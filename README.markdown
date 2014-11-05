@@ -48,5 +48,4 @@ COMING SOON
 
 This distribution, as a whole, is licensed under the terms of the Apache License, Version 2.0
 
-[![Build Status](https://snap-ci.com/thucydides-webtests/thucydides/branch/master/build_image)](https://snap-ci.com/thucydides-webtests/thucydides/branch/master)
-
+[![Build Status](https://snap-ci.com/serenity-bdd/serenity-core/branch/master/build_image)](https://snap-ci.com/serenity-bdd/serenity-core/branch/master)

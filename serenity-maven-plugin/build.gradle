@@ -35,10 +35,6 @@ repositories {
 }
 
 ext {
-    bintrayBaseUrl = 'https://api.bintray.com/maven'
-    bintrayRepository = 'maven'
-    bintrayPackage = 'serenity-core'
-    projectDescription = 'Serenity core libraries'
     if (!project.hasProperty("bintrayUsername")) {
         bintrayUsername = 'wakaleo'
     }
@@ -184,9 +180,9 @@ bintray {
     publications = ['mavenJava'] // see publications closure
     pkg {
         repo = 'maven'
-        userOrg = 'serenity-bdd'
+        userOrg = 'serenity'
         name = 'serenity-core'
-        desc = 'Serenity Maven plugin'
+        desc = 'Serenity core libraries'
         licenses = ['Apache-2.0']
         labels = ['serenity','bdd']
     }

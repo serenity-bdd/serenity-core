@@ -48,7 +48,7 @@ task wrapper(type: Wrapper) {
 }
 
 dependencies {
-    compile "net.serenity:core:${buildVersion.version}"
+    compile "net.serenity-bdd:core:${buildVersion.version}"
 
     compile "org.apache.maven:maven-plugin-api:3.2.3"
     compile "org.apache.maven.reporting:maven-reporting-api:3.0"

@@ -26,7 +26,7 @@ buildVersion {
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
-group = 'net.serenity.maven.plugins'
+group = 'net.serenity-bdd.maven.plugins'
 version = buildVersion.version
 
 repositories {

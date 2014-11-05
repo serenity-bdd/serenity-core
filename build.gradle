@@ -28,7 +28,7 @@ allprojects {
 
     sourceCompatibility = 1.7
     targetCompatibility = 1.7
-    group = 'net.serenity'
+    group = 'net.serenity-bdd'
     version = buildVersion.version
 
     repositories {

@@ -1,0 +1,59 @@
+{
+  "title": "scenario description",
+  "name": "scenario description",
+  "result": "PENDING",
+  "steps": "3",
+  "successful": "0",
+  "failures": "0",
+  "skipped": "0",
+  "ignored": "0",
+  "pending": "3",
+  "duration": "95",
+  "timestamp": "2013-08-03T18:25:35.876+10:00",
+  "user-story": {
+    "qualifiedStoryClassName": "robas",
+    "storyName": "Robas",
+    "path": "stories/browsing_listings/browsing_by_category/robas.story"
+  },
+  "issues": [],
+  "tags": [
+    {
+      "name": "Browsing listings",
+      "type": "capability"
+    },
+    {
+      "name": "Browsing by category",
+      "type": "feature"
+    },
+    {
+      "name": "Robas",
+      "type": "story"
+    }
+  ],
+  "test-steps": [
+    {
+      "description": "Given a user wants to test validation for the \u003cbatch name\u003e",
+      "duration": 3,
+      "startTime": 1375518335952,
+      "screenshots": [],
+      "result": "PENDING",
+      "children": []
+    },
+    {
+      "description": "When the file is loaded with a NON-unique \u003cbatch name\u003e for the current business day",
+      "duration": 1,
+      "startTime": 1375518335956,
+      "screenshots": [],
+      "result": "PENDING",
+      "children": []
+    },
+    {
+      "description": "Then the uploaded file is Rejected with the error message C1\n‘Batch Name may be up to 32 alphanumeric characters and may contain + - @ $ ! % \u0026 ( ) * . / # \u003d : ; ? , \u0027\u0027 [ ] _ ^ and spaces.’",
+      "duration": 0,
+      "startTime": 1375518335958,
+      "screenshots": [],
+      "result": "PENDING",
+      "children": []
+    }
+  ]
+}

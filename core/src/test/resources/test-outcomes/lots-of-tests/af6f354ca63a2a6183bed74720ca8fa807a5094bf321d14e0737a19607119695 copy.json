@@ -1,0 +1,185 @@
+{
+  "title": "Searching by keyword and location",
+  "name": "Searching by keyword and location",
+  "result": "SUCCESS",
+  "steps": "7",
+  "successful": "7",
+  "failures": "0",
+  "skipped": "0",
+  "ignored": "0",
+  "pending": "0",
+  "duration": "30082",
+  "timestamp": "2013-08-03T18:27:02.450+10:00",
+  "user-story": {
+    "qualifiedStoryClassName": "search_by_category",
+    "storyName": "Search by category",
+    "path": "stories/browsing_listings/searching_online_classifieds/search_by_category.story"
+  },
+  "issues": [
+    "TRAD-1"
+  ],
+  "tags": [
+    {
+      "name": "Browsing listings",
+      "type": "capability"
+    },
+    {
+      "name": "Searching online classifieds",
+      "type": "feature"
+    },
+    {
+      "name": "Search by category",
+      "type": "story"
+    }
+  ],
+  "test-steps": [
+    {
+      "description": "Given Sally wants to buy a {puppy} for her son",
+      "duration": 23140,
+      "startTime": 1375518422456,
+      "screenshots": [
+        {
+          "screenshot": {
+            "path": "target/site/thucydides/screenshot-ba9c44f680cee9026220356a0bd38be82da922b8bf2557dac34ecff427f0b08148.png"
+          }
+        }
+      ],
+      "result": "SUCCESS",
+      "children": [
+        {
+          "description": "Opens home page",
+          "duration": 22785,
+          "startTime": 1375518422459,
+          "screenshots": [
+            {
+              "screenshot": {
+                "path": "target/site/thucydides/screenshot-ba9c44f680cee9026220356a0bd38be82da922b8bf2557dac34ecff427f0b08147.png"
+              }
+            }
+          ],
+          "result": "SUCCESS",
+          "children": []
+        }
+      ]
+    },
+    {
+      "description": "When she looks for ads in the {Pets \u0026 Animals} category containing {puppy} in {New South Wales}",
+      "duration": 3358,
+      "startTime": 1375518445596,
+      "screenshots": [
+        {
+          "screenshot": {
+            "path": "target/site/thucydides/screenshot-91c094f768bc8540579fdbb6801a77de93396dad78fa61eb42d95008004dcbf449.png"
+          }
+        }
+      ],
+      "result": "SUCCESS",
+      "children": [
+        {
+          "description": "Chooses region: {New South Wales}",
+          "duration": 748,
+          "startTime": 1375518446007,
+          "screenshots": [
+            {
+              "screenshot": {
+                "path": "target/site/thucydides/screenshot-6b18a1f5b2d1ce716f846e89848ad63411fd77df6f68c0473b7e2179d9ebbb1550.png"
+              }
+            }
+          ],
+          "result": "SUCCESS",
+          "children": []
+        },
+        {
+          "description": "Chooses category and keywords: {Pets \u0026 Animals, puppy}",
+          "duration": 1014,
+          "startTime": 1375518446755,
+          "screenshots": [
+            {
+              "screenshot": {
+                "path": "target/site/thucydides/screenshot-b4fb41571e2d1a235ea1d0a76ccc887c5a0b958ee279db74b4624501ef5f4d8553.png"
+              }
+            }
+          ],
+          "result": "SUCCESS",
+          "children": []
+        },
+        {
+          "description": "Performs search",
+          "duration": 759,
+          "startTime": 1375518447770,
+          "screenshots": [
+            {
+              "screenshot": {
+                "path": "target/site/thucydides/screenshot-5e944e135ff2b6afaceb2099b7f77994f8dac9bd6a60a7aaeb68ff5a7a25083754.png"
+              }
+            }
+          ],
+          "result": "SUCCESS",
+          "children": []
+        }
+      ]
+    },
+    {
+      "description": "Then she should obtain a list of {Pets \u0026 Animals} ads containing the word {puppy} from advertisers in {New South Wales}",
+      "duration": 3577,
+      "startTime": 1375518448954,
+      "screenshots": [
+        {
+          "screenshot": {
+            "path": "target/site/thucydides/screenshot-f552cbad930617a5dcb7ff60d8a7f3ac072059a5c16e9100c5f654341b9454b257.png"
+          }
+        }
+      ],
+      "result": "SUCCESS",
+      "children": [
+        {
+          "description": "Should only see results with titles containing: {puppy}",
+          "duration": 740,
+          "startTime": 1375518449322,
+          "screenshots": [
+            {
+              "screenshot": {
+                "path": "target/site/thucydides/screenshot-0b76ab7c494a43b0152edcde59f32d453bc41064b788c6cafd645863ade1b88658.png"
+              }
+            }
+          ],
+          "result": "SUCCESS",
+          "children": []
+        },
+        {
+          "description": "Should only see results from region: {New South Wales}",
+          "duration": 1347,
+          "startTime": 1375518450063,
+          "screenshots": [
+            {
+              "screenshot": {
+                "path": "target/site/thucydides/screenshot-719896cd7caa9a343286c18bc9c6b35ea5450ab3ccfaf15e7f01f8d65a328e6b60.png"
+              }
+            },
+            {
+              "screenshot": {
+                "path": "target/site/thucydides/screenshot-719896cd7caa9a343286c18bc9c6b35ea5450ab3ccfaf15e7f01f8d65a328e6b61.png"
+              }
+            }
+          ],
+          "result": "SUCCESS",
+          "children": []
+        },
+        {
+          "description": "Should only see results in category: {Pets \u0026 Animals}",
+          "duration": 743,
+          "startTime": 1375518451411,
+          "screenshots": [
+            {
+              "screenshot": {
+                "path": "target/site/thucydides/screenshot-5f58d91d810bcec272eb010183114b6d5aa79fae8fa7be38197e16cd18c0a1c962.png"
+              }
+            }
+          ],
+          "result": "SUCCESS",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

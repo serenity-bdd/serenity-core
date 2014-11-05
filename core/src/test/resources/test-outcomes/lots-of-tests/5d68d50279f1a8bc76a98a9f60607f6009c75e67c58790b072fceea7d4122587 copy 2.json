@@ -1,0 +1,118 @@
+{
+  "title": "Daily Deals should be unique",
+  "name": "Daily Deals should be unique",
+  "result": "ERROR",
+  "steps": "2",
+  "successful": "1",
+  "failures": "0",
+  "errors": "1",
+  "skipped": "0",
+  "ignored": "0",
+  "pending": "0",
+  "duration": "7095",
+  "timestamp": "2013-08-03T18:26:12.665+10:00",
+  "user-story": {
+    "qualifiedStoryClassName": "DailyDeals",
+    "storyName": "Daily deals",
+    "path": "stories/promoting_listings/promote_listings_on_the_site/DailyDeals.story"
+  },
+  "issues": [
+    "DEMO-2"
+  ],
+  "tags": [
+    {
+      "name": "blue",
+      "type": "colour"
+    },
+    {
+      "name": "Promoting listings",
+      "type": "capability"
+    },
+    {
+      "name": "Promote listings on the site",
+      "type": "feature"
+    },
+    {
+      "name": "Daily deals",
+      "type": "story"
+    }
+  ],
+  "test-steps": [
+    {
+      "description": "When I view the daily deals",
+      "duration": 4407,
+      "startTime": 1375518372675,
+      "screenshots": [
+        {
+          "screenshot": {
+            "path": "target/site/thucydides/screenshot-66a5a0b72f54fd86f3a9feb78513ec321e5622f02b65c09027e1e17142a8062223.png"
+          }
+        },
+        {
+          "screenshot": {
+            "path": "target/site/thucydides/screenshot-7d605c14194285f5a97ac44928cf721630793ccd4f7fe3c08432ed503a7fa39c26.png"
+          }
+        }
+      ],
+      "result": "SUCCESS",
+      "children": [
+        {
+          "description": "Navigates to search page",
+          "duration": 3162,
+          "startTime": 1375518373273,
+          "screenshots": [
+            {
+              "screenshot": {
+                "path": "target/site/thucydides/screenshot-7d605c14194285f5a97ac44928cf721630793ccd4f7fe3c08432ed503a7fa39c24.png"
+              }
+            },
+            {
+              "screenshot": {
+                "path": "target/site/thucydides/screenshot-7d605c14194285f5a97ac44928cf721630793ccd4f7fe3c08432ed503a7fa39c25.png"
+              }
+            }
+          ],
+          "result": "SUCCESS",
+          "children": []
+        }
+      ]
+    },
+    {
+      "description": "Then I should see no duplicated deals",
+      "duration": 2675,
+      "startTime": 1375518377082,
+      "screenshots": [
+        {
+          "screenshot": {
+            "path": "target/site/thucydides/screenshot-aa73c15ff6b30345a8d81becf2e63061d8967aab9992fb364fb7b3d491059b3127.png"
+          }
+        }
+      ],
+      "cause": {
+        "class": "net.thucydides.core.steps.StepFailureException",
+        "message": "org.openqa.selenium.NoSuchElementException: Unable to locate element: {\"method\":\"id\",\"selector\":\"dailyDeals_dailyDealsDiv\"}\nCommand duration or timeout: 11 milliseconds\nFor documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html\nBuild info: version: \u00272.33.0\u0027, revision: \u00274ecaf82108b2a6cc6f006aae81961236eba93358\u0027, time: \u00272013-05-22 12:00:17\u0027\nSystem info: os.name: \u0027Mac OS X\u0027, os.arch: \u0027x86_64\u0027, os.version: \u002710.8.4\u0027, java.version: \u00271.7.0_15\u0027\nSession ID: 7893e438-34b2-c349-90c1-6880cbb051eb\nDriver info: org.openqa.selenium.firefox.FirefoxDriver\nCapabilities [{platform\u003dMAC, databaseEnabled\u003dtrue, cssSelectorsEnabled\u003dtrue, javascriptEnabled\u003dtrue, acceptSslCerts\u003dtrue, handlesAlerts\u003dtrue, browserName\u003dfirefox, browserConnectionEnabled\u003dtrue, nativeEvents\u003dtrue, webStorageEnabled\u003dtrue, rotatable\u003dfalse, locationContextEnabled\u003dtrue, applicationCacheEnabled\u003dtrue, takesScreenshot\u003dtrue, version\u003d22.0}]"
+      },
+      "result": "ERROR",
+      "children": [
+        {
+          "description": "Should see no duplicate daily deals",
+          "duration": 1345,
+          "startTime": 1375518377702,
+          "screenshots": [
+            {
+              "screenshot": {
+                "path": "target/site/thucydides/screenshot-e7c0dde3ba66ba19260e58d5e8bc6161e78277517e99a339cfbc2afe06dabb1c28.png"
+              }
+            }
+          ],
+          "cause": {
+            "class": "net.thucydides.core.steps.StepFailureException",
+            "message": "org.openqa.selenium.NoSuchElementException: Unable to locate element: {\"method\":\"id\",\"selector\":\"dailyDeals_dailyDealsDiv\"}\nCommand duration or timeout: 11 milliseconds\nFor documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html\nBuild info: version: \u00272.33.0\u0027, revision: \u00274ecaf82108b2a6cc6f006aae81961236eba93358\u0027, time: \u00272013-05-22 12:00:17\u0027\nSystem info: os.name: \u0027Mac OS X\u0027, os.arch: \u0027x86_64\u0027, os.version: \u002710.8.4\u0027, java.version: \u00271.7.0_15\u0027\nSession ID: 7893e438-34b2-c349-90c1-6880cbb051eb\nDriver info: org.openqa.selenium.firefox.FirefoxDriver\nCapabilities [{platform\u003dMAC, databaseEnabled\u003dtrue, cssSelectorsEnabled\u003dtrue, javascriptEnabled\u003dtrue, acceptSslCerts\u003dtrue, handlesAlerts\u003dtrue, browserName\u003dfirefox, browserConnectionEnabled\u003dtrue, nativeEvents\u003dtrue, webStorageEnabled\u003dtrue, rotatable\u003dfalse, locationContextEnabled\u003dtrue, applicationCacheEnabled\u003dtrue, takesScreenshot\u003dtrue, version\u003d22.0}]"
+          },
+          "result": "ERROR",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

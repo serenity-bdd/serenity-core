@@ -1,0 +1,4 @@
+dependencies {
+    compile("org.jbehave:jbehave-core:3.8")
+    projectDescription = 'Serenity sample resources used for testing purposes'
+}

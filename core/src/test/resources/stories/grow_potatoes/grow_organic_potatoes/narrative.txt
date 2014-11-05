@@ -1,0 +1,8 @@
+Feature #F-1: Grow organic potatoes
+
+Meta:
+@Versions Release 1.0, Iteration 1.3
+
+In order to cater for the organic market
+As a farmer
+I want to grow organic potatoes

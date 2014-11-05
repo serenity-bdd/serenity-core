@@ -1,0 +1,24 @@
+language: java
+before_install:
+  - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+  - sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+  - wget -N http://chromedriver.storage.googleapis.com/2.11/chromedriver_linux64.zip
+  - unzip chromedriver_linux64.zip
+  - chmod +x chromedriver
+  - sudo mv -f chromedriver /usr/local/share/chromedriver
+  - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
+  - sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
+  - sudo apt-get update
+  - sudo apt-get install unzip
+  - sudo apt-get install google-chrome-stable
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+
+script: gradle clean test integrationTests browserTests
+
+cache:
+  directories:
+  - apt
+  - $HOME/.m2
+  - $HOME/.gradle
+  - $HOME/tools

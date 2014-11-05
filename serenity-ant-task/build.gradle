@@ -1,0 +1,12 @@
+ext {
+    bintrayPackage = 'serenity-ant-task'
+    projectDescription = 'Serenity Ant Task'
+}
+
+dependencies {
+    compile project(':core')
+    compile "org.apache.ant:ant:1.9.3"
+
+    testCompile project(':serenity-test-utils')
+    testCompile "org.apache.ant:ant-testutil:1.9.3"
+}

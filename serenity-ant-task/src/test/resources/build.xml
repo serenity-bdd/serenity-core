@@ -1,0 +1,11 @@
+<project name="Thucydides" basedir="." default="thucydides.reports">
+
+    <target name="define.tasks">
+        <taskdef name="thucydidesreport" classname="net.thucydides.ant.ThucydidesReportingTask" />
+
+    </target>
+
+    <target name="thucydides.reports" depends="define.tasks">
+        <thucydidesreport sourceDirectory="classpath:test-outcomes" outputDirectory="classpath:test-outcomes"/>
+    </target>
+</project>

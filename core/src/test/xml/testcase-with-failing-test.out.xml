@@ -1,0 +1,16 @@
+<html>
+<body>
+<h2>Acceptance test result: Managed web driver with a failing test sample</h2>
+<table border="1">
+<tr bgcolor="#9acd32">
+<th>Step</th><th>Outcome</th>
+</tr>
+<tr>
+<td>The user opens the page.</td><td>SUCCESS</td>
+</tr>
+<tr>
+<td>The user performs a search on cats.</td><td>FAILURE</td>
+</tr>
+</table>
+</body>
+</html>

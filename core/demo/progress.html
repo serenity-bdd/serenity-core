@@ -1,0 +1,41 @@
+<!DOCTYPE html> 
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7; IE=EmulateIE9"> 
+    <!--[if IE]><script src="scripts/excanvas.js"></script><![endif]-->
+    <script type="text/javascript" src="scripts/dygraph-combined.js"></script>
+</head>
+<body>
+<div id="graphdiv"></div>
+<script type="text/javascript">
+  g = new Dygraph(
+        document.getElementById("graphdiv"),  
+        "Build,Requirements,Passed,Failed,Estimated,Total\n" +                
+        // the data series
+        "2008-05-07,80,0, 0,10,80\n" +
+        "2008-05-08,85,10,0,10,85\n" +
+        "2008-05-09,87,20,2,20,87\n"+
+        "2008-05-10,87,20,2,20,87\n"+
+        "2008-05-12,87,24,1,24,87\n"+
+        "2008-05-15,89,28,0,28,89\n"+
+        "2008-05-16,90,28,0,28,90\n"+
+        "2008-05-16,0,0,0,  28,90\n"+
+        "2008-06-12,0,0,0,  94,94\n",
+        { fillGraph: true,
+          width: 640,
+          height: 480,
+          title: 'Project Progress',
+          titleHeight: 32,
+          colors: ['#ffda4b', 'green', '#EE1111','#bccb8e', '#00aeff'],
+          legend: 'always',
+            'Estimated': {
+              fillGraph: false
+            },
+            'Total': {
+              fillGraph: false
+            }
+        }                                   
+      );
+</script>
+</body>
+</html>

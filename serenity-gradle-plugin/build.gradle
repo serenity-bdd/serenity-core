@@ -1,0 +1,13 @@
+ext {
+    bintrayPackage = 'serenity-gradle-plugin'
+    projectDescription = 'Serenity Gradle Plugin'
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+
+    compile project(':core')
+    testCompile "junit:junit:4.11"
+}
+

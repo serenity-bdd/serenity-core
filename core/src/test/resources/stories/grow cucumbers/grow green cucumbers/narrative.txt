@@ -1,0 +1,5 @@
+Feature #F-4: Grow green potatoes
+
+In order to cater for the organic market
+As a farmer
+I want to grow organic potatoes

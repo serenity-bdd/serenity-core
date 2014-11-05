@@ -1,0 +1,11 @@
+ext {
+    bintrayPackage = 'serenity-browsermob-plugin'
+    projectDescription = 'Serenity Browsermob integration'
+}
+
+dependencies {
+    compile project(':core')
+    compile("biz.neustar:browsermob-proxy:2.0-beta-7") {
+        exclude module: "slf4j-jdk14"
+    }
+}

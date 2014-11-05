@@ -1,0 +1,43 @@
+{
+  "title": "Output validation of credit account",
+  "name": "Output validation of credit account",
+  "result": "PENDING",
+  "steps": "1",
+  "successful": "0",
+  "failures": "0",
+  "skipped": "0",
+  "ignored": "0",
+  "pending": "1",
+  "duration": "13",
+  "timestamp": "2013-08-03T18:25:37.216+10:00",
+  "user-story": {
+    "qualifiedStoryClassName": "robas",
+    "storyName": "Robas",
+    "path": "stories/browsing_listings/browsing_by_category/robas.story"
+  },
+  "issues": [],
+  "tags": [
+    {
+      "name": "Browsing listings",
+      "type": "capability"
+    },
+    {
+      "name": "Browsing by category",
+      "type": "feature"
+    },
+    {
+      "name": "Robas",
+      "type": "story"
+    }
+  ],
+  "test-steps": [
+    {
+      "description": "Given a credit account associated with an RBA BSB\nCheck that it is a valid open a/c\nIf not valid replace a/c with 002814091\nand report only on final validation report\nand do not reject payment\n\nV2)",
+      "duration": 0,
+      "startTime": 1375518337225,
+      "screenshots": [],
+      "result": "PENDING",
+      "children": []
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Treemap - TreeMap with on-demand nodes</title>
+
+<!-- CSS Files -->
+<link type="text/css" href="../../main/resources/report-resources/jit/css/base.css" rel="stylesheet" />
+<link type="text/css" href="../../main/resources/report-resources/jit/css/Treemap.css" rel="stylesheet" />
+
+<!--[if IE]><script language="javascript" type="text/javascript" src="../../main/resources/report-resources/jit/Extras/excanvas.js"></script><![endif]-->
+
+<!-- JIT Library File -->
+<script language="javascript" type="text/javascript" src="../../main/resources/report-resources/jit/jit.js"></script>
+
+<!-- Example File -->
+<script language="javascript" type="text/javascript" src="functional-coverage.js"></script>
+</head>
+
+<body onload="init();">
+
+<style>
+	#progress-gradient {
+        background: #ebf6ff; /* Old browsers */
+        background: -moz-linear-gradient(left, #ebf6ff 0%, #008cff 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, right top, color-stop(0%,#ebf6ff), color-stop(100%,#008cff)); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(left, #ebf6ff 0%,#008cff 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(left, #ebf6ff 0%,#008cff 100%); /* Opera11.10+ */
+        background: -ms-linear-gradient(left, #ebf6ff 0%,#008cff 100%); /* IE10+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ebf6ff', endColorstr='#008cff',GradientType=1 ); /* IE6-9 */
+        background: linear-gradient(left, #ebf6ff 0%,#008cff 100%); /* W3C */
+
+    }
+
+    #result-gradient {
+        background: #ff0000; /* Old browsers */
+        background: -moz-linear-gradient(left, #ff0000 0%, #ffff00 50%, #00ff00 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, right top, color-stop(0%,#ff0000), color-stop(50%,#ffff00), color-stop(100%,#00ff00)); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(left, #ff0000 0%,#ffff00 50%,#00ff00 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(left, #ff0000 0%,#ffff00 50%,#00ff00 100%); /* Opera11.10+ */
+        background: -ms-linear-gradient(left, #ff0000 0%,#ffff00 50%,#00ff00 100%); /* IE10+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff0000', endColorstr='#00ff00',GradientType=1 ); /* IE6-9 */
+        background: linear-gradient(left, #ff0000 0%,#ffff00 50%,#00ff00 100%); /* W3C */
+    }
+
+    .legend {
+        width: 400px;
+        height: 20px;
+        margin: 8px;
+        margin-left: 0px;
+
+        font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+        font-size:0.9em;
+
+        padding: 5px;
+        border: 1px solid #d3d3d3;
+        border-bottom: 2px solid #ccc;
+        border-right: 2px solid #ccc;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+    }
+
+    .result-graph {
+        border: 1px solid gray;
+        border-bottom: 1px solid #d3d3d3;
+        border-right: 1px solid #d3d3d3;
+    }
+
+    .legend-zone {
+        width:800px;
+        margin:auto;
+    }
+
+    .legend-minimum {
+        color: #000000;
+        font-weight: bold;
+        opacity: 0.75;
+        float: left;
+    }
+
+    .legend-maximum {
+        color: white;
+        font-weight: bold;
+        opacity: 0.67;
+        float: right;
+    }
+
+
+    .dark-legend-minimum {
+        color: #ffff00;
+        font-weight: bold;
+        opacity: 0.75;
+        float: left;
+    }
+
+    .dark-legend-center {
+        color: red;
+        font-weight: bold;
+        opacity: 0.67;
+        float: left;
+        position:relative;
+        left:30%;
+        text-align: center;
+    }
+
+    .dark-legend-maximum {
+        color: #000000;
+        font-weight: bold;
+        opacity: 0.67;
+        float: right;
+    }
+
+
+</style>
+
+    <div >
+        <div id="infovis" class="result-graph"></div>
+        <div class="legend-zone">
+          <div id="result-gradient" class="legend">
+            <div class="dark-legend-minimum">Failing</div>
+            <div class="dark-legend-center">Pending</div>
+            <div class="dark-legend-maximum">Passing</div>
+          </div>
+        </div>
+    </div>
+
+    <div class="legend-zone">
+    <div id="progress-gradient"  class="legend">
+        <div class="legend-minimum">Planned</div>
+        <div class="legend-maximum">Done</div>
+    </div>
+    </div>
+
+</body>
+</html>

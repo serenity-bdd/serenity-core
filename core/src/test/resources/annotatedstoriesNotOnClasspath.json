@@ -1,0 +1,183 @@
+{"mycapability1.myfeature1a.SearchByKeywordStoryTest": {
+    "name": "SearchByKeywordStoryTest",
+    "publicName": "a narrative title for story 1a x",
+    "cardNumber": "1AX",
+    "type": "Story",
+    "narrative": {"name":"Narrative", "text": "A narrative text for\nstory 1a x"},
+    "children": [],
+    "requirement": null,
+    "path": null,
+    "level": 2,
+    "annotatedClass": true
+}, "mycapability1.myfeature1b.SearchByMultipleKeywordsStoryTest": {
+    "name": "SearchByMultipleKeywordsStoryTest",
+    "publicName": "a narrative title for story 1b x",
+    "cardNumber": "1BX",
+    "type": "Story",
+    "narrative": {"name":"Narrative", "text":  "A narrative text\nfor story 1 b x"},
+    "children": [],
+    "requirement": null,
+    "path": null,
+    "level": 2,
+    "annotatedClass": true
+}, "mycapability1.myfeature1a": {
+    "name": "myfeature1a",
+    "publicName": "a narrative title for my feature 1a",
+    "cardNumber": "1A",
+    "type": "myfeaturetype",
+    "narrative": {"name":"Narrative", "text": "a narrative text\nfor my feature 1a"},
+    "children": [
+        {
+            "name": "SearchByKeywordStoryTest",
+            "publicName": "a narrative title for story 1a x",
+            "cardNumber": "1AX",
+            "type": "Story",
+            "narrative":  {"name":"Narrative", "text":  "A narrative text for\nstory 1a x"},
+            "children": [],
+            "requirement": null,
+            "path": null,
+            "level": 2,
+            "annotatedClass": true
+        }
+    ],
+    "requirement": null,
+    "path": null,
+    "level": 1,
+    "annotatedClass": false
+}, "mycapability1.myfeature1b": {
+    "name": "myfeature1b",
+    "publicName": "my narrative title 1B",
+    "cardNumber": "",
+    "type": "",
+    "narrative": {"name":"Narrative", "text": "my narrative text\nfor feature 1B"},
+    "children": [
+        {
+            "name": "SearchByMultipleKeywordsStoryTest",
+            "publicName": "a narrative title for story 1b x",
+            "cardNumber": "1BX",
+            "type": "Story",
+            "narrative":  {"name":"Narrative", "text": "A narrative text\nfor story 1 b x"},
+            "children": [],
+            "requirement": null,
+            "path": null,
+            "level": 2,
+            "annotatedClass": true
+        }
+    ],
+    "requirement": null,
+    "path": null,
+    "level": 1,
+    "annotatedClass": false
+}, "mycapability1": {
+    "name": "mycapability1",
+    "publicName": "narrative title capability 1",
+    "cardNumber": "1",
+    "type": "mycapabilitytype",
+    "narrative":  {"name":"Narrative", "text": "A narrative text\nfor capability 1"},
+    "children": [
+        {
+            "name": "myfeature1a",
+            "publicName": "a narrative title for my feature 1a",
+            "cardNumber": "1A",
+            "type": "myfeaturetype",
+            "narrative":  {"name":"Narrative", "text": "a narrative text\nfor my feature 1a"},
+            "children": [
+                {
+                    "name": "SearchByKeywordStoryTest",
+                    "publicName": "a narrative title for story 1a x",
+                    "cardNumber": "1AX",
+                    "type": "Story",
+                    "narrative": {"name":"Narrative", "text":  "A narrative text for\nstory 1a x"},
+                    "children": [],
+                    "requirement": null,
+                    "path": null,
+                    "level": 2,
+                    "annotatedClass": true
+                }
+            ],
+            "requirement": null,
+            "path": null,
+            "level": 1,
+            "annotatedClass": false
+        },
+        {
+            "name": "myfeature1a",
+            "publicName": "a narrative title for my feature 1a",
+            "cardNumber": "1A",
+            "type": "myfeaturetype",
+            "narrative":  {"name":"Narrative", "text": "a narrative text\nfor my feature 1a"},
+            "children": [
+                {
+                    "name": "SearchByKeywordStoryTest",
+                    "publicName": "a narrative title for story 1a x",
+                    "cardNumber": "1AX",
+                    "type": "Story",
+                    "narrative":  {"name":"Narrative", "text": "A narrative text for\nstory 1a x"},
+                    "children": [],
+                    "requirement": null,
+                    "path": null,
+                    "level": 2,
+                    "annotatedClass": true
+                }
+            ],
+            "requirement": null,
+            "path": null,
+            "level": 1,
+            "annotatedClass": false
+        },
+        {
+            "name": "myfeature1b",
+            "publicName": "myfeature1b",
+            "cardNumber": null,
+            "type": null,
+            "narrative": null,
+            "children": [
+                {
+                    "name": "SearchByMultipleKeywordsStoryTest",
+                    "publicName": "a narrative title for story 1b x",
+                    "cardNumber": "1BX",
+                    "type": "Story",
+                    "narrative":  {"name":"Narrative", "text": "A narrative text\nfor story 1 b x"},
+                    "children": [],
+                    "requirement": null,
+                    "path": null,
+                    "level": 2,
+                    "annotatedClass": true
+                }
+            ],
+            "requirement": null,
+            "path": null,
+            "level": 1,
+            "annotatedClass": false
+        },
+        {
+            "name": "myfeature1b",
+            "publicName": "my narrative title 1B",
+            "cardNumber": "",
+            "type": "",
+            "narrative": {"name":"Narrative", "text": "my narrative text\nfor feature 1B"},
+            "children": [
+                {
+                    "name": "SearchByMultipleKeywordsStoryTest",
+                    "publicName": "a narrative title for story 1b x",
+                    "cardNumber": "1BX",
+                    "type": "Story",
+                    "narrative":  {"name":"Narrative", "text": "A narrative text\nfor story 1 b x"},
+                    "children": [],
+                    "requirement": null,
+                    "path": null,
+                    "level": 2,
+                    "annotatedClass": true
+                }
+            ],
+            "requirement": null,
+            "path": null,
+            "level": 1,
+            "annotatedClass": false
+        }
+    ],
+    "requirement": null,
+    "path": null,
+    "level": 0,
+    "annotatedClass": false
+}}

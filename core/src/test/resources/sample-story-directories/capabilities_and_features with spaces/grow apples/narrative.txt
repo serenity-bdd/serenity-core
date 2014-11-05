@@ -1,0 +1,8 @@
+Grow more apples
+Meta:
+@issue #123
+
+Narrative:
+In order to make apple pies
+As a farmer
+I want to grow apples

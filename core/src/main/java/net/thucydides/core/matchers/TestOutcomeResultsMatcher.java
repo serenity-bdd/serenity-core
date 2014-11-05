@@ -1,0 +1,38 @@
+package net.thucydides.core.matchers;
+
+import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestResult;
+import net.thucydides.core.model.TestStep;
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static ch.lambdaj.Lambda.extract;
+import static ch.lambdaj.Lambda.on;
+
+/**
+ * Does a test outcome contain a given list of results, in the specified order?
+ */
+public class TestOutcomeResultsMatcher extends TypeSafeMatcher<TestOutcome> {
+
+    private final List<TestResult> expectedTestResults;
+
+    public TestOutcomeResultsMatcher(TestResult... expectedTestResults) {
+        this.expectedTestResults = Arrays.asList(expectedTestResults);
+    }
+
+    @Override
+    public boolean matchesSafely(TestOutcome testOutcome) {
+        List<TestStep> allSteps = testOutcome.getFlattenedTestSteps();
+        List<TestResult> allTestResults = extract(allSteps, on(TestStep.class).getResult());
+        return allTestResults.equals(expectedTestResults);
+    }
+
+    @Override
+    public void describeTo(Description description) {
+        description.appendText("a test outcome with results " + Arrays.toString(expectedTestResults.toArray()));
+    }
+}
+

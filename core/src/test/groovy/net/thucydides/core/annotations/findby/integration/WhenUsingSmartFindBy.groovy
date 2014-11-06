@@ -29,6 +29,44 @@ class WhenUsingSmartFindBy extends Specification {
             element.getAttribute("value")  == "<enter first name>"
 	}
 
+
+    def "should be able to find an element using button text"(){
+
+        when: "we try to find an element using button text"
+        def element = driver.findElement(By.buttonText("Red Button"))
+
+        then: "we should find the element"
+        element.getAttribute("id")  == "red-button"
+    }
+
+    def "should throw exception if button not found"(){
+
+        when: "we try to find an element using button text"
+        def element = driver.findElement(By.buttonText("Missing Button"))
+
+        then:
+            thrown(NoSuchElementException)
+    }
+
+    def "should be able to find elements using button text"(){
+
+        when: "we try to find an element using button text"
+        def elements = driver.findElements(By.buttonText("Blue's Button"))
+
+        then: "we should find the element"
+        elements.size() == 1
+    }
+
+
+    def "should return an empty list if no matching buttons found"(){
+
+        when: "we try to find elements using button text"
+        def elements = driver.findElements(By.buttonText("Mission Button"))
+
+        then: "we should not find the element"
+        elements.size() == 0
+    }
+
     def "should be able to find a nested element using jquery"(){
 
         when: "we try to find an element using a jquery selector"

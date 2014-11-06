@@ -60,6 +60,46 @@ public abstract class By extends org.openqa.selenium.By {
         return new ByjQuerySelector(jQuerySelector);
     }
 
+    public static By buttonText(final String text) {
+        Preconditions.checkNotNull(text);
+        return new ByButtonTextSelector(text);
+    }
+
+    public static class ByButtonTextSelector extends By {
+
+        String buttonLabel;
+
+        public ByButtonTextSelector(String buttonLabel) {
+            this.buttonLabel = buttonLabel;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public List<WebElement> findElements(SearchContext context) {
+            return context.findElements(byXpathforButtonWithLabel(buttonLabel));
+        }
+
+        @Override
+        public WebElement findElement(SearchContext context) {
+
+            WebElement element = context.findElement(byXpathforButtonWithLabel(buttonLabel));
+            if (element != null){
+                return element;
+            }
+            throw new NoSuchElementException("Cannot locate element using " + toString());
+        }
+
+        private org.openqa.selenium.By byXpathforButtonWithLabel(String buttonLabel) {
+            return By.xpath(String.format("//*[normalize-space(.)=\"%s\"]", buttonLabel));
+        }
+
+        @Override
+        public String toString() {
+            return "By.buttonText: " + buttonLabel;
+        }
+    }
+
+
     public static class ByjQuerySelector extends By {
         private final String jQuerySelector;
 

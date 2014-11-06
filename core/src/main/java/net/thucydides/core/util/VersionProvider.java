@@ -24,7 +24,7 @@ public class VersionProvider {
 
     public String getVersion()
     {
-        String path = "/version.properties";
+        String path = "/serenity-version.properties";
         InputStream stream = getClass().getResourceAsStream(path);
         if (stream == null)
             return "UNKNOWN";

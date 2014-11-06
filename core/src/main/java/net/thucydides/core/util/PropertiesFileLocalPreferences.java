@@ -43,8 +43,11 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
 
     public void loadPreferences() throws IOException {
         updatePreferencesFrom(preferencesFileInHomeDirectory());
+        updatePreferencesFrom(legacyPreferencesFileInHomeDirectory());
         updatePreferencesFrom(preferencesFileInWorkingDirectory());
+        updatePreferencesFrom(legacyPreferencesFileInWorkingDirectory());
         updatePreferencesFrom(preferencesFileWithAbsolutePath());
+        updatePreferencesFrom(legacyPreferencesFileWithAbsolutePath());
         updatePreferencesFromClasspath();
     }
 
@@ -52,6 +55,9 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         InputStream propertiesOnClasspath = null;
         try {
             propertiesOnClasspath = Thread.currentThread().getContextClassLoader().getResourceAsStream(defaultPropertiesFileName());
+            if (propertiesOnClasspath == null) {
+                propertiesOnClasspath = Thread.currentThread().getContextClassLoader().getResourceAsStream(legacyPropertiesFileName());
+            }
             if (propertiesOnClasspath != null) {
                 Properties localPreferences = new Properties();
                 localPreferences.load(propertiesOnClasspath);
@@ -91,15 +97,31 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         return new File(homeDirectory, defaultPropertiesFileName());
     }
 
+    private File legacyPreferencesFileInHomeDirectory() {
+        return new File(homeDirectory, legacyPropertiesFileName());
+    }
+
     private File preferencesFileInWorkingDirectory() {
         return new File(workingDirectory, defaultPropertiesFileName());
+    }
+
+    private File legacyPreferencesFileInWorkingDirectory() {
+        return new File(workingDirectory, legacyPropertiesFileName());
     }
 
     private File preferencesFileWithAbsolutePath() {
         return new File(defaultPropertiesFileName());
     }
 
+    private File legacyPreferencesFileWithAbsolutePath() {
+        return new File(legacyPropertiesFileName());
+    }
+
     private String defaultPropertiesFileName() {
+        return ThucydidesSystemProperty.PROPERTIES.from(environmentVariables,"serenity.properties");
+    }
+
+    private String legacyPropertiesFileName() {
         return ThucydidesSystemProperty.PROPERTIES.from(environmentVariables,"thucydides.properties");
     }
 

@@ -1,3 +1,5 @@
+import net.serenitybdd.builds.ProjectVersionCounter
+
 buildscript {
     repositories {
         jcenter()
@@ -7,7 +9,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
-        classpath 'nz.org.geonet:gradle-build-version-plugin:1.0.4'
     }
 }
 
@@ -19,17 +20,9 @@ allprojects {
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.bintray'
-    apply plugin: 'build-version'
-
-
-    buildVersion {
-        releaseTagPattern = "^v(\\d+\\.\\d+\\.\\d+)"
-    }
 
     sourceCompatibility = 1.7
     targetCompatibility = 1.7
-    group = 'net.serenity-bdd'
-    version = buildVersion.version
 
     repositories {
         mavenLocal()
@@ -37,6 +30,8 @@ allprojects {
     }
 
     ext {
+        versionCounter = new ProjectVersionCounter(project.hasProperty("releaseBuild"))
+
         bintrayBaseUrl = 'https://api.bintray.com/maven'
         bintrayRepository = 'maven'
         bintrayPackage = 'serenity-core'
@@ -47,6 +42,23 @@ allprojects {
         if (!project.hasProperty("bintrayApiKey")) {
             bintrayApiKey = ''
         }
+    }
+
+    group = 'net.serenity-bdd'
+    version = versionCounter.nextVersion
+
+    task createNewVersionTag(type: Exec) {
+        executable "sh"
+        args "-c", "git tag -f -a v$version -m'release tag'"
+    }
+
+    task publishNewVersionTag(type: Exec, dependsOn: 'createNewVersionTag') {
+        executable "sh"
+        args "-c", "git push -f origin v$version"
+    }
+
+    task tagNextVersion() {
+        dependsOn publishNewVersionTag
     }
 
     task wrapper(type: Wrapper) {
@@ -146,6 +158,12 @@ allprojects {
             labels = ['serenity','bdd']
         }
     }
+
+    task release() {
+        dependsOn bintrayUpload,publishNewVersionTag
+    }
+
+    publishNewVersionTag.mustRunAfter bintrayUpload
 }
 
 subprojects {
@@ -162,7 +180,6 @@ subprojects {
     artifacts {
         archives sourcesJar, javadocJar
     }
-
 
     publishing {
         publications {

@@ -1,21 +1,23 @@
 package net.serenitybdd.builds
 
 class ProjectVersionCounter {
-    final Boolean isRelease;
+    Boolean isRelease
+    Boolean useCurrentVersion = false
 
-    ProjectVersionCounter(Boolean isRelease) {
-        this.isRelease = isRelease
-    }
-
-    def getNextVersion() {
+    def getCurrentVersion() {
         def currentVersion = "git describe --tags".execute().text
         if (currentVersion.isEmpty()) {
             currentVersion = "v1.0.0"
         }
+        return currentVersion
+    }
+
+    def getNextVersion() {
         def matcher = currentVersion =~ "\\d+"
         def majorMinorNumbers = matcher[0] + "." + matcher[1]
         def currentBuildNumber = Integer.valueOf(matcher[2])
-        def nextBuildNumber = currentBuildNumber + 1
+        def nextBuildNumber = (useCurrentVersion) ? currentBuildNumber : currentBuildNumber + 1
+        println "Next build number found: " + nextBuildNumber
         return (isRelease) ?
                 majorMinorNumbers + "." + nextBuildNumber :
                 majorMinorNumbers + "." + nextBuildNumber + "-SNAPSHOT"

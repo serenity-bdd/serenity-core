@@ -29,21 +29,20 @@ allprojects {
         jcenter()
     }
 
-    ext {
-        versionCounter = new ProjectVersionCounter(project.hasProperty("releaseBuild"))
 
+    ext {
         bintrayBaseUrl = 'https://api.bintray.com/maven'
         bintrayRepository = 'maven'
         bintrayPackage = 'serenity-core'
         projectDescription = 'Serenity core libraries'
         if (!project.hasProperty("bintrayUsername")) {
-           bintrayUsername = 'wakaleo'
+            bintrayUsername = 'wakaleo'
         }
         if (!project.hasProperty("bintrayApiKey")) {
             bintrayApiKey = ''
         }
+        versionCounter = new ProjectVersionCounter(isRelease: project.hasProperty("releaseBuild"))
     }
-
     group = 'net.serenity-bdd'
     version = versionCounter.nextVersion
 
@@ -52,13 +51,13 @@ allprojects {
         args "-c", "git tag -f -a v$version -m'release tag'"
     }
 
-    task publishNewVersionTag(type: Exec, dependsOn: 'createNewVersionTag') {
+    task pushVersionTag(type: Exec, dependsOn: 'createNewVersionTag') {
         executable "sh"
         args "-c", "git push -f origin v$version"
     }
 
-    task tagNextVersion() {
-        dependsOn publishNewVersionTag
+    task tagNewVersion() {
+        dependsOn pushVersionTag
     }
 
     task wrapper(type: Wrapper) {
@@ -99,7 +98,6 @@ allprojects {
             exceptionFormat = 'full'
         }
     }
-
 
     task browserTests(type: Test) {
         exclude '**/*$*'
@@ -160,10 +158,9 @@ allprojects {
     }
 
     task release() {
-        dependsOn bintrayUpload,publishNewVersionTag
+        dependsOn bintrayUpload
     }
 
-    publishNewVersionTag.mustRunAfter bintrayUpload
 }
 
 subprojects {

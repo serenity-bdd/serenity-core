@@ -1,3 +1,5 @@
+import net.serenitybdd.builds.ProjectVersionCounter
+
 buildscript {
     repositories {
         jcenter()
@@ -7,7 +9,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
-        classpath 'nz.org.geonet:gradle-build-version-plugin:1.0.4'
     }
 }
 
@@ -18,16 +19,10 @@ apply plugin: 'idea'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
-apply plugin: 'build-version'
 
-buildVersion {
-    releaseTagPattern = "^v(\\d+\\.\\d+\\.\\d+)"
-}
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
-group = 'net.serenity-bdd.maven.plugins'
-version = buildVersion.version
 
 repositories {
     mavenLocal()
@@ -41,7 +36,12 @@ ext {
     if (!project.hasProperty("bintrayApiKey")) {
         bintrayApiKey = ''
     }
+    versionCounter = new ProjectVersionCounter(isRelease: project.hasProperty("releaseBuild"),
+                                               useCurrentVersion: true)
 }
+
+group = 'net.serenity-bdd.maven.plugins'
+version = versionCounter.currentVersion
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.1'

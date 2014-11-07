@@ -38,6 +38,8 @@ ext {
     }
     versionCounter = new ProjectVersionCounter(isRelease: project.hasProperty("releaseBuild"),
                                                useCurrentVersion: true)
+
+    println "Target version: " + versionCounter.currentVersion
 }
 
 group = 'net.serenity-bdd.maven.plugins'
@@ -48,7 +50,7 @@ task wrapper(type: Wrapper) {
 }
 
 dependencies {
-    compile "net.serenity-bdd:core:${buildVersion.version}"
+    compile "net.serenity-bdd:core:${versionCounter.currentVersion}"
 
     compile "org.apache.maven:maven-plugin-api:3.2.3"
     compile "org.apache.maven.reporting:maven-reporting-api:3.0"

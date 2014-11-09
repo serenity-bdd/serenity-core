@@ -40,6 +40,7 @@
         </li>
     </#if>
     </ul>
+        <span class="date-and-time">Report generated ${timestamp}</span>
         <br style="clear:left"/>
 </div>
 </#macro>

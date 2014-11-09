@@ -1,4 +1,4 @@
-package net.serenity.plugins.gradle
+package net.serenitybdd.plugins.gradle
 
 class SerenityPluginExtension {
     def String outputDirectory = 'target/site/thucydides'

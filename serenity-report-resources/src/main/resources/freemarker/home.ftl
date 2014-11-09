@@ -461,7 +461,7 @@
 </div>
 <div id="beforefooter"></div>
 <div id="bottomfooter">
-    <span class="version">Thucydides version ${thucydidesVersionNumber} - Build ${buildNumber}</span>
+    <span class="version">Serenity version ${thucydidesVersionNumber} - Build ${buildNumber}</span>
 </div>
 <#macro list_tags(weighted)>
 <h4>${tagsTitle}</h4>

@@ -32,8 +32,9 @@ a:active {
 
 #topheader
 {
-    background-image:url(../images/bg_01.jpg);
-    background-repeat:repeat-x; height:96px; width:100%;
+    /*    background-image:url(../images/bg_01.jpg);
+        background-repeat:repeat-x; height:96px; width:100%;*/
+    background: white;
     margin:0 auto;
 }
 
@@ -110,15 +111,11 @@ body {
     height:30px;
     padding: 0px;
     padding-left: 10px;
-    background-image:url(../images/top.jpg);
-    background-repeat:repeat-x;
     float:left;
 }
 
 .rightbg
 {
-    background-image:url(../images/top-right.jpg);
-    width:7px; height:30px;
     padding-left: 0px;
     float:left;
 }
@@ -290,10 +287,10 @@ body {
 }
 #contenttop
 {
-    background-image:url(../images/top.jpg);
-    float:inherit;
-    background-repeat:repeat-x;
-    height:30px;
+    /*    background-image:url(../images/top.jpg);
+        float:inherit;
+        background-repeat:repeat-x;
+    */    height:30px;
 }
 
 #beforefooter
@@ -1195,7 +1192,7 @@ table.coverage_data td {
 }
 
 .confluenceTable td {
-     border: thin solid #d3d3d3;
+    border: thin solid #d3d3d3;
 }
 
 #releases {

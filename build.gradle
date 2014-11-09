@@ -3,9 +3,6 @@ import net.serenitybdd.builds.ProjectVersionCounter
 buildscript {
     repositories {
         jcenter()
-        maven {
-            url 'https://geonet.artifactoryonline.com/geonet/public-releases'
-        }
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
@@ -139,7 +136,7 @@ allprojects {
         testCompile("com.github.goldin:spock-extensions:0.1.4") {
             exclude module: "spock-core"
         }
-        testCompile("org.codehaus.groovy:groovy-all:2.3.3")
+        testCompile("org.codehaus.groovy:groovy-all:2.3.6")
         testCompile("org.easytesting:fest-assert:1.4")
     }
 

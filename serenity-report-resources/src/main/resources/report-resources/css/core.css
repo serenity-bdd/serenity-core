@@ -1165,7 +1165,7 @@ table.coverage_data td {
 }
 
 .date-and-time {
-    float:right; padding: 10px;
+    float:right; padding: 0px;
 }
 
 .embedded {

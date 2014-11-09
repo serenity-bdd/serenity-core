@@ -260,8 +260,6 @@
             <#assign errorCount = testOutcomes.totalTests.withResult("error") >
             <#assign failureOrErrorCount = testOutcomes.totalTests.withFailureOrError() >
 
-                <span class="timestamp">Tests executed ${timestamp} - </span>
-
                 <span class="test-count">
                     ${successCount}
                     <#if (successCount > 0 && report.shouldDisplayResultLink)>

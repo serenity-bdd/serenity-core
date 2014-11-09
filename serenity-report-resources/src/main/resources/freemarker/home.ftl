@@ -3,7 +3,14 @@
 <html>
 <head>
     <meta charset="UTF-8"/>
-    <title>Thucydides Reports</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Serenity Reports</title>
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
     <!--[if IE 7]>
@@ -20,6 +27,8 @@
     <script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script><![endif]-->
 
     <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+
     <script type="text/javascript" src="datatables/media/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="jqplot/jquery.jqplot.min.js"></script>
     <script type="text/javascript" src="jqplot/plugins/jqplot.pieRenderer.min.js"></script>
@@ -250,6 +259,8 @@
             <#assign failureCount = testOutcomes.totalTests.withResult("failure") >
             <#assign errorCount = testOutcomes.totalTests.withResult("error") >
             <#assign failureOrErrorCount = testOutcomes.totalTests.withFailureOrError() >
+
+                <span class="timestamp">Tests executed ${timestamp} - </span>
 
                 <span class="test-count">
                     ${successCount}

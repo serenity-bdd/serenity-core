@@ -1,31 +1,45 @@
 <#macro main_menu(selected)>
-<div class="menu">
-    <ul>
-        <li><a href="index.html" <#if selected=="home">class="current"</#if>>Overall Test Results</a></li>
-        <li><a href="capabilities.html" <#if selected=="requirements">class="current"</#if>>Requirements</a></li>
+<#--<div class="menu">-->
+<div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li <#if selected=="home">class="active"</#if>>
+            <#if selected=="home"><a href="#"><#else><a href="index.html"></#if><i class="fa fa-check-square-o"></i> Overall Test Results</a>
+        </li>
+        <li <#if selected=="requirements">class="active"</#if>>
+            <#if selected=="requirements"><a href="#"><#else><a href="capabilities.html"></#if><i class="fa fa-book"></i> Requirements</a>
+        </li>
     <#if (reportOptions.showReleases)>
-        <li><a href="releases.html" <#if selected=="releases">class="current"</#if>>Releases</a></li>
+        <li <#if selected=="releases">class="active"</#if>>
+            <#if selected=="releases"><a href="#"><#else><a href="releases.html"></#if><i class="fa fa-paper-plane"></i> Releases</a>
+        </li>
     </#if>
     <#if reportOptions.showProgress>
-        <li><a href="progress-report.html" <#if selected=="progress">class="current"</#if>>Progress</a></li>
+        <li <#if selected=="progress">class="active"</#if>>
+            <#if selected=="progress"><a href="#"><#else><a href="progress-report.html"></#if>Progress</a>
+        </li>
     </#if>
     <#foreach requirementType in requirementTypes>
         <#assign requirmentReport = absoluteReportName.forRequirementType(requirementType) >
         <#assign typeTitle = inflection.of(requirementType).inPluralForm().asATitle() >
-        <li><a href="${requirmentReport}" <#if selected=="${requirementType}">class="current"</#if>>${typeTitle}</a></li>
+        <li <#if selected=="${requirementType}">class="active"</#if>>
+            <#if selected=="${requirementType}"><a href="#"><#else><a href="${requirmentReport}"></#if><i class="fa fa-comments-o"></i> ${typeTitle}</a>
+        </li>
     </#foreach>
     <#if reportOptions.showTagMenus>
         <#foreach tagType in allTestOutcomes.firstClassTagTypes>
             <#assign tagReport = absoluteReportName.forTagType(tagType) >
             <#assign tagTypeTitle = inflection.of(tagType).inPluralForm().asATitle() >
-            <li><a href="${tagReport}" <#if selected=="${tagType}">class="current"</#if>>>${tagTypeTitle}</a></li>
+            <li <#if selected=="${tagType}">class="active"</#if>>
+                <#if selected=="${tagType}"><a href="#"><#else><a href="${tagReport}"></#if><i class="fa fa-tags"></i> ${tagTypeTitle}</a>
+            </li>
         </#foreach>
     </#if>
     <#if reportOptions.showHistory>
-        <li><a href="history.html" <#if selected=="history">class="current"</#if>>History</a></li>
+        <li <#if selected=="history">class="active"</#if>>
+            <#if selected=="history"><a href="#"><#else><a href="history.html"></#if>History</a>
+        </li>
     </#if>
     </ul>
-    <span class="date-and-time">Report generated ${timestamp}</span>
-    <br style="clear:left"/>
+        <br style="clear:left"/>
 </div>
 </#macro>

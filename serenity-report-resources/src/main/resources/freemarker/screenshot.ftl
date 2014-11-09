@@ -10,8 +10,11 @@
         -->
     </style>
     <link rel="shortcut icon" href="favicon.ico" >
+    <script src="bootstrap/js/bootstrap.min.js"></script>
     <link href="css/core.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
     <script src="scripts/jquery.js" type="text/javascript"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
 </head>
 
 <body>

@@ -6,6 +6,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Home</title>
     <link rel="shortcut icon" href="favicon.ico" >
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
     <link href="css/core.css" rel="stylesheet" type="text/css"/>
     <style type="text/css">
 	#slider {
@@ -31,6 +33,7 @@
     <link href="slides/js/global.css" rel="stylesheet" type="text/css"/>
 
     <script src="scripts/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
 
 	<link rel="stylesheet" href="nivo-slider/nivo-slider.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="nivo-slider/themes/default/default.css" type="text/css" media="screen" />

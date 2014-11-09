@@ -933,6 +933,9 @@ h4 {
     font-size: 14px;
 }
 
+.timestamp {
+    font-size: 14px;
+}
 .requirementName {
     font-family:euphemia, verdana, sans-serif;font-size: 14px; font-weight:bold;font-style: normal;
     color: #0d78ae;

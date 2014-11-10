@@ -14,10 +14,12 @@ public class PathProcessor {
     }
 
     private String classpath(String path) {
-        String corePath = path.replace("classpath:","");
+        String corePath = path.replace("classpath:/", "");
+        corePath = corePath.replace("classpath:", "");
+
         try {
             return Paths.get(Thread.currentThread().getContextClassLoader().getResource(corePath).toURI())
-                        .toAbsolutePath().toString().replaceAll("%20"," ");
+                    .toAbsolutePath().toString().replaceAll("%20", " ");
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }

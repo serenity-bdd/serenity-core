@@ -97,6 +97,10 @@ public class WebElementFacadeImpl implements WebElementFacade {
     	if (locator == null) {
     		return null;
     	}
+        WebElement resolvedELement = locator.findElement();
+        if (resolvedELement == null) {
+            throw new ElementNotVisibleException(locator.toString());
+        }
     	return locator.findElement();
     };
 

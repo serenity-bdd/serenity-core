@@ -80,7 +80,7 @@ allprojects {
         reports.junitXml.destination = "${buildDir}/reports/integration-tests"
         reports.html.destination = "${buildDir}/reports/integration-tests"
         minHeapSize = "128m"
-        maxHeapSize = "1024m"
+        maxHeapSize = "2048m"
         jvmArgs '-XX:MaxPermSize=256m'
     }
 

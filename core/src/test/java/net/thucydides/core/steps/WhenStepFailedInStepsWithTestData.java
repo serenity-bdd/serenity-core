@@ -1,4 +1,4 @@
-package net.thucydides.core.steps.integration;
+package net.thucydides.core.steps;
 
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.StepGroup;

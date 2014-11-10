@@ -4,6 +4,10 @@ import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import io.appium.java_client.FindsByAccessibilityId;
+import io.appium.java_client.FindsByAndroidUIAutomator;
+import io.appium.java_client.FindsByIosUIAutomation;
+import io.appium.java_client.MobileElement;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.jquery.JQueryEnabledPage;
@@ -31,7 +35,7 @@ import static ch.lambdaj.Lambda.convert;
 /**
  * A proxy class for a web element, providing some more methods.
  */
-public class WebElementFacadeImpl implements WebElementFacade {
+public class WebElementFacadeImpl extends MobileElement implements WebElementFacade {
 
     private final WebElement webElement;
     private final WebDriver driver;
@@ -42,63 +46,64 @@ public class WebElementFacadeImpl implements WebElementFacade {
     private JavascriptExecutorFacade javascriptExecutorFacade;
     private InternalSystemClock clock = new InternalSystemClock();
     private final EnvironmentVariables environmentVariables;
-    
+
     private ElementLocator locator;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebElementFacadeImpl.class);
-    
+
     private WebElementFacadeImpl(final WebDriver driver,
-    		final ElementLocator locator,
-            final WebElement webElement,
-            final long timeoutInMilliseconds){
-    	this.webElement = webElement;
-    	this.driver = driver;
-    	this.timeoutInMilliseconds = timeoutInMilliseconds;
-    	this.locator = locator;
-    	this.webdriverClock = new SystemClock();
-		this.sleeper = Sleeper.SYSTEM_SLEEPER;
-		this.javascriptExecutorFacade = new JavascriptExecutorFacade(driver);
-		this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get() ;
+                                 final ElementLocator locator,
+                                 final WebElement webElement,
+                                 final long timeoutInMilliseconds) {
+        this.webElement = webElement;
+        this.driver = driver;
+        this.timeoutInMilliseconds = timeoutInMilliseconds;
+        this.locator = locator;
+        this.webdriverClock = new SystemClock();
+        this.sleeper = Sleeper.SYSTEM_SLEEPER;
+        this.javascriptExecutorFacade = new JavascriptExecutorFacade(driver);
+        this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
     }
 
     private WebElementFacadeImpl copy() {
         return new WebElementFacadeImpl(driver, locator, webElement, timeoutInMilliseconds);
     }
-    
+
     /**
-     * @deprecated As of release 0.9.127, replaced by static {@link #wrapWebElement(WebDriver driver,WebElement webElement,long timeoutInMilliseconds)}
-     * 
      * @param driver
      * @param webElement
      * @param timeoutInMilliseconds
+     * @deprecated As of release 0.9.127, replaced by static {@link #wrapWebElement(WebDriver driver, WebElement webElement, long timeoutInMilliseconds)}
      */
-    @Deprecated 
+    @Deprecated
     public WebElementFacadeImpl(final WebDriver driver, final WebElement webElement, final long timeoutInMilliseconds) {
         this(driver, (ElementLocator) null, webElement, timeoutInMilliseconds);
     }
-    
+
     public WebElementFacadeImpl(final WebDriver driver,
-    		final ElementLocator locator,
-            final long timeoutInMilliseconds) {
-		this(driver, locator, (WebElement)null, timeoutInMilliseconds);
-	}
-    
+                                final ElementLocator locator,
+                                final long timeoutInMilliseconds) {
+        this(driver, locator, (WebElement) null, timeoutInMilliseconds);
+    }
+
     public static WebElementFacadeImpl wrapWebElement(final WebDriver driver,
-    		final WebElement element,
-            final long timeoutInMilliseconds) {
-		return new WebElementFacadeImpl(driver, (ElementLocator)null, element, timeoutInMilliseconds);
-		
-	} 
-    
-    protected WebElement getElement(){
-    	if (webElement != null){
-    		return webElement;
-    	}
-    	if (locator == null) {
-    		return null;
-    	}
-    	return locator.findElement();
-    };
+                                                      final WebElement element,
+                                                      final long timeoutInMilliseconds) {
+        return new WebElementFacadeImpl(driver, (ElementLocator) null, element, timeoutInMilliseconds);
+
+    }
+
+    protected WebElement getElement() {
+        if (webElement != null) {
+            return webElement;
+        }
+        if (locator == null) {
+            return null;
+        }
+        return locator.findElement();
+    }
+
+    ;
 
     protected JavascriptExecutorFacade getJavascriptExecutorFacade() {
         return javascriptExecutorFacade;
@@ -110,30 +115,29 @@ public class WebElementFacadeImpl implements WebElementFacade {
 
 
     @Override
-	public WebElementFacade then(String xpathOrCssSelector) {
+    public WebElementFacade then(String xpathOrCssSelector) {
         return findBy(xpathOrCssSelector);
     }
 
-	@Override
-	public WebElementFacade findBy(String xpathOrCssSelector) {
-		logIfVerbose("findBy " + xpathOrCssSelector);
-		WebElement nestedElement;
-		if (PageObject.isXPath(xpathOrCssSelector)) {
-			nestedElement = getElement().findElement((By
-					.xpath(xpathOrCssSelector)));
-		} else {
-			nestedElement = getElement().findElement((By
-					.cssSelector(xpathOrCssSelector)));
-		}
-		
-		return wrapWebElement(driver, nestedElement,
-				timeoutInMilliseconds);
-	}
-	
-	
+    @Override
+    public WebElementFacade findBy(String xpathOrCssSelector) {
+        logIfVerbose("findBy " + xpathOrCssSelector);
+        WebElement nestedElement;
+        if (PageObject.isXPath(xpathOrCssSelector)) {
+            nestedElement = getElement().findElement((By
+                    .xpath(xpathOrCssSelector)));
+        } else {
+            nestedElement = getElement().findElement((By
+                    .cssSelector(xpathOrCssSelector)));
+        }
+
+        return wrapWebElement(driver, nestedElement,
+                timeoutInMilliseconds);
+    }
+
 
     @Override
-	public List<WebElementFacade> thenFindAll(String xpathOrCssSelector) {
+    public List<WebElementFacade> thenFindAll(String xpathOrCssSelector) {
         logIfVerbose("findAll " + xpathOrCssSelector);
         List<WebElement> nestedElements = Lists.newArrayList();
         if (PageObject.isXPath(xpathOrCssSelector)) {
@@ -147,48 +151,78 @@ public class WebElementFacadeImpl implements WebElementFacade {
 
     private List<WebElementFacade> webElementFacadesFrom(List<WebElement> nestedElements) {
         List<WebElementFacade> results = Lists.newArrayList();
-        for(WebElement element : nestedElements) {
+        for (WebElement element : nestedElements) {
             results.add(wrapWebElement(driver, element, timeoutInMilliseconds));
         }
         return results;
     }
 
     @Override
-	public WebElementFacade findBy(By selector) {
+    public WebElementFacade findBy(By selector) {
         logIfVerbose("findBy " + selector);
         WebElement nestedElement = getElement().findElement(selector);
         return wrapWebElement(driver, nestedElement, timeoutInMilliseconds);
     }
 
     @Override
-	public WebElementFacade find(By bySelector) {
+    public WebElementFacade find(By bySelector) {
         return findBy(bySelector);
     }
 
     @Override
-	public WebElementFacade then(By bySelector) {
+    public WebElementFacade then(By bySelector) {
         return findBy(bySelector);
     }
 
     @Override
-	public String getAttribute(String name) {
+    public String getAttribute(String name) {
         return getElement().getAttribute(name);
     }
 
     @Override
-	public List<WebElementFacade> thenFindAll(By selector) {
+    public List<WebElementFacade> thenFindAll(By selector) {
         logIfVerbose("findAll " + selector);
         List<WebElement> nestedElements = getElement().findElements(selector);
         return webElementFacadesFrom(nestedElements);
     }
 
     @Override
-	public long getTimeoutInMilliseconds() {
+    public WebElement findElementByAccessibilityId(String id) {
+        return ((FindsByAccessibilityId) getElement()).findElementByAccessibilityId(id);
+    }
+
+    @Override
+    public List<WebElement> findElementsByAccessibilityId(String id) {
+        return ((FindsByAccessibilityId) getElement()).findElementsByAccessibilityId(id);
+    }
+
+    @Override
+    public WebElement findElementByAndroidUIAutomator(String using) {
+        return ((FindsByAndroidUIAutomator) getElement()).findElementByAndroidUIAutomator(id);
+    }
+
+    @Override
+    public List<WebElement> findElementsByAndroidUIAutomator(String using) {
+        return ((FindsByAndroidUIAutomator) getElement()).findElementsByAndroidUIAutomator(id);
+    }
+
+    @Override
+    public WebElement findElementByIosUIAutomation(String using) {
+        return ((FindsByIosUIAutomation) getElement()).findElementByIosUIAutomation(id);
+    }
+
+    @Override
+    public List<WebElement> findElementsByIosUIAutomation(String using) {
+        return ((FindsByIosUIAutomation) getElement()).findElementsByIosUIAutomation(id);
+    }
+
+    @Override
+    public long getTimeoutInMilliseconds() {
         return timeoutInMilliseconds;
     }
 
     @Override
-	public WebElementFacade withTimeoutOf(int timeout, TimeUnit unit) {
+    public WebElementFacade withTimeoutOf(int timeout, TimeUnit unit) {
         return wrapWebElement(driver, getElement(),
                 TimeUnit.MILLISECONDS.convert(timeout, unit));
     }
@@ -199,7 +233,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * If the element is not visible, the method will wait a bit to see if it appears later on.
      */
     @Override
-	public boolean isVisible() {
+    public boolean isVisible() {
 
         try {
             return (getElement() != null) && (getElement().isDisplayed());
@@ -216,7 +250,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * Convenience method to chain method calls more fluently.
      */
     @Override
-	public WebElementFacade and() {
+    public WebElementFacade and() {
         return this;
     }
 
@@ -224,7 +258,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * Convenience method to chain method calls more fluently.
      */
     @Override
-	public WebElementFacade then() {
+    public WebElementFacade then() {
         return this;
     }
 
@@ -236,12 +270,12 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * by a method called "isCurrently*" and, if so, fail immediately without waiting as it would normally do.
      */
     @Override
-	public boolean isCurrentlyVisible() {
+    public boolean isCurrentlyVisible() {
         return isVisible();
     }
 
     @Override
-	public boolean isCurrentlyEnabled() {
+    public boolean isCurrentlyEnabled() {
         try {
             return getElement().isEnabled();
         } catch (NoSuchElementException e) {
@@ -256,7 +290,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * Throws an AssertionError if the element is not rendered.
      */
     @Override
-	public void shouldBeVisible() {
+    public void shouldBeVisible() {
         if (!isVisible()) {
             failWithMessage("Element should be visible");
         }
@@ -267,7 +301,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * Throws an AssertionError if the element is not rendered.
      */
     @Override
-	public void shouldBeCurrentlyVisible() {
+    public void shouldBeCurrentlyVisible() {
         if (!isCurrentlyVisible()) {
             failWithMessage("Element should be visible");
         }
@@ -278,7 +312,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * Throws an AssertionError if the element is not rendered.
      */
     @Override
-	public void shouldNotBeVisible() {
+    public void shouldNotBeVisible() {
         if (isCurrentlyVisible()) {
             failWithMessage("Element should not be visible");
         }
@@ -289,7 +323,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * Throws an AssertionError if the element is not rendered.
      */
     @Override
-	public void shouldNotBeCurrentlyVisible() {
+    public void shouldNotBeCurrentlyVisible() {
         if (isCurrentlyVisible()) {
             failWithMessage("Element should not be visible");
         }
@@ -299,7 +333,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * Does this element currently have the focus.
      */
     @Override
-	public boolean hasFocus() {
+    public boolean hasFocus() {
         JavascriptExecutorFacade js = new JavascriptExecutorFacade(driver);
         WebElement activeElement = (WebElement) js.executeScript("return window.document.activeElement");
         return getElement().equals(activeElement);
@@ -309,7 +343,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * Does this element contain a given text?
      */
     @Override
-	public boolean containsText(final String value) {
+    public boolean containsText(final String value) {
         return ((getElement() != null) && (getElement().getText().contains(value)));
     }
 
@@ -317,7 +351,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * Does this element exactly match  given text?
      */
     @Override
-	public boolean containsOnlyText(final String value) {
+    public boolean containsOnlyText(final String value) {
         return ((getElement() != null) && (getElement().getText().equals(value)));
     }
 
@@ -325,12 +359,12 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * Does this dropdown contain the specified value.
      */
     @Override
-	public boolean containsSelectOption(final String value) {
+    public boolean containsSelectOption(final String value) {
         return getSelectOptions().contains(value);
     }
 
     @Override
-	public List<String> getSelectOptions() {
+    public List<String> getSelectOptions() {
         List<WebElement> results = Collections.emptyList();
         if (getElement() != null) {
             results = getElement().findElements(By.tagName("option"));
@@ -350,7 +384,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * @param textValue
      */
     @Override
-	public void shouldContainText(String textValue) {
+    public void shouldContainText(String textValue) {
         if (!containsText(textValue)) {
             String errorMessage = String.format(
                     "The text '%s' was not found in the web element. Element text '%s'.", textValue, getElement().getText());
@@ -364,7 +398,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * @param textValue
      */
     @Override
-	public void shouldContainOnlyText(String textValue) {
+    public void shouldContainOnlyText(String textValue) {
         if (!containsOnlyText(textValue)) {
             String errorMessage = String.format(
                     "The text '%s' does not match the elements text '%s'.", textValue, getElement().getText());
@@ -373,7 +407,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
     }
 
     @Override
-	public void shouldContainSelectedOption(String textValue) {
+    public void shouldContainSelectedOption(String textValue) {
         if (!containsSelectOption(textValue)) {
             String errorMessage = String.format(
                     "The list element '%s' was not found in the web element", textValue);
@@ -387,7 +421,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * @param textValue
      */
     @Override
-	public void shouldNotContainText(String textValue) {
+    public void shouldNotContainText(String textValue) {
         if (containsText(textValue)) {
             String errorMessage = String.format(
                     "The text '%s' was found in the web element when it should not have. Element text '%s'.", textValue, getElement().getText());
@@ -396,7 +430,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
     }
 
     @Override
-	public void shouldBeEnabled() {
+    public void shouldBeEnabled() {
         if (!isEnabled()) {
             String errorMessage = String.format(
                     "Field '%s' should be enabled", toString());
@@ -405,12 +439,12 @@ public class WebElementFacadeImpl implements WebElementFacade {
     }
 
     @Override
-	public boolean isEnabled() {
+    public boolean isEnabled() {
         return (getElement() != null) && (getElement().isEnabled());
     }
 
     @Override
-	public void shouldNotBeEnabled() {
+    public void shouldNotBeEnabled() {
         if (isEnabled()) {
             String errorMessage = String.format(
                     "Field '%s' should not be enabled", toString());
@@ -424,7 +458,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * @param value
      */
     @Override
-	public WebElementFacade type(final String value) {
+    public WebElementFacade type(final String value) {
         logIfVerbose("Type '" + value + "'");
         enableHighlightingIfRequired();
         waitUntilElementAvailable();
@@ -440,7 +474,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * @param value
      */
     @Override
-	public WebElementFacade typeAndEnter(final String value) {
+    public WebElementFacade typeAndEnter(final String value) {
         logIfVerbose("Type and enter '" + value + "'");
         waitUntilElementAvailable();
         clear();
@@ -456,7 +490,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * @param value
      */
     @Override
-	public WebElementFacade typeAndTab(final String value) {
+    public WebElementFacade typeAndTab(final String value) {
         logIfVerbose("Type and tab '" + value + "'");
         enableHighlightingIfRequired();
         waitUntilElementAvailable();
@@ -471,12 +505,12 @@ public class WebElementFacadeImpl implements WebElementFacade {
     }
 
     @Override
-	public void setWindowFocus() {
+    public void setWindowFocus() {
         getJavascriptExecutorFacade().executeScript("window.focus()");
     }
 
     @Override
-	public WebElementFacade selectByVisibleText(final String label) {
+    public WebElementFacade selectByVisibleText(final String label) {
         logIfVerbose("Select label '" + label + "'");
         waitUntilElementAvailable();
         Select select = new Select(getElement());
@@ -486,14 +520,14 @@ public class WebElementFacadeImpl implements WebElementFacade {
     }
 
     @Override
-	public String getSelectedVisibleTextValue() {
+    public String getSelectedVisibleTextValue() {
         waitUntilVisible();
         Select select = new Select(getElement());
         return select.getFirstSelectedOption().getText();
     }
 
     @Override
-	public WebElementFacade selectByValue(String value) {
+    public WebElementFacade selectByValue(String value) {
         logIfVerbose("Select value '" + value + "'");
         enableHighlightingIfRequired();
         waitUntilElementAvailable();
@@ -504,14 +538,14 @@ public class WebElementFacadeImpl implements WebElementFacade {
     }
 
     @Override
-	public String getSelectedValue() {
+    public String getSelectedValue() {
         waitUntilVisible();
         Select select = new Select(getElement());
         return select.getFirstSelectedOption().getAttribute("value");
     }
 
     @Override
-	public WebElementFacade selectByIndex(int indexValue) {
+    public WebElementFacade selectByIndex(int indexValue) {
         logIfVerbose("Select by index '" + indexValue + "'");
         enableHighlightingIfRequired();
         waitUntilElementAvailable();
@@ -531,15 +565,15 @@ public class WebElementFacadeImpl implements WebElementFacade {
     private boolean driverIsDisabled() {
         return StepEventBus.getEventBus().webdriverCallsAreSuspended();
     }
-    
-	public boolean isPresent() {
+
+    public boolean isPresent() {
         if (driverIsDisabled()) {
             return false;
         }
 
         try {
             //return (webElement != null) && (webElement.isDisplayed() || !webElement.isDisplayed());
-        	return (getElement() != null) && (getElement().isDisplayed() || !getElement().isDisplayed());
+            return (getElement() != null) && (getElement().isDisplayed() || !getElement().isDisplayed());
         } catch (NoSuchElementException e) {
             if (e.getCause().getMessage().contains("Element is not usable")) {
                 return true;
@@ -549,14 +583,14 @@ public class WebElementFacadeImpl implements WebElementFacade {
     }
 
     @Override
-	public void shouldBePresent() {
+    public void shouldBePresent() {
         if (!isPresent()) {
             failWithMessage("Field should be present");
         }
     }
 
     @Override
-	public void shouldNotBePresent() {
+    public void shouldNotBePresent() {
         if (isPresent()) {
             failWithMessage("Field should not be present");
         }
@@ -567,7 +601,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
     }
 
     @Override
-	public WebElementFacade waitUntilVisible() {
+    public WebElementFacade waitUntilVisible() {
         if (driverIsDisabled()) {
             return this;
         }
@@ -581,7 +615,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
     }
 
     @Override
-	public WebElementFacade waitUntilPresent() {
+    public WebElementFacade waitUntilPresent() {
         if (driverIsDisabled()) {
             return this;
         }
@@ -665,7 +699,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
     }
 
     @Override
-	public Wait<WebDriver> waitForCondition() {
+    public Wait<WebDriver> waitForCondition() {
         return new FluentWait<WebDriver>(driver, webdriverClock, sleeper)
                 .withTimeout(timeoutInMilliseconds, TimeUnit.MILLISECONDS)
                 .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
@@ -673,7 +707,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
     }
 
     @Override
-	public WebElementFacade waitUntilNotVisible() {
+    public WebElementFacade waitUntilNotVisible() {
         if (driverIsDisabled()) {
             return this;
         }
@@ -687,25 +721,25 @@ public class WebElementFacadeImpl implements WebElementFacade {
     }
 
     @Override
-	public String getValue() {
+    public String getValue() {
         waitUntilVisible();
         return getElement().getAttribute("value");
     }
 
     @Override
-	public boolean isSelected() {
+    public boolean isSelected() {
         waitUntilVisible();
         return getElement().isSelected();
     }
 
     @Override
-	public String getText() {
+    public String getText() {
         waitUntilVisible();
         return getElement().getText();
     }
 
     @Override
-	public WebElementFacade waitUntilEnabled() {
+    public WebElementFacade waitUntilEnabled() {
         if (driverIsDisabled()) {
             return this;
         }
@@ -714,12 +748,12 @@ public class WebElementFacadeImpl implements WebElementFacade {
             waitForCondition().until(elementIsEnabled());
             return this;
         } catch (TimeoutException timeout) {
-            throw new ElementNotVisibleException("Expected enabled element was not enabled" , timeout);
+            throw new ElementNotVisibleException("Expected enabled element was not enabled", timeout);
         }
     }
 
     @Override
-	public WebElementFacade waitUntilDisabled() {
+    public WebElementFacade waitUntilDisabled() {
         if (driverIsDisabled()) {
             return this;
         }
@@ -733,7 +767,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
     }
 
     @Override
-	public String getTextValue() {
+    public String getTextValue() {
         waitUntilPresent();
 
         if (!isVisible()) {
@@ -774,7 +808,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
      * Wait for an element to be visible and enabled, and then click on it.
      */
     @Override
-	public void click() {
+    public void click() {
         enableHighlightingIfRequired();
         waitUntilElementAvailable();
         logClick();
@@ -793,7 +827,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
     }
 
     private boolean useVerboseLogging() {
-        return getEnvironmentVariables().getPropertyAsBoolean(ThucydidesSystemProperty.THUCYDIDES_VERBOSE_STEPS.getPropertyName(),false);
+        return getEnvironmentVariables().getPropertyAsBoolean(ThucydidesSystemProperty.THUCYDIDES_VERBOSE_STEPS.getPropertyName(), false);
     }
 
 
@@ -806,8 +840,8 @@ public class WebElementFacadeImpl implements WebElementFacade {
     }
 
     @Override
-	public void clear() {
-        getElement().sendKeys(Keys.chord(Keys.CONTROL,"a"), Keys.DELETE);
+    public void clear() {
+        getElement().sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
         getElement().clear();
     }
 
@@ -817,11 +851,12 @@ public class WebElementFacadeImpl implements WebElementFacade {
             jQueryEnabledPage.injectJQueryPlugins();
         }
     }
+
     private void notifyScreenChange() {
         StepEventBus.getEventBus().notifyScreenChange();
     }
 
-	@Override
+    @Override
     public String toString() {
         return webElementDescription();
     }
@@ -833,31 +868,31 @@ public class WebElementFacadeImpl implements WebElementFacade {
 
         StringBuffer description = new StringBuffer();
         description.append("<")
-                   .append(getElement().getTagName());
+                .append(getElement().getTagName());
 
         boolean descriptiveFieldFound = false;
         if (StringUtils.isNotEmpty(getElement().getAttribute("id"))) {
-            description.append(attributeValue(getElement(),"id"));
+            description.append(attributeValue(getElement(), "id"));
             descriptiveFieldFound = true;
         }
         if (StringUtils.isNotEmpty(getElement().getAttribute("name"))) {
-            description.append(attributeValue(getElement(),"name"));
+            description.append(attributeValue(getElement(), "name"));
             descriptiveFieldFound = true;
         }
         if (!descriptiveFieldFound && StringUtils.isNotEmpty(getElement().getAttribute("href"))) {
-            description.append(attributeValue(getElement(),"href"));
+            description.append(attributeValue(getElement(), "href"));
             descriptiveFieldFound = true;
         }
         if (StringUtils.isNotEmpty(getElement().getAttribute("type"))) {
-            description.append(attributeValue(getElement(),"type"));
+            description.append(attributeValue(getElement(), "type"));
             descriptiveFieldFound = true;
         }
         if (StringUtils.isNotEmpty(getElement().getAttribute("value"))) {
-            description.append(attributeValue(getElement(),"value"));
+            description.append(attributeValue(getElement(), "value"));
             descriptiveFieldFound = true;
         }
         if (!descriptiveFieldFound && StringUtils.isNotEmpty(getElement().getAttribute("class"))) {
-            description.append(attributeValue(getElement(),"class"));
+            description.append(attributeValue(getElement(), "class"));
         }
 
         description.append(">");
@@ -867,55 +902,55 @@ public class WebElementFacadeImpl implements WebElementFacade {
     private String attributeValue(WebElement webElement, String attribute) {
         return " " + attribute + "='" + webElement.getAttribute(attribute) + "'";
     }
-	/*
-	 * WebDirver default 
+
+    /*
+     * WebDriver default
 	 * 
 	 */
-	
-	public void submit() {
-		getElement().submit();
-	}
+    public void submit() {
+        getElement().submit();
+    }
 
-	public void sendKeys(CharSequence... keysToSend) {
-		getElement().sendKeys(keysToSend);
-	}
+    public void sendKeys(CharSequence... keysToSend) {
+        getElement().sendKeys(keysToSend);
+    }
 
-	public String getTagName() {
-		return getElement().getTagName();
-	}
+    public String getTagName() {
+        return getElement().getTagName();
+    }
 
-	public List<WebElement> findElements(By by) {
-		return getElement().findElements(by);
-	}
+    public List<WebElement> findElements(By by) {
+        return getElement().findElements(by);
+    }
 
-	public WebElement findElement(By by) {
-		return getElement().findElement(by);
-	}
+    public WebElement findElement(By by) {
+        return getElement().findElement(by);
+    }
 
-	public boolean isDisplayed() {
-		return getElement().isDisplayed();
-	}
+    public boolean isDisplayed() {
+        return getElement().isDisplayed();
+    }
 
-	public Point getLocation() {
-		return getElement().getLocation();
-	}
+    public Point getLocation() {
+        return getElement().getLocation();
+    }
 
-	public Dimension getSize() {
-		return getElement().getSize();
-	}
+    public Dimension getSize() {
+        return getElement().getSize();
+    }
 
-	public String getCssValue(String propertyName) {
-		return getElement().getCssValue(propertyName);
-	}
+    public String getCssValue(String propertyName) {
+        return getElement().getCssValue(propertyName);
+    }
 
-	public WebElement getWrappedElement() {
-		return getElement();
-	}
+    public WebElement getWrappedElement() {
+        return getElement();
+    }
 
     @Override
-	public Coordinates getCoordinates() {
-		return  ((Locatable) getElement()).getCoordinates();
-	}
+    public Coordinates getCoordinates() {
+        return ((Locatable) getElement()).getCoordinates();
+    }
 
 }
 

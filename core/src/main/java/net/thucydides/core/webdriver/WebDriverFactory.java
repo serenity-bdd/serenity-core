@@ -1,6 +1,7 @@
 package net.thucydides.core.webdriver;
 
 import com.google.common.base.Preconditions;
+import io.appium.java_client.AppiumDriver;
 import net.thucydides.core.Thucydides;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureException;
@@ -10,6 +11,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.PageObject;
 import net.thucydides.core.steps.FilePathParser;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.appium.AppiumConfiguration;
 import net.thucydides.core.webdriver.capabilities.BrowserStackRemoteDriverCapabilities;
 import net.thucydides.core.webdriver.capabilities.SauceRemoteDriverCapabilities;
 import net.thucydides.core.webdriver.chrome.OptionsSplitter;
@@ -74,7 +76,7 @@ public class WebDriverFactory {
     private final Integer EXTRA_TIME_TO_TAKE_SCREENSHOTS = 180;
 
     public WebDriverFactory() {
-        this(new WebdriverInstanceFactory(), Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(new WebdriverInstanceFactory(), Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
     }
 
     public WebDriverFactory(EnvironmentVariables environmentVariables) {
@@ -92,8 +94,8 @@ public class WebDriverFactory {
                             EnvironmentVariables environmentVariables,
                             FirefoxProfileEnhancer firefoxProfileEnhancer) {
         this(webdriverInstanceFactory, environmentVariables, firefoxProfileEnhancer,
-            Injectors.getInjector().getInstance(FixtureProviderService.class),
-            Injectors.getInjector().getInstance(ElementProxyCreator.class));
+                Injectors.getInjector().getInstance(FixtureProviderService.class),
+                Injectors.getInjector().getInstance(ElementProxyCreator.class));
     }
 
     public WebDriverFactory(WebdriverInstanceFactory webdriverInstanceFactory,
@@ -146,11 +148,11 @@ public class WebDriverFactory {
     public boolean usesSauceLabs() {
         return StringUtils.isNotEmpty(sauceRemoteDriverCapabilities.getUrl());
     }
-    
+
     public boolean usesBrowserStack() {
         return StringUtils.isNotEmpty(browserStackRemoteDriverCapabilities.getUrl());
     }
-    
+
     /**
      * This method is synchronized because multiple webdriver instances can be created in parallel.
      * However, they may use common system resources such as ports, so may potentially interfere
@@ -161,8 +163,10 @@ public class WebDriverFactory {
     protected synchronized WebDriver newWebdriverInstance(final Class<? extends WebDriver> driverClass) {
         try {
             WebDriver driver;
-            if (isARemoteDriver(driverClass) || shouldUseARemoteDriver() || saucelabsUrlIsDefined() || browserStackUrlIsDefined()) {
-            	driver = newRemoteDriver();
+            if (saucelabsUrlIsDefined() || browserStackUrlIsDefined() || shouldUseARemoteDriver()) {
+                driver = newRemoteDriver();
+            } else if (isAnAppiumDriver(driverClass)) {
+                driver = appiumDriver();
             } else if (isAFirefoxDriver(driverClass)) {
                 driver = firefoxDriver();
             } else if (isAnHtmlUnitDriver(driverClass)) {
@@ -176,6 +180,8 @@ public class WebDriverFactory {
                 driver = safariDriver();
             } else if (isAnInternetExplorerDriver(driverClass)) {
                 driver = internetExplorerDriver();
+            } else if (isARemoteDriver(driverClass)) {
+                driver = newRemoteDriver();
             } else if (isAProvidedDriver(driverClass)) {
                 driver = providedDriver();
             } else {
@@ -193,6 +199,7 @@ public class WebDriverFactory {
 
     // IntelliJ in Mac OS X does not pick up environment variables. So to get PhantomJS working in IDE mode for the
     // Thucydides tests, add the 'phantomjs.binary.path' property into a thucydides.properties file in your home directory.
+
     private void setPhantomJSPathIfNotSet() {
         if (!phantomJSIsAvailable()) {
             LOGGER.info("PhantomJS not on path, trying to get path from PHANTOMJS_BINARY_PATH");
@@ -241,7 +248,7 @@ public class WebDriverFactory {
     private void setImplicitTimeoutsIfSpecified(WebDriver driver) {
         if (ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.isDefinedIn(environmentVariables)) {
             int timeout = environmentVariables.getPropertyAsInteger(ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT
-                                                                                            .getPropertyName(),0);
+                    .getPropertyName(), 0);
 
             driver.manage().timeouts().implicitlyWait(timeout, TimeUnit.MILLISECONDS);
         }
@@ -255,13 +262,13 @@ public class WebDriverFactory {
         return webdriverInstanceFactory.newInstanceOf(driverClass);
     }
 
-    private WebDriver  newRemoteDriver() throws MalformedURLException {
+    private WebDriver newRemoteDriver() throws MalformedURLException {
 
         WebDriver driver = null;
         if (saucelabsUrlIsDefined()) {
             driver = buildSaucelabsDriver();
-        } else if (browserStackUrlIsDefined()){
-        	driver = buildBrowserStackDriver();
+        } else if (browserStackUrlIsDefined()) {
+            driver = buildBrowserStackDriver();
         } else {
             driver = buildRemoteDriver();
         }
@@ -281,7 +288,7 @@ public class WebDriverFactory {
     private boolean browserStackUrlIsDefined() {
         return StringUtils.isNotEmpty(browserStackRemoteDriverCapabilities.getUrl());
     }
-    
+
     private WebDriver buildSaucelabsDriver() throws MalformedURLException {
         String saucelabsUrl = sauceRemoteDriverCapabilities.getUrl();
         WebDriver driver = webdriverInstanceFactory.newRemoteDriver(new URL(saucelabsUrl), findSaucelabsCapabilities());
@@ -293,13 +300,13 @@ public class WebDriverFactory {
         }
         return driver;
     }
-    
-    private WebDriver buildBrowserStackDriver() throws MalformedURLException{
-    	String browserStackUrl = browserStackRemoteDriverCapabilities.getUrl();
+
+    private WebDriver buildBrowserStackDriver() throws MalformedURLException {
+        String browserStackUrl = browserStackRemoteDriverCapabilities.getUrl();
         WebDriver driver = webdriverInstanceFactory.newRemoteDriver(new URL(browserStackUrl), findbrowserStackCapabilities());
         return driver;
     }
-    
+
 
     public static String getDriverFrom(EnvironmentVariables environmentVariables, String defaultDriver) {
         String driver = getDriverFrom(environmentVariables);
@@ -321,13 +328,13 @@ public class WebDriverFactory {
 
         return sauceRemoteDriverCapabilities.getCapabilities(capabilities);
     }
-    
-    
+
+
     private Capabilities findbrowserStackCapabilities() {
 
-    	String driver = getDriverFrom(environmentVariables);
-    	DesiredCapabilities capabilities = capabilitiesForDriver(driver);
-    	
+        String driver = getDriverFrom(environmentVariables);
+        DesiredCapabilities capabilities = capabilitiesForDriver(driver);
+
         return browserStackRemoteDriverCapabilities.getCapabilities(capabilities);
 
     }
@@ -361,7 +368,7 @@ public class WebDriverFactory {
         if (!SupportedWebDriver.listOfSupportedDrivers().contains(normalizedDriverName)) {
             SupportedWebDriver closestDriver = SupportedWebDriver.getClosestDriverValueTo(normalizedDriverName);
             throw new AssertionError("Unsupported driver for webdriver.driver or webdriver.remote.driver: " + driver
-                                     + ". Did you mean " + closestDriver.toString().toLowerCase() + "?");
+                    + ". Did you mean " + closestDriver.toString().toLowerCase() + "?");
         }
         return SupportedWebDriver.valueOf(normalizedDriverName);
     }
@@ -381,7 +388,7 @@ public class WebDriverFactory {
 
             case FIREFOX:
                 capabilities = DesiredCapabilities.firefox();
-                capabilities.setCapability("firefox_profile",buildFirefoxProfile());
+                capabilities.setCapability("firefox_profile", buildFirefoxProfile());
                 break;
 
             case HTMLUNIT:
@@ -396,6 +403,10 @@ public class WebDriverFactory {
                 capabilities = DesiredCapabilities.internetExplorer();
                 break;
 
+            case APPIUM:
+                capabilities = appiumCapabilities();
+                break;
+
             default:
                 capabilities = new DesiredCapabilities();
                 capabilities.setJavascriptEnabled(true);
@@ -406,10 +417,10 @@ public class WebDriverFactory {
     private DesiredCapabilities remoteCapabilities() {
         String remoteBrowser = ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables, "firefox");
         DesiredCapabilities capabilities = realBrowserCapabilities(driverTypeFor(remoteBrowser));
-        capabilities.setCapability("idle-timeout",EXTRA_TIME_TO_TAKE_SCREENSHOTS);
+        capabilities.setCapability("idle-timeout", EXTRA_TIME_TO_TAKE_SCREENSHOTS);
 
         Boolean recordScreenshotsInSaucelabs
-              = environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.SAUCELABS_RECORD_SCREENSHOTS, false);
+                = environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.SAUCELABS_RECORD_SCREENSHOTS, false);
         capabilities.setCapability("record-screenshots", recordScreenshotsInSaucelabs);
 
 
@@ -427,7 +438,7 @@ public class WebDriverFactory {
     private DesiredCapabilities addExtraCatabilitiesTo(DesiredCapabilities capabilities) {
         CapabilitySet capabilitySet = new CapabilitySet(environmentVariables);
         Map<String, Object> extraCapabilities = capabilitySet.getCapabilities();
-        for(String capabilityName : extraCapabilities.keySet()) {
+        for (String capabilityName : extraCapabilities.keySet()) {
             capabilities.setCapability(capabilityName, extraCapabilities.get(capabilityName));
         }
         addCapabilitiesFromFixtureServicesTo(capabilities);
@@ -435,19 +446,19 @@ public class WebDriverFactory {
     }
 
     public void setupFixtureServices() throws FixtureException {
-        for(FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
+        for (FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
             fixtureService.setup();
         }
     }
 
     public void shutdownFixtureServices() {
-        for(FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
+        for (FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
             fixtureService.shutdown();
         }
     }
 
     private void addCapabilitiesFromFixtureServicesTo(DesiredCapabilities capabilities) {
-        for(FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
+        for (FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
             fixtureService.addCapabilitiesTo(capabilities);
         }
     }
@@ -493,6 +504,25 @@ public class WebDriverFactory {
         capabilities.setCapability("chrome.switches", chromeSwitches);
         return capabilities;
     }
+
+    private WebDriver appiumDriver() {
+        return webdriverInstanceFactory.newAppiumDriver(appiumUrl(),
+                enhancedCapabilities(appiumCapabilities()),
+                appiumTargetPlatform());
+    }
+
+    private MobilePlatform appiumTargetPlatform() {
+        return AppiumConfiguration.from(environmentVariables).getTargetPlatform();
+    }
+
+    private URL appiumUrl() {
+        return AppiumConfiguration.from(environmentVariables).getUrl();
+    }
+
+    private DesiredCapabilities appiumCapabilities() {
+        return AppiumConfiguration.from(environmentVariables).getCapabilities();
+    }
+
 
     private ChromeOptions optionsFromSwitches(String chromeSwitches) {
         ChromeOptions options = new ChromeOptions();
@@ -582,6 +612,10 @@ public class WebDriverFactory {
         return (InternetExplorerDriver.class.isAssignableFrom(driverClass));
     }
 
+    private boolean isAnAppiumDriver(Class<? extends WebDriver> driverClass) {
+        return (AppiumDriver.class.isAssignableFrom(driverClass));
+    }
+
     private boolean usesFirefox(WebDriver driver) {
         return (FirefoxDriver.class.isAssignableFrom(getDriverClass(driver)));
     }
@@ -611,6 +645,7 @@ public class WebDriverFactory {
     private boolean isAPhantomJSDriver(Class<? extends WebDriver> driverClass) {
         return (PhantomJSDriver.class.isAssignableFrom(driverClass));
     }
+
     private boolean usesPhantomJS(WebDriver driver) {
         return (PhantomJSDriver.class.isAssignableFrom(getDriverClass(driver)));
     }
@@ -622,7 +657,7 @@ public class WebDriverFactory {
             profile = Thucydides.getFirefoxProfile();
         } else {
             profile = new FirefoxProfile();
-            profile.setPreference("network.proxy.socks_port",9999);
+            profile.setPreference("network.proxy.socks_port", 9999);
             profile.setAlwaysLoadNoFocusLib(true);
             profile.setEnableNativeEvents(true);
         }
@@ -670,7 +705,7 @@ public class WebDriverFactory {
     }
 
     private boolean shouldEnableNativeEvents() {
-        return Boolean.valueOf(ThucydidesSystemProperty.THUCYDIDES_NATIVE_EVENTS.from(environmentVariables,"true"));
+        return Boolean.valueOf(ThucydidesSystemProperty.THUCYDIDES_NATIVE_EVENTS.from(environmentVariables, "true"));
     }
 
     private void activateProxyFor(FirefoxProfile profile, FirefoxProfileEnhancer firefoxProfileEnhancer) {
@@ -708,7 +743,7 @@ public class WebDriverFactory {
      * Initialize a page object's fields using the specified WebDriver instance.
      */
     public void initElementsWithAjaxSupport(final PageObject pageObject, final WebDriver driver, int timeoutInSeconds) {
-    	proxyCreator.proxyElements(pageObject, driver, timeoutInSeconds);
+        proxyCreator.proxyElements(pageObject, driver, timeoutInSeconds);
     }
 
 }

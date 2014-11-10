@@ -1,6 +1,6 @@
 package net.thucydides.ant;
 
-import net.thucydides.ant.util.PathProcessor;
+import net.thucydides.core.util.PathProcessor;
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;

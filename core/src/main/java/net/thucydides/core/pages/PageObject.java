@@ -81,14 +81,14 @@ public abstract class PageObject {
     private EnvironmentVariables environmentVariables;
 
     private enum OpenMode {
-    	CHECK_URL_PATTERNS,
-    	IGNORE_URL_PATTERNS
+        CHECK_URL_PATTERNS,
+        IGNORE_URL_PATTERNS
     }
 
     protected PageObject() {
         this.webdriverClock = new SystemClock();
         this.clock = Injectors.getInjector().getInstance(net.thucydides.core.pages.SystemClock.class);
-        this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get() ;
+        this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
         setupPageUrls();
     }
@@ -98,6 +98,7 @@ public abstract class PageObject {
         this.driver = driver;
         callback.apply(this);
     }
+
     public PageObject(final WebDriver driver, final int ajaxTimeout) {
         this();
         setDriver(driver, ajaxTimeout);
@@ -140,13 +141,13 @@ public abstract class PageObject {
     }
 
     public FileToUpload uploadData(String data) throws IOException {
-        Path datafile = Files.createTempFile("upload","data");
+        Path datafile = Files.createTempFile("upload", "data");
         Files.write(datafile, data.getBytes());
         return new FileToUpload(datafile.toAbsolutePath().toString()).useRemoteDriver(isDefinedRemoteUrl());
     }
 
     public FileToUpload uploadData(byte[] data) throws IOException {
-        Path datafile = Files.createTempFile("upload","data");
+        Path datafile = Files.createTempFile("upload", "data");
         Files.write(datafile, data);
         return new FileToUpload(datafile.toAbsolutePath().toString()).useRemoteDriver(isDefinedRemoteUrl());
     }
@@ -324,15 +325,15 @@ public abstract class PageObject {
         return this;
     }
 
-	/**
-	 * Waits for a given text to appear anywhere on the page.
-	 */
-	public PageObject waitForTextToAppear(final String expectedText,
-											 final long timeout) {
+    /**
+     * Waits for a given text to appear anywhere on the page.
+     */
+    public PageObject waitForTextToAppear(final String expectedText,
+                                          final long timeout) {
 
-		getRenderedView().waitForTextToAppear(expectedText, timeout);
-		return this;
-	}
+        getRenderedView().waitForTextToAppear(expectedText, timeout);
+        return this;
+    }
 
     /**
      * Waits for any of a number of text blocks to appear anywhere on the
@@ -520,7 +521,7 @@ public abstract class PageObject {
     }
 
     private long waitForTimeoutInSeconds() {
-        return (waitForTimeoutInMilliseconds < 1000) ? 1 : (waitForTimeoutInMilliseconds/1000);
+        return (waitForTimeoutInMilliseconds < 1000) ? 1 : (waitForTimeoutInMilliseconds / 1000);
     }
 
     public long waitForTimeoutInMilliseconds() {
@@ -576,14 +577,14 @@ public abstract class PageObject {
      * represented in the URL using {0}, {1}, etc.
      */
     public final void open(final String... parameterValues) {
-    	open(OpenMode.CHECK_URL_PATTERNS, parameterValues);
+        open(OpenMode.CHECK_URL_PATTERNS, parameterValues);
     }
 
     /**
      * Opens page without checking URL patterns. Same as open(String...)) otherwise.
      */
     public final void openUnchecked(final String... parameterValues) {
-    	open(OpenMode.IGNORE_URL_PATTERNS, parameterValues);
+        open(OpenMode.IGNORE_URL_PATTERNS, parameterValues);
     }
 
     private void open(final OpenMode openMode, final String... parameterValues) {
@@ -596,28 +597,28 @@ public abstract class PageObject {
     }
 
     public final void open(final String urlTemplateName,
-            final String[] parameterValues) {
-    	open(OpenMode.CHECK_URL_PATTERNS, urlTemplateName, parameterValues);
+                           final String[] parameterValues) {
+        open(OpenMode.CHECK_URL_PATTERNS, urlTemplateName, parameterValues);
     }
 
     /**
      * Opens page without checking URL patterns. Same as {@link #open(String, String[])} otherwise.
      */
     public final void openUnchecked(final String urlTemplateName,
-            final String[] parameterValues) {
-    	open(OpenMode.IGNORE_URL_PATTERNS, urlTemplateName, parameterValues);
+                                    final String[] parameterValues) {
+        open(OpenMode.IGNORE_URL_PATTERNS, urlTemplateName, parameterValues);
     }
 
-	private void open(final OpenMode openMode, final String urlTemplateName,
-			final String[] parameterValues) {
-		String startingUrl = pageUrls.getNamedUrl(urlTemplateName,
-				parameterValues);
-		LOGGER.debug("Opening page at url {}", startingUrl);
-		openPageAtUrl(startingUrl);
-		checkUrlPatterns(openMode);
-		initializePage();
-		LOGGER.debug("Page opened");
-	}
+    private void open(final OpenMode openMode, final String urlTemplateName,
+                      final String[] parameterValues) {
+        String startingUrl = pageUrls.getNamedUrl(urlTemplateName,
+                parameterValues);
+        LOGGER.debug("Opening page at url {}", startingUrl);
+        openPageAtUrl(startingUrl);
+        checkUrlPatterns(openMode);
+        initializePage();
+        LOGGER.debug("Page opened");
+    }
 
     /**
      * Open the webdriver browser to the base URL, determined by the DefaultUrl
@@ -641,14 +642,14 @@ public abstract class PageObject {
      * it will open http://stage.acme.com/client/list. It will then invoke the waitUntilTitleAppears() method.
      */
     final public void open() {
-    	open(OpenMode.CHECK_URL_PATTERNS);
+        open(OpenMode.CHECK_URL_PATTERNS);
     }
 
     /**
      * Opens page without checking URL patterns. Same as {@link #open()} otherwise.
      */
     final public void openUnchecked() {
-    	open(OpenMode.IGNORE_URL_PATTERNS);
+        open(OpenMode.IGNORE_URL_PATTERNS);
     }
 
     private void open(final OpenMode openMode) {
@@ -663,11 +664,11 @@ public abstract class PageObject {
         callWhenPageOpensMethods();
     }
 
-	private void checkUrlPatterns(final OpenMode openMode) {
-		if (openMode == OpenMode.CHECK_URL_PATTERNS) {
+    private void checkUrlPatterns(final OpenMode openMode) {
+        if (openMode == OpenMode.CHECK_URL_PATTERNS) {
             ensurePageIsOnAMatchingUrl();
         }
-	}
+    }
 
     private void ensurePageIsOnAMatchingUrl() {
         if (!matchesAnyUrl()) {
@@ -703,7 +704,7 @@ public abstract class PageObject {
     /**
      * Override this method
      */
-    public void callWhenPageOpensMethods()  {
+    public void callWhenPageOpensMethods() {
         for (Method annotatedMethod : methodsAnnotatedWithWhenPageOpens()) {
             try {
                 annotatedMethod.setAccessible(true);

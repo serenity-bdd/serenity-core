@@ -43,6 +43,8 @@ dependencies {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
     }
 
+    compile 'io.appium:java-client:2.0.0'
+
     compile "net.sf.opencsv:opencsv:2.0"
     compile "commons-beanutils:commons-beanutils-core:1.8.3"
 

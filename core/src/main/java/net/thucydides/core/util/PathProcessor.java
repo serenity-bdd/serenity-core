@@ -1,4 +1,4 @@
-package net.thucydides.ant.util;
+package net.thucydides.core.util;
 
 
 import java.net.URISyntaxException;

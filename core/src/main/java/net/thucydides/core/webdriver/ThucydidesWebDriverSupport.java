@@ -124,4 +124,9 @@ public class ThucydidesWebDriverSupport {
     protected static void injectAnnotatedPagesObjectInto(final Object testCase) {
         StepAnnotations.injectOptionalAnnotatedPagesObjectInto(testCase, getPages());
     }
+
+    public static <T extends WebDriver> T getProxiedDriver() {
+        return (T) ((WebDriverFacade) getDriver()).getProxiedDriver();
+    }
+
 }

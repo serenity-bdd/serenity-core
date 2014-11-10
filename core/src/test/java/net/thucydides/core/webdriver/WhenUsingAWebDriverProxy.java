@@ -89,7 +89,7 @@ public class WhenUsingAWebDriverProxy {
         StepEventBus.getEventBus().temporarilySuspendWebdriverCalls();
         facade.get("http://www.google.com");
 
-        verify(firefoxDriver,never()).get("http://www.google.com");
+        verify(firefoxDriver, never()).get("http://www.google.com");
         StepEventBus.getEventBus().reenableWebdriverCalls();
     }
 
@@ -243,6 +243,7 @@ public class WhenUsingAWebDriverProxy {
         facade.switchTo();
         verify(firefoxDriver, never()).switchTo();
     }
+
     @Test
     public void the_webdriver_proxy_should_handle_quit_if_a_proxied_driver_exists() {
         webDriverFacade.get("http://www.google.com");
@@ -325,4 +326,13 @@ public class WhenUsingAWebDriverProxy {
         assertThat(proxiedDriver, is(notNullValue()));
         assertThat(HtmlUnitDriver.class.isAssignableFrom(proxiedDriver.getClass()), is(true));
     }
+
+    @Test
+    public void should_return_proxied_driver_without_lots_of_ugly_casts() {
+        ThucydidesWebDriverSupport.initialize("htmlunit");
+        HtmlUnitDriver proxiedDriver = ThucydidesWebDriverSupport.getProxiedDriver();
+        assertThat(proxiedDriver, is(instanceOf(HtmlUnitDriver.class)));
+
+    }
+
 }

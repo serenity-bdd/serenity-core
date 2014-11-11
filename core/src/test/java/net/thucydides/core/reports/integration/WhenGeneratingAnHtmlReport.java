@@ -343,39 +343,7 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
         File defaultCssStylesheet = new File(new File(outputDirectory,"css"), "core.css");
         assertThat(defaultCssStylesheet.exists(), is(false));
     }
-    
 
-    @Test
-    public void the_report_should_list_test_groups_as_headings_in_the_table() throws Exception {
-
-        TestOutcome testOutcome = new TestOutcome("a_simple_test_case");
-
-        testOutcome.recordStep(forASuccessfulTestStepCalled("Step 0"));
-        testOutcome.startGroup("A group");
-        testOutcome.recordStep(forASuccessfulTestStepCalled("Step 1"));
-        testOutcome.recordStep(forASuccessfulTestStepCalled("Step 2"));
-        testOutcome.recordStep(forASuccessfulTestStepCalled("Step 3"));
-        testOutcome.startGroup("Another group");
-        testOutcome.recordStep(forASuccessfulTestStepCalled("Step 4"));
-        testOutcome.recordStep(forASuccessfulTestStepCalled("Step 5"));
-        testOutcome.startGroup("Yet another group");
-        testOutcome.recordStep(forAnIgnoredTestStepCalled("Step 6"));
-        testOutcome.endGroup();
-        testOutcome.recordStep(forABrokenTestStepCalled("Step 7", new AssertionError("Oh bother!")));
-        testOutcome.recordStep(forABrokenTestStepCalled("Step 8", new AssertionError("Oh bother!")));
-        testOutcome.recordStep(forASkippedTestStepCalled("Step 9"));
-        testOutcome.recordStep(forAPendingTestStepCalled("Step 10"));
-        testOutcome.recordStep(forAPendingTestStepCalled("Step 11"));
-        testOutcome.recordStep(forAPendingTestStepCalled("Step 12"));
-        testOutcome.endGroup();
-        testOutcome.recordStep(forAPendingTestStepCalled("Step 13"));
-        testOutcome.recordStep(forAPendingTestStepCalled("Step 14"));
-        testOutcome.endGroup();
-        testOutcome.recordStep(forASkippedTestStepCalled("Step 15"));
-
-        reporter.setOutputDirectory(new File("target/thucyidides"));
-        reporter.generateReportFor(testOutcome, allTestOutcomes);
-    }
     
     @Test
     public void a_sample_report_should_be_generated_in_the_target_directory() throws Exception {

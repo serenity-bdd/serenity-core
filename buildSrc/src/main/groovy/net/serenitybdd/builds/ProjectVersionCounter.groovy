@@ -17,7 +17,6 @@ class ProjectVersionCounter {
         def majorMinorNumbers = matcher[0] + "." + matcher[1]
         def currentBuildNumber = Integer.valueOf(matcher[2])
         def nextBuildNumber = (useCurrentVersion) ? currentBuildNumber : currentBuildNumber + 1
-        println "Next build number found: " + nextBuildNumber
         return (isRelease) ?
                 majorMinorNumbers + "." + nextBuildNumber :
                 majorMinorNumbers + "." + nextBuildNumber + "-SNAPSHOT"

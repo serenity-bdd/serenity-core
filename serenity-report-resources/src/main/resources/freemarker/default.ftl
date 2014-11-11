@@ -4,10 +4,14 @@
     <meta charset="UTF-8"/>
     <title>${testOutcome.unqualified.title}</title>
     <link rel="shortcut icon" href="favicon.ico">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/core.css"/>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="jqplot/jquery.jqplot.min.css"/>
 
     <script src="scripts/jquery.js" type="text/javascript"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+
     <script type="text/javascript" src="datatables/media/js/jquery.dataTables.min.js"></script>
     <script src="scripts/imgpreview.full.jquery.js" type="text/javascript"></script>
 
@@ -16,10 +20,10 @@
 
 </head>
 
-<body>
+<body class="results-page">
 <div id="topheader">
     <div id="topbanner">
-        <div id="logo"><a href="index.html"><img src="images/logo.jpg" border="0"/></a></div>
+        <div id="logo"><a href="index.html"><img src="images/serenity-bdd-logo.png" border="0"/></a></div>
         <div id="projectname-banner" style="float:right">
             <span class="projectname">${reportOptions.projectName}</span>
         </div>
@@ -31,8 +35,13 @@
 <div class="middlecontent">
 <div id="contenttop">
     <div class="middlebg">
-        <span class="bluetext"><a href="index.html"
-                                  class="bluetext">Home</a> > ${formatter.truncatedHtmlCompatible(testOutcome.title,80)} </span>
+        <span class="bluetext">
+            <a href="index.html" class="bluetext">Home</a>
+            <#if (parentLink?has_content)>
+            > <a href="${parentLink}">${formatter.truncatedHtmlCompatible(inflection.of(parentTitle).asATitle(),40)}</a>
+            </#if>
+            > ${formatter.truncatedHtmlCompatible(testOutcome.title,80)}
+        </span>
     </div>
     <div class="rightbg"></div>
 </div>
@@ -54,67 +63,69 @@
 <div id="contentbody">
     <div class="titlebar">
         <div class="story-title">
-            <table width="1005">
-                <td width="50"><img class="story-outcome-icon" src="images/${outcome_icon}" width="25" height="25"/>
-                </td>
-            <#if (testOutcome.videoLink)??>
-                <td width="25"><a href="${relativeLink!}${testOutcome.videoLink}"><img class="story-outcome-icon"
-                                                                                       src="images/video.png" width="25"
-                                                                                       height="25" alt="Video"/></a>
-                </td>
-            </#if>
-                <td width="%"><span class="test-case-title"><span
-                        class="${outcome_text}">${testOutcome.unqualified.titleWithLinks}<span
-                        class="related-issue-title">${testOutcome.formattedIssues}</span></span></span>
-                </td>
-                <td width="100"><span class="test-case-duration"><span
-                        class="greentext">${testOutcome.durationInSeconds}s</span></span>
-                </td>
-                </tr>
+            <table class="outcome-header">
                 <tr>
-                    <td colspan="3">
-                    <#if (parentRequirement.isPresent())>
-                        <div>
-                            <#assign parentTitle = inflection.of(parentRequirement.get().name).asATitle() >
-                            <#assign parentType = inflection.of(parentRequirement.get().type).asATitle() >
-                            <#if (parentRequirement.get().cardNumber?has_content) >
-                                <#assign issueNumber = "[" + formatter.addLinks(parentRequirement.get().cardNumber) + "]" >
-                            <#else>
-                                <#assign issueNumber = "">
-                            </#if>
-                            <h3>${parentType}: ${parentTitle} ${issueNumber}</h3>
+                    <td colspan="2" class="test-title-bar">
+                        <span class="outcome-icon"><img class="story-outcome-icon" src="images/${outcome_icon}" /></span>
+                        <#if (testOutcome.videoLink)??>
+                            <a href="${relativeLink!}${testOutcome.videoLink}"><img class="story-outcome-icon"
+                                                                                                   src="images/video.png" width="25"
+                                                                                                   height="25" alt="Video"/></a>
+                        </#if>
+                        <span class="test-case-caption">Test Outcome</span>
+                        <span class="test-case-title">
+                            <#assign testOutcomeTitle = inflection.of(testOutcome.unqualified.titleWithLinks).asATitle() >
 
-                            <div class="requirementNarrativeTitle">
-                            ${formatter.renderDescription(parentRequirement.get().narrative.renderedText)}
-                            </div>
-                        </div>
-                    <#elseif (featureOrStory.isPresent())>
-                        <div>
-                            <#assign parentTitle = inflection.of(featureOrStory.get().name).asATitle() >
-                            <#assign parentType = inflection.of(featureOrStory.get().type.toString()).asATitle() >
-                            <h3>${parentType}: ${parentTitle}</h3>
-
-                            <div class="requirementNarrativeTitle">
-                            ${formatter.renderDescription(featureOrStory.get().narrative)}
-                            </div>
-                        </div>
-                    </#if>
+                            <span class="${outcome_text}">${testOutcomeTitle}
+                                <span class="related-issue-title">${testOutcome.formattedIssues}</span>
+                            </span>
+                        </span>
                     </td>
                 </tr>
+
                 <tr>
-                    <td colspan="3">
-                    <#list testOutcome.tags as tag>
-                        <#assign tagReport = absoluteReportName.forTag(tag) />
-                        <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
-                        <a class="tagLink" href="${tagReport}">${tagTitle} (${tag.type})</a>
-                    </#list>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
+                    <td>
+                        <#if (parentRequirement.isPresent())>
+                            <div>
+                                <#assign parentTitle = inflection.of(parentRequirement.get().name).asATitle() >
+                                <#assign parentType = inflection.of(parentRequirement.get().type).asATitle() >
+                                <#if (parentRequirement.get().cardNumber?has_content) >
+                                    <#assign issueNumber = "[" + formatter.addLinks(parentRequirement.get().cardNumber) + "]" >
+                                <#else>
+                                    <#assign issueNumber = "">
+                                </#if>
+                                <h3 class="story-header">${parentType}: ${parentTitle} ${issueNumber}</h3>
+
+                                <div class="requirementNarrativeTitle">
+                                    ${formatter.renderDescription(parentRequirement.get().narrative.renderedText)}
+                                </div>
+                            </div>
+                        <#elseif (featureOrStory.isPresent())>
+                            <div>
+                                <#assign parentTitle = inflection.of(featureOrStory.get().name).asATitle() >
+                                <#assign parentType = inflection.of(featureOrStory.get().type.toString()).asATitle() >
+                                <h3 class="story-header">${parentType}: ${parentTitle}</h3>
+
+                                <div class="requirementNarrativeTitle">
+                                    ${formatter.renderDescription(featureOrStory.get().narrative)}
+                                </div>
+                            </div>
+                        </#if>
+
                         <#if (testOutcome.backgroundDescription??)>
                             <div class="requirementNarrative">Background: ${testOutcome.backgroundDescription}</div>
                         </#if>
+                    </td>
+                    <td valign="top">
+                        <#list filteredTags as tag>
+                            <#assign tagReport = absoluteReportName.forTag(tag) />
+                            <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
+                            <p class="tag">
+                                <span class="badge tag-badge">
+                                    <i class="fa fa-tag"></i><a class="tagLink" href="${tagReport}">${tagTitle} (${tag.type})</a>
+                                </span>
+                            </p>
+                        </#list>
                     </td>
                 </tr>
             </table>
@@ -126,7 +137,7 @@
 
 <#if (testOutcome.isDataDriven())>
 <div class="story-title">
-    <h3>Scenario:</h3>
+    <h3 class="story-header">Scenario:</h3>
 
     <div class="scenario">${formatter.formatWithFields(testOutcome.dataDrivenSampleScenario, testOutcome.exampleFields)}</div>
 
@@ -146,7 +157,7 @@
 <#if (testOutcome.isDataDriven())>
 
     <#list testOutcome.dataTable.dataSets as dataSet >
-    <h3>Examples:<#if dataSet.title??>&nbsp;${dataSet.title}</#if></h3>
+    <h3 class="story-header">Examples:<#if dataSet.title??>&nbsp;${dataSet.title}</#if></h3>
         <#if dataSet.description??>
         <div class="requirementNarrative">${dataSet.description}</div>
         </#if>
@@ -181,7 +192,12 @@
                 <tr class="step-titles">
                     <th width="65"><#if (testOutcome.manual)><img src="images/worker.png" title="Manual test"/></#if>&nbsp;
                     </th>
-                    <th width="755" class="greentext"><#if (testOutcome.manual)>Manual </#if>Steps</th>
+
+                    <#if testOutcome.hasScreenshots()>
+                        <th width="%" class="step-description-column greentext"><#if (testOutcome.manual)>Manual </#if>Steps</th>
+                    <#else>
+                        <th width="%" class="step-description-wide-column greentext"><#if (testOutcome.manual)>Manual </#if>Steps</th>
+                    </#if>
                     <#if testOutcome.hasScreenshots()>
                         <th width="120" class="greentext">Screenshot</th>
                     </#if>
@@ -292,7 +308,7 @@
                             <#else>
                                 <#assign errorMessageTitle = "">
                             </#if>
-                            <td width="%" colspan="4">
+                            <td width="%" colspan="4" class="error-message-cell">
                                 <span class="error-message" title="${errorMessageTitle}"><pre>${step.shortErrorMessage!''}</pre></span>
                             </td>
                         </tr>
@@ -336,7 +352,7 @@
     </div>
 <div id="beforefooter"></div>
 <div id="bottomfooter">
-    <span class="version">Thucydides version ${thucydidesVersionNumber} - Build ${buildNumber}</span>
+    <span class="version">Serenity BDD version ${thucydidesVersionNumber} - Build ${buildNumber}</span>
 </div>
 
 

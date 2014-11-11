@@ -3,7 +3,14 @@
 <html>
 <head>
     <meta charset="UTF-8"/>
-    <title>Thucydides Reports</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Serenity Reports</title>
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
     <!--[if IE 7]>
@@ -20,6 +27,8 @@
     <script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script><![endif]-->
 
     <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+
     <script type="text/javascript" src="datatables/media/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="jqplot/jquery.jqplot.min.js"></script>
     <script type="text/javascript" src="jqplot/plugins/jqplot.pieRenderer.min.js"></script>
@@ -184,10 +193,10 @@
     </script>
 </head>
 
-<body>
+<body class="results-page">
 <div id="topheader">
     <div id="topbanner">
-        <div id="logo"><a href="index.html"><img src="images/logo.jpg" border="0"/></a></div>
+        <div id="logo"><a href="index.html"><img src="images/serenity-bdd-logo.png" border="0"/></a></div>
         <div id="projectname-banner" style="float:right">
             <span class="projectname">${reportOptions.projectName}</span>
         </div>
@@ -461,7 +470,7 @@
 </div>
 <div id="beforefooter"></div>
 <div id="bottomfooter">
-    <span class="version">Thucydides version ${thucydidesVersionNumber} - Build ${buildNumber}</span>
+    <span class="version">Serenity version ${thucydidesVersionNumber} - Build ${buildNumber}</span>
 </div>
 <#macro list_tags(weighted)>
 <h4>${tagsTitle}</h4>

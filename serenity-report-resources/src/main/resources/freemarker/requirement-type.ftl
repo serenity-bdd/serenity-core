@@ -6,6 +6,7 @@
     <meta charset="UTF-8"/>
     <title>${pageTitle}</title>
     <link rel="shortcut icon" href="favicon.ico">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
     <!--[if IE 7]>
     <link rel="stylesheet" href="font-awesome/css/font-awesome-ie7.min.css">
@@ -20,6 +21,7 @@
     <script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script><![endif]-->
 
     <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="datatables/media/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="jqplot/jquery.jqplot.min.js"></script>
     <script type="text/javascript" src="jqplot/plugins/jqplot.pieRenderer.min.js"></script>
@@ -80,10 +82,10 @@
     </script>
 </head>
 
-<body>
+<body class="results-page">
 <div id="topheader">
     <div id="topbanner">
-        <div id="logo"><a href="index.html"><img src="images/logo.jpg" border="0"/></a></div>
+        <div id="logo"><a href="index.html"><img src="images/serenity-bdd-logo.png" border="0"/></a></div>
         <div id="projectname-banner" style="float:right">
             <span class="projectname">${reportOptions.projectName}</span>
         </div>
@@ -94,7 +96,9 @@
 <div class="middlecontent">
 <div id="contenttop">
     <div class="middlebg">
-        <span class="bluetext"><a href="index.html" class="bluetext">Home</a> > Requirements > ${formatter.truncatedHtmlCompatible(pageTitle,60)} </span>
+        <span class="bluetext"><a href="index.html" class="bluetext">Home</a>
+            > <a href="capabilities.html">Requirements</a>
+            > ${formatter.truncatedHtmlCompatible(pageTitle,60)} </span>
     </div>
     <div class="rightbg"></div>
 </div>
@@ -357,7 +361,7 @@ Estimated ignored or skipped requirements: ${ignored}"
 </div>
 <div id="beforefooter"></div>
 <div id="bottomfooter">
-    <span class="version">Thucydides version ${thucydidesVersionNumber} - Build ${buildNumber}</span>
+    <span class="version">Serenity BDD version ${thucydidesVersionNumber} - Build ${buildNumber}</span>
 </div>
 
 

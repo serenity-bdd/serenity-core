@@ -87,23 +87,25 @@ public class WebElementFacadeImpl extends MobileElement implements WebElementFac
     }
 
     public static WebElementFacadeImpl wrapWebElement(final WebDriver driver,
-                                                      final WebElement element,
-                                                      final long timeoutInMilliseconds) {
-        return new WebElementFacadeImpl(driver, (ElementLocator) null, element, timeoutInMilliseconds);
-
-    }
-
-    protected WebElement getElement() {
-        if (webElement != null) {
-            return webElement;
+    		final WebElement element,
+            final long timeoutInMilliseconds) {
+		return new WebElementFacadeImpl(driver, (ElementLocator)null, element, timeoutInMilliseconds);
+		
+	} 
+    
+    protected WebElement getElement(){
+    	if (webElement != null){
+    		return webElement;
+    	}
+    	if (locator == null) {
+    		return null;
+    	}
+        WebElement resolvedELement = locator.findElement();
+        if (resolvedELement == null) {
+            throw new ElementNotVisibleException(locator.toString());
         }
-        if (locator == null) {
-            return null;
-        }
-        return locator.findElement();
+    	return locator.findElement();
     }
-
-    ;
 
     protected JavascriptExecutorFacade getJavascriptExecutorFacade() {
         return javascriptExecutorFacade;

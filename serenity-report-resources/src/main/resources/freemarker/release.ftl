@@ -5,11 +5,13 @@
     <title>${release.name}</title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" type="text/css" href="jqplot/jquery.jqplot.min.css"/>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!--[if IE]>
     <script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script><![endif]-->
 
     <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="datatables/media/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="jqplot/jquery.jqplot.min.js"></script>
     <script type="text/javascript" src="jqplot/plugins/jqplot.pieRenderer.min.js"></script>
@@ -18,6 +20,7 @@
     <script type="text/javascript" src="jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
 
     <script src="jqtree/tree.jquery.js"></script>
+
     <link rel="stylesheet" href="jqtree/jqtree.css">
 
     <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
@@ -66,7 +69,7 @@
 <body>
 <div id="topheader">
     <div id="topbanner">
-        <div id="logo"><a href="index.html"><img src="images/logo.jpg" border="0"/></a></div>
+        <div id="logo"><a href="index.html"><img src="images/serenity-bdd-logo.png" border="0"/></a></div>
         <div id="projectname-banner" style="float:right">
             <span class="projectname">${reportOptions.projectName}</span>
         </div>
@@ -416,7 +419,7 @@
 </div>
 <div id="beforefooter"></div>
     <div id="bottomfooter">
-        <span class="version">Thucydides version ${thucydidesVersionNumber} - Build ${buildNumber}</span>
+        <span class="version">Serenity BDD version ${thucydidesVersionNumber} - Build ${buildNumber}</span>
     </div>
 
 

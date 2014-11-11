@@ -4,33 +4,22 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Home</title>
-    <link rel="shortcut icon" href="favicon.ico" >
-    <link href="css/core.css" rel="stylesheet" type="text/css"/>
-    <style type="text/css">
-	#slider {
-	    position:relative;
-	    width:1000px; /* Change this to your images width */
-	    height:800px; /* Change this to your images height */
-	    background:url(images/loading.gif) no-repeat 50% 50%;
-	}
-	#slider img {
-	    position:absolute;
-	    top:0px;
-	    left:0px;
-	    display:none;
-	}
-	#slider a {
-	    border:0;
-	    display:block;
-	}
+    <title>Screenshots</title>
 
-    </style>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/core.css"/>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="jqplot/jquery.jqplot.min.css"/>
 
-	<!-- CSS Files -->
-    <link href="slides/js/global.css" rel="stylesheet" type="text/css"/>
+    <script src="scripts/jquery.js" type="text/javascript"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
 
-    <script src="scripts/jquery.js"></script>
+    <script type="text/javascript" src="datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="scripts/imgpreview.full.jquery.js" type="text/javascript"></script>
+
+    <link type="text/css" href="jqueryui/css/start/jquery-ui-1.8.18.custom.css" rel="Stylesheet"/>
+    <script type="text/javascript" src="jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
 
 	<link rel="stylesheet" href="nivo-slider/nivo-slider.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="nivo-slider/themes/default/default.css" type="text/css" media="screen" />
@@ -66,7 +55,7 @@
 <body>
 <div id="topheader">
     <div id="topbanner">
-        <div id="logo"><a href="index.html"><img src="images/logo.jpg" border="0"/></a></div>
+        <div id="logo"><a href="index.html"><img src="images/serenity-bdd-logo.png" border="0"/></a></div>
         <div id="projectname-banner" style="float:right">
             <span class="projectname">${reportOptions.projectName}</span>
         </div>
@@ -84,7 +73,14 @@
 <div class="middlecontent">
     <div id="contenttop">
         <div class="middlebg">
-            <span class="bluetext"><a href="index.html" class="bluetext">Home</a> > <a href="${narrativeView}.html">${formatter.truncatedHtmlCompatible(testOutcome.unqualified.title,60)} </a> > Screenshots </span>
+            <span class="bluetext">
+                <a href="index.html" class="bluetext">Home</a>
+                <#if (parentLink?has_content)>
+                > <a href="${parentLink}">${formatter.truncatedHtmlCompatible(inflection.of(parentTitle).asATitle(),40)}</a>
+                </#if>
+                > <a href="${narrativeView}.html">${formatter.truncatedHtmlCompatible(testOutcome.unqualified.title,60)} </a>
+                > Screenshots
+            </span>
         </div>
         <div class="rightbg"></div>
     </div>
@@ -96,6 +92,7 @@
     <@main_menu selected="home" />
 
     <div class="clr"></div>
+    <!--
     <div id="contentbody">
         <div class="titlebar">
         <div class="story-title">
@@ -131,7 +128,7 @@
                 </tr>
                 <tr>
                     <td colspan="3">
-                    <#list testOutcome.tags as tag>
+                    <#list filteredTags as tag>
                         <#assign tagReport = absoluteReportName.forTag(tag) />
                         <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
                         <#assign tagReport = reportName.forTag(tag.name) />
@@ -142,6 +139,84 @@
             </table>
         </div>
     </div>
+    </div>
+-->
+    <#if testOutcome.result == "FAILURE"><#assign outcome_icon = "fail.png"><#assign outcome_text = "failing-color">
+    <#elseif testOutcome.result == "ERROR"><#assign outcome_icon = "cross.png"><#assign outcome_text = "error-color">
+    <#elseif testOutcome.result == "SUCCESS"><#assign outcome_icon = "success.png"><#assign outcome_text = "success-color">
+    <#elseif testOutcome.result == "PENDING"><#assign outcome_icon = "pending.png"><#assign outcome_text = "pending-color">
+    <#else><#assign outcome_icon = "ignor.png"><#assign outcome_text = "ignore-color">
+    </#if>
+    <#-- TEST TITLE-->
+    <div id="contentbody">
+        <div class="titlebar">
+            <div class="story-title">
+                <table class="outcome-header">
+                    <tr>
+                        <td colspan="2" class="test-title-bar">
+                            <span class="outcome-icon"><img class="story-outcome-icon" src="images/${outcome_icon}" /></span>
+                        <#if (testOutcome.videoLink)??>
+                            <a href="${relativeLink!}${testOutcome.videoLink}"><img class="story-outcome-icon"
+                                                                                    src="images/video.png" width="25"
+                                                                                    height="25" alt="Video"/></a>
+                        </#if>
+                            <span class="test-case-caption">Test Outcome</span>
+                            <span class="test-case-title">
+                                <span class="${outcome_text}">${testOutcome.unqualified.titleWithLinks}
+                                    <span class="related-issue-title">${testOutcome.formattedIssues}</span>
+                                </span>
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                        <#if (parentRequirement.isPresent())>
+                            <div>
+                                <#assign parentTitle = inflection.of(parentRequirement.get().name).asATitle() >
+                                <#assign parentType = inflection.of(parentRequirement.get().type).asATitle() >
+                                <#if (parentRequirement.get().cardNumber?has_content) >
+                                    <#assign issueNumber = "[" + formatter.addLinks(parentRequirement.get().cardNumber) + "]" >
+                                <#else>
+                                    <#assign issueNumber = "">
+                                </#if>
+                                <h3 class="story-header">${parentType}: ${parentTitle} ${issueNumber}</h3>
+
+                                <div class="requirementNarrativeTitle">
+                                ${formatter.renderDescription(parentRequirement.get().narrative.renderedText)}
+                                </div>
+                            </div>
+                        <#elseif (featureOrStory.isPresent())>
+                            <div>
+                                <#assign parentTitle = inflection.of(featureOrStory.get().name).asATitle() >
+                                <#assign parentType = inflection.of(featureOrStory.get().type.toString()).asATitle() >
+                                <h3 class="story-header">${parentType}: ${parentTitle}</h3>
+
+                                <div class="requirementNarrativeTitle">
+                                ${formatter.renderDescription(featureOrStory.get().narrative)}
+                                </div>
+                            </div>
+                        </#if>
+
+                        <#if (testOutcome.backgroundDescription??)>
+                            <div class="requirementNarrative">Background: ${testOutcome.backgroundDescription}</div>
+                        </#if>
+                        </td>
+                        <td>
+                        <#list testOutcome.tags as tag>
+                            <#assign tagReport = absoluteReportName.forTag(tag) />
+                            <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
+                            <p class="tag">
+                                <span class="badge tag-badge">
+                                    <i class="fa fa-tag"></i><a class="tagLink" href="${tagReport}">${tagTitle} (${tag.type})</a>
+                                </span>
+                            </p>
+                        </#list>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
 
     <div class="clr"></div>
@@ -171,7 +246,7 @@
 </div>
 <div id="beforefooter"></div>
 <div id="bottomfooter">
-    <span class="version">Thucydides version ${thucydidesVersionNumber} - Build ${buildNumber}</span>
+    <span class="version">Serenity BDD version ${thucydidesVersionNumber} - Build ${buildNumber}</span>
 </div>
 </body>
 </html>

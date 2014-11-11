@@ -11,11 +11,9 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.nio.charset.Charset;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Map;
 
 /**
@@ -115,8 +113,18 @@ public abstract class HtmlReporter extends ThucydidesReporter {
     protected File writeReportToOutputDirectory(final String reportFilename, final String htmlContents) throws
             IOException {
         File report = new File(getOutputDirectory(), reportFilename);
-        FileUtils.writeStringToFile(report, htmlContents, Charset.forName("UTF-8"));
+        writeToFile(htmlContents, report);
         return report;
+    }
+
+    private void writeToFile(String htmlContents, File report) throws IOException {
+        String lines[] = htmlContents.split("\\r?\\n");
+        try (BufferedWriter writer = Files.newBufferedWriter(report.toPath(), StandardCharsets.UTF_8)){
+            for(String line : lines){
+                writer.write(line);
+                writer.newLine();
+            }
+        }
     }
 
     protected String timestampFrom(TestOutcomes rootOutcomes) {

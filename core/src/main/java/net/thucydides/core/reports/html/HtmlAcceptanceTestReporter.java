@@ -1,22 +1,22 @@
 package net.thucydides.core.reports.html;
 
 import ch.lambdaj.function.convert.Converter;
+import com.beust.jcommander.internal.Sets;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.images.ResizableImage;
 import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.model.Screenshot;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestStep;
-import net.thucydides.core.model.TestTag;
+import net.thucydides.core.model.*;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.OutcomeFormat;
 import net.thucydides.core.reports.ReportOptions;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.screenshots.ScreenshotFormatter;
 import net.thucydides.core.requirements.RequirementsService;
+import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import net.thucydides.core.util.VersionProvider;
@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static ch.lambdaj.Lambda.convert;
 import static com.google.common.collect.Iterables.any;
@@ -36,7 +37,6 @@ import static net.thucydides.core.model.ReportType.HTML;
 
 /**
  * Generates acceptance test results in HTML form.
- * 
  */
 public class HtmlAcceptanceTestReporter extends HtmlReporter implements AcceptanceTestReporter {
 
@@ -50,6 +50,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
     private final IssueTracking issueTracking;
     private RequirementsService requirementsService;
+    private ReportNameProvider reportNameProvider = new ReportNameProvider();
 
     public void setQualifier(final String qualifier) {
         this.qualifier = qualifier;
@@ -81,7 +82,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
         TestOutcome storedTestOutcome = testOutcome.withQualifier(qualifier);
 
-        Map<String,Object> context = new HashMap<String,Object>();
+        Map<String, Object> context = new HashMap<String, Object>();
         addTestOutcomeToContext(storedTestOutcome, allTestOutcomes, context);
 
         if (containsScreenshots(storedTestOutcome)) {
@@ -95,7 +96,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         copyResourcesToOutputDirectory();
 
         String reportFilename = reportFor(storedTestOutcome);
-        LOGGER.info("GENERATING HTML REPORT FOR " + storedTestOutcome.getCompleteName() + (qualifier != null? "/" + qualifier : "") + " => " + reportFilename);
+        LOGGER.info("GENERATING HTML REPORT FOR " + storedTestOutcome.getCompleteName() + (qualifier != null ? "/" + qualifier : "") + " => " + reportFilename);
 
         return writeReportToOutputDirectory(reportFilename, htmlContents);
     }
@@ -112,18 +113,49 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         };
     }
 
-    private void addTestOutcomeToContext(final TestOutcome testOutcome, final TestOutcomes allTestOutcomes, final Map<String,Object> context) {
+    private void addTestOutcomeToContext(final TestOutcome testOutcome, final TestOutcomes allTestOutcomes, final Map<String, Object> context) {
         context.put("allTestOutcomes", allTestOutcomes);
         context.put("testOutcome", testOutcome);
         context.put("currentTag", TestTag.EMPTY_TAG);
         context.put("inflection", Inflector.getInstance());
-        context.put("parentRequirement", requirementsService.getParentRequirementFor(testOutcome));
+
+        Optional<Requirement> parentRequirement = requirementsService.getParentRequirementFor(testOutcome);
+        context.put("parentRequirement", parentRequirement);
+
+        Optional<Story> featureOrStory = Optional.fromNullable(testOutcome.getUserStory());
         context.put("featureOrStory", Optional.fromNullable(testOutcome.getUserStory()));
+
+        String parentTitle = "";
+        String parentLink = "";
+        if (parentRequirement.isPresent()) {
+            parentLink = reportNameProvider.forRequirement(parentRequirement.get());
+            parentTitle = parentRequirement.get().getName();
+        } else if (featureOrStory.isPresent()) {
+            parentLink = reportNameProvider.forTag(featureOrStory.get().asTag());
+            parentTitle = featureOrStory.get().getName();
+        }
+        context.put("parentTitle", parentTitle);
+        context.put("parentLink", parentLink);
+
+        Set<TestTag> filteredTags = removeTagsWithTitle(parentTitle, testOutcome.getTags());
+        context.put("filteredTags", filteredTags);
+
         context.put("requirementTypes", requirementsService.getRequirementTypes());
         addTimestamp(testOutcome, context);
     }
 
-    private void addFormattersToContext(final Map<String,Object> context) {
+    private final List<String> MASKED_TAG_TYPES = ImmutableList.of("story","feature");
+    private Set<TestTag> removeTagsWithTitle(String parentTitle, Set<TestTag> tags) {
+        Set<TestTag> filteredTags = Sets.newHashSet();
+        for (TestTag tag : tags) {
+            if (!tag.getShortName().equalsIgnoreCase(parentTitle) && (!MASKED_TAG_TYPES.contains(tag.getType()))) {
+                filteredTags.add(tag);
+            }
+        }
+        return filteredTags;
+    }
+
+    private void addFormattersToContext(final Map<String, Object> context) {
         Formatter formatter = new Formatter(issueTracking);
         context.put("reportOptions", new ReportOptions(getEnvironmentVariables()));
         context.put("formatter", formatter);
@@ -144,7 +176,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
         String screenshotReport = testOutcome.getReportName() + "_screenshots.html";
 
-        Map<String,Object> context = new HashMap<String,Object>();
+        Map<String, Object> context = new HashMap<String, Object>();
         addTestOutcomeToContext(testOutcome, allTestOutcomes, context);
         addFormattersToContext(context);
         context.put("screenshots", screenshots);
@@ -168,9 +200,9 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         public Screenshot convert(Screenshot screenshot) {
             try {
                 return ScreenshotFormatter.forScreenshot(screenshot)
-                                          .inDirectory(getOutputDirectory())
-                                          .keepOriginals(shouldKeepOriginalScreenshots())
-                                          .expandToHeight(maxHeight);
+                        .inDirectory(getOutputDirectory())
+                        .keepOriginals(shouldKeepOriginalScreenshots())
+                        .expandToHeight(maxHeight);
             } catch (IOException e) {
                 LOGGER.warn("Failed to write scaled screenshot for {}: {}", screenshot, e);
                 return screenshot;
@@ -185,7 +217,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     private int maxScreenshotHeightIn(List<Screenshot> screenshots) throws IOException {
         int maxHeight = 0;
         for (Screenshot screenshot : screenshots) {
-            File screenshotFile = new File(getOutputDirectory(),screenshot.getFilename());
+            File screenshotFile = new File(getOutputDirectory(), screenshot.getFilename());
             if (screenshotFile.exists()) {
                 maxHeight = maxHeightOf(maxHeight, screenshotFile);
             }

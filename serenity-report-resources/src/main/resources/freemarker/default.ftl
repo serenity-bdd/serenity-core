@@ -37,7 +37,9 @@
     <div class="middlebg">
         <span class="bluetext">
             <a href="index.html" class="bluetext">Home</a>
+            <#if (parentLink?has_content)>
             > <a href="${parentLink}">${formatter.truncatedHtmlCompatible(inflection.of(parentTitle).asATitle(),40)}</a>
+            </#if>
             > ${formatter.truncatedHtmlCompatible(testOutcome.title,80)}
         </span>
     </div>

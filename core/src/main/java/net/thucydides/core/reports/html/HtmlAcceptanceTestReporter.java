@@ -125,12 +125,12 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         Optional<Story> featureOrStory = Optional.fromNullable(testOutcome.getUserStory());
         context.put("featureOrStory", Optional.fromNullable(testOutcome.getUserStory()));
 
-        String parentTitle;
-        String parentLink;
+        String parentTitle = "";
+        String parentLink = "";
         if (parentRequirement.isPresent()) {
             parentLink = reportNameProvider.forRequirement(parentRequirement.get());
             parentTitle = parentRequirement.get().getName();
-        } else {
+        } else if (featureOrStory.isPresent()) {
             parentLink = reportNameProvider.forTag(featureOrStory.get().asTag());
             parentTitle = featureOrStory.get().getName();
         }

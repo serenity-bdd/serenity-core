@@ -36,7 +36,7 @@ public class WhenLocatingWebElements {
 
     static class SomePageObject {
 
-        @FindBy(id="someId")
+        @FindBy(id = "someId")
         public WebElement someField;
 
     }
@@ -56,7 +56,7 @@ public class WhenLocatingWebElements {
     @Test(timeout = 5000)
     public void should_find_element_immediately_if_a_previous_step_has_failed() {
 
-        SmartAjaxElementLocator locator = new SmartAjaxElementLocator(driver, field, 5);
+        SmartAjaxElementLocator locator = new SmartAjaxElementLocator(driver, field, MobilePlatform.NONE, 5);
         StepEventBus.getEventBus().stepFailed(failure);
         locator.findElement();
     }
@@ -70,7 +70,7 @@ public class WhenLocatingWebElements {
         expectedException.expect(NoSuchElementException.class);
         expectedException.expectMessage(containsString("Timed out after 1 second"));
 
-        SmartAjaxElementLocator locator = new SmartAjaxElementLocator(driver, field, 1);
+        SmartAjaxElementLocator locator = new SmartAjaxElementLocator(driver, field, MobilePlatform.NONE, 1);
         locator.findElement();
     }
 

@@ -3,6 +3,7 @@ package net.thucydides.core.annotations.locators
 import io.appium.java_client.MobileBy
 import net.thucydides.core.annotations.findby.FindBy
 import net.thucydides.core.annotations.findby.How
+import net.thucydides.core.webdriver.MobilePlatform
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ByIdOrName
@@ -104,7 +105,7 @@ class WhenUsingTheSmartAnnotations extends Specification {
     def "should find the correct By class"() {
 
         given:
-        def annotations = new SmartAnnotations(field)
+        def annotations = new SmartAnnotations(field, MobilePlatform.NONE)
         when:
         def by = annotations.buildBy()
         then:
@@ -132,7 +133,7 @@ class WhenUsingTheSmartAnnotations extends Specification {
     def "should find the correct By class using long ID"() {
 
         given:
-        def annotations = new SmartAnnotations(field)
+        def annotations = new SmartAnnotations(field, MobilePlatform.NONE)
         when:
         def by = annotations.buildBy()
         then:

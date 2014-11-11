@@ -1,5 +1,6 @@
 package net.thucydides.core.annotations.locators;
 
+import net.thucydides.core.webdriver.MobilePlatform;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
@@ -16,14 +17,15 @@ public class SmartElementLocator implements ElementLocator {
 	private final By by;
 	private WebElement cachedElement;
 	private List<WebElement> cachedElementList;
+    private MobilePlatform platform;
 	
 
-	public SmartElementLocator(SearchContext searchContext, Field field) {
+	public SmartElementLocator(SearchContext searchContext, Field field, MobilePlatform platform) {
 		this.searchContext = searchContext;
-	    SmartAnnotations annotations = new SmartAnnotations(field);
+	    SmartAnnotations annotations = new SmartAnnotations(field,platform);
 	    shouldCache = annotations.isLookupCached();
 	    by = annotations.buildBy();
-	}
+    }
 
 	/**
 	 * Find the element.

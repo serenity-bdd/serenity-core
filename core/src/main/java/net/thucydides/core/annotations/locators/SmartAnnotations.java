@@ -162,13 +162,6 @@ public class SmartAnnotations extends Annotations {
         }
     }
 
-
-    public SmartAnnotations(Field field) {
-        super(field);
-        this.field = field;
-        this.platform = MobilePlatform.IOS;
-    }
-
     public SmartAnnotations(Field field, MobilePlatform platform) {
         super(field);
         this.field = field;

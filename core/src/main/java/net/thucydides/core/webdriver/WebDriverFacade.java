@@ -22,7 +22,7 @@ import java.util.Set;
 /**
  * A proxy class for webdriver instances, designed to prevent the browser being opened unnecessarily.
  */
-public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevices, JavascriptExecutor {
+public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevices, JavascriptExecutor, HasCapabilities {
 
     private final Class<? extends WebDriver> driverClass;
 
@@ -38,7 +38,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         this.webDriverFactory = webDriverFactory;
     }
 
-    public Class<? extends WebDriver>  getDriverClass() {
+    public Class<? extends WebDriver> getDriverClass() {
         return driverClass;
     }
 
@@ -176,12 +176,12 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     public void close() {
         if (proxyInstanciated()) {
-        	//if there is only one window closing it means quitting the web driver
-        	if (getDriverInstance().getWindowHandles() != null && getDriverInstance().getWindowHandles().size() == 1){
-        		this.quit();
-        	} else{
-        		getDriverInstance().close();
-        	}
+            //if there is only one window closing it means quitting the web driver
+            if (getDriverInstance().getWindowHandles() != null && getDriverInstance().getWindowHandles().size() == 1) {
+                this.quit();
+            } else {
+                getDriverInstance().close();
+            }
             webDriverFactory.shutdownFixtureServices();
         }
     }
@@ -242,19 +242,18 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
 
-
     public boolean canTakeScreenshots() {
-    	if (driverClass != null) {
-    		if (driverClass == ProvidedDriver.class) {
-    			return TakesScreenshot.class.isAssignableFrom(getProxiedDriver().getClass()) 
-    					|| (getProxiedDriver().getClass() == RemoteWebDriver.class);
-    		} else {
-    			return TakesScreenshot.class.isAssignableFrom(driverClass)
-    					|| (driverClass == RemoteWebDriver.class);
-    		}
-    	} else {
-    		return false;
-    	}
+        if (driverClass != null) {
+            if (driverClass == ProvidedDriver.class) {
+                return TakesScreenshot.class.isAssignableFrom(getProxiedDriver().getClass())
+                        || (getProxiedDriver().getClass() == RemoteWebDriver.class);
+            } else {
+                return TakesScreenshot.class.isAssignableFrom(driverClass)
+                        || (driverClass == RemoteWebDriver.class);
+            }
+        } else {
+            return false;
+        }
     }
 
     public boolean isInstantiated() {
@@ -276,4 +275,10 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     public Object executeAsyncScript(String script, Object... parameters) {
         return ((JavascriptExecutor) getProxiedDriver()).executeAsyncScript(script, parameters);
     }
+
+    @Override
+    public Capabilities getCapabilities() {
+        return ((HasCapabilities) getProxiedDriver()).getCapabilities();
+    }
+
 }

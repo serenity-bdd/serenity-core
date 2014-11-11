@@ -1,26 +1,178 @@
 package net.thucydides.core.annotations.locators;
 
+import io.appium.java_client.MobileBy;
+import io.appium.java_client.pagefactory.AndroidFindBy;
+import io.appium.java_client.pagefactory.AndroidFindBys;
+import io.appium.java_client.pagefactory.iOSFindBy;
+import io.appium.java_client.pagefactory.iOSFindBys;
 import net.thucydides.core.annotations.findby.By;
 import net.thucydides.core.annotations.findby.FindBy;
 import net.thucydides.core.annotations.findby.How;
+import net.thucydides.core.webdriver.MobilePlatform;
 import org.openqa.selenium.support.ByIdOrName;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.pagefactory.Annotations;
+import org.openqa.selenium.support.pagefactory.ByChained;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import static io.appium.java_client.remote.MobilePlatform.ANDROID;
+import static io.appium.java_client.remote.MobilePlatform.IOS;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 
 public class SmartAnnotations extends Annotations {
 
     private Field field;
+    private MobilePlatform platform;
+
+    private final static Class<?>[] DEFAULT_ANNOTATION_METHOD_ARGUMENTS = new Class<?>[]{};
+
+    private static enum Strategies {
+        BYUIAUTOMATOR("uiAutomator") {
+            @Override
+            org.openqa.selenium.By getBy(Annotation annotation) {
+                String value = getValue(annotation, this);
+                if (annotation.annotationType().equals(AndroidFindBy.class)) {
+                    return MobileBy.AndroidUIAutomator(value);
+                }
+                if (annotation.annotationType().equals(iOSFindBy.class)) {
+                    return MobileBy.IosUIAutomation(value);
+                }
+                return super.getBy(annotation);
+            }
+        },
+        BYACCESSABILITY("accessibility") {
+            @Override
+            org.openqa.selenium.By getBy(Annotation annotation) {
+                return MobileBy.AccessibilityId(getValue(annotation, this));
+            }
+        },
+        BYCLASSNAME("className") {
+            @Override
+            org.openqa.selenium.By getBy(Annotation annotation) {
+                return By.className(getValue(annotation, this));
+            }
+        },
+        BYID("id") {
+            @Override
+            org.openqa.selenium.By getBy(Annotation annotation) {
+                return By.id(getValue(annotation, this));
+            }
+        },
+        BYTAG("tagName") {
+            @Override
+            org.openqa.selenium.By getBy(Annotation annotation) {
+                return By.tagName(getValue(annotation, this));
+            }
+        },
+        BYNAME("name") {
+            @Override
+            org.openqa.selenium.By getBy(Annotation annotation) {
+                return By.name(getValue(annotation, this));
+            }
+        },
+        BYXPATH("xpath") {
+            @Override
+            org.openqa.selenium.By getBy(Annotation annotation) {
+                return By.xpath(getValue(annotation, this));
+            }
+        },
+        BYCSS("css") {
+            @Override
+            org.openqa.selenium.By getBy(Annotation annotation) {
+                return By.cssSelector(getValue(annotation, this));
+            }
+        },
+        BYLINKTEXT("linkText") {
+            @Override
+            org.openqa.selenium.By getBy(Annotation annotation) {
+                return By.linkText(getValue(annotation, this));
+            }
+        },
+        BYPARTIALLINKTEXT("partialLinkText") {
+            @Override
+            org.openqa.selenium.By getBy(Annotation annotation) {
+                return By.partialLinkText(getValue(annotation, this));
+            }
+        },
+        JQUERY("jQuery") {
+            @Override
+            org.openqa.selenium.By getBy(Annotation annotation) {
+                return By.jquery(getValue(annotation, this));
+            }
+        },
+        SCUSING("scUsing") {
+            @Override
+            org.openqa.selenium.By getBy(Annotation annotation) {
+                return By.sclocator(getValue(annotation, this));
+            }
+        };
+
+        private final String valueName;
+
+        private String returnValueName() {
+            return valueName;
+        }
+
+        private Strategies(String valueName) {
+            this.valueName = valueName;
+        }
+
+        private static String[] strategyNames() {
+            Strategies[] strategies = values();
+            String[] result = new String[strategies.length];
+            int i = 0;
+            for (Strategies strategy : values()) {
+                result[i] = strategy.valueName;
+                i++;
+            }
+            return result;
+        }
+
+        private static String getValue(Annotation annotation,
+                                       Strategies strategy) {
+            try {
+                Method m = annotation.getClass().getMethod(strategy.valueName,
+                        DEFAULT_ANNOTATION_METHOD_ARGUMENTS);
+                return m.invoke(annotation, new Object[]{}).toString();
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            } catch (SecurityException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        org.openqa.selenium.By getBy(Annotation annotation) {
+            return null;
+        }
+    }
+
 
     public SmartAnnotations(Field field) {
         super(field);
         this.field = field;
+        this.platform = MobilePlatform.IOS;
+    }
+
+    public SmartAnnotations(Field field, MobilePlatform platform) {
+        super(field);
+        this.field = field;
+        this.platform = platform;
     }
 
     private void assertValidAnnotations() {
@@ -36,37 +188,57 @@ public class SmartAnnotations extends Annotations {
     public org.openqa.selenium.By buildBy() {
         assertValidAnnotations();
 
-        org.openqa.selenium.By ans = null;
+        org.openqa.selenium.By by = null;
 
-        //default implementation in case if org.openqa.selenium.support.FindBy was used
-        org.openqa.selenium.support.FindBy findBy = field.getAnnotation(org.openqa.selenium.support.FindBy.class);
-        if (ans == null && findBy != null) {
-            ans = super.buildByFromFindBy(findBy);
+        // appium additions
+        AndroidFindBy androidBy = field
+                .getAnnotation(AndroidFindBy.class);
+        if (androidBy != null && ANDROID.toUpperCase().equals(platform.name())) {
+            by = getMobileBy(androidBy, getFilledValue(androidBy));
         }
 
-
-        //my additions to FindBy
-        FindBy myFindBy = field.getAnnotation(FindBy.class);
-        if (ans == null && myFindBy != null) {
-            ans = buildByFromFindBy(myFindBy);
+        AndroidFindBys androidBys = field
+                .getAnnotation(AndroidFindBys.class);
+        if (androidBys != null && ANDROID.toUpperCase().equals(platform.name())) {
+            by = getComplexMobileBy(androidBys.value(), ByChained.class);
         }
 
-
-        FindBys findBys = field.getAnnotation(FindBys.class);
-        if (ans == null && findBys != null) {
-            ans = buildByFromFindBys(findBys);
+        iOSFindBy iOSBy = field.getAnnotation(iOSFindBy.class);
+        if (iOSBy != null && IOS.toUpperCase().equals(platform.name())) {
+            by = getMobileBy(iOSBy, getFilledValue(iOSBy));
         }
 
-
-        if (ans == null) {
-            ans = buildByFromDefault();
+        iOSFindBys iOSBys = field.getAnnotation(iOSFindBys.class);
+        if (iOSBys != null && IOS.toUpperCase().equals(platform.name())) {
+            by = getComplexMobileBy(iOSBys.value(), ByChained.class);
         }
 
-        if (ans == null) {
+        // additions to FindBy
+        FindBy thucydidesBy = field.getAnnotation(FindBy.class);
+        if (thucydidesBy != null) {
+            by = buildByFromFindBy(thucydidesBy);
+        }
+
+        FindBys thucydidesBys = field.getAnnotation(FindBys.class);
+        if (thucydidesBys != null) {
+            by = buildByFromFindBys(thucydidesBys);
+        }
+
+        // default implementation in case if org.openqa.selenium.support.FindBy was used
+        org.openqa.selenium.support.FindBy seleniumBy = field.getAnnotation(org.openqa.selenium.support.FindBy.class);
+        if (seleniumBy != null) {
+            by = super.buildByFromFindBy(seleniumBy);
+        }
+
+        if (by == null) {
+            by = buildByFromDefault();
+        }
+
+        if (by == null) {
             throw new IllegalArgumentException("Cannot determine how to locate element " + field);
         }
 
-        return ans;
+        return by;
     }
 
 
@@ -119,6 +291,15 @@ public class SmartAnnotations extends Annotations {
             case SCLOCATOR:
                 return By.sclocator(using);
 
+            case ACCESSIBILITY_ID:
+                return MobileBy.AccessibilityId(using);
+
+            case IOS_UI_AUTOMATION:
+                return MobileBy.IosUIAutomation(using);
+
+            case ANDROID_UI_AUTOMATOR:
+                return MobileBy.AndroidUIAutomator(using);
+
             default:
                 // Note that this shouldn't happen (eg, the above matches all
                 // possible values for the How enum)
@@ -163,9 +344,110 @@ public class SmartAnnotations extends Annotations {
         if (isNotEmpty(myFindBy.jquery())) {
             return By.jquery(myFindBy.jquery());
         }
+        if (isNotEmpty(myFindBy.accessibilityId())) {
+            return MobileBy.AccessibilityId(myFindBy.accessibilityId());
+        }
+        if (isNotEmpty(myFindBy.androidUIAutomator())) {
+            return MobileBy.AndroidUIAutomator(myFindBy.androidUIAutomator());
+        }
+        if (isNotEmpty(myFindBy.iOSUIAutomation())) {
+            // FIXME: Need to support android with platform switch
+            return MobileBy.IosUIAutomation(myFindBy.iOSUIAutomation());
+        }
+
         // Fall through
         return null;
     }
+
+    private org.openqa.selenium.By getMobileBy(Annotation annotation, String valueName) {
+        Strategies strategies[] = Strategies.values();
+        for (Strategies strategy : strategies) {
+            if (strategy.returnValueName().equals(valueName)) {
+                return strategy.getBy(annotation);
+            }
+        }
+        throw new IllegalArgumentException("@"
+                + annotation.getClass().getSimpleName()
+                + ": There is an unknown strategy " + valueName);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends org.openqa.selenium.By> T getComplexMobileBy(Annotation[] annotations, Class<T> requiredByClass) {
+        ;
+        org.openqa.selenium.By[] byArray = new org.openqa.selenium.By[annotations.length];
+        for (int i = 0; i < annotations.length; i++) {
+            byArray[i] = getMobileBy(annotations[i],
+                    getFilledValue(annotations[i]));
+        }
+        try {
+            Constructor<?> c = requiredByClass.getConstructor(org.openqa.selenium.By[].class);
+            Object[] values = new Object[]{byArray};
+            return (T) c.newInstance(values);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static String getFilledValue(Annotation mobileBy) {
+        Method[] values = prepareAnnotationMethods(mobileBy.getClass());
+        for (Method value : values) {
+            try {
+                String strategyParameter = value.invoke(mobileBy,
+                        new Object[]{}).toString();
+                if (!"".equals(strategyParameter)) {
+                    return value.getName();
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        throw new IllegalArgumentException("@"
+                + mobileBy.getClass().getSimpleName() + ": one of "
+                + Strategies.strategyNames().toString() + " should be filled");
+    }
+
+    private static Method[] prepareAnnotationMethods(
+            Class<? extends Annotation> annotation) {
+        List<String> targetAnnotationMethodNamesList = getMethodNames(annotation.getDeclaredMethods());
+        targetAnnotationMethodNamesList.removeAll(METHODS_TO_BE_EXCLUDED_WHEN_ANNOTATION_IS_READ);
+        Method[] result = new Method[targetAnnotationMethodNamesList.size()];
+        for (String methodName : targetAnnotationMethodNamesList) {
+            try {
+                result[targetAnnotationMethodNamesList.indexOf(methodName)] = annotation.getMethod(methodName, DEFAULT_ANNOTATION_METHOD_ARGUMENTS);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            } catch (SecurityException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return result;
+    }
+
+    private static List<String> getMethodNames(Method[] methods) {
+        List<String> names = new ArrayList<String>();
+        for (Method m : methods) {
+            names.add(m.getName());
+        }
+        return names;
+    }
+
+    private final static List<String> METHODS_TO_BE_EXCLUDED_WHEN_ANNOTATION_IS_READ = new ArrayList<String>() {
+        private static final long serialVersionUID = 1L;
+
+        {
+            List<String> objectClassMethodNames = getMethodNames(Object.class
+                    .getDeclaredMethods());
+            addAll(objectClassMethodNames);
+            List<String> annotationClassMethodNames = getMethodNames(Annotation.class
+                    .getDeclaredMethods());
+            annotationClassMethodNames.removeAll(objectClassMethodNames);
+            addAll(annotationClassMethodNames);
+        }
+    };
 
 
     private void assertValidFindBy(FindBy findBy) {

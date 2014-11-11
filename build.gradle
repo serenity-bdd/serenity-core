@@ -107,7 +107,7 @@ allprojects {
         include '**/integration/browsers/**'
     }
 
-    task javadoc(type: Javadoc, overwrite:true) {
+    task javadoc(type: Javadoc, overwrite: true) {
         source = sourceSets.main.allJava
         options.memberLevel = JavadocMemberLevel.PUBLIC
         options.addStringOption('views')
@@ -143,6 +143,23 @@ allprojects {
         testCompile("org.easytesting:fest-assert:1.4")
     }
 
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.name == 'mockito-all') {
+                details.useTarget group: 'org.mockito', name: 'mockito-core', version: '1.10.8'
+            }
+            if (details.requested.name == 'hamcrest-core') {
+                details.useTarget group: 'org.hamcrest', name: 'hamcrest-core', version: '1.3'
+            }
+            if (details.requested.name == 'hamcrest-all') {
+                details.useTarget group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+            }
+            if (details.requested.name == 'hamcrest-library') {
+                details.useTarget group: 'org.hamcrest', name: 'hamcrest-library', version: '1.3'
+            }
+        }
+    }
+
     bintray {
         user = bintrayUsername //this usually comes form gradle.properties file in ~/.gradle
         key = bintrayApiKey //this usually comes form gradle.properties file in ~/.gradle
@@ -153,7 +170,7 @@ allprojects {
             name = 'serenity-core'
             desc = 'Serenity core libraries'
             licenses = ['Apache-2.0']
-            labels = ['serenity','bdd']
+            labels = ['serenity', 'bdd']
         }
     }
 

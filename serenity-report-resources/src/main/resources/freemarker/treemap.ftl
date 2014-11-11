@@ -41,7 +41,7 @@
                 </tr>
             </table>
         </div>
-        <div id="logo"><a href="index.html"><img src="images/logo.jpg" border="0"/></a></div>
+        <div id="logo"><a href="index.html"><img src="images/serenity-bdd-logo.png" border="0"/></a></div>
     </div>
 </div>
 

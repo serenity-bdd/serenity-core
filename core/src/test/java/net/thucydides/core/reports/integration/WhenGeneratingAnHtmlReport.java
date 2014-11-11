@@ -343,7 +343,7 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
         File defaultCssStylesheet = new File(new File(outputDirectory,"css"), "core.css");
         assertThat(defaultCssStylesheet.exists(), is(false));
     }
-   
+
     
     @Test
     public void a_sample_report_should_be_generated_in_the_target_directory() throws Exception {

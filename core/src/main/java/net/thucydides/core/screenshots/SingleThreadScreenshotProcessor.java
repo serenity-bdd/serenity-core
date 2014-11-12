@@ -3,7 +3,6 @@ package net.thucydides.core.screenshots;
 import com.google.inject.Inject;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -160,7 +159,8 @@ public class SingleThreadScreenshotProcessor implements ScreenshotProcessor {
 
                 BufferedImage resizedImage = resize(image, targetWidth, targetHeight);
                 ImageIO.write(resizedImage, "png", queuedScreenshot.getDestinationFile());
-                FileUtils.deleteQuietly(queuedScreenshot.getSourceFile());
+//                FileUtils.deleteQuietly(queuedScreenshot.getSourceFile());
+                Files.deleteIfExists(queuedScreenshot.getSourceFile().toPath());
             } catch (Throwable e) {
                 logger.warn("Failed to resize screenshot: using original size " + e.getMessage());
                 moveScreenshot(queuedScreenshot);

@@ -5,11 +5,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.thucydides.core.model.*;
 import net.thucydides.core.reports.adaptors.common.FilebasedOutcomeAdaptor;
-import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.convert;
@@ -41,7 +40,7 @@ public class SpecflowAdaptor extends FilebasedOutcomeAdaptor {
     }
 
     private List<TestOutcome> outcomesFromFile(File outputFile) throws IOException {
-        List<String> outputLines = FileUtils.readLines(outputFile, Charset.defaultCharset());
+        List<String> outputLines = Files.readAllLines(outputFile.toPath());
         return convert(scenarioOutputsFrom(outputLines), toTestOutcomes());
     }
 

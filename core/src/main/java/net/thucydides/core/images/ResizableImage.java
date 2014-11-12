@@ -1,6 +1,5 @@
 package net.thucydides.core.images;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +9,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 public class ResizableImage {
 
@@ -94,6 +94,6 @@ public class ResizableImage {
      * Otherwise we should be applying the saveTo() method on the ResizedImage class.
      */
     public void saveTo(final File savedFile) throws IOException {
-        FileUtils.copyFile(screenshotFile, savedFile);
+        Files.copy(screenshotFile.toPath(), savedFile.toPath());
     }
 }

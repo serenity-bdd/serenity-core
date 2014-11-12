@@ -2,10 +2,10 @@ package net.thucydides.core.reports.html.screenshots;
 
 import net.thucydides.core.images.ResizableImage;
 import net.thucydides.core.model.Screenshot;
-import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  * Class designed to help resize and scale screenshots to a format that is compatible with the Thucydides reports.
@@ -62,13 +62,13 @@ public class ScreenshotFormatter {
         }
         screenshotFile.delete();
 
-        FileUtils.moveFile(scaledFile, screenshotFile);
+        Files.move(scaledFile.toPath(), screenshotFile.toPath());
         return screenshotFile;
     }
 
     private void saveCopyOf(File screenshotFile) throws IOException {
         String backupScreenshotFilename = "original_" + screenshotFile.getName();
-        FileUtils.copyFile(screenshotFile, new File(sourceDirectory, backupScreenshotFilename));
+        Files.copy(screenshotFile.toPath(), new File(sourceDirectory, backupScreenshotFilename).toPath());
     }
 
 }

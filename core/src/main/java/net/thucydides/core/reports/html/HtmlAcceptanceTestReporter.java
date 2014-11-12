@@ -204,7 +204,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
                         .keepOriginals(shouldKeepOriginalScreenshots())
                         .expandToHeight(maxHeight);
             } catch (IOException e) {
-                LOGGER.warn("Failed to write scaled screenshot for {}: {}", screenshot, e);
+                LOGGER.info("NOTE: I couldn't convert Failed to write scaled screenshot for {}: {}", screenshot, e);
                 return screenshot;
             }
         }

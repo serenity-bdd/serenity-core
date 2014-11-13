@@ -248,6 +248,12 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         generateReportPage(context, TEST_OUTCOME_TEMPLATE_PATH, "index.html");
         generateCSVReportFor(testOutcomes, "results.csv");
+        logReportPathMessage();
+    }
+
+    private void logReportPathMessage() {
+        LOGGER.info("REPORTS GENERATED IN " + getOutputDirectory().getAbsolutePath());
+        LOGGER.info("REPORT HOME PAGE: " + getOutputDirectory().getAbsolutePath() + File.separator +  "index.html" );
     }
 
     private ReleaseManager releaseManager;
@@ -517,13 +523,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         } else {
             return types;
         }
-    }
-
-    /**
-     * Check the test outcomes for failures or errors, and throw an appropriate exception if one is found.
-     */
-    public void checkOutcomes() {
-
     }
 }
 

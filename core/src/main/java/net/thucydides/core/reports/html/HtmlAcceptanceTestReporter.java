@@ -137,7 +137,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         context.put("parentTitle", parentTitle);
         context.put("parentLink", parentLink);
 
-        Set<TestTag> filteredTags = removeTagsWithTitle(parentTitle, testOutcome.getTags());
+        Set<TestTag> filteredTags = removeStoryTags(removeTagsWithTitle(parentTitle, testOutcome.getTags()));
         context.put("filteredTags", filteredTags);
 
         context.put("requirementTypes", requirementsService.getRequirementTypes());
@@ -154,6 +154,17 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         }
         return filteredTags;
     }
+
+    private Set<TestTag> removeStoryTags( Set<TestTag> tags) {
+        Set<TestTag> filteredTags = Sets.newHashSet();
+        for (TestTag tag : tags) {
+            if (!tag.getType().equalsIgnoreCase("story")) {
+                filteredTags.add(tag);
+            }
+        }
+        return filteredTags;
+    }
+
 
     private void addFormattersToContext(final Map<String, Object> context) {
         Formatter formatter = new Formatter(issueTracking);

@@ -52,6 +52,16 @@ public class Serenity {
         Thucydides.initializeTestSession();
     }
 
+    public static Object sessionVariableCalled(Object key) {
+        return Thucydides.getCurrentSession().get(key);
+    }
+
+    public static SessionVariableSetter setSessionVariable(Object key) {
+        return new SessionVariableSetter(key);
+    }
+
+
+
     public static SessionMap<Object, Object> getCurrentSession() {
         return Thucydides.getCurrentSession();
     }
@@ -83,4 +93,15 @@ public class Serenity {
         return Thucydides.getFirefoxProfile();
     }
 
+    public static class SessionVariableSetter {
+        final Object key;
+
+        public SessionVariableSetter(Object key) {
+            this.key = key;
+        }
+
+        public void to(Object value) {
+            Thucydides.getCurrentSession().put(key, value);
+        }
+    }
 }

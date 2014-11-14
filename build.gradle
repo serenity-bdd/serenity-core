@@ -112,6 +112,7 @@ allprojects {
         options.addStringOption('quiet')
         options.addStringOption('qualify')
         options.addStringOption('Xdoclint:none')
+        options.encoding = 'UTF-8'
         classpath = configurations.compile
     }
 

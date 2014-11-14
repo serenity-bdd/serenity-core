@@ -309,7 +309,7 @@
                                 <#assign errorMessageTitle = "">
                             </#if>
                             <td width="%" colspan="4" class="error-message-cell">
-                                <span class="error-message" title='${errorMessageTitle}'><pre>${step.shortErrorMessage!''}</pre></span>
+                                <span class="error-message" title='${formatter.htmlAttributeCompatible(errorMessageTitle)}'><pre>${formatter.htmlAttributeCompatible(step.shortErrorMessage)!''}</pre></span>
                             </td>
                         </tr>
                     </#if>

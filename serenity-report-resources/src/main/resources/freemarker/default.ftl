@@ -85,7 +85,7 @@
 
                 <tr>
                     <td>
-                        <#if (parentRequirement.isPresent())>
+                        <#if (parentRequirement?? && parentRequirement.isPresent())>
                             <div>
                                 <#assign parentTitle = inflection.of(parentRequirement.get().name).asATitle() >
                                 <#assign parentType = inflection.of(parentRequirement.get().type).asATitle() >
@@ -100,7 +100,7 @@
                                     ${formatter.renderDescription(parentRequirement.get().narrative.renderedText)}
                                 </div>
                             </div>
-                        <#elseif (featureOrStory.isPresent())>
+                        <#elseif (featureOrStory?? && featureOrStory.isPresent())>
                             <div>
                                 <#assign parentTitle = inflection.of(featureOrStory.get().name).asATitle() >
                                 <#assign parentType = inflection.of(featureOrStory.get().type.toString()).asATitle() >
@@ -309,7 +309,7 @@
                                 <#assign errorMessageTitle = "">
                             </#if>
                             <td width="%" colspan="4" class="error-message-cell">
-                                <span class="error-message" title="${errorMessageTitle}"><pre>${step.shortErrorMessage!''}</pre></span>
+                                <span class="error-message" title='${errorMessageTitle}'><pre>${step.shortErrorMessage!''}</pre></span>
                             </td>
                         </tr>
                     </#if>
@@ -341,7 +341,7 @@
                             <td width="%" colspan="4">
                                 <#if (testOutcome.errorMessage)??>
                                     <span class="error-message"
-                                          title="${testOutcome.errorMessage}">${testOutcome.errorMessage}</span>
+                                          title="${formatter.htmlAttributeCompatible(testOutcome.errorMessage)}">${testOutcome.errorMessage}</span>
                                 </#if>
                             </td>
                         </tr>

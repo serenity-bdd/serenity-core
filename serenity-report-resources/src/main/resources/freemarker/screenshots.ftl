@@ -203,7 +203,7 @@
                         </#if>
                         </td>
                         <td>
-                        <#list testOutcome.tags as tag>
+                        <#list filteredTags as tag>
                             <#assign tagReport = absoluteReportName.forTag(tag) />
                             <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
                             <p class="tag">

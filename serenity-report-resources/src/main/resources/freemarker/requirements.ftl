@@ -150,14 +150,25 @@
     </div>
 </div>
 
+<#if (requirements.parentRequirement.isPresent())>
+    <#assign parentRequirement = requirements.parentRequirement.get() >
+    <#assign parentTitle = inflection.of(parentRequirement.name).asATitle() >
+    <#assign parentType = inflection.of(parentRequirement.type).asATitle() >
+    <#if (parentRequirement.cardNumber?has_content) >
+        <#assign issueNumber = "[" + formatter.addLinks(parentRequirement.cardNumber) + "]" >
+    <#else>
+        <#assign issueNumber = "">
+    </#if>
+</#if>
 
 <div class="middlecontent">
 <div id="contenttop">
     <div class="middlebg">
     <#if requirements.parentRequirement.isPresent()>
-        <#assign breadcrumbs = "Requirements > " + pageTitle >
+        <#assign breadcrumbs = "<a href='capabilities.html'>Requirements</a> > "
+                                + pageTitle + " > " + parentTitle >
     <#else>
-        <#assign breadcrumbs = "Requirements" >
+        <#assign breadcrumbs = "<a href='capabilities.html'>Requirements</a>" >
     </#if>
         <span class="bluetext"><a href="index.html" class="bluetext">Home</a> > ${breadcrumbs} </span>
     </div>
@@ -183,14 +194,6 @@
 <div class="table">
 <#if (requirements.parentRequirement.isPresent())>
 <div>
-    <#assign parentRequirement = requirements.parentRequirement.get() >
-    <#assign parentTitle = inflection.of(parentRequirement.name).asATitle() >
-    <#assign parentType = inflection.of(parentRequirement.type).asATitle() >
-    <#if (parentRequirement.cardNumber?has_content) >
-        <#assign issueNumber = "[" + formatter.addLinks(parentRequirement.cardNumber) + "]" >
-    <#else>
-        <#assign issueNumber = "">
-    </#if>
     <h2>${parentType}: ${issueNumber} ${parentTitle}</h2>
 
     <#if parentRequirement.narrative.renderedText?has_content>
@@ -566,7 +569,7 @@ Estimated ignored or skipped requirements: ${ignored}"
                             <td><img src="images/${testrun_outcome_icon}" title="${testOutcome.result}"
                                      class="summary-icon"/><span style="display:none">${testOutcome.result}</span></td>
                             <td class="${testOutcome.result}-text"><a
-                                    href="${relativeLink!}${testOutcome.reportName}.html" title="${testOutcome.errorMessage}">${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}</a>
+                                    href="${relativeLink!}${testOutcome.reportName}.html" title="${formatter.htmlAttributeCompatible(testOutcome.errorMessage)}">${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}</a>
                             </td>
 
                             <td class="lightgreentext">${testOutcome.nestedStepCount}</td>

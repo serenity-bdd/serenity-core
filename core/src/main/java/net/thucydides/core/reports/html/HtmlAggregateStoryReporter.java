@@ -458,10 +458,10 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         }
         context.put("currentTag", TestTag.EMPTY_TAG);
         context.put("reportName", reportName);
+
         context.put("absoluteReportName", new ReportNameProvider());
 
         context.put("reportOptions", new ReportOptions(getEnvironmentVariables()));
-        //context.put("timestamp", timestampFrom(testOutcomesForTagType.getRootOutcomes()));
         context.put("timestamp", timestampFrom(currentTime()));
         context.put("requirementTypes", requirementsService.getRequirementTypes());
         addFormattersToContext(context);

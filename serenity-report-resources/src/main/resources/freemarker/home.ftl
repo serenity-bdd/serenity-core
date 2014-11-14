@@ -433,7 +433,7 @@
                                 <#if (testOutcome.manual)><img src="images/worker.png" title="Manual test"/></#if>
                                 <span style="display:none">${testOutcome.result}</span></td>
                             <td class="${testOutcome.result}-text"><a
-                                    href="${relativeLink}${testOutcome.reportName}.html" title="${testOutcome.errorMessage}">${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}</a>
+                                    href="${relativeLink}${testOutcome.reportName}.html" title="${formatter.htmlAttributeCompatible(testOutcome.errorMessage)}">${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}</a>
                             </td>
 
                             <td class="lightgreentext">${testOutcome.nestedStepCount}</td>

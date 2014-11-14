@@ -4,11 +4,14 @@ package net.thucydides.core.reports.html;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.model.TestTag;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Set;
 
 public class TagFilter {
 
@@ -34,6 +37,30 @@ public class TagFilter {
 
         return filteredTags;
     }
+
+
+    public Set<TestTag> removeTagsOfType(Set<TestTag> tags, String... redundantTagTypes) {
+        Set<TestTag> filteredTags = Sets.newHashSet();
+        List<String> maskedTagTypes = Lists.newArrayList(redundantTagTypes);
+        for (TestTag tag : tags) {
+            if (!maskedTagTypes.contains(tag.getType())) {
+                filteredTags.add(tag);
+            }
+        }
+        return filteredTags;
+    }
+
+
+    public Set<TestTag> removeTagsWithName(Set<TestTag> tags, String name) {
+        Set<TestTag> filteredTags = Sets.newHashSet();
+        for (TestTag tag : tags) {
+            if (!tag.getShortName().equalsIgnoreCase(name)) {
+                filteredTags.add(tag);
+            }
+        }
+        return filteredTags;
+    }
+
 
     private List<String> onlyKeepAllowedTypes(List<String> tags, List<String> displayedTags) {
         List<String> allowedTags = Lists.newArrayList();

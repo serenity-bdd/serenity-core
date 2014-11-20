@@ -8,6 +8,7 @@ import net.thucydides.core.reports.adaptors.common.FilebasedOutcomeAdaptor;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class SpecflowAdaptor extends FilebasedOutcomeAdaptor {
     }
 
     private List<TestOutcome> outcomesFromFile(File outputFile) throws IOException {
-        List<String> outputLines = Files.readAllLines(outputFile.toPath());
+        List<String> outputLines = Files.readAllLines(outputFile.toPath(), Charset.defaultCharset());
         return convert(scenarioOutputsFrom(outputLines), toTestOutcomes());
     }
 

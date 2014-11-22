@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 public class SampleFailingAssumption {
 
     @Test
-    public void demonstrate_that_pending_test_is_marked_as_passed() {
+    public void tests_with_failing_assumptions_are_ignored() {
         Assume.assumeTrue(false);
     }
 }

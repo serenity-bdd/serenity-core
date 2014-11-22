@@ -488,6 +488,13 @@ public class TestOutcome {
         }
     }
 
+    public void addDataFrom(DataTable newDataTable) {
+        if (dataTable == null) {
+            dataTable = DataTable.withHeaders(newDataTable.getHeaders()).build();
+        }
+        dataTable.addRows(newDataTable.getRows());
+    }
+
     public class TitleBuilder {
         private final boolean qualified;
         private final TestOutcome testOutcome;

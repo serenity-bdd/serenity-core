@@ -105,6 +105,20 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
+    public void a_data_driven_test_with_a_failing_assumption_should_be_ignored() throws Throwable  {
+
+        ThucydidesParameterizedRunner runner = getStubbedTestRunnerUsing(SampleSingleDataDrivenScenarioWithFailingAssumption.class);
+        runner.run(new RunNotifier());
+
+        List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods();
+        assertThat(aggregatedScenarios.size(), is(1));
+        assertThat(aggregatedScenarios.get(0).getStepCount(), is(15));
+        for(TestStep step :aggregatedScenarios.get(0).getTestSteps()) {
+            assertThat(step.getResult(), is(TestResult.IGNORED));
+        }
+    }
+
+    @Test
     public void a_data_driven_test_driver_should_aggregate_test_outcomes_without_steps() throws Throwable  {
 
         ThucydidesParameterizedRunner runner = getStubbedTestRunnerUsing(SimpleSuccessfulParametrizedTestSample.class);

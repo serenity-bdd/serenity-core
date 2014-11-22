@@ -51,7 +51,7 @@ dependencies {
         exclude group: 'org.hamcrest', module: 'hamcrest-all'
         exclude group: 'cglib', module: 'cglib-nodep'
     }
-    compile "com.google.guava:guava:15.0"
+    compile "com.google.guava:guava:18.0"
     compile "joda-time:joda-time:2.0"
     compile "com.thoughtworks.xstream:xstream:1.4.1"
     compile "org.apache.commons:commons-lang3:3.1"

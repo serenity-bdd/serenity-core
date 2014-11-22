@@ -459,6 +459,10 @@ i.tag {
     font-family:euphemia, verdana, sans-serif; font-size:14px; color:#0d78ae; font-style:italic;
 }
 
+.SKIPPED-text {
+    font-family:euphemia, verdana, sans-serif; font-size:14px; color:#0d78ae; font-style:italic;
+}
+
 .SUCCESS-item-text {
     font-family:euphemia, verdana, sans-serif; font-size:14px; color: #88a717; font-style:italic;
 }
@@ -472,6 +476,10 @@ i.tag {
 }
 
 .IGNORED-item-text {
+    font-family:euphemia, verdana, sans-serif; font-size:14px; color:#0d78ae; font-style:italic;
+}
+
+.SKIPPED-item-text {
     font-family:euphemia, verdana, sans-serif; font-size:14px; color:#0d78ae; font-style:italic;
 }
 

@@ -430,7 +430,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         updateSessionIdIfKnown();
         takeEndOfStepScreenshotFor(SUCCESS);
         currentStepDone(SUCCESS);
-//        markCurrentStepAs(SUCCESS);
         pauseIfRequired();
     }
 
@@ -462,7 +461,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public void stepFailed(StepFailure failure) {
         takeEndOfStepScreenshotFor(FAILURE);
         getCurrentTestOutcome().determineTestFailureCause(failure.getException());
-//        markCurrentStepAs(failureAnalysis.resultFor(failure));
         recordFailureDetailsInFailingTestStep(failure);
         currentStepDone(failureAnalysis.resultFor(failure));
     }
@@ -484,13 +482,11 @@ public class BaseStepListener implements StepListener, StepPublisher {
             markCurrentStepAs(SKIPPED);
             currentStepDone(SKIPPED);
         } else {
-//            markCurrentStepAs(IGNORED);
             currentStepDone(IGNORED);
         }
     }
 
     public void stepPending() {
-//        markCurrentStepAs(PENDING);
         currentStepDone(PENDING);
     }
 
@@ -529,6 +525,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (shouldTakeEndOfStepScreenshotFor(result)) {
             take(OPTIONAL_SCREENSHOT);
         }
+    }
+
+    public Optional<TestResult> getForcedResult() {
+        return Optional.fromNullable(getCurrentTestOutcome().getAnnotatedResult());
     }
 
     private void take(final ScreenshotType screenshotType) {

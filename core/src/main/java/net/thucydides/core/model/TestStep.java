@@ -273,7 +273,7 @@ public class TestStep {
      * The test has been aborted (marked as pending or ignored) for a reason described in the exception.
      */
     public void testAborted(final Throwable exception) {
-        new RootCauseAnalyzer(exception).getRootCause();
+        this.exception = new RootCauseAnalyzer(exception).getRootCause();
     }
 
     private String errorMessageFrom(final Throwable error) {

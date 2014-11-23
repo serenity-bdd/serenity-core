@@ -531,6 +531,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return Optional.fromNullable(getCurrentTestOutcome().getAnnotatedResult());
     }
 
+    public void clearForcedResult() {
+        getCurrentTestOutcome().clearForcedResult();
+    }
+
     private void take(final ScreenshotType screenshotType) {
         if (currentStepExists() && browserIsOpen()) {
             try {
@@ -740,8 +744,11 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void exampleStarted(Map<String, String> data) {
-        if (getCurrentTestOutcome().isDataDriven() && !getCurrentTestOutcome().dataIsPredefined()) {
-            getCurrentTestOutcome().addRow(data);
+        clearForcedResult();
+        if (getCurrentTestOutcome().isDataDriven()) {
+            if (!getCurrentTestOutcome().dataIsPredefined()) {
+                getCurrentTestOutcome().addRow(data);
+            }
         }
         currentExample++;
         getEventBus().stepStarted(ExecutedStepDescription.withTitle(exampleTitle(currentExample, data)));

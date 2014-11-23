@@ -41,6 +41,8 @@ class SerenityPlugin implements Plugin<Project> {
         project.task('checkOutcomes') {
             group 'Serenity BDD'
             description "Checks the Serenity reports and fails the build if there are test failures (run automatically with 'check')"
+            dependsOn project.tasks.aggregate
+
             inputs.dir reportDirectory
 
             doLast {

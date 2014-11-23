@@ -19,7 +19,6 @@ class SerenityPlugin implements Plugin<Project> {
         project.task('aggregate') {
             group 'Serenity BDD'
             description 'Generates aggregated Serenity reports'
-            dependsOn project.tasks.test
 
             doLast {
                 if (!project.serenity.projectKey) {
@@ -41,7 +40,6 @@ class SerenityPlugin implements Plugin<Project> {
         project.task('checkOutcomes') {
             group 'Serenity BDD'
             description "Checks the Serenity reports and fails the build if there are test failures (run automatically with 'check')"
-            dependsOn project.tasks.aggregate
 
             inputs.dir reportDirectory
 
@@ -59,6 +57,9 @@ class SerenityPlugin implements Plugin<Project> {
                 reportDirectory.deleteDir()
             }
         }
+
+        project.tasks.aggregate.mustRunAfter project.tasks.test
+        project.tasks.checkOutcomes.mustRunAfter project.tasks.test
 
         project.tasks.clean {
             it.dependsOn 'clearReports'

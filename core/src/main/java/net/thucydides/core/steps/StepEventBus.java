@@ -526,5 +526,9 @@ public class StepEventBus {
         baseStepListener.setAllStepsTo(result);
     }
 
-    public Optional<TestResult> getForcedResult() { return baseStepListener.getForcedResult(); }
+    private final Optional<TestResult> NO_FORCED_RESULT = Optional.absent();
+
+    public Optional<TestResult> getForcedResult() {
+        return (baseStepListener != null) ? baseStepListener.getForcedResult() : NO_FORCED_RESULT;
+    }
 }

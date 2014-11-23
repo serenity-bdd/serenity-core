@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.text.html.Option;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
@@ -493,6 +494,10 @@ public class TestOutcome {
             dataTable = DataTable.withHeaders(newDataTable.getHeaders()).build();
         }
         dataTable.addRows(newDataTable.getRows());
+    }
+
+    public void clearForcedResult() {
+        annotatedResult = null;
     }
 
     public class TitleBuilder {

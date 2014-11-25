@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver;
 
 import com.google.common.base.Preconditions;
-import net.thucydides.core.Serenity;
+import net.serenity_bdd.core.Serenity;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureException;
 import net.thucydides.core.fixtureservices.FixtureProviderService;

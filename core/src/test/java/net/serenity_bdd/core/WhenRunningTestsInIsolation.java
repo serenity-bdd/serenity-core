@@ -1,5 +1,6 @@
-package net.thucydides.core;
+package net.serenity_bdd.core;
 
+import net.serenity_bdd.core.Serenity;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Step;

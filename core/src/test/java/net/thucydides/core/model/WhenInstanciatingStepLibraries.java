@@ -1,6 +1,6 @@
 package net.thucydides.core.model;
 
-import net.thucydides.core.Serenity;
+import net.serenity_bdd.core.Serenity;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.model.samples.MyInheritedStepLibrary;

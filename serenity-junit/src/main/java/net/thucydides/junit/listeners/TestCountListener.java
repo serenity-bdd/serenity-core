@@ -1,6 +1,6 @@
 package net.thucydides.junit.listeners;
 
-import net.thucydides.core.Serenity;
+import net.serenity_bdd.core.Serenity;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.logging.LoggingLevel;
 import net.thucydides.core.model.DataTable;

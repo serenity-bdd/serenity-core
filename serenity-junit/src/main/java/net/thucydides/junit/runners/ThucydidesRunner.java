@@ -2,7 +2,7 @@ package net.thucydides.junit.runners;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import net.thucydides.core.Serenity;
+import net.serenity_bdd.core.Serenity;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.ManagedWebDriverAnnotatedField;
 import net.thucydides.core.annotations.Pending;
@@ -35,7 +35,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
-import static net.thucydides.core.Serenity.initializeTestSession;
+import static net.serenity_bdd.core.Serenity.initializeTestSession;
 
 /**
  * A test runner for WebDriver-based web tests. This test runner initializes a

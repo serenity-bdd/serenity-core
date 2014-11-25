@@ -1,5 +1,6 @@
 package net.thucydides.core;
 
+import net.serenity_bdd.core.Serenity;
 import net.thucydides.core.steps.StepListener;
 import org.openqa.selenium.firefox.FirefoxProfile;
 

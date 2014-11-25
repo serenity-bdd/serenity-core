@@ -22,7 +22,6 @@ import net.thucydides.core.util.FileSystemUtils;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
-import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -37,6 +36,7 @@ import some.other.place.StepsInSomeOtherPlace;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -105,8 +105,9 @@ public class WhenRecordingStepExecutionResults {
         File screenshot1File = FileSystemUtils.getResourceAsFile("screenshots/google_page_1.png");
         File screenshot2File = FileSystemUtils.getResourceAsFile("screenshots/google_page_2.png");
 
-        screenshot1 = FileUtils.readFileToByteArray(screenshot1File);
-        screenshot2 = FileUtils.readFileToByteArray(screenshot2File);
+
+        screenshot1 = Files.readAllBytes(screenshot1File.toPath());
+        screenshot2 = Files.readAllBytes(screenshot2File.toPath());
         stepFactory = new StepFactory(pages);
 
         environmentVariables = new MockEnvironmentVariables();

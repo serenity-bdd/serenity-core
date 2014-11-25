@@ -14,6 +14,7 @@ class WhenUsingTheGradlePlugin extends Specification {
         given:
             Project project = ProjectBuilder.builder().build()
         when:
+            project.apply plugin: 'java'
             project.apply plugin: 'net.serenity-bdd.aggregator'
         then:
             project.tasks.aggregate
@@ -23,6 +24,7 @@ class WhenUsingTheGradlePlugin extends Specification {
         given:
         Project project = ProjectBuilder.builder().build()
         when:
+        project.apply plugin: 'java'
         project.apply plugin: 'net.serenity-bdd.aggregator'
         then:
         project.serenity.outputDirectory == 'target/site/thucydides'
@@ -32,6 +34,7 @@ class WhenUsingTheGradlePlugin extends Specification {
         given:
         Project project = ProjectBuilder.builder().build()
         when:
+        project.apply plugin: 'java'
         project.apply plugin: 'net.serenity-bdd.aggregator'
         then:
         project.tasks.checkOutcomes

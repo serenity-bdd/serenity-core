@@ -525,4 +525,10 @@ public class StepEventBus {
     public void setAllStepsTo(TestResult result) {
         baseStepListener.setAllStepsTo(result);
     }
+
+    private final Optional<TestResult> NO_FORCED_RESULT = Optional.absent();
+
+    public Optional<TestResult> getForcedResult() {
+        return (baseStepListener != null) ? baseStepListener.getForcedResult() : NO_FORCED_RESULT;
+    }
 }

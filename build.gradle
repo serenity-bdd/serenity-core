@@ -112,6 +112,7 @@ allprojects {
         options.addStringOption('quiet')
         options.addStringOption('qualify')
         options.addStringOption('Xdoclint:none')
+        options.encoding = 'UTF-8'
         classpath = configurations.compile
     }
 
@@ -250,5 +251,12 @@ subprojects {
 
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:-options"
+    }
+    if (JavaVersion.current().isJava8Compatible()) {
+        allprojects {
+            tasks.withType(Javadoc) {
+                options.addStringOption('Xdoclint:none', '-quiet')
+            }
+        }
     }
 }

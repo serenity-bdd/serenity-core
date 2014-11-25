@@ -5,13 +5,14 @@ import net.thucydides.core.model.FailureCause;
 import net.thucydides.core.model.Screenshot;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
 import net.thucydides.core.util.FileSystemUtils;
-import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -29,7 +30,9 @@ public class WhenReformattingScreenshots {
         File screenshotsSourceDirectory = FileSystemUtils.getResourceAsFile("screenshots");
         File[] screenshots = screenshotsSourceDirectory.listFiles();
         for(File screenshot : screenshots) {
-            FileUtils.copyFileToDirectory(screenshot, screenshotDirectory);
+            Path file = screenshot.toPath();
+            Path to = screenshotDirectory.toPath();
+            Files.copy(file, to.resolve(file.getFileName()));
         }
     }
 

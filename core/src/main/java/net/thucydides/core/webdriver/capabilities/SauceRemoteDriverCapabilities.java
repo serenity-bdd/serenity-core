@@ -11,6 +11,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.lang.reflect.Method;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
@@ -53,21 +54,39 @@ public class SauceRemoteDriverCapabilities implements RemoteDriverCapabilities {
     }
 
     private void configureTargetPlatform(DesiredCapabilities capabilities) {
-        String platformValue = ThucydidesSystemProperty.SAUCELABS_TARGET_PLATFORM.from(environmentVariables);
-        if (isNotEmpty(platformValue)) {
-            capabilities.setCapability("platform", platformFrom(platformValue));
-        }
-        if (capabilities.getBrowserName().equals("safari"))
-        {
+        setAppropriateSaucelabsPlatformVersion(capabilities);
+        if (capabilities.getBrowserName().equals("safari")) {
             setAppropriateSaucelabsPlatformVersionForSafari(capabilities);
+        }
+    }
+
+    private void setAppropriateSaucelabsPlatformVersion(DesiredCapabilities capabilities) {
+        String platformValue = ThucydidesSystemProperty.SAUCELABS_TARGET_PLATFORM
+                .from(environmentVariables);
+        if (isEmpty(platformValue)) {
+            return;
+        }
+        if (platformValue.equalsIgnoreCase("snowleopard")) {
+            capabilities.setCapability("platform", "OS X 10.6");
+        } else if (platformValue.equalsIgnoreCase("mountainlion")) {
+            capabilities.setCapability("platform", "OS X 10.8");
+        } else if (platformValue.equalsIgnoreCase("mavericks")) {
+            capabilities.setCapability("platform", "OS X 10.9");
+        } else if (platformValue.equalsIgnoreCase("yosemite")) {
+            capabilities.setCapability("platform", "OS X 10.10");
+        } else {
+            capabilities.setCapability("platform", platformFrom(platformValue));
+
         }
     }
 
     private void setAppropriateSaucelabsPlatformVersionForSafari(DesiredCapabilities capabilities)
     {
-        if (ThucydidesSystemProperty.SAUCELABS_DRIVER_VERSION.from(environmentVariables).equalsIgnoreCase("mac"))
+        if (ThucydidesSystemProperty.SAUCELABS_TARGET_PLATFORM.from(environmentVariables).equalsIgnoreCase(
+                "mac"))
         {
-            String browserVersion = ThucydidesSystemProperty.SAUCELABS_DRIVER_VERSION.from(environmentVariables);
+            String browserVersion = ThucydidesSystemProperty.SAUCELABS_DRIVER_VERSION.from(
+                    environmentVariables);
             if (browserVersion.equals("5"))
             {
                 capabilities.setCapability("platform", "OS X 10.6");
@@ -79,6 +98,10 @@ public class SauceRemoteDriverCapabilities implements RemoteDriverCapabilities {
             else if (browserVersion.equals("7"))
             {
                 capabilities.setCapability("platform", "OS X 10.9");
+            }
+            else if (browserVersion.equals("8"))
+            {
+                capabilities.setCapability("platform", "OS X 10.10");
             }
         }
     }

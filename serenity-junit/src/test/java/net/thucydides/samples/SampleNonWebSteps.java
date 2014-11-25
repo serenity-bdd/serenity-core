@@ -3,10 +3,12 @@ package net.thucydides.samples;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.junit.runners.ThucydidesRunner;
+import org.junit.Assume;
 import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
 
 @SuppressWarnings("serial")
@@ -61,5 +63,10 @@ public class SampleNonWebSteps {
 
     public void methodWithMessagelessError() {
         fail();
+    }
+
+    @Step
+    public void stepWithFailingAssumption() {
+        Assume.assumeThat(true, is(false));
     }
 }

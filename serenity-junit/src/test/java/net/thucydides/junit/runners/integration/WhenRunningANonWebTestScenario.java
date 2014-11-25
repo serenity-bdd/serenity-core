@@ -78,6 +78,19 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     }
 
     @Test
+    public void tests_with_failing_assumptions_should_be_ignored() throws InitializationError {
+
+        ThucydidesRunner runner = new ThucydidesRunner(SampleScenarioWithFailingAssumption.class);
+        runner.run(new RunNotifier());
+
+        List<TestOutcome> executedSteps = runner.getTestOutcomes();
+        assertThat(executedSteps.size(), is(3));
+
+        assertThat(inTheTesOutcomes(executedSteps).theResultFor("happy_day_scenario"), is(TestResult.IGNORED));
+    }
+
+
+    @Test
     public void tests_marked_as_ignored_should_be_skipped() throws InitializationError {
 
         ThucydidesRunner runner = new ThucydidesRunner(SamplePassingNonWebScenarioWithIgnoredTests.class);

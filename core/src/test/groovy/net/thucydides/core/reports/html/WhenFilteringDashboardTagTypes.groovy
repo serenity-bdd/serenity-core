@@ -1,5 +1,6 @@
 package net.thucydides.core.reports.html
 
+import net.thucydides.core.model.TestTag
 import net.thucydides.core.util.MockEnvironmentVariables
 import spock.lang.Specification
 
@@ -58,4 +59,31 @@ class WhenFilteringDashboardTagTypes extends Specification {
         then:
             filtered == ["a", "b"]
     }
+
+    def "should filter out tags with an unwanted type"() {
+        given:
+            def tagFilter = new TagFilter(environmentVariables)
+
+            def tags = [TestTag.withName("Search/Display product details").andType("story"),
+                        TestTag.withName("Display product details").andType("story"),
+                        TestTag.withName("Search").andType("capability"),] as Set
+        when:
+            def filtered = tagFilter.removeTagsOfType(tags,"story")
+        then:
+            filtered == [TestTag.withName("Search").andType("capability")] as Set
+    }
+
+
+    def "should filter out tags with an unwanted title"() {
+        given:
+        def tagFilter = new TagFilter(environmentVariables)
+        def tags = [TestTag.withName("web").andType("layer"),
+                    TestTag.withName("foo").andType("story"),
+                    TestTag.withName("bar/foo").andType("story")] as Set
+        when:
+        def filtered = tagFilter.removeTagsWithName(tags,"foo")
+        then:
+        filtered == [TestTag.withName("web").andType("layer")] as Set
+    }
+
 }

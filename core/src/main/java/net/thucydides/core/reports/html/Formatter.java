@@ -279,6 +279,13 @@ public class Formatter {
         return addLineBreaks(ESCAPE_SPECIAL_CHARS.translate(fieldValue != null ? stringFormOf(fieldValue) : ""));
     }
 
+    public String htmlAttributeCompatible(Object fieldValue) {
+        return ESCAPE_SPECIAL_CHARS.translate(stringFormOf(fieldValue)
+                .replaceAll("\"", "'")
+                .replaceAll("\r", "")
+                .replaceAll("\n",""));
+    }
+
     private String stringFormOf(Object fieldValue) {
         if (Iterable.class.isAssignableFrom(fieldValue.getClass())) {
             return "[" + join(fieldValue) + "]";

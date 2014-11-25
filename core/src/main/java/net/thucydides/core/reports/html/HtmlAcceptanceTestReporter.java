@@ -32,6 +32,7 @@ import java.util.Set;
 
 import static ch.lambdaj.Lambda.convert;
 import static com.google.common.collect.Iterables.any;
+import static com.google.common.collect.Iterables.get;
 import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_KEEP_UNSCALED_SCREENSHOTS;
 import static net.thucydides.core.model.ReportType.HTML;
 
@@ -118,41 +119,38 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         context.put("testOutcome", testOutcome);
         context.put("currentTag", TestTag.EMPTY_TAG);
         context.put("inflection", Inflector.getInstance());
-
-        Optional<Requirement> parentRequirement = requirementsService.getParentRequirementFor(testOutcome);
-        context.put("parentRequirement", parentRequirement);
-
-        Optional<Story> featureOrStory = Optional.fromNullable(testOutcome.getUserStory());
-        context.put("featureOrStory", Optional.fromNullable(testOutcome.getUserStory()));
-
-        String parentTitle = "";
-        String parentLink = "";
-        if (parentRequirement.isPresent()) {
-            parentLink = reportNameProvider.forRequirement(parentRequirement.get());
-            parentTitle = parentRequirement.get().getName();
-        } else if (featureOrStory.isPresent()) {
-            parentLink = reportNameProvider.forTag(featureOrStory.get().asTag());
-            parentTitle = featureOrStory.get().getName();
-        }
-        context.put("parentTitle", parentTitle);
-        context.put("parentLink", parentLink);
-
-        Set<TestTag> filteredTags = removeTagsWithTitle(parentTitle, testOutcome.getTags());
-        context.put("filteredTags", filteredTags);
-
         context.put("requirementTypes", requirementsService.getRequirementTypes());
+
+        addParentRequirmentFieldToContext(testOutcome, context);
         addTimestamp(testOutcome, context);
+
     }
 
-    private final List<String> MASKED_TAG_TYPES = ImmutableList.of("story","feature");
-    private Set<TestTag> removeTagsWithTitle(String parentTitle, Set<TestTag> tags) {
-        Set<TestTag> filteredTags = Sets.newHashSet();
-        for (TestTag tag : tags) {
-            if (!tag.getShortName().equalsIgnoreCase(parentTitle) && (!MASKED_TAG_TYPES.contains(tag.getType()))) {
-                filteredTags.add(tag);
-            }
+    private void addParentRequirmentFieldToContext(TestOutcome testOutcome, Map<String, Object> context) {
+        Optional<Requirement> parentRequirement = requirementsService.getParentRequirementFor(testOutcome);
+        Optional<Story> featureOrStory = Optional.fromNullable(testOutcome.getUserStory());
+        String parentTitle = null;
+
+        if (parentRequirement.isPresent()) {
+            parentTitle = parentRequirement.get().getName();
+            context.put("parentRequirement", parentRequirement);
+            context.put("featureOrStory", Optional.absent());
+            context.put("parentTitle", parentTitle);
+            context.put("parentLink", reportNameProvider.forRequirement(parentRequirement.get()));
+        } else if (featureOrStory.isPresent()) {
+            parentTitle = featureOrStory.get().getName();
+            context.put("parentRequirement", Optional.absent());
+            context.put("featureOrStory",featureOrStory);
+            context.put("parentTitle", parentTitle);
+            context.put("parentLink", reportNameProvider.forTag(featureOrStory.get().asTag()));
         }
-        return filteredTags;
+
+        TagFilter tagFilter = new TagFilter(getEnvironmentVariables());
+        Set<TestTag> filteredTags = tagFilter.removeTagsOfType(testOutcome.getTags(), "story");
+        if (parentTitle != null) {
+            filteredTags = tagFilter.removeTagsWithName(filteredTags, parentTitle);
+        }
+        context.put("filteredTags", filteredTags);
     }
 
     private void addFormattersToContext(final Map<String, Object> context) {
@@ -204,7 +202,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
                         .keepOriginals(shouldKeepOriginalScreenshots())
                         .expandToHeight(maxHeight);
             } catch (IOException e) {
-                LOGGER.warn("Failed to write scaled screenshot for {}: {}", screenshot, e);
+                LOGGER.info("NOTE: I couldn't convert Failed to write scaled screenshot for {}: {}", screenshot, e);
                 return screenshot;
             }
         }

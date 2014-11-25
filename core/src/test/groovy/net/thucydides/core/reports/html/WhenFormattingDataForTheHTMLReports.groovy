@@ -23,6 +23,17 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     }
 
     @Unroll
+    def "should change double quotes to single and compress new lines for HTML attribute-compatible messages"() {
+        expect:
+        def formatter = new Formatter(issueTracking);
+        formatter.htmlAttributeCompatible(message) == formattedMessage
+        where:
+        message             | formattedMessage
+        "<expected \"a\">"  | "<expected 'a'>"
+        "<a>\n<b>"          | "<a><b>"
+
+    }
+    @Unroll
     def "should display objects in string form"() {
         expect:
         def formatter = new net.thucydides.core.reports.html.Formatter(issueTracking);

@@ -98,7 +98,8 @@
     <div class="middlebg">
         <span class="bluetext"><a href="index.html" class="bluetext">Home</a>
             > <a href="capabilities.html">Requirements</a>
-            > ${formatter.truncatedHtmlCompatible(pageTitle,60)} </span>
+            > ${formatter.truncatedHtmlCompatible(pageTitle,60)}
+        </span>
     </div>
     <div class="rightbg"></div>
 </div>

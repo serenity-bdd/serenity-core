@@ -3,7 +3,6 @@ package net.thucydides.core.screenshots;
 import com.google.inject.Inject;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,7 +128,7 @@ public class SingleThreadScreenshotProcessor implements ScreenshotProcessor {
 
         private void moveScreenshot(QueuedScreenshot queuedScreenshot) {
             try {
-                CopyOption[] options = new CopyOption[]{ StandardCopyOption.COPY_ATTRIBUTES };
+                CopyOption[] options = new CopyOption[]{StandardCopyOption.COPY_ATTRIBUTES};
 
                 Path sourcePath = queuedScreenshot.getSourceFile().toPath();
                 Path destinationPath = queuedScreenshot.getDestinationFile().toPath();
@@ -152,23 +151,29 @@ public class SingleThreadScreenshotProcessor implements ScreenshotProcessor {
 
         private void resizeScreenshot(QueuedScreenshot queuedScreenshot) {
             try {
-                BufferedImage image = ImageIO.read(queuedScreenshot.getSourceFile());
-                int width = image.getData().getWidth();
-                int height = image.getData().getHeight();
-                int targetWidth = getResizedWidth();
-                int targetHeight = (int) (((double) targetWidth / (double) width) * (double) height);
-
-                BufferedImage resizedImage = resize(image, targetWidth, targetHeight);
-                ImageIO.write(resizedImage, "png", queuedScreenshot.getDestinationFile());
-                FileUtils.deleteQuietly(queuedScreenshot.getSourceFile());
+                if (!queuedScreenshot.getDestinationFile().exists()) {
+                    saveResizedScreenshot(queuedScreenshot);
+                }
+                Files.deleteIfExists(queuedScreenshot.getSourceFile().toPath());
             } catch (Throwable e) {
                 logger.warn("Failed to resize screenshot: using original size " + e.getMessage());
                 moveScreenshot(queuedScreenshot);
             }
         }
 
+        private void saveResizedScreenshot(QueuedScreenshot queuedScreenshot) throws IOException {
+            BufferedImage image = ImageIO.read(queuedScreenshot.getSourceFile());
+            int width = image.getData().getWidth();
+            int height = image.getData().getHeight();
+            int targetWidth = getResizedWidth();
+            int targetHeight = (int) (((double) targetWidth / (double) width) * (double) height);
+
+            BufferedImage resizedImage = resize(image, targetWidth, targetHeight);
+            ImageIO.write(resizedImage, "png", queuedScreenshot.getDestinationFile());
+        }
+
         private BufferedImage resize(BufferedImage image, int width, int height) {
-            int type = image.getType() == 0? BufferedImage.TYPE_INT_ARGB : image.getType();
+            int type = image.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : image.getType();
             BufferedImage resizedImage = new BufferedImage(width, height, type);
             Graphics2D g = resizedImage.createGraphics();
             g.setComposite(AlphaComposite.Src);

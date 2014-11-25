@@ -1,5 +1,6 @@
 ext {
     bintrayPackage = 'serenity-core'
+    seleniumVersion = '2.44.0'
 }
 
 jar {
@@ -32,7 +33,7 @@ dependencies {
         exclude group: 'com.google.guava', module: 'guava'
     }
 
-    compile ("org.seleniumhq.selenium:selenium-server:2.43.1") {
+    compile ("org.seleniumhq.selenium:selenium-server:$seleniumVersion") {
         exclude group: 'cglib', module: 'cglib-nodep'
         exclude group: 'guava', module: 'guava'
         exclude group: 'commons-io', module: 'commons-io'

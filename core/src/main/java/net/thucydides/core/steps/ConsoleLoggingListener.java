@@ -24,17 +24,16 @@ public class ConsoleLoggingListener implements StepListener {
     // STAR WARS
     private static final List<String> BANNER_HEADINGS = ImmutableList.of(
             "\n--------------\n" +
-            "- THUCYDIDES -\n" +
-            "--------------",
-            "\n\n-------------------------------------------------------------------------------------------------------\n" +
-                    ".___________. __    __   __    __    ______ ____    ____  _______   __   _______   _______     _______.\n" +
-                    "|           ||  |  |  | |  |  |  |  /      |\\   \\  /   / |       \\ |  | |       \\ |   ____|   /       |\n" +
-                    "`---|  |----`|  |__|  | |  |  |  | |  ,----' \\   \\/   /  |  .--.  ||  | |  .--.  ||  |__     |   (----`\n" +
-                    "    |  |     |   __   | |  |  |  | |  |       \\_    _/   |  |  |  ||  | |  |  |  ||   __|     \\   \\    \n" +
-                    "    |  |     |  |  |  | |  `--'  | |  `----.    |  |     |  '--'  ||  | |  '--'  ||  |____.----)   |   \n" +
-                    "    |__|     |__|  |__|  \\______/   \\______|    |__|     |_______/ |__| |_______/ |_______|_______/    \n" +
-                    "                                                                                                       \n" +
-                    "-------------------------------------------------------------------------------------------------------\n");
+              "- SERENITY   -\n" +
+              "--------------",
+            "\n\n-------------------------------------------------------------------------------------\n"+
+            "     _______. _______ .______       _______ .__   __.  __  .___________.____    ____ \n"+
+            "    /       ||   ____||   _  \\     |   ____||  \\ |  | |  | |           |\\   \\  /   / \n"+
+            "   |   (----`|  |__   |  |_)  |    |  |__   |   \\|  | |  | `---|  |----` \\   \\/   /  \n"+
+            "    \\   \\    |   __|  |      /     |   __|  |  . `  | |  |     |  |       \\_    _/   \n"+
+            ".----)   |   |  |____ |  |\\  \\----.|  |____ |  |\\   | |  |     |  |         |  |     \n"+
+            "|_______/    |_______|| _| `._____||_______||__| \\__| |__|     |__|         |__|    \n" +
+            "-------------------------------------------------------------------------------------\n");
 
     // Standard
     private static final List<String> TEST_STARTED_HEADINGS = ImmutableList.of(
@@ -117,7 +116,7 @@ public class ConsoleLoggingListener implements StepListener {
     public ConsoleLoggingListener(EnvironmentVariables environmentVariables) {
         this(environmentVariables, LoggerFactory.getLogger(Thucydides.class));
     }
-    
+
     protected Logger getLogger() {
         return logger;
     }
@@ -143,21 +142,21 @@ public class ConsoleLoggingListener implements StepListener {
         return LoggingLevel.valueOf(logLevel);
     }
 
-    
+
     public void testSuiteStarted(Class<?> storyClass) {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
             getLogger().info("Test Suite Started: " + NameConverter.humanize(storyClass.getSimpleName()));
         }
     }
 
-    
+
     public void testSuiteStarted(Story story) {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
             getLogger().info("Test Suite Started: " + NameConverter.humanize(story.getName()));
         }
     }
 
-    
+
     public void testSuiteFinished() {
     }
 
@@ -262,7 +261,7 @@ public class ConsoleLoggingListener implements StepListener {
         }
     }
 
-    
+
     public void skippedStepStarted(ExecutedStepDescription description) {
         stepStarted(description);
     }
@@ -279,7 +278,7 @@ public class ConsoleLoggingListener implements StepListener {
         }
     }
 
-    
+
     public void lastStepFailed(StepFailure failure) {
     }
 
@@ -295,18 +294,18 @@ public class ConsoleLoggingListener implements StepListener {
         }
     }
 
-    
+
     public void stepPending(String message) {
         if (loggingLevelIsAtLeast(getLoggingLevel().VERBOSE)) {
             getLogger().info("PENDING STEP " + "(" + message + ")");
         }
     }
 
-    
+
     public void testFailed(TestOutcome testOutcome, Throwable cause) {
     }
 
-    
+
     public void testIgnored() {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
             getLogger().info("TEST IGNORED");

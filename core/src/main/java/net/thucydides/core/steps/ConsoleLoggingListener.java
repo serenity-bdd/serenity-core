@@ -4,7 +4,7 @@ package net.thucydides.core.steps;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
-import net.thucydides.core.Thucydides;
+import net.thucydides.core.Serenity;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.logging.LoggingLevel;
 import net.thucydides.core.model.DataTable;
@@ -115,9 +115,9 @@ public class ConsoleLoggingListener implements StepListener {
 
     @Inject
     public ConsoleLoggingListener(EnvironmentVariables environmentVariables) {
-        this(environmentVariables, LoggerFactory.getLogger(Thucydides.class));
+        this(environmentVariables, LoggerFactory.getLogger(Serenity.class));
     }
-    
+
     protected Logger getLogger() {
         return logger;
     }
@@ -143,21 +143,21 @@ public class ConsoleLoggingListener implements StepListener {
         return LoggingLevel.valueOf(logLevel);
     }
 
-    
+
     public void testSuiteStarted(Class<?> storyClass) {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
             getLogger().info("Test Suite Started: " + NameConverter.humanize(storyClass.getSimpleName()));
         }
     }
 
-    
+
     public void testSuiteStarted(Story story) {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
             getLogger().info("Test Suite Started: " + NameConverter.humanize(story.getName()));
         }
     }
 
-    
+
     public void testSuiteFinished() {
     }
 
@@ -262,7 +262,7 @@ public class ConsoleLoggingListener implements StepListener {
         }
     }
 
-    
+
     public void skippedStepStarted(ExecutedStepDescription description) {
         stepStarted(description);
     }
@@ -279,7 +279,7 @@ public class ConsoleLoggingListener implements StepListener {
         }
     }
 
-    
+
     public void lastStepFailed(StepFailure failure) {
     }
 
@@ -295,18 +295,18 @@ public class ConsoleLoggingListener implements StepListener {
         }
     }
 
-    
+
     public void stepPending(String message) {
         if (loggingLevelIsAtLeast(getLoggingLevel().VERBOSE)) {
             getLogger().info("PENDING STEP " + "(" + message + ")");
         }
     }
 
-    
+
     public void testFailed(TestOutcome testOutcome, Throwable cause) {
     }
 
-    
+
     public void testIgnored() {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
             getLogger().info("TEST IGNORED");

@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver
 
-import net.thucydides.core.Thucydides
+import net.thucydides.core.Serenity
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.openqa.selenium.firefox.FirefoxProfile
 import spock.lang.Specification
@@ -27,7 +27,7 @@ class WhenConfiguringTheFirefoxProfile extends Specification {
     def "the firefox profile can be set manually"() {
         given: "we want to provide our own Firefox profile"
             def providedProfile = new FirefoxProfile()
-            Thucydides.useFirefoxProfile(providedProfile)
+            Serenity.useFirefoxProfile(providedProfile)
         when:
             def usedProfile = webDriverFactory.buildFirefoxProfile()
         then:

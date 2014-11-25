@@ -2,7 +2,7 @@ package net.thucydides.junit.runners;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import net.thucydides.core.Thucydides;
+import net.thucydides.core.Serenity;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.ManagedWebDriverAnnotatedField;
 import net.thucydides.core.annotations.Pending;
@@ -35,7 +35,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
-import static net.thucydides.core.Thucydides.initializeTestSession;
+import static net.thucydides.core.Serenity.initializeTestSession;
 
 /**
  * A test runner for WebDriver-based web tests. This test runner initializes a
@@ -436,7 +436,7 @@ public class ThucydidesRunner extends BlockJUnit4ClassRunner {
 
     private void clearMetadataIfRequired() {
         if (!configuration.getEnvironmentVariables().getPropertyAsBoolean(ThucydidesSystemProperty.THUCYDIDES_MAINTAIN_SESSION, false)) {
-            Thucydides.getCurrentSession().clearMetaData();
+            Serenity.getCurrentSession().clearMetaData();
         }
     }
 

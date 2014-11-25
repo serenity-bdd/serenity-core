@@ -1,6 +1,6 @@
 package net.thucydides.core.sessions;
 
-import net.thucydides.core.Thucydides;
+import net.thucydides.core.Serenity;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
@@ -16,43 +16,43 @@ public class WhenStoringStateBetweenStep {
 
     @Mock
     Pages pages;
-    
+
     class SampleSteps extends ScenarioSteps {
 
         public SampleSteps(final Pages pages) {
             super(pages);
         }
-        
+
         @Step
         public void storeName(String value) {
-            Thucydides.getCurrentSession().put("name", value);
+            Serenity.getCurrentSession().put("name", value);
         }
 
 
         @Step
         public String retrieveName() {
-            Thucydides.getCurrentSession().shouldContainKey("name");
-            return (String) Thucydides.getCurrentSession().get("name");
+            Serenity.getCurrentSession().shouldContainKey("name");
+            return (String) Serenity.getCurrentSession().get("name");
         }
 
         @Step
         public boolean checkName() {
-            return Thucydides.getCurrentSession().containsKey("name");
+            return Serenity.getCurrentSession().containsKey("name");
         }
 
     }
-    
-    
+
+
     @Before
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
-        Thucydides.initializeTestSession();
+        Serenity.initializeTestSession();
     }
 
     @Test
     public void should_be_able_to_store_variables_between_steps() {
         SampleSteps steps = new SampleSteps(pages);
-        
+
         steps.storeName("joe");
 
         assertThat(steps.retrieveName(), is("joe"));
@@ -82,7 +82,7 @@ public class WhenStoringStateBetweenStep {
         steps.storeName("joe");
         assertThat(steps.retrieveName(), is("joe"));
 
-        Thucydides.initializeTestSession();
+        Serenity.initializeTestSession();
 
         assertThat(steps.checkName(), is(false));
     }

@@ -8,7 +8,6 @@ import org.openqa.selenium.firefox.FirefoxProfile;
  * @deprecated Use Serenity class instead
  *
  * A utility class that provides services to initialize web testing and reporting-related fields in arbitrary objects.
- * It wraps calls to the legacy Thucydides class.
  */
 
 @Deprecated

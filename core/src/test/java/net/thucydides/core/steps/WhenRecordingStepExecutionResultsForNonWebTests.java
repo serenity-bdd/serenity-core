@@ -234,4 +234,22 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
             }
         };
     }
+
+    @Test
+    public void if_all_child_steps_are_ignored_the_overall_step_should_be_ignored() {
+
+        StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
+        StepEventBus.getEventBus().testStarted("app_should_work");
+
+        FlatScenarioStepsWithoutPages steps =  stepFactory.getStepLibraryFor(FlatScenarioStepsWithoutPages.class);
+        steps.failingAssumption();
+        steps.step_one();
+        steps.step_two();
+        steps.step_three();
+        StepEventBus.getEventBus().testFinished(testOutcome);
+
+        List<TestOutcome> results = stepListener.getTestOutcomes();
+        TestOutcome testOutcome = results.get(0);
+        assertThat(testOutcome.getResult(), is(TestResult.IGNORED));
+    }
 }

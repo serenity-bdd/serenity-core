@@ -237,7 +237,11 @@ public class Serenity {
         }
 
         public void to(Object value) {
-            Serenity.getCurrentSession().put(key, value);
+            if (value != null) {
+                Serenity.getCurrentSession().put(key, value);
+            } else {
+                Serenity.getCurrentSession().remove(key);
+            }
         }
     }
 }

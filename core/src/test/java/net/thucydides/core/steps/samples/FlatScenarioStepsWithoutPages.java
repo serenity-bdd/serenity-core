@@ -4,7 +4,10 @@ import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.StepGroup;
 import net.thucydides.core.annotations.Title;
+import org.junit.Assume;
 import org.junit.Ignore;
+
+import static org.hamcrest.CoreMatchers.is;
 
 public class FlatScenarioStepsWithoutPages {
 
@@ -37,6 +40,11 @@ public class FlatScenarioStepsWithoutPages {
     @Step
     public void failingStep() {
         throw new AssertionError("Step failed");
+    }
+
+    @Step
+    public void failingAssumption() {
+        Assume.assumeThat(true, is(false));
     }
 
     @Ignore

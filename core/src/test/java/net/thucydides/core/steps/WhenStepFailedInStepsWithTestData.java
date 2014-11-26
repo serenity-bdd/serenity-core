@@ -53,7 +53,7 @@ public class WhenStepFailedInStepsWithTestData {
             super(pages);
         }
 
-        @StepGroup
+        @Step
         public void step_group_with_fail_step_in_one_iteration() {
             step1(); // should be always done
             fail_step_in_one_iteration(); // should be failed in first iteration
@@ -61,7 +61,7 @@ public class WhenStepFailedInStepsWithTestData {
             step3();   // should be skipped in first iteration
         }
 
-        @StepGroup
+        @Step
         public void step_group_with_fail_step() {
             step1(); // should be always done
             fail_step(); // should be always failed

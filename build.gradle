@@ -1,4 +1,5 @@
-import net.serenitybdd.builds.ProjectVersionCounter
+import org.ajoberstar.grgit.*
+import org.ajoberstar.gradle.git.release.opinion.Strategies
 
 buildscript {
     repositories {
@@ -6,7 +7,16 @@ buildscript {
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
+        classpath 'org.ajoberstar:gradle-git:0.12.0'
     }
+}
+
+apply plugin: 'org.ajoberstar.release-base'
+release {
+    grgit = Grgit.open(project.file('.'))
+    versionStrategy Strategies.FINAL
+    versionStrategy Strategies.PRE_RELEASE
+    defaultVersionStrategy Strategies.SNAPSHOT
 }
 
 subprojects {
@@ -26,7 +36,6 @@ subprojects {
         jcenter()
     }
 
-
     ext {
         bintrayBaseUrl = 'https://api.bintray.com/maven'
         bintrayRepository = 'maven'
@@ -38,24 +47,9 @@ subprojects {
         if (!project.hasProperty("bintrayApiKey")) {
             bintrayApiKey = ''
         }
-        versionCounter = new ProjectVersionCounter(isRelease: project.hasProperty("releaseBuild"))
     }
     group = 'net.serenity-bdd'
-    version = versionCounter.nextVersion
-
-    task createNewVersionTag(type: Exec) {
-        executable "sh"
-        args "-c", "git tag -f -a v$version -m'release tag'"
-    }
-
-    task pushVersionTag(type: Exec, dependsOn: 'createNewVersionTag') {
-        executable "sh"
-        args "-c", "git push -f origin v$version"
-    }
-
-    task tagNewVersion() {
-        dependsOn pushVersionTag
-    }
+    version = rootProject.version
 
     task wrapper(type: Wrapper) {
         gradleVersion = '2.1'
@@ -153,10 +147,6 @@ subprojects {
             licenses = ['Apache-2.0']
             labels = ['serenity','bdd']
         }
-    }
-
-    task release() {
-        dependsOn bintrayUpload
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {

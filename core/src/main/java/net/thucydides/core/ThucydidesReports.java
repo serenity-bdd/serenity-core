@@ -1,5 +1,6 @@
 package net.thucydides.core;
 
+import net.serenity_bdd.core.SerenityListeners;
 import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.webdriver.Configuration;
 
@@ -12,7 +13,7 @@ public class ThucydidesReports {
         return new ReportService(systemConfiguration.getOutputDirectory(), ReportService.getDefaultReporters());
     }
 
-    public static ThucydidesListeners setupListeners(Configuration systemConfiguration) {
-        return new ThucydidesListeners(systemConfiguration);
+    public static SerenityListeners setupListeners(Configuration systemConfiguration) {
+        return new SerenityListeners(systemConfiguration);
     }
 }

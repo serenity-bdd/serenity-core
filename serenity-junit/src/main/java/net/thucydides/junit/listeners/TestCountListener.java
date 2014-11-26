@@ -1,6 +1,6 @@
 package net.thucydides.junit.listeners;
 
-import net.thucydides.core.Thucydides;
+import net.serenity_bdd.core.Serenity;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.logging.LoggingLevel;
 import net.thucydides.core.model.DataTable;
@@ -32,7 +32,7 @@ public class TestCountListener implements StepListener {
     }
 
     public TestCountListener(EnvironmentVariables environmentVariables, TestCount testCount) {
-        this(environmentVariables, LoggerFactory.getLogger(Thucydides.class), testCount);
+        this(environmentVariables, LoggerFactory.getLogger(Serenity.class), testCount);
     }
 
     private void logTotalTestCount() {

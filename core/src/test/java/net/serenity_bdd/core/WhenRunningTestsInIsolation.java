@@ -1,5 +1,6 @@
-package net.thucydides.core;
+package net.serenity_bdd.core;
 
+import net.serenity_bdd.core.Serenity;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Step;
@@ -58,14 +59,14 @@ public class WhenRunningTestsInIsolation {
 
     @After
     public void clearMockDriver() {
-        Thucydides.stopUsingMockDriver();
+        Serenity.stopUsingMockDriver();
     }
 
     @Test
     public void any_class_can_host_an_annotated_webdriver_instance() {
         SampleTestClass sampleTestClass = new SampleTestClass();
 
-        Thucydides.initialize(sampleTestClass);
+        Serenity.initialize(sampleTestClass);
 
         assertThat(sampleTestClass.driver, is(not(nullValue())));
 
@@ -76,7 +77,7 @@ public class WhenRunningTestsInIsolation {
     public void any_class_can_host_an_annotated_step_library() {
         SampleTestClass sampleTestClass = new SampleTestClass();
 
-        Thucydides.initialize(sampleTestClass);
+        Serenity.initialize(sampleTestClass);
 
         assertThat(sampleTestClass.steps, is(not(nullValue())));
     }
@@ -85,7 +86,7 @@ public class WhenRunningTestsInIsolation {
     public void any_class_can_host_an_annotated_pages_library() {
         SampleTestClass sampleTestClass = new SampleTestClass();
 
-        Thucydides.initialize(sampleTestClass);
+        Serenity.initialize(sampleTestClass);
 
         assertThat(sampleTestClass.pages, is(not(nullValue())));
     }
@@ -109,7 +110,7 @@ public class WhenRunningTestsInIsolation {
     public void a_web_driver_can_be_defined_in_a_parent_class() {
         SampleChildTestClass sampleTestClass = new SampleChildTestClass();
 
-        Thucydides.initialize(sampleTestClass);
+        Serenity.initialize(sampleTestClass);
 
         assertThat(sampleTestClass.driver, is(not(nullValue())));
 
@@ -119,7 +120,7 @@ public class WhenRunningTestsInIsolation {
     public void a_page_factory_can_be_defined_in_a_parent_class() {
         SampleChildTestClass sampleTestClass = new SampleChildTestClass();
 
-        Thucydides.initialize(sampleTestClass);
+        Serenity.initialize(sampleTestClass);
 
         assertThat(sampleTestClass.pages, is(not(nullValue())));
 
@@ -129,7 +130,7 @@ public class WhenRunningTestsInIsolation {
     public void a_step_library_can_be_defined_in_a_parent_class() {
         SampleChildTestClass sampleTestClass = new SampleChildTestClass();
 
-        Thucydides.initialize(sampleTestClass);
+        Serenity.initialize(sampleTestClass);
 
         assertThat(sampleTestClass.steps, is(not(nullValue())));
 
@@ -151,7 +152,7 @@ public class WhenRunningTestsInIsolation {
     public void a_web_driver_can_be_defined_as_a_private_field() {
         SampleTestClassWithPrivateFields sampleTestClass = new SampleTestClassWithPrivateFields();
 
-        Thucydides.initialize(sampleTestClass);
+        Serenity.initialize(sampleTestClass);
 
         assertThat(sampleTestClass.driver, is(not(nullValue())));
 
@@ -161,7 +162,7 @@ public class WhenRunningTestsInIsolation {
     public void a_page_factory_can_be_defined_as_a_private_field() {
         SampleTestClassWithPrivateFields sampleTestClass = new SampleTestClassWithPrivateFields();
 
-        Thucydides.initialize(sampleTestClass);
+        Serenity.initialize(sampleTestClass);
 
         assertThat(sampleTestClass.pages, is(not(nullValue())));
 
@@ -171,34 +172,34 @@ public class WhenRunningTestsInIsolation {
     public void a_step_library_can_be_defined_as_a_private_field() {
         SampleTestClassWithPrivateFields sampleTestClass = new SampleTestClassWithPrivateFields();
 
-        Thucydides.initialize(sampleTestClass);
+        Serenity.initialize(sampleTestClass);
 
         assertThat(sampleTestClass.steps, is(not(nullValue())));
 
     }
     @Test
     public void a_step_listener_should_be_created() {
-        StepListener currentListener = Thucydides.getStepListener();
+        StepListener currentListener = Serenity.getStepListener();
 
         SampleChildTestClass sampleTestClass = new SampleChildTestClass();
 
-        Thucydides.initialize(sampleTestClass);
+        Serenity.initialize(sampleTestClass);
 
-        assertThat(Thucydides.getStepListener(), is(not(currentListener)));
+        assertThat(Serenity.getStepListener(), is(not(currentListener)));
 
     }
 
     @Test
     public void no_step_listener_should_be_created() {
-        StepListener currentListener = Thucydides.getStepListener();
+        StepListener currentListener = Serenity.getStepListener();
 
         SampleChildTestClass sampleTestClass = new SampleChildTestClass();
 
         // Given we don't want to touch the step listened
-        Thucydides.initializeWithNoStepListener(sampleTestClass);
+        Serenity.initializeWithNoStepListener(sampleTestClass);
 
         // Then the step listener should not be changed
-        assertThat(Thucydides.getStepListener(), is(currentListener));
+        assertThat(Serenity.getStepListener(), is(currentListener));
     }
 
 }

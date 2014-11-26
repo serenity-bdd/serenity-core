@@ -1,7 +1,7 @@
 package net.thucydides.junit.finder
 
 import net.thucydides.junit.sampletests.thucydidestests.SampleDataDrivenTestCase
-import net.thucydides.junit.sampletests.thucydidestests.SampleNonThucydidesTestCase
+import net.thucydides.junit.sampletests.thucydidestests.SampleNonSerenityTestCase
 import net.thucydides.junit.sampletests.thucydidestests.SampleTestCase
 import spock.lang.Specification
 
@@ -109,7 +109,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
         then:
 
-            !testClasses.contains(SampleNonThucydidesTestCase)
+            !testClasses.contains(SampleNonSerenityTestCase)
 
     }
 
@@ -161,7 +161,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
     }
 
-    
+
 
     def "should be able to search for tests by name"() {
 
@@ -179,7 +179,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
     }
 
-    
+
 
     def "should be able to count the normal tests in a given package"() {
 
@@ -197,7 +197,7 @@ class WhenFindingTestClassesInThePath extends Specification {
 
     }
 
-    
+
 
     def "should be able to count the data-driven tests in a given package"() {
 

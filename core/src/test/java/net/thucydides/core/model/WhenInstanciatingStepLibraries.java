@@ -1,6 +1,6 @@
 package net.thucydides.core.model;
 
-import net.thucydides.core.Thucydides;
+import net.serenity_bdd.core.Serenity;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.model.samples.MyInheritedStepLibrary;
@@ -176,7 +176,7 @@ public class WhenInstanciatingStepLibraries {
 
     @Before
     public void startTest() {
-        Thucydides.initialize(this);
+        Serenity.initialize(this);
         StepEventBus.getEventBus().testSuiteStarted(Story.called("sample story"));
         StepEventBus.getEventBus().testStarted("sample test");
     }

@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver;
 
 import com.google.common.base.Preconditions;
-import net.thucydides.core.Thucydides;
+import net.serenity_bdd.core.Serenity;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureException;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
@@ -146,11 +146,11 @@ public class WebDriverFactory {
     public boolean usesSauceLabs() {
         return StringUtils.isNotEmpty(sauceRemoteDriverCapabilities.getUrl());
     }
-    
+
     public boolean usesBrowserStack() {
         return StringUtils.isNotEmpty(browserStackRemoteDriverCapabilities.getUrl());
     }
-    
+
     /**
      * This method is synchronized because multiple webdriver instances can be created in parallel.
      * However, they may use common system resources such as ports, so may potentially interfere
@@ -281,7 +281,7 @@ public class WebDriverFactory {
     private boolean browserStackUrlIsDefined() {
         return StringUtils.isNotEmpty(browserStackRemoteDriverCapabilities.getUrl());
     }
-    
+
     private WebDriver buildSaucelabsDriver() throws MalformedURLException {
         String saucelabsUrl = sauceRemoteDriverCapabilities.getUrl();
         WebDriver driver = webdriverInstanceFactory.newRemoteDriver(new URL(saucelabsUrl), findSaucelabsCapabilities());
@@ -293,13 +293,13 @@ public class WebDriverFactory {
         }
         return driver;
     }
-    
+
     private WebDriver buildBrowserStackDriver() throws MalformedURLException{
     	String browserStackUrl = browserStackRemoteDriverCapabilities.getUrl();
         WebDriver driver = webdriverInstanceFactory.newRemoteDriver(new URL(browserStackUrl), findbrowserStackCapabilities());
         return driver;
     }
-    
+
 
     public static String getDriverFrom(EnvironmentVariables environmentVariables, String defaultDriver) {
         String driver = getDriverFrom(environmentVariables);
@@ -321,13 +321,13 @@ public class WebDriverFactory {
 
         return sauceRemoteDriverCapabilities.getCapabilities(capabilities);
     }
-    
-    
+
+
     private Capabilities findbrowserStackCapabilities() {
 
     	String driver = getDriverFrom(environmentVariables);
     	DesiredCapabilities capabilities = capabilitiesForDriver(driver);
-    	
+
         return browserStackRemoteDriverCapabilities.getCapabilities(capabilities);
 
     }
@@ -618,8 +618,8 @@ public class WebDriverFactory {
 
     protected FirefoxProfile createNewFirefoxProfile() {
         FirefoxProfile profile;
-        if (Thucydides.getFirefoxProfile() != null) {
-            profile = Thucydides.getFirefoxProfile();
+        if (Serenity.getFirefoxProfile() != null) {
+            profile = Serenity.getFirefoxProfile();
         } else {
             profile = new FirefoxProfile();
             profile.setPreference("network.proxy.socks_port",9999);

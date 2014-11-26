@@ -2,7 +2,7 @@ package net.thucydides.junit.sampletests.thucydidestests
 
 import org.junit.Test
 
-class SampleNonThucydidesTestCase {
+class SampleNonSerenityTestCase {
     @Test
     public void testSomething(){}
 

@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.lessThan;
 
 @SuppressWarnings("serial")
 public class SampleScenarioSteps extends ScenarioSteps {
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ThucydidesRunner.class);
 
     public SampleScenarioSteps(Pages pages) {
@@ -60,7 +60,7 @@ public class SampleScenarioSteps extends ScenarioSteps {
     @Step
     public void stepFour(String option) {
     }
-    
+
     @Step
     public void stepThatShouldBeSkipped() {
     }
@@ -81,17 +81,17 @@ public class SampleScenarioSteps extends ScenarioSteps {
     @Step
     public void stepWithAParameter(String value) {
     }
-    
+
     @Step
     public void stepWithTwoParameters(String value, int number) {
     }
-    
+
     @Step
     public void groupOfStepsContainingAFailure() {
         stepThatSucceeds();
         stepThatFails();
         stepThatShouldBeSkipped();
-        
+
     }
 
     @Step
@@ -99,7 +99,7 @@ public class SampleScenarioSteps extends ScenarioSteps {
         stepThatSucceeds();
         anotherStepThatSucceeds();
         stepThatIsPending();
-        
+
     }
 
     @Step
@@ -108,7 +108,7 @@ public class SampleScenarioSteps extends ScenarioSteps {
         anotherStepThatSucceeds();
         String nullString = null;
         int thisShouldFail = nullString.length();
-        
+
     }
 
     @Step
@@ -175,18 +175,18 @@ public class SampleScenarioSteps extends ScenarioSteps {
     @Step
     public void data_driven_test_step_that_is_skipped() {
     }
-    
+
     @Step
     public void store_name(String value) {
-        Thucydides.getCurrentSession().put("name", value);
+        Serenity.getCurrentSession().put("name", value);
     }
 
     @Step
     public String get_name() {
-        return (String) Thucydides.getCurrentSession().get("name");
+        return (String) Serenity.getCurrentSession().get("name");
     }
 
     public Boolean hasName() {
-        return Thucydides.getCurrentSession().containsKey("name");
+        return Serenity.getCurrentSession().containsKey("name");
     }
 }

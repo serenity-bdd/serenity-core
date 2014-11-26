@@ -1,6 +1,6 @@
 package net.thucydides.core.steps.samples;
 
-import net.thucydides.core.Thucydides;
+import net.serenity_bdd.core.Serenity;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.StepGroup;
@@ -25,21 +25,21 @@ public class FlatScenarioSteps extends ScenarioSteps {
 
     @Step
     public void step_with_screenshot(){
-        Thucydides.takeScreenshot();
+        Serenity.takeScreenshot();
     }
 
     @Step
     public void step_with_two_screenshots(){
-        Thucydides.takeScreenshot();
-        Thucydides.takeScreenshot();
+        Serenity.takeScreenshot();
+        Serenity.takeScreenshot();
     }
 
     @Step
     public void step_with_four_identical_screenshots(){
-        Thucydides.takeScreenshot();
-        Thucydides.takeScreenshot();
-        Thucydides.takeScreenshot();
-        Thucydides.takeScreenshot();
+        Serenity.takeScreenshot();
+        Serenity.takeScreenshot();
+        Serenity.takeScreenshot();
+        Serenity.takeScreenshot();
     }
 
     @Step
@@ -150,13 +150,13 @@ public class FlatScenarioSteps extends ScenarioSteps {
 
     @Step
     public void programmaticallyIgnoredStep() {
-        Thucydides.ignoredStep("This test should be skipped");
+        Serenity.ignoredStep("This test should be skipped");
 
     }
 
     @Step
     public void programmaticallyPendingStep() {
-        Thucydides.pendingStep("This test should be skipped");
+        Serenity.pendingStep("This test should be skipped");
 
     }
 

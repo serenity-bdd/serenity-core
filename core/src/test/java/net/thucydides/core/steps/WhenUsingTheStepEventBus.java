@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import net.thucydides.core.Thucydides;
+import net.serenity_bdd.core.Serenity;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.pages.Pages;
@@ -173,10 +173,10 @@ public class WhenUsingTheStepEventBus {
 
     @Mock
     WebDriver driver;
-    
+
     @Mock
     StepListener listener;
-    
+
     @Mock
     TestOutcome testOutcome;
 
@@ -188,7 +188,7 @@ public class WhenUsingTheStepEventBus {
 
     private StepFactory factory;
 
-    Logger logger = LoggerFactory.getLogger(Thucydides.class);
+    Logger logger = LoggerFactory.getLogger(Serenity.class);
 
     @Rule
     public ExtendedTemporaryFolder temp = new ExtendedTemporaryFolder();

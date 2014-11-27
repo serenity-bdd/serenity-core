@@ -1,4 +1,4 @@
-package net.thucydides.ant;
+package net.serenity_bdd.ant;
 
 import org.apache.tools.ant.BuildFileTest;
 
@@ -12,9 +12,9 @@ import java.nio.file.Paths;
 import static java.lang.Thread.currentThread;
 import static org.fest.assertions.Assertions.assertThat;
 
-public abstract class ThucydidesAntTaskTestBase extends BuildFileTest {
-    protected void thucydidesReportsShouldAppearIn(String reportDirectory) throws URISyntaxException {
-        assertThat(getLog()).contains("Generating Thucydides reports");
+public abstract class SerenityAntTaskTestBase extends BuildFileTest {
+    protected void serenityReportsShouldAppearIn(String reportDirectory) throws URISyntaxException {
+        assertThat(getLog()).contains("Generating Serenity reports");
         String indexFilePath = reportDirectory + "/" + "index.html";
         String screenshotFilePath = reportDirectory + "/" + "amazon.png";
         assertThat(currentThread().getContextClassLoader().getResource(indexFilePath)).isNotNull();
@@ -22,7 +22,7 @@ public abstract class ThucydidesAntTaskTestBase extends BuildFileTest {
     }
 
     protected void thucydidesResourcesShouldAppearIn(String reportDirectory) throws URISyntaxException {
-        assertThat(getLog()).contains("Generating Thucydides reports");
+        assertThat(getLog()).contains("Generating Serenity reports");
         String cssFilePath = reportDirectory + "/css/core.css";
         assertThat(currentThread().getContextClassLoader().getResource(cssFilePath)).isNotNull();
     }

@@ -1,4 +1,4 @@
-package net.thucydides.ant.util;
+package net.serenity_bdd.ant.util;
 
 
 import java.net.URISyntaxException;

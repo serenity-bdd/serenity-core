@@ -1,11 +1,11 @@
-package net.thucydides.ant;
+package net.serenity_bdd.ant;
 
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 
 import static java.lang.Thread.currentThread;
 
-public class WhenRunningTheAntTask extends ThucydidesAntTaskTestBase {
+public class WhenRunningTheAntTask extends SerenityAntTaskTestBase {
     public void setUp() throws Exception {
         String antFile = Paths.get(currentThread().getContextClassLoader().getResource("build.xml").toURI()).toString();//currentThread().getContextClassLoader().getResource("build.xml").getFile();
         configureProject(antFile);
@@ -13,8 +13,8 @@ public class WhenRunningTheAntTask extends ThucydidesAntTaskTestBase {
     }
 
     public void testShouldExecuteTaskWithDefaultValues() throws URISyntaxException {
-        executeTarget("thucydides.reports");
-        thucydidesReportsShouldAppearIn("test-outcomes");
+        executeTarget("serenity.reports");
+        serenityReportsShouldAppearIn("test-outcomes");
         thucydidesResourcesShouldAppearIn("test-outcomes");
     }
 }

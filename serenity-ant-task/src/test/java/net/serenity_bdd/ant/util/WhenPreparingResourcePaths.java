@@ -1,8 +1,8 @@
-package net.thucydides.ant.util;
+package net.serenity_bdd.ant.util;
 
 import org.junit.Test;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class WhenPreparingResourcePaths {
 
@@ -12,5 +12,8 @@ public class WhenPreparingResourcePaths {
     public void shouldNotModifyUnprefixedPaths() {
         assertThat(pathProcessor.normalize("some/path")).isEqualTo("some/path");
     }
+
+
+
 
 }

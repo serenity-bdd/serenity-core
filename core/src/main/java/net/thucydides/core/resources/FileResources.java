@@ -1,6 +1,6 @@
 package net.thucydides.core.resources;
 
-import net.thucydides.core.ThucydidesSystemProperties;
+import net.serenity_bdd.core.SerenitySystemProperties;
 import net.thucydides.core.ThucydidesSystemProperty;
 import org.apache.commons.lang3.StringUtils;
 
@@ -121,13 +121,13 @@ public class FileResources {
 				}
 			}
 		}
-		
+
 		return outStream;
 	}
 
     private long getRetryTimeOut() {
 
-        ThucydidesSystemProperties systemProperties = ThucydidesSystemProperties.getProperties();
+        SerenitySystemProperties systemProperties = SerenitySystemProperties.getProperties();
         int timeout = systemProperties.getIntegerValue(ThucydidesSystemProperty.THUCYDIDES_FILE_IO_RETRY_TIMEOUT, DEFAULT_FILE_IO_RETRY_TIMEOUT);
         return timeout * 1000; //milliseconds
     }

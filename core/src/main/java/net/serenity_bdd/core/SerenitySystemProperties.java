@@ -1,15 +1,16 @@
-package net.thucydides.core;
+package net.serenity_bdd.core;
 
+import net.thucydides.core.ThucydidesSystemProperty;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Convenience class used to get and set Thucydides system properties.
+ * Convenience class used to get and set Serenity system properties.
  */
-public class ThucydidesSystemProperties {
+public class SerenitySystemProperties {
 
-    static ThucydidesSystemProperties currentSystemProperties = new ThucydidesSystemProperties();
+    static SerenitySystemProperties currentSystemProperties = new SerenitySystemProperties();
 
-    public static ThucydidesSystemProperties getProperties() {
+    public static SerenitySystemProperties getProperties() {
         return currentSystemProperties;
     }
 
@@ -18,7 +19,7 @@ public class ThucydidesSystemProperties {
     }
 
     /**
-     * @return True if a Thucydides system property has been set.
+     * @return True if a Serenity system property has been set.
      */
     public boolean isDefined(final ThucydidesSystemProperty property) {
         return (System.getProperty(property.getPropertyName()) != null);
@@ -29,7 +30,7 @@ public class ThucydidesSystemProperties {
     }
 
     /**
-     * @return True if a given Thucydides system property has been set to a non-empty value.
+     * @return True if a given Serenity system property has been set to a non-empty value.
      */
     public boolean isEmpty(final ThucydidesSystemProperty property) {
         String value = System.getProperty(property.getPropertyName());
@@ -37,7 +38,7 @@ public class ThucydidesSystemProperties {
     }
 
     /**
-     * Sets a Thucydides system property to s specified value.
+     * Sets a Serenity system property to s specified value.
      * @param property the name of the property
      * @param value the property value
      */

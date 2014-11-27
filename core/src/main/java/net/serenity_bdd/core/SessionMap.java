@@ -1,4 +1,4 @@
-package net.thucydides.core;
+package net.serenity_bdd.core;
 
 import java.util.Map;
 

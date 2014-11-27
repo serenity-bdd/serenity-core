@@ -1,6 +1,7 @@
-package net.thucydides.core.model
+package net.serenity_bdd.core.model
 
-import net.thucydides.core.PendingStepException
+import net.serenity_bdd.core.PendingStepException
+import net.thucydides.core.model.FailureAnalysis
 import net.thucydides.core.steps.StepFailureException
 import net.thucydides.core.webdriver.WebdriverAssertionError
 import org.junit.internal.ArrayComparisonFailure

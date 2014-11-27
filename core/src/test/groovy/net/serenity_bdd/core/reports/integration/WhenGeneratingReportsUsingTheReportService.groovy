@@ -1,6 +1,6 @@
-package net.thucydides.core.reports.integration
+package net.serenity_bdd.core.reports.integration
 
-import net.thucydides.core.ThucydidesReports
+import net.serenity_bdd.core.SerenityReports
 import net.thucydides.core.model.Story
 import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.util.MockEnvironmentVariables
@@ -27,10 +27,10 @@ class WhenGeneratingReportsUsingTheReportService extends Specification {
     def "should generate reports using each of the subscribed reporters"() {
         given:
             configuration.setOutputDirectory(outputDir)
-            ThucydidesReports.setupListeners(configuration)
+            SerenityReports.setupListeners(configuration)
             def testOutcomes = [TestOutcome.forTestInStory("some test", Story.called("some story"))]
         when:
-            ThucydidesReports.getReportService(configuration).generateReportsFor(testOutcomes)
+            SerenityReports.getReportService(configuration).generateReportsFor(testOutcomes)
         then:
             outputDir.list().findAll { it.endsWith(".html")}.size() == 1
             outputDir.list().findAll { it.endsWith(".xml")}.size() == 1

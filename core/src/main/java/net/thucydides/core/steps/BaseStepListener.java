@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
-import net.thucydides.core.PendingStepException;
+import net.serenity_bdd.core.PendingStepException;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;

@@ -1,7 +1,7 @@
-package net.thucydides.core.sessions;
+package net.serenity_bdd.core.sessions;
 
 import com.google.common.collect.ImmutableMap;
-import net.thucydides.core.SessionMap;
+import net.serenity_bdd.core.SessionMap;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

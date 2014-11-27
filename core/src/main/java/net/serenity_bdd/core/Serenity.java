@@ -1,8 +1,6 @@
 package net.serenity_bdd.core;
 
 import com.google.common.collect.ImmutableList;
-import net.thucydides.core.IgnoredStepException;
-import net.thucydides.core.PendingStepException;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;

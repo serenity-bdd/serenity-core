@@ -1,5 +1,6 @@
 package net.serenity_bdd.ant;
 
+import com.google.common.base.Optional;
 import net.serenity_bdd.ant.util.PathProcessor;
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter;
 import org.apache.tools.ant.BuildException;
@@ -40,10 +41,16 @@ public class SerenityReportingTask extends Task {
      */
     public String jiraProject;
 
+    private final String DEFAULT_SOURCE = "target/site/thucydides";
+
     private PathProcessor pathProcessor = new PathProcessor();
 
     public Path getSourceDirectoryFile() {
-        return Paths.get(pathProcessor.normalize(sourceDirectory));
+        return Paths.get(pathProcessor.normalize(getSourceDirectory()));
+    }
+
+    private String getSourceDirectory() {
+        return Optional.fromNullable(sourceDirectory).or(DEFAULT_SOURCE);
     }
 
     public void setSourceDirectory(String sourceDirectory) {
@@ -80,10 +87,12 @@ public class SerenityReportingTask extends Task {
     }
 
     public Path getOutputDirectoryFile() {
-        return Paths.get(normalizedPath(outputDirectory));
+        return Paths.get(normalizedPath(getOutputDirectory().or(getSourceDirectory())));
     }
 
-
+    private Optional<String> getOutputDirectory() {
+        return Optional.fromNullable(outputDirectory);
+    }
 
     public void execute() {
         log("Generating Serenity reports");

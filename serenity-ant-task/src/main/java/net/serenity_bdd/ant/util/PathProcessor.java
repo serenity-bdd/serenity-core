@@ -1,12 +1,15 @@
 package net.serenity_bdd.ant.util;
 
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Paths;
 
 public class PathProcessor {
     public String normalize(String path) {
-        if (path.startsWith("classpath:")) {
+        if ((path != null) &&  path.startsWith("classpath:")) {
             return classpath(path);
         } else {
             return path;
@@ -16,6 +19,10 @@ public class PathProcessor {
     private String classpath(String path) {
         String corePath = path.replace("classpath:","");
         try {
+            URL pathUrl = Thread.currentThread().getContextClassLoader().getResource(corePath);
+            if ((pathUrl == null) || Paths.get(pathUrl.toURI()) == null) {
+                throw new RuntimeException("Source directory not found: " + path);
+            }
             return Paths.get(Thread.currentThread().getContextClassLoader().getResource(corePath).toURI())
                         .toAbsolutePath().toString().replaceAll("%20"," ");
         } catch (URISyntaxException e) {

@@ -1,4 +1,4 @@
-package net.thucydides.core.webdriver.integration;
+package net.serenity_bdd.core.webdriver.integration;
 
 import net.thucydides.core.pages.PageObject;
 import net.thucydides.core.pages.PageUrls;
@@ -22,10 +22,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertNotNull;
 
-/** @deprecated Ensuring legacy thucydides namespace code still works
- * //todo [deprecate thucydides] Remove when thucydides namespace is removed
- */
-@Deprecated
 public class WhenBrowsingAWebSiteUsingPageObjects {
 
     public class IndexPage extends PageObject {
@@ -49,19 +45,19 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
 
         public RadioButtonGroup nameRadioButtons = new RadioButtonGroup(radioButtons);
 
-        @net.thucydides.core.annotations.findby.FindBy(id="firstname")
+        @net.serenity_bdd.core.annotations.findby.FindBy(id="firstname")
         public WebElement firstnameWithExtendedFindBy;
 
-        @net.thucydides.core.annotations.findby.FindBy(css="#firstname")
+        @net.serenity_bdd.core.annotations.findby.FindBy(css="#firstname")
         public WebElementFacade firstnameFacadeWithExtendedFindBy;
 
         @FindBy(name = "specialField")
         public WebElementFacade extra;
 
-        @net.thucydides.core.annotations.findby.FindBy(name = "specialField")
+        @net.serenity_bdd.core.annotations.findby.FindBy(name = "specialField")
         public WebElementFacade extraWithExtendedFindBy;
 
-        @net.thucydides.core.annotations.findby.FindBy(ngModel = "angularField")
+        @net.serenity_bdd.core.annotations.findby.FindBy(ngModel = "angularField")
         public WebElementFacade ngModelField;
 
         WebElementFacade checkbox() {

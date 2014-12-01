@@ -1,6 +1,6 @@
-package net.thucydides.core.annotations.findby.integration
+package net.serenity_bdd.core.annotations.findby.integration
 
-import net.thucydides.core.annotations.findby.By
+import net.serenity_bdd.core.annotations.findby.By
 import net.thucydides.core.pages.integration.StaticSitePageWithFacades
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.phantomjs.PhantomJSDriver

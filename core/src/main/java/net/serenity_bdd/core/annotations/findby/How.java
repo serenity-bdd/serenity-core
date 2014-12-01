@@ -1,4 +1,4 @@
-package net.thucydides.core.annotations.findby;
+package net.serenity_bdd.core.annotations.findby;
 
 public enum How {
 	  CLASS_NAME,

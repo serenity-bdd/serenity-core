@@ -1,6 +1,7 @@
 package net.thucydides.core.annotations.locators;
 
 import com.google.common.collect.Lists;
+import net.serenity_bdd.core.annotations.locators.SmartAnnotations;
 import net.thucydides.core.steps.StepEventBus;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;

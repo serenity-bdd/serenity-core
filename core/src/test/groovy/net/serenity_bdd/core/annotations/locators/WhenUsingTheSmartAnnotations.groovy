@@ -1,17 +1,12 @@
-package net.thucydides.core.annotations.locators
+package net.serenity_bdd.core.annotations.locators
 
+import net.serenity_bdd.core.annotations.findby.FindBy
 import net.serenity_bdd.core.annotations.findby.How
-import net.serenity_bdd.core.annotations.locators.SmartAnnotations
-import net.thucydides.core.annotations.findby.FindBy
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ByIdOrName
 import spock.lang.Specification
 
-/** @deprecated Ensuring legacy thucydides namespace code still works
- * //todo [deprecate thucydides] Remove when thucydides namespace is removed
- */
-@Deprecated
 class WhenUsingTheSmartAnnotations extends Specification {
 
     class AnnotatedPageSample {

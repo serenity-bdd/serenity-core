@@ -9,7 +9,7 @@ buildscript {
     }
 }
 
-allprojects {
+subprojects {
     apply plugin: 'java'
     apply plugin: 'groovy'
     apply plugin: 'eclipse'
@@ -159,9 +159,6 @@ allprojects {
         dependsOn bintrayUpload
     }
 
-}
-
-subprojects {
     task sourcesJar(type: Jar, dependsOn: classes) {
         classifier = 'sources'
         from sourceSets.main.allSource
@@ -198,11 +195,11 @@ subprojects {
                         name "$project.name"
                         description "$projectDescription"
 
-                        url 'https://github.com/serenity-bdd/$project.name'
+                        url 'https://github.com/serenity-bdd/serenity-core'
                         scm {
-                            url 'scm:git:git@github.com:serenity-bdd/$project.name.git'
-                            connection 'scm:git:git@github.com:serenity-bdd/$project.name.git'
-                            developerConnection 'scm:git:git@github.com:serenity-bdd/$project.name.git'
+                            url 'scm:git:git@github.com:serenity-bdd/serenity-core.git'
+                            connection 'scm:git:git@github.com:serenity-bdd/serenity-core.git'
+                            developerConnection 'scm:git:git@github.com:serenity-bdd/serenity-core.git'
                         }
                         licenses {
                             license {

@@ -9,7 +9,7 @@ buildscript {
     }
 }
 
-allprojects {
+subprojects {
     apply plugin: 'java'
     apply plugin: 'groovy'
     apply plugin: 'eclipse'
@@ -159,9 +159,6 @@ allprojects {
         dependsOn bintrayUpload
     }
 
-}
-
-subprojects {
     task sourcesJar(type: Jar, dependsOn: classes) {
         classifier = 'sources'
         from sourceSets.main.allSource

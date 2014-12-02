@@ -1,7 +1,7 @@
 package net.thucydides.core.annotations.locators;
 
 import com.google.common.collect.ImmutableList;
-import net.thucydides.core.annotations.findby.FindBy;
+import net.serenity_bdd.core.annotations.findby.FindBy;
 import net.thucydides.core.pages.PageObject;
 import net.thucydides.core.pages.WebElementFacade;
 import org.openqa.selenium.WebDriver;
@@ -76,6 +76,7 @@ public class SmartFieldDecorator implements FieldDecorator {
 
     private final static List<Class<? extends Annotation>> LEGAL_ANNOTATIONS
             = ImmutableList.of(FindBy.class,
+            net.thucydides.core.annotations.findby.FindBy.class,
             org.openqa.selenium.support.FindBy.class,
             FindBys.class);
 

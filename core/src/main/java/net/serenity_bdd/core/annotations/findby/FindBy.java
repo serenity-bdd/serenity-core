@@ -1,6 +1,4 @@
-package net.thucydides.core.annotations.findby;
-
-import net.serenity_bdd.core.annotations.findby.How;
+package net.serenity_bdd.core.annotations.findby;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,13 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 
-/** @deprecated
- * Replaced by net.serenity_bdd.core.annotations.findby.FindBy
- */
-@Deprecated
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface FindBy {
+public @interface FindBy{
   How how() default How.ID;
 
   String using() default "";

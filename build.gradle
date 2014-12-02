@@ -1,4 +1,5 @@
-import net.serenitybdd.builds.ProjectVersionCounter
+import org.ajoberstar.grgit.*
+import org.ajoberstar.gradle.git.release.opinion.Strategies
 
 buildscript {
     repositories {
@@ -6,10 +7,19 @@ buildscript {
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
+        classpath 'org.ajoberstar:gradle-git:0.12.0'
     }
 }
 
-allprojects {
+apply plugin: 'org.ajoberstar.release-base'
+release {
+    grgit = Grgit.open(project.file('.'))
+    versionStrategy Strategies.FINAL
+    versionStrategy Strategies.PRE_RELEASE
+    defaultVersionStrategy Strategies.SNAPSHOT
+}
+
+subprojects {
     apply plugin: 'java'
     apply plugin: 'groovy'
     apply plugin: 'eclipse'
@@ -26,7 +36,6 @@ allprojects {
         jcenter()
     }
 
-
     ext {
         bintrayBaseUrl = 'https://api.bintray.com/maven'
         bintrayRepository = 'maven'
@@ -38,24 +47,9 @@ allprojects {
         if (!project.hasProperty("bintrayApiKey")) {
             bintrayApiKey = ''
         }
-        versionCounter = new ProjectVersionCounter(isRelease: project.hasProperty("releaseBuild"))
     }
     group = 'net.serenity-bdd'
-    version = versionCounter.nextVersion
-
-    task createNewVersionTag(type: Exec) {
-        executable "sh"
-        args "-c", "git tag -f -a v$version -m'release tag'"
-    }
-
-    task pushVersionTag(type: Exec, dependsOn: 'createNewVersionTag') {
-        executable "sh"
-        args "-c", "git push -f origin v$version"
-    }
-
-    task tagNewVersion() {
-        dependsOn pushVersionTag
-    }
+    version = rootProject.version
 
     task wrapper(type: Wrapper) {
         gradleVersion = '2.1'
@@ -155,13 +149,6 @@ allprojects {
         }
     }
 
-    task release() {
-        dependsOn bintrayUpload
-    }
-
-}
-
-subprojects {
     task sourcesJar(type: Jar, dependsOn: classes) {
         classifier = 'sources'
         from sourceSets.main.allSource
@@ -198,11 +185,11 @@ subprojects {
                         name "$project.name"
                         description "$projectDescription"
 
-                        url 'https://github.com/serenity-bdd/$project.name'
+                        url 'https://github.com/serenity-bdd/serenity-core'
                         scm {
-                            url 'scm:git:git@github.com:serenity-bdd/$project.name.git'
-                            connection 'scm:git:git@github.com:serenity-bdd/$project.name.git'
-                            developerConnection 'scm:git:git@github.com:serenity-bdd/$project.name.git'
+                            url 'scm:git:git@github.com:serenity-bdd/serenity-core.git'
+                            connection 'scm:git:git@github.com:serenity-bdd/serenity-core.git'
+                            developerConnection 'scm:git:git@github.com:serenity-bdd/serenity-core.git'
                         }
                         licenses {
                             license {

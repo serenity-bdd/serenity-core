@@ -1,5 +1,6 @@
-package net.thucydides.core.annotations.findby.integration
+package net.serenity_bdd.core.annotations.findby.integration
 
+import net.serenity_bdd.core.annotations.findby.FindBy
 import net.thucydides.core.annotations.DefaultUrl
 import net.thucydides.core.pages.PageObject
 import net.thucydides.core.pages.WebElementFacade
@@ -11,22 +12,18 @@ import org.openqa.selenium.phantomjs.PhantomJSDriver
 import spock.lang.Shared
 import spock.lang.Specification
 
-/** @deprecated Ensuring legacy thucydides namespace code still works
- * //todo [deprecate thucydides] Remove when thucydides namespace is removed
- */
-@Deprecated
 class WhenUsingSmartFindByOnPageObjects extends Specification {
 
 	@DefaultUrl("classpath:static-site/index.html")
 	class StaticSitePageWithFindBy extends PageObject {
 
-			@net.thucydides.core.annotations.findby.FindBy(jquery = "[name='firstname']")
+			@FindBy(jquery = "[name='firstname']")
 			public WebElementFacade firstName;
 
-			@net.thucydides.core.annotations.findby.FindBy(jquery = "[name='hiddenfield']")
+			@FindBy(jquery = "[name='hiddenfield']")
 			public WebElementFacade hiddenField;
 
-			@net.thucydides.core.annotations.findby.FindBy(jquery = ".doesNotExist")
+			@FindBy(jquery = ".doesNotExist")
 			public WebElementFacade nonExistantField;
 
 			StaticSitePageWithFindBy(WebDriver driver){

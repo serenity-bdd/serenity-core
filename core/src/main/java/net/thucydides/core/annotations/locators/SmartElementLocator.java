@@ -1,5 +1,6 @@
 package net.thucydides.core.annotations.locators;
 
+import net.serenity_bdd.core.annotations.locators.SmartAnnotations;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;

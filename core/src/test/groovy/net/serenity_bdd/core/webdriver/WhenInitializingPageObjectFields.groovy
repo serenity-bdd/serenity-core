@@ -1,18 +1,15 @@
-package net.thucydides.core.webdriver
+package net.serenity_bdd.core.webdriver
 
-import net.thucydides.core.annotations.findby.FindBy
+import net.serenity_bdd.core.annotations.findby.FindBy
 import net.thucydides.core.pages.PageObject
 import net.thucydides.core.pages.WebElementFacade
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.webdriver.DefaultPageObjectInitialiser
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import spock.lang.Specification
 
-/** @deprecated Ensuring legacy thucydides namespace code still works
- * //todo [deprecate thucydides] Remove when thucydides namespace is removed
- */
-@Deprecated
 class WhenInitializingPageObjectFields extends Specification {
 
     EnvironmentVariables environmentVariables = new MockEnvironmentVariables();

@@ -23,7 +23,9 @@ class WhenConvertingxUnitToTestOutcomes extends Specification {
         then:
             outcomes.size() == 7
             outcome.testCount == 1
-            outcome.title == "Should do something"
+            outcomes.each {
+                outcome.title.startsWith "Should do something"
+            }
 
     }
 

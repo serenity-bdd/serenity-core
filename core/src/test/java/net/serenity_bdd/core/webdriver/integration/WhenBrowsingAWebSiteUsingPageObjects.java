@@ -190,12 +190,6 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
     }
 
     @Test
-    public void should_select_radio_buttons_by_visible_text() {
-        indexPage.nameRadioButtons.selectByVisibleText("Value 1");
-        assertThat(indexPage.nameRadioButtons.getSelectedValue().get(), is("1"));
-    }
-
-    @Test
     public void ticking_a_set_checkbox_should_set_the_value_to_true() {
         if (indexPage.checkbox.isSelected()) {
             indexPage.checkbox.click();

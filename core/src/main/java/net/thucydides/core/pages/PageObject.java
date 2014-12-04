@@ -20,6 +20,7 @@ import net.thucydides.core.webdriver.DefaultPageObjectInitialiser;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webelements.Checkbox;
+import net.thucydides.core.webelements.RadioButtonGroup;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -878,6 +879,10 @@ public abstract class PageObject {
                 jQueryEnabledPage.injectJQueryPlugins();
             }
         }
+    }
+
+    public RadioButtonGroup inRadioButtonGroup(String name) {
+        return new RadioButtonGroup(getDriver().findElements(By.name(name)));
     }
 
     private boolean pageIsLoaded() {

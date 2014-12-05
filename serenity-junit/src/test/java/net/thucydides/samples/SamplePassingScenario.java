@@ -14,8 +14,8 @@ public class SamplePassingScenario {
     @Managed
     public WebDriver webdriver;
 
-    @ManagedPages(defaultUrl = "classpath:static-site/index.html")
-    public Pages pages;
+//    @ManagedPages(defaultUrl = "classpath:static-site/index.html")
+//    public Pages pages;
     
     @Steps
     public SampleScenarioSteps steps;

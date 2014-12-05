@@ -472,7 +472,7 @@ public class ThucydidesRunner extends BlockJUnit4ClassRunner {
         return method.getAnnotation(Pending.class) != null;
     }
 
-    private boolean isIgnored(FrameworkMethod method) {
+    protected boolean isIgnored(FrameworkMethod method) {
         return method.getAnnotation(Ignore.class) != null;
     }
 

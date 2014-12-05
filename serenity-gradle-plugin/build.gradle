@@ -8,6 +8,6 @@ dependencies {
     compile localGroovy()
 
     compile project(':core')
-    testCompile "junit:junit:4.11"
+    testCompile "junit:junit:4.12"
 }
 

@@ -52,7 +52,7 @@ dependencies {
     compile "org.codehaus.groovy:groovy-all:2.2.1"
     compile 'joda-time:joda-time:2.4'
     testCompile "org.easytesting:fest-assert-core:2.0M10"
-    testCompile "junit:junit:4.12"
+    testCompile "junit:junit:4.11"
     testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
     testCompile 'org.mockito:mockito-core:1.10.8'
 }

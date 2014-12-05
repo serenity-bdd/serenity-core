@@ -2,7 +2,7 @@ package net.thucydides.junit.runners;
 
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepPublisher;
-import org.junit.AssumptionViolatedException;
+import org.junit.internal.AssumptionViolatedException;
 import org.junit.runners.model.Statement;
 
 /**

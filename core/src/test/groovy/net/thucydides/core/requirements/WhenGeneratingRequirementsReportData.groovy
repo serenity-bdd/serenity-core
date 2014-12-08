@@ -36,7 +36,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
             requirementsNames == ["Grow cucumbers", "Grow potatoes", "Grow wheat",  "Raise chickens", "Apples", "Nice zucchinis", "Potatoes"]
         and: "the display name should be obtained from the narrative file where present"
             def requirementsDisplayNames = outcomes.requirementOutcomes.collect {it.requirement.displayName}
-        requirementsDisplayNames == ["Grow cucumbers", "Grow lots of potatoes", "Grow wheat", "Raise chickens", "apples", "Nice zucchinis", "Potatoes title"]
+            requirementsDisplayNames == ["Grow cucumbers", "Grow lots of potatoes", "Grow wheat", "Raise chickens", "Apples", "Nice zucchinis", "Potatoes title"]
     }
 
     def "should report no test results for requirements without associated tests"() {

@@ -1,5 +1,6 @@
 package net.thucydides.junit.runners.integration;
 
+import com.google.common.collect.ImmutableList;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.junit.annotations.TestData;
 import net.thucydides.junit.runners.ThucydidesParameterizedRunner;
@@ -9,6 +10,7 @@ import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 @RunWith(ThucydidesParameterizedRunner.class)
 public class SimpleSuccessfulParametrizedTestSample {
@@ -18,7 +20,7 @@ public class SimpleSuccessfulParametrizedTestSample {
 	public SimpleSuccessfulParametrizedTestSample(String userRole) {
 		this.userRole = userRole;
 	}
-	
+
 	@TestData(columnNames = "User")
 	public static Collection<Object[]> testData(){
 		return Arrays.asList(new Object[][]{{"A"}, {"B"}, {"C"}});

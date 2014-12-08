@@ -5,6 +5,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
@@ -13,19 +14,20 @@ import net.thucydides.core.reflection.ClassFinder;
 import net.thucydides.core.requirements.annotations.NarrativeFinder;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.util.Inflector;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.util.*;
 
 import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT;
 
 /**
  * A requirements Provider that reads requirement from class or package annotation.
- * A class or package needs to be annotated with {@link net.thucydides.core.annotations.Narrative}
- * to be a requirement. All package above the class or package will also be considered requirement.
  * The root package is defined using {@link net.thucydides.core.ThucydidesSystemProperty#THUCYDIDES_TEST_ROOT}
  * It is recommended to change the root package if the {@link FileSystemRequirementsTagProvider} is used.
  *
@@ -73,8 +75,11 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     private boolean isMatchingRequirementFor(TestOutcome testOutcome, Requirement requirement) {
-        return (fullPathOf(requirement).matchesOrIsADescendantOf(normalizedPath(testOutcome.getPathId())))
-                || (fullPathOf(requirement).matchesOrIsADescendantOf(normalizedPath(testOutcome.getPath())));
+        if (testOutcome.getTestCase() != null) {
+            return (fullPathOf(requirement).matchesOrIsADescendantOf(normalizedPath(testOutcome.getPathId())));
+        } else {
+            return (fullPathOf(requirement).matchesOrIsADescendantOf(normalizedPath(testOutcome.getPath())));
+        }
     }
 
     private String normalizedPath(String path) {
@@ -117,7 +122,32 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     protected List<Class<?>> loadClasses() {
-        return ClassFinder.loadClasses().annotatedWith(Narrative.class).fromPackage(rootPackage);
+        Set<Class<?>> classesWithNarratives =
+                Sets.newHashSet(ClassFinder.loadClasses().annotatedWith(Narrative.class).fromPackage(rootPackage));
+
+        Set<Class<?>> testCases =
+                Sets.newHashSet(ClassFinder.loadClasses().annotatedWith(RunWith.class).fromPackage(rootPackage));
+
+        Set<Class<?>> requirementClasses = Sets.newHashSet();
+        requirementClasses.addAll(classesWithNarratives);
+
+        for(Class<?> testClass : testCases) {
+            if (serenityTestCase(testClass)) {
+                requirementClasses.add(testClass);
+            }
+        }
+
+        return Lists.newArrayList(requirementClasses);
+
+    }
+
+    private final List<String> LEGAL_SERENITY_RUNNER_NAMES = ImmutableList.of("SerenityRunner","ThucydidesRunner");
+    private boolean serenityTestCase(Class<?> testClass) {
+        RunWith runWithAnnotation = testClass.getAnnotation(RunWith.class);
+        if (runWithAnnotation != null) {
+            return LEGAL_SERENITY_RUNNER_NAMES.contains(runWithAnnotation.value().getSimpleName());
+        }
+        return false;
     }
 
     private SortedMap<String, Requirement> loadFromJSON() {
@@ -305,7 +335,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
 
         return Requirement.named(humanReadableVersionOf(packageName))
                 .withOptionalCardNumber(cardNumber)
-                .withOptionalDisplayName(StringUtils.isEmpty(requirementTitle) ? humanReadableVersionOf(packageName) : requirementTitle)
+                .withOptionalDisplayName(StringUtils.isEmpty(requirementTitle) ? humanReadableVersionOf(packageName) : humanReadableVersionOf(requirementTitle))
                 .withType(requirementType)
                 .withNarrative(narrativeText);
     }

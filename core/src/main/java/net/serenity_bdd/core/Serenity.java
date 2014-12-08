@@ -226,6 +226,11 @@ public class Serenity {
     public static SessionVariableSetter setSessionVariable(Object key) {
         return new SessionVariableSetter(key);
     }
+
+    public static Pages getPagesFactory() {
+        return null;
+    }
+
     public static class SessionVariableSetter {
         final Object key;
 

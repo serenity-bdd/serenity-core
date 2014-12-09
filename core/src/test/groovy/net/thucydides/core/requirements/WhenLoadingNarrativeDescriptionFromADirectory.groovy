@@ -62,7 +62,7 @@ class WhenLoadingNarrativeDescriptionFromADirectory extends Specification {
         and: "the narrativeText title and description should be loaded"
             narrative.get().title.get() == "Grow special red apples"
         and: "the type should be derived from lowest requirement type"
-            narrative.get().type == "feature"
+            narrative.get().type == "story"
     }
 
     def "Should read release version numbers if provided"() {

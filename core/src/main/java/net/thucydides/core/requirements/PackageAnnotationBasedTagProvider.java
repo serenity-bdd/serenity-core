@@ -170,11 +170,31 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     private void loadRequirementsFromClasses(List<Class<?>> classes) {
+        int maxDepth = maximumClassDepth(classes,rootPackage);
+
         for (Class candidateClass : classes) {
-            addRequirementTo(requirementsByPath, candidateClass);
+            addRequirementTo(requirementsByPath, candidateClass, maxDepth);
         }
         leafRequirements = findLeafRequirementsIn(requirementsByPath);
         persistRequirementsAsJSON(requirementsByPath);
+    }
+
+    private int maximumClassDepth(List<Class<?>> classes, String rootPackage) {
+        int maxDepth = 0;
+        for (Class candidateClass : classes) {
+            int pathDepth = pathDepth(rootPackage, candidateClass.getPackage().getName());
+            maxDepth = (pathDepth > maxDepth) ? pathDepth : maxDepth;
+        }
+        return maxDepth;
+    }
+
+    private int pathDepth(String rootPackage, String path) {
+        int maxDepth = 0;
+        if (path.startsWith(rootPackage)) {
+            String localPath = path.replace(rootPackage,"");
+            maxDepth = StringUtils.split(localPath,".").length;
+        }
+        return maxDepth;
     }
 
     private void persistRequirementsAsJSON(SortedMap<String, Requirement> requirementsByPath) {
@@ -243,16 +263,16 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     private void addRequirementTo(SortedMap<String, Requirement> requirementsByPath,
-                                  Class candidateClass) {
+                                  Class candidateClass,
+                                  int maxDepth) {
 
         String fullRequirementName = getFullRequirementPath(candidateClass);
-
 
         String[] packageNames = fullRequirementName.split(DOT_REGEX);
         String currentPath = "";
         for (int level = 0; level < packageNames.length; level++) {
             currentPath = (currentPath.isEmpty()) ? packageNames[level] : Joiner.on(".").join(currentPath, packageNames[level]);
-            String defaultRequirementType = getDefaultType(level);
+            String defaultRequirementType = getDefaultType(level, maxDepth);
             Requirement currentRequirement;
             if (!requirementsByPath.containsKey(currentPath)) {
                 if (level < packageNames.length - 1) {

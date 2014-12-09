@@ -65,7 +65,7 @@ class WhenLoadingRequirementsFromAPackageStructure extends Specification {
         given: "We are using the Annotation provider"
             def vars = new MockEnvironmentVariables()
             vars.setProperty("thucydides.test.root", "junittestcases.samples")
-            vars.setProperty("thucydides.requirement.types", "feature,story")
+//            vars.setProperty("thucydides.requirement.types", "feature,story")
             RequirementsTagProvider capabilityProvider = new PackageAnnotationBasedTagProvider(vars)
         when: "we run a junit test"
             def testOutcome = TestOutcome.forTest("someTest", RedAndGreenApples.class)
@@ -96,6 +96,20 @@ class WhenLoadingRequirementsFromAPackageStructure extends Specification {
             def vars = new MockEnvironmentVariables()
             vars.setProperty("thucydides.test.root", "junittestcases.samples.fruit")
             vars.setProperty("thucydides.requirement.types", "story")
+            RequirementsTagProvider capabilityProvider = new PackageAnnotationBasedTagProvider(vars)
+        when: "we run a junit test"
+            def testOutcome = TestOutcome.forTest("someTest", RedAndGreenApples.class)
+        and: "We look up the tags for this test"
+            def tags = capabilityProvider.getTagsFor(testOutcome);
+        then:
+            tags.size() == 1
+            tags.contains(TestTag.withName("Red and green apples").andType("story"))
+    }
+
+    def "Should consider a JUnit test as a story or feature, no matter what level it is in the requirement structure"() {
+        given: "We are using the Annotation provider"
+            def vars = new MockEnvironmentVariables()
+            vars.setProperty("thucydides.test.root", "junittestcases.samples.fruit")
             RequirementsTagProvider capabilityProvider = new PackageAnnotationBasedTagProvider(vars)
         when: "we run a junit test"
             def testOutcome = TestOutcome.forTest("someTest", RedAndGreenApples.class)

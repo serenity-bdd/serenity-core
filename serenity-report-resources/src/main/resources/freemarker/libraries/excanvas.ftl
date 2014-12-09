@@ -1,3 +1,3 @@
 <!--[if IE]>
-<script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script>
+<script language="javascript" type="text/javascript" src="excanvas/3/excanvas.compiled.js"></script>
 <![endif]-->

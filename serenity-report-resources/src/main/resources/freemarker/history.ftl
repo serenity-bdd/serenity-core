@@ -5,24 +5,12 @@
     <title>Home</title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="css/core.css"/>
-    <link rel="stylesheet" type="text/css" href="jqplot/jquery.jqplot.min.css"/>
+    <link rel="stylesheet" href="css/link.css"/>
+    <link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet"/>
 
-    <!--[if IE]>
-    <script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script><![endif]-->
-
-    <script type="text/javascript" src="scripts/jquery.js"></script>
-    <script type="text/javascript" src="datatables/media/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="jqplot/jquery.jqplot.min.js"></script>
-    <script type="text/javascript" src="jqplot/plugins/jqplot.categoryAxisRenderer.min.js"></script>
-    <script type="text/javascript" src="jqplot/plugins/jqplot.dragable.min.js"></script>
-    <script type="text/javascript" src="jqplot/plugins/jqplot.highlighter.min.js"></script>
-    <script type="text/javascript" src="jqplot/plugins/jqplot.dateAxisRenderer.min.js"></script>
-   	<script type="text/javascript" src="jqplot/plugins/jqplot.cursor.min.js"></script>
-
-
-
-    <link type="text/css" href="jqueryui/css/start/jquery-ui-1.8.18.custom.css" rel="Stylesheet" />
-    <script type="text/javascript" src="jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
+    <#include "libraries/common.ftl">
+    <#include "libraries/jqplot.ftl">
+    <#include "libraries/jquery-ui.ftl">
 
     <script class="code" type="text/javascript">$(document).ready(function () {
 

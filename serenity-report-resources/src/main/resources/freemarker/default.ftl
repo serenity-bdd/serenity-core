@@ -4,19 +4,12 @@
     <meta charset="UTF-8"/>
     <title>${testOutcome.unqualified.title}</title>
     <link rel="shortcut icon" href="favicon.ico">
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/core.css"/>
-    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="jqplot/jquery.jqplot.min.css"/>
 
-    <script src="scripts/jquery.js" type="text/javascript"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-
-    <script type="text/javascript" src="datatables/media/js/jquery.dataTables.min.js"></script>
-    <script src="scripts/imgpreview.full.jquery.js" type="text/javascript"></script>
-
-    <link type="text/css" href="jqueryui/css/start/jquery-ui-1.8.18.custom.css" rel="Stylesheet"/>
-    <script type="text/javascript" src="jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
+    <#include "libraries/common.ftl">
+    <#include "libraries/datatables.ftl">
+    <#include "libraries/imgpreview.ftl">
+    <#include "libraries/jquery-ui.ftl">
 
 </head>
 
@@ -289,7 +282,9 @@
                             <td width="100" class="${step.result}-text">
                                 <#if !step.isAGroup() && step.firstScreenshot??>
                                     <a href="${relativeLink!}${testOutcome.screenshotReportName}.html#screenshots?screenshot=${screenshotCount}">
+                                        <!-- Added invalid href-attribute to img for imgpreviewer -->
                                         <img src="${step.firstScreenshot.screenshotFile.name}"
+                                             href="${step.firstScreenshot.screenshotFile.name}"
                                              class="screenshot"
                                              width="48" height="48"/>
                                         <#assign screenshotCount = screenshotCount + step.screenshotCount />
@@ -375,29 +370,29 @@
 </script>
 
 <script type="text/javascript">
-    $('.example-table table').dataTable({
-        "aaSorting": [
+    $('.example-table table').DataTable({
+        "order": [
             [ 1, "asc" ]
         ],
-        "bJQueryUI": true,
-        "iDisplayLength": 25,
-        "sScrollX": "100%",
-        "sScrollXInner": "100%",
-        "bScrollCollapse": true
+        "pageLength": 25,
+        "scrollX": "100%",
+        "scrollXInner": "100%",
+        "scrollCollapse": true
     });
 </script>
 
 <script type="text/javascript">
     //<![CDATA[
 
-    function ($) {
-        $('a').imgPreview({
+    $(document).ready(function() {
+        $('img.screenshot').imgPreview({
             imgCSS: {
                 width: '500px'
             },
             distanceFromCursor: {top: 10, left: -200}
         });
-    }
+    });
+
     //]]>
 </script>
 <div id="imgPreviewContainer" style="position: absolute; top: 612px; left: 355px; display: none; " class=""><img

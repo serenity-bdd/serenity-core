@@ -8,34 +8,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Serenity Reports</title>
-    <!-- Bootstrap -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="shortcut icon" href="favicon.ico">
-    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
-    <!--[if IE 7]>
-    <link rel="stylesheet" href="font-awesome/css/font-awesome-ie7.min.css">
-    <![endif]-->
     <link rel="stylesheet" href="css/core.css"/>
     <link rel="stylesheet" href="css/link.css"/>
     <link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet"/>
 
-    <link rel="stylesheet" type="text/css" href="jqplot/jquery.jqplot.min.css"/>
-
-
-    <!--[if IE]>
-    <script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script><![endif]-->
-
-    <script type="text/javascript" src="scripts/jquery.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-
-    <script type="text/javascript" src="datatables/media/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="jqplot/jquery.jqplot.min.js"></script>
-    <script type="text/javascript" src="jqplot/plugins/jqplot.pieRenderer.min.js"></script>
-
-    <link type="text/css" href="jqueryui/css/start/jquery-ui-1.8.18.custom.css" rel="Stylesheet"/>
-    <script type="text/javascript" src="jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
-
+    <#include "libraries/common.ftl">
+    <#include "libraries/datatables.ftl">
+    <#assign pie = true>
+    <#include "libraries/jqplot.ftl">
+    <#include "libraries/jquery-ui.ftl">
 
 <#assign successfulManualTests = (testOutcomes.count("manual").withResult("SUCCESS") > 0)>
 <#assign pendingManualTests = (testOutcomes.count("manual").withResult("PENDING") > 0)>
@@ -163,16 +146,15 @@
         });
 
         // Results table
-        $('#test-results-table').dataTable({
-            "aaSorting": [
+        $('#test-results-table').DataTable({
+            "order": [
                 [ 1, "asc" ]
             ],
-            "bJQueryUI": true,
-            "iDisplayLength": 25
+            "pageLength": 25
         });
 
         // Pie charts
-        $('#test-results-tabs').tabs()
+        $('#test-results-tabs').tabs();
 
         $('#toggleNormalPieChart').click(function () {
             $("#test_results_pie_chart").toggle();

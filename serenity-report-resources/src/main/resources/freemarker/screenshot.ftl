@@ -5,19 +5,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>${screenshot.description}</title>
     <link rel="shortcut icon" href="favicon.ico">
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/core.css"/>
-    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="jqplot/jquery.jqplot.min.css"/>
 
-    <script src="scripts/jquery.js" type="text/javascript"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <#include "libraries/common.ftl">
 
-    <script type="text/javascript" src="datatables/media/js/jquery.dataTables.min.js"></script>
-    <script src="scripts/imgpreview.full.jquery.js" type="text/javascript"></script>
-
-    <link type="text/css" href="jqueryui/css/start/jquery-ui-1.8.18.custom.css" rel="Stylesheet"/>
-    <script type="text/javascript" src="jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
 </head>
 
 <body>

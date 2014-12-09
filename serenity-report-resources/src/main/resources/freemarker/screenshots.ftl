@@ -7,26 +7,12 @@
     <title>Screenshots</title>
 
     <link rel="shortcut icon" href="favicon.ico">
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/core.css"/>
-    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="jqplot/jquery.jqplot.min.css"/>
 
-    <script src="scripts/jquery.js" type="text/javascript"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <#include "libraries/common.ftl">
+    <#include "libraries/nivo-slider.ftl">
 
-    <script type="text/javascript" src="datatables/media/js/jquery.dataTables.min.js"></script>
-    <script src="scripts/imgpreview.full.jquery.js" type="text/javascript"></script>
-
-    <link type="text/css" href="jqueryui/css/start/jquery-ui-1.8.18.custom.css" rel="Stylesheet"/>
-    <script type="text/javascript" src="jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
-
-	<link rel="stylesheet" href="nivo-slider/nivo-slider.css" type="text/css" media="screen" />
-	<link rel="stylesheet" href="nivo-slider/themes/default/default.css" type="text/css" media="screen" />
-
-	<script src="nivo-slider/jquery.nivo.slider.pack.js" type="text/javascript"></script>
-
-	<script type="text/javascript">
+    <script type="text/javascript">
 
     function getUrlVars() {
         var vars = {};
@@ -42,10 +28,7 @@
 	    $('#slider').nivoSlider({
             startSlide:screenshotIndex,
             effect:'fade',
-			animSpeed:200,
-			directionNavHide:false,
-			manualAdvance:true,
-			keyboardNav:true
+			animSpeed:200
 		});
 	});
 	</script>

@@ -8,22 +8,9 @@
 
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="css/core.css"/>
-    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
-    <!--[if IE 7]>
-    <link rel="stylesheet" href="font-awesome/css/font-awesome-ie7.min.css">
-    <![endif]-->
 
-    <!-- JQuery -->
-    <script src="scripts/jquery-1.11.1.min.js" type="text/javascript"></script>
-
-    <!-- Bootstrap -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- Nivo Slider -->
-    <link rel="stylesheet" href="nivo-slider/3.2/nivo-slider.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="nivo-slider/3.2/themes/default/default.css" type="text/css" media="screen" />
-    <script src="nivo-slider/3.2/jquery.nivo.slider.pack.js" type="text/javascript"></script>
+    <#include "libraries/common.ftl">
+    <#include "libraries/nivo-slider.ftl">
 
     <script type="text/javascript">
 

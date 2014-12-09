@@ -7,24 +7,11 @@
     <title>${pageTitle}</title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="css/core.css"/>
-    <link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet" />
-    <!--[if IE]>
-    <script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script>
-    <![endif]-->
 
-    <!-- JQuery -->
-    <script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script>
-
-    <!-- Bootstrap -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- dyGraph -->
-    <script type="text/javascript" src="scripts/dygraph/1.1.0/dygraph-combined.js"></script>
-
-    <!-- JQuery-UI -->
-    <link type="text/css" href="jqueryui/1.11.2-start/jquery-ui.min.css" rel="Stylesheet" />
-    <script type="text/javascript" src="jqueryui/1.11.2-start/jquery-ui.min.js"></script>
+    <#include "libraries/common.ftl">
+    <#include "libraries/excanvas.ftl">
+    <#include "libraries/jquery-ui.ftl">
+    <#include "libraries/dygraph.ftl">
 
 </head>
 

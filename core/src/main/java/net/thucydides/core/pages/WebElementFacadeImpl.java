@@ -4,15 +4,13 @@ import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import io.appium.java_client.FindsByAccessibilityId;
-import io.appium.java_client.FindsByAndroidUIAutomator;
-import io.appium.java_client.FindsByIosUIAutomation;
-import io.appium.java_client.MobileElement;
+import io.appium.java_client.*;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.jquery.JQueryEnabledPage;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
@@ -87,24 +85,24 @@ public class WebElementFacadeImpl extends MobileElement implements WebElementFac
     }
 
     public static WebElementFacadeImpl wrapWebElement(final WebDriver driver,
-    		final WebElement element,
-            final long timeoutInMilliseconds) {
-		return new WebElementFacadeImpl(driver, (ElementLocator)null, element, timeoutInMilliseconds);
-		
-	} 
-    
-    protected WebElement getElement(){
-    	if (webElement != null){
-    		return webElement;
-    	}
-    	if (locator == null) {
-    		return null;
-    	}
+                                                      final WebElement element,
+                                                      final long timeoutInMilliseconds) {
+        return new WebElementFacadeImpl(driver, (ElementLocator) null, element, timeoutInMilliseconds);
+
+    }
+
+    protected WebElement getElement() {
+        if (webElement != null) {
+            return webElement;
+        }
+        if (locator == null) {
+            return null;
+        }
         WebElement resolvedELement = locator.findElement();
         if (resolvedELement == null) {
             throw new ElementNotVisibleException(locator.toString());
         }
-    	return locator.findElement();
+        return locator.findElement();
     }
 
     protected JavascriptExecutorFacade getJavascriptExecutorFacade() {
@@ -832,7 +830,6 @@ public class WebElementFacadeImpl extends MobileElement implements WebElementFac
         return getEnvironmentVariables().getPropertyAsBoolean(ThucydidesSystemProperty.THUCYDIDES_VERBOSE_STEPS.getPropertyName(), false);
     }
 
-
     private EnvironmentVariables getEnvironmentVariables() {
         return environmentVariables;
     }
@@ -841,9 +838,17 @@ public class WebElementFacadeImpl extends MobileElement implements WebElementFac
         return HtmlTag.from(webElement).inHumanReadableForm();
     }
 
+    private boolean isMobileDriver() {
+        return ThucydidesWebDriverSupport.getProxiedDriver() instanceof AppiumDriver;
+    }
+
     @Override
     public void clear() {
-        getElement().sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
+
+        if (!isMobileDriver()) {
+            getElement().sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
+        }
+
         getElement().clear();
     }
 

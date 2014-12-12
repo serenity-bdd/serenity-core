@@ -7,25 +7,20 @@
     <title>${pageTitle}</title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="css/core.css"/>
-    <link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet" />
+    <link rel="stylesheet" type="text/css" href="jqplot/jquery.jqplot.min.css"/>
+
     <!--[if IE]>
-    <script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script>
-    <![endif]-->
+    <script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script><![endif]-->
 
-    <!-- JQuery -->
-    <script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script type="text/javascript" src="datatables/media/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="scripts/dygraph-combined.js"></script>
 
-    <!-- Bootstrap -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="bootstrap/js/bootstrap.min.js"></script>
 
-    <!-- dyGraph -->
-    <script type="text/javascript" src="scripts/dygraph/1.1.0/dygraph-combined.js"></script>
+    <link type="text/css" href="jqueryui/css/start/jquery-ui-1.8.18.custom.css" rel="Stylesheet" />
+    <script type="text/javascript" src="jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
 
-    <!-- JQuery-UI -->
-    <link type="text/css" href="jqueryui/1.11.2-start/jquery-ui.min.css" rel="Stylesheet" />
-    <script type="text/javascript" src="jqueryui/1.11.2-start/jquery-ui.min.js"></script>
-
+    <link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet" />
 </head>
 
 <body>
@@ -76,7 +71,7 @@
             <#assign requirementsTitle = inflection.of(requirements.type).inPluralForm().asATitle() >
                 <script type="text/javascript">
                     g = new Dygraph(
-                            $("#progress-graph"),
+                            document.getElementById("progress-graph"),
                             "Build,${requirementsTitle},Passed,Failed,Estimated,Total\n" +
                             <#foreach snapshot in progress>
                                 "${snapshot.formattedTime}, ${snapshot.total}, ${snapshot.completed}, ${snapshot.failed}, ${snapshot.estimated}, ${snapshot.total}\n"<#if snapshot_has_next> +</#if>

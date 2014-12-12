@@ -4,37 +4,32 @@
     <meta charset="UTF-8"/>
     <title>${release.name}</title>
     <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" type="text/css" href="jqplot/jquery.jqplot.min.css"/>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!--[if IE]>
+    <script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script><![endif]-->
+
+    <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="datatables/media/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="jqplot/jquery.jqplot.min.js"></script>
+    <script type="text/javascript" src="jqplot/plugins/jqplot.pieRenderer.min.js"></script>
+
+    <link type="text/css" href="jqueryui/css/start/jquery-ui-1.8.18.custom.css" rel="Stylesheet"/>
+    <script type="text/javascript" src="jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
+
+    <script src="jqtree/tree.jquery.js"></script>
+
+    <link rel="stylesheet" href="jqtree/jqtree.css">
+
     <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
     <!--[if IE 7]>
     <link rel="stylesheet" href="font-awesome/css/font-awesome-ie7.min.css">
     <![endif]-->
     <link rel="stylesheet" href="css/core.css"/>
     <link rel="stylesheet" href="css/link.css"/>
-    <link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet"/>
-
-    <!--[if IE]>
-    <script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script>
-    <![endif]-->
-
-    <!-- JQuery -->
-    <script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script>
-
-    <!-- Bootstrap -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- DataTables -->
-    <script type="text/javascript" src="datatables/1.10.4/media/js/jquery.dataTables.min.js"></script>
-    <link type="text/css" href="datatables/1.10.4/media/jqueryui/dataTables.jqueryui.css" rel="Stylesheet"/>
-    <script type="text/javascript" src="datatables/1.10.4/media/jqueryui/dataTables.jqueryui.min.js"></script>
-
-    <!-- JQuery-UI -->
-    <link type="text/css" href="jqueryui/1.11.2-start/jquery-ui.min.css" rel="Stylesheet" />
-    <script type="text/javascript" src="jqueryui/1.11.2-start/jquery-ui.min.js"></script>
-
-    <!-- jQtree -->
-    <script src="jqtree/0.22/tree.jquery.js"></script>
-    <link rel="stylesheet" href="jqtree/0.22/jqtree.css">
+    <link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet" />
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -52,22 +47,21 @@
                 }
             });
             // Results table
-            $('#req-results-table').DataTable({
-                "order": [
+            $('#req-results-table').dataTable({
+                "aaSorting": [
                     [ 2, "asc" ]
                 ],
-                "pageLength": 25
+                "iDisplayLength": 25,
+                "bJQueryUI": true
             });
 
             // Results table
-            $('#release-test-results-table').DataTable({
-                "order": [
+            $('#release-test-results-table').dataTable({
+                "aaSorting": [
                     [ 2, "asc" ]
-                ]
+                ],
+                "bJQueryUI": true
             });
-
-            $("#tabs").tabs();
-            $("#test-tabs").tabs();
         });
     </script>
 </head>
@@ -109,7 +103,7 @@
     <div id="results-dashboard">
         <div class="middlb">
             <div class="table">
-            <div>
+            <div id="tabs">
                 <div id="releases">
                     <h3>Release Details</h3>
                     <table>
@@ -149,14 +143,14 @@
                     </div>
 
                     <div id="release-coverage">
-                        <div id="tabs">
-                            <ul>
-                                <li class="requirementTitle">
+                        <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                                <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active requirementTitle">
                                     <a href="#tabs-1">Scheduled Requirements</a></li>
                             </ul>
                             <!----->
 
-                            <div id="tabs-1" class="capabilities-table table">
+                            <div id="tabs-1" class="capabilities-table">
                             <#--- Requirements -->
                                 <div id="req_list_tests" class="table">
                                     <div class="test-results">
@@ -166,7 +160,7 @@
                                                 <th width="40" class="test-results-heading">&nbsp;</th>
                                                 <#if secondLevelRequirementTypeTitle??>
                                                     <th width="250" class="test-results-heading">${requirementType}</th>
-                                                    <th width="250" class="test-results-heading">${secondLevelRequirementTypeTitle}</th>
+                                                    <th width="250"class="test-results-heading">${secondLevelRequirementTypeTitle}</th>
                                                 <#else>
                                                     <th width="500" class="test-results-heading">${requirementType}</th>
                                                 </#if>
@@ -325,36 +319,34 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!----->
-                        <#if releaseTestOutcomes.tests?has_content >
-                        <#--- Test Results -->
+                            <!----->
+                            <#if releaseTestOutcomes.tests?has_content >
+                            <#--- Test Results -->
 
-                        <div id="test-tabs">
-                            <ul>
-                                <li class="requirementTitle">
-                                    <a href="#test-tabs-1">Tests (${releaseTestOutcomes.total})</a>
-                                </li>
-                            </ul>
-                            <div id="test-tabs-1" class="capabilities-table table">
-                                <div class="table">
+                            <div id="test-tabs">
+                                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                                    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active requirementTitle">
+                                        <a href="#test-tabs-1">Tests (${releaseTestOutcomes.total})</a>
+                                    </li>
+                                </ul>
+                                <div id="test_list_tests" class="table">
                                     <div class="test-results">
                                         <table id="release-test-results-table">
                                             <thead>
                                             <tr>
-                                                <th width="30px" class="test-results-heading">&nbsp;</th>
-                                                <th class="test-results-heading">Tests</th>
-                                                <th width="70px" class="test-results-heading">Steps</th>
+                                                <th width="30" class="test-results-heading">&nbsp;</th>
+                                                <th width="%" class="test-results-heading">Tests</th>
+                                                <th width="70" class="test-results-heading">Steps</th>
                                                 <#if reportOptions.showStepDetails>
-                                                    <th width="65px" class="test-results-heading">Fail</th>
-                                                    <th width="65px" class="test-results-heading">Errors</th>
-                                                    <th width="65px" class="test-results-heading">Pend</th>
-                                                    <th width="65px" class="test-results-heading">Ignore</th>
-                                                    <th width="65px" class="test-results-heading">Skip</th>
+                                                    <th width="65" class="test-results-heading">Fail</th>
+                                                    <th width="65" class="test-results-heading">Errors</th>
+                                                    <th width="65" class="test-results-heading">Pend</th>
+                                                    <th width="65" class="test-results-heading">Ignore</th>
+                                                    <th width="65" class="test-results-heading">Skip</th>
                                                 </#if>
-                                                <th width="65px" class="test-results-heading">Stable</th>
-                                                <th width="100px" class="test-results-heading">Duration<br>(seconds)</th>
+                                                <th width="65" class="test-results-heading">Stable</th>
+                                                <th width="100" class="test-results-heading">Duration<br>(seconds)</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -396,11 +388,11 @@
 
                                                     <td class="lightgreentext">${testOutcome.nestedStepCount}</td>
                                                     <#if reportOptions.showStepDetails>
-                                                        <td class="redtext">${testOutcome.failureCount}</td>
-                                                        <td class="redtext">${testOutcome.errorCount}</td>
-                                                        <td class="bluetext">${testOutcome.pendingCount}</td>
-                                                        <td class="bluetext">${testOutcome.skippedCount}</td>
-                                                        <td class="bluetext">${testOutcome.ignoredCount}</td>
+                                                        <td class="redtext">${testOutcome.total.withResult("FAILURE")}</td>
+                                                        <td class="redtext">${testOutcome.total.withResult("ERROR")}</td>
+                                                        <td class="bluetext">${testOutcome.total.withResult("PENDING")}</td>
+                                                        <td class="bluetext">${testOutcome.total.withResult("SKIPPED")}</td>
+                                                        <td class="bluetext">${testOutcome.total.withResult("IGNORED")}</td>
                                                     </#if>
                                                     <td class="bluetext">
                                                         <img src="images/${stability_icon}"
@@ -416,9 +408,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        </#if>
+                            </#if>
 
+                        </div>
                     </div>
                 </div>
             </div>

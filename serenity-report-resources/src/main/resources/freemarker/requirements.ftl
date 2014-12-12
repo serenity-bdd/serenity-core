@@ -17,34 +17,24 @@
     <!--[if IE 7]>
     <link rel="stylesheet" href="font-awesome/css/font-awesome-ie7.min.css">
     <![endif]-->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/core.css"/>
     <link rel="stylesheet" href="css/link.css"/>
     <link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet"/>
 
+    <link rel="stylesheet" type="text/css" href="jqplot/jquery.jqplot.min.css"/>
+
     <!--[if IE]>
-    <script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script>
-    <![endif]-->
+    <script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script><![endif]-->
 
-    <!-- JQuery -->
-    <script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script>
-
-    <!-- Bootstrap -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="scripts/jquery.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="datatables/media/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="jqplot/jquery.jqplot.min.js"></script>
+    <script type="text/javascript" src="jqplot/plugins/jqplot.pieRenderer.min.js"></script>
 
-    <!-- DataTables -->
-    <script type="text/javascript" src="datatables/1.10.4/media/js/jquery.dataTables.min.js"></script>
-    <link type="text/css" href="datatables/1.10.4/media/jqueryui/dataTables.jqueryui.css" rel="Stylesheet"/>
-    <script type="text/javascript" src="datatables/1.10.4/media/jqueryui/dataTables.jqueryui.min.js"></script>
-
-    <!-- jQplot -->
-    <link rel="stylesheet" type="text/css" href="jqplot/1.0.8/jquery.jqplot.min.css"/>
-    <script type="text/javascript" src="jqplot/1.0.8/jquery.jqplot.min.js"></script>
-    <script type="text/javascript" src="jqplot/1.0.8/plugins/jqplot.pieRenderer.min.js"></script>
-
-    <!-- JQuery-UI -->
-    <link type="text/css" href="jqueryui/1.11.2-start/jquery-ui.min.css" rel="Stylesheet" />
-    <script type="text/javascript" src="jqueryui/1.11.2-start/jquery-ui.min.js"></script>
+    <link type="text/css" href="jqueryui/css/start/jquery-ui-1.8.18.custom.css" rel="Stylesheet"/>
+    <script type="text/javascript" src="jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
 
 <#assign successfulManualTests = (requirements.count("manual").withResult("SUCCESS") > 0)>
 <#assign pendingManualTests = (requirements.count("manual").withResult("PENDING") > 0)>
@@ -104,23 +94,26 @@
             ]
         });
         // Results table
-        $('#req-results-table').DataTable({
-            "order": [
+        $('#req-results-table').dataTable({
+            "aaSorting": [
                 [ 2, "asc" ]
             ],
-            "pageLength": 25
+            "bJQueryUI": true,
+            "iDisplayLength": 25
         });
-        $('#test-results-table').DataTable({
-            "order": [
+        $('#test-results-table').dataTable({
+            "aaSorting": [
                 [ 2, "asc" ]
             ],
-            "pageLength": 25
+            "bJQueryUI": true,
+            "iDisplayLength": 25
         });
-        $('#examples-table').DataTable({
-            "order": [
+        $('#examples-table').dataTable({
+            "aaSorting": [
                 [ 2, "asc" ]
             ],
-            "pageLength": 25
+            "bJQueryUI": true,
+            "iDisplayLength": 25
         });
         $("#tabs").tabs();
         $("#test-tabs").tabs();
@@ -581,11 +574,11 @@ Estimated ignored or skipped requirements: ${ignored}"
 
                             <td class="lightgreentext">${testOutcome.nestedStepCount}</td>
                             <#if reportOptions.showStepDetails>
-                                <td class="redtext">${testOutcome.failureCount}</td>
-                                <td class="redtext">${testOutcome.errorCount}</td>
-                                <td class="bluetext">${testOutcome.pendingCount}</td>
-                                <td class="bluetext">${testOutcome.skippedCount}</td>
-                                <td class="bluetext">${testOutcome.ignoredCount}</td>
+                                <td class="redtext">${testOutcome.total.withResult("FAILURE")}</td>
+                                <td class="redtext">${testOutcome.total.withResult("ERROR")}</td>
+                                <td class="bluetext">${testOutcome.total.withResult("PENDING")}</td>
+                                <td class="bluetext">${testOutcome.total.withResult("SKIPPED")}</td>
+                                <td class="bluetext">${testOutcome.total.withResult("IGNORED")}</td>
                             </#if>
                             <td class="bluetext">
                                 <img src="images/${stability_icon}"

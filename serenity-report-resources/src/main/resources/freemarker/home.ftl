@@ -16,12 +16,12 @@
     <!--[if IE 7]>
     <link rel="stylesheet" href="font-awesome/css/font-awesome-ie7.min.css">
     <![endif]-->
-    <link rel="stylesheet" href="css/core.css"/>
-    <link rel="stylesheet" href="css/link.css"/>
     <link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet"/>
 
     <link rel="stylesheet" type="text/css" href="jqplot/jquery.jqplot.min.css"/>
 
+    <link rel="stylesheet" href="css/core.css"/>
+    <link rel="stylesheet" href="css/link.css"/>
 
     <!--[if IE]>
     <script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script><![endif]-->
@@ -490,8 +490,11 @@
                 <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
                 <#assign tagReport = reportName.forTag(tag) >
                 <#assign outcomesForTag = testOutcomes.withTag(tag) >
-                <#--outcomesForType.withTag(tag) >-->
-                <#--testOutcomes.withTag(tag) outcomesForType.withTag(tagName)-->
+                <#assign count = outcomesForTag.total>
+                <#assign testCountLabel = inflection.of(count).times("test").inPluralForm() >
+
+            <#--outcomesForType.withTag(tag) >-->
+            <#--testOutcomes.withTag(tag) outcomesForType.withTag(tagName)-->
                 <#if outcomesForTag.result == "FAILURE">
                     <#assign outcome_icon = "fail.png">
                     <#assign outcome_text = "failure-color">
@@ -518,7 +521,7 @@
                             </#if>
                         </span>
                     </td>
-                    <td width="150px" class="lightgreentext">
+                    <td width="220px" class="table-figure">
                         <#if weighted == "true">
                             <#assign percentPending = outcomesForTag.percentSteps.withResult("pending")/>
                             <#assign percentIgnored = outcomesForTag.percentSteps.withResult("ignored") + outcomesForTag.percentSteps.withResult("skipped")/>
@@ -570,6 +573,7 @@
 
                         <table>
                             <tr>
+                                <td width="20px"><span class="result-test-count" title="${outcomesForTag.total} ${testCountLabel}">${count}</span></td>
                                 <td width="50px">${passing}</td>
                                 <td width="150px">
                                     <a href="${tagReport}">

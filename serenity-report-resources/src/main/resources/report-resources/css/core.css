@@ -1008,6 +1008,11 @@ h4 {
     font-weight: bold;
 }
 
+.result-test-count {
+    color: #808080;
+    font-weight: 200;
+}
+
 .test-count {
     font-size: 14px;
 }

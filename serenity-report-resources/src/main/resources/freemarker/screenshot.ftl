@@ -6,9 +6,17 @@
     <title>${screenshot.description}</title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="css/core.css"/>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <!--[if IE 7]>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome-ie7.min.css">
+    <![endif]-->
 
-    <#include "libraries/common.ftl">
+    <!-- JQuery -->
+    <script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script>
 
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="bootstrap/js/bootstrap.min.js"></script>
 </head>
 
 <body>

@@ -5,11 +5,29 @@
     <title>${testOutcome.unqualified.title}</title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="css/core.css"/>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <!--[if IE 7]>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome-ie7.min.css">
+    <![endif]-->
 
-    <#include "libraries/common.ftl">
-    <#include "libraries/datatables.ftl">
-    <#include "libraries/imgpreview.ftl">
-    <#include "libraries/jquery-ui.ftl">
+    <!-- JQuery -->
+    <script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- DataTables -->
+    <script type="text/javascript" src="datatables/1.10.4/media/js/jquery.dataTables.min.js"></script>
+    <link type="text/css" href="datatables/1.10.4/media/jqueryui/dataTables.jqueryui.css" rel="Stylesheet"/>
+    <script type="text/javascript" src="datatables/1.10.4/media/jqueryui/dataTables.jqueryui.min.js"></script>
+
+    <!-- ImgPreview -->
+    <script src="scripts/imgpreview.full.jquery.js" type="text/javascript"></script>
+
+    <!-- JQuery-UI -->
+    <link type="text/css" href="jqueryui/1.11.2-start/jquery-ui.min.css" rel="Stylesheet" />
+    <script type="text/javascript" src="jqueryui/1.11.2-start/jquery-ui.min.js"></script>
 
 </head>
 

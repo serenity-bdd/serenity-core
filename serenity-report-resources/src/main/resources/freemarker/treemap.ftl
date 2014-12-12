@@ -12,10 +12,16 @@
     </style>
     <link href="css/core.css" rel="stylesheet" type="text/css"/>
 
-    <#include "libraries/common.ftl">
-    <#include "libraries/jit.ftl">
+	<!-- CSS Files -->
+	<link type="text/css" href="jit/css/base.css" rel="stylesheet" />
+	<link type="text/css" href="jit/css/Treemap.css" rel="stylesheet" />
 
-	<!-- Data File, does not seem to exist anymore -->
+	<!--[if IE]><script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script><![endif]-->
+
+	<!-- JIT Library File -->
+	<script language="javascript" type="text/javascript" src="jit/jit.js"></script>
+
+	<!-- Data File -->
 	<script language="javascript" type="text/javascript" src="coverage.js"></script>
 
 

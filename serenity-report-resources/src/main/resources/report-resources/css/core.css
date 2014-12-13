@@ -1375,7 +1375,6 @@ ul.second-level-requirements  {
     position:relative;
     width:1000px; /* Change this to your images width */
     height:800px; /* Change this to your images height */
-    background:url(images/loading.gif) no-repeat 50% 50%;
 }
 #slider img {
     position:absolute;

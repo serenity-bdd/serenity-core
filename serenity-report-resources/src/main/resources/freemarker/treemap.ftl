@@ -5,23 +5,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Home</title>
     <link rel="shortcut icon" href="favicon.ico" >
-    <style type="text/css">
-        <!--
-        @import url("css/core.css");
-        -->
-    </style>
-    <link href="css/core.css" rel="stylesheet" type="text/css"/>
 
-	<!-- CSS Files -->
-	<link type="text/css" href="jit/css/base.css" rel="stylesheet" />
-	<link type="text/css" href="jit/css/Treemap.css" rel="stylesheet" />
+    <#include "libraries/common.ftl">
+    <#include "libraries/jit.ftl">
 
-	<!--[if IE]><script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script><![endif]-->
-
-	<!-- JIT Library File -->
-	<script language="javascript" type="text/javascript" src="jit/jit.js"></script>
-
-	<!-- Data File -->
+	<!-- Data File, does not seem to exist anymore -->
 	<script language="javascript" type="text/javascript" src="coverage.js"></script>
 
 

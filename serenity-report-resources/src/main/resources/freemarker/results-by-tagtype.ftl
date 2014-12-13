@@ -3,35 +3,25 @@
 <head>
     <meta charset="UTF-8" />
     <title>Home</title>
+
     <link rel="shortcut icon" href="favicon.ico">
-    <link rel="stylesheet" href="css/core.css"/>
-    <link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet" />
-    <link rel="stylesheet" type="text/css" href="jqplot/jquery.jqplot.min.css"/>
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <!--[if IE]>
-    <script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script><![endif]-->
-
-    <script type="text/javascript" src="scripts/jquery.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
-    <script type="text/javascript" src="datatables/media/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="jqplot/jquery.jqplot.min.js"></script>
-    <script type="text/javascript" src="jqplot/plugins/jqplot.pieRenderer.min.js"></script>
-
-    <link type="text/css" href="jqueryui/css/start/jquery-ui-1.8.18.custom.css" rel="Stylesheet" />
-    <script type="text/javascript" src="jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
+    <#include "libraries/common.ftl">
+    <#include "libraries/jquery-ui.ftl">
+    <#include "libraries/datatables.ftl">
 
     <script class="code" type="text/javascript">$(document).ready(function () {
 
         // Results table
-        $('#tag-list-table').dataTable( {
-            "aaSorting": [[ 1, "asc" ]],
-            "bJQueryUI": true,
-            "iDisplayLength": 25
+        $('#tag-list-table').DataTable( {
+            "order": [
+                [ 1, "asc" ]
+            ],
+            "pageLength": 25
         } );
-    })
-    ;
+
+        $("test-list").tabs();
+    });
     </script>
 </head>
 
@@ -87,8 +77,12 @@
                 <table>
                  <tr>
                    <td>
-                    <div><h3 id="test_list_title">${tagTypeTitlePlural}</h3></div>
-                    <div id="test_list_tests" class="table">
+                    <div id="test-list">
+                        <ul>
+                            <li><a href="test-list-1">${tagTypeTitlePlural}</a></li>
+                        </ul>
+                    </div>
+                    <div id="test-list-1" class="table">
                         <div class="test-results">
                             <table id="tag-list-table">
                                 <thead>
@@ -108,7 +102,19 @@
                                 </thead>
                                 <tbody>
                                 <#foreach tag in testOutcomes.getMostSpecificTagsOfType(tagType)>
-                                    <tr><td><h3>${tag.shortName}</h3></td></tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><h3>${tag.shortName}</h3></td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <#if reportOptions.showStepDetails>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                        </#if>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
                                     <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
                                     <#assign outcomesForTag = testOutcomes.withTag(tag) >
                                     <#assign tagReport = reportName.forTag(tag) >
@@ -153,8 +159,8 @@
 
                                         <#if reportOptions.showStepDetails>
                                         <td class="redtext">${outcomesForTag.totalTests.withResult("failure")}</td>
-                                        <td class="bluetext">${outcomesForTag..totalTests.withResult("pending")}</td>
-                                        <td class="bluetext">${outcomesForTag..totalTests.withResult("skipped")}</td>
+                                        <td class="bluetext">${outcomesForTag.totalTests.withResult("pending")}</td>
+                                        <td class="bluetext">${outcomesForTag.totalTests.withResult("skipped")}</td>
                                         </#if>
                                         <td class="bluetext">
                                             <img src="images/${stability_icon}"  class="summary-icon"/>

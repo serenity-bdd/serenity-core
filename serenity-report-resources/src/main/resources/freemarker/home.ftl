@@ -574,7 +574,7 @@
                         <table>
                             <tr>
                                 <td width="20px"><span class="result-test-count" title="${outcomesForTag.total} ${testCountLabel}">${count}</span></td>
-                                <td width="50px">${passing}</td>
+                                <td width="50px"><span title="${passingCaption}">${passing}</span></td>
                                 <td width="150px">
                                     <a href="${tagReport}">
                                         <div class="percentagebar"

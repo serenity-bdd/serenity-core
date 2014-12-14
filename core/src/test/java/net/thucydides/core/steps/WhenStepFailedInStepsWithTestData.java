@@ -100,6 +100,7 @@ public class WhenStepFailedInStepsWithTestData {
 
         setDefaultStepFactory(factory);
 
+        StepEventBus.getEventBus().testStarted("data-driven-test");
         withTestDataFrom("testdata/test.csv").run(steps).step_group_with_fail_step_in_one_iteration();
 
         verify(listener, times(1)).stepFailed(any(StepFailure.class));
@@ -113,6 +114,7 @@ public class WhenStepFailedInStepsWithTestData {
 
         setDefaultStepFactory(factory);
 
+        StepEventBus.getEventBus().testStarted("data-driven-test");
         withTestDataFrom("testdata/test.csv").run(steps).step_group_with_fail_step();
 
         verify(listener, times(3)).stepFailed(any(StepFailure.class));

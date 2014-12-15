@@ -491,7 +491,7 @@
                 </#if>
                 <tr>
                     <td class="bluetext" class="tag-title">
-                        <span class="${outcomesForTag.result}-text">
+                        <span class="${outcomesForTag.result}-text ellipsis">
                             <#if testOutcomes.label == tag.name>
                                 <a href="${tagReport}" class="currentTag">${tagTitle}</a>
                             <#else>
@@ -551,7 +551,6 @@
 
                         <table>
                             <tr>
-                                <td width="20px"><span class="result-test-count" title="${outcomesForTag.total} ${testCountLabel}">${count}</span></td>
                                 <td width="50px"><span title="${passingCaption}">${passing}</span></td>
                                 <td width="150px">
                                     <a href="${tagReport}">
@@ -577,6 +576,7 @@
                                         </div>
                                     </a>
                                 </td>
+                                <td width="20px"><span class="result-test-count" title="${outcomesForTag.total} ${testCountLabel}">${count}</span></td>
                             </tr>
                         </table>
                     </td>

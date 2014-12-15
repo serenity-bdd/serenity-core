@@ -17,7 +17,6 @@ import static net.thucydides.core.requirements.RequirementsPath.fileSystemPathEl
  * project. The directory structure itself is used to organize capabilities into features, and so on. At the leaf
  * level, the directory will contain story files (e.g. JBehave stories, JUnit test cases, etc). At each level, a
  * "narrative.txt" file provides a description.
- *
  */
 public class NarrativeReader {
     private static final String NEW_LINE = System.getProperty("line.separator");
@@ -78,10 +77,10 @@ public class NarrativeReader {
             String text = readNarrativeFrom(lines);
             reader.close();
             return Optional.of(new Narrative(Optional.fromNullable(title),
-                                             Optional.fromNullable(cardNumber),
-                                             versionNumbers,
-                                             type, text));
-        } catch(IOException ex) {
+                    Optional.fromNullable(cardNumber),
+                    versionNumbers,
+                    type, text));
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
         return Optional.absent();
@@ -89,16 +88,16 @@ public class NarrativeReader {
 
     private String findCardNumberIn(List<String> lines) {
         String cardNumber = null;
-        for(String line: lines) {
+        for (String line : lines) {
             String normalizedLine = line.toUpperCase();
             if (normalizedLine.startsWith("@ISSUES")) {
-                String issueList = normalizedLine.replace("@ISSUES","").trim();
+                String issueList = normalizedLine.replace("@ISSUES", "").trim();
                 List<String> issues = Lists.newArrayList(Splitter.on(",").trimResults().split(issueList));
                 if (!issues.isEmpty()) {
                     cardNumber = issues.get(0);
                 }
             } else if (normalizedLine.startsWith("@ISSUE")) {
-                String issueNumber = normalizedLine.replace("@ISSUE","").trim();
+                String issueNumber = normalizedLine.replace("@ISSUE", "").trim();
                 if (!StringUtils.isEmpty(issueNumber)) {
                     cardNumber = issueNumber;
                 }
@@ -108,7 +107,7 @@ public class NarrativeReader {
     }
 
     private List<String> findVersionNumberIn(List<String> lines) {
-        for(String line: lines) {
+        for (String line : lines) {
             String normalizedLine = line.toUpperCase();
             if (normalizedLine.startsWith("@VERSIONS")) {
                 String versionList = line.substring("@VERSIONS".length()).trim();
@@ -121,13 +120,13 @@ public class NarrativeReader {
     private String readNarrativeFrom(List<String> lines) {
 
         StringBuilder description = new StringBuilder();
-        for(String line : lines) {
-            if (!isMarkup(line) && !isAnnotation(line)) {
-                description.append(line);
+        for (String line : lines) {
+            if (!isMarkup(line) && !isAnnotation(line) && !(isComment(line))) {
+                description.append(line.trim());
                 description.append(NEW_LINE);
             }
         }
-        return description.toString();
+        return description.toString().trim();
 
     }
 
@@ -148,6 +147,10 @@ public class NarrativeReader {
 
     private String stripFeatureFrom(String firstLine) {
         return (firstLine.toLowerCase().startsWith("feature:")) ? firstLine.substring(8).trim() : firstLine;
+    }
+
+    private boolean isComment(String line) {
+        return line.startsWith("#");
     }
 
     private boolean isMarkup(String line) {
@@ -179,7 +182,8 @@ public class NarrativeReader {
     }
 
     private boolean preambleFinishedAt(String nextLine) {
-        return normalizedLine(nextLine).startsWith("scenario:");
+        return (normalizedLine(nextLine).startsWith("scenario")
+                        || normalizedLine(nextLine).startsWith("background:"));
     }
 
     private String normalizedLine(String nextLine) {
@@ -189,8 +193,11 @@ public class NarrativeReader {
     private boolean thereIsUsefulInformationIn(String nextLine) {
         String normalizedText = normalizedLine(nextLine);
         return !normalizedText.isEmpty()
+                && !normalizedText.startsWith("#")
                 && !normalizedText.startsWith("meta:")
-                && !(normalizedText.startsWith("@") && (!normalizedText.startsWith("@issue") && (!normalizedText.startsWith("@versions"))));
+                && !(normalizedText.startsWith("@")
+                && (!normalizedText.startsWith("@issue")
+                && (!normalizedText.startsWith("@versions"))));
     }
 
     private String directoryLevelInRequirementsHierarchy(File narrativeFile, int requirementsLevel) {

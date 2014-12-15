@@ -15,12 +15,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-/**
- * A description goes here.
- * User: johnsmart
- * Date: 6/02/12
- * Time: 10:50 AM
- */
 public class WhenUsingADisabledWebDriverFacade {
 
     class DisabledWebDriverFacade extends WebDriverFacade {
@@ -63,11 +57,6 @@ public class WhenUsingADisabledWebDriverFacade {
     @Test
     public void find_elements_should_return_an_empty_list() {
         assertThat(webDriverFacade.findElements(By.id("someId")).size(), is(0));
-    }
-
-    @Test(expected = ElementNotVisibleException.class)
-    public void find_element_should_throw_element_not_visible() {
-        webDriverFacade.findElement(By.id("someId"));
     }
 
     @Test

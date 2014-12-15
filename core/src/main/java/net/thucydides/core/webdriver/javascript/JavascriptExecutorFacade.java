@@ -28,7 +28,9 @@ public class JavascriptExecutorFacade {
     public JavascriptExecutorFacade(final WebDriver driver) {
         this.driver = driver;
     }
-    
+
+    public JavascriptExecutorFacade() {}
+
     public JavascriptExecutorFacade withObjectMapper(ObjectMapper mapper){
     	this.mapper = mapper;
     	return this;

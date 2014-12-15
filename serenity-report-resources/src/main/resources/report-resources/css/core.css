@@ -994,7 +994,12 @@ h4 {
     margin-bottom: 10px;
 }
 
-
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}
 
 .test-count-summary {
     font-family:euphemia, verdana, sans-serif;

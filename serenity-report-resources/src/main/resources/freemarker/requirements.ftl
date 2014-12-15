@@ -615,7 +615,7 @@ Estimated ignored or skipped requirements: ${ignored}"
 </div>
 </div>
 <div id="bottomfooter">
-    <span class="version">Serenity BDD version ${thucydidesVersionNumber} - Build ${buildNumber}</span>
+    <span class="version">Serenity BDD version ${serenityVersionNumber}</span>
 </div>
 </body>
 </html>

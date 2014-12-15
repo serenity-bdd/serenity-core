@@ -303,7 +303,7 @@
                                 <#assign errorMessageTitle = "">
                             </#if>
                             <td width="%" colspan="4" class="error-message-cell">
-                                <span class="error-message" title='${formatter.htmlAttributeCompatible(errorMessageTitle)}'><pre>${formatter.htmlAttributeCompatible(step.shortErrorMessage)!''}</pre></span>
+                                <span class="error-message ellipsis" title='${formatter.htmlAttributeCompatible(errorMessageTitle)}'><pre>${formatter.htmlAttributeCompatible(errorMessageTitle)!''}</pre></span>
                             </td>
                         </tr>
                     </#if>
@@ -346,7 +346,7 @@
     </div>
 <div id="beforefooter"></div>
 <div id="bottomfooter">
-    <span class="version">Serenity BDD version ${thucydidesVersionNumber} - Build ${buildNumber}</span>
+    <span class="version">Serenity BDD version ${serenityVersionNumber}</span>
 </div>
 
 

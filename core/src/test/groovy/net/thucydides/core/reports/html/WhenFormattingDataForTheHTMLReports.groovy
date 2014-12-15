@@ -29,8 +29,8 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         formatter.htmlAttributeCompatible(message) == formattedMessage
         where:
         message             | formattedMessage
-        "<expected \"a\">"  | "<expected 'a'>"
-        "<a>\n<b>"          | "<a><b>"
+        "<expected \"a\">"  | "(expected 'a')"
+        "<expected \"a\"\nGot\"b\">"          | "(expected 'a' Got 'b')"
 
     }
     @Unroll

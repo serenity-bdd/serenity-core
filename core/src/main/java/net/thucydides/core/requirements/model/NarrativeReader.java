@@ -157,6 +157,7 @@ public class NarrativeReader {
         String normalizedLine = normalizedLine(line);
         return normalizedLine.startsWith("narrative:")
                 || normalizedLine.startsWith("givenstory:")
+                || normalizedLine.startsWith("background:")
                 || normalizedLine.startsWith("meta")
                 || normalizedLine.startsWith("@")
                 || normalizedLine.startsWith("givenstories:");
@@ -195,6 +196,7 @@ public class NarrativeReader {
         return !normalizedText.isEmpty()
                 && !normalizedText.startsWith("#")
                 && !normalizedText.startsWith("meta:")
+                && !normalizedText.startsWith("background:")
                 && !(normalizedText.startsWith("@")
                 && (!normalizedText.startsWith("@issue")
                 && (!normalizedText.startsWith("@versions"))));

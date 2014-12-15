@@ -410,8 +410,10 @@
                                      class="summary-icon"/>
                                 <#if (testOutcome.manual)><img src="images/worker.png" title="Manual test"/></#if>
                                 <span style="display:none">${testOutcome.result}</span></td>
-                            <td class="${testOutcome.result}-text"><a
-                                    href="${relativeLink}${testOutcome.reportName}.html" title="${formatter.htmlAttributeCompatible(testOutcome.errorMessage)}">${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}</a>
+                            <td class="${testOutcome.result}-text">
+                                <a href="${relativeLink}${testOutcome.reportName}.html" class="ellipsis" title="${formatter.htmlAttributeCompatible(testOutcome.errorMessage)}">
+                                    ${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}
+                                </a>
                             </td>
 
                             <td class="lightgreentext">${testOutcome.nestedStepCount}</td>
@@ -448,10 +450,17 @@
 </div>
 <div id="beforefooter"></div>
 <div id="bottomfooter">
-    <span class="version">Serenity version ${thucydidesVersionNumber} - Build ${buildNumber}</span>
+    <span class="version">Serenity version ${serenityVersionNumber}</span>
 </div>
 <#macro list_tags(weighted)>
-<h4>${tagsTitle}</h4>
+    <table class="tags-summary-table">
+        <tr>
+            <td width="300px"><h3>${tagsTitle}</h3></td>
+            <td width="90px" class="tag-count-header">% Passed</td>
+            <td width="130px" class="test-count">&nbsp;</td>
+            <td class="tag-count-header">Test count</td>
+        </tr>
+    </table>
     <#foreach tagType in tagTypes>
         <#assign tagTypeTitle = inflection.of(tagType).inPluralForm().asATitle() >
         <#assign outcomesForType = testOutcomes.withTagType(tagType) >
@@ -493,9 +502,9 @@
                     <td class="bluetext" class="tag-title">
                         <span class="${outcomesForTag.result}-text ellipsis">
                             <#if testOutcomes.label == tag.name>
-                                <a href="${tagReport}" class="currentTag">${tagTitle}</a>
+                                <a href="${tagReport}" title="${tagTitle}" class="currentTag">${tagTitle}</a>
                             <#else>
-                                <a href="${tagReport}">${tagTitle}</a>
+                                <a href="${tagReport}" title="${tagTitle}">${tagTitle}</a>
                             </#if>
                         </span>
                     </td>
@@ -551,7 +560,7 @@
 
                         <table>
                             <tr>
-                                <td width="50px"><span title="${passingCaption}">${passing}</span></td>
+                                <td class="related-tag-percentage"><span title="${passingCaption}">${passing}</span></td>
                                 <td width="150px">
                                     <a href="${tagReport}">
                                         <div class="percentagebar"
@@ -576,7 +585,7 @@
                                         </div>
                                     </a>
                                 </td>
-                                <td width="20px"><span class="result-test-count" title="${outcomesForTag.total} ${testCountLabel}">${count}</span></td>
+                                <td class="related-tag-count"><span class="result-test-count" title="${outcomesForTag.total} ${testCountLabel}">${count}</span></td>
                             </tr>
                         </table>
                     </td>

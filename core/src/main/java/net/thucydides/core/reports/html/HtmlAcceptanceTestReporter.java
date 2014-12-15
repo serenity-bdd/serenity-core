@@ -162,7 +162,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         context.put("reportOptions", new ReportOptions(getEnvironmentVariables()));
 
         VersionProvider versionProvider = new VersionProvider(getEnvironmentVariables());
-        context.put("thucydidesVersionNumber", versionProvider.getVersion());
+        context.put("serenityVersionNumber", versionProvider.getVersion());
         context.put("buildNumber", versionProvider.getBuildNumberText());
     }
 

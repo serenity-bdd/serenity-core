@@ -280,10 +280,15 @@ public class Formatter {
     }
 
     public String htmlAttributeCompatible(Object fieldValue) {
-        return ESCAPE_SPECIAL_CHARS.translate(stringFormOf(fieldValue)
-                .replaceAll("\"", "'")
-                .replaceAll("\r", "")
-                .replaceAll("\n",""));
+        return concatLines(ESCAPE_SPECIAL_CHARS.translate(stringFormOf(fieldValue)
+                .replaceAll("<", "(")
+                .replaceAll(">", ")")
+                .replaceAll("\"", "'")));
+    }
+
+    private String concatLines(String message) {
+        String[] lines = message.replaceAll("\\r", "").split("\\n");
+        return StringUtils.join(lines," ");
     }
 
     private String stringFormOf(Object fieldValue) {

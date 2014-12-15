@@ -290,10 +290,26 @@ public class WhenFindingTagsForATestOutcome {
     }
 
     @Test
-    public void should_get_requirement_from_story_with_narrative_if_present() {
+         public void should_get_requirement_from_story_with_narrative_if_present() {
         FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider();
         Story userStory = Story.called("plant potatoes");
         when(testOutcome.getPath()).thenReturn("stories\\grow_potatoes\\grow_new_potatoes\\PlantPotatoes.story");
+        when(testOutcome.getUserStory()).thenReturn(userStory);
+
+        Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
+
+        assertThat(requirement.isPresent(), is(true));
+        assertThat(requirement.get().getName(), is("Plant potatoes"));
+        assertThat(requirement.get().getNarrative().getText(), containsString("As a farmer"));
+        assertThat(requirement.get().getNarrative().getText(), containsString("I want to plant potatoes"));
+        assertThat(requirement.get().getNarrative().getText(), containsString("So that I can harvest them later on"));
+    }
+
+    @Test
+    public void should_get_requirement_from_feature_with_narrative_if_present() {
+        FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider();
+        Story userStory = Story.called("plant potatoes");
+        when(testOutcome.getPath()).thenReturn("stories\\grow_potatoes\\grow_new_potatoes\\PlantPotatoes.feature");
         when(testOutcome.getUserStory()).thenReturn(userStory);
 
         Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);

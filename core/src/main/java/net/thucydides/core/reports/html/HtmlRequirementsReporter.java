@@ -65,7 +65,7 @@ public class HtmlRequirementsReporter extends HtmlReporter {
         context.put("relativeLink", relativeLink);
 
         VersionProvider versionProvider = new VersionProvider(getEnvironmentVariables());
-        context.put("thucydidesVersionNumber", versionProvider.getVersion());
+        context.put("serenityVersionNumber", versionProvider.getVersion());
         context.put("buildNumber", versionProvider.getBuildNumberText());
 
         addFormattersToContext(context);

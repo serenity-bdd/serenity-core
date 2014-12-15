@@ -468,7 +468,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
 
         VersionProvider versionProvider = new VersionProvider(environmentVariables);
-        context.put("thucydidesVersionNumber", versionProvider.getVersion());
+        context.put("serenityVersionNumber", versionProvider.getVersion());
         context.put("buildNumber", versionProvider.getBuildNumberText());
 
         return context;

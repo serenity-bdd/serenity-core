@@ -30,7 +30,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         where:
         message             | formattedMessage
         "<expected \"a\">"  | "(expected 'a')"
-        "<expected \"a\"\nGot\"b\">"          | "(expected 'a' Got 'b')"
+        "<expected \"a\"\nGot \"b\">"          | "(expected 'a' Got 'b')"
 
     }
     @Unroll

@@ -1,7 +1,7 @@
 package net.thucydides.core.annotations.locators;
 
 import com.google.common.collect.Lists;
-import net.serenity_bdd.core.annotations.locators.SmartAnnotations;
+import net.serenitybdd.core.annotations.locators.SmartAnnotations;
 import net.thucydides.core.steps.StepEventBus;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -70,7 +70,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator {
 		WebElement element = driver.findElement(by);
 		if (element == null) {
 			throw new NoSuchElementException("No such element found for criteria " + by.toString());
-		} 
+		}
 		return element;
 	}
 
@@ -193,7 +193,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator {
 					/*return even if empty and don't wait for them to become available.
 					*not sure that it is the correct approach for Ajax Element Locator that should wait for elements
 					*however correcting it due to https://java.net/jira/browse/THUCYDIDES-187 */
-					return; 
+					return;
 				}
 				for (WebElement element : elements) {
 					if (!isElementUsable(element)) {

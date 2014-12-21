@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.html;
 
 import com.beust.jcommander.internal.Lists;
-import net.serenity_bdd.core.SerenitySystemProperties;
+import net.serenitybdd.core.SerenitySystemProperties;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;

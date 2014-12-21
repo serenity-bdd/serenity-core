@@ -1,6 +1,6 @@
 package net.thucydides.core.annotations.findby;
 
-import net.serenity_bdd.core.annotations.findby.How;
+import net.serenitybdd.core.annotations.findby.How;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 
 /** @deprecated
- * Replaced by net.serenity_bdd.core.annotations.findby.FindBy
+ * Replaced by FindBy
  */
 @Deprecated
 @Retention(RetentionPolicy.RUNTIME)

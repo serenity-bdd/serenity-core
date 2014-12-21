@@ -1,6 +1,6 @@
 package net.thucydides.core.model;
 
-import net.serenity_bdd.core.PendingStepException;
+import net.serenitybdd.core.PendingStepException;
 import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepFailureException;
 import net.thucydides.core.webdriver.WebdriverAssertionError;

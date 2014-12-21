@@ -1,6 +1,6 @@
 package net.thucydides.samples;
 
-import net.serenity_bdd.core.Serenity;
+import net.serenitybdd.core.Serenity;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;

@@ -2,7 +2,7 @@ package net.thucydides.junit.runners;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import net.serenity_bdd.junit.runners.SerenityRunner;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFactory;

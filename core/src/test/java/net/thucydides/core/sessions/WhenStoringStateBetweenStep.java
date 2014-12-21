@@ -1,6 +1,6 @@
 package net.thucydides.core.sessions;
 
-import net.serenity_bdd.core.Serenity;
+import net.serenitybdd.core.Serenity;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;

@@ -1,6 +1,6 @@
 package net.thucydides.junit.runners;
 
-import net.serenity_bdd.junit.runners.SerenityParameterizedRunner;
+import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFactory;

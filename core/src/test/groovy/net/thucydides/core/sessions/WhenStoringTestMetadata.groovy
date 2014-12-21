@@ -1,6 +1,6 @@
 package net.thucydides.core.sessions
 
-import net.serenity_bdd.core.Serenity
+import net.serenitybdd.core.Serenity
 import spock.lang.Specification
 
 class WhenStoringTestMetadata extends Specification {

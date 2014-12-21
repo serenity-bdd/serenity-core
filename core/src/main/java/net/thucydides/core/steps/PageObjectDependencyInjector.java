@@ -1,7 +1,6 @@
 package net.thucydides.core.steps;
 
 import com.google.common.collect.Lists;
-import net.serenity_bdd.core.Serenity;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.pages.PageObject;
 import net.thucydides.core.pages.Pages;

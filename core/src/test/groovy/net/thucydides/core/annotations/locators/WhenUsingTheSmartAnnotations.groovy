@@ -1,7 +1,7 @@
 package net.thucydides.core.annotations.locators
 
-import net.serenity_bdd.core.annotations.findby.How
-import net.serenity_bdd.core.annotations.locators.SmartAnnotations
+import net.serenitybdd.core.annotations.findby.How
+import net.serenitybdd.core.annotations.locators.SmartAnnotations
 import net.thucydides.core.annotations.findby.FindBy
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
@@ -106,8 +106,8 @@ class WhenUsingTheSmartAnnotations extends Specification {
         AnnotatedPageSample.class.getField("byPartialLinkText") | By.ByPartialLinkText
         AnnotatedPageSample.class.getField("byXpath")           | By.ByXPath
         AnnotatedPageSample.class.getField("byTagname")         | By.ByTagName
-        AnnotatedPageSample.class.getField("byJQuery")          | net.serenity_bdd.core.annotations.findby.By.ByjQuerySelector
-        AnnotatedPageSample.class.getField("bySCLocator")       | net.serenity_bdd.core.annotations.findby.By.ByScLocator
+        AnnotatedPageSample.class.getField("byJQuery")          | net.serenitybdd.core.annotations.findby.By.ByjQuerySelector
+        AnnotatedPageSample.class.getField("bySCLocator")       | net.serenitybdd.core.annotations.findby.By.ByScLocator
         AnnotatedPageSample.class.getField("byNgModelName")     | By.ByCssSelector
     }
 
@@ -131,8 +131,8 @@ class WhenUsingTheSmartAnnotations extends Specification {
         AnnotatedPageSample.class.getField("byPartialLinkTextLong")   | By.ByPartialLinkText
         AnnotatedPageSample.class.getField("byXpathLong")       | By.ByXPath
         AnnotatedPageSample.class.getField("byTagnameLong")     | By.ByTagName
-        AnnotatedPageSample.class.getField("byJQueryLong")      | net.serenity_bdd.core.annotations.findby.By.ByjQuerySelector
-        AnnotatedPageSample.class.getField("bySCLocatorLong")   | net.serenity_bdd.core.annotations.findby.By.ByScLocator
+        AnnotatedPageSample.class.getField("byJQueryLong")      | net.serenitybdd.core.annotations.findby.By.ByjQuerySelector
+        AnnotatedPageSample.class.getField("bySCLocatorLong")   | net.serenitybdd.core.annotations.findby.By.ByScLocator
     }
 
 

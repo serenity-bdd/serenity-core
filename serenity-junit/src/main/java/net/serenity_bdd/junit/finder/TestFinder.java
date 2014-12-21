@@ -1,4 +1,4 @@
-package net.thucydides.junit.finder;
+package net.serenity_bdd.junit.finder;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -38,7 +38,7 @@ public abstract class TestFinder {
     public static TestFinderBuilderFactory thatFinds() {
         return new TestFinderBuilderFactory();
     }
-    
+
     public abstract List<Class<?>> getClasses();
 
     public abstract int countTestMethods();

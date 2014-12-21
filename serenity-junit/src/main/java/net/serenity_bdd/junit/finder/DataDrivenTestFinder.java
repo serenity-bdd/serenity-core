@@ -1,4 +1,4 @@
-package net.thucydides.junit.finder;
+package net.serenity_bdd.junit.finder;
 
 import com.google.common.collect.Lists;
 import net.serenity_bdd.junit.runners.DataDrivenAnnotations;

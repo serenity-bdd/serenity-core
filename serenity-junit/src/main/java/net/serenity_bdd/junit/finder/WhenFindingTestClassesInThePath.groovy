@@ -1,5 +1,6 @@
-package net.thucydides.junit.finder
+package net.serenity_bdd.junit.finder
 
+import net.serenity_bdd.junit.finder.TestFinder
 import net.thucydides.junit.sampletests.thucydidestests.SampleDataDrivenTestCase
 import net.thucydides.junit.sampletests.thucydidestests.SampleNonSerenityTestCase
 import net.thucydides.junit.sampletests.thucydidestests.SampleTestCase

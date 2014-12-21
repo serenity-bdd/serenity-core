@@ -1,4 +1,4 @@
-package net.thucydides.junit.finder;
+package net.serenity_bdd.junit.finder;
 
 public class TestFinderBuilder {
 

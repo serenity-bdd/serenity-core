@@ -1,4 +1,4 @@
-package net.thucydides.junit.finder;
+package net.serenity_bdd.junit.finder;
 
 import com.google.common.collect.Lists;
 
@@ -7,14 +7,14 @@ import java.util.List;
 /**
  * Returns all of the Thucydides classes under the specified package.
  */
-public class DefaultTestFinder extends TestFinder {
-    public DefaultTestFinder(final String rootPackage) {
+public class NormalTestFinder extends TestFinder {
+    public NormalTestFinder(final String rootPackage) {
         super(rootPackage);
     }
 
     @Override
     public List<Class<?>> getClasses() {
-        return sorted(Lists.newArrayList(getAllTestClasses()));
+        return sorted(Lists.newArrayList(getNormalTestClasses()));
     }
 
     @Override

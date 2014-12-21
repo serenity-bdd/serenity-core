@@ -1,6 +1,5 @@
 package junittestcases.samples.mock;
 
-import junit.framework.Test;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.RunNotifier;

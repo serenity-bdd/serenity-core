@@ -1,4 +1,4 @@
-package net.thucydides.junit.runners;
+package net.serenity_bdd.junit.runners;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -6,12 +6,13 @@ import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.core.webdriver.WebdriverManager;
+import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.runners.model.InitializationError;
 
 /**
  * An alternative name for the ThucydidesRunner
  */
-public class SerenityRunner extends ThucydidesRunner{
+public class SerenityRunner extends ThucydidesRunner {
     public SerenityRunner(Class<?> klass) throws InitializationError {
         super(klass);
     }

@@ -1,4 +1,4 @@
-package net.thucydides.junit.runners;
+package net.serenity_bdd.junit.runners;
 
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.model.DataTable;

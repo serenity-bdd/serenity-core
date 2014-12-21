@@ -1,4 +1,4 @@
-package net.thucydides.junit.runners;
+package net.serenity_bdd.junit.runners;
 
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -6,6 +6,8 @@ import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.junit.annotations.Qualifier;
 import net.thucydides.junit.annotations.TestData;
 import net.thucydides.junit.annotations.UseTestDataFrom;
+import net.thucydides.junit.runners.PersonTestScenario;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.TestClass;
@@ -151,8 +153,8 @@ public class WhenFindingTestDataInADataDrivenTest {
                 = DataDrivenAnnotations.forClass(testClass).getDataAsInstancesOf(PersonTestScenario.class);
 
         assertThat(testScenarios.size(), is(12));
-        assertThat(testScenarios.get(0).getName(), is("Joe Smith"));
-        assertThat(testScenarios.get(1).getName(), is("Jack Black"));
+        MatcherAssert.assertThat(testScenarios.get(0).getName(), is("Joe Smith"));
+        MatcherAssert.assertThat(testScenarios.get(1).getName(), is("Jack Black"));
     }
 
     static class DataDrivenTestScenarioWithPrivateTestData {
@@ -312,10 +314,10 @@ public class WhenFindingTestDataInADataDrivenTest {
                 = DataDrivenAnnotations.forClass(testClass).getDataAsInstancesOf(PersonTestScenario.class);
 
         assertThat(testScenarios.size(), is(2));
-        assertThat(testScenarios.get(0).getName(), is("Joe Smith"));
-        assertThat(testScenarios.get(0).getAddress(), is("10 Main Street, Smithville"));
-        assertThat(testScenarios.get(1).getName(), is("Jack Black"));
-        assertThat(testScenarios.get(1).getAddress(), is("1 Main Street, Smithville"));
+        MatcherAssert.assertThat(testScenarios.get(0).getName(), is("Joe Smith"));
+        MatcherAssert.assertThat(testScenarios.get(0).getAddress(), is("10 Main Street, Smithville"));
+        MatcherAssert.assertThat(testScenarios.get(1).getName(), is("Jack Black"));
+        MatcherAssert.assertThat(testScenarios.get(1).getAddress(), is("1 Main Street, Smithville"));
     }
 
     @Test
@@ -349,10 +351,10 @@ public class WhenFindingTestDataInADataDrivenTest {
                                        .getDataAsInstancesOf(PersonTestScenario.class);
 
         assertThat(testScenarios.size(), is(2));
-        assertThat(testScenarios.get(0).getName(), is("Joe Smith"));
-        assertThat(testScenarios.get(0).getAddress(), is("10 Main Street, Smithville"));
-        assertThat(testScenarios.get(1).getName(), is("Jack Black"));
-        assertThat(testScenarios.get(1).getAddress(), is("1 Main Street, Smithville"));
+        MatcherAssert.assertThat(testScenarios.get(0).getName(), is("Joe Smith"));
+        MatcherAssert.assertThat(testScenarios.get(0).getAddress(), is("10 Main Street, Smithville"));
+        MatcherAssert.assertThat(testScenarios.get(1).getName(), is("Jack Black"));
+        MatcherAssert.assertThat(testScenarios.get(1).getAddress(), is("1 Main Street, Smithville"));
     }
 
     @UseTestDataFrom(value="does-not-exist/simple-semicolon-data.csv,test-data/simple-semicolon-data.csv", separator=';')
@@ -368,10 +370,10 @@ public class WhenFindingTestDataInADataDrivenTest {
                 .getDataAsInstancesOf(PersonTestScenario.class);
 
         assertThat(testScenarios.size(), is(2));
-        assertThat(testScenarios.get(0).getName(), is("Joe Smith"));
-        assertThat(testScenarios.get(0).getAddress(), is("10 Main Street, Smithville"));
-        assertThat(testScenarios.get(1).getName(), is("Jack Black"));
-        assertThat(testScenarios.get(1).getAddress(), is("1 Main Street, Smithville"));
+        MatcherAssert.assertThat(testScenarios.get(0).getName(), is("Joe Smith"));
+        MatcherAssert.assertThat(testScenarios.get(0).getAddress(), is("10 Main Street, Smithville"));
+        MatcherAssert.assertThat(testScenarios.get(1).getName(), is("Jack Black"));
+        MatcherAssert.assertThat(testScenarios.get(1).getAddress(), is("1 Main Street, Smithville"));
     }
 
     @UseTestDataFrom(value="does-not-exist/simple-semicolon-data.csv,still-does-not-exist/simple-semicolon-data.csv", separator=';')

@@ -1,4 +1,4 @@
-package net.thucydides.junit.runners;
+package net.serenity_bdd.junit.runners;
 
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Splitter;

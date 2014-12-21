@@ -1,4 +1,4 @@
-package net.thucydides.junit.runners;
+package net.serenity_bdd.junit.runners;
 
 import org.junit.runner.Description;
 import org.junit.runner.Result;
@@ -8,7 +8,7 @@ import org.junit.runner.notification.RunNotifier;
 import org.junit.runner.notification.StoppedByUserException;
 
 public abstract class RunNotifierDecorator extends RunNotifier {
-    
+
     protected abstract RunNotifier underlyingNotifier();
 
     @Override

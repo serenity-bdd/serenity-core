@@ -1,7 +1,7 @@
 package net.thucydides.junit.finder;
 
 import com.google.common.collect.Lists;
-import net.thucydides.junit.runners.DataDrivenAnnotations;
+import net.serenity_bdd.junit.runners.DataDrivenAnnotations;
 import org.junit.runners.model.TestClass;
 
 import java.io.IOException;

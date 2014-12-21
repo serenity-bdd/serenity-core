@@ -1,4 +1,4 @@
-package net.thucydides.junit.runners;
+package net.serenity_bdd.junit.runners;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.runners.model.RunnerScheduler;

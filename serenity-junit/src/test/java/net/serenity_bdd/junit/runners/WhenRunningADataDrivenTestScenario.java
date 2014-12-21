@@ -1,6 +1,7 @@
-package net.thucydides.junit.runners;
+package net.serenity_bdd.junit.runners;
 
 import com.google.common.collect.Lists;
+import net.serenity_bdd.junit.runners.ParameterizedTestsOutcomeAggregator;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
@@ -19,6 +20,8 @@ import net.thucydides.junit.annotations.Concurrent;
 import net.thucydides.junit.annotations.TestData;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
 import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule;
+import net.thucydides.junit.runners.ThucydidesParameterizedRunner;
+import net.thucydides.junit.runners.ThucydidesRunner;
 import net.thucydides.junit.runners.integration.SimpleSuccessfulParametrizedTestSample;
 import net.thucydides.samples.*;
 import org.apache.commons.io.FileUtils;
@@ -772,7 +775,7 @@ public class WhenRunningADataDrivenTestScenario {
         WebDriverFactory factory = new WebDriverFactory(environmentVariables);
         return new ThucydidesRunner(testClass, factory, configuration);
     }
-    
+
     protected ThucydidesParameterizedRunner getTestRunnerUsing(Class<?> testClass) throws Throwable {
         Configuration configuration = new SystemPropertiesConfiguration(environmentVariables);
         WebDriverFactory factory = new WebDriverFactory(environmentVariables);

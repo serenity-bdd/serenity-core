@@ -1,11 +1,11 @@
-package net.thucydides.junit.runners;
+package net.serenity_bdd.junit.runners;
 
 import com.google.common.base.Preconditions;
 import net.thucydides.core.annotations.WithDriver;
 import org.junit.runners.model.FrameworkMethod;
 
 /**
- * Utility class used to read Thucydides annotations for a particular JUnit test.
+ * Utility class used to read Serenity annotations for a particular JUnit test.
  * @author johnsmart
  *
  */

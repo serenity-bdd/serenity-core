@@ -1,4 +1,4 @@
-package net.thucydides.junit.runners;
+package net.serenity_bdd.junit.runners;
 
 import net.thucydides.core.batches.SystemVariableBasedBatchManager;
 import net.thucydides.core.batches.TestCountBasedBatchManager;
@@ -16,7 +16,9 @@ import org.junit.runners.model.InitializationError;
 import java.io.File;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
 
 /**
@@ -36,7 +38,7 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
     @Test
     public void the_default_output_directory_should_follow_the_maven_convention() throws InitializationError {
 
-        ThucydidesRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenario.class);
+        SerenityRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenario.class);
 
         File outputDirectory = runner.getOutputDirectory();
 
@@ -50,7 +52,7 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
 
         try {
             environmentVariables.setProperty("webdriver.driver", "netscape");
-            ThucydidesRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenario.class);
+            SerenityRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenario.class);
 
             runner.run(new RunNotifier());
 
@@ -67,7 +69,7 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
         try {
             environmentVariables.setProperty("webdriver.driver", "lynx");
 
-            ThucydidesRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenario.class);
+            SerenityRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenario.class);
 
             runner.run(new RunNotifier());
 
@@ -81,7 +83,7 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
     public void driver_can_be_overridden_using_the_driver_property_in_the_Managed_annotation() throws InitializationError {
         environmentVariables.setProperty("webdriver.driver", "opera");
 
-        ThucydidesRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenarioWithABrowser.class);
+        SerenityRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenarioWithABrowser.class);
 
         runner.run(new RunNotifier());
     }
@@ -92,7 +94,7 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
         try {
             environmentVariables.setProperty("webdriver.driver", "firefox");
 
-            ThucydidesRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenarioWithWrongBrowser.class);
+            SerenityRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenarioWithWrongBrowser.class);
 
             runner.run(new RunNotifier());
 
@@ -109,7 +111,7 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
                 + "reports" + FILE_SEPARATOR
                 + "thucydides");
 
-        ThucydidesRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenario.class);
+        SerenityRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenario.class);
 
         File outputDirectory = runner.getOutputDirectory();
 
@@ -122,7 +124,7 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
     @Test
     public void the_output_directory_can_be_defined_by_a_system_property_using_any_standard_separators() throws InitializationError {
 
-        ThucydidesRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenario.class);
+        SerenityRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenario.class);
 
         environmentVariables.setProperty("thucydides.outputDirectory", "target/reports/thucydides");
 
@@ -136,7 +138,7 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
 
     @Test
     public void a_batch_runner_is_set_by_default() throws InitializationError {
-        ThucydidesRunner  runner = getTestRunnerUsing(SuccessfulSingleTestScenario.class);
+        SerenityRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenario.class);
 
         assertThat(runner.getBatchManager(), instanceOf(SystemVariableBasedBatchManager.class));
 
@@ -148,7 +150,7 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
 //        environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_BATCH_STRATEGY.getPropertyName(), BatchStrategy.DIVIDE_BY_TEST_COUNT.name());
         environmentVariables.setProperty("thucydides.batch.strategy", "DIVIDE_BY_TEST_COUNT");
 
-        ThucydidesRunner  runner = getTestRunnerUsing(SuccessfulSingleTestScenario.class);
+        SerenityRunner runner = getTestRunnerUsing(SuccessfulSingleTestScenario.class);
 
         assertThat(runner.getBatchManager(), instanceOf(TestCountBasedBatchManager.class));
 

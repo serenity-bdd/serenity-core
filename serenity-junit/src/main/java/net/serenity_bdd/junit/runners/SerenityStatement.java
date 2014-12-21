@@ -1,4 +1,4 @@
-package net.thucydides.junit.runners;
+package net.serenity_bdd.junit.runners;
 
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepPublisher;
@@ -6,14 +6,14 @@ import org.junit.internal.AssumptionViolatedException;
 import org.junit.runners.model.Statement;
 
 /**
- * A JUnit statement that runs a Thucydides-enabled test and then publishes the results via JUnit.
+ * A JUnit statement that runs a Serenity-enabled test and then publishes the results via JUnit.
  */
-public class ThucydidesStatement extends Statement {
+public class SerenityStatement extends Statement {
 
     private final Statement statement;
     private final StepPublisher publisher;
 
-    public ThucydidesStatement(final Statement statement, final StepPublisher publisher) {
+    public SerenityStatement(final Statement statement, final StepPublisher publisher) {
         this.statement = statement;
         this.publisher = publisher;
     }

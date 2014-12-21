@@ -1,7 +1,11 @@
-package net.thucydides.junit.runners;
+package net.serenity_bdd.junit.runners;
 
 import com.google.common.collect.Lists;
-import net.thucydides.core.model.*;
+import net.thucydides.core.model.DataTableRow;
+import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestResult;
+import net.thucydides.core.model.TestResultList;
+import net.thucydides.core.model.TestStep;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.runner.Runner;
 
@@ -14,14 +18,14 @@ import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
 
 public class ParameterizedTestsOutcomeAggregator {
-    private final ThucydidesParameterizedRunner thucydidesParameterizedRunner;
+    private final SerenityParameterizedRunner serenityParameterizedRunner;
 
-    private ParameterizedTestsOutcomeAggregator(ThucydidesParameterizedRunner thucydidesParameterizedRunner) {
-        this.thucydidesParameterizedRunner = thucydidesParameterizedRunner;
+    private ParameterizedTestsOutcomeAggregator(SerenityParameterizedRunner serenityParameterizedRunner) {
+        this.serenityParameterizedRunner = serenityParameterizedRunner;
     }
 
-    public static ParameterizedTestsOutcomeAggregator from(ThucydidesParameterizedRunner thucydidesParameterizedRunner) {
-        return new ParameterizedTestsOutcomeAggregator(thucydidesParameterizedRunner);
+    public static ParameterizedTestsOutcomeAggregator from(SerenityParameterizedRunner serenityParameterizedRunner) {
+        return new ParameterizedTestsOutcomeAggregator(serenityParameterizedRunner);
     }
 
 
@@ -54,7 +58,7 @@ public class ParameterizedTestsOutcomeAggregator {
                 TestStep nestedStep = TestStep.forStepCalled(testOutcome.getTitle()).withResult(testOutcome.getResult());
                 for (TestStep nextStep : testSteps) {
                     nextStep.setDescription(normalizeTestStepDescription(nextStep.getDescription(),
-                                            scenarioOutcomes.get(normalizedMethodName).getTestSteps().size() + 1));
+                            scenarioOutcomes.get(normalizedMethodName).getTestSteps().size() + 1));
                     nestedStep.addChildStep(nextStep);
                 }
                 scenarioOutcomes.get(normalizedMethodName).recordStep(nestedStep);
@@ -66,11 +70,11 @@ public class ParameterizedTestsOutcomeAggregator {
 
         }
 
-    List<TestOutcome> aggregatedScenarioOutcomes = new ArrayList<>();
-    aggregatedScenarioOutcomes.addAll(scenarioOutcomes.values());
-    return aggregatedScenarioOutcomes;
+        List<TestOutcome> aggregatedScenarioOutcomes = new ArrayList<>();
+        aggregatedScenarioOutcomes.addAll(scenarioOutcomes.values());
+        return aggregatedScenarioOutcomes;
 
-}
+    }
 
     private void updateResultsForAnyExternalFailures(TestOutcome scenarioOutcome, TestOutcome testOutcome) {
         if (rowResultsAreInconsistantWithOverallResult(testOutcome)) {
@@ -106,8 +110,8 @@ public class ParameterizedTestsOutcomeAggregator {
     public List<TestOutcome> getTestOutcomesForAllParameterSets() {
         List<TestOutcome> testOutcomes = new ArrayList<TestOutcome>();
 
-        for (Runner runner : thucydidesParameterizedRunner.getRunners()) {
-            for (TestOutcome testOutcome : ((ThucydidesRunner) runner).getTestOutcomes()) {
+        for (Runner runner : serenityParameterizedRunner.getRunners()) {
+            for (TestOutcome testOutcome : ((SerenityRunner) runner).getTestOutcomes()) {
                 if (!testOutcomes.contains(testOutcome)) {
                     testOutcomes.add(testOutcome);
                 }

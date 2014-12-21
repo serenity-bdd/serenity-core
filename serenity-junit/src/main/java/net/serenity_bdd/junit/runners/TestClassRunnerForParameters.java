@@ -1,4 +1,4 @@
-package net.thucydides.junit.runners;
+package net.serenity_bdd.junit.runners;
 
 import com.google.common.collect.Lists;
 import net.thucydides.core.batches.BatchManager;
@@ -16,7 +16,7 @@ import org.junit.runners.model.Statement;
 
 import java.util.List;
 
-class TestClassRunnerForParameters extends ThucydidesRunner {
+class TestClassRunnerForParameters extends SerenityRunner {
     private final int parameterSetNumber;
     private final DataTable parametersTable;
     private String qualifier;
@@ -100,7 +100,7 @@ class TestClassRunnerForParameters extends ThucydidesRunner {
 
     private List<TestOutcome> qualified(List<TestOutcome> testOutcomes) {
         List<TestOutcome> qualifiedOutcomes = Lists.newArrayList();
-        for(TestOutcome outcome : testOutcomes) {
+        for (TestOutcome outcome : testOutcomes) {
             qualifiedOutcomes.add(outcome.withQualifier(qualifier));
         }
         return qualifiedOutcomes;

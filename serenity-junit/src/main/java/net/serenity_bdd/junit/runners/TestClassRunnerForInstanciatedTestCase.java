@@ -1,4 +1,4 @@
-package net.thucydides.junit.runners;
+package net.serenity_bdd.junit.runners;
 
 import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.model.DataTable;
@@ -11,7 +11,7 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 
-class TestClassRunnerForInstanciatedTestCase extends ThucydidesRunner {
+class TestClassRunnerForInstanciatedTestCase extends SerenityRunner {
     private final int parameterSetNumber;
     private final Object instanciatedTest;
     private final DataTable parametersTable;
@@ -26,7 +26,7 @@ class TestClassRunnerForInstanciatedTestCase extends ThucydidesRunner {
         super(instanciatedTest.getClass(), webDriverFactory, configuration, batchManager);
         this.instanciatedTest = instanciatedTest;
         this.parameterSetNumber = parameterSetNumber;
-        this.parametersTable    = parametersTable;
+        this.parametersTable = parametersTable;
     }
 
     @Override

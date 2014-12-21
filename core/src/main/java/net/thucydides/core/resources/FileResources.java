@@ -1,6 +1,6 @@
 package net.thucydides.core.resources;
 
-import net.serenity_bdd.core.SerenitySystemProperties;
+import net.serenitybdd.core.SerenitySystemProperties;
 import net.thucydides.core.ThucydidesSystemProperty;
 import org.apache.commons.lang3.StringUtils;
 

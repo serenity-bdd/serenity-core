@@ -1,7 +1,7 @@
 <project name="Serenity" basedir="." default="serenity.reports">
 
     <target name="define.tasks">
-        <taskdef name="serenityreport" classname="net.serenity_bdd.ant.SerenityReportingTask" />
+        <taskdef name="serenityreport" classname="net.serenitybdd.ant.SerenityReportingTask" />
 
     </target>
 

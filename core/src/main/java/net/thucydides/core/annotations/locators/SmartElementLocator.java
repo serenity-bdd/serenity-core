@@ -1,6 +1,6 @@
 package net.thucydides.core.annotations.locators;
 
-import net.serenity_bdd.core.annotations.locators.SmartAnnotations;
+import net.serenitybdd.core.annotations.locators.SmartAnnotations;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
@@ -17,7 +17,7 @@ public class SmartElementLocator implements ElementLocator {
 	private final By by;
 	private WebElement cachedElement;
 	private List<WebElement> cachedElementList;
-	
+
 
 	public SmartElementLocator(SearchContext searchContext, Field field) {
 		this.searchContext = searchContext;

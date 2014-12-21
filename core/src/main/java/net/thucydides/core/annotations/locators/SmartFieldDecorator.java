@@ -1,7 +1,7 @@
 package net.thucydides.core.annotations.locators;
 
 import com.google.common.collect.ImmutableList;
-import net.serenity_bdd.core.annotations.findby.FindBy;
+import net.serenitybdd.core.annotations.findby.FindBy;
 import net.thucydides.core.pages.PageObject;
 import net.thucydides.core.pages.WebElementFacade;
 import org.openqa.selenium.WebDriver;

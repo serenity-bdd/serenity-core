@@ -1,6 +1,6 @@
 package net.thucydides.core.screenshots.integration
 
-import net.serenity_bdd.core.Serenity
+import net.serenitybdd.core.Serenity
 import net.thucydides.core.screenshots.ScreenshotProcessor
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepEventBus

@@ -7,7 +7,7 @@ import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.Listeners;
 import net.thucydides.core.steps.StepListener;
 import net.thucydides.junit.guice.JUnitInjectors;
-import net.serenity_bdd.junit.runners.ParameterizedJUnitStepListener;
+import net.serenitybdd.junit.runners.ParameterizedJUnitStepListener;
 
 import java.io.File;
 

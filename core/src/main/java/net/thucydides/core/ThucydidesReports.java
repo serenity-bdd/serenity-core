@@ -1,7 +1,7 @@
 package net.thucydides.core;
 
-import net.serenity_bdd.core.SerenityListeners;
-import net.serenity_bdd.core.SerenityReports;
+import net.serenitybdd.core.SerenityListeners;
+import net.serenitybdd.core.SerenityReports;
 import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.webdriver.Configuration;
 

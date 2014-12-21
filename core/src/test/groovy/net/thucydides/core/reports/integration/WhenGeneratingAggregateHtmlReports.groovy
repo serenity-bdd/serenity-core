@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.integration
 
 import com.github.goldin.spock.extensions.tempdir.TempDir
-import net.serenity_bdd.core.SerenitySystemProperties
+import net.serenitybdd.core.SerenitySystemProperties
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.issues.IssueTracking
 import net.thucydides.core.reports.FormatConfiguration

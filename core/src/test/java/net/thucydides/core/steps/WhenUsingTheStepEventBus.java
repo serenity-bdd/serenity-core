@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import net.serenity_bdd.core.Serenity;
+import net.serenitybdd.core.Serenity;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.pages.Pages;

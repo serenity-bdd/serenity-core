@@ -185,7 +185,7 @@ public class Formatter {
     }
 
     private boolean shouldFormatEmbeddedTables() {
-        return !environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.IGNORE_EMBEDDED_TABLES, false);
+        return !(ThucydidesSystemProperty.IGNORE_EMBEDDED_TABLES.booleanFrom(environmentVariables));
     }
 
     private boolean containsEmbeddedTable(String text) {

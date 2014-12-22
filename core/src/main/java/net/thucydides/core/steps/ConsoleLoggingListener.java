@@ -103,8 +103,10 @@ public class ConsoleLoggingListener implements StepListener {
                                   Logger logger) {
         this.logger = logger;
         this.environmentVariables = environmentVariables;
-        String headerStyleValue = environmentVariables.getProperty(ThucydidesSystemProperty.THUCYDIDES_CONSOLE_HEADINGS,
-                                                                   HeadingStyle.ASCII.toString()).toUpperCase();
+
+
+        String headerStyleValue = ThucydidesSystemProperty.THUCYDIDES_CONSOLE_HEADINGS.from(environmentVariables, HeadingStyle.ASCII.toString())
+                                  .toUpperCase();
 
         if (HeadingStyle.NORMAL.toString().equals(headerStyleValue)) {
             headingStyle = 0;

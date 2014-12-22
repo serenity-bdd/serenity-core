@@ -45,7 +45,7 @@ public class RootCauseAnalyzer {
     }
 
     private boolean useSimplifedStackTraces() {
-        return environmentVariables.getPropertyAsBoolean(SIMPLIFIED_STACK_TRACES,true);
+        return SIMPLIFIED_STACK_TRACES.booleanFrom(environmentVariables ,true);
     }
 
     private StackTraceElement[] simplifiedStackTrace(StackTraceElement[] stackTrace) {

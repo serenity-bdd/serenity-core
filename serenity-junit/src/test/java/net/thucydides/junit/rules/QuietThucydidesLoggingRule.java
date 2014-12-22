@@ -37,9 +37,9 @@ public class QuietThucydidesLoggingRule implements MethodRule {
 
         private void restoreOldLogLevel() {
             if (originalValue != null) {
-                environmentVariables.setProperty("thucydides.logging", originalValue);
+                environmentVariables.setProperty("serenity.logging", originalValue);
             } else {
-                environmentVariables.clearProperty("thucydides.logging");
+                environmentVariables.clearProperty("serenity.logging");
             }
         }
     }
@@ -49,8 +49,8 @@ public class QuietThucydidesLoggingRule implements MethodRule {
 
     public QuietThucydidesLoggingRule() {
         environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get() ;
-        originalValue = environmentVariables.getProperty("thucydides.logging");
-        environmentVariables.setProperty("thucydides.logging","QUIET");
+        originalValue = environmentVariables.getProperty("serenity.logging");
+        environmentVariables.setProperty("serenity.logging","QUIET");
     }
 
     public Statement apply(final Statement statement, final FrameworkMethod method, final Object target) {

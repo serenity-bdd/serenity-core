@@ -1,7 +1,11 @@
 package net.thucydides.core;
 
+import com.google.common.base.Optional;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.LoggerFactory;
+
+import java.util.logging.Logger;
 
 /**
  * Properties that can be passed to a web driver test to customize its behaviour.
@@ -663,6 +667,8 @@ public enum ThucydidesSystemProperty {
     public static final int DEFAULT_HEIGHT = 700;
     public static final int DEFAULT_WIDTH = 960;
 
+    private final org.slf4j.Logger logger = LoggerFactory.getLogger(ThucydidesSystemProperty.class);
+
     private ThucydidesSystemProperty(final String propertyName) {
         this.propertyName = propertyName;
     }
@@ -681,17 +687,73 @@ public enum ThucydidesSystemProperty {
     }
 
     public String from(EnvironmentVariables environmentVariables) {
-        return environmentVariables.getProperty(getPropertyName());
+        return from(environmentVariables, null);
+    }
+
+    private Optional<String> legacyPropertyValueIfPresentIn(EnvironmentVariables environmentVariables) {
+        String legacyValue = environmentVariables.getProperty(withLegacyPrefix(getPropertyName()));
+        if (legacyValue != null) {
+            logger.warn("Legacy property format detected for {}, please use the serenity.* format instead.",getPropertyName());
+        }
+        return Optional.fromNullable(legacyValue);
+    }
+
+    private String withLegacyPrefix(String propertyName) {
+        return propertyName.replaceAll("serenity.","thucydides.");
+    }
+
+    private String withSerenityPrefix(String propertyName) {
+        return propertyName.replaceAll("thucydides.","serenity.");
     }
 
     public String from(EnvironmentVariables environmentVariables, String defaultValue) {
-        String value = environmentVariables.getProperty(getPropertyName());
-        if (StringUtils.isEmpty(value)) {
-            return defaultValue;
+        Optional<String> newPropertyValue
+                = Optional.fromNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
+
+        if (isDefined(newPropertyValue)) {
+            return newPropertyValue.get();
         } else {
-            return value;
+            Optional<String> legacyValue = legacyPropertyValueIfPresentIn(environmentVariables);
+            return (isDefined(legacyValue)) ? legacyValue.get() : defaultValue;
         }
     }
+
+    private boolean isDefined(Optional<String> newPropertyValue) {
+        return newPropertyValue.isPresent() && StringUtils.isNotEmpty(newPropertyValue.get());
+    }
+
+    public int integerFrom(EnvironmentVariables environmentVariables) {
+        return integerFrom(environmentVariables,0);
+    }
+
+    public int integerFrom(EnvironmentVariables environmentVariables, int defaultValue) {
+        Optional<String> newPropertyValue
+                = Optional.fromNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
+
+        if (isDefined(newPropertyValue)) {
+            return Integer.valueOf(newPropertyValue.get());
+        } else {
+            Optional<String> legacyValue = legacyPropertyValueIfPresentIn(environmentVariables);
+            return (isDefined(legacyValue)) ? Integer.valueOf(legacyValue.get()) : defaultValue;
+        }
+    }
+
+    public Boolean booleanFrom(EnvironmentVariables environmentVariables) {
+        return booleanFrom(environmentVariables, false);
+    }
+
+    public Boolean booleanFrom(EnvironmentVariables environmentVariables, Boolean defaultValue) {
+        Optional<String> newPropertyValue
+                = Optional.fromNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
+
+        if (isDefined(newPropertyValue)) {
+            return Boolean.valueOf(newPropertyValue.get());
+        } else {
+            Optional<String> legacyValue = legacyPropertyValueIfPresentIn(environmentVariables);
+            return (isDefined(legacyValue)) ? Boolean.valueOf(legacyValue.get()) : defaultValue;
+        }
+    }
+
 
     public boolean isDefinedIn(EnvironmentVariables environmentVariables) {
         return StringUtils.isNotEmpty(from(environmentVariables));

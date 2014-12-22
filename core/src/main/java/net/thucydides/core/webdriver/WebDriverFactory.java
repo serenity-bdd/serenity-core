@@ -287,8 +287,8 @@ public class WebDriverFactory {
         WebDriver driver = webdriverInstanceFactory.newRemoteDriver(new URL(saucelabsUrl), findSaucelabsCapabilities());
 
         if (isNotEmpty(ThucydidesSystemProperty.SAUCELABS_IMPLICIT_TIMEOUT.from(environmentVariables))) {
-            int implicitWait = environmentVariables.getPropertyAsInteger(
-                    ThucydidesSystemProperty.SAUCELABS_IMPLICIT_TIMEOUT.getPropertyName(), 30);
+            int implicitWait = ThucydidesSystemProperty.SAUCELABS_IMPLICIT_TIMEOUT.integerFrom(environmentVariables, 30);
+
             driver.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
         }
         return driver;
@@ -408,8 +408,7 @@ public class WebDriverFactory {
         DesiredCapabilities capabilities = realBrowserCapabilities(driverTypeFor(remoteBrowser));
         capabilities.setCapability("idle-timeout",EXTRA_TIME_TO_TAKE_SCREENSHOTS);
 
-        Boolean recordScreenshotsInSaucelabs
-              = environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.SAUCELABS_RECORD_SCREENSHOTS, false);
+        Boolean recordScreenshotsInSaucelabs = ThucydidesSystemProperty.SAUCELABS_RECORD_SCREENSHOTS.booleanFrom(environmentVariables);
         capabilities.setCapability("record-screenshots", recordScreenshotsInSaucelabs);
 
 
@@ -518,8 +517,8 @@ public class WebDriverFactory {
     }
 
     private Dimension getRequestedBrowserSize() {
-        int height = environmentVariables.getPropertyAsInteger(ThucydidesSystemProperty.THUCYDIDES_BROWSER_HEIGHT, DEFAULT_HEIGHT);
-        int width = environmentVariables.getPropertyAsInteger(ThucydidesSystemProperty.THUCYDIDES_BROWSER_WIDTH, DEFAULT_WIDTH);
+        int height = ThucydidesSystemProperty.THUCYDIDES_BROWSER_HEIGHT.integerFrom(environmentVariables, DEFAULT_HEIGHT);
+        int width = ThucydidesSystemProperty.THUCYDIDES_BROWSER_WIDTH.integerFrom(environmentVariables, DEFAULT_WIDTH);
         return new Dimension(width, height);
     }
 
@@ -532,8 +531,8 @@ public class WebDriverFactory {
     }
 
     private boolean browserDimensionsSpecified() {
-        String snapshotWidth = environmentVariables.getProperty(ThucydidesSystemProperty.THUCYDIDES_BROWSER_WIDTH);
-        String snapshotHeight = environmentVariables.getProperty(ThucydidesSystemProperty.THUCYDIDES_BROWSER_HEIGHT);
+        String snapshotWidth =  ThucydidesSystemProperty.THUCYDIDES_BROWSER_WIDTH.from(environmentVariables);
+        String snapshotHeight = ThucydidesSystemProperty.THUCYDIDES_BROWSER_HEIGHT.from(environmentVariables);
         return (snapshotWidth != null) || (snapshotHeight != null);
     }
 
@@ -680,7 +679,7 @@ public class WebDriverFactory {
     }
 
     private String getProxyPortFromEnvironmentVariables() {
-        return environmentVariables.getProperty(ThucydidesSystemProperty.THUCYDIDES_PROXY_HTTP_PORT.getPropertyName());
+        return ThucydidesSystemProperty.THUCYDIDES_PROXY_HTTP_PORT.from(environmentVariables);
     }
 
     private boolean shouldActivateProxy() {
@@ -689,7 +688,7 @@ public class WebDriverFactory {
     }
 
     private String getProxyUrlFromEnvironmentVariables() {
-        return environmentVariables.getProperty(ThucydidesSystemProperty.THUCYDIDES_PROXY_HTTP.getPropertyName());
+        return ThucydidesSystemProperty.THUCYDIDES_PROXY_HTTP.from(environmentVariables);
     }
 
     private FirefoxProfile getProfileFrom(final String profileName) {
@@ -701,7 +700,7 @@ public class WebDriverFactory {
     }
 
     private boolean refuseUntrustedCertificates() {
-        return environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.REFUSE_UNTRUSTED_CERTIFICATES.getPropertyName(), false);
+        return ThucydidesSystemProperty.REFUSE_UNTRUSTED_CERTIFICATES.booleanFrom(environmentVariables);
     }
 
     /**

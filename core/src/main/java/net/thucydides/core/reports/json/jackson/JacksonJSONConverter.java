@@ -73,6 +73,6 @@ public class JacksonJSONConverter implements JSONConverter {
     }
 
     private boolean usePrettyPrinting() {
-        return environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.JSON_PRETTY_PRINTING, false);
+        return ThucydidesSystemProperty.JSON_PRETTY_PRINTING.booleanFrom(environmentVariables);
     }
 }

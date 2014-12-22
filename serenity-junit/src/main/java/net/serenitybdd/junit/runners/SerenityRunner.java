@@ -328,7 +328,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     }
 
     private boolean shouldRetryTest() {
-        return configuration.getEnvironmentVariables().getPropertyAsBoolean(ThucydidesSystemProperty.JUNIT_RETRY_TESTS, false);
+        return (ThucydidesSystemProperty.JUNIT_RETRY_TESTS.booleanFrom(configuration.getEnvironmentVariables()));
     }
 
     protected void initStepEventBus() {
@@ -444,7 +444,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     }
 
     private void clearMetadataIfRequired() {
-        if (!configuration.getEnvironmentVariables().getPropertyAsBoolean(ThucydidesSystemProperty.THUCYDIDES_MAINTAIN_SESSION, false)) {
+        if (!ThucydidesSystemProperty.THUCYDIDES_MAINTAIN_SESSION.booleanFrom(configuration.getEnvironmentVariables())) {
             Serenity.getCurrentSession().clearMetaData();
         }
     }

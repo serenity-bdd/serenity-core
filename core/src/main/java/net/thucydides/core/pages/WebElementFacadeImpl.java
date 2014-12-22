@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static ch.lambdaj.Lambda.convert;
+import static net.thucydides.core.ThucydidesSystemProperty.SIMPLIFIED_STACK_TRACES;
 
 
 /**
@@ -797,7 +798,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
     }
 
     private boolean useVerboseLogging() {
-        return getEnvironmentVariables().getPropertyAsBoolean(ThucydidesSystemProperty.THUCYDIDES_VERBOSE_STEPS.getPropertyName(),false);
+        return ThucydidesSystemProperty.THUCYDIDES_VERBOSE_STEPS.booleanFrom(environmentVariables);
     }
 
 

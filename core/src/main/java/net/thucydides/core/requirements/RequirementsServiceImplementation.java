@@ -250,7 +250,7 @@ public class RequirementsServiceImplementation implements RequirementsService {
 
     private List<RequirementsTagProvider> active(List<RequirementsTagProvider> requirementsProviders) {
         boolean useDirectoryBasedRequirements =
-                environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.THUCYDIDES_USE_REQUIREMENTS_DIRECTORIES, true);
+                ThucydidesSystemProperty.THUCYDIDES_USE_REQUIREMENTS_DIRECTORIES.booleanFrom(environmentVariables, true);
 
         if (useDirectoryBasedRequirements) {
             return requirementsProviders;

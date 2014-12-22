@@ -31,7 +31,7 @@ class CapabilitySet {
     public Map<String,Object> getCapabilities() {
         Map<String,Object> capabilitiesMap = Maps.newHashMap();
 
-        String specifiedCapabilities = environmentVariables.getProperty(THUCYDIDES_DRIVER_CAPABILITIES);
+        String specifiedCapabilities = THUCYDIDES_DRIVER_CAPABILITIES.from(environmentVariables);
         if (StringUtils.isNotEmpty(specifiedCapabilities)) {
             Iterable<String> capabilityValues = Splitter.on(CAPABILITY_SEPARATOR).trimResults().split(specifiedCapabilities);
             capabilitiesMap = addCapabilityMapValues(capabilityValues);

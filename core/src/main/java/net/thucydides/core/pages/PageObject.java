@@ -44,6 +44,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static ch.lambdaj.Lambda.convert;
+import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_BATCH_NUMBER;
 import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascriptIsSupportedIn;
 
 /**
@@ -120,8 +121,7 @@ public abstract class PageObject {
     }
 
     protected int waitForTimeout() {
-        return environmentVariables.getPropertyAsInteger(ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT, WAIT_FOR_TIMEOUT);
-
+        return ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables, WAIT_FOR_TIMEOUT);
     }
 
     public void setPages(Pages pages) {

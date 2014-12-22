@@ -110,7 +110,7 @@ public class SystemPropertiesConfiguration implements Configuration {
      * Where should the reports go?
      */
     public File loadOutputDirectoryFromSystemProperties() {
-        String systemDirectoryProperty = environmentVariables.getProperty(OUTPUT_DIRECTORY_PROPERTY, getMavenBuildDirectory());
+        String systemDirectoryProperty = ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.from(environmentVariables, getMavenBuildDirectory());
         String instantiatedPath = filePathParser.getInstanciatedPath(systemDirectoryProperty);
         String systemDefinedDirectory = (instantiatedPath != null) ? instantiatedPath : DEFAULT_OUTPUT_DIRECTORY;
 
@@ -134,7 +134,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     public int getStepDelay() {
         int stepDelay = 0;
 
-        String stepDelayValue = getEnvironmentVariables().getProperty(ThucydidesSystemProperty.THUCYDIDES_STEP_DELAY.getPropertyName());
+        String stepDelayValue = ThucydidesSystemProperty.THUCYDIDES_STEP_DELAY.from(environmentVariables);
         if ((stepDelayValue != null) && (!stepDelayValue.isEmpty())) {
             stepDelay = Integer.valueOf(stepDelayValue);
         }
@@ -145,7 +145,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     public int getElementTimeout() {
         int elementTimeout = DEFAULT_ELEMENT_TIMEOUT_SECONDS;
 
-        String stepDelayValue = getEnvironmentVariables().getProperty(ThucydidesSystemProperty.THUCYDIDES_TIMEOUT.getPropertyName());
+        String stepDelayValue = ThucydidesSystemProperty.THUCYDIDES_TIMEOUT.from(environmentVariables);
         if ((stepDelayValue != null) && (!stepDelayValue.isEmpty())) {
             elementTimeout = Integer.valueOf(stepDelayValue);
         }
@@ -154,12 +154,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     public boolean getUseUniqueBrowser() {
-        boolean uniqueBrowser = false;
-        String uniqueBrowserValue = getEnvironmentVariables().getProperty(ThucydidesSystemProperty.THUCYDIDES_USE_UNIQUE_BROWSER.getPropertyName());
-        if (uniqueBrowserValue != null) {
-            uniqueBrowser = Boolean.valueOf(uniqueBrowserValue);
-        }
-        return uniqueBrowser;
+        return ThucydidesSystemProperty.THUCYDIDES_USE_UNIQUE_BROWSER.booleanFrom(getEnvironmentVariables());
     }
 
     public void setOutputDirectory(final File outputDirectory) {
@@ -181,8 +176,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     public double getEstimatedAverageStepCount() {
-        return getEnvironmentVariables().getPropertyAsInteger(ThucydidesSystemProperty.THUCYDIDES_ESTIMATED_AVERAGE_STEP_COUNT.getPropertyName(),
-                DEFAULT_ESTIMATED_AVERAGE_STEP_COUNT);
+        return ThucydidesSystemProperty.THUCYDIDES_ESTIMATED_AVERAGE_STEP_COUNT.integerFrom(environmentVariables, DEFAULT_ESTIMATED_AVERAGE_STEP_COUNT);
     }
 
     @SuppressWarnings("deprecation")
@@ -223,9 +217,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     public int getRestartFrequency() {
-        return environmentVariables.getPropertyAsInteger(
-                        ThucydidesSystemProperty.THUCYDIDES_RESTART_BROWSER_FREQUENCY.getPropertyName(),0);
-
+        return ThucydidesSystemProperty.THUCYDIDES_RESTART_BROWSER_FREQUENCY.integerFrom(environmentVariables);
     }
 
     @Override

@@ -27,6 +27,6 @@ public class ScreenshotDigest {
     }
 
     private String optionalWidth() {
-        return environmentVariables.getProperty(ThucydidesSystemProperty.THUCYDIDES_RESIZED_IMAGE_WIDTH, "");
+        return ThucydidesSystemProperty.THUCYDIDES_RESIZED_IMAGE_WIDTH.from(environmentVariables,"");
     }
 }

@@ -74,7 +74,7 @@ public class JQueryEnabledPage {
     }
 
     public void injectJQueryPlugins() {
-        if (environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.THUCYDIDES_ACTIVATE_HIGHLIGHTING.getPropertyName(), false)) {
+        if (ThucydidesSystemProperty.THUCYDIDES_ACTIVATE_HIGHLIGHTING.booleanFrom(environmentVariables)) {
             executeScriptFrom("jquery/jquery-thucydides-plugin.js");
         }
     }

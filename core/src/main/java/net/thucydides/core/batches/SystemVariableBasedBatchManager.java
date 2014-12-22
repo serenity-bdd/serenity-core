@@ -34,13 +34,13 @@ public class SystemVariableBasedBatchManager implements BatchManager {
     @Inject
     public SystemVariableBasedBatchManager(EnvironmentVariables environmentVariables) {
         this.batchCount = getBatchCountFrom(environmentVariables);
-        this.batchNumber = environmentVariables.getPropertyAsInteger(THUCYDIDES_BATCH_NUMBER.getPropertyName(), 0);
+        this.batchNumber = THUCYDIDES_BATCH_NUMBER.integerFrom(environmentVariables, 0);
     }
 
     private int getBatchCountFrom(EnvironmentVariables environmentVariables) {
-        int batchCountValue = environmentVariables.getPropertyAsInteger(THUCYDIDES_BATCH_SIZE.getPropertyName(), 0);
+        int batchCountValue = THUCYDIDES_BATCH_SIZE.integerFrom(environmentVariables, 0);
         if (batchCountValue == 0) {
-            batchCountValue = environmentVariables.getPropertyAsInteger(THUCYDIDES_BATCH_COUNT.getPropertyName(), 0);
+            batchCountValue = THUCYDIDES_BATCH_COUNT.integerFrom(environmentVariables, 0);
         }
         return batchCountValue;
     }

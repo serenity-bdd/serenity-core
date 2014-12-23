@@ -1,6 +1,3 @@
-import org.ajoberstar.grgit.*
-import org.ajoberstar.gradle.git.release.opinion.Strategies
-
 buildscript {
     repositories {
         jcenter()
@@ -8,11 +5,18 @@ buildscript {
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
         classpath 'org.ajoberstar:gradle-git:0.12.0'
+        classpath 'org.pegdown:pegdown:1.4.1'
     }
 }
 
+import org.ajoberstar.grgit.*
+import org.ajoberstar.gradle.git.release.opinion.Strategies
+import org.pegdown.PegDownProcessor
+import groovy.text.SimpleTemplateEngine
+
 apply plugin: 'org.ajoberstar.release-base'
 release {
+    println "Updading release notes"
     grgit = Grgit.open(project.file('.'))
     versionStrategy Strategies.FINAL
     versionStrategy Strategies.PRE_RELEASE
@@ -229,4 +233,175 @@ subprojects {
             }
         }
     }
+}
+
+// Supporting methods to generate the release notes from the Git commits
+
+String LAST_LEGACY_TAG = "v1.0.23"
+String RELEASE_NOTES_FILE = 'release-notes.md'
+
+task releaseNotes() {
+    def writeLegacyReleaseNotes = false
+
+    def releaseNotes = new File(RELEASE_NOTES_FILE)
+    releaseNotes.delete()
+
+    def tags = readTags()
+
+    writeTableOfContents(releaseNotes, tags)
+
+    def moreRecentTag = null
+    tags.each {tag ->
+        if (tag == LAST_LEGACY_TAG) {
+            writeLegacyReleaseNotes = true
+        }
+        if (!moreRecentTag) {
+            writeReleaseTitle(releaseNotes, 'Upcoming')
+            writeToReleaseNotes(changesBetween(tag, null), releaseNotes, writeLegacyReleaseNotes)
+        }
+        else {
+            writeReleaseTitle(releaseNotes, moreRecentTag)
+            writeToReleaseNotes(changesBetween(tag, moreRecentTag), releaseNotes, writeLegacyReleaseNotes)
+        }
+        moreRecentTag = tag
+    }
+    writeReleaseTitle(releaseNotes, moreRecentTag)
+    writeToReleaseNotes(changesBetween(null, moreRecentTag), releaseNotes, writeLegacyReleaseNotes)
+
+    releaseNotes << "\n"
+}
+
+private void writeTableOfContents(releaseNotes, List<String> tags) {
+    releaseNotes << '# Releases\n'
+    tags.each { tag ->
+        releaseNotes << "- [$tag](#$tag)\n"
+    }
+}
+
+private File writeReleaseTitle(releaseNotes, title) {
+    releaseNotes << "# $title<a name='$title'></a>\n"
+}
+
+private File writeSubtitleitle(releaseNotes, title) {
+    releaseNotes << "## $title\n"
+}
+private Iterable<CommitMessage> writeToReleaseNotes(List<CommitMessage> changes, releaseNotes, legacyMode) {
+
+    boolean typesShown = false
+    MessageType.values().each {
+        def changesOfThisType = changesOfType(it, changes)
+        if (changesOfThisType) {
+            typesShown = true
+            writeSubtitleitle(releaseNotes, it.label)
+            changesOfThisType.each { change ->
+                if (change.isIncludedInReleaseNotes()) {
+                    releaseNotes << "$change\n"
+                }
+            }
+        }
+    }
+
+    if (legacyMode) {
+        def miscChanges = changesOfType(null, changes)
+        if (miscChanges) {
+            if (typesShown) writeSubtitleitle(releaseNotes, 'Miscellaneous')
+            miscChanges.each {
+                releaseNotes << "$it\n"
+            }
+        }
+    }
+}
+
+def readTags() {
+    def lines = []
+    def proc = 'git for-each-ref --format=%(*committerdate:iso8601)-%(refname) refs/tags'.execute()
+    proc.in.eachLine {
+        line -> lines += line
+    }
+    lines = lines.sort().reverse();
+    return lines.collect { String line -> line.length() > 36 ? line.substring(36) : ""}
+}
+
+List<CommitMessage> changesBetween(String prevTag, String tag) {
+    def command = "git log $prevTag..$tag --format=%x20-%x20%s%+b"
+    if (prevTag == null) {
+        command = "git log $tag --format=%x20-%x20%s%+b"
+    } else if (tag == null) {
+        command = "git log $prevTag..HEAD --format=%x20-%x20%s%+b"
+    }
+    def proc = command.execute()
+    def changes = []
+
+    def subject = null
+    def body = []
+    proc.in.eachLine {
+        if (it.startsWith(" - ")) {
+            if (subject) {
+                changes  += new CommitMessage(subject, body)
+                body = []
+            }
+            subject = it.substring(3)
+        } else {
+            body += it
+        }
+    }
+    if (subject) {
+        changes += new CommitMessage(subject, body)
+    }
+    return changes
+}
+
+enum MessageType {
+    feat("Features"),
+    fix("Bug Fixes"),
+    docs("Documentation"),
+    style("Style"),
+    refactor("Refactoring"),
+    perf("Performance"),
+    test("Tests"),
+    chore("Chores")
+
+    def label
+
+    MessageType(label) {
+        this.label = label
+    }
+}
+
+class CommitMessage {
+    MessageType type;
+    String subject;
+    List<String> body;
+
+    CommitMessage(String subjectText, List<String> body) {
+        if (declaredType(subjectText)) {
+            this.type = declaredType(subjectText)
+            this.subject = subjectText.replace("$type:","")
+        } else {
+            this.subject = subjectText
+        }
+        this.body = body
+    }
+
+    def declaredType(String subject) {
+        return MessageType.values().find {
+            String typeName = it.toString().toLowerCase()
+            subject.toLowerCase().startsWith("$typeName:")
+        }
+    }
+
+    def isIncludedInReleaseNotes() { type != null }
+
+    @Override
+    public String toString() {
+        def rendered = "  - $subject";
+        body.each {
+            rendered += "\n" + it
+        }
+        rendered
+    }
+}
+
+List<CommitMessage> changesOfType(MessageType messageType, List<CommitMessage> commitMessages) {
+    commitMessages.findAll { it.type == messageType}
 }

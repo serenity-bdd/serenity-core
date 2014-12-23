@@ -251,7 +251,7 @@ task releaseNotes() {
     writeTableOfContents(releaseNotes, tags)
 
     def moreRecentTag = null
-    tags.each {tag ->
+    tags.findAll { !it.isEmpty() }.each {tag ->
         if (tag == LAST_LEGACY_TAG) {
             writeLegacyReleaseNotes = true
         }
@@ -273,7 +273,7 @@ task releaseNotes() {
 
 private void writeTableOfContents(releaseNotes, List<String> tags) {
     releaseNotes << '# Releases\n'
-    tags.each { tag ->
+    tags.findAll { !it.isEmpty() }.each { tag ->
         releaseNotes << "- [$tag](#$tag)\n"
     }
 }

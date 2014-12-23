@@ -24,6 +24,10 @@
 # Upcoming<a name='Upcoming'></a>
 ## Chores
   -  Automated the generation of the release notes from the git commits
+## Miscellaneous
+  - Merge branch 'master' of github.com:serenity-bdd/serenity-core
+  - Updated the README file to reflect the new commit conventions
+  - Updated release notes
 # v1.0.23<a name='v1.0.23'></a>
   - You can now use serenity.* instead of thucydides.* system properties. The thucydides.* system properties are still supported, but a warning is printed to the logs.
   - Merge pull request #13 from mikezx6r/master
@@ -218,6 +222,9 @@ Pti hamcrest 1 1
 ## Chores
   -  Automated the generation of the release notes from the git commits
 ## Miscellaneous
+  - Merge branch 'master' of github.com:serenity-bdd/serenity-core
+  - Updated the README file to reflect the new commit conventions
+  - Updated release notes
   - You can now use serenity.* instead of thucydides.* system properties. The thucydides.* system properties are still supported, but a warning is printed to the logs.
   - Merge pull request #13 from mikezx6r/master
 rename serenity_bdd to serenitybdd

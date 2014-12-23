@@ -23,6 +23,7 @@
 ## Chores
   -  Automated the generation of the release notes from the git commits
 ## Miscellaneous
+  - Improved release notes to avoid empty tags
   - Merge branch 'master' of github.com:serenity-bdd/serenity-core
   - Updated the README file to reflect the new commit conventions
   - Updated release notes

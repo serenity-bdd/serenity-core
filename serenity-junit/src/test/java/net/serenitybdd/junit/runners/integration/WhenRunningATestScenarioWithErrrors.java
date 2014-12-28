@@ -1,10 +1,10 @@
-package net.thucydides.junit.runners.integration;
+package net.serenitybdd.junit.runners.integration;
 
+import net.serenitybdd.junit.runners.AbstractTestStepRunnerTest;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.junit.rules.DisableThucydidesHistoryRule;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
-import net.thucydides.junit.runners.AbstractTestStepRunnerTest;
-import net.thucydides.junit.runners.ThucydidesRunner;
 import net.thucydides.samples.SampleNonWebScenarioWithError;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class WhenRunningATestScenarioWithErrrors extends AbstractTestStepRunnerT
     @Test
     public void the_test_runner_records_the_steps_as_they_are_executed() throws InitializationError {
 
-        ThucydidesRunner runner = new ThucydidesRunner(SampleNonWebScenarioWithError.class);
+        SerenityRunner runner = new SerenityRunner(SampleNonWebScenarioWithError.class);
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();

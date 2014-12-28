@@ -1,40 +1,32 @@
 package net.thucydides.core.webdriver.stubs;
 
-import ch.lambdaj.function.convert.Converter;
 import com.beust.jcommander.internal.Lists;
 import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.pages.*;
-import net.thucydides.core.pages.jquery.JQueryEnabledPage;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.pages.InternalSystemClock;
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.core.pages.WebElementState;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
-import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.internal.Coordinates;
-import org.openqa.selenium.internal.Locatable;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import static ch.lambdaj.Lambda.convert;
 
 public class WebElementFacadeStub implements WebElementFacade {
 
 
-    protected WebElement getElement(){
+    protected WebElement getElement() {
         return this;
-    };
+    }
+
+    ;
 
     protected JavascriptExecutorFacade getJavascriptExecutorFacade() {
         return new JavascriptExecutorFacade() {
@@ -86,7 +78,6 @@ public class WebElementFacadeStub implements WebElementFacade {
         return this;
 
     }
-
 
 
     @Override
@@ -141,7 +132,7 @@ public class WebElementFacadeStub implements WebElementFacade {
     @Override
     public boolean isVisible() {
 
-return false;
+        return false;
     }
 
     /**
@@ -474,11 +465,11 @@ return false;
     }
 
     public Point getLocation() {
-        return new Point(0,0);
+        return new Point(0, 0);
     }
 
     public Dimension getSize() {
-        return new Dimension(0,0);
+        return new Dimension(0, 0);
     }
 
     public String getCssValue(String propertyName) {
@@ -495,26 +486,25 @@ return false;
 
             @Override
             public Point onScreen() {
-                return new Point(0,0);
+                return new Point(0, 0);
             }
 
             @Override
             public Point inViewPort() {
-                return new Point(0,0);
+                return new Point(0, 0);
             }
 
             @Override
             public Point onPage() {
-                return new Point(0,0);
+                return new Point(0, 0);
             }
 
             @Override
             public Object getAuxiliary() {
-                return new Point(0,0);
+                return new Point(0, 0);
             }
         };
     }
-
 
 
 }

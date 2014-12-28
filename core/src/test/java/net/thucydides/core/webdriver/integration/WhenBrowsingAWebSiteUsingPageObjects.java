@@ -2,8 +2,8 @@ package net.thucydides.core.webdriver.integration;
 
 import net.thucydides.core.pages.PageObject;
 import net.thucydides.core.pages.PageUrls;
-import net.thucydides.core.pages.WebElementFacade;
-import net.thucydides.core.pages.WebElementFacadeImpl;
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.core.pages.WebElementFacadeImpl;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;

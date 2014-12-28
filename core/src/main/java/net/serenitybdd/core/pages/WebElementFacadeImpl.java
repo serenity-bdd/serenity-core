@@ -65,7 +65,7 @@ public class WebElementFacadeImpl implements WebElementFacade {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebElementFacadeImpl.class);
 
-    private WebElementFacadeImpl(final WebDriver driver,
+    protected WebElementFacadeImpl(final WebDriver driver,
                                  final ElementLocator locator,
                                  final WebElement webElement,
                                  final long timeoutInMilliseconds) {
@@ -83,27 +83,16 @@ public class WebElementFacadeImpl implements WebElementFacade {
         return new WebElementFacadeImpl(driver, locator, webElement, timeoutInMilliseconds);
     }
 
-    /**
-     * @param driver
-     * @param webElement
-     * @param timeoutInMilliseconds
-     * @deprecated As of release 0.9.127, replaced by static {@link #wrapWebElement(WebDriver driver, WebElement webElement, long timeoutInMilliseconds)}
-     */
-    @Deprecated
-    public WebElementFacadeImpl(final WebDriver driver, final WebElement webElement, final long timeoutInMilliseconds) {
-        this(driver, (ElementLocator) null, webElement, timeoutInMilliseconds);
-    }
-
     public WebElementFacadeImpl(final WebDriver driver,
                                 final ElementLocator locator,
                                 final long timeoutInMilliseconds) {
         this(driver, locator, (WebElement) null, timeoutInMilliseconds);
     }
 
-    public static WebElementFacadeImpl wrapWebElement(final WebDriver driver,
+    public static net.thucydides.core.pages.WebElementFacadeImpl wrapWebElement(final WebDriver driver,
                                                       final WebElement element,
                                                       final long timeoutInMilliseconds) {
-        return new WebElementFacadeImpl(driver, (ElementLocator) null, element, timeoutInMilliseconds);
+        return new net.thucydides.core.pages.WebElementFacadeImpl(driver, (ElementLocator) null, element, timeoutInMilliseconds);
 
     }
 

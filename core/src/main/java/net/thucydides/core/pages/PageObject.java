@@ -2,7 +2,7 @@ package net.thucydides.core.pages;
 
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Predicate;
-import net.serenitybdd.core.pages.WebElementFacade;
+import net.thucydides.core.pages.WebElementFacade;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;

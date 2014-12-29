@@ -16,7 +16,7 @@ import groovy.text.SimpleTemplateEngine
 
 apply plugin: 'org.ajoberstar.release-base'
 release {
-    println "Updading release notes"
+    println "Updating release notes"
     grgit = Grgit.open(project.file('.'))
     versionStrategy Strategies.FINAL
     versionStrategy Strategies.PRE_RELEASE

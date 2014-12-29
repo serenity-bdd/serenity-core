@@ -8,7 +8,6 @@ import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.lang.reflect.Field;
 import java.util.List;
-//import org.openqa.selenium.WebElement;
 
 
 public class SmartElementLocator implements ElementLocator {

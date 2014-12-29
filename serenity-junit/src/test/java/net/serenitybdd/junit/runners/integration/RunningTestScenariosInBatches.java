@@ -1,9 +1,9 @@
-package net.thucydides.junit.runners.integration;
+package net.serenitybdd.junit.runners.integration;
 
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.batches.SystemVariableBasedBatchManager;
 import net.thucydides.core.util.MockEnvironmentVariables;
-import net.thucydides.junit.runners.ThucydidesRunner;
 import net.thucydides.samples.SampleNonWebSteps;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,14 +27,14 @@ public class RunningTestScenariosInBatches {
 
     private void runTestCases(SystemVariableBasedBatchManager batchManager) {
         try {
-            new ThucydidesRunner(SampleTestScenario1.class, batchManager).run(new RunNotifier());
-            new ThucydidesRunner(SampleTestScenario2.class, batchManager).run(new RunNotifier());
-            new ThucydidesRunner(SampleTestScenario3.class, batchManager).run(new RunNotifier());
-            new ThucydidesRunner(SampleTestScenario4.class, batchManager).run(new RunNotifier());
-            new ThucydidesRunner(SampleTestScenario5.class, batchManager).run(new RunNotifier());
-            new ThucydidesRunner(SampleTestScenario6.class, batchManager).run(new RunNotifier());
-            new ThucydidesRunner(SampleTestScenario7.class, batchManager).run(new RunNotifier());
-            new ThucydidesRunner(SampleTestScenario8.class, batchManager).run(new RunNotifier());
+            new SerenityRunner(SampleTestScenario1.class, batchManager).run(new RunNotifier());
+            new SerenityRunner(SampleTestScenario2.class, batchManager).run(new RunNotifier());
+            new SerenityRunner(SampleTestScenario3.class, batchManager).run(new RunNotifier());
+            new SerenityRunner(SampleTestScenario4.class, batchManager).run(new RunNotifier());
+            new SerenityRunner(SampleTestScenario5.class, batchManager).run(new RunNotifier());
+            new SerenityRunner(SampleTestScenario6.class, batchManager).run(new RunNotifier());
+            new SerenityRunner(SampleTestScenario7.class, batchManager).run(new RunNotifier());
+            new SerenityRunner(SampleTestScenario8.class, batchManager).run(new RunNotifier());
         } catch (InitializationError initializationError) {
             initializationError.printStackTrace();
         }
@@ -89,7 +89,7 @@ public class RunningTestScenariosInBatches {
     }
     // TEST CLASSES USED IN THE MAIN TESTS.
 
-    @RunWith(ThucydidesRunner.class)
+    @RunWith(SerenityRunner.class)
     public static class SampleTestScenario1 {
 
         int testNumber;
@@ -126,7 +126,7 @@ public class RunningTestScenariosInBatches {
 
     }
 
-    @RunWith(ThucydidesRunner.class)
+    @RunWith(SerenityRunner.class)
     public static class SampleTestScenario2 {
 
         int testNumber;
@@ -163,7 +163,7 @@ public class RunningTestScenariosInBatches {
 
     }
 
-    @RunWith(ThucydidesRunner.class)
+    @RunWith(SerenityRunner.class)
     public static class SampleTestScenario3 {
 
         int testNumber;
@@ -201,7 +201,7 @@ public class RunningTestScenariosInBatches {
     }
 
 
-    @RunWith(ThucydidesRunner.class)
+    @RunWith(SerenityRunner.class)
     public static class SampleTestScenario4 {
 
         int testNumber;
@@ -240,7 +240,7 @@ public class RunningTestScenariosInBatches {
 
 
 
-    @RunWith(ThucydidesRunner.class)
+    @RunWith(SerenityRunner.class)
     public static class SampleTestScenario5 {
 
         int testNumber;
@@ -277,7 +277,7 @@ public class RunningTestScenariosInBatches {
 
     }
 
-    @RunWith(ThucydidesRunner.class)
+    @RunWith(SerenityRunner.class)
     public static class SampleTestScenario6 {
 
         int testNumber;
@@ -314,7 +314,7 @@ public class RunningTestScenariosInBatches {
 
     }
 
-    @RunWith(ThucydidesRunner.class)
+    @RunWith(SerenityRunner.class)
     public static class SampleTestScenario7 {
 
         int testNumber;
@@ -351,7 +351,7 @@ public class RunningTestScenariosInBatches {
 
     }
 
-    @RunWith(ThucydidesRunner.class)
+    @RunWith(SerenityRunner.class)
     public static class SampleTestScenario8 {
 
         int testNumber;

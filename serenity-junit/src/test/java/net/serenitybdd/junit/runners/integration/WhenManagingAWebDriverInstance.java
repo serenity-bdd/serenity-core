@@ -1,12 +1,21 @@
-package net.thucydides.junit.runners.integration;
+package net.serenitybdd.junit.runners.integration;
 
+import net.serenitybdd.junit.runners.AbstractTestStepRunnerTest;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.webdriver.*;
+import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
+import net.thucydides.core.webdriver.ThucydidesWebdriverManager;
+import net.thucydides.core.webdriver.UnsupportedDriverException;
+import net.thucydides.core.webdriver.WebDriverFactory;
+import net.thucydides.core.webdriver.WebdriverInstanceFactory;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
 import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule;
-import net.thucydides.junit.runners.AbstractTestStepRunnerTest;
-import net.thucydides.junit.runners.ThucydidesRunner;
-import net.thucydides.samples.*;
+import net.thucydides.samples.MultipleTestScenario;
+import net.thucydides.samples.MultipleTestScenarioWithUniqueSession;
+import net.thucydides.samples.SamplePassingScenario;
+import net.thucydides.samples.SingleTestScenario;
+import net.thucydides.samples.SingleWikipediaTestScenario;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,7 +29,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -29,9 +40,8 @@ import static org.mockito.Mockito.verify;
  * Managing the WebDriver instance during a test run
  * The instance should be created once at the start of the test run,
  * and closed once at the end of the tests.
- * 
+ *
  * @author johnsmart
- * 
  */
 public class WhenManagingAWebDriverInstance extends AbstractTestStepRunnerTest {
 
@@ -75,9 +85,9 @@ public class WhenManagingAWebDriverInstance extends AbstractTestStepRunnerTest {
 
 
     @Test
-    public void the_driver_should_be_initialized_before_the_tests() throws InitializationError  {
+    public void the_driver_should_be_initialized_before_the_tests() throws InitializationError {
 
-        ThucydidesRunner runner = new ThucydidesRunner(SamplePassingScenario.class, webDriverFactory);
+        SerenityRunner runner = new SerenityRunner(SamplePassingScenario.class, webDriverFactory);
 
         runner.run(new RunNotifier());
 
@@ -90,29 +100,29 @@ public class WhenManagingAWebDriverInstance extends AbstractTestStepRunnerTest {
     @Test
     public void the_driver_should_be_reset_after_each_test() throws InitializationError {
 
-        ThucydidesRunner runner = new ThucydidesRunner(MultipleTestScenario.class, webDriverFactory);
+        SerenityRunner runner = new SerenityRunner(MultipleTestScenario.class, webDriverFactory);
 
         runner.run(new RunNotifier());
 
-        verify(firefoxDriver,times(3)).quit();
+        verify(firefoxDriver, times(3)).quit();
     }
 
     @Test
     public void the_driver_should_only_be_reset_once_at_the_start_for_unique_session_tests() throws InitializationError {
 
-        ThucydidesRunner runner = new ThucydidesRunner(MultipleTestScenarioWithUniqueSession.class, webDriverFactory);
+        SerenityRunner runner = new SerenityRunner(MultipleTestScenarioWithUniqueSession.class, webDriverFactory);
 
         runner.run(new RunNotifier());
 
-        verify(firefoxDriver,times(1)).quit();
+        verify(firefoxDriver, times(1)).quit();
     }
 
 
     @Test
     public void the_driver_should_be_quit_after_the_tests() throws InitializationError {
 
-        ThucydidesRunner runner = new ThucydidesRunner(SingleTestScenario.class, webDriverFactory);
-        
+        SerenityRunner runner = new SerenityRunner(SingleTestScenario.class, webDriverFactory);
+
         runner.run(new RunNotifier());
         verify(firefoxDriver).quit();
     }
@@ -122,7 +132,7 @@ public class WhenManagingAWebDriverInstance extends AbstractTestStepRunnerTest {
 
         environmentVariables.setProperty("webdriver.driver", "netscape");
         try {
-            ThucydidesRunner runner = getTestRunnerUsing(SingleTestScenario.class);
+            SerenityRunner runner = getTestRunnerUsing(SingleTestScenario.class);
             runner.run(new RunNotifier());
             fail();
         } catch (UnsupportedDriverException e) {
@@ -134,7 +144,7 @@ public class WhenManagingAWebDriverInstance extends AbstractTestStepRunnerTest {
     public void a_system_provided_url_should_override_the_default_url() throws InitializationError {
 
         environmentVariables.setProperty("webdriver.base.url", "http://www.wikipedia.com");
-        ThucydidesRunner runner = getTestRunnerUsing(SingleWikipediaTestScenario.class);
+        SerenityRunner runner = getTestRunnerUsing(SingleWikipediaTestScenario.class);
 
         runner.run(new RunNotifier());
 
@@ -142,9 +152,9 @@ public class WhenManagingAWebDriverInstance extends AbstractTestStepRunnerTest {
     }
 
     @Override
-    protected ThucydidesRunner getTestRunnerUsing(Class<?> testClass) throws InitializationError {
+    protected SerenityRunner getTestRunnerUsing(Class<?> testClass) throws InitializationError {
         Configuration configuration = new SystemPropertiesConfiguration(environmentVariables);
-        return new ThucydidesRunner(testClass, webDriverFactory, configuration);
+        return new SerenityRunner(testClass, webDriverFactory, configuration);
     }
 
 }

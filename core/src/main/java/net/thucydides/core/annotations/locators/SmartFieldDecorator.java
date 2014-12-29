@@ -95,7 +95,7 @@ public class SmartFieldDecorator implements FieldDecorator {
     protected <T> T proxyForLocator(ClassLoader loader, Class<T> interfaceType, ElementLocator locator) {
         InvocationHandler handler;
         T proxy = null;
-        if (WebElementFacade.class.isAssignableFrom(interfaceType)) {
+        if (net.serenitybdd.core.pages.WebElementFacade.class.isAssignableFrom(interfaceType)) {
             handler = new SmartElementHandler(interfaceType, locator, driver, pageObject.waitForTimeoutInMilliseconds());
             proxy = (T) Proxy.newProxyInstance(loader, new Class[]{interfaceType}, handler);
         } else {

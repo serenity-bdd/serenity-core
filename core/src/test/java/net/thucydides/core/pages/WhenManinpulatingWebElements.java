@@ -1,5 +1,6 @@
 package net.thucydides.core.pages;
 
+import net.serenitybdd.core.pages.WebElementFacade;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import org.junit.Before;
 import org.junit.Test;

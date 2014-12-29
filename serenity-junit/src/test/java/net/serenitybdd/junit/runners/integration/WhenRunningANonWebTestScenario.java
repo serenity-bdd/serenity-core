@@ -1,7 +1,9 @@
-package net.thucydides.junit.runners.integration;
+package net.serenitybdd.junit.runners.integration;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import net.serenitybdd.junit.runners.AbstractTestStepRunnerTest;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.guice.ThucydidesModule;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
@@ -9,8 +11,6 @@ import net.thucydides.core.model.TestStep;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.junit.rules.DisableThucydidesHistoryRule;
-import net.thucydides.junit.runners.AbstractTestStepRunnerTest;
-import net.thucydides.junit.runners.ThucydidesRunner;
 import net.thucydides.samples.*;
 import org.junit.Before;
 import org.junit.Rule;
@@ -28,7 +28,6 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 
 public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
@@ -51,7 +50,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Test
     public void the_test_runner_records_the_steps_as_they_are_executed() throws InitializationError {
 
-        ThucydidesRunner runner = new ThucydidesRunner(SamplePassingNonWebScenario.class, injector);
+        SerenityRunner runner = new SerenityRunner(SamplePassingNonWebScenario.class, injector);
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedSteps = runner.getTestOutcomes();
@@ -66,7 +65,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Test
     public void tests_marked_as_pending_should_be_pending() throws InitializationError {
 
-        ThucydidesRunner runner = new ThucydidesRunner(SamplePassingNonWebScenarioWithPendingTests.class);
+        SerenityRunner runner = new SerenityRunner(SamplePassingNonWebScenarioWithPendingTests.class);
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedSteps = runner.getTestOutcomes();
@@ -80,7 +79,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Test
     public void tests_with_failing_assumptions_should_be_ignored() throws InitializationError {
 
-        ThucydidesRunner runner = new ThucydidesRunner(SampleScenarioWithFailingAssumption.class);
+        SerenityRunner runner = new SerenityRunner(SampleScenarioWithFailingAssumption.class);
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedSteps = runner.getTestOutcomes();
@@ -93,7 +92,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Test
     public void tests_marked_as_ignored_should_be_skipped() throws InitializationError {
 
-        ThucydidesRunner runner = new ThucydidesRunner(SamplePassingNonWebScenarioWithIgnoredTests.class);
+        SerenityRunner runner = new SerenityRunner(SamplePassingNonWebScenarioWithIgnoredTests.class);
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedSteps = runner.getTestOutcomes();
@@ -108,7 +107,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Test
     public void tests_with_no_steps_should_be_marked_as_successful() throws InitializationError {
 
-        ThucydidesRunner runner = new ThucydidesRunner(SamplePassingNonWebScenarioWithEmptyTests.class);
+        SerenityRunner runner = new SerenityRunner(SamplePassingNonWebScenarioWithEmptyTests.class);
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedSteps = runner.getTestOutcomes();
@@ -124,7 +123,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Test
     public void tests_should_be_run_after_an_assertion_error() throws InitializationError {
 
-        ThucydidesRunner runner = new ThucydidesRunner(SampleNonWebScenarioWithError.class);
+        SerenityRunner runner = new SerenityRunner(SampleNonWebScenarioWithError.class);
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedSteps = runner.getTestOutcomes();
@@ -138,7 +137,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Test
     public void failing_tests_with_no_steps_should_still_record_the_error() throws InitializationError {
 
-        ThucydidesRunner runner = new ThucydidesRunner(SampleNonWebScenarioWithError.class);
+        SerenityRunner runner = new SerenityRunner(SampleNonWebScenarioWithError.class);
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedSteps = runner.getTestOutcomes();
@@ -151,7 +150,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Test
     public void the_test_runner_skips_any_tests_after_a_failure() throws Exception {
 
-        ThucydidesRunner runner = new ThucydidesRunner(SampleTestScenario.class);
+        SerenityRunner runner = new SerenityRunner(SampleTestScenario.class);
 
         runner.run(new RunNotifier());
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();
@@ -171,7 +170,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Test
     public void the_test_runner_should_notify_test_failures() throws Exception {
 
-        ThucydidesRunner runner = new ThucydidesRunner(SingleNonWebTestScenario.class);
+        SerenityRunner runner = new SerenityRunner(SingleNonWebTestScenario.class);
         RunNotifier notifier = mock(RunNotifier.class);
         runner.run(notifier);
 
@@ -181,7 +180,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Test
     public void the_test_runner_records_the_name_of_the_test_scenario() throws InitializationError {
 
-        ThucydidesRunner runner = new ThucydidesRunner(SamplePassingNonWebScenario.class);
+        SerenityRunner runner = new SerenityRunner(SamplePassingNonWebScenario.class);
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();
@@ -192,7 +191,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
     @Test
     public void the_test_runner_records_each_step_of_the_test_scenario() throws InitializationError {
-        ThucydidesRunner runner = new ThucydidesRunner(SamplePassingNonWebScenario.class);
+        SerenityRunner runner = new SerenityRunner(SamplePassingNonWebScenario.class);
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();
@@ -205,7 +204,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
     @Test
     public void the_test_runner_distinguishes_between_ignored_skipped_and_pending_steps() throws InitializationError {
-        ThucydidesRunner runner = new ThucydidesRunner(SampleTestScenario.class);
+        SerenityRunner runner = new SerenityRunner(SampleTestScenario.class);
 
         runner.run(new RunNotifier());
 
@@ -230,7 +229,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Test
     public void the_test_runner_should_not_store_screenshots_for_non_web_tests() throws Exception {
 
-        ThucydidesRunner runner = new ThucydidesRunner(SingleNonWebTestScenario.class);
+        SerenityRunner runner = new SerenityRunner(SingleNonWebTestScenario.class);
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();
@@ -246,7 +245,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Test
     public void the_test_runner_records_each_step_with_a_nice_name_when_steps_have_parameters() throws InitializationError {
 
-        ThucydidesRunner runner = new ThucydidesRunner(NonWebTestScenarioWithParameterizedSteps.class);
+        SerenityRunner runner = new SerenityRunner(NonWebTestScenarioWithParameterizedSteps.class);
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();
@@ -261,7 +260,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Test
     public void the_test_runner_records_each_step_with_a_nice_name_when_steps_have_multiple_parameters() throws InitializationError {
 
-        ThucydidesRunner runner = new ThucydidesRunner(NonWebTestScenarioWithParameterizedSteps.class);
+        SerenityRunner runner = new SerenityRunner(NonWebTestScenarioWithParameterizedSteps.class);
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();
@@ -274,16 +273,16 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     }
 
 
-    class TestableThucydidesRunnerSample extends ThucydidesRunner {
+    class TestableSerenityRunnerSample extends SerenityRunner {
 
         private final File testOutputDirectory;
 
-        public TestableThucydidesRunnerSample(final Class<?> klass, File outputDirectory) throws InitializationError {
+        public TestableSerenityRunnerSample(final Class<?> klass, File outputDirectory) throws InitializationError {
             super(klass);
             testOutputDirectory = outputDirectory;
         }
 
-        public TestableThucydidesRunnerSample(Class<?> klass,
+        public TestableSerenityRunnerSample(Class<?> klass,
                                               WebDriverFactory webDriverFactory,
                                               File outputDirectory) throws InitializationError {
             super(klass, webDriverFactory);
@@ -301,7 +300,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
         File outputDirectory = temporaryFolder.newFolder("output");
 
-        ThucydidesRunner runner = new TestableThucydidesRunnerSample(SamplePassingNonWebScenario.class,
+        SerenityRunner runner = new TestableSerenityRunnerSample(SamplePassingNonWebScenario.class,
                 outputDirectory);
         runner.run(new RunNotifier());
 
@@ -316,7 +315,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
         File outputDirectory = temporaryFolder.newFolder("output");
 
-        ThucydidesRunner runner = new TestableThucydidesRunnerSample(SamplePassingNonWebScenario.class,outputDirectory);
+        SerenityRunner runner = new TestableSerenityRunnerSample(SamplePassingNonWebScenario.class,outputDirectory);
         runner.run(new RunNotifier());
 
         List<String> generatedHtmlReports = Arrays.asList(outputDirectory.list(new HTMLFileFilter()));
@@ -328,7 +327,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
         File outputDirectory = temporaryFolder.newFolder("output");
 
-        ThucydidesRunner runner = new TestableThucydidesRunnerSample(SamplePassingNonWebScenario.class,
+        SerenityRunner runner = new TestableSerenityRunnerSample(SamplePassingNonWebScenario.class,
                 outputDirectory);
         runner.run(new RunNotifier());
 

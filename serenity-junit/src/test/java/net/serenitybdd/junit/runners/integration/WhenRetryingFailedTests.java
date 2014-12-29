@@ -1,5 +1,6 @@
-package net.thucydides.junit.runners.integration;
+package net.serenitybdd.junit.runners.integration;
 
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.model.TestOutcome;
@@ -7,7 +8,6 @@ import net.thucydides.core.model.TestResult;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import net.thucydides.core.webdriver.WebDriverFactory;
-import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,7 +34,7 @@ public class WhenRetryingFailedTests {
     @Test
     public void result_is_a_pass_despite_initial_failure() throws Exception {
         environmentVariables.setProperty(MAX_RETRIES, "5");
-        ThucydidesRunner runner = new ThucydidesRunner(FailThenPassSample.class,
+        SerenityRunner runner = new SerenityRunner(FailThenPassSample.class,
                                                        new WebDriverFactory(environmentVariables),
                                                        new SystemPropertiesConfiguration(environmentVariables));
 

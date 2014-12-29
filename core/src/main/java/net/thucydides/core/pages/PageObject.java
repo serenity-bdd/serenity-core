@@ -2,6 +2,7 @@ package net.thucydides.core.pages;
 
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Predicate;
+import net.thucydides.core.pages.WebElementFacade;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;
@@ -44,7 +45,6 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static ch.lambdaj.Lambda.convert;
-import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_BATCH_NUMBER;
 import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascriptIsSupportedIn;
 
 /**

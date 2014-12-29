@@ -1,10 +1,10 @@
-package net.thucydides.junit.runners.integration;
+package net.serenitybdd.junit.runners.integration;
 
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.junit.rules.DisableThucydidesHistoryRule;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
 import net.thucydides.junit.runners.AbstractTestStepRunnerTest;
-import net.thucydides.junit.runners.ThucydidesRunner;
 import net.thucydides.samples.LongSamplePassingScenarioUsingPhantomJS;
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class WhenRunningATestScenarioWithScreenshots extends AbstractTestStepRun
     @Test
     public void the_test_runner_records_the_steps_as_they_are_executed() throws InitializationError {
 
-        ThucydidesRunner runner = new ThucydidesRunner(LongSamplePassingScenarioUsingPhantomJS.class);
+        SerenityRunner runner = new SerenityRunner(LongSamplePassingScenarioUsingPhantomJS.class);
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedSteps = runner.getTestOutcomes();

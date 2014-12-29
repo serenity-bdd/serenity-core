@@ -1,9 +1,9 @@
-package net.thucydides.junit.runners.integration;
+package net.serenitybdd.junit.runners.integration;
 
+import net.serenitybdd.junit.runners.AbstractTestStepRunnerTest;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.junit.runners.AbstractTestStepRunnerTest;
-import net.thucydides.junit.runners.ThucydidesRunner;
 import net.thucydides.samples.SamplePassingScenarioUsingHtmlUnit;
 import org.junit.Before;
 import org.junit.Rule;
@@ -38,21 +38,21 @@ public class RunningTestScenariosInParallel extends AbstractTestStepRunnerTest {
 
     public class ScenarioThread extends Thread {
 
-        ThucydidesRunner runner;
+        SerenityRunner runner;
 
         public ScenarioThread()  throws InitializationError {
-            runner = new ThucydidesRunner(SamplePassingScenarioUsingHtmlUnit.class);
+            runner = new SerenityRunner(SamplePassingScenarioUsingHtmlUnit.class);
         }
 
         public void run() {
             runner.run(new RunNotifier());
         }
-        
+
         public List<TestOutcome> getTestOutcomes() {
-            return runner.getTestOutcomes();    
+            return runner.getTestOutcomes();
         }
     }
-    
+
     @Test
     public void the_test_runner_records_the_steps_as_they_are_executed() throws InitializationError, InterruptedException {
 

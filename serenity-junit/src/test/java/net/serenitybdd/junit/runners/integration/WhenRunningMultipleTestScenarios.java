@@ -1,4 +1,4 @@
-package net.thucydides.junit.runners.integration;
+package net.serenitybdd.junit.runners.integration;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

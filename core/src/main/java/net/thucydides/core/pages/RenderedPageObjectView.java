@@ -1,5 +1,6 @@
 package net.thucydides.core.pages;
 
+import net.serenitybdd.core.pages.WebElementFacade;
 import net.thucydides.core.scheduling.NormalFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
 import org.openqa.selenium.*;

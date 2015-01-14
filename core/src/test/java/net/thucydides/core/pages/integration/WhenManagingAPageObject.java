@@ -1,8 +1,8 @@
 package net.thucydides.core.pages.integration;
 
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.core.pages.WebElementFacadeImpl;
 import net.thucydides.core.pages.PageObject;
-import net.thucydides.core.pages.WebElementFacade;
-import net.thucydides.core.pages.WebElementFacadeImpl;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
@@ -10,7 +10,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +25,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class WhenManagingAPageObject {
 
@@ -29,7 +37,7 @@ public class WhenManagingAPageObject {
 
     @Mock
     WebElement mockButton;
-    
+
     MockEnvironmentVariables environmentVariables;
 
     Configuration configuration;
@@ -40,9 +48,9 @@ public class WhenManagingAPageObject {
         environmentVariables = new MockEnvironmentVariables();
         configuration = new SystemPropertiesConfiguration(environmentVariables);
     }
-    
+
     class BasicPageObject extends PageObject {
-        
+
         protected WebElement button;
 
         public BasicPageObject(WebDriver driver) {
@@ -214,7 +222,7 @@ public class WhenManagingAPageObject {
         when(searchedBlock.findElements(any(By.class))).thenReturn(emptyList).thenReturn(listWithElements);
         when(searchedBlock.getText()).thenReturn("contains 'hi there'");
 
-        page.waitForTextToAppear(searchedBlock,"hi there");
+        page.waitForTextToAppear(searchedBlock, "hi there");
     }
 
     @Test
@@ -230,7 +238,7 @@ public class WhenManagingAPageObject {
         when(searchedBlock.findElements(any(By.class))).thenReturn(listWithElements);
         when(searchedBlock.getText()).thenReturn("contains 'hi there'");
 
-        page.waitForTextToAppear(searchedBlock,"hi there");
+        page.waitForTextToAppear(searchedBlock, "hi there");
     }
 
     @Test(expected = TimeoutException.class)
@@ -245,7 +253,7 @@ public class WhenManagingAPageObject {
         when(searchedBlock.findElements(any(By.class))).thenReturn(emptyList);
         when(searchedBlock.getText()).thenReturn("no matching text here");
 
-        page.waitForTextToAppear(searchedBlock,"hi there");
+        page.waitForTextToAppear(searchedBlock, "hi there");
     }
 
     @Test
@@ -260,7 +268,7 @@ public class WhenManagingAPageObject {
         when(searchedBlock.findElements(any(By.class))).thenReturn(listWithElements);
         when(searchedBlock.getText()).thenReturn("contains 'hi there'");
 
-        page.waitForTextToAppear(searchedBlock,"hi there");
+        page.waitForTextToAppear(searchedBlock, "hi there");
     }
 
     @Test
@@ -280,7 +288,7 @@ public class WhenManagingAPageObject {
     }
 
 
-    @Test(expected=TimeoutException.class)
+    @Test(expected = TimeoutException.class)
     public void page_will_fail_if_single_text_fails_to_appear_in_an_element_if_requested() {
 
         BasicPageObject page = new BasicPageObject(driver);
@@ -295,7 +303,7 @@ public class WhenManagingAPageObject {
         page.waitForAnyTextToAppear(searchedBlock, "hi there");
     }
 
-    @Test(expected=TimeoutException.class)
+    @Test(expected = TimeoutException.class)
     public void page_will_fail_if_text_fails_to_appear_in_an_element_if_requested() {
 
         BasicPageObject page = new BasicPageObject(driver);
@@ -365,7 +373,7 @@ public class WhenManagingAPageObject {
     }
 
 
-    @Test(expected=TimeoutException.class)
+    @Test(expected = TimeoutException.class)
     public void page_will_throw_exception_if_waiting_for_rendered_element_does_not_exist() {
 
         when(driver.findElement(any(By.class))).thenThrow(new NoSuchElementException("No such element"));
@@ -376,7 +384,7 @@ public class WhenManagingAPageObject {
     }
 
 
-    @Test(expected=TimeoutException.class)
+    @Test(expected = TimeoutException.class)
     public void page_will_throw_exception_if_waiting_for_rendered_element_is_not_visible() {
 
         WebElement renderedElement = mock(WebElement.class);
@@ -401,7 +409,7 @@ public class WhenManagingAPageObject {
         page.waitForAnyRenderedElementOf(By.id("element1"), By.id("element2"));
     }
 
-    @Test(expected=TimeoutException.class)
+    @Test(expected = TimeoutException.class)
     public void page_will_fail_for_any_of_several_rendered_elements_if_element_is_displayed_but_not_rendered() {
 
         WebElement renderedElement = mock(WebElement.class);
@@ -412,7 +420,6 @@ public class WhenManagingAPageObject {
         page.setWaitForTimeout(200);
         page.waitForAnyRenderedElementOf(By.id("element1"), By.id("element2"));
     }
-
 
 
     @Test
@@ -487,10 +494,10 @@ public class WhenManagingAPageObject {
         when(renderedElement.isDisplayed()).thenReturn(false).thenReturn(true);
         List<WebElement> listWithRenderedElement = Arrays.asList((WebElement) renderedElement);
         when(driver.findElement(criteria)).thenThrow(new NoSuchElementException("No such element"))
-                                          .thenThrow(new NoSuchElementException("No such element"))
-                                          .thenReturn(renderedElement);
+                .thenThrow(new NoSuchElementException("No such element"))
+                .thenReturn(renderedElement);
         when(driver.findElements(criteria)).thenReturn(emptyList)
-                                           .thenReturn(listWithRenderedElement);
+                .thenReturn(listWithRenderedElement);
     }
 
 
@@ -500,15 +507,15 @@ public class WhenManagingAPageObject {
         when(renderedElement.isDisplayed()).thenReturn(true).thenReturn(false);
         List<WebElement> listWithRenderedElement = Arrays.asList((WebElement) renderedElement);
         when(driver.findElement(criteria)).thenReturn(renderedElement)
-                                           .thenReturn(renderedElement)
-                                           .thenThrow(new NoSuchElementException("No such element"));
+                .thenReturn(renderedElement)
+                .thenThrow(new NoSuchElementException("No such element"));
         when(driver.findElements(criteria)).thenReturn(listWithRenderedElement)
-                                           .thenReturn(listWithRenderedElement)
-                                           .thenReturn(emptyList);
+                .thenReturn(listWithRenderedElement)
+                .thenReturn(emptyList);
     }
 
 
-    @Test(expected=AssertionError.class)
+    @Test(expected = AssertionError.class)
     public void should_be_visible_should_throw_an_assertion_if_element_is_not_visible() {
         BasicPageObject page = new BasicPageObject(driver);
         WebElement field = mock(WebElement.class);
@@ -517,7 +524,7 @@ public class WhenManagingAPageObject {
         page.shouldBeVisible(field);
     }
 
-    @Test(expected=AssertionError.class)
+    @Test(expected = AssertionError.class)
     public void should_be_not_visible_should_throw_an_assertion_if_element_is_visible() {
         BasicPageObject page = new BasicPageObject(driver);
         WebElement field = mock(WebElement.class);
@@ -586,7 +593,7 @@ public class WhenManagingAPageObject {
         assertThat(page.containsTextInElement(searchedBlock, "orange"), is(false));
     }
 
-    @Test(expected=AssertionError.class)
+    @Test(expected = AssertionError.class)
     public void should_contain_text_in_element_should_throw_an_assertion_if_text_is_not_visible() {
         BasicPageObject page = new BasicPageObject(driver);
         WebElement searchedBlock = mock(WebElement.class);

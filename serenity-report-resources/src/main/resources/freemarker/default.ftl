@@ -104,7 +104,7 @@
                             </div>
                         </#if>
 
-                        <#if (testOutcome.backgroundDescription??)>
+                        <#if (testOutcome.backgroundDescription?has_content)>
                             <div class="requirementNarrative">Background: ${testOutcome.backgroundDescription}</div>
                         </#if>
                     </td>

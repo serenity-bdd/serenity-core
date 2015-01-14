@@ -23,6 +23,7 @@
 ## Chores
   -  Automated the generation of the release notes from the git commits
 ## Miscellaneous
+  - WIP
   - Improved release notes to avoid empty tags
   - Improved release notes to avoid empty tags
   - Updated release notes

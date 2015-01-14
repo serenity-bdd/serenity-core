@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import net.thucydides.core.statistics.service.ClasspathTagProviderService;
 import net.thucydides.core.statistics.service.TagProvider;
 import net.thucydides.core.statistics.service.TagProviderFilter;
+import net.thucydides.core.statistics.service.TagProviderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,13 +18,11 @@ import java.util.List;
  * Custom requirements providers can be placed on the classpath along with a file in the META-INF.services
  * directory called net.thucydides.core.statistics.service.TagProvider.old that lists the fully qualified class
  * name for the class.
- *
- * The
  */
 public class ClasspathRequirementsProviderService implements RequirementsProviderService {
     private final Logger logger = LoggerFactory.getLogger(ClasspathRequirementsProviderService.class);
 
-    private ClasspathTagProviderService tagProviderService;
+    private TagProviderService tagProviderService;
 
     private List<RequirementsTagProvider> requirementsTagProviders;
 
@@ -31,7 +30,7 @@ public class ClasspathRequirementsProviderService implements RequirementsProvide
     private TagProviderFilter<RequirementsTagProvider> filter = new TagProviderFilter<>();
 
     @Inject
-    public ClasspathRequirementsProviderService(ClasspathTagProviderService tagProviderService) {
+    public ClasspathRequirementsProviderService(TagProviderService tagProviderService) {
         this.tagProviderService = tagProviderService;
     }
 

@@ -121,6 +121,11 @@ public class FailureDetectingStepListener implements StepListener {
 
     }
 
+    @Override
+    public void addNewExamplesFrom(DataTable table) {
+
+    }
+
 
     public void exampleStarted(Map<String, String> data) {
 

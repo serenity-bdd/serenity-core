@@ -1215,6 +1215,16 @@ public class TestOutcome {
         this.dataTable = table;
     }
 
+
+    public void addNewExamplesFrom(DataTable table) {
+        List<DataTableRow> updatedRows = table.getRows();
+        if (table.getSize() > dataTable.getSize()) {
+            for(int rowNumber = dataTable.getSize(); rowNumber < updatedRows.size(); rowNumber++) {
+                dataTable.appendRow(updatedRows.get(rowNumber));
+            }
+        }
+    }
+
     public void moveToNextRow() {
         if (dataTable != null && !dataTable.atLastRow()) {
             dataTable.nextRow();

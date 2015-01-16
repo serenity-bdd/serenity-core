@@ -127,6 +127,11 @@ public interface StepListener {
     void useExamplesFrom(DataTable table);
 
     /**
+     * If multiple tables are used, this method will add any new rows to the test data
+     */
+    void addNewExamplesFrom(DataTable table);
+
+    /**
      * A new example has just started.
      */
     void exampleStarted(Map<String,String> data);

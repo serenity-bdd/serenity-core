@@ -20,26 +20,10 @@
 - [v1.0.4](#v1.0.4)
 - [v1.0.2](#v1.0.2)
 # Upcoming<a name='Upcoming'></a>
-## Style
-  -  fix typo in logging
-## Refactoring
-  -  PageObject still returns thucydides WebElementFacadeImpl so that can be cast to serenitybdd namespace
-This will need to be cleaned up when the thucydides namespace is retired.
-
-  -  Create serenitybdd version of WebElementFacade classes/interfaces
-Deprecate Thucydides versions, but still handle them correctly
-
-  -  Move tests from thucydides to serenitybdd package
 ## Chores
   -  Automated the generation of the release notes from the git commits
 ## Miscellaneous
-  - Added extra support for handling Cucumber example tables
-  - Merged latest changes
-  - Simplified dependencies a little
   - WIP
-  - Updated release notes
-  - Merge pull request #14 from mikezx6r/master
-Serenity BDD version of WebElementFacade classes/interfaces
   - Improved release notes to avoid empty tags
   - Improved release notes to avoid empty tags
   - Updated release notes

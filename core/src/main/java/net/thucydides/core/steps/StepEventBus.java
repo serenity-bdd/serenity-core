@@ -488,6 +488,12 @@ public class StepEventBus {
         }
     }
 
+    public void addNewExamplesFrom(DataTable newTable) {
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.addNewExamplesFrom(newTable);
+        }
+    }
+
     public void exampleStarted(Map<String, String> data) {
         for (StepListener stepListener : getAllListeners()) {
             stepListener.exampleStarted(data);

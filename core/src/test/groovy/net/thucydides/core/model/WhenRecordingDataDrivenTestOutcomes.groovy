@@ -182,6 +182,53 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
             listener.testOutcomes[0].dataTable
     }
 
+    def "Should be able to describe a set of example tables via the event bus"() {
+        given:
+            def eventBus = new StepEventBus(screenshotProcessor)
+            def BaseStepListener listener = new BaseStepListener(outputDirectory)
+            eventBus.registerListener(listener)
+        when:
+            eventBus.testStarted("aDataDrivenTest")
+            eventBus.useExamplesFrom(DataTable.withHeaders(["firstName","lastName","age"]).
+                    andRows([["Joe", "Smith",20],
+                             ["Jack", "Jones",21]]).build())
+            int currentRow = listener.testOutcomes[0].dataTable.currentRowNumber()
+        and:
+            eventBus.addNewExamplesFrom(DataTable.withHeaders(["firstName","lastName","age"]).
+                    andRows([["Joe", "Smith",20],
+                             ["Jack", "Jones",21],
+                             ["Jill", "Jones",22],
+                             ["Jane", "Jones",22],
+                             ["Mary", "Jones",22]]).build())
+        then:
+            listener.testOutcomes[0].isDataDriven()
+        and:
+            listener.testOutcomes[0].dataTable.rows.size() == 5
+        and:
+            listener.testOutcomes[0].dataTable.currentRowNumber() == currentRow
+    }
+
+    def "Should not add rows that already exist"() {
+        given:
+        def eventBus = new StepEventBus(screenshotProcessor)
+        def BaseStepListener listener = new BaseStepListener(outputDirectory)
+        eventBus.registerListener(listener)
+        when:
+        eventBus.testStarted("aDataDrivenTest")
+        eventBus.useExamplesFrom(DataTable.withHeaders(["firstName","lastName","age"]).
+                andRows([["Joe", "Smith",20],
+                         ["Jack", "Jones",21]]).build())
+        and:
+        eventBus.addNewExamplesFrom(DataTable.withHeaders(["firstName","lastName","age"]).
+                andRows([["Joe", "Smith",20],
+                         ["Jack", "Jones",21]]).build())
+
+        then:
+        listener.testOutcomes[0].isDataDriven()
+        and:
+        listener.testOutcomes[0].dataTable.rows.size() == 2
+    }
+
     private static class SomeTest {
         public void step1() {}
         public void step2() {}

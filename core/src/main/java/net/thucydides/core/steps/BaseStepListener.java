@@ -743,6 +743,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
         currentExample = 0;
     }
 
+    public void addNewExamplesFrom(DataTable table) {
+        getCurrentTestOutcome().addNewExamplesFrom(table);
+        currentExample = 0;
+    }
+
+
     public void exampleStarted(Map<String, String> data) {
         clearForcedResult();
         if (getCurrentTestOutcome().isDataDriven()) {

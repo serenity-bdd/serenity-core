@@ -910,7 +910,8 @@ td.step-icon {
 }
 
 .step-description {
-    overflow-x: auto;
+    overflow: auto;
+    max-width: 700px;
 }
 
 .step-table-separator td {
@@ -1221,6 +1222,7 @@ table.coverage_data td {
     border-radius:5px;
     -webkit-border-radius:5px;
     padding:5px;
+    overflow: auto;
 }
 
 .related-tags-section {

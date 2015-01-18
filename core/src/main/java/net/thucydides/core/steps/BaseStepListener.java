@@ -200,7 +200,16 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     protected TestOutcome getCurrentTestOutcome() {
         Preconditions.checkState(!testOutcomes.isEmpty());
-        return testOutcomes.get(testOutcomes.size() - 1);
+        return latestTestOutcome().get();
+    }
+
+    protected Optional<TestOutcome> latestTestOutcome() {
+        if (testOutcomes.isEmpty()) {
+            return Optional.absent();
+        } else {
+            TestOutcome latestOutcome = testOutcomes.get(testOutcomes.size() - 1);
+            return Optional.of(latestOutcome);
+        }
     }
 
     protected SystemClock getClock() {

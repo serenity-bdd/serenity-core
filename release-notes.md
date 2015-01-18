@@ -34,6 +34,7 @@ Deprecate Thucydides versions, but still handle them correctly
   -  Automated the generation of the release notes from the git commits
 ## Miscellaneous
   - Migrated the default output directory to target/site/serenity
+  - Migrated the default output directory to target/site/serenity
   - Added support for better Cucumber reporting
   - Updated release notes
   - Restored release notes

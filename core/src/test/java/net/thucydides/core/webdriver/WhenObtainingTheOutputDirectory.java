@@ -42,7 +42,7 @@ public class WhenObtainingTheOutputDirectory {
         environmentVariables.setProperty("project.reporting.OutputDirectory","custom-reports-directory");
         File outputDirectory = configuration.getOutputDirectory();
 
-        assertThat(outputDirectory.getPath(), is(changeSeparatorIfRequired("custom-reports-directory/thucydides")));
+        assertThat(outputDirectory.getPath(), is(changeSeparatorIfRequired("custom-reports-directory/serenity")));
     }
 
     @Test

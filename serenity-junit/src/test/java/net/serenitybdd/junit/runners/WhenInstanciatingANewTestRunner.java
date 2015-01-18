@@ -42,7 +42,7 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
 
         File outputDirectory = runner.getOutputDirectory();
 
-        assertThat(outputDirectory.getPath(), is("target" + FILE_SEPARATOR + "site" + FILE_SEPARATOR + "thucydides"));
+        assertThat(outputDirectory.getPath(), is("target" + FILE_SEPARATOR + "site" + FILE_SEPARATOR + "serenity"));
     }
 
 

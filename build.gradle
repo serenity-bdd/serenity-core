@@ -16,7 +16,6 @@ import groovy.text.SimpleTemplateEngine
 
 apply plugin: 'org.ajoberstar.release-base'
 release {
-    println "Updating release notes"
     grgit = Grgit.open(project.file('.'))
     versionStrategy Strategies.FINAL
     versionStrategy Strategies.PRE_RELEASE
@@ -236,11 +235,14 @@ subprojects {
 }
 
 // Supporting methods to generate the release notes from the Git commits
+// TODO: Make this into a plugin
 
+/*
 String LAST_LEGACY_TAG = "v1.0.23"
 String RELEASE_NOTES_FILE = 'release-notes.md'
 
-task releaseNotes() {
+task publishReleaseNotes() {
+    println "Generating Release Notes"
     def writeLegacyReleaseNotes = false
 
     def releaseNotes = new File(RELEASE_NOTES_FILE)
@@ -405,3 +407,4 @@ class CommitMessage {
 List<CommitMessage> changesOfType(MessageType messageType, List<CommitMessage> commitMessages) {
     commitMessages.findAll { it.type == messageType}
 }
+*/

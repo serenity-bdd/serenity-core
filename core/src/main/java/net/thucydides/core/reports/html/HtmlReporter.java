@@ -24,7 +24,7 @@ import java.util.Map;
 public abstract class HtmlReporter extends ThucydidesReporter {
 
     private static final String DEFAULT_RESOURCE_DIRECTORY = "report-resources";
-    private static final String DEFAULT_SOURCE_DIR = "target/site/thucydides";
+    private static final String DEFAULT_SOURCE_DIR = "target/site/serenity";
     private String resourceDirectory = DEFAULT_RESOURCE_DIRECTORY;
     private final TemplateManager templateManager;
     private final EnvironmentVariables environmentVariables;

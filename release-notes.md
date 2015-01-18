@@ -33,6 +33,7 @@ Deprecate Thucydides versions, but still handle them correctly
 ## Chores
   -  Automated the generation of the release notes from the git commits
 ## Miscellaneous
+  - Added support for better Cucumber reporting
   - Updated release notes
   - Restored release notes
   - Make sure the release notes are produced dynamically

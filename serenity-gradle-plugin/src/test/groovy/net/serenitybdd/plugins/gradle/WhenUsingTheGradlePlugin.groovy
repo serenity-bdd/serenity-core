@@ -27,7 +27,7 @@ class WhenUsingTheGradlePlugin extends Specification {
         project.apply plugin: 'java'
         project.apply plugin: 'net.serenity-bdd.aggregator'
         then:
-        project.serenity.outputDirectory == 'target/site/thucydides'
+        project.serenity.outputDirectory == 'target/site/serenity'
     }
 
     def "should add the checkOutcomes task to a project"() {

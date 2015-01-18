@@ -1,7 +1,7 @@
 package net.serenitybdd.plugins.gradle
 
 class SerenityPluginExtension {
-    def String outputDirectory = 'target/site/thucydides'
+    def String outputDirectory = 'target/site/serenity'
     def String projectKey
     def String issueTrackerUrl
     def String jiraUrl

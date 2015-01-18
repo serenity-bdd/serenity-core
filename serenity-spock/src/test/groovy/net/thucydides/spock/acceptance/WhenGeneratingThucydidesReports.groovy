@@ -29,7 +29,7 @@ class WhenGeneratingThucydidesReports extends Specification {
     }
 
     def thucydidesReportsShouldHaveBeenGenerated() {
-        def outputDirectory =  new File("target/site/thucydides")
+        def outputDirectory =  new File("target/site/serenity")
         def reportFile = new File(outputDirectory, latestTestOutcomes[0].htmlReport)
         assert reportFile.exists()
     }

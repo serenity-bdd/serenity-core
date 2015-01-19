@@ -164,8 +164,12 @@ subprojects {
 
 
     dependencies {
+        compile "com.google.guava:guava:18.0"
         compile "com.google.inject:guice:3.0"
+        compile "commons-codec:commons-codec:1.9"
+        compile "org.objenesis:objenesis:2.1"
         compile "org.slf4j:slf4j-api:1.6.4"
+        compile "xml-apis:xml-apis:1.4.01"
         testCompile "ch.qos.logback:logback-classic:1.0.13"
         testCompile "junit:junit:4.11"
         testCompile "org.hamcrest:hamcrest-integration:1.3"

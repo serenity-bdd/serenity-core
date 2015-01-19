@@ -1,6 +1,6 @@
 package net.thucydides.core.steps.di;
 
-import net.thucydides.core.steps.DependencyInjector;
+import net.serenitybdd.core.di.DependencyInjector;
 
 import java.util.List;
 

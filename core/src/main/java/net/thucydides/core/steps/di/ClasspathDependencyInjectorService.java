@@ -1,7 +1,7 @@
 package net.thucydides.core.steps.di;
 
 import com.google.common.collect.Lists;
-import net.thucydides.core.steps.DependencyInjector;
+import net.serenitybdd.core.di.DependencyInjector;
 
 import java.util.List;
 import java.util.ServiceLoader;

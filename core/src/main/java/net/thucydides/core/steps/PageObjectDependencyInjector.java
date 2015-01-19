@@ -1,6 +1,7 @@
 package net.thucydides.core.steps;
 
 import com.google.common.collect.Lists;
+import net.serenitybdd.core.di.DependencyInjector;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.pages.PageObject;
 import net.thucydides.core.pages.Pages;
@@ -23,6 +24,9 @@ public class PageObjectDependencyInjector implements DependencyInjector {
             instantiatePageObjectIfNotAssigned(pageObjectField, target);
         }
     }
+
+    @Override
+    public void reset() {}
 
     private void instantiatePageObjectIfNotAssigned(Field pageObjectField, Object target) {
         try {

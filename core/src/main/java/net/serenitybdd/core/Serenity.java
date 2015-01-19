@@ -1,6 +1,7 @@
 package net.serenitybdd.core;
 
 import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.di.DependencyInjector;
 import net.serenitybdd.core.sessions.TestSessionVariables;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.core.guice.Injectors;
@@ -52,12 +53,23 @@ public class Serenity {
     }
 
     private static void injectDependenciesInto(Object testCase) {
-        List<DependencyInjector> dependencyInjectors = getDependencyInjectorService().findDependencyInjectors();
-        dependencyInjectors.addAll(getDefaultDependencyInjectors());
+        List<DependencyInjector> dependencyInjectors = getDependencyInjectors();
 
-        for(DependencyInjector dependencyInjector : dependencyInjectors) {
+        for(DependencyInjector dependencyInjector : getDependencyInjectors()) {
             dependencyInjector.injectDependenciesInto(testCase);
         }
+    }
+
+    private static void resetDependencyInjectors() {
+        for(DependencyInjector dependencyInjector : getDependencyInjectors()) {
+            dependencyInjector.reset();
+        }
+    }
+
+    private static List<DependencyInjector> getDependencyInjectors() {
+        List<DependencyInjector> dependencyInjectors = getDependencyInjectorService().findDependencyInjectors();
+        dependencyInjectors.addAll(getDefaultDependencyInjectors());
+        return dependencyInjectors;
     }
 
     private static DependencyInjectorService getDependencyInjectorService() {
@@ -138,6 +150,7 @@ public class Serenity {
         if (getWebdriverManager() != null) {
             getWebdriverManager().closeAllCurrentDrivers();
         }
+        resetDependencyInjectors();
     }
 
     public static String getCurrentSessionID() {

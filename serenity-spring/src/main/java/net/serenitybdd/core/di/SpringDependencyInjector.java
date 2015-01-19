@@ -1,5 +1,6 @@
-package net.thucydides.core.steps;
+package net.serenitybdd.core.di;
 
+import net.serenitybdd.core.di.DependencyInjector;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestContextManager;
 
@@ -19,6 +20,9 @@ public class SpringDependencyInjector implements DependencyInjector {
             }
         }
     }
+
+    @Override
+    public void reset() {}
 
     private boolean annotatedWithSpringContext(Object target) {
         return (target.getClass().getAnnotation(ContextConfiguration.class) != null);

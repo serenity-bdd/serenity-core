@@ -74,7 +74,7 @@ dependencies {
     compile "org.apache.commons:commons-lang3:3.0.1"
     compile "net.sf.flexjson:flexjson:2.1"
     compile "joda-time:joda-time:2.0"
-    compile "net.sourceforge.htmlunit:htmlunit:2.9"
+    compile "net.sourceforge.htmlunit:htmlunit:2.15"
     compile "org.freemarker:freemarker:2.3.21"
     compile("org.fluentlenium:fluentlenium-core:0.10.2") {
         exclude group: 'org.seleniumhq.selenium', module:'selenium-java'

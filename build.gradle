@@ -6,6 +6,7 @@ buildscript {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
         classpath 'org.ajoberstar:gradle-git:0.12.0'
         classpath 'org.pegdown:pegdown:1.4.1'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.7'
     }
 }
 
@@ -15,6 +16,12 @@ import org.pegdown.PegDownProcessor
 import groovy.text.SimpleTemplateEngine
 
 apply plugin: 'org.ajoberstar.release-base'
+
+allprojects {
+    apply plugin: 'project-report'
+    apply plugin: 'com.github.ben-manes.versions'
+}
+
 release {
     grgit = Grgit.open(project.file('.'))
     versionStrategy Strategies.FINAL

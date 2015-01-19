@@ -56,7 +56,7 @@ dependencies {
     compile "com.google.guava:guava:18.0"
     compile "joda-time:joda-time:2.0"
     compile "com.thoughtworks.xstream:xstream:1.4.1"
-    compile "org.apache.commons:commons-lang3:3.1"
+    compile "org.apache.commons:commons-lang3:3.3.2"
     compile "commons-collections:commons-collections:3.2.1"
     compile "net.sf.flexjson:flexjson:2.1"
     compile "org.freemarker:freemarker:2.3.19"

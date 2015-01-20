@@ -98,6 +98,7 @@ dependencies {
     compile "junit:junit:4.11"
     compile "javax.validation:validation-api:1.1.0.Final"
     compile "org.hibernate:hibernate-validator:5.1.1.Final"
+    compile "javassist:javassist:3.9.0.GA"
     compile "javax.el:javax.el-api:2.2.4"
     compile "org.glassfish.web:javax.el:2.2.4"
 

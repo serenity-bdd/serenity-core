@@ -8,6 +8,8 @@ dependencies {
     compile "org.apache.ant:ant:1.9.3"
 
     testCompile project(':serenity-test-utils')
-    testCompile "org.apache.ant:ant-testutil:1.9.3"
+    testCompile ("org.apache.ant:ant-testutil:1.9.3"){
+        exclude group: "junit"
+    }
     testCompile 'org.assertj:assertj-core:1.7.0'
 }

@@ -41,7 +41,7 @@ public class SerenityReportingTask extends Task {
      */
     public String jiraProject;
 
-    private final String DEFAULT_SOURCE = "target/site/thucydides";
+    private final String DEFAULT_SOURCE = "target/site/serenity";
 
     private PathProcessor pathProcessor = new PathProcessor();
 

@@ -96,6 +96,11 @@ public class SampleStepListener implements StepListener {
     public void useExamplesFrom(DataTable table) {
     }
 
+    @Override
+    public void addNewExamplesFrom(DataTable table) {
+
+    }
+
     public void exampleStarted(Map<String,String> data) {
         //To change body of implemented methods use File | Settings | File Templates.
     }

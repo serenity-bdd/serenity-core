@@ -104,8 +104,12 @@
                             </div>
                         </#if>
 
-                        <#if (testOutcome.backgroundDescription??)>
-                            <div class="requirementNarrative">Background: ${testOutcome.backgroundDescription}</div>
+                        <#if (testOutcome.backgroundTitle?has_content)>
+                            <div class="requirementNarrative">Background: ${testOutcome.backgroundTitle}
+                                <#if (testOutcome.backgroundTitle?has_content)>
+                                <p>${testOutcome.backgroundDescription}</p>
+                                </#if>
+                            </div>
                         </#if>
                     </td>
                     <td valign="top">

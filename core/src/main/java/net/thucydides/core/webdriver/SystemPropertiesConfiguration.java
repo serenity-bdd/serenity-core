@@ -59,7 +59,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     /**
      * By default, reports will go here.
      */
-    private static final String DEFAULT_OUTPUT_DIRECTORY = "target/site/thucydides";
+    private static final String DEFAULT_OUTPUT_DIRECTORY = "target/site/serenity";
 
     /**
      * HTML and XML reports will be generated in this directory.
@@ -124,9 +124,9 @@ public class SystemPropertiesConfiguration implements Configuration {
         String mavenReportsDirectory = getEnvironmentVariables().getProperty(MAVEN_REPORTS_DIRECTORY);
         String defaultMavenRelativeTargetDirectory = null;
         if (StringUtils.isNotEmpty(mavenReportsDirectory)) {
-            defaultMavenRelativeTargetDirectory = mavenReportsDirectory + "/thucydides";
+            defaultMavenRelativeTargetDirectory = mavenReportsDirectory + "/serenity";
         } else if (StringUtils.isNotEmpty(mavenBuildDirectory)) {
-            defaultMavenRelativeTargetDirectory = mavenBuildDirectory + "/site/thucydides";
+            defaultMavenRelativeTargetDirectory = mavenBuildDirectory + "/site/serenity";
         }
         return defaultMavenRelativeTargetDirectory;
     }
@@ -163,7 +163,7 @@ public class SystemPropertiesConfiguration implements Configuration {
 
     /**
      * The output directory is where the test runner writes the XML and HTML
-     * reports to. By default, it will be in 'target/site/thucydides', but you can
+     * reports to. By default, it will be in 'target/site/serenity', but you can
      * override this value either programmatically or by providing a value in
      * the <b>thucydides.output.dir</b> system property.
      * 

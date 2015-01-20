@@ -26,7 +26,7 @@ public class WhenObtainingTheOutputDirectory {
     public void the_default_output_directory_is_in_the_default_maven_site_directory() {
         File outputDirectory = configuration.getOutputDirectory();
 
-        assertThat(outputDirectory.getPath(), is(changeSeparatorIfRequired("target/site/thucydides")));
+        assertThat(outputDirectory.getPath(), is(changeSeparatorIfRequired("target/site/serenity")));
     }
 
     @Test
@@ -34,7 +34,7 @@ public class WhenObtainingTheOutputDirectory {
         environmentVariables.setProperty("project.build.directory","build");
         File outputDirectory = configuration.getOutputDirectory();
 
-        assertThat(outputDirectory.getPath(), is(changeSeparatorIfRequired("build/site/thucydides")));
+        assertThat(outputDirectory.getPath(), is(changeSeparatorIfRequired("build/site/serenity")));
     }
 
     @Test
@@ -42,7 +42,7 @@ public class WhenObtainingTheOutputDirectory {
         environmentVariables.setProperty("project.reporting.OutputDirectory","custom-reports-directory");
         File outputDirectory = configuration.getOutputDirectory();
 
-        assertThat(outputDirectory.getPath(), is(changeSeparatorIfRequired("custom-reports-directory/thucydides")));
+        assertThat(outputDirectory.getPath(), is(changeSeparatorIfRequired("custom-reports-directory/serenity")));
     }
 
     @Test

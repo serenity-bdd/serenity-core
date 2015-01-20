@@ -1,0 +1,11 @@
+ext {
+    bintrayPackage = 'serenity-spring'
+    projectDescription = 'Serenity Spring integration'
+}
+
+dependencies {
+    compile project(':core')
+    compile "org.springframework:spring-test:3.2.3.RELEASE" // optional
+    compile "org.springframework:spring-context:3.2.3.RELEASE" // optional
+    compile "org.springframework:spring-context-support:3.2.3.RELEASE" // optional
+}

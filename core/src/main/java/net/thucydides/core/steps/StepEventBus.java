@@ -479,12 +479,26 @@ public class StepEventBus {
         getBaseStepListener().getCurrentTestOutcome().setDescription(description);
     }
 
+
+
+
+    public void setBackgroundTitle(String title) {
+        getBaseStepListener().getCurrentTestOutcome().setBackgroundTitle(title);
+    }
+
     public void setBackgroundDescription(String description) {
         getBaseStepListener().getCurrentTestOutcome().setBackgroundDescription(description);
     }
+
     public void useExamplesFrom(DataTable table) {
         for (StepListener stepListener : getAllListeners()) {
             stepListener.useExamplesFrom(table);
+        }
+    }
+
+    public void addNewExamplesFrom(DataTable newTable) {
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.addNewExamplesFrom(newTable);
         }
     }
 
@@ -500,6 +514,9 @@ public class StepEventBus {
         }
     }
 
+    public boolean currentTestOutcomeIsDataDriven() {
+        return (getBaseStepListener().latestTestOutcome().isPresent() && getBaseStepListener().latestTestOutcome().get().isDataDriven());
+    }
     /**
      * Forces Thucydides to take a screenshot now.
      */

@@ -28,7 +28,7 @@ public class WhenGeneratingAggregateHtmlReports extends Specification {
     WebDriver driver;
 
     def setup() {
-        outputDirectory = new File(temporaryDirectory,"target/site/thucydides")
+        outputDirectory = new File(temporaryDirectory,"target/site/serenity")
         outputDirectory.mkdirs()
         reporter.outputDirectory = outputDirectory;
         environmentVariables.setProperty("output.formats","xml")

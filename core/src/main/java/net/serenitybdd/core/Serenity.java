@@ -1,6 +1,7 @@
 package net.serenitybdd.core;
 
 import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.di.DependencyInjector;
 import net.serenitybdd.core.sessions.TestSessionVariables;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.core.guice.Injectors;
@@ -52,12 +53,23 @@ public class Serenity {
     }
 
     private static void injectDependenciesInto(Object testCase) {
-        List<DependencyInjector> dependencyInjectors = getDependencyInjectorService().findDependencyInjectors();
-        dependencyInjectors.addAll(getDefaultDependencyInjectors());
+        List<DependencyInjector> dependencyInjectors = getDependencyInjectors();
 
-        for(DependencyInjector dependencyInjector : dependencyInjectors) {
+        for(DependencyInjector dependencyInjector : getDependencyInjectors()) {
             dependencyInjector.injectDependenciesInto(testCase);
         }
+    }
+
+    private static void resetDependencyInjectors() {
+        for(DependencyInjector dependencyInjector : getDependencyInjectors()) {
+            dependencyInjector.reset();
+        }
+    }
+
+    private static List<DependencyInjector> getDependencyInjectors() {
+        List<DependencyInjector> dependencyInjectors = getDependencyInjectorService().findDependencyInjectors();
+        dependencyInjectors.addAll(getDefaultDependencyInjectors());
+        return dependencyInjectors;
     }
 
     private static DependencyInjectorService getDependencyInjectorService() {
@@ -73,7 +85,7 @@ public class Serenity {
      * This includes managed WebDriver instances,
      * @param testCase any object (testcase or other) containing injectable Serenity components
      */
-    public static void initializeWithNoStepListener(final Object testCase) {
+    public static SerenityConfigurer initializeWithNoStepListener(final Object testCase) {
         setupWebDriverFactory();
         setupWebdriverManager();
 
@@ -85,7 +97,11 @@ public class Serenity {
         injectScenarioStepsInto(testCase);
         ThucydidesWebDriverSupport.initializeFieldsIn(testCase);
         injectDependenciesInto(testCase);
+
+        return new SerenityConfigurer();
     }
+
+
 
     private static void initStepListener() {
         Configuration configuration = Injectors.getInjector().getInstance(Configuration.class);
@@ -104,6 +120,7 @@ public class Serenity {
     }
 
     private static void initStepFactoryUsing(final Pages pagesObject) {
+        StepFactory stepFactory = new StepFactory(pagesObject);
         stepFactoryThreadLocal.set(new StepFactory(pagesObject));
     }
 
@@ -138,6 +155,7 @@ public class Serenity {
         if (getWebdriverManager() != null) {
             getWebdriverManager().closeAllCurrentDrivers();
         }
+        resetDependencyInjectors();
     }
 
     public static String getCurrentSessionID() {
@@ -244,6 +262,23 @@ public class Serenity {
             } else {
                 Serenity.getCurrentSession().remove(key);
             }
+        }
+    }
+
+    private static boolean throwExceptionsImmediately = false;
+
+    public static void throwExceptionsImmediately() {
+        throwExceptionsImmediately = true;
+    }
+
+    public static boolean shouldThrowErrorsImmediately() {
+        return throwExceptionsImmediately;
+    }
+
+    public static class SerenityConfigurer {
+        public SerenityConfigurer throwExceptionsImmediately() {
+            Serenity.throwExceptionsImmediately();
+            return this;
         }
     }
 }

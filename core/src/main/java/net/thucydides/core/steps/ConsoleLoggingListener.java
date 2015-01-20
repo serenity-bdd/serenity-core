@@ -336,6 +336,11 @@ public class ConsoleLoggingListener implements StepListener {
     public void useExamplesFrom(DataTable table) {
     }
 
+    @Override
+    public void addNewExamplesFrom(DataTable table) {
+
+    }
+
     public void exampleStarted(Map<String,String> data) {
     }
 

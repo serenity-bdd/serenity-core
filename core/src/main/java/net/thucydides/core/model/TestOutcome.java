@@ -31,7 +31,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.text.html.Option;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
@@ -92,6 +91,7 @@ public class TestOutcome {
 
     private String title;
     private String description;
+    private String backgroundTitle;
     private String backgroundDescription;
 
     /**
@@ -259,6 +259,27 @@ public class TestOutcome {
         this.userStory = userStory;
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
+    }
+
+    public TestOutcome copy() {
+        return new TestOutcome(this.startTime,
+                this.duration,
+                this.title,
+                this.description,
+                this.methodName,
+                this.testCase,
+                this.testSteps,
+                this.issues,
+                this.additionalIssues,
+                this.tags,
+                this.userStory,
+                this.testFailureCause,
+                this.testFailureClassname,
+                this.testFailureMessage,
+                this.annotatedResult,
+                this.dataTable,
+                this.qualifier,
+                this.manual);
     }
 
     protected TestOutcome(final DateTime startTime,
@@ -527,12 +548,20 @@ public class TestOutcome {
         this.backgroundDescription = description.trim();
     }
 
+    public void setBackgroundTitle(String title) {
+        this.backgroundTitle = title.trim();
+    }
+
     public String getDescription() {
         return description;
     }
 
     public String getBackgroundDescription() {
         return backgroundDescription;
+    }
+
+    public String getBackgroundTitle() {
+        return backgroundTitle;
     }
 
     /**
@@ -1214,6 +1243,16 @@ public class TestOutcome {
 
     public void useExamplesFrom(DataTable table) {
         this.dataTable = table;
+    }
+
+
+    public void addNewExamplesFrom(DataTable table) {
+        List<DataTableRow> updatedRows = table.getRows();
+        if (table.getSize() > dataTable.getSize()) {
+            for(int rowNumber = dataTable.getSize(); rowNumber < updatedRows.size(); rowNumber++) {
+                dataTable.appendRow(updatedRows.get(rowNumber));
+            }
+        }
     }
 
     public void moveToNextRow() {

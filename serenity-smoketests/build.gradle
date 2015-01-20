@@ -49,7 +49,7 @@ dependencies {
     compile "net.thucydides:thucydides-jbehave-plugin:${thucydidesJBehaveVersion}"
     compile "org.slf4j:slf4j-simple:1.6.1"
     compile "com.googlecode.lambdaj:lambdaj:2.3.3"
-    compile "org.codehaus.groovy:groovy-all:2.2.1"
+    compile "org.codehaus.groovy:groovy-all:2.3.6"
     compile 'joda-time:joda-time:2.4'
     testCompile "org.easytesting:fest-assert-core:2.0M10"
     testCompile "junit:junit:4.11"

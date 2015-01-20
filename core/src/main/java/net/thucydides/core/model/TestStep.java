@@ -29,7 +29,7 @@ import static net.thucydides.core.model.TestResult.*;
 public class TestStep {
 
     private int number;
-    private String description;    
+    private String description;
     private long duration;
     private long startTime;
     private List<ScreenshotAndHtmlSource> screenshots = new ArrayList<>();
@@ -288,6 +288,15 @@ public class TestStep {
         return exception;
     }
 
+    public FailureCause getNestedException(){
+        for(TestStep step : getFlattenedSteps()) {
+            if (step.getException() != null) {
+                return step.getException();
+            }
+        }
+        return getException();
+    }
+
     public List<? extends TestStep> getFlattenedSteps() {
         List<TestStep> flattenedSteps = new ArrayList<>();
         for(TestStep child : getChildren()) {
@@ -298,7 +307,7 @@ public class TestStep {
         }
         return flattenedSteps;
     }
-    
+
     public boolean isAGroup() {
         return hasChildren();
     }
@@ -333,7 +342,7 @@ public class TestStep {
 
     private boolean thisIsANew(ScreenshotAndHtmlSource screenshotAndHtmlSource) {
         if (screenshots.isEmpty()) {
-            return true;    
+            return true;
         } else {
             ScreenshotAndHtmlSource latestScreenshotAndHtmlSource = screenshots.get(screenshots.size() - 1);
             return !latestScreenshotAndHtmlSource.equals(screenshotAndHtmlSource);

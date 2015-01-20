@@ -32,16 +32,16 @@ public class ThucydidesWebDriverSupport {
         initStepFactoryUsing(getPages());
     }
 
+    public static void initialize() {
+        initialize(null);
+    }
+
     private static void setRequestedDriverIfPresent(String requestedDriver) {
         if (StringUtils.isNotEmpty(requestedDriver)) {
             currentRequestedDriver.set(requestedDriver);
         } else {
             currentRequestedDriver.remove();
         }
-    }
-
-    public static void initialize() {
-        initialize(null);
     }
 
     private static boolean webdriversInitialized() {

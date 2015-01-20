@@ -5,6 +5,7 @@ ext {
 
 dependencies {
     compile project(':core')
+    compile project(':serenity-spring')
 
     compile "org.springframework:spring-core:3.2.3.RELEASE" // optional
     compile "org.springframework:spring-beans:3.2.3.RELEASE" // optional

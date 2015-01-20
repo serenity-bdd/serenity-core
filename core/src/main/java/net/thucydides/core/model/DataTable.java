@@ -88,8 +88,16 @@ public class DataTable {
     }
 
     public void addRow(DataTableRow dataTableRow) {
-        rows.add(dataTableRow);
+        appendRow(dataTableRow);
         currentRow.set(rows.size() - 1);
+    }
+
+    public void appendRow(Map<String, ? extends Object> data) {
+        appendRow(new DataTableRow(ImmutableList.copyOf(data.values())));
+    }
+
+    public void appendRow(DataTableRow dataTableRow) {
+        rows.add(dataTableRow);
     }
 
     public void addRows(List<DataTableRow> rows) {

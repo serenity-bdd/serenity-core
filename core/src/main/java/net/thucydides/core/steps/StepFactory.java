@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
+import net.serenitybdd.core.di.DependencyInjector;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.thucydides.core.guice.Injectors;
@@ -31,7 +32,6 @@ public class StepFactory {
     private final Map<Class<?>, Object> index = new HashMap<Class<?>, Object>();
     private static final Logger LOGGER = LoggerFactory.getLogger(StepFactory.class);
     private final DependencyInjectorService dependencyInjectorService;
-    private boolean throwExceptionImmediately = false;
 
     /**
      * Create a new step factory.
@@ -102,7 +102,6 @@ public class StepFactory {
      */
     public <T> T instantiateNewStepLibraryFor(Class<T> scenarioStepsClass) {
         StepInterceptor stepInterceptor = new StepInterceptor(scenarioStepsClass);
-        stepInterceptor.setThowsExceptionImmediately(throwExceptionImmediately);
         return instantiateNewStepLibraryFor(scenarioStepsClass, stepInterceptor);
     }
 
@@ -137,7 +136,6 @@ public class StepFactory {
 
     private <T> T instantiateUniqueStepLibraryFor(Class<T> scenarioStepsClass) {
         StepInterceptor stepInterceptor = new StepInterceptor(scenarioStepsClass);
-        stepInterceptor.setThowsExceptionImmediately(throwExceptionImmediately);
         T steps = createProxyStepLibrary(scenarioStepsClass, stepInterceptor);
 
         instantiateAnyNestedStepLibrariesIn(steps, scenarioStepsClass);
@@ -238,8 +236,4 @@ public class StepFactory {
         StepAnnotations.injectNestedScenarioStepsInto(steps, this, scenarioStepsClass);
     }
 
-    public StepFactory thatThrowsExcpetionsImmediately() {
-        throwExceptionImmediately = true;
-        return this;
-    }
 }

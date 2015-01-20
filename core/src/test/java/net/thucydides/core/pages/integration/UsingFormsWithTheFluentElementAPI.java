@@ -47,6 +47,12 @@ public class UsingFormsWithTheFluentElementAPI extends FluentElementAPITestsBase
     }
 
     @Test
+    public void should_be_able_to_select_a_radio_button_value() {
+        page.inRadioButtonGroup("radio").selectByValue("1");
+        assertThat(page.inRadioButtonGroup("radio").getSelectedValue().get(), is("1"));
+    }
+
+    @Test
     public void should_find_web_elements_using_raw_css_selector() {
         assertThat(page.element("#textField").getText(), is("text value"));
     }

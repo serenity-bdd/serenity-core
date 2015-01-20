@@ -26,18 +26,12 @@ public class PagesAnnotatedField {
     /**
      * Find the first field in the class annotated with the <b>Managed</b> annotation.
      */
-    public static PagesAnnotatedField findFirstAnnotatedField(final Class<?> testClass) {
-
-        Optional<PagesAnnotatedField> optionalAnnotatedField = findOptionalAnnotatedField(testClass);
-        if (optionalAnnotatedField.isPresent()) {
-            return optionalAnnotatedField.get();
-        } else {
-            throw new InvalidManagedPagesFieldException(NO_ANNOTATED_FIELD_ERROR);
-        }
+    public static Optional<PagesAnnotatedField> findFirstAnnotatedField(final Class<?> testClass) {
+        return findOptionalAnnotatedField(testClass);
     }
 
     /**
-     * Find the first field in the class annotated with the <b>Managed</b> annotation.
+     * Find the first field in the class annotated with the <b>ManagedPages</b> annotation.
      */
     public static Optional<PagesAnnotatedField> findOptionalAnnotatedField(final Class<?> testClass) {
 
@@ -52,14 +46,13 @@ public class PagesAnnotatedField {
 
     private static ManagedPages annotationFrom(final Field aField) {
         ManagedPages annotationOnField = null;
-        if (isFieldAnnotated(aField)) {
+        if (fieldIsAnnotatedCorrectly(aField)) {
+            if (!fieldIsRightType(aField)) {
+                throw new InvalidManagedPagesFieldException("@ManagedPages field must be of type Pages");
+            }
             annotationOnField = aField.getAnnotation(ManagedPages.class);
         }
         return annotationOnField;
-    }
-
-    private static boolean isFieldAnnotated(final Field field) {
-        return (fieldIsAnnotatedCorrectly(field) && fieldIsRightType(field));
     }
 
     static boolean fieldIsRightType(final Field field) {

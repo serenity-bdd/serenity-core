@@ -30,13 +30,4 @@ public class RadioButtonGroup {
             }
         }
     }
-
-    public void selectByVisibleText(String label) {
-        for(WebElement radioButton : radioButtons) {
-            if (label.equalsIgnoreCase(radioButton.getText())) {
-                radioButton.click();
-                break;
-            }
-        }
-    }
 }

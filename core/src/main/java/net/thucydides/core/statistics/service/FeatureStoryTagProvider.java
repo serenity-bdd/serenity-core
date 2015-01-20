@@ -44,7 +44,7 @@ public class FeatureStoryTagProvider implements TagProvider, CoreTagProvider {
     }
 
     private boolean shouldAddStoryTags() {
-        return environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.USE_TEST_CASE_FOR_STORY_TAG,true);
+        return ThucydidesSystemProperty.USE_TEST_CASE_FOR_STORY_TAG.booleanFrom(environmentVariables, true);
     }
 
     private void addFeatureTagIfPresent(TestOutcome testOutcome, Set<TestTag> tags) {

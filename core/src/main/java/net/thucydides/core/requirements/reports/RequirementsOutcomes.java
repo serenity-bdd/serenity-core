@@ -331,8 +331,7 @@ public class RequirementsOutcomes {
     }
 
     private int estimatedTestsPerRequirement() {
-        return environmentVariables.getPropertyAsInteger(ThucydidesSystemProperty.THUCYDIDES_ESTIMATED_TESTS_PER_REQUIREMENT.toString(),
-                DEFAULT_TESTS_PER_REQUIREMENT);
+        return ThucydidesSystemProperty.THUCYDIDES_ESTIMATED_TESTS_PER_REQUIREMENT.integerFrom(environmentVariables, DEFAULT_TESTS_PER_REQUIREMENT);
     }
 
     public RequirementsProportionCounter getProportion() {

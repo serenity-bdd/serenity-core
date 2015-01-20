@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.integration
 
 import com.github.goldin.spock.extensions.tempdir.TempDir
-import net.thucydides.core.ThucydidesSystemProperties
+import net.serenitybdd.core.SerenitySystemProperties
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.issues.IssueTracking
 import net.thucydides.core.reports.FormatConfiguration
@@ -20,7 +20,7 @@ public class WhenGeneratingAggregateHtmlReports extends Specification {
     @TempDir File temporaryDirectory
 
     def issueTracking = Mock(IssueTracking)
-    def mockSystemProperties = Mock(ThucydidesSystemProperties)
+    def mockSystemProperties = Mock(SerenitySystemProperties)
     def environmentVariables = new MockEnvironmentVariables()
     def reporter = new HtmlAggregateStoryReporter("project", issueTracking);
 
@@ -134,7 +134,7 @@ public class WhenGeneratingAggregateHtmlReports extends Specification {
         }
 
         @Override
-        protected ThucydidesSystemProperties getSystemProperties() {
+        protected SerenitySystemProperties getSystemProperties() {
             return mockSystemProperties;
         }
     }

@@ -26,13 +26,34 @@ public class AbstractRequirementsTagProvider {
         return Inflector.getInstance().humanize(underscoredName);
     }
 
-    protected String getDefaultType(int level) {
+    protected String getDefaultType(int level, int maxDepth) {
         List<String> types = getRequirementTypes();
-        if (level > types.size() - 1) {
+
+        // Flat structure: maxdepth 0
+        //      cap, feature | level 0 => [1]
+        //      cap, feature,story | level 0 => [2]
+
+        // 1-layer structure: maxdepth 1
+        //      cap, feature | level 0 => [0]
+        //      cap, feature | level 1 => [1]
+        //      cap, feature,story | level 0 => [1]
+        //      cap, feature,story | level 1 => [2]
+
+        // 2-layer structure: maxdepth 2
+        //      cap, feature, story | level 0 => [0]
+        //      cap, feature, story | level 1 => [1]
+        //      cap, feature, story | level 2 => [2]
+        int relativeLevel = types.size() - 1 - maxDepth + level;
+
+        if (relativeLevel > types.size() - 1) {
             return types.get(types.size() - 1);
         } else {
-            return types.get(level);
+            return types.get(relativeLevel);
         }
+    }
+
+    protected String getDefaultType(int level) {
+        return getDefaultType(level, getRequirementTypes().size() - 1);
     }
 
     protected List<String> getRequirementTypes() {

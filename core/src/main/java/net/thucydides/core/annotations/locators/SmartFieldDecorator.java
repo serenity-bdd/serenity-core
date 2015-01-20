@@ -5,9 +5,8 @@ import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AndroidFindBys;
 import io.appium.java_client.pagefactory.iOSFindBy;
 import io.appium.java_client.pagefactory.iOSFindBys;
-import net.thucydides.core.annotations.findby.FindBy;
+import net.serenitybdd.core.annotations.findby.FindBy;
 import net.thucydides.core.pages.PageObject;
-import net.thucydides.core.pages.WebElementFacade;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.Locatable;
@@ -80,7 +79,9 @@ public class SmartFieldDecorator implements FieldDecorator {
     }
 
     private final static List<Class<? extends Annotation>> LEGAL_ANNOTATIONS
-            = ImmutableList.of(FindBy.class, org.openqa.selenium.support.FindBy.class,
+            = ImmutableList.of(FindBy.class,
+            net.thucydides.core.annotations.findby.FindBy.class,
+            org.openqa.selenium.support.FindBy.class,
             FindBys.class, AndroidFindBy.class, AndroidFindBys.class, iOSFindBy.class, iOSFindBys.class);
 
 
@@ -98,7 +99,7 @@ public class SmartFieldDecorator implements FieldDecorator {
     protected <T> T proxyForLocator(ClassLoader loader, Class<T> interfaceType, ElementLocator locator) {
         InvocationHandler handler;
         T proxy = null;
-        if (WebElementFacade.class.isAssignableFrom(interfaceType)) {
+        if (net.serenitybdd.core.pages.WebElementFacade.class.isAssignableFrom(interfaceType)) {
             handler = new SmartElementHandler(interfaceType, locator, driver, pageObject.waitForTimeoutInMilliseconds());
             proxy = (T) Proxy.newProxyInstance(loader, new Class[]{interfaceType}, handler);
         } else {

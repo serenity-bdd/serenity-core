@@ -153,7 +153,7 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
         driver.get(urlFor(report));
 
         List<WebElement> testCounts = driver.findElements(By.cssSelector(".test-count"));
-        assertThat(testCounts, hasSize(6));
+        assertThat(testCounts, hasSize(8));
         Matcher<Iterable<? super WebElement>> passedMatcher = hasItem(Matchers.<WebElement>hasProperty("text", containsString("2 passed")));
         Matcher<Iterable<? super WebElement>> pendingMatcher = hasItem(Matchers.<WebElement>hasProperty("text", containsString("2 pending")));
         Matcher<Iterable<? super WebElement>> failedMatcher = hasItem(Matchers.<WebElement>hasProperty("text", containsString("3 failed")));

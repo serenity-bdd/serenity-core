@@ -524,7 +524,7 @@ public class TestOutcome {
     }
 
     public void setBackgroundDescription(String description) {
-        this.backgroundDescription = description;
+        this.backgroundDescription = description.trim();
     }
 
     public String getDescription() {

@@ -765,7 +765,6 @@ font-family:euphemia, verdana, sans-serif; font-size:16px; color: #88a717; font-
 }
 
 .test-summary-table {
-    border: 1px solid #BBB;
     width: 100%;
     margin-bottom: 20px;
     background-color: white;
@@ -809,8 +808,23 @@ font-family:euphemia, verdana, sans-serif; font-size:16px; color: #88a717; font-
 }
 
 .tagTypeTitle {
-    font-family:euphemia, verdana, sans-serif; font-size:16px; color: #0d78ae;
-    font-weight: bold;
+    font-family:euphemia, verdana, sans-serif; font-size:14px; color: #0d78ae;
+    font-style: italic;
+}
+
+.related-tag-percentage {
+    text-align: right;
+    width: 50px;
+    min-width: 50px;
+    font-size: 0.8em;
+    padding-right: 4px;
+}
+
+.related-tag-count {
+    text-align: center;
+    width: 50px;
+    min-width: 50px;
+    font-size: 0.8em;
 }
 
 .overview {
@@ -994,8 +1008,16 @@ h4 {
     margin-bottom: 10px;
 }
 
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}
 
-
+.tag-count-header {
+    font-size: 0.9em;
+}
 .test-count-summary {
     font-family:euphemia, verdana, sans-serif;
     font-size: 16px;
@@ -1006,6 +1028,11 @@ h4 {
 
 .test-count-title {
     font-weight: bold;
+}
+
+.result-test-count {
+    color: #808080;
+    font-weight: 200;
 }
 
 .test-count {
@@ -1370,7 +1397,6 @@ ul.second-level-requirements  {
     position:relative;
     width:1000px; /* Change this to your images width */
     height:800px; /* Change this to your images height */
-    background:url(images/loading.gif) no-repeat 50% 50%;
 }
 #slider img {
     position:absolute;
@@ -1381,4 +1407,10 @@ ul.second-level-requirements  {
 #slider a {
     border:0;
     display:block;
+}
+
+.tags-summary-table {
+    margin-bottom: 0px;
+    color: #0d78ae;
+    border: none;
 }

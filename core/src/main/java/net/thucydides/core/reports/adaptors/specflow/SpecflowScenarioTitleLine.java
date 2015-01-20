@@ -94,7 +94,7 @@ public class SpecflowScenarioTitleLine {
     private List<String> removeExcludedElementsFrom(List<String> pathElements) {
         List<String> purgedPathElements = Lists.newArrayList(pathElements);
         String excludedElementConfiguration
-                = environmentVariables.getProperty(ThucydidesSystemProperty.THUCYDIDES_REQUIREMENT_EXCLUSIONS,"");
+                = ThucydidesSystemProperty.THUCYDIDES_REQUIREMENT_EXCLUSIONS.from(environmentVariables,"");
 
         List<String> excludedElements
                 = Lists.newArrayList(Splitter.on(",")

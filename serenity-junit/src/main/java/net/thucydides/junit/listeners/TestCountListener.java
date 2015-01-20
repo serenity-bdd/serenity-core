@@ -1,6 +1,6 @@
 package net.thucydides.junit.listeners;
 
-import net.thucydides.core.Thucydides;
+import net.serenitybdd.core.Serenity;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.logging.LoggingLevel;
 import net.thucydides.core.model.DataTable;
@@ -11,7 +11,7 @@ import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepListener;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.junit.finder.TestFinder;
+import net.serenitybdd.junit.finder.TestFinder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class TestCountListener implements StepListener {
     }
 
     public TestCountListener(EnvironmentVariables environmentVariables, TestCount testCount) {
-        this(environmentVariables, LoggerFactory.getLogger(Thucydides.class), testCount);
+        this(environmentVariables, LoggerFactory.getLogger(Serenity.class), testCount);
     }
 
     private void logTotalTestCount() {

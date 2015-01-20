@@ -24,35 +24,36 @@ public class SystemPropertiesIssueTracking implements IssueTracking {
 
     public String getIssueTrackerUrl() {
         if (jiraUrlDefined()) {
-            return environmentVariables.getProperty(ThucydidesSystemProperty.JIRA_URL.getPropertyName())
+
+            return ThucydidesSystemProperty.JIRA_URL.from(environmentVariables)
                                          + "/browse/" + "{0}";
         } else {
-            return environmentVariables.getProperty(ThucydidesSystemProperty.THUCYDIDES_ISSUE_TRACKER_URL.getPropertyName());
+            return ThucydidesSystemProperty.THUCYDIDES_ISSUE_TRACKER_URL.from(environmentVariables);
         }
     }
 
     public String getShortenedIssueTrackerUrl() {
         if (jiraUrlDefined()) {
-            return environmentVariables.getProperty(ThucydidesSystemProperty.JIRA_URL.getPropertyName())
+            return ThucydidesSystemProperty.JIRA_URL.from(environmentVariables)
                     + "/browse/" + getJiraProjectSuffix() + "{0}";
         } else {
-            return environmentVariables.getProperty(ThucydidesSystemProperty.THUCYDIDES_ISSUE_TRACKER_URL.getPropertyName());
+            return ThucydidesSystemProperty.THUCYDIDES_ISSUE_TRACKER_URL.from(environmentVariables);
         }
     }
 
     private String getJiraProjectSuffix() {
         if (jiraProjectDefined()) {
-            return environmentVariables.getProperty(ThucydidesSystemProperty.JIRA_PROJECT.getPropertyName()) + "-";
+            return ThucydidesSystemProperty.JIRA_PROJECT.from(environmentVariables) + "-";
         } else {
             return "";
         }
     }
 
     private boolean jiraUrlDefined() {
-       return !isEmpty(environmentVariables.getProperty(ThucydidesSystemProperty.JIRA_URL.getPropertyName()));
+       return !isEmpty(ThucydidesSystemProperty.JIRA_URL.from(environmentVariables));
     }
 
     private boolean jiraProjectDefined() {
-       return !isEmpty(environmentVariables.getProperty(ThucydidesSystemProperty.JIRA_PROJECT.getPropertyName()));
+       return !isEmpty(ThucydidesSystemProperty.JIRA_PROJECT.from(environmentVariables));
     }
 }

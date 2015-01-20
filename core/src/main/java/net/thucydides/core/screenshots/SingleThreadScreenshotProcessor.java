@@ -102,7 +102,7 @@ public class SingleThreadScreenshotProcessor implements ScreenshotProcessor {
         }
 
         private int getResizedWidth() {
-            return environmentVariables.getPropertyAsInteger(ThucydidesSystemProperty.THUCYDIDES_RESIZED_IMAGE_WIDTH, 0);
+            return ThucydidesSystemProperty.THUCYDIDES_RESIZED_IMAGE_WIDTH.integerFrom(environmentVariables);
         }
 
         private boolean shouldResize(QueuedScreenshot queuedScreenshot) {

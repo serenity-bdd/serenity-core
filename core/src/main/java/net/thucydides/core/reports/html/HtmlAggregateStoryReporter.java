@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.html;
 
 import com.beust.jcommander.internal.Lists;
-import net.thucydides.core.ThucydidesSystemProperties;
+import net.serenitybdd.core.SerenitySystemProperties;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
@@ -468,7 +468,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
 
         VersionProvider versionProvider = new VersionProvider(environmentVariables);
-        context.put("thucydidesVersionNumber", versionProvider.getVersion());
+        context.put("serenityVersionNumber", versionProvider.getVersion());
         context.put("buildNumber", versionProvider.getBuildNumberText());
 
         return context;
@@ -481,8 +481,8 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         writeReportToOutputDirectory(outputFile, htmlContents);
     }
 
-    protected ThucydidesSystemProperties getSystemProperties() {
-        return ThucydidesSystemProperties.getProperties();
+    protected SerenitySystemProperties getSystemProperties() {
+        return SerenitySystemProperties.getProperties();
     }
 
     public void setIssueTrackerUrl(String issueTrackerUrl) {

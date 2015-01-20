@@ -9,6 +9,10 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import spock.lang.Specification
 
+/** @deprecated Ensuring legacy thucydides namespace code still works
+ * //todo [deprecate thucydides] Remove when thucydides namespace is removed
+ */
+@Deprecated
 class WhenInitializingPageObjectFields extends Specification {
 
     EnvironmentVariables environmentVariables = new MockEnvironmentVariables();

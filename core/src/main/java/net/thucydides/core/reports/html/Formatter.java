@@ -185,7 +185,7 @@ public class Formatter {
     }
 
     private boolean shouldFormatEmbeddedTables() {
-        return !environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.IGNORE_EMBEDDED_TABLES, false);
+        return !(ThucydidesSystemProperty.IGNORE_EMBEDDED_TABLES.booleanFrom(environmentVariables));
     }
 
     private boolean containsEmbeddedTable(String text) {
@@ -280,10 +280,15 @@ public class Formatter {
     }
 
     public String htmlAttributeCompatible(Object fieldValue) {
-        return ESCAPE_SPECIAL_CHARS.translate(stringFormOf(fieldValue)
-                .replaceAll("\"", "'")
-                .replaceAll("\r", "")
-                .replaceAll("\n",""));
+        return concatLines(ESCAPE_SPECIAL_CHARS.translate(stringFormOf(fieldValue)
+                .replaceAll("<", "(")
+                .replaceAll(">", ")")
+                .replaceAll("\"", "'")));
+    }
+
+    private String concatLines(String message) {
+        String[] lines = message.replaceAll("\\r", "").split("\\n");
+        return StringUtils.join(lines," ");
     }
 
     private String stringFormOf(Object fieldValue) {

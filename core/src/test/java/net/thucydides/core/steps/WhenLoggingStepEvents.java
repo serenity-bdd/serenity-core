@@ -43,16 +43,7 @@ public class WhenLoggingStepEvents {
 
         consoleLoggingListener.testSuiteStarted(SomeTestClass.class);
 
-        verify(logger).info(contains(
-        "-------------------------------------------------------------------------------------------------------\n" +
-        ".___________. __    __   __    __    ______ ____    ____  _______   __   _______   _______     _______.\n" +
-        "|           ||  |  |  | |  |  |  |  /      |\\   \\  /   / |       \\ |  | |       \\ |   ____|   /       |\n" +
-        "`---|  |----`|  |__|  | |  |  |  | |  ,----' \\   \\/   /  |  .--.  ||  | |  .--.  ||  |__     |   (----`\n" +
-        "    |  |     |   __   | |  |  |  | |  |       \\_    _/   |  |  |  ||  | |  |  |  ||   __|     \\   \\    \n" +
-        "    |  |     |  |  |  | |  `--'  | |  `----.    |  |     |  '--'  ||  | |  '--'  ||  |____.----)   |   \n" +
-        "    |__|     |__|  |__|  \\______/   \\______|    |__|     |_______/ |__| |_______/ |_______|_______/    \n" +
-        "                                                                                                       \n" +
-        "-------------------------------------------------------------------------------------------------------\n"));
+        verify(logger).info(contains(ConsoleLoggingListener.SERENITY_BIG_BANNER));
 
     }
 
@@ -62,7 +53,7 @@ public class WhenLoggingStepEvents {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("thucydides.console.headings", "normal");
         ConsoleLoggingListener consoleLoggingListener = new ConsoleLoggingListener(environmentVariables, logger);
-        verify(logger).info(contains("THUCYDIDES"));
+        verify(logger).info(contains("SERENITY"));
 
     }
 
@@ -73,16 +64,7 @@ public class WhenLoggingStepEvents {
         environmentVariables.setProperty("thucydides.console.headings", "ascii");
         Logger logger = mock(Logger.class);
         ConsoleLoggingListener consoleLoggingListener = new ConsoleLoggingListener(environmentVariables, logger);
-        verify(logger).info(contains(
-                "-------------------------------------------------------------------------------------------------------\n" +
-                        ".___________. __    __   __    __    ______ ____    ____  _______   __   _______   _______     _______.\n" +
-                        "|           ||  |  |  | |  |  |  |  /      |\\   \\  /   / |       \\ |  | |       \\ |   ____|   /       |\n" +
-                        "`---|  |----`|  |__|  | |  |  |  | |  ,----' \\   \\/   /  |  .--.  ||  | |  .--.  ||  |__     |   (----`\n" +
-                        "    |  |     |   __   | |  |  |  | |  |       \\_    _/   |  |  |  ||  | |  |  |  ||   __|     \\   \\    \n" +
-                        "    |  |     |  |  |  | |  `--'  | |  `----.    |  |     |  '--'  ||  | |  '--'  ||  |____.----)   |   \n" +
-                        "    |__|     |__|  |__|  \\______/   \\______|    |__|     |_______/ |__| |_______/ |_______|_______/    \n" +
-                        "                                                                                                       \n" +
-                        "-------------------------------------------------------------------------------------------------------\n"));
+        verify(logger).info(contains(ConsoleLoggingListener.SERENITY_BIG_BANNER));
 
     }
 
@@ -93,16 +75,7 @@ public class WhenLoggingStepEvents {
         ConsoleLoggingListener quietListener = new ConsoleLoggingListener(environmentVariables, quietLogger);
         quietListener.testSuiteStarted(SomeTestClass.class);
 
-        verify(quietLogger, never()).info(contains(
-                "-------------------------------------------------------------------------------------------------------\n" +
-                        ".___________. __    __   __    __    ______ ____    ____  _______   __   _______   _______     _______.\n" +
-                        "|           ||  |  |  | |  |  |  |  /      |\\   \\  /   / |       \\ |  | |       \\ |   ____|   /       |\n" +
-                        "`---|  |----`|  |__|  | |  |  |  | |  ,----' \\   \\/   /  |  .--.  ||  | |  .--.  ||  |__     |   (----`\n" +
-                        "    |  |     |   __   | |  |  |  | |  |       \\_    _/   |  |  |  ||  | |  |  |  ||   __|     \\   \\    \n" +
-                        "    |  |     |  |  |  | |  `--'  | |  `----.    |  |     |  '--'  ||  | |  '--'  ||  |____.----)   |   \n" +
-                        "    |__|     |__|  |__|  \\______/   \\______|    |__|     |_______/ |__| |_______/ |_______|_______/    \n" +
-                        "                                                                                                       \n" +
-                        "-------------------------------------------------------------------------------------------------------\n"));
+        verify(quietLogger, never()).info(contains(ConsoleLoggingListener.SERENITY_BIG_BANNER));
 
     }
 

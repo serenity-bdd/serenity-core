@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8"/>
@@ -8,34 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Serenity Reports</title>
-    <!-- Bootstrap -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="shortcut icon" href="favicon.ico">
-    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
-    <!--[if IE 7]>
-    <link rel="stylesheet" href="font-awesome/css/font-awesome-ie7.min.css">
-    <![endif]-->
-    <link rel="stylesheet" href="css/core.css"/>
-    <link rel="stylesheet" href="css/link.css"/>
-    <link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet"/>
 
-    <link rel="stylesheet" type="text/css" href="jqplot/jquery.jqplot.min.css"/>
-
-
-    <!--[if IE]>
-    <script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script><![endif]-->
-
-    <script type="text/javascript" src="scripts/jquery.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-
-    <script type="text/javascript" src="datatables/media/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="jqplot/jquery.jqplot.min.js"></script>
-    <script type="text/javascript" src="jqplot/plugins/jqplot.pieRenderer.min.js"></script>
-
-    <link type="text/css" href="jqueryui/css/start/jquery-ui-1.8.18.custom.css" rel="Stylesheet"/>
-    <script type="text/javascript" src="jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
-
+    <#include "libraries/common.ftl">
+    <#include "libraries/jquery-ui.ftl">
+    <#include "libraries/datatables.ftl">
+    <#assign pie = true>
+    <#include "libraries/jqplot.ftl">
 
 <#assign successfulManualTests = (testOutcomes.count("manual").withResult("SUCCESS") > 0)>
 <#assign pendingManualTests = (testOutcomes.count("manual").withResult("PENDING") > 0)>
@@ -163,16 +142,15 @@
         });
 
         // Results table
-        $('#test-results-table').dataTable({
-            "aaSorting": [
+        $('#test-results-table').DataTable({
+            "order": [
                 [ 1, "asc" ]
             ],
-            "bJQueryUI": true,
-            "iDisplayLength": 25
+            "pageLength": 25
         });
 
         // Pie charts
-        $('#test-results-tabs').tabs()
+        $('#test-results-tabs').tabs();
 
         $('#toggleNormalPieChart').click(function () {
             $("#test_results_pie_chart").toggle();
@@ -432,8 +410,10 @@
                                      class="summary-icon"/>
                                 <#if (testOutcome.manual)><img src="images/worker.png" title="Manual test"/></#if>
                                 <span style="display:none">${testOutcome.result}</span></td>
-                            <td class="${testOutcome.result}-text"><a
-                                    href="${relativeLink}${testOutcome.reportName}.html" title="${formatter.htmlAttributeCompatible(testOutcome.errorMessage)}">${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}</a>
+                            <td class="${testOutcome.result}-text">
+                                <a href="${relativeLink}${testOutcome.reportName}.html" class="ellipsis" title="${formatter.htmlAttributeCompatible(testOutcome.errorMessage)}">
+                                    ${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}
+                                </a>
                             </td>
 
                             <td class="lightgreentext">${testOutcome.nestedStepCount}</td>
@@ -470,10 +450,17 @@
 </div>
 <div id="beforefooter"></div>
 <div id="bottomfooter">
-    <span class="version">Serenity version ${thucydidesVersionNumber} - Build ${buildNumber}</span>
+    <span class="version">Serenity version ${serenityVersionNumber}</span>
 </div>
 <#macro list_tags(weighted)>
-<h4>${tagsTitle}</h4>
+    <table class="tags-summary-table">
+        <tr>
+            <td width="300px"><h3>${tagsTitle}</h3></td>
+            <td width="90px" class="tag-count-header">% Passed</td>
+            <td width="130px" class="test-count">&nbsp;</td>
+            <td class="tag-count-header">Test count</td>
+        </tr>
+    </table>
     <#foreach tagType in tagTypes>
         <#assign tagTypeTitle = inflection.of(tagType).inPluralForm().asATitle() >
         <#assign outcomesForType = testOutcomes.withTagType(tagType) >
@@ -490,8 +477,11 @@
                 <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
                 <#assign tagReport = reportName.forTag(tag) >
                 <#assign outcomesForTag = testOutcomes.withTag(tag) >
-                <#--outcomesForType.withTag(tag) >-->
-                <#--testOutcomes.withTag(tag) outcomesForType.withTag(tagName)-->
+                <#assign count = outcomesForTag.total>
+                <#assign testCountLabel = inflection.of(count).times("test").inPluralForm() >
+
+            <#--outcomesForType.withTag(tag) >-->
+            <#--testOutcomes.withTag(tag) outcomesForType.withTag(tagName)-->
                 <#if outcomesForTag.result == "FAILURE">
                     <#assign outcome_icon = "fail.png">
                     <#assign outcome_text = "failure-color">
@@ -510,15 +500,15 @@
                 </#if>
                 <tr>
                     <td class="bluetext" class="tag-title">
-                        <span class="${outcomesForTag.result}-text">
+                        <span class="${outcomesForTag.result}-text ellipsis">
                             <#if testOutcomes.label == tag.name>
-                                <a href="${tagReport}" class="currentTag">${tagTitle}</a>
+                                <a href="${tagReport}" title="${tagTitle}" class="currentTag">${tagTitle}</a>
                             <#else>
-                                <a href="${tagReport}">${tagTitle}</a>
+                                <a href="${tagReport}" title="${tagTitle}">${tagTitle}</a>
                             </#if>
                         </span>
                     </td>
-                    <td width="150px" class="lightgreentext">
+                    <td width="220px" class="table-figure">
                         <#if weighted == "true">
                             <#assign percentPending = outcomesForTag.percentSteps.withResult("pending")/>
                             <#assign percentIgnored = outcomesForTag.percentSteps.withResult("ignored") + outcomesForTag.percentSteps.withResult("skipped")/>
@@ -570,7 +560,7 @@
 
                         <table>
                             <tr>
-                                <td width="50px">${passing}</td>
+                                <td class="related-tag-percentage"><span title="${passingCaption}">${passing}</span></td>
                                 <td width="150px">
                                     <a href="${tagReport}">
                                         <div class="percentagebar"
@@ -595,6 +585,7 @@
                                         </div>
                                     </a>
                                 </td>
+                                <td class="related-tag-count"><span class="result-test-count" title="${outcomesForTag.total} ${testCountLabel}">${count}</span></td>
                             </tr>
                         </table>
                     </td>

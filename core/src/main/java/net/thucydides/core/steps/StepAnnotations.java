@@ -57,9 +57,11 @@ public final class StepAnnotations {
      * Instantiates the @ManagedPages-annotated Pages instance using current WebDriver.
      */
     public static void injectAnnotatedPagesObjectInto(final Object testCase, final Pages pages) {
-       PagesAnnotatedField pagesField = PagesAnnotatedField.findFirstAnnotatedField(testCase.getClass());
-       pages.setDefaultBaseUrl(pagesField.getDefaultBaseUrl());
-       pagesField.setValue(testCase, pages);
+       Optional<PagesAnnotatedField> pagesField = PagesAnnotatedField.findFirstAnnotatedField(testCase.getClass());
+       if (pagesField.isPresent()) {
+           pages.setDefaultBaseUrl(pagesField.get().getDefaultBaseUrl());
+           pagesField.get().setValue(testCase, pages);
+       }
     }
 
     /**

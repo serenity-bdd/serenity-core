@@ -4,32 +4,11 @@
     <meta charset="UTF-8"/>
     <title>Releases</title>
     <link rel="shortcut icon" href="favicon.ico">
-    <link rel="stylesheet" type="text/css" href="jqplot/jquery.jqplot.min.css"/>
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/core.css"/>
 
-    <!--[if IE]>
-    <script language="javascript" type="text/javascript" src="jit/Extras/excanvas.js"></script><![endif]-->
-
-    <script type="text/javascript" src="scripts/jquery.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="datatables/media/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="jqplot/jquery.jqplot.min.js"></script>
-    <script type="text/javascript" src="jqplot/plugins/jqplot.pieRenderer.min.js"></script>
-
-    <link type="text/css" href="jqueryui/css/start/jquery-ui-1.8.18.custom.css" rel="Stylesheet"/>
-    <script type="text/javascript" src="jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
-
-    <script src="jqtree/tree.jquery.js"></script>
-    <link rel="stylesheet" href="jqtree/jqtree.css">
-
-    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
-    <!--[if IE 7]>
-    <link rel="stylesheet" href="font-awesome/css/font-awesome-ie7.min.css">
-    <![endif]-->
-
-    <link rel="stylesheet" href="css/core.css"/>
-    <link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet" />
+    <#include "libraries/common.ftl">
+    <#include "libraries/jquery-ui.ftl">
+    <#include "libraries/datatables.ftl">
+    <#include "libraries/jqtree.ftl">
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -46,6 +25,16 @@
                     });
                 }
             });
+
+            // Results table
+            $('#req-results-table').DataTable({
+                "order": [
+                    [ 2, "asc" ]
+                ],
+                "pageLength": 25
+            });
+
+            $("#tabs").tabs();
         });
     </script>
 </head>
@@ -107,9 +96,9 @@
                 </div>
 
                 <div id="release-coverage">
-                    <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
-                        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-                            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active requirementTitle">
+                    <div id="tabs">
+                        <ul>
+                            <li class="requirementTitle">
                                 <a href="#tabs-1">Release Coverage Summary</a></li>
                         </ul>
                         <!----->
@@ -281,7 +270,7 @@
 </div>
 <div id="beforefooter"></div>
 <div id="bottomfooter">
-    <span class="version">Serenity BDD version ${thucydidesVersionNumber} - Build ${buildNumber}</span>
+    <span class="version">Serenity BDD version ${serenityVersionNumber}</span>
 </div>
 
 

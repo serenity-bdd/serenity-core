@@ -32,7 +32,7 @@ public class VersionProvider {
         try {
             props.load(stream);
             stream.close();
-            return (String) props.get("version");
+            return (String) props.get("application.version");
         } catch (IOException e) {
             return "UNKNOWN";
         }

@@ -36,7 +36,7 @@ public class FirefoxProfileEnhancer {
     }
 
     public boolean shouldActivateFirebugs() {
-        return environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.THUCYDIDES_ACTIVATE_FIREBUGS.getPropertyName(), false);
+        return ThucydidesSystemProperty.THUCYDIDES_ACTIVATE_FIREBUGS.booleanFrom(environmentVariables);
     }
 
     public void addFirebugsTo(final FirefoxProfile profile) {

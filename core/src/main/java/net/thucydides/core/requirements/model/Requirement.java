@@ -6,6 +6,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.thucydides.core.model.TestTag;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -168,7 +169,6 @@ public class Requirement implements Comparable {
     }
 
     public TestTag asTag() {
-
         return TestTag.withName(qualifiedName()).andType(getType());
     }
 
@@ -243,7 +243,7 @@ public class Requirement implements Comparable {
     }
 
     public String qualifiedName() {
-        return (qualifier() != null) ? qualifier() + "/" + getName() : getName();
+        return (StringUtils.isNotEmpty(qualifier())) ? qualifier() + "/" + getName() : getName();
     }
 
     public String qualifier() {
@@ -251,14 +251,6 @@ public class Requirement implements Comparable {
             return getCardNumber();
         }
         return (getParent() != null) ? getParent() : null;
-//        if (getCardNumber() != null) {
-//            return getCardNumber();
-//        } else
-//        if (getParent() != null) {
-//            return getParent();
-//        } else {
-//            return null;
-//        }
     }
 
     public boolean matchesTag(TestTag testTag) {

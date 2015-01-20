@@ -6,6 +6,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.images.ResizableImage;
 import net.thucydides.core.issues.IssueTracking;
@@ -162,7 +163,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         context.put("reportOptions", new ReportOptions(getEnvironmentVariables()));
 
         VersionProvider versionProvider = new VersionProvider(getEnvironmentVariables());
-        context.put("thucydidesVersionNumber", versionProvider.getVersion());
+        context.put("serenityVersionNumber", versionProvider.getVersion());
         context.put("buildNumber", versionProvider.getBuildNumberText());
     }
 
@@ -209,7 +210,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     }
 
     private boolean shouldKeepOriginalScreenshots() {
-        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_KEEP_UNSCALED_SCREENSHOTS, false);
+        return ThucydidesSystemProperty.THUCYDIDES_KEEP_UNSCALED_SCREENSHOTS.booleanFrom(getEnvironmentVariables());
     }
 
     private int maxScreenshotHeightIn(List<Screenshot> screenshots) throws IOException {

@@ -1,7 +1,10 @@
 package net.thucydides.core.requirements
 
 import com.google.common.base.Optional
+import junittestcases.samples.fruit.Oranges
+import junittestcases.samples.fruit.RedAndGreenApples
 import net.thucydides.core.ThucydidesSystemProperty
+import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.model.TestTag
 import net.thucydides.core.requirements.model.Requirement
 import net.thucydides.core.util.EnvironmentVariables
@@ -25,6 +28,115 @@ class WhenLoadingRequirementsFromAPackageStructure extends Specification {
             capabilitiyTexts == ["This is a narrative\nFor apples", "This is a narrative\nFor NiceZuchinnis",
                     "This is a narrative\nFor a potato"]
     }
+
+    def "Should be able to load capabilities from junit test cases in a specified package"() {
+        given: "We are using the Annotation provider"
+            def vars = new MockEnvironmentVariables()
+            vars.setProperty(ThucydidesSystemProperty.THUCYDIDES_ANNOTATED_REQUIREMENTS_DIR.propertyName, "junittestcases.samples")
+            RequirementsTagProvider capabilityProvider = new PackageAnnotationBasedTagProvider(vars)
+        when: "We load the available requirements"
+            def capabilities = capabilityProvider.getRequirements();
+            def capabilityNames = capabilities.collect {it.name}
+        then:
+            capabilityNames == ["Fruit", "Veges"]
+        and:
+            capabilities[0].children.collect {it.name} == ["Oranges","Red and green apples"]
+        and:
+            capabilities[1].children.collect {it.name} == ["Cucumbers"]
+    }
+
+    def "Should be able to load capabilities from junit test cases in a specified package using the default test root"() {
+        given: "We are using the Annotation provider"
+        def vars = new MockEnvironmentVariables()
+        vars.setProperty(ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT.propertyName, "junittestcases.samples")
+        RequirementsTagProvider capabilityProvider = new PackageAnnotationBasedTagProvider(vars)
+        when: "We load the available requirements"
+        def capabilities = capabilityProvider.getRequirements();
+        def capabilityNames = capabilities.collect {it.name}
+        then:
+        capabilityNames == ["Fruit", "Veges"]
+        and:
+        capabilities[0].children.collect {it.name} == ["Oranges", "Red and green apples"]
+        and:
+        capabilities[1].children.collect {it.name} == ["Cucumbers"]
+    }
+
+    def "Should get correct requirement tags from JUnit test outcomes"() {
+        given: "We are using the Annotation provider"
+            def vars = new MockEnvironmentVariables()
+            vars.setProperty("thucydides.test.root", "junittestcases.samples")
+//            vars.setProperty("thucydides.requirement.types", "feature,story")
+            RequirementsTagProvider capabilityProvider = new PackageAnnotationBasedTagProvider(vars)
+        when: "we run a junit test"
+            def testOutcome = TestOutcome.forTest("someTest", RedAndGreenApples.class)
+        and: "We look up the tags for this test"
+            def tags = capabilityProvider.getTagsFor(testOutcome);
+        then:
+            tags.size() == 2
+            tags.contains(TestTag.withName("Fruit").andType("feature"))
+            tags.contains(TestTag.withName("Red and green apples").andType("story"))
+    }
+
+    def "Requirements tags should match test outcome tag"() {
+        given: "We are using the Annotation provider"
+            def vars = new MockEnvironmentVariables()
+            vars.setProperty("thucydides.test.root", "junittestcases.samples")
+            vars.setProperty("thucydides.requirement.types", "feature,story")
+            RequirementsTagProvider capabilityProvider = new PackageAnnotationBasedTagProvider(vars)
+        when: "we run a junit test"
+            def testOutcome = TestOutcome.forTest("someTest", RedAndGreenApples.class)
+        and: "We look up the tags for this test"
+            def requirementsTags = capabilityProvider.getTagsFor(testOutcome);
+        then:
+            requirementsTags.containsAll(testOutcome.getTags());
+    }
+
+    def "Should get correct requirement tags from flat JUnit test outcomes"() {
+        given: "We are using the Annotation provider"
+            def vars = new MockEnvironmentVariables()
+            vars.setProperty("thucydides.test.root", "junittestcases.samples.fruit")
+            vars.setProperty("thucydides.requirement.types", "story")
+            RequirementsTagProvider capabilityProvider = new PackageAnnotationBasedTagProvider(vars)
+        when: "we run a junit test"
+            def testOutcome = TestOutcome.forTest("someTest", RedAndGreenApples.class)
+        and: "We look up the tags for this test"
+            def tags = capabilityProvider.getTagsFor(testOutcome);
+        then:
+            tags.size() == 1
+            tags.contains(TestTag.withName("Red and green apples").andType("story"))
+    }
+
+    def "Should consider a JUnit test as a story or feature, no matter what level it is in the requirement structure"() {
+        given: "We are using the Annotation provider"
+            def vars = new MockEnvironmentVariables()
+            vars.setProperty("thucydides.test.root", "junittestcases.samples.fruit")
+            RequirementsTagProvider capabilityProvider = new PackageAnnotationBasedTagProvider(vars)
+        when: "we run a junit test"
+            def testOutcome = TestOutcome.forTest("someTest", RedAndGreenApples.class)
+        and: "We look up the tags for this test"
+            def tags = capabilityProvider.getTagsFor(testOutcome);
+        then:
+            tags.size() == 1
+            tags.contains(TestTag.withName("Red and green apples").andType("story"))
+    }
+
+    def "Should be able to load stories from junit test cases in a specified package using a flat structure"() {
+        given: "We are using the Annotation provider"
+            def vars = new MockEnvironmentVariables()
+            vars.setProperty(ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT.propertyName, "junittestcases.samples.fruit")
+            vars.setProperty(ThucydidesSystemProperty.THUCYDIDES_REQUIREMENT_TYPES.propertyName, "story")
+
+            RequirementsTagProvider capabilityProvider = new PackageAnnotationBasedTagProvider(vars)
+        when: "We load the available requirements"
+            def stories = capabilityProvider.getRequirements();
+            def storyNames = stories.collect {it.name}
+            def storyTypes = stories.collect {it.type}
+        then:
+            storyNames == ["Oranges","Red and green apples"]
+        and:
+            storyTypes == ["story","story"]
+    }
+
 
     def "Should be able to load issues from the default directory structure"() {
         given: "We are using the Annotation provider"

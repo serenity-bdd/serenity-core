@@ -37,9 +37,9 @@ public class DisableThucydidesHistoryRule implements MethodRule {
 
         private void restoreOldLogLevel() {
             if (originalValue != null) {
-                environmentVariables.setProperty("thucydides.store.history", originalValue);
+                environmentVariables.setProperty("serenity.store.history", originalValue);
             } else {
-                environmentVariables.clearProperty("thucydides.store.history");
+                environmentVariables.clearProperty("serenity.store.history");
             }
         }
     }
@@ -49,8 +49,8 @@ public class DisableThucydidesHistoryRule implements MethodRule {
 
     public DisableThucydidesHistoryRule() {
         environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get() ;
-        originalValue = environmentVariables.getProperty("thucydides.store.history");
-        environmentVariables.setProperty("thucydides.store.history","false");
+        originalValue = environmentVariables.getProperty("serenity.store.history");
+        environmentVariables.setProperty("serenity.store.history","false");
     }
 
     public Statement apply(final Statement statement, final FrameworkMethod method, final Object target) {

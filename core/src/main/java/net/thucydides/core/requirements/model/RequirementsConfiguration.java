@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class RequirementsConfiguration {
-    public final static List<String> DEFAULT_CAPABILITY_TYPES = ImmutableList.of("capability", "feature");
+    public final static List<String> DEFAULT_CAPABILITY_TYPES = ImmutableList.of("capability", "feature", "story");
     protected static final String DEFAULT_ROOT_DIRECTORY = "stories";
 
     private EnvironmentVariables environmentVariables;

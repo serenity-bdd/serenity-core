@@ -22,6 +22,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertNotNull;
 
+/** @deprecated Ensuring legacy thucydides namespace code still works
+ * //todo [deprecate thucydides] Remove when thucydides namespace is removed
+ */
+@Deprecated
 public class WhenBrowsingAWebSiteUsingPageObjects {
 
     public class IndexPage extends PageObject {
@@ -187,12 +191,6 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
     public void should_select_radio_buttons_by_value() {
         indexPage.nameRadioButtons.selectByValue("2");
         assertThat(indexPage.nameRadioButtons.getSelectedValue().get(), is("2"));
-    }
-
-    @Test
-    public void should_select_radio_buttons_by_visible_text() {
-        indexPage.nameRadioButtons.selectByVisibleText("Value 1");
-        assertThat(indexPage.nameRadioButtons.getSelectedValue().get(), is("1"));
     }
 
     @Test

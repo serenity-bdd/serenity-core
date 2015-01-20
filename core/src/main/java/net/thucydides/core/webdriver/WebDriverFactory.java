@@ -2,7 +2,7 @@ package net.thucydides.core.webdriver;
 
 import com.google.common.base.Preconditions;
 import io.appium.java_client.AppiumDriver;
-import net.thucydides.core.Thucydides;
+import net.serenitybdd.core.Serenity;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureException;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
@@ -76,7 +76,7 @@ public class WebDriverFactory {
     private final Integer EXTRA_TIME_TO_TAKE_SCREENSHOTS = 180;
 
     public WebDriverFactory() {
-        this(new WebdriverInstanceFactory(), Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+        this(new WebdriverInstanceFactory(), Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
     }
 
     public WebDriverFactory(EnvironmentVariables environmentVariables) {
@@ -94,8 +94,8 @@ public class WebDriverFactory {
                             EnvironmentVariables environmentVariables,
                             FirefoxProfileEnhancer firefoxProfileEnhancer) {
         this(webdriverInstanceFactory, environmentVariables, firefoxProfileEnhancer,
-                Injectors.getInjector().getInstance(FixtureProviderService.class),
-                Injectors.getInjector().getInstance(ElementProxyCreator.class));
+            Injectors.getInjector().getInstance(FixtureProviderService.class),
+            Injectors.getInjector().getInstance(ElementProxyCreator.class));
     }
 
     public WebDriverFactory(WebdriverInstanceFactory webdriverInstanceFactory,
@@ -148,11 +148,11 @@ public class WebDriverFactory {
     public boolean usesSauceLabs() {
         return StringUtils.isNotEmpty(sauceRemoteDriverCapabilities.getUrl());
     }
-
+    
     public boolean usesBrowserStack() {
         return StringUtils.isNotEmpty(browserStackRemoteDriverCapabilities.getUrl());
     }
-
+    
     /**
      * This method is synchronized because multiple webdriver instances can be created in parallel.
      * However, they may use common system resources such as ports, so may potentially interfere
@@ -163,8 +163,8 @@ public class WebDriverFactory {
     protected synchronized WebDriver newWebdriverInstance(final Class<? extends WebDriver> driverClass) {
         try {
             WebDriver driver;
-            if (saucelabsUrlIsDefined() || browserStackUrlIsDefined() || shouldUseARemoteDriver()) {
-                driver = newRemoteDriver();
+            if (isARemoteDriver(driverClass) || shouldUseARemoteDriver() || saucelabsUrlIsDefined() || browserStackUrlIsDefined()) {
+            	driver = newRemoteDriver();
             } else if (isAnAppiumDriver(driverClass)) {
                 driver = appiumDriver();
             } else if (isAFirefoxDriver(driverClass)) {
@@ -180,8 +180,6 @@ public class WebDriverFactory {
                 driver = safariDriver();
             } else if (isAnInternetExplorerDriver(driverClass)) {
                 driver = internetExplorerDriver();
-            } else if (isARemoteDriver(driverClass)) {
-                driver = newRemoteDriver();
             } else if (isAProvidedDriver(driverClass)) {
                 driver = providedDriver();
             } else {
@@ -248,7 +246,7 @@ public class WebDriverFactory {
     private void setImplicitTimeoutsIfSpecified(WebDriver driver) {
         if (ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.isDefinedIn(environmentVariables)) {
             int timeout = environmentVariables.getPropertyAsInteger(ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT
-                    .getPropertyName(), 0);
+                                                                                            .getPropertyName(),0);
 
             driver.manage().timeouts().implicitlyWait(timeout, TimeUnit.MILLISECONDS);
         }
@@ -262,13 +260,13 @@ public class WebDriverFactory {
         return webdriverInstanceFactory.newInstanceOf(driverClass);
     }
 
-    private WebDriver newRemoteDriver() throws MalformedURLException {
+    private WebDriver  newRemoteDriver() throws MalformedURLException {
 
         WebDriver driver = null;
         if (saucelabsUrlIsDefined()) {
             driver = buildSaucelabsDriver();
-        } else if (browserStackUrlIsDefined()) {
-            driver = buildBrowserStackDriver();
+        } else if (browserStackUrlIsDefined()){
+        	driver = buildBrowserStackDriver();
         } else {
             driver = buildRemoteDriver();
         }
@@ -288,25 +286,25 @@ public class WebDriverFactory {
     private boolean browserStackUrlIsDefined() {
         return StringUtils.isNotEmpty(browserStackRemoteDriverCapabilities.getUrl());
     }
-
+    
     private WebDriver buildSaucelabsDriver() throws MalformedURLException {
         String saucelabsUrl = sauceRemoteDriverCapabilities.getUrl();
         WebDriver driver = webdriverInstanceFactory.newRemoteDriver(new URL(saucelabsUrl), findSaucelabsCapabilities());
 
         if (isNotEmpty(ThucydidesSystemProperty.SAUCELABS_IMPLICIT_TIMEOUT.from(environmentVariables))) {
-            int implicitWait = environmentVariables.getPropertyAsInteger(
-                    ThucydidesSystemProperty.SAUCELABS_IMPLICIT_TIMEOUT.getPropertyName(), 30);
+            int implicitWait = ThucydidesSystemProperty.SAUCELABS_IMPLICIT_TIMEOUT.integerFrom(environmentVariables, 30);
+
             driver.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
         }
         return driver;
     }
-
-    private WebDriver buildBrowserStackDriver() throws MalformedURLException {
-        String browserStackUrl = browserStackRemoteDriverCapabilities.getUrl();
+    
+    private WebDriver buildBrowserStackDriver() throws MalformedURLException{
+    	String browserStackUrl = browserStackRemoteDriverCapabilities.getUrl();
         WebDriver driver = webdriverInstanceFactory.newRemoteDriver(new URL(browserStackUrl), findbrowserStackCapabilities());
         return driver;
     }
-
+    
 
     public static String getDriverFrom(EnvironmentVariables environmentVariables, String defaultDriver) {
         String driver = getDriverFrom(environmentVariables);
@@ -328,13 +326,13 @@ public class WebDriverFactory {
 
         return sauceRemoteDriverCapabilities.getCapabilities(capabilities);
     }
-
-
+    
+    
     private Capabilities findbrowserStackCapabilities() {
 
-        String driver = getDriverFrom(environmentVariables);
-        DesiredCapabilities capabilities = capabilitiesForDriver(driver);
-
+    	String driver = getDriverFrom(environmentVariables);
+    	DesiredCapabilities capabilities = capabilitiesForDriver(driver);
+    	
         return browserStackRemoteDriverCapabilities.getCapabilities(capabilities);
 
     }
@@ -368,7 +366,7 @@ public class WebDriverFactory {
         if (!SupportedWebDriver.listOfSupportedDrivers().contains(normalizedDriverName)) {
             SupportedWebDriver closestDriver = SupportedWebDriver.getClosestDriverValueTo(normalizedDriverName);
             throw new AssertionError("Unsupported driver for webdriver.driver or webdriver.remote.driver: " + driver
-                    + ". Did you mean " + closestDriver.toString().toLowerCase() + "?");
+                                     + ". Did you mean " + closestDriver.toString().toLowerCase() + "?");
         }
         return SupportedWebDriver.valueOf(normalizedDriverName);
     }
@@ -388,7 +386,7 @@ public class WebDriverFactory {
 
             case FIREFOX:
                 capabilities = DesiredCapabilities.firefox();
-                capabilities.setCapability("firefox_profile", buildFirefoxProfile());
+                capabilities.setCapability("firefox_profile",buildFirefoxProfile());
                 break;
 
             case HTMLUNIT:
@@ -417,10 +415,9 @@ public class WebDriverFactory {
     private DesiredCapabilities remoteCapabilities() {
         String remoteBrowser = ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables, "firefox");
         DesiredCapabilities capabilities = realBrowserCapabilities(driverTypeFor(remoteBrowser));
-        capabilities.setCapability("idle-timeout", EXTRA_TIME_TO_TAKE_SCREENSHOTS);
+        capabilities.setCapability("idle-timeout",EXTRA_TIME_TO_TAKE_SCREENSHOTS);
 
-        Boolean recordScreenshotsInSaucelabs
-                = environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.SAUCELABS_RECORD_SCREENSHOTS, false);
+        Boolean recordScreenshotsInSaucelabs = ThucydidesSystemProperty.SAUCELABS_RECORD_SCREENSHOTS.booleanFrom(environmentVariables);
         capabilities.setCapability("record-screenshots", recordScreenshotsInSaucelabs);
 
 
@@ -438,7 +435,7 @@ public class WebDriverFactory {
     private DesiredCapabilities addExtraCatabilitiesTo(DesiredCapabilities capabilities) {
         CapabilitySet capabilitySet = new CapabilitySet(environmentVariables);
         Map<String, Object> extraCapabilities = capabilitySet.getCapabilities();
-        for (String capabilityName : extraCapabilities.keySet()) {
+        for(String capabilityName : extraCapabilities.keySet()) {
             capabilities.setCapability(capabilityName, extraCapabilities.get(capabilityName));
         }
         addCapabilitiesFromFixtureServicesTo(capabilities);
@@ -446,19 +443,19 @@ public class WebDriverFactory {
     }
 
     public void setupFixtureServices() throws FixtureException {
-        for (FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
+        for(FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
             fixtureService.setup();
         }
     }
 
     public void shutdownFixtureServices() {
-        for (FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
+        for(FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
             fixtureService.shutdown();
         }
     }
 
     private void addCapabilitiesFromFixtureServicesTo(DesiredCapabilities capabilities) {
-        for (FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
+        for(FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
             fixtureService.addCapabilitiesTo(capabilities);
         }
     }
@@ -548,8 +545,8 @@ public class WebDriverFactory {
     }
 
     private Dimension getRequestedBrowserSize() {
-        int height = environmentVariables.getPropertyAsInteger(ThucydidesSystemProperty.THUCYDIDES_BROWSER_HEIGHT, DEFAULT_HEIGHT);
-        int width = environmentVariables.getPropertyAsInteger(ThucydidesSystemProperty.THUCYDIDES_BROWSER_WIDTH, DEFAULT_WIDTH);
+        int height = ThucydidesSystemProperty.THUCYDIDES_BROWSER_HEIGHT.integerFrom(environmentVariables, DEFAULT_HEIGHT);
+        int width = ThucydidesSystemProperty.THUCYDIDES_BROWSER_WIDTH.integerFrom(environmentVariables, DEFAULT_WIDTH);
         return new Dimension(width, height);
     }
 
@@ -562,8 +559,8 @@ public class WebDriverFactory {
     }
 
     private boolean browserDimensionsSpecified() {
-        String snapshotWidth = environmentVariables.getProperty(ThucydidesSystemProperty.THUCYDIDES_BROWSER_WIDTH);
-        String snapshotHeight = environmentVariables.getProperty(ThucydidesSystemProperty.THUCYDIDES_BROWSER_HEIGHT);
+        String snapshotWidth =  ThucydidesSystemProperty.THUCYDIDES_BROWSER_WIDTH.from(environmentVariables);
+        String snapshotHeight = ThucydidesSystemProperty.THUCYDIDES_BROWSER_HEIGHT.from(environmentVariables);
         return (snapshotWidth != null) || (snapshotHeight != null);
     }
 
@@ -653,11 +650,11 @@ public class WebDriverFactory {
 
     protected FirefoxProfile createNewFirefoxProfile() {
         FirefoxProfile profile;
-        if (Thucydides.getFirefoxProfile() != null) {
-            profile = Thucydides.getFirefoxProfile();
+        if (Serenity.getFirefoxProfile() != null) {
+            profile = Serenity.getFirefoxProfile();
         } else {
             profile = new FirefoxProfile();
-            profile.setPreference("network.proxy.socks_port", 9999);
+            profile.setPreference("network.proxy.socks_port",9999);
             profile.setAlwaysLoadNoFocusLib(true);
             profile.setEnableNativeEvents(true);
         }
@@ -705,7 +702,7 @@ public class WebDriverFactory {
     }
 
     private boolean shouldEnableNativeEvents() {
-        return Boolean.valueOf(ThucydidesSystemProperty.THUCYDIDES_NATIVE_EVENTS.from(environmentVariables, "true"));
+        return Boolean.valueOf(ThucydidesSystemProperty.THUCYDIDES_NATIVE_EVENTS.from(environmentVariables,"true"));
     }
 
     private void activateProxyFor(FirefoxProfile profile, FirefoxProfileEnhancer firefoxProfileEnhancer) {
@@ -715,7 +712,7 @@ public class WebDriverFactory {
     }
 
     private String getProxyPortFromEnvironmentVariables() {
-        return environmentVariables.getProperty(ThucydidesSystemProperty.THUCYDIDES_PROXY_HTTP_PORT.getPropertyName());
+        return ThucydidesSystemProperty.THUCYDIDES_PROXY_HTTP_PORT.from(environmentVariables);
     }
 
     private boolean shouldActivateProxy() {
@@ -724,7 +721,7 @@ public class WebDriverFactory {
     }
 
     private String getProxyUrlFromEnvironmentVariables() {
-        return environmentVariables.getProperty(ThucydidesSystemProperty.THUCYDIDES_PROXY_HTTP.getPropertyName());
+        return ThucydidesSystemProperty.THUCYDIDES_PROXY_HTTP.from(environmentVariables);
     }
 
     private FirefoxProfile getProfileFrom(final String profileName) {
@@ -736,14 +733,14 @@ public class WebDriverFactory {
     }
 
     private boolean refuseUntrustedCertificates() {
-        return environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.REFUSE_UNTRUSTED_CERTIFICATES.getPropertyName(), false);
+        return ThucydidesSystemProperty.REFUSE_UNTRUSTED_CERTIFICATES.booleanFrom(environmentVariables);
     }
 
     /**
      * Initialize a page object's fields using the specified WebDriver instance.
      */
     public void initElementsWithAjaxSupport(final PageObject pageObject, final WebDriver driver, int timeoutInSeconds) {
-        proxyCreator.proxyElements(pageObject, driver, timeoutInSeconds);
+    	proxyCreator.proxyElements(pageObject, driver, timeoutInSeconds);
     }
 
 }

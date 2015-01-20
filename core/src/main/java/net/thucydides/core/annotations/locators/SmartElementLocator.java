@@ -8,55 +8,53 @@ import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.lang.reflect.Field;
 import java.util.List;
-//import org.openqa.selenium.WebElement;
 
 
 public class SmartElementLocator implements ElementLocator {
-	private final SearchContext searchContext;
-	private final boolean shouldCache;
-	private final By by;
-	private WebElement cachedElement;
-	private List<WebElement> cachedElementList;
-    private MobilePlatform platform;
-	
+    private final SearchContext searchContext;
+    private final boolean shouldCache;
+    private final By by;
+    private WebElement cachedElement;
+    private List<WebElement> cachedElementList;
 
-	public SmartElementLocator(SearchContext searchContext, Field field, MobilePlatform platform) {
-		this.searchContext = searchContext;
-	    SmartAnnotations annotations = new SmartAnnotations(field,platform);
-	    shouldCache = annotations.isLookupCached();
-	    by = annotations.buildBy();
+    public SmartElementLocator(SearchContext searchContext, Field field, MobilePlatform mobilePlatform) {
+        this.searchContext = searchContext;
+        net.serenitybdd.core.annotations.locators.SmartAnnotations annotations =
+                new net.serenitybdd.core.annotations.locators.SmartAnnotations(field, mobilePlatform);
+        shouldCache = annotations.isLookupCached();
+        by = annotations.buildBy();
     }
 
-	/**
-	 * Find the element.
-	 */
-	public WebElement findElement() {
-	    if (cachedElement != null && shouldCache) {
-	      return cachedElement;
-	    }
+    /**
+     * Find the element.
+     */
+    public WebElement findElement() {
+        if (cachedElement != null && shouldCache) {
+            return cachedElement;
+        }
 
-	    WebElement element = searchContext.findElement(by);
-	    if (shouldCache) {
-	      cachedElement = element;
-	    }
+        WebElement element = searchContext.findElement(by);
+        if (shouldCache) {
+            cachedElement = element;
+        }
 
-	    return element;
-	}
+        return element;
+    }
 
-	/**
-	 * Find the element list.
-	 */
-	public List<WebElement> findElements() {
-		if (cachedElementList != null && shouldCache) {
-	      return cachedElementList;
-	    }
+    /**
+     * Find the element list.
+     */
+    public List<WebElement> findElements() {
+        if (cachedElementList != null && shouldCache) {
+            return cachedElementList;
+        }
 
-	    List<WebElement> elements = searchContext.findElements(by);
-	    if (shouldCache) {
-	      cachedElementList = elements;
-	    }
+        List<WebElement> elements = searchContext.findElements(by);
+        if (shouldCache) {
+            cachedElementList = elements;
+        }
 
-	    return elements;
-	}
+        return elements;
+    }
 
 }

@@ -1,18 +1,19 @@
 package net.thucydides.core;
 
+import net.serenitybdd.core.SerenityListeners;
+import net.serenitybdd.core.SerenityReports;
 import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.webdriver.Configuration;
 
-/**
- * Provide supporting methods for creating report listeners and generating reports.
+/** @deprecated Use SerenityListeners instead
+ *
  */
 public class ThucydidesReports {
-
     public static ReportService getReportService(Configuration systemConfiguration) {
-        return new ReportService(systemConfiguration.getOutputDirectory(), ReportService.getDefaultReporters());
+        return SerenityReports.getReportService(systemConfiguration);
     }
 
-    public static ThucydidesListeners setupListeners(Configuration systemConfiguration) {
-        return new ThucydidesListeners(systemConfiguration);
+    public static SerenityListeners setupListeners(Configuration systemConfiguration) {
+        return SerenityReports.setupListeners(systemConfiguration);
     }
 }

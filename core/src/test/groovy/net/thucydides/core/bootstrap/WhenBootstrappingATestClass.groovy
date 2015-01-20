@@ -7,7 +7,7 @@ import net.thucydides.core.steps.StepEventBus
 import spock.lang.Specification
 
 /**
- * How to enrich a test class for use with Thucydides.
+ * How to enrich a test class for use with Serenity.
  * This is designed to be an API that can be used for more standardized integration with other test libraries.
  */
 class WhenBootstrappingATestClass extends Specification {

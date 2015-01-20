@@ -1,10 +1,13 @@
 package net.thucydides.core.webdriver;
 
 import com.gargoylesoftware.htmlunit.ScriptException;
+import net.thucydides.core.pages.WebElementFacade;
+import net.thucydides.core.pages.WebElementFacadeImpl;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.stubs.NavigationStub;
 import net.thucydides.core.webdriver.stubs.OptionsStub;
 import net.thucydides.core.webdriver.stubs.TargetLocatorStub;
+import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.HasInputDevices;
@@ -156,7 +159,8 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     public WebElement findElement(final By by) {
         if (!isEnabled()) {
-            throw new ElementNotVisibleException("No element found for " + by.toString() + " (a previous step has failed)");
+            LOGGER.info("Skipping findElement() for {} - a previous step has failed",  by.toString());
+            return new WebElementFacadeStub();
         }
 
         return getProxiedDriver().findElement(by);

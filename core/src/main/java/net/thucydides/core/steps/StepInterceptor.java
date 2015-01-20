@@ -1,6 +1,7 @@
 package net.thucydides.core.steps;
 
 import com.google.common.base.Preconditions;
+import net.serenitybdd.core.Serenity;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import net.serenitybdd.core.IgnoredStepException;
@@ -35,7 +36,6 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
     private final Class<?> testStepClass;
     private Throwable error = null;
     private static final Logger LOGGER = LoggerFactory.getLogger(StepInterceptor.class);
-    private boolean throwExceptionImmediately = false;
 
     public StepInterceptor(final Class<?> testStepClass) {
         this.testStepClass = testStepClass;
@@ -263,15 +263,14 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
         } catch (AssertionError failedAssertion) {
             error = failedAssertion;
             logStepFailure(method, args, failedAssertion);
-            return appropriateReturnObject(obj, method);
+            result = appropriateReturnObject(obj, method);
         } catch (AssumptionViolatedException assumptionFailed) {
-            return appropriateReturnObject(obj, method);
+            result = appropriateReturnObject(obj, method);
         } catch (Throwable testErrorException) {
             error = testErrorException;
             logStepFailure(method, args, forError(error).convertToAssertion());
-            return appropriateReturnObject(obj, method);
+            result = appropriateReturnObject(obj, method);
         }
-
         return result;
     }
 
@@ -376,7 +375,7 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
     }
 
     private boolean shouldThrowExceptionImmediately() {
-        return throwExceptionImmediately;
+        return Serenity.shouldThrowErrorsImmediately();
     }
 
     private void notifyStepStarted(final Method method, final Object[] args) {
@@ -391,7 +390,4 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
         StepEventBus.getEventBus().skippedStepStarted(description);
     }
 
-    public void setThowsExceptionImmediately(boolean throwExceptionImmediately) {
-        this.throwExceptionImmediately = throwExceptionImmediately;
-    }
 }

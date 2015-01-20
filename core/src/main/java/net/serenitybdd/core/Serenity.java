@@ -85,7 +85,7 @@ public class Serenity {
      * This includes managed WebDriver instances,
      * @param testCase any object (testcase or other) containing injectable Serenity components
      */
-    public static void initializeWithNoStepListener(final Object testCase) {
+    public static SerenityConfigurer initializeWithNoStepListener(final Object testCase) {
         setupWebDriverFactory();
         setupWebdriverManager();
 
@@ -97,7 +97,11 @@ public class Serenity {
         injectScenarioStepsInto(testCase);
         ThucydidesWebDriverSupport.initializeFieldsIn(testCase);
         injectDependenciesInto(testCase);
+
+        return new SerenityConfigurer();
     }
+
+
 
     private static void initStepListener() {
         Configuration configuration = Injectors.getInjector().getInstance(Configuration.class);
@@ -116,6 +120,7 @@ public class Serenity {
     }
 
     private static void initStepFactoryUsing(final Pages pagesObject) {
+        StepFactory stepFactory = new StepFactory(pagesObject);
         stepFactoryThreadLocal.set(new StepFactory(pagesObject));
     }
 
@@ -257,6 +262,23 @@ public class Serenity {
             } else {
                 Serenity.getCurrentSession().remove(key);
             }
+        }
+    }
+
+    private static boolean throwExceptionsImmediately = false;
+
+    public static void throwExceptionsImmediately() {
+        throwExceptionsImmediately = true;
+    }
+
+    public static boolean shouldThrowErrorsImmediately() {
+        return throwExceptionsImmediately;
+    }
+
+    public static class SerenityConfigurer {
+        public SerenityConfigurer throwExceptionsImmediately() {
+            Serenity.throwExceptionsImmediately();
+            return this;
         }
     }
 }

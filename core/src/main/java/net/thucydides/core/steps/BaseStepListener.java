@@ -101,7 +101,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public Optional<TestStep> cloneCurrentStep() {
-        return (Optional<TestStep>) ((currentStepExists()) ? getCurrentStep().clone() : Optional.absent());
+        return (Optional<TestStep>) ((currentStepExists()) ? Optional.of(getCurrentStep().clone()) : Optional.absent());
     }
 
     public void setAllStepsTo(TestResult result) {

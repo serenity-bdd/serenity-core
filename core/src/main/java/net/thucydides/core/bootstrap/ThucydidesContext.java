@@ -135,14 +135,4 @@ class ThucydidesContext {
     private BaseStepListener buildBaseStepListener() {
         return Listeners.getBaseStepListener().withOutputDirectory(outputDirectory);
     }
-//    private BaseStepListener buildBaseStepListener() {
-//        if (pageFactory != null) {
-//            return Listeners.getBaseStepListener()
-//                    .withPages(pageFactory)
-//                    .and().withOutputDirectory(outputDirectory);
-//        } else {
-//            return Listeners.getBaseStepListener()
-//                    .withOutputDirectory(outputDirectory);
-//        }
-//    }
 }

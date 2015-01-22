@@ -10,13 +10,13 @@ import java.util.List;
 
 /**
  * <code>RunAfterTestMethodCallbacks</code> is a custom JUnit 4.5+
- * {@link Statement} which allows the <em>Spring TestContext Framework</em> to
+ * {@link org.junit.runners.model.Statement} which allows the <em>Spring TestContext Framework</em> to
  * be plugged into the JUnit execution chain by calling afterTestMethod()}
- * on the supplied {@link TestContextManager}.
+ * on the supplied {@link org.springframework.test.context.TestContextManager}.
  * (This is a Spring 3.0 class back-ported into Thucydides to ensure compatibliity with Spring 2.5.x).
  *
  * @see #evaluate()
- * @see RunAfterTestMethodCallbacks
+ * @see net.thucydides.junit.spring.RunAfterTestMethodCallbacks
  * @author Sam Brannen
  * @since 3.0
  */

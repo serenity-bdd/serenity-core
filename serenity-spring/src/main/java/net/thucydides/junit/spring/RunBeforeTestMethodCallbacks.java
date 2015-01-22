@@ -7,14 +7,14 @@ import java.lang.reflect.Method;
 
 /**
  * <code>RunBeforeTestMethodCallbacks</code> is a custom JUnit 4.5+
- * {@link Statement} which allows the <em>Spring TestContext Framework</em> to
+ * {@link org.junit.runners.model.Statement} which allows the <em>Spring TestContext Framework</em> to
  * be plugged into the JUnit execution chain by calling
- * {@link TestContextManager#beforeTestMethod(Object, Method)
- * beforeTestMethod()} on the supplied {@link TestContextManager}.
+ * {@link org.springframework.test.context.TestContextManager#beforeTestMethod(Object, java.lang.reflect.Method)
+ * beforeTestMethod()} on the supplied {@link org.springframework.test.context.TestContextManager}.
  * (This is a Spring 3.0 class back-ported into Thucydides to ensure compatibliity with Spring 2.5.x).
  *
  * @see #evaluate()
- * @see RunAfterTestMethodCallbacks
+ * @see net.thucydides.junit.spring.RunAfterTestMethodCallbacks
  * @author Sam Brannen
  * @since 3.0
  */
@@ -48,8 +48,8 @@ public class RunBeforeTestMethodCallbacks extends Statement {
 	}
 
 	/**
-	 * Calls {@link TestContextManager#beforeTestMethod(Object, Method)} and
-	 * then invokes the next {@link Statement} in the execution chain (typically
+	 * Calls {@link org.springframework.test.context.TestContextManager#beforeTestMethod(Object, java.lang.reflect.Method)} and
+	 * then invokes the next {@link org.junit.runners.model.Statement} in the execution chain (typically
 	 * an instance of org.junit.internal.runners.statements.RunBefores).
 	 */
 	@Override

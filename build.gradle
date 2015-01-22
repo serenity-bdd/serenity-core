@@ -185,7 +185,7 @@ subprojects {
             exclude module: "spock-core"
         }
         testCompile("org.codehaus.groovy:groovy-all:2.3.6")
-        testCompile("org.easytesting:fest-assert:1.4")
+        testCompile 'org.assertj:assertj-core:1.7.1'
     }
 
     bintray {

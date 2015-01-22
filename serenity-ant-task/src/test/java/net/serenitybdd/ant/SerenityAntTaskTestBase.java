@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static java.lang.Thread.currentThread;
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;;
 
 public abstract class SerenityAntTaskTestBase extends BuildFileTest {
     protected void serenityReportsShouldAppearIn(String reportDirectory) throws URISyntaxException {

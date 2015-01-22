@@ -5,6 +5,5 @@ include 'serenity-test-utils',
         'serenity-junit',
         'serenity-ant-task',
         'serenity-gradle-plugin',
-        'serenity-spring',
-        'serenity-picocontainer',
+        'serenity-spring'
         'serenity-browsermob-plugin'

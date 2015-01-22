@@ -69,9 +69,6 @@ dependencies {
         exclude group: 'log4j', module: 'log4j'
     }
     compile "asm:asm:3.3.1"
-    compile "org.springframework:spring-test:3.2.3.RELEASE" // optional
-    compile "org.springframework:spring-context:3.2.3.RELEASE" // optional
-    compile "org.springframework:spring-context-support:3.2.3.RELEASE" // optional
 
     compile "org.hamcrest:hamcrest-core:1.3"
     compile 'org.hamcrest:hamcrest-library:1.3'
@@ -98,12 +95,15 @@ dependencies {
     compile "junit:junit:4.11"
     compile "javax.validation:validation-api:1.1.0.Final"
     compile "org.hibernate:hibernate-validator:5.1.1.Final"
-    compile "javassist:javassist:3.12.1.GA"
     compile "javax.el:javax.el-api:2.2.4"
     compile "org.glassfish.web:javax.el:2.2.4"
 
     compile "org.objenesis:objenesis:2.1"
     compile "xml-apis:xml-apis:1.4.01"
+
+    testCompile "org.springframework:spring-test:3.2.3.RELEASE"
+    testCompile "org.springframework:spring-context:3.2.3.RELEASE"
+    testCompile "org.springframework:spring-context-support:3.2.3.RELEASE"
 
     testCompile project(':serenity-sample-alternative-resources')
     testCompile project(':serenity-test-utils')

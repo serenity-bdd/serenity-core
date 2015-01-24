@@ -443,7 +443,7 @@ public class StepEventBus {
             stepListener.testSuiteFinished();
         }
         if (!isUniqueSession()) {
-            ThucydidesWebDriverSupport.closeAllDrivers();
+            ThucydidesWebDriverSupport.closeCurrentDrivers();
         }
         storyUnderTest = null;
     }

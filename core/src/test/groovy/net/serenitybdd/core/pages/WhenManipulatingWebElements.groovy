@@ -2,6 +2,7 @@ package net.serenitybdd.core.pages
 
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.pages.RenderedPageObjectView
+import net.thucydides.core.pages.WebElementDescriber
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade
 import org.openqa.selenium.ElementNotVisibleException
 import org.openqa.selenium.StaleElementReferenceException
@@ -21,23 +22,24 @@ class WhenManipulatingWebElements extends Specification {
 
     WebDriver driver = Mock()
     WebElement webElement = Mock()
-
+    ElementLocator locator = Mock();
 
     @Unroll
     def "web element facade should be printed as the web element"() {
         given:
         webElement.getAttribute(attribute) >> attributeValue
         webElement.getTagName() >> tag
+        locator.toString() >> "find by id or name 'value'"
         when:
         WebElementFacade elementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100);
         then:
-        elementFacade.toString() == asString
+        new WebElementDescriber().webElementDescription(elementFacade, locator) == asString
         where:
         attribute | attributeValue | tag   | asString
-        "id"      | "idvalue"      | "tag" | "<tag id='idvalue'>"
-        "name"    | "somename"     | "tag" | "<tag name='somename'>"
-        "class"   | "someclass"    | "tag" | "<tag class='someclass'>"
-        "href"    | "link"         | "a"   | "<a href='link'>"
+        "id"      | "idvalue"      | "tag" | "<tag id='idvalue'> - find by id or name 'value'"
+        "name"    | "somename"     | "tag" | "<tag name='somename'> - find by id or name 'value'"
+        "class"   | "someclass"    | "tag" | "<tag class='someclass'> - find by id or name 'value'"
+        "href"    | "link"         | "a"   | "<a href='link'> - find by id or name 'value'"
 
     }
 
@@ -47,20 +49,23 @@ class WhenManipulatingWebElements extends Specification {
         webElement.getAttribute("type") >> "button"
         webElement.getAttribute("value") >> "submit"
         webElement.getTagName() >> "input"
+        locator.toString() >> "find by id or name 'value'"
         when:
         WebElementFacade elementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100);
         then:
-        elementFacade.toString() == "<input type='button' value='submit'>"
+        new WebElementDescriber().webElementDescription(elementFacade, locator) == "<input type='button' value='submit'> - find by id or name 'value'"
 
     }
 
     def "web element facade should be printed as tag element if nothing available"() {
         given:
         webElement.getTagName() >> "tag"
+        locator.toString() >> "find by id or name 'value'"
         when:
         WebElementFacade elementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100);
         then:
-        elementFacade.toString() == "<tag>"
+
+        new WebElementDescriber().webElementDescription(elementFacade, locator) == "<tag> - find by id or name 'value'"
     }
 
 

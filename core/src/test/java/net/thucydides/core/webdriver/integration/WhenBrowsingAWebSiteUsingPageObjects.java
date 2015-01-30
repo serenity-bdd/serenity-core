@@ -119,7 +119,7 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
     public void should_print_web_element_facades_in_a_readable_form() {
 
         assertThat(indexPage.checkbox()
-                .toString(), is("<input id='checkbox' type='checkbox' value='checkbox_value'>"));
+                .toString(), is("<input id='checkbox' type='checkbox' value='checkbox_value'> - by id or name \"checkbox\""));
     }
 
     @Test

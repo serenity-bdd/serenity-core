@@ -2,7 +2,7 @@ package net.thucydides.core.pages;
 
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Predicate;
-import net.thucydides.core.pages.WebElementFacade;
+import com.google.common.collect.Lists;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;
@@ -62,7 +62,7 @@ public abstract class PageObject {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PageObject.class);
 
-    private static final int WAIT_FOR_TIMEOUT = 30000;
+    private static final int DEFAULT_IMPLICIT_WAIT_IN_SECONDS = 0;
 
     private WebDriver driver;
 
@@ -83,14 +83,14 @@ public abstract class PageObject {
     private EnvironmentVariables environmentVariables;
 
     private enum OpenMode {
-    	CHECK_URL_PATTERNS,
-    	IGNORE_URL_PATTERNS
+        CHECK_URL_PATTERNS,
+        IGNORE_URL_PATTERNS
     }
 
     protected PageObject() {
         this.webdriverClock = new SystemClock();
         this.clock = Injectors.getInjector().getInstance(net.thucydides.core.pages.SystemClock.class);
-        this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get() ;
+        this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
         setupPageUrls();
     }
@@ -100,6 +100,7 @@ public abstract class PageObject {
         this.driver = driver;
         callback.apply(this);
     }
+
     public PageObject(final WebDriver driver, final int ajaxTimeout) {
         this();
         setDriver(driver, ajaxTimeout);
@@ -121,7 +122,7 @@ public abstract class PageObject {
     }
 
     protected int waitForTimeout() {
-        return ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables, WAIT_FOR_TIMEOUT);
+        return ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables, DEFAULT_IMPLICIT_WAIT_IN_SECONDS);
     }
 
     public void setPages(Pages pages) {
@@ -141,13 +142,13 @@ public abstract class PageObject {
     }
 
     public FileToUpload uploadData(String data) throws IOException {
-        Path datafile = Files.createTempFile("upload","data");
+        Path datafile = Files.createTempFile("upload", "data");
         Files.write(datafile, data.getBytes());
         return new FileToUpload(datafile.toAbsolutePath().toString()).useRemoteDriver(isDefinedRemoteUrl());
     }
 
     public FileToUpload uploadData(byte[] data) throws IOException {
-        Path datafile = Files.createTempFile("upload","data");
+        Path datafile = Files.createTempFile("upload", "data");
         Files.write(datafile, data);
         return new FileToUpload(datafile.toAbsolutePath().toString()).useRemoteDriver(isDefinedRemoteUrl());
     }
@@ -325,15 +326,15 @@ public abstract class PageObject {
         return this;
     }
 
-	/**
-	 * Waits for a given text to appear anywhere on the page.
-	 */
-	public PageObject waitForTextToAppear(final String expectedText,
-											 final long timeout) {
+    /**
+     * Waits for a given text to appear anywhere on the page.
+     */
+    public PageObject waitForTextToAppear(final String expectedText,
+                                          final long timeout) {
 
-		getRenderedView().waitForTextToAppear(expectedText, timeout);
-		return this;
-	}
+        getRenderedView().waitForTextToAppear(expectedText, timeout);
+        return this;
+    }
 
     /**
      * Waits for any of a number of text blocks to appear anywhere on the
@@ -521,7 +522,7 @@ public abstract class PageObject {
     }
 
     private long waitForTimeoutInSeconds() {
-        return (waitForTimeoutInMilliseconds < 1000) ? 1 : (waitForTimeoutInMilliseconds/1000);
+        return (waitForTimeoutInMilliseconds < 1000) ? 1 : (waitForTimeoutInMilliseconds / 1000);
     }
 
     public long waitForTimeoutInMilliseconds() {
@@ -577,14 +578,14 @@ public abstract class PageObject {
      * represented in the URL using {0}, {1}, etc.
      */
     public final void open(final String... parameterValues) {
-    	open(OpenMode.CHECK_URL_PATTERNS, parameterValues);
+        open(OpenMode.CHECK_URL_PATTERNS, parameterValues);
     }
 
     /**
      * Opens page without checking URL patterns. Same as open(String...)) otherwise.
      */
     public final void openUnchecked(final String... parameterValues) {
-    	open(OpenMode.IGNORE_URL_PATTERNS, parameterValues);
+        open(OpenMode.IGNORE_URL_PATTERNS, parameterValues);
     }
 
     private void open(final OpenMode openMode, final String... parameterValues) {
@@ -597,28 +598,28 @@ public abstract class PageObject {
     }
 
     public final void open(final String urlTemplateName,
-            final String[] parameterValues) {
-    	open(OpenMode.CHECK_URL_PATTERNS, urlTemplateName, parameterValues);
+                           final String[] parameterValues) {
+        open(OpenMode.CHECK_URL_PATTERNS, urlTemplateName, parameterValues);
     }
 
     /**
      * Opens page without checking URL patterns. Same as {@link #open(String, String[])} otherwise.
      */
     public final void openUnchecked(final String urlTemplateName,
-            final String[] parameterValues) {
-    	open(OpenMode.IGNORE_URL_PATTERNS, urlTemplateName, parameterValues);
+                                    final String[] parameterValues) {
+        open(OpenMode.IGNORE_URL_PATTERNS, urlTemplateName, parameterValues);
     }
 
-	private void open(final OpenMode openMode, final String urlTemplateName,
-			final String[] parameterValues) {
-		String startingUrl = pageUrls.getNamedUrl(urlTemplateName,
-				parameterValues);
-		LOGGER.debug("Opening page at url {}", startingUrl);
-		openPageAtUrl(startingUrl);
-		checkUrlPatterns(openMode);
-		initializePage();
-		LOGGER.debug("Page opened");
-	}
+    private void open(final OpenMode openMode, final String urlTemplateName,
+                      final String[] parameterValues) {
+        String startingUrl = pageUrls.getNamedUrl(urlTemplateName,
+                parameterValues);
+        LOGGER.debug("Opening page at url {}", startingUrl);
+        openPageAtUrl(startingUrl);
+        checkUrlPatterns(openMode);
+        initializePage();
+        LOGGER.debug("Page opened");
+    }
 
     /**
      * Open the webdriver browser to the base URL, determined by the DefaultUrl
@@ -642,14 +643,14 @@ public abstract class PageObject {
      * it will open http://stage.acme.com/client/list. It will then invoke the waitUntilTitleAppears() method.
      */
     final public void open() {
-    	open(OpenMode.CHECK_URL_PATTERNS);
+        open(OpenMode.CHECK_URL_PATTERNS);
     }
 
     /**
      * Opens page without checking URL patterns. Same as {@link #open()} otherwise.
      */
     final public void openUnchecked() {
-    	open(OpenMode.IGNORE_URL_PATTERNS);
+        open(OpenMode.IGNORE_URL_PATTERNS);
     }
 
     private void open(final OpenMode openMode) {
@@ -664,11 +665,11 @@ public abstract class PageObject {
         callWhenPageOpensMethods();
     }
 
-	private void checkUrlPatterns(final OpenMode openMode) {
-		if (openMode == OpenMode.CHECK_URL_PATTERNS) {
+    private void checkUrlPatterns(final OpenMode openMode) {
+        if (openMode == OpenMode.CHECK_URL_PATTERNS) {
             ensurePageIsOnAMatchingUrl();
         }
-	}
+    }
 
     private void ensurePageIsOnAMatchingUrl() {
         if (!matchesAnyUrl()) {
@@ -704,7 +705,7 @@ public abstract class PageObject {
     /**
      * Override this method
      */
-    public void callWhenPageOpensMethods()  {
+    public void callWhenPageOpensMethods() {
         for (Method annotatedMethod : methodsAnnotatedWithWhenPageOpens()) {
             try {
                 annotatedMethod.setAccessible(true);
@@ -788,38 +789,38 @@ public abstract class PageObject {
     /**
      * Provides a fluent API for querying web elements.
      */
-    public WebElementFacade element(WebElement webElement) {
-        return WebElementFacadeImpl.wrapWebElement(driver, webElement, waitForTimeoutInMilliseconds);
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(WebElement webElement) {
+        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, waitForTimeoutInMilliseconds);
     }
 
-    public WebElementFacade $(WebElement webElement) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(WebElement webElement) {
         return element(webElement);
     }
 
-    public WebElementFacade $(String xpathOrCssSelector) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(String xpathOrCssSelector) {
         return element(xpathOrCssSelector);
     }
 
     /**
      * Provides a fluent API for querying web elements.
      */
-    public WebElementFacade element(By bySelector) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(By bySelector) {
         WebElement webElement = getDriver().findElement(bySelector);
-        return WebElementFacadeImpl.wrapWebElement(driver, webElement, waitForTimeoutInMilliseconds);
+        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, waitForTimeoutInMilliseconds);
     }
 
-    public WebElementFacade find(By selector) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(By selector) {
         return element(selector);
     }
 
-    public List<WebElementFacade> findAll(By bySelector) {
+    public List<net.serenitybdd.core.pages.WebElementFacade> findAll(By bySelector) {
         List<WebElement> matchingWebElements = driver.findElements(bySelector);
         return convert(matchingWebElements, toWebElementFacades());
     }
 
-    private Converter<WebElement, WebElementFacade> toWebElementFacades() {
-        return new Converter<WebElement, WebElementFacade>() {
-            public WebElementFacade convert(WebElement from) {
+    private Converter<WebElement, net.serenitybdd.core.pages.WebElementFacade> toWebElementFacades() {
+        return new Converter<WebElement, net.serenitybdd.core.pages.WebElementFacade>() {
+            public net.serenitybdd.core.pages.WebElementFacade convert(WebElement from) {
                 return element(from);
             }
         };
@@ -828,7 +829,7 @@ public abstract class PageObject {
     /**
      * Provides a fluent API for querying web elements.
      */
-    public WebElementFacade element(String xpathOrCssSelector) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(String xpathOrCssSelector) {
         return element(xpathOrCssSelector(xpathOrCssSelector));
     }
 
@@ -840,11 +841,11 @@ public abstract class PageObject {
         }
     }
 
-    public WebElementFacade findBy(String xpathOrCssSelector) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T findBy(String xpathOrCssSelector) {
         return element(xpathOrCssSelector);
     }
 
-    public List<WebElementFacade> findAll(String xpathOrCssSelector) {
+    public List<net.serenitybdd.core.pages.WebElementFacade> findAll(String xpathOrCssSelector) {
         return findAll(xpathOrCssSelector(xpathOrCssSelector));
     }
 
@@ -928,7 +929,7 @@ public abstract class PageObject {
             element(field).type(value);
         }
 
-        public void into(final WebElementFacade field) {
+        public void into(final net.serenitybdd.core.pages.WebElementFacade field) {
             field.type(value);
         }
 

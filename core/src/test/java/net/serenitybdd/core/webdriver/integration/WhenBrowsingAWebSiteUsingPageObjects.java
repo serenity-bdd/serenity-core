@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
@@ -74,7 +75,7 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
         public WebElement checkbox;
 
         public IndexPageWithShortTimeout(WebDriver driver, int timeout) {
-            super(driver, 1);
+            super(driver, timeout);
         }
     }
 
@@ -115,7 +116,7 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
     public void should_print_web_element_facades_in_a_readable_form() {
 
         assertThat(indexPage.checkbox()
-                .toString(), is("<input id='checkbox' type='checkbox' value='checkbox_value'>"));
+                .toString(), startsWith("<input id='checkbox' type='checkbox' value='checkbox_value'>"));
     }
 
     @Test
@@ -278,6 +279,12 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
         assertNotNull(indexPage.firstname);
         assertThat(indexPage.firstname.getValue(), is("<enter first name>"));
     }
+//
+//    @Test
+//    public void should_support_legacy_web_element_facades() {
+//        assertNotNull(indexPage.legacyFirstname);
+//        assertThat(indexPage.legacyFirstname.getValue(), is("<enter first name>"));
+//    }
 
     @Test
     public void should_initialize_a_web_element_facade_using_the_normal_findby_annotation() {

@@ -1,8 +1,8 @@
 package net.thucydides.core.pages.integration;
 
+import net.serenitybdd.core.pages.WebElementFacade;
 import net.thucydides.core.annotations.DefaultUrl;
 import net.thucydides.core.pages.PageObject;
-import net.thucydides.core.pages.WebElementFacade;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -12,6 +12,9 @@ public class StaticSitePageWithFacades extends PageObject {
 
         @FindBy(name = "firstname")
         protected WebElementFacade firstName;
+
+        @FindBy(name = "firstname")
+        protected net.thucydides.core.pages.WebElementFacade legacyFirstName;
 
         @FindBy(name = "lastname")
         protected WebElementFacade lastName;
@@ -75,6 +78,9 @@ public class StaticSitePageWithFacades extends PageObject {
         protected WebElementFacade focusmessage;
 
         protected WebElementFacade clients;
+
+        @FindBy(id = "clients")
+        protected net.thucydides.core.pages.WebElementFacade  legacyClients;
 
         protected WebElementFacade clients_with_no_headings;
 

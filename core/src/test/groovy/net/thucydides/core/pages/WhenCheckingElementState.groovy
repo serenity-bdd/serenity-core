@@ -1,5 +1,6 @@
 package net.thucydides.core.pages
 
+import net.thucydides.core.webdriver.WebDriverFacade
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
@@ -7,7 +8,7 @@ import spock.lang.Specification
 
 class WhenCheckingElementState extends Specification {
 
-    def driver = Mock(WebDriver)
+    def driver = Mock(WebDriverFacade)
     def webElement = Mock(WebElement)
 
 
@@ -25,7 +26,7 @@ class WhenCheckingElementState extends Specification {
 
     def "should delegate to findElements methods"() {
         given:
-            def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+            def webElementFacade = net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
         when:
             webElementFacade.findElements(By.id("someId"))
         then:
@@ -34,7 +35,7 @@ class WhenCheckingElementState extends Specification {
 
     def "should delegate to isDisplayed methods"() {
         given:
-            def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+            def webElementFacade = net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
         when:
             webElementFacade.isDisplayed()
         then:
@@ -43,7 +44,7 @@ class WhenCheckingElementState extends Specification {
 
     def "should delegate to getSize methods"() {
         given:
-        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+        def webElementFacade = net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
         when:
         webElementFacade.getSize()
         then:
@@ -52,7 +53,7 @@ class WhenCheckingElementState extends Specification {
 
     def "should delegate to submit methods"() {
         given:
-        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+        def webElementFacade = net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
         when:
         webElementFacade.submit()
         then:
@@ -61,7 +62,7 @@ class WhenCheckingElementState extends Specification {
 
     def "should delegate to sendKeys methods"() {
         given:
-        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+        def webElementFacade = net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
         when:
         webElementFacade.sendKeys("keys")
         then:
@@ -70,7 +71,7 @@ class WhenCheckingElementState extends Specification {
 
     def "should delegate to getTagName methods"() {
         given:
-        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+        def webElementFacade = net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
         when:
         webElement.getTagName() >> "someTag"
         then:
@@ -80,7 +81,7 @@ class WhenCheckingElementState extends Specification {
 
     def "text value of an invisible element should be empty"() {
         given:
-        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+        def webElementFacade = net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
         when:
         webElement.isDisplayed() >> false
         then:
@@ -89,7 +90,7 @@ class WhenCheckingElementState extends Specification {
 
     def "should delegate to getCssValue methods"() {
         given:
-        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+        def webElementFacade = net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
         when:
         webElementFacade.getCssValue("value")
         then:
@@ -98,7 +99,7 @@ class WhenCheckingElementState extends Specification {
 
     def "should delegate to getAttribute methods"() {
         given:
-        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+        def webElementFacade = net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
         when:
         webElementFacade.getAttribute("name")
         then:

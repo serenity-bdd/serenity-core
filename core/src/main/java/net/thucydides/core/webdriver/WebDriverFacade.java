@@ -1,6 +1,7 @@
 package net.thucydides.core.webdriver;
 
 import com.gargoylesoftware.htmlunit.ScriptException;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.pages.WebElementFacade;
 import net.thucydides.core.pages.WebElementFacadeImpl;
 import net.thucydides.core.steps.StepEventBus;
@@ -21,6 +22,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A proxy class for webdriver instances, designed to prevent the browser being opened unnecessarily.
@@ -34,6 +36,12 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     protected WebDriver proxiedWebDriver;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebDriverFacade.class);
+
+    /**
+     * Implicit timeout values recorded to that they can be restored after calling findElements()
+     */
+    protected long implicitTimeoutValue = 0;
+    protected TimeUnit implicitTimeoutUnit = TimeUnit.SECONDS;
 
     public WebDriverFacade(final Class<? extends WebDriver> driverClass,
                            final WebDriverFactory webDriverFactory) {
@@ -154,12 +162,23 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
             return Collections.emptyList();
         }
 
-        return getProxiedDriver().findElements(by);
+        overrideTimeoutsTo(0, TimeUnit.SECONDS);
+        List<WebElement> matchingElements = getProxiedDriver().findElements(by);
+        restoreTimeouts();
+
+        return matchingElements;
+    }
+
+    public void overrideTimeoutsTo(int value, TimeUnit unit) {
+        manage().timeouts().implicitlyWait(value,unit);
+    }
+
+    public void restoreTimeouts() {
+        manage().timeouts().implicitlyWait(implicitTimeoutValue, implicitTimeoutUnit);
     }
 
     public WebElement findElement(final By by) {
         if (!isEnabled()) {
-            LOGGER.info("Skipping findElement() for {} - a previous step has failed",  by.toString());
             return new WebElementFacadeStub();
         }
 
@@ -242,10 +261,8 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
             return new OptionsStub();
         }
 
-        return getProxiedDriver().manage();
+        return new OptionsFacade(getProxiedDriver().manage(), this);
     }
-
-
 
     public boolean canTakeScreenshots() {
     	if (driverClass != null) {

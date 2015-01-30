@@ -1,5 +1,6 @@
 package net.thucydides.core.model
 
+import net.thucydides.core.model.stacktrace.FailureCause
 import spock.lang.Specification
 
 /**

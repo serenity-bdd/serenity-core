@@ -1,6 +1,7 @@
-package net.thucydides.core.model;
+package net.thucydides.core.model.stacktrace;
 
 import com.google.common.base.Optional;
+import net.thucydides.core.model.TestFailureException;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;

@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.html.screenshots;
 
 import net.thucydides.core.images.SimpleImageInfo;
-import net.thucydides.core.model.FailureCause;
+import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.Screenshot;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
 import net.thucydides.core.util.FileSystemUtils;

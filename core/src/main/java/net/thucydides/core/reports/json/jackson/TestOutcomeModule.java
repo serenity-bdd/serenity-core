@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import net.thucydides.core.model.*;
 import net.thucydides.core.model.features.ApplicationFeature;
+import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 
 public class TestOutcomeModule extends SimpleModule {

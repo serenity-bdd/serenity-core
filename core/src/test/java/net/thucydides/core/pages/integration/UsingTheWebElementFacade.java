@@ -1,6 +1,7 @@
 package net.thucydides.core.pages.integration;
 
 
+import net.thucydides.core.pages.WebElementFacade;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.junit.BeforeClass;
@@ -8,6 +9,8 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;;
 
@@ -28,6 +31,72 @@ public class UsingTheWebElementFacade extends FluentElementAPITestsBaseClass {
     @Test
     public void should_report_if_element_is_visible() {
         assertThat(page.firstName.isVisible()).isTrue();
+    }
+
+    @Test
+    public void should_allow_nested_queries_on_webelements() {
+        assertThat(page.clients.findBy(".firstname").getText()).isEqualTo("Tim");
+    }
+
+    @Test
+    public void should_allow_nested_queries_on_legacy_webelements() {
+        assertThat(page.legacyClients.findBy(".firstname").getText()).isEqualTo("Tim");
+    }
+
+    @Test
+    public void should_allow_nested_queries_returning_lists_on_webelements() {
+        assertThat(page.clients.thenFindAll(".firstname")).hasSize(3);
+    }
+
+    @Test
+    public void queries_should_return_new_webelementfacades() {
+        net.serenitybdd.core.pages.WebElementFacade element = page.clients.findBy(".firstname");
+        assertThat(element.getText()).isEqualTo("Tim");
+    }
+
+    @Test
+    public void new_webelementfacade_queries_should_be_interchangable_with_legacy_ones() {
+        WebElementFacade legacyElement = page.clients.findBy(".firstname");
+        assertThat(legacyElement.getText()).isEqualTo("Tim");
+    }
+
+    @Test
+    public void page_level_queries_should_return_new_webelementfacades() {
+        net.serenitybdd.core.pages.WebElementFacade element = page.find(By.cssSelector("#clients"));
+        assertThat(element.isVisible()).isTrue();
+    }
+
+    /**
+     * Legacy code that uses Lists of the legacy WebElementFacades will need to be updated.
+     */
+    @Test
+    public void page_level_queries_should_return_new_webelementfacade_lists() {
+        List<net.serenitybdd.core.pages.WebElementFacade> element = page.findAll(".firstname");
+        assertThat(element).isNotEmpty();
+    }
+
+    @Test
+    public void page_level_queries_should_be_compatible_with_legacy_webelementfacades() {
+        WebElementFacade legacyElement = page.findBy("#clients");
+        assertThat(legacyElement.isVisible()).isTrue();
+    }
+
+    /**
+     * Make sure we can write tests with the new web elements that use legacy page objects.
+     */
+    @Test
+    public void new_webelementfacade_fields_should_be_assignable_from_legacy_ones() {
+        net.serenitybdd.core.pages.WebElementFacade legacyElement = page.firstName;
+        assertThat(legacyElement.isVisible()).isTrue();
+    }
+
+    @Test
+    public void should_allow_nested_queries_returning_lists_on_legacy_webelements() {
+        assertThat(page.legacyClients.thenFindAll(".firstname")).hasSize(3);
+    }
+    @Test
+    public void should_support_legacy_web_element_facades() {
+        assertThat(page.legacyFirstName.isVisible()).isTrue();
     }
 
     @Test
@@ -157,284 +226,4 @@ public class UsingTheWebElementFacade extends FluentElementAPITestsBaseClass {
         page.hiddenField.shouldNotBeCurrentlyVisible();
     }
 
-            /*
-
-    @Test
-    public void should_check_element_as_invisible_quickly_if_present_right_now() {
-        page.element(page.hiddenField).shouldNotBeCurrentlyVisible();
-    }
-
-    @Test(expected = AssertionError.class)
-    public void should_throw_expection_if_required_element_is_not_visible() {
-        page.element(page.hiddenField).shouldBeVisible();
-    }
-
-    @Test
-    public void should_know_if_enabled_element_is_enabled() {
-        assertThat(page.element(page.firstName).isEnabled(), is(true));
-    }
-
-    @Test
-    public void should_be_able_to_chain_methods() {
-        page.element(page.buttonThatIsInitiallyDisabled).waitUntilEnabled().and().then().click();
-    }
-
-    @Test
-    public void should_know_if_disabled_element_is_not_enabled() {
-        assertThat(page.element(page.readonlyField).isEnabled(), is(false));
-    }
-
-    @Test
-    public void should_do_nothing_if_enabled_field_should_be_enabled() {
-        page.element(page.firstName).shouldBeEnabled();
-    }
-
-    @Test(expected = AssertionError.class)
-    public void should_throw_exception_if_enabled_field_should_be_disabled() {
-        page.element(page.firstName).shouldNotBeEnabled();
-    }
-
-    @Test
-    public void should_work_if_disabled_field_is_not_enabled() {
-        page.element(page.readonlyField).shouldNotBeEnabled();
-    }
-
-    @Test(expected = AssertionError.class)
-    public void should_throw_exception_if_disabled_field_should_be_enabled() {
-        page.element(page.readonlyField).shouldBeEnabled();
-    }
-
-    @Test
-    public void should_pass_if_unwanted_element_is_not_visible() {
-        page.element(page.hiddenField).shouldNotBeVisible();
-    }
-
-    @Test
-    public void should_pass_if_unwanted_element_is_not_on_page() {
-        page.element(page.fieldDoesNotExist).shouldNotBeVisible();
-    }
-
-    @Test
-    public void should_contain_text_passes_if_field_contains_text() {
-        page.element(page.colors).shouldContainText("Red");
-    }
-
-    @Test
-    public void should_contain_entry_passes_if_dropdown_contains_text() {
-        page.element(page.colors).shouldContainSelectedOption("Red");
-    }
-
-    @Test(expected = AssertionError.class)
-    public void should_contain_entry_fails_if_dropdown_does_not_contain_exact_text() {
-        page.element(page.colors).shouldContainSelectedOption("Red\nBlue");
-    }
-
-    @Test
-    public void should_find_the_list_of_select_options() {
-        assertThat(page.element(page.colors).getSelectOptions(), hasItems("Red", "Blue", "Green"));
-    }
-
-    @Test
-    public void should_return_an_empty_list_of_select_options_for_a_non_select_field() {
-        assertThat(page.element(page.checkbox).getSelectOptions().size(), is(0));
-    }
-
-    @Test
-    public void should_contain_texts_passes_if_page_contains_all_texts() {
-        page.shouldContainAllText("joe", "mary");
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void should_contain_texts_fails_if_page_does_not_contain_all_texts() {
-        page.shouldContainAllText("joe", "Not appearing in this page");
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void should_contain_texts_fails_if_page_does_not_contain_any__texts() {
-        page.shouldContainAllText("Not appearing either", "Not appearing in this page");
-    }
-
-    @Test
-    public void should_contain_text_also_works_with_non_form_elements() {
-        page.element(page.grid).shouldContainText("joe");
-    }
-
-    @Test(expected = AssertionError.class)
-    public void should_contain_text_throws_exception_if_field_does_not_contain_text() {
-        page.element(page.colors).shouldContainText("Magenta");
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void should_contain_text_throws_exception_if_element_does_not_exist() {
-        page.fieldDoesNotExistShouldContainText("Magenta");
-    }
-
-    @Test
-    public void should_not_contain_text_passes_if_field_does_not_contains_text() {
-        page.element(page.colors).shouldNotContainText("Beans");
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void should_not_contain_text_throws_exception_if_field_is_not_found() {
-        page.element(page.fieldDoesNotExist).shouldNotContainText("Beans");
-    }
-
-
-    @Test(expected = AssertionError.class)
-    public void should_not_contain_text_throws_exception_if_field_does_contains_text() {
-        page.element(page.colors).shouldNotContainText("Red");
-    }
-
-    @Test
-    public void should_detect_focus_on_input_fields() {
-        page.evaluateJavascript("document.getElementById('lastname').focus()");
-        assertThat(page.element(page.lastName).hasFocus(), is(true));
-    }
-
-    @Test
-    public void should_detect_focus_on_input_fields_using_page_API() {
-        page.evaluateJavascript("document.getElementById('lastname').focus()");
-        assertThat(page.hasFocus(page.lastName), is(true));
-    }
-
-    @Test
-    public void should_detect_lack_of_focus_on_input_fields() {
-        page.evaluateJavascript("document.getElementById('lastname').focus()");
-        assertThat(page.element(page.firstName).hasFocus(), is(false));
-    }
-
-    @Test
-    public void should_evaluate_javascript_within_browser() {
-        String result = (String) page.evaluateJavascript("return document.title");
-        assertThat(result, is("Thucydides Test Site"));
-    }
-
-
-    @Test
-    public void should_obtain_text_value_from_text_area() {
-        assertThat(page.element(page.textField).getText(), is("text value"));
-    }
-
-    @Ignore
-    @Test
-    public void should_execute_javascript_within_browser() {
-        page.open();
-        assertThat(page.element(page.firstName).hasFocus(), is(false));
-        page.evaluateJavascript("document.getElementById('firstname').focus()");
-        assertThat(page.element(page.firstName).hasFocus(), is(true));
-    }
-
-    @Test
-    public void should_clear_field_before_entering_text() {
-        page.open();
-
-        assertThat(page.firstName.getAttribute("value"), is("<enter first name>"));
-
-        page.element(page.firstName).type("joe");
-
-        assertThat(page.firstName.getAttribute("value"), is("joe"));
-    }
-
-    @Test
-    public void should_select_dropdown_by_visible_text() {
-        page.open();
-
-        page.element(page.colors).selectByVisibleText("Blue");
-        assertThat(page.element(page.colors).getSelectedVisibleTextValue(), is("Blue"));
-    }
-
-    @Test
-    public void should_select_dropdown_by_value() {
-        page.open();
-
-        page.element(page.colors).selectByValue("blue");
-        assertThat(page.element(page.colors).getSelectedValue(), is("blue"));
-    }
-
-    @Test
-    public void should_select_dropdown_by_index_value() {
-        page.open();
-
-        page.element(page.colors).selectByIndex(2);
-        assertThat(page.element(page.colors).getSelectedValue(), is("green"));
-    }
-
-    @Test
-    public void should_detect_text_contained_in_a_web_element() {
-        assertThat(page.element(page.grid).containsText("joe"), is(true));
-    }
-
-    @Test
-    public void should_detect_dropdown_entry_contained_in_a_web_element() {
-        assertThat(page.element(page.grid).containsText("joe"), is(true));
-    }
-
-    @Test
-    public void should_detect_text_not_contained_in_a_web_element() {
-        assertThat(page.element(page.grid).containsText("red"), is(false));
-    }
-
-    @Test
-    public void should_obtain_text_value_from_text_area_using_getTextValue() {
-        assertThat(page.element(page.textField).getTextValue(), is("text value"));
-    }
-
-    @Test
-    public void should_obtain_text_value_from_input_using_getTextValue() {
-        assertThat(page.element(page.firstName).getTextValue(), is("<enter first name>"));
-    }
-
-    @Test
-    public void should_return_empty_string_from_other_element_using_getTextValue() {
-        assertThat(page.element(page.emptylist).getTextValue(), is(""));
-    }
-
-    @Test
-    public void should_wait_for_element_to_be_visible_and_enabled_before_clicking() {
-
-        page.element(page.checkbox).click();
-
-    }
-
-    @Test
-    public void should_detect_when_a_checkbox_is_selected() {
-        assertThat(page.element(page.selectedCheckbox).isSelected(), is(true));
-    }
-
-    @Test
-    public void should_detect_when_a_checkbox_is_not_selected() {
-        page.open();
-        assertThat(page.element(page.checkbox).isSelected(), is(false));
-    }
-
-    @Test
-    public void should_detect_when_a_radio_button_is_selected() {
-        assertThat(page.element(page.radioButton1).isSelected(), is(true));
-    }
-
-    @Test
-    public void should_detect_when_a_radio_button_is_not_selected() {
-
-        assertThat(page.element(page.radioButton2).isSelected(), is(false));
-    }
-
-    @Test
-    public void should_be_able_to_clear_a_text_field_using_deletes() {
-        assertThat(page.firstName.getAttribute("value"), is("<enter first name>"));
-
-        page.element(page.firstName).clear();
-
-        assertThat(page.firstName.getAttribute("value"), is(""));
-    }
-
-    @Test
-    public void should_return_empty_string_when_a_tag_does_not_have_any_text() {
-        assertThat(page.element(page.emptyLabel).getTextValue(), is(""));
-    }
-
-    @Test
-    public void should_return_the_actual_text_when_a_tag_has_any_text() {
-        assertThat(page.element(page.nonEmptyLabel).getTextValue(), is("This div tag has text"));
-    }
-    */
 }

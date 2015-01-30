@@ -10,6 +10,8 @@ import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.StepGroup;
 import net.thucydides.core.annotations.TestAnnotations;
+import net.thucydides.core.model.stacktrace.StackTraceSanitizer;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.internal.AssumptionViolatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -255,7 +257,9 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
 
     private Object runTestStep(final Object obj, final Method method,
                                final Object[] args, final MethodProxy proxy) throws Throwable {
-        LOGGER.info("STARTING STEP: {}", method.getName());
+
+        String callingClass = testContext();
+        LOGGER.info("STARTING STEP: {} - {}", callingClass, method.getName());
         Object result = null;
         try {
             result = executeTestStepMethod(obj, method, args, proxy, result);
@@ -390,4 +394,19 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
         StepEventBus.getEventBus().skippedStepStarted(description);
     }
 
+    public String testContext() {
+        StackTraceSanitizer stackTraceSanitizer = StackTraceSanitizer.forStackTrace(new RuntimeException().getStackTrace());
+        StackTraceElement[] stackTrace = stackTraceSanitizer.getSanitizedStackTrace();
+        return (stackTrace.length > 0) ?
+                getTestContextFrom(stackTraceSanitizer.getSanitizedStackTrace()[0]) : "";
+    }
+
+    private String getTestContextFrom(StackTraceElement stackTraceElement) {
+        return shortenedClassName(stackTraceElement.getClassName()) + "." + stackTraceElement.getMethodName();
+    }
+
+    private String shortenedClassName(String className) {
+        String[] classNameElements = StringUtils.split(className,".");
+        return classNameElements[classNameElements.length - 1];
+    }
 }

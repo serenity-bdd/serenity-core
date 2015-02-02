@@ -1,14 +1,8 @@
 package net.thucydides.core.webdriver;
 
 import com.gargoylesoftware.htmlunit.ScriptException;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.pages.WebElementFacade;
-import net.thucydides.core.pages.WebElementFacadeImpl;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.webdriver.stubs.NavigationStub;
-import net.thucydides.core.webdriver.stubs.OptionsStub;
-import net.thucydides.core.webdriver.stubs.TargetLocatorStub;
-import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
+import net.thucydides.core.webdriver.stubs.*;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.HasInputDevices;
@@ -88,8 +82,12 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     private WebDriver newDriverInstance() {
         try {
-            webDriverFactory.setupFixtureServices();
-            return webDriverFactory.newWebdriverInstance(driverClass);
+            if (StepEventBus.getEventBus().isDryRun()) {
+                return new WebDriverStub();
+            } else {
+                webDriverFactory.setupFixtureServices();
+                return webDriverFactory.newWebdriverInstance(driverClass);
+            }
         } catch (UnsupportedDriverException e) {
             LOGGER.error("FAILED TO CREATE NEW WEBDRIVER_DRIVER INSTANCE " + driverClass + ": " + e.getMessage(), e);
             throw new UnsupportedDriverException("Could not instantiate " + driverClass, e);

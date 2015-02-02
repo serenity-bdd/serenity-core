@@ -27,7 +27,8 @@
 	    $('#slider').nivoSlider({
             startSlide:screenshotIndex,
             effect:'fade',
-			animSpeed:200
+			animSpeed:200,
+            manualAdvance: true
 		});
 	});
 	</script>

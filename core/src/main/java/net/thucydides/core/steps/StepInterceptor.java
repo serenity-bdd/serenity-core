@@ -178,11 +178,11 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
     }
 
     private boolean shouldSkipMethod(final Method methodOrStep, final Class callingClass) {
-        return ((aPreviousStepHasFailed() || testIsPending()) && declaredInSameDomain(methodOrStep, callingClass));
+        return ((aPreviousStepHasFailed() || testIsPending() || isDryRun()) && declaredInSameDomain(methodOrStep, callingClass));
     }
 
     private boolean shouldSkip(final Method methodOrStep) {
-        return aPreviousStepHasFailed() ||  testIsPending() || isPending(methodOrStep) || isIgnored(methodOrStep);
+        return aPreviousStepHasFailed() ||  testIsPending() || isDryRun() || isPending(methodOrStep) || isIgnored(methodOrStep);
     }
 
     private boolean testIsPending() {
@@ -195,6 +195,10 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
             aPreviousStepHasFailed = true;
         }
         return aPreviousStepHasFailed;
+    }
+
+    private boolean isDryRun() {
+        return StepEventBus.getEventBus().isDryRun();
     }
 
     private Object runBaseObjectMethod(final Object obj, final Method method, final Object[] args, final MethodProxy proxy)

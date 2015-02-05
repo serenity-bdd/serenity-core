@@ -1,5 +1,8 @@
 package net.serenitybdd.core.pages;
 
+import io.appium.java_client.FindsByAccessibilityId;
+import io.appium.java_client.FindsByAndroidUIAutomator;
+import io.appium.java_client.FindsByIosUIAutomation;
 import net.serenitybdd.core.annotations.ImplementedBy;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,7 +15,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @ImplementedBy(WebElementFacadeImpl.class)
-public interface WebElementFacade extends WebElement, WrapsElement, Locatable, WebElementState {
+public interface WebElementFacade extends WebElement, WrapsElement, Locatable, WebElementState, FindsByAccessibilityId, FindsByAndroidUIAutomator, FindsByIosUIAutomation {
 
     public <T extends WebElementFacade> T then(String xpathOrCssSelector);
 

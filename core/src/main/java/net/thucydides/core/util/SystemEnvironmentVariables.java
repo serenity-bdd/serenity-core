@@ -1,9 +1,12 @@
 package net.thucydides.core.util;
 
+import ch.lambdaj.Lambda;
+import ch.lambdaj.function.convert.DefaultStringConverter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -28,7 +31,6 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         return getValue(name, null);
     }
 
-    
     public String getValue(Enum<?> property) {
         return getValue(property.toString());
     }
@@ -42,10 +44,15 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         }
     }
 
-    
+
     public String getValue(Enum<?> property, String defaultValue) {
         return getValue(property.toString(), defaultValue);
     }
+
+    public List<String> getKeys() {
+        return Lambda.convert(systemProperties.keySet(), new DefaultStringConverter());
+    }
+
 
     public Integer getPropertyAsInteger(String property, Integer defaultValue) {
         String value = (String) systemProperties.get(property);
@@ -71,7 +78,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         }
     }
 
-    
+
     public Boolean getPropertyAsBoolean(Enum<?> property, boolean defaultValue) {
         return getPropertyAsBoolean(property.toString(), defaultValue);
     }
@@ -80,7 +87,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         return (String) systemProperties.get(name);
     }
 
-    
+
     public String getProperty(Enum<?> property) {
         return getProperty(property.toString());
     }
@@ -89,17 +96,17 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         return systemProperties.getProperty(name, defaultValue);
     }
 
-    
+
     public String getProperty(Enum<?> property, String defaultValue) {
         return getProperty(property.toString(), defaultValue);
     }
 
-    
+
     public void setProperty(String name, String value) {
         systemProperties.setProperty(name, value);
     }
 
-    
+
     public void clearProperty(String name) {
         systemProperties.remove(name);
     }

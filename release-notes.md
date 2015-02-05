@@ -1,4 +1,5 @@
 # Releases
+- [v1.0.24](#v1.0.24)
 - [v1.0.23](#v1.0.23)
 - [v1.0.22](#v1.0.22)
 - [v1.0.21](#v1.0.21)
@@ -17,9 +18,13 @@
 - [v1.0.7](#v1.0.7)
 - [v1.0.6](#v1.0.6)
 - [v1.0.5](#v1.0.5)
+- [v1.0.4-SNAPSHOT](#v1.0.4-SNAPSHOT)
 - [v1.0.4](#v1.0.4)
+- [v1.0.3-SNAPSHOT](#v1.0.3-SNAPSHOT)
 - [v1.0.2](#v1.0.2)
+- [v1.0.1-SNAPSHOT](#v1.0.1-SNAPSHOT)
 # Upcoming<a name='Upcoming'></a>
+# v1.0.24<a name='v1.0.24'></a>
 ## Style
   -  fix typo in logging
 ## Refactoring
@@ -229,9 +234,11 @@ Pti hamcrest 1 1
   - Added the Serenity utility class, which exposes and delegates to methods of the legacy Thucydides class.
   - Check if a resized file for a given screenshot already exists, and if so don't perform the resizing
   - Moved most uses of FileUtils to the Java 7 Files class, in order to remove sporadic issues when resizing screenshots
+# v1.0.4-SNAPSHOT<a name='v1.0.4-SNAPSHOT'></a>
 # v1.0.4<a name='v1.0.4'></a>
   - Fixed a failing test
   - Fine-tuning the reports
+# v1.0.3-SNAPSHOT<a name='v1.0.3-SNAPSHOT'></a>
   - Refactored some tests
   - Cater for rare cases where the driver returns null when an element is not found
   - Repositioned the report timestamp
@@ -243,6 +250,7 @@ Pti hamcrest 1 1
   - Getting the maven plugin build working
   - Fine-tuning the release tagging
 # v1.0.2<a name='v1.0.2'></a>
+# v1.0.1-SNAPSHOT<a name='v1.0.1-SNAPSHOT'></a>
   - Initial release version
   - Added a selector to find buttons by their label, e.g. find(By.buttonText('Add to cart'));
   - Honor both 'thucydides.properties' and 'serenity.properties' files for local project configuration

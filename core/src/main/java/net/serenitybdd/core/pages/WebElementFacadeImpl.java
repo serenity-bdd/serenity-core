@@ -4,6 +4,10 @@ import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.FindsByAccessibilityId;
+import io.appium.java_client.FindsByAndroidUIAutomator;
+import io.appium.java_client.FindsByIosUIAutomation;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.locators.SmartElementHandler;
 import net.thucydides.core.guice.Injectors;
@@ -13,6 +17,7 @@ import net.thucydides.core.pages.PageObject;
 import net.thucydides.core.pages.jquery.JQueryEnabledPage;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import org.apache.commons.lang3.StringUtils;
@@ -53,9 +58,9 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     private static final Logger LOGGER = LoggerFactory.getLogger(WebElementFacadeImpl.class);
 
     protected WebElementFacadeImpl(final WebDriver driver,
-                                   final ElementLocator locator,
-                                   final WebElement webElement,
-                                   final long timeoutInMilliseconds) {
+                                 final ElementLocator locator,
+                                 final WebElement webElement,
+                                 final long timeoutInMilliseconds) {
         this.webElement = webElement;
         this.driver = driver;
         this.timeoutInMilliseconds = timeoutInMilliseconds;
@@ -77,8 +82,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     public static <T extends WebElementFacade> T wrapWebElement(final WebDriver driver,
-                                                                final WebElement element,
-                                                                final long timeoutInMilliseconds) {
+                                                      final WebElement element,
+                                                      final long timeoutInMilliseconds) {
         return (T) new WebElementFacadeImpl(driver, (ElementLocator) null, element, timeoutInMilliseconds);
 
     }
@@ -180,6 +185,36 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         logIfVerbose("findAll " + selector);
         List<WebElement> nestedElements = findElements(selector);
         return webElementFacadesFrom(nestedElements);
+    }
+
+    @Override
+    public WebElement findElementByAccessibilityId(String id) {
+        return ((FindsByAccessibilityId) getElement()).findElementByAccessibilityId(id);
+    }
+
+    @Override
+    public List<WebElement> findElementsByAccessibilityId(String id) {
+        return ((FindsByAccessibilityId) getElement()).findElementsByAccessibilityId(id);
+    }
+
+    @Override
+    public WebElement findElementByAndroidUIAutomator(String using) {
+        return ((FindsByAndroidUIAutomator) getElement()).findElementByAndroidUIAutomator(using);
+    }
+
+    @Override
+    public List<WebElement> findElementsByAndroidUIAutomator(String using) {
+        return ((FindsByAndroidUIAutomator) getElement()).findElementsByAndroidUIAutomator(using);
+    }
+
+    @Override
+    public WebElement findElementByIosUIAutomation(String using) {
+        return ((FindsByIosUIAutomation) getElement()).findElementByIosUIAutomation(using);
+    }
+
+    @Override
+    public List<WebElement> findElementsByIosUIAutomation(String using) {
+        return ((FindsByIosUIAutomation) getElement()).findElementsByIosUIAutomation(using);
     }
 
     @Override
@@ -805,9 +840,17 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return HtmlTag.from(webElement).inHumanReadableForm();
     }
 
+    private boolean isMobileDriver() {
+        return ThucydidesWebDriverSupport.getProxiedDriver() instanceof AppiumDriver;
+    }
+
     @Override
     public void clear() {
+
+        if (!isMobileDriver()) {
         getElement().sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
+        }
+
         getElement().clear();
     }
 

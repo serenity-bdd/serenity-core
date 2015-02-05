@@ -1,9 +1,12 @@
 package net.thucydides.core.annotations.locators;
 
 import com.google.common.collect.ImmutableList;
+import io.appium.java_client.pagefactory.AndroidFindBy;
+import io.appium.java_client.pagefactory.AndroidFindBys;
+import io.appium.java_client.pagefactory.iOSFindBy;
+import io.appium.java_client.pagefactory.iOSFindBys;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.thucydides.core.pages.PageObject;
-import net.thucydides.core.pages.WebElementFacade;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.Locatable;
@@ -72,13 +75,14 @@ public class SmartFieldDecorator implements FieldDecorator {
             return false;
         }
         return annotatedByLegalFindByAnnotation(field);
+
     }
 
     private final static List<Class<? extends Annotation>> LEGAL_ANNOTATIONS
             = ImmutableList.of(FindBy.class,
             net.thucydides.core.annotations.findby.FindBy.class,
             org.openqa.selenium.support.FindBy.class,
-            FindBys.class);
+            FindBys.class, AndroidFindBy.class, AndroidFindBys.class, iOSFindBy.class, iOSFindBys.class);
 
 
     private boolean annotatedByLegalFindByAnnotation(Field field) {

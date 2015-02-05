@@ -1,6 +1,7 @@
 package net.thucydides.core.webdriver;
 
 import com.google.common.base.Preconditions;
+import io.appium.java_client.AppiumDriver;
 import net.serenitybdd.core.Serenity;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureException;
@@ -10,6 +11,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.PageObject;
 import net.thucydides.core.steps.FilePathParser;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.appium.AppiumConfiguration;
 import net.thucydides.core.webdriver.capabilities.BrowserStackRemoteDriverCapabilities;
 import net.thucydides.core.webdriver.capabilities.SauceRemoteDriverCapabilities;
 import net.thucydides.core.webdriver.chrome.OptionsSplitter;
@@ -146,11 +148,11 @@ public class WebDriverFactory {
     public boolean usesSauceLabs() {
         return StringUtils.isNotEmpty(sauceRemoteDriverCapabilities.getUrl());
     }
-
+    
     public boolean usesBrowserStack() {
         return StringUtils.isNotEmpty(browserStackRemoteDriverCapabilities.getUrl());
     }
-
+    
     /**
      * This method is synchronized because multiple webdriver instances can be created in parallel.
      * However, they may use common system resources such as ports, so may potentially interfere
@@ -163,6 +165,8 @@ public class WebDriverFactory {
             WebDriver driver;
             if (isARemoteDriver(driverClass) || shouldUseARemoteDriver() || saucelabsUrlIsDefined() || browserStackUrlIsDefined()) {
             	driver = newRemoteDriver();
+            } else if (isAnAppiumDriver(driverClass)) {
+                driver = appiumDriver();
             } else if (isAFirefoxDriver(driverClass)) {
                 driver = firefoxDriver();
             } else if (isAnHtmlUnitDriver(driverClass)) {
@@ -193,6 +197,7 @@ public class WebDriverFactory {
 
     // IntelliJ in Mac OS X does not pick up environment variables. So to get PhantomJS working in IDE mode for the
     // Thucydides tests, add the 'phantomjs.binary.path' property into a thucydides.properties file in your home directory.
+
     private void setPhantomJSPathIfNotSet() {
         if (!phantomJSIsAvailable()) {
             LOGGER.info("PhantomJS not on path, trying to get path from PHANTOMJS_BINARY_PATH");
@@ -281,7 +286,7 @@ public class WebDriverFactory {
     private boolean browserStackUrlIsDefined() {
         return StringUtils.isNotEmpty(browserStackRemoteDriverCapabilities.getUrl());
     }
-
+    
     private WebDriver buildSaucelabsDriver() throws MalformedURLException {
         String saucelabsUrl = sauceRemoteDriverCapabilities.getUrl();
         WebDriver driver = webdriverInstanceFactory.newRemoteDriver(new URL(saucelabsUrl), findSaucelabsCapabilities());
@@ -293,13 +298,13 @@ public class WebDriverFactory {
         }
         return driver;
     }
-
+    
     private WebDriver buildBrowserStackDriver() throws MalformedURLException{
     	String browserStackUrl = browserStackRemoteDriverCapabilities.getUrl();
         WebDriver driver = webdriverInstanceFactory.newRemoteDriver(new URL(browserStackUrl), findbrowserStackCapabilities());
         return driver;
     }
-
+    
 
     public static String getDriverFrom(EnvironmentVariables environmentVariables, String defaultDriver) {
         String driver = getDriverFrom(environmentVariables);
@@ -321,13 +326,13 @@ public class WebDriverFactory {
 
         return sauceRemoteDriverCapabilities.getCapabilities(capabilities);
     }
-
-
+    
+    
     private Capabilities findbrowserStackCapabilities() {
 
     	String driver = getDriverFrom(environmentVariables);
     	DesiredCapabilities capabilities = capabilitiesForDriver(driver);
-
+    	
         return browserStackRemoteDriverCapabilities.getCapabilities(capabilities);
 
     }
@@ -394,6 +399,10 @@ public class WebDriverFactory {
 
             case IEXPLORER:
                 capabilities = DesiredCapabilities.internetExplorer();
+                break;
+
+            case APPIUM:
+                capabilities = appiumCapabilities();
                 break;
 
             default:
@@ -493,6 +502,25 @@ public class WebDriverFactory {
         return capabilities;
     }
 
+    private WebDriver appiumDriver() {
+        return webdriverInstanceFactory.newAppiumDriver(appiumUrl(),
+                enhancedCapabilities(appiumCapabilities()),
+                appiumTargetPlatform());
+    }
+
+    private MobilePlatform appiumTargetPlatform() {
+        return AppiumConfiguration.from(environmentVariables).getTargetPlatform();
+    }
+
+    private URL appiumUrl() {
+        return AppiumConfiguration.from(environmentVariables).getUrl();
+    }
+
+    private DesiredCapabilities appiumCapabilities() {
+        return AppiumConfiguration.from(environmentVariables).getCapabilities();
+    }
+
+
     private ChromeOptions optionsFromSwitches(String chromeSwitches) {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("test-type");
@@ -581,6 +609,10 @@ public class WebDriverFactory {
         return (InternetExplorerDriver.class.isAssignableFrom(driverClass));
     }
 
+    private boolean isAnAppiumDriver(Class<? extends WebDriver> driverClass) {
+        return (AppiumDriver.class.isAssignableFrom(driverClass));
+    }
+
     private boolean usesFirefox(WebDriver driver) {
         return (FirefoxDriver.class.isAssignableFrom(getDriverClass(driver)));
     }
@@ -610,6 +642,7 @@ public class WebDriverFactory {
     private boolean isAPhantomJSDriver(Class<? extends WebDriver> driverClass) {
         return (PhantomJSDriver.class.isAssignableFrom(driverClass));
     }
+
     private boolean usesPhantomJS(WebDriver driver) {
         return (PhantomJSDriver.class.isAssignableFrom(getDriverClass(driver)));
     }

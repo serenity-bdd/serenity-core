@@ -1,7 +1,6 @@
 package net.thucydides.core.annotations.locators
 
 import net.serenitybdd.core.annotations.findby.How
-import net.serenitybdd.core.annotations.locators.SmartAnnotations
 import net.thucydides.core.annotations.findby.FindBy
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement

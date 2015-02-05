@@ -3,6 +3,7 @@ package net.thucydides.core.annotations.locators;
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.annotations.locators.SmartAnnotations;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.webdriver.MobilePlatform;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -20,6 +21,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator {
 
 	private final Field field;
 	private final WebDriver driver;
+    private final MobilePlatform platform;
 
 	/**
 	 * Main constructor.
@@ -28,17 +30,18 @@ public class SmartAjaxElementLocator extends SmartElementLocator {
 	 * @param field The field representing this element
 	 * @param timeOutInSeconds How long to wait for the element to appear. Measured in seconds.
 	 */
-	public SmartAjaxElementLocator(WebDriver driver, Field field, int timeOutInSeconds) {
-		this(new SystemClock(), driver, field, timeOutInSeconds);
+    public SmartAjaxElementLocator(WebDriver driver, Field field, MobilePlatform platform, int timeOutInSeconds) {
+        this(new SystemClock(), driver, field, platform, timeOutInSeconds);
 
 	}
 
-	public SmartAjaxElementLocator(Clock clock, WebDriver driver, Field field, int timeOutInSeconds) {
-		super(driver, field);
+    public SmartAjaxElementLocator(Clock clock, WebDriver driver, Field field, MobilePlatform platform, int timeOutInSeconds) {
+        super(driver, field, platform);
 		this.timeOutInSeconds = timeOutInSeconds;
 		this.clock = clock;
 		this.field = field;
 		this.driver = driver;
+        this.platform = platform;
 	}
 
 	@Override
@@ -65,12 +68,12 @@ public class SmartAjaxElementLocator extends SmartElementLocator {
     }
 
 	public WebElement findElementImmediately() {
-		SmartAnnotations annotations = new SmartAnnotations(field);
+        SmartAnnotations annotations = new SmartAnnotations(field, platform);
 		By by = annotations.buildBy();
 		WebElement element = driver.findElement(by);
 		if (element == null) {
 			throw new NoSuchElementException("No such element found for criteria " + by.toString());
-		}
+		} 
 		return element;
 	}
 
@@ -193,7 +196,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator {
 					/*return even if empty and don't wait for them to become available.
 					*not sure that it is the correct approach for Ajax Element Locator that should wait for elements
 					*however correcting it due to https://java.net/jira/browse/THUCYDIDES-187 */
-					return;
+					return; 
 				}
 				for (WebElement element : elements) {
 					if (!isElementUsable(element)) {
@@ -224,7 +227,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator {
 
     @Override
     public String toString() {
-        SmartAnnotations annotations = new SmartAnnotations(field);
+        SmartAnnotations annotations = new SmartAnnotations(field, platform);
         By by = annotations.buildBy();
         return by.toString();
     }

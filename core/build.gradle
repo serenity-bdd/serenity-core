@@ -8,7 +8,7 @@ ext {
 jar {
     manifest {
         attributes("Implementation-Title": "Serenity Core",
-                "Implementation-Version": project.version.toString())
+                   "Implementation-Version": project.version.toString())
     }
 }
 
@@ -51,6 +51,8 @@ dependencies {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
     }
+
+    compile 'io.appium:java-client:2.1.0'
 
     compile "net.sf.opencsv:opencsv:2.0"
     compile ("commons-beanutils:commons-beanutils-core:1.8.3") {
@@ -117,7 +119,7 @@ dependencies {
 }
 
 processResources {
-    filter ReplaceTokens, tokens: [
+     filter ReplaceTokens, tokens: [
             "application.version": "" + version
     ]
 }

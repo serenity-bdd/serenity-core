@@ -4,15 +4,11 @@ import com.beust.jcommander.internal.Lists;
 import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
-import net.thucydides.core.pages.InternalSystemClock;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WebElementState;
+import net.thucydides.core.pages.InternalSystemClock;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.support.ui.Wait;
 
@@ -507,4 +503,33 @@ public class WebElementFacadeStub implements WebElementFacade {
     }
 
 
+    @Override
+    public WebElement findElementByAccessibilityId(String using) {
+        return this;
+    }
+
+    @Override
+    public List<WebElement> findElementsByAccessibilityId(String using) {
+        return Lists.newArrayList();
+    }
+
+    @Override
+    public WebElement findElementByAndroidUIAutomator(String using) {
+        return this;
+    }
+
+    @Override
+    public List<WebElement> findElementsByAndroidUIAutomator(String using) {
+        return Lists.newArrayList();
+    }
+
+    @Override
+    public WebElement findElementByIosUIAutomation(String using) {
+        return this;
+    }
+
+    @Override
+    public List<WebElement> findElementsByIosUIAutomation(String using) {
+        return Lists.newArrayList();
+    }
 }

@@ -35,4 +35,11 @@ public @interface FindBy{
   String jquery() default "";
 
   String sclocator() default "";
+
+  String androidUIAutomator() default "";
+
+  String iOSUIAutomation() default "";
+
+  String accessibilityId() default "";
+
 }

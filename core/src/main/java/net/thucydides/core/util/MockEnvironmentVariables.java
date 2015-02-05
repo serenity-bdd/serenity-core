@@ -1,7 +1,10 @@
 package net.thucydides.core.util;
 
+import ch.lambdaj.Lambda;
+import ch.lambdaj.function.convert.DefaultStringConverter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Properties;
 
 public class MockEnvironmentVariables implements EnvironmentVariables {
@@ -25,7 +28,7 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
     public static EnvironmentVariables fromSystemEnvironment() {
         return new MockEnvironmentVariables(System.getProperties());
     }
-    
+
     public boolean propertySetIsEmpty() {
         return properties.isEmpty();
     }
@@ -34,7 +37,7 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         return values.getProperty(name);
     }
 
-    
+
     public String getValue(Enum<?> property) {
         return getValue(property.toString());
     }
@@ -43,7 +46,7 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         return values.getProperty(name, defaultValue);
     }
 
-    
+
     public String getValue(Enum<?> property, String defaultValue) {
         return getValue(property.toString(), defaultValue);
     }
@@ -57,7 +60,7 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         }
     }
 
-    
+
     public Integer getPropertyAsInteger(Enum<?> property, Integer defaultValue) {
         return getPropertyAsInteger(property.toString(), defaultValue);
     }
@@ -66,11 +69,11 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         if (properties.getProperty(name) == null) {
             return defaultValue;
         } else {
-            return Boolean.parseBoolean(properties.getProperty(name,"false"));
+            return Boolean.parseBoolean(properties.getProperty(name, "false"));
         }
     }
 
-    
+
     public Boolean getPropertyAsBoolean(Enum<?> property, boolean defaultValue) {
         return getPropertyAsBoolean(property.toString(), defaultValue);
     }
@@ -79,7 +82,7 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         return properties.getProperty(name);
     }
 
-    
+
     public String getProperty(Enum<?> property) {
         return getProperty(property.toString());
     }
@@ -88,7 +91,7 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         return properties.getProperty(name, defaultValue);
     }
 
-    
+
     public String getProperty(Enum<?> property, String defaultValue) {
         return getProperty(property.toString(), defaultValue);
     }
@@ -97,13 +100,18 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         properties.setProperty(name, value);
     }
 
-    
+
     public void clearProperty(String name) {
         properties.remove(name);
     }
 
     public EnvironmentVariables copy() {
         return new MockEnvironmentVariables(properties, values);
+    }
+
+    @Override
+    public List<String> getKeys() {
+        return Lambda.convert(properties.keySet(), new DefaultStringConverter());
     }
 
     public void setValue(String name, String value) {

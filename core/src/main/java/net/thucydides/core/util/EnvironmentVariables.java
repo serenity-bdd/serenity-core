@@ -1,5 +1,7 @@
 package net.thucydides.core.util;
 
+import java.util.List;
+
 /**
  * Return system environment variable values.
  */
@@ -34,4 +36,7 @@ public interface EnvironmentVariables {
     void clearProperty(final String name);
 
     EnvironmentVariables copy();
+
+    List<String> getKeys();
+
 }

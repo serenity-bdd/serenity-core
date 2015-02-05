@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * A proxy class for webdriver instances, designed to prevent the browser being opened unnecessarily.
  */
-public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevices, JavascriptExecutor {
+public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevices, JavascriptExecutor, HasCapabilities {
 
     private final Class<? extends WebDriver> driverClass;
 
@@ -85,8 +85,8 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
             if (StepEventBus.getEventBus().isDryRun()) {
                 return new WebDriverStub();
             } else {
-                webDriverFactory.setupFixtureServices();
-                return webDriverFactory.newWebdriverInstance(driverClass);
+            webDriverFactory.setupFixtureServices();
+            return webDriverFactory.newWebdriverInstance(driverClass);
             }
         } catch (UnsupportedDriverException e) {
             LOGGER.error("FAILED TO CREATE NEW WEBDRIVER_DRIVER INSTANCE " + driverClass + ": " + e.getMessage(), e);
@@ -295,4 +295,10 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     public Object executeAsyncScript(String script, Object... parameters) {
         return ((JavascriptExecutor) getProxiedDriver()).executeAsyncScript(script, parameters);
     }
+
+    @Override
+    public Capabilities getCapabilities() {
+        return ((HasCapabilities) getProxiedDriver()).getCapabilities();
+    }
+
 }

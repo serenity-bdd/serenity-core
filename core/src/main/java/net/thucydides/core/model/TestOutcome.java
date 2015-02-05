@@ -14,6 +14,8 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.images.SimpleImageInfo;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.features.ApplicationFeature;
+import net.thucydides.core.model.stacktrace.FailureCause;
+import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
 import net.thucydides.core.pages.SystemClock;
 import net.thucydides.core.reports.html.Formatter;
 import net.thucydides.core.reports.json.JSONConverter;

@@ -2,7 +2,7 @@ package net.thucydides.core.pages;
 
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Predicate;
-import net.thucydides.core.pages.WebElementFacade;
+import com.google.common.collect.Lists;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;
@@ -62,7 +62,7 @@ public abstract class PageObject {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PageObject.class);
 
-    private static final int WAIT_FOR_TIMEOUT = 30000;
+    private static final int DEFAULT_IMPLICIT_WAIT_IN_SECONDS = 0;
 
     private WebDriver driver;
 
@@ -122,7 +122,7 @@ public abstract class PageObject {
     }
 
     protected int waitForTimeout() {
-        return ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables, WAIT_FOR_TIMEOUT);
+        return ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables, DEFAULT_IMPLICIT_WAIT_IN_SECONDS);
     }
 
     public void setPages(Pages pages) {
@@ -789,38 +789,38 @@ public abstract class PageObject {
     /**
      * Provides a fluent API for querying web elements.
      */
-    public WebElementFacade element(WebElement webElement) {
-        return WebElementFacadeImpl.wrapWebElement(driver, webElement, waitForTimeoutInMilliseconds);
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(WebElement webElement) {
+        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, waitForTimeoutInMilliseconds);
     }
 
-    public WebElementFacade $(WebElement webElement) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(WebElement webElement) {
         return element(webElement);
     }
 
-    public WebElementFacade $(String xpathOrCssSelector) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(String xpathOrCssSelector) {
         return element(xpathOrCssSelector);
     }
 
     /**
      * Provides a fluent API for querying web elements.
      */
-    public WebElementFacade element(By bySelector) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(By bySelector) {
         WebElement webElement = getDriver().findElement(bySelector);
-        return WebElementFacadeImpl.wrapWebElement(driver, webElement, waitForTimeoutInMilliseconds);
+        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, waitForTimeoutInMilliseconds);
     }
 
-    public WebElementFacade find(By selector) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(By selector) {
         return element(selector);
     }
 
-    public List<WebElementFacade> findAll(By bySelector) {
+    public List<net.serenitybdd.core.pages.WebElementFacade> findAll(By bySelector) {
         List<WebElement> matchingWebElements = driver.findElements(bySelector);
         return convert(matchingWebElements, toWebElementFacades());
     }
 
-    private Converter<WebElement, WebElementFacade> toWebElementFacades() {
-        return new Converter<WebElement, WebElementFacade>() {
-            public WebElementFacade convert(WebElement from) {
+    private Converter<WebElement, net.serenitybdd.core.pages.WebElementFacade> toWebElementFacades() {
+        return new Converter<WebElement, net.serenitybdd.core.pages.WebElementFacade>() {
+            public net.serenitybdd.core.pages.WebElementFacade convert(WebElement from) {
                 return element(from);
             }
         };
@@ -829,7 +829,7 @@ public abstract class PageObject {
     /**
      * Provides a fluent API for querying web elements.
      */
-    public WebElementFacade element(String xpathOrCssSelector) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(String xpathOrCssSelector) {
         return element(xpathOrCssSelector(xpathOrCssSelector));
     }
 
@@ -841,11 +841,11 @@ public abstract class PageObject {
         }
     }
 
-    public WebElementFacade findBy(String xpathOrCssSelector) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T findBy(String xpathOrCssSelector) {
         return element(xpathOrCssSelector);
     }
 
-    public List<WebElementFacade> findAll(String xpathOrCssSelector) {
+    public List<net.serenitybdd.core.pages.WebElementFacade> findAll(String xpathOrCssSelector) {
         return findAll(xpathOrCssSelector(xpathOrCssSelector));
     }
 
@@ -929,7 +929,7 @@ public abstract class PageObject {
             element(field).type(value);
         }
 
-        public void into(final WebElementFacade field) {
+        public void into(final net.serenitybdd.core.pages.WebElementFacade field) {
             field.type(value);
         }
 

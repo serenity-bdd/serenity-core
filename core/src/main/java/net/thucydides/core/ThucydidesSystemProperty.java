@@ -658,6 +658,11 @@ public enum ThucydidesSystemProperty {
     SIMPLIFIED_STACK_TRACES,
 
     /**
+     * Run through the steps without actually executing them.
+     */
+    THUCYDIDES_DRY_RUN,
+
+    /**
      * Keep the Thucydides session data between tests.
      * Normally, the session data is cleared between tests.
      */

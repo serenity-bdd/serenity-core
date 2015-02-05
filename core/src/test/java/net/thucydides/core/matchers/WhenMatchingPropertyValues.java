@@ -9,7 +9,7 @@ import org.junit.rules.ExpectedException;
 import java.math.BigDecimal;
 
 import static net.thucydides.core.matchers.dates.DateMatchers.isAfter;
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 

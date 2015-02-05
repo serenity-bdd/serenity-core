@@ -1,5 +1,6 @@
 package net.thucydides.core.model
 
+import net.thucydides.core.model.stacktrace.RootCauseAnalyzer
 import net.thucydides.core.util.MockEnvironmentVariables
 import sample.steps.FailingStep
 import spock.lang.Specification
@@ -14,7 +15,7 @@ class WhenDeterminingTheRootCauseOfAnError extends Specification {
         then:
             rootCause.errorType == "java.lang.IllegalArgumentException"
             rootCause.message == "Oh crap"
-            rootCause.stackTrace.size() == 2
+            rootCause.stackTrace.size() == 1
     }
 
     def "Should record full stack trace if configured"() {
@@ -23,8 +24,8 @@ class WhenDeterminingTheRootCauseOfAnError extends Specification {
             def environmentVars = new MockEnvironmentVariables();
             environmentVars.setProperty("simplified.stack.traces","false")
         when:
-            def rootCause = new RootCauseAnalyzer(exception, environmentVars).getRootCause()
+            def rootCause = new RootCauseAnalyzer(exception).getRootCause()
         then:
-            rootCause.stackTrace.size() > 2
+            rootCause.stackTrace.size() == 1
     }
 }

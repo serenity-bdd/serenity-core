@@ -10,6 +10,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import net.thucydides.core.model.*;
 import net.thucydides.core.model.features.ApplicationFeature;
+import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;

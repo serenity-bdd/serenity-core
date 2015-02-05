@@ -1,13 +1,8 @@
 package net.thucydides.core.webdriver;
 
 import com.gargoylesoftware.htmlunit.ScriptException;
-import net.thucydides.core.pages.WebElementFacade;
-import net.thucydides.core.pages.WebElementFacadeImpl;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.webdriver.stubs.NavigationStub;
-import net.thucydides.core.webdriver.stubs.OptionsStub;
-import net.thucydides.core.webdriver.stubs.TargetLocatorStub;
-import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
+import net.thucydides.core.webdriver.stubs.*;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.HasInputDevices;
@@ -21,6 +16,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A proxy class for webdriver instances, designed to prevent the browser being opened unnecessarily.
@@ -35,13 +31,19 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebDriverFacade.class);
 
+    /**
+     * Implicit timeout values recorded to that they can be restored after calling findElements()
+     */
+    protected long implicitTimeoutValue = 0;
+    protected TimeUnit implicitTimeoutUnit = TimeUnit.SECONDS;
+
     public WebDriverFacade(final Class<? extends WebDriver> driverClass,
                            final WebDriverFactory webDriverFactory) {
         this.driverClass = driverClass;
         this.webDriverFactory = webDriverFactory;
     }
 
-    public Class<? extends WebDriver> getDriverClass() {
+    public Class<? extends WebDriver>  getDriverClass() {
         return driverClass;
     }
 
@@ -80,8 +82,12 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     private WebDriver newDriverInstance() {
         try {
+            if (StepEventBus.getEventBus().isDryRun()) {
+                return new WebDriverStub();
+            } else {
             webDriverFactory.setupFixtureServices();
             return webDriverFactory.newWebdriverInstance(driverClass);
+            }
         } catch (UnsupportedDriverException e) {
             LOGGER.error("FAILED TO CREATE NEW WEBDRIVER_DRIVER INSTANCE " + driverClass + ": " + e.getMessage(), e);
             throw new UnsupportedDriverException("Could not instantiate " + driverClass, e);
@@ -154,12 +160,23 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
             return Collections.emptyList();
         }
 
-        return getProxiedDriver().findElements(by);
+        overrideTimeoutsTo(0, TimeUnit.SECONDS);
+        List<WebElement> matchingElements = getProxiedDriver().findElements(by);
+        restoreTimeouts();
+
+        return matchingElements;
+    }
+
+    public void overrideTimeoutsTo(int value, TimeUnit unit) {
+        manage().timeouts().implicitlyWait(value,unit);
+    }
+
+    public void restoreTimeouts() {
+        manage().timeouts().implicitlyWait(implicitTimeoutValue, implicitTimeoutUnit);
     }
 
     public WebElement findElement(final By by) {
         if (!isEnabled()) {
-            LOGGER.info("Skipping findElement() for {} - a previous step has failed",  by.toString());
             return new WebElementFacadeStub();
         }
 
@@ -180,12 +197,12 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     public void close() {
         if (proxyInstanciated()) {
-            //if there is only one window closing it means quitting the web driver
-            if (getDriverInstance().getWindowHandles() != null && getDriverInstance().getWindowHandles().size() == 1) {
-                this.quit();
-            } else {
-                getDriverInstance().close();
-            }
+        	//if there is only one window closing it means quitting the web driver
+        	if (getDriverInstance().getWindowHandles() != null && getDriverInstance().getWindowHandles().size() == 1){
+        		this.quit();
+        	} else{
+        		getDriverInstance().close();
+        	}
             webDriverFactory.shutdownFixtureServices();
         }
     }
@@ -242,22 +259,21 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
             return new OptionsStub();
         }
 
-        return getProxiedDriver().manage();
+        return new OptionsFacade(getProxiedDriver().manage(), this);
     }
 
-
     public boolean canTakeScreenshots() {
-        if (driverClass != null) {
-            if (driverClass == ProvidedDriver.class) {
-                return TakesScreenshot.class.isAssignableFrom(getProxiedDriver().getClass())
-                        || (getProxiedDriver().getClass() == RemoteWebDriver.class);
-            } else {
-                return TakesScreenshot.class.isAssignableFrom(driverClass)
-                        || (driverClass == RemoteWebDriver.class);
-            }
-        } else {
-            return false;
-        }
+    	if (driverClass != null) {
+    		if (driverClass == ProvidedDriver.class) {
+    			return TakesScreenshot.class.isAssignableFrom(getProxiedDriver().getClass()) 
+    					|| (getProxiedDriver().getClass() == RemoteWebDriver.class);
+    		} else {
+    			return TakesScreenshot.class.isAssignableFrom(driverClass)
+    					|| (driverClass == RemoteWebDriver.class);
+    		}
+    	} else {
+    		return false;
+    	}
     }
 
     public boolean isInstantiated() {

@@ -31,32 +31,32 @@ allprojects {
             // TODO make work for generated Maven POM... 
             // it's working for gradle build, but also had to exclude old transitives for generated POM
             force 'asm:asm:3.3.1',
-                'com.fasterxml.jackson.core:jackson-annotations:2.4.3',
-                'com.google.code.gson:gson:2.3',
-                'com.google.guava:guava:18.0',
-                'com.google.inject.extensions:guice-multibindings:3.0',
-                'com.google.inject.extensions:guice-servlet:3.0',
-                'com.google.inject:guice:3.0',
-                'com.thoughtworks.xstream:xstream:1.4.1',
-                'commons-codec:commons-codec:1.9',
-                'commons-collections:commons-collections:3.2.1',
-                'commons-io:commons-io:2.4',
-                'commons-logging:commons-logging:1.1.3',
-                'joda-time:joda-time:2.2',
-                'org.apache.commons:commons-lang3:3.3.2',
-                'org.apache.httpcomponents:httpclient:4.3.4',
-                'org.apache.httpcomponents:httpmime:4.3.3',
-                'org.bouncycastle:bcprov-jdk15on:1.48',
-                'org.codehaus.groovy:groovy-all:2.3.6',
-                'org.codehaus.jackson:jackson-core-asl:1.7.1',
-                'org.codehaus.jackson:jackson-mapper-asl:1.7.1',
-                'org.eclipse.jetty:jetty-http:8.1.15.v20140411',
-                'org.freemarker:freemarker:2.3.21',
-                'org.objenesis:objenesis:2.1',
-                'org.seleniumhq.selenium:selenium-api:2.44.0',
-                'org.slf4j:slf4j-api:1.7.5',
-                'xalan:xalan:2.7.1',
-                'xml-apis:xml-apis:1.4.01'
+                    'com.fasterxml.jackson.core:jackson-annotations:2.4.3',
+                    'com.google.code.gson:gson:2.3',
+                    'com.google.guava:guava:18.0',
+                    'com.google.inject.extensions:guice-multibindings:3.0',
+                    'com.google.inject.extensions:guice-servlet:3.0',
+                    'com.google.inject:guice:3.0',
+                    'com.thoughtworks.xstream:xstream:1.4.1',
+                    'commons-codec:commons-codec:1.9',
+                    'commons-collections:commons-collections:3.2.1',
+                    'commons-io:commons-io:2.4',
+                    'commons-logging:commons-logging:1.1.3',
+                    'joda-time:joda-time:2.2',
+                    'org.apache.commons:commons-lang3:3.3.2',
+                    'org.apache.httpcomponents:httpclient:4.3.4',
+                    'org.apache.httpcomponents:httpmime:4.3.3',
+                    'org.bouncycastle:bcprov-jdk15on:1.48',
+                    'org.codehaus.groovy:groovy-all:2.3.6',
+                    'org.codehaus.jackson:jackson-core-asl:1.7.1',
+                    'org.codehaus.jackson:jackson-mapper-asl:1.7.1',
+                    'org.eclipse.jetty:jetty-http:8.1.15.v20140411',
+                    'org.freemarker:freemarker:2.3.21',
+                    'org.objenesis:objenesis:2.1',
+                    'org.seleniumhq.selenium:selenium-api:2.44.0',
+                    'org.slf4j:slf4j-api:1.7.5',
+                    'xalan:xalan:2.7.1',
+                    'xml-apis:xml-apis:1.4.01'
         }
     }
 }
@@ -165,11 +165,14 @@ subprojects {
 
     dependencies {
         compile "com.google.guava:guava:18.0"
-        compile "com.google.inject:guice:3.0"
+        compile("com.google.inject:guice:3.0") {
+            exclude module:"asm"
+        }
         compile "commons-codec:commons-codec:1.9"
         compile "org.objenesis:objenesis:2.1"
         compile "org.slf4j:slf4j-api:1.7.5"
         compile "xml-apis:xml-apis:1.4.01"
+        compile 'commons-logging:commons-logging:1.1.3'
         testCompile "ch.qos.logback:logback-classic:1.0.13"
         testCompile "junit:junit:4.11"
         testCompile "org.hamcrest:hamcrest-integration:1.3"
@@ -185,7 +188,7 @@ subprojects {
             exclude module: "spock-core"
         }
         testCompile("org.codehaus.groovy:groovy-all:2.3.6")
-        testCompile("org.easytesting:fest-assert:1.4")
+        testCompile 'org.assertj:assertj-core:1.7.1'
     }
 
     configurations.all {

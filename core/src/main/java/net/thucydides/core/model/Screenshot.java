@@ -1,5 +1,6 @@
 package net.thucydides.core.model;
 
+import net.thucydides.core.model.stacktrace.FailureCause;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 /**

@@ -3,7 +3,9 @@ package net.thucydides.core.annotations.locators;
 import net.serenitybdd.core.annotations.ImplementedBy;
 import net.thucydides.core.annotations.NotImplementedException;
 import net.serenitybdd.core.pages.WebElementFacade;
+import net.thucydides.core.pages.WebElementDescriber;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.lang.reflect.Constructor;
@@ -59,9 +61,10 @@ public class SmartElementHandler implements InvocationHandler{
     	try {
 	        if ("getWrappedElement".equals(method.getName())) {
 	            return locator.findElement();
-	        }
-	        Constructor<?> constructor = implementerClass.getConstructor(WebDriver.class, ElementLocator.class, long.class);
-	        Object webElementFacadeExt = constructor.newInstance(driver, locator, timeoutInMilliseconds);
+	        } else if ("toString".equals(method.getName())) {
+				return toStringForElement();
+			}
+			Object webElementFacadeExt = newElementInstance(driver, locator, timeoutInMilliseconds);
 
 	        return method.invoke(implementerClass.cast(webElementFacadeExt), objects);
         } catch (InvocationTargetException e) {
@@ -69,6 +72,20 @@ public class SmartElementHandler implements InvocationHandler{
             throw e.getCause();
         }
     }
+
+	private Object newElementInstance(WebDriver driver, ElementLocator locator, long timeoutInMilliseconds) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+		Constructor<?> constructor = implementerClass.getConstructor(WebDriver.class, ElementLocator.class, long.class);
+		return constructor.newInstance(driver, locator, timeoutInMilliseconds);
+	}
+
+	private String toStringForElement() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+		Object webElementFacadeExt = newElementInstance(driver, locator, 100);
+		if (webElementFacadeExt == null) {
+			return "<" + locator.toString() + ">";
+		} else {
+			return new WebElementDescriber().webElementDescription((WebElement) webElementFacadeExt,locator);
+		}
+	}
 
 }
 

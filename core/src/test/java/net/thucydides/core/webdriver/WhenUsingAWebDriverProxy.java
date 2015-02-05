@@ -29,6 +29,12 @@ public class WhenUsingAWebDriverProxy {
     @Mock
     FirefoxDriver firefoxDriver;
 
+    @Mock
+    WebDriver.Options options;
+
+    @Mock
+            WebDriver.Timeouts timeouts;
+
     WebdriverManager webdriverManager;
 
     WebDriverFactory factory;
@@ -44,11 +50,16 @@ public class WhenUsingAWebDriverProxy {
         public WebDriver getProxiedDriver() {
             return firefoxDriver;
         }
+
+        @Override
+        public Options manage() {
+            return options;
+        }
     }
 
     private void initWendriverManager() throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         when(webdriverInstanceFactory.newFirefoxDriver(any(Capabilities.class))).thenReturn(firefoxDriver);
-
+        when(options.timeouts()).thenReturn(timeouts);
         MockEnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         factory = new WebDriverFactory(webdriverInstanceFactory, environmentVariables);
 
@@ -256,12 +267,6 @@ public class WhenUsingAWebDriverProxy {
         webDriverFacade.get("http://www.google.com");
         webDriverFacade.close();
         verify(firefoxDriver).close();
-    }
-
-    @Test
-    public void the_webdriver_proxy_should_handle_manage() {
-        facade.manage();
-        verify(firefoxDriver, atLeast(1)).manage();
     }
 
     @Test

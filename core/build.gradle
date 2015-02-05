@@ -8,7 +8,7 @@ ext {
 jar {
     manifest {
         attributes("Implementation-Title": "Serenity Core",
-                "Implementation-Version": project.version.toString())
+                   "Implementation-Version": project.version.toString())
     }
 }
 
@@ -24,26 +24,30 @@ dependencies {
         exclude group: 'com.google.guava', module: 'guava'
     }
 
-    compile("cglib:cglib:2.2.2") {
+    compile ("cglib:cglib:2.2.2") {
         exclude group: 'asm', module: 'asm'
     }
 
     compile "commons-codec:commons-codec:1.9"
     compile "commons-io:commons-io:2.4"
 
-    compile("com.opera:operadriver:1.5") {
-        exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
-        exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
+    compile ("com.opera:operadriver:1.5") {
+        exclude group: 'org.seleniumhq.selenium', module:'selenium-java'
+        exclude group: 'org.seleniumhq.selenium', module:'selenium-remote-driver' +
+                ''
         exclude group: 'com.google.guava', module: 'guava'
     }
 
-    compile("org.seleniumhq.selenium:selenium-server:$seleniumVersion") {
+    compile ("org.seleniumhq.selenium:selenium-server:$seleniumVersion") {
         exclude group: 'cglib', module: 'cglib-nodep'
         exclude group: 'guava', module: 'guava'
         exclude group: 'commons-io', module: 'commons-io'
+        exclude group: 'commons-codec', module: 'commons-codec'
+        exclude group: 'org.apache.commons', module: 'commons-lang3'
+        exclude group: 'com.google.code.gson', module: 'gson'
     }
 
-    compile('com.github.detro:phantomjsdriver:1.2.0') {
+    compile ('com.github.detro:phantomjsdriver:1.2.0') {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
     }
@@ -55,13 +59,13 @@ dependencies {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
 
-    compile("com.googlecode.lambdaj:lambdaj:2.3.3") {
+    compile ("com.googlecode.lambdaj:lambdaj:2.3.3") {
         exclude group: 'org.hamcrest', module: 'hamcrest-all'
         exclude group: 'cglib', module: 'cglib-nodep'
         exclude group: 'org.objenesis', module: 'objenesis'
     }
     compile "com.google.guava:guava:18.0"
-    compile "joda-time:joda-time:2.0"
+    compile "joda-time:joda-time:2.2"
     compile "com.thoughtworks.xstream:xstream:1.4.1"
     compile "org.apache.commons:commons-lang3:3.3.2"
     compile "commons-collections:commons-collections:3.2.1"
@@ -71,27 +75,21 @@ dependencies {
         exclude group: 'log4j', module: 'log4j'
     }
     compile "asm:asm:3.3.1"
-    compile "org.springframework:spring-test:3.2.3.RELEASE" // optional
-    compile "org.springframework:spring-context:3.2.3.RELEASE" // optional
-    compile "org.springframework:spring-context-support:3.2.3.RELEASE" // optional
 
     compile "org.hamcrest:hamcrest-core:1.3"
     compile 'org.hamcrest:hamcrest-library:1.3'
     compile "com.thoughtworks.xstream:xstream:1.4.1"
     compile "commons-collections:commons-collections:3.2.1"
-    compile ("org.apache.httpcomponents:httpclient:4.3.4") {
-        exclude group: 'commons-codec', module: 'commons-codec'
-    }
-    compile "org.apache.commons:commons-lang3:3.0.1"
     compile "net.sf.flexjson:flexjson:2.1"
-    compile "joda-time:joda-time:2.0"
     compile ("net.sourceforge.htmlunit:htmlunit:2.15") {
+        exclude group: 'org.apache.commons', module: 'commons-lang3'
         exclude group: 'commons-logging', module: 'commons-logging'
         exclude group: 'xml-apis', module: 'xml-apis'
+        exclude group: 'commons-codec', module: 'commons-codec'
     }
     compile "org.freemarker:freemarker:2.3.21"
     compile("org.fluentlenium:fluentlenium-core:0.10.2") {
-        exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
+        exclude group: 'org.seleniumhq.selenium', module:'selenium-java'
         exclude group: 'junit', module: 'junit-dep'
     }
     compile "com.jhlabs:filters:2.0.235"
@@ -100,12 +98,15 @@ dependencies {
     compile "junit:junit:4.11"
     compile "javax.validation:validation-api:1.1.0.Final"
     compile "org.hibernate:hibernate-validator:5.1.1.Final"
-    compile "javassist:javassist:3.9.0.GA"
     compile "javax.el:javax.el-api:2.2.4"
     compile "org.glassfish.web:javax.el:2.2.4"
 
     compile "org.objenesis:objenesis:2.1"
     compile "xml-apis:xml-apis:1.4.01"
+
+    testCompile "org.springframework:spring-test:3.2.3.RELEASE"
+    testCompile "org.springframework:spring-context:3.2.3.RELEASE"
+    testCompile "org.springframework:spring-context-support:3.2.3.RELEASE"
 
     testCompile project(':serenity-sample-alternative-resources')
     testCompile project(':serenity-test-utils')

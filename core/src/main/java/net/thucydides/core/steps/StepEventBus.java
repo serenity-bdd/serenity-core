@@ -5,9 +5,11 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
 import net.thucydides.core.screenshots.ScreenshotProcessor;
+import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,10 +66,11 @@ public class StepEventBus {
     private Story storyUnderTest;
 
     private final ScreenshotProcessor screenshotProcessor;
-
+    private final EnvironmentVariables environmentVariables;
     @Inject
-    public StepEventBus(ScreenshotProcessor screenshotProcessor) {
+    public StepEventBus(ScreenshotProcessor screenshotProcessor, EnvironmentVariables environmentVariables) {
         this.screenshotProcessor = screenshotProcessor;
+        this.environmentVariables = environmentVariables;
     }
 
     /**
@@ -443,7 +446,7 @@ public class StepEventBus {
             stepListener.testSuiteFinished();
         }
         if (!isUniqueSession()) {
-            ThucydidesWebDriverSupport.closeAllDrivers();
+            ThucydidesWebDriverSupport.closeCurrentDrivers();
         }
         storyUnderTest = null;
     }
@@ -547,5 +550,9 @@ public class StepEventBus {
 
     public Optional<TestResult> getForcedResult() {
         return (baseStepListener != null) ? baseStepListener.getForcedResult() : NO_FORCED_RESULT;
+    }
+
+    public boolean isDryRun() {
+        return ThucydidesSystemProperty.THUCYDIDES_DRY_RUN.booleanFrom(environmentVariables);
     }
 }

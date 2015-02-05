@@ -9,6 +9,7 @@ import net.serenitybdd.core.PendingStepException;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
+import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.SystemClock;
 import net.thucydides.core.screenshots.*;

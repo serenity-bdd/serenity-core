@@ -841,7 +841,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     private boolean isMobileDriver() {
-        return ThucydidesWebDriverSupport.getProxiedDriver() instanceof AppiumDriver;
+        return ThucydidesWebDriverSupport.getDriverClass() == AppiumDriver.class;
+//        return ThucydidesWebDriverSupport.getProxiedDriver() instanceof AppiumDriver;
     }
 
     @Override

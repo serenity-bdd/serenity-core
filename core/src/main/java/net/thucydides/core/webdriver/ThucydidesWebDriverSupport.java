@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver;
 
+import io.appium.java_client.AppiumDriver;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
@@ -129,4 +130,7 @@ public class ThucydidesWebDriverSupport {
         return (T) ((WebDriverFacade) getDriver()).getProxiedDriver();
     }
 
+    public static Class<? extends WebDriver> getDriverClass() {
+        return  ((WebDriverFacade) getDriver()).getDriverClass();
+    }
 }

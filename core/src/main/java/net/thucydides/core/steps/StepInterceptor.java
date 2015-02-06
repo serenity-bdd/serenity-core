@@ -1,6 +1,8 @@
 package net.thucydides.core.steps;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import net.serenitybdd.core.Serenity;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -23,7 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static net.thucydides.core.steps.ErrorConvertor.forError;
-import static org.apache.commons.lang3.StringUtils.split;
 
 /**
  * Listen to step results and publish notification messages.
@@ -84,14 +85,14 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
     }
 
     private String packageDomainName(String methodPackage) {
-        String[] packages = split(methodPackage, ".");
+        List<String> packages = Lists.newArrayList(Splitter.on(".").omitEmptyStrings().split(methodPackage));
 
-        if (packages.length == 0) {
+        if (packages.size() == 0) {
             return "";
-        } else if (packages.length == 1) {
-            return packages[0];
+        } else if (packages.size() == 1) {
+            return packages.get(0);
         } else {
-            return packages[0] + "." + packages[1];
+            return packages.get(0) + "." + packages.get(1);
         }
     }
 

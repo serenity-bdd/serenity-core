@@ -1,11 +1,11 @@
 package net.thucydides.core.webdriver.javascript;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.InjectableValues;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.type.TypeFactory;
+//import com.fasterxml.jackson.core.JsonParseException;
+//import com.fasterxml.jackson.databind.InjectableValues;
+//import com.fasterxml.jackson.databind.JsonMappingException;
+//import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.fasterxml.jackson.databind.ObjectReader;
+//import com.fasterxml.jackson.databind.type.TypeFactory;
 import net.thucydides.core.pages.jquery.JQueryEnabledPage;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import org.openqa.selenium.JavascriptExecutor;

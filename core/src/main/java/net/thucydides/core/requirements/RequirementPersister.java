@@ -1,7 +1,7 @@
 package net.thucydides.core.requirements;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import net.thucydides.core.requirements.model.Requirement;
 
 import java.io.File;
@@ -11,13 +11,14 @@ import java.util.Map;
 import java.util.SortedMap;
 
 public class RequirementPersister {
-    private final ObjectMapper mapper = new ObjectMapper();
     private final File outputDirectory;
     private final String rootDirectory;
+    Gson gson;
 
     public RequirementPersister(File outputDirectory, String rootDirectory) {
         this.outputDirectory = outputDirectory;
         this.rootDirectory = rootDirectory;
+        this.gson = new GsonBuilder().create();
     }
 
     public SortedMap<String, Requirement> read() throws IOException{
@@ -51,7 +52,11 @@ public class RequirementPersister {
     }
 
     public void write(SortedMap<String, Requirement> map) throws IOException {
+        try( FileOutputStream os = new FileOutputStream(new File(outputDirectory, rootDirectory + ".json"))) {
+
+        }
         FileOutputStream os = new FileOutputStream(new File(outputDirectory, rootDirectory + ".json"));
+
         mapper.writeValue(os, map);
         os.close();
     }

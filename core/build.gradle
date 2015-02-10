@@ -16,13 +16,13 @@ dependencies {
 
     compile project(':serenity-report-resources')
 
-    compile "com.fasterxml.jackson.core:jackson-core:2.4.3"
-    compile "com.fasterxml.jackson.core:jackson-annotations:2.4.3"
-    compile "com.fasterxml.jackson.core:jackson-databind:2.4.3"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:2.4.3"
-    compile ("com.fasterxml.jackson.datatype:jackson-datatype-guava:2.4.3") {
-        exclude group: 'com.google.guava', module: 'guava'
-    }
+//    compile "com.fasterxml.jackson.core:jackson-core:2.4.3"
+//    compile "com.fasterxml.jackson.core:jackson-annotations:2.4.3"
+//    compile "com.fasterxml.jackson.core:jackson-databind:2.4.3"
+//    compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:2.4.3"
+//    compile ("com.fasterxml.jackson.datatype:jackson-datatype-guava:2.4.3") {
+//        exclude group: 'com.google.guava', module: 'guava'
+//    }
 
     compile ("cglib:cglib:2.2.2") {
         exclude group: 'asm', module: 'asm'

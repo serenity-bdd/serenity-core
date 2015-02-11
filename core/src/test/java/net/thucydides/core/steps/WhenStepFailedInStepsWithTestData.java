@@ -1,9 +1,7 @@
 package net.thucydides.core.steps;
 
 import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.StepGroup;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.steps.*;
+import net.serenitybdd.core.pages.Pages;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

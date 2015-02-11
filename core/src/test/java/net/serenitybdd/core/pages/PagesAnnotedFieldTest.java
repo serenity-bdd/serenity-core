@@ -1,5 +1,7 @@
-package net.thucydides.core.pages;
+package net.serenitybdd.core.pages;
 
+import net.serenitybdd.core.pages.Pages;
+import net.serenitybdd.core.pages.PagesAnnotatedField;
 import org.junit.Test;
 import org.springframework.util.ReflectionUtils;
 
@@ -8,7 +10,7 @@ import java.lang.reflect.Field;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Unit test for {@link PagesAnnotatedField}.
+ * Unit test for {@link net.serenitybdd.core.pages.PagesAnnotatedField}.
  */
 public class PagesAnnotedFieldTest {
 

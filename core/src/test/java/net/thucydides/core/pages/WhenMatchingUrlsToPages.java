@@ -1,5 +1,7 @@
 package net.thucydides.core.pages;
 
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.pages.Pages;
 import net.thucydides.core.annotations.At;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import net.thucydides.core.pages.SystemClock;
+import net.serenitybdd.core.pages.SystemClock;
 
 public class StepDelayer {
 

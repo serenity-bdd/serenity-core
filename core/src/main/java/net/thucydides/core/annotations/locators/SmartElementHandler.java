@@ -3,7 +3,7 @@ package net.thucydides.core.annotations.locators;
 import net.serenitybdd.core.annotations.ImplementedBy;
 import net.thucydides.core.annotations.NotImplementedException;
 import net.serenitybdd.core.pages.WebElementFacade;
-import net.thucydides.core.pages.WebElementDescriber;
+import net.serenitybdd.core.pages.WebElementDescriber;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;

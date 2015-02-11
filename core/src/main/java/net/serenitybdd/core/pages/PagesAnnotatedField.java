@@ -1,4 +1,4 @@
-package net.thucydides.core.pages;
+package net.serenitybdd.core.pages;
 
 import com.google.common.base.Optional;
 import net.thucydides.core.annotations.Fields;
@@ -16,9 +16,6 @@ import java.lang.reflect.Field;
  *
  */
 public class PagesAnnotatedField {
-
-    private static final String NO_ANNOTATED_FIELD_ERROR
-    = "No Pages field annotated with @ManagedPages was found in the test case.";
 
     private Field field;
     private ManagedPages annotation;

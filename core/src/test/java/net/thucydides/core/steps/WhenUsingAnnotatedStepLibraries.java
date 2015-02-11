@@ -3,7 +3,7 @@ package net.thucydides.core.steps;
 import net.thucydides.core.annotations.InvalidStepsFieldException;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.pages.Pages;
+import net.serenitybdd.core.pages.Pages;
 import net.thucydides.core.reflection.FieldSetter;
 import org.junit.Before;
 import org.junit.Test;

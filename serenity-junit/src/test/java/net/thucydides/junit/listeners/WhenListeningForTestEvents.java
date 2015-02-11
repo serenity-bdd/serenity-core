@@ -2,7 +2,7 @@ package net.thucydides.junit.listeners;
 
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Story;
-import net.thucydides.core.pages.Pages;
+import net.serenitybdd.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
 import net.thucydides.core.steps.StepFactory;
 import org.junit.Before;

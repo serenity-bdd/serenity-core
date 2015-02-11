@@ -1,4 +1,4 @@
-package net.thucydides.core.pages;
+package net.serenitybdd.core.pages;
 
 /**
  * Could not invoke a Page Oject method annotated with the WhenPageOpens annotation.

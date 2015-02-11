@@ -2,7 +2,7 @@ package net.thucydides.samples;
 
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.StepGroup;
-import net.thucydides.core.pages.Pages;
+import net.serenitybdd.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
 import net.thucydides.junit.runners.ThucydidesRunner;
 import org.slf4j.Logger;

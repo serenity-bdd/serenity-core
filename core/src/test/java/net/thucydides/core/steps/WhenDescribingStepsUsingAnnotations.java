@@ -1,7 +1,7 @@
 package net.thucydides.core.steps;
 
 import net.thucydides.core.annotations.*;
-import net.thucydides.core.pages.Pages;
+import net.serenitybdd.core.pages.Pages;
 import org.jbehave.core.annotations.Given;
 import org.junit.Ignore;
 import org.junit.Test;

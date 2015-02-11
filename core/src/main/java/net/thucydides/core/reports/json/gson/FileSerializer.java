@@ -13,6 +13,6 @@ import java.lang.reflect.Type;
  */
 public class FileSerializer implements JsonSerializer<File> {
     public JsonElement serialize(File src, Type typeOfSrc, JsonSerializationContext context) {
-        return new JsonPrimitive(src.getPath());
+        return new JsonPrimitive(src.getName());
     }
 }

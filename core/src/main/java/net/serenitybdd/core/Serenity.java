@@ -5,7 +5,7 @@ import net.serenitybdd.core.di.DependencyInjector;
 import net.serenitybdd.core.sessions.TestSessionVariables;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.pages.Pages;
+import net.serenitybdd.core.pages.Pages;
 import net.thucydides.core.steps.*;
 import net.thucydides.core.steps.di.DependencyInjectorService;
 import net.thucydides.core.webdriver.Configuration;

@@ -1,7 +1,6 @@
 package net.thucydides.samples;
 
 import net.thucydides.core.annotations.*;
-import net.thucydides.core.pages.Pages;
 import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;

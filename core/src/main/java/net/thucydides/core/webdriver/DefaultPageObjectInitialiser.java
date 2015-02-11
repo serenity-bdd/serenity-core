@@ -2,7 +2,7 @@ package net.thucydides.core.webdriver;
 
 import com.google.common.base.Predicate;
 import net.thucydides.core.annotations.locators.SmartElementProxyCreator;
-import net.thucydides.core.pages.PageObject;
+import net.serenitybdd.core.pages.PageObject;
 import org.openqa.selenium.WebDriver;
 
 /**

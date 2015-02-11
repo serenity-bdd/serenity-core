@@ -1,5 +1,6 @@
 package net.thucydides.core.pages
 
+import net.serenitybdd.core.pages.PageUrls
 import net.thucydides.core.annotations.DefaultUrl
 import net.thucydides.core.annotations.NamedUrl
 import net.thucydides.core.annotations.NamedUrls

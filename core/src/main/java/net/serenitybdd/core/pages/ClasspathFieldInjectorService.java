@@ -1,4 +1,4 @@
-package net.thucydides.core.pages;
+package net.serenitybdd.core.pages;
 
 /**
  * A description goes here.

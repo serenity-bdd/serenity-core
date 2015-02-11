@@ -1,6 +1,7 @@
 package net.thucydides.core.pages;
 
 import com.google.common.base.Predicate;
+import net.serenitybdd.core.pages.PageObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

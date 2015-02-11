@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver
 
 import net.thucydides.core.annotations.findby.FindBy
-import net.thucydides.core.pages.PageObject
+import net.serenitybdd.core.pages.PageObject
 import net.thucydides.core.pages.WebElementFacade
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables

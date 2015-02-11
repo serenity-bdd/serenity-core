@@ -1,6 +1,6 @@
 package sample.csv;
 
-import net.thucydides.core.pages.PageObject;
+import net.serenitybdd.core.pages.PageObject;
 import org.openqa.selenium.WebDriver;
 
 

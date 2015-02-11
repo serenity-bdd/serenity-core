@@ -1,7 +1,7 @@
 package net.thucydides.core.annotations.locators;
 
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.pages.PageObject;
+import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.ElementLocatorFactorySelector;
 import net.thucydides.core.webdriver.ElementProxyCreator;

@@ -1,5 +1,6 @@
 package net.thucydides.core.pages;
 
+import net.serenitybdd.core.pages.InternalSystemClock;
 import org.joda.time.DateTime;
 import org.junit.Test;
 

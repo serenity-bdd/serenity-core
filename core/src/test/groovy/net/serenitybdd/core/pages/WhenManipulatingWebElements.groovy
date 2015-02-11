@@ -1,8 +1,6 @@
 package net.serenitybdd.core.pages
 
 import net.serenitybdd.core.annotations.findby.By
-import net.thucydides.core.pages.RenderedPageObjectView
-import net.thucydides.core.pages.WebElementDescriber
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade
 import org.openqa.selenium.ElementNotVisibleException
 import org.openqa.selenium.StaleElementReferenceException

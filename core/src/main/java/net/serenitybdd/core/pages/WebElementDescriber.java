@@ -1,4 +1,4 @@
-package net.thucydides.core.pages;
+package net.serenitybdd.core.pages;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebElement;

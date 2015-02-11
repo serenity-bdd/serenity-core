@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements.reportpages
 
-import net.thucydides.core.pages.PageObject
+import net.serenitybdd.core.pages.PageObject
 import net.thucydides.core.pages.WebElementFacade
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver

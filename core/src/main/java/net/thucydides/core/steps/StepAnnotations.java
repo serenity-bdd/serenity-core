@@ -1,8 +1,8 @@
 package net.thucydides.core.steps;
 
 import com.google.common.base.Optional;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.pages.PagesAnnotatedField;
+import net.serenitybdd.core.pages.Pages;
+import net.serenitybdd.core.pages.PagesAnnotatedField;
 
 import java.util.List;
 

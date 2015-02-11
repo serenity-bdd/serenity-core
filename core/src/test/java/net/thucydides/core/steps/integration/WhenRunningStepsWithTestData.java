@@ -2,7 +2,7 @@ package net.thucydides.core.steps.integration;
 
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.StepGroup;
-import net.thucydides.core.pages.Pages;
+import net.serenitybdd.core.pages.Pages;
 import net.thucydides.core.steps.*;
 import org.junit.Before;
 import org.junit.Test;

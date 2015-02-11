@@ -1,7 +1,7 @@
 package net.thucydides.core.model.samples;
 
 import net.thucydides.core.annotations.Step;
-import net.thucydides.core.pages.Pages;
+import net.serenitybdd.core.pages.Pages;
 
 public class MyInheritedStepLibrary extends MyBaseStepLibrary {
 

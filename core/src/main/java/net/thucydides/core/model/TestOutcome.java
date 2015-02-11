@@ -16,7 +16,7 @@ import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.features.ApplicationFeature;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
-import net.thucydides.core.pages.SystemClock;
+import net.serenitybdd.core.pages.SystemClock;
 import net.thucydides.core.reports.html.Formatter;
 import net.thucydides.core.reports.json.JSONConverter;
 import net.thucydides.core.reports.saucelabs.LinkGenerator;
@@ -110,7 +110,7 @@ public class TestOutcome {
     /**
      * When did this test start.
      */
-    private Date startTime;
+    private Long startTime;
 
     /**
      * How long did it last in milliseconds.
@@ -213,7 +213,7 @@ public class TestOutcome {
     }
 
     public TestOutcome(final String name, final Class<?> testCase) {
-        startTime = now().toDate();
+        startTime = now().toDate().getTime();
         this.name = name;
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
@@ -231,7 +231,7 @@ public class TestOutcome {
      * Fix the values of synthetic fields for serialization purposes
      */
     public void calculateDynamicFieldValues() {
-        this.title = getTitle();
+        getTitle();
         this.result = getResult();
         this.issues = getIssues();
         this.versions = getVersions();
@@ -284,7 +284,7 @@ public class TestOutcome {
      *                  represent the story in which the test is implemented.
      */
     protected TestOutcome(final String name, final Class<?> testCase, final Story userStory) {
-        startTime = now().toDate();
+        startTime = now().toDate().getTime();
         this.name = name;
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
@@ -316,7 +316,7 @@ public class TestOutcome {
                 this.manual);
     }
 
-    protected TestOutcome(final Date startTime,
+    protected TestOutcome(final Long startTime,
                           final long duration,
                           final String title,
                           final String description,
@@ -413,7 +413,7 @@ public class TestOutcome {
                 this.name,
                 this.testCase,
                 this.testSteps,
-                ImmutableList.copyOf(issues),
+                (issues == null) ? issues : ImmutableList.copyOf(issues),
                 this.additionalIssues,
                 this.tags,
                 this.userStory,
@@ -436,7 +436,7 @@ public class TestOutcome {
                 this.testSteps,
                 this.coreIssues,
                 this.additionalIssues,
-                ImmutableSet.copyOf(tags),
+                (tags == null) ? tags : ImmutableSet.copyOf(tags),
                 this.userStory,
                 this.testFailureCause,
                 this.testFailureClassname,
@@ -510,15 +510,14 @@ public class TestOutcome {
      * @return the human-readable name for this test.
      */
     public String getTitle() {
-        return getTitle(true);
+        if (title == null) {
+            title = obtainQualifiedTitleFromAnnotationOrMethodName();
+        }
+        return title;
     }
 
     public String getTitle(boolean qualified) {
-        if (title == null) {
-            return (qualified) ? obtainQualifiedTitleFromAnnotationOrMethodName() : getBaseTitleFromAnnotationOrMethodName();
-        } else {
-            return (qualified) ? title : getFormatter().stripQualifications(title);
-        }
+        return (qualified) ? getTitle() : getFormatter().stripQualifications(getTitle());
     }
 
     public TitleBuilder getUnqualified() {
@@ -532,15 +531,6 @@ public class TestOutcome {
     public void setAllStepsTo(TestResult result) {
         for(TestStep step : testSteps) {
             step.setResult(result);
-        }
-    }
-
-    public void setAllStepsTo(List<TestStep> steps, TestResult result) {
-        for(TestStep step : steps) {
-            step.setResult(result);
-            if (step.hasChildren()) {
-                setAllStepsTo(step.getChildren(), result);
-            }
         }
     }
 
@@ -1397,7 +1387,7 @@ public class TestOutcome {
     }
 
     public void setStartTime(DateTime startTime) {
-        this.startTime = startTime.toDate();
+        this.startTime = startTime.toDate().getTime();
     }
 
     public void clearStartTime() {
@@ -1506,7 +1496,7 @@ public class TestOutcome {
     }
 
     public void recordDuration() {
-        setDuration(System.currentTimeMillis() - startTime.getTime());
+        setDuration(System.currentTimeMillis() - startTime);
     }
 
     public void setDuration(final long duration) {

@@ -1,5 +1,8 @@
 package net.thucydides.core.pages;
 
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.pages.PageUrls;
+import net.serenitybdd.core.pages.UnableToInvokeWhenPageOpensMethods;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
@@ -12,7 +15,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.net.URL;
 
-import static net.thucydides.core.pages.PageObject.withParameters;
+import static net.serenitybdd.core.pages.PageObject.withParameters;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;

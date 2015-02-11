@@ -1,6 +1,5 @@
-package net.thucydides.core.pages;
+package net.serenitybdd.core.pages;
 
-import net.serenitybdd.core.pages.WebElementFacade;
 import net.thucydides.core.scheduling.NormalFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
 import org.openqa.selenium.*;
@@ -101,7 +100,7 @@ public class RenderedPageObjectView {
         try {
             List<WebElement> matchingElements = driver.findElements(byElementCriteria);
             for(WebElement webElement : matchingElements) {
-                WebElementFacade element = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100);
+                WebElementFacade element = net.thucydides.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, 100);
                 if (element.isCurrentlyVisible()) {
                     return true;
                 }

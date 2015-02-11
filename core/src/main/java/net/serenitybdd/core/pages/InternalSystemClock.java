@@ -1,4 +1,4 @@
-package net.thucydides.core.pages;
+package net.serenitybdd.core.pages;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;

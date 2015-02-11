@@ -1,4 +1,4 @@
-package net.thucydides.core.pages;
+package net.serenitybdd.core.pages;
 
 import com.google.common.base.Optional;
 import net.thucydides.core.annotations.DefaultUrl;

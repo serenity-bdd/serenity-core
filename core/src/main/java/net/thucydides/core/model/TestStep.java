@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
-import net.thucydides.core.pages.SystemClock;
+import net.serenitybdd.core.pages.SystemClock;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;

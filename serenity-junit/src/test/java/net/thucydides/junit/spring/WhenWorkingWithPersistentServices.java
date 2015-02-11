@@ -2,7 +2,7 @@ package net.thucydides.junit.spring;
 
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
-import net.thucydides.core.pages.Pages;
+import net.serenitybdd.core.pages.Pages;
 import net.thucydides.junit.runners.ThucydidesRunner;
 import net.thucydides.junit.spring.samples.domain.User;
 import net.thucydides.junit.spring.samples.service.UserService;

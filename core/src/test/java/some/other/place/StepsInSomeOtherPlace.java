@@ -1,7 +1,7 @@
 package some.other.place;
 
 import net.thucydides.core.annotations.Step;
-import net.thucydides.core.pages.Pages;
+import net.serenitybdd.core.pages.Pages;
 
 public class StepsInSomeOtherPlace extends BaseScenarioInSomeOtherPackage {
 

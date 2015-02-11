@@ -3,7 +3,7 @@ package net.thucydides.junit.runners;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.pages.Pages;
+import net.serenitybdd.core.pages.Pages;
 import net.thucydides.samples.IndexPage;
 import net.thucydides.samples.SampleScenarioSteps;
 import org.junit.Test;

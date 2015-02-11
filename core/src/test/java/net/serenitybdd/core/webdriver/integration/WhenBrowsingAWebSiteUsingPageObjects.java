@@ -1,7 +1,7 @@
 package net.serenitybdd.core.webdriver.integration;
 
-import net.thucydides.core.pages.PageObject;
-import net.thucydides.core.pages.PageUrls;
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.pages.PageUrls;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WebElementFacadeImpl;
 import net.thucydides.core.util.MockEnvironmentVariables;
@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;

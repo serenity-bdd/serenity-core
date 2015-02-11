@@ -172,7 +172,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     "name" : "A user story",
     "type" : "story"
   } ],
-  "startTime" : "Jan 1, 2013 12:00:00 AM",
+  "startTime" : 1356958800000,
   "duration" : 0,
   "result" : "SUCCESS",
   "manual" : false,
@@ -748,7 +748,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     def "should read a test outcome with tags"() {
         given:
         def serializedTestOutcome =
-                """{"name":"Another Addition","testSteps":[{"number":1,"description":"Given a calculator I just turned on","duration":4,"startTime":1413519392021,"result":"SUCCESS"},{"number":2,"description":"When I add 4 and 7","duration":3,"startTime":1413519392025,"result":"SUCCESS"},{"number":3,"description":"Then the result is 11","duration":2,"startTime":1413519392028,"result":"SUCCESS"}],"userStory":{"id":"basic-arithmetic","storyName":"Basic Arithmetic","path":"src/test/resources/samples/calculator/basic_arithmetic.feature","narrative":"Calculing additions","type":"feature"},"title":"Another Addition","tags":[{"name":"ISSUE-123","type":"issue"},{"name":"foo","type":"tag"},{"name":"Calculator/Basic arithmetic","type":"story"},{"name":"Basic Arithmetic","type":"feature"}],"startTime":"Jan 1, 2013 12:00:00 AM","duration":10,"manual":false,"result":"SUCCESS"}"""
+                """{"name":"Another Addition","testSteps":[{"number":1,"description":"Given a calculator I just turned on","duration":4,"startTime":1413519392021,"result":"SUCCESS"},{"number":2,"description":"When I add 4 and 7","duration":3,"startTime":1413519392025,"result":"SUCCESS"},{"number":3,"description":"Then the result is 11","duration":2,"startTime":1413519392028,"result":"SUCCESS"}],"userStory":{"id":"basic-arithmetic","storyName":"Basic Arithmetic","path":"src/test/resources/samples/calculator/basic_arithmetic.feature","narrative":"Calculing additions","type":"feature"},"title":"Another Addition","tags":[{"name":"ISSUE-123","type":"issue"},{"name":"foo","type":"tag"},{"name":"Calculator/Basic arithmetic","type":"story"},{"name":"Basic Arithmetic","type":"feature"}],"startTime":1413519392028,"duration":10,"manual":false,"result":"SUCCESS"}"""
 
         def jsonReport = new File(outputDirectory,"result.json")
         jsonReport.withWriter{ it << serializedTestOutcome }

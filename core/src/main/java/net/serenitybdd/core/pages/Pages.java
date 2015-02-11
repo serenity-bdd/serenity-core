@@ -1,8 +1,9 @@
-package net.thucydides.core.pages;
+package net.serenitybdd.core.pages;
 
 import com.google.common.base.Optional;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.pages.WrongPageError;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebdriverProxyFactory;
@@ -29,7 +30,6 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 public class Pages implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private static final String NO_VALID_CONSTRUCTOR_FOUND = "This page object does not appear have an empty constructor or a constructor that takes a WebDriver parameter";
 
     private transient WebDriver driver;
 

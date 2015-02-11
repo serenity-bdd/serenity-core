@@ -575,18 +575,8 @@ public class WebDriverFactory {
     protected void resizeBrowserTo(WebDriver driver, int height, int width) {
 
         LOGGER.info("Setting browser dimensions to {}/{}", height, width);
-
-        if (usesFirefox(driver) || usesInternetExplorer(driver) || usesPhantomJS(driver)) {
-            driver.manage().window().setSize(new Dimension(width, height));
-        } else if (usesChrome(driver)) {
-            ((JavascriptExecutor) driver).executeScript("window.open('about:blank','_blank','width=#{width},height=#{height}');");
-            Set<String> windowHandles = driver.getWindowHandles();
-            windowHandles.remove(driver.getWindowHandle());
-            String newWindowHandle = windowHandles.toArray(new String[]{})[0];
-            driver.switchTo().window(newWindowHandle);
-        }
-        String resizeWindow = "window.resizeTo(" + width + "," + height + ")";
-        ((JavascriptExecutor) driver).executeScript(resizeWindow);
+        driver.manage().window().setSize(new Dimension(width, height));
+        driver.manage().window().setPosition(new Point(0,0));
     }
 
     private boolean isARemoteDriver(Class<? extends WebDriver> driverClass) {

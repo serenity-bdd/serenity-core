@@ -16,8 +16,6 @@ import net.thucydides.core.util.MockEnvironmentVariables
 import org.joda.time.DateTime
 import org.joda.time.LocalDateTime
 import org.junit.ComparisonFailure
-import org.skyscreamer.jsonassert.JSONCompare
-import org.skyscreamer.jsonassert.JSONCompareMode
 import sample.steps.FailingStep
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -147,41 +145,12 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.description = "Some description"
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").
                 startingAt(FIRST_OF_JANUARY))
-        and:
-        def expectedReport = """
-{
-  "name" : "should_do_this",
-  "testCase":"net.thucydides.core.reports.json.WhenStoringTestOutcomesAsJSON\$SomeTestScenario",
-  "testCaseName" : "net.thucydides.core.reports.json.WhenStoringTestOutcomesAsJSON.SomeTestScenario",
-  "testSteps" : [ {
-    "number" : 1,
-    "description" : "step 1",
-    "duration" : 0,
-    "result" : "SUCCESS",
-    "startTime" : 1356958800000
-  } ],
-  "userStory" : {
-    "id" : "net.thucydides.core.reports.json.WhenStoringTestOutcomesAsJSON.AUserStory",
-    "storyName" : "A user story",
-    "storyClassName" : "net.thucydides.core.reports.json.WhenStoringTestOutcomesAsJSON\$AUserStory",
-    "path" : "net.thucydides.core.reports.json.WhenStoringTestOutcomesAsJSON"
-  },
-  "title" : "Should do this",
-  "description" : "Some description",
-  "tags" : [ {
-    "name" : "A user story",
-    "type" : "story"
-  } ],
-  "startTime" : 1356958800000,
-  "duration" : 0,
-  "result" : "SUCCESS",
-  "manual" : false,
-  }
-            """
         when:
         def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        and:
+        def reloadedTestOutcome = loader.loadReportFrom(jsonReport)
         then:
-        JSONCompare.compareJSON(expectedReport, jsonReport.text, JSONCompareMode.LENIENT).passed();
+        reloadedTestOutcome.isPresent() && reloadedTestOutcome.get() == testOutcome
     }
 
 

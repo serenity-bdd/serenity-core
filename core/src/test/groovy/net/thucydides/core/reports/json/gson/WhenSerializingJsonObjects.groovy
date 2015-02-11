@@ -1,8 +1,9 @@
-package net.thucydides.core.reports.json
+package net.thucydides.core.reports.json.gson
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonSerializationContext
+import net.thucydides.core.reports.json.ThrowableClassAdapter
 import spock.lang.Specification
 
 class WhenSerializingJsonObjects extends Specification {

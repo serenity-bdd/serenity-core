@@ -621,7 +621,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testFinished(testOutcome);
 
         TestOutcome testOutcome = results.get(0);
-        assertThat(testOutcome.getMethodName(), is("app_should_work"));
+        assertThat(testOutcome.getName(), is("app_should_work"));
     }
 
     @Test

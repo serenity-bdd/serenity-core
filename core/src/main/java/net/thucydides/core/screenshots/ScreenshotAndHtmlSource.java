@@ -5,28 +5,27 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 
 /**
  * A screenshot image and the corresponding HTML source code.
  */
 public class ScreenshotAndHtmlSource {
 
-    private final File screenshotFile;
+    private final File screenshot;
     private final File htmlSource;
 
     public ScreenshotAndHtmlSource(String screenshotName, String sourcecodeName) {
-        this.screenshotFile = new File(screenshotName);
+        this.screenshot = new File(screenshotName);
         this.htmlSource = (sourcecodeName != null) ? new File(sourcecodeName) : null;
     }
 
-    public ScreenshotAndHtmlSource(File screenshotFile, File sourcecode) {
-        this.screenshotFile = screenshotFile;
+    public ScreenshotAndHtmlSource(File screenshot, File sourcecode) {
+        this.screenshot = screenshot;
         this.htmlSource = sourcecode;
     }
 
     public String getScreenshotName() {
-        return screenshotFile.getName();
+        return screenshot.getName();
     }
 
     public String getHtmlSourceName() {
@@ -36,12 +35,12 @@ public class ScreenshotAndHtmlSource {
         return htmlSource.getName();
     }
 
-    public ScreenshotAndHtmlSource(File screenshotFile) {
-        this(screenshotFile, null);
+    public ScreenshotAndHtmlSource(File screenshot) {
+        this(screenshot, null);
     }
 
-    public File getScreenshotFile() {
-        return screenshotFile;
+    public File getScreenshot() {
+        return screenshot;
     }
 
     public Optional<File> getHtmlSource() {
@@ -49,7 +48,7 @@ public class ScreenshotAndHtmlSource {
     }
 
     public boolean wasTaken() {
-        return (screenshotFile != null);
+        return (screenshot != null);
     }
 
     @Override
@@ -59,13 +58,13 @@ public class ScreenshotAndHtmlSource {
 
         ScreenshotAndHtmlSource that = (ScreenshotAndHtmlSource) o;
 
-        if (screenshotFile == null) {
-            return (that.screenshotFile == null);
-        } else if (that.screenshotFile == null) {
-            return (this.screenshotFile == null);
+        if (screenshot == null) {
+            return (that.screenshot == null);
+        } else if (that.screenshot == null) {
+            return (this.screenshot == null);
         } else {
             try {
-                return FileUtils.contentEquals(screenshotFile, that.screenshotFile);
+                return FileUtils.contentEquals(screenshot, that.screenshot);
             } catch (IOException e) {
                 return false;
             }
@@ -75,20 +74,20 @@ public class ScreenshotAndHtmlSource {
 
     @Override
     public int hashCode() {
-        return screenshotFile != null ? screenshotFile.hashCode() : 0;
+        return screenshot != null ? screenshot.hashCode() : 0;
     }
 
     public boolean hasIdenticalScreenshotsAs(ScreenshotAndHtmlSource anotherScreenshotAndHtmlSource) {
         if (hasNoScreenshot() || anotherScreenshotAndHtmlSource.hasNoScreenshot()) {
             return false;
         }
-        return (getScreenshotFile().getName().equals(anotherScreenshotAndHtmlSource.getScreenshotFile().getName()));
+        return (getScreenshot().getName().equals(anotherScreenshotAndHtmlSource.getScreenshot().getName()));
     }
 
     public File getScreenshotFile(File screenshotTargetDirectory) {
-        return new File(screenshotTargetDirectory, getScreenshotFile().getName());
+        return new File(screenshotTargetDirectory, getScreenshot().getName());
     }
     public boolean hasNoScreenshot() {
-        return getScreenshotFile() == null;
+        return getScreenshot() == null;
     }
 }

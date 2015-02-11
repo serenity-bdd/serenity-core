@@ -36,7 +36,7 @@ public class WhenRunningATestScenarioWithScreenshots extends AbstractTestStepRun
         TestOutcome testOutcome1 = executedSteps.get(0);
 
         assertThat(testOutcome1.getTitle(), is("Happy day scenario"));
-        assertThat(testOutcome1.getMethodName(), is("happy_day_scenario"));
+        assertThat(testOutcome1.getName(), is("happy_day_scenario"));
         assertThat(testOutcome1.getTestSteps().size(), is(3));
         assertThat(testOutcome1.getScreenshots().size(), is(not(0)));
     }

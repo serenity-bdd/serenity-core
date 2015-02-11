@@ -1,12 +1,18 @@
 package net.thucydides.core.requirements;
 
+import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import net.thucydides.core.reports.json.gson.ClassTypeAdapter;
+import net.thucydides.core.reports.json.gson.CollectionAdapter;
+import net.thucydides.core.reports.json.gson.OptionalTypeAdapter;
 import net.thucydides.core.requirements.model.Requirement;
+import org.apache.commons.lang3.reflect.TypeUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Map;
 import java.util.SortedMap;
 
@@ -18,7 +24,10 @@ public class RequirementPersister {
     public RequirementPersister(File outputDirectory, String rootDirectory) {
         this.outputDirectory = outputDirectory;
         this.rootDirectory = rootDirectory;
-        this.gson = new GsonBuilder().create();
+        this.gson = Converters.registerAll(new GsonBuilder())
+                .registerTypeAdapterFactory(OptionalTypeAdapter.FACTORY)
+                .registerTypeHierarchyAdapter(Collection.class, new CollectionAdapter()).create();
+
     }
 
     public SortedMap<String, Requirement> read() throws IOException{
@@ -28,10 +37,13 @@ public class RequirementPersister {
             return map;
         }
 
-        JavaType type = mapper.getTypeFactory().constructMapType(map.getClass(), String.class, Requirement.class);
-        SortedMap<String, Requirement> storedRequirementsMap = mapper.readValue(jsonFile, type);
-
+        SortedMap<String, Requirement> storedRequirementsMap;
+        Type requirementsMapType = new TypeToken<SortedMap<String, Requirement>>(){}.getType();
+        try(FileReader reader = new FileReader(jsonFile)) {
+            storedRequirementsMap = gson.fromJson(reader, requirementsMapType);
+        }
         map.putAll(storedRequirementsMap);
+
         //reset the parents
         for (Map.Entry<String, Requirement> entry : storedRequirementsMap.entrySet()) {
             String key = entry.getKey();
@@ -52,12 +64,10 @@ public class RequirementPersister {
     }
 
     public void write(SortedMap<String, Requirement> map) throws IOException {
-        try( FileOutputStream os = new FileOutputStream(new File(outputDirectory, rootDirectory + ".json"))) {
-
+        try( Writer writer = new FileWriter(new File(outputDirectory, rootDirectory + ".json"))) {
+            gson.toJson(map, writer);
+            writer.flush();
+            writer.close();
         }
-        FileOutputStream os = new FileOutputStream(new File(outputDirectory, rootDirectory + ".json"));
-
-        mapper.writeValue(os, map);
-        os.close();
     }
 }

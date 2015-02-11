@@ -302,7 +302,7 @@ public class WhenReadingAnXMLReport {
         assertThat(testOutcome.get().getTestSteps().size(), is(1));
         assertThat(testStep.getResult(), is(TestResult.SUCCESS));
         assertThat(testStep.getDescription(), is("step 1"));
-        assertThat(testStep.getScreenshots().get(0).getScreenshotFile().getName(), is("step_1.png"));
+        assertThat(testStep.getScreenshots().get(0).getScreenshot().getName(), is("step_1.png"));
         assertThat(testStep.getScreenshots().get(0).getHtmlSource().get().getName(), is("step_1.html"));
     }
 
@@ -328,7 +328,7 @@ public class WhenReadingAnXMLReport {
         assertThat(testOutcome.get().getTestSteps().size(), is(1));
         assertThat(testStep.getResult(), is(TestResult.SUCCESS));
         assertThat(testStep.getDescription(), is("step 1"));
-        assertThat(testStep.getScreenshots().get(0).getScreenshotFile().getName(), is("step_1.png"));
+        assertThat(testStep.getScreenshots().get(0).getScreenshot().getName(), is("step_1.png"));
         assertThat(testStep.getScreenshots().get(0).getHtmlSource().isPresent(), is(false));
     }
 

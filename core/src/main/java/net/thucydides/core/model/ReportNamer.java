@@ -55,7 +55,7 @@ public class ReportNamer {
         if (testOutcome.getUserStory() != null) {
             testName = NameConverter.underscore(testOutcome.getUserStory().getName());
         }
-        String scenarioName = NameConverter.underscore(testOutcome.getMethodName());
+        String scenarioName = NameConverter.underscore(testOutcome.getName());
         testName = pathFrom(testOutcome) + withNoIssueNumbers(withNoArguments(appendToIfNotNull(testName, scenarioName)));
         return appendSuffixTo(Digest.ofTextValue(testName));
     }

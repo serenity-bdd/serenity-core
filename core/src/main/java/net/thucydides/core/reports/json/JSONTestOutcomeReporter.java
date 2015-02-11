@@ -75,10 +75,8 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
         try(BufferedInputStream report = new BufferedInputStream(new FileInputStream(reportFile))) {
             TestOutcome fromJson = jsonConverter.fromJson(report);
             return Optional.of(fromJson);
-//        } catch (JsonMappingException mappingException) {
-//            throw new RuntimeException("Error loading JSON test outcomes", mappingException);
         } catch (Throwable e) {
-            LOGGER.warn("this file was not a valid JSON Thucydides test report: " + reportFile.getName()
+            LOGGER.warn("this file was not a valid JSON Serenity test report: " + reportFile.getName()
                         + System.lineSeparator()
                         + e.getMessage());
 

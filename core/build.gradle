@@ -16,13 +16,8 @@ dependencies {
 
     compile project(':serenity-report-resources')
 
-//    compile "com.fasterxml.jackson.core:jackson-core:2.4.3"
-//    compile "com.fasterxml.jackson.core:jackson-annotations:2.4.3"
-//    compile "com.fasterxml.jackson.core:jackson-databind:2.4.3"
-//    compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:2.4.3"
-//    compile ("com.fasterxml.jackson.datatype:jackson-datatype-guava:2.4.3") {
-//        exclude group: 'com.google.guava', module: 'guava'
-//    }
+    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.fatboyindustrial.gson-javatime-serialisers:gson-javatime-serialisers:1.1.1'
 
     compile ("cglib:cglib:2.2.2") {
         exclude group: 'asm', module: 'asm'
@@ -94,7 +89,7 @@ dependencies {
     }
     compile "com.jhlabs:filters:2.0.235"
     compile "org.asciidoctor:asciidoctor-java-integration:0.1.3"
-    compile "com.google.code.gson:gson:2.2.4"
+
     compile "junit:junit:4.11"
     compile "javax.validation:validation-api:1.1.0.Final"
     compile "org.hibernate:hibernate-validator:5.1.1.Final"

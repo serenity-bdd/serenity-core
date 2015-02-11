@@ -22,13 +22,6 @@ class WhenProcessingTestOutcomes extends Specification {
             testOutcomes.size() == 3
     }
 
-    def "should load test outcomes from a given directory in large volumes"() {
-        when:
-        List<TestOutcome> testOutcomes = loader.forFormat(OutcomeFormat.JSON).loadFrom(directoryInClasspathCalled("/test-outcomes/lots-of-tests"));
-        then:
-        testOutcomes.size() == 220
-    }
-
     EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
 
     def "should load tests in JSON if configured"() {

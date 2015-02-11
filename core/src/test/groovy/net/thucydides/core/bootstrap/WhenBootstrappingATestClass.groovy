@@ -49,7 +49,7 @@ class WhenBootstrappingATestClass extends Specification {
         and: "we call a @Step-annotated method in the step library"
             testCase.testSomething()
         then: "the method should have been recorded in the test result"
-            latestTestOutcome.methodName == 'Test Something'
+            latestTestOutcome.name == 'Test Something'
             latestTestOutcome.testSteps.collect {it.description} == ["Step1","Step2"]
     }
 

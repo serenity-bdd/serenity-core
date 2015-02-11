@@ -71,12 +71,12 @@ public class TestOutcome {
      * The name of the method implementing this test.
      */
     @NotNull
-    private final String methodName;
+    private String name;
 
     /**
      * The class containing the test method, if the test is implemented in a Java class.
      */
-    private final Class<?> testCase;
+    private  Class<?> testCase;
 
     private String testCaseName;
 
@@ -99,10 +99,10 @@ public class TestOutcome {
     /**
      *
      */
-    private List<String> issues;
+    private List<String> coreIssues;
     private List<String> additionalIssues;
 
-    private List<String> versions;
+    private List<String> coreVersions;
     private List<String> additionalVersions;
 
     private Set<TestTag> tags;
@@ -110,7 +110,7 @@ public class TestOutcome {
     /**
      * When did this test start.
      */
-    private DateTime startTime;
+    private Date startTime;
 
     /**
      * How long did it last in milliseconds.
@@ -120,7 +120,7 @@ public class TestOutcome {
     /**
      * When did the current test batch start
      */
-    private DateTime testRunTimestamp;
+    private Date testRunTimestamp;
 
     /**
      * Identifies the project associated with this test.
@@ -135,16 +135,7 @@ public class TestOutcome {
      * Used to determine what result should be returned if there are no steps in this test.
      */
     private TestResult annotatedResult = null;
-    /**
-     * Keeps track of step groups.
-     * If not empty, the top of the stack contains the step corresponding to the current step group - new steps should
-     * be added here.
-     */
-    private Stack<TestStep> groupStack = new Stack<TestStep>();
 
-    private IssueTracking issueTracking;
-
-    private EnvironmentVariables environmentVariables;
 
     /**
      * The session ID for this test, is a remote web driver was used.
@@ -152,7 +143,18 @@ public class TestOutcome {
      */
     private String sessionId;
 
-    private LinkGenerator linkGenerator;
+    /**
+     * Keeps track of step groups.
+     * If not empty, the top of the stack contains the step corresponding to the current step group - new steps should
+     * be added here.
+     */
+    private transient Stack<TestStep> groupStack = new Stack<>();
+
+    private transient IssueTracking issueTracking;
+
+    private transient EnvironmentVariables environmentVariables;
+
+    private transient LinkGenerator linkGenerator;
 
     /**
      * Test statistics, read from the statistics database.
@@ -163,7 +165,7 @@ public class TestOutcome {
     /**
      * Returns a set of tag provider classes that are used to determine the tags to associate with a test outcome.
      */
-    private TagProviderService tagProviderService;
+    private transient TagProviderService tagProviderService;
 
     /**
      * An optional qualifier used to distinguish different runs of this test in data-driven tests.
@@ -180,20 +182,39 @@ public class TestOutcome {
      */
     private boolean manual;
 
-    private final org.slf4j.Logger logger = LoggerFactory.getLogger(TestOutcome.class);
+
+    /**
+     * Fields used for serialization
+     */
+    TestResult result;
+    List<String> issues;
+    List<String> versions;
+
+
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(TestOutcome.class);
+
+    private TestOutcome() {
+        groupStack = new Stack<>();
+        this.additionalIssues = Lists.newArrayList();
+        this.additionalVersions = Lists.newArrayList();
+        this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
+        this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
+        this.qualifier = Optional.absent();
+        this.groupStack = new Stack<>();
+    }
 
     /**
      * The title is immutable once set. For convenience, you can create a test
      * run directly with a title using this constructor.
-     * @param methodName The name of the Java method that implements this test.
+     * @param name The name of the Java method that implements this test.
      */
-    public TestOutcome(final String methodName) {
-        this(methodName, null);
+    public TestOutcome(final String name) {
+        this(name, null);
     }
 
-    public TestOutcome(final String methodName, final Class<?> testCase) {
-        startTime = now();
-        this.methodName = methodName;
+    public TestOutcome(final String name, final Class<?> testCase) {
+        startTime = now().toDate();
+        this.name = name;
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
         this.additionalIssues = Lists.newArrayList();
@@ -204,6 +225,17 @@ public class TestOutcome {
         if (testCase != null) {
             initializeStoryFrom(testCase);
         }
+    }
+
+    /**
+     * Fix the values of synthetic fields for serialization purposes
+     */
+    public void calculateDynamicFieldValues() {
+        this.title = getTitle();
+        this.result = getResult();
+        this.issues = getIssues();
+        this.versions = getVersions();
+        this.tags = getTags();
     }
 
     private String nameOf(Class<?> testCase) {
@@ -246,14 +278,14 @@ public class TestOutcome {
 
     /**
      * A test outcome should relate to a particular test class or user story class.
-     * @param methodName The name of the Java method implementing this test, if the test is a JUnit or TestNG test (for example)
+     * @param name The name of the Java method implementing this test, if the test is a JUnit or TestNG test (for example)
      * @param testCase The test class that contains this test method, if the test is a JUnit or TestNG test
      * @param userStory If the test is not implemented by a Java class (e.g. an easyb story), we may just use the Story class to
      *                  represent the story in which the test is implemented.
      */
-    protected TestOutcome(final String methodName, final Class<?> testCase, final Story userStory) {
-        startTime = now();
-        this.methodName = methodName;
+    protected TestOutcome(final String name, final Class<?> testCase, final Story userStory) {
+        startTime = now().toDate();
+        this.name = name;
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
         this.additionalIssues = Lists.newArrayList();
@@ -268,10 +300,10 @@ public class TestOutcome {
                 this.duration,
                 this.title,
                 this.description,
-                this.methodName,
+                this.name,
                 this.testCase,
                 this.testSteps,
-                this.issues,
+                this.coreIssues,
                 this.additionalIssues,
                 this.tags,
                 this.userStory,
@@ -284,11 +316,11 @@ public class TestOutcome {
                 this.manual);
     }
 
-    protected TestOutcome(final DateTime startTime,
+    protected TestOutcome(final Date startTime,
                           final long duration,
                           final String title,
                           final String description,
-                          final String methodName,
+                          final String name,
                           final Class<?> testCase,
                           final List<TestStep> testSteps,
                           final List<String> issues,
@@ -306,11 +338,11 @@ public class TestOutcome {
         this.duration = duration;
         this.title = title;
         this.description = description;
-        this.methodName = methodName;
+        this.name = name;
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
         addSteps(testSteps);
-        this.issues = removeDuplicates(issues);
+        this.coreIssues = removeDuplicates(issues);
         this.additionalVersions = removeDuplicates(additionalVersions);
         this.additionalIssues = additionalIssues;
         this.tags = tags;
@@ -354,10 +386,10 @@ public class TestOutcome {
                     this.duration,
                     this.title,
                     this.description,
-                    this.methodName,
+                    this.name,
                     this.testCase,
                     this.testSteps,
-                    this.issues,
+                    this.coreIssues,
                     this.additionalIssues,
                     this.tags,
                     this.userStory,
@@ -378,7 +410,7 @@ public class TestOutcome {
                 this.duration,
                 this.title,
                 this.description,
-                this.methodName,
+                this.name,
                 this.testCase,
                 this.testSteps,
                 ImmutableList.copyOf(issues),
@@ -399,10 +431,10 @@ public class TestOutcome {
                 this.duration,
                 this.title,
                 this.description,
-                this.methodName,
+                this.name,
                 this.testCase,
                 this.testSteps,
-                issues,
+                this.coreIssues,
                 this.additionalIssues,
                 ImmutableSet.copyOf(tags),
                 this.userStory,
@@ -424,7 +456,7 @@ public class TestOutcome {
                     methodName,
                     this.testCase,
                     this.getTestSteps(),
-                    this.issues,
+                    this.coreIssues,
                     this.additionalIssues,
                     this.tags,
                     this.userStory,
@@ -453,8 +485,8 @@ public class TestOutcome {
     /**
      * @return The name of the Java method implementing this test, if the test is implemented in Java.
      */
-    public String getMethodName() {
-        return methodName;
+    public String getName() {
+        return name;
     }
 
     public static TestOutcome forTestInStory(final String testName, final Story story) {
@@ -623,8 +655,8 @@ public class TestOutcome {
     }
 
     private String getBaseTitleFromAnnotationOrMethodName() {
-        Optional<String> annotatedTitle = TestAnnotations.forClass(testCase).getAnnotatedTitleForMethod(methodName);
-        return annotatedTitle.or(NameConverter.humanize(withNoArguments(methodName)));
+        Optional<String> annotatedTitle = TestAnnotations.forClass(testCase).getAnnotatedTitleForMethod(name);
+        return annotatedTitle.or(NameConverter.humanize(withNoArguments(name)));
     }
 
     private String qualified(String rootTitle) {
@@ -718,9 +750,9 @@ public class TestOutcome {
     private Converter<ScreenshotAndHtmlSource, Screenshot> toScreenshotsFor(final TestStep currentStep) {
         return new Converter<ScreenshotAndHtmlSource, Screenshot>() {
             public Screenshot convert(ScreenshotAndHtmlSource from) {
-                return new Screenshot(from.getScreenshotFile().getName(),
+                return new Screenshot(from.getScreenshot().getName(),
                         currentStep.getDescription(),
-                        widthOf(from.getScreenshotFile()),
+                        widthOf(from.getScreenshot()),
                         currentStep.getException());
             }
         };
@@ -1017,10 +1049,10 @@ public class TestOutcome {
     }
 
     private List<String> issues() {
-        if (!thereAre(issues)) {
-            issues = removeDuplicates(readIssues());
+        if (!thereAre(coreIssues)) {
+            coreIssues = removeDuplicates(readIssues());
         }
-        return issues;
+        return coreIssues;
     }
 
     public List<String> getIssues() {
@@ -1032,10 +1064,10 @@ public class TestOutcome {
     }
 
     private List<String> versions() {
-        if (!thereAre(versions)) {
-            versions = removeDuplicates(readVersions());
+        if (!thereAre(coreVersions)) {
+            coreVersions = removeDuplicates(readVersions());
         }
-        return versions;
+        return coreVersions;
     }
 
     private List<String> readVersions() {
@@ -1061,7 +1093,18 @@ public class TestOutcome {
     }
 
     public Class<?> getTestCase() {
+        if (testCase == null) {
+            testCase = findTestCaseFromName(testCaseName);
+        }
         return testCase;
+    }
+
+    private Class<?> findTestCaseFromName(String testCaseName) {
+        try {
+            return (testCaseName != null) ? Class.forName(testCaseName) : null;
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
     }
 
     public String getTestCaseName() {
@@ -1101,7 +1144,7 @@ public class TestOutcome {
     }
 
     public void setTestRunTimestamp(DateTime testRunTimestamp) {
-        this.testRunTimestamp = testRunTimestamp;
+        this.testRunTimestamp = testRunTimestamp.toDate();
     }
 
 
@@ -1178,7 +1221,7 @@ public class TestOutcome {
             try {
                 tags.addAll(tagProvider.getTagsFor(this));
             } catch(Throwable theTagProviderFailedButThereIsntMuchWeCanDoAboutIt) {
-                logger.error("Tag provider " + tagProvider + " failure",
+                LOGGER.error("Tag provider " + tagProvider + " failure",
                         theTagProviderFailedButThereIsntMuchWeCanDoAboutIt);
             }
         }
@@ -1226,9 +1269,9 @@ public class TestOutcome {
     public String getQualifiedMethodName() {
         if ((qualifier != null) && (qualifier.isPresent())) {
             String qualifierWithoutSpaces = qualifier.get().replaceAll(" ", "_");
-            return getMethodName() + "_" + qualifierWithoutSpaces;
+            return getName() + "_" + qualifierWithoutSpaces;
         } else {
-            return getMethodName();
+            return getName();
         }
     }
 
@@ -1237,9 +1280,9 @@ public class TestOutcome {
      */
     public String getCompleteName() {
         if (StringUtils.isNotEmpty(getStoryTitle())) {
-            return getStoryTitle() + ":" + getMethodName();
+            return getStoryTitle() + ":" + getName();
         } else {
-            return getTestCase() + ":" + getMethodName();
+            return getTestCase() + ":" + getName();
         }
     }
 
@@ -1354,7 +1397,7 @@ public class TestOutcome {
     }
 
     public void setStartTime(DateTime startTime) {
-        this.startTime = startTime;
+        this.startTime = startTime.toDate();
     }
 
     public void clearStartTime() {
@@ -1463,7 +1506,7 @@ public class TestOutcome {
     }
 
     public void recordDuration() {
-        setDuration(System.currentTimeMillis() - startTime.getMillis());
+        setDuration(System.currentTimeMillis() - startTime.getTime());
     }
 
     public void setDuration(final long duration) {
@@ -1629,18 +1672,18 @@ public class TestOutcome {
     }
 
     public DateTime getStartTime() {
-        return startTime;
+        return new DateTime(startTime);
     }
 
     public DateTime getTestRunTimestamp() {
-        return testRunTimestamp;
+        return new DateTime(testRunTimestamp);
     }
 
     public boolean isDataDriven() {
         return dataTable != null;
     }
 
-    final private List<String> NO_HEADERS = Lists.newArrayList();
+    final static private List<String> NO_HEADERS = Lists.newArrayList();
 
     public List<String> getExampleFields() {
         return (isDataDriven()) ? getDataTable().getHeaders() : NO_HEADERS;
@@ -1677,7 +1720,7 @@ public class TestOutcome {
         TestOutcome that = (TestOutcome) o;
 
         if (manual != that.manual) return false;
-        if (methodName != null ? !methodName.equals(that.methodName) : that.methodName != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (qualifier != null ? !qualifier.equals(that.qualifier) : that.qualifier != null) return false;
         if (testCase != null ? !testCase.equals(that.testCase) : that.testCase != null) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
@@ -1688,7 +1731,7 @@ public class TestOutcome {
 
     @Override
     public int hashCode() {
-        int result = methodName != null ? methodName.hashCode() : 0;
+        int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (testCase != null ? testCase.hashCode() : 0);
         result = 31 * result + (userStory != null ? userStory.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);

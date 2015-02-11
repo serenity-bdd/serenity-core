@@ -5,7 +5,7 @@ import static ch.qos.logback.classic.Level.WARN
 
 appender("STDOUT", ConsoleAppender) {
     encoder(PatternLayoutEncoder) {
-        pattern = "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} Groovy - %msg%n"
+        pattern = "%d{HH:mm:ss.SSS} [%thread] %-5level %LOGGER{5} Groovy - %msg%n"
     }
 }
 

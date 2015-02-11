@@ -1,6 +1,5 @@
-package net.thucydides.core.reports.json
+package net.thucydides.core.reports.json.gson
 
-import net.thucydides.core.reports.json.jackson.JacksonJSONConverter
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.skyscreamer.jsonassert.JSONCompare
@@ -18,9 +17,8 @@ class WhenStoringScreenshotsAsJSON extends Specification {
         def screenshot = new ScreenshotAndHtmlSource(screenshotFile, htmlSource)
 
         when:
-        StringWriter writer = new StringWriter();
-        def converter = new JacksonJSONConverter(environmentVars)
-        converter.mapper.writerWithDefaultPrettyPrinter().writeValue(writer, screenshot);
+        def converter = new GsonJSONConverter(environmentVars)
+        def serializedJson = converter.gson.toJson(screenshot)
 
         then:
         def expectedJson = """
@@ -29,9 +27,7 @@ class WhenStoringScreenshotsAsJSON extends Specification {
   "htmlSource" : "screenshot.html"
 }
 """
-        def serializedStory = writer.toString()
-        println serializedStory
-        JSONCompare.compareJSON(expectedJson, serializedStory, JSONCompareMode.LENIENT).passed();
+        JSONCompare.compareJSON(expectedJson, serializedJson, JSONCompareMode.LENIENT).passed();
     }
 
 
@@ -41,9 +37,8 @@ class WhenStoringScreenshotsAsJSON extends Specification {
         def screenshot = new ScreenshotAndHtmlSource(screenshotFile)
 
         when:
-        StringWriter writer = new StringWriter();
-        def converter = new JacksonJSONConverter(environmentVars)
-        converter.mapper.writerWithDefaultPrettyPrinter().writeValue(writer, screenshot);
+        def converter = new GsonJSONConverter(environmentVars)
+        def serializedJson = converter.gson.toJson(screenshot)
 
         then:
         def expectedJson = """
@@ -51,8 +46,7 @@ class WhenStoringScreenshotsAsJSON extends Specification {
   "screenshot" : "screenshot.png"
 }
 """
-        def serializedStory = writer.toString()
-        JSONCompare.compareJSON(expectedJson, serializedStory, JSONCompareMode.LENIENT).passed();
+        JSONCompare.compareJSON(expectedJson, serializedJson, JSONCompareMode.LENIENT).passed();
     }
 
     def "should read a screenshot from JSON"() {
@@ -66,11 +60,11 @@ class WhenStoringScreenshotsAsJSON extends Specification {
         def reader = new StringReader(serializedScreenshot)
 
         when:
-        def converter = new JacksonJSONConverter(environmentVars)
-        def screenshot = converter.mapper.readValue(reader,ScreenshotAndHtmlSource)
+        def converter = new GsonJSONConverter(environmentVars)
+        def screenshot = converter.gson.fromJson(serializedScreenshot, ScreenshotAndHtmlSource)
 
         then:
-        screenshot.screenshotFile.name == "screenshot.png"
+        screenshot.screenshot.name == "screenshot.png"
         screenshot.htmlSource.isPresent()
         screenshot.htmlSource.get().name == "screenshot.html"
     }
@@ -85,14 +79,12 @@ class WhenStoringScreenshotsAsJSON extends Specification {
   "screenshot" : "screenshot.png"
 }
 """
-        def reader = new StringReader(serializedScreenshot)
-
         when:
-        def converter = new JacksonJSONConverter(environmentVars)
-        def screenshot = converter.mapper.readValue(reader,ScreenshotAndHtmlSource)
+        def converter = new GsonJSONConverter(environmentVars)
+        def screenshot = converter.gson.fromJson(serializedScreenshot, ScreenshotAndHtmlSource)
 
         then:
-        screenshot.screenshotFile.absolutePath == screenshotFile.absolutePath
+        screenshot.screenshot.absolutePath == screenshotFile.absolutePath
         !screenshot.htmlSource.isPresent()
     }
 }

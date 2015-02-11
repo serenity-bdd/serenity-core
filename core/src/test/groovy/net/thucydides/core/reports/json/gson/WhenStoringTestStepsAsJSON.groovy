@@ -1,8 +1,7 @@
-package net.thucydides.core.reports.json
+package net.thucydides.core.reports.json.gson
 
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.model.TestStep
-import net.thucydides.core.reports.json.jackson.JacksonJSONConverter
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.joda.time.DateTime
 import org.joda.time.LocalDateTime
@@ -14,6 +13,7 @@ import spock.lang.Unroll
 
 class WhenStoringTestStepsAsJSON extends Specification {
 
+    @Shared
     def environmentVars = new MockEnvironmentVariables();
 
     private static final DateTime FIRST_OF_JANUARY = new LocalDateTime(2013, 1, 1, 0, 0, 0, 0).toDateTime()
@@ -32,14 +32,12 @@ class WhenStoringTestStepsAsJSON extends Specification {
 """
 
     @Shared
-    def converter = new JacksonJSONConverter(environmentVars)
+    def converter = new GsonJSONConverter(environmentVars)
 
     @Unroll
     def "should generate an JSON report for a test step"() {
         expect:
-        StringWriter writer = new StringWriter();
-        converter.mapper.writerWithDefaultPrettyPrinter().writeValue(writer, testStep);
-        def renderedJson = writer.toString()
+        def renderedJson = converter.gson.toJson(testStep)
         JSONCompare.compareJSON(expectedJson, renderedJson, JSONCompareMode.LENIENT).passed();
 
         where:
@@ -50,8 +48,7 @@ class WhenStoringTestStepsAsJSON extends Specification {
 
     def "should read a test step from a simple JSON string"() {
         expect:
-        def reader = new StringReader(json)
-        def step = converter.mapper.readValue(reader, net.thucydides.core.model.TestStep)
+        def step = converter.gson.fromJson(json,TestStep)
         step == expectedStep
 
         where:
@@ -66,12 +63,9 @@ class WhenStoringTestStepsAsJSON extends Specification {
             stepWithError.failedWith(new IllegalStateException("Oh crap!"))
 
         when:
-            StringWriter writer = new StringWriter();
-            converter.mapper.writerWithDefaultPrettyPrinter().writeValue(writer, stepWithError);
-            def renderedJson = writer.toString()
+            def renderedJson = converter.gson.toJson(stepWithError)
         and:
-            def reader = new StringReader(renderedJson)
-            def step = converter.mapper.readValue(reader, net.thucydides.core.model.TestStep)
+            def step = converter.gson.fromJson(renderedJson,TestStep)
         then:
             step.equals(stepWithError)
         and:
@@ -86,12 +80,9 @@ class WhenStoringTestStepsAsJSON extends Specification {
         failingStep.failedWith(new AssertionError("Oh crap!"))
 
         when:
-        StringWriter writer = new StringWriter();
-        converter.mapper.writerWithDefaultPrettyPrinter().writeValue(writer, failingStep);
-        def renderedJson = writer.toString()
+        def renderedJson = converter.gson.toJson(failingStep)
         and:
-        def reader = new StringReader(renderedJson)
-        def step = converter.mapper.readValue(reader, net.thucydides.core.model.TestStep)
+        def step = converter.gson.fromJson(renderedJson,TestStep)
         then:
         step.equals(failingStep)
         step.getResult() == TestResult.FAILURE
@@ -109,12 +100,9 @@ line 3
                 .startingAt(FIRST_OF_JANUARY);
 
         when:
-        StringWriter writer = new StringWriter();
-        converter.mapper.writerWithDefaultPrettyPrinter().writeValue(writer, aStep);
-        def renderedJson = writer.toString()
+        def renderedJson = converter.gson.toJson(aStep)
         and:
-        def reader = new StringReader(renderedJson)
-        def step = converter.mapper.readValue(reader, net.thucydides.core.model.TestStep)
+        def step = converter.gson.fromJson(renderedJson,TestStep)
         then:
         step.description == description
     }
@@ -126,12 +114,9 @@ line 3
                 .startingAt(FIRST_OF_JANUARY);
 
         when:
-        StringWriter writer = new StringWriter();
-        converter.mapper.writerWithDefaultPrettyPrinter().writeValue(writer, aStep);
-        def renderedJson = writer.toString()
+        def renderedJson = converter.gson.toJson(aStep)
         and:
-        def reader = new StringReader(renderedJson)
-        def step = converter.mapper.readValue(reader, net.thucydides.core.model.TestStep)
+        def step = converter.gson.fromJson(renderedJson,TestStep)
         then:
         step.description == description
     }
@@ -147,14 +132,11 @@ line 3
                 .startingAt(FIRST_OF_JANUARY))
 
         when:
-        StringWriter writer = new StringWriter();
-        converter.mapper.writerWithDefaultPrettyPrinter().writeValue(writer, parentStep);
-        def renderedJson = writer.toString()
+        def renderedJson = converter.gson.toJson(parentStep)
         and:
-        def reader = new StringReader(renderedJson)
-        def step = converter.mapper.readValue(reader, net.thucydides.core.model.TestStep)
+        def step = converter.gson.fromJson(renderedJson,TestStep)
         then:
         step.equals(parentStep)
-        parentStep.getChildren().size() == 2
+        step.getChildren().size() == 2
     }
 }

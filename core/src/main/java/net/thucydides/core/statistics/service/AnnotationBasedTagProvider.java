@@ -24,7 +24,7 @@ public class AnnotationBasedTagProvider implements TagProvider, CoreTagProvider 
         if (testOutcome.getTestCase() == null) {
             return Collections.emptySet();
         }
-        List<TestTag> tags = TestAnnotations.forClass(testOutcome.getTestCase()).getTagsForMethod(testOutcome.getMethodName());
+        List<TestTag> tags = TestAnnotations.forClass(testOutcome.getTestCase()).getTagsForMethod(testOutcome.getName());
 
         return Sets.newHashSet(tags);
     }

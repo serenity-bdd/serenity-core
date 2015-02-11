@@ -1,9 +1,8 @@
 package net.thucydides.core.webdriver.stubs;
 
 import com.beust.jcommander.internal.Lists;
-import com.fasterxml.jackson.databind.InjectableValues;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
+import com.google.gson.Gson;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WebElementState;
 import net.thucydides.core.pages.InternalSystemClock;
@@ -12,7 +11,9 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.support.ui.Wait;
 
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class WebElementFacadeStub implements WebElementFacade {
@@ -22,19 +23,16 @@ public class WebElementFacadeStub implements WebElementFacade {
         return this;
     }
 
-    ;
-
     protected JavascriptExecutorFacade getJavascriptExecutorFacade() {
         return new JavascriptExecutorFacade() {
 
             @Override
-            public JavascriptExecutorFacade withObjectMapper(ObjectMapper mapper) {
-                return this;
+            protected Gson getGson() {
+                return null;
             }
 
             @Override
-            public JavascriptExecutorFacade withInjectableValues(InjectableValues inject) {
-                return this;
+            public void registerTypeAdapter(Type type, Object typeAdapter) {
             }
 
             @Override
@@ -48,12 +46,17 @@ public class WebElementFacadeStub implements WebElementFacade {
             }
 
             @Override
-            public <T> T deserializeScriptResultAs(Class<T> classOfT, String script, Object... params) {
+            public <T> T deserializeScriptResultAs(Class<T> classOfT, String script, Map<String, Object> injectedFields, Object... params) throws IllegalAccessException {
                 return null;
             }
 
             @Override
-            public <T> List<T> deserializeScriptResultAsListOf(Class<T> classOfT, String script, Object... params) {
+            public <T> T deserializeScriptResultAs(Class<T> classOfT, String script, Object... params) throws IllegalAccessException {
+                return null;
+            }
+
+            @Override
+            public <T> List<T> deserializeScriptResultAsListOf(String script, Object... params) {
                 return null;
             }
         };

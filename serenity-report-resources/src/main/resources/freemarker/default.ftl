@@ -286,8 +286,8 @@
                                 <#if !step.isAGroup() && step.firstScreenshot??>
                                     <a href="${relativeLink!}${testOutcome.screenshotReportName}.html#screenshots?screenshot=${screenshotCount}">
                                         <!-- Added invalid href-attribute to img for imgpreviewer -->
-                                        <img src="${step.firstScreenshot.screenshotFile.name}"
-                                             href="${step.firstScreenshot.screenshotFile.name}"
+                                        <img src="${step.firstScreenshot.screenshot.name}"
+                                             href="${step.firstScreenshot.screenshot.name}"
                                              class="screenshot"
                                              width="48" height="48"/>
                                         <#assign screenshotCount = screenshotCount + step.screenshotCount />

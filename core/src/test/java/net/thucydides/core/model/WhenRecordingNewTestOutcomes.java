@@ -173,7 +173,7 @@ public class WhenRecordingNewTestOutcomes {
     public void a_test_outcome_should_record_the_tested_method_name() {
         TestOutcome outcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class);
 
-        assertThat(outcome.getMethodName(), is("should_do_this"));
+        assertThat(outcome.getName(), is("should_do_this"));
     }
 
     @Test

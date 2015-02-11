@@ -168,8 +168,8 @@ public class TestOutcomeConverter implements Converter {
     }
 
     private String nameFrom(final TestOutcome testOutcome) {
-        if (testOutcome.getMethodName() != null) {
-            return testOutcome.getMethodName();
+        if (testOutcome.getName() != null) {
+            return testOutcome.getName();
         } else {
             return testOutcome.getTitle();
         }
@@ -367,7 +367,7 @@ public class TestOutcomeConverter implements Converter {
             writer.startNode(SCREENSHOT_LIST_FIELD);
             for(ScreenshotAndHtmlSource screenshotAndHtmlSource : step.getScreenshots()) {
                 writer.startNode(SCREENSHOT_FIELD);
-                writer.addAttribute(SCREENSHOT_IMAGE, screenshotAndHtmlSource.getScreenshotFile().getName());
+                writer.addAttribute(SCREENSHOT_IMAGE, screenshotAndHtmlSource.getScreenshot().getName());
                 if (screenshotAndHtmlSource.getHtmlSource().isPresent()) {
                     writer.addAttribute(SCREENSHOT_SOURCE, screenshotAndHtmlSource.getHtmlSource().get().getName());
                 }

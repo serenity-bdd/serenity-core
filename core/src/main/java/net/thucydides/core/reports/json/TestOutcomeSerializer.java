@@ -214,7 +214,7 @@ public class TestOutcomeSerializer implements JsonSerializer<TestOutcome>,
 	}
 
     private String nameFrom(final TestOutcome testOutcome) {
-        return testOutcome.getMethodName();
+        return testOutcome.getName();
     }
 
     private String descriptionFrom(final TestOutcome testOutcome) {

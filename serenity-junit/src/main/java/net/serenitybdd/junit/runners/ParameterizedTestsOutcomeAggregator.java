@@ -104,7 +104,7 @@ public class ParameterizedTestsOutcomeAggregator {
     }
 
     private String normalizeMethodName(TestOutcome testOutcome) {
-        return testOutcome.getMethodName().replaceAll("\\[\\d+\\]", "");
+        return testOutcome.getName().replaceAll("\\[\\d+\\]", "");
     }
 
     public List<TestOutcome> getTestOutcomesForAllParameterSets() {

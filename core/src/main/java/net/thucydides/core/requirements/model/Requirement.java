@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -90,7 +89,6 @@ public class Requirement implements Comparable {
         return releaseVersions;
     }
 
-    @JsonIgnore
     public int getChildrenCount() {
         return children.size();
     }
@@ -111,7 +109,6 @@ public class Requirement implements Comparable {
         return !examples.isEmpty();
     }
 
-    @JsonIgnore
     public int getExampleCount() {
         return examples.size();
     }

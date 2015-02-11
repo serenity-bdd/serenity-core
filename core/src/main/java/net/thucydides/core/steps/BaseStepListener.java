@@ -588,7 +588,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private boolean screenshotWasTaken(ScreenshotAndHtmlSource screenshotAndHtmlSource) {
-        return screenshotAndHtmlSource.getScreenshotFile() != null;
+        return screenshotAndHtmlSource.getScreenshot() != null;
     }
 
 
@@ -688,8 +688,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private Comparator<? super TestOutcome> byStartTimeAndName() {
         return new Comparator<TestOutcome>() {
             public int compare(TestOutcome testOutcome1, TestOutcome testOutcome2) {
-                String creationTimeAndName1 = testOutcome1.getStartTime().getMillis() + "_" + testOutcome1.getMethodName();
-                String creationTimeAndName2 = testOutcome2.getStartTime().getMillis() + "_" + testOutcome2.getMethodName();
+                String creationTimeAndName1 = testOutcome1.getStartTime().getMillis() + "_" + testOutcome1.getName();
+                String creationTimeAndName2 = testOutcome2.getStartTime().getMillis() + "_" + testOutcome2.getName();
                 return creationTimeAndName1.compareTo(creationTimeAndName2);
             }
         };

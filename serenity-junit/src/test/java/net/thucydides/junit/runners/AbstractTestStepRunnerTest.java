@@ -53,7 +53,7 @@ public abstract class AbstractTestStepRunnerTest {
 
         private TestOutcome matchingTestOutcomeCalled(String methodName) {
             for (TestOutcome testOutcome : testOutcomes) {
-                if (testOutcome.getMethodName().equals(methodName)) {
+                if (testOutcome.getName().equals(methodName)) {
                     return testOutcome;
                 }
             }

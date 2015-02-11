@@ -1,6 +1,5 @@
 package net.serenitybdd.junit.runners;
 
-import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.util.MockEnvironmentVariables;
@@ -53,7 +52,7 @@ public abstract class AbstractTestStepRunnerTest {
 
         private TestOutcome matchingTestOutcomeCalled(String methodName) {
             for (TestOutcome testOutcome : testOutcomes) {
-                if (testOutcome.getMethodName().equals(methodName)) {
+                if (testOutcome.getName().equals(methodName)) {
                     return testOutcome;
                 }
             }

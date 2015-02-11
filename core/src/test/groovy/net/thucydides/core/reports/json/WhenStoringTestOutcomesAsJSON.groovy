@@ -9,7 +9,8 @@ import net.thucydides.core.reports.AcceptanceTestLoader
 import net.thucydides.core.reports.AcceptanceTestReporter
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.integration.TestStepFactory
-import net.thucydides.core.reports.json.jackson.JacksonJSONConverter
+import net.thucydides.core.reports.json.gson.GsonJSONConverter
+
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.joda.time.DateTime
@@ -147,16 +148,17 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").
                 startingAt(FIRST_OF_JANUARY))
         and:
-        def expectedReport = """\
-                {
+        def expectedReport = """
+{
   "name" : "should_do_this",
+  "testCase":"net.thucydides.core.reports.json.WhenStoringTestOutcomesAsJSON\$SomeTestScenario",
   "testCaseName" : "net.thucydides.core.reports.json.WhenStoringTestOutcomesAsJSON.SomeTestScenario",
   "testSteps" : [ {
     "number" : 1,
     "description" : "step 1",
     "duration" : 0,
     "result" : "SUCCESS",
-    "startTime" : ${FIRST_OF_JANUARY.millis}
+    "startTime" : 1356958800000
   } ],
   "userStory" : {
     "id" : "net.thucydides.core.reports.json.WhenStoringTestOutcomesAsJSON.AUserStory",
@@ -170,7 +172,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     "name" : "A user story",
     "type" : "story"
   } ],
-  "startTime" : ${FIRST_OF_JANUARY.millis},
+  "startTime" : "Jan 1, 2013 12:00:00 AM",
   "duration" : 0,
   "result" : "SUCCESS",
   "manual" : false,
@@ -211,7 +213,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         def environmentVariables = new MockEnvironmentVariables()
         environmentVariables.setProperty("json.pretty.printing","true")
         when:
-        reporter.jsonConverter = new JacksonJSONConverter(environmentVariables)
+        reporter.jsonConverter = new GsonJSONConverter(environmentVariables)
         def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
         then:
         jsonReport.text.contains("  ")
@@ -590,7 +592,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         then:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.testSteps[0].screenshotCount == 1
-        reloadedOutcome.testSteps[0].screenshots[0].screenshotFile.name.endsWith("step_1.png")
+        reloadedOutcome.testSteps[0].screenshots[0].screenshot.name.endsWith("step_1.png")
         reloadedOutcome.testSteps[0].screenshots[0].htmlSource.isPresent()
     }
 
@@ -611,7 +613,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         then:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.testSteps[0].screenshotCount == 1
-        reloadedOutcome.testSteps[0].screenshots[0].screenshotFile.name.endsWith("step_1.png")
+        reloadedOutcome.testSteps[0].screenshots[0].screenshot.name.endsWith("step_1.png")
         !reloadedOutcome.testSteps[0].screenshots[0].htmlSource.isPresent()
     }
 
@@ -729,7 +731,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         def savedOutcome = new File(outputDirectory,"saved.json")
         savedOutcome << jsonString
         TestOutcome reloadedOutcome = loader.loadReportFrom(savedOutcome).get()
-        reloadedOutcome.methodName == testOutcome.methodName
+        reloadedOutcome.name == testOutcome.name
     }
 
     def "should throw a violation exception if the json file is badly formed"() {
@@ -746,7 +748,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     def "should read a test outcome with tags"() {
         given:
         def serializedTestOutcome =
-                """{"name":"Another Addition","testSteps":[{"number":1,"description":"Given a calculator I just turned on","duration":4,"startTime":1413519392021,"result":"SUCCESS"},{"number":2,"description":"When I add 4 and 7","duration":3,"startTime":1413519392025,"result":"SUCCESS"},{"number":3,"description":"Then the result is 11","duration":2,"startTime":1413519392028,"result":"SUCCESS"}],"userStory":{"id":"basic-arithmetic","storyName":"Basic Arithmetic","path":"src/test/resources/samples/calculator/basic_arithmetic.feature","narrative":"Calculing additions","type":"feature"},"title":"Another Addition","tags":[{"name":"ISSUE-123","type":"issue"},{"name":"foo","type":"tag"},{"name":"Calculator/Basic arithmetic","type":"story"},{"name":"Basic Arithmetic","type":"feature"}],"startTime":1413519392020,"duration":10,"manual":false,"result":"SUCCESS"}"""
+                """{"name":"Another Addition","testSteps":[{"number":1,"description":"Given a calculator I just turned on","duration":4,"startTime":1413519392021,"result":"SUCCESS"},{"number":2,"description":"When I add 4 and 7","duration":3,"startTime":1413519392025,"result":"SUCCESS"},{"number":3,"description":"Then the result is 11","duration":2,"startTime":1413519392028,"result":"SUCCESS"}],"userStory":{"id":"basic-arithmetic","storyName":"Basic Arithmetic","path":"src/test/resources/samples/calculator/basic_arithmetic.feature","narrative":"Calculing additions","type":"feature"},"title":"Another Addition","tags":[{"name":"ISSUE-123","type":"issue"},{"name":"foo","type":"tag"},{"name":"Calculator/Basic arithmetic","type":"story"},{"name":"Basic Arithmetic","type":"feature"}],"startTime":"Jan 1, 2013 12:00:00 AM","duration":10,"manual":false,"result":"SUCCESS"}"""
 
         def jsonReport = new File(outputDirectory,"result.json")
         jsonReport.withWriter{ it << serializedTestOutcome }

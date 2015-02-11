@@ -16,7 +16,7 @@ class TestOutcomeChecks {
         }
 
         public TestOutcome getAt(String methodName) {
-            def matchingOutcome = testOutcomes.find { it.methodName.equals(methodName) }
+            def matchingOutcome = testOutcomes.find { it.name.equals(methodName) }
             if (!matchingOutcome) {
                 throw new AssertionError("No matching test method called $methodName")
             }

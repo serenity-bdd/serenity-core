@@ -2,7 +2,7 @@ package net.thucydides.core.webdriver
 
 import net.thucydides.core.annotations.Managed
 import net.thucydides.core.annotations.ManagedPages
-import net.serenitybdd.core.pages.Pages
+import net.thucydides.core.pages.Pages
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import spock.lang.Specification

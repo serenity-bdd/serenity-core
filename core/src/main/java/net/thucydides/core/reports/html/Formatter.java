@@ -180,7 +180,8 @@ public class Formatter {
     }
 
     private String convertNonStandardNLChars(String text) {
-        text = StringUtils.replace(text, "\r␤", NEW_LINE);
+        StringUtils.replace(text, "\r␤", NEW_LINE)
+                   .replace("␤", NEW_LINE);
         return StringUtils.replace(text, "␤", NEW_LINE);
     }
 
@@ -209,7 +210,7 @@ public class Formatter {
         try {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (!inTable && line.contains("|")){ // start of a table
+                if (!inTable && containsTableStart(line)){ // start of a table
                     inTable = true;
                 } else if (inTable && !line.contains("|") && !(isBlank(line))){ // end of a table
                     embeddedTables.add(tableText.toString().trim());
@@ -229,6 +230,10 @@ public class Formatter {
         }
         return embeddedTables;
 
+    }
+
+    private boolean containsTableStart(String line) {
+        return line.contains("|");
     }
 
     private String getFirstEmbeddedTable(String text) {

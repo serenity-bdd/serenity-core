@@ -3,7 +3,7 @@ package net.thucydides.core.steps;
 import com.google.inject.Key;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.logging.ThucydidesLogging;
-import net.serenitybdd.core.pages.Pages;
+import net.thucydides.core.pages.Pages;
 import net.thucydides.core.statistics.Statistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

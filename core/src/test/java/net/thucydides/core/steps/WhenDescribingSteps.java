@@ -1,7 +1,7 @@
 package net.thucydides.core.steps;
 
 import net.thucydides.core.annotations.UserStoryCode;
-import net.serenitybdd.core.pages.Pages;
+import net.thucydides.core.pages.Pages;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

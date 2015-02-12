@@ -1,7 +1,7 @@
 package net.thucydides.samples;
 
 import net.thucydides.core.annotations.*;
-import net.serenitybdd.core.pages.Pages;
+import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
 import org.junit.Ignore;
 import org.openqa.selenium.NoSuchElementException;

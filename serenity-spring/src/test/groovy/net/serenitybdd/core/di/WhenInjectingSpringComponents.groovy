@@ -1,7 +1,7 @@
 package net.serenitybdd.core.di
 
 import net.serenitybdd.core.di.samples.FlatScenarioStepsWithSpringDependencies
-import net.serenitybdd.core.pages.Pages
+import net.thucydides.core.pages.Pages
 import net.thucydides.core.steps.di.ClasspathDependencyInjectorService
 import spock.lang.Specification
 

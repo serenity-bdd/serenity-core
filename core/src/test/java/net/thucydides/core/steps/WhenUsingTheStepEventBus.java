@@ -3,7 +3,7 @@ package net.thucydides.core.steps;
 import net.serenitybdd.core.Serenity;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.model.TestOutcome;
-import net.serenitybdd.core.pages.Pages;
+import net.thucydides.core.pages.Pages;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
 import net.thucydides.core.util.MockEnvironmentVariables;

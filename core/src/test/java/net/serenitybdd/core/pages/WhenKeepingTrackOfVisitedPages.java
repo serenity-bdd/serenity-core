@@ -1,9 +1,7 @@
 package net.serenitybdd.core.pages;
 
 
-import net.serenitybdd.core.pages.AnyPage;
-import net.serenitybdd.core.pages.PageObject;
-import net.serenitybdd.core.pages.Pages;
+import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.ApacheHomePage;
 import net.thucydides.core.pages.WrongPageError;
 import net.thucydides.core.util.MockEnvironmentVariables;
@@ -45,7 +43,7 @@ public class WhenKeepingTrackOfVisitedPages {
         configuration = new SystemPropertiesConfiguration(environmentVariables);
     }
 
-    static class SimplePage extends PageObject {
+    public static class SimplePage extends PageObject {
 
         public SimplePage(final WebDriver driver) {
             super(driver);
@@ -184,14 +182,14 @@ public class WhenKeepingTrackOfVisitedPages {
         pages.currentPageAt(PageObjectWithNoDriverConstructor.class);
     }
 
-    static final class GooglePage extends PageObject {
+    public static final class GooglePage extends PageObject {
 
         public GooglePage(final WebDriver driver) {
             super(driver);
         }
     }
 
-    static final class SomeOtherPage extends PageObject {
+    public static final class SomeOtherPage extends PageObject {
 
         public SomeOtherPage(final WebDriver driver) {
             super(driver);

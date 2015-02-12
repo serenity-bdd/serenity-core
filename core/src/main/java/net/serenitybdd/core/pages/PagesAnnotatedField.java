@@ -3,6 +3,7 @@ package net.serenitybdd.core.pages;
 import com.google.common.base.Optional;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.annotations.ManagedPages;
+import net.thucydides.core.pages.Pages;
 import net.thucydides.core.reflection.FieldSetter;
 import net.thucydides.core.steps.InvalidManagedPagesFieldException;
 
@@ -71,6 +72,10 @@ public class PagesAnnotatedField {
     protected PagesAnnotatedField(final Field field, final ManagedPages annotation) {
         this.field = field;
         this.annotation = annotation;
+    }
+
+    public Class<?> getFieldType() {
+        return this.field.getType();
     }
 
     public void setValue(final Object testCase, final Pages pages) {

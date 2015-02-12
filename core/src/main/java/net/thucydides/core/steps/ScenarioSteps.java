@@ -1,7 +1,7 @@
 package net.thucydides.core.steps;
 
 import net.thucydides.core.guice.Injectors;
-import net.serenitybdd.core.pages.Pages;
+import net.thucydides.core.pages.Pages;
 import net.serenitybdd.core.pages.SystemClock;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;

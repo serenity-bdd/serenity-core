@@ -1,7 +1,7 @@
 package net.thucydides.junit.sampletests.thucydidestests
 
 import net.thucydides.core.annotations.Step
-import net.serenitybdd.core.pages.Pages
+import net.thucydides.core.pages.Pages
 import net.thucydides.core.steps.ScenarioSteps
 
 

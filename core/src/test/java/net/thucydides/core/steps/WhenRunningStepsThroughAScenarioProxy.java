@@ -2,7 +2,7 @@ package net.thucydides.core.steps;
 
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.model.TestOutcome;
-import net.serenitybdd.core.pages.Pages;
+import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.samples.SomeTestScenario;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
 import org.junit.*;

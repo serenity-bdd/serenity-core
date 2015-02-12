@@ -1,7 +1,7 @@
 package net.thucydides.core.steps;
 
 import net.serenitybdd.core.pages.PageObject;
-import net.serenitybdd.core.pages.Pages;
+import net.thucydides.core.pages.Pages;
 import net.serenitybdd.core.pages.SystemClock;
 import org.junit.Before;
 import org.junit.Test;

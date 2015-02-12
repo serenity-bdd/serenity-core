@@ -8,7 +8,7 @@ import net.serenitybdd.core.di.DependencyInjector;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.thucydides.core.guice.Injectors;
-import net.serenitybdd.core.pages.Pages;
+import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.di.DependencyInjectorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -28,7 +28,7 @@ public class DefaultPageObjectInitialiser implements Predicate<PageObject> {
         }
     }
 
-    public boolean apply(PageObject page) {
+    public boolean apply(net.serenitybdd.core.pages.PageObject page) {
         page.setWaitForTimeout(ajaxTimeoutInMilliseconds);
         elementProxyCreator.proxyElements(page, driver, ajaxTimeoutInSecondsWithAtLeast1Second());
         return true;

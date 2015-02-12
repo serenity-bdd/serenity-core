@@ -2,7 +2,7 @@ package net.thucydides.core.webdriver;
 
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.core.guice.Injectors;
-import net.serenitybdd.core.pages.Pages;
+import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.StepAnnotations;
 import net.thucydides.core.steps.StepFactory;
 import org.apache.commons.lang3.StringUtils;

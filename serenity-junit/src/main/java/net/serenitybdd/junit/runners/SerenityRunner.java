@@ -11,7 +11,7 @@ import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.batches.BatchManagerProvider;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
-import net.serenitybdd.core.pages.Pages;
+import net.thucydides.core.pages.Pages;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.statistics.TestCount;

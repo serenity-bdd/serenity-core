@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver.integration;
 
 import net.serenitybdd.core.pages.PageObject;
-import net.serenitybdd.core.pages.Pages;
+import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.components.FileToUpload;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

@@ -95,7 +95,7 @@ public abstract class PageObject {
         setupPageUrls();
     }
 
-    protected PageObject(final WebDriver driver, Predicate<PageObject> callback) {
+    protected PageObject(final WebDriver driver, Predicate<? super PageObject> callback) {
         this();
         this.driver = driver;
         callback.apply(this);

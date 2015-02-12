@@ -1,7 +1,6 @@
 package net.serenitybdd.core.pages;
 
-import net.serenitybdd.core.pages.Pages;
-import net.serenitybdd.core.pages.PagesAnnotatedField;
+import net.thucydides.core.pages.Pages;
 import org.junit.Test;
 import org.springframework.util.ReflectionUtils;
 

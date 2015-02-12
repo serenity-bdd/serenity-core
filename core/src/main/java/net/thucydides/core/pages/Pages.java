@@ -1,9 +1,9 @@
-package net.serenitybdd.core.pages;
+package net.thucydides.core.pages;
 
 import com.google.common.base.Optional;
+import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.pages.WrongPageError;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebdriverProxyFactory;
@@ -57,8 +57,8 @@ public class Pages implements Serializable {
         this.driver = driver;
     }
 
-    public Pages(final WebDriver driver, Configuration Configuration) {
-        this(Configuration);
+    public Pages(final WebDriver driver, Configuration configuration) {
+        this(configuration);
         this.driver = driver;
     }
 

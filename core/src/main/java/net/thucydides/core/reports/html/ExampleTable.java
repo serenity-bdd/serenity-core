@@ -10,21 +10,20 @@ import java.util.regex.Pattern;
 import static org.apache.commons.collections.IteratorUtils.toList;
 
 public class ExampleTable {
-    private static final String SQUARE_BRACKETS_OR_WHITE_SPACE = "[]［］ \t";
     List<String> headers;
     List<List<String>> rows = Lists.newArrayList();
-
     final static Pattern NEW_LINE = Pattern.compile("(\\r\\n)|(\\n)|(\\r)|(␤)|(\\r␤)");
+    private static final String SQUARE_BRACKETS_OR_WHITE_SPACE = "[]［］ \t";
 
     public ExampleTable(String tableContents) {
-            List<String> lines = toList(Splitter.on(NEW_LINE)
-                    .omitEmptyStrings()
-                    .trimResults(CharMatcher.anyOf(SQUARE_BRACKETS_OR_WHITE_SPACE))
-                    .split(tableContents).iterator());
-            addHeaderFrom(lines.get(0));
-            for(int row = 1; row < lines.size(); row++) {
-                addRowFrom(lines.get(row));
-            }
+        List<String> lines = toList(Splitter.on(NEW_LINE)
+                .omitEmptyStrings()
+                .trimResults(CharMatcher.anyOf(SQUARE_BRACKETS_OR_WHITE_SPACE))
+                .split(tableContents).iterator());
+        addHeaderFrom(lines.get(0));
+        for(int row = 1; row < lines.size(); row++) {
+            addRowFrom(lines.get(row));
+        }
     }
 
     private void addRowFrom(String row) {

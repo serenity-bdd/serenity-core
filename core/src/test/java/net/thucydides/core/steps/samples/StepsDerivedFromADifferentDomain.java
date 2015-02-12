@@ -1,7 +1,7 @@
 package net.thucydides.core.steps.samples;
 
 import net.thucydides.core.annotations.Step;
-import net.serenitybdd.core.pages.Pages;
+import net.thucydides.core.pages.Pages;
 import some.other.place.BaseScenarioInSomeOtherPackage;
 
 public class StepsDerivedFromADifferentDomain extends BaseScenarioInSomeOtherPackage {

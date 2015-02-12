@@ -10,7 +10,7 @@ import net.thucydides.core.batches.BatchManagerProvider;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestStep;
-import net.serenitybdd.core.pages.Pages;
+import net.thucydides.core.pages.Pages;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;

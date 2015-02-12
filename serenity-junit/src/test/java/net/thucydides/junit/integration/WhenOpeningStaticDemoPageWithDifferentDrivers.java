@@ -1,7 +1,7 @@
 package net.thucydides.junit.integration;
 
 import net.thucydides.core.annotations.*;
-import net.serenitybdd.core.pages.Pages;
+import net.thucydides.core.pages.Pages;
 import net.thucydides.junit.runners.ThucydidesRunner;
 import net.thucydides.samples.DemoSiteSteps;
 import org.junit.Test;

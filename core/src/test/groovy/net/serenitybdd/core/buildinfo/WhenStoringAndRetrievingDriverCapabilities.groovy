@@ -26,7 +26,7 @@ class WhenStoringAndRetrievingDriverCapabilities extends Specification {
             driverCapabilityRecord.registerCapabilities("htmlUnit", DesiredCapabilities.htmlUnit());
             driverCapabilityRecord.registerCapabilities("firefox", DesiredCapabilities.firefox());
         then:
-            outputDirectory.list() == ["browser-firefox.properties","browser-htmlunit.properties"]
+            outputDirectory.list().sort() == ["browser-firefox.properties","browser-htmlunit.properties"]
     }
 
     def "should read driver capabilities from stored properties files"() {
@@ -39,7 +39,7 @@ class WhenStoringAndRetrievingDriverCapabilities extends Specification {
             def drivers = driverCapabilityRecord.drivers
             def capabilities = driverCapabilityRecord.driverCapabilities
         then:
-            drivers == ["firefox","htmlunit"]
+            drivers.sort() == ["firefox","htmlunit"]
         and:
             capabilities["firefox"].getProperty("browserName") == "firefox"
             capabilities["htmlunit"].getProperty("browserName") == "htmlunit"

@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class RenderedPageObjectView {
 
     private final transient WebDriver driver;
-    private transient long waitForTimeoutInMilliseconds;
+    private transient Duration waitForTimeout;
     private final Clock webdriverClock;
     private final Sleeper sleeper;
 
@@ -26,23 +26,27 @@ public class RenderedPageObjectView {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(RenderedPageObjectView.class);
 
-    public RenderedPageObjectView(final WebDriver driver, final long waitForTimeout) {
+    public RenderedPageObjectView(final WebDriver driver, long waitForTimeoutInMilliseconds) {
+        this(driver, new Duration(waitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS));
+    }
+
+    public RenderedPageObjectView(final WebDriver driver, Duration waitForTimeout) {
         this.driver = driver;
-        this.waitForTimeoutInMilliseconds = waitForTimeout;
+        setWaitForTimeout(waitForTimeout);
         this.webdriverClock = new SystemClock();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
     }
 
     public ThucydidesFluentWait<WebDriver> waitForCondition() {
         return new NormalFluentWait<WebDriver>(driver, webdriverClock, sleeper)
-                .withTimeout(waitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS)
+                .withTimeout(waitForTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS)
                 .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
                 .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
     }
 
     public FluentWait<WebDriver> doWait() {
         return new FluentWait(driver)
-                    .withTimeout(waitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS)
+                .withTimeout(waitForTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS)
                     .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
                     .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
     }
@@ -77,9 +81,8 @@ public class RenderedPageObjectView {
      * This method will wait until an element is present on the screen, though not necessarily visible.
      */
     public void waitForPresenceOf(final By byElementCriteria) {
-        WebDriverWait wait = new WebDriverWait(driver, (long)(waitForTimeoutInMilliseconds/1000));
+        WebDriverWait wait = new WebDriverWait(driver, waitForTimeout.in(TimeUnit.SECONDS));
         wait.until(ExpectedConditions.presenceOfElementLocated(byElementCriteria));
-//        waitForCondition().until(elementPresent(byElementCriteria));
     }
 
     public boolean elementIsPresent(final By byElementCriteria) {
@@ -291,10 +294,14 @@ public class RenderedPageObjectView {
     }
 
     public void setWaitForTimeoutInMilliseconds(long waitForTimeoutInMilliseconds) {
-        this.waitForTimeoutInMilliseconds = waitForTimeoutInMilliseconds;
+        setWaitForTimeout(new Duration(waitForTimeoutInMilliseconds,TimeUnit.MILLISECONDS));
     }
 
-    public long getWaitForTimeoutInMilliseconds() {
-        return waitForTimeoutInMilliseconds;
+    public void setWaitForTimeout(Duration waitForTimeout) {
+        this.waitForTimeout = waitForTimeout;
+    }
+
+    public Duration getWaitForTimeout() {
+        return waitForTimeout;
     }
 }

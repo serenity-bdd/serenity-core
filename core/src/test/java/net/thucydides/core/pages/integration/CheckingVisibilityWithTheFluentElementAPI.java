@@ -106,7 +106,7 @@ public class CheckingVisibilityWithTheFluentElementAPI extends FluentElementAPIT
 
     @Test
     public void should_be_able_to_set_the_timeout_for_waits() {
-        assertThat(page.withTimeoutOf(10, TimeUnit.SECONDS).getWaitForTimeoutInMilliseconds(), is(10000L));
+        assertThat(page.withTimeoutOf(10, TimeUnit.SECONDS).getWaitForTimeout().in(TimeUnit.SECONDS), is(10L));
     }
 
     @Test

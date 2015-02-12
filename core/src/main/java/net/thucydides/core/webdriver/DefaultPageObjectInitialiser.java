@@ -4,6 +4,10 @@ import com.google.common.base.Predicate;
 import net.thucydides.core.annotations.locators.SmartElementProxyCreator;
 import net.serenitybdd.core.pages.PageObject;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.Duration;
+
+import java.util.concurrent.TimeUnit;
+
 
 /**
  * Initializes WebElement and WebElementFacade fields in a page object.
@@ -11,25 +15,21 @@ import org.openqa.selenium.WebDriver;
 public class DefaultPageObjectInitialiser implements Predicate<PageObject> {
 
     private final WebDriver driver;
-    private final int ajaxTimeoutInMilliseconds;
+    private final Duration ajaxTimeout;
     private final ElementProxyCreator elementProxyCreator;
 
-    public DefaultPageObjectInitialiser(WebDriver driver, int ajaxTimeoutInMilliseconds) {
+    public DefaultPageObjectInitialiser(WebDriver driver, long ajaxTimeoutInMilliseconds) {
         this.driver = driver;
-        this.ajaxTimeoutInMilliseconds = ajaxTimeoutInMilliseconds;
+        ajaxTimeout = new Duration(ajaxTimeoutInMilliseconds, TimeUnit.MILLISECONDS);
         this.elementProxyCreator = new SmartElementProxyCreator();
     }
 
     protected int ajaxTimeoutInSecondsWithAtLeast1Second() {
-        if (ajaxTimeoutInMilliseconds > 1000) {
-            return ajaxTimeoutInMilliseconds / 1000;
-        } else {
-            return 1;
-        }
+        return (int) ((ajaxTimeout.in(TimeUnit.SECONDS) > 0) ? ajaxTimeout.in(TimeUnit.SECONDS) : 1);
     }
 
     public boolean apply(net.serenitybdd.core.pages.PageObject page) {
-        page.setWaitForTimeout(ajaxTimeoutInMilliseconds);
+        page.setWaitForTimeout(ajaxTimeout.in(TimeUnit.MILLISECONDS));
         elementProxyCreator.proxyElements(page, driver, ajaxTimeoutInSecondsWithAtLeast1Second());
         return true;
     }

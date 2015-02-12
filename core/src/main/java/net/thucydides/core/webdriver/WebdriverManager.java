@@ -17,6 +17,8 @@ public interface WebdriverManager {
 
     WebDriver getWebdriver(final String driver);
 
+    String getCurrentDriverName();
+
     SessionId getSessionId();
 
     void closeDriver();

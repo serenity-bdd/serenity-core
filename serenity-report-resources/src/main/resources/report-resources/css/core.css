@@ -1416,3 +1416,11 @@ ul.second-level-requirements  {
     color: #0d78ae;
     border: none;
 }
+
+.build-info table {
+    table-layout: fixed;
+}
+
+.build-info table td,th {
+    overflow: hidden;
+}

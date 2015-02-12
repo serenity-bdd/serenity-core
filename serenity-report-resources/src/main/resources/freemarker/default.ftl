@@ -72,6 +72,9 @@
                                 <span class="related-issue-title">${testOutcome.formattedIssues}</span>
                             </span>
                         </span>
+                        <#if (testOutcome.driver)??>
+                            <span style="float:right"><img src="images/driver-${testOutcome.driver}.png" height="20" alt="${testOutcome.driver}" title="${testOutcome.driver}" /></span>
+                        </#if>
                     </td>
                 </tr>
 

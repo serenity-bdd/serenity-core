@@ -3,6 +3,8 @@ package net.thucydides.core.guice;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
+import net.serenitybdd.core.buildinfo.PropertyBasedDriverCapabilityRecord;
 import net.thucydides.core.annotations.locators.SmartElementProxyCreator;
 import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.batches.BatchManagerProvider;
@@ -66,6 +68,7 @@ public class ThucydidesModule extends AbstractModule {
         bind(TestCount.class).to(AtomicTestCount.class).in(Singleton.class);
 
         bind(MarkupRenderer.class).annotatedWith(Asciidoc.class).to(AsciidocMarkupRenderer.class).in(Singleton.class);
+        bind(DriverCapabilityRecord.class).to(PropertyBasedDriverCapabilityRecord.class);
     }
 
     @Provides

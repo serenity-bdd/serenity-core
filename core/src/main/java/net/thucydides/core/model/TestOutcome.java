@@ -144,6 +144,11 @@ public class TestOutcome {
     private String sessionId;
 
     /**
+     * The driver used to run this test if it is a web test.
+     */
+    private String driver;
+
+    /**
      * Keeps track of step groups.
      * If not empty, the top of the stack contains the step corresponding to the current step group - new steps should
      * be added here.
@@ -313,6 +318,7 @@ public class TestOutcome {
                 this.annotatedResult,
                 this.dataTable,
                 this.qualifier,
+                this.driver,
                 this.manual);
     }
 
@@ -333,6 +339,7 @@ public class TestOutcome {
                           final TestResult annotatedResult,
                           final DataTable dataTable,
                           final Optional<String> qualifier,
+                          final String driver,
                           final boolean manualTest) {
         this.startTime = startTime;
         this.duration = duration;
@@ -355,6 +362,7 @@ public class TestOutcome {
         this.dataTable = dataTable;
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
+        this.driver = driver;
         this.manual = manualTest;
     }
 
@@ -399,6 +407,7 @@ public class TestOutcome {
                     this.annotatedResult,
                     this.dataTable,
                     Optional.fromNullable(qualifier),
+                    this.driver,
                     this.manual);
         } else {
             return this;
@@ -423,6 +432,7 @@ public class TestOutcome {
                 this.annotatedResult,
                 this.dataTable,
                 this.qualifier,
+                this.driver,
                 this.manual);
     }
 
@@ -444,6 +454,7 @@ public class TestOutcome {
                 this.annotatedResult,
                 this.dataTable,
                 this.qualifier,
+                this.driver,
                 this.manual);
     }
 
@@ -466,6 +477,7 @@ public class TestOutcome {
                     this.annotatedResult,
                     this.dataTable,
                     this.qualifier,
+                    this.driver,
                     this.manual);
         } else {
             return this;
@@ -543,6 +555,14 @@ public class TestOutcome {
 
     public void clearForcedResult() {
         annotatedResult = null;
+    }
+
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
+
+    public String getDriver() {
+        return driver;
     }
 
     public class TitleBuilder {

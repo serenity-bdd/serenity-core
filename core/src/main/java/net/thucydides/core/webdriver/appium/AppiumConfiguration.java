@@ -53,11 +53,16 @@ public class AppiumConfiguration {
 
     public DesiredCapabilities getCapabilities() {
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        Properties appiumProperties = appiumPropertiesFrom(environmentVariables);
+        Properties appiumProperties = getProperties();
         for (Object key : appiumProperties.keySet()) {
             capabilities.setCapability(key.toString(), appiumProperties.getProperty(key.toString()));
+            capabilities.asMap();
         }
         return capabilities;
+    }
+
+    public Properties getProperties() {
+        return appiumPropertiesFrom(environmentVariables);
     }
 
     private Properties appiumPropertiesFrom(EnvironmentVariables environmentVariables) {

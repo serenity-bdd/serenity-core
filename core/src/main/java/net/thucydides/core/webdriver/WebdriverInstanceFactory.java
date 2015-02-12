@@ -2,6 +2,8 @@ package net.thucydides.core.webdriver;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
+import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
+import net.thucydides.core.guice.Injectors;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -19,7 +21,10 @@ import java.net.URL;
  */
 public class WebdriverInstanceFactory {
 
+    private DriverCapabilityRecord driverProperties;
+
     public WebdriverInstanceFactory() {
+        this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     public WebDriver newInstanceOf(final Class<? extends WebDriver> webdriverClass) throws IllegalAccessException, InstantiationException {
@@ -27,40 +32,59 @@ public class WebdriverInstanceFactory {
     }
 
     public WebDriver newRemoteDriver(URL remoteUrl, Capabilities capabilities) {
-        return new RemoteWebDriver(remoteUrl, capabilities);
+        RemoteWebDriver driver = new RemoteWebDriver(remoteUrl, capabilities);
+        driverProperties.registerCapabilities("remote", driver.getCapabilities());
+        return driver;
     }
 
     public WebDriver newFirefoxDriver(Capabilities capabilities) {
-        return new FirefoxDriver(capabilities);
+        FirefoxDriver driver = new FirefoxDriver(capabilities);
+        driverProperties.registerCapabilities("firefox", driver.getCapabilities());
+        return driver;
     }
 
     public WebDriver newChromeDriver(Capabilities capabilities) {
-        return new ChromeDriver(capabilities);
+        ChromeDriver driver = new ChromeDriver(capabilities);
+        driverProperties.registerCapabilities("chrome", driver.getCapabilities());
+        return driver;
     }
 
     public WebDriver newAppiumDriver(URL hub, Capabilities capabilities, MobilePlatform platform) {
         switch (platform) {
             case ANDROID:
-                return new AndroidDriver(hub, capabilities);
+                AndroidDriver androidDriver = new AndroidDriver(hub, capabilities);
+                driverProperties.registerCapabilities("appium", androidDriver.getCapabilities());
+                return androidDriver;
             case IOS:
-                return new IOSDriver(hub, capabilities);
+                IOSDriver iosDriver = new IOSDriver(hub, capabilities);
+                driverProperties.registerCapabilities("appium", iosDriver.getCapabilities());
+                return iosDriver;
         }
         throw new UnsupportedDriverException(platform.name());
     }
 
     public WebDriver newSafariDriver(Capabilities capabilities) {
-        return new SafariDriver(capabilities);
+        SafariDriver driver = new SafariDriver(capabilities);
+        driverProperties.registerCapabilities("chrome", driver.getCapabilities());
+        return driver;
     }
 
     public WebDriver newInternetExplorerDriver(Capabilities capabilities) {
-        return new InternetExplorerDriver(capabilities);
+        InternetExplorerDriver driver = new InternetExplorerDriver(capabilities);
+        driverProperties.registerCapabilities("iexplorer", driver.getCapabilities());
+        return driver;
     }
 
     public WebDriver newHtmlUnitDriver(Capabilities capabilities) {
-        return new HtmlUnitDriver(capabilities);
+        HtmlUnitDriver driver = new HtmlUnitDriver(capabilities);
+        driverProperties.registerCapabilities("htmlunit", driver.getCapabilities());
+        return driver;
     }
 
-    public WebDriver newPhantomDriver(Capabilities caps) {
-        return new PhantomJSDriver(caps);
+    public WebDriver newPhantomDriver(Capabilities capabilities) {
+        PhantomJSDriver driver = new PhantomJSDriver(capabilities);
+        driverProperties.registerCapabilities("phantomjs", driver.getCapabilities());
+        return driver;
     }
+
 }

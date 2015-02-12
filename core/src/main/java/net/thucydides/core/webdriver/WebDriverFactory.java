@@ -260,7 +260,7 @@ public class WebDriverFactory {
         return webdriverInstanceFactory.newInstanceOf(driverClass);
     }
 
-    private WebDriver  newRemoteDriver() throws MalformedURLException {
+    private WebDriver newRemoteDriver() throws MalformedURLException {
 
         WebDriver driver = null;
         if (saucelabsUrlIsDefined()) {

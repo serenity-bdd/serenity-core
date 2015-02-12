@@ -15,7 +15,7 @@ public class WebdriverInstances {
     private String currentDriver;
 
     public WebdriverInstances() {
-        this.driverMap = new HashMap<String, WebDriver>();
+        this.driverMap = new HashMap<>();
     }
 
     public WebDriver getCurrentDriver() {

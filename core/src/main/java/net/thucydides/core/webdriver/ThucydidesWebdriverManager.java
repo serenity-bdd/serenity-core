@@ -95,7 +95,12 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
     }
 
     public WebDriver getWebdriver() {
-        return getThreadLocalWebDriver(configuration, webDriverFactory, inThisTestThread().getCurrentDriverName());
+        WebDriver driver = getThreadLocalWebDriver(configuration, webDriverFactory, inThisTestThread().getCurrentDriverName());
+        return driver;
+    }
+
+    public String getCurrentDriverName() {
+        return inThisTestThread().getCurrentDriverName();
     }
 
     public SessionId getSessionId() {

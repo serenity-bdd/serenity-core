@@ -14,10 +14,7 @@ import net.thucydides.core.model.stacktrace.FailureCause;
 import net.serenitybdd.core.pages.Pages;
 import net.serenitybdd.core.pages.SystemClock;
 import net.thucydides.core.screenshots.*;
-import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.WebDriverFacade;
-import net.thucydides.core.webdriver.WebdriverManager;
-import net.thucydides.core.webdriver.WebdriverProxyFactory;
+import net.thucydides.core.webdriver.*;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
@@ -269,6 +266,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
      */
     public void testStarted(final String testMethod) {
         TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory);
+        if (driver != null) {
+            newTestOutcome.setDriver(webdriverManager.getCurrentDriverName());
+        }
         testOutcomes.add(newTestOutcome);
         updateSessionIdIfKnown();
         setAnnotatedResult(testMethod);

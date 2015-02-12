@@ -1,7 +1,9 @@
 package net.thucydides.core.reports.html;
 
 import com.beust.jcommander.internal.Lists;
+import com.beust.jcommander.internal.Maps;
 import net.serenitybdd.core.SerenitySystemProperties;
+import net.serenitybdd.core.buildinfo.BuildInfoProvider;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
@@ -21,6 +23,7 @@ import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.requirements.reports.RequirmentsOutcomeFactory;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
+import net.thucydides.core.util.LocalPreferences;
 import net.thucydides.core.util.VersionProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -44,6 +47,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     private static final String HISTORY_TEMPLATE_PATH = "freemarker/history.ftl";
     private static final String TEST_OUTCOME_TEMPLATE_PATH = "freemarker/home.ftl";
+    private static final String BUILD_INFO_TEMPLATE_PATH = "freemarker/build-info.ftl";
     private static final String RELEASES_TEMPLATE_PATH = "freemarker/releases.ftl";
     private static final String RELEASE_TEMPLATE_PATH = "freemarker/release.ftl";
     private static final String TAGTYPE_TEMPLATE_PATH = "freemarker/results-by-tagtype.ftl";
@@ -114,6 +118,12 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         context.put("relativeLink", relativeLink);
         context.put("reportOptions", new ReportOptions(getEnvironmentVariables()));
     }
+
+    private void addBuildInformationToContext(final Map<String, Object> context) {
+        BuildInfoProvider buildInfoProvider = new BuildInfoProvider(getEnvironmentVariables());
+        context.put("build", buildInfoProvider.getBuildProperties());
+    }
+
 
     public TestOutcomes generateReportsForTestResultsFrom(final File sourceDirectory) throws IOException {
         TestOutcomes allTestOutcomes = loadTestOutcomesFrom(sourceDirectory);
@@ -247,6 +257,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         context.put("csvReport", "results.csv");
 
         generateReportPage(context, TEST_OUTCOME_TEMPLATE_PATH, "index.html");
+        generateReportPage(context, BUILD_INFO_TEMPLATE_PATH, "build-info.html");
         generateCSVReportFor(testOutcomes, "results.csv");
         logReportPathMessage();
     }
@@ -471,6 +482,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         context.put("serenityVersionNumber", versionProvider.getVersion());
         context.put("buildNumber", versionProvider.getBuildNumberText());
 
+        addBuildInformationToContext(context);
         return context;
     }
 

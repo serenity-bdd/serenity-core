@@ -7,13 +7,17 @@ import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.ThucydidesReporter;
 import net.thucydides.core.reports.templates.ReportTemplate;
 import net.thucydides.core.reports.templates.TemplateManager;
+import net.thucydides.core.reports.util.CopyDirectory;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.EnumSet;
 import java.util.Map;
 
 /**
@@ -76,22 +80,32 @@ public abstract class HtmlReporter extends ThucydidesReporter {
     }
 
     protected void copyTestResultsToOutputDirectory() throws IOException {
-        File testResultsSource = getSourceDirectoryOrDefault();
-        if ((!getOutputDirectory().getAbsolutePath().equals(testResultsSource.getAbsolutePath())) && testResultsSource.exists()) {
-            FileUtils.copyDirectory(testResultsSource, getOutputDirectory(), withXMLorHTMLorCSVFiles());
+        Path sourcePath = getSourceDirectoryOrDefault().toPath();
+        Path destinationPath = getOutputDirectory().toPath();
+        if (Files.exists(sourcePath) && !Files.isSameFile(sourcePath, destinationPath)) {
+            copyDirectoryContents(sourcePath, destinationPath);
         }
     }
 
-    private FileFilter withXMLorHTMLorCSVFiles() {
-        return new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                return file.getName().endsWith(".xml")
-                        || file.getName().endsWith(".html")
-                        || file.getName().endsWith(".csv");
-            }
-        };
+    private void copyDirectoryContents(Path sourcePath, Path destinationPath) throws IOException {
+        Files.walkFileTree(sourcePath, EnumSet.of(FileVisitOption.FOLLOW_LINKS),
+                Integer.MAX_VALUE, new CopyDirectory(sourcePath, destinationPath));
+//        FileUtils.copyDirectory(sourcePath.toFile(), destinationPath.toFile(), withXMLorHTMLorCSVFiles());
+
     }
+
+//    private FileFilter withXMLorHTMLorCSVFiles() {
+//        return new FileFilter() {
+//            @Override
+//            public boolean accept(File file) {
+//                return file.getName().endsWith(".xml")
+//                        || file.getName().endsWith(".html")
+//                        || file.getName().endsWith(".properties")
+//                        || file.getName().endsWith(".json")
+//                        || file.getName().endsWith(".csv");
+//            }
+//        };
+//    }
 
     private File getSourceDirectoryOrDefault() {
         String source = (getSourceDirectory() != null) ? getSourceDirectory().getAbsolutePath() : DEFAULT_SOURCE_DIR;

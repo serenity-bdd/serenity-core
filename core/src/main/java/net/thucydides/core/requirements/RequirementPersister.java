@@ -1,14 +1,11 @@
 package net.thucydides.core.requirements;
 
-import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import net.thucydides.core.reports.json.gson.ClassTypeAdapter;
 import net.thucydides.core.reports.json.gson.CollectionAdapter;
 import net.thucydides.core.reports.json.gson.OptionalTypeAdapter;
 import net.thucydides.core.requirements.model.Requirement;
-import org.apache.commons.lang3.reflect.TypeUtils;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -24,7 +21,7 @@ public class RequirementPersister {
     public RequirementPersister(File outputDirectory, String rootDirectory) {
         this.outputDirectory = outputDirectory;
         this.rootDirectory = rootDirectory;
-        this.gson = Converters.registerAll(new GsonBuilder())
+        this.gson = new GsonBuilder()
                 .registerTypeAdapterFactory(OptionalTypeAdapter.FACTORY)
                 .registerTypeHierarchyAdapter(Collection.class, new CollectionAdapter()).create();
 

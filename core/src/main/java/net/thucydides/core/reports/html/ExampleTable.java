@@ -3,6 +3,7 @@ package net.thucydides.core.reports.html;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -10,12 +11,22 @@ import java.util.regex.Pattern;
 import static org.apache.commons.collections.IteratorUtils.toList;
 
 public class ExampleTable {
+
+    private final static String NEWLINE_CHAR = "\u2424";
+    private final static String NEWLINE = "\u0085";
+    private final static String LINE_SEPARATOR = "\u2028";
+    private final static String PARAGRAPH_SEPARATOR = "\u2089";
+    private final static String LEFT_BRACKET = "\u0FF3B";
+    private final static String RIGHT_BRACKET = "\u0FF3D";
+
     List<String> headers;
     List<List<String>> rows = Lists.newArrayList();
-    final static Pattern NEW_LINE = Pattern.compile("(\\r\\n)|(\\n)|(\\r)|(␤)|(\\r␤)");
-    private static final String SQUARE_BRACKETS_OR_WHITE_SPACE = "[]［］ \t";
+    final static Pattern NEW_LINE
+            = Pattern.compile("(\\r\\n)|(\\n)|(\\r)|(" + NEWLINE_CHAR + ")|(" + LINE_SEPARATOR + ")|(" + PARAGRAPH_SEPARATOR + ")|(\\r" + NEWLINE_CHAR + ")");
+    private static final String SQUARE_BRACKETS_OR_WHITE_SPACE = "[]" + LEFT_BRACKET + RIGHT_BRACKET + "\t";
 
     public ExampleTable(String tableContents) {
+        tableContents = stripBracketsFromOuterPipes(tableContents);
         List<String> lines = toList(Splitter.on(NEW_LINE)
                 .omitEmptyStrings()
                 .trimResults(CharMatcher.anyOf(SQUARE_BRACKETS_OR_WHITE_SPACE))
@@ -26,6 +37,13 @@ public class ExampleTable {
         }
     }
 
+    public static String stripBracketsFromOuterPipes(String text) {
+        text = StringUtils.replace(text, "[|", "|");
+        text = StringUtils.replace(text,"|]","|");
+        text = StringUtils.replace(text,LEFT_BRACKET + "|","|");
+        text = StringUtils.replace(text,"|" + RIGHT_BRACKET,"|");
+        return text;
+    }
     private void addRowFrom(String row) {
         rows.add(cellsFrom(row));
     }

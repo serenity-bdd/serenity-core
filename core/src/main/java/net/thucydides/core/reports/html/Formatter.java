@@ -44,6 +44,13 @@ public class Formatter {
     private static final String ASCIIDOC = "asciidoc";
     private static final String NEW_LINE = System.getProperty("line.separator");
 
+    private final static String NEWLINE_CHAR = "\u2424";
+    private final static String NEWLINE = "\u0085";
+    private final static String LINE_SEPARATOR = "\u2028";
+    private final static String PARAGRAPH_SEPARATOR = "\u2089";
+    private final static String LEFT_BRACKET = "\u0FF3B";
+    private final static String RIGHT_BRACKET = "\u0FF3D";
+
     private final IssueTracking issueTracking;
     private final EnvironmentVariables environmentVariables;
     private final MarkupRenderer asciidocRenderer;
@@ -159,8 +166,9 @@ public class Formatter {
     }
 
     public String convertAnyTables(String text) {
-        text = convertNonStandardNLChars(text);
         if (shouldFormatEmbeddedTables() && containsEmbeddedTable(text)) {
+            text = convertNonStandardNLChars(text);
+            text = ExampleTable.stripBracketsFromOuterPipes(text);
             text = withTablesReplaced(text);
 
         }
@@ -180,9 +188,11 @@ public class Formatter {
     }
 
     private String convertNonStandardNLChars(String text) {
-        StringUtils.replace(text, "\r␤", NEW_LINE)
-                   .replace("␤", NEW_LINE);
-        return StringUtils.replace(text, "␤", NEW_LINE);
+        text = StringUtils.replace(text, NEWLINE_CHAR, NEW_LINE);
+        text = StringUtils.replace(text, NEWLINE, NEW_LINE);
+        text = StringUtils.replace(text, LINE_SEPARATOR, NEW_LINE);
+        text = StringUtils.replace(text, PARAGRAPH_SEPARATOR, NEW_LINE);
+        return text;
     }
 
     private boolean shouldFormatEmbeddedTables() {
@@ -210,7 +220,7 @@ public class Formatter {
         try {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (!inTable && containsTableStart(line)){ // start of a table
+                if (!inTable && line.contains("|")){ // start of a table
                     inTable = true;
                 } else if (inTable && !line.contains("|") && !(isBlank(line))){ // end of a table
                     embeddedTables.add(tableText.toString().trim());

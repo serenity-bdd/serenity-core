@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.json.gson;
 
-import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
@@ -27,7 +26,7 @@ public class GsonJSONConverter implements JSONConverter {
     @Inject
     public GsonJSONConverter(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
-        GsonBuilder gsonBuilder = Converters.registerAll(new GsonBuilder())
+        GsonBuilder gsonBuilder = new GsonBuilder()
                                             .registerTypeAdapterFactory(OptionalTypeAdapter.FACTORY)
                                             .registerTypeHierarchyAdapter(Collection.class, new CollectionAdapter())
                                             .registerTypeAdapter(File.class, new FileSerializer())

@@ -28,7 +28,6 @@ public class WhenStoringStateBetweenStep {
             Serenity.getCurrentSession().put("name", value);
         }
 
-
         @Step
         public String retrieveName() {
             Serenity.getCurrentSession().shouldContainKey("name");
@@ -86,4 +85,17 @@ public class WhenStoringStateBetweenStep {
 
         assertThat(steps.checkName(), is(false));
     }
+
+    @Test
+    public void should_clear_session_variable_if_null_is_provided() {
+        SampleSteps steps = new SampleSteps(pages);
+
+        steps.storeName("joe");
+        assertThat(steps.retrieveName(), is("joe"));
+
+        steps.storeName(null);
+
+        assertThat(steps.checkName(), is(false));
+    }
+
 }

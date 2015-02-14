@@ -18,6 +18,18 @@ public class TestSessionVariables<K,V> extends ConcurrentHashMap implements Sess
         }
     }
 
+
+    @Override
+    public Object put(Object key, Object value) {
+        if (value == null) {
+            return remove(key);
+        } else {
+            return super.put(key, value);
+        }
+    }
+
+
+
     @Override
     public Map<String, String> getMetaData() {
         return ImmutableMap.copyOf(metadata);

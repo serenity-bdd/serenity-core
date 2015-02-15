@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static net.thucydides.core.matchers.BeanMatcherAsserts.*;
 import static net.thucydides.core.matchers.BeanMatchers.*;
-import static org.assertj.core.api.Assertions.assertThat;;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 

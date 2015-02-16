@@ -5,8 +5,10 @@ import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AndroidFindBys;
 import io.appium.java_client.pagefactory.iOSFindBy;
 import io.appium.java_client.pagefactory.iOSFindBys;
+import java.util.List;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.pages.WebElementFacadeImpl;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.Locatable;
@@ -36,7 +38,9 @@ public class SmartFieldDecorator implements FieldDecorator {
     }
 
     public Object decorate(ClassLoader loader, Field field) {
-        if (!(WebElement.class.isAssignableFrom(field.getType()) || isDecoratableList(field))) {
+        if (!(WebElement.class.isAssignableFrom(field.getType()) || isDecoratableList(field))
+        		// skip members of the base class
+        		|| field.getDeclaringClass() == WebElementFacadeImpl.class) {
             return null;
         }
         ElementLocator locator = factory.createLocator(field);
@@ -111,13 +115,15 @@ public class SmartFieldDecorator implements FieldDecorator {
         return proxy;
     }
 
-    /* generates a proxy for a list of elements to be wrapped. */
-    @SuppressWarnings("unchecked")
-    protected <T> List<T> proxyForListLocator(ClassLoader loader, Class<T> interfaceType, ElementLocator locator) {
-        InvocationHandler handler = new LocatingElementListHandler(locator);
-        List<T> proxy;
-        proxy = (List<T>) Proxy.newProxyInstance(
-                loader, new Class[]{List.class}, handler);
-        return proxy;
-    }
+	@SuppressWarnings("unchecked")
+	protected <T> List<T> proxyForListLocator(ClassLoader loader, Class<T> interfaceType, ElementLocator locator) {
+		InvocationHandler handler = null;
+		if (net.serenitybdd.core.pages.WebElementFacade.class.isAssignableFrom(interfaceType)) {
+			handler = new SmartListHandler(loader, interfaceType, locator, driver, pageObject.waitForTimeoutInMilliseconds());
+		}
+		else {
+			handler = new LocatingElementListHandler(locator);
+		}
+		return (List<T>) Proxy.newProxyInstance(loader, new Class[]{List.class}, handler);
+	}
 }

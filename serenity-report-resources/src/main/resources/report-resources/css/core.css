@@ -1360,7 +1360,7 @@ ul.second-level-requirements  {
 
 .projectname {
     font-family:euphemia, verdana, sans-serif;
-    font-weight:bold; font-size:2em; color:white; position:relative; top:30px; right:20px;
+    font-weight:bold; font-size:2em; color:#428bca; position:relative; top:30px; right:20px;
 }
 
 .togglePieChart {

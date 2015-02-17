@@ -1,46 +1,48 @@
 package net.thucydides.core.annotations.locators;
 
-import com.google.common.collect.Lists;
+import java.lang.reflect.Field;
+import java.util.List;
+
 import net.serenitybdd.core.annotations.locators.SmartAnnotations;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.MobilePlatform;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Clock;
 import org.openqa.selenium.support.ui.SlowLoadableComponent;
 import org.openqa.selenium.support.ui.SystemClock;
 
-import java.lang.reflect.Field;
-import java.util.List;
+import com.google.common.collect.Lists;
 
 public class SmartAjaxElementLocator extends SmartElementLocator {
 	protected final int timeOutInSeconds;
 	private final Clock clock;
 
 	private final Field field;
-	private final WebDriver driver;
+	private final SearchContext searchContext;
     private final MobilePlatform platform;
 
 	/**
 	 * Main constructor.
 	 *
-	 * @param driver The WebDriver to use when locating elements
+	 * @param searchContext The SearchContext to use when locating elements
 	 * @param field The field representing this element
 	 * @param timeOutInSeconds How long to wait for the element to appear. Measured in seconds.
 	 */
-    public SmartAjaxElementLocator(WebDriver driver, Field field, MobilePlatform platform, int timeOutInSeconds) {
-        this(new SystemClock(), driver, field, platform, timeOutInSeconds);
+    public SmartAjaxElementLocator(SearchContext searchContext, Field field, MobilePlatform platform, int timeOutInSeconds) {
+        this(new SystemClock(), searchContext, field, platform, timeOutInSeconds);
 
 	}
 
-    public SmartAjaxElementLocator(Clock clock, WebDriver driver, Field field, MobilePlatform platform, int timeOutInSeconds) {
-        super(driver, field, platform);
+    public SmartAjaxElementLocator(Clock clock, SearchContext searchContext, Field field, MobilePlatform platform, int timeOutInSeconds) {
+        super(searchContext, field, platform);
 		this.timeOutInSeconds = timeOutInSeconds;
 		this.clock = clock;
 		this.field = field;
-		this.driver = driver;
+		this.searchContext = searchContext;
         this.platform = platform;
 	}
 
@@ -70,7 +72,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator {
 	public WebElement findElementImmediately() {
         SmartAnnotations annotations = new SmartAnnotations(field, platform);
 		By by = annotations.buildBy();
-		WebElement element = driver.findElement(by);
+		WebElement element = searchContext.findElement(by);
 		if (element == null) {
 			throw new NoSuchElementException("No such element found for criteria " + by.toString());
 		} 

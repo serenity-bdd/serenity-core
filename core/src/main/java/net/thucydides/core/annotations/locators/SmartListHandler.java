@@ -7,9 +7,10 @@ import java.lang.reflect.Proxy;
 import java.util.AbstractList;
 import java.util.List;
 
+import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.core.pages.WidgetObject;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
@@ -23,14 +24,14 @@ public class SmartListHandler implements InvocationHandler {
 	private final ClassLoader loader;
 	private final Class<?> interfaceType;
 	private final ElementLocator locator;
-	private final WebDriver driver;
+	private final PageObject page;
 	private final long timeoutInMilliseconds;
 
-	public SmartListHandler(ClassLoader loader, Class<?> interfaceType, ElementLocator locator, WebDriver driver, long timeoutInMilliseconds) {
+	public SmartListHandler(ClassLoader loader, Class<?> interfaceType, ElementLocator locator, PageObject page, long timeoutInMilliseconds) {
 		this.loader = loader;
 		this.interfaceType = interfaceType;
 		this.locator = locator;
-		this.driver = driver;
+		this.page = page;
 		this.timeoutInMilliseconds = timeoutInMilliseconds;
 	}
 
@@ -75,14 +76,17 @@ public class SmartListHandler implements InvocationHandler {
 		@SuppressWarnings("unchecked")
 		private T newProxyElementOfList(WebElement element) {
 			InvocationHandler handler = null;
-			if (WebElementFacade.class.isAssignableFrom(interfaceType)) {
-				handler = new WebElementFacadeListItemHandler(interfaceType, locator, element, driver, timeoutInMilliseconds);
+			if (WidgetObject.class.isAssignableFrom(interfaceType)) {
+				handler = new WidgetListItemHandler(interfaceType, locator, element, page, timeoutInMilliseconds);
+			}
+			else if (WebElementFacade.class.isAssignableFrom(interfaceType)) {
+				handler = new WebElementFacadeListItemHandler(interfaceType, locator, element, page, timeoutInMilliseconds);
 			}
 			if (handler != null) {
 				return (T) Proxy.newProxyInstance(loader, new Class[] {interfaceType}, handler);
 			}
-			if (WebElement.class.isAssignableFrom(interfaceType)) {
-				// no need to proxy
+			else if (WebElement.class.isAssignableFrom(interfaceType)) {
+				// element is already located
 				return (T) element;
 			}
 			throw new RuntimeException("Unrecognized element type: " + interfaceType.getCanonicalName());

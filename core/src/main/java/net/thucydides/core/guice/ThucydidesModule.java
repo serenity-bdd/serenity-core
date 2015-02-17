@@ -1,11 +1,11 @@
 package net.thucydides.core.guice;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.buildinfo.PropertyBasedDriverCapabilityRecord;
+import net.serenitybdd.core.pages.InternalSystemClock;
+import net.serenitybdd.core.pages.SystemClock;
 import net.thucydides.core.annotations.locators.SmartElementProxyCreator;
+import net.thucydides.core.annotations.locators.SmartWidgetProxyCreator;
 import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.batches.BatchManagerProvider;
 import net.thucydides.core.fixtureservices.ClasspathFixtureProviderService;
@@ -13,8 +13,6 @@ import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.issues.SystemPropertiesIssueTracking;
 import net.thucydides.core.logging.ThucydidesLogging;
-import net.serenitybdd.core.pages.InternalSystemClock;
-import net.serenitybdd.core.pages.SystemClock;
 import net.thucydides.core.reports.json.JSONConverter;
 import net.thucydides.core.reports.json.gson.GsonJSONConverter;
 import net.thucydides.core.reports.renderer.Asciidoc;
@@ -40,7 +38,16 @@ import net.thucydides.core.steps.di.ClasspathDependencyInjectorService;
 import net.thucydides.core.steps.di.DependencyInjectorService;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.SystemEnvironmentVariables;
-import net.thucydides.core.webdriver.*;
+import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.core.webdriver.ElementProxyCreator;
+import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
+import net.thucydides.core.webdriver.ThucydidesWebdriverManager;
+import net.thucydides.core.webdriver.WebdriverManager;
+import net.thucydides.core.webdriver.WidgetProxyCreator;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
 
 public class ThucydidesModule extends AbstractModule {
 
@@ -52,7 +59,7 @@ public class ThucydidesModule extends AbstractModule {
         bind(IssueTracking.class).to(SystemPropertiesIssueTracking.class).in(Singleton.class);
         bind(WebdriverManager.class).to(ThucydidesWebdriverManager.class).in(Singleton.class);
         bind(BatchManager.class).toProvider(BatchManagerProvider.class).in(Singleton.class);
-        bind(LinkGenerator.class).to(SaucelabsLinkGenerator.class).in(Singleton.class);;
+        bind(LinkGenerator.class).to(SaucelabsLinkGenerator.class).in(Singleton.class);
         bind(ScreenshotProcessor.class).to(SingleThreadScreenshotProcessor.class).in(Singleton.class);
         bind(JSONConverter.class).to(GsonJSONConverter.class).in(Singleton.class);
 
@@ -64,6 +71,7 @@ public class ThucydidesModule extends AbstractModule {
 
         bind(StepListener.class).annotatedWith(ThucydidesLogging.class).to(ConsoleLoggingListener.class).in(Singleton.class);
         bind(ElementProxyCreator.class).to(SmartElementProxyCreator.class).in(Singleton.class);
+        bind(WidgetProxyCreator.class).to(SmartWidgetProxyCreator.class).in(Singleton.class);
 
         bind(TestCount.class).to(AtomicTestCount.class).in(Singleton.class);
 

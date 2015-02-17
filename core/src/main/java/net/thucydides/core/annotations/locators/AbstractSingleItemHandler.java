@@ -12,36 +12,25 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 /**
- * Similar to {@link SmartElementHandler} but wraps a concrete WebElement
- * instead of an ElementLocator.
- * 
+ * Base class for handlers of non-List members.
  * @author Joe Nasca
  * @param <T>	the target interface
  */
-public abstract class AbstractListItemHandler<T> implements InvocationHandler {
-	
-	protected final ElementLocator locator;
-    protected final WebElement element;
+public abstract class AbstractSingleItemHandler<T> implements InvocationHandler {
+
+    protected final ElementLocator locator;
     protected final PageObject page;
     protected final Class<?> implementerClass;
     protected final long timeoutInMilliseconds;
 
-    /**
-     * Constructor.
-     * @param targetInterface	usually WidgetObject or WebElementFacade
-     * @param interfaceType
-     * @param locator			the locator of the List containing this element
-     * @param element
-     * @param driver
-     * @param timeoutInMilliseconds
-     */
-    public AbstractListItemHandler(Class<T> targetInterface, Class<?> interfaceType, ElementLocator locator, WebElement element, PageObject page, long timeoutInMilliseconds) {
-    	this.locator = locator;
+    public AbstractSingleItemHandler(Class<T> targetInterface, Class<?> interfaceType, ElementLocator locator,
+			PageObject page, long timeoutInMilliseconds) {
     	this.page = page;
-        this.element = element;
+        this.locator = locator;
         if (!targetInterface.isAssignableFrom(interfaceType)) {
             throw new NotImplementedException("interface not assignable to " + targetInterface.getSimpleName());
         }
+
         this.implementerClass = new WebElementFacadeImplLocator().getImplementer(interfaceType);
         this.timeoutInMilliseconds = timeoutInMilliseconds;
     }
@@ -50,11 +39,11 @@ public abstract class AbstractListItemHandler<T> implements InvocationHandler {
 	public Object invoke(Object object, Method method, Object[] objects) throws Throwable {
     	try {
 	        if ("getWrappedElement".equals(method.getName())) {
-	            return element;
+	            return locator.findElement();
 	        } else if ("toString".equals(method.getName())) {
 				return toStringForElement();
 			}
-			Object webElementFacadeExt = newElementInstance();
+			Object webElementFacadeExt = newElementInstance(timeoutInMilliseconds);
 
 	        return method.invoke(implementerClass.cast(webElementFacadeExt), objects);
         } catch (InvocationTargetException e) {
@@ -63,9 +52,15 @@ public abstract class AbstractListItemHandler<T> implements InvocationHandler {
         }
     }
 
-	protected abstract Object newElementInstance() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException;
+	protected abstract Object newElementInstance(long timeoutInMilliseconds) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException;
 
 	private String toStringForElement() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-		return new WebElementDescriber().webElementDescription(element, locator);
+		Object webElementFacadeExt = newElementInstance(100);
+		if (webElementFacadeExt == null) {
+			return "<" + locator.toString() + ">";
+		} else {
+			return new WebElementDescriber().webElementDescription((WebElement) webElementFacadeExt,locator);
+		}
 	}
+
 }

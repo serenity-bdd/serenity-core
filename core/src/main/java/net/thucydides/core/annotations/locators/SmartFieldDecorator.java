@@ -1,14 +1,24 @@
 package net.thucydides.core.annotations.locators;
 
-import com.google.common.collect.ImmutableList;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AndroidFindBys;
 import io.appium.java_client.pagefactory.iOSFindBy;
 import io.appium.java_client.pagefactory.iOSFindBys;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
 import java.util.List;
+
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WebElementFacadeImpl;
+import net.serenitybdd.core.pages.WidgetObject;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.Locatable;
@@ -20,21 +30,19 @@ import org.openqa.selenium.support.pagefactory.FieldDecorator;
 import org.openqa.selenium.support.pagefactory.internal.LocatingElementHandler;
 import org.openqa.selenium.support.pagefactory.internal.LocatingElementListHandler;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.*;
-import java.util.List;
+import com.google.common.collect.ImmutableList;
 
 public class SmartFieldDecorator implements FieldDecorator {
 
     protected ElementLocatorFactory factory;
     protected WebDriver driver;
-    protected PageObject pageObject;
+    protected PageObject page;
 
     public SmartFieldDecorator(ElementLocatorFactory factory, WebDriver driver,
                                PageObject pageObject) {
         this.driver = driver;
         this.factory = factory;
-        this.pageObject = pageObject;
+        this.page = pageObject;
     }
 
     public Object decorate(ClassLoader loader, Field field) {
@@ -103,8 +111,12 @@ public class SmartFieldDecorator implements FieldDecorator {
     protected <T> T proxyForLocator(ClassLoader loader, Class<T> interfaceType, ElementLocator locator) {
         InvocationHandler handler;
         T proxy = null;
-        if (net.serenitybdd.core.pages.WebElementFacade.class.isAssignableFrom(interfaceType)) {
-            handler = new SmartElementHandler(interfaceType, locator, driver, pageObject.waitForTimeoutInMilliseconds());
+        if (WidgetObject.class.isAssignableFrom(interfaceType)) {
+        	handler = new SmartWidgetHandler(interfaceType, locator, page, page.waitForTimeoutInMilliseconds());
+            proxy = (T) Proxy.newProxyInstance(loader, new Class[]{interfaceType}, handler);
+        }
+        else if (WebElementFacade.class.isAssignableFrom(interfaceType)) {
+            handler = new SmartElementHandler(interfaceType, locator, page, page.waitForTimeoutInMilliseconds());
             proxy = (T) Proxy.newProxyInstance(loader, new Class[]{interfaceType}, handler);
         } else {
             handler = new LocatingElementHandler(locator);
@@ -119,7 +131,7 @@ public class SmartFieldDecorator implements FieldDecorator {
 	protected <T> List<T> proxyForListLocator(ClassLoader loader, Class<T> interfaceType, ElementLocator locator) {
 		InvocationHandler handler = null;
 		if (net.serenitybdd.core.pages.WebElementFacade.class.isAssignableFrom(interfaceType)) {
-			handler = new SmartListHandler(loader, interfaceType, locator, driver, pageObject.waitForTimeoutInMilliseconds());
+			handler = new SmartListHandler(loader, interfaceType, locator, page, page.waitForTimeoutInMilliseconds());
 		}
 		else {
 			handler = new LocatingElementListHandler(locator);

@@ -3,6 +3,7 @@ package net.thucydides.core.annotations.locators;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WebElementFacadeImpl;
 
@@ -21,12 +22,13 @@ public class WebElementFacadeListItemHandler extends AbstractListItemHandler<Web
 			+ "Expected one of the following:  %s(WebDriver, WebElement, long) or %s(WebDriver, ElementLocator, WebElement, long)";
 
 	public WebElementFacadeListItemHandler(Class<?> interfaceType, ElementLocator locator,
-			WebElement element, WebDriver driver, long timeoutInMilliseconds) {
-		super(WebElementFacade.class, interfaceType, locator, element, driver, timeoutInMilliseconds);
+			WebElement element, PageObject page, long timeoutInMilliseconds) {
+		super(WebElementFacade.class, interfaceType, locator, element, page, timeoutInMilliseconds);
 	}
 
 	@Override
 	protected Object newElementInstance() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+		WebDriver driver = page.getDriver();
 		if (implementerClass == WebElementFacadeImpl.class) {
 			// the target constructor is protected; use the static wrapper method
 			return WebElementFacadeImpl.wrapWebElement(driver, element, timeoutInMilliseconds);

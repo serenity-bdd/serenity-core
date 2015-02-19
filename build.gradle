@@ -32,7 +32,8 @@ allprojects {
             // it's working for gradle build, but also had to exclude old transitives for geio.appiumnerated POM
             force  'com.thoughtworks.xstream:xstream:1.4.5',
                    'commons-collections:commons-collections:3.2.1',
-                   'commons-logging:commons-logging:1.2'
+                   'commons-logging:commons-logging:1.2',
+                    'xml-apis:xml-apis:1.4.01'
         }
     }
 }

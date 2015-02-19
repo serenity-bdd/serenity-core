@@ -322,6 +322,11 @@ public enum ThucydidesSystemProperty {
     WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT,
 
     /**
+     * How long webdriver waits by default when you use a fluent waiting mwthod..
+     */
+    WEBDRIVER_WAIT_FOR_TIMEOUT,
+
+    /**
      * Extension packages. This is a list of packages that will be scanned for custom TagProvider implementations.
      * To add a custom tag provider, just implement the TagProvider interface and specify the root package for this
      * provider in this parameter.

@@ -47,6 +47,7 @@ import java.util.concurrent.TimeUnit;
 
 import static ch.lambdaj.Lambda.convert;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascriptIsSupportedIn;
 
 /**
@@ -57,12 +58,14 @@ import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascr
 public abstract class PageObject {
 
     public static Duration FIVE_HUNDRED_MILLIS = new Duration(500, MILLISECONDS);
+    public static Duration FIVE_SECONDS = new Duration(5, SECONDS);
 
     private static final int WAIT_FOR_ELEMENT_PAUSE_LENGTH = 250;
 
     private static final int ONE_SECOND = 1000;
 
-    private static final Duration DEFAULT_WAIT_FOR_TIMEOUT = FIVE_HUNDRED_MILLIS;
+    private static final Duration DEFAULT_WAIT_FOR_TIMEOUT = FIVE_SECONDS;
+    private static final Duration DEFAULT_WAIT_FOR_ELEMENT_TIMEOUT = FIVE_HUNDRED_MILLIS;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PageObject.class);
 
@@ -123,15 +126,26 @@ public abstract class PageObject {
     }
 
     public void setDriver(WebDriver driver) {
-        setDriver(driver, getWaitForTimeout().in(TimeUnit.MILLISECONDS));
+        setDriver(driver, getWaitForElementTimeout().in(TimeUnit.MILLISECONDS));
     }
 
     public Duration getWaitForTimeout() {
 
         if (waitForTimeout == null) {
             int configuredWaitForTimeoutInMilliseconds =
-                    ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT
+                    ThucydidesSystemProperty.WEBDRIVER_WAIT_FOR_TIMEOUT
                             .integerFrom(environmentVariables, (int) DEFAULT_WAIT_FOR_TIMEOUT.in(MILLISECONDS));
+            waitForTimeout = new Duration(configuredWaitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS);
+        }
+        return waitForTimeout;
+    }
+
+    public Duration getWaitForElementTimeout() {
+
+        if (waitForTimeout == null) {
+            int configuredWaitForTimeoutInMilliseconds =
+                    ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT
+                            .integerFrom(environmentVariables, (int) DEFAULT_WAIT_FOR_ELEMENT_TIMEOUT.in(MILLISECONDS));
             waitForTimeout = new Duration(configuredWaitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS);
         }
         return waitForTimeout;
@@ -190,7 +204,7 @@ public abstract class PageObject {
 
     protected RenderedPageObjectView getRenderedView() {
         if (renderedView == null) {
-            renderedView = new RenderedPageObjectView(driver, waitForTimeout);
+            renderedView = new RenderedPageObjectView(driver, getWaitForTimeout());
         }
         return renderedView;
     }

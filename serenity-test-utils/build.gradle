@@ -2,14 +2,14 @@ ext {
     bintrayPackage = 'serenity-test-utils'
     projectDescription = 'Serenity test utilities'
 }
-
+git
 dependencies {
     compile("org.hamcrest:hamcrest-library:1.3")
     compile("org.hamcrest:hamcrest-integration:1.3")
     compile("org.hamcrest:hamcrest-core:1.3")
     compile("xmlunit:xmlunit:1.3")
 
-    compile("org.slf4j:slf4j-api:1.7.5")
+    compile("org.slf4j:slf4j-api:1.7.7")
 
     testCompile("junit:junit:4.11")
 }

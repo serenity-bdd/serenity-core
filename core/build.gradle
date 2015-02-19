@@ -21,6 +21,7 @@ dependencies {
     compile "commons-codec:commons-codec:1.9"
     compile "commons-io:commons-io:2.4"
     compile 'org.apache.httpcomponents:httpclient:4.4'
+    compile 'xml-apis:xml-apis:1.4.01'
 
     compile ("com.opera:operadriver:1.5") {
         exclude group: 'org.seleniumhq.selenium', module:'selenium-java'
@@ -38,11 +39,13 @@ dependencies {
         exclude group: 'com.google.code.gson', module: 'gson'
         exclude group: 'com.google.guava', module: 'guava'
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+        exclude group: 'net.sourceforge.htmlunit', module: 'htmlunit'
     }
 
     compile ('com.github.detro:phantomjsdriver:1.2.0') {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
+        exclude group: 'xml-apis', module: 'xml-apis'
     }
 
     compile ('io.appium:java-client:2.1.0') {

@@ -1,5 +1,5 @@
 dependencies {
-    compile("org.jbehave:jbehave-core:3.8") {
+    compile("org.jbehave:jbehave-core:3.9.5") {
         exclude group: "org.hamcrest"
     }
     projectDescription = 'Serenity sample resources used for testing purposes'

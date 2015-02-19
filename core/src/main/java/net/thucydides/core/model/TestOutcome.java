@@ -76,7 +76,7 @@ public class TestOutcome {
     /**
      * The class containing the test method, if the test is implemented in a Java class.
      */
-    private  Class<?> testCase;
+    private  transient Class<?> testCase;
 
     private String testCaseName;
 
@@ -1732,7 +1732,7 @@ public class TestOutcome {
         if (manual != that.manual) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (qualifier != null ? !qualifier.equals(that.qualifier) : that.qualifier != null) return false;
-        if (testCase != null ? !testCase.equals(that.testCase) : that.testCase != null) return false;
+        if (testCaseName != null ? !testCaseName.equals(that.testCaseName) : that.testCaseName != null) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
         if (userStory != null ? !userStory.equals(that.userStory) : that.userStory != null) return false;
 

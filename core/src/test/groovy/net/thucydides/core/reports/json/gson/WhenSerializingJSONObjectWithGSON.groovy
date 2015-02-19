@@ -41,4 +41,15 @@ class WhenSerializingJSONObjectWithGSON extends Specification {
         then:
             loadedTestOutcome == testOutcome
     }
+
+    def "should load serialized test outcomes from JSON"() {
+        given:
+            GsonJSONConverter converter = new GsonJSONConverter(environmentVariables)
+        and:
+            def jsonFile = this.class.getResource("/json-reports/sample-report-1.json").getPath()
+        when:
+            def loadedTestOutcome = converter.fromJson(new FileInputStream(new File(jsonFile)))
+        then:
+            loadedTestOutcome != null
+    }
 }

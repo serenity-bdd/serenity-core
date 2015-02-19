@@ -24,15 +24,14 @@ allprojects {
     configurations.all {
         resolutionStrategy {
             // fail fast on dependency convergence problems
-            //failOnVersionConflict()
+            failOnVersionConflict()
 
             // force versions to fix dependency convergence problems
             // when updating this list, update Serenity's declared deps if exists
             // TODO make work for generated Maven POM... 
-            // it's working for gradle build, but also had to exclude old transitives for generated POM
-            force 'asm:asm:3.3.1',
-                    'com.fasterxml.jackson.core:jackson-annotations:2.4.3',
-                    'com.google.code.gson:gson:2.3',
+            // it's working for gradle build, but also had to exclude old transitives for geio.appiumnerated POM
+            force  'com.fasterxml.jackson.core:jackson-annotations:2.4.3',
+                    'com.google.code.gson:gson:2.3.1',
                     'com.google.guava:guava:18.0',
                     'com.google.inject.extensions:guice-multibindings:3.0',
                     'com.google.inject.extensions:guice-servlet:3.0',
@@ -44,7 +43,7 @@ allprojects {
                     'commons-logging:commons-logging:1.1.3',
                     'joda-time:joda-time:2.2',
                     'org.apache.commons:commons-lang3:3.3.2',
-                    'org.apache.httpcomponents:httpclient:4.3.4',
+                    'org.apache.httpcomponents:httpclient:4.4',
                     'org.apache.httpcomponents:httpmime:4.3.3',
                     'org.bouncycastle:bcprov-jdk15on:1.48',
                     'org.codehaus.groovy:groovy-all:2.3.6',
@@ -173,7 +172,14 @@ subprojects {
         compile "com.google.guava:guava:18.0"
         compile("com.google.inject:guice:3.0") {
             exclude module:"asm"
+            exclude module:"cglib"
         }
+
+        compile ('cglib:cglib:3.1') {
+            exclude module:"asm"
+        }
+        compile ('org.ow2.asm:asm:5.0.3')
+
         compile "commons-codec:commons-codec:1.9"
         compile "org.objenesis:objenesis:2.1"
         compile "org.slf4j:slf4j-api:1.7.5"

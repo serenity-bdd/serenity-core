@@ -14,7 +14,7 @@ dependencies {
     testCompile "org.springframework:spring-jdbc:3.2.3.RELEASE"
     testCompile "org.springframework:spring-aop:3.2.3.RELEASE"
     testCompile "org.springframework:spring-orm:3.2.3.RELEASE"
-    testCompile "javassist:javassist:3.12.1.GA"
+    testCompile "org.javassist:javassist:3.19.0-GA"
     testCompile "hsqldb:hsqldb:1.8.0.10"
 
     testCompile ("org.hibernate:hibernate-entitymanager:3.5.4-Final") {
@@ -22,5 +22,6 @@ dependencies {
         exclude group: 'org.slf4j'
         exclude group: 'commons-collections'
         exclude group: 'cglib'
+        exclude group: 'javassist'
     }
 }

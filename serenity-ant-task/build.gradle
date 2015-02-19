@@ -11,5 +11,5 @@ dependencies {
     testCompile ("org.apache.ant:ant-testutil:1.9.3"){
         exclude group: "junit"
     }
-    testCompile 'org.assertj:assertj-core:1.7.0'
+    testCompile 'org.assertj:assertj-core:1.7.1'
 }

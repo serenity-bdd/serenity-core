@@ -30,32 +30,9 @@ allprojects {
             // when updating this list, update Serenity's declared deps if exists
             // TODO make work for generated Maven POM... 
             // it's working for gradle build, but also had to exclude old transitives for geio.appiumnerated POM
-            force  'com.fasterxml.jackson.core:jackson-annotations:2.4.3',
-                    'com.google.code.gson:gson:2.3.1',
-                    'com.google.guava:guava:18.0',
-                    'com.google.inject.extensions:guice-multibindings:3.0',
-                    'com.google.inject.extensions:guice-servlet:3.0',
-                    'com.google.inject:guice:3.0',
-                    'com.thoughtworks.xstream:xstream:1.4.1',
-                    'commons-codec:commons-codec:1.9',
-                    'commons-collections:commons-collections:3.2.1',
-                    'commons-io:commons-io:2.4',
-                    'commons-logging:commons-logging:1.2',
-                    'joda-time:joda-time:2.2',
-                    'org.apache.commons:commons-lang3:3.3.2',
-                    'org.apache.httpcomponents:httpclient:4.4',
-                    'org.apache.httpcomponents:httpmime:4.3.3',
-                    'org.bouncycastle:bcprov-jdk15on:1.48',
-                    'org.codehaus.groovy:groovy-all:2.3.6',
-                    'org.codehaus.jackson:jackson-core-asl:1.7.1',
-                    'org.codehaus.jackson:jackson-mapper-asl:1.7.1',
-                    'org.eclipse.jetty:jetty-http:8.1.15.v20140411',
-                    'org.freemarker:freemarker:2.3.21',
-                    'org.objenesis:objenesis:2.1',
-                    'org.seleniumhq.selenium:selenium-api:2.44.0',
-                    'org.slf4j:slf4j-api:1.7.7',
-                    'xalan:xalan:2.7.1',
-                    'xml-apis:xml-apis:1.4.01'
+            force  'com.thoughtworks.xstream:xstream:1.4.5',
+                   'commons-collections:commons-collections:3.2.1',
+                   'commons-logging:commons-logging:1.2'
         }
     }
 }
@@ -185,7 +162,9 @@ subprojects {
         compile "org.slf4j:slf4j-api:1.7.7"
         compile "xml-apis:xml-apis:1.4.01"
         compile 'commons-logging:commons-logging:1.2'
-        testCompile "ch.qos.logback:logback-classic:1.0.13"
+        testCompile ("ch.qos.logback:logback-classic:1.0.13") {
+            exclude module: 'slf4j-api'
+        }
         testCompile "junit:junit:4.11"
         testCompile "org.hamcrest:hamcrest-integration:1.3"
         testCompile "org.hamcrest:hamcrest-library:1.3"
@@ -195,6 +174,7 @@ subprojects {
         }
         testCompile("org.spockframework:spock-core:0.7-groovy-2.0") {
             exclude group: "junit"
+            exclude module: "groovy-all"
         }
         testCompile("com.github.goldin:spock-extensions:0.1.4") {
             exclude module: "spock-core"

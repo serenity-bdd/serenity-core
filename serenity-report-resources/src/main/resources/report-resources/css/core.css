@@ -1359,8 +1359,8 @@ ul.second-level-requirements  {
 }
 
 .projectname {
-    font-family:euphemia, verdana, sans-serif;
-    font-weight:bold; font-size:2em; color:#428bca; position:relative; top:30px; right:20px;
+    font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
+    font-weight:normal; font-size:2em; color:#428bca; position:relative; top:30px; right:20px;
 }
 
 .togglePieChart {
@@ -1384,7 +1384,7 @@ ul.second-level-requirements  {
 }
 
 .step-parameter {
-    color: darkblue;
+    color: #0d78ae;
 }
 
 .version {

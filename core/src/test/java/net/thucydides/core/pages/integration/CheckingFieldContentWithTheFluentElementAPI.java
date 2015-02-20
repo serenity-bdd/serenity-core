@@ -21,7 +21,7 @@ public class CheckingFieldContentWithTheFluentElementAPI extends FluentElementAP
     @BeforeClass
     public static void openStaticPage() {
         localDriver = new WebDriverFacade(HtmlUnitDriver.class, new WebDriverFactory());
-        page = new StaticSitePage(localDriver, 1);
+        page = new StaticSitePage(localDriver, 1000);
         page.open();
     }
 
@@ -209,7 +209,6 @@ public class CheckingFieldContentWithTheFluentElementAPI extends FluentElementAP
     @Test
     public void should_wait_for_field_to_appear() {
         page.element(page.city).waitUntilVisible();
-
         assertThat(page.element(page.city).isCurrentlyVisible(), is(true));
     }
 

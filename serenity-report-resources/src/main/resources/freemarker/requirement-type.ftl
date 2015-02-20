@@ -160,7 +160,7 @@
                             <tbody>
 
                                 <#foreach requirementOutcome in requirements.requirementOutcomes>
-                                    <#if requirementOutcome.testOutcomes.stepCount == 0 || requirementOutcome.testOutcomes.result == "PENDING" || requirementOutcome.testOutcomes.result == "IGNORED">
+                                    <#if requirementOutcome.testOutcomes.stepCount == 0 || requirementOutcome.testOutcomes.result == "PENDING" || requirementOutcome.testOutcomes.result == "IGNORED" || requirementOutcome.testOutcomes.result == "SKIPPED">
                                         <#assign status_icon = "traffic-yellow.gif">
                                         <#assign status_rank = 0>
                                     <#elseif requirementOutcome.testOutcomes.result == "ERROR">
@@ -172,6 +172,9 @@
                                     <#elseif requirementOutcome.testOutcomes.result == "SUCCESS">
                                         <#assign status_icon = "traffic-green.gif">
                                         <#assign status_rank = 3>
+                                    <#else>
+                                        <#assign status_icon = "traffic-in-progress.gif">
+                                        <#assign status_rank = 0>
                                     </#if>
 
                                 <tr class="test-${requirementOutcome.testOutcomes.result} requirementRow">

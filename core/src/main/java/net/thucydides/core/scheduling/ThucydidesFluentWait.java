@@ -71,8 +71,8 @@ public abstract class ThucydidesFluentWait<T> implements Wait<T> {
             }
 
             if (!getClock().isNowBefore(end)) {
-                throw timeoutException(String.format("Timed out after %d seconds",
-                        timeout.in(SECONDS)), lastException);
+                throw timeoutException(String.format("Timed out after %d milliseconds",
+                        timeout.in(MILLISECONDS)), lastException);
             }
 
             try {

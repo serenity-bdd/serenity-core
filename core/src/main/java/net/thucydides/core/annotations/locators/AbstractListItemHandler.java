@@ -29,11 +29,7 @@ public abstract class AbstractListItemHandler<T> implements InvocationHandler {
     /**
      * Constructor.
      * @param targetInterface	usually WidgetObject or WebElementFacade
-     * @param interfaceType
      * @param locator			the locator of the List containing this element
-     * @param element
-     * @param driver
-     * @param timeoutInMilliseconds
      */
     public AbstractListItemHandler(Class<T> targetInterface, Class<?> interfaceType, ElementLocator locator, WebElement element, PageObject page, long timeoutInMilliseconds) {
     	this.locator = locator;

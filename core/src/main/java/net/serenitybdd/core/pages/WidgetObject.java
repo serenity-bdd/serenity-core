@@ -16,7 +16,7 @@ public interface WidgetObject extends WebElementFacade {
 
 	/**
 	 * Get the page containing this widget.
-	 * @return
+	 * @return the page containing this widget
 	 */
 	public PageObject getPage();
 	

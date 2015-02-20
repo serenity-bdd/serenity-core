@@ -84,6 +84,7 @@ public abstract class PageObject {
     private net.serenitybdd.core.pages.SystemClock clock;
 
     private Duration waitForTimeout;
+    private Duration waitForElementTimeout;
 
     private final Sleeper sleeper;
     private final Clock webdriverClock;
@@ -142,13 +143,13 @@ public abstract class PageObject {
 
     public Duration getWaitForElementTimeout() {
 
-        if (waitForTimeout == null) {
+        if (waitForElementTimeout == null) {
             int configuredWaitForTimeoutInMilliseconds =
                     ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT
                             .integerFrom(environmentVariables, (int) DEFAULT_WAIT_FOR_ELEMENT_TIMEOUT.in(MILLISECONDS));
-            waitForTimeout = new Duration(configuredWaitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS);
+            waitForElementTimeout = new Duration(configuredWaitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS);
         }
-        return waitForTimeout;
+        return waitForElementTimeout;
     }
 
     public void setPages(Pages pages) {
@@ -200,6 +201,10 @@ public abstract class PageObject {
     public void setWaitForTimeout(final long waitForTimeoutInMilliseconds) {
         this.waitForTimeout = new Duration(waitForTimeoutInMilliseconds, MILLISECONDS);
         getRenderedView().setWaitForTimeout(this.waitForTimeout);
+    }
+
+    public void setWaitForElementTimeout(final long waitForTimeoutInMilliseconds) {
+        this.waitForElementTimeout = new Duration(waitForTimeoutInMilliseconds, MILLISECONDS);
     }
 
     protected RenderedPageObjectView getRenderedView() {
@@ -339,7 +344,7 @@ public abstract class PageObject {
     }
 
     public PageObject waitForTextToDisappear(final String expectedText) {
-        return waitForTextToDisappear(expectedText, waitForTimeout.in(MILLISECONDS));
+        return waitForTextToDisappear(expectedText, getWaitForTimeout().in(MILLISECONDS));
     }
 
     /**
@@ -548,11 +553,11 @@ public abstract class PageObject {
     }
 
     private long waitForTimeoutInSecondsWithAMinimumOfOneSecond() {
-        return (waitForTimeout.in(TimeUnit.SECONDS) < 1) ? 1 : (waitForTimeout.in(TimeUnit.SECONDS));
+        return (getWaitForTimeout().in(TimeUnit.SECONDS) < 1) ? 1 : (getWaitForTimeout().in(TimeUnit.SECONDS));
     }
 
     public long waitForTimeoutInMilliseconds() {
-        return waitForTimeout.in(MILLISECONDS);
+        return getWaitForTimeout().in(MILLISECONDS);
     }
 
 
@@ -816,7 +821,7 @@ public abstract class PageObject {
      * Provides a fluent API for querying web elements.
      */
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(WebElement webElement) {
-        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, waitForTimeout.in(MILLISECONDS));
+        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, getWaitForElementTimeout().in(MILLISECONDS));
     }
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(WebElement webElement) {
@@ -832,7 +837,7 @@ public abstract class PageObject {
      */
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(By bySelector) {
         WebElement webElement = getDriver().findElement(bySelector);
-        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, waitForTimeout.in(MILLISECONDS));
+        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, getWaitForElementTimeout().in(MILLISECONDS));
     }
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(By selector) {
@@ -922,14 +927,14 @@ public abstract class PageObject {
 
     public ThucydidesFluentWait<WebDriver> waitForWithRefresh() {
         return new FluentWaitWithRefresh<>(driver, webdriverClock, sleeper)
-                .withTimeout(waitForTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS)
+                .withTimeout(getWaitForTimeout().in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS)
                 .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
                 .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
     }
 
     public ThucydidesFluentWait<WebDriver> waitForCondition() {
         return new NormalFluentWait<>(driver, webdriverClock, sleeper)
-                .withTimeout(waitForTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS)
+                .withTimeout(getWaitForTimeout().in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS)
                 .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
                 .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
     }

@@ -546,7 +546,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void take(final ScreenshotType screenshotType) {
-        if (currentStepExists() && browserIsOpen()) {
+        if (shouldTakeScreenshots()) {
             try {
                 Optional<ScreenshotAndHtmlSource> screenshotAndHtmlSource = grabScreenshot();
                 if (screenshotAndHtmlSource.isPresent()) {
@@ -557,6 +557,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
                 LOGGER.warn("Failed to take screenshot", e);
             }
         }
+    }
+
+    private boolean shouldTakeScreenshots() {
+        return (currentStepExists() && browserIsOpen()
+                && !StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed()
+                && !StepEventBus.getEventBus().currentTestIsSuspended());
     }
 
     private void removeDuplicatedInitalScreenshotsIfPresent() {

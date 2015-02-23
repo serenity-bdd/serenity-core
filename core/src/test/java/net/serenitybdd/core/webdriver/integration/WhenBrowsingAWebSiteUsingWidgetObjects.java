@@ -20,6 +20,7 @@ import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
@@ -156,6 +157,12 @@ public class WhenBrowsingAWebSiteUsingWidgetObjects {
         environmentVariables = new MockEnvironmentVariables();
         configuration = new SystemPropertiesConfiguration(environmentVariables);
     }
+
+	@After
+	public void closeDriver() {
+		driver.close();
+		driver.quit();
+	}
 
     private void openStaticTestSite() {
         File baseDir = new File(System.getProperty("user.dir"));

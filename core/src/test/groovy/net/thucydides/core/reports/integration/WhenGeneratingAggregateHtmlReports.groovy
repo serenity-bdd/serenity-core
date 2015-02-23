@@ -39,6 +39,7 @@ public class WhenGeneratingAggregateHtmlReports extends Specification {
 
     def cleanup() {
         if (driver) {
+            driver.close()
             driver.quit()
         }
     }

@@ -8,6 +8,7 @@ import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import net.thucydides.core.webelements.RadioButtonGroup;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
@@ -96,6 +97,12 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
         openStaticTestSite();
         indexPage = new IndexPage(driver, 1);
         indexPage.setWaitForTimeout(100);
+    }
+
+    @After
+    public void closeDriver() {
+        driver.close();
+        driver.quit();
     }
 
     @Before

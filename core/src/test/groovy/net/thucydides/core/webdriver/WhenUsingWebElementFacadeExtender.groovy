@@ -45,6 +45,7 @@ class WhenUsingWebElementFacadeExtender extends Specification {
 	def cleanupSpec() {
 		if (driver) {
 			driver.close()
+			driver.quit()
 		}
 	}
 }

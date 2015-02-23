@@ -60,6 +60,7 @@ public class WhenUploadingFiles {
 
     @AfterClass
     public static void closeBrowser() {
+        driver.close();
         driver.quit();
     }
 

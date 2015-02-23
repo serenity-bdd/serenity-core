@@ -13,6 +13,14 @@ class WhenProvidingYourOwnWebdriverInstance extends Specification {
             SupportedWebDriver.listOfSupportedDrivers().contains "PROVIDED"
     }
 
+    def driver
+
+    def cleanup() {
+        if (driver) {
+            driver.close()
+            driver.quit()
+        }
+    }
     def "should be able to ask the WebDriverFactory to provide a custom driver"() {
 
         given:
@@ -21,7 +29,7 @@ class WhenProvidingYourOwnWebdriverInstance extends Specification {
             environmentVariables.setProperty("webdriver.provided.mydriver","net.thucydides.core.webdriver.MyDriverSource")
             def factory = new WebDriverFactory(environmentVariables)
         when:
-            def driver = factory.newWebdriverInstance(ProvidedDriver);
+            driver = factory.newWebdriverInstance(ProvidedDriver);
         then:
             driver.class == HtmlUnitDriver
     }
@@ -54,7 +62,7 @@ class WhenProvidingYourOwnWebdriverInstance extends Specification {
             environmentVariables.setProperty("webdriver.provided.mydriver","net.thucydides.core.webdriver.MyDriverSource")
         when:
             def sourceConfig = new ProvidedDriverConfiguration(environmentVariables)
-            def driver = sourceConfig.driverSource.newDriver()
+            driver = sourceConfig.driverSource.newDriver()
         then:
             driver.class == HtmlUnitDriver
     }

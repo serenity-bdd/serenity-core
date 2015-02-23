@@ -1,5 +1,6 @@
 package net.thucydides.core.reports.integration;
 
+import com.beust.jcommander.internal.Lists;
 import net.thucydides.core.digest.Digest;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.reports.ResultChecker;
@@ -21,6 +22,8 @@ import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 import java.io.File;
@@ -55,11 +58,12 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
 
         File sourceDirectory = directoryInClasspathCalled("/test-outcomes/containing-nostep-errors");
         reporter.generateReportsForTestResultsFrom(sourceDirectory);
-        driver = new PhantomJSDriver();
+        driver = new FirefoxDriver();// PhantomJSDriver();
     }
 
     @AfterClass
     public static void deleteReportDirectory() {
+        driver.close();
         driver.quit();
         outputDirectory.delete();
     }
@@ -152,15 +156,23 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
         File report = new File(outputDirectory,"index.html");
         driver.get(urlFor(report));
 
-        List<WebElement> testCounts = driver.findElements(By.cssSelector(".test-count"));
-        assertThat(testCounts, hasSize(8));
-        Matcher<Iterable<? super WebElement>> passedMatcher = hasItem(Matchers.<WebElement>hasProperty("text", containsString("2 passed")));
-        Matcher<Iterable<? super WebElement>> pendingMatcher = hasItem(Matchers.<WebElement>hasProperty("text", containsString("2 pending")));
-        Matcher<Iterable<? super WebElement>> failedMatcher = hasItem(Matchers.<WebElement>hasProperty("text", containsString("3 failed")));
-        Matcher<Iterable<? super WebElement>> errorMatcher = hasItem(Matchers.<WebElement>hasProperty("text", containsString("1 with errors")));
-        Matcher<Iterable<? super WebElement>> skippedMatcher = hasItem(Matchers.<WebElement>hasProperty("text", containsString("0 skipped")));
-        Matcher<Iterable<? super WebElement>> ignoredMatcher = hasItem(Matchers.<WebElement>hasProperty("text", containsString("0 ignored")));
-        assertThat(testCounts, allOf(passedMatcher, pendingMatcher, failedMatcher, errorMatcher,skippedMatcher, ignoredMatcher));
+        List<String> testCountLabels = convertToStrings(driver.findElements(By.cssSelector(".test-count")));
+        assertThat(testCountLabels, hasSize(8));
+        Matcher<Iterable<? super String>> passedMatcher = hasItem(containsString("2 passed"));
+        Matcher<Iterable<? super String>> pendingMatcher = hasItem(containsString("2 pending"));
+        Matcher<Iterable<? super String>> failedMatcher = hasItem(containsString("3 failed"));
+        Matcher<Iterable<? super String>> errorMatcher = hasItem(containsString("1 with errors"));
+        Matcher<Iterable<? super String>> skippedMatcher = hasItem(containsString("0 skipped"));
+        Matcher<Iterable<? super String>> ignoredMatcher = hasItem(containsString("0 ignored"));
+        assertThat(testCountLabels, allOf(passedMatcher, pendingMatcher, failedMatcher, errorMatcher,skippedMatcher, ignoredMatcher));
+    }
+
+    private List<String> convertToStrings(List<WebElement> elements) {
+        List<String> labels = Lists.newArrayList();
+        for(WebElement element : elements) {
+            labels.add(element.getText());
+        }
+        return labels;
     }
 
     @Test

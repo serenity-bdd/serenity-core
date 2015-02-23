@@ -67,7 +67,7 @@ public class WhenTakingLargeScreenshots {
         environmentVariables.setProperty("thucydides.browser.width", "640");
         environmentVariables.setProperty("thucydides.browser.height", "400");
 
-        driver = testSite.open("phantomjs");
+        driver = testSite.open("firefox");
 
         ScreenshotProcessor screenshotProcessor = new SingleThreadScreenshotProcessor(environmentVariables);
         Photographer photographer = new Photographer(driver, screenshotDirectory,screenshotProcessor);
@@ -85,7 +85,7 @@ public class WhenTakingLargeScreenshots {
     @Test
     public void should_only_store_one_file_for_identical_screenshots() throws Exception {
 
-        driver = testSite.open("phantomjs");
+        driver = testSite.open("firefox");
 
         ScreenshotProcessor screenshotProcessor = new SingleThreadScreenshotProcessor(environmentVariables);
         Photographer photographer = new Photographer(driver, screenshotDirectory,screenshotProcessor);
@@ -108,7 +108,7 @@ public class WhenTakingLargeScreenshots {
 
         environmentVariables.setProperty("thucydides.resized.image.width", "300");
 
-        driver = testSite.open("phantomjs");
+        driver = testSite.open("firefox");
 
         ScreenshotProcessor screenshotProcessor = new SingleThreadScreenshotProcessor(environmentVariables);
         Photographer photographer = new Photographer(driver, screenshotDirectory, screenshotProcessor);
@@ -125,7 +125,7 @@ public class WhenTakingLargeScreenshots {
 
     @Test
     public void should_take_screenshots_correctly() throws IOException {
-        driver = testSite.open("http:www.google.com", "screenshots/google.html", "phantomjs");
+        driver = testSite.open("http:www.google.com", "screenshots/google.html", "firefox");
 
         Photographer photographer = new Photographer(driver, screenshotDirectory);
         File screenshotFile = photographer.takeScreenshot().get();

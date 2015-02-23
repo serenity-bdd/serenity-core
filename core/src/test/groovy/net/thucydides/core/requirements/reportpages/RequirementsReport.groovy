@@ -5,6 +5,7 @@ import net.thucydides.core.pages.WebElementFacade
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
+import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriver
 
 /**
@@ -13,7 +14,7 @@ import org.openqa.selenium.phantomjs.PhantomJSDriver
 class RequirementsReport extends PageObject {
 
     static RequirementsReport inDirectory(File directory) {
-        def driver = new PhantomJSDriver();
+        def driver = new FirefoxDriver();
         def report = new RequirementsReport(driver)
         report.openAt("file:///" +  directory.getAbsolutePath() + "/capabilities.html");
         return report
@@ -48,6 +49,7 @@ class RequirementsReport extends PageObject {
     }
 
     def close() {
+        driver.close()
         driver.quit()
     }
 

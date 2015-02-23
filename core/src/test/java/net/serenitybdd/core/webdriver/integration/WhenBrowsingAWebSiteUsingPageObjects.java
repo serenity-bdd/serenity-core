@@ -8,11 +8,11 @@ import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import net.thucydides.core.webelements.RadioButtonGroup;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.openqa.selenium.*;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
@@ -79,24 +79,28 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
         }
     }
 
-    WebDriver driver;
-
     IndexPage indexPage;
 
     MockEnvironmentVariables environmentVariables;
 
     Configuration configuration;
 
+    static WebDriver driver;
+
+    @BeforeClass
+    public static void openDriver() {
+        driver = new FirefoxDriver();
+    }
+
     @Before
     public void openLocalStaticSite() {
-        driver = new HtmlUnitDriver();
         openStaticTestSite();
         indexPage = new IndexPage(driver, 1);
         indexPage.setWaitForTimeout(100);
     }
 
-    @After
-    public void closeDriver() {
+    @AfterClass
+    public static void closeDriver() {
         driver.close();
         driver.quit();
     }

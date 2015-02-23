@@ -1,5 +1,6 @@
 package net.thucydides.core.requirements.integration
 
+import com.github.goldin.spock.extensions.tempdir.TempDir
 import com.google.common.collect.Lists
 import net.thucydides.core.issues.IssueTracking
 import net.thucydides.core.model.*
@@ -9,7 +10,6 @@ import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
 import net.thucydides.core.reports.html.HtmlRequirementsReporter
 import net.thucydides.core.requirements.FileSystemRequirementsTagProvider
 import net.thucydides.core.requirements.model.Requirement
-import net.thucydides.core.requirements.reportpages.ProgressReport
 import net.thucydides.core.requirements.reportpages.RequirementsReport
 import net.thucydides.core.requirements.reports.RequirementsOutcomes
 import net.thucydides.core.requirements.reports.RequirmentsOutcomeFactory
@@ -25,32 +25,21 @@ class WhenGeneratingRequirementsReports extends Specification {
             return time
         }
     }
+
     def requirementsProvider = new FileSystemRequirementsTagProvider()
     def htmlRequirementsReporter = new HtmlRequirementsReporter()
-    def outputDirectory = newTemporaryDirectory();
     def issueTracking = Mock(IssueTracking)
     def requirmentsOutcomeFactory = new RequirmentsOutcomeFactory([], issueTracking);
-    def dateProvider = new MockedDateProvider()
     def aggregateReporter = new HtmlAggregateStoryReporter("project", issueTracking)
 
-    def firstOfJanuary = new DateTime(2010,1,1,0,0);
-    def firstOfFebruary= new DateTime(2010,2,1,0,0);
     RequirementsReport report
-    ProgressReport progressReport
 
     def cleanup() {
         report?.close()
-        progressReport?.close()
-
     }
 
-    def newTemporaryDirectory() {
-        def tempDirectory = File.createTempFile("tmp","reports")
-        tempDirectory.delete()
-        tempDirectory.mkdir()
-        tempDirectory.deleteOnExit()
-        return tempDirectory
-    }
+    @TempDir
+    File outputDirectory
 
     def "Should list all top-level requirements in the requirements report"() {
         given: "there are no associated tests"

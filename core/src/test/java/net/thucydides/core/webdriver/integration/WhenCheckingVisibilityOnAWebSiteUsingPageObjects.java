@@ -9,6 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 import static net.thucydides.core.webdriver.StaticTestSite.fileInClasspathCalled;
@@ -37,7 +38,7 @@ public class WhenCheckingVisibilityOnAWebSiteUsingPageObjects {
     @BeforeClass
     public static void openStaticTestSite() {
         String url = "file://" + fileInClasspathCalled("static-site/index.html").getAbsolutePath();
-        driver = new PhantomJSDriver();
+        driver = new FirefoxDriver();// PhantomJSDriver();
         driver.get(url);
     }
 

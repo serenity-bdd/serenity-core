@@ -7,9 +7,11 @@ import com.google.gson.JsonParseException
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebDriverException
+import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriver
 import sample.deserialization.DeserializationClass
 import sample.deserialization.DeserializationWithInjection
+import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -18,13 +20,14 @@ import java.lang.reflect.Type
 class WhenDeserializingJSONObjects extends Specification {
 	
 	@Shared
-	WebDriver driver = new PhantomJSDriver();
+	WebDriver driver = new FirefoxDriver();// PhantomJSDriver();
 
 	JavascriptExecutorFacade jsFacade;
 	
 	def setup() {
 		 jsFacade = new JavascriptExecutorFacade(driver)
 	}
+
 		
 	def "should deserialize JSON as proper object"() {
 		given:"object exists in javascript"
@@ -46,6 +49,7 @@ class WhenDeserializingJSONObjects extends Specification {
 			obj.klass.str == null		 
 	}
 
+	@Ignore
 	def "should deserialize JSON as proper object when arguments are passed to the script"() {
 		given: "test arguments"
 			def arg1 = "Test argument"
@@ -91,6 +95,7 @@ class WhenDeserializingJSONObjects extends Specification {
 			list.get(1).str == "List2"
 	}
 
+	@Ignore
 	def "should deserialize JSON as proper list of object when arguments are passed to the script"() {
 		given: "test arguments"
 			def arg1 = "Test argument for List"
@@ -153,6 +158,7 @@ class WhenDeserializingJSONObjects extends Specification {
 
 	def cleanupSpec() {
 		if (driver) {
+			driver.close()
 			driver.quit()
 		}
 	}

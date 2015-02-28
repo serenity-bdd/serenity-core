@@ -45,8 +45,10 @@ class SerenityPlugin implements Plugin<Project> {
 
             doLast {
                 logger.lifecycle("Checking serenity results for ${project.serenity.projectKey} in directory $reportDirectory")
-                def checker = new ResultChecker(reportDirectory)
-                checker.checkTestResults()
+                if (reportDirectory.exists()) {
+                    def checker = new ResultChecker(reportDirectory)
+                    checker.checkTestResults()
+                }
             }
         }
         project.task('clearReports') {
@@ -59,7 +61,7 @@ class SerenityPlugin implements Plugin<Project> {
         }
 
         project.tasks.aggregate.mustRunAfter project.tasks.test
-        project.tasks.checkOutcomes.mustRunAfter project.tasks.test
+        project.tasks.checkOutcomes.mustRunAfter project.tasks.aggregate
 
         project.tasks.clean {
             it.dependsOn 'clearReports'

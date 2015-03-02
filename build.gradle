@@ -191,7 +191,7 @@ subprojects {
             exclude module: "spock-core"
             exclude module: "slf4j-api"
         }
-        testCompile("org.codehaus.groovy:groovy-all:2.4.1")
+        testCompile("org.codehaus.groovy:groovy-all:${groovyVersion}")
         testCompile 'org.assertj:assertj-core:1.7.1'
     }
 

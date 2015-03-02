@@ -18,19 +18,19 @@ public class TimeoutsFacade implements WebDriver.Timeouts {
     }
 
     @Override
-    public WebDriver.Timeouts implicitlyWait(long value, TimeUnit timeUnit) {
-        webDriverFacade.implicitTimeoutValue = value;
+    public WebDriver.Timeouts implicitlyWait(long timeoutValue, TimeUnit timeUnit) {
+        webDriverFacade.implicitTimeoutValue = timeoutValue;
         webDriverFacade.implicitTimeoutUnit = timeUnit;
-        return timeouts.implicitlyWait(value,timeUnit);
+        return timeouts.implicitlyWait(timeoutValue,timeUnit);
     }
 
     @Override
-    public WebDriver.Timeouts setScriptTimeout(long l, TimeUnit timeUnit) {
-        return timeouts.setScriptTimeout(1, timeUnit);
+    public WebDriver.Timeouts setScriptTimeout(long timeoutValue, TimeUnit timeUnit) {
+        return timeouts.setScriptTimeout(timeoutValue, timeUnit);
     }
 
     @Override
-    public WebDriver.Timeouts pageLoadTimeout(long l, TimeUnit timeUnit) {
-        return timeouts.pageLoadTimeout(l,timeUnit);
+    public WebDriver.Timeouts pageLoadTimeout(long timeoutValue, TimeUnit timeUnit) {
+        return timeouts.pageLoadTimeout(timeoutValue,timeUnit);
     }
 }

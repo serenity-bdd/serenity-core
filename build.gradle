@@ -160,6 +160,7 @@ subprojects {
         compile "com.google.guava:guava:${guavaVersion}"
         compile("com.google.inject:guice:3.0") {
             exclude group:"org.ow2.asm", module:"asm"
+            exclude group:"asm", module:"asm"
             exclude group:"cglib", module:"cglib"
         }
 
@@ -189,8 +190,9 @@ subprojects {
 
         }
         testCompile("com.github.goldin:spock-extensions:0.1.4") {
-            exclude group:"org.spockframework:spock-core", module: "spock-core"
+            exclude group:"org.spockframework", module: "spock-core"
             exclude group:"org.slf4j", module: "slf4j-api"
+            exclude group:"asm", module: "asm"
         }
         testCompile("org.codehaus.groovy:groovy-all:${groovyVersion}")
         testCompile 'org.assertj:assertj-core:1.7.1'

@@ -18,9 +18,9 @@ class WhenMonitoringWebDriverTimeoutOptions extends Specification {
         given:
             def driver = new WebDriverFacade(HtmlUnitDriver.class, webDriverFactory)
         when:
-            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
+            driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS)
         then:
-            driver.implicitTimeoutValue == 10
+            driver.implicitTimeoutValue == 30
             driver.implicitTimeoutUnit == TimeUnit.SECONDS
     }
 }

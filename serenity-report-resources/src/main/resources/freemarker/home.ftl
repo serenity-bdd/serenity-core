@@ -218,8 +218,8 @@
     <tr>
         <td width="375px" valign="top">
             <div class="test-count-summary">
-                <span class="test-count-title">${testOutcomes.total}
-                    test scenarios <#if (testOutcomes.hasDataDrivenTests())>(including ${testOutcomes.totalDataRows}
+                <span class="test-count-title">${testOutcomes.totalTestScenarios}
+                    test scenarios <#if (testOutcomes.hasDataDrivenTests())>(${testOutcomes.total} tests in all, including ${testOutcomes.totalDataRows}
                     rows of test data)</#if></span>
                 <div>
             <#assign successReport = reportName.withPrefix(currentTag).forTestResult("success") >

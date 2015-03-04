@@ -1346,10 +1346,21 @@ public class TestOutcome {
     }
 
     public int countResults(TestResult expectedResult, TestType expectedType) {
+        if (annotatedResult != null) {
+            return annotatedResultCount(expectedResult, expectedType);
+        }
         if (isDataDriven()) {
             return countDataRowsWithResult(expectedResult);
         } else {
             return (getResult() == expectedResult) && (typeCompatibleWith(expectedType)) ? 1 : 0;
+        }
+    }
+
+    private int annotatedResultCount(TestResult expectedResult, TestType expectedType) {
+        if ((annotatedResult == expectedResult) && (typeCompatibleWith(expectedType))) {
+            return (isDataDriven()) ? dataTable.getSize() : 1;
+        } else {
+            return 0;
         }
     }
 

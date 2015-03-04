@@ -253,4 +253,19 @@ class WhenProcessingTestOutcomes extends Specification {
         then:
             testOutcomes.total == 3
     }
+
+
+    def "should count the number of scenarios correctly"() {
+        when:
+            def testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/json-passing-pending"));
+        then:
+            testOutcomes.totalTestScenarios == 11
+        and:
+            testOutcomes.total == 23
+        and:
+            testOutcomes.totalTests.withResult(TestResult.SUCCESS) == 4
+        and:
+            testOutcomes.totalTests.withResult(TestResult.PENDING) == 19
+    }
+
 }

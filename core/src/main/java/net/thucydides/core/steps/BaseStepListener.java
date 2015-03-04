@@ -562,6 +562,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private boolean shouldTakeScreenshots() {
         return (currentStepExists() && browserIsOpen()
                 && !StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed()
+                && !StepEventBus.getEventBus().isDryRun()
                 && !StepEventBus.getEventBus().currentTestIsSuspended());
     }
 

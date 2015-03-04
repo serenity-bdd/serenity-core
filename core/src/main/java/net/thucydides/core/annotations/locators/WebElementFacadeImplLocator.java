@@ -8,7 +8,6 @@ public class WebElementFacadeImplLocator {
 	/**
 	 * Refactored from {@link SmartElementHandler}.
 	 * @param interfaceType
-	 * @return
 	 */
     public Class<?> getImplementer(Class<?> interfaceType) {
     	if (!interfaceType.isInterface()){

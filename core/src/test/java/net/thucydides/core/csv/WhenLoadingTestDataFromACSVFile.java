@@ -1,5 +1,6 @@
 package net.thucydides.core.csv;
 
+import au.com.bytecode.opencsv.CSVReader;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
 import org.junit.Before;
 import org.junit.Rule;
@@ -306,4 +307,24 @@ public class WhenLoadingTestDataFromACSVFile {
         assertThat(person.getDateOfBirth(), is("10/10/1980"));
     }
 
+    @Test
+    public void should_able_handle_escape_sequences() throws IOException {
+
+        File testDataFile = useTestDataIn("testdata.csv",
+                "name; address;        phone",
+                "Bill; 10 main street, Bill\\nVille; 123456789");
+        //  csv file will be crated as below. With \n between Bill and Ville
+        //  name; address;        phone
+        //  Bill; 10 main street, Bill\nVille; 123456789
+
+        TestDataSource testdata = new CSVTestDataSource(testDataFile.getAbsolutePath(),';', CSVReader.DEFAULT_QUOTE_CHARACTER, '"'); // '"' to handle '\n'
+
+        List<Map<String,String>> loadedData = testdata.getData();
+        Map<String,String> row = loadedData.get(0);
+
+
+        assertThat(row.get("name"), is("Bill"));
+        assertThat(row.get("address"), is("10 main street, Bill\\nVille"));
+        assertThat(row.get("phone"), is("123456789"));
+    }
 }

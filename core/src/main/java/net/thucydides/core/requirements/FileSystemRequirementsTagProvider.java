@@ -8,9 +8,11 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
+import net.thucydides.core.requirements.model.FeatureType;
 import net.thucydides.core.requirements.model.Narrative;
 import net.thucydides.core.requirements.model.NarrativeReader;
 import net.thucydides.core.requirements.model.Requirement;
+import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +32,7 @@ import static ch.lambdaj.Lambda.convert;
 import static net.thucydides.core.requirements.RequirementsPath.pathElements;
 import static net.thucydides.core.requirements.RequirementsPath.stripRootFromPath;
 import static net.thucydides.core.util.NameConverter.humanize;
+import static org.apache.commons.io.FilenameUtils.removeExtension;
 
 //import javax.persistence.Transient;
 
@@ -70,11 +73,11 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
 
         Optional<String> resourceDirectory = getResourceDirectory(environmentVariables);
-        if(resourceDirectory.isPresent()) {
-            String resourceDir =  resourceDirectory.get();
-            if(new File(resourceDir,DEFAULT_ROOT_DIRECTORY).exists()) {
+        if (resourceDirectory.isPresent()) {
+            String resourceDir = resourceDirectory.get();
+            if (new File(resourceDir, DEFAULT_ROOT_DIRECTORY).exists()) {
                 return DEFAULT_ROOT_DIRECTORY;
-            } else if(new File(resourceDir, FEATURES_ROOT_DIRECTORY).exists()) {
+            } else if (new File(resourceDir, FEATURES_ROOT_DIRECTORY).exists()) {
                 return FEATURES_ROOT_DIRECTORY;
             }
         }
@@ -82,7 +85,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     public FileSystemRequirementsTagProvider(String rootDirectory, int level) {
-        this(filePathFormOf(rootDirectory), level, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(filePathFormOf(rootDirectory), level, Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
     }
 
     /**
@@ -119,7 +122,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
             try {
                 Set<Requirement> allRequirements = Sets.newHashSet();
                 Set<String> directoryPaths = getRootDirectoryPaths();
-                for(String rootDirectoryPath : directoryPaths) {
+                for (String rootDirectoryPath : directoryPaths) {
                     File rootDirectory = new File(rootDirectoryPath);
                     allRequirements.addAll(loadCapabilitiesFrom(rootDirectory.listFiles(thatAreDirectories())));
                     allRequirements.addAll(loadStoriesFrom(rootDirectory.listFiles(thatAreStories())));
@@ -181,7 +184,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private Set<String> restoreSpacesIn(List<URL> resourceRoots) {
         Set<String> urlsWithRestoredSpaces = Sets.newHashSet();
-        for(URL resourceRoot : resourceRoots) {
+        for (URL resourceRoot : resourceRoots) {
             urlsWithRestoredSpaces.add(withRestoredSpaces(resourceRoot.getPath()));
         }
         return urlsWithRestoredSpaces;
@@ -213,7 +216,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private Optional<String> getRootDirectoryFromParentDir(String parentDir) {
         File resourceDirectory = getResourceDirectory(environmentVariables).isPresent() ? new File(parentDir, getResourceDirectory(environmentVariables).get()) : new File(parentDir);
         File requirementsDirectory = absolutePath(rootDirectoryPath) ? new File(rootDirectoryPath) : new File(resourceDirectory, rootDirectoryPath);
-        if(!requirementsDirectory.exists()) {
+        if (!requirementsDirectory.exists()) {
             requirementsDirectory = new File(resourceDirectory, FEATURES_ROOT_DIRECTORY); //features
         }
         if (requirementsDirectory.exists()) {
@@ -353,7 +356,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         if (storyPathElements.isEmpty()) {
             return Optional.absent();
         } else {
-            return lastRequirementMatchingPath(getRequirements(), storyPathElements);
+            return lastRequirementMatchingPath(getFlattenedRequirements(), storyPathElements);
         }
     }
 
@@ -418,7 +421,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private Optional<Requirement> findMatchingRequirementIn(String storyPathElement, List<Requirement> requirements) {
         for (Requirement requirement : requirements) {
             String normalizedStoryPathElement = Inflector.getInstance().humanize(Inflector.getInstance().underscore(storyPathElement));
-            if (requirement.getName().equals(normalizedStoryPathElement)) {
+            if (requirement.getName().equals(normalizedStoryPathElement)
+                    || (storyPathElement.equalsIgnoreCase(removeExtension(requirement.getFeatureFileName())))) {
                 return Optional.of(requirement);
             }
         }
@@ -447,7 +451,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return new Converter<File, Requirement>() {
 
             public Requirement convert(File storyFile) {
-                return readRequirementsFromStoryFile(storyFile);
+                return readRequirementsFromStoryOrFeatureFile(storyFile);
             }
         };
     }
@@ -464,24 +468,32 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
     }
 
-    private Requirement readRequirementsFromStoryFile(File storyFile) {
-        Optional<Narrative> optionalNarrative = narrativeReader.loadFromStoryFile(storyFile);
-        String storyFileName = storyFile.getName();
-        String storyName = "";
-        String storyType = "story";
-        if(storyFileName.endsWith("." + STORY_EXTENSION)) {
-            storyName = storyFile.getName().replace("." + STORY_EXTENSION, "");
-            storyType = "story";
-        }
-        else if(storyFileName.endsWith("." + FEATURE_EXTENSION)) {
-            storyName = storyFile.getName().replace("." + FEATURE_EXTENSION, "");
-            storyType = "feature";
-        }
-        if (optionalNarrative.isPresent()) {
-            return requirementWithNarrative(storyFile, humanReadableVersionOf(storyName), optionalNarrative.get()).withType(storyType);
-        } else {
-            return storyNamed(storyName).withType(storyType);
-        }
+    private Requirement readRequirementsFromStoryOrFeatureFile(File storyFile) {
+        FeatureType type = featureTypeOf(storyFile);
+        String defaultStoryName = storyFile.getName().replace(type.getExtension(), "");
+
+        Optional<Narrative> optionalNarrative = (type == FeatureType.STORY) ? loadFromStoryFile(storyFile) : loadFromFeatureFile(storyFile);
+
+        String storyName = (optionalNarrative.isPresent()) ? optionalNarrative.get().getTitle().or(defaultStoryName) : defaultStoryName;
+
+        Requirement requirement = (optionalNarrative.isPresent()) ?
+                requirementWithNarrative(storyFile, humanReadableVersionOf(storyName), optionalNarrative.get()).withType(type.toString())
+                : storyNamed(storyName).withType(type.toString());
+
+        return requirement.definedInFile(storyFile);
+    }
+
+    private Optional<Narrative> loadFromStoryFile(File storyFile) {
+        return narrativeReader.loadFromStoryFile(storyFile);
+    }
+
+    private Optional<Narrative> loadFromFeatureFile(File storyFile) {
+        CucumberParser parser = new CucumberParser();
+        return parser.loadFeatureNarrative(storyFile);
+    }
+
+    private FeatureType featureTypeOf(File storyFile) {
+        return (storyFile.getName().endsWith("." + STORY_EXTENSION)) ? FeatureType.STORY : FeatureType.FEATURE;
     }
 
     private Requirement requirementFromDirectoryName(File requirementDirectory) {
@@ -494,7 +506,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         String shortName = humanReadableVersionOf(storyName);
         return Requirement.named(shortName).withType(STORY_EXTENSION).withNarrative(shortName);
     }
-
 
 
     private Requirement requirementWithNarrative(File requirementDirectory, String shortName, Narrative requirementNarrative) {

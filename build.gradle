@@ -173,7 +173,10 @@ subprojects {
         compile "org.objenesis:objenesis:2.1"
         compile "org.slf4j:slf4j-api:1.7.7"
         compile "xml-apis:xml-apis:1.4.01"
+        compile 'info.cukes:cucumber-core:1.2.2'
+
         compile 'commons-logging:commons-logging:1.2'
+
         testCompile ("ch.qos.logback:logback-classic:1.0.13") {
             exclude group: "org.slf4j", module: 'slf4j-api'
         }

@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
@@ -54,7 +55,13 @@ public class NarrativeReader {
 
 
     public Optional<Narrative> loadFromStoryFile(File storyFile) {
-        return narrativeLoadedFrom(storyFile, "story");
+        if (storyFile.getName().endsWith(".story")) {
+            return narrativeLoadedFrom(storyFile, "story");
+        } else if (storyFile.getName().endsWith(".feature")) {
+            return featureNarrativeLoadedFrom(storyFile);
+        } else {
+            return Optional.absent();
+        }
     }
 
     private Optional<Narrative> narrativeLoadedFrom(File narrativeFile, int requirementsLevel) {
@@ -85,6 +92,12 @@ public class NarrativeReader {
         }
         return Optional.absent();
     }
+
+    private Optional<Narrative> featureNarrativeLoadedFrom(File narrativeFile)  {
+        CucumberParser parser = new CucumberParser();
+        return parser.loadFeatureNarrative(narrativeFile);
+    }
+
 
     private String findCardNumberIn(List<String> lines) {
         String cardNumber = null;

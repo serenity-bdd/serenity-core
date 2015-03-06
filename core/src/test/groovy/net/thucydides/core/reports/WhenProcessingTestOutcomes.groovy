@@ -257,7 +257,7 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should count the number of scenarios correctly"() {
         when:
-            def testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/json-passing-pending"));
+            def testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/samplefulljsonreport"));
         then:
             testOutcomes.totalTestScenarios == 11
         and:

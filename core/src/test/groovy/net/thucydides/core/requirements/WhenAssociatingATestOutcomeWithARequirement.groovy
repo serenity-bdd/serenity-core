@@ -145,6 +145,23 @@ class WhenAssociatingATestOutcomeWithARequirement extends Specification {
             requirement.get().narrative.renderedText.contains "I want to grow potatoes"
     }
 
+    def "Should find the requirement for a feature tag"() {
+        given: "We load requirements with nested capability directories"
+            RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/feature_files");
+            def testOutcome = new TestOutcome("someTest")
+            testOutcome.addTags([TestTag.withName('Planting a new apple tree').andType('feature'),
+                                 TestTag.withName('123').andType('issue'),
+                                 TestTag.withName('Planting an apple tree').andType('story')])
+
+        when:
+            Optional<Requirement> requirement = capabilityProvider.getParentRequirementOf(testOutcome)
+        then: "the nested requirements should be recorded as features"
+            requirement.isPresent()
+        and:
+            requirement.get().featureFileName == "PlantingAnAppleTree.feature"
+
+    }
+
     def "Should not find the requirement if there are no matching requirements for a tag"() {
         given: "We are using the default requirements provider"
             EnvironmentVariables vars = new MockEnvironmentVariables();

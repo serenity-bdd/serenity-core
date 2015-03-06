@@ -24,8 +24,7 @@ dependencies {
 
     compile ("com.opera:operadriver:1.5") {
         exclude group: 'org.seleniumhq.selenium', module:'selenium-java'
-        exclude group: 'org.seleniumhq.selenium', module:'selenium-remote-driver' +
-                ''
+        exclude group: 'org.seleniumhq.selenium', module:'selenium-remote-driver'
         exclude group: 'com.google.guava', module: 'guava'
     }
 

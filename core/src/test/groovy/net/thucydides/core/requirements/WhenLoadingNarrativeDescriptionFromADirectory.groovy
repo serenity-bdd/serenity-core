@@ -60,9 +60,7 @@ class WhenLoadingNarrativeDescriptionFromADirectory extends Specification {
         then: "the narrativeText should be found"
         narrative.present
         narrative.get().title.get() == 'Planting a new apple tree'
-        narrative.get().text == "As a farmer\n" +
-                                "I want to plant an apple tree\n" +
-                                "So that I can grow apples"
+        narrative.get().text == "As a farmer\nI want to plant an apple tree\nSo that I can grow apples\n\nThis is really important"
     }
 
     def "Should use the lowest requirement type for deeply nested requirements"() {

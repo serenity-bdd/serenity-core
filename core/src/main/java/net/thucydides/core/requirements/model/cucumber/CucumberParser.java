@@ -1,0 +1,88 @@
+package net.thucydides.core.requirements.model.cucumber;
+
+import com.google.common.base.Optional;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+import gherkin.formatter.model.Tag;
+import gherkin.parser.Parser;
+import net.thucydides.core.requirements.model.Narrative;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Scanner;
+
+/**
+ * Created by john on 5/03/15.
+ */
+public class CucumberParser {
+
+    public Optional<Narrative> loadFeatureNarrative(File narrativeFile)  {
+
+        CucumberFeatureListener gherkinStructure =new CucumberFeatureListener();
+        Parser parser = new Parser(gherkinStructure);
+
+        try {
+            String gherkinScenarios = filterOutCommentsFrom(FileUtils.readFileToString(narrativeFile));
+            parser.parse(gherkinScenarios, narrativeFile.getName(),0);
+
+
+            String cardNumber = findCardNumberInTags(gherkinStructure.getFeature().getTags());
+            List<String> versionNumbers = findVersionNumberInTags(gherkinStructure.getFeature().getTags());
+            String title = gherkinStructure.getFeature().getName();
+            String text = gherkinStructure.getFeature().getDescription();
+
+            return Optional.of(new Narrative(Optional.fromNullable(title),
+                    Optional.fromNullable(cardNumber),
+                    versionNumbers,
+                    "feature",
+                    text));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return Optional.absent();
+    }
+
+
+    private String filterOutCommentsFrom(String gherkin) {
+        StringBuilder filteredGherkin = new StringBuilder();
+
+        Scanner scanner = new Scanner(gherkin);
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            if (!line.trim().startsWith("#")) {
+                filteredGherkin.append(line).append(System.lineSeparator());
+            }
+        }
+        scanner.close();
+        return filteredGherkin.toString();
+    }
+
+    private String findCardNumberInTags(List<Tag> tags) {
+        for(Tag tag : tags) {
+            if (tag.getName().toLowerCase().startsWith("@issue:")) {
+                return tag.getName().replaceAll("@issue:","");
+            } else if (tag.getName().toLowerCase().startsWith("@issues:")) {
+                String issueNumberList = tag.getName().replaceAll("@issues:", "");
+                List<String> issueNumberTags = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(issueNumberList);
+                return issueNumberTags.get(0);
+            }
+        }
+        return null;
+    }
+
+    private List<String> findVersionNumberInTags(List<Tag> tags) {
+        List<String> versionNumbers = Lists.newArrayList();
+        for(Tag tag : tags) {
+            if (tag.getName().toLowerCase().startsWith("@version:")) {
+                versionNumbers.add(tag.getName().replaceAll("@version:", ""));
+            } else if (tag.getName().toLowerCase().startsWith("@versions:")) {
+                String versionNumberList = tag.getName().replaceAll("@versions:", "");
+                List<String> versionNumberTags = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(versionNumberList);
+                versionNumbers.addAll(versionNumberTags);
+            }
+        }
+        return versionNumbers;
+    }
+}

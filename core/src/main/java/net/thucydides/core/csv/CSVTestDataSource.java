@@ -22,12 +22,18 @@ public class CSVTestDataSource implements TestDataSource {
     
     private final List<Map<String, String>> testData;
     private final char separator;
+    private final char quotechar;
+    private final char escape;
+    private final int skipLines;
     private final List<String> headers;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CSVTestDataSource.class);
 
-    public CSVTestDataSource(final String path, final char separatorValue) throws IOException {
+    public CSVTestDataSource(final String path, final char separatorValue, final char quotechar, final char escape, final int skipLines) throws IOException {
         this.separator = separatorValue;
+        this.quotechar = quotechar;
+        this.escape = escape;
+        this.skipLines = skipLines;
         List<String[]> csvDataRows = getCSVDataFrom(getDataFileFor(path));
         String[] titleRow = csvDataRows.get(0);
 
@@ -43,7 +49,19 @@ public class CSVTestDataSource implements TestDataSource {
     }
 
     public CSVTestDataSource(final String path) throws IOException {
-        this(path, CSVReader.DEFAULT_SEPARATOR);
+        this(path, CSVReader.DEFAULT_SEPARATOR, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
+    }
+
+    public CSVTestDataSource(final String path, final char separatorValue) throws IOException {
+        this(path, separatorValue, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
+    }
+
+    public CSVTestDataSource(final String path, final char separatorValue, final char quotechar) throws IOException {
+        this(path, separatorValue, quotechar, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
+    }
+
+    public CSVTestDataSource(final String path, final char separatorValue, final char quotechar, final char escape) throws IOException {
+        this(path, separatorValue, quotechar, escape, CSVReader.DEFAULT_SKIP_LINES);
     }
 
     public static boolean validTestDataPath(final String path) {
@@ -80,7 +98,7 @@ public class CSVTestDataSource implements TestDataSource {
 
     protected List<String[]> getCSVDataFrom(final Reader testDataReader) throws IOException {
 
-        CSVReader reader = new CSVReader(testDataReader, separator);
+        CSVReader reader = new CSVReader(testDataReader, separator, quotechar, escape, skipLines);
         List<String[]> rows = Lists.newArrayList();
         try {
             rows = reader.readAll();

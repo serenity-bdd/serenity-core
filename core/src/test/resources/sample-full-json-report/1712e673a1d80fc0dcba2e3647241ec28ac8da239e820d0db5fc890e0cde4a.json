@@ -1,0 +1,563 @@
+{
+  "name": "Allow skipping a blind key if can't confirm or if a wrong value is entered",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "[1] {field-1\u003d, date-of-birth\u003d, field-1\u003d12345678, outcome\u003dsucceed}",
+      "duration": 42,
+      "startTime": 1425438519626,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 2,
+          "description": "Given the following customers exist",
+          "duration": 9,
+          "startTime": 1425438519627,
+          "result": "SUCCESS"
+        },
+        {
+          "number": 3,
+          "description": "And I am logged into the app",
+          "duration": 9,
+          "startTime": 1425438519636,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 4,
+              "description": "Logs in as: \u003cspan class\u003d\u0027step-parameter\u0027\u003ePHILLIP\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438519642,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 5,
+          "description": "Given I have displayed customer",
+          "duration": 5,
+          "startTime": 1425438519646,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 6,
+              "description": "View locate customer page",
+              "duration": 0,
+              "startTime": 1425438519648,
+              "result": "IGNORED"
+            },
+            {
+              "number": 7,
+              "description": "Find customer",
+              "duration": 0,
+              "startTime": 1425438519649,
+              "result": "IGNORED"
+            },
+            {
+              "number": 8,
+              "description": "Select customer",
+              "duration": 0,
+              "startTime": 1425438519650,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 9,
+          "description": "And I trigger an action that requires customer level 1 authentication",
+          "duration": 3,
+          "startTime": 1425438519652,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 10,
+              "description": "Update customer details",
+              "duration": 1,
+              "startTime": 1425438519653,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 11,
+          "description": "When I verify the customer\u0027s identity",
+          "duration": 5,
+          "startTime": 1425438519655,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 12,
+              "description": "Select blind key tab",
+              "duration": 1,
+              "startTime": 1425438519656,
+              "result": "IGNORED"
+            },
+            {
+              "number": 13,
+              "description": "Verify identity",
+              "duration": 1,
+              "startTime": 1425438519658,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 14,
+          "description": "Then customer authentication should succeed",
+          "duration": 7,
+          "startTime": 1425438519660,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 15,
+              "description": "Authentication should: \u003cspan class\u003d\u0027step-parameter\u0027\u003esucceed\u003c/span\u003e",
+              "duration": 2,
+              "startTime": 1425438519663,
+              "result": "IGNORED"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "description": "[1] {field-1\u003d12345678, date-of-birth\u003d, field-1\u003dskipped, outcome\u003dsucceed}",
+      "duration": 34,
+      "startTime": 1425438519668,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 17,
+          "description": "Given the following customers exist",
+          "duration": 10,
+          "startTime": 1425438519669,
+          "result": "SUCCESS"
+        },
+        {
+          "number": 18,
+          "description": "And I am logged into the app",
+          "duration": 7,
+          "startTime": 1425438519679,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 19,
+              "description": "Logs in as: \u003cspan class\u003d\u0027step-parameter\u0027\u003ePHILLIP\u003c/span\u003e",
+              "duration": 0,
+              "startTime": 1425438519684,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 20,
+          "description": "Given I have displayed customer",
+          "duration": 5,
+          "startTime": 1425438519686,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 21,
+              "description": "View locate customer page",
+              "duration": 0,
+              "startTime": 1425438519687,
+              "result": "IGNORED"
+            },
+            {
+              "number": 22,
+              "description": "Find customer",
+              "duration": 0,
+              "startTime": 1425438519688,
+              "result": "IGNORED"
+            },
+            {
+              "number": 23,
+              "description": "Select customer",
+              "duration": 1,
+              "startTime": 1425438519689,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 24,
+          "description": "And I trigger an action that requires customer level 1 authentication",
+          "duration": 3,
+          "startTime": 1425438519691,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 25,
+              "description": "Update customer details",
+              "duration": 1,
+              "startTime": 1425438519692,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 26,
+          "description": "When I verify the customer\u0027s identity",
+          "duration": 3,
+          "startTime": 1425438519694,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 27,
+              "description": "Select blind key tab",
+              "duration": 1,
+              "startTime": 1425438519695,
+              "result": "IGNORED"
+            },
+            {
+              "number": 28,
+              "description": "Verify identity",
+              "duration": 0,
+              "startTime": 1425438519696,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 29,
+          "description": "Then customer authentication should succeed",
+          "duration": 4,
+          "startTime": 1425438519697,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 30,
+              "description": "Authentication should: \u003cspan class\u003d\u0027step-parameter\u0027\u003esucceed\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438519699,
+              "result": "IGNORED"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "description": "[1] {field-1\u003dskipped, date-of-birth\u003d10/04/1952, field-1\u003dskipped, outcome\u003dsucceed}",
+      "duration": 38,
+      "startTime": 1425438519703,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 32,
+          "description": "Given the following customers exist",
+          "duration": 8,
+          "startTime": 1425438519705,
+          "result": "SUCCESS"
+        },
+        {
+          "number": 33,
+          "description": "And I am logged into the app",
+          "duration": 9,
+          "startTime": 1425438519713,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 34,
+              "description": "Logs in as: \u003cspan class\u003d\u0027step-parameter\u0027\u003ePHILLIP\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438519719,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 35,
+          "description": "Given I have displayed customer Joe Blogs using Phone Number",
+          "duration": 6,
+          "startTime": 1425438519722,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 36,
+              "description": "View locate customer page",
+              "duration": 0,
+              "startTime": 1425438519724,
+              "result": "IGNORED"
+            },
+            {
+              "number": 37,
+              "description": "Find customer",
+              "duration": 0,
+              "startTime": 1425438519725,
+              "result": "IGNORED"
+            },
+            {
+              "number": 38,
+              "description": "Select customer",
+              "duration": 2,
+              "startTime": 1425438519725,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 39,
+          "description": "And I trigger an action that requires customer level 1 authentication",
+          "duration": 3,
+          "startTime": 1425438519728,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 40,
+              "description": "Update customer details",
+              "duration": 0,
+              "startTime": 1425438519730,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 41,
+          "description": "When I verify the customer\u0027s identity by successively entering skipped,skipped,10/04/1952",
+          "duration": 5,
+          "startTime": 1425438519732,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 42,
+              "description": "Select blind key tab",
+              "duration": 0,
+              "startTime": 1425438519734,
+              "result": "IGNORED"
+            },
+            {
+              "number": 43,
+              "description": "Verify identity by successively entering: \u003cspan class\u003d\u0027step-parameter\u0027\u003e[skipped, skipped, 10/04/1952]\u003c/span\u003e",
+              "duration": 0,
+              "startTime": 1425438519735,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 44,
+          "description": "Then customer authentication should succeed",
+          "duration": 4,
+          "startTime": 1425438519737,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 45,
+              "description": "Authentication should: \u003cspan class\u003d\u0027step-parameter\u0027\u003esucceed\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438519739,
+              "result": "IGNORED"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 46,
+      "description": "[1] {field-1\u003dskipped, date-of-birth\u003dskipped, field-1\u003dskipped, outcome\u003dfail}",
+      "duration": 42,
+      "startTime": 1425438519742,
+      "result": "PENDING",
+      "children": [
+        {
+          "number": 47,
+          "description": "Given the following customers exist",
+          "duration": 9,
+          "startTime": 1425438519743,
+          "result": "SUCCESS"
+        },
+        {
+          "number": 48,
+          "description": "And I am logged into the app",
+          "duration": 9,
+          "startTime": 1425438519753,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 49,
+              "description": "Logs in as: \u003cspan class\u003d\u0027step-parameter\u0027\u003ePHILLIP\u003c/span\u003e",
+              "duration": 1,
+              "startTime": 1425438519758,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 50,
+          "description": "Given I have displayed customer",
+          "duration": 7,
+          "startTime": 1425438519762,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 51,
+              "description": "View locate customer page",
+              "duration": 1,
+              "startTime": 1425438519764,
+              "result": "IGNORED"
+            },
+            {
+              "number": 52,
+              "description": "Find customer",
+              "duration": 1,
+              "startTime": 1425438519765,
+              "result": "IGNORED"
+            },
+            {
+              "number": 53,
+              "description": "Select customer",
+              "duration": 2,
+              "startTime": 1425438519766,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 54,
+          "description": "And I trigger an action that requires customer level 1 authentication",
+          "duration": 3,
+          "startTime": 1425438519770,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 55,
+              "description": "Update customer details",
+              "duration": 1,
+              "startTime": 1425438519771,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 56,
+          "description": "When I verify the customer\u0027s identity",
+          "duration": 5,
+          "startTime": 1425438519774,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 57,
+              "description": "Select blind key tab",
+              "duration": 1,
+              "startTime": 1425438519775,
+              "result": "IGNORED"
+            },
+            {
+              "number": 58,
+              "description": "Verify identity",
+              "duration": 0,
+              "startTime": 1425438519777,
+              "result": "IGNORED"
+            }
+          ]
+        },
+        {
+          "number": 59,
+          "description": "Then customer authentication should fail",
+          "duration": 3,
+          "startTime": 1425438519779,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 60,
+              "description": "Authentication should: \u003cspan class\u003d\u0027step-parameter\u0027\u003efail\u003c/span\u003e",
+              "duration": 0,
+              "startTime": 1425438519781,
+              "result": "IGNORED"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "blind-key-authentication",
+    "storyName": "Blind key authentication",
+    "path": "blind_key.feature",
+    "type": "feature"
+  },
+  "title": "Allow to skip a blind key if unable to confirm or if a wrong value is entered",
+  "description": "",
+  "backgroundTitle": "",
+  "backgroundDescription": "",
+  "tags": [
+    {
+      "name": "pending",
+      "type": "tag"
+    },
+    {
+      "name": "Blind key authentication",
+      "type": "feature"
+    },
+    {
+      "name": "PROJ-198",
+      "type": "issue"
+    },
+    {
+      "name": "Blind key",
+      "type": "story"
+    }
+  ],
+  "startTime": 1425438519626,
+  "duration": 158,
+  "annotatedResult": "PENDING",
+  "driver": "firefox",
+  "dataTable": {
+    "headers": [
+      "field-1",
+      "field-1",
+      "date-of-birth",
+      "outcome"
+    ],
+    "rows": [
+      {
+        "values": [
+          "40562514",
+          "",
+          "",
+          "succeed"
+        ],
+        "result": "SUCCESS"
+      },
+      {
+        "values": [
+          "skipped",
+          "00012097",
+          "",
+          "succeed"
+        ],
+        "result": "SUCCESS"
+      },
+      {
+        "values": [
+          "skipped",
+          "skipped",
+          "10/04/1952",
+          "succeed"
+        ],
+        "result": "SUCCESS"
+      },
+      {
+        "values": [
+          "skipped",
+          "skipped",
+          "skipped",
+          "fail"
+        ],
+        "result": "SUCCESS"
+      }
+    ],
+    "predefinedRows": true,
+    "currentRow": {"value": 3},
+    "dataSetDescriptors": [
+      {
+        "startRow": 0,
+        "rowCount": 0,
+        "name": "",
+        "description": ""
+      }
+    ]
+  },
+  "manual": false,
+  "result": "PENDING"
+}

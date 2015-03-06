@@ -1,0 +1,88 @@
+{
+  "name": "Attempting to log on with invalid credentials",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Given I am an authorized staff member",
+      "duration": 7,
+      "startTime": 1425438529307,
+      "result": "SUCCESS"
+    },
+    {
+      "number": 2,
+      "description": "When I provide an invalid staff number",
+      "duration": 3,
+      "startTime": 1425438529314,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 3,
+          "description": "Enters credentials: \u003cspan class\u003d\u0027step-parameter\u0027\u003e123, P@55word\u003c/span\u003e",
+          "duration": 1,
+          "startTime": 1425438529315,
+          "result": "IGNORED"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "description": "Then I should not be able to login",
+      "duration": 1022,
+      "startTime": 1425438529317,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 5,
+          "description": "Login button should be disabled",
+          "duration": 1019,
+          "startTime": 1425438529319,
+          "result": "IGNORED"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "description": "And I should see an authentication error message",
+      "duration": 5019,
+      "startTime": 1425438530339,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 7,
+          "description": "Should see authentication error message",
+          "duration": 5016,
+          "startTime": 1425438530341,
+          "result": "IGNORED"
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "login-with-username-and-password",
+    "storyName": "Login with username and password",
+    "path": "login.feature",
+    "narrative": "In order to prevent unauthorized access to non-staff members\nAs a system admin\nI want valid users to authenticate before they access customer information",
+    "type": "feature"
+  },
+  "title": "Attempting to log on with an invalid credentials",
+  "description": "In order to enhance user experience the users should not be allowed to log on using credentials that are obviously wrong, such as a username that is too short",
+  "tags": [
+    {
+      "name": "Login with username and password",
+      "type": "feature"
+    },
+    {
+      "name": "PROJ-36",
+      "type": "issue"
+    },
+    {
+      "name": "Login",
+      "type": "story"
+    }
+  ],
+  "startTime": 1425438529307,
+  "duration": 6051,
+  "driver": "firefox",
+  "manual": false,
+  "result": "SUCCESS"
+}

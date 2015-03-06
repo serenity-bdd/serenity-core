@@ -260,8 +260,12 @@ public abstract class PageObject {
     }
 
     public RenderedPageObjectView withTimeoutOf(int timeout, TimeUnit units) {
+        return withTimeoutOf(new Duration(timeout, units));
+    }
+
+    public RenderedPageObjectView withTimeoutOf(Duration timeout) {
         RenderedPageObjectView renderedPageObjectView = getRenderedView();
-        renderedPageObjectView.setWaitForTimeoutInMilliseconds(TimeUnit.MILLISECONDS.convert(timeout, units));
+        renderedPageObjectView.setWaitForTimeoutInMilliseconds(timeout.in(MILLISECONDS));
         return renderedPageObjectView;
     }
 

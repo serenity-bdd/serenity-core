@@ -1,0 +1,97 @@
+{
+  "name": "System error during login",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Given the authentication service is unavailable",
+      "duration": 10,
+      "startTime": 1425438541169,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 2,
+          "description": "Set authentication service status: \u003cspan class\u003d\u0027step-parameter\u0027\u003eUNAVAILABLE\u003c/span\u003e",
+          "duration": 2,
+          "startTime": 1425438541175,
+          "result": "IGNORED"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "description": "When I log on using my valid credentials",
+      "duration": 5,
+      "startTime": 1425438541179,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 4,
+          "description": "Logs in as: \u003cspan class\u003d\u0027step-parameter\u0027\u003ePHILLIP\u003c/span\u003e",
+          "duration": 1,
+          "startTime": 1425438541182,
+          "result": "IGNORED"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "description": "Then I should not be logged into the application",
+      "duration": 5,
+      "startTime": 1425438541184,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 6,
+          "description": "Should not be logged on",
+          "duration": 0,
+          "startTime": 1425438541186,
+          "result": "IGNORED"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "description": "And I should see an authentication error message",
+      "duration": 5035,
+      "startTime": 1425438541190,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 8,
+          "description": "Should see authentication error message",
+          "duration": 5031,
+          "startTime": 1425438541193,
+          "result": "IGNORED"
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "login-with-username-and-password",
+    "storyName": "Login with username and password",
+    "path": "login.feature",
+    "narrative": "In order to prevent unauthorized access to non-staff members\nAs a system admin\nI want valid users to authenticate before they access customer information",
+    "type": "feature"
+  },
+  "title": "Login is prevented by a system error",
+  "description": "",
+  "tags": [
+    {
+      "name": "Login with username and password",
+      "type": "feature"
+    },
+    {
+      "name": "PROJ-36",
+      "type": "issue"
+    },
+    {
+      "name": "Login",
+      "type": "story"
+    }
+  ],
+  "startTime": 1425438541168,
+  "duration": 5057,
+  "driver": "firefox",
+  "manual": false,
+  "result": "SUCCESS"
+}

@@ -3,6 +3,7 @@ package net.thucydides.core.webdriver
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriver
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import java.util.concurrent.TimeUnit
@@ -14,6 +15,7 @@ class WhenMonitoringWebDriverTimeoutOptions extends Specification {
 
     def webDriverFactory = new WebDriverFactory()
 
+    @Ignore
     def "should record the driver implicit timeout when it is set"() {
         given:
             def driver = new WebDriverFacade(PhantomJSDriver.class, webDriverFactory)

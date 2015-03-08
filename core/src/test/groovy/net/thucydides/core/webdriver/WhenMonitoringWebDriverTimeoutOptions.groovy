@@ -17,7 +17,7 @@ class WhenMonitoringWebDriverTimeoutOptions extends Specification {
 
     def "should record the driver implicit timeout when it is set"() {
         given:
-            def driver = new WebDriverFacade(HtmlUnitDriver.class, webDriverFactory)
+            def driver = new WebDriverFacade(PhantomJSDriver.class, webDriverFactory)
         when:
             driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS)
         then:

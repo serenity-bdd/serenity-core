@@ -24,9 +24,11 @@ import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webelements.Checkbox;
 import net.thucydides.core.webelements.RadioButtonGroup;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
+import org.openqa.selenium.support.ui.Duration;
 import org.openqa.selenium.support.ui.SystemClock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,19 +59,10 @@ import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascr
  */
 public abstract class PageObject {
 
-    public static Duration FIVE_HUNDRED_MILLIS = new Duration(500, MILLISECONDS);
-    public static Duration FIVE_SECONDS = new Duration(5, SECONDS);
 
     private static final int WAIT_FOR_ELEMENT_PAUSE_LENGTH = 250;
 
-    private static final int ONE_SECOND = 1000;
-
-    private static final Duration DEFAULT_WAIT_FOR_TIMEOUT = FIVE_SECONDS;
-    private static final Duration DEFAULT_WAIT_FOR_ELEMENT_TIMEOUT = FIVE_HUNDRED_MILLIS;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(PageObject.class);
-
-    private static final int DEFAULT_IMPLICIT_WAIT_IN_SECONDS = 0;
 
     private WebDriver driver;
 
@@ -91,6 +84,10 @@ public abstract class PageObject {
     private JavascriptExecutorFacade javascriptExecutorFacade;
 
     private EnvironmentVariables environmentVariables;
+
+    public PageObject usingTimeoutOf(Duration timeout) {
+        return this;
+    }
 
     private enum OpenMode {
         CHECK_URL_PATTERNS,
@@ -135,7 +132,7 @@ public abstract class PageObject {
         if (waitForTimeout == null) {
             int configuredWaitForTimeoutInMilliseconds =
                     ThucydidesSystemProperty.WEBDRIVER_WAIT_FOR_TIMEOUT
-                            .integerFrom(environmentVariables, (int) DEFAULT_WAIT_FOR_TIMEOUT.in(MILLISECONDS));
+                            .integerFrom(environmentVariables, (int) DefaultTimeouts.DEFAULT_WAIT_FOR_TIMEOUT.in(MILLISECONDS));
             waitForTimeout = new Duration(configuredWaitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS);
         }
         return waitForTimeout;
@@ -146,7 +143,7 @@ public abstract class PageObject {
         if (waitForElementTimeout == null) {
             int configuredWaitForTimeoutInMilliseconds =
                     ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT
-                            .integerFrom(environmentVariables, (int) DEFAULT_WAIT_FOR_ELEMENT_TIMEOUT.in(MILLISECONDS));
+                            .integerFrom(environmentVariables, (int) DefaultTimeouts.DEFAULT_WAIT_FOR_ELEMENT_TIMEOUT.in(MILLISECONDS));
             waitForElementTimeout = new Duration(configuredWaitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS);
         }
         return waitForElementTimeout;
@@ -264,9 +261,7 @@ public abstract class PageObject {
     }
 
     public RenderedPageObjectView withTimeoutOf(Duration timeout) {
-        RenderedPageObjectView renderedPageObjectView = getRenderedView();
-        renderedPageObjectView.setWaitForTimeoutInMilliseconds(timeout.in(MILLISECONDS));
-        return renderedPageObjectView;
+        return new RenderedPageObjectView(driver, timeout);
     }
 
     public PageObject waitFor(String xpathOrCssSelector) {

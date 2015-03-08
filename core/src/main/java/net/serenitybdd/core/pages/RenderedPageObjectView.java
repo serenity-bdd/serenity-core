@@ -2,6 +2,7 @@ package net.serenitybdd.core.pages;
 
 import net.thucydides.core.scheduling.NormalFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
+import net.thucydides.core.webdriver.WebDriverFacade;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 import org.openqa.selenium.support.ui.SystemClock;
@@ -31,14 +32,14 @@ public class RenderedPageObjectView {
     }
 
     public RenderedPageObjectView(final WebDriver driver, Duration waitForTimeout) {
-        this.driver = driver;
+        this.driver = ((WebDriverFacade) driver).withTimeoutOf(waitForTimeout);
         setWaitForTimeout(waitForTimeout);
         this.webdriverClock = new SystemClock();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
     }
 
     public ThucydidesFluentWait<WebDriver> waitForCondition() {
-        return new NormalFluentWait<WebDriver>(driver, webdriverClock, sleeper)
+        return new NormalFluentWait<>(driver, webdriverClock, sleeper)
                 .withTimeout(waitForTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS)
                 .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
                 .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
@@ -101,19 +102,24 @@ public class RenderedPageObjectView {
 
     public boolean elementIsDisplayed(final By byElementCriteria) {
         try {
-            List<WebElement> matchingElements = driver.findElements(byElementCriteria);
-            for(WebElement webElement : matchingElements) {
-                WebElementFacade element = net.thucydides.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, 100);
-                if (element.isCurrentlyVisible()) {
-                    return true;
-                }
-            }
-            return false;
+            waitFor(ExpectedConditions.visibilityOfAllElementsLocatedBy(byElementCriteria));
+            return true;
+//            List<WebElement> matchingElements = driver.findElements(byElementCriteria);
+//            System.out.println(matchingElements);
+//            for(WebElement webElement : matchingElements) {
+//                WebElementFacade element = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100);
+//                if (element.isCurrentlyVisible()) {
+//                    return true;
+//                }
+//            }
+//            return false;
         } catch (NoSuchElementException noSuchElement) {
             LOGGER.trace("No such element " + noSuchElement);
             return false;
         } catch (StaleElementReferenceException se) {
             LOGGER.trace("Element no longer attached to the DOM " + se);
+            return false;
+        } catch (TimeoutException iGuessItsNotThere) {
             return false;
         }
     }

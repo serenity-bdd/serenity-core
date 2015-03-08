@@ -99,6 +99,10 @@ public class StaticSitePage extends PageObject {
         waitABit(500);
     }
 
+    public StaticSitePage(WebDriver driver) {
+        super(driver);
+    }
+
     public StaticSitePage(WebDriver driver, int timeout) {
         super(driver, timeout);
     }

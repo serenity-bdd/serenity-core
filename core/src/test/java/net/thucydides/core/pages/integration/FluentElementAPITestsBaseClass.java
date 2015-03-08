@@ -11,6 +11,7 @@ public class FluentElementAPITestsBaseClass {
 
     private static StaticTestSite staticTestSite;
     private static StaticSitePage chromePage;
+    private static StaticSitePage phantomjsPage;
 
     @BeforeClass
     public static void openStaticSite() {
@@ -33,10 +34,19 @@ public class FluentElementAPITestsBaseClass {
     protected StaticSitePage getChromePage() {
         if (chromePage == null) {
             WebDriver driver = getStaticTestSite().open("chrome");
-            chromePage = new StaticSitePage(driver, 1000);
+            chromePage = new StaticSitePage(driver);
             chromePage.open();
         }
         return chromePage;
+    }
+
+    protected StaticSitePage getPhantomJSPage() {
+        if (phantomjsPage == null) {
+            WebDriver driver = getStaticTestSite().open("phantomjs");
+            phantomjsPage = new StaticSitePage(driver);
+            phantomjsPage.open();
+        }
+        return phantomjsPage;
     }
 
     @AfterClass

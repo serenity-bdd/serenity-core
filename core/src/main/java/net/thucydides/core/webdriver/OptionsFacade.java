@@ -48,7 +48,7 @@ public class OptionsFacade implements WebDriver.Options {
 
     @Override
     public WebDriver.Timeouts timeouts() {
-        return new TimeoutsFacade(webDriverFacade, options.timeouts());
+        return new TimeoutsFacade(webDriverFacade, (options != null) ? options.timeouts() : null);
     }
 
     @Override

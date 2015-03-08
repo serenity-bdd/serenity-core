@@ -13,6 +13,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -28,7 +30,7 @@ public class WaitingForElementsWithTheFluentElementAPIInARealBrowser extends Flu
     @BeforeClass
     public static void openBrowsers() {
         driver = new FirefoxDriver();
-        staticPage = new StaticSitePage(driver, 1000);
+        staticPage = new StaticSitePage(driver);
         staticPage.open();
     }
 
@@ -100,5 +102,6 @@ public class WaitingForElementsWithTheFluentElementAPIInARealBrowser extends Flu
         page.waitForAnyRenderedElementOf(By.id("city"));
         assertThat(page.element(page.city).isCurrentlyVisible(), is(true));
     }
+
 
 }

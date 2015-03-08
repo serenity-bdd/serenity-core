@@ -3,6 +3,7 @@ package net.thucydides.core.webdriver
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriver
+import org.openqa.selenium.support.ui.Duration
 import spock.lang.Specification
 
 import java.util.concurrent.TimeUnit
@@ -20,7 +21,6 @@ class WhenMonitoringWebDriverTimeoutOptions extends Specification {
         when:
             driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS)
         then:
-            driver.implicitTimeoutValue == 30
-            driver.implicitTimeoutUnit == TimeUnit.SECONDS
+            driver.implicitTimeout == new Duration(30, TimeUnit.SECONDS)
     }
 }

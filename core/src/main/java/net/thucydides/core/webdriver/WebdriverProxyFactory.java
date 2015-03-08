@@ -43,11 +43,14 @@ public class WebdriverProxyFactory implements Serializable {
         return ImmutableList.copyOf(eventListeners);
     }
     public WebDriverFacade proxyFor(final Class<? extends WebDriver> driverClass) {
-       return proxyFor(driverClass, new WebDriverFactory());
+       return proxyFor(driverClass,
+                       new WebDriverFactory(),
+                       Injectors.getInjector().getInstance(Configuration.class));
     }
 
     public WebDriverFacade proxyFor(final Class<? extends WebDriver> driverClass,
-                              final WebDriverFactory webDriverFactory) {
+                                    final WebDriverFactory webDriverFactory,
+                                    Configuration configuration) {
         if (mockDriver != null) {
             return mockDriver;
         } else {
@@ -67,7 +70,9 @@ public class WebdriverProxyFactory implements Serializable {
 
     public WebDriver proxyDriver() {
         Class<? extends WebDriver> driverClass = webDriverFactory.getClassFor(configuration.getDriverType());
-        return proxyFor(driverClass, webDriverFactory);
+        return proxyFor(driverClass,
+                        webDriverFactory,
+                        Injectors.getInjector().getInstance(Configuration.class));
     }
 
     public static void resetDriver(final WebDriver driver) {

@@ -1,7 +1,11 @@
 package net.thucydides.core.webdriver;
 
 import com.gargoylesoftware.htmlunit.ScriptException;
+import net.serenitybdd.core.pages.DefaultTimeouts;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.stubs.*;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
@@ -9,6 +13,7 @@ import org.openqa.selenium.interactions.HasInputDevices;
 import org.openqa.selenium.interactions.Keyboard;
 import org.openqa.selenium.interactions.Mouse;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +22,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * A proxy class for webdriver instances, designed to prevent the browser being opened unnecessarily.
@@ -31,16 +39,46 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebDriverFacade.class);
 
+    private EnvironmentVariables environmentVariables;
+
     /**
      * Implicit timeout values recorded to that they can be restored after calling findElements()
      */
-    protected long implicitTimeoutValue = 0;
-    protected TimeUnit implicitTimeoutUnit = TimeUnit.SECONDS;
+    protected Duration implicitTimeout;
 
     public WebDriverFacade(final Class<? extends WebDriver> driverClass,
                            final WebDriverFactory webDriverFactory) {
+        this(driverClass, webDriverFactory, Injectors.getInjector().getInstance(EnvironmentVariables.class));
+    }
+
+    public WebDriverFacade(final Class<? extends WebDriver> driverClass,
+                           final WebDriverFactory webDriverFactory,
+                           final EnvironmentVariables environmentVariables ) {
         this.driverClass = driverClass;
         this.webDriverFactory = webDriverFactory;
+        this.environmentVariables = environmentVariables;
+        this.implicitTimeout = defaultImplicitWait();
+    }
+
+    private Duration defaultImplicitWait() {
+        int configuredWaitForTimeoutInMilliseconds = ThucydidesSystemProperty.WEBDRIVER_WAIT_FOR_TIMEOUT
+                        .integerFrom(environmentVariables, (int) DefaultTimeouts.DEFAULT_WAIT_FOR_TIMEOUT.in(MILLISECONDS));
+
+       return new Duration(configuredWaitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS);
+    }
+
+    public WebDriverFacade(final Class<? extends WebDriver> driverClass,
+                           final WebDriverFactory webDriverFactory,
+                           WebDriver proxiedWebDriver,
+                           Duration implicitTimeout) {
+        this.driverClass = driverClass;
+        this.webDriverFactory = webDriverFactory;
+        this.proxiedWebDriver = proxiedWebDriver;
+        this.implicitTimeout = implicitTimeout;
+    }
+
+    public WebDriverFacade withTimeoutOf(Duration implicitTimeout) {
+        return new WebDriverFacade(driverClass, webDriverFactory, proxiedWebDriver, implicitTimeout);
     }
 
     public Class<? extends WebDriver>  getDriverClass() {
@@ -123,11 +161,17 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     private void openIgnoringHtmlUnitScriptErrors(final String url) {
         try {
             getProxiedDriver().get(url);
+            setTimeouts();
         } catch (WebDriverException e) {
             if (!htmlunitScriptError(e)) {
                 throw e;
             }
         }
+    }
+
+    private void setTimeouts() {
+        System.out.println("Set timeouts to " + implicitTimeout);
+        manage().timeouts().implicitlyWait(implicitTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
     }
 
     private boolean htmlunitScriptError(WebDriverException e) {
@@ -159,12 +203,8 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         if (!isEnabled()) {
             return Collections.emptyList();
         }
-
-        overrideTimeoutsTo(0, TimeUnit.SECONDS);
-        List<WebElement> matchingElements = getProxiedDriver().findElements(by);
-        restoreTimeouts();
-
-        return matchingElements;
+        setTimeouts();
+        return getProxiedDriver().findElements(by);
     }
 
     public void overrideTimeoutsTo(int value, TimeUnit unit) {
@@ -172,7 +212,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     public void restoreTimeouts() {
-        manage().timeouts().implicitlyWait(implicitTimeoutValue, implicitTimeoutUnit);
+        manage().timeouts().implicitlyWait(implicitTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
     }
 
     public WebElement findElement(final By by) {
@@ -180,6 +220,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
             return new WebElementFacadeStub();
         }
 
+        setTimeouts();
         return getProxiedDriver().findElement(by);
     }
 

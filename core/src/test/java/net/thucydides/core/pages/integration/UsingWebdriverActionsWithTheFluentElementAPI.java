@@ -17,7 +17,7 @@ public class UsingWebdriverActionsWithTheFluentElementAPI extends FluentElementA
     @BeforeClass
     public static void openStaticPage() {
         htmlUnitDriver = new WebDriverFacade(HtmlUnitDriver.class, new WebDriverFactory());
-        page = new StaticSitePage(htmlUnitDriver, 1);
+        page = new StaticSitePage(htmlUnitDriver);
         page.setWaitForTimeout(750);
         page.open();
     }

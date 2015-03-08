@@ -109,6 +109,11 @@ public abstract class ThucydidesFluentWait<T> implements Wait<T> {
         return this;
     }
 
+    public ThucydidesFluentWait<T> withTimeout(Duration timeout) {
+        this.timeout = timeout;
+        return this;
+    }
+
     public ThucydidesFluentWait<T> pollingEvery(long duration, TimeUnit unit) {
         this.interval = new Duration(duration, unit);
         return this;

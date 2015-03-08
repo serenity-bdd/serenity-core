@@ -74,13 +74,13 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     public WebElementFacadeImpl(final WebDriver driver,
                                 final ElementLocator locator,
                                 final long timeoutInMilliseconds) {
-        this(driver, locator, (WebElement) null, timeoutInMilliseconds);
+        this(driver, locator, null, timeoutInMilliseconds);
     }
 
     public static <T extends WebElementFacade> T wrapWebElement(final WebDriver driver,
                                                       final WebElement element,
                                                       final long timeoutInMilliseconds) {
-        return (T) new WebElementFacadeImpl(driver, (ElementLocator) null, element, timeoutInMilliseconds);
+        return (T) new WebElementFacadeImpl(driver, null, element, timeoutInMilliseconds);
 
     }
 
@@ -136,7 +136,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public List<WebElementFacade> thenFindAll(String xpathOrCssSelector) {
         logIfVerbose("findAll " + xpathOrCssSelector);
-        List<WebElement> nestedElements = Lists.newArrayList();
+        List<WebElement> nestedElements;
         if (PageObject.isXPath(xpathOrCssSelector)) {
             nestedElements = findElements((By.xpath(xpathOrCssSelector)));
         } else {
@@ -838,7 +838,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     private boolean isMobileDriver() {
         return ThucydidesWebDriverSupport.getDriverClass() == AppiumDriver.class;
-//        return ThucydidesWebDriverSupport.getProxiedDriver() instanceof AppiumDriver;
     }
 
     @Override
@@ -888,13 +887,13 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     public List<WebElement> findElements(By by) {
-        if (webDriverFacade().isPresent()) {
-            webDriverFacade().get().overrideTimeoutsTo(0, TimeUnit.SECONDS);
-        }
+//        if (webDriverFacade().isPresent()) {
+//            webDriverFacade().get().overrideTimeoutsTo(0, TimeUnit.SECONDS);
+//        }
         List<WebElement> matchingElements = getElement().findElements(by);
-        if (webDriverFacade().isPresent()) {
-            webDriverFacade().get().restoreTimeouts();
-        }
+//        if (webDriverFacade().isPresent()) {
+//            webDriverFacade().get().restoreTimeouts();
+//        }
 
         return matchingElements;
     }

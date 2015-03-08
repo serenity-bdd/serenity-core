@@ -21,7 +21,7 @@ public class CheckingFieldContentWithTheFluentElementAPI extends FluentElementAP
     @BeforeClass
     public static void openStaticPage() {
         localDriver = new WebDriverFacade(HtmlUnitDriver.class, new WebDriverFactory());
-        page = new StaticSitePage(localDriver, 1000);
+        page = new StaticSitePage(localDriver);
         page.open();
     }
 

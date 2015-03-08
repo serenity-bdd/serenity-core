@@ -14,8 +14,12 @@ public class StaticTestSite {
     private EnvironmentVariables environmentVariables;
 
     public StaticTestSite() {
-        factory = new WebDriverFactory();
-        environmentVariables = MockEnvironmentVariables.fromSystemEnvironment();
+        this(MockEnvironmentVariables.fromSystemEnvironment());
+    }
+
+    public StaticTestSite(EnvironmentVariables environmentVariables) {
+        this.environmentVariables = environmentVariables;
+        factory = new WebDriverFactory(environmentVariables);
         webdriverManager = new ThucydidesWebdriverManager(factory, new SystemPropertiesConfiguration(environmentVariables));
     }
 

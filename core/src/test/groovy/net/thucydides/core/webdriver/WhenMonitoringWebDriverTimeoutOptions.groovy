@@ -1,7 +1,5 @@
 package net.thucydides.core.webdriver
 
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriver
 import org.openqa.selenium.support.ui.Duration
 import spock.lang.Specification

@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements;
 
-import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -28,7 +27,6 @@ import java.net.URLDecoder;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static ch.lambdaj.Lambda.convert;
 import static net.thucydides.core.requirements.RequirementsPath.pathElements;
 import static net.thucydides.core.requirements.RequirementsPath.stripRootFromPath;
 import static net.thucydides.core.util.NameConverter.humanize;
@@ -404,7 +402,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private List<TestTag> concat(TestTag thisTag, List<TestTag> remainingTags) {
-        List<TestTag> totalTags = new ArrayList<TestTag>();
+        List<TestTag> totalTags = new ArrayList<>();
         totalTags.add(thisTag);
         totalTags.addAll(remainingTags);
         return totalTags;
@@ -430,30 +428,20 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private List<Requirement> loadCapabilitiesFrom(File[] requirementDirectories) {
-        return convert(requirementDirectories, toRequirements());
+        List<Requirement> capabilities = Lists.newArrayList();
+        for(File requirementsDirectory : requirementDirectories) {
+            capabilities.add(readRequirementFrom(requirementsDirectory));
+        }
+        return capabilities;
     }
 
 
     private List<Requirement> loadStoriesFrom(File[] storyFiles) {
-        return convert(storyFiles, toStoryRequirements());
-    }
-
-    private Converter<File, Requirement> toRequirements() {
-        return new Converter<File, Requirement>() {
-
-            public Requirement convert(File requirementFileOrDirectory) {
-                return readRequirementFrom(requirementFileOrDirectory);
-            }
-        };
-    }
-
-    private Converter<File, Requirement> toStoryRequirements() {
-        return new Converter<File, Requirement>() {
-
-            public Requirement convert(File storyFile) {
-                return readRequirementsFromStoryOrFeatureFile(storyFile);
-            }
-        };
+        List<Requirement> stories = Lists.newArrayList();
+        for(File storyFile : storyFiles) {
+            stories.add(readRequirementsFromStoryOrFeatureFile(storyFile));
+        }
+        return stories;
     }
 
     private Requirement readRequirementFrom(File requirementDirectory) {
@@ -525,8 +513,12 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private List<Requirement> readChildrenFrom(File requirementDirectory) {
         String childDirectory = rootDirectoryPath + "/" + requirementDirectory.getName();
-        RequirementsTagProvider childReader = new FileSystemRequirementsTagProvider(childDirectory, level + 1, environmentVariables);
-        return childReader.getRequirements();
+        if (new File(childDirectory).exists()) {
+            RequirementsTagProvider childReader = new FileSystemRequirementsTagProvider(childDirectory, level + 1, environmentVariables);
+            return childReader.getRequirements();
+        } else {
+            return Lists.newArrayList();
+        }
     }
 
     private String getTitleFromNarrativeOrDirectoryName(Narrative requirementNarrative, String nameIfNoNarrativePresent) {

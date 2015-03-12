@@ -10,7 +10,6 @@ import net.thucydides.core.webdriver.ThucydidesWebdriverManager
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeDisabledException
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeEnabledException
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeInvisibleException
-import net.thucydides.core.webdriver.exceptions.ElementShouldBeVisibleException
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import spock.lang.Specification
@@ -91,7 +90,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
 
     def "If the implicit wait times out when fetching a list of values only the currently loaded values will be returned"() {
         given: "We configure the WebDriver implicit wait to be 100 milliseconds"
-            environmentVariables.setProperty("webdriver.timeouts.implicitlywait","100")
+            environmentVariables.setProperty("webdriver.timeouts.implicitlywait","0")
         when: "We access the a list of elements"
             page = openTestPageUsing(defaultBrowser)
             int itemCount = page.elementItems.size()

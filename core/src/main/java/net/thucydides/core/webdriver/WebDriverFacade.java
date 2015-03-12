@@ -180,9 +180,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     private void setTimeouts() {
-        System.out.println("Set implicit wait to " + implicitTimeout);
         webDriverFactory.setTimeouts(getProxiedDriver(), implicitTimeout);
-//        manage().timeouts().implicitlyWait(implicitTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
     }
 
     private boolean htmlunitScriptError(WebDriverException e) {

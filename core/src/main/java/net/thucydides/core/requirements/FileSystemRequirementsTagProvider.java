@@ -27,6 +27,7 @@ import java.net.URLDecoder;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import static ch.lambdaj.Lambda.convert;
 import static net.thucydides.core.requirements.RequirementsPath.pathElements;
 import static net.thucydides.core.requirements.RequirementsPath.stripRootFromPath;
 import static net.thucydides.core.util.NameConverter.humanize;
@@ -402,7 +403,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private List<TestTag> concat(TestTag thisTag, List<TestTag> remainingTags) {
-        List<TestTag> totalTags = new ArrayList<>();
+        List<TestTag> totalTags = new ArrayList<TestTag>();
         totalTags.add(thisTag);
         totalTags.addAll(remainingTags);
         return totalTags;
@@ -443,7 +444,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
         return stories;
     }
-
+    
     private Requirement readRequirementFrom(File requirementDirectory) {
         Optional<Narrative> requirementNarrative = narrativeReader.loadFrom(requirementDirectory, level);
 

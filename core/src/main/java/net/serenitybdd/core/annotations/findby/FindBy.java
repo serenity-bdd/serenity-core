@@ -42,4 +42,6 @@ public @interface FindBy{
 
   String accessibilityId() default "";
 
+  String timeoutInSeconds() default "";
+
 }

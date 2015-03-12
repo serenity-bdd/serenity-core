@@ -2,6 +2,7 @@ package net.thucydides.core.webdriver;
 
 import com.google.common.collect.ImmutableList;
 import net.thucydides.core.guice.Injectors;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 
 import java.io.Serializable;
@@ -54,9 +55,14 @@ public class WebdriverProxyFactory implements Serializable {
         if (mockDriver != null) {
             return mockDriver;
         } else {
-            return new WebDriverFacade(driverClass, webDriverFactory);
+            return new WebDriverFacade(driverClass, webDriverFactory, configuration.getEnvironmentVariables());
         }
     }
+
+    public WebDriverFacade proxyFor(WebDriver driver) {
+        return new WebDriverFacade(driver, webDriverFactory, configuration.getEnvironmentVariables());
+    }
+
 
     public void registerListener(final ThucydidesWebDriverEventListener eventListener) {
         eventListeners.add(eventListener);

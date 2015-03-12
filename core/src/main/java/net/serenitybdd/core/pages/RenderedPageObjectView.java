@@ -1,16 +1,21 @@
 package net.serenitybdd.core.pages;
 
+import com.google.common.collect.Lists;
 import net.thucydides.core.scheduling.NormalFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
+import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 import org.openqa.selenium.support.ui.SystemClock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static net.serenitybdd.core.pages.Selectors.xpathOrCssSelector;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static ch.lambdaj.Lambda.convert;
 
 /**
  * A page view that handles checking and waiting for element visibility.
@@ -21,18 +26,21 @@ public class RenderedPageObjectView {
     private transient Duration waitForTimeout;
     private final Clock webdriverClock;
     private final Sleeper sleeper;
+    private final PageObject pageObject;
 
     private static final int WAIT_FOR_ELEMENT_PAUSE_LENGTH = 50;
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(RenderedPageObjectView.class);
 
-    public RenderedPageObjectView(final WebDriver driver, long waitForTimeoutInMilliseconds) {
-        this(driver, new Duration(waitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS));
+    public RenderedPageObjectView(final WebDriver driver, final PageObject pageObject, long waitForTimeoutInMilliseconds) {
+        this(driver, pageObject, new Duration(waitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS));
     }
 
-    public RenderedPageObjectView(final WebDriver driver, Duration waitForTimeout) {
-        this.driver = ((WebDriverFacade) driver).withTimeoutOf(waitForTimeout);
+    public RenderedPageObjectView(final WebDriver driver, final PageObject pageObject, Duration waitForTimeout) {
+
+        this.driver = driver;
+        this.pageObject = pageObject;
         setWaitForTimeout(waitForTimeout);
         this.webdriverClock = new SystemClock();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
@@ -104,15 +112,6 @@ public class RenderedPageObjectView {
         try {
             waitFor(ExpectedConditions.visibilityOfAllElementsLocatedBy(byElementCriteria));
             return true;
-//            List<WebElement> matchingElements = driver.findElements(byElementCriteria);
-//            System.out.println(matchingElements);
-//            for(WebElement webElement : matchingElements) {
-//                WebElementFacade element = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100);
-//                if (element.isCurrentlyVisible()) {
-//                    return true;
-//                }
-//            }
-//            return false;
         } catch (NoSuchElementException noSuchElement) {
             LOGGER.trace("No such element " + noSuchElement);
             return false;
@@ -122,10 +121,6 @@ public class RenderedPageObjectView {
         } catch (TimeoutException iGuessItsNotThere) {
             return false;
         }
-    }
-
-    private boolean matchingElementsArePresent(List<WebElement> matchingElements) {
-        return (matchingElements != null) && (!matchingElements.isEmpty());
     }
 
     private ExpectedCondition<Boolean> textPresent(final String expectedText) {
@@ -170,10 +165,6 @@ public class RenderedPageObjectView {
 
     public boolean containsText(final String textValue) {
         return driver.findElement(By.tagName("body")).getText().contains(textValue);
-    }
-
-    private boolean foundNo(List<WebElement> elements) {
-        return ((elements == null) || (elements.isEmpty()));
     }
 
     public boolean containsText(final WebElement element, final String textValue) {
@@ -299,9 +290,9 @@ public class RenderedPageObjectView {
         waitForCondition().until(anyElementPresent(expectedElements));
     }
 
-    public void setWaitForTimeoutInMilliseconds(long waitForTimeoutInMilliseconds) {
-        setWaitForTimeout(new Duration(waitForTimeoutInMilliseconds,TimeUnit.MILLISECONDS));
-    }
+//    public void setWaitForTimeoutInMilliseconds(long waitForTimeoutInMilliseconds) {
+//        setWaitForTimeout(new Duration(waitForTimeoutInMilliseconds,TimeUnit.MILLISECONDS));
+//    }
 
     public void setWaitForTimeout(Duration waitForTimeout) {
         this.waitForTimeout = waitForTimeout;
@@ -309,5 +300,34 @@ public class RenderedPageObjectView {
 
     public Duration getWaitForTimeout() {
         return waitForTimeout;
+    }
+
+    public List<net.serenitybdd.core.pages.WebElementFacade> findAll(By bySelector) {
+        List<net.serenitybdd.core.pages.WebElementFacade> results;
+        try {
+            pageObject.setImplicitTimeout(0, TimeUnit.SECONDS);
+            waitFor(bySelector);
+            results = pageObject.findAll(bySelector);
+            pageObject.resetImplicitTimeout();
+        } catch (TimeoutException e) {
+            return Lists.newArrayList();
+        }
+        return results;
+    }
+
+    public List<net.serenitybdd.core.pages.WebElementFacade> findAll(String xpathOrCssSelector) {
+        return findAll(xpathOrCssSelector(xpathOrCssSelector));
+    }
+
+    public net.serenitybdd.core.pages.WebElementFacade find(By bySelector) {
+        waitFor(bySelector);
+        pageObject.setImplicitTimeout(0, TimeUnit.SECONDS);
+        net.serenitybdd.core.pages.WebElementFacade result = pageObject.find(bySelector);
+        pageObject.resetImplicitTimeout();
+        return result;
+    }
+
+    public net.serenitybdd.core.pages.WebElementFacade find(String xpathOrCssSelector) {
+        return find(xpathOrCssSelector(xpathOrCssSelector));
     }
 }

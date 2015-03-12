@@ -1,6 +1,8 @@
 package net.thucydides.core.webdriver;
 
 import com.google.inject.Inject;
+import net.serenitybdd.core.pages.DefaultTimeouts;
+import net.thucydides.core.ThucydidesSystemProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -9,6 +11,10 @@ import org.openqa.selenium.remote.SessionId;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import static net.serenitybdd.core.pages.DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT;
 
 /**
  * Manage WebDriver instances.
@@ -97,8 +103,7 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
     }
 
     public WebDriver getWebdriver() {
-        WebDriver driver = getThreadLocalWebDriver(configuration, webDriverFactory, inThisTestThread().getCurrentDriverName());
-        return driver;
+        return getThreadLocalWebDriver(configuration, webDriverFactory, inThisTestThread().getCurrentDriverName());
     }
 
     public String getCurrentDriverName() {
@@ -156,5 +161,8 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
     public int getActiveWebdriverCount() {
         return allWebdriverInstances.size();
     }
+
+
+
 
 }

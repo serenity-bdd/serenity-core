@@ -12,19 +12,19 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.Duration;
 
 import java.lang.reflect.Field;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
-
 public class WhenLocatingWebElements {
 
     @Mock
-    WebDriver driver;
+    WebDriverFacade driver;
 
     @Mock
     WebElement webElement;
@@ -49,6 +49,7 @@ public class WhenLocatingWebElements {
 
         StepEventBus.getEventBus().clear();
 
+        when(driver.withTimeoutOf(any(Duration.class))).thenReturn(driver);
         when(driver.findElement(By.id("someId"))).thenReturn(webElement);
         when(driver.findElements(By.id("someId"))).thenReturn(ImmutableList.of(webElement));
     }

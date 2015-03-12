@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Thucydides Test Site -- Nested Page Objects</title>
+	<style>
+	   .card {
+	       display: inline-block;
+	       border: solid; 
+	       padding: 5px;
+	       margin: 5px;
+	       width: 200px;
+	       height: 75px;
+	   }
+	   
+	</style>
+	</head>
+<body>
+    <div id="topRow">
+        <div class="card">
+            <span class="cardTitle">TopRow Card 0</span>
+            <p class="cardContent">TopRow Card 0 content</p>
+        </div>
+        <div class="card">
+            <span class="cardTitle">TopRow Card 1</span>
+            <p class="cardContent">TopRow Card 1 content</p>
+        </div>
+        <div class="card">
+            <span class="cardTitle">TopRow Card 2</span>
+            <p class="cardContent">TopRow Card 2 content</p>
+        </div>
+    </div>
+    <div id="mainContent">
+        <ol>
+            <li>
+                <div class="card">
+		            <span class="cardTitle">MainRow 0 Card 0</span>
+		            <p class="cardContent">MainRow 0 Card 0 content</p>
+		        </div>
+                <div class="card">
+		            <span class="cardTitle">MainRow 0 Card 1</span>
+		            <p class="cardContent">MainRow 0 Card 1 content</p>
+		        </div>
+            </li>
+            <li>
+                <div class="card">
+		            <span class="cardTitle">MainRow 1 Card 0</span>
+		            <p class="cardContent">MainRow 1 Card 0 content</p>
+		        </div>
+            </li>
+            <li>
+                <div class="card">
+		            <span class="cardTitle">MainRow 2 Card 0</span>
+		            <p class="cardContent">MainRow 2 Card 0 content</p>
+		        </div>
+                <div class="card">
+		            <span class="cardTitle">MainRow 2 Card 1</span>
+		            <p class="cardContent">MainRow 2 Card 1 content</p>
+		        </div>
+                <div class="card">
+		            <span class="cardTitle">MainRow 2 Card 2</span>
+		            <p class="cardContent">MainRow 2 Card 2 content</p>
+		        </div>
+                <div class="card">
+		            <span class="cardTitle">MainRow 2 Card 3</span>
+		            <p class="cardContent">MainRow 2 Card 3 content</p>
+		        </div>
+            </li>
+        </ol>
+    </div>
+    <div id="orphans">
+		<div class="card">
+			<span class="cardTitle">Orphan Card 0</span>
+			<p class="cardContent">Orphan Card 0 content</p>
+    	</div>
+        <span class="cardTitle">Orphan Title</span>
+        <p class="cardContent">Orphan Content</p>
+    </div>
+</body>
+</html>

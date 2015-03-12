@@ -9,6 +9,8 @@
     function initFields() {
         document.demo.lastname.focus()
         hide('city')
+        hide('country')
+        hide('slow-loader')
         displayFieldsAfterDelay();
     }
 
@@ -41,6 +43,14 @@
     function displayCityField() {
         show('city')
     }
+
+    function displayCountryField() {
+        show('country')
+    }
+    function displaySlowLoaderField() {
+        show('slow-loader')
+    }
+
     function hideLocationTitle() {
         hide('placetitle')
     }
@@ -65,12 +75,14 @@
     }
     
     function displayFieldsAfterDelay() {
-        setTimeout("loadElementsSelect()", 500);
-        setTimeout("displayCityField()", 500);
-        setTimeout("hideLocationTitle()", 500);
-        setTimeout("activateDisabledButton()", 500);
-        setTimeout("deactivateEnabledButton()", 500);
-        setTimeout("removeDisappearingText()", 500);
+        setTimeout("loadElementsSelect()", 2000);
+        setTimeout("displayCityField()", 1000);
+        setTimeout("displayCountryField()", 2000);
+        setTimeout("displaySlowLoaderField()", 4000);
+        setTimeout("hideLocationTitle()", 1000);
+        setTimeout("activateDisabledButton()", 1000);
+        setTimeout("deactivateEnabledButton()", 1000);
+        setTimeout("removeDisappearingText()", 1000);
 
     }
 
@@ -100,7 +112,8 @@
     <p>
     <span style="display:none">Invisible text</span>
     <h3 id="placetitle">Location</h3>
-    <input name="city" id="city"/>
+    <input name="city" id="city" value="Sydney" style="display:none" />
+    <input name="slow-loader" id="slow-loader" value="Slow to load" style="display:none" />
     <input name="state" id="state"/>
     <input name="country" id="country" value="Australia"/>
     <input ng-model="angularField" value="Model value" />

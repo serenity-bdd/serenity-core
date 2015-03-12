@@ -18,23 +18,23 @@ import net.thucydides.core.scheduling.ThucydidesFluentWait;
 import net.thucydides.core.steps.StepDelayer;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import net.thucydides.core.webdriver.DefaultPageObjectInitialiser;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webelements.Checkbox;
 import net.thucydides.core.webelements.RadioButtonGroup;
+import static net.serenitybdd.core.pages.Selectors.xpathOrCssSelector;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.server.handler.ConfigureTimeout;
 import org.openqa.selenium.support.ui.*;
 import org.openqa.selenium.support.ui.Duration;
 import org.openqa.selenium.support.ui.SystemClock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathFactory;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -49,7 +49,6 @@ import java.util.concurrent.TimeUnit;
 
 import static ch.lambdaj.Lambda.convert;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
 import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascriptIsSupportedIn;
 
 /**
@@ -85,8 +84,33 @@ public abstract class PageObject {
 
     private EnvironmentVariables environmentVariables;
 
-    public PageObject usingTimeoutOf(Duration timeout) {
-        return this;
+    public void setImplicitTimeout(int duration, TimeUnit unit) {
+        waitForElementTimeout = new Duration(duration, unit);
+        setDriverImplicitTimeout(waitForElementTimeout);
+    }
+
+    public void resetImplicitTimeout() {
+        if (driver instanceof ConfigurableTimeouts) {
+            ((ConfigurableTimeouts) driver).resetTimeouts();
+        } else {
+            Duration defaultImplicitTimeout = getDefaultImplicitTimeout();
+            driver.manage().timeouts().implicitlyWait(defaultImplicitTimeout.in(MILLISECONDS), MILLISECONDS);
+        }
+    }
+
+    private void setDriverImplicitTimeout(Duration implicitTimeout) {
+        if (driver instanceof ConfigurableTimeouts) {
+            ((ConfigurableTimeouts) driver).setImplicitTimeout(implicitTimeout);
+        } else {
+            driver.manage().timeouts().implicitlyWait(implicitTimeout.in(MILLISECONDS), MILLISECONDS);
+        }
+    }
+
+    private Duration getDefaultImplicitTimeout() {
+        Integer configuredTimeout = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables);
+        return (configuredTimeout != null) ? new Duration(configuredTimeout, TimeUnit.MILLISECONDS)
+                : DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
+
     }
 
     private enum OpenMode {
@@ -118,13 +142,19 @@ public abstract class PageObject {
         setDriver(driver);
     }
 
+    public PageObject(final WebDriver driver, final EnvironmentVariables environmentVariables) {
+        this();
+        this.environmentVariables = environmentVariables;
+        setDriver(driver);
+    }
+
     protected void setDriver(WebDriver driver, long timeout) {
         this.driver = driver;
         new DefaultPageObjectInitialiser(driver, timeout).apply(this);
     }
 
     public void setDriver(WebDriver driver) {
-        setDriver(driver, getWaitForElementTimeout().in(TimeUnit.MILLISECONDS));
+        setDriver(driver, getImplicitWaitTimeout().in(TimeUnit.MILLISECONDS));
     }
 
     public Duration getWaitForTimeout() {
@@ -138,12 +168,17 @@ public abstract class PageObject {
         return waitForTimeout;
     }
 
+    @Deprecated
     public Duration getWaitForElementTimeout() {
+        return getImplicitWaitTimeout();
+    }
+
+    public Duration getImplicitWaitTimeout() {
 
         if (waitForElementTimeout == null) {
             int configuredWaitForTimeoutInMilliseconds =
                     ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT
-                            .integerFrom(environmentVariables, (int) DefaultTimeouts.DEFAULT_WAIT_FOR_ELEMENT_TIMEOUT.in(MILLISECONDS));
+                            .integerFrom(environmentVariables, (int) DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT.in(MILLISECONDS));
             waitForElementTimeout = new Duration(configuredWaitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS);
         }
         return waitForElementTimeout;
@@ -206,7 +241,7 @@ public abstract class PageObject {
 
     protected RenderedPageObjectView getRenderedView() {
         if (renderedView == null) {
-            renderedView = new RenderedPageObjectView(driver, getWaitForTimeout());
+            renderedView = new RenderedPageObjectView(driver, this, getWaitForTimeout());
         }
         return renderedView;
     }
@@ -261,7 +296,7 @@ public abstract class PageObject {
     }
 
     public RenderedPageObjectView withTimeoutOf(Duration timeout) {
-        return new RenderedPageObjectView(driver, timeout);
+        return new RenderedPageObjectView(driver, this, timeout);
     }
 
     public PageObject waitFor(String xpathOrCssSelector) {
@@ -307,7 +342,8 @@ public abstract class PageObject {
     }
 
     private WebDriverWait waitOnPage() {
-        return new WebDriverWait(driver, waitForTimeoutInSecondsWithAMinimumOfOneSecond());
+        return new WebDriverWait(driver, getWaitForTimeout().in(TimeUnit.SECONDS));
+//        waitForTimeoutInSecondsWithAMinimumOfOneSecond());
     }
 
     public PageObject waitForTitleToDisappear(final String expectedTitle) {
@@ -559,6 +595,9 @@ public abstract class PageObject {
         return getWaitForTimeout().in(MILLISECONDS);
     }
 
+    public long implicitTimoutMilliseconds() {
+        return getImplicitWaitTimeout().in(MILLISECONDS);
+    }
 
     public String updateUrlWithBaseUrlIfDefined(final String startingUrl) {
 
@@ -820,7 +859,7 @@ public abstract class PageObject {
      * Provides a fluent API for querying web elements.
      */
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(WebElement webElement) {
-        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, getWaitForElementTimeout().in(MILLISECONDS));
+        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, getImplicitWaitTimeout().in(MILLISECONDS));
     }
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(WebElement webElement) {
@@ -836,7 +875,7 @@ public abstract class PageObject {
      */
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(By bySelector) {
         WebElement webElement = getDriver().findElement(bySelector);
-        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, getWaitForElementTimeout().in(MILLISECONDS));
+        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, getImplicitWaitTimeout().in(MILLISECONDS));
     }
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(By selector) {
@@ -863,31 +902,12 @@ public abstract class PageObject {
         return element(xpathOrCssSelector(xpathOrCssSelector));
     }
 
-    private By xpathOrCssSelector(String xpathOrCssSelector) {
-        if (isXPath(xpathOrCssSelector)) {
-            return By.xpath(xpathOrCssSelector);
-        } else {
-            return By.cssSelector(xpathOrCssSelector);
-        }
-    }
-
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T findBy(String xpathOrCssSelector) {
         return element(xpathOrCssSelector);
     }
 
     public List<net.serenitybdd.core.pages.WebElementFacade> findAll(String xpathOrCssSelector) {
         return findAll(xpathOrCssSelector(xpathOrCssSelector));
-    }
-
-    public static boolean isXPath(String xpathExpression) {
-        XPathFactory factory = XPathFactory.newInstance();
-        XPath xpath = factory.newXPath();
-        try {
-            xpath.compile(xpathExpression);
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
     }
 
     public Object evaluateJavascript(final String script) {

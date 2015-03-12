@@ -1,6 +1,7 @@
 package net.thucydides.core.webdriver;
 
 import com.gargoylesoftware.htmlunit.ScriptException;
+import com.google.common.base.Optional;
 import net.serenitybdd.core.pages.DefaultTimeouts;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
@@ -24,12 +25,11 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * A proxy class for webdriver instances, designed to prevent the browser being opened unnecessarily.
  */
-public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevices, JavascriptExecutor, HasCapabilities {
+public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevices, JavascriptExecutor, HasCapabilities, ConfigurableTimeouts {
 
     private final Class<? extends WebDriver> driverClass;
 
@@ -60,9 +60,19 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         this.implicitTimeout = defaultImplicitWait();
     }
 
+    public WebDriverFacade(final WebDriver driver,
+                           final WebDriverFactory webDriverFactory,
+                           final EnvironmentVariables environmentVariables ) {
+        this.driverClass = driver.getClass();
+        this.proxiedWebDriver = driver;
+        this.webDriverFactory = webDriverFactory;
+        this.environmentVariables = environmentVariables;
+        this.implicitTimeout = defaultImplicitWait();
+    }
+
     private Duration defaultImplicitWait() {
-        int configuredWaitForTimeoutInMilliseconds = ThucydidesSystemProperty.WEBDRIVER_WAIT_FOR_TIMEOUT
-                        .integerFrom(environmentVariables, (int) DefaultTimeouts.DEFAULT_WAIT_FOR_TIMEOUT.in(MILLISECONDS));
+        int configuredWaitForTimeoutInMilliseconds = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT
+                        .integerFrom(environmentVariables, (int) DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT.in(MILLISECONDS));
 
        return new Duration(configuredWaitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS);
     }
@@ -170,8 +180,9 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     private void setTimeouts() {
-        System.out.println("Set timeouts to " + implicitTimeout);
-        manage().timeouts().implicitlyWait(implicitTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
+        System.out.println("Set implicit wait to " + implicitTimeout);
+        webDriverFactory.setTimeouts(getProxiedDriver(), implicitTimeout);
+//        manage().timeouts().implicitlyWait(implicitTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
     }
 
     private boolean htmlunitScriptError(WebDriverException e) {
@@ -203,25 +214,20 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         if (!isEnabled()) {
             return Collections.emptyList();
         }
-        setTimeouts();
-        return getProxiedDriver().findElements(by);
-    }
-
-    public void overrideTimeoutsTo(int value, TimeUnit unit) {
-        manage().timeouts().implicitlyWait(value,unit);
-    }
-
-    public void restoreTimeouts() {
-        manage().timeouts().implicitlyWait(implicitTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
+        webDriverFactory.setTimeouts(getProxiedDriver(), getCurrentImplicitTimeout());
+        List<WebElement> elements = getProxiedDriver().findElements(by);
+        webDriverFactory.resetTimeouts(getProxiedDriver());
+        return elements;
     }
 
     public WebElement findElement(final By by) {
         if (!isEnabled()) {
             return new WebElementFacadeStub();
         }
-
-        setTimeouts();
-        return getProxiedDriver().findElement(by);
+        webDriverFactory.setTimeouts(getProxiedDriver(), getCurrentImplicitTimeout());
+        WebElement element = getProxiedDriver().findElement(by);
+        webDriverFactory.resetTimeouts(getProxiedDriver());
+        return element;
     }
 
     public String getPageSource() {
@@ -231,6 +237,19 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
         return getProxiedDriver().getPageSource();
     }
+
+    public void setImplicitTimeout(Duration implicitTimeout) {
+        webDriverFactory.setTimeouts(getProxiedDriver(), implicitTimeout);
+    }
+
+    public Duration getCurrentImplicitTimeout() {
+        return webDriverFactory.currentTimeoutFor(getProxiedDriver());
+    }
+
+    public void resetTimeouts() {
+        webDriverFactory.resetTimeouts(getProxiedDriver());
+    }
+
 
     protected WebDriver getDriverInstance() {
         return proxiedWebDriver;

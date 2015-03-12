@@ -26,7 +26,7 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
     }
 
     public static EnvironmentVariables fromSystemEnvironment() {
-        return new MockEnvironmentVariables(System.getProperties());
+        return new MockEnvironmentVariables(SystemEnvironmentVariables.createEnvironmentVariables().getProperties());
     }
 
     public boolean propertySetIsEmpty() {
@@ -112,6 +112,11 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
     @Override
     public List<String> getKeys() {
         return Lambda.convert(properties.keySet(), new DefaultStringConverter());
+    }
+
+    @Override
+    public Properties getProperties() {
+        return new Properties(properties);
     }
 
     public void setValue(String name, String value) {

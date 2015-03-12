@@ -3,11 +3,15 @@ package net.thucydides.core.pages.integration;
 
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
+import net.thucydides.core.webdriver.exceptions.ElementShouldBeDisabledException;
+import net.thucydides.core.webdriver.exceptions.ElementShouldBeEnabledException;
+import net.thucydides.core.webdriver.exceptions.ElementShouldBeInvisibleException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
@@ -140,11 +144,10 @@ public class CheckingFieldContentWithTheFluentElementAPI extends FluentElementAP
 
     @Test
     public void should_detect_when_a_radio_button_is_not_selected() {
-
         assertThat(page.element(page.radioButton2).isSelected(), is(false));
     }
 
-    @Test(expected = ElementNotVisibleException.class)
+    @Test(expected = ElementShouldBeInvisibleException.class)
     public void should_throw_exception_if_waiting_for_field_that_does_not_disappear() {
         assertThat(page.element(page.firstName).isCurrentlyVisible(), is(true));
         page.setWaitForTimeout(500);
@@ -166,11 +169,11 @@ public class CheckingFieldContentWithTheFluentElementAPI extends FluentElementAP
 
     @Test
     public void should_wait_for_field_to_be_disabled() throws InterruptedException {
-        page.element(page.buttonThatIsInitiallyEnabled).waitUntilDisabled();
-        assertThat(page.element(page.buttonThatIsInitiallyEnabled).isCurrentlyEnabled(), is(false));
+        page.element(page.initiallyEnabled).waitUntilDisabled();
+        assertThat(page.element(page.initiallyEnabled).isCurrentlyEnabled(), is(false));
     }
 
-    @Test(expected = ElementNotVisibleException.class)
+    @Test(expected = ElementShouldBeEnabledException.class)
     public void should_fail_if_wait_for_field_to_be_enabled_never_happens() throws InterruptedException {
         page.setWaitForTimeout(500);
         page.element(page.readonlyField).waitUntilEnabled();
@@ -181,7 +184,7 @@ public class CheckingFieldContentWithTheFluentElementAPI extends FluentElementAP
         page.element(page.placetitle).waitUntilEnabled();
     }
 
-    @Test(expected = ElementNotVisibleException.class)
+    @Test(expected = ElementShouldBeDisabledException.class)
     public void should_fail_if_wait_for_field_to_be_disabled_never_happens() throws InterruptedException {
         page.setWaitForTimeout(500);
         page.element(page.firstName).waitUntilDisabled();
@@ -199,11 +202,11 @@ public class CheckingFieldContentWithTheFluentElementAPI extends FluentElementAP
 
     @Test
     public void should_wait_for_field_to_be_enabled() throws InterruptedException {
-        assertThat(page.element(page.buttonThatIsInitiallyDisabled).isCurrentlyEnabled(), is(false));
+        assertThat(page.element(page.initiallyDisabled).isCurrentlyEnabled(), is(false));
 
-        page.element(page.buttonThatIsInitiallyDisabled).waitUntilEnabled();
+        page.element(page.initiallyDisabled).waitUntilEnabled();
 
-        assertThat(page.element(page.buttonThatIsInitiallyDisabled).isCurrentlyEnabled(), is(true));
+        assertThat(page.element(page.initiallyDisabled).isCurrentlyEnabled(), is(true));
     }
 
     @Test
@@ -214,8 +217,8 @@ public class CheckingFieldContentWithTheFluentElementAPI extends FluentElementAP
 
     @Test
     public void should_succeed_if_waiting_for_an_existing_field_to_appear() {
-        assertThat(page.element(page.country).isCurrentlyVisible(), is(true));
-        page.element(page.country).waitUntilVisible();
+        assertThat(page.element(page.firstName).isCurrentlyVisible(), is(true));
+        page.element(page.firstName).waitUntilVisible();
     }
 
     @Test

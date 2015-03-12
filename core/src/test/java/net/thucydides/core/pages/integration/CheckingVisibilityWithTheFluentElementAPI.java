@@ -28,7 +28,7 @@ public class CheckingVisibilityWithTheFluentElementAPI extends FluentElementAPIT
     public static void openStaticPage() {
         localDriver = new WebDriverFacade(HtmlUnitDriver.class, new WebDriverFactory());
         page = new StaticSitePage(localDriver, 1);
-        page.setWaitForTimeout(750);
+        page.setWaitForTimeout(2000);
         page.open();
     }
 
@@ -133,14 +133,14 @@ public class CheckingVisibilityWithTheFluentElementAPI extends FluentElementAPIT
         assertThat(page.element(page.fieldDoesNotExist).isVisible(), is(false));
     }
 
-    @Test(timeout = 1000)
+    @Test(timeout = 500)
     public void should_report_element_as_not_visible_quickly_if_not_present_right_now() {
-        assertThat(page.element(page.fieldDoesNotExist).isCurrentlyVisible(), is(false));
+        assertThat(page.fieldDoesNotExist.isCurrentlyVisible(), is(false));
     }
 
-    @Test(timeout = 1000, expected = AssertionError.class)
+    @Test(timeout = 500, expected = AssertionError.class)
     public void should_check_element_as_not_visible_quickly_if_not_present_right_now() {
-        page.element(page.fieldDoesNotExist).shouldBeCurrentlyVisible();
+        page.fieldDoesNotExist.shouldBeCurrentlyVisible();
     }
 
 
@@ -181,7 +181,7 @@ public class CheckingVisibilityWithTheFluentElementAPI extends FluentElementAPIT
 
     @Test
     public void should_be_able_to_chain_methods() {
-        page.element(page.buttonThatIsInitiallyDisabled).waitUntilEnabled().and().then().click();
+        page.element(page.initiallyDisabled).waitUntilEnabled().and().then().click();
     }
 
     @Test
@@ -324,8 +324,8 @@ public class CheckingVisibilityWithTheFluentElementAPI extends FluentElementAPIT
     public void should_execute_javascript_within_browser() {
         page.open();
         assertThat(page.element(page.firstName).hasFocus(), is(false));
-        page.evaluateJavascript("document.getElementById('firstname').focus()");
-        assertThat(page.element(page.firstName).hasFocus(), is(true));
+        page.evaluateJavascript("document.getElementById('firstname').value='Joe'");
+        assertThat(page.element(page.firstName).getValue(), is("Joe"));
     }
 
     @Test

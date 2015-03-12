@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
@@ -39,7 +40,6 @@ public class WhenUsingTheFluentAPIWithJavascriptAndJQuery {
     @Test
     public void should_inject_jquery_into_the_page() {
         WebDriver driver = new PhantomJSDriver();
-        StaticSitePage page = new StaticSitePage(driver, 1000);
         getPage().open();
 
         getPage().evaluateJavascript("$('#firstname').focus();");
@@ -48,34 +48,6 @@ public class WhenUsingTheFluentAPIWithJavascriptAndJQuery {
         assertThat(jqueryInjected, is(true));
 
         driver.quit();
-    }
-
-    @Test
-    public void should_be_able_to_use_the_javascript_executor_with_parameters() {
-        getPage().evaluateJavascript("$('#firstname').focus();", "#firstname");
-
-        assertThat(getPage().element(getPage().firstName).hasFocus(), is(true));
-    }
-
-    @Test
-    public void should_be_able_to_set_focus_directly() {
-        JavascriptExecutorFacade js = new JavascriptExecutorFacade(getPage().getDriver());
-        js.executeScript("$('#firstname').focus();");
-
-        assertThat(getPage().element(getPage().firstName).hasFocus(), is(true));
-    }
-
-    @Test
-    public void should_support_jquery_queries_in_the_page() {
-
-        StaticSitePage page = getPage();
-        getPage().evaluateJavascript("$('#firstname').focus();");
-
-        assertThat(getPage().element(getPage().firstName).hasFocus(), is(true));
-
-        getPage().evaluateJavascript("$('#lastname').focus();");
-
-        assertThat(getPage().element(getPage().lastName).hasFocus(), is(true));
     }
 
     @Test
@@ -117,9 +89,8 @@ public class WhenUsingTheFluentAPIWithJavascriptAndJQuery {
     @Test
     public void should_execute_javascript_within_browser() {
         getPage().open();
-        assertThat(getPage().element(getPage().firstName).hasFocus(), is(false));
-        getPage().evaluateJavascript("document.getElementById('firstname').focus()");
-        assertThat(getPage().element(getPage().firstName).hasFocus(), is(true));
+        Long result = (Long) getPage().evaluateJavascript("return 1 + 1");
+        assertThat(result, is(2L));
     }
 
 

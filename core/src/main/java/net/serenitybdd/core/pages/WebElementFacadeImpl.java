@@ -9,12 +9,15 @@ import io.appium.java_client.FindsByAccessibilityId;
 import io.appium.java_client.FindsByAndroidUIAutomator;
 import io.appium.java_client.FindsByIosUIAutomation;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.annotations.locators.WithConfigurableTimeout;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.jquery.JQueryEnabledPage;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebDriverFacade;
+import net.thucydides.core.webdriver.exceptions.*;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
@@ -31,6 +34,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static ch.lambdaj.Lambda.convert;
+import static net.serenitybdd.core.pages.Selectors.isXPath;
 
 
 /**
@@ -91,7 +95,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         if (locator == null) {
             return null;
         }
-        resolvedELement = locator.findElement();
+        resolvedELement = getLocator().findElement();
         if (resolvedELement == null) {
             throw new ElementNotVisibleException(locator.toString());
         }
@@ -120,7 +124,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     public <T extends WebElementFacade> T findBy(String xpathOrCssSelector) {
         logIfVerbose("findBy " + xpathOrCssSelector);
         WebElement nestedElement;
-        if (PageObject.isXPath(xpathOrCssSelector)) {
+        if (isXPath(xpathOrCssSelector)) {
             nestedElement = getElement().findElement((By
                     .xpath(xpathOrCssSelector)));
         } else {
@@ -128,16 +132,24 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                     .cssSelector(xpathOrCssSelector)));
         }
 
-        return wrapWebElement(driver, nestedElement,
-                timeoutInMilliseconds);
+        return wrapWebElement(driver, nestedElement, timeoutInMilliseconds());
     }
 
+
+    public long timeoutInMilliseconds() {
+        if (driver instanceof WebDriverFacade) {
+            return ((WebDriverFacade) driver).getCurrentImplicitTimeout().in(TimeUnit.MILLISECONDS);
+        } else {
+            return timeoutInMilliseconds;
+        }
+
+    }
 
     @Override
     public List<WebElementFacade> thenFindAll(String xpathOrCssSelector) {
         logIfVerbose("findAll " + xpathOrCssSelector);
         List<WebElement> nestedElements;
-        if (PageObject.isXPath(xpathOrCssSelector)) {
+        if (isXPath(xpathOrCssSelector)) {
             nestedElements = findElements((By.xpath(xpathOrCssSelector)));
         } else {
             nestedElements = findElements((By.cssSelector(xpathOrCssSelector)));
@@ -149,7 +161,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     private List<WebElementFacade> webElementFacadesFrom(List<WebElement> nestedElements) {
         List<WebElementFacade> results = Lists.newArrayList();
         for (WebElement element : nestedElements) {
-            results.add(wrapWebElement(driver, element, timeoutInMilliseconds));
+            results.add(wrapWebElement(driver, element, timeoutInMilliseconds()));
         }
         return results;
     }
@@ -158,7 +170,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     public WebElementFacade findBy(By selector) {
         logIfVerbose("findBy " + selector);
         WebElement nestedElement = getElement().findElement(selector);
-        return wrapWebElement(driver, nestedElement, timeoutInMilliseconds);
+        return wrapWebElement(driver, nestedElement, timeoutInMilliseconds());
     }
 
     @Override
@@ -217,6 +229,11 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     public long getTimeoutInMilliseconds() {
         return timeoutInMilliseconds;
     }
+
+    public Duration getImplicitTimeout() {
+        return ((ConfigurableTimeouts) driver).getCurrentImplicitTimeout();
+    }
+
 
     @Override
     public WebElementFacade withTimeoutOf(int timeout, TimeUnit unit) {
@@ -367,6 +384,35 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             results = findElements(By.tagName("option"));
         }
         return convert(results, new ExtractText());
+    }
+
+    public ElementLocator getLocator() {
+        if ((locator instanceof WithConfigurableTimeout) && (driver instanceof ConfigurableTimeouts)) {
+            ((WithConfigurableTimeout) locator).setTimeOutInSeconds((int) getImplicitTimeout().in(TimeUnit.SECONDS));
+        }
+        return locator;
+    }
+
+    @Override
+    public void setImplicitTimeout(Duration implicitTimeout) {
+        if (driver instanceof ConfigurableTimeouts) {
+            ((ConfigurableTimeouts) driver).setImplicitTimeout(implicitTimeout);
+        }
+    }
+
+    @Override
+    public Duration getCurrentImplicitTimeout() {
+        if (driver instanceof ConfigurableTimeouts) {
+            return ((ConfigurableTimeouts) driver).getCurrentImplicitTimeout();
+        }
+        return DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
+    }
+
+    @Override
+    public void resetTimeouts() {
+        if (driver instanceof ConfigurableTimeouts) {
+            ((ConfigurableTimeouts) driver).resetTimeouts();
+        }
     }
 
     class ExtractText implements Converter<WebElement, String> {
@@ -569,7 +615,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         }
 
         try {
-            //return (webElement != null) && (webElement.isDisplayed() || !webElement.isDisplayed());
             return (getElement() != null) && (getElement().isDisplayed() || !getElement().isDisplayed());
         } catch (NoSuchElementException e) {
             if (e.getCause().getMessage().contains("Element is not usable")) {
@@ -606,7 +651,11 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         try {
             waitForCondition().until(elementIsDisplayed());
         } catch (Throwable error) {
-            throwErrorWithCauseIfPresent(error, error.getMessage());
+            if (webElement != null) {
+                throwShouldBeVisibleErrorWithCauseIfPresent(error, error.getMessage());
+            } else {
+                throwNoSuchElementExceptionWithCauseIfPresent(error, error.getMessage());
+            }
         }
         return this;
     }
@@ -620,16 +669,33 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         try {
             waitForCondition().until(elementIsPresent());
         } catch (TimeoutException timeout) {
-            throwErrorWithCauseIfPresent(timeout, timeout.getMessage());
+            throwShouldBePresentErrorWithCauseIfPresent(timeout, timeout.getMessage());
         }
         return this;
     }
 
 
-    private void throwErrorWithCauseIfPresent(final Throwable timeout, final String defaultMessage) {
+    private void throwNoSuchElementExceptionWithCauseIfPresent(final Throwable timeout, final String defaultMessage) {
         String timeoutMessage = (timeout.getCause() != null) ? timeout.getCause().getMessage() : timeout.getMessage();
         String finalMessage = (StringUtils.isNotEmpty(timeoutMessage)) ? timeoutMessage : defaultMessage;
-        throw new ElementNotVisibleException(finalMessage, timeout);
+        throw new NoSuchElementException(finalMessage, timeout);
+    }
+    private void throwShouldBeVisibleErrorWithCauseIfPresent(final Throwable timeout, final String defaultMessage) {
+        String timeoutMessage = (timeout.getCause() != null) ? timeout.getCause().getMessage() : timeout.getMessage();
+        String finalMessage = (StringUtils.isNotEmpty(timeoutMessage)) ? timeoutMessage : defaultMessage;
+        throw new ElementShouldBeVisibleException(finalMessage, timeout);
+    }
+
+    private void throwShouldBeInvisibleErrorWithCauseIfPresent(final Throwable timeout, final String defaultMessage) {
+        String timeoutMessage = (timeout.getCause() != null) ? timeout.getCause().getMessage() : timeout.getMessage();
+        String finalMessage = (StringUtils.isNotEmpty(timeoutMessage)) ? timeoutMessage : defaultMessage;
+        throw new ElementShouldBeInvisibleException(finalMessage, timeout);
+    }
+
+    private void throwShouldBePresentErrorWithCauseIfPresent(final Throwable timeout, final String defaultMessage) {
+        String timeoutMessage = (timeout.getCause() != null) ? timeout.getCause().getMessage() : timeout.getMessage();
+        String finalMessage = (StringUtils.isNotEmpty(timeoutMessage)) ? timeoutMessage : defaultMessage;
+        throw new ElementShouldBePresentException(finalMessage, timeout);
     }
 
     private ExpectedCondition<Boolean> elementIsDisplayed() {
@@ -697,7 +763,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public Wait<WebDriver> waitForCondition() {
-        return new FluentWait<WebDriver>(driver, webdriverClock, sleeper)
+        return new FluentWait<>(driver, webdriverClock, sleeper)
                 .withTimeout(timeoutInMilliseconds, TimeUnit.MILLISECONDS)
                 .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
                 .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
@@ -712,7 +778,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         try {
             waitForCondition().until(elementIsNotDisplayed());
         } catch (TimeoutException timeout) {
-            throwErrorWithCauseIfPresent(timeout, "Expected hidden element was displayed");
+            throwShouldBeInvisibleErrorWithCauseIfPresent(timeout, "Expected hidden element was displayed");
         }
         return this;
     }
@@ -745,7 +811,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             waitForCondition().until(elementIsEnabled());
             return this;
         } catch (TimeoutException timeout) {
-            throw new ElementNotVisibleException("Expected enabled element was not enabled", timeout);
+            throw new ElementShouldBeEnabledException("Expected enabled element was not enabled", timeout);
         }
     }
 
@@ -759,7 +825,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             waitForCondition().until(elementIsNotEnabled());
             return this;
         } catch (TimeoutException timeout) {
-            throw new ElementNotVisibleException("Expected disabled element was not disabled", timeout);
+            throw new ElementShouldBeDisabledException("Expected disabled element was not disabled", timeout);
         }
     }
 
@@ -887,15 +953,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     public List<WebElement> findElements(By by) {
-//        if (webDriverFacade().isPresent()) {
-//            webDriverFacade().get().overrideTimeoutsTo(0, TimeUnit.SECONDS);
-//        }
-        List<WebElement> matchingElements = getElement().findElements(by);
-//        if (webDriverFacade().isPresent()) {
-//            webDriverFacade().get().restoreTimeouts();
-//        }
-
-        return matchingElements;
+        return getElement().findElements(by);
     }
 
     public WebElement findElement(By by) {

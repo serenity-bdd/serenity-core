@@ -1,30 +1,36 @@
 package net.thucydides.core.pages.integration;
 
+import net.serenitybdd.core.annotations.findby.FindBy;
 import net.thucydides.core.annotations.DefaultUrl;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
+import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+
+import java.util.List;
 
 @DefaultUrl("classpath:static-site/index.html")
 public class StaticSitePage extends PageObject {
 
     @FindBy(name = "firstname")
-    public WebElement firstName;
+    public WebElementFacade firstName;
 
     @FindBy(name = "lastname")
     public WebElement lastName;
 
     @FindBy(name = "city")
-    public WebElement city;
+    public WebElementFacade city;
 
-    @FindBy(name = "country")
-    public WebElement country;
+    @FindBy(id="slow-loader")
+    public WebElementFacade slowLoadingField;
+
+    @FindBy(name = "country", timeoutInSeconds="10")
+    public WebElementFacade country;
 
     @FindBy(name = "hiddenfield")
-    public WebElement hiddenField;
+    public WebElementFacade hiddenField;
 
     public WebElement csshiddenfield;
 
@@ -41,13 +47,15 @@ public class StaticSitePage extends PageObject {
 
     public WebElement selectedCheckbox;
 
-    public WebElement buttonThatIsInitiallyDisabled;
+    @FindBy(id="buttonThatIsInitiallyDisabled")
+    public WebElementFacade initiallyDisabled;
 
-    public WebElement buttonThatIsInitiallyEnabled;
+    @FindBy(id="buttonThatIsInitiallyEnabled")
+    public WebElementFacade initiallyEnabled;
 
-    public WebElement placetitle;
+    public WebElementFacade placetitle;
 
-    public WebElement dissapearingtext;
+    public WebElementFacade dissapearingtext;
 
     @FindBy(id = "visible")
     public WebElement visibleTitle;
@@ -57,12 +65,15 @@ public class StaticSitePage extends PageObject {
 
     public WebElement elements;
 
+    @FindBy(css="#elements option")
+    public List<WebElementFacade> elementItems;
+
     public WebElement grid;
 
     public WebElement emptylist;
 
     @FindBy(name = "fieldDoesNotExist")
-    public WebElement fieldDoesNotExist;
+    public WebElementFacade fieldDoesNotExist;
 
     @FindBy(id = "emptyLabelID")
     public WebElement emptyLabel;
@@ -101,6 +112,10 @@ public class StaticSitePage extends PageObject {
 
     public StaticSitePage(WebDriver driver) {
         super(driver);
+    }
+
+    public StaticSitePage(WebDriver driver, EnvironmentVariables environmentVariables) {
+        super(driver, environmentVariables);
     }
 
     public StaticSitePage(WebDriver driver, int timeout) {
@@ -154,7 +169,7 @@ public class StaticSitePage extends PageObject {
     public ExpectedCondition<Boolean> twoFieldsAreDisabled() {
         return new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
-                return (!buttonThatIsInitiallyEnabled.isEnabled() && !readonlyField.isEnabled());
+                return (!initiallyEnabled.isEnabled() && !readonlyField.isEnabled());
             }
         };
     }

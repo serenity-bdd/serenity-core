@@ -9,6 +9,7 @@ import net.serenitybdd.core.pages.InternalSystemClock;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.internal.Coordinates;
+import org.openqa.selenium.support.ui.Duration;
 import org.openqa.selenium.support.ui.Wait;
 
 import java.lang.reflect.Type;
@@ -534,5 +535,20 @@ public class WebElementFacadeStub implements WebElementFacade {
     @Override
     public List<WebElement> findElementsByIosUIAutomation(String using) {
         return Lists.newArrayList();
+    }
+
+    @Override
+    public void setImplicitTimeout(Duration implicitTimeout) {
+
+    }
+
+    @Override
+    public Duration getCurrentImplicitTimeout() {
+        return null;
+    }
+
+    @Override
+    public void resetTimeouts() {
+
     }
 }

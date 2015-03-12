@@ -1,8 +1,10 @@
 package net.thucydides.core.webdriver;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import io.appium.java_client.AppiumDriver;
 import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.pages.DefaultTimeouts;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureException;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
@@ -32,6 +34,7 @@ import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.support.ui.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +45,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
 import static net.thucydides.core.webdriver.javascript.JavascriptSupport.activateJavascriptSupportFor;
@@ -74,6 +77,7 @@ public class WebDriverFactory {
     private final SauceRemoteDriverCapabilities sauceRemoteDriverCapabilities;
 
     private final Integer EXTRA_TIME_TO_TAKE_SCREENSHOTS = 180;
+    private final TimeoutStack timeoutStack;
 
     public WebDriverFactory() {
         this(new WebdriverInstanceFactory(), Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
@@ -118,6 +122,7 @@ public class WebDriverFactory {
         this.proxyCreator = proxyCreator;
         this.browserStackRemoteDriverCapabilities = new BrowserStackRemoteDriverCapabilities(environmentVariables);
         this.sauceRemoteDriverCapabilities = new SauceRemoteDriverCapabilities(environmentVariables);
+        this.timeoutStack = new TimeoutStack();
     }
 
     protected ProfilesIni getAllProfiles() {
@@ -201,7 +206,7 @@ public class WebDriverFactory {
     private void setPhantomJSPathIfNotSet() {
         if (!phantomJSIsAvailable()) {
             LOGGER.info("PhantomJS not on path, trying to get path from PHANTOMJS_BINARY_PATH");
-            String phantomJSPath = System.getProperty(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY);
+            String phantomJSPath = environmentVariables.getProperty(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY);
             String phantomJSPathEnvironmentProperty = System.getenv("PHANTOMJS_BINARY_PATH");
             LOGGER.info("PHANTOMJS_BINARY_PATH = " + phantomJSPathEnvironmentProperty);
             LOGGER.info("PHANTOMJS_EXECUTABLE_PATH_PROPERTY = " + phantomJSPath);
@@ -262,7 +267,7 @@ public class WebDriverFactory {
 
     private WebDriver newRemoteDriver() throws MalformedURLException {
 
-        WebDriver driver = null;
+        WebDriver driver;
         if (saucelabsUrlIsDefined()) {
             driver = buildSaucelabsDriver();
         } else if (browserStackUrlIsDefined()){
@@ -569,7 +574,7 @@ public class WebDriverFactory {
     }
 
     private boolean isNotAMocked(WebDriver driver) {
-        return (!driver.getClass().getName().contains("Mock"));
+        return (!(driver.getClass().getName().contains("Mock") || driver.toString().contains("Mock for")));
     }
 
     protected void resizeBrowserTo(WebDriver driver, int height, int width) {
@@ -733,4 +738,33 @@ public class WebDriverFactory {
     	proxyCreator.proxyElements(pageObject, driver, timeoutInSeconds);
     }
 
+    public void setTimeouts(WebDriver proxiedDriver, Duration implicitTimeout) {
+        Duration currentTimeout = currentTimeoutFor(proxiedDriver);
+        timeoutStack.pushTimeoutFor(proxiedDriver, implicitTimeout);
+        if ((implicitTimeout != currentTimeout) && isNotAMocked(proxiedDriver)) {
+            proxiedDriver.manage().timeouts().implicitlyWait(implicitTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
+        }
+    }
+
+    public Duration currentTimeoutFor(WebDriver proxiedDriver) {
+        Optional<Duration> storedTimeoutValue = timeoutStack.currentTimeoutValueFor(proxiedDriver);
+        return storedTimeoutValue.or(getDefaultImplicitTimeout());
+    }
+
+    public void resetTimeouts(WebDriver proxiedDriver) {
+        Duration currentTimeout = currentTimeoutFor(proxiedDriver);
+        if (timeoutStack.containsTimeoutFor(proxiedDriver)) {
+            Duration previousTimeout = timeoutStack.popTimeoutFor(proxiedDriver).or(getDefaultImplicitTimeout());
+            if ((currentTimeout != previousTimeout)  && isNotAMocked(proxiedDriver)) {
+                proxiedDriver.manage().timeouts().implicitlyWait(previousTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
+            }
+        }
+    }
+
+    public Duration getDefaultImplicitTimeout() {
+        Integer configuredTimeout = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables);
+        return (configuredTimeout != null) ? new Duration(configuredTimeout, TimeUnit.MILLISECONDS)
+                                           : DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
+
+    }
 }

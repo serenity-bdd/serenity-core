@@ -53,6 +53,11 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         return Lambda.convert(systemProperties.keySet(), new DefaultStringConverter());
     }
 
+    @Override
+    public Properties getProperties() {
+        return new Properties(systemProperties);
+    }
+
 
     public Integer getPropertyAsInteger(String property, Integer defaultValue) {
         String value = (String) systemProperties.get(property);

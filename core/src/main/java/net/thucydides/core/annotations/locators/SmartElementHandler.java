@@ -23,8 +23,8 @@ public class SmartElementHandler extends AbstractSingleItemHandler<WebElementFac
 	@Override
 	protected Object newElementInstance(long timeoutInMilliseconds) throws InvocationTargetException,
 			NoSuchMethodException, InstantiationException, IllegalAccessException {
-		Constructor<?> constructor = null;
-		Object instance = null;
+		Constructor<?> constructor;
+		Object instance;
 		try {
 			constructor = implementerClass.getConstructor(WebDriver.class, ElementLocator.class, long.class);
 			instance = constructor.newInstance(page.getDriver(), locator, timeoutInMilliseconds);
@@ -32,7 +32,7 @@ public class SmartElementHandler extends AbstractSingleItemHandler<WebElementFac
 		catch (NoSuchMethodException e) {
 			try {
 				constructor = implementerClass.getConstructor(WebDriver.class, ElementLocator.class, WebElement.class, long.class);
-				instance = constructor.newInstance(page.getDriver(), locator, (WebElement) null, timeoutInMilliseconds);
+				instance = constructor.newInstance(page.getDriver(), locator, null, timeoutInMilliseconds);
 			}
 			catch (NoSuchMethodException e1) {
 				String className = implementerClass.getSimpleName();

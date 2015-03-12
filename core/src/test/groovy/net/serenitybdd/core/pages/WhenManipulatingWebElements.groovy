@@ -1,8 +1,14 @@
 package net.serenitybdd.core.pages
 
 import net.serenitybdd.core.annotations.findby.By
+import net.thucydides.core.webdriver.WebDriverFacade
+import net.thucydides.core.webdriver.exceptions.ElementShouldBeDisabledException
+import net.thucydides.core.webdriver.exceptions.ElementShouldBeEnabledException
+import net.thucydides.core.webdriver.exceptions.ElementShouldBePresentException
+import net.thucydides.core.webdriver.exceptions.ElementShouldBeVisibleException
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade
 import org.openqa.selenium.ElementNotVisibleException
+import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
@@ -18,9 +24,10 @@ import java.util.concurrent.TimeUnit
 class WhenManipulatingWebElements extends Specification {
 
 
-    WebDriver driver = Mock()
+    WebDriverFacade driver = Mock()
     WebElement webElement = Mock()
     ElementLocator locator = Mock();
+    PageObject parentPage = Mock();
 
     @Unroll
     def "web element facade should be printed as the web element"() {
@@ -76,59 +83,12 @@ class WhenManipulatingWebElements extends Specification {
         !elementFacade.isVisible()
     }
 
-
-    def "stale element found using a finder should not be considered displayed"() {
-        given:
-        driver.findElements(_) >> { throw new StaleElementReferenceException("Stale element") }
-        when:
-        RenderedPageObjectView view = new RenderedPageObjectView(driver, 100);
-        then:
-        !view.elementIsDisplayed(By.id("some-element"))
-    }
-
-
-    def "inexistant element should not be considered present"() {
-        given:
-        driver.findElements(By.id("some-element")) >> []
-        when:
-        RenderedPageObjectView view = new RenderedPageObjectView(driver, 100);
-        then:
-        !view.elementIsPresent(By.id("some-element"))
-    }
-
-    def "an element on the page should be considered present"() {
-        given:
-        driver.findElements(By.id("some-element")) >> [webElement]
-        when:
-        RenderedPageObjectView view = new RenderedPageObjectView(driver, 100);
-        then:
-        view.elementIsPresent(By.id("some-element"))
-    }
-
     def "timeout can be redefined"() {
         when:
         WebElementFacade webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100);
         WebElementFacade webElementFacadeWithDifferentTimeout = webElementFacade.withTimeoutOf(2, TimeUnit.SECONDS);
         then:
         webElementFacadeWithDifferentTimeout.timeoutInMilliseconds == 2000L
-    }
-
-    def "inexistant element should not be considered displayed"() {
-        given:
-        driver.findElements(By.id("some-element")) >> []
-        when:
-        RenderedPageObjectView view = new RenderedPageObjectView(driver, 100);
-        then:
-        !view.elementIsDisplayed(By.id("some-element"))
-    }
-
-    def "stale element should not be considered enabled"() {
-        given:
-        driver.findElements(_) >> { throw new StaleElementReferenceException("Stale element") }
-        when:
-        WebElementFacade elementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100);
-        then:
-        !elementFacade.isCurrentlyEnabled()
     }
 
     JavascriptExecutorFacade mockJavascriptExecutorFacade = Mock()
@@ -182,21 +142,14 @@ class WhenManipulatingWebElements extends Specification {
         when:
             webElementFacade.click()
         then:
-            thrown(ElementNotVisibleException.class)
-    }
-
-    def "when webelement is null it should fail wait until enabled"() {
-        when:
-        webElementFacade.waitUntilEnabled()
-        then:
-        thrown(ElementNotVisibleException.class)
+            thrown(ElementShouldBeEnabledException.class)
     }
 
     def "when webelement is null it should fail wait until disabled"() {
         when:
         webElementFacade.waitUntilDisabled()
         then:
-        thrown(ElementNotVisibleException.class)
+        thrown(ElementShouldBeDisabledException.class)
     }
 
 
@@ -204,7 +157,7 @@ class WhenManipulatingWebElements extends Specification {
         when:
         webElementFacade.waitUntilPresent()
         then:
-        thrown(ElementNotVisibleException.class)
+        thrown(ElementShouldBePresentException.class)
     }
 
 
@@ -229,21 +182,21 @@ class WhenManipulatingWebElements extends Specification {
         when:
         !webElementFacade.getSelectedValue()
         then:
-        thrown(ElementNotVisibleException.class)
+        thrown(NoSuchElementException.class)
     }
 
     def "when webelement is null get text value should fail"() {
         when:
         !webElementFacade.getTextValue()
         then:
-        thrown(ElementNotVisibleException.class)
+        thrown(ElementShouldBePresentException.class)
     }
 
     def "when webelement is null get value should fail"() {
         when:
         !webElementFacade.getValue()
         then:
-        thrown(ElementNotVisibleException.class)
+        thrown(NoSuchElementException.class)
     }
 
 
@@ -251,6 +204,6 @@ class WhenManipulatingWebElements extends Specification {
         when:
         !webElementFacade.getText()
         then:
-        thrown(ElementNotVisibleException.class)
+        thrown(NoSuchElementException.class)
     }
 }

@@ -2,8 +2,10 @@ package net.thucydides.core.annotations.locators;
 
 import java.lang.reflect.Field;
 
+import net.serenitybdd.core.annotations.findby.FindBy;
 import net.thucydides.core.webdriver.MobilePlatform;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;

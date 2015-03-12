@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 public class WhenLocatingWebElementsWithSmartLocator {
 
     @Mock
-    WebDriver driver;
+    WebDriverFacade driver;
 
     @Mock
     WebElement webElement;
@@ -55,15 +55,7 @@ public class WhenLocatingWebElementsWithSmartLocator {
         when(driver.findElements(By.id("someId"))).thenReturn(ImmutableList.of(webElement));
     }
 
-    @Test(timeout = 5000)
-    public void should_find_element_immediately_if_a_previous_step_has_failed() {
-
-        SmartAjaxElementLocator locator = new SmartAjaxElementLocator(driver, field, MobilePlatform.NONE, 5);
-        StepEventBus.getEventBus().stepFailed(failure);
-        locator.findElement();
-    }
-
-    @Test(timeout = 5000)
+    @Test(timeout = 2000)
     public void should_find_elements_immediately_if_a_previous_step_has_failed() {
         SmartAjaxElementLocator locator = new SmartAjaxElementLocator(driver, field, MobilePlatform.NONE, 5);
         StepEventBus.getEventBus().stepFailed(failure);

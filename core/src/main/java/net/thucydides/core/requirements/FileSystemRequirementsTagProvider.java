@@ -1,5 +1,6 @@
 package net.thucydides.core.requirements;
 
+import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -123,8 +124,10 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 Set<String> directoryPaths = getRootDirectoryPaths();
                 for (String rootDirectoryPath : directoryPaths) {
                     File rootDirectory = new File(rootDirectoryPath);
-                    allRequirements.addAll(loadCapabilitiesFrom(rootDirectory.listFiles(thatAreDirectories())));
-                    allRequirements.addAll(loadStoriesFrom(rootDirectory.listFiles(thatAreStories())));
+                    if (rootDirectory.exists()) {
+                        allRequirements.addAll(loadCapabilitiesFrom(rootDirectory.listFiles(thatAreDirectories())));
+                        allRequirements.addAll(loadStoriesFrom(rootDirectory.listFiles(thatAreStories())));
+                    }
                 }
                 requirements = Lists.newArrayList(allRequirements);
                 Collections.sort(requirements);
@@ -355,7 +358,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         if (storyPathElements.isEmpty()) {
             return Optional.absent();
         } else {
-            return lastRequirementMatchingPath(getFlattenedRequirements(), storyPathElements);
+            return lastRequirementMatchingPath(getRequirements(), storyPathElements);
         }
     }
 
@@ -429,22 +432,32 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private List<Requirement> loadCapabilitiesFrom(File[] requirementDirectories) {
-        List<Requirement> capabilities = Lists.newArrayList();
-        for(File requirementsDirectory : requirementDirectories) {
-            capabilities.add(readRequirementFrom(requirementsDirectory));
-        }
-        return capabilities;
+        return convert(requirementDirectories, toRequirements());
     }
 
 
     private List<Requirement> loadStoriesFrom(File[] storyFiles) {
-        List<Requirement> stories = Lists.newArrayList();
-        for(File storyFile : storyFiles) {
-            stories.add(readRequirementsFromStoryOrFeatureFile(storyFile));
-        }
-        return stories;
+        return convert(storyFiles, toStoryRequirements());
     }
-    
+
+    private Converter<File, Requirement> toRequirements() {
+        return new Converter<File, Requirement>() {
+
+            public Requirement convert(File requirementFileOrDirectory) {
+                return readRequirementFrom(requirementFileOrDirectory);
+            }
+        };
+    }
+
+    private Converter<File, Requirement> toStoryRequirements() {
+        return new Converter<File, Requirement>() {
+
+            public Requirement convert(File storyFile) {
+                return readRequirementsFromStoryOrFeatureFile(storyFile);
+            }
+        };
+    }
+
     private Requirement readRequirementFrom(File requirementDirectory) {
         Optional<Narrative> requirementNarrative = narrativeReader.loadFrom(requirementDirectory, level);
 
@@ -514,12 +527,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private List<Requirement> readChildrenFrom(File requirementDirectory) {
         String childDirectory = rootDirectoryPath + "/" + requirementDirectory.getName();
-        if (new File(childDirectory).exists()) {
-            RequirementsTagProvider childReader = new FileSystemRequirementsTagProvider(childDirectory, level + 1, environmentVariables);
-            return childReader.getRequirements();
-        } else {
-            return Lists.newArrayList();
-        }
+        RequirementsTagProvider childReader = new FileSystemRequirementsTagProvider(childDirectory, level + 1, environmentVariables);
+        return childReader.getRequirements();
     }
 
     private String getTitleFromNarrativeOrDirectoryName(Narrative requirementNarrative, String nameIfNoNarrativePresent) {

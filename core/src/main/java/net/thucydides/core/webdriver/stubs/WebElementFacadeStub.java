@@ -403,6 +403,11 @@ public class WebElementFacadeStub implements WebElementFacade {
     }
 
     @Override
+    public <T extends WebElementFacade> T waitUntilClickable() {
+        return null;
+    }
+
+    @Override
     public WebElementFacade waitUntilEnabled() {
         return this;
     }

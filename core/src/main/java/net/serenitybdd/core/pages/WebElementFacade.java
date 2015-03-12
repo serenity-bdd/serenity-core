@@ -98,6 +98,8 @@ public interface WebElementFacade extends WebElement, WrapsElement, Locatable, W
 
     public <T extends WebElementFacade> T waitUntilEnabled();
 
+    public <T extends WebElementFacade> T waitUntilClickable();
+
     public <T extends WebElementFacade> T waitUntilDisabled();
 
     /**

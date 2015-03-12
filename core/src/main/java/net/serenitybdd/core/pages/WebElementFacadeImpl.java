@@ -725,10 +725,21 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     private ExpectedCondition<Boolean> elementIsEnabled() {
         return new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
-                return ((getElement() != null) && (!isDisabledField(getElement())));
+                WebElement element = getElement();
+                return ((element != null) && (!isDisabledField(element)));
             }
         };
     }
+    private ExpectedCondition<Boolean> elementIsClickable() {
+
+        return new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver driver) {
+                WebElement element = getElement();
+                return ((element != null) && (element.isDisplayed()) && element.isEnabled());
+            }
+        };
+    }
+
 
     private boolean isDisabledField(WebElement webElement) {
         return (isAFormElement(webElement) && (!webElement.isEnabled()));
@@ -809,6 +820,20 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
         try {
             waitForCondition().until(elementIsEnabled());
+            return this;
+        } catch (TimeoutException timeout) {
+            throw new ElementShouldBeEnabledException("Expected enabled element was not enabled", timeout);
+        }
+    }
+
+    @Override
+    public WebElementFacade waitUntilClickable() {
+        if (driverIsDisabled()) {
+            return this;
+        }
+
+        try {
+            waitForCondition().until(elementIsClickable());
             return this;
         } catch (TimeoutException timeout) {
             throw new ElementShouldBeEnabledException("Expected enabled element was not enabled", timeout);

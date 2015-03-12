@@ -13,7 +13,6 @@ import net.thucydides.core.webdriver.exceptions.ElementShouldBeInvisibleExceptio
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.TimeoutException
-import org.openqa.selenium.support.ui.ExpectedConditions
 import spock.lang.Specification
 import spock.lang.Unroll
 

@@ -33,6 +33,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static ch.lambdaj.Lambda.by;
 import static ch.lambdaj.Lambda.convert;
 import static net.serenitybdd.core.pages.Selectors.isXPath;
 
@@ -985,4 +986,31 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return ((Locatable) getElement()).getCoordinates();
     }
 
+    @Override
+    public boolean containsElements(By bySelector) {
+        return !findElements(bySelector).isEmpty();
+    }
+
+    @Override
+    public boolean containsElements(String xpathOrCssSelector) {
+        return !thenFindAll(xpathOrCssSelector).isEmpty();
+    }
+
+    @Override
+    public void shouldContainElements(By bySelector) {
+        if (!containsElements(bySelector)) {
+            String errorMessage = String.format(
+                    "Could not find contained elements %s in %s", bySelector, getElement().toString());
+            failWithMessage(errorMessage);
+        }
+    }
+
+    @Override
+    public void shouldContainElements(String xpathOrCssSelector) {
+        if (!containsElements(xpathOrCssSelector)) {
+            String errorMessage = String.format(
+                    "Could not find contained elements %s in %s", xpathOrCssSelector, getElement().toString());
+            failWithMessage(errorMessage);
+        }
+    }
 }

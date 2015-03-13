@@ -551,4 +551,26 @@ public class WebElementFacadeStub implements WebElementFacade {
     public void resetTimeouts() {
 
     }
+
+    @Override
+    public boolean containsElements(By selector) {
+        return false;
+    }
+
+    @Override
+    public boolean containsElements(String xpathOrCssSelector) {
+        return false;
+    }
+
+    @Override
+    public void shouldContainElements(By selector) {
+        
+    }
+
+    @Override
+    public void shouldContainElements(String xpathOrCssSelector) {
+
+    }
+
 }
+

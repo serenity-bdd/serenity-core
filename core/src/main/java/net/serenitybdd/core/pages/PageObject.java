@@ -15,8 +15,9 @@ import net.thucydides.core.reflection.MethodFinder;
 import net.thucydides.core.scheduling.FluentWaitWithRefresh;
 import net.thucydides.core.scheduling.NormalFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
-import net.thucydides.core.steps.StepDelayer;
+import net.thucydides.core.steps.PageObjectStepDelayer;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.WaitForBuilder;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import net.thucydides.core.webdriver.DefaultPageObjectInitialiser;
@@ -28,7 +29,6 @@ import static net.serenitybdd.core.pages.Selectors.xpathOrCssSelector;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.remote.server.handler.ConfigureTimeout;
 import org.openqa.selenium.support.ui.*;
 import org.openqa.selenium.support.ui.Duration;
 import org.openqa.selenium.support.ui.SystemClock;
@@ -434,12 +434,16 @@ public abstract class PageObject {
         getClock().pauseFor(timeInMilliseconds);
     }
 
-    public StepDelayer.WaitForBuilder waitFor(int duration) {
-        return new StepDelayer(clock).waitFor(duration);
+    public WaitForBuilder<? extends PageObject> waitFor(int duration) {
+        return new PageObjectStepDelayer(clock, this).waitFor(duration);
     }
 
     public List<WebElement> thenReturnElementList(final By byListCriteria) {
         return driver.findElements(byListCriteria);
+    }
+
+    public <T extends PageObject> T foo() {
+        return (T) this;
     }
 
     /**

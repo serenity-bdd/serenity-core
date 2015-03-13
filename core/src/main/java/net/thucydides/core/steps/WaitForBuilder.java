@@ -2,58 +2,58 @@ package net.thucydides.core.steps;
 
 import net.serenitybdd.core.pages.SystemClock;
 
-public class StepDelayer {
-
-    private final SystemClock clock;
-
-    public StepDelayer(SystemClock clock) {
-        this.clock = clock;
-    }
-
-    public WaitForBuilder waitFor(int duration) {
-        return new WaitForBuilder(duration);
-    }
-
-    public class WaitForBuilder {
+public class WaitForBuilder<T> {
         private final int duration;
+        private final T parent;
+        private final SystemClock clock;
+
         private static final int MILLISECONDS_IN_A_SECOND = 1000;
         private static final int MILLISECONDS_IN_A_MINUTE = 1000 * 60;
         private static final int MILLISECONDS_IN_AN_HOUR = 1000 * 60 * 60;
 
-        public WaitForBuilder(int duration) {
-            this.duration = duration;
+        public WaitForBuilder(int duration, T parent, SystemClock clock) {
+            this.clock = clock;
+            this.duration = duration; 
+            this.parent = parent;
         }
 
-        public void millisecond() {
+        public T millisecond() {
             clock.pauseFor(duration);
+            return parent;
         }
 
-        public void milliseconds() {
+        public T milliseconds() {
             clock.pauseFor(duration);
+            return parent;
         }
 
-        public void second() {
+        public T second() {
             clock.pauseFor(duration * MILLISECONDS_IN_A_SECOND);
+            return parent;
         }
 
-        public void seconds() {
+        public T seconds() {
             clock.pauseFor(duration * MILLISECONDS_IN_A_SECOND);
+            return parent;
         }
 
-        public void minute() {
+        public T minute() {
             clock.pauseFor(duration * MILLISECONDS_IN_A_MINUTE);
+            return parent;
         }
 
-        public void minutes() {
+        public T minutes() {
             clock.pauseFor(duration * MILLISECONDS_IN_A_MINUTE);
+            return parent;
         }
 
-        public void hour() {
+        public T hour() {
             clock.pauseFor(duration * MILLISECONDS_IN_AN_HOUR);
+            return parent;
         }
 
-        public void hours() {
+        public T hours() {
             clock.pauseFor(duration * MILLISECONDS_IN_AN_HOUR);
+            return parent;
         }
     }
-}

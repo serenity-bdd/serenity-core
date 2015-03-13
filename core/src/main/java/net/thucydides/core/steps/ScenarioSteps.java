@@ -70,8 +70,8 @@ public class ScenarioSteps implements Serializable {
         }
     }
 
-    public StepDelayer.WaitForBuilder waitFor(int duration) {
-        return new StepDelayer(clock).waitFor(duration);
+    public WaitForBuilder<? extends ScenarioSteps> waitFor(int duration) {
+        return new ScenarioStepsStepDelayer(clock, this).waitFor(duration);
     }
     
 

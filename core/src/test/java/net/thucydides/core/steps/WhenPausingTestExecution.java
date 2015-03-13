@@ -22,6 +22,9 @@ public class WhenPausingTestExecution {
     @Mock
     WebDriver driver;
 
+    @Mock
+    PageObject parent;
+
     @Before
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
@@ -30,7 +33,7 @@ public class WhenPausingTestExecution {
     @Test
     public void should_pause_test_execution_for_a_millisecond() {
 
-        StepDelayer delayer = new StepDelayer(clock);
+        PageObjectStepDelayer delayer = new PageObjectStepDelayer(clock, parent);
         delayer.waitFor(1).millisecond();
 
         verify(clock).pauseFor(1);
@@ -39,7 +42,7 @@ public class WhenPausingTestExecution {
     @Test
     public void should_pause_test_execution_for_a_specified_number_of_milliseconds() {
 
-        StepDelayer delayer = new StepDelayer(clock);
+        PageObjectStepDelayer delayer = new PageObjectStepDelayer(clock, parent);
         delayer.waitFor(2).milliseconds();
 
         verify(clock).pauseFor(2);
@@ -48,7 +51,7 @@ public class WhenPausingTestExecution {
     @Test
     public void should_pause_test_execution_for_a_minute() {
 
-        StepDelayer delayer = new StepDelayer(clock);
+        PageObjectStepDelayer delayer = new PageObjectStepDelayer(clock, parent);
         delayer.waitFor(1).minute();
 
         verify(clock).pauseFor(60000);
@@ -57,7 +60,7 @@ public class WhenPausingTestExecution {
     @Test
     public void should_pause_test_execution_for_a_specified_number_of_minutes() {
 
-        StepDelayer delayer = new StepDelayer(clock);
+        PageObjectStepDelayer delayer = new PageObjectStepDelayer(clock, parent);
         delayer.waitFor(2).minutes();
 
         verify(clock).pauseFor(120000);
@@ -66,7 +69,7 @@ public class WhenPausingTestExecution {
     @Test
     public void should_pause_test_execution_for_a_second() {
 
-        StepDelayer delayer = new StepDelayer(clock);
+        PageObjectStepDelayer delayer = new PageObjectStepDelayer(clock, parent);
         delayer.waitFor(1).second();
 
         verify(clock).pauseFor(1000);
@@ -75,7 +78,7 @@ public class WhenPausingTestExecution {
     @Test
     public void should_pause_test_execution_for_a_specified_number_of_seconds() {
 
-        StepDelayer delayer = new StepDelayer(clock);
+        PageObjectStepDelayer delayer = new PageObjectStepDelayer(clock, parent);
         delayer.waitFor(2).seconds();
 
         verify(clock).pauseFor(2000);
@@ -84,7 +87,7 @@ public class WhenPausingTestExecution {
     @Test
     public void should_pause_test_execution_for_an_hour() {
 
-        StepDelayer delayer = new StepDelayer(clock);
+        PageObjectStepDelayer delayer = new PageObjectStepDelayer(clock, parent);
         delayer.waitFor(1).hour();
 
         verify(clock).pauseFor(1000 * 60 * 60);
@@ -93,7 +96,7 @@ public class WhenPausingTestExecution {
     @Test
     public void should_pause_test_execution_for_a_specified_number_of_hourss() {
 
-        StepDelayer delayer = new StepDelayer(clock);
+        PageObjectStepDelayer delayer = new PageObjectStepDelayer(clock, parent);
         delayer.waitFor(2).hours();
 
         verify(clock).pauseFor(2 * 1000 * 60 * 60);
@@ -104,17 +107,18 @@ public class WhenPausingTestExecution {
             super(pages);
         }
 
+        public void step1() {}
+
     }
 
     @Test
     public void should_pause_step_execution() {
         PausedScenario scenario = new PausedScenario(pages);
-
         scenario.waitFor(2).milliseconds();
     }
+
     
-    
-    class PausedPageObject extends PageObject {
+    static final class PausedPageObject extends PageObject {
 
         PausedPageObject(WebDriver driver) {
             super(driver);
@@ -124,7 +128,14 @@ public class WhenPausingTestExecution {
     @Test
     public void should_pause_page_execution() {
         PausedPageObject page = new PausedPageObject(driver);
-
         page.waitFor(2).milliseconds();
     }
+
+    @Test
+    public void should_chain_after_pauses() {
+        PausedPageObject page = new PausedPageObject(driver);
+
+        page.waitFor(2).milliseconds().findAll(".item");
+    }
+
 }

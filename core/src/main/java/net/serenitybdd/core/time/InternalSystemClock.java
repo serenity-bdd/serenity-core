@@ -1,4 +1,4 @@
-package net.serenitybdd.core.pages;
+package net.serenitybdd.core.time;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;

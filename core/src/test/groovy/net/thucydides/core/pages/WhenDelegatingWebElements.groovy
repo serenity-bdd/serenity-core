@@ -12,7 +12,7 @@ class WhenDelegatingWebElements extends Specification {
 
     def "should delegate to findElement methods"() {
         given:
-            def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+            def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000, 1000)
         when:
             webElementFacade.findElement(By.id("someId"))
         then:
@@ -21,7 +21,7 @@ class WhenDelegatingWebElements extends Specification {
 
     def "should delegate to findElements methods"() {
         given:
-            def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+            def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000, 1000)
         when:
             webElementFacade.findElements(By.id("someId"))
         then:
@@ -30,7 +30,7 @@ class WhenDelegatingWebElements extends Specification {
 
     def "should delegate to isDisplayed methods"() {
         given:
-            def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+            def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000, 1000)
         when:
             webElementFacade.isDisplayed()
         then:
@@ -39,7 +39,7 @@ class WhenDelegatingWebElements extends Specification {
 
     def "should delegate to getSize methods"() {
         given:
-        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000, 1000)
         when:
         webElementFacade.getSize()
         then:
@@ -48,7 +48,7 @@ class WhenDelegatingWebElements extends Specification {
 
     def "should delegate to submit methods"() {
         given:
-        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000, 1000)
         when:
         webElementFacade.submit()
         then:
@@ -57,7 +57,7 @@ class WhenDelegatingWebElements extends Specification {
 
     def "should delegate to sendKeys methods"() {
         given:
-        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000, 1000)
         when:
         webElementFacade.sendKeys("keys")
         then:
@@ -66,7 +66,7 @@ class WhenDelegatingWebElements extends Specification {
 
     def "should delegate to getTagName methods"() {
         given:
-        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000, 1000)
         when:
         webElement.getTagName() >> "someTag"
         then:
@@ -76,7 +76,7 @@ class WhenDelegatingWebElements extends Specification {
 
     def "text value of an invisible element should be empty"() {
         given:
-        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000, 1000)
         when:
         webElement.isDisplayed() >> false
         then:
@@ -85,7 +85,7 @@ class WhenDelegatingWebElements extends Specification {
 
     def "should delegate to getCssValue methods"() {
         given:
-        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000, 1000)
         when:
         webElementFacade.getCssValue("value")
         then:
@@ -94,7 +94,7 @@ class WhenDelegatingWebElements extends Specification {
 
     def "should delegate to getAttribute methods"() {
         given:
-        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000, 1000)
         when:
         webElementFacade.getAttribute("name")
         then:
@@ -104,7 +104,7 @@ class WhenDelegatingWebElements extends Specification {
 //
 //    def "should return immediately if called after  "() {
 //        given:
-//        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000)
+//        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000, 1000)
 //        when:
 //        webElementFacade.getAttribute("name")
 //        then:

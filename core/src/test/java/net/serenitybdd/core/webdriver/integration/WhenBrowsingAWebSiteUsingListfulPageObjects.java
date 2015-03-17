@@ -70,13 +70,13 @@ public class WhenBrowsingAWebSiteUsingListfulPageObjects {
     public static class TableImpl extends WebElementFacadeImpl implements Table {
     	
     	private final WebDriver driver;
-    	
-    	public TableImpl(WebDriver driver, ElementLocator locator, long timeoutInMilliseconds) {
-			this(driver, locator, null, timeoutInMilliseconds);
+
+    	public TableImpl(WebDriver driver, ElementLocator locator, long implicitTimeoutInMilliseconds, long waitForTimeoutInMilliseconds) {
+			this(driver, locator, null, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
 		}
 
-		public TableImpl(WebDriver driver, ElementLocator locator, WebElement webElement, long timeoutInMilliseconds) {
-			super(driver, locator, webElement, timeoutInMilliseconds);
+		public TableImpl(WebDriver driver, ElementLocator locator, WebElement webElement, long implicitTimeoutInMilliseconds, long waitForTimeoutInMilliseconds) {
+			super(driver, locator, webElement, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
 			this.driver = driver;
 		}
 
@@ -85,7 +85,7 @@ public class WhenBrowsingAWebSiteUsingListfulPageObjects {
 			return convert(findElements(By.cssSelector("tbody tr")), new Converter<WebElement, Row>() {
 				@Override
 				public Row convert(WebElement from) {
-					return new RowImpl(driver, null, from, getTimeoutInMilliseconds());
+					return new RowImpl(driver, null, from, getImplicitTimeoutInMilliseconds());
 				}
 			});
     	}
@@ -127,7 +127,7 @@ public class WhenBrowsingAWebSiteUsingListfulPageObjects {
     public void openLocalStaticSite() {
         driver = new HtmlUnitDriver();
         openStaticTestSite();
-        indexPage = new TablesPage(driver, 1);
+        indexPage = new TablesPage(driver, 1000);
         indexPage.setWaitForTimeout(100);
     }
 
@@ -146,7 +146,9 @@ public class WhenBrowsingAWebSiteUsingListfulPageObjects {
     @SuppressWarnings("unchecked")
 	private <T> T findDataTable(List<? extends WebElement> tables) {
     	for (WebElement table : tables) {
-    		if (DATA_TABLE_ID.equals(table.getAttribute("id"))) {
+			String id = table.getAttribute("id");
+			System.out.printf("ID = " + id);
+			if (DATA_TABLE_ID.equals(id)) {
     			return (T) table;
     		}
     	}
@@ -154,7 +156,8 @@ public class WhenBrowsingAWebSiteUsingListfulPageObjects {
     }
     
     private Table tableFromElement(TablesPage page, WebElement elm) {
-    	return new TableImpl(page.getDriver(), null, elm, page.getWaitForTimeout().in(TimeUnit.MILLISECONDS));
+    	return new TableImpl(page.getDriver(), null, elm, page.getImplicitWaitTimeout().in(TimeUnit.MILLISECONDS),
+														  page.getWaitForTimeout().in(TimeUnit.MILLISECONDS));
     }
 
     @Test
@@ -190,8 +193,7 @@ public class WhenBrowsingAWebSiteUsingListfulPageObjects {
     @Test
     public void should_find_nested_content_using_custom_facade_type_list() {
     	Table table = findDataTable(indexPage.customFacadeTables);
-    	assertThat(convert(table.getBodyRows(), toCsvContent()), 
-    			everyItem(is(DATA_TABLE_ROW_CONTENT)));
+    	assertThat(convert(table.getBodyRows(), toCsvContent()), everyItem(is(DATA_TABLE_ROW_CONTENT)));
     }
     
     @Test

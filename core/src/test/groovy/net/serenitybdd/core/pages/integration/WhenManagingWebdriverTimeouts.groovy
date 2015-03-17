@@ -37,7 +37,6 @@ class WhenManagingWebdriverTimeouts extends Specification {
     EnvironmentVariables environmentVariables
 
     def setup() {
-        println "Clearing environment variables"
         environmentVariables = new MockEnvironmentVariables();
         def phantomJSPath = MockEnvironmentVariables.fromSystemEnvironment().getProperty(ThucydidesSystemProperty.PHANTOMJS_BINARY_PATH)
         if (phantomJSPath) {
@@ -56,20 +55,20 @@ class WhenManagingWebdriverTimeouts extends Specification {
         return page
     }
 
-    def defaultBrowser = "phantomjs"
+    def defaultBrowser = "htmlunit"
 
     //
     // IMPLICIT WAITS
     //
     def "WebDriver implicit waits are defined using the webdriver.timeouts.implicitlywait system property"() {
-        given: "The #slow-loader field takes 3 seconds to load"
-        and: "We configure the WebDriver implicit wait to be 1 second"
-            environmentVariables.setProperty("webdriver.timeouts.implicitlywait","1000")
+        given: "The #slow-loader field takes 4 seconds to load"
+        and: "We configure the WebDriver implicit wait to be 0 seconds"
+            environmentVariables.setProperty("webdriver.timeouts.implicitlywait","0")
         when: "We access the field"
             page = openTestPageUsing(defaultBrowser)
             page.slowLoadingField.isDisplayed()
         then: "An error should be thrown"
-            thrown(org.openqa.selenium.NoSuchElementException)
+            thrown(org.openqa.selenium.ElementNotVisibleException)
     }
 
     def "The default implicit wait is set to 2 seconds"() {
@@ -82,7 +81,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
 
     def "The implicit waits apply when you find a list of elements"() {
         when: "We access the a list of elements"
-            page = openTestPageUsing(defaultBrowser)
+            page = openTestPageUsing("phantomjs")
             int itemCount = page.elementItems.size()
         then: "They should all be found"
             itemCount == 4
@@ -122,10 +121,10 @@ class WhenManagingWebdriverTimeouts extends Specification {
             visibility == expectedVisibility
         where:
             field                | expectedVisibility
+            "hiddenField"        | false                 // Invisible
             "firstName"          | true                  // Immediately visible
             "city"               | true                  // loads in 500 ms
-            "slowLoadingField"   | false                 // loads in 3 seconds
-            "hiddenField"        | false                 // Invisible
+            "slowLoadingField"   | false                 // loads in 4 seconds
     }
 
     @Unroll
@@ -138,10 +137,10 @@ class WhenManagingWebdriverTimeouts extends Specification {
             visibility == expectedVisibility
         where:
             field                | expectedVisibility
+            "hiddenField"        | false                 // Invisible
             "firstName"          | true                  // Immediately visible
             "city"               | false                 // loads in 500 ms
             "slowLoadingField"   | false                 // loads in 3 seconds
-            "hiddenField"        | false                 // Invisible
     }
 
     def "The webdriver.timeouts.implicitlywait value is used when loading elements using the findAll() method."() {
@@ -170,8 +169,9 @@ class WhenManagingWebdriverTimeouts extends Specification {
     // WAIT-FOR TIMEOUTS
     //
     def "You can also explicitly wait for fields to appear. This will use the webdriver.wait.for.timeout property rather than the implicit timeouts"() {
-        given: "We set the webdriver.wait.for.timeout to 10 seconds"
-            environmentVariables.setProperty("webdriver.wait.for.timeout","10000")
+        given: "We set the webdriver.wait.for.timeout to 5 seconds"
+            environmentVariables.setProperty("webdriver.implicit.wait","0")
+            environmentVariables.setProperty("webdriver.wait.for.timeout","5000")
         and:
             page = openTestPageUsing(defaultBrowser)
         when: "We wait for a field to appear that takes 2 seconds to load"
@@ -184,7 +184,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         given: "We set the webdriver.wait.for.timeout to 1 seconds"
             environmentVariables.setProperty("webdriver.wait.for.timeout", "1000")
         and: "The implicit wait will timeout"
-            environmentVariables.setProperty("webdriver.timeouts.implicitlywait","50")
+            environmentVariables.setProperty("webdriver.timeouts.implicitlywait","0")
         and:
             page = openTestPageUsing(defaultBrowser)
         when: "We wait for a field to appear that takes 2 seconds to load"

@@ -2,6 +2,7 @@ package net.thucydides.core.annotations.locators;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.TimeUnit;
 
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WidgetObject;
@@ -20,28 +21,57 @@ public class WidgetListItemHandler extends AbstractListItemHandler<WidgetObject>
 			+ "Expected one of the following:  %s(PageObject, WebElement, long) or %s(PageObject, ElementLocator, WebElement, long)";
 
 	public WidgetListItemHandler(Class<?> interfaceType, ElementLocator locator,
-			WebElement element, PageObject page, long timeoutInMilliseconds) {
-		super(WidgetObject.class, interfaceType, locator, element, page, timeoutInMilliseconds);
+			WebElement element, PageObject page, long implicitTimeoutInMilliseconds, long waitForTimeoutInMilliseconds) {
+		super(WidgetObject.class, interfaceType, locator, element, page, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
 	}
 
 	protected Object newElementInstance() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		// initialize using the element, not the locator
-		Constructor<?> constructor = null;
-		Object obj = null;
-		try {
-			constructor = implementerClass.getConstructor(PageObject.class, WebElement.class, long.class);
-			obj = constructor.newInstance(page, element, timeoutInMilliseconds);
-		}
-		catch (NoSuchMethodException e) {
-			try {
-				constructor = implementerClass.getConstructor(PageObject.class, ElementLocator.class, WebElement.class, long.class);
-				obj = constructor.newInstance(page, (ElementLocator) null, element, timeoutInMilliseconds);
+//		Constructor<?> constructor = null;
+//		Object obj = null;
+//		try {
+//			constructor = implementerClass.getConstructor(PageObject.class, WebElement.class, long.class);
+//			obj = constructor.newInstance(page, element, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
+//		}
+//		catch (NoSuchMethodException e) {
+//			try {
+//				constructor = implementerClass.getConstructor(PageObject.class, ElementLocator.class, WebElement.class, long.class);
+//				obj = constructor.newInstance(page, null, element, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
+//			}
+//			catch (NoSuchMethodException e1) {
+//				String className = implementerClass.getSimpleName();
+//				throw new RuntimeException(String.format(NO_SUITABLE_CONSTRUCTOR_FOUND_FMT2, className, className));
+//			}
+//		}
+//		return obj;
+
+		Object instance = null;
+
+		if (ElementContructorForm.applicableConstructor(implementerClass).isPresent()) {
+			Constructor constructor = ElementContructorForm.applicableConstructorFrom(implementerClass).get();
+			switch (ElementContructorForm.applicableConstructor((implementerClass)).get()) {
+				case PAGE_ELEMENT_SINGLE_TIMEOUT:
+					instance = constructor.newInstance(page, element, implicitTimeoutInMilliseconds);
+					break;
+				case PAGE_ELEMENT_TWO_TIMEOUTS:
+					instance = constructor.newInstance(page, element, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
+					break;
+
+				case PAGE_LOCATOR_SINGLE_TIMEOUT:
+					instance = constructor.newInstance(page, locator, implicitTimeoutInMilliseconds);
+					break;
+				case PAGE_LOCATOR_TWO_TIMEOUTS:
+					instance = constructor.newInstance(page, locator, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
+					break;
+				case PAGE_LOCATOR_ELEMENT_SINGLE_TIMEOUT:
+					instance = constructor.newInstance(page, locator, element, implicitTimeoutInMilliseconds);
+					break;
+				case PAGE_LOCATOR_ELEMENT_TWO_TIMEOUTS:
+					instance = constructor.newInstance(page, locator, element, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
+					break;
 			}
-			catch (NoSuchMethodException e1) {
-				String className = implementerClass.getSimpleName();
-				throw new RuntimeException(String.format(NO_SUITABLE_CONSTRUCTOR_FOUND_FMT2, className, className));
-			}
 		}
-		return obj;
+		return instance;
+
 	}
 }

@@ -21,7 +21,7 @@ public class WidgetObjectImpl extends WebElementFacadeImpl implements WidgetObje
 	}
 
 	public WidgetObjectImpl(PageObject page, ElementLocator locator, long timeoutInMilliseconds) {
-		this(page, locator, (WebElement) null, timeoutInMilliseconds);
+		this(page, locator, null, timeoutInMilliseconds);
 	}
 
 	public PageObject getPage() {

@@ -37,10 +37,9 @@ public interface WebElementFacade extends WebElement, WrapsElement, Locatable, W
 
     public List<WebElementFacade> thenFindAll(By selector);
 
-    public long getTimeoutInMilliseconds();
+    public long getImplicitTimeoutInMilliseconds();
 
-    public <T extends WebElementFacade> T withTimeoutOf(int timeout,
-                                                   TimeUnit unit);
+    public <T extends WebElementFacade> T withTimeoutOf(int timeout, TimeUnit unit);
 
     /**
      * Convenience method to chain method calls more fluently.

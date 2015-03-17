@@ -10,10 +10,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 
 import java.lang.reflect.Field;
@@ -68,7 +65,6 @@ public class WhenLocatingWebElementsWithSmartLocator {
     @Test
     public void should_wait_for_find_element_if_no_previous_step_has_failed() {
 
-        expectedException.expect(NoSuchElementException.class);
         expectedException.expectMessage(containsString("Timed out after 1 second"));
 
         SmartAjaxElementLocator locator = new SmartAjaxElementLocator(driver, field, MobilePlatform.NONE, 1);
@@ -78,7 +74,6 @@ public class WhenLocatingWebElementsWithSmartLocator {
     @Test
     public void should_wait_for_find_elements_if_no_previous_step_has_failed() {
 
-        expectedException.expect(NoSuchElementException.class);
         expectedException.expectMessage(containsString("Timed out after 1 second"));
 
         SmartAjaxElementLocator locator = new SmartAjaxElementLocator(driver, field, MobilePlatform.NONE, 1);

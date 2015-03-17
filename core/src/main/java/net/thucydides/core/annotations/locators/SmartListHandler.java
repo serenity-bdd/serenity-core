@@ -25,14 +25,17 @@ public class SmartListHandler implements InvocationHandler {
 	private final Class<?> interfaceType;
 	private final ElementLocator locator;
 	private final PageObject page;
-	private final long timeoutInMilliseconds;
+	private final long implicitTimeoutInMilliseconds;
+	private final long waitForTimeoutInMilliseconds;
 
-	public SmartListHandler(ClassLoader loader, Class<?> interfaceType, ElementLocator locator, PageObject page, long timeoutInMilliseconds) {
+	public SmartListHandler(ClassLoader loader, Class<?> interfaceType, ElementLocator locator, PageObject page,
+							long implicitTimeoutInMilliseconds, long waitForTimeoutInMilliseconds) {
 		this.loader = loader;
 		this.interfaceType = interfaceType;
 		this.locator = locator;
 		this.page = page;
-		this.timeoutInMilliseconds = timeoutInMilliseconds;
+		this.implicitTimeoutInMilliseconds = implicitTimeoutInMilliseconds;
+		this.waitForTimeoutInMilliseconds = waitForTimeoutInMilliseconds;
 	}
 
 	@Override
@@ -77,10 +80,12 @@ public class SmartListHandler implements InvocationHandler {
 		private T newProxyElementOfList(WebElement element) {
 			InvocationHandler handler = null;
 			if (WidgetObject.class.isAssignableFrom(interfaceType)) {
-				handler = new WidgetListItemHandler(interfaceType, locator, element, page, timeoutInMilliseconds);
+				handler = new WidgetListItemHandler(interfaceType, locator, element, page,
+													implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
 			}
 			else if (WebElementFacade.class.isAssignableFrom(interfaceType)) {
-				handler = new WebElementFacadeListItemHandler(interfaceType, locator, element, page, timeoutInMilliseconds);
+				handler = new WebElementFacadeListItemHandler(interfaceType, locator, element, page,
+															  implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
 			}
 			if (handler != null) {
 				return (T) Proxy.newProxyInstance(loader, new Class[] {interfaceType}, handler);

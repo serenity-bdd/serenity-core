@@ -24,14 +24,16 @@ public abstract class AbstractListItemHandler<T> implements InvocationHandler {
     protected final WebElement element;
     protected final PageObject page;
     protected final Class<?> implementerClass;
-    protected final long timeoutInMilliseconds;
+    protected final long implicitTimeoutInMilliseconds;
+    protected final long waitForTimeoutInMilliseconds;
 
     /**
      * Constructor.
      * @param targetInterface	usually WidgetObject or WebElementFacade
      * @param locator			the locator of the List containing this element
      */
-    public AbstractListItemHandler(Class<T> targetInterface, Class<?> interfaceType, ElementLocator locator, WebElement element, PageObject page, long timeoutInMilliseconds) {
+    public AbstractListItemHandler(Class<T> targetInterface, Class<?> interfaceType, ElementLocator locator, WebElement element,
+                                   PageObject page, long implicitTimeoutInMilliseconds, long waitForTimeoutInMilliseconds) {
     	this.locator = locator;
     	this.page = page;
         this.element = element;
@@ -39,7 +41,8 @@ public abstract class AbstractListItemHandler<T> implements InvocationHandler {
             throw new NotImplementedException("interface not assignable to " + targetInterface.getSimpleName());
         }
         this.implementerClass = new WebElementFacadeImplLocator().getImplementer(interfaceType);
-        this.timeoutInMilliseconds = timeoutInMilliseconds;
+        this.implicitTimeoutInMilliseconds = implicitTimeoutInMilliseconds;
+        this.waitForTimeoutInMilliseconds = waitForTimeoutInMilliseconds;
     }
 
     @Override

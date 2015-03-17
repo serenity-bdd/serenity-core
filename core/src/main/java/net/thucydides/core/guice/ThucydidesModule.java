@@ -2,8 +2,8 @@ package net.thucydides.core.guice;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.buildinfo.PropertyBasedDriverCapabilityRecord;
-import net.serenitybdd.core.pages.InternalSystemClock;
-import net.serenitybdd.core.pages.SystemClock;
+import net.serenitybdd.core.time.InternalSystemClock;
+import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.annotations.locators.SmartElementProxyCreator;
 import net.thucydides.core.annotations.locators.SmartWidgetProxyCreator;
 import net.thucydides.core.batches.BatchManager;

@@ -14,6 +14,8 @@ import net.thucydides.core.webdriver.MobilePlatform;
 
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebdriverProxyFactory;
+import net.thucydides.core.webdriver.exceptions.ElementNotVisibleAfterTimeoutError;
+import net.thucydides.core.webdriver.exceptions.ElementNotFoundAfterTimeoutError;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Clock;
@@ -85,18 +87,8 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 	}
 
 	private boolean shouldFindElementImmediately() {
-		return aPreviousStepHasFailed() || (calledFromAQuickMethod());
+		return aPreviousStepHasFailed() || (MethodTiming.forThisThread().isInQuickMethod());
 	}
-
-	private boolean calledFromAQuickMethod() {
-        for (StackTraceElement elt : Thread.currentThread().getStackTrace()) {
-            //if (QUICK_METHODS.contains(elt.getName())
-            if (elt.getMethodName().contains("Currently")) {
-                return true;
-            }
-        }
-        return false;
-    }
 
 	public WebElement findElementImmediately() {
         SmartAnnotations annotations = new SmartAnnotations(field, platform);
@@ -125,7 +117,11 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 		SlowLoadingElement loadingElement = new SlowLoadingElement(clock, annotatedTimeoutInSecondes.or(timeOutInSeconds));
 		try {
 			return loadingElement.get().getElement();
-		} catch (NoSuchElementError e) {
+		} catch (ElementNotVisibleAfterTimeoutError notVisible) {
+			throw new ElementNotVisibleException(
+					String.format("Timed out after %d seconds. %s", annotatedTimeoutInSecondes.or(timeOutInSeconds), notVisible.getMessage()),
+					notVisible.getCause());
+		} catch (Error e) {
 			throw new NoSuchElementException(
 					String.format("Timed out after %d seconds. %s", annotatedTimeoutInSecondes.or(timeOutInSeconds), e.getMessage()),
 					e.getCause());
@@ -144,7 +140,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 		SlowLoadingElementList list = new SlowLoadingElementList(clock, annotatedTimeoutInSecondes.or(timeOutInSeconds));
 		try {
 			return list.get().getElements();
-		} catch (NoSuchElementError e) {
+		} catch (Error e) {
 			throw new NoSuchElementException(
 					String.format("Timed out after %d seconds. %s", annotatedTimeoutInSecondes.or(timeOutInSeconds), e.getMessage()),
 					e.getCause());
@@ -167,7 +163,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 	}
 
 	private class SlowLoadingElement extends SlowLoadableComponent<SlowLoadingElement> {
-		private NoSuchElementException lastException;
+		private Optional<WebDriverException> lastException = Optional.absent();
 		private WebElement element;
 
 		public SlowLoadingElement(Clock clock, int timeOutInSeconds) {
@@ -176,7 +172,14 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 
 		@Override
 		protected void load() {
-			// Does nothing
+			lastException = Optional.absent();
+			if (element == null) {
+				try {
+					element = SmartAjaxElementLocator.super.findElement();
+				} catch (WebDriverException e) {
+					lastException = Optional.of(e);
+				}
+			}
 		}
 
 		@Override
@@ -186,21 +189,28 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 
 		@Override
 		protected void isLoaded() throws Error {
-			try {
-				element = SmartAjaxElementLocator.super.findElement();
-				if (!isElementUsable(element)) {
-					throw new NoSuchElementException("Element is not usable " + element.toString());
+			if (element != null) {
+				load();
+			}
+			if (!isElementUsable(element)) {
+				if (lastException.isPresent()) {
+					throw new ElementNotFoundAfterTimeoutError("Element not found", lastException.get());
+				} else {
+					throw new ElementNotVisibleAfterTimeoutError("Element not available");
 				}
-			} catch (NoSuchElementException e) {
-				lastException = e;
-				// Should use JUnit's AssertionError, but it may not be present
-				throw new NoSuchElementError("Unable to locate the element: " + e.getMessage(), e);
 			}
 		}
 
-		public NoSuchElementException getLastException() {
-			return lastException;
+		@Override
+		protected void isError() throws Error {
+			if (lastException.isPresent()) {
+				throw new AssertionError("Element could not be loaded", lastException.get());
+			}
 		}
+
+//		public NoSuchElementException getLastException() {
+//			return lastException.get();
+//		}
 
 		public WebElement getElement() {
 			return element;
@@ -208,7 +218,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 	}
 
 	private class SlowLoadingElementList extends SlowLoadableComponent<SlowLoadingElementList> {
-		private NoSuchElementException lastException;
+		private Optional<WebDriverException> lastException = Optional.absent();
 		private List<WebElement> elements;
 
 		public SlowLoadingElementList(Clock clock, int timeOutInSeconds) {
@@ -217,7 +227,14 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 
 		@Override
 		protected void load() {
-			// Does nothing
+			lastException = Optional.absent();
+			if (elements == null) {
+				try {
+					elements = SmartAjaxElementLocator.super.findElements();
+				} catch (WebDriverException e) {
+					lastException = Optional.of(e);
+				}
+			}
 		}
 
 		@Override
@@ -227,42 +244,42 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 
 		@Override
 		protected void isLoaded() throws Error {
-			try {
-				elements = SmartAjaxElementLocator.super.findElements();
-				if (elements.size() == 0) {
-					/*return even if empty and don't wait for them to become available.
-					*not sure that it is the correct approach for Ajax Element Locator that should wait for elements
-					*however correcting it due to https://java.net/jira/browse/THUCYDIDES-187 */
-					return; 
+			if (elements == null) {
+				load();
+			}
+			if (!areElementsUsable(elements)) {
+				if (lastException.isPresent()) {
+					throw new ElementNotFoundAfterTimeoutError("List elements not found", lastException.get());
+				} else {
+					throw new ElementNotVisibleAfterTimeoutError("List elements not visible");
 				}
-				for (WebElement element : elements) {
-					if (!isElementUsable(element)) {
-						throw new NoSuchElementException("Element is not usable");
-					}
-				}
-			} catch (NoSuchElementException e) {
-				lastException = e;
-				// Should use JUnit's AssertionError, but it may not be present
-				throw new NoSuchElementError("Unable to locate the element " + e.getMessage(), e);
 			}
 		}
 
-		public NoSuchElementException getLastException() {
-			return lastException;
+		private boolean areElementsUsable(List<WebElement> elements) {
+			if (elements == null) {
+				return false;
+			}
+			for (WebElement element : elements) {
+				if (!isElementUsable(element)) {
+					return false;
+				}
+			}
+			return true;
 		}
+
+//		public NoSuchElementException getLastException() {
+//			return lastException;
+//		}
 
 		public List<WebElement> getElements() {
 			return elements;
 		}
 	}
 
-	private static class NoSuchElementError extends Error {
-		private NoSuchElementError(String message, Throwable throwable) {
-			super(message, throwable);
-		}
-	}
 
-    @Override
+
+	@Override
     public String toString() {
         SmartAnnotations annotations = new SmartAnnotations(field, platform);
         By by = annotations.buildBy();

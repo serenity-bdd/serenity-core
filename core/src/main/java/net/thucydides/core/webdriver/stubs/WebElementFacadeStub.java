@@ -5,7 +5,7 @@ import com.google.common.base.Function;
 import com.google.gson.Gson;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WebElementState;
-import net.serenitybdd.core.pages.InternalSystemClock;
+import net.serenitybdd.core.time.InternalSystemClock;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.internal.Coordinates;
@@ -115,7 +115,7 @@ public class WebElementFacadeStub implements WebElementFacade {
     }
 
     @Override
-    public long getTimeoutInMilliseconds() {
+    public long getImplicitTimeoutInMilliseconds() {
         return 0;
     }
 

@@ -50,6 +50,9 @@
     function displaySlowLoaderField() {
         show('slow-loader')
     }
+    function displayVerySlowLoadingField() {
+        show('very-slow-loader')
+    }
 
     function hideLocationTitle() {
         hide('placetitle')
@@ -79,6 +82,7 @@
         setTimeout("displayCityField()", 2000);
         setTimeout("displayCountryField()", 2000);
         setTimeout("displaySlowLoaderField()", 4000);
+        setTimeout("displayVerySlowLoadingField()", 60000);
         setTimeout("hideLocationTitle()", 2000);
         setTimeout("activateDisabledButton()", 2000);
         setTimeout("deactivateEnabledButton()", 2000);
@@ -114,6 +118,7 @@
     <h3 id="placetitle">Location</h3>
     <input name="city" id="city" value="Sydney" style="display:none" />
     <input name="slow-loader" id="slow-loader" value="Slow to load" style="display:none" />
+    <input name="very-slow-loader" id="very-slow-loader" value="Slow to load" style="display:none" />
     <input name="state" id="state"/>
     <input name="country" id="country" value="Australia"/>
     <input ng-model="angularField" value="Model value" />

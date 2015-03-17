@@ -21,10 +21,9 @@ public abstract class AbstractSingleItemHandler<T> implements InvocationHandler 
     protected final ElementLocator locator;
     protected final PageObject page;
     protected final Class<?> implementerClass;
-    protected final long timeoutInMilliseconds;
 
     public AbstractSingleItemHandler(Class<T> targetInterface, Class<?> interfaceType, ElementLocator locator,
-			PageObject page, long timeoutInMilliseconds) {
+			PageObject page) {
     	this.page = page;
         this.locator = locator;
         if (!targetInterface.isAssignableFrom(interfaceType)) {
@@ -32,7 +31,6 @@ public abstract class AbstractSingleItemHandler<T> implements InvocationHandler 
         }
 
         this.implementerClass = new WebElementFacadeImplLocator().getImplementer(interfaceType);
-        this.timeoutInMilliseconds = timeoutInMilliseconds;
     }
 
     @Override
@@ -43,7 +41,7 @@ public abstract class AbstractSingleItemHandler<T> implements InvocationHandler 
 	        } else if ("toString".equals(method.getName())) {
 				return toStringForElement();
 			}
-			Object webElementFacadeExt = newElementInstance(timeoutInMilliseconds);
+			Object webElementFacadeExt = newElementInstance();
 
 	        return method.invoke(implementerClass.cast(webElementFacadeExt), objects);
         } catch (InvocationTargetException e) {
@@ -52,10 +50,10 @@ public abstract class AbstractSingleItemHandler<T> implements InvocationHandler 
         }
     }
 
-	protected abstract Object newElementInstance(long timeoutInMilliseconds) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException;
+	protected abstract Object newElementInstance() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException;
 
 	private String toStringForElement() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-		Object webElementFacadeExt = newElementInstance(100);
+		Object webElementFacadeExt = newElementInstance();
 		if (webElementFacadeExt == null) {
 			return "<" + locator.toString() + ">";
 		} else {

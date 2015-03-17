@@ -1,5 +1,6 @@
 package net.thucydides.core.annotations.locators;
 
+import cucumber.runtime.StopWatch;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AndroidFindBys;
 import io.appium.java_client.pagefactory.iOSFindBy;
@@ -19,6 +20,7 @@ import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WebElementFacadeImpl;
 import net.serenitybdd.core.pages.WidgetObject;
 
+import net.serenitybdd.core.time.Stopwatch;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.Locatable;
@@ -112,18 +114,17 @@ public class SmartFieldDecorator implements FieldDecorator {
         InvocationHandler handler;
         T proxy = null;
         if (WidgetObject.class.isAssignableFrom(interfaceType)) {
-        	handler = new SmartWidgetHandler(interfaceType, locator, page, page.waitForTimeoutInMilliseconds());
+        	handler = new SmartWidgetHandler(interfaceType, locator, page);
             proxy = (T) Proxy.newProxyInstance(loader, new Class[]{interfaceType}, handler);
         }
         else if (WebElementFacade.class.isAssignableFrom(interfaceType)) {
-            handler = new SmartElementHandler(interfaceType, locator, page, page.waitForTimeoutInMilliseconds());
+            handler = new SmartElementHandler(interfaceType, locator, page);
             proxy = (T) Proxy.newProxyInstance(loader, new Class[]{interfaceType}, handler);
         } else {
             handler = new LocatingElementHandler(locator);
             proxy = (T) Proxy.newProxyInstance(loader,
                     new Class[]{WebElement.class, WrapsElement.class, Locatable.class}, handler);
         }
-
         return proxy;
     }
 
@@ -131,7 +132,7 @@ public class SmartFieldDecorator implements FieldDecorator {
 	protected <T> List<T> proxyForListLocator(ClassLoader loader, Class<T> interfaceType, ElementLocator locator) {
 		InvocationHandler handler = null;
 		if (net.serenitybdd.core.pages.WebElementFacade.class.isAssignableFrom(interfaceType)) {
-			handler = new SmartListHandler(loader, interfaceType, locator, page, page.waitForTimeoutInMilliseconds());
+			handler = new SmartListHandler(loader, interfaceType, locator, page, page.implicitTimoutMilliseconds(), page.waitForTimeoutInMilliseconds());
 		}
 		else {
 			handler = new LocatingElementListHandler(locator);

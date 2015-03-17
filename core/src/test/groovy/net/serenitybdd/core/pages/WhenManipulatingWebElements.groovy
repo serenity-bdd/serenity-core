@@ -1,16 +1,12 @@
 package net.serenitybdd.core.pages
 
-import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeDisabledException
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeEnabledException
 import net.thucydides.core.webdriver.exceptions.ElementShouldBePresentException
-import net.thucydides.core.webdriver.exceptions.ElementShouldBeVisibleException
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade
-import org.openqa.selenium.ElementNotVisibleException
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
-import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.pagefactory.ElementLocator
 import spock.lang.Specification
@@ -36,7 +32,7 @@ class WhenManipulatingWebElements extends Specification {
         webElement.getTagName() >> tag
         locator.toString() >> "find by id or name 'value'"
         when:
-        WebElementFacade elementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100);
+        WebElementFacade elementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100, 100);
         then:
         new WebElementDescriber().webElementDescription(elementFacade, locator) == asString
         where:
@@ -56,7 +52,7 @@ class WhenManipulatingWebElements extends Specification {
         webElement.getTagName() >> "input"
         locator.toString() >> "find by id or name 'value'"
         when:
-        WebElementFacade elementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100);
+        WebElementFacade elementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100, 100);
         then:
         new WebElementDescriber().webElementDescription(elementFacade, locator) == "<input type='button' value='submit'> - find by id or name 'value'"
 
@@ -67,7 +63,7 @@ class WhenManipulatingWebElements extends Specification {
         webElement.getTagName() >> "tag"
         locator.toString() >> "find by id or name 'value'"
         when:
-        WebElementFacade elementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100);
+        WebElementFacade elementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100, 100);
         then:
 
         new WebElementDescriber().webElementDescription(elementFacade, locator) == "<tag> - find by id or name 'value'"
@@ -78,24 +74,25 @@ class WhenManipulatingWebElements extends Specification {
         given:
         webElement.isDisplayed() >> { throw new StaleElementReferenceException("Stale element") }
         when:
-        WebElementFacade elementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100);
+        WebElementFacade elementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100, 100);
         then:
         !elementFacade.isVisible()
     }
 
     def "timeout can be redefined"() {
         when:
-        WebElementFacade webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100);
+        WebElementFacade webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100, 100);
         WebElementFacade webElementFacadeWithDifferentTimeout = webElementFacade.withTimeoutOf(2, TimeUnit.SECONDS);
         then:
-        webElementFacadeWithDifferentTimeout.timeoutInMilliseconds == 2000L
+        webElementFacadeWithDifferentTimeout.implicitTimeoutInMilliseconds == 100L
+        webElementFacadeWithDifferentTimeout.waitForTimeoutInMilliseconds == 2000L
     }
 
     JavascriptExecutorFacade mockJavascriptExecutorFacade = Mock()
 
     def "element can set window focus"() {
         given:
-        def elementFacade = new WebElementFacadeImpl(driver, (ElementLocator) null, 100) {
+        def elementFacade = new WebElementFacadeImpl(driver, (ElementLocator) null, 100, 100) {
             @Override
             protected JavascriptExecutorFacade getJavascriptExecutorFacade() {
                 return mockJavascriptExecutorFacade;
@@ -116,7 +113,7 @@ class WhenManipulatingWebElements extends Specification {
         webElement.getTagName() >> getTagName
         webElement.getAttribute("value") >> value
 
-        WebElementFacade elementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100);
+        WebElementFacade elementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100, 100);
 
         then:
         elementFacade.getTextValue() == expectedTextValue
@@ -131,12 +128,12 @@ class WhenManipulatingWebElements extends Specification {
 
     def "Null WebElements should not be acessible"() {
         when:
-        WebElementFacade webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, (WebElement) null, 100);
+        WebElementFacade webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, (WebElement) null, 100, 100);
         then:
         !webElementFacade.isVisible() && !webElementFacade.isPresent() && !webElementFacade.isEnabled()
     }
 
-    WebElementFacade webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, (WebElement) null, 100);
+    WebElementFacade webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, (WebElement) null, 100, 100);
 
     def "when webelement is null it should not be clickable"() {
         when:

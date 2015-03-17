@@ -26,6 +26,9 @@ public class StaticSitePage extends PageObject {
     @FindBy(id="slow-loader")
     public WebElementFacade slowLoadingField;
 
+    @FindBy(id="very-slow-loader")
+    public WebElementFacade verySlowLoadingField;
+
     @FindBy(name = "country", timeoutInSeconds="10")
     public WebElementFacade country;
 

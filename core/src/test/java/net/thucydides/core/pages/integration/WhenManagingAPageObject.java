@@ -347,7 +347,7 @@ public class WhenManagingAPageObject {
     @Test
     public void should_provide_a_fluent_api_for_entering_a_value_in_a_field_using_webelementfacade() {
         WebElement field = mock(WebElement.class);
-        WebElementFacade facade = WebElementFacadeImpl.wrapWebElement(driver, field, 0L);
+        WebElementFacade facade = WebElementFacadeImpl.wrapWebElement(driver, field, 0, 0);
         BasicPageObject page = new BasicPageObject(driver);
         when(field.isEnabled()).thenReturn(true);
         when(field.getTagName()).thenReturn("input");

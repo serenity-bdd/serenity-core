@@ -16,7 +16,7 @@ import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.features.ApplicationFeature;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
-import net.serenitybdd.core.pages.SystemClock;
+import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.reports.html.Formatter;
 import net.thucydides.core.reports.json.JSONConverter;
 import net.thucydides.core.reports.saucelabs.LinkGenerator;

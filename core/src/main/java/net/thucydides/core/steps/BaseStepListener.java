@@ -11,7 +11,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.pages.Pages;
-import net.serenitybdd.core.pages.SystemClock;
+import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.screenshots.*;
 import net.thucydides.core.webdriver.*;
 import org.apache.commons.lang3.StringUtils;

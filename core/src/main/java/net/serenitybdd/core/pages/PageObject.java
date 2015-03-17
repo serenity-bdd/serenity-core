@@ -73,7 +73,7 @@ public abstract class PageObject {
 
     private PageUrls pageUrls;
 
-    private net.serenitybdd.core.pages.SystemClock clock;
+    private net.serenitybdd.core.time.SystemClock clock;
 
     private Duration waitForTimeout;
     private Duration waitForElementTimeout;
@@ -120,7 +120,7 @@ public abstract class PageObject {
 
     protected PageObject() {
         this.webdriverClock = new SystemClock();
-        this.clock = Injectors.getInjector().getInstance(net.serenitybdd.core.pages.SystemClock.class);
+        this.clock = Injectors.getInjector().getInstance(net.serenitybdd.core.time.SystemClock.class);
         this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
         setupPageUrls();
@@ -246,7 +246,7 @@ public abstract class PageObject {
         return renderedView;
     }
 
-    protected net.serenitybdd.core.pages.SystemClock getClock() {
+    protected net.serenitybdd.core.time.SystemClock getClock() {
         return clock;
     }
 
@@ -863,7 +863,9 @@ public abstract class PageObject {
      * Provides a fluent API for querying web elements.
      */
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(WebElement webElement) {
-        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, getImplicitWaitTimeout().in(MILLISECONDS));
+        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement,
+                getImplicitWaitTimeout().in(MILLISECONDS),
+                getWaitForTimeout().in(MILLISECONDS));
     }
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(WebElement webElement) {
@@ -879,7 +881,10 @@ public abstract class PageObject {
      */
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(By bySelector) {
         WebElement webElement = getDriver().findElement(bySelector);
-        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement, getImplicitWaitTimeout().in(MILLISECONDS));
+        return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver,
+                                                                              webElement,
+                                                                              getImplicitWaitTimeout().in(MILLISECONDS),
+                                                                              getWaitForTimeout().in(MILLISECONDS));
     }
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(By selector) {

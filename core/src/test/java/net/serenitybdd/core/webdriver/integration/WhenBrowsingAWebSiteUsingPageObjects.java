@@ -132,7 +132,7 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
     @Test
     public void should_print_web_element_facade_without_a_webelement_in_a_readable_form() {
 
-        WebElementFacade WebElement = WebElementFacadeImpl.wrapWebElement(driver, null, 0);
+        WebElementFacade WebElement = WebElementFacadeImpl.wrapWebElement(driver, null, 0, 0);
         assertThat(WebElement.toString(), is("<Undefined web element>"));
     }
 

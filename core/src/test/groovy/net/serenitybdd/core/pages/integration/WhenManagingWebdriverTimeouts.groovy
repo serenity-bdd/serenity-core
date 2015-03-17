@@ -12,6 +12,7 @@ import net.thucydides.core.webdriver.exceptions.ElementShouldBeEnabledException
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeInvisibleException
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
+import org.openqa.selenium.TimeoutException
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -300,6 +301,24 @@ class WhenManagingWebdriverTimeouts extends Specification {
             def cityIsDisplayed = page.withTimeoutOf(50, MILLISECONDS).elementIsDisplayed(By.cssSelector("#city"))
         then:
             !cityIsDisplayed
+    }
+
+    def "The withTimeoutOf() method can be used to wait until a button is clickable"() {
+        given:
+            page = openTestPageUsing(defaultBrowser)
+        when:
+            page.initiallyDisabled.withTimeoutOf(5, SECONDS).waitUntilClickable().click()
+        then:
+            noExceptionThrown()
+    }
+
+    def "The withTimeoutOf() method can be used to wait until a button is clickable and will fail if it waits too long"() {
+        given:
+            page = openTestPageUsing(defaultBrowser)
+        when:
+            page.initiallyDisabled.withTimeoutOf(50, MILLISECONDS).waitUntilClickable().click()
+        then:
+            thrown(TimeoutException)
     }
 
     def "The withTimeoutOf() method can be used to override the global webdriver.wait.for.timeout value (positive case)"() {

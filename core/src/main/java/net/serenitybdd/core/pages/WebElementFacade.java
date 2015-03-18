@@ -118,6 +118,4 @@ public interface WebElementFacade extends WebElement, WrapsElement, Locatable, W
 
     public void shouldContainElements(String xpathOrCssSelector);
 
-
-
 }

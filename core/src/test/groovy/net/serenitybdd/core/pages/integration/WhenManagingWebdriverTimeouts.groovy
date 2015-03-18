@@ -16,6 +16,8 @@ import org.openqa.selenium.TimeoutException
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.util.concurrent.TimeUnit
+
 import static java.util.concurrent.TimeUnit.MILLISECONDS
 import static java.util.concurrent.TimeUnit.SECONDS
 
@@ -416,6 +418,33 @@ class WhenManagingWebdriverTimeouts extends Specification {
             page.country.isDisplayed()
         then: "Annotated timeouts on fields override configured implicit timeouts"
             page.country.isCurrentlyVisible()
+    }
+
+    def "You can check whether a child element is present using a By selector"() {
+        when:
+        environmentVariables.setProperty("webdriver.timeouts.implicitlywait","0")
+        page = openTestPageUsing(defaultBrowser)
+        then:
+        page.clients.shouldContainElements(By.cssSelector(".color"))
+        and:
+        page.clients.shouldContainElements(".color")
+    }
+
+    def "You can check whether a child element is present"() {
+        when:
+            environmentVariables.setProperty("webdriver.timeouts.implicitlywait","0")
+            page = openTestPageUsing(defaultBrowser)
+        then:
+            page.clients.containsElements(By.cssSelector(".color"))
+        and:
+            !page.clients.containsElements(By.cssSelector(".flavor"))
+    }
+
+    def "You can check whether a child element is present with waits"() {
+        when:
+            page = openTestPageUsing(defaultBrowser)
+        then:
+            page.clients.withTimeoutOf(0, TimeUnit.SECONDS).containsElements(By.cssSelector(".color"))
     }
 
 }

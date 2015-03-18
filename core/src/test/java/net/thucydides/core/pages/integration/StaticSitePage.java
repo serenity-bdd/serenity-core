@@ -86,7 +86,7 @@ public class StaticSitePage extends PageObject {
 
     public WebElement focusmessage;
 
-    public WebElement clients;
+    public WebElementFacade clients;
 
     public WebElement clients_with_no_headings;
 

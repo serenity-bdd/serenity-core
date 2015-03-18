@@ -128,7 +128,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         WebElement result;
 
         try {
-            Stopwatch.SYSTEM.start();
             if (resolvedElement() != null) {
                 result = resolvedElement();
             } else if (locator == null) {

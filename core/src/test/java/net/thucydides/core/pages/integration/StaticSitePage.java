@@ -29,7 +29,7 @@ public class StaticSitePage extends PageObject {
     @FindBy(id="very-slow-loader")
     public WebElementFacade verySlowLoadingField;
 
-    @FindBy(name = "country", timeoutInSeconds="10")
+    @FindBy(name = "country", timeoutInSeconds="5")
     public WebElementFacade country;
 
     @FindBy(name = "hiddenfield")

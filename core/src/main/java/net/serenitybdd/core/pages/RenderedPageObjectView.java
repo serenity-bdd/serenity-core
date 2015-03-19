@@ -1,5 +1,6 @@
 package net.serenitybdd.core.pages;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import net.thucydides.core.scheduling.NormalFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
@@ -63,7 +64,7 @@ public class RenderedPageObjectView {
     private ExpectedCondition<Boolean> elementDisplayed(final By byElementCriteria) {
         return new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
-                return (elementIsDisplayed(byElementCriteria));
+                return (elementIsCurrentlyVisible(byElementCriteria));
             }
         };
     }
@@ -84,6 +85,63 @@ public class RenderedPageObjectView {
 
     public void waitFor(final ExpectedCondition expectedCondition) {
         doWait().until(expectedCondition);
+    }
+
+    public WebElementFacade waitFor(final WebElement webElement) {
+        return (webElement instanceof WebElementFacade) ?
+                waitForElement((WebElementFacade)webElement) :
+                waitForElement(pageObject.element(webElement));
+    }
+
+    public List<WebElementFacade> waitFor(final List<WebElementFacade> webElements) {
+        return waitForElements(webElements);
+    }
+
+    private WebElementFacade waitForElement(final WebElementFacade webElement) {
+        waitForCondition().until(elementIsDisplayed(webElement));
+        return webElement;
+    }
+
+    private List<WebElementFacade> waitForElements(final List<WebElementFacade> elements) {
+        waitForCondition().until(elementsAreDisplayed(elements));
+        return elements;
+    }
+
+    private Function<? super WebDriver, Boolean> elementIsDisplayed(final WebElementFacade webElement) {
+        return new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver driver) {
+                try {
+                    if (webElement.isCurrentlyVisible()) {
+                        return true;
+                    }
+                } catch (NoSuchElementException noSuchElement) {
+                    LOGGER.trace("No such element " + noSuchElement);
+                }
+                return false;
+            }
+        };
+    }
+
+    private Function<? super WebDriver, Boolean> elementsAreDisplayed(final List<WebElementFacade> webElements) {
+        return new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver driver) {
+                try {
+                    return (webElements.size() > 0) && allElementsVisibleIn(webElements);
+                } catch (NoSuchElementException noSuchElement) {
+                    LOGGER.trace("No such element " + noSuchElement);
+                }
+                return false;
+            }
+        };
+    }
+
+    private boolean allElementsVisibleIn(List<WebElementFacade> webElements) {
+        for(WebElementFacade element: webElements) {
+            if (!element.isCurrentlyVisible()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -112,6 +170,21 @@ public class RenderedPageObjectView {
         try {
             waitFor(ExpectedConditions.visibilityOfAllElementsLocatedBy(byElementCriteria));
             return true;
+        } catch (NoSuchElementException noSuchElement) {
+            LOGGER.trace("No such element " + noSuchElement);
+            return false;
+        } catch (StaleElementReferenceException se) {
+            LOGGER.trace("Element no longer attached to the DOM " + se);
+            return false;
+        } catch (TimeoutException iGuessItsNotThere) {
+            return false;
+        }
+    }
+
+    public boolean elementIsCurrentlyVisible(final By byElementCriteria) {
+        try {
+            List<WebElement> matchingElements = driver.findElements(byElementCriteria);
+            return (!matchingElements.isEmpty() && matchingElements.get(0).isDisplayed());
         } catch (NoSuchElementException noSuchElement) {
             LOGGER.trace("No such element " + noSuchElement);
             return false;

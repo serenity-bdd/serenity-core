@@ -91,7 +91,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
     }
 
     def "If the implicit wait times out when fetching a list of values only the currently loaded values will be returned"() {
-        given: "We configure the WebDriver implicit wait to be 100 milliseconds"
+        given: "We configure the WebDriver implicit wait to be 0 milliseconds"
             environmentVariables.setProperty("webdriver.timeouts.implicitlywait","0")
         when: "We access the a list of elements"
             page = openTestPageUsing(defaultBrowser)
@@ -100,6 +100,16 @@ class WhenManagingWebdriverTimeouts extends Specification {
             itemCount == 0
     }
 
+    def "You can force an extra delay to give elements time to load"() {
+        given: "We configure the WebDriver implicit wait to be 0 milliseconds"
+            environmentVariables.setProperty("webdriver.timeouts.implicitlywait","0")
+            environmentVariables.setProperty("webdriver.wait.for.timeout", "0")
+        when: "We access the a list of elements"
+            page = openTestPageUsing(defaultBrowser)
+            def count = page.withTimeoutOf(5,SECONDS).waitFor(page.elementItems).size()
+        then: "Only the elements loaded after the timeout should be loaded"
+            count == 4
+    }
 
     def "You can override the implicit wait during test execution"() {
         given: "The #slow-loader field takes 3 seconds to load"

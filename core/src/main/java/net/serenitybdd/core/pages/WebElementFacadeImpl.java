@@ -1014,7 +1014,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public String toString() {
-        return (resolvedElement() != null) ? resolvedElement().toString() : "<Undefined web element>";
+        String locatorString = (locator != null) ? locator.toString() : "<Undefined web element>";
+        return (resolvedElement() != null) ? resolvedElement().toString() : locatorString;
     }
 
     public void submit() {

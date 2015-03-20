@@ -146,7 +146,7 @@
             "order": [
                 [ 1, "asc" ]
             ],
-            "pageLength": 25
+            "pageLength": 50
         });
 
         // Pie charts

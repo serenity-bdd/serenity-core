@@ -3,6 +3,9 @@ package net.thucydides.core.steps
 import net.thucydides.core.annotations.Step
 import net.serenitybdd.core.pages.PageObject
 import net.thucydides.core.pages.Pages
+import net.thucydides.core.util.EnvironmentVariables
+import net.thucydides.core.webdriver.Configuration
+import net.thucydides.core.webdriver.SystemPropertiesConfiguration
 import org.openqa.selenium.WebDriver
 import spock.lang.Specification
 
@@ -38,6 +41,8 @@ class WhenInstanciatingStepLibraries extends Specification {
 
         MyPageObject myPageObject;
         MyOtherPageObject myInstantiatedPageObject;
+        EnvironmentVariables environmentVariables;
+        Configuration configuration;
 
         MyStepLibrary(Pages pages) {
             super(pages)
@@ -107,4 +112,19 @@ class WhenInstanciatingStepLibraries extends Specification {
         then:
             myStepLibrary.myInstantiatedPageObject == myOtherPageObject
     }
+
+    def "should instantiate environment variable fields"() {
+        when:
+        def myStepLibrary = stepFactory.getStepLibraryFor(MyStepLibrary)
+        then:
+        myStepLibrary.environmentVariables != null
+    }
+
+    def "should instantiate system configuration variable fields"() {
+        when:
+        def myStepLibrary = stepFactory.getStepLibraryFor(MyStepLibrary)
+        then:
+        myStepLibrary.configuration != null
+    }
+
 }

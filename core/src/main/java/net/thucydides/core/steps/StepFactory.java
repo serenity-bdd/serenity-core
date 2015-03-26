@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import net.serenitybdd.core.di.DependencyInjector;
+import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.thucydides.core.guice.Injectors;
@@ -131,7 +132,8 @@ public class StepFactory {
     }
 
     private List<DependencyInjector> getDefaultDependencyInjectors() {
-        return ImmutableList.of((DependencyInjector)new PageObjectDependencyInjector(pages));
+        return ImmutableList.of((DependencyInjector)new PageObjectDependencyInjector(pages),
+                                (DependencyInjector) new EnvironmentDependencyInjector());
     }
 
     private <T> T instantiateUniqueStepLibraryFor(Class<T> scenarioStepsClass) {

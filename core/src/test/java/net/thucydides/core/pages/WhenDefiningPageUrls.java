@@ -249,6 +249,24 @@ public class WhenDefiningPageUrls {
         verify(webdriver).get("http://jira.mycompany.org/issues/ISSUE-1");
     }
 
+    @DefaultUrl("http://jira.mycompany.org/project/{1}/issues/{2}")
+    final class PageObjectWithMultipleUrlParameters extends PageObject {
+        public PageObjectWithMultipleUrlParameters(WebDriver driver) {
+            super(driver);
+        }
+    }
+
+    @Test
+    public void the_url_annotation_should_let_you_use_a_parameterized_url_with_the_parameter_values_directly() {
+        PageObject page = new PageObjectWithMultipleUrlParameters(webdriver);
+        PageUrls pageUrls = new PageUrls(page, configuration);
+        page.setPageUrls(pageUrls);
+
+        page.open("PROJECT-1","ISSUE-1");
+
+        verify(webdriver).get("http://jira.mycompany.org/project/PROJECT-1/issues/ISSUE-1");
+    }
+
     @Test
     public void the_pages_object_provides_access_to_the_webdriver_instance() {
         PageObject page = new PageObjectWithParameterizedUrlDefinition(webdriver);
@@ -428,7 +446,7 @@ public class WhenDefiningPageUrls {
 
         configuration.setDefaultBaseUrl("http://myapp.mycompany.com");
 
-        page.open("close.issue", withParameters("ISSUE-1"));
+        page.open("close.issue", "ISSUE-1");
 
         verify(webdriver).get("http://myapp.mycompany.com/issues/close/ISSUE-1");
     }

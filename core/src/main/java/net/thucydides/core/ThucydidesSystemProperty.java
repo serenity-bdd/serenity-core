@@ -322,7 +322,7 @@ public enum ThucydidesSystemProperty {
     WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT,
 
     /**
-     * How long webdriver waits by default when you use a fluent waiting mwthod..
+     * How long webdriver waits by default when you use a fluent waiting method, in milliseconds.
      */
     WEBDRIVER_WAIT_FOR_TIMEOUT,
 

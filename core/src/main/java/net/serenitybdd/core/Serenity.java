@@ -2,6 +2,7 @@ package net.serenitybdd.core;
 
 import com.google.common.collect.ImmutableList;
 import net.serenitybdd.core.di.DependencyInjector;
+import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.serenitybdd.core.sessions.TestSessionVariables;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.core.guice.Injectors;
@@ -30,7 +31,8 @@ public class Serenity {
     private static final ThreadLocal<StepFactory> stepFactoryThreadLocal = new ThreadLocal<StepFactory>();
     private static final ThreadLocal<StepListener> stepListenerThreadLocal = new ThreadLocal<StepListener>();
     private static final ThreadLocal<TestSessionVariables> testSessionThreadLocal = new ThreadLocal<TestSessionVariables>();
-    private static final ThreadLocal<FirefoxProfile> firefoxProfileThreadLocal = new ThreadLocal<FirefoxProfile>();
+    private static final ThreadLocal<FirefoxProfile> firefoxProfileThreadLocal = new ThreadLocal<>();
+    private static final boolean AND_CLOSE_ALL_DRIVERS = true;
 
     /**
      * Initialize Serenity-related fields in the specified object.
@@ -53,8 +55,6 @@ public class Serenity {
     }
 
     private static void injectDependenciesInto(Object testCase) {
-        List<DependencyInjector> dependencyInjectors = getDependencyInjectors();
-
         for(DependencyInjector dependencyInjector : getDependencyInjectors()) {
             dependencyInjector.injectDependenciesInto(testCase);
         }
@@ -77,7 +77,8 @@ public class Serenity {
     }
 
     private static List<DependencyInjector> getDefaultDependencyInjectors() {
-        return ImmutableList.of((DependencyInjector) new PageObjectDependencyInjector(getPages()));
+        return ImmutableList.of( (DependencyInjector) new PageObjectDependencyInjector(getPages()),
+                                 (DependencyInjector) new EnvironmentDependencyInjector());
     }
 
     /**
@@ -152,7 +153,11 @@ public class Serenity {
      * Indicate that the test run using this object is finished, and reports can be generated.
      */
     public static void done() {
-        if (getWebdriverManager() != null) {
+        done(AND_CLOSE_ALL_DRIVERS);
+    }
+
+    public static void done(boolean closeAllDrivers) {
+        if (closeAllDrivers && getWebdriverManager() != null) {
             getWebdriverManager().closeAllCurrentDrivers();
         }
         resetDependencyInjectors();

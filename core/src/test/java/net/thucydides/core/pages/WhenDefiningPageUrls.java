@@ -262,7 +262,7 @@ public class WhenDefiningPageUrls {
         PageUrls pageUrls = new PageUrls(page, configuration);
         page.setPageUrls(pageUrls);
 
-        page.open("PROJECT-1","ISSUE-1");
+        page.open(withParameters("PROJECT-1","ISSUE-1"));
 
         verify(webdriver).get("http://jira.mycompany.org/project/PROJECT-1/issues/ISSUE-1");
     }
@@ -446,7 +446,7 @@ public class WhenDefiningPageUrls {
 
         configuration.setDefaultBaseUrl("http://myapp.mycompany.com");
 
-        page.open("close.issue", "ISSUE-1");
+        page.open("close.issue", withParameters("ISSUE-1"));
 
         verify(webdriver).get("http://myapp.mycompany.com/issues/close/ISSUE-1");
     }

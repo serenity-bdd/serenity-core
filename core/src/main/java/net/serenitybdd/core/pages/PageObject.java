@@ -650,7 +650,7 @@ public abstract class PageObject {
      * Open the webdriver browser using a paramaterized URL. Parameters are
      * represented in the URL using {0}, {1}, etc.
      */
-    public final void open(final String... parameterValues) {
+    public final void open(final String[] parameterValues) {
         open(OpenMode.CHECK_URL_PATTERNS, parameterValues);
     }
 
@@ -966,6 +966,15 @@ public abstract class PageObject {
                 .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
                 .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
     }
+
+    public WebElementFacade waitFor(WebElement webElement) {
+        return waitFor($(webElement));
+    }
+
+    public WebElementFacade waitFor(WebElementFacade webElement) {
+        return getRenderedView().waitFor(webElement);
+    }
+
 
     public Alert getAlert() {
         return driver.switchTo().alert();

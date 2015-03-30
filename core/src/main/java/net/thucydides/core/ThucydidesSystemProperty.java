@@ -668,6 +668,12 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_DRY_RUN,
 
     /**
+     * What (human) language are the Cucumber feature files written in?
+     * Defaults to "en"
+     */
+    FEATURE_FILE_LANGUAGE,
+
+    /**
      * Keep the Thucydides session data between tests.
      * Normally, the session data is cleared between tests.
      */

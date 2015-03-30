@@ -5,7 +5,10 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import gherkin.formatter.model.Tag;
 import gherkin.parser.Parser;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.requirements.model.Narrative;
+import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -18,11 +21,21 @@ import java.util.Scanner;
  */
 public class CucumberParser {
 
+    private final EnvironmentVariables environmentVariables ;
+
+    public CucumberParser() {
+        this(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+    }
+
+
+    public CucumberParser(EnvironmentVariables environmentVariables) {
+        this.environmentVariables = environmentVariables;
+    }
+
     public Optional<Narrative> loadFeatureNarrative(File narrativeFile)  {
 
         CucumberFeatureListener gherkinStructure =new CucumberFeatureListener();
-        Parser parser = new Parser(gherkinStructure);
-
+        Parser parser = new Parser(gherkinStructure, true, "root", false, featureFileLanguage());
         try {
             String gherkinScenarios = filterOutCommentsFrom(FileUtils.readFileToString(narrativeFile));
             parser.parse(gherkinScenarios, narrativeFile.getName(),0);
@@ -42,6 +55,10 @@ public class CucumberParser {
             ex.printStackTrace();
         }
         return Optional.absent();
+    }
+
+    private String featureFileLanguage() {
+        return ThucydidesSystemProperty.FEATURE_FILE_LANGUAGE.from(environmentVariables,"en");
     }
 
 

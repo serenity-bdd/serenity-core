@@ -8,13 +8,19 @@ import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.FileSystemRequirementsTagProvider;
+import net.thucydides.core.requirements.model.Narrative;
 import net.thucydides.core.requirements.model.Requirement;
+import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 import java.util.Set;
 
@@ -319,6 +325,20 @@ public class WhenFindingTagsForATestOutcome {
         assertThat(requirement.get().getNarrative().getText(), containsString("As a farmer"));
         assertThat(requirement.get().getNarrative().getText(), containsString("I want to plant potatoes"));
         assertThat(requirement.get().getNarrative().getText(), containsString("So that I can harvest them later on"));
+    }
+
+    @Test
+    public void should_get_requirement_from_feature_in_a_foreign_language() throws URISyntaxException {
+
+        environmentVariables.setProperty("feature.file.language","no"); // Norweigan
+        CucumberParser parser = new CucumberParser(environmentVariables);
+
+        URL url = this.getClass().getResource("/features/PlantScandanavianPotatoes.feature");
+        File featureFile = new File(url.toURI());
+
+        Optional<Narrative> narrative = parser.loadFeatureNarrative(featureFile);
+
+        assertThat(narrative.isPresent(), is(true));
     }
 
 }

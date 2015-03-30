@@ -98,7 +98,7 @@ public class ReportService {
         LOGGER.info("Generating reports using: " + reporter);
         long t0 = System.currentTimeMillis();
 
-        ListeningExecutorService executorService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(8));
+        ListeningExecutorService executorService = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
 
         List<? extends TestOutcome> outcomes = testOutcomes.getOutcomes();
         final AtomicInteger remainingReportCount = new AtomicInteger(outcomes.size());

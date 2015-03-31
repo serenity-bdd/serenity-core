@@ -1,6 +1,7 @@
 package net.thucydides.core.webdriver;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
 import com.opera.core.systems.OperaDriver;
 import io.appium.java_client.AppiumDriver;
 import org.apache.commons.lang3.StringUtils;
@@ -107,5 +108,14 @@ public enum SupportedWebDriver {
                     + "?", e);
         }
 
+    }
+
+    public static SupportedWebDriver forClass(Class<? extends WebDriver> driverClass) {
+       for(SupportedWebDriver supportedWebDriver : values()) {
+           if (driverClass.equals(supportedWebDriver.getWebdriverClass())) {
+               return supportedWebDriver;
+           }
+       }
+        throw new IllegalArgumentException("Driver not supported: " + driverClass);
     }
 }

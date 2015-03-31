@@ -265,9 +265,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
      */
     public void testStarted(final String testMethod) {
         TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory);
-        if (driver != null) {
-            newTestOutcome.setDriver(webdriverManager.getCurrentDriverName());
-        }
         testOutcomes.add(newTestOutcome);
         updateSessionIdIfKnown();
         setAnnotatedResult(testMethod);
@@ -307,7 +304,20 @@ public class BaseStepListener implements StepListener, StepPublisher {
         getCurrentTestOutcome().addIssues(storywideIssues);
         // TODO: Disable when run from an IDE
         getCurrentTestOutcome().addTags(storywideTags);
+
+        if(currentTestIsABrowserTest()) {
+            getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
+        }
         currentStepStack.clear();
+    }
+
+
+    private String getDriverUsedInThisTest() {
+        return webdriverManager.getCurrentDriverName();
+    }
+
+    private boolean currentTestIsABrowserTest() {
+        return (webdriverManager.isDriverInstantiated());
     }
 
     public void testRetried() {
@@ -331,6 +341,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         recordStep(description);
         takeInitialScreenshot();
         updateSessionIdIfKnown();
+
     }
 
     public void skippedStepStarted(final ExecutedStepDescription description) {

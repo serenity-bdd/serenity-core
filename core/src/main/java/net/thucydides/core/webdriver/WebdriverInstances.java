@@ -27,7 +27,8 @@ public class WebdriverInstances {
     }
 
     public String getCurrentDriverName() {
-        return currentDriver;
+        return (getCurrentDriver() != null) ?
+                ((WebDriverFacade) getCurrentDriver()).getDriverName() : "";
     }
 
     public WebDriver closeCurrentDriver() {
@@ -78,6 +79,10 @@ public class WebdriverInstances {
 
     public int getActiveWebdriverCount() {
         return driverMap.size();
+    }
+
+    public boolean isDriverInstantiated() {
+        return ((WebDriverFacade) getCurrentDriver()).isInstantiated();
     }
 
     public final class InstanceRegistration {

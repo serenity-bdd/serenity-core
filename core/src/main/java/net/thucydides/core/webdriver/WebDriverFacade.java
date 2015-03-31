@@ -359,4 +359,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         return ((HasCapabilities) getProxiedDriver()).getCapabilities();
     }
 
+    public String getDriverName() {
+        return SupportedWebDriver.forClass(getDriverClass()).name().toLowerCase();
+    }
 }

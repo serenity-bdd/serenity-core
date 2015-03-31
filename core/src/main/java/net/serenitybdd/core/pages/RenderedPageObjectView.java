@@ -87,6 +87,11 @@ public class RenderedPageObjectView {
         doWait().until(expectedCondition);
     }
 
+    public void waitFor(String xpathOrCssSelector) {
+        waitFor(xpathOrCssSelector(xpathOrCssSelector));
+    }
+
+
     public WebElementFacade waitFor(final WebElement webElement) {
         return (webElement instanceof WebElementFacade) ?
                 waitForElement((WebElementFacade)webElement) :

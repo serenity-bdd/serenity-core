@@ -7,6 +7,7 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.guice.ThucydidesModule;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.util.NameConverter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -87,9 +88,12 @@ public class BuildInfoProvider {
 
             String value = evaluateGroovyExpression(expression);
 
-            buildProperties.put(simplifiedKey, value);
+            buildProperties.put(humanizedFormOf(simplifiedKey), value);
         }
+    }
 
+    private String humanizedFormOf(String simplifiedKey) {
+        return StringUtils.capitalize(StringUtils.replace(simplifiedKey,"."," "));
     }
 
     private String evaluateGroovyExpression(String expression) {
@@ -98,5 +102,4 @@ public class BuildInfoProvider {
         GroovyShell shell = new GroovyShell(binding);
         return shell.evaluate(expression).toString();
     }
-
 }

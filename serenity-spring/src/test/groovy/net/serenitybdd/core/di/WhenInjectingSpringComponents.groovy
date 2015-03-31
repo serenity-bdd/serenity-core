@@ -1,8 +1,10 @@
 package net.serenitybdd.core.di
 
+import net.serenitybdd.core.di.samples.FlatScenarioStepsWithBrokenSpringDependencies
 import net.serenitybdd.core.di.samples.FlatScenarioStepsWithSpringDependencies
 import net.thucydides.core.pages.Pages
 import net.thucydides.core.steps.di.ClasspathDependencyInjectorService
+import org.springframework.beans.factory.NoSuchBeanDefinitionException
 import spock.lang.Specification
 
 class WhenInjectingSpringComponents extends Specification {
@@ -28,4 +30,16 @@ class WhenInjectingSpringComponents extends Specification {
         then:
             dependencyInjectors.find { it.class == SpringDependencyInjector }
     }
+
+    def "should report error if the Spring autowiring fails"() {
+
+        given:
+            SpringDependencyInjector dependencyInjector = new SpringDependencyInjector();
+            FlatScenarioStepsWithBrokenSpringDependencies steps = new FlatScenarioStepsWithBrokenSpringDependencies(pages);
+        when:
+            dependencyInjector.injectDependenciesInto(steps);
+        then:
+            thrown(IllegalStateException)
+    }
+
 }

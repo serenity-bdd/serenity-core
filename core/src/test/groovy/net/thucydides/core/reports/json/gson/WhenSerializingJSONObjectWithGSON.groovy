@@ -46,10 +46,16 @@ class WhenSerializingJSONObjectWithGSON extends Specification {
         given:
             GsonJSONConverter converter = new GsonJSONConverter(environmentVariables)
         and:
-            def jsonFile = this.class.getResource("/json-reports/sample-report-1.json").getPath()
+            def jsonFile = this.class.getResource(filename).getPath()
         when:
             def loadedTestOutcome = converter.fromJson(new FileInputStream(new File(jsonFile)))
         then:
-            loadedTestOutcome != null
+            loadedTestOutcome != null && loadedTestOutcome.name == name
+        where:
+            filename                                       | name
+            "/json-reports/sample-report-1.json"           | 'should_do_this'
+            "/json-reports/sample-report-2.json"           | 'should_do_this_too'
+            "/json-reports/sample-report-3.json"           | 'an_acceptance_test_run'
+            "/json-reports/sample-report-4.json"           | 'Another sample report with unicode'
     }
 }

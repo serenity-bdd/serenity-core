@@ -10,6 +10,7 @@ import org.openqa.selenium.remote.SessionId;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -162,7 +163,7 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
         return allWebdriverInstances.size();
     }
 
-
-
-
+    public boolean isDriverInstantiated() {
+        return inThisTestThread().isDriverInstantiated();
+    }
 }

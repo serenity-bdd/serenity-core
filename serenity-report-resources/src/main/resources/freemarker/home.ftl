@@ -146,7 +146,8 @@
             "order": [
                 [ 1, "asc" ]
             ],
-            "pageLength": 50
+            "pageLength": 100,
+            "lengthMenu": [ [50, 100, 200, -1] , [50, 100, 200, "All"] ]
         });
 
         // Pie charts

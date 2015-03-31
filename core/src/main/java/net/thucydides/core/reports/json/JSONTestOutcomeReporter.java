@@ -77,9 +77,7 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
             return Optional.of(fromJson);
         } catch (Throwable e) {
             LOGGER.warn("this file was not a valid JSON Serenity test report: " + reportFile.getName()
-                        + System.lineSeparator()
-                        + e.getMessage());
-
+                        + System.lineSeparator(), e);
             return Optional.absent();
         }
     }

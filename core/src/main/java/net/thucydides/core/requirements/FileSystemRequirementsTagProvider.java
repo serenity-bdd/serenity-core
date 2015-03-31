@@ -59,6 +59,16 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     //    @Transient
     private List<Requirement> requirements;
 
+    public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables) {
+        this(defaultRootDirectoryPathFrom(Injectors.getInjector().getProvider(EnvironmentVariables.class).get()),
+                0,
+                environmentVariables);
+    }
+
+    public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables, String root) {
+        this(root,0, environmentVariables);
+    }
+
     public FileSystemRequirementsTagProvider() {
         this(defaultRootDirectoryPathFrom(Injectors.getInjector().getProvider(EnvironmentVariables.class).get()));
     }
@@ -490,7 +500,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private Optional<Narrative> loadFromFeatureFile(File storyFile) {
-        CucumberParser parser = new CucumberParser();
+        CucumberParser parser = new CucumberParser(environmentVariables);
         return parser.loadFeatureNarrative(storyFile);
     }
 

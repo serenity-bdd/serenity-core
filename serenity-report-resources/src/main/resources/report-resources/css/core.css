@@ -187,9 +187,12 @@ body {
 
 }
 
+.test-outcome-title-bar {
+    padding: 8px;
+}
+
 .test-title-bar {
     padding: 8px;
-    border-bottom: solid 1px blue;
 }
 .test-case-title {
     margin: 2px;
@@ -213,6 +216,28 @@ h3.story-header {
     font-style: italic;
 }
 
+h3.discreet-story-header {
+    color: gray;
+    font-size: 1.1em;
+    padding-left: 4px;
+    font-weight: normal;
+    font-style: normal;
+    margin-top: 10px;
+}
+
+.story-header-title {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.discreet-requirement-narrative-title {
+    /*     color: #0d78ae; */
+    color: darkgrey;
+    font-size: 1.0em;
+    font-family:euphemia, verdana, sans-serif;font-size: 15px; font-weight:lighter; font-style: italic;
+    /*border: #6495ed solid thin;*/
+    padding: 4px;
+}
 .tags {
     vertical-align: text-top;
     padding: 4px;
@@ -862,13 +887,25 @@ a.tagLink:visited, a.tagLink:link {
     border-style: solid;
 }
 
+.scenario-title {
+    width:1008px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    background: #f4f6ec;
+    padding: 10px;
+    border: 1px;
+    border-color: #e7e8e3;
+    border-style: solid;
+}
+
 .step-table
 {
     width:1025px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
-    background: #f1f3e8;
+    background: #f4f6ec;
     padding: 5px;
     border: 1px;
     border-color: #e7e8e3;
@@ -1055,6 +1092,7 @@ h4 {
     margin-bottom: 1em;
     font-family:euphemia, verdana, sans-serif;font-size: 14px; font-weight:normal; font-style: italic;
 }
+
 
 .requirementNarrativeTitle {
     color: #0d78ae;

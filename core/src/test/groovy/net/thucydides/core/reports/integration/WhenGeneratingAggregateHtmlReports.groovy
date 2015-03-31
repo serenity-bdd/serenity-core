@@ -9,6 +9,7 @@ import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriver
 import spock.lang.Ignore
@@ -47,7 +48,7 @@ public class WhenGeneratingAggregateHtmlReports extends Specification {
     }
     def "we can navigate sub reports"() {
         when: "We generate reports from a directory containing features and stories only"
-            driver = new PhantomJSDriver();
+            driver = new ChromeDriver();// PhantomJSDriver();
             driver.get reportHomePageUrl();
         then: "we can see all available tags and click on 'Grow New Potatoes' link"
             def anotherDifferentFeatureLink = driver.findElement(By.linkText("Grow New Potatoes"))

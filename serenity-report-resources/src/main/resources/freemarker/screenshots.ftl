@@ -8,30 +8,30 @@
 
     <link rel="shortcut icon" href="favicon.ico">
 
-    <#include "libraries/common.ftl">
-    <#include "libraries/nivo-slider.ftl">
+<#include "libraries/common.ftl">
+<#include "libraries/nivo-slider.ftl">
 
     <script type="text/javascript">
 
-    function getUrlVars() {
-        var vars = {};
-        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-            vars[key] = value;
+        function getUrlVars() {
+            var vars = {};
+            var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+                vars[key] = value;
+            });
+            return vars;
+        }
+
+        var screenshotIndex = getUrlVars()["screenshot"];
+
+        $(window).load(function () {
+            $('#slider').nivoSlider({
+                startSlide: screenshotIndex,
+                effect: 'fade',
+                animSpeed: 200,
+                manualAdvance: true
+            });
         });
-        return vars;
-    }
-
-    var screenshotIndex = getUrlVars()["screenshot"];
-
-	$(window).load(function() {
-	    $('#slider').nivoSlider({
-            startSlide:screenshotIndex,
-            effect:'fade',
-			animSpeed:200,
-            manualAdvance: true
-		});
-	});
-	</script>
+    </script>
 
 </head>
 
@@ -58,10 +58,12 @@
         <div class="middlebg">
             <span class="bluetext">
                 <a href="index.html" class="bluetext">Home</a>
-                <#if (parentLink?has_content)>
-                > <a href="${parentLink}">${formatter.truncatedHtmlCompatible(inflection.of(parentTitle).asATitle(),40)}</a>
-                </#if>
-                > <a href="${narrativeView}.html">${formatter.truncatedHtmlCompatible(testOutcome.unqualified.title,60)} </a>
+            <#if (parentLink?has_content)>
+                > <a
+                    href="${parentLink}">${formatter.truncatedHtmlCompatible(inflection.of(parentTitle).asATitle(),40)}</a>
+            </#if>
+                > <a
+                    href="${narrativeView}.html">${formatter.truncatedHtmlCompatible(testOutcome.unqualified.title,60)} </a>
                 > Screenshots
             </span>
         </div>
@@ -71,8 +73,8 @@
     <div class="clr"></div>
 
     <!--/* starts second table*/-->
-    <#include "menu.ftl">
-    <@main_menu selected="home" />
+<#include "menu.ftl">
+<@main_menu selected="home" />
 
     <div class="clr"></div>
     <!--
@@ -124,37 +126,20 @@
     </div>
     </div>
 -->
-    <#if testOutcome.result == "FAILURE"><#assign outcome_icon = "fail.png"><#assign outcome_text = "failing-color">
-    <#elseif testOutcome.result == "ERROR"><#assign outcome_icon = "cross.png"><#assign outcome_text = "error-color">
-    <#elseif testOutcome.result == "SUCCESS"><#assign outcome_icon = "success.png"><#assign outcome_text = "success-color">
-    <#elseif testOutcome.result == "PENDING"><#assign outcome_icon = "pending.png"><#assign outcome_text = "pending-color">
-    <#else><#assign outcome_icon = "ignor.png"><#assign outcome_text = "ignore-color">
-    </#if>
-    <#-- TEST TITLE-->
+<#if testOutcome.result == "FAILURE"><#assign outcome_icon = "fail.png"><#assign outcome_text = "failing-color">
+<#elseif testOutcome.result == "ERROR"><#assign outcome_icon = "cross.png"><#assign outcome_text = "error-color">
+<#elseif testOutcome.result == "SUCCESS"><#assign outcome_icon = "success.png"><#assign outcome_text = "success-color">
+<#elseif testOutcome.result == "PENDING"><#assign outcome_icon = "pending.png"><#assign outcome_text = "pending-color">
+<#else><#assign outcome_icon = "ignor.png"><#assign outcome_text = "ignore-color">
+</#if>
+<#-- TEST TITLE-->
     <div id="contentbody">
         <div class="titlebar">
             <div class="story-title">
                 <table class="outcome-header">
                     <tr>
-                        <td colspan="2" class="test-title-bar">
-                            <span class="outcome-icon"><img class="story-outcome-icon" src="images/${outcome_icon}" /></span>
-                        <#if (testOutcome.videoLink)??>
-                            <a href="${relativeLink!}${testOutcome.videoLink}"><img class="story-outcome-icon"
-                                                                                    src="images/video.png" width="25"
-                                                                                    height="25" alt="Video"/></a>
-                        </#if>
-                            <span class="test-case-caption">Test Outcome</span>
-                            <span class="test-case-title">
-                                <span class="${outcome_text}">${testOutcome.unqualified.titleWithLinks}
-                                    <span class="related-issue-title">${testOutcome.formattedIssues}</span>
-                                </span>
-                            </span>
-                        </td>
-                    </tr>
-
-                    <tr>
                         <td>
-                        <#if (parentRequirement.isPresent())>
+                        <#if (parentRequirement?? && parentRequirement.isPresent())>
                             <div>
                                 <#assign parentTitle = inflection.of(parentRequirement.get().name).asATitle() >
                                 <#assign parentType = inflection.of(parentRequirement.get().type).asATitle() >
@@ -163,38 +148,71 @@
                                 <#else>
                                     <#assign issueNumber = "">
                                 </#if>
-                                <h3 class="story-header">${parentType}: ${parentTitle} ${issueNumber}</h3>
+                                <h3 class="discreet-story-header">
+                                    <i class="fa fa-comments-o"></i>
+                                    <span class="story-header-title">${parentTitle} ${issueNumber}</span>
+                                    <span class="badge tag-badge">${parentType}</span>
+                                </h3>
 
-                                <div class="requirementNarrativeTitle">
+                                <div class="discreet-requirement-narrative-title">
                                 ${formatter.renderDescription(parentRequirement.get().narrative.renderedText)}
                                 </div>
                             </div>
-                        <#elseif (featureOrStory.isPresent())>
+                        <#elseif (featureOrStory?? && featureOrStory.isPresent())>
                             <div>
                                 <#assign parentTitle = inflection.of(featureOrStory.get().name).asATitle() >
                                 <#assign parentType = inflection.of(featureOrStory.get().type.toString()).asATitle() >
-                                <h3 class="story-header">${parentType}: ${parentTitle}</h3>
+                                <h3 class="discreet-story-header">
+                                    <i class="fa fa-comments-o"></i>
+                                    <span class="story-header-title">${parentTitle}</span>
+                                    <span class="badge tag-badge">${parentType}</span>
+                                </h3>
 
-                                <div class="requirementNarrativeTitle">
+                                <div class="discreet-requirement-narrative-title">
                                 ${formatter.renderDescription(featureOrStory.get().narrative)}
                                 </div>
                             </div>
                         </#if>
 
-                        <#if (testOutcome.backgroundDescription??)>
-                            <div class="requirementNarrative">Background: ${testOutcome.backgroundDescription}</div>
+                        <#if (testOutcome.backgroundTitle?has_content)>
+                            <div class="requirementNarrative">Background: ${testOutcome.backgroundTitle}
+                                <#if (testOutcome.backgroundTitle?has_content)>
+                                    <p>${testOutcome.backgroundDescription}</p>
+                                </#if>
+                            </div>
                         </#if>
                         </td>
-                        <td>
+                        <td valign="top">
                         <#list filteredTags as tag>
                             <#assign tagReport = absoluteReportName.forTag(tag) />
                             <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
                             <p class="tag">
                                 <span class="badge tag-badge">
-                                    <i class="fa fa-tag"></i><a class="tagLink" href="${tagReport}">${tagTitle} (${tag.type})</a>
+                                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" href="${tagReport}">${tagTitle}
+                                    (${tag.type})</a>
                                 </span>
                             </p>
                         </#list>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <divv class="story-title">
+                <table class="outcome-header">
+                    <tr>
+                        <td colspan="2" class="test-title-bar">
+                            <span class="outcome-icon"><img class="story-outcome-icon"
+                                                            src="images/${outcome_icon}"/></span>
+                        <#if (testOutcome.videoLink)??>
+                            <a href="${relativeLink!}${testOutcome.videoLink}"><img class="story-outcome-icon"
+                                                                                    src="images/video.png" width="25"
+                                                                                    height="25" alt="Video"/></a>
+                        </#if>
+                            <span class="test-case-title">
+                                <span class="${outcome_text}">${testOutcome.unqualified.titleWithLinks}
+                                    <span class="related-issue-title">${testOutcome.formattedIssues}</span>
+                                </span>
+                            </span>
                         </td>
                     </tr>
                 </table>
@@ -204,25 +222,27 @@
 
     <div class="clr"></div>
 
-    <#if (testOutcome.isDataDriven())>
-        <div class="story-title">
-            <h3>Scenario:</h3>
-            <div class="scenario">${formatter.formatWithFields(testOutcome.dataDrivenSampleScenario, testOutcome.exampleFields)}</div>
+<#if (testOutcome.isDataDriven())>
+    <div class="story-title">
+        <h3>Scenario:</h3>
 
-        </div>
-    </#if>
+        <div class="scenario">${formatter.formatWithFields(testOutcome.dataDrivenSampleScenario, testOutcome.exampleFields)}</div>
+
+    </div>
+</#if>
 
 
     <div id="beforetable"></div>
     <div id="contenttilttle">
 
-	 <div class="slider-wrapper theme-default">
-		<div id="slider">
+        <div class="slider-wrapper theme-default">
+            <div id="slider">
             <#foreach screenshot in screenshots>
-                <img src="${screenshot.filename}" alt="${screenshot.shortErrorMessage}" title="${screenshot.html.description}" width="${screenshot.width?string.computer}"/>
+                <img src="${screenshot.filename}" alt="${screenshot.shortErrorMessage}"
+                     title="${screenshot.html.description}" width="${screenshot.width?string.computer}"/>
             </#foreach>
+            </div>
         </div>
-	  </div>
 
 
     </div>

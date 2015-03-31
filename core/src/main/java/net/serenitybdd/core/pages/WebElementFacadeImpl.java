@@ -61,8 +61,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebElementFacadeImpl.class);
 
-    private final static long UNDEFINED_TIMEOUT = -1;
-
     public WebElementFacadeImpl(final WebDriver driver,
                                    final ElementLocator locator,
                                    final WebElement webElement,

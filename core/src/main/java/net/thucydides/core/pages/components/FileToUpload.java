@@ -55,7 +55,7 @@ public class FileToUpload {
     }
 
     private String getFileFromResourcePath(final String filename) {
-        return resourceOnClasspath(filename).getFile();
+        return new File(resourceOnClasspath(filename).getFile()).getAbsolutePath();
     }
 
     private String getFileFromFileSystem(final String filename) {

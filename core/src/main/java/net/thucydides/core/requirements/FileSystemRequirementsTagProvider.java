@@ -52,6 +52,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private static final List<TestTag> NO_TEST_TAGS = Lists.newArrayList();
     public static final String STORY_EXTENSION = "story";
     public static final String FEATURE_EXTENSION = "feature";
+    private static final List<Requirement> NO_CHILD_REQUIREMENTS = Lists.newArrayList();
 
     private final String rootDirectoryPath;
     private final NarrativeReader narrativeReader;
@@ -490,7 +491,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         String storyName = (optionalNarrative.isPresent()) ? optionalNarrative.get().getTitle().or(defaultStoryName) : defaultStoryName;
 
         Requirement requirement = (optionalNarrative.isPresent()) ?
-                requirementWithNarrative(storyFile, humanReadableVersionOf(storyName), optionalNarrative.get()).withType(type.toString())
+                leafRequirementWithNarrative(storyFile, humanReadableVersionOf(storyName), optionalNarrative.get()).withType(type.toString())
                 : storyNamed(storyName).withType(type.toString());
 
         return requirement.definedInFile(storyFile);
@@ -536,6 +537,18 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return Requirement.named(shortName).withType(STORY_EXTENSION).withNarrative(shortName);
     }
 
+    private Requirement leafRequirementWithNarrative(File requirementDirectory, String shortName, Narrative requirementNarrative) {
+        String displayName = getTitleFromNarrativeOrDirectoryName(requirementNarrative, shortName);
+        String cardNumber = requirementNarrative.getCardNumber().orNull();
+        String type = requirementNarrative.getType();
+        List<String> releaseVersions = requirementNarrative.getVersionNumbers();
+        return Requirement.named(shortName)
+                .withOptionalDisplayName(displayName)
+                .withOptionalCardNumber(cardNumber)
+                .withType(type)
+                .withNarrative(requirementNarrative.getText())
+                .withReleaseVersions(releaseVersions);
+    }
 
     private Requirement requirementWithNarrative(File requirementDirectory, String shortName, Narrative requirementNarrative) {
         String displayName = getTitleFromNarrativeOrDirectoryName(requirementNarrative, shortName);

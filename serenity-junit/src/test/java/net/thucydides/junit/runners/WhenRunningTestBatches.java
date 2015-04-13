@@ -1,5 +1,6 @@
 package net.thucydides.junit.runners;
 
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.MockEnvironmentVariables;
@@ -62,7 +63,7 @@ public class WhenRunningTestBatches extends AbstractTestStepRunnerTest {
     @Test
     public void the_test_runner_records_the_steps_as_they_are_executed() throws InitializationError {
 
-        ThucydidesRunner runner = new ThucydidesRunner(SamplePassingScenario.class, webDriverFactory);
+        SerenityRunner runner = new SerenityRunner(SamplePassingScenario.class, webDriverFactory);
 
         runner.run(new RunNotifier());
 

@@ -52,7 +52,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private static final List<TestTag> NO_TEST_TAGS = Lists.newArrayList();
     public static final String STORY_EXTENSION = "story";
     public static final String FEATURE_EXTENSION = "feature";
-    private static final List<Requirement> NO_CHILD_REQUIREMENTS = Lists.newArrayList();
 
     private final String rootDirectoryPath;
     private final NarrativeReader narrativeReader;

@@ -330,15 +330,16 @@ public class WhenFindingTagsForATestOutcome {
     @Test
     public void should_get_requirement_from_feature_in_a_foreign_language() throws URISyntaxException {
 
-        environmentVariables.setProperty("feature.file.language","no"); // Norweigan
-        CucumberParser parser = new CucumberParser(environmentVariables);
+        FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider(environmentVariables);
 
-        URL url = this.getClass().getResource("/features/PlantScandanavianPotatoes.feature");
-        File featureFile = new File(url.toURI());
+        File norwegenfeatureFile = new File(this.getClass().getResource("/features/PlantScandanavianPotatoes.feature").toURI());
+        File germanfeatureFile = new File(this.getClass().getResource("/features/PlantGermanPotatoes.feature").toURI());
 
-        Optional<Narrative> narrative = parser.loadFeatureNarrative(featureFile);
+        Requirement norwegenRequirement = tagProvider.readRequirementsFromStoryOrFeatureFile(norwegenfeatureFile);
+        Requirement germanRequirement = tagProvider.readRequirementsFromStoryOrFeatureFile(germanfeatureFile);
 
-        assertThat(narrative.isPresent(), is(true));
+        assertThat(norwegenRequirement.getName(), is("Summering"));
+        assertThat(germanRequirement.getName(), is("Ich möchte testen, wie serenity und cucumber mit deutscher sprache umgehen."));
     }
 
 }

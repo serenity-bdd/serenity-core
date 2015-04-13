@@ -21,7 +21,7 @@ import java.util.Scanner;
  */
 public class CucumberParser {
 
-    private final EnvironmentVariables environmentVariables ;
+    private final String locale;
 
     public CucumberParser() {
         this(Injectors.getInjector().getInstance(EnvironmentVariables.class));
@@ -29,13 +29,17 @@ public class CucumberParser {
 
 
     public CucumberParser(EnvironmentVariables environmentVariables) {
-        this.environmentVariables = environmentVariables;
+        locale = ThucydidesSystemProperty.FEATURE_FILE_LANGUAGE.from(environmentVariables,"en");
+    }
+
+    public CucumberParser(String locale) {
+        this.locale = locale;
     }
 
     public Optional<Narrative> loadFeatureNarrative(File narrativeFile)  {
 
         CucumberFeatureListener gherkinStructure =new CucumberFeatureListener();
-        Parser parser = new Parser(gherkinStructure, true, "root", false, featureFileLanguage());
+        Parser parser = new Parser(gherkinStructure, true, "root", false, locale);
         try {
             String gherkinScenarios = filterOutCommentsFrom(FileUtils.readFileToString(narrativeFile));
             parser.parse(gherkinScenarios, narrativeFile.getName(),0);
@@ -56,11 +60,6 @@ public class CucumberParser {
         }
         return Optional.absent();
     }
-
-    private String featureFileLanguage() {
-        return ThucydidesSystemProperty.FEATURE_FILE_LANGUAGE.from(environmentVariables,"en");
-    }
-
 
     private String filterOutCommentsFrom(String gherkin) {
         StringBuilder filteredGherkin = new StringBuilder();

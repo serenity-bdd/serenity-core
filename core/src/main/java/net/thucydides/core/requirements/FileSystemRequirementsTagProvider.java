@@ -15,6 +15,7 @@ import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -468,7 +469,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         };
     }
 
-    private Requirement readRequirementFrom(File requirementDirectory) {
+    public Requirement readRequirementFrom(File requirementDirectory) {
         Optional<Narrative> requirementNarrative = narrativeReader.loadFrom(requirementDirectory, level);
 
         if (requirementNarrative.isPresent()) {
@@ -480,7 +481,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
     }
 
-    private Requirement readRequirementsFromStoryOrFeatureFile(File storyFile) {
+    public Requirement readRequirementsFromStoryOrFeatureFile(File storyFile) {
         FeatureType type = featureTypeOf(storyFile);
         String defaultStoryName = storyFile.getName().replace(type.getExtension(), "");
 
@@ -500,8 +501,24 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private Optional<Narrative> loadFromFeatureFile(File storyFile) {
-        CucumberParser parser = new CucumberParser(environmentVariables);
+        String explicitLocale = readLocaleFromFeatureFile(storyFile);
+        CucumberParser parser = (explicitLocale != null) ?
+                new CucumberParser(explicitLocale) : new CucumberParser(environmentVariables);
         return parser.loadFeatureNarrative(storyFile);
+    }
+
+    private String readLocaleFromFeatureFile(File storyFile) {
+        try {
+            List<String> featureFileLines = FileUtils.readLines(storyFile);
+            for(String line : featureFileLines) {
+                if (line.startsWith("#") && line.contains("language:")) {
+                    return line.substring(line.indexOf("language:") + 10).trim();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private FeatureType featureTypeOf(File storyFile) {

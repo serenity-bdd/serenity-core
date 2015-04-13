@@ -1,14 +1,15 @@
 package net.serenitybdd.core.buildinfo;
 
-import com.beust.jcommander.internal.Maps;
+import com.google.common.collect.Maps;
 import groovy.lang.Binding;
+import groovy.lang.GroovyRuntimeException;
 import groovy.lang.GroovyShell;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.guice.ThucydidesModule;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.NameConverter;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,8 @@ import static org.hamcrest.CoreMatchers.startsWith;
 public class BuildInfoProvider {
     private final EnvironmentVariables environmentVariables;
     private final DriverCapabilityRecord driverCapabilityRecord;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BuildInfoProvider.class);
 
     public BuildInfoProvider(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
@@ -86,7 +89,7 @@ public class BuildInfoProvider {
             String simplifiedKey = key.replace("sysinfo.", "");
             String expression = environmentVariables.getProperty(key);
 
-            String value = evaluateGroovyExpression(expression);
+            String value = evaluateGroovyExpression(key, expression);
 
             buildProperties.put(humanizedFormOf(simplifiedKey), value);
         }
@@ -96,10 +99,18 @@ public class BuildInfoProvider {
         return StringUtils.capitalize(StringUtils.replace(simplifiedKey,"."," "));
     }
 
-    private String evaluateGroovyExpression(String expression) {
+    private String evaluateGroovyExpression(String key, String expression) {
         Binding binding = new Binding();
         binding.setVariable("env", environmentVariables);
         GroovyShell shell = new GroovyShell(binding);
-        return shell.evaluate(expression).toString();
+        Object result = null;
+        try {
+            if (StringUtils.isNotEmpty(expression)) {
+                result = shell.evaluate(expression);
+            }
+        } catch (GroovyRuntimeException e) {
+            LOGGER.warn("Failed to evaluate build info expression '%s' for key %s",expression, key);
+        }
+        return (result != null) ? result.toString() : "";
     }
 }

@@ -111,7 +111,7 @@ public class TestOutcomeLoader {
     }
     private class SerializedOutcomeFilenameFilter implements FilenameFilter {
         public boolean accept(final File file, final String filename) {
-            return filename.toLowerCase(Locale.getDefault()).endsWith(formatConfiguration.getPreferredFormat().getExtension());
+            return (filename.toLowerCase(Locale.getDefault()).endsWith(formatConfiguration.getPreferredFormat().getExtension()) && (!filename.endsWith(".features.json"))) ;
         }
     }
 }

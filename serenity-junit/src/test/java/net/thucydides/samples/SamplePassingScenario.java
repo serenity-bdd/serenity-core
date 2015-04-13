@@ -19,7 +19,7 @@ public class SamplePassingScenario {
     @Steps
     public SampleScenarioSteps steps;
 
-    @Test
+    @Test(timeout=10000)
     @WithTagValuesOf({"story:simple scenario", "iteration:I1"})
     public void happy_day_scenario() throws Throwable {
         steps.stepThatSucceeds();

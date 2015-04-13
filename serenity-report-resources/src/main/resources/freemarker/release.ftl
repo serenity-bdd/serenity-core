@@ -88,7 +88,6 @@
                     <h3>Release Details</h3>
                     <table>
                         <tr>
-                            <td valign="top"><a class="label" href="releases.html">Releases</a></td>
                             <td valign="top">
                             <#foreach parent in release.parents>
                                 >&nbsp<a class="label" href="${parent.reportName}">${parent.name}</a>

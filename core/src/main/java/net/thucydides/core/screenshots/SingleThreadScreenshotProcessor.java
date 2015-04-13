@@ -34,7 +34,7 @@ public class SingleThreadScreenshotProcessor implements ScreenshotProcessor {
     }
 
     public void start() {
-        screenshotThread = new Thread(new Processor(queue));
+        screenshotThread = new Thread(new Processor(queue),"Screenshot Processor");
         screenshotThread.setDaemon(true);
         screenshotThread.start();
     }

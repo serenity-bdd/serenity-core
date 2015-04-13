@@ -44,7 +44,7 @@ public class PageUrls {
         } else {
             url = getBaseUrl();
         }
-        return verified(url);
+        return verified(url, pageObject);
     }
 
     private Optional<String> getDeclaredDefaultUrl() {
@@ -56,7 +56,7 @@ public class PageUrls {
         }
     }
 
-    public String verified(String requestedUrl) {
+    public String verified(String requestedUrl, Object pageObject) {
         if (isAClasspathResource(requestedUrl)) {
             return obtainResourcePathFromClasspath(requestedUrl).toString();
         } else {
@@ -64,7 +64,12 @@ public class PageUrls {
                 URL url = new URL(requestedUrl);
                 return url.toString();
             } catch (MalformedURLException e) {
-                throw new AssertionError("Invalid URL: " + requestedUrl);
+                if (requestedUrl == null) {
+                    throw new AssertionError("Undefined default URL for page object "
+                                             + pageObject.getClass().getSimpleName());
+                } else {
+                    throw new AssertionError("Invalid URL: " + requestedUrl);
+                }
             }
         }
     }

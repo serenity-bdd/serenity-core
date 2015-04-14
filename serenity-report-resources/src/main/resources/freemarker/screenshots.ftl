@@ -197,7 +197,7 @@
                     </tr>
                 </table>
             </div>
-            <divv class="story-title">
+            <div class="story-title">
                 <table class="outcome-header">
                     <tr>
                         <td colspan="2" class="test-title-bar">

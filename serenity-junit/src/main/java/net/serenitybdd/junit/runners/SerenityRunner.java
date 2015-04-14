@@ -3,6 +3,7 @@ package net.serenitybdd.junit.runners;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.ManagedWebDriverAnnotatedField;
 import net.thucydides.core.annotations.Pending;
@@ -534,7 +535,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         }
 
         injectScenarioStepsInto(test);
-
+        injectEnvironmentVariablesInto(test);
         useStepFactoryForDataDrivenSteps();
 
         Statement baseStatement = super.methodInvoker(method, test);
@@ -580,6 +581,11 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
          */
     protected void injectAnnotatedPagesObjectInto(final Object testCase) {
         StepAnnotations.injectAnnotatedPagesObjectInto(testCase, pages);
+    }
+
+    protected void injectEnvironmentVariablesInto(final Object testCase) {
+        EnvironmentDependencyInjector environmentDependencyInjector = new EnvironmentDependencyInjector();
+        environmentDependencyInjector.injectDependenciesInto(testCase);
     }
 
     protected WebDriver getDriver() {

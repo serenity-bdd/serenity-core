@@ -1,7 +1,6 @@
 package net.thucydides.core.reports.html;
 
-import com.beust.jcommander.internal.Lists;
-import com.beust.jcommander.internal.Maps;
+import com.google.common.collect.Lists;
 import net.serenitybdd.core.SerenitySystemProperties;
 import net.serenitybdd.core.buildinfo.BuildInfoProvider;
 import net.thucydides.core.ThucydidesSystemProperty;

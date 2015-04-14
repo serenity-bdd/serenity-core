@@ -1,6 +1,6 @@
 package net.thucydides.core.reports.integration;
 
-import com.beust.jcommander.internal.Lists;
+import com.google.common.collect.Lists;
 import net.thucydides.core.digest.Digest;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.reports.ResultChecker;
@@ -13,7 +13,6 @@ import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -23,8 +22,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,9 +47,9 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
     public static void generateReports() throws IOException {
         IssueTracking issueTracking = mock(IssueTracking.class);
         RequirementsService requirementsService = mock(RequirementsService.class);
-        environmentVariables.setProperty("output.formats","xml");
+        environmentVariables.setProperty("output.formats", "xml");
         HtmlAggregateStoryReporter reporter = new HtmlAggregateStoryReporter("project", "", issueTracking,
-                                                                              requirementsService, environmentVariables);
+                requirementsService, environmentVariables);
         outputDirectory = newTemporaryDirectory();
         reporter.setOutputDirectory(outputDirectory);
 
@@ -69,7 +66,7 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
     }
 
     private static File newTemporaryDirectory() throws IOException {
-        File createdFolder= File.createTempFile("reports", "");
+        File createdFolder = File.createTempFile("reports", "");
         createdFolder.delete();
         createdFolder.mkdir();
         return createdFolder;
@@ -82,8 +79,9 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
 
     @Test
     public void should_generate_an_aggregate_dashboard() throws Exception {
-        assertThat(new File(outputDirectory,"index.html"), exists());
+        assertThat(new File(outputDirectory, "index.html"), exists());
     }
+
     @Test
     public void should_generate_overall_passed_failed_and_pending_reports() throws Exception {
         ReportNameProvider reportName = new ReportNameProvider();
@@ -100,16 +98,16 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
         String expectedSuccessReport = reportName.forTestResult("success");
         String expectedPendingReport = reportName.forTestResult("pending");
 
-        File report = new File(outputDirectory,"index.html");
+        File report = new File(outputDirectory, "index.html");
         driver.get(urlFor(report));
 
-        driver.findElement(By.cssSelector("a[href='" + expectedSuccessReport +"']"));
-        driver.findElement(By.cssSelector("a[href='" + expectedPendingReport +"']"));
+        driver.findElement(By.cssSelector("a[href='" + expectedSuccessReport + "']"));
+        driver.findElement(By.cssSelector("a[href='" + expectedPendingReport + "']"));
     }
 
     @Test
     public void should_display_the_date_and_time_of_tests_on_the_home_page() throws Exception {
-        File report = new File(outputDirectory,"index.html");
+        File report = new File(outputDirectory, "index.html");
         driver.get(urlFor(report));
         assertThat(driver.findElement(By.cssSelector(".date-and-time")).isDisplayed(), is(true));
     }
@@ -138,12 +136,12 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
     @Test
     public void aggregate_dashboard_should_contain_a_list_of_all_tag_types() throws Exception {
 
-        File report = new File(outputDirectory,"index.html");
+        File report = new File(outputDirectory, "index.html");
         driver.get(urlFor(report));
 
         List<WebElement> tagTypes = driver.findElements(By.cssSelector(".tagTypeTitle"));
         List<String> tagTypeNames = extract(tagTypes, on(WebElement.class).getText());
-        assertThat(tagTypeNames, hasItems("Stories","Features", "Epics"));
+        assertThat(tagTypeNames, hasItems("Stories", "Features", "Epics"));
     }
 
     private String urlFor(File report) {
@@ -153,7 +151,7 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
     @Test
     public void aggregate_dashboard_should_contain_correct_test_counts() throws Exception {
 
-        File report = new File(outputDirectory,"index.html");
+        File report = new File(outputDirectory, "index.html");
         driver.get(urlFor(report));
 
         List<String> testCountLabels = convertToStrings(driver.findElements(By.cssSelector(".test-count")));
@@ -164,12 +162,12 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
         Matcher<Iterable<? super String>> errorMatcher = hasItem(containsString("1 with errors"));
         Matcher<Iterable<? super String>> skippedMatcher = hasItem(containsString("0 skipped"));
         Matcher<Iterable<? super String>> ignoredMatcher = hasItem(containsString("0 ignored"));
-        assertThat(testCountLabels, allOf(passedMatcher, pendingMatcher, failedMatcher, errorMatcher,skippedMatcher, ignoredMatcher));
+        assertThat(testCountLabels, allOf(passedMatcher, pendingMatcher, failedMatcher, errorMatcher, skippedMatcher, ignoredMatcher));
     }
 
     private List<String> convertToStrings(List<WebElement> elements) {
         List<String> labels = Lists.newArrayList();
-        for(WebElement element : elements) {
+        for (WebElement element : elements) {
             labels.add(element.getText());
         }
         return labels;

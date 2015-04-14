@@ -1,12 +1,10 @@
 package net.thucydides.core.webdriver.javascript;
 
-import com.beust.jcommander.internal.Maps;
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import net.thucydides.core.pages.injectors.FieldInjectorService;
 import net.thucydides.core.pages.jquery.JQueryEnabledPage;
-import net.thucydides.core.reflection.FieldSetter;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.openqa.selenium.JavascriptExecutor;

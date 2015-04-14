@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver;
 
-import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Optional;
+import com.google.common.collect.Maps;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Duration;
 

@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver.stubs;
 
-import com.beust.jcommander.internal.Sets;
+import com.google.common.collect.Sets;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.Logs;

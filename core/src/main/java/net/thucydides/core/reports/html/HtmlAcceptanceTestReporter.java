@@ -1,11 +1,9 @@
 package net.thucydides.core.reports.html;
 
 import ch.lambdaj.function.convert.Converter;
-import com.beust.jcommander.internal.Sets;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.images.ResizableImage;
@@ -33,8 +31,6 @@ import java.util.Set;
 
 import static ch.lambdaj.Lambda.convert;
 import static com.google.common.collect.Iterables.any;
-import static com.google.common.collect.Iterables.get;
-import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_KEEP_UNSCALED_SCREENSHOTS;
 import static net.thucydides.core.model.ReportType.HTML;
 
 /**

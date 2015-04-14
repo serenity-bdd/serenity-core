@@ -104,7 +104,9 @@ public class Photographer {
                 if (screenshotTempFile != null) {
                     String storedFilename = getDigestScreenshotNameFor(screenshotTempFile);
                     File savedScreenshot = targetScreenshot(storedFilename);
-                    screenshotProcessor.queueScreenshot(new QueuedScreenshot(screenshotTempFile, savedScreenshot));
+                    if (!Files.exists(savedScreenshot.toPath())) {
+                        screenshotProcessor.queueScreenshot(new QueuedScreenshot(screenshotTempFile, savedScreenshot));
+                    }
                     return Optional.of(savedScreenshot);
                 }
             } catch (Throwable e) {

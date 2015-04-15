@@ -28,7 +28,7 @@ public class SingleTestScenarioWithWebdriverException {
         steps.stepThatSucceeds();
         steps.stepThatIsIgnored();
         steps.anotherStepThatSucceeds();
-        steps.stepThatFailsWithWebdriverException();
+        steps.stepThatFailsWithRuntimeException();
         steps.stepThatShouldBeSkipped();
     }    
 }

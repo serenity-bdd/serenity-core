@@ -25,7 +25,7 @@ public class MockDemoSiteStepsWithWebdriverError extends ScenarioSteps {
     
     @Step
     public void should_have_selected_value(String selectValue) {
-        throw new NoSuchElementException("This is not the element you're looking for");
+        throw new RuntimeException("This is not the element you're looking for");
     }
 
     @Step

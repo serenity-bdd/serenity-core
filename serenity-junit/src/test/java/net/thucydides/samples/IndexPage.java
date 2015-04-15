@@ -38,5 +38,4 @@ public class IndexPage extends PageObject {
     public void enterValue(String value) {
         element(textfield).type(value);
     }
-
 }

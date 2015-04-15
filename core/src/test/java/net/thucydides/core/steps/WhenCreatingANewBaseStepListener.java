@@ -55,23 +55,6 @@ public class WhenCreatingANewBaseStepListener {
     }
 
     @Test
-    public void should_create_a_new_proxy_driver_using_the_pages_driver_if_provided() {
-        Pages pages = new Pages(driver);
-        BaseStepListener baseStepListener = new BaseStepListener(outputDirectory, pages);
-
-        assertThat(baseStepListener.getDriver(), is(pages.getDriver()));
-    }
-
-    @Test
-    public void should_be_able_to_create_a_base_listener_without_a_page_factory() {
-        Pages pages = new Pages(driver);
-        BaseStepListener baseStepListener = new BaseStepListener(outputDirectory);
-
-        assertThat(baseStepListener.getDriver(), is(nullValue()));
-    }
-
-
-    @Test
     public void when_the_pages_object_has_no_driver_one_should_be_created() {
         Pages pages = new Pages((WebDriver) null);
         BaseStepListener baseStepListener = new BaseStepListener(outputDirectory, pages);
@@ -79,17 +62,9 @@ public class WhenCreatingANewBaseStepListener {
         assertThat(pages.getDriver(), is(not(nullValue())));
         assertThat(baseStepListener.getDriver(), is(pages.getDriver()));
     }
-
-    @Test
-    public void when_the_pages_is_null_a_new_driver_should_be_created() {
-        BaseStepListener baseStepListener = new BaseStepListener(outputDirectory, (Pages) null);
-
-        assertThat(baseStepListener.getDriver(), is(not(nullValue())));
-    }
-
     @Test
     public void should_use_the_driver_from_the_pages_object_if_assigend() {
-        BaseStepListener baseStepListener = new TestableBaseStepListener(FirefoxDriver.class, outputDirectory);
+       new TestableBaseStepListener(FirefoxDriver.class, outputDirectory);
 
         verify(proxyFactory).proxyFor(FirefoxDriver.class);
     }

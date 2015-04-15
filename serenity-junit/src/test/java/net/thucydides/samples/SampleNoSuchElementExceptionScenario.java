@@ -1,5 +1,6 @@
 package net.thucydides.samples;
 
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
@@ -9,7 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
-@RunWith(ThucydidesRunner.class)
+@RunWith(SerenityRunner.class)
 public class SampleNoSuchElementExceptionScenario {
 
     @Managed
@@ -17,6 +18,7 @@ public class SampleNoSuchElementExceptionScenario {
 
     @ManagedPages(defaultUrl = "classpath:static-site/index.html")
     public Pages pages;
+
 
     @Steps
     public SampleScenarioSteps steps;

@@ -25,14 +25,6 @@ class WhenSettingUpReportServices extends Specification {
             listeners.baseStepListener != null
     }
 
-    def "should be able to configure default listeners with a webdriver instance"() {
-        when:
-            def driver = Mock(WebDriver)
-            def listeners = SerenityReports.setupListeners(configuration).withDriver(driver)
-        then:
-            listeners.baseStepListener.driver == driver
-    }
-
     def "should be able to obtain the results from the base step listener"() {
         when:
             def listeners = SerenityReports.setupListeners(configuration)

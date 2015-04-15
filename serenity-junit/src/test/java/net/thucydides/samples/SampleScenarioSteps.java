@@ -1,11 +1,13 @@
 package net.thucydides.samples;
 
 import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.annotations.findby.By;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.Assume;
 import org.junit.Ignore;
@@ -44,10 +46,11 @@ public class SampleScenarioSteps extends ScenarioSteps {
     public void anotherStepThatSucceeds() {
     }
 
+    IndexPage indexPage;
+
     @Step
     public void stepThatUsesABrowser() {
-        IndexPage page = pages().get(IndexPage.class);
-        page.getTitle();
+        indexPage.open();
     }
 
     @Step
@@ -150,9 +153,11 @@ public class SampleScenarioSteps extends ScenarioSteps {
 
     }
 
+    IndexPage page;
+
     @Step
     public void failsToFindElement() {
-        throw new NoSuchElementException("Could not find an element");
+        throw new RuntimeException("Element not found");
     }
 
     public String name;

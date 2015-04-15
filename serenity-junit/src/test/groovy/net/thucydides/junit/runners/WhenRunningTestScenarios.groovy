@@ -1,6 +1,7 @@
 package net.thucydides.junit.runners
 
 import com.github.goldin.spock.extensions.tempdir.TempDir
+import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration
 import net.thucydides.core.webdriver.ThucydidesWebdriverManager
@@ -98,7 +99,6 @@ class WhenRunningTestScenarios extends Specification {
         and:
         results["happy_day_scenario"].result == ERROR
         results["happy_day_scenario"].testSteps[2].result == ERROR
-        println results["happy_day_scenario"].testFailureCause.stackTrace
     }
 
     def "a failure in a nested step method should cause the test to fail"() {
@@ -230,7 +230,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should skip test steps after a failure"() {
         given:
-        def runner = new ThucydidesRunner(SingleHtmlUnitTestScenario, webDriverFactory)
+        def runner = new ThucydidesRunner(SingleTestScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         then:
@@ -250,7 +250,7 @@ class WhenRunningTestScenarios extends Specification {
 
     }
 
-    def "should skip test steps after a webdriver error"() {
+    def "should skip test steps after an error"() {
         given:
         def runner = new ThucydidesRunner(SampleNoSuchElementExceptionScenario, webDriverFactory)
         when:
@@ -264,29 +264,16 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should record error message in the failing test step"() {
         given:
-        def runner = new ThucydidesRunner(SingleHtmlUnitTestScenario, webDriverFactory)
+        def runner = new ThucydidesRunner(SingleTestScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
         def steps = runner.testOutcomes[0].getTestSteps()
+        println steps
         def failingStep = steps[4]
         then:
-        println failingStep.errorMessage
-        println failingStep.exception.class
-        println failingStep.exception.errorType
         failingStep.errorMessage.contains "Expected: is <2>"
         and:
         failingStep.exception.errorType == "java.lang.AssertionError"
-    }
-
-    def "when a test throws a webdrriver exception is should be recorded in the step"() {
-        given:
-        def runner = new ThucydidesRunner(SingleTestScenarioWithWebdriverException, webDriverFactory)
-        when:
-        runner.run(new RunNotifier())
-        def steps = runner.testOutcomes[0].getTestSteps()
-        def failingStep = steps[3]
-        then:
-        failingStep.exception.errorType == "org.openqa.selenium.NoSuchElementException"
     }
 
     def "when a test throws a runtime exception is should be recorded in the step"() {

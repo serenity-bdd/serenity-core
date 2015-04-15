@@ -52,6 +52,7 @@ public abstract class ThucydidesFluentWait<T> implements Wait<T> {
     public <V> V until(Function<? super T, V> isTrue) {
         long end = getClock().laterBy(timeout.in(MILLISECONDS));
         RuntimeException lastException = null;
+        String waitForConditionMessage = isTrue.toString();
         while (true) {
             if (aPreviousStepHasFailed()) {
                 return (V) Boolean.TRUE;
@@ -71,7 +72,7 @@ public abstract class ThucydidesFluentWait<T> implements Wait<T> {
             }
 
             if (!getClock().isNowBefore(end)) {
-                throw timeoutException(String.format("Timed out after %d milliseconds",
+                throw timeoutException(String.format("Timed out after %d milliseconds: " + waitForConditionMessage,
                         timeout.in(MILLISECONDS)), lastException);
             }
 

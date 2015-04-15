@@ -2,6 +2,8 @@ package net.thucydides.core.model.stacktrace;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 
@@ -21,11 +23,20 @@ public class RootCauseAnalyzer {
     }
 
     public FailureCause getRootCause() {
-        Throwable originalException = (thrownException.getCause() != null) ? thrownException.getCause() : thrownException;
 
+        Throwable originalException = originalExceptionFrom(thrownException);
+        // (thrownException.getCause() != null) ? thrownException.getCause() : thrownException;
 
         StackTraceSanitizer stackTraceSanitizer = StackTraceSanitizer.forStackTrace(thrownException.getStackTrace());
         return new FailureCause(originalException, stackTraceSanitizer.getSanitizedStackTrace());
+    }
+
+    private Throwable originalExceptionFrom(Throwable thrownException) {
+        if (thrownException instanceof SerenityWebDriverException) {
+            return thrownException;
+        } else {
+            return (thrownException.getCause() != null) ? thrownException.getCause() : thrownException;
+        }
     }
 
     public String getClassname() {

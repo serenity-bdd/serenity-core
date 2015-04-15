@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static net.serenitybdd.core.pages.Selectors.xpathOrCssSelector;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -66,16 +67,14 @@ public class RenderedPageObjectView {
             public Boolean apply(WebDriver driver) {
                 return (elementIsCurrentlyVisible(byElementCriteria));
             }
-        };
-    }
 
-    private ExpectedCondition<Boolean> elementPresent(final By byElementCriteria) {
-        return new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver driver) {
-                return (elementIsDisplayed(byElementCriteria));
+            @Override
+            public String toString() {
+                return "Expecting element is displayed: " + byElementCriteria.toString();
             }
         };
     }
+
     /**
      * This method will wait until an element is present and visible on the screen.
      */
@@ -206,6 +205,11 @@ public class RenderedPageObjectView {
             public Boolean apply(WebDriver driver) {
                 return (containsText(expectedText));
             }
+
+            @Override
+            public String toString() {
+                return "Expecting text present: '" + expectedText +"'";
+            }
         };
     }
 
@@ -218,6 +222,11 @@ public class RenderedPageObjectView {
             public Boolean apply(WebDriver driver) {
                 return (containsText(element, expectedText));
             }
+
+            @Override
+            public String toString() {
+                return "Expecting text present in element: '" + expectedText +"'";
+            }
         };
     }
 
@@ -229,6 +238,10 @@ public class RenderedPageObjectView {
         return new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
                 return titleIs(expectedTitle);
+            }
+            @Override
+            public String toString() {
+                return "Expecting title present: '" + expectedTitle +"'";
             }
         };
     }
@@ -254,6 +267,11 @@ public class RenderedPageObjectView {
             public Boolean apply(WebDriver driver) {
                 return !containsText(expectedText);
             }
+
+            @Override
+            public String toString() {
+                return "Expecting text not present: '" + expectedText +"'";
+            }
         };
     }
 
@@ -274,7 +292,11 @@ public class RenderedPageObjectView {
             public Boolean apply(WebDriver driver) {
                 return !titleIs(expectedTitle);
             }
-        };
+
+            @Override
+            public String toString() {
+                return "Expecting title present: '" + expectedTitle + "'";
+            }        };
     }
 
     public void waitForTitleToDisappear(final String expectedTitle) {
@@ -298,6 +320,12 @@ public class RenderedPageObjectView {
             public Boolean apply(WebDriver driver) {
                 return elementContains(element, expectedTexts);
             }
+
+            @Override
+            public String toString() {
+                return "Expecting any text present in element: '" + Arrays.toString(expectedTexts) +"'";
+            }
+
         };
     }
 
@@ -333,6 +361,10 @@ public class RenderedPageObjectView {
                 }
                 return true;
             }
+            @Override
+            public String toString() {
+                return "Expecting all texts present in element: '" + Arrays.toString(expectedTexts) +"'";
+            }
         };
     }
 
@@ -344,6 +376,10 @@ public class RenderedPageObjectView {
         return new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
                 return (!elementIsDisplayed(byElementCriteria));
+            }
+            @Override
+            public String toString() {
+                return "Expecting element not displayed: " + byElementCriteria ;
             }
         };
     }
@@ -361,6 +397,10 @@ public class RenderedPageObjectView {
                     }
                 }
                 return false;
+            }
+            @Override
+            public String toString() {
+                return "Expecting any element present: " + Arrays.toString(expectedElements)  ;
             }
         };
     }

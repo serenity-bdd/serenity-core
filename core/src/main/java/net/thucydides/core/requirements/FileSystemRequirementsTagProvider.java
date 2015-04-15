@@ -26,6 +26,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -565,9 +570,23 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private List<Requirement> readChildrenFrom(File requirementDirectory) {
-        String childDirectory = rootDirectoryPath + "/" + requirementDirectory.getName();
-        RequirementsTagProvider childReader = new FileSystemRequirementsTagProvider(childDirectory, level + 1, environmentVariables);
-        return childReader.getRequirements();
+        if (hasSubdirectories(requirementDirectory)) {
+            String childDirectory = rootDirectoryPath + "/" + requirementDirectory.getName();
+            RequirementsTagProvider childReader = new FileSystemRequirementsTagProvider(childDirectory, level + 1, environmentVariables);
+            return childReader.getRequirements();
+        } else {
+            return Lists.newArrayList();
+        }
+    }
+
+    private boolean hasSubdirectories(File requirementDirectory) {
+        for(File subdirectory : requirementDirectory.listFiles()) {
+            if (subdirectory.isDirectory()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private String getTitleFromNarrativeOrDirectoryName(Narrative requirementNarrative, String nameIfNoNarrativePresent) {

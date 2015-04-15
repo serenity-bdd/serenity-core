@@ -64,10 +64,10 @@ public class FailureAnalysis {
     }
 
     public TestResult resultFor(StepFailure stepFailure) {
-        if (stepFailure.getException() == null) {
+        if (stepFailure.getExceptionClass() == null) {
             return FAILURE;
         } else {
-            return resultFor(stepFailure.getException());
+            return resultFor(stepFailure.getExceptionClass());
         }
     }
 

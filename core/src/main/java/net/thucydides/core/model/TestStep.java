@@ -278,10 +278,6 @@ public class TestStep {
         this.exception = new RootCauseAnalyzer(exception).getRootCause();
     }
 
-    private String errorMessageFrom(final Throwable error) {
-        return (error.getCause() != null) ? error.getCause().getMessage() : error.getMessage();
-    }
-
     public String getShortErrorMessage() {
         return new ErrorMessageFormatter(getErrorMessage()).getShortErrorMessage();
     }

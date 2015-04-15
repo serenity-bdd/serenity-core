@@ -1,6 +1,7 @@
 package net.thucydides.core.model.stacktrace;
 
 import com.google.common.base.Optional;
+import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.thucydides.core.model.TestFailureException;
 
 import java.lang.reflect.Constructor;
@@ -18,13 +19,21 @@ public class FailureCause {
     public FailureCause() {}
 
     public FailureCause(Throwable cause) {
-        this.errorType = cause.getClass().getName();
+        this.errorType = exceptionClassName(cause);
         this.message =  cause.getMessage();
         this.stackTrace = cause.getStackTrace();
     }
 
     public FailureCause(Throwable cause, StackTraceElement[] stackTrace) {
-        this(cause.getClass().getName(), cause.getMessage(), stackTrace);
+        this(exceptionClassName(cause), cause.getMessage(), stackTrace);
+    }
+
+    private static String exceptionClassName(Throwable cause) {
+        if (cause instanceof SerenityWebDriverException) {
+            return ((SerenityWebDriverException) cause).getExceptionClass().getName();
+        } else {
+            return cause.getClass().getName();
+        }
     }
 
     public FailureCause(String errorType, String message, StackTraceElement[] stackTrace) {

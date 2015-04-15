@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
@@ -987,7 +988,7 @@ public class TestOutcome {
 
     public void determineTestFailureCause(Throwable cause) {
         if (cause != null) {
-            RootCauseAnalyzer rootCauseAnalyser = new RootCauseAnalyzer(cause);
+            RootCauseAnalyzer rootCauseAnalyser = new RootCauseAnalyzer(SerenityWebDriverException.detachedCopyOf(cause));
             FailureCause rootCause = rootCauseAnalyser.getRootCause();
             this.testFailureClassname = rootCauseAnalyser.getRootCause().getErrorType();
             this.testFailureMessage = rootCauseAnalyser.getMessage();

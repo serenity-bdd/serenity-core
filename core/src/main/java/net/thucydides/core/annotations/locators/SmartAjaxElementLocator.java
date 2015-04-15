@@ -131,8 +131,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
                     notVisible.getCause());
         } catch (Error e) {
             throw new NoSuchElementException(
-                    String.format("Timed out after %d seconds. %s", annotatedTimeoutInSeconds.or(timeOutInSeconds), e.getMessage()),
-                    e.getCause());
+                    String.format("Timed out after %d seconds. %s", annotatedTimeoutInSeconds.or(timeOutInSeconds), e.getMessage()));
         }
     }
 

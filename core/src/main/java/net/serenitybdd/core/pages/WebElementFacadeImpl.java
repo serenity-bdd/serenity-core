@@ -828,6 +828,11 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             public Boolean apply(WebDriver driver) {
                 return ((getElement() != null) && (!getElement().isEnabled()));
             }
+
+            @Override
+            public String toString() {
+                return "Element is not enabled: " + getElement();
+            }
         };
     }
 
@@ -855,7 +860,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public String getValue() {
-        waitUntilVisible();
+        // waitUntilVisible();
         return getElement().getAttribute("value");
     }
 
@@ -867,7 +872,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public String getText() {
-        waitUntilVisible();
+//        waitUntilVisible();
         return getElement().getText();
     }
 

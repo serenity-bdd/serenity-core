@@ -167,7 +167,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
         this(outputDirectory);
         if (pages != null) {
             setDriverUsingPagesDriverIfDefined(pages);
-        } else {
+        }
+        else {
             createNewDriver();
         }
     }
@@ -184,10 +185,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void setDriverUsingPagesDriverIfDefined(final Pages pages) {
-        if (pages.getDriver() != null) {
-            setDriver(pages.getDriver());
-        } else {
-            createNewDriver();
+//        if (pages.getDriver() != null) {
+//            setDriver(pages.getDriver());
+//        } else {
+//            createNewDriver();
+//            pages.setDriver(getDriver());
+//        }
+        if (pages.getDriver() == null) {
             pages.setDriver(getDriver());
         }
     }
@@ -632,14 +636,15 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private boolean browserIsOpen() {
-        if (driver == null) {
-            return false;
-        }
-        if (driver instanceof WebDriverFacade) {
-            return (((WebDriverFacade) driver).isInstantiated());
-        } else {
-            return (driver.getCurrentUrl() != null);
-        }
+        return webdriverManager.isDriverInstantiated();
+//        if (driver == null) {
+//            return false;
+//        }
+//        if (driver instanceof WebDriverFacade) {
+//            return (((WebDriverFacade) driver).isInstantiated());
+//        } else {
+//            return (driver.getCurrentUrl() != null);
+//        }
     }
 
     private void takeInitialScreenshot() {
@@ -683,11 +688,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public Photographer getPhotographer() {
         ScreenshotBlurCheck blurCheck = new ScreenshotBlurCheck();
         if (blurCheck.blurLevel().isPresent()) {
-            return new Photographer(driver, outputDirectory, blurCheck.blurLevel().get());
+            return new Photographer(getDriver(), outputDirectory, blurCheck.blurLevel().get());
         } else {
-            return new Photographer(driver, outputDirectory);
+            return new Photographer(getDriver(), outputDirectory);
         }
     }
+
 
     private boolean shouldTakeEndOfStepScreenshotFor(final TestResult result) {
         if (result == FAILURE) {
@@ -719,7 +725,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public WebDriver getDriver() {
-        return driver;
+        return /* (driver != null) ? driver : */webdriverManager.getWebdriver();
     }
 
     @SuppressWarnings("ThrowableResultOfMethodCallIgnored")

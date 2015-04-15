@@ -12,11 +12,23 @@ public class StepFailure {
     private final ExecutedStepDescription description;
 
     private final Throwable cause;
+    private final Class<? extends Throwable> exceptionClass;
+    private final String message;
+    private final StackTraceElement[] stackTraceElements;
 
 
     public StepFailure(final ExecutedStepDescription description, final Throwable cause) {
         this.description = description;
         this.cause = cause;
+        if (cause != null) {
+            this.exceptionClass = cause.getClass();
+            this.message = cause.getMessage();
+            this.stackTraceElements = cause.getStackTrace();
+        } else {
+            this.exceptionClass = null;
+            this.message = null;
+            this.stackTraceElements = null;
+        }
     }
 
     /**
@@ -35,6 +47,14 @@ public class StepFailure {
     }
 
     public String getMessage() {
-        return getException().getMessage();
+        return message;
+    }
+
+    public Class<? extends Throwable> getExceptionClass() {
+        return exceptionClass;
+    }
+
+    public StackTraceElement[] getStackTraceElements() {
+        return stackTraceElements;
     }
 }

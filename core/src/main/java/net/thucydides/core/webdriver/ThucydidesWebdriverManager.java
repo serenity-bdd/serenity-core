@@ -148,7 +148,7 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
         return inThisTestThread().useDriver(driver);
     }
 
-    private static WebdriverInstances inThisTestThread() {
+    public static WebdriverInstances inThisTestThread() {
         if (webdriverInstancesThreadLocal.get() == null) {
             webdriverInstancesThreadLocal.set(new WebdriverInstances());
         }

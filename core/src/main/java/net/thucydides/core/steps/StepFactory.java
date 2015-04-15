@@ -131,9 +131,11 @@ public class StepFactory {
         }
     }
 
-    private List<DependencyInjector> getDefaultDependencyInjectors() {
-        return ImmutableList.of((DependencyInjector)new PageObjectDependencyInjector(pages),
-                                (DependencyInjector) new EnvironmentDependencyInjector());
+    private ImmutableList<? extends DependencyInjector> getDefaultDependencyInjectors() {
+        return (pages != null) ?
+                ImmutableList.of(new PageObjectDependencyInjector(pages),
+                                 new EnvironmentDependencyInjector()) :
+                ImmutableList.of(new EnvironmentDependencyInjector());
     }
 
     private <T> T instantiateUniqueStepLibraryFor(Class<T> scenarioStepsClass) {

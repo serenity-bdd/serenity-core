@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import net.serenitybdd.core.IgnoredStepException;
@@ -15,6 +16,7 @@ import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.model.stacktrace.StackTraceSanitizer;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.internal.AssumptionViolatedException;
+import org.openqa.selenium.WebDriverException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -222,7 +224,8 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
         try {
             result = invokeMethod(obj, args, proxy);
         } catch (Throwable generalException) {
-            error = generalException;
+            error = SerenityWebDriverException.detachedCopyOf(generalException);
+//            error = generalException;
             Throwable assertionError = forError(error).convertToAssertion();
             notifyStepStarted(method, args);
             notifyOfStepFailure(method, args, assertionError);
@@ -276,7 +279,7 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
         } catch (AssumptionViolatedException assumptionFailed) {
             result = appropriateReturnObject(obj, method);
         } catch (Throwable testErrorException) {
-            error = testErrorException;
+            error = SerenityWebDriverException.detachedCopyOf(testErrorException);
             logStepFailure(method, args, forError(error).convertToAssertion());
             result = appropriateReturnObject(obj, method);
         }

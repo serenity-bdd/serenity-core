@@ -110,7 +110,7 @@ public enum SupportedWebDriver {
 
     }
 
-    public static SupportedWebDriver forClass(Class<? extends WebDriver> driverClass) {
+    public static SupportedWebDriver forClass(Class<?> driverClass) {
        for(SupportedWebDriver supportedWebDriver : values()) {
            if (driverClass.equals(supportedWebDriver.getWebdriverClass())) {
                return supportedWebDriver;

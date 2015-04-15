@@ -90,7 +90,7 @@ public class StepEventBus {
         return this;
     }
 
-    private BaseStepListener getBaseStepListener() {
+    public BaseStepListener getBaseStepListener() {
         Preconditions.checkNotNull(baseStepListener, "No BaseStepListener has been registered");
         return baseStepListener;
     }

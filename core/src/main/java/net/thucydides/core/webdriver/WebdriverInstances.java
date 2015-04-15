@@ -27,8 +27,16 @@ public class WebdriverInstances {
     }
 
     public String getCurrentDriverName() {
-        return (getCurrentDriver() != null) ?
-                ((WebDriverFacade) getCurrentDriver()).getDriverName() : "";
+        if (getCurrentDriver() == null) {
+            return "";
+        }
+        if (getCurrentDriver() instanceof WebDriverFacade) {
+            return ((WebDriverFacade) getCurrentDriver()).getDriverName();
+        }
+        if (getCurrentDriver().getClass().getName().contains("Mockito")) {
+            return SupportedWebDriver.forClass(getCurrentDriver().getClass().getSuperclass()).name().toLowerCase();
+        }
+        return "";
     }
 
     public WebDriver closeCurrentDriver() {
@@ -82,7 +90,11 @@ public class WebdriverInstances {
     }
 
     public boolean isDriverInstantiated() {
-        return ((WebDriverFacade) getCurrentDriver()).isInstantiated();
+        if (getCurrentDriver() instanceof WebDriverFacade) {
+            return ((WebDriverFacade) getCurrentDriver()).isInstantiated();
+        } else {
+            return (getCurrentDriver() != null);
+        }
     }
 
     public final class InstanceRegistration {

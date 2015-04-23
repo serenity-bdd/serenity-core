@@ -49,7 +49,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     private final WebDriver driver;
     private final long implicitTimeoutInMilliseconds;
     private final long waitForTimeoutInMilliseconds;
-    private static final int WAIT_FOR_ELEMENT_PAUSE_LENGTH = 250;
+    private static final int WAIT_FOR_ELEMENT_PAUSE_LENGTH = 100;
     private final Sleeper sleeper;
     private final Clock webdriverClock;
     private JavascriptExecutorFacade javascriptExecutorFacade;
@@ -700,6 +700,18 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         throw new AssertionError(getErrorMessage(errorMessage));
     }
 
+    private void checkPresenceOfWebElement() {
+        try {
+            waitBriefly().until(elementIsDisplayed());
+        } catch (Throwable error) {
+            if (webElement != null) {
+                throwShouldBeVisibleErrorWithCauseIfPresent(error, error.getMessage());
+            } else {
+                throwNoSuchElementExceptionWithCauseIfPresent(error, error.getMessage());
+            }
+        }
+    }
+
     @Override
     public WebElementFacade waitUntilVisible() {
         if (driverIsDisabled()) {
@@ -844,6 +856,13 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                 .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
     }
 
+    private Wait<WebDriver> waitBriefly() {
+        return new FluentWait<>(driver, webdriverClock, sleeper)
+                .withTimeout(500, TimeUnit.MILLISECONDS)
+                .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
+                .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
+    }
+
     @Override
     public WebElementFacade waitUntilNotVisible() {
         if (driverIsDisabled()) {
@@ -860,7 +879,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public String getValue() {
-        // waitUntilVisible();
+//        waitUntilVisible();
+        checkPresenceOfWebElement();
         return getElement().getAttribute("value");
     }
 
@@ -873,6 +893,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public String getText() {
 //        waitUntilVisible();
+        checkPresenceOfWebElement();
         return getElement().getText();
     }
 

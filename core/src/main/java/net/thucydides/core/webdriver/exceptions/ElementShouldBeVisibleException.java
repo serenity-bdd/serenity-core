@@ -8,6 +8,10 @@ import org.openqa.selenium.TimeoutException;
  */
 
 public class ElementShouldBeVisibleException extends ElementNotVisibleException {
+    public ElementShouldBeVisibleException(String message) {
+        super(message);
+    }
+
     public ElementShouldBeVisibleException(String message, Throwable cause) {
         super(message, cause);
     }

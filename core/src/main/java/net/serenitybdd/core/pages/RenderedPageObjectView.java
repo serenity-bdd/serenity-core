@@ -2,6 +2,7 @@ package net.serenitybdd.core.pages;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.thucydides.core.scheduling.NormalFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
@@ -119,7 +120,7 @@ public class RenderedPageObjectView {
                         return true;
                     }
                 } catch (NoSuchElementException noSuchElement) {
-                    LOGGER.trace("No such element " + noSuchElement);
+                    // Ignore exception
                 }
                 return false;
             }
@@ -132,7 +133,7 @@ public class RenderedPageObjectView {
                 try {
                     return (webElements.size() > 0) && allElementsVisibleIn(webElements);
                 } catch (NoSuchElementException noSuchElement) {
-                    LOGGER.trace("No such element " + noSuchElement);
+                    // Ignore exception
                 }
                 return false;
             }
@@ -164,7 +165,6 @@ public class RenderedPageObjectView {
                 isDisplayed = false;
             }
         } catch (NoSuchElementException noSuchElement) {
-            LOGGER.trace("No such element " + noSuchElement);
             isDisplayed = false;
         }
         return isDisplayed;
@@ -175,10 +175,8 @@ public class RenderedPageObjectView {
             waitFor(ExpectedConditions.visibilityOfAllElementsLocatedBy(byElementCriteria));
             return true;
         } catch (NoSuchElementException noSuchElement) {
-            LOGGER.trace("No such element " + noSuchElement);
             return false;
         } catch (StaleElementReferenceException se) {
-            LOGGER.trace("Element no longer attached to the DOM " + se);
             return false;
         } catch (TimeoutException iGuessItsNotThere) {
             return false;
@@ -190,10 +188,8 @@ public class RenderedPageObjectView {
             List<WebElement> matchingElements = driver.findElements(byElementCriteria);
             return (!matchingElements.isEmpty() && matchingElements.get(0).isDisplayed());
         } catch (NoSuchElementException noSuchElement) {
-            LOGGER.trace("No such element " + noSuchElement);
             return false;
         } catch (StaleElementReferenceException se) {
-            LOGGER.trace("Element no longer attached to the DOM " + se);
             return false;
         } catch (TimeoutException iGuessItsNotThere) {
             return false;

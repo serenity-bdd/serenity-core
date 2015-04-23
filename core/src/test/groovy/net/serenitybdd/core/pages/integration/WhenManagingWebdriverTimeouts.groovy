@@ -14,6 +14,7 @@ import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.TimeoutException
 import spock.lang.Specification
+import spock.lang.Timeout
 import spock.lang.Unroll
 
 import java.util.concurrent.TimeUnit
@@ -382,6 +383,19 @@ class WhenManagingWebdriverTimeouts extends Specification {
         then:
             page.city.isCurrentlyVisible()
             page.isElementVisible(By.cssSelector("#city"))
+    }
+
+
+    @Timeout(3)
+    def "Should not hang if CSS selector is incorrect"() {
+        given:
+            environmentVariables.setProperty("webdriver.timeouts.implicitlywait","50")
+            environmentVariables.setProperty("webdriver.wait.for.timeout", "50")
+            page = openTestPageUsing(defaultBrowser)
+        when:
+            page.waitFor("NOT!%**##CSS")
+        then:
+            thrown(TimeoutException)
     }
 
     def "The withTimeoutOf() method can be used to override the global timeouts when retrieving lists"() {

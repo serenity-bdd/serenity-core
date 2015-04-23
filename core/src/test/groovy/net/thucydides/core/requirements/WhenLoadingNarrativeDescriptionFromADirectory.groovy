@@ -25,6 +25,19 @@ class WhenLoadingNarrativeDescriptionFromADirectory extends Specification {
             narrative.get().type == "capability"
     }
 
+    def "Should be able to override the default capability type in the narrative file"() {
+        given: "there is a capability.narrativeText file in a directory"
+            File directoryContainingANarrative = directoryInClasspathAt("sample-story-directories/capabilities_and_features/grow_potatoes")
+        when: "We try to load the narrativeText from the directory"
+            def reader = NarrativeReader.forRootDirectory("sample-story-directories/capabilities_and_features")
+            Optional<Narrative> narrative = reader.loadFrom(directoryContainingANarrative)
+        then: "the narrativeText should be found"
+            narrative.present
+        and: "the narrative type should be derived from the first line in the narrative"
+            narrative.get().type == "theme"
+    }
+
+
     def "Should be able to derive the narrative type from the directory level"() {
         given: "there is a narrative.txt file in a directory"
             File directoryContainingANarrative = directoryInClasspathAt("sample-story-directories/capabilities_and_features/grow_apples/grow_red_apples")

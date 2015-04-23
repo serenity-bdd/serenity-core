@@ -296,7 +296,7 @@ public class WhenFindingTagsForATestOutcome {
     }
 
     @Test
-         public void should_get_requirement_from_story_with_narrative_if_present() {
+    public void should_get_requirement_from_story_with_narrative_if_present() {
         FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider();
         Story userStory = Story.called("plant potatoes");
         when(testOutcome.getPath()).thenReturn("stories\\grow_potatoes\\grow_new_potatoes\\PlantPotatoes.story");

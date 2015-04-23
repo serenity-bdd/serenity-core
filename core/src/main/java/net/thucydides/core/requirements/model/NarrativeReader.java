@@ -65,21 +65,23 @@ public class NarrativeReader {
     }
 
     private Optional<Narrative> narrativeLoadedFrom(File narrativeFile, int requirementsLevel) {
-        String type = directoryLevelInRequirementsHierarchy(narrativeFile, requirementsLevel);
-        return narrativeLoadedFrom(narrativeFile, type);
+        String defaultType = directoryLevelInRequirementsHierarchy(narrativeFile, requirementsLevel);
+        return narrativeLoadedFrom(narrativeFile, defaultType);
     }
 
-    private Optional<Narrative> narrativeLoadedFrom(File narrativeFile, String type) {
+    private Optional<Narrative> narrativeLoadedFrom(File narrativeFile, String defaultType) {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(narrativeFile), "UTF-8"));
             List<String> lines = readPreambleFrom(reader);
 
             String title = null;
+            String type = defaultType;
             String cardNumber = findCardNumberIn(lines);
             List<String> versionNumbers = findVersionNumberIn(lines);
             Optional<String> titleLine = readOptionalTitleFrom(lines);
             if (titleLine.isPresent()) {
-                title = titleLine.get();
+                title = titleFrom(titleLine.get());
+                type = typeFrom(titleLine.get()).or(defaultType);
             }
             String text = readNarrativeFrom(lines);
             reader.close();
@@ -91,6 +93,22 @@ public class NarrativeReader {
             ex.printStackTrace();
         }
         return Optional.absent();
+    }
+
+    private String titleFrom(String titleLine) {
+        return (titleLine.contains(":")) ? titleLine.substring(titleLine.indexOf(":") + 1) : titleLine;
+    }
+
+    Optional<String> TYPE_UNDEFINED = Optional.absent();
+
+    private Optional<String> typeFrom(String titleLine) {
+        if (titleLine.contains(":")) {
+            String featureNameSection = titleLine.substring(0, titleLine.indexOf(":"));
+            String featureName = featureNameSection.split("\\s")[0];
+            return Optional.of(featureName.toLowerCase().trim());
+        } else {
+            return TYPE_UNDEFINED;
+        }
     }
 
     private Optional<Narrative> featureNarrativeLoadedFrom(File narrativeFile)  {
@@ -218,13 +236,35 @@ public class NarrativeReader {
     private String directoryLevelInRequirementsHierarchy(File narrativeFile, int requirementsLevel) {
         String normalizedNarrativePath = normalized(narrativeFile.getAbsolutePath());
         String normalizedRootPath = normalized(rootDirectory);
-        int rootDirectoryStart = normalizedNarrativePath.lastIndexOf(normalizedRootPath);
-        int rootDirectoryEnd = (rootDirectoryStart >= 0) ? rootDirectoryStart + normalizedRootPath.length() : 0;
+        int rootDirectoryStart = findRootDirectoryStart(normalizedNarrativePath, normalizedRootPath);
+        int rootDirectoryEnd = findRootDirectoryEnd(rootDirectoryStart, normalizedNarrativePath, normalizedRootPath);
         String relativeNarrativePath = normalizedNarrativePath.substring(rootDirectoryEnd);
         int directoryCount = fileSystemPathElements(relativeNarrativePath).size() - 1;
         int level = requirementsLevel + directoryCount - 1;
 
         return getRequirementTypeForLevel(level);
+    }
+
+    private int findRootDirectoryEnd(int rootDirectoryStart, String normalizedNarrativePath, String normalizedRootPath) {
+        if (normalizedNarrativePath.contains(normalizedRootPath)) {
+            return (rootDirectoryStart >= 0) ? rootDirectoryStart + normalizedRootPath.length() : 0;
+        } else if (normalizedNarrativePath.contains("/stories/")) {
+            return (rootDirectoryStart >= 0) ? rootDirectoryStart + "/stories/".length() : 0;
+        } else if (normalizedNarrativePath.contains("/features/")) {
+            return (rootDirectoryStart >= 0) ? rootDirectoryStart + "/features/".length() : 0;
+        }
+        return 0;
+    }
+
+    private int findRootDirectoryStart(String normalizedNarrativePath, String normalizedRootPath) {
+        if (normalizedNarrativePath.contains(normalizedRootPath)) {
+            return normalizedNarrativePath.lastIndexOf(normalizedRootPath);
+        } else if (normalizedNarrativePath.contains("/stories/")) {
+            return normalizedNarrativePath.lastIndexOf("/stories/");
+        } else if (normalizedNarrativePath.contains("/features/")) {
+            return normalizedNarrativePath.lastIndexOf("/features/");
+        }
+        return 0;
     }
 
     private String normalized(String path) {

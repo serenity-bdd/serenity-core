@@ -637,14 +637,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private boolean browserIsOpen() {
         return webdriverManager.isDriverInstantiated();
-//        if (driver == null) {
-//            return false;
-//        }
-//        if (driver instanceof WebDriverFacade) {
-//            return (((WebDriverFacade) driver).isInstantiated());
-//        } else {
-//            return (driver.getCurrentUrl() != null);
-//        }
     }
 
     private void takeInitialScreenshot() {

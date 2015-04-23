@@ -130,6 +130,8 @@ public class TestOutcomes {
             addTagTypesFrom(outcome, tagTypes);
         }
         tagTypes.remove("version");
+        tagTypes.remove("feature");
+        tagTypes.remove("story");
         tagTypes.removeAll(getRequirementTagTypes());
         return sort(ImmutableList.copyOf(tagTypes), on(String.class));
     }

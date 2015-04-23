@@ -26,11 +26,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -72,7 +68,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables, String root) {
-        this(root,0, environmentVariables);
+        this(root, 0, environmentVariables);
     }
 
     public FileSystemRequirementsTagProvider() {
@@ -338,7 +334,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                     mostSpecificRequirement = matchingRequirement;
                 }
             }
-
         }
         return mostSpecificRequirement;
     }
@@ -495,7 +490,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         String storyName = (optionalNarrative.isPresent()) ? optionalNarrative.get().getTitle().or(defaultStoryName) : defaultStoryName;
 
         Requirement requirement = (optionalNarrative.isPresent()) ?
-                leafRequirementWithNarrative(storyFile, humanReadableVersionOf(storyName), optionalNarrative.get()).withType(type.toString())
+                leafRequirementWithNarrative(humanReadableVersionOf(storyName), optionalNarrative.get()).withType(type.toString())
                 : storyNamed(storyName).withType(type.toString());
 
         return requirement.definedInFile(storyFile);
@@ -515,7 +510,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private String readLocaleFromFeatureFile(File storyFile) {
         try {
             List<String> featureFileLines = FileUtils.readLines(storyFile);
-            for(String line : featureFileLines) {
+            for (String line : featureFileLines) {
                 if (line.startsWith("#") && line.contains("language:")) {
                     return line.substring(line.indexOf("language:") + 10).trim();
                 }
@@ -531,6 +526,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private Requirement requirementFromDirectoryName(File requirementDirectory) {
+        System.out.println("Reading requirement from directory name " + requirementDirectory);
         String shortName = humanReadableVersionOf(requirementDirectory.getName());
         List<Requirement> children = readChildrenFrom(requirementDirectory);
         return Requirement.named(shortName).withType(getDefaultType(level)).withNarrative(shortName).withChildren(children);
@@ -541,7 +537,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return Requirement.named(shortName).withType(STORY_EXTENSION).withNarrative(shortName);
     }
 
-    private Requirement leafRequirementWithNarrative(File requirementDirectory, String shortName, Narrative requirementNarrative) {
+    private Requirement leafRequirementWithNarrative(String shortName, Narrative requirementNarrative) {
         String displayName = getTitleFromNarrativeOrDirectoryName(requirementNarrative, shortName);
         String cardNumber = requirementNarrative.getCardNumber().orNull();
         String type = requirementNarrative.getType();
@@ -570,22 +566,41 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private List<Requirement> readChildrenFrom(File requirementDirectory) {
-        if (hasSubdirectories(requirementDirectory)) {
-            String childDirectory = rootDirectoryPath + "/" + requirementDirectory.getName();
+        String childDirectory = rootDirectoryPath + "/" + requirementDirectory.getName();
+        if (childrenExistFor(childDirectory)) {
             RequirementsTagProvider childReader = new FileSystemRequirementsTagProvider(childDirectory, level + 1, environmentVariables);
             return childReader.getRequirements();
         } else {
-            return Lists.newArrayList();
+            return NO_REQUIREMENTS;
         }
     }
 
-    private boolean hasSubdirectories(File requirementDirectory) {
-        for(File subdirectory : requirementDirectory.listFiles()) {
+    private boolean childrenExistFor(String path) {
+        if (hasSubdirectories(path)) {
+            return true;
+        } else {
+            return classpathResourceExistsFor(path);
+        }
+    }
+
+    private boolean classpathResourceExistsFor(String path) {
+        return getClass().getResource(resourcePathFor(path)) != null;
+    }
+
+    private String resourcePathFor(String path) {
+        return (path.startsWith("/")) ? path : "/" + path;
+    }
+
+    private boolean hasSubdirectories(String path) {
+        File pathDirectory = new File(path);
+        if (!pathDirectory.exists()) {
+            return false;
+        }
+        for(File subdirectory : pathDirectory.listFiles()) {
             if (subdirectory.isDirectory()) {
                 return true;
             }
         }
-
         return false;
     }
 

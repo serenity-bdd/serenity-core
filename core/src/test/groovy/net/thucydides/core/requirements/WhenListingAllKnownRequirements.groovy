@@ -12,7 +12,7 @@ class WhenListingAllKnownRequirements extends Specification {
     def "Should be able to list all the available capabilities from a package structure"() {
         given: "we have stored requirements in a package structure with the JUnit tests"
             EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
-            environmentVariables.setProperty("thucydides.test.root","net.thucydides.core.requirements.stories")
+            environmentVariables.setProperty("serenity.test.root","net.thucydides.core.requirements.stories")
         and: "We are using the default requirements provider"
             RequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider(defaultRootDirectoryPathFrom(environmentVariables))
         when: "We obtain the list of requirements"

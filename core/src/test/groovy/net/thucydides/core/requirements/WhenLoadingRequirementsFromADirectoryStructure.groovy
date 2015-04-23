@@ -2,6 +2,7 @@ package net.thucydides.core.requirements
 
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.util.SystemEnvironmentVariables
 import spock.lang.Specification
 
 class WhenLoadingRequirementsFromADirectoryStructure extends Specification {
@@ -12,8 +13,10 @@ class WhenLoadingRequirementsFromADirectoryStructure extends Specification {
         when: "We load the available requirements"
         def capabilities = capabilityProvider.getRequirements()
         def capabilityNames = capabilities.collect { it.name }
+        def capabilityTypes = capabilities.collect { it.type }
         then: "the requirements should be loaded from the first-level sub-directories"
         capabilityNames == ["Grow apples", "Grow potatoes", "Grow zuchinnis"]
+        capabilityTypes == ["capability","theme","capability"]
     }
 
     def "Should be able to load release versions with the capabilities from the default directory structure"() {
@@ -76,12 +79,26 @@ class WhenLoadingRequirementsFromADirectoryStructure extends Specification {
         RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/feature_files");
         when: "We load requirements with nested capability directories"
         def capabilities = capabilityProvider.getRequirements()
-        then: "the nested requirements should be recorded as features"
         def growApples = capabilities.get(0)
+        then: "the nested requirements should be recorded as features"
+        growApples.type == "capability"
         and:
         growApples.childrenCount
         and:
         growApples.children[0].type == "feature"
+    }
+
+    def "Should be able to customize the requirements levels"() {
+        given:
+            def environmentVariables = new MockEnvironmentVariables()
+            environmentVariables.setProperty("serenity.requirement.types", "feature, story")
+        and:
+            RequirementsTagProvider capabilityProvider = new FileSystemRequirementsTagProvider("sample-story-directories/narrative_files",0,environmentVariables);
+        when: "We load requirements with nested capability directories"
+            def capabilities = capabilityProvider.getRequirements()
+            def types = capabilities.collect { it -> it.type }
+        then: "the nested requirements should be recorded as features"
+            types == ["feature","feature","feature"]
     }
 
 

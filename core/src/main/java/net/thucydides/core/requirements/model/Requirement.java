@@ -5,11 +5,14 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.thucydides.core.model.TestTag;
+import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
+
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * A capability represents a high-level business goal that will appear in the result summary report.
@@ -166,6 +169,14 @@ public class Requirement implements Comparable {
         return new Requirement(this.name, this.displayName, this.cardNumber, this.parent, type, this.narrative, children, examples, releaseVersions, customFields, featureFileName);
     }
 
+    public Requirement withDisplayName(String displayName) {
+        return new Requirement(this.name, displayName, this.cardNumber, this.parent, type, this.narrative, children, examples, releaseVersions, customFields, featureFileName);
+    }
+
+    public Requirement withFeatureFileyName(String featureFileName) {
+        return new Requirement(this.name, displayName, this.cardNumber, this.parent, type, this.narrative, children, examples, releaseVersions, customFields, featureFileName);
+    }
+
     public Requirement withExample(Example example) {
         List<Example> updatedExamples = Lists.newArrayList(examples);
         updatedExamples.add(example);
@@ -179,6 +190,12 @@ public class Requirement implements Comparable {
     public Requirement withReleaseVersions(List<String> releaseVersions) {
         return new Requirement(this.name, this.displayName, this.cardNumber, this.parent, this.type, this.narrative, children, examples, releaseVersions, customFields, featureFileName);
     }
+
+    public Requirement withCustomFields(List<CustomFieldValue> customFields) {
+        return new Requirement(this.name, this.displayName, this.cardNumber, this.parent, this.type, this.narrative, children, examples, releaseVersions, customFields, featureFileName);
+    }
+
+
 
     public boolean hasChildren() {
         return (children != null) && (!children.isEmpty());
@@ -214,7 +231,7 @@ public class Requirement implements Comparable {
     public boolean matches(Requirement that) {
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (cardNumber != null ? !cardNumber.equals(that.cardNumber) : that.cardNumber != null) return false;
+        if (StringUtils.isNotEmpty(cardNumber) ? !cardNumber.equals(that.cardNumber) : that.cardNumber != null) return false;
 
         return true;
     }
@@ -285,6 +302,44 @@ public class Requirement implements Comparable {
     public boolean matchesTag(TestTag testTag) {
         TestTag requirementTag = asTag();
         return requirementTag.isAsOrMoreSpecificThan(testTag);
+    }
+
+    public Requirement merge(Requirement newRequirement) {
+
+        String mergedCardNumber = isEmpty(cardNumber) ? newRequirement.cardNumber : cardNumber;
+        String mergedDisplayName= isEmpty(displayName) ? newRequirement.displayName : displayName;
+        String mergedNarrativeText = isEmpty(narrative.getText()) ? newRequirement.narrative.getText() : narrative.getText();
+        String mergedFeatureFileName = isEmpty(featureFileName) ? newRequirement.featureFileName : featureFileName;
+        List<String> mergedReleasVersions = ListUtils.union(releaseVersions, newRequirement.releaseVersions) ;
+        List<Example> mergedExamples = ListUtils.union(examples, newRequirement.examples);
+        List<CustomFieldValue> mergedCustomFields = ListUtils.union(customFields, newRequirement.customFields);
+
+        List<Requirement> mergedChildren = mergeRequirementLists(children, newRequirement.children);
+
+        return Requirement.named(name)
+                .withOptionalParent(parent)
+                .withOptionalCardNumber(mergedCardNumber)
+                .withType(type)
+                .withNarrative(mergedNarrativeText)
+                .withDisplayName(mergedDisplayName)
+                .withReleaseVersions(mergedReleasVersions)
+                .withExamples(mergedExamples)
+                .withCustomFields(mergedCustomFields)
+                .withFeatureFileyName(mergedFeatureFileName)
+                .withChildren(mergedChildren);
+    }
+
+    private List<Requirement> mergeRequirementLists(List<Requirement> existingChilden, List<Requirement> newChildren) {
+        List<Requirement> mergedChildren = Lists.newArrayList(existingChilden);
+        for(Requirement newChild : newChildren) {
+            if (mergedChildren.contains(newChild)) {
+                Requirement existingChild = mergedChildren.remove(mergedChildren.indexOf(newChild));
+                mergedChildren.add(existingChild.merge(newChild));
+            } else {
+                mergedChildren.add(newChild);
+            }
+        }
+        return ImmutableList.copyOf(mergedChildren);
     }
 
     public class CustomFieldSetter {

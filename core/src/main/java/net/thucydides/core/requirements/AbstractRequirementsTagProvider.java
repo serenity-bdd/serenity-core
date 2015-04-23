@@ -47,8 +47,10 @@ public class AbstractRequirementsTagProvider {
 
         if (relativeLevel > types.size() - 1) {
             return types.get(types.size() - 1);
-        } else {
+        } else if (relativeLevel >= 0) {
             return types.get(relativeLevel);
+        } else {
+            return types.get(0);
         }
     }
 

@@ -11,11 +11,7 @@ import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.core.webdriver.WebdriverInstanceFactory;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
 import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule;
-import net.thucydides.samples.MultipleTestScenario;
-import net.thucydides.samples.MultipleTestScenarioWithUniqueSession;
-import net.thucydides.samples.SamplePassingScenario;
-import net.thucydides.samples.SingleTestScenario;
-import net.thucydides.samples.SingleWikipediaTestScenario;
+import net.thucydides.samples.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -121,9 +117,10 @@ public class WhenManagingAWebDriverInstance extends AbstractTestStepRunnerTest {
     @Test
     public void the_driver_should_be_quit_after_the_tests() throws InitializationError {
 
-        SerenityRunner runner = new SerenityRunner(SingleTestScenario.class, webDriverFactory);
+        SerenityRunner runner = new SerenityRunner(SamplePassingScenarioUsingFirefox.class, webDriverFactory);
 
         runner.run(new RunNotifier());
+
         verify(firefoxDriver).quit();
     }
 

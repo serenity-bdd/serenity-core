@@ -526,7 +526,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private Requirement requirementFromDirectoryName(File requirementDirectory) {
-        System.out.println("Reading requirement from directory name " + requirementDirectory);
         String shortName = humanReadableVersionOf(requirementDirectory.getName());
         List<Requirement> children = readChildrenFrom(requirementDirectory);
         return Requirement.named(shortName).withType(getDefaultType(level)).withNarrative(shortName).withChildren(children);

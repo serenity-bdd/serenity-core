@@ -85,7 +85,7 @@ public class WhenTakingLargeScreenshots {
     @Test
     public void should_only_store_one_file_for_identical_screenshots() throws Exception {
 
-        driver = testSite.open("phantomjs");
+        driver = testSite.open("firefox");
 
         ScreenshotProcessor screenshotProcessor = new SingleThreadScreenshotProcessor(environmentVariables);
         Photographer photographer = new Photographer(driver, screenshotDirectory,screenshotProcessor);

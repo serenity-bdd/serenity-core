@@ -89,10 +89,14 @@ public class BuildInfoProvider {
             String simplifiedKey = key.replace("sysinfo.", "");
             String expression = environmentVariables.getProperty(key);
 
-            String value = evaluateGroovyExpression(key, expression);
+            String value = (isGroovyExpression(expression)) ? evaluateGroovyExpression(key, expression) : expression;
 
             buildProperties.put(humanizedFormOf(simplifiedKey), value);
         }
+    }
+
+    private boolean isGroovyExpression(String expression) {
+        return expression.startsWith("${") && expression.endsWith("}");
     }
 
     private String humanizedFormOf(String simplifiedKey) {
@@ -105,12 +109,13 @@ public class BuildInfoProvider {
         GroovyShell shell = new GroovyShell(binding);
         Object result = null;
         try {
-            if (StringUtils.isNotEmpty(expression)) {
-                result = shell.evaluate(expression);
+            String groovy = expression.substring(2, expression.length() - 1);
+            if (StringUtils.isNotEmpty(groovy)) {
+                result = shell.evaluate(groovy);
             }
         } catch (GroovyRuntimeException e) {
             LOGGER.warn("Failed to evaluate build info expression '%s' for key %s",expression, key);
         }
-        return (result != null) ? result.toString() : "";
+        return (result != null) ? result.toString() : expression;
     }
 }

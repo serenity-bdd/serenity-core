@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import net.thucydides.core.pages.jquery.JQueryEnabledPage;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.openqa.selenium.JavascriptExecutor;
@@ -63,14 +64,21 @@ public class JavascriptExecutorFacade {
     }
 
     public Object executeScript(final String script, final Object... params) {
-        if (javascriptIsSupportedIn(driver)) {
+        if (javascriptIsSupportedIn(driver) && shouldExecuteJavascript()) {
             JavascriptExecutor js = getJavascriptEnabledDriver();
             return js.executeScript(script, params);
         } else {
             return null;
         }
     }
-    
+
+    private boolean shouldExecuteJavascript() {
+        return (!StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed()
+                && !StepEventBus.getEventBus().isDryRun()
+                && !StepEventBus.getEventBus().currentTestIsSuspended());
+    }
+
+
     private String executeAndGetJsonAsString(final String script, final Object... params){
     	JQueryEnabledPage jQueryEnabledPage = JQueryEnabledPage.withDriver(getRealDriver());
         jQueryEnabledPage.injectJavaScriptUtils();

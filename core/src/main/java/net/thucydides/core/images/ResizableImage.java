@@ -48,12 +48,12 @@ public class ResizableImage {
 
         int targetHeight = Math.min(height, MAX_SUPPORTED_HEIGHT);
 
-        BufferedImage image = ImageIO.read(screenshotFile);
-        int width = new SimpleImageInfo(screenshotFile).getWidth();
         try {
+            BufferedImage image = ImageIO.read(screenshotFile);
+            int width = new SimpleImageInfo(screenshotFile).getWidth();
             return resizeImage(width, targetHeight, image);
-        } catch (IllegalArgumentException e) {
-            getLogger().warn("Could not resize screenshot: " + screenshotFile, e);
+        } catch (Throwable e) {
+            getLogger().warn("Could not resize screenshot, so leaving original version: " + screenshotFile, e);
             return this;
         }
     }

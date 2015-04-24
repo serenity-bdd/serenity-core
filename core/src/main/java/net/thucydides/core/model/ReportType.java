@@ -15,9 +15,12 @@ public enum ReportType {
 
     /** HTML reports. */
     HTML("html"),
-    
+
     /** JSON reports. */
-    JSON("json");
+    JSON("json"),
+
+    /** JUnit XML reports. */
+    JUNIT("xml");
 
     private String suffix;
 

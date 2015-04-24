@@ -3,6 +3,7 @@ package net.thucydides.core.reports;
 import com.google.common.util.concurrent.*;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.reports.junit.JUnitXMLOutcomeReporter;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import org.slf4j.Logger;
@@ -33,6 +34,8 @@ public class ReportService {
      */
     private List<AcceptanceTestReporter> subscribedReporters;
 
+    private JUnitXMLOutcomeReporter jUnitXMLOutcomeReporter;
+
     private final static Logger LOGGER = LoggerFactory.getLogger(ReportService.class);
 
     @Inject
@@ -51,6 +54,8 @@ public class ReportService {
     public ReportService(final File outputDirectory, final Collection<AcceptanceTestReporter> subscribedReporters) {
         this.outputDirectory = outputDirectory;
         getSubscribedReporters().addAll(subscribedReporters);
+        jUnitXMLOutcomeReporter = new JUnitXMLOutcomeReporter(outputDirectory);
+
     }
 
     public void setOutputDirectory(File outputDirectory) {
@@ -114,7 +119,7 @@ public class ReportService {
                 public void run() {
                     generateQueuedReport(future, testOutcomes, reporter);
                 }
-            }, MoreExecutors.sameThreadExecutor());
+            }, MoreExecutors.newDirectExecutorService());//.sameThreadExecutor());
 
             Futures.addCallback(future, new FutureCallback<TestOutcome>() {
                 @Override
@@ -129,9 +134,22 @@ public class ReportService {
                 }
             });
         }
+        generateJUnitTestResults(testOutcomes);
         waitForReportGenerationToFinish(remainingReportCount);
         LOGGER.info("Reports generated in: " + (System.currentTimeMillis() - t0));
 
+    }
+
+    /**
+     * JUnit test results are a special case, since they create a output file per test class (or story, or feature) rather than for each test.
+     * @param outcomes
+     */
+    private void generateJUnitTestResults(TestOutcomes outcomes) {
+        try {
+            jUnitXMLOutcomeReporter.generateReportsFor(outcomes);
+        } catch (IOException e) {
+            throw new RuntimeException("Report generation failure", e);
+        }
     }
 
     private void generateQueuedReport(ListenableFuture<TestOutcome> future, TestOutcomes testOutcomes, AcceptanceTestReporter reporter) {

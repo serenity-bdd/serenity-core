@@ -31,9 +31,10 @@ class WhenGeneratingReportsUsingTheReportService extends Specification {
             def testOutcomes = [TestOutcome.forTestInStory("some test", Story.called("some story"))]
         when:
             SerenityReports.getReportService(configuration).generateReportsFor(testOutcomes)
+            Thread.sleep(1000)
         then:
             outputDir.list().findAll { it.endsWith(".html")}.size() == 1
-            outputDir.list().findAll { it.endsWith(".xml")}.size() == 1
+            outputDir.list().findAll { it.endsWith(".xml")}.size() == 2
             outputDir.list().findAll { it.endsWith(".json")}.size() == 1
     }
 }

@@ -338,7 +338,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
     private class XMLFileFilter implements FilenameFilter {
         public boolean accept(File file, String filename) {
-            return filename.endsWith(".xml");
+            return filename.endsWith(".xml") && !filename.startsWith("SERENITY-");
         }
     }
 

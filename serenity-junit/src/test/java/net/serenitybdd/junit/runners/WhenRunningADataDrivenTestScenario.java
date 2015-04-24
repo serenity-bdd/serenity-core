@@ -763,7 +763,7 @@ public class WhenRunningADataDrivenTestScenario {
 
     private class XMLFileFilter implements FilenameFilter {
         public boolean accept(File directory, String filename) {
-            return filename.endsWith(".xml");
+            return filename.endsWith(".xml") && (!filename.startsWith("SERENITY-"));
         }
     }
 

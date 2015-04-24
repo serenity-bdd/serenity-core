@@ -424,7 +424,7 @@ class WhenRunningTestScenarios extends Specification {
         def runner = new ATestableThucydidesRunnerSample(SamplePassingScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
-        def xmlReports = temporaryDirectory.list().findAll {it.endsWith(".xml")}
+        def xmlReports = temporaryDirectory.list().findAll {it.endsWith(".xml") && !it.startsWith("SERENITY-")}
         then:
         xmlReports.size() == 3
     }
@@ -433,7 +433,7 @@ class WhenRunningTestScenarios extends Specification {
         when:
         new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
         new ATestableThucydidesRunnerSample(SampleFailingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
-        def xmlReports = temporaryDirectory.list().findAll {it.endsWith(".xml")}
+        def xmlReports = temporaryDirectory.list().findAll {it.endsWith(".xml") && !it.startsWith("SERENITY-")}
         then:
         xmlReports.size() == 6
     }

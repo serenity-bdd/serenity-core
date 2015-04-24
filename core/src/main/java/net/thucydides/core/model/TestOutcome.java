@@ -1013,6 +1013,15 @@ public class TestOutcome {
         return testFailureCause;
     }
 
+    public FailureCause getNestedTestFailureCause() {
+        for(TestStep step : getFlattenedTestSteps()) {
+            if (step.getException() != null) {
+                return step.getException();
+            }
+        }
+        return null;
+    }
+
     private boolean isFailureClass(String testFailureClassname) {
         return new FailureAnalysis().isFailure(testFailureClassname);
     }

@@ -17,17 +17,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matcher;
 import org.joda.time.DateTime;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static ch.lambdaj.Lambda.*;
 import static net.thucydides.core.model.TestResult.*;
 import static net.thucydides.core.reports.matchers.TestOutcomeMatchers.*;
 import static org.hamcrest.Matchers.is;
-
-//import net.thucydides.core.statistics.HibernateTestStatisticsProvider;
 
 /**
  * A set of test outcomes, which lets you perform query operations on the test outcomes.
@@ -85,6 +80,9 @@ public class TestOutcomes {
         return new TestOutcomes(this.outcomes, this.estimatedAverageStepCount, label);
     }
 
+    public EnvironmentVariables getEnvironmentVariables() {
+        return environmentVariables;
+    }
     public TestOutcomes havingResult(String result) {
         return havingResult(TestResult.valueOf(result.toUpperCase()));
     }

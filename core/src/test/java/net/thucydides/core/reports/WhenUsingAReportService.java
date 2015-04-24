@@ -4,12 +4,15 @@ import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
 import org.hamcrest.Matcher;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +21,14 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class WhenUsingAReportService {
 
-    @Mock
+
+    @Rule
+    public TemporaryFolder folder= new TemporaryFolder();
+
     File outputDirectory;
 
     @Mock
@@ -31,8 +38,10 @@ public class WhenUsingAReportService {
     TestOutcome testOutcome;
 
     @Before
-    public void initMocks() {
+    public void initMocks() throws IOException {
         MockitoAnnotations.initMocks(this);
+        when(testOutcome.getTestCaseName()).thenReturn("someTestCase");
+        outputDirectory = folder.newFolder();
     }
 
     @Test
@@ -49,12 +58,15 @@ public class WhenUsingAReportService {
         verify(reporter).generateReportFor(eq(testOutcome), Matchers.any(TestOutcomes.class));
     }
 
+    public static final class ATestCase {}
+
     @Test
     public void a_report_service_should_generate_reports_for_each_test_outcome() throws Exception {
 
         List<TestOutcome> testOutcomeResults = new ArrayList<>();
         for(int i = 0; i < 1000; i++) {
-            TestOutcome outcome = TestOutcome.forTestInStory("test" + i, Story.withId("s1", "Story 1"));
+            TestOutcome outcome = TestOutcome.forTest("test" + i, ATestCase.class);
+            //TestOutcome outcome = TestOutcome.forTestInStory("test" + i, Story.withId("s1", "Story 1"));
             testOutcomeResults.add(outcome);
         }
 

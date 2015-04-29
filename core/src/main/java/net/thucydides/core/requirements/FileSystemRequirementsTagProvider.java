@@ -18,10 +18,7 @@ import net.thucydides.core.util.Inflector;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -526,6 +523,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private Requirement requirementFromDirectoryName(File requirementDirectory) {
+        System.out.println("Reading requirement from directory name " + requirementDirectory);
         String shortName = humanReadableVersionOf(requirementDirectory.getName());
         List<Requirement> children = readChildrenFrom(requirementDirectory);
         return Requirement.named(shortName).withType(getDefaultType(level)).withNarrative(shortName).withChildren(children);
@@ -569,6 +567,9 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         if (childrenExistFor(childDirectory)) {
             RequirementsTagProvider childReader = new FileSystemRequirementsTagProvider(childDirectory, level + 1, environmentVariables);
             return childReader.getRequirements();
+        } else if (childrenExistFor(requirementDirectory.getPath())) {
+            RequirementsTagProvider childReader = new FileSystemRequirementsTagProvider(requirementDirectory.getPath(), level + 1, environmentVariables);
+            return childReader.getRequirements();
         } else {
             return NO_REQUIREMENTS;
         }
@@ -577,9 +578,40 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private boolean childrenExistFor(String path) {
         if (hasSubdirectories(path)) {
             return true;
+        } else if (hasFeatureOrStoryFiles(path)) {
+            return true;
         } else {
             return classpathResourceExistsFor(path);
         }
+    }
+
+    private boolean hasFeatureOrStoryFiles(String path) {
+        File requirementDirectory = new File(path);
+        if (requirementDirectory.isDirectory()) {
+            return ((requirementDirectory.list(storyFiles()).length > 0) || (requirementDirectory.list(featureFiles()).length > 0));
+        } else {
+            return false;
+        }
+    }
+
+    private FilenameFilter storyFiles() {
+        return new FilenameFilter() {
+
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.endsWith(".story");
+            }
+        };
+    }
+
+    private FilenameFilter featureFiles() {
+        return new FilenameFilter() {
+
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.endsWith(".feature");
+            }
+        };
     }
 
     private boolean classpathResourceExistsFor(String path) {

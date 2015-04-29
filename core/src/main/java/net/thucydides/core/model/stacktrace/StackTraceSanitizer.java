@@ -35,8 +35,15 @@ public class StackTraceSanitizer {
             "org.codehaus.groovy",
             "org.jbehave",
             "cucumber.runtime",
-            "net.serenitybdd",
-            "net.thucydides");
+            "net.serenitybdd.core",
+            "net.serenitybdd.junit",
+            "net.serenitybdd.plugins",
+            "net.serenitybdd.cucumber",
+            "net.serenitybdd.jbehave",
+            "net.thucydides.core",
+            "net.thucydides.junit",
+            "net.thucydides.plugins",
+            "net.thucydides.jbehave");
 
     public StackTraceSanitizer(EnvironmentVariables environmentVariables, StackTraceElement[] stackTrace) {
         this.environmentVariables = environmentVariables;

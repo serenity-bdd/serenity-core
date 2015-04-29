@@ -1019,7 +1019,7 @@ public class TestOutcome {
                 return step.getException();
             }
         }
-        return null;
+        return getTestFailureCause();
     }
 
     private boolean isFailureClass(String testFailureClassname) {

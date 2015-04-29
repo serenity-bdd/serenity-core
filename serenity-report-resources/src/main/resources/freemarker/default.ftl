@@ -249,6 +249,43 @@
                     </#if>
                 </#if>
             </#macro>
+
+            <#macro stacktrace(cause) >
+                <div><!-- Stack trace -->
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#stacktraceModal">
+                        View stack trace
+                    </button>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="stacktraceModal" tabindex="-1" role="dialog"
+                     aria-labelledby="stacktraceModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                        aria-label="Close"><span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="stacktraceModalLabel">
+                                    ${cause.errorType} :  ${cause.message}
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <#list cause.stackTrace as element>
+                                ${element.className}.${element.methodName}(${element.fileName}
+                                    :${element.lineNumber})
+                                </#list>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </#macro>
+
             <#macro step_details(step, step_number, level)>
                 <#if step.result == "FAILURE">
                     <#assign step_outcome_icon = "fail.png">
@@ -331,6 +368,9 @@
                         <td width="%" colspan="4" class="error-message-cell">
                             <span class="error-message ellipsis"
                                   title='${formatter.htmlAttributeCompatible(errorMessageTitle)}'><pre>${formatter.htmlAttributeCompatible(errorMessageTitle)!''}</pre></span>
+                            <#if step.nestedException?has_content>
+                                <@stacktrace cause=step.nestedException />
+                            </#if>
                         </td>
                     </tr>
                 </#if>
@@ -363,6 +403,7 @@
                             <#if (testOutcome.errorMessage)??>
                                 <span class="error-message"
                                       title="${formatter.htmlAttributeCompatible(testOutcome.errorMessage)}">${testOutcome.errorMessage}</span>
+                                    <@stacktrace cause=testOutcome.nestedTestFailureCause />
                             </#if>
                         </td>
                     </tr>

@@ -225,7 +225,6 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
             result = invokeMethod(obj, args, proxy);
         } catch (Throwable generalException) {
             error = SerenityWebDriverException.detachedCopyOf(generalException);
-//            error = generalException;
             Throwable assertionError = forError(error).convertToAssertion();
             notifyStepStarted(method, args);
             notifyOfStepFailure(method, args, assertionError);

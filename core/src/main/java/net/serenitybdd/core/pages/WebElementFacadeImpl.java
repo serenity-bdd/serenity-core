@@ -702,7 +702,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     private void checkPresenceOfWebElement() {
         try {
-            waitBriefly().until(elementIsDisplayed());
+            waitForCondition().until(elementIsDisplayed());
         } catch (Throwable error) {
             if (webElement != null) {
                 throwShouldBeVisibleErrorWithCauseIfPresent(error, error.getMessage());

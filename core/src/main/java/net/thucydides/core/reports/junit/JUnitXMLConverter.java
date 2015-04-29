@@ -72,8 +72,10 @@ public class JUnitXMLConverter {
     private Element buildTestCaseElement(Document doc, TestOutcome outcome) {
         Element testCaseElement = doc.createElement("testcase");
 
-        testCaseElement.setAttribute("classname", outcome.getTestCaseName());
-        if (outcome.getTestCaseName() != null) {
+        if (outcome.getTestCase() != null) {
+            testCaseElement.setAttribute("classname", outcome.getTestCase().getName());
+        }
+        if (outcome.getTitle() != null) {
             testCaseElement.setAttribute("name", outcome.getTitle());
         }
 

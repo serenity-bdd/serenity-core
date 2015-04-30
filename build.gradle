@@ -176,11 +176,11 @@ subprojects {
         compile 'info.cukes:cucumber-core:1.2.2'
 
         compile 'commons-logging:commons-logging:1.2'
+        compile "junit:junit:${junitVersion}"
 
         testCompile ("ch.qos.logback:logback-classic:1.0.13") {
             exclude group: "org.slf4j", module: 'slf4j-api'
         }
-        testCompile "junit:junit:${junitVersion}"
         testCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"

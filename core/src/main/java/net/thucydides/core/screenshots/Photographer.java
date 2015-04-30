@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 /**
  * The photographer takes and stores screenshots during the test.
@@ -94,7 +95,7 @@ public class Photographer {
                 File screenshotTempFile = null;
                 Object capturedScreenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
                 if (isAFile(capturedScreenshot)) {
-                    screenshotTempFile = (File) capturedScreenshot;
+                    screenshotTempFile = copyScreenshotWorkingCopyFrom((File) capturedScreenshot);
                 } else if (isByteArray(capturedScreenshot)) {
                     screenshotTempFile = saveScreenshotData((byte[]) capturedScreenshot);
                 }
@@ -110,10 +111,16 @@ public class Photographer {
                     return Optional.of(savedScreenshot);
                 }
             } catch (Throwable e) {
-                getLogger().warn("Failed to write screenshot (possibly an out of memory error): " + e.getMessage());
+                getLogger().warn("Failed to write screenshot (possibly an out of memory error): ",e);
             }
         }
         return Optional.absent();
+    }
+
+    private File copyScreenshotWorkingCopyFrom(File capturedScreenshot) throws IOException {
+        Path temporaryScreenshotFile = Files.createTempFile("screenshot", "");
+        Files.copy(capturedScreenshot.toPath(), temporaryScreenshotFile, StandardCopyOption.REPLACE_EXISTING);
+        return temporaryScreenshotFile.toFile();
     }
 
     public String getPageSource() {

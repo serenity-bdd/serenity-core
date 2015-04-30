@@ -1,9 +1,11 @@
 package net.thucydides.core.model
 
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer
+import net.thucydides.core.model.stacktrace.StackTraceSanitizer
 import net.thucydides.core.util.MockEnvironmentVariables
 import sample.steps.FailingStep
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class WhenDeterminingTheRootCauseOfAnError extends Specification {
 
@@ -28,4 +30,28 @@ class WhenDeterminingTheRootCauseOfAnError extends Specification {
         then:
             rootCause.stackTrace.size() == 1
     }
+
+    @Unroll
+    def "Should filter out test framework steps"() {
+        given:
+            def environmentVars = new MockEnvironmentVariables();
+            environmentVars.setProperty("simplified.stack.traces",simplifiedStackStace)
+            def stackTrace = [new StackTraceElement(className, 'someMethod','SomeClass.java', 100)] as StackTraceElement[]
+        when:
+            def filter = new StackTraceSanitizer(environmentVars,stackTrace)
+        then:
+            filter.sanitizedStackTrace.size() == filteredStackSize
+        where:
+            className                                           | simplifiedStackStace | filteredStackSize
+            'net.thucydides.showcase.jbehave.pages.ListingPage' | "true"               | 1
+            'net.thucydides.core.something.SomeClass'           | "true"               | 0
+            'net.serenitybdd.core.pages.WebElementFacadeImpl'   | "true"               | 0
+            'net.sf.cglib.proxy.MethodProxy'                    | "true"               | 0
+            'sun.reflect.NativeMethodAccessorImpl'              | "true"               | 0
+            'net.thucydides.core.something.SomeClass'           | "false"              | 1
+            'net.serenitybdd.core.pages.WebElementFacadeImpl'   | "false"              | 1
+            'net.sf.cglib.proxy.MethodProxy'                    | "false"              | 1
+            'sun.reflect.NativeMethodAccessorImpl'              | "false"              | 1
+    }
+
 }

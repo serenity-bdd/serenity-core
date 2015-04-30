@@ -10,6 +10,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
+
+import static com.jayway.awaitility.Awaitility.await;
 
 public class ResizableImage {
 
@@ -49,6 +54,7 @@ public class ResizableImage {
         int targetHeight = Math.min(height, MAX_SUPPORTED_HEIGHT);
 
         try {
+            waitForCreationOfFile();
             BufferedImage image = ImageIO.read(screenshotFile);
             int width = new SimpleImageInfo(screenshotFile).getWidth();
             return resizeImage(width, targetHeight, image);
@@ -56,6 +62,18 @@ public class ResizableImage {
             getLogger().warn("Could not resize screenshot, so leaving original version: " + screenshotFile, e);
             return this;
         }
+    }
+
+    private void waitForCreationOfFile() {
+        await().atMost(30, TimeUnit.SECONDS).until(screenshotIsProcessed());
+    }
+
+    private Callable<Boolean> screenshotIsProcessed() {
+        return new Callable<Boolean>() {
+            public Boolean call() throws Exception {
+                return (screenshotFile.exists() && screenshotFile.length() > 0);
+            }
+        };
     }
 
     protected ResizableImage resizeImage(int width, int targetHeight, BufferedImage image) throws IOException {
@@ -94,6 +112,6 @@ public class ResizableImage {
      * Otherwise we should be applying the saveTo() method on the ResizedImage class.
      */
     public void saveTo(final File savedFile) throws IOException {
-        Files.copy(screenshotFile.toPath(), savedFile.toPath());
+        Files.copy(screenshotFile.toPath(), savedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
 }

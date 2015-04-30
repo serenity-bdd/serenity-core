@@ -194,12 +194,13 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
         public Screenshot convert(Screenshot screenshot) {
             try {
+
                 return ScreenshotFormatter.forScreenshot(screenshot)
                         .inDirectory(getOutputDirectory())
                         .keepOriginals(shouldKeepOriginalScreenshots())
                         .expandToHeight(maxHeight);
             } catch (IOException e) {
-                LOGGER.info("NOTE: I couldn't convert Failed to write scaled screenshot for {}: {}", screenshot, e);
+                LOGGER.info("NOTE: I couldn't convert scaled screenshot for {}: {}", screenshot.getFilename(), e.getMessage(), e);
                 return screenshot;
             }
         }

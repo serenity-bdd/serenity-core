@@ -22,6 +22,8 @@ public class SingleThreadScreenshotProcessor implements ScreenshotProcessor {
     Thread screenshotThread;
     final Queue<QueuedScreenshot> queue;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SingleThreadScreenshotProcessor.class);
+
     private final EnvironmentVariables environmentVariables;
 
     private final Logger logger = LoggerFactory.getLogger(SingleThreadScreenshotProcessor.class);
@@ -88,9 +90,12 @@ public class SingleThreadScreenshotProcessor implements ScreenshotProcessor {
         }
 
         private void processScreenshot(QueuedScreenshot queuedScreenshot) {
+
+            LOGGER.info("Processing screenshot: " + queuedScreenshot.getSourceFile());
             if (!queuedScreenshot.getDestinationFile().exists()) {
                 resizeOrMoveScreenshot(queuedScreenshot);
             }
+            LOGGER.info("Processing screenshot completed");
         }
 
         private void resizeOrMoveScreenshot(QueuedScreenshot queuedScreenshot) {
@@ -150,14 +155,20 @@ public class SingleThreadScreenshotProcessor implements ScreenshotProcessor {
         }
 
         private void resizeScreenshot(QueuedScreenshot queuedScreenshot) {
+            LOGGER.debug("Resizing screenshot: " + queuedScreenshot.getSourceFile() + " to " + queuedScreenshot.getDestinationFile());
             try {
                 if (!queuedScreenshot.getDestinationFile().exists()) {
                     saveResizedScreenshot(queuedScreenshot);
                 }
-                Files.deleteIfExists(queuedScreenshot.getSourceFile().toPath());
             } catch (Throwable e) {
-                logger.warn("Failed to resize screenshot: using original size " + e.getMessage());
+                logger.warn("Failed to resize screenshot: using original size ",e );
                 moveScreenshot(queuedScreenshot);
+            } finally {
+                try {
+                    Files.deleteIfExists(queuedScreenshot.getSourceFile().toPath());
+                } catch (IOException e) {
+                    LOGGER.info("Could not delete queued screenshot after processing: " + e.getMessage());
+                }
             }
         }
 

@@ -40,8 +40,6 @@ public class JUnitXMLConverter {
 
         Element testSuiteElement = buildTestSuiteElement(doc, testCaseName, testCaseOutcomes);
 
-        testSuiteElement.appendChild(systemPropertiesElement(doc, testCaseOutcomes.getEnvironmentVariables()));
-
         for(TestOutcome outcome : outcomes) {
             Element testCaseElement = buildTestCaseElement(doc, outcome);
             testSuiteElement.appendChild(testCaseElement);
@@ -55,18 +53,6 @@ public class JUnitXMLConverter {
         StreamResult result = new StreamResult(outputStream);
 
         transformer.transform(source, result);
-    }
-
-    private Element systemPropertiesElement(Document doc, EnvironmentVariables environmentVariables) {
-        Element properties = doc.createElement("properties");
-        for(String propertyName : environmentVariables.getKeys()) {
-            String value = environmentVariables.getProperty(propertyName);
-            Element property = doc.createElement("property");
-            property.setAttribute("name", propertyName);
-            property.setAttribute("value", value);
-            properties.appendChild(property);
-        }
-        return properties;
     }
 
     private Element buildTestCaseElement(Document doc, TestOutcome outcome) {

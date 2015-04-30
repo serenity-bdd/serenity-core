@@ -2,6 +2,7 @@ package net.serenitybdd.core.pages;
 
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Optional;
+import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import io.appium.java_client.AppiumDriver;
@@ -1121,5 +1122,12 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                     "Could not find contained elements %s in %s", xpathOrCssSelector, getElement().toString());
             failWithMessage(errorMessage);
         }
+    }
+
+    @Override
+    public boolean hasClass(String cssClassName) {
+        String cssClassValue = getAttribute("class").toLowerCase();
+        List<String> cssClasses = Lists.newArrayList(Splitter.on(" ").omitEmptyStrings().trimResults().split(cssClassValue));
+        return cssClasses.contains(cssClassName.toLowerCase());
     }
 }

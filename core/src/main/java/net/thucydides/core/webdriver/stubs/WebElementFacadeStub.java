@@ -577,5 +577,10 @@ public class WebElementFacadeStub implements WebElementFacade {
 
     }
 
+    @Override
+    public boolean hasClass(String cssClassName) {
+        return false;
+    }
+
 }
 

@@ -120,7 +120,7 @@ public class RequirementsConfiguration {
             return Optional.of(cucumberFileMatcher);
         }
         try {
-            Path root = findResourcePath(rootRequirementsDirectory + "/feature");
+            Path root = findResourcePath(rootRequirementsDirectory + "/features");
             if (root != null) {
                 cucumberFileMatcher = new SearchForFilesOfType(root,".feature");
                 Files.walkFileTree(root, cucumberFileMatcher);

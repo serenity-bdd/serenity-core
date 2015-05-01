@@ -16,7 +16,7 @@ public class RootCauseAnalyzer {
     public FailureCause getRootCause() {
 
         Throwable originalException = originalExceptionFrom(thrownException);
-        StackTraceSanitizer stackTraceSanitizer = StackTraceSanitizer.forStackTrace(thrownException.getStackTrace());
+        StackTraceSanitizer stackTraceSanitizer = StackTraceSanitizer.forStackTrace(originalException.getStackTrace());
         return new FailureCause(originalException, stackTraceSanitizer.getSanitizedStackTrace());
     }
 

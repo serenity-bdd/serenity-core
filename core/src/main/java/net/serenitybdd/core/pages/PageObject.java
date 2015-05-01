@@ -919,6 +919,15 @@ public abstract class PageObject {
         return findAll(xpathOrCssSelector(xpathOrCssSelector));
     }
 
+    public boolean containsElements(By bySelector) {
+        return !findAll(bySelector).isEmpty();
+    }
+
+    public boolean containsElements(String xpathOrCssSelector) {
+        return !findAll(xpathOrCssSelector).isEmpty();
+    }
+
+
     public Object evaluateJavascript(final String script) {
         addJQuerySupport();
         JavascriptExecutorFacade js = new JavascriptExecutorFacade(driver);

@@ -1462,3 +1462,7 @@ ul.second-level-requirements  {
 .build-info table td,th {
     overflow: hidden;
 }
+
+.modal-body p {
+    word-wrap: break-word;
+}

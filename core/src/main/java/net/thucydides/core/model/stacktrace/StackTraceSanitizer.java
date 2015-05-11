@@ -25,6 +25,7 @@ public class StackTraceSanitizer {
             "org.gradle",
             "org.testng",
             "org.hamcrest",
+            "com.jayway.restassured",
             "org.fest",
             "org.assertj",
             "org.openqa.selenium",

@@ -186,9 +186,9 @@
                 <tbody>
                     <#assign rowIndex = dataSet.startRow >
                     <#list dataSet.rows as row>
-                    <tr class="test-${row.result}">
+                    <tr>
                         <#list row.values as value>
-                            <td><a href="#${rowIndex}">${formatter.htmlCompatible(value)}</a></td>
+                            <td class="test-${row.result}"><a href="#${rowIndex}">${formatter.htmlCompatible(value)}</a></td>
                         </#list>
                     </tr>
                         <#assign rowIndex = rowIndex + 1 >

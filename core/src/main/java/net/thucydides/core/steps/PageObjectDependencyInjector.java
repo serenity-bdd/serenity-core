@@ -2,6 +2,7 @@ package net.thucydides.core.steps;
 
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.di.DependencyInjector;
+import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.thucydides.core.annotations.Fields;
 import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.pages.Pages;
@@ -14,11 +15,15 @@ public class PageObjectDependencyInjector implements DependencyInjector {
 
     private final Pages pages;
 
+    EnvironmentDependencyInjector environmentDependencyInjector;
+
     public PageObjectDependencyInjector(Pages pages) {
         this.pages = pages;
+        this.environmentDependencyInjector = new EnvironmentDependencyInjector();
     }
 
     public void injectDependenciesInto(Object target) {
+        environmentDependencyInjector.injectDependenciesInto(target);
         List<Field> pageObjectFields = pageObjectFieldsIn(target);
         for(Field pageObjectField : pageObjectFields) {
             instantiatePageObjectIfNotAssigned(pageObjectField, target);

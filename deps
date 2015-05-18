@@ -1,0 +1,22 @@
+Inferred version: 1.0.48-SNAPSHOT
+Publishing serenity-ant-task:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-core:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-report-resources:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-browsermob-plugin:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-gradle-plugin:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-junit:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-rest-assured:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-sample-alternative-resources:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-spring:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-test-utils:net.serenity-bdd:1.0.48-SNAPSHOT
+:dependencies
+
+------------------------------------------------------------
+Root project
+------------------------------------------------------------
+
+No configurations
+
+BUILD SUCCESSFUL
+
+Total time: 3.648 secs

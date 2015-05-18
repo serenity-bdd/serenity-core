@@ -4,7 +4,7 @@ ext {
 }
 
 dependencies {
-    compile project(':core')
+    compile project(':serenity-core')
     compile ("org.springframework:spring-test:${springVersion}")
     compile ("org.springframework:spring-context:${springVersion}")
     compile ("org.springframework:spring-context-support:${springVersion}")

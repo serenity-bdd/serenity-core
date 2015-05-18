@@ -1,6 +1,5 @@
 package net.serenitybdd.core.di;
 
-import net.serenitybdd.core.di.DependencyInjector;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestContextManager;
 

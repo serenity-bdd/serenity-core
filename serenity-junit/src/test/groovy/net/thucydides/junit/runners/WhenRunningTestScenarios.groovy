@@ -8,6 +8,8 @@ import net.thucydides.core.webdriver.ThucydidesWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFactory
 import net.thucydides.core.webdriver.WebdriverInstanceFactory
 import net.thucydides.samples.*
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import org.junit.runner.notification.RunNotifier
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
@@ -25,8 +27,13 @@ class WhenRunningTestScenarios extends Specification {
     def environmentVariables = new MockEnvironmentVariables()
     def configuration = new SystemPropertiesConfiguration(environmentVariables)
     def webDriverFactory = new WebDriverFactory(webdriverInstanceFactory, environmentVariables)
+    File temporaryDirectory
+
+    @Rule
+    TemporaryFolder temporaryFolder
 
     def setup() {
+        temporaryDirectory = temporaryFolder.newFolder()
         webdriverInstanceFactory.newFirefoxDriver(_) >> firefoxDriver
         webdriverInstanceFactory.newHtmlUnitDriver(_) >> htmlUnitDriver
     }
@@ -404,8 +411,6 @@ class WhenRunningTestScenarios extends Specification {
         then:
         manager.closeDriver()
     }
-
-    @TempDir File temporaryDirectory
 
     class ATestableThucydidesRunnerSample extends ThucydidesRunner {
         ATestableThucydidesRunnerSample(Class<?> klass, WebDriverFactory webDriverFactory) {

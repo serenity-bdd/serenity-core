@@ -1,0 +1,831 @@
+Inferred version: 1.0.48-SNAPSHOT
+Publishing serenity-ant-task:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-core:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-report-resources:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-browsermob-plugin:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-gradle-plugin:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-junit:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-rest-assured:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-sample-alternative-resources:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-spring:net.serenity-bdd:1.0.48-SNAPSHOT
+Publishing serenity-test-utils:net.serenity-bdd:1.0.48-SNAPSHOT
+:serenity-ant-task:dependencies
+
+------------------------------------------------------------
+Project :serenity-ant-task
+------------------------------------------------------------
+
+archives - Configuration for archive artifacts.
+No dependencies
+
+compile - Compile classpath for source set 'main'.
++--- com.google.guava:guava:18.0
++--- com.google.inject:guice:3.0
+|    +--- javax.inject:javax.inject:1
+|    +--- aopalliance:aopalliance:1.0
+|    \--- org.sonatype.sisu.inject:cglib:2.2.1-v20090111
++--- cglib:cglib:3.1
++--- org.ow2.asm:asm:5.0.3
++--- commons-codec:commons-codec:1.9
++--- org.objenesis:objenesis:2.1
++--- org.slf4j:slf4j-api:1.7.7
++--- xml-apis:xml-apis:1.4.01
++--- info.cukes:cucumber-core:1.2.2
+|    +--- info.cukes:cucumber-html:0.2.3
+|    +--- info.cukes:cucumber-jvm-deps:1.0.3
+|    \--- info.cukes:gherkin:2.12.2
++--- commons-logging:commons-logging:1.2
++--- junit:junit:4.11
+|    \--- org.hamcrest:hamcrest-core:1.3
++--- project :serenity-core
+|    +--- com.google.guava:guava:18.0
+|    +--- com.google.inject:guice:3.0 (*)
+|    +--- cglib:cglib:3.1
+|    +--- org.ow2.asm:asm:5.0.3
+|    +--- commons-codec:commons-codec:1.9
+|    +--- org.objenesis:objenesis:2.1
+|    +--- org.slf4j:slf4j-api:1.7.7
+|    +--- xml-apis:xml-apis:1.4.01
+|    +--- info.cukes:cucumber-core:1.2.2 (*)
+|    +--- commons-logging:commons-logging:1.2
+|    +--- junit:junit:4.11 (*)
+|    +--- project :serenity-report-resources
+|    |    +--- com.google.guava:guava:18.0
+|    |    +--- com.google.inject:guice:3.0 (*)
+|    |    +--- cglib:cglib:3.1
+|    |    +--- org.ow2.asm:asm:5.0.3
+|    |    +--- commons-codec:commons-codec:1.9
+|    |    +--- org.objenesis:objenesis:2.1
+|    |    +--- org.slf4j:slf4j-api:1.7.7
+|    |    +--- xml-apis:xml-apis:1.4.01
+|    |    +--- info.cukes:cucumber-core:1.2.2 (*)
+|    |    +--- commons-logging:commons-logging:1.2
+|    |    \--- junit:junit:4.11 (*)
+|    +--- com.google.code.gson:gson:2.3.1
+|    +--- commons-io:commons-io:2.4
+|    +--- com.opera:operadriver:1.5
+|    |    +--- com.opera:operalaunchers:1.1
+|    |    +--- com.google.protobuf:protobuf-java:2.4.1
+|    |    +--- commons-jxpath:commons-jxpath:1.3
+|    |    +--- org.apache.commons:commons-exec:1.1
+|    |    \--- org.ini4j:ini4j:0.5.2
+|    +--- org.seleniumhq.selenium:selenium-server:2.45.0
+|    |    +--- org.bouncycastle:bcprov-jdk15on:1.48
+|    |    +--- org.bouncycastle:bcpkix-jdk15on:1.48
+|    |    |    \--- org.bouncycastle:bcprov-jdk15on:1.48
+|    |    +--- mx4j:mx4j-tools:3.0.1
+|    |    +--- org.mortbay.jetty:servlet-api-2.5:6.1.9
+|    |    +--- org.seleniumhq.selenium:jetty-repacked:7.6.1
+|    |    +--- org.seleniumhq.selenium:jetty-rc-repacked:5
+|    |    +--- net.jcip:jcip-annotations:1.0
+|    |    +--- org.seleniumhq.selenium:selenium-java:2.45.0
+|    |    |    +--- org.seleniumhq.selenium:selenium-chrome-driver:2.45.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0
+|    |    |    |         +--- org.seleniumhq.selenium:selenium-api:2.45.0
+|    |    |    |         +--- org.apache.commons:commons-exec:1.1
+|    |    |    |         +--- net.java.dev.jna:jna:3.4.0
+|    |    |    |         \--- net.java.dev.jna:platform:3.4.0
+|    |    |    +--- org.seleniumhq.selenium:selenium-htmlunit-driver:2.45.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    +--- org.seleniumhq.selenium:selenium-firefox-driver:2.45.0
+|    |    |    |    +--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    |    \--- org.apache.commons:commons-exec:1.1
+|    |    |    +--- org.seleniumhq.selenium:selenium-ie-driver:2.45.0
+|    |    |    |    +--- net.java.dev.jna:jna:3.4.0
+|    |    |    |    +--- net.java.dev.jna:platform:3.4.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    +--- org.seleniumhq.selenium:selenium-safari-driver:2.45.0
+|    |    |    |    +--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    |    \--- org.webbitserver:webbit:0.4.14
+|    |    |    |         \--- io.netty:netty:3.5.2.Final
+|    |    |    +--- org.seleniumhq.selenium:selenium-support:2.45.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    +--- org.webbitserver:webbit:0.4.14 (*)
+|    |    |    \--- org.seleniumhq.selenium:selenium-leg-rc:2.45.0
+|    |    |         \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    \--- org.yaml:snakeyaml:1.8
+|    +--- com.codeborne:phantomjsdriver:1.2.1
+|    +--- io.appium:java-client:2.1.0
+|    +--- org.codehaus.groovy:groovy:2.3.6
+|    +--- net.sf.opencsv:opencsv:2.0
+|    +--- commons-beanutils:commons-beanutils-core:1.8.3
+|    +--- com.googlecode.lambdaj:lambdaj:2.3.3
+|    +--- joda-time:joda-time:2.2
+|    +--- com.thoughtworks.xstream:xstream:1.4.1 -> 1.4.5
+|    |    +--- xmlpull:xmlpull:1.1.3.1
+|    |    \--- xpp3:xpp3_min:1.1.4c
+|    +--- org.apache.commons:commons-lang3:3.3.2
+|    +--- commons-collections:commons-collections:3.2.1
+|    +--- org.freemarker:freemarker:2.3.21
+|    +--- net.sourceforge.jexcelapi:jxl:2.6.12
+|    +--- org.hamcrest:hamcrest-core:1.3
+|    +--- org.hamcrest:hamcrest-library:1.3
+|    |    \--- org.hamcrest:hamcrest-core:1.3
+|    +--- com.thoughtworks.xstream:xstream:1.4.5 (*)
+|    +--- net.sourceforge.htmlunit:htmlunit:2.16
+|    |    +--- xalan:xalan:2.7.1
+|    |    |    \--- xalan:serializer:2.7.1
+|    |    +--- commons-collections:commons-collections:3.2.1
+|    |    +--- net.sourceforge.htmlunit:htmlunit-core-js:2.16
+|    |    +--- xerces:xercesImpl:2.11.0
+|    |    +--- net.sourceforge.nekohtml:nekohtml:1.9.22
+|    |    +--- net.sourceforge.cssparser:cssparser:0.9.15
+|    |    |    \--- org.w3c.css:sac:1.3
+|    |    +--- commons-io:commons-io:2.4
+|    |    \--- org.eclipse.jetty.websocket:websocket-client:9.2.10.v20150310
+|    |         +--- org.eclipse.jetty:jetty-util:9.2.10.v20150310
+|    |         +--- org.eclipse.jetty:jetty-io:9.2.10.v20150310
+|    |         |    \--- org.eclipse.jetty:jetty-util:9.2.10.v20150310
+|    |         \--- org.eclipse.jetty.websocket:websocket-common:9.2.10.v20150310
+|    |              +--- org.eclipse.jetty.websocket:websocket-api:9.2.10.v20150310
+|    |              +--- org.eclipse.jetty:jetty-util:9.2.10.v20150310
+|    |              \--- org.eclipse.jetty:jetty-io:9.2.10.v20150310 (*)
+|    +--- org.apache.httpcomponents:httpclient:4.4.1
+|    |    +--- org.apache.httpcomponents:httpcore:4.4.1
+|    |    +--- commons-logging:commons-logging:1.2
+|    |    \--- commons-codec:commons-codec:1.9
+|    +--- org.apache.httpcomponents:httpmime:4.4.1
+|    |    \--- org.apache.httpcomponents:httpclient:4.4.1 (*)
+|    +--- org.fluentlenium:fluentlenium-core:0.10.2
+|    +--- com.jhlabs:filters:2.0.235
+|    +--- org.asciidoctor:asciidoctor-java-integration:0.1.3
+|    |    +--- org.jruby:jruby-complete:1.7.4
+|    |    \--- com.beust:jcommander:1.30
+|    +--- javax.validation:validation-api:1.1.0.Final
+|    +--- org.hibernate:hibernate-validator:5.1.1.Final
+|    |    +--- javax.validation:validation-api:1.1.0.Final
+|    |    +--- org.jboss.logging:jboss-logging:3.1.3.GA
+|    |    \--- com.fasterxml:classmate:1.0.0
+|    +--- javax.el:javax.el-api:2.2.4
+|    +--- org.glassfish.web:javax.el:2.2.4
+|    |    \--- javax.el:javax.el-api:2.2.4
+|    \--- com.jayway.awaitility:awaitility:1.6.3
+|         +--- org.hamcrest:hamcrest-library:1.3 (*)
+|         +--- org.hamcrest:hamcrest-core:1.3
+|         \--- org.objenesis:objenesis:2.1
+\--- org.apache.ant:ant:1.9.3
+     \--- org.apache.ant:ant-launcher:1.9.3
+
+default - Configuration for default artifacts.
++--- com.google.guava:guava:18.0
++--- com.google.inject:guice:3.0
+|    +--- javax.inject:javax.inject:1
+|    +--- aopalliance:aopalliance:1.0
+|    \--- org.sonatype.sisu.inject:cglib:2.2.1-v20090111
++--- cglib:cglib:3.1
++--- org.ow2.asm:asm:5.0.3
++--- commons-codec:commons-codec:1.9
++--- org.objenesis:objenesis:2.1
++--- org.slf4j:slf4j-api:1.7.7
++--- xml-apis:xml-apis:1.4.01
++--- info.cukes:cucumber-core:1.2.2
+|    +--- info.cukes:cucumber-html:0.2.3
+|    +--- info.cukes:cucumber-jvm-deps:1.0.3
+|    \--- info.cukes:gherkin:2.12.2
++--- commons-logging:commons-logging:1.2
++--- junit:junit:4.11
+|    \--- org.hamcrest:hamcrest-core:1.3
++--- project :serenity-core
+|    +--- com.google.guava:guava:18.0
+|    +--- com.google.inject:guice:3.0 (*)
+|    +--- cglib:cglib:3.1
+|    +--- org.ow2.asm:asm:5.0.3
+|    +--- commons-codec:commons-codec:1.9
+|    +--- org.objenesis:objenesis:2.1
+|    +--- org.slf4j:slf4j-api:1.7.7
+|    +--- xml-apis:xml-apis:1.4.01
+|    +--- info.cukes:cucumber-core:1.2.2 (*)
+|    +--- commons-logging:commons-logging:1.2
+|    +--- junit:junit:4.11 (*)
+|    +--- project :serenity-report-resources
+|    |    +--- com.google.guava:guava:18.0
+|    |    +--- com.google.inject:guice:3.0 (*)
+|    |    +--- cglib:cglib:3.1
+|    |    +--- org.ow2.asm:asm:5.0.3
+|    |    +--- commons-codec:commons-codec:1.9
+|    |    +--- org.objenesis:objenesis:2.1
+|    |    +--- org.slf4j:slf4j-api:1.7.7
+|    |    +--- xml-apis:xml-apis:1.4.01
+|    |    +--- info.cukes:cucumber-core:1.2.2 (*)
+|    |    +--- commons-logging:commons-logging:1.2
+|    |    \--- junit:junit:4.11 (*)
+|    +--- com.google.code.gson:gson:2.3.1
+|    +--- commons-io:commons-io:2.4
+|    +--- com.opera:operadriver:1.5
+|    |    +--- com.opera:operalaunchers:1.1
+|    |    +--- com.google.protobuf:protobuf-java:2.4.1
+|    |    +--- commons-jxpath:commons-jxpath:1.3
+|    |    +--- org.apache.commons:commons-exec:1.1
+|    |    \--- org.ini4j:ini4j:0.5.2
+|    +--- org.seleniumhq.selenium:selenium-server:2.45.0
+|    |    +--- org.bouncycastle:bcprov-jdk15on:1.48
+|    |    +--- org.bouncycastle:bcpkix-jdk15on:1.48
+|    |    |    \--- org.bouncycastle:bcprov-jdk15on:1.48
+|    |    +--- mx4j:mx4j-tools:3.0.1
+|    |    +--- org.mortbay.jetty:servlet-api-2.5:6.1.9
+|    |    +--- org.seleniumhq.selenium:jetty-repacked:7.6.1
+|    |    +--- org.seleniumhq.selenium:jetty-rc-repacked:5
+|    |    +--- net.jcip:jcip-annotations:1.0
+|    |    +--- org.seleniumhq.selenium:selenium-java:2.45.0
+|    |    |    +--- org.seleniumhq.selenium:selenium-chrome-driver:2.45.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0
+|    |    |    |         +--- org.seleniumhq.selenium:selenium-api:2.45.0
+|    |    |    |         +--- org.apache.commons:commons-exec:1.1
+|    |    |    |         +--- net.java.dev.jna:jna:3.4.0
+|    |    |    |         \--- net.java.dev.jna:platform:3.4.0
+|    |    |    +--- org.seleniumhq.selenium:selenium-htmlunit-driver:2.45.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    +--- org.seleniumhq.selenium:selenium-firefox-driver:2.45.0
+|    |    |    |    +--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    |    \--- org.apache.commons:commons-exec:1.1
+|    |    |    +--- org.seleniumhq.selenium:selenium-ie-driver:2.45.0
+|    |    |    |    +--- net.java.dev.jna:jna:3.4.0
+|    |    |    |    +--- net.java.dev.jna:platform:3.4.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    +--- org.seleniumhq.selenium:selenium-safari-driver:2.45.0
+|    |    |    |    +--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    |    \--- org.webbitserver:webbit:0.4.14
+|    |    |    |         \--- io.netty:netty:3.5.2.Final
+|    |    |    +--- org.seleniumhq.selenium:selenium-support:2.45.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    +--- org.webbitserver:webbit:0.4.14 (*)
+|    |    |    \--- org.seleniumhq.selenium:selenium-leg-rc:2.45.0
+|    |    |         \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    \--- org.yaml:snakeyaml:1.8
+|    +--- com.codeborne:phantomjsdriver:1.2.1
+|    +--- io.appium:java-client:2.1.0
+|    +--- org.codehaus.groovy:groovy:2.3.6
+|    +--- net.sf.opencsv:opencsv:2.0
+|    +--- commons-beanutils:commons-beanutils-core:1.8.3
+|    +--- com.googlecode.lambdaj:lambdaj:2.3.3
+|    +--- joda-time:joda-time:2.2
+|    +--- com.thoughtworks.xstream:xstream:1.4.1 -> 1.4.5
+|    |    +--- xmlpull:xmlpull:1.1.3.1
+|    |    \--- xpp3:xpp3_min:1.1.4c
+|    +--- org.apache.commons:commons-lang3:3.3.2
+|    +--- commons-collections:commons-collections:3.2.1
+|    +--- org.freemarker:freemarker:2.3.21
+|    +--- net.sourceforge.jexcelapi:jxl:2.6.12
+|    +--- org.hamcrest:hamcrest-core:1.3
+|    +--- org.hamcrest:hamcrest-library:1.3
+|    |    \--- org.hamcrest:hamcrest-core:1.3
+|    +--- com.thoughtworks.xstream:xstream:1.4.5 (*)
+|    +--- net.sourceforge.htmlunit:htmlunit:2.16
+|    |    +--- xalan:xalan:2.7.1
+|    |    |    \--- xalan:serializer:2.7.1
+|    |    +--- commons-collections:commons-collections:3.2.1
+|    |    +--- net.sourceforge.htmlunit:htmlunit-core-js:2.16
+|    |    +--- xerces:xercesImpl:2.11.0
+|    |    +--- net.sourceforge.nekohtml:nekohtml:1.9.22
+|    |    +--- net.sourceforge.cssparser:cssparser:0.9.15
+|    |    |    \--- org.w3c.css:sac:1.3
+|    |    +--- commons-io:commons-io:2.4
+|    |    \--- org.eclipse.jetty.websocket:websocket-client:9.2.10.v20150310
+|    |         +--- org.eclipse.jetty:jetty-util:9.2.10.v20150310
+|    |         +--- org.eclipse.jetty:jetty-io:9.2.10.v20150310
+|    |         |    \--- org.eclipse.jetty:jetty-util:9.2.10.v20150310
+|    |         \--- org.eclipse.jetty.websocket:websocket-common:9.2.10.v20150310
+|    |              +--- org.eclipse.jetty.websocket:websocket-api:9.2.10.v20150310
+|    |              +--- org.eclipse.jetty:jetty-util:9.2.10.v20150310
+|    |              \--- org.eclipse.jetty:jetty-io:9.2.10.v20150310 (*)
+|    +--- org.apache.httpcomponents:httpclient:4.4.1
+|    |    +--- org.apache.httpcomponents:httpcore:4.4.1
+|    |    +--- commons-logging:commons-logging:1.2
+|    |    \--- commons-codec:commons-codec:1.9
+|    +--- org.apache.httpcomponents:httpmime:4.4.1
+|    |    \--- org.apache.httpcomponents:httpclient:4.4.1 (*)
+|    +--- org.fluentlenium:fluentlenium-core:0.10.2
+|    +--- com.jhlabs:filters:2.0.235
+|    +--- org.asciidoctor:asciidoctor-java-integration:0.1.3
+|    |    +--- org.jruby:jruby-complete:1.7.4
+|    |    \--- com.beust:jcommander:1.30
+|    +--- javax.validation:validation-api:1.1.0.Final
+|    +--- org.hibernate:hibernate-validator:5.1.1.Final
+|    |    +--- javax.validation:validation-api:1.1.0.Final
+|    |    +--- org.jboss.logging:jboss-logging:3.1.3.GA
+|    |    \--- com.fasterxml:classmate:1.0.0
+|    +--- javax.el:javax.el-api:2.2.4
+|    +--- org.glassfish.web:javax.el:2.2.4
+|    |    \--- javax.el:javax.el-api:2.2.4
+|    \--- com.jayway.awaitility:awaitility:1.6.3
+|         +--- org.hamcrest:hamcrest-library:1.3 (*)
+|         +--- org.hamcrest:hamcrest-core:1.3
+|         \--- org.objenesis:objenesis:2.1
+\--- org.apache.ant:ant:1.9.3
+     \--- org.apache.ant:ant-launcher:1.9.3
+
+runtime - Runtime classpath for source set 'main'.
++--- com.google.guava:guava:18.0
++--- com.google.inject:guice:3.0
+|    +--- javax.inject:javax.inject:1
+|    +--- aopalliance:aopalliance:1.0
+|    \--- org.sonatype.sisu.inject:cglib:2.2.1-v20090111
++--- cglib:cglib:3.1
++--- org.ow2.asm:asm:5.0.3
++--- commons-codec:commons-codec:1.9
++--- org.objenesis:objenesis:2.1
++--- org.slf4j:slf4j-api:1.7.7
++--- xml-apis:xml-apis:1.4.01
++--- info.cukes:cucumber-core:1.2.2
+|    +--- info.cukes:cucumber-html:0.2.3
+|    +--- info.cukes:cucumber-jvm-deps:1.0.3
+|    \--- info.cukes:gherkin:2.12.2
++--- commons-logging:commons-logging:1.2
++--- junit:junit:4.11
+|    \--- org.hamcrest:hamcrest-core:1.3
++--- project :serenity-core
+|    +--- com.google.guava:guava:18.0
+|    +--- com.google.inject:guice:3.0 (*)
+|    +--- cglib:cglib:3.1
+|    +--- org.ow2.asm:asm:5.0.3
+|    +--- commons-codec:commons-codec:1.9
+|    +--- org.objenesis:objenesis:2.1
+|    +--- org.slf4j:slf4j-api:1.7.7
+|    +--- xml-apis:xml-apis:1.4.01
+|    +--- info.cukes:cucumber-core:1.2.2 (*)
+|    +--- commons-logging:commons-logging:1.2
+|    +--- junit:junit:4.11 (*)
+|    +--- project :serenity-report-resources
+|    |    +--- com.google.guava:guava:18.0
+|    |    +--- com.google.inject:guice:3.0 (*)
+|    |    +--- cglib:cglib:3.1
+|    |    +--- org.ow2.asm:asm:5.0.3
+|    |    +--- commons-codec:commons-codec:1.9
+|    |    +--- org.objenesis:objenesis:2.1
+|    |    +--- org.slf4j:slf4j-api:1.7.7
+|    |    +--- xml-apis:xml-apis:1.4.01
+|    |    +--- info.cukes:cucumber-core:1.2.2 (*)
+|    |    +--- commons-logging:commons-logging:1.2
+|    |    \--- junit:junit:4.11 (*)
+|    +--- com.google.code.gson:gson:2.3.1
+|    +--- commons-io:commons-io:2.4
+|    +--- com.opera:operadriver:1.5
+|    |    +--- com.opera:operalaunchers:1.1
+|    |    +--- com.google.protobuf:protobuf-java:2.4.1
+|    |    +--- commons-jxpath:commons-jxpath:1.3
+|    |    +--- org.apache.commons:commons-exec:1.1
+|    |    \--- org.ini4j:ini4j:0.5.2
+|    +--- org.seleniumhq.selenium:selenium-server:2.45.0
+|    |    +--- org.bouncycastle:bcprov-jdk15on:1.48
+|    |    +--- org.bouncycastle:bcpkix-jdk15on:1.48
+|    |    |    \--- org.bouncycastle:bcprov-jdk15on:1.48
+|    |    +--- mx4j:mx4j-tools:3.0.1
+|    |    +--- org.mortbay.jetty:servlet-api-2.5:6.1.9
+|    |    +--- org.seleniumhq.selenium:jetty-repacked:7.6.1
+|    |    +--- org.seleniumhq.selenium:jetty-rc-repacked:5
+|    |    +--- net.jcip:jcip-annotations:1.0
+|    |    +--- org.seleniumhq.selenium:selenium-java:2.45.0
+|    |    |    +--- org.seleniumhq.selenium:selenium-chrome-driver:2.45.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0
+|    |    |    |         +--- org.seleniumhq.selenium:selenium-api:2.45.0
+|    |    |    |         +--- org.apache.commons:commons-exec:1.1
+|    |    |    |         +--- net.java.dev.jna:jna:3.4.0
+|    |    |    |         \--- net.java.dev.jna:platform:3.4.0
+|    |    |    +--- org.seleniumhq.selenium:selenium-htmlunit-driver:2.45.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    +--- org.seleniumhq.selenium:selenium-firefox-driver:2.45.0
+|    |    |    |    +--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    |    \--- org.apache.commons:commons-exec:1.1
+|    |    |    +--- org.seleniumhq.selenium:selenium-ie-driver:2.45.0
+|    |    |    |    +--- net.java.dev.jna:jna:3.4.0
+|    |    |    |    +--- net.java.dev.jna:platform:3.4.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    +--- org.seleniumhq.selenium:selenium-safari-driver:2.45.0
+|    |    |    |    +--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    |    \--- org.webbitserver:webbit:0.4.14
+|    |    |    |         \--- io.netty:netty:3.5.2.Final
+|    |    |    +--- org.seleniumhq.selenium:selenium-support:2.45.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    +--- org.webbitserver:webbit:0.4.14 (*)
+|    |    |    \--- org.seleniumhq.selenium:selenium-leg-rc:2.45.0
+|    |    |         \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    \--- org.yaml:snakeyaml:1.8
+|    +--- com.codeborne:phantomjsdriver:1.2.1
+|    +--- io.appium:java-client:2.1.0
+|    +--- org.codehaus.groovy:groovy:2.3.6
+|    +--- net.sf.opencsv:opencsv:2.0
+|    +--- commons-beanutils:commons-beanutils-core:1.8.3
+|    +--- com.googlecode.lambdaj:lambdaj:2.3.3
+|    +--- joda-time:joda-time:2.2
+|    +--- com.thoughtworks.xstream:xstream:1.4.1 -> 1.4.5
+|    |    +--- xmlpull:xmlpull:1.1.3.1
+|    |    \--- xpp3:xpp3_min:1.1.4c
+|    +--- org.apache.commons:commons-lang3:3.3.2
+|    +--- commons-collections:commons-collections:3.2.1
+|    +--- org.freemarker:freemarker:2.3.21
+|    +--- net.sourceforge.jexcelapi:jxl:2.6.12
+|    +--- org.hamcrest:hamcrest-core:1.3
+|    +--- org.hamcrest:hamcrest-library:1.3
+|    |    \--- org.hamcrest:hamcrest-core:1.3
+|    +--- com.thoughtworks.xstream:xstream:1.4.5 (*)
+|    +--- net.sourceforge.htmlunit:htmlunit:2.16
+|    |    +--- xalan:xalan:2.7.1
+|    |    |    \--- xalan:serializer:2.7.1
+|    |    +--- commons-collections:commons-collections:3.2.1
+|    |    +--- net.sourceforge.htmlunit:htmlunit-core-js:2.16
+|    |    +--- xerces:xercesImpl:2.11.0
+|    |    +--- net.sourceforge.nekohtml:nekohtml:1.9.22
+|    |    +--- net.sourceforge.cssparser:cssparser:0.9.15
+|    |    |    \--- org.w3c.css:sac:1.3
+|    |    +--- commons-io:commons-io:2.4
+|    |    \--- org.eclipse.jetty.websocket:websocket-client:9.2.10.v20150310
+|    |         +--- org.eclipse.jetty:jetty-util:9.2.10.v20150310
+|    |         +--- org.eclipse.jetty:jetty-io:9.2.10.v20150310
+|    |         |    \--- org.eclipse.jetty:jetty-util:9.2.10.v20150310
+|    |         \--- org.eclipse.jetty.websocket:websocket-common:9.2.10.v20150310
+|    |              +--- org.eclipse.jetty.websocket:websocket-api:9.2.10.v20150310
+|    |              +--- org.eclipse.jetty:jetty-util:9.2.10.v20150310
+|    |              \--- org.eclipse.jetty:jetty-io:9.2.10.v20150310 (*)
+|    +--- org.apache.httpcomponents:httpclient:4.4.1
+|    |    +--- org.apache.httpcomponents:httpcore:4.4.1
+|    |    +--- commons-logging:commons-logging:1.2
+|    |    \--- commons-codec:commons-codec:1.9
+|    +--- org.apache.httpcomponents:httpmime:4.4.1
+|    |    \--- org.apache.httpcomponents:httpclient:4.4.1 (*)
+|    +--- org.fluentlenium:fluentlenium-core:0.10.2
+|    +--- com.jhlabs:filters:2.0.235
+|    +--- org.asciidoctor:asciidoctor-java-integration:0.1.3
+|    |    +--- org.jruby:jruby-complete:1.7.4
+|    |    \--- com.beust:jcommander:1.30
+|    +--- javax.validation:validation-api:1.1.0.Final
+|    +--- org.hibernate:hibernate-validator:5.1.1.Final
+|    |    +--- javax.validation:validation-api:1.1.0.Final
+|    |    +--- org.jboss.logging:jboss-logging:3.1.3.GA
+|    |    \--- com.fasterxml:classmate:1.0.0
+|    +--- javax.el:javax.el-api:2.2.4
+|    +--- org.glassfish.web:javax.el:2.2.4
+|    |    \--- javax.el:javax.el-api:2.2.4
+|    \--- com.jayway.awaitility:awaitility:1.6.3
+|         +--- org.hamcrest:hamcrest-library:1.3 (*)
+|         +--- org.hamcrest:hamcrest-core:1.3
+|         \--- org.objenesis:objenesis:2.1
+\--- org.apache.ant:ant:1.9.3
+     \--- org.apache.ant:ant-launcher:1.9.3
+
+testCompile - Compile classpath for source set 'test'.
+Download https://jcenter.bintray.com/org/codehaus/groovy/groovy-all/2.4.3/groovy-all-2.4.3.pom
+Download https://jcenter.bintray.com/joda-time/joda-time/2.7/joda-time-2.7.pom
++--- com.google.guava:guava:18.0
++--- com.google.inject:guice:3.0
+|    +--- javax.inject:javax.inject:1
+|    +--- aopalliance:aopalliance:1.0
+|    \--- org.sonatype.sisu.inject:cglib:2.2.1-v20090111
++--- cglib:cglib:3.1
++--- org.ow2.asm:asm:5.0.3
++--- commons-codec:commons-codec:1.9
++--- org.objenesis:objenesis:2.1
++--- org.slf4j:slf4j-api:1.7.7
++--- xml-apis:xml-apis:1.4.01
++--- info.cukes:cucumber-core:1.2.2
+|    +--- info.cukes:cucumber-html:0.2.3
+|    +--- info.cukes:cucumber-jvm-deps:1.0.3
+|    \--- info.cukes:gherkin:2.12.2
++--- commons-logging:commons-logging:1.2
++--- junit:junit:4.11
+|    \--- org.hamcrest:hamcrest-core:1.3
++--- project :serenity-core
+|    +--- com.google.guava:guava:18.0
+|    +--- com.google.inject:guice:3.0 (*)
+|    +--- cglib:cglib:3.1
+|    +--- org.ow2.asm:asm:5.0.3
+|    +--- commons-codec:commons-codec:1.9
+|    +--- org.objenesis:objenesis:2.1
+|    +--- org.slf4j:slf4j-api:1.7.7
+|    +--- xml-apis:xml-apis:1.4.01
+|    +--- info.cukes:cucumber-core:1.2.2 (*)
+|    +--- commons-logging:commons-logging:1.2
+|    +--- junit:junit:4.11 (*)
+|    +--- project :serenity-report-resources
+|    |    +--- com.google.guava:guava:18.0
+|    |    +--- com.google.inject:guice:3.0 (*)
+|    |    +--- cglib:cglib:3.1
+|    |    +--- org.ow2.asm:asm:5.0.3
+|    |    +--- commons-codec:commons-codec:1.9
+|    |    +--- org.objenesis:objenesis:2.1
+|    |    +--- org.slf4j:slf4j-api:1.7.7
+|    |    +--- xml-apis:xml-apis:1.4.01
+|    |    +--- info.cukes:cucumber-core:1.2.2 (*)
+|    |    +--- commons-logging:commons-logging:1.2
+|    |    \--- junit:junit:4.11 (*)
+|    +--- com.google.code.gson:gson:2.3.1
+|    +--- commons-io:commons-io:2.4
+|    +--- com.opera:operadriver:1.5
+|    |    +--- com.opera:operalaunchers:1.1
+|    |    +--- com.google.protobuf:protobuf-java:2.4.1
+|    |    +--- commons-jxpath:commons-jxpath:1.3
+|    |    +--- org.apache.commons:commons-exec:1.1
+|    |    \--- org.ini4j:ini4j:0.5.2
+|    +--- org.seleniumhq.selenium:selenium-server:2.45.0
+|    |    +--- org.bouncycastle:bcprov-jdk15on:1.48
+|    |    +--- org.bouncycastle:bcpkix-jdk15on:1.48
+|    |    |    \--- org.bouncycastle:bcprov-jdk15on:1.48
+|    |    +--- mx4j:mx4j-tools:3.0.1
+|    |    +--- org.mortbay.jetty:servlet-api-2.5:6.1.9
+|    |    +--- org.seleniumhq.selenium:jetty-repacked:7.6.1
+|    |    +--- org.seleniumhq.selenium:jetty-rc-repacked:5
+|    |    +--- net.jcip:jcip-annotations:1.0
+|    |    +--- org.seleniumhq.selenium:selenium-java:2.45.0
+|    |    |    +--- org.seleniumhq.selenium:selenium-chrome-driver:2.45.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0
+|    |    |    |         +--- org.seleniumhq.selenium:selenium-api:2.45.0
+|    |    |    |         +--- org.apache.commons:commons-exec:1.1
+|    |    |    |         +--- net.java.dev.jna:jna:3.4.0
+|    |    |    |         \--- net.java.dev.jna:platform:3.4.0
+|    |    |    +--- org.seleniumhq.selenium:selenium-htmlunit-driver:2.45.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    +--- org.seleniumhq.selenium:selenium-firefox-driver:2.45.0
+|    |    |    |    +--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    |    \--- org.apache.commons:commons-exec:1.1
+|    |    |    +--- org.seleniumhq.selenium:selenium-ie-driver:2.45.0
+|    |    |    |    +--- net.java.dev.jna:jna:3.4.0
+|    |    |    |    +--- net.java.dev.jna:platform:3.4.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    +--- org.seleniumhq.selenium:selenium-safari-driver:2.45.0
+|    |    |    |    +--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    |    \--- org.webbitserver:webbit:0.4.14
+|    |    |    |         \--- io.netty:netty:3.5.2.Final
+|    |    |    +--- org.seleniumhq.selenium:selenium-support:2.45.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    +--- org.webbitserver:webbit:0.4.14 (*)
+|    |    |    \--- org.seleniumhq.selenium:selenium-leg-rc:2.45.0
+|    |    |         \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    \--- org.yaml:snakeyaml:1.8
+|    +--- com.codeborne:phantomjsdriver:1.2.1
+|    +--- io.appium:java-client:2.1.0
+|    +--- org.codehaus.groovy:groovy:2.3.6
+|    +--- net.sf.opencsv:opencsv:2.0
+|    +--- commons-beanutils:commons-beanutils-core:1.8.3
+|    +--- com.googlecode.lambdaj:lambdaj:2.3.3
+|    +--- joda-time:joda-time:2.2 -> 2.7
+|    +--- com.thoughtworks.xstream:xstream:1.4.1 -> 1.4.5
+|    |    +--- xmlpull:xmlpull:1.1.3.1
+|    |    \--- xpp3:xpp3_min:1.1.4c
+|    +--- org.apache.commons:commons-lang3:3.3.2
+|    +--- commons-collections:commons-collections:3.2.1
+|    +--- org.freemarker:freemarker:2.3.21
+|    +--- net.sourceforge.jexcelapi:jxl:2.6.12
+|    +--- org.hamcrest:hamcrest-core:1.3
+|    +--- org.hamcrest:hamcrest-library:1.3
+|    |    \--- org.hamcrest:hamcrest-core:1.3
+|    +--- com.thoughtworks.xstream:xstream:1.4.5 (*)
+|    +--- net.sourceforge.htmlunit:htmlunit:2.16
+|    |    +--- xalan:xalan:2.7.1
+|    |    |    \--- xalan:serializer:2.7.1
+|    |    +--- commons-collections:commons-collections:3.2.1
+|    |    +--- net.sourceforge.htmlunit:htmlunit-core-js:2.16
+|    |    +--- xerces:xercesImpl:2.11.0
+|    |    +--- net.sourceforge.nekohtml:nekohtml:1.9.22
+|    |    +--- net.sourceforge.cssparser:cssparser:0.9.15
+|    |    |    \--- org.w3c.css:sac:1.3
+|    |    +--- commons-io:commons-io:2.4
+|    |    \--- org.eclipse.jetty.websocket:websocket-client:9.2.10.v20150310
+|    |         +--- org.eclipse.jetty:jetty-util:9.2.10.v20150310
+|    |         +--- org.eclipse.jetty:jetty-io:9.2.10.v20150310
+|    |         |    \--- org.eclipse.jetty:jetty-util:9.2.10.v20150310
+|    |         \--- org.eclipse.jetty.websocket:websocket-common:9.2.10.v20150310
+|    |              +--- org.eclipse.jetty.websocket:websocket-api:9.2.10.v20150310
+|    |              +--- org.eclipse.jetty:jetty-util:9.2.10.v20150310
+|    |              \--- org.eclipse.jetty:jetty-io:9.2.10.v20150310 (*)
+|    +--- org.apache.httpcomponents:httpclient:4.4.1
+|    |    +--- org.apache.httpcomponents:httpcore:4.4.1
+|    |    +--- commons-logging:commons-logging:1.2
+|    |    \--- commons-codec:commons-codec:1.9
+|    +--- org.apache.httpcomponents:httpmime:4.4.1
+|    |    \--- org.apache.httpcomponents:httpclient:4.4.1 (*)
+|    +--- org.fluentlenium:fluentlenium-core:0.10.2
+|    +--- com.jhlabs:filters:2.0.235
+|    +--- org.asciidoctor:asciidoctor-java-integration:0.1.3
+|    |    +--- org.jruby:jruby-complete:1.7.4
+|    |    \--- com.beust:jcommander:1.30
+|    +--- javax.validation:validation-api:1.1.0.Final
+|    +--- org.hibernate:hibernate-validator:5.1.1.Final
+|    |    +--- javax.validation:validation-api:1.1.0.Final
+|    |    +--- org.jboss.logging:jboss-logging:3.1.3.GA
+|    |    \--- com.fasterxml:classmate:1.0.0
+|    +--- javax.el:javax.el-api:2.2.4
+|    +--- org.glassfish.web:javax.el:2.2.4
+|    |    \--- javax.el:javax.el-api:2.2.4
+|    \--- com.jayway.awaitility:awaitility:1.6.3
+|         +--- org.hamcrest:hamcrest-library:1.3 (*)
+|         +--- org.hamcrest:hamcrest-core:1.3
+|         \--- org.objenesis:objenesis:2.1
++--- org.apache.ant:ant:1.9.3
+|    \--- org.apache.ant:ant-launcher:1.9.3
++--- ch.qos.logback:logback-classic:1.0.13
+|    \--- ch.qos.logback:logback-core:1.0.13
++--- org.hamcrest:hamcrest-integration:1.3
+|    \--- org.hamcrest:hamcrest-library:1.3 (*)
++--- org.hamcrest:hamcrest-library:1.3 (*)
++--- org.hamcrest:hamcrest-core:1.3
++--- org.mockito:mockito-all:1.10.8 -> org.mockito:mockito-core:1.10.8
+|    \--- org.objenesis:objenesis:2.1
++--- org.spockframework:spock-core:1.0-groovy-2.3
++--- com.geodevv.testing:spock-extensions:1.0.2
+|    +--- org.codehaus.groovy:groovy-all:2.4.3
+|    \--- joda-time:joda-time:2.7
++--- org.codehaus.groovy:groovy-all:2.3.6 -> 2.4.3
++--- org.assertj:assertj-core:1.7.1
++--- project :serenity-test-utils
+|    +--- com.google.guava:guava:18.0
+|    +--- com.google.inject:guice:3.0 (*)
+|    +--- cglib:cglib:3.1
+|    +--- org.ow2.asm:asm:5.0.3
+|    +--- commons-codec:commons-codec:1.9
+|    +--- org.objenesis:objenesis:2.1
+|    +--- org.slf4j:slf4j-api:1.7.7
+|    +--- xml-apis:xml-apis:1.4.01
+|    +--- info.cukes:cucumber-core:1.2.2 (*)
+|    +--- commons-logging:commons-logging:1.2
+|    +--- junit:junit:4.11 (*)
+|    +--- org.hamcrest:hamcrest-library:1.3 (*)
+|    +--- org.hamcrest:hamcrest-integration:1.3 (*)
+|    +--- org.hamcrest:hamcrest-core:1.3
+|    \--- xmlunit:xmlunit:1.3
+\--- org.apache.ant:ant-testutil:1.9.3
+     \--- org.apache.ant:ant:1.9.3 (*)
+
+testRuntime - Runtime classpath for source set 'test'.
++--- com.google.guava:guava:18.0
++--- com.google.inject:guice:3.0
+|    +--- javax.inject:javax.inject:1
+|    +--- aopalliance:aopalliance:1.0
+|    \--- org.sonatype.sisu.inject:cglib:2.2.1-v20090111
++--- cglib:cglib:3.1
++--- org.ow2.asm:asm:5.0.3
++--- commons-codec:commons-codec:1.9
++--- org.objenesis:objenesis:2.1
++--- org.slf4j:slf4j-api:1.7.7
++--- xml-apis:xml-apis:1.4.01
++--- info.cukes:cucumber-core:1.2.2
+|    +--- info.cukes:cucumber-html:0.2.3
+|    +--- info.cukes:cucumber-jvm-deps:1.0.3
+|    \--- info.cukes:gherkin:2.12.2
++--- commons-logging:commons-logging:1.2
++--- junit:junit:4.11
+|    \--- org.hamcrest:hamcrest-core:1.3
++--- project :serenity-core
+|    +--- com.google.guava:guava:18.0
+|    +--- com.google.inject:guice:3.0 (*)
+|    +--- cglib:cglib:3.1
+|    +--- org.ow2.asm:asm:5.0.3
+|    +--- commons-codec:commons-codec:1.9
+|    +--- org.objenesis:objenesis:2.1
+|    +--- org.slf4j:slf4j-api:1.7.7
+|    +--- xml-apis:xml-apis:1.4.01
+|    +--- info.cukes:cucumber-core:1.2.2 (*)
+|    +--- commons-logging:commons-logging:1.2
+|    +--- junit:junit:4.11 (*)
+|    +--- project :serenity-report-resources
+|    |    +--- com.google.guava:guava:18.0
+|    |    +--- com.google.inject:guice:3.0 (*)
+|    |    +--- cglib:cglib:3.1
+|    |    +--- org.ow2.asm:asm:5.0.3
+|    |    +--- commons-codec:commons-codec:1.9
+|    |    +--- org.objenesis:objenesis:2.1
+|    |    +--- org.slf4j:slf4j-api:1.7.7
+|    |    +--- xml-apis:xml-apis:1.4.01
+|    |    +--- info.cukes:cucumber-core:1.2.2 (*)
+|    |    +--- commons-logging:commons-logging:1.2
+|    |    \--- junit:junit:4.11 (*)
+|    +--- com.google.code.gson:gson:2.3.1
+|    +--- commons-io:commons-io:2.4
+|    +--- com.opera:operadriver:1.5
+|    |    +--- com.opera:operalaunchers:1.1
+|    |    +--- com.google.protobuf:protobuf-java:2.4.1
+|    |    +--- commons-jxpath:commons-jxpath:1.3
+|    |    +--- org.apache.commons:commons-exec:1.1
+|    |    \--- org.ini4j:ini4j:0.5.2
+|    +--- org.seleniumhq.selenium:selenium-server:2.45.0
+|    |    +--- org.bouncycastle:bcprov-jdk15on:1.48
+|    |    +--- org.bouncycastle:bcpkix-jdk15on:1.48
+|    |    |    \--- org.bouncycastle:bcprov-jdk15on:1.48
+|    |    +--- mx4j:mx4j-tools:3.0.1
+|    |    +--- org.mortbay.jetty:servlet-api-2.5:6.1.9
+|    |    +--- org.seleniumhq.selenium:jetty-repacked:7.6.1
+|    |    +--- org.seleniumhq.selenium:jetty-rc-repacked:5
+|    |    +--- net.jcip:jcip-annotations:1.0
+|    |    +--- org.seleniumhq.selenium:selenium-java:2.45.0
+|    |    |    +--- org.seleniumhq.selenium:selenium-chrome-driver:2.45.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0
+|    |    |    |         +--- org.seleniumhq.selenium:selenium-api:2.45.0
+|    |    |    |         +--- org.apache.commons:commons-exec:1.1
+|    |    |    |         +--- net.java.dev.jna:jna:3.4.0
+|    |    |    |         \--- net.java.dev.jna:platform:3.4.0
+|    |    |    +--- org.seleniumhq.selenium:selenium-htmlunit-driver:2.45.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    +--- org.seleniumhq.selenium:selenium-firefox-driver:2.45.0
+|    |    |    |    +--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    |    \--- org.apache.commons:commons-exec:1.1
+|    |    |    +--- org.seleniumhq.selenium:selenium-ie-driver:2.45.0
+|    |    |    |    +--- net.java.dev.jna:jna:3.4.0
+|    |    |    |    +--- net.java.dev.jna:platform:3.4.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    +--- org.seleniumhq.selenium:selenium-safari-driver:2.45.0
+|    |    |    |    +--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    |    \--- org.webbitserver:webbit:0.4.14
+|    |    |    |         \--- io.netty:netty:3.5.2.Final
+|    |    |    +--- org.seleniumhq.selenium:selenium-support:2.45.0
+|    |    |    |    \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    |    +--- org.webbitserver:webbit:0.4.14 (*)
+|    |    |    \--- org.seleniumhq.selenium:selenium-leg-rc:2.45.0
+|    |    |         \--- org.seleniumhq.selenium:selenium-remote-driver:2.45.0 (*)
+|    |    \--- org.yaml:snakeyaml:1.8
+|    +--- com.codeborne:phantomjsdriver:1.2.1
+|    +--- io.appium:java-client:2.1.0
+|    +--- org.codehaus.groovy:groovy:2.3.6
+|    +--- net.sf.opencsv:opencsv:2.0
+|    +--- commons-beanutils:commons-beanutils-core:1.8.3
+|    +--- com.googlecode.lambdaj:lambdaj:2.3.3
+|    +--- joda-time:joda-time:2.2 -> 2.7
+|    +--- com.thoughtworks.xstream:xstream:1.4.1 -> 1.4.5
+|    |    +--- xmlpull:xmlpull:1.1.3.1
+|    |    \--- xpp3:xpp3_min:1.1.4c
+|    +--- org.apache.commons:commons-lang3:3.3.2
+|    +--- commons-collections:commons-collections:3.2.1
+|    +--- org.freemarker:freemarker:2.3.21
+|    +--- net.sourceforge.jexcelapi:jxl:2.6.12
+|    +--- org.hamcrest:hamcrest-core:1.3
+|    +--- org.hamcrest:hamcrest-library:1.3
+|    |    \--- org.hamcrest:hamcrest-core:1.3
+|    +--- com.thoughtworks.xstream:xstream:1.4.5 (*)
+|    +--- net.sourceforge.htmlunit:htmlunit:2.16
+|    |    +--- xalan:xalan:2.7.1
+|    |    |    \--- xalan:serializer:2.7.1
+|    |    +--- commons-collections:commons-collections:3.2.1
+|    |    +--- net.sourceforge.htmlunit:htmlunit-core-js:2.16
+|    |    +--- xerces:xercesImpl:2.11.0
+|    |    +--- net.sourceforge.nekohtml:nekohtml:1.9.22
+|    |    +--- net.sourceforge.cssparser:cssparser:0.9.15
+|    |    |    \--- org.w3c.css:sac:1.3
+|    |    +--- commons-io:commons-io:2.4
+|    |    \--- org.eclipse.jetty.websocket:websocket-client:9.2.10.v20150310
+|    |         +--- org.eclipse.jetty:jetty-util:9.2.10.v20150310
+|    |         +--- org.eclipse.jetty:jetty-io:9.2.10.v20150310
+|    |         |    \--- org.eclipse.jetty:jetty-util:9.2.10.v20150310
+|    |         \--- org.eclipse.jetty.websocket:websocket-common:9.2.10.v20150310
+|    |              +--- org.eclipse.jetty.websocket:websocket-api:9.2.10.v20150310
+|    |              +--- org.eclipse.jetty:jetty-util:9.2.10.v20150310
+|    |              \--- org.eclipse.jetty:jetty-io:9.2.10.v20150310 (*)
+|    +--- org.apache.httpcomponents:httpclient:4.4.1
+|    |    +--- org.apache.httpcomponents:httpcore:4.4.1
+|    |    +--- commons-logging:commons-logging:1.2
+|    |    \--- commons-codec:commons-codec:1.9
+|    +--- org.apache.httpcomponents:httpmime:4.4.1
+|    |    \--- org.apache.httpcomponents:httpclient:4.4.1 (*)
+|    +--- org.fluentlenium:fluentlenium-core:0.10.2
+|    +--- com.jhlabs:filters:2.0.235
+|    +--- org.asciidoctor:asciidoctor-java-integration:0.1.3
+|    |    +--- org.jruby:jruby-complete:1.7.4
+|    |    \--- com.beust:jcommander:1.30
+|    +--- javax.validation:validation-api:1.1.0.Final
+|    +--- org.hibernate:hibernate-validator:5.1.1.Final
+|    |    +--- javax.validation:validation-api:1.1.0.Final
+|    |    +--- org.jboss.logging:jboss-logging:3.1.3.GA
+|    |    \--- com.fasterxml:classmate:1.0.0
+|    +--- javax.el:javax.el-api:2.2.4
+|    +--- org.glassfish.web:javax.el:2.2.4
+|    |    \--- javax.el:javax.el-api:2.2.4
+|    \--- com.jayway.awaitility:awaitility:1.6.3
+|         +--- org.hamcrest:hamcrest-library:1.3 (*)
+|         +--- org.hamcrest:hamcrest-core:1.3
+|         \--- org.objenesis:objenesis:2.1
++--- org.apache.ant:ant:1.9.3
+|    \--- org.apache.ant:ant-launcher:1.9.3
++--- ch.qos.logback:logback-classic:1.0.13
+|    \--- ch.qos.logback:logback-core:1.0.13
++--- org.hamcrest:hamcrest-integration:1.3
+|    \--- org.hamcrest:hamcrest-library:1.3 (*)
++--- org.hamcrest:hamcrest-library:1.3 (*)
++--- org.hamcrest:hamcrest-core:1.3
++--- org.mockito:mockito-all:1.10.8 -> org.mockito:mockito-core:1.10.8
+|    \--- org.objenesis:objenesis:2.1
++--- org.spockframework:spock-core:1.0-groovy-2.3
++--- com.geodevv.testing:spock-extensions:1.0.2
+|    +--- org.codehaus.groovy:groovy-all:2.4.3
+|    \--- joda-time:joda-time:2.7
++--- org.codehaus.groovy:groovy-all:2.3.6 -> 2.4.3
++--- org.assertj:assertj-core:1.7.1
++--- project :serenity-test-utils
+|    +--- com.google.guava:guava:18.0
+|    +--- com.google.inject:guice:3.0 (*)
+|    +--- cglib:cglib:3.1
+|    +--- org.ow2.asm:asm:5.0.3
+|    +--- commons-codec:commons-codec:1.9
+|    +--- org.objenesis:objenesis:2.1
+|    +--- org.slf4j:slf4j-api:1.7.7
+|    +--- xml-apis:xml-apis:1.4.01
+|    +--- info.cukes:cucumber-core:1.2.2 (*)
+|    +--- commons-logging:commons-logging:1.2
+|    +--- junit:junit:4.11 (*)
+|    +--- org.hamcrest:hamcrest-library:1.3 (*)
+|    +--- org.hamcrest:hamcrest-integration:1.3 (*)
+|    +--- org.hamcrest:hamcrest-core:1.3
+|    \--- xmlunit:xmlunit:1.3
+\--- org.apache.ant:ant-testutil:1.9.3
+     \--- org.apache.ant:ant:1.9.3 (*)
+
+(*) - dependencies omitted (listed previously)
+
+BUILD SUCCESSFUL
+
+Total time: 11.173 secs

@@ -8,7 +8,7 @@ import net.thucydides.core.fixtureservices.FixtureService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
-import org.browsermob.proxy.ProxyServer;
+import net.lightbody.bmp.proxy.ProxyServer;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -79,11 +79,7 @@ public class BrowserMobFixtureService implements FixtureService {
         if (!proxyServerRunning()) {
             setup();
         }
-        try {
-            capabilities.setCapability(CapabilityType.PROXY, threadLocalproxyServer.get().seleniumProxy());
-        } catch (UnknownHostException e) {
-            throw new IllegalArgumentException(e);
-        }
+        capabilities.setCapability(CapabilityType.PROXY, threadLocalproxyServer.get().seleniumProxy());
     }
 
     private boolean proxyServerRunning() {

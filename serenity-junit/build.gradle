@@ -4,7 +4,7 @@ ext {
 }
 
 dependencies {
-    compile project(':core')
+    compile project(':serenity-core')
     compile "junit:junit:${junitVersion}"
     compile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
 

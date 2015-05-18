@@ -1466,3 +1466,15 @@ ul.second-level-requirements  {
 .modal-body p {
     word-wrap: break-word;
 }
+
+#restModal .modal-content
+{
+    height:500px;
+    overflow:auto;
+}
+
+#stacktraceModal .modal-content
+{
+    height:500px;
+    overflow:auto;
+}

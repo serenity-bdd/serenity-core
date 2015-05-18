@@ -1,0 +1,16 @@
+ext {
+    bintrayPackage = 'serenity-rest-assured'
+    projectDescription = 'Serenity RestAssured integration'
+}
+
+dependencies {
+    compile project(':serenity-core')
+    compile ("com.jayway.restassured:rest-assured:${restAssuredVersion}") {
+    	exclude group: 'org.apache.httpcomponents', module:'httpclient'
+    	exclude group: 'org.apache.httpcomponents', module:'httpmime'
+        exclude group: 'org.codehaus.groovy', module:'groovy'
+        exclude group: 'org.codehaus.groovy', module:'groovy-json'
+        exclude group: 'org.codehaus.groovy', module:'groovy-xml'
+    }
+    compile "net.bytebuddy:byte-buddy:0.6.5"
+}

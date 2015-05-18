@@ -283,8 +283,49 @@
                         </div>
                     </div>
                 </div>
-
             </#macro>
+
+            <#macro restQueryData(restQuery) >
+                <div>
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#restModal">
+                        View REST query
+                    </button>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="restModal" tabindex="-1" role="dialog"
+                     aria-labelledby="restModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                        aria-label="Close"><span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="restModalLabel">
+                                    ${restQuery.formattedQuery}
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Status code: ${restQuery.statusCode}</p>
+                                <#if restQuery.contentType?has_content>
+                                    <p>Content Type: ${restQuery.contentType}</p>
+                                </#if>
+                                <#if restQuery.content?has_content>
+                                    <h5>Content Body</h5>
+                                    <pre>${restQuery.content}</pre>
+                                </#if>
+                                <h5>Response Body</h5>
+                                <pre>${restQuery.responseBody}</pre>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </#macro>
+
 
             <#macro step_details(step, step_number, level)>
                 <#if step.result == "FAILURE">
@@ -351,6 +392,13 @@
                                          width="48" height="48"/>
                                     <#assign screenshotCount = screenshotCount + step.screenshotCount />
                                 </a>
+                            </#if>
+                        </td>
+                    </#if>
+                    <#if testOutcome.hasRestQueries()>
+                        <td width="100" class="${step.result}-text">
+                            <#if step.hasRestQuery()>
+                                <@restQueryData(step.restQuery) />
                             </#if>
                         </td>
                     </#if>

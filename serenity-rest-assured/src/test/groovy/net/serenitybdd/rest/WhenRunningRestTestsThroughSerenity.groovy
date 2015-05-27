@@ -13,7 +13,7 @@ import spock.lang.Specification
 
 import static com.jayway.restassured.RestAssured.given
 import static net.serenitybdd.core.rest.RestMethod.*
-import static net.serenitybdd.rest.SerenityRest.webservice
+import static net.serenitybdd.rest.SerenityRest.rest
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.greaterThan;
 
@@ -35,7 +35,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
 
     private void seedTestData() {
         def samplePet = """{"id": 1000, "name": "doggie", "photoUrls": [], "status": "available"}"""
-        given().body(samplePet).post("http://petstore.swagger.io/v2/pet")
+        given().contentType(ContentType.JSON).body(samplePet).post("http://petstore.swagger.io/v2/pet")
     }
 
     def cleanup() {
@@ -49,7 +49,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
             StepEventBus.eventBus.registerListener(mockListener)
             StepEventBus.eventBus.testStarted("rest")
         when:
-            webservice().get("http://petstore.swagger.io/v2/store/inventory")
+            rest().get("http://petstore.swagger.io/v2/store/inventory")
         then: "The JSON request should be recorded in the test steps"
             1 * mockListener.recordRestQuery({ RestQuery query -> query.method == GET  && query.path == "http://petstore.swagger.io/v2/store/inventory"})
     }
@@ -60,7 +60,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
         StepEventBus.eventBus.registerListener(mockListener)
         StepEventBus.eventBus.testStarted("rest")
         when:
-        webservice().get("http://petstore.swagger.io/v2/pet/findByStatus?status={status}",["status":"available"])
+        rest().get("http://petstore.swagger.io/v2/pet/findByStatus?status={status}",["status":"available"])
         then: "The JSON request should be recorded in the test steps"
         1 * mockListener.recordRestQuery({ RestQuery query -> query.toString() == "GET http://petstore.swagger.io/v2/pet/findByStatus?status=available"})
     }
@@ -71,7 +71,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
             StepEventBus.eventBus.registerListener(mockListener)
             StepEventBus.eventBus.testStarted("rest")
         when:
-            webservice().get("http://petstore.swagger.io/v2/pet/findByStatus?status={status}","available")
+            rest().get("http://petstore.swagger.io/v2/pet/findByStatus?status={status}","available")
         then: "The JSON request should be recorded in the test steps"
             1 * mockListener.recordRestQuery({ RestQuery query -> query.toString() == "GET http://petstore.swagger.io/v2/pet/findByStatus?status=available"})
     }
@@ -84,7 +84,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
         and:
             def samplePet = """{"id": 1001, "name": "doggie", "photoUrls": [], "status": "available"}"""
         when:
-            webservice().given().contentType("application/json").content(samplePet).post("http://petstore.swagger.io/v2/pet")
+            rest().given().contentType("application/json").content(samplePet).post("http://petstore.swagger.io/v2/pet")
         then: "The JSON request should be recorded in the test steps"
             1 * mockListener.recordRestQuery({ RestQuery query -> query.toString() == "POST http://petstore.swagger.io/v2/pet" &&
                                                                   query.content == samplePet  &&
@@ -101,7 +101,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
             StepEventBus.eventBus.testStarted("rest")
             def updatedPet = """{"id": 1003, "name": "fido", "photoUrls": [], "status": "available"}"""
         when:
-            webservice().given().contentType("application/json").content(updatedPet).put("http://petstore.swagger.io/v2/pet")
+            rest().given().contentType("application/json").content(updatedPet).put("http://petstore.swagger.io/v2/pet")
         then: "The JSON request should be recorded in the test steps"
             1 * mockListener.recordRestQuery({ RestQuery query -> query.toString() == "PUT http://petstore.swagger.io/v2/pet" &&
                 query.content == updatedPet  &&
@@ -117,7 +117,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
             StepEventBus.eventBus.registerListener(mockListener)
             StepEventBus.eventBus.testStarted("rest")
         when:
-            webservice().delete("http://petstore.swagger.io/v2/pet/{id}","1002")
+            rest().delete("http://petstore.swagger.io/v2/pet/{id}","1002")
         then: "The JSON request should be recorded in the test steps"
             1 * mockListener.recordRestQuery({ RestQuery query -> query.toString() == "DELETE http://petstore.swagger.io/v2/pet/1002"})
     }
@@ -126,7 +126,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
         given:
             StepEventBus.eventBus.testStarted("rest")
         when:
-            webservice().get("http://petstore.swagger.io/v2/store/inventory")
+            rest().get("http://petstore.swagger.io/v2/store/inventory")
         then: "The JSON request should be recorded in the test steps"
             def testSteps = stepListener.testOutcomes[0].flattenedTestSteps
             testSteps[0].description == "GET http://petstore.swagger.io/v2/store/inventory"
@@ -136,7 +136,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
         given:
             StepEventBus.eventBus.testStarted("rest")
         when:
-            webservice().get("http://petstore.swagger.io/v2/pet/{id}", 1000).then().body("id", equalTo(1000));
+            rest().get("http://petstore.swagger.io/v2/pet/{id}", 1000).then().body("id", equalTo(1000));
         then: "The JSON request should be recorded in the test steps"
             def testSteps = stepListener.testOutcomes[0].flattenedTestSteps
             testSteps[0].description == "GET http://petstore.swagger.io/v2/pet/1000"
@@ -145,25 +145,25 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
     static class RestSteps {
         @Step
         def successfulGet() {
-            webservice().get("http://petstore.swagger.io/v2/pet/{id}", 1000).then().body("id", equalTo(1000));
-            webservice().get("http://petstore.swagger.io/v2/pet/{id}", 1000).then().body("/pets/id")
+            rest().get("http://petstore.swagger.io/v2/pet/{id}", 1000).then().body("id", equalTo(1000));
+            rest().get("http://petstore.swagger.io/v2/pet/{id}", 1000).then().body("/pets/id")
         }
 
         @Step
         def failingGet() {
-            webservice().get("http://petstore.swagger.io/v2/pet/{id}", 1000).then().body("id", equalTo(1001));
+            rest().get("http://petstore.swagger.io/v2/pet/{id}", 1000).then().body("id", equalTo(1001));
         }
 
 
         @Step
         def getPetById() {
-            webservice().get("http://petstore.swagger.io/v2/pet/{id}", 1000);
+            rest().get("http://petstore.swagger.io/v2/pet/{id}", 1000);
         }
 
         @Step
         def thenCheckOutcome() {
-            webservice().then().body("id", equalTo(1000));
-            webservice().then().expect().body("id", greaterThan(0));
+            rest().then().body("id", equalTo(1000));
+            rest().then().expect().body("id", greaterThan(0));
         }
 
     }

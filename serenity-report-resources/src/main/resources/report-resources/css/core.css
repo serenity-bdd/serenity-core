@@ -1478,3 +1478,7 @@ ul.second-level-requirements  {
     height:500px;
     overflow:auto;
 }
+
+.rest-query {
+    padding-left : 10px;
+}

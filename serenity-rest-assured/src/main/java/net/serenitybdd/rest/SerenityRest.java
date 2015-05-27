@@ -36,12 +36,18 @@ public class SerenityRest {
         return currentQueryPayload.get();
     }
 
-    public static RequestSpecification webservice() {
-        if (currentRequestSpecification.get() == null) {
-            currentRequestSpecification.set(instrumentedRequestSpecification());
-            StepEventBus.getEventBus().registerListener(new RestStepListener());
-        }
+    public static RequestSpecification rest() {
+        currentRequestSpecification.set(instrumentedRequestSpecification());
+        StepEventBus.getEventBus().registerListener(new RestStepListener());
         return currentRequestSpecification.get();
+    }
+
+    public static RequestSpecification then() {
+        if (currentRequestSpecification.get() == null) {
+            return rest();
+        } else {
+            return currentRequestSpecification.get();
+        }
     }
 
     private static RequestSpecification instrumentedRequestSpecification() {

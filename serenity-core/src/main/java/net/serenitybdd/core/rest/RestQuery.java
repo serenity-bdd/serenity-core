@@ -76,6 +76,14 @@ public class RestQuery {
         return responseBody;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
     public Integer getStatusCode() {
         return statusCode;
     }

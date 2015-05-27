@@ -188,7 +188,8 @@
                     <#list dataSet.rows as row>
                     <tr>
                         <#list row.values as value>
-                            <td class="test-${row.result}"><a href="#${rowIndex}">${formatter.htmlCompatible(value)}</a></td>
+                            <td class="test-${row.result}"><a href="#${rowIndex}">${formatter.htmlCompatible(value)}</a>
+                            </td>
                         </#list>
                     </tr>
                         <#assign rowIndex = rowIndex + 1 >
@@ -252,7 +253,8 @@
 
             <#macro stacktrace(cause) >
                 <div><!-- Stack trace -->
-                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#stacktraceModal">
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                            data-target="#stacktraceModal">
                         View stack trace
                     </button>
                 </div>
@@ -266,7 +268,7 @@
                                         aria-label="Close"><span aria-hidden="true">&times;</span>
                                 </button>
                                 <h4 class="modal-title" id="stacktraceModalLabel">
-                                    ${cause.errorType} :  ${cause.message}
+                                ${cause.errorType} :  ${cause.message}
                                 </h4>
                             </div>
                             <div class="modal-body">
@@ -285,14 +287,15 @@
                 </div>
             </#macro>
 
-            <#macro restQueryData(restQuery) >
-                <div>
-                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#restModal">
-                        View REST query
+            <#macro restQueryData(restQuery, number) >
+                <span>
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                            data-target="#restModal-${number}">
+                        REST Query
                     </button>
-                </div>
+                </span>
                 <!-- Modal -->
-                <div class="modal fade" id="restModal" tabindex="-1" role="dialog"
+                <div class="modal fade" id="restModal-${number}" tabindex="-1" role="dialog"
                      aria-labelledby="restModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
@@ -301,7 +304,7 @@
                                         aria-label="Close"><span aria-hidden="true">&times;</span>
                                 </button>
                                 <h4 class="modal-title" id="restModalLabel">
-                                    ${restQuery.formattedQuery}
+                                ${restQuery.formattedQuery}
                                 </h4>
                             </div>
                             <div class="modal-body">
@@ -311,7 +314,7 @@
                                 </#if>
                                 <#if restQuery.content?has_content>
                                     <h5>Content Body</h5>
-                                    <pre>${restQuery.content}</pre>
+                                    <pre>${(restQuery.content)!}</pre>
                                 </#if>
                                 <h5>Response Body</h5>
                                 <pre>${restQuery.responseBody}</pre>
@@ -379,6 +382,13 @@
                             <#if showAccordion>
                             </a>
                             </#if>
+
+                            <#if step.hasRestQuery()>
+                                <span class="rest-query">
+                                    <@restQueryData restQuery=step.restQuery number=step.number />
+                                </span>
+                            </#if>
+
                         </div>
                     </td>
                     <#if testOutcome.hasScreenshots()>
@@ -392,13 +402,6 @@
                                          width="48" height="48"/>
                                     <#assign screenshotCount = screenshotCount + step.screenshotCount />
                                 </a>
-                            </#if>
-                        </td>
-                    </#if>
-                    <#if testOutcome.hasRestQueries()>
-                        <td width="100" class="${step.result}-text">
-                            <#if step.hasRestQuery()>
-                                <@restQueryData(step.restQuery) />
                             </#if>
                         </td>
                     </#if>
@@ -451,7 +454,7 @@
                             <#if (testOutcome.errorMessage)??>
                                 <span class="error-message"
                                       title="${formatter.htmlAttributeCompatible(testOutcome.errorMessage)}">${testOutcome.errorMessage}</span>
-                                    <@stacktrace cause=testOutcome.nestedTestFailureCause />
+                                <@stacktrace cause=testOutcome.nestedTestFailureCause />
                             </#if>
                         </td>
                     </tr>

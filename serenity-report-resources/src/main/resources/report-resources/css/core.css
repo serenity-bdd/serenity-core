@@ -1436,7 +1436,7 @@ ul.second-level-requirements  {
 #slider {
     position:relative;
     width:1000px; /* Change this to your images width */
-    height:800px; /* Change this to your images height */
+    height:auto; /* Change this to your images height */
 }
 #slider img {
     position:absolute;

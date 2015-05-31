@@ -107,6 +107,8 @@ public class Photographer {
                     File savedScreenshot = targetScreenshot(storedFilename);
                     if (!Files.exists(savedScreenshot.toPath())) {
                         screenshotProcessor.queueScreenshot(new QueuedScreenshot(screenshotTempFile, savedScreenshot));
+                    } else {
+                        silentlyDelete(screenshotTempFile);
                     }
                     return Optional.of(savedScreenshot);
                 }
@@ -120,7 +122,17 @@ public class Photographer {
     private File copyScreenshotWorkingCopyFrom(File capturedScreenshot) throws IOException {
         Path temporaryScreenshotFile = Files.createTempFile("screenshot", "");
         Files.copy(capturedScreenshot.toPath(), temporaryScreenshotFile, StandardCopyOption.REPLACE_EXISTING);
+        silentlyDelete(capturedScreenshot);
         return temporaryScreenshotFile.toFile();
+    }
+
+    private void silentlyDelete(File capturedScreenshot) {
+        try {
+            Files.deleteIfExists(capturedScreenshot.toPath());
+        } catch(IOException e) {
+            logger.info("Failed to quickly delete screenshot " + capturedScreenshot.getName() + " : " + e.getMessage());
+            capturedScreenshot.deleteOnExit();
+        }
     }
 
     public String getPageSource() {
@@ -133,6 +145,7 @@ public class Photographer {
     }
 
     protected File blur(File srcFile) throws IOException {
+        System.out.println("BLURING  " + srcFile);
         BufferedImage srcImage = ImageIO.read(srcFile);
         BufferedImage destImage = deepCopy(srcImage);
         BoxBlurFilter boxBlurFilter = new BoxBlurFilter();
@@ -143,7 +156,9 @@ public class Photographer {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         ImageIO.write(destImage, "png", outStream);
 
-        return saveScreenshotData(outStream.toByteArray());
+        File blurredFile = saveScreenshotData(outStream.toByteArray());
+        silentlyDelete(srcFile);
+        return blurredFile;
     }
 
     private BufferedImage deepCopy(BufferedImage srcImage) {
@@ -155,6 +170,7 @@ public class Photographer {
 
     private File saveScreenshotData(byte[] capturedScreenshot) throws IOException {
         Path temporaryScreenshotFile = Files.createTempFile("screenshot", "");
+        System.out.println("SAVING SCREENSHOT DATA TO  " + temporaryScreenshotFile);
         Files.write(temporaryScreenshotFile, capturedScreenshot);
         return temporaryScreenshotFile.toFile();
     }

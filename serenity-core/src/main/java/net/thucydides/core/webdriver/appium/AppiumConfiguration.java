@@ -81,14 +81,6 @@ public class AppiumConfiguration {
         if (!appiumProperties.containsKey("app")) {
             throw new ThucydidesConfigurationException("The path to the app needs to be provided in the appium.app property.");
         }
-        if (!validPath(appiumProperties.getProperty("app"))) {
-            throw new ThucydidesConfigurationException("The path defined in the appium.app property seems wrong: " + appiumProperties.getProperty("app"));
-        }
-
-    }
-
-    private boolean validPath(String path) {
-        return new File(path).exists();
     }
 
     private String appPathFrom(String propertyValue) {

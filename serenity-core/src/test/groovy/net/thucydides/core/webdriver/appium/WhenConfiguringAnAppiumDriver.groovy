@@ -104,20 +104,4 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         invalidConfiguration.message.contains("The path to the app needs to be provided in the appium.app property.")
     }
 
-    @Unroll
-    def "should provide meaningful message if the app path is invalid for path '#wrongPath'"() {
-        given:
-        environmentVariables.setProperty("appium.platformName", "IOS")
-        environmentVariables.setProperty("appium.app", wrongPath)
-        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
-        when:
-        appiumConfiguration.capabilities
-        then:
-        ThucydidesConfigurationException invalidConfiguration = thrown()
-        invalidConfiguration.message.contains("The path defined in the appium.app property seems wrong")
-        where:
-        wrongPath << ["/not/a/proper/path", "-", ""]
-    }
-
-
 }

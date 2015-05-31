@@ -268,7 +268,7 @@
                                         aria-label="Close"><span aria-hidden="true">&times;</span>
                                 </button>
                                 <h4 class="modal-title" id="stacktraceModalLabel">
-                                ${cause.errorType} :  ${cause.message}
+                                ${cause.errorType} <#if (cause.message)??>:  ${cause.message} </#if>
                                 </h4>
                             </div>
                             <div class="modal-body">

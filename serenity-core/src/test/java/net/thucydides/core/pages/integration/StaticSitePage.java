@@ -71,6 +71,9 @@ public class StaticSitePage extends PageObject {
     @FindBy(css="#elements option")
     public List<WebElementFacade> elementItems;
 
+    @FindBy(css="#elements option")
+    public WebElementFacade firstElementItem;
+
     public WebElement grid;
 
     public WebElement emptylist;

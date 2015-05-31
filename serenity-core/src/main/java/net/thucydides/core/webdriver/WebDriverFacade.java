@@ -212,9 +212,15 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         if (!isEnabled()) {
             return Collections.emptyList();
         }
-        webDriverFactory.setTimeouts(getProxiedDriver(), getCurrentImplicitTimeout());
-        List<WebElement> elements = getProxiedDriver().findElements(by);
-        webDriverFactory.resetTimeouts(getProxiedDriver());
+        List<WebElement> elements;
+        try {
+            webDriverFactory.setTimeouts(getProxiedDriver(), getCurrentImplicitTimeout());
+            elements = getProxiedDriver().findElements(by);
+        } catch (Throwable e) {
+            throw e;
+        } finally {
+            webDriverFactory.resetTimeouts(getProxiedDriver());
+        }
         return elements;
     }
 
@@ -222,9 +228,17 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         if (!isEnabled()) {
             return new WebElementFacadeStub();
         }
-        webDriverFactory.setTimeouts(getProxiedDriver(), getCurrentImplicitTimeout());
-        WebElement element = getProxiedDriver().findElement(by);
-        webDriverFactory.resetTimeouts(getProxiedDriver());
+
+        WebElement element;
+
+        try {
+            webDriverFactory.setTimeouts(getProxiedDriver(), getCurrentImplicitTimeout());
+            element = getProxiedDriver().findElement(by);
+        } catch(Throwable e) {
+            throw e;
+        } finally {
+            webDriverFactory.resetTimeouts(getProxiedDriver());
+        }
         return element;
     }
 

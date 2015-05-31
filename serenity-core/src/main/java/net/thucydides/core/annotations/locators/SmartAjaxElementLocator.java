@@ -104,9 +104,16 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
         if (searchContext instanceof ConfigurableTimeouts) {
             ((ConfigurableTimeouts) searchContext).setImplicitTimeout(ZERO_SECONDS);
         }
-        WebElement element = searchContext.findElement(by);
-        if (searchContext instanceof ConfigurableTimeouts) {
-            ((ConfigurableTimeouts) searchContext).resetTimeouts();
+
+        WebElement element;
+        try {
+            element = searchContext.findElement(by);
+        } catch (Throwable e) {
+            throw e;
+        } finally {
+            if (searchContext instanceof ConfigurableTimeouts) {
+                ((ConfigurableTimeouts) searchContext).resetTimeouts();
+            }
         }
         if (element == null) {
             throw new NoSuchElementException("No such element found for criteria " + by.toString());

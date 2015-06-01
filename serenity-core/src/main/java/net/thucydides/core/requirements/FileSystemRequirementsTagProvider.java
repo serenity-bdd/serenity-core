@@ -310,12 +310,23 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     public Optional<Requirement> getParentRequirementOf(final TestOutcome testOutcome) {
-        if (testOutcome.getPath() != null) {
+        if (testOutcome.getFeatureTag().isPresent()) {
+            return requirementWithMatchingFeatureTag(testOutcome.getFeatureTag().get());
+        } else if (testOutcome.getPath() != null) {
             List<String> storyPathElements = stripStorySuffixFrom(stripRootFrom(pathElements(stripRootPathFrom(testOutcome.getPath()))));
             return lastRequirementFrom(storyPathElements);
         } else {
             return mostSpecificTagRequirementFor(testOutcome);
         }
+    }
+
+    private Optional<Requirement> requirementWithMatchingFeatureTag(TestTag featureTag) {
+        for (Requirement requirement : getFlattenedRequirements()) {
+            if (requirement.asUnqualifiedTag().equals(featureTag)) {
+                return Optional.of(requirement);
+            }
+        }
+        return Optional.absent();
     }
 
     private Optional<Requirement> mostSpecificTagRequirementFor(TestOutcome testOutcome) {
@@ -523,7 +534,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private Requirement requirementFromDirectoryName(File requirementDirectory) {
-        System.out.println("Reading requirement from directory name " + requirementDirectory);
         String shortName = humanReadableVersionOf(requirementDirectory.getName());
         List<Requirement> children = readChildrenFrom(requirementDirectory);
         return Requirement.named(shortName).withType(getDefaultType(level)).withNarrative(shortName).withChildren(children);

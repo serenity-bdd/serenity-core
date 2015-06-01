@@ -301,6 +301,7 @@ public class WhenFindingTagsForATestOutcome {
         Story userStory = Story.called("plant potatoes");
         when(testOutcome.getPath()).thenReturn("stories\\grow_potatoes\\grow_new_potatoes\\PlantPotatoes.story");
         when(testOutcome.getUserStory()).thenReturn(userStory);
+        when(testOutcome.getFeatureTag()).thenReturn(Optional.<TestTag>absent());
 
         Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
 
@@ -317,6 +318,7 @@ public class WhenFindingTagsForATestOutcome {
         Story userStory = Story.called("plant potatoes");
         when(testOutcome.getPath()).thenReturn("stories\\grow_potatoes\\grow_new_potatoes\\PlantPotatoes.feature");
         when(testOutcome.getUserStory()).thenReturn(userStory);
+        when(testOutcome.getFeatureTag()).thenReturn(Optional.<TestTag>absent());
 
         Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
 

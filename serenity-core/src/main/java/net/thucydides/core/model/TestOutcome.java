@@ -47,6 +47,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static net.thucydides.core.model.ReportType.HTML;
 import static net.thucydides.core.model.ReportType.ROOT;
 import static net.thucydides.core.model.TestResult.*;
+import static net.thucydides.core.util.NameConverter.humanize;
 import static net.thucydides.core.util.NameConverter.withNoArguments;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.hamcrest.Matchers.is;
@@ -1780,4 +1781,19 @@ public class TestOutcome {
         result = 31 * result + (manual ? 1 : 0);
         return result;
     }
+
+
+    public Optional<TestTag> getFeatureTag() {
+        if (getPath() != null) {
+            if (getPath().endsWith(".feature")) {
+                String featureName = humanize(new File(getPath()).getName().replace(".feature",""));
+                return Optional.of(TestTag.withName(featureName).andType("feature"));
+            } else if (getPath().endsWith(".story")) {
+                String featureName = humanize(new File(getPath()).getName().replace(".story", ""));
+                return Optional.of(TestTag.withName(featureName).andType("story"));
+            }
+        }
+        return Optional.absent();
+    }
+
 }

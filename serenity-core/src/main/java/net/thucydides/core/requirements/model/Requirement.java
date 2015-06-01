@@ -214,6 +214,10 @@ public class Requirement implements Comparable {
         return TestTag.withName(qualifiedName()).andType(getType());
     }
 
+    public TestTag asUnqualifiedTag() {
+        return TestTag.withName(getName()).andType(getType());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

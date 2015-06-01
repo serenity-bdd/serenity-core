@@ -36,9 +36,6 @@ public class Dropdown {
         Select select = new Select(dropdown);
         for (String selectedLabel : selectedLabels) {
             select.selectByVisibleText(selectedLabel);
-//            String optionPath = String.format("//option[.='%s']", selectedLabel);
-//            WebElement option = dropdown.findElement(By.xpath(optionPath));
-//            option.click();
         }
     }
 

@@ -2,6 +2,7 @@ package net.thucydides.core.webelements;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.HashSet;
 import java.util.List;
@@ -18,8 +19,10 @@ public class MultipleSelect {
     }
 
     public Set<String> getSelectedOptionLabels() {
-        Set<String> selectedOptions = new HashSet<String>();
-        List<WebElement> options = dropdownField.findElements(By.tagName("option"));
+
+        List<WebElement> options = new Select(dropdownField).getAllSelectedOptions();
+
+        Set<String> selectedOptions = new HashSet<>();
         for (WebElement option : options) {
             if (option.isSelected()) {
                 selectedOptions.add(option.getText());

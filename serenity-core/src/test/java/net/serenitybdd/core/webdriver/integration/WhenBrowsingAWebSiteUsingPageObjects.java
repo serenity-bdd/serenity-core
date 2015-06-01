@@ -146,26 +146,7 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
     public void should_not_find_text_not_contained_in_page() {
         indexPage.shouldContainText("This text is not in the pages");
     }
-
-    @Test
-    public void should_select_in_multiple_select_lists_correctly() {
-        indexPage.selectMultipleItemsFromDropdown(indexPage.multiselect, "Label 1", "Label 3");
-
-        Set<String> selectedLabels = indexPage.getSelectedOptionLabelsFrom(indexPage.multiselect);
-        assertThat(selectedLabels.size(), is(2));
-        assertThat(selectedLabels, hasItems("Label 1", "Label 3"));
-    }
-
-    @Test
-    public void should_select_values_in_multiple_select_lists_correctly() {
-
-        indexPage.selectMultipleItemsFromDropdown(indexPage.multiselect, "Label 1", "Label 3");
-
-        Set<String> selectedValues = indexPage.getSelectedOptionValuesFrom(indexPage.multiselect);
-        assertThat(selectedValues.size(), is(2));
-        assertThat(selectedValues, hasItems("1", "3"));
-    }
-
+    
     @Test
     public void should_return_selected_value_in_select() {
 

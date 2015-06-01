@@ -556,4 +556,8 @@ public class
     public boolean isDryRun() {
         return ThucydidesSystemProperty.THUCYDIDES_DRY_RUN.booleanFrom(environmentVariables);
     }
+
+    public void exceptionExpected(Class<? extends Throwable> expected) {
+        getBaseStepListener().exceptionExpected(expected);
+    }
 }

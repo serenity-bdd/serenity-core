@@ -108,6 +108,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
         getCurrentTestOutcome().setAllStepsTo(result);
     }
 
+    public void exceptionExpected(Class<? extends Throwable> expected) {
+        if ((getCurrentTestOutcome().getTestFailureCause() != null) && (getCurrentTestOutcome().getTestFailureCause().getErrorType().equals(expected.getName()))) {
+            getCurrentTestOutcome().setAnnotatedResult(TestResult.SUCCESS);
+        }
+    }
+
     protected enum ScreenshotType {
         OPTIONAL_SCREENSHOT,
         MANDATORY_SCREENSHOT

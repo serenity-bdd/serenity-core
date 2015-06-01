@@ -5,6 +5,7 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepListener;
+import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -84,9 +85,21 @@ public class JUnitStepListener extends RunListener {
     @Override
     public void testFinished(final Description description) throws Exception {
         if (testingThisTest(description)) {
+            updateResultsUsingTestAnnotations(description);
             StepEventBus.getEventBus().testFinished();
             endTest();
         }
+    }
+
+    private void updateResultsUsingTestAnnotations(final Description description) {
+        Test testAnnotation = description.getAnnotation(Test.class);
+        if (testAnnotation.expected() != null) {
+            updateResultsForExpectedException(testAnnotation.expected());
+        }
+    }
+
+    private void updateResultsForExpectedException(Class<? extends Throwable> expected) {
+        StepEventBus.getEventBus().exceptionExpected(expected);
     }
 
     @Override

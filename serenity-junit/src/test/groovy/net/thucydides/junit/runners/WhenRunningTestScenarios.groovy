@@ -445,10 +445,10 @@ class WhenRunningTestScenarios extends Specification {
 
     def "HTML test results should be written to the output directory"() {
         when:
-        new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
-        def xmlReports = temporaryDirectory.list().findAll {it.endsWith(".html")}
+            new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
+            def xmlReports = temporaryDirectory.list().findAll {it.endsWith(".html")}
         then:
-        xmlReports.size() == 3
+            xmlReports.size() == 3
     }
 
 

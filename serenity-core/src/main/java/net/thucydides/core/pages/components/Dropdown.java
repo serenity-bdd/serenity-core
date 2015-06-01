@@ -33,10 +33,12 @@ public class Dropdown {
     }
 
     public void selectMultipleItems(final String... selectedLabels) {
+        Select select = new Select(dropdown);
         for (String selectedLabel : selectedLabels) {
-            String optionPath = String.format("//option[.='%s']", selectedLabel);
-            WebElement option = dropdown.findElement(By.xpath(optionPath));
-            option.click();
+            select.selectByVisibleText(selectedLabel);
+//            String optionPath = String.format("//option[.='%s']", selectedLabel);
+//            WebElement option = dropdown.findElement(By.xpath(optionPath));
+//            option.click();
         }
     }
 

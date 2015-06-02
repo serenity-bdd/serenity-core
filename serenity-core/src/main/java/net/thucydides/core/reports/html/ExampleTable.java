@@ -39,7 +39,9 @@ public class ExampleTable {
 
     public static String stripBracketsFromOuterPipes(String text) {
         text = StringUtils.replace(text, "[|", "|");
+        text = StringUtils.replace(text, "［|", "|");
         text = StringUtils.replace(text,"|]","|");
+        text = StringUtils.replace(text,"|］","|");
         text = StringUtils.replace(text,LEFT_BRACKET + "|","|");
         text = StringUtils.replace(text,"|" + RIGHT_BRACKET,"|");
         return text;

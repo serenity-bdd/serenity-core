@@ -259,6 +259,16 @@ public class WhenFormattingForHTML {
         assertThat(formattedValue, is("A table:<br><table class='embedded'><thead><th>name</th><th>age</th></thead><tbody><tr><td>Bill</td><td>20</td></tr></tbody></table>"));
     }
 
+    @Test
+    public void should_convert_embedded_jbehave_style_tables__with_square_brackets_into_html_tables() {
+        when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
+        Formatter formatter = new Formatter(issueTracking);
+
+        String formattedValue = formatter.convertAnyTables("Given I have the following pet:\n［|name | status |\n|Fido | available |］");
+
+        assertThat(formattedValue, is("Given I have the following pet:<br><table class='embedded'><thead><th>name</th><th>status</th></thead><tbody><tr><td>Fido</td><td>available</td></tr></tbody></table>"));
+    }
+
 
     @Test
     public void should_ignore_isolated_pipes() {

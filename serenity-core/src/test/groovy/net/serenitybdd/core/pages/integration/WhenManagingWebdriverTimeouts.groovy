@@ -125,16 +125,27 @@ class WhenManagingWebdriverTimeouts extends Specification {
     }
 
     def "Implicit timeout should not be affected by isCurrently* methods"() {
-        given: "The #slow-loader field takes 3 seconds to load"
+        given: "The #slow-loader WebElementFacade field takes 3 seconds to load"
             page = openTestPageUsing("phantomjs")
         when: "We override the implicit timeout to allow the slow-loader field to load"
             page.setImplicitTimeout(5, SECONDS)
-        and: "we should be able to access the slow-loader field"
-            page.firstElementItem.isCurrentlyVisible()
+        and: "isCurrently* methods should not use the implicit timeout"
+            !page.slowLoadingField.isCurrentlyVisible()
         then: "we can reset the driver timeouts to the default value once we are done"
             page.driver.currentImplicitTimeout.in(SECONDS) == 5
-        and:
-            page.resetImplicitTimeout()
+        and: "we can reload a slow loading WebElementFacade normally"
+            page.slowLoadingField.isDisplayed()
+    }
+
+
+    def "Element loading times should not be affected by isCurrently* methods"() {
+        given: "The #slow-loader field takes 3 seconds to load"
+            environmentVariables.setProperty("webdriver.timeouts.implicitlywait","3000")
+            page = openTestPageUsing("firefox")
+        when: "we should be able to access the slow-loader field"
+            page.country.isCurrentlyVisible()
+        then: "we can reload a slow element normally"
+            page.slowLoadingField.isDisplayed()
     }
 
     @Unroll

@@ -215,12 +215,12 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
             }
         }
 
-        @Override
-        protected void isError() throws Error {
-            if (lastException.isPresent()) {
-                throw new AssertionError("Element could not be loaded", lastException.get());
-            }
-        }
+//        @Override
+//        protected void isError() throws Error {
+//            if (lastException.isPresent()) {
+//                throw new AssertionError("Element could not be loaded", lastException.get());
+//            }
+//        }
 
 //		public NoSuchElementException getLastException() {
 //			return lastException.get();

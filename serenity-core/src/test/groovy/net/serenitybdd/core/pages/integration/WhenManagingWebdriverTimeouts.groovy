@@ -140,8 +140,8 @@ class WhenManagingWebdriverTimeouts extends Specification {
 
     def "Element loading times should not be affected by isCurrently* methods"() {
         given: "The #slow-loader field takes 3 seconds to load"
-            environmentVariables.setProperty("webdriver.timeouts.implicitlywait","3000")
-            page = openTestPageUsing("firefox")
+            environmentVariables.setProperty("webdriver.timeouts.implicitlywait","5000")
+            page = openTestPageUsing("phantomjs")
         when: "we should be able to access the slow-loader field"
             page.country.isCurrentlyVisible()
         then: "we can reload a slow element normally"

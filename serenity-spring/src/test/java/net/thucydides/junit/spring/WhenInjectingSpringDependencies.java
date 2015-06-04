@@ -21,7 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @RunWith(ThucydidesRunner.class)
-@ContextConfiguration(locations = "/spring/config.xml")
+@ContextConfiguration(locations = "/spring/dirty-config.xml")
 public class WhenInjectingSpringDependencies {
 
     @Managed

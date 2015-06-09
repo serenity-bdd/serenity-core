@@ -169,7 +169,7 @@ public class SmartAnnotations extends Annotations {
         this.platform = platform;
     }
 
-    private void assertValidAnnotations() {
+    protected void assertValidAnnotations() {
         FindBys findBys = field.getAnnotation(FindBys.class);
         FindBy myFindBy = field.getAnnotation(FindBy.class);
 

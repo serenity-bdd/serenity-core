@@ -123,14 +123,14 @@ subprojects {
 
     test {
         testLogging {
-            events "passed", "skipped", "failed"
+            events "failed"//, "passed", "skipped"
             exceptionFormat = 'full'
         }
     }
 
     integrationTests {
         testLogging {
-            events "passed", "skipped", "failed"
+            events "failed"//, "passed", "skipped"
             exceptionFormat = 'full'
         }
         beforeTest { desc ->

@@ -80,7 +80,7 @@ dependencies {
     compile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
     compile "com.thoughtworks.xstream:xstream:1.4.5"
     compile "commons-collections:commons-collections:3.2.1"
-    compile ("net.sourceforge.htmlunit:htmlunit:2.16") {
+    compile ("net.sourceforge.htmlunit:htmlunit:2.17") {
         exclude group: 'org.apache.commons', module: 'commons-lang3'
         exclude group: 'commons-logging', module: 'commons-logging'
         exclude group: 'xml-apis', module: 'xml-apis'

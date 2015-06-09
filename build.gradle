@@ -19,7 +19,7 @@ import groovy.text.SimpleTemplateEngine
 apply plugin: 'org.ajoberstar.release-base'
 
 ext {
-    seleniumVersion = '2.45.0'
+    seleniumVersion = '2.46.0'
     groovyVersion = '2.3.9'
     junitVersion = '4.11'
     hamcrestVersion = '1.3'

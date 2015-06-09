@@ -25,6 +25,7 @@ dependencies {
         exclude group: 'org.seleniumhq.selenium', module:'selenium-java'
         exclude group: 'org.seleniumhq.selenium', module:'selenium-remote-driver'
         exclude group: 'com.google.guava', module: 'guava'
+        exclude group: 'org.apache.commons', module: 'commons-exec'
     }
 
     compile ("org.seleniumhq.selenium:selenium-server:$seleniumVersion") {

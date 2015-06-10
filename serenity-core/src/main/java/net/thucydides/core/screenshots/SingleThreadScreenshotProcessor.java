@@ -135,7 +135,8 @@ public class SingleThreadScreenshotProcessor implements ScreenshotProcessor {
         }
 
         private void moveScreenshot(QueuedScreenshot queuedScreenshot) {
-            CopyOption[] options = new CopyOption[]{COPY_ATTRIBUTES, REPLACE_EXISTING};
+//            CopyOption[] options = new CopyOption[]{REPLACE_EXISTING};
+            CopyOption[] options = new CopyOption[]{StandardCopyOption.COPY_ATTRIBUTES};
 
             try {
                 Path sourcePath = queuedScreenshot.getSourceFile().toPath();
@@ -145,7 +146,7 @@ public class SingleThreadScreenshotProcessor implements ScreenshotProcessor {
                     Files.createDirectories(destinationDir);
                 }
                 if (Files.notExists(destinationPath)) {
-                    Files.move(sourcePath, destinationPath, options);
+                    Files.copy(sourcePath, destinationPath, options);
                 }
                 try {
                     Files.deleteIfExists(sourcePath);

@@ -17,6 +17,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class SingleThreadScreenshotProcessor implements ScreenshotProcessor {
@@ -134,6 +135,8 @@ public class SingleThreadScreenshotProcessor implements ScreenshotProcessor {
         }
 
         private void moveScreenshot(QueuedScreenshot queuedScreenshot) {
+            CopyOption[] options = new CopyOption[]{COPY_ATTRIBUTES, REPLACE_EXISTING};
+
             try {
                 Path sourcePath = queuedScreenshot.getSourceFile().toPath();
                 Path destinationPath = queuedScreenshot.getDestinationFile().toPath();
@@ -142,7 +145,7 @@ public class SingleThreadScreenshotProcessor implements ScreenshotProcessor {
                     Files.createDirectories(destinationDir);
                 }
                 if (Files.notExists(destinationPath)) {
-                    Files.move(sourcePath, destinationPath, REPLACE_EXISTING);
+                    Files.move(sourcePath, destinationPath, options);
                 }
                 try {
                     Files.deleteIfExists(sourcePath);

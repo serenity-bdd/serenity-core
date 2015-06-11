@@ -3,11 +3,15 @@ package net.thucydides.core.model.stacktrace;
 import com.google.common.base.Optional;
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.thucydides.core.model.TestFailureException;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 public class FailureCause {
+
+    private final org.slf4j.Logger logger = LoggerFactory.getLogger(FailureCause.class);
 
     public static final String ERROR_MESSAGE_LABEL_1 = "{'errorMessage':";
     public static final String ERROR_MESSAGE_LABEL_2 = "{\"errorMessage\":";
@@ -107,15 +111,31 @@ public class FailureCause {
     private Optional<Throwable> restoreExceptionFrom(String testFailureClassname, String testFailureMessage) {
         try {
             Class failureClass = Class.forName(testFailureClassname);
+            Throwable exception = null;
+
             Constructor constructorWithMessage = getExceptionConstructor(failureClass);
-            Throwable exception = (Throwable) constructorWithMessage.newInstance(testFailureMessage);
-            exception.setStackTrace(this.getStackTrace());
-            return Optional.of(exception);
+            if (constructorWithMessage != null) {
+                exception = (Throwable) constructorWithMessage.newInstance(testFailureMessage);
+            }
+            if (exception == null) {
+                Constructor constructorWithoutMessage = getExceptionConstructor(failureClass);
+                if (constructorWithoutMessage != null) {
+                    exception = (Throwable) constructorWithoutMessage.newInstance();
+                }
+            }
+            if (exception == null) {
+                logger.warn("Could not instantiate exception class for " + failureClass.getName() + ": check that it has an empty or single-string constructor");
+                exception = new RuntimeException(testFailureClassname + ": " + testFailureMessage);
+                exception.setStackTrace(this.getStackTrace());
+                return Optional.of(exception);
+            } else {
+                exception.setStackTrace(this.getStackTrace());
+                return Optional.of(exception);
+            }
         } catch (Exception e) {
             Throwable exception = new RuntimeException(testFailureClassname + ": " + testFailureMessage);
             exception.setStackTrace(this.getStackTrace());
             return Optional.of(exception);
-//            return Optional.absent();
         }
 
     }
@@ -124,7 +144,11 @@ public class FailureCause {
         try {
             return failureClass.getConstructor(String.class);
         } catch (NoSuchMethodException e) {
-            return failureClass.getConstructor(Object.class);
+            try {
+                return failureClass.getConstructor(Object.class);
+            } catch(NoSuchMethodException e1) {
+                    return null;
+            }
         }
     }
 

@@ -10,7 +10,11 @@ public class StepArgumentWriter {
         } else if (arg.getClass().isArray()) {
             return ArrayUtils.toString(arg);
         } else {
-            return arg.toString();
+            try {
+                return arg.toString();
+            } catch (Throwable e) {
+                return "<" + arg.getClass().getName() + ">";
+            }
         }
     }
 }

@@ -21,4 +21,14 @@ public class WhenRunningASerenityTestWithExceptions {
         throw new MyException();
     }
 
+    @Test
+    public void shouldAllowRecursiveParameters() {
+        RecursivePojo parent = new RecursivePojo(null, "parent");
+        RecursivePojo child = new RecursivePojo(parent, "child");
+        parent.setParent(child);
+
+        mySteps.stepWithRecursiveParameter(child);
+    }
+
+
 }

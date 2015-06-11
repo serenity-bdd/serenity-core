@@ -4,8 +4,13 @@ import net.thucydides.core.annotations.Step;
 
 public class MySteps {
 
-        @Step
-        public void throwException() throws MyException{
-           throw new MyException();
-        }
+    @Step
+    public void throwException() throws MyException {
+        throw new MyException();
     }
+
+    @Step
+    public void stepWithRecursiveParameter(RecursivePojo recursivePojo) {
+
+    }
+}

@@ -4,6 +4,7 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -21,6 +22,7 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
+@Ignore
 public class WhenUsingAWebDriverProxy {
 
     @Mock
@@ -88,6 +90,12 @@ public class WhenUsingAWebDriverProxy {
     public void clearMocks() {
         WebdriverProxyFactory.getFactory().clearMockDriver();
         webdriverManager.closeDriver();
+    }
+
+    @Test
+    public void the_webdriver_proxy_should_handle_get() {
+        webDriverFacade.get("http://www.google.com");
+        verify(driver).get("http://www.google.com");
     }
 
     @Test

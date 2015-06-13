@@ -61,6 +61,7 @@ public class WhenUsingAWebDriverProxy {
         when(webdriverInstanceFactory.newPhantomDriver(any(Capabilities.class))).thenReturn(driver);
         when(options.timeouts()).thenReturn(timeouts);
         MockEnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+        environmentVariables.setProperty("webdriver.driver", "phantomjs");
         factory = new WebDriverFactory(webdriverInstanceFactory, environmentVariables);
 
         webdriverManager = new ThucydidesWebdriverManager(factory, new SystemPropertiesConfiguration(environmentVariables));
@@ -324,19 +325,19 @@ public class WhenUsingAWebDriverProxy {
 
     @Test
     public void the_proxied_webdriver_should_be_accessible_if_required() {
-        WebDriver driver = WebdriverProxyFactory.getFactory().proxyFor(HtmlUnitDriver.class);
+        WebDriver driver = WebdriverProxyFactory.getFactory().proxyFor(PhantomJSDriver.class);
 
-        HtmlUnitDriver proxiedDriver = (HtmlUnitDriver) ((WebDriverFacade) driver).getProxiedDriver();
+        PhantomJSDriver proxiedDriver = (PhantomJSDriver) ((WebDriverFacade) driver).getProxiedDriver();
 
         assertThat(proxiedDriver, is(notNullValue()));
-        assertThat(HtmlUnitDriver.class.isAssignableFrom(proxiedDriver.getClass()), is(true));
+        assertThat(PhantomJSDriver.class.isAssignableFrom(proxiedDriver.getClass()), is(true));
     }
 
     @Test
     public void should_return_proxied_driver_without_lots_of_ugly_casts() {
-        ThucydidesWebDriverSupport.initialize("htmlunit");
-        HtmlUnitDriver proxiedDriver = ThucydidesWebDriverSupport.getProxiedDriver();
-        assertThat(proxiedDriver, is(instanceOf(HtmlUnitDriver.class)));
+        ThucydidesWebDriverSupport.initialize("phantomjs");
+        PhantomJSDriver proxiedDriver = ThucydidesWebDriverSupport.getProxiedDriver();
+        assertThat(proxiedDriver, is(instanceOf(PhantomJSDriver.class)));
 
     }
 

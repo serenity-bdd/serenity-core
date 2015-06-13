@@ -42,9 +42,9 @@ public class WhenUsingAWebDriverProxy {
 
     WebDriverFacade webDriverFacade;
 
-    class MockFirefoxWebDriverFacade extends WebDriverFacade {
-        MockFirefoxWebDriverFacade() {
-            super(FirefoxDriver.class, factory);
+    class MockWebDriverFacade extends WebDriverFacade {
+        MockWebDriverFacade() {
+            super(PhantomJSDriver.class, factory);
         }
 
         @Override
@@ -59,7 +59,7 @@ public class WhenUsingAWebDriverProxy {
     }
 
     private void initWendriverManager() throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        when(webdriverInstanceFactory.newFirefoxDriver(any(Capabilities.class))).thenReturn(driver);
+        when(webdriverInstanceFactory.newPhantomDriver(any(Capabilities.class))).thenReturn(driver);
         when(options.timeouts()).thenReturn(timeouts);
         MockEnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         factory = new WebDriverFactory(webdriverInstanceFactory, environmentVariables);
@@ -69,7 +69,7 @@ public class WhenUsingAWebDriverProxy {
     }
 
 
-    MockFirefoxWebDriverFacade facade;
+    MockWebDriverFacade facade;
 
     @Before
     public void createATestableDriverFactory() throws Exception {
@@ -80,7 +80,7 @@ public class WhenUsingAWebDriverProxy {
         WebdriverProxyFactory.getFactory().clearMockDriver();
         webdriverManager.closeAllCurrentDrivers();
 
-        facade = new MockFirefoxWebDriverFacade();
+        facade = new MockWebDriverFacade();
 
     }
 

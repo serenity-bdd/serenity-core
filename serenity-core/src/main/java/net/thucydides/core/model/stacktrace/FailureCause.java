@@ -167,13 +167,4 @@ public class FailureCause {
             return Optional.absent();
         }
     }
-
-    private Optional<Constructor> objectThrowableConstructorFor(Class failureClass) throws NoSuchMethodException {
-        try {
-            return Optional.fromNullable(failureClass.getConstructor(String.class, Throwable.class));
-        } catch(NoSuchMethodException e) {
-            return Optional.absent();
-        }
-    }
-
 }

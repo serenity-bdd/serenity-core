@@ -4,6 +4,7 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -33,7 +34,7 @@ public class WhenUsingAWebDriverProxy {
     WebDriver.Options options;
 
     @Mock
-            WebDriver.Timeouts timeouts;
+    WebDriver.Timeouts timeouts;
 
     WebdriverManager webdriverManager;
 
@@ -89,6 +90,7 @@ public class WhenUsingAWebDriverProxy {
         webdriverManager.closeDriver();
     }
 
+    @Ignore
     @Test
     public void the_webdriver_proxy_should_handle_get() {
         facade.get("http://www.google.com");

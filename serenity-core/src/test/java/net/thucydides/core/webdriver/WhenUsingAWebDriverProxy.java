@@ -4,7 +4,6 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -14,6 +13,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -28,7 +28,7 @@ public class WhenUsingAWebDriverProxy {
     WebdriverInstanceFactory webdriverInstanceFactory;
 
     @Mock
-    FirefoxDriver firefoxDriver;
+    PhantomJSDriver driver;
 
     @Mock
     WebDriver.Options options;
@@ -49,7 +49,7 @@ public class WhenUsingAWebDriverProxy {
 
         @Override
         public WebDriver getProxiedDriver() {
-            return firefoxDriver;
+            return driver;
         }
 
         @Override
@@ -59,7 +59,7 @@ public class WhenUsingAWebDriverProxy {
     }
 
     private void initWendriverManager() throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        when(webdriverInstanceFactory.newFirefoxDriver(any(Capabilities.class))).thenReturn(firefoxDriver);
+        when(webdriverInstanceFactory.newFirefoxDriver(any(Capabilities.class))).thenReturn(driver);
         when(options.timeouts()).thenReturn(timeouts);
         MockEnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         factory = new WebDriverFactory(webdriverInstanceFactory, environmentVariables);
@@ -90,11 +90,10 @@ public class WhenUsingAWebDriverProxy {
         webdriverManager.closeDriver();
     }
 
-    @Ignore
     @Test
     public void the_webdriver_proxy_should_handle_get() {
         facade.get("http://www.google.com");
-        verify(firefoxDriver).get("http://www.google.com");
+        verify(driver).get("http://www.google.com");
     }
 
     @Test
@@ -102,7 +101,7 @@ public class WhenUsingAWebDriverProxy {
         StepEventBus.getEventBus().temporarilySuspendWebdriverCalls();
         facade.get("http://www.google.com");
 
-        verify(firefoxDriver, never()).get("http://www.google.com");
+        verify(driver, never()).get("http://www.google.com");
         StepEventBus.getEventBus().reenableWebdriverCalls();
     }
 
@@ -114,7 +113,7 @@ public class WhenUsingAWebDriverProxy {
 
         webDriverFacade.reset();
 
-        verify(firefoxDriver).quit();
+        verify(driver).quit();
     }
 
     @Test
@@ -132,13 +131,13 @@ public class WhenUsingAWebDriverProxy {
     public void the_webdriver_proxy_should_handle_find_element() {
         facade.findElement(By.id("q"));
 
-        verify(firefoxDriver).findElement(By.id("q"));
+        verify(driver).findElement(By.id("q"));
     }
 
     @Test
     public void the_webdriver_proxy_should_handle_find_elements() {
         facade.findElements(By.id("q"));
-        verify(firefoxDriver).findElements(By.id("q"));
+        verify(driver).findElements(By.id("q"));
     }
 
     @Test
@@ -146,7 +145,7 @@ public class WhenUsingAWebDriverProxy {
         StepEventBus.getEventBus().temporarilySuspendWebdriverCalls();
 
         facade.findElements(By.id("q"));
-        verify(firefoxDriver, never()).findElements(By.id("q"));
+        verify(driver, never()).findElements(By.id("q"));
     }
 
 
@@ -154,13 +153,13 @@ public class WhenUsingAWebDriverProxy {
     public void the_webdriver_proxy_should_handle_get_screenshot() {
         webDriverFacade.get("http://www.google.com");
         webDriverFacade.getScreenshotAs(OutputType.FILE);
-        verify(firefoxDriver).getScreenshotAs(OutputType.FILE);
+        verify(driver).getScreenshotAs(OutputType.FILE);
     }
 
     @Test
     public void the_webdriver_proxy_should_handle_get_current_url() {
         facade.getCurrentUrl();
-        verify(firefoxDriver, atLeast(1)).getCurrentUrl();
+        verify(driver, atLeast(1)).getCurrentUrl();
     }
 
     @Test
@@ -168,14 +167,14 @@ public class WhenUsingAWebDriverProxy {
         StepEventBus.getEventBus().temporarilySuspendWebdriverCalls();
 
         facade.getCurrentUrl();
-        verify(firefoxDriver, never()).getCurrentUrl();
+        verify(driver, never()).getCurrentUrl();
     }
 
 
     @Test
     public void the_webdriver_proxy_should_handle_get_page_source() {
         facade.getPageSource();
-        verify(firefoxDriver).getPageSource();
+        verify(driver).getPageSource();
     }
 
     @Test
@@ -183,13 +182,13 @@ public class WhenUsingAWebDriverProxy {
         StepEventBus.getEventBus().temporarilySuspendWebdriverCalls();
 
         facade.getPageSource();
-        verify(firefoxDriver, never()).getPageSource();
+        verify(driver, never()).getPageSource();
     }
 
     @Test
     public void the_webdriver_proxy_should_handle_get_title() {
         facade.getTitle();
-        verify(firefoxDriver).getTitle();
+        verify(driver).getTitle();
     }
 
     @Test
@@ -197,14 +196,14 @@ public class WhenUsingAWebDriverProxy {
         StepEventBus.getEventBus().temporarilySuspendWebdriverCalls();
 
         facade.getTitle();
-        verify(firefoxDriver, never()).getTitle();
+        verify(driver, never()).getTitle();
     }
 
 
     @Test
     public void the_webdriver_proxy_should_handle_get_window_handle() {
         facade.getWindowHandle();
-        verify(firefoxDriver).getWindowHandle();
+        verify(driver).getWindowHandle();
     }
 
     @Test
@@ -212,13 +211,13 @@ public class WhenUsingAWebDriverProxy {
         StepEventBus.getEventBus().temporarilySuspendWebdriverCalls();
 
         facade.getWindowHandle();
-        verify(firefoxDriver, never()).getWindowHandle();
+        verify(driver, never()).getWindowHandle();
     }
 
     @Test
     public void the_webdriver_proxy_should_handle_get_window_handles() {
         facade.getWindowHandles();
-        verify(firefoxDriver).getWindowHandles();
+        verify(driver).getWindowHandles();
     }
 
     @Test
@@ -226,13 +225,13 @@ public class WhenUsingAWebDriverProxy {
         StepEventBus.getEventBus().temporarilySuspendWebdriverCalls();
 
         facade.getWindowHandles();
-        verify(firefoxDriver, never()).getWindowHandles();
+        verify(driver, never()).getWindowHandles();
     }
 
     @Test
     public void the_webdriver_proxy_should_handle_navigate() {
         facade.navigate();
-        verify(firefoxDriver).navigate();
+        verify(driver).navigate();
     }
 
     @Test
@@ -240,13 +239,13 @@ public class WhenUsingAWebDriverProxy {
         StepEventBus.getEventBus().temporarilySuspendWebdriverCalls();
 
         facade.navigate();
-        verify(firefoxDriver, never()).navigate();
+        verify(driver, never()).navigate();
     }
 
     @Test
     public void the_webdriver_proxy_should_handle_switchTo() {
         facade.switchTo();
-        verify(firefoxDriver).switchTo();
+        verify(driver).switchTo();
     }
 
     @Test
@@ -254,21 +253,21 @@ public class WhenUsingAWebDriverProxy {
         StepEventBus.getEventBus().temporarilySuspendWebdriverCalls();
 
         facade.switchTo();
-        verify(firefoxDriver, never()).switchTo();
+        verify(driver, never()).switchTo();
     }
 
     @Test
     public void the_webdriver_proxy_should_handle_quit_if_a_proxied_driver_exists() {
         webDriverFacade.get("http://www.google.com");
         webDriverFacade.quit();
-        verify(firefoxDriver).quit();
+        verify(driver).quit();
     }
 
     @Test
     public void the_webdriver_proxy_should_handle_close_if_a_proxied_driver_exists() {
         webDriverFacade.get("http://www.google.com");
         webDriverFacade.close();
-        verify(firefoxDriver).close();
+        verify(driver).close();
     }
 
     @Test
@@ -276,19 +275,19 @@ public class WhenUsingAWebDriverProxy {
         StepEventBus.getEventBus().temporarilySuspendWebdriverCalls();
 
         facade.manage();
-        verify(firefoxDriver, never()).manage();
+        verify(driver, never()).manage();
     }
 
     @Test
     public void the_webdriver_proxy_should_not_call_quit_if_a_proxied_driver_doesnt_exist() {
         facade.quit();
-        verify(firefoxDriver, never()).quit();
+        verify(driver, never()).quit();
     }
 
     @Test
     public void the_webdriver_proxy_should_not_call_close_if_a_proxied_driver_doesnt_exist() {
         facade.close();
-        verify(firefoxDriver, never()).close();
+        verify(driver, never()).close();
     }
 
     @Test
@@ -298,9 +297,9 @@ public class WhenUsingAWebDriverProxy {
         webDriverFacade.findElement(By.id("q"));
         webDriverFacade.getScreenshotAs(OutputType.FILE);
 
-        verify(firefoxDriver).get("http://www.google.com");
-        verify(firefoxDriver).findElement(By.id("q"));
-        verify(firefoxDriver).getScreenshotAs(OutputType.FILE);
+        verify(driver).get("http://www.google.com");
+        verify(driver).findElement(By.id("q"));
+        verify(driver).getScreenshotAs(OutputType.FILE);
     }
 
     @Mock

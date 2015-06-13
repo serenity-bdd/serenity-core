@@ -91,12 +91,6 @@ public class WhenUsingAWebDriverProxy {
     }
 
     @Test
-    public void the_webdriver_proxy_should_handle_get() {
-        webDriverFacade.get("http://www.google.com");
-        verify(driver).get("http://www.google.com");
-    }
-
-    @Test
     public void the_webdriver_proxy_should_ignore_get_when_webdriver_calls_are_disabled() {
         StepEventBus.getEventBus().temporarilySuspendWebdriverCalls();
         facade.get("http://www.google.com");

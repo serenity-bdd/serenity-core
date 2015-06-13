@@ -1,4 +1,4 @@
-package net.serenitybdd.rest
+package net.serenitybdd.rest.integration
 
 import com.jayway.restassured.http.ContentType
 import net.serenitybdd.core.rest.RestQuery

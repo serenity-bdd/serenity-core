@@ -2,16 +2,13 @@ package net.thucydides.core.model.stacktrace;
 
 import com.google.common.base.Optional;
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
+import net.serenitybdd.core.exceptions.UnrecognisedException;
 import net.thucydides.core.model.TestFailureException;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 public class FailureCause {
-
-    private final org.slf4j.Logger logger = LoggerFactory.getLogger(FailureCause.class);
 
     public static final String ERROR_MESSAGE_LABEL_1 = "{'errorMessage':";
     public static final String ERROR_MESSAGE_LABEL_2 = "{\"errorMessage\":";
@@ -100,7 +97,7 @@ public class FailureCause {
     }
 
     public Throwable toException() {
-        Optional<Throwable> exception = restoreExceptionFrom(errorType, message);
+        Optional<? extends Throwable> exception = restoreExceptionFrom(errorType, message);
         if (exception.isPresent()) {
             return exception.get();
         } else {
@@ -108,47 +105,74 @@ public class FailureCause {
         }
     }
 
-    private Optional<Throwable> restoreExceptionFrom(String testFailureClassname, String testFailureMessage) {
+    private Optional<? extends Throwable> restoreExceptionFrom(String testFailureClassname, String testFailureMessage) {
         try {
             Class failureClass = Class.forName(testFailureClassname);
-            Throwable exception = null;
-
-            Constructor constructorWithMessage = getExceptionConstructor(failureClass);
-            if (constructorWithMessage != null) {
-                exception = (Throwable) constructorWithMessage.newInstance(testFailureMessage);
-            }
+            Throwable exception = buildThrowable(testFailureMessage, failureClass);
             if (exception == null) {
-                Constructor constructorWithoutMessage = getExceptionConstructor(failureClass);
-                if (constructorWithoutMessage != null) {
-                    exception = (Throwable) constructorWithoutMessage.newInstance();
-                }
+                exception =  new UnrecognisedException(failureClass.getName() + ": " + testFailureMessage);
             }
-            if (exception == null) {
-                logger.warn("Could not instantiate exception class for " + failureClass.getName() + ": check that it has an empty or single-string constructor");
-                exception = new RuntimeException(testFailureClassname + ": " + testFailureMessage);
-                exception.setStackTrace(this.getStackTrace());
-                return Optional.of(exception);
-            } else {
-                exception.setStackTrace(this.getStackTrace());
-                return Optional.of(exception);
-            }
-        } catch (Exception e) {
-            Throwable exception = new RuntimeException(testFailureClassname + ": " + testFailureMessage);
             exception.setStackTrace(this.getStackTrace());
-            return Optional.of(exception);
+            return Optional.fromNullable(exception);
+        } catch (Exception e) {
+            Throwable exception = new UnrecognisedException(testFailureClassname + ": " + testFailureMessage);
+            exception.setStackTrace(this.getStackTrace());
+            return Optional.fromNullable(exception);
         }
 
     }
 
-    private Constructor getExceptionConstructor(Class failureClass) throws NoSuchMethodException {
+    private <T extends Throwable> T buildThrowable(String testFailureMessage, Class failureClass) throws Exception {
+
+        if (defaultConstructorFor(failureClass).isPresent()) {
+            return (T) defaultConstructorFor(failureClass).get().newInstance();
+        } else if (stringConstructorFor(failureClass).isPresent()) {
+            return (T) stringConstructorFor(failureClass).get().newInstance(testFailureMessage);
+        } else if (stringThrowableConstructorFor(failureClass).isPresent()) {
+            return (T) stringThrowableConstructorFor(failureClass).get().newInstance(testFailureMessage, null);
+        }else if (throwableConstructorFor(failureClass).isPresent()) {
+            return (T) throwableConstructorFor(failureClass).get().newInstance(new AssertionError(testFailureMessage));
+        }
+        return null;
+    }
+
+    private Optional<Constructor> defaultConstructorFor(Class failureClass) throws NoSuchMethodException {
         try {
-            return failureClass.getConstructor(String.class);
-        } catch (NoSuchMethodException e) {
-            try {
-                return failureClass.getConstructor(Object.class);
-            } catch(NoSuchMethodException e1) {
-                    return null;
-            }
+            return Optional.fromNullable(failureClass.getConstructor());
+        } catch(NoSuchMethodException e) {
+            return Optional.absent();
+        }
+    }
+
+    private Optional<Constructor> stringConstructorFor(Class failureClass) throws NoSuchMethodException {
+        try {
+            return Optional.fromNullable(failureClass.getConstructor(String.class));
+        } catch(NoSuchMethodException e) {
+            return Optional.absent();
+        }
+    }
+
+    private Optional<Constructor> stringThrowableConstructorFor(Class failureClass) throws NoSuchMethodException {
+        try {
+            return Optional.fromNullable(failureClass.getConstructor(String.class, Throwable.class));
+        } catch(NoSuchMethodException e) {
+            return Optional.absent();
+        }
+    }
+
+    private Optional<Constructor> throwableConstructorFor(Class failureClass) throws NoSuchMethodException {
+        try {
+            return Optional.fromNullable(failureClass.getConstructor(Throwable.class));
+        } catch(NoSuchMethodException e) {
+            return Optional.absent();
+        }
+    }
+
+    private Optional<Constructor> objectThrowableConstructorFor(Class failureClass) throws NoSuchMethodException {
+        try {
+            return Optional.fromNullable(failureClass.getConstructor(String.class, Throwable.class));
+        } catch(NoSuchMethodException e) {
+            return Optional.absent();
         }
     }
 

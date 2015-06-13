@@ -92,7 +92,7 @@ public class WhenUsingAWebDriverProxy {
 
     @Test
     public void the_webdriver_proxy_should_handle_get() {
-        facade.get("http://www.google.com");
+        webDriverFacade.get("http://www.google.com");
         verify(driver).get("http://www.google.com");
     }
 

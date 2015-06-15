@@ -14,6 +14,7 @@ import spock.lang.Specification
 import static com.jayway.restassured.RestAssured.given
 import static net.serenitybdd.core.rest.RestMethod.*
 import static net.serenitybdd.rest.SerenityRest.rest
+import static net.serenitybdd.rest.SerenityRest.then
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.greaterThan;
 
@@ -162,10 +163,14 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
 
         @Step
         def thenCheckOutcome() {
-            rest().then().body("id", equalTo(1000));
-            rest().then().expect().body("id", greaterThan(0));
+            then().body("id", equalTo(1000))
+            then().body("id", greaterThan(0));
         }
 
+        @Step
+        def thenCheckWrongOutcome() {
+            then().body("id", equalTo(0));
+        }
     }
 
     def "should support failing assertions on response results"() {
@@ -193,6 +198,21 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
             def testSteps = stepListener.testOutcomes[0].testSteps
             testSteps[0].result == TestResult.SUCCESS
             testSteps[1].result == TestResult.SUCCESS
+    }
+
+
+    def "should report failures in subsequent steps"() {
+        given:
+            StepEventBus.eventBus.testStarted("rest")
+            StepFactory factory = new StepFactory();
+            def restSteps = factory.getStepLibraryFor(RestSteps)
+        when:
+            restSteps.getPetById()
+            restSteps.thenCheckWrongOutcome()
+        then:
+            def testSteps = stepListener.testOutcomes[0].testSteps
+            testSteps[0].result == TestResult.SUCCESS
+            testSteps[1].result == TestResult.FAILURE
     }
 
 }

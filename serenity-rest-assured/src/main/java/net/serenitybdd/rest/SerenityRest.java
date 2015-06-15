@@ -3,7 +3,9 @@ package net.serenitybdd.rest;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.internal.RestAssuredResponseImpl;
 import com.jayway.restassured.response.Response;
+import com.jayway.restassured.response.ValidatableResponse;
 import com.jayway.restassured.specification.RequestSpecification;
 import net.serenitybdd.core.rest.RestMethod;
 import net.serenitybdd.core.rest.RestQuery;
@@ -15,6 +17,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+import static com.jayway.restassured.RestAssured.when;
 import static net.serenitybdd.core.rest.RestMethod.GET;
 import static net.serenitybdd.core.rest.RestMethod.POST;
 import static net.serenitybdd.core.rest.RestMethod.restMethodCalled;
@@ -23,6 +26,7 @@ public class SerenityRest {
 
     private static ThreadLocal<RestQuery> currentRestQuery = new ThreadLocal<>();
     private static ThreadLocal<RequestSpecification> currentRequestSpecification = new ThreadLocal<>();
+    private static ThreadLocal<RestAssuredResponseImpl> currentResponse = new ThreadLocal<>();
     private static ThreadLocal<QueryPayload> currentQueryPayload = new ThreadLocal<>();
 
     public static void clearQueryData() {
@@ -43,12 +47,13 @@ public class SerenityRest {
         return currentRequestSpecification.get();
     }
 
-    public static RequestSpecification then() {
-        if (currentRequestSpecification.get() == null) {
-            return rest();
-        } else {
-            return currentRequestSpecification.get();
-        }
+    public static ValidatableResponse and() {
+        return then();
+    }
+    
+    public static ValidatableResponse then() {
+        assert(currentResponse.get() != null);
+        return currentResponse.get().then();
     }
 
     private static RequestSpecification instrumentedRequestSpecification() {
@@ -67,11 +72,15 @@ public class SerenityRest {
                 } else if (definesContent(method.getName())) {
                     recordContent(method.getName(), args);
                 }
-                return wrappedResult(method, requestSpecification, args);
+                if (method.getReturnType().isAssignableFrom(RestAssuredResponseImpl.class)) {
+                    RestAssuredResponseImpl response = (RestAssuredResponseImpl) wrappedResult(method, requestSpecification, args);
+                    currentResponse.set(response);
+                    return response;
+                } else {
+                    return wrappedResult(method, requestSpecification, args);
+                }
+
             }
-
-
-
         });
 
         return (RequestSpecification) enhancer.create();

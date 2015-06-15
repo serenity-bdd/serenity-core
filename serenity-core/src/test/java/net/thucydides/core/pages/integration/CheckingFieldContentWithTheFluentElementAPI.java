@@ -13,6 +13,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
@@ -33,6 +35,7 @@ public class CheckingFieldContentWithTheFluentElementAPI extends FluentElementAP
     public void refreshPage() {
         refresh(page);
         page.setWaitForTimeout(5000);
+        page.setImplicitTimeout(2, TimeUnit.SECONDS);
     }
 
     @Test

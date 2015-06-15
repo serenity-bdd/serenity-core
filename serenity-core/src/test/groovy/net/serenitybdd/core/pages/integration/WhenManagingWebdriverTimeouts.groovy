@@ -111,15 +111,18 @@ class WhenManagingWebdriverTimeouts extends Specification {
             count == 4
     }
 
+    @Timeout(20)
     def "You can override the implicit wait during test execution"() {
         given: "The #slow-loader field takes 3 seconds to load"
             page = openTestPageUsing("phantomjs")
         when: "We override the implicit timeout to allow the slow-loader field to load"
-            page.setImplicitTimeout(5, SECONDS)
+            page.setImplicitTimeout(100, SECONDS)
         then: "we should be able to access the slow-loader field"
             page.firstElementItem.isVisible()
         and: "we can reset the driver timeouts to the default value once we are done"
             page.resetImplicitTimeout()
+        and:
+            !page.fieldDoesNotExist.isVisible()
         and:
             page.driver.currentImplicitTimeout.in(SECONDS) == 2
     }

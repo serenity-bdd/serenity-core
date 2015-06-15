@@ -17,7 +17,7 @@ public class MethodTiming {
 
     public boolean isInQuickMethod() {
         for (StackTraceElement elt : Thread.currentThread().getStackTrace()) {
-            if (elt.getMethodName().contains("Currently")) {
+            if (elt.getMethodName().contains("Currently") || elt.getMethodName().contains("toString")) {
                 return true;
             }
         }

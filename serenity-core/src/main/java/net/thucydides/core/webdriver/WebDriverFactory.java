@@ -754,7 +754,8 @@ public class WebDriverFactory {
     public void resetTimeouts(WebDriver proxiedDriver) {
         Duration currentTimeout = currentTimeoutFor(proxiedDriver);
         if (timeoutStack.containsTimeoutFor(proxiedDriver)) {
-            Duration previousTimeout = timeoutStack.popTimeoutFor(proxiedDriver).or(getDefaultImplicitTimeout());
+            timeoutStack.popTimeoutFor(proxiedDriver);
+            Duration previousTimeout = currentTimeoutFor(proxiedDriver);//timeoutStack.popTimeoutFor(proxiedDriver).or(getDefaultImplicitTimeout());
             if ((currentTimeout != previousTimeout)  && isNotAMocked(proxiedDriver)) {
                 proxiedDriver.manage().timeouts().implicitlyWait(previousTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
             }

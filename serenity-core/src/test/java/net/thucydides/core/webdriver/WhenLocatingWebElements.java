@@ -55,10 +55,10 @@ public class WhenLocatingWebElements {
         when(driver.findElements(By.id("someId"))).thenReturn(ImmutableList.of(webElement));
     }
 
-    @Test(timeout = 5000)
+    @Test(timeout = 2000)
     public void should_find_element_immediately_if_a_previous_step_has_failed() {
 
-        SmartAjaxElementLocator locator = new SmartAjaxElementLocator(driver, field, MobilePlatform.NONE, 5);
+        SmartAjaxElementLocator locator = new SmartAjaxElementLocator(driver, field, MobilePlatform.NONE);
         StepEventBus.getEventBus().stepFailed(failure);
         locator.findElement();
     }
@@ -70,9 +70,9 @@ public class WhenLocatingWebElements {
     public void should_wait_for_find_element_immediately_if_no_previous_step_has_failed() {
 
         expectedException.expect(ElementNotVisibleException.class);
-        expectedException.expectMessage(containsString("Timed out after 1 second"));
+        expectedException.expectMessage(containsString("Timed out after 2 second"));
 
-        SmartAjaxElementLocator locator = new SmartAjaxElementLocator(driver, field, MobilePlatform.NONE, 1);
+        SmartAjaxElementLocator locator = new SmartAjaxElementLocator(driver, field, MobilePlatform.NONE);
         locator.findElement();
     }
 

@@ -1,9 +1,17 @@
 package net.thucydides.core.webdriver;
 
+import net.serenitybdd.core.pages.DefaultTimeouts;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.Duration;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 /**
  * One or more WebDriver drivers that are being used in a test.
@@ -14,8 +22,11 @@ public class WebdriverInstances {
 
     private String currentDriver;
 
+    private EnvironmentVariables environmentVariables;
+
     public WebdriverInstances() {
         this.driverMap = new HashMap<>();
+        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
     }
 
     public WebDriver getCurrentDriver() {
@@ -96,6 +107,21 @@ public class WebdriverInstances {
             return (getCurrentDriver() != null);
         }
     }
+
+    public Duration getCurrentImplicitTimeout() {
+        if (getCurrentDriver() instanceof ConfigurableTimeouts) {
+            return ((ConfigurableTimeouts) getCurrentDriver()).getCurrentImplicitTimeout();
+        } else {
+            return getDefaultImplicitTimeout();
+        }
+    }
+
+    protected Duration getDefaultImplicitTimeout() {
+        Integer configuredTimeout = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables, -1);
+        return (configuredTimeout >= 0) ? new Duration(configuredTimeout, TimeUnit.MILLISECONDS)
+                : DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
+    }
+
 
     public final class InstanceRegistration {
         private final String driverName;

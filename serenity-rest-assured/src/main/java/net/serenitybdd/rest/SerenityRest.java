@@ -1,6 +1,7 @@
 package net.serenitybdd.rest;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
@@ -191,7 +192,7 @@ public class SerenityRest {
 
 
     private static List<Object> listParameters(Object[] args) {
-        return ImmutableList.copyOf((Object[]) args[1]);
+        return Lists.newArrayList((Object[]) args[1]);
     }
 
     private static boolean queryHasParameters(Object[] args) {

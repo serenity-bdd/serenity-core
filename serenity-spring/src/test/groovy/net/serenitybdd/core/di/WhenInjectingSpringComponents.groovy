@@ -2,6 +2,8 @@ package net.serenitybdd.core.di
 import net.serenitybdd.core.di.samples.FlatScenarioStepsWithBrokenSpringDependencies
 import net.serenitybdd.core.di.samples.FlatScenarioStepsWithSpringContextHierarchyDependencies
 import net.serenitybdd.core.di.samples.FlatScenarioStepsWithSpringDependencies
+import net.serenitybdd.core.di.samples.FlatScenarioStepsWithSpringMetaAnnotationContextHierarchyDependencies
+import net.serenitybdd.core.di.samples.FlatScenarioStepsWithSpringMetaAnnotationDependencies
 import net.thucydides.core.pages.Pages
 import net.thucydides.core.steps.di.ClasspathDependencyInjectorService
 import spock.lang.Specification
@@ -21,11 +23,33 @@ class WhenInjectingSpringComponents extends Specification {
             steps.widgetService != null && steps.catalogService != null
     }
 
+    def "should inject Spring dependencies into a step library class when using meta ContextConfiguration annotations"() {
+
+        given:
+            SpringDependencyInjector dependencyInjector = new SpringDependencyInjector();
+            FlatScenarioStepsWithSpringMetaAnnotationDependencies steps = new FlatScenarioStepsWithSpringMetaAnnotationDependencies(pages);
+        when:
+            dependencyInjector.injectDependenciesInto(steps);
+        then:
+            steps.widgetService != null && steps.catalogService != null
+    }
+
     def "should inject Spring dependencies into a step library class when using ContextHierarchy"() {
 
         given:
             SpringDependencyInjector dependencyInjector = new SpringDependencyInjector();
             FlatScenarioStepsWithSpringContextHierarchyDependencies steps = new FlatScenarioStepsWithSpringContextHierarchyDependencies(pages);
+        when:
+            dependencyInjector.injectDependenciesInto(steps);
+        then:
+            steps.widgetService != null && steps.catalogService != null
+    }
+
+    def "should inject Spring dependencies into a step library class when using meta ContextHierarchy annotations"() {
+
+        given:
+            SpringDependencyInjector dependencyInjector = new SpringDependencyInjector();
+            FlatScenarioStepsWithSpringMetaAnnotationContextHierarchyDependencies steps = new FlatScenarioStepsWithSpringMetaAnnotationContextHierarchyDependencies(pages);
         when:
             dependencyInjector.injectDependenciesInto(steps);
         then:

@@ -19,7 +19,7 @@ public class HibernateUserDAO implements UserDAO {
 	}
 
 	public List<User> findAll() {
-		return hibernateTemplate.find("from User");
+		return (List<User>) hibernateTemplate.find("from User");
 	}
 
     public void remove(User user) {

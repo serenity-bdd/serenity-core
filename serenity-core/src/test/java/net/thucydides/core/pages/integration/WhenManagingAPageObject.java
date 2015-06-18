@@ -110,29 +110,6 @@ public class WhenManagingAPageObject {
         assertThat(elementList, is(renderedElements));
     }
 
-
-    @Test
-    public void page_will_wait_for_rendered_element_to_disappear() {
-
-        List<WebElement> emptyList = Arrays.asList();
-        when(driver.findElements(any(By.class))).thenReturn(emptyList);
-
-        BasicPageObject page = new BasicPageObject(driver);
-        page.setWaitForTimeout(100);
-        page.waitForRenderedElementsToDisappear(By.id("whatever"));
-    }
-
-    @Test
-    public void page_will_wait_for_rendered_element_to_disappear_using_shortened_form() {
-
-        List<WebElement> emptyList = Arrays.asList();
-        when(driver.findElements(any(By.class))).thenReturn(emptyList);
-
-        BasicPageObject page = new BasicPageObject(driver);
-        page.setWaitForTimeout(100);
-        page.waitForAbsenceOf("#whatever");
-    }
-
     @Test
     public void page_can_delay_requests_for_a_short_period() {
         long start = System.currentTimeMillis();
@@ -140,20 +117,6 @@ public class WhenManagingAPageObject {
         page.invokeWaitABit(500);
 
         assertThat((int) (System.currentTimeMillis() - start), greaterThanOrEqualTo(500));
-    }
-
-    @Test(expected = TimeoutException.class)
-    public void wait_for_rendered_element_to_disappear_will_fail_if_element_does_not_disappear() {
-
-        WebElement textBlock = mock(WebElement.class);
-        when(textBlock.isDisplayed()).thenReturn(true);
-        List<WebElement> listWithElements = Arrays.asList(textBlock);
-
-        when(driver.findElements(any(By.class))).thenReturn(listWithElements);
-
-        BasicPageObject page = new BasicPageObject(driver);
-        page.setWaitForTimeout(150);
-        page.waitForRenderedElementsToDisappear(By.id("whatever"));
     }
 
     @Test
@@ -446,27 +409,6 @@ public class WhenManagingAPageObject {
         page.setWaitForTimeout(1000);
         page.waitForAnyRenderedElementOf(By.id("element1"), By.id("element2"));
     }
-
-
-    @Test
-    public void page_can_wait_for_an_element_to_disappear() {
-
-        WebElement renderedElement = mock(WebElement.class);
-        elementDisappearsAfterADelay(renderedElement, By.id("element1"));
-        BasicPageObject page = new BasicPageObject(driver);
-        page.setWaitForTimeout(200);
-        page.waitForRenderedElementsToDisappear(By.id("element1"));
-    }
-
-    @Test
-    public void page_can_wait_for_an_element_to_disappear_if_element_is_not_initially_displayed() {
-
-        noElementIsRendered(By.id("element1"));
-        BasicPageObject page = new BasicPageObject(driver);
-        page.setWaitForTimeout(200);
-        page.waitForRenderedElementsToDisappear(By.id("element1"));
-    }
-
 
     private void noElementIsRendered(By criteria) {
         List<WebElement> emptyList = Arrays.asList();

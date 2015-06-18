@@ -3,6 +3,7 @@ package net.serenitybdd.core.pages;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
+import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.scheduling.NormalFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
@@ -12,6 +13,8 @@ import org.openqa.selenium.support.ui.*;
 import org.openqa.selenium.support.ui.SystemClock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static net.serenitybdd.core.pages.Selectors.xpathOrCssSelector;
 
 import java.util.Arrays;
@@ -30,6 +33,7 @@ public class RenderedPageObjectView {
     private final Clock webdriverClock;
     private final Sleeper sleeper;
     private final PageObject pageObject;
+    private final boolean timeoutCanBeOverriden;
 
     private static final int WAIT_FOR_ELEMENT_PAUSE_LENGTH = 50;
 
@@ -37,16 +41,17 @@ public class RenderedPageObjectView {
             .getLogger(RenderedPageObjectView.class);
 
     public RenderedPageObjectView(final WebDriver driver, final PageObject pageObject, long waitForTimeoutInMilliseconds) {
-        this(driver, pageObject, new Duration(waitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS));
+        this(driver, pageObject, new Duration(waitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS), true);
     }
 
-    public RenderedPageObjectView(final WebDriver driver, final PageObject pageObject, Duration waitForTimeout) {
+    public RenderedPageObjectView(final WebDriver driver, final PageObject pageObject, Duration waitForTimeout, boolean timeoutCanBeOverriden) {
 
         this.driver = driver;
         this.pageObject = pageObject;
         setWaitForTimeout(waitForTimeout);
         this.webdriverClock = new SystemClock();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
+        this.timeoutCanBeOverriden = timeoutCanBeOverriden;
     }
 
     public ThucydidesFluentWait<WebDriver> waitForCondition() {
@@ -125,6 +130,16 @@ public class RenderedPageObjectView {
                 return false;
             }
         };
+    }
+
+    private boolean elementIsNotDisplayed(final By byElementCriteria) {
+        List<WebElementFacade> matchingElements = findAll(byElementCriteria);
+        for(WebElementFacade matchingElement : matchingElements) {
+            if ( matchingElement.isCurrentlyVisible()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private Function<? super WebDriver, Boolean> elementsAreDisplayed(final List<WebElementFacade> webElements) {
@@ -329,6 +344,12 @@ public class RenderedPageObjectView {
         waitForCondition().until(anyTextPresentInElement(element, expectedTexts));
     }
 
+
+    public void waitForAbsenceOf(String xpathOrCssSelector) {
+        waitForElementsToDisappear(xpathOrCssSelector(xpathOrCssSelector));
+    }
+
+
     private boolean elementContains(final WebElement element, final String... expectedTexts) {
         for (String expectedText : expectedTexts) {
             if (containsText(element, expectedText)) {
@@ -371,7 +392,7 @@ public class RenderedPageObjectView {
     private ExpectedCondition<Boolean> elementNotDisplayed(final By byElementCriteria) {
         return new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
-                return (!elementIsDisplayed(byElementCriteria));
+                return (elementIsNotDisplayed(byElementCriteria));
             }
             @Override
             public String toString() {
@@ -420,13 +441,30 @@ public class RenderedPageObjectView {
         List<net.serenitybdd.core.pages.WebElementFacade> results;
         try {
             pageObject.setImplicitTimeout(0, TimeUnit.SECONDS);
+            if (timeoutCanBeOverriden) {
+                overrideWaitForTimeoutTo(new Duration(0, TimeUnit.SECONDS));
+            }
             waitFor(bySelector);
             results = pageObject.findAll(bySelector);
+            if (timeoutCanBeOverriden) {
+                resetWaitForTimeout();
+            }
             pageObject.resetImplicitTimeout();
         } catch (TimeoutException e) {
             return Lists.newArrayList();
         }
         return results;
+    }
+
+    private Duration oldWaitFor;
+
+    private void overrideWaitForTimeoutTo(Duration duration) {
+        oldWaitFor = waitForTimeout;
+        setWaitForTimeout(duration);
+    }
+
+    private void resetWaitForTimeout() {
+        setWaitForTimeout(oldWaitFor);
     }
 
     public List<net.serenitybdd.core.pages.WebElementFacade> findAll(String xpathOrCssSelector) {

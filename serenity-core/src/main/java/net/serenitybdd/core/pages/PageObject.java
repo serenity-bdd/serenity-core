@@ -2,6 +2,7 @@ package net.serenitybdd.core.pages;
 
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Predicate;
+import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;
@@ -241,7 +242,7 @@ public abstract class PageObject {
 
     protected RenderedPageObjectView getRenderedView() {
         if (renderedView == null) {
-            renderedView = new RenderedPageObjectView(driver, this, getWaitForTimeout());
+            renderedView = new RenderedPageObjectView(driver, this, getWaitForTimeout(),true);
         }
         return renderedView;
     }
@@ -296,7 +297,7 @@ public abstract class PageObject {
     }
 
     public RenderedPageObjectView withTimeoutOf(Duration timeout) {
-        return new RenderedPageObjectView(driver, this, timeout);
+        return new RenderedPageObjectView(driver, this, timeout, false);
     }
 
     public PageObject waitFor(String xpathOrCssSelector) {

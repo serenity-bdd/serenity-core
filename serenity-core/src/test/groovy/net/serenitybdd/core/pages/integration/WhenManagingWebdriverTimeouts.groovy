@@ -460,6 +460,35 @@ class WhenManagingWebdriverTimeouts extends Specification {
             city.isCurrentlyVisible()
     }
 
+    @Timeout(5)
+    def "waitForAbsenceOf should return immediately if no elements are present"() {
+        when:
+            environmentVariables.setProperty("webdriver.wait.for.timeout", "50000")
+            page = openTestPageUsing(defaultBrowser)
+        then:
+            page.waitForAbsenceOf("#does-not-exist")
+    }
+
+    @Timeout(8)
+    def "waitForAbsenceOf should wait no more than the time needed for the element to dissapear"() {
+        when: "placetitle will dissapear after 2 seconds"
+            environmentVariables.setProperty("webdriver.wait.for.timeout", "16000")
+            page = openTestPageUsing(defaultBrowser)
+        then:
+            page.waitForAbsenceOf("#placetitle")
+    }
+
+
+    def "waitForAbsenceOf with explicit timeout should wait no more than the time needed for the element to dissapear"() {
+        given: "placetitle will dissapear after 2 seconds"
+            environmentVariables.setProperty("webdriver.wait.for.timeout", "10000")
+            page = openTestPageUsing(defaultBrowser)
+        when:
+            page.withTimeoutOf(1, SECONDS).waitForAbsenceOf("#placetitle")
+        then:
+            thrown(org.openqa.selenium.TimeoutException)
+    }
+
     def "Timeouts for individual fields can be specified using the timeoutInSeconds parameter of the FindBy annotation"() {
         given:
             environmentVariables.setProperty("webdriver.timeouts.implicitlywait","0")

@@ -70,8 +70,6 @@ public class WhenLocatingWebElements {
     public void should_wait_for_find_element_immediately_if_no_previous_step_has_failed() {
 
         expectedException.expect(ElementNotVisibleException.class);
-        expectedException.expectMessage(containsString("Timed out after 2 second"));
-
         SmartAjaxElementLocator locator = new SmartAjaxElementLocator(driver, field, MobilePlatform.NONE);
         locator.findElement();
     }

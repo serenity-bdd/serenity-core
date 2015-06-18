@@ -3,6 +3,9 @@ package net.serenitybdd.core.pages.integration
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.pages.integration.StaticSitePage
+import net.thucydides.core.steps.ExecutedStepDescription
+import net.thucydides.core.steps.StepEventBus
+import net.thucydides.core.steps.StepFailure
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.StaticTestSite
@@ -45,6 +48,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         if (phantomJSPath) {
             environmentVariables.setProperty("phantomjs.binary.path", phantomJSPath)
         }
+        StepEventBus.eventBus.clear()
     }
 
     def cleanup() {
@@ -72,6 +76,21 @@ class WhenManagingWebdriverTimeouts extends Specification {
             page.slowLoadingField.isDisplayed()
         then: "An error should be thrown"
             thrown(org.openqa.selenium.ElementNotVisibleException)
+    }
+
+    @Timeout(2)
+    def "Slow loading fields should not wait once a step has failed"() {
+        given: "The #slow-loader field takes 4 seconds to load"
+        and: "A step has failed"
+            def stepFailure = Mock(StepFailure)
+            StepEventBus.getEventBus().testStarted("a test")
+            StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle("a step"))
+            StepEventBus.getEventBus().stepFailed(stepFailure);
+        when: "We access the field"
+            page = openTestPageUsing(defaultBrowser)
+            page.verySlowLoadingField.isDisplayed()
+        then: "Not error should not be thrown"
+            notThrown(org.openqa.selenium.ElementNotVisibleException)
     }
 
     def "The default implicit wait is set to 2 seconds"() {

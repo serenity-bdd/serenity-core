@@ -9,6 +9,7 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.*;
 import net.thucydides.core.webdriver.exceptions.ElementNotFoundAfterTimeoutError;
 import net.thucydides.core.webdriver.exceptions.ElementNotVisibleAfterTimeoutError;
+import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Clock;
@@ -84,7 +85,9 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 
     @Override
     public WebElement findElement() {
-        if (shouldFindElementImmediately()) {
+        if (aPreviousStepHasFailed()) {
+            return new WebElementFacadeStub();
+        } else if (shouldFindElementImmediately()) {
             return findElementImmediately();
         } else {
             return ajaxFindElement();
@@ -96,7 +99,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
     }
 
     private boolean shouldFindElementImmediately() {
-        return aPreviousStepHasFailed() || (MethodTiming.forThisThread().isInQuickMethod());
+        return /*aPreviousStepHasFailed() ||*/ (MethodTiming.forThisThread().isInQuickMethod());
     }
 
     public WebElement findElementImmediately() {

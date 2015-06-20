@@ -69,4 +69,8 @@ public class SampleNonWebSteps {
     public void stepWithFailingAssumption() {
         Assume.assumeThat(true, is(false));
     }
+
+    public void throw_exception() {
+        throw new IllegalArgumentException("Your argument is invalid");
+    }
 }

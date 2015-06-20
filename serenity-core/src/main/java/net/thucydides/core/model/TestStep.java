@@ -203,7 +203,6 @@ public class TestStep {
     public TestResult getResult() {
         if (isAGroup() && !groupResultOverridesChildren()) {
             return (result != null) ? TestResultList.of(result, getResultFromChildren()).getOverallResult() : getResultFromChildren();
-            //return getResultFromChildren();
         } else {
             return getResultFromThisStep();
         }
@@ -296,6 +295,10 @@ public class TestStep {
 
     public FailureCause getException() {
         return exception;
+    }
+
+    public void clearException() {
+        this.exception = null;
     }
 
     public FailureCause getNestedException(){

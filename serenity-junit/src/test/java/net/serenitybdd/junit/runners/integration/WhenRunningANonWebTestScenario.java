@@ -233,7 +233,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();
-        TestOutcome testOutcome = executedScenarios.get(0);
+        TestOutcome testOutcome = testOutcomeWithTitle("Happy day scenario", executedScenarios);
 
         List<TestStep> steps = testOutcome.getTestSteps();
         assertThat(steps.get(0).getScreenshots().size(), is(0));
@@ -250,11 +250,33 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();
 
-        TestOutcome testOutcome = executedScenarios.get(0);
+        TestOutcome testOutcome = testOutcomeWithTitle("Happy day scenario", executedScenarios);
         TestStep firstStep = testOutcome.getTestSteps().get(0);
 
         assertThat(firstStep.getDescription(), containsString("Step with a parameter:"));
         assertThat(firstStep.getDescription(), containsString("proportionOf"));
+    }
+
+    @Test
+    public void should_not_fail_test_if_an_exception_is_expected() throws InitializationError {
+
+        SerenityRunner runner = new SerenityRunner(NonWebTestScenarioWithParameterizedSteps.class);
+        runner.run(new RunNotifier());
+
+        List<TestOutcome> executedScenarios = runner.getTestOutcomes();
+
+        TestOutcome testOutcome = testOutcomeWithTitle("Should throw correct exception", executedScenarios);
+        TestStep firstStep = testOutcome.getTestSteps().get(0);
+        assertThat(firstStep.getResult(), is(TestResult.SUCCESS));
+    }
+
+    private TestOutcome testOutcomeWithTitle(String title, List<TestOutcome> testOutcomes) {
+        for(TestOutcome testOutcome : testOutcomes) {
+            if (testOutcome.getTitle().equals(title)) {
+                return testOutcome;
+            }
+        };
+        return null;
     }
 
     @Test
@@ -265,12 +287,14 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();
 
-        TestOutcome testOutcome = executedScenarios.get(0);
+        TestOutcome testOutcome = executedScenarios.get(1);
         TestStep secondStep = testOutcome.getTestSteps().get(1);
 
         assertThat(secondStep.getDescription(), containsString("Step with two parameters"));
         assertThat(secondStep.getDescription(), containsString("proportionOf, 2"));
     }
+
+
 
 
     class TestableSerenityRunnerSample extends SerenityRunner {

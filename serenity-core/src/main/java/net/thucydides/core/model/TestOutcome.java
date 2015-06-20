@@ -568,6 +568,24 @@ public class TestOutcome {
         return driver;
     }
 
+    public void resetFailingStepsCausedBy(Class<? extends Throwable> expected) {
+        for(TestStep step : testSteps) {
+            resetFailingStepsIn(step).causedBy(expected);
+        }
+        clearTestFailure();
+    }
+
+    private void clearTestFailure() {
+        testFailureCause = null;
+        testFailureClassname = null;
+        testFailureMessage = null;
+        annotatedResult = null;
+    }
+
+    private StepResetBuilder resetFailingStepsIn(TestStep step) {
+        return new StepResetBuilder(step);
+    }
+
     public class TitleBuilder {
         private final boolean qualified;
         private final TestOutcome testOutcome;
@@ -1796,4 +1814,20 @@ public class TestOutcome {
         return Optional.absent();
     }
 
+    private class StepResetBuilder {
+        TestStep step;
+        public StepResetBuilder(TestStep step) {
+            this.step = step;
+        }
+
+        public void causedBy(Class<? extends Throwable> expected) {
+            if (step.getException().getErrorType().equals(expected.getName())) {
+                step.clearException();
+                step.setResult(TestResult.SUCCESS);
+            }
+            for(TestStep childStep : step.getChildren()) {
+                resetFailingStepsIn(childStep).causedBy(expected);
+            }
+        }
+    }
 }

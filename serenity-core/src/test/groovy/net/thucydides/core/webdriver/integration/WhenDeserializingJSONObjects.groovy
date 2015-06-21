@@ -21,12 +21,21 @@ import java.lang.reflect.Type
 class WhenDeserializingJSONObjects extends Specification {
 	
 	@Shared
-	WebDriver driver = new PhantomJSDriver();
+	WebDriver driver;
 
+	@Shared
 	JavascriptExecutorFacade jsFacade;
 	
-	def setup() {
-		 jsFacade = new JavascriptExecutorFacade(driver)
+	def setupSpec() {
+		driver = new ChromeDriver();
+		jsFacade = new JavascriptExecutorFacade(driver)
+	}
+
+	def cleanupSpec() {
+		if (driver) {
+			driver.close()
+			driver.quit()
+		}
 	}
 
 		
@@ -39,7 +48,7 @@ class WhenDeserializingJSONObjects extends Specification {
 		    obj.str.equals("Test deserialization")
 	}
 
-	def "should deserialize cyclic JSON as properly but breaking the cyclic dependency"() {
+ 	def "should deserialize cyclic JSON as properly but breaking the cyclic dependency"() {
 		given:"cyclic object exists in javascript"
 			jsFacade.executeScript("obj = {str: 'Test Cycle'}; obj.klass = obj;")
 		when:"we execute the script and deserialize its result"
@@ -157,11 +166,5 @@ class WhenDeserializingJSONObjects extends Specification {
 			obj.injectable.equals("Injected Value")
 	}
 
-	def cleanupSpec() {
-		if (driver) {
-			driver.close()
-			driver.quit()
-		}
-	}
 
 }

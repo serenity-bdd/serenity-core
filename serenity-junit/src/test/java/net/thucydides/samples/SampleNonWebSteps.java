@@ -73,4 +73,22 @@ public class SampleNonWebSteps {
     public void throw_exception() {
         throw new IllegalArgumentException("Your argument is invalid");
     }
+
+
+    public final static class CurrencyIn$ {
+        int value;
+
+        public CurrencyIn$(int value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return "$" + value + ".00";
+        }
+    }
+
+    @Step("a step with an object parameter called {0}")
+    public void a_customized_step_with_object_parameters(CurrencyIn$ currency) {}
+
 }

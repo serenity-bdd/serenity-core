@@ -2,7 +2,6 @@ package net.thucydides.samples;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Steps;
-import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -26,5 +25,11 @@ public class NonWebTestScenarioWithParameterizedSteps {
     public void should_throw_correct_exception() {
         steps.throw_exception();
     }
+
+    @Test
+    public void should_handle_nested_object_parameters() {
+        steps.a_customized_step_with_object_parameters(new SampleNonWebSteps.CurrencyIn$(100));
+    }
+
 
 }

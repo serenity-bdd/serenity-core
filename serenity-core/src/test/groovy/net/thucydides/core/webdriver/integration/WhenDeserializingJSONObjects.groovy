@@ -21,7 +21,7 @@ import java.lang.reflect.Type
 class WhenDeserializingJSONObjects extends Specification {
 	
 	@Shared
-	WebDriver driver = new ChromeDriver();//FirefoxDriver();// PhantomJSDriver();
+	WebDriver driver = new PhantomJSDriver();
 
 	JavascriptExecutorFacade jsFacade;
 	

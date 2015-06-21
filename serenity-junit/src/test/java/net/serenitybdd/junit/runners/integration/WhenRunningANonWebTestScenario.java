@@ -154,7 +154,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
         runner.run(new RunNotifier());
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();
-        TestOutcome testOutcome = executedScenarios.get(0);
+        TestOutcome testOutcome = testOutcomeWithTitle("Happy day scenario", executedScenarios);
 
         List<TestStep> steps = testOutcome.getTestSteps();
         assertThat(steps.size(), is(6));
@@ -210,7 +210,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();
         assertThat(executedScenarios.size(), is(2));
-        TestOutcome testOutcome = executedScenarios.get(0);
+        TestOutcome testOutcome = testOutcomeWithTitle("Happy day scenario", executedScenarios);
         TestOutcome failingTestOutcome = executedScenarios.get(1);
         TestStep succeeds = testOutcome.getTestSteps().get(0);
         TestStep ignored = testOutcome.getTestSteps().get(1);
@@ -270,9 +270,22 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
         assertThat(firstStep.getResult(), is(TestResult.SUCCESS));
     }
 
+    @Test
+    public void should_report_nested_class_parameters_correctly() throws InitializationError {
+
+        SerenityRunner runner = new SerenityRunner(NonWebTestScenarioWithParameterizedSteps.class);
+        runner.run(new RunNotifier());
+
+        List<TestOutcome> executedScenarios = runner.getTestOutcomes();
+
+        TestOutcome testOutcome = testOutcomeWithTitle("Should handle nested object parameters", executedScenarios);
+        TestStep firstStep = testOutcome.getTestSteps().get(0);
+        assertThat(firstStep.getDescription(), is("a step with an object parameter called <span class='step-parameter'>$100.00</span>"));
+    }
+
     private TestOutcome testOutcomeWithTitle(String title, List<TestOutcome> testOutcomes) {
         for(TestOutcome testOutcome : testOutcomes) {
-            if (testOutcome.getTitle().equals(title)) {
+            if (testOutcome.getTitle().startsWith(title)) {
                 return testOutcome;
             }
         };
@@ -287,7 +300,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();
 
-        TestOutcome testOutcome = executedScenarios.get(1);
+        TestOutcome testOutcome = testOutcomeWithTitle("Happy day scenario", executedScenarios);
         TestStep secondStep = testOutcome.getTestSteps().get(1);
 
         assertThat(secondStep.getDescription(), containsString("Step with two parameters"));

@@ -199,7 +199,9 @@ public final class AnnotatedStepDescription {
         Iterable<String> parameters = getParamatersFrom(description.getName());
         int counter = 0;
         for(String parameter : parameters) {
-            annotatedStepName = annotatedStepName.replaceAll("\\{" + counter++ + "\\}", parameter);
+            String token = "{" + counter++ + "}";
+            annotatedStepName = StringUtils.replace(annotatedStepName, token, parameter);
+
         }
         return annotatedStepName;
     }

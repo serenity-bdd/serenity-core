@@ -359,7 +359,7 @@ public class WebDriverFactory {
 
         Preconditions.checkNotNull(driverType, "Unsupported remote driver type: ");
 
-        if (driverType == SupportedWebDriver.REMOTE) {
+        if (shouldUseARemoteDriver()) {
             return (DesiredCapabilities) enhancedCapabilities(remoteCapabilities());
         } else {
             return (DesiredCapabilities) enhancedCapabilities(realBrowserCapabilities(driverType));
@@ -418,7 +418,11 @@ public class WebDriverFactory {
     }
 
     private DesiredCapabilities remoteCapabilities() {
-        String remoteBrowser = ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables, "firefox");
+        String remoteBrowser = ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables, getDriverFrom(environmentVariables));
+        if (remoteBrowser == null) {
+            remoteBrowser = "firefox";
+        }
+
         DesiredCapabilities capabilities = realBrowserCapabilities(driverTypeFor(remoteBrowser));
         capabilities.setCapability("idle-timeout",EXTRA_TIME_TO_TAKE_SCREENSHOTS);
 
@@ -431,8 +435,9 @@ public class WebDriverFactory {
         }
 
         if (environmentVariables.getProperty(ThucydidesSystemProperty.WEBDRIVER_REMOTE_BROWSER_VERSION) != null) {
-            capabilities.setCapability("version", Platform.valueOf(environmentVariables.getProperty(ThucydidesSystemProperty.WEBDRIVER_REMOTE_BROWSER_VERSION)));
+            capabilities.setCapability("version", environmentVariables.getProperty(ThucydidesSystemProperty.WEBDRIVER_REMOTE_BROWSER_VERSION));
         }
+
 
         return capabilities;
     }

@@ -359,7 +359,7 @@ public class WebDriverFactory {
 
         Preconditions.checkNotNull(driverType, "Unsupported remote driver type: ");
 
-        if (driverType == SupportedWebDriver.REMOTE) {
+        if (shouldUseARemoteDriver()) {
             return (DesiredCapabilities) enhancedCapabilities(remoteCapabilities());
         } else {
             return (DesiredCapabilities) enhancedCapabilities(realBrowserCapabilities(driverType));
@@ -431,8 +431,9 @@ public class WebDriverFactory {
         }
 
         if (environmentVariables.getProperty(ThucydidesSystemProperty.WEBDRIVER_REMOTE_BROWSER_VERSION) != null) {
-            capabilities.setCapability("version", Platform.valueOf(environmentVariables.getProperty(ThucydidesSystemProperty.WEBDRIVER_REMOTE_BROWSER_VERSION)));
+            capabilities.setCapability("version", environmentVariables.getProperty(ThucydidesSystemProperty.WEBDRIVER_REMOTE_BROWSER_VERSION));
         }
+
 
         return capabilities;
     }

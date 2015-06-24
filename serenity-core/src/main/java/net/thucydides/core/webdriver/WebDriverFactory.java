@@ -418,7 +418,11 @@ public class WebDriverFactory {
     }
 
     private DesiredCapabilities remoteCapabilities() {
-        String remoteBrowser = ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables, "firefox");
+        String remoteBrowser = ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables, getDriverFrom(environmentVariables));
+        if (remoteBrowser == null) {
+            remoteBrowser = "firefox";
+        }
+
         DesiredCapabilities capabilities = realBrowserCapabilities(driverTypeFor(remoteBrowser));
         capabilities.setCapability("idle-timeout",EXTRA_TIME_TO_TAKE_SCREENSHOTS);
 

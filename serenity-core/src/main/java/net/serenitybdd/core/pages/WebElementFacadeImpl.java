@@ -704,7 +704,9 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     private void checkPresenceOfWebElement() {
         try {
-            waitForCondition().until(elementIsDisplayed());
+            if (!driverIsDisabled()) {
+                waitForCondition().until(elementIsDisplayed());
+            }
         } catch (Throwable error) {
             if (webElement != null) {
                 throwShouldBeVisibleErrorWithCauseIfPresent(error, error.getMessage());
@@ -716,12 +718,10 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public WebElementFacade waitUntilVisible() {
-        if (driverIsDisabled()) {
-            return this;
-        }
-
         try {
-            waitForCondition().until(elementIsDisplayed());
+            if (!driverIsDisabled()) {
+                waitForCondition().until(elementIsDisplayed());
+            }
         } catch (Throwable error) {
             if (webElement != null) {
                 throwShouldBeVisibleErrorWithCauseIfPresent(error, error.getMessage());
@@ -734,12 +734,10 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public WebElementFacade waitUntilPresent() {
-        if (driverIsDisabled()) {
-            return this;
-        }
-
         try {
-            waitForCondition().until(elementIsPresent());
+            if (!driverIsDisabled()) {
+                waitForCondition().until(elementIsPresent());
+            }
         } catch (TimeoutException timeout) {
             throwShouldBePresentErrorWithCauseIfPresent(timeout, timeout.getMessage());
         }
@@ -867,12 +865,10 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public WebElementFacade waitUntilNotVisible() {
-        if (driverIsDisabled()) {
-            return this;
-        }
-
         try {
-            waitForCondition().until(elementIsNotDisplayed());
+            if (!driverIsDisabled()) {
+                waitForCondition().until(elementIsNotDisplayed());
+            }
         } catch (TimeoutException timeout) {
             throwShouldBeInvisibleErrorWithCauseIfPresent(timeout, "Expected hidden element was displayed");
         }
@@ -881,7 +877,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public String getValue() {
-//        waitUntilVisible();
         checkPresenceOfWebElement();
         return getElement().getAttribute("value");
     }
@@ -901,44 +896,38 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public WebElementFacade waitUntilEnabled() {
-        if (driverIsDisabled()) {
-            return this;
-        }
-
         try {
-            waitForCondition().until(elementIsEnabled());
-            return this;
+            if (!driverIsDisabled()) {
+                waitForCondition().until(elementIsEnabled());
+            }
         } catch (TimeoutException timeout) {
             throw new ElementShouldBeEnabledException("Expected enabled element was not enabled", timeout);
         }
+        return this;
     }
 
     @Override
     public WebElementFacade waitUntilClickable() {
-        if (driverIsDisabled()) {
-            return this;
-        }
-
         try {
-            waitForCondition().until(elementIsClickable());
-            return this;
+            if (!driverIsDisabled()) {
+                waitForCondition().until(elementIsClickable());
+            }
         } catch (TimeoutException timeout) {
             throw new ElementShouldBeEnabledException("Expected enabled element was not enabled", timeout);
         }
+        return this;
     }
 
     @Override
     public WebElementFacade waitUntilDisabled() {
-        if (driverIsDisabled()) {
-            return this;
-        }
-
         try {
-            waitForCondition().until(elementIsNotEnabled());
-            return this;
+            if (!driverIsDisabled()) {
+                waitForCondition().until(elementIsNotEnabled());
+            }
         } catch (TimeoutException timeout) {
             throw new ElementShouldBeDisabledException("Expected disabled element was not disabled", timeout);
         }
+        return this;
     }
 
     @Override

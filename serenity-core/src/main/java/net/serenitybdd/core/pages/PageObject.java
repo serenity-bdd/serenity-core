@@ -361,12 +361,18 @@ public abstract class PageObject {
         return this;
     }
 
+    private boolean driverIsDisabled() {
+        return StepEventBus.getEventBus().webdriverCallsAreSuspended();
+    }
+
     /**
      * Waits for a given text to disappear from the element.
      */
     public PageObject waitForTextToDisappear(final WebElement element,
                                              final String expectedText) {
-        waitForCondition().until(elementDoesNotContain(element, expectedText));
+        if (!driverIsDisabled()) {
+            waitForCondition().until(elementDoesNotContain(element, expectedText));
+        }
         return this;
     }
 

@@ -6,6 +6,7 @@ import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.scheduling.NormalFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import org.openqa.selenium.*;
@@ -54,6 +55,10 @@ public class RenderedPageObjectView {
         this.timeoutCanBeOverriden = timeoutCanBeOverriden;
     }
 
+    private boolean driverIsDisabled() {
+        return StepEventBus.getEventBus().webdriverCallsAreSuspended();
+    }
+
     public ThucydidesFluentWait<WebDriver> waitForCondition() {
         return new NormalFluentWait<>(driver, webdriverClock, sleeper)
                 .withTimeout(waitForTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS)
@@ -85,7 +90,9 @@ public class RenderedPageObjectView {
      * This method will wait until an element is present and visible on the screen.
      */
     public void waitFor(final By byElementCriteria) {
-        waitForCondition().until(elementDisplayed(byElementCriteria));
+        if (!driverIsDisabled()) {
+            waitForCondition().until(elementDisplayed(byElementCriteria));
+        }
     }
 
     public void waitFor(final ExpectedCondition expectedCondition) {
@@ -108,12 +115,16 @@ public class RenderedPageObjectView {
     }
 
     private WebElementFacade waitForElement(final WebElementFacade webElement) {
-        waitForCondition().until(elementIsDisplayed(webElement));
+        if (!driverIsDisabled()) {
+            waitForCondition().until(elementIsDisplayed(webElement));
+        }
         return webElement;
     }
 
     private List<WebElementFacade> waitForElements(final List<WebElementFacade> elements) {
-        waitForCondition().until(elementsAreDisplayed(elements));
+        if (!driverIsDisabled()) {
+            waitForCondition().until(elementsAreDisplayed(elements));
+        }
         return elements;
     }
 
@@ -225,7 +236,9 @@ public class RenderedPageObjectView {
     }
 
     public void waitForText(final String expectedText) {
-        waitForCondition().until(textPresent(expectedText));
+        if (!driverIsDisabled()) {
+            waitForCondition().until(textPresent(expectedText));
+        }
     }
 
     private ExpectedCondition<Boolean> textPresentInElement(final WebElement element, final String expectedText) {
@@ -242,7 +255,9 @@ public class RenderedPageObjectView {
     }
 
     public void waitForText(final WebElement element, final String expectedText) {
-        waitForCondition().until(textPresentInElement(element, expectedText));
+        if (!driverIsDisabled()) {
+            waitForCondition().until(textPresentInElement(element, expectedText));
+        }
     }
 
     private ExpectedCondition<Boolean> titlePresent(final String expectedTitle) {
@@ -258,7 +273,9 @@ public class RenderedPageObjectView {
     }
 
     public void waitForTitle(final String expectedTitle) {
-        waitForCondition().until(titlePresent(expectedTitle));
+        if (!driverIsDisabled()) {
+            waitForCondition().until(titlePresent(expectedTitle));
+        }
     }
 
     private boolean titleIs(final String expectedTitle) {
@@ -287,15 +304,19 @@ public class RenderedPageObjectView {
     }
 
     public void waitForTextToDisappear(final String expectedText, final long timeout) {
-        waitForCondition()
-                .withTimeout(timeout, TimeUnit.MILLISECONDS)
-                .until(textNotPresent(expectedText));
+        if (!driverIsDisabled()) {
+            waitForCondition()
+                    .withTimeout(timeout, TimeUnit.MILLISECONDS)
+                    .until(textNotPresent(expectedText));
+        }
     }
 
 	public void waitForTextToAppear(final String expectedText, final long timeout) {
-		waitForCondition()
-				.withTimeout(timeout, TimeUnit.MILLISECONDS)
-				.until(textPresent(expectedText));
+        if (!driverIsDisabled()) {
+            waitForCondition()
+                    .withTimeout(timeout, TimeUnit.MILLISECONDS)
+                    .until(textPresent(expectedText));
+        }
 	}
 
     private ExpectedCondition<Boolean> titleNotPresent(final String expectedTitle) {
@@ -311,7 +332,9 @@ public class RenderedPageObjectView {
     }
 
     public void waitForTitleToDisappear(final String expectedTitle) {
-        waitForCondition().until(titleNotPresent(expectedTitle));
+        if (!driverIsDisabled()) {
+            waitForCondition().until(titleNotPresent(expectedTitle));
+        }
     }
 
     private ExpectedCondition<Boolean> anyTextPresent(final String... expectedTexts) {
@@ -323,7 +346,9 @@ public class RenderedPageObjectView {
     }
 
     public void waitForAnyTextToAppear(final String... expectedTexts) {
-        waitForCondition().until(anyTextPresent(expectedTexts));
+        if (!driverIsDisabled()) {
+            waitForCondition().until(anyTextPresent(expectedTexts));
+        }
     }
 
     private ExpectedCondition<Boolean> anyTextPresentInElement(final WebElement element, final String... expectedTexts) {
@@ -341,7 +366,9 @@ public class RenderedPageObjectView {
     }
 
     public void waitForAnyTextToAppear(final WebElement element, final String... expectedTexts) {
-        waitForCondition().until(anyTextPresentInElement(element, expectedTexts));
+        if (!driverIsDisabled()) {
+            waitForCondition().until(anyTextPresentInElement(element, expectedTexts));
+        }
     }
 
 
@@ -386,7 +413,9 @@ public class RenderedPageObjectView {
     }
 
     public void waitForAllTextToAppear(final String... expectedTexts) {
-        waitForCondition().until(allTextPresent(expectedTexts));
+        if (!driverIsDisabled()) {
+            waitForCondition().until(allTextPresent(expectedTexts));
+        }
     }
 
     private ExpectedCondition<Boolean> elementNotDisplayed(final By byElementCriteria) {
@@ -402,7 +431,9 @@ public class RenderedPageObjectView {
     }
 
     public void waitForElementsToDisappear(final By byElementCriteria) {
-        waitForCondition().until(elementNotDisplayed(byElementCriteria));
+        if (!driverIsDisabled()) {
+            waitForCondition().until(elementNotDisplayed(byElementCriteria));
+        }
     }
 
     private ExpectedCondition<Boolean> anyElementPresent(final By... expectedElements) {
@@ -422,7 +453,9 @@ public class RenderedPageObjectView {
         };
     }
     public void waitForAnyRenderedElementOf(final By[] expectedElements) {
-        waitForCondition().until(anyElementPresent(expectedElements));
+        if (!driverIsDisabled()) {
+            waitForCondition().until(anyElementPresent(expectedElements));
+        }
     }
 
 //    public void setWaitForTimeoutInMilliseconds(long waitForTimeoutInMilliseconds) {

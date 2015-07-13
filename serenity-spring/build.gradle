@@ -5,11 +5,11 @@ ext {
 
 dependencies {
     compile project(':serenity-core')
-	compile project(':serenity-junit')
+	  compile project(':serenity-junit')
     compile ("org.springframework:spring-test:${springVersion}")
     compile ("org.springframework:spring-context:${springVersion}")
     compile ("org.springframework:spring-context-support:${springVersion}")
-	
+
     testCompile "org.springframework:spring-jdbc:${springVersion}"
     testCompile "org.springframework:spring-aop:${springVersion}"
     testCompile "org.springframework:spring-orm:${springVersion}"
@@ -29,7 +29,7 @@ test {
 		exclude {
 			FileTreeElement elem -> elem.path.contains('/integration/') && !elem.path.contains('/junit/spring/integration/')
 		}
-	} 
+	}
 	else {
 		throw new GradleException("The root build.gradle has been modified and has broken serenity-spring's build.gradle. Please modify serenity-spring's build.gradle.")
 	}

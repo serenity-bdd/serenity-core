@@ -6,7 +6,7 @@ ext {
 dependencies {
     compile gradleApi()
 //    compile localGroovy()
-    compile 'org.codehaus.groovy:groovy-all:2.3.9'
+    compile 'org.codehaus.groovy:groovy-all:2.3.10'
     compile project(':serenity-core')
     testCompile "junit:junit:4.11"
 }

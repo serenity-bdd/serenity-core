@@ -80,7 +80,7 @@ subprojects {
     apply plugin: 'idea'
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
-    //apply plugin: 'com.jfrog.bintray'
+    apply plugin: 'com.jfrog.bintray'
 
     sourceCompatibility = 1.7
     targetCompatibility = 1.7
@@ -237,7 +237,7 @@ subprojects {
         }
     }
 
-/*
+
     bintray {
         user = bintrayUsername //this usually comes form gradle.properties file in ~/.gradle
         key = bintrayApiKey //this usually comes form gradle.properties file in ~/.gradle
@@ -251,7 +251,7 @@ subprojects {
             labels = ['serenity', 'bdd']
         }
     }
-*/
+
     task sourcesJar(type: Jar, dependsOn: classes) {
         classifier = 'sources'
         from sourceSets.main.allSource
@@ -265,7 +265,7 @@ subprojects {
     artifacts {
         archives sourcesJar, javadocJar
     }
-/*
+
     publishing {
         publications {
             mavenJava(MavenPublication) {
@@ -321,7 +321,7 @@ subprojects {
             }
         }
     }
-*/
+/*
     uploadArchives {
         repositories {
             mavenDeployer {
@@ -363,7 +363,7 @@ subprojects {
             }
         }
     }
-
+*/
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:-options"
     }

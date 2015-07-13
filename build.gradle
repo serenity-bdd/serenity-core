@@ -3,8 +3,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
-        classpath 'org.ajoberstar:gradle-git:0.12.0'
+        // classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
+        classpath 'org.ajoberstar:gradle-git:1.2.0'
         classpath 'org.pegdown:pegdown:1.4.1'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.7'
     }
@@ -15,6 +15,12 @@ import org.ajoberstar.gradle.git.release.opinion.Strategies
 import org.ajoberstar.grgit.Grgit
 
 apply plugin: 'org.ajoberstar.release-base'
+release {
+    grgit = Grgit.open(project.file('.'))
+    versionStrategy Strategies.FINAL
+    versionStrategy Strategies.PRE_RELEASE
+    defaultVersionStrategy Strategies.SNAPSHOT
+}
 
 ext {
     seleniumVersion = '2.46.0'
@@ -24,6 +30,20 @@ ext {
     springVersion = '4.1.6.RELEASE'
     guavaVersion = '18.0'
     restAssuredVersion = '2.4.1'
+
+    // Bintray configuration
+    bintrayBaseUrl = 'https://api.bintray.com/maven'
+    bintrayRepository = 'maven'
+    bintrayPackage = 'serenity-core'
+    projectDescription = 'Serenity Core'
+
+    if (!project.hasProperty("bintrayUsername")) {
+        bintrayUsername = 'wakaleo'
+    }
+    if (!project.hasProperty("bintrayApiKey")) {
+        bintrayApiKey = ''
+    }
+
 }
 
 allprojects {
@@ -61,7 +81,7 @@ subprojects {
     apply plugin: 'idea'
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
-    apply plugin: 'com.jfrog.bintray'
+    //apply plugin: 'com.jfrog.bintray'
 
     sourceCompatibility = 1.7
     targetCompatibility = 1.7
@@ -222,6 +242,7 @@ subprojects {
         }
     }
 
+/*
     bintray {
         user = bintrayUsername //this usually comes form gradle.properties file in ~/.gradle
         key = bintrayApiKey //this usually comes form gradle.properties file in ~/.gradle
@@ -235,7 +256,7 @@ subprojects {
             labels = ['serenity', 'bdd']
         }
     }
-
+*/
     task sourcesJar(type: Jar, dependsOn: classes) {
         classifier = 'sources'
         from sourceSets.main.allSource
@@ -249,7 +270,7 @@ subprojects {
     artifacts {
         archives sourcesJar, javadocJar
     }
-
+/*
     publishing {
         publications {
             mavenJava(MavenPublication) {
@@ -301,6 +322,48 @@ subprojects {
                     }.each() {
                         it.scope*.value = 'compile'
                     }
+                }
+            }
+        }
+    }
+*/
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                pom.artifactId = 'serenity-core'
+                pom.project {
+                    name = project.name
+                    description = projectDescription
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+                    url 'https://github.com/serenity-bdd/$project.name'
+                    scm {
+                        url 'scm:git:git@github.com:serenity-bdd/$project.name.git'
+                        connection 'scm:git:git@github.com:serenity-bdd/$project.name.git'
+                        developerConnection 'scm:git:git@github.com:serenity-bdd/$project.name.git'
+                    }
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'johnsmart'
+                            name 'John Ferguson Smart'
+                            email 'john.smart@wakaleo.com'
+                        }
+                    }
+                }
+                repository(url: bintrayBaseUrl + '/serenity/maven/serenity-core') {
+                    authentication(userName: bintrayUsername, password: bintrayApiKey)
                 }
             }
         }

@@ -1,8 +1,10 @@
 package net.thucydides.core.webdriver;
 
+import com.google.common.base.Splitter;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
+import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.thucydides.core.guice.Injectors;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
@@ -12,9 +14,11 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.safari.SafariDriver;
 
 import java.net.URL;
+import java.util.List;
 
 /**
  * Centralize instantiation of WebDriver drivers.
@@ -32,9 +36,23 @@ public class WebdriverInstanceFactory {
     }
 
     public WebDriver newRemoteDriver(URL remoteUrl, Capabilities capabilities) {
-        RemoteWebDriver driver = new RemoteWebDriver(remoteUrl, capabilities);
-        driverProperties.registerCapabilities("remote", driver.getCapabilities());
-        return driver;
+        try {
+            RemoteWebDriver driver = new RemoteWebDriver(remoteUrl, capabilities);
+            driverProperties.registerCapabilities("remote", driver.getCapabilities());
+            return driver;
+        } catch (UnreachableBrowserException unreachableBrowser) {
+            String errorMessage = unreachableBrowserErrorMessage(unreachableBrowser);
+            throw new SerenityWebDriverException(errorMessage, unreachableBrowser);
+
+        }
+    }
+
+    private String unreachableBrowserErrorMessage(UnreachableBrowserException unreachableBrowser) {
+        List<String> errorLines =  Splitter.onPattern("\n").splitToList(unreachableBrowser.getLocalizedMessage());
+        Throwable cause = unreachableBrowser.getCause();
+        String errorCause = ((cause == null) ? "" :
+                              System.lineSeparator() + cause.getClass().getSimpleName() + " - " + cause.getLocalizedMessage());
+        return errorLines.get(0) + errorCause;
     }
 
     public WebDriver newFirefoxDriver(Capabilities capabilities) {

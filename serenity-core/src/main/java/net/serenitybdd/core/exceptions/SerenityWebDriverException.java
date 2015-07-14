@@ -30,6 +30,15 @@ public class SerenityWebDriverException extends WebDriverException {
         this.exceptionClass = testErrorException.getClass();
     }
 
+    public SerenityWebDriverException(String message, WebDriverException testErrorException) {
+        super(testErrorException.getCause());
+        this.detailedMessage = message;
+        this.stackTrace = testErrorException.getStackTrace();
+        this.cause = testErrorException.getCause();
+        this.exceptionClass = testErrorException.getClass();
+    }
+
+
     @Override
     public String getMessage() {
         return detailedMessage;

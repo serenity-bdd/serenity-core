@@ -1,6 +1,7 @@
 package net.thucydides.core.webdriver
 
 import com.opera.core.systems.OperaDriver
+import net.serenitybdd.core.exceptions.SerenityWebDriverException
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.openqa.selenium.Capabilities
 import org.openqa.selenium.WebDriver
@@ -130,6 +131,21 @@ class WhenConfiguringTheWebdriverInstance extends Specification {
         then:
             webdriver == remote && configuredRemoteCapabilities.getCapability("browserName") == "internet explorer"
     }
+
+    def "Should return sensible error message on remote driver error"() {
+        when:
+            environmentVariables.setProperty("webdriver.driver", "remote")
+            environmentVariables.setProperty("webdriver.remote.url", "http://host-does-not-exist:4444")
+            environmentVariables.setProperty("webdriver.remote.driver", "firefox")
+            environmentVariables.setProperty("webdriver.remote.os", "WINDOWS")
+            def webDriverFactory = new WebDriverFactory(new WebdriverInstanceFactory(), environmentVariables)
+            webDriverFactory.newInstanceOf(SupportedWebDriver.REMOTE)
+        then:
+            def e = thrown(SerenityWebDriverException)
+            e.message.contains("Could not start a new session. Possible causes are invalid address of the remote server or browser start-up failure.")
+            e.message.contains("UnknownHostException - host-does-not-exist")
+    }
+
 
     def "Should create remote driver using the browser defined in webdriver.driver if webdriver.remote.driver is not defined"() {
         when:

@@ -46,7 +46,7 @@ dependencies {
         exclude group: 'xml-apis', module: 'xml-apis'
     }
 
-    compile ('io.appium:java-client:2.1.0') {
+    compile ('io.appium:java-client:3.1.0') {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
         exclude group: 'cglib', module: 'cglib'

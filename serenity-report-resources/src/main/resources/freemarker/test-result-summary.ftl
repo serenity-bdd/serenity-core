@@ -93,6 +93,15 @@
             <td>${pendingCount} (${percentagePendingCount?string.percent})</td>
             <td>${ignoredCount} (${percentageIgnoredCount?string.percent})</td>
         </tr>
+        <tr>
+            <td class="summary-leading-column">Total Duration</td>
+            <#assign durationInSeconds = testOutcomes.duration / 1000>
+            <#if (durationInSeconds > 60)>
+                <td colspan="5">${(durationInSeconds / 60)?int} minutes ${(durationInSeconds % 60)?round} seconds</td>
+            <#else>
+                <td colspan="5">${durationInSeconds?round} seconds</td>
+            </#if>
+        </tr>
         </body>
     </table>
 </div>

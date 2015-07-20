@@ -314,10 +314,10 @@
                                 </#if>
                                 <#if restQuery.content?has_content>
                                     <h5>Content Body</h5>
-                                    <pre>${(restQuery.content)!}</pre>
+                                    <pre>${(formatter.renderXML(restQuery.content))!}</pre>
                                 </#if>
                                 <h5>Response Body</h5>
-                                <pre>${restQuery.responseBody}</pre>
+                                <pre>${formatter.renderXML(restQuery.responseBody)}</pre>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">

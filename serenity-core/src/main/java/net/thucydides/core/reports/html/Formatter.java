@@ -72,7 +72,7 @@ public class Formatter {
     }
 
     private String stripNewLines(String render) {
-        return render.replaceAll("\n","");
+        return render.replaceAll("\n", "");
     }
 
     public String stripQualifications(String title) {
@@ -81,6 +81,10 @@ public class Formatter {
         } else {
             return title;
         }
+    }
+
+    public String renderXML(String text) {
+        return concatLines(BASIC_XML.translate(stringFormOf(text)));
     }
 
     static class IssueExtractor {
@@ -288,6 +292,10 @@ public class Formatter {
     private final CharSequenceTranslator ESCAPE_SPECIAL_CHARS = new AggregateTranslator(
             new LookupTranslator(EntityArrays.ISO8859_1_ESCAPE()),
             new LookupTranslator(EntityArrays.HTML40_EXTENDED_ESCAPE())
+    );
+
+    private final CharSequenceTranslator BASIC_XML = new AggregateTranslator(
+            new LookupTranslator(EntityArrays.BASIC_ESCAPE())
     );
 
     public String htmlCompatible(Object fieldValue) {

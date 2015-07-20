@@ -312,6 +312,16 @@ public class WhenFormattingForHTML {
     }
 
     @Test
+    public void should_not_escape_xml_tags_unless_asked_nicely() {
+        when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
+        Formatter formatter = new Formatter(issueTracking);
+
+        String formattedValue = formatter.renderXML("<wsse:username>nonofyourbusiness</wsse:username>");
+
+        assertThat(formattedValue, is("&lt;wsse:username&gt;nonofyourbusiness&lt;/wsse:username&gt;"));
+    }
+
+    @Test
     public void should_escape_table_fields() {
         Formatter formatter = new Formatter(issueTracking);
 

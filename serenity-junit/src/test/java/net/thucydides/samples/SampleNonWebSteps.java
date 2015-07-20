@@ -5,6 +5,7 @@ import net.thucydides.core.annotations.Step;
 import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.Assume;
 import org.junit.Ignore;
+import org.openqa.selenium.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,6 +73,10 @@ public class SampleNonWebSteps {
 
     public void throw_exception() {
         throw new IllegalArgumentException("Your argument is invalid");
+    }
+
+    public void throw_element_not_found_exception() {
+        throw new NoSuchElementException("It ain't there, boss");
     }
 
 

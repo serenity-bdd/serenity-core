@@ -1,5 +1,7 @@
 package net.serenitybdd.junit.runners;
 
+import net.thucydides.core.steps.StepEventBus;
+import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -7,6 +9,8 @@ import org.junit.runner.notification.RunNotifier;
 import org.junit.runner.notification.StoppedByUserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Method;
 
 public class RetryFilteringRunNotifier extends RunNotifierDecorator {
 
@@ -44,13 +48,37 @@ public class RetryFilteringRunNotifier extends RunNotifierDecorator {
 
     @Override
     public void fireTestFailure(Failure failure) {
-        log.debug("Test failed: " + failure);
-        testStartAlreadyFired = false;
-        testFailed = true;
-        lastFailure = failure;
-
-        retryAwareRunNotifier.fireTestFailure(failure);
+        if (isExpected(failure)) {
+            fireTestFinished(failure.getDescription());
+        } else {
+            log.debug("Test failed: " + failure);
+            testStartAlreadyFired = false;
+            testFailed = true;
+            lastFailure = failure;
+            retryAwareRunNotifier.fireTestFailure(failure);
+        }
     }
+
+    private boolean isExpected(Failure failure) {
+        if ((failure.getDescription().getTestClass() == null) || (failure.getDescription().getMethodName() == null)) {
+            return false;
+        }
+        try {
+            Method testMethod =  failure.getDescription().getTestClass().getMethod(failure.getDescription().getMethodName());
+            Test testAnnotation = testMethod.getAnnotation(Test.class);
+            if (testAnnotation.expected() != null) {
+                return (failure.getException().getClass().isAssignableFrom(testAnnotation.expected()));
+            }
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+        return false;
+    }
+
+    private void updateResultsForExpectedException(Class<? extends Throwable> expected) {
+        StepEventBus.getEventBus().exceptionExpected(expected);
+    }
+
 
     public void flush() {
         log.debug("Flushing notifications");

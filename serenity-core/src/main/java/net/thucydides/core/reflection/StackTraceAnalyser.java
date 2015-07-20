@@ -1,11 +1,15 @@
 package net.thucydides.core.reflection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Method;
 
 
 public class StackTraceAnalyser {
 
     private final StackTraceElement stackTraceElement;
+    private final Logger logger = LoggerFactory.getLogger(StackTraceAnalyser.class);
 
     private StackTraceAnalyser(StackTraceElement stackTraceElement) {
         this.stackTraceElement = stackTraceElement;
@@ -24,8 +28,11 @@ public class StackTraceAnalyser {
                     return matchingMethod;
                 }
             }
-        } catch (ClassNotFoundException classNotFound) {}
-
+        } catch (ClassNotFoundException classNotFoundIgnored) {
+            logger.warn("Failed to load class during Stack analysis: " + classNotFoundIgnored.getLocalizedMessage());
+        } catch (NoClassDefFoundError noClassDefFoundErrorIgnored) {
+            logger.warn("Failed to load class definition during Stack analysis: " + noClassDefFoundErrorIgnored.getLocalizedMessage());
+        }
         return null;
     }
 

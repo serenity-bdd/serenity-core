@@ -344,5 +344,17 @@ public class WhenFindingTagsForATestOutcome {
         assertThat(germanRequirement.getName(), is("Ich möchte testen, wie serenity und cucumber mit deutscher sprache umgehen."));
     }
 
+    @Test
+    public void should_get_requirement_from_feature_file_using_the_title_of_the_feature() throws URISyntaxException {
+
+        FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider(environmentVariables);
+
+        File featureFile = new File(this.getClass().getResource("/features/PlantPotatoes.feature").toURI());
+
+        Requirement featureRequirement = tagProvider.readRequirementsFromStoryOrFeatureFile(featureFile);
+
+        assertThat(featureRequirement.getName(), is("Planting some potatoes"));
+    }
+
 }
 

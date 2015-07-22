@@ -199,7 +199,22 @@
 <div id="contenttop">
 <#--<div class="leftbg"></div>-->
     <div class="middlebg">
-        <span class="bluetext"><a href="index.html" class="bluetext">Home</a> ${resultsContext}</span>
+        <span class="bluetext"><a href="index.html" class="bluetext">Home</a>
+        <#if (breadcrumbs?has_content)>
+            <#list breadcrumbs as breadcrumb>
+                <#assign breadcrumbReport = absoluteReportName.forRequirementOrTag(breadcrumb) />
+                <#assign breadcrumbTitle = inflection.of(breadcrumb.shortName).asATitle() >
+                > <a href="${breadcrumbReport}">${formatter.truncatedHtmlCompatible(breadcrumbTitle,40)}</a>
+            </#list>
+        <#else>
+            <#if currentTagType?has_content>
+                > ${inflection.of(currentTagType!"").asATitle()}
+            </#if>
+        </#if>
+            <#if testOutcomes.label?has_content>
+                > ${formatter.truncatedHtmlCompatible(inflection.of(testOutcomes.label).asATitle(),80)}
+            </#if>
+        </span>
     </div>
     <div class="rightbg"></div>
 </div>
@@ -476,7 +491,8 @@
             </tr>
             <#foreach tag in tags>
                 <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
-                <#assign tagReport = reportName.forTag(tag) >
+                <#assign tagLabel = inflection.of(tag.name).asATitle() >
+                <#assign tagReport = reportName.forRequirementOrTag(tag) >
                 <#assign outcomesForTag = testOutcomes.withTag(tag) >
                 <#assign count = outcomesForTag.total>
                 <#assign testCountLabel = inflection.of(count).times("test").inPluralForm() >
@@ -503,7 +519,7 @@
                     <td class="bluetext" class="tag-title">
                         <span class="${outcomesForTag.result}-text ellipsis">
                             <#if testOutcomes.label == tag.name>
-                                <a href="${tagReport}" title="${tagTitle}" class="currentTag">${tagTitle}</a>
+                                <a href="${tagReport}" title="${tagLabel}" class="currentTag">${tagTitle}</a>
                             <#else>
                                 <a href="${tagReport}" title="${tagTitle}">${tagTitle}</a>
                             </#if>

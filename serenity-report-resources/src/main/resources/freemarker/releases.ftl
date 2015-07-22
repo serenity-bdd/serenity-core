@@ -53,7 +53,7 @@
 <div class="middlecontent">
     <div id="contenttop">
         <div class="middlebg">
-            <span class="bluetext"><a href="index.html" class="bluetext">Home</a> > Releases </span>
+            <span class="bluetext">Releases </span>
         </div>
         <div class="rightbg"></div>
     </div>

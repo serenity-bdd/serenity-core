@@ -29,9 +29,12 @@
         <div class="middlebg">
         <span class="bluetext">
             <a href="index.html" class="bluetext">Home</a>
-        <#if (parentLink?has_content)>
-            > <a href="${parentLink}">${formatter.truncatedHtmlCompatible(inflection.of(parentTitle).asATitle(),40)}</a>
-        </#if>
+
+        <#list breadcrumbs as breadcrumb>
+            <#assign breadcrumbReport = absoluteReportName.forRequirement(breadcrumb) />
+            <#assign breadcrumbTitle = inflection.of(breadcrumb.shortName).asATitle() >
+            > <a href="${breadcrumbReport}">${formatter.truncatedHtmlCompatible(breadcrumbTitle,40)}</a>
+        </#list>
             > ${formatter.truncatedHtmlCompatible(testOutcome.title,80)}
         </span>
         </div>

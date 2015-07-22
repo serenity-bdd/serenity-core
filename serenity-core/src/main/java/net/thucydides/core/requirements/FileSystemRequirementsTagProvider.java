@@ -23,7 +23,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.nio.file.Files;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -158,8 +157,9 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private List<Requirement> addParentsTo(List<Requirement> requirements, String parent) {
         List<Requirement> augmentedRequirements = Lists.newArrayList();
         for (Requirement requirement : requirements) {
+            // !!! NEW CODE
             List<Requirement> children = requirement.hasChildren()
-                    ? addParentsTo(requirement.getChildren(), requirement.getName()) : NO_REQUIREMENTS;
+                    ? addParentsTo(requirement.getChildren(), requirement.qualifiedName()) : NO_REQUIREMENTS;
             augmentedRequirements.add(requirement.withParent(parent).withChildren(children));
         }
         return augmentedRequirements;
@@ -258,9 +258,10 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         Set<TestTag> tags = new HashSet<>();
         if (testOutcome.getPath() != null) {
             List<String> storyPathElements = stripRootFrom(pathElements(stripRootPathFrom(testOutcome.getPath())));
-            addStoryTagIfPresent(tags, storyPathElements);
-            storyPathElements = stripStorySuffixFrom(storyPathElements);
-            tags.addAll(getMatchingCapabilities(getRequirements(), storyPathElements));
+            tags.addAll(getMatchingCapabilities(getRequirements(), stripStorySuffixFrom(storyPathElements)));
+            if (tags.isEmpty()) {
+                addDefaultStoryTagIfPresent(tags, storyPathElements);
+            }
         }
         return tags;
     }
@@ -279,14 +280,14 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return strippedPathElements;
     }
 
-    private void addStoryTagIfPresent(Set<TestTag> tags, List<String> storyPathElements) {
+    private void addDefaultStoryTagIfPresent(Set<TestTag> tags, List<String> storyPathElements) {
         Optional<TestTag> storyTag = storyTagFrom(storyPathElements);
         tags.addAll(storyTag.asSet());
     }
 
     private Optional<TestTag> storyTagFrom(List<String> storyPathElements) {
         if ((!storyPathElements.isEmpty()) && isSupportedFileStoryExtension(last(storyPathElements))) {
-            String storyName = Lists.reverse(storyPathElements).get(1);
+            String storyName = Lists.reverse(storyPathElements).get(1); // TODO: Get the story or feature name from the file only as a last resort
             String storyParent = parentElement(storyPathElements);
             String qualifiedName = storyParent == null ?
                     humanize(storyName) : humanize(storyParent).trim() + "/" + humanize(storyName);

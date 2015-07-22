@@ -4,16 +4,20 @@ import com.google.common.base.Preconditions;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.NumericalFormatter;
+import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.ReportOptions;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
+import net.thucydides.core.tags.BreadcrumbTagFilter;
 import net.thucydides.core.util.Inflector;
 import net.thucydides.core.util.VersionProvider;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HtmlRequirementsReporter extends HtmlReporter {
@@ -68,6 +72,7 @@ public class HtmlRequirementsReporter extends HtmlReporter {
         context.put("serenityVersionNumber", versionProvider.getVersion());
         context.put("buildNumber", versionProvider.getBuildNumberText());
 
+        addBreadcrumbs(requirementsOutcomes, context);
         addFormattersToContext(context);
 
         String htmlContents = mergeTemplate(DEFAULT_REQUIREMENTS_REPORT).usingContext(context);
@@ -75,6 +80,12 @@ public class HtmlRequirementsReporter extends HtmlReporter {
 
         return writeReportToOutputDirectory(filename, htmlContents);
     }
+
+    private void addBreadcrumbs(RequirementsOutcomes requirementsOutcomes, Map<String, Object> context) {
+        List<TestTag> breadcrumbs = new BreadcrumbTagFilter().getRequirementBreadcrumbsFrom(requirementsOutcomes);
+        context.put("breadcrumbs", breadcrumbs);
+    }
+
 
     private void addFormattersToContext(final Map<String, Object> context) {
         Formatter formatter = new Formatter(issueTracking);

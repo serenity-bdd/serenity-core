@@ -17,6 +17,7 @@ import java.util.Set;
  * Legacy tag provider that builds tags based on the Feature/Story structure, if the @WithTag annotation is not used.
  * If the @WithTag annotation is used, @Feature classes will not be used.
  */
+@Deprecated
 public class FeatureStoryTagProvider implements TagProvider, CoreTagProvider {
 
     private final EnvironmentVariables environmentVariables;

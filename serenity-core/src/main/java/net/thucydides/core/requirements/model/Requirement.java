@@ -160,6 +160,10 @@ public class Requirement implements Comparable {
         return new Requirement(this.name, this.displayName, this.cardNumber, this.parent, this.type,  this.narrative, children, examples, releaseVersions, customFields, featureFileName);
     }
 
+    public void setChildren(List<Requirement> children) {
+        this.children = ImmutableList.copyOf(children);
+    }
+
     public Requirement withParent(String parent) {
         return new Requirement(this.name, this.displayName, this.cardNumber, parent, this.type, this.narrative, children, examples, releaseVersions, customFields, featureFileName);
     }
@@ -211,6 +215,7 @@ public class Requirement implements Comparable {
     }
 
     public TestTag asTag() {
+//        return asUnqualifiedTag();
         return TestTag.withName(qualifiedName()).andType(getType());
     }
 
@@ -292,14 +297,14 @@ public class Requirement implements Comparable {
         return featureFileName;
     }
 
-    public String qualifiedName() {
+    public String  qualifiedName() {
         return (StringUtils.isNotEmpty(qualifier())) ? qualifier() + "/" + getName() : getName();
     }
 
     public String qualifier() {
-        if (getCardNumber() != null) {
-            return getCardNumber();
-        }
+//        if (getCardNumber() != null) {
+//            return getCardNumber();
+//        }
         return (getParent() != null) ? getParent() : null;
     }
 

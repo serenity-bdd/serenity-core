@@ -1,10 +1,12 @@
 package net.thucydides.core.reports.html;
 
 import com.google.common.base.Optional;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.Release;
 import net.thucydides.core.model.ReportNamer;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestTag;
+import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.NameConverter;
 
@@ -12,6 +14,7 @@ public class ReportNameProvider {
 
     private final Optional<String> context;
     private final ReportNamer reportNamer;
+    private final RequirementsService requirementsService;
 
     private final static Optional<String> NO_CONTEXT = Optional.absent();
 
@@ -20,12 +23,17 @@ public class ReportNameProvider {
     }
 
     public ReportNameProvider(String context) {
-       this(Optional.fromNullable(context), ReportType.HTML);
+       this(Optional.fromNullable(context), ReportType.HTML, Injectors.getInjector().getInstance(RequirementsService.class));
     }
 
     protected ReportNameProvider(Optional<String> context, ReportType type) {
+        this(context, type, Injectors.getInjector().getInstance(RequirementsService.class));
+    }
+
+    protected ReportNameProvider(Optional<String> context, ReportType type, RequirementsService requirementsService) {
         this.context = context;
         this.reportNamer = ReportNamer.forReportType(type);
+        this.requirementsService = requirementsService;
     }
 
     public String getContext() {
@@ -83,6 +91,18 @@ public class ReportNameProvider {
 
     public String forRequirement(Requirement requirement) {
         return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + "requirement_" + requirement.qualifiedName());
+    }
+
+    public String forRequirement(TestTag tag) {
+        return forRequirement(tag.getName());
+    }
+
+    public String forRequirementOrTag(TestTag tag) {
+        return (requirementsService.isRequirementsTag(tag)) ? forRequirement(tag.getName()) : forTag(tag);
+    }
+
+    public String forRequirement(String requirementName) {
+        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + "requirement_" + requirementName);
     }
 
     public String forRelease(Release release) {

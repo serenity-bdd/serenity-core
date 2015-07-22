@@ -244,8 +244,10 @@ h3.discreet-story-header {
 }
 .tag {
     display: block;
-    padding-top: 8px;
+    padding-top: 2px;
+    margin: 0 0 5px;
 }
+
 i.tag {
     color: red;
 }
@@ -1481,4 +1483,12 @@ ul.second-level-requirements  {
 
 .rest-query {
     padding-left : 10px;
+}
+
+.parent-requirement-label {
+    color:#428bca;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 12pt;
+
+
 }

@@ -49,16 +49,6 @@ class WhenManagingReleaseReporting extends Specification {
             releases.collect { it.label } == ["Release 1.0", "Release 2.0"]
     }
 
-    def "should be able to get requirements information from a central service"() {
-        given:
-            def requirementsService = new RequirementsServiceImplementation();
-        when:
-            def parentRequirement = requirementsService.getParentRequirementFor(outcome5);
-        then:
-            parentRequirement.get().name == "Grow new potatoes"
-
-    }
-
     def "should be able to derive release tags from requirements"() {
         given:
             def releaseManager = new ReleaseManager(environmentVariables, reportNameProvider);

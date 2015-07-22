@@ -77,8 +77,7 @@
 <div class="middlecontent">
 <div id="contenttop">
     <div class="middlebg">
-        <span class="bluetext"><a href="index.html" class="bluetext">Home</a>
-            > <a href="capabilities.html">Requirements</a>
+        <span class="bluetext"><a href="capabilities.html">Requirements</a>
             > ${formatter.truncatedHtmlCompatible(pageTitle,60)}
         </span>
     </div>

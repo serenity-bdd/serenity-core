@@ -72,6 +72,24 @@ public class JavascriptExecutorFacade {
         }
     }
 
+    public Object executeAsyncScript(final String script) {
+        if (javascriptIsSupportedIn(driver)) {
+            JavascriptExecutor js = getJavascriptEnabledDriver();
+            return js.executeAsyncScript(script);
+        } else {
+            return null;
+        }
+    }
+
+    public Object executeAsyncScript(final String script, final Object... params) {
+        if (javascriptIsSupportedIn(driver) && shouldExecuteJavascript()) {
+            JavascriptExecutor js = getJavascriptEnabledDriver();
+            return js.executeAsyncScript(script, params);
+        } else {
+            return null;
+        }
+    }
+
     private boolean shouldExecuteJavascript() {
         return (!StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed()
                 && !StepEventBus.getEventBus().isDryRun()

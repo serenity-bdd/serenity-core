@@ -477,7 +477,6 @@ public class RenderedPageObjectView {
             if (timeoutCanBeOverriden) {
                 overrideWaitForTimeoutTo(new Duration(0, TimeUnit.SECONDS));
             }
-            waitFor(bySelector);
             results = pageObject.findAll(bySelector);
             if (timeoutCanBeOverriden) {
                 resetWaitForTimeout();

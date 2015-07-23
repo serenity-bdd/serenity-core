@@ -59,7 +59,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
 
     Map<Requirement, String> getRequirementPaths() {
         Map<Requirement, String> requirementPaths = Maps.newHashMap();
-        for(String path : getRequirementsByPath().keySet()) {
+        for (String path : getRequirementsByPath().keySet()) {
             requirementPaths.put(getRequirementsByPath().get(path), path);
         }
         return requirementPaths;
@@ -110,10 +110,9 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
 
-
     private void addChildrenTo(SortedMap<String, Requirement> requirementsByPath) {
         Set<String> paths = requirementsByPath.keySet();
-        for(String path : paths) {
+        for (String path : paths) {
             Requirement requirement = requirementsByPath.get(path);
             List<Requirement> childRequirements = directChildrenOf(requirement).in(requirementsByPath.values());
             requirement.setChildren(childRequirements);
@@ -317,13 +316,14 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
 
     private static class RequirementChildLocator {
         Requirement parent;
+
         public RequirementChildLocator(Requirement parent) {
             this.parent = parent;
         }
 
         public List<Requirement> in(Collection<Requirement> requirements) {
             List<Requirement> children = Lists.newArrayList();
-            for(Requirement requirement : requirements) {
+            for (Requirement requirement : requirements) {
                 if (requirement.getParent() != null && requirement.getParent().equals(parent.getName())) {
                     children.add(requirement);
                 }
@@ -337,8 +337,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         return getRequirementsByPath().values();
     }
 
-
-        private boolean isMatchingRequirementFor(TestOutcome testOutcome, Requirement requirement) {
+    private boolean isMatchingRequirementFor(TestOutcome testOutcome, Requirement requirement) {
         if (testOutcome.getTestCase() != null) {
             return (fullPathOf(requirement).matchesOrIsADescendantOf(normalizedPath(testOutcome.getPathId())));
         } else {
@@ -347,7 +346,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     private String normalizedPath(String path) {
-        path = path.replaceAll("/", ".");
+        path = (path == null) ? "" : path.replaceAll("/", ".");
         for (String supportedSuffix : SUPPORTED_SUFFIXES) {
             if (path.endsWith("." + supportedSuffix)) {
                 path = path.substring(0, path.lastIndexOf("." + supportedSuffix));

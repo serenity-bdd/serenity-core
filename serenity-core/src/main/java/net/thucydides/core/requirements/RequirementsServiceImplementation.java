@@ -13,6 +13,7 @@ import net.thucydides.core.model.TestTag;
 import net.thucydides.core.releases.ReleaseManager;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.Requirement;
+import net.thucydides.core.statistics.service.AnnotationBasedTagProvider;
 import net.thucydides.core.statistics.service.FeatureStoryTagProvider;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
@@ -40,7 +41,9 @@ public class RequirementsServiceImplementation implements RequirementsService {
     private static final List<String> LOW_PRIORITY_PROVIDERS =
             ImmutableList.of(FileSystemRequirementsTagProvider.class.getCanonicalName(),
                              PackageAnnotationBasedTagProvider.class.getCanonicalName(),
-                             FeatureStoryTagProvider.class.getCanonicalName());
+                             AnnotationBasedTagProvider.class.getCanonicalName()
+                             //FeatureStoryTagProvider.class.getCanonicalName()
+                             );
 
     public RequirementsServiceImplementation() {
         environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get() ;

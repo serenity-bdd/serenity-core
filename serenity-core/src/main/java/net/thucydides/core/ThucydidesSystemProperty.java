@@ -674,6 +674,13 @@ public enum ThucydidesSystemProperty {
     FEATURE_FILE_LANGUAGE,
 
     /**
+     * Fine-tune the number of threads Serenity uses for report generation.
+     */
+    REPORT_THREADS,
+    REPORT_MAX_THREADS,
+    REPORT_KEEP_ALIVE_TIME,
+
+    /**
      * Keep the Thucydides session data between tests.
      * Normally, the session data is cleared between tests.
      */

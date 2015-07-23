@@ -13,6 +13,8 @@ import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.issues.SystemPropertiesIssueTracking;
 import net.thucydides.core.logging.ThucydidesLogging;
+import net.thucydides.core.reports.ExecutorServiceProvider;
+import net.thucydides.core.reports.MultithreadExecutorServiceProvider;
 import net.thucydides.core.reports.json.JSONConverter;
 import net.thucydides.core.reports.json.gson.GsonJSONConverter;
 import net.thucydides.core.reports.renderer.Asciidoc;
@@ -77,6 +79,7 @@ public class ThucydidesModule extends AbstractModule {
 
         bind(MarkupRenderer.class).annotatedWith(Asciidoc.class).to(AsciidocMarkupRenderer.class).in(Singleton.class);
         bind(DriverCapabilityRecord.class).to(PropertyBasedDriverCapabilityRecord.class);
+        bind(ExecutorServiceProvider.class).to(MultithreadExecutorServiceProvider.class).in(Singleton.class);
     }
 
     @Provides

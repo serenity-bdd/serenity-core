@@ -183,13 +183,7 @@
             <div class="table">
             <#if (requirements.parentRequirement.isPresent())>
                 <div>
-                    <#if (requirements.parentRequirement.get().parent?has_content)>
-                        <#assign parentRequirementReport = reportName.forRequirement(requirements.parentRequirement.get().parent) >
-                        <div class="parent-requirement-label"><i class="fa fa-book"></i> <a
-                                href="${parentRequirementReport}">${requirements.parentRequirement.get().parent!}</a>
-                        </div>
-                    </#if>
-                    <h2>${parentType}: ${issueNumber} ${parentTitle}</h2>
+                    <h2><i class="fa fa-book"></i> ${parentType}: ${issueNumber} ${parentTitle}</h2>
 
                     <#if parentRequirement.narrative.renderedText?has_content>
                         <div class="requirementNarrativeTitle">

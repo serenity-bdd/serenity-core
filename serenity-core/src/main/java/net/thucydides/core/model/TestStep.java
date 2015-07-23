@@ -18,6 +18,7 @@ import java.util.List;
 
 import static ch.lambdaj.Lambda.*;
 import static net.thucydides.core.model.TestResult.*;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * An acceptance test run is made up of test steps.
@@ -279,8 +280,16 @@ public class TestStep {
         setResult(new FailureAnalysis().resultFor(this.exception.toException()));
     }
 
-    public String getErrorMessage() {
+    public String getError() {
         return (exception != null) ? exception.getMessage() : "";
+    }
+
+
+    public String getErrorMessage() {
+        if (exception == null) {
+            return "";
+        }
+        return (isEmpty(exception.getMessage())) ? exception.getErrorType() : exception.getMessage();
     }
 
     /**

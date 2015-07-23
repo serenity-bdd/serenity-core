@@ -191,7 +191,7 @@
 <#else>
     <#assign resultsContext = '> ' + testOutcomes.label>
     <#if (currentTagType! != '')>
-        <#assign pageTitle = inflection.of(currentTagType!"").asATitle() + ': ' +  inflection.of(testOutcomes.label).asATitle() >
+        <#assign pageTitle = "<i class='fa fa-tags'></i> " + inflection.of(currentTagType!"").asATitle() + ': ' +  inflection.of(testOutcomes.label).asATitle() >
     <#else>
         <#assign pageTitle = inflection.of(testOutcomes.label).asATitle() >
     </#if>
@@ -229,6 +229,7 @@
 <div id="results-dashboard">
 <div class="middlb">
 <div class="table">
+
 <h2>${pageTitle}</h2>
 <table class='overview'>
     <tr>

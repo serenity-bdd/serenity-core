@@ -391,7 +391,6 @@
                                     <@restQueryData restQuery=step.restQuery number=step.number />
                                 </span>
                             </#if>
-
                         </div>
                     </td>
                     <#if testOutcome.hasScreenshots()>
@@ -411,7 +410,7 @@
                     <td width="100"><span class="${step_class_root}-step">${step.result}</span></td>
                     <td width="100"><span class="${step_class_root}-step">${step.durationInSeconds}s</span></td>
                 </tr>
-                <#if (step.errorMessage?has_content) && !step.isAGroup()>
+                <#if (step.errorMessage?has_content) && !step.hasNestedErrors()>
                     <tr class="test-${step.result}">
                         <td width="40">&nbsp</td>
                         <#if step.errorMessage?has_content>

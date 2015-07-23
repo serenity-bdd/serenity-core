@@ -1,5 +1,6 @@
 package net.serenitybdd.rest;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.jayway.restassured.RestAssured;
@@ -7,20 +8,29 @@ import com.jayway.restassured.internal.RestAssuredResponseImpl;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.response.ValidatableResponse;
 import com.jayway.restassured.specification.RequestSpecification;
+import groovy.lang.MetaClass;
+import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.serenitybdd.core.rest.RestMethod;
 import net.serenitybdd.core.rest.RestQuery;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.InvocationHandler;
+import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.StepFailure;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static com.jayway.restassured.RestAssured.requestSpecification;
 import static com.jayway.restassured.RestAssured.when;
 import static net.serenitybdd.core.rest.RestMethod.GET;
 import static net.serenitybdd.core.rest.RestMethod.POST;
 import static net.serenitybdd.core.rest.RestMethod.restMethodCalled;
+import static net.thucydides.core.steps.ErrorConvertor.forError;
+import static net.thucydides.core.steps.StepEventBus.getEventBus;
 
 public class SerenityRest {
 
@@ -43,7 +53,7 @@ public class SerenityRest {
 
     public static RequestSpecification rest() {
         currentRequestSpecification.set(instrumentedRequestSpecification());
-        StepEventBus.getEventBus().registerListener(new RestStepListener());
+        getEventBus().registerListener(new RestStepListener());
         return currentRequestSpecification.get();
     }
 
@@ -72,18 +82,65 @@ public class SerenityRest {
                 } else if (definesContent(method.getName())) {
                     recordContent(method.getName(), args);
                 }
-                if (method.getReturnType().isAssignableFrom(RestAssuredResponseImpl.class)) {
-                    RestAssuredResponseImpl response = (RestAssuredResponseImpl) wrappedResult(method, requestSpecification, args);
-                    currentResponse.set(response);
-                    return response;
+                if (!restCallsAreDisabled()) {
+                    return executeRestQuery(method, args, requestSpecification);
                 } else {
-                    return wrappedResult(method, requestSpecification, args);
+                    // TODO: should we return a stub here?
+                    return null;//return returnStub(method, args, requestSpecification);
                 }
 
             }
         });
 
         return (RequestSpecification) enhancer.create();
+    }
+
+    private static boolean restCallsAreDisabled() {
+        return (getEventBus().isDryRun() || getEventBus().currentTestIsSuspended());
+    }
+
+    private static Object executeRestQuery(Method method, Object[] args, RequestSpecification requestSpecification) throws Throwable{
+        if (method.getReturnType().isAssignableFrom(RestAssuredResponseImpl.class)) {
+            RestAssuredResponseImpl response = (RestAssuredResponseImpl) wrappedResult(method, requestSpecification, args);
+            currentResponse.set(response);
+            return response;
+        } else {
+            return wrappedResult(method, requestSpecification, args);
+        }
+    }
+
+    private static Object returnStub(Method method, Object[] args, RequestSpecification requestSpecification) throws Throwable{
+        if (method.getReturnType().isAssignableFrom(RestAssuredResponseImpl.class)) {
+            return new RestAssuredResponseImpl() {
+
+                @Override
+                public Object invokeMethod(String s, Object o) {
+                    return null;
+                }
+
+                @Override
+                public Object getProperty(String s) {
+                    return null;
+                }
+
+                @Override
+                public void setProperty(String s, Object o) {
+
+                }
+
+                @Override
+                public MetaClass getMetaClass() {
+                    return null;
+                }
+
+                @Override
+                public void setMetaClass(MetaClass metaClass) {
+
+                }
+            };
+        } else {
+            return wrappedResult(method, requestSpecification, args);
+        }
     }
 
     private final static List<String> CONTENT_METHODS = ImmutableList.of("content","body");
@@ -126,7 +183,7 @@ public class SerenityRest {
         }
     }
 
-    private static Object wrappedResult(Method method, Object target, Object[] args) {
+    private static Object wrappedResult(Method method, Object target, Object[] args) throws Throwable {
 
         try {
             method.setAccessible(true);
@@ -143,12 +200,35 @@ public class SerenityRest {
             } else {
                 return result;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        } catch (Exception generalException) {
+            Throwable error = SerenityWebDriverException.detachedCopyOf(generalException.getCause());
+            Throwable assertionError = forError(error).convertToAssertion();
+            notifyOfStepFailure(method, args, assertionError);
+            return returnStub(method,args, requestSpecification);
         }
 
     }
+
+    private static void notifyOfStepFailure(final Method method, final Object[] args, final Throwable cause) throws Throwable {
+        ExecutedStepDescription description = ExecutedStepDescription.withTitle(restMethodName(method, args));
+        StepFailure failure = new StepFailure(description, cause);
+        StepEventBus.getEventBus().stepStarted(description);
+        StepEventBus.getEventBus().stepFailed(failure);
+        if (Serenity.shouldThrowErrorsImmediately()) {
+            throw cause;
+        }
+    }
+
+    private static String restMethodName(Method method, Object[] args) {
+        String restMethod = method.getName().toUpperCase() + " " + args[0].toString();
+        return (args.length < 2) ? restMethod : restMethod + " " + queryParametersIn(args);
+    }
+
+    private static String queryParametersIn(Object[] args) {
+        List<Object> parameters = Arrays.asList(args).subList(1, args.length);
+        return (" " + Joiner.on("&").join(parameters)).trim();
+    }
+
 
     private static void notifyResponse(Response result) {
         String responseBody = result.prettyPrint();
@@ -157,7 +237,7 @@ public class SerenityRest {
         if (currentRestQuery.get() != null) {
             RestQuery query = currentRestQuery.get();
             query = query.withResponse(responseBody).withStatusCode(statusCode);
-            StepEventBus.getEventBus().getBaseStepListener().recordRestQuery(query);
+            getEventBus().getBaseStepListener().recordRestQuery(query);
             currentRestQuery.remove();
         }
     }

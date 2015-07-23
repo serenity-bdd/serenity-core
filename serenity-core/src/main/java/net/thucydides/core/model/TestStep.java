@@ -7,6 +7,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
 import net.serenitybdd.core.time.SystemClock;
+import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -323,6 +324,15 @@ public class TestStep {
 
     public boolean isAGroup() {
         return hasChildren();
+    }
+
+    public boolean hasNestedErrors() {
+        for(TestStep child : getFlattenedSteps()) {
+            if (child.isFailure() || child.isError()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public TestStep addChildStep(final TestStep step) {

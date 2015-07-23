@@ -8,17 +8,24 @@ import com.jayway.restassured.internal.RestAssuredResponseImpl;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.response.ValidatableResponse;
 import com.jayway.restassured.specification.RequestSpecification;
+import com.jayway.restassured.specification.ResponseSpecification;
 import groovy.lang.MetaClass;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.serenitybdd.core.rest.RestMethod;
 import net.serenitybdd.core.rest.RestQuery;
+import net.serenitybdd.rest.stubs.RequestSpecificationStub;
+import net.serenitybdd.rest.stubs.ResponseSpecificationStub;
+import net.serenitybdd.rest.stubs.ResponseStub;
+import net.serenitybdd.rest.stubs.ValidatableResponseStub;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.InvocationHandler;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepFailure;
+import org.mockito.Mockito;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +43,7 @@ public class SerenityRest {
 
     private static ThreadLocal<RestQuery> currentRestQuery = new ThreadLocal<>();
     private static ThreadLocal<RequestSpecification> currentRequestSpecification = new ThreadLocal<>();
-    private static ThreadLocal<RestAssuredResponseImpl> currentResponse = new ThreadLocal<>();
+    private static ThreadLocal<Response> currentResponse = new ThreadLocal<>();
     private static ThreadLocal<QueryPayload> currentQueryPayload = new ThreadLocal<>();
 
     public static void clearQueryData() {
@@ -82,13 +89,7 @@ public class SerenityRest {
                 } else if (definesContent(method.getName())) {
                     recordContent(method.getName(), args);
                 }
-                if (!restCallsAreDisabled()) {
-                    return executeRestQuery(method, args, requestSpecification);
-                } else {
-                    // TODO: should we return a stub here?
-                    return null;//return returnStub(method, args, requestSpecification);
-                }
-
+                return executeRestQuery(method, args, requestSpecification);
             }
         });
 
@@ -100,44 +101,15 @@ public class SerenityRest {
     }
 
     private static Object executeRestQuery(Method method, Object[] args, RequestSpecification requestSpecification) throws Throwable{
+
+        if (restCallsAreDisabled()) {
+            return Mockito.mock(method.getReturnType());
+        }
+
         if (method.getReturnType().isAssignableFrom(RestAssuredResponseImpl.class)) {
-            RestAssuredResponseImpl response = (RestAssuredResponseImpl) wrappedResult(method, requestSpecification, args);
+            Response response = (Response) wrappedResult(method, requestSpecification, args);
             currentResponse.set(response);
             return response;
-        } else {
-            return wrappedResult(method, requestSpecification, args);
-        }
-    }
-
-    private static Object returnStub(Method method, Object[] args, RequestSpecification requestSpecification) throws Throwable{
-        if (method.getReturnType().isAssignableFrom(RestAssuredResponseImpl.class)) {
-            return new RestAssuredResponseImpl() {
-
-                @Override
-                public Object invokeMethod(String s, Object o) {
-                    return null;
-                }
-
-                @Override
-                public Object getProperty(String s) {
-                    return null;
-                }
-
-                @Override
-                public void setProperty(String s, Object o) {
-
-                }
-
-                @Override
-                public MetaClass getMetaClass() {
-                    return null;
-                }
-
-                @Override
-                public void setMetaClass(MetaClass metaClass) {
-
-                }
-            };
         } else {
             return wrappedResult(method, requestSpecification, args);
         }
@@ -186,8 +158,10 @@ public class SerenityRest {
     private static Object wrappedResult(Method method, Object target, Object[] args) throws Throwable {
 
         try {
-            method.setAccessible(true);
-            Object result = method.invoke(target, args);
+            if (restCallsAreDisabled()) {
+                return stubbed(method);
+            }
+            Object result = invokeMethod(method, target, args);
             if (result == null) {
                 return null;
             }
@@ -204,9 +178,27 @@ public class SerenityRest {
             Throwable error = SerenityWebDriverException.detachedCopyOf(generalException.getCause());
             Throwable assertionError = forError(error).convertToAssertion();
             notifyOfStepFailure(method, args, assertionError);
-            return returnStub(method,args, requestSpecification);
+            return stubbed(method);
         }
 
+    }
+
+    private static Object stubbed(Method method) {
+        if (method.getReturnType().isAssignableFrom(RequestSpecification.class)) {
+            return new RequestSpecificationStub();
+        }
+        if (method.getReturnType().isAssignableFrom(Response.class)) {
+            return new ResponseStub();
+        }
+        if (method.getReturnType().isAssignableFrom(ResponseSpecification.class)) {
+            return new ResponseSpecificationStub();
+        }
+        return Mockito.mock(method.getReturnType());
+    }
+
+    private static Object invokeMethod(Method method, Object target, Object[] args) throws IllegalAccessException, InvocationTargetException {
+        method.setAccessible(true);
+        return method.invoke(target, args);
     }
 
     private static void notifyOfStepFailure(final Method method, final Object[] args, final Throwable cause) throws Throwable {

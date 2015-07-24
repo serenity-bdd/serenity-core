@@ -51,14 +51,18 @@ public class RequirementsServiceImplementation implements RequirementsService {
 
     @Override
     public List<Requirement> getRequirements() {
+        RequirementsMerger merger = new RequirementsMerger();
+
         if (requirements == null) {
             requirements = newArrayList();
             for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
                 LOGGER.info("Reading requirements from " + tagProvider);
-                requirements = tagProvider.getRequirements();
-                if (!requirements.isEmpty()) {
-                    break;
-                }
+
+                List<Requirement> newRequirements = tagProvider.getRequirements();
+//                if (!requirements.isEmpty()) {
+//                    break;
+//                }
+                requirements = merger.merge(requirements, newRequirements);
             }
             requirements = addParentsTo(requirements);
             indexRequirements();

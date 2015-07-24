@@ -289,7 +289,9 @@ public class TestStep {
         if (exception == null) {
             return "";
         }
-        return (isEmpty(exception.getMessage())) ? exception.getErrorType() : exception.getMessage();
+        return (isEmpty(exception.getMessage())) ?
+                exception.getErrorType() :
+                exception.getErrorType() + ": " + exception.getMessage();
     }
 
     /**

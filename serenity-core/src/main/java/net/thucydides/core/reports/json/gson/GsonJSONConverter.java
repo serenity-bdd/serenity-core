@@ -7,6 +7,8 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.json.JSONConverter;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.Collection;
@@ -14,6 +16,8 @@ import java.util.Collection;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class GsonJSONConverter implements JSONConverter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GsonJSONConverter.class);
 
     private final EnvironmentVariables environmentVariables;
 
@@ -38,6 +42,7 @@ public class GsonJSONConverter implements JSONConverter {
     @Override
     public TestOutcome fromJson(InputStream inputStream) throws IOException {
         TestOutcome testOutcome = gson.fromJson(new InputStreamReader(inputStream), TestOutcome.class);
+        LOGGER.debug("Read test outcome from JSON: " + testOutcome.toJson());
         return isValid(testOutcome) ? testOutcome : null;
     }
 

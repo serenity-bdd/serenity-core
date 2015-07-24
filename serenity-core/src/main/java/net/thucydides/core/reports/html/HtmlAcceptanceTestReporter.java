@@ -148,9 +148,9 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     }
 
     private void addTags(TestOutcome testOutcome, Map<String, Object> context, String parentTitle) {
-//        TagFilter tagFilter = new TagFilter(getEnvironmentVariables());
-//        Set<TestTag> filteredTags = (parentTitle != null) ? tagFilter.removeTagsWithName(testOutcome.getTags(), parentTitle) : testOutcome.getTags();
-        context.put("filteredTags", testOutcome.getTags());
+        TagFilter tagFilter = new TagFilter(getEnvironmentVariables());
+        Set<TestTag> filteredTags = (parentTitle != null) ? tagFilter.removeTagsWithName(testOutcome.getTags(), parentTitle) : testOutcome.getTags();
+        context.put("filteredTags", filteredTags);
     }
 
     private void addBreadcrumbs(TestOutcome testOutcome, Map<String, Object> context) {

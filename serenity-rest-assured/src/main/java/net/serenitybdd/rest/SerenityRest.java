@@ -31,10 +31,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.jayway.restassured.RestAssured.requestSpecification;
-import static com.jayway.restassured.RestAssured.when;
-import static net.serenitybdd.core.rest.RestMethod.GET;
-import static net.serenitybdd.core.rest.RestMethod.POST;
 import static net.serenitybdd.core.rest.RestMethod.restMethodCalled;
 import static net.thucydides.core.steps.ErrorConvertor.forError;
 import static net.thucydides.core.steps.StepEventBus.getEventBus;
@@ -101,10 +97,6 @@ public class SerenityRest {
     }
 
     private static Object executeRestQuery(Method method, Object[] args, RequestSpecification requestSpecification) throws Throwable{
-
-        if (restCallsAreDisabled()) {
-            return Mockito.mock(method.getReturnType());
-        }
 
         if (method.getReturnType().isAssignableFrom(RestAssuredResponseImpl.class)) {
             Response response = (Response) wrappedResult(method, requestSpecification, args);

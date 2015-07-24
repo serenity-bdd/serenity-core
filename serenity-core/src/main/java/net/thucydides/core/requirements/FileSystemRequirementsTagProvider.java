@@ -17,6 +17,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.bouncycastle.cert.ocsp.Req;
 
 import javax.swing.text.html.Option;
 import java.io.*;
@@ -257,10 +258,35 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
             List<String> storyPathElements = stripRootFrom(pathElements(stripRootPathFrom(testOutcome.getPath())));
             tags.addAll(getMatchingCapabilities(getRequirements(), stripStorySuffixFrom(storyPathElements)));
             if (tags.isEmpty() && storyOrFeatureDescribedIn(storyPathElements).isPresent()) {
-                tags.addAll(getMatchingRequirementTagsFor(storyOrFeatureDescribedIn(storyPathElements).get()).asSet());
+                Optional<TestTag> matchingRequirementTag = getMatchingRequirementTagsFor(storyOrFeatureDescribedIn(storyPathElements).get());
+                if (matchingRequirementTag.isPresent()) {
+                    tags.add(matchingRequirementTag.get());
+                    tags.addAll(parentRequirementsOf(matchingRequirementTag.get()));
+                }
             }
         }
         return tags;
+    }
+
+    private Collection<TestTag> parentRequirementsOf(TestTag requirementTag) {
+        List<TestTag> matchingTags = Lists.newArrayList();
+
+        Optional<Requirement> matchingRequirement = getMatchingRequirementFor(requirementTag);
+        Optional<Requirement> parent = parentRequirementsOf(matchingRequirement.get());
+        while (parent.isPresent()) {
+            matchingTags.add(parent.get().asTag());
+            parent = parentRequirementsOf(parent.get());
+        }
+        return matchingTags;
+    }
+
+    private Optional<Requirement> parentRequirementsOf(Requirement matchingRequirement) {
+        for(Requirement requirement : getFlattenedRequirements()) {
+            if (requirement.getChildren().contains(matchingRequirement)) {
+                return Optional.of(requirement);
+            }
+        }
+        return Optional.absent();
     }
 
     private List<String> stripStorySuffixFrom(List<String> pathElements) {
@@ -277,11 +303,19 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return strippedPathElements;
     }
 
-    private Optional<TestTag> getMatchingRequirementTagsFor(TestTag storyOrFeatureTag) {
+    private Optional<Requirement> getMatchingRequirementFor(TestTag storyOrFeatureTag) {
         for(Requirement requirement : getFlattenedRequirements()) {
             if (requirement.asTag().isAsOrMoreSpecificThan(storyOrFeatureTag)) {
-                return Optional.of(requirement.asTag());
+                return Optional.of(requirement);
             }
+        }
+        return Optional.absent();
+    }
+
+    private Optional<TestTag> getMatchingRequirementTagsFor(TestTag storyOrFeatureTag) {
+        Optional<Requirement> matchingRequirement = getMatchingRequirementFor(storyOrFeatureTag);
+        if (matchingRequirement.isPresent()) {
+            return Optional.of(matchingRequirement.get().asTag());
         }
         return Optional.absent();
     }

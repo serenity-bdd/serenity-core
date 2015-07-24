@@ -9,11 +9,14 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import net.serenitybdd.core.IgnoredStepException;
 import net.serenitybdd.core.PendingStepException;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.StepGroup;
 import net.thucydides.core.annotations.TestAnnotations;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.stacktrace.StackTraceSanitizer;
+import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.internal.AssumptionViolatedException;
 import org.openqa.selenium.WebDriverException;
@@ -41,9 +44,11 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
     private final Class<?> testStepClass;
     private Throwable error = null;
     private static final Logger LOGGER = LoggerFactory.getLogger(StepInterceptor.class);
+    private final EnvironmentVariables environmentVariables;
 
     public StepInterceptor(final Class<?> testStepClass) {
         this.testStepClass = testStepClass;
+        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
     }
 
     public Object intercept(final Object obj, final Method method,
@@ -123,13 +128,27 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
         }
 
         if (shouldSkip(method)) {
-            notifySkippedStepStarted(method, args);
-            return skipTestStep(obj, method, args, proxy);
+            return skipStepMethod(obj, method, args, proxy);
         } else {
             notifyStepStarted(method, args);
             return runTestStep(obj, method, args, proxy);
         }
 
+    }
+
+    private Object skipStepMethod(final Object obj, Method method, final Object[] args, final MethodProxy proxy) throws Exception {
+        if (shouldExecuteNestedStepsAfterFailures()) {
+            notifySkippedStepStarted(method, args);
+            return skipTestStep(obj, method, args, proxy);
+        } else {
+            notifySkippedStepStarted(method, args);
+            notifyStepFinishedFor(method, args);
+            return null;
+        }
+    }
+
+    private boolean shouldExecuteNestedStepsAfterFailures() {
+        return ThucydidesSystemProperty.DEEP_STEP_EXECUTION_AFTER_FAILURES.booleanFrom(environmentVariables, false);
     }
 
     private Object skipTestStep(Object obj, Method method, Object[] args, MethodProxy proxy) throws Exception {

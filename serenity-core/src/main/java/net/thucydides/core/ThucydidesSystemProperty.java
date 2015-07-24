@@ -681,6 +681,12 @@ public enum ThucydidesSystemProperty {
     REPORT_KEEP_ALIVE_TIME,
 
     /**
+     * Set this to true if you want Serenity to report nested step structures for subsequent steps
+     * after a step failure.
+     */
+    DEEP_STEP_EXECUTION_AFTER_FAILURES,
+
+    /**
      * Keep the Thucydides session data between tests.
      * Normally, the session data is cleared between tests.
      */

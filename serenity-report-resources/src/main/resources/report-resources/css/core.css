@@ -292,6 +292,11 @@ i.tag {
     font-family:euphemia, verdana, sans-serif; font-size:14px; color: #0d78ae; padding-left: 25px; font-style: italic
 }
 
+.breadcrumbs
+{
+    font-family:euphemia, verdana, sans-serif; font-size:14px; color: #0d78ae;
+}
+
 .bluetext
 {
     font-family:euphemia, verdana, sans-serif; font-size:16px; color: #0d78ae;

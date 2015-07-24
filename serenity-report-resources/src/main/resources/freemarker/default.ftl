@@ -27,8 +27,8 @@
 <div class="middlecontent">
     <div id="contenttop">
         <div class="middlebg">
-        <span class="bluetext">
-            <a href="index.html" class="bluetext">Home</a>
+        <span class="breadcrumbs">
+            <a href="index.html" class="breadcrumbs">Home</a>
 
         <#list breadcrumbs as breadcrumb>
             <#assign breadcrumbReport = absoluteReportName.forRequirement(breadcrumb) />

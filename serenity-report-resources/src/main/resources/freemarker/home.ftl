@@ -199,7 +199,7 @@
 <div id="contenttop">
 <#--<div class="leftbg"></div>-->
     <div class="middlebg">
-        <span class="bluetext"><a href="index.html" class="bluetext">Home</a>
+        <span class="breadcrumbs"><a href="index.html">Home</a>
         <#if (breadcrumbs?has_content)>
             <#list breadcrumbs as breadcrumb>
                 <#assign breadcrumbReport = absoluteReportName.forRequirementOrTag(breadcrumb) />

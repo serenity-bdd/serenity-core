@@ -28,7 +28,7 @@
 <div class="middlecontent">
     <div id="contenttop">
         <div class="middlebg">
-            <span class="bluetext"><a href="index.html" class="bluetext">Home</a> > ${pageTitle} </span>
+            <span class="breadcrumbs"><a href="index.html" class="breadcrumbs">Home</a> > ${pageTitle} </span>
         </div>
         <div class="rightbg"></div>
     </div>

@@ -145,7 +145,7 @@
 <div class="middlecontent">
     <div id="contenttop">
         <div class="middlebg">
-            <span class="bluetext">
+            <span class="breadcrumbs">
             <a href='index.html'>Home</a>
             <#if requirements.parentRequirement.isPresent()>
 

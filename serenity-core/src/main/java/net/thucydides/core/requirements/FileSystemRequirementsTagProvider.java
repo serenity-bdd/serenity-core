@@ -18,6 +18,7 @@ import net.thucydides.core.util.Inflector;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.swing.text.html.Option;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -76,10 +77,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         if (ThucydidesSystemProperty.THUCYDIDES_REQUIREMENTS_DIR.isDefinedIn(environmentVariables)) {
             return ThucydidesSystemProperty.THUCYDIDES_REQUIREMENTS_DIR.from(environmentVariables);
         }
-        if (ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT.isDefinedIn(environmentVariables)) {
-            return ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT.from(environmentVariables);
-        }
-
         Optional<String> resourceDirectory = getResourceDirectory(environmentVariables);
         if (resourceDirectory.isPresent()) {
             String resourceDir = resourceDirectory.get();
@@ -259,8 +256,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         if (testOutcome.getPath() != null) {
             List<String> storyPathElements = stripRootFrom(pathElements(stripRootPathFrom(testOutcome.getPath())));
             tags.addAll(getMatchingCapabilities(getRequirements(), stripStorySuffixFrom(storyPathElements)));
-            if (tags.isEmpty()) {
-                addDefaultStoryTagIfPresent(tags, storyPathElements);
+            if (tags.isEmpty() && storyOrFeatureDescribedIn(storyPathElements).isPresent()) {
+                tags.addAll(getMatchingRequirementTagsFor(storyOrFeatureDescribedIn(storyPathElements).get()).asSet());
             }
         }
         return tags;
@@ -280,23 +277,29 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return strippedPathElements;
     }
 
-    private void addDefaultStoryTagIfPresent(Set<TestTag> tags, List<String> storyPathElements) {
-        Optional<TestTag> storyTag = storyTagFrom(storyPathElements);
-        tags.addAll(storyTag.asSet());
+    private Optional<TestTag> getMatchingRequirementTagsFor(TestTag storyOrFeatureTag) {
+        for(Requirement requirement : getFlattenedRequirements()) {
+            if (requirement.asTag().isAsOrMoreSpecificThan(storyOrFeatureTag)) {
+                return Optional.of(requirement.asTag());
+            }
+        }
+        return Optional.absent();
     }
 
-    private Optional<TestTag> storyTagFrom(List<String> storyPathElements) {
+    private Optional<TestTag> storyOrFeatureDescribedIn(List<String> storyPathElements) {
         if ((!storyPathElements.isEmpty()) && isSupportedFileStoryExtension(last(storyPathElements))) {
             String storyName = Lists.reverse(storyPathElements).get(1); // TODO: Get the story or feature name from the file only as a last resort
             String storyParent = parentElement(storyPathElements);
             String qualifiedName = storyParent == null ?
                     humanize(storyName) : humanize(storyParent).trim() + "/" + humanize(storyName);
-            TestTag storyTag = TestTag.withName(qualifiedName).andType("story");
+            TestTag storyTag = TestTag.withName(qualifiedName).andType((last(storyPathElements)));
             return Optional.of(storyTag);
         } else {
             return Optional.absent();
         }
     }
+
+
 
     private String parentElement(List<String> storyPathElements) {
         return storyPathElements.size() > 2 ? Lists.reverse(storyPathElements).get(2) : null;

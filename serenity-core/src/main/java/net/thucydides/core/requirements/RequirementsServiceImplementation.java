@@ -57,11 +57,7 @@ public class RequirementsServiceImplementation implements RequirementsService {
             requirements = newArrayList();
             for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
                 LOGGER.info("Reading requirements from " + tagProvider);
-
                 List<Requirement> newRequirements = tagProvider.getRequirements();
-//                if (!requirements.isEmpty()) {
-//                    break;
-//                }
                 requirements = merger.merge(requirements, newRequirements);
             }
             requirements = addParentsTo(requirements);

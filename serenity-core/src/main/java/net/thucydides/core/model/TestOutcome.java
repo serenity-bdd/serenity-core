@@ -1274,7 +1274,22 @@ public class TestOutcome {
                         theTagProviderFailedButThereIsntMuchWeCanDoAboutIt);
             }
         }
+        tags = removeRedundantTagsFrom(tags);
         return tags;
+    }
+
+    private Set<TestTag> removeRedundantTagsFrom(Set<TestTag> tags) {
+        Set<TestTag> optimizedTags = Sets.newHashSet();
+        for(TestTag tag: tags) {
+            if (!aMoreSpecificTagExistsThan(tag).in(tags)) {
+                optimizedTags.add(tag);
+            }
+        }
+        return optimizedTags;
+    }
+
+    private SpecificTagFinder aMoreSpecificTagExistsThan(TestTag tag) {
+        return new SpecificTagFinder(tag);
     }
 
     public void setTags(Set<TestTag> tags) {
@@ -1828,6 +1843,23 @@ public class TestOutcome {
             for(TestStep childStep : step.getChildren()) {
                 resetFailingStepsIn(childStep).causedBy(expected);
             }
+        }
+    }
+
+    private class SpecificTagFinder {
+        private final TestTag tag;
+
+        public SpecificTagFinder(TestTag tag) {
+            this.tag = tag;
+        }
+
+        public boolean in(Set<TestTag> tags) {
+            for(TestTag otherTag : tags) {
+                if ((otherTag != tag) && (otherTag.isAsOrMoreSpecificThan(tag))) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

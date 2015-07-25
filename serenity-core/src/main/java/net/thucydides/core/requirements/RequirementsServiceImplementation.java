@@ -41,8 +41,8 @@ public class RequirementsServiceImplementation implements RequirementsService {
     private static final List<String> LOW_PRIORITY_PROVIDERS =
             ImmutableList.of(FileSystemRequirementsTagProvider.class.getCanonicalName(),
                              PackageAnnotationBasedTagProvider.class.getCanonicalName(),
-                             AnnotationBasedTagProvider.class.getCanonicalName()
-                             //FeatureStoryTagProvider.class.getCanonicalName()
+                             AnnotationBasedTagProvider.class.getCanonicalName(),
+                             FeatureStoryTagProvider.class.getCanonicalName()
                              );
 
     public RequirementsServiceImplementation() {

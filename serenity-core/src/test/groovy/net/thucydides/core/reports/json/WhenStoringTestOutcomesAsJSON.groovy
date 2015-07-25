@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.json
 
-import com.github.goldin.spock.extensions.tempdir.TempDir
 import net.serenitybdd.core.rest.RestMethod
 import net.serenitybdd.core.rest.RestQuery
 import net.thucydides.core.annotations.*
@@ -462,7 +461,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         generatedReportText.contains "Oh nose!"
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.isError()
-        reloadedOutcome.testSteps[0].errorMessage == "Oh nose!"
+        reloadedOutcome.testSteps[0].errorMessage.contains "Oh nose!"
     }
 
 
@@ -619,7 +618,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         then:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.getResult() == TestResult.FAILURE
-        reloadedOutcome.errorMessage == "a failure"
+        reloadedOutcome.errorMessage.contains "a failure"
     }
 
     def "should record test results for test with an error"() {
@@ -633,7 +632,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         then:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.getResult() == TestResult.ERROR
-        reloadedOutcome.errorMessage == "an error"
+        reloadedOutcome.errorMessage.contains "an error"
     }
 
     def "should record test results for test with an error outside a step"() {

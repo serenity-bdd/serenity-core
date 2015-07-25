@@ -17,9 +17,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.bouncycastle.cert.ocsp.Req;
 
-import javax.swing.text.html.Option;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -33,8 +31,6 @@ import static net.thucydides.core.requirements.RequirementsPath.pathElements;
 import static net.thucydides.core.requirements.RequirementsPath.stripRootFromPath;
 import static net.thucydides.core.util.NameConverter.humanize;
 import static org.apache.commons.io.FilenameUtils.removeExtension;
-
-//import javax.persistence.Transient;
 
 /**
  * Load a set of requirements (epics/themes,...) from the directory structure.

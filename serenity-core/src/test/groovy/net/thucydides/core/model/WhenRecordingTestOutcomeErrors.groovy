@@ -21,7 +21,7 @@ class WhenRecordingTestOutcomeErrors extends Specification {
         testOutcome.testFailureClassname == "java.lang.AssertionError"
         testOutcome.testFailureMessage == "oh crap!"
 
-        testOutcome.errorMessage == "oh crap!"
+        testOutcome.errorMessage.contains "oh crap!"
         testOutcome.result == TestResult.FAILURE
     }
 
@@ -37,7 +37,7 @@ class WhenRecordingTestOutcomeErrors extends Specification {
         testOutcome.recordStep(failingStep)
 
         then:
-        testOutcome.errorMessage == "oh crap!"
+        testOutcome.errorMessage.contains "oh crap!"
         testOutcome.result == TestResult.FAILURE
     }
 
@@ -54,7 +54,7 @@ class WhenRecordingTestOutcomeErrors extends Specification {
         testOutcome.testFailureMessage == "oh crap!"
 
         testOutcome.result == TestResult.ERROR
-        testOutcome.errorMessage == "oh crap!"
+        testOutcome.errorMessage.contains "oh crap!"
     }
 
     def "should record error message in steps"() {
@@ -69,7 +69,7 @@ class WhenRecordingTestOutcomeErrors extends Specification {
         testOutcome.recordStep(failingStep)
 
         then:
-        testOutcome.errorMessage == "oh crap!"
+        testOutcome.errorMessage.contains "oh crap!"
         testOutcome.result == TestResult.ERROR
     }
 }

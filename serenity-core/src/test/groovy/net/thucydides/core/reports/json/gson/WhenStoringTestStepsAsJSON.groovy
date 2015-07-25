@@ -70,7 +70,7 @@ class WhenStoringTestStepsAsJSON extends Specification {
             step.equals(stepWithError)
         and:
             step.getResult() == TestResult.ERROR
-            step.getErrorMessage() == "Oh crap!"
+            step.getErrorMessage().contains "Oh crap!"
     }
 
     def "should read and write a test step containing a failure"() {
@@ -86,7 +86,7 @@ class WhenStoringTestStepsAsJSON extends Specification {
         then:
         step.equals(failingStep)
         step.getResult() == TestResult.FAILURE
-        step.getErrorMessage() == "Oh crap!"
+        step.getErrorMessage().contains "Oh crap!"
     }
 
 

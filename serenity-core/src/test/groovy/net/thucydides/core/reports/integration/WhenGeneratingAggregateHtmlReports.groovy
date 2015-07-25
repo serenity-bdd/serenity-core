@@ -52,25 +52,6 @@ public class WhenGeneratingAggregateHtmlReports extends Specification {
             driver.quit()
         }
     }
-    def "we can navigate sub reports"() {
-        when: "We generate reports from a directory containing features and stories only"
-            driver = new ChromeDriver();// PhantomJSDriver();
-            driver.get reportHomePageUrl();
-        then: "we can see all available tags and click on 'Grow New Potatoes' link"
-            def anotherDifferentFeatureLink = driver.findElement(By.linkText("Grow New Potatoes"))
-            anotherDifferentFeatureLink.click()
-            def breadcrumbText = driver.findElement(By.cssSelector(".bluetext")).getText()
-            breadcrumbText == "Home > Grow potatoes/Grow new potatoes"
-        when: "we click on the Features link"
-            def featuresLink = driver.findElement(By.linkText("Requirements"))
-            featuresLink.click()
-        then: "we see the breadcrumb showing Thucydedes Reports > another different feature"
-            def subReportBreadcrumbText = driver.findElement(By.cssSelector(".bluetext")).getText()
-            subReportBreadcrumbText == "Home > Requirements"
-        and: "a single feature"
-            def featureLink = driver.findElement(By.linkText("Grow cucumbers"))
-            featureLink.enabled
-    }
 
     def "should pass JIRA URL to reporter"() {
         given:

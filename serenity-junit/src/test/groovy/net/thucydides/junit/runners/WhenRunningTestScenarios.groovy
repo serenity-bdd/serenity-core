@@ -121,7 +121,7 @@ class WhenRunningTestScenarios extends Specification {
         results["happy_day_scenario"].result == FAILURE
         results["happy_day_scenario"].testSteps[2].result == FAILURE
         results["happy_day_scenario"].testSteps[2].children[0].result == SUCCESS
-        results["happy_day_scenario"].testSteps[2].errorMessage == "Oh crap!"
+        results["happy_day_scenario"].testSteps[2].errorMessage.contains "Oh crap!"
     }
 
 

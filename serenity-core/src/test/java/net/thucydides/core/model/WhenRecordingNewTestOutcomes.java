@@ -644,7 +644,7 @@ public class WhenRecordingNewTestOutcomes {
 
 
         TestStep failingStep = testOutcome.getTestSteps().get(1);
-        assertThat(failingStep.getErrorMessage(), is("Oh bother!"));
+        assertThat(failingStep.getErrorMessage(), is("java.lang.AssertionError: Oh bother!"));
     }
 
     @Test

@@ -186,7 +186,7 @@
     <div id="contenttop">
     <#--<div class="leftbg"></div>-->
         <div class="middlebg">
-            <span class="bluetext"><a href="index.html" class="bluetext">Home</a></span>
+            <span class="breadcrumbs"><a href="index.html">Home</a></span>
         </div>
         <div class="rightbg"></div>
     </div>

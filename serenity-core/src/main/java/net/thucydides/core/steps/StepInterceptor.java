@@ -137,13 +137,13 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
     }
 
     private Object skipStepMethod(final Object obj, Method method, final Object[] args, final MethodProxy proxy) throws Exception {
-        if (shouldExecuteNestedStepsAfterFailures()) {
+        if (aPreviousStepHasFailed() && (!shouldExecuteNestedStepsAfterFailures())) {
             notifySkippedStepStarted(method, args);
-            return skipTestStep(obj, method, args, proxy);
+            notifySkippedStepFinishedFor(method, args);
+            return null;
         } else {
             notifySkippedStepStarted(method, args);
-            notifyStepFinishedFor(method, args);
-            return null;
+            return skipTestStep(obj, method, args, proxy);
         }
     }
 
@@ -335,6 +335,10 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
 
     private void notifyStepFinishedFor(final Method method, final Object[] args) {
         StepEventBus.getEventBus().stepFinished();
+    }
+
+    private void notifySkippedStepFinishedFor(final Method method, final Object[] args) {
+        StepEventBus.getEventBus().stepIgnored();
     }
 
     private void notifyStepPending(String message) {

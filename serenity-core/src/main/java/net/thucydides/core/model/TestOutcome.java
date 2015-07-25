@@ -1288,6 +1288,12 @@ public class TestOutcome {
         this.tags = ImmutableSet.copyOf(updatedTags);
     }
 
+    public void addTag(TestTag tag) {
+        Set<TestTag> updatedTags = Sets.newHashSet(getTags());
+        updatedTags.add(tag);
+        this.tags = ImmutableSet.copyOf(updatedTags);
+    }
+
     public List<String> getIssueKeys() {
         return convert(getIssues(), toIssueKeys());
     }

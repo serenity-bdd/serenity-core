@@ -135,7 +135,7 @@
                                     <span class="related-issue-title">${testOutcome.formattedIssues}</span>
                             </span>
                         </span>
-                        <#if (testOutcome.driver)??>
+                        <#if (testOutcome.driver)?? && (!testOutcome.manual)>
                             <span style="float:right"><img src="images/driver-${testOutcome.driver}.png" height="20"
                                                            alt="${testOutcome.driver}"
                                                            title="${testOutcome.driver}"/></span>

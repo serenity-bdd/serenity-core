@@ -686,6 +686,12 @@ public enum ThucydidesSystemProperty {
      */
     DEEP_STEP_EXECUTION_AFTER_FAILURES,
 
+
+    /**
+     * What test result (success,ignored, or pending) should be shown for manual annotated tests in the reports?
+     */
+    MANUAL_TEST_REPORT_RESULT,
+
     /**
      * Keep the Thucydides session data between tests.
      * Normally, the session data is cleared between tests.

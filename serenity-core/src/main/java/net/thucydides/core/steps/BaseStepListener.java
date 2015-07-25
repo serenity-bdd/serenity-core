@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.rest.RestQuery;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
@@ -756,6 +757,20 @@ public class BaseStepListener implements StepListener, StepPublisher {
     @Override
     public void testIsManual() {
         getCurrentTestOutcome().asManualTest();
+        getCurrentTestOutcome().addTag(TestTag.withName("Manual").andType("External Tests"));
+        getCurrentTestOutcome().setAnnotatedResult(defaulManualTestReportResult());
+    }
+
+    private TestResult defaulManualTestReportResult() {
+        String manualTestResultValue = ThucydidesSystemProperty.MANUAL_TEST_REPORT_RESULT.from(configuration.getEnvironmentVariables(),
+                                                                                          TestResult.PENDING.toString());
+        TestResult manualTestResult = TestResult.PENDING;
+        try {
+            manualTestResult = TestResult.valueOf(manualTestResultValue.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            LOGGER.warn("Badly configured value for manual.test.report.result: should be one of " + TestResult.values());
+        }
+        return manualTestResult;
     }
 
     public void notifyScreenChange() {

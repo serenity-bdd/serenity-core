@@ -54,4 +54,19 @@ class WhenCountingTestOutcomes extends Specification {
         TestOutcomes.of(outcomes).proportionOf("manual").withResult("pending") == 0.1
         TestOutcomes.of(outcomes).proportionOf("manual").withResult("failure") == 0.1
     }
+
+    def "should distinguish manual and automated pending tests"() {
+        given:
+            def outcome1 = TestOutcome.forTest("test3",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.SUCCESS))
+            def outcome2 = TestOutcome.forTest("test4",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.FAILURE))
+            def outcome3 = TestOutcome.forTest("test5",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.PENDING))
+            def outcome4 = TestOutcome.forTest("test5",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.PENDING)).asManualTest()
+            def outcomes = [outcome1,outcome2,outcome3,outcome4]
+        when:
+            def manualPendingTests = TestOutcomes.of(outcomes).proportionOf("manual").withResult("pending")
+        then:
+            manualPendingTests == 0.25
+
+    }
+
 }

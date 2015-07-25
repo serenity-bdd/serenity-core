@@ -36,20 +36,7 @@ public class WhenResizingTheBrowser {
     }
 
     @Test
-    public void should_resize_chrome_automatically() {
-        environmentVariables.setProperty("thucydides.browser.height", "200");
-        environmentVariables.setProperty("thucydides.browser.width", "400");
-
-        driver = factory.newInstanceOf(SupportedWebDriver.CHROME);
-        page = new StaticSitePage(driver, 1000);
-        page.open();
-
-        int width = ((Long)(((JavascriptExecutor)driver).executeScript("return window.innerWidth"))).intValue();
-        assertThat(width, allOf(lessThanOrEqualTo(400), greaterThan(380)));
-    }
-
-    @Test
-    public void should_resize_firefox_automatically() {
+    public void should_resize_browser_automatically() {
         environmentVariables.setProperty("thucydides.browser.height", "200");
         environmentVariables.setProperty("thucydides.browser.width", "400");
 

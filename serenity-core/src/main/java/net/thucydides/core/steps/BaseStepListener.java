@@ -753,6 +753,11 @@ public class BaseStepListener implements StepListener, StepPublisher {
         getCurrentTestOutcome().setAnnotatedResult(PENDING);
     }
 
+    @Override
+    public void testIsManual() {
+        getCurrentTestOutcome().asManualTest();
+    }
+
     public void notifyScreenChange() {
         if (screenshots().areAllowed(TakeScreenshots.FOR_EACH_ACTION)) {
             take(OPTIONAL_SCREENSHOT);

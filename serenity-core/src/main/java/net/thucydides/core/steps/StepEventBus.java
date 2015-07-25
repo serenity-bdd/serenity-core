@@ -406,6 +406,17 @@ public class
         suspendTest();
     }
 
+    /**
+     * Mark the current test method as pending.
+     * The test will stil be executed to record the steps, but any webdriver calls will be skipped.
+     */
+    public void testIsManual() {
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.testIsManual();
+        }
+        suspendTest();
+    }
+
     public void suspendTest() {
         suspendedTest = true;
     }

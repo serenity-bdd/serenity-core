@@ -144,7 +144,7 @@ public class BrowserStackRemoteDriverCapabilities implements RemoteDriverCapabil
     private void configureBrowserStackResolution(DesiredCapabilities capabilities){
         String resolution = ThucydidesSystemProperty.BROWSERSTACK_RESOLUTION.from(environmentVariables);
         if (isNotEmpty(resolution)) {
-            capabilities.setCapability("browserstack.resolution", resolution);
+            capabilities.setCapability("resolution", resolution);
         }
     }
 

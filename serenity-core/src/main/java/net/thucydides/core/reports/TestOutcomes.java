@@ -45,6 +45,7 @@ public class TestOutcomes {
      * A label indicating where these tests come from (e.g. the tag, the result status, etc).
      */
     private final String label;
+    private final TestTag testTag;
 
     /**
      * Reference to the test statistics service provider, used to inject test history if required.
@@ -55,11 +56,27 @@ public class TestOutcomes {
     protected TestOutcomes(List<? extends TestOutcome> outcomes,
                            double estimatedAverageStepCount,
                            String label,
+                           TestTag testTag,
                            TestOutcomes rootOutcomes,
                            EnvironmentVariables environmentVariables) {
         this.outcomes = ImmutableList.copyOf(outcomes);
         this.estimatedAverageStepCount = estimatedAverageStepCount;
         this.label = label;
+        this.testTag = testTag;
+        this.rootOutcomes = Optional.fromNullable(rootOutcomes);
+        this.environmentVariables = environmentVariables;
+        this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
+    }
+
+    protected TestOutcomes(List<? extends TestOutcome> outcomes,
+                           double estimatedAverageStepCount,
+                           String label,
+                           TestOutcomes rootOutcomes,
+                           EnvironmentVariables environmentVariables) {
+        this.outcomes = ImmutableList.copyOf(outcomes);
+        this.estimatedAverageStepCount = estimatedAverageStepCount;
+        this.label = label;
+        this.testTag = null;
         this.rootOutcomes = Optional.fromNullable(rootOutcomes);
         this.environmentVariables = environmentVariables;
         this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
@@ -68,7 +85,14 @@ public class TestOutcomes {
     protected TestOutcomes(List<? extends TestOutcome> outcomes,
                            double estimatedAverageStepCount,
                            String label) {
-        this(outcomes, estimatedAverageStepCount, label, null, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(outcomes, estimatedAverageStepCount, label, null, null, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+    }
+
+    protected TestOutcomes(List<? extends TestOutcome> outcomes,
+                           double estimatedAverageStepCount,
+                           String label,
+                           TestTag tag) {
+        this(outcomes, estimatedAverageStepCount, label, tag, null, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
     }
 
     protected TestOutcomes(List<? extends TestOutcome> outcomes,
@@ -339,8 +363,15 @@ public class TestOutcomes {
     }
 
     public TestOutcomes withTag(TestTag tag) {
-        List<? extends TestOutcome> matchingTags = matchingOutcomes(outcomes, tag);
-        return TestOutcomes.of(matchingTags).withLabel(tag.getName()).withRootOutcomes(getRootOutcomes());
+        List<? extends TestOutcome> outcomesWithMatchingTag = matchingOutcomes(outcomes, tag);
+        return TestOutcomes.of(outcomesWithMatchingTag)
+                           .withLabel(tag.getShortName())
+                           .withTestTag(tag)
+                           .withRootOutcomes(getRootOutcomes());
+    }
+
+    private TestOutcomes withTestTag(TestTag tag) {
+        return new TestOutcomes(this.outcomes, this.estimatedAverageStepCount, label, tag);
     }
 
     public TestOutcomes withTags(List<TestTag> tags) {

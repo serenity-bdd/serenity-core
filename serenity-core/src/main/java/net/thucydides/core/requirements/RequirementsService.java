@@ -15,6 +15,8 @@ public interface RequirementsService {
 
     Optional<Requirement> getRequirementFor(TestTag tag);
 
+    boolean isRequirementsTag(TestTag tag);
+
     List<Requirement> getAncestorRequirementsFor(TestOutcome testOutcome);
 
     List<String> getReleaseVersionsFor(TestOutcome testOutcome);

@@ -58,4 +58,19 @@ class WhenSerializingJSONObjectWithGSON extends Specification {
             "/json-reports/sample-report-3.json"           | 'an_acceptance_test_run'
             "/json-reports/sample-report-4.json"           | 'Another sample report with unicode'
     }
+
+    def "should load all test outcome fields correctly from JSON"() {
+        given:
+            GsonJSONConverter converter = new GsonJSONConverter(environmentVariables)
+        and:
+            def jsonFile = this.class.getResource('/json-reports/display_product_details.json').getPath()
+        when:
+            def loadedTestOutcome = converter.fromJson(new FileInputStream(new File(jsonFile)))
+        then:
+            loadedTestOutcome != null  &&
+            loadedTestOutcome.name == "Display product details from the search list" &&
+            loadedTestOutcome.tags.size() == 4
+
+    }
+
 }

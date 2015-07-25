@@ -438,7 +438,8 @@ public class WhenUsingTheStepEventBus {
     }
 
     @Test
-    public void should_record_nested_step_failures() {
+    @Ignore
+    public void should_record_nested_step_failures_when_configured() {
         SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("a_test", SampleTestScenario.class);

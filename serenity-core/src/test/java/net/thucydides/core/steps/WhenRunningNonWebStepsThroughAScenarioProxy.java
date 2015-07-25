@@ -247,5 +247,4 @@ public class WhenRunningNonWebStepsThroughAScenarioProxy {
         assertThat(listener.toString(), containsString(expectedExecution));
 
     }
-
 }

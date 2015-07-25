@@ -192,7 +192,7 @@ subprojects {
         compile "org.objenesis:objenesis:2.1"
         compile "org.slf4j:slf4j-api:1.7.7"
         compile "xml-apis:xml-apis:1.4.01"
-        compile 'info.cukes:cucumber-core:1.2.2'
+        compile 'info.cukes:cucumber-core:1.2.4'
 
         compile 'commons-logging:commons-logging:1.2'
         compile "junit:junit:${junitVersion}"
@@ -203,7 +203,7 @@ subprojects {
         testCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
-        testCompile('org.mockito:mockito-all:1.10.8') {
+        testCompile('org.mockito:mockito-all:1.10.18') {
             exclude group: "org.hamcrest"
         }
         testCompile('org.spockframework:spock-core:1.0-groovy-2.3') {
@@ -223,7 +223,7 @@ subprojects {
     configurations.all {
         resolutionStrategy.eachDependency { DependencyResolveDetails details ->
             if (details.requested.name == 'mockito-all') {
-                details.useTarget group: 'org.mockito', name: 'mockito-core', version: '1.10.8'
+                details.useTarget group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
             }
             if (details.requested.name == 'hamcrest-core') {
                 details.useTarget group: 'org.hamcrest', name: 'hamcrest-core', version: "${hamcrestVersion}"

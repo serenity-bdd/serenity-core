@@ -61,7 +61,7 @@ class WhenReadingTagsFromAnnotations extends Specification {
             def anotherTagProvider = new PackageAnnotationBasedTagProvider(environmentVariables) {
 
                 @Override
-                protected List<Class<?>> loadClasses() {
+                protected List<Class<?>> loadClassesFromPath() {
                     return []
                 }
             }
@@ -80,7 +80,7 @@ class WhenReadingTagsFromAnnotations extends Specification {
             def anotherTagProvider = new PackageAnnotationBasedTagProvider(environmentVariables) {
 
             @Override
-            protected List<Class<?>> loadClasses() {
+            protected List<Class<?>> loadClassesFromPath() {
                 return []
             }
         }
@@ -113,7 +113,7 @@ class WhenReadingTagsFromAnnotations extends Specification {
         when:
             def tags = tagProvider.getTagsFor(testOutcome)
         then:
-            tags.collect { it.name }.containsAll(["Big potatoe sample test1", "Big potatoes", "Potatoes"])
+            tags.collect { it.name }.containsAll(["Big potatoes/Big potatoe sample test1", "Potatoes/Big potatoes", "Potatoes"])
     }
 
     def "should get all tags for non-JUnit outcomes"() {
@@ -125,7 +125,7 @@ class WhenReadingTagsFromAnnotations extends Specification {
         when:
             def tags = tagProvider.getTagsFor(testOutcome)
         then:
-            tags.collect { it.name }.containsAll(["Big potatoes", "Potatoes"])
+            tags.collect { it.name }.containsAll(["Potatoes/Big potatoes", "Potatoes"])
     }
 
     def "should find correct requirement for a given test tag"() {

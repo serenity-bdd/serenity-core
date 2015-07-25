@@ -48,18 +48,6 @@ public class WhenReformattingScreenshots {
     }
 
     @Test
-    public void should_keep_original_image_if_requested() throws IOException {
-
-        Screenshot screenshot = new Screenshot("google_page_1.png", "Google", 1200);
-        ScreenshotFormatter.forScreenshot(screenshot).
-                keepOriginals(true).
-                inDirectory(screenshotDirectory).expandToHeight(1500);
-
-        File backupScreenshot = new File(screenshotDirectory, "original_google_page_1.png");
-        assertThat(backupScreenshot.exists(), is(true));
-    }
-
-    @Test
     public void should_not_keep_original_image_by_default() throws IOException {
 
         Screenshot screenshot = new Screenshot("google_page_1.png", "Google", 1200);

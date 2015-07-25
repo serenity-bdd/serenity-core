@@ -13,6 +13,7 @@ import net.thucydides.core.model.TestTag;
 import net.thucydides.core.releases.ReleaseManager;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.Requirement;
+import net.thucydides.core.statistics.service.AnnotationBasedTagProvider;
 import net.thucydides.core.statistics.service.FeatureStoryTagProvider;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
@@ -38,9 +39,11 @@ public class RequirementsServiceImplementation implements RequirementsService {
     private static final List<Requirement> NO_REQUIREMENTS = Lists.newArrayList();
 
     private static final List<String> LOW_PRIORITY_PROVIDERS =
-            ImmutableList.of(PackageAnnotationBasedTagProvider.class.getCanonicalName(),
-                    FeatureStoryTagProvider.class.getCanonicalName(),
-                    FileSystemRequirementsTagProvider.class.getCanonicalName());
+            ImmutableList.of(FileSystemRequirementsTagProvider.class.getCanonicalName(),
+                             PackageAnnotationBasedTagProvider.class.getCanonicalName(),
+                             AnnotationBasedTagProvider.class.getCanonicalName(),
+                             FeatureStoryTagProvider.class.getCanonicalName()
+                             );
 
     public RequirementsServiceImplementation() {
         environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get() ;
@@ -48,14 +51,14 @@ public class RequirementsServiceImplementation implements RequirementsService {
 
     @Override
     public List<Requirement> getRequirements() {
+        RequirementsMerger merger = new RequirementsMerger();
+
         if (requirements == null) {
             requirements = newArrayList();
             for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
                 LOGGER.info("Reading requirements from " + tagProvider);
-                requirements = tagProvider.getRequirements();
-                if (!requirements.isEmpty()) {
-                    break;
-                }
+                List<Requirement> newRequirements = tagProvider.getRequirements();
+                requirements = merger.merge(requirements, newRequirements);
             }
             requirements = addParentsTo(requirements);
             indexRequirements();
@@ -134,6 +137,7 @@ public class RequirementsServiceImplementation implements RequirementsService {
         return Optional.absent();
     }
 
+
     @Override
     public Optional<Requirement> getRequirementFor(TestTag tag) {
 
@@ -148,6 +152,11 @@ public class RequirementsServiceImplementation implements RequirementsService {
             LOGGER.error("Tag provider failure", handleTagProvidersElegantly);
         }
         return Optional.absent();
+    }
+
+    @Override
+    public boolean isRequirementsTag(TestTag tag) {
+        return getRequirementTypes().contains(tag.getType());
     }
 
     @Override
@@ -265,20 +274,27 @@ public class RequirementsServiceImplementation implements RequirementsService {
         }
     }
 
-
     private List<RequirementsTagProvider> reprioritizeProviders(List<RequirementsTagProvider> requirementsTagProviders) {
-        List<RequirementsTagProvider> lowPriorityProviders = newArrayList();
+        Map<String,RequirementsTagProvider> lowPriorityProviders = Maps.newHashMap();
         List<RequirementsTagProvider> prioritizedProviders = newArrayList();
 
         for (RequirementsTagProvider provider : requirementsTagProviders) {
             if (LOW_PRIORITY_PROVIDERS.contains(provider.getClass().getCanonicalName())) {
-                lowPriorityProviders.add(provider);
+                lowPriorityProviders.put(provider.getClass().getCanonicalName(), provider);
             } else {
                 prioritizedProviders.add(provider);
             }
         }
-        prioritizedProviders.addAll(lowPriorityProviders);
+        addLowPriorityProviders(lowPriorityProviders, prioritizedProviders);
         return prioritizedProviders;
+    }
+
+    private void addLowPriorityProviders(Map<String, RequirementsTagProvider> lowPriorityProviders, List<RequirementsTagProvider> prioritizedProviders) {
+        for(String lowPriorityProvider : LOW_PRIORITY_PROVIDERS) {
+            if (lowPriorityProviders.containsKey(lowPriorityProvider)) {
+                prioritizedProviders.add(lowPriorityProviders.get(lowPriorityProvider));
+            }
+        }
     }
 
     public List<Requirement> getAllRequirements() {

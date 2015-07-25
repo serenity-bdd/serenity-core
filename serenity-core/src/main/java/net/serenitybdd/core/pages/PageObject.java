@@ -1031,4 +1031,8 @@ public abstract class PageObject {
         return new ThucydidesFluentAdapter(getDriver());
     }
 
+    public void waitForAngularRequestsToFinish() {
+        getJavascriptExecutorFacade().executeAsyncScript("var callback = arguments[arguments.length - 1];" +
+                "angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
+    }
 }

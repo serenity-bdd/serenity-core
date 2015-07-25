@@ -23,7 +23,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.nio.file.Files;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -32,8 +31,6 @@ import static net.thucydides.core.requirements.RequirementsPath.pathElements;
 import static net.thucydides.core.requirements.RequirementsPath.stripRootFromPath;
 import static net.thucydides.core.util.NameConverter.humanize;
 import static org.apache.commons.io.FilenameUtils.removeExtension;
-
-//import javax.persistence.Transient;
 
 /**
  * Load a set of requirements (epics/themes,...) from the directory structure.
@@ -77,10 +74,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         if (ThucydidesSystemProperty.THUCYDIDES_REQUIREMENTS_DIR.isDefinedIn(environmentVariables)) {
             return ThucydidesSystemProperty.THUCYDIDES_REQUIREMENTS_DIR.from(environmentVariables);
         }
-        if (ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT.isDefinedIn(environmentVariables)) {
-            return ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT.from(environmentVariables);
-        }
-
         Optional<String> resourceDirectory = getResourceDirectory(environmentVariables);
         if (resourceDirectory.isPresent()) {
             String resourceDir = resourceDirectory.get();
@@ -158,8 +151,9 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private List<Requirement> addParentsTo(List<Requirement> requirements, String parent) {
         List<Requirement> augmentedRequirements = Lists.newArrayList();
         for (Requirement requirement : requirements) {
+            // !!! NEW CODE
             List<Requirement> children = requirement.hasChildren()
-                    ? addParentsTo(requirement.getChildren(), requirement.getName()) : NO_REQUIREMENTS;
+                    ? addParentsTo(requirement.getChildren(), requirement.qualifiedName()) : NO_REQUIREMENTS;
             augmentedRequirements.add(requirement.withParent(parent).withChildren(children));
         }
         return augmentedRequirements;
@@ -258,11 +252,37 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         Set<TestTag> tags = new HashSet<>();
         if (testOutcome.getPath() != null) {
             List<String> storyPathElements = stripRootFrom(pathElements(stripRootPathFrom(testOutcome.getPath())));
-            addStoryTagIfPresent(tags, storyPathElements);
-            storyPathElements = stripStorySuffixFrom(storyPathElements);
-            tags.addAll(getMatchingCapabilities(getRequirements(), storyPathElements));
+            tags.addAll(getMatchingCapabilities(getRequirements(), stripStorySuffixFrom(storyPathElements)));
+            if (tags.isEmpty() && storyOrFeatureDescribedIn(storyPathElements).isPresent()) {
+                Optional<TestTag> matchingRequirementTag = getMatchingRequirementTagsFor(storyOrFeatureDescribedIn(storyPathElements).get());
+                if (matchingRequirementTag.isPresent()) {
+                    tags.add(matchingRequirementTag.get());
+                    tags.addAll(parentRequirementsOf(matchingRequirementTag.get()));
+                }
+            }
         }
         return tags;
+    }
+
+    private Collection<TestTag> parentRequirementsOf(TestTag requirementTag) {
+        List<TestTag> matchingTags = Lists.newArrayList();
+
+        Optional<Requirement> matchingRequirement = getMatchingRequirementFor(requirementTag);
+        Optional<Requirement> parent = parentRequirementsOf(matchingRequirement.get());
+        while (parent.isPresent()) {
+            matchingTags.add(parent.get().asTag());
+            parent = parentRequirementsOf(parent.get());
+        }
+        return matchingTags;
+    }
+
+    private Optional<Requirement> parentRequirementsOf(Requirement matchingRequirement) {
+        for(Requirement requirement : getFlattenedRequirements()) {
+            if (requirement.getChildren().contains(matchingRequirement)) {
+                return Optional.of(requirement);
+            }
+        }
+        return Optional.absent();
     }
 
     private List<String> stripStorySuffixFrom(List<String> pathElements) {
@@ -279,23 +299,37 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return strippedPathElements;
     }
 
-    private void addStoryTagIfPresent(Set<TestTag> tags, List<String> storyPathElements) {
-        Optional<TestTag> storyTag = storyTagFrom(storyPathElements);
-        tags.addAll(storyTag.asSet());
+    private Optional<Requirement> getMatchingRequirementFor(TestTag storyOrFeatureTag) {
+        for(Requirement requirement : getFlattenedRequirements()) {
+            if (requirement.asTag().isAsOrMoreSpecificThan(storyOrFeatureTag)) {
+                return Optional.of(requirement);
+            }
+        }
+        return Optional.absent();
     }
 
-    private Optional<TestTag> storyTagFrom(List<String> storyPathElements) {
+    private Optional<TestTag> getMatchingRequirementTagsFor(TestTag storyOrFeatureTag) {
+        Optional<Requirement> matchingRequirement = getMatchingRequirementFor(storyOrFeatureTag);
+        if (matchingRequirement.isPresent()) {
+            return Optional.of(matchingRequirement.get().asTag());
+        }
+        return Optional.absent();
+    }
+
+    private Optional<TestTag> storyOrFeatureDescribedIn(List<String> storyPathElements) {
         if ((!storyPathElements.isEmpty()) && isSupportedFileStoryExtension(last(storyPathElements))) {
-            String storyName = Lists.reverse(storyPathElements).get(1);
+            String storyName = Lists.reverse(storyPathElements).get(1); // TODO: Get the story or feature name from the file only as a last resort
             String storyParent = parentElement(storyPathElements);
             String qualifiedName = storyParent == null ?
                     humanize(storyName) : humanize(storyParent).trim() + "/" + humanize(storyName);
-            TestTag storyTag = TestTag.withName(qualifiedName).andType("story");
+            TestTag storyTag = TestTag.withName(qualifiedName).andType((last(storyPathElements)));
             return Optional.of(storyTag);
         } else {
             return Optional.absent();
         }
     }
+
+
 
     private String parentElement(List<String> storyPathElements) {
         return storyPathElements.size() > 2 ? Lists.reverse(storyPathElements).get(2) : null;

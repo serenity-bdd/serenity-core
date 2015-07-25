@@ -2,27 +2,22 @@ package net.serenitybdd.core.pages;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import net.serenitybdd.core.exceptions.SerenityWebDriverException;
-import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.scheduling.NormalFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.webdriver.ConfigurableTimeouts;
-import net.thucydides.core.webdriver.WebDriverFacade;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
 import org.openqa.selenium.support.ui.SystemClock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static net.serenitybdd.core.pages.Selectors.xpathOrCssSelector;
+import static net.serenitybdd.core.pages.FindAllWaitOptions.*;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static ch.lambdaj.Lambda.convert;
 
 /**
  * A page view that handles checking and waiting for element visibility.
@@ -144,7 +139,7 @@ public class RenderedPageObjectView {
     }
 
     private boolean elementIsNotDisplayed(final By byElementCriteria) {
-        List<WebElementFacade> matchingElements = findAll(byElementCriteria);
+        List<WebElementFacade> matchingElements = findAllWithNoWait(byElementCriteria);
         for(WebElementFacade matchingElement : matchingElements) {
             if ( matchingElement.isCurrentlyVisible()) {
                 return false;
@@ -470,14 +465,16 @@ public class RenderedPageObjectView {
         return waitForTimeout;
     }
 
-    public List<net.serenitybdd.core.pages.WebElementFacade> findAll(By bySelector) {
+    protected List<net.serenitybdd.core.pages.WebElementFacade> findAllWithOptionalWait(By bySelector, FindAllWaitOptions waitForOptions) {
         List<net.serenitybdd.core.pages.WebElementFacade> results;
         try {
             pageObject.setImplicitTimeout(0, TimeUnit.SECONDS);
             if (timeoutCanBeOverriden) {
                 overrideWaitForTimeoutTo(new Duration(0, TimeUnit.SECONDS));
             }
-            waitFor(bySelector);
+            if (waitForOptions == WITH_WAIT) {
+                waitFor(bySelector);
+            }
             results = pageObject.findAll(bySelector);
             if (timeoutCanBeOverriden) {
                 resetWaitForTimeout();
@@ -487,6 +484,14 @@ public class RenderedPageObjectView {
             return Lists.newArrayList();
         }
         return results;
+    }
+
+    public List<net.serenitybdd.core.pages.WebElementFacade> findAll(By bySelector) {
+        return findAllWithOptionalWait(bySelector, WITH_WAIT);
+    }
+
+    public List<net.serenitybdd.core.pages.WebElementFacade> findAllWithNoWait(By bySelector) {
+        return findAllWithOptionalWait(bySelector, WITH_NO_WAIT);
     }
 
     private Duration oldWaitFor;

@@ -7,6 +7,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
 import net.serenitybdd.core.time.SystemClock;
+import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import static ch.lambdaj.Lambda.*;
 import static net.thucydides.core.model.TestResult.*;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * An acceptance test run is made up of test steps.
@@ -278,8 +280,18 @@ public class TestStep {
         setResult(new FailureAnalysis().resultFor(this.exception.toException()));
     }
 
-    public String getErrorMessage() {
+    public String getError() {
         return (exception != null) ? exception.getMessage() : "";
+    }
+
+
+    public String getErrorMessage() {
+        if (exception == null) {
+            return "";
+        }
+        return (isEmpty(exception.getMessage())) ?
+                exception.getErrorType() :
+                exception.getErrorType() + ": " + exception.getMessage();
     }
 
     /**
@@ -323,6 +335,15 @@ public class TestStep {
 
     public boolean isAGroup() {
         return hasChildren();
+    }
+
+    public boolean hasNestedErrors() {
+        for(TestStep child : getFlattenedSteps()) {
+            if (child.isFailure() || child.isError()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public TestStep addChildStep(final TestStep step) {

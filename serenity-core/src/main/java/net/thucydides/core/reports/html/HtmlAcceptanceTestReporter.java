@@ -16,6 +16,7 @@ import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.screenshots.ScreenshotFormatter;
 import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.Requirement;
+import net.thucydides.core.tags.BreadcrumbTagFilter;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import net.thucydides.core.util.VersionProvider;
@@ -142,12 +143,19 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
             context.put("parentLink", reportNameProvider.forTag(featureOrStory.get().asTag()));
         }
 
+        addBreadcrumbs(testOutcome, context);
+        addTags(testOutcome, context, parentTitle);
+    }
+
+    private void addTags(TestOutcome testOutcome, Map<String, Object> context, String parentTitle) {
         TagFilter tagFilter = new TagFilter(getEnvironmentVariables());
-        Set<TestTag> filteredTags = tagFilter.removeTagsOfType(testOutcome.getTags(), "story");
-        if (parentTitle != null) {
-            filteredTags = tagFilter.removeTagsWithName(filteredTags, parentTitle);
-        }
+        Set<TestTag> filteredTags = (parentTitle != null) ? tagFilter.removeTagsWithName(testOutcome.getTags(), parentTitle) : testOutcome.getTags();
         context.put("filteredTags", filteredTags);
+    }
+
+    private void addBreadcrumbs(TestOutcome testOutcome, Map<String, Object> context) {
+        List<TestTag> breadcrumbs = new BreadcrumbTagFilter().getRequirementBreadcrumbsFrom(testOutcome.getTags());
+        context.put("breadcrumbs", breadcrumbs);
     }
 
     private void addFormattersToContext(final Map<String, Object> context) {
@@ -241,4 +249,5 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     public Optional<OutcomeFormat> getFormat() {
         return Optional.of(OutcomeFormat.HTML);
     }
+
 }

@@ -20,6 +20,7 @@ import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.requirements.reports.RequirementOutcome;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.requirements.reports.RequirmentsOutcomeFactory;
+import net.thucydides.core.tags.BreadcrumbTagFilter;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import net.thucydides.core.util.LocalPreferences;
@@ -420,9 +421,19 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         String csvReport = reportName.forCSVFiles().forTag(tag);
         context.put("csvReport", csvReport);
 
+        addBreadcrumbsForRequirementsTag(context, testOutcomes, tag);
+
         String report = reportName.forTag(tag);
         generateReportPage(context, TEST_OUTCOME_TEMPLATE_PATH, report);
         generateCSVReportFor(testOutcomesForTag, csvReport);
+    }
+
+    private void addBreadcrumbsForRequirementsTag(Map<String, Object> context, TestOutcomes testOutcomes, TestTag tag) {
+        BreadcrumbTagFilter breadcrumbTagFilter = new BreadcrumbTagFilter();
+        if (breadcrumbTagFilter.isRequirementTag(tag)) {
+            List<TestTag> breadcrumbs = breadcrumbTagFilter.getRequirementBreadcrumbsFrom(testOutcomes.getTags());
+            context.put("breadcrumbs", breadcrumbs);
+        }
     }
 
 

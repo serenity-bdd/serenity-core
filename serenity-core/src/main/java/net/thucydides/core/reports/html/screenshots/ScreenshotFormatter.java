@@ -2,6 +2,7 @@ package net.thucydides.core.reports.html.screenshots;
 
 import net.thucydides.core.images.ResizableImage;
 import net.thucydides.core.model.Screenshot;
+import org.openqa.selenium.io.TemporaryFilesystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,35 +45,35 @@ public class ScreenshotFormatter {
 
     public Screenshot expandToHeight(final int targetHeight) throws IOException {
         File screenshotFile = new File(sourceDirectory, screenshot.getFilename());
-        if (screenshotFile.exists()) {
-            File resizedFile = resizedImage(screenshotFile, targetHeight);
+        File resizedFile = resizedTargetFile(screenshot.getFilename());
+        LOGGER.info("Resizing image " + screenshotFile + " to " + resizedFile);
+        LOGGER.info("Screenshot exists" + screenshotFile.exists());
+        LOGGER.info("Resized screenshot exists" + resizedFile.exists());
+        if (!resizedFile.exists()) {
+            resizedFile = resizedImage(screenshotFile, targetHeight);
             return new Screenshot(resizedFile.getName(),
-                                  screenshot.getDescription(),
-                                  screenshot.getWidth(),
-                                  screenshot.getError());
+                    screenshot.getDescription(),
+                    screenshot.getWidth(),
+                    screenshot.getError());
         } else {
             return screenshot;
         }
     }
 
+    private File resizedTargetFile(String screenshotFilename) {
+        return new File(sourceDirectory, "scaled_" + screenshotFilename);
+    }
+
     private File resizedImage(File screenshotFile, int maxHeight) throws IOException {
         LOGGER.info("Resizing image " + screenshotFile);
-        String resizedScreenshotFilename = "scaled_" + screenshotFile.getName();
-        ResizableImage scaledImage = ResizableImage.loadFrom(screenshotFile).rescaleCanvas(maxHeight);
-
-        File scaledFile = new File(sourceDirectory, resizedScreenshotFilename);
-        scaledImage.saveTo(scaledFile);
-        LOGGER.info("Scaled image saved to " + scaledFile);
-
-        if (shouldKeepOriginalScreenshots) {
-            saveCopyOf(screenshotFile);
+        File scaledFile = resizedTargetFile(screenshotFile.getName());
+        if (!scaledFile.exists()) {
+            ResizableImage scaledImage = ResizableImage.loadFrom(screenshotFile).rescaleCanvas(maxHeight);
+            scaledImage.saveTo(scaledFile);
+            LOGGER.info("Scaled image saved to " + scaledFile);
         }
-
-        if (scaledFile.exists()) {
-            LOGGER.info("Replace original screenshot with scaled version");
-            Files.move(scaledFile.toPath(), screenshotFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        }
-        return screenshotFile;
+        LOGGER.info("Resizing image done -> " + scaledFile.getAbsolutePath());
+        return scaledFile;
     }
 
     private void saveCopyOf(File screenshotFile) throws IOException {

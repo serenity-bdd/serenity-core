@@ -27,11 +27,14 @@
 <div class="middlecontent">
     <div id="contenttop">
         <div class="middlebg">
-        <span class="bluetext">
-            <a href="index.html" class="bluetext">Home</a>
-        <#if (parentLink?has_content)>
-            > <a href="${parentLink}">${formatter.truncatedHtmlCompatible(inflection.of(parentTitle).asATitle(),40)}</a>
-        </#if>
+        <span class="breadcrumbs">
+            <a href="index.html" class="breadcrumbs">Home</a>
+
+        <#list breadcrumbs as breadcrumb>
+            <#assign breadcrumbReport = absoluteReportName.forRequirement(breadcrumb) />
+            <#assign breadcrumbTitle = inflection.of(breadcrumb.shortName).asATitle() >
+            > <a href="${breadcrumbReport}">${formatter.truncatedHtmlCompatible(breadcrumbTitle,40)}</a>
+        </#list>
             > ${formatter.truncatedHtmlCompatible(testOutcome.title,80)}
         </span>
         </div>
@@ -70,7 +73,6 @@
                                 <h3 class="discreet-story-header">
                                     <i class="fa fa-comments-o"></i>
                                     <span class="story-header-title">${parentTitle} ${issueNumber}</span>
-                                    <span class="badge tag-badge">${parentType}</span>
                                 </h3>
 
                                 <div class="discreet-requirement-narrative-title">
@@ -84,7 +86,6 @@
                                 <h3 class="discreet-story-header">
                                     <i class="fa fa-comments-o"></i>
                                     <span class="story-header-title">${parentTitle}</span>
-                                    <span class="badge tag-badge">${parentType}</span>
                                 </h3>
 
                                 <div class="discreet-requirement-narrative-title">
@@ -103,7 +104,7 @@
                         </td>
                         <td valign="top">
                         <#list filteredTags as tag>
-                            <#assign tagReport = absoluteReportName.forTag(tag) />
+                            <#assign tagReport = absoluteReportName.forRequirementOrTag(tag) />
                             <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
                             <p class="tag">
                                 <span class="badge tag-badge">
@@ -388,7 +389,6 @@
                                     <@restQueryData restQuery=step.restQuery number=step.number />
                                 </span>
                             </#if>
-
                         </div>
                     </td>
                     <#if testOutcome.hasScreenshots()>
@@ -408,7 +408,7 @@
                     <td width="100"><span class="${step_class_root}-step">${step.result}</span></td>
                     <td width="100"><span class="${step_class_root}-step">${step.durationInSeconds}s</span></td>
                 </tr>
-                <#if (step.errorMessage?has_content) && !step.isAGroup()>
+                <#if (step.errorMessage?has_content) && !step.hasNestedErrors()>
                     <tr class="test-${step.result}">
                         <td width="40">&nbsp</td>
                         <#if step.errorMessage?has_content>

@@ -13,9 +13,7 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -36,6 +34,8 @@ public class ReportService {
 
     private JUnitXMLOutcomeReporter jUnitXMLOutcomeReporter;
 
+    private ExecutorService executorService;
+
     private final static Logger LOGGER = LoggerFactory.getLogger(ReportService.class);
 
     @Inject
@@ -55,6 +55,7 @@ public class ReportService {
         this.outputDirectory = outputDirectory;
         getSubscribedReporters().addAll(subscribedReporters);
         jUnitXMLOutcomeReporter = new JUnitXMLOutcomeReporter(outputDirectory);
+        this.executorService = Injectors.getInjector().getInstance(ExecutorServiceProvider.class).getExecutorService();
 
     }
 
@@ -96,41 +97,23 @@ public class ReportService {
         for (final AcceptanceTestReporter reporter : getSubscribedReporters()) {
             generateReportsFor(reporter, allTestOutcomes);
         }
-
     }
 
     private void generateReportsFor(final AcceptanceTestReporter reporter, final TestOutcomes testOutcomes) {
         LOGGER.info("Generating reports using: " + reporter);
         long t0 = System.currentTimeMillis();
 
-        ListeningExecutorService executorService = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
-
         List<? extends TestOutcome> outcomes = testOutcomes.getOutcomes();
+
         final AtomicInteger remainingReportCount = new AtomicInteger(outcomes.size());
-        for (final TestOutcome outcome : outcomes) {
-            final ListenableFuture<TestOutcome> future = executorService.submit(new Callable<TestOutcome>() {
-                @Override
-                public TestOutcome call() throws Exception {
-                    return outcome;
-                }
-            });
-            future.addListener(new Runnable() {
+        for(final TestOutcome outcome : outcomes) {
+            executorService.execute(new Runnable() {
                 @Override
                 public void run() {
-                    generateQueuedReport(future, testOutcomes, reporter);
-                }
-            }, MoreExecutors.newDirectExecutorService());//.sameThreadExecutor());
-
-            Futures.addCallback(future, new FutureCallback<TestOutcome>() {
-                @Override
-                public void onSuccess(TestOutcome result) {
+                    LOGGER.info("Processing test outcome " + outcome.getCompleteName());
+                    generateReportFor(outcome, testOutcomes, reporter);
                     remainingReportCount.decrementAndGet();
-                    LOGGER.info("Report generated for " + result.getCompleteName());
-                }
-
-                @Override
-                public void onFailure(Throwable t) {
-                    LOGGER.info("Report generated failed " + t.getMessage());
+                    LOGGER.info("Processing test outcome " + outcome.getCompleteName() + " done");
                 }
             });
         }
@@ -148,18 +131,6 @@ public class ReportService {
         try {
             jUnitXMLOutcomeReporter.generateReportsFor(outcomes);
         } catch (IOException e) {
-            throw new RuntimeException("Report generation failure", e);
-        }
-    }
-
-    private void generateQueuedReport(ListenableFuture<TestOutcome> future, TestOutcomes testOutcomes, AcceptanceTestReporter reporter) {
-        try {
-            final TestOutcome outcome = future.get();
-            LOGGER.info("Processing test outcome " + outcome.getCompleteName());
-            generateReportFor(outcome, testOutcomes, reporter);
-        } catch (InterruptedException e) {
-            throw new RuntimeException("Report generation failure", e);
-        } catch (ExecutionException e) {
             throw new RuntimeException("Report generation failure", e);
         }
     }

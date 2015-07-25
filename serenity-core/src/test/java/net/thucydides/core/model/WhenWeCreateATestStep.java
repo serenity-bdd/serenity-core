@@ -133,7 +133,7 @@ public class WhenWeCreateATestStep {
       
         step.setResult(TestResult.FAILURE);
         step.failedWith(new Exception("Oh nose!"));
-        assertThat(step.getErrorMessage(), is("Oh nose!"));
+        assertThat(step.getErrorMessage(), containsString("Oh nose!"));
     }
     
     @Test
@@ -153,7 +153,7 @@ public class WhenWeCreateATestStep {
         step.setResult(TestResult.FAILURE);
         Throwable e = new IllegalStateException("Original error");
         step.failedWith(new Exception("Oh nose", e));
-        assertThat(step.getErrorMessage(), is("Original error"));
+        assertThat(step.getErrorMessage(), containsString("Original error"));
     }
 
     @Test

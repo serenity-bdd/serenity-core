@@ -929,7 +929,7 @@ public class WhenGeneratingAnXMLReport {
         File xmlReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
         String generatedReportText = getStringFrom(xmlReport);
 
-        assertThat(generatedReportText, containsString("<error>Oh nose!</error>"));
+        assertThat(generatedReportText, containsString("<error>java.lang.IllegalArgumentException: Oh nose!</error>"));
     }
 
     @Test

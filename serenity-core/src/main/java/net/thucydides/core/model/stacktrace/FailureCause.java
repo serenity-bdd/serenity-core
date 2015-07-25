@@ -4,9 +4,12 @@ import com.google.common.base.Optional;
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.serenitybdd.core.exceptions.UnrecognisedException;
 import net.thucydides.core.model.TestFailureException;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
+
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class FailureCause {
 
@@ -69,6 +72,10 @@ public class FailureCause {
 
     public String getMessage() {
         return message;
+    }
+
+    public String asString() {
+        return isEmpty(message) ? errorType : message;
     }
 
     public StackTraceElement[] getStackTrace() {

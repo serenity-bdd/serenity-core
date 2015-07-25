@@ -6,6 +6,7 @@ import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.ManagedWebDriverAnnotatedField;
+import net.thucydides.core.annotations.Manual;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.core.batches.BatchManager;
@@ -405,7 +406,11 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
             return;
         }
 
-        if (isPending(method)) {
+        if (isManual(method)) {
+            markAsManual(method);
+            notifier.fireTestIgnored(describeChild(method));
+            return;
+        } else if (isPending(method)) {
             markAsPending(method);
             notifier.fireTestIgnored(describeChild(method));
             return;
@@ -464,6 +469,12 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         StepEventBus.getEventBus().testFinished();
     }
 
+    private void markAsManual(FrameworkMethod method) {
+        stepListener.testStarted(Description.createTestDescription(method.getMethod().getDeclaringClass(), testName(method)));
+        StepEventBus.getEventBus().testIsManual();
+        StepEventBus.getEventBus().testFinished();
+    }
+
     /**
      * Process any Serenity annotations in the test class.
      * Ignored tests will just be skipped by JUnit - we need to ensure
@@ -480,6 +491,10 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
 
     private boolean isPending(FrameworkMethod method) {
         return method.getAnnotation(Pending.class) != null;
+    }
+
+    private boolean isManual(FrameworkMethod method) {
+        return method.getAnnotation(Manual.class) != null;
     }
 
     protected boolean isIgnored(FrameworkMethod method) {

@@ -29,7 +29,7 @@
                 ['Pending', ${testOutcomes.proportionOf("automated").withResult("pending")}],
                 <#if (pendingManualTests)>['Pending (manual)', ${testOutcomes.proportionOf("manual").withResult("pending")}],</#if>
                 ['Ignored', ${testOutcomes.proportionOf("automated").withResult("ignored")}],
-                <#if (pendingManualTests)>['Ignored (manual)', ${testOutcomes.proportionOf("manual").withResult("ignored")}],</#if>
+                <#if (ignoredManualTests)>['Ignored (manual)', ${testOutcomes.proportionOf("manual").withResult("ignored")}],</#if>
                 ['Failing', ${testOutcomes.proportionOf("automated").withResult("failure")}],
                 <#if (failingManualTests)>['Failing (manual)', ${testOutcomes.proportionOf("manual").withResult("failure")}],</#if>
                 ['Errors',  ${testOutcomes.proportionOf("automated").withResult("error")}]
@@ -88,7 +88,7 @@
                 ['Pending', ${testOutcomes.proportionalStepsOf("automated").withResult("pending")}],
                 <#if (pendingManualTests)>['Pending (manual)', ${testOutcomes.proportionalStepsOf("manual").withResult("pending")}],</#if>
                 ['Ignored', ${testOutcomes.proportionalStepsOf("automated").withResult("ignored")}],
-                <#if (ignoredManualTests)>['Pending (manual)', ${testOutcomes.proportionalStepsOf("manual").withResult("ignored")}],</#if>
+                <#if (ignoredManualTests)>['Ignored (manual)', ${testOutcomes.proportionalStepsOf("manual").withResult("ignored")}],</#if>
                 ['Failing', ${testOutcomes.proportionalStepsOf("automated").withResult("failure")}],
                 <#if (failingManualTests)>['Failing (manual)', ${testOutcomes.proportionalStepsOf("manual").withResult("failure")}],</#if>
                 ['Errors', ${testOutcomes.proportionalStepsOf("automated").withResult("error")}]

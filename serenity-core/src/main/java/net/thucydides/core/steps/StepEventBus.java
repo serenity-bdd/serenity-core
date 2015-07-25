@@ -26,8 +26,7 @@ import java.util.*;
  * placing your class in the classpath. Thucydides will automatically detect the listener and add it to the
  * registered listeners. It will load custom listeners automatically when a test starts for the first time.
  */
-public class
-        StepEventBus {
+public class StepEventBus {
 
     private static ThreadLocal<StepEventBus> stepEventBusThreadLocal = new ThreadLocal<StepEventBus>();
     private static final String CORE_THUCYDIDES_PACKAGE = "net.thucydides.core";
@@ -402,6 +401,17 @@ public class
     public void testPending() {
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testPending();
+        }
+        suspendTest();
+    }
+
+    /**
+     * Mark the current test method as pending.
+     * The test will stil be executed to record the steps, but any webdriver calls will be skipped.
+     */
+    public void testIsManual() {
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.testIsManual();
         }
         suspendTest();
     }

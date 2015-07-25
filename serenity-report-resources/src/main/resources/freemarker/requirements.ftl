@@ -28,18 +28,19 @@
     <script class="code" type="text/javascript">$(document).ready(function () {
         var plot1 = $.jqplot('coverage_pie_chart', [
             [
-                ['Passing', ${requirements.proportion.withResult("SUCCESS")}],
+                ['Passing', ${requirements.proportionOf("automated").withResult("SUCCESS")}],
             <#if (successfulManualTests == true)>
                 ['Passing (manual)', ${requirements.proportionOf("manual").withResult("SUCCESS")}],
             </#if>
-                ['Pending', ${requirements.proportion.withResult("PENDING")}],
+                ['Pending', ${requirements.proportionOf("automated").withResult("PENDING")}],
             <#if (pendingManualTests)>
                 ['Pending (manual)', ${requirements.proportionOf("manual").withResult("PENDING")}],
             </#if>
-                ['Ignored', ${requirements.proportion.withResult("IGNORED")}],
-            <#if (pendingManualTests)>
+                ['Ignored', ${requirements.proportionOf("automated").withResult("IGNORED")}],
+            <#if (ignoredManualTests)>
                 ['Ignored (manual)', ${requirements.proportionOf("manual").withResult("IGNORED")}],
-            </#if>                ['Failing', ${requirements.proportion.withResult("FAILURE")}],
+            </#if>
+                ['Failing', ${requirements.proportionOf("automated").withResult("FAILURE")}],
             <#if (failingManualTests)>
                 ['Failing (manual)', ${requirements.proportionOf("manual").withResult("FAILURE")}],
             </#if>
@@ -519,7 +520,7 @@ Estimated ignored or skipped requirements: ${ignored}"
                                     <table id="test-results-table">
                                         <thead>
                                         <tr>
-                                            <th width="30" class="test-results-heading">&nbsp;</th>
+                                            <th width="50" class="test-results-heading">&nbsp;</th>
                                             <th width="%" class="test-results-heading">Acceptance Tests</th>
                                             <th width="70" class="test-results-heading">Steps</th>
                                             <#if reportOptions.showStepDetails>
@@ -569,10 +570,13 @@ Estimated ignored or skipped requirements: ${ignored}"
                                                 </#if>
 
                                             <tr class="test-${testOutcome.result}">
-                                                <td><img src="images/${testrun_outcome_icon}"
+                                                <td>
+                                                    <img src="images/${testrun_outcome_icon}"
                                                          title="${testOutcome.result}"
-                                                         class="summary-icon"/><span
-                                                        style="display:none">${testOutcome.result}</span></td>
+                                                         class="summary-icon"/>
+                                                    <span style="display:none">${testOutcome.result}</span>
+                                                    <#if (testOutcome.manual)><img src="images/worker.png" title="Manual test"/></#if>
+                                                </td>
                                                 <td class="${testOutcome.result}-text"><a
                                                         href="${relativeLink!}${testOutcome.reportName}.html"
                                                         title="${formatter.htmlAttributeCompatible(testOutcome.errorMessage)}">${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}</a>

@@ -119,6 +119,8 @@ public interface StepListener {
      */
     void testPending();
 
+    void testIsManual();
+
     void notifyScreenChange();
 
     /**

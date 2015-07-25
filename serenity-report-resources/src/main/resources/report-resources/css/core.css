@@ -40,6 +40,7 @@ a:active {
 
 body {
     background-color: #f7f8f3;
+    color:#eeeadd;
 }
 
 .results-page {
@@ -1318,7 +1319,7 @@ table.coverage_data td {
 }
 
 .date-and-time {
-    float:right; padding: 0px;
+    float:right; padding: 0px; color:gray;
 }
 
 .embedded {

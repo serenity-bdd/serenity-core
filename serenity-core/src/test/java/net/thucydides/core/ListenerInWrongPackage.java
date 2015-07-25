@@ -82,6 +82,11 @@ public class ListenerInWrongPackage implements StepListener {
 
     }
 
+    @Override
+    public void testIsManual() {
+
+    }
+
     public List<TestOutcome> getTestOutcomes() {
         return null;  
     }

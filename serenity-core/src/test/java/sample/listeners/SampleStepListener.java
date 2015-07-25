@@ -82,6 +82,11 @@ public class SampleStepListener implements StepListener {
 
     }
 
+    @Override
+    public void testIsManual() {
+
+    }
+
     public List<TestOutcome> getTestOutcomes() {
         return null;  
     }

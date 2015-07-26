@@ -112,7 +112,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedSteps = runner.getTestOutcomes();
-        assertThat(inTheTesOutcomes(executedSteps).theResultFor("a_manual_test"), is(TestResult.IGNORED));
+        assertThat(inTheTesOutcomes(executedSteps).theResultFor("a_manual_test"), is(TestResult.PENDING));
         assertThat(inTheTesOutcomes(executedSteps).theOutcomeFor("a_manual_test").isManual(), equalTo(true));
         assertThat(inTheTesOutcomes(executedSteps).theOutcomeFor("a_manual_test").getTags(),
                 hasItem(TestTag.withName("Manual").andType("External Tests")));

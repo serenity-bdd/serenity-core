@@ -1473,6 +1473,19 @@ ul.second-level-requirements  {
 
 .modal-body p {
     word-wrap: break-word;
+    color: grey;
+}
+
+#results-dashboard {
+    color:grey;
+}
+
+.stacktrace {
+    color: grey;
+}
+
+.rest-content {
+    color: cornflowerblue;
 }
 
 #restModal .modal-content

@@ -99,4 +99,8 @@ public class StepsAnnotatedField {
     public Class<?> getFieldClass() {
         return field.getType();
     }
+
+    public boolean isUniqueInstance() {
+        return field.getAnnotation(Steps.class).uniqueInstance();
+    }
 }

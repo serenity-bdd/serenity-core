@@ -66,16 +66,12 @@ public class StepFactory {
         if (isStepLibraryInstantiatedFor(scenarioStepsClass)) {
             return getManagedStepLibraryFor(scenarioStepsClass);
         } else {
-            return instantiateNewStepLibraryFor(scenarioStepsClass);
+            return getNewStepLibraryFor(scenarioStepsClass);
         }
     }
 
     public <T> T getNewStepLibraryFor(final Class<T> scenarioStepsClass) {
-        if (isStepLibraryInstantiatedFor(scenarioStepsClass)) {
-            return getManagedStepLibraryFor(scenarioStepsClass);
-        } else {
-            return instantiateNewStepLibraryFor(scenarioStepsClass);
-        }
+        return instantiateNewStepLibraryFor(scenarioStepsClass);
     }
 
     public <T> T getUniqueStepLibraryFor(final Class<T> scenarioStepsClass) {

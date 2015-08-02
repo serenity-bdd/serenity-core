@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver;
 
-import com.beust.jcommander.internal.Lists;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
@@ -9,20 +8,22 @@ import net.thucydides.core.steps.StepFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A utility class that provides services to initialize web testing and reporting-related fields in arbitrary objects.
- * It is designed to help integrate Thucydides into other testing tools such as Cucumber and JBehave.
+ * It is designed to help integrate Thucydides into other testing tools such as Cucumber.
  */
 public class ThucydidesWebDriverSupport {
 
-    private static final Set<WebDriver> registeredWebdrivers = Collections.synchronizedSet(new HashSet<WebDriver>());
+    private static final List<WebdriverManager> registeredWebdriverManagers = Collections.synchronizedList(new ArrayList<WebdriverManager>());
 
-    private static final ThreadLocal<WebdriverManager> webdriverManagerThreadLocal = new ThreadLocal<>();
-    private static final ThreadLocal<Pages> pagesThreadLocal = new ThreadLocal<>();
-    private static final ThreadLocal<StepFactory> stepFactoryThreadLocal = new ThreadLocal<>();
-    private static final ThreadLocal<String> currentRequestedDriver = new ThreadLocal<>();
+    private static final ThreadLocal<WebdriverManager> webdriverManagerThreadLocal = new ThreadLocal<WebdriverManager>();
+    private static final ThreadLocal<Pages> pagesThreadLocal = new ThreadLocal<Pages>();
+    private static final ThreadLocal<StepFactory> stepFactoryThreadLocal = new ThreadLocal<StepFactory>();
+    private static final ThreadLocal<String> currentRequestedDriver = new ThreadLocal<String>();
 
     public static void initialize(String requestedDriver) {
         setRequestedDriverIfPresent(requestedDriver);
@@ -64,32 +65,22 @@ public class ThucydidesWebDriverSupport {
     }
 
     public static WebDriver getDriver() {
-        WebDriver driver =  (currentRequestedDriver.get() != null) ?
-                getWebdriverManager().getWebdriver(currentRequestedDriver.get()) : getWebdriverManager().getWebdriver();
-
-        registeredWebdrivers.add(driver);
-        return driver;
-
+        if (currentRequestedDriver.get() != null) {
+            return getWebdriverManager().getWebdriver(currentRequestedDriver.get());
+        } else {
+            return getWebdriverManager().getWebdriver();
+        }
     }
 
     public static void closeCurrentDrivers() {
-        // Closing them directly as tools like JBehave run tests in different threads, so the drivers become inaccessible.
-        for(WebDriver driver : registeredWebdrivers){
-            try {
-                driver.close();
-                driver.quit();
-            } catch (Exception failedToCloseDriverButIDontCare) {
-            }
+        if (webdriversInitialized()) {
+            getWebdriverManager().closeAllCurrentDrivers();
         }
     }
 
     public static void closeAllDrivers() {
-        for(WebDriver driver : registeredWebdrivers){
-            try {
-                driver.close();
-                driver.quit();
-            } catch (Exception failedToCloseDriverButIDontCare) {
-            }
+        if (webdriversInitialized()) {
+            getWebdriverManager().closeAllDrivers();
         }
     }
 

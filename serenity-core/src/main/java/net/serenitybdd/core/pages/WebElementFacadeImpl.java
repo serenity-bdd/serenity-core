@@ -655,7 +655,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         if (driverIsDisabled()) {
             return;
         }
-        waitUntilEnabled();
+        withTimeoutOf((int)waitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS).waitUntilEnabled();
     }
 
     private boolean driverIsDisabled() {

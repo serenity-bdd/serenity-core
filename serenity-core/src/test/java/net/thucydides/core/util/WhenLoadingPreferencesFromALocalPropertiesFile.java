@@ -131,7 +131,7 @@ public class WhenLoadingPreferencesFromALocalPropertiesFile {
 
         localPreferences.loadPreferences();
 
-        assertThat(environmentVariables.getProperty("serenity.logging"), is("DEBUG"));
+        assertThat(environmentVariables.getProperty("serenity.logging"), is("VERBOSE"));
     }
 
     @Test

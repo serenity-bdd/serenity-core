@@ -3,6 +3,7 @@ package net.thucydides.core.annotations;
 
 import com.google.common.base.Optional;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -62,6 +63,17 @@ public class Fields {
             }
         }
         return Optional.absent();
+    }
+
+    public Set<Field> fieldsAnnotatedBy(Class<? extends Annotation> annotationClass) {
+        Set<Field> fields = allFields();
+        Set<Field> annotatedFields = new HashSet<>();
+        for(Field field : fields) {
+            if (field.getAnnotation(annotationClass) != null) {
+                annotatedFields.add(field);
+            }
+        }
+        return annotatedFields;
     }
 }
 

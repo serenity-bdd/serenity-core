@@ -12,6 +12,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static net.thucydides.core.util.NameConverter.humanize;
 
@@ -150,9 +151,32 @@ public final class AnnotatedStepDescription {
         Step step = testMethod.getAnnotation(Step.class);
 
         if ((step != null) && (!StringUtils.isEmpty(step.value()))) {
-            return Optional.of(step.value());
+            return Optional.of(injectAnnotatedFieldValuesFrom(testMethod).into(step.value()));
         }
         return Optional.absent();
+    }
+
+    private AnnotatedFieldValuesBuilder injectAnnotatedFieldValuesFrom(final Method method) {
+        return new AnnotatedFieldValuesBuilder(method);
+    }
+
+    private  class AnnotatedFieldValuesBuilder {
+
+        private final Method method;
+
+        public AnnotatedFieldValuesBuilder(Method method) {
+            this.method = method;
+        }
+
+        public String into(String stepDescription) {
+
+            Map<String, String> annotatedFieldValues = description.getDisplayedFields();
+            for(String field : annotatedFieldValues.keySet()) {
+                String value = annotatedFieldValues.get(field);
+                stepDescription = StringUtils.replace(stepDescription,"#" + field, value);
+            }
+            return stepDescription;
+        }
     }
 
     public String getName() {

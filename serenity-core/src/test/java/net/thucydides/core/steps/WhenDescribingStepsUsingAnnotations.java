@@ -1,5 +1,6 @@
 package net.thucydides.core.steps;
 
+import com.google.common.collect.ImmutableMap;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.pages.Pages;
 import org.jbehave.core.annotations.Given;
@@ -18,6 +19,10 @@ public class WhenDescribingStepsUsingAnnotations {
         public SampleTestSteps(final Pages pages) {
             super(pages);
         }
+
+
+        @Reported
+        public String color;
 
         @Step
         public void a_step() {}
@@ -47,6 +52,9 @@ public class WhenDescribingStepsUsingAnnotations {
 
         @Step("a step with a parameter called '{0}'")
         public void a_customized_step_with_parameters(String name) {}
+
+        @Step("a step with a parameter called '{0}' and a field called #color")
+        public void a_customized_step_with_parameters_and_fields(String name) {}
 
         @Step("a step about a person called {0}, aged {1}")
         public void a_customized_step_with_two_parameters(String name, int age) {}
@@ -126,6 +134,18 @@ public class WhenDescribingStepsUsingAnnotations {
         AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
 
         assertThat(annotatedStepDescription.getName(), is("a step with a parameter called 'Joe'"));
+    }
+
+    @Test
+    public void a_step_can_be_annotated_to_provide_a_more_readable_name_including_a_parameter_and_a_field_variable() {
+
+        ExecutedStepDescription description = new ExecutedStepDescription(SampleTestSteps.class,
+                                                                          "a_customized_step_with_parameters_and_fields: Joe")
+                                                                          .withDisplayedFields(ImmutableMap.of("color","red"));
+
+        AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
+
+        assertThat(annotatedStepDescription.getName(), is("a step with a parameter called 'Joe' and a field called red"));
     }
 
     @Test

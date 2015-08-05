@@ -127,8 +127,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public BaseStepListener(final File outputDirectory, Injector injector) {
         this.proxyFactory = WebdriverProxyFactory.getFactory();
         this.testOutcomes = Lists.newArrayList();
-        this.currentStepStack = new Stack<TestStep>();
-        this.currentGroupStack = new Stack<TestStep>();
+        this.currentStepStack = new Stack<>();
+        this.currentGroupStack = new Stack<>();
         this.outputDirectory = outputDirectory;
         this.inFluentStepSequence = false;
         this.storywideIssues = Lists.newArrayList();
@@ -827,4 +827,5 @@ public class BaseStepListener implements StepListener, StepPublisher {
         getCurrentStep().recordRestQuery(restQuery);
         stepFinished();
     }
+
 }

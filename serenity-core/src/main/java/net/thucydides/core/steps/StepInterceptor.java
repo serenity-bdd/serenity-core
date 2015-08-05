@@ -3,6 +3,7 @@ package net.thucydides.core.steps;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -10,24 +11,22 @@ import net.sf.cglib.proxy.MethodProxy;
 import net.serenitybdd.core.IgnoredStepException;
 import net.serenitybdd.core.PendingStepException;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.annotations.Pending;
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.StepGroup;
-import net.thucydides.core.annotations.TestAnnotations;
+import net.thucydides.core.annotations.*;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.stacktrace.StackTraceSanitizer;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.internal.AssumptionViolatedException;
-import org.openqa.selenium.WebDriverException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static net.thucydides.core.steps.ErrorConvertor.forError;
 
@@ -65,7 +64,7 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
     }
 
     private final List<String> OBJECT_METHODS
-       = Arrays.asList("toString",
+            = Arrays.asList("toString",
             "equals",
             "hashcode",
             "clone",
@@ -130,7 +129,7 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
         if (shouldSkip(method)) {
             return skipStepMethod(obj, method, args, proxy);
         } else {
-            notifyStepStarted(method, args);
+            notifyStepStarted(obj, method, args);
             return runTestStep(obj, method, args, proxy);
         }
 
@@ -138,11 +137,11 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
 
     private Object skipStepMethod(final Object obj, Method method, final Object[] args, final MethodProxy proxy) throws Exception {
         if (aPreviousStepHasFailed() && (!shouldExecuteNestedStepsAfterFailures())) {
-            notifySkippedStepStarted(method, args);
+            notifySkippedStepStarted(obj, method, args);
             notifySkippedStepFinishedFor(method, args);
             return null;
         } else {
-            notifySkippedStepStarted(method, args);
+            notifySkippedStepStarted(obj, method, args);
             return skipTestStep(obj, method, args, proxy);
         }
     }
@@ -204,7 +203,7 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
     }
 
     private boolean shouldSkip(final Method methodOrStep) {
-        return aPreviousStepHasFailed() ||  testIsPending() || isDryRun() || isPending(methodOrStep) || isIgnored(methodOrStep);
+        return aPreviousStepHasFailed() || testIsPending() || isDryRun() || isPending(methodOrStep) || isIgnored(methodOrStep);
     }
 
     private boolean testIsPending() {
@@ -245,8 +244,8 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
         } catch (Throwable generalException) {
             error = SerenityWebDriverException.detachedCopyOf(generalException);
             Throwable assertionError = forError(error).convertToAssertion();
-            notifyStepStarted(method, args);
-            notifyOfStepFailure(method, args, assertionError);
+            notifyStepStarted(obj, method, args);
+            notifyOfStepFailure(obj, method, args, assertionError);
         }
         return result;
     }
@@ -292,20 +291,20 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
             LOGGER.info("STEP DONE: {}", method.getName());
         } catch (AssertionError failedAssertion) {
             error = failedAssertion;
-            logStepFailure(method, args, failedAssertion);
+            logStepFailure(obj, method, args, failedAssertion);
             result = appropriateReturnObject(obj, method);
         } catch (AssumptionViolatedException assumptionFailed) {
             result = appropriateReturnObject(obj, method);
         } catch (Throwable testErrorException) {
             error = SerenityWebDriverException.detachedCopyOf(testErrorException);
-            logStepFailure(method, args, forError(error).convertToAssertion());
+            logStepFailure(obj, method, args, forError(error).convertToAssertion());
             result = appropriateReturnObject(obj, method);
         }
         return result;
     }
 
-    private void logStepFailure(Method method, Object[] args, Throwable assertionError) throws Throwable {
-        notifyOfStepFailure(method, args, assertionError);
+    private void logStepFailure(Object object, Method method, Object[] args, Throwable assertionError) throws Throwable {
+        notifyOfStepFailure(object, method, args, assertionError);
         LOGGER.info("STEP FAILED: {} - {}", method.getName(), assertionError.getMessage());
     }
 
@@ -313,11 +312,11 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
         try {
             result = invokeMethod(obj, args, proxy);
             notifyStepFinishedFor(method, args);
-        } catch(PendingStepException pendingStep) {
+        } catch (PendingStepException pendingStep) {
             notifyStepPending(pendingStep.getMessage());
-        } catch(IgnoredStepException ignoredStep) {
+        } catch (IgnoredStepException ignoredStep) {
             notifyStepIgnored(ignoredStep.getMessage());
-        } catch(AssumptionViolatedException assumptionViolated) {
+        } catch (AssumptionViolatedException assumptionViolated) {
             notifyAssumptionViolated(assumptionViolated.getMessage());
         }
 
@@ -371,7 +370,7 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
         StringBuilder testName = new StringBuilder(method.getName());
         testName.append(": ");
         if (addMarkup) {
-           testName.append("<span class='step-parameter'>");
+            testName.append("<span class='step-parameter'>");
         }
         boolean isFirst = true;
         for (Object arg : args) {
@@ -397,9 +396,10 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
         }
     }
 
-    private void notifyOfStepFailure(final Method method, final Object[] args,
+    private void notifyOfStepFailure(final Object object, final Method method, final Object[] args,
                                      final Throwable cause) throws Throwable {
-        ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args));
+        ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args))
+                .withDisplayedFields(displayedFieldValuesIn(object));
 
         StepFailure failure = new StepFailure(description, cause);
         StepEventBus.getEventBus().stepFailed(failure);
@@ -412,15 +412,29 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
         return Serenity.shouldThrowErrorsImmediately();
     }
 
-    private void notifyStepStarted(final Method method, final Object[] args) {
-
-        ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args));
+    private void notifyStepStarted(final Object object, final Method method, final Object[] args) {
+        ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args))
+                .withDisplayedFields(displayedFieldValuesIn(object));
         StepEventBus.getEventBus().stepStarted(description);
     }
 
-    private void notifySkippedStepStarted(final Method method, final Object[] args) {
+    private Map<String, String> displayedFieldValuesIn(Object object) {
+        Map<String, String> fieldValues = Maps.newHashMap();
+        for(Field field : Fields.of(object.getClass()).fieldsAnnotatedBy(Reported.class)) {
+            try {
+                field.setAccessible(true);
+                fieldValues.put(field.getName(), field.get(object).toString());
+            } catch (IllegalAccessException e) {
+                LOGGER.warn("Failed to inject the field " + field.getName(), e);
+            }
+        }
+        return fieldValues;
+    }
 
-        ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args));
+    private void notifySkippedStepStarted(final Object object, final Method method, final Object[] args) {
+
+        ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args))
+                .withDisplayedFields(displayedFieldValuesIn(object));
         StepEventBus.getEventBus().skippedStepStarted(description);
     }
 
@@ -436,7 +450,7 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
     }
 
     private String shortenedClassName(String className) {
-        String[] classNameElements = StringUtils.split(className,".");
+        String[] classNameElements = StringUtils.split(className, ".");
         return classNameElements[classNameElements.length - 1];
     }
 }

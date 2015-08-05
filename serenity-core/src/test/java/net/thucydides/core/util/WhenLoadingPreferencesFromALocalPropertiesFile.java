@@ -125,6 +125,25 @@ public class WhenLoadingPreferencesFromALocalPropertiesFile {
         return writeToPropertiesFileCalled("thucydides.properties", lines);
     }
 
+    @Test
+    public void should_load_property_values_from_typesafe_config() throws Exception {
+        localPreferences.setHomeDirectory(homeDirectory);
+
+        localPreferences.loadPreferences();
+
+        assertThat(environmentVariables.getProperty("serenity.logging"), is("DEBUG"));
+    }
+
+    @Test
+    public void should_load_arbitrary_property_values_from_typesafe_config() throws Exception {
+        localPreferences.setHomeDirectory(homeDirectory);
+
+        localPreferences.loadPreferences();
+
+        assertThat(environmentVariables.getProperty("environment.uat"), is("uat-server"));
+    }
+
+
     @SuppressWarnings("static-access")
     private String writeToPropertiesFileCalled(String filename, String... lines) throws IOException, InterruptedException {
         thucydidesPropertiesFile = new File(homeDirectory, filename);

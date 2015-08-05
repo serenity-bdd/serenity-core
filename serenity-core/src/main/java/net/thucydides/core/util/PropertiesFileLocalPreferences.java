@@ -1,7 +1,11 @@
 package net.thucydides.core.util;
 
 import com.google.inject.Inject;
+import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigValue;
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import net.thucydides.core.ThucydidesSystemProperty;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +14,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+
+import static org.apache.commons.lang3.StringUtils.*;
 
 /**
  * Loads Thucydides preferences from a local file called thucydides.properties.
@@ -21,6 +29,7 @@ import java.util.Properties;
  */
 public class PropertiesFileLocalPreferences implements LocalPreferences {
 
+    public static final String TYPESAFE_CONFIG_FILE = "serenity.conf";
     private File workingDirectory;
     private File homeDirectory;
     private final EnvironmentVariables environmentVariables;
@@ -42,16 +51,20 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     }
 
     public void loadPreferences() throws IOException {
-        updatePreferencesFrom(preferencesFileInHomeDirectory());
-        updatePreferencesFrom(legacyPreferencesFileInHomeDirectory());
-        updatePreferencesFrom(preferencesFileInWorkingDirectory());
-        updatePreferencesFrom(legacyPreferencesFileInWorkingDirectory());
-        updatePreferencesFrom(preferencesFileWithAbsolutePath());
-        updatePreferencesFrom(legacyPreferencesFileWithAbsolutePath());
-        updatePreferencesFromClasspath();
+
+        updatePreferencesFrom(
+                typesafeConfigPreferences(),
+                preferencesIn(preferencesFileInHomeDirectory()),
+                preferencesIn(legacyPreferencesFileInHomeDirectory()),
+                preferencesIn(preferencesFileInWorkingDirectory()),
+                preferencesIn(legacyPreferencesFileInWorkingDirectory()),
+                preferencesIn(preferencesFileWithAbsolutePath()),
+                preferencesIn(legacyPreferencesFileWithAbsolutePath()),
+                preferencesInClasspath());
+
     }
 
-    private void updatePreferencesFromClasspath() throws IOException {
+    private Properties preferencesInClasspath() throws IOException {
         InputStream propertiesOnClasspath = null;
         try {
             propertiesOnClasspath = Thread.currentThread().getContextClassLoader().getResourceAsStream(defaultPropertiesFileName());
@@ -61,22 +74,39 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
             if (propertiesOnClasspath != null) {
                 Properties localPreferences = new Properties();
                 localPreferences.load(propertiesOnClasspath);
-                setUndefinedSystemPropertiesFrom(localPreferences);
+                return localPreferences;
             }
         } finally {
             if (propertiesOnClasspath != null) {
                 propertiesOnClasspath.close();
             }
         }
+        return new Properties();
     }
 
-    private void updatePreferencesFrom(File preferencesFile) throws IOException {
-        if (preferencesFile.exists()) {
-            Properties localPreferences = new Properties();
-            LOGGER.info("LOADING LOCAL PROPERTIES FROM {} ", preferencesFile.getAbsolutePath());
-            localPreferences.load(new FileInputStream(preferencesFile));
+    private Properties typesafeConfigPreferences() {
+        Set<Map.Entry<String, ConfigValue>> preferences = ConfigFactory.load(TYPESAFE_CONFIG_FILE).entrySet();
+        Properties properties = new Properties();
+        for (Map.Entry<String, ConfigValue> preference : preferences) {
+            properties.put(preference.getKey(), strip(preference.getValue().render(), "\""));
+        }
+        return properties;
+    }
+
+
+    private void updatePreferencesFrom(Properties... propertySets) throws IOException {
+        for (Properties localPreferences : propertySets) {
             setUndefinedSystemPropertiesFrom(localPreferences);
         }
+    }
+
+    private Properties preferencesIn(File preferencesFile) throws IOException {
+        Properties preferenceProperties = new Properties();
+        if (preferencesFile.exists()) {
+            LOGGER.info("LOADING LOCAL PROPERTIES FROM {} ", preferencesFile.getAbsolutePath());
+            preferenceProperties.load(new FileInputStream(preferencesFile));
+        }
+        return preferenceProperties;
     }
 
     private void setUndefinedSystemPropertiesFrom(Properties localPreferences) {
@@ -118,11 +148,11 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     }
 
     private String defaultPropertiesFileName() {
-        return ThucydidesSystemProperty.PROPERTIES.from(environmentVariables,"serenity.properties");
+        return ThucydidesSystemProperty.PROPERTIES.from(environmentVariables, "serenity.properties");
     }
 
     private String legacyPropertiesFileName() {
-        return ThucydidesSystemProperty.PROPERTIES.from(environmentVariables,"thucydides.properties");
+        return ThucydidesSystemProperty.PROPERTIES.from(environmentVariables, "thucydides.properties");
     }
 
 }

@@ -269,10 +269,11 @@
                                         aria-label="Close"><span aria-hidden="true">&times;</span>
                                 </button>
                                 <h4 class="modal-title" id="stacktraceModalLabel">
-                                ${cause.errorType} <#if (cause.message)??>:  ${cause.message} </#if>
+                                ${cause.errorType}
                                 </h4>
                             </div>
                             <div class="modal-body">
+                                <#if (cause.message)??><h4>${cause.message}</h4></#if>
                                 <#list cause.stackTrace as element>
                                 ${element.className}.${element.methodName}(${element.fileName}
                                     :${element.lineNumber})

@@ -1498,6 +1498,7 @@ ul.second-level-requirements  {
 {
     height:500px;
     overflow:auto;
+    color: grey;
 }
 
 .rest-query {

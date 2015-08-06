@@ -420,7 +420,7 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
 
     private Map<String, String> displayedFieldValuesIn(Object object) {
         Map<String, String> fieldValues = Maps.newHashMap();
-        for(Field field : Fields.of(object.getClass()).fieldsAnnotatedBy(Reported.class)) {
+        for(Field field : Fields.of(object.getClass()).allFields()) {
             try {
                 field.setAccessible(true);
                 fieldValues.put(field.getName(), field.get(object).toString());

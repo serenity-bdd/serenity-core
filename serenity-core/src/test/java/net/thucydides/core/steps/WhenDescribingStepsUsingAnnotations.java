@@ -20,8 +20,6 @@ public class WhenDescribingStepsUsingAnnotations {
             super(pages);
         }
 
-
-        @Reported
         public String color;
 
         @Step

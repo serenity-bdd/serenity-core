@@ -17,14 +17,14 @@ public class ExecutedStepDescription implements Cloneable {
 
     private final Class<? extends Object> stepsClass;
     private final String name;
-    private final Map<String, String> displayedFields;
+    private final Map<String, Object> displayedFields;
     private boolean isAGroup;
 
-    private final static Map<String,String> NO_FIELDS = Maps.newHashMap();
+    private final static Map<String,Object> NO_FIELDS = Maps.newHashMap();
 
     protected ExecutedStepDescription(final Class<? extends Object> stepsClass,
                                       final String name,
-                                      Map<String, String> displayedFields,
+                                      Map<String, Object> displayedFields,
                                       final boolean isAGroup) {
         this.stepsClass = stepsClass;
         this.name = name;
@@ -67,7 +67,7 @@ public class ExecutedStepDescription implements Cloneable {
         return new ExecutedStepDescription(this.stepsClass, newName, isAGroup);
     }
 
-    public ExecutedStepDescription withDisplayedFields(Map<String, String> displayedFields) {
+    public ExecutedStepDescription withDisplayedFields(Map<String, Object> displayedFields) {
         return new ExecutedStepDescription(this.stepsClass, this.name, displayedFields, isAGroup);
     }
 
@@ -116,7 +116,7 @@ public class ExecutedStepDescription implements Cloneable {
         return humanize(name);
     }
 
-    public Map<String, String> getDisplayedFields() {
+    public Map<String, Object> getDisplayedFields() {
         return displayedFields;
     }
 }

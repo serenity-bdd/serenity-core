@@ -21,6 +21,8 @@ public class WhenDescribingStepsUsingAnnotations {
         }
 
         public String color;
+        public Integer age;
+        public String emptyField;
 
         @Step
         public void a_step() {}
@@ -53,6 +55,9 @@ public class WhenDescribingStepsUsingAnnotations {
 
         @Step("a step with a parameter called '{0}' and a field called #color")
         public void a_customized_step_with_parameters_and_fields(String name) {}
+
+        @Step("a step with a parameter called '{0}' and a field called #emptyField")
+        public void a_customized_step_with_parameters_and_empty_field_value(String name) {}
 
         @Step("a step about a person called {0}, aged {1}")
         public void a_customized_step_with_two_parameters(String name, int age) {}
@@ -139,11 +144,22 @@ public class WhenDescribingStepsUsingAnnotations {
 
         ExecutedStepDescription description = new ExecutedStepDescription(SampleTestSteps.class,
                                                                           "a_customized_step_with_parameters_and_fields: Joe")
-                                                                          .withDisplayedFields(ImmutableMap.of("color","red"));
+                                                                          .withDisplayedFields(ImmutableMap.of("color",(Object)"red"));
 
         AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
 
         assertThat(annotatedStepDescription.getName(), is("a step with a parameter called 'Joe' and a field called red"));
+    }
+
+    @Test(expected = AssertionError.class)
+    public void a_step_can_be_annotated_to_provide_a_more_readable_name_including_a_parameter_and_an_empty_field_variable() {
+
+        ExecutedStepDescription description = new ExecutedStepDescription(SampleTestSteps.class,
+                "a_customized_step_with_parameters_and_empty_field_value: Joe")
+                .withDisplayedFields(ImmutableMap.of("color",(Object)"red", "emptyField", Fields.FieldValue.UNDEFINED));
+
+        AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
+        System.out.println(annotatedStepDescription.getName());
     }
 
     @Test

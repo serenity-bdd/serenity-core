@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static net.thucydides.core.annotations.Fields.FieldValue.UNDEFINED;
 import static net.thucydides.core.util.NameConverter.humanize;
 
 /**
@@ -151,32 +152,49 @@ public final class AnnotatedStepDescription {
         Step step = testMethod.getAnnotation(Step.class);
 
         if ((step != null) && (!StringUtils.isEmpty(step.value()))) {
-            return Optional.of(injectAnnotatedFieldValuesFrom(testMethod).into(step.value()));
+            return Optional.of(injectAnnotatedFieldValuesFrom(description).into(step.value()));
         }
         return Optional.absent();
     }
 
-    private AnnotatedFieldValuesBuilder injectAnnotatedFieldValuesFrom(final Method method) {
-        return new AnnotatedFieldValuesBuilder(method);
+    private AnnotatedFieldValuesBuilder injectAnnotatedFieldValuesFrom(ExecutedStepDescription description) {
+        return new AnnotatedFieldValuesBuilder(description);
     }
 
     private  class AnnotatedFieldValuesBuilder {
+        private final ExecutedStepDescription description;
 
-        private final Method method;
-
-        public AnnotatedFieldValuesBuilder(Method method) {
-            this.method = method;
+        private AnnotatedFieldValuesBuilder(ExecutedStepDescription description) {
+            this.description = description;
         }
 
         public String into(String stepDescription) {
 
-            Map<String, String> annotatedFieldValues = description.getDisplayedFields();
-            for(String field : annotatedFieldValues.keySet()) {
-                String value = annotatedFieldValues.get(field);
-                stepDescription = StringUtils.replace(stepDescription,"#" + field, value);
+            Map<String, Object> fields = description.getDisplayedFields();
+            for(String field : fields.keySet()) {
+                String fieldName = fieldNameFor(field);
+                Object value = fields.get(field);
+                if (stepDescription.contains(fieldName) && (value != UNDEFINED)) {
+                    stepDescription = StringUtils.replace(stepDescription, fieldNameFor(field), value.toString());
+                }
             }
+            allStepDefinitionFieldsShouldBeResolvedIn(stepDescription);
             return stepDescription;
         }
+
+        private void allStepDefinitionFieldsShouldBeResolvedIn(String stepDescription) {
+            Map<String, Object> fields = description.getDisplayedFields();
+            for(String field : fields.keySet()) {
+                if (stepDescription.contains(fieldNameFor(field))) {
+                    throw new AssertionError(stepDescription +  " : " + field + " value could not be resolved");
+                }
+            }
+        }
+
+    }
+
+    private String fieldNameFor(String field) {
+        return "#" + field;
     }
 
     public String getName() {

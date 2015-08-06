@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Optional.fromNullable;
 import static net.thucydides.core.steps.ErrorConvertor.forError;
 
 /**
@@ -399,7 +400,7 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
     private void notifyOfStepFailure(final Object object, final Method method, final Object[] args,
                                      final Throwable cause) throws Throwable {
         ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args))
-                .withDisplayedFields(displayedFieldValuesIn(object));
+                .withDisplayedFields(fieldValuesIn(object));
 
         StepFailure failure = new StepFailure(description, cause);
         StepEventBus.getEventBus().stepFailed(failure);
@@ -414,27 +415,18 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
 
     private void notifyStepStarted(final Object object, final Method method, final Object[] args) {
         ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args))
-                .withDisplayedFields(displayedFieldValuesIn(object));
+                .withDisplayedFields(fieldValuesIn(object));
         StepEventBus.getEventBus().stepStarted(description);
     }
 
-    private Map<String, String> displayedFieldValuesIn(Object object) {
-        Map<String, String> fieldValues = Maps.newHashMap();
-        for(Field field : Fields.of(object.getClass()).allFields()) {
-            try {
-                field.setAccessible(true);
-                fieldValues.put(field.getName(), field.get(object).toString());
-            } catch (IllegalAccessException e) {
-                LOGGER.warn("Failed to inject the field " + field.getName(), e);
-            }
-        }
-        return fieldValues;
+    private Map<String, Object> fieldValuesIn(Object object) {
+        return Fields.of(object).asMap();
     }
 
     private void notifySkippedStepStarted(final Object object, final Method method, final Object[] args) {
 
         ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args))
-                .withDisplayedFields(displayedFieldValuesIn(object));
+                .withDisplayedFields(fieldValuesIn(object));
         StepEventBus.getEventBus().skippedStepStarted(description);
     }
 

@@ -2,13 +2,20 @@ package net.thucydides.core.annotations;
 
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+
+import static com.google.common.base.Optional.fromNullable;
 
 /**
  * Find the annotated fields in a given class.
@@ -24,7 +31,13 @@ import java.util.Set;
  */
 public class Fields {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Fields.class);
+
     private final Class<?> clazz;
+
+    public enum FieldValue {
+        UNDEFINED
+    }
 
     public static Fields of(final Class<?> testClass) {
         return new Fields(testClass);
@@ -74,6 +87,55 @@ public class Fields {
             }
         }
         return annotatedFields;
+    }
+
+    public static FieldValueBuilder of(Object object) {
+        return new FieldValueBuilder(object);
+    }
+
+    public static class FieldValueBuilder {
+        private final Object object;
+
+        public FieldValueBuilder(Object object) {
+            this.object = object;
+        }
+
+        public Map<String, Object> asMap() {
+            Map<String, Object> fieldValues = Maps.newHashMap();
+            for(Field field : Fields.of(object.getClass()).allFields()) {
+                try {
+                    field.setAccessible(true);
+                    if (isValid(field)) {
+                        fieldValues.put(field.getName(), fieldValueFrom(field).or(FieldValue.UNDEFINED));
+                    }
+                } catch (IllegalAccessException e) {
+                    LOGGER.warn("Failed to inject the field " + field.getName(), e);
+                }
+            }
+            return ImmutableMap.copyOf(fieldValues);
+        }
+
+        private boolean isValid(Field field) {
+            return ((field != null) && (!field.getName().contains("CGLIB")));
+        }
+
+        private FieldValueProvider fieldValueFrom(Field field) {
+            return new FieldValueProvider(field, object);
+        }
+
+        private class FieldValueProvider {
+            Field field;
+            Object object;
+
+            public FieldValueProvider(Field field, Object object) {
+                this.field = field;
+                this.object = object;
+            }
+
+            public Object or(FieldValue undefinedValue) throws IllegalAccessException {
+                return ((field == null) || (object == null)|| (field.get(object) == null)) ? undefinedValue : field.get(object);
+            }
+        }
     }
 }
 

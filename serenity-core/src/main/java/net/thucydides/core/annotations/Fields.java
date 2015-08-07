@@ -112,6 +112,8 @@ public class Fields {
                     LOGGER.warn("Failed to inject the field " + field.getName(), e);
                 }
             }
+            fieldValues.put("self",object);
+            fieldValues.put("this",object);
             return ImmutableMap.copyOf(fieldValues);
         }
 

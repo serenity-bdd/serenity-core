@@ -9,8 +9,10 @@ import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
 import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.jsoup.Jsoup;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -165,6 +167,16 @@ public class TestStep {
 
     public String getDescription() {
         return description;
+    }
+
+    public TestStep unrendered() {
+        TestStep stepCopy = clone();
+        stepCopy.setDescription(stripMarkupFrom(description));
+        return stepCopy;
+    }
+
+    private String stripMarkupFrom(String description) {
+        return Jsoup.parse(description).text();
     }
 
     public List<TestStep> getChildren() {

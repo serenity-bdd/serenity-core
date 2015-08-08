@@ -231,7 +231,7 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
     private Object runNormalMethod(final Object obj, final Method method, final Object[] args, final MethodProxy proxy)
             throws Throwable {
 
-        Object result = defaultReturnValueFor(method);
+        Object result = defaultReturnValueFor(method, obj);
 
         if (shouldNotSkipMethod(method, obj.getClass())) {
             result = invokeMethodAndNotifyFailures(obj, method, args, proxy, result);
@@ -251,9 +251,9 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
         return result;
     }
 
-    private Object defaultReturnValueFor(Method method) {
-        if (method.getReturnType() == method.getDeclaringClass()) {
-            return this;
+    private Object defaultReturnValueFor(Method method, Object object) {
+        if (method.getReturnType().isAssignableFrom(object.getClass())) {
+            return object;
         } else {
             return DefaultValue.forClass(method.getReturnType());
         }

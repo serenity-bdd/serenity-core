@@ -1,0 +1,9 @@
+ext {
+    bintrayPackage = 'serenity-journey'
+    projectDescription = 'Support for the User Journey pattern in Serenity'
+}
+
+dependencies {
+    compile project(':serenity-core')
+    testCompile project(':serenity-junit')
+}

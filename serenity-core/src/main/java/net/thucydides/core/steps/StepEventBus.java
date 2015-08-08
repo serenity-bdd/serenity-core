@@ -570,4 +570,11 @@ public class StepEventBus {
     public void exceptionExpected(Class<? extends Throwable> expected) {
         getBaseStepListener().exceptionExpected(expected);
     }
+
+    Optional<TestResult> NO_RESULT_YET = Optional.absent();
+    public Optional<TestResult> resultSoFar() {
+
+        return (getBaseStepListener().latestTestOutcome().isPresent()) ?
+                Optional.fromNullable(getBaseStepListener().latestTestOutcome().get().getResult()) : NO_RESULT_YET;
+    }
 }

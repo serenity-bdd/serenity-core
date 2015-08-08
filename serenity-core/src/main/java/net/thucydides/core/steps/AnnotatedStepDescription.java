@@ -178,7 +178,7 @@ public final class AnnotatedStepDescription {
                     stepDescription = StringUtils.replace(stepDescription, fieldNameFor(field), value.toString());
                 }
             }
-            allStepDefinitionFieldsShouldBeResolvedIn(stepDescription);
+            //allStepDefinitionFieldsShouldBeResolvedIn(stepDescription);
             return stepDescription;
         }
 

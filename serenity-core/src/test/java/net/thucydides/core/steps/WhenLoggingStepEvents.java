@@ -296,30 +296,6 @@ public class WhenLoggingStepEvents {
         verify(logger).info(contains("PENDING STEP (for some reason)"));
     }
 
-    @Test
-    public void should_log_no_step_events_if_not_in_verbose_mode() {
-        consoleLoggingListener.stepStarted(ExecutedStepDescription.withTitle("some step"));
-        consoleLoggingListener.skippedStepStarted(ExecutedStepDescription.withTitle("some skipped step"));
-        consoleLoggingListener.stepFinished();
-        consoleLoggingListener.stepFailed(stepFailure);
-        consoleLoggingListener.stepIgnored();
-        consoleLoggingListener.stepPending();
-        consoleLoggingListener.stepPending("for some reason");
-        consoleLoggingListener.stepPending("for some reason");
-
-        verify(logger,never()).info(contains("STEP"));
-    }
-
-    @Test
-    public void should_not_log_test_name_when_a_test_starts_if_logging_disabled() {
-        environmentVariables.setProperty("thucydides.logging","QUIET");
-
-        consoleLoggingListener.testStarted("some_test");
-
-        verify(logger, never()).info(contains("TEST: some_test"));
-    }
-
-
     private TestOutcome pendingTestOutcome() {
         TestOutcome testOutcome = TestOutcome.forTest("some_test", SomeTestClass.class);
         testOutcome.recordStep(TestStepFactory.forAPendingTestStepCalled("do_something"));

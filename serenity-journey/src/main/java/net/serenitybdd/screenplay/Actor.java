@@ -21,11 +21,13 @@ public class Actor implements PerformsTasks {
         taskTally.reset();
     }
 
-    public <T extends Task> void has(T... todos) {
-        attemtpsTo(todos);
+    @SafeVarargs
+    public final <T extends Task> void has(T... todos) {
+        attemptsTo(todos);
     }
 
-    public <T extends Task> void attemtpsTo(T... todos) {
+    @SafeVarargs
+    public final <T extends Task> void attemptsTo(T... todos) {
         for (Task todo : todos) {
             perform(todo);
         }
@@ -56,6 +58,23 @@ public class Actor implements PerformsTasks {
     @Step("Then #this should see that {0}")
     public <ANSWER> ANSWER seesThat(Question<ANSWER> question) {
         return question.answeredBy(this);
+    }
+
+    @SafeVarargs
+    public final <T> void shouldSee(Consequence<T>... consequences) {
+        for (Consequence<T> consequence : consequences) {
+            check(consequence);
+        }
+    }
+
+    private <T> void check(Consequence<T> consequence) {
+        try {
+            eventBusInterface.reportNewStepWithTitle(consequence.shortDescription());
+            consequence.evaluate();
+            eventBusInterface.reportStepFinished();
+        } catch (Throwable e) {
+            eventBusInterface.reportStepFailureFor(consequence, e);
+        }
     }
 
     public static Actor named(String name) {

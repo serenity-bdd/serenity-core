@@ -465,7 +465,6 @@ public class StepEventBus {
     }
 
     public void testRunFinished() {
-        System.out.println("TEST RUN FINISHED");
         screenshotProcessor.waitUntilDone();
         screenshotProcessor.terminate();
 

@@ -10,6 +10,7 @@ import static net.serenitybdd.journey.TestOutcomeChecks.resultsFrom
 import static net.thucydides.core.model.TestResult.ERROR
 import static net.thucydides.core.model.TestResult.FAILURE
 import static net.thucydides.core.model.TestResult.SKIPPED
+import static net.thucydides.core.model.TestResult.SUCCESS
 
 class WhenRunningASimpleJourney extends Specification{
 
@@ -36,7 +37,8 @@ class WhenRunningASimpleJourney extends Specification{
         then:
             def outcome = results["shouldBeAbleToPurchaseSomeItems"]
             outcome.testSteps.collect { it.unrendered().description } == ["Given Dana has purchased an apple for 10 dollars",
-                                                                          "Given Dana has purchased a pear for 5 dollars"]
+                                                                          "Given Dana has purchased a pear for 5 dollars",
+                                                                          "And Dana has them delivered"]
     }
 
     def "should produce a failed step when an assumption fails"() {
@@ -75,6 +77,27 @@ class WhenRunningASimpleJourney extends Specification{
             def outcome = results["shouldBeAbleToPurchaseAnItemWithANegativeAmount"]
             outcome.testSteps.collect { it.unrendered().description } == ["Given Dana has purchased an apple for -10 dollars",
                                                                           "Given Dana has purchased a pear for 5 dollars"]
+    }
+
+    def "should report failing expectations correctly"() {
+        given:
+            def runner = new SerenityRunner(DanaGoesShopping)
+        when:
+            runner.run(new RunNotifier())
+            def results = resultsFrom(runner.testOutcomes)
+        then:
+            def outcome = results["shouldBeAbleToPurchaseSomeItemsWithDelivery"]
+            outcome.result == FAILURE
+        and:
+            outcome.testSteps.collect { it.unrendered().description } ==
+                    ["Given Dana has purchased an apple for 10 dollars",
+                     "Given Dana has purchased a pear for 5 dollars",
+                     "And Dana has them delivered",
+                     "Then the total cost should be <15>",
+                     "Then the total cost including delivery should be <20>"]
+        and:
+            outcome.testSteps[3].result == FAILURE && outcome.testSteps[4].result == SUCCESS
+
     }
 
 }

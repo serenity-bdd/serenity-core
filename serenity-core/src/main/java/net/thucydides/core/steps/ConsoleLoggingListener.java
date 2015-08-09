@@ -277,8 +277,9 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
     public void stepFailed(StepFailure failure) {
-        if (loggingLevelIsAtLeast(getLoggingLevel().VERBOSE)) {
-            getLogger().info("STEP FAILED: " + failure.getMessage());
+        if (loggingLevelIsAtLeast(getLoggingLevel().NORMAL)) {
+            String errorMessage = (failure.getException() != null) ? failure.getException().toString() : failure.getMessage();
+            getLogger().info("STEP FAILED: " + errorMessage);
         }
     }
 

@@ -1,6 +1,6 @@
 package net.serenitybdd.journey
 
-import net.serenitybdd.journey.shopping.DanaGoesShopping
+import net.serenitybdd.journey.shopping.DanaGoesShoppingSample
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.thucydides.core.model.TestResult
 import org.junit.runner.notification.RunNotifier
@@ -16,7 +16,7 @@ class WhenRunningASimpleJourney extends Specification{
 
     def "should produce a normal test outcome"() {
         given:
-            def runner = new SerenityRunner(DanaGoesShopping)
+            def runner = new SerenityRunner(DanaGoesShoppingSample)
         when:
             runner.run(new RunNotifier())
             def results = resultsFrom(runner.testOutcomes)
@@ -30,7 +30,7 @@ class WhenRunningASimpleJourney extends Specification{
 
     def "should produce a step for each task call"() {
         given:
-            def runner = new SerenityRunner(DanaGoesShopping)
+            def runner = new SerenityRunner(DanaGoesShoppingSample)
         when:
             runner.run(new RunNotifier())
             def results = resultsFrom(runner.testOutcomes)
@@ -43,7 +43,7 @@ class WhenRunningASimpleJourney extends Specification{
 
     def "should produce a failed step when an assumption fails"() {
         given:
-            def runner = new SerenityRunner(DanaGoesShopping)
+            def runner = new SerenityRunner(DanaGoesShoppingSample)
         when:
             runner.run(new RunNotifier())
             def results = resultsFrom(runner.testOutcomes)
@@ -57,7 +57,7 @@ class WhenRunningASimpleJourney extends Specification{
 
     def "should produce a step with an error when a step breaks"() {
         given:
-            def runner = new SerenityRunner(DanaGoesShopping)
+            def runner = new SerenityRunner(DanaGoesShoppingSample)
         when:
             runner.run(new RunNotifier())
             def results = resultsFrom(runner.testOutcomes)
@@ -69,7 +69,7 @@ class WhenRunningASimpleJourney extends Specification{
 
     def "should document tasks as far as possible when errors occur"() {
         given:
-            def runner = new SerenityRunner(DanaGoesShopping)
+            def runner = new SerenityRunner(DanaGoesShoppingSample)
         when:
             runner.run(new RunNotifier())
             def results = resultsFrom(runner.testOutcomes)
@@ -81,7 +81,7 @@ class WhenRunningASimpleJourney extends Specification{
 
     def "should report failing expectations correctly"() {
         given:
-            def runner = new SerenityRunner(DanaGoesShopping)
+            def runner = new SerenityRunner(DanaGoesShoppingSample)
         when:
             runner.run(new RunNotifier())
             def results = resultsFrom(runner.testOutcomes)

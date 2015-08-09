@@ -117,7 +117,6 @@ public class WhenRecordingStepExecutionResults {
         stepListener = new BaseStepListener(FirefoxDriver.class, outputDirectory, configuration);
 
         driver = mock(FirefoxDriver.class);
-//        stepListener.setDriver(driver);
 
         ThucydidesWebdriverManager.inThisTestThread().closeAllDrivers();
         ThucydidesWebdriverManager.inThisTestThread().registerDriverCalled("firefox").forDriver(driver);
@@ -125,7 +124,6 @@ public class WhenRecordingStepExecutionResults {
         when(driver.getCurrentUrl()).thenReturn("http://www.google.com");
         when(driver.getScreenshotAs(any(OutputType.class))).thenReturn(screenshot1).thenReturn(screenshot2);
 
-        StepEventBus.getEventBus().clear();
         StepEventBus.getEventBus().registerListener(stepListener);
     }
 

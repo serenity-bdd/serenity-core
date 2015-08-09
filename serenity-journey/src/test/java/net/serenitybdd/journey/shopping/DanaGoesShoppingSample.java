@@ -15,7 +15,7 @@ import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static org.hamcrest.Matchers.equalTo;
 
 @RunWith(SerenityRunner.class)
-public class DanaGoesShopping {
+public class DanaGoesShoppingSample {
 
     Actor dana = Actor.named("Dana");
 

@@ -203,7 +203,7 @@ subprojects {
         testCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
-        testCompile('org.mockito:mockito-all:1.10.18') {
+        compile('org.mockito:mockito-all:1.10.18') {
             exclude group: "org.hamcrest"
         }
         testCompile('org.spockframework:spock-core:1.0-groovy-2.3') {

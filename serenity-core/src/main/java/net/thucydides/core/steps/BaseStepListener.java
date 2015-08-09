@@ -1,11 +1,14 @@
 package net.thucydides.core.steps;
 
+import ch.lambdaj.function.aggregate.Aggregator;
+import ch.lambdaj.function.aggregate.PairAggregator;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
+import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.rest.RestQuery;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
@@ -27,6 +30,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
+import static ch.lambdaj.Lambda.aggregate;
+import static com.google.common.collect.Lists.partition;
 import static net.thucydides.core.model.Stories.findStoryFrom;
 import static net.thucydides.core.model.TestResult.*;
 import static net.thucydides.core.steps.BaseStepListener.ScreenshotType.MANDATORY_SCREENSHOT;
@@ -113,6 +118,28 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if ((getCurrentTestOutcome().getTestFailureCause() != null) && (getCurrentTestOutcome().getTestFailureCause().getErrorType().equals(expected.getName()))) {
             getCurrentTestOutcome().resetFailingStepsCausedBy(expected);
         }
+    }
+
+    public StepMerger mergeLast(int maxStepsToMerge) {
+        return new StepMerger(maxStepsToMerge);
+    }
+
+    public int getStepCount() {
+        return getCurrentTestOutcome().getStepCount();
+    }
+
+    public class StepMerger {
+
+        final int maxStepsToMerge;
+
+        public StepMerger(int maxStepsToMerge) {
+            this.maxStepsToMerge = maxStepsToMerge;
+        }
+
+        public void steps() {
+            getCurrentTestOutcome().mergeMostRecentSteps(maxStepsToMerge);
+        }
+
     }
 
     protected enum ScreenshotType {

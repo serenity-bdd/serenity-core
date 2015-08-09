@@ -6,4 +6,13 @@ ext {
 dependencies {
     compile project(':serenity-core')
     testCompile project(':serenity-junit')
+
+/*
+    asciidoclet 'org.asciidoctor:asciidoclet:0.1.3'
+
+    javadoc {
+        options.docletpath = configurations.asciidoclet.files.asType(List)
+        options.doclet = 'org.asciidoctor.Asciidoclet'
+    }
+*/
 }

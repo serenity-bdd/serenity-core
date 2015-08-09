@@ -1,15 +1,13 @@
 package net.serenitybdd.screenplay;
 
-import net.serenitybdd.screenplay.executionstrategies.*;
-import net.serenitybdd.screenplay.state.TestStateEngine;
+import net.serenitybdd.screenplay.eventbus.EventBusInterface;
 import net.thucydides.core.annotations.Step;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepFailure;
 
-public class Actor {
+public class Actor implements PerformsTasks {
 
     private final String name;
+    private final PerformedTaskTally taskTally = new PerformedTaskTally();
+    private EventBusInterface eventBusInterface = new EventBusInterface();
 
     public Actor(String name) {
         this.name = name;
@@ -17,6 +15,10 @@ public class Actor {
 
     public String toString() {
         return name;
+    }
+
+    public void start() {
+        taskTally.reset();
     }
 
     public <T extends Task> void has(T... todos) {
@@ -31,35 +33,23 @@ public class Actor {
 
     private void perform(Task todo) {
         try {
+            taskTally.newTask();
             todo.performAs(this);
+
+            if (anOutOfStepErrorOccurred()) {
+                eventBusInterface.mergePreviousStep();
+            }
+
         } catch (Throwable e) {
-            StepEventBus.getEventBus().testFailed(e);
+            eventBusInterface.reportStepFailureFor(todo, e);
         }
     }
 
-    private void ensureAllStepsAppearInTheTestOutcome() {
+
+    private boolean anOutOfStepErrorOccurred() {
+        return eventBusInterface.getStepCount() > taskTally.getPerformedTaskCount();
     }
 
-    private boolean theTaskHasFailed() {
-        return (getCurrentOutcome() == TestResult.FAILURE || getCurrentOutcome() == TestResult.ERROR);
-    }
-
-    private void completeTestOutcomeStructure() {
-        StepEventBus.getEventBus().getCurrentStep();
-    }
-
-    private boolean newOutcomeIsDifferentTo(TestResult previousOutcome) {
-        return previousOutcome != getCurrentOutcome();
-    }
-
-    private void insertError(Throwable e) {
-    }
-
-    private void replaySteps() {
-    }
-
-    private void windBackSteps() {
-    }
 
     @Step("Then #this should see that {0}")
     public <ANSWER> ANSWER seesThat(Question<ANSWER> question) {
@@ -68,24 +58,5 @@ public class Actor {
 
     public static Actor named(String name) {
         return new Actor(name);
-    }
-
-    private TaskExecutionStrategy usingCurrentExecutionStrategy() {
-        switch (TestStateEngine.currentState()) {
-            case RUNNABLE:
-                return new RunnableTaskStrategy(this);
-            case DRY_RUN:
-                return new DryRunTaskStrategy(this);
-            case PENDING:
-                return new PendingTaskStrategy(this);
-            case FAILED:
-                return new PostFailureTaskStrategy(this);
-            default:
-                return new PostFailureTaskStrategy(this);
-        }
-    }
-
-    public TestResult getCurrentOutcome() {
-        return StepEventBus.getEventBus().resultSoFar().or(TestResult.UNDEFINED);
     }
 }

@@ -151,6 +151,7 @@ public class WhenDescribingStepsUsingAnnotations {
         assertThat(annotatedStepDescription.getName(), is("a step with a parameter called 'Joe' and a field called red"));
     }
 
+    @Ignore("Don't throw exceptions when a variable is not found, as this can sometimes happen in normal execution.")
     @Test(expected = AssertionError.class)
     public void a_step_can_be_annotated_to_provide_a_more_readable_name_including_a_parameter_and_an_empty_field_variable() {
 

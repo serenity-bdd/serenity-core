@@ -2,6 +2,7 @@ package net.thucydides.core.steps;
 
 import org.joda.time.DateTime;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 public class DefaultValue {
@@ -19,6 +20,14 @@ public class DefaultValue {
         DEFAULT_VALUES.put(List.class, Collections.EMPTY_LIST);
         DEFAULT_VALUES.put(Set.class, Collections.EMPTY_SET);
         DEFAULT_VALUES.put(Map.class, Collections.EMPTY_MAP);
+    }
+
+    public static Object defaultReturnValueFor(Method method, Object object) {
+        if (method.getReturnType().isAssignableFrom(object.getClass())) {
+            return object;
+        } else {
+            return DefaultValue.forClass(method.getReturnType());
+        }
     }
 
     public static Object forClass(Class<?> declaringClass) {

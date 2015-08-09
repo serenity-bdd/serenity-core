@@ -718,6 +718,7 @@ public class WhenRecordingStepExecutionResults {
         assertThat(stringValue, is("proportionOf"));
     }
 
+    @Ignore("We should only skip methods if they call webdriver or make rest calls")
     @Test
     public void should_skip_methods_from_same_domain_after_failure() {
 

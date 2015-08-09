@@ -3,7 +3,6 @@ package net.thucydides.core.steps;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -20,15 +19,12 @@ import org.junit.internal.AssumptionViolatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Serializable;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Optional.fromNullable;
 import static net.thucydides.core.steps.ErrorConvertor.forError;
 
 /**
@@ -38,9 +34,8 @@ import static net.thucydides.core.steps.ErrorConvertor.forError;
  *
  * @author johnsmart
  */
-public class StepInterceptor implements MethodInterceptor, Serializable {
+public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
 
-    private static final long serialVersionUID = 1L;
     private final Class<?> testStepClass;
     private Throwable error = null;
     private static final Logger LOGGER = LoggerFactory.getLogger(StepInterceptor.class);
@@ -231,13 +226,31 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
     private Object runNormalMethod(final Object obj, final Method method, final Object[] args, final MethodProxy proxy)
             throws Throwable {
 
-        Object result = defaultReturnValueFor(method, obj);
+        Object result = DefaultValue.defaultReturnValueFor(method, obj);
 
-        if (shouldNotSkipMethod(method, obj.getClass())) {
-            result = invokeMethodAndNotifyFailures(obj, method, args, proxy, result);
-        }
-        return result;
+//        if (shouldNotSkipMethod(method, obj.getClass())) {
+//            result = invokeMethodAndNotifyFailures(obj, method, args, proxy, result);
+//        }
+//        return result;
+        return withNonStepMethodRunner(method, obj.getClass())
+               .invokeMethodAndNotifyFailures(obj, method, args, proxy, result);
     }
+
+    private MethodRunner withNonStepMethodRunner(final Method methodOrStep, final Class callingClass) {
+        return (shouldRunInDryRunMode(methodOrStep, callingClass)) ? new DryRunMethodRunner() : new NormalMethodRunner(this);
+    }
+
+    private boolean shouldRunInDryRunMode(final Method methodOrStep, final Class callingClass) {
+        return ((aPreviousStepHasFailed() || testIsPending() || isDryRun()) && declaredInSameDomain(methodOrStep, callingClass));
+    }
+
+    public void reportMethodError(Throwable generalException, Object obj, Method method, Object[] args) throws Throwable {
+        error = SerenityWebDriverException.detachedCopyOf(generalException);
+        Throwable assertionError = forError(error).convertToAssertion();
+        notifyStepStarted(obj, method, args);
+        notifyOfStepFailure(obj, method, args, assertionError);
+    }
+
 
     private Object invokeMethodAndNotifyFailures(Object obj, Method method, Object[] args, MethodProxy proxy, Object result) throws Throwable {
         try {
@@ -249,14 +262,6 @@ public class StepInterceptor implements MethodInterceptor, Serializable {
             notifyOfStepFailure(obj, method, args, assertionError);
         }
         return result;
-    }
-
-    private Object defaultReturnValueFor(Method method, Object object) {
-        if (method.getReturnType().isAssignableFrom(object.getClass())) {
-            return object;
-        } else {
-            return DefaultValue.forClass(method.getReturnType());
-        }
     }
 
     private boolean isAnnotatedWithAValidStepAnnotation(final Method method) {

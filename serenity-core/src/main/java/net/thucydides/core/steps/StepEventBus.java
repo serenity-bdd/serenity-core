@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.annotations.Step;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
 import net.thucydides.core.screenshots.ScreenshotProcessor;
@@ -31,6 +32,7 @@ public class StepEventBus {
     private static ThreadLocal<StepEventBus> stepEventBusThreadLocal = new ThreadLocal<StepEventBus>();
     private static final String CORE_THUCYDIDES_PACKAGE = "net.thucydides.core";
     private static final Logger LOGGER = LoggerFactory.getLogger(StepEventBus.class);
+    private Optional<TestStep> previousStep;
 
     /**
      * The event bus used to inform listening classes about when tests and test steps start and finish.
@@ -576,5 +578,9 @@ public class StepEventBus {
 
         return (getBaseStepListener().latestTestOutcome().isPresent()) ?
                 Optional.fromNullable(getBaseStepListener().latestTestOutcome().get().getResult()) : NO_RESULT_YET;
+    }
+
+    public void mergePreviousStep() {
+        baseStepListener.mergeLast(2).steps();
     }
 }

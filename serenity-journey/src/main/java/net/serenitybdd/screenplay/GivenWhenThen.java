@@ -5,7 +5,8 @@ import org.hamcrest.Matcher;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GivenWhenThen {
-    public static <T> T givenThat(T actor) {
+    public static <T extends PerformsTasks> T givenThat(T actor) {
+        actor.start();
         return actor;
     }
 

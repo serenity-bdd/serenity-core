@@ -9,13 +9,14 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
-import net.serenitybdd.core.rest.RestQuery;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.images.SimpleImageInfo;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.features.ApplicationFeature;
+import net.thucydides.core.model.results.MergeStepResultStrategy;
+import net.thucydides.core.model.results.StepResultMergeStragegy;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
 import net.serenitybdd.core.time.SystemClock;
@@ -42,8 +43,11 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static ch.lambdaj.Lambda.*;
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Lists.partition;
+import static com.google.common.collect.Lists.reverse;
 import static net.thucydides.core.model.ReportType.HTML;
 import static net.thucydides.core.model.ReportType.ROOT;
 import static net.thucydides.core.model.TestResult.*;
@@ -87,7 +91,7 @@ public class TestOutcome {
      * The list of steps recorded in this test execution.
      * Each step can contain other nested steps.
      */
-    private final List<TestStep> testSteps = new ArrayList<TestStep>();
+    private final List<TestStep> testSteps = new ArrayList<>();
 
     /**
      * A test can be linked to the user story it tests using the Story annotation.
@@ -586,6 +590,69 @@ public class TestOutcome {
         return new StepResetBuilder(step);
     }
 
+    public StepReplacer replace(List<TestStep> stepsToMerge) {
+        return new StepReplacer(stepsToMerge);
+    }
+
+    public void mergeMostRecentSteps(int maxStepsToMerge) {
+        checkArgument(maxStepsToMerge > 0);
+
+        List<TestStep> stepsToMerge = getLast(maxStepsToMerge).steps();
+        TestStep mergedStep = merge(stepsToMerge);
+        replace(stepsToMerge).with(mergedStep);
+    }
+
+    private GetLastStepBuilder getLast(int maxCount) {
+        return new GetLastStepBuilder(maxCount);
+    }
+
+    private class GetLastStepBuilder {
+
+        int maxCount;
+        public GetLastStepBuilder(int maxCount) {
+            this.maxCount = maxCount;
+        }
+
+        public List<TestStep> steps() {
+
+            List<List<TestStep>> testStepPartitions = partition(reverse(getTestSteps()), maxCount);
+            return reverse(testStepPartitions.get(0));
+        }
+    }
+
+    private TestStep merge(List<TestStep> stepsToMerge) {
+        TestStep mergedStep = stepsToMerge.get(0);
+        for(TestStep nextStep : stepsToMerge.subList(1, stepsToMerge.size())) {
+            mergedStep = mergeStep(mergedStep).into(nextStep);
+        }
+        return mergedStep;
+    }
+
+    private StepMergeBuilder mergeStep(TestStep step) {
+        return new StepMergeBuilder(step);
+    }
+
+    class StepMergeBuilder {
+        private final TestStep previousStep;
+
+        private StepMergeBuilder(TestStep step) {
+            this.previousStep = step;
+        }
+
+        public TestStep into(TestStep nextStep) {
+            TestStep mergedStep = nextStep.addChildStep(previousStep);
+            if (nextStep.getResult() == SKIPPED && (previousStep.getResult() == ERROR || previousStep.getResult() == FAILURE) ) {
+                nextStep.setResult(UNDEFINED);
+            }
+            mergedStep.setResult(merge(nextStep.getResult()).with(previousStep.getResult()));
+            return mergedStep;
+        }
+
+        private StepResultMergeStragegy merge(TestResult nextStepResult) {
+            return MergeStepResultStrategy.whenNextStepResultis(nextStepResult);
+        }
+    }
+
     public class TitleBuilder {
         private final boolean qualified;
         private final TestOutcome testOutcome;
@@ -976,8 +1043,6 @@ public class TestOutcome {
         } else {
             TestStep currentStepGroup = groupStack.peek();
             return lastStepIn(currentStepGroup.getChildren());
-//            Optional<TestStep> lastUnfinishedChild = lastUnfinishedStepIn(currentStepGroup.getChildren());
-//            return lastUnfinishedChild.or(currentStepGroup);
         }
     }
 
@@ -1866,6 +1931,29 @@ public class TestOutcome {
                 }
             }
             return false;
+        }
+    }
+
+    public class StepReplacer {
+        List<TestStep> stepsToReplace;
+
+        public StepReplacer(List<TestStep> stepsToReplace) {
+            this.stepsToReplace = stepsToReplace;
+        }
+
+        public void with(TestStep mergedStep) {
+            removeSteps(stepsToReplace);
+            addStep(mergedStep);
+            renumberTestSteps();
+        }
+    }
+
+    private void removeSteps(List<TestStep> stepsToReplace) {
+        List<TestStep> currentTestSteps = ImmutableList.copyOf(testSteps);
+        for(TestStep testStep : currentTestSteps) {
+            if (stepsToReplace.contains(testStep)) {
+                testSteps.remove(testStep);
+            }
         }
     }
 }

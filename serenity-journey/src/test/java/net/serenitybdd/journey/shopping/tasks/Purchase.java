@@ -3,33 +3,26 @@ package net.serenitybdd.journey.shopping.tasks;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
 import net.thucydides.core.annotations.Step;
-import net.thucydides.core.steps.StepFactory;
 
+import static net.serenitybdd.screenplay.Tasks.instrumented;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * The role of a task is to simulate a high-level action performed by the user.
+ * It is common practice to add methods, e.g.
+ *
+ */
 public class Purchase implements Task {
 
     String purchasedItem;
     int cost;
     String currency;
 
-    static StepFactory stepFactory = new StepFactory();
-
     public static Purchase purchased() {return instrumented(Purchase.class);}
-
-    private static Purchase instrumented(Class<Purchase> purchaseClass) {
-        return stepFactory.getUniqueStepLibraryFor(purchaseClass);
-    }
-
     public static Purchase purchase() {return instrumented(Purchase.class);}
 
     public Purchase anApple() {
         this.purchasedItem = "an apple";
-        return this;
-    }
-
-    private Purchase forItem(String item) {
-        this.purchasedItem = item;
         return this;
     }
 
@@ -46,6 +39,9 @@ public class Purchase implements Task {
 
     public Purchase thatCosts(int cost) {
         this.cost = cost;
+        if (cost < 0) {
+            throw new IllegalArgumentException("Cost cannot be negative");
+        }
         return this;
     }
 

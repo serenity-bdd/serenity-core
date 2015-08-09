@@ -2,7 +2,9 @@ package net.thucydides.core.steps;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -82,7 +84,7 @@ public class StepEventBus {
      * place the listener class on the classpath and it will be detected automatically.
      */
     public StepEventBus registerListener(final StepListener listener) {
-        if (!registeredListeners.contains(listener)) {
+        if (!Iterables.any(registeredListeners, Predicates.instanceOf(listener.getClass()))) {
             registeredListeners.add(listener);
             if (BaseStepListener.class.isAssignableFrom(listener.getClass())) {
                 baseStepListener = (BaseStepListener) listener;

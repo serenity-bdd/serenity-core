@@ -583,4 +583,8 @@ public class StepEventBus {
     public void mergePreviousStep() {
         baseStepListener.mergeLast(2).steps();
     }
+
+    public void updateOverallResults() {
+        baseStepListener.updateOverallResults();
+    }
 }

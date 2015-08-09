@@ -128,6 +128,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return getCurrentTestOutcome().getStepCount();
     }
 
+    public void updateOverallResults() {
+        getCurrentTestOutcome().updateOverallResults();
+    }
+
     public class StepMerger {
 
         final int maxStepsToMerge;

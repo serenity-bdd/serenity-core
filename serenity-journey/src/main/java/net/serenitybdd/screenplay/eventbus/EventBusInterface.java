@@ -22,4 +22,8 @@ public class EventBusInterface {
     public void mergePreviousStep() {
         StepEventBus.getEventBus().mergePreviousStep();
     }
+
+    public void updateOverallResult() {
+        StepEventBus.getEventBus().updateOverallResults();
+    }
 }

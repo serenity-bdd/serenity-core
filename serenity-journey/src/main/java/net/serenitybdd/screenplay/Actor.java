@@ -39,10 +39,12 @@ public class Actor implements PerformsTasks {
             if (anOutOfStepErrorOccurred()) {
                 eventBusInterface.mergePreviousStep();
             }
-
         } catch (Throwable e) {
             eventBusInterface.reportStepFailureFor(todo, e);
+        } finally {
+            eventBusInterface.updateOverallResult();
         }
+
     }
 
 

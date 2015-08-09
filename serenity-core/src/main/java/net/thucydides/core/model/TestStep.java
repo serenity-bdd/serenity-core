@@ -1,5 +1,6 @@
 package net.thucydides.core.model;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.rest.RestQuery;
@@ -91,6 +92,14 @@ public class TestStep {
 
     public void recordRestQuery(RestQuery restQuery) {
         this.restQuery = restQuery;
+    }
+
+    public void updateOverallResult() {
+        if (result != null) {
+            if (getResultFromChildren().overrides(result)) {
+                result = null;
+            }
+        }
     }
 
     public static class TestStepBuilder {

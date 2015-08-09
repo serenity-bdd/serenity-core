@@ -606,6 +606,21 @@ public class TestOutcome {
         return new GetLastStepBuilder(maxCount);
     }
 
+    public void updateOverallResults() {
+        updateOverallResultsFor(testSteps);
+    }
+
+    private void updateOverallResultsFor(List<TestStep> testSteps) {
+        for(TestStep testStep : testSteps) {
+            updateOverallResultsFor(testStep.getChildren());
+            updateOverallResultsFor(testStep);
+        }
+    }
+
+    private void updateOverallResultsFor(TestStep testStep) {
+        testStep.updateOverallResult();
+    }
+
     private class GetLastStepBuilder {
 
         int maxCount;

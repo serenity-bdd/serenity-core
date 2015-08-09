@@ -25,19 +25,19 @@ public class DanaGoesShopping {
                 purchased.aPear().thatCosts(5).dollars());
     }
 
-    // Expected to fail
-    @Test
-    public void shouldBeAbleToPurchaseAnItemForFree() {
-        givenThat(dana).attemtpsTo(purchase().anApple().thatCosts(0).dollars(), // Will fail
-                purchase().aPear().thatCosts(5).dollars());  // Should be skipped
-    }
-
-    // Expected to fail with an error
-    @Test
-    public void shouldBeAbleToPurchaseAnItemWithANegativeAmount() {
-        givenThat(dana).attemtpsTo(purchase().anApple().thatCosts(-10).dollars(), // Will fail with an error
-                                   purchase().aPear().thatCosts(5).dollars());  // Should be skipped
-    }
+//    // Expected to fail
+//    @Test
+//    public void shouldBeAbleToPurchaseAnItemForFree() {
+//        givenThat(dana).attemtpsTo(purchase().anApple().thatCosts(0).dollars(), // Will fail
+//                purchase().aPear().thatCosts(5).dollars());  // Should be skipped
+//    }
+//
+//    // Expected to fail with an error
+//    @Test
+//    public void shouldBeAbleToPurchaseAnItemWithANegativeAmount() {
+//        givenThat(dana).attemtpsTo(purchase().anApple().thatCosts(-10).dollars(), // Will fail with an error
+//                                   purchase().aPear().thatCosts(5).dollars());  // Should be skipped
+//    }
 
 }
 

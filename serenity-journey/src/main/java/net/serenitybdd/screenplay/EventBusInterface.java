@@ -1,7 +1,5 @@
-package net.serenitybdd.screenplay.eventbus;
+package net.serenitybdd.screenplay;
 
-import net.serenitybdd.screenplay.Consequence;
-import net.serenitybdd.screenplay.Task;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepFailure;

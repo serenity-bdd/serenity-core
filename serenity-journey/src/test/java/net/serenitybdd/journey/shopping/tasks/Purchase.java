@@ -24,6 +24,7 @@ public class Purchase implements Task {
 
     public static Purchase purchased() {return instrumented(Purchase.class);}
     public static Purchase purchase() {return instrumented(Purchase.class);}
+    public static Purchase andPurchased() {return instrumented(Purchase.class);}
 
     @Step("Given {0} has purchased #purchasedItem for #cost #currency")
     public void performAs(Actor actor) {

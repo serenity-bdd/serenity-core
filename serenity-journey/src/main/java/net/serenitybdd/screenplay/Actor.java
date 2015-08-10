@@ -1,8 +1,5 @@
 package net.serenitybdd.screenplay;
 
-import net.serenitybdd.screenplay.eventbus.EventBusInterface;
-import net.thucydides.core.annotations.Step;
-
 public class Actor implements PerformsTasks {
 
     private final String name;
@@ -19,6 +16,10 @@ public class Actor implements PerformsTasks {
 
     public void start() {
         taskTally.reset();
+    }
+
+    public static Actor named(String name) {
+        return new Actor(name);
     }
 
     @SafeVarargs
@@ -49,35 +50,25 @@ public class Actor implements PerformsTasks {
 
     }
 
-
-    private boolean anOutOfStepErrorOccurred() {
-        return eventBusInterface.getStepCount() > taskTally.getPerformedTaskCount();
-    }
-
-
-    @Step("Then #this should see that {0}")
-    public <ANSWER> ANSWER seesThat(Question<ANSWER> question) {
-        return question.answeredBy(this);
-    }
-
     @SafeVarargs
-    public final <T> void shouldSee(Consequence<T>... consequences) {
+    public final <T> void should(Consequence<T>... consequences) {
         for (Consequence<T> consequence : consequences) {
             check(consequence);
         }
     }
 
+    private boolean anOutOfStepErrorOccurred() {
+        return eventBusInterface.getStepCount() > taskTally.getPerformedTaskCount();
+    }
+
     private <T> void check(Consequence<T> consequence) {
         try {
-            eventBusInterface.reportNewStepWithTitle(consequence.shortDescription());
-            consequence.evaluate();
+            eventBusInterface.reportNewStepWithTitle(consequence.toString());
+            consequence.evaluateFor(this);
             eventBusInterface.reportStepFinished();
         } catch (Throwable e) {
             eventBusInterface.reportStepFailureFor(consequence, e);
         }
     }
 
-    public static Actor named(String name) {
-        return new Actor(name);
-    }
 }

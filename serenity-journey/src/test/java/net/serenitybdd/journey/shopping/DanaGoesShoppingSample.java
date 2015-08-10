@@ -9,10 +9,14 @@ import net.thucydides.core.annotations.Steps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static net.serenitybdd.journey.shopping.questions.TotalCost.theTotalCost;
+import static net.serenitybdd.journey.shopping.questions.TotalCostIncludingDelivery.theTotalCostIncludingDelivery;
+import static net.serenitybdd.journey.shopping.tasks.Purchase.andPurchased;
 import static net.serenitybdd.journey.shopping.tasks.Purchase.purchase;
 import static net.serenitybdd.journey.shopping.tasks.Purchase.purchased;
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 @RunWith(SerenityRunner.class)
 public class DanaGoesShoppingSample {
@@ -25,20 +29,18 @@ public class DanaGoesShoppingSample {
     @Steps
     HaveItemsDelivered haveThemDelivered;
 
-    @Steps
-    TotalCost theTotal;
-
     @Test
     public void shouldBeAbleToPurchaseSomeItemsWithDelivery() {
         givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
-                purchased().aPear().thatCosts(5).dollars());
+                            andPurchased().aPear().thatCosts(5).dollars());
 
         when(dana).attemptsTo(haveThemDelivered);
 
-        then(dana).shouldSee(
-                that(theTotal.cost(), equalTo(15)).about("the total cost"),
-                that(theTotal.costIncludingDelivery(), equalTo(20)).about("the total cost including delivery"));
+        then(dana).should(seeThat(theTotalCost(), equalTo(15)),
+                          seeThat(theTotalCostIncludingDelivery(), greaterThanOrEqualTo(20)));
     }
+
+
 
     @Test
     public void shouldBeAbleToPurchaseSomeItems() {

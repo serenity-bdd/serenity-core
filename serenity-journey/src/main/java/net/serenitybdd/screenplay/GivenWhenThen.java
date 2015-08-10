@@ -18,7 +18,7 @@ public class GivenWhenThen {
         assertThat(actual, matcher);
     }
 
-    public static <T> Consequence<T> that(T actual, Matcher<? super T> expected) {
+    public static <T> Consequence<T> seeThat(Question<T> actual, Matcher<? super T> expected) {
         return new Consequence(actual, expected);
     }
 }

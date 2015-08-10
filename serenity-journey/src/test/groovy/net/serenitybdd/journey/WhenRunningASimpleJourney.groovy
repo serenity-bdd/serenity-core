@@ -93,8 +93,8 @@ class WhenRunningASimpleJourney extends Specification{
                     ["Given Dana has purchased an apple for 10 dollars",
                      "Given Dana has purchased a pear for 5 dollars",
                      "And Dana has them delivered",
-                     "Then the total cost should be <15>",
-                     "Then the total cost including delivery should be <20>"]
+                     "Then total cost should be <15>",
+                     "Then total cost including delivery should be a value equal to or greater than <20>"]
         and:
             outcome.testSteps[3].result == FAILURE && outcome.testSteps[4].result == SUCCESS
 

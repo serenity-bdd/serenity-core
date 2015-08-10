@@ -56,7 +56,7 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
 
         File sourceDirectory = directoryInClasspathCalled("/test-outcomes/containing-nostep-errors");
         reporter.generateReportsForTestResultsFrom(sourceDirectory);
-        driver = new ChromeDriver();//new FirefoxDriver();// PhantomJSDriver();
+        driver = new ChromeDriver();
     }
 
     @AfterClass

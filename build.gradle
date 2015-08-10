@@ -14,7 +14,6 @@ buildscript {
 import org.ajoberstar.gradle.git.release.opinion.Strategies
 import org.ajoberstar.grgit.Grgit
 
-//apply plugin: 'org.ajoberstar.release-base'
 apply plugin: 'org.ajoberstar.release-opinion'
 
 task wrapper(type: Wrapper) {

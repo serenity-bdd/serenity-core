@@ -704,11 +704,11 @@ public enum ThucydidesSystemProperty {
 
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(ThucydidesSystemProperty.class);
 
-    private ThucydidesSystemProperty(final String propertyName) {
+    ThucydidesSystemProperty(final String propertyName) {
         this.propertyName = propertyName;
     }
 
-    private ThucydidesSystemProperty() {
+    ThucydidesSystemProperty() {
         this.propertyName = name().replaceAll("_",".").toLowerCase();
     }
 

@@ -1,7 +1,8 @@
 package net.serenitybdd.core.di;
 
-import net.serenitybdd.core.di.DependencyInjector;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.TestContextManager;
 
 public class SpringDependencyInjector implements DependencyInjector {
@@ -25,7 +26,8 @@ public class SpringDependencyInjector implements DependencyInjector {
     public void reset() {}
 
     private boolean annotatedWithSpringContext(Object target) {
-        return (target.getClass().getAnnotation(ContextConfiguration.class) != null);
+
+        return (AnnotationUtils.findAnnotation(target.getClass(), ContextConfiguration.class) != null) || (AnnotationUtils.findAnnotation(target.getClass(), ContextHierarchy.class) != null);
     }
 
     private boolean springIsOnClasspath() {

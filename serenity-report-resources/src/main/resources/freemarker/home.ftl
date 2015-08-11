@@ -29,7 +29,7 @@
                 ['Pending', ${testOutcomes.proportionOf("automated").withResult("pending")}],
                 <#if (pendingManualTests)>['Pending (manual)', ${testOutcomes.proportionOf("manual").withResult("pending")}],</#if>
                 ['Ignored', ${testOutcomes.proportionOf("automated").withResult("ignored")}],
-                <#if (pendingManualTests)>['Ignored (manual)', ${testOutcomes.proportionOf("manual").withResult("ignored")}],</#if>
+                <#if (ignoredManualTests)>['Ignored (manual)', ${testOutcomes.proportionOf("manual").withResult("ignored")}],</#if>
                 ['Failing', ${testOutcomes.proportionOf("automated").withResult("failure")}],
                 <#if (failingManualTests)>['Failing (manual)', ${testOutcomes.proportionOf("manual").withResult("failure")}],</#if>
                 ['Errors',  ${testOutcomes.proportionOf("automated").withResult("error")}]
@@ -88,7 +88,7 @@
                 ['Pending', ${testOutcomes.proportionalStepsOf("automated").withResult("pending")}],
                 <#if (pendingManualTests)>['Pending (manual)', ${testOutcomes.proportionalStepsOf("manual").withResult("pending")}],</#if>
                 ['Ignored', ${testOutcomes.proportionalStepsOf("automated").withResult("ignored")}],
-                <#if (ignoredManualTests)>['Pending (manual)', ${testOutcomes.proportionalStepsOf("manual").withResult("ignored")}],</#if>
+                <#if (ignoredManualTests)>['Ignored (manual)', ${testOutcomes.proportionalStepsOf("manual").withResult("ignored")}],</#if>
                 ['Failing', ${testOutcomes.proportionalStepsOf("automated").withResult("failure")}],
                 <#if (failingManualTests)>['Failing (manual)', ${testOutcomes.proportionalStepsOf("manual").withResult("failure")}],</#if>
                 ['Errors', ${testOutcomes.proportionalStepsOf("automated").withResult("error")}]
@@ -191,7 +191,7 @@
 <#else>
     <#assign resultsContext = '> ' + testOutcomes.label>
     <#if (currentTagType! != '')>
-        <#assign pageTitle = inflection.of(currentTagType!"").asATitle() + ': ' +  inflection.of(testOutcomes.label).asATitle() >
+        <#assign pageTitle = "<i class='fa fa-tags'></i> " + inflection.of(currentTagType!"").asATitle() + ': ' +  inflection.of(testOutcomes.label).asATitle() >
     <#else>
         <#assign pageTitle = inflection.of(testOutcomes.label).asATitle() >
     </#if>
@@ -199,7 +199,22 @@
 <div id="contenttop">
 <#--<div class="leftbg"></div>-->
     <div class="middlebg">
-        <span class="bluetext"><a href="index.html" class="bluetext">Home</a> ${resultsContext}</span>
+        <span class="breadcrumbs"><a href="index.html">Home</a>
+        <#if (breadcrumbs?has_content)>
+            <#list breadcrumbs as breadcrumb>
+                <#assign breadcrumbReport = absoluteReportName.forRequirementOrTag(breadcrumb) />
+                <#assign breadcrumbTitle = inflection.of(breadcrumb.shortName).asATitle() >
+                > <a href="${breadcrumbReport}">${formatter.truncatedHtmlCompatible(breadcrumbTitle,40)}</a>
+            </#list>
+        <#else>
+            <#if currentTagType?has_content>
+                > ${inflection.of(currentTagType!"").asATitle()}
+            </#if>
+        </#if>
+            <#if testOutcomes.label?has_content>
+                > ${formatter.truncatedHtmlCompatible(inflection.of(testOutcomes.label).asATitle(),80)}
+            </#if>
+        </span>
     </div>
     <div class="rightbg"></div>
 </div>
@@ -214,6 +229,7 @@
 <div id="results-dashboard">
 <div class="middlb">
 <div class="table">
+
 <h2>${pageTitle}</h2>
 <table class='overview'>
     <tr>
@@ -476,7 +492,8 @@
             </tr>
             <#foreach tag in tags>
                 <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
-                <#assign tagReport = reportName.forTag(tag) >
+                <#assign tagLabel = inflection.of(tag.name).asATitle() >
+                <#assign tagReport = reportName.forRequirementOrTag(tag) >
                 <#assign outcomesForTag = testOutcomes.withTag(tag) >
                 <#assign count = outcomesForTag.total>
                 <#assign testCountLabel = inflection.of(count).times("test").inPluralForm() >
@@ -503,7 +520,7 @@
                     <td class="bluetext" class="tag-title">
                         <span class="${outcomesForTag.result}-text ellipsis">
                             <#if testOutcomes.label == tag.name>
-                                <a href="${tagReport}" title="${tagTitle}" class="currentTag">${tagTitle}</a>
+                                <a href="${tagReport}" title="${tagLabel}" class="currentTag">${tagTitle}</a>
                             <#else>
                                 <a href="${tagReport}" title="${tagTitle}">${tagTitle}</a>
                             </#if>

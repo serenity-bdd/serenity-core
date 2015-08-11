@@ -62,14 +62,14 @@
 .nivo-caption {
 	position:absolute;
 	left:0px;
-	bottom:0px;
+	top:0px;
 	background:#000;
 	color:#fff;
 	width:100%;
 	z-index:8;
 	padding: 5px 10px;
-	opacity: 0.8;
-	overflow: hidden;
+	opacity: 0.5;
+	overflow: auto;
 	display: none;
 	-moz-opacity: 0.8;
 	filter:alpha(opacity=8);

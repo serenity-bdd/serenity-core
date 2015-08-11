@@ -1,89 +1,104 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Thucydides Test Site</title>
-<script type="text/javascript">
-<!--
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Thucydides Test Site</title>
+    <script type="text/javascript">
+        <!--
 
-    function initFields() {
-        document.demo.lastname.focus()
-        hide('city')
-        displayFieldsAfterDelay();
-    }
+        function initFields() {
+            document.demo.lastname.focus()
+            hide('city')
+            hide('country')
+            hide('slow-loader')
+            displayFieldsAfterDelay();
+        }
 
-    function toggle_visibility(id) {
-       var e = document.getElementById(id);
-       if(e.style.display == 'block')
-          e.style.display = 'none';
-       else
-          e.style.display = 'block';
-    }
+        function toggle_visibility(id) {
+            var e = document.getElementById(id);
+            if(e.style.display == 'block')
+                e.style.display = 'none';
+            else
+                e.style.display = 'block';
+        }
 
-    function hide(id) {
-       var e = document.getElementById(id);
-       e.style.display = 'none';
-    }
+        function hide(id) {
+            var e = document.getElementById(id);
+            e.style.display = 'none';
+        }
 
-    function show(id) {
-        var e = document.getElementById(id);
-       e.style.display = 'block';
-    }
-    function activate(id) {
-       var e = document.getElementById(id);
-       e.disabled = false;
-    }
-    function deactivate(id) {
-       var e = document.getElementById(id);
-       e.disabled = true;
-    }
+        function show(id) {
+            var e = document.getElementById(id);
+            e.style.display = 'block';
+        }
+        function activate(id) {
+            var e = document.getElementById(id);
+            e.disabled = false;
+        }
+        function deactivate(id) {
+            var e = document.getElementById(id);
+            e.disabled = true;
+        }
 
-    function displayCityField() {
-        show('city')
-    }
-    function hideLocationTitle() {
-        hide('placetitle')
-    }
+        function displayCityField() {
+            show('city')
+        }
 
-    function activateDisabledButton() {
-        activate('buttonThatIsInitiallyDisabled')
-    }
-    function deactivateEnabledButton() {
-        deactivate('buttonThatIsInitiallyEnabled')
-    }
+        function displayCountryField() {
+            show('country')
+        }
+        function displaySlowLoaderField() {
+            show('slow-loader')
+        }
+        function displayVerySlowLoadingField() {
+            show('very-slow-loader')
+        }
 
-    function removeDisappearingText() {
-        document.getElementById('dissapearingtextcell').textContent = '';
+        function hideLocationTitle() {
+            hide('placetitle')
+        }
 
-    }
-    function loadElementsSelect() {
-        var elementSelect = document.demo.elements.options;
-        elementSelect[0] = new Option('Earth',1);
-        elementSelect[1] = new Option('Air',2);
-        elementSelect[2] = new Option('Fire',3);
-        elementSelect[3] = new Option('Water',4);
-    }
-    
-    function displayFieldsAfterDelay() {
-        setTimeout("loadElementsSelect()", 500);
-        setTimeout("displayCityField()", 500);
-        setTimeout("hideLocationTitle()", 500);
-        setTimeout("activateDisabledButton()", 500);
-        setTimeout("deactivateEnabledButton()", 500);
-        setTimeout("removeDisappearingText()", 500);
+        function activateDisabledButton() {
+            activate('buttonThatIsInitiallyDisabled')
+        }
+        function deactivateEnabledButton() {
+            deactivate('buttonThatIsInitiallyEnabled')
+        }
 
-    }
+        function removeDisappearingText() {
+            document.getElementById('dissapearingtextcell').textContent = '';
 
-    function focusOn(field) {
-         document.getElementById('focusmessage').textContent = '';
-    }
+        }
+        function loadElementsSelect() {
+            var elementSelect = document.demo.elements.options;
+            elementSelect[0] = new Option('Earth',1);
+            elementSelect[1] = new Option('Air',2);
+            elementSelect[2] = new Option('Fire',3);
+            elementSelect[3] = new Option('Water',4);
+        }
 
-    function focusOff(field) {
-        document.getElementById('focusmessage').textContent = 'focus left ' + field;
-    }
+        function displayFieldsAfterDelay() {
+            setTimeout("loadElementsSelect()", 1500);
+            setTimeout("displayCityField()", 1500);
+            setTimeout("displayCountryField()", 1500);
+            setTimeout("displaySlowLoaderField()", 4000);
+            setTimeout("displayVerySlowLoadingField()", 60000);
+            setTimeout("hideLocationTitle()", 2000);
+            setTimeout("activateDisabledButton()", 2000);
+            setTimeout("deactivateEnabledButton()", 2000);
+            setTimeout("removeDisappearingText()", 2000);
+        }
 
-//-->
-</script>
+        function focusOn(field) {
+            document.getElementById('focusmessage').textContent = '';
+        }
+
+        function focusOff(field) {
+            document.getElementById('focusmessage').textContent = 'focus left ' + field;
+        }
+
+        //-->
+    </script>
 </head>
 <body onLoad="initFields()">
 <h2 id="visible">A visible title</h2>
@@ -98,9 +113,11 @@
     <input name="lastname" id="lastname"/>
     </p>
     <p>
-    <span style="display:none">Invisible text</span>
+        <span style="display:none">Invisible text</span>
     <h3 id="placetitle">Location</h3>
-    <input name="city" id="city"/>
+    <input name="city" id="city" value="Sydney" style="display:none" />
+    <input name="slow-loader" id="slow-loader" value="Slow to load" style="display:none" />
+    <input name="very-slow-loader" id="very-slow-loader" value="Slow to load" style="display:none" />
     <input name="state" id="state"/>
     <input name="country" id="country" value="Australia"/>
     <input ng-model="angularField" value="Model value" />
@@ -205,12 +222,12 @@
     </tr>
     </thead>
     <tbody>
-        <tr><td><table><tr><td><a href="#">Timothy</a></td><td><a href="#">Tim</a></td></tr></table>
-        </td><td>Brooke-Taylor</td><td>Red</td></tr>
-        <tr><td><table><tr><td><a href="#">Graeme</a></td><td><a href="#">Garry</a></td></tr></table>
-        </td><td>Garden</td><td>Green</td></tr>
-        <tr><td><table><tr><td><a href="#">William</a></td><td><a href="#">Bill</a></td></tr></table>
-        </td><td>Oddie</td><td>Blue</td></tr>
+    <tr><td><table><tr><td><a href="#">Timothy</a></td><td><a href="#">Tim</a></td></tr></table>
+    </td><td>Brooke-Taylor</td><td>Red</td></tr>
+    <tr><td><table><tr><td><a href="#">Graeme</a></td><td><a href="#">Garry</a></td></tr></table>
+    </td><td>Garden</td><td>Green</td></tr>
+    <tr><td><table><tr><td><a href="#">William</a></td><td><a href="#">Bill</a></td></tr></table>
+    </td><td>Oddie</td><td>Blue</td></tr>
     </tbody>
 </table>
 

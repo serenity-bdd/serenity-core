@@ -40,6 +40,7 @@ a:active {
 
 body {
     background-color: #f7f8f3;
+    color:#eeeadd;
 }
 
 .results-page {
@@ -244,8 +245,10 @@ h3.discreet-story-header {
 }
 .tag {
     display: block;
-    padding-top: 8px;
+    padding-top: 2px;
+    margin: 0 0 5px;
 }
+
 i.tag {
     color: red;
 }
@@ -288,6 +291,11 @@ i.tag {
 .caption
 {
     font-family:euphemia, verdana, sans-serif; font-size:14px; color: #0d78ae; padding-left: 25px; font-style: italic
+}
+
+.breadcrumbs
+{
+    font-family:euphemia, verdana, sans-serif; font-size:14px; color: #0d78ae;
 }
 
 .bluetext
@@ -1311,7 +1319,7 @@ table.coverage_data td {
 }
 
 .date-and-time {
-    float:right; padding: 0px;
+    float:right; padding: 0px; color:gray;
 }
 
 .embedded {
@@ -1436,7 +1444,7 @@ ul.second-level-requirements  {
 #slider {
     position:relative;
     width:1000px; /* Change this to your images width */
-    height:800px; /* Change this to your images height */
+    height:auto; /* Change this to your images height */
 }
 #slider img {
     position:absolute;
@@ -1465,4 +1473,42 @@ ul.second-level-requirements  {
 
 .modal-body p {
     word-wrap: break-word;
+    color: grey;
+}
+
+#results-dashboard {
+    color:grey;
+}
+
+.stacktrace {
+    color: grey;
+}
+
+.rest-content {
+    color: cornflowerblue;
+}
+
+#restModal .modal-content
+{
+    height:500px;
+    overflow:auto;
+}
+
+#stacktraceModal .modal-content
+{
+    height:500px;
+    overflow:auto;
+    color: grey;
+}
+
+.rest-query {
+    padding-left : 10px;
+}
+
+.parent-requirement-label {
+    color:#428bca;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 12pt;
+
+
 }

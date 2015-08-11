@@ -4,8 +4,25 @@ ext {
 }
 
 dependencies {
-    compile project(':core')
-    compile("biz.neustar:browsermob-proxy:2.0-beta-7") {
-        exclude module: "slf4j-jdk14"
-    }
+    compile project(':serenity-core')
+    compile('net.lightbody.bmp:browsermob-proxy:2.0.0') {
+     	exclude group: 'org.seleniumhq.selenium', module:'selenium-java'
+     	exclude group: 'org.seleniumhq.selenium', module:'selenium-server'
+     	exclude group: 'org.seleniumhq.selenium', module:'selenium-remote-driver'
+     	exclude group: 'org.seleniumhq.selenium', module:'selenium-api'
+     	exclude group: 'org.apache.httpcomponents', module:'httpclient'
+     	exclude group: 'org.apache.httpcomponents', module:'httpcore'
+     	exclude group: 'org.bouncycastle', module:'bcprov-jdk15on'
+     	exclude group: 'com.google.guava'
+     	exclude group: 'org.apache.httpcomponents', module:'httpmime'
+    	exclude group: 'com.fasterxml.jackson.core', module:'jackson-databind'
+    	exclude group: 'javax.validation', module:'validation-api'
+        exclude module: "slf4j-api"
+     	exclude group: 'org.eclipse.jetty', module:'jetty-http'
+     	exclude group: 'com.google.code.findbugs', module:'jsr305'
+     	exclude group: 'junit', module:'junit'
+     	exclude group: 'org.codehaus.plexus', module:'plexus-utils'
+     	exclude group: 'org.jsoup', module:'jsoup'
+     	exclude group: 'commons-io', module:'commons-io'
+	}
 }

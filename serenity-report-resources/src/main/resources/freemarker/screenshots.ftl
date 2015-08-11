@@ -67,8 +67,8 @@
 <div class="middlecontent">
     <div id="contenttop">
         <div class="middlebg">
-            <span class="bluetext">
-                <a href="index.html" class="bluetext">Home</a>
+            <span class="breadcrumbs">
+                <a href="index.html">Home</a>
             <#if (parentLink?has_content)>
                 > <a
                     href="${parentLink}">${formatter.truncatedHtmlCompatible(inflection.of(parentTitle).asATitle(),40)}</a>

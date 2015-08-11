@@ -8,6 +8,7 @@ import net.thucydides.core.guice.ThucydidesModule;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestStep;
+import net.thucydides.core.model.TestTag;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.junit.rules.DisableThucydidesHistoryRule;
@@ -105,6 +106,20 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     }
 
     @Test
+    public void tests_marked_as_manual_should_be_skipped_and_be_flagged_as_manual_tests() throws InitializationError {
+
+        SerenityRunner runner = new SerenityRunner(SamplePassingNonWebScenarioWithManualTests.class);
+        runner.run(new RunNotifier());
+
+        List<TestOutcome> executedSteps = runner.getTestOutcomes();
+        assertThat(inTheTesOutcomes(executedSteps).theResultFor("a_manual_test"), is(TestResult.PENDING));
+        assertThat(inTheTesOutcomes(executedSteps).theOutcomeFor("a_manual_test").isManual(), equalTo(true));
+        assertThat(inTheTesOutcomes(executedSteps).theOutcomeFor("a_manual_test").getTags(),
+                hasItem(TestTag.withName("Manual").andType("External Tests")));
+    }
+
+//
+    @Test
     public void tests_with_no_steps_should_be_marked_as_successful() throws InitializationError {
 
         SerenityRunner runner = new SerenityRunner(SamplePassingNonWebScenarioWithEmptyTests.class);
@@ -154,7 +169,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
         runner.run(new RunNotifier());
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();
-        TestOutcome testOutcome = executedScenarios.get(0);
+        TestOutcome testOutcome = testOutcomeWithTitle("Happy day scenario", executedScenarios);
 
         List<TestStep> steps = testOutcome.getTestSteps();
         assertThat(steps.size(), is(6));
@@ -210,7 +225,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();
         assertThat(executedScenarios.size(), is(2));
-        TestOutcome testOutcome = executedScenarios.get(0);
+        TestOutcome testOutcome = testOutcomeWithTitle("Happy day scenario", executedScenarios);
         TestOutcome failingTestOutcome = executedScenarios.get(1);
         TestStep succeeds = testOutcome.getTestSteps().get(0);
         TestStep ignored = testOutcome.getTestSteps().get(1);
@@ -233,7 +248,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();
-        TestOutcome testOutcome = executedScenarios.get(0);
+        TestOutcome testOutcome = testOutcomeWithTitle("Happy day scenario", executedScenarios);
 
         List<TestStep> steps = testOutcome.getTestSteps();
         assertThat(steps.get(0).getScreenshots().size(), is(0));
@@ -250,11 +265,46 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();
 
-        TestOutcome testOutcome = executedScenarios.get(0);
+        TestOutcome testOutcome = testOutcomeWithTitle("Happy day scenario", executedScenarios);
         TestStep firstStep = testOutcome.getTestSteps().get(0);
 
         assertThat(firstStep.getDescription(), containsString("Step with a parameter:"));
         assertThat(firstStep.getDescription(), containsString("proportionOf"));
+    }
+
+    @Test
+    public void should_not_fail_test_if_an_exception_is_expected() throws InitializationError {
+
+        SerenityRunner runner = new SerenityRunner(NonWebTestScenarioWithParameterizedSteps.class);
+        runner.run(new RunNotifier());
+
+        List<TestOutcome> executedScenarios = runner.getTestOutcomes();
+
+        TestOutcome testOutcome = testOutcomeWithTitle("Should throw correct exception", executedScenarios);
+        TestStep firstStep = testOutcome.getTestSteps().get(0);
+        assertThat(firstStep.getResult(), is(TestResult.SUCCESS));
+    }
+
+    @Test
+    public void should_report_nested_class_parameters_correctly() throws InitializationError {
+
+        SerenityRunner runner = new SerenityRunner(NonWebTestScenarioWithParameterizedSteps.class);
+        runner.run(new RunNotifier());
+
+        List<TestOutcome> executedScenarios = runner.getTestOutcomes();
+
+        TestOutcome testOutcome = testOutcomeWithTitle("Should handle nested object parameters", executedScenarios);
+        TestStep firstStep = testOutcome.getTestSteps().get(0);
+        assertThat(firstStep.getDescription(), is("a step with an object parameter called <span class='step-parameter'>$100.00</span>"));
+    }
+
+    private TestOutcome testOutcomeWithTitle(String title, List<TestOutcome> testOutcomes) {
+        for(TestOutcome testOutcome : testOutcomes) {
+            if (testOutcome.getTitle().startsWith(title)) {
+                return testOutcome;
+            }
+        };
+        return null;
     }
 
     @Test
@@ -265,12 +315,14 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
         List<TestOutcome> executedScenarios = runner.getTestOutcomes();
 
-        TestOutcome testOutcome = executedScenarios.get(0);
+        TestOutcome testOutcome = testOutcomeWithTitle("Happy day scenario", executedScenarios);
         TestStep secondStep = testOutcome.getTestSteps().get(1);
 
         assertThat(secondStep.getDescription(), containsString("Step with two parameters"));
         assertThat(secondStep.getDescription(), containsString("proportionOf, 2"));
     }
+
+
 
 
     class TestableSerenityRunnerSample extends SerenityRunner {

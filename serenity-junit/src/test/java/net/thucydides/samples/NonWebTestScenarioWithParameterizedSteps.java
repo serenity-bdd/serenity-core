@@ -1,11 +1,12 @@
 package net.thucydides.samples;
 
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Steps;
-import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.NoSuchElementException;
 
-@RunWith(ThucydidesRunner.class)
+@RunWith(SerenityRunner.class)
 public class NonWebTestScenarioWithParameterizedSteps {
     
     @Steps
@@ -19,5 +20,23 @@ public class NonWebTestScenarioWithParameterizedSteps {
         steps.stepThatIsIgnored();
         steps.stepThatIsPending();
         steps.anotherStepThatSucceeds();
-    }    
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_throw_correct_exception() {
+        steps.throw_exception();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void should_throw_element_not_found() {
+        steps.throw_element_not_found_exception();
+    }
+
+
+    @Test
+    public void should_handle_nested_object_parameters() {
+        steps.a_customized_step_with_object_parameters(new SampleNonWebSteps.CurrencyIn$(100));
+    }
+
+
 }

@@ -316,7 +316,7 @@
                                         <table id="release-test-results-table">
                                             <thead>
                                             <tr>
-                                                <th width="30px" class="test-results-heading">&nbsp;</th>
+                                                <th width="50px" class="test-results-heading">&nbsp;</th>
                                                 <th class="test-results-heading">Tests</th>
                                                 <th width="70px" class="test-results-heading">Steps</th>
                                                 <#if reportOptions.showStepDetails>
@@ -364,7 +364,11 @@
                                                     </#if>
 
                                                 <tr class="test-${testOutcome.result}">
-                                                    <td><img src="images/${testrun_outcome_icon}" title="${testOutcome.result}" class="summary-icon"/><span style="display:none">${testOutcome.result}</span></td>
+                                                    <td>
+                                                        <img src="images/${testrun_outcome_icon}" title="${testOutcome.result}" class="summary-icon"/>
+                                                        <span style="display:none">${testOutcome.result}</span>
+                                                        <#if (testOutcome.manual)><img src="images/worker.png" title="Manual test"/></#if>
+                                                    </td>
                                                     <td class="${testOutcome.result}-text"><a href="${relativeLink!}${testOutcome.reportName}.html">${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}</a></td>
 
                                                     <td class="lightgreentext">${testOutcome.nestedStepCount}</td>

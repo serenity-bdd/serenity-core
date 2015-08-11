@@ -27,11 +27,14 @@
 <div class="middlecontent">
     <div id="contenttop">
         <div class="middlebg">
-        <span class="bluetext">
-            <a href="index.html" class="bluetext">Home</a>
-        <#if (parentLink?has_content)>
-            > <a href="${parentLink}">${formatter.truncatedHtmlCompatible(inflection.of(parentTitle).asATitle(),40)}</a>
-        </#if>
+        <span class="breadcrumbs">
+            <a href="index.html" class="breadcrumbs">Home</a>
+
+        <#list breadcrumbs as breadcrumb>
+            <#assign breadcrumbReport = absoluteReportName.forRequirement(breadcrumb) />
+            <#assign breadcrumbTitle = inflection.of(breadcrumb.shortName).asATitle() >
+            > <a href="${breadcrumbReport}">${formatter.truncatedHtmlCompatible(breadcrumbTitle,40)}</a>
+        </#list>
             > ${formatter.truncatedHtmlCompatible(testOutcome.title,80)}
         </span>
         </div>
@@ -70,7 +73,6 @@
                                 <h3 class="discreet-story-header">
                                     <i class="fa fa-comments-o"></i>
                                     <span class="story-header-title">${parentTitle} ${issueNumber}</span>
-                                    <span class="badge tag-badge">${parentType}</span>
                                 </h3>
 
                                 <div class="discreet-requirement-narrative-title">
@@ -84,7 +86,6 @@
                                 <h3 class="discreet-story-header">
                                     <i class="fa fa-comments-o"></i>
                                     <span class="story-header-title">${parentTitle}</span>
-                                    <span class="badge tag-badge">${parentType}</span>
                                 </h3>
 
                                 <div class="discreet-requirement-narrative-title">
@@ -103,7 +104,7 @@
                         </td>
                         <td valign="top">
                         <#list filteredTags as tag>
-                            <#assign tagReport = absoluteReportName.forTag(tag) />
+                            <#assign tagReport = absoluteReportName.forRequirementOrTag(tag) />
                             <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
                             <p class="tag">
                                 <span class="badge tag-badge">
@@ -134,7 +135,7 @@
                                     <span class="related-issue-title">${testOutcome.formattedIssues}</span>
                             </span>
                         </span>
-                        <#if (testOutcome.driver)??>
+                        <#if (testOutcome.driver)?? && (!testOutcome.manual)>
                             <span style="float:right"><img src="images/driver-${testOutcome.driver}.png" height="20"
                                                            alt="${testOutcome.driver}"
                                                            title="${testOutcome.driver}"/></span>
@@ -188,7 +189,8 @@
                     <#list dataSet.rows as row>
                     <tr>
                         <#list row.values as value>
-                            <td class="test-${row.result}"><a href="#${rowIndex}">${formatter.htmlCompatible(value)}</a></td>
+                            <td class="test-${row.result}"><a href="#${rowIndex}">${formatter.htmlCompatible(value)}</a>
+                            </td>
                         </#list>
                     </tr>
                         <#assign rowIndex = rowIndex + 1 >
@@ -252,7 +254,8 @@
 
             <#macro stacktrace(cause) >
                 <div><!-- Stack trace -->
-                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#stacktraceModal">
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                            data-target="#stacktraceModal">
                         View stack trace
                     </button>
                 </div>
@@ -266,10 +269,11 @@
                                         aria-label="Close"><span aria-hidden="true">&times;</span>
                                 </button>
                                 <h4 class="modal-title" id="stacktraceModalLabel">
-                                    ${cause.errorType} :  ${cause.message}
+                                ${cause.errorType}
                                 </h4>
                             </div>
                             <div class="modal-body">
+                                <#if (cause.message)??><h4>${cause.message}</h4></#if>
                                 <#list cause.stackTrace as element>
                                 ${element.className}.${element.methodName}(${element.fileName}
                                     :${element.lineNumber})
@@ -283,8 +287,50 @@
                         </div>
                     </div>
                 </div>
-
             </#macro>
+
+            <#macro restQueryData(restQuery, number) >
+                <span>
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                            data-target="#restModal-${number}">
+                        REST Query
+                    </button>
+                </span>
+                <!-- Modal -->
+                <div class="modal fade" id="restModal-${number}" tabindex="-1" role="dialog"
+                     aria-labelledby="restModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                        aria-label="Close"><span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="restModalLabel">
+                                ${restQuery.formattedQuery}
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Status code: ${restQuery.statusCode}</p>
+                                <#if restQuery.contentType?has_content>
+                                    <p>Content Type: ${restQuery.contentType}</p>
+                                </#if>
+                                <#if restQuery.content?has_content>
+                                    <h5>Content Body</h5>
+                                    <pre>${(formatter.renderXML(restQuery.content))!}</pre>
+                                </#if>
+                                <h5>Response Body</h5>
+                                <pre>${formatter.renderXML(restQuery.responseBody)}</pre>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </#macro>
+
 
             <#macro step_details(step, step_number, level)>
                 <#if step.result == "FAILURE">
@@ -338,6 +384,12 @@
                             <#if showAccordion>
                             </a>
                             </#if>
+
+                            <#if step.hasRestQuery()>
+                                <span class="rest-query">
+                                    <@restQueryData restQuery=step.restQuery number=step.number />
+                                </span>
+                            </#if>
                         </div>
                     </td>
                     <#if testOutcome.hasScreenshots()>
@@ -357,7 +409,7 @@
                     <td width="100"><span class="${step_class_root}-step">${step.result}</span></td>
                     <td width="100"><span class="${step_class_root}-step">${step.durationInSeconds}s</span></td>
                 </tr>
-                <#if (step.errorMessage?has_content) && !step.isAGroup()>
+                <#if (step.errorMessage?has_content) && !step.hasNestedErrors()>
                     <tr class="test-${step.result}">
                         <td width="40">&nbsp</td>
                         <#if step.errorMessage?has_content>
@@ -403,7 +455,7 @@
                             <#if (testOutcome.errorMessage)??>
                                 <span class="error-message"
                                       title="${formatter.htmlAttributeCompatible(testOutcome.errorMessage)}">${testOutcome.errorMessage}</span>
-                                    <@stacktrace cause=testOutcome.nestedTestFailureCause />
+                                <@stacktrace cause=testOutcome.nestedTestFailureCause />
                             </#if>
                         </td>
                     </tr>

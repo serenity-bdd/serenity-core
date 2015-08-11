@@ -4,8 +4,37 @@ ext {
 }
 
 dependencies {
-    compile project(':core')
+    compile project(':serenity-core')
+	  compile project(':serenity-junit')
     compile ("org.springframework:spring-test:${springVersion}")
     compile ("org.springframework:spring-context:${springVersion}")
     compile ("org.springframework:spring-context-support:${springVersion}")
+
+    testCompile "org.springframework:spring-jdbc:${springVersion}"
+    testCompile "org.springframework:spring-aop:${springVersion}"
+    testCompile "org.springframework:spring-orm:${springVersion}"
+
+    testCompile ("org.hibernate:hibernate-entitymanager:3.5.4-Final") {
+        exclude group: 'commons-logging'
+        exclude group: 'org.slf4j'
+        exclude group: 'commons-collections'
+        exclude group: 'cglib'
+        exclude group: 'javassist'
+    }
+}
+
+test {
+	if (excludes.contains('**/integration/**')) {
+		excludes -= '**/integration/**'
+		exclude {
+			FileTreeElement elem -> elem.path.contains('/integration/') && !elem.path.contains('/junit/spring/integration/')
+		}
+	}
+	else {
+		throw new GradleException("The root build.gradle has been modified and has broken serenity-spring's build.gradle. Please modify serenity-spring's build.gradle.")
+	}
+}
+
+integrationTests {
+	exclude '**/junit/spring/integration/**'
 }

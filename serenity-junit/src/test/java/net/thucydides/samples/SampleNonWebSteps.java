@@ -1,10 +1,12 @@
 package net.thucydides.samples;
 
+import net.thucydides.core.annotations.Manual;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.Assume;
 import org.junit.Ignore;
+import org.openqa.selenium.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,4 +71,30 @@ public class SampleNonWebSteps {
     public void stepWithFailingAssumption() {
         Assume.assumeThat(true, is(false));
     }
+
+    public void throw_exception() {
+        throw new IllegalArgumentException("Your argument is invalid");
+    }
+
+    public void throw_element_not_found_exception() {
+        throw new NoSuchElementException("It ain't there, boss");
+    }
+
+
+    public final static class CurrencyIn$ {
+        int value;
+
+        public CurrencyIn$(int value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return "$" + value + ".00";
+        }
+    }
+
+    @Step("a step with an object parameter called {0}")
+    public void a_customized_step_with_object_parameters(CurrencyIn$ currency) {}
+
 }

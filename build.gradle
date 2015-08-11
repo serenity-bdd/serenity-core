@@ -3,28 +3,45 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
-        classpath 'org.ajoberstar:gradle-git:0.12.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
+        classpath 'org.ajoberstar:gradle-git:1.2.0'
         classpath 'org.pegdown:pegdown:1.4.1'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.7'
     }
 }
 
-import org.ajoberstar.grgit.*
+
 import org.ajoberstar.gradle.git.release.opinion.Strategies
-import org.pegdown.PegDownProcessor
-import groovy.text.SimpleTemplateEngine
+import org.ajoberstar.grgit.Grgit
 
+apply plugin: 'org.ajoberstar.release-opinion'
 
-apply plugin: 'org.ajoberstar.release-base'
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.5'
+}
 
 ext {
-    seleniumVersion = '2.45.0'
-    groovyVersion = '2.3.6'
+    seleniumVersion = '2.46.0'
+    groovyVersion = '2.3.9'
     junitVersion = '4.11'
     hamcrestVersion = '1.3'
-    springVersion = '3.2.12.RELEASE'
+    springVersion = '4.1.6.RELEASE'
     guavaVersion = '18.0'
+    restAssuredVersion = '2.4.1'
+
+    // Bintray configuration
+    bintrayBaseUrl = 'https://api.bintray.com/maven'
+    bintrayRepository = 'maven'
+    bintrayPackage = 'serenity-core'
+    projectDescription = 'Serenity Core'
+
+    if (!project.hasProperty("bintrayUsername")) {
+        bintrayUsername = 'wakaleo'
+    }
+    if (!project.hasProperty("bintrayApiKey")) {
+        bintrayApiKey = ''
+    }
+
 }
 
 allprojects {
@@ -34,11 +51,11 @@ allprojects {
     configurations.all {
         resolutionStrategy {
             // fail fast on dependency convergence problems
-            failOnVersionConflict()
+           //failOnVersionConflict()
 
             // force versions to fix dependency convergence problems
             // when updating this list, update Serenity's declared deps if exists
-            // TODO make work for generated Maven POM... 
+            // TODO make work for generated Maven POM...
             // it's working for gradle build, but also had to exclude old transitives for geio.appiumnerated POM
             force  'com.thoughtworks.xstream:xstream:1.4.5',
                    'commons-collections:commons-collections:3.2.1',
@@ -50,8 +67,8 @@ allprojects {
 
 release {
     grgit = Grgit.open(project.file('.'))
-    versionStrategy Strategies.FINAL
-    versionStrategy Strategies.PRE_RELEASE
+    // versionStrategy Strategies.FINAL
+    // versionStrategy Strategies.PRE_RELEASE
     defaultVersionStrategy Strategies.SNAPSHOT
 }
 
@@ -87,10 +104,6 @@ subprojects {
     group = 'net.serenity-bdd'
     version = rootProject.version
 
-    task wrapper(type: Wrapper) {
-        gradleVersion = '2.2.1'
-    }
-
     test {
         exclude '**/*$*'
         exclude '**/integration/**'
@@ -101,7 +114,7 @@ subprojects {
         if (!JavaVersion.current().isJava8Compatible()) {
             jvmArgs '-XX:MaxPermSize=256m'
         }
-//        maxParallelForks = 2
+        maxParallelForks = 4
     }
 
     task integrationTests(type: Test) {
@@ -115,21 +128,26 @@ subprojects {
         minHeapSize = "128m"
         maxHeapSize = "2048m"
         if (!JavaVersion.current().isJava8Compatible()) {
-            jvmArgs '-XX:MaxPermSize=256m'
+            jvmArgs '-XX:MaxPermSize=512m'
         }
-        forkEvery 50
+        forkEvery 20
     }
 
     test {
         testLogging {
+            events "failed"//, "passed", "skipped"
             exceptionFormat = 'full'
         }
     }
 
     integrationTests {
         testLogging {
+            events "failed"//, "passed", "skipped"
             exceptionFormat = 'full'
         }
+//        beforeTest { desc ->
+//            println "Executing test ${desc.name} [${desc.className}]"
+//        }
     }
 
     task browserTests(type: Test) {
@@ -173,7 +191,7 @@ subprojects {
         compile "org.objenesis:objenesis:2.1"
         compile "org.slf4j:slf4j-api:1.7.7"
         compile "xml-apis:xml-apis:1.4.01"
-        compile 'info.cukes:cucumber-core:1.2.2'
+        compile 'info.cukes:cucumber-core:1.2.4'
 
         compile 'commons-logging:commons-logging:1.2'
         compile "junit:junit:${junitVersion}"
@@ -184,10 +202,10 @@ subprojects {
         testCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
-        testCompile('org.mockito:mockito-all:1.10.8') {
+        compile('org.mockito:mockito-all:1.10.18') {
             exclude group: "org.hamcrest"
         }
-        testCompile("org.spockframework:spock-core:0.7-groovy-2.0") {
+        testCompile('org.spockframework:spock-core:1.0-groovy-2.3') {
             exclude group: "junit"
             exclude group:"org.codehaus.groovy", module: "groovy-all"
 
@@ -204,7 +222,7 @@ subprojects {
     configurations.all {
         resolutionStrategy.eachDependency { DependencyResolveDetails details ->
             if (details.requested.name == 'mockito-all') {
-                details.useTarget group: 'org.mockito', name: 'mockito-core', version: '1.10.8'
+                details.useTarget group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
             }
             if (details.requested.name == 'hamcrest-core') {
                 details.useTarget group: 'org.hamcrest', name: 'hamcrest-core', version: "${hamcrestVersion}"
@@ -217,6 +235,7 @@ subprojects {
             }
         }
     }
+
 
     bintray {
         user = bintrayUsername //this usually comes form gradle.properties file in ~/.gradle
@@ -301,7 +320,49 @@ subprojects {
             }
         }
     }
-
+/*
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                pom.artifactId = 'serenity-core'
+                pom.project {
+                    name = project.name
+                    description = projectDescription
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+                    url 'https://github.com/serenity-bdd/$project.name'
+                    scm {
+                        url 'scm:git:git@github.com:serenity-bdd/$project.name.git'
+                        connection 'scm:git:git@github.com:serenity-bdd/$project.name.git'
+                        developerConnection 'scm:git:git@github.com:serenity-bdd/$project.name.git'
+                    }
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'johnsmart'
+                            name 'John Ferguson Smart'
+                            email 'john.smart@wakaleo.com'
+                        }
+                    }
+                }
+                repository(url: bintrayBaseUrl + '/serenity/maven/serenity-core') {
+                    authentication(userName: bintrayUsername, password: bintrayApiKey)
+                }
+            }
+        }
+    }
+*/
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:-options"
     }
@@ -312,179 +373,5 @@ subprojects {
             }
         }
     }
+
 }
-
-// Supporting methods to generate the release notes from the Git commits
-// TODO: Make this into a plugin
-
-/*
-String LAST_LEGACY_TAG = "v1.0.23"
-String RELEASE_NOTES_FILE = 'release-notes.md'
-
-task publishReleaseNotes() {
-    println "Generating Release Notes"
-    def writeLegacyReleaseNotes = false
-
-    def releaseNotes = new File(RELEASE_NOTES_FILE)
-    releaseNotes.delete()
-
-    def tags = readTags()
-
-    writeTableOfContents(releaseNotes, tags)
-
-    def moreRecentTag = null
-    tags.findAll { !it.isEmpty() }.each {tag ->
-        if (tag == LAST_LEGACY_TAG) {
-            writeLegacyReleaseNotes = true
-        }
-        if (!moreRecentTag) {
-            writeReleaseTitle(releaseNotes, 'Upcoming')
-            writeToReleaseNotes(changesBetween(tag, null), releaseNotes, writeLegacyReleaseNotes)
-        }
-        else {
-            writeReleaseTitle(releaseNotes, moreRecentTag)
-            writeToReleaseNotes(changesBetween(tag, moreRecentTag), releaseNotes, writeLegacyReleaseNotes)
-        }
-        moreRecentTag = tag
-    }
-    writeReleaseTitle(releaseNotes, moreRecentTag)
-    writeToReleaseNotes(changesBetween(null, moreRecentTag), releaseNotes, writeLegacyReleaseNotes)
-
-    releaseNotes << "\n"
-}
-
-private void writeTableOfContents(releaseNotes, List<String> tags) {
-    releaseNotes << '# Releases\n'
-    tags.findAll { !it.isEmpty() }.each { tag ->
-        releaseNotes << "- [$tag](#$tag)\n"
-    }
-}
-
-private File writeReleaseTitle(releaseNotes, title) {
-    releaseNotes << "# $title<a name='$title'></a>\n"
-}
-
-private File writeSubtitleitle(releaseNotes, title) {
-    releaseNotes << "## $title\n"
-}
-private Iterable<CommitMessage> writeToReleaseNotes(List<CommitMessage> changes, releaseNotes, legacyMode) {
-
-    boolean typesShown = false
-    MessageType.values().each {
-        def changesOfThisType = changesOfType(it, changes)
-        if (changesOfThisType) {
-            typesShown = true
-            writeSubtitleitle(releaseNotes, it.label)
-            changesOfThisType.each { change ->
-                if (change.isIncludedInReleaseNotes()) {
-                    releaseNotes << "$change\n"
-                }
-            }
-        }
-    }
-
-    if (legacyMode) {
-        def miscChanges = changesOfType(null, changes)
-        if (miscChanges) {
-            if (typesShown) writeSubtitleitle(releaseNotes, 'Miscellaneous')
-            miscChanges.each {
-                releaseNotes << "$it\n"
-            }
-        }
-    }
-}
-
-def readTags() {
-    def lines = []
-    def proc = 'git for-each-ref --format=%(*committerdate:iso8601)-%(refname) refs/tags'.execute()
-    proc.in.eachLine {
-        line -> lines += line
-    }
-    lines = lines.sort().reverse();
-    return lines.collect { String line -> line.length() > 36 ? line.substring(36) : ""}
-}
-
-List<CommitMessage> changesBetween(String prevTag, String tag) {
-    def command = "git log $prevTag..$tag --format=%x20-%x20%s%+b"
-    if (prevTag == null) {
-        command = "git log $tag --format=%x20-%x20%s%+b"
-    } else if (tag == null) {
-        command = "git log $prevTag..HEAD --format=%x20-%x20%s%+b"
-    }
-    def proc = command.execute()
-    def changes = []
-
-    def subject = null
-    def body = []
-    proc.in.eachLine {
-        if (it.startsWith(" - ")) {
-            if (subject) {
-                changes  += new CommitMessage(subject, body)
-                body = []
-            }
-            subject = it.substring(3)
-        } else {
-            body += it
-        }
-    }
-    if (subject) {
-        changes += new CommitMessage(subject, body)
-    }
-    return changes
-}
-
-enum MessageType {
-    feat("Features"),
-    fix("Bug Fixes"),
-    docs("Documentation"),
-    style("Style"),
-    refactor("Refactoring"),
-    perf("Performance"),
-    test("Tests"),
-    chore("Chores")
-
-    def label
-
-    MessageType(label) {
-        this.label = label
-    }
-}
-
-class CommitMessage {
-    MessageType type;
-    String subject;
-    List<String> body;
-
-    CommitMessage(String subjectText, List<String> body) {
-        if (declaredType(subjectText)) {
-            this.type = declaredType(subjectText)
-            this.subject = subjectText.replace("$type:","")
-        } else {
-            this.subject = subjectText
-        }
-        this.body = body
-    }
-
-    def declaredType(String subject) {
-        return MessageType.values().find {
-            String typeName = it.toString().toLowerCase()
-            subject.toLowerCase().startsWith("$typeName:")
-        }
-    }
-
-    def isIncludedInReleaseNotes() { type != null }
-
-    @Override
-    public String toString() {
-        def rendered = "  - $subject";
-        body.each {
-            rendered += "\n" + it
-        }
-        rendered
-    }
-}
-
-List<CommitMessage> changesOfType(MessageType messageType, List<CommitMessage> commitMessages) {
-    commitMessages.findAll { it.type == messageType}
-}
-*/

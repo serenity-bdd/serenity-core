@@ -1,9 +1,11 @@
 include 'serenity-test-utils',
         'serenity-report-resources',
         'serenity-sample-alternative-resources',
-        'core',
+        'serenity-core',
         'serenity-junit',
+        'serenity-journey',
         'serenity-ant-task',
         'serenity-gradle-plugin',
-        'serenity-spring'
+        'serenity-spring',
+        'serenity-rest-assured',
         'serenity-browsermob-plugin'

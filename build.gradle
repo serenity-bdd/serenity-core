@@ -20,6 +20,10 @@ task wrapper(type: Wrapper) {
     gradleVersion = '2.5'
 }
 
+subprojects {
+    task allDeps(type: DependencyReportTask) {}
+}
+
 ext {
     seleniumVersion = '2.46.0'
     groovyVersion = '2.3.9'

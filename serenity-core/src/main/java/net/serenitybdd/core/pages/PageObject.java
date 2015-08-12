@@ -1032,7 +1032,12 @@ public abstract class PageObject {
     }
 
     public void waitForAngularRequestsToFinish() {
-        getJavascriptExecutorFacade().executeAsyncScript("var callback = arguments[arguments.length - 1];" +
-                "angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
+        if ((boolean) getJavascriptExecutorFacade().executeScript(
+                "return (typeof angular !== 'undefined')? true : false;")) {
+            getJavascriptExecutorFacade()
+                    .executeAsyncScript(
+                            "var callback = arguments[arguments.length - 1];"
+                                    + "angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
+        }
     }
 }

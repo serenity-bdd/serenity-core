@@ -8,6 +8,7 @@ import net.serenitybdd.core.di.DependencyInjector;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
+import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.di.DependencyInjectorService;
@@ -174,7 +175,7 @@ public class StepFactory {
         if (ScenarioSteps.class.isAssignableFrom(stepLibraryClass))  {
             ((ScenarioSteps) newStepLibrary).setPages(pages);
         } else if (hasAPagesField(stepLibraryClass)) {
-            ImmutableSet<Field> fields = copyOf(stepLibraryClass.getDeclaredFields());
+            ImmutableSet<Field> fields = copyOf(Fields.of(stepLibraryClass).allFields());
             Field pagesField =  Iterables.find(fields, ofTypePages());
             pagesField.setAccessible(true);
             try {
@@ -200,7 +201,7 @@ public class StepFactory {
     }
 
     private <T> boolean hasAPagesField(final Class<T> stepLibraryClass) {
-        ImmutableSet<Field> fields = copyOf(stepLibraryClass.getDeclaredFields());
+        ImmutableSet<Field> fields = copyOf(Fields.of(stepLibraryClass).allFields());
         return Iterables.any(fields, ofTypePages());
 
     }

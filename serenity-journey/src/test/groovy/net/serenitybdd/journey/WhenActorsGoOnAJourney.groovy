@@ -6,13 +6,13 @@ import net.thucydides.core.model.TestResult
 import org.junit.runner.notification.RunNotifier
 import spock.lang.Specification
 
-import static net.serenitybdd.journey.TestOutcomeChecks.resultsFrom
+import static OutcomeChecks.resultsFrom
 import static net.thucydides.core.model.TestResult.ERROR
 import static net.thucydides.core.model.TestResult.FAILURE
 import static net.thucydides.core.model.TestResult.SKIPPED
 import static net.thucydides.core.model.TestResult.SUCCESS
 
-class WhenRunningASimpleJourney extends Specification{
+class WhenActorsGoOnAJourney extends Specification{
 
     def "should produce a normal test outcome"() {
         given:

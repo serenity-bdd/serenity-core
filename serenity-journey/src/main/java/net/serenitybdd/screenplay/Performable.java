@@ -11,6 +11,6 @@ package net.serenitybdd.screenplay;
  * --
  *
  */
-public interface Task {
-    void performAs(Actor actor);
+public interface Performable {
+    <T extends Actor> void performAs(T actor);
 }

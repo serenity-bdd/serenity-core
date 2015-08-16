@@ -2,7 +2,7 @@ package net.serenitybdd.journey
 
 import net.thucydides.core.model.TestOutcome
 
-class TestOutcomeChecks {
+class OutcomeChecks {
 
     static def TestOutcomeChecker resultsFrom(List<TestOutcome> testOutcomes) {
         new TestOutcomeChecker(testOutcomes);

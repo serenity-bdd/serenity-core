@@ -12,7 +12,7 @@ public class Consequence<T> {
     protected Consequence(Question<T> actual, Matcher<T> expected) {
         this.actual = actual;
         this.expected = expected;
-        this.subject = QuestionSubject.fromClass(actual.getClass());
+        this.subject = QuestionSubject.fromClass(actual.getClass()).andQuestion(actual).subject();
     }
 
     public void evaluateFor(Actor actor) {

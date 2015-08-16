@@ -199,6 +199,9 @@ subprojects {
 
         compile 'commons-logging:commons-logging:1.2'
         compile "junit:junit:${junitVersion}"
+        compile('org.mockito:mockito-all:1.10.19') {
+            exclude group: "org.hamcrest", module:"hamcrest-all"
+        }
 
         testCompile ("ch.qos.logback:logback-classic:1.0.13") {
             exclude group: "org.slf4j", module: 'slf4j-api'
@@ -206,9 +209,6 @@ subprojects {
         testCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
-        compile('org.mockito:mockito-all:1.10.18') {
-            exclude group: "org.hamcrest"
-        }
         testCompile('org.spockframework:spock-core:1.0-groovy-2.3') {
             exclude group: "junit"
             exclude group:"org.codehaus.groovy", module: "groovy-all"

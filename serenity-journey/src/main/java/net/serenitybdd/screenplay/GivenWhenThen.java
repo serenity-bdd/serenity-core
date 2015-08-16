@@ -11,8 +11,10 @@ public class GivenWhenThen {
     }
     public static Actor andThat(Actor actor) {return actor; }
 
-    public static Actor when(Actor actor) { return actor; }
+    public static Actor when(Actor actor) {  return actor; }
     public static Actor then(Actor actor) { return actor; }
+    public static Actor and(Actor actor) { return actor; }
+    public static Actor but(Actor actor) { return actor; }
 
     public static <T> void then(T actual, Matcher<? super T> matcher) {
         assertThat(actual, matcher);
@@ -21,4 +23,6 @@ public class GivenWhenThen {
     public static <T> Consequence<T> seeThat(Question<T> actual, Matcher<? super T> expected) {
         return new Consequence(actual, expected);
     }
+
+    public static String currentClause;
 }

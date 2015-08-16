@@ -1,10 +1,18 @@
 package net.serenitybdd.screenplay;
 
+import java.util.Map;
+
+import static com.google.common.collect.Maps.*;
+
 public class Actor implements PerformsTasks {
 
     private final String name;
+
     private final PerformedTaskTally taskTally = new PerformedTaskTally();
     private EventBusInterface eventBusInterface = new EventBusInterface();
+
+    private Map<String, Object> notepad = newHashMap();
+    private Map<Class, Ability> abilities = newHashMap();
 
     public Actor(String name) {
         this.name = name;
@@ -22,19 +30,28 @@ public class Actor implements PerformsTasks {
         return new Actor(name);
     }
 
+    public <T extends Ability> Actor can(T doSomething) {
+        abilities.put(doSomething.getClass(), doSomething);
+        return this;
+    }
+
+    public <T extends Ability> T abilityTo(Class<? extends T> doSomething) {
+        return (T) abilities.get(doSomething);
+    }
+
     @SafeVarargs
-    public final <T extends Task> void has(T... todos) {
+    public final <T extends Performable> void has(T... todos) {
         attemptsTo(todos);
     }
 
     @SafeVarargs
-    public final <T extends Task> void attemptsTo(T... todos) {
-        for (Task todo : todos) {
+    public final <T extends Performable> void attemptsTo(T... todos) {
+        for (Performable todo : todos) {
             perform(todo);
         }
     }
 
-    private void perform(Task todo) {
+    private <T extends Performable> void perform(T todo) {
         try {
             taskTally.newTask();
             todo.performAs(this);
@@ -71,4 +88,17 @@ public class Actor implements PerformsTasks {
         }
     }
 
+    public void remember(String key, Object value) {
+        notepad.put(key, value);
+    }
+
+    public <T> T recall(String key) {
+        return (T) notepad.get(key);
+    }
+    public <T> T sawAsThe(String key) {
+        return recall(key);
+    }
+    public <T> T gaveAsThe(String key) {
+        return recall(key);
+    }
 }

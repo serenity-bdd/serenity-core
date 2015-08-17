@@ -3,10 +3,12 @@ package net.serenitybdd.screenplay;
 import com.google.common.base.Optional;
 import net.serenitybdd.screenplay.annotations.AnnotatedTitle;
 import net.serenitybdd.screenplay.annotations.Subject;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
 
 import static net.thucydides.core.util.NameConverter.humanize;
+import static org.apache.commons.lang3.StringUtils.lowerCase;
 
 public class QuestionSubject<T> {
 
@@ -62,7 +64,7 @@ public class QuestionSubject<T> {
     }
 
     public String subject() {
-        return annotatedSubject().or(humanize(questionClass.getSimpleName()));
+        return annotatedSubject().or(lowerCase(humanize(questionClass.getSimpleName())));
     }
 
 }

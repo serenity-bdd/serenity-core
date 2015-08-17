@@ -7,18 +7,19 @@ import java.util.Locale;
 
 /**
  * Utility class to convert test case and method names into human-readable form.
- * 
- * @author johnsmart
  *
+ * @author johnsmart
  */
 public final class NameConverter {
 
     private static final String INDEXED_METHOD_NAME = ".*\\[\\d+]";
 
-    private NameConverter() {}
+    private NameConverter() {
+    }
 
     /**
      * Converts a class or method name into a human-readable sentence.
+     *
      * @param name a class or method name
      * @return the human-readable form
      */
@@ -29,7 +30,7 @@ public final class NameConverter {
 
         if (name.contains(" ") && !thereAreParametersIn(name)) {
             return name;
-        } else if (thereAreParametersIn(name)){
+        } else if (thereAreParametersIn(name)) {
             return humanizeNameWithParameters(name);
         } else {
             String noUnderscores = name.replaceAll("_", " ");
@@ -52,6 +53,7 @@ public final class NameConverter {
 
     /**
      * Inserts spaces between words in a CamelCase name.
+     *
      * @param name a name in camel-case
      * @return the name with spaces instead of underscores
      */
@@ -61,7 +63,7 @@ public final class NameConverter {
         // AbcDef
         boolean inWord = false;
         String currentWord = "";
-        for(int index = 0; index < name.length(); index++) {
+        for (int index = 0; index < name.length(); index++) {
             if (onWordBoundary(name, index)) {
                 splitWords.append(lowercaseOrAcronym(currentWord)).append(" ");
                 currentWord = String.valueOf(name.charAt(index));
@@ -119,7 +121,7 @@ public final class NameConverter {
         }
     }
 
-    public static String stripArgumentsFrom(final String methodName)  {
+    public static String stripArgumentsFrom(final String methodName) {
         if (methodName == null) {
             return null;
         }
@@ -132,30 +134,31 @@ public final class NameConverter {
     }
 
 
-    public static String stripIndexesFrom(final String methodName)  {
+    public static String stripIndexesFrom(final String methodName) {
         if (methodName == null) {
             return null;
         }
-        return (methodName.matches(INDEXED_METHOD_NAME)) ?  methodName.substring(0, methodName.lastIndexOf('[')) :  methodName;
+        return (methodName.matches(INDEXED_METHOD_NAME)) ? methodName.substring(0, methodName.lastIndexOf('[')) : methodName;
     }
 
     /**
      * Transform a camel-case word to underscored-version.
+     *
      * @param name name to be converted
      * @return a name with underscore separators
      */
     public static String underscore(final String name) {
         if (name != null) {
             return name.replaceAll(" ", "_")
-                    .replaceAll("<","_")
-                    .replaceAll(">","_")
-                    .replaceAll("'","_")
-                    .replaceAll(",","_")
-                    .replaceAll(":","_")
-                    .replaceAll("/","_")
-                    .replaceAll("\"","_")
-                    .replaceAll("=","_")
-                        .toLowerCase(Locale.getDefault()).trim();
+                    .replaceAll("<", "_")
+                    .replaceAll(">", "_")
+                    .replaceAll("'", "_")
+                    .replaceAll(",", "_")
+                    .replaceAll(":", "_")
+                    .replaceAll("/", "_")
+                    .replaceAll("\"", "_")
+                    .replaceAll("=", "_")
+                    .toLowerCase(Locale.getDefault()).trim();
         } else {
             return "";
         }

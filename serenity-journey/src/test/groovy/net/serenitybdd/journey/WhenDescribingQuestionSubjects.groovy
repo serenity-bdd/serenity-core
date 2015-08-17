@@ -24,8 +24,23 @@ class WhenDescribingQuestionSubjects  extends Specification {
             def subject = QuestionSubject.fromClass(AnswersSomeQuestion).andQuestion(answersSomeQuestion).subject();
         then:
             subject == "some answer"
-
     }
+
+
+    class AnswersSomeQuestionWithoutAnnotation implements Question<String> {
+
+        public String answeredBy(Actor actor) {}
+    }
+
+    def "If the @Subject annotation is not used a humanized version of the class name should be used instead"() {
+        given:
+        def answersSomeQuestion = new AnswersSomeQuestionWithoutAnnotation()
+        when:
+        def subject = QuestionSubject.fromClass(AnswersSomeQuestionWithoutAnnotation).andQuestion(answersSomeQuestion).subject();
+        then:
+        subject == "answers some question without annotation"
+    }
+
 
     @Subject("some answer")
     class AnswersSomeQuestionWithClassAnnotation implements Question<String> {

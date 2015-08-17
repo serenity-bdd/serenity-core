@@ -7,7 +7,7 @@ ext {
 jar {
     manifest {
         attributes("Implementation-Title": "Serenity Core",
-                   "Implementation-Version": project.version.toString())
+                "Implementation-Version": project.version.toString())
     }
 }
 
@@ -21,14 +21,14 @@ dependencies {
     compile "commons-io:commons-io:2.4"
     compile 'xml-apis:xml-apis:1.4.01'
 
-    compile ("com.opera:operadriver:1.5") {
-        exclude group: 'org.seleniumhq.selenium', module:'selenium-java'
-        exclude group: 'org.seleniumhq.selenium', module:'selenium-remote-driver'
+    compile("com.opera:operadriver:1.5") {
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
         exclude group: 'com.google.guava', module: 'guava'
         exclude group: 'org.apache.commons', module: 'commons-exec'
     }
 
-    compile ("org.seleniumhq.selenium:selenium-server:$seleniumVersion") {
+    compile("org.seleniumhq.selenium:selenium-server:$seleniumVersion") {
         exclude group: 'cglib', module: 'cglib-nodep'
         exclude group: 'guava', module: 'guava'
         exclude group: 'commons-io', module: 'commons-io'
@@ -40,30 +40,30 @@ dependencies {
         exclude group: 'net.sourceforge.htmlunit', module: 'htmlunit'
     }
 
-    compile ('com.codeborne:phantomjsdriver:1.2.1') {
+    compile('com.codeborne:phantomjsdriver:1.2.1') {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
         exclude group: 'xml-apis', module: 'xml-apis'
     }
 
-    compile ('io.appium:java-client:3.1.0') {
+    compile('io.appium:java-client:3.1.0') {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
         exclude group: 'cglib', module: 'cglib'
         exclude group: 'junit', module: 'junit'
         exclude group: 'com.google.guava', module: 'guava'
-        exclude group:'org.apache.httpcomponents', module:'httpclient'
-        exclude group:'com.google.code.gson', module:'gson'
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+        exclude group: 'com.google.code.gson', module: 'gson'
     }
 
     compile "org.codehaus.groovy:groovy:${groovyVersion}"
 
     compile "net.sf.opencsv:opencsv:2.0"
-    compile ("commons-beanutils:commons-beanutils-core:1.8.3") {
+    compile("commons-beanutils:commons-beanutils-core:1.8.3") {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
 
-    compile ("com.googlecode.lambdaj:lambdaj:2.3.3") {
+    compile("com.googlecode.lambdaj:lambdaj:2.3.3") {
         exclude group: 'org.hamcrest', module: 'hamcrest-all'
         exclude group: 'cglib', module: 'cglib-nodep'
         exclude group: 'org.objenesis', module: 'objenesis'
@@ -73,14 +73,14 @@ dependencies {
     compile "org.apache.commons:commons-lang3:3.3.2"
     compile "commons-collections:commons-collections:3.2.1"
     compile "org.freemarker:freemarker:2.3.21"
-    compile ("net.sourceforge.jexcelapi:jxl:2.6.12") {
+    compile("net.sourceforge.jexcelapi:jxl:2.6.12") {
         exclude group: 'log4j', module: 'log4j'
     }
     compile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
     compile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
     compile "com.thoughtworks.xstream:xstream:1.4.5"
     compile "commons-collections:commons-collections:3.2.1"
-    compile ("net.sourceforge.htmlunit:htmlunit:2.17") {
+    compile("net.sourceforge.htmlunit:htmlunit:2.17") {
         exclude group: 'org.apache.commons', module: 'commons-lang3'
         exclude group: 'commons-logging', module: 'commons-logging'
         exclude group: 'xml-apis', module: 'xml-apis'
@@ -93,7 +93,7 @@ dependencies {
 
     compile "org.freemarker:freemarker:2.3.21"
     compile("org.fluentlenium:fluentlenium-core:0.10.2") {
-        exclude group: 'org.seleniumhq.selenium', module:'selenium-java'
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'junit', module: 'junit-dep'
     }
     compile "com.jhlabs:filters:2.0.235"
@@ -107,10 +107,12 @@ dependencies {
     compile "org.objenesis:objenesis:2.1"
     compile "xml-apis:xml-apis:1.4.01"
     compile('com.jayway.awaitility:awaitility:1.6.3') {
-        exclude group:'cglib', module: 'cglib-nodep'
+        exclude group: 'cglib', module: 'cglib-nodep'
     }
     compile 'com.typesafe:config:1.2.1'
-    compile 'org.jsoup:jsoup:1.8.3'
+    compile('org.jsoup:jsoup:1.8.3') {
+        exclude group: 'junit', module: 'junit'
+    }
 
     testCompile "junit:junit:${junitVersion}"
     testCompile "org.springframework:spring-test:${springVersion}"
@@ -128,7 +130,7 @@ dependencies {
 }
 
 processResources {
-     filter ReplaceTokens, tokens: [
+    filter ReplaceTokens, tokens: [
             "application.version": "" + version
     ]
 }

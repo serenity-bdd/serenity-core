@@ -6,7 +6,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GivenWhenThen {
     public static <T extends PerformsTasks> T givenThat(T actor) {
-        actor.start();
         return actor;
     }
     public static Actor andThat(Actor actor) {return actor; }
@@ -23,6 +22,4 @@ public class GivenWhenThen {
     public static <T> Consequence<T> seeThat(Question<T> actual, Matcher<? super T> expected) {
         return new Consequence(actual, expected);
     }
-
-    public static String currentClause;
 }

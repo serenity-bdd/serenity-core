@@ -22,10 +22,6 @@ public class Actor implements PerformsTasks {
         return name;
     }
 
-    public void start() {
-        taskTally.reset();
-    }
-
     public static Actor named(String name) {
         return new Actor(name);
     }
@@ -96,9 +92,9 @@ public class Actor implements PerformsTasks {
         return (T) notepad.get(key);
     }
     public <T> T sawAsThe(String key) {
-        return recall(key);
+        return (T) recall(key);
     }
     public <T> T gaveAsThe(String key) {
-        return recall(key);
+        return (T) recall(key);
     }
 }

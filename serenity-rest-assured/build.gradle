@@ -13,7 +13,7 @@ dependencies {
         exclude group: 'org.codehaus.groovy', module:'groovy-xml'
     }
     compile "net.bytebuddy:byte-buddy:0.6.5"
-    compile('org.mockito:mockito-all:1.10.19') {
-        exclude group: "org.hamcrest", module:"hamcrest-all"
+    compile('org.mockito:mockito-core:2.0.31-beta') {
+        exclude group: "org.hamcrest", module:"hamcrest-core"
     }
 }

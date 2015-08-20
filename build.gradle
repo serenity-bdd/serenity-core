@@ -199,8 +199,7 @@ subprojects {
 
         compile 'commons-logging:commons-logging:1.2'
         compile "junit:junit:${junitVersion}"
-        compile('org.mockito:mockito-all:1.10.19') {
-            exclude group: "org.hamcrest", module:"hamcrest-all"
+        compile('org.mockito:mockito-core:2.0.31-beta') {
             exclude group: "org.hamcrest", module:"hamcrest-core"
         }
 
@@ -227,7 +226,7 @@ subprojects {
     configurations.all {
         resolutionStrategy.eachDependency { DependencyResolveDetails details ->
             if (details.requested.name == 'mockito-all') {
-                details.useTarget group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
+                details.useTarget group: 'org.mockito', name: 'mockito-core', version: '2.0.31-beta'
             }
             if (details.requested.name == 'hamcrest-core') {
                 details.useTarget group: 'org.hamcrest', name: 'hamcrest-core', version: "${hamcrestVersion}"

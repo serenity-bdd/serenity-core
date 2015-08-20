@@ -247,7 +247,7 @@ public class WebDriverFactory {
         try {
             return sourceConfig.getDriverSource().newDriver();
         } catch (Exception e) {
-            throw new RuntimeException("Could not instantiate the custom webdriver provider of type " + sourceConfig.getDriverName());
+            throw new RuntimeException("Could not instantiate the custom webdriver provider of type " + sourceConfig.getDriverName(), e);
         }
     }
 

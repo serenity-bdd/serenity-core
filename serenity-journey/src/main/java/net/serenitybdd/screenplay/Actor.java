@@ -88,12 +88,17 @@ public class Actor implements PerformsTasks {
         notepad.put(key, value);
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T recall(String key) {
         return (T) notepad.get(key);
     }
+
+    @SuppressWarnings("unchecked")
     public <T> T sawAsThe(String key) {
         return (T) recall(key);
     }
+
+    @SuppressWarnings("unchecked")
     public <T> T gaveAsThe(String key) {
         return (T) recall(key);
     }

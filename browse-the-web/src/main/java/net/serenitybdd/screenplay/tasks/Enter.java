@@ -3,13 +3,15 @@ package net.serenitybdd.screenplay.tasks;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.serenitybdd.screenplay.targets.Target;
+import net.thucydides.core.annotations.Step;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
 public class Enter implements Performable {
 
     private String theText;
-    private String description;
+    private Target target;
 
     public static Enter theValue(String text) {
         Enter enterAction = instrumented(Enter.class);
@@ -18,14 +20,19 @@ public class Enter implements Performable {
     }
 
     public Performable into(String cssOrXpathForElement) {
-        this.description = cssOrXpathForElement;
+        this.target = Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement);
         return this;
     }
 
-    @Override
+    public Performable into(Target target) {
+        this.target = target;
+        return this;
+    }
+
+    @Step("{0} enters '#theText' from #target")
     public <T extends Actor> void performAs(T theUser) {
         BrowseTheWeb.as(theUser)
-                .moveTo(description)
+                .moveTo(target.getCssOrXPathSelector())
                 .then().type(theText);
     }
 }

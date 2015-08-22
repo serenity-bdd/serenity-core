@@ -1,11 +1,9 @@
 package net.thucydides.core.steps
-
-import net.thucydides.core.annotations.Step
 import net.serenitybdd.core.pages.PageObject
+import net.thucydides.core.annotations.Step
 import net.thucydides.core.pages.Pages
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.webdriver.Configuration
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration
 import org.openqa.selenium.WebDriver
 import spock.lang.Specification
 
@@ -25,8 +23,6 @@ class WhenInstanciatingStepLibraries extends Specification {
 
     static class MySimplePageObject extends PageObject {
     }
-
-
 
     static class MyOtherPageObject extends PageObject {
 
@@ -127,4 +123,40 @@ class WhenInstanciatingStepLibraries extends Specification {
         myStepLibrary.configuration != null
     }
 
+    def "should instantiate unique step libraries if requested"() {
+        when:
+            def aStepLibrary = stepFactory.getUniqueStepLibraryFor(MyStepLibrary)
+        and:
+            def anotherStepLibrary = stepFactory.getUniqueStepLibraryFor(MyStepLibrary)
+        then:
+            aStepLibrary != anotherStepLibrary
+    }
+
+
+    static class MyImmutableStepLibrary {
+
+        private final String favoriteColor;
+        private final Integer favoriteNumber;
+
+        String getFavoriteColor() {
+            return favoriteColor
+        }
+
+        Integer getFavoriteNumber() {
+            return favoriteNumber
+        }
+
+        MyImmutableStepLibrary(String favoriteColor, Integer favoriteNumber) {
+            this.favoriteColor = favoriteColor
+            this.favoriteNumber = favoriteNumber
+        }
+    }
+
+    def "should be able to instantiate step libraries with parameters in constructors"() {
+        when:
+            def immutableStepLibrary = stepFactory.getUniqueStepLibraryFor(MyImmutableStepLibrary, "red", 42)
+        then:
+            immutableStepLibrary.favoriteColor == "red" && immutableStepLibrary.favoriteNumber == 42
+
+    }
 }

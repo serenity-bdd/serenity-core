@@ -1,26 +1,19 @@
 package net.serenitybdd.screenplay.webtests.pages;
 
-import net.serenitybdd.core.pages.PageObject;
-import net.thucydides.core.annotations.DefaultUrl;
+import net.serenitybdd.screenplay.targets.Target;
 
-@DefaultUrl("classpath:sample-web-site/index.html")
-public class ProfilePage extends PageObject {
+public class ProfilePage {
 
+    public static Target NAME = Target.the("Name").locatedBy("#name");
+    public static Target COUNTRY = Target.the("Country of residence").locatedBy("#country");
     public enum ProfileField {
-        Name("#name");
+        Name("#name"),
+        Country("#country");
 
         public final String xpathOrCssSelector;
 
         ProfileField(String xpathOrCssSelector) {
             this.xpathOrCssSelector = xpathOrCssSelector;
         }
-    }
-
-    public static String the(ProfilePage.ProfileField field) {
-        return field.xpathOrCssSelector;
-    }
-
-    public String fieldValueFor(ProfileField field) {
-        return $(field.xpathOrCssSelector).getValue();
     }
 }

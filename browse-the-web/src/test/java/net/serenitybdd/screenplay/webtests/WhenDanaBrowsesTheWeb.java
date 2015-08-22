@@ -3,10 +3,10 @@ package net.serenitybdd.screenplay.webtests;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
-import net.serenitybdd.screenplay.webtests.tasks.ViewMyProfileField;
 import net.serenitybdd.screenplay.webtests.tasks.OpenedTheApplication;
 import net.serenitybdd.screenplay.webtests.tasks.UpdateHerProfile;
 import net.serenitybdd.screenplay.webtests.tasks.ViewMyProfile;
+import net.serenitybdd.screenplay.webtests.tasks.TheProfile;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Test;
@@ -15,12 +15,11 @@ import org.openqa.selenium.WebDriver;
 
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 
 @RunWith(SerenityRunner.class)
 public class WhenDanaBrowsesTheWeb {
 
-    @Managed(driver="phantomjs")
+    @Managed(driver="firefox")
     WebDriver driver;
 
     @Test
@@ -32,9 +31,11 @@ public class WhenDanaBrowsesTheWeb {
         givenThat(dana).has(openedTheApplication);
 
         when(dana).attemptsTo(viewHerProfile);
-        and(dana).attemptsTo(updateHer.name().to("Dana"));
+        and(dana).attemptsTo(UpdateHerProfile.name().to("Dana"));
+        and(dana).attemptsTo(UpdateHerProfile.country().to("France"));
 
-        then(dana).should(seeThat(herProfile.name(), equalTo("Dana")));
+        then(dana).should(seeThat(TheProfile.name(), equalTo("Dana")));
+        and(dana).should(seeThat(TheProfile.country(), equalTo("France")));
     }
 
     @Steps
@@ -44,9 +45,6 @@ public class WhenDanaBrowsesTheWeb {
     ViewMyProfile viewHerProfile;
 
     @Steps
-    UpdateHerProfile updateHer;
-
-    @Steps
-    ViewMyProfileField herProfile;
+    TheProfile herProfile;
 
 }

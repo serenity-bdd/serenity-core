@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import com.google.common.base.Predicate;
+import com.beust.jcommander.internal.Lists;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
@@ -11,17 +11,19 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
+import net.thucydides.core.steps.construction.StepLibraryConstructionStrategy;
+import net.thucydides.core.steps.construction.StepLibraryType;
 import net.thucydides.core.steps.di.DependencyInjectorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.ImmutableSet.copyOf;
+import static net.thucydides.core.steps.construction.StepLibraryType.ofTypePages;
 
 /**
  * Produces an instance of a set of requirement steps for use in the acceptance tests.
@@ -31,7 +33,7 @@ public class StepFactory {
 
     private final Pages pages;
 
-    private final Map<Class<?>, Object> index = new HashMap<Class<?>, Object>();
+    private final Map<Class<?>, Object> index = new HashMap<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(StepFactory.class);
     private final DependencyInjectorService dependencyInjectorService;
 
@@ -77,6 +79,10 @@ public class StepFactory {
 
     public <T> T getUniqueStepLibraryFor(final Class<T> scenarioStepsClass) {
         return instantiateUniqueStepLibraryFor(scenarioStepsClass);
+    }
+
+    public <T> T getUniqueStepLibraryFor(final Class<T> scenarioStepsClass, Object... parameters) {
+        return instantiateUniqueStepLibraryFor(scenarioStepsClass, parameters);
     }
 
     public void reset() {
@@ -135,9 +141,9 @@ public class StepFactory {
                 ImmutableList.of(new EnvironmentDependencyInjector());
     }
 
-    private <T> T instantiateUniqueStepLibraryFor(Class<T> scenarioStepsClass) {
+    private <T> T instantiateUniqueStepLibraryFor(Class<T> scenarioStepsClass, Object... parameters) {
         StepInterceptor stepInterceptor = new StepInterceptor(scenarioStepsClass);
-        T steps = createProxyStepLibrary(scenarioStepsClass, stepInterceptor);
+        T steps = createProxyStepLibrary(scenarioStepsClass, stepInterceptor, parameters);
 
         instantiateAnyNestedStepLibrariesIn(steps, scenarioStepsClass);
         
@@ -148,20 +154,35 @@ public class StepFactory {
 
     @SuppressWarnings("unchecked")
     private <T> T createProxyStepLibrary(Class<T> scenarioStepsClass,
-                                         MethodInterceptor interceptor) {
+                                         MethodInterceptor interceptor,
+                                         Object... parameters) {
         Enhancer e = new Enhancer();
         e.setSuperclass(scenarioStepsClass);
         e.setCallback(interceptor);
 
-        if (isWebdriverStepClass(scenarioStepsClass)) {
-            return webEnabledStepLibrary(scenarioStepsClass, e);
-        } else {
-            return (T) e.create();
+        switch (StepLibraryConstructionStrategy.forClass(scenarioStepsClass).getStrategy()) {
+            case WEBDRIVER_ENABLED_STEP_LIBRARY: return webEnabledStepLibrary(scenarioStepsClass, e);
+            case CONSTRUCTOR_WITH_PARAMETERS: return immutableStepLibrary(e,  parameters);
+            default: return (T) e.create();
         }
     }
 
+    private <T> T immutableStepLibrary(Enhancer e, Object[] parameters) {
+        return (T) e.create(argumentTypesFrom(parameters), parameters);
+    }
+
+    private Class<?>[] argumentTypesFrom(Object[] parameters) {
+        List<Class<?>> argumentTypes = Lists.newArrayList();
+        for(Object parameter : parameters) {
+            argumentTypes.add( parameter.getClass());
+        }
+        return argumentTypes.toArray(CONSTRUCTOR_ARG_TYPES);
+    }
+
+
+
     private <T> T webEnabledStepLibrary(final Class<T> scenarioStepsClass, final Enhancer e) {
-        if (hasAPagesConstructor(scenarioStepsClass)) {
+        if (StepLibraryType.ofClass(scenarioStepsClass).hasAPagesConstructor()) {
             Object[] arguments = new Object[1];
             arguments[0] = pages;
             return (T) e.create(CONSTRUCTOR_ARG_TYPES, arguments);
@@ -171,62 +192,35 @@ public class StepFactory {
         }
     }
 
-    private <T> T injectPagesInto(final Class<T> stepLibraryClass, T newStepLibrary) {
-        if (ScenarioSteps.class.isAssignableFrom(stepLibraryClass))  {
-            ((ScenarioSteps) newStepLibrary).setPages(pages);
-        } else if (hasAPagesField(stepLibraryClass)) {
-            ImmutableSet<Field> fields = copyOf(Fields.of(stepLibraryClass).allFields());
-            Field pagesField =  Iterables.find(fields, ofTypePages());
-            pagesField.setAccessible(true);
-            try {
-                pagesField.set(newStepLibrary, pages);
-            } catch (IllegalAccessException e) {
-                LOGGER.error("Could not instantiate pages field for step library {}", newStepLibrary);
-            }
+    class PageInjector {
+        private final Pages pages;
+
+        public PageInjector(Pages pages) {
+            this.pages = pages;
         }
-        return newStepLibrary;
-    }
 
-    private <T> boolean isWebdriverStepClass(final Class<T> stepLibraryClass) {
-
-        return (isAScenarioStepClass(stepLibraryClass)
-                || hasAPagesConstructor(stepLibraryClass)
-                || hasAPagesField(stepLibraryClass));
-    }
-
-    private <T> boolean hasAPagesConstructor(final Class<T> stepLibraryClass) {
-        ImmutableSet<Constructor<?>> constructors = copyOf(stepLibraryClass.getDeclaredConstructors());
-        return Iterables.any(constructors, withASinglePagesParameter());
-
-    }
-
-    private <T> boolean hasAPagesField(final Class<T> stepLibraryClass) {
-        ImmutableSet<Field> fields = copyOf(Fields.of(stepLibraryClass).allFields());
-        return Iterables.any(fields, ofTypePages());
-
-    }
-
-    private Predicate<Constructor> withASinglePagesParameter() {
-        return new Predicate<Constructor>() {
-
-            public boolean apply(Constructor constructor) {
-                return ((constructor.getParameterTypes().length == 1)
-                        && (constructor.getParameterTypes()[0] == Pages.class));
+        public <T> T injectPagesInto(final Class<T> stepLibraryClass, T newStepLibrary) {
+            if (ScenarioSteps.class.isAssignableFrom(stepLibraryClass))  {
+                ((ScenarioSteps) newStepLibrary).setPages(pages);
+            } else if (StepLibraryType.ofClass(stepLibraryClass).hasAPagesField()) {
+                ImmutableSet<Field> fields = copyOf(Fields.of(stepLibraryClass).allFields());
+                Field pagesField =  Iterables.find(fields, ofTypePages());
+                pagesField.setAccessible(true);
+                try {
+                    pagesField.set(newStepLibrary, pages);
+                } catch (IllegalAccessException e) {
+                    LOGGER.error("Could not instantiate pages field for step library {}", newStepLibrary);
+                }
             }
-        };
+            return newStepLibrary;
+        }
+
     }
 
-    private Predicate<Field> ofTypePages() {
-        return new Predicate<Field>() {
-            public boolean apply(Field field) {
-                return (field.getType() == Pages.class);
-            }
-        };
+    private <T> T injectPagesInto(final Class<T> stepLibraryClass, T newStepLibrary) {
+        return new PageInjector(pages).injectPagesInto(stepLibraryClass, newStepLibrary);
     }
 
-    private <T> boolean isAScenarioStepClass(final Class<T> stepLibraryClass) {
-        return ScenarioSteps.class.isAssignableFrom(stepLibraryClass);
-    }
 
     private <T> void indexStepLibrary(Class<T> scenarioStepsClass, T steps) {
         index.put(scenarioStepsClass, steps);

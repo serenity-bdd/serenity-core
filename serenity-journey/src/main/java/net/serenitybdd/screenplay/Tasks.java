@@ -6,7 +6,7 @@ public class Tasks {
 
     private static StepFactory stepFactory = new StepFactory();
 
-    public static <T extends Performable> T instrumented(Class<T> purchaseClass) {
-        return stepFactory.getUniqueStepLibraryFor(purchaseClass);
+    public static <T extends Performable> T instrumented(Class<T> purchaseClass, Object... parameters) {
+        return stepFactory.getUniqueStepLibraryFor(purchaseClass, parameters);
     }
 }

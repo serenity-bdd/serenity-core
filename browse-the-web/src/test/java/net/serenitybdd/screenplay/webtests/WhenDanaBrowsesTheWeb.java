@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.equalTo;
 @RunWith(SerenityRunner.class)
 public class WhenDanaBrowsesTheWeb {
 
-    @Managed(driver="firefox")
+    @Managed(driver="phantomjs")
     WebDriver driver;
 
     @Test
@@ -31,8 +31,7 @@ public class WhenDanaBrowsesTheWeb {
         givenThat(dana).has(openedTheApplication);
 
         when(dana).attemptsTo(viewHerProfile);
-        and(dana).attemptsTo(UpdateHerProfile.name().to("Dana"));
-        and(dana).attemptsTo(UpdateHerProfile.country().to("France"));
+        and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
 
         then(dana).should(seeThat(TheProfile.name(), equalTo("Dana")));
         and(dana).should(seeThat(TheProfile.country(), equalTo("France")));

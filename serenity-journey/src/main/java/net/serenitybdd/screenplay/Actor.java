@@ -1,5 +1,7 @@
 package net.serenitybdd.screenplay;
 
+import net.serenitybdd.screenplay.exceptions.IgnoreStepException;
+
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
@@ -79,6 +81,8 @@ public class Actor implements PerformsTasks {
             eventBusInterface.reportNewStepWithTitle(consequence.toString());
             consequence.evaluateFor(this);
             eventBusInterface.reportStepFinished();
+        } catch (IgnoreStepException e) {
+            eventBusInterface.reportStepIgnored();
         } catch (Throwable e) {
             eventBusInterface.reportStepFailureFor(consequence, e);
         }

@@ -36,4 +36,8 @@ public class EventBusInterface {
     public void reportStepFinished() {
         StepEventBus.getEventBus().stepFinished();
     }
+
+    public void reportStepIgnored() {
+        StepEventBus.getEventBus().stepIgnored();
+    }
 }

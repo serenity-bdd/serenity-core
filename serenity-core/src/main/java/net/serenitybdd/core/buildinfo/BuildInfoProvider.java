@@ -122,7 +122,7 @@ public class BuildInfoProvider {
                 result = shell.evaluate(groovy);
             }
         } catch (GroovyRuntimeException e) {
-            LOGGER.warn("Failed to evaluate build info expression '%s' for key %s",expression, key);
+            LOGGER.warn("Failed to evaluate build info expression '{0}' for key {1}",expression, key);
         }
         return (result != null) ? result.toString() : expression;
     }

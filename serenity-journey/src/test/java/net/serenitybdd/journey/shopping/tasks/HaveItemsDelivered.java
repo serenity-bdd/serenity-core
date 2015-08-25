@@ -11,6 +11,5 @@ public class HaveItemsDelivered implements Performable {
     @Override
     @Step("And {0} has them delivered")
     public void performAs(Actor actor) {
-
     }
 }

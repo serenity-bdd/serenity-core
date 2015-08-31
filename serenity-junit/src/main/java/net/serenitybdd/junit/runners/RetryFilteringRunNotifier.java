@@ -51,7 +51,7 @@ public class RetryFilteringRunNotifier extends RunNotifierDecorator {
         if (isExpected(failure)) {
             fireTestFinished(failure.getDescription());
         } else {
-            log.debug("Test failed: " + failure);
+            log.debug("Test failed: " + failure, failure.getException());
             testStartAlreadyFired = false;
             testFailed = true;
             lastFailure = failure;

@@ -100,7 +100,7 @@ public class ReportService {
     }
 
     private void generateReportsFor(final AcceptanceTestReporter reporter, final TestOutcomes testOutcomes) {
-        LOGGER.info("Generating reports using: " + reporter);
+        LOGGER.info("Generating reports for " + testOutcomes.getTotalTestScenarios() +" test outcomes using: " + reporter);
         long t0 = System.currentTimeMillis();
 
         List<? extends TestOutcome> outcomes = testOutcomes.getOutcomes();
@@ -119,7 +119,7 @@ public class ReportService {
         }
         generateJUnitTestResults(testOutcomes);
         waitForReportGenerationToFinish(remainingReportCount);
-        LOGGER.info("Reports generated in: " + (System.currentTimeMillis() - t0));
+        LOGGER.info("Reports generated in: " + (System.currentTimeMillis() - t0) + " ms");
 
     }
 

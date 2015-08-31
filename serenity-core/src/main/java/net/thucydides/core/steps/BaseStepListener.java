@@ -783,6 +783,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public void testPending() {
         getCurrentTestOutcome().setAnnotatedResult(PENDING);
+        updateExampleTableIfNecessary(PENDING);
     }
 
     @Override

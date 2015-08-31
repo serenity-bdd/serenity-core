@@ -86,7 +86,15 @@ public class WhenReadingManagedDriverAnnotations {
 
         assertThat(managedField.getDriver(), is("chrome"));
     }
-    
+
+    @Test
+    public void shouldAllowMultipleDriversToBeManaged() {
+        ManagedWebDriverAnnotatedField managedField
+                = ManagedWebDriverAnnotatedField.findFirstAnnotatedField(SampleTestCaseUsingUniqueSessionWithChrome.class);
+
+        assertThat(managedField.getDriver(), is("chrome"));
+    }
+
     static final class SampleTestCaseUsingFirefoxWebDriver {
 
         public void normalTest(){}

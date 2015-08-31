@@ -1,8 +1,7 @@
 package net.thucydides.core.webdriver;
 
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
-import net.serenitybdd.core.pages.DefaultTimeouts;
-import net.thucydides.core.ThucydidesSystemProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -10,12 +9,7 @@ import org.openqa.selenium.remote.SessionId;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
-import static net.serenitybdd.core.pages.DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT;
 
 /**
  * Manage WebDriver instances.
@@ -104,7 +98,19 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
     }
 
     public WebDriver getWebdriver() {
-        return getThreadLocalWebDriver(configuration, webDriverFactory, inThisTestThread().getCurrentDriverName());
+        return currentDriver.or(getThreadLocalWebDriver(configuration, webDriverFactory, inThisTestThread().getCurrentDriverName()));
+    }
+
+    private Optional<WebDriver> currentDriver = Optional.absent();
+
+    @Override
+    public void setCurrentDriver(WebDriver driver) {
+        currentDriver = Optional.fromNullable(driver);
+    }
+
+    @Override
+    public void clearCurrentDriver() {
+        currentDriver = Optional.absent();
     }
 
     public String getCurrentDriverName() {
@@ -166,4 +172,5 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
     public boolean isDriverInstantiated() {
         return inThisTestThread().isDriverInstantiated();
     }
+
 }

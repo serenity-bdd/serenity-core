@@ -31,7 +31,6 @@ public class StepEventBus {
     private static ThreadLocal<StepEventBus> stepEventBusThreadLocal = new ThreadLocal<StepEventBus>();
     private static final String CORE_THUCYDIDES_PACKAGE = "net.thucydides.core";
     private static final Logger LOGGER = LoggerFactory.getLogger(StepEventBus.class);
-    private Optional<TestStep> previousStep;
 
     /**
      * The event bus used to inform listening classes about when tests and test steps start and finish.

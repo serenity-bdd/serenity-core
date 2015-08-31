@@ -1,7 +1,12 @@
 package net.thucydides.core.annotations;
 
 import com.google.common.base.Optional;
+import net.thucydides.core.webdriver.WebdriverManager;
 import org.openqa.selenium.WebDriver;
+
+import java.util.List;
+
+import static net.thucydides.core.annotations.ManagedWebDriverAnnotatedField.*;
 
 /**
  * Utility class used to inject fields into a test case.
@@ -25,9 +30,16 @@ public final class TestCaseAnnotations {
      */
     public void injectDriver(final WebDriver driver) {
         Optional<ManagedWebDriverAnnotatedField> webDriverField
-                = ManagedWebDriverAnnotatedField.findOptionalAnnotatedField(testCase.getClass());
+                = findOptionalAnnotatedField(testCase.getClass());
         if (webDriverField.isPresent()) {
             webDriverField.get().setValue(testCase, driver);
+        }
+    }
+
+    public void injectDrivers(final WebdriverManager webdriverManager) {
+        List<ManagedWebDriverAnnotatedField> webDriverFields = findAnnotatedFields(testCase.getClass());
+        for(ManagedWebDriverAnnotatedField webDriverField : webDriverFields) {
+            webDriverField.setValue(testCase, webdriverManager.getWebdriver(webDriverField.getDriver()));
         }
     }
 
@@ -37,7 +49,7 @@ public final class TestCaseAnnotations {
      * annotation.
      */
     public static boolean supportsWebTests(Class clazz) {
-        return ManagedWebDriverAnnotatedField.hasManagedWebdriverField(clazz);
+        return hasManagedWebdriverField(clazz);
     }
 
     public boolean isUniqueSession() {
@@ -46,12 +58,12 @@ public final class TestCaseAnnotations {
 
 
     public static boolean isUniqueSession(Class<?> testClass) {
-        ManagedWebDriverAnnotatedField webDriverField = ManagedWebDriverAnnotatedField.findFirstAnnotatedField(testClass);
+        ManagedWebDriverAnnotatedField webDriverField = findFirstAnnotatedField(testClass);
         return webDriverField.isUniqueSession();
     }
 
     public static boolean isWebTest(Class<?> testClass) {
-        return ManagedWebDriverAnnotatedField.findOptionalAnnotatedField(testClass).isPresent();
+        return findOptionalAnnotatedField(testClass).isPresent();
     }
 
 }

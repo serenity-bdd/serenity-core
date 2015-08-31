@@ -3,8 +3,6 @@ package net.thucydides.core.webdriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
 
-import java.util.List;
-
 /**
  * Manage WebDriver instances.
  * It instantiates browser drivers, based on the test configuration, and manages them for the
@@ -37,4 +35,7 @@ public interface WebdriverManager {
 
     boolean isDriverInstantiated();
 
+    void setCurrentDriver(WebDriver driver);
+
+    void clearCurrentDriver();
 }

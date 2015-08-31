@@ -1,10 +1,12 @@
 package net.serenitybdd.screenplay;
 
+import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
+import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
 import net.serenitybdd.screenplay.exceptions.IgnoreStepException;
 
 import java.util.Map;
 
-import static com.google.common.collect.Maps.*;
+import static com.google.common.collect.Maps.newHashMap;
 
 public class Actor implements PerformsTasks {
 
@@ -28,7 +30,12 @@ public class Actor implements PerformsTasks {
         return new Actor(name);
     }
 
+    public String getName() {
+        return name;
+    }
+
     public <T extends Ability> Actor can(T doSomething) {
+        doSomething.asActor(this);
         abilities.put(doSomething.getClass(), doSomething);
         return this;
     }
@@ -43,10 +50,20 @@ public class Actor implements PerformsTasks {
     }
 
     @SafeVarargs
-    public final <T extends Performable> void attemptsTo(T... todos) {
-        for (Performable todo : todos) {
-            perform(todo);
+    public final <T extends Performable> void attemptsTo(T... tasks) {
+        beginPerformance();
+        for (Performable task : tasks) {
+            perform(task);
         }
+        endPerformance();
+    }
+
+    private void beginPerformance() {
+        Broadcaster.getEventBus().post(new ActorBeginsPerformanceEvent(name));
+    }
+
+    private void endPerformance() {
+        Broadcaster.getEventBus().post(new ActorEndsPerformanceEvent(name));
     }
 
     public <ANSWER> ANSWER asksFor(Question<ANSWER> question) {
@@ -71,9 +88,11 @@ public class Actor implements PerformsTasks {
 
     @SafeVarargs
     public final <T> void should(Consequence<T>... consequences) {
+        beginPerformance();
         for (Consequence<T> consequence : consequences) {
             check(consequence);
         }
+        endPerformance();
     }
 
     private boolean anOutOfStepErrorOccurred() {

@@ -568,7 +568,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
      */
     protected void injectDriverInto(final Object testCase,
                                     final FrameworkMethod method) {
-        TestCaseAnnotations.forTestCase(testCase).injectDriver(driverFor(method));
+        //TestCaseAnnotations.forTestCase(testCase).injectDriver(driverFor(method));
+        TestCaseAnnotations.forTestCase(testCase).injectDrivers(getWebdriverManager());
         dependencyInjector.injectDependenciesInto(testCase);
     }
 
@@ -579,7 +580,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         } else {
             return getDriver();
         }
-
     }
 
     /**

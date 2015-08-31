@@ -1,14 +1,19 @@
 package net.thucydides.core.annotations;
 
+import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.NoSuchElementException;
+
+import static ch.lambdaj.Lambda.convert;
 
 /**
  * The WebDriver driver is stored as an annotated field in the test classes.
@@ -46,6 +51,21 @@ public class ManagedWebDriverAnnotatedField {
         } else {
             throw new InvalidManagedWebDriverFieldException(NO_ANNOTATED_FIELD_ERROR);
         }
+    }
+
+    public static List<ManagedWebDriverAnnotatedField> findAnnotatedFields(final Class<?> testClass) {
+        List<Field> managedFields = ImmutableList.copyOf(Iterables.filter(fieldsIn(testClass), withCorrectAnnotations()));
+        return convert(managedFields, toManagedAnnotatedFields());
+    }
+
+    private static Converter<Field, ManagedWebDriverAnnotatedField> toManagedAnnotatedFields() {
+        return new Converter<Field, ManagedWebDriverAnnotatedField>() {
+
+            @Override
+            public ManagedWebDriverAnnotatedField convert(Field field) {
+                return new ManagedWebDriverAnnotatedField(field);
+            }
+        };
     }
 
     public static boolean hasManagedWebdriverField(final Class<?> testClass) {

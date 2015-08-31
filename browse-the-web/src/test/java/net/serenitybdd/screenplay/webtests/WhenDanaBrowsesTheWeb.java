@@ -19,14 +19,17 @@ import static org.hamcrest.Matchers.equalTo;
 @RunWith(SerenityRunner.class)
 public class WhenDanaBrowsesTheWeb {
 
-    @Managed(driver="phantomjs")
-    WebDriver driver;
+    @Managed(driver="chrome")
+    WebDriver firstBrowser;
+
+    @Managed(driver="firefox")
+    WebDriver anotherBrowser;
 
     @Test
-    public void danaCanClickOnButtons() {
+    public void danaCanUpdateHerProfile() {
 
         Actor dana = new Actor("Dana");
-        dana.can(BrowseTheWeb.with(driver));
+        dana.can(BrowseTheWeb.with(firstBrowser));
 
         givenThat(dana).has(openedTheApplication);
 
@@ -35,6 +38,32 @@ public class WhenDanaBrowsesTheWeb {
 
         then(dana).should(seeThat(TheProfile.name(), equalTo("Dana")));
         and(dana).should(seeThat(TheProfile.country(), equalTo("France")));
+    }
+
+    @Test
+    public void multipleUsersCanUpdateTheirProfilesSimultaneously() {
+
+        Actor dana = new Actor("Dana");
+        dana.can(BrowseTheWeb.with(firstBrowser));
+
+        Actor jane = new Actor("Jane");
+        jane.can(BrowseTheWeb.with(anotherBrowser));
+
+        givenThat(dana).has(openedTheApplication);
+        andThat(jane).has(openedTheApplication);
+
+        when(dana).attemptsTo(viewHerProfile);
+        and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
+
+        and(jane).attemptsTo(viewHerProfile);
+        and(jane).attemptsTo(UpdateHerProfile.withName("Jane").andCountryOfResidence("United Kingdom"));
+
+        then(dana).should(seeThat(TheProfile.name(), equalTo("Dana")));
+        and(dana).should(seeThat(TheProfile.country(), equalTo("France")));
+
+        and(jane).should(seeThat(TheProfile.name(), equalTo("Jane")));
+        and(jane).should(seeThat(TheProfile.country(), equalTo("United Kingdom")));
+
     }
 
     @Steps

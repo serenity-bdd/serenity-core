@@ -12,6 +12,7 @@ import static net.serenitybdd.journey.shopping.questions.TotalCost.theTotalCost;
 import static net.serenitybdd.journey.shopping.questions.TotalCostIncludingDelivery.theTotalCostIncludingDelivery;
 import static net.serenitybdd.journey.shopping.tasks.Purchase.*;
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
@@ -38,6 +39,17 @@ public class DanaGoesShoppingSample {
     }
 
 
+    @Test
+    public void shouldBeAbleToAskForNiceThings() {
+        Integer totalCost = dana.asksFor(theTotalCost());
+        assertThat(totalCost).isEqualTo(14);
+    }
+
+    @Test
+    public void shouldBeAbleToRememberThingsInAVeryReadableWay() {
+        dana.remember("Total Cost", theTotalCost());
+        assertThat(dana.recall("Total Cost")).isEqualTo(14);
+    }
 
     @Test
     public void shouldBeAbleToPurchaseSomeItems() {

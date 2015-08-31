@@ -49,6 +49,10 @@ public class Actor implements PerformsTasks {
         }
     }
 
+    public <ANSWER> ANSWER asksFor(Question<ANSWER> question) {
+        return question.answeredBy(this);
+    }
+
     private <T extends Performable> void perform(T todo) {
         try {
             taskTally.newTask();
@@ -86,6 +90,11 @@ public class Actor implements PerformsTasks {
         } catch (Throwable e) {
             eventBusInterface.reportStepFailureFor(consequence, e);
         }
+    }
+
+    public <ANSWER> void remember(String key, Question<ANSWER> question) {
+        ANSWER answer = this.asksFor(question);
+        notepad.put(key, answer);
     }
 
     public void remember(String key, Object value) {

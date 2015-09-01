@@ -19,10 +19,11 @@ class WhenConfiguringPhantomJS extends Specification {
         then:
             1 * capabilities.setCapability("phantomjs.cli.args",
                                            ['--web-security=false',
-                                            '--ssl-protocol=any',
                                             '--ignore-ssl-errors=true',
                                             '--webdriver-loglevel=OFF',
-                                            '--proxy=http://proxy.mycompany.com'])
+                                            '--proxy=http://proxy.mycompany.com',
+                                            '--ssl-protocol=any'
+                                           ])
 
     }
 
@@ -36,10 +37,11 @@ class WhenConfiguringPhantomJS extends Specification {
         then:
             1 * capabilities.setCapability("phantomjs.cli.args",
                     ['--web-security=false',
-                        '--ssl-protocol=any',
                         '--ignore-ssl-errors=true',
                         '--webdriver-loglevel=OFF',
-                        '--proxy=http://proxy.mycompany.com:8080'])
+                        '--proxy=http://proxy.mycompany.com:8080',
+                        '--ssl-protocol=any'
+                    ])
 
     }
 
@@ -55,11 +57,12 @@ class WhenConfiguringPhantomJS extends Specification {
         then:
             1 * capabilities.setCapability("phantomjs.cli.args",
                     ['--web-security=false',
-                        '--ssl-protocol=any',
                         '--ignore-ssl-errors=true',
                         '--webdriver-loglevel=OFF',
                         '--proxy=http://proxy.mycompany.com:8080',
-                        '--proxy-auth=scott:tiger'])
+                        '--proxy-auth=scott:tiger',
+                        '--ssl-protocol=any',
+                    ])
     }
 
     def "should set proxy config with type"() {
@@ -73,11 +76,12 @@ class WhenConfiguringPhantomJS extends Specification {
         then:
         1 * capabilities.setCapability("phantomjs.cli.args",
                 ['--web-security=false',
-                        '--ssl-protocol=any',
                         '--ignore-ssl-errors=true',
                         '--webdriver-loglevel=OFF',
                         '--proxy=http://proxy.mycompany.com:8080',
-                        '--proxy-type=socks5'])
+                        '--proxy-type=socks5',
+                        '--ssl-protocol=any',
+                ])
     }
 
     def "should configure for selenium hub"() {
@@ -91,11 +95,12 @@ class WhenConfiguringPhantomJS extends Specification {
         then:
         1 * capabilities.setCapability("phantomjs.cli.args",
                 ['--web-security=false',
-                        '--ssl-protocol=any',
                         '--ignore-ssl-errors=true',
                         '--webdriver-loglevel=OFF',
                         '--webdriver-selenium-grid-hub=http://127.0.0.1:4444',
-                        '--webdriver=5555'])
+                        '--webdriver=5555',
+                        '--ssl-protocol=any',
+                ])
     }
 
     def "should configure for selenium hub without webdriver port"() {
@@ -108,9 +113,10 @@ class WhenConfiguringPhantomJS extends Specification {
         then:
         1 * capabilities.setCapability("phantomjs.cli.args",
                 ['--web-security=false',
-                        '--ssl-protocol=any',
                         '--ignore-ssl-errors=true',
                         '--webdriver-loglevel=OFF',
-                        '--webdriver-selenium-grid-hub=http://127.0.0.1:4444'])
+                        '--webdriver-selenium-grid-hub=http://127.0.0.1:4444',
+                        '--ssl-protocol=any',
+                ])
     }
 }

@@ -41,7 +41,12 @@ public class GsonJSONConverter implements JSONConverter {
 
     @Override
     public TestOutcome fromJson(InputStream inputStream) throws IOException {
-        TestOutcome testOutcome = gson.fromJson(new InputStreamReader(inputStream), TestOutcome.class);
+        return fromJson(new InputStreamReader(inputStream));
+    }
+
+    @Override
+    public TestOutcome fromJson(Reader jsonReader) {
+        TestOutcome testOutcome = gson.fromJson(jsonReader, TestOutcome.class);
         LOGGER.debug("Read test outcome from JSON: " + testOutcome.toJson());
         return isValid(testOutcome) ? testOutcome : null;
     }

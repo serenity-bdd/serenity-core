@@ -1,6 +1,5 @@
 package net.thucydides.core.reports;
 
-import com.google.common.util.concurrent.*;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.junit.JUnitXMLOutcomeReporter;
@@ -125,7 +124,6 @@ public class ReportService {
 
     /**
      * JUnit test results are a special case, since they create a output file per test class (or story, or feature) rather than for each test.
-     * @param outcomes
      */
     private void generateJUnitTestResults(TestOutcomes outcomes) {
         try {
@@ -146,11 +144,9 @@ public class ReportService {
 
     /**
      * The default reporters applicable for standard test runs.
-     *
-     * @return a list of default reporters.
      */
     public static List<AcceptanceTestReporter> getDefaultReporters() {
-        List<AcceptanceTestReporter> reporters = new ArrayList<AcceptanceTestReporter>();
+        List<AcceptanceTestReporter> reporters = new ArrayList<>();
 
         FormatConfiguration formatConfiguration
                 = new FormatConfiguration(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());

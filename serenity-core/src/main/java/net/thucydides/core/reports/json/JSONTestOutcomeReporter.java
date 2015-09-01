@@ -72,8 +72,8 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
     }
 
     public Optional<TestOutcome> loadReportFrom(final File reportFile) {
-        try(BufferedInputStream report = new BufferedInputStream(new FileInputStream(reportFile))) {
-            TestOutcome fromJson = jsonConverter.fromJson(report);
+        try (BufferedReader in = new BufferedReader(new FileReader(reportFile))) {
+            TestOutcome fromJson = jsonConverter.fromJson(in);
             return Optional.fromNullable(fromJson);
         } catch (Throwable e) {
             LOGGER.warn("this file was not a valid JSON Serenity test report: " + reportFile.getName()

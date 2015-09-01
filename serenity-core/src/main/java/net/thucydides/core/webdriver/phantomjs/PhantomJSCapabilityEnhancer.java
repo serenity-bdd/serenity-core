@@ -26,12 +26,29 @@ public class PhantomJSCapabilityEnhancer {
         ArrayList<String> cliArgs = Lists.newArrayList();
         setSecurityOptions(cliArgs);
         setLoggingOptions(cliArgs);
+
         if (StringUtils.isNotEmpty(ThucydidesSystemProperty.THUCYDIDES_PROXY_HTTP.from(environmentVariables))) {
             setProxyOptions(cliArgs);
         }
         if (StringUtils.isNotEmpty(ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.from(environmentVariables))) {
             setRemoteOptions(cliArgs);
         }
+        if (StringUtils.isNotEmpty(ThucydidesSystemProperty.PHANTOMJS_SSL_PROTOCOL.from(environmentVariables))) {
+            String sslSupport = ThucydidesSystemProperty.PHANTOMJS_SSL_PROTOCOL.from(environmentVariables);
+            if (sslSupport.equals("sslv2") ||
+                    sslSupport.equals("sslv3") ||
+                    sslSupport.equals("tlsv1") ||
+                    sslSupport.equals("any")) {
+                cliArgs.add("--ssl-protocol=" + sslSupport);
+            }
+            else {
+                cliArgs.add("--ssl-protocol=any");
+            }
+        }
+        else {
+            cliArgs.add("--ssl-protocol=any");
+        }
+
         capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, cliArgs.toArray(new String[]{}));
     }
 
@@ -80,7 +97,6 @@ public class PhantomJSCapabilityEnhancer {
 
     private void setSecurityOptions(ArrayList<String> cliArgs ) {
         cliArgs.add("--web-security=false");
-        cliArgs.add("--ssl-protocol=any");
         cliArgs.add("--ignore-ssl-errors=true");
     }
 

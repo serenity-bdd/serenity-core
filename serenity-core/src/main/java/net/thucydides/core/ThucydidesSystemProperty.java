@@ -696,7 +696,12 @@ public enum ThucydidesSystemProperty {
      * Keep the Thucydides session data between tests.
      * Normally, the session data is cleared between tests.
      */
-    THUCYDIDES_MAINTAIN_SESSION;
+    THUCYDIDES_MAINTAIN_SESSION,
+
+    /**
+     * Path to PhantomJS SSL support
+     */
+    PHANTOMJS_SSL_PROTOCOL;
 
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;

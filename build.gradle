@@ -201,6 +201,7 @@ subprojects {
         compile "junit:junit:${junitVersion}"
         compile('org.mockito:mockito-core:1.9.5') {
             exclude group: "org.hamcrest", module:"hamcrest-core"
+            exclude group: "org.objenesis", module:"objenesis"
         }
 
         testCompile ("ch.qos.logback:logback-classic:1.0.13") {

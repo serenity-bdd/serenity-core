@@ -310,7 +310,9 @@
                                 </h4>
                             </div>
                             <div class="modal-body">
-                                <p>Status code: ${restQuery.statusCode}</p>
+								<#if restQuery.statusCode?has_content>
+                                	<p>Status code: ${restQuery.statusCode}</p>
+								</#if>
                                 <#if restQuery.contentType?has_content>
                                     <p>Content Type: ${restQuery.contentType}</p>
                                 </#if>

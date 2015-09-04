@@ -84,6 +84,9 @@ public class Formatter {
     }
 
     public String renderXML(String text) {
+        if (text == null) {
+            return "";
+        }
         return concatLines(BASIC_XML.translate(stringFormOf(text)));
     }
 

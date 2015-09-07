@@ -76,6 +76,9 @@ public class Formatter {
     }
 
     public String stripQualifications(String title) {
+        if (title == null) {
+            return "";
+        }
         if (title.contains("[")) {
             return title.substring(0,title.lastIndexOf("["));
         } else {

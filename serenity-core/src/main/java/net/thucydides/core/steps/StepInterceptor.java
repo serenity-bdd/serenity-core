@@ -149,12 +149,12 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     private Object skipTestStep(Object obj, Method method, Object[] args, MethodProxy proxy) throws Exception {
         Object skippedReturnObject = runSkippedMethod(obj, method, args, proxy);
         notifyStepSkippedFor(method, args);
-        LOGGER.info("SKIPPED STEP: {}", method.getName());
+        LOGGER.info("SKIPPED STEP: {}", StepName.fromStepAnnotationIn(method).or(method.getName()));
         return appropriateReturnObject(skippedReturnObject, obj, method);
     }
 
     private Object runSkippedMethod(Object obj, Method method, Object[] args, MethodProxy proxy) {
-        LOGGER.trace("Running test step " + getTestNameFrom(method, args, false));
+        LOGGER.trace("Running test step " + StepName.fromStepAnnotationIn(method).or(method.getName()));
         Object result = null;
         StepEventBus.getEventBus().temporarilySuspendWebdriverCalls();
         result = runIfNestedMethodsShouldBeRun(obj, method, args, proxy);
@@ -290,11 +290,11 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
                                final Object[] args, final MethodProxy proxy) throws Throwable {
 
         String callingClass = testContext();
-        LOGGER.info("STARTING STEP: {} - {}", callingClass, method.getName());
+        LOGGER.info("STARTING STEP: {} - {}", callingClass, StepName.fromStepAnnotationIn(method).or(method.getName()));
         Object result = null;
         try {
             result = executeTestStepMethod(obj, method, args, proxy, result);
-            LOGGER.info("STEP DONE: {}", method.getName());
+            LOGGER.info("STEP DONE: {}", StepName.fromStepAnnotationIn(method).or(method.getName()));
         } catch (AssertionError failedAssertion) {
             error = failedAssertion;
             logStepFailure(obj, method, args, failedAssertion);
@@ -311,7 +311,9 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
 
     private void logStepFailure(Object object, Method method, Object[] args, Throwable assertionError) throws Throwable {
         notifyOfStepFailure(object, method, args, assertionError);
-        LOGGER.info("STEP FAILED: {} - {}", method.getName(), assertionError.getMessage());
+
+
+        LOGGER.info("STEP FAILED: {} - {}", StepName.fromStepAnnotationIn(method).or(method.getName()), assertionError.getMessage());
     }
 
     private Object executeTestStepMethod(Object obj, Method method, Object[] args, MethodProxy proxy, Object result) throws Throwable {
@@ -364,7 +366,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
 
     private String getTestNameFrom(final Method method, final Object[] args, final boolean addMarkup) {
         if ((args == null) || (args.length == 0)) {
-            return method.getName();
+            return StepName.fromStepAnnotationIn(method).or(method.getName());
         } else {
             return testNameWithArguments(method, args, addMarkup);
         }
@@ -373,7 +375,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     private String testNameWithArguments(final Method method,
                                          final Object[] args,
                                          final boolean addMarkup) {
-        StringBuilder testName = new StringBuilder(method.getName());
+        StringBuilder testName = new StringBuilder(StepName.fromStepAnnotationIn(method).or(method.getName()));
         testName.append(": ");
         if (addMarkup) {
             testName.append("<span class='step-parameter'>");

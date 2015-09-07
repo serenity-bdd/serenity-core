@@ -366,7 +366,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
 
     private String getTestNameFrom(final Method method, final Object[] args, final boolean addMarkup) {
         if ((args == null) || (args.length == 0)) {
-            return StepName.fromStepAnnotationIn(method).or(method.getName());
+            return method.getName();
         } else {
             return testNameWithArguments(method, args, addMarkup);
         }
@@ -375,7 +375,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     private String testNameWithArguments(final Method method,
                                          final Object[] args,
                                          final boolean addMarkup) {
-        StringBuilder testName = new StringBuilder(StepName.fromStepAnnotationIn(method).or(method.getName()));
+        StringBuilder testName = new StringBuilder(method.getName());
         testName.append(": ");
         if (addMarkup) {
             testName.append("<span class='step-parameter'>");

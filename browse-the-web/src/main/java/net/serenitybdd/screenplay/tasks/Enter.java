@@ -29,7 +29,7 @@ public class Enter implements Performable {
         return this;
     }
 
-    @Step("{0} enters '#theText' from #target")
+    @Step("{0} enters '#theText' into #target")
     public <T extends Actor> void performAs(T theUser) {
         BrowseTheWeb.as(theUser)
                 .moveTo(target.getCssOrXPathSelector())

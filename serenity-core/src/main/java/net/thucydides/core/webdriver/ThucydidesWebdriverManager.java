@@ -148,10 +148,14 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
 
         if (!inThisTestThread().driverIsRegisteredFor(driver)) {
             inThisTestThread().registerDriverCalled(driver)
-                              .forDriver(newDriver(configuration, webDriverFactory, driver));
+                              .forDriver(newDriver(configuration, webDriverFactory, driverTypeOf(driver)));
 
         }
         return inThisTestThread().useDriver(driver);
+    }
+
+    private static String driverTypeOf(String driverName) {
+        return driverName.contains(":") ? driverName.substring(0, driverName.indexOf(":")) : driverName;
     }
 
     public static WebdriverInstances inThisTestThread() {

@@ -19,10 +19,10 @@ import static org.hamcrest.Matchers.equalTo;
 @RunWith(SerenityRunner.class)
 public class WhenDanaBrowsesTheWeb {
 
-    @Managed(driver="chrome")
+    @Managed
     WebDriver firstBrowser;
 
-    @Managed(driver="firefox")
+    @Managed
     WebDriver anotherBrowser;
 
     @Test

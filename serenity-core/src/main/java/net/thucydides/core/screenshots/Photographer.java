@@ -137,7 +137,6 @@ public class Photographer {
         try {
             Files.deleteIfExists(capturedScreenshot.toPath());
         } catch(IOException e) {
-//            logger.info("Failed to quickly delete screenshot " + capturedScreenshot.getName() + " : " + e.getMessage());
             capturedScreenshot.deleteOnExit();
         }
     }

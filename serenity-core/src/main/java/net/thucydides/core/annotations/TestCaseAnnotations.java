@@ -38,8 +38,10 @@ public final class TestCaseAnnotations {
 
     public void injectDrivers(final WebdriverManager webdriverManager) {
         List<ManagedWebDriverAnnotatedField> webDriverFields = findAnnotatedFields(testCase.getClass());
+        int driverCount = 1;
         for(ManagedWebDriverAnnotatedField webDriverField : webDriverFields) {
-            webDriverField.setValue(testCase, webdriverManager.getWebdriver(webDriverField.getDriver()));
+            String driverName = webDriverField.getDriver() + ":" + driverCount++;
+            webDriverField.setValue(testCase, webdriverManager.getWebdriver(driverName));
         }
     }
 

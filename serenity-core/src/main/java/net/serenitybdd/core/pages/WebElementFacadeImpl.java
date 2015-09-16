@@ -468,6 +468,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         }
     }
 
+
     class ExtractText implements Converter<WebElement, String> {
         public String convert(WebElement from) {
             return from.getText();
@@ -649,6 +650,14 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         select.selectByIndex(indexValue);
         notifyScreenChange();
         return this;
+    }
+
+    @Override
+    public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
+        if (driverIsDisabled()) {
+            return null;
+        }
+        return getWrappedElement().getScreenshotAs(target);
     }
 
     private void waitUntilElementAvailable() {

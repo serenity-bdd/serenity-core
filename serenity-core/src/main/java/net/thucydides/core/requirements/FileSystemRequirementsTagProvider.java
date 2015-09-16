@@ -477,7 +477,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         for (Requirement requirement : requirements) {
             String normalizedStoryPathElement = Inflector.getInstance().humanize(Inflector.getInstance().underscore(storyPathElement));
             if (requirement.getName().equals(normalizedStoryPathElement)
-                    || (storyPathElement.equalsIgnoreCase(removeExtension(requirement.getFeatureFileName())))) {
+                    || (storyPathElement.equalsIgnoreCase(removeExtension(requirement.getFeatureFileName())))
+                    || (storyPathElement.equalsIgnoreCase(requirement.getName()))) {
                 return Optional.of(requirement);
             }
         }

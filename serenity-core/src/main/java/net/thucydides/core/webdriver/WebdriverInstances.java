@@ -122,6 +122,19 @@ public class WebdriverInstances {
                 : DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
     }
 
+    public void setCurrentDriverTo(WebDriver driver) {
+        currentDriver = driverNameFor(driver);
+    }
+
+    private String driverNameFor(WebDriver driver) {
+        for(String driverName : driverMap.keySet()) {
+            if (driverMap.get(driverName) == driver) {
+                return driverName;
+            }
+        }
+        throw new IllegalStateException("No matching driver found in this thread");
+    }
+
 
     public final class InstanceRegistration {
         private final String driverName;

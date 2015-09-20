@@ -106,6 +106,7 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
     @Override
     public void setCurrentDriver(WebDriver driver) {
         currentDriver = Optional.fromNullable(driver);
+        inThisTestThread().setCurrentDriverTo(driver);
     }
 
     @Override

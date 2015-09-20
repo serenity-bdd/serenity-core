@@ -6,6 +6,7 @@ import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Broadcaster;
 import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
+import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.webdriver.WebdriverManager;
@@ -47,7 +48,7 @@ public class BrowseTheWeb extends PageObject implements Ability {
         }
     }
 
-    @Subscribe public void endPerformance(ActorBeginsPerformanceEvent performanceEvent) {
+    @Subscribe public void endPerformance(ActorEndsPerformanceEvent performanceEvent) {
         if (performanceEvent.getName().equals(actor.getName())) {
             webdriverManager.clearCurrentDriver();
         }

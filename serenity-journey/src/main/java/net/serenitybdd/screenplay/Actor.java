@@ -3,6 +3,8 @@ package net.serenitybdd.screenplay;
 import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
 import net.serenitybdd.screenplay.exceptions.IgnoreStepException;
+import net.thucydides.core.steps.ExecutedStepDescription;
+import net.thucydides.core.steps.StepEventBus;
 
 import java.util.Map;
 
@@ -96,7 +98,8 @@ public class Actor implements PerformsTasks {
     }
 
     private boolean anOutOfStepErrorOccurred() {
-        return eventBusInterface.getStepCount() > taskTally.getPerformedTaskCount();
+        return eventBusInterface.aStepHasFailed()
+               && eventBusInterface.getStepCount() > taskTally.getPerformedTaskCount();
     }
 
     private <T> void check(Consequence<T> consequence) {

@@ -40,4 +40,6 @@ public class EventBusInterface {
     public void reportStepIgnored() {
         StepEventBus.getEventBus().stepIgnored();
     }
+
+    public boolean aStepHasFailed() { return StepEventBus.getEventBus().getBaseStepListener().aStepHasFailed(); }
 }

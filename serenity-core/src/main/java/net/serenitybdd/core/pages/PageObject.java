@@ -1040,7 +1040,7 @@ public abstract class PageObject {
     }
 
     public <T extends WebElementFacade> T moveTo(String xpathOrCssSelector) {
-        withAction().moveToElement(findBy(xpathOrCssSelector));
+        withAction().moveToElement(findBy(xpathOrCssSelector)).perform();
         return findBy(xpathOrCssSelector);
     }
 

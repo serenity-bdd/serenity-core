@@ -546,7 +546,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private Optional<Narrative> loadFromFeatureFile(File storyFile) {
         String explicitLocale = readLocaleFromFeatureFile(storyFile);
         CucumberParser parser = (explicitLocale != null) ?
-                new CucumberParser(explicitLocale) : new CucumberParser(environmentVariables);
+                new CucumberParser(explicitLocale, environmentVariables) : new CucumberParser(environmentVariables);
         return parser.loadFeatureNarrative(storyFile);
     }
 

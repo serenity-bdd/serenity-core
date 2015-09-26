@@ -58,6 +58,12 @@ public class SauceRemoteDriverCapabilities implements RemoteDriverCapabilities {
         if (capabilities.getBrowserName().equals("safari")) {
             setAppropriateSaucelabsPlatformVersionForSafari(capabilities);
         }
+
+        String remotePlatform = environmentVariables.getProperty("remote.platform");
+        if (isNotEmpty(remotePlatform)) {
+            capabilities.setPlatform(Platform.valueOf(remotePlatform));
+        }
+
     }
 
     private void setAppropriateSaucelabsPlatformVersion(DesiredCapabilities capabilities) {

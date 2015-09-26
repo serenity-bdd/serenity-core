@@ -94,11 +94,11 @@ public class SingleThreadScreenshotProcessor implements ScreenshotProcessor {
 
         private void processScreenshot(QueuedScreenshot queuedScreenshot) {
 
-            LOGGER.info("Processing screenshot: " + queuedScreenshot.getSourceFile());
+            LOGGER.debug("Processing screenshot: " + queuedScreenshot.getSourceFile());
             if (!queuedScreenshot.getDestinationFile().exists()) {
                 resizeOrMoveScreenshot(queuedScreenshot);
             }
-            LOGGER.info("Processing screenshot completed");
+            LOGGER.debug("Processing screenshot completed");
         }
 
         private void resizeOrMoveScreenshot(QueuedScreenshot queuedScreenshot) {
@@ -171,7 +171,7 @@ public class SingleThreadScreenshotProcessor implements ScreenshotProcessor {
                 try {
                     Files.deleteIfExists(queuedScreenshot.getSourceFile().toPath());
                 } catch (IOException e) {
-                    LOGGER.info("Could not delete queued screenshot after processing: " + e.getMessage());
+                    LOGGER.debug("Could not delete queued screenshot after processing: " + e.getMessage());
                 }
             }
         }

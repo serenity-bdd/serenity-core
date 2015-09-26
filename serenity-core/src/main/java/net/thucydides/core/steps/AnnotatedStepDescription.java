@@ -1,19 +1,20 @@
 package net.thucydides.core.steps;
 
+import com.beust.jcommander.internal.Lists;
+import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.reflection.MethodFinder;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Keys;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static ch.lambdaj.Lambda.joinFrom;
 import static net.thucydides.core.annotations.Fields.FieldValue.UNDEFINED;
 import static net.thucydides.core.util.NameConverter.humanize;
 
@@ -175,11 +176,30 @@ public final class AnnotatedStepDescription {
                 String fieldName = fieldNameFor(field);
                 Object value = fields.get(field);
                 if (stepDescription.contains(fieldName) && (value != UNDEFINED)) {
-                    stepDescription = StringUtils.replace(stepDescription, fieldNameFor(field), value.toString());
+                    stepDescription = StringUtils.replace(stepDescription, fieldNameFor(field), stringValueFor(value));
                 }
             }
             //allStepDefinitionFieldsShouldBeResolvedIn(stepDescription);
             return stepDescription;
+        }
+
+        private String stringValueFor(Object value) {
+
+            if (value instanceof Keys[]) {
+                return keyNamesFor((Keys[]) value);
+            }
+            if (value.getClass().isArray()) {
+                return Joiner.on(",").join(Arrays.asList(value));
+            }
+            return value.toString();
+        }
+
+        private String keyNamesFor(Keys[] keyValues) {
+            List<String> keyNames = Lists.newArrayList();
+            for(Keys keyValue: keyValues) {
+                keyNames.add((keyValue.name()));
+            }
+            return Joiner.on(",").join(keyNames);
         }
 
         private void allStepDefinitionFieldsShouldBeResolvedIn(String stepDescription) {

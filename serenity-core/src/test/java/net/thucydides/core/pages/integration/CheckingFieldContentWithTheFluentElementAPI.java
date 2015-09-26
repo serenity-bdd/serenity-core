@@ -224,13 +224,6 @@ public class CheckingFieldContentWithTheFluentElementAPI extends FluentElementAP
         page.element(page.firstName).waitUntilVisible();
     }
 
-    @Test
-    public void should_wait_for_field_to_appear_before_entering_data() {
-        page.element(page.city).type("Denver");
-
-        assertThat(page.element(page.city).isCurrentlyVisible(), is(true));
-        assertThat(page.city.getAttribute("value"), is("Denver"));
-    }
 
     @Test(expected = TimeoutException.class)
     public void should_timeout_if_wait_for_text_in_element_to_dissapear_fails() {

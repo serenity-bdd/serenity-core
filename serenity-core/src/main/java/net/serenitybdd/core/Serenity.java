@@ -77,8 +77,8 @@ public class Serenity {
     }
 
     private static List<DependencyInjector> getDefaultDependencyInjectors() {
-        return ImmutableList.of( (DependencyInjector) new PageObjectDependencyInjector(getPages()),
-                                 (DependencyInjector) new EnvironmentDependencyInjector());
+        return ImmutableList.of((DependencyInjector) new PageObjectDependencyInjector(getPages()),
+                (DependencyInjector) new EnvironmentDependencyInjector());
     }
 
     /**
@@ -242,6 +242,10 @@ public class Serenity {
 
     public static FirefoxProfile getFirefoxProfile() {
         return firefoxProfileThreadLocal.get();
+    }
+
+    public static boolean hasASessionVariableCalled(Object key) {
+        return getCurrentSession().containsKey(key);
     }
 
     @SuppressWarnings("unchecked")

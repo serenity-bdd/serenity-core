@@ -10,16 +10,16 @@ public class WhenReadingEnvironmentVariables {
     @Test
     public void should_read_environment_variable_from_system() {
         EnvironmentVariables environmentVariables = new SystemEnvironmentVariables();
-        String value = environmentVariables.getValue("PATH");
+        String value = environmentVariables.getValue("JAVA_HOME");
         assertThat(value, is(not(nullValue())));
     }
 
-    enum LocalEnvProperties {PATH, USER_DIR, DOES_NOT_EXIST}
+    enum LocalEnvProperties {JAVA_HOME, USER_DIR, DOES_NOT_EXIST}
 
     @Test
     public void should_read_environment_variable_from_system_using_an_enum() {
         EnvironmentVariables environmentVariables = new SystemEnvironmentVariables();
-        String value = environmentVariables.getValue(LocalEnvProperties.PATH);
+        String value = environmentVariables.getValue(LocalEnvProperties.JAVA_HOME);
         assertThat(value, is(not(nullValue())));
     }
 

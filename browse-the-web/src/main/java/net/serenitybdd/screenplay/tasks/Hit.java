@@ -34,7 +34,7 @@ public class Hit implements Performable {
     public Performable keyIn(String cssOrXpathForElement) { return into(cssOrXpathForElement); }
     public Performable keyIn(Target target) { return into(target); }
 
-    @Step("{0} enters '#theText' into #target")
+    @Step("{0} types '#keys' in #target")
     public <T extends Actor> void performAs(T theUser) {
         BrowseTheWeb.as(theUser)
                 .moveTo(target.getCssOrXPathSelector())

@@ -231,20 +231,8 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
         StepEventBus.getEventBus().testFinished(testOutcome);
 
         List<TestStep> stepOutomes = stepListener.getTestOutcomes().get(0).getTestSteps();
-        assertThat(stepOutomes, everyItem(hasNoScreenshot()));
-    }
-
-    private Matcher<TestStep> hasNoScreenshot() {
-        return new BaseMatcher<TestStep>() {
-            public boolean matches(Object o) {
-                TestStep step = (TestStep) o;
-                return (step.getScreenshots() == null) || (step.getScreenshots().isEmpty());
-            }
-
-            public void describeTo(Description description) {
-                description.appendText("with no screenshot");
-            }
-        };
+        assertThat(stepOutomes.get(0).getScreenshots().size(), is(0));
+        assertThat(stepOutomes.get(1).getScreenshots().size(), is(0));
     }
 
     @Test

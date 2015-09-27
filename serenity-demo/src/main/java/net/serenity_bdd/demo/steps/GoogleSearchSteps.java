@@ -26,13 +26,13 @@ public class GoogleSearchSteps extends ScenarioSteps {
 
     @Step
     public void searchFor(String term) {
-        GoogleHomePage page = (GoogleHomePage) getPages().currentPageAt(GoogleHomePage.class);
+        GoogleHomePage page = getPages().currentPageAt(GoogleHomePage.class);
         page.searchFor(term);
     }
     
     @Step
     public void resultListShouldContain(String term) {
-        GoogleResultsPage page = (GoogleResultsPage) getPages().currentPageAt(GoogleResultsPage.class);
+        GoogleResultsPage page = getPages().currentPageAt(GoogleResultsPage.class);
         List<String> resultHeadings = page.getResultTitles();
         assertThat(resultHeadings, hasItem(containsString(term)));
     }

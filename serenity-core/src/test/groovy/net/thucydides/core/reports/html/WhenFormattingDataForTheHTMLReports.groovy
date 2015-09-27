@@ -229,6 +229,17 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         embeddedTable == "I have the following document:<br><table class='embedded'><thead><th>CSV</th></thead><tbody><tr><td>HEADERS</td></tr><tr><td>values</td></tr></tbody></table>"
     }
 
+    def "should identify a table within a step using paragraph separator"() {
+        given:
+        def table = "I have the following document:\u2029|CSV|\u2029|HEADERS|\u2029|values|"
+
+        def formatter = new Formatter(issueTracking);
+        when:
+        def embeddedTable = formatter.convertAnyTables(table)
+        then:
+        embeddedTable == "I have the following document:<br><table class='embedded'><thead><th>CSV</th></thead><tbody><tr><td>HEADERS</td></tr><tr><td>values</td></tr></tbody></table>"
+    }
+
     def "should identify a table within a step using double spaced lines"() {
         given:
         def table = "I have the following document:\n|CSV|\n\n|HEADERS|\n|values|"

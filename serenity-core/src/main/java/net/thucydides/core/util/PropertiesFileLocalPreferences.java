@@ -3,9 +3,7 @@ package net.thucydides.core.util;
 import com.google.inject.Inject;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigValue;
-import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import net.thucydides.core.ThucydidesSystemProperty;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

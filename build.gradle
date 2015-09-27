@@ -118,7 +118,6 @@ subprojects {
         if (!JavaVersion.current().isJava8Compatible()) {
             jvmArgs '-XX:MaxPermSize=256m'
         }
-        maxParallelForks = 4
     }
 
     task integrationTests(type: Test) {

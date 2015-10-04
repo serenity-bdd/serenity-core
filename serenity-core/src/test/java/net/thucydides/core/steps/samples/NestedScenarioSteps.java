@@ -5,6 +5,7 @@ import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.WrongPageError;
+import net.thucydides.core.screenshots.BlurLevel;
 import net.thucydides.core.steps.ScenarioSteps;
 
 public class NestedScenarioSteps extends ScenarioSteps {
@@ -45,7 +46,7 @@ public class NestedScenarioSteps extends ScenarioSteps {
     }
 
     @Step
-    @BlurScreenshots("HEAVY")
+    @BlurScreenshots(BlurLevel.HEAVY)
     public void blurred_step() {
     }
 }

@@ -1,26 +1,25 @@
-package net.thucydides.core.screenshots;
+package net.serenitybdd.core.photography.bluring;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.annotations.BlurScreenshots;
 import net.thucydides.core.reflection.StackTraceAnalyser;
+import net.thucydides.core.screenshots.BlurLevel;
 
 import java.lang.reflect.Method;
 
-public class ScreenshotBlurCheck {
+public class AnnotatedBluring {
 
-
-    public Optional<BlurLevel> blurLevel() {
+    public static BlurLevel blurLevel() {
         return fromAnnotation();
     }
 
-    private Optional<BlurLevel> fromAnnotation() {
+    private static BlurLevel fromAnnotation() {
         StackTraceElement[] stackTrace = new Throwable().getStackTrace();
         for (StackTraceElement stackTraceElement : stackTrace) {
             Method callingMethod = StackTraceAnalyser.forStackTraceElement(stackTraceElement).getMethod();
             if (callingMethod != null && callingMethod.getAnnotation(BlurScreenshots.class) != null) {
-                return Optional.of(callingMethod.getAnnotation(BlurScreenshots.class).value());
+                return callingMethod.getAnnotation(BlurScreenshots.class).value();
             }
         }
-        return Optional.absent();
+        return BlurLevel.NONE;
     }
 }

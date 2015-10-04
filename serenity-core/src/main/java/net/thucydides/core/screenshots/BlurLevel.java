@@ -1,5 +1,7 @@
 package net.thucydides.core.screenshots;
 
+import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
+
 /**
  * Created with IntelliJ IDEA.
  * User: rahuljai
@@ -22,5 +24,9 @@ public enum BlurLevel {
 
     public int getRadius() {
         return radius;
+    }
+
+    public static BlurLevel fromAnnotations() {
+        return AnnotatedBluring.blurLevel();
     }
 }

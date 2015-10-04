@@ -7,7 +7,6 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.ProvidedDriverConfiguration;
 import net.thucydides.core.webdriver.WebDriverFacade;
-import net.thucydides.core.webdriver.WebdriverManager;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -35,7 +34,6 @@ import java.nio.file.StandardCopyOption;
  */
 public class Photographer {
 
-    private final WebdriverManager webdriverManager;
     private final WebDriver driver;
     private final File targetDirectory;
     private Optional<BlurLevel> blurLevel;
@@ -82,7 +80,6 @@ public class Photographer {
         this.screenshotProcessor = screenshotProcessor;
         this.blurLevel = Optional.fromNullable(blurLevel);
         this.environmentVariables = environmentVariables;
-        this.webdriverManager = Injectors.getInjector().getInstance(WebdriverManager.class);
     }
 
     public Optional<BlurLevel> getBlurLevel() {
@@ -97,6 +94,8 @@ public class Photographer {
             try {
                 File screenshotTempFile = null;
                 Object capturedScreenshot = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.FILE);
+                // TODO: See if this can just be a byte array
+                // TODO: Use JIMFS
                 if (isAFile(capturedScreenshot)) {
                     screenshotTempFile = copyScreenshotWorkingCopyFrom((File) capturedScreenshot);
                 } else if (isByteArray(capturedScreenshot)) {
@@ -108,6 +107,7 @@ public class Photographer {
                 if (screenshotTempFile != null) {
                     String storedFilename = getDigestScreenshotNameFor(screenshotTempFile);
                     File savedScreenshot = targetScreenshot(storedFilename);
+                    // TODO: QueuedScreenshot should be a Negative
                     if (!Files.exists(savedScreenshot.toPath())) {
                         screenshotProcessor.queueScreenshot(new QueuedScreenshot(screenshotTempFile, savedScreenshot));
                     } else {
@@ -150,8 +150,8 @@ public class Photographer {
         return screenshotDigest.forScreenshot(screenshotTempFile);
     }
 
+    // TODO: Extract to a DarkRoom class
     protected File blur(File srcFile) throws IOException {
-        System.out.println("BLURING  " + srcFile);
         BufferedImage srcImage = ImageIO.read(srcFile);
         BufferedImage destImage = deepCopy(srcImage);
         BoxBlurFilter boxBlurFilter = new BoxBlurFilter();
@@ -176,7 +176,6 @@ public class Photographer {
 
     private File saveScreenshotData(byte[] capturedScreenshot) throws IOException {
         Path temporaryScreenshotFile = Files.createTempFile("screenshot", "");
-        System.out.println("SAVING SCREENSHOT DATA TO  " + temporaryScreenshotFile);
         Files.write(temporaryScreenshotFile, capturedScreenshot);
         return temporaryScreenshotFile.toFile();
     }

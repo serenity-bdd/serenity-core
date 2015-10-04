@@ -52,7 +52,7 @@ dependencies {
         exclude group: 'xml-apis', module: 'xml-apis'
     }
 
-    compile('io.appium:java-client:3.1.0') {
+    compile('io.appium:java-client:3.2.0') {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
         exclude group: 'cglib', module: 'cglib'
@@ -119,6 +119,7 @@ dependencies {
     compile('org.jsoup:jsoup:1.8.3') {
         exclude group: 'junit', module: 'junit'
     }
+    compile 'com.google.jimfs:jimfs:1.0'
 
     testCompile "junit:junit:${junitVersion}"
     testCompile "org.springframework:spring-test:${springVersion}"
@@ -144,7 +145,7 @@ processResources {
 task writeNewPom << {
     pom {
         project {
-            inceptionYear '2008'
+            inceptionYear '2011'
             licenses {
                 license {
                     name 'The Apache Software License, Version 2.0'

@@ -8,17 +8,11 @@ import net.thucydides.core.steps.StepFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * A utility class that provides services to initialize web testing and reporting-related fields in arbitrary objects.
  * It is designed to help integrate Thucydides into other testing tools such as Cucumber.
  */
 public class ThucydidesWebDriverSupport {
-
-    private static final List<WebdriverManager> registeredWebdriverManagers = Collections.synchronizedList(new ArrayList<WebdriverManager>());
 
     private static final ThreadLocal<WebdriverManager> webdriverManagerThreadLocal = new ThreadLocal<WebdriverManager>();
     private static final ThreadLocal<Pages> pagesThreadLocal = new ThreadLocal<Pages>();

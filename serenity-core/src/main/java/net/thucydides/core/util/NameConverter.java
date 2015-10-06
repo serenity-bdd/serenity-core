@@ -61,7 +61,6 @@ public final class NameConverter {
         StringBuffer splitWords = new StringBuffer();
 
         // AbcDef
-        boolean inWord = false;
         String currentWord = "";
         for (int index = 0; index < name.length(); index++) {
             if (onWordBoundary(name, index)) {

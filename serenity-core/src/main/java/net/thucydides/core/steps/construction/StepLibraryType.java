@@ -40,19 +40,19 @@ public class StepLibraryType {
         return Iterables.any(fields, ofTypePages());
 
     }
-    private Predicate<Constructor> withAnyParameters() {
-        return new Predicate<Constructor>() {
+    private Predicate<Constructor<?>> withAnyParameters() {
+        return new Predicate<Constructor<?>>() {
 
-            public boolean apply(Constructor constructor) {
+            public boolean apply(Constructor<?> constructor) {
                 return ((constructor.getParameterTypes().length > 0));
             }
         };
     }
 
-    private Predicate<Constructor> withASinglePagesParameter() {
-        return new Predicate<Constructor>() {
+    private Predicate<Constructor<?>> withASinglePagesParameter() {
+        return new Predicate<Constructor<?>>() {
 
-            public boolean apply(Constructor constructor) {
+            public boolean apply(Constructor<?> constructor) {
                 return ((constructor.getParameterTypes().length == 1)
                         && (constructor.getParameterTypes()[0] == Pages.class));
             }

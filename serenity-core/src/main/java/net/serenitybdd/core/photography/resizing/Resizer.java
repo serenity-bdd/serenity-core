@@ -1,5 +1,7 @@
-package net.serenitybdd.core.photography;
+package net.serenitybdd.core.photography.resizing;
 
+import net.serenitybdd.core.photography.NegativeProcessor;
+import net.serenitybdd.core.photography.ScreenshotNegative;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.Dimension;
@@ -26,12 +28,20 @@ public class Resizer implements NegativeProcessor {
         this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
     }
 
-    public void process(ScreenshotNegative negative) {
+    @Override
+    public Path amendedScreenshotPath(ScreenshotNegative negative) {
+        return negative.getScreenshotPath();
+    }
+
+    public ScreenshotNegative process(ScreenshotNegative negative) {
+
+        ScreenshotNegative amendedNegative = negative.withScreenshotPath(amendedScreenshotPath(negative));
         try {
-            saveResizedScreenshotTo(negative.getTemporaryPath());
+            saveResizedScreenshotTo(amendedNegative.getTemporaryPath());
         } catch (IOException e) {
             LOGGER.warn("Could not save resized screenshot", e);
         }
+        return amendedNegative;
     }
 
     private void saveResizedScreenshotTo(Path temporaryPath) throws IOException {

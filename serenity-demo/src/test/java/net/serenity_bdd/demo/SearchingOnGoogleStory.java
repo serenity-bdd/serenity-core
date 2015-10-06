@@ -1,10 +1,10 @@
-package net.thucydides.demo;
+package net.serenity_bdd.demo;
 
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.demo.steps.GoogleSearchSteps;
+import net.serenity_bdd.demo.steps.GoogleSearchSteps;
 import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;

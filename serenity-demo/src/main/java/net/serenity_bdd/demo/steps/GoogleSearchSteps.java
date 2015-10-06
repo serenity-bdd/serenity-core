@@ -1,11 +1,11 @@
-package net.thucydides.demo.steps;
+package net.serenity_bdd.demo.steps;
 
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.StepGroup;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
-import net.thucydides.demo.pages.GoogleHomePage;
-import net.thucydides.demo.pages.GoogleResultsPage;
+import net.serenity_bdd.demo.pages.GoogleHomePage;
+import net.serenity_bdd.demo.pages.GoogleResultsPage;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package net.thucydides.demo.pages;
+package net.serenity_bdd.demo.pages;
 
 import net.thucydides.core.annotations.At;
 import net.thucydides.core.pages.PageObject;

@@ -14,6 +14,8 @@ import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.serenitybdd.core.eventbus.Broadcaster;
+
 import java.util.*;
 
 /**
@@ -196,6 +198,8 @@ public class StepEventBus {
         resultTally = null;
         classUnderTest = null;
         webdriverSuspensions.clear();
+
+        Broadcaster.unregisterAllListeners();
     }
 
     private void noAssumptionsViolated() {

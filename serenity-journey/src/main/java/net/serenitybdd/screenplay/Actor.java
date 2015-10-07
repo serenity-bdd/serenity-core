@@ -1,6 +1,7 @@
 package net.serenitybdd.screenplay;
 
 import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
 import net.serenitybdd.screenplay.exceptions.IgnoreStepException;

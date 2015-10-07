@@ -4,13 +4,15 @@ import com.google.common.eventbus.Subscribe;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.Broadcaster;
+import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.webdriver.WebdriverManager;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Gives an actor theValue ability to browse theValue web.
@@ -21,6 +23,8 @@ public class BrowseTheWeb extends PageObject implements Ability {
     private final WebdriverManager webdriverManager;
 
     private Actor actor;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected BrowseTheWeb(WebDriver browser) {
         super(browser);
@@ -43,14 +47,23 @@ public class BrowseTheWeb extends PageObject implements Ability {
     }
 
     @Subscribe public void beginPerformance(ActorBeginsPerformanceEvent performanceEvent) {
-        if (performanceEvent.getName().equals(actor.getName())) {
-              webdriverManager.setCurrentDriver(getDriver());
+        try {
+            if (performanceEvent.getName().equals(actor.getName())) {
+                logger.info("Set current driver for " + actor.getName() + " to " + getDriver());
+                webdriverManager.setCurrentDriver(getDriver());
+            }
+        } catch(Throwable e) {
+            logger.warn("Failed to notify begin performance event for actor " + performanceEvent.getName(),e);
         }
     }
 
     @Subscribe public void endPerformance(ActorEndsPerformanceEvent performanceEvent) {
-        if (performanceEvent.getName().equals(actor.getName())) {
-            webdriverManager.clearCurrentDriver();
+        try {
+            if (performanceEvent.getName().equals(actor.getName())) {
+                webdriverManager.clearCurrentDriver();
+            }
+        } catch(Throwable e) {
+            logger.warn("Failed to notify end performance event for actor " + performanceEvent.getName(),e);
         }
     }
 

@@ -4,7 +4,7 @@
 
     <groupId>net.thucydides</groupId>
     <artifactId>thucydides-demo</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.8.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>thucydides-demo</name>
@@ -56,6 +56,10 @@
                     <excludes>
                         <exclude>**/Abstract*.java</exclude>
                     </excludes>
+                    <systemProperties>
+                    	<webdriver.driver>${webdriver.driver}</webdriver.driver>
+                    	<webdriver.chrome.driver>${webdriver.chrome.driver}</webdriver.chrome.driver>
+                    </systemProperties>
                 </configuration>
             </plugin>
             <plugin>
@@ -88,4 +92,23 @@
             </plugin>
         </plugins>
     </build>
+    
+    <profiles>
+    	<profile>
+    		<id>firefox</id>
+    		<activation>
+    			<activeByDefault>true</activeByDefault>
+    		</activation>
+    		<properties>
+    			<webdriver.driver>firefox</webdriver.driver>
+    		</properties>
+    	</profile>
+    	<profile>
+    		<id>chrome</id>
+    		<properties>
+    			<webdriver.driver>chrome</webdriver.driver>
+    			<webdriver.chrome.driver>/path-to/chromedriver</webdriver.chrome.driver>
+    		</properties>
+    	</profile>
+    </profiles>
 </project>

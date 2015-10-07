@@ -672,6 +672,12 @@ public enum ThucydidesSystemProperty {
     FEATURE_FILE_LANGUAGE,
 
     /**
+     * What encoding to use for reading Cucumber feature files?
+     * Defaults to system default encoding
+     */
+    FEATURE_FILE_ENCODING,
+
+    /**
      * Fine-tune the number of threads Serenity uses for report generation.
      */
     REPORT_THREADS,

@@ -1,10 +1,9 @@
 package net.serenitybdd.screenplay;
 
+import net.serenitybdd.core.Serenity;
 import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
 import net.serenitybdd.screenplay.exceptions.IgnoreStepException;
-import net.thucydides.core.steps.ExecutedStepDescription;
-import net.thucydides.core.steps.StepEventBus;
 
 import java.util.Map;
 
@@ -42,17 +41,16 @@ public class Actor implements PerformsTasks {
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends Ability> T abilityTo(Class<? extends T> doSomething) {
         return (T) abilities.get(doSomething);
     }
 
-    @SafeVarargs
-    public final <T extends Performable> void has(T... todos) {
+    public final void has(Performable... todos) {
         attemptsTo(todos);
     }
 
-    @SafeVarargs
-    public final <T extends Performable> void attemptsTo(T... tasks) {
+    public final void attemptsTo(Performable... tasks) {
         beginPerformance();
         for (Performable task : tasks) {
             perform(task);
@@ -82,6 +80,9 @@ public class Actor implements PerformsTasks {
             }
         } catch (Throwable e) {
             eventBusInterface.reportStepFailureFor(todo, e);
+            if (Serenity.shouldThrowErrorsImmediately()) {
+                throw e;
+            }
         } finally {
             eventBusInterface.updateOverallResult();
         }
@@ -111,6 +112,9 @@ public class Actor implements PerformsTasks {
             eventBusInterface.reportStepIgnored();
         } catch (Throwable e) {
             eventBusInterface.reportStepFailureFor(consequence, e);
+            if (Serenity.shouldThrowErrorsImmediately()) {
+                throw e;
+            }
         }
     }
 
@@ -128,13 +132,11 @@ public class Actor implements PerformsTasks {
         return (T) notepad.get(key);
     }
 
-    @SuppressWarnings("unchecked")
     public <T> T sawAsThe(String key) {
-        return (T) recall(key);
+        return recall(key);
     }
 
-    @SuppressWarnings("unchecked")
     public <T> T gaveAsThe(String key) {
-        return (T) recall(key);
+        return recall(key);
     }
 }

@@ -118,7 +118,6 @@ subprojects {
         if (!JavaVersion.current().isJava8Compatible()) {
             jvmArgs '-XX:MaxPermSize=256m'
         }
-        maxParallelForks = 4
     }
 
     task integrationTests(type: Test) {
@@ -368,8 +367,15 @@ subprojects {
         }
     }
 */
+
+    tasks.withType(GroovyCompile) {
+        options.encoding = "UTF-8" // for Java compilation
+        groovyOptions.encoding = "UTF-8" // for Groovy compilation
+    }
+
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:-options"
+        options.encoding = 'UTF-8'
     }
     if (JavaVersion.current().isJava8Compatible()) {
         allprojects {

@@ -9,16 +9,17 @@ import org.openqa.selenium.Keys;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
-public class Enter implements Performable {
+public class Hit implements Performable {
 
-    private String theText;
+    private Keys[] keys;
     private Target target;
 
-    public static Enter theValue(String text) {
-        Enter enterAction = instrumented(Enter.class);
-        enterAction.theText = text;
+    public static Hit the(Keys... keys) {
+        Hit enterAction = instrumented(Hit.class);
+        enterAction.keys = keys;
         return enterAction;
     }
+
 
     public Performable into(String cssOrXpathForElement) {
         this.target = Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement);
@@ -30,10 +31,13 @@ public class Enter implements Performable {
         return this;
     }
 
-    @Step("{0} enters '#theText' into #target")
+    public Performable keyIn(String cssOrXpathForElement) { return into(cssOrXpathForElement); }
+    public Performable keyIn(Target target) { return into(target); }
+
+    @Step("{0} types '#keys' in #target")
     public <T extends Actor> void performAs(T theUser) {
         BrowseTheWeb.as(theUser)
                 .moveTo(target.getCssOrXPathSelector())
-                .then().type(theText);
+                .then().sendKeys(keys);
     }
 }

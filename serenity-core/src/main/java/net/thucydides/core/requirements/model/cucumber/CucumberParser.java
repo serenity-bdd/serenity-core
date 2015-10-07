@@ -13,6 +13,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,6 +23,7 @@ import java.util.Scanner;
 public class CucumberParser {
 
     private final String locale;
+    private final String encoding;
 
     public CucumberParser() {
         this(Injectors.getInjector().getInstance(EnvironmentVariables.class));
@@ -29,11 +31,12 @@ public class CucumberParser {
 
 
     public CucumberParser(EnvironmentVariables environmentVariables) {
-        locale = ThucydidesSystemProperty.FEATURE_FILE_LANGUAGE.from(environmentVariables,"en");
+        this(ThucydidesSystemProperty.FEATURE_FILE_LANGUAGE.from(environmentVariables,"en"), environmentVariables);
     }
 
-    public CucumberParser(String locale) {
+    public CucumberParser(String locale, EnvironmentVariables environmentVariables) {
         this.locale = locale;
+        this.encoding = ThucydidesSystemProperty.FEATURE_FILE_ENCODING.from(environmentVariables, Charset.defaultCharset().name());
     }
 
     public Optional<Narrative> loadFeatureNarrative(File narrativeFile)  {
@@ -41,7 +44,7 @@ public class CucumberParser {
         CucumberFeatureListener gherkinStructure =new CucumberFeatureListener();
         Parser parser = new Parser(gherkinStructure, true, "root", false, locale);
         try {
-            String gherkinScenarios = filterOutCommentsFrom(FileUtils.readFileToString(narrativeFile));
+            String gherkinScenarios = filterOutCommentsFrom(FileUtils.readFileToString(narrativeFile, encoding));
             parser.parse(gherkinScenarios, narrativeFile.getName(),0);
 
 

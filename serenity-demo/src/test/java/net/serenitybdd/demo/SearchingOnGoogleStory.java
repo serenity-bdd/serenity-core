@@ -1,7 +1,7 @@
 package net.serenitybdd.demo;
 
 import net.serenitybdd.demo.steps.GoogleSearchSteps;
-import net.serenitybdd.junit.runners.SerenityRunner;
+import net.thucydides.junit.runners.ThucydidesRunner;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
-@RunWith(SerenityRunner.class)
+@RunWith(ThucydidesRunner.class)
 public class SearchingOnGoogleStory {
 
     @Managed

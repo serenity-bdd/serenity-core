@@ -652,7 +652,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return this;
     }
 
-    @Override
     public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
         if (driverIsDisabled()) {
             return null;

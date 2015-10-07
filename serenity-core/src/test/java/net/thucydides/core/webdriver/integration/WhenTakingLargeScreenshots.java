@@ -53,9 +53,8 @@ public class WhenTakingLargeScreenshots {
 
     @After
     public void closeBrowser() {
-        try {
+        if (driver != null) {
             driver.quit();
-        } catch (Exception e) { // Ignore - we don't really care
         }
     }
 

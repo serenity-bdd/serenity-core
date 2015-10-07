@@ -54,7 +54,9 @@ public class WhenCheckingVisibilityOnAWebSiteUsingPageObjects {
 
     @AfterClass
     public static void closeBrowser() {
-        driver.quit();
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
     @Test

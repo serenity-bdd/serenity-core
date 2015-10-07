@@ -82,29 +82,6 @@
                 <artifactId>maven-thucydides-plugin</artifactId>
                 <version>0.8.0</version>
             </plugin>
-            <plugin>
-                <groupId>org.easyb</groupId>
-                <artifactId>maven-easyb-plugin</artifactId>
-                <version>1.4</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <storyType>html</storyType>
-                    <storyReport>${project.build.directory}/net.thucydides.easyb/stories.html</storyReport>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.easyb</groupId>
-                        <artifactId>easyb-core</artifactId>
-                        <version>1.5</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
         </plugins>
     </build>
     

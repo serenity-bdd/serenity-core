@@ -7,14 +7,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 
-@At("http://www.google\\..*")
+@At("https://www.google\\..*")
 public class GoogleHomePage extends PageObject {
 
     @FindBy(name="q")
     WebElement query;
 
-    @FindBy(name="btnG")
-    WebElement searchButton;
+//    @FindBy(name="btnK")
+//    WebElement searchButton;
     
     public GoogleHomePage(WebDriver driver) {
         super(driver);
@@ -22,7 +22,8 @@ public class GoogleHomePage extends PageObject {
 
     public void searchFor(String term) {
         query.sendKeys(term);
-        searchButton.click();
+        query.submit();
+//        searchButton.click();
         waitABit(200);
     }
 }

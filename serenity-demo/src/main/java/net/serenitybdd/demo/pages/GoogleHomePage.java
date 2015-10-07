@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 
-@At("http://www.google\\..*")
+@At("https://www.google\\..*")
 public class GoogleHomePage extends PageObject {
 
     @FindBy(name="q")

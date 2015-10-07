@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@At("http://www.google\\..*")
+@At("https://www.google\\..*")
 public class GoogleResultsPage extends PageObject {
 
     @FindBy(name="btnG")

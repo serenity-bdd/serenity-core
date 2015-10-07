@@ -135,7 +135,7 @@
                                     <span class="related-issue-title">${testOutcome.formattedIssues}</span>
                             </span>
                         </span>
-                        <#if (testOutcome.driver)??>
+                        <#if (testOutcome.driver)?? && (!testOutcome.manual)>
                             <span style="float:right"><img src="images/driver-${testOutcome.driver}.png" height="20"
                                                            alt="${testOutcome.driver}"
                                                            title="${testOutcome.driver}"/></span>
@@ -269,10 +269,11 @@
                                         aria-label="Close"><span aria-hidden="true">&times;</span>
                                 </button>
                                 <h4 class="modal-title" id="stacktraceModalLabel">
-                                ${cause.errorType} <#if (cause.message)??>:  ${cause.message} </#if>
+                                ${cause.errorType}
                                 </h4>
                             </div>
                             <div class="modal-body">
+                                <#if (cause.message)??><h4>${cause.message}</h4></#if>
                                 <#list cause.stackTrace as element>
                                 ${element.className}.${element.methodName}(${element.fileName}
                                     :${element.lineNumber})
@@ -309,7 +310,9 @@
                                 </h4>
                             </div>
                             <div class="modal-body">
-                                <p>Status code: ${restQuery.statusCode}</p>
+								<#if restQuery.statusCode?has_content>
+                                	<p>Status code: ${restQuery.statusCode}</p>
+								</#if>
                                 <#if restQuery.contentType?has_content>
                                     <p>Content Type: ${restQuery.contentType}</p>
                                 </#if>

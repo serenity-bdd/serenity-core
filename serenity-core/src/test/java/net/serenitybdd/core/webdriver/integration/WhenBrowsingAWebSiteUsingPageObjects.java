@@ -102,8 +102,10 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
 
     @AfterClass
     public static void closeDriver() {
-        driver.close();
-        driver.quit();
+    	if (driver != null) {
+	        driver.close();
+	        driver.quit();
+    	}
     }
 
     @Before
@@ -115,7 +117,7 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
     private void openStaticTestSite() {
         File baseDir = new File(System.getProperty("user.dir"));
         File testSite = new File(baseDir, "src/test/resources/static-site/index.html");
-        this.driver.get("file://" + testSite.getAbsolutePath());
+        driver.get("file://" + testSite.getAbsolutePath());
     }
 
     @Test

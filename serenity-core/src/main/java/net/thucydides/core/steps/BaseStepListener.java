@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.rest.RestQuery;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
@@ -114,6 +115,32 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
+    public StepMerger mergeLast(int maxStepsToMerge) {
+        return new StepMerger(maxStepsToMerge);
+    }
+
+    public int getStepCount() {
+        return getCurrentTestOutcome().getStepCount();
+    }
+
+    public void updateOverallResults() {
+        getCurrentTestOutcome().updateOverallResults();
+    }
+
+    public class StepMerger {
+
+        final int maxStepsToMerge;
+
+        public StepMerger(int maxStepsToMerge) {
+            this.maxStepsToMerge = maxStepsToMerge;
+        }
+
+        public void steps() {
+            getCurrentTestOutcome().mergeMostRecentSteps(maxStepsToMerge);
+        }
+
+    }
+
     protected enum ScreenshotType {
         OPTIONAL_SCREENSHOT,
         MANDATORY_SCREENSHOT
@@ -126,8 +153,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public BaseStepListener(final File outputDirectory, Injector injector) {
         this.proxyFactory = WebdriverProxyFactory.getFactory();
         this.testOutcomes = Lists.newArrayList();
-        this.currentStepStack = new Stack<TestStep>();
-        this.currentGroupStack = new Stack<TestStep>();
+        this.currentStepStack = new Stack<>();
+        this.currentGroupStack = new Stack<>();
         this.outputDirectory = outputDirectory;
         this.inFluentStepSequence = false;
         this.storywideIssues = Lists.newArrayList();
@@ -727,7 +754,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return /* (driver != null) ? driver : */webdriverManager.getWebdriver();
     }
 
-    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
     public boolean aStepHasFailed() {
         return ((!getTestOutcomes().isEmpty()) &&
                 (getCurrentTestOutcome().getResult() == TestResult.FAILURE || getCurrentTestOutcome().getResult() == TestResult.ERROR));
@@ -751,6 +777,26 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public void testPending() {
         getCurrentTestOutcome().setAnnotatedResult(PENDING);
+        updateExampleTableIfNecessary(PENDING);
+    }
+
+    @Override
+    public void testIsManual() {
+        getCurrentTestOutcome().asManualTest();
+        getCurrentTestOutcome().addTag(TestTag.withName("Manual").andType("External Tests"));
+        getCurrentTestOutcome().setAnnotatedResult(defaulManualTestReportResult());
+    }
+
+    private TestResult defaulManualTestReportResult() {
+        String manualTestResultValue = ThucydidesSystemProperty.MANUAL_TEST_REPORT_RESULT.from(configuration.getEnvironmentVariables(),
+                                                                                          TestResult.PENDING.toString());
+        TestResult manualTestResult = TestResult.PENDING;
+        try {
+            manualTestResult = TestResult.valueOf(manualTestResultValue.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            LOGGER.warn("Badly configured value for manual.test.report.result: should be one of " + TestResult.values());
+        }
+        return manualTestResult;
     }
 
     public void notifyScreenChange() {
@@ -807,4 +853,5 @@ public class BaseStepListener implements StepListener, StepPublisher {
         getCurrentStep().recordRestQuery(restQuery);
         stepFinished();
     }
+
 }

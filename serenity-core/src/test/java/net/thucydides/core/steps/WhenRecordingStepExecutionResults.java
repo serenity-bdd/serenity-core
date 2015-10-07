@@ -117,7 +117,6 @@ public class WhenRecordingStepExecutionResults {
         stepListener = new BaseStepListener(FirefoxDriver.class, outputDirectory, configuration);
 
         driver = mock(FirefoxDriver.class);
-//        stepListener.setDriver(driver);
 
         ThucydidesWebdriverManager.inThisTestThread().closeAllDrivers();
         ThucydidesWebdriverManager.inThisTestThread().registerDriverCalled("firefox").forDriver(driver);
@@ -125,7 +124,6 @@ public class WhenRecordingStepExecutionResults {
         when(driver.getCurrentUrl()).thenReturn("http://www.google.com");
         when(driver.getScreenshotAs(any(OutputType.class))).thenReturn(screenshot1).thenReturn(screenshot2);
 
-        StepEventBus.getEventBus().clear();
         StepEventBus.getEventBus().registerListener(stepListener);
     }
 
@@ -718,6 +716,7 @@ public class WhenRecordingStepExecutionResults {
         assertThat(stringValue, is("proportionOf"));
     }
 
+    @Ignore("We should only skip methods if they call webdriver or make rest calls")
     @Test
     public void should_skip_methods_from_same_domain_after_failure() {
 

@@ -77,8 +77,8 @@ public class Serenity {
     }
 
     private static List<DependencyInjector> getDefaultDependencyInjectors() {
-        return ImmutableList.of( (DependencyInjector) new PageObjectDependencyInjector(getPages()),
-                                 (DependencyInjector) new EnvironmentDependencyInjector());
+        return ImmutableList.of((DependencyInjector) new PageObjectDependencyInjector(getPages()),
+                (DependencyInjector) new EnvironmentDependencyInjector());
     }
 
     /**
@@ -130,7 +130,9 @@ public class Serenity {
      * @param testCase any object (testcase or other) containing injectable Serenity components
      */
     protected static void injectDriverInto(final Object testCase) {
-        TestCaseAnnotations.forTestCase(testCase).injectDriver(getDriver());
+//        TestCaseAnnotations.forTestCase(testCase).injectDriver(getDriver());
+        TestCaseAnnotations.forTestCase(testCase).injectDrivers(getWebdriverManager());
+
     }
 
     /**
@@ -242,16 +244,17 @@ public class Serenity {
         return firefoxProfileThreadLocal.get();
     }
 
-    public static Object sessionVariableCalled(Object key) {
-        return getCurrentSession().get(key);
+    public static boolean hasASessionVariableCalled(Object key) {
+        return getCurrentSession().containsKey(key);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T sessionVariableCalled(Object key) {
+        return (T) getCurrentSession().get(key);
     }
 
     public static SessionVariableSetter setSessionVariable(Object key) {
         return new SessionVariableSetter(key);
-    }
-
-    public static Pages getPagesFactory() {
-        return null;
     }
 
     public static class SessionVariableSetter {
@@ -261,13 +264,17 @@ public class Serenity {
             this.key = key;
         }
 
-        public void to(Object value) {
+        public <T> void to(T value) {
             if (value != null) {
                 Serenity.getCurrentSession().put(key, value);
             } else {
                 Serenity.getCurrentSession().remove(key);
             }
         }
+    }
+
+    public static Pages getPagesFactory() {
+        return null;
     }
 
     private static boolean throwExceptionsImmediately = false;

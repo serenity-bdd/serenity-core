@@ -135,6 +135,11 @@ public class TestCountListener implements StepListener {
 
     }
 
+    @Override
+    public void testIsManual() {
+
+    }
+
 
     public void notifyScreenChange() {
     }

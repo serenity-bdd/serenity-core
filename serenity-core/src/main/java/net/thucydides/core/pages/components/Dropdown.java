@@ -31,6 +31,10 @@ public class Dropdown {
     public void select(final String visibleLabel) {
         selectField.selectByVisibleText(visibleLabel);
     }
+    
+    public void selectByValue(final String value) {
+        selectField.selectByValue(value);
+    }
 
     public void selectMultipleItems(final String... selectedLabels) {
         Select select = new Select(dropdown);

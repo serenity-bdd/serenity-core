@@ -47,10 +47,16 @@ public final class StepAnnotations {
                                                          StepsAnnotatedField stepsField) {
         if (!stepsField.isInstantiated(testCaseOrSteps)) {
            Class<?> scenarioStepsClass = stepsField.getFieldClass();
-           Object steps = stepFactory.getStepLibraryFor(scenarioStepsClass);
+           Object steps = (useUniqueInstanceFor(stepsField)) ?
+                   stepFactory.getNewStepLibraryFor(scenarioStepsClass) :
+                   stepFactory.getStepLibraryFor(scenarioStepsClass) ;
            stepsField.setValue(testCaseOrSteps, steps);
            injectNestedScenarioStepsInto(steps, stepFactory, scenarioStepsClass);
        }
+    }
+
+    private static boolean useUniqueInstanceFor(StepsAnnotatedField stepsField) {
+        return stepsField.isUniqueInstance();
     }
 
     /**

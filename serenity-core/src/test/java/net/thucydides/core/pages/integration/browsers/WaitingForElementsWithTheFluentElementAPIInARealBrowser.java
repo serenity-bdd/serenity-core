@@ -60,37 +60,6 @@ public class WaitingForElementsWithTheFluentElementAPIInARealBrowser extends Flu
     }
 
     @Test
-    public void should_optionally_type_tab_after_entering_text_on_linux() {
-
-        if (runningOnLinux()) {
-            StaticSitePage page = getChromePage();
-
-            assertThat(page.firstName.getAttribute("value"), is("<enter first name>"));
-
-            page.element(page.firstName).typeAndTab("joe");
-
-            assertThat(page.element(page.lastName).hasFocus(), is(true));
-        }
-    }
-
-    @Test
-    public void should_trigger_blur_event_when_focus_leaves_field_in_chrome() {
-        // Not supported on Windows
-        if (!OS.isFamilyWindows()) {
-            StaticSitePage page = getChromePage();
-            page.getDriver().navigate().refresh();
-
-            assertThat(page.firstName.getAttribute("value"), is("<enter first name>"));
-
-            assertThat(page.focusmessage.getText(), is(""));
-
-            page.element(page.firstName).typeAndTab("joe");
-
-            assertThat(page.focusmessage.getText(), is("focus left firstname"));
-        }
-    }
-
-    @Test
     public void should_be_able_to_build_composite_wait_until_enabled_clauses() throws InterruptedException {
         StaticSitePage page = getFirefoxPage();
 

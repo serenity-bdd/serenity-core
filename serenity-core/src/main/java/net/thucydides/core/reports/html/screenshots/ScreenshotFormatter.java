@@ -46,9 +46,9 @@ public class ScreenshotFormatter {
     public Screenshot expandToHeight(final int targetHeight) throws IOException {
         File screenshotFile = new File(sourceDirectory, screenshot.getFilename());
         File resizedFile = resizedTargetFile(screenshot.getFilename());
-        LOGGER.info("Resizing image " + screenshotFile + " to " + resizedFile);
-        LOGGER.info("Screenshot exists" + screenshotFile.exists());
-        LOGGER.info("Resized screenshot exists" + resizedFile.exists());
+        LOGGER.debug("Resizing image " + screenshotFile + " to " + resizedFile);
+        LOGGER.debug("Screenshot exists" + screenshotFile.exists());
+        LOGGER.debug("Resized screenshot exists" + resizedFile.exists());
         if (!resizedFile.exists()) {
             resizedFile = resizedImage(screenshotFile, targetHeight);
             return new Screenshot(resizedFile.getName(),
@@ -65,21 +65,15 @@ public class ScreenshotFormatter {
     }
 
     private File resizedImage(File screenshotFile, int maxHeight) throws IOException {
-        LOGGER.info("Resizing image " + screenshotFile);
+        LOGGER.debug("Resizing image " + screenshotFile);
         File scaledFile = resizedTargetFile(screenshotFile.getName());
         if (!scaledFile.exists()) {
             ResizableImage scaledImage = ResizableImage.loadFrom(screenshotFile).rescaleCanvas(maxHeight);
             scaledImage.saveTo(scaledFile);
-            LOGGER.info("Scaled image saved to " + scaledFile);
+            LOGGER.debug("Scaled image saved to " + scaledFile);
         }
-        LOGGER.info("Resizing image done -> " + scaledFile.getAbsolutePath());
+        LOGGER.debug("Resizing image done -> " + scaledFile.getAbsolutePath());
         return scaledFile;
     }
-
-    private void saveCopyOf(File screenshotFile) throws IOException {
-        String backupScreenshotFilename = "original_" + screenshotFile.getName();
-        Files.copy(screenshotFile.toPath(), new File(sourceDirectory, backupScreenshotFilename).toPath());
-    }
-
 }
 

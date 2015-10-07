@@ -28,18 +28,19 @@
     <script class="code" type="text/javascript">$(document).ready(function () {
         var plot1 = $.jqplot('coverage_pie_chart', [
             [
-                ['Passing', ${requirements.proportion.withResult("SUCCESS")}],
+                ['Passing', ${requirements.proportionOf("automated").withResult("SUCCESS")}],
             <#if (successfulManualTests == true)>
                 ['Passing (manual)', ${requirements.proportionOf("manual").withResult("SUCCESS")}],
             </#if>
-                ['Pending', ${requirements.proportion.withResult("PENDING")}],
+                ['Pending', ${requirements.proportionOf("automated").withResult("PENDING")}],
             <#if (pendingManualTests)>
                 ['Pending (manual)', ${requirements.proportionOf("manual").withResult("PENDING")}],
             </#if>
-                ['Ignored', ${requirements.proportion.withResult("IGNORED")}],
-            <#if (pendingManualTests)>
+                ['Ignored', ${requirements.proportionOf("automated").withResult("IGNORED")}],
+            <#if (ignoredManualTests)>
                 ['Ignored (manual)', ${requirements.proportionOf("manual").withResult("IGNORED")}],
-            </#if>                ['Failing', ${requirements.proportion.withResult("FAILURE")}],
+            </#if>
+                ['Failing', ${requirements.proportionOf("automated").withResult("FAILURE")}],
             <#if (failingManualTests)>
                 ['Failing (manual)', ${requirements.proportionOf("manual").withResult("FAILURE")}],
             </#if>
@@ -519,7 +520,7 @@ Estimated ignored or skipped requirements: ${ignored}"
                                     <table id="test-results-table">
                                         <thead>
                                         <tr>
-                                            <th width="30" class="test-results-heading">&nbsp;</th>
+                                            <th width="50" class="test-results-heading">&nbsp;</th>
                                             <th width="%" class="test-results-heading">Acceptance Tests</th>
                                             <th width="70" class="test-results-heading">Steps</th>
                                             <#if reportOptions.showStepDetails>
@@ -529,7 +530,6 @@ Estimated ignored or skipped requirements: ${ignored}"
                                                 <th width="65" class="test-results-heading">Ignore</th>
                                                 <th width="65" class="test-results-heading">Skip</th>
                                             </#if>
-                                            <th width="65" class="test-results-heading">Stable</th>
                                             <th width="100" class="test-results-heading">Duration<br>(seconds)</th>
                                         </tr>
                                         </thead>
@@ -550,29 +550,14 @@ Estimated ignored or skipped requirements: ${ignored}"
                                                     <#assign testrun_outcome_icon = "ignor.png">
                                                 </#if>
 
-                                                <#assign stability = testOutcome.recentStability>
-                                                <#if (testOutcome.recentTestRunCount == testOutcome.recentPendingCount)>
-                                                    <#assign stability_icon = "traffic-in-progress.gif">
-                                                    <#assign stability_rank = 0>
-                                                <#elseif stability < 0.25>
-                                                    <#assign stability_icon = "traffic-red.gif">
-                                                    <#assign stability_rank = 1>
-                                                <#elseif stability < 0.5 >
-                                                    <#assign stability_icon = "traffic-orange.gif">
-                                                    <#assign stability_rank = 2>
-                                                <#elseif stability < 0.5 >
-                                                    <#assign stability_icon = "traffic-yellow.gif">
-                                                    <#assign stability_rank = 3>
-                                                <#else>
-                                                    <#assign stability_icon = "traffic-green.gif">
-                                                    <#assign stability_rank = 4>
-                                                </#if>
-
                                             <tr class="test-${testOutcome.result}">
-                                                <td><img src="images/${testrun_outcome_icon}"
+                                                <td>
+                                                    <img src="images/${testrun_outcome_icon}"
                                                          title="${testOutcome.result}"
-                                                         class="summary-icon"/><span
-                                                        style="display:none">${testOutcome.result}</span></td>
+                                                         class="summary-icon"/>
+                                                    <span style="display:none">${testOutcome.result}</span>
+                                                    <#if (testOutcome.manual)><img src="images/worker.png" title="Manual test"/></#if>
+                                                </td>
                                                 <td class="${testOutcome.result}-text"><a
                                                         href="${relativeLink!}${testOutcome.reportName}.html"
                                                         title="${formatter.htmlAttributeCompatible(testOutcome.errorMessage)}">${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}</a>
@@ -586,12 +571,7 @@ Estimated ignored or skipped requirements: ${ignored}"
                                                     <td class="bluetext">${testOutcome.skippedCount}</td>
                                                     <td class="bluetext">${testOutcome.ignoredCount}</td>
                                                 </#if>
-                                                <td class="bluetext">
-                                                    <img src="images/${stability_icon}"
-                                                         title="Over the last ${testOutcome.recentTestRunCount} tests: ${testOutcome.recentPassCount} passed, ${testOutcome.recentFailCount} failed, ${testOutcome.recentPendingCount} pending"
-                                                         class="summary-icon"/>
-                                                    <span style="display:none">${stability_rank }</span>
-                                                </td>
+
                                                 <td class="lightgreentext">${testOutcome.durationInSeconds}</td>
                                             </tr>
                                             </#foreach>

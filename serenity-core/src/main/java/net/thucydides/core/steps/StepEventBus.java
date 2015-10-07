@@ -26,8 +26,7 @@ import java.util.*;
  * placing your class in the classpath. Thucydides will automatically detect the listener and add it to the
  * registered listeners. It will load custom listeners automatically when a test starts for the first time.
  */
-public class
-        StepEventBus {
+public class StepEventBus {
 
     private static ThreadLocal<StepEventBus> stepEventBusThreadLocal = new ThreadLocal<StepEventBus>();
     private static final String CORE_THUCYDIDES_PACKAGE = "net.thucydides.core";
@@ -406,6 +405,17 @@ public class
         suspendTest();
     }
 
+    /**
+     * Mark the current test method as pending.
+     * The test will stil be executed to record the steps, but any webdriver calls will be skipped.
+     */
+    public void testIsManual() {
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.testIsManual();
+        }
+        suspendTest();
+    }
+
     public void suspendTest() {
         suspendedTest = true;
     }
@@ -453,7 +463,6 @@ public class
     }
 
     public void testRunFinished() {
-        System.out.println("TEST RUN FINISHED");
         screenshotProcessor.waitUntilDone();
         screenshotProcessor.terminate();
 
@@ -559,5 +568,20 @@ public class
 
     public void exceptionExpected(Class<? extends Throwable> expected) {
         getBaseStepListener().exceptionExpected(expected);
+    }
+
+    Optional<TestResult> NO_RESULT_YET = Optional.absent();
+    public Optional<TestResult> resultSoFar() {
+
+        return (getBaseStepListener().latestTestOutcome().isPresent()) ?
+                Optional.fromNullable(getBaseStepListener().latestTestOutcome().get().getResult()) : NO_RESULT_YET;
+    }
+
+    public void mergePreviousStep() {
+        baseStepListener.mergeLast(2).steps();
+    }
+
+    public void updateOverallResults() {
+        baseStepListener.updateOverallResults();
     }
 }

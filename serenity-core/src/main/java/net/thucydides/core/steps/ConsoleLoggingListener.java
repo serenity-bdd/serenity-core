@@ -260,7 +260,7 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
     public void stepStarted(ExecutedStepDescription description) {
-        if (loggingLevelIsAtLeast(getLoggingLevel().VERBOSE)) {
+        if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
             getLogger().info("STARTING STEP " + description.getTitle());
         }
     }
@@ -271,14 +271,15 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
     public void stepFinished() {
-        if (loggingLevelIsAtLeast(getLoggingLevel().VERBOSE)) {
+        if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
             getLogger().info("FINISHING STEP");
         }
     }
 
     public void stepFailed(StepFailure failure) {
-        if (loggingLevelIsAtLeast(getLoggingLevel().VERBOSE)) {
-            getLogger().info("STEP FAILED: " + failure.getMessage());
+        if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
+            String errorMessage = (failure.getException() != null) ? failure.getException().toString() : failure.getMessage();
+            getLogger().info("STEP FAILED: " + errorMessage);
         }
     }
 
@@ -287,20 +288,20 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
     public void stepIgnored() {
-        if (loggingLevelIsAtLeast(getLoggingLevel().VERBOSE)) {
+        if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
             getLogger().info("IGNORING STEP");
         }
     }
 
     public void stepPending() {
-        if (loggingLevelIsAtLeast(getLoggingLevel().VERBOSE)) {
+        if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
             getLogger().info("PENDING STEP");
         }
     }
 
 
     public void stepPending(String message) {
-        if (loggingLevelIsAtLeast(getLoggingLevel().VERBOSE)) {
+        if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
             getLogger().info("PENDING STEP " + "(" + message + ")");
         }
     }
@@ -327,7 +328,15 @@ public class ConsoleLoggingListener implements StepListener {
     public void testPending() {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
             getLogger().info("TEST PENDING");
-        }    }
+        }
+    }
+
+    @Override
+    public void testIsManual() {
+        if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
+            getLogger().info("TEST MANUAL");
+        }
+    }
 
 
     public void notifyScreenChange() {

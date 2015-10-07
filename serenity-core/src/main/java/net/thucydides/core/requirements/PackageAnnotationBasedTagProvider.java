@@ -17,6 +17,7 @@ import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.runner.RunWith;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -49,7 +50,11 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         super(vars);
         configuration = new SystemPropertiesConfiguration(environmentVariables);
         rootPackage = THUCYDIDES_TEST_ROOT.from(environmentVariables, rootDirectory);
-        persister = new RequirementPersister(configuration.getOutputDirectory(), rootPackage);
+        persister = new RequirementPersister(getRequirementsDirectory(), rootPackage);
+    }
+
+    private File getRequirementsDirectory() {
+        return new File(configuration.getOutputDirectory(),"requirements");
     }
 
     @Override
@@ -104,7 +109,6 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
             addRequirementTo(requirementMap, candidateClass, maxDepth);
         }
         addChildrenTo(requirementMap);
-//        leafRequirements = findLeafRequirementsIn(requirementsByPath);
         persistRequirementsAsJSON(requirementMap);
         return requirementMap;
     }

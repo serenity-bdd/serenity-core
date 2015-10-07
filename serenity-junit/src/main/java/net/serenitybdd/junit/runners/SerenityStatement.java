@@ -35,7 +35,8 @@ public class SerenityStatement extends Statement {
 
     private void checkForStepFailures() throws Throwable {
         if (publisher.aStepHasFailed()) {
-            System.out.println( publisher.getTestFailureCause().toException());
+            String message = publisher.getTestFailureCause().getErrorType() + ": " + publisher.getTestFailureCause().getMessage();
+            System.out.println(message);
             throw publisher.getTestFailureCause().toException();
         }
     }

@@ -40,6 +40,7 @@ a:active {
 
 body {
     background-color: #f7f8f3;
+    color:#eeeadd;
 }
 
 .results-page {
@@ -1318,7 +1319,7 @@ table.coverage_data td {
 }
 
 .date-and-time {
-    float:right; padding: 0px;
+    float:right; padding: 0px; color:gray;
 }
 
 .embedded {
@@ -1472,6 +1473,19 @@ ul.second-level-requirements  {
 
 .modal-body p {
     word-wrap: break-word;
+    color: grey;
+}
+
+#results-dashboard {
+    color:grey;
+}
+
+.stacktrace {
+    color: grey;
+}
+
+.rest-content {
+    color: cornflowerblue;
 }
 
 #restModal .modal-content
@@ -1484,6 +1498,7 @@ ul.second-level-requirements  {
 {
     height:500px;
     overflow:auto;
+    color: grey;
 }
 
 .rest-query {

@@ -56,17 +56,13 @@ public class RequirementsServiceImplementation implements RequirementsService {
         if (requirements == null) {
             requirements = newArrayList();
             for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
-                LOGGER.info("Reading requirements from " + tagProvider);
-
+                LOGGER.debug("Reading requirements from " + tagProvider);
                 List<Requirement> newRequirements = tagProvider.getRequirements();
-//                if (!requirements.isEmpty()) {
-//                    break;
-//                }
                 requirements = merger.merge(requirements, newRequirements);
             }
             requirements = addParentsTo(requirements);
             indexRequirements();
-            LOGGER.info("Requirements found:" + requirements);
+            LOGGER.debug("Requirements found:" + requirements);
         }
         return requirements;
     }
@@ -91,7 +87,7 @@ public class RequirementsServiceImplementation implements RequirementsService {
         for (Requirement requirement : requirements) {
             List<Requirement> requirementPath = ImmutableList.of(requirement);
             requirementAncestors.put(requirement, ImmutableList.of(requirement));
-            LOGGER.info("Requirement ancestors for:" + requirement + " = " + requirementPath);
+            LOGGER.debug("Requirement ancestors for:" + requirement + " = " + requirementPath);
             indexChildRequirements(requirementPath, requirement.getChildren());
         }
     }
@@ -119,7 +115,7 @@ public class RequirementsServiceImplementation implements RequirementsService {
             List<Requirement> requirementPath = newArrayList(ancestors);
             requirementPath.add(requirement);
             requirementAncestors.put(requirement, ImmutableList.copyOf(requirementPath));
-            LOGGER.info("Requirement ancestors for:" + requirement + " = " + requirementPath);
+            LOGGER.debug("Requirement ancestors for:" + requirement + " = " + requirementPath);
             indexChildRequirements(requirementPath, requirement.getChildren());
         }
     }
@@ -168,7 +164,7 @@ public class RequirementsServiceImplementation implements RequirementsService {
         for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
             Optional<Requirement> requirement = getParentRequirementOf(testOutcome, tagProvider);
             if (requirement.isPresent()) {
-                LOGGER.info("Requirement found for test outcome " + testOutcome.getTitle() + "-" + testOutcome.getIssueKeys() + ": " + requirement);
+                LOGGER.debug("Requirement found for test outcome " + testOutcome.getTitle() + "-" + testOutcome.getIssueKeys() + ": " + requirement);
                 if (getRequirementAncestors().containsKey(requirement.get())) {
                     return getRequirementAncestors().get(requirement.get());
                 } else {

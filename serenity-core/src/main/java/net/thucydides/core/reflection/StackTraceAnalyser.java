@@ -21,7 +21,7 @@ public class StackTraceAnalyser {
 
     public Method getMethod() {
         try {
-            if (allowedClassName(stackTraceElement.getClassName())) {
+            if (allowedClassName(stackTraceElement.getClassName()) && !lambda(stackTraceElement.getClassName()) ) {
                 Class callingClass = Class.forName(stackTraceElement.getClassName());
                 Method matchingMethod = extractMethod(stackTraceElement, callingClass);
                 if (matchingMethod != null) {
@@ -34,6 +34,10 @@ public class StackTraceAnalyser {
             logger.warn("Failed to load class definition during Stack analysis: " + noClassDefFoundErrorIgnored.getLocalizedMessage());
         }
         return null;
+    }
+
+    private boolean lambda(String className) {
+        return className.contains("$$Lambda$");
     }
 
     public static Method extractMethod(StackTraceElement stackTraceElement, Class callingClass)  {

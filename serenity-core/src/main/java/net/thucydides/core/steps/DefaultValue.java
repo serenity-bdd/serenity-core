@@ -2,11 +2,12 @@ package net.thucydides.core.steps;
 
 import org.joda.time.DateTime;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 public class DefaultValue {
     
-    private static final Map<Class, Object> DEFAULT_VALUES = new HashMap<Class, Object>();    
+    private static final Map<Class<?>, Object> DEFAULT_VALUES = new HashMap<Class<?>, Object>();    
     static {
         DEFAULT_VALUES.put(String.class, "");
         DEFAULT_VALUES.put(Integer.class, 0);
@@ -21,11 +22,19 @@ public class DefaultValue {
         DEFAULT_VALUES.put(Map.class, Collections.EMPTY_MAP);
     }
 
+    public static Object defaultReturnValueFor(Method method, Object object) {
+        if (method.getReturnType().isAssignableFrom(object.getClass())) {
+            return object;
+        } else {
+            return DefaultValue.forClass(method.getReturnType());
+        }
+    }
+
     public static Object forClass(Class<?> declaringClass) {
         Object defaultValue = null;
 
-        Set<Class> classes = DEFAULT_VALUES.keySet();
-        for (Class returnType : classes) {
+        Set<Class<?>> classes = DEFAULT_VALUES.keySet();
+        for (Class<?> returnType : classes) {
             if (returnType.isAssignableFrom(declaringClass)) {
                 defaultValue = DEFAULT_VALUES.get(returnType);
                 break;

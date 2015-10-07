@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static ch.lambdaj.Lambda.convert;
 import static ch.lambdaj.Lambda.join;
@@ -52,7 +53,7 @@ public class DateCollectionContainsSameDatesMatcher extends TypeSafeMatcher<Coll
         return new Converter<Date, String>() {
             @Override
             public String convert(Date from) {
-                return new DateTime(from).toString("d MMM yyyy HH:mm:ss");
+                return new DateTime(from).toString("d MMM yyyy HH:mm:ss", Locale.ENGLISH);
             }
         };
     }

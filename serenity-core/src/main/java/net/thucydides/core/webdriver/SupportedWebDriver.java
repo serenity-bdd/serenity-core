@@ -1,7 +1,6 @@
 package net.thucydides.core.webdriver;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
 import com.opera.core.systems.OperaDriver;
 import io.appium.java_client.AppiumDriver;
 import org.apache.commons.lang3.StringUtils;

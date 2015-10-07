@@ -7,4 +7,6 @@ include 'serenity-test-utils',
         'serenity-gradle-plugin',
         'serenity-spring',
         'serenity-rest-assured',
-        'serenity-browsermob-plugin'
+        'serenity-browsermob-plugin',
+        'serenity-journey',
+        'browse-the-web'

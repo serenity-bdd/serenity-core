@@ -7,6 +7,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.ProvidedDriverConfiguration;
 import net.thucydides.core.webdriver.WebDriverFacade;
+import net.thucydides.core.webdriver.WebdriverManager;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -34,6 +35,7 @@ import java.nio.file.StandardCopyOption;
  */
 public class Photographer {
 
+    private final WebdriverManager webdriverManager;
     private final WebDriver driver;
     private final File targetDirectory;
     private Optional<BlurLevel> blurLevel;
@@ -80,6 +82,7 @@ public class Photographer {
         this.screenshotProcessor = screenshotProcessor;
         this.blurLevel = Optional.fromNullable(blurLevel);
         this.environmentVariables = environmentVariables;
+        this.webdriverManager = Injectors.getInjector().getInstance(WebdriverManager.class);
     }
 
     public Optional<BlurLevel> getBlurLevel() {
@@ -90,10 +93,10 @@ public class Photographer {
      * Take a screenshot of the current browser and store it in the output directory.
      */
     public Optional<File> takeScreenshot() {
-        if (driver != null && driverCanTakeSnapshots()) {
+        if (getDriver() != null && driverCanTakeSnapshots()) {
             try {
                 File screenshotTempFile = null;
-                Object capturedScreenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+                Object capturedScreenshot = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.FILE);
                 if (isAFile(capturedScreenshot)) {
                     screenshotTempFile = copyScreenshotWorkingCopyFrom((File) capturedScreenshot);
                 } else if (isByteArray(capturedScreenshot)) {
@@ -119,6 +122,10 @@ public class Photographer {
         return Optional.absent();
     }
 
+    private WebDriver getDriver() {
+        return driver;
+    }
+
     private File copyScreenshotWorkingCopyFrom(File capturedScreenshot) throws IOException {
         Path temporaryScreenshotFile = Files.createTempFile("screenshot", "");
         Files.copy(capturedScreenshot.toPath(), temporaryScreenshotFile, StandardCopyOption.REPLACE_EXISTING);
@@ -130,13 +137,12 @@ public class Photographer {
         try {
             Files.deleteIfExists(capturedScreenshot.toPath());
         } catch(IOException e) {
-            logger.info("Failed to quickly delete screenshot " + capturedScreenshot.getName() + " : " + e.getMessage());
             capturedScreenshot.deleteOnExit();
         }
     }
 
     public String getPageSource() {
-        return driver.getPageSource();
+        return getDriver().getPageSource();
     }
 
     private String getDigestScreenshotNameFor(File screenshotTempFile) throws IOException {
@@ -190,17 +196,18 @@ public class Photographer {
 
     protected boolean driverCanTakeSnapshots() {
 
-        if (driver == null) {
+        if (getDriver() == null) {
             return false;
-        } else if (driverIsProvided()) {
+        }
+        if (driverIsProvided()) {
             ProvidedDriverConfiguration sourceConfig = new ProvidedDriverConfiguration(environmentVariables);
             return sourceConfig.getDriverSource().takesScreenshots();
-        } else if (driver instanceof WebDriverFacade) {
-            return ((WebDriverFacade) driver).canTakeScreenshots()
-                    && (((WebDriverFacade) driver).getProxiedDriver() != null);
-        } else {
-            return TakesScreenshot.class.isAssignableFrom(driver.getClass());
         }
+        if (getDriver() instanceof WebDriverFacade) {
+            return ((WebDriverFacade) getDriver()).canTakeScreenshots()
+                    && (((WebDriverFacade) getDriver()).getProxiedDriver() != null);
+        }
+        return TakesScreenshot.class.isAssignableFrom(getDriver().getClass());
     }
 
     private boolean driverIsProvided() {

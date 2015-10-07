@@ -22,5 +22,9 @@ class TestOutcomeChecks {
             }
             return matchingOutcome
         }
+
+        public boolean isEmpty() {
+            return testOutcomes.isEmpty()
+        }
     }
 }

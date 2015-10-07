@@ -96,7 +96,6 @@
                                         <th width="65" class="test-results-heading">Pend</th>
                                         <th width="65" class="test-results-heading">Skip</th>
                                         </#if>
-                                        <th width="65" class="test-results-heading">Stable</th>
                                         <th width="65" class="test-results-heading">Duration</th>
                                     </tr>
                                 </thead>
@@ -132,24 +131,6 @@
                                         <#assign outcome_text = "ignore-color">
                                     </#if>
 
-                                    <#assign stability = outcomesForTag.recentStability>
-                                    <#if (outcomesForTag.total == outcomesForTag.totalTests.withIndeterminateResult())>
-                                        <#assign stability_icon = "traffic-in-progress.gif">
-                                        <#assign stability_rank = 0>
-                                    <#elseif stability < 0.25>
-                                        <#assign stability_icon = "traffic-red.gif">
-                                        <#assign stability_rank = 1>
-                                    <#elseif stability < 0.5 >
-                                        <#assign stability_icon = "traffic-orange.gif">
-                                        <#assign stability_rank = 2>
-                                    <#elseif stability < 0.5 >
-                                        <#assign stability_icon = "traffic-yellow.gif">
-                                        <#assign stability_rank = 3>
-                                    <#else>
-                                        <#assign stability_icon = "traffic-green.gif">
-                                        <#assign stability_rank = 4>
-                                    </#if>
-
                                     <tr class="test-${outcomesForTag.result}">
                                         <td><img src="images/${outcome_icon}" title="${outcomesForTag.result}" class="summary-icon"/><span style="display:none">${outcomesForTag.result}</span></td>
                                         <td class="${outcomesForTag.result}-text"><a href="${tagReport}">${tagTitle}</a></td>
@@ -162,10 +143,6 @@
                                         <td class="bluetext">${outcomesForTag.totalTests.withResult("pending")}</td>
                                         <td class="bluetext">${outcomesForTag.totalTests.withResult("skipped")}</td>
                                         </#if>
-                                        <td class="bluetext">
-                                            <img src="images/${stability_icon}"  class="summary-icon"/>
-                                            <span style="display:none">${stability_rank }</span>
-                                        </td>
                                         <td class="lightgreentext">${outcomesForTag.duration / 1000}</td>
                                     </tr>
                                 </#foreach>

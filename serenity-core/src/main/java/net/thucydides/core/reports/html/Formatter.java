@@ -42,12 +42,12 @@ public class Formatter {
     private final static String ISSUE_LINK_FORMAT = "<a target=\"_blank\" href=\"{0}\">{1}</a>";
     private static final String ELIPSE = "&hellip;";
     private static final String ASCIIDOC = "asciidoc";
-    private static final String NEW_LINE = System.getProperty("line.separator");
+    private static final String NEW_LINE = "\n";
 
     private final static String NEWLINE_CHAR = "\u2424";
     private final static String NEWLINE = "\u0085";
     private final static String LINE_SEPARATOR = "\u2028";
-    private final static String PARAGRAPH_SEPARATOR = "\u2089";
+    private final static String PARAGRAPH_SEPARATOR = "\u2029";
     private final static String LEFT_BRACKET = "\u0FF3B";
     private final static String RIGHT_BRACKET = "\u0FF3D";
 
@@ -76,6 +76,9 @@ public class Formatter {
     }
 
     public String stripQualifications(String title) {
+        if (title == null) {
+            return "";
+        }
         if (title.contains("[")) {
             return title.substring(0,title.lastIndexOf("["));
         } else {
@@ -84,6 +87,9 @@ public class Formatter {
     }
 
     public String renderXML(String text) {
+        if (text == null) {
+            return "";
+        }
         return concatLines(BASIC_XML.translate(stringFormOf(text)));
     }
 

@@ -1,5 +1,6 @@
 package net.thucydides.core.model;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.rest.RestQuery;
@@ -9,8 +10,10 @@ import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
 import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.jsoup.Jsoup;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -91,6 +94,14 @@ public class TestStep {
         this.restQuery = restQuery;
     }
 
+    public void updateOverallResult() {
+        if (result != null) {
+            if (getResultFromChildren().overrides(result)) {
+                result = null;
+            }
+        }
+    }
+
     public static class TestStepBuilder {
         private final String description;
 
@@ -165,6 +176,16 @@ public class TestStep {
 
     public String getDescription() {
         return description;
+    }
+
+    public TestStep unrendered() {
+        TestStep stepCopy = clone();
+        stepCopy.setDescription(stripMarkupFrom(description));
+        return stepCopy;
+    }
+
+    private String stripMarkupFrom(String description) {
+        return Jsoup.parse(description).text();
     }
 
     public List<TestStep> getChildren() {

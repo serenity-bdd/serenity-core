@@ -520,4 +520,9 @@ public class RenderedPageObjectView {
     public net.serenitybdd.core.pages.WebElementFacade find(String xpathOrCssSelector) {
         return find(xpathOrCssSelector(xpathOrCssSelector));
     }
+
+    public <T extends WebElementFacade> T moveTo(String xpathOrCssSelector) {
+        pageObject.withAction().moveToElement(pageObject.findBy(xpathOrCssSelector));
+        return pageObject.findBy(xpathOrCssSelector);
+    }
 }

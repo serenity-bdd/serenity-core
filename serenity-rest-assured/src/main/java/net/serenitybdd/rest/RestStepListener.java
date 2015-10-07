@@ -107,6 +107,11 @@ public class RestStepListener implements StepListener {
     }
 
     @Override
+    public void testIsManual() {
+
+    }
+
+    @Override
     public void notifyScreenChange() {
 
     }

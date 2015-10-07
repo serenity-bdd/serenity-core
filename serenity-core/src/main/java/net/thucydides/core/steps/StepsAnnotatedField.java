@@ -95,8 +95,11 @@ public class StepsAnnotatedField {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public Class<?> getFieldClass() {
         return field.getType();
+    }
+
+    public boolean isUniqueInstance() {
+        return field.getAnnotation(Steps.class).uniqueInstance();
     }
 }

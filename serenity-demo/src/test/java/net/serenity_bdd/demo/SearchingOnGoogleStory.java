@@ -16,7 +16,9 @@ public class SearchingOnGoogleStory {
     @Managed
     public WebDriver webdriver;
 
-    @ManagedPages(defaultUrl = "http://www.google.com")
+    // Using 'http://www.google.com/ncr' prevents redirects from 'google.com' 
+    // to country specific google search pages. For example in Germany 'google.de'.
+    @ManagedPages(defaultUrl = "http://www.google.com/ncr")
     public Pages pages;
     
     @Steps

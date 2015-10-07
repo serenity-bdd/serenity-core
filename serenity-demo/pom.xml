@@ -96,9 +96,6 @@
     <profiles>
     	<profile>
     		<id>firefox</id>
-    		<activation>
-    			<activeByDefault>true</activeByDefault>
-    		</activation>
     		<properties>
     			<webdriver.driver>firefox</webdriver.driver>
     		</properties>
@@ -107,7 +104,13 @@
     		<id>chrome</id>
     		<properties>
     			<webdriver.driver>chrome</webdriver.driver>
+    			<!--  Add the property 'webdriver.chrome.driver' as shown below to this profile.         -->
+    			<!--  Correct the value, so it contains the path to the location where the chromedriver  -->
+    			<!--  is installed. Or add this property key and related value to the 'settings.xml'.    -->
+    			<!--  See also the README.md                                                             -->
+    			<!--
     			<webdriver.chrome.driver>/path-to/chromedriver</webdriver.chrome.driver>
+    			-->
     		</properties>
     	</profile>
     </profiles>

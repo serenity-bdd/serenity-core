@@ -8,7 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 
 import static net.serenitybdd.core.photography.ScreenshotNegative.prepareNegativeIn;
 
@@ -43,7 +45,9 @@ public class PhotoSession {
     }
 
     private ScreenshotReceipt storeScreenshot(byte[] screenshotData, Path screenshotPath) throws IOException {
-        Path screenshotsDirectory = DarkroomFileSystem.get().getPath("./screenshots");
+        Path screenshotsDirectory = DarkroomFileSystem.get().getPath("/tmp/screenshots");
+
+        Files.createDirectories(screenshotsDirectory);
 
         ScreenshotNegative screenshotNegative = prepareNegativeIn(screenshotsDirectory)
                 .withScreenshotData(screenshotData)

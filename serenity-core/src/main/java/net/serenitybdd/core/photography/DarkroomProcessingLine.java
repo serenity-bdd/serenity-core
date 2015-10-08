@@ -82,20 +82,30 @@ public class DarkroomProcessingLine implements Runnable {
 
         Path screenshotPath = screenshotPathFor(negative);
 
-        if (Files.exists(screenshotPath)) {
-            return;
+        if (!Files.exists(screenshotPath)) {
+            saveProcessedScreenshot(negative);
         }
+        deleteTemporaryScreenshotFrom(negative);
+    }
+
+    private void deleteTemporaryScreenshotFrom(ScreenshotNegative negative) {
+        try {
+            Files.deleteIfExists(negative.getTemporaryPath());
+        } catch (IOException e) {
+            LOGGER.warn("Failed to delete temporary screenshot", e);
+        }
+    }
+
+    private void saveProcessedScreenshot(ScreenshotNegative negative) {
         LOGGER.debug("Processing screenshot image");
         for (NegativeProcessor processor : processors) {
             negative = processor.process(negative);
         }
         try {
-            LOGGER.debug("Saving screenshot to " + negative.getScreenshotPath());
+            LOGGER.info("Saving screenshot to " + negative.getScreenshotPath());
             if (!Files.exists(negative.getScreenshotPath())) {
                 Files.copy(negative.getTemporaryPath(), negative.getScreenshotPath());
             }
-            Files.deleteIfExists(negative.getTemporaryPath());
-            LOGGER.debug("Screenshot saved");
         } catch (IOException e) {
             LOGGER.warn("Failed to save screenshot", e);
         }

@@ -58,6 +58,7 @@ public class Darkroom {
         } catch (InterruptedException e) {
             LOGGER.error("Screenshot processing interrupted",e);
         }
+        DarkroomFileSystem.close();
     }
 
     public ScreenshotReceipt submitForProcessing(ScreenshotNegative negative) {
@@ -68,7 +69,7 @@ public class Darkroom {
      * Returns a receipt of the screenshot negative with the definitive destination path
      */
     public static ScreenshotReceipt sendNegative(ScreenshotNegative screenshotNegative) {
-        LOGGER.info("Send negative for processing for " + screenshotNegative.getScreenshotPath());
+        LOGGER.debug("Send negative for processing for " + screenshotNegative.getScreenshotPath());
         return theDarkroom.get().submitForProcessing(screenshotNegative);
     }
 }

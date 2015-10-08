@@ -6,15 +6,16 @@ import com.google.common.jimfs.Jimfs;
 import java.nio.file.FileSystem;
 
 public class DarkroomFileSystem {
-    private static ThreadLocal<FileSystem> fileSystemThreadLocal = new ThreadLocal<FileSystem>() {
-        @Override
-        protected FileSystem initialValue() {
-            return Jimfs.newFileSystem(Configuration.unix());
-        }
-    };
+    private static ThreadLocal<FileSystem> fileSystemThreadLocal = new ThreadLocal<>();
 
     public static FileSystem get() {
+        if (fileSystemThreadLocal.get() == null) {
+            fileSystemThreadLocal.set(Jimfs.newFileSystem(Configuration.unix()));
+        }
         return fileSystemThreadLocal.get();
     }
 
+    public static void close() {
+        fileSystemThreadLocal.remove();
+    }
 }

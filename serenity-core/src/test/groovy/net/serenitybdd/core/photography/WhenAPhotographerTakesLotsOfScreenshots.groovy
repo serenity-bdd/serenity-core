@@ -23,6 +23,7 @@ class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
             }
             Darkroom.waitUntilClose();
         then:
+            println "Photos: $photos"
             photos.forEach { photo -> Files.exists(photo.pathToScreenshot) }
     }
 

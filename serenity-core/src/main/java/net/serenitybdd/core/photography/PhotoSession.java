@@ -34,6 +34,7 @@ public class PhotoSession {
 
         try {
             ScreenshotReceipt screenshotReceipt = storeScreenshot(screenshotData, screenshotPath);
+            LOGGER.debug("Screenshot sheduled to be saved to " + screenshotPath);
             return ScreenshotPhoto.forScreenshotAt(screenshotReceipt.getDestinationPath());
         } catch (IOException e) {
             LOGGER.warn("Failed to save screenshot", e);

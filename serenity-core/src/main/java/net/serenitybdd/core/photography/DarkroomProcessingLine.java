@@ -47,7 +47,7 @@ public class DarkroomProcessingLine implements Runnable {
     }
 
     public void run() {
-        LOGGER.info("Darkroom processing line starting up");
+        LOGGER.debug("Darkroom processing line starting up");
         while (!done) {
             synchronized (queue) {
                 processNegative();
@@ -61,7 +61,7 @@ public class DarkroomProcessingLine implements Runnable {
                 }
             }
         }
-        LOGGER.info("Darkroom processing line shutting down");
+        LOGGER.debug("Darkroom processing line shutting down");
     }
 
     private void finishProcessingNegatives() {
@@ -85,17 +85,17 @@ public class DarkroomProcessingLine implements Runnable {
         if (Files.exists(screenshotPath)) {
             return;
         }
-        LOGGER.info("Processing screenshot image");
+        LOGGER.debug("Processing screenshot image");
         for (NegativeProcessor processor : processors) {
             negative = processor.process(negative);
         }
         try {
-            LOGGER.info("Saving screenshot to " + negative.getScreenshotPath());
+            LOGGER.debug("Saving screenshot to " + negative.getScreenshotPath());
             if (!Files.exists(negative.getScreenshotPath())) {
                 Files.copy(negative.getTemporaryPath(), negative.getScreenshotPath());
             }
             Files.deleteIfExists(negative.getTemporaryPath());
-            LOGGER.info("Screenshot saved");
+            LOGGER.debug("Screenshot saved");
         } catch (IOException e) {
             LOGGER.warn("Failed to save screenshot", e);
         }

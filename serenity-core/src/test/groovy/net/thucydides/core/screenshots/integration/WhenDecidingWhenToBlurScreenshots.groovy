@@ -34,7 +34,7 @@ class WhenDecidingWhenToBlurScreenshots extends Specification {
     }
 
 
-    @BlurScreenshots(BlurLevel.HEAVY)
+    @BlurScreenshots(BlurLevel.LIGHT)
     Optional<BlurLevel> getBlurLevelFromStepMethodSetWithLightBlur() {
         return new ScreenshotBlurCheck().blurLevel();
     }

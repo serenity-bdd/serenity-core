@@ -1,24 +1,27 @@
 package net.thucydides.core.steps;
 
-import ch.lambdaj.function.aggregate.Aggregator;
-import ch.lambdaj.function.aggregate.PairAggregator;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
-import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.photography.ScreenshotPhoto;
+import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
 import net.serenitybdd.core.rest.RestQuery;
+import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.pages.Pages;
-import net.serenitybdd.core.time.SystemClock;
-import net.thucydides.core.screenshots.*;
-import net.thucydides.core.webdriver.*;
+import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.core.screenshots.ScreenshotException;
+import net.thucydides.core.screenshots.ScreenshotProcessor;
+import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.core.webdriver.WebdriverManager;
+import net.thucydides.core.webdriver.WebdriverProxyFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
@@ -26,12 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.*;
 
-import static ch.lambdaj.Lambda.aggregate;
-import static com.google.common.collect.Lists.partition;
 import static net.thucydides.core.model.Stories.findStoryFrom;
 import static net.thucydides.core.model.TestResult.*;
 import static net.thucydides.core.steps.BaseStepListener.ScreenshotType.MANDATORY_SCREENSHOT;
@@ -93,6 +92,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private List<String> storywideIssues;
 
     private List<TestTag> storywideTags;
+
+    private net.serenitybdd.core.photography.Photographer photographer = new net.serenitybdd.core.photography.Photographer();
 
     public void setEventBus(StepEventBus eventBus) {
         this.eventBus = eventBus;
@@ -685,46 +686,14 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private Optional<ScreenshotAndHtmlSource> grabScreenshot() {
-        Optional<File> screenshot = getPhotographer().takeScreenshot();
-        if (screenshot.isPresent()) {
-            if (shouldStoreSourcecode()) {
-                File sourcecodeFile = sourcecodeForScreenshot(screenshot.get(), getPageSource());
-                return Optional.of(new ScreenshotAndHtmlSource(screenshot.get(), sourcecodeFile));
-            } else {
-                return Optional.of(new ScreenshotAndHtmlSource(screenshot.get()));
-            }
-        }
-        return Optional.absent();
+
+        ScreenshotPhoto newPhoto = photographer.takesAScreenshot()
+                .withDriver(getDriver())
+                .andWithBlurring(AnnotatedBluring.blurLevel())
+                .andSaveToDirectory(outputDirectory.toPath());
+
+        return Optional.of(new ScreenshotAndHtmlSource(newPhoto.getPathToScreenshot().toFile()));
     }
-
-    public String getPageSource() {
-        return getPhotographer().getPageSource();
-    }
-
-    private File sourcecodeForScreenshot(File screenshotFile, String pageSource) {
-        File pageSourceFile = new File(screenshotFile.getAbsolutePath() + ".html");
-
-        try {
-            Files.write(pageSourceFile.toPath(), pageSource.getBytes());
-        } catch (IOException e) {
-            LOGGER.warn("Failed to write screen source code",e);
-        }
-        return pageSourceFile;
-    }
-
-    private boolean shouldStoreSourcecode() {
-        return configuration.storeHtmlSourceCode();
-    }
-
-    public Photographer getPhotographer() {
-        ScreenshotBlurCheck blurCheck = new ScreenshotBlurCheck();
-        if (blurCheck.blurLevel().isPresent()) {
-            return new Photographer(getDriver(), outputDirectory, blurCheck.blurLevel().get());
-        } else {
-            return new Photographer(getDriver(), outputDirectory);
-        }
-    }
-
 
     private boolean shouldTakeEndOfStepScreenshotFor(final TestResult result) {
         if (result == FAILURE) {

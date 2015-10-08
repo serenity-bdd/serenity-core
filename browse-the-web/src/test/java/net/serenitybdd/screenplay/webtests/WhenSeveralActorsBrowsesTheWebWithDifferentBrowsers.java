@@ -19,16 +19,16 @@ import static org.hamcrest.Matchers.equalTo;
 @RunWith(SerenityRunner.class)
 public class WhenSeveralActorsBrowsesTheWebWithDifferentBrowsers {
 
-    @Managed
+    @Managed(driver = "phantomjs")
     WebDriver firstBrowser;
 
-    @Managed
+    @Managed(driver = "phantomjs")
     WebDriver secondBrowser;
 
-    @Managed
+    @Managed(driver = "phantomjs")
     WebDriver thirdBrowser;
 
-    @Managed
+    @Managed(driver = "phantomjs")
     WebDriver fourthBrowser;
 
     @Test

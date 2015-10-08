@@ -18,7 +18,7 @@ public class Darkroom {
     private static ThreadLocal<Darkroom> theDarkroom = new ThreadLocal();
 
     public static void isOpenForBusiness() {
-        if (theDarkroom.get() == null) {
+        if (theDarkroomIsClosed()) {
             LOGGER.info("Opening darkroom");
             theDarkroom.set(new Darkroom());
         }
@@ -28,10 +28,20 @@ public class Darkroom {
         start();
     }
 
+    private static boolean theDarkroomIsClosed() {
+        return (theDarkroom.get() == null);
+    }
+
+    private static boolean theDarkroomIsOpen() {
+        return (theDarkroom.get() != null);
+    }
+
     public static void waitUntilClose() {
         LOGGER.info("Closing darkroom");
-        theDarkroom.get().terminate();
-        theDarkroom.remove();
+        if (theDarkroomIsOpen()) {
+            theDarkroom.get().terminate();
+            theDarkroom.remove();
+        }
     }
 
     public void start() {

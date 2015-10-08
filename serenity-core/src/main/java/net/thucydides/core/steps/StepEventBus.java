@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import net.serenitybdd.core.photography.Darkroom;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
@@ -73,6 +74,8 @@ public class StepEventBus {
     public StepEventBus(ScreenshotProcessor screenshotProcessor, EnvironmentVariables environmentVariables) {
         this.screenshotProcessor = screenshotProcessor;
         this.environmentVariables = environmentVariables;
+
+        Darkroom.isOpenForBusiness();
     }
 
     /**
@@ -220,6 +223,8 @@ public class StepEventBus {
 
     public void testFinished() {
         screenshotProcessor.waitUntilDone();
+        Darkroom.waitUntilClose();
+
         TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testFinished(outcome);
@@ -229,6 +234,8 @@ public class StepEventBus {
 
     public void testFinished(TestOutcome result) {
         screenshotProcessor.waitUntilDone();
+        Darkroom.waitUntilClose();
+
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testFinished(result);
         }
@@ -469,6 +476,8 @@ public class StepEventBus {
     public void testRunFinished() {
         screenshotProcessor.waitUntilDone();
         screenshotProcessor.terminate();
+
+        Darkroom.waitUntilClose();
 
     }
 

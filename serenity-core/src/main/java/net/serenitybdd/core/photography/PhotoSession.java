@@ -45,7 +45,7 @@ public class PhotoSession {
     }
 
     private ScreenshotReceipt storeScreenshot(byte[] screenshotData, Path screenshotPath) throws IOException {
-        Path screenshotsDirectory = DarkroomFileSystem.get().getPath("/tmp/screenshots");
+        Path screenshotsDirectory = DarkroomFileSystem.get().getPath("./screenshots");
 
         Files.createDirectories(screenshotsDirectory);
 

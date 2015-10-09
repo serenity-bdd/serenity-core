@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.*;
 
 import static net.thucydides.core.model.Stories.findStoryFrom;
@@ -697,6 +698,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return (newPhoto == ScreenshotPhoto.None) ?
                 Optional.<ScreenshotAndHtmlSource>absent()
                 : Optional.of(new ScreenshotAndHtmlSource(newPhoto.getPathToScreenshot().toFile()));
+    }
+
+    private Path pathOf(File directory) {
+        return (directory == null) ? null : directory.toPath();
     }
 
     private boolean shouldTakeEndOfStepScreenshotFor(final TestResult result) {

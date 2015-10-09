@@ -693,7 +693,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         ScreenshotPhoto newPhoto = photographer.takesAScreenshot()
                 .withDriver(getDriver())
                 .andWithBlurring(AnnotatedBluring.blurLevel())
-                .andSaveToDirectory(outputDirectory.toPath());
+                .andSaveToDirectory(pathOf(outputDirectory));
 
         return (newPhoto == ScreenshotPhoto.None) ?
                 Optional.<ScreenshotAndHtmlSource>absent()

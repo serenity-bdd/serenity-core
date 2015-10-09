@@ -383,8 +383,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
      */
     public void stepStarted(final ExecutedStepDescription description) {
         recordStep(description);
-        getDriver();
-        takeInitialScreenshot();
+        if (currentTestIsABrowserTest()) {
+            takeInitialScreenshot();
+        }
         updateSessionIdIfKnown();
 
     }
@@ -588,7 +589,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void takeEndOfStepScreenshotFor(final TestResult result) {
-        if (shouldTakeEndOfStepScreenshotFor(result)) {
+        if (currentTestIsABrowserTest() && shouldTakeEndOfStepScreenshotFor(result)) {
             take(OPTIONAL_SCREENSHOT);
         }
     }
@@ -778,7 +779,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void notifyScreenChange() {
-        if (screenshots().areAllowed(TakeScreenshots.FOR_EACH_ACTION)) {
+        if (currentTestIsABrowserTest() && screenshots().areAllowed(TakeScreenshots.FOR_EACH_ACTION)) {
             take(OPTIONAL_SCREENSHOT);
         }
     }

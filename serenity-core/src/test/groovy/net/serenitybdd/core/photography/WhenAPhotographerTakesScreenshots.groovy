@@ -37,6 +37,7 @@ class WhenAPhotographerTakesScreenshots extends Specification {
                     .andSaveToDirectory(screenshotDirectory);
         then:
             Darkroom.waitUntilClose();
+            Thread.sleep(1000)
             Files.exists(photo.getPathToScreenshot())
     }
 

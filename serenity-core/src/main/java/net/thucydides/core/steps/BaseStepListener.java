@@ -383,6 +383,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
      */
     public void stepStarted(final ExecutedStepDescription description) {
         recordStep(description);
+        getDriver();
         takeInitialScreenshot();
         updateSessionIdIfKnown();
 
@@ -605,7 +606,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
             try {
                 Optional<ScreenshotAndHtmlSource> screenshotAndHtmlSource = grabScreenshot();
                 if (screenshotAndHtmlSource.isPresent()) {
-                    takeScreenshotIfRequired(screenshotType, screenshotAndHtmlSource.get());
+                    recordScreenshotIfRequired(screenshotType, screenshotAndHtmlSource.get());
                 }
                 removeDuplicatedInitalScreenshotsIfPresent();
             } catch (ScreenshotException e) {
@@ -643,7 +644,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return testStep.getScreenshots().get(testStep.getScreenshots().size() - 1);
     }
 
-    private void takeScreenshotIfRequired(ScreenshotType screenshotType, ScreenshotAndHtmlSource screenshotAndHtmlSource) {
+    private void recordScreenshotIfRequired(ScreenshotType screenshotType, ScreenshotAndHtmlSource screenshotAndHtmlSource) {
         if (shouldTakeScreenshot(screenshotType, screenshotAndHtmlSource) && screenshotWasTaken(screenshotAndHtmlSource)) {
             getCurrentStep().addScreenshot(screenshotAndHtmlSource);
         }
@@ -692,7 +693,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
                 .andWithBlurring(AnnotatedBluring.blurLevel())
                 .andSaveToDirectory(outputDirectory.toPath());
 
-        return Optional.of(new ScreenshotAndHtmlSource(newPhoto.getPathToScreenshot().toFile()));
+        return (newPhoto == ScreenshotPhoto.None) ?
+                Optional.<ScreenshotAndHtmlSource>absent()
+                : Optional.of(new ScreenshotAndHtmlSource(newPhoto.getPathToScreenshot().toFile()));
     }
 
     private boolean shouldTakeEndOfStepScreenshotFor(final TestResult result) {

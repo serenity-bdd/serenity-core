@@ -32,9 +32,17 @@ public class PhotoSession {
     public ScreenshotPhoto takeScreenshot() {
 
         byte[] screenshotData = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-        Path screenshotPath = screenshotPathFor(screenshotData);
 
+        if (screenshotData == null || screenshotData.length == 0) {
+            return ScreenshotPhoto.None;
+        }
+
+        return storedScreenshot(screenshotData);
+    }
+
+    private ScreenshotPhoto storedScreenshot(byte[] screenshotData) {
         try {
+            Path screenshotPath = screenshotPathFor(screenshotData);
             ScreenshotReceipt screenshotReceipt = storeScreenshot(screenshotData, screenshotPath);
             LOGGER.debug("Screenshot sheduled to be saved to " + screenshotPath);
             return ScreenshotPhoto.forScreenshotAt(screenshotReceipt.getDestinationPath());

@@ -9,7 +9,6 @@ import net.serenitybdd.core.photography.Darkroom;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
-import net.thucydides.core.screenshots.ScreenshotProcessor;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.slf4j.Logger;
@@ -68,11 +67,9 @@ public class StepEventBus {
     private Class<?> classUnderTest;
     private Story storyUnderTest;
 
-    private final ScreenshotProcessor screenshotProcessor;
     private final EnvironmentVariables environmentVariables;
     @Inject
-    public StepEventBus(ScreenshotProcessor screenshotProcessor, EnvironmentVariables environmentVariables) {
-        this.screenshotProcessor = screenshotProcessor;
+    public StepEventBus(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
 
         Darkroom.isOpenForBusiness();
@@ -222,7 +219,7 @@ public class StepEventBus {
     }
 
     public void testFinished() {
-        screenshotProcessor.waitUntilDone();
+        //screenshotProcessor.waitUntilDone();
         Darkroom.waitUntilClose();
 
         TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
@@ -233,7 +230,7 @@ public class StepEventBus {
     }
 
     public void testFinished(TestOutcome result) {
-        screenshotProcessor.waitUntilDone();
+        //screenshotProcessor.waitUntilDone();
         Darkroom.waitUntilClose();
 
         for (StepListener stepListener : getAllListeners()) {
@@ -474,8 +471,8 @@ public class StepEventBus {
     }
 
     public void testRunFinished() {
-        screenshotProcessor.waitUntilDone();
-        screenshotProcessor.terminate();
+        //screenshotProcessor.waitUntilDone();
+        //screenshotProcessor.terminate();
 
         Darkroom.waitUntilClose();
 

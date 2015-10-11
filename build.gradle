@@ -114,11 +114,11 @@ subprojects {
         exclude '**/samples/**'
         exclude '**/*Sample*'
         minHeapSize = "128m"
-        maxHeapSize = "512m"
+        maxHeapSize = "1024m"
         if (!JavaVersion.current().isJava8Compatible()) {
-            jvmArgs '-XX:MaxPermSize=256m'
+            jvmArgs '-XX:MaxPermSize=512m'
         }
-       // maxParallelForks = 4
+        maxParallelForks = 16
     }
 
     task integrationTests(type: Test) {
@@ -142,6 +142,12 @@ subprojects {
             events "failed"//, "passed", "skipped"
             exceptionFormat = 'full'
         }
+//        beforeTest { desc ->
+//            println "Executing test ${desc.name} [${desc.className}]"
+//        }
+//        afterTest { desc ->
+//            println "Finished test ${desc.name} [${desc.className}]"
+//        }
     }
 
     integrationTests {
@@ -151,6 +157,9 @@ subprojects {
         }
 //        beforeTest { desc ->
 //            println "Executing test ${desc.name} [${desc.className}]"
+//        }
+//        afterTest { desc ->
+//            println "Finished test ${desc.name} [${desc.className}]"
 //        }
     }
 

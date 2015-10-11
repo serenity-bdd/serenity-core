@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
+import net.serenitybdd.core.photography.Darkroom;
 import net.serenitybdd.core.photography.ScreenshotPhoto;
 import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
 import net.serenitybdd.core.rest.RestQuery;
@@ -18,7 +19,6 @@ import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.screenshots.ScreenshotException;
-import net.thucydides.core.screenshots.ScreenshotProcessor;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebdriverManager;
 import net.thucydides.core.webdriver.WebdriverProxyFactory;
@@ -86,7 +86,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private Configuration configuration;
 
-    ScreenshotProcessor screenshotProcessor;
+    //ScreenshotProcessor screenshotProcessor;
 
     private boolean inFluentStepSequence;
 
@@ -169,7 +169,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         this.webdriverManager = injector.getInstance(WebdriverManager.class);
         this.clock = injector.getInstance(SystemClock.class);
         this.configuration = injector.getInstance(Configuration.class);
-        this.screenshotProcessor = injector.getInstance(ScreenshotProcessor.class);
+        //this.screenshotProcessor = injector.getInstance(ScreenshotProcessor.class);
     }
 
     /**
@@ -297,7 +297,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void testSuiteFinished() {
-        screenshotProcessor.waitUntilDone();
+        //screenshotProcessor.waitUntilDone();
+        Darkroom.waitUntilClose();
         clearStorywideTagsAndIssues();
         suiteStarted = false;
     }

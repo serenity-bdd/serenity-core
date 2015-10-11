@@ -1,6 +1,5 @@
 package net.thucydides.core.model
 
-import net.thucydides.core.screenshots.ScreenshotProcessor
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.ExecutedStepDescription
 import net.thucydides.core.steps.StepEventBus
@@ -164,13 +163,12 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
             table.rows.collect {it.result} ==[FAILURE, PENDING]
     }
 
-    def screenshotProcessor = Mock(ScreenshotProcessor)
     def outputDirectory = Mock(File);
     def environmentVariables = new MockEnvironmentVariables()
 
     def "Should be able to describe an example table via the event bus"() {
         given:
-            def eventBus = new StepEventBus(screenshotProcessor,environmentVariables)
+            def eventBus = new StepEventBus(environmentVariables)
             def BaseStepListener listener = new BaseStepListener(outputDirectory)
             eventBus.registerListener(listener)
         when:
@@ -186,7 +184,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
 
     def "Should be able to describe a set of example tables via the event bus"() {
         given:
-            def eventBus = new StepEventBus(screenshotProcessor,environmentVariables)
+            def eventBus = new StepEventBus(environmentVariables)
             def BaseStepListener listener = new BaseStepListener(outputDirectory)
             eventBus.registerListener(listener)
         when:
@@ -212,7 +210,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
 
     def "Should not add rows that already exist"() {
         given:
-        def eventBus = new StepEventBus(screenshotProcessor,environmentVariables)
+        def eventBus = new StepEventBus(environmentVariables)
         def BaseStepListener listener = new BaseStepListener(outputDirectory)
         eventBus.registerListener(listener)
         when:
@@ -243,7 +241,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
 
     def "Should be able to update the table results via the event bus"() {
         given:
-            def eventBus = new StepEventBus(screenshotProcessor,environmentVariables)
+            def eventBus = new StepEventBus(environmentVariables)
             def BaseStepListener listener = new BaseStepListener(outputDirectory)
             eventBus.registerListener(listener)
         when:
@@ -292,7 +290,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
 
     def "Should be able to update the table results incrementally via the event bus"() {
         given:
-            def eventBus = new StepEventBus(screenshotProcessor,environmentVariables)
+            def eventBus = new StepEventBus(environmentVariables)
             def BaseStepListener listener = new BaseStepListener(outputDirectory)
             eventBus.registerListener(listener)
         when:

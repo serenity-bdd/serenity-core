@@ -1,14 +1,12 @@
 package net.thucydides.core.screenshots.integration
 
 import net.serenitybdd.core.Serenity
-import net.thucydides.core.screenshots.ScreenshotProcessor
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepEventBus
 import spock.lang.Specification
 
 class WhenTakingArbitraryScreenshots extends Specification {
 
-    def screenshotProcessor = Mock(ScreenshotProcessor)
     def baseStepListener = Mock(BaseStepListener)
 
     def setup() {

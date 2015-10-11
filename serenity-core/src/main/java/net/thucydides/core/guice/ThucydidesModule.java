@@ -28,8 +28,6 @@ import net.thucydides.core.requirements.ClasspathRequirementsProviderService;
 import net.thucydides.core.requirements.RequirementsProviderService;
 import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.RequirementsServiceImplementation;
-import net.thucydides.core.screenshots.ScreenshotProcessor;
-import net.thucydides.core.screenshots.SingleThreadScreenshotProcessor;
 import net.thucydides.core.statistics.AtomicTestCount;
 import net.thucydides.core.statistics.TestCount;
 import net.thucydides.core.statistics.service.ClasspathTagProviderService;
@@ -62,7 +60,7 @@ public class ThucydidesModule extends AbstractModule {
         bind(WebdriverManager.class).to(ThucydidesWebdriverManager.class).in(Singleton.class);
         bind(BatchManager.class).toProvider(BatchManagerProvider.class).in(Singleton.class);
         bind(LinkGenerator.class).to(SaucelabsLinkGenerator.class).in(Singleton.class);
-        bind(ScreenshotProcessor.class).to(SingleThreadScreenshotProcessor.class).in(Singleton.class);
+//        bind(ScreenshotProcessor.class).to(SingleThreadScreenshotProcessor.class).in(Singleton.class);
         bind(JSONConverter.class).to(GsonJSONConverter.class).in(Singleton.class);
 
         bind(TagProviderService.class).to(ClasspathTagProviderService.class).in(Singleton.class);

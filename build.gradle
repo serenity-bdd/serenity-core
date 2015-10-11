@@ -116,7 +116,8 @@ subprojects {
         minHeapSize = "128m"
         maxHeapSize = "1024m"
         if (!JavaVersion.current().isJava8Compatible()) {
-            jvmArgs += [ "-XX:MaxPermSize=256m" ]
+            jvmArgs += ["-XX:MaxPermSize=256m"]
+        }
     }
 
     task integrationTests(type: Test) {

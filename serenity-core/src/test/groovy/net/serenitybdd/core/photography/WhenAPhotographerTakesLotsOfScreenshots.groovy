@@ -17,7 +17,7 @@ class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
         when:
             Darkroom.isOpenForBusiness();
             List<ScreenshotPhoto> photos = Lists.newArrayList();
-            for (photoCount in 0..1000){
+            for (photoCount in 0..10){
                 photos.add(photographer.takesAScreenshot()
                         .withDriver(driver)
                         .andSaveToDirectory(screenshotDirectory));

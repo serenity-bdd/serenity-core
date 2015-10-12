@@ -7,16 +7,16 @@ import net.thucydides.core.scheduling.ThucydidesFluentWait;
 import net.thucydides.core.steps.StepEventBus;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
-import org.openqa.selenium.support.ui.SystemClock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static net.serenitybdd.core.pages.Selectors.xpathOrCssSelector;
-import static net.serenitybdd.core.pages.FindAllWaitOptions.*;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_NO_WAIT;
+import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_WAIT;
+import static net.serenitybdd.core.pages.Selectors.xpathOrCssSelector;
 
 
 /**

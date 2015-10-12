@@ -1,18 +1,12 @@
 package net.thucydides.core.reports.junit;
 
 import net.thucydides.core.model.TestOutcome;
-
-import java.io.OutputStream;
-import java.util.List;
-
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestType;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.util.EnvironmentVariables;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,6 +16,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.OutputStream;
+import java.util.List;
 
 /**
  * Created by john on 24/04/2015.

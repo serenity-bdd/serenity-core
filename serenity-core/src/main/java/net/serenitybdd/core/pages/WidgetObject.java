@@ -1,8 +1,7 @@
 package net.serenitybdd.core.pages;
 
-import org.openqa.selenium.support.FindBy;
-
 import net.serenitybdd.core.annotations.ImplementedBy;
+import org.openqa.selenium.support.FindBy;
 
 /**
  * Represents a page fragment which occurs across pages or multiple times in a single

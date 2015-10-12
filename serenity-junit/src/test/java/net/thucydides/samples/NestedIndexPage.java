@@ -1,8 +1,8 @@
 package net.thucydides.samples;
 
 
-import net.thucydides.core.annotations.DefaultUrl;
 import net.serenitybdd.core.pages.PageObject;
+import net.thucydides.core.annotations.DefaultUrl;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 

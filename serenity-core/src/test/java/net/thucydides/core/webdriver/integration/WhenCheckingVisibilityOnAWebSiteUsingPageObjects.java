@@ -10,8 +10,6 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 import static net.thucydides.core.webdriver.StaticTestSite.fileInClasspathCalled;
 import static org.hamcrest.MatcherAssert.assertThat;

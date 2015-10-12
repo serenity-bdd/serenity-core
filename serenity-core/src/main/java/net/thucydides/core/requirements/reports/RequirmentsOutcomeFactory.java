@@ -2,7 +2,6 @@ package net.thucydides.core.requirements.reports;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.reports.TestOutcomes;
@@ -12,7 +11,6 @@ import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.List;
-import java.util.Set;
 
 public class RequirmentsOutcomeFactory {
 

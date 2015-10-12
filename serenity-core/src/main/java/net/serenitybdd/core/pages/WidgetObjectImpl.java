@@ -1,7 +1,6 @@
 package net.serenitybdd.core.pages;
 
 import net.thucydides.core.webdriver.DefaultWidgetObjectInitialiser;
-
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 

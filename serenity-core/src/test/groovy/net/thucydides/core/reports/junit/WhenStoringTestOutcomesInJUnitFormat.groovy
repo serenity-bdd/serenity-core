@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.junit
 
-import com.github.goldin.spock.extensions.tempdir.TempDir
 import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.integration.TestStepFactory

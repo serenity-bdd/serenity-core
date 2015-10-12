@@ -11,7 +11,6 @@ import net.thucydides.core.reports.AcceptanceTestReporter
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.integration.TestStepFactory
 import net.thucydides.core.reports.json.gson.GsonJSONConverter
-
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.joda.time.DateTime
@@ -22,7 +21,6 @@ import org.junit.rules.TemporaryFolder
 import sample.steps.FailingStep
 import spock.lang.Specification
 import spock.lang.Unroll
-import net.thucydides.core.annotations.Story
 
 class WhenStoringTestOutcomesAsJSON extends Specification {
 

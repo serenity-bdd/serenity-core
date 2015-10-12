@@ -1,7 +1,6 @@
 package net.thucydides.core.pages.components;
 
 import net.thucydides.core.webelements.MultipleSelect;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 

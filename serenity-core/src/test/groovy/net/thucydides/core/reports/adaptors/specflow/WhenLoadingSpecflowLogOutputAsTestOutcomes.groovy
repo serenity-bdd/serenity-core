@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.adaptors.specflow
 
-import com.github.goldin.spock.extensions.tempdir.TempDir
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.reports.adaptors.TestOutcomeAdaptor
 import org.junit.Rule

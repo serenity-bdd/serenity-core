@@ -17,9 +17,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-
 public class SingleThreadScreenshotProcessor implements ScreenshotProcessor {
 
     Thread screenshotThread;

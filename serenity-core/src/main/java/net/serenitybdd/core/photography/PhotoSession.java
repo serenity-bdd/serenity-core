@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.stream.Collectors;
 
 import static net.serenitybdd.core.photography.ScreenshotNegative.prepareNegativeIn;
 

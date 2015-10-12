@@ -5,7 +5,6 @@ import net.serenitybdd.screenplay.Performable;
 import net.thucydides.core.annotations.Step;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The role of a task is to simulate a high-level action performed by the user.

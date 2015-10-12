@@ -2,14 +2,11 @@ package net.thucydides.core.reports.html.screenshots;
 
 import net.thucydides.core.images.ResizableImage;
 import net.thucydides.core.model.Screenshot;
-import org.openqa.selenium.io.TemporaryFilesystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 /**
  * Class designed to help resize and scale screenshots to a format that is compatible with the Thucydides reports.

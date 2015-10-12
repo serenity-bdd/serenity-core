@@ -3,7 +3,6 @@ package net.serenitybdd.screenplay;
 import com.google.common.base.Optional;
 import net.serenitybdd.screenplay.annotations.AnnotatedTitle;
 import net.serenitybdd.screenplay.annotations.Subject;
-import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
 

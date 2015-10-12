@@ -1,7 +1,6 @@
 package net.thucydides.core.pages.integration;
 
 
-import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webdriver.jquery.ByJQuery;
 import net.thucydides.core.webdriver.jquery.ByJQuerySelector;
 import org.junit.AfterClass;
@@ -10,7 +9,6 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 

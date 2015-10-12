@@ -1,7 +1,7 @@
 package net.serenitybdd.journey.shopping.questions;
 
-import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Question;
 
 public class TotalCost implements Question<Integer> {
 

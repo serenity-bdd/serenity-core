@@ -15,8 +15,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.base.Optional.fromNullable;
-
 /**
  * Find the annotated fields in a given class.
  * Used as a utility class for the higher-level annotation processing.

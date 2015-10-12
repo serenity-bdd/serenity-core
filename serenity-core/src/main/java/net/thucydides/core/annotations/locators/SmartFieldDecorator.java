@@ -1,26 +1,15 @@
 package net.thucydides.core.annotations.locators;
 
-import cucumber.runtime.StopWatch;
+import com.google.common.collect.ImmutableList;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AndroidFindBys;
 import io.appium.java_client.pagefactory.iOSFindBy;
 import io.appium.java_client.pagefactory.iOSFindBys;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Proxy;
-import java.lang.reflect.Type;
-import java.util.List;
-
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WebElementFacadeImpl;
 import net.serenitybdd.core.pages.WidgetObject;
-
-import net.serenitybdd.core.time.Stopwatch;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.Locatable;
@@ -32,7 +21,9 @@ import org.openqa.selenium.support.pagefactory.FieldDecorator;
 import org.openqa.selenium.support.pagefactory.internal.LocatingElementHandler;
 import org.openqa.selenium.support.pagefactory.internal.LocatingElementListHandler;
 
-import com.google.common.collect.ImmutableList;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.*;
+import java.util.List;
 
 public class SmartFieldDecorator implements FieldDecorator {
 

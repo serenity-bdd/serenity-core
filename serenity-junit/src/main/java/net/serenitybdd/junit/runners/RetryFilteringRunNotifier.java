@@ -1,6 +1,5 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.steps.StepEventBus;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.Result;

@@ -3,7 +3,6 @@ package net.thucydides.core.pages.integration.browsers;
 
 import net.thucydides.core.pages.integration.FluentElementAPITestsBaseClass;
 import net.thucydides.core.pages.integration.StaticSitePage;
-import org.apache.commons.exec.OS;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -12,9 +11,6 @@ import org.junit.rules.ExpectedException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-
-import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

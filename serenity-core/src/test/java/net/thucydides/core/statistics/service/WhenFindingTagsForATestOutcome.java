@@ -8,19 +8,15 @@ import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.FileSystemRequirementsTagProvider;
-import net.thucydides.core.requirements.model.Narrative;
 import net.thucydides.core.requirements.model.Requirement;
-import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
 import java.util.Set;
 

@@ -10,6 +10,7 @@ import net.thucydides.core.webdriver.WebDriverFacade;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;

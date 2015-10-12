@@ -1,11 +1,10 @@
 package net.thucydides.core.webdriver;
 
-import java.util.concurrent.TimeUnit;
-
 import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.guice.Injectors;
-
 import org.openqa.selenium.WebDriver;
+
+import java.util.concurrent.TimeUnit;
 
 public class DefaultPageObjectInitialiser extends AbstractObjectInitialiser<PageObject> {
 

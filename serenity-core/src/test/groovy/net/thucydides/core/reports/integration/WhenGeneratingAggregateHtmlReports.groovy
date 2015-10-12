@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.integration
 
-import com.github.goldin.spock.extensions.tempdir.TempDir
 import net.serenitybdd.core.SerenitySystemProperties
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.issues.IssueTracking
@@ -11,8 +10,6 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.chrome.ChromeDriver
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriver
 import spock.lang.Ignore
 import spock.lang.Specification

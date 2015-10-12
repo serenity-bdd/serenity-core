@@ -1,18 +1,15 @@
 package net.thucydides.samples;
 
 import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.annotations.findby.By;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
-import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.Assume;
 import org.junit.Ignore;
 import org.openqa.selenium.ElementNotVisibleException;
-import org.openqa.selenium.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

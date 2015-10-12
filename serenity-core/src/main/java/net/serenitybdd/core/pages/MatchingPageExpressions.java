@@ -1,6 +1,5 @@
 package net.serenitybdd.core.pages;
 
-import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.annotations.At;
 
 import java.util.ArrayList;

@@ -17,7 +17,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matcher;
 import org.joda.time.DateTime;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 import static ch.lambdaj.Lambda.*;
 import static net.thucydides.core.model.TestResult.*;

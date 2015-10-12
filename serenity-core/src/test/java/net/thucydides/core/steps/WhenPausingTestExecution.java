@@ -1,8 +1,8 @@
 package net.thucydides.core.steps;
 
 import net.serenitybdd.core.pages.PageObject;
-import net.thucydides.core.pages.Pages;
 import net.serenitybdd.core.time.SystemClock;
+import net.thucydides.core.pages.Pages;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

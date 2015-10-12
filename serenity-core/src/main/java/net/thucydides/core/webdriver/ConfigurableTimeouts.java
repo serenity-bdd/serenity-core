@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver;
 
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.support.ui.Duration;
 
 /**

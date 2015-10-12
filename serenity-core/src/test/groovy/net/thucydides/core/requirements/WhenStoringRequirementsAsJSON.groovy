@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements
 
-import com.github.goldin.spock.extensions.tempdir.TempDir
 import com.google.common.collect.Maps
 import net.thucydides.core.requirements.model.Requirement
 import org.junit.Rule

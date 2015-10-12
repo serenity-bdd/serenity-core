@@ -1,11 +1,7 @@
 package net.serenitybdd.junit.runners;
 
 import com.google.common.collect.Lists;
-import net.thucydides.core.model.DataTableRow;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestResultList;
-import net.thucydides.core.model.TestStep;
+import net.thucydides.core.model.*;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.runner.Runner;
 

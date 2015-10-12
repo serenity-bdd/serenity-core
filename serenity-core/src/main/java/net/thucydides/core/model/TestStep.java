@@ -1,16 +1,13 @@
 package net.thucydides.core.model;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.rest.RestQuery;
+import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
-import net.serenitybdd.core.time.SystemClock;
-import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.jsoup.Jsoup;

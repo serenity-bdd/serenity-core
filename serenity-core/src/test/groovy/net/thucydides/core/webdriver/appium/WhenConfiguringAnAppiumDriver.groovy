@@ -5,9 +5,7 @@ import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.util.PathProcessor
 import net.thucydides.core.webdriver.MobilePlatform
 import net.thucydides.core.webdriver.ThucydidesConfigurationException
-import net.thucydides.core.webdriver.appium.AppiumConfiguration
 import spock.lang.Specification
-import spock.lang.Unroll
 
 /**
  * Created by Ben on 10/11/14.

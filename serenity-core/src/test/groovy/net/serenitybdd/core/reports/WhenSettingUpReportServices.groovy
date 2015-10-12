@@ -3,7 +3,6 @@ package net.serenitybdd.core.reports
 import net.serenitybdd.core.SerenityReports
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration
-import org.openqa.selenium.WebDriver
 import spock.lang.Specification
 
 class WhenSettingUpReportServices extends Specification {

@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.core.photography.Darkroom;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
@@ -13,8 +14,6 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import net.serenitybdd.core.eventbus.Broadcaster;
 
 import java.util.*;
 

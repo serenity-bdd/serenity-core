@@ -1,10 +1,10 @@
 package net.serenitybdd.screenplay.abilities;
 
 import com.google.common.eventbus.Subscribe;
+import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
 import net.thucydides.core.guice.Injectors;

@@ -10,7 +10,6 @@ import io.appium.java_client.FindsByAccessibilityId;
 import io.appium.java_client.FindsByAndroidUIAutomator;
 import io.appium.java_client.FindsByIosUIAutomation;
 import net.serenitybdd.core.time.InternalSystemClock;
-import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.locators.MethodTiming;
 import net.thucydides.core.annotations.locators.WithConfigurableTimeout;
@@ -39,7 +38,6 @@ import java.util.concurrent.TimeUnit;
 
 import static ch.lambdaj.Lambda.convert;
 import static net.serenitybdd.core.pages.Selectors.isXPath;
-import static net.serenitybdd.core.pages.Selectors.xpathOrCssSelector;
 
 
 /**

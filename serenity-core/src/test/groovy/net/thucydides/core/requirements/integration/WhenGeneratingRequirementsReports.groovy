@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements.integration
 
-import com.github.goldin.spock.extensions.tempdir.TempDir
 import com.google.common.collect.Lists
 import net.thucydides.core.issues.IssueTracking
 import net.thucydides.core.model.*
@@ -8,7 +7,6 @@ import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.history.DateProvider
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
 import net.thucydides.core.reports.html.HtmlRequirementsReporter
-import net.thucydides.core.reports.junit.JUnitXMLOutcomeReporter
 import net.thucydides.core.requirements.FileSystemRequirementsTagProvider
 import net.thucydides.core.requirements.model.Requirement
 import net.thucydides.core.requirements.reportpages.RequirementsReport

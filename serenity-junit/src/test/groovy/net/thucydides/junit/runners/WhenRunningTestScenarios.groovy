@@ -1,7 +1,5 @@
 package net.thucydides.junit.runners
 
-import com.github.goldin.spock.extensions.tempdir.TempDir
-import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration
 import net.thucydides.core.webdriver.ThucydidesWebdriverManager

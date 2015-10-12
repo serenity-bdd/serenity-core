@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.strip;
 
 /**
  * Loads Thucydides preferences from a local file called thucydides.properties.

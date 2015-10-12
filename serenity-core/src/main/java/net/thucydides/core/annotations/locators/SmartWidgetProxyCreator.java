@@ -5,7 +5,6 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.ElementLocatorFactorySelector;
 import net.thucydides.core.webdriver.WidgetProxyCreator;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;

@@ -1,16 +1,6 @@
 package net.serenitybdd.core.webdriver.integration;
 
-import static ch.lambdaj.Lambda.convert;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.everyItem;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNotNull;
-
-import java.io.File;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
+import ch.lambdaj.function.convert.Converter;
 import net.serenitybdd.core.annotations.ImplementedBy;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.pages.PageObject;
@@ -19,7 +9,6 @@ import net.serenitybdd.core.pages.WebElementFacadeImpl;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -28,7 +17,16 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
-import ch.lambdaj.function.convert.Converter;
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static ch.lambdaj.Lambda.convert;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNotNull;
 
 public class WhenBrowsingAWebSiteUsingListfulPageObjects {
 	

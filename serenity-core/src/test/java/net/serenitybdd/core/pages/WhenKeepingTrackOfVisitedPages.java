@@ -1,8 +1,8 @@
 package net.serenitybdd.core.pages;
 
 
-import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.ApacheHomePage;
+import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.WrongPageError;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;

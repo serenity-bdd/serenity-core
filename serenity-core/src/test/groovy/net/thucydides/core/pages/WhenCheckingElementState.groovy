@@ -2,7 +2,6 @@ package net.thucydides.core.pages
 
 import net.thucydides.core.webdriver.WebDriverFacade
 import org.openqa.selenium.By
-import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import spock.lang.Specification
 

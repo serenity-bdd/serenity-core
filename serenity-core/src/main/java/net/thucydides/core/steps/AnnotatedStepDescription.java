@@ -12,9 +12,11 @@ import org.openqa.selenium.Keys;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
-import static ch.lambdaj.Lambda.joinFrom;
 import static net.thucydides.core.annotations.Fields.FieldValue.UNDEFINED;
 import static net.thucydides.core.util.NameConverter.humanize;
 

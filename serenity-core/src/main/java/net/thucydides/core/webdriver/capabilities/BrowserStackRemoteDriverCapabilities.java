@@ -7,9 +7,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.List;
 
-import static ch.lambdaj.Lambda.filter;
-import static ch.lambdaj.Lambda.having;
-import static ch.lambdaj.Lambda.on;
+import static ch.lambdaj.Lambda.*;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.hamcrest.Matchers.startsWith;
 

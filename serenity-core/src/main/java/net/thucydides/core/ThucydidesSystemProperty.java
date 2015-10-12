@@ -5,8 +5,6 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 
-import java.util.logging.Logger;
-
 /**
  * Properties that can be passed to a web driver test to customize its behaviour.
  * The properties can be passed as system properties or placed in the 'thucydides.properties' file using a lower-case,

@@ -3,8 +3,8 @@ package net.thucydides.core.steps;
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.di.DependencyInjector;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
-import net.thucydides.core.annotations.Fields;
 import net.serenitybdd.core.pages.PageObject;
+import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.pages.Pages;
 
 import java.lang.reflect.Field;

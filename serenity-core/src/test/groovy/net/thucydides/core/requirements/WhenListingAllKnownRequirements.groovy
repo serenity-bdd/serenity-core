@@ -1,10 +1,6 @@
 package net.thucydides.core.requirements
 
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.MockEnvironmentVariables
 import spock.lang.Specification
-
-import static net.thucydides.core.requirements.FileSystemRequirementsTagProvider.defaultRootDirectoryPathFrom
 
 class WhenListingAllKnownRequirements extends Specification {
 

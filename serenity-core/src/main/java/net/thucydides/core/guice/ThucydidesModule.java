@@ -1,5 +1,8 @@
 package net.thucydides.core.guice;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.buildinfo.PropertyBasedDriverCapabilityRecord;
 import net.serenitybdd.core.time.InternalSystemClock;
@@ -38,16 +41,7 @@ import net.thucydides.core.steps.di.ClasspathDependencyInjectorService;
 import net.thucydides.core.steps.di.DependencyInjectorService;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.SystemEnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.ElementProxyCreator;
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
-import net.thucydides.core.webdriver.ThucydidesWebdriverManager;
-import net.thucydides.core.webdriver.WebdriverManager;
-import net.thucydides.core.webdriver.WidgetProxyCreator;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
+import net.thucydides.core.webdriver.*;
 
 public class ThucydidesModule extends AbstractModule {
 

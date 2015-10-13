@@ -590,8 +590,7 @@ public class WhenRecordingNewTestOutcomes {
         testOutcome.recordStep(forASuccessfulTestStepCalled("step_3"));
 
         List<String> screenshots = extract(testOutcome.getScreenshots(), on(Screenshot.class).getFilename());
-        assertThat(screenshots, hasItems("step_1.png", "step_2.1.1.1.png",
-                "step_2.1.2.png", "step_2.2.png", "step_3.png"));
+        assertThat(screenshots, hasItems("step_1.png", "step_2.1.1.1.png","step_2.1.2.png", "step_2.2.png", "step_3.png"));
     }
 
     @Test

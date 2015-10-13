@@ -20,7 +20,7 @@ public class ResizedImage extends ResizableImage {
     }
 
     @Override
-    public int getWitdh() {
+    public int getWidth() {
         return image.getWidth();
     }
 

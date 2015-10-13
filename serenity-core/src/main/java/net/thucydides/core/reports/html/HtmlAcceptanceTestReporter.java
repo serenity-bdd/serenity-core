@@ -231,7 +231,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
     private int maxHeightOf(int maxHeight, File screenshotFile) throws IOException {
         int height = ResizableImage.loadFrom(screenshotFile).getHeight();
-        int width = ResizableImage.loadFrom(screenshotFile).getWitdh();
+        int width = ResizableImage.loadFrom(screenshotFile).getWidth();
         if (width > MAXIMUM_SCREENSHOT_WIDTH) {
             height = (int) ((height * 1.0) * (MAXIMUM_SCREENSHOT_WIDTH * 1.0 / width));
         }

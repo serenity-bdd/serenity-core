@@ -1,9 +1,6 @@
 package net.serenitybdd.demos.todos.features.maintain_my_todo_list;
 
-import net.serenitybdd.demos.todos.tasks.AddItems;
-import net.serenitybdd.demos.todos.tasks.ClearCompletedItems;
-import net.serenitybdd.demos.todos.tasks.CompleteItem;
-import net.serenitybdd.demos.todos.tasks.DisplayedItems;
+import net.serenitybdd.demos.todos.tasks.*;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
@@ -29,12 +26,14 @@ public class TidyUpTheTodoList {
     @Steps AddItems addedSomeItems;
     @Steps DisplayedItems theDisplayedItems;
     @Steps ClearCompletedItems clearTheCompletedItems;
+    @Steps OpenTheApplication openedTheTodoApplication;
 
     Actor joe = Actor.named("Joe");
 
     @Before
     public void joe_can_use_a_browser() {
         joe.can(BrowseTheWeb.with(hisBrowser));
+        joe.has(openedTheTodoApplication);
     }
 
     @Test

@@ -11,7 +11,7 @@ public class ATodoUser {
 
     @Step
     public void opens_the_todo_application() {
-        onTheTodoHomePage.open();
+        onTheTodoHomePage.openApplication();
     }
 
     TodoPage onTheTodoHomePage;

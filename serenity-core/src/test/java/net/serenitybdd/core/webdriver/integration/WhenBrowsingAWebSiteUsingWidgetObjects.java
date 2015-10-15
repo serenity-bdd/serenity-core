@@ -157,8 +157,10 @@ public class WhenBrowsingAWebSiteUsingWidgetObjects {
 
 	@After
 	public void closeDriver() {
-		driver.close();
-		driver.quit();
+		if (driver != null) {
+			driver.close();
+			driver.quit();
+		}
 	}
 
     private void openStaticTestSite() {

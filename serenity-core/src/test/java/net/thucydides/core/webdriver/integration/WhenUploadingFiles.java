@@ -60,8 +60,10 @@ public class WhenUploadingFiles {
 
     @AfterClass
     public static void closeBrowser() {
-        driver.close();
-        driver.quit();
+        if (driver != null) {
+            driver.close();
+            driver.quit();
+        }
     }
 
     private static void openStaticTestSite(WebDriver driver) {

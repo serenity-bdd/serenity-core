@@ -1,11 +1,12 @@
-package net.thucydides.demo;
+package net.serenitybdd.demo;
 
+import net.serenitybdd.demo.steps.GoogleSearchSteps;
+import net.thucydides.junit.runners.ThucydidesRunner;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.demo.steps.GoogleSearchSteps;
-import net.thucydides.junit.runners.ThucydidesRunner;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
@@ -16,7 +17,9 @@ public class SearchingOnGoogleStory {
     @Managed
     public WebDriver webdriver;
 
-    @ManagedPages(defaultUrl = "http://www.google.com")
+    // Using 'http://www.google.com/ncr' prevents redirects from 'google.com' 
+    // to country specific google search pages. For example in Germany 'google.de'.
+    @ManagedPages(defaultUrl = "http://www.google.com/ncr")
     public Pages pages;
     
     @Steps

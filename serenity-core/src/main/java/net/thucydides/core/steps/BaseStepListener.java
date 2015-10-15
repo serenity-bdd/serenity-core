@@ -742,7 +742,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return /* (driver != null) ? driver : */webdriverManager.getWebdriver();
     }
 
-    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
     public boolean aStepHasFailed() {
         return ((!getTestOutcomes().isEmpty()) &&
                 (getCurrentTestOutcome().getResult() == TestResult.FAILURE || getCurrentTestOutcome().getResult() == TestResult.ERROR));

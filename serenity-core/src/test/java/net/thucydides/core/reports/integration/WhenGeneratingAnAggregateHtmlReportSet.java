@@ -60,8 +60,10 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
 
     @AfterClass
     public static void deleteReportDirectory() {
-        driver.close();
-        driver.quit();
+        if (driver != null) {
+            driver.close();
+            driver.quit();
+        }
         outputDirectory.delete();
     }
 

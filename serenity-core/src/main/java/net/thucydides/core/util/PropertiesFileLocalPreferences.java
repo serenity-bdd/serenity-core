@@ -108,7 +108,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     }
 
     private void setUndefinedSystemPropertiesFrom(Properties localPreferences) {
-        Enumeration propertyNames = localPreferences.propertyNames();
+        Enumeration<?> propertyNames = localPreferences.propertyNames();
         while (propertyNames.hasMoreElements()) {
             String propertyName = (String) propertyNames.nextElement();
             String localPropertyValue = localPreferences.getProperty(propertyName);

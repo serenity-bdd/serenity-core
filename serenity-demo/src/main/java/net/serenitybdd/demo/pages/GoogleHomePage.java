@@ -1,4 +1,4 @@
-package net.thucydides.demo.pages;
+package net.serenitybdd.demo.pages;
 
 import net.thucydides.core.annotations.At;
 import net.thucydides.core.pages.PageObject;
@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 
-@At("http://www.google\\..*")
+@At("https://www.google\\..*")
 public class GoogleHomePage extends PageObject {
 
     @FindBy(name="q")

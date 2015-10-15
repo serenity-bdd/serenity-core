@@ -1,4 +1,4 @@
-package net.thucydides.demo.pages;
+package net.serenitybdd.demo.pages;
 
 import net.thucydides.core.annotations.At;
 import net.thucydides.core.pages.PageObject;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@At("http://www.google\\..*")
+@At("https://www.google\\..*")
 public class GoogleResultsPage extends PageObject {
 
     @FindBy(name="btnG")

@@ -9,7 +9,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ATodoUser {
 
-
     @Step
     public void opens_the_todo_application() {
         onTheTodoHomePage.open();

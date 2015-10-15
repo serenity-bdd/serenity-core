@@ -23,3 +23,4 @@ thucydides-arquillian
 *.sublime-workspace
 .hg*
 .nb-gradle
+.DS_Store

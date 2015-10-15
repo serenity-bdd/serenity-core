@@ -1,11 +1,11 @@
 package net.serenitybdd.core.photography;
 
+import com.google.common.base.Optional;
 import net.thucydides.core.screenshots.BlurLevel;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 
 public class ScreenshotNegative {
     private final Path temporaryPath;
@@ -15,7 +15,7 @@ public class ScreenshotNegative {
     public ScreenshotNegative(Path temporaryPath, Path screenshotPath, BlurLevel blurLevel) {
         this.temporaryPath = temporaryPath;
         this.screenshotPath = screenshotPath;
-        this.blurLevel = Optional.ofNullable(blurLevel).orElse(BlurLevel.NONE);
+        this.blurLevel = Optional.fromNullable(blurLevel).or(BlurLevel.NONE);
     }
 
     public Path getTemporaryPath() {

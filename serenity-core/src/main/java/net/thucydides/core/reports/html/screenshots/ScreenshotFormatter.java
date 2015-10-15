@@ -43,18 +43,14 @@ public class ScreenshotFormatter {
     public Screenshot expandToHeight(final int targetHeight) throws IOException {
         File screenshotFile = new File(sourceDirectory, screenshot.getFilename());
         File resizedFile = resizedTargetFile(screenshot.getFilename());
-        LOGGER.debug("Resizing image " + screenshotFile + " to " + resizedFile);
-        LOGGER.debug("Screenshot exists" + screenshotFile.exists());
-        LOGGER.debug("Resized screenshot exists" + resizedFile.exists());
         if (!resizedFile.exists()) {
             resizedFile = resizedImage(screenshotFile, targetHeight);
             return new Screenshot(resizedFile.getName(),
                     screenshot.getDescription(),
                     screenshot.getWidth(),
                     screenshot.getError());
-        } else {
-            return screenshot;
         }
+        return screenshot;
     }
 
     private File resizedTargetFile(String screenshotFilename) {
@@ -64,13 +60,17 @@ public class ScreenshotFormatter {
     private File resizedImage(File screenshotFile, int maxHeight) throws IOException {
         LOGGER.debug("Resizing image " + screenshotFile);
         File scaledFile = resizedTargetFile(screenshotFile.getName());
-        if (!scaledFile.exists()) {
+        if (!scaledFile.exists() && isAValidScreenshotFile(screenshotFile)) {
             ResizableImage scaledImage = ResizableImage.loadFrom(screenshotFile).rescaleCanvas(maxHeight);
             scaledImage.saveTo(scaledFile);
             LOGGER.debug("Scaled image saved to " + scaledFile);
         }
         LOGGER.debug("Resizing image done -> " + scaledFile.getAbsolutePath());
         return scaledFile;
+    }
+
+    private boolean isAValidScreenshotFile(File screenshotFile) {
+        return screenshotFile.length() > 0;
     }
 }
 

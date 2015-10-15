@@ -60,6 +60,17 @@ public class WhenReformattingScreenshots {
     }
 
     @Test
+    public void should_not_resize_image_if_screenshot_is_empty() throws IOException {
+
+        Screenshot screenshot = new Screenshot("empty.png", "Wikipedia", 0);
+        Screenshot expandedScreenshot = ScreenshotFormatter.forScreenshot(screenshot).inDirectory(screenshotDirectory).expandToHeight(4000);
+
+        int resultingHeight = new ResizableImage(new File(screenshotDirectory, expandedScreenshot.getFilename())).getHeight();
+        assertThat(resultingHeight, is(0));
+        assertThat(expandedScreenshot.getWidth(), is(0));
+    }
+
+    @Test
     public void should_only_display_the_first_line_of_an_error_message_in_the_UI() {
         String errorMessage = "<org.openqa.selenium.ElementNotVisibleException: Unable to locate element: {\"method\":\"name\",\"selector\":\"fieldDoesNotExist\"}; duration or timeout: 8 milliseconds\n" +
                 "For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html\n" +

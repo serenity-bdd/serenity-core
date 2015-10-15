@@ -1,9 +1,9 @@
 package net.thucydides.core.steps;
 
-import com.beust.jcommander.internal.Lists;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import net.serenitybdd.core.di.DependencyInjector;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.sf.cglib.proxy.Enhancer;

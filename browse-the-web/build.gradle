@@ -3,28 +3,8 @@ ext {
     projectDescription = 'Webdriver integration for theValue User Journey pattern in Serenity'
 }
 
-configurations {
-    asciidoclet
-}
-
 dependencies {
     compile project(':serenity-core')
     compile project(':serenity-journey')
     testCompile project(':serenity-junit')
-
-    asciidoclet 'org.asciidoctor:asciidoclet:0.1.3'
-}
-
-dependencies {
-    asciidoclet 'org.asciidoctor:asciidoclet:1.+'
-}
-
-javadoc {
-    options.docletpath = configurations.asciidoclet.files.asType(List)
-    options.doclet = 'org.asciidoctor.Asciidoclet'
-    options.overview = "src/main/java/overview.adoc"
-    options.addStringOption "-base-dir", "${projectDir}"
-    options.addStringOption "-attribute",
-            "name=${project.name}," +
-                    "version=${project.version},"
 }

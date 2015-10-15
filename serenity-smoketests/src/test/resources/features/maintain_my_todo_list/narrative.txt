@@ -1,0 +1,2 @@
+Maintain my todo list
+I want to be able to edit or delete entries if I make a mistake

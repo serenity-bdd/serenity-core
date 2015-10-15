@@ -1,9 +1,7 @@
-apply plugin: 'java'
-apply plugin: 'groovy'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'maven'
-apply plugin: 'net.serenity.serenity-aggregator'
+repositories {
+    jcenter()
+    mavenLocal()
+}
 
 buildscript {
     repositories {
@@ -11,48 +9,20 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'net.thucydides:thucydides-gradle-plugin:0.91.200'
+        classpath("net.serenity-bdd:serenity-gradle-plugin:1.1.17-SNAPSHOT")
     }
 }
 
-repositories {
-    mavenLocal()
-    jcenter()
-}
-
-
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
-group = 'net.thucydides'
-version = '0.91.200'
-
-ext {
-    if (!project.hasProperty("thucydidesVersion")) {
-        thucydidesVersion = '0.91.200'
-    }
-    if (!project.hasProperty("thucydidesJBehaveVersion")) {
-        thucydidesJBehaveVersion = '0.9.275'
-    }
-}
-
-serenity {
-    projectKey = "flying-high"
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.1'
-}
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'net.serenity-bdd.aggregator'
 
 dependencies {
-    compile "net.thucydides:thucydides-core:${thucydidesVersion}"
-    compile "net.thucydides:thucydides-junit:${thucydidesVersion}"
-    compile "net.thucydides:thucydides-jbehave-plugin:${thucydidesJBehaveVersion}"
-    compile "org.slf4j:slf4j-simple:1.6.1"
-    compile "com.googlecode.lambdaj:lambdaj:2.3.3"
-    compile "org.codehaus.groovy:groovy-all:2.4.1"
-    compile 'joda-time:joda-time:2.4'
-    testCompile "org.easytesting:fest-assert-core:2.0M10"
-    testCompile "junit:junit:4.11"
-    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
-    testCompile 'org.mockito:mockito-core:1.9.5'
+    compile 'net.serenity-bdd:serenity-core:1.1.17-SNAPSHOT'
+    compile 'net.serenity-bdd:serenity-cucumber:1.1.1'
+    testCompile('junit:junit:4.12')
+    compile('org.assertj:assertj-core:1.7.0')
+//    compile('com.googlecode.lambdaj:lambdaj:2.3.3')
 }
+gradle.startParameter.continueOnFailure = true

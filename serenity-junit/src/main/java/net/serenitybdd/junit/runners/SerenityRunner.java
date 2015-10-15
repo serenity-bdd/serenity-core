@@ -315,9 +315,14 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     }
 
     private RunNotifier initializeRunNotifier(RunNotifier notifier) {
-        RunNotifier notifierForSteps = new RunNotifier();
-        notifierForSteps.addListener(getStepListener());
-        return (shouldRetryTest() ? notifier : new RetryFilteringRunNotifier(notifier, notifierForSteps));
+        if (shouldRetryTest()) {
+            notifier.addListener(getStepListener());
+            return notifier;
+        } else {
+            RunNotifier notifierForSteps = new RunNotifier();
+            notifierForSteps.addListener(getStepListener());
+            return new RetryFilteringRunNotifier(notifier, notifierForSteps);
+        }
     }
 
     private boolean shouldRetryTest() {
@@ -411,6 +416,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
 
         FailureDetectingStepListener failureDetectingStepListener = new FailureDetectingStepListener();
         StepEventBus.getEventBus().registerListener(failureDetectingStepListener);
+       // notifier.addListener(stepListener);
 
         int maxRetries = getConfiguration().maxRetries();
         for (int attemptCount = 0; attemptCount <= maxRetries; attemptCount++) {
@@ -455,15 +461,20 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     }
 
     private void markAsPending(FrameworkMethod method) {
-        stepListener.testStarted(Description.createTestDescription(method.getMethod().getDeclaringClass(), testName(method)));
+        testStarted(method);
         StepEventBus.getEventBus().testPending();
         StepEventBus.getEventBus().testFinished();
     }
 
     private void markAsManual(FrameworkMethod method) {
-        stepListener.testStarted(Description.createTestDescription(method.getMethod().getDeclaringClass(), testName(method)));
+        testStarted(method);
         StepEventBus.getEventBus().testIsManual();
         StepEventBus.getEventBus().testFinished();
+    }
+
+    private void testStarted(FrameworkMethod method) {
+        getStepListener().testStarted(Description.createTestDescription(method.getMethod().getDeclaringClass(), testName(method)));
+//        stepListener.testStarted(Description.createTestDescription(method.getMethod().getDeclaringClass(), testName(method)));
     }
 
     /**
@@ -474,7 +485,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
      */
     private void processTestMethodAnnotationsFor(FrameworkMethod method) {
         if (isIgnored(method)) {
-            stepListener.testStarted(Description.createTestDescription(method.getMethod().getDeclaringClass(), testName(method)));
+            testStarted(method);
             StepEventBus.getEventBus().testIgnored();
         }
     }

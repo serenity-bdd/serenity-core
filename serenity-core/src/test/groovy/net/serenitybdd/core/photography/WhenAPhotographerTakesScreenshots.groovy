@@ -10,6 +10,7 @@ import spock.lang.Specification
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 
 import static net.thucydides.core.ThucydidesSystemProperty.DEFAULT_HEIGHT
 import static net.thucydides.core.ThucydidesSystemProperty.DEFAULT_WIDTH
@@ -37,7 +38,6 @@ class WhenAPhotographerTakesScreenshots extends Specification {
                     .andSaveToDirectory(screenshotDirectory);
         then:
             Darkroom.waitUntilClose();
-            Thread.sleep(1000)
             Files.exists(photo.getPathToScreenshot())
     }
 
@@ -108,7 +108,7 @@ class WhenAPhotographerTakesScreenshots extends Specification {
     long startTime;
 
     def setup() {
-        screenshotDirectory = Files.createTempDirectory("screenshots")
+        screenshotDirectory = Files.createDirectories(Paths.get("./build/screenshots"));// Files.createTempDirectory("screenshots")
         driver = new PhantomJSDriver()
         driver.get(siteFromUrlAt("/static-site/unchanging-page.html"))
         startTime = System.currentTimeMillis()

@@ -1,0 +1,4 @@
+Filter todos
+I need to be able to filter my todos by their status
+
+These features illustrate using Cucumber step definitions with Serenity steps for the task layer.

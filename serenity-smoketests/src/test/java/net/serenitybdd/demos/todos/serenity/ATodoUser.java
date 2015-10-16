@@ -1,6 +1,7 @@
 package net.serenitybdd.demos.todos.serenity;
 
 import net.serenitybdd.demos.todos.model.TodoStatusFilter;
+import net.serenitybdd.demos.todos.pages.ApplicationHomePage;
 import net.serenitybdd.demos.todos.pages.TodoPage;
 import net.thucydides.core.annotations.Step;
 
@@ -11,9 +12,10 @@ public class ATodoUser {
 
     @Step
     public void opens_the_todo_application() {
-        onTheTodoHomePage.openApplication();
+        onTheHomePage.openApplication();
     }
 
+    ApplicationHomePage onTheHomePage;
     TodoPage onTheTodoHomePage;
 
     @Step

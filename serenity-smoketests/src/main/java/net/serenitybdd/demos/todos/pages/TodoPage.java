@@ -9,7 +9,6 @@ import net.thucydides.core.annotations.DefaultUrl;
 import org.openqa.selenium.Keys;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @DefaultUrl("http://todomvc.com/examples/angularjs/#/")
@@ -69,14 +68,5 @@ public class TodoPage extends PageObject {
 
     public void clearCompletedActions() {
         $("#clear-completed").click();
-    }
-
-    public void waitForTheApplicationToLoad() {
-        withTimeoutOf(15, TimeUnit.SECONDS).waitFor("#new-todo");
-    }
-
-    public void openApplication() {
-        open();
-        waitForTheApplicationToLoad();
     }
 }

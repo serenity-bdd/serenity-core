@@ -693,7 +693,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
         ScreenshotPhoto newPhoto = ScreenshotPhoto.None;
 
-        if (outputDirectory != null) { // Output directory may be null for some tests
+        if (pathOf(outputDirectory) != null) { // Output directory may be null for some tests
             newPhoto = photographer.takesAScreenshot()
                                    .withDriver(getDriver())
                                    .andWithBlurring(AnnotatedBluring.blurLevel())

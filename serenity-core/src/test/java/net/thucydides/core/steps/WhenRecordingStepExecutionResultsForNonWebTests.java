@@ -68,6 +68,7 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
 
     Configuration configuration;
 
+
     @Before
     public void createStepListenerAndFactory() throws IOException {
         MockitoAnnotations.initMocks(this);
@@ -79,7 +80,7 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
         stepFactory = new StepFactory();
         stepListener = new BaseStepListener(null, outputDirectory, configuration);
 
-        StepEventBus.getEventBus().clear();
+        StepEventBus.reset();
         StepEventBus.getEventBus().registerListener(stepListener);
     }
 

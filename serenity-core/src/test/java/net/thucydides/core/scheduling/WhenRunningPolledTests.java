@@ -65,7 +65,7 @@ public class WhenRunningPolledTests {
 
         when(driver.navigate()).thenReturn(navigation);
 
-        StepEventBus.getEventBus().clear();
+        StepEventBus.reset();
         StepEventBus.getEventBus().testSuiteStarted(ATestClass.class);
         StepEventBus.getEventBus().testStarted("someTest");
     }
@@ -105,7 +105,7 @@ public class WhenRunningPolledTests {
         SlowPage page = new SlowPage(driver);
         Counter counter = new Counter();
 
-        StepEventBus.getEventBus().clear();
+        StepEventBus.reset();
         StepEventBus.getEventBus().testSuiteStarted(ATestClass.class);
         StepEventBus.getEventBus().testStarted("someTest");
         StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle("a step"));

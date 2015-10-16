@@ -77,7 +77,7 @@ public class WhenUsingAWebDriverProxy {
     public void createATestableDriverFactory() throws Exception {
         MockitoAnnotations.initMocks(this);
         initWendriverManager();
-        StepEventBus.getEventBus().clear();
+        StepEventBus.reset();
         webDriverFacade = (WebDriverFacade) webdriverManager.getWebdriver();
         WebdriverProxyFactory.getFactory().clearMockDriver();
         webdriverManager.closeAllCurrentDrivers();

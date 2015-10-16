@@ -593,4 +593,8 @@ public class StepEventBus {
     public void updateOverallResults() {
         baseStepListener.updateOverallResults();
     }
+
+    public static void reset() {
+        stepEventBusThreadLocal.remove();
+    }
 }

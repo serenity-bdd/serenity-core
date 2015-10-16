@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -104,7 +105,7 @@ public class DarkroomProcessingLine implements Runnable {
         try {
             LOGGER.info("Saving screenshot to " + negative.getScreenshotPath());
             if (!Files.exists(negative.getScreenshotPath())) {
-                Files.copy(negative.getTemporaryPath(), negative.getScreenshotPath());
+                Files.copy(negative.getTemporaryPath(), negative.getScreenshotPath(), StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (IOException e) {
             LOGGER.warn("Failed to save screenshot", e);

@@ -48,7 +48,7 @@ public class WhenLocatingWebElementsWithSmartLocator {
 
         field = SomePageObject.class.getField("someField");
 
-        StepEventBus.getEventBus().clear();
+        StepEventBus.reset();
 
         when(driver.findElement(By.id("someId"))).thenReturn(webElement);
         when(driver.findElements(By.id("someId"))).thenReturn(ImmutableList.of(webElement));

@@ -350,7 +350,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
         factory = new StepFactory(new Pages(driver));
 
-        StepEventBus.getEventBus().clear();
+        StepEventBus.reset();
         baseStepListener = new BaseStepListener(temp.newFolder());
 
         StepEventBus.getEventBus().registerListener(baseStepListener);

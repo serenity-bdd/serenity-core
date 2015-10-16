@@ -1409,8 +1409,7 @@ public class WhenRecordingStepExecutionResults {
 
         BaseStepListener stepListener = new BaseStepListener(FirefoxDriver.class, outputDirectory, configuration);
         stepListener.setDriver(driver);
-        StepEventBus.getEventBus().clear();
-        StepEventBus.getEventBus().dropAllListeners();
+        StepEventBus.reset();
         StepEventBus.getEventBus().registerListener(stepListener);
     }
 

@@ -1,8 +1,8 @@
 package net.thucydides.core.steps;
 
 
-import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.stacktrace.FailureCause;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;

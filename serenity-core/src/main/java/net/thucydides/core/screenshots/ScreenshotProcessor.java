@@ -1,5 +1,6 @@
 package net.thucydides.core.screenshots;
 
+@Deprecated
 public interface ScreenshotProcessor {
     void waitUntilDone();
 

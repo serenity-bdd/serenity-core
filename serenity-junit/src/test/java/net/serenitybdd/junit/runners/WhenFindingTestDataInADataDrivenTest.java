@@ -1,7 +1,5 @@
 package net.serenitybdd.junit.runners;
 
-import net.serenitybdd.junit.runners.DataDrivenAnnotations;
-import net.serenitybdd.junit.runners.QualifierFinder;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;

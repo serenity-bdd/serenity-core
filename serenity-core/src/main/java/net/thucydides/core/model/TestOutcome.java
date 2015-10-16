@@ -9,17 +9,17 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
+import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.images.SimpleImageInfo;
+import net.thucydides.core.images.ResizableImage;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.features.ApplicationFeature;
 import net.thucydides.core.model.results.MergeStepResultStrategy;
 import net.thucydides.core.model.results.StepResultMergeStragegy;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
-import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.reports.html.Formatter;
 import net.thucydides.core.reports.json.JSONConverter;
 import net.thucydides.core.reports.saucelabs.LinkGenerator;
@@ -43,9 +43,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static ch.lambdaj.Lambda.*;
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Preconditions.*;
 import static com.google.common.collect.Lists.partition;
 import static com.google.common.collect.Lists.reverse;
 import static net.thucydides.core.model.ReportType.HTML;
@@ -882,7 +880,7 @@ public class TestOutcome {
 
     private int widthOf(final File screenshot) {
         try {
-            return new SimpleImageInfo(screenshot).getWidth();
+            return new ResizableImage(screenshot).getWidth();
         } catch (IOException e) {
             return ThucydidesSystemProperty.DEFAULT_WIDTH;
         }
@@ -899,7 +897,7 @@ public class TestOutcome {
     }
 
     public List<TestStep> getFlattenedTestSteps() {
-        List<TestStep> flattenedTestSteps = new ArrayList<TestStep>();
+        List<TestStep> flattenedTestSteps = new ArrayList<>();
         for (TestStep step : getTestSteps()) {
             flattenedTestSteps.add(step);
             if (step.isAGroup()) {

@@ -1,5 +1,6 @@
 package net.serenitybdd.core.buildinfo;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import groovy.lang.Binding;
 import groovy.lang.GroovyRuntimeException;
@@ -14,9 +15,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import static ch.lambdaj.Lambda.filter;
-import static org.hamcrest.CoreMatchers.startsWith;
 
 /**
  * Created by john on 12/02/15.
@@ -84,7 +82,7 @@ public class BuildInfoProvider {
 
     private void addCustomPropertiesTo(Map<String, String> buildProperties) {
 
-        List<String> sysInfoKeys = filter(startsWith("sysinfo."), environmentVariables.getKeys());
+        List<String> sysInfoKeys = sysInfoKeysIn(environmentVariables.getKeys());
         for(String key : sysInfoKeys) {
             String simplifiedKey = key.replace("sysinfo.", "");
             String expression = environmentVariables.getProperty(key);
@@ -93,6 +91,16 @@ public class BuildInfoProvider {
 
             buildProperties.put(humanizedFormOf(simplifiedKey), value);
         }
+    }
+
+    private List<String> sysInfoKeysIn(List<String> keys) {
+        List<String> filteredKeys = Lists.newArrayList();
+        for(String key : keys) {
+            if (key.startsWith("sysinfo.")) {
+                filteredKeys.add(key);
+            }
+        }
+        return filteredKeys;
     }
 
     private boolean isGroovyExpression(String expression) {
@@ -114,7 +122,7 @@ public class BuildInfoProvider {
                 result = shell.evaluate(groovy);
             }
         } catch (GroovyRuntimeException e) {
-            LOGGER.warn("Failed to evaluate build info expression '%s' for key %s",expression, key);
+            LOGGER.warn("Failed to evaluate build info expression '{0}' for key {1}",expression, key);
         }
         return (result != null) ? result.toString() : expression;
     }

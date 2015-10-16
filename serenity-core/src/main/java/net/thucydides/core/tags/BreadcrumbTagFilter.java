@@ -1,7 +1,7 @@
 package net.thucydides.core.tags;
 
-import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.RequirementsService;

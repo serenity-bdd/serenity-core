@@ -9,10 +9,12 @@ import net.thucydides.core.reports.templates.ReportTemplate;
 import net.thucydides.core.reports.templates.TemplateManager;
 import net.thucydides.core.reports.util.CopyDirectory;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;

@@ -1,7 +1,13 @@
 package net.thucydides.core.annotations;
 
 import com.google.common.base.Optional;
+import net.thucydides.core.webdriver.WebdriverManager;
 import org.openqa.selenium.WebDriver;
+
+import java.util.List;
+
+import static net.thucydides.core.annotations.ManagedWebDriverAnnotatedField.*;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Utility class used to inject fields into a test case.
@@ -25,10 +31,30 @@ public final class TestCaseAnnotations {
      */
     public void injectDriver(final WebDriver driver) {
         Optional<ManagedWebDriverAnnotatedField> webDriverField
-                = ManagedWebDriverAnnotatedField.findOptionalAnnotatedField(testCase.getClass());
+                = findOptionalAnnotatedField(testCase.getClass());
         if (webDriverField.isPresent()) {
             webDriverField.get().setValue(testCase, driver);
         }
+    }
+
+    public void injectDrivers(final WebdriverManager webdriverManager) {
+        List<ManagedWebDriverAnnotatedField> webDriverFields = findAnnotatedFields(testCase.getClass());
+        int driverCount = 1;
+
+        String suffix = "";
+        for(ManagedWebDriverAnnotatedField webDriverField : webDriverFields) {
+            String driverRootName = isEmpty(webDriverField.getDriver()) ?
+                    webdriverManager.getCurrentDriverName() : webDriverField.getDriver();
+
+            String driverName = driverRootName + suffix;
+            webDriverField.setValue(testCase, webdriverManager.getWebdriver(driverName));
+
+            suffix = nextSuffix(driverCount++);
+        }
+    }
+
+    private String nextSuffix(int driverCount) {
+        return ":" + driverCount + 1;
     }
 
     /**
@@ -37,7 +63,7 @@ public final class TestCaseAnnotations {
      * annotation.
      */
     public static boolean supportsWebTests(Class clazz) {
-        return ManagedWebDriverAnnotatedField.hasManagedWebdriverField(clazz);
+        return hasManagedWebdriverField(clazz);
     }
 
     public boolean isUniqueSession() {
@@ -46,12 +72,12 @@ public final class TestCaseAnnotations {
 
 
     public static boolean isUniqueSession(Class<?> testClass) {
-        ManagedWebDriverAnnotatedField webDriverField = ManagedWebDriverAnnotatedField.findFirstAnnotatedField(testClass);
+        ManagedWebDriverAnnotatedField webDriverField = findFirstAnnotatedField(testClass);
         return webDriverField.isUniqueSession();
     }
 
     public static boolean isWebTest(Class<?> testClass) {
-        return ManagedWebDriverAnnotatedField.findOptionalAnnotatedField(testClass).isPresent();
+        return findOptionalAnnotatedField(testClass).isPresent();
     }
 
 }

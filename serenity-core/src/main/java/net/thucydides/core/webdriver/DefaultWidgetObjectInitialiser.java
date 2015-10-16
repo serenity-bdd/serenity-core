@@ -3,7 +3,6 @@ package net.thucydides.core.webdriver;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WidgetObject;
 import net.thucydides.core.guice.Injectors;
-
 import org.openqa.selenium.WebDriver;
 
 /**

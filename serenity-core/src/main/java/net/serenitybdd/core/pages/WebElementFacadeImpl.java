@@ -10,7 +10,6 @@ import io.appium.java_client.FindsByAccessibilityId;
 import io.appium.java_client.FindsByAndroidUIAutomator;
 import io.appium.java_client.FindsByIosUIAutomation;
 import net.serenitybdd.core.time.InternalSystemClock;
-import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.locators.MethodTiming;
 import net.thucydides.core.annotations.locators.WithConfigurableTimeout;
@@ -39,7 +38,6 @@ import java.util.concurrent.TimeUnit;
 
 import static ch.lambdaj.Lambda.convert;
 import static net.serenitybdd.core.pages.Selectors.isXPath;
-import static net.serenitybdd.core.pages.Selectors.xpathOrCssSelector;
 
 
 /**
@@ -468,6 +466,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         }
     }
 
+
     class ExtractText implements Converter<WebElement, String> {
         public String convert(WebElement from) {
             return from.getText();
@@ -649,6 +648,13 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         select.selectByIndex(indexValue);
         notifyScreenChange();
         return this;
+    }
+
+    public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
+        if (driverIsDisabled()) {
+            return null;
+        }
+        return getWrappedElement().getScreenshotAs(target);
     }
 
     private void waitUntilElementAvailable() {

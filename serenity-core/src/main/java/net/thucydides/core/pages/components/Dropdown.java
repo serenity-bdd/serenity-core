@@ -1,7 +1,6 @@
 package net.thucydides.core.pages.components;
 
 import net.thucydides.core.webelements.MultipleSelect;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
@@ -30,6 +29,10 @@ public class Dropdown {
 
     public void select(final String visibleLabel) {
         selectField.selectByVisibleText(visibleLabel);
+    }
+    
+    public void selectByValue(final String value) {
+        selectField.selectByValue(value);
     }
 
     public void selectMultipleItems(final String... selectedLabels) {

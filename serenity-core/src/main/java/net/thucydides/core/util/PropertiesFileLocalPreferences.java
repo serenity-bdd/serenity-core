@@ -3,9 +3,7 @@ package net.thucydides.core.util;
 import com.google.inject.Inject;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigValue;
-import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import net.thucydides.core.ThucydidesSystemProperty;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +16,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.strip;
 
 /**
  * Loads Thucydides preferences from a local file called thucydides.properties.
@@ -110,7 +108,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     }
 
     private void setUndefinedSystemPropertiesFrom(Properties localPreferences) {
-        Enumeration propertyNames = localPreferences.propertyNames();
+        Enumeration<?> propertyNames = localPreferences.propertyNames();
         while (propertyNames.hasMoreElements()) {
             String propertyName = (String) propertyNames.nextElement();
             String localPropertyValue = localPreferences.getProperty(propertyName);

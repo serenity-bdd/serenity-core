@@ -1,16 +1,21 @@
 package net.thucydides.core.images;
 
+import net.thucydides.core.screenshots.ScreenshotException;
+import org.imgscalr.Scalr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.FileImageInputStream;
+import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Iterator;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
@@ -19,8 +24,9 @@ import static com.jayway.awaitility.Awaitility.await;
 public class ResizableImage {
 
     private final File screenshotFile;
-    private final SimpleImageInfo imageInfo;
     private final int MAX_SUPPORTED_HEIGHT = 4000;
+
+    private Dimension dimension;
 
     private final Logger logger = LoggerFactory.getLogger(ResizableImage.class);
 
@@ -30,19 +36,59 @@ public class ResizableImage {
 
     public ResizableImage(final File screenshotFile) throws IOException {
         this.screenshotFile = screenshotFile;
-        this.imageInfo = new SimpleImageInfo(screenshotFile);
     }
 
     public static ResizableImage loadFrom(final File screenshotFile) throws IOException {
         return new ResizableImage(screenshotFile);
     }
 
-    public int getWitdh() {
-        return imageInfo.getWidth();
+    public int getWidth() {
+        return getImageDimension().width;
+    }
+
+    private Dimension getImageDimension() {
+        if (dimension != null) {
+            return dimension;
+        }
+
+        String suffix = this.getFileSuffix(screenshotFile.getPath());
+        Iterator<ImageReader> imageReaders = ImageIO.getImageReadersBySuffix(suffix);
+        if (imageReaders.hasNext()) {
+            ImageReader reader = imageReaders.next();
+            try {
+                ImageInputStream stream = new FileImageInputStream(screenshotFile);
+                reader.setInput(stream);
+                int width = reader.getWidth(reader.getMinIndex());
+                int height = reader.getHeight(reader.getMinIndex());
+                dimension = new Dimension(width, height);
+            } catch (IOException e) {
+                logger.warn("Could not find the dimensions of the screenshot for " + screenshotFile);
+                return new Dimension(0,0);
+            } finally {
+                reader.dispose();
+            }
+        } else {
+            throw new ScreenshotException("Could not find the dimensions of the screenshot for " + screenshotFile);
+        }
+        return dimension;
+    }
+
+    private String getFileSuffix(final String path) {
+        String result = null;
+        if (path != null) {
+            result = "";
+            if (path.lastIndexOf('.') != -1) {
+                result = path.substring(path.lastIndexOf('.'));
+                if (result.startsWith(".")) {
+                    result = result.substring(1);
+                }
+            }
+        }
+        return result;
     }
 
     public int getHeight() {
-        return imageInfo.getHeight();
+        return getImageDimension().height;
     }
 
     public ResizableImage rescaleCanvas(final int height) throws IOException {
@@ -55,9 +101,7 @@ public class ResizableImage {
 
         try {
             waitForCreationOfFile();
-            BufferedImage image = ImageIO.read(screenshotFile);
-            int width = new SimpleImageInfo(screenshotFile).getWidth();
-            return resizeImage(width, targetHeight, image);
+            return resizeImage(getWidth(), targetHeight, ImageIO.read(screenshotFile));
         } catch (Throwable e) {
             getLogger().warn("Could not resize screenshot, so leaving original version: " + screenshotFile, e);
             return this;
@@ -77,15 +121,8 @@ public class ResizableImage {
     }
 
     protected ResizableImage resizeImage(int width, int targetHeight, BufferedImage image) throws IOException {
-        try {
-            int imageType = (image.getType() > 0) ? image.getType() : BufferedImage.TYPE_4BYTE_ABGR;
-			BufferedImage resizedImage = new BufferedImage(width, targetHeight, imageType);
-			fillWithWhiteBackground(resizedImage);
-			resizedImage.setData(image.getRaster());
-	        return new ResizedImage(resizedImage, screenshotFile);
-		} catch (Throwable e) {
-			throw new IllegalArgumentException(e);
-		}
+        BufferedImage resizedImage = Scalr.resize(image, Scalr.Method.SPEED,Scalr.Mode.FIT_TO_WIDTH, width, targetHeight, Scalr.OP_ANTIALIAS);
+	    return new ResizedImage(resizedImage, screenshotFile);
     }
 
     private boolean skipRescale(int height) {
@@ -98,13 +135,6 @@ public class ResizableImage {
         }
 
         return false;
-    }
-
-    private void fillWithWhiteBackground(final BufferedImage resizedImage) {
-        Graphics2D g2d = resizedImage.createGraphics();
-        g2d.setColor(Color.LIGHT_GRAY);
-        g2d.fill(new Rectangle2D.Float(0, 0, resizedImage.getWidth(), resizedImage.getHeight()));
-        g2d.dispose();
     }
 
     /**

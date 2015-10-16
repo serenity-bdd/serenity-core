@@ -1,14 +1,12 @@
 package net.thucydides.core.annotations.locators;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.concurrent.TimeUnit;
-
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WidgetObject;
-
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Handles a resolved {@link WidgetObject} from a List.

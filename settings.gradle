@@ -3,9 +3,10 @@ include 'serenity-test-utils',
         'serenity-sample-alternative-resources',
         'serenity-core',
         'serenity-junit',
-        'serenity-journey',
         'serenity-ant-task',
         'serenity-gradle-plugin',
         'serenity-spring',
         'serenity-rest-assured',
-        'serenity-browsermob-plugin'
+        'serenity-browsermob-plugin',
+        'serenity-journey',
+        'browse-the-web'

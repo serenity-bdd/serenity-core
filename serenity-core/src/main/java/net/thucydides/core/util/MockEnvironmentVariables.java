@@ -14,6 +14,7 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
 
     public MockEnvironmentVariables() {
         this.properties.setProperty("user.home", System.getProperty("user.home"));
+        this.properties.setProperty("feature.file.encoding", "UTF-8");
     }
 
     protected MockEnvironmentVariables(Properties properties) {

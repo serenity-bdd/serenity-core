@@ -8,17 +8,16 @@ import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import net.thucydides.core.webelements.RadioButtonGroup;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
 import java.util.List;
-import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -102,8 +101,10 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
 
     @AfterClass
     public static void closeDriver() {
-        driver.close();
-        driver.quit();
+    	if (driver != null) {
+	        driver.close();
+	        driver.quit();
+    	}
     }
 
     @Before
@@ -115,7 +116,7 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
     private void openStaticTestSite() {
         File baseDir = new File(System.getProperty("user.dir"));
         File testSite = new File(baseDir, "src/test/resources/static-site/index.html");
-        this.driver.get("file://" + testSite.getAbsolutePath());
+        driver.get("file://" + testSite.getAbsolutePath());
     }
 
     @Test

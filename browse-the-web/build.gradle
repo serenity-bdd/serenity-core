@@ -1,0 +1,10 @@
+ext {
+    bintrayPackage = 'serenity-ability-to-browse-theValue-web'
+    projectDescription = 'Webdriver integration for theValue User Journey pattern in Serenity'
+}
+
+dependencies {
+    compile project(':serenity-core')
+    compile project(':serenity-journey')
+    testCompile project(':serenity-junit')
+}

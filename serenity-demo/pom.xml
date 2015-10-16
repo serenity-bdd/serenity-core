@@ -4,7 +4,7 @@
 
     <groupId>net.thucydides</groupId>
     <artifactId>thucydides-demo</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.8.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>thucydides-demo</name>
@@ -12,9 +12,23 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        
+        <slf4j.version>1.6.4</slf4j.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>net.thucydides</groupId>
+            <artifactId>thucydides-core</artifactId>
+            <version>0.8.31</version>
+            <exclusions>
+            	<exclusion>
+            		<groupId>log4j</groupId>
+            		<artifactId>log4j</artifactId>
+            	</exclusion>
+            </exclusions>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -24,13 +38,22 @@
         <dependency>
             <groupId>net.thucydides</groupId>
             <artifactId>thucydides-junit</artifactId>
-            <version>0.8.1-SNAPSHOT</version>
+            <version>0.8.31</version>
+            <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>net.thucydides</groupId>
-            <artifactId>thucydides-core</artifactId>
-            <version>0.8.1-SNAPSHOT</version>
-        </dependency>
+        
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>test</scope>
+		</dependency>
     </dependencies>
 
     <build>
@@ -48,6 +71,10 @@
                     <excludes>
                         <exclude>**/Abstract*.java</exclude>
                     </excludes>
+                    <systemProperties>
+                    	<webdriver.driver>${webdriver.driver}</webdriver.driver>
+                    	<webdriver.chrome.driver>${webdriver.chrome.driver}</webdriver.chrome.driver>
+                    </systemProperties>
                 </configuration>
             </plugin>
             <plugin>
@@ -55,29 +82,28 @@
                 <artifactId>maven-thucydides-plugin</artifactId>
                 <version>0.8.0</version>
             </plugin>
-            <plugin>
-                <groupId>org.easyb</groupId>
-                <artifactId>maven-easyb-plugin</artifactId>
-                <version>1.4</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <storyType>html</storyType>
-                    <storyReport>${project.build.directory}/net.thucydides.easyb/stories.html</storyReport>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.easyb</groupId>
-                        <artifactId>easyb-core</artifactId>
-                        <version>1.5</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
         </plugins>
     </build>
+    
+    <profiles>
+    	<profile>
+    		<id>firefox</id>
+    		<properties>
+    			<webdriver.driver>firefox</webdriver.driver>
+    		</properties>
+    	</profile>
+    	<profile>
+    		<id>chrome</id>
+    		<properties>
+    			<webdriver.driver>chrome</webdriver.driver>
+    			<!--  Add the property 'webdriver.chrome.driver' as shown below to this profile.         -->
+    			<!--  Correct the value, so it contains the path to the location where the chromedriver  -->
+    			<!--  is installed. Or add this property key and related value to the 'settings.xml'.    -->
+    			<!--  See also the README.md                                                             -->
+    			<!--
+    			<webdriver.chrome.driver>/path-to/chromedriver</webdriver.chrome.driver>
+    			-->
+    		</properties>
+    	</profile>
+    </profiles>
 </project>

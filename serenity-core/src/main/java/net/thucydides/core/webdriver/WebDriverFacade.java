@@ -1,7 +1,6 @@
 package net.thucydides.core.webdriver;
 
 import com.gargoylesoftware.htmlunit.ScriptException;
-import com.google.common.base.Optional;
 import net.serenitybdd.core.pages.DefaultTimeouts;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;

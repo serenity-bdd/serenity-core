@@ -20,9 +20,13 @@ task wrapper(type: Wrapper) {
     gradleVersion = '2.5'
 }
 
+subprojects {
+    task allDeps(type: DependencyReportTask) {}
+}
+
 ext {
-    seleniumVersion = '2.46.0'
-    groovyVersion = '2.3.9'
+    seleniumVersion = '2.48.2'
+    groovyVersion = '2.3.10'
     junitVersion = '4.11'
     hamcrestVersion = '1.3'
     springVersion = '4.1.6.RELEASE'
@@ -51,7 +55,7 @@ allprojects {
     configurations.all {
         resolutionStrategy {
             // fail fast on dependency convergence problems
-           //failOnVersionConflict()
+            failOnVersionConflict()
 
             // force versions to fix dependency convergence problems
             // when updating this list, update Serenity's declared deps if exists
@@ -110,11 +114,10 @@ subprojects {
         exclude '**/samples/**'
         exclude '**/*Sample*'
         minHeapSize = "128m"
-        maxHeapSize = "512m"
+        maxHeapSize = "1024m"
         if (!JavaVersion.current().isJava8Compatible()) {
-            jvmArgs '-XX:MaxPermSize=256m'
+            jvmArgs += ["-XX:MaxPermSize=256m"]
         }
-        maxParallelForks = 4
     }
 
     task integrationTests(type: Test) {
@@ -126,9 +129,9 @@ subprojects {
         reports.junitXml.destination = "${buildDir}/reports/integration-tests"
         reports.html.destination = "${buildDir}/reports/integration-tests"
         minHeapSize = "128m"
-        maxHeapSize = "2048m"
+        maxHeapSize = "1024m"
         if (!JavaVersion.current().isJava8Compatible()) {
-            jvmArgs '-XX:MaxPermSize=512m'
+            jvmArgs '-XX:MaxPermSize=256m'
         }
         forkEvery 20
     }
@@ -138,6 +141,12 @@ subprojects {
             events "failed"//, "passed", "skipped"
             exceptionFormat = 'full'
         }
+//        beforeTest { desc ->
+//            println "Executing test ${desc.name} [${desc.className}]"
+//        }
+//        afterTest { desc ->
+//            println "Finished test ${desc.name} [${desc.className}]"
+//        }
     }
 
     integrationTests {
@@ -147,6 +156,9 @@ subprojects {
         }
 //        beforeTest { desc ->
 //            println "Executing test ${desc.name} [${desc.className}]"
+//        }
+//        afterTest { desc ->
+//            println "Finished test ${desc.name} [${desc.className}]"
 //        }
     }
 
@@ -195,6 +207,10 @@ subprojects {
 
         compile 'commons-logging:commons-logging:1.2'
         compile "junit:junit:${junitVersion}"
+        compile('org.mockito:mockito-core:1.9.5') {
+            exclude group: "org.hamcrest", module:"hamcrest-core"
+            exclude group: "org.objenesis", module:"objenesis"
+        }
 
         testCompile ("ch.qos.logback:logback-classic:1.0.13") {
             exclude group: "org.slf4j", module: 'slf4j-api'
@@ -202,9 +218,6 @@ subprojects {
         testCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
-        compile('org.mockito:mockito-all:1.10.18') {
-            exclude group: "org.hamcrest"
-        }
         testCompile('org.spockframework:spock-core:1.0-groovy-2.3') {
             exclude group: "junit"
             exclude group:"org.codehaus.groovy", module: "groovy-all"
@@ -222,7 +235,7 @@ subprojects {
     configurations.all {
         resolutionStrategy.eachDependency { DependencyResolveDetails details ->
             if (details.requested.name == 'mockito-all') {
-                details.useTarget group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
+                details.useTarget group: 'org.mockito', name: 'mockito-core', version: '1.9.5'
             }
             if (details.requested.name == 'hamcrest-core') {
                 details.useTarget group: 'org.hamcrest', name: 'hamcrest-core', version: "${hamcrestVersion}"
@@ -363,8 +376,15 @@ subprojects {
         }
     }
 */
+
+    tasks.withType(GroovyCompile) {
+        options.encoding = "UTF-8" // for Java compilation
+        groovyOptions.encoding = "UTF-8" // for Groovy compilation
+    }
+
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:-options"
+        options.encoding = 'UTF-8'
     }
     if (JavaVersion.current().isJava8Compatible()) {
         allprojects {

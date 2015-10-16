@@ -8,7 +8,7 @@ import spock.lang.Specification
 
 class WhenDecidingWhenToBlurScreenshots extends Specification {
 
-    @BlurScreenshots("HEAVY")
+    @BlurScreenshots(BlurLevel.HEAVY)
     def "should blur screenshot if annotation is present for a test method"() {
         when:
             Optional<BlurLevel> blurLevel = new ScreenshotBlurCheck().blurLevel();
@@ -24,7 +24,7 @@ class WhenDecidingWhenToBlurScreenshots extends Specification {
             assert ! blurLevel.isPresent();
     }
 
-    @BlurScreenshots("HEAVY")
+    @BlurScreenshots(BlurLevel.HEAVY)
     def "should override Blur Level with the value of inner method annotation"() {
         when:
         Optional<BlurLevel> blurLevel = getBlurLevelFromStepMethodSetWithLightBlur();
@@ -34,7 +34,7 @@ class WhenDecidingWhenToBlurScreenshots extends Specification {
     }
 
 
-    @BlurScreenshots("LIGHT")
+    @BlurScreenshots(BlurLevel.LIGHT)
     Optional<BlurLevel> getBlurLevelFromStepMethodSetWithLightBlur() {
         return new ScreenshotBlurCheck().blurLevel();
     }

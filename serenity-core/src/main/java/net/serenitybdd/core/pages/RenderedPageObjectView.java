@@ -7,16 +7,16 @@ import net.thucydides.core.scheduling.ThucydidesFluentWait;
 import net.thucydides.core.steps.StepEventBus;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
-import org.openqa.selenium.support.ui.SystemClock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static net.serenitybdd.core.pages.Selectors.xpathOrCssSelector;
-import static net.serenitybdd.core.pages.FindAllWaitOptions.*;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_NO_WAIT;
+import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_WAIT;
+import static net.serenitybdd.core.pages.Selectors.xpathOrCssSelector;
 
 
 /**
@@ -519,5 +519,10 @@ public class RenderedPageObjectView {
 
     public net.serenitybdd.core.pages.WebElementFacade find(String xpathOrCssSelector) {
         return find(xpathOrCssSelector(xpathOrCssSelector));
+    }
+
+    public <T extends WebElementFacade> T moveTo(String xpathOrCssSelector) {
+        pageObject.withAction().moveToElement(pageObject.findBy(xpathOrCssSelector));
+        return pageObject.findBy(xpathOrCssSelector);
     }
 }

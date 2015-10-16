@@ -2,7 +2,7 @@ package net.thucydides.core.model.results;
 
 import net.thucydides.core.model.TestResult;
 
-import static net.thucydides.core.model.TestResult.*;
+import static net.thucydides.core.model.TestResult.ERROR;
 
 /**
  * Created by john on 9/08/2015.

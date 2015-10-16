@@ -582,5 +582,9 @@ public class WebElementFacadeStub implements WebElementFacade {
         return false;
     }
 
+    @Override
+    public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
+        return null;
+    }
 }
 

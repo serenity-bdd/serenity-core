@@ -12,6 +12,4 @@ dependencies {
         exclude group: 'org.codehaus.groovy', module:'groovy-json'
         exclude group: 'org.codehaus.groovy', module:'groovy-xml'
     }
-    compile "net.bytebuddy:byte-buddy:0.6.5"
-    compile "org.mockito:mockito-all:1.10.18"
 }

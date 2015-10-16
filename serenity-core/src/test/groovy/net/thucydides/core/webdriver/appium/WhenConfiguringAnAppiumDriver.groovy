@@ -1,12 +1,11 @@
 package net.thucydides.core.webdriver.appium
 
+import net.thucydides.core.util.FileSeparatorUtil
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.util.PathProcessor
 import net.thucydides.core.webdriver.MobilePlatform
 import net.thucydides.core.webdriver.ThucydidesConfigurationException
-import net.thucydides.core.webdriver.appium.AppiumConfiguration
 import spock.lang.Specification
-import spock.lang.Unroll
 
 /**
  * Created by Ben on 10/11/14.
@@ -90,7 +89,8 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
         then:
         def appPath = appiumConfiguration.capabilities.getCapability("app").toString()
-        appPath.endsWith("/apps/dummy-app")
+        def expectedEnding = FileSeparatorUtil.changeSeparatorIfRequired("/apps/dummy-app")
+        appPath.endsWith(expectedEnding)
     }
 
     def "should provide meaningful message if the app path is not specified"() {

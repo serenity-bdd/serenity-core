@@ -9,7 +9,6 @@ import com.jayway.restassured.response.Response;
 import com.jayway.restassured.response.ValidatableResponse;
 import com.jayway.restassured.specification.RequestSpecification;
 import com.jayway.restassured.specification.ResponseSpecification;
-import groovy.lang.MetaClass;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.serenitybdd.core.rest.RestMethod;
@@ -17,7 +16,6 @@ import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.rest.stubs.RequestSpecificationStub;
 import net.serenitybdd.rest.stubs.ResponseSpecificationStub;
 import net.serenitybdd.rest.stubs.ResponseStub;
-import net.serenitybdd.rest.stubs.ValidatableResponseStub;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.InvocationHandler;
 import net.thucydides.core.steps.ExecutedStepDescription;
@@ -220,10 +218,16 @@ public class SerenityRest {
 
         if (currentRestQuery.get() != null) {
             RestQuery query = currentRestQuery.get();
-            query = query.withResponse(responseBody).withStatusCode(statusCode);
+            if (shouldRecordResponseBodyFor(result)) {
+                query = query.withResponse(responseBody).withStatusCode(statusCode);
+            }
             getEventBus().getBaseStepListener().recordRestQuery(query);
             currentRestQuery.remove();
         }
+    }
+
+    private static boolean shouldRecordResponseBodyFor(Response result) {
+        return result.getContentType().endsWith("/json") || result.getContentType().endsWith("/xml") || result.getContentType().endsWith("/text");
     }
 
     private static void notifyGetOrDelete(Object[] args, RestMethod method) {

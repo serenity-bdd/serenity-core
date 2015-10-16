@@ -1,6 +1,7 @@
 package net.serenitybdd.screenplay;
 
 public interface PerformsTasks {
-    void start();
-    <T extends Task> void attemptsTo(T... todos);
+    <T extends Performable> void attemptsTo(T... todos);
+
+    <ANSWER> ANSWER asksFor(Question<ANSWER> question);
 }

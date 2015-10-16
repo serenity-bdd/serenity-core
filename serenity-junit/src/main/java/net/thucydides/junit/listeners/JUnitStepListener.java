@@ -1,7 +1,7 @@
 package net.thucydides.junit.listeners;
 
-import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepListener;

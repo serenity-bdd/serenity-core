@@ -1,6 +1,5 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.steps.StepEventBus;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
@@ -51,7 +50,7 @@ public class RetryFilteringRunNotifier extends RunNotifierDecorator {
         if (isExpected(failure)) {
             fireTestFinished(failure.getDescription());
         } else {
-            log.debug("Test failed: " + failure);
+            log.debug("Test failed: " + failure, failure.getException());
             testStartAlreadyFired = false;
             testFailed = true;
             lastFailure = failure;
@@ -74,11 +73,6 @@ public class RetryFilteringRunNotifier extends RunNotifierDecorator {
         }
         return false;
     }
-
-    private void updateResultsForExpectedException(Class<? extends Throwable> expected) {
-        StepEventBus.getEventBus().exceptionExpected(expected);
-    }
-
 
     public void flush() {
         log.debug("Flushing notifications");
@@ -138,12 +132,12 @@ public class RetryFilteringRunNotifier extends RunNotifierDecorator {
 
     @Override
     public void fireTestRunStarted(Description description) {
-        super.fireTestRunStarted(description);    //To change body of overridden methods use File | Settings | File Templates.
+        super.fireTestRunStarted(description);
     }
 
     @Override
     public void fireTestRunFinished(Result result) {
-        super.fireTestRunFinished(result);    //To change body of overridden methods use File | Settings | File Templates.
+        super.fireTestRunFinished(result);
 
         retryAwareRunNotifier.fireTestRunFinished(result);
     }

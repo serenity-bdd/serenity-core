@@ -19,8 +19,8 @@ out
 build
 bin
 thucydides-arquillian
-tools
 *.sublime-project
 *.sublime-workspace
 .hg*
 .nb-gradle
+.DS_Store

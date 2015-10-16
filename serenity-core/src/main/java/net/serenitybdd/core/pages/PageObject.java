@@ -2,7 +2,6 @@ package net.serenitybdd.core.pages;
 
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Predicate;
-import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;
@@ -20,19 +19,17 @@ import net.thucydides.core.steps.PageObjectStepDelayer;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.WaitForBuilder;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.util.Inflector;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import net.thucydides.core.webdriver.DefaultPageObjectInitialiser;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webelements.Checkbox;
 import net.thucydides.core.webelements.RadioButtonGroup;
-import static net.serenitybdd.core.pages.Selectors.xpathOrCssSelector;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
-import org.openqa.selenium.support.ui.Duration;
-import org.openqa.selenium.support.ui.SystemClock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +47,7 @@ import java.util.concurrent.TimeUnit;
 
 import static ch.lambdaj.Lambda.convert;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static net.serenitybdd.core.pages.Selectors.xpathOrCssSelector;
 import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascriptIsSupportedIn;
 
 /**
@@ -156,6 +154,11 @@ public abstract class PageObject {
 
     public void setDriver(WebDriver driver) {
         setDriver(driver, getImplicitWaitTimeout().in(TimeUnit.MILLISECONDS));
+    }
+
+    public PageObject withDriver(WebDriver driver) {
+        setDriver(driver);
+        return this;
     }
 
     public Duration getWaitForTimeout() {
@@ -1031,8 +1034,26 @@ public abstract class PageObject {
         return new ThucydidesFluentAdapter(getDriver());
     }
 
+    public <T extends WebElementFacade> T moveTo(String xpathOrCssSelector) {
+        withAction().moveToElement(findBy(xpathOrCssSelector)).perform();
+        return findBy(xpathOrCssSelector);
+    }
+
     public void waitForAngularRequestsToFinish() {
-        getJavascriptExecutorFacade().executeAsyncScript("var callback = arguments[arguments.length - 1];" +
-                "angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
+        if ((boolean) getJavascriptExecutorFacade().executeScript(
+                "return (typeof angular !== 'undefined')? true : false;")) {
+            getJavascriptExecutorFacade()
+                    .executeAsyncScript(
+                            "var callback = arguments[arguments.length - 1];"
+                                    + "angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
+        }
+    }
+
+    Inflector inflection = Inflector.getInstance();
+
+    @Override
+    public String toString() {
+        return inflection.of(getClass().getSimpleName())
+                .inHumanReadableForm().toString();
     }
 }

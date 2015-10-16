@@ -1,11 +1,10 @@
 package net.thucydides.core.webdriver;
 
-import java.util.concurrent.TimeUnit;
-
+import com.google.common.base.Predicate;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Duration;
 
-import com.google.common.base.Predicate;
+import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractObjectInitialiser<T> implements Predicate<T> {
 	

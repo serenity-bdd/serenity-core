@@ -2,6 +2,7 @@ package net.thucydides.core.pages;
 
 import com.google.common.base.Optional;
 import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.pages.PageObjects;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.webdriver.Configuration;
@@ -297,5 +298,9 @@ public class Pages implements Serializable {
     public Pages onSamePage() {
         usePreviousPage = true;
         return this;
+    }
+
+    public static <T extends PageObject> T instrumentedPageObjectUsing(Class<T> pageObjectClass, WebDriver driver) {
+        return PageObjects.usingDriver(driver).ofType(pageObjectClass);
     }
 }

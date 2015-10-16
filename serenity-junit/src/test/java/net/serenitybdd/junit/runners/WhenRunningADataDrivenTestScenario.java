@@ -1,6 +1,7 @@
 package net.serenitybdd.junit.runners;
 
 import com.google.common.collect.Lists;
+import net.serenitybdd.junit.runners.integration.SimpleSuccessfulParametrizedTestSample;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
@@ -19,7 +20,6 @@ import net.thucydides.junit.annotations.Concurrent;
 import net.thucydides.junit.annotations.TestData;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
 import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule;
-import net.serenitybdd.junit.runners.integration.SimpleSuccessfulParametrizedTestSample;
 import net.thucydides.samples.*;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.Description;

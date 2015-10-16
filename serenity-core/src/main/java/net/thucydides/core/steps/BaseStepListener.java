@@ -1,24 +1,27 @@
 package net.thucydides.core.steps;
 
-import ch.lambdaj.function.aggregate.Aggregator;
-import ch.lambdaj.function.aggregate.PairAggregator;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
-import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.photography.Darkroom;
+import net.serenitybdd.core.photography.ScreenshotPhoto;
+import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
 import net.serenitybdd.core.rest.RestQuery;
+import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.pages.Pages;
-import net.serenitybdd.core.time.SystemClock;
-import net.thucydides.core.screenshots.*;
-import net.thucydides.core.webdriver.*;
+import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.core.screenshots.ScreenshotException;
+import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.core.webdriver.WebdriverManager;
+import net.thucydides.core.webdriver.WebdriverProxyFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
@@ -26,12 +29,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
-import static ch.lambdaj.Lambda.aggregate;
-import static com.google.common.collect.Lists.partition;
 import static net.thucydides.core.model.Stories.findStoryFrom;
 import static net.thucydides.core.model.TestResult.*;
 import static net.thucydides.core.steps.BaseStepListener.ScreenshotType.MANDATORY_SCREENSHOT;
@@ -86,13 +86,15 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private Configuration configuration;
 
-    ScreenshotProcessor screenshotProcessor;
+    //ScreenshotProcessor screenshotProcessor;
 
     private boolean inFluentStepSequence;
 
     private List<String> storywideIssues;
 
     private List<TestTag> storywideTags;
+
+    private net.serenitybdd.core.photography.Photographer photographer = new net.serenitybdd.core.photography.Photographer();
 
     public void setEventBus(StepEventBus eventBus) {
         this.eventBus = eventBus;
@@ -167,7 +169,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         this.webdriverManager = injector.getInstance(WebdriverManager.class);
         this.clock = injector.getInstance(SystemClock.class);
         this.configuration = injector.getInstance(Configuration.class);
-        this.screenshotProcessor = injector.getInstance(ScreenshotProcessor.class);
+        //this.screenshotProcessor = injector.getInstance(ScreenshotProcessor.class);
     }
 
     /**
@@ -295,7 +297,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void testSuiteFinished() {
-        screenshotProcessor.waitUntilDone();
+        //screenshotProcessor.waitUntilDone();
+        Darkroom.waitUntilClose();
         clearStorywideTagsAndIssues();
         suiteStarted = false;
     }
@@ -382,7 +385,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
      */
     public void stepStarted(final ExecutedStepDescription description) {
         recordStep(description);
-        takeInitialScreenshot();
+        if (currentTestIsABrowserTest()) {
+            takeInitialScreenshot();
+        }
         updateSessionIdIfKnown();
 
     }
@@ -586,7 +591,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void takeEndOfStepScreenshotFor(final TestResult result) {
-        if (shouldTakeEndOfStepScreenshotFor(result)) {
+        if (currentTestIsABrowserTest() && shouldTakeEndOfStepScreenshotFor(result)) {
             take(OPTIONAL_SCREENSHOT);
         }
     }
@@ -604,7 +609,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
             try {
                 Optional<ScreenshotAndHtmlSource> screenshotAndHtmlSource = grabScreenshot();
                 if (screenshotAndHtmlSource.isPresent()) {
-                    takeScreenshotIfRequired(screenshotType, screenshotAndHtmlSource.get());
+                    recordScreenshotIfRequired(screenshotType, screenshotAndHtmlSource.get());
                 }
                 removeDuplicatedInitalScreenshotsIfPresent();
             } catch (ScreenshotException e) {
@@ -642,7 +647,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return testStep.getScreenshots().get(testStep.getScreenshots().size() - 1);
     }
 
-    private void takeScreenshotIfRequired(ScreenshotType screenshotType, ScreenshotAndHtmlSource screenshotAndHtmlSource) {
+    private void recordScreenshotIfRequired(ScreenshotType screenshotType, ScreenshotAndHtmlSource screenshotAndHtmlSource) {
         if (shouldTakeScreenshot(screenshotType, screenshotAndHtmlSource) && screenshotWasTaken(screenshotAndHtmlSource)) {
             getCurrentStep().addScreenshot(screenshotAndHtmlSource);
         }
@@ -685,46 +690,24 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private Optional<ScreenshotAndHtmlSource> grabScreenshot() {
-        Optional<File> screenshot = getPhotographer().takeScreenshot();
-        if (screenshot.isPresent()) {
-            if (shouldStoreSourcecode()) {
-                File sourcecodeFile = sourcecodeForScreenshot(screenshot.get(), getPageSource());
-                return Optional.of(new ScreenshotAndHtmlSource(screenshot.get(), sourcecodeFile));
-            } else {
-                return Optional.of(new ScreenshotAndHtmlSource(screenshot.get()));
-            }
+
+        ScreenshotPhoto newPhoto = ScreenshotPhoto.None;
+
+        if (pathOf(outputDirectory) != null) { // Output directory may be null for some tests
+            newPhoto = photographer.takesAScreenshot()
+                                   .withDriver(getDriver())
+                                   .andWithBlurring(AnnotatedBluring.blurLevel())
+                                   .andSaveToDirectory(pathOf(outputDirectory));
+
         }
-        return Optional.absent();
+        return (newPhoto == ScreenshotPhoto.None) ?
+                Optional.<ScreenshotAndHtmlSource>absent()
+                : Optional.of(new ScreenshotAndHtmlSource(newPhoto.getPathToScreenshot().toFile()));
     }
 
-    public String getPageSource() {
-        return getPhotographer().getPageSource();
+    private Path pathOf(File directory) {
+        return (directory == null) ? null : directory.toPath();
     }
-
-    private File sourcecodeForScreenshot(File screenshotFile, String pageSource) {
-        File pageSourceFile = new File(screenshotFile.getAbsolutePath() + ".html");
-
-        try {
-            Files.write(pageSourceFile.toPath(), pageSource.getBytes());
-        } catch (IOException e) {
-            LOGGER.warn("Failed to write screen source code",e);
-        }
-        return pageSourceFile;
-    }
-
-    private boolean shouldStoreSourcecode() {
-        return configuration.storeHtmlSourceCode();
-    }
-
-    public Photographer getPhotographer() {
-        ScreenshotBlurCheck blurCheck = new ScreenshotBlurCheck();
-        if (blurCheck.blurLevel().isPresent()) {
-            return new Photographer(getDriver(), outputDirectory, blurCheck.blurLevel().get());
-        } else {
-            return new Photographer(getDriver(), outputDirectory);
-        }
-    }
-
 
     private boolean shouldTakeEndOfStepScreenshotFor(final TestResult result) {
         if (result == FAILURE) {
@@ -759,7 +742,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return /* (driver != null) ? driver : */webdriverManager.getWebdriver();
     }
 
-    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
     public boolean aStepHasFailed() {
         return ((!getTestOutcomes().isEmpty()) &&
                 (getCurrentTestOutcome().getResult() == TestResult.FAILURE || getCurrentTestOutcome().getResult() == TestResult.ERROR));
@@ -783,6 +765,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public void testPending() {
         getCurrentTestOutcome().setAnnotatedResult(PENDING);
+        updateExampleTableIfNecessary(PENDING);
     }
 
     @Override
@@ -805,7 +788,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void notifyScreenChange() {
-        if (screenshots().areAllowed(TakeScreenshots.FOR_EACH_ACTION)) {
+        if (currentTestIsABrowserTest() && screenshots().areAllowed(TakeScreenshots.FOR_EACH_ACTION)) {
             take(OPTIONAL_SCREENSHOT);
         }
     }

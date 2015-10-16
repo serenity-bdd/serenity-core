@@ -6,7 +6,10 @@ import com.google.inject.Inject;
 import net.thucydides.core.webdriver.Configuration;
 import org.openqa.selenium.Capabilities;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.nio.file.DirectoryIteratorException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;

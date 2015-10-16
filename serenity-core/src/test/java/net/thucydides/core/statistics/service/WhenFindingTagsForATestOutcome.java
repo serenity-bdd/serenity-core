@@ -8,19 +8,15 @@ import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.FileSystemRequirementsTagProvider;
-import net.thucydides.core.requirements.model.Narrative;
 import net.thucydides.core.requirements.model.Requirement;
-import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
 import java.util.Set;
 
@@ -315,19 +311,36 @@ public class WhenFindingTagsForATestOutcome {
     @Test
     public void should_get_requirement_from_feature_with_narrative_if_present() {
         FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider();
-        Story userStory = Story.called("plant potatoes");
-        when(testOutcome.getPath()).thenReturn("stories\\grow_potatoes\\grow_new_potatoes\\PlantPotatoes.feature");
+        Story userStory = Story.called("Water the potatoes");
+        when(testOutcome.getPath()).thenReturn("stories\\grow_potatoes\\grow_new_potatoes\\WaterPotatoes.feature");
         when(testOutcome.getUserStory()).thenReturn(userStory);
         when(testOutcome.getFeatureTag()).thenReturn(Optional.<TestTag>absent());
 
         Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
 
         assertThat(requirement.isPresent(), is(true));
-        assertThat(requirement.get().getName(), is("Plant potatoes"));
+        assertThat(requirement.get().getName(), is("Watering the potatoes"));
         assertThat(requirement.get().getNarrative().getText(), containsString("As a farmer"));
         assertThat(requirement.get().getNarrative().getText(), containsString("I want to plant potatoes"));
         assertThat(requirement.get().getNarrative().getText(), containsString("So that I can harvest them later on"));
     }
+
+/*
+    fixme:
+    @Test
+    public void should_get_requirement_from_feature_when_only_the_feature_file_name_is_provided() {
+        FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider();
+        Story userStory = Story.called("Watering the potatoes");
+        when(testOutcome.getPath()).thenReturn("WaterPotatoes.feature");
+        when(testOutcome.getUserStory()).thenReturn(userStory);
+        when(testOutcome.getFeatureTag()).thenReturn(Optional.<TestTag>absent());
+
+        Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
+
+        assertThat(requirement.isPresent(), is(true));
+        assertThat(requirement.get().getName(), is("Watering the potatoes"));
+    }
+     */
 
     @Test
     public void should_get_requirement_from_feature_in_a_foreign_language() throws URISyntaxException {

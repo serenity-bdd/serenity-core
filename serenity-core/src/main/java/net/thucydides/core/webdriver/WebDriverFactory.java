@@ -6,12 +6,12 @@ import io.appium.java_client.AppiumDriver;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.serenitybdd.core.pages.DefaultTimeouts;
+import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureException;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.fixtureservices.FixtureService;
 import net.thucydides.core.guice.Injectors;
-import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.steps.FilePathParser;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.appium.AppiumConfiguration;
@@ -46,7 +46,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
 import static net.thucydides.core.webdriver.javascript.JavascriptSupport.activateJavascriptSupportFor;
@@ -247,7 +246,7 @@ public class WebDriverFactory {
         try {
             return sourceConfig.getDriverSource().newDriver();
         } catch (Exception e) {
-            throw new RuntimeException("Could not instantiate the custom webdriver provider of type " + sourceConfig.getDriverName());
+            throw new RuntimeException("Could not instantiate the custom webdriver provider of type " + sourceConfig.getDriverName(), e);
         }
     }
 

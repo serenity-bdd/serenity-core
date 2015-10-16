@@ -2,7 +2,6 @@ package net.thucydides.core.requirements;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
-import net.thucydides.core.statistics.service.ClasspathTagProviderService;
 import net.thucydides.core.statistics.service.TagProvider;
 import net.thucydides.core.statistics.service.TagProviderFilter;
 import net.thucydides.core.statistics.service.TagProviderService;

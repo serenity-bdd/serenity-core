@@ -1,18 +1,11 @@
 package net.thucydides.core.annotations.locators;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
-import javax.swing.text.html.Option;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class SmartElementHandler extends AbstractSingleItemHandler<WebElementFacade> {

@@ -1,5 +1,7 @@
 package net.thucydides.core.annotations;
 
+import net.thucydides.core.screenshots.BlurLevel;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -11,5 +13,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface BlurScreenshots {
-    String value();
+    BlurLevel value();
 }

@@ -1,0 +1,3 @@
+== The Serenity Journey module
+
+This module allows fluent, highly-readable acceptance tests to be written in JUnit and Serenity.

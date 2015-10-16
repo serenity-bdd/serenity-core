@@ -113,7 +113,11 @@ public class ExecutedStepDescription implements Cloneable {
      * Turns a method into a human-readable title.
      */
     public String getTitle() {
-        return humanize(name);
+        try {
+            return humanize(AnnotatedStepDescription.from(this).getName());
+        } catch(IllegalArgumentException noMatchingMethod) {
+            return humanize(name);
+        }
     }
 
     public Map<String, Object> getDisplayedFields() {

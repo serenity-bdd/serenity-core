@@ -11,8 +11,6 @@ import org.openqa.selenium.support.ui.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-
 /**
  * One or more WebDriver drivers that are being used in a test.
  */
@@ -120,6 +118,19 @@ public class WebdriverInstances {
         Integer configuredTimeout = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables, -1);
         return (configuredTimeout >= 0) ? new Duration(configuredTimeout, TimeUnit.MILLISECONDS)
                 : DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
+    }
+
+    public void setCurrentDriverTo(WebDriver driver) {
+        currentDriver = driverNameFor(driver);
+    }
+
+    private String driverNameFor(WebDriver driver) {
+        for(String driverName : driverMap.keySet()) {
+            if (driverMap.get(driverName) == driver) {
+                return driverName;
+            }
+        }
+        throw new IllegalStateException("No matching driver found in this thread");
     }
 
 

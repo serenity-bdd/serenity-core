@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.serenitybdd.core.exceptions.UnrecognisedException;
 import net.thucydides.core.model.TestFailureException;
-import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;

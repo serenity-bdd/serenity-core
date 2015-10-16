@@ -2,6 +2,7 @@ package net.serenitybdd.junit.finder;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.reflection.ClassFinder;
 import net.thucydides.junit.annotations.UseTestDataFrom;
 import net.thucydides.junit.runners.ThucydidesRunner;
@@ -70,9 +71,11 @@ public abstract class TestFinder {
         return classes;
     }
 
+    @SuppressWarnings("deprecation")
     private boolean normalThucydidesTest(Class<?> testClass) {
         RunWith runWith = testClass.getAnnotation(RunWith.class);
-        return ((runWith != null) && (runWith.value() == ThucydidesRunner.class));
+        return ((runWith != null)
+                && ((runWith.value() == ThucydidesRunner.class) || (runWith.value() == SerenityRunner.class)));
     }
 
     public List<Method> getAllTestMethods() {

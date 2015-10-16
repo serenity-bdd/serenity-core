@@ -6,7 +6,6 @@ import net.thucydides.core.webdriver.MobilePlatform;
 import net.thucydides.core.webdriver.ThucydidesConfigurationException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;

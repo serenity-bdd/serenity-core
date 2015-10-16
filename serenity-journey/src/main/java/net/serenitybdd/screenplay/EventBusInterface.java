@@ -7,7 +7,7 @@ import net.thucydides.core.steps.StepFailure;
 
 public class EventBusInterface {
 
-    public void reportStepFailureFor(Task todo, Throwable e) {
+    public void reportStepFailureFor(Performable todo, Throwable e) {
         ExecutedStepDescription taskDescription =  ExecutedStepDescription.of(todo.getClass(),"attemptsTo");
         StepEventBus.getEventBus().stepFailed(new StepFailure(taskDescription, e));
     }
@@ -36,4 +36,10 @@ public class EventBusInterface {
     public void reportStepFinished() {
         StepEventBus.getEventBus().stepFinished();
     }
+
+    public void reportStepIgnored() {
+        StepEventBus.getEventBus().stepIgnored();
+    }
+
+    public boolean aStepHasFailed() { return StepEventBus.getEventBus().getBaseStepListener().aStepHasFailed(); }
 }

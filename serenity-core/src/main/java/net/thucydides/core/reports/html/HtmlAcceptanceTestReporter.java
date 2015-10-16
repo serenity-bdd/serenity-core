@@ -81,7 +81,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
         TestOutcome storedTestOutcome = testOutcome.withQualifier(qualifier);
 
-        Map<String, Object> context = new HashMap<String, Object>();
+        Map<String, Object> context = new HashMap<>();
         addTestOutcomeToContext(storedTestOutcome, allTestOutcomes, context);
 
         if (containsScreenshots(storedTestOutcome)) {
@@ -179,14 +179,13 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
         String screenshotReport = testOutcome.getReportName() + "_screenshots.html";
 
-        Map<String, Object> context = new HashMap<String, Object>();
+        Map<String, Object> context = new HashMap<>();
         addTestOutcomeToContext(testOutcome, allTestOutcomes, context);
         addFormattersToContext(context);
         context.put("screenshots", screenshots);
         context.put("narrativeView", testOutcome.getReportName());
         String htmlContents = mergeTemplate(DEFAULT_ACCEPTANCE_TEST_SCREENSHOT).usingContext(context);
         writeReportToOutputDirectory(screenshotReport, htmlContents);
-
     }
 
     private List<Screenshot> expandScreenshots(List<Screenshot> screenshots) throws IOException {
@@ -222,16 +221,20 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         int maxHeight = 0;
         for (Screenshot screenshot : screenshots) {
             File screenshotFile = new File(getOutputDirectory(), screenshot.getFilename());
-            if (screenshotFile.exists()) {
+            if (screenshotFile.exists() && isValidScreenshotFile(screenshotFile)) {
                 maxHeight = maxHeightOf(maxHeight, screenshotFile);
             }
         }
         return maxHeight;
     }
 
+    private boolean isValidScreenshotFile(File screenshotFile) {
+        return screenshotFile.isFile() && screenshotFile.length() > 0;
+    }
+
     private int maxHeightOf(int maxHeight, File screenshotFile) throws IOException {
         int height = ResizableImage.loadFrom(screenshotFile).getHeight();
-        int width = ResizableImage.loadFrom(screenshotFile).getWitdh();
+        int width = ResizableImage.loadFrom(screenshotFile).getWidth();
         if (width > MAXIMUM_SCREENSHOT_WIDTH) {
             height = (int) ((height * 1.0) * (MAXIMUM_SCREENSHOT_WIDTH * 1.0 / width));
         }

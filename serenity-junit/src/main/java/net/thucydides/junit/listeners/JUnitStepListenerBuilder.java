@@ -1,13 +1,13 @@
 package net.thucydides.junit.listeners;
 
 import com.google.inject.Key;
+import net.serenitybdd.junit.runners.ParameterizedJUnitStepListener;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.Listeners;
 import net.thucydides.core.steps.StepListener;
 import net.thucydides.junit.guice.JUnitInjectors;
-import net.serenitybdd.junit.runners.ParameterizedJUnitStepListener;
 
 import java.io.File;
 

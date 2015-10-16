@@ -5,7 +5,6 @@ import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.model.TestTag
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.html.ReportNameProvider
-import net.thucydides.core.requirements.RequirementsServiceImplementation
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode

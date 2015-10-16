@@ -2,10 +2,8 @@ package net.serenitybdd.core.injectors;
 
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.di.DependencyInjector;
-import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.pages.Pages;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;

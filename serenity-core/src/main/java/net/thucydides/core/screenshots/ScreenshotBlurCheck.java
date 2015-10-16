@@ -18,7 +18,7 @@ public class ScreenshotBlurCheck {
         for (StackTraceElement stackTraceElement : stackTrace) {
             Method callingMethod = StackTraceAnalyser.forStackTraceElement(stackTraceElement).getMethod();
             if (callingMethod != null && callingMethod.getAnnotation(BlurScreenshots.class) != null) {
-                return Optional.of(BlurLevel.valueOf(callingMethod.getAnnotation(BlurScreenshots.class).value().toUpperCase()));
+                return Optional.of(callingMethod.getAnnotation(BlurScreenshots.class).value());
             }
         }
         return Optional.absent();

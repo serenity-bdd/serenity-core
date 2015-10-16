@@ -1,26 +1,39 @@
 package net.thucydides.core.util;
 
-import org.junit.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.Test;
 
 public class WhenReadingEnvironmentVariables {
 
     @Test
     public void should_read_environment_variable_from_system() {
-        EnvironmentVariables environmentVariables = new SystemEnvironmentVariables();
-        String value = environmentVariables.getValue("PATH");
+        EnvironmentVariables environmentVariables = new SystemEnvironmentVariables(System.getProperties(), getEnvVars());
+        String value = environmentVariables.getValue("JAVA_HOME");
         assertThat(value, is(not(nullValue())));
     }
 
-    enum LocalEnvProperties {PATH, USER_DIR, DOES_NOT_EXIST}
+    enum LocalEnvProperties {JAVA_HOME, USER_DIR, DOES_NOT_EXIST}
 
     @Test
     public void should_read_environment_variable_from_system_using_an_enum() {
-        EnvironmentVariables environmentVariables = new SystemEnvironmentVariables();
-        String value = environmentVariables.getValue(LocalEnvProperties.PATH);
+        EnvironmentVariables environmentVariables = new SystemEnvironmentVariables(System.getProperties(), getEnvVars());
+        String value = environmentVariables.getValue(LocalEnvProperties.JAVA_HOME);
         assertThat(value, is(not(nullValue())));
+    }
+
+    private Map<String, String> getEnvVars() {
+        Map<String, String> environmentVars = new HashMap<String, String>(System.getenv());
+        if (! environmentVars.containsKey("JAVA_HOME")) {
+            environmentVars.put("JAVA_HOME", "sample");
+        }
+        return environmentVars;
     }
 
     @Test

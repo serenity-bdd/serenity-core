@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.net.URL;
 
 import static net.thucydides.core.util.TestResources.fileInClasspathCalled;
-import static org.assertj.core.api.Assertions.assertThat;;
+import static org.assertj.core.api.Assertions.assertThat;
+
+;
 
 /**
  * Created by john on 30/10/2014.

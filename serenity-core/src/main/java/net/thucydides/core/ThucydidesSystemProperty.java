@@ -5,8 +5,6 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 
-import java.util.logging.Logger;
-
 /**
  * Properties that can be passed to a web driver test to customize its behaviour.
  * The properties can be passed as system properties or placed in the 'thucydides.properties' file using a lower-case,
@@ -674,6 +672,12 @@ public enum ThucydidesSystemProperty {
     FEATURE_FILE_LANGUAGE,
 
     /**
+     * What encoding to use for reading Cucumber feature files?
+     * Defaults to system default encoding
+     */
+    FEATURE_FILE_ENCODING,
+
+    /**
      * Fine-tune the number of threads Serenity uses for report generation.
      */
     REPORT_THREADS,
@@ -696,7 +700,12 @@ public enum ThucydidesSystemProperty {
      * Keep the Thucydides session data between tests.
      * Normally, the session data is cleared between tests.
      */
-    THUCYDIDES_MAINTAIN_SESSION;
+    THUCYDIDES_MAINTAIN_SESSION,
+
+    /**
+     * Path to PhantomJS SSL support
+     */
+    PHANTOMJS_SSL_PROTOCOL;
 
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;

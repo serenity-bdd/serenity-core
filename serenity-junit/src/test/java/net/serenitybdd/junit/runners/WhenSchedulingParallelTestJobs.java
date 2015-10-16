@@ -1,6 +1,5 @@
 package net.serenitybdd.junit.runners;
 
-import net.serenitybdd.junit.runners.ParameterizedRunnerScheduler;
 import net.thucydides.samples.SampleParallelDataDrivenScenario;
 import org.junit.Before;
 import org.junit.Test;

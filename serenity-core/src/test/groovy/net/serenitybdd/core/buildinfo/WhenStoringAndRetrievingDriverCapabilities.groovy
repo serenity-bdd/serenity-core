@@ -1,6 +1,5 @@
 package net.serenitybdd.core.buildinfo
 
-import com.github.goldin.spock.extensions.tempdir.TempDir
 import net.thucydides.core.webdriver.Configuration
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder

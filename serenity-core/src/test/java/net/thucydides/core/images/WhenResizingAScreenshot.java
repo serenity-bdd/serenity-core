@@ -33,15 +33,6 @@ public class WhenResizingAScreenshot {
     }
 
     @Test
-    public void should_be_able_to_determine_the_size_of_an_image() throws IOException {
-        File screenshotFile = screenshotFileFrom("/screenshots/google_page_1.png");
-        SimpleImageInfo info = new SimpleImageInfo(screenshotFile);
-        assertThat(info.getHeight(), is(788));
-        assertThat(info.getWidth(), is(1200));
-    }
-
-
-    @Test
     public void should_be_able_to_determine_the_dimensions_of_an_image() throws IOException {
 
         File screenshotFile = screenshotFileFrom("/screenshots/google_page_1.png");
@@ -51,7 +42,7 @@ public class WhenResizingAScreenshot {
 
         ResizableImage image = ResizableImage.loadFrom(screenshotFile);
 
-        assertThat(image.getWitdh(), is(expectedWidth));
+        assertThat(image.getWidth(), is(expectedWidth));
         assertThat(image.getHeight(), is(expectedHeight));
     }
 
@@ -65,7 +56,7 @@ public class WhenResizingAScreenshot {
 
         ResizableImage image = ResizableImage.loadFrom(screenshotFile);
 
-        assertThat(image.getWitdh(), is(expectedWidth));
+        assertThat(image.getWidth(), is(expectedWidth));
         assertThat(image.getHeight(), is(expectedHeight));
     }
 
@@ -90,7 +81,7 @@ public class WhenResizingAScreenshot {
 
         ResizableImage resizedImage = image.rescaleCanvas(1200);
 
-        assertThat(resizedImage.getWitdh(), is(805));
+        assertThat(resizedImage.getWidth(), is(805));
         assertThat(resizedImage.getHeight(), is(greaterThan(1200)));
     }
 
@@ -137,7 +128,7 @@ public class WhenResizingAScreenshot {
 
         ResizableImage resizedImage = image.rescaleCanvas(1200);
 
-        assertThat(resizedImage.getWitdh(), is(805));
+        assertThat(resizedImage.getWidth(), is(805));
         assertThat(resizedImage.getHeight(), is(greaterThan(1200)));
     }
 
@@ -150,7 +141,7 @@ public class WhenResizingAScreenshot {
 
         ResizableImage resizedImage = image.rescaleCanvas(4000);
 
-        assertThat(resizedImage.getWitdh(), is(805));
+        assertThat(resizedImage.getWidth(), is(805));
         assertThat(resizedImage.getHeight(), is(greaterThan(4000)));
     }
 
@@ -165,7 +156,7 @@ public class WhenResizingAScreenshot {
 
         ResizedImage image = new ResizedImage(bufferedImage, screenshotFile);
 
-        assertThat(image.getWitdh(), is(100));
+        assertThat(image.getWidth(), is(100));
     }
 
     @Test
@@ -191,19 +182,6 @@ public class WhenResizingAScreenshot {
         assertThat(resizedImage.getHeight(), is(greaterThan(400)));
     }
 
-
-    @Test
-    public void should_be_able_to_redimension_an_image_by_reducing_its_size() throws IOException {
-
-        File screenshotFile = screenshotFileFrom("/screenshots/google_page_1.png");
-
-        int newHeight = 938;
-
-        ResizableImage image = ResizableImage.loadFrom(screenshotFile);
-        ResizableImage resizedImage = image.rescaleCanvas(newHeight);
-
-        assertThat(resizedImage.getHeight(), is(newHeight));
-    }
 
     @Test
     public void should_be_able_to_redimension_an_image_by_filling_out_the_background() throws IOException {

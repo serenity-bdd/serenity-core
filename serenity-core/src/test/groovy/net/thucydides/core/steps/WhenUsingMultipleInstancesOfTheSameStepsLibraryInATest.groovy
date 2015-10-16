@@ -1,9 +1,9 @@
 package net.thucydides.core.steps
 
-import net.thucydides.core.annotations.Steps;
+import net.thucydides.core.annotations.Steps
 import spock.lang.Specification
 
-import static net.thucydides.core.steps.StepAnnotations.injectScenarioStepsInto;
+import static net.thucydides.core.steps.StepAnnotations.injectScenarioStepsInto
 
 public class WhenUsingMultipleInstancesOfTheSameStepsLibraryInATest extends Specification {
 

@@ -1,11 +1,9 @@
 package net.thucydides.core.model
 
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import javax.validation.Validation
 import javax.validation.ValidatorFactory
-
 
 /**
  * Created by john on 21/06/2014.

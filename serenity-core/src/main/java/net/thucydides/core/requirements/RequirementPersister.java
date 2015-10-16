@@ -10,7 +10,6 @@ import net.thucydides.core.requirements.model.Requirement;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
-import java.nio.file.attribute.FileAttribute;
 import java.util.Collection;
 import java.util.Map;
 import java.util.SortedMap;

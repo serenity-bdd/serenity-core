@@ -10,9 +10,6 @@ import net.thucydides.core.util.ExtendedTemporaryFolder;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,7 +22,6 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.is;
 
 /**
@@ -231,20 +227,8 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
         StepEventBus.getEventBus().testFinished(testOutcome);
 
         List<TestStep> stepOutomes = stepListener.getTestOutcomes().get(0).getTestSteps();
-        assertThat(stepOutomes, everyItem(hasNoScreenshot()));
-    }
-
-    private Matcher<TestStep> hasNoScreenshot() {
-        return new BaseMatcher<TestStep>() {
-            public boolean matches(Object o) {
-                TestStep step = (TestStep) o;
-                return (step.getScreenshots() == null) || (step.getScreenshots().isEmpty());
-            }
-
-            public void describeTo(Description description) {
-                description.appendText("with no screenshot");
-            }
-        };
+        assertThat(stepOutomes.get(0).getScreenshots().size(), is(0));
+        assertThat(stepOutomes.get(1).getScreenshots().size(), is(0));
     }
 
     @Test

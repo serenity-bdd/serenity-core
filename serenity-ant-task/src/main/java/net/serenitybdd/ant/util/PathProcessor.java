@@ -1,8 +1,6 @@
 package net.serenitybdd.ant.util;
 
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;

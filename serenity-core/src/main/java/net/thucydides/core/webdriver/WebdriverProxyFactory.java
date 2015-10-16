@@ -2,7 +2,6 @@ package net.thucydides.core.webdriver;
 
 import com.google.common.collect.ImmutableList;
 import net.thucydides.core.guice.Injectors;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 
 import java.io.Serializable;

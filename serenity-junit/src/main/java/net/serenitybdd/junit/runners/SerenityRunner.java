@@ -17,18 +17,9 @@ import net.thucydides.core.pages.Pages;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.statistics.TestCount;
-import net.thucydides.core.steps.PageObjectDependencyInjector;
-import net.thucydides.core.steps.StepAnnotations;
-import net.thucydides.core.steps.StepData;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepFactory;
+import net.thucydides.core.steps.*;
 import net.thucydides.core.tags.TagScanner;
-import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.SupportedWebDriver;
-import net.thucydides.core.webdriver.ThucydidesWebdriverManager;
-import net.thucydides.core.webdriver.WebDriverFactory;
-import net.thucydides.core.webdriver.WebdriverManager;
-import net.thucydides.core.webdriver.WebdriverProxyFactory;
+import net.thucydides.core.webdriver.*;
 import net.thucydides.junit.listeners.JUnitStepListener;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Ignore;
@@ -324,9 +315,14 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     }
 
     private RunNotifier initializeRunNotifier(RunNotifier notifier) {
-        RunNotifier notifierForSteps = new RunNotifier();
-        notifierForSteps.addListener(getStepListener());
-        return (shouldRetryTest() ? notifier : new RetryFilteringRunNotifier(notifier, notifierForSteps));
+        if (shouldRetryTest()) {
+            notifier.addListener(getStepListener());
+            return notifier;
+        } else {
+            RunNotifier notifierForSteps = new RunNotifier();
+            notifierForSteps.addListener(getStepListener());
+            return new RetryFilteringRunNotifier(notifier, notifierForSteps);
+        }
     }
 
     private boolean shouldRetryTest() {
@@ -420,6 +416,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
 
         FailureDetectingStepListener failureDetectingStepListener = new FailureDetectingStepListener();
         StepEventBus.getEventBus().registerListener(failureDetectingStepListener);
+       // notifier.addListener(stepListener);
 
         int maxRetries = getConfiguration().maxRetries();
         for (int attemptCount = 0; attemptCount <= maxRetries; attemptCount++) {
@@ -464,15 +461,20 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     }
 
     private void markAsPending(FrameworkMethod method) {
-        stepListener.testStarted(Description.createTestDescription(method.getMethod().getDeclaringClass(), testName(method)));
+        testStarted(method);
         StepEventBus.getEventBus().testPending();
         StepEventBus.getEventBus().testFinished();
     }
 
     private void markAsManual(FrameworkMethod method) {
-        stepListener.testStarted(Description.createTestDescription(method.getMethod().getDeclaringClass(), testName(method)));
+        testStarted(method);
         StepEventBus.getEventBus().testIsManual();
         StepEventBus.getEventBus().testFinished();
+    }
+
+    private void testStarted(FrameworkMethod method) {
+        getStepListener().testStarted(Description.createTestDescription(method.getMethod().getDeclaringClass(), testName(method)));
+//        stepListener.testStarted(Description.createTestDescription(method.getMethod().getDeclaringClass(), testName(method)));
     }
 
     /**
@@ -483,7 +485,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
      */
     private void processTestMethodAnnotationsFor(FrameworkMethod method) {
         if (isIgnored(method)) {
-            stepListener.testStarted(Description.createTestDescription(method.getMethod().getDeclaringClass(), testName(method)));
+            testStarted(method);
             StepEventBus.getEventBus().testIgnored();
         }
     }
@@ -568,7 +570,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
      */
     protected void injectDriverInto(final Object testCase,
                                     final FrameworkMethod method) {
-        TestCaseAnnotations.forTestCase(testCase).injectDriver(driverFor(method));
+        //TestCaseAnnotations.forTestCase(testCase).injectDriver(driverFor(method));
+        TestCaseAnnotations.forTestCase(testCase).injectDrivers(getWebdriverManager());
         dependencyInjector.injectDependenciesInto(testCase);
     }
 
@@ -579,7 +582,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         } else {
             return getDriver();
         }
-
     }
 
     /**

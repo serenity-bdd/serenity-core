@@ -23,7 +23,6 @@ import net.thucydides.core.requirements.reports.RequirmentsOutcomeFactory;
 import net.thucydides.core.tags.BreadcrumbTagFilter;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
-import net.thucydides.core.util.LocalPreferences;
 import net.thucydides.core.util.VersionProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

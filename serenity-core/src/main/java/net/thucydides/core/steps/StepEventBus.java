@@ -2,16 +2,14 @@ package net.thucydides.core.steps;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import net.serenitybdd.core.eventbus.Broadcaster;
+import net.serenitybdd.core.photography.Darkroom;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.annotations.Step;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
-import net.thucydides.core.screenshots.ScreenshotProcessor;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.slf4j.Logger;
@@ -34,7 +32,6 @@ public class StepEventBus {
     private static ThreadLocal<StepEventBus> stepEventBusThreadLocal = new ThreadLocal<StepEventBus>();
     private static final String CORE_THUCYDIDES_PACKAGE = "net.thucydides.core";
     private static final Logger LOGGER = LoggerFactory.getLogger(StepEventBus.class);
-    private Optional<TestStep> previousStep;
 
     /**
      * The event bus used to inform listening classes about when tests and test steps start and finish.
@@ -69,12 +66,12 @@ public class StepEventBus {
     private Class<?> classUnderTest;
     private Story storyUnderTest;
 
-    private final ScreenshotProcessor screenshotProcessor;
     private final EnvironmentVariables environmentVariables;
     @Inject
-    public StepEventBus(ScreenshotProcessor screenshotProcessor, EnvironmentVariables environmentVariables) {
-        this.screenshotProcessor = screenshotProcessor;
+    public StepEventBus(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
+
+        Darkroom.isOpenForBusiness();
     }
 
     /**
@@ -200,6 +197,8 @@ public class StepEventBus {
         resultTally = null;
         classUnderTest = null;
         webdriverSuspensions.clear();
+
+        Broadcaster.unregisterAllListeners();
     }
 
     private void noAssumptionsViolated() {
@@ -219,7 +218,9 @@ public class StepEventBus {
     }
 
     public void testFinished() {
-        screenshotProcessor.waitUntilDone();
+        //screenshotProcessor.waitUntilDone();
+        Darkroom.waitUntilClose();
+
         TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testFinished(outcome);
@@ -228,7 +229,9 @@ public class StepEventBus {
     }
 
     public void testFinished(TestOutcome result) {
-        screenshotProcessor.waitUntilDone();
+        //screenshotProcessor.waitUntilDone();
+        Darkroom.waitUntilClose();
+
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testFinished(result);
         }
@@ -467,8 +470,10 @@ public class StepEventBus {
     }
 
     public void testRunFinished() {
-        screenshotProcessor.waitUntilDone();
-        screenshotProcessor.terminate();
+        //screenshotProcessor.waitUntilDone();
+        //screenshotProcessor.terminate();
+
+        Darkroom.waitUntilClose();
 
     }
 

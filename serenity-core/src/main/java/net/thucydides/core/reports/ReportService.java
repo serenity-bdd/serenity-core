@@ -1,6 +1,5 @@
 package net.thucydides.core.reports;
 
-import com.google.common.util.concurrent.*;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.junit.JUnitXMLOutcomeReporter;
@@ -13,7 +12,7 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -100,7 +99,7 @@ public class ReportService {
     }
 
     private void generateReportsFor(final AcceptanceTestReporter reporter, final TestOutcomes testOutcomes) {
-        LOGGER.info("Generating reports using: " + reporter);
+        LOGGER.info("Generating reports for " + testOutcomes.getTotalTestScenarios() +" test outcomes using: " + reporter);
         long t0 = System.currentTimeMillis();
 
         List<? extends TestOutcome> outcomes = testOutcomes.getOutcomes();
@@ -119,13 +118,12 @@ public class ReportService {
         }
         generateJUnitTestResults(testOutcomes);
         waitForReportGenerationToFinish(remainingReportCount);
-        LOGGER.info("Reports generated in: " + (System.currentTimeMillis() - t0));
+        LOGGER.info("Reports generated in: " + (System.currentTimeMillis() - t0) + " ms");
 
     }
 
     /**
      * JUnit test results are a special case, since they create a output file per test class (or story, or feature) rather than for each test.
-     * @param outcomes
      */
     private void generateJUnitTestResults(TestOutcomes outcomes) {
         try {
@@ -146,11 +144,9 @@ public class ReportService {
 
     /**
      * The default reporters applicable for standard test runs.
-     *
-     * @return a list of default reporters.
      */
     public static List<AcceptanceTestReporter> getDefaultReporters() {
-        List<AcceptanceTestReporter> reporters = new ArrayList<AcceptanceTestReporter>();
+        List<AcceptanceTestReporter> reporters = new ArrayList<>();
 
         FormatConfiguration formatConfiguration
                 = new FormatConfiguration(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());

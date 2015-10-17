@@ -15,6 +15,8 @@ public class Darkroom {
     private DarkroomProcessingLine processingLine;
     private Thread screenshotThread;
 
+
+
     private static ThreadLocal<Darkroom> theDarkroom = new ThreadLocal();
 
     public static void isOpenForBusiness() {

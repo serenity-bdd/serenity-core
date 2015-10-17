@@ -2,6 +2,7 @@ package net.thucydides.core.util;
 
 import ch.lambdaj.Lambda;
 import ch.lambdaj.function.convert.DefaultStringConverter;
+import net.thucydides.core.guice.Injectors;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -15,6 +16,13 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
     public MockEnvironmentVariables() {
         this.properties.setProperty("user.home", System.getProperty("user.home"));
         this.properties.setProperty("feature.file.encoding", "UTF-8");
+        if (localEnvironment().getProperty("phantomjs.binary.path") != null) {
+            this.properties.setProperty("phantomjs.binary.path", localEnvironment().getProperty("phantomjs.binary.path"));
+        }
+    }
+
+    private EnvironmentVariables localEnvironment() {
+        return Injectors.getInjector().getInstance(EnvironmentVariables.class);
     }
 
     protected MockEnvironmentVariables(Properties properties) {

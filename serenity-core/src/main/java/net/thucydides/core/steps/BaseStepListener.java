@@ -297,7 +297,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void testSuiteFinished() {
-        //screenshotProcessor.waitUntilDone();
         Darkroom.waitUntilClose();
         clearStorywideTagsAndIssues();
         suiteStarted = false;

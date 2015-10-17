@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -98,7 +99,7 @@ public class DarkroomProcessingLine implements Runnable {
     }
 
     private void saveProcessedScreenshot(ScreenshotNegative negative) {
-        LOGGER.debug("Processing screenshot image in {0}", negative.getTemporaryPath());
+        LOGGER.debug("Processing screenshot image in {}", negative.getTemporaryPath());
         for (NegativeProcessor processor : processors) {
             negative = processor.process(negative);
         }
@@ -108,6 +109,7 @@ public class DarkroomProcessingLine implements Runnable {
                 Files.createDirectories(negative.getScreenshotPath().getParent());
                 Files.copy(negative.getTemporaryPath(), negative.getScreenshotPath(), StandardCopyOption.REPLACE_EXISTING);
             }
+        } catch (FileAlreadyExistsException noFurtherActionRequired) {
         } catch (IOException e) {
             LOGGER.warn("Failed to save screenshot", e);
         }

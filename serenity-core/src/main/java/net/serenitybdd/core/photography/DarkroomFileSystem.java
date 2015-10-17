@@ -14,14 +14,12 @@ public class DarkroomFileSystem {
 
     public static FileSystem get() {
         if (fileSystemThreadLocal.get() == null) {
-            System.out.println("Create new local file system");
             fileSystemThreadLocal.set(Jimfs.newFileSystem(Configuration.unix()));
         }
         return fileSystemThreadLocal.get();
     }
 
     public static void close() {
-        System.out.println("Delete local file system");
         fileSystemThreadLocal.remove();
     }
 }

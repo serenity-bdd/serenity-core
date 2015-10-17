@@ -1,7 +1,7 @@
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import ch.qos.logback.core.ConsoleAppender
 
-import static ch.qos.logback.classic.Level.INFO
+import static ch.qos.logback.classic.Level.DEBUG
 import static ch.qos.logback.classic.Level.WARN
 
 def bySecond = timestamp("yyyyMMdd'T'HHmmss")
@@ -12,7 +12,7 @@ appender("STDOUT", ConsoleAppender) {
     }
 }
 
-logger("net.thucydides", INFO)
-logger("net.serenitybdd", INFO)
+logger("net.thucydides", DEBUG)
+logger("net.serenitybdd", DEBUG)
 logger("org.hibernate", WARN)
 root(WARN, ["STDOUT"])

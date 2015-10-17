@@ -59,6 +59,6 @@ public class StackTraceAnalyser {
     }
 
     private boolean allowedClassName(String className) {
-        return !((className.startsWith("sun.")) || (className.startsWith("java.")));
+        return !((className.startsWith("sun.")) || (className.startsWith("java.")) || (className.contains("$")));
     }
 }

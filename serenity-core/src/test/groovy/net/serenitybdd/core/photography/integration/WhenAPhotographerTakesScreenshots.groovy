@@ -1,11 +1,14 @@
-package net.serenitybdd.core.photography
+package net.serenitybdd.core.photography.integration
 
+import net.serenitybdd.core.photography.Darkroom
+import net.serenitybdd.core.photography.Photographer
+import net.serenitybdd.core.photography.ScreenshotPhoto
 import net.serenitybdd.core.photography.bluring.AnnotatedBluring
 import net.thucydides.core.annotations.BlurScreenshots
 import net.thucydides.core.screenshots.BlurLevel
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.phantomjs.PhantomJSDriver
+import org.openqa.selenium.firefox.FirefoxDriver
 import spock.lang.Specification
 
 import java.nio.file.Files
@@ -109,7 +112,7 @@ class WhenAPhotographerTakesScreenshots extends Specification {
 
     def setup() {
         screenshotDirectory = Files.createDirectories(Paths.get("./build/screenshots"));// Files.createTempDirectory("screenshots")
-        driver = new PhantomJSDriver()
+        driver = new FirefoxDriver()
         driver.get(siteFromUrlAt("/static-site/unchanging-page.html"))
         startTime = System.currentTimeMillis()
 

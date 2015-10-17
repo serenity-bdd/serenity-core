@@ -19,8 +19,7 @@ public class Darkroom {
 
     public static void isOpenForBusiness() {
         if (theDarkroomIsClosed()) {
-            LOGGER.info("Opening darkroom");
-            System.out.println("Opening darkroom");
+            LOGGER.debug("Opening darkroom");
             theDarkroom.set(new Darkroom());
         }
     }
@@ -38,8 +37,7 @@ public class Darkroom {
     }
 
     public static void waitUntilClose() {
-        LOGGER.info("Closing darkroom");
-        System.out.println("Closing darkroom");
+        LOGGER.debug("Closing darkroom");
         if (theDarkroomIsOpen()) {
             theDarkroom.get().terminate();
             theDarkroom.remove();

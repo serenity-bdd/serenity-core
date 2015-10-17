@@ -98,13 +98,14 @@ public class DarkroomProcessingLine implements Runnable {
     }
 
     private void saveProcessedScreenshot(ScreenshotNegative negative) {
-        LOGGER.debug("Processing screenshot image");
+        LOGGER.debug("Processing screenshot image in {0}", negative.getTemporaryPath());
         for (NegativeProcessor processor : processors) {
             negative = processor.process(negative);
         }
         try {
-            LOGGER.info("Saving screenshot to " + negative.getScreenshotPath());
+            LOGGER.debug("Saving screenshot to " + negative.getScreenshotPath());
             if (!Files.exists(negative.getScreenshotPath())) {
+                Files.createDirectories(negative.getScreenshotPath().getParent());
                 Files.copy(negative.getTemporaryPath(), negative.getScreenshotPath(), StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (IOException e) {

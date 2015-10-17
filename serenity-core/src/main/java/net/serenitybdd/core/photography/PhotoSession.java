@@ -43,7 +43,7 @@ public class PhotoSession {
         try {
             Path screenshotPath = screenshotPathFor(screenshotData);
             ScreenshotReceipt screenshotReceipt = storeScreenshot(screenshotData, screenshotPath);
-            LOGGER.debug("Screenshot sheduled to be saved to " + screenshotPath);
+            LOGGER.debug("Screenshot scheduled to be saved to {}", screenshotPath);
             return ScreenshotPhoto.forScreenshotAt(screenshotReceipt.getDestinationPath());
         } catch (IOException e) {
             LOGGER.warn("Failed to save screenshot", e);
@@ -52,7 +52,7 @@ public class PhotoSession {
     }
 
     private ScreenshotReceipt storeScreenshot(byte[] screenshotData, Path screenshotPath) throws IOException {
-        Path screenshotsDirectory = DarkroomFileSystem.get().getPath("./screenshots");
+        Path screenshotsDirectory = DarkroomFileSystem.get().getPath("/var/screenshots");
 
         Files.createDirectories(screenshotsDirectory);
 

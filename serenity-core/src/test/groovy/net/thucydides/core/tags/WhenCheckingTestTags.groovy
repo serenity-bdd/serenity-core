@@ -20,6 +20,10 @@ class WhenCheckingTestTags extends Specification {
 
         @WithTagValuesOf(["color:orange","flavor:licorice"])
         def orange() {}
+
+        @WithTag("red")
+        def red() {}
+
     }
 
     def environmentVariables = new MockEnvironmentVariables()
@@ -63,6 +67,7 @@ class WhenCheckingTestTags extends Specification {
             ClassWithTags   | "blue"            | "color:yellow"      | false
             ClassWithTags   | "doesnotexist"    | "color:yellow"      | false
             ClassWithTags   | "orange"          | "flavor:licorice"   | true
+            ClassWithTags   | "red"             | "red"               | true
     }
 
 

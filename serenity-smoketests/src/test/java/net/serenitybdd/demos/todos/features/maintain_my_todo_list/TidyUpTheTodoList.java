@@ -7,6 +7,7 @@ import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.annotations.WithDriver;
+import net.thucydides.core.annotations.WithTag;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,8 @@ import static org.hamcrest.Matchers.hasSize;
  * Also illustrates using different browsers for different tests.
  */
 @RunWith(SerenityRunner.class)
+@WithTag("smoketest")
+
 public class TidyUpTheTodoList {
 
     @Managed

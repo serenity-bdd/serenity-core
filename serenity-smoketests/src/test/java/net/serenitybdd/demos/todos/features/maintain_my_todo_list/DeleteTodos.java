@@ -6,6 +6,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
+import net.thucydides.core.annotations.WithTag;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +19,7 @@ import static org.hamcrest.Matchers.contains;
  * This example illustrates using the Journey pattern with JUnit.
  */
 @RunWith(SerenityRunner.class)
+@WithTag("smoketest")
 public class DeleteTodos {
 
     @Managed

@@ -14,7 +14,7 @@
         <serenity.version>1.1.17-SNAPSHOT</serenity.version>
         <serenity.maven.version>1.1.14</serenity.maven.version>
         <webdriver.driver>firefox</webdriver.driver>
-        <parallel.tests>2</parallel.tests>
+        <parallel.tests>4</parallel.tests>
     </properties>
 
     <repositories>

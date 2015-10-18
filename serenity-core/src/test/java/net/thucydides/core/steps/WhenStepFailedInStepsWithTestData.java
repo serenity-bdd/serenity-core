@@ -38,7 +38,7 @@ public class WhenStepFailedInStepsWithTestData {
         MockitoAnnotations.initMocks(this);
         factory = new StepFactory(new Pages(driver));
 
-        StepEventBus.reset();
+        StepEventBus.getEventBus().reset();
         StepEventBus.getEventBus().registerListener(listener);
         setDefaultStepFactory(null);
     }

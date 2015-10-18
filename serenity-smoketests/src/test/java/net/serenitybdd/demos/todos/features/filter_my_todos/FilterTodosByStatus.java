@@ -14,6 +14,7 @@ import org.openqa.selenium.WebDriver;
 import static net.serenitybdd.demos.todos.model.TodoStatusFilter.Active;
 import static net.serenitybdd.demos.todos.model.TodoStatusFilter.Completed;
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.contains;
 
 @RunWith(SerenityRunner.class)
@@ -34,6 +35,7 @@ public class FilterTodosByStatus {
         joe.has(openedTheTodoApplication);
     }
 
+    static int tries = 1;
     @Test
     public void filter_by_active_tasks() {
         givenThat(joe).has(addedSomeItems.called("Buy the milk", "Buy Petrol"));
@@ -42,6 +44,7 @@ public class FilterTodosByStatus {
         when(joe).attemptsTo(FilterItems.byStatus(Active));
 
         then(joe).should(seeThat(theDisplayedItems, contains("Buy Petrol")));
+        assertThat(tries++).isGreaterThanOrEqualTo(3);
     }
 
     @Test

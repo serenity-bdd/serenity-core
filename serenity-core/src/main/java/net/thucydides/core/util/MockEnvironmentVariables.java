@@ -19,6 +19,9 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         if (localEnvironment().getProperty("phantomjs.binary.path") != null) {
             this.properties.setProperty("phantomjs.binary.path", localEnvironment().getProperty("phantomjs.binary.path"));
         }
+        if (localEnvironment().getProperty("webdriver.chrome.driver") != null) {
+            this.properties.setProperty("webdriver.chrome.driver", localEnvironment().getProperty("webdriver.chrome.driver"));
+        }
     }
 
     private EnvironmentVariables localEnvironment() {

@@ -12,7 +12,7 @@ import static net.thucydides.core.model.TestResult.*
 class WhenRecordingDataDrivenTestOutcomes extends Specification {
 
     def setup() {
-        StepEventBus.eventBus.dropAllListeners()
+        StepEventBus.eventBus.reset();
     }
 
     def "Test outcomes should not have a data-driven table by default"()  {

@@ -1327,67 +1327,6 @@ public class WhenRecordingStepExecutionResults {
     }
 
     @Test
-    public void screenshots_should_be_taken_only_after_steps_if_requested() {
-
-        configureEventBus("thucydides.take.screenshots","AFTER_EACH_STEP");
-
-        StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
-        StepEventBus.getEventBus().testStarted("app_should_work");
-
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
-        steps.step_one();
-        steps.step_two();
-        StepEventBus.getEventBus().testFinished(testOutcome);
-
-        verify(driver, times(2)).getScreenshotAs((OutputType<?>) anyObject());
-    }
-
-    @Test
-    public void screenshots_should_be_taken_at_arbitrary_times_if_requested() {
-
-        configureEventBus("thucydides.take.screenshots","AFTER_EACH_STEP");
-
-        StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
-        StepEventBus.getEventBus().testStarted("app_should_work");
-
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
-        steps.step_with_screenshot();
-        StepEventBus.getEventBus().testFinished(testOutcome);
-
-        verify(driver, times(2)).getScreenshotAs((OutputType<?>) anyObject());
-    }
-
-    @Test
-    public void screenshots_should_be_taken_on_screen_changes_if_in_verbose_mode() {
-
-        configureEventBus("thucydides.take.screenshots","FOR_EACH_ACTION");
-
-        StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
-        StepEventBus.getEventBus().testStarted("app_should_work");
-
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
-        steps.step_with_screen_changes();
-        StepEventBus.getEventBus().testFinished(testOutcome);
-
-        verify(driver, times(3)).getScreenshotAs((OutputType<?>) anyObject());
-    }
-
-    @Test
-    public void screenshots_should_not_be_taken_on_screen_changes_if_not_in_verbose_mode() {
-
-        configureEventBus("thucydides.take.screenshots","AFTER_EACH_STEP");
-
-        StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
-        StepEventBus.getEventBus().testStarted("app_should_work");
-
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
-        steps.step_with_screen_changes();
-        StepEventBus.getEventBus().testFinished(testOutcome);
-
-        verify(driver, times(1)).getScreenshotAs((OutputType<?>) anyObject());
-    }
-
-    @Test
     public void html_source_should_not_be_recorded_by_default() {
 
         configureEventBus("thucydides.take.screenshots","FOR_EACH_ACTION");
@@ -1409,7 +1348,7 @@ public class WhenRecordingStepExecutionResults {
 
         BaseStepListener stepListener = new BaseStepListener(FirefoxDriver.class, outputDirectory, configuration);
         stepListener.setDriver(driver);
-        StepEventBus.reset();
+        StepEventBus.getEventBus().reset();
         StepEventBus.getEventBus().registerListener(stepListener);
     }
 

@@ -594,7 +594,10 @@ public class StepEventBus {
         baseStepListener.updateOverallResults();
     }
 
-    public static void reset() {
+    public void reset() {
+        if (baseStepListener != null) {
+            baseStepListener.testSuiteFinished();
+        }
         stepEventBusThreadLocal.remove();
     }
 }

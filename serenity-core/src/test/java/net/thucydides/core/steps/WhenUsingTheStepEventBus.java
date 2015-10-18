@@ -204,7 +204,7 @@ public class WhenUsingTheStepEventBus {
         consoleStepListener = new ConsoleStepListener();
         consoleLoggingListener = new ConsoleLoggingListener(environmentVariables);
         baseStepListener = new BaseStepListener(temp.newFolder());
-        StepEventBus.reset();
+        StepEventBus.getEventBus().reset();
         StepEventBus.getEventBus().registerListener(listener);
         StepEventBus.getEventBus().registerListener(consoleStepListener);
         StepEventBus.getEventBus().registerListener(consoleLoggingListener);

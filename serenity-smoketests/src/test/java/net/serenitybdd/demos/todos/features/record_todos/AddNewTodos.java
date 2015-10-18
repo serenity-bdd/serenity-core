@@ -27,7 +27,7 @@ public class AddNewTodos {
     }
 
     @Test
-    public void shouldBeAbleToClearCompletedActionsFromTheTodoList() {
+    public void shouldBeAbleToAddANewTodoItem() {
 
         // WHEN
         jane.adds_an_action_called("Walk the dog");

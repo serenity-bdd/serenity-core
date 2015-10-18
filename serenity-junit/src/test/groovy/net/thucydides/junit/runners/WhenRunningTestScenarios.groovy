@@ -50,11 +50,12 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should be able to specify a different driver for an individual test"() {
         given:
-        def runner = new ThucydidesRunner(SamplePassingScenarioUsingHtmlUnitForOneTest, webDriverFactory)
+            def runner = new ThucydidesRunner(SamplePassingScenarioUsingDifferentBrowsersForEachTest, webDriverFactory)
         when:
-        runner.run(new RunNotifier())
+            runner.run(new RunNotifier())
+            def drivers = runner.testOutcomes.collect {it.driver}
         then:
-        runner.testOutcomes.size() == 3
+            drivers.contains("firefox") && drivers.contains("htmlunit")
     }
 
     def "should record the steps that are executed"() {

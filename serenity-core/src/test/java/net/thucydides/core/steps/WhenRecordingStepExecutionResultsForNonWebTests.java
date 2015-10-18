@@ -80,7 +80,7 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
         stepFactory = new StepFactory();
         stepListener = new BaseStepListener(null, outputDirectory, configuration);
 
-        StepEventBus.reset();
+        StepEventBus.getEventBus().reset();
         StepEventBus.getEventBus().registerListener(stepListener);
     }
 
@@ -112,7 +112,6 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
         public void app_should_work() {
         }
     }
-
 
     @Test
     public void the_listener_should_record_basic_step_execution_for_non_webtest_steps() {

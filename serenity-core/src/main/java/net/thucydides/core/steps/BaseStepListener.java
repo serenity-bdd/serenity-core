@@ -226,12 +226,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void setDriverUsingPagesDriverIfDefined(final Pages pages) {
-//        if (pages.getDriver() != null) {
-//            setDriver(pages.getDriver());
-//        } else {
-//            createNewDriver();
-//            pages.setDriver(getDriver());
-//        }
         if (pages.getDriver() == null) {
             pages.setDriver(getDriver());
         }
@@ -299,6 +293,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public void testSuiteFinished() {
         Darkroom.waitUntilClose();
         clearStorywideTagsAndIssues();
+        webdriverManager.closeAllCurrentDrivers();
         suiteStarted = false;
     }
 

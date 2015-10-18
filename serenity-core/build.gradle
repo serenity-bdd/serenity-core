@@ -12,8 +12,11 @@ jar {
 }
 
 //integrationTests {
+//    beforeTest { desc, result ->
+//        println "Executing test ${desc.name} [${desc.className}]"
+//    }
 //    afterTest { desc, result ->
-//        println "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
+//        println "Finished test ${desc.name} [${desc.className}] with result: ${result.resultType}"
 //    }
 //}
 //

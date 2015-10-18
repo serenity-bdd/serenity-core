@@ -33,7 +33,7 @@ public class WhenRunningNonWebStepsThroughAScenarioProxy {
         factory = new StepFactory();
 
         listener = new ConsoleStepListener();
-        StepEventBus.reset();
+        StepEventBus.getEventBus().reset();
         StepEventBus.getEventBus().registerListener(listener);
         StepEventBus.getEventBus().registerListener(mockListener);
 

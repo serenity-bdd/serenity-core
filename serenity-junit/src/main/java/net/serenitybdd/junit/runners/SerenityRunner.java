@@ -416,7 +416,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
 
         FailureDetectingStepListener failureDetectingStepListener = new FailureDetectingStepListener();
         StepEventBus.getEventBus().registerListener(failureDetectingStepListener);
-       // notifier.addListener(stepListener);
 
         int maxRetries = getConfiguration().maxRetries();
         for (int attemptCount = 0; attemptCount <= maxRetries; attemptCount++) {
@@ -425,7 +424,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
             }
 
             if (attemptCount > 0) {
-                logger.warn(method.getName() + " failed, making attempt " + (attemptCount + 1) + ". Max retries: " + maxRetries);
+                logger.warn("{} failed, making attempt number {} out of {} retries", method.getName(), (attemptCount + 1), maxRetries);
                 StepEventBus.getEventBus().testRetried();
             }
 
@@ -474,7 +473,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
 
     private void testStarted(FrameworkMethod method) {
         getStepListener().testStarted(Description.createTestDescription(method.getMethod().getDeclaringClass(), testName(method)));
-//        stepListener.testStarted(Description.createTestDescription(method.getMethod().getDeclaringClass(), testName(method)));
     }
 
     /**
@@ -545,7 +543,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     protected Statement methodInvoker(final FrameworkMethod method, final Object test) {
 
         if (webtestsAreSupported()) {
-            injectDriverInto(test, method);
+            injectDriverInto(test);
             initPagesObjectUsing(driverFor(method));
             injectAnnotatedPagesObjectInto(test);
             initStepFactoryUsing(getPages());
@@ -566,11 +564,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     /**
      * Instantiate the @Managed-annotated WebDriver instance with current WebDriver.
      * @param testCase A Serenity-annotated test class
-     * @param method the test method
      */
-    protected void injectDriverInto(final Object testCase,
-                                    final FrameworkMethod method) {
-        //TestCaseAnnotations.forTestCase(testCase).injectDriver(driverFor(method));
+    protected void injectDriverInto(final Object testCase) {
         TestCaseAnnotations.forTestCase(testCase).injectDrivers(getWebdriverManager());
         dependencyInjector.injectDependenciesInto(testCase);
     }

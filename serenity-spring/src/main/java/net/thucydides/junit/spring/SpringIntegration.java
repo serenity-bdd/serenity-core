@@ -6,13 +6,17 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.springframework.test.context.TestContextManager;
 
+@Deprecated
 /**
  * Use the Spring test annotations in Thucydides tests.
  *
  * @author johnsmart
- * @deprecated Replaced by {@see net.serenitybdd.junit.spring.integration.SpringIntegrationMethodRule}, which doesn't use the deprecated {@see org.junit.rules.TestWatchman}, and also works together with {@see net.serenitybdd.junit.spring.integration.SpringIntegrationClassRule}. However, the suggested replacements do not support Spring Framework 2.5, while this class retains support for Spring Framework 2.5.
+ * @deprecated Replaced by {@see net.serenitybdd.junit.spring.integration.SpringIntegrationMethodRule},
+ * which doesn't use the deprecated {@see org.junit.rules.TestWatchman}, and also works together with
+ * {@see net.serenitybdd.junit.spring.integration.SpringIntegrationClassRule}.
+ * However, the suggested replacements do not support Spring Framework 2.5,
+ * while this class retains support for Spring Framework 2.5.
  */
-@Deprecated
 public class SpringIntegration extends TestWatchman {
 
     public SpringIntegration() {

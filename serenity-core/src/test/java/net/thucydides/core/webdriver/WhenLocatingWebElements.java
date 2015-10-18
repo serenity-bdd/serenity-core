@@ -46,7 +46,7 @@ public class WhenLocatingWebElements {
 
         field = SomePageObject.class.getField("someField");
 
-        StepEventBus.reset();
+        StepEventBus.getEventBus().reset();
 
         when(driver.withTimeoutOf(any(Duration.class))).thenReturn(driver);
         when(driver.findElement(By.id("someId"))).thenReturn(webElement);

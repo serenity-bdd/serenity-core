@@ -2,8 +2,8 @@ package net.serenitybdd.junit.runners;
 
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Splitter;
-import net.thucydides.core.csv.CSVTestDataSource;
-import net.thucydides.core.csv.TestDataSource;
+import net.thucydides.core.steps.stepdata.CSVTestDataSource;
+import net.thucydides.core.steps.stepdata.TestDataSource;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.steps.FilePathParser;

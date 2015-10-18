@@ -43,7 +43,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.filter;
-import static net.thucydides.core.steps.StepData.withTestDataFrom;
+import static net.thucydides.core.steps.stepdata.StepData.withTestDataFrom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;

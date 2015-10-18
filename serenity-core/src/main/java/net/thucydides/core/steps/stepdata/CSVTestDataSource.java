@@ -1,10 +1,16 @@
-package net.thucydides.core.csv;
+package net.thucydides.core.steps.stepdata;
 
 import au.com.bytecode.opencsv.CSVReader;
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
+import net.thucydides.core.csv.FailedToInitializeTestData;
+import net.thucydides.core.csv.FieldName;
+import net.thucydides.core.csv.InstanceBuilder;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.steps.FilePathParser;
 import net.thucydides.core.steps.StepFactory;
+import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,32 +26,44 @@ import static ch.lambdaj.Lambda.convert;
  */
 public class CSVTestDataSource implements TestDataSource {
     
-    private final List<Map<String, String>> testData;
-    private final char separator;
+    //private final List<Map<String, String>> testData;
+    private char separator;
     private final char quotechar;
     private final char escape;
     private final int skipLines;
-    private final List<String> headers;
+    private final String instantiatedPath;
+    private List<String[]> csvDataRows;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CSVTestDataSource.class);
+    FilePathParser testDataSourcePath = new FilePathParser(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
 
     public CSVTestDataSource(final String path, final char separatorValue, final char quotechar, final char escape, final int skipLines) throws IOException {
         this.separator = separatorValue;
         this.quotechar = quotechar;
         this.escape = escape;
         this.skipLines = skipLines;
-        List<String[]> csvDataRows = getCSVDataFrom(getDataFileFor(path));
-        String[] titleRow = csvDataRows.get(0);
+        this.instantiatedPath = testDataSourcePath.getInstanciatedPath(path);
 
-        this.headers = convert(titleRow, new Converter<String, String>() {
-            @Override
-            public String convert(String str) {
-                return StringUtils.strip(str);
+//        List<String[]> csvDataRows = getCSVDataFrom(getDataFileFor(instantiatedPath));
+//        String[] titleRow = csvDataRows.get(0);
+
+//        this.headers = convert(titleRow, new Converter<String, String>() {
+//            @Override
+//            public String convert(String str) {
+//                return StringUtils.strip(str);
+//            }
+//        });
+    }
+
+    List<String[]> getDataRows() {
+        if (csvDataRows == null) {
+            try {
+                csvDataRows = getCSVDataFrom(getDataFileFor(instantiatedPath));
+            } catch (IOException e) {
+                LOGGER.error("Could not read test data file from {}", instantiatedPath, e);
             }
-        });
-
-        testData = loadTestDataFrom(csvDataRows);
-
+        }
+        return csvDataRows;
     }
 
     public CSVTestDataSource(final String path) throws IOException {
@@ -54,10 +72,6 @@ public class CSVTestDataSource implements TestDataSource {
 
     public CSVTestDataSource(final String path, final char separatorValue) throws IOException {
         this(path, separatorValue, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
-    }
-
-    public CSVTestDataSource(final String path, final char separatorValue, final char quotechar) throws IOException {
-        this(path, separatorValue, quotechar, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
     }
 
     public CSVTestDataSource(final String path, final char separatorValue, final char quotechar, final char escape) throws IOException {
@@ -74,7 +88,7 @@ public class CSVTestDataSource implements TestDataSource {
     }
 
     private Reader getDataFileFor(final String path) throws FileNotFoundException {
-        Preconditions.checkNotNull(path,"Test data source was not defined");
+        Preconditions.checkNotNull(path, "Test data source was not defined");
         if (isAClasspathResource(path)) {
         		return new InputStreamReader(getClass().getClassLoader().getResourceAsStream(path));
         } else if (validFileSystemPath(path)){
@@ -84,10 +98,7 @@ public class CSVTestDataSource implements TestDataSource {
     }
 
     private static boolean isAClasspathResource(final String path) {
-    	if (CSVTestDataSource.class.getClassLoader().getResourceAsStream(path) == null){
-    		return false;
-    	}
-        return true;
+    	return !(CSVTestDataSource.class.getClassLoader().getResourceAsStream(path) == null);
         
     }
 
@@ -98,19 +109,16 @@ public class CSVTestDataSource implements TestDataSource {
 
     protected List<String[]> getCSVDataFrom(final Reader testDataReader) throws IOException {
 
-        CSVReader reader = new CSVReader(testDataReader, separator, quotechar, escape, skipLines);
-        List<String[]> rows = Lists.newArrayList();
-        try {
+        List<String[]> rows;
+        try (CSVReader reader = new CSVReader(testDataReader, separator, quotechar, escape, skipLines)) {
             rows = reader.readAll();
-        } finally {
-            reader.close();
         }
         return rows;
     }
 
     protected List<Map<String, String>> loadTestDataFrom(List<String[]> rows) throws IOException {
 
-        List<Map<String, String>> loadedData = new ArrayList<Map<String, String>>();
+        List<Map<String, String>> loadedData = new ArrayList<>();
         String[] titleRow = rows.get(0);
 
         for (int i = 1; i < rows.size(); i++) {
@@ -122,7 +130,7 @@ public class CSVTestDataSource implements TestDataSource {
 
 
     private Map<String, String> dataEntryFrom(final String[] titleRow, final String[] dataRow) {
-        Map<String, String> dataset = new HashMap<String, String>();
+        Map<String, String> dataset = new HashMap<>();
 
         for (int column = 0; column < titleRow.length; column++) {
             if (column < dataRow.length) {
@@ -136,11 +144,25 @@ public class CSVTestDataSource implements TestDataSource {
     }
 
     public List<Map<String, String>> getData() {
-        return testData;
+        try {
+            return loadTestDataFrom(getCSVDataFrom(getDataFileFor(instantiatedPath)));
+        } catch (IOException e) {
+            LOGGER.error("Could not read test data file from {}", instantiatedPath, e);
+        }
+        return ImmutableList.of();
     }
 
     public List<String> getHeaders() {
-        return headers;
+        return convert(getTitleRow(), new Converter<String, String>() {
+            @Override
+            public String convert(String str) {
+                return StringUtils.strip(str);
+            }
+        });
+    }
+
+    private String[] getTitleRow() {
+        return getDataRows().get(0);
     }
 
     /**
@@ -149,7 +171,7 @@ public class CSVTestDataSource implements TestDataSource {
     public <T> List<T> getDataAsInstancesOf(final Class<T> clazz, final Object... constructorArgs) {
         List<Map<String, String>> data = getData();
 
-        List<T> resultsList = new ArrayList<T>();
+        List<T> resultsList = new ArrayList<>();
         for (Map<String, String> rowData : data) {
             resultsList.add(newInstanceFrom(clazz, rowData, constructorArgs));
         }
@@ -159,11 +181,17 @@ public class CSVTestDataSource implements TestDataSource {
     public <T> List<T> getInstanciatedInstancesFrom(final Class<T> clazz, final StepFactory factory) {
         List<Map<String, String>> data = getData();
         
-        List<T> resultsList = new ArrayList<T>();
+        List<T> resultsList = new ArrayList<>();
         for (Map<String, String> rowData : data) {
             resultsList.add(newInstanceFrom(clazz, factory, rowData));
         }
         return resultsList;
+    }
+
+    @Override
+    public TestDataSource separatedBy(char newSeparator) {
+        this.separator = newSeparator;
+        return this;
     }
 
     private <T> T newInstanceFrom(final Class<T> clazz,

@@ -11,8 +11,8 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 
-import static net.thucydides.core.steps.StepData.setDefaultStepFactory;
-import static net.thucydides.core.steps.StepData.withTestDataFrom;
+import static net.thucydides.core.steps.stepdata.StepData.setDefaultStepFactory;
+import static net.thucydides.core.steps.stepdata.StepData.withTestDataFrom;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

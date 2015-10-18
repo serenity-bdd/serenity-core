@@ -5,7 +5,7 @@ import net.thucydides.core.annotations.Steps;
 
 import java.io.IOException;
 
-import static net.thucydides.core.steps.StepData.withTestDataFrom;
+import static net.thucydides.core.steps.stepdata.StepData.withTestDataFrom;
 
 
 public class NestedDatadrivenSteps {

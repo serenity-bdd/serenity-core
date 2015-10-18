@@ -18,6 +18,7 @@ import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.statistics.TestCount;
 import net.thucydides.core.steps.*;
+import net.thucydides.core.steps.stepdata.StepData;
 import net.thucydides.core.tags.TagScanner;
 import net.thucydides.core.webdriver.*;
 import net.thucydides.junit.listeners.JUnitStepListener;

@@ -1,4 +1,4 @@
-package net.thucydides.core.csv;
+package net.thucydides.core.steps.stepdata;
 
 import net.thucydides.core.steps.StepFactory;
 
@@ -19,4 +19,5 @@ public interface TestDataSource {
 
     <T> List<T> getInstanciatedInstancesFrom(Class<T> clazz, StepFactory factory);
 
+    TestDataSource separatedBy(char newSeparator);
 }

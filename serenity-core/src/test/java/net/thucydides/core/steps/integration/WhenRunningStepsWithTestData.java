@@ -13,8 +13,8 @@ import sample.csv.TestPageObject;
 
 import java.io.IOException;
 
-import static net.thucydides.core.steps.StepData.setDefaultStepFactory;
-import static net.thucydides.core.steps.StepData.withTestDataFrom;
+import static net.thucydides.core.steps.stepdata.StepData.setDefaultStepFactory;
+import static net.thucydides.core.steps.stepdata.StepData.withTestDataFrom;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
@@ -199,6 +199,21 @@ public class WhenRunningStepsWithTestData {
         TestSteps steps = factory.getStepLibraryFor(TestSteps.class);
 
         withTestDataFrom("testdata/test.csv").usingFactory(factory).run(steps).step1();
+
+        verify(driver, times(3)).get(anyString());
+    }
+
+    @Test
+    public void should_invoke_step_method_for_each_row_in_a_list_of_strings() throws IOException {
+
+        TestSteps steps = factory.getStepLibraryFor(TestSteps.class);
+
+        withTestDataFrom(
+                "Name, Address, Date of birth",
+                "Bill, 1 main street, 10/10/1970",
+                "Joe, 2 main street, 10 / 10 / 1971",
+                "Mary, 4 main street, 10/10/1972"
+        ).usingFactory(factory).run(steps).step1();
 
         verify(driver, times(3)).get(anyString());
     }

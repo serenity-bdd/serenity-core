@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
-import static net.thucydides.core.steps.StepData.withTestDataFrom;
+import static net.thucydides.core.steps.stepdata.StepData.withTestDataFrom;
 
 @RunWith(ThucydidesRunner.class)
 public class SamplePassingScenarioWithTestSpecificData {

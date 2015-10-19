@@ -20,7 +20,7 @@ public class TestOutcomeAdaptorReporter extends ThucydidesReporter {
 
     private final Optional<File> NO_SOURCE_FILE = Optional.absent();
 
-    public void generateReports() throws IOException {
+    public void generateReports() throws Exception {
         generateReports(NO_SOURCE_FILE);
     }
 
@@ -35,11 +35,11 @@ public class TestOutcomeAdaptorReporter extends ThucydidesReporter {
      * @param sourceDirectory
      * @throws IOException
      */
-    public void generateReportsFrom(File sourceDirectory) throws IOException {
+    public void generateReportsFrom(File sourceDirectory) throws Exception {
         generateReports(Optional.fromNullable(sourceDirectory));
     }
 
-    public void generateReports(Optional<File> sourceDirectory) throws IOException {
+    public void generateReports(Optional<File> sourceDirectory) throws Exception {
         setupOutputDirectoryIfRequired();
         for (TestOutcomeAdaptor adaptor : adaptors) {
             List<TestOutcome> outcomes = sourceDirectory.isPresent() ?
@@ -54,7 +54,7 @@ public class TestOutcomeAdaptorReporter extends ThucydidesReporter {
         }
     }
 
-    private void generateReportsFor(List<TestOutcome> outcomes) throws IOException {
+    private void generateReportsFor(List<TestOutcome> outcomes) throws Exception {
         TestOutcomes allOutcomes = TestOutcomes.of(outcomes);
         for (TestOutcome outcome : allOutcomes.getOutcomes()) {
             if (shouldGenerate(OutcomeFormat.XML)) {

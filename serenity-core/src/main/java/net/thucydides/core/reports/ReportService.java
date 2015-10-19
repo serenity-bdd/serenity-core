@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -117,7 +118,7 @@ public class ReportService {
             });
         }
         generateJUnitTestResults(testOutcomes);
-        waitForReportGenerationToFinish(remainingReportCount);
+        waitForReportGenerationToFinish(executorService, remainingReportCount);
         LOGGER.info("Reports generated in: " + (System.currentTimeMillis() - t0) + " ms");
 
     }
@@ -133,8 +134,8 @@ public class ReportService {
         }
     }
 
-    private void waitForReportGenerationToFinish(AtomicInteger reportCount) {
-        while (reportCount.get() > 0) {
+    private void waitForReportGenerationToFinish(ExecutorService executorService, AtomicInteger reportCount) {
+        while (reportCount.get() > 0 && ((ThreadPoolExecutor) executorService).getActiveCount() != 0){
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
@@ -175,7 +176,7 @@ public class ReportService {
             LOGGER.info(reporter + ": Generating report for test outcome: " + testOutcome.getCompleteName());
             reporter.setOutputDirectory(outputDirectory);
             reporter.generateReportFor(testOutcome, allTestOutcomes);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new ReportGenerationFailedError(
                     "Failed to generate reports using " + reporter, e);
         }

@@ -25,3 +25,4 @@ thucydides-arquillian
 .nb-gradle
 .DS_Store
 serenity-core/serenity.properties
+serenity-junit/serenity.properties

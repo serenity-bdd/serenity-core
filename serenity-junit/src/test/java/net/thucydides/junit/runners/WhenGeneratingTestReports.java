@@ -64,23 +64,4 @@ public class WhenGeneratingTestReports extends AbstractTestStepRunnerTest {
 
         verify(mockReporter,atLeast(1)).setOutputDirectory(any(File.class));
     }
-    
-    @Test
-    public void multiple_test_reporters_can_subscribe_to_the_runner()
-            throws Exception {
-
-        SerenityRunner runner = new ThucydidesRunner(AnnotatedSingleTestScenario.class);
-        
-        AcceptanceTestReporter reporter1 = mock(AcceptanceTestReporter.class);
-        AcceptanceTestReporter reporter2 = mock(AcceptanceTestReporter.class);
-
-        runner.subscribeReporter(reporter1);
-        runner.subscribeReporter(reporter2);
-
-        runner.run(new RunNotifier());
-
-        verify(reporter1).generateReportFor(any(TestOutcome.class), any(TestOutcomes.class));
-        verify(reporter2).generateReportFor(any(TestOutcome.class), any(TestOutcomes.class));
-    } 
-
 }

@@ -54,7 +54,7 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
     /**
      * Generate an XML report for a given test run.
      */
-    public File generateReportFor(final TestOutcome testOutcome, final TestOutcomes allTestOutcomes) throws Exception {
+    public File generateReportFor(final TestOutcome testOutcome, final TestOutcomes allTestOutcomes) throws IOException {
         TestOutcome storedTestOutcome = testOutcome.withQualifier(qualifier);
         Preconditions.checkNotNull(outputDirectory);
         XStream xstream = new XStream();
@@ -74,8 +74,6 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
             writer = new OutputStreamWriter(outputStream, Charset.forName("UTF-8"));
             xstream.toXML(storedTestOutcome, writer);
             LOGGER.info("XML report generated ({} bytes) {}",report.getAbsolutePath(),report.length());
-        } catch(Exception failedToWriteReport) {
-            throw new Exception(failedToWriteReport);
         } finally {
             writer.flush();
             writer.close();

@@ -132,7 +132,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     }
 
     private Object skipStepMethod(final Object obj, Method method, final Object[] args, final MethodProxy proxy) throws Exception {
-        if ((aPreviousStepHasFailed() || testIsPending()) && (!shouldExecuteNestedStepsAfterFailures())) {
+        if ((aPreviousStepHasFailed() || testAssumptionViolated()) && (!shouldExecuteNestedStepsAfterFailures())) {
             notifySkippedStepStarted(obj, method, args);
             notifySkippedStepFinishedFor(method, args);
             return null;
@@ -204,6 +204,10 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
 
     private boolean testIsPending() {
         return StepEventBus.getEventBus().currentTestIsSuspended();
+    }
+
+    private boolean testAssumptionViolated() {
+        return StepEventBus.getEventBus().assumptionViolated();
     }
 
     private boolean aPreviousStepHasFailed() {

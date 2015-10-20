@@ -132,7 +132,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     }
 
     private Object skipStepMethod(final Object obj, Method method, final Object[] args, final MethodProxy proxy) throws Exception {
-        if (aPreviousStepHasFailed() && (!shouldExecuteNestedStepsAfterFailures())) {
+        if ((aPreviousStepHasFailed() || testIsPending()) && (!shouldExecuteNestedStepsAfterFailures())) {
             notifySkippedStepStarted(obj, method, args);
             notifySkippedStepFinishedFor(method, args);
             return null;

@@ -1,5 +1,6 @@
 package net.thucydides.junit.runners;
 
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.TestOutcomes;
@@ -41,9 +42,9 @@ public class WhenGeneratingTestReports extends AbstractTestStepRunnerTest {
     public QuietThucydidesLoggingRule quietThucydidesLoggingRule = new QuietThucydidesLoggingRule();
 
     @Test
-    public void a_test_reporter_can_subscribe_to_the_runner() throws InitializationError, IOException {
+    public void a_test_reporter_can_subscribe_to_the_runner() throws Exception {
         
-        ThucydidesRunner runner = new ThucydidesRunner(AnnotatedSingleTestScenario.class);
+        SerenityRunner runner = new ThucydidesRunner(AnnotatedSingleTestScenario.class);
         runner.subscribeReporter(mockReporter);
 
         runner.run(new RunNotifier());
@@ -55,8 +56,8 @@ public class WhenGeneratingTestReports extends AbstractTestStepRunnerTest {
     @Test
     public void the_runner_should_tell_the_reporter_what_directory_to_use()
             throws InitializationError, IOException {
-        
-        ThucydidesRunner runner = new ThucydidesRunner(AnnotatedSingleTestScenario.class);
+
+        SerenityRunner runner = new ThucydidesRunner(AnnotatedSingleTestScenario.class);
         runner.subscribeReporter(mockReporter);
 
         runner.run(new RunNotifier());
@@ -66,9 +67,9 @@ public class WhenGeneratingTestReports extends AbstractTestStepRunnerTest {
     
     @Test
     public void multiple_test_reporters_can_subscribe_to_the_runner()
-            throws InitializationError, IOException {
+            throws Exception {
 
-        ThucydidesRunner runner = new ThucydidesRunner(AnnotatedSingleTestScenario.class);
+        SerenityRunner runner = new ThucydidesRunner(AnnotatedSingleTestScenario.class);
         
         AcceptanceTestReporter reporter1 = mock(AcceptanceTestReporter.class);
         AcceptanceTestReporter reporter2 = mock(AcceptanceTestReporter.class);

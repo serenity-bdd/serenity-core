@@ -22,10 +22,11 @@ class WhenAPhotographerTakesScreenshots extends Specification {
 
     def "when a photographer takes a screenshot the photographer returns the future path of the screenshot"() {
         given:
+            Darkroom.isOpenForBusiness();
             def photographer = new Photographer();
         when:
             ScreenshotPhoto photo = photographer.takesAScreenshot()
-                                                .withDriver(driver)
+                                                .with(driver)
                                                 .andSaveToDirectory(screenshotDirectory);
         then:
             Darkroom.waitUntilClose();
@@ -34,10 +35,11 @@ class WhenAPhotographerTakesScreenshots extends Specification {
 
     def "when a photographer takes a screenshot the screenshot should be stored after processing"() {
         given:
+            Darkroom.isOpenForBusiness();
             def photographer = new Photographer();
         when:
             ScreenshotPhoto photo = photographer.takesAScreenshot()
-                    .withDriver(driver)
+                    .with(driver)
                     .andSaveToDirectory(screenshotDirectory);
         then:
             Darkroom.waitUntilClose();
@@ -46,13 +48,14 @@ class WhenAPhotographerTakesScreenshots extends Specification {
 
     def "a screenshot that has already been stored should not be stored again"() {
         given:
+            Darkroom.isOpenForBusiness();
             def photographer = new Photographer();
             ScreenshotPhoto previousPhoto = photographer.takesAScreenshot()
-                                                         .withDriver(driver)
+                                                         .with(driver)
                                                          .andSaveToDirectory(screenshotDirectory);
         when:
             ScreenshotPhoto newPhoto = photographer.takesAScreenshot()
-                    .withDriver(driver)
+                    .with(driver)
                     .andSaveToDirectory(screenshotDirectory);
         then:
             Darkroom.waitUntilClose();
@@ -62,12 +65,13 @@ class WhenAPhotographerTakesScreenshots extends Specification {
 
     def "a screenshot that is already the correct dimensions should not be resized"() {
         given:
+            Darkroom.isOpenForBusiness();
             def photographer = new Photographer();
             driver.manage().window().setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT))
 
         when:
             ScreenshotPhoto newPhoto = photographer.takesAScreenshot()
-                    .withDriver(driver)
+                    .with(driver)
                     .andSaveToDirectory(screenshotDirectory);
         then:
             Darkroom.waitUntilClose();
@@ -77,12 +81,13 @@ class WhenAPhotographerTakesScreenshots extends Specification {
     @BlurScreenshots(BlurLevel.HEAVY)
     def "blurred screenshots should be blurred"() {
         given:
+            Darkroom.isOpenForBusiness();
             def photographer = new Photographer();
             driver.manage().window().setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT))
 
         when:
             ScreenshotPhoto newPhoto = photographer.takesAScreenshot()
-                    .withDriver(driver)
+                    .with(driver)
                     .andWithBlurring(AnnotatedBluring.blurLevel())
                     .andSaveToDirectory(screenshotDirectory);
             Darkroom.waitUntilClose();
@@ -92,12 +97,13 @@ class WhenAPhotographerTakesScreenshots extends Specification {
 
     def "unblurred screenshots should not be blurred"() {
         given:
+            Darkroom.isOpenForBusiness();
             def photographer = new Photographer();
             driver.manage().window().setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT))
 
         when:
             ScreenshotPhoto newPhoto = photographer.takesAScreenshot()
-                    .withDriver(driver)
+                    .with(driver)
                     .andWithBlurring(AnnotatedBluring.blurLevel())
                     .andSaveToDirectory(screenshotDirectory);
             Darkroom.waitUntilClose();
@@ -115,8 +121,6 @@ class WhenAPhotographerTakesScreenshots extends Specification {
         driver = new FirefoxDriver()
         driver.get(siteFromUrlAt("/static-site/unchanging-page.html"))
         startTime = System.currentTimeMillis()
-
-        Darkroom.isOpenForBusiness();
     }
 
     String siteFromUrlAt(String path) {

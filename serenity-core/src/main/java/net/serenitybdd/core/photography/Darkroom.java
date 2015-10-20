@@ -11,7 +11,7 @@ import java.util.List;
 public class Darkroom {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Darkroom.class);
-    private List<? extends NegativeProcessor> processors = ImmutableList.of(new Resizer(), new Blurer());
+    private List<? extends PhotoFilter> processors = ImmutableList.of(new Resizer(), new Blurer());
     private DarkroomProcessingLine processingLine;
     private Thread screenshotThread;
 

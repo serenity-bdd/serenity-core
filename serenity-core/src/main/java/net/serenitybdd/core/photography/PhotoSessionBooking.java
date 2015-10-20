@@ -12,7 +12,7 @@ public class PhotoSessionBooking {
     private Path outputDirectory;
     private BlurLevel blurLevel;
 
-    public PhotoSessionBooking withDriver(WebDriver driver) {
+    public PhotoSessionBooking with(WebDriver driver) {
         this.driver = driver;
         return this;
     }

@@ -21,7 +21,7 @@ class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
             List<ScreenshotPhoto> photos = Lists.newArrayList();
             for (photoCount in 0..10){
                 photos.add(photographer.takesAScreenshot()
-                        .withDriver(driver)
+                        .with(driver)
                         .andSaveToDirectory(screenshotDirectory));
             }
             Darkroom.waitUntilClose();
@@ -44,7 +44,7 @@ class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
 
                     for (j in 1..10) {
                         photos.add(photographer.takesAScreenshot()
-                                .withDriver(driver)
+                                .with(driver)
                                 .andSaveToDirectory(screenshotDirectory));
                     }
                     driver.quit()

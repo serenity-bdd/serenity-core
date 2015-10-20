@@ -19,7 +19,7 @@ public class DarkroomProcessingLine implements Runnable {
 
     boolean done = false;
 
-    private final List<? extends NegativeProcessor> processors;
+    private final List<? extends PhotoFilter> processors;
 
     public void terminate() {
         done = true;
@@ -31,7 +31,7 @@ public class DarkroomProcessingLine implements Runnable {
 
     private final Queue<ScreenshotNegative> queue;
 
-    DarkroomProcessingLine(List<? extends NegativeProcessor> processors) {
+    DarkroomProcessingLine(List<? extends PhotoFilter> processors) {
         this.processors = processors;
         this.queue = new ConcurrentLinkedQueue<>();
     }
@@ -100,7 +100,7 @@ public class DarkroomProcessingLine implements Runnable {
 
     private void saveProcessedScreenshot(ScreenshotNegative negative) {
         LOGGER.debug("Processing screenshot image in {}", negative.getTemporaryPath());
-        for (NegativeProcessor processor : processors) {
+        for (PhotoFilter processor : processors) {
             negative = processor.process(negative);
         }
         try {
@@ -117,7 +117,7 @@ public class DarkroomProcessingLine implements Runnable {
 
     private Path screenshotPathFor(ScreenshotNegative negative) {
         ScreenshotNegative amendedNegative = negative;
-        for (NegativeProcessor processor : processors) {
+        for (PhotoFilter processor : processors) {
             amendedNegative = amendedNegative.withScreenshotPath(processor.amendedScreenshotPath(amendedNegative));
         }
         return amendedNegative.getScreenshotPath();

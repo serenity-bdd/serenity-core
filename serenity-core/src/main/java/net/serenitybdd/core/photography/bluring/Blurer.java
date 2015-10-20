@@ -2,7 +2,7 @@ package net.serenitybdd.core.photography.bluring;
 
 import com.jhlabs.image.BoxBlurFilter;
 import net.serenitybdd.core.photography.AmendedPathBuilder;
-import net.serenitybdd.core.photography.NegativeProcessor;
+import net.serenitybdd.core.photography.PhotoFilter;
 import net.serenitybdd.core.photography.ScreenshotNegative;
 import net.thucydides.core.screenshots.BlurLevel;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ import java.nio.file.Path;
 
 import static java.nio.file.Files.newInputStream;
 
-public class Blurer implements NegativeProcessor {
+public class Blurer implements PhotoFilter {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 

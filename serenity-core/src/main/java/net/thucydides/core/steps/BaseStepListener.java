@@ -689,7 +689,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
         if (pathOf(outputDirectory) != null) { // Output directory may be null for some tests
             newPhoto = photographer.takesAScreenshot()
-                                   .withDriver(getDriver())
+                                   .with(getDriver())
                                    .andWithBlurring(AnnotatedBluring.blurLevel())
                                    .andSaveToDirectory(pathOf(outputDirectory));
 

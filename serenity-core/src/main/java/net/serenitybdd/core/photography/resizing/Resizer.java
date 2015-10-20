@@ -1,6 +1,6 @@
 package net.serenitybdd.core.photography.resizing;
 
-import net.serenitybdd.core.photography.NegativeProcessor;
+import net.serenitybdd.core.photography.PhotoFilter;
 import net.serenitybdd.core.photography.ScreenshotNegative;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -18,7 +18,7 @@ import java.nio.file.Path;
 import static net.thucydides.core.ThucydidesSystemProperty.DEFAULT_WIDTH;
 import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_RESIZED_IMAGE_WIDTH;
 
-public class Resizer implements NegativeProcessor {
+public class Resizer implements PhotoFilter {
 
     private final EnvironmentVariables environmentVariables;
 

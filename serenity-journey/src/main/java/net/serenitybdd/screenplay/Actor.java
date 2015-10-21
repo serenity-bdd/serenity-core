@@ -90,10 +90,9 @@ public class Actor implements PerformsTasks {
 
     }
 
-    @SafeVarargs
-    public final <T> void should(Consequence<T>... consequences) {
+    public final void should(Consequence... consequences) {
         beginPerformance();
-        for (Consequence<T> consequence : consequences) {
+        for (Consequence consequence : consequences) {
             check(consequence);
         }
         endPerformance();

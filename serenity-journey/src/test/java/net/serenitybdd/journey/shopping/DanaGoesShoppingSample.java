@@ -8,6 +8,7 @@ import net.thucydides.core.annotations.Steps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static net.serenitybdd.journey.shopping.questions.ThankYouMessage.theThankYouMessage;
 import static net.serenitybdd.journey.shopping.questions.TotalCost.theTotalCost;
 import static net.serenitybdd.journey.shopping.questions.TotalCostIncludingDelivery.theTotalCostIncludingDelivery;
 import static net.serenitybdd.journey.shopping.tasks.Purchase.*;
@@ -35,7 +36,8 @@ public class DanaGoesShoppingSample {
         when(dana).attemptsTo(haveThemDelivered);
 
         then(dana).should(seeThat(theTotalCost(), equalTo(15)),
-                          seeThat(theTotalCostIncludingDelivery(), greaterThanOrEqualTo(20)));
+                          seeThat(theTotalCostIncludingDelivery(), greaterThanOrEqualTo(20)),
+                          seeThat(theThankYouMessage(), equalTo("Thank you!")));
     }
 
 

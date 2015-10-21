@@ -149,14 +149,14 @@ public class ConsoleLoggingListener implements StepListener {
 
     public void testSuiteStarted(Class<?> storyClass) {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
-            getLogger().info("Test Suite Started: " + NameConverter.humanize(storyClass.getSimpleName()));
+            getLogger().info("Test Suite Started: {}", NameConverter.humanize(storyClass.getSimpleName()));
         }
     }
 
 
     public void testSuiteStarted(Story story) {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
-            getLogger().info("Test Suite Started: " + NameConverter.humanize(story.getName()));
+            getLogger().info("Test Suite Started: {}", NameConverter.humanize(story.getName()));
         }
     }
 
@@ -203,7 +203,7 @@ public class ConsoleLoggingListener implements StepListener {
 
     private void logFailure(TestOutcome result) {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
-            getLogger().info(testFailureHeading() + "\nTEST FAILED: " + result.getTitle() + underline(TEST_FAILED_HEADINGS.get(headingStyle)));
+            getLogger().info(testFailureHeading() + "\nTEST FAILED: {}", result.getTitle() + underline(TEST_FAILED_HEADINGS.get(headingStyle)));
 
             logRelatedIssues(result);
             logFailureCause(result);
@@ -218,7 +218,7 @@ public class ConsoleLoggingListener implements StepListener {
 
     private void logRelatedIssues(TestOutcome result) {
         Joiner joiner = Joiner.on(",");
-        getLogger().info("RELATED ISSUES: " + joiner.join(result.getIssueKeys()));
+        getLogger().info("RELATED ISSUES: {}", joiner.join(result.getIssueKeys()));
 
     }
 
@@ -234,7 +234,7 @@ public class ConsoleLoggingListener implements StepListener {
 
     private void logPending(TestOutcome result) {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
-            getLogger().info(testSkippedHeading() + "\nTEST PENDING: " + result.getTitle() + underline(testSkippedHeading()));
+            getLogger().info(testSkippedHeading() + "\nTEST PENDING: {}", result.getTitle() + underline(testSkippedHeading()));
 
         }
     }
@@ -245,13 +245,13 @@ public class ConsoleLoggingListener implements StepListener {
 
     private void logSkipped(TestOutcome result) {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
-            getLogger().info(testSkippedHeading() + "\nTEST SKIPPED: " + result.getTitle() + underline(testSkippedHeading()));
+            getLogger().info(testSkippedHeading() + "\nTEST SKIPPED: {}", result.getTitle() + underline(testSkippedHeading()));
         }
     }
 
     private void logSuccess(TestOutcome result) {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
-            getLogger().info(testPassedHeading() + "\nTEST PASSED: " + result.getTitle() + underline(testPassedHeading()));
+            getLogger().info(testPassedHeading() + "\nTEST PASSED: {}", result.getTitle() + underline(testPassedHeading()));
         }
     }
 
@@ -261,7 +261,7 @@ public class ConsoleLoggingListener implements StepListener {
 
     public void stepStarted(ExecutedStepDescription description) {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
-            getLogger().info("STARTING STEP " + description.getTitle());
+            getLogger().info("STARTING STEP {}", description.getTitle());
         }
     }
 
@@ -279,7 +279,7 @@ public class ConsoleLoggingListener implements StepListener {
     public void stepFailed(StepFailure failure) {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
             String errorMessage = (failure.getException() != null) ? failure.getException().toString() : failure.getMessage();
-            getLogger().info("STEP FAILED: " + errorMessage);
+            getLogger().info("STEP FAILED: {}", errorMessage);
         }
     }
 
@@ -302,7 +302,7 @@ public class ConsoleLoggingListener implements StepListener {
 
     public void stepPending(String message) {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
-            getLogger().info("PENDING STEP " + "(" + message + ")");
+            getLogger().info("PENDING STEP ({})", message);
         }
     }
 

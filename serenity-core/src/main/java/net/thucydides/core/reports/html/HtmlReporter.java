@@ -21,7 +21,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.EnumSet;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.thucydides.core.reports.html.HtmlResourceCopier.copyHtmlResourcesFrom;
 
@@ -69,14 +68,9 @@ public abstract class HtmlReporter extends ThucydidesReporter {
         return environmentVariables;
     }
 
-    private static AtomicBoolean alreadyCopied = new AtomicBoolean(false);
-
     protected void copyResourcesToOutputDirectory() throws IOException {
-
-        if (!alreadyCopied.getAndSet(true)) {
-            updateResourceDirectoryFromSystemPropertyIfDefined();
-            copyHtmlResourcesFrom(getResourceDirectory()).to(getOutputDirectory());
-        }
+        updateResourceDirectoryFromSystemPropertyIfDefined();
+        copyHtmlResourcesFrom(getResourceDirectory()).to(getOutputDirectory());
     }
 
     protected void copyTestResultsToOutputDirectory() throws IOException {

@@ -1,7 +1,9 @@
-package net.serenitybdd.junit.runners;
+package net.serenitybdd.junit.runners.integration;
 
 import com.google.common.collect.Lists;
-import net.serenitybdd.junit.runners.integration.SimpleSuccessfulParametrizedTestSample;
+import net.serenitybdd.junit.runners.ParameterizedTestsOutcomeAggregator;
+import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;

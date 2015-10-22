@@ -133,7 +133,6 @@ subprojects {
         if (!JavaVersion.current().isJava8Compatible()) {
             jvmArgs '-XX:MaxPermSize=256m'
         }
-        forkEvery 20
     }
 
     test {

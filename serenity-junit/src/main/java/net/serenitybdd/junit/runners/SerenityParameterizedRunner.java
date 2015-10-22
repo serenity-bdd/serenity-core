@@ -68,11 +68,11 @@ public class SerenityParameterizedRunner extends Suite {
         setScheduler(new ParameterizedRunnerScheduler(klass, getThreadCountFor(klass)));
     }
 
-    protected boolean runTestsInParallelFor(final Class<?> klass) {
+    public boolean runTestsInParallelFor(final Class<?> klass) {
         return (klass.getAnnotation(Concurrent.class) != null);
     }
 
-    protected int getThreadCountFor(final Class<?> klass) {
+    public int getThreadCountFor(final Class<?> klass) {
         Concurrent concurrent = klass.getAnnotation(Concurrent.class);
         String threadValue = getThreadParameter(concurrent);
         int threads = (AVAILABLE_PROCESSORS * 2);

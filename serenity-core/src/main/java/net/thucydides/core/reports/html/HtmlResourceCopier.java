@@ -54,7 +54,8 @@ public class HtmlResourceCopier {
     }
 
     private void recordResourceMarkerIn(File targetDirectory) throws IOException {
-        resourceMarkerIn(targetDirectory).toFile().createNewFile();
+        Files.createDirectories(targetDirectory.toPath());
+        resourceMarkerIn(targetDirectory).toFile();
     }
 
     private boolean resourceFilesAreAlreadyPresentIn(File targetDirectory) {

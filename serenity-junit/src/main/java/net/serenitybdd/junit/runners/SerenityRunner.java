@@ -233,29 +233,20 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
 
     @Override
     public void run(final RunNotifier notifier) {
-        RunNotifier localNotifier;
-        if (!skipThisTest()) {
-            try {
-                setupFixtureServices();
-                localNotifier = initializeRunNotifier(notifier);
-                super.run(localNotifier);
-            } catch (Throwable someFailure) {
-                someFailure.printStackTrace();
-                throw someFailure;
-            } finally {
-                notifyTestSuiteFinished();
-                generateReports();
-                dropListeners(notifier);
-                closeDrivers();
-                shutdownFixtureServices();
-            }
+        if (skipThisTest()) { return; }
+
+        try {
+            RunNotifier localNotifier = initializeRunNotifier(notifier);
+            super.run(localNotifier);
+        } catch (Throwable someFailure) {
+            someFailure.printStackTrace();
+            throw someFailure;
+        } finally {
+            notifyTestSuiteFinished();
+            generateReports();
+            dropListeners(notifier);
+            closeDrivers();
         }
-    }
-
-    private void setupFixtureServices() {
-    }
-
-    private void shutdownFixtureServices() {
     }
 
     private void notifyTestSuiteFinished() {

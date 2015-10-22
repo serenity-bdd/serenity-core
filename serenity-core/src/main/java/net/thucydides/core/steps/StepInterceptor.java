@@ -155,9 +155,8 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
 
     private Object runSkippedMethod(Object obj, Method method, Object[] args, MethodProxy proxy) {
         LOGGER.trace("Running test step " + StepName.fromStepAnnotationIn(method).or(method.getName()));
-        Object result = null;
         StepEventBus.getEventBus().temporarilySuspendWebdriverCalls();
-        result = runIfNestedMethodsShouldBeRun(obj, method, args, proxy);
+        Object result = runIfNestedMethodsShouldBeRun(obj, method, args, proxy);
         StepEventBus.getEventBus().reenableWebdriverCalls();
         return result;
     }

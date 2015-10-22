@@ -107,8 +107,7 @@ public abstract class PageObject {
 
     private Duration getDefaultImplicitTimeout() {
         Integer configuredTimeout = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables);
-        return (configuredTimeout != null) ? new Duration(configuredTimeout, TimeUnit.MILLISECONDS)
-                : DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
+        return new Duration(configuredTimeout, TimeUnit.MILLISECONDS);
 
     }
 

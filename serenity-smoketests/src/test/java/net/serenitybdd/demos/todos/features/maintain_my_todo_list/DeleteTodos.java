@@ -36,7 +36,7 @@ public class DeleteTodos {
     public void joe_can_use_a_browser() {
         joe.can(BrowseTheWeb.with(hisBrowser));
         joe.has(openedTheTodoApplication);
-    }
+   }
 
     @Test
     public void should_be_able_to_remove_items_from_the_todo_list() {
@@ -46,6 +46,5 @@ public class DeleteTodos {
         when(joe).attemptsTo(DeleteAnItem.called("Buy the milk"));
 
         then(joe).should(seeThat(theDisplayedItems, contains("Walk the dog")));
-
     }
 }

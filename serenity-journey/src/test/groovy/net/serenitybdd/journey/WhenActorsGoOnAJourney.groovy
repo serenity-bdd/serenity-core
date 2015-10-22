@@ -91,7 +91,8 @@ class WhenActorsGoOnAJourney extends Specification{
                      "Given Dana has purchased a pear for 5 dollars",
                      "And Dana has them delivered",
                      "Then total cost should be <15>",
-                     "Then total cost including delivery should be a value equal to or greater than <20>"]
+                     "Then total cost including delivery should be a value equal to or greater than <20>",
+                      "Then thank you message should be \"Thank you!\""]
         and:
             outcome.testSteps[3].result == FAILURE && outcome.testSteps[4].result == SKIPPED
 

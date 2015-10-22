@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Iterator;
@@ -126,15 +127,7 @@ public class ResizableImage {
     }
 
     private boolean skipRescale(int height) {
-        if (getHeight() > MAX_SUPPORTED_HEIGHT) {
-            return true;
-        }
-
-        if (getHeight() >= height) {
-            return true;
-        }
-
-        return false;
+        return getHeight() > MAX_SUPPORTED_HEIGHT || (getHeight() >= height);
     }
 
     /**
@@ -142,6 +135,8 @@ public class ResizableImage {
      * Otherwise we should be applying the saveTo() method on the ResizedImage class.
      */
     public void saveTo(final File savedFile) throws IOException {
-        Files.copy(screenshotFile.toPath(), savedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        try {
+            Files.copy(screenshotFile.toPath(), savedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (FileAlreadyExistsException ignored) {}
     }
 }

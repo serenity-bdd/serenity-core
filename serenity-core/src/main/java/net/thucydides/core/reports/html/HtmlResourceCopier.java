@@ -17,6 +17,8 @@ public class HtmlResourceCopier {
 
     private String resourceDirectory;
 
+    private static final Object htmlReportResources = new Object();
+
     public HtmlResourceCopier(final String resourceDirectory) {
         super();
         this.resourceDirectory = resourceDirectory;
@@ -33,20 +35,22 @@ public class HtmlResourceCopier {
             return;
         }
 
-        Pattern resourcePattern = allFilesInDirectory(resourceDirectory);
-        FileResources fileResource = FileResources.from(resourceDirectory);
+        synchronized (htmlReportResources) {
+            recordResourceMarkerIn(targetDirectory);
+            Pattern resourcePattern = allFilesInDirectory(resourceDirectory);
+            FileResources fileResource = FileResources.from(resourceDirectory);
 
-        Collection<String> reportResources = ResourceList.forResources(resourcePattern).list();
+            Collection<String> reportResources = ResourceList.forResources(resourcePattern).list();
 
-        for (String resourcePath : reportResources) {
-            if (fileResourceFromAJar(resourcePath)) {
-                fileResource.copyResourceTo(resourcePath, targetDirectory);
-            } else if (fileResourceFromPath(resourcePath)) {
-                fileResource.copyResourceTo(resourcePath,
-                                            targetDirectory);
+            for (String resourcePath : reportResources) {
+                if (fileResourceFromAJar(resourcePath)) {
+                    fileResource.copyResourceTo(resourcePath, targetDirectory);
+                } else if (fileResourceFromPath(resourcePath)) {
+                    fileResource.copyResourceTo(resourcePath,
+                            targetDirectory);
+                }
             }
         }
-        recordResourceMarkerIn(targetDirectory);
     }
 
     private void recordResourceMarkerIn(File targetDirectory) throws IOException {

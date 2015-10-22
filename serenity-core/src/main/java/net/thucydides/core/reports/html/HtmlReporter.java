@@ -21,6 +21,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.EnumSet;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static net.thucydides.core.reports.html.HtmlResourceCopier.copyHtmlResourcesFrom;
 
 /**
  * An HTML report generates reports in a given directory and uses resources (images,...) from another.
@@ -66,19 +69,14 @@ public abstract class HtmlReporter extends ThucydidesReporter {
         return environmentVariables;
     }
 
-    private boolean alreadyCopied = false;
+    private static AtomicBoolean alreadyCopied = new AtomicBoolean(false);
 
     protected void copyResourcesToOutputDirectory() throws IOException {
-        if (!alreadyCopied) {
-            alreadyCopied = true;
-            updateResourceDirectoryFromSystemPropertyIfDefined();
-            copyResources();
-        }
-    }
 
-    private void copyResources() throws IOException {
-        HtmlResourceCopier copier = new HtmlResourceCopier(getResourceDirectory());
-        copier.copyHTMLResourcesTo(getOutputDirectory());
+        if (!alreadyCopied.getAndSet(true)) {
+            updateResourceDirectoryFromSystemPropertyIfDefined();
+            copyHtmlResourcesFrom(getResourceDirectory()).to(getOutputDirectory());
+        }
     }
 
     protected void copyTestResultsToOutputDirectory() throws IOException {
@@ -92,22 +90,8 @@ public abstract class HtmlReporter extends ThucydidesReporter {
     private void copyDirectoryContents(Path sourcePath, Path destinationPath) throws IOException {
         Files.walkFileTree(sourcePath, EnumSet.of(FileVisitOption.FOLLOW_LINKS),
                 Integer.MAX_VALUE, new CopyDirectory(sourcePath, destinationPath));
-//        FileUtils.copyDirectory(sourcePath.toFile(), destinationPath.toFile(), withXMLorHTMLorCSVFiles());
 
     }
-
-//    private FileFilter withXMLorHTMLorCSVFiles() {
-//        return new FileFilter() {
-//            @Override
-//            public boolean accept(File file) {
-//                return file.getName().endsWith(".xml")
-//                        || file.getName().endsWith(".html")
-//                        || file.getName().endsWith(".properties")
-//                        || file.getName().endsWith(".json")
-//                        || file.getName().endsWith(".csv");
-//            }
-//        };
-//    }
 
     private File getSourceDirectoryOrDefault() {
         String source = (getSourceDirectory() != null) ? getSourceDirectory().getAbsolutePath() : DEFAULT_SOURCE_DIR;

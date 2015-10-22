@@ -5,6 +5,8 @@ import net.thucydides.core.resources.ResourceList;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
@@ -25,7 +27,11 @@ public class HtmlResourceCopier {
      * src/main/resources/reports directory. When the jar is deployed, they will
      * end up on the classpath.
      */
-    public void copyHTMLResourcesTo(final File targetDirectory) throws IOException {
+    public void to(final File targetDirectory) throws IOException {
+
+        if (resourceFilesAreAlreadyPresentIn(targetDirectory)) {
+            return;
+        }
 
         Pattern resourcePattern = allFilesInDirectory(resourceDirectory);
         FileResources fileResource = FileResources.from(resourceDirectory);
@@ -40,7 +46,21 @@ public class HtmlResourceCopier {
                                             targetDirectory);
             }
         }
+        recordResourceMarkerIn(targetDirectory);
     }
+
+    private void recordResourceMarkerIn(File targetDirectory) throws IOException {
+        resourceMarkerIn(targetDirectory).toFile().createNewFile();
+    }
+
+    private boolean resourceFilesAreAlreadyPresentIn(File targetDirectory) {
+        return Files.exists(resourceMarkerIn(targetDirectory));
+    }
+
+    private Path resourceMarkerIn(File outputDirectory) {
+        return outputDirectory.toPath().resolve("serenity-resources");
+    }
+
 
     private boolean fileResourceFromAJar(final String resourcePath) {
         return (resourceIsFromAJar(resourcePath)
@@ -71,5 +91,9 @@ public class HtmlResourceCopier {
 
     private boolean resourceIsFromAJar(final String resourcePath) {
         return !resourcePath.startsWith("/");
+    }
+
+    public static HtmlResourceCopier copyHtmlResourcesFrom(String resourceDirectory) {
+        return new HtmlResourceCopier(resourceDirectory);
     }
 }

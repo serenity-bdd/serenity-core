@@ -129,8 +129,7 @@ public class ResourceList {
         return retval;
     }
 
-    private Collection<String> getResourcesFromDirectory(final File directory,
-                                                                final Pattern pattern) {
+    private Collection<String> getResourcesFromDirectory(final File directory, final Pattern pattern) {
         final ArrayList<String> retval = new ArrayList<String>();
         final File[] fileList = directory.listFiles();
         if (fileList != null) {
@@ -138,15 +137,16 @@ public class ResourceList {
                 if (file.isDirectory() && (file.exists())) {
                     retval.addAll(getResourcesFromDirectory(file, pattern));
                 } else {
+                    String fileName = "";
                     if (file.exists()) {
                         try {
-                            final String fileName = file.getCanonicalPath();
+                            fileName = file.getCanonicalPath();
                             final boolean accept = pattern.matcher(fileName).matches();
                             if (accept) {
                                 retval.add(fileName);
                             }
                         } catch (final IOException e) {
-                            throw new ResourceCopyingError("Could not read from the JAR file", e);
+                            throw new ResourceCopyingError("Could not read from the JAR file " + fileName, e);
                         }
                     }
                 }

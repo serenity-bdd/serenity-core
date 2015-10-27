@@ -137,9 +137,9 @@
                                     <span class="related-issue-title">${testOutcome.formattedIssues}</span>
                             </span>
                         </span>
-                        <#if (testOutcome.driver)?? && (!testOutcome.manual)>
+                        <#if (testOutcome.manual)>
                             <span style="float:right">
-                                <i class="fa fa-user manual" alt="${testOutcome.driver}" title="${testOutcome.driver}"></i>
+                                <i class="fa fa-user manual" alt="Manual test" title="Manual test"></i>
                             </span
                         </#if>
                         </td>
@@ -207,7 +207,9 @@
         <div>
             <table class="step-table">
                 <tr class="step-titles">
-                    <th width="65"><#if (testOutcome.manual)><img src="images/worker.png" title="Manual test"/></#if>
+                    <th width="65"><#if (testOutcome.manual)>
+                        <i class="fa fa-user fa-2x" title="Manual test"></i>
+                   </#if>
                         &nbsp;
                     </th>
 

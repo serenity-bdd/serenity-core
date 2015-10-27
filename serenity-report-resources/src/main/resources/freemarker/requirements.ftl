@@ -541,7 +541,11 @@ Estimated ignored or skipped requirements: ${ignored}"
                                                 <td>
                                                     <span class="summary-icon">${testrun_outcome_icon}</span>
                                                     <span style="display:none">${testOutcome.result}</span>
-                                                    <#if (testOutcome.manual)><img src="images/worker.Acc" title="Manual test"/></#if>
+                                                    <#if testOutcome.manual>
+                                                        <span style="float:right">
+                                                            <i class="fa fa-user manual" alt="Manual test" title="Manual test"></i>
+                                                        </span
+                                                    </#if>
                                                 </td>
                                                 <td class="${testOutcome.result}-text"><a
                                                         href="${relativeLink!}${testOutcome.reportName}.html"

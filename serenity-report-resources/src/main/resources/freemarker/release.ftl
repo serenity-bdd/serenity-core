@@ -348,7 +348,8 @@
                                                     <td>
                                                         <img src="images/${testrun_outcome_icon}" title="${testOutcome.result}" class="summary-icon"/>
                                                         <span style="display:none">${testOutcome.result}</span>
-                                                        <#if (testOutcome.manual)><img src="images/worker.png" title="Manual test"/></#if>
+                                                        <#if (testOutcome.manual)>
+                                                            <i class="fa fa-user fa-2x"  title="Manual test"></i>
                                                     </td>
                                                     <td class="${testOutcome.result}-text"><a href="${relativeLink!}${testOutcome.reportName}.html">${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}</a></td>
 

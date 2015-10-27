@@ -1,9 +1,13 @@
 package net.thucydides.core.model;
 
+import com.google.common.collect.ImmutableList;
 import net.serenitybdd.core.PendingStepException;
 import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepFailureException;
 import net.thucydides.core.webdriver.WebdriverAssertionError;
+import net.thucydides.core.webdriver.exceptions.CausesAssertionFailure;
+
+import java.util.List;
 
 import static net.thucydides.core.model.TestResult.*;
 
@@ -11,6 +15,7 @@ import static net.thucydides.core.model.TestResult.*;
  * Determine whether a given type of exception should result in a failure or an error.
  * Any exception  that extends AssertionError is a FAILURE.
  * Any exception  that extends WebdriverAssertionError and has a cause that is an AssertionError is also a FAILURE.
+ * Unless it is one of the
  * All other exceptions are an ERROR (except for StepFailureException as described below)
  *
  * Any exception that extends StepFailureException and has a cause that meets the above criteria is classed as above.
@@ -28,27 +33,26 @@ public class FailureAnalysis {
         return ERROR;
     }
 
+    private final List<Class<?>> VALID_FAILURE_TYPES = ImmutableList.of(AssertionError.class, CausesAssertionFailure.class);
+
     public boolean isFailure(String testFailureCause) {
-        if (testFailureCause != null) {
-            try {
-                if (isA(AssertionError.class, Class.forName(testFailureCause))) {
+        if (testFailureCause == null) {
+            return false;
+        }
+        try {
+            for(Class<?> validFailureType: VALID_FAILURE_TYPES) {
+                if (isA(validFailureType,Class.forName(testFailureCause))) {
                     return true;
                 }
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
             }
+            return false;
+        } catch (ClassNotFoundException aRecordedClassCouldNotBeReloaded) {
+            return false;
         }
-        return false;
     }
 
     private boolean isA(Class<?> expectedClass, Class testFailureCause) {
-        while(testFailureCause != null) {
-            if (testFailureCause.equals(expectedClass)) {
-                return true;
-            }
-            testFailureCause = testFailureCause.getSuperclass();
-        }
-        return false;
+        return expectedClass.isAssignableFrom(testFailureCause);
     }
 
     public TestResult resultFor(Throwable testFailureCause) {

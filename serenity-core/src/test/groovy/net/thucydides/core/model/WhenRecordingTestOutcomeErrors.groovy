@@ -1,11 +1,9 @@
 package net.thucydides.core.model
 
+import net.thucydides.core.webdriver.exceptions.ElementShouldBePresentException
 import spock.lang.Specification
 
 
-/**
- * Created by john on 12/06/2014.
- */
 class WhenRecordingTestOutcomeErrors extends Specification {
 
     def "should record failure classname and message"() {
@@ -71,5 +69,21 @@ class WhenRecordingTestOutcomeErrors extends Specification {
         then:
         testOutcome.errorMessage.contains "oh crap!"
         testOutcome.result == TestResult.ERROR
+    }
+
+    def "should-style assertions should be marked as failures"() {
+
+        given:
+        def testOutcome = TestOutcome.forTestInStory("aTest", Story.called("a story"))
+
+        when:
+        testOutcome.determineTestFailureCause(new ElementShouldBePresentException("oh crap!",new RuntimeException("crapity crap crap!")))
+
+        then:
+        testOutcome.testFailureClassname == "net.thucydides.core.webdriver.exceptions.ElementShouldBePresentException"
+        testOutcome.testFailureMessage.contains "oh crap!"
+
+        testOutcome.result == TestResult.FAILURE
+        testOutcome.errorMessage.contains "oh crap!"
     }
 }

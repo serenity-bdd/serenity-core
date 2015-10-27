@@ -160,7 +160,7 @@
                                     <#assign issueNumber = "">
                                 </#if>
                                 <h3 class="discreet-story-header">
-                                    <i class="fa fa-comments-o"></i>
+                                    <i class="fa fa-2x fa-comments-o"></i>
                                     <span class="story-header-title">${parentTitle} ${issueNumber}</span>
                                     <span class="badge tag-badge">${parentType}</span>
                                 </h3>
@@ -174,7 +174,7 @@
                                 <#assign parentTitle = inflection.of(featureOrStory.get().name).asATitle() >
                                 <#assign parentType = inflection.of(featureOrStory.get().type.toString()).asATitle() >
                                 <h3 class="discreet-story-header">
-                                    <i class="fa fa-comments-o"></i>
+                                    <i class="fa fa-2x fa-comments-o"></i>
                                     <span class="story-header-title">${parentTitle}</span>
                                     <span class="badge tag-badge">${parentType}</span>
                                 </h3>
@@ -193,7 +193,7 @@
                             </div>
                         </#if>
                         </td>
-                        <td valign="top">
+                        <td valign="top" align="right>
                         <#list filteredTags as tag>
                             <#assign tagReport = absoluteReportName.forTag(tag) />
                             <#assign tagTitle = inflection.of(tag.shortName).asATitle() >

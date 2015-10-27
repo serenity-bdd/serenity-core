@@ -195,8 +195,8 @@
                     <#foreach customField in parentRequirement.customFields >
                         <#if parentRequirement.getCustomField(customField).present>
                             <div>
-                                <a href="javaScript:void(0)" class="read-more-link"><img src="images/plus.png"
-                                                                                         height="15"/>
+                                <a href="javaScript:void(0)" class="read-more-link">
+                                    <i class="fa fa-plus-square-o"></i>
                                     <span class="custom-field-title">${customField}</span>
                                 </a>
 
@@ -542,9 +542,7 @@ Estimated ignored or skipped requirements: ${ignored}"
                                                     <span class="summary-icon">${testrun_outcome_icon}</span>
                                                     <span style="display:none">${testOutcome.result}</span>
                                                     <#if testOutcome.manual>
-                                                        <span style="float:right">
-                                                            <i class="fa fa-user manual" alt="Manual test" title="Manual test"></i>
-                                                        </span
+                                                        <i class="fa fa-user manual" alt="Manual test" title="Manual test"></i>
                                                     </#if>
                                                 </td>
                                                 <td class="${testOutcome.result}-text"><a

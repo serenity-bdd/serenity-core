@@ -5,18 +5,17 @@ import net.thucydides.core.model.TestResult;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.lang.String.format;
-
 public class ResultIconFormatter {
+
     private final Map<TestResult, String> resultIcons = new HashMap<>();
     {
-        resultIcons.put(TestResult.ERROR, "fa-exclamation-triangle");
-        resultIcons.put(TestResult.FAILURE, "fa-times-circle");
-        resultIcons.put(TestResult.SUCCESS, "fa-check-square-o");
-        resultIcons.put(TestResult.PENDING, "fa-spinner");
-        resultIcons.put(TestResult.IGNORED, "fa-eye-slash");
-        resultIcons.put(TestResult.SKIPPED, "fa-fast-forward");
-        resultIcons.put(TestResult.UNDEFINED, "fa-exclamation");
+        resultIcons.put(TestResult.ERROR,  "<i class='fa fa-exclamation-triangle ${iconStyle} ${qualifier}' title='${result}'></i>");
+        resultIcons.put(TestResult.FAILURE, "<i class='fa fa-times-circle ${iconStyle} ${qualifier}' title='${result}'></i>");
+        resultIcons.put(TestResult.SUCCESS, "<i class='fa fa-check-square-o ${iconStyle} ${qualifier}' title='${result}'></i>");
+        resultIcons.put(TestResult.PENDING, "<i class='fa fa-square-o ${iconStyle} ${qualifier}' title='${result}'></i>");
+        resultIcons.put(TestResult.IGNORED, "<i class='fa fa-ban ${iconStyle} ${qualifier}' title='${result}'></i>");
+        resultIcons.put(TestResult.SKIPPED, "<i class='fa fa-fast-forward ${iconStyle} ${qualifier}' title='${result}'></i>");
+        resultIcons.put(TestResult.UNDEFINED, "<i class='fa-exclamation ${iconStyle} ${qualifier}' title='${result}'></i>");
     }
 
     private final Map<TestResult, String> resultIconStyles = new HashMap<>();
@@ -29,8 +28,6 @@ public class ResultIconFormatter {
         resultIconStyles.put(TestResult.SKIPPED, "skipped-icon");
         resultIconStyles.put(TestResult.UNDEFINED, "undefined-icon");
     }
-
-    private final static String HTML_ICON = "<i class='fa %s %s %s' title='%s'></i>";
 
     private String qualifier = "";
 
@@ -45,7 +42,11 @@ public class ResultIconFormatter {
     }
 
     public String forResult(TestResult result) {
-        return format(HTML_ICON, resultIcons.get(result), resultIconStyles.get(result), qualifier, result);
+
+        return resultIcons.get(result)
+                .replace("${iconStyle}", resultIconStyles.get(result))
+                .replace("${qualifier}", qualifier)
+                .replace("${result}", result.toString());
     }
 
     public String colorFor(TestResult result) {

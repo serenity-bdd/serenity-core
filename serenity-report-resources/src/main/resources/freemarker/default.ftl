@@ -74,7 +74,7 @@
                                     <#assign issueNumber = "">
                                 </#if>
                                 <h3 class="discreet-story-header">
-                                    <i class="fa fa-comments-o"></i>
+                                    <i class="fa fa-2x fa-comments-o"></i>
                                     <span class="story-header-title">${parentTitle} ${issueNumber}</span>
                                 </h3>
 
@@ -87,7 +87,7 @@
                                 <#assign parentTitle = inflection.of(featureOrStory.get().name).asATitle() >
                                 <#assign parentType = inflection.of(featureOrStory.get().type.toString()).asATitle() >
                                 <h3 class="discreet-story-header">
-                                    <i class="fa fa-comments-o"></i>
+                                    <i class="fa fa-2x fa-comments-o"></i>
                                     <span class="story-header-title">${parentTitle}</span>
                                 </h3>
 
@@ -138,9 +138,7 @@
                             </span>
                         </span>
                         <#if (testOutcome.manual)>
-                            <span style="float:right">
-                                <i class="fa fa-user manual" alt="Manual test" title="Manual test"></i>
-                            </span
+                            <i class="fa fa-user manual" alt="Manual test" title="Manual test"></i>
                         </#if>
                         </td>
                     </tr>

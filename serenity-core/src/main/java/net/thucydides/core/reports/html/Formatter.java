@@ -48,8 +48,6 @@ public class Formatter {
     private final static String NEWLINE = "\u0085";
     private final static String LINE_SEPARATOR = "\u2028";
     private final static String PARAGRAPH_SEPARATOR = "\u2029";
-    private final static String LEFT_BRACKET = "\u0FF3B";
-    private final static String RIGHT_BRACKET = "\u0FF3D";
 
     private final IssueTracking issueTracking;
     private final EnvironmentVariables environmentVariables;
@@ -252,33 +250,6 @@ public class Formatter {
 
     }
 
-    private boolean containsTableStart(String line) {
-        return line.contains("|");
-    }
-
-    private String getFirstEmbeddedTable(String text) {
-        BufferedReader reader = new BufferedReader(new StringReader(text));
-        StringBuffer tableText = new StringBuffer();
-        boolean inTable = false;
-        String newLine = newLineUsedIn(text);
-        try {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (!inTable && line.contains("|")){
-                    inTable = true;
-                } else if (inTable && !line.contains("|") && !(isBlank(line))){
-                    break;
-                }
-                if (inTable) {
-                    tableText.append(line).append(newLine);
-                }
-            }
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Could not process embedded table", e);
-        }
-        return tableText.toString().trim();
-    }
-
     private boolean isBlank(String line) {
         return (StringUtils.isBlank(line.trim()));
     }
@@ -313,6 +284,11 @@ public class Formatter {
                 .replaceAll("<", "(")
                 .replaceAll(">", ")")
                 .replaceAll("\"", "'")));
+    }
+
+
+    public ResultIconFormatter resultIcon() {
+        return new ResultIconFormatter();
     }
 
     private String concatLines(String message) {

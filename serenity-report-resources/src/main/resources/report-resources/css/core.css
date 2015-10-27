@@ -1509,6 +1509,29 @@ ul.second-level-requirements  {
     color:#428bca;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 12pt;
+}
 
+/* Icon colors */
+.pending-icon {
+    color: #0d78ae;
+}
 
+.success-icon {
+    color: green;
+}
+
+.failure-icon {
+    color: red;
+}
+
+.error-icon {
+    color: darkorange;
+}
+
+.ignored-icon {
+    color: grey;
+}
+
+.skip-icon {
+    color: darkgoldenrod;
 }

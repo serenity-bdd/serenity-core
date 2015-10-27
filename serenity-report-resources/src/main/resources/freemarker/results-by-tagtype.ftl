@@ -117,22 +117,10 @@
                                     <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
                                     <#assign outcomesForTag = testOutcomes.withTag(tag) >
                                     <#assign tagReport = reportName.forTag(tag) >
-                                    <#if outcomesForTag.result == "FAILURE">
-                                        <#assign outcome_icon = "fail.png">
-                                        <#assign outcome_text = "failing-color">
-                                    <#elseif outcomesForTag.result == "SUCCESS">
-                                        <#assign outcome_icon = "success.png">
-                                        <#assign outcome_text = "success-color">
-                                    <#elseif outcomesForTag.result == "PENDING">
-                                        <#assign outcome_icon = "pending.png">
-                                        <#assign outcome_text = "pending-color">
-                                    <#else>
-                                        <#assign outcome_icon = "ignor.png">
-                                        <#assign outcome_text = "ignore-color">
-                                    </#if>
+                                    <#assign tag_outcome_icon = formatter.resultIcon().inLarge().forResult(outcomesForTag.result) />
 
                                     <tr class="test-${outcomesForTag.result}">
-                                        <td><img src="images/${outcome_icon}" title="${outcomesForTag.result}" class="summary-icon"/><span style="display:none">${outcomesForTag.result}</span></td>
+                                        <td><span class="summary-icon"/>${tag_outcome_icon}</span><span style="display:none">${outcomesForTag.result}</span></td>
                                         <td class="${outcomesForTag.result}-text"><a href="${tagReport}">${tagTitle}</a></td>
 
                                         <td class="lightgreentext">${outcomesForTag.total}</td>

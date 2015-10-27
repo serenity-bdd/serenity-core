@@ -536,27 +536,12 @@ Estimated ignored or skipped requirements: ${ignored}"
                                         <tbody>
                                             <#assign testResultSet = testOutcomes.tests >
                                             <#foreach testOutcome in testResultSet>
-                                                <#if testOutcome.result == "PENDING">
-                                                    <#assign testrun_outcome_icon = "pending.png">
-                                                <#elseif testOutcome.result == "IGNORED">
-                                                    <#assign testrun_outcome_icon = "ignor.png">
-                                                <#elseif testOutcome.result == "FAILURE">
-                                                    <#assign testrun_outcome_icon = "fail.png">
-                                                <#elseif testOutcome.result == "ERROR">
-                                                    <#assign testrun_outcome_icon = "cross.png">
-                                                <#elseif testOutcome.result == "SUCCESS">
-                                                    <#assign testrun_outcome_icon = "success.png">
-                                                <#else>
-                                                    <#assign testrun_outcome_icon = "ignor.png">
-                                                </#if>
-
+                                                <#assign testrun_outcome_icon = formatter.resultIcon().forResult(testOutcome.result) />
                                             <tr class="test-${testOutcome.result}">
                                                 <td>
-                                                    <img src="images/${testrun_outcome_icon}"
-                                                         title="${testOutcome.result}"
-                                                         class="summary-icon"/>
+                                                    <span class="summary-icon">${testrun_outcome_icon}</span>
                                                     <span style="display:none">${testOutcome.result}</span>
-                                                    <#if (testOutcome.manual)><img src="images/worker.png" title="Manual test"/></#if>
+                                                    <#if (testOutcome.manual)><img src="images/worker.Acc" title="Manual test"/></#if>
                                                 </td>
                                                 <td class="${testOutcome.result}-text"><a
                                                         href="${relativeLink!}${testOutcome.reportName}.html"

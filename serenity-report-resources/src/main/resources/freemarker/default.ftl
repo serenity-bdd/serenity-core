@@ -48,12 +48,15 @@
 <@main_menu selected="home" />
     <div class="clr"></div>
 
-<#if testOutcome.result == "FAILURE"><#assign outcome_icon = "fail.png"><#assign outcome_text = "failing-color">
-<#elseif testOutcome.result == "ERROR"><#assign outcome_icon = "cross.png"><#assign outcome_text = "error-color">
-<#elseif testOutcome.result == "SUCCESS"><#assign outcome_icon = "success.png"><#assign outcome_text = "success-color">
-<#elseif testOutcome.result == "PENDING"><#assign outcome_icon = "pending.png"><#assign outcome_text = "pending-color">
-<#else><#assign outcome_icon = "ignor.png"><#assign outcome_text = "ignore-color">
+<#if testOutcome.result == "FAILURE"><#assign outcome_text = "failing-color">
+<#elseif testOutcome.result == "ERROR"><#assign outcome_text = "error-color">
+<#elseif testOutcome.result == "SUCCESS"><#assign outcome_text = "success-color">
+<#elseif testOutcome.result == "PENDING"><#assign outcome_text = "pending-color">
+<#else><#assign outcome_text = "ignore-color">
 </#if>
+
+<#assign title_outcome_icon =  formatter.resultIcon().inExtraLarge().forResult(testOutcome.result) />
+
 <#-- TEST TITLE-->
     <div id="contentbody">
         <div class="titlebar">
@@ -121,8 +124,7 @@
                 <table class="outcome-header">
                     <tr>
                         <td colspan="2" class="test-title-bar">
-                            <span class="outcome-icon"><img class="story-outcome-icon"
-                                                            src="images/${outcome_icon}"/></span>
+                            <span class="outcome-icon">${title_outcome_icon}</span>
                         <#if (testOutcome.videoLink)??>
                             <a href="${relativeLink!}${testOutcome.videoLink}"><img class="story-outcome-icon"
                                                                                     src="images/video.png" width="25"
@@ -136,9 +138,9 @@
                             </span>
                         </span>
                         <#if (testOutcome.driver)?? && (!testOutcome.manual)>
-                            <span style="float:right"><img src="images/driver-${testOutcome.driver}.png" height="20"
-                                                           alt="${testOutcome.driver}"
-                                                           title="${testOutcome.driver}"/></span>
+                            <span style="float:right">
+                                <i class="fa fa-user manual" alt="${testOutcome.driver}" title="${testOutcome.driver}"></i>
+                            </span
                         </#if>
                         </td>
                     </tr>
@@ -335,17 +337,8 @@
 
 
             <#macro step_details(step, step_number, level)>
-                <#if step.result == "FAILURE">
-                    <#assign step_outcome_icon = "fail.png">
-                <#elseif step.result == "ERROR">
-                    <#assign step_outcome_icon = "cross.png">
-                <#elseif step.result == "SUCCESS">
-                    <#assign step_outcome_icon = "success.png">
-                <#elseif step.result == "PENDING">
-                    <#assign step_outcome_icon = "pending.png">
-                <#else>
-                    <#assign step_outcome_icon = "ignor.png">
-                </#if>
+                <#assign step_outcome_icon = formatter.resultIcon().forResult(step.result) />
+                <#assign step_outcome_style = formatter.resultIcon().colorFor(step.result) />
                 <#assign step_icon_size = 20>
                 <#if (level>1)>
                     <#if step.isAGroup()>
@@ -366,21 +359,24 @@
                     <td width="60" class="step-icon">
                         <#if step_number?has_content><a name="${step_number}"/></#if>
                         <#if showAccordion>
-                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection${step_number}')"
-                               style="display:block">
-                                <img src="images/plus.png" width="24" class="imgstepSection${step_number}"
-                                     style="margin-left: 20px; float:left;  padding-right:5px"/>
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection${step_number}')" style="display:block">
+                                <#--${step_outcome_icon}-->
+                                    <i class="fa fa-plus-square-o imgstepSection${step_number} ${step_outcome_style}" style="margin-left: 20px; float:left;  padding-right:5px"></i>
+                                <#--<img src="images/plus.png" width="24" class="imgstepSection${step_number}"-->
+                                     <#--style="margin-left: 20px; float:left;  padding-right:5px"/>-->
                             </a>
                         <#else>
-                            <img style="margin-left: ${step_indent}px; margin-right: 5px;"
-                                 src="images/${step_outcome_icon}" class="${step_class_root}-icon"/>
+                            <span style="margin-left: ${step_indent}px; margin-right: 5px;"
+                                  class="${step_class_root}-icon">${step_outcome_icon}</span>
+                            <#--<img style="margin-left: ${step_indent}px; margin-right: 5px;"-->
+                                 <#--src="images/${step_outcome_icon}" class="${step_class_root}-icon"/>-->
                         </#if>
                     </td>
                     <td>
                         <div class="step-description">
                             <#if showAccordion>
                             <a href="javaScript:void(0)" onClick="toggleDiv('stepSection${step_number}')"
-                               style="display:block">
+                               style="display:block;">
                             </#if>
                             <span class="${step_class_root}-step">${formatter.formatWithFields(step.description,testOutcome.exampleFields)}</span>
                             <#if showAccordion>
@@ -434,16 +430,17 @@
                 <@write_step step=step step_number=step_index />
             </#list>
             <#if testOutcome.stepCount == 0 || testOutcome.hasNonStepFailure()>
-                <#if testOutcome.result == "FAILURE">
-                    <#assign step_outcome_icon = "fail.png">
-                <#elseif testOutcome.result == "ERROR">
-                    <#assign step_outcome_icon = "cross.png">
-                </#if>
+                <#assign step_outcome_icon = formatter.resultIconFor(testOutcome.result) />
+                <#--<#if testOutcome.result == "FAILURE">-->
+                    <#--<#assign step_outcome_icon = "fail.png">-->
+                <#--<#elseif testOutcome.result == "ERROR">-->
+                    <#--<#assign step_outcome_icon = "cross.png">-->
+                <#--</#if>-->
                 <#if step_outcome_icon?has_content>
                     <tr class="test-${testOutcome.result}">
-                        <td width="40">
-                            <img style="margin-left: 20px; margin-right: 5px;" src="images/${step_outcome_icon}"
-                                 class="top-level-icon"/>
+                        <td width="40">${step_outcome_icon}
+                            <#--<img style="margin-left: 20px; margin-right: 5px;" src="images/${step_outcome_icon}"-->
+                                 <#--class="top-level-icon"/>-->
                         </td>
                         <td width="%">
                             <span class="top-level-step">An error occurred outside of step execution.</span>

@@ -2,6 +2,7 @@ package net.thucydides.core.reports.html
 
 import com.google.common.collect.ImmutableList
 import net.thucydides.core.issues.IssueTracking
+import net.thucydides.core.model.TestResult
 import net.thucydides.core.util.MockEnvironmentVariables
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -307,5 +308,31 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         embeddedTable.contains("<table class='embedded'>")
     }
 
+
+    @Unroll
+    def "should render test outcomes as Font Awesome icons"() {
+        when:
+            def formatter = new Formatter(issueTracking);
+        then:
+            formatter.resultIcon().forResult(result) == expectedIcon
+        where:
+            result              | expectedIcon
+            TestResult.ERROR        | "<i class='fa fa-exclamation-triangle error-icon' title='ERROR'></i>"
+            TestResult.FAILURE      | "<i class='fa fa-times-circle failure-icon' title='FAILURE'></i>"
+            TestResult.SUCCESS      | "<i class='fa fa-check-square-o success-icon' title='SUCCESS'></i>"
+    }
+
+    @Unroll
+    def "should know the right style for result icons"() {
+        when:
+        def formatter = new Formatter(issueTracking);
+        then:
+        formatter.resultIcon().colorFor(result) == expectedStyle
+        where:
+        result              | expectedStyle
+        TestResult.ERROR        | "error-icon"
+        TestResult.FAILURE      | "failure-icon"
+        TestResult.SUCCESS      | "success-icon"
+    }
 
 }

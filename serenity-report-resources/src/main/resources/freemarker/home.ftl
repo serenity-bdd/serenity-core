@@ -386,24 +386,11 @@
                         <tbody>
                         <#assign testResultSet = testOutcomes.tests >
                         <#foreach testOutcome in testResultSet>
-                            <#if testOutcome.result == "PENDING">
-                                <#assign testrun_outcome_icon = "pending.png">
-                            <#elseif testOutcome.result == "IGNORED">
-                                <#assign testrun_outcome_icon = "ignor.png">
-                            <#elseif testOutcome.result == "FAILURE">
-                                <#assign testrun_outcome_icon = "fail.png">
-                            <#elseif testOutcome.result == "ERROR">
-                                <#assign testrun_outcome_icon = "cross.png">
-                            <#elseif testOutcome.result == "SUCCESS">
-                                <#assign testrun_outcome_icon = "success.png">
-                            <#else>
-                                <#assign testrun_outcome_icon = "ignor.png">
-                            </#if>
+                            <#assign test_outcome_icon = formatter.resultIcon().forResult(testOutcome.result) />
 
                         <tr class="test-${testOutcome.result}">
-                            <td><img src="images/${testrun_outcome_icon}" title="${testOutcome.result}"
-                                     class="summary-icon"/>
-                                <#if (testOutcome.manual)><img src="images/worker.png" title="Manual test"/></#if>
+                            <td><span class="summary-icon">${test_outcome_icon}</span>
+                                <#if (testOutcome.manual)><i class="fa fa-user manual" title="Manual test"></i></#if>
                                 <span style="display:none">${testOutcome.result}</span></td>
                             <td class="${testOutcome.result}-text">
                                 <a href="${relativeLink}${testOutcome.reportName}.html" class="ellipsis" title="${formatter.htmlAttributeCompatible(testOutcome.errorMessage)}">
@@ -469,25 +456,6 @@
                 <#assign outcomesForTag = testOutcomes.withTag(tag) >
                 <#assign count = outcomesForTag.total>
                 <#assign testCountLabel = inflection.of(count).times("test").inPluralForm() >
-
-            <#--outcomesForType.withTag(tag) >-->
-            <#--testOutcomes.withTag(tag) outcomesForType.withTag(tagName)-->
-                <#if outcomesForTag.result == "FAILURE">
-                    <#assign outcome_icon = "fail.png">
-                    <#assign outcome_text = "failure-color">
-                <#elseif outcomesForTag.result == "ERROR">
-                    <#assign outcome_icon = "cross.png">
-                    <#assign outcome_text = "error-color">
-                <#elseif outcomesForTag.result == "SUCCESS">
-                    <#assign outcome_icon = "success.png">
-                    <#assign outcome_text = "success-color">
-                <#elseif outcomesForTag.result == "PENDING">
-                    <#assign outcome_icon = "pending.png">
-                    <#assign outcome_text = "pending-color">
-                <#else>
-                    <#assign outcome_icon = "ignor.png">
-                    <#assign outcome_text = "ignore-color">
-                </#if>
                 <tr>
                     <td class="bluetext" class="tag-title">
                         <span class="${outcomesForTag.result}-text ellipsis">

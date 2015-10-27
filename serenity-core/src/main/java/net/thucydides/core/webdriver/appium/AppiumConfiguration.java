@@ -70,7 +70,7 @@ public class AppiumConfiguration {
         for (String key : appiumKeys) {
             String value = isAppProperty(key) ? appPathFrom(environmentVariables.getProperty(key)) : environmentVariables.getProperty(key);
             String simplifiedKey = key.replace("appium.", "");
-            appiumProperties.setProperty(simplifiedKey, value);
+            appiumProperties.setProperty(simplifiedKey, value.trim());
         }
         ensureAppPathDefinedIn(appiumProperties);
         return appiumProperties;

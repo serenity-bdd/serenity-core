@@ -317,9 +317,9 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
             formatter.resultIcon().forResult(result) == expectedIcon
         where:
             result              | expectedIcon
-            TestResult.ERROR        | "<i class='fa fa-exclamation-triangle error-icon' title='ERROR'></i>"
-            TestResult.FAILURE      | "<i class='fa fa-times-circle failure-icon' title='FAILURE'></i>"
-            TestResult.SUCCESS      | "<i class='fa fa-check-square-o success-icon' title='SUCCESS'></i>"
+            TestResult.ERROR        | "<i class='fa fa-exclamation-triangle error-icon ' title='ERROR'></i>"
+            TestResult.FAILURE      | "<i class='fa fa-times-circle failure-icon ' title='FAILURE'></i>"
+            TestResult.SUCCESS      | "<i class='fa fa-check-square-o success-icon ' title='SUCCESS'></i>"
     }
 
     @Unroll

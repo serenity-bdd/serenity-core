@@ -2,6 +2,7 @@ package net.thucydides.core.reports
 
 import net.thucydides.core.model.*
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static net.thucydides.core.util.TestResources.directoryInClasspathCalled
 
@@ -39,6 +40,7 @@ class WhenObtainingResultSummariesFromTestOutcomes extends Specification {
             "/test-outcomes/containing-skipped"        | TestResult.SUCCESS
     }
 
+    @Unroll
     def "should find the total number of tests with a given result in a test outcome set"() {
         when:
             def testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.XML).from(directoryInClasspathCalled(directory));
@@ -53,7 +55,7 @@ class WhenObtainingResultSummariesFromTestOutcomes extends Specification {
             directory                                  | successCount | failureCount | errorCount   | pendingCount | skipCount  | indeterminateCount
             "/test-outcomes/all-successful"            | 3            | 0            | 0            | 0            | 0          | 0
             "/test-outcomes/containing-failure"        | 1            | 1            | 0            | 1            | 0          | 1
-            "/test-outcomes/containing-nostep-errors"  | 2            | 3            | 1            | 2            | 0          | 2
+            "/test-outcomes/containing-nostep-errors"  | 2            | 2            | 1            | 2            | 0          | 3
             "/test-outcomes/containing-errors"         | 1            | 0            | 2            | 0            | 0          | 0
             "/test-outcomes/containing-pending"        | 2            | 0            | 0            | 1            | 0          | 1
             "/test-outcomes/containing-skipped"        | 3            | 0            | 0            | 0            | 1          | 1

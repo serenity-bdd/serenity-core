@@ -430,7 +430,7 @@
                 <@write_step step=step step_number=step_index />
             </#list>
             <#if testOutcome.stepCount == 0 || testOutcome.hasNonStepFailure()>
-                <#assign step_outcome_icon = formatter.resultIconFor(testOutcome.result) />
+                <#assign step_outcome_icon = formatter.resultIcon().forResult(testOutcome.result) />
                 <#--<#if testOutcome.result == "FAILURE">-->
                     <#--<#assign step_outcome_icon = "fail.png">-->
                 <#--<#elseif testOutcome.result == "ERROR">-->
@@ -454,7 +454,9 @@
                             <#if (testOutcome.errorMessage)??>
                                 <span class="error-message"
                                       title="${formatter.htmlAttributeCompatible(testOutcome.errorMessage)}">${testOutcome.errorMessage}</span>
-                                <@stacktrace cause=testOutcome.nestedTestFailureCause />
+                                <#if (testOutcome.nestedTestFailureCause)??>
+                                    <@stacktrace cause=testOutcome.nestedTestFailureCause />
+                                </#if>
                             </#if>
                         </td>
                     </tr>

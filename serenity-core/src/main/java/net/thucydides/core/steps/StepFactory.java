@@ -174,7 +174,7 @@ public class StepFactory {
     private Class<?>[] argumentTypesFrom(Object[] parameters) {
         List<Class<?>> argumentTypes = Lists.newArrayList();
         for(Object parameter : parameters) {
-            argumentTypes.add( parameter.getClass());
+            argumentTypes.add(parameter.getClass());
         }
         return argumentTypes.toArray(CONSTRUCTOR_ARG_TYPES);
     }

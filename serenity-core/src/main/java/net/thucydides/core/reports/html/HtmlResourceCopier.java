@@ -46,8 +46,7 @@ public class HtmlResourceCopier {
                 if (fileResourceFromAJar(resourcePath)) {
                     fileResource.copyResourceTo(resourcePath, targetDirectory);
                 } else if (fileResourceFromPath(resourcePath)) {
-                    fileResource.copyResourceTo(resourcePath,
-                            targetDirectory);
+                    fileResource.copyResourceTo(resourcePath, targetDirectory);
                 }
             }
         }

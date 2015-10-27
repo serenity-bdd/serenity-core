@@ -4,10 +4,7 @@ import com.google.inject.Inject;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * Created by john on 23/07/2015.
@@ -30,13 +27,14 @@ public class MultithreadExecutorServiceProvider implements ExecutorServiceProvid
     @Override
     public ExecutorService getExecutorService() {
         if (executorService == null)  {
-            int corePoolSize = 4;
+//            int corePoolSize = 4;
             int maximumPoolSize = 8;
-            int keepAliveTime = 60000;
+//            int keepAliveTime = 60000;
 
-            executorService = new ThreadPoolExecutor(corePoolSize, maximumPoolSize,
-                    keepAliveTime, TimeUnit.MILLISECONDS,
-                    new LinkedBlockingQueue<Runnable>());
+            executorService = Executors.newFixedThreadPool(maximumPoolSize);
+//            executorService = new ThreadPoolExecutor(corePoolSize, maximumPoolSize,
+//                    keepAliveTime, TimeUnit.MILLISECONDS,
+//                    new LinkedBlockingQueue<Runnable>());
 
         }
         return executorService;

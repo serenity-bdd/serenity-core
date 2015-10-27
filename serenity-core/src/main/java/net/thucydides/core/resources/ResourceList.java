@@ -1,5 +1,7 @@
 package net.thucydides.core.resources;
 
+import com.google.common.collect.ImmutableList;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -15,7 +17,7 @@ import java.util.zip.ZipFile;
  */
 public class ResourceList {
 
-    private static final List<String> UNREQUIRED_FILES = Arrays.asList("pom.xml");
+    private static final List<String> UNREQUIRED_FILES = ImmutableList.of("pom.xml");
     private static final String PATH_SEPARATOR = System.getProperty("path.separator");
 
     private final Pattern pattern;
@@ -36,7 +38,7 @@ public class ResourceList {
      * @return the resources in the order they are found
      */
     public Collection<String> list() {
-        final ArrayList<String> resources = new ArrayList<String>();
+        final ArrayList<String> resources = new ArrayList<>();
         resources.addAll(systemPropertiesClasspathElements());
 
         ClassLoader classLoader = getClass().getClassLoader();
@@ -56,7 +58,7 @@ public class ResourceList {
 
 
     public Collection<String> systemPropertiesClasspathElements() {
-        final ArrayList<String> resources = new ArrayList<String>();
+        final ArrayList<String> resources = new ArrayList<>();
         final String classPath = System.getProperty("java.class.path", ".");
         final String[] classPathElements = classPath.split(PATH_SEPARATOR);
         for (final String element : classPathElements) {
@@ -67,7 +69,7 @@ public class ResourceList {
 
 
     private Collection<String> getResources(final String element, final Pattern pattern) {
-        final ArrayList<String> resources = new ArrayList<String>();
+        final ArrayList<String> resources = new ArrayList<>();
         final File file = new File(element);
         if (isAJarFile(file)) {
             resources.addAll(getResourcesFromJarFile(file, pattern));
@@ -78,7 +80,7 @@ public class ResourceList {
     }
 
     private Collection<String> removeUnnecessaryFilesFrom(final Collection<String> resources) {
-        final Collection<String> cleanedResources = new ArrayList<String>();
+        final Collection<String> cleanedResources = new ArrayList<>();
         for (String filepath : resources) {
             String filename = new File(filepath).getName();
             if (!UNREQUIRED_FILES.contains(filename)) {
@@ -89,11 +91,7 @@ public class ResourceList {
     }
 
     private boolean isAJarFile(final File file) {
-        if (file.isDirectory()) {
-            return false;
-        } else {
-            return (file.getName().endsWith(".jar"));
-        }
+        return !file.isDirectory() && (file.getName().endsWith(".jar"));
     }
 
     protected ZipFile zipFileFor(final File file) throws IOException {
@@ -101,36 +99,31 @@ public class ResourceList {
     }
 
     private Collection<String> getResourcesFromJarFile(final File file, final Pattern pattern) {
-        final ArrayList<String> retval = new ArrayList<String>();
-        if (file.exists()) {
-            ZipFile zf;
-            try {
-                zf = zipFileFor(file);
-            } catch (final IOException e) {
-                throw new ResourceCopyingError("Could not read from the JAR file", e);
-            }
-            @SuppressWarnings("rawtypes")
-            final Enumeration e = zf.entries();
-            while (e.hasMoreElements()) {
-                final ZipEntry ze = (ZipEntry) e.nextElement();
-                final String fileName = ze.getName();
-                
-                final boolean accept = pattern.matcher(fileName).matches();
-                if (accept) {
-                    retval.add(fileName);
+        final ArrayList<String> retval = new ArrayList<>();
+        try{
+            if (file.exists()) {
+                try (ZipFile zf = zipFileFor(file)) {
+                    @SuppressWarnings("rawtypes")
+                    final Enumeration e = zf.entries();
+                    while (e.hasMoreElements()) {
+                        final ZipEntry ze = (ZipEntry) e.nextElement();
+                        final String fileName = ze.getName();
+
+                        final boolean accept = pattern.matcher(fileName).matches();
+                        if (accept) {
+                            retval.add(fileName);
+                        }
+                    }
                 }
             }
-            try {
-                zf.close();
-            } catch (final IOException e1) {
-                throw new ResourceCopyingError("Couldn't close the zip file", e1);
-            }
+        } catch (final IOException e1) {
+            throw new ResourceCopyingError("Couldn't close the zip file", e1);
         }
         return retval;
     }
 
     private Collection<String> getResourcesFromDirectory(final File directory, final Pattern pattern) {
-        final ArrayList<String> retval = new ArrayList<String>();
+        final ArrayList<String> retval = new ArrayList<>();
         final File[] fileList = directory.listFiles();
         if (fileList != null) {
             for (final File file : fileList) {
@@ -146,7 +139,7 @@ public class ResourceList {
                                 retval.add(fileName);
                             }
                         } catch (final IOException e) {
-                            throw new ResourceCopyingError("Could not read from the JAR file " + fileName, e);
+                            throw new ResourceCopyingError("Could not read from the JAR file " + fileName , e);
                         }
                     }
                 }

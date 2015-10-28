@@ -5,6 +5,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import cucumber.api.PendingException;
 import net.serenitybdd.core.PendingStepException;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepFailureException;
@@ -98,23 +99,24 @@ public class FailureAnalysis {
     }
 
     private List<Class<? extends RuntimeException>> errorTypesDefinedIn(EnvironmentVariables environmentVariables) {
-        return typesDefinedIn("serenity.error.on", environmentVariables);
+        return typesDefinedIn(ThucydidesSystemProperty.SERENITY_ERROR_ON, environmentVariables);
     }
 
 
     private List<Class<? extends RuntimeException>> failureTypesDefinedIn(EnvironmentVariables environmentVariables) {
-        return typesDefinedIn("serenity.fail.on", environmentVariables);
+        return typesDefinedIn(ThucydidesSystemProperty.SERENITY_FAIL_ON, environmentVariables);
     }
 
     private List<Class<? extends RuntimeException>> pendingTypesDefinedIn(EnvironmentVariables environmentVariables) {
-        return typesDefinedIn("serenity.pending.on", environmentVariables);
+        return typesDefinedIn(ThucydidesSystemProperty.SERENITY_PENDING_ON, environmentVariables);
     }
 
-    private List<Class<? extends RuntimeException>> typesDefinedIn(String typeListProperty, EnvironmentVariables environmentVariables) {
+    private List<Class<? extends RuntimeException>> typesDefinedIn(ThucydidesSystemProperty typeListProperty, EnvironmentVariables environmentVariables) {
+
         List<Class<? extends RuntimeException>> errorTypes  = Lists.newArrayList();
         List<String> errorClassNames = Splitter.on(",")
                 .trimResults()
-                .splitToList(environmentVariables.getProperty(typeListProperty, ""));
+                .splitToList(typeListProperty.from(environmentVariables,""));
 
         for(String errorClassName : errorClassNames) {
             try {

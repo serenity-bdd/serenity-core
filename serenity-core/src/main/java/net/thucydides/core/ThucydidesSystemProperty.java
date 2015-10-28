@@ -705,7 +705,22 @@ public enum ThucydidesSystemProperty {
     /**
      * Path to PhantomJS SSL support
      */
-    PHANTOMJS_SSL_PROTOCOL;
+    PHANTOMJS_SSL_PROTOCOL,
+
+    /**
+     * Comma-separated list of exception classes that should produce an error in the reports.
+     */
+    SERENITY_ERROR_ON,
+
+    /**
+     * Comma-separated list of exception classes that should produce a failure in the reports.
+     */
+    SERENITY_FAIL_ON,
+
+    /**
+     * Comma-separated list of exception classes that should produce a pending test in the reports.
+     */
+    SERENITY_PENDING_ON;
 
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;

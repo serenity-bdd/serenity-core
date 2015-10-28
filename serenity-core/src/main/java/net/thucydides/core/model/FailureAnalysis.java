@@ -3,6 +3,7 @@ package net.thucydides.core.model;
 import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
+import cucumber.api.PendingException;
 import net.serenitybdd.core.PendingStepException;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepFailure;
@@ -54,6 +55,8 @@ public class FailureAnalysis {
     }
 
     private final List<Class<?>> DEFAULT_FAILURE_TYPES = ImmutableList.of(AssertionError.class, CausesAssertionFailure.class);
+    private final List<Class<? extends RuntimeException>> DEFAULT_PENDING_TYPES
+            = ImmutableList.of(PendingStepException.class, PendingException.class);
 
     public boolean reportAsFailure(Class<?> testFailureCause) {
         if (testFailureCause == null) {
@@ -61,6 +64,18 @@ public class FailureAnalysis {
         }
         for(Class<?> validFailureType: getConfiguredFailureTypes()) {
             if (isA(validFailureType,testFailureCause)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean reportAsPending(Class<?> testFailureCause) {
+        if (testFailureCause == null) {
+            return false;
+        }
+        for(Class<?> validPendingType: getConfiguredPendingTypes()) {
+            if (isA(validPendingType,testFailureCause)) {
                 return true;
             }
         }
@@ -76,24 +91,34 @@ public class FailureAnalysis {
         return failureTypes;
     }
 
-    private List<Class<?>> errorTypesDefinedIn(EnvironmentVariables environmentVariables) {
+    private List<Class<? extends RuntimeException>> getConfiguredPendingTypes() {
+        List<Class<? extends RuntimeException>> pendingTypes = Lists.newArrayList(DEFAULT_PENDING_TYPES);
+        pendingTypes.addAll(pendingTypesDefinedIn(environmentVariables));
+        return pendingTypes;
+    }
+
+    private List<Class<? extends RuntimeException>> errorTypesDefinedIn(EnvironmentVariables environmentVariables) {
         return typesDefinedIn("serenity.error.on", environmentVariables);
     }
 
 
-    private List<Class<?>> failureTypesDefinedIn(EnvironmentVariables environmentVariables) {
+    private List<Class<? extends RuntimeException>> failureTypesDefinedIn(EnvironmentVariables environmentVariables) {
         return typesDefinedIn("serenity.fail.on", environmentVariables);
     }
 
-    private List<Class<?>> typesDefinedIn(String typeListProperty, EnvironmentVariables environmentVariables) {
-        List<Class<?>> errorTypes  = Lists.newArrayList();
+    private List<Class<? extends RuntimeException>> pendingTypesDefinedIn(EnvironmentVariables environmentVariables) {
+        return typesDefinedIn("serenity.pending.on", environmentVariables);
+    }
+
+    private List<Class<? extends RuntimeException>> typesDefinedIn(String typeListProperty, EnvironmentVariables environmentVariables) {
+        List<Class<? extends RuntimeException>> errorTypes  = Lists.newArrayList();
         List<String> errorClassNames = Splitter.on(",")
                 .trimResults()
                 .splitToList(environmentVariables.getProperty(typeListProperty, ""));
 
         for(String errorClassName : errorClassNames) {
             try {
-                errorTypes.add(Class.forName(errorClassName));
+                errorTypes.add((Class<? extends RuntimeException>) Class.forName(errorClassName));
             } catch (ClassNotFoundException e) {
                 LOGGER.warn("Could not find error class: " + errorClassName);
             }
@@ -106,7 +131,7 @@ public class FailureAnalysis {
     }
 
     public TestResult resultFor(Throwable testFailureCause) {
-        if (PendingStepException.class.isAssignableFrom(testFailureCause.getClass())) {
+        if (isPendingException(testFailureCause)) {
             return PENDING;
         } else if (isFailureError(testFailureCause)) {
             return FAILURE;
@@ -132,12 +157,20 @@ public class FailureAnalysis {
     }
 
     private boolean isFailureError(Throwable testFailureCause) {
+        return reportAsFailure(getRootCauseOf(testFailureCause));
+    }
+
+    private boolean isPendingException(Throwable testFailureCause) {
+        return reportAsPending(getRootCauseOf(testFailureCause));
+    }
+
+    private Class<? extends Throwable> getRootCauseOf(Throwable testFailureCause) {
         Class<? extends Throwable> failureCauseClass = testFailureCause.getClass();
 
         if(WebdriverAssertionError.class.isAssignableFrom(failureCauseClass) && (testFailureCause.getCause() != null)) {
             failureCauseClass = testFailureCause.getCause().getClass();
         }
-        return reportAsFailure(failureCauseClass);
+        return failureCauseClass;
     }
 
 }

@@ -1,5 +1,6 @@
 package net.serenitybdd.core.model
 
+import cucumber.api.PendingException
 import net.serenitybdd.core.PendingStepException
 import net.serenitybdd.core.model.sampleexceptions.MyFailureException
 import net.thucydides.core.model.FailureAnalysis
@@ -38,6 +39,7 @@ class WhenReportingExceptions extends Specification {
             new NullPointerException()                                                              | ERROR
             new WebDriverException()                                                                | ERROR
             new PendingStepException("step is pending")                                             | PENDING
+            new PendingException("step is pending")                                             | PENDING
     }
 
     def "non-assertion exceptions should be reported as Errors by default"() {
@@ -83,6 +85,18 @@ class WhenReportingExceptions extends Specification {
             def result = failureAnalysisOf.resultFor(new NoSuchElementException())
         then:
             result == FAILURE
+    }
+
+    def "should be able to override errors as pending"() {
+
+        given:
+            def environmentVariables = new MockEnvironmentVariables()
+            environmentVariables.setProperty("serenity.pending.on", "net.serenitybdd.core.model.sampleexceptions.MyFailureException")
+        when:
+            def failureAnalysisOf = new FailureAnalysis(environmentVariables)
+            def result = failureAnalysisOf.resultFor(new MyFailureException())
+        then:
+            result == PENDING
     }
 
     def "should be able to override errors as failures even with nested errors"() {

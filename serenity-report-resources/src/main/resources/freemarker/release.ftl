@@ -350,6 +350,7 @@
                                                         <span style="display:none">${testOutcome.result}</span>
                                                         <#if (testOutcome.manual)>
                                                             <i class="fa fa-user fa-2x"  title="Manual test"></i>
+                                                        </#if>
                                                     </td>
                                                     <td class="${testOutcome.result}-text"><a href="${relativeLink!}${testOutcome.reportName}.html">${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}</a></td>
 

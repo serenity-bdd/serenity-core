@@ -21,7 +21,6 @@ import static net.thucydides.core.model.TestResult.*;
  * Determine whether a given type of exception should result in a failure or an error.
  * By default, any exception  that extends AssertionError is a FAILURE.
  * Any exception  that extends WebdriverAssertionError and has a cause that is an AssertionError is also a FAILURE.
- * Unless it is one of the
  * All other exceptions are an ERROR (except for StepFailureException as described below)
  *
  * Any exception that extends StepFailureException and has a cause that meets the above criteria is classed as above.
@@ -37,14 +36,18 @@ public class FailureAnalysis {
     private static final Logger LOGGER = LoggerFactory.getLogger(FailureAnalysis.class);
 
     public FailureAnalysis() {
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+    }
+
+    public FailureAnalysis(EnvironmentVariables environmentVariables) {
+        this.environmentVariables = environmentVariables;
     }
 
     public TestResult resultFor(Class testFailureCause) {
         if (isA(PendingStepException.class, testFailureCause)) {
             return PENDING;
         }
-        if (isFailure(testFailureCause.getName())) {
+        if (reportAsFailure(testFailureCause)) {
             return FAILURE;
         }
         return ERROR;
@@ -52,20 +55,16 @@ public class FailureAnalysis {
 
     private final List<Class<?>> DEFAULT_FAILURE_TYPES = ImmutableList.of(AssertionError.class, CausesAssertionFailure.class);
 
-    public boolean isFailure(String testFailureCause) {
+    public boolean reportAsFailure(Class<?> testFailureCause) {
         if (testFailureCause == null) {
             return false;
         }
-        try {
-            for(Class<?> validFailureType: getConfiguredFailureTypes()) {
-                if (isA(validFailureType,Class.forName(testFailureCause))) {
-                    return true;
-                }
+        for(Class<?> validFailureType: getConfiguredFailureTypes()) {
+            if (isA(validFailureType,testFailureCause)) {
+                return true;
             }
-            return false;
-        } catch (ClassNotFoundException aRecordedClassCouldNotBeReloaded) {
-            return false;
         }
+        return false;
     }
 
     private List<Class<?>> getConfiguredFailureTypes() {
@@ -135,10 +134,10 @@ public class FailureAnalysis {
     private boolean isFailureError(Throwable testFailureCause) {
         Class<? extends Throwable> failureCauseClass = testFailureCause.getClass();
 
-        if(WebdriverAssertionError.class.isAssignableFrom(failureCauseClass)) {
-            return testFailureCause.getCause() == null || AssertionError.class.isAssignableFrom(testFailureCause.getCause().getClass());
+        if(WebdriverAssertionError.class.isAssignableFrom(failureCauseClass) && (testFailureCause.getCause() != null)) {
+            failureCauseClass = testFailureCause.getCause().getClass();
         }
-        return AssertionError.class.isAssignableFrom(failureCauseClass);
+        return reportAsFailure(failureCauseClass);
     }
 
 }

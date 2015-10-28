@@ -1129,10 +1129,6 @@ public class TestOutcome {
         return getTestFailureCause();
     }
 
-    private boolean isFailureClass(String testFailureClassname) {
-        return new FailureAnalysis().isFailure(testFailureClassname);
-    }
-
     public String getErrorMessage() {
         for (TestStep step : getFlattenedTestSteps()) {
             if (isNotBlank(step.getErrorMessage())) {

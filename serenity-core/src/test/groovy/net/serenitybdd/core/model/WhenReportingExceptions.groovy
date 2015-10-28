@@ -1,8 +1,10 @@
 package net.serenitybdd.core.model
 
 import net.serenitybdd.core.PendingStepException
+import net.serenitybdd.core.model.sampleexceptions.MyFailureException
 import net.thucydides.core.model.FailureAnalysis
 import net.thucydides.core.steps.StepFailureException
+import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.WebdriverAssertionError
 import org.junit.internal.ArrayComparisonFailure
 import org.openqa.selenium.WebDriverException
@@ -13,13 +15,13 @@ import static net.thucydides.core.model.TestResult.*
 
 class WhenReportingExceptions extends Specification {
 
-    def fixture = new FailureAnalysis()
+    def failureAnalysisOf = new FailureAnalysis()
 
     @Unroll
     def "should be able to report an exception as either a failure or an error depending on its type (#exception -> #expectedResult"() {
 
         when:
-            def result = fixture.resultFor(exception)
+            def result = failureAnalysisOf.resultFor(exception)
         then:
             result == expectedResult
 
@@ -37,4 +39,63 @@ class WhenReportingExceptions extends Specification {
             new WebDriverException()                                                                | ERROR
             new PendingStepException("step is pending")                                             | PENDING
     }
+
+    def "non-assertion exceptions should be reported as Errors by default"() {
+        when:
+            def failureAnalysisOf = new FailureAnalysis()
+            def result = failureAnalysisOf.resultFor(new MyFailureException())
+        then:
+            result == ERROR
+    }
+
+    def "should be able to define what exceptions cause failures using serenity.fail.on"() {
+
+        given:
+            def environmentVariables = new MockEnvironmentVariables()
+            environmentVariables.setProperty("serenity.fail.on","net.serenitybdd.core.model.sampleexceptions.MyFailureException")
+        when:
+            def failureAnalysisOf = new FailureAnalysis(environmentVariables)
+            def result = failureAnalysisOf.resultFor(new MyFailureException())
+        then:
+            result == FAILURE
+    }
+
+    def "should be able to override failures as errors using serenity.error.on"() {
+
+        given:
+            def environmentVariables = new MockEnvironmentVariables()
+            environmentVariables.setProperty("serenity.error.on","java.lang.AssertionError")
+        when:
+            def failureAnalysisOf = new FailureAnalysis(environmentVariables)
+            def result = failureAnalysisOf.resultFor(new AssertionError("oh crap"))
+        then:
+            result == ERROR
+    }
+
+    def "should be able to override errors as failures"() {
+
+        given:
+            def environmentVariables = new MockEnvironmentVariables()
+            environmentVariables.setProperty("serenity.fail.on",
+                                             "net.serenitybdd.core.model.sampleexceptions.MyFailureException, java.util.NoSuchElementException")
+        when:
+            def failureAnalysisOf = new FailureAnalysis(environmentVariables)
+            def result = failureAnalysisOf.resultFor(new NoSuchElementException())
+        then:
+            result == FAILURE
+    }
+
+    def "should be able to override errors as failures even with nested errors"() {
+
+        given:
+            def environmentVariables = new MockEnvironmentVariables()
+            environmentVariables.setProperty("serenity.fail.on",
+                    "net.serenitybdd.core.model.sampleexceptions.MyFailureException, java.util.NoSuchElementException")
+        when:
+            def failureAnalysisOf = new FailureAnalysis(environmentVariables)
+            def result = failureAnalysisOf.resultFor(new StepFailureException("oh bother!",new NoSuchElementException()))
+        then:
+            result == FAILURE
+    }
+
 }

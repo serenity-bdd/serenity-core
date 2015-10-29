@@ -23,5 +23,3 @@ public class WhenAuthorisationPerforming {
         this.steps.authorizeByToken("correct");
     }
 }
-
-

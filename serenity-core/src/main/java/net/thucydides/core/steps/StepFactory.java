@@ -3,7 +3,6 @@ package net.thucydides.core.steps;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import net.serenitybdd.core.di.DependencyInjector;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.sf.cglib.proxy.Enhancer;
@@ -17,6 +16,7 @@ import net.thucydides.core.steps.di.DependencyInjectorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
@@ -162,23 +162,34 @@ public class StepFactory {
 
         switch (StepLibraryConstructionStrategy.forClass(scenarioStepsClass).getStrategy()) {
             case WEBDRIVER_ENABLED_STEP_LIBRARY: return webEnabledStepLibrary(scenarioStepsClass, e);
-            case CONSTRUCTOR_WITH_PARAMETERS: return immutableStepLibrary(e,  parameters);
+            case CONSTRUCTOR_WITH_PARAMETERS: return immutableStepLibrary(scenarioStepsClass, e,  parameters);
             default: return (T) e.create();
         }
     }
 
-    private <T> T immutableStepLibrary(Enhancer e, Object[] parameters) {
-        return (T) e.create(argumentTypesFrom(parameters), parameters);
+    private <T> T immutableStepLibrary(Class<T> scenarioStepsClass, Enhancer e, Object[] parameters) {
+        return (T) e.create(argumentTypesFrom(scenarioStepsClass, parameters), parameters);
     }
 
-    private Class<?>[] argumentTypesFrom(Object[] parameters) {
-        List<Class<?>> argumentTypes = Lists.newArrayList();
-        for(Object parameter : parameters) {
-            argumentTypes.add(parameter.getClass());
+    private Class<?>[] argumentTypesFrom(Class<?> scenarioStepsClass, Object[] parameters) {
+        for (Constructor<?> candidateConstructor :scenarioStepsClass.getConstructors()) {
+            Class<?>[] parameterTypes = candidateConstructor.getParameterTypes();
+            if (parametersMatchFor(parameters, parameterTypes)) {
+                return parameterTypes;
+            }
         }
-        return argumentTypes.toArray(CONSTRUCTOR_ARG_TYPES);
+        throw new IllegalArgumentException("Could not find a matching constructor for class " + scenarioStepsClass + "with parameters " + parameters);
     }
 
+    private boolean parametersMatchFor(Object[] parameters, Class<?>[] parameterTypes) {
+        int parameterNumber = 0;
+        for(Class<?> parameterType : parameterTypes) {
+            if (!parameterType.isAssignableFrom(parameters[parameterNumber++].getClass())) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 
     private <T> T webEnabledStepLibrary(final Class<T> scenarioStepsClass, final Enhancer e) {

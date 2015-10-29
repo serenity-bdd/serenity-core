@@ -132,10 +132,15 @@
                 <version>${serenity.maven.version}</version>
                 <dependencies>
                     <dependency>
-                        <groupId>net.serenitybdd.demos.todos</groupId>
-                        <artifactId>todo-demo</artifactId>
-                        <version>${project.version}</version>
+                        <groupId>net.serenity-bdd</groupId>
+                        <artifactId>serenity-core</artifactId>
+                        <version>${serenity.version}</version>
                     </dependency>
+                    <!--<dependency>-->
+                        <!--<groupId>net.serenitybdd.demos.todos</groupId>-->
+                        <!--<artifactId>todo-demo</artifactId>-->
+                        <!--<version>${project.version}</version>-->
+                    <!--</dependency>-->
                 </dependencies>
                 <executions>
                     <execution>

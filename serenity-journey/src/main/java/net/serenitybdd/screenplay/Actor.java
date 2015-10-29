@@ -90,6 +90,10 @@ public class Actor implements PerformsTasks {
 
     }
 
+    public final void can(Consequence... consequences) {
+        should(consequences);
+    }
+
     public final void should(Consequence... consequences) {
         beginPerformance();
         for (Consequence consequence : consequences) {

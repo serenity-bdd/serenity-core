@@ -3,6 +3,8 @@ package net.serenitybdd.demos.todos.features.record_todos;
 import net.serenitybdd.demos.todos.serenity.ATodoUser;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Managed;
+import net.thucydides.core.annotations.Manual;
+import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,4 +41,11 @@ public class AddNewTodos {
         jane.should_see_the_todo_actions("Walk the dog", "Put out the garbage");
     }
 
+    @Test
+    @Manual
+    public void shouldBeAbleToAddANewTodoItemReallyFast() {}
+
+    @Test
+    @Pending
+    public void shouldBeAbleToAddANewTodoItemEasily() {}
 }

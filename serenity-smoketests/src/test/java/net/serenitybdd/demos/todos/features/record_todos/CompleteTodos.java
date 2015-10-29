@@ -6,6 +6,7 @@ import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.annotations.WithTag;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
@@ -42,4 +43,8 @@ public class CompleteTodos {
         joe.should_see_the_todo_actions("Put out the garbage");
     }
 
+    @Test
+    @Ignore
+    public void shouldBeAbleToIgnoreStuff() {
+    }
 }

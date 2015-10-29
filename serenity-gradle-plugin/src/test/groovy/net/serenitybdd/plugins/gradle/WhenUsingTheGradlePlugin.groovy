@@ -42,7 +42,7 @@ class WhenUsingTheGradlePlugin extends Specification {
         project.tasks.checkOutcomes
     }
 
-    def "should build aggregate build of simple project with defsults"() {
+    def "should build aggregate build of simple project with defaults"() {
         given:
             def testProject = TestResources
                 .directoryInClasspathCalled("simple-gradle-project")

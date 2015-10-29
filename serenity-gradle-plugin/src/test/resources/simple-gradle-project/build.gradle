@@ -6,11 +6,13 @@ targetCompatibility = 1.8
 
 repositories {
     mavenLocal()
+    jcenter()
 }
 
 buildscript {
     repositories {
         mavenLocal()
+        jcenter()
     }
 }
 

@@ -429,14 +429,14 @@
             <#list testOutcome.testSteps as step>
                 <@write_step step=step step_number=step_index />
             </#list>
-            <#if testOutcome.stepCount == 0 || testOutcome.hasNonStepFailure()>
+            <#if testOutcome.hasNonStepFailure()>
                 <#assign step_outcome_icon = formatter.resultIcon().forResult(testOutcome.result) />
                 <#--<#if testOutcome.result == "FAILURE">-->
                     <#--<#assign step_outcome_icon = "fail.png">-->
                 <#--<#elseif testOutcome.result == "ERROR">-->
                     <#--<#assign step_outcome_icon = "cross.png">-->
                 <#--</#if>-->
-                <#if step_outcome_icon?has_content>
+                <#--<#if (testOutcome.hasNonStepFailure()) >-->
                     <tr class="test-${testOutcome.result}">
                         <td width="40">${step_outcome_icon}
                             <#--<img style="margin-left: 20px; margin-right: 5px;" src="images/${step_outcome_icon}"-->
@@ -460,7 +460,7 @@
                             </#if>
                         </td>
                     </tr>
-                </#if>
+                <#--</#if>-->
             </#if>
                 <tr class="test-${testOutcome.result}">
                     <td colspan="2"></td>

@@ -6,7 +6,6 @@ import spock.lang.Specification
 import net.thucydides.core.util.TestResources
 import java.nio.file.Files
 
-
 /**
  * Created by john on 9/11/2014.
  */
@@ -42,31 +41,97 @@ class WhenUsingTheGradlePlugin extends Specification {
         project.tasks.checkOutcomes
     }
 
-    def "should build aggregate build of simple project with defaults"() {
-        given:
+    def "should assemble aggregate report of legacy gradle project"() {
+        given: "legacy project for aggregation task"
             def testProject = TestResources
-                .directoryInClasspathCalled("simple-gradle-project")
+                .directoryInClasspathCalled "legacy-gradle-project"
             def project = ProjectBuilder.builder().withProjectDir(testProject)
                 .build()
             def plugin = new SerenityPlugin()
-            def reports = project.projectDir.toPath().resolve("target")
-                .resolve("site").resolve("serenity")
-        when:
+            def reports = project.projectDir.toPath()
+
+        when: "project build and aggregation plugin called"
             project.apply plugin: 'java'
             plugin.apply(project)
-            project.getTasksByName("clearReports", false).first().execute()
-            project.getTasksByName("clean", false).first().execute()
-            project.getTasksByName("compileJava", false).first().execute()
-            project.getTasksByName("processResources", false).first().execute()
-            project.getTasksByName("classes", false).first().execute()
-            project.getTasksByName("assemble", false).first().execute()
-            project.getTasksByName("compileTestJava", false).first().execute()
-            project.getTasksByName("processTestResources", false).first().execute()
-            project.getTasksByName("testClasses", false).first().execute()
-            project.getTasksByName("test", false).first().execute()
-            project.getTasksByName("aggregate", false).first().execute()
-        then:
-            Files.exists(reports)
-            Files.isDirectory(reports)
+            def folders = project.serenity.outputDirectory.split "\\|/"
+            folders.each { reports = reports.resolve(it) }
+
+            ["compileJava", "processResources", "classes",
+             "assemble", "compileTestJava", "processTestResources", "testClasses",
+             "test", "aggregate"
+            ].each {
+                project.getTasksByName(it, false).first().execute()
+            }
+
+        then: "report generated in ${project.serenity.outputDirectory} dir"
+            Files.exists reports
+            Files.isDirectory reports
+            Files.exists reports.resolve("index.html")
+    }
+
+    def "should assemble aggregate report of gradle project"() {
+        given: "simple project for aggregation task"
+            def testProject = TestResources
+                .directoryInClasspathCalled "simple-gradle-project"
+            def project = ProjectBuilder.builder().withProjectDir(testProject)
+                .build()
+            def plugin = new SerenityPlugin()
+            def reports = project.projectDir.toPath()
+
+        when: "project build and aggregation plugin called"
+            project.apply plugin: 'java'
+            plugin.apply(project)
+            def folders = project.serenity.outputDirectory.split "\\|/"
+            folders.each { reports = reports.resolve(it) }
+
+
+            ["compileJava", "processResources", "classes",
+             "assemble", "compileTestJava", "processTestResources", "testClasses",
+             "test", "aggregate"
+            ].each {
+                project.getTasksByName(it, false).first().execute()
+            }
+
+        then: "report generated in ${project.serenity.outputDirectory} dir"
+            Files.exists reports
+            Files.isDirectory reports
+            Files.exists reports.resolve("index.html")
+    }
+
+    def "should assemble aggregate report of gradle project with properties"() {
+        given: "project with customized properties for aggregation task"
+            def testProject = TestResources
+                .directoryInClasspathCalled "customized-gradle-project"
+            def project = ProjectBuilder.builder().withProjectDir(testProject)
+                .build()
+            def plugin = new SerenityPlugin()
+            def reports = project.projectDir.toPath()
+
+            def properties = new Properties()
+            testProject.toPath().resolve("serenity.properties").withInputStream {
+                properties.load(it)
+            }
+            def folders = properties."serenity.outputDirectory".split "\\|/"
+            folders.each { reports = reports.resolve(it) }
+
+            def configs = new SerenityPluginExtension(
+                outputDirectory: properties."serenity.outputDirectory"
+            )
+            project.extensions.add "serenity", configs
+
+        when: "project build and aggregation plugin called"
+            project.apply plugin: 'java'
+            plugin.apply(project)
+            ["compileJava", "processResources", "classes",
+             "assemble", "compileTestJava", "processTestResources", "testClasses",
+             "test", "aggregate"
+            ].each {
+                project.getTasksByName(it, false).first().execute()
+            }
+
+        then: "report generated in ${properties."serenity.outputDirectory"} dir"
+            Files.exists reports
+            Files.isDirectory reports
+            Files.exists reports.resolve("index.html")
     }
 }

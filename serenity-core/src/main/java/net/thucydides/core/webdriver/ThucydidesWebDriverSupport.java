@@ -7,6 +7,7 @@ import net.thucydides.core.steps.StepAnnotations;
 import net.thucydides.core.steps.StepFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.SessionId;
 
 /**
  * A utility class that provides services to initialize web testing and reporting-related fields in arbitrary objects.
@@ -58,6 +59,11 @@ public class ThucydidesWebDriverSupport {
         return stepFactoryThreadLocal.get();
     }
 
+    public static void useDriver(WebDriver driver) {
+        getWebdriverManager().registerDriver(driver);
+    }
+
+
     public static WebDriver getDriver() {
         if (currentRequestedDriver.get() != null) {
             return getWebdriverManager().getWebdriver(currentRequestedDriver.get());
@@ -91,7 +97,7 @@ public class ThucydidesWebDriverSupport {
     }
 
 
-    private static WebdriverManager getWebdriverManager() {
+    public static WebdriverManager getWebdriverManager() {
         lazyInitalize();
         return webdriverManagerThreadLocal.get();
     }
@@ -126,5 +132,18 @@ public class ThucydidesWebDriverSupport {
 
     public static Class<? extends WebDriver> getDriverClass() {
         return  ((WebDriverFacade) getDriver()).getDriverClass();
+    }
+
+    public static SessionId getSessionId() {
+        return getWebdriverManager().getSessionId();
+
+    }
+
+    public static String getCurrentDriverName() {
+        return getWebdriverManager().getCurrentDriverName();
+    }
+
+    public static boolean isDriverInstantiated() {
+        return getWebdriverManager().isDriverInstantiated();
     }
 }

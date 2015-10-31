@@ -114,6 +114,12 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
         currentDriver = Optional.absent();
     }
 
+    @Override
+    public void registerDriver(WebDriver driver) {
+        inThisTestThread().registerDriverCalled(driver.toString()).forDriver(driver);
+        inThisTestThread().setCurrentDriverTo(driver);
+    }
+
     public String getCurrentDriverName() {
         return inThisTestThread().getCurrentDriverName();
     }

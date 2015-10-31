@@ -38,4 +38,6 @@ public interface WebdriverManager {
     void setCurrentDriver(WebDriver driver);
 
     void clearCurrentDriver();
+
+    void registerDriver(WebDriver driver);
 }

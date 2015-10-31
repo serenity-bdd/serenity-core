@@ -4,14 +4,12 @@ import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
-import net.thucydides.core.webdriver.WebdriverManager;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.remote.SessionId;
 
 import java.io.File;
 
@@ -203,21 +201,6 @@ public class WhenTallyingTestStepResults {
         stepListener.testStarted("the app should work");
         stepListener.testSuiteFinished();
         assertThat(stepListener.testSuiteRunning(), is(false));
-    }
-
-
-    @Mock
-    WebdriverManager webdriverManager;
-
-    @Test
-    public void should_record_remote_session_id() {
-
-        when(webdriverManager.getSessionId()).thenReturn(new SessionId("SESSION-ID"));
-        BaseStepListener stepListener = new BaseStepListener(outputDirectory, webdriverManager);
-        net.thucydides.core.model.Story story = net.thucydides.core.model.Story.from(MyStory.class);
-        stepListener.testSuiteStarted(story);
-        stepListener.testStarted("the app should work");
-        assertThat(stepListener.getCurrentTestOutcome().getSessionId() , is("SESSION-ID"));
     }
 
 

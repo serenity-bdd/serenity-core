@@ -11,15 +11,16 @@ class SerenityPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-
-        project.extensions.create("serenity", SerenityPluginExtension)
+        if(!project.extensions.findByName("serenity")) {
+            project.extensions.create("serenity", SerenityPluginExtension)
+        }
 
         reportDirectory = prepareReportDirectory(project)
+
 
         project.task('aggregate') {
             group 'Serenity BDD'
             description 'Generates aggregated Serenity reports'
-
             doLast {
                 if (!project.serenity.projectKey) {
                     project.serenity.projectKey = project.name
@@ -33,7 +34,7 @@ class SerenityPlugin implements Plugin<Project> {
                 reporter.issueTrackerUrl = project.serenity.issueTrackerUrl
                 reporter.jiraUrl = project.serenity.jiraUrl
                 reporter.jiraProject = project.serenity.jiraProject
-                reporter.generateReportsForTestResultsFrom(new File(project.projectDir, project.serenity.sourceDirectory))
+                reporter.generateReportsForTestResultsFrom(reportDirectory)
             }
         }
 
@@ -72,6 +73,6 @@ class SerenityPlugin implements Plugin<Project> {
     }
 
     def prepareReportDirectory(Project project) {
-        reportDirectory = new File(project.projectDir, project.serenity.outputDirectory)
+        new File(project.projectDir, project.serenity.outputDirectory)
     }
 }

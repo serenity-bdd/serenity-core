@@ -156,7 +156,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         RequirementsOutcomes requirementsOutcomes = requirementsFactory.buildRequirementsOutcomesFrom(testOutcomes.withRequirementsTags());
 
         copyResourcesToOutputDirectory();
-        copyTestResultsToOutputDirectory();
 
         generateAggregateReportFor(testOutcomes);
         generateTagReportsFor(testOutcomes);
@@ -173,6 +172,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         generateReleasesReportFor(testOutcomes, requirementsOutcomes);
 
+        copyTestResultsToOutputDirectory();
     }
 
     private void generateRequirementTypeReports(RequirementsOutcomes requirementsOutcomes) throws IOException {

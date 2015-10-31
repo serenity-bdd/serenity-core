@@ -19,9 +19,6 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.OutputStream;
 import java.util.List;
 
-/**
- * Created by john on 24/04/2015.
- */
 public class JUnitXMLConverter {
 
 
@@ -85,12 +82,6 @@ public class JUnitXMLConverter {
         if (outcome.getNestedTestFailureCause() != null) {
             testCaseElement.appendChild(syserrorElement(doc, outcome.getNestedTestFailureCause()));
         }
-    }
-
-    private Element sysoutElement(Document doc, FailureCause nestedTestFailureCause) {
-        Element testCaseElement = doc.createElement("system-out");
-        testCaseElement.appendChild(doc.createTextNode(nestedTestFailureCause.getMessage()));
-        return testCaseElement;
     }
 
     private Element syserrorElement(Document doc, FailureCause nestedTestFailureCause) {

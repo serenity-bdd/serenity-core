@@ -63,21 +63,15 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
 
         String reportFilename = reportFor(storedTestOutcome);
 
-        OutputStream outputStream = null;
-        OutputStreamWriter writer = null;
         File report = new File(getOutputDirectory(), reportFilename);
 
         LOGGER.info("Generating XML report for {} to file {}", testOutcome.getTitle(), report.getAbsolutePath());
 
-        try {
-            outputStream = new FileOutputStream(report);
-            writer = new OutputStreamWriter(outputStream, Charset.forName("UTF-8"));
-            xstream.toXML(storedTestOutcome, writer);
-            LOGGER.info("XML report generated ({} bytes) {}",report.getAbsolutePath(),report.length());
-        } finally {
-            writer.flush();
-            writer.close();
-            outputStream.close();
+        try(
+           OutputStream outputStream = new FileOutputStream(report);
+           OutputStreamWriter writer = new OutputStreamWriter(outputStream, Charset.forName("UTF-8"))) {
+           xstream.toXML(storedTestOutcome, writer);
+           LOGGER.info("XML report generated ({} bytes) {}", report.getAbsolutePath(), report.length());
         }
         return report;
     }
@@ -91,14 +85,13 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
     }
 
     public Optional<TestOutcome> loadReportFrom(final File reportFile) {
-        InputStream input = null;
-        InputStreamReader reader = null;
-        try {
+        try(
+                InputStream input = new FileInputStream(reportFile);
+                InputStreamReader reader = new InputStreamReader(input, Charset.forName("UTF-8"));
+        ) {
             XStream xstream = new XStream();
             xstream.alias("acceptance-test-run", TestOutcome.class);
             xstream.registerConverter(usingXmlConverter());
-            input = new FileInputStream(reportFile);
-            reader = new InputStreamReader(input, Charset.forName("UTF-8"));
             return Optional.of((TestOutcome) xstream.fromXML(reader));
         } catch (CannotResolveClassException e) {
             LOGGER.warn("Tried to load a file that is not a thucydides report: " + reportFile);
@@ -106,11 +99,9 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
         } catch (FileNotFoundException e) {
             LOGGER.warn("Tried to load a file that is not a thucydides report: " + reportFile);
             return Optional.absent();
-        } finally {
-            try {
-                reader.close();
-                input.close();
-            } catch (IOException ignored) {}
+        } catch (IOException e) {
+            LOGGER.warn("Could not load a report for some reason" + e.getMessage());
+            return Optional.absent();
         }
     }
 

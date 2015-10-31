@@ -27,15 +27,7 @@ public class MultithreadExecutorServiceProvider implements ExecutorServiceProvid
     @Override
     public ExecutorService getExecutorService() {
         if (executorService == null)  {
-//            int corePoolSize = 4;
-            int maximumPoolSize = 8;
-//            int keepAliveTime = 60000;
-
             executorService = Executors.newFixedThreadPool(maximumPoolSize);
-//            executorService = new ThreadPoolExecutor(corePoolSize, maximumPoolSize,
-//                    keepAliveTime, TimeUnit.MILLISECONDS,
-//                    new LinkedBlockingQueue<Runnable>());
-
         }
         return executorService;
     }

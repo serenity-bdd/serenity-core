@@ -58,10 +58,6 @@ public class JUnitXMLOutcomeReporter  {
         return "SERENITY-JUNIT-"  + reportNamer.getNormalizedTestNameFor(testOutcome);
     }
 
-    private String filenameCompatible(String testCase) {
-        return testCase.replaceAll(" ","_");
-    }
-
     private Map<String, List<TestOutcome>> groupByTestCase(TestOutcomes testOutcomes) {
         Map<String, List<TestOutcome>> groupedTestOutcomes = Maps.newHashMap();
         for(TestOutcome outcome : testOutcomes.getOutcomes()) {

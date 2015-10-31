@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -55,7 +56,9 @@ public class Resizer implements PhotoFilter {
         }
 
         BufferedImage resizedImage = resize(image, targetSize.width, targetSize.height);
-        ImageIO.write(resizedImage, "png", Files.newOutputStream(temporaryPath));
+        try(OutputStream resizedImageStream = Files.newOutputStream(temporaryPath)) {
+            ImageIO.write(resizedImage, "png", resizedImageStream);
+        }
     }
 
     private Dimension targetSizeInProportionTo(Dimension imageSize) {

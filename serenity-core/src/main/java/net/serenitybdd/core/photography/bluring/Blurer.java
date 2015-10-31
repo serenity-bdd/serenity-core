@@ -51,9 +51,11 @@ public class Blurer implements PhotoFilter {
             BufferedImage destImage = deepCopy(srcImage);
             destImage = withFilterFor(negative.getBlurLevel()).filter(srcImage, destImage);
 
-            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-            ImageIO.write(destImage, "png", outStream);
-            Files.write(negative.getTemporaryPath(), outStream.toByteArray());
+            try(ByteArrayOutputStream outStream = new ByteArrayOutputStream()) {
+                ImageIO.write(destImage,"png",outStream);
+                Files.write(negative.getTemporaryPath(),outStream.toByteArray());
+            }
+
 
         } catch (Throwable e) {
             LOGGER.warn("Failed to blur screenshot", e);

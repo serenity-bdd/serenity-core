@@ -26,9 +26,10 @@ task createClasspathManifest {
 }
 
 def cloneGeneratedJars(def project) {
+    def destination = Files.createDirectories(Paths.get("$buildDir").resolve("libs"))
     project.buildDir.toPath().resolve("libs").eachFile {
         Files.copy(it,
-            Paths.get("$buildDir").resolve("libs").resolve(it.toFile().getName()),
+            destination.resolve(it.toFile().getName()),
             StandardCopyOption.REPLACE_EXISTING)
     }
 }

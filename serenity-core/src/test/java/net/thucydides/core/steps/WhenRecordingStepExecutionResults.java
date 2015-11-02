@@ -22,6 +22,7 @@ import net.thucydides.core.util.FileSystemUtils;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.ThucydidesWebdriverManager;
 import org.junit.*;
 import org.mockito.Mock;
@@ -111,15 +112,16 @@ public class WhenRecordingStepExecutionResults {
         environmentVariables = new MockEnvironmentVariables();
         configuration = new SystemPropertiesConfiguration(environmentVariables);
 
-        stepListener = new BaseStepListener(FirefoxDriver.class, outputDirectory, configuration);
-
         driver = mock(FirefoxDriver.class);
 
-        ThucydidesWebdriverManager.inThisTestThread().closeAllDrivers();
-        ThucydidesWebdriverManager.inThisTestThread().registerDriverCalled("firefox").forDriver(driver);
-
         when(driver.getCurrentUrl()).thenReturn("http://www.google.com");
+        when(driver.toString()).thenReturn("firefox");
         when(driver.getScreenshotAs(any(OutputType.class))).thenReturn(screenshot1).thenReturn(screenshot2);
+
+        ThucydidesWebDriverSupport.closeAllDrivers();
+        ThucydidesWebDriverSupport.useDriver(driver);
+
+        stepListener = new BaseStepListener(FirefoxDriver.class, outputDirectory, configuration);
 
         StepEventBus.getEventBus().registerListener(stepListener);
     }
@@ -721,7 +723,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testStarted("app_should_work");
 
         StepsInSomeOtherPlace steps = stepFactory.getStepLibraryFor(StepsInSomeOtherPlace.class);
-        steps.step_one();              
+        steps.step_one();
         steps.step_that_fails();
         String stringValue = steps.returnFoo();
         steps.step_two();

@@ -16,10 +16,6 @@ buildscript {
         jcenter()
         flatDir(name: 'fileRepo', dirs: libDir)
     }
-    dependencies {
-        classpath 'net.serenity-bdd:serenity-junit:1.1.11-SNAPSHOT'
-        classpath 'net.serenity-bdd:serenity-core:1.1.11-SNAPSHOT'
-    }
 }
 
 dependencies {

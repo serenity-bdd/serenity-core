@@ -104,7 +104,6 @@ public class WhenRecordingStepExecutionResults {
         File screenshot1File = FileSystemUtils.getResourceAsFile("screenshots/google_page_1.png");
         File screenshot2File = FileSystemUtils.getResourceAsFile("screenshots/google_page_2.png");
 
-
         screenshot1 = Files.readAllBytes(screenshot1File.toPath());
         screenshot2 = Files.readAllBytes(screenshot2File.toPath());
         stepFactory = new StepFactory(pages);
@@ -119,7 +118,9 @@ public class WhenRecordingStepExecutionResults {
         when(driver.getScreenshotAs(any(OutputType.class))).thenReturn(screenshot1).thenReturn(screenshot2);
 
         ThucydidesWebDriverSupport.closeAllDrivers();
+        ThucydidesWebDriverSupport.initialize(driver.toString());
         ThucydidesWebDriverSupport.useDriver(driver);
+        assertThat(ThucydidesWebDriverSupport.getCurrentDriverName(),is(driver.toString()));
 
         stepListener = new BaseStepListener(FirefoxDriver.class, outputDirectory, configuration);
 

@@ -111,8 +111,7 @@ public class ReportService {
                 @Override
                 public void run() {
                     LOGGER.info("Processing test outcome " + outcome.getCompleteName());
-                    generateReportFor(outcome, testOutcomes, reporter);
-                    remainingReportCount.decrementAndGet();
+                    generateReportFor(outcome, testOutcomes, reporter, remainingReportCount);
                     LOGGER.info("Processing test outcome " + outcome.getCompleteName() + " done");
                 }
             });
@@ -171,7 +170,7 @@ public class ReportService {
 
     private void generateReportFor(final TestOutcome testOutcome,
                                    final TestOutcomes allTestOutcomes,
-                                   final AcceptanceTestReporter reporter) {
+                                   final AcceptanceTestReporter reporter, AtomicInteger remainingReportCount) {
         try {
             LOGGER.info(reporter + ": Generating report for test outcome: " + testOutcome.getCompleteName());
             reporter.setOutputDirectory(outputDirectory);
@@ -179,6 +178,8 @@ public class ReportService {
         } catch (Exception e) {
             throw new ReportGenerationFailedError(
                     "Failed to generate reports using " + reporter, e);
+        } finally {
+            remainingReportCount.decrementAndGet();
         }
     }
 

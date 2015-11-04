@@ -187,7 +187,7 @@ public class RequirementsOutcomes {
     public int getFailingRequirementsCount() {
         int failingRequirements = 0;
         for (RequirementOutcome requirementOutcome : requirementOutcomes) {
-            if (requirementOutcome.isFailure() || requirementOutcome.isError()) {
+            if (requirementOutcome.isFailure() || requirementOutcome.isError() || requirementOutcome.isCompromised()) {
                 failingRequirements++;
             }
         }

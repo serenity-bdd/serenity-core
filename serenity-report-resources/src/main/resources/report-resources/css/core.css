@@ -278,6 +278,10 @@ i.tag {
     background-color: #f5ad59
 }
 
+.test-COMPROMISED {
+    background-color: plum;
+}
+
 .test-SKIPPED {
     background-color: #eeeadd;
 }
@@ -329,6 +333,10 @@ i.tag {
 .lightorangetext
 {
     font-family:euphemia, verdana, sans-serif; font-size:16px; color: #fd3e03;
+}
+.violettext
+{
+    font-family:euphemia, verdana, sans-serif; font-size:16px; color: darkviolet;
 }
 .greentext
 {
@@ -421,6 +429,10 @@ i.tag {
     color: darkgoldenrod;
 }
 
+.compromised-color  {
+    color: mediumvioletred;
+}
+
 .group-heading {
     font-family:euphemia, verdana, sans-serif; font-size:18px; color: #0d78ae; font-weight: bold;
 }
@@ -485,6 +497,10 @@ i.tag {
 
 .ERROR-text {
     font-family:euphemia, verdana, sans-serif; font-size:14px; color: darkorange; font-style:italic;
+}
+
+.COMPROMISED-text {
+    font-family:euphemia, verdana, sans-serif; font-size:14px; color: blueviolet; font-style:italic;
 }
 
 .PENDING-text {
@@ -743,10 +759,13 @@ font-family:euphemia, verdana, sans-serif; font-size:16px; color: #88a717; font-
     background-color: darkorange; height: 1.1em;
 }
 
+.compromisedbar {
+    background-color: fuchsia; height: 1.1em;
+}
+
 .ignoredbar {
     background-color: #eeeadd; height: 1.1em;
 }
-
 
 .failingbar {
     background-color: #f8001f; height: 1.1em;
@@ -1205,6 +1224,7 @@ h4 {
 .datagrid table tbody tr:last-child td { border-bottom: none; }
 .datagrid table tbody tr.test-FAILURE td { background: #ffcdce; color: red; }
 .datagrid table tbody tr.test-ERROR td { background: #fed6c2; color: red; }
+.datagrid table tbody tr.test-COMPROMISED td { background: plum; color: darkviolet; }
 .datagrid table tbody tr.test-SKIPPED td { background: #eeeadd;}
 .datagrid table tbody tr.test-IGNORED td { background: #eeeadd;}
 .datagrid table tbody tr.test-PENDING td { background: #e5f2eb;}
@@ -1525,6 +1545,10 @@ ul.second-level-requirements  {
 
 .failure-icon {
     color: red;
+}
+
+.compromised-icon {
+    color: mediumvioletred;
 }
 
 .error-icon {

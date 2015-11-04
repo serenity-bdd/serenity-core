@@ -48,26 +48,6 @@ class WhenGeneratingRequirementsReports extends Specification {
         outputDirectory = temporaryFolder.newFolder()
     }
 
-    def "Should list all top-level requirements in the requirements report"() {
-        given: "there are no associated tests"
-            issueTracking.getIssueTrackerUrl() >> "http://my.issue.tracker/MY-PROJECT/browse/ISSUE-{0}"
-            def noTestOutcomes = TestOutcomes.of(Collections.EMPTY_LIST)
-        and: "we read the requirements from the directory structure"
-            RequirmentsOutcomeFactory requirmentsOutcomeFactory = new RequirmentsOutcomeFactory([requirementsProvider], issueTracking)
-        when: "we generate the capability reports"
-            RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
-            htmlRequirementsReporter.setOutputDirectory(outputDirectory);
-            htmlRequirementsReporter.generateReportFor(outcomes);
-            report = RequirementsReport.inDirectory(outputDirectory)
-        then: "all the known capabilities should be listed"
-            def rows = report.requirements;
-            report.names == ['Grow cucumbers', 'Grow lots of potatoes', 'Grow wheat', 'Raise chickens']
-        and: "the title should reflect the requirements type"
-            report.title == 'Requirements'
-        and: "the table title should reflect the requirements type"
-            report.tableTitle.startsWith('Capabilities (')
-    }
-
     def "Should know the type of child requirements"() {
         given: "we read the requirements from the directory structure"
             def noTestOutcomes = TestOutcomes.of(Collections.EMPTY_LIST)
@@ -78,35 +58,7 @@ class WhenGeneratingRequirementsReports extends Specification {
         then:
             firstRequirement.childType() == 'feature'
     }
-
-
-    def "Should summarize test results in the capabilities report"() {
-        given: "there are some associated tests"
-            issueTracking.getIssueTrackerUrl() >> "http://my.issue.tracker/MY-PROJECT/browse/ISSUE-{0}"
-            def someTestOutcomes = TestOutcomes.of(someTestResults())
-        and: "we read the requirements from the directory structure"
-            def requirmentsOutcomeFactory = new RequirmentsOutcomeFactory([requirementsProvider], issueTracking)
-        when: "we generate the capability reports"
-            RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(someTestOutcomes)
-            htmlRequirementsReporter.setOutputDirectory(outputDirectory);
-            htmlRequirementsReporter.generateReportFor(outcomes);
-            report = RequirementsReport.inDirectory(outputDirectory)
-        then: "there should be test results for each capability"
-            def rows = report.requirements;
-            rows[1].tests == 2
-            rows[2].tests == 1
-            rows[3].tests == 1
-        and: "the number of child requirements should be displayed"
-            rows[1].children == 3
-            rows[2].children == 0
-            rows[3].children == 1
-        and: "the icons should reflect the test results"
-            rows[1].icon.contains("yellow") == true
-            rows[2].icon.contains("green") == true
-            rows[3].icon.contains("red") == true
-    }
-
-
+    
     def "Should generate reports for child requirements"() {
         given: "there are some associated tests"
             issueTracking.getIssueTrackerUrl() >> "http://my.issue.tracker/MY-PROJECT/browse/ISSUE-{0}"

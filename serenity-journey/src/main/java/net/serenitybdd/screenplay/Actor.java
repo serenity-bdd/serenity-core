@@ -81,13 +81,16 @@ public class Actor implements PerformsTasks {
             }
         } catch (Throwable e) {
             eventBusInterface.reportStepFailureFor(todo, e);
-            if (Serenity.shouldThrowErrorsImmediately()) {
+            if (Serenity.shouldThrowErrorsImmediately() || isAnAssumptionFailure(e)) {
                 throw e;
             }
         } finally {
             eventBusInterface.updateOverallResult();
         }
+    }
 
+    private boolean isAnAssumptionFailure(Throwable e) {
+        return e.getClass().getSimpleName().contains("Assumption");
     }
 
     public final void can(Consequence... consequences) {

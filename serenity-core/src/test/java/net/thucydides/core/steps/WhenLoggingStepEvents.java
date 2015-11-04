@@ -260,16 +260,6 @@ public class WhenLoggingStepEvents {
     }
 
     @Test
-    public void should_log_step_failure_if_in_verbose_mode() {
-        environmentVariables.setProperty("thucydides.logging", "VERBOSE");
-        when(stepFailure.getMessage()).thenReturn("for some reason");
-
-        consoleLoggingListener.stepFailed(stepFailure);
-
-        verify(logger).info(contains("STEP FAILED: "),eq("for some reason"));
-    }
-
-    @Test
     public void should_log_skipped_step_if_in_verbose_mode() {
         environmentVariables.setProperty("thucydides.logging", "VERBOSE");
 

@@ -26,7 +26,7 @@ subprojects {
 ext {
     seleniumVersion = '2.48.2'
     groovyVersion = '2.3.10'
-    junitVersion = '4.11'
+    junitVersion = '4.12'
     hamcrestVersion = '1.3'
     springVersion = '4.1.6.RELEASE'
     guavaVersion = '18.0'

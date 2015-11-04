@@ -15,6 +15,7 @@ import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.images.ResizableImage;
 import net.thucydides.core.issues.IssueTracking;
+import net.thucydides.core.model.failures.FailureAnalysis;
 import net.thucydides.core.model.features.ApplicationFeature;
 import net.thucydides.core.model.results.MergeStepResultStrategy;
 import net.thucydides.core.model.results.StepResultMergeStragegy;
@@ -654,7 +655,7 @@ public class TestOutcome {
 
         public TestStep into(TestStep nextStep) {
             TestStep mergedStep = nextStep.addChildStep(previousStep);
-            if (nextStep.getResult() == SKIPPED && (previousStep.getResult() == ERROR || previousStep.getResult() == FAILURE) ) {
+            if (nextStep.getResult() == SKIPPED  && (wasUnsuccessful(previousStep))) {
                 nextStep.setResult(UNDEFINED);
             }
             mergedStep.setResult(merge(nextStep.getResult()).with(previousStep.getResult()));
@@ -662,8 +663,12 @@ public class TestOutcome {
         }
 
         private StepResultMergeStragegy merge(TestResult nextStepResult) {
-            return MergeStepResultStrategy.whenNextStepResultis(nextStepResult);
+            return MergeStepResultStrategy.whenNextStepResultIs(nextStepResult);
         }
+    }
+
+    private boolean wasUnsuccessful(TestStep previousStep) {
+        return  (previousStep.getResult() == ERROR || previousStep.getResult() == FAILURE || previousStep.getResult() == COMPROMISED);
     }
 
     public class TitleBuilder {
@@ -889,11 +894,11 @@ public class TestOutcome {
     public boolean hasNonStepFailure() {
         boolean stepsContainFailure = false;
         for(TestStep step : getFlattenedTestSteps()) {
-            if (step.getResult() == FAILURE || step.getResult() == ERROR) {
+            if (step.getResult() == FAILURE || step.getResult() == ERROR || step.getResult() == COMPROMISED) {
                 stepsContainFailure = true;
             }
         }
-        return (!stepsContainFailure && (getResult() == ERROR || getResult() == FAILURE));
+        return (!stepsContainFailure && (getResult() == ERROR || getResult() == FAILURE || getResult() == COMPROMISED));
     }
 
     public List<TestStep> getFlattenedTestSteps() {
@@ -1618,6 +1623,10 @@ public class TestOutcome {
         return count(errorSteps()).in(getLeafTestSteps());
     }
 
+    public Integer getCompromisedCount() {
+        return count(compromisedSteps()).in(getLeafTestSteps());
+    }
+
     public Integer getIgnoredCount() {
         return count(ignoredSteps()).in(getLeafTestSteps());
     }
@@ -1643,6 +1652,10 @@ public class TestOutcome {
         return (getResult() == FAILURE);
     }
 
+    public Boolean isCompromised() {
+        return (getResult() == COMPROMISED);
+    }
+
     public Boolean isError() {
         return (getResult() == ERROR);
     }
@@ -1654,7 +1667,6 @@ public class TestOutcome {
     public Boolean isSkipped() {
         return (getResult() == SKIPPED) || (getResult() == IGNORED);
     }
-
 
     public Story getUserStory() {
         return userStory;
@@ -1766,6 +1778,15 @@ public class TestOutcome {
             @Override
             boolean apply(TestStep step) {
                 return step.isError();
+            }
+        };
+    }
+
+    StepFilter compromisedSteps() {
+        return new StepFilter() {
+            @Override
+            boolean apply(TestStep step) {
+                return step.isCompromised();
             }
         };
     }

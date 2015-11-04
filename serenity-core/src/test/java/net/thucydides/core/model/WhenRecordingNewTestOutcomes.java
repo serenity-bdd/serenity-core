@@ -1,6 +1,7 @@
 package net.thucydides.core.model;
 
 import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.exceptions.TestCompromisedException;
 import net.thucydides.core.annotations.Issue;
 import net.thucydides.core.annotations.Issues;
 import net.thucydides.core.annotations.Story;
@@ -450,7 +451,7 @@ public class WhenRecordingNewTestOutcomes {
 
         testOutcome.recordSteps(ImmutableList.of(forASuccessfulTestStepCalled("Step 1"),forASuccessfulTestStepCalled("Step 2")));
         testOutcome.startGroup();
-        testOutcome.recordSteps(ImmutableList.of(forASuccessfulTestStepCalled("Step 2.1"),forASuccessfulTestStepCalled("Step 2.2")));
+        testOutcome.recordSteps(ImmutableList.of(forASuccessfulTestStepCalled("Step 2.1"), forASuccessfulTestStepCalled("Step 2.2")));
         testOutcome.endGroup();
         testOutcome.recordStep(forASuccessfulTestStepCalled("Step 3"));
 
@@ -632,6 +633,20 @@ public class WhenRecordingNewTestOutcomes {
 
         assertThat(testOutcome.getResult(), is(ERROR));
         assertThat(testOutcome.isError(), is(true));
+    }
+
+    @Test
+    public void the_acceptance_test_case_is_compromised_if_a_compromising_exception_is_raised() {
+
+        testOutcome.recordStep(forASuccessfulTestStepCalled("Step 1"));
+        testOutcome.recordStep(forABrokenTestStepCalled("Step 2", new TestCompromisedException("Oh bother!")));
+        testOutcome.recordStep(forASkippedTestStepCalled("Step 3"));
+
+        assertThat(testOutcome.getResult(), is(COMPROMISED));
+        assertThat(testOutcome.isCompromised(), is(true));
+
+        TestStep compromisedStep = testOutcome.getTestSteps().get(1);
+        assertThat(compromisedStep.getErrorMessage(), is("net.serenitybdd.core.exceptions.TestCompromisedException: Oh bother!"));
     }
 
     @Test

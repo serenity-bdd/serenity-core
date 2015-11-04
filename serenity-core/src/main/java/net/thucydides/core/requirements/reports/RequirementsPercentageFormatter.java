@@ -34,7 +34,9 @@ public class RequirementsPercentageFormatter {
         }
 
         public String withFailureOrError() {
-            double result = counter.withResult(TestResult.ERROR) + counter.withResult(TestResult.FAILURE);
+            double result = counter.withResult(TestResult.ERROR)
+                    + counter.withResult(TestResult.FAILURE)
+                    + counter.withResult(TestResult.COMPROMISED);
             return formatter.percentage(result, 1);
         }
 

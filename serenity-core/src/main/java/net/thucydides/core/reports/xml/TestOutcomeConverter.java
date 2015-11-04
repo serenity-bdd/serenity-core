@@ -334,7 +334,7 @@ public class TestOutcomeConverter implements Converter {
     }
 
     private void writeErrorForFailingTest(final HierarchicalStreamWriter writer, final TestStep step) {
-        if (step.isFailure() || step.isError()) {
+        if (step.isFailure() || step.isError() || step.isCompromised()) {
             writeErrorMessageAndException(writer, step);
         }
     }

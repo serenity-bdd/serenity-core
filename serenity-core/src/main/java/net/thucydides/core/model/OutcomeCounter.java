@@ -30,11 +30,16 @@ public class OutcomeCounter extends TestOutcomeCounter {
     public int withIndeterminateResult() {
         return outcomes.getTotal() - withResult(TestResult.SUCCESS)
                 - withResult(TestResult.FAILURE)
-                - withResult(TestResult.ERROR);
+                - withResult(TestResult.ERROR)
+                - withResult(TestResult.COMPROMISED);
     }
 
     public int withFailureOrError() {
-        return withResult(TestResult.FAILURE) + withResult(TestResult.ERROR);
+        return withResult(TestResult.FAILURE) + withResult(TestResult.ERROR) + withResult(TestResult.COMPROMISED);
+    }
+
+    public int withCompromisedResults() {
+        return withResult(TestResult.COMPROMISED);
     }
 
     public int withAnyResult() {

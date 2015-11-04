@@ -8,5 +8,5 @@ dependencies {
 //    compile localGroovy()
     compile 'org.codehaus.groovy:groovy-all:2.3.10'
     compile project(':serenity-core')
-    testCompile "junit:junit:4.11"
+    testCompile "junit:junit:4.12"
 }

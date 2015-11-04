@@ -68,6 +68,9 @@ public class RequirementOutcome {
         return getTestOutcomes().getResult() == TestResult.ERROR || anyChildRequirementsAreErrors();
     }
 
+    public boolean isCompromised() {
+        return getTestOutcomes().getResult() == TestResult.COMPROMISED || anyChildRequirementsAreCompromised();
+    }
 
     public boolean isPending() {
         return (getTestOutcomes().getTestCount() == 0) || getTestOutcomes().getResult() == TestResult.PENDING || anyChildRequirementsArePending();
@@ -114,6 +117,11 @@ public class RequirementOutcome {
     private boolean anyChildRequirementsAreErrors() {
         return anyChildRequirementsAreErrorsFor(requirement.getChildren());
     }
+
+    private boolean anyChildRequirementsAreCompromised() {
+        return anyChildRequirementsAreCompromisedFor(requirement.getChildren());
+    }
+
     private boolean anyChildRequirementsArePending() {
         return anyChildRequirementsArePendingFor(requirement.getChildren());
     }
@@ -148,6 +156,7 @@ public class RequirementOutcome {
         }
         return false;
     }
+
     private boolean anyChildRequirementsAreFailuresFor(List<Requirement> requirements) {
         for(Requirement childRequirement : requirements) {
             RequirementOutcome childOutcomes = new RequirementOutcome(childRequirement,
@@ -155,6 +164,19 @@ public class RequirementOutcome {
             if (childOutcomes.isFailure()) {
                 return true;
             } else if (anyChildRequirementsAreFailuresFor(childRequirement.getChildren())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean anyChildRequirementsAreCompromisedFor(List<Requirement> requirements) {
+        for(Requirement childRequirement : requirements) {
+            RequirementOutcome childOutcomes = new RequirementOutcome(childRequirement,
+                    testOutcomes.forRequirement(requirement), issueTracking);
+            if (childOutcomes.isCompromised()) {
+                return true;
+            } else if (anyChildRequirementsAreErrorsFor(childRequirement.getChildren())) {
                 return true;
             }
         }
@@ -294,7 +316,7 @@ public class RequirementOutcome {
         }
 
         public int withFailureOrError() {
-            return withResult(TestResult.FAILURE) + withResult(TestResult.ERROR);
+            return withResult(TestResult.FAILURE) + withResult(TestResult.ERROR) + withResult(TestResult.COMPROMISED);
         }
 
         public int withAnyResult() {

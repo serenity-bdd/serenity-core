@@ -291,6 +291,10 @@ public class Formatter {
         return new ResultIconFormatter();
     }
 
+    public ResultRankingFormatter resultRank() {
+        return new ResultRankingFormatter();
+    }
+
     private String concatLines(String message) {
         String[] lines = message.replaceAll("\\r", "").split("\\n");
         return StringUtils.join(lines," ");

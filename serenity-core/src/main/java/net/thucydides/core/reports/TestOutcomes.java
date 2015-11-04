@@ -436,7 +436,13 @@ public class TestOutcomes {
 
     public TestOutcomes getErrorTests() {
         return TestOutcomes.of(filter(withResult(TestResult.ERROR), outcomes))
-                .withLabel(labelForTestsWithStatus("failing tests"))
+                .withLabel(labelForTestsWithStatus("tests with errors"))
+                .withRootOutcomes(getRootOutcomes());
+    }
+
+    public TestOutcomes getCompromisedTests() {
+        return TestOutcomes.of(filter(withResult(TestResult.COMPROMISED), outcomes))
+                .withLabel(labelForTestsWithStatus("compromised tests"))
                 .withRootOutcomes(getRootOutcomes());
     }
 
@@ -610,7 +616,7 @@ public class TestOutcomes {
             return (getTotal() == 0) ? 0 : ((pendingCount + skippedCount + ignoredCount) / (double) getTotal());
         }
         public Double withFailureOrError() {
-            return withResult(TestResult.FAILURE) + withResult(TestResult.ERROR);
+            return withResult(TestResult.FAILURE) + withResult(TestResult.ERROR) + withResult(TestResult.COMPROMISED);
         }
     }
 

@@ -389,6 +389,9 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         if (testOutcomesForThisTag.getTotalTests().withResult(TestResult.ERROR) > 0) {
             generateResultReport(testOutcomesForThisTag.getErrorTests(), reportName, tag, "error");
         }
+        if (testOutcomesForThisTag.getTotalTests().withResult(TestResult.COMPROMISED) > 0) {
+            generateResultReport(testOutcomesForThisTag.getCompromisedTests(), reportName, tag, "compromised");
+        }
         if (testOutcomesForThisTag.getTotalTests().withResult(TestResult.IGNORED) > 0) {
             generateResultReport(testOutcomesForThisTag.havingResult(TestResult.IGNORED), reportName, tag, "ignored");
         }

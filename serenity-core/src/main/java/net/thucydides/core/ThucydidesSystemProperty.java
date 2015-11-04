@@ -708,6 +708,11 @@ public enum ThucydidesSystemProperty {
     PHANTOMJS_SSL_PROTOCOL,
 
     /**
+     * Comma-separated list of exception classes that should produce a compromised test in the reports.
+     */
+    SERENITY_COMPROMISED_ON,
+
+    /**
      * Comma-separated list of exception classes that should produce an error in the reports.
      */
     SERENITY_ERROR_ON,

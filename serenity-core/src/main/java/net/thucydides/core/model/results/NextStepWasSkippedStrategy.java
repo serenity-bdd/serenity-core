@@ -2,9 +2,6 @@ package net.thucydides.core.model.results;
 
 import net.thucydides.core.model.TestResult;
 
-/**
- * Created by john on 9/08/2015.
- */
 public class NextStepWasSkippedStrategy implements StepResultMergeStragegy {
     private final TestResult nextStepResult;
 
@@ -17,6 +14,7 @@ public class NextStepWasSkippedStrategy implements StepResultMergeStragegy {
         switch (previousResult) {
             case FAILURE: return previousResult;
             case ERROR: return previousResult;
+            case COMPROMISED: return previousResult;
             default: return nextStepResult;
         }
     }

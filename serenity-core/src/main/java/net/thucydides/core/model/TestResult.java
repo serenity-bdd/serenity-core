@@ -11,6 +11,10 @@ package net.thucydides.core.model;
  */
 public enum TestResult {
     /**
+     * Test failures due to external events or systems that compromise the validity of the test.
+     */
+    COMPROMISED(5),
+    /**
      *  Test failure, due to some other exception.
      */
      ERROR(4),
@@ -57,8 +61,15 @@ public enum TestResult {
         this.priority = priority;
     }
 
+    public int getPriority() {
+        return priority;
+    }
 
     public boolean overrides(TestResult result) {
         return priority > result.priority;
+    }
+
+    public boolean isMoreSevereThan(TestResult otherResult) {
+        return ordinal() > otherResult.ordinal();
     }
 }

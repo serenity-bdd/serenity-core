@@ -2,6 +2,7 @@ dependencies {
     compile("org.jbehave:jbehave-core:3.9.5") {
         exclude group: "org.hamcrest"
         exclude group: "org.freemarker"
+        exclude group: "junit", module:"junit"
     }
     projectDescription = 'Serenity sample resources used for testing purposes'
 }

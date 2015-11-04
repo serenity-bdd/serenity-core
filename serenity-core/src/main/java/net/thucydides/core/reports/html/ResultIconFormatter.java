@@ -4,11 +4,13 @@ import net.thucydides.core.model.TestResult;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class ResultIconFormatter {
 
     private final Map<TestResult, String> resultIcons = new HashMap<>();
     {
+        resultIcons.put(TestResult.COMPROMISED, "<i class='fa fa-chain-broken ${iconStyle} ${qualifier}' title='${result}'></i>");
         resultIcons.put(TestResult.ERROR,  "<i class='fa fa-exclamation-triangle ${iconStyle} ${qualifier}' title='${result}'></i>");
         resultIcons.put(TestResult.FAILURE, "<i class='fa fa-times-circle ${iconStyle} ${qualifier}' title='${result}'></i>");
         resultIcons.put(TestResult.SUCCESS, "<i class='fa fa-check-square-o ${iconStyle} ${qualifier}' title='${result}'></i>");
@@ -20,6 +22,7 @@ public class ResultIconFormatter {
 
     private final Map<TestResult, String> resultIconStyles = new HashMap<>();
     {
+        resultIconStyles.put(TestResult.COMPROMISED, "compromised-icon");
         resultIconStyles.put(TestResult.ERROR, "error-icon");
         resultIconStyles.put(TestResult.FAILURE, "failure-icon");
         resultIconStyles.put(TestResult.SUCCESS, "success-icon");
@@ -43,14 +46,15 @@ public class ResultIconFormatter {
 
     public String forResult(TestResult result) {
 
-        return resultIcons.get(result)
-                .replace("${iconStyle}", resultIconStyles.get(result))
+        TestResult testResult = Optional.ofNullable(result).orElse(TestResult.PENDING);
+        return resultIcons.get(testResult)
+                .replace("${iconStyle}", resultIconStyles.get(testResult))
                 .replace("${qualifier}", qualifier)
-                .replace("${result}", result.toString());
+                .replace("${result}", testResult.toString());
     }
 
     public String colorFor(TestResult result) {
-        return resultIconStyles.get(result);
+        return resultIconStyles.get(Optional.ofNullable(result).orElse(TestResult.PENDING));
     }
 
 }

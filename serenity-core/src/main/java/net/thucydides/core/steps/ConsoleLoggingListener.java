@@ -10,6 +10,7 @@ import net.thucydides.core.logging.LoggingLevel;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.failures.FailureAnalysis;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.NameConverter;
 import org.apache.commons.lang3.StringUtils;
@@ -96,6 +97,7 @@ public class ConsoleLoggingListener implements StepListener {
     private final Logger logger;
     private final EnvironmentVariables environmentVariables;
     private final int headingStyle;
+    private final FailureAnalysis analysis;
 
     private enum HeadingStyle { NORMAL, ASCII}
 
@@ -103,6 +105,7 @@ public class ConsoleLoggingListener implements StepListener {
                                   Logger logger) {
         this.logger = logger;
         this.environmentVariables = environmentVariables;
+        this.analysis = new FailureAnalysis(environmentVariables);
 
 
         String headerStyleValue = ThucydidesSystemProperty.THUCYDIDES_CONSOLE_HEADINGS.from(environmentVariables, HeadingStyle.ASCII.toString())
@@ -279,7 +282,8 @@ public class ConsoleLoggingListener implements StepListener {
     public void stepFailed(StepFailure failure) {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
             String errorMessage = (failure.getException() != null) ? failure.getException().toString() : failure.getMessage();
-            getLogger().info("STEP FAILED: {}", errorMessage);
+            String failureType = analysis.resultFor(failure.getException()).name();
+            getLogger().info("STEP {}: {}", failureType, errorMessage);
         }
     }
 

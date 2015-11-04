@@ -52,6 +52,7 @@
 <#elseif testOutcome.result == "ERROR"><#assign outcome_text = "error-color">
 <#elseif testOutcome.result == "SUCCESS"><#assign outcome_text = "success-color">
 <#elseif testOutcome.result == "PENDING"><#assign outcome_text = "pending-color">
+<#elseif testOutcome.result == "COMPROMISED"><#assign outcome_text = "compromised-color">
 <#else><#assign outcome_text = "ignore-color">
 </#if>
 

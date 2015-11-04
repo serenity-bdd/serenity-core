@@ -62,6 +62,8 @@ public class JUnitXMLConverter {
             addFailureElement(doc, outcome, testCaseElement);
         } else if (outcome.isError()) {
             addErrorElement(doc, outcome, testCaseElement);
+        } else if (outcome.isCompromised()) {
+            addCompromisedElement(doc, outcome, testCaseElement);
         } else  if (outcome.isSkipped() || outcome.isPending()) {
             testCaseElement.appendChild(doc.createElement("skipped"));
         }
@@ -72,6 +74,13 @@ public class JUnitXMLConverter {
 
     private void addErrorElement(Document doc, TestOutcome outcome, Element testCaseElement) {
         testCaseElement.appendChild(errorElement(doc, outcome));
+        if (outcome.getNestedTestFailureCause() != null) {
+            testCaseElement.appendChild(syserrorElement(doc, outcome.getNestedTestFailureCause()));
+        }
+    }
+
+    private void addCompromisedElement(Document doc, TestOutcome outcome, Element testCaseElement) {
+        testCaseElement.appendChild(compromisedElement(doc, outcome));
         if (outcome.getNestedTestFailureCause() != null) {
             testCaseElement.appendChild(syserrorElement(doc, outcome.getNestedTestFailureCause()));
         }
@@ -116,6 +125,12 @@ public class JUnitXMLConverter {
 
     private Element errorElement(Document doc, TestOutcome outcome) {
         Element testCaseElement = doc.createElement("error");
+        addFailureCause(doc, testCaseElement, outcome.getNestedTestFailureCause());
+        return testCaseElement;
+    }
+
+    private Element compromisedElement(Document doc, TestOutcome outcome) {
+        Element testCaseElement = doc.createElement("compromised");
         addFailureCause(doc, testCaseElement, outcome.getNestedTestFailureCause());
         return testCaseElement;
     }

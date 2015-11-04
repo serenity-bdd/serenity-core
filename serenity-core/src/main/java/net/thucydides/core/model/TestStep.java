@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.model.failures.FailureAnalysis;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
@@ -263,6 +264,10 @@ public class TestStep {
 
     public Boolean isError() {
         return getResult() == ERROR;
+    }
+
+    public Boolean isCompromised() {
+        return getResult() == COMPROMISED;
     }
 
     public Boolean isIgnored() {

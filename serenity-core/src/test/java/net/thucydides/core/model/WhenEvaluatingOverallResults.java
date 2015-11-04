@@ -52,6 +52,13 @@ public class WhenEvaluatingOverallResults {
                 { Arrays.asList(IGNORED,ERROR),             ERROR },
                 { Arrays.asList(SKIPPED,ERROR),             ERROR },
                 { Arrays.asList(SUCCESS,ERROR),             ERROR },
+                { Arrays.asList(SUCCESS,COMPROMISED),       COMPROMISED },
+                { Arrays.asList(ERROR,COMPROMISED),         COMPROMISED },
+                { Arrays.asList(FAILURE,COMPROMISED),       COMPROMISED },
+                { Arrays.asList(IGNORED,COMPROMISED),       COMPROMISED },
+                { Arrays.asList(PENDING,COMPROMISED),       COMPROMISED },
+                { Arrays.asList(SKIPPED,COMPROMISED),       COMPROMISED },
+
         });
     }
 

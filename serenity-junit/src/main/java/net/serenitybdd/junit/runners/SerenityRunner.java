@@ -17,7 +17,10 @@ import net.thucydides.core.pages.Pages;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.statistics.TestCount;
-import net.thucydides.core.steps.*;
+import net.thucydides.core.steps.PageObjectDependencyInjector;
+import net.thucydides.core.steps.StepAnnotations;
+import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.StepFactory;
 import net.thucydides.core.steps.stepdata.StepData;
 import net.thucydides.core.tags.TagScanner;
 import net.thucydides.core.webdriver.*;
@@ -519,7 +522,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     }
 
     protected boolean isUniqueSession() {
-        return TestCaseAnnotations.isUniqueSession(getTestClass().getJavaClass());
+        return (TestCaseAnnotations.isUniqueSession(getTestClass().getJavaClass()) || configuration.getUseUniqueBrowser());
     }
 
     protected void resetBroswerFromTimeToTime() {

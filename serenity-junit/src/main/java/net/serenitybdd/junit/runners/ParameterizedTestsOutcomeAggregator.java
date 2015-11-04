@@ -93,7 +93,7 @@ public class ParameterizedTestsOutcomeAggregator {
 
     private boolean rowResultsAreInconsistantWithOverallResult(TestOutcome testOutcome) {
         TestResult overallRowResult = overallResultFrom(testOutcome.getDataTable().getRows());
-        return (testOutcome.isError() || testOutcome.isFailure())
+        return (testOutcome.isError() || testOutcome.isFailure() || testOutcome.isCompromised())
                 && (!testOutcome.getDataTable().getRows().isEmpty())
                 && (testOutcome.getResult() != overallRowResult);
     }

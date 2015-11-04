@@ -1,9 +1,9 @@
 package net.serenitybdd.core.model
-
 import cucumber.api.PendingException
 import net.serenitybdd.core.PendingStepException
+import net.serenitybdd.core.exceptions.TestCompromisedException
 import net.serenitybdd.core.model.sampleexceptions.MyFailureException
-import net.thucydides.core.model.FailureAnalysis
+import net.thucydides.core.model.failures.FailureAnalysis
 import net.thucydides.core.steps.StepFailureException
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.WebdriverAssertionError
@@ -39,7 +39,8 @@ class WhenReportingExceptions extends Specification {
             new NullPointerException()                                                              | ERROR
             new WebDriverException()                                                                | ERROR
             new PendingStepException("step is pending")                                             | PENDING
-            new PendingException("step is pending")                                             | PENDING
+            new PendingException("step is pending")                                                 | PENDING
+            new TestCompromisedException("test is compromised")                                     | COMPROMISED
     }
 
     def "non-assertion exceptions should be reported as Errors by default"() {
@@ -72,6 +73,18 @@ class WhenReportingExceptions extends Specification {
             def result = failureAnalysisOf.resultFor(new AssertionError("oh crap"))
         then:
             result == ERROR
+    }
+
+    def "should be able to override errors as compromised using serenity.compromised.on"() {
+
+        given:
+        def environmentVariables = new MockEnvironmentVariables()
+        environmentVariables.setProperty("serenity.compromised.on","java.lang.AssertionError")
+        when:
+        def failureAnalysisOf = new FailureAnalysis(environmentVariables)
+        def result = failureAnalysisOf.resultFor(new AssertionError("oh crap"))
+        then:
+        result == COMPROMISED
     }
 
     def "should be able to override errors as failures"() {

@@ -35,6 +35,10 @@ public class TestResultList {
             return SUCCESS;
         }
 
+        if (testResults.contains(COMPROMISED)) {
+            return COMPROMISED;
+        }
+
         if (testResults.contains(ERROR)) {
             return ERROR;
         }

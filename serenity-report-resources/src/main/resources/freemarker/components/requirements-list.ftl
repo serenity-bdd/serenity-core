@@ -47,8 +47,8 @@
             <tbody>
 
                 <#foreach requirementOutcome in requirements.requirementOutcomes>
-                    <#assign status_icon = formatter.resultIcon().forResult(requirementOutcome.result) />
-                    <#assign status_rank = formatter.resultRank().forResult(requirementOutcome.result) />
+                    <#assign status_icon = formatter.resultIcon().forResult(requirementOutcome.testOutcomes.result) />
+                    <#assign status_rank = formatter.resultRank().forResult(requirementOutcome.testOutcomes.result) />
 
                 <tr class="test-${requirementOutcome.testOutcomes.result} requirementRow">
                     <td class="requirementRowCell">
@@ -135,7 +135,6 @@
                         <#assign ignored = requirementOutcome.formattedPercentage.withSkippedOrIgnored()>
                         <#assign indeterminate = requirementOutcome.formattedPercentage.withIndeterminateResult()>
 
-
                         <#assign ignoredbar = (percentPassing + percentFailing + percentError + percentCompromised + percentIgnored)*125>
                         <#assign compromisedbar = (percentPassing + percentFailing + percentError + percentCompromised)*125>
                         <#assign errorbar = (percentPassing + percentFailing + percentError)*125>
@@ -145,18 +144,6 @@
 
                         <#assign tests = inflection.of(requirementOutcome.testOutcomes.total).times("test") >
 
-                        <!--
-                        Accessing the ESAA Registration screens
-
-                        Tests implemented: 10
-                          - Passing tests: 4
-                          - Failing tests: 3
-
-                        Requirements specified:   6
-                        Requiments without tests: 2
-
-                        Estimated unimplemented tests: 7
-                        -->
                         <#assign overviewCaption =
                         "${requirementOutcome.requirement.displayName}
 Tests implemented: ${requirementOutcome.testCount}

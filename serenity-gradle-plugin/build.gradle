@@ -52,7 +52,7 @@ dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.3.10'
     compile project(':serenity-core')
     compile project(':serenity-junit')
-    testCompile "junit:junit:4.11"
+    testCompile "junit:junit:4.12"
     testCompile project(':serenity-core').sourceSets.test.output
     testRuntime files(copySerenityCore)
     testRuntime files(copySerenityJunit)

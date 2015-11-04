@@ -130,6 +130,8 @@ public class FailureAnalysis {
     }
 
     private boolean failingStepException(Throwable testFailureCause) {
+        if (testFailureCause == null) { return false; }
+
         return ((StepFailureException.class.isAssignableFrom(testFailureCause.getClass()))
                 && (testFailureCause.getCause() != null)
                 && (isFailure(testFailureCause.getCause())));

@@ -725,7 +725,12 @@ public enum ThucydidesSystemProperty {
     /**
      * Comma-separated list of exception classes that should produce a pending test in the reports.
      */
-    SERENITY_PENDING_ON;
+    SERENITY_PENDING_ON,
+
+    /**
+     * If set to true, add a tag for test failures, based on the error type and message
+     */
+    SERENITY_TAG_FAILURES;
 
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;

@@ -527,7 +527,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public void stepFailed(StepFailure failure) {
         takeEndOfStepScreenshotFor(FAILURE);
         getCurrentTestOutcome().determineTestFailureCause(failure.getException());
-        recordFailureDetailsInFailingTestStep(failure);
+        recordFailureDetails(failure);
         currentStepDone(failureAnalysis.resultFor(failure));
     }
 
@@ -537,10 +537,21 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
 
-    private void recordFailureDetailsInFailingTestStep(final StepFailure failure) {
+    private void recordFailureDetails(final StepFailure failure) {
         if (currentStepExists()) {
             getCurrentStep().failedWith(new StepFailureException(failure.getMessage(), failure.getException()));
         }
+        if (shouldTagErrors()) {
+            addTagFor(getCurrentTestOutcome());
+        }
+    }
+
+    private void addTagFor(TestOutcome testOutcome) {
+        testOutcome.addTag(TestTag.withName(testOutcome.getTestFailureCause().getSimpleErrorType()).andType("error"));
+    }
+
+    private boolean shouldTagErrors() {
+        return ThucydidesSystemProperty.SERENITY_TAG_FAILURES.booleanFrom(configuration.getEnvironmentVariables());
     }
 
     public void stepIgnored() {

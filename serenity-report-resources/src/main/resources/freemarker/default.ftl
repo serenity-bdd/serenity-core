@@ -412,7 +412,7 @@
                     <tr class="test-${step.result}">
                         <td width="40">&nbsp</td>
                         <#if step.errorMessage?has_content>
-                            <#assign errorMessageTitle = step.errorMessage?html>
+                            <#assign errorMessageTitle = step.conciseErrorMessage?html>
                         <#else>
                             <#assign errorMessageTitle = "">
                         </#if>
@@ -432,16 +432,8 @@
             </#list>
             <#if testOutcome.hasNonStepFailure()>
                 <#assign step_outcome_icon = formatter.resultIcon().forResult(testOutcome.result) />
-                <#--<#if testOutcome.result == "FAILURE">-->
-                    <#--<#assign step_outcome_icon = "fail.png">-->
-                <#--<#elseif testOutcome.result == "ERROR">-->
-                    <#--<#assign step_outcome_icon = "cross.png">-->
-                <#--</#if>-->
-                <#--<#if (testOutcome.hasNonStepFailure()) >-->
                     <tr class="test-${testOutcome.result}">
                         <td width="40">${step_outcome_icon}
-                            <#--<img style="margin-left: 20px; margin-right: 5px;" src="images/${step_outcome_icon}"-->
-                                 <#--class="top-level-icon"/>-->
                         </td>
                         <td width="%">
                             <span class="top-level-step">An error occurred outside of step execution.</span>
@@ -451,10 +443,10 @@
                     </tr>
                     <tr class="test-${testOutcome.result}">
                         <td width="40">&nbsp</td>
-                        <td width="%" colspan="4">
+                        <td width="%" colspan="3">
                             <#if (testOutcome.errorMessage)??>
                                 <span class="error-message"
-                                      title="${formatter.htmlAttributeCompatible(testOutcome.errorMessage)}">${testOutcome.errorMessage}</span>
+                                      title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage)}">${testOutcome.conciseErrorMessage}</span>
                                 <#if (testOutcome.nestedTestFailureCause)??>
                                     <@stacktrace cause=testOutcome.nestedTestFailureCause />
                                 </#if>

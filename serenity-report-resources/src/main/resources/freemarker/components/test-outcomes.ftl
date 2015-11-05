@@ -34,7 +34,7 @@
                                     <#if (testOutcome.manual)><i class="fa fa-user manual" title="Manual test"></i></#if>
                                     <span style="display:none">${testOutcome.result}</span></td>
                                 <td class="${testOutcome.result}-text">
-                                    <a href="${relativeLink}${testOutcome.reportName}.html" class="ellipsis" title="${formatter.htmlAttributeCompatible(testOutcome.errorMessage)}">
+                                    <a href="${relativeLink}${testOutcome.reportName}.html" class="ellipsis" title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage)}">
                                     ${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}
                                     </a>
                                 </td>

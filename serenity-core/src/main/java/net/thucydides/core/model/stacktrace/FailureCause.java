@@ -1,12 +1,15 @@
 package net.thucydides.core.model.stacktrace;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Splitter;
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.serenitybdd.core.exceptions.UnrecognisedException;
 import net.thucydides.core.model.TestFailureException;
+import net.thucydides.core.util.NameConverter;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -67,6 +70,14 @@ public class FailureCause {
 
     public String getErrorType() {
         return errorType;
+    }
+
+    public String getSimpleErrorType() {
+        return NameConverter.humanize(lastElementOf(Splitter.on(".").splitToList(errorType)));
+    }
+
+    private String lastElementOf(List<String> elements) {
+        return elements.get(elements.size() - 1);
     }
 
     public String getMessage() {
@@ -172,5 +183,13 @@ public class FailureCause {
         } catch(NoSuchMethodException e) {
             return Optional.absent();
         }
+    }
+
+    public String getShortenedMessage() {
+        if (isEmpty(message.trim())) {
+            return message;
+        }
+        String[] messageLines = message.trim().split("\n|\n\r|\r");
+        return messageLines[0];
     }
 }

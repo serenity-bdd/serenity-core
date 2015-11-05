@@ -1134,16 +1134,34 @@ public class TestOutcome {
         return getTestFailureCause();
     }
 
-    public String getErrorMessage() {
+    private Optional<TestStep> firstStepWithErrorMessage() {
         for (TestStep step : getFlattenedTestSteps()) {
             if (isNotBlank(step.getErrorMessage())) {
-                return step.getErrorMessage();
+                return Optional.of(step);
             }
         }
-        if (testFailureMessage != null) {
-            return testFailureMessage;
+        return Optional.absent();
+    }
+
+    public Optional<String> testFailureMessage() {
+        return Optional.fromNullable(testFailureMessage);
+
+    }
+
+    public String getErrorMessage() {
+        if (firstStepWithErrorMessage().isPresent()) {
+            return firstStepWithErrorMessage().get().getErrorMessage();
         }
-        return "";
+        return testFailureMessage().or("");
+    }
+
+
+
+    public String getConciseErrorMessage() {
+        if (firstStepWithErrorMessage().isPresent()) {
+            return firstStepWithErrorMessage().get().getConciseErrorMessage();
+        }
+        return testFailureMessage().or("");
     }
 
     public void setTestFailureMessage(String testFailureMessage) {

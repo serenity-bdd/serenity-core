@@ -11,8 +11,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <serenity.version>1.1.20-SNAPSHOT</serenity.version>
-        <serenity.maven.version>1.1.17</serenity.maven.version>
+        <serenity.version>1.1.21-SNAPSHOT</serenity.version>
+        <serenity.maven.version>1.1.20</serenity.maven.version>
         <webdriver.driver>firefox</webdriver.driver>
         <parallel.tests>4</parallel.tests>
     </properties>

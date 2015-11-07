@@ -448,8 +448,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     @Override
     protected Description describeChild(FrameworkMethod method) {
         Integer attempt = this.methodRetryCounts.get(method.getName());
-        Description description =null;
-        if(attempt!=null) {
+        Description description = null;
+        if(attempt!=null && attempt > 0) {
             description =  Description.createTestDescription(this.getTestClass().getJavaClass(), this.testName(method)+ "_attempt_" + attempt, method.getAnnotations());
         }else{
             description =  Description.createTestDescription(this.getTestClass().getJavaClass(), this.testName(method), method.getAnnotations());

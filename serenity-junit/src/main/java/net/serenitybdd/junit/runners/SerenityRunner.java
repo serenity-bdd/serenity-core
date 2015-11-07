@@ -40,6 +40,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static net.serenitybdd.core.Serenity.initializeTestSession;
 
@@ -75,6 +77,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
      * Retrieve the runner getConfiguration().from an external source.
      */
     private Configuration configuration;
+
     private TagScanner tagScanner;
 
     private BatchManager batchManager;
@@ -84,6 +87,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     public Pages getPages() {
         return pages;
     }
+
+    protected Map<String, Integer> methodRetryCounts = new ConcurrentHashMap<>();
 
     /**
      * Creates a new test runner for WebDriver web tests.
@@ -413,13 +418,13 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         StepEventBus.getEventBus().registerListener(failureDetectingStepListener);
 
         int maxRetries = getConfiguration().maxRetries();
-        for (int attemptCount = 0; attemptCount <= maxRetries; attemptCount++) {
+        for (int attemptCount = 0; attemptCount < maxRetries + 1; attemptCount += 1) {
             if (notifier instanceof RetryFilteringRunNotifier) {
                 ((RetryFilteringRunNotifier) notifier).reset();
             }
-
+            this.methodRetryCounts.put(method.getName(), attemptCount);
             if (attemptCount > 0) {
-                logger.warn("{} failed, making attempt number {} out of {} retries", method.getName(), (attemptCount + 1), maxRetries);
+                logger.warn("{} failed, making attempt number {} out of 1 base call + {} retries", method.getName(), attemptCount, maxRetries);
                 StepEventBus.getEventBus().testRetried();
             }
 
@@ -438,6 +443,18 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         if (notifier instanceof RetryFilteringRunNotifier) {
             ((RetryFilteringRunNotifier) notifier).flush();
         }
+    }
+
+    @Override
+    protected Description describeChild(FrameworkMethod method) {
+        Integer attempt = this.methodRetryCounts.get(method.getName());
+        Description description =null;
+        if(attempt!=null) {
+            description =  Description.createTestDescription(this.getTestClass().getJavaClass(), this.testName(method)+ "_attempt_" + attempt, method.getAnnotations());
+        }else{
+            description =  Description.createTestDescription(this.getTestClass().getJavaClass(), this.testName(method), method.getAnnotations());
+        }
+        return description;
     }
 
     private void clearMetadataIfRequired() {

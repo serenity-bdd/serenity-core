@@ -49,6 +49,8 @@ import static net.thucydides.core.steps.stepdata.StepData.withTestDataFrom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
+import static net.thucydides.core.webdriver.SystemPropertiesConfiguration.MAX_RETRIES;
+import static net.thucydides.core.webdriver.SystemPropertiesConfiguration.JUNIT_RETRY_TESTS;
 
 public class WhenRunningADataDrivenTestScenario {
 
@@ -69,8 +71,8 @@ public class WhenRunningADataDrivenTestScenario {
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
         environmentVariables = new MockEnvironmentVariables();
-        environmentVariables.setProperty("max.retries", "1");
-        environmentVariables.setProperty("junit.retry.tests", "true");
+        environmentVariables.setProperty(MAX_RETRIES, "1");
+        environmentVariables.setProperty(JUNIT_RETRY_TESTS, "true");
         configuration = new SystemPropertiesConfiguration(environmentVariables);
     }
 

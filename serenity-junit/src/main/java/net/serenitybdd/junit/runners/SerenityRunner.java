@@ -417,7 +417,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         FailureDetectingStepListener failureDetectingStepListener = new FailureDetectingStepListener();
         StepEventBus.getEventBus().registerListener(failureDetectingStepListener);
 
-        int maxRetries = getConfiguration().maxRetries();
+        int maxRetries = shouldRetryTest() ? getConfiguration().maxRetries() : 0;
         for (int attemptCount = 0; attemptCount < maxRetries + 1; attemptCount += 1) {
             if (notifier instanceof RetryFilteringRunNotifier) {
                 ((RetryFilteringRunNotifier) notifier).reset();

@@ -1,6 +1,6 @@
 import java.nio.file.Files
-project.apply plugin: 'java'
-
+//apply plugin: 'java'
+//apply plugin: 'net.serenity-bdd.aggregator'
 buildscript {
     def libDir = {
         def pluginBuildDir = buildDir.toPath().parent.parent.parent.parent
@@ -11,6 +11,9 @@ buildscript {
         mavenLocal()
         jcenter()
         flatDir(name: 'fileRepo', dirs: libDir)
+    }
+    dependencies{
+        classpath fileTree(libDir)
     }
 }
 
@@ -28,6 +31,7 @@ repositories {
 
 /*test {
     systemProperty 'max.retries', 2
+    systemProperty 'junit.retry.tests', true
 }*/
 
 dependencies {

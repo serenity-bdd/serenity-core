@@ -41,7 +41,7 @@ class WhenNamingReports extends Specification {
         when:
         def reportName = reportNameProvider.forTag("tagvalue")
         then:
-        reportName == Digest.ofTextValue("context_sometest_tag_tagvalue") + ".html"
+        reportName == Digest.ofTextValue("context_sometest_tagvalue") + ".html"
     }
 
     def "should find a unique prefixed name for a tag report"() {
@@ -50,7 +50,7 @@ class WhenNamingReports extends Specification {
         when:
         def reportName = reportNameProvider.withPrefix("pre").forTag("tagvalue")
         then:
-        reportName == Digest.ofTextValue("context_pre_tag_tagvalue") + ".html"
+        reportName == Digest.ofTextValue("context_pre_tagvalue") + ".html"
     }
 
     def "should find a unique name for a tag type report"() {

@@ -730,7 +730,12 @@ public enum ThucydidesSystemProperty {
     /**
      * If set to true, add a tag for test failures, based on the error type and message
      */
-    SERENITY_TAG_FAILURES;
+    SERENITY_TAG_FAILURES,
+
+    /**
+     * A comma-separated list of tag types for which human-readable report names will be generated.
+     */
+    SERENITY_LINKED_TAGS;
 
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;

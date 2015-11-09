@@ -18,9 +18,15 @@ public class ReportNamer {
     }
 
     private ReportType type;
+    private boolean compressedFilename = true;
 
     private ReportNamer(final ReportType type) {
+        this(type, true);
+    }
+
+    public ReportNamer(ReportType type, boolean compressedFilename) {
         this.type = type;
+        this.compressedFilename = compressedFilename;
     }
 
     /**
@@ -78,7 +84,8 @@ public class ReportNamer {
 
     public String getNormalizedTestNameFor(String name) {
         String testNameWithUnderscores = NameConverter.underscore(name.toLowerCase());
-        return appendSuffixTo(Digest.ofTextValue(testNameWithUnderscores));
+        return (compressedFilename) ? appendSuffixTo(Digest.ofTextValue(testNameWithUnderscores))
+                : appendSuffixTo(testNameWithUnderscores);
     }
 
     private String appendSuffixTo(final String testNameWithUnderscores) {
@@ -87,5 +94,9 @@ public class ReportNamer {
         } else {
             return testNameWithUnderscores + "." + type.toString();
         }
+    }
+
+    public ReportNamer withNoCompression() {
+        return new ReportNamer(type, false);
     }
 }

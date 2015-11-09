@@ -1,5 +1,6 @@
 package net.thucydides.core.reports.html;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.SerenitySystemProperties;
 import net.serenitybdd.core.buildinfo.BuildInfoProvider;
@@ -165,8 +166,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         }
         generateRequirementTypeReports(requirementsOutcomes);
         generateResultReportsFor(testOutcomes);
-//        generateHistoryReportFor(testOutcomes);
-//        generateCoverageReportsFor(testOutcomes);
 
         generateRequirementsReportsFor(requirementsOutcomes);
 
@@ -428,6 +427,28 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         String report = reportName.forTag(tag);
         generateReportPage(context, TEST_OUTCOME_TEMPLATE_PATH, report);
         generateCSVReportFor(testOutcomesForTag, csvReport);
+
+        if (shouldGenerateLinkableReportsFor(tag, reportName)) {
+            String linkableReport = reportName.inLinkableForm().forTag(tag);
+            generateReportPage(context, TEST_OUTCOME_TEMPLATE_PATH, linkableReport);
+            System.out.println("Generating tag report: " + linkableReport);
+        }
+
+    }
+
+    private boolean shouldGenerateLinkableReportsFor(TestTag tag, ReportNameProvider reportName) {
+        List<String> linkableTags = Splitter.on(",").trimResults().splitToList(
+                ThucydidesSystemProperty.SERENITY_LINKED_TAGS.from(environmentVariables, "").toLowerCase());
+        return reportName.getContext().isEmpty() && containsTag(linkableTags, tag.getType().toLowerCase());
+    }
+
+    private boolean containsTag(List<String> linkableTags, String tag) {
+        for(String linkableTag : linkableTags) {
+            if (linkableTag.equalsIgnoreCase(tag)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void addBreadcrumbsForRequirementsTag(Map<String, Object> context, TestOutcomes testOutcomes, TestTag tag) {

@@ -16,6 +16,13 @@ public class ReportNameProvider {
     private final ReportNamer reportNamer;
     private final RequirementsService requirementsService;
 
+
+    public ReportNameProvider(Optional<String> context, ReportNamer reportNamer, RequirementsService requirementsService) {
+        this.context = context;
+        this.reportNamer = reportNamer;
+        this.requirementsService = requirementsService;
+    }
+
     private final static Optional<String> NO_CONTEXT = Optional.absent();
 
     public ReportNameProvider() {
@@ -24,6 +31,7 @@ public class ReportNameProvider {
 
     public ReportNameProvider(String context) {
        this(Optional.fromNullable(context), ReportType.HTML, Injectors.getInjector().getInstance(RequirementsService.class));
+
     }
 
     protected ReportNameProvider(Optional<String> context, ReportType type) {
@@ -53,11 +61,11 @@ public class ReportNameProvider {
     }
 
     public String forTag(String tag) {
-        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + "tag_" + tag.toLowerCase());
+        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + tag.toLowerCase());
     }
 
     public String forTag(TestTag tag) {
-        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + "tag_" + tag.getType().toLowerCase() + "_" + tag.getName().toLowerCase());
+        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + tag.getType().toLowerCase() + "_" + tag.getName().toLowerCase());
     }
 
 
@@ -113,4 +121,7 @@ public class ReportNameProvider {
         return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + "release_" + releaseName);
     }
 
+    public ReportNameProvider inLinkableForm() {
+        return new ReportNameProvider(context, reportNamer.withNoCompression(), requirementsService);
+    }
 }

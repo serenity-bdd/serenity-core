@@ -1,18 +1,7 @@
 package net.serenitybdd.plugins.gradle.integration
 
-import net.serenitybdd.core.annotations.findby.By
-import net.serenitybdd.core.pages.PageObject
 import net.serenitybdd.plugins.gradle.SerenityPlugin
 import org.gradle.testfixtures.ProjectBuilder
-import org.junit.AfterClass
-import org.junit.Before
-import org.junit.BeforeClass
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebElement
-import org.openqa.selenium.chrome.ChromeDriver
-import org.openqa.selenium.firefox.FirefoxDriver
-import org.openqa.selenium.phantomjs.PhantomJSDriver
-import spock.lang.Shared
 import spock.lang.Specification
 import net.thucydides.core.util.TestResources
 import java.nio.file.Files

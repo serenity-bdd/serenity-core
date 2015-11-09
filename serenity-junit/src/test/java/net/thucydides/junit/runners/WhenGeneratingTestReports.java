@@ -10,15 +10,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.notification.RunNotifier;
-import org.junit.runners.model.InitializationError;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.io.File;
-import java.io.IOException;
-
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 /**
  * Managing the WebDriver instance during a test run The instance should be
@@ -50,18 +46,5 @@ public class WhenGeneratingTestReports extends AbstractTestStepRunnerTest {
         runner.run(new RunNotifier());
 
         verify(mockReporter).generateReportFor(any(TestOutcome.class), any(TestOutcomes.class));
-    }
-
-
-    @Test
-    public void the_runner_should_tell_the_reporter_what_directory_to_use()
-            throws InitializationError, IOException {
-
-        SerenityRunner runner = new ThucydidesRunner(AnnotatedSingleTestScenario.class);
-        runner.subscribeReporter(mockReporter);
-
-        runner.run(new RunNotifier());
-
-        verify(mockReporter,atLeast(1)).setOutputDirectory(any(File.class));
     }
 }

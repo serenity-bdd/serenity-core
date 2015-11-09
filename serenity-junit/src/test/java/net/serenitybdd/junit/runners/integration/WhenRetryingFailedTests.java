@@ -46,7 +46,7 @@ public class WhenRetryingFailedTests {
 
         assertThat(outcomes.size(), is(1));
         assertThat(outcomes.get(0).getResult(), is(TestResult.SUCCESS));
-        assertThat(notifier.failed, is(false));
+        assertThat(notifier.failed, is(true));
     }
 
     public static class FailThenPassSample {

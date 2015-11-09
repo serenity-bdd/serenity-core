@@ -11,7 +11,7 @@ public class Consequence<T> {
     private final Matcher<T> expected;
     private final String subject;
 
-    protected Consequence(Question<T> actual, Matcher<T> expected) {
+    public Consequence(Question<T> actual, Matcher<T> expected) {
         this.actual = actual;
         this.expected = expected;
         this.subject = QuestionSubject.fromClass(actual.getClass()).andQuestion(actual).subject();

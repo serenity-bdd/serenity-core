@@ -189,7 +189,12 @@ public class FailureCause {
         if (isEmpty(message.trim())) {
             return message;
         }
-        String[] messageLines = message.trim().split("\n|\n\r|\r");
+        String[] messageLines = withCollapedAssertionError(message).trim().split("\n|\n\r|\r");
         return messageLines[0];
+    }
+
+    private String withCollapedAssertionError(String message) {
+        return message.replace("Expecting:\\r\\n", "Expecting:")
+                      .replace("Expecting:\\n", "Expecting:");
     }
 }

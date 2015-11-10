@@ -96,7 +96,7 @@ class WhenRunTestsWithGradlePlugin extends Specification {
                 .directoryInClasspathCalled "test-retries-gradle-project"
             def project = ProjectBuilder.builder().withProjectDir(testProject)
                 .build()
-            def reports = project.projectDir.toPath()
+            def reports = testProject.toPath()
             def plugin = new SerenityPlugin()
             testProject.toPath().resolve(project.buildDir.name).deleteDir()
         when: "project build and aggregation plugin called"

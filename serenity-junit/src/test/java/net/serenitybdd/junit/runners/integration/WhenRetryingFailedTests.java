@@ -17,6 +17,7 @@ import org.junit.runner.notification.RunNotifier;
 import java.util.List;
 
 import static net.thucydides.core.webdriver.SystemPropertiesConfiguration.MAX_RETRIES;
+import static net.thucydides.core.webdriver.SystemPropertiesConfiguration.JUNIT_RETRY_TESTS;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -34,6 +35,7 @@ public class WhenRetryingFailedTests {
     @Test
     public void result_is_a_pass_despite_initial_failure() throws Exception {
         environmentVariables.setProperty(MAX_RETRIES, "5");
+        environmentVariables.setProperty(JUNIT_RETRY_TESTS, "true");
         SerenityRunner runner = new SerenityRunner(FailThenPassSample.class,
                                                        new WebDriverFactory(environmentVariables),
                                                        new SystemPropertiesConfiguration(environmentVariables));
@@ -44,7 +46,7 @@ public class WhenRetryingFailedTests {
 
         assertThat(outcomes.size(), is(1));
         assertThat(outcomes.get(0).getResult(), is(TestResult.SUCCESS));
-        assertThat(notifier.failed, is(false));
+        assertThat(notifier.failed, is(true));
     }
 
     public static class FailThenPassSample {

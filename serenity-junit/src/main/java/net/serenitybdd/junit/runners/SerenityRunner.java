@@ -75,6 +75,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
      * Retrieve the runner getConfiguration().from an external source.
      */
     private Configuration configuration;
+
     private TagScanner tagScanner;
 
     private BatchManager batchManager;
@@ -412,14 +413,13 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         FailureDetectingStepListener failureDetectingStepListener = new FailureDetectingStepListener();
         StepEventBus.getEventBus().registerListener(failureDetectingStepListener);
 
-        int maxRetries = getConfiguration().maxRetries();
-        for (int attemptCount = 0; attemptCount <= maxRetries; attemptCount++) {
+        int maxRetries = shouldRetryTest() ? getConfiguration().maxRetries() : 0;
+        for (int attemptCount = 0; attemptCount < maxRetries + 1; attemptCount += 1) {
             if (notifier instanceof RetryFilteringRunNotifier) {
                 ((RetryFilteringRunNotifier) notifier).reset();
             }
-
             if (attemptCount > 0) {
-                logger.warn("{} failed, making attempt number {} out of {} retries", method.getName(), (attemptCount + 1), maxRetries);
+                logger.warn("{} failed, making attempt number {} out of 1 base call + {} retries", method.getName(), attemptCount, maxRetries);
                 StepEventBus.getEventBus().testRetried();
             }
 

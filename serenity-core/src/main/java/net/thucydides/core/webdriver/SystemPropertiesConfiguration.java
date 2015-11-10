@@ -17,7 +17,7 @@ import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
  * Centralized configuration of the test runner. You can configure the output
  * directory, the browser to use, and the reports to generate. Most
  * configuration elements can be set using system properties.
- * 
+ *
  */
 public class SystemPropertiesConfiguration implements Configuration {
 
@@ -55,6 +55,8 @@ public class SystemPropertiesConfiguration implements Configuration {
             = ThucydidesSystemProperty.REFUSE_UNTRUSTED_CERTIFICATES.getPropertyName();
 
     public static final String MAX_RETRIES = "max.retries";
+
+    public static final String JUNIT_RETRY_TESTS="junit.retry.tests";
 
     /**
      * By default, reports will go here.
@@ -166,7 +168,7 @@ public class SystemPropertiesConfiguration implements Configuration {
      * reports to. By default, it will be in 'target/site/serenity', but you can
      * override this value either programmatically or by providing a value in
      * the <b>thucydides.output.dir</b> system property.
-     * 
+     *
      */
     public File getOutputDirectory() {
         if (outputDirectory == null) {
@@ -236,7 +238,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     /**
      * Transform a driver type into the SupportedWebDriver enum. Driver type can
      * be any case.
-     * 
+     *
      * @throws UnsupportedDriverException
      */
     private SupportedWebDriver lookupSupportedDriverTypeFor(final String driverType) {

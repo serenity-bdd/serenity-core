@@ -10,7 +10,6 @@ import java.nio.file.Files
  * Created by john on 9/11/2014.
  */
 class WhenUsingTheGradlePlugin extends Specification {
-
     def "should add the aggregate task to a project"() {
         given:
             Project project = ProjectBuilder.builder().build()
@@ -98,7 +97,7 @@ class WhenUsingTheGradlePlugin extends Specification {
             Files.exists reports.resolve("index.html")
     }
 
-    def "should assemble aggregate report of gradle project with properties"() {
+    def "should assemble aggregate report of gradle project in output dir"() {
         given: "project with customized properties for aggregation task"
             def testProject = TestResources
                 .directoryInClasspathCalled "customized-gradle-project"

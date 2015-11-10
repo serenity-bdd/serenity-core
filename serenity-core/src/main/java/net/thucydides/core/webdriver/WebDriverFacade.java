@@ -376,6 +376,6 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     public String getDriverName() {
-        return SupportedWebDriver.forClass(getDriverClass()).name().toLowerCase();
+        return SupportedWebDriver.forClass(this.driverClass).name().toLowerCase();
     }
 }

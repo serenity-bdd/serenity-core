@@ -9,9 +9,7 @@
                     <table id="${id}">
                         <thead>
                         <tr>
-                            <th width="50" class="test-results-heading">&
-
-                                nbsp;</th>
+                            <th width="50" class="test-results-heading">&nbsp;</th>
                             <th width="%" class="test-results-heading">Tests</th>
                             <th width="70" class="test-results-heading">Steps</th>
 

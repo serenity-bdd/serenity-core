@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.internal.RestAssuredResponseImpl;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.response.ValidatableResponse;
@@ -61,7 +62,7 @@ public class SerenityRest {
     public static ValidatableResponse and() {
         return then();
     }
-    
+
     public static ValidatableResponse then() {
         assert(currentResponse.get() != null);
         return currentResponse.get().then();
@@ -227,7 +228,9 @@ public class SerenityRest {
     }
 
     private static boolean shouldRecordResponseBodyFor(Response result) {
-        return result.getContentType().endsWith("/json") || result.getContentType().endsWith("/xml") || result.getContentType().endsWith("/text");
+        ContentType type=ContentType.fromContentType(result.contentType());
+        return type!=null && (ContentType.JSON == type || ContentType.XML == type
+            || ContentType.TEXT == type);
     }
 
     private static void notifyGetOrDelete(Object[] args, RestMethod method) {

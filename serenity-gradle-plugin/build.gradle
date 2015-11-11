@@ -49,10 +49,10 @@ task copySerenityJunit() {
 dependencies {
     compile gradleApi()
 //    compile localGroovy()
-    compile 'org.codehaus.groovy:groovy-all:2.3.10'
+    compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
     compile project(':serenity-core')
     compile project(':serenity-junit')
-    testCompile "junit:junit:4.12"
+    testCompile "junit:junit:${junitVersion}"
     testCompile project(':serenity-core').sourceSets.test.output
     testRuntime files(copySerenityCore)
     testRuntime files(copySerenityJunit)

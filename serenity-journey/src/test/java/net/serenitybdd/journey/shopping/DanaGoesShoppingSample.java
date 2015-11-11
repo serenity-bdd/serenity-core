@@ -37,9 +37,31 @@ public class DanaGoesShoppingSample {
 
         then(dana).should(seeThat(theTotalCost(), equalTo(15)),
                           seeThat(theTotalCostIncludingDelivery(), greaterThanOrEqualTo(20)),
-                          seeThat(theThankYouMessage(), equalTo("Thank you!")));
+                          seeThat(theThankYouMessage(), equalTo("Thank you")));
     }
 
+    @Test
+    public void shouldBeAbleToPurchaseSomeItemsWithDeliveryAndCustomErrors() {
+        givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
+                andPurchased().aPear().thatCosts(5).dollars());
+
+        when(dana).attemptsTo(haveThemDelivered);
+
+        then(dana).should(seeThat(theTotalCostIncludingDelivery(), greaterThanOrEqualTo(20)),
+                seeThat(theThankYouMessage(), equalTo("You're welcome")));
+    }
+
+    @Test
+    public void shouldBeAbleToPurchaseSomeItemsWithDeliveryAndCustomErrorsByQuestion() {
+        givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
+                andPurchased().aPear().thatCosts(5).dollars());
+
+        when(dana).attemptsTo(haveThemDelivered);
+
+        then(dana).should(seeThat(theTotalCostIncludingDelivery(), greaterThanOrEqualTo(20)),
+                seeThat(theThankYouMessage(), equalTo("You're welcome"))
+                        .orComplainWith(PeopleAreSoImpolite.class));
+    }
 
     @Test
     public void shouldBeAbleToAskForNiceThings() {

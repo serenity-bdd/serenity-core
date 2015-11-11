@@ -10,6 +10,7 @@ public class Consequence<T> {
     private final Question<T> actual;
     private final Matcher<T> expected;
     private final String subject;
+    private Class<? extends AssertionError> complaintType;
 
     public Consequence(Question<T> actual, Matcher<T> expected) {
         this.actual = actual;
@@ -19,7 +20,37 @@ public class Consequence<T> {
 
     public void evaluateFor(Actor actor) {
         ensureThisStepShouldNotBeIgnored();
-        assertThat(actual.answeredBy(actor), expected);
+        try {
+            assertThat(actual.answeredBy(actor), expected);
+        } catch (AssertionError actualError) {
+
+            throwComplaintTypeErrorIfSpecified(actualError);
+
+            throwDiagosticErrorIfProvided(actualError);
+
+            throw actualError;
+        }
+    }
+
+    private void throwDiagosticErrorIfProvided(AssertionError actualError) {
+        if (actual instanceof QuestionDiagnostics) {
+            throw complaintFrom(((QuestionDiagnostics) actual).onError(), actualError);
+        }
+    }
+
+    private void throwComplaintTypeErrorIfSpecified(AssertionError actualError) {
+        if (complaintType != null) {
+            throw complaintFrom(complaintType, actualError);
+        }
+    }
+
+    private AssertionError complaintFrom(Class<? extends AssertionError> complaintType, AssertionError actualError) {
+        try {
+            return complaintType.getConstructor(Throwable.class).newInstance(actualError);
+        } catch (Exception e) {
+            return new AssertionError(String.format("%s should have a constructor that takes a nested exception",
+                    complaintType.getSimpleName()));
+        }
     }
 
     private void ensureThisStepShouldNotBeIgnored() {
@@ -31,5 +62,10 @@ public class Consequence<T> {
     @Override
     public String toString() {
         return String.format("Then %s should be %s", subject, expected);
+    }
+
+    public Consequence<T> orComplainWith(Class<? extends AssertionError> complaintType) {
+        this.complaintType = complaintType;
+        return this;
     }
 }

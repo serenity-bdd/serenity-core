@@ -22,11 +22,12 @@ public class FailureCause {
     private String message;
     private StackTraceElement[] stackTrace;
 
-    public FailureCause() {}
+    public FailureCause() {
+    }
 
     public FailureCause(Throwable cause) {
         this.errorType = exceptionClassName(cause);
-        this.message =  cause.getMessage();
+        this.message = cause.getMessage();
         this.stackTrace = cause.getStackTrace();
     }
 
@@ -50,13 +51,13 @@ public class FailureCause {
 
     private String parseErrorMessage(String message) {
         if ((message != null) && (message.startsWith(ERROR_MESSAGE_LABEL_1) || message.startsWith(ERROR_MESSAGE_LABEL_2))) {
-                return extractErrorMessageTextFrom(message);
+            return extractErrorMessageTextFrom(message);
         } else {
             return message;
         }
     }
 
-    private String extractErrorMessageTextFrom(String message)  {
+    private String extractErrorMessageTextFrom(String message) {
         message = message.substring(ERROR_MESSAGE_LABEL_1.length() + 1);
         int endOfMessage = message.indexOf("','");
         if (endOfMessage == -1) {
@@ -127,7 +128,7 @@ public class FailureCause {
             Class failureClass = Class.forName(testFailureClassname);
             Throwable exception = buildThrowable(testFailureMessage, failureClass);
             if (exception == null) {
-                exception =  new UnrecognisedException(failureClass.getName() + ": " + testFailureMessage);
+                exception = new UnrecognisedException(failureClass.getName() + ": " + testFailureMessage);
             }
             exception.setStackTrace(this.getStackTrace());
             return Optional.fromNullable(exception);
@@ -147,7 +148,7 @@ public class FailureCause {
             return (T) stringConstructorFor(failureClass).get().newInstance(testFailureMessage);
         } else if (stringThrowableConstructorFor(failureClass).isPresent()) {
             return (T) stringThrowableConstructorFor(failureClass).get().newInstance(testFailureMessage, null);
-        }else if (throwableConstructorFor(failureClass).isPresent()) {
+        } else if (throwableConstructorFor(failureClass).isPresent()) {
             return (T) throwableConstructorFor(failureClass).get().newInstance(new AssertionError(testFailureMessage));
         }
         return null;
@@ -156,7 +157,7 @@ public class FailureCause {
     private Optional<Constructor> defaultConstructorFor(Class failureClass) throws NoSuchMethodException {
         try {
             return Optional.fromNullable(failureClass.getConstructor());
-        } catch(NoSuchMethodException e) {
+        } catch (NoSuchMethodException e) {
             return Optional.absent();
         }
     }
@@ -164,7 +165,7 @@ public class FailureCause {
     private Optional<Constructor> stringConstructorFor(Class failureClass) throws NoSuchMethodException {
         try {
             return Optional.fromNullable(failureClass.getConstructor(String.class));
-        } catch(NoSuchMethodException e) {
+        } catch (NoSuchMethodException e) {
             return Optional.absent();
         }
     }
@@ -172,7 +173,7 @@ public class FailureCause {
     private Optional<Constructor> stringThrowableConstructorFor(Class failureClass) throws NoSuchMethodException {
         try {
             return Optional.fromNullable(failureClass.getConstructor(String.class, Throwable.class));
-        } catch(NoSuchMethodException e) {
+        } catch (NoSuchMethodException e) {
             return Optional.absent();
         }
     }
@@ -180,7 +181,7 @@ public class FailureCause {
     private Optional<Constructor> throwableConstructorFor(Class failureClass) throws NoSuchMethodException {
         try {
             return Optional.fromNullable(failureClass.getConstructor(Throwable.class));
-        } catch(NoSuchMethodException e) {
+        } catch (NoSuchMethodException e) {
             return Optional.absent();
         }
     }
@@ -194,7 +195,14 @@ public class FailureCause {
     }
 
     private String withCollapedAssertionError(String message) {
-        return message.replace("Expecting:\\r\\n", "Expecting:")
-                      .replace("Expecting:\\n", "Expecting:");
+        return (message.contains("AssertionError")) ?
+                message.replace("\r\n", "")
+                        .replace("\\r\\n", "")
+                        .replace("/r/n", "")
+                        .replace("\n", "")
+                        .replace("\\n","")
+                        .replace("/n", "")
+                        .replace("     ", " ")
+                        .replace("java.lang.AssertionError", "") : message;
     }
 }

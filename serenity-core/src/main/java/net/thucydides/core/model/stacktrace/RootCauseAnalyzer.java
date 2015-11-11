@@ -1,6 +1,7 @@
 package net.thucydides.core.model.stacktrace;
 
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
+import net.thucydides.core.webdriver.WebdriverAssertionError;
 
 /**
  * Created by john on 3/07/2014.
@@ -21,11 +22,10 @@ public class RootCauseAnalyzer {
     }
 
     private Throwable originalExceptionFrom(Throwable thrownException) {
-        if (thrownException instanceof SerenityWebDriverException) {
+        if (!(thrownException instanceof WebdriverAssertionError) && ((thrownException instanceof SerenityWebDriverException) || (thrownException instanceof AssertionError))){
             return thrownException;
-        } else {
-            return (thrownException.getCause() != null) ? thrownException.getCause() : thrownException;
         }
+        return (thrownException.getCause() != null) ? thrownException.getCause() : thrownException;
     }
 
     public String getClassname() {
@@ -33,6 +33,7 @@ public class RootCauseAnalyzer {
     }
 
     public String getMessage() {
-        return getRootCause().getMessage();
+        return (getRootCause().getMessage() != null) ?
+                getRootCause().getMessage().replace("java.lang.AssertionError","") : getRootCause().getMessage();
     }
 }

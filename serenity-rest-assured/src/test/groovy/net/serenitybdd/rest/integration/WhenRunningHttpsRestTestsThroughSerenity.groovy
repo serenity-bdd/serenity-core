@@ -54,5 +54,4 @@ class WhenRunningHttpsRestTestsThroughSerenity {
                     query.responseBody.contains("26201720")
             })
     }
-
 }

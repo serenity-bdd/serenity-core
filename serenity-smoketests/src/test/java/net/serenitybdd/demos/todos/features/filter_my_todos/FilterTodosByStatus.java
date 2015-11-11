@@ -37,7 +37,7 @@ public class FilterTodosByStatus {
         joe.has(openedTheTodoApplication);
     }
 
-    static int tries = 1;
+    //static int tries = 1;
     @Test
     public void filter_by_active_tasks() {
         givenThat(joe).has(addedSomeItems.called("Buy the milk", "Buy Petrol"));
@@ -46,7 +46,8 @@ public class FilterTodosByStatus {
         when(joe).attemptsTo(FilterItems.byStatus(Active));
 
         then(joe).should(seeThat(theDisplayedItems, contains("Buy Petrol")));
-        assertThat(tries++).isGreaterThanOrEqualTo(3);
+        //todo move to external build test
+        //assertThat(tries++).isGreaterThanOrEqualTo(3);
     }
 
     @Test

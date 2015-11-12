@@ -456,7 +456,7 @@
                 <#--</#if>-->
             </#if>
                 <tr class="test-${testOutcome.result}">
-                    <td colspan="2"></td>
+                    <td colspan="3"></td>
                     <td width="100"><span class="top-level-step"><em>${testOutcome.result}</em></span></td>
                     <td width="100"><span class="top-level-step"><em>${testOutcome.durationInSeconds}s</em></span></td>
                 </tr>

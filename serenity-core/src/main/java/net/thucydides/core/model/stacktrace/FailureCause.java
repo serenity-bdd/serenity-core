@@ -197,7 +197,7 @@ public class FailureCause {
     }
 
     private String withCollapedAssertionError(String message) {
-        return (message.contains("AssertionError")) ?
+        return (message.contains("AssertionError") || message.contains("Expected")) ?
                 message.replace("\r\n", "")
                         .replace("\\r\\n", "")
                         .replace("/r/n", "")

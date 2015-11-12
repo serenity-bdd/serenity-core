@@ -150,6 +150,8 @@ public class FailureCause {
             return (T) stringThrowableConstructorFor(failureClass).get().newInstance(testFailureMessage, null);
         } else if (throwableConstructorFor(failureClass).isPresent()) {
             return (T) throwableConstructorFor(failureClass).get().newInstance(new AssertionError(testFailureMessage));
+        } else if (AssertionError.class.isAssignableFrom(failureClass)) {
+            return (T) new AssertionError(testFailureMessage);
         }
         return null;
     }

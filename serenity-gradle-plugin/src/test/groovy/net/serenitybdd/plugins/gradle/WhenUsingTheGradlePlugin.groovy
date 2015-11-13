@@ -113,17 +113,12 @@ class WhenUsingTheGradlePlugin extends Specification {
             def folders = properties."serenity.outputDirectory".split "\\|/"
             folders.each { reports = reports.resolve(it) }
 
-            def configs = new SerenityPluginExtension(
-                outputDirectory: properties."serenity.outputDirectory"
-            )
-            project.extensions.add "serenity", configs
-
         when: "project build and aggregation plugin called"
             project.apply plugin: 'java'
             plugin.apply(project)
             ["compileJava", "processResources", "classes",
              "assemble", "compileTestJava", "processTestResources", "testClasses",
-             "test", "aggregate"
+             "test", "aggregate", "checkOutcomes"
             ].each {
                 project.getTasksByName(it, false).first().execute()
             }

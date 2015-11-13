@@ -13,21 +13,13 @@ class SerenityPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        if(!project.extensions.findByName("serenity")) {
-            project.extensions.add("serenity", new SerenityPluginExtension())
-            def serenityProperties = project.rootDir.toPath().resolve("serenity.properties")
-            if(Files.exists(serenityProperties)){
-                def properties = new Properties()
-                serenityProperties.withInputStream {
-                    properties.load(it)
-                }
-                project.serenity.outputDirectory = properties."serenity.outputDirectory"
-                project.serenity.sourceDirectory = project.serenity.outputDirectory
-            }
+        def configuration = loadProperties()
+        project.extensions.create("serenity", new SerenityPluginExtension())
+        if(configuration."serenity.outputDirectory"){
+            project.serenity.outputDirectory = configuration."serenity.outputDirectory"
+            project.serenity.sourceDirectory = configuration."serenity.outputDirectory"
         }
-
         reportDirectory = prepareReportDirectory(project)
-
 
         project.task('aggregate') {
             group 'Serenity BDD'
@@ -85,5 +77,17 @@ class SerenityPlugin implements Plugin<Project> {
 
     def prepareReportDirectory(Project project) {
         new File(project.projectDir, project.serenity.outputDirectory)
+    }
+
+    def loadProperties(){
+        def configuration = new Properties()
+        def serenityProperties = project.rootDir.toPath().resolve("serenity.properties")
+        if(Files.exists(serenityProperties)){
+            serenityProperties.withInputStream {
+                configuration.load(it)
+            }
+        }
+        configuration.putAll(System.properties)
+        configuration
     }
 }

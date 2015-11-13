@@ -14,7 +14,7 @@
                             <th width="70" class="test-results-heading">Steps</th>
 
                             <#if reportOptions.showStepDetails>
-                                <th width="65" `class="test-results-heading">Fail</th>
+                                <th width="65" class="test-results-heading">Fail</th>
                                 <th width="65" class="test-results-heading">Error</th>
                                 <th width="65" class="test-results-heading">Comp</th>
                                 <th width="65" class="test-results-heading">Pend</th>

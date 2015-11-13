@@ -49,7 +49,6 @@ public class BrowseTheWeb extends PageObject implements Ability {
     @Subscribe public void beginPerformance(ActorBeginsPerformanceEvent performanceEvent) {
         try {
             if (performanceEvent.getName().equals(actor.getName())) {
-                logger.info("Set current driver for " + actor.getName() + " to " + getDriver());
                 webdriverManager.setCurrentDriver(getDriver());
             }
         } catch(Throwable e) {

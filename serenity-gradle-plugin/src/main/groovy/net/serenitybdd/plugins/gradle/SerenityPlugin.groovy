@@ -13,8 +13,8 @@ class SerenityPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        def configuration = loadProperties()
-        project.extensions.create("serenity", new SerenityPluginExtension())
+        def configuration = loadProperties(project)
+        project.extensions.create("serenity", SerenityPluginExtension)
         if(configuration."serenity.outputDirectory"){
             project.serenity.outputDirectory = configuration."serenity.outputDirectory"
             project.serenity.sourceDirectory = configuration."serenity.outputDirectory"
@@ -79,7 +79,7 @@ class SerenityPlugin implements Plugin<Project> {
         new File(project.projectDir, project.serenity.outputDirectory)
     }
 
-    def loadProperties(){
+    def loadProperties(def project){
         def configuration = new Properties()
         def serenityProperties = project.rootDir.toPath().resolve("serenity.properties")
         if(Files.exists(serenityProperties)){

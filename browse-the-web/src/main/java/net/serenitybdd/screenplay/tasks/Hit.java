@@ -37,7 +37,7 @@ public class Hit implements Performable {
     @Step("{0} types '#keys' in #target")
     public <T extends Actor> void performAs(T theUser) {
         BrowseTheWeb.as(theUser)
-                .moveTo(target.getCssOrXPathSelector())
+                .findBy(target.getCssOrXPathSelector())
                 .then().sendKeys(keys);
     }
 }

@@ -131,7 +131,8 @@ class WhenAPhotographerTakesScreenshots extends Specification {
 
     def cleanup() {
         println "Test duration: " + (System.currentTimeMillis() - startTime) + " ms"
-        driver.quit()
+        if (driver){
+            driver.quit()
+        }
     }
-
 }

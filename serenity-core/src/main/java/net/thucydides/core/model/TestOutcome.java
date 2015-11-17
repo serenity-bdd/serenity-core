@@ -1710,7 +1710,7 @@ public class TestOutcome {
      * @return The total duration of all of the tests in this set in milliseconds.
      */
     public double getDurationInSeconds() {
-        return TestDuration.of(duration).inSeconds();
+        return TestDuration.of(getDuration()).inSeconds();
     }
 
     /**

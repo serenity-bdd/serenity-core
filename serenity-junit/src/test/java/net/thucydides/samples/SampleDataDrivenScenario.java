@@ -40,7 +40,7 @@ public class SampleDataDrivenScenario {
 
     @Steps
     public SampleScenarioSteps steps;
-        
+
     @Test
     public void happy_day_scenario() {
         steps.stepWithParameters(option1, option2);
@@ -51,5 +51,11 @@ public class SampleDataDrivenScenario {
         steps.stepWithParameters(option1,option2);
     }
 
+    public String getOption1() {
+        return this.option1;
+    }
 
+    public Integer getOption2() {
+        return this.option2;
+    }
 }

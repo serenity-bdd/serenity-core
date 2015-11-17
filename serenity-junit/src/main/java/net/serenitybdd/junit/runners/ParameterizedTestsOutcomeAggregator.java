@@ -71,7 +71,12 @@ public class ParameterizedTestsOutcomeAggregator {
                 nextStep.setDescription(normalizeTestStepDescription(nextStep.getDescription(),
                                         scenarioOutcome.getTestSteps().size() + 1));
                 nestedStep.addChildStep(nextStep);
+                nestedStep.setDuration(nextStep.getDuration()+nestedStep.getDuration());
             }
+        }
+
+        if (nestedStep.getDuration() == 0){
+            nestedStep.setDuration(testOutcome.getDuration());
         }
         scenarioOutcome.recordStep(nestedStep);
     }

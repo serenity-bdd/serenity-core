@@ -12,6 +12,7 @@ import org.junit.Ignore;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -79,6 +80,13 @@ public class SampleScenarioSteps extends ScenarioSteps {
 
     @Step
     public void stepWithParameters(String option1, Integer option2) {
+    }
+
+    @Step
+    public void stepWithParameters(String option1, Integer option2, Boolean pause) {
+        if (pause) {
+            action();
+        }
     }
 
     @Step
@@ -238,5 +246,13 @@ public class SampleScenarioSteps extends ScenarioSteps {
 
     public Boolean hasName() {
         return Serenity.getCurrentSession().containsKey("name");
+    }
+
+    private void action() {
+        try {
+            Thread.sleep(ThreadLocalRandom.current().nextInt(2, 5));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

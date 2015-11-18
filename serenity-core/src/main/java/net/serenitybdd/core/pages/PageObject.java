@@ -891,9 +891,9 @@ public abstract class PageObject {
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(By bySelector) {
         WebElement webElement = getDriver().findElement(bySelector);
         return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver,
-                                                                              webElement,
-                                                                              getImplicitWaitTimeout().in(MILLISECONDS),
-                                                                              getWaitForTimeout().in(MILLISECONDS));
+                webElement,
+                getImplicitWaitTimeout().in(MILLISECONDS),
+                getWaitForTimeout().in(MILLISECONDS));
     }
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(By selector) {
@@ -965,10 +965,17 @@ public abstract class PageObject {
 
     private boolean pageIsLoaded() {
         try {
-            return (getDriver().getCurrentUrl() != null);
+            return (driverIsInstantiated() && getDriver().getCurrentUrl() != null);
         } catch (WebDriverException e) {
             return false;
         }
+    }
+
+    protected boolean driverIsInstantiated() {
+        if (getDriver() instanceof WebDriverFacade) {
+            return ((WebDriverFacade) getDriver()).isEnabled() && ((WebDriverFacade) getDriver()).isInstantiated();
+        }
+        return true;
     }
 
     public ThucydidesFluentWait<WebDriver> waitForWithRefresh() {

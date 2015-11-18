@@ -58,12 +58,6 @@
 
 <#-- HEADER
 -->
-<#if testOutcome.result == "FAILURE"><#assign outcome_icon = "fail.png"><#assign outcome_text = "failing-color">
-<#elseif testOutcome.result == "ERROR"><#assign outcome_icon = "cross.png"><#assign outcome_text = "error-color">
-<#elseif testOutcome.result == "SUCCESS"><#assign outcome_icon = "success.png"><#assign outcome_text = "success-color">
-<#elseif testOutcome.result == "PENDING"><#assign outcome_icon = "pending.png"><#assign outcome_text = "pending-color">
-<#else><#assign outcome_icon = "ignor.png"><#assign outcome_text = "ignore-color">
-</#if>
 <div class="middlecontent">
     <div id="contenttop">
         <div class="middlebg">
@@ -88,61 +82,17 @@
 <@main_menu selected="home" />
 
     <div class="clr"></div>
-    <!--
-    <div id="contentbody">
-        <div class="titlebar">
-        <div class="story-title">
-            <table width="1005">
-                <td width="50"><img class="story-outcome-icon" src="images/${outcome_icon}" width="25" height="25"/> </td>
-            <#if (testOutcome.videoLink)??>
-                <td width="25"><a href="${testOutcome.videoLink}"><img class="story-outcome-icon" src="images/video.png" width="25" height="25" alt="Video"/></a></td>
-            </#if>
-                <td width="%"><span class="test-case-title"><span
-                        class="${outcome_text}">${testOutcome.titleWithLinks}<span class="related-issue-title">${testOutcome.formattedIssues}</span></span></span>
-                </td>
-                <td width="100"><span class="test-case-duration"><span class="greentext">${testOutcome.durationInSeconds}s</span></span>
-                </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                    <#if (parentRequirement.isPresent())>
-                        <div>
-                            <#assign parentTitle = inflection.of(parentRequirement.get().name).asATitle() >
-                            <#assign parentType = inflection.of(parentRequirement.get().type).asATitle() >
-                            <#if (parentRequirement.get().cardNumber?has_content) >
-                                <#assign issueNumber = "[" + formatter.addLinks(parentRequirement.get().cardNumber) + "]" >
-                            <#else>
-                                <#assign issueNumber = "">
-                            </#if>
-                            <h3>${parentType}: ${issueNumber} ${parentTitle}</h3>
-                            <div class="requirementNarrativeTitle">
-                            ${formatter.renderDescription(parentRequirement.get().narrative.renderedText)}
-                            </div>
-                        </div>
-                    </#if>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                    <#list filteredTags as tag>
-                        <#assign tagReport = absoluteReportName.forTag(tag) />
-                        <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
-                        <#assign tagReport = reportName.forTag(tag.name) />
-                        <a class="tagLink" href="${tagReport}">${tagTitle} (${tag.type})</a>
-                    </#list>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    </div>
--->
-<#if testOutcome.result == "FAILURE"><#assign outcome_icon = "fail.png"><#assign outcome_text = "failing-color">
-<#elseif testOutcome.result == "ERROR"><#assign outcome_icon = "cross.png"><#assign outcome_text = "error-color">
-<#elseif testOutcome.result == "SUCCESS"><#assign outcome_icon = "success.png"><#assign outcome_text = "success-color">
-<#elseif testOutcome.result == "PENDING"><#assign outcome_icon = "pending.png"><#assign outcome_text = "pending-color">
-<#else><#assign outcome_icon = "ignor.png"><#assign outcome_text = "ignore-color">
+
+<#if testOutcome.result == "FAILURE"><#assign outcome_text = "failing-color">
+<#elseif testOutcome.result == "ERROR"><#assign outcome_text = "error-color">
+<#elseif testOutcome.result == "SUCCESS"><#assign outcome_text = "success-color">
+<#elseif testOutcome.result == "PENDING"><#assign outcome_text = "pending-color">
+<#elseif testOutcome.result == "COMPROMISED"><#assign outcome_text = "compromised-color">
+<#else><#assign outcome_text = "ignore-color">
 </#if>
+
+<#assign title_outcome_icon =  formatter.resultIcon().inExtraLarge().forResult(testOutcome.result) />
+
 <#-- TEST TITLE-->
     <div id="contentbody">
         <div class="titlebar">
@@ -212,8 +162,7 @@
                 <table class="outcome-header">
                     <tr>
                         <td colspan="2" class="test-title-bar">
-                            <span class="outcome-icon"><img class="story-outcome-icon"
-                                                            src="images/${outcome_icon}"/></span>
+                            <span class="outcome-icon">${title_outcome_icon}</span>
                         <#if (testOutcome.videoLink)??>
                             <a href="${relativeLink!}${testOutcome.videoLink}"><img class="story-outcome-icon"
                                                                                     src="images/video.png" width="25"
@@ -224,6 +173,7 @@
                                     <span class="related-issue-title">${testOutcome.formattedIssues}</span>
                                 </span>
                             </span>
+
                         </td>
                     </tr>
                 </table>
@@ -238,19 +188,25 @@
         <h3>Scenario:</h3>
 
         <div class="scenario">${formatter.formatWithFields(testOutcome.dataDrivenSampleScenario, testOutcome.exampleFields)}</div>
-
     </div>
 </#if>
 
 
     <div id="beforetable"></div>
     <div id="contenttilttle">
-
         <div class="slider-wrapper theme-default">
             <div id="slider">
             <#foreach screenshot in screenshots>
-                <img src="${screenshot.filename}" alt="${screenshot.shortErrorMessage}"
-                     title="${screenshot.html.description}" width="${screenshot.width?string.computer}"/>
+                <#if screenshot_has_next>
+                    <#assign caption = "${screenshot.html.description}">
+                <#else>
+                    <#if testOutcome.conciseErrorMessage??>
+                        <#assign caption = "${screenshot.html.description}: <span class='error-caption'><emphasis>${testOutcome.conciseErrorMessage}</emphasis></span>">
+                    <#else>
+                        <#assign caption = "${screenshot.html.description}">
+                    </#if>
+                </#if>
+                <img src="${screenshot.filename}" title="${caption}" width="${screenshot.width?string.computer}"/>
             </#foreach>
             </div>
         </div>

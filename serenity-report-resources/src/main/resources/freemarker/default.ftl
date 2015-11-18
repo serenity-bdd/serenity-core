@@ -443,7 +443,11 @@
                     </tr>
                     <tr class="test-${testOutcome.result}">
                         <td width="40">&nbsp</td>
-                        <td width="%" colspan="3">
+                        <#if testOutcome.hasScreenshots()>
+                            <td width="%" colspan="3">
+                        <#else>
+                            <td width="%" colspan="2">
+                        </#if>
                             <#if (testOutcome.errorMessage)??>
                                 <span class="error-message"
                                       title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage)}">${testOutcome.conciseErrorMessage}</span>
@@ -456,7 +460,11 @@
                 <#--</#if>-->
             </#if>
                 <tr class="test-${testOutcome.result}">
-                    <td colspan="3"></td>
+                    <#if testOutcome.hasScreenshots()>
+                        <td colspan="3"></td>
+                    <#else>
+                        <td colspan="2"></td>
+                    </#if>
                     <td width="100"><span class="top-level-step"><em>${testOutcome.result}</em></span></td>
                     <td width="100"><span class="top-level-step"><em>${testOutcome.durationInSeconds}s</em></span></td>
                 </tr>

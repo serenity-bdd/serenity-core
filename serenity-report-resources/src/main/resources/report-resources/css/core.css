@@ -1562,3 +1562,8 @@ ul.second-level-requirements  {
 .skip-icon {
     color: darkgoldenrod;
 }
+
+.error-caption {
+    color: red;
+    font-weight: bold;
+}

@@ -19,7 +19,8 @@ public class Consequence<T> {
     }
 
     public void evaluateFor(Actor actor) {
-        ensureThisStepShouldNotBeIgnored();
+        if (thisStepShouldBeIgnored()) { return; }
+
         try {
             assertThat(actual.answeredBy(actor), expected);
         } catch (AssertionError actualError) {
@@ -53,10 +54,8 @@ public class Consequence<T> {
         }
     }
 
-    private void ensureThisStepShouldNotBeIgnored() {
-        if (StepEventBus.getEventBus().currentTestIsSuspended() || StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed()) {
-            throw new IgnoreStepException();
-        }
+    private boolean thisStepShouldBeIgnored() {
+        return (StepEventBus.getEventBus().currentTestIsSuspended() || StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed());
     }
 
     @Override

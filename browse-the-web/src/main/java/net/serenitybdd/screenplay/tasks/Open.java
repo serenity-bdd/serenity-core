@@ -5,6 +5,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.thucydides.core.annotations.Step;
+import net.thucydides.core.steps.StepEventBus;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 

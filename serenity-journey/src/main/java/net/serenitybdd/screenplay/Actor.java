@@ -1,16 +1,22 @@
 package net.serenitybdd.screenplay;
 
+import net.serenitybdd.core.IgnoredStepException;
+import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.SkipNested;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
 import net.serenitybdd.screenplay.exceptions.IgnoreStepException;
+import net.thucydides.core.annotations.Pending;
+import net.thucydides.core.steps.StepEventBus;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
 
-public class Actor implements PerformsTasks {
+public class Actor implements PerformsTasks, SkipNested {
 
     private final String name;
 
@@ -72,6 +78,9 @@ public class Actor implements PerformsTasks {
     }
 
     private <T extends Performable> void perform(T todo) {
+        if (isPending(todo)) {
+            StepEventBus.getEventBus().stepPending();
+        }
         try {
             taskTally.newTask();
             todo.performAs(this);
@@ -79,14 +88,35 @@ public class Actor implements PerformsTasks {
             if (anOutOfStepErrorOccurred()) {
                 eventBusInterface.mergePreviousStep();
             }
-        } catch (Throwable e) {
-            eventBusInterface.reportStepFailureFor(todo, e);
-            if (Serenity.shouldThrowErrorsImmediately() || isAnAssumptionFailure(e)) {
-                throw e;
+        } catch (Throwable exception) {
+            if (!pendingOrIgnore(exception)) {
+                eventBusInterface.reportStepFailureFor(todo, exception);
+            }
+            if (Serenity.shouldThrowErrorsImmediately() || isAnAssumptionFailure(exception)) {
+                throw exception;
             }
         } finally {
             eventBusInterface.updateOverallResult();
         }
+    }
+
+    private <T extends Performable> boolean isPending(T todo) {
+        try {
+            Method performAs = todo.getClass().getSuperclass().getMethod("performAs", Actor.class);
+            return (performAs.getAnnotation(Pending.class) != null);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private <T extends Performable> void logSkippedTask() {
+        StepEventBus.getEventBus().testSkipped();
+    }
+
+    private boolean pendingOrIgnore(Throwable exception) {
+        return exception instanceof IgnoreStepException ||
+                exception instanceof PendingStepException;
     }
 
     private boolean isAnAssumptionFailure(Throwable e) {
@@ -113,6 +143,9 @@ public class Actor implements PerformsTasks {
     private <T> void check(Consequence<T> consequence) {
         try {
             eventBusInterface.reportNewStepWithTitle(consequence.toString());
+            if (StepEventBus.getEventBus().currentTestIsSuspended() || StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed()) {
+                StepEventBus.getEventBus().stepIgnored();
+            }
             consequence.evaluateFor(this);
             eventBusInterface.reportStepFinished();
         } catch (IgnoreStepException e) {

@@ -1,5 +1,6 @@
 package net.serenitybdd.junit.runners;
 
+import com.google.common.base.Optional;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import net.serenitybdd.core.Serenity;
@@ -13,6 +14,7 @@ import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.batches.BatchManagerProvider;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestResult;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.ReportService;
@@ -242,6 +244,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         try {
             RunNotifier localNotifier = initializeRunNotifier(notifier);
             super.run(localNotifier);
+            fireNotificationsBasedOnTestResultsTo(notifier);
         } catch (Throwable someFailure) {
             someFailure.printStackTrace();
             throw someFailure;
@@ -250,6 +253,22 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
             generateReports();
             dropListeners(notifier);
             closeDrivers();
+        }
+    }
+
+    private Optional<TestOutcome> latestOutcome() {
+        if (StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes().isEmpty()) {
+            return Optional.absent();
+        }
+        return Optional.of(StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes().get(0));
+    }
+
+    private void fireNotificationsBasedOnTestResultsTo(RunNotifier notifier) {
+        if (!latestOutcome().isPresent()) {
+            return;
+        }
+        if (latestOutcome().get().getResult() == TestResult.IGNORED || latestOutcome().get().getResult() == TestResult.PENDING) {
+            notifier.fireTestIgnored(getDescription());
         }
     }
 

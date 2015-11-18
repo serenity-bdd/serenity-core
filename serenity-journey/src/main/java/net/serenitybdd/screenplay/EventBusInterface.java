@@ -41,5 +41,12 @@ public class EventBusInterface {
         StepEventBus.getEventBus().stepIgnored();
     }
 
+    public void reportStepSkippedFor(Performable todo) {
+        ExecutedStepDescription taskDescription =  ExecutedStepDescription.of(todo.getClass(),"performAs");
+        StepEventBus.getEventBus().stepStarted(taskDescription);
+        StepEventBus.getEventBus().stepIgnored();
+    }
+
+
     public boolean aStepHasFailed() { return StepEventBus.getEventBus().getBaseStepListener().aStepHasFailed(); }
 }

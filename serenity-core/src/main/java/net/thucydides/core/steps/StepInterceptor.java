@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import net.serenitybdd.core.IgnoredStepException;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.SkipNested;
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -164,13 +165,21 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     private Object runIfNestedMethodsShouldBeRun(Object obj, Method method, Object[] args, MethodProxy proxy) {
         Object result = null;
         try {
-            if (!TestAnnotations.shouldSkipNested(method)) {
+            if (shouldRunNestedMethodsIn(method)) {
                 result = invokeMethod(obj, args, proxy);
             }
         } catch (Throwable anyException) {
             LOGGER.trace("Ignoring exception thrown during a skipped test", anyException);
         }
         return result;
+    }
+
+    private boolean shouldRunNestedMethodsIn(Method method) {
+        return !(TestAnnotations.shouldSkipNested(method) || shouldSkipNestedIn(method.getDeclaringClass()));
+    }
+
+    private boolean shouldSkipNestedIn(Class testStepClass) {
+        return (SkipNested.class.isAssignableFrom(testStepClass));
     }
 
     Object appropriateReturnObject(final Object returnedValue, final Object obj, final Method method) {

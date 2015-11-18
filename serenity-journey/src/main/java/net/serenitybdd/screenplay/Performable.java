@@ -1,5 +1,7 @@
 package net.serenitybdd.screenplay;
 
+import net.serenitybdd.core.SkipNested;
+
 /**
  * = Task
  *
@@ -11,6 +13,6 @@ package net.serenitybdd.screenplay;
  * --
  *
  */
-public interface Performable {
+public interface Performable extends SkipNested {
     <T extends Actor> void performAs(T actor);
 }

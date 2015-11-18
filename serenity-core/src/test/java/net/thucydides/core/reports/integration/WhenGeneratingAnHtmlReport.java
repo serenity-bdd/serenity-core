@@ -197,7 +197,7 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
         String reportContents = FileUtils.readFileToString(screenshotReport);
         assertThat(reportContents, allOf(containsString("title=\"Search cats on Google\""),
                 containsString("title=\"View the results\""),
-                containsString("title=\"Display a resulting page\"")));
+                containsString("title=\"Display a resulting page")));
     }
 
     @Test
@@ -218,6 +218,7 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
     @Test
     public void screenshot_html_should_mention_the_step_name()  throws Exception {
         TestOutcome testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class);
+
 
         TestStep step1 = TestStepFactory.successfulTestStepCalled("step 1");
         File screenshot = temporaryDirectory.newFile("google_page_1.png");

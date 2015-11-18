@@ -150,7 +150,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     private Object skipTestStep(Object obj, Method method, Object[] args, MethodProxy proxy) throws Exception {
         Object skippedReturnObject = runSkippedMethod(obj, method, args, proxy);
         notifyStepSkippedFor(method, args);
-        LOGGER.info("SKIPPED STEP: {}", StepName.fromStepAnnotationIn(method).or(method.getName()));
+        LOGGER.debug("SKIPPED STEP: {}", StepName.fromStepAnnotationIn(method).or(method.getName()));
         return appropriateReturnObject(skippedReturnObject, obj, method);
     }
 
@@ -302,11 +302,11 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
                                final Object[] args, final MethodProxy proxy) throws Throwable {
 
         String callingClass = testContext();
-        LOGGER.info("STARTING STEP: {} - {}", callingClass, StepName.fromStepAnnotationIn(method).or(method.getName()));
+        LOGGER.debug("STARTING STEP: {} - {}", callingClass, StepName.fromStepAnnotationIn(method).or(method.getName()));
         Object result = null;
         try {
             result = executeTestStepMethod(obj, method, args, proxy, result);
-            LOGGER.info("STEP DONE: {}", StepName.fromStepAnnotationIn(method).or(method.getName()));
+            LOGGER.debug("STEP DONE: {}", StepName.fromStepAnnotationIn(method).or(method.getName()));
         } catch (AssertionError failedAssertion) {
             error = failedAssertion;
             logStepFailure(obj, method, args, failedAssertion);
@@ -325,7 +325,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         notifyOfStepFailure(object, method, args, assertionError);
 
 
-        LOGGER.info("STEP FAILED: {} - {}", StepName.fromStepAnnotationIn(method).or(method.getName()), assertionError.getMessage());
+        LOGGER.debug("STEP FAILED: {} - {}", StepName.fromStepAnnotationIn(method).or(method.getName()), assertionError.getMessage());
     }
 
     private Object executeTestStepMethod(Object obj, Method method, Object[] args, MethodProxy proxy, Object result) throws Throwable {

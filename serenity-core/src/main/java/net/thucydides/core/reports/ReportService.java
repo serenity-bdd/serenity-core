@@ -100,7 +100,7 @@ public class ReportService {
     }
 
     private void generateReportsFor(final AcceptanceTestReporter reporter, final TestOutcomes testOutcomes) {
-        LOGGER.info("Generating reports for " + testOutcomes.getTotalTestScenarios() +" test outcomes using: " + reporter);
+        LOGGER.debug("Generating reports for " + testOutcomes.getTotalTestScenarios() + " test outcomes using: " + reporter);
         long t0 = System.currentTimeMillis();
 
         List<? extends TestOutcome> outcomes = testOutcomes.getOutcomes();
@@ -110,15 +110,15 @@ public class ReportService {
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
-                    LOGGER.info("Processing test outcome " + outcome.getCompleteName());
+                    LOGGER.debug("Processing test outcome " + outcome.getCompleteName());
                     generateReportFor(outcome, testOutcomes, reporter, remainingReportCount);
-                    LOGGER.info("Processing test outcome " + outcome.getCompleteName() + " done");
+                    LOGGER.debug("Processing test outcome " + outcome.getCompleteName() + " done");
                 }
             });
         }
         generateJUnitTestResults(testOutcomes);
         waitForReportGenerationToFinish(executorService, remainingReportCount);
-        LOGGER.info("Reports generated in: " + (System.currentTimeMillis() - t0) + " ms");
+        LOGGER.debug("Reports generated in: " + (System.currentTimeMillis() - t0) + " ms");
 
     }
 
@@ -155,13 +155,13 @@ public class ReportService {
         Iterator<AcceptanceTestReporter> reporterImplementations = reporterServiceLoader.iterator();
         // Service.providers(AcceptanceTestReporter.class);
 
-        LOGGER.info("Reporting formats: " + formatConfiguration.getFormats());
+        LOGGER.debug("Reporting formats: " + formatConfiguration.getFormats());
 
         while (reporterImplementations.hasNext()) {
             AcceptanceTestReporter reporter = reporterImplementations.next();
-            LOGGER.info("Found reporter: " + reporter + "(format = " + reporter.getFormat() + ")");
+            LOGGER.debug("Found reporter: " + reporter + "(format = " + reporter.getFormat() + ")");
             if (!reporter.getFormat().isPresent() || formatConfiguration.getFormats().contains(reporter.getFormat().get())) {
-                LOGGER.info("Registering reporter: " + reporter);
+                LOGGER.debug("Registering reporter: " + reporter);
                 reporters.add(reporter);
             }
         }
@@ -172,7 +172,7 @@ public class ReportService {
                                    final TestOutcomes allTestOutcomes,
                                    final AcceptanceTestReporter reporter, AtomicInteger remainingReportCount) {
         try {
-            LOGGER.info(reporter + ": Generating report for test outcome: " + testOutcome.getCompleteName());
+            LOGGER.debug(reporter + ": Generating report for test outcome: " + testOutcome.getCompleteName());
             reporter.setOutputDirectory(outputDirectory);
             reporter.generateReportFor(testOutcome, allTestOutcomes);
         } catch (Exception e) {

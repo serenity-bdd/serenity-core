@@ -620,6 +620,17 @@ public class TestOutcome {
         testStep.updateOverallResult();
     }
 
+    public Optional<TestStep> getFailingStep() {
+        List<TestStep> stepsInReverseOrder = Lists.newArrayList(getFlattenedTestSteps());
+        Collections.reverse(stepsInReverseOrder);
+        for(TestStep step : stepsInReverseOrder) {
+            if (step.isError() || step.isFailure()) {
+                return Optional.of(step);
+            }
+        }
+        return Optional.absent();
+    }
+
     private class GetLastStepBuilder {
 
         int maxCount;

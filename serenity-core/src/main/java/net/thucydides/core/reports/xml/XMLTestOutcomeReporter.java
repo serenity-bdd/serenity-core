@@ -65,13 +65,13 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
 
         File report = new File(getOutputDirectory(), reportFilename);
 
-        LOGGER.info("Generating XML report for {} to file {}", testOutcome.getTitle(), report.getAbsolutePath());
+        LOGGER.debug("Generating XML report for {} to file {}", testOutcome.getTitle(), report.getAbsolutePath());
 
         try(
            OutputStream outputStream = new FileOutputStream(report);
            OutputStreamWriter writer = new OutputStreamWriter(outputStream, Charset.forName("UTF-8"))) {
            xstream.toXML(storedTestOutcome, writer);
-           LOGGER.info("XML report generated ({} bytes) {}", report.getAbsolutePath(), report.length());
+           LOGGER.debug("XML report generated ({} bytes) {}", report.getAbsolutePath(), report.length());
         }
         return report;
     }

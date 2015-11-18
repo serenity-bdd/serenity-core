@@ -431,7 +431,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         if (shouldGenerateLinkableReportsFor(tag, reportName)) {
             String linkableReport = reportName.inLinkableForm().forTag(tag);
             generateReportPage(context, TEST_OUTCOME_TEMPLATE_PATH, linkableReport);
-            System.out.println("Generating tag report: " + linkableReport);
         }
 
     }

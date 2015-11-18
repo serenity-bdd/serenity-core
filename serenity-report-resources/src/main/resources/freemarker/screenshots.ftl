@@ -194,6 +194,9 @@
 
     <div id="beforetable"></div>
     <div id="contenttilttle">
+        <#if testOutcome.conciseErrorMessage??>
+            <span class='error-caption ellipsis'>${testOutcome.result}: ${testOutcome.conciseErrorMessage}</span>
+        </#if>
         <div class="slider-wrapper theme-default">
             <div id="slider">
             <#foreach screenshot in screenshots>
@@ -201,7 +204,7 @@
                     <#assign caption = "${screenshot.html.description}">
                 <#else>
                     <#if testOutcome.conciseErrorMessage??>
-                        <#assign caption = "${screenshot.html.description}: <span class='error-caption'><emphasis>${testOutcome.conciseErrorMessage}</emphasis></span>">
+                        <#assign caption = "${screenshot.html.description}: <span class='error-caption'>${testOutcome.result}</span>">
                     <#else>
                         <#assign caption = "${screenshot.html.description}">
                     </#if>

@@ -63,8 +63,30 @@ public class ConsoleLoggingListener implements StepListener {
 
     private static final List<String> TEST_FAILED_HEADINGS =  ImmutableList.of(
             "\n----------------\n" +
-            "- TEST FAILED -\n" +
-            "----------------",
+                    "- TEST FAILED -\n" +
+                    "----------------",
+            "\n           __  _____ _____ ____ _____   _____ _    ___ _     _____ ____  \n" +
+                    "  _       / / |_   _| ____/ ___|_   _| |  ___/ \\  |_ _| |   | ____|  _ \\ \n" +
+                    " (_)_____| |    | | |  _| \\___ \\ | |   | |_ / _ \\  | || |   |  _| | | | |\n" +
+                    "  _|_____| |    | | | |___ ___) || |   |  _/ ___ \\ | || |___| |___| |_| |\n" +
+                    " (_)     | |    |_| |_____|____/ |_|   |_|/_/   \\_\\___|_____|_____|____/ \n" +
+                    "          \\_\\                                                            \n");
+
+    private static final List<String> TEST_ERROR_HEADINGS =  ImmutableList.of(
+            "\n--------------------------\n" +
+                    "- TEST FAILED WITH ERROR-\n" +
+                    "--------------------------",
+            "\n           __  _____ _____ ____ _____   _____ _    ___ _     _____ ____  \n" +
+                    "  _       / / |_   _| ____/ ___|_   _| |  ___/ \\  |_ _| |   | ____|  _ \\ \n" +
+                    " (_)_____| |    | | |  _| \\___ \\ | |   | |_ / _ \\  | || |   |  _| | | | |\n" +
+                    "  _|_____| |    | | | |___ ___) || |   |  _/ ___ \\ | || |___| |___| |_| |\n" +
+                    " (_)     | |    |_| |_____|____/ |_|   |_|/_/   \\_\\___|_____|_____|____/ \n" +
+                    "          \\_\\                                                            \n");
+
+    private static final List<String> TEST_COMPROMISED_HEADINGS =  ImmutableList.of(
+            "\n--------------------------\n" +
+                    "- TEST COMPROMISED -\n" +
+                    "--------------------------",
             "\n           __  _____ _____ ____ _____   _____ _    ___ _     _____ ____  \n" +
                     "  _       / / |_   _| ____/ ___|_   _| |  ___/ \\  |_ _| |   | ____|  _ \\ \n" +
                     " (_)_____| |    | | |  _| \\___ \\ | |   | |_ / _ \\  | || |   |  _| | | | |\n" +
@@ -87,6 +109,17 @@ public class ConsoleLoggingListener implements StepListener {
             "\n-----------\n" +
             "- FAILURE -\n" +
             "-----------",
+            "\n  _____ _    ___ _     _   _ ____  _____ \n" +
+                    " |  ___/ \\  |_ _| |   | | | |  _ \\| ____|\n" +
+                    " | |_ / _ \\  | || |   | | | | |_) |  _|  \n" +
+                    " |  _/ ___ \\ | || |___| |_| |  _ <| |___ \n" +
+                    " |_|/_/   \\_\\___|_____|\\___/|_| \\_\\_____|\n" +
+                    "                                         \n");
+
+    private static List<String>  ERROR_HEADINGS  = ImmutableList.of(
+            "\n-----------\n" +
+                    "- FAILED WITH ERROR -\n" +
+                    "-----------",
             "\n  _____ _    ___ _     _   _ ____  _____ \n" +
                     " |  ___/ \\  |_ _| |   | | | |  _ \\| ____|\n" +
                     " | |_ / _ \\  | || |   | | | | |_) |  _|  \n" +
@@ -191,11 +224,20 @@ public class ConsoleLoggingListener implements StepListener {
     public void testFinished(TestOutcome result) {
         if (result.isFailure()) {
             logFailure(result);
-        } else if (result.isPending()) {
+        }
+        if (result.isError()) {
+            logError(result);
+        }
+        if (result.isCompromised()) {
+            logCompromised(result);
+        }
+        if (result.isPending()) {
             logPending(result);
-        } else if (result.isSkipped()) {
+        }
+        if (result.isSkipped()) {
             logSkipped(result);
-        } else if (result.isSuccess()) {
+        }
+        if (result.isSuccess()) {
             logSuccess(result);
         }
     }
@@ -205,8 +247,8 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
     private void logFailure(TestOutcome result) {
-        if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
-            getLogger().info(testFailureHeading() + "\nTEST FAILED: {}", result.getTitle() + underline(TEST_FAILED_HEADINGS.get(headingStyle)));
+        if (loggingLevelIsAtLeast(LoggingLevel.QUIET)) {
+            getLogger().error(testFailureHeading() + "\nTEST FAILED: {}", result.getTitle() + underline(TEST_FAILED_HEADINGS.get(headingStyle)));
 
             logRelatedIssues(result);
             logFailureCause(result);
@@ -215,19 +257,44 @@ public class ConsoleLoggingListener implements StepListener {
         }
     }
 
+    private void logError(TestOutcome result) {
+        if (loggingLevelIsAtLeast(LoggingLevel.QUIET)) {
+            getLogger().error(testFailureHeading() + "\nTEST FAILED WITH ERROR: {}", result.getTitle() + underline(TEST_ERROR_HEADINGS.get(headingStyle)));
+
+            logRelatedIssues(result);
+            logFailureCause(result);
+
+            underline(ERROR_HEADINGS.get(headingStyle));
+        }
+    }
+
+    private void logCompromised(TestOutcome result) {
+        if (loggingLevelIsAtLeast(LoggingLevel.QUIET)) {
+            getLogger().error(testFailureHeading() + "\nTEST COMPROMISED: {}", result.getTitle() + underline(TEST_COMPROMISED_HEADINGS.get(headingStyle)));
+
+            logRelatedIssues(result);
+            logFailureCause(result);
+
+            underline(ERROR_HEADINGS.get(headingStyle));
+        }
+    }
     private String testFailureHeading() {
         return TEST_FAILED_HEADINGS.get(headingStyle);
     }
 
     private void logRelatedIssues(TestOutcome result) {
         Joiner joiner = Joiner.on(",");
-        getLogger().info("RELATED ISSUES: {}", joiner.join(result.getIssueKeys()));
+        getLogger().debug("RELATED ISSUES: {}", joiner.join(result.getIssueKeys()));
 
     }
 
     private void logFailureCause(TestOutcome result) {
-        if (result.getTestFailureMessage() != null) {
-            getLogger().info(failureHeading() + "\n" + result.getTestFailureMessage());
+        if (result.getNestedTestFailureCause() != null) {
+            if (result.getFailingStep().isPresent()) {
+                String failingStep = result.getFailingStep().get().unrendered().getDescription();
+                getLogger().error("TEST FAILED AT STEP " + failingStep);
+            }
+            getLogger().error(result.getNestedTestFailureCause().getShortenedMessage());
         }
     }
 
@@ -264,7 +331,7 @@ public class ConsoleLoggingListener implements StepListener {
 
     public void stepStarted(ExecutedStepDescription description) {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
-            getLogger().info("STARTING STEP {}", description.getTitle());
+            getLogger().debug("STARTING STEP {}", description.getTitle());
         }
     }
 
@@ -275,15 +342,15 @@ public class ConsoleLoggingListener implements StepListener {
 
     public void stepFinished() {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
-            getLogger().info("FINISHING STEP");
+            getLogger().debug("FINISHING STEP");
         }
     }
 
     public void stepFailed(StepFailure failure) {
-        if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
+        if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
             String errorMessage = (failure.getException() != null) ? failure.getException().toString() : failure.getMessage();
             String failureType = analysis.resultFor(failure.getException()).name();
-            getLogger().info("STEP {}: {}", failureType, errorMessage);
+            getLogger().debug("STEP {}: {}", failureType, errorMessage);
         }
     }
 
@@ -293,20 +360,20 @@ public class ConsoleLoggingListener implements StepListener {
 
     public void stepIgnored() {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
-            getLogger().info("IGNORING STEP");
+            getLogger().debug("IGNORING STEP");
         }
     }
 
     public void stepPending() {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
-            getLogger().info("PENDING STEP");
+            getLogger().debug("PENDING STEP");
         }
     }
 
 
     public void stepPending(String message) {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
-            getLogger().info("PENDING STEP ({})", message);
+            getLogger().debug("PENDING STEP ({})", message);
         }
     }
 
@@ -362,8 +429,8 @@ public class ConsoleLoggingListener implements StepListener {
 
     @Override
     public void assumptionViolated(String message) {
-        if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
-            getLogger().info("ASSUMPTION VIOLATED");
+        if (loggingLevelIsAtLeast(LoggingLevel.QUIET)) {
+            getLogger().error("ASSUMPTION VIOLATED: " + message);
         }
     }
 }

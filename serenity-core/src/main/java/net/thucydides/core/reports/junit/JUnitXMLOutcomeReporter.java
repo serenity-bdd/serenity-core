@@ -32,7 +32,7 @@ public class JUnitXMLOutcomeReporter  {
 
     public void generateReportsFor(TestOutcomes testOutcomes) throws IOException {
 
-        LOGGER.info("GENERATING JUNIT REPORTS");
+        LOGGER.debug("GENERATING JUNIT REPORTS");
 
         Preconditions.checkNotNull(outputDirectory);
 
@@ -42,7 +42,7 @@ public class JUnitXMLOutcomeReporter  {
             List<TestOutcome> testCaseOutcomes = testOutcomesGroupedByTestCase.get(testCase);
             String reportFilename = reportFilenameFor(testCaseOutcomes.get(0));
             File report = new File(getOutputDirectory(), reportFilename);
-            LOGGER.info("GENERATING JUNIT REPORT " + reportFilename);
+            LOGGER.debug("GENERATING JUNIT REPORT " + reportFilename);
             try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(report))){
                 junitXMLConverter.write(testCase, testCaseOutcomes, outputStream);
             } catch (ParserConfigurationException e) {

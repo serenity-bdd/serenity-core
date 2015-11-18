@@ -188,8 +188,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public BaseStepListener(final Class<? extends WebDriver> driverClass,
                             final File outputDirectory,
                             final Configuration configuration) {
-        this(outputDirectory);
-        this.driver = getProxyFactory().proxyFor(driverClass);
+        this(driverClass, outputDirectory);
         this.configuration = configuration;
     }
 

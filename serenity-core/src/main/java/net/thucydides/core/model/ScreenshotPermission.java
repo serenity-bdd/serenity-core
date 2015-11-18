@@ -52,7 +52,9 @@ public class ScreenshotPermission {
     }
 
     private TakeScreenshots screenshotLevelFrom(Screenshots screenshots) {
-        if (screenshots.onlyOnFailures()) {
+        if (screenshots.disabled()) {
+            return TakeScreenshots.DISABLED;
+        } else if (screenshots.onlyOnFailures()) {
             return TakeScreenshots.FOR_FAILURES;
         } else if (screenshots.forEachAction()) {
             return TakeScreenshots.FOR_EACH_ACTION;

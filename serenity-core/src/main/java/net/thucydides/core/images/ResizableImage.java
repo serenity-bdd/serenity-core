@@ -63,7 +63,6 @@ public class ResizableImage {
                 int height = reader.getHeight(reader.getMinIndex());
                 dimension = new Dimension(width, height);
             } catch (IOException e) {
-                logger.warn("Could not find the dimensions of the screenshot for " + screenshotFile);
                 return new Dimension(0,0);
             } finally {
                 reader.dispose();
@@ -99,7 +98,6 @@ public class ResizableImage {
         }
 
         int targetHeight = Math.min(height, MAX_SUPPORTED_HEIGHT);
-
         try {
             waitForCreationOfFile();
             return resizeImage(getWidth(), targetHeight, ImageIO.read(screenshotFile));
@@ -110,7 +108,7 @@ public class ResizableImage {
     }
 
     private void waitForCreationOfFile() {
-        await().atMost(30, TimeUnit.SECONDS).until(screenshotIsProcessed());
+        await().atMost(60, TimeUnit.SECONDS).until(screenshotIsProcessed());
     }
 
     private Callable<Boolean> screenshotIsProcessed() {

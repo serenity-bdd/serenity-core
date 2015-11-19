@@ -183,4 +183,13 @@ class WhenDecidingWhetherToTakeScreenshots extends Specification {
         assert permissions.areAllowed(TakeScreenshots.FOR_FAILURES)
         assert !permissions.areAllowed(TakeScreenshots.FOR_EACH_ACTION)
     }
+
+    @Screenshots(disabled = true)
+    public void shouldNotTakeScreenshots(Configuration configuration) {
+        ScreenshotPermission permissions = new ScreenshotPermission(configuration)
+        assert !permissions.areAllowed(TakeScreenshots.FOR_EACH_ACTION)
+        assert !permissions.areAllowed(TakeScreenshots.BEFORE_AND_AFTER_EACH_STEP)
+        assert !permissions.areAllowed(TakeScreenshots.AFTER_EACH_STEP)
+        assert !permissions.areAllowed(TakeScreenshots.FOR_FAILURES)
+    }
 }

@@ -63,6 +63,7 @@ public class ResizableImage {
                 int height = reader.getHeight(reader.getMinIndex());
                 dimension = new Dimension(width, height);
             } catch (IOException e) {
+                logger.warn("Could not find the dimensions of the screenshot for " + screenshotFile);
                 return new Dimension(0,0);
             } finally {
                 reader.dispose();

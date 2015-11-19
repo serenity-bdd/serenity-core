@@ -23,12 +23,12 @@ import java.util.Map;
 public class ConsoleLoggingListener implements StepListener {
 
     public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_RED = "\u001B[91m";
+    public static final String ANSI_GREEN = "\u001B[92m";
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_PURPLE = "\u001B[95m";
+    public static final String ANSI_CYAN = "\u001B[96m";
 
     public static final String SERENITY_BIG_BANNER = ANSI_CYAN +
             "\n\n-------------------------------------------------------------------------------------\n" +
@@ -124,8 +124,7 @@ public class ConsoleLoggingListener implements StepListener {
             "\n----------------\n" +
                     "- TEST PENDING -\n" +
                     "----------------",
-            "\n            __  _____ _____ ____ _____   ____  _  _____ ____  ____  _____ ____  \n" +
-                    "          __  _____ _____ ____ _____   ____  _____ _   _ ____ ___ _   _  ____ \n" +
+            "\n          __  _____ _____ ____ _____   ____  _____ _   _ ____ ___ _   _  ____ \n" +
                     " _       / / |_   _| ____/ ___|_   _| |  _ \\| ____| \\ | |  _ \\_ _| \\ | |/ ___|\n" +
                     "(_)____ / /    | | |  _| \\___ \\ | |   | |_) |  _| |  \\| | | | | ||  \\| | |  _ \n" +
                     " |_____/ /     | | | |___ ___) || |   |  __/| |___| |\\  | |_| | || |\\  | |_| |\n" +

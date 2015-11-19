@@ -30,7 +30,7 @@ public class ConsoleLoggingListener implements StepListener {
     public static final String ANSI_PURPLE = "\u001B[95m";
     public static final String ANSI_CYAN = "\u001B[96m";
 
-    public static final String SERENITY_BIG_BANNER = ANSI_CYAN +
+    public static final String SERENITY_BIG_BANNER =
             "\n\n-------------------------------------------------------------------------------------\n" +
             "     _______. _______ .______       _______ .__   __.  __  .___________.____    ____ \n" +
             "    /       ||   ____||   _  \\     |   ____||  \\ |  | |  | |           |\\   \\  /   / \n" +
@@ -38,11 +38,12 @@ public class ConsoleLoggingListener implements StepListener {
             "    \\   \\    |   __|  |      /     |   __|  |  . `  | |  |     |  |       \\_    _/   \n" +
             ".----)   |   |  |____ |  |\\  \\----.|  |____ |  |\\   | |  |     |  |         |  |     \n" +
             "|_______/    |_______|| _| `._____||_______||__| \\__| |__|     |__|         |__|    \n" +
-            "-------------------------------------------------------------------------------------\n"
-            + ANSI_RESET;
-    public static final String SERENITY_SMALL_BANNER = ANSI_BLUE + "\n--------------\n" +
+            "-------------------------------------------------------------------------------------\n";
+
+    public static final String SERENITY_SMALL_BANNER = "\n--------------\n" +
             "- SERENITY   -\n" +
-            "--------------" + ANSI_RESET;
+            "--------------";
+
     // STAR WARS
     private static final List<String> BANNER_HEADINGS = ImmutableList.of(
             SERENITY_SMALL_BANNER,
@@ -194,7 +195,7 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
     private String bannerHeading() {
-        return BANNER_HEADINGS.get(headingStyle);
+        return cyan(BANNER_HEADINGS.get(headingStyle));
     }
 
     private boolean loggingLevelIsAtLeast(LoggingLevel minimumLoggingLevel) {
@@ -463,24 +464,28 @@ public class ConsoleLoggingListener implements StepListener {
         }
     }
 
+    private boolean showColoredOutput() {
+        return ThucydidesSystemProperty.THUCYDIDES_CONSOLE_COLORS.booleanFrom(environmentVariables,false);
+    }
+
     private String red(String text) {
-        return ANSI_RED + text + ANSI_RESET;
+        return (showColoredOutput()) ? ANSI_RED + text + ANSI_RESET : text;
     }
 
     private String green(String text) {
-        return ANSI_GREEN + text + ANSI_RESET;
+        return (showColoredOutput()) ? ANSI_GREEN + text + ANSI_RESET : text;
     }
 
     private String yellow(String text) {
-        return ANSI_YELLOW + text + ANSI_RESET;
+        return (showColoredOutput()) ? ANSI_YELLOW + text + ANSI_RESET : text;
     }
 
     private String cyan(String text) {
-        return ANSI_CYAN + text + ANSI_RESET;
+        return (showColoredOutput()) ? ANSI_CYAN + text + ANSI_RESET : text;
     }
 
     private String purple(String text) {
-        return ANSI_PURPLE + text + ANSI_RESET;
+        return (showColoredOutput()) ? ANSI_PURPLE + text + ANSI_RESET : text;
     }
 
 }

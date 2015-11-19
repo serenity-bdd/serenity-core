@@ -586,6 +586,8 @@ public enum ThucydidesSystemProperty {
      */
     THUCYDIDES_CONSOLE_HEADINGS,
 
+    THUCYDIDES_CONSOLE_COLORS,
+
     /**
      * If set to true, Asciidoc formatting will be supported in the narrative texts.
      */

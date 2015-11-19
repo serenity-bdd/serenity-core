@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay;
 
+import com.google.common.base.Optional;
 import net.serenitybdd.core.IgnoredStepException;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.Serenity;
@@ -101,12 +102,17 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     private <T extends Performable> boolean isPending(T todo) {
+            Method performAs = getPerformAsForClass(todo.getClass().getSuperclass()).
+                               or(getPerformAsForClass(todo.getClass()).orNull());
+
+            return (performAs != null) && (performAs.getAnnotation(Pending.class) != null);
+    }
+
+    private Optional<Method> getPerformAsForClass(Class taskClass) {
         try {
-            Method performAs = todo.getClass().getSuperclass().getMethod("performAs", Actor.class);
-            return (performAs.getAnnotation(Pending.class) != null);
+            return Optional.of(taskClass.getMethod("performAs", Actor.class));
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            return false;
+            return Optional.absent();
         }
     }
 
@@ -137,7 +143,7 @@ public class Actor implements PerformsTasks, SkipNested {
 
     private boolean anOutOfStepErrorOccurred() {
         return eventBusInterface.aStepHasFailed()
-               && eventBusInterface.getStepCount() > taskTally.getPerformedTaskCount();
+                && eventBusInterface.getStepCount() > taskTally.getPerformedTaskCount();
     }
 
     private <T> void check(Consequence<T> consequence) {

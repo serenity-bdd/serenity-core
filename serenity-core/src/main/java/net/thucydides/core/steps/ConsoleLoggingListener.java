@@ -22,17 +22,27 @@ import java.util.Map;
 
 public class ConsoleLoggingListener implements StepListener {
 
-    public static final String SERENITY_BIG_BANNER = "\n\n-------------------------------------------------------------------------------------\n" +
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+
+    public static final String SERENITY_BIG_BANNER = ANSI_CYAN +
+            "\n\n-------------------------------------------------------------------------------------\n" +
             "     _______. _______ .______       _______ .__   __.  __  .___________.____    ____ \n" +
             "    /       ||   ____||   _  \\     |   ____||  \\ |  | |  | |           |\\   \\  /   / \n" +
             "   |   (----`|  |__   |  |_)  |    |  |__   |   \\|  | |  | `---|  |----` \\   \\/   /  \n" +
             "    \\   \\    |   __|  |      /     |   __|  |  . `  | |  |     |  |       \\_    _/   \n" +
             ".----)   |   |  |____ |  |\\  \\----.|  |____ |  |\\   | |  |     |  |         |  |     \n" +
             "|_______/    |_______|| _| `._____||_______||__| \\__| |__|     |__|         |__|    \n" +
-            "-------------------------------------------------------------------------------------\n";
-    public static final String SERENITY_SMALL_BANNER = "\n--------------\n" +
+            "-------------------------------------------------------------------------------------\n"
+            + ANSI_RESET;
+    public static final String SERENITY_SMALL_BANNER = ANSI_BLUE + "\n--------------\n" +
             "- SERENITY   -\n" +
-            "--------------";
+            "--------------" + ANSI_RESET;
     // STAR WARS
     private static final List<String> BANNER_HEADINGS = ImmutableList.of(
             SERENITY_SMALL_BANNER,
@@ -108,6 +118,18 @@ public class ConsoleLoggingListener implements StepListener {
                     " (_)_____ / /    | | |  _| \\___ \\ | |   \\___ \\| ' / | || |_) | |_) |  _| | | | |\n" +
                     "  _|_____/ /     | | | |___ ___) || |    ___) | . \\ | ||  __/|  __/| |___| |_| |\n" +
                     " (_)    /_/      |_| |_____|____/ |_|   |____/|_|\\_\\___|_|   |_|   |_____|____/ \n" +
+                    "                                                                                \n");
+
+    private static final List<String> TEST_PENDING_HEADINGS  = ImmutableList.of(
+            "\n----------------\n" +
+                    "- TEST PENDING -\n" +
+                    "----------------",
+            "\n            __  _____ _____ ____ _____   ____  _  _____ ____  ____  _____ ____  \n" +
+                    "          __  _____ _____ ____ _____   ____  _____ _   _ ____ ___ _   _  ____ \n" +
+                    " _       / / |_   _| ____/ ___|_   _| |  _ \\| ____| \\ | |  _ \\_ _| \\ | |/ ___|\n" +
+                    "(_)____ / /    | | |  _| \\___ \\ | |   | |_) |  _| |  \\| | | | | ||  \\| | |  _ \n" +
+                    " |_____/ /     | | | |___ ___) || |   |  __/| |___| |\\  | |_| | || |\\  | |_| |\n" +
+                    "(_)   /_/      |_| |_____|____/ |_|   |_|   |_____|_| \\_|____/___|_| \\_|\\____|\n" +
                     "                                                                                \n");
 
     private static List<String>  FAILURE_HEADINGS  = ImmutableList.of(
@@ -253,7 +275,8 @@ public class ConsoleLoggingListener implements StepListener {
 
     private void logFailure(TestOutcome result) {
         if (loggingLevelIsAtLeast(LoggingLevel.QUIET)) {
-            getLogger().error(testFailureHeading() + "\nTEST FAILED: {}", result.getTitle() + underline(TEST_FAILED_HEADINGS.get(headingStyle)));
+            getLogger().error(red(testFailureHeading() + "\nTEST FAILED: {}"),
+                    result.getTitle() + underline(TEST_FAILED_HEADINGS.get(headingStyle)));
 
             logRelatedIssues(result);
             logFailureCause(result);
@@ -264,7 +287,8 @@ public class ConsoleLoggingListener implements StepListener {
 
     private void logError(TestOutcome result) {
         if (loggingLevelIsAtLeast(LoggingLevel.QUIET)) {
-            getLogger().error(testFailureHeading() + "\nTEST FAILED WITH ERROR: {}", result.getTitle() + underline(TEST_ERROR_HEADINGS.get(headingStyle)));
+            getLogger().error(red(testFailureHeading() + "\nTEST FAILED WITH ERROR: {}"),
+                    result.getTitle() + underline(TEST_ERROR_HEADINGS.get(headingStyle)));
 
             logRelatedIssues(result);
             logFailureCause(result);
@@ -275,7 +299,8 @@ public class ConsoleLoggingListener implements StepListener {
 
     private void logCompromised(TestOutcome result) {
         if (loggingLevelIsAtLeast(LoggingLevel.QUIET)) {
-            getLogger().error(testFailureHeading() + "\nTEST COMPROMISED: {}", result.getTitle() + underline(TEST_COMPROMISED_HEADINGS.get(headingStyle)));
+            getLogger().error(purple(testFailureHeading() + "\nTEST COMPROMISED: {}"),
+                    result.getTitle() + underline(TEST_COMPROMISED_HEADINGS.get(headingStyle)));
 
             logRelatedIssues(result);
             logFailureCause(result);
@@ -297,19 +322,15 @@ public class ConsoleLoggingListener implements StepListener {
         if (result.getNestedTestFailureCause() != null) {
             if (result.getFailingStep().isPresent()) {
                 String failingStep = result.getFailingStep().get().unrendered().getDescription();
-                getLogger().error("TEST FAILED AT STEP " + failingStep);
+                getLogger().error(red("TEST FAILED AT STEP " + failingStep));
             }
             getLogger().error(result.getNestedTestFailureCause().getShortenedMessage());
         }
     }
 
-    private String failureHeading() {
-        return FAILURE_HEADINGS.get(headingStyle);
-    }
-
     private void logPending(TestOutcome result) {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
-            getLogger().info(testSkippedHeading() + "\nTEST PENDING: {}", result.getTitle() + underline(testSkippedHeading()));
+            getLogger().info(cyan(testPendingHeading() + "\nTEST PENDING: {}"), result.getTitle() + underline(testSkippedHeading()));
 
         }
     }
@@ -318,15 +339,19 @@ public class ConsoleLoggingListener implements StepListener {
         return TEST_SKIPPED_HEADINGS.get(headingStyle);
     }
 
+    private String testPendingHeading() {
+        return TEST_PENDING_HEADINGS.get(headingStyle);
+    }
+
     private void logSkipped(TestOutcome result) {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
-            getLogger().info(testSkippedHeading() + "\nTEST SKIPPED: {}", result.getTitle() + underline(testSkippedHeading()));
+            getLogger().info(yellow(testSkippedHeading() + "\nTEST SKIPPED: {}"), result.getTitle() + underline(testSkippedHeading()));
         }
     }
 
     private void logSuccess(TestOutcome result) {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
-            getLogger().info(testPassedHeading() + "\nTEST PASSED: {}", result.getTitle() + underline(testPassedHeading()));
+            getLogger().info(green(testPassedHeading() + "\nTEST PASSED: {}"), result.getTitle() + underline(testPassedHeading()));
         }
     }
 
@@ -355,7 +380,7 @@ public class ConsoleLoggingListener implements StepListener {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
             String errorMessage = (failure.getException() != null) ? failure.getException().toString() : failure.getMessage();
             String failureType = analysis.resultFor(failure.getException()).name();
-            getLogger().debug("STEP {}: {}", failureType, errorMessage);
+            getLogger().debug(red("STEP {}: {}"), failureType, errorMessage);
         }
     }
 
@@ -365,20 +390,20 @@ public class ConsoleLoggingListener implements StepListener {
 
     public void stepIgnored() {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
-            getLogger().debug("IGNORING STEP");
+            getLogger().debug(yellow("IGNORING STEP"));
         }
     }
 
     public void stepPending() {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
-            getLogger().debug("PENDING STEP");
+            getLogger().debug(cyan("PENDING STEP"));
         }
     }
 
 
     public void stepPending(String message) {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
-            getLogger().debug("PENDING STEP ({})", message);
+            getLogger().debug(cyan("PENDING STEP ({})"), message);
         }
     }
 
@@ -389,21 +414,21 @@ public class ConsoleLoggingListener implements StepListener {
 
     public void testIgnored() {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
-            getLogger().info("TEST IGNORED");
+            getLogger().info(yellow("TEST IGNORED"));
         }
     }
 
     @Override
     public void testSkipped() {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
-            getLogger().info("TEST SKIPPED");
+            getLogger().info(yellow("TEST SKIPPED"));
         }
     }
 
     @Override
     public void testPending() {
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
-            getLogger().info("TEST PENDING");
+            getLogger().info(cyan("TEST PENDING"));
         }
     }
 
@@ -435,7 +460,28 @@ public class ConsoleLoggingListener implements StepListener {
     @Override
     public void assumptionViolated(String message) {
         if (loggingLevelIsAtLeast(LoggingLevel.QUIET)) {
-            getLogger().error("ASSUMPTION VIOLATED: " + message);
+            getLogger().error(red("ASSUMPTION VIOLATED: " + message));
         }
     }
+
+    private String red(String text) {
+        return ANSI_RED + text + ANSI_RESET;
+    }
+
+    private String green(String text) {
+        return ANSI_GREEN + text + ANSI_RESET;
+    }
+
+    private String yellow(String text) {
+        return ANSI_YELLOW + text + ANSI_RESET;
+    }
+
+    private String cyan(String text) {
+        return ANSI_CYAN + text + ANSI_RESET;
+    }
+
+    private String purple(String text) {
+        return ANSI_PURPLE + text + ANSI_RESET;
+    }
+
 }

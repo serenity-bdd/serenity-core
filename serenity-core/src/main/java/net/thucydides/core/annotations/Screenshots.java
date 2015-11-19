@@ -12,4 +12,5 @@ public @interface Screenshots {
     boolean beforeAndAfterEachStep() default true;
     boolean afterEachStep() default false;
     boolean forEachAction() default false;
+    boolean disabled() default false;
 }

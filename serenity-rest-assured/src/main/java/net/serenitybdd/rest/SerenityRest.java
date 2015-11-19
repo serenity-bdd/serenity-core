@@ -141,6 +141,7 @@ public class SerenityRest {
                 break;
             case POST:
             case PUT:
+            case PATCH:
                 notifyPostOrPut(args, methodType);
                 break;
         }

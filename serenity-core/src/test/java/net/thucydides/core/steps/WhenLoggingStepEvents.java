@@ -96,18 +96,6 @@ public class WhenLoggingStepEvents {
     }
 
     @Test
-    public void should_log_test_banner_when_test_starts() {
-        consoleLoggingListener.testStarted("Some test");
-
-        verify(logger).info(contains(
-              "\n  _____ _____ ____ _____   ____ _____  _    ____ _____ _____ ____  \n" +
-                " |_   _| ____/ ___|_   _| / ___|_   _|/ \\  |  _ \\_   _| ____|  _ \\ \n" +
-                "   | | |  _| \\___ \\ | |   \\___ \\ | | / _ \\ | |_) || | |  _| | | | |\n" +
-                "   | | | |___ ___) || |    ___) || |/ ___ \\|  _ < | | | |___| |_| |\n" +
-                "   |_| |_____|____/ |_|   |____/ |_/_/   \\_\\_| \\_\\|_| |_____|____/ \n"));
-    }
-
-    @Test
     public void should_log_test_name_when_test_starts() {
         consoleLoggingListener.testStarted("Some test");
 

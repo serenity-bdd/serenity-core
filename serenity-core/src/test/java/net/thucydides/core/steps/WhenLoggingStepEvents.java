@@ -115,15 +115,6 @@ public class WhenLoggingStepEvents {
     }
 
     @Test
-    public void should_log_message_when_test_fails() {
-        TestOutcome testOutcome = failingTestOutcome();
-
-        consoleLoggingListener.testFinished(testOutcome);
-
-        verify(logger).info(contains("TEST FAILED: {}"),contains("Some test"));
-    }
-
-    @Test
     public void should_not_log_messages_when_test_fails_in_quiet_mode() {
         environmentVariables.setProperty("thucydides.logging","QUIET");
         TestOutcome testOutcome = failingTestOutcome();
@@ -240,7 +231,7 @@ public class WhenLoggingStepEvents {
         environmentVariables.setProperty("thucydides.logging","VERBOSE");
         consoleLoggingListener.stepStarted(ExecutedStepDescription.withTitle("some step"));
 
-        verify(logger).info(contains("STARTING STEP"),eq("some step"));
+        verify(logger).debug(contains("STARTING STEP"), eq("some step"));
     }
 
     @Test
@@ -248,7 +239,7 @@ public class WhenLoggingStepEvents {
         environmentVariables.setProperty("thucydides.logging","VERBOSE");
         consoleLoggingListener.skippedStepStarted(ExecutedStepDescription.withTitle("some step"));
 
-        verify(logger).info(contains("STARTING STEP {}"), eq("some step"));
+        verify(logger).debug(contains("STARTING STEP {}"), eq("some step"));
     }
 
     @Test
@@ -256,7 +247,7 @@ public class WhenLoggingStepEvents {
         environmentVariables.setProperty("thucydides.logging", "VERBOSE");
         consoleLoggingListener.stepFinished();
 
-        verify(logger).info(contains("FINISHING STEP"));
+        verify(logger).debug(contains("FINISHING STEP"));
     }
 
     @Test
@@ -265,7 +256,7 @@ public class WhenLoggingStepEvents {
 
         consoleLoggingListener.stepIgnored();
 
-        verify(logger).info(contains("IGNORING STEP"));
+        verify(logger).debug(contains("IGNORING STEP"));
     }
 
     @Test
@@ -274,7 +265,7 @@ public class WhenLoggingStepEvents {
 
         consoleLoggingListener.stepPending();
 
-        verify(logger).info(contains("PENDING STEP"));
+        verify(logger).debug(contains("PENDING STEP"));
     }
 
     @Test
@@ -283,7 +274,7 @@ public class WhenLoggingStepEvents {
 
         consoleLoggingListener.stepPending("for some reason");
 
-        verify(logger).info(contains("PENDING STEP ({})"), eq("for some reason"));
+        verify(logger).debug(contains("PENDING STEP ({})"), eq("for some reason"));
     }
 
     private TestOutcome pendingTestOutcome() {

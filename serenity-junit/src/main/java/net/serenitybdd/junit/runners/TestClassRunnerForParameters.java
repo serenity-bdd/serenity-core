@@ -44,6 +44,16 @@ class TestClassRunnerForParameters extends SerenityRunner {
     }
 
     @Override
+    protected JUnitStepListener initListeners() {
+        setStepListener(JUnitStepListener.withOutputDirectory(getConfiguration().getOutputDirectory())
+                .and().withParameterSetNumber(parameterSetNumber)
+                .and().withParametersTable(parametersTable)
+                .and().withTestClass(getTestClass().getJavaClass())
+                .and().build());
+        return getStepListener();
+    }
+
+    @Override
     public Object createTest() throws Exception {
         return getTestClass().getOnlyConstructor().newInstance(computeParams());
     }

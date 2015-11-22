@@ -47,19 +47,19 @@ public class Resizer implements PhotoFilter {
     }
 
     private void saveResizedScreenshotTo(Path temporaryPath) throws IOException {
-        try (
-            InputStream imageStream = Files.newInputStream(temporaryPath);
-            OutputStream resizedImageStream = Files.newOutputStream(temporaryPath)
-        ){
-            BufferedImage image = ImageIO.read(imageStream);
+        BufferedImage resizedImage;
+        try (InputStream images = Files.newInputStream(temporaryPath)) {
+            BufferedImage image = ImageIO.read(images);
+
             Dimension imageSize = sizeOf(image);
             Dimension targetSize = targetSizeInProportionTo(imageSize);
 
             if (imageSize.equals(targetSize)) {
                 return;
             }
-
-            BufferedImage resizedImage = resize(image, targetSize.width, targetSize.height);
+            resizedImage = resize(image, targetSize.width, targetSize.height);
+        }
+        try (OutputStream resizedImageStream = Files.newOutputStream(temporaryPath)) {
             ImageIO.write(resizedImage, "png", resizedImageStream);
         }
     }

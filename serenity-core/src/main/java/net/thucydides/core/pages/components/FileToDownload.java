@@ -23,11 +23,13 @@ public class FileToDownload {
     }
 
     public byte[] asByteArray() throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try(InputStream in = new BufferedInputStream(url.openStream())) {
+        try(
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            InputStream in = new BufferedInputStream(url.openStream())
+        ) {
             IOUtils.copy(in, out);
+            return out.toByteArray();
         }
-        return out.toByteArray();
     }
 
     public String asString() throws IOException {

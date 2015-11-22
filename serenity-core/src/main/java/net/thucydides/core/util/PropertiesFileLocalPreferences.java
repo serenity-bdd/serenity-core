@@ -101,8 +101,10 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     private Properties preferencesIn(File preferencesFile) throws IOException {
         Properties preferenceProperties = new Properties();
         if (preferencesFile.exists()) {
-            LOGGER.info("LOADING LOCAL PROPERTIES FROM {} ", preferencesFile.getAbsolutePath());
-            preferenceProperties.load(new FileInputStream(preferencesFile));
+            try(InputStream preferences = new FileInputStream(preferencesFile)) {
+                LOGGER.info("LOADING LOCAL PROPERTIES FROM {} ", preferencesFile.getAbsolutePath());
+                preferenceProperties.load(preferences);
+            }
         }
         return preferenceProperties;
     }

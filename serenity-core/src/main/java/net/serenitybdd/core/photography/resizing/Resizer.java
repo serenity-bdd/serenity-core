@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,17 +47,19 @@ public class Resizer implements PhotoFilter {
     }
 
     private void saveResizedScreenshotTo(Path temporaryPath) throws IOException {
-        BufferedImage image = ImageIO.read(Files.newInputStream(temporaryPath));
+        try (
+            InputStream imageStream = Files.newInputStream(temporaryPath);
+            OutputStream resizedImageStream = Files.newOutputStream(temporaryPath)
+        ){
+            BufferedImage image = ImageIO.read(imageStream);
+            Dimension imageSize = sizeOf(image);
+            Dimension targetSize = targetSizeInProportionTo(imageSize);
 
-        Dimension imageSize = sizeOf(image);
-        Dimension targetSize = targetSizeInProportionTo(imageSize);
+            if (imageSize.equals(targetSize)) {
+                return;
+            }
 
-        if (imageSize.equals(targetSize)) {
-            return;
-        }
-
-        BufferedImage resizedImage = resize(image, targetSize.width, targetSize.height);
-        try(OutputStream resizedImageStream = Files.newOutputStream(temporaryPath)) {
+            BufferedImage resizedImage = resize(image, targetSize.width, targetSize.height);
             ImageIO.write(resizedImage, "png", resizedImageStream);
         }
     }

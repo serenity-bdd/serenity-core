@@ -8,6 +8,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class ScreenshotDigest {
 
@@ -20,10 +21,12 @@ public class ScreenshotDigest {
     private final EnvironmentVariables environmentVariables;
 
     public String forScreenshot(File screenshotFile) throws IOException {
-        return DigestUtils.md5Hex(new FileInputStream(screenshotFile))
-               + "_" + blurLevel.or(BlurLevel.NONE).toString()
-               + optionalWidth()
-               + ".png";
+        try(InputStream screenshot = new FileInputStream(screenshotFile)){
+            return DigestUtils.md5Hex(screenshot)
+                + "_" + blurLevel.or(BlurLevel.NONE).toString()
+                + optionalWidth()
+                + ".png";
+        }
     }
 
     private String optionalWidth() {

@@ -56,8 +56,7 @@ public class ResizableImage {
         Iterator<ImageReader> imageReaders = ImageIO.getImageReadersBySuffix(suffix);
         if (imageReaders.hasNext()) {
             ImageReader reader = imageReaders.next();
-            try {
-                ImageInputStream stream = new FileImageInputStream(screenshotFile);
+            try (ImageInputStream stream = new FileImageInputStream(screenshotFile)){
                 reader.setInput(stream);
                 int width = reader.getWidth(reader.getMinIndex());
                 int height = reader.getHeight(reader.getMinIndex());

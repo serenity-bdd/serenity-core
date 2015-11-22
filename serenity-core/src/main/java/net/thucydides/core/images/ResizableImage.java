@@ -55,8 +55,11 @@ public class ResizableImage {
         String suffix = this.getFileSuffix(screenshotFile.getPath());
         Iterator<ImageReader> imageReaders = ImageIO.getImageReadersBySuffix(suffix);
         if (imageReaders.hasNext()) {
+
             ImageReader reader = imageReaders.next();
-            try (ImageInputStream stream = new FileImageInputStream(screenshotFile)){
+            ImageInputStream stream = null;
+            try{
+                stream = new FileImageInputStream(screenshotFile);
                 reader.setInput(stream);
                 int width = reader.getWidth(reader.getMinIndex());
                 int height = reader.getHeight(reader.getMinIndex());
@@ -65,7 +68,18 @@ public class ResizableImage {
                 logger.warn("Could not find the dimensions of the screenshot for " + screenshotFile);
                 return new Dimension(0,0);
             } finally {
-                reader.dispose();
+                try {
+                    reader.dispose();
+                } catch (Throwable e) {
+                    logger.error("During reader disposing",e);
+                }
+                try {
+                    if (stream != null) {
+                        stream.close();
+                    }
+                } catch (IOException e) {
+                    logger.error("During image stream closing",e);
+                }
             }
         } else {
             throw new ScreenshotException("Could not find the dimensions of the screenshot for " + screenshotFile);

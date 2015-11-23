@@ -25,11 +25,10 @@ public class VersionProvider {
     public String getVersion()
     {
         String path = "/serenity-version.properties";
-        InputStream stream = getClass().getResourceAsStream(path);
-        if (stream == null)
-            return "UNKNOWN";
         Properties props = new Properties();
-        try {
+        try (InputStream stream = getClass().getResourceAsStream(path)){
+            if (stream == null)
+                return "UNKNOWN";
             props.load(stream);
             stream.close();
             return (String) props.get("application.version");

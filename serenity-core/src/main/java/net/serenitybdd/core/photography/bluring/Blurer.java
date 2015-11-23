@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -46,17 +47,16 @@ public class Blurer implements PhotoFilter {
             return amendedNegative;
         }
 
-        try {
-            BufferedImage srcImage = ImageIO.read(newInputStream(amendedNegative.getTemporaryPath()));
+        try (
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            InputStream imageStream = newInputStream(amendedNegative.getTemporaryPath())
+        ) {
+            BufferedImage srcImage = ImageIO.read(imageStream);
             BufferedImage destImage = deepCopy(srcImage);
             destImage = withFilterFor(negative.getBlurLevel()).filter(srcImage, destImage);
 
-            try(ByteArrayOutputStream outStream = new ByteArrayOutputStream()) {
-                ImageIO.write(destImage,"png",outStream);
-                Files.write(negative.getTemporaryPath(),outStream.toByteArray());
-            }
-
-
+            ImageIO.write(destImage, "png", outStream);
+            Files.write(negative.getTemporaryPath(), outStream.toByteArray());
         } catch (Throwable e) {
             LOGGER.warn("Failed to blur screenshot", e);
         }

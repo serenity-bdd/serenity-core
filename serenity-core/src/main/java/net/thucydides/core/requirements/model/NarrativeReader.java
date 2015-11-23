@@ -70,8 +70,7 @@ public class NarrativeReader {
     }
 
     private Optional<Narrative> narrativeLoadedFrom(File narrativeFile, String defaultType) {
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(narrativeFile), "UTF-8"));
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(narrativeFile), "UTF-8"))) {
             List<String> lines = readPreambleFrom(reader);
 
             String title = null;

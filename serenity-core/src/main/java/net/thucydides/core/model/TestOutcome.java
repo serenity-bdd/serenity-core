@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
+import net.serenitybdd.core.model.FailureDetails;
 import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
@@ -1145,7 +1146,7 @@ public class TestOutcome {
         return getTestFailureCause();
     }
 
-    private Optional<TestStep> firstStepWithErrorMessage() {
+    public Optional<TestStep> firstStepWithErrorMessage() {
         for (TestStep step : getFlattenedTestSteps()) {
             if (isNotBlank(step.getErrorMessage())) {
                 return Optional.of(step);
@@ -1165,8 +1166,6 @@ public class TestOutcome {
         }
         return testFailureMessage().or("");
     }
-
-
 
     public String getConciseErrorMessage() {
         if (firstStepWithErrorMessage().isPresent()) {
@@ -2015,4 +2014,9 @@ public class TestOutcome {
             }
         }
     }
+
+    public FailureDetails getFailureDetails() {
+        return new FailureDetails(this);
+    }
+
 }

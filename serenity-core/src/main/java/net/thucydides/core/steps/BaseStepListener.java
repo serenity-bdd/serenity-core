@@ -8,6 +8,7 @@ import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.photography.Darkroom;
 import net.serenitybdd.core.photography.ScreenshotPhoto;
+import net.serenitybdd.core.photography.SoundEngineer;
 import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
 import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.core.time.SystemClock;
@@ -97,6 +98,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private List<TestTag> storywideTags;
 
     private net.serenitybdd.core.photography.Photographer photographer = new net.serenitybdd.core.photography.Photographer();
+    private SoundEngineer soundEngineer = new SoundEngineer();
 
     public void setEventBus(StepEventBus eventBus) {
         this.eventBus = eventBus;
@@ -599,7 +601,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private void takeEndOfStepScreenshotFor(final TestResult result) {
         if (currentTestIsABrowserTest() && shouldTakeEndOfStepScreenshotFor(result)) {
-            take(OPTIONAL_SCREENSHOT);
+            take(MANDATORY_SCREENSHOT, result);
         }
     }
 
@@ -612,9 +614,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void take(final ScreenshotType screenshotType) {
+        take(screenshotType, UNDEFINED);
+    }
+
+    private void take(final ScreenshotType screenshotType, TestResult result) {
         if (shouldTakeScreenshots()) {
             try {
-                Optional<ScreenshotAndHtmlSource> screenshotAndHtmlSource = grabScreenshot();
+                Optional<ScreenshotAndHtmlSource> screenshotAndHtmlSource = grabScreenshot(result);
                 if (screenshotAndHtmlSource.isPresent()) {
                     recordScreenshotIfRequired(screenshotType, screenshotAndHtmlSource.get());
                 }
@@ -696,9 +702,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
-    private Optional<ScreenshotAndHtmlSource> grabScreenshot() {
+    private Optional<ScreenshotAndHtmlSource> grabScreenshot(TestResult result) {
 
         ScreenshotPhoto newPhoto = ScreenshotPhoto.None;
+        Optional<File> pageSource = Optional.absent();
 
         if (pathOf(outputDirectory) != null) { // Output directory may be null for some tests
             newPhoto = photographer.takesAScreenshot()
@@ -706,10 +713,14 @@ public class BaseStepListener implements StepListener, StepPublisher {
                                    .andWithBlurring(AnnotatedBluring.blurLevel())
                                    .andSaveToDirectory(pathOf(outputDirectory));
 
+            pageSource = soundEngineer.ifRequiredForResult(result)
+                                     .recordPageSourceUsing(getDriver())
+                                     .intoDirectory(pathOf(outputDirectory));
+
         }
         return (newPhoto == ScreenshotPhoto.None) ?
                 Optional.<ScreenshotAndHtmlSource>absent()
-                : Optional.of(new ScreenshotAndHtmlSource(newPhoto.getPathToScreenshot().toFile()));
+                : Optional.of(new ScreenshotAndHtmlSource(newPhoto.getPathToScreenshot().toFile(), pageSource.orNull()));
     }
 
     private Path pathOf(File directory) {

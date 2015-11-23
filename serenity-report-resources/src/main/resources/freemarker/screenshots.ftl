@@ -194,8 +194,13 @@
 
     <div id="beforetable"></div>
     <div id="contenttilttle">
-        <#if testOutcome.conciseErrorMessage??>
-            <span class='error-caption ellipsis'>${testOutcome.result}: ${testOutcome.conciseErrorMessage}</span>
+        <#if testOutcome.failureDetails.conciseErrorMessage??>
+            <div class="screenshotFailure panel panel-danger">
+                <div class="panel-heading"><span class='error-caption ellipsis'>${testOutcome.result}: ${testOutcome.failureDetails.conciseErrorMessage}</span></div>
+                <div class="panel-body">
+                    <a href="${testOutcome.failureDetails.pageSourceLink}" target="_blank" class="btn btn-info">HTML Source</a>
+                </div>
+            </div>
         </#if>
         <div class="slider-wrapper theme-default">
             <div id="slider">

@@ -1,5 +1,6 @@
 package net.thucydides.core.screenshots;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import org.apache.commons.io.FileUtils;
 
@@ -54,23 +55,11 @@ public class ScreenshotAndHtmlSource {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ScreenshotAndHtmlSource)) return false;
-
+        if (o == null || getClass() != o.getClass()) return false;
         ScreenshotAndHtmlSource that = (ScreenshotAndHtmlSource) o;
-
-        if (screenshot == null) {
-            return (that.screenshot == null);
-        } else if (that.screenshot == null) {
-            return (this.screenshot == null);
-        } else {
-            try {
-                return FileUtils.contentEquals(screenshot, that.screenshot);
-            } catch (IOException e) {
-                return false;
-            }
-        }
+        return Objects.equal(screenshot, that.screenshot) &&
+                Objects.equal(htmlSource, that.htmlSource);
     }
-
 
     @Override
     public int hashCode() {

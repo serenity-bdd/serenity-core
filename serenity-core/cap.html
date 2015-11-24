@@ -1,0 +1,976 @@
+serenity.test.root = net.serenitybdd.demos.todos.features
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>Requirements</title>
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <!--[if IE 7]>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome-ie7.min.css">
+    <![endif]--><!-- JQuery -->
+    <script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script><!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="bootstrap/js/bootstrap.min.js"></script><link rel="stylesheet" href="css/core.css"/>
+    <link rel="stylesheet" href="css/link.css"/>
+    <link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet"/><!-- JQuery-UI -->
+    <link type="text/css" href="jqueryui/1.11.2-start/jquery-ui.min.css" rel="Stylesheet" />
+    <script type="text/javascript" src="jqueryui/1.11.2-start/jquery-ui.min.js"></script><!-- DataTables -->
+    <link type="text/css" href="datatables/1.10.4/media/jqueryui/dataTables.jqueryui.css" rel="Stylesheet"/>
+    <link type="text/css" href="css/tables.css" rel="stylesheet" />
+
+    <script type="text/javascript" src="datatables/1.10.4/media/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="datatables/1.10.4/media/jqueryui/dataTables.jqueryui.min.js"></script><!-- jQplot -->
+    <!--[if IE]>
+    <script language="javascript" type="text/javascript" src="excanvas/3/excanvas.compiled.js"></script>
+    <![endif]--><link rel="stylesheet" type="text/css" href="jqplot/1.0.8/jquery.jqplot.min.css"/>
+    <script type="text/javascript" src="jqplot/1.0.8/jquery.jqplot.min.js"></script>
+    <script type="text/javascript" src="jqplot/1.0.8/plugins/jqplot.pieRenderer.min.js"></script>
+
+
+    <script class="code" type="text/javascript">$(document).ready(function () {
+        var plot1 = $.jqplot('coverage_pie_chart', [
+            [
+                ['Passing', 0.310345],
+                ['Pending', 0.034483],
+                ['Ignored', 0],
+                ['Failing', 0.068966],
+                ['Errors',  0.068966],
+                ['Compromised Tests',  0.103448],
+            ]
+        ], {
+            gridPadding: {top: 0, bottom: 38, left: 0, right: 0},
+            seriesColors: ['#30cb23',
+
+                '#a2f2f2',
+
+                '#eeeadd',
+
+                '#f8001f',
+
+                '#fc6e1f',
+                'mediumvioletred'],
+            seriesDefaults: {
+                renderer: $.jqplot.PieRenderer,
+                trendline: {show: false},
+                rendererOptions: {padding: 8, showDataLabels: true}
+            },
+            legend: {
+                show: true,
+                placement: 'outside',
+                rendererOptions: {
+                    numberRows: 3
+                },
+                location: 's',
+                marginTop: '15px'
+            },
+            series: [
+                {label: '31% requirements tested successfully'},
+                {label: '55.2% requirements untested'},
+                {label: '6.9%} requirements failing'},
+                {label: '6.9%} requirements with errors'},
+                {label: '10.3%} requirements with compromised tests'}
+            ]
+        });
+        // Results table
+        $('#req-results-table').DataTable({
+            "order": [
+                [2, "asc"]
+            ],
+            "pageLength": 25
+        });
+        $('#test-results-table').DataTable({
+            "order": [
+                [2, "asc"]
+            ],
+            "pageLength": 25
+        });
+        $('#examples-table').DataTable({
+            "order": [
+                [2, "asc"]
+            ],
+            "pageLength": 25
+        });
+        $("#tabs").tabs();
+        $("#test-tabs").tabs();
+    })
+    ;
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".read-more-link").click(function () {
+                $(this).nextAll("div.read-more-text").toggle();
+                var isrc = $(this).find("img").attr('src');
+                if (isrc == 'images/plus.png') {
+                    $(this).find("img").attr("src", function () {
+                        return "images/minus.png";
+                    });
+                } else {
+                    $(this).find("img").attr("src", function () {
+                        return "images/plus.png";
+                    });
+                }
+            });
+        });
+    </script>
+</head>
+
+<body class="results-page">
+<div id="topheader">
+    <div id="topbanner">
+        <div id="logo"><a href="index.html"><img src="images/serenity-bdd-logo.png" border="0"/></a></div>
+        <div id="projectname-banner" style="float:right">
+            <span class="projectname"></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="middlecontent">
+    <div id="contenttop">
+        <div class="middlebg">
+            <span class="breadcrumbs">
+            <a href='index.html'>Home</a>
+            </span>
+        </div>
+        <div class="rightbg"></div>
+    </div>
+
+    <div class="clr"></div>
+
+    <!--/* starts second table*/-->
+
+    <div>
+        <ul class="nav nav-tabs" role="tablist">
+            <li >
+                <a href="index.html"><i class="fa fa-check-square-o"></i> Overall Test Results</a>
+            </li>
+            <li class="active">
+                <a href="#"><i class="fa fa-book"></i> Requirements</a>
+            </li>
+            <li >
+                <a href="576946480b52ad056d6f5bddf874399c83582ecf90963cc074a14c70580e7d9f.html"><i class="fa fa-comments-o"></i> Features</a>
+            </li>
+            <li >
+                <a href="2a4631d87648e59c428d4cf0e9247f9d286e4679f436ca2ce872e931eb4dfd58.html"><i class="fa fa-comments-o"></i> Stories</a>
+            </li>
+        </ul>
+        <span class="date-and-time"><a href="build-info.html"><i class="fa fa-info-circle"></i></a> Report generated 02-11-2015 08:51</span>
+        <br style="clear:left"/>
+    </div>
+
+    <div class="clr"></div>
+
+    <div id="beforetable"></div>
+    <div id="results-dashboard">
+        <div class="middlb">
+            <div class="table">
+
+                <div id="requirements-summary">
+                    <div id="coverage_pie_chart"
+                         style="margin-top:10px; margin-left:10px; width:250px; height:250px;"></div>
+                    <div id="coverage_summary">
+                        <div>
+                            <h4>Requirements Overview</h4>
+                            <table class="summary-table">
+                                <head>
+                                    <tr>
+                                        <th>Requirement Type</th>
+                                        <th>Total</th>
+                                        <th>Pass&nbsp;<i class="icon-check"/></th>
+                                        <th>Fail&nbsp;<i class="icon-thumbs-down"/></th>
+                                        <th>Pending&nbsp;<i class="icon-calendar"/></th>
+                                        <th>Ignored&nbsp;<i class="icon-ban-circle"/></th>
+                                        <th>Untested&nbsp;<i class="icon-question"/></th>
+                                    </tr>
+                                </head>
+                                <body>
+                                <tr>
+                                    <td class="summary-leading-column">Features</td>
+                                    <td>2</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>3</td>
+                                </tr>
+                                <tr>
+                                    <td class="summary-leading-column">Stories</td>
+                                    <td>2</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>2</td>
+                                    <td>0</td>
+                                    <td>2</td>
+                                </tr>
+                                <tr>
+                                    <td class="summary-leading-column">Acceptance Criteria (tests)</td>
+                                    <td>17</td>
+                                    <td>9</td>
+                                    <td>7</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td></td>
+                                </tr>
+                                </body>
+                            </table>
+                        </div>
+
+
+
+
+
+                        <div>
+                            <h4>Test Result Summary</h4>
+                            <table class="summary-table">
+                                <head>
+                                    <tr>
+                                        <th>Test Type</th>
+                                        <th>Total</th>
+                                        <th>Pass&nbsp;<i class="icon-check"/> </th>
+                                        <th>Fail&nbsp;<i class="icon-thumbs-down"/></th>
+                                        <th>Pending&nbsp;<i class="icon-calendar"/></th>
+                                        <th>Ignored&nbsp;<i class="icon-ban-circle"/></th>
+                                    </tr>
+                                </head>
+                                <body>
+                                <tr>
+                                    <td class="summary-leading-column">Automated</td>
+                                    <td>17</td>
+                                    <td>9 (53%)</td>
+                                    <td>7 (41%)</td>
+                                    <td>1 (6%)</td>
+                                    <td>0 (0%)</td>
+                                </tr>
+                                <tr>
+                                    <td class="summary-leading-column">Manual</td>
+                                    <td>0</td>
+                                    <td>0 (0%)</td>
+                                    <td>0 (0%)</td>
+                                    <td>0 (0%)</td>
+                                    <td>0 (0%)</td>
+                                </tr>
+                                <tr>
+                                    <td class="summary-leading-column">Total</td>
+                                    <td>17</td>
+                                    <td>9 (53%)</td>
+                                    <td>7 (12%)</td>
+                                    <td>1 (6%)</td>
+                                    <td>0 (0%)</td>
+                                </tr>
+                                <tr>
+                                    <td class="summary-leading-column">Total Duration</td>
+                                    <td colspan="5">1 minutes 38 seconds</td>
+                                </tr>
+                                </body>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="clr"></div>
+
+                <div id="tabs">
+                    <ul>
+                        <li><a href="#tabs-1">
+                            Features (2)
+                        </a></li>
+                    </ul>
+                    <div id="tabs-1" class="capabilities-table">
+                        <div id="req_list_tests" class="table">
+                            <div class="test-results">
+                                <table id="req-results-table">
+                                    <thead>
+                                    <tr>
+                                        <th width="30" class="test-results-heading">&nbsp;</th>
+                                        <th width="65" class="test-results-heading">ID</th>
+                                        <th width="525" class="test-results-heading">Feature</th>
+                                        <th width="65" class="test-results-heading">Stories</th>
+                                        <th class="test-results-heading" width="75px">Auto.<br/>Tests</th>
+                                        <th class="test-results-heading" width="25px"><i
+                                                class="icon-check icon-large"
+                                                title="Tests passed (automated)"></i></th>
+                                        <th class="test-results-heading" width="25px"><i
+                                                class="icon-ban-circle icon-large"
+                                                title="Tests skipped or pending (automated)">
+                                        </th>
+                                        <th class="test-results-heading" width="25px"><i
+                                                class="icon-thumbs-down icon-large"
+                                                title="Tests failed (automated)"></th>
+                                        <th class="test-results-heading" width="25px"><i
+                                                class="icon-exclamation-sign icon-large"
+                                                title="Tests failed with an error (automated)">
+                                        </th>
+                                        <th class="test-results-heading" width="75px">Manual<br/>Tests</th>
+                                        <th class="test-results-heading" width="25px"><i
+                                                class="icon-check icon-large"
+                                                title="Tests passed (manual)"></i></th>
+                                        <th class="test-results-heading" width="25px"><i
+                                                class="icon-ban-circle icon-large"
+                                                title="Tests skipped or pending (manual)">></i>
+                                        </th>
+                                        <th class="test-results-heading" width="25px"><i
+                                                class="icon-thumbs-down icon-large"
+                                                title="Tests failed (manual)">></i></th>
+                                        <th class="test-results-heading" width="25px"><i
+                                                class="icon-exclamation-sign icon-large"
+                                                title="Tests failed with an error (manual)">></i>
+                                        </th>
+
+
+                                        <th width="125px" class="test-results-heading">Coverage</th>
+                                    </tr>
+                                    <tbody>
+
+
+                                    <tr class="test-SUCCESS requirementRow">
+                                        <td class="requirementRowCell">
+                                                    <span class="summary-icon"
+                                                          title="SUCCESS"><i class='fa fa-check-square-o success-icon ' title='SUCCESS'></i></span>
+                                            <span style="display:none">1</span>
+                                        </td>
+                                        <td class="cardNumber requirementRowCell"></td>
+
+                                        <td class="SUCCESS-text requirementRowCell">
+                                            <a href="javaScript:void(0)" class="read-more-link"><img
+                                                    src="images/plus.png"
+                                                    height="20"/></a>
+                                                    <span class="requirementName"><a
+                                                            href="a9d391d524814f10a176b42634c4307588bafa70a743676efbe42359b8e03673.html">Filter my todos in jbehave</a></span>
+                                            <div class="requirementNarrative read-more-text">Filter my todos in jbehave</div>
+                                        </td>
+
+                                        <td class="bluetext requirementRowCell">1</td>
+
+
+                                        <td class="greentext highlighted-value requirementRowCell">0</td>
+                                        <td class="greentext requirementRowCell">0</td>
+                                        <td class="bluetext requirementRowCell">0</td>
+                                        <td class="redtext requirementRowCell">0</td>
+                                        <td class="lightorangetext requirementRowCell">0</td>
+                                        <td class="lightorangetext requirementRowCell">0</td>
+                                        <td class="greentext highlighted-value requirementRowCell">0</td>
+                                        <td class="greentext requirementRowCell">0</td>
+                                        <td class="bluetext requirementRowCell">0</td>
+                                        <td class="redtext requirementRowCell">0</td>
+                                        <td class="violettext requirementRowCell">0</td>
+
+                                        <td width="125px" class="lightgreentext requirementRowCell">
+
+                                            <!--
+                                            Accessing the ESAA Registration screens
+
+                                            Tests implemented: 10
+                                              - Passing tests: 4
+                                              - Failing tests: 3
+
+                                            Requirements specified:   6
+                                            Requiments without tests: 2
+
+                                            Estimated unimplemented tests: 7
+                                            -->
+
+                                            <table>
+                                                <tr>
+                                                    <td width="40px">
+                                                        <div class="small">0%</div>
+                                                    </td>
+                                                    <td width="125px">
+                                                        <div class="percentagebar"
+                                                             title="Filter my todos in jbehave
+Tests implemented: 0
+  - Passing tests: 0 (0% of specified requirements)
+  - Failing tests: 0 (0% of specified requirements)
+  - Tests with errors: 0 (0% of specified requirements)
+  - Tests compromised: 0 (0% of specified requirements)
+
+Tests not implemented or not executed: 0
+  - Pending tests: 0 (0% of specified requirements)
+  - Ignored or skipped tests: 0 (0% of specified requirements)
+
+Requirements specified:     2
+Requirements with no tests: 2
+
+
+Estimated unimplemented tests: 8
+Estimated unimplemented or pending requirements: 0%
+Estimated ignored or skipped requirements: 0%"
+                                                             style="width: 125px;">
+                                                            <div class="ignoredbar"
+                                                                 style="width: 0px;"
+                                                                 title="Filter my todos in jbehave
+Tests implemented: 0
+  - Passing tests: 0 (0% of specified requirements)
+  - Failing tests: 0 (0% of specified requirements)
+  - Tests with errors: 0 (0% of specified requirements)
+  - Tests compromised: 0 (0% of specified requirements)
+
+Tests not implemented or not executed: 0
+  - Pending tests: 0 (0% of specified requirements)
+  - Ignored or skipped tests: 0 (0% of specified requirements)
+
+Requirements specified:     2
+Requirements with no tests: 2
+
+
+Estimated unimplemented tests: 8
+Estimated unimplemented or pending requirements: 0%
+Estimated ignored or skipped requirements: 0%">
+                                                                <div class="compromisedbar"
+                                                                     style="width: 0px;"
+                                                                     title="Filter my todos in jbehave
+Tests implemented: 0
+  - Passing tests: 0 (0% of specified requirements)
+  - Failing tests: 0 (0% of specified requirements)
+  - Tests with errors: 0 (0% of specified requirements)
+  - Tests compromised: 0 (0% of specified requirements)
+
+Tests not implemented or not executed: 0
+  - Pending tests: 0 (0% of specified requirements)
+  - Ignored or skipped tests: 0 (0% of specified requirements)
+
+Requirements specified:     2
+Requirements with no tests: 2
+
+
+Estimated unimplemented tests: 8
+Estimated unimplemented or pending requirements: 0%
+Estimated ignored or skipped requirements: 0%">
+                                                                    <div class="errorbar"
+                                                                         style="width: 0px;"
+                                                                         title="Filter my todos in jbehave
+Tests implemented: 0
+  - Passing tests: 0 (0% of specified requirements)
+  - Failing tests: 0 (0% of specified requirements)
+  - Tests with errors: 0 (0% of specified requirements)
+  - Tests compromised: 0 (0% of specified requirements)
+
+Tests not implemented or not executed: 0
+  - Pending tests: 0 (0% of specified requirements)
+  - Ignored or skipped tests: 0 (0% of specified requirements)
+
+Requirements specified:     2
+Requirements with no tests: 2
+
+
+Estimated unimplemented tests: 8
+Estimated unimplemented or pending requirements: 0%
+Estimated ignored or skipped requirements: 0%">
+                                                                        <div class="failingbar"
+                                                                             style="width: 0px;"
+                                                                             title="Filter my todos in jbehave
+Tests implemented: 0
+  - Passing tests: 0 (0% of specified requirements)
+  - Failing tests: 0 (0% of specified requirements)
+  - Tests with errors: 0 (0% of specified requirements)
+  - Tests compromised: 0 (0% of specified requirements)
+
+Tests not implemented or not executed: 0
+  - Pending tests: 0 (0% of specified requirements)
+  - Ignored or skipped tests: 0 (0% of specified requirements)
+
+Requirements specified:     2
+Requirements with no tests: 2
+
+
+Estimated unimplemented tests: 8
+Estimated unimplemented or pending requirements: 0%
+Estimated ignored or skipped requirements: 0%">
+                                                                            <div class="passingbar"
+                                                                                 style="width: 0px;"
+                                                                                 title="Filter my todos in jbehave
+Tests implemented: 0
+  - Passing tests: 0 (0% of specified requirements)
+  - Failing tests: 0 (0% of specified requirements)
+  - Tests with errors: 0 (0% of specified requirements)
+  - Tests compromised: 0 (0% of specified requirements)
+
+Tests not implemented or not executed: 0
+  - Pending tests: 0 (0% of specified requirements)
+  - Ignored or skipped tests: 0 (0% of specified requirements)
+
+Requirements specified:     2
+Requirements with no tests: 2
+
+
+Estimated unimplemented tests: 8
+Estimated unimplemented or pending requirements: 0%
+Estimated ignored or skipped requirements: 0%">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+
+                                    </tr>
+
+                                    <tr class="test-SUCCESS requirementRow">
+                                        <td class="requirementRowCell">
+                                                    <span class="summary-icon"
+                                                          title="SUCCESS"><i class='fa fa-check-square-o success-icon ' title='SUCCESS'></i></span>
+                                            <span style="display:none">1</span>
+                                        </td>
+                                        <td class="cardNumber requirementRowCell"></td>
+
+                                        <td class="SUCCESS-text requirementRowCell">
+                                            <a href="javaScript:void(0)" class="read-more-link"><img
+                                                    src="images/plus.png"
+                                                    height="20"/></a>
+                                                    <span class="requirementName"><a
+                                                            href="1dcdccf4fa610438e085426e6ff8821e1a7ace0101a0f2550d081d42c84a25ed.html">Record todos</a></span>
+                                            <div class="requirementNarrative read-more-text">Record todos</div>
+                                        </td>
+
+                                        <td class="bluetext requirementRowCell">1</td>
+
+
+                                        <td class="greentext highlighted-value requirementRowCell">1</td>
+                                        <td class="greentext requirementRowCell">1</td>
+                                        <td class="bluetext requirementRowCell">0</td>
+                                        <td class="redtext requirementRowCell">0</td>
+                                        <td class="lightorangetext requirementRowCell">0</td>
+                                        <td class="lightorangetext requirementRowCell">0</td>
+                                        <td class="greentext highlighted-value requirementRowCell">0</td>
+                                        <td class="greentext requirementRowCell">0</td>
+                                        <td class="bluetext requirementRowCell">0</td>
+                                        <td class="redtext requirementRowCell">0</td>
+                                        <td class="violettext requirementRowCell">0</td>
+
+                                        <td width="125px" class="lightgreentext requirementRowCell">
+
+                                            <!--
+                                            Accessing the ESAA Registration screens
+
+                                            Tests implemented: 10
+                                              - Passing tests: 4
+                                              - Failing tests: 3
+
+                                            Requirements specified:   6
+                                            Requiments without tests: 2
+
+                                            Estimated unimplemented tests: 7
+                                            -->
+
+                                            <table>
+                                                <tr>
+                                                    <td width="40px">
+                                                        <div class="small">20%</div>
+                                                    </td>
+                                                    <td width="125px">
+                                                        <div class="percentagebar"
+                                                             title="Record todos
+Tests implemented: 1
+  - Passing tests: 1 (20% of specified requirements)
+  - Failing tests: 0 (0% of specified requirements)
+  - Tests with errors: 0 (0% of specified requirements)
+  - Tests compromised: 0 (0% of specified requirements)
+
+Tests not implemented or not executed: 0
+  - Pending tests: 0 (0% of specified requirements)
+  - Ignored or skipped tests: 0 (0% of specified requirements)
+
+Requirements specified:     2
+Requirements with no tests: 1
+
+
+Estimated unimplemented tests: 4
+Estimated unimplemented or pending requirements: 0%
+Estimated ignored or skipped requirements: 0%"
+                                                             style="width: 125px;">
+                                                            <div class="ignoredbar"
+                                                                 style="width: 25px;"
+                                                                 title="Record todos
+Tests implemented: 1
+  - Passing tests: 1 (20% of specified requirements)
+  - Failing tests: 0 (0% of specified requirements)
+  - Tests with errors: 0 (0% of specified requirements)
+  - Tests compromised: 0 (0% of specified requirements)
+
+Tests not implemented or not executed: 0
+  - Pending tests: 0 (0% of specified requirements)
+  - Ignored or skipped tests: 0 (0% of specified requirements)
+
+Requirements specified:     2
+Requirements with no tests: 1
+
+
+Estimated unimplemented tests: 4
+Estimated unimplemented or pending requirements: 0%
+Estimated ignored or skipped requirements: 0%">
+                                                                <div class="compromisedbar"
+                                                                     style="width: 25px;"
+                                                                     title="Record todos
+Tests implemented: 1
+  - Passing tests: 1 (20% of specified requirements)
+  - Failing tests: 0 (0% of specified requirements)
+  - Tests with errors: 0 (0% of specified requirements)
+  - Tests compromised: 0 (0% of specified requirements)
+
+Tests not implemented or not executed: 0
+  - Pending tests: 0 (0% of specified requirements)
+  - Ignored or skipped tests: 0 (0% of specified requirements)
+
+Requirements specified:     2
+Requirements with no tests: 1
+
+
+Estimated unimplemented tests: 4
+Estimated unimplemented or pending requirements: 0%
+Estimated ignored or skipped requirements: 0%">
+                                                                    <div class="errorbar"
+                                                                         style="width: 25px;"
+                                                                         title="Record todos
+Tests implemented: 1
+  - Passing tests: 1 (20% of specified requirements)
+  - Failing tests: 0 (0% of specified requirements)
+  - Tests with errors: 0 (0% of specified requirements)
+  - Tests compromised: 0 (0% of specified requirements)
+
+Tests not implemented or not executed: 0
+  - Pending tests: 0 (0% of specified requirements)
+  - Ignored or skipped tests: 0 (0% of specified requirements)
+
+Requirements specified:     2
+Requirements with no tests: 1
+
+
+Estimated unimplemented tests: 4
+Estimated unimplemented or pending requirements: 0%
+Estimated ignored or skipped requirements: 0%">
+                                                                        <div class="failingbar"
+                                                                             style="width: 25px;"
+                                                                             title="Record todos
+Tests implemented: 1
+  - Passing tests: 1 (20% of specified requirements)
+  - Failing tests: 0 (0% of specified requirements)
+  - Tests with errors: 0 (0% of specified requirements)
+  - Tests compromised: 0 (0% of specified requirements)
+
+Tests not implemented or not executed: 0
+  - Pending tests: 0 (0% of specified requirements)
+  - Ignored or skipped tests: 0 (0% of specified requirements)
+
+Requirements specified:     2
+Requirements with no tests: 1
+
+
+Estimated unimplemented tests: 4
+Estimated unimplemented or pending requirements: 0%
+Estimated ignored or skipped requirements: 0%">
+                                                                            <div class="passingbar"
+                                                                                 style="width: 25px;"
+                                                                                 title="Record todos
+Tests implemented: 1
+  - Passing tests: 1 (20% of specified requirements)
+  - Failing tests: 0 (0% of specified requirements)
+  - Tests with errors: 0 (0% of specified requirements)
+  - Tests compromised: 0 (0% of specified requirements)
+
+Tests not implemented or not executed: 0
+  - Pending tests: 0 (0% of specified requirements)
+  - Ignored or skipped tests: 0 (0% of specified requirements)
+
+Requirements specified:     2
+Requirements with no tests: 1
+
+
+Estimated unimplemented tests: 4
+Estimated unimplemented or pending requirements: 0%
+Estimated ignored or skipped requirements: 0%">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="test-tabs">
+                        <ul>
+                            <li><a href="#test-tabs-1">Acceptance Tests (17)</a></li>
+                        </ul>
+                        <div id="test_list_tests" class="table">
+                            <div class="test-results">
+                                <table id="test-results-table">
+                                    <thead>
+                                    <tr>
+                                        <th width="50" class="test-results-heading">&nbsp;</th>
+                                        <th width="%" class="test-results-heading">Acceptance Tests</th>
+                                        <th width="70" class="test-results-heading">Steps</th>
+                                        <th width="100" class="test-results-heading">Duration<br>(seconds)</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="test-COMPROMISED">
+                                        <td>
+                                            <span class="summary-icon"><i class='fa fa-chain-broken compromised-icon ' title='COMPROMISED'></i></span>
+                                            <span style="display:none">COMPROMISED</span>
+                                        </td>
+                                        <td class="COMPROMISED-text"><a
+                                                href="6178e948272569e153a1641ffa0f65e4471f6f1631bf24156e4664543d2e2ac8.html"
+                                                title="net.serenitybdd.core.exceptions.TestCompromisedException">A compromised step </a>
+                                        </td>
+
+                                        <td class="lightgreentext">1</td>
+
+                                        <td class="lightgreentext">0</td>
+                                    </tr>
+                                    <tr class="test-ERROR">
+                                        <td>
+                                            <span class="summary-icon"><i class='fa fa-exclamation-triangle error-icon ' title='ERROR'></i></span>
+                                            <span style="display:none">ERROR</span>
+                                        </td>
+                                        <td class="ERROR-text"><a
+                                                href="9343e218c2688c11f0a1e76d857e87342fba4d73998e852cdbff7aa448b06b89.html"
+                                                title="org.openqa.selenium.ElementNotVisibleException:  Build info: version: '2.48.2', revision: '41bccdd10cf2c0560f637404c2d96164b67d9d67', time: '2015-10-09 13:08:06' System info: host: 'Johns-MacBook-Pro.local', ip: '172.17.172.31', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.11.1', java.version: '1.8.0_45' Driver info: driver.version: unknown">A step error </a>
+                                        </td>
+
+                                        <td class="lightgreentext">1</td>
+
+                                        <td class="lightgreentext">0.01</td>
+                                    </tr>
+                                    <tr class="test-FAILURE">
+                                        <td>
+                                            <span class="summary-icon"><i class='fa fa-times-circle failure-icon ' title='FAILURE'></i></span>
+                                            <span style="display:none">FAILURE</span>
+                                        </td>
+                                        <td class="FAILURE-text"><a
+                                                href="ad1ccf10b62f8b45b5892f2b68bdb70ef5d05305a6da0dbed7ee854c5640c2f3.html"
+                                                title="java.lang.AssertionError:  Expected: is (false)      but: was (true)">A step failure </a>
+                                        </td>
+
+                                        <td class="lightgreentext">1</td>
+
+                                        <td class="lightgreentext">0.01</td>
+                                    </tr>
+                                    <tr class="test-SUCCESS">
+                                        <td>
+                                            <span class="summary-icon"><i class='fa fa-check-square-o success-icon ' title='SUCCESS'></i></span>
+                                            <span style="display:none">SUCCESS</span>
+                                        </td>
+                                        <td class="SUCCESS-text"><a
+                                                href="d2140d8e1685a463518885ad5fcfc7f2ae22c2f6f126735406c10c4cd6f75ab3.html"
+                                                title="">Complete a todo action </a>
+                                        </td>
+
+                                        <td class="lightgreentext">6</td>
+
+                                        <td class="lightgreentext">4.54</td>
+                                    </tr>
+                                    <tr class="test-SUCCESS">
+                                        <td>
+                                            <span class="summary-icon"><i class='fa fa-check-square-o success-icon ' title='SUCCESS'></i></span>
+                                            <span style="display:none">SUCCESS</span>
+                                        </td>
+                                        <td class="SUCCESS-text"><a
+                                                href="fa5cc8c72432898ca92e31949689e6d188aa81046eb8c049e9397bc7a7c1dc9c.html"
+                                                title="">Delete a completed todo </a>
+                                        </td>
+
+                                        <td class="lightgreentext">15</td>
+
+                                        <td class="lightgreentext">6.77</td>
+                                    </tr>
+                                    <tr class="test-SUCCESS">
+                                        <td>
+                                            <span class="summary-icon"><i class='fa fa-check-square-o success-icon ' title='SUCCESS'></i></span>
+                                            <span style="display:none">SUCCESS</span>
+                                        </td>
+                                        <td class="SUCCESS-text"><a
+                                                href="0df771f582e88c61727733b17e797d692b8f12f6d1235afa1043518de8db3ef7.html"
+                                                title="">Delete an active todo </a>
+                                        </td>
+
+                                        <td class="lightgreentext">13</td>
+
+                                        <td class="lightgreentext">4.4</td>
+                                    </tr>
+                                    <tr class="test-SUCCESS">
+                                        <td>
+                                            <span class="summary-icon"><i class='fa fa-check-square-o success-icon ' title='SUCCESS'></i></span>
+                                            <span style="display:none">SUCCESS</span>
+                                        </td>
+                                        <td class="SUCCESS-text"><a
+                                                href="daaf182a6c7c6b9edc044bac0ff8b3cd12741d6d7944812c4c66f644607ad515.html"
+                                                title="">Display only Active tasks </a>
+                                        </td>
+
+                                        <td class="lightgreentext">16</td>
+
+                                        <td class="lightgreentext">8.55</td>
+                                    </tr>
+                                    <tr class="test-PENDING">
+                                        <td>
+                                            <span class="summary-icon"><i class='fa fa-square-o pending-icon ' title='PENDING'></i></span>
+                                            <span style="display:none">PENDING</span>
+                                        </td>
+                                        <td class="PENDING-text"><a
+                                                href="4dee2dacd2b81bfdaea981de7a0491bea245d76c9ebbe7f3b92b365e9019db7a.html"
+                                                title="">New todos should also make coffee </a>
+                                        </td>
+
+                                        <td class="lightgreentext">5</td>
+
+                                        <td class="lightgreentext">3.52</td>
+                                    </tr>
+                                    <tr class="test-SUCCESS">
+                                        <td>
+                                            <span class="summary-icon"><i class='fa fa-check-square-o success-icon ' title='SUCCESS'></i></span>
+                                            <span style="display:none">SUCCESS</span>
+                                        </td>
+                                        <td class="SUCCESS-text"><a
+                                                href="90335eae6bad4c4757ebfe7f9c5f927c8d79247bf78e8ca400b302ab1a235369.html"
+                                                title="">New todos should be marked as Active </a>
+                                        </td>
+
+                                        <td class="lightgreentext">7</td>
+
+                                        <td class="lightgreentext">4.26</td>
+                                    </tr>
+                                    <tr class="test-SUCCESS">
+                                        <td>
+                                            <span class="summary-icon"><i class='fa fa-check-square-o success-icon ' title='SUCCESS'></i></span>
+                                            <span style="display:none">SUCCESS</span>
+                                        </td>
+                                        <td class="SUCCESS-text"><a
+                                                href="0a758803f63682afc824e8e4524226f624cb342d64ff7d6334d1278740194fce.html"
+                                                title="">Record a new todo action for future use </a>
+                                        </td>
+
+                                        <td class="lightgreentext">6</td>
+
+                                        <td class="lightgreentext">9.44</td>
+                                    </tr>
+                                    <tr class="test-SUCCESS">
+                                        <td>
+                                            <span class="summary-icon"><i class='fa fa-check-square-o success-icon ' title='SUCCESS'></i></span>
+                                            <span style="display:none">SUCCESS</span>
+                                        </td>
+                                        <td class="SUCCESS-text"><a
+                                                href="a48a0889e3d64097e5af114081fd031c89bef2e17e5f654c440c36063f45c32b.html"
+                                                title="">Several users add new todos </a>
+                                        </td>
+
+                                        <td class="lightgreentext">24</td>
+
+                                        <td class="lightgreentext">10.66</td>
+                                    </tr>
+                                    <tr class="test-SUCCESS">
+                                        <td>
+                                            <span class="summary-icon"><i class='fa fa-check-square-o success-icon ' title='SUCCESS'></i></span>
+                                            <span style="display:none">SUCCESS</span>
+                                        </td>
+                                        <td class="SUCCESS-text"><a
+                                                href="92e2e0b2edcd4872f76d4315824003131c8a482dbfb1640e299144019bcd9447.html"
+                                                title="">Should be able to clear completed actions from the todo list </a>
+                                        </td>
+
+                                        <td class="lightgreentext">7</td>
+
+                                        <td class="lightgreentext">6.04</td>
+                                    </tr>
+                                    <tr class="test-FAILURE">
+                                        <td>
+                                            <span class="summary-icon"><i class='fa fa-times-circle failure-icon ' title='FAILURE'></i></span>
+                                            <span style="display:none">FAILURE</span>
+                                        </td>
+                                        <td class="FAILURE-text"><a
+                                                href="55b7f1902a494a2274674a2c1bd2fcc641c37c4b662b45b4d1ae1f6bfcd5d906.html"
+                                                title="java.lang.AssertionError:  Expected: iterable containing ['Walk the cat']      but: item 0: was 'Walk the dog'">Should be able to remove cat related completed items from the todo list </a>
+                                        </td>
+
+                                        <td class="lightgreentext">12</td>
+
+                                        <td class="lightgreentext">12.76</td>
+                                    </tr>
+                                    <tr class="test-SUCCESS">
+                                        <td>
+                                            <span class="summary-icon"><i class='fa fa-check-square-o success-icon ' title='SUCCESS'></i></span>
+                                            <span style="display:none">SUCCESS</span>
+                                        </td>
+                                        <td class="SUCCESS-text"><a
+                                                href="ffb5eb1161e7ce5c5bf16976f8c99e3ae9281309238910d6bea8b99db1fa49ba.html"
+                                                title="">Should be able to remove completed items from the todo list </a>
+                                        </td>
+
+                                        <td class="lightgreentext">12</td>
+
+                                        <td class="lightgreentext">8.08</td>
+                                    </tr>
+                                    <tr class="test-ERROR">
+                                        <td>
+                                            <span class="summary-icon"><i class='fa fa-exclamation-triangle error-icon ' title='ERROR'></i></span>
+                                            <span style="display:none">ERROR</span>
+                                        </td>
+                                        <td class="ERROR-text"><a
+                                                href="e94ae73340db111564be64b49645557e448f4f3ca73813968613db5837ed47ca.html"
+                                                title="org.openqa.selenium.ElementNotVisibleException: no such element Build info: version: '2.48.2', revision: '41bccdd10cf2c0560f637404c2d96164b67d9d67', time: '2015-10-09 13:08:06' System info: host: 'Johns-MacBook-Pro.local', ip: '172.17.172.31', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.11.1', java.version: '1.8.0_45' Driver info: driver.version: unknown">Should be able to remove dog related completed items from the todo list </a>
+                                        </td>
+
+                                        <td class="lightgreentext">9</td>
+
+                                        <td class="lightgreentext">6.07</td>
+                                    </tr>
+                                    <tr class="test-COMPROMISED">
+                                        <td>
+                                            <span class="summary-icon"><i class='fa fa-chain-broken compromised-icon ' title='COMPROMISED'></i></span>
+                                            <span style="display:none">COMPROMISED</span>
+                                        </td>
+                                        <td class="COMPROMISED-text"><a
+                                                href="e21d81ef1dcc550cd5b65b363740de501332297f0b0144753e5984c14662707f.html"
+                                                title="net.serenitybdd.core.exceptions.TestCompromisedException: Mainframe down">Should be able to remove dog when the mainframe is down </a>
+                                        </td>
+
+                                        <td class="lightgreentext">9</td>
+
+                                        <td class="lightgreentext">5.92</td>
+                                    </tr>
+                                    <tr class="test-COMPROMISED">
+                                        <td>
+                                            <span class="summary-icon"><i class='fa fa-chain-broken compromised-icon ' title='COMPROMISED'></i></span>
+                                            <span style="display:none">COMPROMISED</span>
+                                        </td>
+                                        <td class="COMPROMISED-text"><a
+                                                href="31c0134c3ba03054d161a21ef6f9fa5a37ef68a3c45d05f646667e39d76832de.html"
+                                                title="net.serenitybdd.core.exceptions.TestCompromisedException: Mainframe down">Should be able to remove dog when the mainframe is down at the end of the test </a>
+                                        </td>
+
+                                        <td class="lightgreentext">12</td>
+
+                                        <td class="lightgreentext">7.48</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<div id="bottomfooter">
+    <span class="version">Serenity BDD version 1.1.18-SNAPSHOT</span>
+</div>
+</body>
+</html>

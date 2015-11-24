@@ -219,7 +219,7 @@ public class WhenLoggingStepEvents {
         environmentVariables.setProperty("thucydides.logging","VERBOSE");
         consoleLoggingListener.stepStarted(ExecutedStepDescription.withTitle("some step"));
 
-        verify(logger).debug(contains("STARTING STEP"), eq("some step"));
+        verify(logger).info(contains("STARTING STEP"), eq("some step"));
     }
 
     @Test
@@ -227,7 +227,7 @@ public class WhenLoggingStepEvents {
         environmentVariables.setProperty("thucydides.logging","VERBOSE");
         consoleLoggingListener.skippedStepStarted(ExecutedStepDescription.withTitle("some step"));
 
-        verify(logger).debug(contains("STARTING STEP {}"), eq("some step"));
+        verify(logger).info(contains("STARTING STEP {}"), eq("some step"));
     }
 
     @Test
@@ -235,7 +235,7 @@ public class WhenLoggingStepEvents {
         environmentVariables.setProperty("thucydides.logging", "VERBOSE");
         consoleLoggingListener.stepFinished();
 
-        verify(logger).debug(contains("FINISHING STEP"));
+        verify(logger).info(contains("FINISHING STEP"));
     }
 
     @Test
@@ -244,7 +244,7 @@ public class WhenLoggingStepEvents {
 
         consoleLoggingListener.stepIgnored();
 
-        verify(logger).debug(contains("IGNORING STEP"));
+        verify(logger).info(contains("IGNORING STEP"));
     }
 
     @Test
@@ -253,7 +253,7 @@ public class WhenLoggingStepEvents {
 
         consoleLoggingListener.stepPending();
 
-        verify(logger).debug(contains("PENDING STEP"));
+        verify(logger).info(contains("PENDING STEP"));
     }
 
     @Test
@@ -262,7 +262,7 @@ public class WhenLoggingStepEvents {
 
         consoleLoggingListener.stepPending("for some reason");
 
-        verify(logger).debug(contains("PENDING STEP ({})"), eq("for some reason"));
+        verify(logger).info(contains("PENDING STEP ({})"), eq("for some reason"));
     }
 
     private TestOutcome pendingTestOutcome() {

@@ -361,7 +361,7 @@ public class ConsoleLoggingListener implements StepListener {
 
     public void stepStarted(ExecutedStepDescription description) {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
-            getLogger().debug("STARTING STEP {}", description.getTitle());
+            getLogger().info("STARTING STEP {}", description.getTitle());
         }
     }
 
@@ -372,7 +372,7 @@ public class ConsoleLoggingListener implements StepListener {
 
     public void stepFinished() {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
-            getLogger().debug("FINISHING STEP");
+            getLogger().info("FINISHING STEP");
         }
     }
 
@@ -380,7 +380,7 @@ public class ConsoleLoggingListener implements StepListener {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
             String errorMessage = (failure.getException() != null) ? failure.getException().toString() : failure.getMessage();
             String failureType = analysis.resultFor(failure.getException()).name();
-            getLogger().debug(red("STEP {}: {}"), failureType, errorMessage);
+            getLogger().info(red("STEP {}: {}"), failureType, errorMessage);
         }
     }
 
@@ -390,20 +390,20 @@ public class ConsoleLoggingListener implements StepListener {
 
     public void stepIgnored() {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
-            getLogger().debug(yellow("IGNORING STEP"));
+            getLogger().info(yellow("IGNORING STEP"));
         }
     }
 
     public void stepPending() {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
-            getLogger().debug(cyan("PENDING STEP"));
+            getLogger().info(cyan("PENDING STEP"));
         }
     }
 
 
     public void stepPending(String message) {
         if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
-            getLogger().debug(cyan("PENDING STEP ({})"), message);
+            getLogger().info(cyan("PENDING STEP ({})"), message);
         }
     }
 

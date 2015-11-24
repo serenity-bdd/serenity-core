@@ -194,7 +194,7 @@
 
     <div id="beforetable"></div>
     <div id="contenttilttle">
-        <#if testOutcome.failureDetails.conciseErrorMessage??>
+        <#if (testOutcome.result == "FAILURE" || testOutcome.result == "ERROR")>
             <div class="screenshotFailure panel panel-danger">
                 <div class="panel-heading"><span class='error-caption ellipsis'>${testOutcome.result}: ${testOutcome.failureDetails.conciseErrorMessage}</span></div>
                 <div class="panel-body">
@@ -209,7 +209,7 @@
                     <#assign caption = "${screenshot.html.description}">
                 <#else>
                     <#if testOutcome.conciseErrorMessage??>
-                        <#assign caption = "${screenshot.html.description}: <span class='error-caption'>${testOutcome.result}</span>">
+                        <#assign caption = "${screenshot.html.description}: <span class='${outcome_text}'>${testOutcome.result}</span>">
                     <#else>
                         <#assign caption = "${screenshot.html.description}">
                     </#if>

@@ -774,6 +774,19 @@ font-family:euphemia, verdana, sans-serif; font-size:16px; color: #88a717; font-
     background-color: #30cb23; height: 1.1em;
 }
 
+.failing-color {
+    color: #f8001f;
+}
+.error-color {
+    color: darkorange;
+}
+.compromised-color {
+    color: fuchsia;
+}
+.passing-color {
+    color: #30cb23;
+}
+
 #accordion {
     list-style: none;
     padding: 0 0 0 0;

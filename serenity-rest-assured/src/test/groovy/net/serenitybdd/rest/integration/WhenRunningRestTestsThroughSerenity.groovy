@@ -92,6 +92,22 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
                                                                   query.contentType == "application/json"})
     }
 
+    def "Should record RestAssured patch() method calls"() {
+        given:
+        def mockListener = Mock(BaseStepListener)
+        StepEventBus.eventBus.registerListener(mockListener)
+        StepEventBus.eventBus.testStarted("rest")
+        and:
+        def updateContent = """{"id": 1007, "name": "doggie", "status": "not_available"}"""
+        when:
+        rest().given().contentType("application/json").content(updateContent).patch("http://petstore.swagger.io/v2/pet/{id}","1007")
+
+        then: "The JSON request should be recorded in the test steps"
+        1 * mockListener.recordRestQuery({ RestQuery query -> query.toString() == "PATCH http://petstore.swagger.io/v2/pet/1007" &&
+            query.content == updateContent  &&
+            query.contentType == "application/json"})
+    }
+
     def "Should record RestAssured put() method calls"() {
         given:
             def samplePet = """{"id": 1003, "name": "doggie", "photoUrls": [], "status": "available"}"""

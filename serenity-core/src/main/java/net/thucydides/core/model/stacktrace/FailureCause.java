@@ -189,9 +189,10 @@ public class FailureCause {
     }
 
     public String getShortenedMessage() {
-        if (isEmpty(message.trim())) {
-            return message;
-        }
+
+        if (message == null) { return ""; }
+        if (isEmpty(message.trim())) { return message; }
+
         String[] messageLines = withCollapedAssertionError(message).trim().split("\n|\n\r|\r");
         return messageLines[0];
     }

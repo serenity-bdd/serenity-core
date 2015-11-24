@@ -6,9 +6,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 /**
  * Utility class to read report resources from the classpath. This way, report
@@ -21,6 +25,8 @@ public class ResourceList {
     private static final String PATH_SEPARATOR = System.getProperty("path.separator");
 
     private final Pattern pattern;
+
+    private final long TO_GIVE_THE_OTHER_PROCESS_TIME_TO_RELEASE_THE_ZIP = 1000;
 
     public static ResourceList forResources(final Pattern pattern) {
         return new ResourceList(pattern);
@@ -95,7 +101,23 @@ public class ResourceList {
     }
 
     protected ZipFile zipFileFor(final File file) throws IOException {
-        return new ZipFile(file);
+        return loadZipFileWithMaxRetries(file, 3);
+    }
+
+    private ZipFile loadZipFileWithMaxRetries(final File file, int maxRetries) throws IOException {
+        try {
+            return new ZipFile(file);
+        } catch (ZipException resourceFileLockedOrSomething) {
+            if (maxRetries == 0) {
+                throw resourceFileLockedOrSomething;
+            }
+            try {
+                Thread.sleep(TO_GIVE_THE_OTHER_PROCESS_TIME_TO_RELEASE_THE_ZIP);
+            } catch (InterruptedException shouldNeverHappen) {
+                throw new RuntimeException(shouldNeverHappen);
+            }
+            return loadZipFileWithMaxRetries(file, maxRetries - 1);
+        }
     }
 
     private Collection<String> getResourcesFromJarFile(final File file, final Pattern pattern) {

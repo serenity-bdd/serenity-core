@@ -27,7 +27,9 @@ class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
             Darkroom.waitUntilClose();
             driver.quit()
         then:
-            photos.each { photo -> Files.exists(photo.pathToScreenshot) }
+            photos.findAll {
+                photo -> Files.exists(photo.pathToScreenshot)
+            }.size() == 11
     }
 
     def "should handle multiple screenshots in parallel"() {
@@ -56,8 +58,9 @@ class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
             threads.forEach { it.join() }
         then:
             photos.size() == 100
-            photos.each { photo -> Files.exists(photo.pathToScreenshot) }
-
+            photos.findAll {
+                photo -> Files.exists(photo.pathToScreenshot)
+            }.size() == 100
     }
     WebDriver driver;
     Path screenshotDirectory;

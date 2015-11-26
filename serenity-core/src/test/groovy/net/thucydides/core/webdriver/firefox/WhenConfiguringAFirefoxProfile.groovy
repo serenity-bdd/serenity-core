@@ -47,9 +47,9 @@ class WhenConfiguringAFirefoxProfile extends Specification {
         then:
             1 * profile.setPreference("network.proxy.http", "http://my.proxy");
         and:
-            1 * profile.setPreference("network.proxy.http_port", "8080");
+            1 * profile.setPreference("network.proxy.http_port", 8080);
         and:
-            1 * profile.setPreference("network.proxy.type", "1");
+            1 * profile.setPreference("network.proxy.type", 1);
     }
 
     def "should add firefox preferences"() {

@@ -63,8 +63,8 @@ public class FirefoxProfileEnhancer {
 
     public void activateProxy(final FirefoxProfile profile, String proxyUrl, String proxyPort) {
         profile.setPreference(FIREFOX_NETWORK_PROXY_HTTP, proxyUrl);
-        profile.setPreference(FIREFOX_NETWORK_PROXY_HTTP_PORT, proxyPort);
-        profile.setPreference(FIREFOX_NETWORK_PROXY_TYPE, "1");
+        profile.setPreference(FIREFOX_NETWORK_PROXY_HTTP_PORT, NumberUtils.toInt(proxyPort));
+        profile.setPreference(FIREFOX_NETWORK_PROXY_TYPE, 1);
     }
 
     public void activateNativeEventsFor(FirefoxProfile profile, boolean enabled) {

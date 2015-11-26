@@ -190,7 +190,7 @@ subprojects {
         compile("com.google.inject:guice:3.0") {
             exclude group:"org.ow2.asm", module:"asm"
             exclude group:"asm", module:"asm"
-            exclude group:"cglib", module:"cglib"
+            exclude group:"org.sonatype.sisu.inject", module:"cglib"
         }
 
         compile ('cglib:cglib:3.1') {

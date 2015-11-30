@@ -13,12 +13,15 @@ import com.jayway.restassured.internal.mapping.ObjectMapping;
 import com.jayway.restassured.internal.serialization.SerializationSupport;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.response.ValidatableResponse;
+import com.jayway.restassured.specification.AuthenticationSpecification;
+import com.jayway.restassured.specification.RequestLogSpecification;
 import com.jayway.restassured.specification.RequestSpecification;
 import com.jayway.restassured.specification.ResponseSpecification;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
 import net.serenitybdd.core.rest.RestMethod;
 import net.serenitybdd.core.rest.RestQuery;
+import net.serenitybdd.rest.decorators.RestDecorator;
 import net.serenitybdd.rest.stubs.RequestSpecificationStub;
 import net.serenitybdd.rest.stubs.ResponseSpecificationStub;
 import net.serenitybdd.rest.stubs.ResponseStub;
@@ -45,6 +48,7 @@ public class SerenityRest {
     private static ThreadLocal<RequestSpecification> currentRequestSpecification = new ThreadLocal<>();
     private static ThreadLocal<Response> currentResponse = new ThreadLocal<>();
     private static ThreadLocal<QueryPayload> currentQueryPayload = new ThreadLocal<>();
+    private static ThreadLocal<RestDecorator> decorator = new ThreadLocal<>();
 
     public static void clearQueryData() {
         currentRequestSpecification.remove();
@@ -185,7 +189,6 @@ public class SerenityRest {
     }
 
     private static Object wrappedResult(Method method, Object target, Object[] args) throws Throwable {
-
         try {
             if (restCallsAreDisabled()) {
                 return stubbed(method);
@@ -200,7 +203,11 @@ public class SerenityRest {
             } else if (Response.class.isAssignableFrom(result.getClass())) {
                 notifyResponse((Response) result);
                 return result;
-            } else {
+            }else if (AuthenticationSpecification.class.isAssignableFrom(result.getClass())){
+                return getDecorator().decorate((AuthenticationSpecification)result);
+            } else if (RequestLogSpecification.class.isAssignableFrom(result.getClass())){
+                return getDecorator().decorate((RequestLogSpecification) result);
+            }  else {
                 return result;
             }
         } catch (Exception generalException) {
@@ -209,7 +216,13 @@ public class SerenityRest {
             notifyOfStepFailure(method, args, assertionError);
             return stubbed(method);
         }
+    }
 
+    private static RestDecorator getDecorator(){
+        if (SerenityRest.decorator.get() == null) {
+            SerenityRest.decorator.set(new RestDecorator(SerenityRest.currentRequestSpecification));
+        }
+        return SerenityRest.decorator.get();
     }
 
     private static Object stubbed(Method method) {

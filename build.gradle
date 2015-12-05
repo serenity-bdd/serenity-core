@@ -31,6 +31,7 @@ ext {
     springVersion = '4.1.6.RELEASE'
     guavaVersion = '18.0'
     restAssuredVersion = '2.4.1'
+    mockitoCoreVersion = '1.10.19'
 
     // Bintray configuration
     bintrayBaseUrl = 'https://api.bintray.com/maven'
@@ -206,7 +207,7 @@ subprojects {
 
         compile 'commons-logging:commons-logging:1.2'
         compile "junit:junit:${junitVersion}"
-        compile('org.mockito:mockito-core:1.9.5') {
+        compile("org.mockito:mockito-core:${mockitoCoreVersion}") {
             exclude group: "org.hamcrest", module:"hamcrest-core"
             exclude group: "org.objenesis", module:"objenesis"
         }

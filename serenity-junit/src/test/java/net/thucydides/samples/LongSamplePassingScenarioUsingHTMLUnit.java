@@ -3,20 +3,20 @@ package net.thucydides.samples;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
+import net.thucydides.core.annotations.Screenshots;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
 @RunWith(SerenityRunner.class)
-public class LongSamplePassingScenarioUsingPhantomJS {
+public class LongSamplePassingScenarioUsingHTMLUnit {
 
-    @Managed(uniqueSession = true, driver="phantomjs")
+    @Managed(uniqueSession = true, driver="htmlunit")
     public WebDriver webdriver;
 
-    @ManagedPages(defaultUrl = "classpath:static-site/index.html")
+    @ManagedPages(defaultUrl = "http://www.wikipedia.org")
     public Pages pages;
 
     @Steps

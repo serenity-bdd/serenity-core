@@ -46,7 +46,6 @@ import org.junit.runner.RunWith;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.WebDriver;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -58,11 +57,11 @@ import java.util.List;
 
 import static ch.lambdaj.Lambda.filter;
 import static net.thucydides.core.steps.stepdata.StepData.withTestDataFrom;
-import static net.thucydides.core.webdriver.SystemPropertiesConfiguration.JUNIT_RETRY_TESTS;
-import static net.thucydides.core.webdriver.SystemPropertiesConfiguration.MAX_RETRIES;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
+import static net.thucydides.core.webdriver.SystemPropertiesConfiguration.JUNIT_RETRY_TESTS;
+import static net.thucydides.core.webdriver.SystemPropertiesConfiguration.MAX_RETRIES;
 
 public class WhenRunningADataDrivenTestScenario {
 
@@ -610,7 +609,7 @@ public class WhenRunningADataDrivenTestScenario {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-                outputDirectory.getAbsolutePath());
+            outputDirectory.getAbsolutePath());
 
         SerenityParameterizedRunner runner = getTestRunnerUsing(SimpleSuccessfulParametrizedTestSample.class);
 
@@ -654,7 +653,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void by_default_the_number_of_threads_is_2_times_the_number_of_CPU_cores() throws Throwable  {
+    public void by_default_the_number_of_threads_is_2_times_the_number_of_CPU_cores() throws Throwable {
 
         SerenityParameterizedRunner runner = getTestRunnerUsing(SampleParallelDataDrivenScenario.class);
         int threadCount = runner.getThreadCountFor(SampleParallelDataDrivenScenario.class);
@@ -686,11 +685,11 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void the_number_of_threads_can_be_overridden_with_a_system_property() throws Throwable  {
+    public void the_number_of_threads_can_be_overridden_with_a_system_property() throws Throwable {
 
         environmentVariables.setProperty("thucydides.concurrent.threads","4");
         SerenityParameterizedRunner runner
-                = getTestRunnerUsing(ParallelDataDrivenScenarioWithSpecifiedThreadCountSample.class);
+            = getTestRunnerUsing(ParallelDataDrivenScenarioWithSpecifiedThreadCountSample.class);
         int threadCount = runner.getThreadCountFor(ParallelDataDrivenScenarioWithSpecifiedThreadCountSample.class);
 
         assertThat(threadCount, is(4));

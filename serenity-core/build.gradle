@@ -1,5 +1,4 @@
 import org.apache.tools.ant.filters.*
-
 ext {
     bintrayPackage = 'serenity-core'
 }

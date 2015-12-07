@@ -2,10 +2,13 @@ package net.serenitybdd.junit.runners.integration;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestResult;
 import net.thucydides.junit.rules.DisableThucydidesHistoryRule;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
 import net.thucydides.junit.runners.AbstractTestStepRunnerTest;
+import net.thucydides.samples.LongSamplePassingScenarioUsingHTMLUnit;
 import net.thucydides.samples.LongSamplePassingScenarioUsingPhantomJS;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.notification.RunNotifier;
@@ -26,7 +29,7 @@ public class WhenRunningATestScenarioWithScreenshots extends AbstractTestStepRun
     public DisableThucydidesHistoryRule disableThucydidesHistoryRule = new DisableThucydidesHistoryRule();
 
     @Test
-    public void the_test_runner_records_the_steps_as_they_are_executed() throws InitializationError {
+    public void the_test_runner_records_the_steps_as_they_are_executed_with_phantom_js() throws InitializationError {
 
         SerenityRunner runner = new SerenityRunner(LongSamplePassingScenarioUsingPhantomJS.class);
         runner.run(new RunNotifier());
@@ -39,6 +42,23 @@ public class WhenRunningATestScenarioWithScreenshots extends AbstractTestStepRun
         assertThat(testOutcome1.getName(), is("happy_day_scenario"));
         assertThat(testOutcome1.getTestSteps().size(), is(3));
         assertThat(testOutcome1.getScreenshots().size(), is(not(0)));
+        assertThat(testOutcome1.getResult(), is(TestResult.SUCCESS));
     }
 
+    @Test
+    @Ignore
+    public void the_test_runner_records_the_steps_as_they_are_executed_with_html_unit() throws InitializationError {
+        SerenityRunner runner = new SerenityRunner(LongSamplePassingScenarioUsingHTMLUnit.class);
+        runner.run(new RunNotifier());
+
+        List<TestOutcome> executedSteps = runner.getTestOutcomes();
+        assertThat(executedSteps.size(), is(1));
+        TestOutcome testOutcome1 = executedSteps.get(0);
+
+        assertThat(testOutcome1.getTitle(), is("Happy day scenario"));
+        assertThat(testOutcome1.getName(), is("happy_day_scenario"));
+        assertThat(testOutcome1.getTestSteps().size(), is(3));
+        assertThat(testOutcome1.getScreenshots().size(), is(0));
+        assertThat(testOutcome1.getResult(), is(TestResult.SUCCESS));
+    }
 }

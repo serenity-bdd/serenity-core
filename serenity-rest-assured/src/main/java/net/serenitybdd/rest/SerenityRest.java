@@ -4,13 +4,8 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.config.EncoderConfig;
-import com.jayway.restassured.config.ObjectMapperConfig;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.internal.RestAssuredResponseImpl;
-import com.jayway.restassured.internal.http.CharsetExtractor;
-import com.jayway.restassured.internal.mapping.ObjectMapping;
-import com.jayway.restassured.internal.serialization.SerializationSupport;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.response.ValidatableResponse;
 import com.jayway.restassured.specification.AuthenticationSpecification;
@@ -125,44 +120,12 @@ public class SerenityRest {
         switch (name) {
             case "content" :
             case "body" :
-                registerContent(convent(args));
+                registerContent(args[0].toString());
                 break;
             case "contentType":
                 registerContentType(args[0].toString());
                 break;
         }
-    }
-
-    private static String convent(Object[] args) {
-        String convented = "";
-        if (args != null) {
-            final Object object = args[0];
-            if (!SerializationSupport.isSerializableCandidate(object)) {
-                convented = object.toString();
-            }
-            ObjectMapperConfig config = ObjectMapperConfig.objectMapperConfig();
-            ObjectMapping.serialize(object, getContentType(), findEncoderCharsetOrReturnDefault(getContentType()), null, config);
-        } else {
-            convented = "null";
-        }
-        return convented;
-    }
-
-    private static String findEncoderCharsetOrReturnDefault(String contentType) {
-        String charset = CharsetExtractor.getCharsetFromContentType(contentType);
-        if (charset == null) {
-            final EncoderConfig cfg = new EncoderConfig();
-            charset = cfg.defaultContentCharset();
-        }
-        return charset;
-    }
-
-    private static String getContentType() {
-        String type = currentQueryPayload().getContentType();
-        if (type == null) {
-            type = ContentType.ANY.toString();
-        }
-        return type;
     }
 
     private static void registerContentType(String contentType) {

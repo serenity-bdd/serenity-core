@@ -22,7 +22,18 @@ import net.thucydides.junit.annotations.Concurrent;
 import net.thucydides.junit.annotations.TestData;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
 import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule;
-import net.thucydides.samples.*;
+import net.thucydides.samples.NestedDatadrivenSteps;
+import net.thucydides.samples.SampleCSVDataDrivenScenario;
+import net.thucydides.samples.SampleDataDrivenIgnoredScenario;
+import net.thucydides.samples.SampleDataDrivenPendingScenario;
+import net.thucydides.samples.SampleDataDrivenScenario;
+import net.thucydides.samples.SampleDataDrivenScenarioWithExternalFailure;
+import net.thucydides.samples.SampleParallelDataDrivenScenario;
+import net.thucydides.samples.SamplePassingScenarioWithTestSpecificData;
+import net.thucydides.samples.SampleScenarioSteps;
+import net.thucydides.samples.SampleSingleDataDrivenScenario;
+import net.thucydides.samples.SampleSingleDataDrivenScenarioWithFailingAssumption;
+import net.thucydides.samples.SampleSingleSessionDataDrivenScenario;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -35,10 +46,10 @@ import org.junit.runner.RunWith;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.WebDriver;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -49,8 +60,8 @@ import static net.thucydides.core.steps.stepdata.StepData.withTestDataFrom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static net.thucydides.core.webdriver.SystemPropertiesConfiguration.MAX_RETRIES;
 import static net.thucydides.core.webdriver.SystemPropertiesConfiguration.JUNIT_RETRY_TESTS;
+import static net.thucydides.core.webdriver.SystemPropertiesConfiguration.MAX_RETRIES;
 
 public class WhenRunningADataDrivenTestScenario {
 
@@ -202,7 +213,7 @@ public class WhenRunningADataDrivenTestScenario {
 
         runner.run(new RunNotifier());
 
-        File[] reports = outputDirectory.listFiles(new XMLFileFilter());
+        File[] reports = reload(outputDirectory).listFiles(new XMLFileFilter());
         assertThat(reports.length, is(2));
     }
 
@@ -217,7 +228,7 @@ public class WhenRunningADataDrivenTestScenario {
 
         runner.run(new RunNotifier());
 
-        File[] reports = outputDirectory.listFiles(new XMLFileFilter());
+        File[] reports = reload(outputDirectory).listFiles(new XMLFileFilter());
         assertThat(reports.length, is(2));
     }
 
@@ -232,7 +243,7 @@ public class WhenRunningADataDrivenTestScenario {
 
         runner.run(new RunNotifier());
 
-        List<String> reportContents = contentsOf(outputDirectory.listFiles(new XMLFileFilter()));
+        List<String> reportContents = contentsOf(reload(outputDirectory).listFiles(new XMLFileFilter()));
 
         assertThat(reportContents, hasItemContainsString("Jack Black"));
         assertThat(reportContents, hasItemContainsString("Joe Smith"));
@@ -272,7 +283,7 @@ public class WhenRunningADataDrivenTestScenario {
 
         runner.run(new RunNotifier());
 
-        List reportContents = contentsOf(outputDirectory.listFiles(new XMLFileFilter()));
+        List reportContents = contentsOf(reload(outputDirectory).listFiles(new XMLFileFilter()));
         assertThat(reportContents.size(), is(1));
     }
 
@@ -598,13 +609,13 @@ public class WhenRunningADataDrivenTestScenario {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-                outputDirectory.getAbsolutePath());
+            outputDirectory.getAbsolutePath());
 
         SerenityParameterizedRunner runner = getTestRunnerUsing(SimpleSuccessfulParametrizedTestSample.class);
 
         runner.run(new RunNotifier());
 
-        List<String> reportContents = contentsOf(outputDirectory.listFiles(new XMLFileFilter()));
+        List<String> reportContents = contentsOf(reload(outputDirectory).listFiles(new XMLFileFilter()));
 
         assertThat(reportContents.size(), is(2));
 
@@ -621,7 +632,7 @@ public class WhenRunningADataDrivenTestScenario {
 
         runner.run(new RunNotifier());
 
-        List<String> reportContents = contentsOf(outputDirectory.listFiles(new XMLFileFilter()));
+        List<String> reportContents = contentsOf(reload(outputDirectory).listFiles(new XMLFileFilter()));
 
         assertThat(reportContents, hasItemContainsString("<value>a</value>"));
         assertThat(reportContents, hasItemContainsString("<value>1</value>"));
@@ -642,7 +653,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void by_default_the_number_of_threads_is_2_times_the_number_of_CPU_cores() throws Throwable  {
+    public void by_default_the_number_of_threads_is_2_times_the_number_of_CPU_cores() throws Throwable {
 
         SerenityParameterizedRunner runner = getTestRunnerUsing(SampleParallelDataDrivenScenario.class);
         int threadCount = runner.getThreadCountFor(SampleParallelDataDrivenScenario.class);
@@ -674,11 +685,11 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void the_number_of_threads_can_be_overridden_with_a_system_property() throws Throwable  {
+    public void the_number_of_threads_can_be_overridden_with_a_system_property() throws Throwable {
 
         environmentVariables.setProperty("thucydides.concurrent.threads","4");
         SerenityParameterizedRunner runner
-                = getTestRunnerUsing(ParallelDataDrivenScenarioWithSpecifiedThreadCountSample.class);
+            = getTestRunnerUsing(ParallelDataDrivenScenarioWithSpecifiedThreadCountSample.class);
         int threadCount = runner.getThreadCountFor(ParallelDataDrivenScenarioWithSpecifiedThreadCountSample.class);
 
         assertThat(threadCount, is(4));
@@ -745,6 +756,10 @@ public class WhenRunningADataDrivenTestScenario {
         return FileUtils.readFileToString(reportFile);
     }
 
+    private File reload(File old) {
+        return Paths.get(old.getAbsolutePath()).toFile();
+    }
+
     @Test
     public void a_separate_html_report_should_be_generated_from_each_scenario() throws Throwable  {
 
@@ -756,7 +771,7 @@ public class WhenRunningADataDrivenTestScenario {
 
         runner.run(new RunNotifier());
 
-        File[] reports = outputDirectory.listFiles(new HTMLFileFilter());
+        File[] reports = reload(outputDirectory).listFiles(new HTMLFileFilter());
         assertThat(reports.length, is(2));
     }
 

@@ -14,6 +14,9 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.nio.file.Path
+import java.nio.file.Paths
+
 import static net.thucydides.core.model.TestResult.*
 import static net.thucydides.junit.runners.TestOutcomeChecks.resultsFrom
 
@@ -428,7 +431,7 @@ class WhenRunningTestScenarios extends Specification {
         def runner = new ATestableThucydidesRunnerSample(SamplePassingScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
-        def xmlReports = temporaryDirectory.list().findAll {it.endsWith(".xml") && !it.startsWith("SERENITY-")}
+        def xmlReports = reload(temporaryDirectory).list().findAll {it.endsWith(".xml") && !it.startsWith("SERENITY-")}
         then:
         xmlReports.size() == 3
     }
@@ -437,7 +440,7 @@ class WhenRunningTestScenarios extends Specification {
         when:
         new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
         new ATestableThucydidesRunnerSample(SampleFailingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
-        def xmlReports = temporaryDirectory.list().findAll {it.endsWith(".xml") && !it.startsWith("SERENITY-")}
+        def xmlReports = reload(temporaryDirectory).list().findAll {it.endsWith(".xml") && !it.startsWith("SERENITY-")}
         then:
         xmlReports.size() == 6
     }
@@ -445,7 +448,7 @@ class WhenRunningTestScenarios extends Specification {
     def "HTML test results should be written to the output directory"() {
         when:
             new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
-            def xmlReports = temporaryDirectory.list().findAll {it.endsWith(".html")}
+            def xmlReports = reload(temporaryDirectory).list().findAll {it.endsWith(".html")}
         then:
             xmlReports.size() == 3
     }
@@ -486,4 +489,10 @@ class WhenRunningTestScenarios extends Specification {
             "iteration:I3"                | 0
     }
 
+    private File reload(File old) {
+        return Paths.get(old.getAbsolutePath()).toFile();
+    }
+    private Path reload(Path old) {
+        return Paths.get(old.toAbsolutePath().toString());
+    }
 }

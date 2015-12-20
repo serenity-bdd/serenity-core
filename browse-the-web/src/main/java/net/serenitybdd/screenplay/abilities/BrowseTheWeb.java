@@ -43,6 +43,13 @@ public class BrowseTheWeb extends PageObject implements Ability {
     public static BrowseTheWeb with(WebDriver browser) { return new BrowseTheWeb(browser);}
 
     public <T extends PageObject> T onPage(Class<T> pageObjectClass) {
+        return on(pageObjectClass);
+    }
+
+    public <T extends PageObject> T onPageElement(Class<T> pageObjectClass) {
+        return on(pageObjectClass);
+    }
+    public <T extends PageObject> T on(Class<T> pageObjectClass) {
         return Pages.instrumentedPageObjectUsing(pageObjectClass, getDriver());
     }
 

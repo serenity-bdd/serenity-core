@@ -1,4 +1,4 @@
-package net.serenitybdd.screenplay.targets;
+package net.serenitybdd.core.targets;
 
 public class Target {
     private final String targetElementName;

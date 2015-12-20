@@ -3,7 +3,7 @@ package net.serenitybdd.screenplay.webtests;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
-import net.serenitybdd.screenplay.webtests.tasks.OpenedTheApplication;
+import net.serenitybdd.screenplay.webtests.tasks.OpenTheApplication;
 import net.serenitybdd.screenplay.webtests.tasks.TheProfile;
 import net.serenitybdd.screenplay.webtests.tasks.UpdateHerProfile;
 import net.serenitybdd.screenplay.webtests.tasks.ViewMyProfile;
@@ -19,10 +19,10 @@ import static org.hamcrest.Matchers.equalTo;
 @RunWith(SerenityRunner.class)
 public class WhenDanaBrowsesTheWeb {
 
-    @Managed(driver = "phantomjs")
+    @Managed(driver = "htmlunit")
     WebDriver firstBrowser;
 
-    @Managed(driver = "phantomjs")
+    @Managed(driver = "htmlunit")
     WebDriver anotherBrowser;
 
     @Test
@@ -93,7 +93,7 @@ public class WhenDanaBrowsesTheWeb {
     }
 
     @Steps
-    OpenedTheApplication openedTheApplication;
+    OpenTheApplication openedTheApplication;
 
     @Steps
     ViewMyProfile viewHerProfile;

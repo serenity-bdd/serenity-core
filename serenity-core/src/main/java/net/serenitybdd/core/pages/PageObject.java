@@ -2,6 +2,7 @@ package net.serenitybdd.core.pages;
 
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Predicate;
+import net.serenitybdd.core.targets.Target;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;
@@ -885,6 +886,10 @@ public abstract class PageObject {
         return element(xpathOrCssSelector);
     }
 
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(Target target) {
+        return element(xpathOrCssSelector(target.getCssOrXPathSelector()));
+    }
+
     /**
      * Provides a fluent API for querying web elements.
      */
@@ -924,8 +929,16 @@ public abstract class PageObject {
         return element(xpathOrCssSelector);
     }
 
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T findBy(Target target) {
+        return element(target.getCssOrXPathSelector());
+    }
+
     public List<net.serenitybdd.core.pages.WebElementFacade> findAll(String xpathOrCssSelector) {
         return findAll(xpathOrCssSelector(xpathOrCssSelector));
+    }
+
+    public List<net.serenitybdd.core.pages.WebElementFacade> findAll(Target target) {
+        return findAll(xpathOrCssSelector(target.getCssOrXPathSelector()));
     }
 
     public boolean containsElements(By bySelector) {
@@ -1043,6 +1056,11 @@ public abstract class PageObject {
     public <T extends WebElementFacade> T moveTo(String xpathOrCssSelector) {
         withAction().moveToElement(findBy(xpathOrCssSelector)).perform();
         return findBy(xpathOrCssSelector);
+    }
+
+    public <T extends WebElementFacade> T moveTo(Target target) {
+        withAction().moveToElement(findBy(target)).perform();
+        return findBy(target);
     }
 
     public void waitForAngularRequestsToFinish() {

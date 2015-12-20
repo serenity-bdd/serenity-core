@@ -1,4 +1,4 @@
-package net.serenitybdd.screenplay.tasks;
+package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.screenplay.Performable;
 

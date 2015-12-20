@@ -1,7 +1,6 @@
 package net.serenitybdd.screenplay;
 
 import com.google.common.base.Optional;
-import net.serenitybdd.core.IgnoredStepException;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SkipNested;
@@ -55,6 +54,13 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     public final void has(Performable... todos) {
+        attemptsTo(todos);
+    }
+
+    /**
+     * A tense-neutral synonyme for has() for use with given() clauses
+     */
+    public final void wasAbleTo(Performable... todos) {
         attemptsTo(todos);
     }
 

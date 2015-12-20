@@ -1,16 +1,15 @@
-package net.serenitybdd.screenplay.tasks;
+package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.Action;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.thucydides.core.annotations.Step;
-import net.thucydides.core.steps.StepEventBus;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
 //@Task("Opens theValue #targetPage {0}")
-public class Open implements Performable {
+public class Open implements Action {
 
     private PageObject targetPage;
 

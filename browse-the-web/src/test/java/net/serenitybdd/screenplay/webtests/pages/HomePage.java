@@ -7,4 +7,8 @@ import net.thucydides.core.annotations.DefaultUrl;
 public class HomePage extends PageObject {
 
     public final static String VIEW_PROFILE = ".view-profile";
+
+    public void viewProfile() {
+        $(VIEW_PROFILE).click();
+    }
 }

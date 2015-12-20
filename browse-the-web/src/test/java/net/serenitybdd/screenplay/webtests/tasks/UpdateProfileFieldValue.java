@@ -2,9 +2,9 @@ package net.serenitybdd.screenplay.webtests.tasks;
 
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.targets.Target;
-import net.serenitybdd.screenplay.tasks.Enter;
-import net.serenitybdd.screenplay.tasks.Settable;
+import net.serenitybdd.core.targets.Target;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Settable;
 
 public class UpdateProfileFieldValue implements Settable {
 

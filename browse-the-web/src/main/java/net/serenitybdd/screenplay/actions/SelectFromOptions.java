@@ -1,15 +1,16 @@
-package net.serenitybdd.screenplay.tasks;
+package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.Action;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
-import net.serenitybdd.screenplay.targets.Target;
+import net.serenitybdd.core.targets.Target;
 import net.thucydides.core.annotations.Step;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
-public class SelectFromOptions implements Performable {
+public class SelectFromOptions implements Action {
 
     enum SelectStrategy {
         ByValue, ByVisibleText, ByIndex

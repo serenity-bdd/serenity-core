@@ -3,7 +3,7 @@ package net.serenitybdd.demos.todos.tasks;
 import net.serenitybdd.demos.todos.pages.components.ToDoList;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.tasks.Click;
+import net.serenitybdd.screenplay.actions.Click;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 

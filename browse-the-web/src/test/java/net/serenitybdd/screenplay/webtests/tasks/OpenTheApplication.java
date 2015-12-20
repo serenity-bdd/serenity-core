@@ -2,11 +2,11 @@ package net.serenitybdd.screenplay.webtests.tasks;
 
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.tasks.Open;
+import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.webtests.pages.HomePage;
 import net.thucydides.core.annotations.Step;
 
-public class OpenedTheApplication implements Performable {
+public class OpenTheApplication implements Performable {
 
     HomePage homePage;
 

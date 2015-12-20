@@ -4,7 +4,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.annotations.Subject;
-import net.serenitybdd.screenplay.targets.Target;
+import net.serenitybdd.core.targets.Target;
 
 @Subject("#field")
 public class ReadProfileOptionValue implements Question<String> {

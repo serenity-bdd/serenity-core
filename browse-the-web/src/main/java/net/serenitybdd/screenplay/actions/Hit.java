@@ -1,9 +1,9 @@
-package net.serenitybdd.screenplay.tasks;
+package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
-import net.serenitybdd.screenplay.targets.Target;
+import net.serenitybdd.core.targets.Target;
 import net.thucydides.core.annotations.Step;
 import org.openqa.selenium.Keys;
 
@@ -36,8 +36,6 @@ public class Hit implements Performable {
 
     @Step("{0} types '#keys' in #target")
     public <T extends Actor> void performAs(T theUser) {
-        BrowseTheWeb.as(theUser)
-                .findBy(target.getCssOrXPathSelector())
-                .then().sendKeys(keys);
+        BrowseTheWeb.as(theUser).findBy(target).then().sendKeys(keys);
     }
 }

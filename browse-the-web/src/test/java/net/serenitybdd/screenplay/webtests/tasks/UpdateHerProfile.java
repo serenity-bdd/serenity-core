@@ -2,7 +2,7 @@ package net.serenitybdd.screenplay.webtests.tasks;
 
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.tasks.Settable;
+import net.serenitybdd.screenplay.actions.Settable;
 import net.serenitybdd.screenplay.webtests.pages.ProfilePage;
 import net.thucydides.core.annotations.Step;
 

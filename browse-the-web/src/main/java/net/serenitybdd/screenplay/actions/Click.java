@@ -1,14 +1,15 @@
-package net.serenitybdd.screenplay.tasks;
+package net.serenitybdd.screenplay.actions;
 
+import net.serenitybdd.screenplay.Action;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
-import net.serenitybdd.screenplay.targets.Target;
+import net.serenitybdd.core.targets.Target;
 import net.thucydides.core.annotations.Step;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
-public class Click implements Performable {
+public class Click implements Action {
 
     private final Target target;
 
@@ -22,8 +23,7 @@ public class Click implements Performable {
 
     @Step("{0} clicks on #target")
     public <T extends Actor> void performAs(T theUser) {
-        BrowseTheWeb.as(theUser).findBy(target.getCssOrXPathSelector())
-                                .then().click();
+        BrowseTheWeb.as(theUser).findBy(target).then().click();
     }
 
     public Click(Target target) {

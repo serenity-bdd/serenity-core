@@ -8,6 +8,7 @@ import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.pages.Pages;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Set;
 
@@ -25,9 +26,19 @@ public class PageObjectDependencyInjector implements DependencyInjector {
     public void injectDependenciesInto(Object target) {
         environmentDependencyInjector.injectDependenciesInto(target);
         List<Field> pageObjectFields = pageObjectFieldsIn(target);
-        for(Field pageObjectField : pageObjectFields) {
+        for(Field pageObjectField : nonAbstract(pageObjectFields)) {
             instantiatePageObjectIfNotAssigned(pageObjectField, target);
         }
+    }
+
+    private List<Field> nonAbstract(List<Field> pageObjectFields) {
+        List<Field> concretePageObjectFields = Lists.newArrayList();
+        for(Field field : pageObjectFields) {
+            if (!Modifier.isAbstract(field.getType().getModifiers())) {
+                concretePageObjectFields.add(field);
+            }
+        }
+        return concretePageObjectFields;
     }
 
     @Override

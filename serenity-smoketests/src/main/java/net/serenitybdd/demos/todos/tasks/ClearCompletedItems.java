@@ -3,7 +3,7 @@ package net.serenitybdd.demos.todos.tasks;
 import net.serenitybdd.demos.todos.pages.components.FilterBar;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.tasks.Click;
+import net.serenitybdd.screenplay.actions.Click;
 import net.thucydides.core.annotations.Step;
 
 public class ClearCompletedItems implements Performable {

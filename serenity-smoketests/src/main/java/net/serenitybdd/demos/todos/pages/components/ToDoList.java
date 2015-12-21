@@ -1,6 +1,6 @@
 package net.serenitybdd.demos.todos.pages.components;
 
-import net.serenitybdd.screenplay.targets.Target;
+import net.serenitybdd.core.targets.Target;
 
 public class ToDoList {
     public static Target NEW_TODO_FIELD = Target.the("New Todo Field").locatedBy("#new-todo");

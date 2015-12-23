@@ -1,71 +1,57 @@
 package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.core.pages.WebElementFacade;
-import net.serenitybdd.screenplay.Action;
-import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.core.targets.Target;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.screenplay.Performable;
+import net.serenitybdd.screenplay.actions.selectactions.*;
 
-import static net.serenitybdd.screenplay.Tasks.instrumented;
-
-public class SelectFromOptions implements Action {
-
-    enum SelectStrategy {
-        ByValue, ByVisibleText, ByIndex
-    }
+public class SelectFromOptions {
 
     private final SelectStrategy strategy;
     private String theText;
     private Integer indexValue;
-    private Target target;
 
     public SelectFromOptions(SelectStrategy strategy) {
         this.strategy = strategy;
     }
 
     public static SelectFromOptions byValue(String value) {
-        SelectFromOptions enterAction = instrumented(SelectFromOptions.class, SelectStrategy.ByValue);
+        SelectFromOptions enterAction = new SelectFromOptions(SelectStrategy.ByValue);
         enterAction.theText = value;
         return enterAction;
     }
 
     public static SelectFromOptions byVisibleText(String value) {
-        SelectFromOptions enterAction = instrumented(SelectFromOptions.class, SelectStrategy.ByVisibleText);
+        SelectFromOptions enterAction = new SelectFromOptions(SelectStrategy.ByVisibleText);
         enterAction.theText = value;
         return enterAction;
     }
 
     public static SelectFromOptions byIndex(Integer indexValue) {
-        SelectFromOptions enterAction = instrumented(SelectFromOptions.class, SelectStrategy.ByVisibleText);
+        SelectFromOptions enterAction = new SelectFromOptions( SelectStrategy.ByIndex);
         enterAction.indexValue = indexValue;
         return enterAction;
     }
 
     public Performable from(String cssOrXpathForElement) {
-        this.target = Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement);
-        return this;
+        return from(Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement));
     }
 
     public Performable from(Target target) {
-        this.target = target;
-        return this;
+        switch (strategy) {
+            case ByValue: return new SelectByValueFromTarget(target, theText);
+            case ByVisibleText: return new SelectByVisibleTextFromTarget(target, theText);
+            case ByIndex: return new SelectByIndexFromTarget(target, indexValue);
+        }
+        throw new IllegalStateException("Unknown select strategy " + strategy);
     }
 
-    @Step("{0} selects '#theText' from #target")
-    public <T extends Actor> void performAs(T theUser) {
-        WebElementFacade targetDropdown = BrowseTheWeb.as(theUser).moveTo(target.getCssOrXPathSelector());
+    public Performable from(WebElementFacade element) {
         switch (strategy) {
-            case ByValue:
-                targetDropdown.selectByVisibleText(theText);
-                break;
-            case ByVisibleText:
-                targetDropdown.selectByVisibleText(theText);
-                break;
-            case ByIndex:
-                targetDropdown.selectByIndex(indexValue);
-                break;
+            case ByValue: return new SelectByValueFromElement(element, theText);
+            case ByVisibleText: return new SelectByVisibleTextFromElement(element, theText);
+            case ByIndex: return new SelectByIndexFromElement(element, indexValue);
         }
+        throw new IllegalStateException("Unknown select strategy " + strategy);
     }
 }

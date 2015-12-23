@@ -5,10 +5,13 @@ import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.events.ActorAsksQuestion;
 import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
+import net.serenitybdd.screenplay.events.ActorPerforms;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
+import net.thucydides.core.steps.PageObjectDependencyInjector;
 import net.thucydides.core.webdriver.WebdriverManager;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -61,6 +64,18 @@ public class BrowseTheWeb extends PageObject implements Ability {
         } catch(Throwable e) {
             logger.warn("Failed to notify begin performance event for actor " + performanceEvent.getName(),e);
         }
+    }
+
+    @Subscribe public void perform(ActorPerforms performAction) {
+        WebDriver driver = webdriverManager.getWebdriver();
+        PageObjectDependencyInjector injector = new PageObjectDependencyInjector(new Pages(driver));
+        injector.injectDependenciesInto(performAction.getPerformable());
+    }
+
+    @Subscribe public void prepareQuestion(ActorAsksQuestion questionEvent) {
+        WebDriver driver = webdriverManager.getWebdriver();
+        PageObjectDependencyInjector injector = new PageObjectDependencyInjector(new Pages(driver));
+        injector.injectDependenciesInto(questionEvent.getQuestion());
     }
 
     @Subscribe public void endPerformance(ActorEndsPerformanceEvent performanceEvent) {

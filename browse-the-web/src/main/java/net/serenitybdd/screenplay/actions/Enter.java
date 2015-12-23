@@ -1,37 +1,31 @@
 package net.serenitybdd.screenplay.actions;
 
-import net.serenitybdd.screenplay.Action;
-import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.targets.Target;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.screenplay.Performable;
 
-import static net.serenitybdd.screenplay.Tasks.instrumented;
+public class Enter {
 
-public class Enter implements Action {
+    private final String theText;
 
-    private String theText;
-    private Target target;
+    public Enter(String theText) {
+        this.theText = theText;
+    }
 
     public static Enter theValue(String text) {
-        Enter enterAction = instrumented(Enter.class);
-        enterAction.theText = text;
-        return enterAction;
+        return new Enter(text);
     }
 
     public Performable into(String cssOrXpathForElement) {
-        this.target = Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement);
-        return this;
+        return new EnterValueIntoTarget(theText, Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement));
     }
 
     public Performable into(Target target) {
-        this.target = target;
-        return this;
+        return new EnterValueIntoTarget(theText, target);
     }
 
-    @Step("{0} enters '#theText' into #target")
-    public <T extends Actor> void performAs(T theUser) {
-        BrowseTheWeb.as(theUser).moveTo(target).then().type(theText);
+    public Performable into(WebElementFacade element) {
+        return new EnterValueIntoElement(theText, element);
     }
+
 }

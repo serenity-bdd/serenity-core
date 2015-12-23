@@ -1,4 +1,4 @@
-package net.serenitybdd.demos.todos.features.record_todos;
+package net.serenitybdd.demos.todos.features.update_my_todos;
 
 import net.serenitybdd.demos.todos.serenity.ATodoUser;
 import net.serenitybdd.junit.runners.SerenityRunner;
@@ -30,7 +30,7 @@ public class CompleteTodos {
     }
 
     @Test
-    public void shouldBeAbleToClearCompletedActionsFromTheTodoList() {
+    public void should_be_able_to_clear_completed_actions_from_the_todo_list() {
 
         // GIVEN
         joe.has_added_actions_called("Walk the dog", "Put out the garbage");

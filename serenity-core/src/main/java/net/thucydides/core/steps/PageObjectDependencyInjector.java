@@ -6,6 +6,7 @@ import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.pages.Pages;
+import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -52,9 +53,17 @@ public class PageObjectDependencyInjector implements DependencyInjector {
                 PageObject newPageObject = pages.getPage(pageObjectClass);
                 injectDependenciesInto(newPageObject);
                 pageObjectField.set(target, newPageObject);
+            } else {
+                updateDriver(pageObjectField.get(target), pages.getDriver());
             }
         } catch (IllegalAccessException e) {
             throw new IllegalArgumentException("Could not instanciate page objects in " + target);
+        }
+    }
+
+    private void updateDriver(Object pageObject, WebDriver driver) {
+        if (pageObject instanceof PageObject) {
+            ((PageObject) pageObject).setDriver(driver);
         }
     }
 

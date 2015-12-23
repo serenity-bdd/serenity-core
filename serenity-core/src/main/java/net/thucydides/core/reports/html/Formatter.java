@@ -168,7 +168,7 @@ public class Formatter {
         return (text != null) && (text.startsWith("<"));
     }
 
-    public String addLineBreaks(final String text) {
+    public static String addLineBreaks(final String text) {
         return (text != null) ?
                 text.replaceAll(IOUtils.LINE_SEPARATOR_WINDOWS, "<br>").replaceAll(IOUtils.LINE_SEPARATOR_UNIX, "<br>") : "";
     }
@@ -266,7 +266,7 @@ public class Formatter {
         }
     }
 
-    private final CharSequenceTranslator ESCAPE_SPECIAL_CHARS = new AggregateTranslator(
+    private static final CharSequenceTranslator ESCAPE_SPECIAL_CHARS = new AggregateTranslator(
             new LookupTranslator(EntityArrays.ISO8859_1_ESCAPE()),
             new LookupTranslator(EntityArrays.HTML40_EXTENDED_ESCAPE())
     );
@@ -275,11 +275,11 @@ public class Formatter {
             new LookupTranslator(EntityArrays.BASIC_ESCAPE())
     );
 
-    public String htmlCompatible(Object fieldValue) {
+    public static String htmlCompatible(Object fieldValue) {
         return addLineBreaks(ESCAPE_SPECIAL_CHARS.translate(fieldValue != null ? stringFormOf(fieldValue) : ""));
     }
 
-    public String htmlAttributeCompatible(Object fieldValue) {
+    public static String htmlAttributeCompatible(Object fieldValue) {
         return concatLines(ESCAPE_SPECIAL_CHARS.translate(stringFormOf(fieldValue)
                 .replaceAll("<", "(")
                 .replaceAll(">", ")")
@@ -295,12 +295,12 @@ public class Formatter {
         return new ResultRankingFormatter();
     }
 
-    private String concatLines(String message) {
+    private static String concatLines(String message) {
         String[] lines = message.replaceAll("\\r", "").split("\\n");
         return StringUtils.join(lines," ");
     }
 
-    private String stringFormOf(Object fieldValue) {
+    private static String stringFormOf(Object fieldValue) {
         if (Iterable.class.isAssignableFrom(fieldValue.getClass())) {
             return "[" + join(fieldValue) + "]";
         } else {

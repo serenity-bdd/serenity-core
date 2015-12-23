@@ -1,41 +1,35 @@
 package net.serenitybdd.screenplay.actions;
 
-import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.targets.Target;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.screenplay.Performable;
 import org.openqa.selenium.Keys;
 
-import static net.serenitybdd.screenplay.Tasks.instrumented;
-
-public class Hit implements Performable {
+public class Hit {
 
     private Keys[] keys;
-    private Target target;
 
-    public static Hit the(Keys... keys) {
-        Hit enterAction = instrumented(Hit.class);
-        enterAction.keys = keys;
-        return enterAction;
+    public Hit(Keys[] keys) {
+        this.keys = keys;
     }
 
+    public static Hit the(Keys... keys) {
+        return new Hit(keys);
+    }
 
     public Performable into(String cssOrXpathForElement) {
-        this.target = Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement);
-        return this;
+        return new HitTarget(keys, Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement));
     }
 
     public Performable into(Target target) {
-        this.target = target;
-        return this;
+        return new HitTarget(keys, target);
     }
 
+    public Performable into(WebElementFacade element) {
+        return new HitElement(keys, element);
+    }
     public Performable keyIn(String cssOrXpathForElement) { return into(cssOrXpathForElement); }
     public Performable keyIn(Target target) { return into(target); }
+    public Performable keyIn(WebElementFacade element) { return into(element); }
 
-    @Step("{0} types '#keys' in #target")
-    public <T extends Actor> void performAs(T theUser) {
-        BrowseTheWeb.as(theUser).findBy(target).then().sendKeys(keys);
-    }
 }

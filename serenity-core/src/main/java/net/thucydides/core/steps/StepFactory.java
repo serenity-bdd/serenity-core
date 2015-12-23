@@ -172,7 +172,7 @@ public class StepFactory {
     }
 
     private Class<?>[] argumentTypesFrom(Class<?> scenarioStepsClass, Object[] parameters) {
-        for (Constructor<?> candidateConstructor :scenarioStepsClass.getConstructors()) {
+        for (Constructor<?> candidateConstructor :scenarioStepsClass.getDeclaredConstructors()) {
             Class<?>[] parameterTypes = candidateConstructor.getParameterTypes();
             if (parametersMatchFor(parameters, parameterTypes)) {
                 return parameterTypes;

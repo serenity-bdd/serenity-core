@@ -1,0 +1,23 @@
+package net.serenitybdd.screenplay.actions;
+
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.Action;
+import net.serenitybdd.screenplay.Actor;
+import net.thucydides.core.annotations.Step;
+import org.openqa.selenium.Keys;
+
+public class HitElement implements Action {
+
+    private Keys[] keys;
+    private WebElementFacade element;
+
+    public HitElement(Keys[] keys, WebElementFacade element) {
+        this.keys = keys;
+        this.element = element;
+    }
+
+    @Step("{0} types '#keys' in #element")
+    public <T extends Actor> void performAs(T theUser) {
+        element.sendKeys(keys);
+    }
+}

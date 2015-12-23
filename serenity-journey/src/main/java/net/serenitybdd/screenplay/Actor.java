@@ -7,7 +7,9 @@ import net.serenitybdd.core.SkipNested;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
+import net.serenitybdd.screenplay.events.ActorPerforms;
 import net.serenitybdd.screenplay.exceptions.IgnoreStepException;
+import net.serenitybdd.screenplay.formatting.FormattedTitle;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.steps.StepEventBus;
 
@@ -89,6 +91,7 @@ public class Actor implements PerformsTasks, SkipNested {
             StepEventBus.getEventBus().stepPending();
         }
         try {
+            notifyPerformanceOf(todo);
             taskTally.newTask();
             todo.performAs(this);
 
@@ -105,6 +108,10 @@ public class Actor implements PerformsTasks, SkipNested {
         } finally {
             eventBusInterface.updateOverallResult();
         }
+    }
+
+    private <T extends Performable> void notifyPerformanceOf(T todo) {
+        Broadcaster.getEventBus().post(new ActorPerforms(todo));
     }
 
     private <T extends Performable> boolean isPending(T todo) {
@@ -154,7 +161,7 @@ public class Actor implements PerformsTasks, SkipNested {
 
     private <T> void check(Consequence<T> consequence) {
         try {
-            eventBusInterface.reportNewStepWithTitle(consequence.toString());
+            eventBusInterface.reportNewStepWithTitle(FormattedTitle.ofConsequence(consequence));
             if (StepEventBus.getEventBus().currentTestIsSuspended() || StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed()) {
                 StepEventBus.getEventBus().stepIgnored();
             }

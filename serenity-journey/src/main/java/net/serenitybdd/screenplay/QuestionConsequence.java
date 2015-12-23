@@ -1,18 +1,20 @@
 package net.serenitybdd.screenplay;
 
+import net.serenitybdd.core.eventbus.Broadcaster;
+import net.serenitybdd.screenplay.events.ActorAsksQuestion;
 import net.thucydides.core.steps.StepEventBus;
 import org.hamcrest.Matcher;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class QuestionConsequence<T> implements Consequence<T> {
-    private final Question<T> actual;
+    private final Question<T> question;
     private final Matcher<T> expected;
     private final String subject;
     private Class<? extends AssertionError> complaintType;
 
     public QuestionConsequence(Question<T> actual, Matcher<T> expected) {
-        this.actual = actual;
+        this.question = actual;
         this.expected = expected;
         this.subject = QuestionSubject.fromClass(actual.getClass()).andQuestion(actual).subject();
     }
@@ -21,8 +23,9 @@ public class QuestionConsequence<T> implements Consequence<T> {
     public void evaluateFor(Actor actor) {
         if (thisStepShouldBeIgnored()) { return; }
 
+        Broadcaster.getEventBus().post(new ActorAsksQuestion(question));
         try {
-            assertThat(actual.answeredBy(actor), expected);
+            assertThat(question.answeredBy(actor), expected);
         } catch (AssertionError actualError) {
 
             throwComplaintTypeErrorIfSpecified(actualError);
@@ -34,8 +37,8 @@ public class QuestionConsequence<T> implements Consequence<T> {
     }
 
     private void throwDiagosticErrorIfProvided(AssertionError actualError) {
-        if (actual instanceof QuestionDiagnostics) {
-            throw complaintFrom(((QuestionDiagnostics) actual).onError(), actualError);
+        if (question instanceof QuestionDiagnostics) {
+            throw complaintFrom(((QuestionDiagnostics) question).onError(), actualError);
         }
     }
 

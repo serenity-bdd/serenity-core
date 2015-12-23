@@ -48,7 +48,7 @@ class WhenActorsGoOnAJourney extends Specification{
             outcome.result == FAILURE
             outcome.testSteps.collect { it.unrendered().description } == ["Given Dana has purchased an apple for 0 dollars",
                                                                           "Given Dana has purchased a pear for 5 dollars",
-                                                                          "Then total cost should be <15>"]
+                                                                          "Then total cost should be (15)"]
             outcome.testSteps.collect { it.result } == [FAILURE, SKIPPED, SKIPPED]
     }
 
@@ -90,9 +90,9 @@ class WhenActorsGoOnAJourney extends Specification{
                     ["Given Dana has purchased an apple for 10 dollars",
                      "Given Dana has purchased a pear for 5 dollars",
                      "And Dana has them delivered",
-                     "Then total cost should be <15>",
-                     "Then total cost including delivery should be a value equal to or greater than <20>",
-                      "Then thank you message should be \"Thank you\""]
+                     "Then total cost should be (15)",
+                     "Then total cost including delivery should be a value equal to or greater than (20)",
+                      "Then thank you message should be 'Thank you'"]
         and:
             outcome.testSteps[3].result == FAILURE && outcome.testSteps[4].result == SKIPPED
 

@@ -81,7 +81,6 @@ public class StepEventBus {
      * place the listener class on the classpath and it will be detected automatically.
      */
     public StepEventBus registerListener(final StepListener listener) {
-        System.out.printf("Register listener " + listener);
         if (!registeredListeners.contains(listener)) {
             registeredListeners.add(listener);
             if (BaseStepListener.class.isAssignableFrom(listener.getClass())) {

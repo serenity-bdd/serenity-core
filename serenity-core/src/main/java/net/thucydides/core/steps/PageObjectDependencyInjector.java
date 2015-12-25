@@ -6,7 +6,6 @@ import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.pages.Pages;
-import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -27,6 +26,8 @@ public class PageObjectDependencyInjector implements DependencyInjector {
     public void injectDependenciesInto(Object target) {
         environmentDependencyInjector.injectDependenciesInto(target);
         List<Field> pageObjectFields = pageObjectFieldsIn(target);
+
+        updatePageObject(target, pages);
         for(Field pageObjectField : nonAbstract(pageObjectFields)) {
             instantiatePageObjectIfNotAssigned(pageObjectField, target);
         }
@@ -54,16 +55,17 @@ public class PageObjectDependencyInjector implements DependencyInjector {
                 injectDependenciesInto(newPageObject);
                 pageObjectField.set(target, newPageObject);
             } else {
-                updateDriver(pageObjectField.get(target), pages.getDriver());
+                updatePageObject(pageObjectField.get(target), pages);
             }
         } catch (IllegalAccessException e) {
             throw new IllegalArgumentException("Could not instanciate page objects in " + target);
         }
     }
 
-    private void updateDriver(Object pageObject, WebDriver driver) {
+    private void updatePageObject(Object pageObject, Pages pages) {
         if (pageObject instanceof PageObject) {
-            ((PageObject) pageObject).setDriver(driver);
+            ((PageObject) pageObject).setPages(pages);
+            ((PageObject) pageObject).setDriver(pages.getDriver());
         }
     }
 

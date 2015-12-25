@@ -26,10 +26,13 @@ public class StepLibraryConstructionStrategy {
 
     public ConstructionStrategy getStrategy() {
         if (isWebdriverStepClass(stepLibraryClass)) {
-            return ConstructionStrategy.WEBDRIVER_ENABLED_STEP_LIBRARY;
+            return ConstructionStrategy.STEP_LIBRARY_WITH_WEBDRIVER;
         }
         if (hasAConstructorWithParameters(stepLibraryClass)) {
             return ConstructionStrategy.CONSTRUCTOR_WITH_PARAMETERS;
+        }
+        if (hasAPagesField(stepLibraryClass)) {
+            return ConstructionStrategy.STEP_LIBRARY_WITH_PAGES;
         }
         return ConstructionStrategy.DEFAULT_CONSTRUCTOR;
     }
@@ -38,8 +41,7 @@ public class StepLibraryConstructionStrategy {
     private <T> boolean isWebdriverStepClass(final Class<T> stepLibraryClass) {
 
         return (isAScenarioStepClass(stepLibraryClass)
-                || hasAPagesConstructor(stepLibraryClass)
-                || hasAPagesField(stepLibraryClass));
+                || hasAPagesConstructor(stepLibraryClass));
     }
 
     private <T> boolean hasAPagesConstructor(final Class<T> stepLibraryClass) {

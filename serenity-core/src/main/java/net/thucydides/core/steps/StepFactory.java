@@ -161,7 +161,8 @@ public class StepFactory {
         e.setCallback(interceptor);
 
         switch (StepLibraryConstructionStrategy.forClass(scenarioStepsClass).getStrategy()) {
-            case WEBDRIVER_ENABLED_STEP_LIBRARY: return webEnabledStepLibrary(scenarioStepsClass, e);
+            case STEP_LIBRARY_WITH_WEBDRIVER: return webEnabledStepLibrary(scenarioStepsClass, e);
+            case STEP_LIBRARY_WITH_PAGES: return stepLibraryWithPages(scenarioStepsClass, e);
             case CONSTRUCTOR_WITH_PARAMETERS: return immutableStepLibrary(scenarioStepsClass, e,  parameters);
             default: return (T) e.create();
         }
@@ -201,6 +202,11 @@ public class StepFactory {
             T newStepLibrary = (T) e.create();
             return injectPagesInto(scenarioStepsClass, newStepLibrary);
         }
+    }
+
+    private <T> T stepLibraryWithPages(final Class<T> scenarioStepsClass, final Enhancer e) {
+        T newStepLibrary = (T) e.create();
+        return injectPagesInto(scenarioStepsClass, newStepLibrary);
     }
 
     class PageInjector {

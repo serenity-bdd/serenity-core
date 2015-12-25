@@ -1,11 +1,10 @@
 package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.core.pages.WebElementFacade;
-import net.serenitybdd.screenplay.Action;
 import net.serenitybdd.screenplay.Actor;
 import net.thucydides.core.annotations.Step;
 
-public class EnterValueIntoElement implements Action {
+public class EnterValueIntoElement extends WebAction {
 
     private String theText;
     private WebElementFacade element;

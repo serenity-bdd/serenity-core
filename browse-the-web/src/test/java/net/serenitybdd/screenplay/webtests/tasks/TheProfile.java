@@ -2,6 +2,8 @@ package net.serenitybdd.screenplay.webtests.tasks;
 
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.webtests.pages.ProfilePage;
+import net.serenitybdd.screenplay.webtests.questions.ReadProfileField;
+import net.serenitybdd.screenplay.webtests.questions.ReadProfileOptionValue;
 
 
 public class TheProfile {

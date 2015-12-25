@@ -1,7 +1,8 @@
 package net.thucydides.core.steps.construction;
 
 public enum ConstructionStrategy {
-        DEFAULT_CONSTRUCTOR,
-        WEBDRIVER_ENABLED_STEP_LIBRARY,
-        CONSTRUCTOR_WITH_PARAMETERS
-    }
+    DEFAULT_CONSTRUCTOR,
+    STEP_LIBRARY_WITH_WEBDRIVER,
+    STEP_LIBRARY_WITH_PAGES,
+    CONSTRUCTOR_WITH_PARAMETERS
+}

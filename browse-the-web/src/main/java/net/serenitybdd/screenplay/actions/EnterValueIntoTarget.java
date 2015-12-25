@@ -1,12 +1,10 @@
 package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.core.targets.Target;
-import net.serenitybdd.screenplay.Action;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.thucydides.core.annotations.Step;
 
-public class EnterValueIntoTarget implements Action {
+public class EnterValueIntoTarget extends WebAction {
 
     private String theText;
     private Target target;
@@ -18,6 +16,7 @@ public class EnterValueIntoTarget implements Action {
 
     @Step("{0} enters '#theText' into #target")
     public <T extends Actor> void performAs(T theUser) {
-        BrowseTheWeb.as(theUser).moveTo(target).then().type(theText);
+        ensurePresenceOf(target);
+        moveTo(target).then().type(theText);
     }
 }

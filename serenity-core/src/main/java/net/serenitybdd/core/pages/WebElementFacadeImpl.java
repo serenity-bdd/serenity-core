@@ -604,50 +604,33 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         getJavascriptExecutorFacade().executeScript("window.focus()");
     }
 
+    private DropdownSelector select() {
+        return new DropdownSelector(this);
+    }
+
     @Override
     public WebElementFacade selectByVisibleText(final String label) {
-        logIfVerbose("Select label '" + label + "'");
-        waitUntilElementAvailable();
-        Select select = new Select(getElement());
-        select.selectByVisibleText(label);
-        notifyScreenChange();
-        return this;
+        return select().byVisibleText(label);
     }
 
     @Override
     public String getSelectedVisibleTextValue() {
-        waitUntilVisible();
-        Select select = new Select(getElement());
-        return select.getFirstSelectedOption().getText();
+        return select().visibleTextValue();
     }
 
     @Override
     public WebElementFacade selectByValue(String value) {
-        logIfVerbose("Select value '" + value + "'");
-        enableHighlightingIfRequired();
-        waitUntilElementAvailable();
-        Select select = new Select(getElement());
-        select.selectByValue(value);
-        notifyScreenChange();
-        return this;
+        return select().byValue(value);
     }
 
     @Override
     public String getSelectedValue() {
-        waitUntilVisible();
-        Select select = new Select(getElement());
-        return select.getFirstSelectedOption().getAttribute("value");
+        return select().value();
     }
 
     @Override
     public WebElementFacade selectByIndex(int indexValue) {
-        logIfVerbose("Select by index '" + indexValue + "'");
-        enableHighlightingIfRequired();
-        waitUntilElementAvailable();
-        Select select = new Select(getElement());
-        select.selectByIndex(indexValue);
-        notifyScreenChange();
-        return this;
+        return select().byIndex(indexValue);
     }
 
     public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
@@ -657,14 +640,14 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return getWrappedElement().getScreenshotAs(target);
     }
 
-    private void waitUntilElementAvailable() {
+    protected void waitUntilElementAvailable() {
         if (driverIsDisabled()) {
             return;
         }
         withTimeoutOf((int)waitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS).waitUntilEnabled();
     }
 
-    private boolean driverIsDisabled() {
+    protected boolean driverIsDisabled() {
         return StepEventBus.getEventBus().webdriverCallsAreSuspended();
     }
 
@@ -1022,14 +1005,14 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         getElement().clear();
     }
 
-    private void enableHighlightingIfRequired() {
+    protected void enableHighlightingIfRequired() {
         JQueryEnabledPage jQueryEnabledPage = JQueryEnabledPage.withDriver(driver);
         if (jQueryEnabledPage.isJQueryIntegrationEnabled() && !jQueryEnabledPage.isJQueryAvailable()) {
             jQueryEnabledPage.injectJQueryPlugins();
         }
     }
 
-    private void notifyScreenChange() {
+    protected void notifyScreenChange() {
         StepEventBus.getEventBus().notifyScreenChange();
     }
 

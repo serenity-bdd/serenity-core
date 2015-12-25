@@ -24,6 +24,7 @@ import net.thucydides.core.util.Inflector;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import net.thucydides.core.webdriver.DefaultPageObjectInitialiser;
 import net.thucydides.core.webdriver.WebDriverFacade;
+import net.thucydides.core.webdriver.exceptions.ElementShouldBePresentException;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webelements.Checkbox;
 import net.thucydides.core.webelements.RadioButtonGroup;
@@ -582,8 +583,14 @@ public abstract class PageObject {
 
     public void shouldBeVisible(final By byCriteria) {
         waitOnPage().until(ExpectedConditions.visibilityOfElementLocated(byCriteria));
-//        WebElement element = getDriver().findElement(byCriteria);
-//        shouldBeVisible(element);
+    }
+
+    protected void ensurePresenceOf(Target target) {
+        try {
+            findBy(target);
+        } catch (NotFoundException targettedElementNotFound) {
+            throw new ElementShouldBePresentException(target.getTargetElementName() + " element could not be found", targettedElementNotFound);
+        }
     }
 
     public void shouldNotBeVisible(final WebElement field) {
@@ -1054,13 +1061,14 @@ public abstract class PageObject {
     }
 
     public <T extends WebElementFacade> T moveTo(String xpathOrCssSelector) {
-        withAction().moveToElement(findBy(xpathOrCssSelector)).perform();
+        if (!driverIsDisabled()) {
+            withAction().moveToElement(findBy(xpathOrCssSelector)).perform();
+        }
         return findBy(xpathOrCssSelector);
     }
 
     public <T extends WebElementFacade> T moveTo(Target target) {
-        withAction().moveToElement(findBy(target)).perform();
-        return findBy(target);
+        return moveTo(target.getCssOrXPathSelector());
     }
 
     public void waitForAngularRequestsToFinish() {

@@ -15,7 +15,9 @@ public interface WebdriverManager {
 
     WebDriver getWebdriver();
 
-    WebDriver getWebdriver(final String driver);
+    WebdriverContext inContext(String context);
+
+    WebDriver getWebdriver(String driver);
 
     String getCurrentDriverName();
 

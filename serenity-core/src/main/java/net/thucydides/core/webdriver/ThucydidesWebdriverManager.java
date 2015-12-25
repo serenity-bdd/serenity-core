@@ -101,6 +101,11 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
         return currentDriver.or(getThreadLocalWebDriver(configuration, webDriverFactory, inThisTestThread().getCurrentDriverName()));
     }
 
+    @Override
+    public WebdriverContext inContext(String context) {
+        return new WebdriverContext(this, context);
+    }
+
     private Optional<WebDriver> currentDriver = Optional.absent();
 
     @Override

@@ -36,8 +36,10 @@ public class UpdateHerProfile implements Performable {
 
     @Step("{0} updates her profile details")
     public <T extends Actor> void performAs(T theUser) {
-        theUser.attemptsTo(UpdateHerProfile.name().to(name));
-        theUser.attemptsTo(UpdateHerProfile.country().to(countryOfResidence));
+        theUser.attemptsTo(
+                UpdateHerProfile.name().to(name),
+                UpdateHerProfile.country().to(countryOfResidence)
+        );
 
     }
 }

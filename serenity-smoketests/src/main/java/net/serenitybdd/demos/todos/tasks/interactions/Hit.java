@@ -1,9 +1,9 @@
 package net.serenitybdd.demos.todos.tasks.interactions;
 
-import net.serenitybdd.core.targets.Target;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.serenitybdd.screenplay.targets.Target;
 import net.thucydides.core.annotations.Step;
 import org.openqa.selenium.Keys;
 

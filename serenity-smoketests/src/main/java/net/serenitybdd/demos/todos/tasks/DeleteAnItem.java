@@ -1,6 +1,5 @@
 package net.serenitybdd.demos.todos.tasks;
 
-import net.serenitybdd.core.targets.Target;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.thucydides.core.annotations.Step;
@@ -20,12 +19,8 @@ public class DeleteAnItem implements Performable {
 
     @Step("{0} deletes the item '#itemName'")
     public <T extends Actor> void performAs(T theActor) {
-        WebElement deleteButton = as(theActor).findBy(pathTo(deleteButtonForItem(itemName)));
+        WebElement deleteButton = deleteButtonForItem(itemName).resolveFor(theActor);
         as(theActor).evaluateJavascript("arguments[0].click()", deleteButton);
-    }
-
-    private String pathTo(Target target) {
-        return target.getCssOrXPathSelector();
     }
 
     public static DeleteAnItem called(String itemName) {

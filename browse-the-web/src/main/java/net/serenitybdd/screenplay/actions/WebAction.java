@@ -6,6 +6,7 @@ import net.serenitybdd.screenplay.Action;
 /**
  * A convenience class to make it easier to use the Serenity WebDriver API in Action classes.
  */
+@Deprecated
 public abstract class WebAction extends PageObject implements Action {
     public WebAction() {}
 }

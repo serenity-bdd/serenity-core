@@ -22,4 +22,5 @@ public class GivenWhenThen {
     public static <T> Consequence<T> seeThat(Question<? extends T> actual, Matcher<T> expected) {
         return new QuestionConsequence(actual, expected);
     }
+
 }

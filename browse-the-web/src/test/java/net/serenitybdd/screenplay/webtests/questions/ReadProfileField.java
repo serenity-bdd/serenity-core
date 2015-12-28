@@ -1,13 +1,13 @@
 package net.serenitybdd.screenplay.webtests.questions;
 
-import net.serenitybdd.core.targets.Target;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.annotations.Subject;
-import net.serenitybdd.screenplay.questions.WebQuestion;
+import net.serenitybdd.screenplay.questions.Value;
+import net.serenitybdd.screenplay.targets.Target;
 
 @Subject("#field")
-public class ReadProfileField extends WebQuestion implements Question<String> {
+public class ReadProfileField implements Question<String> {
 
     private Target field;
 
@@ -16,6 +16,6 @@ public class ReadProfileField extends WebQuestion implements Question<String> {
     }
 
     public String answeredBy(Actor actor) {
-        return $(field).getValue();
+        return Value.of(field).onTheScreenOf(actor).value();
     }
 }

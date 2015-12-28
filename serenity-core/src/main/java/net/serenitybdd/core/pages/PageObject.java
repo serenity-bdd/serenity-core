@@ -2,7 +2,6 @@ package net.serenitybdd.core.pages;
 
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Predicate;
-import net.serenitybdd.core.targets.Target;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;
@@ -24,7 +23,6 @@ import net.thucydides.core.util.Inflector;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import net.thucydides.core.webdriver.DefaultPageObjectInitialiser;
 import net.thucydides.core.webdriver.WebDriverFacade;
-import net.thucydides.core.webdriver.exceptions.ElementShouldBePresentException;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webelements.Checkbox;
 import net.thucydides.core.webelements.RadioButtonGroup;
@@ -585,14 +583,6 @@ public abstract class PageObject {
         waitOnPage().until(ExpectedConditions.visibilityOfElementLocated(byCriteria));
     }
 
-    protected void ensurePresenceOf(Target target) {
-        try {
-            findBy(target);
-        } catch (NotFoundException targettedElementNotFound) {
-            throw new ElementShouldBePresentException(target.getTargetElementName() + " element could not be found", targettedElementNotFound);
-        }
-    }
-
     public void shouldNotBeVisible(final WebElement field) {
         try {
             element(field).shouldNotBeVisible();
@@ -893,10 +883,6 @@ public abstract class PageObject {
         return element(xpathOrCssSelector);
     }
 
-    public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(Target target) {
-        return element(xpathOrCssSelector(target.getCssOrXPathSelector()));
-    }
-
     /**
      * Provides a fluent API for querying web elements.
      */
@@ -936,16 +922,8 @@ public abstract class PageObject {
         return element(xpathOrCssSelector);
     }
 
-    public <T extends net.serenitybdd.core.pages.WebElementFacade> T findBy(Target target) {
-        return element(target.getCssOrXPathSelector());
-    }
-
     public List<net.serenitybdd.core.pages.WebElementFacade> findAll(String xpathOrCssSelector) {
         return findAll(xpathOrCssSelector(xpathOrCssSelector));
-    }
-
-    public List<net.serenitybdd.core.pages.WebElementFacade> findAll(Target target) {
-        return findAll(xpathOrCssSelector(target.getCssOrXPathSelector()));
     }
 
     public boolean containsElements(By bySelector) {
@@ -1065,10 +1043,6 @@ public abstract class PageObject {
             withAction().moveToElement(findBy(xpathOrCssSelector)).perform();
         }
         return findBy(xpathOrCssSelector);
-    }
-
-    public <T extends WebElementFacade> T moveTo(Target target) {
-        return moveTo(target.getCssOrXPathSelector());
     }
 
     public void waitForAngularRequestsToFinish() {

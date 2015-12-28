@@ -1,9 +1,9 @@
 package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.core.pages.WebElementFacade;
-import net.serenitybdd.core.targets.Target;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.actions.selectactions.*;
+import net.serenitybdd.screenplay.targets.Target;
 
 public class SelectFromOptions {
 

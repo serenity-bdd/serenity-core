@@ -55,6 +55,12 @@ public class Fields {
         return fields;
     }
 
+    public Set<Field> declaredFields() {
+        Set<Field> fields = new HashSet<Field>();
+        fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+        return fields;
+    }
+
     public Set<Field> nonStaticFields() {
         Set<Field> fields = allFields();
         Set<Field> nonStaticFields = new HashSet<Field>();
@@ -136,6 +142,18 @@ public class Fields {
                 return ((field == null) || (object == null)|| (field.get(object) == null)) ? undefinedValue : field.get(object);
             }
         }
+    }
+
+    public static boolean isAbstract(Field field) {
+        return Modifier.isAbstract(field.getType().getModifiers());
+    }
+
+    public static boolean isFinal(Field field) {
+        return Modifier.isFinal(field.getType().getModifiers());
+    }
+
+    public static boolean isStatic(Field field) {
+        return Modifier.isStatic(field.getType().getModifiers());
     }
 }
 

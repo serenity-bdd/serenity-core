@@ -6,8 +6,8 @@ import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.abilities.BrowsingTheWeb;
 import net.serenitybdd.screenplay.webtests.pages.HomePage;
 import net.serenitybdd.screenplay.webtests.pages.ProfilePage;
+import net.serenitybdd.screenplay.webtests.questions.ProfileQuestion;
 import net.serenitybdd.screenplay.webtests.tasks.OpenTheApplication;
-import net.serenitybdd.screenplay.webtests.tasks.TheProfile;
 import net.serenitybdd.screenplay.webtests.tasks.ViewMyProfile;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
@@ -17,12 +17,15 @@ import org.openqa.selenium.WebDriver;
 
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
 
 @RunWith(SerenityRunner.class)
 public class WhenDanaInteractsWithAPageObject {
 
     @Managed(driver = "htmlunit")
     WebDriver herBrowser;
+
+    ProfileQuestion herProfile = new ProfileQuestion();
 
     @Test
     public void danaCanUpdateHerProfile() {
@@ -41,8 +44,8 @@ public class WhenDanaInteractsWithAPageObject {
         onTheProfilePage.updateNameTo("Dana");
         onTheProfilePage.updateCountryTo("France");
 
-        then(dana).should(seeThat(TheProfile.name(), equalTo("Dana")));
-        and(dana).should(seeThat(TheProfile.country(), equalTo("France")));
+        then(dana).should(seeThat(herProfile, hasProperty("name", equalTo("Dana"))));
+        and(dana).should(seeThat(herProfile, hasProperty("country", equalTo("France"))));
     }
 
     @Steps

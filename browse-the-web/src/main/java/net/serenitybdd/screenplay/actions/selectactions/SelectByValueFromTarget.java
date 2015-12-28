@@ -1,11 +1,11 @@
 package net.serenitybdd.screenplay.actions.selectactions;
 
-import net.serenitybdd.core.targets.Target;
+import net.serenitybdd.screenplay.Action;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.actions.WebAction;
+import net.serenitybdd.screenplay.targets.Target;
 import net.thucydides.core.annotations.Step;
 
-public class SelectByValueFromTarget extends WebAction {
+public class SelectByValueFromTarget implements Action {
     private final Target target;
     private final String value;
 
@@ -16,7 +16,7 @@ public class SelectByValueFromTarget extends WebAction {
 
     @Step("{0} clicks on #target")
     public <T extends Actor> void performAs(T theUser) {
-        moveTo(target.getCssOrXPathSelector()).and().selectByVisibleText(value);
+        target.resolveFor(theUser).selectByVisibleText(value);
     }
 
 

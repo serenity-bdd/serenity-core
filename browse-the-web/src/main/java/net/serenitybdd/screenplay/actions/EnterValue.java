@@ -1,12 +1,13 @@
 package net.serenitybdd.screenplay.actions;
 
 import com.google.common.collect.Lists;
+import net.serenitybdd.screenplay.Action;
 import org.openqa.selenium.Keys;
 
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class EnterValue extends WebAction {
+public abstract class EnterValue implements Action {
 
     protected final static List<Keys> NO_FOLLOWUP_KEYS = Lists.newArrayList();
 

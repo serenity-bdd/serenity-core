@@ -34,4 +34,22 @@ public class FieldFinder {
         }
         return Optional.absent();
     }
+
+    public Optional<Field> findFieldOfType(Class type) {
+        return findFieldOfType(type, targetClass);
+    }
+
+    private Optional<Field> findFieldOfType(Class type, Class targetClass) {
+        Field[] fields = targetClass.getDeclaredFields();
+        for(Field field : fields) {
+            if (field.getType().equals(type)) {
+                return Optional.of(field);
+            }
+        }
+        if (targetClass.getSuperclass() != null) {
+            return findFieldOfType(type, targetClass.getSuperclass());
+        }
+        return Optional.absent();
+    }
+
 }

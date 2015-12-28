@@ -14,8 +14,8 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
+import static net.serenitybdd.screenplay.matchers.ConsequenceMatchers.displays;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasProperty;
 
 @RunWith(SerenityRunner.class)
 public class WhenDanaBrowsesTheWeb {
@@ -39,8 +39,8 @@ public class WhenDanaBrowsesTheWeb {
         when(dana).attemptsTo(viewHerProfile);
         and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
 
-        then(dana).should(seeThat(profile, hasProperty("name", equalTo("Dana"))));
-        and(dana).should(seeThat(profile, hasProperty("country", equalTo("France"))));
+        then(dana).should(seeThat(profile, displays("name", equalTo("Dana"))));
+        and(dana).should(seeThat(profile, displays("country", equalTo("France"))));
     }
 
     @Test
@@ -61,11 +61,11 @@ public class WhenDanaBrowsesTheWeb {
         and(jane).attemptsTo(viewHerProfile);
         and(jane).attemptsTo(UpdateHerProfile.withName("Jane").andCountryOfResidence("United Kingdom"));
 
-        then(dana).should(seeThat(profile, hasProperty("name", equalTo("Dana"))));
-        and(dana).should(seeThat(profile, hasProperty("country", equalTo("France"))));
+        then(dana).should(seeThat(profile, displays("name", equalTo("Dana"))));
+        and(dana).should(seeThat(profile, displays("country", equalTo("France"))));
 
-        then(jane).should(seeThat(profile, hasProperty("name", equalTo("Jane"))));
-        and(jane).should(seeThat(profile, hasProperty("country", equalTo("United Kingdom"))));
+        then(jane).should(seeThat(profile, displays("name", equalTo("Jane"))));
+        and(jane).should(seeThat(profile, displays("country", equalTo("United Kingdom"))));
 
     }
 
@@ -84,14 +84,14 @@ public class WhenDanaBrowsesTheWeb {
         when(dana).attemptsTo(viewHerProfile);
         and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
 
-        then(dana).should(seeThat(profile, hasProperty("name", equalTo("Dana"))));
-        and(dana).should(seeThat(profile, hasProperty("country", equalTo("France"))));
+        then(dana).should(seeThat(profile, displays("name", equalTo("Dana"))));
+        and(dana).should(seeThat(profile, displays("country", equalTo("France"))));
 
         when(jane).attemptsTo(viewHerProfile);
         and(jane).attemptsTo(UpdateHerProfile.withName("Jane").andCountryOfResidence("United Kingdom"));
 
-        then(jane).should(seeThat(profile, hasProperty("name", equalTo("Jane"))));
-        and(jane).should(seeThat(profile, hasProperty("country", equalTo("United Kingdom"))));
+        then(jane).should(seeThat(profile, displays("name", equalTo("Jane"))));
+        and(jane).should(seeThat(profile, displays("country", equalTo("United Kingdom"))));
 
     }
 

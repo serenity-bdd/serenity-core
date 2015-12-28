@@ -9,7 +9,7 @@ import java.util.List;
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
 
-public class CSSValue extends UIState<String> {
+public class CSSValue extends TargetedUIState<String> {
 
     private final String attributeName;
 

@@ -9,7 +9,7 @@ import java.util.List;
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
 
-public class SelectedVisibleTextValue extends UIState<String> {
+public class SelectedVisibleTextValue extends TargetedUIState<String> {
 
     public SelectedVisibleTextValue(Target target, Actor actor) {
         super(target,actor);

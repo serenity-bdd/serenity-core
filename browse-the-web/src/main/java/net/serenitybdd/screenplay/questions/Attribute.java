@@ -9,7 +9,7 @@ import java.util.List;
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
 
-public class Attribute extends UIState<String> {
+public class Attribute extends TargetedUIState<String> {
 
     private final String attributeName;
 

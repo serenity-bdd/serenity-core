@@ -5,7 +5,7 @@ import net.serenitybdd.screenplay.targets.Target;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class UIStateReaderBuilder<T> {
+public class UIStateReaderBuilder<T>{
     private final Target target;
     private final Class<T> type;
 

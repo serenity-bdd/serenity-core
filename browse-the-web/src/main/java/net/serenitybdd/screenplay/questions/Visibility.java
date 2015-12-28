@@ -9,7 +9,7 @@ import java.util.List;
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
 
-public class Visibility extends UIState<Boolean> {
+public class Visibility extends TargetedUIState<Boolean> {
 
     public Visibility(Target target, Actor actor) {
         super(target, actor);

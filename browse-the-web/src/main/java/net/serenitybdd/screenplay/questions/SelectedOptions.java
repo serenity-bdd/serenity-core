@@ -9,7 +9,7 @@ import java.util.List;
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
 
-public class SelectedOptions extends UIState<List<String>> {
+public class SelectedOptions extends TargetedUIState<List<String>> {
 
     public SelectedOptions(Target target, Actor actor) {
         super(target,actor);

@@ -10,7 +10,7 @@ import java.util.List;
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
 
-public class TheSize extends UIState<Dimension> {
+public class TheSize extends TargetedUIState<Dimension> {
 
     public TheSize(Target target, Actor actor) {
         super(target,actor);

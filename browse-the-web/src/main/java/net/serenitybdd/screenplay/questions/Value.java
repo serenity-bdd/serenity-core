@@ -9,7 +9,7 @@ import java.util.List;
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
 
-public class Value extends UIState<String> {
+public class Value extends TargetedUIState<String> {
 
     public Value(Target target, Actor actor) {
         super(target,actor);

@@ -9,7 +9,7 @@ import java.util.List;
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
 
-public class CurrentlyEnabled extends UIState<Boolean> {
+public class CurrentlyEnabled extends TargetedUIState<Boolean> {
 
     public CurrentlyEnabled(Target target, Actor actor) {
         super(target, actor);

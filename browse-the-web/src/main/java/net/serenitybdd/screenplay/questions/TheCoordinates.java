@@ -9,7 +9,7 @@ import java.util.List;
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
 
-public class TheCoordinates extends UIState<org.openqa.selenium.interactions.internal.Coordinates> {
+public class TheCoordinates extends TargetedUIState<org.openqa.selenium.interactions.internal.Coordinates> {
 
     public TheCoordinates(Target target, Actor actor) {
         super(target,actor);

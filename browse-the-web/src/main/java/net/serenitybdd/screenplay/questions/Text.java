@@ -9,7 +9,7 @@ import java.util.List;
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
 
-public class Text extends UIState<String> {
+public class Text extends TargetedUIState<String> {
 
     public Text(Target target, Actor actor) {
         super(target, actor);

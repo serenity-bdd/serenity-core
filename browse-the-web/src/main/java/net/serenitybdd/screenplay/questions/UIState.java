@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.questions.converters.*;
-import net.serenitybdd.screenplay.targets.Target;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
@@ -13,7 +12,6 @@ import java.util.Map;
 
 public abstract class UIState<T> {
 
-    protected final Target target;
     protected final Actor actor;
 
     protected Map<Class<?>, Converter> DEFAULT_CONVERTERS = Maps.newHashMap();
@@ -27,13 +25,11 @@ public abstract class UIState<T> {
         DEFAULT_CONVERTERS.put(Long.class, new LongConverter());
     }
 
-    protected UIState(Target target, Actor actor) {
-        this.target = target;
+    protected UIState(Actor actor) {
         this.actor = actor;
     }
 
     public abstract T resolve();
-    public abstract List<T> resolveAll();
 
     public T value() { return resolve(); }
 
@@ -68,14 +64,6 @@ public abstract class UIState<T> {
     public <T> T asEnum(Class<T> enumType) {
         String value = resolve().toString();
         return EnumValues.forType(enumType).getValueOf(value);
-    }
-
-    public List<T> asList() {
-        return resolveAll();
-    }
-
-    public <T> List<T> asListOf(Class<T> type) {
-        return convertToEnums(type, asList());
     }
 
     protected <T> List<T> convertToEnums(Class<T> enumType, List<?> values) {

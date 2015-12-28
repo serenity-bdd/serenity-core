@@ -10,7 +10,7 @@ import java.util.List;
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
 
-public class TheLocation extends UIState<Point> {
+public class TheLocation extends TargetedUIState<Point> {
 
     public TheLocation(Target target, Actor actor) {
         super(target,actor);

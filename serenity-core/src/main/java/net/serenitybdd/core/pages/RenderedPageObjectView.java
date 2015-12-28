@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_NO_WAIT;
 import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_WAIT;
-import static net.serenitybdd.core.pages.Selectors.xpathOrCssSelector;
+import static net.serenitybdd.core.selectors.Selectors.xpathOrCssSelector;
 
 
 /**

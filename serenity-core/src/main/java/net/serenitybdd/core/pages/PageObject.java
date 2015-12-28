@@ -47,7 +47,7 @@ import java.util.concurrent.TimeUnit;
 
 import static ch.lambdaj.Lambda.convert;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static net.serenitybdd.core.pages.Selectors.xpathOrCssSelector;
+import static net.serenitybdd.core.selectors.Selectors.xpathOrCssSelector;
 import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascriptIsSupportedIn;
 
 /**

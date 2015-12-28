@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static ch.lambdaj.Lambda.convert;
-import static net.serenitybdd.core.pages.Selectors.isXPath;
+import static net.serenitybdd.core.selectors.Selectors.isXPath;
 
 
 /**

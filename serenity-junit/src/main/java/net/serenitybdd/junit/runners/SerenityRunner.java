@@ -547,6 +547,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     protected void resetBroswerFromTimeToTime() {
         if (isAWebTest() && restartBrowserBeforeTest()) {
             WebdriverProxyFactory.resetDriver(getDriver());
+        } else {
+            WebdriverProxyFactory.clearBrowserSession(getDriver());
         }
     }
 

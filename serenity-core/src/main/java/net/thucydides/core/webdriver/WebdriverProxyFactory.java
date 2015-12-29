@@ -2,6 +2,7 @@ package net.thucydides.core.webdriver;
 
 import com.google.common.collect.ImmutableList;
 import net.thucydides.core.guice.Injectors;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
 import java.io.Serializable;
@@ -92,5 +93,12 @@ public class WebdriverProxyFactory implements Serializable {
 
     public void clearMockDriver() {
         this.mockDriver = null;
+    }
+
+    public static void clearBrowserSession(WebDriver driver) {
+        if (((WebDriverFacade) driver).isInstantiated()) {
+            driver.manage().deleteAllCookies();
+            ((JavascriptExecutor) driver).executeScript(String.format("window.localStorage.clear();"));
+        }
     }
 }

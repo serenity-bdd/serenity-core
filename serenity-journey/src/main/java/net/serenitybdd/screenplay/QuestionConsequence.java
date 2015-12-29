@@ -2,6 +2,7 @@ package net.serenitybdd.screenplay;
 
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.events.ActorAsksQuestion;
+import net.serenitybdd.screenplay.formatting.StripRedundantTerms;
 import net.thucydides.core.steps.StepEventBus;
 import org.hamcrest.Matcher;
 
@@ -63,7 +64,8 @@ public class QuestionConsequence<T> implements Consequence<T> {
 
     @Override
     public String toString() {
-        return String.format("Then %s should be %s", subject, expected);
+        String expectedExpression = StripRedundantTerms.from(expected.toString());
+        return String.format("Then %s should be %s", subject, expectedExpression);
     }
 
     @Override

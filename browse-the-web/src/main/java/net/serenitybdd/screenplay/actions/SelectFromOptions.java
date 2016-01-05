@@ -5,6 +5,8 @@ import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.actions.selectactions.*;
 import net.serenitybdd.screenplay.targets.Target;
 
+import static net.serenitybdd.screenplay.Tasks.instrumented;
+
 public class SelectFromOptions {
 
     private final SelectStrategy strategy;
@@ -39,18 +41,18 @@ public class SelectFromOptions {
 
     public Performable from(Target target) {
         switch (strategy) {
-            case ByValue: return new SelectByValueFromTarget(target, theText);
-            case ByVisibleText: return new SelectByVisibleTextFromTarget(target, theText);
-            case ByIndex: return new SelectByIndexFromTarget(target, indexValue);
+            case ByValue: return instrumented(SelectByValueFromTarget.class, target, theText);
+            case ByVisibleText: return instrumented(SelectByVisibleTextFromTarget.class, target, theText);
+            case ByIndex: return instrumented(SelectByIndexFromTarget.class, target, indexValue);
         }
         throw new IllegalStateException("Unknown select strategy " + strategy);
     }
 
     public Performable from(WebElementFacade element) {
         switch (strategy) {
-            case ByValue: return new SelectByValueFromElement(element, theText);
-            case ByVisibleText: return new SelectByVisibleTextFromElement(element, theText);
-            case ByIndex: return new SelectByIndexFromElement(element, indexValue);
+            case ByValue: return instrumented(SelectByValueFromElement.class, element, theText);
+            case ByVisibleText: return instrumented(SelectByVisibleTextFromElement.class, element, theText);
+            case ByIndex: return instrumented(SelectByIndexFromElement.class, element, indexValue);
         }
         throw new IllegalStateException("Unknown select strategy " + strategy);
     }

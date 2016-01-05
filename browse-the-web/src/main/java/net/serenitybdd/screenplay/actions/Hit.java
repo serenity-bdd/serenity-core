@@ -5,6 +5,8 @@ import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.Keys;
 
+import static net.serenitybdd.screenplay.Tasks.instrumented;
+
 public class Hit {
 
     private Keys[] keys;
@@ -18,15 +20,15 @@ public class Hit {
     }
 
     public Performable into(String cssOrXpathForElement) {
-        return new HitTarget(keys, Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement));
+        return instrumented(HitTarget.class, keys, Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement));
     }
 
     public Performable into(Target target) {
-        return new HitTarget(keys, target);
+        return instrumented(HitTarget.class, keys, target);
     }
 
     public Performable into(WebElementFacade element) {
-        return new HitElement(keys, element);
+        return instrumented(HitElement.class, keys, element);
     }
     public Performable keyIn(String cssOrXpathForElement) { return into(cssOrXpathForElement); }
     public Performable keyIn(Target target) { return into(target); }

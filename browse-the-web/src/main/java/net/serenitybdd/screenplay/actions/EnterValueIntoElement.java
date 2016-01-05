@@ -13,10 +13,9 @@ public class EnterValueIntoElement extends EnterValue {
         this.element = element;
     }
 
-    @Step("{0} enters '#theText' into #element")
+    @Step("{0} enters '#theText' into #element#followedBy")
     public <T extends Actor> void performAs(T theUser) {
         element.type(theText)
                .sendKeys(getFollowedByKeys());
     }
-
 }

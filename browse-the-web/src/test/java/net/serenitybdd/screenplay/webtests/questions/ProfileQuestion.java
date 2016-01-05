@@ -12,10 +12,10 @@ public class ProfileQuestion implements Question<Customer> {
     public Customer answeredBy(Actor actor) {
         System.out.printf("READING QUESTION FOR " + actor);
         String name = Value.of(ProfilePage.NAME)
-                           .onTheScreenOf(actor)
+                           .viewedBy(actor)
                            .value();
 
-        String country = SelectedVisibleTextValue.of(ProfilePage.COUNTRY).onTheScreenOf(actor).value();
+        String country = SelectedVisibleTextValue.of(ProfilePage.COUNTRY).viewedBy(actor).value();
         return new Customer(name, country);
     }
 }

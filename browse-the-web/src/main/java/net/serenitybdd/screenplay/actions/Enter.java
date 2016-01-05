@@ -3,6 +3,8 @@ package net.serenitybdd.screenplay.actions;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.targets.Target;
 
+import static net.serenitybdd.screenplay.Tasks.instrumented;
+
 public class Enter {
 
     private final String theText;
@@ -16,15 +18,15 @@ public class Enter {
     }
 
     public EnterValue into(String cssOrXpathForElement) {
-        return new EnterValueIntoTarget(theText, Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement));
+        return instrumented(EnterValueIntoTarget.class, theText, Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement));
     }
 
     public EnterValue into(Target target) {
-        return new EnterValueIntoTarget(theText, target);
+        return instrumented(EnterValueIntoTarget.class, theText, target);
     }
 
     public EnterValue into(WebElementFacade element) {
-        return new EnterValueIntoElement(theText, element);
+        return instrumented(EnterValueIntoElement.class, theText, element);
     }
 
 }

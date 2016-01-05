@@ -17,6 +17,6 @@ public class ReadProfileOptionValue implements Question<String> {
     }
  
     public String answeredBy(Actor actor) {
-        return SelectedVisibleTextValue.of(field).onTheScreenOf(actor).value();
+        return SelectedVisibleTextValue.of(field).viewedBy(actor).value();
     }
 }

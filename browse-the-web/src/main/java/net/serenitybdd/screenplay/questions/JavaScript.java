@@ -37,7 +37,7 @@ public class JavaScript extends UIState<String> {
             return this;
         }
 
-        public JavaScript onTheScreenOf(Actor actor) {
+        public JavaScript viewedBy(Actor actor) {
             return new JavaScript(expression, parameters, actor);
         }
 

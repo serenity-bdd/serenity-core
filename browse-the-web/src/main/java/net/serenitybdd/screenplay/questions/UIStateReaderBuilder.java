@@ -16,7 +16,7 @@ public class UIStateReaderBuilder<T>{
         this.type = type;
     }
 
-    public T onTheScreenOf(Actor actor) {
+    public T viewedBy(Actor actor) {
         try {
             return (T) type.getConstructor(Target.class, Actor.class).newInstance(target, actor);
         } catch (Exception e) {

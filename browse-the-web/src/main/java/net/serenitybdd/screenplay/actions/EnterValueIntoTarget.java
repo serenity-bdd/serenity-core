@@ -13,7 +13,7 @@ public class EnterValueIntoTarget extends EnterValue {
         this.target = target;
     }
 
-    @Step("{0} enters '#theText' into #target")
+    @Step("{0} enters '#theText' into #target#followedBy")
     public <T extends Actor> void performAs(T theUser) {
         target.resolveFor(theUser).type(theText)
                 .sendKeys(getFollowedByKeys());

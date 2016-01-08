@@ -3,6 +3,7 @@ package net.serenitybdd.screenplay.webtests;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.serenitybdd.screenplay.webtests.pages.ProfilePage;
 import net.serenitybdd.screenplay.webtests.questions.ProfileQuestion;
 import net.serenitybdd.screenplay.webtests.tasks.OpenTheApplication;
 import net.serenitybdd.screenplay.webtests.tasks.UpdateHerProfile;
@@ -15,6 +16,8 @@ import org.openqa.selenium.WebDriver;
 
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static net.serenitybdd.screenplay.matchers.ConsequenceMatchers.displays;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+import static net.serenitybdd.screenplay.questions.WebElementQuestion.the;
 import static org.hamcrest.Matchers.equalTo;
 
 @RunWith(SerenityRunner.class)
@@ -41,6 +44,23 @@ public class WhenDanaBrowsesTheWeb {
 
         then(dana).should(seeThat(profile, displays("name", equalTo("Dana"))));
         and(dana).should(seeThat(profile, displays("country", equalTo("France"))));
+    }
+
+    @Test
+    public void danaCanMakeAssertionsAboutWebElements() {
+
+        Actor dana = new Actor("Dana");
+        dana.can(BrowseTheWeb.with(firstBrowser));
+
+        givenThat(dana).has(openedTheApplication);
+
+        when(dana).attemptsTo(viewHerProfile);
+        and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
+
+        then(dana).should(seeThat(the(ProfilePage.NAME), isVisible()));
+        then(dana).should(seeThat(the(ProfilePage.NAME), isCurrentlyVisible()));
+        and(dana).should(seeThat(the(ProfilePage.NAME), isEnabled()));
+        and(dana).should(seeThat(the(ProfilePage.NAME), isCurrentlyEnabled()));
     }
 
     @Test

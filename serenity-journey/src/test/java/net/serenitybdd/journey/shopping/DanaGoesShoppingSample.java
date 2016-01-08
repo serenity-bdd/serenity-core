@@ -64,6 +64,17 @@ public class DanaGoesShoppingSample {
     }
 
     @Test
+    public void shouldBeAbleToPurchaseSomeItemsWithDeliveryAndCustomErrorsByQuestionWithACustomMessage() {
+        givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
+                andPurchased().aPear().thatCosts(5).dollars());
+
+        when(dana).attemptsTo(haveThemDelivered);
+
+        then(dana).should(seeThat(theTotalCostIncludingDelivery(), greaterThanOrEqualTo(20)),
+                seeThat(theThankYouMessage(), equalTo("You're welcome"))
+                        .orComplainWith(PeopleAreSoImpolite.class,"You should say something nice"));
+    }
+    @Test
     public void shouldBeAbleToAskForNiceThings() {
         Integer totalCost = dana.asksFor(theTotalCost());
         assertThat(totalCost).isEqualTo(14);

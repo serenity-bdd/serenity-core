@@ -1,14 +1,13 @@
 package net.serenitybdd.screenplay;
 
-import net.thucydides.core.steps.StepEventBus;
+import net.serenitybdd.screenplay.formatting.StripRedundantTerms;
 import org.hamcrest.Matcher;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ValueConsequence<T> implements Consequence<T> {
+public class ValueConsequence<T> extends BaseConsequence<T> {
     private final T actual;
     private final Matcher<T> expected;
-    private Class<? extends AssertionError> complaintType;
 
     public ValueConsequence(T actual, Matcher<T> expected) {
         this.actual = actual;
@@ -21,49 +20,25 @@ public class ValueConsequence<T> implements Consequence<T> {
 
         try {
             assertThat(actual, expected);
-        } catch (AssertionError actualError) {
+        } catch (Throwable actualError) {
 
-            throwComplaintTypeErrorIfSpecified(actualError);
+            throwComplaintTypeErrorIfSpecified(errorFrom(actualError));
 
-            throwDiagosticErrorIfProvided(actualError);
+            throwDiagosticErrorIfProvided(errorFrom(actualError));
 
             throw actualError;
         }
     }
 
-    private void throwDiagosticErrorIfProvided(AssertionError actualError) {
+    private void throwDiagosticErrorIfProvided(Error actualError) {
         if (actual instanceof QuestionDiagnostics) {
-            throw complaintFrom(((QuestionDiagnostics) actual).onError(), actualError);
+            throw Complaint.from(((QuestionDiagnostics) actual).onError(), actualError);
         }
-    }
-
-    private void throwComplaintTypeErrorIfSpecified(AssertionError actualError) {
-        if (complaintType != null) {
-            throw complaintFrom(complaintType, actualError);
-        }
-    }
-
-    private AssertionError complaintFrom(Class<? extends AssertionError> complaintType, AssertionError actualError) {
-        try {
-            return complaintType.getConstructor(Throwable.class).newInstance(actualError);
-        } catch (Exception e) {
-            return new AssertionError(String.format("%s should have a constructor that takes a nested exception",
-                    complaintType.getSimpleName()));
-        }
-    }
-
-    private boolean thisStepShouldBeIgnored() {
-        return (StepEventBus.getEventBus().currentTestIsSuspended() || StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed());
     }
 
     @Override
     public String toString() {
-        return String.format("Then %s should be %s", actual, expected);
-    }
-
-    @Override
-    public ValueConsequence<T> orComplainWith(Class<? extends AssertionError> complaintType) {
-        this.complaintType = complaintType;
-        return this;
+        String expectedExpression = StripRedundantTerms.from(expected.toString());
+        return String.format("Then %s should be %s", actual, expectedExpression);
     }
 }

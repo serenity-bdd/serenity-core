@@ -548,7 +548,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void addTagFor(TestOutcome testOutcome) {
-        testOutcome.addTag(TestTag.withName(testOutcome.getTestFailureCause().getSimpleErrorType()).andType("error"));
+        testOutcome.addTag(TestTag.withName(testOutcome.getTestFailureCause().getSimpleErrorType()).andType("error type"));
     }
 
     private boolean shouldTagErrors() {
@@ -762,7 +762,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public boolean aStepHasFailed() {
         return ((!getTestOutcomes().isEmpty()) &&
-                (getCurrentTestOutcome().getResult() == TestResult.FAILURE || getCurrentTestOutcome().getResult() == TestResult.ERROR));
+                (getCurrentTestOutcome().getResult() == TestResult.FAILURE
+                 || getCurrentTestOutcome().getResult() == TestResult.ERROR
+                 || getCurrentTestOutcome().getResult() == TestResult.COMPROMISED));
     }
 
     public FailureCause getTestFailureCause() {

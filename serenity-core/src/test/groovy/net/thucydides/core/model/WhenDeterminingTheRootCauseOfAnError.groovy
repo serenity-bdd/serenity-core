@@ -1,8 +1,10 @@
 package net.thucydides.core.model
 
+import net.serenitybdd.core.exceptions.CausesCompromisedTestFailure
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer
 import net.thucydides.core.model.stacktrace.StackTraceSanitizer
 import net.thucydides.core.util.MockEnvironmentVariables
+import org.openqa.selenium.ElementNotVisibleException
 import sample.steps.FailingStep
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -18,6 +20,34 @@ class WhenDeterminingTheRootCauseOfAnError extends Specification {
             rootCause.errorType == "java.lang.IllegalArgumentException"
             rootCause.message == "Oh crap"
             rootCause.stackTrace.size() == 1
+    }
+
+    def "Should report WebdriverAssertionError exceptions directly "() {
+        given:
+            def exception = new ElementNotVisibleException("Oh crap")
+        when:
+            def rootCause = new RootCauseAnalyzer(exception).getRootCause()
+        then:
+            rootCause.errorType == "org.openqa.selenium.ElementNotVisibleException"
+    }
+
+    public static class AppCompromised extends Error implements CausesCompromisedTestFailure {
+        AppCompromised(String message) {
+            super(message)
+        }
+
+        AppCompromised(String message, Throwable cause) {
+            super(message, cause)
+        }
+    }
+
+    def "Should report Compromised exceptions directly "() {
+        given:
+            def exception = new AppCompromised("Oh crap", new AssertionError("Oh bugger"))
+        when:
+            def rootCause = new RootCauseAnalyzer(exception).getRootCause()
+        then:
+            rootCause.errorType.contains("AppCompromised")
     }
 
     def "Should record full stack trace if configured"() {

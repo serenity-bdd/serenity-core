@@ -1,6 +1,9 @@
 package net.thucydides.core.model.stacktrace;
 
 import net.serenitybdd.core.exceptions.SerenityWebDriverException;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.model.failures.FailureAnalysis;
+import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.WebdriverAssertionError;
 
 /**
@@ -9,9 +12,13 @@ import net.thucydides.core.webdriver.WebdriverAssertionError;
 public class RootCauseAnalyzer {
 
     private final Throwable thrownException;
+    private final FailureAnalysis failureAnalysis;
+    private final EnvironmentVariables environmentVariables;
 
     public RootCauseAnalyzer(Throwable thrownException) {
         this.thrownException = thrownException;
+        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        failureAnalysis = new FailureAnalysis(environmentVariables);
     }
 
     public FailureCause getRootCause() {
@@ -22,7 +29,17 @@ public class RootCauseAnalyzer {
     }
 
     private Throwable originalExceptionFrom(Throwable thrownException) {
+
         if (!(thrownException instanceof WebdriverAssertionError) && ((thrownException instanceof SerenityWebDriverException) || (thrownException instanceof AssertionError))){
+            return thrownException;
+        }
+        if (failureAnalysis.reportAsCompromised(thrownException.getClass())) {
+            return thrownException;
+        }
+        if (failureAnalysis.reportAsFailure(thrownException.getClass())) {
+            return thrownException;
+        }
+        if (failureAnalysis.reportAsPending(thrownException.getClass())) {
             return thrownException;
         }
         return (thrownException.getCause() != null) ? thrownException.getCause() : thrownException;

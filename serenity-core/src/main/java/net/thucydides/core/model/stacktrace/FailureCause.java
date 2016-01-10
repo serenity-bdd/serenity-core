@@ -128,12 +128,12 @@ public class FailureCause {
             Class failureClass = Class.forName(testFailureClassname);
             Throwable exception = buildThrowable(testFailureMessage, failureClass);
             if (exception == null) {
-                exception = new UnrecognisedException(failureClass.getName() + ": " + testFailureMessage);
+                exception = new UnrecognisedException();
             }
             exception.setStackTrace(this.getStackTrace());
             return Optional.fromNullable(exception);
         } catch (Exception e) {
-            Throwable exception = new UnrecognisedException(testFailureClassname + ": " + testFailureMessage);
+            Throwable exception = new UnrecognisedException();
             exception.setStackTrace(this.getStackTrace());
             return Optional.fromNullable(exception);
         }

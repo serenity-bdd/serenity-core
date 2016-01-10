@@ -31,15 +31,18 @@ public class ResultChecker {
         switch (testOutcomes.getResult()) {
             case ERROR: throw new TestOutcomesError(testOutcomeSummary(testOutcomes));
             case FAILURE: throw new TestOutcomesFailures(testOutcomeSummary(testOutcomes));
+            case COMPROMISED: throw new TestOutcomesCompromised(testOutcomeSummary(testOutcomes));
         }
     }
 
     private String testOutcomeSummary(TestOutcomes testOutcomes) {
         int errors = testOutcomes.count(TestType.ANY).withResult(TestResult.ERROR);
         int failures = testOutcomes.count(TestType.ANY).withResult(TestResult.FAILURE);
+        int compromised = testOutcomes.count(TestType.ANY).withResult(TestResult.COMPROMISED);
         String errorText = (errors > 0) ? "ERROR COUNT: " + errors : "";
         String failureText = (failures > 0) ? "FAILURE COUNT: " + failures : "";
-        return "THUCYDIDES TEST FAILURES: " + errorText + " " + failureText;
+        String compromisedText = (compromised > 0) ? "COMPROMISED COUNT: " + failures : "";
+        return "THUCYDIDES TEST FAILURES: " + errorText + " " + failureText + " " + compromisedText;
     }
 
     private void handleMissingTestResults() {

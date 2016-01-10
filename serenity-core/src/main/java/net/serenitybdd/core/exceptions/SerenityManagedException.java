@@ -3,7 +3,7 @@ package net.serenitybdd.core.exceptions;
 
 import org.openqa.selenium.WebDriverException;
 
-public class SerenityWebDriverException extends WebDriverException {
+public class SerenityManagedException extends RuntimeException {
 
     private final String detailedMessage;
     private final StackTraceElement[] stackTrace;
@@ -14,27 +14,27 @@ public class SerenityWebDriverException extends WebDriverException {
     public static Throwable detachedCopyOf(Throwable testErrorException) {
         if (!(testErrorException instanceof WebDriverException)) {
             return testErrorException;
-        } else if (testErrorException instanceof SerenityWebDriverException) {
+        } else if (testErrorException instanceof SerenityManagedException) {
             return testErrorException;
         } else {
-            return new SerenityWebDriverException((WebDriverException) testErrorException);
+            return new SerenityManagedException(testErrorException);
         }
     }
 
 
-    public SerenityWebDriverException(WebDriverException testErrorException) {
-        super(testErrorException.getCause());
+    public SerenityManagedException(Throwable testErrorException) {
+        super(testErrorException);
         this.detailedMessage = testErrorException.getMessage();
         this.stackTrace = testErrorException.getStackTrace();
         this.cause = testErrorException.getCause();
         this.exceptionClass = testErrorException.getClass();
     }
 
-    public SerenityWebDriverException(String message, WebDriverException testErrorException) {
-        super(testErrorException.getCause());
+    public SerenityManagedException(String message, Throwable testErrorException) {
+        super(testErrorException);
         this.detailedMessage = message;
         this.stackTrace = testErrorException.getStackTrace();
-        this.cause = testErrorException.getCause();
+        this.cause =  testErrorException.getCause();
         this.exceptionClass = testErrorException.getClass();
     }
 

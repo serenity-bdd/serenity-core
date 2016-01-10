@@ -2,7 +2,7 @@ package net.thucydides.core.model.stacktrace;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
-import net.serenitybdd.core.exceptions.SerenityWebDriverException;
+import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.exceptions.UnrecognisedException;
 import net.thucydides.core.model.TestFailureException;
 import net.thucydides.core.util.NameConverter;
@@ -36,8 +36,8 @@ public class FailureCause {
     }
 
     private static String exceptionClassName(Throwable cause) {
-        if (cause instanceof SerenityWebDriverException) {
-            return ((SerenityWebDriverException) cause).getExceptionClass().getName();
+        if (cause instanceof SerenityManagedException) {
+            return ((SerenityManagedException) cause).getExceptionClass().getName();
         } else {
             return cause.getClass().getName();
         }

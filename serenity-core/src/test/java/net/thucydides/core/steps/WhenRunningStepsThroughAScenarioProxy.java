@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.exceptions.SerenityWebDriverException;
+import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.pages.Pages;
@@ -642,7 +642,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
         verify(listener).stepFailed(argument.capture());
         assertThat(argument.getValue().getDescription().getStepClass().getName(), is(SimpleTestScenarioSteps.class.getName()));
         assertThat(argument.getValue().getDescription().getName(), is("failing_web_step"));
-        assertThat(argument.getValue().getException().getClass().getName(), is(SerenityWebDriverException.class.getName()));
+        assertThat(argument.getValue().getException().getClass().getName(), is(SerenityManagedException.class.getName()));
 
         verify(listener, times(1)).stepFailed(any(StepFailure.class));
 
@@ -665,7 +665,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
         ArgumentCaptor<StepFailure> argument = ArgumentCaptor.forClass(StepFailure.class);
         verify(listener).stepFailed(argument.capture());
-        assertThat(argument.getValue().getMessage(), is("java.lang.AssertionError: Oops!"));
+        assertThat(argument.getValue().getMessage(), is("Oops!"));
     }
 
     @Test

@@ -4,7 +4,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import io.appium.java_client.AppiumDriver;
 import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.exceptions.SerenityWebDriverException;
+import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.pages.DefaultTimeouts;
 import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -195,7 +195,7 @@ public class WebDriverFactory {
 
             activateJavascriptSupportFor(driver);
             return driver;
-        } catch (SerenityWebDriverException toPassThrough) {
+        } catch (SerenityManagedException toPassThrough) {
             throw toPassThrough;
         } catch (Exception cause) {
             throw new UnsupportedDriverException("Could not instantiate " + driverClass, cause);

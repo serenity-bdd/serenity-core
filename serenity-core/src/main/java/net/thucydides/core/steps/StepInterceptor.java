@@ -7,7 +7,7 @@ import net.serenitybdd.core.IgnoredStepException;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SkipNested;
-import net.serenitybdd.core.exceptions.SerenityWebDriverException;
+import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -257,7 +257,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     }
 
     public void reportMethodError(Throwable generalException, Object obj, Method method, Object[] args) throws Throwable {
-        error = SerenityWebDriverException.detachedCopyOf(generalException);
+        error = SerenityManagedException.detachedCopyOf(generalException);
         Throwable assertionError = forError(error).convertToAssertion();
         notifyStepStarted(obj, method, args);
         notifyOfStepFailure(obj, method, args, assertionError);
@@ -268,7 +268,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         try {
             result = invokeMethod(obj, args, proxy);
         } catch (Throwable generalException) {
-            error = SerenityWebDriverException.detachedCopyOf(generalException);
+            error = SerenityManagedException.detachedCopyOf(generalException);
             Throwable assertionError = forError(error).convertToAssertion();
             notifyStepStarted(obj, method, args);
             notifyOfStepFailure(obj, method, args, assertionError);
@@ -314,7 +314,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         } catch (AssumptionViolatedException assumptionFailed) {
             result = appropriateReturnObject(obj, method);
         } catch (Throwable testErrorException) {
-            error = SerenityWebDriverException.detachedCopyOf(testErrorException);
+            error = SerenityManagedException.detachedCopyOf(testErrorException);
             logStepFailure(obj, method, args, forError(error).convertToAssertion());
             result = appropriateReturnObject(obj, method);
         }

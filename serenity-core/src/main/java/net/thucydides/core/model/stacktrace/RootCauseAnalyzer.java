@@ -1,6 +1,6 @@
 package net.thucydides.core.model.stacktrace;
 
-import net.serenitybdd.core.exceptions.SerenityWebDriverException;
+import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.failures.FailureAnalysis;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -30,7 +30,7 @@ public class RootCauseAnalyzer {
 
     private Throwable originalExceptionFrom(Throwable thrownException) {
 
-        if (!(thrownException instanceof WebdriverAssertionError) && ((thrownException instanceof SerenityWebDriverException) || (thrownException instanceof AssertionError))){
+        if (!(thrownException instanceof WebdriverAssertionError) && ((thrownException instanceof SerenityManagedException) || (thrownException instanceof AssertionError))){
             return thrownException;
         }
         if (failureAnalysis.reportAsCompromised(thrownException.getClass())) {

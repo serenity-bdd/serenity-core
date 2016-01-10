@@ -4,7 +4,7 @@ import com.google.common.base.Splitter;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
-import net.serenitybdd.core.exceptions.SerenityWebDriverException;
+import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.thucydides.core.guice.Injectors;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
@@ -42,7 +42,7 @@ public class WebdriverInstanceFactory {
             return driver;
         } catch (UnreachableBrowserException unreachableBrowser) {
             String errorMessage = unreachableBrowserErrorMessage(unreachableBrowser);
-            throw new SerenityWebDriverException(errorMessage, unreachableBrowser);
+            throw new SerenityManagedException(errorMessage, unreachableBrowser);
 
         }
     }

@@ -13,7 +13,7 @@ import com.jayway.restassured.specification.RequestLogSpecification;
 import com.jayway.restassured.specification.RequestSpecification;
 import com.jayway.restassured.specification.ResponseSpecification;
 import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.exceptions.SerenityWebDriverException;
+import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.rest.RestMethod;
 import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.rest.decorators.RestDecorator;
@@ -174,7 +174,7 @@ public class SerenityRest {
                 return result;
             }
         } catch (Exception generalException) {
-            Throwable error = SerenityWebDriverException.detachedCopyOf(generalException.getCause());
+            Throwable error = SerenityManagedException.detachedCopyOf(generalException.getCause());
             Throwable assertionError = forError(error).convertToAssertion();
             notifyOfStepFailure(method, args, assertionError);
             return stubbed(method);

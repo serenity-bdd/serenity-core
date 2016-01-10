@@ -1,6 +1,8 @@
 package net.thucydides.core.steps;
 
 
+import net.serenitybdd.core.exceptions.SerenityManagedException;
+
 /**
  * Description and underlying cause behind a step failure.
  * A <code>StepFailure</code> holds a description of the failed test step and the
@@ -21,9 +23,15 @@ public class StepFailure {
         this.description = description;
         this.cause = cause;
         if (cause != null) {
-            this.exceptionClass = cause.getClass();
-            this.message = cause.getMessage();
-            this.stackTraceElements = cause.getStackTrace();
+            if (cause instanceof SerenityManagedException) {
+                this.exceptionClass = ((SerenityManagedException)cause).getExceptionClass();
+                this.message = cause.getMessage();
+                this.stackTraceElements = ((SerenityManagedException)cause).getStackTrace();
+            } else {
+                this.exceptionClass = cause.getClass();
+                this.message = cause.getMessage();
+                this.stackTraceElements = cause.getStackTrace();
+            }
         } else {
             this.exceptionClass = null;
             this.message = null;

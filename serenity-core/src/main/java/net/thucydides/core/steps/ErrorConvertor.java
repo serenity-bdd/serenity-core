@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import net.thucydides.core.webdriver.WebdriverAssertionError;
+import net.serenitybdd.core.exceptions.SerenityManagedException;
 
 import java.io.Serializable;
 
@@ -19,7 +19,8 @@ public class ErrorConvertor implements Serializable {
         if (RuntimeException.class.isAssignableFrom(throwable.getClass())) {
             return throwable;
         } else {
-            return new WebdriverAssertionError(throwable);
+//            return new WebdriverAssertionError(throwable);
+            return new SerenityManagedException(throwable);
         }
     }
 }

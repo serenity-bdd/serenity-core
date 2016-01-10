@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver
 
 import com.opera.core.systems.OperaDriver
-import net.serenitybdd.core.exceptions.SerenityWebDriverException
+import net.serenitybdd.core.exceptions.SerenityManagedException
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.openqa.selenium.Capabilities
 import org.openqa.selenium.WebDriver
@@ -141,7 +141,7 @@ class WhenConfiguringTheWebdriverInstance extends Specification {
             def webDriverFactory = new WebDriverFactory(new WebdriverInstanceFactory(), environmentVariables)
             webDriverFactory.newInstanceOf(SupportedWebDriver.REMOTE)
         then:
-            def e = thrown(SerenityWebDriverException)
+            def e = thrown(SerenityManagedException)
             e.message.contains("Could not start a new session. Possible causes are invalid address of the remote server or browser start-up failure.")
             e.message.contains("UnknownHostException - host-does-not-exist")
     }

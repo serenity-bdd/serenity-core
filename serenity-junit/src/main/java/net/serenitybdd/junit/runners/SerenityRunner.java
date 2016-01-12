@@ -405,6 +405,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
      */
     private void generateReportsFor(final List<TestOutcome> testOutcomeResults) {
         getReportService().generateReportsFor(testOutcomeResults);
+        getReportService().generateConfigurationsReport();
     }
 
 

@@ -5,6 +5,9 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Properties that can be passed to a web driver test to customize its behaviour.
  * The properties can be passed as system properties or placed in the 'thucydides.properties' file using a lower-case,
@@ -89,6 +92,16 @@ public enum ThucydidesSystemProperty {
      * Where should reports be generated (use the system property 'thucydides.outputDirectory').
      */
     THUCYDIDES_OUTPUT_DIRECTORY("thucydides.outputDirectory"),
+
+    /**
+     * Default name of report with configurations. It will contains some values that was used during generation of reports
+     */
+    THUCYDIDES_CONFIGURATION_REPORT("thucydides.configuration.json"),
+
+    /**
+     * Default name of folder, with reports about test flow and aggregation report generation
+     */
+    THUCYDIDES_FLOW_REPORTS_DIR("flow"),
 
     /**
      * Should Thucydides only store screenshots for failing steps?
@@ -394,7 +407,7 @@ public enum ThucydidesSystemProperty {
     BROWSERSTACK_URL,
 
     BROWSERSTACK_OS,
-    
+
     BROWSERSTACK_OS_VERSION,
 
     BROWSERSTACK_BROWSER,
@@ -775,11 +788,21 @@ public enum ThucydidesSystemProperty {
     }
 
     private String withLegacyPrefix(String propertyName) {
-        return propertyName.replaceAll("serenity.","thucydides.");
+        return propertyName.replaceAll("serenity.", "thucydides.");
     }
 
     private String withSerenityPrefix(String propertyName) {
-        return propertyName.replaceAll("thucydides.","serenity.");
+        return propertyName.replaceAll("thucydides.", "serenity.");
+    }
+
+    public String preferredName(){
+        return withSerenityPrefix(getPropertyName());
+    }
+
+    public List<String> legacyNames(){
+        List<String> names = new ArrayList<>(1);
+        names.add(withLegacyPrefix(getPropertyName()));
+        return names;
     }
 
     public String from(EnvironmentVariables environmentVariables, String defaultValue) {

@@ -121,6 +121,7 @@ class ThucydidesContext {
 
     public void generateReports() {
         reportService.generateReportsFor(latestTestOutcomes());
+        reportService.generateConfigurationsReport();
     }
 
     private List<TestOutcome> latestTestOutcomes() {

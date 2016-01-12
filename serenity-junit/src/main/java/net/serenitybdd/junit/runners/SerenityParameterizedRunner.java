@@ -191,6 +191,7 @@ public class SerenityParameterizedRunner extends Suite {
 
     private void generateReportsFor(List<TestOutcome> testOutcomes) {
         getReportService().generateReportsFor(testOutcomes);
+        getReportService().generateConfigurationsReport();
     }
 
     private ReportService getReportService() {

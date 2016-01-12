@@ -1,5 +1,7 @@
 package net.thucydides.core.reports;
 
+import com.typesafe.config.*;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.junit.JUnitXMLOutcomeReporter;
@@ -9,8 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -97,6 +102,35 @@ public class ReportService {
         for (final AcceptanceTestReporter reporter : getSubscribedReporters()) {
             generateReportsFor(reporter, allTestOutcomes);
         }
+    }
+
+    /**
+     *
+     * Store some configuration properties under output directory
+     */
+    public void generateConfigurationsReport(){
+
+        final Configuration configuration = Injectors.getInjector().getInstance(Configuration.class);
+        Config config = ConfigFactory.empty();
+
+        config = config.withValue(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.preferredName(),
+                ConfigValueFactory.fromAnyRef(configuration.getOutputDirectory().getAbsolutePath()));
+
+        try {
+            final boolean autoFlush = true;
+            final Path flow = this.outputDirectory.toPath().resolve(
+                    ThucydidesSystemProperty.THUCYDIDES_FLOW_REPORTS_DIR.preferredName());
+            final Path file = flow.resolve(ThucydidesSystemProperty.THUCYDIDES_CONFIGURATION_REPORT.preferredName());
+            Files.createDirectories(flow);
+            try (Writer writer = new PrintWriter(Files.newBufferedWriter(file, Charset.defaultCharset()), autoFlush)) {
+                LOGGER.debug("Generating report for configuration");
+                writer.write(config.root().render(ConfigRenderOptions.concise().setJson(true)));
+            }
+        } catch (final Exception e) {
+            throw new ReportGenerationFailedError(
+                    "Failed to generate configuration reports", e);
+        }
+
     }
 
     private void generateReportsFor(final AcceptanceTestReporter reporter, final TestOutcomes testOutcomes) {

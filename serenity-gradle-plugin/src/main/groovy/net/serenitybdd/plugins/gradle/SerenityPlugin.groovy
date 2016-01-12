@@ -5,20 +5,13 @@ import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-import java.nio.file.Files
-
 class SerenityPlugin implements Plugin<Project> {
 
     File reportDirectory
 
     @Override
     void apply(Project project) {
-        def configuration = loadProperties(project)
         project.extensions.create("serenity", SerenityPluginExtension)
-        if(configuration."serenity.outputDirectory"){
-            project.serenity.outputDirectory = configuration."serenity.outputDirectory"
-            project.serenity.sourceDirectory = configuration."serenity.outputDirectory"
-        }
         reportDirectory = prepareReportDirectory(project)
 
         project.task('aggregate') {
@@ -77,17 +70,5 @@ class SerenityPlugin implements Plugin<Project> {
 
     def prepareReportDirectory(Project project) {
         new File(project.projectDir, project.serenity.outputDirectory)
-    }
-
-    def loadProperties(def project){
-        def configuration = new Properties()
-        def serenityProperties = project.rootDir.toPath().resolve("serenity.properties")
-        if(Files.exists(serenityProperties)){
-            serenityProperties.withInputStream {
-                configuration.load(it)
-            }
-        }
-        configuration.putAll(System.properties)
-        configuration
     }
 }

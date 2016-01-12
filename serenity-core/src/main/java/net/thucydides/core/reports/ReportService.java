@@ -110,22 +110,22 @@ public class ReportService {
      */
     public void generateConfigurationsReport(){
 
-        Configuration configuration = Injectors.getInjector().getInstance(Configuration.class);
+        final Configuration configuration = Injectors.getInjector().getInstance(Configuration.class);
         Config config = ConfigFactory.empty();
 
-        config.withValue(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.preferredName(),
+        config = config.withValue(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.preferredName(),
                 ConfigValueFactory.fromAnyRef(configuration.getOutputDirectory().getAbsolutePath()));
 
         try {
-            boolean autoFlush = true;
-            Path file = this.outputDirectory.toPath()
+            final boolean autoFlush = true;
+            final Path file = this.outputDirectory.toPath()
                     .resolve(ThucydidesSystemProperty.THUCYDIDES_CONFIGURATION_REPORT.preferredName());
             Files.createDirectories(this.outputDirectory.toPath());
             try (Writer writer = new PrintWriter(Files.newBufferedWriter(file, Charset.defaultCharset()), autoFlush)) {
                 LOGGER.debug("Generating report for configuration");
                 writer.write(config.root().render(ConfigRenderOptions.concise().setJson(true)));
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new ReportGenerationFailedError(
                     "Failed to generate configuration reports", e);
         }

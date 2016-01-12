@@ -120,7 +120,7 @@ public class ReportService {
             boolean autoFlush = true;
             Path file = this.outputDirectory.toPath()
                     .resolve(ThucydidesSystemProperty.THUCYDIDES_CONFIGURATION_REPORT.preferredName());
-            Files.createDirectories(file);
+            Files.createDirectories(this.outputDirectory.toPath());
             try (Writer writer = new PrintWriter(Files.newBufferedWriter(file, Charset.defaultCharset()), autoFlush)) {
                 LOGGER.debug("Generating report for configuration");
                 writer.write(config.root().render(ConfigRenderOptions.concise().setJson(true)));

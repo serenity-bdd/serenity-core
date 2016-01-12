@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.5'
         classpath 'org.ajoberstar:gradle-git:1.2.0'
         classpath 'org.pegdown:pegdown:1.4.1'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.11.3'
@@ -16,7 +16,7 @@ import org.ajoberstar.gradle.git.release.opinion.Strategies
 import org.ajoberstar.grgit.Grgit
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.5'
+    gradleVersion = "${gradleVersion}"
 }
 
 subprojects {
@@ -25,7 +25,8 @@ subprojects {
 
 ext {
     seleniumVersion = '2.48.2'
-    groovyVersion = '2.3.10'
+    groovyVersion = '2.4.4'
+    gradleVersion = '2.10'
     junitVersion = '4.12'
     hamcrestVersion = '1.3'
     springVersion = '4.1.6.RELEASE'
@@ -218,7 +219,7 @@ subprojects {
         testCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
-        testCompile('org.spockframework:spock-core:1.0-groovy-2.3') {
+        testCompile('org.spockframework:spock-core:1.0-groovy-2.4') {
             exclude group: "junit"
             exclude group:"org.codehaus.groovy", module: "groovy-all"
 
@@ -394,4 +395,12 @@ subprojects {
         }
     }
 
+    task wrapper(type: Wrapper) {
+        gradleVersion = "${gradleVersion}"
+    }
+
+    task copyDeps(type: Copy) {
+        from configurations.runtime
+        into project.projectDir.path + "/lib"
+    }
 }

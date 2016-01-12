@@ -1,5 +1,7 @@
 package net.thucydides.core.reports;
 
+import com.typesafe.config.*;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.junit.JUnitXMLOutcomeReporter;
@@ -9,8 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -97,6 +102,34 @@ public class ReportService {
         for (final AcceptanceTestReporter reporter : getSubscribedReporters()) {
             generateReportsFor(reporter, allTestOutcomes);
         }
+    }
+
+    /**
+     *
+     * Store some configuration properties under output directory
+     */
+    public void generateConfigurationsReport(){
+
+        Configuration configuration = Injectors.getInjector().getInstance(Configuration.class);
+        Config config = ConfigFactory.empty();
+
+        config.withValue(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.preferredName(),
+                ConfigValueFactory.fromAnyRef(configuration.getOutputDirectory().getAbsolutePath()));
+
+        try {
+            boolean autoFlush = true;
+            Path file = this.outputDirectory.toPath()
+                    .resolve(ThucydidesSystemProperty.THUCYDIDES_CONFIGURATION_REPORT.preferredName());
+            Files.createDirectories(file);
+            try (Writer writer = new PrintWriter(Files.newBufferedWriter(file, Charset.defaultCharset()), autoFlush)) {
+                LOGGER.debug("Generating report for configuration");
+                writer.write(config.root().render(ConfigRenderOptions.concise().setJson(true)));
+            }
+        } catch (Exception e) {
+            throw new ReportGenerationFailedError(
+                    "Failed to generate configuration reports", e);
+        }
+
     }
 
     private void generateReportsFor(final AcceptanceTestReporter reporter, final TestOutcomes testOutcomes) {

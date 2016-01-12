@@ -99,6 +99,11 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_CONFIGURATION_REPORT("thucydides.configuration.json"),
 
     /**
+     * Default name of folder, with reports about test flow and aggregation report generation
+     */
+    THUCYDIDES_FLOW_REPORTS_DIR("flow"),
+
+    /**
      * Should Thucydides only store screenshots for failing steps?
      * This can save disk space and speed up the tests somewhat. Useful for data-driven testing.
      * @deprecated This property is still supported, but thucydides.take.screenshots provides more fine-grained control.
@@ -783,11 +788,11 @@ public enum ThucydidesSystemProperty {
     }
 
     private String withLegacyPrefix(String propertyName) {
-        return propertyName.replaceAll("serenity.","thucydides.");
+        return propertyName.replaceAll("serenity.", "thucydides.");
     }
 
     private String withSerenityPrefix(String propertyName) {
-        return propertyName.replaceAll("thucydides.","serenity.");
+        return propertyName.replaceAll("thucydides.", "serenity.");
     }
 
     public String preferredName(){

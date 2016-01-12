@@ -118,9 +118,10 @@ public class ReportService {
 
         try {
             final boolean autoFlush = true;
-            final Path file = this.outputDirectory.toPath()
-                    .resolve(ThucydidesSystemProperty.THUCYDIDES_CONFIGURATION_REPORT.preferredName());
-            Files.createDirectories(this.outputDirectory.toPath());
+            final Path flow = this.outputDirectory.toPath().resolve(
+                    ThucydidesSystemProperty.THUCYDIDES_FLOW_REPORTS_DIR.preferredName());
+            final Path file = flow.resolve(ThucydidesSystemProperty.THUCYDIDES_CONFIGURATION_REPORT.preferredName());
+            Files.createDirectories(flow);
             try (Writer writer = new PrintWriter(Files.newBufferedWriter(file, Charset.defaultCharset()), autoFlush)) {
                 LOGGER.debug("Generating report for configuration");
                 writer.write(config.root().render(ConfigRenderOptions.concise().setJson(true)));

@@ -2,7 +2,9 @@ package net.serenitybdd.plugins.gradle
 
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Ignore
 import spock.lang.Specification
+import spock.lang.Ignore
 import net.thucydides.core.util.TestResources
 import java.nio.file.Files
 
@@ -97,6 +99,7 @@ class WhenUsingTheGradlePlugin extends Specification {
             Files.exists reports.resolve("index.html")
     }
 
+    @Ignore('should be upgraded to use gradle 2.10 features')
     def "should assemble aggregate report of gradle project in output dir"() {
         given: "project with customized properties for aggregation task"
             def testProject = TestResources

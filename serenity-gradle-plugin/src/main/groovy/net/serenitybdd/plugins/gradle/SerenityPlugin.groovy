@@ -1,7 +1,11 @@
 package net.serenitybdd.plugins.gradle
 
+import net.thucydides.core.guice.Injectors
 import net.thucydides.core.reports.ResultChecker
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
+import net.thucydides.core.util.EnvironmentVariables
+import net.thucydides.core.webdriver.Configuration;
+
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -13,12 +17,17 @@ class SerenityPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        def configuration = loadProperties(project)
+//        def configuration = loadProperties(project)
         project.extensions.create("serenity", SerenityPluginExtension)
-        if(configuration."serenity.outputDirectory"){
+/*
+        def serenityConfiguration = Injectors.getInjector().getProvider(Configuration.class).get()
+        serenityConfiguration.getOutputDirectory()
+*/
+
+/*        if(configuration."serenity.outputDirectory"){
             project.serenity.outputDirectory = configuration."serenity.outputDirectory"
             project.serenity.sourceDirectory = configuration."serenity.outputDirectory"
-        }
+        }*/
         reportDirectory = prepareReportDirectory(project)
 
         project.task('aggregate') {

@@ -438,11 +438,11 @@ class WhenRunningTestScenarios extends Specification {
 
     def "tests for multiple stories should be written to the output directory"() {
         when:
-        new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
-        new ATestableThucydidesRunnerSample(SampleFailingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
-        def xmlReports = reload(temporaryDirectory).list().findAll {it.endsWith(".xml") && !it.startsWith("SERENITY-")}
+            new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
+            new ATestableThucydidesRunnerSample(SampleFailingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
+            def xmlReports = reload(temporaryDirectory).list().findAll {it.endsWith(".xml") && !it.startsWith("SERENITY-")}
         then:
-        xmlReports.size() == 6
+            xmlReports.size() == 6
     }
 
     def "HTML test results should be written to the output directory"() {

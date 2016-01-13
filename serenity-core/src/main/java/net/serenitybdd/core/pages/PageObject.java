@@ -1058,6 +1058,13 @@ public abstract class PageObject {
         return findBy(xpathOrCssSelector);
     }
 
+    public <T extends WebElementFacade> T moveTo(By locator) {
+        if (!driverIsDisabled()) {
+            withAction().moveToElement(find(locator)).perform();
+        }
+        return find(locator);
+    }
+
     public void waitForAngularRequestsToFinish() {
         if ((boolean) getJavascriptExecutorFacade().executeScript(
                 "return (typeof angular !== 'undefined')? true : false;")) {

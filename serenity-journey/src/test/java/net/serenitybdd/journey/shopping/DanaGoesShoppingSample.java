@@ -1,5 +1,6 @@
 package net.serenitybdd.journey.shopping;
 
+import net.serenitybdd.PeopleAreTerriblyIncorrect;
 import net.serenitybdd.journey.shopping.tasks.HaveItemsDelivered;
 import net.serenitybdd.journey.shopping.tasks.Purchase;
 import net.serenitybdd.junit.runners.SerenityRunner;
@@ -106,6 +107,38 @@ public class DanaGoesShoppingSample {
     public void shouldBeAbleToPurchaseAnItemWithANegativeAmount() {
         givenThat(dana).attemptsTo(purchase().anApple().thatCosts(-10).dollars(), // Will fail with an error
                 purchase().aPear().thatCosts(5).dollars());  // Should be skipped
+    }
+
+    // Expected to fail with two failues
+    @Test
+    public void shouldBeAbleToPurchaseAnItemWithAllTheRightDetails() {
+        givenThat(dana).attemptsTo(purchase().anApple().thatCosts(10).dollars(),
+                                   purchase().aPear().thatCosts(5).dollars());
+
+        then(dana).should(seeThat(theTotalCost(), equalTo(20)),
+                                  seeThat(theThankYouMessage(), equalTo("De nada")));
+    }
+
+    // Expected to fail with two failures and a compromised test
+    @Test
+    public void shouldBeAbleToPurchaseAnItemWithACompromisedTest() {
+        givenThat(dana).attemptsTo(purchase().anApple().thatCosts(10).dollars(),
+                purchase().aPear().thatCosts(5).dollars());
+
+        then(dana).should(seeThat(theTotalCost(), equalTo(20)),
+                seeThat(theThankYouMessage(), equalTo("De nada")).orComplainWith(PeopleAreTerriblyIncorrect.class),
+                seeThat(theTotalCost(), equalTo(20)));
+    }
+
+
+    // Expected to fail with two failures and a skipped
+    @Test
+    public void shouldBeAbleToPurchaseAnItemWithAllTheRightDetailsAndContinue() {
+        givenThat(dana).attemptsTo(purchase().anApple().thatCosts(10).dollars(),
+                purchase().aPear().thatCosts(5).dollars());
+
+        then(dana).should(seeThat(theTotalCost(), equalTo(20)));
+        and(dana).should(seeThat(theThankYouMessage(), equalTo("De nada")));
     }
 }
 

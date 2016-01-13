@@ -33,9 +33,13 @@ public class Complaint {
 
     public static Error from(Class<? extends Error> complaintType, Throwable actualError) {
         try {
-            return complaintType.getConstructor(String.class, Throwable.class).newInstance(actualError);
+            return complaintType.getConstructor(Throwable.class).newInstance(actualError);
         } catch (Exception e) {
-            return new AssertionError(String.format(NO_VALID_CONSTRUCTOR, complaintType.getSimpleName()));
+            try {
+                return complaintType.getConstructor(String.class, Throwable.class).newInstance(actualError.getMessage(), actualError);
+            } catch (Exception e1) {
+                return new AssertionError(String.format(NO_VALID_CONSTRUCTOR, complaintType.getSimpleName()));
+            }
         }
     }
 }

@@ -31,6 +31,7 @@ import net.thucydides.core.statistics.service.TagProvider;
 import net.thucydides.core.statistics.service.TagProviderService;
 import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepFailureException;
+import net.thucydides.core.steps.TestFailureCause;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.NameConverter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -61,7 +62,7 @@ import static org.hamcrest.Matchers.is;
  * includes the narrative steps taken during the test, screenshots at each step,
  * the results of each step, and the overall result. A test scenario
  * can be associated with a user story using the UserStory annotation.
- *
+ * <p/>
  * A TestOutcome is stored after a test is executed. When the aggregate reports
  * are generated, the test outcome files are loaded into memory and processed.
  *
@@ -83,7 +84,7 @@ public class TestOutcome {
     /**
      * The class containing the test method, if the test is implemented in a Java class.
      */
-    private  transient Class<?> testCase;
+    private transient Class<?> testCase;
 
     private String testCaseName;
 
@@ -218,6 +219,7 @@ public class TestOutcome {
     /**
      * The title is immutable once set. For convenience, you can create a test
      * run directly with a title using this constructor.
+     *
      * @param name The name of the Java method that implements this test.
      */
     public TestOutcome(final String name) {
@@ -283,15 +285,16 @@ public class TestOutcome {
 
     public EnvironmentVariables getEnvironmentVariables() {
         if (environmentVariables == null) {
-            environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get() ;
+            environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
         }
         return environmentVariables;
     }
 
     /**
      * A test outcome should relate to a particular test class or user story class.
-     * @param name The name of the Java method implementing this test, if the test is a JUnit or TestNG test (for example)
-     * @param testCase The test class that contains this test method, if the test is a JUnit or TestNG test
+     *
+     * @param name      The name of the Java method implementing this test, if the test is a JUnit or TestNG test (for example)
+     * @param testCase  The test class that contains this test method, if the test is a JUnit or TestNG test
      * @param userStory If the test is not implemented by a Java class (e.g. an easyb story), we may just use the Story class to
      *                  represent the story in which the test is implemented.
      */
@@ -376,7 +379,7 @@ public class TestOutcome {
     private List<String> removeDuplicates(List<String> issues) {
         List<String> issuesWithNoDuplicates = Lists.newArrayList();
         if (issues != null) {
-            for(String issue : issues) {
+            for (String issue : issues) {
                 if (!issuesWithNoDuplicates.contains(issue)) {
                     issuesWithNoDuplicates.add(issue);
                 }
@@ -387,8 +390,9 @@ public class TestOutcome {
 
     /**
      * Create a new test outcome instance for a given test class or user story.
-     * @param methodName  The name of the Java method implementing this test,
-     * @param testCase The  JUnit or TestNG test class that contains this test method
+     *
+     * @param methodName The name of the Java method implementing this test,
+     * @param testCase   The  JUnit or TestNG test class that contains this test method
      * @return A new TestOutcome object for this test.
      */
     public static TestOutcome forTest(final String methodName, final Class<?> testCase) {
@@ -548,7 +552,7 @@ public class TestOutcome {
     }
 
     public void setAllStepsTo(TestResult result) {
-        for(TestStep step : testSteps) {
+        for (TestStep step : testSteps) {
             step.setResult(result);
         }
     }
@@ -573,7 +577,7 @@ public class TestOutcome {
     }
 
     public void resetFailingStepsCausedBy(Class<? extends Throwable> expected) {
-        for(TestStep step : testSteps) {
+        for (TestStep step : testSteps) {
             resetFailingStepsIn(step).causedBy(expected);
         }
         clearTestFailure();
@@ -611,7 +615,7 @@ public class TestOutcome {
     }
 
     private void updateOverallResultsFor(List<TestStep> testSteps) {
-        for(TestStep testStep : testSteps) {
+        for (TestStep testStep : testSteps) {
             updateOverallResultsFor(testStep.getChildren());
             updateOverallResultsFor(testStep);
         }
@@ -624,7 +628,7 @@ public class TestOutcome {
     public Optional<TestStep> getFailingStep() {
         List<TestStep> stepsInReverseOrder = Lists.newArrayList(getFlattenedTestSteps());
         Collections.reverse(stepsInReverseOrder);
-        for(TestStep step : stepsInReverseOrder) {
+        for (TestStep step : stepsInReverseOrder) {
             if (step.isError() || step.isFailure()) {
                 return Optional.of(step);
             }
@@ -635,6 +639,7 @@ public class TestOutcome {
     private class GetLastStepBuilder {
 
         int maxCount;
+
         public GetLastStepBuilder(int maxCount) {
             this.maxCount = maxCount;
         }
@@ -648,7 +653,7 @@ public class TestOutcome {
 
     private TestStep merge(List<TestStep> stepsToMerge) {
         TestStep mergedStep = stepsToMerge.get(0);
-        for(TestStep nextStep : stepsToMerge.subList(1, stepsToMerge.size())) {
+        for (TestStep nextStep : stepsToMerge.subList(1, stepsToMerge.size())) {
             mergedStep = mergeStep(mergedStep).into(nextStep);
         }
         return mergedStep;
@@ -667,7 +672,7 @@ public class TestOutcome {
 
         public TestStep into(TestStep nextStep) {
             TestStep mergedStep = nextStep.addChildStep(previousStep);
-            if (nextStep.getResult() == SKIPPED  && (wasUnsuccessful(previousStep))) {
+            if (nextStep.getResult() == SKIPPED && (wasUnsuccessful(previousStep))) {
                 nextStep.setResult(UNDEFINED);
             }
             mergedStep.setResult(merge(nextStep.getResult()).with(previousStep.getResult()));
@@ -680,7 +685,7 @@ public class TestOutcome {
     }
 
     private boolean wasUnsuccessful(TestStep previousStep) {
-        return  (previousStep.getResult() == ERROR || previousStep.getResult() == FAILURE || previousStep.getResult() == COMPROMISED);
+        return (previousStep.getResult() == ERROR || previousStep.getResult() == FAILURE || previousStep.getResult() == COMPROMISED);
     }
 
     public class TitleBuilder {
@@ -754,7 +759,7 @@ public class TestOutcome {
 
     public String toJson() {
         JSONConverter jsonConverter = Injectors.getInjector().getInstance(JSONConverter.class);
-        try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             jsonConverter.toJson(this, outputStream);
             return outputStream.toString();
         } catch (IOException e) {
@@ -779,7 +784,7 @@ public class TestOutcome {
     }
 
     private String obtainUnqualifiedTitleFromAnnotationOrMethodName() {
-         return getBaseTitleFromAnnotationOrMethodName();
+        return getBaseTitleFromAnnotationOrMethodName();
     }
 
     private String getBaseTitleFromAnnotationOrMethodName() {
@@ -841,6 +846,7 @@ public class TestOutcome {
      * An acceptance test is made up of a series of steps. Each step is in fact
      * a small test, which follows on from the previous one. The outcome of the
      * acceptance test as a whole depends on the outcome of all of the steps.
+     *
      * @return A list of top-level test steps for this test.
      */
     public List<TestStep> getTestSteps() {
@@ -852,7 +858,7 @@ public class TestOutcome {
     }
 
     public boolean hasRestQueries() {
-        for(TestStep step : getFlattenedTestSteps()) {
+        for (TestStep step : getFlattenedTestSteps()) {
             if (step.hasRestQuery()) {
                 return true;
             }
@@ -905,7 +911,7 @@ public class TestOutcome {
 
     public boolean hasNonStepFailure() {
         boolean stepsContainFailure = false;
-        for(TestStep step : getFlattenedTestSteps()) {
+        for (TestStep step : getFlattenedTestSteps()) {
             if (step.getResult() == FAILURE || step.getResult() == ERROR || step.getResult() == COMPROMISED) {
                 stepsContainFailure = true;
             }
@@ -943,6 +949,7 @@ public class TestOutcome {
      * of the steps are ignored, the test will be considered 'ignored'. If all
      * of the tests succeed except the ignored tests, the test is a success.
      * The test result can also be overridden using the 'setResult()' method.
+     *
      * @return The outcome of this test.
      */
     public TestResult getResult() {
@@ -961,7 +968,7 @@ public class TestOutcome {
     }
 
     public TestOutcome recordSteps(final List<TestStep> steps) {
-        for(TestStep step : steps) {
+        for (TestStep step : steps) {
             recordStep(step);
         }
         return this;
@@ -969,6 +976,7 @@ public class TestOutcome {
 
     /**
      * Add a test step to this acceptance test.
+     *
      * @param step a completed step to be added to this test outcome.
      * @return this TestOucome insstance - this is a convenience to allow method chaining.
      */
@@ -995,7 +1003,7 @@ public class TestOutcome {
 
     private void renumberTestSteps() {
         int count = 1;
-        for(TestStep step : testSteps) {
+        for (TestStep step : testSteps) {
             count = step.renumberFrom(count);
         }
     }
@@ -1013,6 +1021,7 @@ public class TestOutcome {
      * If no user story is defined, no feature can be returned, so the method returns null.
      * If a user story has been defined without a class (for example, one that has been reloaded),
      * the feature will be built using the feature name and id in the user story.
+     *
      * @return The Feature defined for this TestOutcome, if any
      */
     public ApplicationFeature getFeature() {
@@ -1125,6 +1134,32 @@ public class TestOutcome {
         }
     }
 
+    public void appendTestFailure(TestFailureCause failureCause) {
+        if (!failureCause.isDefined()) {
+            this.testFailureCause = null;
+            this.testFailureClassname = "";
+            this.testFailureMessage = "";
+            return;
+        }
+
+        if (noStepHasFailedSoFar()) {
+            this.testFailureClassname = failureCause.getRootCause().getErrorType();
+            this.testFailureMessage = failureCause.getTestFailureMessage();
+            this.setAnnotatedResult(failureCause.getAnnotatedResult());
+            this.testFailureCause = failureCause.getRootCause();
+        } else {
+            this.testFailureClassname = AssertionError.class.getName();
+            this.testFailureMessage = this.testFailureMessage + System.lineSeparator() + failureCause.getTestFailureMessage();
+            this.setAnnotatedResult(TestResultList.of(this.getAnnotatedResult(), failureCause.getAnnotatedResult()).getOverallResult());
+        }
+
+    }
+
+    private boolean noStepHasFailedSoFar() {
+        return this.testFailureCause == null;
+    }
+
+
     public void setTestFailureCause(FailureCause testFailureCause) {
         this.testFailureCause = testFailureCause;
     }
@@ -1138,7 +1173,7 @@ public class TestOutcome {
     }
 
     public FailureCause getNestedTestFailureCause() {
-        for(TestStep step : getFlattenedTestSteps()) {
+        for (TestStep step : getFlattenedTestSteps()) {
             if (step.getException() != null) {
                 return step.getException();
             }
@@ -1188,7 +1223,8 @@ public class TestOutcome {
 
     public void setAnnotatedResult(final TestResult annotatedResult) {
         if (this.annotatedResult != PENDING) {
-            this.annotatedResult = annotatedResult;
+            this.annotatedResult = (this.annotatedResult == null) ?
+                    annotatedResult : TestResultList.of(this.annotatedResult, annotatedResult).getOverallResult();
         }
     }
 
@@ -1241,7 +1277,7 @@ public class TestOutcome {
     }
 
     private void addVersionsDefinedInTagsTo(List<String> allVersions) {
-        for(TestTag tag : getTags()) {
+        for (TestTag tag : getTags()) {
             if (tag.getType().equalsIgnoreCase("version") && (!allVersions.contains(tag.getName()))) {
                 allVersions.add(tag.getName());
             }
@@ -1272,14 +1308,14 @@ public class TestOutcome {
     }
 
     public TestOutcome addVersion(String version) {
-        if (!getVersions().contains(version)){
+        if (!getVersions().contains(version)) {
             additionalVersions.add(version);
         }
         return this;
     }
 
     public TestOutcome addVersions(List<String> versions) {
-        for(String version : versions) {
+        for (String version : versions) {
             addVersion(version);
         }
         return this;
@@ -1372,11 +1408,11 @@ public class TestOutcome {
 
 
     private Set<TestTag> getTagsUsingTagProviders(List<TagProvider> tagProviders) {
-        Set<TestTag> tags  = Sets.newHashSet();
+        Set<TestTag> tags = Sets.newHashSet();
         for (TagProvider tagProvider : tagProviders) {
             try {
                 tags.addAll(tagProvider.getTagsFor(this));
-            } catch(Throwable theTagProviderFailedButThereIsntMuchWeCanDoAboutIt) {
+            } catch (Throwable theTagProviderFailedButThereIsntMuchWeCanDoAboutIt) {
                 LOGGER.error("Tag provider " + tagProvider + " failure",
                         theTagProviderFailedButThereIsntMuchWeCanDoAboutIt);
             }
@@ -1387,7 +1423,7 @@ public class TestOutcome {
 
     private Set<TestTag> removeRedundantTagsFrom(Set<TestTag> tags) {
         Set<TestTag> optimizedTags = Sets.newHashSet();
-        for(TestTag tag: tags) {
+        for (TestTag tag : tags) {
             if (!aMoreSpecificTagExistsThan(tag).in(tags)) {
                 optimizedTags.add(tag);
             }
@@ -1421,7 +1457,7 @@ public class TestOutcome {
     }
 
     private Converter<String, String> toIssueKeys() {
-        return new Converter<String,String>() {
+        return new Converter<String, String>() {
 
             public String convert(String issueNumber) {
                 String issueKey = issueNumber;
@@ -1471,7 +1507,7 @@ public class TestOutcome {
     public void addNewExamplesFrom(DataTable table) {
         List<DataTableRow> updatedRows = table.getRows();
         if (table.getSize() > dataTable.getSize()) {
-            for(int rowNumber = dataTable.getSize(); rowNumber < updatedRows.size(); rowNumber++) {
+            for (int rowNumber = dataTable.getSize(); rowNumber < updatedRows.size(); rowNumber++) {
                 dataTable.appendRow(updatedRows.get(rowNumber));
             }
         }
@@ -1567,7 +1603,7 @@ public class TestOutcome {
         if (tagType.equalsIgnoreCase(ISSUES) && !getIssueKeys().isEmpty()) {
             return Optional.of(Joiner.on(",").join(getIssueKeys()));
         } else {
-            for(TestTag tag : getTags()) {
+            for (TestTag tag : getTags()) {
                 if (tag.getType().equalsIgnoreCase(tagType)) {
                     return Optional.of(tag.getName());
                 }
@@ -1725,6 +1761,7 @@ public class TestOutcome {
 
     /**
      * Returns the link to the associated video (e.g. from Saucelabs) for this test.
+     *
      * @return a URL.
      */
     public String getVideoLink() {
@@ -1857,7 +1894,7 @@ public class TestOutcome {
 
     public Long getRecentTestRunCount() {
         if (getStatistics() == null) return 0L;
-        return (getStatistics().getTotalTestRuns() > RECENT_TEST_RUN_COUNT) ? RECENT_TEST_RUN_COUNT :  getStatistics().getTotalTestRuns();
+        return (getStatistics().getTotalTestRuns() > RECENT_TEST_RUN_COUNT) ? RECENT_TEST_RUN_COUNT : getStatistics().getTotalTestRuns();
     }
 
     public int getRecentPassCount() {
@@ -1899,7 +1936,7 @@ public class TestOutcome {
         }
         TestStep firstExample = getTestSteps().get(0);
         StringBuilder sampleScenario = new StringBuilder();
-        for(TestStep topLevelChildStep : firstExample.getChildren()) {
+        for (TestStep topLevelChildStep : firstExample.getChildren()) {
             sampleScenario.append(topLevelChildStep.getDescription());
             if (topLevelChildStep != lastOf(firstExample.getChildren())) {
                 sampleScenario.append("\n");
@@ -1948,7 +1985,7 @@ public class TestOutcome {
     public Optional<TestTag> getFeatureTag() {
         if (getPath() != null) {
             if (getPath().endsWith(".feature")) {
-                String featureName = humanize(new File(getPath()).getName().replace(".feature",""));
+                String featureName = humanize(new File(getPath()).getName().replace(".feature", ""));
                 return Optional.of(TestTag.withName(featureName).andType("feature"));
             } else if (getPath().endsWith(".story")) {
                 String featureName = humanize(new File(getPath()).getName().replace(".story", ""));
@@ -1960,6 +1997,7 @@ public class TestOutcome {
 
     private class StepResetBuilder {
         TestStep step;
+
         public StepResetBuilder(TestStep step) {
             this.step = step;
         }
@@ -1969,7 +2007,7 @@ public class TestOutcome {
                 step.clearException();
                 step.setResult(TestResult.SUCCESS);
             }
-            for(TestStep childStep : step.getChildren()) {
+            for (TestStep childStep : step.getChildren()) {
                 resetFailingStepsIn(childStep).causedBy(expected);
             }
         }
@@ -1983,7 +2021,7 @@ public class TestOutcome {
         }
 
         public boolean in(Set<TestTag> tags) {
-            for(TestTag otherTag : tags) {
+            for (TestTag otherTag : tags) {
                 if ((otherTag != tag) && (otherTag.isAsOrMoreSpecificThan(tag))) {
                     return true;
                 }
@@ -2008,7 +2046,7 @@ public class TestOutcome {
 
     private void removeSteps(List<TestStep> stepsToReplace) {
         List<TestStep> currentTestSteps = ImmutableList.copyOf(testSteps);
-        for(TestStep testStep : currentTestSteps) {
+        for (TestStep testStep : currentTestSteps) {
             if (stepsToReplace.contains(testStep)) {
                 testSteps.remove(testStep);
             }

@@ -49,4 +49,20 @@ public class EventBusInterface {
 
 
     public boolean aStepHasFailed() { return StepEventBus.getEventBus().getBaseStepListener().aStepHasFailed(); }
+
+    public boolean shouldIgnoreConsequences() {
+        if (StepEventBus.getEventBus().softAssertsActive()) {
+            return false;
+        }
+        return (StepEventBus.getEventBus().currentTestIsSuspended() || StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed());
+    }
+
+    public void enableSoftAsserts() {
+        StepEventBus.getEventBus().enableSoftAsserts();
+    }
+
+    public void disableSoftAsserts() {
+        StepEventBus.getEventBus().disableSoftAsserts();
+    }
+
 }

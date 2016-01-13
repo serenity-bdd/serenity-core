@@ -3,6 +3,7 @@ package net.serenitybdd.screenplay;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.events.ActorAsksQuestion;
 import net.serenitybdd.screenplay.formatting.StripRedundantTerms;
+import net.thucydides.core.steps.StepEventBus;
 import org.hamcrest.Matcher;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,7 +21,8 @@ public class QuestionConsequence<T> extends BaseConsequence<T> {
 
     @Override
     public void evaluateFor(Actor actor) {
-        if (thisStepShouldBeIgnored()) { return; }
+        // TODO: Override if running consequences
+        if (thisStepShouldBeIgnored() && !StepEventBus.getEventBus().softAssertsActive()) { return; }
 
         Broadcaster.getEventBus().post(new ActorAsksQuestion(question));
         try {

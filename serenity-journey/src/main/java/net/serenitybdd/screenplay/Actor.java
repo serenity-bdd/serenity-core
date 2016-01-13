@@ -5,9 +5,7 @@ import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SkipNested;
 import net.serenitybdd.core.eventbus.Broadcaster;
-import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
-import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
-import net.serenitybdd.screenplay.events.ActorPerforms;
+import net.serenitybdd.screenplay.events.*;
 import net.serenitybdd.screenplay.exceptions.IgnoreStepException;
 import net.serenitybdd.screenplay.formatting.FormattedTitle;
 import net.thucydides.core.annotations.Pending;
@@ -24,6 +22,7 @@ public class Actor implements PerformsTasks, SkipNested {
 
     private final PerformedTaskTally taskTally = new PerformedTaskTally();
     private EventBusInterface eventBusInterface = new EventBusInterface();
+    private ConsequenceListener consequenceListener = new ConsequenceListener(eventBusInterface);
 
     private Map<String, Object> notepad = newHashMap();
     private Map<Class, Ability> abilities = newHashMap();
@@ -72,14 +71,6 @@ public class Actor implements PerformsTasks, SkipNested {
             perform(task);
         }
         endPerformance();
-    }
-
-    private void beginPerformance() {
-        Broadcaster.getEventBus().post(new ActorBeginsPerformanceEvent(name));
-    }
-
-    private void endPerformance() {
-        Broadcaster.getEventBus().post(new ActorEndsPerformanceEvent(name));
     }
 
     public <ANSWER> ANSWER asksFor(Question<ANSWER> question) {
@@ -146,12 +137,22 @@ public class Actor implements PerformsTasks, SkipNested {
         should(consequences);
     }
 
+
+
     public final void should(Consequence... consequences) {
-        beginPerformance();
+
+        ErrorTally errorTally = new ErrorTally(eventBusInterface);
+
+        startConsequenceCheck();
+
         for (Consequence consequence : consequences) {
-            check(consequence);
+            check(consequence, errorTally);
         }
-        endPerformance();
+
+        endConsequenceCheck();
+
+        errorTally.reportAnyErrors();
+
     }
 
     private boolean anOutOfStepErrorOccurred() {
@@ -159,21 +160,19 @@ public class Actor implements PerformsTasks, SkipNested {
                 && eventBusInterface.getStepCount() > taskTally.getPerformedTaskCount();
     }
 
-    private <T> void check(Consequence<T> consequence) {
+    private <T> void check(Consequence<T> consequence, ErrorTally errorTally) {
         try {
             eventBusInterface.reportNewStepWithTitle(FormattedTitle.ofConsequence(consequence));
-            if (StepEventBus.getEventBus().currentTestIsSuspended() || StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed()) {
+            if (eventBusInterface.shouldIgnoreConsequences()) {
                 StepEventBus.getEventBus().stepIgnored();
+            } else {
+                consequence.evaluateFor(this);
             }
-            consequence.evaluateFor(this);
             eventBusInterface.reportStepFinished();
         } catch (IgnoreStepException e) {
             eventBusInterface.reportStepIgnored();
         } catch (Throwable e) {
-            eventBusInterface.reportStepFailureFor(consequence, e);
-            if (Serenity.shouldThrowErrorsImmediately()) {
-                throw e;
-            }
+            errorTally.recordError(consequence, e);
         }
     }
 
@@ -198,4 +197,25 @@ public class Actor implements PerformsTasks, SkipNested {
     public <T> T gaveAsThe(String key) {
         return recall(key);
     }
+
+    private void beginPerformance() {
+        Broadcaster.getEventBus().post(new ActorBeginsPerformanceEvent(name));
+    }
+
+    private void endPerformance() {
+        Broadcaster.getEventBus().post(new ActorEndsPerformanceEvent(name));
+    }
+
+
+    private void startConsequenceCheck() {
+        consequenceListener.beginConsequenceCheck();
+        Broadcaster.getEventBus().post(new ActorBeginsConsequenceCheckEvent(name));
+    }
+
+    private void endConsequenceCheck() {
+        consequenceListener.endConsequenceCheck();
+        Broadcaster.getEventBus().post(new ActorEndsConsequenceCheckEvent(name));
+    }
+
+
 }

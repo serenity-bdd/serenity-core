@@ -527,7 +527,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public void stepFailed(StepFailure failure) {
         takeEndOfStepScreenshotFor(FAILURE);
-        getCurrentTestOutcome().determineTestFailureCause(failure.getException());
+
+        TestFailureCause failureCause = TestFailureCause.from(failure.getException());
+        getCurrentTestOutcome().appendTestFailure(failureCause);
+
         recordFailureDetails(failure);
         currentStepDone(failureAnalysis.resultFor(failure));
     }

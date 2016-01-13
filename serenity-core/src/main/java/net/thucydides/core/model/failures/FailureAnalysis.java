@@ -43,11 +43,11 @@ public class FailureAnalysis {
         if (reportAsPending(testFailureCause)) {
             return PENDING;
         }
-        if (reportAsFailure(testFailureCause)) {
-            return FAILURE;
-        }
         if (reportAsCompromised(testFailureCause)) {
             return COMPROMISED;
+        }
+        if (reportAsFailure(testFailureCause)) {
+            return FAILURE;
         }
         return ERROR;
     }

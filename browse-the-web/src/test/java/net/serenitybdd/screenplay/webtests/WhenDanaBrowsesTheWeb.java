@@ -58,6 +58,7 @@ public class WhenDanaBrowsesTheWeb {
         and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
 
         then(dana).should(seeThat(the(ProfilePage.NAME), isVisible()));
+
         then(dana).should(seeThat(the(ProfilePage.NAME), isCurrentlyVisible()));
         and(dana).should(seeThat(the(ProfilePage.NAME), isEnabled()));
         and(dana).should(seeThat(the(ProfilePage.NAME), isCurrentlyEnabled()));

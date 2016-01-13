@@ -2,6 +2,7 @@ package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.targets.Target;
+import org.openqa.selenium.By;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
@@ -29,4 +30,7 @@ public class Enter {
         return instrumented(EnterValueIntoElement.class, theText, element);
     }
 
+    public EnterValue into(By... locators) {
+        return instrumented(EnterValueIntoBy.class, theText, locators);
+    }
 }

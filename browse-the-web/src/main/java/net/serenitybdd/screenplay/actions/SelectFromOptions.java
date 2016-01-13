@@ -4,6 +4,7 @@ import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.actions.selectactions.*;
 import net.serenitybdd.screenplay.targets.Target;
+import org.openqa.selenium.By;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
@@ -56,4 +57,14 @@ public class SelectFromOptions {
         }
         throw new IllegalStateException("Unknown select strategy " + strategy);
     }
+
+    public Performable from(By... locators) {
+        switch (strategy) {
+            case ByValue: return instrumented(SelectByValueFromBy.class, theText, locators);
+            case ByVisibleText: return instrumented(SelectByVisibleTextFromBy.class, theText, locators);
+            case ByIndex: return instrumented(SelectByIndexFromBy.class, indexValue, locators);
+        }
+        throw new IllegalStateException("Unknown select strategy " + strategy);
+    }
+
 }

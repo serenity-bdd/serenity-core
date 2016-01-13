@@ -1,5 +1,7 @@
 package net.serenitybdd.screenplay.targets;
 
+import org.openqa.selenium.By;
+
 public class TargetBuilder<T> {
     private String targetElementName;
 
@@ -8,11 +10,10 @@ public class TargetBuilder<T> {
     }
 
     public Target locatedBy(String cssOrXPathSelector) {
-        return new Target(targetElementName, cssOrXPathSelector);
+        return new XPathOrCssTarget(targetElementName, cssOrXPathSelector);
     }
 
-    public TargetBuilder<T> onElementNamed(String targetElementName) {
-        this.targetElementName = targetElementName;
-        return this;
+    public Target located(By locator) {
+        return new ByTarget(targetElementName, locator);
     }
 }

@@ -2,6 +2,7 @@ package net.serenitybdd.core.pages;
 
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;
@@ -244,7 +245,7 @@ public abstract class PageObject {
 
     protected RenderedPageObjectView getRenderedView() {
         if (renderedView == null) {
-            renderedView = new RenderedPageObjectView(driver, this, getWaitForTimeout(),true);
+            renderedView = new RenderedPageObjectView(driver, this, getWaitForTimeout(), true);
         }
         return renderedView;
     }
@@ -894,8 +895,20 @@ public abstract class PageObject {
                 getWaitForTimeout().in(MILLISECONDS));
     }
 
-    public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(By selector) {
-        return element(selector);
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(List<By> selectors) {
+        T element = null;
+        for (By selector : selectors) {
+            if (element == null) {
+                element = element(selector);
+            } else {
+                element = element.find(selector);
+            }
+        }
+        return element;
+    }
+
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(By... selectors) {
+        return find(Lists.newArrayList(selectors));
     }
 
     public List<net.serenitybdd.core.pages.WebElementFacade> findAll(By bySelector) {

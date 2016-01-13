@@ -40,6 +40,6 @@ public class UpdateHerProfile implements Performable {
                 UpdateHerProfile.name().to(name),
                 UpdateHerProfile.country().to(countryOfResidence)
         );
-
     }
+
 }

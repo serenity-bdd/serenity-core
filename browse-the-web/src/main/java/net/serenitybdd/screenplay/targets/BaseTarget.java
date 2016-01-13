@@ -5,11 +5,11 @@ import net.serenitybdd.screenplay.Actor;
 
 import java.util.List;
 
-public abstract class Target {
+public abstract class BaseTarget {
 
     protected final String targetElementName;
 
-    public Target(String targetElementName) {
+    public BaseTarget(String targetElementName) {
         this.targetElementName = targetElementName;
     }
 
@@ -26,5 +26,5 @@ public abstract class Target {
 
     public abstract List<WebElementFacade> resolveAllFor(Actor actor);
 
-    public abstract Target called(String name);
+    public abstract BaseTarget called(String name);
 }

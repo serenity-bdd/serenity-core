@@ -25,12 +25,16 @@ public class XPathOrCssTarget extends Target {
         return resolver.findAll(cssOrXPathSelector);
     }
 
-    public XPathOrCssTarget of(String... parameters) {
+    public Target of(String... parameters) {
         return new XPathOrCssTarget(targetElementName, instantiated(cssOrXPathSelector, parameters));
     }
 
-    public XPathOrCssTarget called(String name) {
+    public Target called(String name) {
         return new XPathOrCssTarget(name, cssOrXPathSelector);
+    }
+
+    public String getCssOrXPathSelector() {
+        return cssOrXPathSelector;
     }
 
     private String instantiated(String cssOrXPathSelector, String[] parameters) {

@@ -26,7 +26,7 @@ public class StepFailure {
             if (cause instanceof SerenityManagedException) {
                 this.exceptionClass = ((SerenityManagedException)cause).getExceptionClass();
                 this.message = cause.getMessage();
-                this.stackTraceElements = ((SerenityManagedException)cause).getStackTrace();
+                this.stackTraceElements = cause.getStackTrace();
             } else {
                 this.exceptionClass = cause.getClass();
                 this.message = cause.getMessage();

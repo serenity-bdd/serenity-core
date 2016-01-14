@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.actions;
 
+import com.google.common.collect.Lists;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Action;
 import net.serenitybdd.screenplay.targets.Target;
@@ -22,7 +23,7 @@ public class Click {
     }
 
     public static Action on(By... locators) {
-        return instrumented(ClickOnBy.class, locators);
+        return instrumented(ClickOnBy.class, Lists.newArrayList(locators));
     }
 
 }

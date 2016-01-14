@@ -27,4 +27,14 @@ public abstract class Target {
     public abstract List<WebElementFacade> resolveAllFor(Actor actor);
 
     public abstract Target called(String name);
+
+    public abstract Target of(String... parameters);
+
+    public abstract String getCssOrXPathSelector();
+
+    public String getName() {
+        return targetElementName;
+    }
+
+
 }

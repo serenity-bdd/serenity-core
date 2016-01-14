@@ -26,6 +26,16 @@ public class ByTarget extends Target {
         return resolver.findAll(locator);
     }
 
+
+    public XPathOrCssTarget of(String... parameters) {
+        throw new UnsupportedOperationException("The of() method is not supported for By-type Targets");
+    }
+
+    @Override
+    public String getCssOrXPathSelector() {
+        throw new UnsupportedOperationException("The getCssOrXPathSelector() method is not supported for By-type Targets");
+    }
+
     public ByTarget called(String name) {
         return new ByTarget(name, locator);
     }

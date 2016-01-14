@@ -375,6 +375,9 @@ public class StepEventBus {
     }
 
     public boolean webdriverCallsAreSuspended() {
+        if (softAssertsActive()) {
+            return !webdriverSuspensions.isEmpty();
+        }
         return aStepInTheCurrentTestHasFailed() || !webdriverSuspensions.isEmpty();
     }
 

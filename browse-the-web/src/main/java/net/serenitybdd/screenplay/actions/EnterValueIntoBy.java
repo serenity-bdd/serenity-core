@@ -21,7 +21,7 @@ public class EnterValueIntoBy extends EnterValue {
         this.locators = ImmutableList.copyOf(locators);
     }
 
-    @Step("{0} enters '#theText' into #element#followedBy")
+    @Step("{0} enters '#theText' into #element")
     public <T extends Actor> void performAs(T theUser) {
         resolveFor(theUser).sendKeys(theText);
         resolveFor(theUser).sendKeys(getFollowedByKeys());

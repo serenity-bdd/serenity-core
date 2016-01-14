@@ -8,6 +8,8 @@ public class ProfilePage extends PageObject {
     // Journey-pattern selectors
     public static Target NAME = Target.the("Name").locatedBy("#name");
     public static Target COUNTRY = Target.the("Country of residence").located(By.cssSelector("#country"));
+    public static Target COLOR = Target.the("Favorite Color").locatedBy("#color");
+    public static Target DATE_OF_BIRTH = Target.the("Date of Birth").locatedBy("#dob");
 
     // Illulstrations of classic page object methods
 

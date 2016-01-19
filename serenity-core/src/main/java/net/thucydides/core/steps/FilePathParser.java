@@ -3,6 +3,7 @@ package net.thucydides.core.steps;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
+import java.io.File;
 
 /**
  * Builds a file path by substituting environment variables.
@@ -48,7 +49,7 @@ public class FilePathParser {
     }
 
     protected String getFileSeparator() {
-        return System.getProperty("file.separator");
+        return File.separator;
     }
 
     protected String getFileSeparatorToReplace() {

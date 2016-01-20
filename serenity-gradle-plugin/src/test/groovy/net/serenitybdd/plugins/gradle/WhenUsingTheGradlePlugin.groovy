@@ -24,12 +24,12 @@ class WhenUsingTheGradlePlugin extends Specification {
 
     def "the 'serenity' project property is used to configure the build"() {
         given:
-        Project project = ProjectBuilder.builder().build()
+            Project project = ProjectBuilder.builder().build()
         when:
-        project.apply plugin: 'java'
-        project.apply plugin: 'net.serenity-bdd.aggregator'
+            project.apply plugin: 'java'
+            project.apply plugin: 'net.serenity-bdd.aggregator'
         then:
-        project.serenity.outputDirectory == 'target/site/serenity'
+            project.serenity.outputDirectory == 'target/site/serenity'
     }
 
     def "should add the checkOutcomes task to a project"() {

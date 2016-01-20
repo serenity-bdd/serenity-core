@@ -119,7 +119,7 @@ subprojects {
         if (!JavaVersion.current().isJava8Compatible()) {
             jvmArgs += ["-XX:MaxPermSize=256m"]
         }
-        maxParallelForks = 4
+        maxParallelForks = Runtime.runtime.availableProcessors()
     }
 
     task integrationTests(type: Test) {
@@ -135,6 +135,7 @@ subprojects {
         if (!JavaVersion.current().isJava8Compatible()) {
             jvmArgs '-XX:MaxPermSize=256m'
         }
+        maxParallelForks = Runtime.runtime.availableProcessors()
     }
 
     test {

@@ -34,13 +34,13 @@ def cloneGeneratedJars(def project) {
     }
 }
 
-task copySerenityCore() {
+task copySerenityCore(dependsOn: ':serenity-core:jar') {
     doLast {
         cloneGeneratedJars(project(':serenity-core'))
     }
 }
 
-task copySerenityJunit() {
+task copySerenityJunit(dependsOn: ':serenity-junit:jar') {
     doLast {
         cloneGeneratedJars(project(':serenity-junit'))
     }
@@ -54,6 +54,7 @@ dependencies {
     compile project(':serenity-junit')
     testCompile "junit:junit:${junitVersion}"
     testCompile project(':serenity-core').sourceSets.test.output
+    testCompile project(':serenity-junit').sourceSets.test.output
     testRuntime files(copySerenityCore)
     testRuntime files(copySerenityJunit)
     testRuntime files(createClasspathManifest)

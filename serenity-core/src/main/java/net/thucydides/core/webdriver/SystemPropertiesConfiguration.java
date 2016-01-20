@@ -7,8 +7,11 @@ import net.thucydides.core.model.TakeScreenshots;
 import net.thucydides.core.steps.FilePathParser;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.nio.file.Paths;
 
 import static net.thucydides.core.ThucydidesSystemProperty.*;
 import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
@@ -20,6 +23,8 @@ import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
  *
  */
 public class SystemPropertiesConfiguration implements Configuration {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(SystemPropertiesConfiguration.class);
 
     /**
      * The default browser is Firefox.
@@ -39,9 +44,22 @@ public class SystemPropertiesConfiguration implements Configuration {
      */
     public static final String OUTPUT_DIRECTORY_PROPERTY = ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName();
 
-    private static final String MAVEN_BUILD_DIRECTORY = "project.build.directory";
+    private static final String MAVEN_BASE_DIR = "project.basedir";
 
-    private static final String MAVEN_REPORTS_DIRECTORY = "project.reporting.OutputDirectory";
+
+    /**
+     * If in system properties will be defined project.build.directory or project.reporting.OutputDirectory then it will
+     * be used for output for serenity test reports.
+     * By default maven NEVER push this properties to system environment, but they are available in maven pm.
+     * This property is used when maven/gradle build conta subprojects by serenity  plugins
+     */
+    public static final String PROJECT_BUILD_DIRECTORY = "project.build.directory";
+
+    /**
+     * This property is used when maven/gradle build conta subprojects by serenity  plugins
+     */
+    private static final String PROJECT_REPORTING_OUTPUT_DIRECTORY = "project.reporting.OutputDirectory";
+
     /**
      * By default, when accepting untrusted SSL certificates, assume that these certificates will come from an
      * untrusted issuer or will be self signed. Due to limitation within Firefox, it is easy to find out if the
@@ -67,6 +85,8 @@ public class SystemPropertiesConfiguration implements Configuration {
      * HTML and XML reports will be generated in this directory.
      */
     private File outputDirectory;
+
+    private boolean outputDirectoryResolvedAgainstBuildDir = false;
 
     private String defaultBaseUrl;
 
@@ -117,18 +137,40 @@ public class SystemPropertiesConfiguration implements Configuration {
         String systemDefinedDirectory = (instantiatedPath != null) ? instantiatedPath : DEFAULT_OUTPUT_DIRECTORY;
 
         File newOutputDirectory = new File(systemDefinedDirectory);
+        if (!outputDirectoryResolvedAgainstBuildDir && !newOutputDirectory.isAbsolute()) {
+            newOutputDirectory = resolveIfMavenIsUsed(newOutputDirectory);
+        }
         newOutputDirectory.mkdirs();
+        LOGGER.info("OutputDirectory" + " : " + newOutputDirectory.getAbsolutePath());
         return newOutputDirectory;
     }
 
+    /**
+     * should be base on module dir and not root project dir (if multimodule project iused with maven plugin)
+     *
+     * @param path to dir with reports, "outputDir"
+     * @return if maven used, path should be resolved instead module dir but not against working dir.
+     */
+    private File resolveIfMavenIsUsed(File path) {
+        String mavenBuildDirectory = getEnvironmentVariables().getProperty(PROJECT_BUILD_DIRECTORY);
+        if (StringUtils.isNotEmpty(mavenBuildDirectory)) {
+            return Paths.get(mavenBuildDirectory).resolve(path.toPath()).toFile();
+        }
+        return path;
+    }
+
     private String getMavenBuildDirectory() {
-        String mavenBuildDirectory = getEnvironmentVariables().getProperty(MAVEN_BUILD_DIRECTORY);
-        String mavenReportsDirectory = getEnvironmentVariables().getProperty(MAVEN_REPORTS_DIRECTORY);
+        LOGGER.info(PROJECT_BUILD_DIRECTORY + " : " + getEnvironmentVariables().getProperty(PROJECT_BUILD_DIRECTORY));
+        LOGGER.info(PROJECT_REPORTING_OUTPUT_DIRECTORY + " : " + getEnvironmentVariables().getProperty(PROJECT_REPORTING_OUTPUT_DIRECTORY));
+        String mavenBuildDirectory = getEnvironmentVariables().getProperty(PROJECT_BUILD_DIRECTORY);
+        String mavenReportsDirectory = getEnvironmentVariables().getProperty(PROJECT_REPORTING_OUTPUT_DIRECTORY);
         String defaultMavenRelativeTargetDirectory = null;
         if (StringUtils.isNotEmpty(mavenReportsDirectory)) {
-            defaultMavenRelativeTargetDirectory = mavenReportsDirectory + "/serenity";
+            defaultMavenRelativeTargetDirectory = mavenReportsDirectory.concat(File.separator).concat("serenity");
+            outputDirectoryResolvedAgainstBuildDir = true;
         } else if (StringUtils.isNotEmpty(mavenBuildDirectory)) {
-            defaultMavenRelativeTargetDirectory = mavenBuildDirectory + "/site/serenity";
+            defaultMavenRelativeTargetDirectory = mavenBuildDirectory.concat(File.separator).concat(DEFAULT_OUTPUT_DIRECTORY);
+            outputDirectoryResolvedAgainstBuildDir = true;
         }
         return defaultMavenRelativeTargetDirectory;
     }

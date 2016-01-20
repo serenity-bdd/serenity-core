@@ -11,6 +11,9 @@ class SerenityPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
+        if(!System.properties['project.build.directory']){
+            System.properties['project.build.directory'] = project.projectDir.getAbsolutePath()
+        }
         project.extensions.create("serenity", SerenityPluginExtension)
         reportDirectory = prepareReportDirectory(project)
 
@@ -69,6 +72,10 @@ class SerenityPlugin implements Plugin<Project> {
     }
 
     def prepareReportDirectory(Project project) {
-        new File(project.projectDir, project.serenity.outputDirectory)
+        def outputDir = new File(project.serenity.outputDirectory)
+        if (!outputDir.isAbsolute()) {
+            outputDir = project.projectDir.toPath().resolve(outputDir.toPath()).toFile()
+        }
+        outputDir
     }
 }

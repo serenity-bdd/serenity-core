@@ -41,7 +41,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         this.environmentVariables = environmentVariables;
         this.homeDirectory = new File(System.getProperty("user.home"));
         this.workingDirectory = new File(System.getProperty("user.dir"));
-        final String mavenBuildDir = System.getProperty(SystemPropertiesConfiguration.MAVEN_BUILD_DIRECTORY);
+        final String mavenBuildDir = System.getProperty(SystemPropertiesConfiguration.PROJECT_BUILD_DIRECTORY);
         if (!StringUtils.isEmpty(mavenBuildDir)) {
             this.mavenModuleDirectory = new File(mavenBuildDir);
         } else {

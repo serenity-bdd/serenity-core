@@ -418,7 +418,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
 
     private void notifyOfStepFailure(final Object object, final Method method, final Object[] args,
                                      final Throwable cause) throws Throwable {
-        ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args))
+        ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args), args)
                 .withDisplayedFields(fieldValuesIn(object));
 
         StepFailure failure = new StepFailure(description, cause);
@@ -433,7 +433,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     }
 
     private void notifyStepStarted(final Object object, final Method method, final Object[] args) {
-        ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args))
+        ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args), args)
                 .withDisplayedFields(fieldValuesIn(object));
         StepEventBus.getEventBus().stepStarted(description);
     }
@@ -444,7 +444,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
 
     private void notifySkippedStepStarted(final Object object, final Method method, final Object[] args) {
 
-        ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args))
+        ExecutedStepDescription description = ExecutedStepDescription.of(testStepClass, getTestNameFrom(method, args), args)
                 .withDisplayedFields(fieldValuesIn(object));
         StepEventBus.getEventBus().skippedStepStarted(description);
     }

@@ -38,5 +38,8 @@ public class NonWebTestScenarioWithParameterizedSteps {
         steps.a_customized_step_with_object_parameters(new SampleNonWebSteps.CurrencyIn$(100));
     }
 
-
+    @Test
+    public void should_be_correct_customized_title_for_parameter_with_comma() {
+        steps.a_customized_step_with_two_parameters("Joe, Smith", "20");
+    }
 }

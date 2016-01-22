@@ -1,7 +1,3 @@
-repositories {
-    mavenCentral()
-}
-
 ext {
     bintrayPackage = 'serenity-browsermob-plugin'
     projectDescription = 'Serenity Browsermob integration'

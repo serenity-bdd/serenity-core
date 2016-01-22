@@ -1,28 +1,29 @@
+repositories {
+    mavenCentral()
+}
+
 ext {
     bintrayPackage = 'serenity-browsermob-plugin'
     projectDescription = 'Serenity Browsermob integration'
 }
 
+
 dependencies {
     compile project(':serenity-core')
-    compile('net.lightbody.bmp:browsermob-proxy:2.0.0') {
+    compile('net.lightbody.bmp:browsermob-core-littleproxy:2.1.0-beta-4') {
      	exclude group: 'org.seleniumhq.selenium', module:'selenium-java'
      	exclude group: 'org.seleniumhq.selenium', module:'selenium-server'
      	exclude group: 'org.seleniumhq.selenium', module:'selenium-remote-driver'
-     	exclude group: 'org.seleniumhq.selenium', module:'selenium-api'
-     	exclude group: 'org.apache.httpcomponents', module:'httpclient'
-     	exclude group: 'org.apache.httpcomponents', module:'httpcore'
+        exclude group: 'org.seleniumhq.selenium', module:'selenium-api'
+        exclude group: 'org.apache.commons', module:'commons-lang3'
      	exclude group: 'org.bouncycastle', module:'bcprov-jdk15on'
      	exclude group: 'com.google.guava'
-     	exclude group: 'org.apache.httpcomponents', module:'httpmime'
     	exclude group: 'com.fasterxml.jackson.core', module:'jackson-databind'
-    	exclude group: 'javax.validation', module:'validation-api'
         exclude module: "slf4j-api"
-     	exclude group: 'org.eclipse.jetty', module:'jetty-http'
      	exclude group: 'com.google.code.findbugs', module:'jsr305'
-     	exclude group: 'junit', module:'junit'
-     	exclude group: 'org.codehaus.plexus', module:'plexus-utils'
-     	exclude group: 'org.jsoup', module:'jsoup'
-     	exclude group: 'commons-io', module:'commons-io'
+        exclude group:'org.bouncycastle' ,module:'bcpkix-jdk15on'
+        exclude group:'commons-codec' ,module:'commons-codec'
+        exclude group:'io.netty' ,module:'netty-all'
 	}
+    compile('io.netty:netty-all:4.0.33.Final')
 }

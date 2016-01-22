@@ -96,4 +96,7 @@ public class SampleNonWebSteps {
     @Step("a step with an object parameter called {0}")
     public void a_customized_step_with_object_parameters(CurrencyIn$ currency) {}
 
+    @Step("a step with two object parameters called '{0}' and '{1}'")
+    public void a_customized_step_with_two_parameters(String param1, String param2) {}
+
 }

@@ -1,10 +1,11 @@
+group = 'net.serenity-bdd'
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.5'
-        classpath 'org.ajoberstar:gradle-git:1.2.0'
+        classpath 'org.ajoberstar:gradle-git:1.4.0-rc.1'
         classpath 'org.pegdown:pegdown:1.4.1'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.11.3'
     }
@@ -71,7 +72,7 @@ allprojects {
 }
 
 release {
-    grgit = Grgit.open(project.file('.'))
+    grgit = Grgit.open()
     // versionStrategy Strategies.FINAL
     // versionStrategy Strategies.PRE_RELEASE
     defaultVersionStrategy Strategies.SNAPSHOT

@@ -1,5 +1,6 @@
 package net.thucydides.core.reports.json.gson;
 
+import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -41,7 +43,7 @@ public class GsonJSONConverter implements JSONConverter {
 
     @Override
     public TestOutcome fromJson(InputStream inputStream) throws IOException {
-        return fromJson(new InputStreamReader(inputStream));
+        return fromJson(new InputStreamReader(inputStream, Charsets.UTF_8));
     }
 
     @Override
@@ -58,7 +60,7 @@ public class GsonJSONConverter implements JSONConverter {
     @Override
     public void toJson(TestOutcome testOutcome, OutputStream outputStream) throws IOException {
         testOutcome.calculateDynamicFieldValues();
-        try(Writer out = new OutputStreamWriter(outputStream)) {
+        try(Writer out = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
             gson.toJson(testOutcome, out);
         }
     }

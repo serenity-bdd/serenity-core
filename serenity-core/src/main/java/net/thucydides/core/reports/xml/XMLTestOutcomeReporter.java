@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 
@@ -22,7 +23,7 @@ import static net.thucydides.core.model.ReportType.XML;
 
 /**
  * Generates acceptance test results in XML form.
- * 
+ *
  */
 public class XMLTestOutcomeReporter implements AcceptanceTestReporter, AcceptanceTestLoader {
 
@@ -69,7 +70,7 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
 
         try(
            OutputStream outputStream = new FileOutputStream(report);
-           OutputStreamWriter writer = new OutputStreamWriter(outputStream, Charset.forName("UTF-8"))) {
+           OutputStreamWriter writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
            xstream.toXML(storedTestOutcome, writer);
            LOGGER.debug("XML report generated ({} bytes) {}", report.getAbsolutePath(), report.length());
         }
@@ -87,7 +88,7 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
     public Optional<TestOutcome> loadReportFrom(final File reportFile) {
         try(
                 InputStream input = new FileInputStream(reportFile);
-                InputStreamReader reader = new InputStreamReader(input, Charset.forName("UTF-8"));
+                InputStreamReader reader = new InputStreamReader(input, StandardCharsets.UTF_8);
         ) {
             XStream xstream = new XStream();
             xstream.alias("acceptance-test-run", TestOutcome.class);

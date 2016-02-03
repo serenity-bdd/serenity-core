@@ -189,6 +189,7 @@ subprojects {
 
     dependencies {
         compile "com.google.guava:guava:${guavaVersion}"
+        compile "com.google.code.findbugs:jsr305:3.0.1"
         compile("com.google.inject:guice:3.0") {
             exclude group:"org.ow2.asm", module:"asm"
             exclude group:"asm", module:"asm"

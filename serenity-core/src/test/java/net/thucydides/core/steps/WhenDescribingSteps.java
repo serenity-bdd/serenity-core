@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
 
@@ -112,6 +113,25 @@ public class WhenDescribingSteps {
         assertThat(clone.getName(), is(description.getName()));
         assertThat(clone.getTestMethod(), is(description.getTestMethod()));
         assertThat(clone.isAGroup(), is(description.isAGroup()));
+        assertThat(clone.getArguments(), is(description.getArguments()));
     }
 
+    @Test
+    public void a_description_can_be_created_without_arguments_list() {
+        ExecutedStepDescription description = new ExecutedStepDescription(SampleTestSteps.class, "a_step");
+
+        assertThat(description.getTestMethod().getName(), is("a_step"));
+        assertThat(description.getArguments(), notNullValue());
+        assertThat(description.getArguments().size(), is(0));
+    }
+
+    @Test
+    public void a_description_can_be_created_with_arguments_list() {
+        ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class, "a_step_with_parameters", new Object[] {"Joe"});
+
+        assertThat(description.getTestMethod().getName(), is("a_step_with_parameters"));
+        assertThat(description.getArguments(), notNullValue());
+        assertThat(description.getArguments().size(), is(1));
+        assertThat(description.getArguments().get(0), is("Joe"));
+    }
 }

@@ -11,13 +11,16 @@ class SerenityPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
+        if(!System.properties['project.build.directory']){
+            System.properties['project.build.directory'] = project.projectDir.getAbsolutePath()
+        }
         project.extensions.create("serenity", SerenityPluginExtension)
-        reportDirectory = prepareReportDirectory(project)
 
         project.task('aggregate') {
             group 'Serenity BDD'
             description 'Generates aggregated Serenity reports'
             doLast {
+                reportDirectory = prepareReportDirectory(project)
                 if (!project.serenity.projectKey) {
                     project.serenity.projectKey = project.name
                 }
@@ -41,6 +44,7 @@ class SerenityPlugin implements Plugin<Project> {
             inputs.dir reportDirectory
 
             doLast {
+                reportDirectory = prepareReportDirectory(project)
                 logger.lifecycle("Checking serenity results for ${project.serenity.projectKey} in directory $reportDirectory")
                 if (reportDirectory.exists()) {
                     def checker = new ResultChecker(reportDirectory)
@@ -53,6 +57,7 @@ class SerenityPlugin implements Plugin<Project> {
             description "Deletes the Serenity output directory (run automatically with 'clean')"
 
             doLast {
+                reportDirectory = prepareReportDirectory(project)
                 reportDirectory.deleteDir()
             }
         }
@@ -69,6 +74,10 @@ class SerenityPlugin implements Plugin<Project> {
     }
 
     def prepareReportDirectory(Project project) {
-        new File(project.projectDir, project.serenity.outputDirectory)
+        def outputDir = new File(project.serenity.outputDirectory)
+        if (!outputDir.isAbsolute()) {
+            outputDir = project.projectDir.toPath().resolve(outputDir.toPath()).toFile()
+        }
+        outputDir
     }
 }

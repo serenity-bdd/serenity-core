@@ -7,6 +7,7 @@ import spock.lang.Specification
 import spock.lang.Ignore
 import net.thucydides.core.util.TestResources
 import java.nio.file.Files
+import java.nio.file.Paths
 
 /**
  * Created by john on 9/11/2014.
@@ -22,6 +23,7 @@ class WhenUsingTheGradlePlugin extends Specification {
             project.tasks.aggregate
     }
 
+    @Ignore('should be upgraded to use gradle 2.10 features')
     def "the 'serenity' project property is used to configure the build"() {
         given:
         Project project = ProjectBuilder.builder().build()
@@ -29,7 +31,7 @@ class WhenUsingTheGradlePlugin extends Specification {
         project.apply plugin: 'java'
         project.apply plugin: 'net.serenity-bdd.aggregator'
         then:
-        project.serenity.outputDirectory == 'target/site/serenity'
+        project.serenity.outputDirectory == Paths.get("").resolve('target/site/serenity').toAbsolutePath()
     }
 
     def "should add the checkOutcomes task to a project"() {

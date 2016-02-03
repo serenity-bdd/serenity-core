@@ -295,7 +295,20 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
         TestOutcome testOutcome = testOutcomeWithTitle("Should handle nested object parameters", executedScenarios);
         TestStep firstStep = testOutcome.getTestSteps().get(0);
-        assertThat(firstStep.getDescription(), is("a step with an object parameter called <span class='step-parameter'>$100.00</span>"));
+        assertThat(firstStep.getDescription(), is("a step with an object parameter called $100.00"));
+    }
+
+    @Test
+    public void should_report_correctly_customized_title_for_parameter_with_comma() throws InitializationError {
+
+        SerenityRunner runner = new SerenityRunner(NonWebTestScenarioWithParameterizedSteps.class);
+        runner.run(new RunNotifier());
+
+        List<TestOutcome> executedScenarios = runner.getTestOutcomes();
+
+        TestOutcome testOutcome = testOutcomeWithTitle("Should be correct customized title for parameter with comma", executedScenarios);
+        TestStep firstStep = testOutcome.getTestSteps().get(0);
+        assertThat(firstStep.getDescription(), is("a step with two object parameters called 'Joe, Smith' and '20'"));
     }
 
     private TestOutcome testOutcomeWithTitle(String title, List<TestOutcome> testOutcomes) {

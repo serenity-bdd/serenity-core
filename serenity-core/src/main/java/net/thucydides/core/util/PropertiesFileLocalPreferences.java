@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigValue;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +32,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     public static final String TYPESAFE_CONFIG_FILE = "serenity.conf";
     private File workingDirectory;
     private File homeDirectory;
+    private File mavenModuleDirectory;
     private final EnvironmentVariables environmentVariables;
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesFileLocalPreferences.class);
 
@@ -38,6 +41,12 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         this.environmentVariables = environmentVariables;
         this.homeDirectory = new File(System.getProperty("user.home"));
         this.workingDirectory = new File(System.getProperty("user.dir"));
+        final String mavenBuildDir = System.getProperty(SystemPropertiesConfiguration.PROJECT_BUILD_DIRECTORY);
+        if (!StringUtils.isEmpty(mavenBuildDir)) {
+            this.mavenModuleDirectory = new File(mavenBuildDir);
+        } else {
+            this.mavenModuleDirectory = this.workingDirectory;
+        }
     }
 
     public File getHomeDirectory() {
@@ -54,6 +63,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
                 typesafeConfigPreferences(),
                 preferencesIn(preferencesFileInHomeDirectory()),
                 preferencesIn(legacyPreferencesFileInHomeDirectory()),
+                preferencesIn(preferencesFileInMavenModuleDirectory()),
                 preferencesIn(preferencesFileInWorkingDirectory()),
                 preferencesIn(legacyPreferencesFileInWorkingDirectory()),
                 preferencesIn(preferencesFileWithAbsolutePath()),
@@ -134,6 +144,11 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     private File preferencesFileInWorkingDirectory() {
         return new File(workingDirectory, defaultPropertiesFileName());
     }
+
+    private File preferencesFileInMavenModuleDirectory() {
+        return new File(mavenModuleDirectory, defaultPropertiesFileName());
+    }
+
 
     private File legacyPreferencesFileInWorkingDirectory() {
         return new File(workingDirectory, legacyPropertiesFileName());

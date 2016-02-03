@@ -1,9 +1,11 @@
 package net.thucydides.core.steps;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.thucydides.core.reflection.MethodFinder;
 
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
 import static net.thucydides.core.util.NameConverter.humanize;
@@ -17,17 +19,21 @@ public class ExecutedStepDescription implements Cloneable {
 
     private final Class<? extends Object> stepsClass;
     private final String name;
+    private final List<String> argumentsList;
     private final Map<String, Object> displayedFields;
     private boolean isAGroup;
 
     private final static Map<String,Object> NO_FIELDS = Maps.newHashMap();
+    private final static List<String> NO_ARGUMENTS = Lists.newArrayList();
 
     protected ExecutedStepDescription(final Class<? extends Object> stepsClass,
                                       final String name,
+                                      List<String> argumentsList,
                                       Map<String, Object> displayedFields,
                                       final boolean isAGroup) {
         this.stepsClass = stepsClass;
         this.name = name;
+        this.argumentsList = argumentsList;
         this.displayedFields = displayedFields;
         this.isAGroup = isAGroup;
     }
@@ -35,20 +41,20 @@ public class ExecutedStepDescription implements Cloneable {
     protected ExecutedStepDescription(final Class<? extends Object> stepsClass,
                                       final String name,
                                       final boolean isAGroup) {
-        this(stepsClass, name, NO_FIELDS, isAGroup);
+        this(stepsClass, name, NO_ARGUMENTS, NO_FIELDS, isAGroup);
     }
 
     protected ExecutedStepDescription(final Class<? extends Object> stepsClass,
                                       final String name) {
-        this(stepsClass, name, NO_FIELDS, false);
+        this(stepsClass, name, NO_ARGUMENTS, NO_FIELDS, false);
     }
 
     protected ExecutedStepDescription(final String name) {
-        this(null, name, NO_FIELDS, false);
+        this(null, name, NO_ARGUMENTS, NO_FIELDS, false);
     }
 
     public ExecutedStepDescription clone() {
-        return new ExecutedStepDescription(stepsClass, name, displayedFields, isAGroup);
+        return new ExecutedStepDescription(stepsClass, name, argumentsList, displayedFields, isAGroup);
     }
 
     /**
@@ -58,9 +64,12 @@ public class ExecutedStepDescription implements Cloneable {
         return stepsClass;
     }
 
-
     public String getName() {
         return name;
+    }
+
+    public List<String> getArguments() {
+        return argumentsList;
     }
 
     public ExecutedStepDescription withName(String newName) {
@@ -68,7 +77,7 @@ public class ExecutedStepDescription implements Cloneable {
     }
 
     public ExecutedStepDescription withDisplayedFields(Map<String, Object> displayedFields) {
-        return new ExecutedStepDescription(this.stepsClass, this.name, displayedFields, isAGroup);
+        return new ExecutedStepDescription(this.stepsClass, this.name, this.argumentsList, displayedFields, isAGroup);
     }
 
     /**
@@ -76,7 +85,21 @@ public class ExecutedStepDescription implements Cloneable {
      */
     public static ExecutedStepDescription of(final Class<? extends Object> stepsClass,
                                              final String name) {
-        return new ExecutedStepDescription(stepsClass, name, NO_FIELDS, false);
+        return new ExecutedStepDescription(stepsClass, name, NO_ARGUMENTS, NO_FIELDS, false);
+    }
+
+    public static ExecutedStepDescription of(final Class<? extends Object> stepsClass,
+                                             final String name,
+                                             final Object[] arguments) {
+        return new ExecutedStepDescription(stepsClass, name, convertArguments(arguments), NO_FIELDS, false);
+    }
+
+    private static List<String> convertArguments(Object[] arguments) {
+        List<String> listResult = Lists.newArrayList();
+        for (Object argument : arguments) {
+            listResult.add(StepArgumentWriter.readableFormOf(argument));
+        }
+        return listResult;
     }
 
     public static ExecutedStepDescription withTitle(final String name) {

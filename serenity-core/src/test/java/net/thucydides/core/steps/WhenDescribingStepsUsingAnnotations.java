@@ -132,7 +132,9 @@ public class WhenDescribingStepsUsingAnnotations {
 
     @Test
     public void a_step_can_be_annotated_to_provide_a_more_readable_name_including_a_parameter() {
-        ExecutedStepDescription description = new ExecutedStepDescription(SampleTestSteps.class, "a_customized_step_with_parameters: Joe");
+        ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
+                "a_customized_step_with_parameters: Joe",
+                new Object[]{"Joe"});
 
         AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
 
@@ -142,9 +144,10 @@ public class WhenDescribingStepsUsingAnnotations {
     @Test
     public void a_step_can_be_annotated_to_provide_a_more_readable_name_including_a_parameter_and_a_field_variable() {
 
-        ExecutedStepDescription description = new ExecutedStepDescription(SampleTestSteps.class,
-                                                                          "a_customized_step_with_parameters_and_fields: Joe")
-                                                                          .withDisplayedFields(ImmutableMap.of("color",(Object)"red"));
+        ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
+                "a_customized_step_with_parameters_and_fields",
+                new Object[]{"Joe"})
+                .withDisplayedFields(ImmutableMap.of("color", (Object) "red"));
 
         AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
 
@@ -155,8 +158,9 @@ public class WhenDescribingStepsUsingAnnotations {
     @Test(expected = AssertionError.class)
     public void a_step_can_be_annotated_to_provide_a_more_readable_name_including_a_parameter_and_an_empty_field_variable() {
 
-        ExecutedStepDescription description = new ExecutedStepDescription(SampleTestSteps.class,
-                "a_customized_step_with_parameters_and_empty_field_value: Joe")
+        ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
+                "a_customized_step_with_parameters_and_empty_field_value",
+                new Object[] {"Joe"})
                 .withDisplayedFields(ImmutableMap.of("color",(Object)"red", "emptyField", Fields.FieldValue.UNDEFINED));
 
         AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
@@ -165,11 +169,24 @@ public class WhenDescribingStepsUsingAnnotations {
 
     @Test
     public void a_step_can_be_annotated_to_provide_a_more_readable_name_including_several_parameters() {
-        ExecutedStepDescription description = new ExecutedStepDescription(SampleTestSteps.class, "a_customized_step_with_two_parameters: Joe,20");
+        ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
+                "a_customized_step_with_two_parameters",
+                new Object[]{"Joe", "20"});
 
         AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
 
         assertThat(annotatedStepDescription.getName(), is("a step about a person called Joe, aged 20"));
+    }
+
+    @Test
+    public void a_step_can_be_annotated_to_provide_a_more_readable_name_including_several_parameters_with_comma() {
+        ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
+                "a_customized_step_with_two_parameters",
+                new Object[] {"Smith, Joe", "20"});
+
+        AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
+
+        assertThat(annotatedStepDescription.getName(), is("a step about a person called Smith, Joe, aged 20"));
     }
 
     @Test

@@ -260,19 +260,13 @@ public final class AnnotatedStepDescription {
     private String annotatedStepNameWithParameters(String annotatedStepTemplate) {
         String annotatedStepName = annotatedStepTemplate;
 
-        Iterable<String> parameters = getParamatersFrom(description.getName());
         int counter = 0;
-        for(String parameter : parameters) {
+        for(String parameter : description.getArguments()) {
             String token = "{" + counter++ + "}";
             annotatedStepName = StringUtils.replace(annotatedStepName, token, parameter);
 
         }
         return annotatedStepName;
-    }
-
-    private Iterable<String> getParamatersFrom(String name) {
-        String parameters = StringUtils.substringAfter(name,":");
-        return Splitter.on(",").trimResults().split(parameters);
     }
 
     public boolean isAGroup() {

@@ -3,18 +3,20 @@ package net.thucydides.browsermob.fixtureservices;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import net.lightbody.bmp.BrowserMobProxy;
+import net.lightbody.bmp.BrowserMobProxyServer;
+import net.lightbody.bmp.client.ClientUtil;
 import net.thucydides.core.fixtureservices.FixtureException;
 import net.thucydides.core.fixtureservices.FixtureService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
-import net.lightbody.bmp.proxy.ProxyServer;
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.UnknownHostException;
 import java.util.List;
 
 import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
@@ -31,7 +33,7 @@ public class BrowserMobFixtureService implements FixtureService {
 
     private int port = 0;
 
-    private ThreadLocal<ProxyServer> threadLocalproxyServer = new  ThreadLocal<ProxyServer>();
+    private ThreadLocal<BrowserMobProxy> threadLocalproxyServer = new  ThreadLocal<BrowserMobProxy>();
 
     public BrowserMobFixtureService() {
         this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
@@ -52,14 +54,14 @@ public class BrowserMobFixtureService implements FixtureService {
         }
     }
 
-    public ProxyServer getProxyServer() {
+    public BrowserMobProxy getProxyServer() {
         return threadLocalproxyServer.get();
     }
 
     private void initializeProxy(int port) throws Exception {
         setPort(port);
-        threadLocalproxyServer.set(new ProxyServer(port));
-        threadLocalproxyServer.get().start();
+        threadLocalproxyServer.set(new BrowserMobProxyServer());
+        threadLocalproxyServer.get().start(getPort());
     }
 
     @Override
@@ -79,7 +81,8 @@ public class BrowserMobFixtureService implements FixtureService {
         if (!proxyServerRunning()) {
             setup();
         }
-        capabilities.setCapability(CapabilityType.PROXY, threadLocalproxyServer.get().seleniumProxy());
+        Proxy seleniumProxy = ClientUtil.createSeleniumProxy(threadLocalproxyServer.get());
+        capabilities.setCapability(CapabilityType.PROXY, seleniumProxy);
     }
 
     private boolean proxyServerRunning() {

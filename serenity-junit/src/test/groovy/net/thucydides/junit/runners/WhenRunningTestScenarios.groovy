@@ -16,6 +16,7 @@ import spock.lang.Unroll
 
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.concurrent.TimeUnit
 
 import static net.thucydides.core.model.TestResult.*
 import static net.thucydides.junit.runners.TestOutcomeChecks.resultsFrom

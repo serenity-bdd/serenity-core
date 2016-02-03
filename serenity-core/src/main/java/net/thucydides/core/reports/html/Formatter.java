@@ -221,11 +221,10 @@ public class Formatter {
 
     private List<String> getEmbeddedTablesIn(String text) {
         List<String> embeddedTables = Lists.newArrayList();
-        BufferedReader reader = new BufferedReader(new StringReader(text));
         StringBuffer tableText = new StringBuffer();
-        boolean inTable = false;
-        String newLine = newLineUsedIn(text);
-        try {
+        try (BufferedReader reader = new BufferedReader(new StringReader(text))) {
+            boolean inTable = false;
+            String newLine = newLineUsedIn(text);
             String line;
             while ((line = reader.readLine()) != null) {
                 if (!inTable && line.contains("|")){ // start of a table

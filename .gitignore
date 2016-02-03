@@ -4,3 +4,4 @@ build
 lib
 target
 *.iml
+*.log

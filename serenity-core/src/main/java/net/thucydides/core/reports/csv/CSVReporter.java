@@ -15,6 +15,7 @@ import net.thucydides.core.util.Inflector;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,7 +41,7 @@ public class CSVReporter extends ThucydidesReporter {
     public CSVReporter(File outputDirectory, EnvironmentVariables environmentVariables) {
         this.setOutputDirectory(outputDirectory);
         this.extraColumns = extraColumnsDefinedIn(environmentVariables);
-        this.encoding = ThucydidesSystemProperty.THUCYDIDES_REPORT_ENCODING.from(environmentVariables, java.nio.charset.Charset.defaultCharset().name());
+        this.encoding = ThucydidesSystemProperty.THUCYDIDES_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());
     }
 
     private List<String> extraColumnsDefinedIn(EnvironmentVariables environmentVariables) {

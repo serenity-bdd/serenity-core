@@ -23,6 +23,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -197,7 +198,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private String withRestoredSpaces(String path) {
         try {
-            return URLDecoder.decode(path, "UTF-8");
+            return URLDecoder.decode(path, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             return StringUtils.replace(path, "%20", " ");
         }

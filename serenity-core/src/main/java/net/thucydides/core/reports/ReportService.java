@@ -12,9 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.io.*;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.*;
@@ -121,7 +120,7 @@ public class ReportService {
                     ThucydidesSystemProperty.THUCYDIDES_FLOW_REPORTS_DIR.preferredName());
             final Path file = flow.resolve(ThucydidesSystemProperty.THUCYDIDES_CONFIGURATION_REPORT.preferredName());
             Files.createDirectories(flow);
-            try (Writer writer = new PrintWriter(Files.newBufferedWriter(file, Charset.defaultCharset()), autoFlush)) {
+            try (Writer writer = new PrintWriter(Files.newBufferedWriter(file, StandardCharsets.UTF_8), autoFlush)) {
                 LOGGER.debug("Generating report for configuration");
                 writer.write(config.root().render(ConfigRenderOptions.concise().setJson(true)));
             }

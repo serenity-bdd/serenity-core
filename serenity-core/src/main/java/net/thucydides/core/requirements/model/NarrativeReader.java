@@ -8,6 +8,7 @@ import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static net.thucydides.core.requirements.RequirementsPath.fileSystemPathElements;
@@ -70,7 +71,7 @@ public class NarrativeReader {
     }
 
     private Optional<Narrative> narrativeLoadedFrom(File narrativeFile, String defaultType) {
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(narrativeFile), "UTF-8"))) {
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(narrativeFile), StandardCharsets.UTF_8))) {
             List<String> lines = readPreambleFrom(reader);
 
             String title = null;

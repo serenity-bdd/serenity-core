@@ -36,12 +36,12 @@ class WhenUsingTheGradlePlugin extends Specification {
 
     def "should add the checkOutcomes task to a project"() {
         given:
-        Project project = ProjectBuilder.builder().build()
+            Project project = ProjectBuilder.builder().build()
         when:
-        project.apply plugin: 'java'
-        project.apply plugin: 'net.serenity-bdd.aggregator'
+            project.apply plugin: 'java'
+            project.apply plugin: 'net.serenity-bdd.aggregator'
         then:
-        project.tasks.checkOutcomes
+            project.tasks.checkOutcomes
     }
 
     def "should assemble aggregate report of legacy gradle project"() {

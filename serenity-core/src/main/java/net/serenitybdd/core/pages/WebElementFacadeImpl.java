@@ -975,21 +975,12 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     private void logIfVerbose(String logMessage) {
         if (useVerboseLogging()) {
-            LOGGER.info(humanizedTabfNameFor(getElement()) + ":" + logMessage);
+            LOGGER.debug(logMessage + " : " +  locator.toString());
         }
     }
 
     private boolean useVerboseLogging() {
         return ThucydidesSystemProperty.THUCYDIDES_VERBOSE_STEPS.booleanFrom(environmentVariables);
-    }
-
-
-    private EnvironmentVariables getEnvironmentVariables() {
-        return environmentVariables;
-    }
-
-    private String humanizedTabfNameFor(WebElement webElement) {
-        return HtmlTag.from(webElement).inHumanReadableForm();
     }
 
     private boolean isMobileDriver() {
@@ -1060,6 +1051,11 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     public Dimension getSize() {
         return getElement().getSize();
+    }
+
+    @Override
+    public Rectangle getRect() {
+        return getElement().getRect();
     }
 
     public String getCssValue(String propertyName) {

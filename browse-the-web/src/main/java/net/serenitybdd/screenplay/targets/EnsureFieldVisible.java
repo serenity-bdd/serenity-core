@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 public class EnsureFieldVisible {
     private final Actor actor;
-    private final Boolean scrollToTarget;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -22,12 +21,10 @@ public class EnsureFieldVisible {
 
     public EnsureFieldVisible(Actor actor) {
         this.actor = actor;
-        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
-        this.scrollToTarget = ThucydidesSystemProperty.SERENITY_SCREENPLAY_SCROLLTOTARGETS.booleanFrom(environmentVariables, true);
     }
 
     public void canSee(WebElementFacade targetElement) {
-        if (scrollToTarget && !targetElement.isCurrentlyVisible()) {
+        if (!targetElement.isCurrentlyVisible()) {
             try {
                 actor.attemptsTo(Scroll.to(targetElement));
             } catch (WebDriverException failedToMoveToElement) {

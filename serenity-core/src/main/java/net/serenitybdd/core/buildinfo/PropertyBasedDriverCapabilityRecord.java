@@ -5,11 +5,10 @@ import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import net.thucydides.core.webdriver.Configuration;
 import org.openqa.selenium.Capabilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.nio.file.DirectoryIteratorException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -24,6 +23,8 @@ import static java.nio.file.Files.newInputStream;
  * Created by john on 12/02/15.
  */
 public class PropertyBasedDriverCapabilityRecord implements DriverCapabilityRecord {
+
+    Logger LOGGER = LoggerFactory.getLogger(PropertyBasedDriverCapabilityRecord.class);
 
     private Configuration configuration;
 
@@ -60,7 +61,7 @@ public class PropertyBasedDriverCapabilityRecord implements DriverCapabilityReco
                 drivers.add(driverName);
             }
         } catch (IOException | DirectoryIteratorException x) {
-            System.err.println(x);
+            LOGGER.error("Exception during getting drivers", x);
         }
         return drivers;
     }
@@ -81,11 +82,13 @@ public class PropertyBasedDriverCapabilityRecord implements DriverCapabilityReco
             for (Path file : stream) {
                 String driverName = driverNameFrom(file);
                 Properties driverProperties = new Properties();
-                driverProperties.load(newInputStream(file));
+                try(InputStream properties = newInputStream(file)) {
+                    driverProperties.load(properties);
+                }
                 driverCapabilities.put(driverName, driverProperties);
             }
         } catch (IOException | DirectoryIteratorException x) {
-            System.err.println(x);
+            LOGGER.error("Exception during getting driver capabilities",x);
         }
         return driverCapabilities;
     }

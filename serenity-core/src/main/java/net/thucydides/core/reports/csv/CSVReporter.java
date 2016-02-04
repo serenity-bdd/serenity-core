@@ -49,10 +49,12 @@ public class CSVReporter extends ThucydidesReporter {
     }
 
     public File generateReportFor(TestOutcomes testOutcomes, String reportName) throws IOException {
-        CSVWriter writer = new CSVWriter(new java.io.OutputStreamWriter(new java.io.FileOutputStream(getOutputFile(reportName)), encoding));
-        writeTitleRow(writer);
-        writeEachRow(testOutcomes.withHistory(), writer);
-        writer.close();
+        try(CSVWriter writer = new CSVWriter(
+                new java.io.OutputStreamWriter(
+                        new java.io.FileOutputStream(getOutputFile(reportName)), encoding))) {
+            writeTitleRow(writer);
+            writeEachRow(testOutcomes.withHistory(), writer);
+        }
         return getOutputFile(reportName);
     }
 

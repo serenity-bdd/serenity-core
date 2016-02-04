@@ -55,11 +55,8 @@ public class ResizableImage {
         String suffix = this.getFileSuffix(screenshotFile.getPath());
         Iterator<ImageReader> imageReaders = ImageIO.getImageReadersBySuffix(suffix);
         if (imageReaders.hasNext()) {
-
             ImageReader reader = imageReaders.next();
-            ImageInputStream stream = null;
-            try{
-                stream = new FileImageInputStream(screenshotFile);
+            try (ImageInputStream stream = new FileImageInputStream(screenshotFile);) {
                 reader.setInput(stream);
                 int width = reader.getWidth(reader.getMinIndex());
                 int height = reader.getHeight(reader.getMinIndex());
@@ -72,13 +69,6 @@ public class ResizableImage {
                     reader.dispose();
                 } catch (Throwable e) {
                     logger.error("During reader disposing",e);
-                }
-                try {
-                    if (stream != null) {
-                        stream.close();
-                    }
-                } catch (IOException e) {
-                    logger.error("During image stream closing",e);
                 }
             }
         } else {

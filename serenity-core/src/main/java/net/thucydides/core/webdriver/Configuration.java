@@ -13,7 +13,7 @@ public interface Configuration {
 
     int getElementTimeout();
 
-    boolean getUseUniqueBrowser();
+    boolean shouldUseAUniqueBrowser();
 
     void setOutputDirectory(File outputDirectory);
 

@@ -873,8 +873,18 @@ public abstract class PageObject {
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(WebElement webElement) {
         return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement,
                 getImplicitWaitTimeout().in(MILLISECONDS),
-                getWaitForTimeout().in(MILLISECONDS));
+                getWaitForTimeout().in(MILLISECONDS),
+                nameOf(webElement));
     }
+
+    private String nameOf(WebElement webElement) {
+        try {
+            return webElement.toString();
+        } catch (Exception e) {
+            return "Unknown web element";
+        }
+    }
+
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(WebElement webElement) {
         return element(webElement);
@@ -892,7 +902,8 @@ public abstract class PageObject {
         return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver,
                 webElement,
                 getImplicitWaitTimeout().in(MILLISECONDS),
-                getWaitForTimeout().in(MILLISECONDS));
+                getWaitForTimeout().in(MILLISECONDS),
+                bySelector.toString());
     }
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(List<By> selectors) {

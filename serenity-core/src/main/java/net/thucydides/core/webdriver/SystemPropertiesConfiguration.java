@@ -197,7 +197,7 @@ public class SystemPropertiesConfiguration implements Configuration {
 
     }
 
-    public boolean getUseUniqueBrowser() {
+    public boolean shouldUseAUniqueBrowser() {
         return ThucydidesSystemProperty.THUCYDIDES_USE_UNIQUE_BROWSER.booleanFrom(getEnvironmentVariables());
     }
 

@@ -203,6 +203,11 @@ public class CheckingFieldContentWithTheFluentElementAPI extends FluentElementAP
     }
 
     @Test
+    public void is_currently_enabled_should_be_false_for_an_inexistant_web_element_facade() throws InterruptedException {
+        assertThat(page.fieldDoesNotExist.isCurrentlyEnabled(), is(false));
+    }
+
+    @Test
     public void should_wait_for_field_to_be_enabled() throws InterruptedException {
         assertThat(page.element(page.initiallyDisabled).isCurrentlyEnabled(), is(false));
 

@@ -13,6 +13,12 @@ public interface Configuration {
 
     int getElementTimeout();
 
+    /**
+     * Use shouldUseAUniqueBrowser() instead
+     */
+    @Deprecated
+    boolean getUseUniqueBrowser();
+
     boolean shouldUseAUniqueBrowser();
 
     void setOutputDirectory(File outputDirectory);

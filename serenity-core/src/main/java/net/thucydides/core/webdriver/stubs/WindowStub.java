@@ -26,4 +26,8 @@ public class WindowStub implements WebDriver.Window {
     @Override
     public void maximize() {
     }
+
+    @Override
+    public void fullscreen() {
+    }
 }

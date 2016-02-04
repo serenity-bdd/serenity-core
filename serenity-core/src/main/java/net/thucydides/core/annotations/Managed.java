@@ -5,9 +5,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static net.thucydides.core.annotations.ClearCookiesPolicy.BeforeEachTest;
+
 /**
  * Annotation that marks a WebDriver field as one that is managed by the Test Runner.
- * The Thucydides Test Runner will instantiate this WebDriver before the tests start,
+ * The Serenity Test Runner will instantiate this WebDriver before the tests start,
  * and close it once they have all finished.
  *
  */
@@ -15,5 +17,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Managed {
     boolean uniqueSession() default false;
+    ClearCookiesPolicy clearCookies() default BeforeEachTest;
     String driver() default "";
 }

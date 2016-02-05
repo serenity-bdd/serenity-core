@@ -67,6 +67,23 @@ public class WhenDanaBrowsesTheWeb {
     }
 
     @Test
+    public void danaCanMakeAssertionsAboutWebElementsInTheSameAssertion() {
+
+        Actor dana = new Actor("Dana");
+        dana.can(BrowseTheWeb.with(firstBrowser));
+
+        givenThat(dana).has(openedTheApplication);
+
+        when(dana).attemptsTo(viewHerProfile);
+        and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
+
+        then(dana).should(seeThat(the(ProfilePage.NAME),
+                                  isVisible(),
+                                  isCurrentlyVisible(),
+                                  isEnabled()));
+    }
+
+    @Test
     public void multipleUsersCanUpdateTheirProfilesSimultaneously() {
 
         Actor dana = new Actor("Dana");
@@ -141,6 +158,9 @@ public class WhenDanaBrowsesTheWeb {
                 seeThat(Client.country(), is(equalTo("France"))));
 
     }
+
+
+
     @Steps
     OpenTheApplication openedTheApplication;
 

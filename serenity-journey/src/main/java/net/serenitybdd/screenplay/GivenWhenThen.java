@@ -1,6 +1,9 @@
 package net.serenitybdd.screenplay;
 
+import com.beust.jcommander.internal.Lists;
 import org.hamcrest.Matcher;
+
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -22,4 +25,13 @@ public class GivenWhenThen {
     public static <T> Consequence<T> seeThat(Question<? extends T> actual, Matcher<T> expected) {
         return new QuestionConsequence(actual, expected);
     }
+
+    public static <T> Consequence<T>[] seeThat(Question<? extends T> actual, Matcher<T>... expectedMatchers) {
+        List<Consequence<T>> consequences = Lists.newArrayList();
+        for(Matcher<T> matcher : expectedMatchers) {
+            consequences.add(new QuestionConsequence(actual, matcher));
+        }
+        return consequences.toArray(new Consequence[]{});
+    }
+
 }

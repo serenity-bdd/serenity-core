@@ -11,6 +11,7 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.SortedMap;
 
@@ -39,6 +40,9 @@ public class RequirementPersister {
         Type requirementsMapType = new TypeToken<SortedMap<String, Requirement>>(){}.getType();
         try(FileReader reader = new FileReader(jsonFile)) {
             storedRequirementsMap = gson.fromJson(reader, requirementsMapType);
+            if (storedRequirementsMap == null) {
+                storedRequirementsMap = Collections.emptySortedMap();
+            }
         }
         map.putAll(storedRequirementsMap);
 

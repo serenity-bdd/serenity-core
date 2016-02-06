@@ -4,6 +4,7 @@ import net.serenitybdd.core.photography.Darkroom
 import net.serenitybdd.core.photography.Photographer
 import net.serenitybdd.core.photography.ScreenshotPhoto
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.firefox.FirefoxDriver
 import spock.lang.Specification
 
@@ -12,57 +13,89 @@ import java.nio.file.Path
 
 class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
 
-    def "when a photographer takes a series of screenshots they all should be stored"() {
+    def "when a photographer takes a series of screenshots they all should be stored"(def Class browser) {
         given:
             def photographer = new Photographer();
         when:
-            def driver = new FirefoxDriver()
-            Darkroom.isOpenForBusiness();
             List<ScreenshotPhoto> photos = Lists.newArrayList();
-            for (photoCount in 0..10){
-                photos.add(photographer.takesAScreenshot()
+            def driver
+            try {
+                driver = new FirefoxDriver()
+                Darkroom.isOpenForBusiness();
+                for (photoCount in 0..10) {
+                    photos.add(photographer.takesAScreenshot()
                         .with(driver)
                         .andSaveToDirectory(screenshotDirectory));
+                }
+                Darkroom.waitUntilClose();
+            } finally {
+                try {
+                    if (driver) {
+                        driver.close()
+                        driver.quit()
+                    }
+                } catch (some) {
+                }
             }
-            Darkroom.waitUntilClose();
-            driver.quit()
         then:
             photos.findAll {
                 photo -> Files.exists(photo.pathToScreenshot)
             }.size() == 11
+        where:
+            browser << [ChromeDriver.class, FirefoxDriver.class]
     }
 
-    def "should handle multiple screenshots in parallel"() {
+    def "should handle multiple screenshots in parallel"(def Class browser){
         given:
             def photographer = new Photographer();
-            List<ScreenshotPhoto> photos = Lists.newArrayList();
+            List<ScreenshotPhoto> files = Lists.newArrayList();
+            def Integer threads = 10
+            def Integer photos = 10
         and:
-            def threads = []
-            for (i in 1..10) {
-                threads << Thread.start {
-                    Darkroom.isOpenForBusiness();
-                    def driver = new FirefoxDriver()
-                    driver.get(siteFromUrlAt("/static-site/index.html"))
-
-                    for (j in 1..10) {
-                        photos.add(photographer.takesAScreenshot()
-                                .with(driver)
-                                .andSaveToDirectory(screenshotDirectory));
+            def runners = []
+            for (i in 1..threads) {
+                runners << new Thread(new Runnable() {
+                    @Override
+                    void run() {
+                        Darkroom.isOpenForBusiness();
+                        def driver = null
+                        try {
+                            driver = (WebDriver)browser.newInstance()
+                            driver.get(siteFromUrlAt("/static-site/index.html"))
+                            for (j in 1..files) {
+                                files.add(photographer.takesAScreenshot()
+                                    .with(driver)
+                                    .andSaveToDirectory(screenshotDirectory));
+                            }
+                        } finally {
+                            try {
+                                if (driver) {
+                                    driver.close()
+                                    driver.quit()
+                                }
+                            } catch (some) {
+                            }
+                        }
+                        Darkroom.waitUntilClose();
                     }
-                    driver.quit()
-                    Darkroom.waitUntilClose();
-                }
+                })
             }
-            println threads
+            println runners
         when:
-            threads.forEach { it.join() }
+            runners.each {
+                it.start()
+                it.join()
+            }
+            runners.each { it.join() }
         then:
-            photos.size() == 100
-            photos.findAll {
+            files.size() == threads * photos
+            files.findAll {
                 photo -> Files.exists(photo.pathToScreenshot)
-            }.size() == 100
+            }.size() == threads * photos
+        where:
+            browser << [ChromeDriver.class, FirefoxDriver.class]
     }
-    WebDriver driver;
+
     Path screenshotDirectory;
 
     long startTime;

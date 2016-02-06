@@ -97,6 +97,7 @@ public class DanaGoesShoppingSample {
     // Expected to fail
     @Test
     public void shouldBeAbleToPurchaseAnItemForFree() {
+
         givenThat(dana).attemptsTo(purchase().anApple().thatCosts(0).dollars(), // Will fail
                 purchase().aPear().thatCosts(5).dollars());  // Should be skipped
         then(dana).should(seeThat(theTotalCost(), equalTo(15)));

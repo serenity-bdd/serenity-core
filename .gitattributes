@@ -40,5 +40,3 @@
 *.xpi binary
 *.otf binary
 *.pages binary
-*driver
-*.woff

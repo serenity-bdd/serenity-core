@@ -21,6 +21,8 @@ public class Purchase implements Performable {
     String currency;
 
 
+    public Boolean theItemWasPurchased = false;
+
     public static Purchase purchased() {return instrumented(Purchase.class);}
     public static Purchase purchase() {return instrumented(Purchase.class);}
     public static Purchase andPurchased() {return instrumented(Purchase.class);}
@@ -29,6 +31,7 @@ public class Purchase implements Performable {
     public <T extends Actor> void performAs(T actor) {
         assertThat(cost).isGreaterThan(0);
         andThat(actor).has(placed_the_item_in_her_basket());
+        this.theItemWasPurchased = true;
     }
 
     public Purchase anApple() {

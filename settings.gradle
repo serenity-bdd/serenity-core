@@ -8,5 +8,5 @@ include 'serenity-test-utils',
         'serenity-spring',
         'serenity-rest-assured',
         'serenity-browsermob-plugin',
-        'serenity-journey',
+        'serenity-screenplay',
         'browse-the-web'

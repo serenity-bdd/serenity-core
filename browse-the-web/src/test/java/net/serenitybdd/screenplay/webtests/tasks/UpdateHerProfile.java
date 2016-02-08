@@ -2,7 +2,6 @@ package net.serenitybdd.screenplay.webtests.tasks;
 
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.Unless;
 import net.serenitybdd.screenplay.actions.Settable;
 import net.serenitybdd.screenplay.webtests.pages.ProfilePage;
 import net.thucydides.core.annotations.Step;
@@ -61,7 +60,7 @@ public class UpdateHerProfile implements Performable {
                 UpdateHerProfile.name().to(name),
                 UpdateHerProfile.country().to(countryOfResidence),
                 UpdateHerProfile.dob().to(dob),
-                Unless.the(color.equals("none"),UpdateHerProfile.color().to(color))
+                UpdateHerProfile.color().to(color)
         );
     }
 

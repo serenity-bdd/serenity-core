@@ -5,6 +5,6 @@ ext {
 
 dependencies {
     compile project(':serenity-core')
-    compile project(':serenity-journey')
+    compile project(':serenity-screenplay')
     testCompile project(':serenity-junit')
 }

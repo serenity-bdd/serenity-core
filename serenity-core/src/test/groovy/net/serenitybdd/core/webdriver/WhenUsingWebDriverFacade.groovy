@@ -48,7 +48,7 @@ class WhenUsingWebDriverFacade extends Specification {
         configuration = new SystemPropertiesConfiguration(environmentVariables)
     }
 
-    def "stack should be initially empty"() {
+    def "should be possible get session id using webdriverManager"() {
         given:
             when(remote.getSessionId()).thenReturn(session)
             when(webDriverFactory.newInstanceOf(any(SupportedWebDriver.class))).thenReturn(remote)

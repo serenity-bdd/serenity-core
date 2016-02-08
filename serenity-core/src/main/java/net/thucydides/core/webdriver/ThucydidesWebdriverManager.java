@@ -133,7 +133,7 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
         WebDriver driver = getThreadLocalWebDriver(configuration, webDriverFactory,
                                                    inThisTestThread().getCurrentDriverName());
         if(driver instanceof WebDriverFacade){
-            driver = ((WebDriverFacade) driver).getProxiedDriver();
+            driver = ((WebDriverFacade) driver).getDriverInstance();
         }
         if (driver instanceof RemoteWebDriver) {
             return ((RemoteWebDriver) driver).getSessionId();

@@ -1,7 +1,9 @@
 package net.serenitybdd.plugins.gradle
 
+import net.thucydides.core.guice.Injectors
 import net.thucydides.core.reports.ResultChecker
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
+import net.thucydides.core.webdriver.Configuration
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -11,12 +13,9 @@ class SerenityPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        if(!System.properties['project.build.directory']){
-            System.properties['project.build.directory'] = project.projectDir.getAbsolutePath()
-        }
         project.extensions.create("serenity", SerenityPluginExtension)
-
         project.task('aggregate') {
+            updateProperties(project)
             group 'Serenity BDD'
             description 'Generates aggregated Serenity reports'
             doLast {
@@ -38,6 +37,7 @@ class SerenityPlugin implements Plugin<Project> {
         }
 
         project.task('checkOutcomes') {
+            updateProperties(project)
             group 'Serenity BDD'
             description "Checks the Serenity reports and fails the build if there are test failures (run automatically with 'check')"
 
@@ -53,6 +53,7 @@ class SerenityPlugin implements Plugin<Project> {
             }
         }
         project.task('clearReports') {
+            updateProperties(project)
             group 'Serenity BDD'
             description "Deletes the Serenity output directory (run automatically with 'clean')"
 
@@ -79,5 +80,12 @@ class SerenityPlugin implements Plugin<Project> {
             outputDir = project.projectDir.toPath().resolve(outputDir.toPath()).toFile()
         }
         outputDir
+    }
+
+    def updateProperties(Project project) {
+        System.properties['project.build.directory'] = project.projectDir.getAbsolutePath()
+        def config = Injectors.getInjector().getProvider(Configuration.class).get()
+        project.serenity.outputDirectory = config.getOutputDirectory()
+        project.serenity.sourceDirectory = config.getOutputDirectory()
     }
 }

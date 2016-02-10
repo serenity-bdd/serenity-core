@@ -11,7 +11,6 @@ import org.gradle.api.Project
 class SerenityPlugin implements Plugin<Project> {
 
     File reportDirectory
-    def log
 
     @Override
     void apply(Project project) {
@@ -21,7 +20,6 @@ class SerenityPlugin implements Plugin<Project> {
             group 'Serenity BDD'
             description 'Generates aggregated Serenity reports'
             doLast {
-                log=logger
                 updateProperties(project)
                 reportDirectory = prepareReportDirectory(project)
                 if (!project.serenity.projectKey) {
@@ -47,7 +45,6 @@ class SerenityPlugin implements Plugin<Project> {
             inputs.dir reportDirectory
 
             doLast {
-                log=logger
                 updateProperties(project)
                 reportDirectory = prepareReportDirectory(project)
                 logger.lifecycle("Checking serenity results for ${project.serenity.projectKey} in directory $reportDirectory")
@@ -62,7 +59,6 @@ class SerenityPlugin implements Plugin<Project> {
             description "Deletes the Serenity output directory (run automatically with 'clean')"
 
             doLast {
-                log=logger
                 updateProperties(project)
                 reportDirectory = prepareReportDirectory(project)
                 reportDirectory.deleteDir()
@@ -90,7 +86,7 @@ class SerenityPlugin implements Plugin<Project> {
 
     def updateSystemPath(Project project) {
         System.properties['project.build.directory'] = project.projectDir.getAbsolutePath()
-        if (log) log.lifecycle("Updating project.build.directory to ${project.projectDir.getAbsolutePath()}")
+        printf ("Updating project.build.directory to ${project.projectDir.getAbsolutePath()}")
         def SystemPropertiesConfiguration configuration = (SystemPropertiesConfiguration) Injectors.getInjector().getProvider(Configuration.class).get()
         configuration.getEnvironmentVariables().setProperty('project.build.directory', project.projectDir.getAbsolutePath())
         configuration.reloadOutputDirectory()
@@ -100,7 +96,7 @@ class SerenityPlugin implements Plugin<Project> {
     def updateProperties(Project project) {
         updateSystemPath(project)
         def config = Injectors.getInjector().getProvider(Configuration.class).get()
-        if (log) log.lifecycle("Updating project.serenity.outputDirectory to ${config.getOutputDirectory()}")
+        printf ("Updating project.serenity.outputDirectory to ${config.getOutputDirectory()}")
         project.serenity.outputDirectory = config.getOutputDirectory()
         project.serenity.sourceDirectory = config.getOutputDirectory()
     }

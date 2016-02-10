@@ -15,6 +15,7 @@ import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
+import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -205,7 +206,15 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private Set<String> getRootDirectoryFromWorkingDirectory() throws IOException {
-        return getRootDirectoryFromParentDir(System.getProperty(WORKING_DIR)).asSet();
+        final String workingDirectory = System.getProperty("user.dir");
+        final String mavenBuildDir = System.getProperty(SystemPropertiesConfiguration.PROJECT_BUILD_DIRECTORY);
+        String resultDir = "";
+        if (!StringUtils.isEmpty(mavenBuildDir)) {
+            resultDir = mavenBuildDir;
+        } else {
+            resultDir = workingDirectory;
+        }
+        return getRootDirectoryFromParentDir(resultDir).asSet();
     }
 
     private Optional<String> configuredRelativeRootDirectory;

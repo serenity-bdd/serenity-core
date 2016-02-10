@@ -90,8 +90,8 @@ class SerenityPlugin implements Plugin<Project> {
 
     def updateSystemPath(Project project) {
         System.properties['project.build.directory'] = project.projectDir.getAbsolutePath()
-        log.lifecycle("Updating project.build.directory to ${project.projectDir.getAbsolutePath()}")
-        def SystemPropertiesConfiguration configuration = (SystemPropertiesConfiguration)Injectors.getInjector().getProvider(Configuration.class).get()
+        if (log) log.lifecycle("Updating project.build.directory to ${project.projectDir.getAbsolutePath()}")
+        def SystemPropertiesConfiguration configuration = (SystemPropertiesConfiguration) Injectors.getInjector().getProvider(Configuration.class).get()
         configuration.getEnvironmentVariables().setProperty('project.build.directory', project.projectDir.getAbsolutePath())
         configuration.reloadOutputDirectory()
     }
@@ -100,7 +100,7 @@ class SerenityPlugin implements Plugin<Project> {
     def updateProperties(Project project) {
         updateSystemPath(project)
         def config = Injectors.getInjector().getProvider(Configuration.class).get()
-        log.lifecycle("Updating project.serenity.outputDirectory to ${config.getOutputDirectory()}")
+        if (log) log.lifecycle("Updating project.serenity.outputDirectory to ${config.getOutputDirectory()}")
         project.serenity.outputDirectory = config.getOutputDirectory()
         project.serenity.sourceDirectory = config.getOutputDirectory()
     }

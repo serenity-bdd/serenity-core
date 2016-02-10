@@ -18,6 +18,8 @@ import net.thucydides.core.util.Inflector;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URI;
@@ -40,6 +42,8 @@ import static org.apache.commons.io.FilenameUtils.removeExtension;
  * By default, the tests
  */
 public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagProvider implements RequirementsTagProvider, OverridableTagProvider {
+
+    private final static Logger logger = LoggerFactory.getLogger(FileSystemRequirementsTagProvider.class);
 
     private final static String DEFAULT_ROOT_DIRECTORY = "stories";
     private final static String FEATURES_ROOT_DIRECTORY = "features";
@@ -128,6 +132,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 Set<String> directoryPaths = getRootDirectoryPaths();
                 for (String rootDirectoryPath : directoryPaths) {
                     File rootDirectory = new File(rootDirectoryPath);
+                    logger.info("Loading requirements from isExists="+rootDirectory.exists()+" path:"+rootDirectory);
                     if (rootDirectory.exists()) {
                         allRequirements.addAll(loadCapabilitiesFrom(rootDirectory.listFiles(thatAreDirectories())));
                         allRequirements.addAll(loadStoriesFrom(rootDirectory.listFiles(thatAreStories())));

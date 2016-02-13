@@ -1,6 +1,6 @@
 ext {
-    bintrayPackage = 'serenity-ability-to-browse-theValue-web'
-    projectDescription = 'Webdriver integration for theValue User Journey pattern in Serenity'
+    bintrayPackage = 'serenity-ability-to-browse-the-web'
+    projectDescription = 'Webdriver integration for the User Journey pattern in Serenity'
 }
 
 dependencies {

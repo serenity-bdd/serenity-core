@@ -35,6 +35,11 @@ public class FailureAnalysisConfiguration {
         DEFAULT_PENDING_TYPES.addAll(ImmutableList.of(PendingStepException.class, PendingException.class));
     }
 
+    private final List<Class<?>> DEFAULT_ERROR_TYPES = Lists.newArrayList();
+    {
+        DEFAULT_ERROR_TYPES.addAll(ImmutableList.of(Error.class));
+    }
+
     public FailureAnalysisConfiguration(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
     }
@@ -73,6 +78,17 @@ public class FailureAnalysisConfiguration {
         pendingTypes.removeAll(failureTypesDefinedIn(environmentVariables));
 
         return pendingTypes;
+    }
+
+    public List<Class<?>> errorTypes() {
+        List<Class<?>> errorTypes = Lists.newArrayList(DEFAULT_ERROR_TYPES);
+        errorTypes.addAll(errorTypesDefinedIn(environmentVariables));
+
+        errorTypes.removeAll(pendingTypesDefinedIn(environmentVariables));
+        errorTypes.removeAll(compromisedTypesDefinedIn(environmentVariables));
+        errorTypes.removeAll(failureTypesDefinedIn(environmentVariables));
+
+        return errorTypes;
     }
 
     private List<Class<?>> errorTypesDefinedIn(EnvironmentVariables environmentVariables) {

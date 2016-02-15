@@ -1122,13 +1122,6 @@ public class WhenRecordingNewTestOutcomes {
     }
 
     @Test
-    public void should_be_able_to_obtain_a_link_to_the_saucelabs_video() {
-        testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class);
-        testOutcome.setSessionId("1234");
-        assertThat(testOutcome.getVideoLink(), is("http://saucelabs.com/jobs/1234"));
-    }
-
-    @Test
     public void should_be_able_to_find_the_last_step() {
         testOutcome.recordStep(forASuccessfulTestStepCalled("Step 1"));
         testOutcome.recordStep(forASuccessfulTestStepCalled("Step 2"));

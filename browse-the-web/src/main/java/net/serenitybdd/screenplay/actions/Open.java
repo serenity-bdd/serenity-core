@@ -8,7 +8,7 @@ import net.thucydides.core.annotations.Step;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
-//@Task("Opens theValue #targetPage {0}")
+//@Task("Opens the #targetPage {0}")
 public class Open implements Action {
 
     private PageObject targetPage;

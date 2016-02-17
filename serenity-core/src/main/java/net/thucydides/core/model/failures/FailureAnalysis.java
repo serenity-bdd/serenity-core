@@ -67,6 +67,10 @@ public class FailureAnalysis {
         DEFAULT_PENDING_TYPES.addAll(ImmutableList.of(PendingStepException.class, PendingException.class));
     }
 
+    private final List<Class<?>> DEFAULT_ERROR = Lists.newArrayList();
+    {
+        DEFAULT_ERROR.addAll(ImmutableList.of(Error.class));
+    }
     public boolean reportAsFailure(Class<?> testFailureCause) {
         if (testFailureCause == null) {
             return false;
@@ -97,6 +101,18 @@ public class FailureAnalysis {
         }
         for(Class<?> validPendingType: configured.pendingTypes()) {
             if (isA(validPendingType,testFailureCause)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean reportAsError(Class<?> testFailureCause) {
+        if (testFailureCause == null) {
+            return false;
+        }
+        for(Class<?> validErrorType: configured.errorTypes()) {
+            if (isA(validErrorType,testFailureCause)) {
                 return true;
             }
         }

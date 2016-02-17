@@ -29,15 +29,25 @@ public class SaucelabsLinkGenerator implements LinkGenerator {
     }
 
     public String linkFor(TestOutcome testOutcome) {
-        String jobId = testOutcome.getSessionId();
-        if (jobId == null) {
+        if (saucelabsIsNotConfigured()) {
+            return null;
+        }
+        if (noSessionIdIsFoundFor(testOutcome)) {
             return null;
         }
         if (accessKeyAvailable()) {
-            return noLoginLinkFor(jobId);
+            return noLoginLinkFor(testOutcome.getSessionId());
         } else {
-            return simpleLinkFor(jobId);
+            return simpleLinkFor(testOutcome.getSessionId());
         }
+    }
+
+    private boolean saucelabsIsNotConfigured() {
+        return (ThucydidesSystemProperty.SAUCELABS_URL.from(environmentVariables) == null);
+    }
+
+    private boolean noSessionIdIsFoundFor(TestOutcome testOutcome) {
+        return testOutcome.getSessionId() == null;
     }
 
     private String simpleLinkFor(String jobId) {

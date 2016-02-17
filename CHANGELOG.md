@@ -1,4 +1,4 @@
-## # Serenity BDD Core Change Log
+## Serenity BDD core changes log
 
 ### v1.1.26 (2016/02/15 11:18 +00:00)
  

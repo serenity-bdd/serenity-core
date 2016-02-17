@@ -1,4 +1,4 @@
-## Serenity BDD core changelog
+## # Serenity BDD Core Change Log
 
 ### v1.1.26 (2016/02/15 11:18 +00:00)
  
@@ -39,15 +39,12 @@
 - [0e08c8c](https://github.com/serenity-bdd/serenity-core/commit/0e08c8c86f76f9c596dca271cb82f73f555421da) Use the correct name for the screenplay library for this version ([@wakaleo](https://github.com/wakaleo))
 - [9d5fb9e](https://github.com/serenity-bdd/serenity-core/commit/9d5fb9e53e2a7c7592735d10046fb137fa073dae) style: updating test style ([@YamStranger](https://github.com/YamStranger))
 - [91c3238](https://github.com/serenity-bdd/serenity-core/commit/91c32382040967d4ac57068f8ff2cb4656aad480) fix: updating version of serenityc-core and maven-plugin ([@YamStranger](https://github.com/YamStranger))
-- [22e56c8](https://github.com/serenity-bdd/serenity-core/commit/22e56c85164468369f594318871919640b0e1108) Merge branch 'master', remote-tracking branch 'upstream/master' ([@YamStranger](https://github.com/YamStranger))
 - [6f4f5d4](https://github.com/serenity-bdd/serenity-core/commit/6f4f5d461d969c0b675b81795cfc87e3c93d6a5c) fix: updating logging for serenity gradle plugin, using simple out stream ([@YamStranger](https://github.com/YamStranger))
 - [0340f82](https://github.com/serenity-bdd/serenity-core/commit/0340f82dcb76e3c72221cafdc334f94320409b23) fix: updating logging for serenity gradle plugin ([@YamStranger](https://github.com/YamStranger))
 - [412657b](https://github.com/serenity-bdd/serenity-core/commit/412657bb56c87401a6e71e329e19374bcc93799d) fix: updating gradle plugin to work with new configuration ([@YamStranger](https://github.com/YamStranger))
 - [ffdc3ef](https://github.com/serenity-bdd/serenity-core/commit/ffdc3efce06074d0b7b1f36525b96d027c994fb4) fix: updating requirements directory to be able work with multimodule projects ([@YamStranger](https://github.com/YamStranger))
-- [d56aff2](https://github.com/serenity-bdd/serenity-core/commit/d56aff22ba0bdd4cacc12d1a3b928474b7264d60) Merge branch 'master', remote-tracking branch 'upstream/master' ([@YamStranger](https://github.com/YamStranger))
 - [cbc92cb](https://github.com/serenity-bdd/serenity-core/commit/cbc92cba6fc8792d46ae6d9df466797dd286ca57) fix: updated gradle plugin to work with multimodule projects ([@YamStranger](https://github.com/YamStranger))
 - [4f1581c](https://github.com/serenity-bdd/serenity-core/commit/4f1581ce6369aaa7995552563df04c11d391465a) fix: updating getSessionId method to get session id without init new webdriver ([@YamStranger](https://github.com/YamStranger))
-- [7211b5b](https://github.com/serenity-bdd/serenity-core/commit/7211b5ba47098a090612cd5a9d88d9f418e1bfda) Merge branch 'master', remote-tracking branch 'upstream/master' ([@YamStranger](https://github.com/YamStranger))
 - [d9c1e6a](https://github.com/serenity-bdd/serenity-core/commit/d9c1e6a65a28bb86ad80e76f593da6a6c6d364b4) style: updated name of test method ([@YamStranger](https://github.com/YamStranger))
 - [bf8fca3](https://github.com/serenity-bdd/serenity-core/commit/bf8fca33efc9aa079eb81e9d0e3763c2eb308472) fix: remote driver session id can be under proxied driver ([@YamStranger](https://github.com/YamStranger))
 - [909f21a](https://github.com/serenity-bdd/serenity-core/commit/909f21a66d8f7321495ec717b666b6a77f8b0d56) Renamed serenity-journey to serenity-screenplay ([@wakaleo](https://github.com/wakaleo))
@@ -70,24 +67,16 @@
  
 **Pull requests:**
  
-- [#297](https://github.com/serenity-bdd/serenity-core/pull/297) Revert "Git Attributes Experiment, please don't merge" ([@YamStranger](https://github.com/YamStranger))
-- [#296](https://github.com/serenity-bdd/serenity-core/pull/296) Revert "Updating gitattributes not to update chromedriver and woff files" ([@YamStranger](https://github.com/YamStranger))
 - [#293](https://github.com/serenity-bdd/serenity-core/pull/293) Updating gitattributes not to update chromedriver and woff files ([@YamStranger](https://github.com/YamStranger))
 - [#289](https://github.com/serenity-bdd/serenity-core/pull/289) Updated RequirementPersister ([@YamStranger](https://github.com/YamStranger))
 - [#291](https://github.com/serenity-bdd/serenity-core/pull/291) Git Attributes Experiment, please don't merge ([@YamStranger](https://github.com/YamStranger))
-- [#290](https://github.com/serenity-bdd/serenity-core/pull/290) Revert "Git Attributes Experiment, please don't merge" ([@YamStranger](https://github.com/YamStranger))
 - [#288](https://github.com/serenity-bdd/serenity-core/pull/288) Git Attributes Experiment, please don't merge ([@YamStranger](https://github.com/YamStranger))
  
 **Commits:**
  
-- [91aee6a](https://github.com/serenity-bdd/serenity-core/commit/91aee6a29aae70e8202566498e0a8056d631ac6b) Revert "Git Attributes Experiment, please don't merge" ([@YamStranger](https://github.com/YamStranger))
-- [0dcba83](https://github.com/serenity-bdd/serenity-core/commit/0dcba83994ed144c615afd847b9679de443877fc) Revert "Updating gitattributes not to update chromedriver and woff files" ([@YamStranger](https://github.com/YamStranger))
 - [e71056d](https://github.com/serenity-bdd/serenity-core/commit/e71056d57767f35c6840445618a8fa2466f9eeae) fix: updated gitattributes ([@YamStranger](https://github.com/YamStranger))
-- [66b53f5](https://github.com/serenity-bdd/serenity-core/commit/66b53f523234cf66d011e81c08e33d0c3fd056c7) Merge branch 'master', remote-tracking branch 'upstream/master' ([@YamStranger](https://github.com/YamStranger))
 - [b98f19f](https://github.com/serenity-bdd/serenity-core/commit/b98f19f058c80353804a61459854115c51d7d296) chore: updated gitattributes ([@YamStranger](https://github.com/YamStranger))
-- [5236c58](https://github.com/serenity-bdd/serenity-core/commit/5236c58bf846648fc61e2928bdd02de068407c3d) Revert "Git Attributes Experiment, please don't merge" ([@YamStranger](https://github.com/YamStranger))
 - [c6122c8](https://github.com/serenity-bdd/serenity-core/commit/c6122c8a49761495287233a068fba18cddb7a635) fix: fixed nullpointer if json config does not exists ([@YamStranger](https://github.com/YamStranger))
-- [b0e3972](https://github.com/serenity-bdd/serenity-core/commit/b0e3972388381e3aaab8be37b735ce9d1521c4e0) Merge branch 'master', remote-tracking branch 'upstream/master' ([@YamStranger](https://github.com/YamStranger))
 - [862b790](https://github.com/serenity-bdd/serenity-core/commit/862b790b16d85acd31d4e64213700e15c6cf6af0) Updated smoke tests ([@wakaleo](https://github.com/wakaleo))
 - [c9572c8](https://github.com/serenity-bdd/serenity-core/commit/c9572c849d9e710202dd01e4d75026952b869f1a) Actors can now perform tasks conditionally ([@wakaleo](https://github.com/wakaleo))
 - [3e0d991](https://github.com/serenity-bdd/serenity-core/commit/3e0d99168dbec1a580677df52287c6393139fc1b) Actors can now perform tasks conditionally ([@wakaleo](https://github.com/wakaleo))
@@ -130,7 +119,6 @@
  
 - [c4a8fc1](https://github.com/serenity-bdd/serenity-core/commit/c4a8fc16ec943cad9d2fc35aa9271dadf63a6fc7) Refactoring and performance improvements ([@wakaleo](https://github.com/wakaleo))
 - [2e2450a](https://github.com/serenity-bdd/serenity-core/commit/2e2450a32770d5e0f2c906f3886372a705df01a0) Tests can now manage whether cookies should be cleared between each test ([@wakaleo](https://github.com/wakaleo))
-- [ba0c2a3](https://github.com/serenity-bdd/serenity-core/commit/ba0c2a38f93e529c420ba71cff2eb9bf80c6459f) Merge branch 'master', remote-tracking branch 'upstream/master' ([@YamStranger](https://github.com/YamStranger))
 - [95449fe](https://github.com/serenity-bdd/serenity-core/commit/95449fed05268e1e3dff2c2475bed4814f341e4d) style: update test style ([@YamStranger](https://github.com/YamStranger))
 - [4e495f5](https://github.com/serenity-bdd/serenity-core/commit/4e495f56444915a7e6749a9ba4061ba2c0e50131) style: test updated ([@YamStranger](https://github.com/YamStranger))
 - [194f3d9](https://github.com/serenity-bdd/serenity-core/commit/194f3d966d780148be98061a22ee04ccc2dc213e) fix: updated report template generation ([@YamStranger](https://github.com/YamStranger))
@@ -160,7 +148,6 @@
  > During verbose logging, Serenity tried to read the tag from web elements. This could cause failures if the element was stale or unavailable when the logging happen. This has now been changed to log the locator and not the element tag type. 
 - [9f1f6b5](https://github.com/serenity-bdd/serenity-core/commit/9f1f6b5c05f6c1b568a574a26f487f974badaaa6) Added an Action class to scroll to a particular eleemtn on the screen. ([@wakaleo](https://github.com/wakaleo))
 - [123e26d](https://github.com/serenity-bdd/serenity-core/commit/123e26d0bda8d05b6483c34f1011fbb3c57bfc7d) fix: updated processing of "browserstack.os.version" and "browserstack.browser.version" system properties according to latest changes on BrowserStack side ([@ovenal](https://github.com/ovenal))
-- [9b06e81](https://github.com/serenity-bdd/serenity-core/commit/9b06e815e629d15f53769b84467051fc95099123) Merge branch 'master', remote-tracking branch 'upstream/master' ([@YamStranger](https://github.com/YamStranger))
 - [e96d512](https://github.com/serenity-bdd/serenity-core/commit/e96d512758d18462ab14c2ad00ddee515a317ad7) style: updated test ([@YamStranger](https://github.com/YamStranger))
 - [9eb9390](https://github.com/serenity-bdd/serenity-core/commit/9eb93903d47414aa03231ffc74a0e0dd6de5ffca) chore: updating gitignore ([@YamStranger](https://github.com/YamStranger))
 - [737b1aa](https://github.com/serenity-bdd/serenity-core/commit/737b1aaf46a94ab4a75792ff9170b983dfe3eb80) chore: updated wrapper, and build publishing libs ([@YamStranger](https://github.com/YamStranger))
@@ -212,7 +199,6 @@
  
 **Pull requests:**
  
-- [#256](https://github.com/serenity-bdd/serenity-core/pull/256) Revert "#243 Upgrading typesafe.config from 1.2 to 1.3" ([@YamStranger](https://github.com/YamStranger))
 - [#253](https://github.com/serenity-bdd/serenity-core/pull/253) #183 Updating of gradle plugin to use same Configuration as SerenityRunner ([@YamStranger](https://github.com/YamStranger))
 - [#252](https://github.com/serenity-bdd/serenity-core/pull/252) #250 Upgrading gradle and groovy ([@YamStranger](https://github.com/YamStranger))
 - [#251](https://github.com/serenity-bdd/serenity-core/pull/251) Report for configuration ([@YamStranger](https://github.com/YamStranger))
@@ -222,7 +208,6 @@
 - [1f0dba1](https://github.com/serenity-bdd/serenity-core/commit/1f0dba14b3c4c559704508ba27076549f2903884) Updated smoke test dependencies ([@wakaleo](https://github.com/wakaleo))
 - [7caec06](https://github.com/serenity-bdd/serenity-core/commit/7caec064fd2d81debbe42f45ae29aad2c8d0f741) Removed a redundant test ([@wakaleo](https://github.com/wakaleo))
 - [c7bcd96](https://github.com/serenity-bdd/serenity-core/commit/c7bcd9643a1d3b7246bd96ffbdba9afc64416c13) Multiple assertions in the same should() method are now treated as "soft" asserts. ([@wakaleo](https://github.com/wakaleo))
-- [05ac6bd](https://github.com/serenity-bdd/serenity-core/commit/05ac6bd4c911b895f41fecb8afc7f243d536fbdd) Revert "#243 Upgrading typesafe.config from 1.2 to 1.3" ([@YamStranger](https://github.com/YamStranger))
 - [5f78a7b](https://github.com/serenity-bdd/serenity-core/commit/5f78a7b2ca9d63ed61a34551313a5f4bce6d9b98) style: changed style of one test ([@YamStranger](https://github.com/YamStranger))
 - [5db32df](https://github.com/serenity-bdd/serenity-core/commit/5db32dfbc9fba66aa476e2e2febcbef853d50049) fix: update serenity-gradle-plugin to use same Configuration as Tests ([@YamStranger](https://github.com/YamStranger))
 - [a610239](https://github.com/serenity-bdd/serenity-core/commit/a610239496c0955e66d5908b93a77534134e395a) fix: aggregation report generation in gradle plugin ([@YamStranger](https://github.com/YamStranger))
@@ -289,7 +274,6 @@
 **Pull requests:**
  
 - [#224](https://github.com/serenity-bdd/serenity-core/pull/224) Pull request for adding reloading output dir before checks in tests ([@YamStranger](https://github.com/YamStranger))
-- [#225](https://github.com/serenity-bdd/serenity-core/pull/225) Revert "Pull request for updating SerenityRest to log all types of input" ([@YamStranger](https://github.com/YamStranger))
 - [#222](https://github.com/serenity-bdd/serenity-core/pull/222) Pull request for removing dependecy ([@YamStranger](https://github.com/YamStranger))
  
 **Commits:**
@@ -298,7 +282,6 @@
 - [c6803e8](https://github.com/serenity-bdd/serenity-core/commit/c6803e834640e9dfe84d80a7bbdeabec8655a883) Readability improvements and moved the UI Action classes into their own package. ([@wakaleo](https://github.com/wakaleo))
 - [4c9a1b1](https://github.com/serenity-bdd/serenity-core/commit/4c9a1b1ec71d2489a72fd654891697def1b4bdfc) 223_issue: reloading result dir ([@YamStranger](https://github.com/YamStranger))
 - [8d42d0d](https://github.com/serenity-bdd/serenity-core/commit/8d42d0d2f40dea536930f1032f7f3f79e9ea0110) 223_issue: reverting updating of some imports ([@YamStranger](https://github.com/YamStranger))
-- [994da12](https://github.com/serenity-bdd/serenity-core/commit/994da12a7d2a331a712edb51b2d446f2ab95793e) Revert "Pull request for updating SerenityRest to log all types of input" ([@YamStranger](https://github.com/YamStranger))
 - [54721c4](https://github.com/serenity-bdd/serenity-core/commit/54721c4a11479df11c1177ed6138261950cd314a) 223_issue: added reloading output dir for tests ([@YamStranger](https://github.com/YamStranger))
 - [c46729f](https://github.com/serenity-bdd/serenity-core/commit/c46729fb285850d38a179bf3be9e17eac0aeff92) 217_issue: style fix ([@YamStranger](https://github.com/YamStranger))
 - [9c8f3b2](https://github.com/serenity-bdd/serenity-core/commit/9c8f3b20036cdb6fd98fba128843fe4553bb374e) 217_issue: removed dependency org.mortbay.jetty:servlet-api-2.5:6.1.9, it is duplicated with javax.servlet:javax.servlet-api:3.1.0 ([@YamStranger](https://github.com/YamStranger))
@@ -512,7 +495,6 @@
  
 **Commits:**
  
-- [6e91a31](https://github.com/serenity-bdd/serenity-core/commit/6e91a31d3426c4ddde7a609d3c55bbbb14810d96) Revert "Merge branch 'master' of github.com:serenity-bdd/serenity-core" ([@wakaleo](https://github.com/wakaleo))
  
  > This reverts commit 4397786f9fd7f37cb6c2e4f00741a2343e9e4d57, reversing 
  > changes made to 84d095558dcd61554c2a0a988977bb1e9eecb71d. 
@@ -1306,9 +1288,6 @@
 - [66801ff](https://github.com/serenity-bdd/serenity-core/commit/66801ffbbc769e407f60b93fe8fdae7572ce2188) Added test data for a sample pending report ([@wakaleo](https://github.com/wakaleo))
 - [cd09406](https://github.com/serenity-bdd/serenity-core/commit/cd09406dcb34a96553926e964ebe87a267da19c2) Added test data for a sample pending report ([@wakaleo](https://github.com/wakaleo))
 - [c191b5a](https://github.com/serenity-bdd/serenity-core/commit/c191b5a2b3d0a8cf12bfb189944c91784ec15a35) Added test data for a sample pending report ([@wakaleo](https://github.com/wakaleo))
-- [6a0cb97](https://github.com/serenity-bdd/serenity-core/commit/6a0cb9713ab969f5c5048ee4ac508a3502df538c) Merge branch 'master' of github.com:serenity-bdd/serenity-core ([@wakaleo](https://github.com/wakaleo))
-- [20a26b4](https://github.com/serenity-bdd/serenity-core/commit/20a26b4ad444a148d9a5bb9e7835a6a2f3a3eef7) Merge branch 'master' of github.com:serenity-bdd/serenity-core ([@wakaleo](https://github.com/wakaleo))
-- [6d95ca8](https://github.com/serenity-bdd/serenity-core/commit/6d95ca8247c3ddf1e96a2f8cf63b3d14dcc0c337) Merge branch 'master' of github.com:serenity-bdd/serenity-core ([@wakaleo](https://github.com/wakaleo))
 - [ac60be6](https://github.com/serenity-bdd/serenity-core/commit/ac60be617fe6dd15076a8406347e0be2897ff62e) Fixed an issue with Cucumber requirements reporting when the name of the feature differs from the name of the feature file. ([@wakaleo](https://github.com/wakaleo))
 - [a6d6cc6](https://github.com/serenity-bdd/serenity-core/commit/a6d6cc62c5763512c53b4c79fbdfc3844de54ea6) Fixed an issue with Cucumber requirements reporting when the name of the feature differs from the name of the feature file. ([@wakaleo](https://github.com/wakaleo))
 - [8043809](https://github.com/serenity-bdd/serenity-core/commit/8043809da640f99f1eaae165f7774a2d5fe1eb19) Update WhenLoadingTestDataFromACSVFile.java ([@x-hovo-x](https://github.com/x-hovo-x))
@@ -1520,14 +1499,8 @@
 - [199e60a](https://github.com/serenity-bdd/serenity-core/commit/199e60a595c0830172e8fb648363cb3b068ca660) Updated reporting, attempt 2 ([@bmwsedee](https://github.com/bmwsedee))
 - [602eaf8](https://github.com/serenity-bdd/serenity-core/commit/602eaf8dfe8633e9e90005a68b56079638437f7c) Added tool tips on the 'Related Tags' tables ([@wakaleo](https://github.com/wakaleo))
 - [a05b31f](https://github.com/serenity-bdd/serenity-core/commit/a05b31ffb0928e9bc3b80c809a7a029975fefe22) Undid javascript library updates and added the number of tests for tags on the reports ([@wakaleo](https://github.com/wakaleo))
-- [0a272c4](https://github.com/serenity-bdd/serenity-core/commit/0a272c47a9a49f24d62982faf98ea86f73b92494) Revert "Updated libraries" ([@wakaleo](https://github.com/wakaleo))
  
  > This reverts commit 44ec91e92d90ebc3742a6221f82d1a404b1baa57. 
-- [f8f4762](https://github.com/serenity-bdd/serenity-core/commit/f8f476230acb6e8b5bccba058d0903699d62ec73) Revert "Update reports to use new libraries" ([@wakaleo](https://github.com/wakaleo))
-- [d017a61](https://github.com/serenity-bdd/serenity-core/commit/d017a61caa8d820872da94ec66f26e1b747fdfc2) Revert "Refactoring to facilitate easier migrating to new versions of the libraries" ([@wakaleo](https://github.com/wakaleo))
-- [a25fed4](https://github.com/serenity-bdd/serenity-core/commit/a25fed4b5fe383059edec8a96a66b7e0ef224d49) Revert "Updated excanvas" ([@wakaleo](https://github.com/wakaleo))
-- [b49d680](https://github.com/serenity-bdd/serenity-core/commit/b49d68030bb88d0b5f992da15af5085e5f6afc78) Revert "Updated JavaScript InfoVis Toolkit" ([@wakaleo](https://github.com/wakaleo))
-- [1b62cb0](https://github.com/serenity-bdd/serenity-core/commit/1b62cb0a07240b4d267cd029c7f4bd1338e2f971) Revert "Removed old versions of libraries" ([@wakaleo](https://github.com/wakaleo))
  
  > This reverts commit 7b26344dea3c0ee710ee90fe7040141a6941f97f. 
 - [911799b](https://github.com/serenity-bdd/serenity-core/commit/911799b02a2d987ac49ac41f1735925b173538cd) Fixed issues with identifying appium driver ([@schmurgon](https://github.com/schmurgon))

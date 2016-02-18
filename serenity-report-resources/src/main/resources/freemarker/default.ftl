@@ -278,7 +278,7 @@
                             <div class="modal-body">
                                 <#if (cause.message)??><h4>${cause.message}</h4></#if>
                                 <#list cause.stackTrace as element>
-                                ${element.className}.${element.methodName}(${element.fileName}
+                                ${element.className}.${element.methodName}(${(element.fileName)!""}
                                     :${element.lineNumber})
                                 </#list>
                             </div>

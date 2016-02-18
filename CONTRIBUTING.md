@@ -48,18 +48,35 @@ where <type> is one of the following:
   - perf: A code change that improves performance
   - test: Adding missing tests
   - chore: Changes to the build process or auxiliary tools and libraries such as documentation generation
-Starting from version 1.0.24, any commits without one of these prefixes will not appear in the release notes.
+  
+Also commits can consists of several lines - to include some additional information in relase notes. For example:
+```  
+feat: A new feature to make something better
+now it will be available to call api.function() with additional parameters like api.function(Integer)
+```
+it will be included in release notes as:
+
+ - feat: A new feature to make something better
+     
+     > now it will be available to call api.function() with additional parameters like api.function(Integer)
+
+Please take a look at release notes to find some more examples of mutiline commits. 
+  
+Starting from version 1.1.26, any commits without one of these prefixes will not appear in the release notes.
 
 ## <a name="pull_request_template"></a> Pull Request Template
 During creating pull request please use name conventions and short template for description. 
 
 If Pull request related to some issue, or issues – name of it should starts from reference, like #241 for example. If no issues for this pull request just short title. Here is some examples for pull requests names:
 ```
-#124 Including test execution duration
-#435 Updating dependency
-Updating structure of configuration
+Included test execution duration for #124
+some:lib was updated to 2.45 for #435
+Updated structure of configuration to for retries
 ```
-PR Template:
+**Remember**
+almost all pull requests will be included in release notes, so name of pull requests is very important
+
+PR body Template:
 
 ```
 #### Summary of this PR

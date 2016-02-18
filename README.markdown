@@ -55,7 +55,23 @@ where <type> is one of the following:
   - test: Adding missing tests
   - chore: Changes to the build process or auxiliary tools and libraries such as documentation generation
 
-Starting from version 1.0.24, any commits without one of these prefixes will not appear in the release notes.
+Also commits can consists of several lines - to include some additional information in relase notes. For example:
+```  
+feat: A new feature to make something better
+now it will be available to call api.function() with additional parameters like api.function(Integer)
+```
+it will be included in release notes as:
+
+ - feat: A new feature to make something better
+     
+     > now it will be available to call api.function() with additional parameters like api.function(Integer)
+
+Please take a look at release notes to find some more examples of mutiline commits. 
+
+**More you can find in Contributing guide for this repo**
+
+Starting from version 1.1.26, any commits without one of these prefixes will not appear in the release notes.
+
 
 ## Licensing
 

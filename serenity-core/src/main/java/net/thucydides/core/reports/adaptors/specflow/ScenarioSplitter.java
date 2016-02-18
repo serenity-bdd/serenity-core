@@ -2,6 +2,7 @@ package net.thucydides.core.reports.adaptors.specflow;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class ScenarioSplitter {
     }
 
     private String removeParametersFrom(String title) {
-        if (title != null && title.indexOf("(") > -1) {
+        if (StringUtils.isNotEmpty(title) && title.indexOf("(") > -1) {
             return title.substring(0, title.indexOf("(") );
         } else {
             return title;

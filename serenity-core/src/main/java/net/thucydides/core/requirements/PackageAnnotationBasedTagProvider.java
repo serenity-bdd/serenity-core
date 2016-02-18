@@ -328,7 +328,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         public List<Requirement> in(Collection<Requirement> requirements) {
             List<Requirement> children = Lists.newArrayList();
             for (Requirement requirement : requirements) {
-                if (requirement.getParent() != null && requirement.getParent().equals(parent.getName())) {
+                if (StringUtils.isNotEmpty(requirement.getParent()) && requirement.getParent().equals(parent.getName())) {
                     children.add(requirement);
                 }
             }

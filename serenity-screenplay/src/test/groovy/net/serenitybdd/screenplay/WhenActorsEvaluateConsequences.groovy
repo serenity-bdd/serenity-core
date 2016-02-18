@@ -5,7 +5,10 @@ import org.junit.runner.notification.RunNotifier
 import spock.lang.Specification
 
 import static OutcomeChecks.resultsFrom
+import static net.serenitybdd.screenplay.GivenWhenThen.seeThat
+import static net.serenitybdd.screenplay.shopping.questions.ThankYouMessage.theThankYouMessage
 import static net.thucydides.core.model.TestResult.*
+import static org.hamcrest.Matchers.equalTo
 
 class WhenActorsEvaluateConsequences extends Specification{
 

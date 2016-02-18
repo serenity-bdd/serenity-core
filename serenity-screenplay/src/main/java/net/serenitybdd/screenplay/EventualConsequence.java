@@ -68,6 +68,11 @@ public class EventualConsequence<T> implements Consequence<T> {
     }
 
     @Override
+    public String toString() {
+        return consequenceThatMightTakeSomeTime.toString();
+    }
+
+    @Override
     public Consequence<T> orComplainWith(Class<? extends Error> complaintType) {
         return new EventualConsequence(consequenceThatMightTakeSomeTime.orComplainWith(complaintType));
     }

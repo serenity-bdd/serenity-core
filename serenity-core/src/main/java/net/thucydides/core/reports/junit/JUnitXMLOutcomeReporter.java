@@ -7,6 +7,7 @@ import net.thucydides.core.model.ReportNamer;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.TestOutcomes;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +62,7 @@ public class JUnitXMLOutcomeReporter  {
     private Map<String, List<TestOutcome>> groupByTestCase(TestOutcomes testOutcomes) {
         Map<String, List<TestOutcome>> groupedTestOutcomes = Maps.newHashMap();
         for(TestOutcome outcome : testOutcomes.getOutcomes()) {
-            String testCaseName = outcome.getTestCaseName() != null ? outcome.getTestCaseName() : outcome.getStoryTitle();
+            String testCaseName = StringUtils.isNotEmpty(outcome.getTestCaseName()) ? outcome.getTestCaseName() : outcome.getStoryTitle();
             if (groupedTestOutcomes.containsKey(testCaseName)) {
                 groupedTestOutcomes.get(testCaseName).add(outcome);
             } else {

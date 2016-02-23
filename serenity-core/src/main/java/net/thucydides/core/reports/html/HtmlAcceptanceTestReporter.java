@@ -20,6 +20,7 @@ import net.thucydides.core.tags.BreadcrumbTagFilter;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import net.thucydides.core.util.VersionProvider;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,7 +96,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         copyResourcesToOutputDirectory();
 
         String reportFilename = reportFor(storedTestOutcome);
-        LOGGER.debug("GENERATING HTML REPORT FOR " + storedTestOutcome.getCompleteName() + (qualifier != null ? "/" + qualifier : "") + " => " + reportFilename);
+        LOGGER.debug("GENERATING HTML REPORT FOR " + storedTestOutcome.getCompleteName() + (StringUtils.isNotEmpty(qualifier) ? "/" + qualifier : "") + " => " + reportFilename);
 
         return writeReportToOutputDirectory(reportFilename, htmlContents);
     }

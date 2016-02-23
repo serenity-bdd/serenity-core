@@ -1,5 +1,6 @@
 package net.thucydides.core.reflection;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +56,7 @@ public class StackTraceAnalyser {
     }
 
     private static boolean isInstrumentedMethod(StackTraceElement stackTraceElement) {
-        return (stackTraceElement.getFileName()) != null && (stackTraceElement.getFileName().equals("<generated>"));
+        return StringUtils.isNotEmpty(stackTraceElement.getFileName()) && (stackTraceElement.getFileName().equals("<generated>"));
     }
 
     private boolean allowedClassName(String className) {

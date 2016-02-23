@@ -34,6 +34,7 @@ ext {
     guavaVersion = '18.0'
     restAssuredVersion = '2.4.1'
     mockitoCoreVersion = '1.10.19'
+    jbehaveCoreVersion = '4.0.5'
 
     // Bintray configuration
     bintrayBaseUrl = 'https://api.bintray.com/maven'
@@ -63,7 +64,7 @@ allprojects {
             // when updating this list, update Serenity's declared deps if exists
             // TODO make work for generated Maven POM...
             // it's working for gradle build, but also had to exclude old transitives for geio.appiumnerated POM
-            force  'com.thoughtworks.xstream:xstream:1.4.5',
+            force  'com.thoughtworks.xstream:xstream:1.4.8',
                    'commons-collections:commons-collections:3.2.2',
                    'commons-logging:commons-logging:1.2',
                    'xml-apis:xml-apis:1.4.01'

@@ -8,7 +8,7 @@ import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.webtests.pages.HomePage;
 import net.thucydides.core.annotations.Step;
 
-public class ViewMyProfile implements Performable {
+public class LegacyViewMyProfile implements Performable {
 
     Target theProfileButton = Target.the("View profile button").locatedBy(HomePage.VIEW_PROFILE);
 
@@ -17,7 +17,7 @@ public class ViewMyProfile implements Performable {
     @Step("{0} views her profile")
     public <T extends Actor> void performAs(T actor) {
         actor.attemptsTo(
-                Open.browserOn(homePage),
+                Open.browserOn().the(homePage),
                 Click.on(theProfileButton)
         );
     }

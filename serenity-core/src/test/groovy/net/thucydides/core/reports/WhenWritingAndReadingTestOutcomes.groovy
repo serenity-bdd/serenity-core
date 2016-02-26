@@ -58,27 +58,47 @@ class WhenWritingAndReadingTestOutcomes extends Specification {
         def AcceptanceTestReporter reporter, def AcceptanceTestLoader loader) {
         given:
             def directory = temporary.getRoot()
-            def Set<TestOutcome> outcomes = generate(10)
+            def processors = Runtime.runtime.availableProcessors()
+            def Set<TestOutcome> outcomes = generate(processors * 5)
             def TestOutcomes testOutcomes = TestOutcomes.of(new ArrayList<TestOutcome>(outcomes))
             reporter.setOutputDirectory(directory)
-            def executor = Executors.newFixedThreadPool(10);
+            def executor = Executors.newFixedThreadPool(processors);
             def List<Future<File>> result = new ArrayList<>()
+            def List<Future> loading = new ArrayList<>()
+            def List<Future<TestOutcome>> checked = new ArrayList<>()
+            def List<File> created = new ArrayList<>()
+            def List<TestOutcome> loaded = new ArrayList<>()
         when:
-            100.times {
-                outcomes.each { outcome ->
-                    result.add(executor.submit(new Callable<File>() {
-                        @Override
-                        File call() throws Exception {
-                            reporter.generateReportFor(outcome, testOutcomes)
-                        }
-                    }))
-                }
+            outcomes.each { outcome ->
+                result.add(executor.submit(new Callable<File>() {
+                    @Override
+                    File call() throws Exception {
+                        reporter.generateReportFor(outcome, testOutcomes)
+                    }
+                }))
             }
+            result.each { future ->
+                created.add(future.get())
+            }
+
+            created.each { file ->
+                loading.add(executor.submit(new Runnable() {
+                    @Override
+                    void run() {
+                        Optional<TestOutcome> outcome = loader.loadReportFrom(file)
+                        if (outcome.isPresent()) {
+                            loaded.add(outcome.get())
+                        }
+                    }
+                }))
+            }
+            loading.each {
+                it.get()
+            }
+
             def notFountOutcomes = {
-                result.findAll { future ->
-                    def File generated = future.get()
-                    Optional<TestOutcome> outcome = loader.loadReportFrom(generated)
-                    return !(outcome.isPresent() && outcomes.contains(outcome.get()))
+                loaded.findAll { outcome ->
+                    return !(outcomes.contains(outcome))
                 }.size()
             }
         then:

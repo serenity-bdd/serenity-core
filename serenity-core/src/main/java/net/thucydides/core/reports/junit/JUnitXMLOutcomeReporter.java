@@ -26,6 +26,8 @@ public class JUnitXMLOutcomeReporter  {
 
     private final JUnitXMLConverter junitXMLConverter;
 
+    public final static String FILE_PREFIX = "SERENITY-JUNIT-";
+
     public JUnitXMLOutcomeReporter(File outputDirectory) {
         this.outputDirectory = outputDirectory;
         junitXMLConverter = new JUnitXMLConverter();
@@ -56,7 +58,7 @@ public class JUnitXMLOutcomeReporter  {
 
     private String reportFilenameFor(TestOutcome testOutcome) {
         ReportNamer reportNamer = ReportNamer.forReportType(ReportType.XML);
-        return "SERENITY-JUNIT-"  + reportNamer.getNormalizedTestNameFor(testOutcome);
+        return FILE_PREFIX  + reportNamer.getNormalizedTestNameFor(testOutcome);
     }
 
     private Map<String, List<TestOutcome>> groupByTestCase(TestOutcomes testOutcomes) {

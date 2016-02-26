@@ -56,10 +56,12 @@ public class ReportService {
      */
     public ReportService(final File outputDirectory, final Collection<AcceptanceTestReporter> subscribedReporters) {
         this.outputDirectory = outputDirectory;
+        if(!this.outputDirectory.exists()){
+            this.outputDirectory.mkdirs();
+        }
         getSubscribedReporters().addAll(subscribedReporters);
         jUnitXMLOutcomeReporter = new JUnitXMLOutcomeReporter(outputDirectory);
         this.executorService = Injectors.getInjector().getInstance(ExecutorServiceProvider.class).getExecutorService();
-
     }
 
     public void setOutputDirectory(File outputDirectory) {

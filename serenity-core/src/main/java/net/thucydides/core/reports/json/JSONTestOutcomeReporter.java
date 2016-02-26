@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
 
@@ -59,6 +60,7 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
                 ReportType.JSON);
     }
 
+    @Override
     public void setOutputDirectory(final File outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
@@ -68,18 +70,30 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
         this.qualifier = qualifier;
     }
 
+    @Override
     public void setResourceDirectory(String resourceDirectoryPath) {
     }
 
+    @Override
+    public Optional<TestOutcome> loadReportFrom(final Path reportFile) {
+        return loadReportFrom(reportFile.toFile());
+    }
+
+    @Override
     public Optional<TestOutcome> loadReportFrom(final File reportFile) {
         try (BufferedReader in = new BufferedReader(new FileReader(reportFile))) {
             TestOutcome fromJson = jsonConverter.fromJson(in);
             return Optional.fromNullable(fromJson);
         } catch (Throwable e) {
-            LOGGER.warn("this file was not a valid JSON Serenity test report: " + reportFile.getName()
-                        + System.lineSeparator() + e.getMessage());
+            LOGGER.warn("This file was not a valid JSON Serenity test report: " + reportFile.getName()
+                    + System.lineSeparator() + e.getMessage());
             return Optional.absent();
         }
+    }
+
+    @Override
+    public List<TestOutcome> loadReportsFrom(final Path outputDirectory) {
+        return loadReportsFrom(outputDirectory.toFile());
     }
 
     @Override

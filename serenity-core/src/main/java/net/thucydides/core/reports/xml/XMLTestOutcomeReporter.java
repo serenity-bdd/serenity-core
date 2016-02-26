@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,6 +34,7 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
 
     private transient String qualifier;
 
+    @Override
     public void setQualifier(final String qualifier) {
         this.qualifier = qualifier;
     }
@@ -40,9 +42,11 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
     /**
      * We don't need any resources for XML reports.
      */
+    @Override
     public void setResourceDirectory(final String resourceDirectoryPath) {
     }
 
+    @Override
     public String getName() {
         return "xml";
     }
@@ -55,6 +59,7 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
     /**
      * Generate an XML report for a given test run.
      */
+    @Override
     public File generateReportFor(final TestOutcome testOutcome, final TestOutcomes allTestOutcomes) throws IOException {
         TestOutcome storedTestOutcome = testOutcome.withQualifier(qualifier);
         Preconditions.checkNotNull(outputDirectory);
@@ -85,6 +90,12 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
         return testOutcome.withQualifier(qualifier).getReportName(XML);
     }
 
+    @Override
+    public Optional<TestOutcome> loadReportFrom(final Path reportFile) {
+        return loadReportFrom(reportFile.toFile());
+    }
+
+    @Override
     public Optional<TestOutcome> loadReportFrom(final File reportFile) {
         try(
                 InputStream input = new FileInputStream(reportFile);
@@ -110,10 +121,17 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
         return outputDirectory;
     }
 
+    @Override
     public void setOutputDirectory(final File outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
 
+    @Override
+    public List<TestOutcome> loadReportsFrom(final Path outputDirectory) {
+        return loadReportsFrom(outputDirectory.toFile());
+    }
+
+    @Override
     public List<TestOutcome> loadReportsFrom(File outputDirectory) {
         File[] reportFiles = getAllXMLFilesFrom(outputDirectory);
         List<TestOutcome> testOutcomes = Lists.newArrayList();

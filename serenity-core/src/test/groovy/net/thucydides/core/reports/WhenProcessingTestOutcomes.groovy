@@ -38,7 +38,7 @@ class WhenProcessingTestOutcomes extends Specification {
         when:
             loader.loadFrom(new File("/does-not-exist"))
         then:
-            thrown IOException
+            thrown ReportLoadingFailedError
     }
 
     def "should list all the tag types for the test outcomes"() {

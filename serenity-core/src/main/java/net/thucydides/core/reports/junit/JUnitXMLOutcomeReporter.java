@@ -14,8 +14,11 @@ import org.slf4j.LoggerFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class JUnitXMLOutcomeReporter  {
 
@@ -44,10 +47,18 @@ public class JUnitXMLOutcomeReporter  {
         for(String testCase : testOutcomesGroupedByTestCase.keySet()) {
             List<TestOutcome> testCaseOutcomes = testOutcomesGroupedByTestCase.get(testCase);
             String reportFilename = reportFilenameFor(testCaseOutcomes.get(0));
+            String unique = UUID.randomUUID().toString();
+            File temporary = new File(getOutputDirectory(), reportFilename.concat(unique));
             File report = new File(getOutputDirectory(), reportFilename);
-            LOGGER.debug("GENERATING JUNIT REPORT " + reportFilename);
-            try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(report))){
+            report.createNewFile();
+
+            LOGGER.debug("GENERATING JUNIT REPORT {} using temporary file {}", reportFilename, temporary);
+            try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(temporary))){
                 junitXMLConverter.write(testCase, testCaseOutcomes, outputStream);
+                outputStream.flush();
+                Files.move(temporary.toPath(), report.toPath(),
+                        StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
+                );
             } catch (ParserConfigurationException e) {
                 throw new IOException(e);
             } catch (TransformerException e) {

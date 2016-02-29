@@ -16,9 +16,12 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import static net.thucydides.core.model.ReportType.XML;
 
@@ -69,14 +72,21 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
 
         String reportFilename = reportFor(storedTestOutcome);
 
+        String unique = UUID.randomUUID().toString();
+        File temporary = new File(getOutputDirectory(), reportFilename.concat(unique));
         File report = new File(getOutputDirectory(), reportFilename);
+        report.createNewFile();
 
-        LOGGER.debug("Generating XML report for {} to file {}", testOutcome.getTitle(), report.getAbsolutePath());
+        LOGGER.debug("Generating XML report for {} to file {} (using temp file {})", testOutcome.getTitle(), report.getAbsolutePath(), temporary.getAbsolutePath());
 
         try(
-           OutputStream outputStream = new FileOutputStream(report);
+           OutputStream outputStream = new FileOutputStream(temporary);
            OutputStreamWriter writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
            xstream.toXML(storedTestOutcome, writer);
+           writer.flush();
+           Files.move(temporary.toPath(), report.toPath(),
+                   StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
+           );
            LOGGER.debug("XML report generated ({} bytes) {}", report.getAbsolutePath(), report.length());
         }
         return report;

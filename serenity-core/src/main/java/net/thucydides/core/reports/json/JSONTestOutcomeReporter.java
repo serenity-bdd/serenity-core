@@ -14,9 +14,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 public class JSONTestOutcomeReporter implements AcceptanceTestReporter, AcceptanceTestLoader {
 
@@ -44,9 +47,19 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
         TestOutcome storedTestOutcome = testOutcome.withQualifier(qualifier);
         Preconditions.checkNotNull(outputDirectory);
         String reportFilename = reportFor(storedTestOutcome);
+        String unique = UUID.randomUUID().toString();
+        File temporary = new File(getOutputDirectory(), reportFilename.concat(unique));
         File report = new File(getOutputDirectory(), reportFilename);
-        try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(report))){
+        report.createNewFile();
+
+        LOGGER.debug("Generating JSON report for {} to file {} (using temp file {})", testOutcome.getTitle(), report.getAbsolutePath(), temporary.getAbsolutePath());
+
+        try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(temporary))){
             jsonConverter.toJson(storedTestOutcome, outputStream);
+            outputStream.flush();
+            Files.move(temporary.toPath(), report.toPath(),
+                    StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
+            );
         }
         return report;
     }

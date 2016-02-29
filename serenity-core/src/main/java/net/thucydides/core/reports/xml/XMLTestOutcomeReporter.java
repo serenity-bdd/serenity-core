@@ -79,7 +79,7 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
         LOGGER.debug("Generating XML report for {} to file {} (using temp file {})", testOutcome.getTitle(), report.getAbsolutePath(), temporary.getAbsolutePath());
 
         try(
-           OutputStream outputStream = new FileOutputStream(report);
+           OutputStream outputStream = new FileOutputStream(temporary);
            OutputStreamWriter writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
            xstream.toXML(storedTestOutcome, writer);
            writer.flush();

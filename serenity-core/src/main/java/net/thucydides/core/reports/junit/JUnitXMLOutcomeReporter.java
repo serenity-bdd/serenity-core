@@ -52,7 +52,7 @@ public class JUnitXMLOutcomeReporter  {
             File temporary = new File(getOutputDirectory(), reportFilename.concat(unique));
             LOGGER.debug("GENERATING JUNIT REPORT {} using temporary file {}", reportFilename, temporary);
 
-            try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(report))){
+            try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(temporary))){
                 junitXMLConverter.write(testCase, testCaseOutcomes, outputStream);
                 outputStream.flush();
                 Files.move(temporary.toPath(), report.toPath(), StandardCopyOption.REPLACE_EXISTING);

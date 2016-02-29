@@ -47,15 +47,18 @@ public class JUnitXMLOutcomeReporter  {
         for(String testCase : testOutcomesGroupedByTestCase.keySet()) {
             List<TestOutcome> testCaseOutcomes = testOutcomesGroupedByTestCase.get(testCase);
             String reportFilename = reportFilenameFor(testCaseOutcomes.get(0));
-            File report = new File(getOutputDirectory(), reportFilename);
             String unique = UUID.randomUUID().toString();
             File temporary = new File(getOutputDirectory(), reportFilename.concat(unique));
-            LOGGER.debug("GENERATING JUNIT REPORT {} using temporary file {}", reportFilename, temporary);
+            File report = new File(getOutputDirectory(), reportFilename);
+            report.createNewFile();
 
+            LOGGER.debug("GENERATING JUNIT REPORT {} using temporary file {}", reportFilename, temporary);
             try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(temporary))){
                 junitXMLConverter.write(testCase, testCaseOutcomes, outputStream);
                 outputStream.flush();
-                Files.move(temporary.toPath(), report.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                Files.move(temporary.toPath(), report.toPath(),
+                        StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
+                );
             } catch (ParserConfigurationException e) {
                 throw new IOException(e);
             } catch (TransformerException e) {

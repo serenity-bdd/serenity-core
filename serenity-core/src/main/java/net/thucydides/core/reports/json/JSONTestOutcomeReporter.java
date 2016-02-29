@@ -61,7 +61,7 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
                     StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
             );
         }
-        return temporary;
+        return report;
     }
 
     public File getOutputDirectory() {

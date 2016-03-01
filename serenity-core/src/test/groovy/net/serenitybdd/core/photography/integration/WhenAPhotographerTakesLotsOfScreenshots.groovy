@@ -71,6 +71,9 @@ class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
                                     .with(driver)
                                     .andSaveToDirectory(screenshotDirectory));
                             }
+                        } catch (some) {
+                            println some
+
                         } finally {
                             try {
                                 if (driver) {

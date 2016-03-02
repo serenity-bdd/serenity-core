@@ -84,11 +84,11 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
            OutputStreamWriter writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
            xstream.toXML(storedTestOutcome, writer);
            writer.flush();
-           Files.move(temporary.toPath(), report.toPath(),
-                   StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
-           );
            LOGGER.debug("XML report generated ({} bytes) {}", report.getAbsolutePath(), report.length());
         }
+        Files.move(temporary.toPath(), report.toPath(),
+                StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
+        );
         return report;
     }
 

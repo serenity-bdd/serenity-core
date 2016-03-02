@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -94,7 +95,7 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
 
     @Override
     public Optional<TestOutcome> loadReportFrom(final File reportFile) {
-        try (BufferedReader in = new BufferedReader(new FileReader(reportFile))) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(reportFile), StandardCharsets.UTF_8))) {
             TestOutcome fromJson = jsonConverter.fromJson(in);
             return Optional.fromNullable(fromJson);
         } catch (Throwable e) {

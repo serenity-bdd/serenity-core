@@ -7,12 +7,12 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 public class WhenMakingTestNamesMoreReadable {
-    
+
     @Test
     public void null_should_be_converted_to_an_empty_string() {
         assertThat(NameConverter.humanize(null), is(""));
     }
-    
+
     @Test
     public void an_empty_string_should_be_converted_to_an_empty_string() {
         assertThat(NameConverter.humanize(""), is(""));
@@ -94,5 +94,19 @@ public class WhenMakingTestNamesMoreReadable {
         assertThat(NameConverter.withNoArguments("a_test_method[0]"), is("a_test_method"));
     }
 
+    @Test
+    public void humanized_camelCase_methods_can_contains_CSV() {
+        assertThat(NameConverter.humanize("aTestMethodForCSVFormat"), is("A test method for CSV format"));
+    }
+
+    @Test
+    public void humanized_camelCase_methods_can_contains_JSON() {
+        assertThat(NameConverter.humanize("aTestMethodForJSONFormat"), is("A test method for JSON format"));
+    }
+
+    @Test
+    public void humanized_camelCase_methods_can_contains_XML() {
+        assertThat(NameConverter.humanize("aTestMethodForXMLFormat"), is("A test method for XML format"));
+    }
 }
 

@@ -72,13 +72,13 @@ public class AppiumConfiguration {
             String simplifiedKey = key.replace("appium.", "");
             appiumProperties.setProperty(simplifiedKey, value.trim());
         }
-        ensureAppPathDefinedIn(appiumProperties);
+        ensureAppOrBrowserPathDefinedIn(appiumProperties);
         return appiumProperties;
     }
 
-    private void ensureAppPathDefinedIn(Properties appiumProperties) {
-        if (!appiumProperties.containsKey("app")) {
-            throw new ThucydidesConfigurationException("The path to the app needs to be provided in the appium.app property.");
+    private void ensureAppOrBrowserPathDefinedIn(Properties appiumProperties) {
+        if (!appiumProperties.containsKey("app") && !appiumProperties.containsKey("browserName")) {
+            throw new ThucydidesConfigurationException("The browser under test or path to the app needs to be provided in the appium.app or appium.browserName property.");
         }
     }
 

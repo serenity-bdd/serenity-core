@@ -57,10 +57,10 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
         try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(temporary))){
             jsonConverter.toJson(storedTestOutcome, outputStream);
             outputStream.flush();
-            Files.move(temporary.toPath(), report.toPath(),
-                    StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
-            );
         }
+        Files.move(temporary.toPath(), report.toPath(),
+                StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
+        );
         return report;
     }
 

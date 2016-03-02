@@ -56,14 +56,14 @@ public class JUnitXMLOutcomeReporter  {
             try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(temporary))){
                 junitXMLConverter.write(testCase, testCaseOutcomes, outputStream);
                 outputStream.flush();
-                Files.move(temporary.toPath(), report.toPath(),
-                        StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
-                );
             } catch (ParserConfigurationException e) {
                 throw new IOException(e);
             } catch (TransformerException e) {
                 throw new IOException(e);
             }
+            Files.move(temporary.toPath(), report.toPath(),
+                    StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
+            );
         }
     }
 

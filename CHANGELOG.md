@@ -1,6 +1,6 @@
 ## Serenity BDD core change Log
 
-### upcoming (2016/03/02 17:31 +00:00)
+### v1.1.29-rc.1 (2016/03/02 17:33 +00:00)
  
 **Pull requests:**
  
@@ -1376,18 +1376,6 @@
  
 ### v1.0.34 (2015/02/20 04:51 +00:00)
  
- 
-**Commits:**
- 
-- [2cb5e77](https://github.com/serenity-bdd/serenity-core/commit/2cb5e77f4aa71a61a6fb092c7b1d9564e9344c94) fix: Fixed a bug where the reports fail to generate if there are skipped test results in the outcomes. ([@wakaleo](https://github.com/wakaleo))
-- [2d48ba3](https://github.com/serenity-bdd/serenity-core/commit/2d48ba34363f7e10f3102a72123fa58b1a241420) test:Updated some unit tests ([@wakaleo](https://github.com/wakaleo))
-- [924764f](https://github.com/serenity-bdd/serenity-core/commit/924764f8f9f38eb4eb0d0edbe3e763e4979efc80) feat: Improved the readability of parameters in the screenshot pages. ([@wakaleo](https://github.com/wakaleo))
-- [a1dba09](https://github.com/serenity-bdd/serenity-core/commit/a1dba09cd2737da45d3a6f6de3b74cd47e42e16b) feat: You can now distinguish between AJAX element waits (defaults to 500 ms) and explicit fluent waits (which default to 5 seconds) ([@wakaleo](https://github.com/wakaleo))
-- [b55c8cd](https://github.com/serenity-bdd/serenity-core/commit/b55c8cd17404b9a555c02383ee33335b3c0f9cff) feat: Distinguish between element-level timing and "wait-for"-style timing. ([@wakaleo](https://github.com/wakaleo))
-- [e20146d](https://github.com/serenity-bdd/serenity-core/commit/e20146db9d8e88298f5bd089392f164fbf1e9c56) test:Updated some unit tests ([@wakaleo](https://github.com/wakaleo))
- 
-### v1.0.33 (2015/02/19 06:15 +00:00)
- 
 **Pull requests:**
  
 - [#25](https://github.com/serenity-bdd/serenity-core/pull/25) feat: nested page objects i.e. widget objects ([@CoeJoder](https://github.com/CoeJoder))
@@ -1470,6 +1458,8 @@
  
  > Also move a number of helper classes into serenity_bdd package
 - [2bde33a](https://github.com/serenity-bdd/serenity-core/commit/2bde33abd91afd7aee14fae2a1ff5109eb570c04) refactor: Move tests from thucydides to serenitybdd package ([@mikezx6r](https://github.com/mikezx6r))
+- [2cb5e77](https://github.com/serenity-bdd/serenity-core/commit/2cb5e77f4aa71a61a6fb092c7b1d9564e9344c94) fix: Fixed a bug where the reports fail to generate if there are skipped test results in the outcomes. ([@wakaleo](https://github.com/wakaleo))
+- [2d48ba3](https://github.com/serenity-bdd/serenity-core/commit/2d48ba34363f7e10f3102a72123fa58b1a241420) test:Updated some unit tests ([@wakaleo](https://github.com/wakaleo))
 - [2ed2864](https://github.com/serenity-bdd/serenity-core/commit/2ed2864f88aaf29666617767cbe492fc8d05fbed) [migrate] Move exceptions ([@mikezx6r](https://github.com/mikezx6r))
 - [2f58c3b](https://github.com/serenity-bdd/serenity-core/commit/2f58c3b419c5330bab8eb141d5a354a57bb12a07) Fixed some formatting and navigation issues in the reports ([@wakaleo](https://github.com/wakaleo))
 - [3049d14](https://github.com/serenity-bdd/serenity-core/commit/3049d1465732d6c384a0a9019b70c1e6366a5328) Initial move over to Serenity from Thucydides ([@wakaleo](https://github.com/wakaleo))
@@ -1580,6 +1570,7 @@
  > Also, the browser is now automatically positioned in the top left hand corner of the screen.
  > Signed-off-by: John Ferguson Smart &lt;john.smart[@wakaleo.com&gt](https://github.com/wakaleo.com&gt);
 - [911799b](https://github.com/serenity-bdd/serenity-core/commit/911799b02a2d987ac49ac41f1735925b173538cd) Fixed issues with identifying appium driver ([@schmurgon](https://github.com/schmurgon))
+- [924764f](https://github.com/serenity-bdd/serenity-core/commit/924764f8f9f38eb4eb0d0edbe3e763e4979efc80) feat: Improved the readability of parameters in the screenshot pages. ([@wakaleo](https://github.com/wakaleo))
 - [931e476](https://github.com/serenity-bdd/serenity-core/commit/931e476b086f4a082a906596202601c9978c85fa) fix: Tidied up dependencies used by the other serenity modules ([@wakaleo](https://github.com/wakaleo))
 - [93b836f](https://github.com/serenity-bdd/serenity-core/commit/93b836f8f2a811ee75a89194af7407d64e1ac464) fix: fixed an issue loading the JSON test reports during aggregate report generation. ([@wakaleo](https://github.com/wakaleo))
 - [948caa8](https://github.com/serenity-bdd/serenity-core/commit/948caa8ad7924d47466dd791113e7263ac82a927) Updated release notes
@@ -1593,6 +1584,7 @@
 - [9e47250](https://github.com/serenity-bdd/serenity-core/commit/9e47250a7a37d8607e455ba8ba7dac50a7ae4879) Improved release notes to avoid empty tags ([@wakaleo](https://github.com/wakaleo))
 - [9e9711d](https://github.com/serenity-bdd/serenity-core/commit/9e9711d48eca8bbc95c7d5b59a6ad2610e5599d6) Added extra support for handling Cucumber example tables ([@wakaleo](https://github.com/wakaleo))
 - [a05b31f](https://github.com/serenity-bdd/serenity-core/commit/a05b31ffb0928e9bc3b80c809a7a029975fefe22) Undid javascript library updates and added the number of tests for tags on the reports ([@wakaleo](https://github.com/wakaleo))
+- [a1dba09](https://github.com/serenity-bdd/serenity-core/commit/a1dba09cd2737da45d3a6f6de3b74cd47e42e16b) feat: You can now distinguish between AJAX element waits (defaults to 500 ms) and explicit fluent waits (which default to 5 seconds) ([@wakaleo](https://github.com/wakaleo))
 - [a2d3a0f](https://github.com/serenity-bdd/serenity-core/commit/a2d3a0f17b4ad209710aee1a9f5ec7f69a34785a) Refactored optional Spring dependencies into the serenity-spring module - include this module if you want Serenity to honor Spring annotations and dependency injection ([@wakaleo](https://github.com/wakaleo))
 - [a3c95dc](https://github.com/serenity-bdd/serenity-core/commit/a3c95dc54f1165c5ea00fcb2719f14a63acba604) Updated JavaScript InfoVis Toolkit ([@bmwsedee](https://github.com/bmwsedee))
 - [ad3a486](https://github.com/serenity-bdd/serenity-core/commit/ad3a486ced855de8542b79048c26c3fdd56fbcbc) [migrate] Move SessionMap ([@mikezx6r](https://github.com/mikezx6r))
@@ -1601,6 +1593,7 @@
 - [b3340e5](https://github.com/serenity-bdd/serenity-core/commit/b3340e5d3756a26169073690c95f2eea73737fb9) Integrated better support for JBehave ([@wakaleo](https://github.com/wakaleo))
 - [b42d58b](https://github.com/serenity-bdd/serenity-core/commit/b42d58b33af6ea34b2155a2f6b30c1634b323799) Fine-tuning the reports ([@wakaleo](https://github.com/wakaleo))
 - [b52b55a](https://github.com/serenity-bdd/serenity-core/commit/b52b55a39a9d5016fc87306108c5a661915da0d3) Now you can use the -Dserenity.dry.run=true option to skip step executions - useful when testing JBehave or Cucumber step definitions ([@wakaleo](https://github.com/wakaleo))
+- [b55c8cd](https://github.com/serenity-bdd/serenity-core/commit/b55c8cd17404b9a555c02383ee33335b3c0f9cff) feat: Distinguish between element-level timing and "wait-for"-style timing. ([@wakaleo](https://github.com/wakaleo))
 - [b5732dc](https://github.com/serenity-bdd/serenity-core/commit/b5732dc3a744246365f512d30484aae735f0f636) Let the bintray keys be defined by the build server ([@wakaleo](https://github.com/wakaleo))
 - [b94933d](https://github.com/serenity-bdd/serenity-core/commit/b94933d99cc7e9f679584550b49c0947ea89b8b0) Move JUnit runners to serenity_bdd package ([@mikezx6r](https://github.com/mikezx6r))
 - [bc0e078](https://github.com/serenity-bdd/serenity-core/commit/bc0e078f187ae7fdd0c7889180b09d4fe51778fb) Added more info to the README file ([@wakaleo](https://github.com/wakaleo))
@@ -1619,6 +1612,7 @@
 - [d9a768a](https://github.com/serenity-bdd/serenity-core/commit/d9a768af4b3eb2acc4fefb401e01aedada972039) Release notes are now triggered manually before the release ([@wakaleo](https://github.com/wakaleo))
 - [e0a96d7](https://github.com/serenity-bdd/serenity-core/commit/e0a96d7cd7499a43fceeb887a0697b7409c2a8d2) Fix scm url's ([@mikezx6r](https://github.com/mikezx6r))
 - [e1956cf](https://github.com/serenity-bdd/serenity-core/commit/e1956cfd278a505bf7c06db7ed2ab17e077f6466) Enable selection of Mac Os version on SauceLabs
+- [e20146d](https://github.com/serenity-bdd/serenity-core/commit/e20146db9d8e88298f5bd089392f164fbf1e9c56) test:Updated some unit tests ([@wakaleo](https://github.com/wakaleo))
 - [e3ce499](https://github.com/serenity-bdd/serenity-core/commit/e3ce499a6d4f91ec14cb6d7fa7a4454bc7c6cf51) Simplified dependencies a little ([@wakaleo](https://github.com/wakaleo))
 - [e5a13c7](https://github.com/serenity-bdd/serenity-core/commit/e5a13c7723cb73c0a76a1ed9527411ec53196e12) SmartAnnotation needs platform for Appium annotations to work ([@schmurgon](https://github.com/schmurgon))
 - [e78dd2c](https://github.com/serenity-bdd/serenity-core/commit/e78dd2cfdd98e23c1e69c92ebafffce27dbf7f5b) Added support for displaying Saucelabs configuration in the build info screen. ([@wakaleo](https://github.com/wakaleo))

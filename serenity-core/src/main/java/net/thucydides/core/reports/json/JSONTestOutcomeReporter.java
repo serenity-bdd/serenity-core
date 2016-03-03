@@ -3,6 +3,7 @@ package net.thucydides.core.reports.json;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
@@ -10,6 +11,8 @@ import net.thucydides.core.reports.AcceptanceTestLoader;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.OutcomeFormat;
 import net.thucydides.core.reports.TestOutcomes;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +34,10 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
 
     private transient String qualifier;
 
+    private final EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+
+    private final String encoding;
+
     @Override
     public String getName() {
         return "json";
@@ -39,6 +46,7 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
     JSONConverter jsonConverter;
 
     public JSONTestOutcomeReporter() {
+        encoding = ThucydidesSystemProperty.THUCYDIDES_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());
         jsonConverter = Injectors.getInjector().getInstance(JSONConverter.class);
     }
 
@@ -95,7 +103,7 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
 
     @Override
     public Optional<TestOutcome> loadReportFrom(final File reportFile) {
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(reportFile), StandardCharsets.UTF_8))) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(reportFile), encoding))) {
             TestOutcome fromJson = jsonConverter.fromJson(in);
             return Optional.fromNullable(fromJson);
         } catch (Throwable e) {

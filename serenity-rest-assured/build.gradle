@@ -12,4 +12,10 @@ dependencies {
         exclude group: 'org.codehaus.groovy', module:'groovy-json'
         exclude group: 'org.codehaus.groovy', module:'groovy-xml'
     }
+    testCompile ("com.github.tomakehurst:wiremock:$wiremockCoreVersion") {
+        exclude group: 'com.google.guava', module:'guava'
+        exclude group: 'org.apache.httpcomponents', module:'httpclient'
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
+    testCompile project(':serenity-test-utils')
 }

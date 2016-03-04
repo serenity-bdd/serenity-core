@@ -1,5 +1,16 @@
 ## Serenity BDD core change Log
 
+### upcoming (2016/03/04 15:26 +00:00)
+ 
+**Pull requests:**
+ 
+- [#339](https://github.com/serenity-bdd/serenity-core/pull/339) Updated tests for rest-assurance to use wiremock server instead of petstore. Added TestCase rule - now it is possible initialize test using spock ([@YamStranger](https://github.com/YamStranger))
+- [#330](https://github.com/serenity-bdd/serenity-core/pull/330) Updated store/load of outcomes - serenity.report.encoding property will be used with UTF-8 as default ([@cliviu](https://github.com/cliviu))
+ 
+**Commits:**
+ 
+- [4d2029c](https://github.com/serenity-bdd/serenity-core/commit/4d2029c6b2b6313c1825c80f39acf2b425ec959b) test: updated tests for rest-assurance to use wiremock server instead of petstore ([@YamStranger](https://github.com/YamStranger))
+ 
 ### v1.1.29-rc.1 (2016/03/02 17:33 +00:00)
  
 **Pull requests:**

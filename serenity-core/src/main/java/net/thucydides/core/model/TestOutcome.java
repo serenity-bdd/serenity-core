@@ -763,6 +763,7 @@ public class TestOutcome {
             jsonConverter.toJson(this, outputStream);
             return outputStream.toString();
         } catch (IOException e) {
+            LOGGER.error("serialization error for testOutcome with name \""+this.getName()+"\"",e);
             return "";
         }
     }

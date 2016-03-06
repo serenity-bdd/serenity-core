@@ -194,11 +194,18 @@ class WhenReadingUIValues extends Specification {
             SelectedOptions.of(target).viewedBy(actor).asList() == [["value1", "value2"], ["value3", "value4"]]
     }
 
-    def "should read css value"() {
+    def "should be able to read values without calling value() directly"() {
         when:
             element.getCssValue("font") >> "Italics"
         then:
-            CSSValue.of(target).named("font").viewedBy(actor).value() == "Italics"
+            ValueOf.the(CSSValue.of(target).named("font").viewedBy(actor)) == "Italics"
+    }
+
+    def "should read css value"() {
+        when:
+        element.getCssValue("font") >> "Italics"
+        then:
+        CSSValue.of(target).named("font").viewedBy(actor).value() == "Italics"
     }
 
     def "should read multiple css values"() {

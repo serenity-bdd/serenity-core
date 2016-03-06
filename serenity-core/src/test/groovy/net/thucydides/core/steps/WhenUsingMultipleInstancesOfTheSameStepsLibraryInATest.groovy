@@ -37,7 +37,7 @@ public class WhenUsingMultipleInstancesOfTheSameStepsLibraryInATest extends Spec
     def "should instantiate a new singlton step library for each @Steps annotation by default"() {
         given:
             def stepFactory = new StepFactory()
-           def testCase = new SimpleTestSampleSupportingMultipleInstances()
+            def testCase = new SimpleTestSampleSupportingMultipleInstances()
         when: "we get two instances of the same step library"
             injectScenarioStepsInto(testCase, stepFactory);
             def stepLibrary1 = testCase.steps1

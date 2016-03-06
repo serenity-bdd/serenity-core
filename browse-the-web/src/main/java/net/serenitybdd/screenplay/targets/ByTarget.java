@@ -7,6 +7,8 @@ import org.openqa.selenium.By;
 
 import java.util.List;
 
+import static net.serenitybdd.screenplay.targets.EnsureFieldVisible.ensureThat;
+
 public class ByTarget extends Target {
 
     private final By locator;
@@ -16,9 +18,11 @@ public class ByTarget extends Target {
         this.locator = locator;
     }
 
-    public WebElementFacade resolveFor(Actor actor) {
-        TargetResolver resolver = new TargetResolver(BrowseTheWeb.as(actor).getDriver());
-        return resolver.find(locator);
+    public WebElementFacade resolveFor(Actor theActor) {
+        TargetResolver resolver = new TargetResolver(BrowseTheWeb.as(theActor).getDriver());
+        WebElementFacade resolvedTarget = resolver.find(locator);
+        ensureThat(theActor).canSee(resolvedTarget);
+        return resolvedTarget;
     }
 
     public List<WebElementFacade> resolveAllFor(Actor actor) {

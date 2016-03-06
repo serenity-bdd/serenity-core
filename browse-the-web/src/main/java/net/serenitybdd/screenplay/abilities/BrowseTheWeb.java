@@ -18,8 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Gives an actor theValue ability to browse theValue web.
- * This extends theValue classic Serenity PageObject class.
+ * Gives an actor the ability to browse theValue web.
+ * This extends the classic Serenity PageObject class.
  */
 public class BrowseTheWeb extends PageObject implements Ability {
 

@@ -15,14 +15,18 @@ import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
+import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -38,6 +42,8 @@ import static org.apache.commons.io.FilenameUtils.removeExtension;
  * By default, the tests
  */
 public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagProvider implements RequirementsTagProvider, OverridableTagProvider {
+
+    private final static Logger logger = LoggerFactory.getLogger(FileSystemRequirementsTagProvider.class);
 
     private final static String DEFAULT_ROOT_DIRECTORY = "stories";
     private final static String FEATURES_ROOT_DIRECTORY = "features";
@@ -126,6 +132,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 Set<String> directoryPaths = getRootDirectoryPaths();
                 for (String rootDirectoryPath : directoryPaths) {
                     File rootDirectory = new File(rootDirectoryPath);
+                    logger.info("Loading requirements from isExists="+rootDirectory.exists()+" path:"+rootDirectory);
                     if (rootDirectory.exists()) {
                         allRequirements.addAll(loadCapabilitiesFrom(rootDirectory.listFiles(thatAreDirectories())));
                         allRequirements.addAll(loadStoriesFrom(rootDirectory.listFiles(thatAreStories())));
@@ -197,14 +204,22 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private String withRestoredSpaces(String path) {
         try {
-            return URLDecoder.decode(path, "UTF-8");
+            return URLDecoder.decode(path, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             return StringUtils.replace(path, "%20", " ");
         }
     }
 
     private Set<String> getRootDirectoryFromWorkingDirectory() throws IOException {
-        return getRootDirectoryFromParentDir(System.getProperty(WORKING_DIR)).asSet();
+        final String workingDirectory = System.getProperty("user.dir");
+        final String mavenBuildDir = System.getProperty(SystemPropertiesConfiguration.PROJECT_BUILD_DIRECTORY);
+        String resultDir = "";
+        if (!StringUtils.isEmpty(mavenBuildDir)) {
+            resultDir = mavenBuildDir;
+        } else {
+            resultDir = workingDirectory;
+        }
+        return getRootDirectoryFromParentDir(resultDir).asSet();
     }
 
     private Optional<String> configuredRelativeRootDirectory;
@@ -451,7 +466,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private String stripRootPathFrom(String testOutcomePath) {
         String rootPath = ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT.from(environmentVariables);
-        if (rootPath != null && testOutcomePath.startsWith(rootPath) && (!testOutcomePath.equals(rootPath))) {
+        if (StringUtils.isNotEmpty(rootPath) && testOutcomePath.startsWith(rootPath) && (!testOutcomePath.equals(rootPath))) {
             return testOutcomePath.substring(rootPath.length() + 1);
         } else {
             return testOutcomePath;

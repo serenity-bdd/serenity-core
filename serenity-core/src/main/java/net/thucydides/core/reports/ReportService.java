@@ -12,13 +12,11 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.io.*;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -58,10 +56,12 @@ public class ReportService {
      */
     public ReportService(final File outputDirectory, final Collection<AcceptanceTestReporter> subscribedReporters) {
         this.outputDirectory = outputDirectory;
+        if(!this.outputDirectory.exists()){
+            this.outputDirectory.mkdirs();
+        }
         getSubscribedReporters().addAll(subscribedReporters);
         jUnitXMLOutcomeReporter = new JUnitXMLOutcomeReporter(outputDirectory);
         this.executorService = Injectors.getInjector().getInstance(ExecutorServiceProvider.class).getExecutorService();
-
     }
 
     public void setOutputDirectory(File outputDirectory) {
@@ -122,7 +122,7 @@ public class ReportService {
                     ThucydidesSystemProperty.THUCYDIDES_FLOW_REPORTS_DIR.preferredName());
             final Path file = flow.resolve(ThucydidesSystemProperty.THUCYDIDES_CONFIGURATION_REPORT.preferredName());
             Files.createDirectories(flow);
-            try (Writer writer = new PrintWriter(Files.newBufferedWriter(file, Charset.defaultCharset()), autoFlush)) {
+            try (Writer writer = new PrintWriter(Files.newBufferedWriter(file, StandardCharsets.UTF_8), autoFlush)) {
                 LOGGER.debug("Generating report for configuration");
                 writer.write(config.root().render(ConfigRenderOptions.concise().setJson(true)));
             }
@@ -139,19 +139,19 @@ public class ReportService {
 
         List<? extends TestOutcome> outcomes = testOutcomes.getOutcomes();
 
-        final AtomicInteger remainingReportCount = new AtomicInteger(outcomes.size());
+        final ArrayList<Future> tasks=new ArrayList<>(outcomes.size());
         for(final TestOutcome outcome : outcomes) {
-            executorService.execute(new Runnable() {
+            tasks.add(executorService.submit(new Runnable() {
                 @Override
                 public void run() {
                     LOGGER.debug("Processing test outcome " + outcome.getCompleteName());
-                    generateReportFor(outcome, testOutcomes, reporter, remainingReportCount);
+                    generateReportFor(outcome, testOutcomes, reporter);
                     LOGGER.debug("Processing test outcome " + outcome.getCompleteName() + " done");
                 }
-            });
+            }));
         }
         generateJUnitTestResults(testOutcomes);
-        waitForReportGenerationToFinish(executorService, remainingReportCount);
+        waitForReportGenerationToFinish(executorService, tasks);
         LOGGER.debug("Reports generated in: " + (System.currentTimeMillis() - t0) + " ms");
 
     }
@@ -167,12 +167,14 @@ public class ReportService {
         }
     }
 
-    private void waitForReportGenerationToFinish(ExecutorService executorService, AtomicInteger reportCount) {
-        while (reportCount.get() > 0 && ((ThreadPoolExecutor) executorService).getActiveCount() != 0){
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
+    private void waitForReportGenerationToFinish(ExecutorService executorService, List<Future> tasks) {
+        try {
+            for (Future task : tasks) {
+                task.get();
             }
+        } catch (InterruptedException | ExecutionException | CancellationException e) {
+            throw new ReportGenerationFailedError(
+                    "Failed to generate configuration report", e);
         }
     }
 
@@ -204,7 +206,7 @@ public class ReportService {
 
     private void generateReportFor(final TestOutcome testOutcome,
                                    final TestOutcomes allTestOutcomes,
-                                   final AcceptanceTestReporter reporter, AtomicInteger remainingReportCount) {
+                                   final AcceptanceTestReporter reporter) {
         try {
             LOGGER.debug(reporter + ": Generating report for test outcome: " + testOutcome.getCompleteName());
             reporter.setOutputDirectory(outputDirectory);
@@ -212,8 +214,6 @@ public class ReportService {
         } catch (Exception e) {
             throw new ReportGenerationFailedError(
                     "Failed to generate reports using " + reporter, e);
-        } finally {
-            remainingReportCount.decrementAndGet();
         }
     }
 

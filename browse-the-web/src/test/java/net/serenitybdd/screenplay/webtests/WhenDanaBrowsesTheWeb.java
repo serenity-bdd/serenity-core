@@ -6,6 +6,7 @@ import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.webtests.model.Client;
 import net.serenitybdd.screenplay.webtests.pages.ProfilePage;
 import net.serenitybdd.screenplay.webtests.questions.ProfileQuestion;
+import net.serenitybdd.screenplay.webtests.tasks.LegacyViewMyProfile;
 import net.serenitybdd.screenplay.webtests.tasks.OpenTheApplication;
 import net.serenitybdd.screenplay.webtests.tasks.UpdateHerProfile;
 import net.serenitybdd.screenplay.webtests.tasks.ViewMyProfile;
@@ -64,6 +65,23 @@ public class WhenDanaBrowsesTheWeb {
         then(dana).should(seeThat(the(ProfilePage.NAME), isCurrentlyVisible()));
         and(dana).should(seeThat(the(ProfilePage.NAME), isEnabled()));
         and(dana).should(seeThat(the(ProfilePage.NAME), isCurrentlyEnabled()));
+    }
+
+    @Test
+    public void danaCanMakeAssertionsAboutWebElementsInTheSameAssertion() {
+
+        Actor dana = new Actor("Dana");
+        dana.can(BrowseTheWeb.with(firstBrowser));
+
+        givenThat(dana).has(openedTheApplication);
+
+        when(dana).attemptsTo(viewHerProfile);
+        and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
+
+        then(dana).should(seeThat(the(ProfilePage.NAME),
+                isVisible(),
+                isCurrentlyVisible(),
+                isEnabled()));
     }
 
     @Test
@@ -141,8 +159,37 @@ public class WhenDanaBrowsesTheWeb {
                 seeThat(Client.country(), is(equalTo("France"))));
 
     }
+
+    @Test
+    public void shouldSeeCorrectLegacyClientDetails() {
+
+        Actor dana = new Actor("Dana");
+        dana.can(BrowseTheWeb.with(firstBrowser));
+
+        givenThat(dana).has(openedTheApplication);
+
+        when(dana).attemptsTo(viewHerOldProfile);
+        and(dana).attemptsTo(
+                UpdateHerProfile
+                        .withName("Dana")
+                        .andCountryOfResidence("France")
+                        .andDateOfBirth("10/10/1969")
+                        .andFavoriteColor("Red"));
+
+        then(dana).should(
+                seeThat(Client.name(), is(equalTo("Dana"))),
+                seeThat(Client.color(), is(equalTo("Red"))),
+                seeThat(Client.dateOfBirth(), is(equalTo("10/10/1969"))),
+                seeThat(Client.country(), is(equalTo("France"))));
+
+    }
+
+
     @Steps
     OpenTheApplication openedTheApplication;
+
+    @Steps
+    LegacyViewMyProfile viewHerOldProfile;
 
     @Steps
     ViewMyProfile viewHerProfile;

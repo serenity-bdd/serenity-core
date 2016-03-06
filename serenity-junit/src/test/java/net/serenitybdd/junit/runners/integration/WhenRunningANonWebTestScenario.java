@@ -403,18 +403,18 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
     private class XMLFileFilter implements FilenameFilter {
         public boolean accept(File file, String filename) {
-            return filename.endsWith(".xml") && !filename.startsWith("SERENITY-");
+            return filename.toLowerCase().endsWith(".xml") && !filename.startsWith("SERENITY-");
         }
     }
 
     private class HTMLFileFilter implements FilenameFilter {
         public boolean accept(File file, String filename) {
-            return filename.endsWith(".html");
+            return filename.toLowerCase().endsWith(".html");
         }
     }
     private class JSONFileFilter implements FilenameFilter {
         public boolean accept(File file, String filename) {
-            return filename.endsWith(".json");
+            return filename.toLowerCase().endsWith(".json");
         }
     }
 }

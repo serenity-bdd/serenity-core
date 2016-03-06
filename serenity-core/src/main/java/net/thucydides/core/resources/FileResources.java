@@ -75,32 +75,28 @@ public class FileResources {
     private void copyFileFromClasspathToTargetDirectory(
             final String resourcePath, final File targetDirectory)
             throws IOException {
-
-        FileOutputStream out = null;
-        InputStream in = null;
-        try {
-            File resourceOnClasspath = new File(resourcePath);
-
-            if (resourceOnClasspath.exists()) {
-                in = new FileInputStream(resourceOnClasspath);
-            } else {
-                in = this.getClass().getClassLoader().getResourceAsStream(resourcePath);
-            }
-            File destinationFile = new File(targetDirectory, resourceOnClasspath.getName());
-
-            if (destinationFile.exists()) {
-                return;
-            }
-            if (destinationFile.getParent() != null) {
-                new File(destinationFile.getParent()).mkdirs();
-            }
-
-            out = getOutputStreamForDestination(destinationFile);
-
-            copyData(in, out);
-        } finally {
-            closeSafely(out, in);
+        File destinationFile = new File(targetDirectory, new File(resourcePath).getName());
+        if (destinationFile.exists()) {
+            return;
         }
+        if (destinationFile.getParent() != null) {
+            new File(destinationFile.getParent()).mkdirs();
+        }
+        try(InputStream in = fileSource(resourcePath);
+            FileOutputStream out = getOutputStreamForDestination(destinationFile);) {
+            copyData(in, out);
+        }
+    }
+
+    private InputStream fileSource(final String resourcePath) throws FileNotFoundException{
+        InputStream source = null;
+        File resourceOnClasspath = new File(resourcePath);
+        if (resourceOnClasspath.exists()) {
+            source = new FileInputStream(resourceOnClasspath);
+        } else {
+            source = this.getClass().getClassLoader().getResourceAsStream(resourcePath);
+        }
+        return source;
     }
 
 	private FileOutputStream getOutputStreamForDestination(File destinationFile) throws FileNotFoundException {
@@ -146,16 +142,6 @@ public class FileResources {
         int bytesRead;
         while ((bytesRead = in.read(buffer)) != -1) {
             out.write(buffer, 0, bytesRead);
-        }
-    }
-
-    private void closeSafely(final OutputStream out, final InputStream in)
-            throws IOException {
-        if (in != null) {
-            in.close();
-        }
-        if (out != null) {
-            out.close();
         }
     }
 

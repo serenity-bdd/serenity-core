@@ -146,6 +146,13 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     /**
+     * If some property that can change output directory was changed this method should be called
+     */
+    public void reloadOutputDirectory(){
+        setOutputDirectory(loadOutputDirectoryFromSystemProperties());
+    }
+
+    /**
      * should be base on module dir and not root project dir (if multimodule project iused with maven plugin)
      *
      * @param path to dir with reports, "outputDir"
@@ -197,7 +204,12 @@ public class SystemPropertiesConfiguration implements Configuration {
 
     }
 
+    @Override
     public boolean getUseUniqueBrowser() {
+        return shouldUseAUniqueBrowser();
+    }
+
+    public boolean shouldUseAUniqueBrowser() {
         return ThucydidesSystemProperty.THUCYDIDES_USE_UNIQUE_BROWSER.booleanFrom(getEnvironmentVariables());
     }
 

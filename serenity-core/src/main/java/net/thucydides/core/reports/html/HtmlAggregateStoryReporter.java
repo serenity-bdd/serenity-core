@@ -138,9 +138,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
             Path targetPath = Paths.get(getOutputDirectory().toURI());
             Path sourcePath = Paths.get(sourceDirectory.toURI());
-            try {
-
-                DirectoryStream<Path> directoryContents = Files.newDirectoryStream(sourcePath);
+            try (DirectoryStream<Path> directoryContents = Files.newDirectoryStream(sourcePath)) {
                 for(Path sourceFile : directoryContents) {
                     Path destinationFile = targetPath.resolve(sourceFile.getFileName());
                     if (Files.notExists(destinationFile)) {

@@ -441,7 +441,7 @@ class WhenRunningTestScenarios extends Specification {
         when:
             new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
             new ATestableThucydidesRunnerSample(SampleFailingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
-            def xmlReports = reload(temporaryDirectory).list().findAll {it.endsWith(".xml") && !it.startsWith("SERENITY-")}
+            def xmlReports = reload(temporaryDirectory).list().findAll {it.toLowerCase().endsWith(".xml") && !it.startsWith("SERENITY-")}
         then:
             xmlReports.size() == 6
     }
@@ -449,9 +449,9 @@ class WhenRunningTestScenarios extends Specification {
     def "HTML test results should be written to the output directory"() {
         when:
             new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
-            def xmlReports = reload(temporaryDirectory).list().findAll {it.endsWith(".html")}
+            def htmlReports = reload(temporaryDirectory).list().findAll {it.toLowerCase().endsWith(".html")}
         then:
-            xmlReports.size() == 3
+            htmlReports.size() == 3
     }
 
 

@@ -5,24 +5,32 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.AcceptanceTestLoader;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.OutcomeFormat;
 import net.thucydides.core.reports.TestOutcomes;
+import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import static net.thucydides.core.model.ReportType.XML;
 
 /**
  * Generates acceptance test results in XML form.
- * 
+ *
  */
 public class XMLTestOutcomeReporter implements AcceptanceTestReporter, AcceptanceTestLoader {
 
@@ -32,6 +40,15 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
 
     private transient String qualifier;
 
+    private final EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+
+    private final String encoding;
+
+    public XMLTestOutcomeReporter() {
+        encoding = ThucydidesSystemProperty.THUCYDIDES_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());
+    }
+
+    @Override
     public void setQualifier(final String qualifier) {
         this.qualifier = qualifier;
     }
@@ -39,9 +56,11 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
     /**
      * We don't need any resources for XML reports.
      */
+    @Override
     public void setResourceDirectory(final String resourceDirectoryPath) {
     }
 
+    @Override
     public String getName() {
         return "xml";
     }
@@ -54,6 +73,7 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
     /**
      * Generate an XML report for a given test run.
      */
+    @Override
     public File generateReportFor(final TestOutcome testOutcome, final TestOutcomes allTestOutcomes) throws IOException {
         TestOutcome storedTestOutcome = testOutcome.withQualifier(qualifier);
         Preconditions.checkNotNull(outputDirectory);
@@ -63,16 +83,23 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
 
         String reportFilename = reportFor(storedTestOutcome);
 
+        String unique = UUID.randomUUID().toString();
+        File temporary = new File(getOutputDirectory(), reportFilename.concat(unique));
         File report = new File(getOutputDirectory(), reportFilename);
+        report.createNewFile();
 
-        LOGGER.debug("Generating XML report for {} to file {}", testOutcome.getTitle(), report.getAbsolutePath());
+        LOGGER.debug("Generating XML report for {} to file {} (using temp file {})", testOutcome.getTitle(), report.getAbsolutePath(), temporary.getAbsolutePath());
 
         try(
-           OutputStream outputStream = new FileOutputStream(report);
-           OutputStreamWriter writer = new OutputStreamWriter(outputStream, Charset.forName("UTF-8"))) {
+           OutputStream outputStream = new FileOutputStream(temporary);
+           OutputStreamWriter writer = new OutputStreamWriter(outputStream, encoding)) {
            xstream.toXML(storedTestOutcome, writer);
+           writer.flush();
            LOGGER.debug("XML report generated ({} bytes) {}", report.getAbsolutePath(), report.length());
         }
+        Files.move(temporary.toPath(), report.toPath(),
+                StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
+        );
         return report;
     }
 
@@ -84,10 +111,16 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
         return testOutcome.withQualifier(qualifier).getReportName(XML);
     }
 
+    @Override
+    public Optional<TestOutcome> loadReportFrom(final Path reportFile) {
+        return loadReportFrom(reportFile.toFile());
+    }
+
+    @Override
     public Optional<TestOutcome> loadReportFrom(final File reportFile) {
         try(
                 InputStream input = new FileInputStream(reportFile);
-                InputStreamReader reader = new InputStreamReader(input, Charset.forName("UTF-8"));
+                InputStreamReader reader = new InputStreamReader(input, encoding);
         ) {
             XStream xstream = new XStream();
             xstream.alias("acceptance-test-run", TestOutcome.class);
@@ -109,10 +142,17 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
         return outputDirectory;
     }
 
+    @Override
     public void setOutputDirectory(final File outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
 
+    @Override
+    public List<TestOutcome> loadReportsFrom(final Path outputDirectory) {
+        return loadReportsFrom(outputDirectory.toFile());
+    }
+
+    @Override
     public List<TestOutcome> loadReportsFrom(File outputDirectory) {
         File[] reportFiles = getAllXMLFilesFrom(outputDirectory);
         List<TestOutcome> testOutcomes = Lists.newArrayList();

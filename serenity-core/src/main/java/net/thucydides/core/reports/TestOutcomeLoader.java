@@ -5,13 +5,19 @@ import com.google.inject.Inject;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.json.JSONTestOutcomeReporter;
+import net.thucydides.core.reports.junit.JUnitXMLOutcomeReporter;
 import net.thucydides.core.reports.xml.XMLTestOutcomeReporter;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 /**
  * Loads test outcomes from a given directory, and reports on their contents.
@@ -21,6 +27,8 @@ public class TestOutcomeLoader {
 
     private final EnvironmentVariables environmentVariables;
     private final FormatConfiguration formatConfiguration;
+    private final ExecutorService executor;
+    private final static Logger logger = LoggerFactory.getLogger(TestOutcomeLoader.class);
 
     public TestOutcomeLoader() {
         this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
@@ -28,13 +36,13 @@ public class TestOutcomeLoader {
 
     @Inject
     public TestOutcomeLoader(EnvironmentVariables environmentVariables) {
-        this.environmentVariables = environmentVariables;
-        this.formatConfiguration = new FormatConfiguration(environmentVariables);
+        this(environmentVariables, new FormatConfiguration(environmentVariables));
     }
 
     public TestOutcomeLoader(EnvironmentVariables environmentVariables, FormatConfiguration formatConfiguration) {
         this.environmentVariables = environmentVariables;
         this.formatConfiguration = formatConfiguration;
+        this.executor = Injectors.getInjector().getInstance(ExecutorServiceProvider.class).getExecutorService();
     }
 
     public TestOutcomeLoader forFormat(OutcomeFormat format) {
@@ -42,23 +50,36 @@ public class TestOutcomeLoader {
         return new TestOutcomeLoader(environmentVariables, new FormatConfiguration(format));
     }
     /**
-     * Load the test outcomes from a given directory.
+     * Load the test outcomes from a given directory, sorted by Title
      *
      * @param reportDirectory An existing directory that contains the test outcomes in XML or JSON format.
      * @return The full list of test outcomes.
-     * @throws java.io.IOException Thrown if the specified directory was invalid.
+     * @throws ReportLoadingFailedError Thrown if the specified directory was invalid or loading finished with error.
      */
-    public List<TestOutcome> loadFrom(final File reportDirectory) throws IOException {
-
-        final AcceptanceTestLoader testOutcomeReporter = getOutcomeReporter();
-        List<File> reportFiles = getAllOutcomeFilesFrom(reportDirectory);
-
-        final List<TestOutcome> testOutcomes = Collections.synchronizedList(new ArrayList<TestOutcome>());
-        for(File reportFile : reportFiles) {
-            testOutcomes.addAll(testOutcomeReporter.loadReportFrom(reportFile).asSet());
+    public List<TestOutcome> loadFrom(final File reportDirectory) throws ReportLoadingFailedError {
+        try {
+            final AcceptanceTestLoader testOutcomeReporter = getOutcomeReporter();
+            final List<File> reportFiles = getAllOutcomeFilesFrom(reportDirectory);
+            final List<TestOutcome> testOutcomes = Collections.synchronizedList(new ArrayList<TestOutcome>(reportFiles.size()));
+            final List<Future<Set<TestOutcome>>> reading = new ArrayList<>(reportFiles.size());
+            for (final File reportFile : reportFiles) {
+                reading.add(this.executor.submit(new Callable<Set<TestOutcome>>() {
+                    @Override
+                    public Set<TestOutcome> call() throws Exception {
+                        logger.debug(Thread.currentThread().getName() + " is reading report from " + reportFile.getAbsolutePath());
+                        return testOutcomeReporter.loadReportFrom(reportFile).asSet();
+                    }
+                }));
+            }
+            for (Future<Set<TestOutcome>> result : reading) {
+                testOutcomes.addAll(result.get());
+            }
+            logger.debug(Thread.currentThread().getName()+" readed " + testOutcomes.size());
+            Collections.sort(testOutcomes, byTitle());
+            return ImmutableList.copyOf(testOutcomes);
+        }catch (Exception exception){
+            throw new ReportLoadingFailedError("Can not load reports for some reason",exception);
         }
-        Collections.sort(testOutcomes, byTitle());
-        return ImmutableList.copyOf(testOutcomes);
     }
 
     private Comparator<? super TestOutcome> byTitle() {
@@ -111,7 +132,7 @@ public class TestOutcomeLoader {
     }
     private class SerializedOutcomeFilenameFilter implements FilenameFilter {
         public boolean accept(final File file, final String filename) {
-            return (filename.toLowerCase(Locale.getDefault()).endsWith(formatConfiguration.getPreferredFormat().getExtension()) && (!filename.endsWith(".features.json"))) ;
+            return (filename.toLowerCase(Locale.getDefault()).endsWith(formatConfiguration.getPreferredFormat().getExtension()) && (!filename.endsWith(".features.json")) && (!filename.startsWith(JUnitXMLOutcomeReporter.FILE_PREFIX))) ;
         }
     }
 }

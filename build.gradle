@@ -1,10 +1,11 @@
+group = 'net.serenity-bdd'
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.5'
-        classpath 'org.ajoberstar:gradle-git:1.2.0'
+        classpath 'org.ajoberstar:gradle-git:1.4.0-rc.1'
         classpath 'org.pegdown:pegdown:1.4.1'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.11.3'
     }
@@ -24,7 +25,7 @@ subprojects {
 }
 
 ext {
-    seleniumVersion = '2.48.2'
+    seleniumVersion = '2.52.0'
     groovyVersion = '2.4.4'
     gradleVersion = '2.10'
     junitVersion = '4.12'
@@ -33,6 +34,8 @@ ext {
     guavaVersion = '18.0'
     restAssuredVersion = '2.4.1'
     mockitoCoreVersion = '1.10.19'
+    jbehaveCoreVersion = '4.0.5'
+    wiremockCoreVersion = '1.58'
 
     // Bintray configuration
     bintrayBaseUrl = 'https://api.bintray.com/maven'
@@ -62,16 +65,16 @@ allprojects {
             // when updating this list, update Serenity's declared deps if exists
             // TODO make work for generated Maven POM...
             // it's working for gradle build, but also had to exclude old transitives for geio.appiumnerated POM
-            force  'com.thoughtworks.xstream:xstream:1.4.5',
-                   'commons-collections:commons-collections:3.2.1',
+            force  'com.thoughtworks.xstream:xstream:1.4.8',
+                   'commons-collections:commons-collections:3.2.2',
                    'commons-logging:commons-logging:1.2',
-                    'xml-apis:xml-apis:1.4.01'
+                   'xml-apis:xml-apis:1.4.01'
         }
     }
 }
 
 release {
-    grgit = Grgit.open(project.file('.'))
+    grgit = Grgit.open()
     // versionStrategy Strategies.FINAL
     // versionStrategy Strategies.PRE_RELEASE
     defaultVersionStrategy Strategies.SNAPSHOT
@@ -190,6 +193,7 @@ subprojects {
 
     dependencies {
         compile "com.google.guava:guava:${guavaVersion}"
+        compile "com.google.code.findbugs:jsr305:3.0.1"
         compile("com.google.inject:guice:3.0") {
             exclude group:"org.ow2.asm", module:"asm"
             exclude group:"asm", module:"asm"
@@ -401,7 +405,7 @@ subprojects {
     }
 
     task copyDeps(type: Copy) {
-        from configurations.runtime
+        from configurations.runtime + configurations.testCompile
         into project.projectDir.path + "/lib"
     }
 }

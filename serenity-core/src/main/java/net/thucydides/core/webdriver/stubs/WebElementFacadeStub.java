@@ -477,6 +477,11 @@ public class WebElementFacadeStub implements WebElementFacade {
         return new Dimension(0, 0);
     }
 
+    @Override
+    public Rectangle getRect() {
+        return new Rectangle(0,0,0,0);
+    }
+
     public String getCssValue(String propertyName) {
         return "";
     }

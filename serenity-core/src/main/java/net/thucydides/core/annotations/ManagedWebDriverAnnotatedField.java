@@ -122,6 +122,10 @@ public class ManagedWebDriverAnnotatedField {
         return field.getAnnotation(Managed.class).uniqueSession();
     }
 
+    public ClearCookiesPolicy getClearCookiesPolicy() {
+        return field.getAnnotation(Managed.class).clearCookies();
+    }
+
     public String getDriver() {
         return field.getAnnotation(Managed.class).driver();
     }

@@ -73,23 +73,22 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     }
 
     private Properties preferencesInClasspath() throws IOException {
-        InputStream propertiesOnClasspath = null;
-        try {
-            propertiesOnClasspath = Thread.currentThread().getContextClassLoader().getResourceAsStream(defaultPropertiesFileName());
-            if (propertiesOnClasspath == null) {
-                propertiesOnClasspath = Thread.currentThread().getContextClassLoader().getResourceAsStream(legacyPropertiesFileName());
-            }
+        try (InputStream propertiesOnClasspath = propertiesInputStream()) {
             if (propertiesOnClasspath != null) {
                 Properties localPreferences = new Properties();
                 localPreferences.load(propertiesOnClasspath);
                 return localPreferences;
             }
-        } finally {
-            if (propertiesOnClasspath != null) {
-                propertiesOnClasspath.close();
-            }
         }
         return new Properties();
+    }
+
+    private InputStream propertiesInputStream(){
+        InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(defaultPropertiesFileName());
+        if (input == null) {
+            input = Thread.currentThread().getContextClassLoader().getResourceAsStream(legacyPropertiesFileName());
+        }
+        return input;
     }
 
     private Properties typesafeConfigPreferences() {

@@ -142,9 +142,7 @@ public class FailureCause {
 
     private <T extends Throwable> T buildThrowable(String testFailureMessage, Class failureClass) throws Exception {
 
-        if (defaultConstructorFor(failureClass).isPresent()) {
-            return (T) defaultConstructorFor(failureClass).get().newInstance();
-        } else if (stringConstructorFor(failureClass).isPresent()) {
+        if (stringConstructorFor(failureClass).isPresent()) {
             return (T) stringConstructorFor(failureClass).get().newInstance(testFailureMessage);
         } else if (stringThrowableConstructorFor(failureClass).isPresent()) {
             return (T) stringThrowableConstructorFor(failureClass).get().newInstance(testFailureMessage, null);
@@ -152,6 +150,8 @@ public class FailureCause {
             return (T) throwableConstructorFor(failureClass).get().newInstance(new AssertionError(testFailureMessage));
         } else if (AssertionError.class.isAssignableFrom(failureClass)) {
             return (T) new AssertionError(testFailureMessage);
+        } else if (defaultConstructorFor(failureClass).isPresent()) {
+            return (T) defaultConstructorFor(failureClass).get().newInstance();
         }
         return null;
     }

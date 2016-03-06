@@ -33,6 +33,9 @@ public class RootCauseAnalyzer {
         if (!(thrownException instanceof WebdriverAssertionError) && ((thrownException instanceof SerenityManagedException) || (thrownException instanceof AssertionError))){
             return thrownException;
         }
+        if (failureAnalysis.reportAsError(thrownException.getClass())) {
+            return thrownException;
+        }
         if (failureAnalysis.reportAsCompromised(thrownException.getClass())) {
             return thrownException;
         }

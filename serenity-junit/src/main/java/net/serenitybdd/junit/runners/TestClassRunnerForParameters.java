@@ -99,6 +99,17 @@ class TestClassRunnerForParameters extends SerenityRunner {
 
     @Override
     public void useQualifier(final String qualifier) {
+        try{
+            Object testObject = createTest();
+            QualifierFinder qualifierFinder = QualifierFinder.forTestCase(testObject);
+            if(qualifierFinder.hasQualifierAnnotation()){
+                this.qualifier = qualifierFinder.getQualifier();
+                super.useQualifier(this.qualifier);
+                return;
+            }
+        }catch(Exception e){
+            //Ignore and default to firstParameter
+        }
         this.qualifier = qualifier;
         super.useQualifier(qualifier);
     }

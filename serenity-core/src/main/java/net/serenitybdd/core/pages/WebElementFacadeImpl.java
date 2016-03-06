@@ -55,6 +55,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     private JavascriptExecutorFacade javascriptExecutorFacade;
     private InternalSystemClock clock = new InternalSystemClock();
     private final EnvironmentVariables environmentVariables;
+    private String foundBy;
 
     private ElementLocator locator;
     private WebElement resolvedELement;
@@ -111,14 +112,23 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                                                                 final WebElement element,
                                                                 final long timeoutInMilliseconds,
                                                                 final long waitForTimeoutInMilliseconds) {
-        return (T) new WebElementFacadeImpl(driver, null, element, timeoutInMilliseconds, waitForTimeoutInMilliseconds);
+        return (T) new WebElementFacadeImpl(driver, null, element, timeoutInMilliseconds, waitForTimeoutInMilliseconds)
+                       .foundBy("<Undefined web element>");
+    }
 
+    public static <T extends WebElementFacade> T wrapWebElement(final WebDriver driver,
+                                                                final WebElement element,
+                                                                final long timeoutInMilliseconds,
+                                                                final long waitForTimeoutInMilliseconds,
+                                                                final String foundBy) {
+        return (T) new WebElementFacadeImpl(driver, null, element, timeoutInMilliseconds, waitForTimeoutInMilliseconds)
+                       .foundBy(foundBy);
     }
 
     public static <T extends WebElementFacade> T wrapWebElement(final WebDriver driver,
                                                                 final WebElement element,
                                                                 final long timeout) {
-        return (T) new WebElementFacadeImpl(driver, null, element, timeout, timeout);
+        return (T) new WebElementFacadeImpl(driver, null, element, timeout, timeout).foundBy(element.toString());
 
     }
 
@@ -173,7 +183,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                     .cssSelector(xpathOrCssSelector)));
         }
 
-        return wrapWebElement(driver, nestedElement, timeoutInMilliseconds(), waitForTimeoutInMilliseconds);
+        return wrapWebElement(driver, nestedElement, timeoutInMilliseconds(), waitForTimeoutInMilliseconds,
+                              "element located by " + xpathOrCssSelector);
     }
 
 
@@ -202,7 +213,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     private List<WebElementFacade> webElementFacadesFrom(List<WebElement> nestedElements) {
         List<WebElementFacade> results = Lists.newArrayList();
         for (WebElement element : nestedElements) {
-            results.add(wrapWebElement(driver, element, timeoutInMilliseconds(), waitForTimeoutInMilliseconds));
+            results.add(wrapWebElement(driver, element, timeoutInMilliseconds(), waitForTimeoutInMilliseconds, element.toString()));
         }
         return results;
     }
@@ -211,7 +222,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     public WebElementFacade findBy(By selector) {
         logIfVerbose("findBy " + selector);
         WebElement nestedElement = getElement().findElement(selector);
-        return wrapWebElement(driver, nestedElement, timeoutInMilliseconds(), waitForTimeoutInMilliseconds);
+        return wrapWebElement(driver, nestedElement, timeoutInMilliseconds(), waitForTimeoutInMilliseconds,
+                              "element located by " + selector.toString());
     }
 
     @Override
@@ -278,7 +290,10 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public WebElementFacade withTimeoutOf(int timeout, TimeUnit unit) {
-        return wrapWebElement(driver, getElement(), implicitTimeoutInMilliseconds, TimeUnit.MILLISECONDS.convert(timeout, unit));
+        return wrapWebElement(driver, getElement(),
+                              implicitTimeoutInMilliseconds,
+                              TimeUnit.MILLISECONDS.convert(timeout, unit),
+                              foundBy);
     }
 
     /**
@@ -464,6 +479,10 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         if (driver instanceof ConfigurableTimeouts) {
             ((ConfigurableTimeouts) driver).resetTimeouts();
         }
+    }
+
+    public String getFoundBy() {
+        return foundBy;
     }
 
 
@@ -975,21 +994,12 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     private void logIfVerbose(String logMessage) {
         if (useVerboseLogging()) {
-            LOGGER.info(humanizedTabfNameFor(getElement()) + ":" + logMessage);
+            LOGGER.debug(logMessage + " : " +  toString());
         }
     }
 
     private boolean useVerboseLogging() {
         return ThucydidesSystemProperty.THUCYDIDES_VERBOSE_STEPS.booleanFrom(environmentVariables);
-    }
-
-
-    private EnvironmentVariables getEnvironmentVariables() {
-        return environmentVariables;
-    }
-
-    private String humanizedTabfNameFor(WebElement webElement) {
-        return HtmlTag.from(webElement).inHumanReadableForm();
     }
 
     private boolean isMobileDriver() {
@@ -1018,8 +1028,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public String toString() {
-        String locatorString = (locator != null) ? locator.toString() : "<Undefined web element>";
-        return (resolvedElement() != null) ? resolvedElement().toString() : locatorString;
+        return foundBy;
     }
 
     public void submit() {
@@ -1060,6 +1069,11 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     public Dimension getSize() {
         return getElement().getSize();
+    }
+
+    @Override
+    public Rectangle getRect() {
+        return getElement().getRect();
     }
 
     public String getCssValue(String propertyName) {
@@ -1108,5 +1122,10 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         String cssClassValue = getAttribute("class").toLowerCase();
         List<String> cssClasses = Lists.newArrayList(Splitter.on(" ").omitEmptyStrings().trimResults().split(cssClassValue));
         return cssClasses.contains(cssClassName.toLowerCase());
+    }
+
+    public WebElementFacade foundBy(String foundBy) {
+        this.foundBy = foundBy;
+        return this;
     }
 }

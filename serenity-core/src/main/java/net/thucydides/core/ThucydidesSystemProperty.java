@@ -781,7 +781,7 @@ public enum ThucydidesSystemProperty {
 
     private Optional<String> legacyPropertyValueIfPresentIn(EnvironmentVariables environmentVariables) {
         String legacyValue = environmentVariables.getProperty(withLegacyPrefix(getPropertyName()));
-        if (legacyValue != null) {
+        if (StringUtils.isNotEmpty(legacyValue)) {
             logger.warn("Legacy property format detected for {}, please use the serenity.* format instead.",getPropertyName());
         }
         return Optional.fromNullable(legacyValue);

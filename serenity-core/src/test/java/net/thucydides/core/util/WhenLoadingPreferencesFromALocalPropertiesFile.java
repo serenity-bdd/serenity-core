@@ -4,6 +4,8 @@ import net.thucydides.core.guice.Injectors;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -16,6 +18,8 @@ import static org.hamcrest.Matchers.nullValue;
 
 public class WhenLoadingPreferencesFromALocalPropertiesFile {
 
+    Logger LOGGER = LoggerFactory.getLogger(WhenLoadingPreferencesFromALocalPropertiesFile.class);
+
     @Rule
     public ExtendedTemporaryFolder temporaryFolder = new ExtendedTemporaryFolder();
 
@@ -23,7 +27,7 @@ public class WhenLoadingPreferencesFromALocalPropertiesFile {
     File thucydidesPropertiesFile;
     EnvironmentVariables environmentVariables;
     PropertiesFileLocalPreferences localPreferences;
-    
+
     @Before
     public void setupDirectories() throws IOException {
         environmentVariables = new MockEnvironmentVariables();
@@ -36,7 +40,7 @@ public class WhenLoadingPreferencesFromALocalPropertiesFile {
     @Test
     public void the_default_preferences_directory_is_the_users_home_directory() throws Exception {
         PropertiesFileLocalPreferences localPreferences = new PropertiesFileLocalPreferences(environmentVariables);
-        
+
         String homeDirectory = System.getProperty("user.home");
 
         assertThat(localPreferences.getHomeDirectory().getPath(), is(homeDirectory));
@@ -47,7 +51,7 @@ public class WhenLoadingPreferencesFromALocalPropertiesFile {
         writeToPropertiesFile("webdriver.driver = opera");
 
         localPreferences.setHomeDirectory(homeDirectory);
-        
+
         localPreferences.loadPreferences();
 
         assertThat(environmentVariables.getProperty("webdriver.driver"), is("opera"));
@@ -150,11 +154,11 @@ public class WhenLoadingPreferencesFromALocalPropertiesFile {
         thucydidesPropertiesFile.setReadable(true);
         thucydidesPropertiesFile.setWritable(true);
         thucydidesPropertiesFile.setExecutable(true);
-        
+
         try {
         	thucydidesPropertiesFile.createNewFile();
         } catch (IOException e) {
-        	System.err.println(e);
+            LOGGER.error("Exception during writing properties",e);
 		}
         Thread.currentThread().sleep(100);
         FileWriter outFile = new FileWriter(thucydidesPropertiesFile);

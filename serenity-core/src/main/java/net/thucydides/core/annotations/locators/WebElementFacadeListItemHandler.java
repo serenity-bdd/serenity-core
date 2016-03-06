@@ -34,7 +34,7 @@ public class WebElementFacadeListItemHandler extends AbstractListItemHandler<Web
 		WebDriver driver = page.getDriver();
 		if (implementerClass == WebElementFacadeImpl.class) {
 			// the target constructor is protected; use the static wrapper method
-			return WebElementFacadeImpl.wrapWebElement(driver, element, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds);
+			return WebElementFacadeImpl.wrapWebElement(driver, element, implicitTimeoutInMilliseconds, waitForTimeoutInMilliseconds, locator.toString());
 		}
 
 /*

@@ -1,5 +1,6 @@
 package net.thucydides.core.reports.json.gson;
 
+import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -27,9 +29,12 @@ public class GsonJSONConverter implements JSONConverter {
         return gson;
     }
 
+    private final String encoding;
+
     @Inject
     public GsonJSONConverter(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
+        encoding = ThucydidesSystemProperty.THUCYDIDES_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());
         GsonBuilder gsonBuilder = new GsonBuilder()
                                             .registerTypeAdapterFactory(OptionalTypeAdapter.FACTORY)
                                             .registerTypeHierarchyAdapter(Collection.class, new CollectionAdapter())
@@ -41,7 +46,7 @@ public class GsonJSONConverter implements JSONConverter {
 
     @Override
     public TestOutcome fromJson(InputStream inputStream) throws IOException {
-        return fromJson(new InputStreamReader(inputStream));
+        return fromJson(new InputStreamReader(inputStream, encoding));
     }
 
     @Override
@@ -55,10 +60,11 @@ public class GsonJSONConverter implements JSONConverter {
         return isNotEmpty(testOutcome.getName());
     }
 
+
     @Override
     public void toJson(TestOutcome testOutcome, OutputStream outputStream) throws IOException {
         testOutcome.calculateDynamicFieldValues();
-        try(Writer out = new OutputStreamWriter(outputStream)) {
+        try(Writer out = new OutputStreamWriter(outputStream, encoding)) {
             gson.toJson(testOutcome, out);
         }
     }

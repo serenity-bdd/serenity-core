@@ -48,11 +48,11 @@ class WhenDelegatingWebElements extends Specification {
 
     def "should delegate to submit methods"() {
         given:
-        def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000, 1000)
+            def webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 1000, 1000)
         when:
-        webElementFacade.submit()
+            webElementFacade.submit()
         then:
-        1 * webElement.submit()
+            1 * webElement.submit()
     }
 
     def "should delegate to sendKeys methods"() {

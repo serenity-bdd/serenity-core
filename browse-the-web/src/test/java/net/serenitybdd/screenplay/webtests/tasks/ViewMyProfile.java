@@ -17,7 +17,7 @@ public class ViewMyProfile implements Performable {
     @Step("{0} views her profile")
     public <T extends Actor> void performAs(T actor) {
         actor.attemptsTo(
-                Open.browserOn().the(homePage),
+                Open.browserOn(homePage),
                 Click.on(theProfileButton)
         );
     }

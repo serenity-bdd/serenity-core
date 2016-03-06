@@ -41,15 +41,18 @@ public class CucumberParser {
 
     public Optional<Narrative> loadFeatureNarrative(File narrativeFile)  {
 
-        CucumberFeatureListener gherkinStructure =new CucumberFeatureListener();
+        CucumberFeatureListener gherkinStructure = new CucumberFeatureListener();
         Parser parser = new Parser(gherkinStructure, true, "root", false, locale);
         try {
             String gherkinScenarios = filterOutCommentsFrom(FileUtils.readFileToString(narrativeFile, encoding));
             parser.parse(gherkinScenarios, narrativeFile.getName(),0);
 
+            if (featureFileCouldNotBeReadFor(gherkinStructure)) {
+                return Optional.absent();
+            }
 
-            String cardNumber = findCardNumberInTags(gherkinStructure.getFeature().getTags());
-            List<String> versionNumbers = findVersionNumberInTags(gherkinStructure.getFeature().getTags());
+            String cardNumber = findCardNumberInTags(tagsDefinedIn(gherkinStructure));
+            List<String> versionNumbers = findVersionNumberInTags(tagsDefinedIn(gherkinStructure));
             String title = gherkinStructure.getFeature().getName();
             String text = gherkinStructure.getFeature().getDescription();
 
@@ -62,6 +65,10 @@ public class CucumberParser {
             ex.printStackTrace();
         }
         return Optional.absent();
+    }
+
+    private boolean featureFileCouldNotBeReadFor(CucumberFeatureListener gherkinStructure) {
+        return gherkinStructure.getFeature() == null;
     }
 
     private String filterOutCommentsFrom(String gherkin) {
@@ -78,7 +85,12 @@ public class CucumberParser {
         return filteredGherkin.toString();
     }
 
+    private List<Tag> tagsDefinedIn(CucumberFeatureListener gherkinStructure) {
+        return(gherkinStructure.getFeature() != null) ?  gherkinStructure.getFeature().getTags() : Lists.<Tag>newArrayList();
+    }
+
     private String findCardNumberInTags(List<Tag> tags) {
+
         for(Tag tag : tags) {
             if (tag.getName().toLowerCase().startsWith("@issue:")) {
                 return tag.getName().replaceAll("@issue:","");

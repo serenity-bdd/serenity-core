@@ -25,7 +25,7 @@ import static ch.lambdaj.Lambda.convert;
  * Test data from a CSV file.
  */
 public class CSVTestDataSource implements TestDataSource {
-    
+
     //private final List<Map<String, String>> testData;
     private char separator;
     private final char quotechar;
@@ -57,8 +57,8 @@ public class CSVTestDataSource implements TestDataSource {
 
     List<String[]> getDataRows() {
         if (csvDataRows == null) {
-            try {
-                csvDataRows = getCSVDataFrom(getDataFileFor(instantiatedPath));
+            try (Reader reader = getDataFileFor(instantiatedPath)) {
+                csvDataRows = getCSVDataFrom(reader);
             } catch (IOException e) {
                 LOGGER.error("Could not read test data file from {}", instantiatedPath, e);
             }
@@ -99,7 +99,7 @@ public class CSVTestDataSource implements TestDataSource {
 
     private static boolean isAClasspathResource(final String path) {
     	return !(CSVTestDataSource.class.getClassLoader().getResourceAsStream(path) == null);
-        
+
     }
 
     private static boolean validFileSystemPath(final String path) {
@@ -144,8 +144,8 @@ public class CSVTestDataSource implements TestDataSource {
     }
 
     public List<Map<String, String>> getData() {
-        try {
-            return loadTestDataFrom(getCSVDataFrom(getDataFileFor(instantiatedPath)));
+        try (Reader reader = getDataFileFor(instantiatedPath)) {
+            return loadTestDataFrom(getCSVDataFrom(reader));
         } catch (IOException e) {
             LOGGER.error("Could not read test data file from {}", instantiatedPath, e);
         }
@@ -180,7 +180,7 @@ public class CSVTestDataSource implements TestDataSource {
 
     public <T> List<T> getInstanciatedInstancesFrom(final Class<T> clazz, final StepFactory factory) {
         List<Map<String, String>> data = getData();
-        
+
         List<T> resultsList = new ArrayList<>();
         for (Map<String, String> rowData : data) {
             resultsList.add(newInstanceFrom(clazz, factory, rowData));
@@ -206,7 +206,7 @@ public class CSVTestDataSource implements TestDataSource {
     private <T> T newInstanceFrom(final Class<T> clazz,
                                   final StepFactory factory,
                                   final Map<String,String> rowData) {
-    	
+
     	T newObject = factory.getUniqueStepLibraryFor(clazz);
         assignPropertiesFromTestData(clazz, rowData, newObject);
         return newObject;

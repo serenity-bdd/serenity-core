@@ -1,6 +1,5 @@
 package net.thucydides.core.pages.jquery;
 
-import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
@@ -9,6 +8,7 @@ import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import org.openqa.selenium.WebDriver;
 
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascriptIsSupportedIn;
 
@@ -66,7 +66,7 @@ public class JQueryEnabledPage {
         String content = "";
         try {
             URL fileUrl = getClass().getClassLoader().getResource(resourcePath);
-            content = Resources.toString(fileUrl, Charsets.UTF_8);
+            content = Resources.toString(fileUrl, StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -78,7 +78,7 @@ public class JQueryEnabledPage {
             executeScriptFrom("jquery/jquery-thucydides-plugin.js");
         }
     }
-    
+
     public void injectJavaScriptUtils(){
     	executeScriptFrom("javascript/cycle.js");
     }

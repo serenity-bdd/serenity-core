@@ -7,14 +7,18 @@ import net.thucydides.core.model.ReportNamer;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.TestOutcomes;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class JUnitXMLOutcomeReporter  {
 
@@ -24,6 +28,8 @@ public class JUnitXMLOutcomeReporter  {
     private final File outputDirectory;
 
     private final JUnitXMLConverter junitXMLConverter;
+
+    public final static String FILE_PREFIX = "SERENITY-JUNIT-";
 
     public JUnitXMLOutcomeReporter(File outputDirectory) {
         this.outputDirectory = outputDirectory;
@@ -41,27 +47,35 @@ public class JUnitXMLOutcomeReporter  {
         for(String testCase : testOutcomesGroupedByTestCase.keySet()) {
             List<TestOutcome> testCaseOutcomes = testOutcomesGroupedByTestCase.get(testCase);
             String reportFilename = reportFilenameFor(testCaseOutcomes.get(0));
+            String unique = UUID.randomUUID().toString();
+            File temporary = new File(getOutputDirectory(), reportFilename.concat(unique));
             File report = new File(getOutputDirectory(), reportFilename);
-            LOGGER.debug("GENERATING JUNIT REPORT " + reportFilename);
-            try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(report))){
+            report.createNewFile();
+
+            LOGGER.debug("GENERATING JUNIT REPORT {} using temporary file {}", reportFilename, temporary);
+            try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(temporary))){
                 junitXMLConverter.write(testCase, testCaseOutcomes, outputStream);
+                outputStream.flush();
             } catch (ParserConfigurationException e) {
                 throw new IOException(e);
             } catch (TransformerException e) {
                 throw new IOException(e);
             }
+            Files.move(temporary.toPath(), report.toPath(),
+                    StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
+            );
         }
     }
 
     private String reportFilenameFor(TestOutcome testOutcome) {
         ReportNamer reportNamer = ReportNamer.forReportType(ReportType.XML);
-        return "SERENITY-JUNIT-"  + reportNamer.getNormalizedTestNameFor(testOutcome);
+        return FILE_PREFIX  + reportNamer.getNormalizedTestNameFor(testOutcome);
     }
 
     private Map<String, List<TestOutcome>> groupByTestCase(TestOutcomes testOutcomes) {
         Map<String, List<TestOutcome>> groupedTestOutcomes = Maps.newHashMap();
         for(TestOutcome outcome : testOutcomes.getOutcomes()) {
-            String testCaseName = outcome.getTestCaseName() != null ? outcome.getTestCaseName() : outcome.getStoryTitle();
+            String testCaseName = StringUtils.isNotEmpty(outcome.getTestCaseName()) ? outcome.getTestCaseName() : outcome.getStoryTitle();
             if (groupedTestOutcomes.containsKey(testCaseName)) {
                 groupedTestOutcomes.get(testCaseName).add(outcome);
             } else {

@@ -80,7 +80,11 @@ class WhenSavingTestOutcomesInCSVForm extends Specification {
     }
 
     def linesIn(File csvResults) {
-        def reader = new CSVReader(new java.io.InputStreamReader(new java.io.FileInputStream(csvResults), "windows-1251"))
-        reader.readAll()
+        def CSVReader reader = new CSVReader(new java.io.InputStreamReader(new java.io.FileInputStream(csvResults), "windows-1251"))
+        try{
+            reader.readAll()
+        }finally{
+            reader.close()
+        }
     }
 }

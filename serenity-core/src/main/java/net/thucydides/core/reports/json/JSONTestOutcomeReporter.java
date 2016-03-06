@@ -3,6 +3,7 @@ package net.thucydides.core.reports.json;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
@@ -10,12 +11,19 @@ import net.thucydides.core.reports.AcceptanceTestLoader;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.OutcomeFormat;
 import net.thucydides.core.reports.TestOutcomes;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 public class JSONTestOutcomeReporter implements AcceptanceTestReporter, AcceptanceTestLoader {
 
@@ -26,6 +34,10 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
 
     private transient String qualifier;
 
+    private final EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+
+    private final String encoding;
+
     @Override
     public String getName() {
         return "json";
@@ -34,6 +46,7 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
     JSONConverter jsonConverter;
 
     public JSONTestOutcomeReporter() {
+        encoding = ThucydidesSystemProperty.THUCYDIDES_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());
         jsonConverter = Injectors.getInjector().getInstance(JSONConverter.class);
     }
 
@@ -43,10 +56,20 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
         TestOutcome storedTestOutcome = testOutcome.withQualifier(qualifier);
         Preconditions.checkNotNull(outputDirectory);
         String reportFilename = reportFor(storedTestOutcome);
+        String unique = UUID.randomUUID().toString();
+        File temporary = new File(getOutputDirectory(), reportFilename.concat(unique));
         File report = new File(getOutputDirectory(), reportFilename);
-        try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(report))){
+        report.createNewFile();
+
+        LOGGER.debug("Generating JSON report for {} to file {} (using temp file {})", testOutcome.getTitle(), report.getAbsolutePath(), temporary.getAbsolutePath());
+
+        try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(temporary))){
             jsonConverter.toJson(storedTestOutcome, outputStream);
+            outputStream.flush();
         }
+        Files.move(temporary.toPath(), report.toPath(),
+                StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
+        );
         return report;
     }
 
@@ -59,6 +82,7 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
                 ReportType.JSON);
     }
 
+    @Override
     public void setOutputDirectory(final File outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
@@ -68,18 +92,30 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
         this.qualifier = qualifier;
     }
 
+    @Override
     public void setResourceDirectory(String resourceDirectoryPath) {
     }
 
+    @Override
+    public Optional<TestOutcome> loadReportFrom(final Path reportFile) {
+        return loadReportFrom(reportFile.toFile());
+    }
+
+    @Override
     public Optional<TestOutcome> loadReportFrom(final File reportFile) {
-        try (BufferedReader in = new BufferedReader(new FileReader(reportFile))) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(reportFile), encoding))) {
             TestOutcome fromJson = jsonConverter.fromJson(in);
             return Optional.fromNullable(fromJson);
         } catch (Throwable e) {
-            LOGGER.warn("this file was not a valid JSON Serenity test report: " + reportFile.getName()
-                        + System.lineSeparator() + e.getMessage());
+            LOGGER.warn("This file was not a valid JSON Serenity test report: " + reportFile.getName()
+                    + System.lineSeparator() + e.getMessage());
             return Optional.absent();
         }
+    }
+
+    @Override
+    public List<TestOutcome> loadReportsFrom(final Path outputDirectory) {
+        return loadReportsFrom(outputDirectory.toFile());
     }
 
     @Override

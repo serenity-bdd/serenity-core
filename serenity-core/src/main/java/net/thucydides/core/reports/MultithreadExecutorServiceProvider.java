@@ -17,8 +17,8 @@ public class MultithreadExecutorServiceProvider implements ExecutorServiceProvid
 
     @Inject
     public MultithreadExecutorServiceProvider(EnvironmentVariables environmentVariables) {
-        corePoolSize = ThucydidesSystemProperty.REPORT_THREADS.integerFrom(environmentVariables, 4);
-        maximumPoolSize = ThucydidesSystemProperty.REPORT_MAX_THREADS.integerFrom(environmentVariables, 8);
+        corePoolSize = ThucydidesSystemProperty.REPORT_THREADS.integerFrom(environmentVariables, Runtime.getRuntime().availableProcessors());
+        maximumPoolSize = ThucydidesSystemProperty.REPORT_MAX_THREADS.integerFrom(environmentVariables, Runtime.getRuntime().availableProcessors());
         keepAliveTime = ThucydidesSystemProperty.REPORT_KEEP_ALIVE_TIME.integerFrom(environmentVariables, 60000);
     }
 

@@ -1,14 +1,17 @@
 package net.serenitybdd.core.photography.integration
+
 import com.google.common.collect.Lists
 import net.serenitybdd.core.photography.Darkroom
 import net.serenitybdd.core.photography.Photographer
 import net.serenitybdd.core.photography.ScreenshotPhoto
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.phantomjs.PhantomJSDriver
 import spock.lang.Specification
-
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.concurrent.Callable
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import java.util.concurrent.Future
 
 class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
 
@@ -16,53 +19,86 @@ class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
         given:
             def photographer = new Photographer();
         when:
-            def driver = new FirefoxDriver()
-            Darkroom.isOpenForBusiness();
             List<ScreenshotPhoto> photos = Lists.newArrayList();
-            for (photoCount in 0..10){
-                photos.add(photographer.takesAScreenshot()
+            def driver
+            try {
+                driver = new PhantomJSDriver()
+                Darkroom.isOpenForBusiness();
+                for (photoCount in 0..10) {
+                    photos.add(photographer.takesAScreenshot()
                         .with(driver)
                         .andSaveToDirectory(screenshotDirectory));
+                }
+                Darkroom.waitUntilClose();
+            } finally {
+                try {
+                    if (driver) {
+                        driver.close()
+                        driver.quit()
+                    }
+                } catch (some) {
+                }
             }
-            Darkroom.waitUntilClose();
-            driver.quit()
         then:
             photos.findAll {
                 photo -> Files.exists(photo.pathToScreenshot)
             }.size() == 11
+
     }
 
     def "should handle multiple screenshots in parallel"() {
         given:
             def photographer = new Photographer();
-            List<ScreenshotPhoto> photos = Lists.newArrayList();
-        and:
-            def threads = []
-            for (i in 1..10) {
-                threads << Thread.start {
-                    Darkroom.isOpenForBusiness();
-                    def driver = new FirefoxDriver()
-                    driver.get(siteFromUrlAt("/static-site/index.html"))
+            def List<Future<List<ScreenshotPhoto>>> processing = new ArrayList<>();
+            def List<ScreenshotPhoto> screenshots = new ArrayList<>();
+            def Integer threads = 10
+            def Integer photos = 3
 
-                    for (j in 1..10) {
-                        photos.add(photographer.takesAScreenshot()
-                                .with(driver)
-                                .andSaveToDirectory(screenshotDirectory));
-                    }
-                    driver.quit()
-                    Darkroom.waitUntilClose();
-                }
-            }
-            println threads
+            def ExecutorService service = Executors.newFixedThreadPool(10);
         when:
-            threads.forEach { it.join() }
+            threads.times {
+                processing << service.submit(new Callable<List<ScreenshotPhoto>>() {
+                    @Override
+                    List<ScreenshotPhoto> call() throws Exception {
+                        def List<ScreenshotPhoto> photo = new ArrayList<>()
+                        Darkroom.isOpenForBusiness();
+                        def driver = null
+                        try {
+                            driver = new PhantomJSDriver()
+                            driver.get(siteFromUrlAt("/static-site/index.html"))
+                            photos.times {
+                                photo.add(photographer.takesAScreenshot()
+                                    .with(driver)
+                                    .andSaveToDirectory(screenshotDirectory));
+                            }
+                        } catch (some) {
+                            println some
+
+                        } finally {
+                            try {
+                                if (driver) {
+                                    driver.close()
+                                    driver.quit()
+                                }
+                            } catch (some) {
+                            }
+                        }
+                        Darkroom.waitUntilClose();
+                        return photo
+                    }
+                })
+            }
+            processing.each { future ->
+                screenshots.addAll(future.get())
+            }
         then:
-            photos.size() == 100
-            photos.findAll {
+            processing.size() == threads
+            screenshots.size() == threads * photos
+            screenshots.findAll {
                 photo -> Files.exists(photo.pathToScreenshot)
-            }.size() == 100
+            }.size() == threads * photos
     }
-    WebDriver driver;
+
     Path screenshotDirectory;
 
     long startTime;
@@ -76,7 +112,7 @@ class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
 
     String siteFromUrlAt(String path) {
         File baseDir = new File(System.getProperty("user.dir"));
-        File testSite = new File(baseDir, "src/test/resources"  + path);
+        File testSite = new File(baseDir, "src/test/resources" + path);
         return "file://" + testSite.getAbsolutePath();
     }
 

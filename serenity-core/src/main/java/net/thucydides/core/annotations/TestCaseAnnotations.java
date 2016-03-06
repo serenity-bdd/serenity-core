@@ -18,7 +18,7 @@ public final class TestCaseAnnotations {
 
     private final Object testCase;
 
-    private TestCaseAnnotations(final Object testCase) {
+    public TestCaseAnnotations(final Object testCase) {
         this.testCase = testCase;
     }
 
@@ -80,4 +80,8 @@ public final class TestCaseAnnotations {
         return findOptionalAnnotatedField(testClass).isPresent();
     }
 
+    public static boolean shouldClearCookiesBeforeEachTestIn(Class<?> testClass) {
+        ManagedWebDriverAnnotatedField webDriverField = findFirstAnnotatedField(testClass);
+        return webDriverField.getClearCookiesPolicy() == ClearCookiesPolicy.BeforeEachTest;
+    }
 }

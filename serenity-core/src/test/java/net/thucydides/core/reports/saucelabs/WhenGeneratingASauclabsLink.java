@@ -41,6 +41,7 @@ public class WhenGeneratingASauclabsLink {
 
     @Test
     public void should_generate_a_simple_link_if_no_API_key_is_provided() {
+        environmentVariables.setProperty("saucelabs.url","http://username:accesskey@ondemand.saucelabs.com:80/wd/hub");
         SaucelabsLinkGenerator saucelabsLinkGenerator = new SaucelabsLinkGenerator(environmentVariables);
 
         String saucelabsLink = saucelabsLinkGenerator.linkFor(testOutcome);
@@ -56,7 +57,16 @@ public class WhenGeneratingASauclabsLink {
     }
 
     @Test
+    public void should_generate_no_link_if_the_saucelabs_links_are_not_activated() {
+        SaucelabsLinkGenerator saucelabsLinkGenerator = new SaucelabsLinkGenerator(environmentVariables);
+
+        String saucelabsLink = saucelabsLinkGenerator.linkFor(testOutcome);
+        assertThat(saucelabsLink, is(nullValue()));
+    }
+
+    @Test
     public void should_generate_a_link_with_hmac_authentication_if_an_API_key_is_provided() {
+        environmentVariables.setProperty("saucelabs.url","http://username:accesskey@ondemand.saucelabs.com:80/wd/hub");
         environmentVariables.setProperty("saucelabs.user.id","example_user");
         environmentVariables.setProperty("saucelabs.access.key","123456-asdf-8dcf81f1fc71");
 

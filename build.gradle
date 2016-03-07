@@ -45,7 +45,7 @@ ext {
     gsonVersion = '2.4'
     typesafeConfigVersion = '1.2.1'
     freemarkerVersion = '2.3.23'
-
+    wiremockCoreVersion = '1.58'
     // Bintray configuration
     bintrayBaseUrl = 'https://api.bintray.com/maven'
     bintrayRepository = 'maven'

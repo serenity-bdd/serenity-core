@@ -57,7 +57,7 @@ public class SerenityRest {
         return currentQueryPayload.get();
     }
 
-    public static RequestSpecification rest() {
+    public static RequestSpecification  rest() {
         currentRequestSpecification.set(instrumentedRequestSpecification());
         getEventBus().registerListener(new RestStepListener());
         return currentRequestSpecification.get();

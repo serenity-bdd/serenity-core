@@ -13,6 +13,7 @@ import java.util.Locale;
 public final class NameConverter {
 
     private static final String INDEXED_METHOD_NAME = ".*\\[\\d+]";
+    private static final String[] abbreviations = {"CSV", "XML", "JSON"};
 
     private NameConverter() {
     }
@@ -35,8 +36,17 @@ public final class NameConverter {
         } else {
             String noUnderscores = name.replaceAll("_", " ");
             String splitCamelCase = splitCamelCase(noUnderscores);
-            return StringUtils.capitalize(splitCamelCase);
+            String capitalized = StringUtils.capitalize(splitCamelCase);
+            return restoreAbbreviations(capitalized);
         }
+    }
+
+    private static String restoreAbbreviations(final String sentence){
+        String processing = sentence;
+        for(String abbreviation: abbreviations){
+            processing = processing.replaceAll(StringUtils.capitalize(abbreviation), abbreviation);
+        }
+        return processing;
     }
 
     private static String humanizeNameWithParameters(final String name) {

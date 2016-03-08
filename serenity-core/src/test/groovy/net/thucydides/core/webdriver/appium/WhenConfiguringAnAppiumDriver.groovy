@@ -101,7 +101,7 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         appiumConfiguration.capabilities
         then:
         ThucydidesConfigurationException invalidConfiguration = thrown()
-        invalidConfiguration.message.contains("The path to the app needs to be provided in the appium.app property.")
+        invalidConfiguration.message.contains("The browser under test or path to the app needs to be provided in the appium.app or appium.browserName property.")
     }
 
 }

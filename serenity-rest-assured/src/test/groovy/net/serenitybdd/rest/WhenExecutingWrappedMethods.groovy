@@ -1,12 +1,19 @@
 package net.serenitybdd.rest
 
+import com.github.tomakehurst.wiremock.junit.WireMockRule
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
+import net.serenity.test.utils.rules.TestCase
 import net.serenitybdd.core.rest.RestQuery
 import net.thucydides.core.steps.BaseStepListener
-import net.thucydides.core.steps.StepEventBus
+import org.junit.Rule
 import spock.lang.Ignore
 import spock.lang.Specification
 
 import static net.serenitybdd.rest.SerenityRest.rest
+import static com.github.tomakehurst.wiremock.client.WireMock.*
 
 /**
  * User: YamStranger
@@ -15,65 +22,107 @@ import static net.serenitybdd.rest.SerenityRest.rest
  */
 class WhenExecutingWrappedMethods extends Specification {
 
-    def BaseStepListener listener
+    @Rule
+    def WireMockRule wire = new WireMockRule(0);
 
-    def setup() {
-        listener = Mock(BaseStepListener)
-        StepEventBus.eventBus.registerListener(listener)
-    }
+    @Rule
+    def TestCase<BaseStepListener> test = new TestCase({
+        Mock(BaseStepListener)
+    }.call());
 
-    def cleanup() {
-        StepEventBus.eventBus.testFinished()
-    }
+    def Gson gson = new GsonBuilder().setPrettyPrinting().
+        serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+
 
     def "should work properly after executing log method"() {
         given:
-            StepEventBus.eventBus.testStarted("rest")
-        and:
-            def samplePet = """{"id": 1001, "name": "doggie", "photoUrls": [], "status": "available"}"""
+            def JsonObject json = new JsonObject()
+            json.addProperty("Title", "King")
+            json.addProperty("Salary", "100")
+            def body = gson.toJson(json)
+
+            def base = "http://localhost:${wire.port()}"
+            def path = "/test/resource"
+            def url = "$base$path"
+
+            stubFor(post(urlEqualTo(path))
+                .withRequestBody(matching(".*"))
+                .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(body)));
         when:
-            rest().given().contentType("application/json").content(samplePet).log().all()
-            .post("http://petstore.swagger.io/v2/pet")
+            def result = rest().given().contentType("application/json").content(body).log().all()
+                .post(url).then()
         then: "The JSON request should be recorded in the test steps"
-            1 * listener.recordRestQuery({ RestQuery query ->
-                query.toString() == "POST http://petstore.swagger.io/v2/pet" &&
-                    query.content == samplePet &&
-                    query.contentType == "application/json"
-            })
+            1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
+                assert "$query" == "POST $url"
+                assert query.content == body
+                assert query.contentType == "application/json"
+            }
+        and:
+            result.statusCode(200)
     }
 
     def "should work properly after executing auth method"() {
         given:
-            StepEventBus.eventBus.testStarted("rest")
-        and:
-            def samplePet = """{"id": 1001, "name": "doggie", "photoUrls": [], "status": "available"}"""
+            def JsonObject json = new JsonObject()
+            json.addProperty("Name", "Ivanna")
+            json.addProperty("City", "Earth")
+            def body = gson.toJson(json)
+
+            def base = "http://localhost:${wire.port()}"
+            def path = "/test/resource/auth"
+            def url = "$base$path"
+
+            stubFor(post(urlEqualTo(path))
+                .withRequestBody(matching(".*"))
+                .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(body)));
         when:
-            rest().given().contentType("application/json").content(samplePet).auth().none()
-                .post("http://petstore.swagger.io/v2/pet")
+            def result = rest().given().contentType("application/json").content(body).auth().none()
+                .post(url).then()
         then: "The JSON request should be recorded in the test steps"
-            1 * listener.recordRestQuery({ RestQuery query ->
-                query.toString() == "POST http://petstore.swagger.io/v2/pet" &&
-                    query.content == samplePet &&
-                    query.contentType == "application/json"
-            })
+            1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
+                assert "$query" == "POST $url"
+                assert query.content == body
+                assert query.contentType == "application/json"
+            }
+        and:
+            result.statusCode(200)
     }
 
-    @Ignore
+    @Ignore("Redirect is not implemented")
     def "should work properly after executing redirect method"() {
         given:
-            def mockListener = Mock(BaseStepListener)
-            StepEventBus.eventBus.registerListener(mockListener)
-            StepEventBus.eventBus.testStarted("rest")
-        and:
-            def samplePet = """{"id": 1001, "name": "doggie", "photoUrls": [], "status": "available"}"""
+            def JsonObject json = new JsonObject()
+            json.addProperty("Phone", 1789)
+            json.addProperty("Color", "blue")
+            def body = gson.toJson(json)
+
+            def base = "http://localhost:${wire.port()}"
+            def path = "/test/resource/redirection"
+            def url = "$base$path"
+
+            stubFor(post(urlEqualTo(path))
+                .withRequestBody(matching(".*"))
+                .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(body)));
         when:
-            rest().given().contentType("application/json").content(samplePet).redirects().follow(true)
-                .post("http://petstore.swagger.io/v2/pet")
-            then: "The JSON request should be recorded in the test steps"
-            1 * listener.recordRestQuery({ RestQuery query ->
-                query.toString() == "POST http://petstore.swagger.io/v2/pet" &&
-                    query.content == samplePet &&
-                    query.contentType == "application/json"
-            })
+            def result = rest().given().contentType("application/json").content(body)
+                .redirects().follow(true)
+                .post(url).then()
+        then: "The JSON request should be recorded in the test steps"
+            1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
+                assert "$query" == "POST $url"
+                assert query.content == body
+                assert query.contentType == "application/json"
+            }
+        and:
+            result.statusCode(200)
     }
 }

@@ -132,7 +132,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 Set<String> directoryPaths = getRootDirectoryPaths();
                 for (String rootDirectoryPath : directoryPaths) {
                     File rootDirectory = new File(rootDirectoryPath);
-                    logger.info("Loading requirements from isExists="+rootDirectory.exists()+" path:"+rootDirectory);
+                    logger.debug("Loading requirements from {0}", rootDirectory);
                     if (rootDirectory.exists()) {
                         allRequirements.addAll(loadCapabilitiesFrom(rootDirectory.listFiles(thatAreDirectories())));
                         allRequirements.addAll(loadStoriesFrom(rootDirectory.listFiles(thatAreStories())));

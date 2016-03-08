@@ -5,11 +5,14 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.AcceptanceTestLoader;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.OutcomeFormat;
 import net.thucydides.core.reports.TestOutcomes;
+import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +39,14 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
     private static final Logger LOGGER = LoggerFactory.getLogger(XMLTestOutcomeReporter.class);
 
     private transient String qualifier;
+
+    private final EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+
+    private final String encoding;
+
+    public XMLTestOutcomeReporter() {
+        encoding = ThucydidesSystemProperty.THUCYDIDES_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());
+    }
 
     @Override
     public void setQualifier(final String qualifier) {
@@ -81,14 +92,14 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
 
         try(
            OutputStream outputStream = new FileOutputStream(temporary);
-           OutputStreamWriter writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
+           OutputStreamWriter writer = new OutputStreamWriter(outputStream, encoding)) {
            xstream.toXML(storedTestOutcome, writer);
            writer.flush();
-           Files.move(temporary.toPath(), report.toPath(),
-                   StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
-           );
            LOGGER.debug("XML report generated ({} bytes) {}", report.getAbsolutePath(), report.length());
         }
+        Files.move(temporary.toPath(), report.toPath(),
+                StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
+        );
         return report;
     }
 
@@ -109,7 +120,7 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
     public Optional<TestOutcome> loadReportFrom(final File reportFile) {
         try(
                 InputStream input = new FileInputStream(reportFile);
-                InputStreamReader reader = new InputStreamReader(input, StandardCharsets.UTF_8);
+                InputStreamReader reader = new InputStreamReader(input, encoding);
         ) {
             XStream xstream = new XStream();
             xstream.alias("acceptance-test-run", TestOutcome.class);

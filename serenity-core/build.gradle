@@ -28,10 +28,10 @@ dependencies {
 
     compile project(':serenity-report-resources')
 
-    compile 'com.google.code.gson:gson:2.4'
+    compile "com.google.code.gson:gson:${gsonVersion}"
 
-    compile "commons-codec:commons-codec:1.9"
-    compile "commons-io:commons-io:2.4"
+    compile "commons-codec:commons-codec:${commonsCodecVersion}"
+    compile "commons-io:commons-io:${commonsIoVersion}"
     compile 'xml-apis:xml-apis:1.4.01'
 
     compile("com.opera:operadriver:1.5") {
@@ -60,7 +60,7 @@ dependencies {
         exclude group: 'xml-apis', module: 'xml-apis'
     }
 
-    compile('io.appium:java-client:3.2.0') {
+    compile('io.appium:java-client:3.3.0') {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
         exclude group: 'cglib', module: 'cglib'
@@ -78,22 +78,21 @@ dependencies {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
 
-    compile("com.googlecode.lambdaj:lambdaj:2.3.3") {
+    compile("com.googlecode.lambdaj:lambdaj:${lambdajVersion}") {
         exclude group: 'org.hamcrest', module: 'hamcrest-all'
         exclude group: 'cglib', module: 'cglib-nodep'
         exclude group: 'org.objenesis', module: 'objenesis'
     }
-    compile "joda-time:joda-time:2.7"
-    compile "com.thoughtworks.xstream:xstream:1.4.8"
-    compile "org.apache.commons:commons-lang3:3.3.2"
-    compile "commons-collections:commons-collections:3.2.1"
-    compile "org.freemarker:freemarker:2.3.21"
+    compile "joda-time:joda-time:${jodaTimeVersion}"
+    compile "com.thoughtworks.xstream:xstream:${xstreamVersion}"
+    compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
+    compile "commons-collections:commons-collections:${commonsCollectionsVersion}"
+    compile "org.freemarker:freemarker:${freemarkerVersion}"
     compile("net.sourceforge.jexcelapi:jxl:2.6.12") {
         exclude group: 'log4j', module: 'log4j'
     }
     compile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
     compile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
-    compile "commons-collections:commons-collections:3.2.1"
     compile("net.sourceforge.htmlunit:htmlunit:2.19") {
         exclude group: 'org.apache.commons', module: 'commons-lang3'
         exclude group: 'commons-logging', module: 'commons-logging'
@@ -105,7 +104,6 @@ dependencies {
     compile 'org.apache.httpcomponents:httpclient:4.4.1'
     compile 'org.apache.httpcomponents:httpmime:4.4.1'
 
-    compile "org.freemarker:freemarker:2.3.21"
     compile("org.fluentlenium:fluentlenium-core:0.10.2") {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'junit', module: 'junit-dep'
@@ -127,7 +125,7 @@ dependencies {
     compile('com.jayway.awaitility:awaitility:1.6.3') {
         exclude group: 'cglib', module: 'cglib-nodep'
     }
-    compile 'com.typesafe:config:1.2.1'
+    compile "com.typesafe:config:${typesafeConfigVersion}"
     compile('org.jsoup:jsoup:1.8.3') {
         exclude group: 'junit', module: 'junit'
     }

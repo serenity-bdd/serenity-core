@@ -29,9 +29,12 @@ public class GsonJSONConverter implements JSONConverter {
         return gson;
     }
 
+    private final String encoding;
+
     @Inject
     public GsonJSONConverter(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
+        encoding = ThucydidesSystemProperty.THUCYDIDES_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());
         GsonBuilder gsonBuilder = new GsonBuilder()
                                             .registerTypeAdapterFactory(OptionalTypeAdapter.FACTORY)
                                             .registerTypeHierarchyAdapter(Collection.class, new CollectionAdapter())
@@ -43,7 +46,7 @@ public class GsonJSONConverter implements JSONConverter {
 
     @Override
     public TestOutcome fromJson(InputStream inputStream) throws IOException {
-        return fromJson(new InputStreamReader(inputStream, Charsets.UTF_8));
+        return fromJson(new InputStreamReader(inputStream, encoding));
     }
 
     @Override
@@ -57,10 +60,11 @@ public class GsonJSONConverter implements JSONConverter {
         return isNotEmpty(testOutcome.getName());
     }
 
+
     @Override
     public void toJson(TestOutcome testOutcome, OutputStream outputStream) throws IOException {
         testOutcome.calculateDynamicFieldValues();
-        try(Writer out = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
+        try(Writer out = new OutputStreamWriter(outputStream, encoding)) {
             gson.toJson(testOutcome, out);
         }
     }

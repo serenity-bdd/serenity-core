@@ -58,7 +58,7 @@ public class QualifierFinder {
         }
     }
 
-    private boolean hasQualifierAnnotation() {
+    public boolean hasQualifierAnnotation() {
         return (getQualifiedMethod() != null);
     }
 }

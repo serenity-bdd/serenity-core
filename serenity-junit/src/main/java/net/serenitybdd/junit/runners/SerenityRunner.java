@@ -63,7 +63,9 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     private String requestedDriver;
     private ReportService reportService;
     private final TestCount testCount;
+
     private final TestConfiguration theTest;
+    private String qualifier;
     /**
      * Special listener that keeps track of test step execution and results.
      */
@@ -230,7 +232,12 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     }
 
     public void useQualifier(final String qualifier) {
+        this.qualifier = qualifier;
         getReportService().useQualifier(qualifier);
+    }
+
+    public String getQualifier(){
+        return qualifier;
     }
 
     /**

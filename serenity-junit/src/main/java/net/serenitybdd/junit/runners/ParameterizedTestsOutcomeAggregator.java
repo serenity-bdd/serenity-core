@@ -5,10 +5,7 @@ import net.thucydides.core.model.*;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.runner.Runner;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
@@ -59,7 +56,11 @@ public class ParameterizedTestsOutcomeAggregator {
     }
 
     private void recordTestOutcomeAsSteps(TestOutcome testOutcome, TestOutcome scenarioOutcome) {
-        TestStep nestedStep = TestStep.forStepCalled(testOutcome.getTitle()).withResult(testOutcome.getResult());
+        Integer recordIndex = new Integer(StringUtils.substringBetween(testOutcome.getName(),"[","]"));
+        Optional<String> qualifier = getQualifier(recordIndex);
+        String title = qualifier.isPresent() ? qualifier.get() : testOutcome.getTitle();
+
+        TestStep nestedStep = TestStep.forStepCalled(title).withResult(testOutcome.getResult());
         List<TestStep> testSteps = testOutcome.getTestSteps();
 
         if (testOutcome.getTestFailureCause() != null) {
@@ -67,7 +68,8 @@ public class ParameterizedTestsOutcomeAggregator {
         }
 
         if (!testSteps.isEmpty()) {
-            for (TestStep nextStep : testSteps) {
+            for (TestStep nextStep : testSteps.get(0).getChildren()) {
+
                 nextStep.setDescription(normalizeTestStepDescription(nextStep.getDescription(),
                                         scenarioOutcome.getTestSteps().size() + 1));
                 nestedStep.addChildStep(nextStep);
@@ -114,7 +116,7 @@ public class ParameterizedTestsOutcomeAggregator {
 
     private TestOutcome createScenarioOutcome(TestOutcome parameterizedOutcome) {
         TestOutcome testOutcome = TestOutcome.forTest(normalizeMethodName(parameterizedOutcome),
-                                                      parameterizedOutcome.getTestCase());
+                parameterizedOutcome.getTestCase());
 
         return testOutcome;
     }
@@ -134,5 +136,15 @@ public class ParameterizedTestsOutcomeAggregator {
             }
         }
         return testOutcomes;
+    }
+
+    protected Optional<String> getQualifier(Integer index){
+        List<Runner> runners = serenityParameterizedRunner.getRunners();
+        if(runners != null && runners.size() > index){
+            SerenityRunner runner = (SerenityRunner)runners.get(index);
+            return Optional.ofNullable(runner.getQualifier());
+        }else{
+            return Optional.empty();
+        }
     }
 }

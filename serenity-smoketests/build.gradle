@@ -1,0 +1,84 @@
+import org.ajoberstar.grgit.Grgit
+import org.ajoberstar.grgit.Tag
+import java.util.regex.Pattern
+
+group = 'net.serenity-bdd'
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.5'
+        classpath 'org.ajoberstar:gradle-git:1.4.0-rc.1'
+        classpath 'org.pegdown:pegdown:1.4.1'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.11.3'
+        classpath("net.serenity-bdd:serenity-gradle-plugin:1.1.26-rc.1")
+    }
+}
+
+repositories {
+    mavenLocal()
+    jcenter()
+}
+
+ext {
+    grgit = Grgit.open()
+    def tags = grgit.tag.list()
+    tags.sort(new Comparator() {
+        @Override
+        int compare(Object o1, Object o2) {
+            def Tag left=(Tag)o1
+            def Tag right=(Tag)o2
+            return left.commit.time.compareTo(right.commit.time)
+        }
+    })
+    def Tag last = tags.last()
+
+    def pattern = Pattern.compile("\\d+\\S+")
+    def matcher = pattern.matcher(last.fullName)
+    def String version = "not found"
+    if (matcher.find()) {
+        version = matcher.group()
+    }
+    serenityCoreVersion = "$version"
+}
+
+apply plugin: "java"
+apply plugin: "net.serenity-bdd.aggregator"
+
+
+println "serenityCoreVersion= $serenityCoreVersion"
+
+dependencies {
+    compile "net.serenity-bdd:serenity-core:$serenityCoreVersion"
+    compile "net.serenity-bdd:serenity-junit:$serenityCoreVersion"
+    compile("net.serenity-bdd:serenity-screenplay:$serenityCoreVersion")
+    compile("net.serenity-bdd:browse-the-web:$serenityCoreVersion")
+
+    compile 'org.slf4j:slf4j-simple:1.7.7'
+    compile 'org.codehaus.groovy:groovy-all:2.4.4'
+    compile 'junit:junit:4.11'
+    compile 'com.googlecode.lambdaj:lambdaj:2.3.3'
+    compile 'org.assertj:assertj-core:1.7.0'
+    compile 'org.hamcrest:hamcrest-all:1.3'
+}
+
+
+test {
+    testLogging {
+        // showStandardStreams = true
+    }
+    /* Pass all system properties: */
+    systemProperties System.getProperties()
+
+    maxParallelForks = Runtime.runtime.availableProcessors()
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.10'
+}
+
+task copyDeps(type: Copy) {
+    from configurations.runtime + configurations.testCompile
+    into project.projectDir.path + "/lib"
+}

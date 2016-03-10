@@ -1959,7 +1959,7 @@ public class TestOutcome {
         for (TestStep step : getStepChildren()) {
             sampleScenario.append(getMethodNameWithoutParameters(step.getDescription())).append("\n");
         }
-        return sampleScenario.substring(0, sampleScenario.length() - 1);
+        return sampleScenario.length() > 1 ? sampleScenario.substring(0, sampleScenario.length() - 1) : "";
     }
 
 

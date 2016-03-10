@@ -43,6 +43,7 @@ import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static ch.lambdaj.Lambda.*;
@@ -1931,20 +1932,37 @@ public class TestOutcome {
         return (isDataDriven()) ? getDataTable().getHeaders() : NO_HEADERS;
     }
 
+    private List<TestStep> getStepChildren() {
+        TestStep firstExample = getTestSteps().get(0);
+        List<TestStep> firstLevel = firstExample.getChildren();
+        if (firstLevel.size() > 0 && firstLevel.get(0).getDescription().matches("^\\[\\d+\\]\\s\\{.+")) {
+            firstLevel = firstLevel.get(0).getChildren();
+        }
+        return firstLevel;
+    }
+
+    private String getMethodNameWithoutParameters(final String value) {
+        final Pattern methodName = Pattern.compile("(?<method>^\\w+[^\\:]+)(?<parameters>.*)");
+        final Matcher matcher = methodName.matcher(value);
+        String processed = value;
+        if (matcher.find()) {
+            processed = matcher.group("method");
+        }
+        return processed;
+    }
+
     public String getDataDrivenSampleScenario() {
         if (!isDataDriven() || getTestSteps().isEmpty() || !getTestSteps().get(0).hasChildren()) {
             return "";
         }
-        TestStep firstExample = getTestSteps().get(0);
         StringBuilder sampleScenario = new StringBuilder();
-        for (TestStep topLevelChildStep : firstExample.getChildren()) {
-            sampleScenario.append(topLevelChildStep.getDescription());
-            if (topLevelChildStep != lastOf(firstExample.getChildren())) {
-                sampleScenario.append("\n");
-            }
+        for (TestStep step : getStepChildren()) {
+            sampleScenario.append(getMethodNameWithoutParameters(step.getDescription())).append("\n");
         }
-        return sampleScenario.toString();
+        return sampleScenario.substring(0, sampleScenario.length() - 1);
     }
+
+
 
     private TestStep lastOf(List<TestStep> children) {
         return children.get(children.size() - 1);

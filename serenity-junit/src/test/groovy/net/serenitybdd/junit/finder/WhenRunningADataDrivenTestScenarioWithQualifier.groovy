@@ -49,7 +49,7 @@ class WhenRunningADataDrivenTestScenarioWithQualifier extends Specification {
         configuration = new SystemPropertiesConfiguration(environmentVariables);
     }
 
-    def "when test contains test data"() {
+    def "when test contains method to determine Qualifier it should be used for step names"() {
         given:
             File outputDirectory = tempFolder.newFolder("serenitybdd");
             environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
@@ -70,7 +70,6 @@ class WhenRunningADataDrivenTestScenarioWithQualifier extends Specification {
                 assert step.getDescription().matches("Happy day scenario for [a-zA-Z]{1} and \\d{1,2}")
             }
     }
-
 
     def private SerenityParameterizedRunner getStubbedTestRunnerUsing(Class<?> testClass) throws Throwable {
         Configuration configuration = new SystemPropertiesConfiguration(environmentVariables);

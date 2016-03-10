@@ -50,6 +50,8 @@ public class SampleDataDrivenScenarioWithQualifier {
     @Test
     public void happy_day_scenario() {
         steps.stepWithParameters(option1, option2);
+        steps.moreStepWithParameters(option1, option2);
+        steps.stepWithTwoParameters(option1, option2);
     }
 
     @Test

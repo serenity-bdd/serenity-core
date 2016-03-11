@@ -4,11 +4,9 @@ import com.google.common.collect.Lists;
 import net.thucydides.core.model.*;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.runner.Runner;
+import com.google.common.base.Optional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
@@ -31,16 +29,15 @@ public class ParameterizedTestsOutcomeAggregator {
         if (allOutcomes.isEmpty()) {
             return Lists.newArrayList();
         } else {
-            return aggregatedScenarioOutcomes(allOutcomes);
+            return  aggregatedScenarioOutcomes(allOutcomes);
         }
-
     }
 
     private List<TestOutcome> aggregatedScenarioOutcomes(List<TestOutcome> allOutcomes) {
         Map<String, TestOutcome> scenarioOutcomes = new HashMap<>();
 
         for (TestOutcome testOutcome : allOutcomes) {
-            final String normalizedMethodName = normalizeMethodName(testOutcome);
+            final String normalizedMethodName = baseMethodName(testOutcome);
 
             TestOutcome scenarioOutcome = scenarioOutcomeFor(normalizedMethodName, testOutcome, scenarioOutcomes);
             recordTestOutcomeAsSteps(testOutcome, scenarioOutcome);
@@ -59,7 +56,8 @@ public class ParameterizedTestsOutcomeAggregator {
     }
 
     private void recordTestOutcomeAsSteps(TestOutcome testOutcome, TestOutcome scenarioOutcome) {
-        TestStep nestedStep = TestStep.forStepCalled(testOutcome.getTitle()).withResult(testOutcome.getResult());
+        final String name = alternativeMethodName(testOutcome);
+        TestStep nestedStep = TestStep.forStepCalled(name).withResult(testOutcome.getResult());
         List<TestStep> testSteps = testOutcome.getTestSteps();
 
         if (testOutcome.getTestFailureCause() != null) {
@@ -69,13 +67,13 @@ public class ParameterizedTestsOutcomeAggregator {
         if (!testSteps.isEmpty()) {
             for (TestStep nextStep : testSteps) {
                 nextStep.setDescription(normalizeTestStepDescription(nextStep.getDescription(),
-                                        scenarioOutcome.getTestSteps().size() + 1));
+                        scenarioOutcome.getTestSteps().size() + 1));
                 nestedStep.addChildStep(nextStep);
-                nestedStep.setDuration(nextStep.getDuration()+nestedStep.getDuration());
+                nestedStep.setDuration(nextStep.getDuration() + nestedStep.getDuration());
             }
         }
 
-        if (nestedStep.getDuration() == 0){
+        if (nestedStep.getDuration() == 0) {
             nestedStep.setDuration(testOutcome.getDuration());
         }
         scenarioOutcome.recordStep(nestedStep);
@@ -113,19 +111,28 @@ public class ParameterizedTestsOutcomeAggregator {
     }
 
     private TestOutcome createScenarioOutcome(TestOutcome parameterizedOutcome) {
-        TestOutcome testOutcome = TestOutcome.forTest(normalizeMethodName(parameterizedOutcome),
-                                                      parameterizedOutcome.getTestCase());
+        TestOutcome testOutcome = TestOutcome.forTest(baseMethodName(parameterizedOutcome),
+                parameterizedOutcome.getTestCase());
 
         return testOutcome;
     }
 
-    private String normalizeMethodName(TestOutcome testOutcome) {
+    private String baseMethodName(TestOutcome testOutcome) {
         return testOutcome.getName().replaceAll("\\[\\d+\\]", "");
     }
 
-    public List<TestOutcome> getTestOutcomesForAllParameterSets() {
-        List<TestOutcome> testOutcomes = new ArrayList<TestOutcome>();
+    private String alternativeMethodName(TestOutcome testOutcome) {
+        Optional<String> qualifier = testOutcome.getQualifier();
+        if (qualifier.isPresent()) {
+            return testOutcome.getTitle(false) +
+                    testOutcome.getQualifier().get();
+        } else {
+            return testOutcome.getTitle();
+        }
+    }
 
+    public List<TestOutcome> getTestOutcomesForAllParameterSets() {
+        List<TestOutcome> testOutcomes = new ArrayList<>();
         for (Runner runner : serenityParameterizedRunner.getRunners()) {
             for (TestOutcome testOutcome : ((SerenityRunner) runner).getTestOutcomes()) {
                 if (!testOutcomes.contains(testOutcome)) {

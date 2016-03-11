@@ -11,6 +11,7 @@ dependencies {
         exclude group: 'org.codehaus.groovy', module:'groovy'
         exclude group: 'org.codehaus.groovy', module:'groovy-json'
         exclude group: 'org.codehaus.groovy', module:'groovy-xml'
+        exclude group: 'org.apache.commons', module:'commons-lang3'
     }
     testCompile ("com.github.tomakehurst:wiremock:$wiremockCoreVersion") {
         exclude group: 'com.google.guava', module:'guava'

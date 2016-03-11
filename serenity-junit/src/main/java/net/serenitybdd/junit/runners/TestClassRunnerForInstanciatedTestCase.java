@@ -11,11 +11,10 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 
-class TestClassRunnerForInstanciatedTestCase extends SerenityRunner {
+class TestClassRunnerForInstanciatedTestCase extends QualifiedTestsRunner {
     private final int parameterSetNumber;
     private final Object instanciatedTest;
     private final DataTable parametersTable;
-
 
     TestClassRunnerForInstanciatedTestCase(final Object instanciatedTest,
                                            Configuration configuration,
@@ -23,7 +22,7 @@ class TestClassRunnerForInstanciatedTestCase extends SerenityRunner {
                                            final BatchManager batchManager,
                                            final DataTable parametersTable,
                                            final int parameterSetNumber) throws InitializationError {
-        super(instanciatedTest.getClass(), webDriverFactory, configuration, batchManager);
+        super(instanciatedTest.getClass(), configuration, webDriverFactory, batchManager);
         this.instanciatedTest = instanciatedTest;
         this.parameterSetNumber = parameterSetNumber;
         this.parametersTable = parametersTable;
@@ -41,9 +40,10 @@ class TestClassRunnerForInstanciatedTestCase extends SerenityRunner {
     }
 
     @Override
-    public Object createTest() throws Exception {
+    protected Object initializeTest() throws Exception {
         return instanciatedTest;
     }
+
 
     @Override
     protected String getName() {
@@ -64,6 +64,4 @@ class TestClassRunnerForInstanciatedTestCase extends SerenityRunner {
     protected void generateReports() {
         //do not generate reports at example level
     }
-
-
 }

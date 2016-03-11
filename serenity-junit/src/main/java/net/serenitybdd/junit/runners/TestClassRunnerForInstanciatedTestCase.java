@@ -40,6 +40,16 @@ class TestClassRunnerForInstanciatedTestCase extends QualifiedTestsRunner {
     }
 
     @Override
+    protected JUnitStepListener initListeners() {
+        setStepListener(JUnitStepListener.withOutputDirectory(getConfiguration().getOutputDirectory())
+              .and().withParameterSetNumber(parameterSetNumber)
+              .and().withParametersTable(parametersTable)
+              .and().withTestClass(getTestClass().getJavaClass())
+              .and().build());
+        return getStepListener();
+    }
+
+    @Override
     protected Object initializeTest() throws Exception {
         return instanciatedTest;
     }

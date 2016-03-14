@@ -1,15 +1,26 @@
 ## Serenity BDD core change Log
 
-### upcoming (2016/03/04 15:26 +00:00)
+### upcoming (2016/03/14 05:33 +00:00)
  
 **Pull requests:**
  
+- [#354](https://github.com/serenity-bdd/serenity-core/pull/354) fix: Issues with SerenityParameterized test requiring WebDriver ([@jordanbragg](https://github.com/jordanbragg))
+- [#349](https://github.com/serenity-bdd/serenity-core/pull/349) Updated scenario data driven steps processing for report - now report will contains steps as for first scenario ([@YamStranger](https://github.com/YamStranger))
+- [#348](https://github.com/serenity-bdd/serenity-core/pull/348) Updated name of test method for Qualifier tests ([@YamStranger](https://github.com/YamStranger))
+- [#347](https://github.com/serenity-bdd/serenity-core/pull/347) Updated processing of @Qualifier tag in junit tests with data tables. Now it is possible add short description to steps based on parameters value ([@YamStranger](https://github.com/YamStranger))
+- [#344](https://github.com/serenity-bdd/serenity-core/pull/344) Created gradle build config for smoketests to execute them against latest serenty core ([@YamStranger](https://github.com/YamStranger))
 - [#339](https://github.com/serenity-bdd/serenity-core/pull/339) Updated tests for rest-assurance to use wiremock server instead of petstore. Added TestCase rule - now it is possible initialize test using spock ([@YamStranger](https://github.com/YamStranger))
 - [#330](https://github.com/serenity-bdd/serenity-core/pull/330) Updated store/load of outcomes - serenity.report.encoding property will be used with UTF-8 as default ([@cliviu](https://github.com/cliviu))
  
 **Commits:**
  
 - [4d2029c](https://github.com/serenity-bdd/serenity-core/commit/4d2029c6b2b6313c1825c80f39acf2b425ec959b) test: updated tests for rest-assurance to use wiremock server instead of petstore ([@YamStranger](https://github.com/YamStranger))
+- [6417437](https://github.com/serenity-bdd/serenity-core/commit/64174370c98b6db742fe95e47d8ce25d9de59c96) fix: updated scenario data driven steps processing for report - now report will contains steps as from first scenario ([@YamStranger](https://github.com/YamStranger))
+- [6aefe69](https://github.com/serenity-bdd/serenity-core/commit/6aefe6917efc7abf5b1902b77f69a8b70723b914) test: refactored test for Qualifier ([@YamStranger](https://github.com/YamStranger))
+- [71102ac](https://github.com/serenity-bdd/serenity-core/commit/71102acf032fd2c5aa6b2919b7f378fbf285da94) fix: updated processing of @Qualifier tag in junit tests with data tables. Now it is possible add short description to steps based on parameters value ([@YamStranger](https://github.com/YamStranger))
+- [a4d6b32](https://github.com/serenity-bdd/serenity-core/commit/a4d6b324a8c80976961b4312ab75f11980519d62) fix: When using SerenityParameterizedRunner tests there was a need to add [@Managed WebDriver in order to see the examples table. This is due to TestClassRunnerForInstanciatedTestCase not overriding initListener](https://github.com/Managed WebDriver in order to see the examples table. This is due to TestClassRunnerForInstanciatedTestCase not overriding initListener)s
+- [bf6d91e](https://github.com/serenity-bdd/serenity-core/commit/bf6d91e2f403ea4c5049ea32c72cade8a2f1f2d9) chore: created gradle build config for smoketests to execute them against latest serenty core ([@YamStranger](https://github.com/YamStranger))
+- [e6e6651](https://github.com/serenity-bdd/serenity-core/commit/e6e665143f90393636e44ff85d1f8784f8b3910d) test: updated name of test method ([@YamStranger](https://github.com/YamStranger))
  
 ### v1.1.29-rc.1 (2016/03/02 17:33 +00:00)
  

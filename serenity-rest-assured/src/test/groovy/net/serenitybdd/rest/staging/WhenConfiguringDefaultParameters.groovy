@@ -176,7 +176,6 @@ class WhenConfiguringDefaultParameters extends Specification {
             password     | login
             "secret"     | "bond"
             "UI_DESTROY" | "Dark"
-
     }
 
     def "should be possible set default config for all rest requests"(

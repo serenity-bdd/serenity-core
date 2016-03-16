@@ -1,15 +1,8 @@
 package net.serenitybdd.rest.staging.rules
 
-import com.jayway.restassured.specification.FilterableRequestSpecification
-import com.jayway.restassured.specification.ProxySpecification
 import net.serenitybdd.rest.staging.SerenityRest
 import org.junit.Rule
 import spock.lang.Specification
-
-import static net.serenitybdd.rest.staging.SerenityRest.getDefaultProxy
-import static net.serenitybdd.rest.staging.SerenityRest.given
-import static net.serenitybdd.rest.staging.SerenityRest.reset
-import static net.serenitybdd.rest.staging.SerenityRest.setDefaultProxy
 
 /**
  * User: YamStranger

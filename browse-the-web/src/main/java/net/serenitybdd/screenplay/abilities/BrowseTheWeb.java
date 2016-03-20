@@ -36,7 +36,7 @@ public class BrowseTheWeb extends PageObject implements Ability {
     }
 
     private void registerForEventNotification() {
-        Broadcaster.getEventBus().register(this);
+        Broadcaster.register(this);
     }
 
     public static BrowseTheWeb as(Actor actor) {

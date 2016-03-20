@@ -102,7 +102,7 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     private <T extends Performable> void notifyPerformanceOf(T todo) {
-        Broadcaster.getEventBus().post(new ActorPerforms(todo));
+        Broadcaster.postEvent(new ActorPerforms(todo));
     }
 
     private <T extends Performable> boolean isPending(T todo) {
@@ -199,22 +199,22 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     private void beginPerformance() {
-        Broadcaster.getEventBus().post(new ActorBeginsPerformanceEvent(name));
+        Broadcaster.postEvent(new ActorBeginsPerformanceEvent(name));
     }
 
     private void endPerformance() {
-        Broadcaster.getEventBus().post(new ActorEndsPerformanceEvent(name));
+        Broadcaster.postEvent(new ActorEndsPerformanceEvent(name));
     }
 
 
     private void startConsequenceCheck() {
         consequenceListener.beginConsequenceCheck();
-        Broadcaster.getEventBus().post(new ActorBeginsConsequenceCheckEvent(name));
+        Broadcaster.postEvent(new ActorBeginsConsequenceCheckEvent(name));
     }
 
     private void endConsequenceCheck() {
         consequenceListener.endConsequenceCheck();
-        Broadcaster.getEventBus().post(new ActorEndsConsequenceCheckEvent(name));
+        Broadcaster.postEvent(new ActorEndsConsequenceCheckEvent(name));
     }
 
 

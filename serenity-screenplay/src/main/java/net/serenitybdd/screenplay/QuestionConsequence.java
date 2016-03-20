@@ -24,7 +24,7 @@ public class QuestionConsequence<T> extends BaseConsequence<T> {
         // TODO: Override if running consequences
         if (thisStepShouldBeIgnored() && !StepEventBus.getEventBus().softAssertsActive()) { return; }
 
-        Broadcaster.getEventBus().post(new ActorAsksQuestion(question));
+        Broadcaster.postEvent(new ActorAsksQuestion(question));
         try {
             assertThat(question.answeredBy(actor), expected);
         } catch (Throwable actualError) {

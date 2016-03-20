@@ -2,7 +2,7 @@ package net.serenitybdd.core.eventbus;
 
 import com.google.common.eventbus.EventBus;
 
-public class Broadcaster {
+public class OldBroadcaster {
 
     static private ThreadLocal<EventBus> eventBusThreadLocal = new ThreadLocal<>();
 
@@ -16,5 +16,4 @@ public class Broadcaster {
     public static void unregisterAllListeners() {
         eventBusThreadLocal.remove();
     }
-
 }

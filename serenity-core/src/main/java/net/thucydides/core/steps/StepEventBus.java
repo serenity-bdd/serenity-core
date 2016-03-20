@@ -1,21 +1,22 @@
 package net.thucydides.core.steps;
 
-        import com.google.common.base.Optional;
-        import com.google.common.base.Preconditions;
-        import com.google.common.collect.ImmutableList;
-        import com.google.common.collect.Lists;
-        import com.google.inject.Inject;
-        import net.serenitybdd.core.eventbus.Broadcaster;
-        import net.serenitybdd.core.photography.Darkroom;
-        import net.thucydides.core.ThucydidesSystemProperty;
-        import net.thucydides.core.guice.Injectors;
-        import net.thucydides.core.model.*;
-        import net.thucydides.core.util.EnvironmentVariables;
-        import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
-        import org.slf4j.Logger;
-        import org.slf4j.LoggerFactory;
+import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.inject.Inject;
+import net.serenitybdd.core.eventbus.Broadcaster;
+import net.serenitybdd.core.lifecycle.TestLifecycle;
+import net.serenitybdd.core.photography.Darkroom;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.model.*;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-        import java.util.*;
+import java.util.*;
 
 /**
  * An event bus for Step-related notifications.
@@ -67,6 +68,7 @@ public class StepEventBus {
     private Story storyUnderTest;
 
     private final EnvironmentVariables environmentVariables;
+
     @Inject
     public StepEventBus(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
@@ -98,6 +100,12 @@ public class StepEventBus {
 
     public void testStarted(final String testName) {
         clear();
+
+        // Newer Guava eventbus listeners
+        //Broadcaster.getEventBus().post(TestLifecycle.aTestHasStartedCalled(testName));
+
+        Broadcaster.postEvent(TestLifecycle.aTestHasStartedCalled(testName));
+        // Legacy test step listeners
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testStarted(testName);
         }
@@ -199,7 +207,7 @@ public class StepEventBus {
         classUnderTest = null;
         webdriverSuspensions.clear();
 
-        Broadcaster.unregisterAllListeners();
+        Broadcaster.shutdown();
     }
 
     private void noAssumptionsViolated() {
@@ -223,8 +231,15 @@ public class StepEventBus {
         Darkroom.waitUntilClose();
 
         TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
-        for (StepListener stepListener : getAllListeners()) {
-            stepListener.testFinished(outcome);
+
+        if (outcome != null) {
+            // Newer Guava event bus listeners
+            Broadcaster.postEvent(TestLifecycle.aTestHasFinishedWith(outcome));
+
+            // Legacy test step listeners
+            for (StepListener stepListener : getAllListeners()) {
+                stepListener.testFinished(outcome);
+            }
         }
         clear();
     }
@@ -506,8 +521,6 @@ public class StepEventBus {
     }
 
 
-
-
     public void setBackgroundTitle(String title) {
         getBaseStepListener().getCurrentTestOutcome().setBackgroundTitle(title);
     }
@@ -543,6 +556,7 @@ public class StepEventBus {
     public boolean currentTestOutcomeIsDataDriven() {
         return (getBaseStepListener().latestTestOutcome().isPresent() && getBaseStepListener().latestTestOutcome().get().isDataDriven());
     }
+
     /**
      * Forces Thucydides to take a screenshot now.
      */
@@ -558,11 +572,14 @@ public class StepEventBus {
         return assumptionViolatedMessage;
     }
 
-    public Optional<TestStep> getCurrentStep() {return getBaseStepListener().cloneCurrentStep(); }
+    public Optional<TestStep> getCurrentStep() {
+        return getBaseStepListener().cloneCurrentStep();
+    }
 
     /**
      * Set all steps in the current test outcome to a given result.
      * Used to set all steps to PENDING or SKIPPED, for example.
+     *
      * @param result
      */
     public void setAllStepsTo(TestResult result) {
@@ -584,6 +601,7 @@ public class StepEventBus {
     }
 
     Optional<TestResult> NO_RESULT_YET = Optional.absent();
+
     public Optional<TestResult> resultSoFar() {
 
         return (getBaseStepListener().latestTestOutcome().isPresent()) ?

@@ -1,6 +1,9 @@
 package net.thucydides.core.reports;
 
-import com.typesafe.config.*;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigRenderOptions;
+import com.typesafe.config.ConfigValueFactory;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
@@ -11,16 +14,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 /**
  * Generates different Thucydides reports in a given output directory.
+ * TODO: Make this service work with the Guava event bus
  */
 @SuppressWarnings("restriction")
 public class ReportService {
@@ -150,8 +159,17 @@ public class ReportService {
                 }
             }));
         }
-        generateJUnitTestResults(testOutcomes);
-        waitForReportGenerationToFinish(executorService, tasks);
+
+        tasks.add(executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                LOGGER.debug("Processing JUnit test report");
+                generateJUnitTestResults(testOutcomes);
+                LOGGER.debug("Processing JUnit test report done");
+            }
+        }));
+
+        waitForReportGenerationToFinish(tasks);
         LOGGER.debug("Reports generated in: " + (System.currentTimeMillis() - t0) + " ms");
 
     }
@@ -167,7 +185,7 @@ public class ReportService {
         }
     }
 
-    private void waitForReportGenerationToFinish(ExecutorService executorService, List<Future> tasks) {
+    private void waitForReportGenerationToFinish(List<Future> tasks) {
         try {
             for (Future task : tasks) {
                 task.get();

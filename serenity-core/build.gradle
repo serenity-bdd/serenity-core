@@ -165,6 +165,7 @@ dependencies {
         exclude module: 'junit'
         exclude module: 'xstream'
     }
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
 processResources {
@@ -187,3 +188,13 @@ task writeNewPom << {
         }
     }.writeTo("pom.xml")
 }
+buildscript {
+    ext.kotlin_version = '1.0.1'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+apply plugin: 'kotlin'

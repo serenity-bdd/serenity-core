@@ -11,8 +11,15 @@ import com.jayway.restassured.builder.RequestSpecBuilder
 import com.jayway.restassured.builder.ResponseSpecBuilder
 import com.jayway.restassured.config.RestAssuredConfig
 import com.jayway.restassured.config.SessionConfig
+import com.jayway.restassured.filter.Filter
+import com.jayway.restassured.filter.FilterContext
+import com.jayway.restassured.mapper.ObjectMapper
+import com.jayway.restassured.mapper.ObjectMapperDeserializationContext
+import com.jayway.restassured.mapper.ObjectMapperSerializationContext
 import com.jayway.restassured.parsing.Parser
+import com.jayway.restassured.response.Response
 import com.jayway.restassured.specification.FilterableRequestSpecification
+import com.jayway.restassured.specification.FilterableResponseSpecification
 import com.jayway.restassured.specification.ProxySpecification
 import net.serenitybdd.rest.staging.rules.RestConfigurationAction
 import net.serenitybdd.rest.staging.rules.RestConfigurationRule
@@ -126,7 +133,6 @@ class WhenConfiguringDefaultParameters extends Specification {
             rootPath << ["root",
                          "secondRoot"]
     }
-
 
     def "should be possible set default session id for all rest requests"(final def String session
     ) {
@@ -290,7 +296,6 @@ class WhenConfiguringDefaultParameters extends Specification {
                          "po"]
     }
 
-
     def "should be possible set default parser to be used in all rest requests and responses"(
         final def Parser parser
     ) {
@@ -303,5 +308,123 @@ class WhenConfiguringDefaultParameters extends Specification {
             RestAssured.defaultParser
         where:
             parser << [Parser.JSON, Parser.XML]
+    }
+
+    def "should be possible add custom default filter to be used during request/response creating"(
+        final def Filter filter
+    ) {
+        given: "rest assured default filters updated"
+            def list = new ArrayList<Filter>()
+            list.add(filter);
+            filters(list)
+        when: "getting filters"
+            def defaults = RestAssured.filters()
+        then: "default filters should be configured property"
+            defaults.size() == 1
+            defaults.contains(filter)
+            filters().containsAll(defaults)
+        where:
+            filter << [new Filter() {
+                @Override
+                Response filter(FilterableRequestSpecification requestSpec, FilterableResponseSpecification responseSpec, FilterContext ctx) {
+                    throw new UnsupportedOperationException("#filter()")
+                }
+            }, new Filter() {
+                @Override
+                Response filter(FilterableRequestSpecification requestSpec, FilterableResponseSpecification responseSpec, FilterContext ctx) {
+                    throw new UnsupportedOperationException("#filter()")
+                }
+            }]
+    }
+
+    def "should be possible add custom default filters to be used during request/response creating"() {
+        given: "rest assured default filters updated"
+            def filter1 = new Filter() {
+                @Override
+                Response filter(FilterableRequestSpecification requestSpec, FilterableResponseSpecification responseSpec, FilterContext ctx) {
+                    throw new UnsupportedOperationException("#filter()")
+                }
+            }
+            def filter2 = new Filter() {
+                @Override
+                Response filter(FilterableRequestSpecification requestSpec, FilterableResponseSpecification responseSpec, FilterContext ctx) {
+                    throw new UnsupportedOperationException("#filter()")
+                }
+            }
+            filters(filter1, filter2)
+        when: "getting filters"
+            def defaults = RestAssured.filters()
+        then: "default filters should be configured property"
+            defaults.size() == 2
+            defaults.contains(filter2) && defaults.contains(filter1)
+            filters().containsAll(defaults)
+    }
+
+    def "should be possible replace all default filters to be used during request/response creating"() {
+        given: "rest assured default filters updated"
+            def filter1 = new Filter() {
+                @Override
+                Response filter(FilterableRequestSpecification requestSpec, FilterableResponseSpecification responseSpec, FilterContext ctx) {
+                    throw new UnsupportedOperationException("#filter()")
+                }
+            }
+            def filter2 = new Filter() {
+                @Override
+                Response filter(FilterableRequestSpecification requestSpec, FilterableResponseSpecification responseSpec, FilterContext ctx) {
+                    throw new UnsupportedOperationException("#filter()")
+                }
+            }
+            def replacing = new Filter() {
+                @Override
+                Response filter(FilterableRequestSpecification requestSpec, FilterableResponseSpecification responseSpec, FilterContext ctx) {
+                    throw new UnsupportedOperationException("#filter()")
+                }
+            }
+            filters(filter1, filter2)
+        when: "replacing filters and getting filters"
+            replaceFiltersWith(replacing)
+            def defaults = RestAssured.filters()
+        then: "default filters should be configured property"
+            defaults.size() == 1
+            !defaults.contains(filter2) && !defaults.contains(filter1)
+            filters().containsAll(defaults) && filters().size() == defaults.size()
+    }
+
+    def "should be possible set default object mapper for all rest requests"(
+        final def ObjectMapper mapper
+    ) {
+        given: "rest assured default config updated"
+            objectMapper(mapper)
+            def body = "<root>" +
+                "<value>1</value>" +
+                "</root>"
+
+            def base = "http://localhost:${wire.port()}"
+            def path = "/test/levels"
+            def url = "$base$path"
+
+            stubFor(WireMock.get(urlMatching(path))
+                .withRequestBody(matching(".*"))
+                .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/xml")
+                .withBody(body)));
+        when: "creating request"
+            def request = (FilterableRequestSpecification) given();
+            def response = request.options(url)
+        then: "default config should be used for created request"
+            request.getConfig().objectMapperConfig.defaultObjectMapper() == mapper
+        where:
+            mapper << [new ObjectMapper() {
+                @Override
+                Object deserialize(ObjectMapperDeserializationContext context) {
+                    return "deserialized";
+                }
+
+                @Override
+                Object serialize(ObjectMapperSerializationContext context) {
+                    return null;
+                }
+            }]
     }
 }

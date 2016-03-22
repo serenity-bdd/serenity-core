@@ -23,6 +23,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import static com.jayway.restassured.internal.assertion.AssertParameter.notNull;
+
 /**
  * User: YamStranger
  * Date: 3/16/16
@@ -669,16 +671,6 @@ public class RequestSpecificationDecorated implements FilterableRequestSpecifica
     }
 
     @Override
-    public Response get(String path, Object... pathParams) {
-        return core.get(path, pathParams);
-    }
-
-    @Override
-    public Response get(String path, Map<String, ?> pathParams) {
-        return core.get(path, pathParams);
-    }
-
-    @Override
     public Response post(String path, Object... pathParams) {
         return core.post(path, pathParams);
     }
@@ -739,11 +731,6 @@ public class RequestSpecificationDecorated implements FilterableRequestSpecifica
     }
 
     @Override
-    public Response get(URI uri) {
-        return core.get(uri);
-    }
-
-    @Override
     public Response post(URI uri) {
         return core.post(uri);
     }
@@ -771,11 +758,6 @@ public class RequestSpecificationDecorated implements FilterableRequestSpecifica
     @Override
     public Response options(URI uri) {
         return core.options(uri);
-    }
-
-    @Override
-    public Response get(URL url) {
-        return core.get(url);
     }
 
     @Override
@@ -810,7 +792,27 @@ public class RequestSpecificationDecorated implements FilterableRequestSpecifica
 
     @Override
     public Response get() {
-        return core.get();
+        return get("");
+    }
+
+    @Override
+    public Response get(URL url) {
+        return get(notNull(url, "URL").toString());
+    }
+
+    @Override
+    public Response get(String path, Object... pathParams) {
+        return decorate(core.get(path, pathParams));
+    }
+
+    @Override
+    public Response get(String path, Map<String, ?> pathParams) {
+        return decorate(core.get(path, pathParams));
+    }
+
+    @Override
+    public Response get(URI uri) {
+        return core.get(uri);
     }
 
     @Override
@@ -859,17 +861,27 @@ public class RequestSpecificationDecorated implements FilterableRequestSpecifica
     }
 
     private ResponseSpecification check(final ResponseSpecification specification) {
-        if (!(specification instanceof RequestSpecificationDecorated)) {
-            log.warn("returnted not decorated response, SerenityRest can work incorrectly");
+        if (specification instanceof ResponseSpecificationDecorated) {
+            return specification;
+        } else {
+            log.warn("returned not decorated response, SerenityRest can work incorrectly");
+            return specification;
         }
-        return specification;
     }
 
     private ResponseSpecification decorate(final ResponseSpecification specification) {
-        if (specification instanceof RequestSpecificationDecorated) {
-            return new ResponseSpecificationDecorated((ResponseSpecificationImpl) specification);
-        } else {
+        if (specification instanceof ResponseSpecificationDecorated) {
             return specification;
+        } else {
+            return new ResponseSpecificationDecorated((ResponseSpecificationImpl) specification);
+        }
+    }
+
+    private Response decorate(final Response response) {
+        if (response instanceof ResponseDecorated) {
+            return response;
+        } else {
+            return new ResponseDecorated(response);
         }
     }
 

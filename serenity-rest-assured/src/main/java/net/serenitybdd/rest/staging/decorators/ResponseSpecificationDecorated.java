@@ -305,16 +305,6 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
     }
 
     @Override
-    public Response get(String path, Object... pathParams) {
-        return core.get(path, pathParams);
-    }
-
-    @Override
-    public Response get(String path, Map<String, ?> pathParams) {
-        return core.get(path, pathParams);
-    }
-
-    @Override
     public Response post(String path, Object... pathParams) {
         return core.post(path, pathParams);
     }
@@ -375,11 +365,6 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
     }
 
     @Override
-    public Response get(URI uri) {
-        return core.get(uri);
-    }
-
-    @Override
     public Response post(URI uri) {
         return core.post(uri);
     }
@@ -407,11 +392,6 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
     @Override
     public Response options(URI uri) {
         return core.options(uri);
-    }
-
-    @Override
-    public Response get(URL url) {
-        return core.get(url);
     }
 
     @Override
@@ -447,6 +427,26 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
     @Override
     public Response get() {
         return core.get();
+    }
+
+    @Override
+    public Response get(URL url) {
+        return core.get(url);
+    }
+
+    @Override
+    public Response get(URI uri) {
+        return core.get(uri);
+    }
+
+    @Override
+    public Response get(String path, Object... pathParams) {
+        return core.get(path, pathParams);
+    }
+
+    @Override
+    public Response get(String path, Map<String, ?> pathParams) {
+        return core.get(path, pathParams);
     }
 
     @Override
@@ -495,17 +495,19 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
     }
 
     private ResponseSpecification check(final ResponseSpecification specification) {
-        if (!(specification instanceof RequestSpecificationDecorated)) {
-            log.warn("returnted not decorated response, SerenityRest can work incorrectly");
+        if (specification instanceof RequestSpecificationDecorated) {
+            return specification;
+        } else {
+            log.warn("returned not decorated response, SerenityRest can work incorrectly");
+            return specification;
         }
-        return specification;
     }
 
     private RequestSpecification decorate(final RequestSpecification specification) {
         if (specification instanceof RequestSpecificationDecorated) {
-            return new RequestSpecificationDecorated((RequestSpecificationImpl) specification);
-        } else {
             return specification;
+        } else {
+            return new RequestSpecificationDecorated((RequestSpecificationImpl) specification);
         }
     }
 

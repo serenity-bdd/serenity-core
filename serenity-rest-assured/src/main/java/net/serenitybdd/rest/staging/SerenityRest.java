@@ -147,12 +147,10 @@ public class SerenityRest {
         RestAssured.objectMapper(objectMapper);
     }
 
-    //todo should be returned wrapped instance
     public static ResponseSpecification expect() {
         return given().response();
     }
 
-    //todo should be returned wrapped instance
     public static RequestSpecification with() {
         return given();
     }
@@ -195,7 +193,6 @@ public class SerenityRest {
         return given();
     }
 
-    //todo should use wrapped instance of request and response
     public static RequestSender given(final RequestSpecification request, final ResponseSpecification response) {
         RequestSpecification requestDecorated = null;
         ResponseSpecification responseDecorated = null;
@@ -257,7 +254,6 @@ public class SerenityRest {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails(logDetail);
     }
 
-    //todo should be returned wrapped instance
     public static AuthenticationScheme certificate(String certURL, String password, CertificateAuthSettings certificateAuthSettings) {
         return RestAssured.certificate(certURL, password, certificateAuthSettings);
     }

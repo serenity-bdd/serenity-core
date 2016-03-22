@@ -35,7 +35,7 @@ class WhenExecutingGetRequest extends Specification {
         }
     },)
 
-    def "should return wrapped request and response if they initialised separately"() {
+    def "should use wrapped request and response if they initialised separately"() {
         given: "initialised Request and Response and access point"
             def request = Mock(RequestSpecificationDecorated)
             def response = Mock(ResponseSpecificationDecorated)

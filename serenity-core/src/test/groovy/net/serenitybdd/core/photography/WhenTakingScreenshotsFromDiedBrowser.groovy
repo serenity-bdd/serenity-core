@@ -12,7 +12,7 @@ class WhenTakingScreenshotsFromDiedBrowser extends Specification {
     @Rule
     TemporaryFolder folder = new TemporaryFolder();
 
-    def "when a photo session died browser is used it should not take a photo"() {
+    def "when a photo session with died browser is used it should not take a photo"() {
         given:
             def driver = Mock(WebDriver)
             driver.getTitle() >> { throw new NoSuchWindowException("Some exception ") };
@@ -33,5 +33,4 @@ class WhenTakingScreenshotsFromDiedBrowser extends Specification {
         then:
             !photo.isPresent()
     }
-
 }

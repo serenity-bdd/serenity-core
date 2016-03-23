@@ -153,11 +153,11 @@ public class WebDriverFactory {
     public boolean usesSauceLabs() {
         return StringUtils.isNotEmpty(sauceRemoteDriverCapabilities.getUrl());
     }
-    
+
     public boolean usesBrowserStack() {
         return StringUtils.isNotEmpty(browserStackRemoteDriverCapabilities.getUrl());
     }
-    
+
     /**
      * This method is synchronized because multiple webdriver instances can be created in parallel.
      * However, they may use common system resources such as ports, so may potentially interfere
@@ -293,7 +293,7 @@ public class WebDriverFactory {
     private boolean browserStackUrlIsDefined() {
         return StringUtils.isNotEmpty(browserStackRemoteDriverCapabilities.getUrl());
     }
-    
+
     private WebDriver buildSaucelabsDriver() throws MalformedURLException {
         String saucelabsUrl = sauceRemoteDriverCapabilities.getUrl();
         WebDriver driver = webdriverInstanceFactory.newRemoteDriver(new URL(saucelabsUrl), findSaucelabsCapabilities());
@@ -305,13 +305,13 @@ public class WebDriverFactory {
         }
         return driver;
     }
-    
+
     private WebDriver buildBrowserStackDriver() throws MalformedURLException{
     	String browserStackUrl = browserStackRemoteDriverCapabilities.getUrl();
         WebDriver driver = webdriverInstanceFactory.newRemoteDriver(new URL(browserStackUrl), findbrowserStackCapabilities());
         return driver;
     }
-    
+
 
     public static String getDriverFrom(EnvironmentVariables environmentVariables, String defaultDriver) {
         String driver = getDriverFrom(environmentVariables);
@@ -333,13 +333,13 @@ public class WebDriverFactory {
 
         return sauceRemoteDriverCapabilities.getCapabilities(capabilities);
     }
-    
-    
+
+
     private Capabilities findbrowserStackCapabilities() {
 
     	String driver = getDriverFrom(environmentVariables);
     	DesiredCapabilities capabilities = capabilitiesForDriver(driver);
-    	
+
         return browserStackRemoteDriverCapabilities.getCapabilities(capabilities);
 
     }
@@ -774,5 +774,17 @@ public class WebDriverFactory {
         return (configuredTimeout != null) ? new Duration(configuredTimeout, TimeUnit.MILLISECONDS)
                                            : DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
 
+    }
+    
+    public static boolean isAlive(final WebDriver driver) {
+        try {
+            driver.getTitle();
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+    public static boolean isNotAlive(final WebDriver driver){
+        return !isAlive(driver);
     }
 }

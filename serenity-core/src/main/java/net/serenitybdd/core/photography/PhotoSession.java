@@ -31,7 +31,7 @@ public class PhotoSession {
 
     public ScreenshotPhoto takeScreenshot() {
         byte[] screenshotData = null;
-        if(WebDriverFactory.isAlive(driver)){
+        if(WebDriverFactory.isAlive(driver) && driver instanceof TakesScreenshot){
             screenshotData = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
         }
 

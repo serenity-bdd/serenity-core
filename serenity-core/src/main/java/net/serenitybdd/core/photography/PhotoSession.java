@@ -1,6 +1,7 @@
 package net.serenitybdd.core.photography;
 
 import net.thucydides.core.screenshots.BlurLevel;
+import net.thucydides.core.webdriver.WebDriverFactory;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -29,8 +30,10 @@ public class PhotoSession {
     }
 
     public ScreenshotPhoto takeScreenshot() {
-
-        byte[] screenshotData = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+        byte[] screenshotData = null;
+        if(WebDriverFactory.isAlive(driver)){
+            screenshotData = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+        }
 
         if (screenshotData == null || screenshotData.length == 0) {
             return ScreenshotPhoto.None;

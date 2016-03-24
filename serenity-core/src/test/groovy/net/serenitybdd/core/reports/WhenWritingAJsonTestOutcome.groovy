@@ -1,251 +1,139 @@
-package net.thucydides.core.reports.json
+package net.serenitybdd.core.reports
 
-import net.serenitybdd.core.rest.RestMethod
-import net.serenitybdd.core.rest.RestQuery
+import net.serenitybdd.core.eventbus.Broadcaster
+import net.serenitybdd.core.lifecycle.TestLifecycle
 import net.thucydides.core.annotations.*
-import net.thucydides.core.digest.Digest
-import net.thucydides.core.issues.IssueTracking
+import net.thucydides.core.model.ReportType
 import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.model.TestStep
-import net.thucydides.core.reports.AcceptanceTestLoader
-import net.thucydides.core.reports.AcceptanceTestReporter
-import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.integration.TestStepFactory
-import net.thucydides.core.reports.json.gson.GsonJSONConverter
+import net.thucydides.core.reports.json.JSONTestOutcomeReader
+import net.thucydides.core.reports.json.JSONTestOutcomeWriter
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.joda.time.DateTime
 import org.joda.time.LocalDateTime
-import org.junit.ComparisonFailure
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
-import sample.steps.FailingStep
 import spock.lang.Specification
-import spock.lang.Unroll
+
+import java.nio.file.Path
 
 import static net.thucydides.core.model.TestOutcome.forTest
 import static net.thucydides.core.model.TestOutcome.forTestInStory
 
-class WhenStoringTestOutcomesAsJSON extends Specification {
+class WhenWritingAJsonTestOutcome extends Specification {
 
     private static final DateTime FIRST_OF_JANUARY = new LocalDateTime(2013, 1, 1, 0, 0, 0, 0).toDateTime()
     private static final DateTime SECOND_OF_JANUARY = new LocalDateTime(2013, 1, 2, 0, 0, 0, 0).toDateTime()
 
-    def AcceptanceTestReporter reporter
-    def AcceptanceTestLoader loader
-
-    File outputDirectory
-
     @Rule
     TemporaryFolder temporaryFolder
 
-    TestOutcomes allTestOutcomes = Mock();
+    Path outputDirectory
 
     def setup() {
-        outputDirectory = temporaryFolder.newFolder()
-        reporter = new JSONTestOutcomeReporter();
-        loader = new JSONTestOutcomeReporter();
-        reporter.setOutputDirectory(outputDirectory);
-        loader.setOutputDirectory(outputDirectory);
+        outputDirectory = temporaryFolder.newFolder().toPath()
     }
 
-    class AUserStory {
-    }
+    def reader = new JSONTestOutcomeReader()
 
-    @Story(AUserStory.class)
-    class SomeTestScenario {
-        public void a_simple_test_case() {
-        }
-
-        public void should_do_this() {
-        }
-
-        public void should_do_that() {
-        }
-    }
-
-    @Issue("PROJ-123")
-    @WithTag(name = "important feature", type = "feature")
-    class SomeTestScenarioWithTags {
-        public void a_simple_test_case() {
-        }
-
-        @WithTag(name = "simple story", type = "story")
-        public void should_do_this() {
-        }
-
-        public void should_do_that() {
-        }
-    }
-
-    @Feature
-    class AFeature {
-        class AUserStoryInAFeature {
-        }
-    }
-
-    @Story(AFeature.AUserStoryInAFeature.class)
-    class SomeTestScenarioInAFeature {
-        public void should_do_this() {
-        }
-
-        public void should_do_that() {
-        }
-    }
-
-    class ATestScenarioWithoutAStory {
-        public void should_do_this() {
-        }
-
-        public void should_do_that() {
-        }
-
-        public void and_should_do_that() {
-        }
-    }
-
-    @Story(AUserStory.class)
-    @Issues(["#123", "#456"])
-    class ATestScenarioWithIssues {
-        public void a_simple_test_case() {
-        }
-
-        @Issue("#789")
-        public void should_do_this() {
-        }
-
-        public void should_do_that() {
-        }
-    }
-
-
-    @Story(AUserStory.class)
-    @Issues(["PROJ-123", "PROJ-456"])
-    class ATestScenarioWithLongIssues {
-        public void a_simple_test_case() {
-        }
-
-        @Issue("PROJ-456")
-        public void should_do_this() {
-        }
-
-        public void should_do_that() {
-        }
-    }
-
-    @Story(AUserStory.class)
-    class SomeNestedTestScenario {
-        public void a_nested_test_case() {
-        };
-
-        public void should_do_this() {
-        };
-
-        public void should_do_that() {
-        };
-    }
-
-    def "should generate an JSON report for an acceptance test run"() {
+    def "The JSONTestOutcomeWriter writes test outcomes in JSON to a given output directory"() {
         given:
-        def testOutcome = forTest("should_do_this", SomeTestScenario.class)
-        testOutcome.startTime = FIRST_OF_JANUARY
+            def jsonWriter = JSONTestOutcomeWriter.withOutputDirectory(outputDirectory)
+            TestOutcome testOutcome = aSimpleTestOutcome()
 
-        testOutcome.description = "Some description"
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
-        when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
-        and:
-        def reloadedTestOutcome = loader.loadReportFrom(jsonReport)
-        then:
-        reloadedTestOutcome.isPresent() && reloadedTestOutcome.get() == testOutcome
+        when: "I ask to be notified about test lifecycle events"
+            Broadcaster.register(jsonWriter)
+
+        and: "A test gets executed"
+            Broadcaster.postEvent(TestLifecycle.aTestHasFinishedWith(testOutcome))
+            Broadcaster.shutdown()
+
+        then: "the reporter should have generated a JSON report in the output directory"
+            def recordedJsonFilename = testOutcome.getReportName(ReportType.JSON)
+
+            def jsonOutputFile = outputDirectory.resolve(recordedJsonFilename)
+            jsonOutputFile.toFile().exists()
+            testOutcome == reader.load(jsonOutputFile).get()
     }
-
-
-
 
     def "should generate a minimized JSON report by default"() {
         given:
-        def testOutcome = forTest("should_do_this", SomeTestScenario.class)
-        testOutcome.startTime = FIRST_OF_JANUARY
-
-        testOutcome.description = "Some description"
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").
-                startingAt(FIRST_OF_JANUARY))
+            TestOutcome testOutcome = aSimpleTestOutcome()
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+            def jsonReport = JSONTestOutcomeWriter.withOutputDirectory(outputDirectory).
+                             recordTestOutcomeFor(TestLifecycle.aTestHasFinishedWith(testOutcome))
         then:
-        !jsonReport.text.contains("  ")
+            !jsonReport.text.contains("  ")
+
     }
 
     def "should generate pretty JSON report if configured"() {
         given:
-        def testOutcome = forTest("should_do_this", SomeTestScenario.class)
-        testOutcome.startTime = FIRST_OF_JANUARY
-
-        testOutcome.description = "Some description"
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").
-                startingAt(FIRST_OF_JANUARY))
-
-        def environmentVariables = new MockEnvironmentVariables()
-        environmentVariables.setProperty("json.pretty.printing","true")
+            TestOutcome testOutcome = aSimpleTestOutcome()
+        and:
+            def environmentVariables = new MockEnvironmentVariables()
+            environmentVariables.setProperty("json.pretty.printing","true")
         when:
-        reporter.jsonConverter = new GsonJSONConverter(environmentVariables)
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+            def jsonReport = JSONTestOutcomeWriter.withOutputDirectory(outputDirectory).
+                                                   withEnvironmentVariables(environmentVariables).
+                                                   recordTestOutcomeFor(TestLifecycle.aTestHasFinishedWith(testOutcome))
+
         then:
-        jsonReport.text.contains("  ")
+            jsonReport.text.contains("  ")
     }
+
 
     def "should include the project and batch start time in the JSON report if specified."() {
         given:
-        def testOutcome = forTest("should_do_this", SomeTestScenario.class)
-        testOutcome.startTime = FIRST_OF_JANUARY
-        testOutcome.description = "Some description"
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").
-                startingAt(FIRST_OF_JANUARY))
-
-        testOutcome = testOutcome.forProject("Some Project").inTestRunTimestamped(SECOND_OF_JANUARY)
+            def testOutcome = aSimpleTestOutcome().forProject("Some Project").inTestRunTimestamped(SECOND_OF_JANUARY)
 
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+            def jsonReport = JSONTestOutcomeWriter.withOutputDirectory(outputDirectory).
+                                                   recordTestOutcomeFor(TestLifecycle.aTestHasFinishedWith(testOutcome))
         and:
-        TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
+            TestOutcome reloadedOutcome = reader.load(jsonReport).get()
         then:
-        reloadedOutcome.startTime == testOutcome.startTime
-        reloadedOutcome.description == testOutcome.description
-        reloadedOutcome.testSteps.size() == 1
+            reloadedOutcome.startTime == testOutcome.startTime
+            reloadedOutcome.description == testOutcome.description
+            reloadedOutcome.testSteps.size() == 1
     }
 
     def "should record screenshot details"() {
         given:
-        def testOutcome = forTest("should_do_this", SomeTestScenario.class)
-        testOutcome.startTime = FIRST_OF_JANUARY
-        testOutcome.description = "Some description"
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").
-                startingAt(FIRST_OF_JANUARY).addScreenshot(new ScreenshotAndHtmlSource(new File("screenshot1.png"))))
+            def testOutcome = forTest("should_do_this", SomeTestScenario.class)
+            testOutcome.startTime = FIRST_OF_JANUARY
+            testOutcome.description = "Some description"
+            testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").
+                        startingAt(FIRST_OF_JANUARY).addScreenshot(new ScreenshotAndHtmlSource(new File("screenshot1.png"))))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+            def jsonReport = JSONTestOutcomeWriter.withOutputDirectory(outputDirectory).
+                                                    recordTestOutcomeFor(TestLifecycle.aTestHasFinishedWith(testOutcome))
         and:
-        TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
+            TestOutcome reloadedOutcome = reader.load(jsonReport).get()
         then:
-        !reloadedOutcome.testSteps.get(0).getScreenshots().isEmpty()
+            !reloadedOutcome.testSteps.get(0).getScreenshots().isEmpty()
     }
 
     def "should generate an JSON report for an acceptance test run without a test class"() {
         given:
-        def testOutcome = forTestInStory("should_do_this",
-                net.thucydides.core.model.Story.withId("id", "name"))
-        testOutcome.startTime = FIRST_OF_JANUARY
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
+            def testOutcome = forTestInStory("should_do_this",
+                    net.thucydides.core.model.Story.withId("id", "name"))
+            testOutcome.startTime = FIRST_OF_JANUARY
+            testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+            def jsonReport = JSONTestOutcomeWriter.withOutputDirectory(outputDirectory).
+            recordTestOutcomeFor(TestLifecycle.aTestHasFinishedWith(testOutcome))
         and:
-        TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
+            TestOutcome reloadedOutcome = reader.load(jsonReport).get()
         then:
-        reloadedOutcome.userStory.id == "id"
-        reloadedOutcome.userStory.name == "name"
+            reloadedOutcome.userStory.id == "id"
+            reloadedOutcome.userStory.name == "name"
 
     }
+
+    // TODO: Migrate these tests to this test case
+/*
 
     def "should include issues in the JSON report"() {
         given:
@@ -752,4 +640,111 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         then:
         loadedOutcome.tags
     }
+ */
+
+    def aSimpleTestOutcome() {
+        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class)
+        testOutcome.startTime = FIRST_OF_JANUARY
+        testOutcome.description = "Some description"
+        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
+        return testOutcome
+    }
+
+
+    class AUserStory {
+    }
+
+    @Story(AUserStory.class)
+    class SomeTestScenario {
+        public void a_simple_test_case() {
+        }
+
+        public void should_do_this() {
+        }
+
+        public void should_do_that() {
+        }
+    }
+
+    @Issue("PROJ-123")
+    @WithTag(name = "important feature", type = "feature")
+    class SomeTestScenarioWithTags {
+        public void a_simple_test_case() {
+        }
+
+        @WithTag(name = "simple story", type = "story")
+        public void should_do_this() {
+        }
+
+        public void should_do_that() {
+        }
+    }
+
+    @Feature
+    class AFeature {
+        class AUserStoryInAFeature {
+        }
+    }
+
+    @Story(AFeature.AUserStoryInAFeature.class)
+    class SomeTestScenarioInAFeature {
+        public void should_do_this() {
+        }
+
+        public void should_do_that() {
+        }
+    }
+
+    class ATestScenarioWithoutAStory {
+        public void should_do_this() {
+        }
+
+        public void should_do_that() {
+        }
+
+        public void and_should_do_that() {
+        }
+    }
+
+    @Story(AUserStory.class)
+    @Issues(["#123", "#456"])
+    class ATestScenarioWithIssues {
+        public void a_simple_test_case() {
+        }
+
+        @Issue("#789")
+        public void should_do_this() {
+        }
+
+        public void should_do_that() {
+        }
+    }
+
+
+    @Story(AUserStory.class)
+    @Issues(["PROJ-123", "PROJ-456"])
+    class ATestScenarioWithLongIssues {
+        public void a_simple_test_case() {
+        }
+
+        @Issue("PROJ-456")
+        public void should_do_this() {
+        }
+
+        public void should_do_that() {
+        }
+    }
+
+    @Story(AUserStory.class)
+    class SomeNestedTestScenario {
+        public void a_nested_test_case() {
+        };
+
+        public void should_do_this() {
+        };
+
+        public void should_do_that() {
+        };
+    }
+
 }

@@ -6,7 +6,6 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.adaptors.TestOutcomeAdaptor;
 import net.thucydides.core.reports.html.HtmlAcceptanceTestReporter;
-import net.thucydides.core.reports.json.JSONTestOutcomeReporter;
 import net.thucydides.core.reports.xml.XMLTestOutcomeReporter;
 import net.thucydides.core.util.EnvironmentVariables;
 
@@ -60,9 +59,9 @@ public class TestOutcomeAdaptorReporter extends ThucydidesReporter {
             if (shouldGenerate(OutcomeFormat.XML)) {
                 getXMLReporter().generateReportFor(outcome, allOutcomes);
             }
-            if (shouldGenerate(OutcomeFormat.JSON)) {
-                getJsonReporter().generateReportFor(outcome, allOutcomes);
-            }
+//            if (shouldGenerate(OutcomeFormat.JSON)) {
+//                getJsonReporter().generateReportFor(outcome, allOutcomes);
+//            }
             getHTMLReporter().generateReportFor(outcome, allOutcomes);
         }
     }
@@ -76,12 +75,12 @@ public class TestOutcomeAdaptorReporter extends ThucydidesReporter {
         reporter.setOutputDirectory(getOutputDirectory());
         return reporter;
     }
-
-    private AcceptanceTestReporter getJsonReporter() {
-        JSONTestOutcomeReporter reporter = new JSONTestOutcomeReporter();
-        reporter.setOutputDirectory(getOutputDirectory());
-        return reporter;
-    }
+//
+//    private AcceptanceTestReporter getJsonReporter() {
+//        JSONTestOutcomeReporter reporter = new JSONTestOutcomeReporter();
+//        reporter.setOutputDirectory(getOutputDirectory());
+//        return reporter;
+//    }
 
     private AcceptanceTestReporter getHTMLReporter() {
         HtmlAcceptanceTestReporter reporter = new HtmlAcceptanceTestReporter();

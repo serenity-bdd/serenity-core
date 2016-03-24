@@ -29,7 +29,7 @@ import java.util.concurrent.Future;
 
 /**
  * Generates different Thucydides reports in a given output directory.
- * TODO: Make this service work with the Guava event bus
+ * TODO: Replace this service with the Guava event bus
  */
 @SuppressWarnings("restriction")
 public class ReportService {

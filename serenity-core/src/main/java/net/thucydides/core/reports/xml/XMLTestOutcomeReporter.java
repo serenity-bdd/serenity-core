@@ -111,7 +111,6 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
         return testOutcome.withQualifier(qualifier).getReportName(XML);
     }
 
-    @Override
     public Optional<TestOutcome> loadReportFrom(final Path reportFile) {
         return loadReportFrom(reportFile.toFile());
     }
@@ -147,7 +146,6 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
         this.outputDirectory = outputDirectory;
     }
 
-    @Override
     public List<TestOutcome> loadReportsFrom(final Path outputDirectory) {
         return loadReportsFrom(outputDirectory.toFile());
     }

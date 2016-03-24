@@ -3,13 +3,19 @@ package net.serenitybdd.core.eventbus
 
 import com.google.common.eventbus.AsyncEventBus
 import com.google.common.eventbus.EventBus
+import net.thucydides.core.reports.json.JSONTestOutcomeReader
+import org.slf4j.LoggerFactory
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 object BroadcasterInstance {
+
     var eventBus: EventBus
     var executorService: ExecutorService
+
+    private val logger = LoggerFactory.getLogger(JSONTestOutcomeReader::class.java)
+
 
     init {
         executorService = newExecutorService()
@@ -26,12 +32,19 @@ object BroadcasterInstance {
     }
 
     fun register(subscriber: Any) {
+        logger.debug("Broadcaster registered {}", subscriber)
         eventBus.register(subscriber)
     }
 
+    fun post(event: Any) {
+        logger.debug("Broadcasting event {}", event)
+        eventBus.post(event)
+    }
+
     fun shutdown() {
+        logger.debug("Broadcaster shutting down")
         executorService.shutdown()
-        executorService.awaitTermination(30, TimeUnit.SECONDS)
+        executorService.awaitTermination(60, TimeUnit.MINUTES)
 
         executorService = newExecutorService()
         eventBus = newEventBus(executorService)
@@ -45,7 +58,7 @@ fun register(subscriber : Any) : BroadcasterInstance {
 }
 
 fun postEvent(event : Any) {
-    BroadcasterInstance.eventBus.post(event)
+    BroadcasterInstance.post(event)
 }
 
 fun shutdown() {

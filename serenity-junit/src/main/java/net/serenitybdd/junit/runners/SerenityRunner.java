@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.ManagedWebDriverAnnotatedField;
@@ -250,7 +251,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
             throw someFailure;
         } finally {
             notifyTestSuiteFinished();
-            generateReports();
+            generateReports(); // TODO: Replace this with Broadcaster integration
             dropListeners(notifier);
             closeDrivers();
         }

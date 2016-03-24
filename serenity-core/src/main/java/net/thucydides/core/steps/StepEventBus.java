@@ -206,8 +206,6 @@ public class StepEventBus {
         resultTally = null;
         classUnderTest = null;
         webdriverSuspensions.clear();
-
-        Broadcaster.shutdown();
     }
 
     private void noAssumptionsViolated() {
@@ -227,19 +225,17 @@ public class StepEventBus {
     }
 
     public void testFinished() {
-        //screenshotProcessor.waitUntilDone();
         Darkroom.waitUntilClose();
 
         TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
 
         if (outcome != null) {
-            // Newer Guava event bus listeners
-            Broadcaster.postEvent(TestLifecycle.aTestHasFinishedWith(outcome));
-
             // Legacy test step listeners
             for (StepListener stepListener : getAllListeners()) {
                 stepListener.testFinished(outcome);
             }
+            // Newer Guava event bus listeners
+            Broadcaster.postEvent(TestLifecycle.aTestHasFinishedWith(outcome));
         }
         clear();
     }
@@ -493,6 +489,7 @@ public class StepEventBus {
         //screenshotProcessor.terminate();
 
         Darkroom.waitUntilClose();
+        Broadcaster.shutdown();
 
     }
 

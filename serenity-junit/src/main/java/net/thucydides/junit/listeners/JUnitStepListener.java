@@ -53,6 +53,7 @@ public class JUnitStepListener extends RunListener {
     @Override
     public void testRunStarted(Description description) throws Exception {
         super.testRunStarted(description);
+
     }
 
     @Override

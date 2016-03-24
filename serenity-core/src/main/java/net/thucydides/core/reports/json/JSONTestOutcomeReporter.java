@@ -7,12 +7,9 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.AcceptanceTestLoader;
-import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.OutcomeFormat;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-public class JSONTestOutcomeReporter implements AcceptanceTestReporter, AcceptanceTestLoader {
+public class JSONTestOutcomeReporter { //implements AcceptanceTestReporter, AcceptanceTestLoader {
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(JSONTestOutcomeReporter.class);
@@ -38,7 +35,6 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
 
     private final String encoding;
 
-    @Override
     public String getName() {
         return "json";
     }
@@ -50,7 +46,6 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
         jsonConverter = Injectors.getInjector().getInstance(JSONConverter.class);
     }
 
-    @Override
     public File generateReportFor(TestOutcome testOutcome,
                                   TestOutcomes allTestOutcomes) throws IOException {
         TestOutcome storedTestOutcome = testOutcome.withQualifier(qualifier);
@@ -78,30 +73,24 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
     }
 
     private String reportFor(final TestOutcome testOutcome) {
-        return testOutcome.withQualifier(qualifier).getReportName(
-                ReportType.JSON);
+        return testOutcome.withQualifier(qualifier).getReportName(ReportType.JSON);
     }
 
-    @Override
     public void setOutputDirectory(final File outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
 
-    @Override
     public void setQualifier(final String qualifier) {
         this.qualifier = qualifier;
     }
 
-    @Override
     public void setResourceDirectory(String resourceDirectoryPath) {
     }
 
-    @Override
     public Optional<TestOutcome> loadReportFrom(final Path reportFile) {
         return loadReportFrom(reportFile.toFile());
     }
 
-    @Override
     public Optional<TestOutcome> loadReportFrom(final File reportFile) {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(reportFile), encoding))) {
             TestOutcome fromJson = jsonConverter.fromJson(in);
@@ -113,12 +102,10 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
         }
     }
 
-    @Override
     public List<TestOutcome> loadReportsFrom(final Path outputDirectory) {
         return loadReportsFrom(outputDirectory.toFile());
     }
 
-    @Override
     public List<TestOutcome> loadReportsFrom(File outputDirectory) {
         File[] reportFiles = getAllJsonFilesFrom(outputDirectory);
         List<TestOutcome> testOutcomes = Lists.newArrayList();
@@ -140,7 +127,6 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
         }
     }
 
-    @Override
     public Optional<OutcomeFormat> getFormat() {
         return Optional.of(OutcomeFormat.JSON);
     }

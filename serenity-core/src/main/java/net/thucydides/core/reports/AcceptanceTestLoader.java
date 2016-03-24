@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 import net.thucydides.core.model.TestOutcome;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.List;
 
 public interface AcceptanceTestLoader {
@@ -12,9 +11,9 @@ public interface AcceptanceTestLoader {
 
     List<TestOutcome> loadReportsFrom(final File outputDirectory);
 
-    Optional<TestOutcome> loadReportFrom(final Path reportFile);
-
-    List<TestOutcome> loadReportsFrom(final Path outputDirectory);
+//    Optional<TestOutcome> loadReportFrom(final Path reportFile);
+//
+//    List<TestOutcome> loadReportsFrom(final Path outputDirectory);
 
     Optional<OutcomeFormat> getFormat();
 }

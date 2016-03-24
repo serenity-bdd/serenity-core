@@ -2,6 +2,8 @@ package net.serenitybdd.core.photography;
 
 
 import com.google.common.base.Optional;
+import net.thucydides.core.webdriver.WebDriverFacade;
+import net.thucydides.core.webdriver.WebDriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,12 +23,14 @@ public class PageSourceRecorder {
     }
 
     public Optional<File> intoDirectory(Path path) {
-        try {
-            Path pageSourceFile = Files.createTempFile(path, "pagesource", ".html.txt");
-            Files.write(pageSourceFile, pageSource());
-            return Optional.of(pageSourceFile.toFile());
-        } catch(IOException couldNotCreatePageSourcce) {
-            LOGGER.warn("Could not save the page source HTML file", couldNotCreatePageSourcce);
+        if (WebDriverFactory.isAlive(driver)) {
+            try {
+                Path pageSourceFile = Files.createTempFile(path, "pagesource", ".html.txt");
+                Files.write(pageSourceFile, pageSource());
+                return Optional.of(pageSourceFile.toFile());
+            } catch (IOException couldNotCreatePageSourcce) {
+                LOGGER.warn("Could not save the page source HTML file", couldNotCreatePageSourcce);
+            }
         }
         return Optional.absent();
     }

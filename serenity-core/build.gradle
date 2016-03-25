@@ -60,6 +60,12 @@ dependencies {
         exclude group: 'xml-apis', module: 'xml-apis'
     }
 
+    compile("org.seleniumhq.selenium:htmlunit-driver:${htmlunitVersion}"){
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
+        exclude group: 'commons-codec', module: 'commons-codec'
+    }
+
     compile('io.appium:java-client:3.3.0') {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
@@ -93,7 +99,7 @@ dependencies {
     }
     compile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
     compile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
-    compile("net.sourceforge.htmlunit:htmlunit:2.19") {
+    compile("net.sourceforge.htmlunit:htmlunit:${htmlunitVersion}") {
         exclude group: 'org.apache.commons', module: 'commons-lang3'
         exclude group: 'commons-logging', module: 'commons-logging'
         exclude group: 'xml-apis', module: 'xml-apis'
@@ -101,8 +107,12 @@ dependencies {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
         exclude group: 'org.apache.httpcomponents', module: 'httpmime'
     }
-    compile 'org.apache.httpcomponents:httpclient:4.4.1'
-    compile 'org.apache.httpcomponents:httpmime:4.4.1'
+    compile ('org.apache.httpcomponents:httpclient:4.5.2') {
+        exclude group: 'commons-codec', module: 'commons-codec'
+    }
+    compile ('org.apache.httpcomponents:httpmime:4.5.2'){
+        exclude group: 'commons-codec', module: 'commons-codec'
+    }
 
     compile("org.fluentlenium:fluentlenium-core:0.10.2") {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'

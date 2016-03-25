@@ -2,6 +2,7 @@ package net.serenitybdd.screenplay.webtests;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.webtests.model.Client;
 import net.serenitybdd.screenplay.webtests.pages.ProfilePage;
@@ -49,6 +50,18 @@ public class WhenDanaBrowsesTheWeb {
         and(dana).should(seeThat(profile, displays("country", equalTo("France"))));
     }
 
+    public static class TheProfileName implements Question<Boolean> {
+
+        @Override
+        public Boolean answeredBy(Actor actor) {
+            return the(ProfilePage.NAME).answeredBy(actor).isCurrentlyVisible();
+        }
+
+        public static TheProfileName isDisplayed() {
+            return new TheProfileName();
+        }
+    }
+
     @Test
     public void danaCanMakeAssertionsAboutWebElements() {
 
@@ -65,6 +78,7 @@ public class WhenDanaBrowsesTheWeb {
         then(dana).should(seeThat(the(ProfilePage.NAME), isCurrentlyVisible()));
         and(dana).should(seeThat(the(ProfilePage.NAME), isEnabled()));
         and(dana).should(seeThat(the(ProfilePage.NAME), isCurrentlyEnabled()));
+        and(dana).should(seeThat(TheProfileName.isDisplayed()));
     }
 
     @Test

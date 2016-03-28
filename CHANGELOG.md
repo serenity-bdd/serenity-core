@@ -1,6 +1,6 @@
 ## Serenity BDD core change Log
 
-### upcoming (2016/03/25 12:03 +00:00)
+### v1.1.29-rc.2 (2016/03/25 14:57 +00:00)
  
 **Pull requests:**
  
@@ -1397,13 +1397,6 @@
  
 ### v1.0.35 (2015/02/20 12:41 +00:00)
  
- 
-**Commits:**
- 
-- [d7f4cd3](https://github.com/serenity-bdd/serenity-core/commit/d7f4cd3ab1d16d172b81afe10208394116480cbb) fix: Fixed an issue in which tests were slowed down after a failing step because Serenity continued to try to take screenshots ([@wakaleo](https://github.com/wakaleo))
- 
-### v1.0.34 (2015/02/20 04:51 +00:00)
- 
 **Pull requests:**
  
 - [#25](https://github.com/serenity-bdd/serenity-core/pull/25) feat: nested page objects i.e. widget objects ([@CoeJoder](https://github.com/CoeJoder))
@@ -1636,6 +1629,7 @@
 - [cfaae5a](https://github.com/serenity-bdd/serenity-core/commit/cfaae5a78a36fbbb7fecea07762c93237839eca3) rename serenity_bdd to serenitybdd ([@mikezx6r](https://github.com/mikezx6r))
 - [d5511b6](https://github.com/serenity-bdd/serenity-core/commit/d5511b6706701d49a361192e5a8752e273c23ebe) Cater for rare cases where the driver returns null when an element is not found ([@wakaleo](https://github.com/wakaleo))
 - [d5f35b9](https://github.com/serenity-bdd/serenity-core/commit/d5f35b9cf08b4e6f9c37ee706122a7778cd6dbd0) Switched back to JUnit 4.11 due to API incompatibilities with build tools ([@wakaleo](https://github.com/wakaleo))
+- [d7f4cd3](https://github.com/serenity-bdd/serenity-core/commit/d7f4cd3ab1d16d172b81afe10208394116480cbb) fix: Fixed an issue in which tests were slowed down after a failing step because Serenity continued to try to take screenshots ([@wakaleo](https://github.com/wakaleo))
 - [d84aeed](https://github.com/serenity-bdd/serenity-core/commit/d84aeede8457858be99f934e05636e49e0c97fff) [rename] Create Serenity namespaced class and move some associated test classes ([@mikezx6r](https://github.com/mikezx6r))
 - [d9a768a](https://github.com/serenity-bdd/serenity-core/commit/d9a768af4b3eb2acc4fefb401e01aedada972039) Release notes are now triggered manually before the release ([@wakaleo](https://github.com/wakaleo))
 - [e0a96d7](https://github.com/serenity-bdd/serenity-core/commit/e0a96d7cd7499a43fceeb887a0697b7409c2a8d2) Fix scm url's ([@mikezx6r](https://github.com/mikezx6r))

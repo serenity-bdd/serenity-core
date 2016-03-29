@@ -64,6 +64,7 @@ dependencies {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
         exclude group: 'commons-codec', module: 'commons-codec'
+        exclude group: 'net.sourceforge.htmlunit', module:'htmlunit'
     }
 
     compile('io.appium:java-client:3.3.0') {
@@ -103,6 +104,7 @@ dependencies {
         exclude group: 'org.apache.commons', module: 'commons-lang3'
         exclude group: 'commons-logging', module: 'commons-logging'
         exclude group: 'xml-apis', module: 'xml-apis'
+        exclude group: 'xalan', module: 'xalan'
         exclude group: 'commons-codec', module: 'commons-codec'
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
         exclude group: 'org.apache.httpcomponents', module: 'httpmime'
@@ -132,6 +134,13 @@ dependencies {
 
     compile "org.objenesis:objenesis:2.1"
     compile "xml-apis:xml-apis:1.4.01"
+    compile("xalan:xalan:2.7.2") {
+        exclude group: 'xalan', module:'serializer'
+    }
+    compile("xalan:serializer:2.7.2") {
+        exclude group: 'xml-apis', module:'xml-apis'
+    }
+
     compile('com.jayway.awaitility:awaitility:1.6.3') {
         exclude group: 'cglib', module: 'cglib-nodep'
     }

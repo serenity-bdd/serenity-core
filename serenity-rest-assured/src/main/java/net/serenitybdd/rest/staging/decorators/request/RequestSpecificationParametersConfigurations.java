@@ -143,6 +143,41 @@ abstract class RequestSpecificationParametersConfigurations extends RequestSpeci
     }
 
     @Override
+    public RequestSpecification pathParameter(String parameterName, Object parameterValue) {
+        return core.pathParameter(parameterName, parameterValue);
+    }
+
+    @Override
+    public RequestSpecification pathParameters(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
+        return core.pathParameters(firstParameterName, firstParameterValue, parameterNameValuePairs);
+    }
+
+    @Override
+    public RequestSpecification pathParameters(Map<String, ?> parameterNameValuePairs) {
+        return core.pathParameters(parameterNameValuePairs);
+    }
+
+    @Override
+    public RequestSpecification pathParam(String parameterName, Object parameterValue) {
+        return core.pathParam(parameterName, parameterValue);
+    }
+
+    @Override
+    public RequestSpecification pathParams(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
+        return core.pathParams(firstParameterName, firstParameterValue, parameterNameValuePairs);
+    }
+
+    @Override
+    public RequestSpecification pathParams(Map<String, ?> parameterNameValuePairs) {
+        return core.pathParams(parameterNameValuePairs);
+    }
+
+    @Override
+    public Map<String, ?> getPathParams() {
+        return core.getPathParams();
+    }
+
+    @Override
     public Map<String, ?> getQueryParams() {
         return core.getQueryParams();
     }

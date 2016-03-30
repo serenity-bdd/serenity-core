@@ -53,27 +53,28 @@ public class RequestSpecificationDecorated extends RequestSpecificationAdvancedC
 
     @Override
     public Response post() {
-        return core.post();
+        return post("");
     }
 
     @Override
     public Response post(URL url) {
-        return core.post(url);
+        return post(notNull(url, "URL").toString());
     }
 
     @Override
     public Response post(String path, Object... pathParams) {
-        return core.post(path, pathParams);
+        return decorate(core.post(path, pathParams));
     }
 
     @Override
     public Response post(String path, Map<String, ?> pathParams) {
-        return core.post(path, pathParams);
+        pathParameters(pathParams);
+        return post(path);
     }
 
     @Override
     public Response post(URI uri) {
-        return core.post(uri);
+        return post(notNull(uri, "URI").toString());
     }
 
     @Override
@@ -104,101 +105,105 @@ public class RequestSpecificationDecorated extends RequestSpecificationAdvancedC
 
     @Override
     public Response delete() {
-        return core.delete();
+        return delete("");
     }
 
     @Override
     public Response delete(URL url) {
-        return core.delete(url);
+        return delete(notNull(url, "URL").toString());
     }
 
     @Override
     public Response delete(URI uri) {
-        return core.delete(uri);
+        return delete(notNull(uri, "URI").toString());
     }
 
     @Override
     public Response delete(String path, Object... pathParams) {
-        return core.delete(path, pathParams);
+        return decorate(core.delete(path, pathParams));
     }
 
     @Override
     public Response delete(String path, Map<String, ?> pathParams) {
-        return core.delete(path, pathParams);
+        pathParameters(pathParams);
+        return delete(path);
     }
 
     @Override
     public Response head() {
-        return core.head();
+        return head("");
     }
 
     @Override
     public Response head(URL url) {
-        return core.head(url);
+        return head(notNull(url, "URL").toString());
     }
 
     @Override
     public Response head(URI uri) {
-        return core.head(uri);
+        return head(notNull(uri, "URI").toString());
     }
 
     @Override
     public Response head(String path, Object... pathParams) {
-        return core.head(path, pathParams);
+        return decorate(core.head(path, pathParams));
     }
 
     @Override
     public Response head(String path, Map<String, ?> pathParams) {
-        return core.head(path, pathParams);
+        pathParameters(pathParams);
+        return head(path);
     }
 
     @Override
     public Response patch() {
-        return core.patch();
+        return patch("");
     }
 
     @Override
     public Response patch(URL url) {
-        return core.patch(url);
+        return patch(notNull(url, "URL").toString());
     }
 
     @Override
     public Response patch(URI uri) {
-        return core.patch(uri);
+        return patch(notNull(uri, "URI").toString());
     }
 
     @Override
     public Response patch(String path, Object... pathParams) {
-        return core.patch(path, pathParams);
+        return decorate(core.patch(path, pathParams));
     }
 
     @Override
     public Response patch(String path, Map<String, ?> pathParams) {
-        return core.patch(path, pathParams);
+        pathParameters(pathParams);
+        return patch(path);
     }
 
     @Override
     public Response options() {
-        return core.options();
+        return options("");
     }
 
     @Override
     public Response options(String path, Object... pathParams) {
-        return core.options(path, pathParams);
+        return decorate(core.options(path, pathParams));
     }
 
     @Override
     public Response options(String path, Map<String, ?> pathParams) {
-        return core.options(path, pathParams);
+        pathParameters(pathParams);
+        return options(path);
     }
 
     @Override
     public Response options(URI uri) {
-        return core.options(uri);
+        return options(notNull(uri, "URI").toString());
     }
 
     @Override
     public Response options(URL url) {
-        return core.options(url);
+        return options(notNull(url, "URL").toString());
     }
 }

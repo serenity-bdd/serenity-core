@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  * Date: 3/16/16
  * Time: 2:08 PM
  */
-abstract class RequestSpecificationRedirectConfigurations extends RequestSpecificationPathParametersConfigurations
+abstract class RequestSpecificationRedirectConfigurations extends RequestSpecificationBodyConfigurations
         implements FilterableRequestSpecification {
     private static final Logger log = LoggerFactory.getLogger(RequestSpecificationRedirectConfigurations.class);
 

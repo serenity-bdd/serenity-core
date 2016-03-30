@@ -49,8 +49,8 @@ class WhenExecutingHeadRequestFromExpectation extends Specification {
                 .withBody(body)));
         when: "creating expectation"
             def expectation = expect().
-                statusCode(506).
-                body(Matchers.equalTo(body))
+                statusCode(506).header("Content-Type",
+                Matchers.equalTo("application/xml"))
         and: "executing expectation"
             def response = expectation.when().head(url);
         then: "created response should be decorated"
@@ -75,8 +75,9 @@ class WhenExecutingHeadRequestFromExpectation extends Specification {
             def response = given().
                 param("x", "y").
                 expect().
-                statusCode(506).
-                body(Matchers.equalTo(body)).
+                statusCode(506).header("Content-Type",
+                Matchers.equalTo("application/xml"))
+                .body(Matchers.isEmptyOrNullString()).
                 when().
                 head(url);
         then: "created response should be decorated"

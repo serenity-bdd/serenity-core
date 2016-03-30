@@ -71,8 +71,9 @@ class WhenValidatingResponseFromHeadOperation extends Specification {
                 .withBody(body)));
         when: "creating expectation"
             def expectation = expect().
-                statusCode(856).
-                body(Matchers.equalTo(body))
+                statusCode(856).header("Content-Type",
+                Matchers.equalTo("application/xml"))
+                .body(Matchers.isEmptyOrNullString())
         then: "validation of expectation should be correct"
             expectation.when().head(url);
     }

@@ -42,12 +42,13 @@ public class RequestSpecificationDecorated extends RequestSpecificationAdvancedC
 
     @Override
     public Response get(String path, Map<String, ?> pathParams) {
-        return decorate(core.get(path, pathParams));
+        pathParameters(pathParams);
+        return get(path);
     }
 
     @Override
     public Response get(URI uri) {
-        return core.get(uri);
+        return get(notNull(uri, "URI").toString());
     }
 
     @Override
@@ -77,27 +78,28 @@ public class RequestSpecificationDecorated extends RequestSpecificationAdvancedC
 
     @Override
     public Response put() {
-        return core.put();
+        return put("");
     }
 
     @Override
     public Response put(URL url) {
-        return core.put(url);
+        return put(notNull(url, "URL").toString());
     }
 
     @Override
     public Response put(URI uri) {
-        return core.put(uri);
+        return put(notNull(uri, "URI").toString());
     }
 
     @Override
     public Response put(String path, Object... pathParams) {
-        return core.put(path, pathParams);
+        return decorate(core.put(path, pathParams));
     }
 
     @Override
     public Response put(String path, Map<String, ?> pathParams) {
-        return core.put(path, pathParams);
+        pathParameters(pathParams);
+        return put(path);
     }
 
     @Override

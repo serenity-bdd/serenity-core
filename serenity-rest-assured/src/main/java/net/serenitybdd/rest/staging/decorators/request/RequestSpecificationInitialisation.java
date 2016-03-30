@@ -105,8 +105,12 @@ abstract class RequestSpecificationInitialisation implements FilterableRequestSp
         }
     }
 
+    public RequestSpecificationImpl getCore() {
+        return ((RequestSpecificationImpl) core);
+    }
+
     public void setResponseSpecification(final ResponseSpecification specification) {
-        ((RequestSpecificationImpl) core).setResponseSpecification(decorate(specification));
+        getCore().setResponseSpecification(decorate(specification));
     }
 
     public void setresponseSpecification(final ResponseSpecification specification) {

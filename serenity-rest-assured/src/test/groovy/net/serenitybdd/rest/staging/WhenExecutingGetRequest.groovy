@@ -2,7 +2,11 @@ package net.serenitybdd.rest.staging
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
+import com.jayway.restassured.RestAssured
+import com.jayway.restassured.internal.RequestSpecificationImpl
 import com.jayway.restassured.specification.RequestSender
+import com.jayway.restassured.specification.RequestSpecification
+import com.jayway.restassured.specification.ResponseSpecification
 import net.serenitybdd.rest.staging.decorators.request.RequestSpecificationDecorated
 import net.serenitybdd.rest.staging.decorators.ResponseDecorated
 import net.serenitybdd.rest.staging.decorators.ResponseSpecificationDecorated
@@ -37,8 +41,8 @@ class WhenExecutingGetRequest extends Specification {
 
     def "should use wrapped request and response if they initialised separately"() {
         given: "initialised Request and Response and access point"
-            def request = Mock(RequestSpecificationDecorated)
-            def response = Mock(ResponseSpecificationDecorated)
+            def request = (RequestSpecification) RestAssured.given();
+            def response = (ResponseSpecification)RestAssured.given().response();
             def body = "<root>" +
                 "<value>1</value>" +
                 "</root>"
@@ -55,7 +59,7 @@ class WhenExecutingGetRequest extends Specification {
             def RequestSender sender = given(request, response)
             def generated = sender.get(url)
         then: "created response should be decorated"
-            1 * request.get((String) _, (Object) _)
+            generated instanceof ResponseDecorated
     }
 
     def "should return wrapped response during GET by URL called from request"() {

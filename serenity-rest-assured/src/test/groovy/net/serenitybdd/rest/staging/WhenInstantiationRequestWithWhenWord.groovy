@@ -1,6 +1,6 @@
 package net.serenitybdd.rest.staging
 
-import net.serenitybdd.rest.staging.decorators.RequestSpecificationDecorated
+import net.serenitybdd.rest.staging.decorators.request.RequestSpecificationDecorated
 import net.serenitybdd.rest.staging.rules.RestConfigurationAction
 import net.serenitybdd.rest.staging.rules.RestConfigurationRule
 import org.junit.Rule

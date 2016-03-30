@@ -6,29 +6,22 @@ import com.jayway.restassured.config.RestAssuredConfig;
 import com.jayway.restassured.filter.Filter;
 import com.jayway.restassured.filter.log.LogDetail;
 import com.jayway.restassured.internal.*;
-import com.jayway.restassured.internal.log.LogRepository;
 import com.jayway.restassured.mapper.ObjectMapper;
 import com.jayway.restassured.parsing.Parser;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.*;
-import net.serenitybdd.rest.staging.decorators.RequestSpecificationDecorated;
+import net.serenitybdd.rest.staging.decorators.request.RequestSpecificationDecorated;
 import net.serenitybdd.rest.staging.decorators.ResponseSpecificationDecorated;
-import net.thucydides.core.annotations.NotImplementedException;
-import org.apache.commons.lang3.Validate;
 
-import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyStore;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static com.jayway.restassured.config.ObjectMapperConfig.objectMapperConfig;
 import static com.jayway.restassured.specification.ProxySpecification.host;
 
 /**

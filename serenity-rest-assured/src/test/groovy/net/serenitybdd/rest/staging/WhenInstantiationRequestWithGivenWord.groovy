@@ -2,7 +2,7 @@ package net.serenitybdd.rest.staging
 
 import com.jayway.restassured.RestAssured
 import com.jayway.restassured.specification.FilterableRequestSpecification
-import net.serenitybdd.rest.staging.decorators.RequestSpecificationDecorated
+import net.serenitybdd.rest.staging.decorators.request.RequestSpecificationDecorated
 import net.serenitybdd.rest.staging.decorators.ResponseSpecificationDecorated
 import net.serenitybdd.rest.staging.rules.RestConfigurationAction
 import net.serenitybdd.rest.staging.rules.RestConfigurationRule

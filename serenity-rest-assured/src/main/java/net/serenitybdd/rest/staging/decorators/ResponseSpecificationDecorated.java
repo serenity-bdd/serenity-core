@@ -10,6 +10,7 @@ import com.jayway.restassured.parsing.Parser;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.*;
 import com.jayway.restassured.specification.RequestSpecification;
+import net.serenitybdd.rest.staging.decorators.request.RequestSpecificationDecorated;
 import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

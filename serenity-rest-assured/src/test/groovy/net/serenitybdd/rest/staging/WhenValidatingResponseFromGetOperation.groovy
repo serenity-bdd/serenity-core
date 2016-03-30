@@ -2,10 +2,7 @@ package net.serenitybdd.rest.staging
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.jayway.restassured.specification.RequestSender
-import net.serenitybdd.rest.staging.decorators.RequestSpecificationDecorated
 import net.serenitybdd.rest.staging.decorators.ResponseDecorated
-import net.serenitybdd.rest.staging.decorators.ResponseSpecificationDecorated
 import net.serenitybdd.rest.staging.rules.RestConfigurationAction
 import net.serenitybdd.rest.staging.rules.RestConfigurationRule
 import org.hamcrest.Matchers

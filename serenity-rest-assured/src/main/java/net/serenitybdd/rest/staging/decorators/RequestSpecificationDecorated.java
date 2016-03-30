@@ -671,126 +671,6 @@ public class RequestSpecificationDecorated implements FilterableRequestSpecifica
     }
 
     @Override
-    public Response post(String path, Object... pathParams) {
-        return core.post(path, pathParams);
-    }
-
-    @Override
-    public Response post(String path, Map<String, ?> pathParams) {
-        return core.post(path, pathParams);
-    }
-
-    @Override
-    public Response put(String path, Object... pathParams) {
-        return core.put(path, pathParams);
-    }
-
-    @Override
-    public Response put(String path, Map<String, ?> pathParams) {
-        return core.put(path, pathParams);
-    }
-
-    @Override
-    public Response delete(String path, Object... pathParams) {
-        return core.delete(path, pathParams);
-    }
-
-    @Override
-    public Response delete(String path, Map<String, ?> pathParams) {
-        return core.delete(path, pathParams);
-    }
-
-    @Override
-    public Response head(String path, Object... pathParams) {
-        return core.head(path, pathParams);
-    }
-
-    @Override
-    public Response head(String path, Map<String, ?> pathParams) {
-        return core.head(path, pathParams);
-    }
-
-    @Override
-    public Response patch(String path, Object... pathParams) {
-        return core.patch(path, pathParams);
-    }
-
-    @Override
-    public Response patch(String path, Map<String, ?> pathParams) {
-        return core.patch(path, pathParams);
-    }
-
-    @Override
-    public Response options(String path, Object... pathParams) {
-        return core.options(path, pathParams);
-    }
-
-    @Override
-    public Response options(String path, Map<String, ?> pathParams) {
-        return core.options(path, pathParams);
-    }
-
-    @Override
-    public Response post(URI uri) {
-        return core.post(uri);
-    }
-
-    @Override
-    public Response put(URI uri) {
-        return core.put(uri);
-    }
-
-    @Override
-    public Response delete(URI uri) {
-        return core.delete(uri);
-    }
-
-    @Override
-    public Response head(URI uri) {
-        return core.head(uri);
-    }
-
-    @Override
-    public Response patch(URI uri) {
-        return core.patch(uri);
-    }
-
-    @Override
-    public Response options(URI uri) {
-        return core.options(uri);
-    }
-
-    @Override
-    public Response post(URL url) {
-        return core.post(url);
-    }
-
-    @Override
-    public Response put(URL url) {
-        return core.put(url);
-    }
-
-    @Override
-    public Response delete(URL url) {
-        return core.delete(url);
-    }
-
-    @Override
-    public Response head(URL url) {
-        return core.head(url);
-    }
-
-    @Override
-    public Response patch(URL url) {
-        return core.patch(url);
-    }
-
-    @Override
-    public Response options(URL url) {
-        return core.options(url);
-    }
-
-    @Override
     public Response get() {
         return get("");
     }
@@ -821,8 +701,48 @@ public class RequestSpecificationDecorated implements FilterableRequestSpecifica
     }
 
     @Override
+    public Response post(URL url) {
+        return core.post(url);
+    }
+
+    @Override
+    public Response post(String path, Object... pathParams) {
+        return core.post(path, pathParams);
+    }
+
+    @Override
+    public Response post(String path, Map<String, ?> pathParams) {
+        return core.post(path, pathParams);
+    }
+
+    @Override
+    public Response post(URI uri) {
+        return core.post(uri);
+    }
+
+    @Override
     public Response put() {
         return core.put();
+    }
+
+    @Override
+    public Response put(URL url) {
+        return core.put(url);
+    }
+
+    @Override
+    public Response put(URI uri) {
+        return core.put(uri);
+    }
+
+    @Override
+    public Response put(String path, Object... pathParams) {
+        return core.put(path, pathParams);
+    }
+
+    @Override
+    public Response put(String path, Map<String, ?> pathParams) {
+        return core.put(path, pathParams);
     }
 
     @Override
@@ -831,8 +751,48 @@ public class RequestSpecificationDecorated implements FilterableRequestSpecifica
     }
 
     @Override
+    public Response delete(URL url) {
+        return core.delete(url);
+    }
+
+    @Override
+    public Response delete(URI uri) {
+        return core.delete(uri);
+    }
+
+    @Override
+    public Response delete(String path, Object... pathParams) {
+        return core.delete(path, pathParams);
+    }
+
+    @Override
+    public Response delete(String path, Map<String, ?> pathParams) {
+        return core.delete(path, pathParams);
+    }
+
+    @Override
     public Response head() {
         return core.head();
+    }
+
+    @Override
+    public Response head(URL url) {
+        return core.head(url);
+    }
+
+    @Override
+    public Response head(URI uri) {
+        return core.head(uri);
+    }
+
+    @Override
+    public Response head(String path, Object... pathParams) {
+        return core.head(path, pathParams);
+    }
+
+    @Override
+    public Response head(String path, Map<String, ?> pathParams) {
+        return core.head(path, pathParams);
     }
 
     @Override
@@ -841,8 +801,48 @@ public class RequestSpecificationDecorated implements FilterableRequestSpecifica
     }
 
     @Override
+    public Response patch(URL url) {
+        return core.patch(url);
+    }
+
+    @Override
+    public Response patch(URI uri) {
+        return core.patch(uri);
+    }
+
+    @Override
+    public Response patch(String path, Object... pathParams) {
+        return core.patch(path, pathParams);
+    }
+
+    @Override
+    public Response patch(String path, Map<String, ?> pathParams) {
+        return core.patch(path, pathParams);
+    }
+
+    @Override
     public Response options() {
         return core.options();
+    }
+
+    @Override
+    public Response options(String path, Object... pathParams) {
+        return core.options(path, pathParams);
+    }
+
+    @Override
+    public Response options(String path, Map<String, ?> pathParams) {
+        return core.options(path, pathParams);
+    }
+
+    @Override
+    public Response options(URI uri) {
+        return core.options(uri);
+    }
+
+    @Override
+    public Response options(URL url) {
+        return core.options(url);
     }
 
     @Override

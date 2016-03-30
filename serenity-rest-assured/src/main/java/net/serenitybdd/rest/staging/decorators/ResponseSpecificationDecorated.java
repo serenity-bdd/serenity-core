@@ -35,18 +35,33 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
     }
 
     @Override
-    public ResponseSpecification content(String key, Matcher<?> matcher, Object... additionalKeyMatcherPairs) {
-        return core.content(key, matcher, additionalKeyMatcherPairs);
-    }
-
-    @Override
     public Matcher<Integer> getStatusCode() {
         return core.getStatusCode();
     }
 
     @Override
+    public ResponseSpecification statusCode(Matcher<? super Integer> expectedStatusCode) {
+        return core.statusCode(expectedStatusCode);
+    }
+
+    @Override
+    public ResponseSpecification statusCode(int expectedStatusCode) {
+        return core.statusCode(expectedStatusCode);
+    }
+
+    @Override
     public Matcher<String> getStatusLine() {
         return core.getStatusLine();
+    }
+
+    @Override
+    public ResponseSpecification statusLine(Matcher<? super String> expectedStatusLine) {
+        return core.statusLine(expectedStatusLine);
+    }
+
+    @Override
+    public ResponseSpecification statusLine(String expectedStatusLine) {
+        return core.statusLine(expectedStatusLine);
     }
 
     @Override
@@ -70,13 +85,18 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
     }
 
     @Override
-    public ResponseSpecification content(Matcher<?> matcher, Matcher<?>... additionalMatchers) {
-        return core.content(matcher, additionalMatchers);
+    public ResponseSpecification noRootPath() {
+        return core.noRootPath();
     }
 
     @Override
-    public ResponseSpecification content(List<Argument> arguments, Matcher matcher, Object... additionalKeyMatcherPairs) {
-        return core.content(arguments, matcher, additionalKeyMatcherPairs);
+    public ResponseSpecification rootPath(String rootPath) {
+        return core.rootPath(rootPath);
+    }
+
+    @Override
+    public ResponseSpecification rootPath(String rootPath, List<Argument> arguments) {
+        return core.rootPath(rootPath, arguments);
     }
 
     @Override
@@ -95,23 +115,13 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
     }
 
     @Override
-    public ResponseSpecification statusCode(Matcher<? super Integer> expectedStatusCode) {
-        return core.statusCode(expectedStatusCode);
+    public ResponseSpecification body(Matcher<?> matcher, Matcher<?>... additionalMatchers) {
+        return core.body(matcher, additionalMatchers);
     }
 
     @Override
-    public ResponseSpecification statusCode(int expectedStatusCode) {
-        return core.statusCode(expectedStatusCode);
-    }
-
-    @Override
-    public ResponseSpecification statusLine(Matcher<? super String> expectedStatusLine) {
-        return core.statusLine(expectedStatusLine);
-    }
-
-    @Override
-    public ResponseSpecification statusLine(String expectedStatusLine) {
-        return core.statusLine(expectedStatusLine);
+    public ResponseSpecification body(String path, Matcher<?> matcher, Object... additionalKeyMatcherPairs) {
+        return core.body(path, matcher, additionalKeyMatcherPairs);
     }
 
     @Override
@@ -140,13 +150,13 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
     }
 
     @Override
-    public ResponseSpecification cookie(String cookieName) {
-        return core.cookie(cookieName);
+    public ResponseSpecification cookies(String firstExpectedCookieName, Object firstExpectedCookieValue, Object... expectedCookieNameValuePairs) {
+        return core.cookies(firstExpectedCookieName, firstExpectedCookieValue, expectedCookieNameValuePairs);
     }
 
     @Override
-    public ResponseSpecification cookies(String firstExpectedCookieName, Object firstExpectedCookieValue, Object... expectedCookieNameValuePairs) {
-        return core.cookies(firstExpectedCookieName, firstExpectedCookieValue, expectedCookieNameValuePairs);
+    public ResponseSpecification cookie(String cookieName) {
+        return core.cookie(cookieName);
     }
 
     @Override
@@ -165,16 +175,6 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
     }
 
     @Override
-    public ResponseSpecification rootPath(String rootPath) {
-        return core.rootPath(rootPath);
-    }
-
-    @Override
-    public ResponseSpecification rootPath(String rootPath, List<Argument> arguments) {
-        return core.rootPath(rootPath, arguments);
-    }
-
-    @Override
     public ResponseSpecification root(String rootPath, List<Argument> arguments) {
         return core.root(rootPath, arguments);
     }
@@ -187,11 +187,6 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
     @Override
     public ResponseSpecification noRoot() {
         return core.noRoot();
-    }
-
-    @Override
-    public ResponseSpecification noRootPath() {
-        return core.noRootPath();
     }
 
     @Override
@@ -225,18 +220,23 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
     }
 
     @Override
-    public ResponseSpecification body(Matcher<?> matcher, Matcher<?>... additionalMatchers) {
-        return core.body(matcher, additionalMatchers);
-    }
-
-    @Override
-    public ResponseSpecification body(String path, Matcher<?> matcher, Object... additionalKeyMatcherPairs) {
-        return core.body(path, matcher, additionalKeyMatcherPairs);
-    }
-
-    @Override
     public ResponseSpecification content(String path, List<Argument> arguments, Matcher matcher, Object... additionalKeyMatcherPairs) {
         return core.content(path, arguments, matcher, additionalKeyMatcherPairs);
+    }
+
+    @Override
+    public ResponseSpecification content(String key, Matcher<?> matcher, Object... additionalKeyMatcherPairs) {
+        return core.content(key, matcher, additionalKeyMatcherPairs);
+    }
+
+    @Override
+    public ResponseSpecification content(Matcher<?> matcher, Matcher<?>... additionalMatchers) {
+        return core.content(matcher, additionalMatchers);
+    }
+
+    @Override
+    public ResponseSpecification content(List<Argument> arguments, Matcher matcher, Object... additionalKeyMatcherPairs) {
+        return core.content(arguments, matcher, additionalKeyMatcherPairs);
     }
 
     @Override
@@ -305,126 +305,6 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
     }
 
     @Override
-    public Response post(String path, Object... pathParams) {
-        return core.post(path, pathParams);
-    }
-
-    @Override
-    public Response post(String path, Map<String, ?> pathParams) {
-        return core.post(path, pathParams);
-    }
-
-    @Override
-    public Response put(String path, Object... pathParams) {
-        return core.put(path, pathParams);
-    }
-
-    @Override
-    public Response put(String path, Map<String, ?> pathParams) {
-        return core.put(path, pathParams);
-    }
-
-    @Override
-    public Response delete(String path, Object... pathParams) {
-        return core.delete(path, pathParams);
-    }
-
-    @Override
-    public Response delete(String path, Map<String, ?> pathParams) {
-        return core.delete(path, pathParams);
-    }
-
-    @Override
-    public Response head(String path, Object... pathParams) {
-        return core.head(path, pathParams);
-    }
-
-    @Override
-    public Response head(String path, Map<String, ?> pathParams) {
-        return core.head(path, pathParams);
-    }
-
-    @Override
-    public Response patch(String path, Object... pathParams) {
-        return core.patch(path, pathParams);
-    }
-
-    @Override
-    public Response patch(String path, Map<String, ?> pathParams) {
-        return core.patch(path, pathParams);
-    }
-
-    @Override
-    public Response options(String path, Object... pathParams) {
-        return core.options(path, pathParams);
-    }
-
-    @Override
-    public Response options(String path, Map<String, ?> pathParams) {
-        return core.options(path, pathParams);
-    }
-
-    @Override
-    public Response post(URI uri) {
-        return core.post(uri);
-    }
-
-    @Override
-    public Response put(URI uri) {
-        return core.put(uri);
-    }
-
-    @Override
-    public Response delete(URI uri) {
-        return core.delete(uri);
-    }
-
-    @Override
-    public Response head(URI uri) {
-        return core.head(uri);
-    }
-
-    @Override
-    public Response patch(URI uri) {
-        return core.patch(uri);
-    }
-
-    @Override
-    public Response options(URI uri) {
-        return core.options(uri);
-    }
-
-    @Override
-    public Response post(URL url) {
-        return core.post(url);
-    }
-
-    @Override
-    public Response put(URL url) {
-        return core.put(url);
-    }
-
-    @Override
-    public Response delete(URL url) {
-        return core.delete(url);
-    }
-
-    @Override
-    public Response head(URL url) {
-        return core.head(url);
-    }
-
-    @Override
-    public Response patch(URL url) {
-        return core.patch(url);
-    }
-
-    @Override
-    public Response options(URL url) {
-        return core.options(url);
-    }
-
-    @Override
     public Response get() {
         return core.get();
     }
@@ -455,8 +335,48 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
     }
 
     @Override
+    public Response post(URL url) {
+        return core.post(url);
+    }
+
+    @Override
+    public Response post(URI uri) {
+        return core.post(uri);
+    }
+
+    @Override
+    public Response post(String path, Object... pathParams) {
+        return core.post(path, pathParams);
+    }
+
+    @Override
+    public Response post(String path, Map<String, ?> pathParams) {
+        return core.post(path, pathParams);
+    }
+
+    @Override
     public Response put() {
         return core.put();
+    }
+
+    @Override
+    public Response put(URL url) {
+        return core.put(url);
+    }
+
+    @Override
+    public Response put(URI uri) {
+        return core.put(uri);
+    }
+
+    @Override
+    public Response put(String path, Object... pathParams) {
+        return core.put(path, pathParams);
+    }
+
+    @Override
+    public Response put(String path, Map<String, ?> pathParams) {
+        return core.put(path, pathParams);
     }
 
     @Override
@@ -465,8 +385,48 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
     }
 
     @Override
+    public Response delete(URL url) {
+        return core.delete(url);
+    }
+
+    @Override
+    public Response delete(URI uri) {
+        return core.delete(uri);
+    }
+
+    @Override
+    public Response delete(String path, Object... pathParams) {
+        return core.delete(path, pathParams);
+    }
+
+    @Override
+    public Response delete(String path, Map<String, ?> pathParams) {
+        return core.delete(path, pathParams);
+    }
+
+    @Override
     public Response head() {
         return core.head();
+    }
+
+    @Override
+    public Response head(URL url) {
+        return core.head(url);
+    }
+
+    @Override
+    public Response head(String path, Object... pathParams) {
+        return core.head(path, pathParams);
+    }
+
+    @Override
+    public Response head(String path, Map<String, ?> pathParams) {
+        return core.head(path, pathParams);
+    }
+
+    @Override
+    public Response head(URI uri) {
+        return core.head(uri);
     }
 
     @Override
@@ -475,8 +435,48 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
     }
 
     @Override
+    public Response patch(URL url) {
+        return core.patch(url);
+    }
+
+    @Override
+    public Response patch(URI uri) {
+        return core.patch(uri);
+    }
+
+    @Override
+    public Response patch(String path, Object... pathParams) {
+        return core.patch(path, pathParams);
+    }
+
+    @Override
+    public Response patch(String path, Map<String, ?> pathParams) {
+        return core.patch(path, pathParams);
+    }
+
+    @Override
     public Response options() {
         return core.options();
+    }
+
+    @Override
+    public Response options(String path, Object... pathParams) {
+        return core.options(path, pathParams);
+    }
+
+    @Override
+    public Response options(String path, Map<String, ?> pathParams) {
+        return core.options(path, pathParams);
+    }
+
+    @Override
+    public Response options(URI uri) {
+        return core.options(uri);
+    }
+
+    @Override
+    public Response options(URL url) {
+        return core.options(url);
     }
 
     @Override

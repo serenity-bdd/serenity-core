@@ -39,7 +39,7 @@ class WhenExecutingGetRequestFromExpectation extends Specification {
                 "<value>7</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/creature"
+            def path = "/test/get/creature"
             def url = "$base$path"
             stubFor(WireMock.get(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
@@ -63,7 +63,7 @@ class WhenExecutingGetRequestFromExpectation extends Specification {
                 "<value>7</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/creature"
+            def path = "/test/get/creature"
             def url = "$base$path"
             stubFor(WireMock.get(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))

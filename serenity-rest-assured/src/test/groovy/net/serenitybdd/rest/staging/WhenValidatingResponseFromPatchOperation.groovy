@@ -9,17 +9,18 @@ import org.hamcrest.Matchers
 import org.junit.Rule
 import spock.lang.Specification
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*
-import static net.serenitybdd.rest.staging.SerenityRest.reset
-import static net.serenitybdd.rest.staging.SerenityRest.given
-import static net.serenitybdd.rest.staging.SerenityRest.expect
+import static net.serenitybdd.rest.staging.SerenityRest.*
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import static com.github.tomakehurst.wiremock.client.WireMock.matching
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
+import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching
 
 /**
  * User: YamStranger
  * Date: 3/14/16
  * Time: 9:57 AM
  */
-class WhenValidatingResponseFromGetOperation extends Specification {
+class WhenValidatingResponseFromPatchOperation extends Specification {
 
     @Rule
     def WireMockRule wire = new WireMockRule(0);
@@ -38,16 +39,16 @@ class WhenValidatingResponseFromGetOperation extends Specification {
                 "<value>7</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/get/creature"
+            def path = "/test/patch/creature"
             def url = "$base$path"
-            stubFor(WireMock.get(urlMatching("$path.*"))
+            stubFor(WireMock.patch(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(506)
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
-        when: "creating new request and making get request"
-            def response = given().get(url)
+        when: "creating new request and making patch request"
+            def response = given().patch(url)
         then: "created response should be decorated"
             response instanceof ResponseDecorated
         and: "returned status should be correct"
@@ -60,19 +61,19 @@ class WhenValidatingResponseFromGetOperation extends Specification {
                 "<value>7</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/get/creature"
+            def path = "/test/patch/creature"
             def url = "$base$path"
-            stubFor(WireMock.get(urlMatching("$path.*"))
+            stubFor(WireMock.patch(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
-                .withStatus(506)
+                .withStatus(856)
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
         when: "creating expectation"
             def expectation = expect().
-                statusCode(506).
+                statusCode(856).
                 body(Matchers.equalTo(body))
         then: "validation of expectation should be correct"
-            expectation.when().get(url);
+            expectation.when().patch(url);
     }
 }

@@ -7,8 +7,6 @@ import com.jayway.restassured.specification.RequestSender
 import com.jayway.restassured.specification.RequestSpecification
 import com.jayway.restassured.specification.ResponseSpecification
 import net.serenitybdd.rest.staging.decorators.ResponseDecorated
-import net.serenitybdd.rest.staging.decorators.ResponseSpecificationDecorated
-import net.serenitybdd.rest.staging.decorators.request.RequestSpecificationDecorated
 import net.serenitybdd.rest.staging.rules.RestConfigurationAction
 import net.serenitybdd.rest.staging.rules.RestConfigurationRule
 import org.junit.Rule
@@ -46,7 +44,7 @@ class WhenExecutingPutRequest extends Specification {
                 "<value>1</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/levels"
+            def path = "/test/put/levels"
             def url = "$base$path"
             stubFor(WireMock.put(urlMatching(path))
                 .withRequestBody(matching(".*"))
@@ -67,7 +65,7 @@ class WhenExecutingPutRequest extends Specification {
                 "<value>2</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/keyboard"
+            def path = "/test/put/keyboard"
             def url = "$base$path"
             stubFor(WireMock.put(urlMatching(path))
                 .withRequestBody(matching(".*"))
@@ -89,7 +87,7 @@ class WhenExecutingPutRequest extends Specification {
                 "<value>3</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/house"
+            def path = "/test/put/house"
             def url = "$base$path"
             stubFor(WireMock.put(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
@@ -111,7 +109,7 @@ class WhenExecutingPutRequest extends Specification {
                 "<value>4</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/pet"
+            def path = "/test/put/pet"
             def url = "$base$path"
             stubFor(WireMock.put(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
@@ -133,7 +131,7 @@ class WhenExecutingPutRequest extends Specification {
                 "<value>5</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/child"
+            def path = "/test/put/child"
             def url = "$base$path"
             stubFor(WireMock.put(urlMatching(path))
                 .withRequestBody(matching(".*"))
@@ -155,7 +153,7 @@ class WhenExecutingPutRequest extends Specification {
                 "<value>6</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/book"
+            def path = "/test/put/book"
             def url = "$base$path"
             stubFor(WireMock.put(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
@@ -177,7 +175,7 @@ class WhenExecutingPutRequest extends Specification {
                 "<value>7</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/creature"
+            def path = "/test/put/creature"
             def url = "$base$path"
             stubFor(WireMock.put(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))

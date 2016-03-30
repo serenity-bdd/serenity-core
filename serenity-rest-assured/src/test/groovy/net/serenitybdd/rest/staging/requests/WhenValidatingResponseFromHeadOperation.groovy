@@ -1,4 +1,4 @@
-package net.serenitybdd.rest.staging
+package net.serenitybdd.rest.staging.requests
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
@@ -17,10 +17,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching
 
 /**
  * User: YamStranger
- * Date: 3/14/16
+ * Date: 3/30/16
  * Time: 9:57 AM
  */
-class WhenExecutingPatchRequestFromExpectation extends Specification {
+class WhenValidatingResponseFromHeadOperation extends Specification {
 
     @Rule
     def WireMockRule wire = new WireMockRule(0);
@@ -33,53 +33,48 @@ class WhenExecutingPatchRequestFromExpectation extends Specification {
         }
     },)
 
-    def "should return wrapped response during PUT by URL called from expectation"() {
+    def "should be possible to validate status code"() {
         given: "configured access point"
             def body = "<root>" +
                 "<value>7</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/patch/creature"
+            def path = "/test/head/creature"
             def url = "$base$path"
-            stubFor(WireMock.put(urlMatching("$path.*"))
+            stubFor(WireMock.head(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(506)
+                .withHeader("Content-Type", "application/xml")
+                .withBody(body)));
+        when: "creating new request and making head request"
+            def response = given().head(url)
+        then: "created response should be decorated"
+            response instanceof ResponseDecorated
+        and: "returned status should be correct"
+            response.then().statusCode(506)
+    }
+
+    def "should be possible to validate response body"() {
+        given: "configured access point"
+            def body = "<root>" +
+                "<value>7</value>" +
+                "</root>"
+            def base = "http://localhost:${wire.port()}"
+            def path = "/test/head/creature"
+            def url = "$base$path"
+            stubFor(WireMock.head(urlMatching("$path.*"))
+                .withRequestBody(matching(".*"))
+                .willReturn(aResponse()
+                .withStatus(856)
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
         when: "creating expectation"
             def expectation = expect().
-                statusCode(506).
-                body(Matchers.equalTo(body))
-        and: "executing expectation"
-            def response = expectation.when().put(url);
-        then: "created response should be decorated"
-            response instanceof ResponseDecorated
-    }
-
-    def "should return wrapped response during PUT by URL called from expectation with parameters"() {
-        given: "configured access point"
-            def body = "<root>" +
-                "<value>7</value>" +
-                "</root>"
-            def base = "http://localhost:${wire.port()}"
-            def path = "/test/patch/creature"
-            def url = "$base$path"
-            stubFor(WireMock.put(urlMatching("$path.*"))
-                .withRequestBody(matching(".*"))
-                .willReturn(aResponse()
-                .withStatus(506)
-                .withHeader("Content-Type", "application/xml")
-                .withBody(body)));
-        when: "executing expectation"
-            def response = given().
-                param("x", "y").
-                expect().
-                statusCode(506).
-                body(Matchers.equalTo(body)).
-                when().
-                put(url);
-        then: "created response should be decorated"
-            response instanceof ResponseDecorated
+                statusCode(856).header("Content-Type",
+                Matchers.equalTo("application/xml"))
+                .body(Matchers.isEmptyOrNullString())
+        then: "validation of expectation should be correct"
+            expectation.when().head(url);
     }
 }

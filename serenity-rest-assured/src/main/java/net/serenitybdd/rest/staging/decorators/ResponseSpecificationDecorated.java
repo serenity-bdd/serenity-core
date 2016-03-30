@@ -262,7 +262,7 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
 
     @Override
     public ResponseSpecification response() {
-        return core.response();
+        return this;
     }
 
     @Override
@@ -518,7 +518,7 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
 
     public void setRequestSpecification(final RequestSpecification specification) {
         try {
-            this.helper.setValueTo("requestSpecification", specification);
+            this.helper.setValueTo("requestSpecification", decorate(specification));
         } catch (Exception e) {
             throw new IllegalStateException
                     ("Can not set specification to response, SerenityRest can work incorrectly");

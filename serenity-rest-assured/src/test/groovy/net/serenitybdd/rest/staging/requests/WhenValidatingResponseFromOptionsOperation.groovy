@@ -1,4 +1,4 @@
-package net.serenitybdd.rest.staging
+package net.serenitybdd.rest.staging.requests
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
@@ -17,10 +17,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching
 
 /**
  * User: YamStranger
- * Date: 3/14/16
+ * Date: 3/30/16
  * Time: 9:57 AM
  */
-class WhenValidatingResponseFromPostOperation extends Specification {
+class WhenValidatingResponseFromOptionsOperation extends Specification {
 
     @Rule
     def WireMockRule wire = new WireMockRule(0);
@@ -39,16 +39,16 @@ class WhenValidatingResponseFromPostOperation extends Specification {
                 "<value>7</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/post/creature"
+            def path = "/test/options/creature"
             def url = "$base$path"
-            stubFor(WireMock.post(urlMatching("$path.*"))
+            stubFor(WireMock.options(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(506)
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
-        when: "creating new request and making post request"
-            def response = given().post(url)
+        when: "creating new request and making options request"
+            def response = given().options(url)
         then: "created response should be decorated"
             response instanceof ResponseDecorated
         and: "returned status should be correct"
@@ -61,9 +61,9 @@ class WhenValidatingResponseFromPostOperation extends Specification {
                 "<value>7</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/post/creature"
+            def path = "/test/options/creature"
             def url = "$base$path"
-            stubFor(WireMock.post(urlMatching("$path.*"))
+            stubFor(WireMock.options(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(856)
@@ -74,6 +74,6 @@ class WhenValidatingResponseFromPostOperation extends Specification {
                 statusCode(856).
                 body(Matchers.equalTo(body))
         then: "validation of expectation should be correct"
-            expectation.when().post(url);
+            expectation.when().options(url);
     }
 }

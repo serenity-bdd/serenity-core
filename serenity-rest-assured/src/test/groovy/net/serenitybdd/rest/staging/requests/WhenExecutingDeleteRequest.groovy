@@ -1,4 +1,4 @@
-package net.serenitybdd.rest.staging
+package net.serenitybdd.rest.staging.requests
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
@@ -18,12 +18,13 @@ import static com.github.tomakehurst.wiremock.client.WireMock.matching
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching
 
+
 /**
  * User: YamStranger
- * Date: 3/14/16
+ * Date: 3/30/16
  * Time: 9:57 AM
  */
-class WhenExecutingPutRequest extends Specification {
+class WhenExecutingDeleteRequest extends Specification {
 
     @Rule
     def WireMockRule wire = new WireMockRule(0);
@@ -44,9 +45,9 @@ class WhenExecutingPutRequest extends Specification {
                 "<value>1</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/put/levels"
+            def path = "/test/delete/levels"
             def url = "$base$path"
-            stubFor(WireMock.put(urlMatching(path))
+            stubFor(WireMock.delete(urlMatching(path))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(200)
@@ -54,137 +55,137 @@ class WhenExecutingPutRequest extends Specification {
                 .withBody(body)));
         when: "creating new request and making request"
             def RequestSender sender = given(request, response)
-            def generated = sender.put(url)
+            def generated = sender.delete(url)
         then: "created response should be decorated"
             generated instanceof ResponseDecorated
     }
 
-    def "should return wrapped response during PUT by URL called from request"() {
+    def "should return wrapped response during DELETE by URL called from request"() {
         given: "configured access point"
             def body = "<root>" +
                 "<value>2</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/put/keyboard"
+            def path = "/test/delete/keyboard"
             def url = "$base$path"
-            stubFor(WireMock.put(urlMatching(path))
+            stubFor(WireMock.delete(urlMatching(path))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(256)
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
-        when: "creating new request and making put request"
-            def response = given().put(url)
+        when: "creating new request and making delete request"
+            def response = given().delete(url)
         then: "created response should be decorated"
             response instanceof ResponseDecorated
         and: "returned status should be correct"
             response.then().statusCode(256)
     }
 
-    def "should return wrapped response during PUT by URL with MAP parameters called from request"() {
+    def "should return wrapped response during DELETE by URL with MAP parameters called from request"() {
         given: "configured access point"
             def body = "<root>" +
                 "<value>3</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/put/house"
+            def path = "/test/delete/house"
             def url = "$base$path"
-            stubFor(WireMock.put(urlMatching("$path.*"))
+            stubFor(WireMock.delete(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(700)
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
-        when: "creating new request and making put request"
-            def response = given().put("$url?status={status}", ["status": "available"])
+        when: "creating new request and making delete request"
+            def response = given().delete("$url?status={status}", ["status": "available"])
         then: "created response should be decorated"
             response instanceof ResponseDecorated
         and: "returned status should be correct"
             response.then().statusCode(700)
     }
 
-    def "should return wrapped response during PUT by URL with array parameters called from request"() {
+    def "should return wrapped response during DELETE by URL with array parameters called from request"() {
         given: "configured access point"
             def body = "<root>" +
                 "<value>4</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/put/pet"
+            def path = "/test/delete/pet"
             def url = "$base$path"
-            stubFor(WireMock.put(urlMatching("$path.*"))
+            stubFor(WireMock.delete(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(845)
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
-        when: "creating new request and making put request"
-            def response = given().put("$url?status={status}", "available")
+        when: "creating new request and making delete request"
+            def response = given().delete("$url?status={status}", "available")
         then: "created response should be decorated"
             response instanceof ResponseDecorated
         and: "returned status should be correct"
             response.then().statusCode(845)
     }
 
-    def "should return wrapped response during PUT by URL called from response"() {
+    def "should return wrapped response during DELETE by URL called from response"() {
         given: "configured access point"
             def body = "<root>" +
                 "<value>5</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/put/child"
+            def path = "/test/delete/child"
             def url = "$base$path"
-            stubFor(WireMock.put(urlMatching(path))
+            stubFor(WireMock.delete(urlMatching(path))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(945)
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
-        when: "creating new request and making put request"
-            def response = expect().put(url)
+        when: "creating new request and making delete request"
+            def response = expect().delete(url)
         then: "created response should be decorated"
             response instanceof ResponseDecorated
         and: "returned status should be correct"
             response.then().statusCode(945)
     }
 
-    def "should return wrapped response during PUT by URL with MAP parameters called from response"() {
+    def "should return wrapped response during DELETE by URL with MAP parameters called from response"() {
         given: "configured access point"
             def body = "<root>" +
                 "<value>6</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/put/book"
+            def path = "/test/delete/book"
             def url = "$base$path"
-            stubFor(WireMock.put(urlMatching("$path.*"))
+            stubFor(WireMock.delete(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(203)
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
-        when: "creating new request and making put request"
-            def response = expect().put("$url?status={status}", ["status": "available"])
+        when: "creating new request and making delete request"
+            def response = expect().delete("$url?status={status}", ["status": "available"])
         then: "created response should be decorated"
             response instanceof ResponseDecorated
         and: "returned status should be correct"
             response.then().statusCode(203)
     }
 
-    def "should return wrapped response during PUT by URL with array parameters called from response"() {
+    def "should return wrapped response during DELETE by URL with array parameters called from response"() {
         given: "configured access point"
             def body = "<root>" +
                 "<value>7</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/put/creature"
+            def path = "/test/delete/creature"
             def url = "$base$path"
-            stubFor(WireMock.put(urlMatching("$path.*"))
+            stubFor(WireMock.delete(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(506)
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
-        when: "creating new request and making put request"
-            def response = expect().put("$url?status={status}", "available")
+        when: "creating new request and making delete request"
+            def response = expect().delete("$url?status={status}", "available")
         then: "created response should be decorated"
             response instanceof ResponseDecorated
         and: "returned status should be correct"

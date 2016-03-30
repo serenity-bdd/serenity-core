@@ -1,4 +1,4 @@
-package net.serenitybdd.rest.staging
+package net.serenitybdd.rest.staging.requests
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
@@ -20,7 +20,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching
 
 /**
  * User: YamStranger
- * Date: 3/14/16
+ * Date: 3/30/16
  * Time: 9:57 AM
  */
 class WhenExecutingOptionsRequest extends Specification {

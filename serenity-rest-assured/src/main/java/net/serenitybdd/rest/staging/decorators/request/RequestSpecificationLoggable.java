@@ -1,8 +1,12 @@
 package net.serenitybdd.rest.staging.decorators.request;
 
+import com.jayway.restassured.internal.RequestLogSpecificationImpl;
 import com.jayway.restassured.internal.RequestSpecificationImpl;
+import com.jayway.restassured.internal.log.LogRepository;
+import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.FilterableRequestSpecification;
 import com.jayway.restassured.specification.RequestLogSpecification;
+import net.serenitybdd.rest.staging.decorators.ReflectionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +25,24 @@ abstract class RequestSpecificationLoggable extends RequestSpecificationRedirect
 
     @Override
     public RequestLogSpecification log() {
-        return core.log();
+        final RequestLogSpecificationImpl specification = new RequestLogSpecificationImpl();
+        final ReflectionHelper<RequestLogSpecificationImpl> logHelper = new ReflectionHelper<>(specification);
+        try {
+            logHelper.setValueTo("requestSpecification", this);
+            logHelper.setValueTo("logRepository", logRepository());
+        } catch (Exception e) {
+            throw new IllegalStateException
+                    ("Can not set requestSpecification or logRepository to RequestLogSpecificationImpl, SerenityRest can work incorrectly");
+        }
+        return specification;
+    }
+
+    protected LogRepository logRepository() {
+        try {
+            return (LogRepository) this.helper.getValueFrom("logRepository");
+        } catch (Exception e) {
+            throw new IllegalStateException
+                    ("Can not get logRepository from request, SerenityRest can work incorrectly");
+        }
     }
 }

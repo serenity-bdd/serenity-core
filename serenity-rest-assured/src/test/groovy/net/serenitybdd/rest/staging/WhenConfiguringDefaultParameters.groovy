@@ -32,18 +32,15 @@ import static com.github.tomakehurst.wiremock.client.WireMock.matching
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching
 
+import static net.serenitybdd.rest.staging.SerenityRest.*
+import static net.serenitybdd.rest.staging.SerenityRest.getDefaultProxy
+import static net.serenitybdd.rest.staging.SerenityRest.setDefaultResponseSpecification;
 
 /**
  * User: YamStranger
  * Date: 3/14/16
  * Time: 9:57 AM
  */
-
-import static net.serenitybdd.rest.staging.SerenityRest.*
-import static net.serenitybdd.rest.staging.SerenityRest.getDefaultProxy
-import static net.serenitybdd.rest.staging.SerenityRest.setDefaultResponseSpecification;
-
-
 class WhenConfiguringDefaultParameters extends Specification {
 
     @Rule

@@ -1,4 +1,4 @@
-package net.serenitybdd.rest.staging
+package net.serenitybdd.rest.staging.requests
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
@@ -17,10 +17,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching
 
 /**
  * User: YamStranger
- * Date: 3/14/16
+ * Date: 3/30/16
  * Time: 9:57 AM
  */
-class WhenValidatingResponseFromHeadOperation extends Specification {
+class WhenValidatingResponseFromPutOperation extends Specification {
 
     @Rule
     def WireMockRule wire = new WireMockRule(0);
@@ -39,16 +39,16 @@ class WhenValidatingResponseFromHeadOperation extends Specification {
                 "<value>7</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/head/creature"
+            def path = "/test/pust/creature"
             def url = "$base$path"
-            stubFor(WireMock.head(urlMatching("$path.*"))
+            stubFor(WireMock.put(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(506)
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
-        when: "creating new request and making head request"
-            def response = given().head(url)
+        when: "creating new request and making put request"
+            def response = given().put(url)
         then: "created response should be decorated"
             response instanceof ResponseDecorated
         and: "returned status should be correct"
@@ -61,9 +61,9 @@ class WhenValidatingResponseFromHeadOperation extends Specification {
                 "<value>7</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/head/creature"
+            def path = "/test/pust/creature"
             def url = "$base$path"
-            stubFor(WireMock.head(urlMatching("$path.*"))
+            stubFor(WireMock.put(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(856)
@@ -71,10 +71,9 @@ class WhenValidatingResponseFromHeadOperation extends Specification {
                 .withBody(body)));
         when: "creating expectation"
             def expectation = expect().
-                statusCode(856).header("Content-Type",
-                Matchers.equalTo("application/xml"))
-                .body(Matchers.isEmptyOrNullString())
+                statusCode(856).
+                body(Matchers.equalTo(body))
         then: "validation of expectation should be correct"
-            expectation.when().head(url);
+            expectation.when().put(url);
     }
 }

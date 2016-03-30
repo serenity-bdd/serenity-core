@@ -1,4 +1,4 @@
-package net.serenitybdd.rest.staging
+package net.serenitybdd.rest.staging.requests
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
@@ -17,10 +17,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching
 
 /**
  * User: YamStranger
- * Date: 3/14/16
+ * Date: 3/30/16
  * Time: 9:57 AM
  */
-class WhenExecutingOptionsRequestFromExpectation extends Specification {
+class WhenExecutingPatchRequestFromExpectation extends Specification {
 
     @Rule
     def WireMockRule wire = new WireMockRule(0);
@@ -33,15 +33,15 @@ class WhenExecutingOptionsRequestFromExpectation extends Specification {
         }
     },)
 
-    def "should return wrapped response during OPTIONS by URL called from expectation"() {
+    def "should return wrapped response during PUT by URL called from expectation"() {
         given: "configured access point"
             def body = "<root>" +
                 "<value>7</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/options/creature"
+            def path = "/test/patch/creature"
             def url = "$base$path"
-            stubFor(WireMock.options(urlMatching("$path.*"))
+            stubFor(WireMock.put(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(506)
@@ -52,20 +52,20 @@ class WhenExecutingOptionsRequestFromExpectation extends Specification {
                 statusCode(506).
                 body(Matchers.equalTo(body))
         and: "executing expectation"
-            def response = expectation.when().options(url);
+            def response = expectation.when().put(url);
         then: "created response should be decorated"
             response instanceof ResponseDecorated
     }
 
-    def "should return wrapped response during OPTIONS by URL called from expectation with parameters"() {
+    def "should return wrapped response during PUT by URL called from expectation with parameters"() {
         given: "configured access point"
             def body = "<root>" +
                 "<value>7</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/options/creature"
+            def path = "/test/patch/creature"
             def url = "$base$path"
-            stubFor(WireMock.options(urlMatching("$path.*"))
+            stubFor(WireMock.put(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(506)
@@ -78,7 +78,7 @@ class WhenExecutingOptionsRequestFromExpectation extends Specification {
                 statusCode(506).
                 body(Matchers.equalTo(body)).
                 when().
-                options(url);
+                put(url);
         then: "created response should be decorated"
             response instanceof ResponseDecorated
     }

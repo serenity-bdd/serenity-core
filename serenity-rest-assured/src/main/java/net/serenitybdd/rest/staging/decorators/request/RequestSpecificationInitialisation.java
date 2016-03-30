@@ -1,5 +1,6 @@
 package net.serenitybdd.rest.staging.decorators.request;
 
+import com.jayway.restassured.config.RestAssuredConfig;
 import com.jayway.restassured.internal.RequestSpecificationImpl;
 import com.jayway.restassured.internal.ResponseSpecificationImpl;
 import com.jayway.restassured.response.*;
@@ -67,7 +68,7 @@ abstract class RequestSpecificationInitialisation implements FilterableRequestSp
 
     @Override
     public RequestSpecification request() {
-        return core.request();
+        return this;
     }
 
     @Override
@@ -105,15 +106,38 @@ abstract class RequestSpecificationInitialisation implements FilterableRequestSp
         }
     }
 
+    /**
+     * Method created for using in tests
+     */
     public RequestSpecificationImpl getCore() {
         return ((RequestSpecificationImpl) core);
     }
 
+    /**
+     * Method created for using in groovy (rest assured internals)
+     */
     public void setResponseSpecification(final ResponseSpecification specification) {
         getCore().setResponseSpecification(decorate(specification));
     }
 
+    /**
+     * Method created for using in groovy (rest assured internals)
+     */
     public void setresponseSpecification(final ResponseSpecification specification) {
         setResponseSpecification(specification);
+    }
+
+    /**
+     * Method created for using in groovy (rest assured internals)
+     */
+    public RestAssuredConfig getRestAssuredConfig() {
+        return getCore().getConfig();
+    }
+
+    /**
+     * Method created for using in groovy (rest assured internals)
+     */
+    public RestAssuredConfig getrestAssuredConfig() {
+        return getRestAssuredConfig();
     }
 }

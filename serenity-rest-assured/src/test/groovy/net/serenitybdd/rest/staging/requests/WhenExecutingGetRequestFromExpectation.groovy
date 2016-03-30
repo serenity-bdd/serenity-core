@@ -1,4 +1,4 @@
-package net.serenitybdd.rest.staging
+package net.serenitybdd.rest.staging.requests
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
@@ -17,10 +17,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching
 
 /**
  * User: YamStranger
- * Date: 3/14/16
+ * Date: 3/30/16
  * Time: 9:57 AM
  */
-class WhenValidatingResponseFromOptionsOperation extends Specification {
+class WhenExecutingGetRequestFromExpectation extends Specification {
 
     @Rule
     def WireMockRule wire = new WireMockRule(0);
@@ -33,47 +33,53 @@ class WhenValidatingResponseFromOptionsOperation extends Specification {
         }
     },)
 
-    def "should be possible to validate status code"() {
+    def "should return wrapped response during GET by URL called from expectation"() {
         given: "configured access point"
             def body = "<root>" +
                 "<value>7</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/options/creature"
+            def path = "/test/get/creature"
             def url = "$base$path"
-            stubFor(WireMock.options(urlMatching("$path.*"))
+            stubFor(WireMock.get(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(506)
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
-        when: "creating new request and making options request"
-            def response = given().options(url)
+        when: "creating expectation"
+            def expectation = expect().
+                statusCode(506).
+                body(Matchers.equalTo(body))
+        and: "executing expectation"
+            def response = expectation.when().get(url);
         then: "created response should be decorated"
             response instanceof ResponseDecorated
-        and: "returned status should be correct"
-            response.then().statusCode(506)
     }
 
-    def "should be possible to validate response body"() {
+    def "should return wrapped response during GET by URL called from expectation with parameters"() {
         given: "configured access point"
             def body = "<root>" +
                 "<value>7</value>" +
                 "</root>"
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/options/creature"
+            def path = "/test/get/creature"
             def url = "$base$path"
-            stubFor(WireMock.options(urlMatching("$path.*"))
+            stubFor(WireMock.get(urlMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
-                .withStatus(856)
+                .withStatus(506)
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
-        when: "creating expectation"
-            def expectation = expect().
-                statusCode(856).
-                body(Matchers.equalTo(body))
-        then: "validation of expectation should be correct"
-            expectation.when().options(url);
+        when: "executing expectation"
+            def response = given().
+                param("x", "y").
+                expect().
+                statusCode(506).
+                body(Matchers.equalTo(body)).
+                when().
+                get(url);
+        then: "created response should be decorated"
+            response instanceof ResponseDecorated
     }
 }

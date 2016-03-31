@@ -1,10 +1,13 @@
 package net.serenitybdd.rest.staging.decorators.request;
 
+import com.jayway.restassured.internal.RedirectSpecificationImpl;
 import com.jayway.restassured.internal.RequestSpecificationImpl;
 import com.jayway.restassured.specification.FilterableRequestSpecification;
 import com.jayway.restassured.specification.RedirectSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * User: YamStranger
@@ -21,6 +24,15 @@ abstract class RequestSpecificationRedirectConfigurations extends RequestSpecifi
 
     @Override
     public RedirectSpecification redirects() {
-        return core.redirects();
+        return new RedirectSpecificationImpl(this, httpClientParams());
+    }
+
+    protected Map<String, Object> httpClientParams() {
+        try {
+            return (Map<String, Object>) this.helper.getValueFrom("httpClientParams");
+        } catch (Exception e) {
+            throw new IllegalStateException
+                    ("Can not get httpClientParams from request, SerenityRest can work incorrectly");
+        }
     }
 }

@@ -512,11 +512,11 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
         }
     }
 
-    public void setrequestSpecification(final RequestSpecification specification) {
+    protected void setrequestSpecification(final RequestSpecification specification) {
         setRequestSpecification(specification);
     }
 
-    public void setRequestSpecification(final RequestSpecification specification) {
+    protected void setRequestSpecification(final RequestSpecification specification) {
         try {
             this.helper.setValueTo("requestSpecification", decorate(specification));
         } catch (Exception e) {
@@ -530,11 +530,11 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
      *
      * @param assertionClosure HamcrestAssertionClosure value that will be set to repose specification
      */
-    public void setassertionClosure(final ResponseSpecificationImpl.HamcrestAssertionClosure assertionClosure) {
+    protected void setassertionClosure(final ResponseSpecificationImpl.HamcrestAssertionClosure assertionClosure) {
         setAssertionClosure(assertionClosure);
     }
 
-    public void setAssertionClosure(final ResponseSpecificationImpl.HamcrestAssertionClosure assertionClosure) {
+    protected void setAssertionClosure(final ResponseSpecificationImpl.HamcrestAssertionClosure assertionClosure) {
         try {
             this.helper.setValueTo("assertionClosure", assertionClosure);
         } catch (Exception e) {
@@ -549,11 +549,11 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
      *
      * @return HamcrestAssertionClosure value of current object
      */
-    public ResponseSpecificationImpl.HamcrestAssertionClosure getassertionClosure() {
+    protected ResponseSpecificationImpl.HamcrestAssertionClosure getassertionClosure() {
         return getAssertionClosure();
     }
 
-    public ResponseSpecificationImpl.HamcrestAssertionClosure getAssertionClosure() {
+    protected ResponseSpecificationImpl.HamcrestAssertionClosure getAssertionClosure() {
         try {
             return (ResponseSpecificationImpl.HamcrestAssertionClosure) this.helper.getValueFrom("assertionClosure");
         } catch (Exception e) {
@@ -567,11 +567,11 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
      *
      * @param restAssuredResponse Response value that will be set to rest assured response
      */
-    public void setrestAssuredResponse(final Response restAssuredResponse) {
+    protected void setrestAssuredResponse(final Response restAssuredResponse) {
         setRestAssuredResponse(restAssuredResponse);
     }
 
-    public void setRestAssuredResponse(final Response restAssuredResponse) {
+    protected void setRestAssuredResponse(final Response restAssuredResponse) {
         try {
             this.helper.setValueTo("restAssuredResponse", restAssuredResponse);
         } catch (Exception e) {
@@ -585,11 +585,11 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
      *
      * @return HamcrestAssertionClosure value of current object
      */
-    public Response getrestAssuredResponse() {
+    protected Response getrestAssuredResponse() {
         return getRestAssuredResponse();
     }
 
-    public Response getRestAssuredResponse() {
+    protected Response getRestAssuredResponse() {
         try {
             return (Response) this.helper.getValueFrom("restAssuredResponse");
         } catch (Exception e) {

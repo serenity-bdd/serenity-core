@@ -114,30 +114,30 @@ abstract class RequestSpecificationInitialisation implements FilterableRequestSp
     }
 
     /**
-     * Method created for using in groovy (rest assured internals)
+     * Method created for using ONLY in groovy (rest assured internals)
      */
-    public void setResponseSpecification(final ResponseSpecification specification) {
+    protected void setResponseSpecification(final ResponseSpecification specification) {
         getCore().setResponseSpecification(decorate(specification));
     }
 
     /**
-     * Method created for using in groovy (rest assured internals)
+     * Method created for using ONLY in groovy (rest assured internals)
      */
-    public void setresponseSpecification(final ResponseSpecification specification) {
+    protected void setresponseSpecification(final ResponseSpecification specification) {
         setResponseSpecification(specification);
     }
 
     /**
-     * Method created for using in groovy (rest assured internals)
+     * Method created for using ONLY in groovy (rest assured internals)
      */
-    public RestAssuredConfig getRestAssuredConfig() {
+    protected RestAssuredConfig getRestAssuredConfig() {
         return getCore().getConfig();
     }
 
     /**
-     * Method created for using in groovy (rest assured internals)
+     * Method created for using ONLY in groovy (rest assured internals)
      */
-    public RestAssuredConfig getrestAssuredConfig() {
+    protected RestAssuredConfig getrestAssuredConfig() {
         return getRestAssuredConfig();
     }
 }

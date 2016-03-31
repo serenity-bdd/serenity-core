@@ -14,7 +14,7 @@ import java.net.URI;
  * Date: 3/16/16
  * Time: 2:08 PM
  */
-abstract class RequestSpecificationProxyConfigurations extends RequestSpecificationConfigurable
+abstract class RequestSpecificationProxyConfigurations extends RequestSpecificationFiltersConfigurations
         implements FilterableRequestSpecification {
     private static final Logger log = LoggerFactory.getLogger(RequestSpecificationProxyConfigurations.class);
 

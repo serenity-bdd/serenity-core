@@ -1,7 +1,10 @@
 package net.serenitybdd.rest.staging.decorators.request;
 
 import com.jayway.restassured.authentication.AuthenticationScheme;
+import com.jayway.restassured.config.RestAssuredConfig;
+import com.jayway.restassured.internal.AuthenticationSpecificationImpl;
 import com.jayway.restassured.internal.RequestSpecificationImpl;
+import com.jayway.restassured.internal.log.LogRepository;
 import com.jayway.restassured.specification.AuthenticationSpecification;
 import com.jayway.restassured.specification.FilterableRequestSpecification;
 import com.jayway.restassured.specification.RequestSpecification;
@@ -26,41 +29,64 @@ abstract class RequestSpecificationSecurityConfigurations extends RequestSpecifi
 
     @Override
     public RequestSpecification keystore(String pathToJks, String password) {
-        return core.keystore(pathToJks, password);
+        core.keystore(pathToJks, password);
+        return this;
     }
 
     @Override
     public RequestSpecification keystore(File pathToJks, String password) {
-        return core.keystore(pathToJks, password);
+        core.keystore(pathToJks, password);
+        return this;
     }
 
     @Override
     public RequestSpecification trustStore(KeyStore trustStore) {
-        return core.trustStore(trustStore);
+        core.trustStore(trustStore);
+        return this;
     }
 
     @Override
     public RequestSpecification relaxedHTTPSValidation() {
-        return core.relaxedHTTPSValidation();
+        return relaxedHTTPSValidation(RequestSpecificationImpl.SSL);
     }
 
     @Override
     public RequestSpecification relaxedHTTPSValidation(String protocol) {
-        return core.relaxedHTTPSValidation(protocol);
+        core.relaxedHTTPSValidation(protocol);
+        return this;
     }
 
     @Override
     public AuthenticationSpecification authentication() {
-        return core.authentication();
+        return new AuthenticationSpecificationImpl(this);
     }
 
     @Override
     public AuthenticationSpecification auth() {
-        return core.auth();
+        return authentication();
     }
 
     @Override
     public AuthenticationScheme getAuthenticationScheme() {
         return core.getAuthenticationScheme();
+    }
+
+    /**
+     * Method created ONLY for using in groovy (rest assured internals)
+     */
+    protected void setAuthenticationScheme(final AuthenticationScheme scheme) {
+        try {
+            this.helper.setValueTo("authenticationScheme", scheme);
+        } catch (Exception e) {
+            throw new IllegalStateException
+                    ("Can not set authenticationScheme from request, SerenityRest can work incorrectly");
+        }
+    }
+
+    /**
+     * Method created ONLY for using in groovy (rest assured internals)
+     */
+    protected RestAssuredConfig setauthenticationScheme() {
+        return getRestAssuredConfig();
     }
 }

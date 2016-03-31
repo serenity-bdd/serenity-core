@@ -75,36 +75,6 @@ abstract class RequestSpecificationConfigurable extends RequestSpecificationInit
     }
 
     @Override
-    public RequestSpecification filter(Filter filter) {
-        return core.filter(filter);
-    }
-
-    @Override
-    public RequestSpecification filters(List<Filter> filters) {
-        return core.filters(filters);
-    }
-
-    @Override
-    public RequestSpecification filters(Filter filter, Filter... additionalFilter) {
-        return core.filters(filter, additionalFilter);
-    }
-
-    @Override
-    public RequestSpecification noFilters() {
-        return core.noFilters();
-    }
-
-    @Override
-    public List<Filter> getDefinedFilters() {
-        return core.getDefinedFilters();
-    }
-
-    @Override
-    public <T extends Filter> RequestSpecification noFiltersOfType(Class<T> filterType) {
-        return core.noFiltersOfType(filterType);
-    }
-
-    @Override
     public RequestSpecification port(int port) {
         return core.port(port);
     }

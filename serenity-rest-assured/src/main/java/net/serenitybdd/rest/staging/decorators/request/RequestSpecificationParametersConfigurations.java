@@ -1,6 +1,9 @@
 package net.serenitybdd.rest.staging.decorators.request;
 
+import com.jayway.restassured.internal.MapCreator;
 import com.jayway.restassured.internal.RequestSpecificationImpl;
+import com.jayway.restassured.internal.log.LogRepository;
+import com.jayway.restassured.internal.support.ParameterAppender;
 import com.jayway.restassured.specification.FilterableRequestSpecification;
 import com.jayway.restassured.specification.RequestSpecification;
 import org.slf4j.Logger;
@@ -8,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Map;
+
+import static com.jayway.restassured.internal.assertion.AssertParameter.notNull;
 
 /**
  * User: YamStranger
@@ -24,152 +29,172 @@ abstract class RequestSpecificationParametersConfigurations extends RequestSpeci
 
     @Override
     public RequestSpecification parameters(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
-        return core.parameters(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        notNull(firstParameterName, "firstParameterName");
+        notNull(firstParameterValue, "firstParameterValue");
+        return parameters(MapCreator.createMapFromParams(firstParameterName, firstParameterValue, parameterNameValuePairs));
     }
 
     @Override
     public RequestSpecification parameters(Map<String, ?> parametersMap) {
-        return core.parameters(parametersMap);
+        core.parameters(parametersMap);
+        return this;
     }
 
     @Override
     public RequestSpecification parameter(String parameterName, Object... parameterValues) {
-        return core.parameter(parameterName, parameterValues);
+        core.parameter(parameterName, parameterValues);
+        return this;
     }
 
     @Override
     public RequestSpecification parameter(String parameterName, Collection<?> parameterValues) {
-        return core.parameter(parameterName, parameterValues);
+        core.parameter(parameterName, parameterValues);
+        return this;
     }
 
     @Override
     public RequestSpecification params(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
-        return core.params(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        return parameters(firstParameterName, firstParameterValue, parameterNameValuePairs);
     }
 
     @Override
     public RequestSpecification params(Map<String, ?> parametersMap) {
-        return core.params(parametersMap);
+        return parameters(parametersMap);
     }
 
     @Override
     public RequestSpecification param(String parameterName, Object... parameterValues) {
-        return core.param(parameterName, parameterValues);
+        return parameters(parameterName, parameterValues);
     }
 
     @Override
     public RequestSpecification param(String parameterName, Collection<?> parameterValues) {
-        return core.param(parameterName, parameterValues);
+        return parameters(parameterName, parameterValues);
     }
 
     @Override
     public RequestSpecification queryParameters(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
-        return core.queryParameters(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        notNull(firstParameterName, "firstParameterName");
+        notNull(firstParameterValue, "firstParameterValue");
+        return queryParameters(MapCreator.createMapFromParams(firstParameterName, firstParameterValue, parameterNameValuePairs));
     }
 
     @Override
     public RequestSpecification queryParameters(Map<String, ?> parametersMap) {
-        return core.queryParameters(parametersMap);
+        core.queryParameters(parametersMap);
+        return this;
     }
 
     @Override
     public RequestSpecification queryParameter(String parameterName, Object... parameterValues) {
-        return core.queryParameter(parameterName, parameterValues);
+        core.queryParameter(parameterName, parameterValues);
+        return this;
     }
 
     @Override
     public RequestSpecification queryParameter(String parameterName, Collection<?> parameterValues) {
-        return core.queryParameter(parameterName, parameterValues);
+        core.queryParameter(parameterName, parameterValues);
+        return this;
+
     }
 
     @Override
     public RequestSpecification queryParams(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
-        return core.queryParams(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        return queryParameters(firstParameterName, firstParameterValue, parameterNameValuePairs);
     }
 
     @Override
     public RequestSpecification queryParams(Map<String, ?> parametersMap) {
-        return core.queryParams(parametersMap);
+        return queryParameters(parametersMap);
     }
 
     @Override
     public RequestSpecification queryParam(String parameterName, Object... parameterValues) {
-        return core.queryParam(parameterName, parameterValues);
+        return queryParameters(parameterName, parameterValues);
     }
 
     @Override
     public RequestSpecification queryParam(String parameterName, Collection<?> parameterValues) {
-        return core.queryParam(parameterName, parameterValues);
+        return queryParameters(parameterName, parameterValues);
     }
 
     @Override
     public RequestSpecification formParameters(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
-        return core.formParameters(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        notNull(firstParameterName, "firstParameterName");
+        notNull(firstParameterValue, "firstParameterValue");
+        return formParameters(MapCreator.createMapFromParams(firstParameterName, firstParameterValue, parameterNameValuePairs));
     }
 
     @Override
     public RequestSpecification formParameters(Map<String, ?> parametersMap) {
-        return core.formParameters(parametersMap);
+        core.formParameters(parametersMap);
+        return this;
     }
 
     @Override
     public RequestSpecification formParameter(String parameterName, Object... parameterValues) {
-        return core.formParameter(parameterName, parameterValues);
+        core.formParameter(parameterName, parameterValues);
+        return this;
     }
 
     @Override
     public RequestSpecification formParameter(String parameterName, Collection<?> parameterValues) {
-        return core.formParameter(parameterName, parameterValues);
+        core.formParameter(parameterName, parameterValues);
+        return this;
     }
 
     @Override
     public RequestSpecification formParams(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
-        return core.formParams(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        return formParameters(firstParameterName, firstParameterValue, parameterNameValuePairs);
     }
 
     @Override
     public RequestSpecification formParams(Map<String, ?> parametersMap) {
-        return core.formParams(parametersMap);
+        return formParameters(parametersMap);
     }
 
     @Override
     public RequestSpecification formParam(String parameterName, Object... parameterValues) {
-        return core.formParam(parameterName, parameterValues);
+        return formParameter(parameterName, parameterValues);
     }
 
     @Override
     public RequestSpecification formParam(String parameterName, Collection<?> parameterValues) {
-        return core.formParam(parameterName, parameterValues);
+        return formParameter(parameterName, parameterValues);
     }
 
     @Override
     public RequestSpecification pathParameter(String parameterName, Object parameterValue) {
-        return core.pathParameter(parameterName, parameterValue);
+        core.pathParameter(parameterName, parameterValue);
+        return this;
     }
 
     @Override
     public RequestSpecification pathParameters(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
-        return core.pathParameters(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        notNull(firstParameterName, "firstParameterName");
+        notNull(firstParameterValue, "firstParameterValue");
+        return pathParameters(MapCreator.createMapFromParams(firstParameterName, firstParameterValue, parameterNameValuePairs));
     }
 
     @Override
     public RequestSpecification pathParameters(Map<String, ?> parameterNameValuePairs) {
-        return core.pathParameters(parameterNameValuePairs);
+        core.pathParameters(parameterNameValuePairs);
+        return this;
     }
 
     @Override
     public RequestSpecification pathParam(String parameterName, Object parameterValue) {
-        return core.pathParam(parameterName, parameterValue);
+        return pathParameter(parameterName, parameterValue);
     }
 
     @Override
     public RequestSpecification pathParams(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
-        return core.pathParams(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        return pathParameters(firstParameterName, firstParameterValue, parameterNameValuePairs);
     }
 
     @Override
     public RequestSpecification pathParams(Map<String, ?> parameterNameValuePairs) {
-        return core.pathParams(parameterNameValuePairs);
+        return pathParameters(parameterNameValuePairs);
     }
 
     @Override

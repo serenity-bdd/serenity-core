@@ -1,6 +1,7 @@
 package net.serenitybdd.rest.staging.decorators.request;
 
 import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.internal.MapCreator;
 import com.jayway.restassured.internal.RequestSpecificationImpl;
 import com.jayway.restassured.response.Header;
 import com.jayway.restassured.response.Headers;
@@ -42,7 +43,7 @@ abstract class RequestSpecificationHeaderConfigurations extends RequestSpecifica
 
     @Override
     public RequestSpecification headers(String firstHeaderName, Object firstHeaderValue, Object... headerNameValuePairs) {
-        return headers(createMapFromObjects(firstHeaderName, firstHeaderValue, headerNameValuePairs));
+        return headers(MapCreator.createMapFromParams(firstHeaderName, firstHeaderValue, headerNameValuePairs));
     }
 
     @Override
@@ -87,19 +88,5 @@ abstract class RequestSpecificationHeaderConfigurations extends RequestSpecifica
     public RequestSpecification accept(String mediaTypes) {
         notNull(mediaTypes, "Accept header media range");
         return header(ACCEPT.asString(), mediaTypes);
-    }
-
-    private Map<String, Object> createMapFromObjects(Object... parameters) {
-        if (parameters == null || parameters.length < 2) {
-            throw new IllegalArgumentException("You must supply at least one key and one value.");
-        } else if (parameters.length % 2 != 0) {
-            throw new IllegalArgumentException("You must supply the same number of keys as values.");
-        }
-
-        Map<String, Object> map = new LinkedHashMap<String, Object>();
-        for (int i = 0; i < parameters.length; i += 2) {
-            map.put(String.valueOf(parameters[i]), parameters[i + 1]);
-        }
-        return map;
     }
 }

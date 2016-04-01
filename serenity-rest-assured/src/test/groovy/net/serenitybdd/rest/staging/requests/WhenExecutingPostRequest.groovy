@@ -2,16 +2,23 @@ package net.serenitybdd.rest.staging.requests
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
 import com.jayway.restassured.RestAssured
 import com.jayway.restassured.specification.RequestSender
 import com.jayway.restassured.specification.RequestSpecification
 import com.jayway.restassured.specification.ResponseSpecification
+import net.serenitybdd.core.rest.RestQuery
 import net.serenitybdd.rest.staging.decorators.ResponseDecorated
 import net.serenitybdd.rest.staging.rules.RestConfigurationAction
 import net.serenitybdd.rest.staging.rules.RestConfigurationRule
 import org.junit.Rule
 import spock.lang.Specification
 
+import static com.github.tomakehurst.wiremock.client.WireMock.post
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import static net.serenitybdd.rest.staging.SerenityRest.*
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.matching
@@ -35,6 +42,9 @@ class WhenExecutingPostRequest extends Specification {
             reset()
         }
     },)
+
+    def Gson gson = new GsonBuilder().setPrettyPrinting().
+        serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
 
     def "should use wrapped request and response if they initialised separately"() {
         given: "initialised Request and Response and access point"
@@ -189,5 +199,30 @@ class WhenExecutingPostRequest extends Specification {
             response instanceof ResponseDecorated
         and: "returned status should be correct"
             response.then().statusCode(506)
+    }
+
+    def "should work properly after executing setting content type and body"() {
+        given:
+            def JsonObject json = new JsonObject()
+            json.addProperty("Title", "King")
+            json.addProperty("Salary", "100")
+            def body = gson.toJson(json)
+
+            def base = "http://localhost:${wire.port()}"
+            def path = "/test/resource"
+            def url = "$base$path"
+
+            stubFor(post(urlEqualTo(path))
+                .withRequestBody(matching(".*"))
+                .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(body)));
+        when:
+            def result = given().contentType("application/json").content(body).post(url)
+        then: "created response should be decorated"
+            result instanceof ResponseDecorated
+        and: "returned status should be correct"
+            result.then().statusCode(200)
     }
 }

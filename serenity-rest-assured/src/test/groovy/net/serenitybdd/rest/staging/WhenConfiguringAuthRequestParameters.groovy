@@ -69,7 +69,7 @@ class WhenConfiguringAuthRequestParameters extends Specification {
             responseAfterLog == request
     }
 
-    def "should be returned wrapped request after authentication-none configuration and executing request"() {
+    def "should be returned wrapped response after authentication-none configuration and executing request"() {
         given: "rest with default config updated"
             def body = "<root>" +
                 "<value>1</value>" +

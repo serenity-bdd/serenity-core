@@ -16,7 +16,7 @@ import java.util.List;
  * Date: 3/16/16
  * Time: 2:08 PM
  */
-abstract class RequestSpecificationMultiPartConfigurations extends RequestSpecificationContentConfigurations
+abstract class RequestSpecificationMultiPartConfigurations extends RequestSpecificationParametersConfigurations
         implements FilterableRequestSpecification {
     private static final Logger log = LoggerFactory.getLogger(RequestSpecificationMultiPartConfigurations.class);
 

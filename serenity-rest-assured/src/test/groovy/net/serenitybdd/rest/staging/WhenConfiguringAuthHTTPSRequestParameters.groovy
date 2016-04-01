@@ -42,7 +42,7 @@ class WhenConfiguringAuthHTTPSRequestParameters extends Specification {
     def Gson gson = new GsonBuilder().setPrettyPrinting().
         serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
 
-    def "should be returned wrapped request after relaxedHTTPSValidation configuration and executing request"() {
+    def "should be returned wrapped response after relaxedHTTPSValidation configuration and executing request"() {
         given: "rest with default config updated"
             def JsonObject json = new JsonObject()
             json.addProperty("Size", "Huge")

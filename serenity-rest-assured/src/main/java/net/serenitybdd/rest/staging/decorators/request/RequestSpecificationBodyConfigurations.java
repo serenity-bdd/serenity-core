@@ -1,15 +1,20 @@
 package net.serenitybdd.rest.staging.decorators.request;
 
+import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.internal.RequestSpecificationImpl;
 import com.jayway.restassured.internal.mapper.ObjectMapperType;
 import com.jayway.restassured.mapper.ObjectMapper;
 import com.jayway.restassured.specification.FilterableRequestSpecification;
 import com.jayway.restassured.specification.RequestSpecification;
+import net.serenitybdd.rest.staging.HeaderNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.InputStream;
+
+import static com.jayway.restassured.internal.assertion.AssertParameter.notNull;
+import static net.serenitybdd.rest.staging.HeaderNames.*;
 
 /**
  * User: YamStranger
@@ -30,37 +35,92 @@ abstract class RequestSpecificationBodyConfigurations extends RequestSpecificati
     }
 
     @Override
-    public RequestSpecification body(String body) {
-        return core.body(body);
-    }
-
-    @Override
-    public RequestSpecification body(byte[] body) {
-        return core.body(body);
-    }
-
-    @Override
-    public RequestSpecification body(File body) {
-        return core.body(body);
-    }
-
-    @Override
-    public RequestSpecification body(InputStream body) {
-        return core.body(body);
-    }
-
-    @Override
     public RequestSpecification body(Object object) {
-        return core.body(object);
+        core.body(object);
+        return this;
     }
 
     @Override
     public RequestSpecification body(Object object, ObjectMapper mapper) {
-        return core.body(object, mapper);
+        core.body(object, mapper);
+        return this;
     }
 
     @Override
     public RequestSpecification body(Object object, ObjectMapperType mapperType) {
-        return core.body(object, mapperType);
+        core.body(object, mapperType);
+        return this;
+    }
+
+    @Override
+    public String getRequestContentType() {
+        return core.getRequestContentType();
+    }
+
+    @Override
+    public RequestSpecification body(String body) {
+        return body((Object) body);
+    }
+
+    @Override
+    public RequestSpecification body(byte[] body) {
+        return body((Object) body);
+    }
+
+    @Override
+    public RequestSpecification body(File body) {
+        return body((Object) body);
+    }
+
+    @Override
+    public RequestSpecification body(InputStream body) {
+        return body((Object) body);
+    }
+
+    @Override
+    public RequestSpecification content(String content) {
+        return content((Object) content);
+    }
+
+    @Override
+    public RequestSpecification content(byte[] content) {
+        return content((Object) content);
+    }
+
+    @Override
+    public RequestSpecification content(File content) {
+        return content((Object) content);
+    }
+
+    @Override
+    public RequestSpecification content(InputStream content) {
+        return content((Object) content);
+    }
+
+    @Override
+    public RequestSpecification content(Object object) {
+        return body(object);
+    }
+
+    @Override
+    public RequestSpecification content(Object object, ObjectMapperType mapperType) {
+        return body(object, mapperType);
+    }
+
+    @Override
+    public RequestSpecification content(Object object, ObjectMapper mapper) {
+        return body(object, mapper);
+    }
+
+    @Override
+    public RequestSpecification contentType(ContentType contentType) {
+        notNull(contentType, ContentType.class);
+        return header(CONTENT_TYPE.asString(), contentType);
+    }
+
+    @Override
+    public RequestSpecification contentType(String contentType) {
+        notNull(contentType, "Content-Type header cannot be null");
+        return header(CONTENT_TYPE.asString(), contentType);
     }
 }

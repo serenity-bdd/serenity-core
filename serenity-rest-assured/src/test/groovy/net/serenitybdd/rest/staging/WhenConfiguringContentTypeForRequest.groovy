@@ -38,13 +38,15 @@ class WhenConfiguringContentTypeForRequest extends Specification {
     def "should be returned wrapped request specification after setting content type operations"() {
         given: "request initialised"
             def request = (FilterableRequestSpecification) given();
-        when: "logging from request and getting request specification"
+        when: "setting content type and getting request specification"
             def requestAfterLog = request.contentType(ContentType.JSON).request()
-        then: "same request should be returned after log operation"
+        then: "same request should be returned after setting content type"
             requestAfterLog == request
+        and: "correct content type should be returned"
+            request.getRequestContentType().contains(ContentType.JSON.toString())
     }
 
-    def "should be returned wrapped response after log operations and executing request"() {
+    def "should be returned wrapped response after setting content type and executing request"() {
         given: "rest with default config updated"
             def body = "<root>" +
                 "<value>1</value>" +
@@ -61,11 +63,13 @@ class WhenConfiguringContentTypeForRequest extends Specification {
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
             def request = (FilterableRequestSpecification) given();
-        when: "logging from request and executing request"
-            def responseAfterExecutingRequest = request.log().body().request().get(url)
+        when: "setting content type and executing request"
+            def responseAfterExecutingRequest = request.contentType(ContentType.XML).get(url)
         then: "wrapped response should be returned after executing request"
             responseAfterExecutingRequest instanceof ResponseDecorated
         and: "status code returned as expected"
             responseAfterExecutingRequest.then().statusCode(200)
+        and: "correct content type should be returned"
+            request.getRequestContentType().contains(ContentType.XML.toString())
     }
 }

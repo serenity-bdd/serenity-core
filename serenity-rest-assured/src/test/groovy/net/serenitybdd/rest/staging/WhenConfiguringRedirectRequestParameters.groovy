@@ -71,7 +71,7 @@ class WhenConfiguringRedirectRequestParameters extends Specification {
             responseAfterLog instanceof ResponseSpecificationDecorated
     }
 
-    def "should be returned wrapped request after redirects configuration and executing request"() {
+    def "should be returned wrapped response after redirects configuration and executing request"() {
         given: "rest with default config updated"
             def body = "<root>" +
                 "<value>1</value>" +

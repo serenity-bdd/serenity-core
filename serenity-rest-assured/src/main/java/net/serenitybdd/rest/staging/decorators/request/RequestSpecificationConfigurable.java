@@ -1,15 +1,11 @@
 package net.serenitybdd.rest.staging.decorators.request;
 
 import com.jayway.restassured.config.RestAssuredConfig;
-import com.jayway.restassured.filter.Filter;
+import com.jayway.restassured.config.SessionConfig;
 import com.jayway.restassured.internal.RequestSpecificationImpl;
 import com.jayway.restassured.specification.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-
-import static com.jayway.restassured.internal.assertion.AssertParameter.notNull;
 
 /**
  * User: YamStranger
@@ -20,7 +16,7 @@ abstract class RequestSpecificationConfigurable extends RequestSpecificationInit
         implements FilterableRequestSpecification {
     private static final Logger log = LoggerFactory.getLogger(RequestSpecificationConfigurable.class);
 
-    public RequestSpecificationConfigurable(RequestSpecificationImpl core) {
+    public RequestSpecificationConfigurable(final RequestSpecificationImpl core) {
         super(core);
     }
 
@@ -30,8 +26,9 @@ abstract class RequestSpecificationConfigurable extends RequestSpecificationInit
     }
 
     @Override
-    public RequestSpecification config(RestAssuredConfig config) {
-        return core.config(config);
+    public RequestSpecification config(final RestAssuredConfig config) {
+        core.config(config);
+        return this;
     }
 
     @Override
@@ -40,8 +37,9 @@ abstract class RequestSpecificationConfigurable extends RequestSpecificationInit
     }
 
     @Override
-    public RequestSpecification baseUri(String baseUri) {
-        return core.baseUri(baseUri);
+    public RequestSpecification baseUri(final String baseUri) {
+        core.baseUri(baseUri);
+        return this;
     }
 
     @Override
@@ -50,8 +48,9 @@ abstract class RequestSpecificationConfigurable extends RequestSpecificationInit
     }
 
     @Override
-    public RequestSpecification basePath(String basePath) {
-        return core.basePath(basePath);
+    public RequestSpecification basePath(final String basePath) {
+        core.basePath(basePath);
+        return this;
     }
 
     @Override
@@ -60,32 +59,43 @@ abstract class RequestSpecificationConfigurable extends RequestSpecificationInit
     }
 
     @Override
-    public RequestSpecification sessionId(String sessionIdValue) {
-        return core.sessionId(sessionIdValue);
+    public RequestSpecification sessionId(final String sessionIdValue) {
+        final String sessionIdName;
+        if (getConfig() == null) {
+            sessionIdName = SessionConfig.DEFAULT_SESSION_ID_NAME;
+        } else {
+            sessionIdName = getConfig().getSessionConfig().sessionIdName();
+        }
+        return sessionId(sessionIdName, sessionIdValue);
     }
 
     @Override
-    public RequestSpecification sessionId(String sessionIdName, String sessionIdValue) {
-        return core.sessionId(sessionIdName, sessionIdValue);
+    public RequestSpecification sessionId(final String sessionIdName, final String sessionIdValue) {
+        core.sessionId(sessionIdName, sessionIdValue);
+        return this;
     }
 
     @Override
-    public RequestSpecification urlEncodingEnabled(boolean isEnabled) {
-        return core.urlEncodingEnabled(isEnabled);
+    public RequestSpecification urlEncodingEnabled(final boolean isEnabled) {
+        core.urlEncodingEnabled(isEnabled);
+        return this;
     }
 
     @Override
-    public RequestSpecification port(int port) {
-        return core.port(port);
+    public RequestSpecification port(final int port) {
+        core.port(port);
+        return this;
     }
 
     @Override
-    public RequestSpecification spec(RequestSpecification requestSpecificationToMerge) {
-        return core.spec(requestSpecificationToMerge);
+    public RequestSpecification spec(final RequestSpecification requestSpecificationToMerge) {
+        core.spec(requestSpecificationToMerge);
+        return this;
     }
 
     @Override
-    public RequestSpecification specification(RequestSpecification requestSpecificationToMerge) {
-        return core.specification(requestSpecificationToMerge);
+    public RequestSpecification specification(final RequestSpecification requestSpecificationToMerge) {
+        core.specification(requestSpecificationToMerge);
+        return this;
     }
 }

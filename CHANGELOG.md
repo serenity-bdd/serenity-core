@@ -1,5 +1,10 @@
 ## Serenity BDD core change Log
 
+### v1.1.29-rc.3 (2016/03/29 17:38 +00:00)
+ 
+**Pull requests:**
+ 
+ 
 ### v1.1.29-rc.2 (2016/03/25 14:57 +00:00)
  
 **Pull requests:**
@@ -1387,16 +1392,6 @@
  
 ### v1.0.36 (2015/03/02 21:13 +00:00)
  
- 
-**Commits:**
- 
-- [3026d24](https://github.com/serenity-bdd/serenity-core/commit/3026d248d04401404d5ba128e222306d8ac6b605) test: ensured that HTMLUnit tests closed the drivers to avoid memory leaks during the build. ([@wakaleo](https://github.com/wakaleo))
-- [71fcf22](https://github.com/serenity-bdd/serenity-core/commit/71fcf22e7fe769309798d67551450f4ef791246b) test: Refactored a few tests to reduce sporadic errors ([@wakaleo](https://github.com/wakaleo))
-- [d21e03e](https://github.com/serenity-bdd/serenity-core/commit/d21e03e66f56d862fa20ddf6d97064c331762e33) Standardized the Groovy version used throughout the build to 2.3.6 ([@wakaleo](https://github.com/wakaleo))
-- [e8c1a87](https://github.com/serenity-bdd/serenity-core/commit/e8c1a874c9030db021b596943c4ab3a166f7be8c) Updated to Selenium 2.45.0 ([@wakaleo](https://github.com/wakaleo))
- 
-### v1.0.35 (2015/02/20 12:41 +00:00)
- 
 **Pull requests:**
  
 - [#25](https://github.com/serenity-bdd/serenity-core/pull/25) feat: nested page objects i.e. widget objects ([@CoeJoder](https://github.com/CoeJoder))
@@ -1483,6 +1478,7 @@
 - [2d48ba3](https://github.com/serenity-bdd/serenity-core/commit/2d48ba34363f7e10f3102a72123fa58b1a241420) test:Updated some unit tests ([@wakaleo](https://github.com/wakaleo))
 - [2ed2864](https://github.com/serenity-bdd/serenity-core/commit/2ed2864f88aaf29666617767cbe492fc8d05fbed) [migrate] Move exceptions ([@mikezx6r](https://github.com/mikezx6r))
 - [2f58c3b](https://github.com/serenity-bdd/serenity-core/commit/2f58c3b419c5330bab8eb141d5a354a57bb12a07) Fixed some formatting and navigation issues in the reports ([@wakaleo](https://github.com/wakaleo))
+- [3026d24](https://github.com/serenity-bdd/serenity-core/commit/3026d248d04401404d5ba128e222306d8ac6b605) test: ensured that HTMLUnit tests closed the drivers to avoid memory leaks during the build. ([@wakaleo](https://github.com/wakaleo))
 - [3049d14](https://github.com/serenity-bdd/serenity-core/commit/3049d1465732d6c384a0a9019b70c1e6366a5328) Initial move over to Serenity from Thucydides ([@wakaleo](https://github.com/wakaleo))
 - [308ec8f](https://github.com/serenity-bdd/serenity-core/commit/308ec8f50c5dbccb0710620feb77886078c0cae6) Updated the changelog to reflect the serenity-core repo. For Bintray this is a bit of a hack, since the BinTray serenity-core package gets artifacts from two repos, serenity-core and serenity-maven-plugin, which are separate only because of the fact that core needs to be built and deployed before the maven plugin generation task in the serenity-maven-plugin build can be done. So the changelogs will be up-to-date on Github for both repos, but the one on bintray will only reflect core. ([@wakaleo](https://github.com/wakaleo))
 - [3144ad1](https://github.com/serenity-bdd/serenity-core/commit/3144ad12699cd6a380a67826eeb5e58c26911855) Upgrade groovy-all version for transitive convergence #16. ([@jeffjensen](https://github.com/jeffjensen))
@@ -1555,6 +1551,7 @@
  > HtmlUnit uses 3.3.2, Serenity was using 3.1.
 - [7094f8d](https://github.com/serenity-bdd/serenity-core/commit/7094f8dc6dd6baefff894d4646d94dac6de0ec46) Fixed a bug where if a null value was stored in the Serenity session after a failing step, a null pointer exception was thrown. ([@wakaleo](https://github.com/wakaleo))
 - [71d6c5a](https://github.com/serenity-bdd/serenity-core/commit/71d6c5a562d886dc92cef007ecabd03f22cd6e80) Updated the README file to reflect the new commit conventions ([@wakaleo](https://github.com/wakaleo))
+- [71fcf22](https://github.com/serenity-bdd/serenity-core/commit/71fcf22e7fe769309798d67551450f4ef791246b) test: Refactored a few tests to reduce sporadic errors ([@wakaleo](https://github.com/wakaleo))
 - [74df029](https://github.com/serenity-bdd/serenity-core/commit/74df0296738f380196774513f93e725690233975) Fine-tuning the release tagging ([@wakaleo](https://github.com/wakaleo))
 - [7a267aa](https://github.com/serenity-bdd/serenity-core/commit/7a267aa8399a3dd9d754e7fc99280c3f5256fed8) Build: Add plugins that help with dep versions. #16 ([@jeffjensen](https://github.com/jeffjensen))
  
@@ -1627,6 +1624,7 @@
 - [c9f9505](https://github.com/serenity-bdd/serenity-core/commit/c9f95050aadcd98861dce9b16d11a3c5876126ff) Upgrade javassist version to match transitive dep. #16 ([@jeffjensen](https://github.com/jeffjensen))
 - [ceb0c1d](https://github.com/serenity-bdd/serenity-core/commit/ceb0c1d103411a97645454b9e99ec78084514d48) Upgrade htmlunit to Selenium's dep version. #16 ([@jeffjensen](https://github.com/jeffjensen))
 - [cfaae5a](https://github.com/serenity-bdd/serenity-core/commit/cfaae5a78a36fbbb7fecea07762c93237839eca3) rename serenity_bdd to serenitybdd ([@mikezx6r](https://github.com/mikezx6r))
+- [d21e03e](https://github.com/serenity-bdd/serenity-core/commit/d21e03e66f56d862fa20ddf6d97064c331762e33) Standardized the Groovy version used throughout the build to 2.3.6 ([@wakaleo](https://github.com/wakaleo))
 - [d5511b6](https://github.com/serenity-bdd/serenity-core/commit/d5511b6706701d49a361192e5a8752e273c23ebe) Cater for rare cases where the driver returns null when an element is not found ([@wakaleo](https://github.com/wakaleo))
 - [d5f35b9](https://github.com/serenity-bdd/serenity-core/commit/d5f35b9cf08b4e6f9c37ee706122a7778cd6dbd0) Switched back to JUnit 4.11 due to API incompatibilities with build tools ([@wakaleo](https://github.com/wakaleo))
 - [d7f4cd3](https://github.com/serenity-bdd/serenity-core/commit/d7f4cd3ab1d16d172b81afe10208394116480cbb) fix: Fixed an issue in which tests were slowed down after a failing step because Serenity continued to try to take screenshots ([@wakaleo](https://github.com/wakaleo))
@@ -1639,6 +1637,7 @@
 - [e5a13c7](https://github.com/serenity-bdd/serenity-core/commit/e5a13c7723cb73c0a76a1ed9527411ec53196e12) SmartAnnotation needs platform for Appium annotations to work ([@schmurgon](https://github.com/schmurgon))
 - [e78dd2c](https://github.com/serenity-bdd/serenity-core/commit/e78dd2cfdd98e23c1e69c92ebafffce27dbf7f5b) Added support for displaying Saucelabs configuration in the build info screen. ([@wakaleo](https://github.com/wakaleo))
 - [e84ac40](https://github.com/serenity-bdd/serenity-core/commit/e84ac40f8da7831e03a899de15418f0d0ff1be9c) Porting changes from thucydides appium-driver-support ([@schmurgon](https://github.com/schmurgon))
+- [e8c1a87](https://github.com/serenity-bdd/serenity-core/commit/e8c1a874c9030db021b596943c4ab3a166f7be8c) Updated to Selenium 2.45.0 ([@wakaleo](https://github.com/wakaleo))
 - [eb4608f](https://github.com/serenity-bdd/serenity-core/commit/eb4608f6d8c18187608e7112ed6b83f0546eb623) Removed some code that used the JDK 8 libraries ([@wakaleo](https://github.com/wakaleo))
 - [ed62753](https://github.com/serenity-bdd/serenity-core/commit/ed62753b69b522f1321750164cbd035d1ebc4c8d) [namespace] Move Find annotations to serenity_bdd namespace ([@mikezx6r](https://github.com/mikezx6r))
 - [f07879c](https://github.com/serenity-bdd/serenity-core/commit/f07879ca4b9418342d144ba78200c76f2a8d323a) Refactored some tests ([@wakaleo](https://github.com/wakaleo))

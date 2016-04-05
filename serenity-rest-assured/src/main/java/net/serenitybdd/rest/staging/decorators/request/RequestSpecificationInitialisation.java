@@ -36,12 +36,12 @@ abstract class RequestSpecificationInitialisation implements FilterableRequestSp
 
     @Override
     public RequestSpecification and() {
-        return core.and();
+        return this;
     }
 
     @Override
     public RequestSpecification with() {
-        return core.with();
+        return this;
     }
 
     @Override
@@ -56,17 +56,17 @@ abstract class RequestSpecificationInitialisation implements FilterableRequestSp
 
     @Override
     public RequestSpecification when() {
-        return core.when();
+        return this;
     }
 
     @Override
     public RequestSpecification given() {
-        return core.given();
+        return this;
     }
 
     @Override
     public RequestSpecification that() {
-        return core.that();
+        return this;
     }
 
     @Override

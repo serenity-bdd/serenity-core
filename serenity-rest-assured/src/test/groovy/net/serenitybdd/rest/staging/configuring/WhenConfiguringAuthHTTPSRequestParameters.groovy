@@ -1,4 +1,4 @@
-package net.serenitybdd.rest.staging
+package net.serenitybdd.rest.staging.configuring
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.google.gson.FieldNamingPolicy

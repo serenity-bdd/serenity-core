@@ -1,9 +1,10 @@
-package net.serenitybdd.rest.staging
+package net.serenitybdd.rest.staging.configuring
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.jayway.restassured.http.ContentType
 import com.jayway.restassured.specification.FilterableRequestSpecification
+import net.serenitybdd.rest.staging.HeaderNames
 import net.serenitybdd.rest.staging.decorators.ResponseDecorated
 import net.serenitybdd.rest.staging.rules.RestConfigurationAction
 import net.serenitybdd.rest.staging.rules.RestConfigurationRule
@@ -13,7 +14,7 @@ import spock.lang.Specification
 import static com.github.tomakehurst.wiremock.client.WireMock.*
 import static net.serenitybdd.rest.staging.SerenityRest.given
 import static net.serenitybdd.rest.staging.SerenityRest.reset
-import static HeaderNames.*;
+import static net.serenitybdd.rest.staging.HeaderNames.*;
 
 /**
  * User: YamStranger
@@ -37,7 +38,7 @@ class WhenConfiguringHeadersForRequest extends Specification {
         given: "request initialised"
             def request = (FilterableRequestSpecification) given();
         when: "updating content type and getting request specification"
-            def requestAfterLog = request.header(CONTENT_TYPE.asString(), ContentType.JSON).request()
+            def requestAfterLog = request.header(HeaderNames.CONTENT_TYPE.asString(), ContentType.JSON).request()
         then: "same request should be returned after setting content type"
             requestAfterLog == request
         and: "header should contains correct value"

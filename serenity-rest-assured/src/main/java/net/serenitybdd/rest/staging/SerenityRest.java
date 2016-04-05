@@ -348,29 +348,24 @@ public class SerenityRest {
         RestAssured.keystore(pathToJks, password);
     }
 
-    //todo should be returned wrapped instance
     public static Response head(URI uri) {
-        return RestAssured.head(uri);
+        return given().head(uri);
     }
 
-    //todo should be returned wrapped instance
     public static Response head() {
-        return RestAssured.head();
+        return given().head();
     }
 
-    //todo should be returned wrapped instance
     public static Response head(String path, Object... pathParams) {
-        return RestAssured.head(path, pathParams);
+        return given().head(path, pathParams);
     }
 
-    //todo should be returned wrapped instance
     public static Response head(String path, Map<String, ?> pathParams) {
-        return RestAssured.head(path, pathParams);
+        return given().head(path, pathParams);
     }
 
-    //todo should be returned wrapped instance
     public static Response head(URL url) {
-        return RestAssured.head(url);
+        return given().head(url);
     }
 
     public static RestAssuredConfig config() {
@@ -400,151 +395,123 @@ public class SerenityRest {
         return RestAssured.digest(userName, password);
     }
 
-    //todo should be returned wrapped instance
     public static Response options() {
-        return RestAssured.options();
+        return given().options();
     }
 
-    //todo should be returned wrapped instance
     public static Response options(URL url) {
-        return RestAssured.options(url);
+        return given().options(url);
     }
 
-    //todo should be returned wrapped instance
     public static Response options(URI uri) {
-        return RestAssured.options(uri);
+        return given().options(uri);
     }
 
-    //todo should be returned wrapped instance
     public static Response options(String path, Object... pathParams) {
-        return RestAssured.options(path, pathParams);
+        return given().options(path, pathParams);
     }
 
     public static Response options(String path, Map<String, ?> pathParams) {
-        return RestAssured.options(path, pathParams);
+        return given().options(path, pathParams);
     }
 
     public static void unregisterParser(String contentType) {
         RestAssured.unregisterParser(contentType);
     }
 
-    //todo should be returned wrapped instance
     public static Response patch(String path, Map<String, ?> pathParams) {
-        return RestAssured.patch(path, pathParams);
+        return given().patch(path, pathParams);
     }
 
-    //todo should be returned wrapped instance
     public static Response patch(URI uri) {
-        return RestAssured.patch(uri);
+        return given().patch(uri);
     }
 
-    //todo should be returned wrapped instance
     public static Response patch(URL url) {
-        return RestAssured.patch(url);
+        return given().patch(url);
     }
 
-    //todo should be returned wrapped instance
     public static Response patch() {
-        return RestAssured.patch();
+        return given().patch();
     }
 
-    //todo should be returned wrapped instance
     public static Response patch(String path, Object... pathParams) {
-        return RestAssured.patch(path, pathParams);
+        return given().patch(path, pathParams);
     }
 
-    //todo should be returned wrapped instance
     public static Response post(String path, Object... pathParams) {
-        return RestAssured.post(path, pathParams);
+        return given().post(path, pathParams);
     }
 
-    //todo should be returned wrapped instance
     public static Response post(String path, Map<String, ?> pathParams) {
-        return RestAssured.post(path, pathParams);
+        return given().post(path, pathParams);
     }
 
-    //todo should be returned wrapped instance
     public static Response post(URL url) {
-        return RestAssured.post(url);
+        return given().post(url);
     }
 
-    //todo should be returned wrapped instance
     public static Response post() {
-        return RestAssured.post();
+        return given().post();
     }
 
-    //todo should be returned wrapped instance
     public static Response post(URI uri) {
-        return RestAssured.post(uri);
+        return given().post(uri);
     }
 
-    //todo should be returned wrapped instance
     public static Response put(URI uri) {
-        return RestAssured.put(uri);
+        return given().put(uri);
     }
 
-    //todo should be returned wrapped instance
     public static Response put(String path, Object... pathParams) {
-        return RestAssured.put(path, pathParams);
+        return given().put(path, pathParams);
     }
 
-    //todo should be returned wrapped instance
     public static Response put() {
-        return RestAssured.put();
+        return given().put();
     }
 
-    //todo should be returned wrapped instance
     public static Response put(URL url) {
-        return RestAssured.put(url);
+        return given().put(url);
     }
 
-    //todo should be returned wrapped instance
     public static Response delete(String path, Map<String, ?> pathParams) {
-        return RestAssured.delete(path, pathParams);
+        return given().delete(path, pathParams);
     }
 
-    //todo should be returned wrapped instance
     public static Response delete(URL url) {
-        return RestAssured.delete(url);
+        return given().delete(url);
     }
 
-    //todo should be returned wrapped instance
     public static Response delete(URI uri) {
-        return RestAssured.delete(uri);
+        return given().delete(uri);
     }
 
-    //todo should be returned wrapped instance
     public static Response delete() {
-        return RestAssured.delete();
+        return given().delete();
     }
 
-    //todo should be returned wrapped instance
     public static Response delete(String path, Object... pathParams) {
-        return RestAssured.delete(path, pathParams);
+        return given().delete(path, pathParams);
     }
 
-    //todo should be returned wrapped instance
     public static Response get(URI uri) {
-        return RestAssured.get(uri);
+        return given().get(uri);
     }
 
-    //todo should be returned wrapped instance
     public static Response get(URL url) {
-        return RestAssured.get(url);
+        return given().get(url);
     }
 
-    //todo should be returned wrapped instance
     public static Response get(String path, Object... pathParams) {
-        return RestAssured.get(path, pathParams);
+        return given().get(path, pathParams);
     }
 
-    //todo should be returned wrapped instance
     public static Response get(String path, Map<String, ?> pathParams) {
-        return RestAssured.get(path, pathParams);
+        return given().get(path, pathParams);
     }
 
-    //todo should be returned wrapped instance
     public static Response get() {
-        return RestAssured.get();
+        return given().get();
     }
 }

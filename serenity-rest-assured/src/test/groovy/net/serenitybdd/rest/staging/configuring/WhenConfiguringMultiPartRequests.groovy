@@ -1,4 +1,4 @@
-package net.serenitybdd.rest.staging
+package net.serenitybdd.rest.staging.configuring
 
 import com.jayway.restassured.specification.FilterableRequestSpecification
 import net.serenitybdd.rest.staging.decorators.request.RequestSpecificationDecorated

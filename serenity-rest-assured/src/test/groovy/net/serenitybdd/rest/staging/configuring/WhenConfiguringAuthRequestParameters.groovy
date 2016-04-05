@@ -1,5 +1,6 @@
-package net.serenitybdd.rest.staging
+package net.serenitybdd.rest.staging.configuring
 
+import com.github.tomakehurst.wiremock.client.RequestPatternBuilder
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.jayway.restassured.specification.FilterableRequestSpecification
@@ -10,19 +11,16 @@ import net.serenitybdd.rest.staging.rules.RestConfigurationRule
 import org.junit.Rule
 import spock.lang.Specification
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
-import static com.github.tomakehurst.wiremock.client.WireMock.matching
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
-import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching
-
-import static net.serenitybdd.rest.staging.SerenityRest.*
+import static com.github.tomakehurst.wiremock.client.WireMock.*
+import static net.serenitybdd.rest.staging.SerenityRest.given
+import static net.serenitybdd.rest.staging.SerenityRest.reset
 
 /**
  * User: YamStranger
  * Date: 3/30/16
  * Time: 9:57 AM
  */
-class WhenLoggingRequestParameters extends Specification {
+class WhenConfiguringAuthRequestParameters extends Specification {
 
     @Rule
     def WireMockRule wire = new WireMockRule(0);
@@ -35,43 +33,43 @@ class WhenLoggingRequestParameters extends Specification {
         }
     },)
 
-    def "should be returned wrapped request specification after log operations"() {
+    def "should be returned wrapped request specification after authentication-basic configuration"() {
         given: "request initialised"
             def request = (FilterableRequestSpecification) given();
-        when: "logging from request and getting request specification"
-            def requestAfterLog = request.log().body().request()
+        when: "changing authentication configuration and getting request specification"
+            def requestAfterLog = request.authentication().basic("user", "password")
         then: "same request should be returned after log operation"
             requestAfterLog == request
     }
 
-    def "should be returned wrapped response specification after body log operations"() {
+    def "should be returned wrapped request specification after auth-oauth2 configuration"() {
         given: "request initialised"
             def request = (FilterableRequestSpecification) given();
-        when: "logging from request and getting response"
-            def responseAfterLog = request.log().body().response()
+        when: "changing authentication configuration and getting request specification"
+            def responseAfterLog = request.auth().oauth2("asdfsafas")
         then: "wrapped response specification should be returned after log operation"
-            responseAfterLog instanceof ResponseSpecificationDecorated
+            responseAfterLog ==  request
     }
 
-    def "should be returned wrapped response specification after all log operations"() {
+    def "should be returned wrapped request specification after auth-preemptive-basic configuration"() {
         given: "request initialised"
             def request = (FilterableRequestSpecification) given();
-        when: "logging from request and getting response"
-            def responseAfterLog = request.log().all().response()
+        when: "changing authentication configuration and getting request specification"
+            def responseAfterLog = request.auth().preemptive().basic("user", "password")
         then: "wrapped response specification should be returned after log operation"
-            responseAfterLog instanceof ResponseSpecificationDecorated
+            responseAfterLog == request
     }
 
-    def "should be returned wrapped response specification after parameters log operations"() {
+    def "should be returned wrapped request specification after authentication-none configuration"() {
         given: "request initialised"
             def request = (FilterableRequestSpecification) given();
-        when: "logging from request and getting response"
-            def responseAfterLog = request.log().parameters().response()
+        when: "changing authentication configuration and getting request specification"
+            def responseAfterLog = request.authentication().none()
         then: "wrapped response specification should be returned after log operation"
-            responseAfterLog instanceof ResponseSpecificationDecorated
+            responseAfterLog == request
     }
 
-    def "should be returned wrapped response after log operations and executing request"() {
+    def "should be returned wrapped response after authentication-none configuration and executing request"() {
         given: "rest with default config updated"
             def body = "<root>" +
                 "<value>1</value>" +
@@ -81,15 +79,15 @@ class WhenLoggingRequestParameters extends Specification {
             def path = "/test/log/levels"
             def url = "$base$path"
 
-            stubFor(WireMock.get(urlMatching(path))
+            stubFor(get(urlMatching(path))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
             def request = (FilterableRequestSpecification) given();
-        when: "logging from request and executing request"
-            def responseAfterExecutingRequest = request.log().body().request().get(url)
+        when: "changing authentication configuration and and executing request"
+            def responseAfterExecutingRequest = request.authentication().basic("login","password").get(url)
         then: "wrapped response should be returned after executing request"
             responseAfterExecutingRequest instanceof ResponseDecorated
         and: "status code returned as expected"

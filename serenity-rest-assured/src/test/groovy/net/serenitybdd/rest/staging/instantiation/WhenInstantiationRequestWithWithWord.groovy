@@ -1,4 +1,4 @@
-package net.serenitybdd.rest.staging
+package net.serenitybdd.rest.staging.instantiation
 
 import net.serenitybdd.rest.staging.decorators.request.RequestSpecificationDecorated
 import net.serenitybdd.rest.staging.rules.RestConfigurationAction

@@ -19,7 +19,6 @@ import java.util.Map;
  * making requests, can be used for better readability of code.
  * There is no difference in behaving between this class or SerenityRest.
  */
-
 public class RestRequests {
     public static Response get() {
         return SerenityRest.get();

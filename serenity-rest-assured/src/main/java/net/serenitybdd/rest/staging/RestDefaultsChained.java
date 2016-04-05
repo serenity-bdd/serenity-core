@@ -30,8 +30,6 @@ import java.util.List;
  * new RestDefaultsChained().setDefaultBasePath("some/path").setDefaultProxy(object).setDefaultPort(10)
  * There is no difference in behaving between this class or SerenityRest.
  */
-
-
 public class RestDefaultsChained {
     public RestDefaultsChained setDefaultBasePath(final String basePath) {
         SerenityRest.setDefaultBasePath(basePath);

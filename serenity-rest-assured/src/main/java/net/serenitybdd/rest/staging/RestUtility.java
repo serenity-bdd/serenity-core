@@ -17,7 +17,6 @@ import java.util.List;
  * can be used for better readability of code.
  * There is no difference what to use this class or SerenityRest.
  */
-
 public class RestUtility {
     public static List<Argument> withArguments(final Object firstArgument, final Object... additionalArguments) {
         return SerenityRest.withArguments(firstArgument, additionalArguments);

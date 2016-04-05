@@ -25,7 +25,6 @@ import java.util.List;
  * setting default values and parameters, can be used for better readability of code.
  * There is no difference in behaving between this class or SerenityRest.
  */
-
 public class RestDefaults {
     public static String setDefaultBasePath(final String basePath) {
         return SerenityRest.setDefaultBasePath(basePath);

@@ -24,7 +24,6 @@ import java.security.KeyStore;
 import java.util.List;
 import java.util.Map;
 
-import static com.jayway.restassured.config.ObjectMapperConfig.objectMapperConfig;
 import static com.jayway.restassured.specification.ProxySpecification.host;
 
 /**

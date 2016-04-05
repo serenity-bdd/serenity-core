@@ -11,6 +11,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
+import static com.jayway.restassured.http.ContentType.ANY;
+import static com.jayway.restassured.http.ContentType.JSON;
+
 /**
  * User: YamStranger
  * Date: 3/16/16
@@ -25,67 +28,75 @@ abstract class RequestSpecificationMultiPartConfigurations extends RequestSpecif
     }
 
     @Override
+    public List<MultiPartSpecification> getMultiPartParams() {
+        return core.getMultiPartParams();
+    }
+
+    @Override
     public RequestSpecification multiPart(MultiPartSpecification multiPartSpecification) {
-        return core.multiPart(multiPartSpecification);
-    }
-
-    @Override
-    public RequestSpecification multiPart(File file) {
-        return core.multiPart(file);
-    }
-
-    @Override
-    public RequestSpecification multiPart(String controlName, File file) {
-        return core.multiPart(controlName, file);
+        core.multiPart(multiPartSpecification);
+        return this;
     }
 
     @Override
     public RequestSpecification multiPart(String controlName, File file, String mimeType) {
-        return core.multiPart(controlName, file, mimeType);
-    }
-
-    @Override
-    public RequestSpecification multiPart(String controlName, Object object) {
-        return core.multiPart(controlName, object);
+        core.multiPart(controlName, file, mimeType);
+        return this;
     }
 
     @Override
     public RequestSpecification multiPart(String controlName, Object object, String mimeType) {
-        return core.multiPart(controlName, object, mimeType);
-    }
-
-    @Override
-    public RequestSpecification multiPart(String controlName, String fileName, byte[] bytes) {
-        return core.multiPart(controlName, fileName, bytes);
+        core.multiPart(controlName, object, mimeType);
+        return this;
     }
 
     @Override
     public RequestSpecification multiPart(String controlName, String fileName, byte[] bytes, String mimeType) {
-        return core.multiPart(controlName, fileName, bytes, mimeType);
-    }
-
-    @Override
-    public RequestSpecification multiPart(String controlName, String fileName, InputStream stream) {
-        return core.multiPart(controlName, fileName, stream);
+        core.multiPart(controlName, fileName, bytes, mimeType);
+        return this;
     }
 
     @Override
     public RequestSpecification multiPart(String controlName, String fileName, InputStream stream, String mimeType) {
-        return core.multiPart(controlName, fileName, stream, mimeType);
-    }
-
-    @Override
-    public RequestSpecification multiPart(String controlName, String contentBody) {
-        return core.multiPart(controlName, contentBody);
+        core.multiPart(controlName, fileName, stream, mimeType);
+        return this;
     }
 
     @Override
     public RequestSpecification multiPart(String controlName, String contentBody, String mimeType) {
-        return core.multiPart(controlName, contentBody, mimeType);
+        core.multiPart(controlName, contentBody, mimeType);
+        return this;
     }
 
     @Override
-    public List<MultiPartSpecification> getMultiPartParams() {
-        return core.getMultiPartParams();
+    public RequestSpecification multiPart(File file) {
+        return multiPart("file", file);
+    }
+
+    @Override
+    public RequestSpecification multiPart(String controlName, File file) {
+        return multiPart(controlName, file, (String) null);
+    }
+
+
+    @Override
+    public RequestSpecification multiPart(String controlName, Object object) {
+        return multiPart(controlName, object,
+                ANY.toString().equals(getRequestContentType()) ? JSON.toString() : getRequestContentType());
+    }
+
+    @Override
+    public RequestSpecification multiPart(String controlName, String fileName, byte[] bytes) {
+        return multiPart(controlName, fileName, bytes, null);
+    }
+
+    @Override
+    public RequestSpecification multiPart(String controlName, String fileName, InputStream stream) {
+        return multiPart(controlName, fileName, stream, null);
+    }
+
+    @Override
+    public RequestSpecification multiPart(String controlName, String contentBody) {
+        return multiPart(controlName, contentBody, (String) null);
     }
 }

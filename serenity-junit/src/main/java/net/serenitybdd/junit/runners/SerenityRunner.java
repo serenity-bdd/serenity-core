@@ -372,11 +372,15 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     }
 
     private void initStepFactoryUsing(final Pages pagesObject) {
-        stepFactory = new StepFactory(pagesObject);
+        if(stepFactory == null) {
+            stepFactory = new StepFactory(pagesObject);
+        }
     }
 
     private void initStepFactory() {
-        stepFactory = new StepFactory();
+        if(stepFactory == null) {
+            stepFactory = new StepFactory();
+        }
     }
 
     private void closeDrivers() {

@@ -30,7 +30,7 @@ public class ParameterizedJUnitStepListener extends JUnitStepListener {
 
 
     @Override
-    public void testStarted(final Description description) {
+    public void testStarted(final Description description) throws Exception {
         if (testingThisDataSet(description)) {
             super.testStarted(description);
             StepEventBus.getEventBus().useExamplesFrom(dataTableRow());

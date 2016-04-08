@@ -475,6 +475,8 @@ public class StepEventBus {
     }
 
     public void testSuiteFinished() {
+        Broadcaster.postEvent(TestLifecycle.aTestGroupHasFinishedWith(baseStepListener.getTestOutcomes()));
+
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testSuiteFinished();
         }
@@ -489,6 +491,9 @@ public class StepEventBus {
         //screenshotProcessor.terminate();
 
         Darkroom.waitUntilClose();
+
+        Broadcaster.postEvent(TestLifecycle.aTestRunHasFinished(baseStepListener.getTestOutcomes()));
+
         Broadcaster.shutdown();
 
     }

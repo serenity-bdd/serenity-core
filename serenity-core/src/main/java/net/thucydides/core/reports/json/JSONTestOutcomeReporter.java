@@ -7,6 +7,8 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.reports.AcceptanceTestLoader;
+import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.OutcomeFormat;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -22,7 +24,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-public class JSONTestOutcomeReporter { //implements AcceptanceTestReporter, AcceptanceTestLoader {
+public class JSONTestOutcomeReporter implements AcceptanceTestReporter, AcceptanceTestLoader {
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(JSONTestOutcomeReporter.class);

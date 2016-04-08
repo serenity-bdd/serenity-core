@@ -1,18 +1,18 @@
 @file:JvmName("JSONTestOutcomeWriter")
-package net.thucydides.core.reports.json
+package net.serenitybdd.core.reports.json
 
 import com.google.common.eventbus.Subscribe
 import net.serenitybdd.core.lifecycle.TestFinishedEvent
+import net.serenitybdd.core.reports.copyWorkingCopyToTarget
 import net.thucydides.core.guice.Injectors
 import net.thucydides.core.model.ReportType
 import net.thucydides.core.model.TestOutcome
+import net.thucydides.core.reports.json.JSONConverter
 import net.thucydides.core.reports.json.gson.GsonJSONConverter
 import net.thucydides.core.util.EnvironmentVariables
 import java.io.BufferedOutputStream
 import java.io.FileOutputStream
-import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.StandardCopyOption
 import java.util.*
 
 class JSONTestOutcomeReportWriter(val outputDirectory: Path,
@@ -47,11 +47,6 @@ class JSONTestOutcomeReportWriter(val outputDirectory: Path,
         return JSONTestOutcomeReportWriter(outputDirectory, environmentVariables)
     }
 
-    private fun copyWorkingCopyToTarget(workingCopy: Path, targetReport: Path) {
-        Files.move(workingCopy, targetReport,
-                StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE)
-    }
-
     private fun saveAWorkingCopy(testOutcomeToBeStored: TestOutcome, workingCopy: Path) {
         BufferedOutputStream(FileOutputStream(workingCopy.toFile())).use { outputStream ->
             jsonConverter.toJson(testOutcomeToBeStored, outputStream)
@@ -61,7 +56,7 @@ class JSONTestOutcomeReportWriter(val outputDirectory: Path,
 
     private fun workingCopyOf(reportName: String) = reportName + UUID.randomUUID().toString()
 
-    private fun jsonOutputFor(storedTestOutcome: TestOutcome) = storedTestOutcome.getReportName(ReportType.JSON)
+    private fun jsonOutputFor(storedTestOutcome: TestOutcome) = "outcome_" + storedTestOutcome.getReportName(ReportType.JSON)
 }
 
 fun withOutputDirectory(outputDirectory: Path) : JSONTestOutcomeReportWriter = JSONTestOutcomeReportWriter(outputDirectory)

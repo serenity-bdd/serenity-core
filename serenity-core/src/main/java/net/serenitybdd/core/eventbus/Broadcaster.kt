@@ -52,9 +52,26 @@ object BroadcasterInstance {
 }
 
 // Static method API for Java code
+/**
+ * Register a subscriber to test lifecycle events
+ */
 fun register(subscriber : Any) : BroadcasterInstance {
     BroadcasterInstance.register(subscriber)
     return BroadcasterInstance
+}
+
+fun registerAll(subscribers : Collection<Any>) : BroadcasterInstance {
+    for(subscriber in subscribers) {
+        register(subscriber)
+    }
+    return BroadcasterInstance
+}
+
+/**
+ * Register the default subscribers
+ */
+fun registerDefaultSubscribers() {
+    registerAll(Subscribers.configuredByDefault())
 }
 
 fun postEvent(event : Any) {
@@ -64,4 +81,3 @@ fun postEvent(event : Any) {
 fun shutdown() {
     BroadcasterInstance.shutdown()
 }
-

@@ -47,6 +47,7 @@ public class JUnitXMLOutcomeReporter  {
         for(String testCase : testOutcomesGroupedByTestCase.keySet()) {
             List<TestOutcome> testCaseOutcomes = testOutcomesGroupedByTestCase.get(testCase);
             String reportFilename = reportFilenameFor(testCaseOutcomes.get(0));
+
             String unique = UUID.randomUUID().toString();
             File temporary = new File(getOutputDirectory(), reportFilename.concat(unique));
             File report = new File(getOutputDirectory(), reportFilename);

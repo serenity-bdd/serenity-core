@@ -1,5 +1,7 @@
 package net.thucydides.junit.listeners;
 
+import net.serenitybdd.core.eventbus.Broadcaster;
+import net.serenitybdd.core.lifecycle.TestRunStartedEvent;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.steps.BaseStepListener;
@@ -52,6 +54,14 @@ public class JUnitStepListener extends RunListener {
 
     @Override
     public void testRunStarted(Description description) throws Exception {
+        Broadcaster.registerDefaultSubscribers();
+
+        // New lifecycle event bus
+        Broadcaster.postEvent(new TestRunStartedEvent(description.getDisplayName()));
+
+        // Legacy step event bus
+        StepEventBus.getEventBus().testSuiteStarted(description.getTestClass());
+
         super.testRunStarted(description);
 
     }
@@ -67,7 +77,7 @@ public class JUnitStepListener extends RunListener {
      * time, as the testRunStarted() method is not invoked for some reason.
      */
     @Override
-    public void testStarted(final Description description) {
+    public void testStarted(final Description description) throws Exception {
         if (testingThisTest(description)) {
             startTestSuiteForFirstTest(description);
             StepEventBus.getEventBus().clear();
@@ -77,9 +87,9 @@ public class JUnitStepListener extends RunListener {
         }
     }
 
-    private void startTestSuiteForFirstTest(Description description) {
+    private void startTestSuiteForFirstTest(Description description) throws Exception {
         if (!getBaseStepListener().testSuiteRunning()) {
-            StepEventBus.getEventBus().testSuiteStarted(description.getTestClass());
+            testRunStarted(description);
         }
     }
 
@@ -112,7 +122,7 @@ public class JUnitStepListener extends RunListener {
         }
     }
 
-    private void startTestIfNotYetStarted(Description description) {
+    private void startTestIfNotYetStarted(Description description) throws Exception {
         if (!testStarted) {
            testStarted(description);
         }

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.reports.json.JSONTestOutcomeReporter;
 import net.thucydides.core.reports.junit.JUnitXMLOutcomeReporter;
 import net.thucydides.core.reports.xml.XMLTestOutcomeReporter;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -125,7 +126,7 @@ public class TestOutcomeLoader {
     public AcceptanceTestLoader getOutcomeReporter() {
         switch (formatConfiguration.getPreferredFormat()) {
             case XML: return new XMLTestOutcomeReporter();
-            //case JSON: return new JSONTestOutcomeReporter();
+            case JSON: return new JSONTestOutcomeReporter();
             default: throw new IllegalArgumentException("Unsupported report format: " + formatConfiguration.getPreferredFormat());
         }
     }

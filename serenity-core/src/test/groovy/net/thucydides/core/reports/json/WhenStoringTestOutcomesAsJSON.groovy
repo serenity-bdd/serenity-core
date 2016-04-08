@@ -5,6 +5,7 @@ import net.serenitybdd.core.rest.RestQuery
 import net.thucydides.core.annotations.*
 import net.thucydides.core.digest.Digest
 import net.thucydides.core.issues.IssueTracking
+import net.thucydides.core.model.DataTable
 import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.model.TestStep
@@ -345,7 +346,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         given:
         def testOutcome = forTest("should_do_this", SomeTestScenarioWithTags.class);
         testOutcome.startTime = FIRST_OF_JANUARY
-        testOutcome.useExamplesFrom(DataTable.withHeaders(["a","b","c"])
+        testOutcome.useExamplesFrom(DataTable.withHeaders(["a", "b", "c"])
                                              .andTitle("a title")
                                              .andDescription("some description").build())
         testOutcome.addRow(["a":"1", "b":"2", "c":"3"]);
@@ -364,7 +365,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         given:
         def testOutcome = forTest("should_do_this", SomeTestScenarioWithTags.class);
         testOutcome.startTime = FIRST_OF_JANUARY
-        testOutcome.useExamplesFrom(DataTable.withHeaders(["a","b","c"])
+        testOutcome.useExamplesFrom(DataTable.withHeaders(["a", "b", "c"])
                 .andTitle("a title")
                 .andDescription("a description").build())
         testOutcome.addRow(["a":"1", "b":"2", "c":"3"]);

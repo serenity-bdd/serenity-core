@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.ManagedWebDriverAnnotatedField;
@@ -482,14 +481,18 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         StepEventBus.getEventBus().testFinished();
     }
 
-    private void markAsManual(FrameworkMethod method) {
+    private void markAsManual(FrameworkMethod method){
         testStarted(method);
         StepEventBus.getEventBus().testIsManual();
         StepEventBus.getEventBus().testFinished();
     }
 
-    private void testStarted(FrameworkMethod method) {
-        getStepListener().testStarted(Description.createTestDescription(method.getMethod().getDeclaringClass(), testName(method)));
+    private void testStarted(FrameworkMethod method){
+        try {
+            getStepListener().testStarted(Description.createTestDescription(method.getMethod().getDeclaringClass(), testName(method)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

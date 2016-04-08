@@ -1,8 +1,8 @@
 package net.thucydides.core.reports.json
 
 import com.google.common.base.Optional
+import net.serenitybdd.core.guice.injected
 import net.thucydides.core.ThucydidesSystemProperty
-import net.thucydides.core.guice.Injectors
 import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.reports.AcceptanceTestLoader
 import net.thucydides.core.reports.OutcomeFormat
@@ -17,12 +17,10 @@ import java.nio.file.Path
 
 class JSONTestOutcomeReader : AcceptanceTestLoader {
 
-    protected val environmentVariables: EnvironmentVariables
-            = Injectors.getInjector().getInstance(EnvironmentVariables::class.java)
-    protected val jsonConverter: JSONConverter
-            = Injectors.getInjector().getInstance(JSONConverter::class.java)
-    protected val encoding
-            = ThucydidesSystemProperty.THUCYDIDES_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name())
+    protected val environmentVariables = injected(EnvironmentVariables::class.java)
+    protected val jsonConverter = injected(JSONConverter::class.java)
+    protected val encoding = ThucydidesSystemProperty.THUCYDIDES_REPORT_ENCODING.from(environmentVariables,
+                                                                                      StandardCharsets.UTF_8.name())
 
     private val logger = LoggerFactory.getLogger(JSONTestOutcomeReader::class.java)
 

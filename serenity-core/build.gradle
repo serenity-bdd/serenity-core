@@ -198,3 +198,6 @@ buildscript {
     }
 }
 apply plugin: 'kotlin'
+
+//compileJava.dependsOn = compileJava.taskDependencies.values - compileKotlin
+compileTestGroovy.dependsOn(compileKotlin)

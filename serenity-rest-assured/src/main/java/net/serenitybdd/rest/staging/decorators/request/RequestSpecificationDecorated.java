@@ -3,6 +3,8 @@ package net.serenitybdd.rest.staging.decorators.request;
 import com.jayway.restassured.internal.RequestSpecificationImpl;
 import com.jayway.restassured.response.*;
 import com.jayway.restassured.specification.*;
+import net.serenitybdd.core.rest.RestMethod;
+import net.serenitybdd.rest.staging.decorators.ResponseDecorated;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +13,7 @@ import java.net.URL;
 import java.util.Map;
 
 import static com.jayway.restassured.internal.assertion.AssertParameter.notNull;
+import static net.serenitybdd.core.rest.RestMethod.*;
 
 /**
  * User: YamStranger
@@ -37,7 +40,7 @@ public class RequestSpecificationDecorated extends RequestSpecificationAdvancedC
 
     @Override
     public Response get(String path, Object... pathParams) {
-        return decorate(core.get(path, pathParams));
+        return execute(GET, path, pathParams);
     }
 
     @Override
@@ -63,7 +66,7 @@ public class RequestSpecificationDecorated extends RequestSpecificationAdvancedC
 
     @Override
     public Response post(String path, Object... pathParams) {
-        return decorate(core.post(path, pathParams));
+        return execute(POST, path, pathParams);
     }
 
     @Override
@@ -94,7 +97,7 @@ public class RequestSpecificationDecorated extends RequestSpecificationAdvancedC
 
     @Override
     public Response put(String path, Object... pathParams) {
-        return decorate(core.put(path, pathParams));
+        return execute(PUT, path, pathParams);
     }
 
     @Override
@@ -120,7 +123,7 @@ public class RequestSpecificationDecorated extends RequestSpecificationAdvancedC
 
     @Override
     public Response delete(String path, Object... pathParams) {
-        return decorate(core.delete(path, pathParams));
+        return execute(DELETE, path, pathParams);
     }
 
     @Override
@@ -146,7 +149,7 @@ public class RequestSpecificationDecorated extends RequestSpecificationAdvancedC
 
     @Override
     public Response head(String path, Object... pathParams) {
-        return decorate(core.head(path, pathParams));
+        return execute(HEAD, path, pathParams);
     }
 
     @Override
@@ -172,7 +175,7 @@ public class RequestSpecificationDecorated extends RequestSpecificationAdvancedC
 
     @Override
     public Response patch(String path, Object... pathParams) {
-        return decorate(core.patch(path, pathParams));
+        return execute(PATCH, path, pathParams);
     }
 
     @Override
@@ -188,7 +191,7 @@ public class RequestSpecificationDecorated extends RequestSpecificationAdvancedC
 
     @Override
     public Response options(String path, Object... pathParams) {
-        return decorate(core.options(path, pathParams));
+        return execute(OPTIONS, path, pathParams);
     }
 
     @Override
@@ -205,5 +208,48 @@ public class RequestSpecificationDecorated extends RequestSpecificationAdvancedC
     @Override
     public Response options(URL url) {
         return options(notNull(url, "URL").toString());
+    }
+
+    protected Response execute(final RestMethod method, final String path, final Object... pathParams) {
+        ResponseDecorated response = null;
+        RuntimeException exception = null;
+/*        if (restCallsAreDisabled()) {
+            return stubbed(method);
+        }*/
+        try {
+            switch (method) {
+                case POST:
+                    response = decorate(this.core.post(path, pathParams));
+                    break;
+                case GET:
+                    response = decorate(this.core.get(path, pathParams));
+                    break;
+                case DELETE:
+                    response = decorate(this.core.delete(path, pathParams));
+                    break;
+                case PUT:
+                    response = decorate(this.core.put(path, pathParams));
+                    break;
+                case HEAD:
+                    response = decorate(this.core.head(path, pathParams));
+                    break;
+                case OPTIONS:
+                    response = decorate(this.core.options(path, pathParams));
+                    break;
+                case PATCH:
+                    response = decorate(this.core.options(path, pathParams));
+                    break;
+            }
+        } catch (RuntimeException e) {
+            exception = e;
+        } finally {
+            if (exception == null) {
+                reporting.registerCall(method, response, this, path, pathParams);
+            } else {
+                reporting.registerCall(method, this, path, exception, pathParams);
+                throw exception;
+            }
+        }
+        return response;
     }
 }

@@ -12,6 +12,7 @@ import com.jayway.restassured.mapper.ObjectMapper;
 import com.jayway.restassured.parsing.Parser;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.*;
+import net.serenitybdd.rest.staging.decorators.DecorationHelper;
 import net.serenitybdd.rest.staging.decorators.request.RequestSpecificationDecorated;
 import net.serenitybdd.rest.staging.decorators.ResponseSpecificationDecorated;
 
@@ -185,7 +186,7 @@ public class SerenityRest {
 
     public static RequestSpecification given() {
         final RequestSpecificationImpl generated = (RequestSpecificationImpl) RestAssured.given();
-        final RequestSpecificationDecorated request = new RequestSpecificationDecorated(generated);
+        final RequestSpecification request = DecorationHelper.decorate(generated);
         final ResponseSpecificationDecorated response = new ResponseSpecificationDecorated(
                 (ResponseSpecificationImpl) generated.response());
         return ((TestSpecificationImpl) given(request, response)).getRequestSpecification();
@@ -196,29 +197,14 @@ public class SerenityRest {
     }
 
     public static RequestSender given(final RequestSpecification request, final ResponseSpecification response) {
-        RequestSpecification requestDecorated = null;
-        ResponseSpecification responseDecorated = null;
-        if (request instanceof RequestSpecificationDecorated) {
-            requestDecorated = request;
-        } else if (request instanceof RequestSpecificationImpl) {
-            requestDecorated = new RequestSpecificationDecorated((RequestSpecificationImpl) request);
-        } else {
-            throw new IllegalArgumentException("Can not be used custom Request Specification Implementation");
-        }
-
-        if (response instanceof ResponseSpecificationDecorated) {
-            responseDecorated = response;
-        } else if (response instanceof ResponseSpecificationImpl) {
-            responseDecorated = new ResponseSpecificationDecorated((ResponseSpecificationImpl) response);
-        } else {
-            throw new IllegalArgumentException("Can not be used custom Response Specification Implementation");
-        }
+        RequestSpecification requestDecorated = DecorationHelper.decorate(request);
+        ResponseSpecification responseDecorated = DecorationHelper.decorate(response);
         return RestAssured.given(requestDecorated, responseDecorated);
     }
 
     public static RequestSpecification given(final RequestSpecification requestSpecification) {
         final RequestSpecificationImpl generated = (RequestSpecificationImpl) RestAssured.given(requestSpecification);
-        final RequestSpecificationDecorated request = new RequestSpecificationDecorated(generated);
+        final RequestSpecification request = DecorationHelper.decorate(generated);
         final ResponseSpecificationDecorated response = new ResponseSpecificationDecorated(
                 (ResponseSpecificationImpl) generated.response());
         return ((TestSpecificationImpl) given(request, response)).getRequestSpecification();

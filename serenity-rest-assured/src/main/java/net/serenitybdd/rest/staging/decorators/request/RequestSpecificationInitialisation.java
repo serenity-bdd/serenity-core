@@ -5,14 +5,12 @@ import com.jayway.restassured.internal.RequestSpecificationImpl;
 import com.jayway.restassured.internal.ResponseSpecificationImpl;
 import com.jayway.restassured.response.*;
 import com.jayway.restassured.specification.*;
+import net.serenitybdd.rest.staging.utils.RestReportingHelper;
 import net.serenitybdd.rest.staging.decorators.ReflectionHelper;
 import net.serenitybdd.rest.staging.decorators.ResponseDecorated;
 import net.serenitybdd.rest.staging.decorators.ResponseSpecificationDecorated;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * User: YamStranger
@@ -23,10 +21,16 @@ abstract class RequestSpecificationInitialisation implements FilterableRequestSp
     private static final Logger log = LoggerFactory.getLogger(RequestSpecificationInitialisation.class);
     protected final RequestSpecificationImpl core;
     protected final ReflectionHelper<RequestSpecificationImpl> helper;
+    protected RestReportingHelper reporting;
 
     public RequestSpecificationInitialisation(RequestSpecificationImpl core) {
         this.core = core;
         this.helper = new ReflectionHelper<>(core);
+        this.reporting = new RestReportingHelper();
+    }
+
+    public void setRestReportingHelper(final RestReportingHelper helper) {
+        this.reporting = helper;
     }
 
     @Override
@@ -101,9 +105,9 @@ abstract class RequestSpecificationInitialisation implements FilterableRequestSp
         }
     }
 
-    protected Response decorate(final Response response) {
+    protected ResponseDecorated decorate(final Response response) {
         if (response instanceof ResponseDecorated) {
-            return response;
+            return (ResponseDecorated)response;
         } else {
             return new ResponseDecorated(response);
         }

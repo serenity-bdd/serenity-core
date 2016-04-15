@@ -504,21 +504,13 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
         }
     }
 
-    private RequestSpecification decorate(final RequestSpecification specification) {
-        if (specification instanceof RequestSpecificationDecorated) {
-            return specification;
-        } else {
-            return new RequestSpecificationDecorated((RequestSpecificationImpl) specification);
-        }
-    }
-
     protected void setrequestSpecification(final RequestSpecification specification) {
         setRequestSpecification(specification);
     }
 
     protected void setRequestSpecification(final RequestSpecification specification) {
         try {
-            this.helper.setValueTo("requestSpecification", decorate(specification));
+            this.helper.setValueTo("requestSpecification", DecorationHelper.decorate(specification));
         } catch (Exception e) {
             throw new IllegalStateException
                     ("Can not set specification to response, SerenityRest can work incorrectly");

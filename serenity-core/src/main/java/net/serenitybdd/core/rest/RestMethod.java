@@ -3,7 +3,13 @@ package net.serenitybdd.core.rest;
 import com.google.common.base.Optional;
 
 public enum RestMethod {
-    GET, POST, PUT, DELETE, PATCH;
+    PUT,
+    GET,
+    POST,
+    PATCH,
+    OPTIONS,
+    HEAD,
+    DELETE;
 
     private static final Optional<RestMethod> NOT_A_REST_METHOD = Optional.absent();
 

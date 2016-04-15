@@ -179,40 +179,15 @@ public class RestReportingHelper {
                     withStatusCode(response.getStatusCode());
         }
         getEventBus().getBaseStepListener().recordRestQuery(restQuery);
-
-        /*RestQuery query = RestQuery.withMethod(method).andPath(path);
-        this.query = query;*/
-        //notifyGetOrDelete
-        //executeRestQuery
-        /**
-         * wrappedResult
-         try{
-         if (restCallsAreDisabled()) {
-         return stubbed(method);
-         }
-         Object result = invokeMethod(method, target, args);
-
-         notifyResponse((Response) result){;
-         if (shouldRecordResponseBodyFor(result)) {
-         query = query.withResponse(responseBody).withStatusCode(statusCode);
-         }
-         getEventBus().getBaseStepListener().recordRestQuery(query);
-         }
-         } catch (Exception generalException) {
-         Throwable error = SerenityManagedException.detachedCopyOf(generalException.getCause());
-         Throwable assertionError = forError(error).convertToAssertion();
-         notifyOfStepFailure(method, args, assertionError);
-         return stubbed(method);
-         }
-
-         */
     }
 
-    public void registerCall(final RestMethod type, final RequestSpecificationDecorated spec, final String path,
+    public void registerCall(final RestMethod method, final RequestSpecificationDecorated spec, final String path,
                              final RuntimeException throwable, final Object... params) {
-        ExecutedStepDescription description = ExecutedStepDescription.withTitle(type.toString());
+        RestQuery restQuery = recordRestSpecificationData(method, spec, path, params);
+        ExecutedStepDescription description = ExecutedStepDescription.withTitle(restQuery.toString());
         StepFailure failure = new StepFailure(description, throwable);
         StepEventBus.getEventBus().stepStarted(description);
+        getEventBus().getBaseStepListener().recordRestQuery(restQuery);
         StepEventBus.getEventBus().stepFailed(failure);
         if (Serenity.shouldThrowErrorsImmediately()) {
             throw throwable;

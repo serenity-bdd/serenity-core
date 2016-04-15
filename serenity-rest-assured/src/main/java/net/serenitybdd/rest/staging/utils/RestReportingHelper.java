@@ -159,7 +159,6 @@ public class RestReportingHelper {
                 values.put(internal.logDetail(), internal.recorded());
             }
         }
-
         final RestQuery query = RestQuery.
                 withMethod(method).andPath(path).
                 withContentType(String.valueOf(

@@ -146,10 +146,6 @@ public class RestReportingHelper {
         return payload;
     }
 
-    public boolean restCallsAreEnabled() {
-        return !(getEventBus().isDryRun() || getEventBus().currentTestIsSuspended());
-    }
-
     public RestQuery recordRestSpecificationData(final RestMethod method, final RequestSpecificationDecorated spec,
                                                  final String path, final Object... params) {
         final Map<LogDetail, String> values = new HashMap<>();

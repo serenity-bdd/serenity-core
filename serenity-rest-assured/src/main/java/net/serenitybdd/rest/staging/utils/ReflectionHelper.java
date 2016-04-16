@@ -1,4 +1,4 @@
-package net.serenitybdd.rest.staging.decorators;
+package net.serenitybdd.rest.staging.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

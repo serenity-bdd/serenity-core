@@ -33,7 +33,7 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
 
     public ResponseSpecificationDecorated(ResponseSpecificationImpl core) {
         this.core = core;
-        this.helper = new ReflectionHelper(core);
+        this.helper = new ReflectionHelper<ResponseSpecificationImpl>(core);
     }
 
     @Override

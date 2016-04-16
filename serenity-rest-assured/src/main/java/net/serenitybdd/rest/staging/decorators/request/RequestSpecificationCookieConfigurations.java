@@ -1,8 +1,8 @@
 package net.serenitybdd.rest.staging.decorators.request;
 
+import com.google.common.base.Preconditions;
 import com.jayway.restassured.internal.MapCreator;
 import com.jayway.restassured.internal.RequestSpecificationImpl;
-import com.jayway.restassured.internal.log.LogRepository;
 import com.jayway.restassured.response.Cookie;
 import com.jayway.restassured.response.Cookies;
 import com.jayway.restassured.specification.FilterableRequestSpecification;
@@ -10,12 +10,10 @@ import com.jayway.restassured.specification.RequestSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static com.jayway.restassured.internal.assertion.AssertParameter.notNull;
 import static java.util.Arrays.asList;
 
 /**
@@ -38,7 +36,7 @@ abstract class RequestSpecificationCookieConfigurations extends RequestSpecifica
 
     @Override
     public RequestSpecification cookies(Map<String, ?> cookies) {
-        notNull(cookies, "cookies");
+        Preconditions.checkNotNull(cookies, "cookies");
         List<Cookie> list = new LinkedList<>();
         for (Map.Entry<String, ?> cookie : cookies.entrySet()) {
             list.add(new Cookie.Builder(cookie.getKey(),
@@ -49,7 +47,7 @@ abstract class RequestSpecificationCookieConfigurations extends RequestSpecifica
 
     @Override
     public RequestSpecification cookies(Cookies cookies) {
-        notNull(cookies, "cookies");
+        Preconditions.checkNotNull(cookies, "cookies");
         core.cookies(cookies);
         return this;
     }
@@ -71,7 +69,7 @@ abstract class RequestSpecificationCookieConfigurations extends RequestSpecifica
 
     @Override
     public RequestSpecification cookie(Cookie cookie) {
-        notNull(cookie, "Cookie");
+        Preconditions.checkNotNull(cookie, "Cookie");
         return cookies(new Cookies(asList(cookie)));
     }
 

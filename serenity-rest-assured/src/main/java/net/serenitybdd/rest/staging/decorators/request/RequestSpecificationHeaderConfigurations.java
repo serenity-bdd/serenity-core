@@ -1,5 +1,6 @@
 package net.serenitybdd.rest.staging.decorators.request;
 
+import com.google.common.base.Preconditions;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.internal.MapCreator;
 import com.jayway.restassured.internal.RequestSpecificationImpl;
@@ -11,10 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.jayway.restassured.internal.assertion.AssertParameter.notNull;
 import static net.serenitybdd.rest.staging.HeaderNames.*;
 
 /**
@@ -48,7 +47,7 @@ abstract class RequestSpecificationHeaderConfigurations extends RequestSpecifica
 
     @Override
     public RequestSpecification headers(Headers headers) {
-        notNull(headers, "headers");
+        Preconditions.checkNotNull(headers, "headers");
         Map<String, String> converted = new HashMap<>();
         if (headers.exist()) {
             for (Header header : headers.asList()) {
@@ -60,8 +59,8 @@ abstract class RequestSpecificationHeaderConfigurations extends RequestSpecifica
 
     @Override
     public RequestSpecification header(String headerName, Object headerValue, Object... additionalHeaderValues) {
-        notNull(headerName, "Header name");
-        notNull(headerValue, "Header value");
+        Preconditions.checkNotNull(headerName, "Header name");
+        Preconditions.checkNotNull(headerValue, "Header value");
 
         Map<String, Object> prepared = new HashMap<>();
         prepared.put(headerName, headerValue);
@@ -80,13 +79,13 @@ abstract class RequestSpecificationHeaderConfigurations extends RequestSpecifica
 
     @Override
     public RequestSpecification accept(ContentType contentType) {
-        notNull(contentType, "Accept header");
+        Preconditions.checkNotNull(contentType, "Accept header");
         return accept(contentType.getAcceptHeader());
     }
 
     @Override
     public RequestSpecification accept(String mediaTypes) {
-        notNull(mediaTypes, "Accept header media range");
+        Preconditions.checkNotNull(mediaTypes, "Accept header media range");
         return header(ACCEPT.asString(), mediaTypes);
     }
 }

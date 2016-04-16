@@ -31,6 +31,7 @@ import static net.serenitybdd.core.rest.RestMethod.*;
 public class RequestSpecificationDecorated extends RequestSpecificationAdvancedConfiguration
         implements FilterableRequestSpecification {
     private static final Logger log = LoggerFactory.getLogger(RequestSpecificationDecorated.class);
+    private Response lastResponse;
 
     public RequestSpecificationDecorated(RequestSpecificationImpl core) {
         super(core);
@@ -252,16 +253,21 @@ public class RequestSpecificationDecorated extends RequestSpecificationAdvancedC
             exception = e;
         }
         if (exception != null) {
-            if(Serenity.shouldThrowErrorsImmediately()){
+            if (Serenity.shouldThrowErrorsImmediately()) {
                 throw exception;
-            }else{
+            } else {
                 response = stubbed();
             }
             reporting.registerCall(method, this, path, exception, pathParams);
         } else {
             reporting.registerCall(method, response, this, path, pathParams);
         }
+        this.lastResponse = response;
         return response;
+    }
+
+    public Response getLastResponse() {
+        return this.lastResponse;
     }
 
     private Response stubbed() {

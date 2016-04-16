@@ -1,5 +1,6 @@
 package net.serenitybdd.rest.staging;
 
+import com.google.common.base.Preconditions;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.authentication.*;
 import com.jayway.restassured.config.LogConfig;
@@ -11,7 +12,9 @@ import com.jayway.restassured.internal.*;
 import com.jayway.restassured.mapper.ObjectMapper;
 import com.jayway.restassured.parsing.Parser;
 import com.jayway.restassured.response.Response;
+import com.jayway.restassured.response.ValidatableResponse;
 import com.jayway.restassured.specification.*;
+import net.serenitybdd.rest.staging.decorators.request.RequestSpecificationDecorated;
 import net.serenitybdd.rest.staging.utils.RestDecorationHelper;
 import net.serenitybdd.rest.staging.decorators.ResponseSpecificationDecorated;
 
@@ -32,6 +35,23 @@ import static com.jayway.restassured.specification.ProxySpecification.host;
  * Time: 8:51 AM
  */
 public class SerenityRest {
+    private static ThreadLocal<RequestSpecificationDecorated> currentRequestSpecification = new ThreadLocal<>();
+
+    public static RequestSpecification rest() {
+        return given();
+    }
+
+    public static ValidatableResponse and() {
+        return then();
+    }
+
+    public static ValidatableResponse then() {
+        Preconditions.checkNotNull(currentRequestSpecification, "request specification should be initialized");
+        final Response response = currentRequestSpecification.get().getLastResponse();
+        Preconditions.checkNotNull(currentRequestSpecification, "response should be created");
+        return response.then();
+    }
+
     public static String setDefaultBasePath(final String basePath) {
         return RestAssured.basePath = basePath;
     }
@@ -198,7 +218,11 @@ public class SerenityRest {
     public static RequestSender given(final RequestSpecification request, final ResponseSpecification response) {
         RequestSpecification requestDecorated = RestDecorationHelper.decorate(request);
         ResponseSpecification responseDecorated = RestDecorationHelper.decorate(response);
-        return RestAssured.given(requestDecorated, responseDecorated);
+        RequestSender created = RestAssured.given(requestDecorated, responseDecorated);
+        currentRequestSpecification.set(
+                (RequestSpecificationDecorated) ((TestSpecificationImpl) created).getRequestSpecification()
+        );
+        return created;
     }
 
     public static RequestSpecification given(final RequestSpecification requestSpecification) {

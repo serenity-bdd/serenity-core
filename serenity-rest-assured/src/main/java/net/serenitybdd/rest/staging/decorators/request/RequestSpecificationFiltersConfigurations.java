@@ -1,7 +1,5 @@
 package net.serenitybdd.rest.staging.decorators.request;
 
-import com.jayway.restassured.authentication.AuthenticationScheme;
-import com.jayway.restassured.config.RestAssuredConfig;
 import com.jayway.restassured.filter.Filter;
 import com.jayway.restassured.internal.RequestSpecificationImpl;
 import com.jayway.restassured.specification.FilterableRequestSpecification;

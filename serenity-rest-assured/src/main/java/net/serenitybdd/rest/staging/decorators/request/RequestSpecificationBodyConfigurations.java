@@ -1,19 +1,18 @@
 package net.serenitybdd.rest.staging.decorators.request;
 
+import com.google.common.base.Preconditions;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.internal.RequestSpecificationImpl;
 import com.jayway.restassured.internal.mapper.ObjectMapperType;
 import com.jayway.restassured.mapper.ObjectMapper;
 import com.jayway.restassured.specification.FilterableRequestSpecification;
 import com.jayway.restassured.specification.RequestSpecification;
-import net.serenitybdd.rest.staging.HeaderNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.InputStream;
 
-import static com.jayway.restassured.internal.assertion.AssertParameter.notNull;
 import static net.serenitybdd.rest.staging.HeaderNames.*;
 
 /**
@@ -114,13 +113,13 @@ abstract class RequestSpecificationBodyConfigurations extends RequestSpecificati
 
     @Override
     public RequestSpecification contentType(ContentType contentType) {
-        notNull(contentType, ContentType.class);
+        Preconditions.checkNotNull(contentType, ContentType.class);
         return header(CONTENT_TYPE.asString(), contentType);
     }
 
     @Override
     public RequestSpecification contentType(String contentType) {
-        notNull(contentType, "Content-Type header cannot be null");
+        Preconditions.checkNotNull(contentType, "Content-Type header cannot be null");
         return header(CONTENT_TYPE.asString(), contentType);
     }
 }

@@ -16,6 +16,7 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import static com.github.tomakehurst.wiremock.client.WireMock.get
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
 import static net.serenitybdd.rest.staging.SerenityRest.*
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
@@ -59,7 +60,17 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
 
         @Step
         def getById(final String url) {
-            given().get("$url/{id}", 1000);
+            rest().get("$url/{id}", 1000);
+        }
+
+        @Step
+        def thenCheckOutcome() {
+            then().body("Id", Matchers.anything())
+        }
+
+        @Step
+        def thenCheckWrongOutcome() {
+            then().body("id", Matchers.equalTo(0));
         }
     }
 
@@ -124,5 +135,35 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
             formatted("${testSteps.get(0).getRestQuery().getResponseBody()}") == formatted(body)
         and:
             result.statusCode(200)
+    }
+
+    def "should support sequences of operations in different steps"() {
+        given:
+            def listener = new BaseStepListener(temporaryFolder.newFolder())
+            test.register(listener)
+            StepFactory factory = new StepFactory();
+            def restSteps = factory.getStepLibraryFor(RestSteps)
+            def JsonObject json = new JsonObject()
+            json.addProperty("Object", "Groot")
+            json.addProperty("id", 7)
+            def body = gson.toJson(json)
+
+            def base = "http://localhost:${wire.port()}"
+            def path = "/test/objects"
+            def url = "$base$path"
+
+            stubFor(get(urlPathMatching("path.*"))
+                .withRequestBody(matching(".*"))
+                .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(body)));
+        when:
+            restSteps.getById(url)
+            restSteps.thenCheckOutcome()
+        then:
+            def testSteps = listener.testOutcomes[0].testSteps
+            testSteps[0].result == TestResult.SUCCESS
+            testSteps[1].result == TestResult.SUCCESS
     }
 }

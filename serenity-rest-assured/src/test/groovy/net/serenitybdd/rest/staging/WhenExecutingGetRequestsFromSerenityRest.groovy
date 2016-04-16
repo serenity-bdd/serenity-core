@@ -2,9 +2,11 @@ package net.serenitybdd.rest.staging
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
+import net.serenity.test.utils.rules.TestCase
 import net.serenitybdd.rest.staging.decorators.ResponseDecorated
 import net.serenitybdd.rest.staging.rules.RestConfigurationAction
 import net.serenitybdd.rest.staging.rules.RestConfigurationRule
+import net.thucydides.core.steps.BaseStepListener
 import org.junit.Rule
 import spock.lang.Specification
 
@@ -31,6 +33,11 @@ class WhenExecutingGetRequestsFromSerenityRest extends Specification {
             reset()
         }
     },)
+
+    @Rule
+    def TestCase<BaseStepListener> test = new TestCase({
+        Mock(BaseStepListener)
+    }.call());
 
     def "should return wrapped response during GET by URL called from Serenity Rest"() {
         given: "configured access point"

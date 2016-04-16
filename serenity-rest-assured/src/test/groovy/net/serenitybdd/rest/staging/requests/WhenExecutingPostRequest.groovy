@@ -10,10 +10,12 @@ import com.jayway.restassured.RestAssured
 import com.jayway.restassured.specification.RequestSender
 import com.jayway.restassured.specification.RequestSpecification
 import com.jayway.restassured.specification.ResponseSpecification
+import net.serenity.test.utils.rules.TestCase
 import net.serenitybdd.core.rest.RestQuery
 import net.serenitybdd.rest.staging.decorators.ResponseDecorated
 import net.serenitybdd.rest.staging.rules.RestConfigurationAction
 import net.serenitybdd.rest.staging.rules.RestConfigurationRule
+import net.thucydides.core.steps.BaseStepListener
 import org.junit.Rule
 import spock.lang.Specification
 
@@ -42,6 +44,11 @@ class WhenExecutingPostRequest extends Specification {
             reset()
         }
     },)
+
+    @Rule
+    def TestCase<BaseStepListener> test = new TestCase({
+        Mock(BaseStepListener)
+    }.call());
 
     def Gson gson = new GsonBuilder().setPrettyPrinting().
         serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();

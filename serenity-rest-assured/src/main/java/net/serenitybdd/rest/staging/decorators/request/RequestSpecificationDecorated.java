@@ -237,7 +237,7 @@ public class RequestSpecificationDecorated extends RequestSpecificationAdvancedC
                     response = decorate(this.core.options(path, pathParams));
                     break;
                 case PATCH:
-                    response = decorate(this.core.options(path, pathParams));
+                    response = decorate(this.core.patch(path, pathParams));
                     break;
             }
         } catch (RuntimeException e) {

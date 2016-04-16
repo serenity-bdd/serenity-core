@@ -6,10 +6,13 @@ import com.jayway.restassured.RestAssured
 import com.jayway.restassured.specification.RequestSender
 import com.jayway.restassured.specification.RequestSpecification
 import com.jayway.restassured.specification.ResponseSpecification
+import net.serenity.test.utils.rules.TestCase
 import net.serenitybdd.rest.staging.decorators.ResponseDecorated
 import net.serenitybdd.rest.staging.rules.RestConfigurationAction
 import net.serenitybdd.rest.staging.rules.RestConfigurationRule
+import net.thucydides.core.steps.BaseStepListener
 import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import static net.serenitybdd.rest.staging.SerenityRest.*
@@ -24,6 +27,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching
  * Date: 3/30/16
  * Time: 9:57 AM
  */
+
 class WhenExecutingDeleteRequest extends Specification {
 
     @Rule
@@ -37,10 +41,15 @@ class WhenExecutingDeleteRequest extends Specification {
         }
     },)
 
+    @Rule
+    def TestCase<BaseStepListener> test = new TestCase({
+        Mock(BaseStepListener)
+    }.call());
+
     def "should use wrapped request and response if they initialised separately"() {
         given: "initialised Request and Response and access point"
             def request = (RequestSpecification) RestAssured.given();
-            def response = (ResponseSpecification)RestAssured.given().response();
+            def response = (ResponseSpecification) RestAssured.given().response();
             def body = "<root>" +
                 "<value>1</value>" +
                 "</root>"

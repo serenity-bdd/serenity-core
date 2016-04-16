@@ -1,5 +1,6 @@
 package net.serenitybdd.rest.staging
 
+import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
@@ -7,21 +8,14 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import net.serenity.test.utils.rules.TestCase
 import net.serenitybdd.core.rest.RestQuery
-import net.serenitybdd.rest.WhenRunningRestTestsThroughSerenity
-import net.thucydides.core.annotations.Step
-import net.thucydides.core.model.TestResult
 import net.thucydides.core.steps.BaseStepListener
-import net.thucydides.core.steps.StepFactory
-import org.hamcrest.Matchers
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-import static com.github.tomakehurst.wiremock.client.WireMock.get
-import static com.github.tomakehurst.wiremock.client.WireMock.post
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
 import static net.serenitybdd.core.rest.RestMethod.POST
-import static net.serenitybdd.rest.SerenityRest.rest
 import static net.serenitybdd.rest.staging.SerenityRest.*
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.matching
@@ -33,7 +27,7 @@ import static net.serenitybdd.rest.staging.JsonConverter.*;
  * Date: 11/29/15
  * Time: 5:58 PM
  */
-class WhenExecutingRestUsingSerenity extends Specification {
+class WhenRecordPostRequestsWithSerenityRest extends Specification {
 
     @Rule
     def WireMockRule wire = new WireMockRule(0);
@@ -52,109 +46,87 @@ class WhenExecutingRestUsingSerenity extends Specification {
     def "Should record RestAssured post() method calls"() {
         given:
             def JsonObject json = new JsonObject()
-            json.addProperty("Transport", "train")
-            json.addProperty("arriving", "10min")
+            json.addProperty("Number", "9999")
+            json.addProperty("Price", "100")
             def body = gson.toJson(json)
 
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/transport"
+            def path = "/test/number"
             def url = "$base$path"
 
-            stubFor(post(urlPathMatching("$path.*"))
+            stubFor(WireMock.post(urlEqualTo(path))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
                 .withBody(body)));
         when:
-            def result = given().contentType("application/json").content(body).post(url).then()
+            def result = post(url).then()
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
                 assert "$query" == "POST $url"
                 assert query.method == POST
+                assert "${query.path}" == url
                 assert query.statusCode == 200
-                assert query.contentType == "application/json"
-                assert formatted(query.content) == formatted(body)
             }
         and:
             result.statusCode(200)
     }
 
-    static class RestSteps {
-        @Step
-        def successfulGet(final String url) {
-            given().get("$url/{id}", 1000).then().body("id", Matchers.equalTo(1000));
-            given().get("$url/{id}", 1000).then().body(Matchers.equalTo("/pets/id"))
-        }
-
-        @Step
-        def failingGet(final String url) {
-            given().get("$url/{id}", 1000).then().body("Food", Matchers.equalTo(1001));
-        }
-
-
-        @Step
-        def getById(final String url) {
-            given().get("$url/{id}", 1000);
-        }
-    }
-
-    def "should support failing assertions on response results"() {
+    def "Should record RestAssured post() method calls with parameters"() {
         given:
-            def listener = new BaseStepListener(temporaryFolder.newFolder())
-            test.register(listener)
-            StepFactory factory = new StepFactory();
-            def restSteps = factory.getStepLibraryFor(RestSteps)
-
             def JsonObject json = new JsonObject()
-            json.addProperty("Food", "sushi")
-            json.addProperty("size", "7")
+            json.addProperty("Exists", true)
+            json.addProperty("label", "UI")
             def body = gson.toJson(json)
 
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/food/sushi"
+            def path = "/test/label"
             def url = "$base$path"
 
-            stubFor(get(urlPathMatching("$path.*"))
+            stubFor(WireMock.post(urlPathMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
                 .withBody(body)));
         when:
-            restSteps.failingGet(url)
-        then:
-            def testSteps = listener.testOutcomes[0].testSteps
-            testSteps[0].result == TestResult.FAILURE
-    }
-
-    def "should support assertions on response results"() {
-        given:
-            def listener = new BaseStepListener(temporaryFolder.newFolder())
-            test.register(listener)
-            def JsonObject json = new JsonObject()
-            json.addProperty("Sky", "Clear")
-            json.addProperty("Time", "10:17AM")
-            def body = gson.toJson(json)
-
-            def base = "http://localhost:${wire.port()}"
-            def path = "/test/photos/eidk398d"
-            def url = "$base$path"
-
-            stubFor(get(urlPathMatching(path))
-                .withRequestBody(matching(".*"))
-                .willReturn(aResponse()
-                .withStatus(200)
-                .withHeader("Content-Type", "application/json")
-                .withBody(body)));
-        when:
-            def result = given().get(url).then().body("Sky", Matchers.equalTo("Clear"))
-            test.finish()
+            def result = post("$url?status={status}", ["status": "available"]).then()
         then: "The JSON request should be recorded in the test steps"
-            listener.getTestOutcomes().size() > 0
-            listener.getTestOutcomes().get(0).getFlattenedTestSteps().size() > 0
-            def testSteps = listener.getTestOutcomes().get(0).getFlattenedTestSteps()
-            "${testSteps.get(0).getDescription()}" == "GET $url"
+            1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
+                assert "$query" == "POST $url?status=available"
+                assert query.method == POST
+                assert query.statusCode == 200
+            }
+        and:
+            result.statusCode(200)
+    }
+
+    def "Should record RestAssured post() method calls with parameter provided as a list"() {
+        given:
+            def JsonObject json = new JsonObject()
+            json.addProperty("Weather", "rain")
+            json.addProperty("temperature", "+2")
+            def body = gson.toJson(json)
+
+            def base = "http://localhost:${wire.port()}"
+            def path = "/test/weather"
+            def url = "$base$path"
+
+            stubFor(WireMock.post(urlPathMatching("$path.*"))
+                .withRequestBody(matching(".*"))
+                .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(body)));
+        when:
+            def result = post("$url?status={status}", "available").then()
+        then: "The JSON request should be recorded in the test steps"
+            1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
+                assert "$query" == "POST $url?status=available"
+                assert query.method == POST
+                assert query.statusCode == 200
+            }
         and:
             result.statusCode(200)
     }

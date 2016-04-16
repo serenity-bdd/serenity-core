@@ -3,11 +3,19 @@ package net.serenitybdd.rest.staging.decorators.request;
 import com.jayway.restassured.internal.RequestSpecificationImpl;
 import com.jayway.restassured.response.*;
 import com.jayway.restassured.specification.*;
+import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.rest.RestMethod;
 import net.serenitybdd.rest.staging.decorators.ResponseDecorated;
+import net.serenitybdd.rest.staging.utils.RestExecutionHelper;
+import net.serenitybdd.rest.staging.utils.RestReportingHelper;
+import net.serenitybdd.rest.stubs.RequestSpecificationStub;
+import net.serenitybdd.rest.stubs.ResponseSpecificationStub;
+import net.serenitybdd.rest.stubs.ResponseStub;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
 import java.util.Map;
@@ -211,11 +219,8 @@ public class RequestSpecificationDecorated extends RequestSpecificationAdvancedC
     }
 
     protected Response execute(final RestMethod method, final String path, final Object... pathParams) {
-        ResponseDecorated response = null;
+        Response response = null;
         RuntimeException exception = null;
-/*        if (restCallsAreDisabled()) {
-            return stubbed(method);
-        }*/
         try {
             switch (method) {
                 case POST:
@@ -240,16 +245,26 @@ public class RequestSpecificationDecorated extends RequestSpecificationAdvancedC
                     response = decorate(this.core.patch(path, pathParams));
                     break;
             }
+            if (RestExecutionHelper.restCallsAreEnabled()) {
+                response = stubbed();
+            }
         } catch (RuntimeException e) {
             exception = e;
-        } finally {
-            if (exception == null) {
-                reporting.registerCall(method, response, this, path, pathParams);
-            } else {
-                reporting.registerCall(method, this, path, exception, pathParams);
+        }
+        if (exception != null) {
+            if(Serenity.shouldThrowErrorsImmediately()){
                 throw exception;
+            }else{
+                response = stubbed();
             }
+            reporting.registerCall(method, this, path, exception, pathParams);
+        } else {
+            reporting.registerCall(method, response, this, path, pathParams);
         }
         return response;
+    }
+
+    private Response stubbed() {
+        return new ResponseStub();
     }
 }

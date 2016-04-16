@@ -7,8 +7,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import net.serenity.test.utils.rules.TestCase
-import net.serenitybdd.core.rest.RestQuery
-import net.serenitybdd.rest.WhenRunningRestTestsThroughSerenity
 import net.thucydides.core.annotations.Step
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.steps.BaseStepListener
@@ -18,13 +16,7 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
-import static net.serenitybdd.core.rest.RestMethod.DELETE
-import static net.serenitybdd.core.rest.RestMethod.GET
-import static net.serenitybdd.core.rest.RestMethod.PATCH
-import static net.serenitybdd.core.rest.RestMethod.POST
-import static net.serenitybdd.core.rest.RestMethod.PUT
 import static net.serenitybdd.rest.staging.SerenityRest.*
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.matching

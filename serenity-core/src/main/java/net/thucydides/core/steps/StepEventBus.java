@@ -65,6 +65,7 @@ public class StepEventBus {
 
     private Class<?> classUnderTest;
     private Story storyUnderTest;
+    private Optional<Boolean> isDryRun = Optional.absent();
 
     private final EnvironmentVariables environmentVariables;
     @Inject
@@ -575,8 +576,16 @@ public class StepEventBus {
         return (baseStepListener != null) ? baseStepListener.getForcedResult() : NO_FORCED_RESULT;
     }
 
-    public boolean isDryRun() {
-        return ThucydidesSystemProperty.THUCYDIDES_DRY_RUN.booleanFrom(environmentVariables);
+    public synchronized boolean isDryRun() {
+        if (this.isDryRun.isPresent()) {
+            return this.isDryRun.get();
+        } else {
+            return ThucydidesSystemProperty.THUCYDIDES_DRY_RUN.booleanFrom(environmentVariables);
+        }
+    }
+
+    public synchronized void enableDryRun() {
+        this.isDryRun = Optional.of(true);
     }
 
     public void exceptionExpected(Class<? extends Throwable> expected) {

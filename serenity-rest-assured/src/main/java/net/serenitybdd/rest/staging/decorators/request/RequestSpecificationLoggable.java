@@ -3,10 +3,9 @@ package net.serenitybdd.rest.staging.decorators.request;
 import com.jayway.restassured.internal.RequestLogSpecificationImpl;
 import com.jayway.restassured.internal.RequestSpecificationImpl;
 import com.jayway.restassured.internal.log.LogRepository;
-import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.FilterableRequestSpecification;
 import com.jayway.restassured.specification.RequestLogSpecification;
-import net.serenitybdd.rest.staging.decorators.ReflectionHelper;
+import net.serenitybdd.rest.staging.utils.ReflectionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

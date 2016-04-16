@@ -6,7 +6,7 @@ import com.jayway.restassured.internal.ResponseSpecificationImpl;
 import com.jayway.restassured.response.*;
 import com.jayway.restassured.specification.*;
 import net.serenitybdd.rest.staging.utils.RestReportingHelper;
-import net.serenitybdd.rest.staging.decorators.ReflectionHelper;
+import net.serenitybdd.rest.staging.utils.ReflectionHelper;
 import net.serenitybdd.rest.staging.decorators.ResponseDecorated;
 import net.serenitybdd.rest.staging.decorators.ResponseSpecificationDecorated;
 import org.slf4j.Logger;

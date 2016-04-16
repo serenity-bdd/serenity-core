@@ -12,8 +12,7 @@ import com.jayway.restassured.mapper.ObjectMapper;
 import com.jayway.restassured.parsing.Parser;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.*;
-import net.serenitybdd.rest.staging.decorators.DecorationHelper;
-import net.serenitybdd.rest.staging.decorators.request.RequestSpecificationDecorated;
+import net.serenitybdd.rest.staging.utils.RestDecorationHelper;
 import net.serenitybdd.rest.staging.decorators.ResponseSpecificationDecorated;
 
 import java.io.File;
@@ -186,7 +185,7 @@ public class SerenityRest {
 
     public static RequestSpecification given() {
         final RequestSpecificationImpl generated = (RequestSpecificationImpl) RestAssured.given();
-        final RequestSpecification request = DecorationHelper.decorate(generated);
+        final RequestSpecification request = RestDecorationHelper.decorate(generated);
         final ResponseSpecificationDecorated response = new ResponseSpecificationDecorated(
                 (ResponseSpecificationImpl) generated.response());
         return ((TestSpecificationImpl) given(request, response)).getRequestSpecification();
@@ -197,14 +196,14 @@ public class SerenityRest {
     }
 
     public static RequestSender given(final RequestSpecification request, final ResponseSpecification response) {
-        RequestSpecification requestDecorated = DecorationHelper.decorate(request);
-        ResponseSpecification responseDecorated = DecorationHelper.decorate(response);
+        RequestSpecification requestDecorated = RestDecorationHelper.decorate(request);
+        ResponseSpecification responseDecorated = RestDecorationHelper.decorate(response);
         return RestAssured.given(requestDecorated, responseDecorated);
     }
 
     public static RequestSpecification given(final RequestSpecification requestSpecification) {
         final RequestSpecificationImpl generated = (RequestSpecificationImpl) RestAssured.given(requestSpecification);
-        final RequestSpecification request = DecorationHelper.decorate(generated);
+        final RequestSpecification request = RestDecorationHelper.decorate(generated);
         final ResponseSpecificationDecorated response = new ResponseSpecificationDecorated(
                 (ResponseSpecificationImpl) generated.response());
         return ((TestSpecificationImpl) given(request, response)).getRequestSpecification();

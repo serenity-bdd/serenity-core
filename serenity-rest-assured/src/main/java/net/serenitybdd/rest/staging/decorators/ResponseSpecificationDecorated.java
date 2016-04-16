@@ -2,7 +2,6 @@ package net.serenitybdd.rest.staging.decorators;
 
 import com.jayway.restassured.config.RestAssuredConfig;
 import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.internal.RequestSpecificationImpl;
 import com.jayway.restassured.internal.ResponseParserRegistrar;
 import com.jayway.restassured.internal.ResponseSpecificationImpl;
 import com.jayway.restassured.internal.log.LogRepository;
@@ -11,6 +10,8 @@ import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.*;
 import com.jayway.restassured.specification.RequestSpecification;
 import net.serenitybdd.rest.staging.decorators.request.RequestSpecificationDecorated;
+import net.serenitybdd.rest.staging.utils.RestDecorationHelper;
+import net.serenitybdd.rest.staging.utils.ReflectionHelper;
 import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -510,7 +511,7 @@ public class ResponseSpecificationDecorated implements FilterableResponseSpecifi
 
     protected void setRequestSpecification(final RequestSpecification specification) {
         try {
-            this.helper.setValueTo("requestSpecification", DecorationHelper.decorate(specification));
+            this.helper.setValueTo("requestSpecification", RestDecorationHelper.decorate(specification));
         } catch (Exception e) {
             throw new IllegalStateException
                     ("Can not set specification to response, SerenityRest can work incorrectly");

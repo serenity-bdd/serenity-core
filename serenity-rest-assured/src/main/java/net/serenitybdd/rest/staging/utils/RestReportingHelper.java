@@ -164,7 +164,7 @@ public class RestReportingHelper {
         return query;
     }
 
-    public void registerCall(final RestMethod method, final ResponseDecorated response,
+    public void registerCall(final RestMethod method, final Response response,
                              final RequestSpecificationDecorated spec,
                              final String path, final Object... params) {
         RestQuery restQuery = recordRestSpecificationData(method, spec, path, params);

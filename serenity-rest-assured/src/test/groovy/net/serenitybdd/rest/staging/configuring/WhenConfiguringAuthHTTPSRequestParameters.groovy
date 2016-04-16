@@ -6,9 +6,11 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.jayway.restassured.specification.FilterableRequestSpecification
+import net.serenity.test.utils.rules.TestCase
 import net.serenitybdd.rest.staging.decorators.ResponseDecorated
 import net.serenitybdd.rest.staging.rules.RestConfigurationAction
 import net.serenitybdd.rest.staging.rules.RestConfigurationRule
+import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.util.FileSystemUtils
 import org.junit.Rule
 import spock.lang.Specification
@@ -38,6 +40,11 @@ class WhenConfiguringAuthHTTPSRequestParameters extends Specification {
             reset()
         }
     },)
+
+    @Rule
+    def TestCase<BaseStepListener> test = new TestCase({
+        Mock(BaseStepListener)
+    }.call());
 
     def Gson gson = new GsonBuilder().setPrettyPrinting().
         serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();

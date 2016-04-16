@@ -4,10 +4,12 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.jayway.restassured.http.ContentType
 import com.jayway.restassured.specification.FilterableRequestSpecification
+import net.serenity.test.utils.rules.TestCase
 import net.serenitybdd.rest.staging.HeaderNames
 import net.serenitybdd.rest.staging.decorators.ResponseDecorated
 import net.serenitybdd.rest.staging.rules.RestConfigurationAction
 import net.serenitybdd.rest.staging.rules.RestConfigurationRule
+import net.thucydides.core.steps.BaseStepListener
 import org.junit.Rule
 import spock.lang.Specification
 
@@ -33,6 +35,11 @@ class WhenConfiguringHeadersForRequest extends Specification {
             reset()
         }
     },)
+
+    @Rule
+    def TestCase<BaseStepListener> test = new TestCase({
+        Mock(BaseStepListener)
+    }.call());
 
     def "should be returned wrapped request specification after setting header"() {
         given: "request initialised"

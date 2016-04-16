@@ -21,8 +21,10 @@ import com.jayway.restassured.response.Response
 import com.jayway.restassured.specification.FilterableRequestSpecification
 import com.jayway.restassured.specification.FilterableResponseSpecification
 import com.jayway.restassured.specification.ProxySpecification
+import net.serenity.test.utils.rules.TestCase
 import net.serenitybdd.rest.staging.rules.RestConfigurationAction
 import net.serenitybdd.rest.staging.rules.RestConfigurationRule
+import net.thucydides.core.steps.BaseStepListener
 import org.hamcrest.Matchers
 import org.junit.Rule
 import spock.lang.Specification
@@ -53,6 +55,11 @@ class WhenConfiguringDefaultParameters extends Specification {
             reset()
         }
     },)
+
+    @Rule
+    def TestCase<BaseStepListener> test = new TestCase({
+        Mock(BaseStepListener)
+    }.call());
 
     def Gson gson = new GsonBuilder().setPrettyPrinting().
         serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();

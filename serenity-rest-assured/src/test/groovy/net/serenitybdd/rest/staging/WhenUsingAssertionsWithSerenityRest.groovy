@@ -108,6 +108,8 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
             json.addProperty("Sky", "Clear")
             json.addProperty("Time", "10:17AM")
             def body = gson.toJson(json)
+            json.addProperty("SomeValue","value")
+            def requestBody = gson.toJson(json)
 
             def base = "http://localhost:${wire.port()}"
             def path = "/test/photos/eidk398d"
@@ -127,6 +129,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
             listener.getTestOutcomes().get(0).getFlattenedTestSteps().size() > 0
             def testSteps = listener.getTestOutcomes().get(0).getFlattenedTestSteps()
             "${testSteps.get(0).getDescription()}" == "GET $url"
+            formatted("${testSteps.get(0).getRestQuery().getResponseBody()}") == formatted(body)
         and:
             result.statusCode(200)
     }

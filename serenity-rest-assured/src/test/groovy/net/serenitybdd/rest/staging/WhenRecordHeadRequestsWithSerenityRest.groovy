@@ -20,7 +20,7 @@ import static net.serenitybdd.rest.staging.SerenityRest.*
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.matching
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
-import static net.serenitybdd.rest.staging.JsonConverter.*;
+import static DecomposedContentType.*;
 
 
 /**
@@ -59,7 +59,7 @@ class WhenRecordHeadRequestsWithSerenityRest extends Specification {
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(200)
-                .withHeader("Content-Type", "application/json")
+                .withHeader("Content-Type", APPLICATION_JSON.asString())
                 .withBody(body)));
         when:
             def result = head(url).then()
@@ -89,7 +89,7 @@ class WhenRecordHeadRequestsWithSerenityRest extends Specification {
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(200)
-                .withHeader("Content-Type", "application/json")
+                .withHeader("Content-Type", APPLICATION_JSON.asString())
                 .withBody(body)));
         when:
             def result = head("$url?status={status}", ["status": "available"]).then()
@@ -118,7 +118,7 @@ class WhenRecordHeadRequestsWithSerenityRest extends Specification {
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(200)
-                .withHeader("Content-Type", "application/json")
+                .withHeader("Content-Type", APPLICATION_JSON.asString())
                 .withBody(body)));
         when:
             def result = head("$url?status={status}", "available").then()

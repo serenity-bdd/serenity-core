@@ -418,7 +418,11 @@ public class SerenityRest {
     }
 
     public static Response options(final String path, final Object... pathParams) {
-        return given().options(path, pathParams);
+        if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
+            return given().options(path, (Map<String, ?>) pathParams[0]);
+        } else {
+            return given().options(path, pathParams);
+        }
     }
 
     public static Response options(final String path, final Map<String, ?> pathParams) {
@@ -442,11 +446,19 @@ public class SerenityRest {
     }
 
     public static Response patch(final String path, final Object... pathParams) {
-        return given().patch(path, pathParams);
+        if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
+            return given().patch(path, (Map<String, ?>) pathParams[0]);
+        } else {
+            return given().patch(path, pathParams);
+        }
     }
 
     public static Response post(final String path, final Object... pathParams) {
-        return given().post(path, pathParams);
+        if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
+            return given().post(path, (Map<String, ?>) pathParams[0]);
+        } else {
+            return given().post(path, pathParams);
+        }
     }
 
     public static Response post(final String path, final Map<String, ?> pathParams) {
@@ -470,7 +482,11 @@ public class SerenityRest {
     }
 
     public static Response put(final String path, final Object... pathParams) {
-        return given().put(path, pathParams);
+        if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
+            return given().put(path, (Map<String, ?>) pathParams[0]);
+        } else {
+            return given().put(path, pathParams);
+        }
     }
 
     public static Response put() {
@@ -498,7 +514,11 @@ public class SerenityRest {
     }
 
     public static Response delete(final String path, final Object... pathParams) {
-        return given().delete(path, pathParams);
+        if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
+            return given().delete(path, (Map<String, ?>) pathParams[0]);
+        } else {
+            return given().delete(path, pathParams);
+        }
     }
 
     public static Response get(final URI uri) {
@@ -510,7 +530,11 @@ public class SerenityRest {
     }
 
     public static Response get(final String path, final Object... pathParams) {
-        return given().get(path, pathParams);
+        if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
+            return given().get(path, (Map<String, ?>) pathParams[0]);
+        } else {
+            return given().get(path, pathParams);
+        }
     }
 
     public static Response get(final String path, final Map<String, ?> pathParams) {

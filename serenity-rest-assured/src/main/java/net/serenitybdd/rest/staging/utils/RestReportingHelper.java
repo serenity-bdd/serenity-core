@@ -160,7 +160,7 @@ public class RestReportingHelper {
             }
         }
         final RestQuery query = RestQuery.
-                withMethod(method).andPath(path).
+                withMethod(method).andPath(ObjectUtils.firstNonNull(values.get(LogDetail.PATH), "")).
                 withContentType(String.valueOf(
                                 ContentType.fromContentType(spec.getRequestContentType()))
                 ).
@@ -171,13 +171,11 @@ public class RestReportingHelper {
     public void registerCall(final RestMethod method, final ResponseDecorated response,
                              final RequestSpecificationDecorated spec,
                              final String path, final Object... params) {
-
         RestQuery restQuery = recordRestSpecificationData(method, spec, path, params);
         if (shouldRecordResponseBodyFor(response)) {
-            restQuery = restQuery.
-                    withResponse(response.getBody().prettyPrint()).
-                    withStatusCode(response.getStatusCode());
+            restQuery = restQuery.withResponse(response.getBody().prettyPrint());
         }
+        restQuery = restQuery.withStatusCode(response.getStatusCode());
         getEventBus().getBaseStepListener().recordRestQuery(restQuery);
     }
 

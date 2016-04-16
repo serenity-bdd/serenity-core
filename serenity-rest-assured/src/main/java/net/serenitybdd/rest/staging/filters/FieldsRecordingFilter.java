@@ -43,7 +43,9 @@ public class FieldsRecordingFilter implements Filter {
             final Response response = filter.filter(requestSpec, responseSpec, ctx);
             recordingStream.flush();
             this.recorded = new String(output.toByteArray(), StandardCharsets.UTF_8);
-            this.recorded = this.recorded.replaceAll("^((Proxy:)|(Body:)|(Cookies:)|(Headers:)|(Multiparts:))\\s*\\n*", "");
+            this.recorded = this.recorded.replaceAll("^(" +
+                    "(Proxy:)|(Body:)|(Cookies:)|(Headers:)|(Multiparts:)|(Request path:)" +
+                    ")\\s*\\n*", "");
             this.recorded = this.recorded.replaceAll("^(<none>)", "");
             this.recorded = this.recorded.replaceAll("\n$", "");
             return response;

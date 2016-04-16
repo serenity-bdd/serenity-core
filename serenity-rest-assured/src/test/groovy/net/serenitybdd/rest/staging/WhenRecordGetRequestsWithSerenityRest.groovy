@@ -8,11 +8,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import net.serenity.test.utils.rules.TestCase
 import net.serenitybdd.core.rest.RestQuery
-import net.thucydides.core.annotations.Step
-import net.thucydides.core.model.TestResult
 import net.thucydides.core.steps.BaseStepListener
-import net.thucydides.core.steps.StepFactory
-import org.hamcrest.Matchers
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
@@ -25,6 +21,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.matching
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import static net.serenitybdd.rest.staging.JsonConverter.*;
+import static DecomposedContentType.*;
 
 /**
  * User: YamStranger
@@ -53,6 +50,8 @@ class WhenRecordGetRequestsWithSerenityRest extends Specification {
             json.addProperty("Number", "9999")
             json.addProperty("Price", "100")
             def body = gson.toJson(json)
+            json.addProperty("SomeValue","value")
+            def requestBody = gson.toJson(json)
 
             def base = "http://localhost:${wire.port()}"
             def path = "/test/number"
@@ -62,7 +61,7 @@ class WhenRecordGetRequestsWithSerenityRest extends Specification {
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(200)
-                .withHeader("Content-Type", "application/json")
+                .withHeader("Content-Type", "$APPLICATION_JSON")
                 .withBody(body)));
         when:
             def result = get(url).then()
@@ -72,6 +71,7 @@ class WhenRecordGetRequestsWithSerenityRest extends Specification {
                 assert query.method == GET
                 assert "${query.path}" == url
                 assert query.statusCode == 200
+                assert formatted(query.responseBody) == formatted(body)
             }
         and:
             result.statusCode(200)
@@ -83,6 +83,8 @@ class WhenRecordGetRequestsWithSerenityRest extends Specification {
             json.addProperty("Exists", true)
             json.addProperty("label", "UI")
             def body = gson.toJson(json)
+            json.addProperty("SomeValue","value")
+            def requestBody = gson.toJson(json)
 
             def base = "http://localhost:${wire.port()}"
             def path = "/test/label"
@@ -92,7 +94,7 @@ class WhenRecordGetRequestsWithSerenityRest extends Specification {
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(200)
-                .withHeader("Content-Type", "application/json")
+                .withHeader("Content-Type", "$APPLICATION_JSON")
                 .withBody(body)));
         when:
             def result = get("$url?status={status}", ["status": "available"]).then()
@@ -101,6 +103,7 @@ class WhenRecordGetRequestsWithSerenityRest extends Specification {
                 assert "$query" == "GET $url?status=available"
                 assert query.method == GET
                 assert query.statusCode == 200
+                assert formatted(query.responseBody) == formatted(body)
             }
         and:
             result.statusCode(200)
@@ -112,6 +115,8 @@ class WhenRecordGetRequestsWithSerenityRest extends Specification {
             json.addProperty("Weather", "rain")
             json.addProperty("temperature", "+2")
             def body = gson.toJson(json)
+            json.addProperty("SomeValue","value")
+            def requestBody = gson.toJson(json)
 
             def base = "http://localhost:${wire.port()}"
             def path = "/test/weather"
@@ -121,7 +126,7 @@ class WhenRecordGetRequestsWithSerenityRest extends Specification {
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(200)
-                .withHeader("Content-Type", "application/json")
+                .withHeader("Content-Type", "$APPLICATION_JSON")
                 .withBody(body)));
         when:
             def result = get("$url?status={status}", "available").then()
@@ -130,6 +135,7 @@ class WhenRecordGetRequestsWithSerenityRest extends Specification {
                 assert "$query" == "GET $url?status=available"
                 assert query.method == GET
                 assert query.statusCode == 200
+                assert formatted(query.responseBody) == formatted(body)
             }
         and:
             result.statusCode(200)

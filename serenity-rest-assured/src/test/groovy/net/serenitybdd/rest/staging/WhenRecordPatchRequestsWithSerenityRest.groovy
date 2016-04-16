@@ -22,6 +22,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.matching
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import static net.serenitybdd.rest.staging.JsonConverter.*;
+import static DecomposedContentType.*;
 
 
 /**
@@ -51,6 +52,8 @@ class WhenRecordPatchRequestsWithSerenityRest extends Specification {
             json.addProperty("Number", "9999")
             json.addProperty("Price", "100")
             def body = gson.toJson(json)
+            json.addProperty("SomeValue","value")
+            def requestBody = gson.toJson(json)
 
             def base = "http://localhost:${wire.port()}"
             def path = "/test/number"
@@ -60,16 +63,18 @@ class WhenRecordPatchRequestsWithSerenityRest extends Specification {
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(200)
-                .withHeader("Content-Type", "application/json")
+                .withHeader("Content-Type", "$APPLICATION_JSON")
                 .withBody(body)));
         when:
-            def result = patch(url).then()
+            def result = given().contentType("$APPLICATION_JSON").body(requestBody).patch(url).then()
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
                 assert "$query" == "PATCH $url"
                 assert query.method == PATCH
                 assert "${query.path}" == url
                 assert query.statusCode == 200
+                assert formatted(query.responseBody) == formatted(body)
+                assert formatted(query.content) == formatted(requestBody)
             }
         and:
             result.statusCode(200)
@@ -81,6 +86,8 @@ class WhenRecordPatchRequestsWithSerenityRest extends Specification {
             json.addProperty("Exists", true)
             json.addProperty("label", "UI")
             def body = gson.toJson(json)
+            json.addProperty("SomeValue","value")
+            def requestBody = gson.toJson(json)
 
             def base = "http://localhost:${wire.port()}"
             def path = "/test/label"
@@ -90,15 +97,17 @@ class WhenRecordPatchRequestsWithSerenityRest extends Specification {
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(200)
-                .withHeader("Content-Type", "application/json")
+                .withHeader("Content-Type", "$APPLICATION_JSON")
                 .withBody(body)));
         when:
-            def result = patch("$url?status={status}", ["status": "available"]).then()
+            def result = given().contentType("$APPLICATION_JSON").body(requestBody).patch("$url?status={status}", ["status": "available"]).then()
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
                 assert "$query" == "PATCH $url?status=available"
                 assert query.method == PATCH
                 assert query.statusCode == 200
+                assert formatted(query.responseBody) == formatted(body)
+                assert formatted(query.content) == formatted(requestBody)
             }
         and:
             result.statusCode(200)
@@ -110,6 +119,8 @@ class WhenRecordPatchRequestsWithSerenityRest extends Specification {
             json.addProperty("Weather", "rain")
             json.addProperty("temperature", "+2")
             def body = gson.toJson(json)
+            json.addProperty("SomeValue","value")
+            def requestBody = gson.toJson(json)
 
             def base = "http://localhost:${wire.port()}"
             def path = "/test/weather"
@@ -119,15 +130,17 @@ class WhenRecordPatchRequestsWithSerenityRest extends Specification {
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(200)
-                .withHeader("Content-Type", "application/json")
+                .withHeader("Content-Type", "$APPLICATION_JSON")
                 .withBody(body)));
         when:
-            def result = patch("$url?status={status}", "available").then()
+            def result = given().contentType("$APPLICATION_JSON").body(requestBody).patch("$url?status={status}", "available").then()
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
                 assert "$query" == "PATCH $url?status=available"
                 assert query.method == PATCH
                 assert query.statusCode == 200
+                assert formatted(query.responseBody) == formatted(body)
+                assert formatted(query.content) == formatted(requestBody)
             }
         and:
             result.statusCode(200)

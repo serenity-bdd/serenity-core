@@ -316,9 +316,56 @@ public class WhenFormattingForHTML {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
         Formatter formatter = new Formatter(issueTracking);
 
-        String formattedValue = formatter.renderXML("<wsse:username>nonofyourbusiness</wsse:username>");
+        String formattedValue = formatter.renderText("<wsse:username>nonofyourbusiness</wsse:username>");
 
         assertThat(formattedValue, is("&lt;wsse:username&gt;nonofyourbusiness&lt;/wsse:username&gt;"));
+    }
+
+    @Test
+    public void should_keep_new_line_chars_in_xml() {
+        when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
+        Formatter formatter = new Formatter(issueTracking);
+
+        String formattedValue = formatter.renderText("<catalog>\n" +
+                "    <cd>\n" +
+                "        <title>Empire Burlesque</title>\n" +
+                "        <artist>Bob Dylan</artist>\n" +
+                "        <country>USA</country>\n" +
+                "        <country>Columbia</country>\n" +
+                "        <price>10.90</price>\n" +
+                "        <year>1985</year>\n" +
+                "    </cd>\n" +
+                "</catalog>");
+
+        assertThat(formattedValue, is("&lt;catalog&gt;<br>    " +
+                "&lt;cd&gt;<br>        " +
+                "&lt;title&gt;Empire Burlesque&lt;/title&gt;<br>" +
+                "        &lt;artist&gt;Bob Dylan&lt;/artist&gt;<br>" +
+                "        &lt;country&gt;USA&lt;/country&gt;<br>  " +
+                "      &lt;country&gt;Columbia&lt;/country&gt;<br> " +
+                "       &lt;price&gt;10.90&lt;/price&gt;<br>  " +
+                "      &lt;year&gt;1985&lt;/year&gt;<br> " +
+                "   &lt;/cd&gt;<br>&lt;/catalog&gt;"));
+    }
+
+    @Test
+    public void should_keep_new_line_chars_in_json() {
+        when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
+        Formatter formatter = new Formatter(issueTracking);
+
+        String formattedValue = formatter.renderText("{\n" +
+                "    \"id\": 1409959379,\n" +
+                "    \"name\": \"Fido\",\n" +
+                "    \"photoUrls\": [],\n" +
+                "    \"tags\": [],\n" +
+                "    \"status\": \"available\"\n" +
+                "}");
+
+        assertThat(formattedValue, is("{<br>    &quot;id&quot;: 1409959379,<br>" +
+                "    &quot;name&quot;: &quot;Fido&quot;,<br> " +
+                "   &quot;photoUrls&quot;: [],<br> " +
+                "   &quot;tags&quot;: [],<br> " +
+                "   &quot;status&quot;: &quot;available&quot;<br>}"));
     }
 
     @Test

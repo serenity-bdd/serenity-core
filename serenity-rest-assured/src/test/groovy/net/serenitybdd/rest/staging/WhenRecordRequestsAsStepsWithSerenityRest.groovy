@@ -71,6 +71,7 @@ class WhenRecordRequestsAsStepsWithSerenityRest extends Specification {
             def testSteps = listener.getTestOutcomes().get(0).getFlattenedTestSteps()
             "${testSteps.get(0).getDescription()}" == "GET $url"
             formatted("${testSteps.get(0).getRestQuery().getResponseBody()}") == formatted(body)
+            "${testSteps.get(0).getRestQuery().getResponseHeaders()}".contains("Content-Type: $APPLICATION_JSON")
         and:
             result.statusCode(200)
     }

@@ -20,12 +20,12 @@ public class ResponseLogSpecificationStub implements ResponseLogSpecification {
     }
 
     @Override
-    public ResponseSpecification ifStatusCodeIsEqualTo(int statusCode) {
+    public ResponseSpecification ifStatusCodeIsEqualTo(final int statusCode) {
         return new ResponseSpecificationStub();
     }
 
     @Override
-    public ResponseSpecification ifStatusCodeMatches(Matcher<Integer> matcher) {
+    public ResponseSpecification ifStatusCodeMatches(final Matcher<Integer> matcher) {
         return new ResponseSpecificationStub();
     }
 
@@ -35,7 +35,7 @@ public class ResponseLogSpecificationStub implements ResponseLogSpecification {
     }
 
     @Override
-    public ResponseSpecification body(boolean shouldPrettyPrint) {
+    public ResponseSpecification body(final boolean shouldPrettyPrint) {
         return new ResponseSpecificationStub();
     }
 
@@ -45,7 +45,7 @@ public class ResponseLogSpecificationStub implements ResponseLogSpecification {
     }
 
     @Override
-    public ResponseSpecification all(boolean shouldPrettyPrint) {
+    public ResponseSpecification all(final boolean shouldPrettyPrint) {
         return new ResponseSpecificationStub();
     }
 
@@ -55,7 +55,7 @@ public class ResponseLogSpecificationStub implements ResponseLogSpecification {
     }
 
     @Override
-    public ResponseSpecification everything(boolean shouldPrettyPrint) {
+    public ResponseSpecification everything(final boolean shouldPrettyPrint) {
         return new ResponseSpecificationStub();
     }
 
@@ -75,12 +75,12 @@ public class ResponseLogSpecificationStub implements ResponseLogSpecification {
     }
 
     @Override
-    public ResponseSpecification ifValidationFails(LogDetail logDetail) {
+    public ResponseSpecification ifValidationFails(final LogDetail logDetail) {
         return new ResponseSpecificationStub();
     }
 
     @Override
-    public ResponseSpecification ifValidationFails(LogDetail logDetail, boolean shouldPrettyPrint) {
+    public ResponseSpecification ifValidationFails(final LogDetail logDetail, boolean shouldPrettyPrint) {
         return new ResponseSpecificationStub();
     }
 }

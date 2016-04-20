@@ -357,7 +357,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
 
     private String getDriverUsedInThisTest() {
-        return ThucydidesWebDriverSupport.getCurrentDriverName();// webdriverManager.getCurrentDriverName();
+        return ThucydidesWebDriverSupport.getCurrentDriverName();// webdriverManager.getCurrentDriverType();
     }
 
     private boolean currentTestIsABrowserTest() {

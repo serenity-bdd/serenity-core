@@ -23,7 +23,6 @@ import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
-import net.thucydides.core.webdriver.ThucydidesWebdriverManager;
 import org.junit.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;

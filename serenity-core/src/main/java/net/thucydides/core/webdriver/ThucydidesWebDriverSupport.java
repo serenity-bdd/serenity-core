@@ -140,7 +140,7 @@ public class ThucydidesWebDriverSupport {
     }
 
     public static String getCurrentDriverName() {
-        return getWebdriverManager().getCurrentDriverName();
+        return getWebdriverManager().getCurrentDriverType();
     }
 
     public static boolean isDriverInstantiated() {

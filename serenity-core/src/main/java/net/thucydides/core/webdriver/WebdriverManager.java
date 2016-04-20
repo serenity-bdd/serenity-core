@@ -18,8 +18,9 @@ public interface WebdriverManager {
     WebdriverContext inContext(String context);
 
     WebDriver getWebdriver(String driver);
+    WebDriver getWebdriverByName(String actorName);
 
-    String getCurrentDriverName();
+    String getCurrentDriverType();
 
     SessionId getSessionId();
 

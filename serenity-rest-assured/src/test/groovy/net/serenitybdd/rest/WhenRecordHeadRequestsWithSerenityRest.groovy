@@ -1,5 +1,6 @@
 package net.serenitybdd.rest
 
+import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
@@ -9,118 +10,123 @@ import net.serenity.test.utils.rules.TestCase
 import net.serenitybdd.core.rest.RestQuery
 import net.thucydides.core.steps.BaseStepListener
 import org.junit.Rule
-import spock.lang.Ignore
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-import static net.serenitybdd.rest.SerenityRest.rest
-import static com.github.tomakehurst.wiremock.client.WireMock.*
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
+import static net.serenitybdd.core.rest.RestMethod.HEAD
+import static net.serenitybdd.rest.SerenityRest.*
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import static com.github.tomakehurst.wiremock.client.WireMock.matching
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
+import static net.serenitybdd.rest.DecomposedContentType.*;
+
 
 /**
  * User: YamStranger
  * Date: 11/29/15
  * Time: 5:58 PM
  */
-class WhenExecutingWrappedMethods extends Specification {
+class WhenRecordHeadRequestsWithSerenityRest extends Specification {
 
     @Rule
     def WireMockRule wire = new WireMockRule(0);
 
     @Rule
     def TestCase<BaseStepListener> test = new TestCase({
-        Mock(BaseStepListener)
+        Mock(BaseStepListener);
     }.call());
+
+    @Rule
+    TemporaryFolder temporaryFolder
 
     def Gson gson = new GsonBuilder().setPrettyPrinting().
         serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
 
-
-    def "should work properly after executing log method"() {
+    def "Should record RestAssured head() method calls"() {
         given:
             def JsonObject json = new JsonObject()
-            json.addProperty("Title", "King")
-            json.addProperty("Salary", "100")
+            json.addProperty("Number", "9999")
+            json.addProperty("Price", "100")
             def body = gson.toJson(json)
 
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/resource"
+            def path = "/test/number"
             def url = "$base$path"
 
-            stubFor(post(urlEqualTo(path))
+            stubFor(WireMock.head(urlEqualTo(path))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(200)
-                .withHeader("Content-Type", "application/json")
+                .withHeader("Content-Type", APPLICATION_JSON.asString())
                 .withBody(body)));
         when:
-            def result = rest().given().contentType("application/json").content(body).log().all()
-                .post(url).then()
+            def result = head(url).then()
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
-                assert "$query" == "POST $url"
-                assert JsonConverter.formatted(query.content) == JsonConverter.formatted(body)
-                assert query.contentType == "application/json"
+                assert "$query" == "HEAD $url"
+                assert query.method == HEAD
+                assert "${query.path}" == url
+                assert query.statusCode == 200
             }
         and:
             result.statusCode(200)
     }
 
-    def "should work properly after executing auth method"() {
+    def "Should record RestAssured head() method calls with parameters"() {
         given:
             def JsonObject json = new JsonObject()
-            json.addProperty("Name", "Ivanna")
-            json.addProperty("City", "Earth")
+            json.addProperty("Exists", true)
+            json.addProperty("label", "UI")
             def body = gson.toJson(json)
 
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/resource/auth"
+            def path = "/test/label"
             def url = "$base$path"
 
-            stubFor(post(urlEqualTo(path))
+            stubFor(WireMock.head(urlPathMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(200)
-                .withHeader("Content-Type", "application/json")
+                .withHeader("Content-Type", APPLICATION_JSON.asString())
                 .withBody(body)));
         when:
-            def result = rest().given().contentType("application/json").content(body).auth().none()
-                .post(url).then()
+            def result = head("$url?status={status}", ["status": "available"]).then()
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
-                assert "$query" == "POST $url"
-                assert JsonConverter.formatted(query.content) == JsonConverter.formatted(body)
-                assert query.contentType == "application/json"
+                assert "$query" == "HEAD $url?status=available"
+                assert query.method == HEAD
+                assert query.statusCode == 200
             }
         and:
             result.statusCode(200)
     }
 
-    @Ignore("Redirect is not implemented")
-    def "should work properly after executing redirect method"() {
+    def "Should record RestAssured head() method calls with parameter provided as a list"() {
         given:
             def JsonObject json = new JsonObject()
-            json.addProperty("Phone", 1789)
-            json.addProperty("Color", "blue")
+            json.addProperty("Weather", "rain")
+            json.addProperty("temperature", "+2")
             def body = gson.toJson(json)
 
             def base = "http://localhost:${wire.port()}"
-            def path = "/test/resource/redirection"
+            def path = "/test/weather"
             def url = "$base$path"
 
-            stubFor(post(urlEqualTo(path))
+            stubFor(WireMock.head(urlPathMatching("$path.*"))
                 .withRequestBody(matching(".*"))
                 .willReturn(aResponse()
                 .withStatus(200)
-                .withHeader("Content-Type", "application/json")
+                .withHeader("Content-Type", APPLICATION_JSON.asString())
                 .withBody(body)));
         when:
-            def result = rest().given().contentType("application/json").content(body)
-                .redirects().follow(true)
-                .post(url).then()
+            def result = head("$url?status={status}", "available").then()
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
-                assert "$query" == "POST $url"
-                assert JsonConverter.formatted(query.content) == JsonConverter.formatted(body)
-                assert query.contentType == "application/json"
+                assert "$query" == "HEAD $url?status=available"
+                assert query.method == HEAD
+                assert query.statusCode == 200
             }
         and:
             result.statusCode(200)

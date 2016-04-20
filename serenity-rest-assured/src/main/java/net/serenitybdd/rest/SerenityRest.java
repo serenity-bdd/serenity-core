@@ -1,66 +1,44 @@
 package net.serenitybdd.rest;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import com.google.common.base.Preconditions;
 import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.internal.RestAssuredResponseImpl;
+import com.jayway.restassured.authentication.*;
+import com.jayway.restassured.config.LogConfig;
+import com.jayway.restassured.config.RestAssuredConfig;
+import com.jayway.restassured.config.SSLConfig;
+import com.jayway.restassured.filter.Filter;
+import com.jayway.restassured.filter.log.LogDetail;
+import com.jayway.restassured.internal.*;
+import com.jayway.restassured.mapper.ObjectMapper;
+import com.jayway.restassured.parsing.Parser;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.response.ValidatableResponse;
-import com.jayway.restassured.specification.AuthenticationSpecification;
-import com.jayway.restassured.specification.RequestLogSpecification;
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
-import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.exceptions.SerenityManagedException;
-import net.serenitybdd.core.rest.RestMethod;
-import net.serenitybdd.core.rest.RestQuery;
-import net.serenitybdd.rest.decorators.RestDecorator;
-import net.serenitybdd.rest.stubs.RequestSpecificationStub;
-import net.serenitybdd.rest.stubs.ResponseSpecificationStub;
-import net.serenitybdd.rest.stubs.ResponseStub;
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.InvocationHandler;
-import net.thucydides.core.steps.ExecutedStepDescription;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.steps.StepFailure;
-import org.mockito.Mockito;
+import com.jayway.restassured.specification.*;
+import net.serenitybdd.rest.decorators.request.RequestSpecificationDecorated;
+import net.serenitybdd.rest.utils.RestDecorationHelper;
+import net.serenitybdd.rest.decorators.ResponseSpecificationDecorated;
 
-import java.lang.reflect.InvocationTargetException;
+import java.io.File;
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.security.KeyStore;
 import java.util.List;
 import java.util.Map;
 
-import static net.serenitybdd.core.rest.RestMethod.restMethodCalled;
-import static net.thucydides.core.steps.ErrorConvertor.forError;
-import static net.thucydides.core.steps.StepEventBus.getEventBus;
+import static com.jayway.restassured.specification.ProxySpecification.host;
 
+/**
+ * User: YamStranger
+ * Date: 3/14/16
+ * Time: 8:51 AM
+ */
 public class SerenityRest {
+    private static ThreadLocal<RequestSpecificationDecorated> currentRequestSpecification = new ThreadLocal<>();
 
-    private static ThreadLocal<RestQuery> currentRestQuery = new ThreadLocal<>();
-    private static ThreadLocal<RequestSpecification> currentRequestSpecification = new ThreadLocal<>();
-    private static ThreadLocal<Response> currentResponse = new ThreadLocal<>();
-    private static ThreadLocal<QueryPayload> currentQueryPayload = new ThreadLocal<>();
-    private static ThreadLocal<RestDecorator> decorator = new ThreadLocal<>();
-
-    public static void clearQueryData() {
-        currentRequestSpecification.remove();
-        currentRestQuery.remove();
-    }
-
-    public static QueryPayload currentQueryPayload() {
-        if (currentQueryPayload.get() == null) {
-            currentQueryPayload.set(new QueryPayload());
-        }
-        return currentQueryPayload.get();
-    }
-
-    public static RequestSpecification  rest() {
-        currentRequestSpecification.set(instrumentedRequestSpecification());
-        getEventBus().registerListener(new RestStepListener());
-        return currentRequestSpecification.get();
+    public static RequestSpecification rest() {
+        return given();
     }
 
     public static ValidatableResponse and() {
@@ -68,239 +46,525 @@ public class SerenityRest {
     }
 
     public static ValidatableResponse then() {
-        assert(currentResponse.get() != null);
-        return currentResponse.get().then();
+        Preconditions.checkNotNull(currentRequestSpecification, "request specification should be initialized");
+        final Response response = currentRequestSpecification.get().getLastResponse();
+        Preconditions.checkNotNull(currentRequestSpecification, "response should be created");
+        return response.then();
     }
 
-    private static RequestSpecification instrumentedRequestSpecification() {
-        RequestSpecification specification = RestAssured.given();
-        return instrumentedRequestSpecificationFor(specification);
+    public static String setDefaultBasePath(final String basePath) {
+        return RestAssured.basePath = basePath;
     }
 
-    private static RequestSpecification instrumentedRequestSpecificationFor(final RequestSpecification requestSpecification) {
-        Enhancer enhancer = new Enhancer();
-        enhancer.setSuperclass(RequestSpecification.class);
-        enhancer.setCallback(new InvocationHandler() {
-            @Override
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                if (restMethodCalled(method.getName()).isPresent()) {
-                    notifyRestMethodCall(args, restMethodCalled(method.getName()).get());
-                } else if (definesContent(method.getName())) {
-                    recordContent(method.getName(), args);
-                }
-                return executeRestQuery(method, args, requestSpecification);
-            }
-        });
-
-        return (RequestSpecification) enhancer.create();
+    public static String getDefaultBasePath() {
+        return RestAssured.basePath;
     }
 
-    private static boolean restCallsAreDisabled() {
-        return (getEventBus().isDryRun() || getEventBus().currentTestIsSuspended());
+    public static int getDefaultPort() {
+        return RestAssured.port;
     }
 
-    private static Object executeRestQuery(Method method, Object[] args, RequestSpecification requestSpecification) throws Throwable{
+    public static int setDefaultPort(final int port) {
+        return RestAssured.port = port;
+    }
 
-        if (method.getReturnType().isAssignableFrom(RestAssuredResponseImpl.class)) {
-            Response response = (Response) wrappedResult(method, requestSpecification, args);
-            currentResponse.set(response);
-            return response;
-        } else {
-            return wrappedResult(method, requestSpecification, args);
+    public static boolean isUrlEncodingEnabled() {
+        return RestAssured.urlEncodingEnabled;
+    }
+
+    public static boolean setUrlEncodingEnabled(final boolean urlEncodingEnabled) {
+        return RestAssured.urlEncodingEnabled = urlEncodingEnabled;
+    }
+
+    public static String getDefaultRootPath() {
+        return RestAssured.rootPath;
+    }
+
+    public static String setDefaultRootPath(final String rootPath) {
+        if (rootPath == null) {
+            throw new IllegalArgumentException("RootPath can not be null");
         }
+        return RestAssured.rootPath = rootPath;
     }
 
-    private final static List<String> CONTENT_METHODS = ImmutableList.of("content","body");
-
-    private static boolean definesContent(String name) {
-        return (CONTENT_METHODS.contains(name.toLowerCase()) || name.equalsIgnoreCase("contentType"));
+    public static String getDefaultSessionId() {
+        return RestAssured.sessionId;
     }
 
-    private static void recordContent(String name, Object[] args) {
-        switch (name) {
-            case "content" :
-            case "body" :
-                registerContent(args[0].toString());
-                break;
-            case "contentType":
-                registerContentType(args[0].toString());
-                break;
+    public static String setDefaultSessionId(final String sessionId) {
+        if (sessionId == null) {
+            throw new IllegalArgumentException("Session id can not be null");
         }
+        return RestAssured.sessionId = sessionId;
     }
 
-    private static void registerContentType(String contentType) {
-        currentQueryPayload().setContentType(contentType);
+    public static AuthenticationScheme getDefaultAuthentication() {
+        return RestAssured.authentication;
     }
 
-    private static void registerContent(String content) {
-        currentQueryPayload().setContent(content);
-    }
-
-
-    private static void notifyRestMethodCall(Object[] args, RestMethod methodType) {
-        switch (methodType) {
-            case GET:
-            case DELETE:
-                notifyGetOrDelete(args,methodType);
-                break;
-            case POST:
-            case PUT:
-            case PATCH:
-                notifyPostOrPut(args, methodType);
-                break;
+    public static AuthenticationScheme setDefaultAuthentication(final AuthenticationScheme authentication) {
+        if (authentication == null) {
+            throw new IllegalArgumentException("AuthenticationScheme can not be null");
         }
+        return RestAssured.authentication = authentication;
     }
 
-    private static Object wrappedResult(Method method, Object target, Object[] args) throws Throwable {
+    public static RequestSpecification getDefaultRequestSpecification() {
+        return RestAssured.requestSpecification;
+    }
+
+    public static RequestSpecification setDefaultRequestSpecification(
+            final RequestSpecification requestSpecification) {
+        return RestAssured.requestSpecification = requestSpecification;
+    }
+
+    public static Parser getDefaultParser() {
+        return RestAssured.defaultParser;
+    }
+
+    public static Parser setDefaultParser(final Parser defaultParser) {
+        return RestAssured.defaultParser = defaultParser;
+    }
+
+    public static ResponseSpecification getDefaultResponseSpecification() {
+        return RestAssured.responseSpecification;
+    }
+
+    public static ResponseSpecification setDefaultResponseSpecification(
+            final ResponseSpecification responseSpecification) {
+        return RestAssured.responseSpecification = responseSpecification;
+    }
+
+    //todo should be implemented reset of configs if they used in serenity reports
+    public static void reset() {
+        RestAssured.reset();
+    }
+
+    public static List<Filter> filters(final List<Filter> filters) {
+        RestAssured.filters(filters);
+        return filters();
+    }
+
+    public static List<Filter> filters(final Filter filter, final Filter... additionalFilters) {
+        RestAssured.filters(filter, additionalFilters);
+        return filters();
+    }
+
+    public static List<Filter> replaceFiltersWith(final List<Filter> filters) {
+        RestAssured.replaceFiltersWith(filters);
+        return filters();
+    }
+
+    public static List<Filter> replaceFiltersWith(final Filter filter, final Filter... additionalFilters) {
+        RestAssured.replaceFiltersWith(filter, additionalFilters);
+        return filters();
+    }
+
+    public static List<Filter> filters() {
+        return RestAssured.filters();
+    }
+
+    public static ObjectMapper objectMapper(final ObjectMapper objectMapper) {
+        RestAssured.objectMapper(objectMapper);
+        return config().getObjectMapperConfig().defaultObjectMapper();
+    }
+
+    public static ResponseSpecification expect() {
+        return given().response();
+    }
+
+    public static RequestSpecification with() {
+        return given();
+    }
+
+    public static List<Argument> withArguments(final Object firstArgument, final Object... additionalArguments) {
+        return RestAssured.withArguments(firstArgument, additionalArguments);
+    }
+
+    public static List<Argument> withNoArguments() {
+        return RestAssured.withNoArguments();
+    }
+
+    public static List<Argument> withArgs(final Object firstArgument, final Object... additionalArguments) {
+        return withArguments(firstArgument, additionalArguments);
+    }
+
+    public static List<Argument> withNoArgs() {
+        return withNoArguments();
+    }
+
+    private static TestSpecificationImpl createTestSpecification() {
         try {
-            if (restCallsAreDisabled()) {
-                return stubbed(method);
+            Method method = RestAssured.class.getDeclaredMethod("createTestSpecification");
+            method.setAccessible(true);
+            return (TestSpecificationImpl) method.invoke(null);
+        } catch (Exception e) {
+            throw new IllegalStateException("Can not initialize rest assurance");
+        }
+    }
+
+    public static RequestSpecification given() {
+        final RequestSpecificationImpl generated = (RequestSpecificationImpl) RestAssured.given();
+        final RequestSpecification request = RestDecorationHelper.decorate(generated);
+        final ResponseSpecificationDecorated response = new ResponseSpecificationDecorated(
+                (ResponseSpecificationImpl) generated.response());
+        return ((TestSpecificationImpl) given(request, response)).getRequestSpecification();
+    }
+
+    public static RequestSender when() {
+        return given();
+    }
+
+    public static RequestSender given(final RequestSpecification request, final ResponseSpecification response) {
+        RequestSpecification requestDecorated = RestDecorationHelper.decorate(request);
+        ResponseSpecification responseDecorated = RestDecorationHelper.decorate(response);
+        RequestSender created = RestAssured.given(requestDecorated, responseDecorated);
+        currentRequestSpecification.set(
+                (RequestSpecificationDecorated) ((TestSpecificationImpl) created).getRequestSpecification()
+        );
+        return created;
+    }
+
+    public static RequestSpecification given(final RequestSpecification requestSpecification) {
+        final RequestSpecificationImpl generated = (RequestSpecificationImpl) RestAssured.given(requestSpecification);
+        final RequestSpecification request = RestDecorationHelper.decorate(generated);
+        final ResponseSpecificationDecorated response = new ResponseSpecificationDecorated(
+                (ResponseSpecificationImpl) generated.response());
+        return ((TestSpecificationImpl) given(request, response)).getRequestSpecification();
+    }
+
+    public static SSLConfig useRelaxedHTTPSValidation() {
+        return SerenityRest.useRelaxedHTTPSValidation("SSL");
+    }
+
+    public static SSLConfig useRelaxedHTTPSValidation(final String protocol) {
+        RestAssured.useRelaxedHTTPSValidation(protocol);
+        return config().getSSLConfig();
+    }
+
+    public static void registerParser(final String contentType, final Parser parser) {
+        RestAssured.registerParser(contentType, parser);
+    }
+
+    public static void unregisterParser(final String contentType) {
+        RestAssured.unregisterParser(contentType);
+    }
+
+    public static AuthenticationScheme oauth2(final String accessToken) {
+        return RestAssured.oauth2(accessToken);
+    }
+
+    public static SSLConfig trustStore(final KeyStore truststore) {
+        RestAssured.trustStore(truststore);
+        return config().getSSLConfig();
+    }
+
+    public static AuthenticationScheme certificate(final String certURL, final String password) {
+        return RestAssured.certificate(certURL, password);
+    }
+
+    public static LogConfig enableLoggingOfRequestAndResponseIfValidationFails() {
+        return SerenityRest.enableLoggingOfRequestAndResponseIfValidationFails(LogDetail.ALL);
+    }
+
+    public static LogConfig enableLoggingOfRequestAndResponseIfValidationFails(final LogDetail logDetail) {
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails(logDetail);
+        return config().getLogConfig();
+    }
+
+    public static AuthenticationScheme certificate(final String certURL, final String password,
+                                                   final CertificateAuthSettings certificateAuthSettings) {
+        return RestAssured.certificate(certURL, password, certificateAuthSettings);
+    }
+
+    public static AuthenticationScheme form(final String userName, final String password) {
+        return RestAssured.form(userName, password);
+    }
+
+    public static PreemptiveAuthProvider preemptive() {
+        return RestAssured.preemptive();
+    }
+
+    public static AuthenticationScheme form(final String userName, final String password,
+                                            final FormAuthConfig config) {
+        return RestAssured.form(userName, password, config);
+    }
+
+    public static AuthenticationScheme oauth2(final String accessToken, final OAuthSignature signature) {
+        return RestAssured.oauth2(accessToken, signature);
+    }
+
+    public static AuthenticationScheme basic(final String userName, final String password) {
+        return RestAssured.basic(userName, password);
+    }
+
+    public static ProxySpecification proxy(final String host, final int port, final String scheme) {
+        return setDefaultProxy(host, port, scheme);
+    }
+
+    public static ProxySpecification proxy(final String host, final int port) {
+        return setDefaultProxy(host, port);
+    }
+
+    public static ProxySpecification proxy(final int port) {
+        return setDefaultProxy(port);
+    }
+
+    public static ProxySpecification proxy(final URI uri) {
+        if (uri == null) {
+            throw new IllegalArgumentException("Proxy URI cannot be null");
+        }
+        return SerenityRest.setDefaultProxy(new ProxySpecification(uri.getHost(), uri.getPort(), uri.getScheme()));
+    }
+
+    public static ProxySpecification proxy(final String host) {
+        if (UriValidator.isUri(host)) {
+            try {
+                return setDefaultProxy(new URI(host));
+            } catch (URISyntaxException e) {
+                throw new RuntimeException("Internal error in REST Assured when constructing URI for Proxy.", e);
             }
-            Object result = invokeMethod(method, target, args);
-            if (result == null) {
-                return null;
-            }
-            if ((RequestSpecification.class.isAssignableFrom(result.getClass()))) {
-                currentRequestSpecification.set(instrumentedRequestSpecificationFor((RequestSpecification) result));
-                return currentRequestSpecification.get();
-            } else if (Response.class.isAssignableFrom(result.getClass())) {
-                notifyResponse((Response) result);
-                return result;
-            }else if (AuthenticationSpecification.class.isAssignableFrom(result.getClass())){
-                return getDecorator().decorate((AuthenticationSpecification)result);
-            } else if (RequestLogSpecification.class.isAssignableFrom(result.getClass())){
-                return getDecorator().decorate((RequestLogSpecification) result);
-            }  else {
-                return result;
-            }
-        } catch (Exception generalException) {
-            Throwable error = SerenityManagedException.detachedCopyOf(generalException.getCause());
-            Throwable assertionError = forError(error).convertToAssertion();
-            notifyOfStepFailure(method, args, assertionError);
-            return stubbed(method);
+        } else {
+            return setDefaultProxy(host(host));
         }
     }
 
-    private static RestDecorator getDecorator(){
-        if (SerenityRest.decorator.get() == null) {
-            SerenityRest.decorator.set(new RestDecorator(SerenityRest.currentRequestSpecification));
+    public static ProxySpecification proxy(final ProxySpecification proxySpecification) {
+        return SerenityRest.setDefaultProxy(proxySpecification);
+    }
+
+    public static ProxySpecification setDefaultProxy(final String host, final int port, final String scheme) {
+        return setDefaultProxy(new ProxySpecification(host, port, scheme));
+    }
+
+    public static ProxySpecification setDefaultProxy(final ProxySpecification proxy) {
+        if (proxy == null) {
+            throw new IllegalArgumentException("ProxySpecification can not be null");
         }
-        return SerenityRest.decorator.get();
+        return RestAssured.proxy = proxy;
     }
 
-    private static Object stubbed(Method method) {
-        if (method.getReturnType().isAssignableFrom(RequestSpecification.class)) {
-            return new RequestSpecificationStub();
+    public static ProxySpecification setDefaultProxy(final String host, final int port) {
+        return setDefaultProxy(ProxySpecification.host(host).withPort(port));
+    }
+
+    public static ProxySpecification setDefaultProxy(final int port) {
+        return setDefaultProxy(ProxySpecification.port(port));
+    }
+
+    public static ProxySpecification setDefaultProxy(final URI uri) {
+        if (uri == null) {
+            throw new IllegalArgumentException("Proxy URI cannot be null");
         }
-        if (method.getReturnType().isAssignableFrom(Response.class)) {
-            return new ResponseStub();
+        return setDefaultProxy(new ProxySpecification(uri.getHost(), uri.getPort(), uri.getScheme()));
+    }
+
+    public static ProxySpecification getDefaultProxy() {
+        return RestAssured.proxy;
+    }
+
+    public static SSLConfig keystore(final File pathToJks, final String password) {
+        RestAssured.keystore(pathToJks, password);
+        return config().getSSLConfig();
+    }
+
+    public static SSLConfig keystore(final String password) {
+        RestAssured.keystore(password);
+        return config().getSSLConfig();
+    }
+
+    public static SSLConfig keystore(final String pathToJks, final String password) {
+        RestAssured.keystore(pathToJks, password);
+        return config().getSSLConfig();
+    }
+
+    public static Response head(final URI uri) {
+        return given().head(uri);
+    }
+
+    public static Response head() {
+        return given().head();
+    }
+
+    public static Response head(final String path, final Object... pathParams) {
+        return given().head(path, pathParams);
+    }
+
+    public static Response head(final String path, final Map<String, ?> pathParams) {
+        return given().head(path, pathParams);
+    }
+
+    public static Response head(final URL url) {
+        return given().head(url);
+    }
+
+    public static RestAssuredConfig config() {
+        return RestAssured.config();
+    }
+
+    public static RestAssuredConfig getDefaultConfig() {
+        return RestAssured.config;
+    }
+
+    public static RestAssuredConfig setDefaultConfig(final RestAssuredConfig config) {
+        if (config == null) {
+            throw new IllegalArgumentException("RestAssuredConfig can not be null");
         }
-        if (method.getReturnType().isAssignableFrom(ResponseSpecification.class)) {
-            return new ResponseSpecificationStub();
-        }
-        return Mockito.mock(method.getReturnType());
+        return RestAssured.config = config;
     }
 
-    private static Object invokeMethod(Method method, Object target, Object[] args) throws IllegalAccessException, InvocationTargetException {
-        method.setAccessible(true);
-        return method.invoke(target, args);
+    public static AuthenticationScheme oauth(final String consumerKey, final String consumerSecret,
+                                             final String accessToken, final String secretToken,
+                                             final OAuthSignature signature) {
+        return RestAssured.oauth(consumerKey, consumerSecret, accessToken, secretToken, signature);
     }
 
-    private static void notifyOfStepFailure(final Method method, final Object[] args, final Throwable cause) throws Throwable {
-        ExecutedStepDescription description = ExecutedStepDescription.withTitle(restMethodName(method, args));
-        StepFailure failure = new StepFailure(description, cause);
-        StepEventBus.getEventBus().stepStarted(description);
-        StepEventBus.getEventBus().stepFailed(failure);
-        if (Serenity.shouldThrowErrorsImmediately()) {
-            throw cause;
-        }
+    public static AuthenticationScheme oauth(final String consumerKey, final String consumerSecret,
+                                             final String accessToken, final String secretToken) {
+        return RestAssured.oauth(consumerKey, consumerSecret, accessToken, secretToken);
     }
 
-    private static String restMethodName(Method method, Object[] args) {
-        String restMethod = method.getName().toUpperCase() + " " + args[0].toString();
-        return (args.length < 2) ? restMethod : restMethod + " " + queryParametersIn(args);
+    public static AuthenticationScheme digest(final String userName, final String password) {
+        return RestAssured.digest(userName, password);
     }
 
-    private static String queryParametersIn(Object[] args) {
-        List<Object> parameters = Arrays.asList(args).subList(1, args.length);
-        return (" " + Joiner.on("&").join(parameters)).trim();
+    public static Response options() {
+        return given().options();
     }
 
+    public static Response options(final URL url) {
+        return given().options(url);
+    }
 
-    private static void notifyResponse(Response result) {
-        String responseBody = result.prettyPrint();
-        int statusCode = result.statusCode();
+    public static Response options(final URI uri) {
+        return given().options(uri);
+    }
 
-        if (currentRestQuery.get() != null) {
-            RestQuery query = currentRestQuery.get();
-            if (shouldRecordResponseBodyFor(result)) {
-                query = query.withResponse(responseBody).withStatusCode(statusCode);
-            }
-            getEventBus().getBaseStepListener().recordRestQuery(query);
-            currentRestQuery.remove();
+    public static Response options(final String path, final Object... pathParams) {
+        if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
+            return given().options(path, (Map<String, ?>) pathParams[0]);
+        } else {
+            return given().options(path, pathParams);
         }
     }
 
-    private static boolean shouldRecordResponseBodyFor(Response result) {
-        ContentType type=ContentType.fromContentType(result.contentType());
-        return type!=null && (ContentType.JSON == type || ContentType.XML == type
-            || ContentType.TEXT == type);
+    public static Response options(final String path, final Map<String, ?> pathParams) {
+        return given().options(path, pathParams);
     }
 
-    private static void notifyGetOrDelete(Object[] args, RestMethod method) {
-        String path = (args.length == 0) ? RestAssured.basePath : args[0].toString();
+    public static Response patch(final String path, final Map<String, ?> pathParams) {
+        return given().patch(path, pathParams);
+    }
 
-        RestQuery query = RestQuery.withMethod(method).andPath(path);
-        if (queryHasParameters(args)) {
-            query = hasParameterMap(args) ? query.withParameters(mapParameters(args)) : query.withParameters(listParameters(args));
+    public static Response patch(final URI uri) {
+        return given().patch(uri);
+    }
+
+    public static Response patch(final URL url) {
+        return given().patch(url);
+    }
+
+    public static Response patch() {
+        return given().patch();
+    }
+
+    public static Response patch(final String path, final Object... pathParams) {
+        if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
+            return given().patch(path, (Map<String, ?>) pathParams[0]);
+        } else {
+            return given().patch(path, pathParams);
         }
-        currentRestQuery.set(query);
     }
 
-    private static void notifyPostOrPut(Object[] args, RestMethod method) {
-        String path = (args.length == 0) ? RestAssured.basePath : args[0].toString();
-
-        RestQuery query = RestQuery.withMethod(method).andPath(path);
-        if (queryHasParameters(args)) {
-            query = hasParameterMap(args) ? query.withParameters(mapParameters(args)) : query.withParameters(listParameters(args));
+    public static Response post(final String path, final Object... pathParams) {
+        if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
+            return given().post(path, (Map<String, ?>) pathParams[0]);
+        } else {
+            return given().post(path, pathParams);
         }
-        if (currentQueryPayload() != null) {
-            if (currentQueryPayload().getContentType() != null) {
-                query = query.withContentType(currentQueryPayload().getContentType() );
-            }
-            if (currentQueryPayload().getContent() != null) {
-                query = query.withContent(currentQueryPayload().getContent() );
-            }
+    }
+
+    public static Response post(final String path, final Map<String, ?> pathParams) {
+        return given().post(path, pathParams);
+    }
+
+    public static Response post(final URL url) {
+        return given().post(url);
+    }
+
+    public static Response post() {
+        return given().post();
+    }
+
+    public static Response post(final URI uri) {
+        return given().post(uri);
+    }
+
+    public static Response put(final URI uri) {
+        return given().put(uri);
+    }
+
+    public static Response put(final String path, final Object... pathParams) {
+        if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
+            return given().put(path, (Map<String, ?>) pathParams[0]);
+        } else {
+            return given().put(path, pathParams);
         }
-        currentRestQuery.set(query);
     }
 
-    private static boolean hasParameterMap(Object[] args) {
-        return (args[1] instanceof Map);
+    public static Response put() {
+        return given().put();
     }
 
-
-    private static Map<String, ?> mapParameters(Object[] args) {
-        return (Map<String, ?>) args[1];
+    public static Response put(final URL url) {
+        return given().put(url);
     }
 
-
-    private static List<Object> listParameters(Object[] args) {
-        return Lists.newArrayList((Object[]) args[1]);
+    public static Response delete(final String path, final Map<String, ?> pathParams) {
+        return given().delete(path, pathParams);
     }
 
-    private static boolean queryHasParameters(Object[] args) {
-        if (args.length <= 1) {
-            return false;
+    public static Response delete(final URL url) {
+        return given().delete(url);
+    }
+
+    public static Response delete(final URI uri) {
+        return given().delete(uri);
+    }
+
+    public static Response delete() {
+        return given().delete();
+    }
+
+    public static Response delete(final String path, final Object... pathParams) {
+        if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
+            return given().delete(path, (Map<String, ?>) pathParams[0]);
+        } else {
+            return given().delete(path, pathParams);
         }
-        if (args[1].getClass().isArray()) {
-            return (((Object[]) args[1]).length > 0);
-        }
-        if (args[1] instanceof Map) {
-            return !((Map) args[1]).isEmpty();
-        }
-        return false;
     }
 
+    public static Response get(final URI uri) {
+        return given().get(uri);
+    }
+
+    public static Response get(final URL url) {
+        return given().get(url);
+    }
+
+    public static Response get(final String path, final Object... pathParams) {
+        if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
+            return given().get(path, (Map<String, ?>) pathParams[0]);
+        } else {
+            return given().get(path, pathParams);
+        }
+    }
+
+    public static Response get(final String path, final Map<String, ?> pathParams) {
+        return given().get(path, pathParams);
+    }
+
+    public static Response get() {
+        return given().get();
+    }
 }
-

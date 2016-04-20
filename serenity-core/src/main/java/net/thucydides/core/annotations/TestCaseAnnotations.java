@@ -44,17 +44,17 @@ public final class TestCaseAnnotations {
         String suffix = "";
         for(ManagedWebDriverAnnotatedField webDriverField : webDriverFields) {
             String driverRootName = isEmpty(webDriverField.getDriver()) ?
-                    webdriverManager.getCurrentDriverName() : webDriverField.getDriver();
+                    webdriverManager.getCurrentDriverType() : webDriverField.getDriver();
 
             String driverName = driverRootName + suffix;
-            webDriverField.setValue(testCase, webdriverManager.getWebdriver(driverName));
+            webDriverField.setValue(testCase, webdriverManager.getWebdriverByName(driverName));
 
             suffix = nextSuffix(driverCount++);
         }
     }
 
     private String nextSuffix(int driverCount) {
-        return ":" + driverCount + 1;
+        return String.format("%d", driverCount + 1);
     }
 
     /**

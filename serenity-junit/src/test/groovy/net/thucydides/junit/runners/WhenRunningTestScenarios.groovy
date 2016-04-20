@@ -2,7 +2,7 @@ package net.thucydides.junit.runners
 
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration
-import net.thucydides.core.webdriver.ThucydidesWebdriverManager
+import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFactory
 import net.thucydides.core.webdriver.WebdriverInstanceFactory
 import net.thucydides.samples.*
@@ -16,7 +16,6 @@ import spock.lang.Unroll
 
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.concurrent.TimeUnit
 
 import static net.thucydides.core.model.TestResult.*
 import static net.thucydides.junit.runners.TestOutcomeChecks.resultsFrom
@@ -410,7 +409,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should ignore close if the webdriver is not defined"() {
         when:
-        def manager = new ThucydidesWebdriverManager(webDriverFactory, new SystemPropertiesConfiguration(environmentVariables));
+        def manager = new SerenityWebdriverManager(webDriverFactory, new SystemPropertiesConfiguration(environmentVariables));
         then:
         manager.closeDriver()
     }

@@ -57,7 +57,7 @@ class WhenExecutingWrappedMethods extends Specification {
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
                 assert "$query" == "POST $url"
-                assert query.content == body
+                assert JsonConverter.formatted(query.content) == JsonConverter.formatted(body)
                 assert query.contentType == "application/json"
             }
         and:
@@ -87,7 +87,7 @@ class WhenExecutingWrappedMethods extends Specification {
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
                 assert "$query" == "POST $url"
-                assert query.content == body
+                assert JsonConverter.formatted(query.content) == JsonConverter.formatted(body)
                 assert query.contentType == "application/json"
             }
         and:
@@ -119,7 +119,7 @@ class WhenExecutingWrappedMethods extends Specification {
         then: "The JSON request should be recorded in the test steps"
             1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
                 assert "$query" == "POST $url"
-                assert query.content == body
+                assert JsonConverter.formatted(query.content) == JsonConverter.formatted(body)
                 assert query.contentType == "application/json"
             }
         and:

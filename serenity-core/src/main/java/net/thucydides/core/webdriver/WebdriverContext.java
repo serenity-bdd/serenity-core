@@ -13,14 +13,8 @@ public class WebdriverContext {
     }
 
     public WebDriver getWebdriver() {
-        String driverType = webdriverManager.getCurrentDriverName();
+        String driverType = webdriverManager.getCurrentDriverType();
         String driverName = driverType + ":" + context;
         return webdriverManager.getWebdriver(driverName);
     }
-
-    WebDriver getWebdriver(String driverType) {
-        String driverName = driverType + ":" + context;
-        return webdriverManager.getWebdriver(driverName);
-    }
-
 }

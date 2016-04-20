@@ -8,22 +8,22 @@ import com.jayway.restassured.specification.RequestSpecification;
  */
 public class RedirectSpecificationStub implements RedirectSpecification {
     @Override
-    public RequestSpecification max(int maxNumberOfRedirect) {
+    public RequestSpecification max(final int maxNumberOfRedirect) {
         return new RequestSpecificationStub();
     }
 
     @Override
-    public RequestSpecification follow(boolean followRedirects) {
+    public RequestSpecification follow(final boolean followRedirects) {
         return new RequestSpecificationStub();
     }
 
     @Override
-    public RequestSpecification allowCircular(boolean allowCircularRedirects) {
+    public RequestSpecification allowCircular(final boolean allowCircularRedirects) {
         return new RequestSpecificationStub();
     }
 
     @Override
-    public RequestSpecification rejectRelative(boolean rejectRelativeRedirects) {
+    public RequestSpecification rejectRelative(final boolean rejectRelativeRedirects) {
         return new RequestSpecificationStub();
     }
 }

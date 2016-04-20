@@ -58,9 +58,9 @@ public class BrowseTheWeb extends PageObject implements Ability {
 
     @Subscribe public void beginPerformance(ActorBeginsPerformanceEvent performanceEvent) {
         try {
-            if (performanceEvent.getName().equals(actor.getName())) {
-                webdriverManager.setCurrentDriver(getDriver());
-            }
+//            if (performanceEvent.getName().equals(actor.getName())) {
+//                webdriverManager.setCurrentDriver(getDriver());
+//            }
         } catch(Throwable e) {
             logger.warn("Failed to notify begin performance event for actor " + performanceEvent.getName(),e);
         }

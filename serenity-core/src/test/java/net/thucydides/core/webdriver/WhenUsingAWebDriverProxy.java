@@ -66,7 +66,7 @@ public class WhenUsingAWebDriverProxy {
         environmentVariables.setProperty("webdriver.driver", "phantomjs");
         factory = new WebDriverFactory(webdriverInstanceFactory, environmentVariables);
 
-        webdriverManager = new ThucydidesWebdriverManager(factory, new SystemPropertiesConfiguration(environmentVariables));
+        webdriverManager = new SerenityWebdriverManager(factory, new SystemPropertiesConfiguration(environmentVariables));
 
     }
 

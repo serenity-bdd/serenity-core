@@ -6,9 +6,6 @@ import net.serenitybdd.core.Serenity;
 
 import java.util.List;
 
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
-
 public class ErrorTally {
 
         private final EventBusInterface eventBusInterface;
@@ -30,16 +27,28 @@ public class ErrorTally {
                 return;
             }
             if (Serenity.shouldThrowErrorsImmediately()) {
-                throwSummaryExceptionFrom(extract(errors, on(FailedConsequence.class).getCause()));
+                throwSummaryExceptionFrom(errorCausesIn(errors));
             }
-
         }
 
     private void throwSummaryExceptionFrom(List<Throwable> errorCauses) {
-        List<String> errorMessages = extract(errorCauses, on(Throwable.class).getMessage());
-        String overallErrorMessage = Joiner.on(System.lineSeparator()).join(errorMessages);
+        String overallErrorMessage = Joiner.on(System.lineSeparator()).join(errorMessagesIn(errorCauses));
         throw new AssertionError(overallErrorMessage);
     }
 
+    private List<Throwable> errorCausesIn(List<FailedConsequence> failedConsequences) {
+        List<Throwable> causes = Lists.newArrayList();
+        for(FailedConsequence consequence : failedConsequences) {
+            causes.add(consequence.getCause());
+        }
+        return causes;
+    }
 
+    private List<String> errorMessagesIn(List<Throwable> errorCauses) {
+        List<String> errorMessages = Lists.newArrayList();
+        for(Throwable cause : errorCauses) {
+            errorMessages.add(cause.getMessage());
+        }
+        return errorMessages;
+    }
 }

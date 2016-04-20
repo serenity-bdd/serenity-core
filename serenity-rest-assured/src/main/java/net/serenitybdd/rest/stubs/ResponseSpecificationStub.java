@@ -19,97 +19,97 @@ import java.util.Map;
  */
 public class ResponseSpecificationStub implements ResponseSpecification {
     @Override
-    public ResponseSpecification content(Matcher<?> matcher, Matcher<?>... additionalMatchers) {
+    public ResponseSpecification content(final Matcher<?> matcher, final Matcher<?>... additionalMatchers) {
         return this;
     }
 
     @Override
-    public ResponseSpecification content(List<Argument> arguments, Matcher matcher, Object... additionalKeyMatcherPairs) {
+    public ResponseSpecification content(final List<Argument> arguments, final Matcher matcher, final Object... additionalKeyMatcherPairs) {
         return this;
     }
 
     @Override
-    public Response validate(Response response) {
+    public Response validate(final Response response) {
         return new ResponseStub();
     }
 
     @Override
-    public ResponseSpecification content(String key, Matcher<?> matcher, Object... additionalKeyMatcherPairs) {
+    public ResponseSpecification content(final String key, final Matcher<?> matcher, final Object... additionalKeyMatcherPairs) {
         return this;
     }
 
     @Override
-    public ResponseSpecification body(String key, List<Argument> arguments, Matcher matcher, Object... additionalKeyMatcherPairs) {
+    public ResponseSpecification body(final String key, final List<Argument> arguments, final Matcher matcher, final Object... additionalKeyMatcherPairs) {
         return this;
     }
 
     @Override
-    public ResponseSpecification body(List<Argument> arguments, Matcher matcher, Object... additionalKeyMatcherPairs) {
+    public ResponseSpecification body(final List<Argument> arguments, final Matcher matcher, final Object... additionalKeyMatcherPairs) {
         return this;
     }
 
     @Override
-    public ResponseSpecification statusCode(Matcher<? super Integer> expectedStatusCode) {
+    public ResponseSpecification statusCode(final Matcher<? super Integer> expectedStatusCode) {
         return this;
     }
 
     @Override
-    public ResponseSpecification statusCode(int expectedStatusCode) {
+    public ResponseSpecification statusCode(final int expectedStatusCode) {
         return this;
     }
 
     @Override
-    public ResponseSpecification statusLine(Matcher<? super String> expectedStatusLine) {
+    public ResponseSpecification statusLine(final Matcher<? super String> expectedStatusLine) {
         return this;
     }
 
     @Override
-    public ResponseSpecification statusLine(String expectedStatusLine) {
+    public ResponseSpecification statusLine(final String expectedStatusLine) {
         return this;
     }
 
     @Override
-    public ResponseSpecification headers(Map<String, ?> expectedHeaders) {
+    public ResponseSpecification headers(final Map<String, ?> expectedHeaders) {
         return this;
     }
 
     @Override
-    public ResponseSpecification headers(String firstExpectedHeaderName, Object firstExpectedHeaderValue, Object... expectedHeaders) {
+    public ResponseSpecification headers(final String firstExpectedHeaderName, final Object firstExpectedHeaderValue, final Object... expectedHeaders) {
         return this;
     }
 
     @Override
-    public ResponseSpecification header(String headerName, Matcher<?> expectedValueMatcher) {
+    public ResponseSpecification header(final String headerName, final Matcher<?> expectedValueMatcher) {
         return this;
     }
 
     @Override
-    public ResponseSpecification header(String headerName, String expectedValue) {
+    public ResponseSpecification header(final String headerName, final String expectedValue) {
         return this;
     }
 
     @Override
-    public ResponseSpecification cookies(Map<String, ?> expectedCookies) {
+    public ResponseSpecification cookies(final Map<String, ?> expectedCookies) {
         return this;
     }
 
     @Override
-    public ResponseSpecification cookie(String cookieName) {
+    public ResponseSpecification cookie(final String cookieName) {
         return this;
     }
 
     @Override
-    public ResponseSpecification cookies(String firstExpectedCookieName, Object firstExpectedCookieValue, Object... expectedCookieNameValuePairs) {
+    public ResponseSpecification cookies(final String firstExpectedCookieName, final Object firstExpectedCookieValue, final Object... expectedCookieNameValuePairs) {
         return this;
     }
 
     @Override
-    public ResponseSpecification cookie(String cookieName, Matcher<?> expectedValueMatcher) {
+    public ResponseSpecification cookie(final String cookieName, final Matcher<?> expectedValueMatcher) {
         return this;
     }
 
     @Override
-    public ResponseSpecification cookie(String cookieName, Object expectedValue) {
+    public ResponseSpecification cookie(final String cookieName, final Object expectedValue) {
         return this;
     }
 
@@ -119,22 +119,22 @@ public class ResponseSpecificationStub implements ResponseSpecification {
     }
 
     @Override
-    public ResponseSpecification rootPath(String rootPath) {
+    public ResponseSpecification rootPath(final String rootPath) {
         return this;
     }
 
     @Override
-    public ResponseSpecification rootPath(String rootPath, List<Argument> arguments) {
+    public ResponseSpecification rootPath(final String rootPath, final List<Argument> arguments) {
         return this;
     }
 
     @Override
-    public ResponseSpecification root(String rootPath, List<Argument> arguments) {
+    public ResponseSpecification root(final String rootPath, final List<Argument> arguments) {
         return this;
     }
 
     @Override
-    public ResponseSpecification root(String rootPath) {
+    public ResponseSpecification root(final String rootPath) {
         return this;
     }
 
@@ -149,47 +149,47 @@ public class ResponseSpecificationStub implements ResponseSpecification {
     }
 
     @Override
-    public ResponseSpecification appendRoot(String pathToAppend) {
+    public ResponseSpecification appendRoot(final String pathToAppend) {
         return this;
     }
 
     @Override
-    public ResponseSpecification appendRoot(String pathToAppend, List<Argument> arguments) {
+    public ResponseSpecification appendRoot(final String pathToAppend, final List<Argument> arguments) {
         return this;
     }
 
     @Override
-    public ResponseSpecification detachRoot(String pathToDetach) {
+    public ResponseSpecification detachRoot(final String pathToDetach) {
         return this;
     }
 
     @Override
-    public ResponseSpecification contentType(ContentType contentType) {
+    public ResponseSpecification contentType(final ContentType contentType) {
         return this;
     }
 
     @Override
-    public ResponseSpecification contentType(String contentType) {
+    public ResponseSpecification contentType(final String contentType) {
         return this;
     }
 
     @Override
-    public ResponseSpecification contentType(Matcher<? super String> contentType) {
+    public ResponseSpecification contentType(final Matcher<? super String> contentType) {
         return this;
     }
 
     @Override
-    public ResponseSpecification body(Matcher<?> matcher, Matcher<?>... additionalMatchers) {
+    public ResponseSpecification body(final Matcher<?> matcher, final Matcher<?>... additionalMatchers) {
         return this;
     }
 
     @Override
-    public ResponseSpecification body(String path, Matcher<?> matcher, Object... additionalKeyMatcherPairs) {
+    public ResponseSpecification body(final String path, final Matcher<?> matcher, final Object... additionalKeyMatcherPairs) {
         return this;
     }
 
     @Override
-    public ResponseSpecification content(String path, List<Argument> arguments, Matcher matcher, Object... additionalKeyMatcherPairs) {
+    public ResponseSpecification content(final String path, final List<Argument> arguments, final Matcher matcher, final Object... additionalKeyMatcherPairs) {
         return this;
     }
 
@@ -239,162 +239,162 @@ public class ResponseSpecificationStub implements ResponseSpecification {
     }
 
     @Override
-    public ResponseSpecification spec(ResponseSpecification responseSpecificationToMerge) {
+    public ResponseSpecification spec(final ResponseSpecification responseSpecificationToMerge) {
         return this;
     }
 
     @Override
-    public ResponseSpecification specification(ResponseSpecification responseSpecificationToMerge) {
+    public ResponseSpecification specification(final ResponseSpecification responseSpecificationToMerge) {
         return this;
     }
 
     @Override
-    public ResponseSpecification parser(String contentType, Parser parser) {
+    public ResponseSpecification parser(final String contentType, final Parser parser) {
         return this;
     }
 
     @Override
-    public ResponseSpecification defaultParser(Parser parser) {
+    public ResponseSpecification defaultParser(final Parser parser) {
         return this;
     }
 
     @Override
-    public Response get(String path, Object... pathParams) {
+    public Response get(final String path, final Object... pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response get(String path, Map<String, ?> pathParams) {
+    public Response get(final String path, final Map<String, ?> pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response post(String path, Object... pathParams) {
+    public Response post(final String path, final Object... pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response post(String path, Map<String, ?> pathParams) {
+    public Response post(final String path, final Map<String, ?> pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response put(String path, Object... pathParams) {
+    public Response put(final String path, final Object... pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response put(String path, Map<String, ?> pathParams) {
+    public Response put(final String path, final Map<String, ?> pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response delete(String path, Object... pathParams) {
+    public Response delete(final String path, final Object... pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response delete(String path, Map<String, ?> pathParams) {
+    public Response delete(final String path, final Map<String, ?> pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response head(String path, Object... pathParams) {
+    public Response head(final String path, final Object... pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response head(String path, Map<String, ?> pathParams) {
+    public Response head(final String path, final Map<String, ?> pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response patch(String path, Object... pathParams) {
+    public Response patch(final String path, final Object... pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response patch(String path, Map<String, ?> pathParams) {
+    public Response patch(final String path, final Map<String, ?> pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response options(String path, Object... pathParams) {
+    public Response options(final String path, final Object... pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response options(String path, Map<String, ?> pathParams) {
+    public Response options(final String path, final Map<String, ?> pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response get(URI uri) {
+    public Response get(final URI uri) {
         return new ResponseStub();
     }
 
     @Override
-    public Response post(URI uri) {
+    public Response post(final URI uri) {
         return new ResponseStub();
     }
 
     @Override
-    public Response put(URI uri) {
+    public Response put(final URI uri) {
         return new ResponseStub();
     }
 
     @Override
-    public Response delete(URI uri) {
+    public Response delete(final URI uri) {
         return new ResponseStub();
     }
 
     @Override
-    public Response head(URI uri) {
+    public Response head(final URI uri) {
         return new ResponseStub();
     }
 
     @Override
-    public Response patch(URI uri) {
+    public Response patch(final URI uri) {
         return new ResponseStub();
     }
 
     @Override
-    public Response options(URI uri) {
+    public Response options(final URI uri) {
         return new ResponseStub();
     }
 
     @Override
-    public Response get(URL url) {
+    public Response get(final URL url) {
         return new ResponseStub();
     }
 
     @Override
-    public Response post(URL url) {
+    public Response post(final URL url) {
         return new ResponseStub();
     }
 
     @Override
-    public Response put(URL url) {
+    public Response put(final URL url) {
         return new ResponseStub();
     }
 
     @Override
-    public Response delete(URL url) {
+    public Response delete(final URL url) {
         return new ResponseStub();
     }
 
     @Override
-    public Response head(URL url) {
+    public Response head(final URL url) {
         return new ResponseStub();
     }
 
     @Override
-    public Response patch(URL url) {
+    public Response patch(final URL url) {
         return new ResponseStub();
     }
 
     @Override
-    public Response options(URL url) {
+    public Response options(final URL url) {
         return new ResponseStub();
     }
 

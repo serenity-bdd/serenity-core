@@ -1,5 +1,153 @@
 ## Serenity BDD core change Log
 
+### v1.1.31 (2016/04/20 04:59 +00:00)
+ 
+**Pull requests:**
+ 
+- [#358](https://github.com/serenity-bdd/serenity-core/pull/358) Rest core updated. Fixed issues with reason in old structure ([@YamStranger](https://github.com/YamStranger))
+ 
+**Commits:**
+ 
+- [117dbf2](https://github.com/serenity-bdd/serenity-core/commit/117dbf23d51a4e6316fa6d203ea0e7d7857bcb37) feat: serenity rest core updated to return updated configurations, filters, etc. ([@YamStranger](https://github.com/YamStranger))
+- [2787384](https://github.com/serenity-bdd/serenity-core/commit/2787384de5c0e4dd71b767817a30ff9257fbbe7a) feat: serenity-rest implemented recording of boyd, content-type, path, method, prepared recoding structure ([@YamStranger](https://github.com/YamStranger))
+ 
+ > Now it will be is easy to include in restQuery recording info about cookies, headers, and so on using filtering RestAssured mechanism
+- [2d4719b](https://github.com/serenity-bdd/serenity-core/commit/2d4719b5c0ab7cf48437c144274be062b0419446) feat: serenity-rest supported sequences of operations in different steps: ([@YamStranger](https://github.com/YamStranger))
+ 
+ > Now it is possible run sequence of rest operations, with restspecification and response shared in one thread:
+ > ```
+ > class RestSteps {
+ > [@Ste](https://github.com/Ste)p
+ > def successfulGet(final String url) {
+ > given().get(&quot;$url/{id}&quot;, 1000).then().body(&quot;id&quot;, Matchers.equalTo(1000));
+ > }
+ > [@Ste](https://github.com/Ste)p
+ > def getById(final String url) {
+ > rest().get(&quot;$url/{id}&quot;, 1000);
+ > }
+ > [@Ste](https://github.com/Ste)p
+ > def thenCheckOutcome() {
+ > then().body(&quot;Id&quot;, Matchers.anything())
+ > }
+ > }
+ > ```
+- [52e54a9](https://github.com/serenity-bdd/serenity-core/commit/52e54a9c668627a21905685c8a04e34f9fcdc809) feat: implemented wrapping of request specification after multypart request configurations ([@YamStranger](https://github.com/YamStranger))
+- [5b6c531](https://github.com/serenity-bdd/serenity-core/commit/5b6c531b8551b464772a205b8d2cae9bb4f345f5) feat: implemented wrapping of request after configuring cookies ([@YamStranger](https://github.com/YamStranger))
+ 
+ > Now serenity rest will work correctly after operations like below:
+ > ```
+ > given().cookies(mapWithCookies).get(url)
+ > given().cookies(&quot;value&quot;).get(url)
+ > given().cookies(&quot;value&quot;, param).get(url)
+ > ```
+- [5bdeda5](https://github.com/serenity-bdd/serenity-core/commit/5bdeda5fa991e707d6a3aa96b0c360e78b76a6ba) feat: serenity-rest implemented wrapping for all requests in SerenityRest class, all covered by tests ([@YamStranger](https://github.com/YamStranger))
+- [7c0f58a](https://github.com/serenity-bdd/serenity-core/commit/7c0f58aedac4ea2015abab047080c53a8168cd1b) test: added test to ceheck wrapping after cookie operations ([@YamStranger](https://github.com/YamStranger))
+- [7d5f5c8](https://github.com/serenity-bdd/serenity-core/commit/7d5f5c881d59a8df718e93bc7e31e89809ccd3f1) test: implemented test for wrapping request with configured multipart request ([@YamStranger](https://github.com/YamStranger))
+- [8040ade](https://github.com/serenity-bdd/serenity-core/commit/8040ade93c477c2f451085ba03a9d3fca2abdcf3) feat: serenity-rest implemented recording of all basic fields, like status-code, body, path, method. Implemented recoding of exceptions. ([@YamStranger](https://github.com/YamStranger))
+ 
+ > Now all operations will be recorded, after request executed, in report all fields will appear in same format as send.
+ > After this update content/body should be matched with additional transformation, because if string contains json/xml it will be reformatted by RestAssured,
+ > for example for Json it can be:
+ > ```
+ > ...
+ > import static net.serenitybdd.rest.staging.JsonConverter.*;
+ > ...
+ > assert formatted(query.responseBody) == formatted(body)
+ > ```
+ > Introduced DecomposedContentType class for representation simple content types:
+ > if in rest assured defined only:
+ > ```
+ > ANY(&quot;*/*&quot;),
+ > TEXT(&quot;text/plain&quot;),
+ > JSON(&quot;application/json&quot;, &quot;application/javascript&quot;, &quot;text/javascript&quot;),
+ > XML(&quot;application/xml&quot;, &quot;text/xml&quot;, &quot;application/xhtml+xml&quot;),
+ > HTML(&quot;text/html&quot;),
+ > URLENC(&quot;application/x-www-form-urlencoded&quot;),
+ > BINARY(&quot;application/octet-stream&quot;);
+ > ```
+ > not it will be possible define something like that `given().contentType(&quot;$APPLICATION_JSON&quot;)` for:
+ > ```
+ > ANY(&quot;*/*&quot;),
+ > TEXT(&quot;text/plain&quot;),
+ > APPLICATION_JSON(&quot;application/json&quot;),
+ > APPLICATION_JAVASCRIPT(&quot;application/javascript&quot;),
+ > APPLICATION_XML(&quot;application/xml&quot;),
+ > TEST_XML(&quot;text/xml&quot;),
+ > APPLICATION_XHTML_XML(&quot;application/xhtml+xml&quot;),
+ > TEST_JAVASCRIPT(&quot;text/javascript&quot;),
+ > HTML(&quot;text/html&quot;),
+ > URLENC(&quot;application/x-www-form-urlencoded&quot;),
+ > BINARY(&quot;application/octet-stream&quot;);
+ > ```
+ > as well as find some RestAssured content type by DecomposedContentType or String:
+ > ```
+ > DecomposedContentType.byString(&quot;application/javascript; Charset: UTF-8&quot;).contentType()
+ > ```
+- [8d3e5c9](https://github.com/serenity-bdd/serenity-core/commit/8d3e5c93e264970857fe3b988d4a3966b42e2b92) feat: serenity rest core decomposed to make possible to use different classes for different purposes. ([@YamStranger](https://github.com/YamStranger))
+ 
+ > Now it is possible to execute almost all serenity rest operations using SerenityRest (90+ methods) or use smaller classes:
+ > RestDefaults (50+ methods)can be used for configuratins only default parameters
+ > RestRequests (20+ methods)can be used for making requests
+ > RestUtility  (20+ methods)can be used for initialising some default or reusable objects
+- [a608efe](https://github.com/serenity-bdd/serenity-core/commit/a608efe35f711f3907cdcb64c29429b44e712c43) feat: serenity-rest-assured updated rest core and tests, renamed some classes ([@YamStranger](https://github.com/YamStranger))
+- [ae9e4a8](https://github.com/serenity-bdd/serenity-core/commit/ae9e4a87b1b76ad0a8eea4b5a33c9b8c47b49b5f) feat: serenity-core updated restQuery and reports to include Cookies and headers, changed wrapping of request and response ([@YamStranger](https://github.com/YamStranger))
+- [b99deb4](https://github.com/serenity-bdd/serenity-core/commit/b99deb4009cb2a162ca80f5f527b4e48a33e1b8c) test: serenity-rest created test to check how dryRun works for serenity rest ([@YamStranger](https://github.com/YamStranger))
+- [ca6690e](https://github.com/serenity-bdd/serenity-core/commit/ca6690e39b567279ab8d6488199c26ee30eb57ad) test: serenity-rest implemented test to check if body, contenttype, responce is recorded ([@YamStranger](https://github.com/YamStranger))
+- [d869ad2](https://github.com/serenity-bdd/serenity-core/commit/d869ad2252483e78aaba581de2155a18f370868f) test: serenity-rest implemented tests to check how recording of rest requests and reponses works ([@YamStranger](https://github.com/YamStranger))
+- [de2dc5e](https://github.com/serenity-bdd/serenity-core/commit/de2dc5ee86b2f85e2ecae52e4a2a71de2c4c988c) feat: implemented support of DryRun for Serenity Rest ([@YamStranger](https://github.com/YamStranger))
+- [ebe88bd](https://github.com/serenity-bdd/serenity-core/commit/ebe88bdb34972cac83c6f9ac7eda6848aa6060eb) feat: serenity rest core decomposed to make possible use shaned method invocations for configuring default parameters. ([@YamStranger](https://github.com/YamStranger))
+- [f5eb645](https://github.com/serenity-bdd/serenity-core/commit/f5eb6455a0175085bfa28eb218c517882a7028b7) test: serenity-rest implemented test to check if failed query recorded and it is possible to use assertions ([@YamStranger](https://github.com/YamStranger))
+ 
+### v1.1.30 (2016/04/05 13:55 +00:00)
+ 
+ 
+**Commits:**
+ 
+- [08c4823](https://github.com/serenity-bdd/serenity-core/commit/08c48231157fcdc6b4f704ae15767782600c5d28) test: serenity-rest tested to configure base path and pase uri and other base configurations ([@YamStranger](https://github.com/YamStranger))
+- [146b1d8](https://github.com/serenity-bdd/serenity-core/commit/146b1d8129b31e836b712fe9f70cfb400a48dda8) feat: serenity-rest implemented wrapping of request after redirects configuration ([@YamStranger](https://github.com/YamStranger))
+- [231052b](https://github.com/serenity-bdd/serenity-core/commit/231052beeacac17732877c574029a528644cec06) feat: implemented wrapping after operations with body, content, headers, contentTypes ([@YamStranger](https://github.com/YamStranger))
+ 
+ > Now serenity-rest will work correctly with opertions like:
+ > ```
+ > given().contentType(ContentType.XML).get(url)
+ > given().contentType(ContentType.XML).get(url)
+ > given().headers(map).get(url)
+ > given().header(CONTENT_TYPE.asString(), ContentType.JSON).get(url)
+ > given().contentType(&quot;application/json&quot;).content(body).post(url)
+ > ```
+- [30105b4](https://github.com/serenity-bdd/serenity-core/commit/30105b4face22f9f2e8116381c999a89affba996) test: created tests to check if HEAD operatin works correctly and return empty body ([@YamStranger](https://github.com/YamStranger))
+- [432e5f6](https://github.com/serenity-bdd/serenity-core/commit/432e5f6a141cfe05df7bcfad670a4faba94b379a) feat: implemented wrapping during executing on request instance operations like when, with, given, and ([@YamStranger](https://github.com/YamStranger))
+- [443ca49](https://github.com/serenity-bdd/serenity-core/commit/443ca49c83bc41296a7a7a62f7d6abd75221b7db) test: serenity-rest, added tests for checking https requests and auth params configurations ([@YamStranger](https://github.com/YamStranger))
+- [4cb9449](https://github.com/serenity-bdd/serenity-core/commit/4cb944933b815836db18e2dd077c2abe3b800d9a) feat: implemented wrapping of request/response after HTTPS and Auth configurations ([@YamStranger](https://github.com/YamStranger))
+ 
+ > Now, rest assured will use wrapped request and response after configurations like below:
+ > ```
+ > given().relaxedHTTPSValidation().get(url)
+ > when().authentication().basic(&quot;login&quot;,&quot;password&quot;).get(url)
+ > given().authentication().none()
+ > given().auth().oauth2(token)
+ > given().authentication().basic(&quot;user&quot;, &quot;password&quot;)
+ > ```
+- [5b6b67f](https://github.com/serenity-bdd/serenity-core/commit/5b6b67fa068e7a7b9a0cd535d05d4fa7e741ba81) feat: wrapped put request, updated wrapping of get request - to use only one function-endpoint ([@YamStranger](https://github.com/YamStranger))
+- [5cc45f3](https://github.com/serenity-bdd/serenity-core/commit/5cc45f33718c705bc5a1283b2e9a44ea38731b4d) feat: in serenity-rest implemented setting base path, base uri, session id, port, urlEncodingEnabled ([@YamStranger](https://github.com/YamStranger))
+ 
+ > To set base paramters next code can be used:
+ > ```
+ > given().basePath(path).get(url)
+ > given().baseUri(base).port(port).get(path)
+ > given().baseUri(base).port(port).get(path)
+ > given().baseUri(base).basePath(&quot;/test&quot;).get(&quot;log/levels&quot;)
+ > ```
+- [63d9538](https://github.com/serenity-bdd/serenity-core/commit/63d9538b0322057869ab87d6b8829794106df541) test: added tests to check wrapping response and request and correctness of setting body, content, headers ([@YamStranger](https://github.com/YamStranger))
+- [6ed97f3](https://github.com/serenity-bdd/serenity-core/commit/6ed97f3f78d8aa7e2b175f7800337e7a5944e345) style: changed request organisation, added tests for get operation ([@YamStranger](https://github.com/YamStranger))
+- [794f5af](https://github.com/serenity-bdd/serenity-core/commit/794f5af4fa1a9e84c66991a86fcfb82369817d30) test: serenity-rest, added tests for checking wrapping after redirects configuration ([@YamStranger](https://github.com/YamStranger))
+- [7a014ec](https://github.com/serenity-bdd/serenity-core/commit/7a014ec919eb224a4c839f3acde389cad2a6883c) feat: implemented HEAD, PATCH, DELETE, OPTIONS, POST operations and wrapping of results ([@YamStranger](https://github.com/YamStranger))
+- [7f439d2](https://github.com/serenity-bdd/serenity-core/commit/7f439d278111f3907ed94fd3a78ea211cdae977a) test: serenity-rest added tests for using chains of given, and, when, with based on request instance ([@YamStranger](https://github.com/YamStranger))
+- [81c6d30](https://github.com/serenity-bdd/serenity-core/commit/81c6d3092a1522b031e3b7735c83f77e5fa43579) feat: impelemented processing and wrapping of result for operations with pathParameter, queryParams, param, params, parameters, formParam ([@YamStranger](https://github.com/YamStranger))
+- [af19533](https://github.com/serenity-bdd/serenity-core/commit/af19533f10fc3844ba0d4b50ceaa89334a2533d2) feat: implemented processing log operation with rest assurance, and created tests for it ([@YamStranger](https://github.com/YamStranger))
+- [ca059a5](https://github.com/serenity-bdd/serenity-core/commit/ca059a5b9a51c8761908a3bea2eb1db4c8decc4d) test: added tests to check wrapping repsponse after PUT, POST, PATCH, DELETE, OPTIONS, HEAD requests ([@YamStranger](https://github.com/YamStranger))
+- [f1e2cde](https://github.com/serenity-bdd/serenity-core/commit/f1e2cde371629a9f06cf4ce1dbdf5b4f279f0854) test: added tests for PUT operations ([@YamStranger](https://github.com/YamStranger))
+ 
 ### v1.1.29-rc.3 (2016/03/29 17:38 +00:00)
  
 **Pull requests:**
@@ -23,14 +171,53 @@
 **Commits:**
  
 - [240b93b](https://github.com/serenity-bdd/serenity-core/commit/240b93be5bd79a80bf13778033753a0fd62b3f7f) feat: added checking if browser alive before taking screenshot or saving page-source ([@YamStranger](https://github.com/YamStranger))
+- [24c5d38](https://github.com/serenity-bdd/serenity-core/commit/24c5d3858022ddce0cc44db3dcf6a7dca745f354) feat: added rule for configuration initialization of SerenityRest using configurtion Actions, added tests ([@YamStranger](https://github.com/YamStranger))
+ 
+ > Now it will be possible to use same default configuration of SerenityRest during execution different test methods:
+ > ```
+ > [@Rul](https://github.com/Rul)e
+ > def RestConfigurationRule rule = new RestConfigurationRule(
+ > new RestConfigurationAction() {
+ > [@Overrid](https://github.com/Overrid)e
+ > void apply() {
+ > setDefaultBasePath(&quot;home/units&quot;)
+ > }
+ > }, new RestConfigurationAction() {
+ > [@Overrid](https://github.com/Overrid)e
+ > void apply() {
+ > setDefaultPort(0)
+ > }
+ > },)
+ > ```
+ > Before test actions executed one by one, after tests SerenityRest.reset() is executed
+- [4315100](https://github.com/serenity-bdd/serenity-core/commit/43151004ed37461a899fa0fb9efae7eb2d0da52c) style: updated test, removed blank lines and unused imports ([@YamStranger](https://github.com/YamStranger))
 - [4d2029c](https://github.com/serenity-bdd/serenity-core/commit/4d2029c6b2b6313c1825c80f39acf2b425ec959b) test: updated tests for rest-assurance to use wiremock server instead of petstore ([@YamStranger](https://github.com/YamStranger))
+- [5b4590c](https://github.com/serenity-bdd/serenity-core/commit/5b4590c78e6e245091f2a7a2c8faab94b77ce576) feat: wrapped response from GET to make possible including in report validations ([@YamStranger](https://github.com/YamStranger))
+ 
+ > Now during execution then, expect, and validations like then.statusCode(200) used wrapped response.
+ > For example supported lines:
+ > ```
+ > given()
+ > .param(&quot;x&quot;, &quot;y&quot;)
+ > .expect()
+ > .statusCode(200)
+ > .body(Matchers.equalTo(body))
+ > .when()
+ > .get(url)
+ > given().get(url).then().statusCode(200)
+ > ```
 - [6417437](https://github.com/serenity-bdd/serenity-core/commit/64174370c98b6db742fe95e47d8ce25d9de59c96) fix: updated scenario data driven steps processing for report - now report will contains steps as from first scenario ([@YamStranger](https://github.com/YamStranger))
 - [6aefe69](https://github.com/serenity-bdd/serenity-core/commit/6aefe6917efc7abf5b1902b77f69a8b70723b914) test: refactored test for Qualifier ([@YamStranger](https://github.com/YamStranger))
 - [71102ac](https://github.com/serenity-bdd/serenity-core/commit/71102acf032fd2c5aa6b2919b7f378fbf285da94) fix: updated processing of @Qualifier tag in junit tests with data tables. Now it is possible add short description to steps based on parameters value ([@YamStranger](https://github.com/YamStranger))
+- [7996d30](https://github.com/serenity-bdd/serenity-core/commit/7996d30f9977393c77ddf2332f945ae138b07309) feat: updated serentyRest and tests. Checking Response and request wrapping during creation ([@YamStranger](https://github.com/YamStranger))
 - [89e9512](https://github.com/serenity-bdd/serenity-core/commit/89e9512d61ebfa1227c9106b774e82176780bb04) test: added tests to check how taking screenshorts works with died browsers ([@YamStranger](https://github.com/YamStranger))
+- [8fb8303](https://github.com/serenity-bdd/serenity-core/commit/8fb8303860637e672e26e2ee741c543a320624c4) test: added tests to check wrapping during initialisation of requests and responses ([@YamStranger](https://github.com/YamStranger))
+- [90ffb4e](https://github.com/serenity-bdd/serenity-core/commit/90ffb4e6ca2e8926dc3fa19ce82cb21d723fa6a5) feat: implemented wrapping during initialisation of request and response using methods given,when,expect ([@YamStranger](https://github.com/YamStranger))
+- [a291ba1](https://github.com/serenity-bdd/serenity-core/commit/a291ba1e4402dbe3acad99bdfc9f88997918c456) feat: implemented SerenityRest methods for setting default values ([@YamStranger](https://github.com/YamStranger))
 - [a4d6b32](https://github.com/serenity-bdd/serenity-core/commit/a4d6b324a8c80976961b4312ab75f11980519d62) fix: When using SerenityParameterizedRunner tests there was a need to add [@Managed WebDriver in order to see the examples table. This is due to TestClassRunnerForInstanciatedTestCase not overriding initListener](https://github.com/Managed WebDriver in order to see the examples table. This is due to TestClassRunnerForInstanciatedTestCase not overriding initListener)s
 - [a505bd9](https://github.com/serenity-bdd/serenity-core/commit/a505bd9bcc18bde3625c0d0b4b4a86d43416f438) fix: updated closing web driver when appium is used, it seems that window handles still does not implemented for Android devices, only for iOS ([@YamStranger](https://github.com/YamStranger))
 - [bf6d91e](https://github.com/serenity-bdd/serenity-core/commit/bf6d91e2f403ea4c5049ea32c72cade8a2f1f2d9) chore: created gradle build config for smoketests to execute them against latest serenty core ([@YamStranger](https://github.com/YamStranger))
+- [cd93fbb](https://github.com/serenity-bdd/serenity-core/commit/cd93fbb84276728c5703231817df14edc1a39091) test: updated tests to check how SerenityRest works with expectation and validations like then, expect, statusCode etc ([@YamStranger](https://github.com/YamStranger))
 - [e6e6651](https://github.com/serenity-bdd/serenity-core/commit/e6e665143f90393636e44ff85d1f8784f8b3910d) test: updated name of test method ([@YamStranger](https://github.com/YamStranger))
  
 ### v1.1.29-rc.1 (2016/03/02 17:33 +00:00)
@@ -1311,89 +1498,10 @@
  
 ### v1.0.42 (2015/03/19 11:38 +00:00)
  
- 
-**Commits:**
- 
-- [33ff1a1](https://github.com/serenity-bdd/serenity-core/commit/33ff1a16031cb982ece39dfec2d3c6933f5566c1) Allows explicit waits on web elements in a page ([@wakaleo](https://github.com/wakaleo))
- 
- > For example:
- > withTimeoutOf(5, TimeUnit.SECONDS).waitFor(facebookIcon).click()
- 
-### v1.0.41 (2015/03/18 03:35 +00:00)
- 
- 
-**Commits:**
- 
-- [b497a1d](https://github.com/serenity-bdd/serenity-core/commit/b497a1db76988333b8cafacc057104178bbf90b1) Implemented the timeoutInSeconds attribute on the FindBy annotation. ([@wakaleo](https://github.com/wakaleo))
-- [d8ccfda](https://github.com/serenity-bdd/serenity-core/commit/d8ccfdabf6a5952f5313a140e6a2fd5889ffbf00) Implemented the timeoutInSeconds attribute on the FindBy annotation. ([@wakaleo](https://github.com/wakaleo))
- 
-### v1.0.40 (2015/03/17 11:59 +00:00)
- 
- 
-**Commits:**
- 
-- [0fa63e2](https://github.com/serenity-bdd/serenity-core/commit/0fa63e2aba5951d2b87ff001fa04895d72f9fad1) Added containsElements() and shouldContainElements() methods to WebElementFacade ([@wakaleo](https://github.com/wakaleo))
-- [9d9c5a4](https://github.com/serenity-bdd/serenity-core/commit/9d9c5a4b6a19c4f11c577553f160c41a08e15bf8) Added a convenience method to allow more fluent waitFor() constructs ([@wakaleo](https://github.com/wakaleo))
-- [e7235f7](https://github.com/serenity-bdd/serenity-core/commit/e7235f713c2d37952baec9c54431fa379d4035b5) Refactored wait logic to use distinct values for implicit waits and wait-for waits. ([@wakaleo](https://github.com/wakaleo))
- 
-### v1.0.39 (2015/03/12 22:42 +00:00)
- 
- 
-**Commits:**
- 
-- [204900f](https://github.com/serenity-bdd/serenity-core/commit/204900f5f48211acb9e1527f40ddc9c065d17e9e) Rewrote much of the timeout APIs ([@wakaleo](https://github.com/wakaleo))
-- [2eca74a](https://github.com/serenity-bdd/serenity-core/commit/2eca74a07bd6db6630d376265d132ade63f37431) fix: Fixed a bug in reading the requirements from the file system. ([@wakaleo](https://github.com/wakaleo))
-- [3828027](https://github.com/serenity-bdd/serenity-core/commit/38280276b961e60528a675c6f0990434d2cd4647) fix: Fixed a bug in reading the requirements from the file system. ([@wakaleo](https://github.com/wakaleo))
-- [5a46d71](https://github.com/serenity-bdd/serenity-core/commit/5a46d718876a96a86f3be5affef0432f4b15f828) test: Use phantomjs to check implicit timeouts more realisticly ([@wakaleo](https://github.com/wakaleo))
-- [73ce792](https://github.com/serenity-bdd/serenity-core/commit/73ce792b29c26b4f75dcb49e74e360a5f9e368a4) Removed redundant test ([@wakaleo](https://github.com/wakaleo))
-- [82d1ab1](https://github.com/serenity-bdd/serenity-core/commit/82d1ab1c848b7d38ea74584597c29913b448561a) tests: test hardening ([@wakaleo](https://github.com/wakaleo))
-- [9a6c99d](https://github.com/serenity-bdd/serenity-core/commit/9a6c99dcc3e1949c69b724549685383f505bd449) fix: Fixed a bug in reading the requirements from the file system. ([@wakaleo](https://github.com/wakaleo))
-- [ac3de4e](https://github.com/serenity-bdd/serenity-core/commit/ac3de4e6f2f409bce189dc81dcc03affe2ff2804) tests: hardeding the timeout tests ([@wakaleo](https://github.com/wakaleo))
-- [b29b7cc](https://github.com/serenity-bdd/serenity-core/commit/b29b7cc6ce97ee96b9d3dc80661f623d805afc79) feature: Added support for a waitUntilClickable() method on web elements ([@wakaleo](https://github.com/wakaleo))
-- [dbddf6d](https://github.com/serenity-bdd/serenity-core/commit/dbddf6df434355f7f21ccb8ad2178ad755e4530e) test: Temporarily disabling a test that doesn't work on the build server pending further investigation ([@wakaleo](https://github.com/wakaleo))
- 
-### v1.0.38 (2015/03/08 23:00 +00:00)
- 
 **Pull requests:**
  
 - [#32](https://github.com/serenity-bdd/serenity-core/pull/32) Update CSVTestDataSource.java ([@x-hovo-x](https://github.com/x-hovo-x))
 - [#31](https://github.com/serenity-bdd/serenity-core/pull/31) Update WhenLoadingTestDataFromACSVFile.java ([@x-hovo-x](https://github.com/x-hovo-x))
- 
-**Commits:**
- 
-- [0c23f3a](https://github.com/serenity-bdd/serenity-core/commit/0c23f3a8c26b06e44854f92fe9433615e6f88c83) test: Temporarily disabling a test that doesn't work on the build server pending further investigation ([@wakaleo](https://github.com/wakaleo))
-- [219441f](https://github.com/serenity-bdd/serenity-core/commit/219441fb70fb4b94c54118770940cdae043efc7a) test: Added sample JSON test data ([@wakaleo](https://github.com/wakaleo))
-- [326a643](https://github.com/serenity-bdd/serenity-core/commit/326a643ba2bcb0d92355dc59a897426d8632003c) Fixed an issue in the reports where pending test results were not being accurately reported in the pie charts. ([@wakaleo](https://github.com/wakaleo))
-- [4bfdb91](https://github.com/serenity-bdd/serenity-core/commit/4bfdb9133300e0e016beaddcc46ed35e83d4a8de) test: Added sample JSON test data ([@wakaleo](https://github.com/wakaleo))
-- [536bfdf](https://github.com/serenity-bdd/serenity-core/commit/536bfdf46cac5b0f3cc48854f176e74abac441d0) test: Use phantomjs to check implicit timeouts more realisticly ([@wakaleo](https://github.com/wakaleo))
-- [66801ff](https://github.com/serenity-bdd/serenity-core/commit/66801ffbbc769e407f60b93fe8fdae7572ce2188) Added test data for a sample pending report ([@wakaleo](https://github.com/wakaleo))
-- [8043809](https://github.com/serenity-bdd/serenity-core/commit/8043809da640f99f1eaae165f7774a2d5fe1eb19) Update WhenLoadingTestDataFromACSVFile.java ([@x-hovo-x](https://github.com/x-hovo-x))
- 
- > Added all possible parameters for CSVReader to be able to parse special chars like \n \t ...
-- [9e65332](https://github.com/serenity-bdd/serenity-core/commit/9e653329dd691a596a5ff450a868b4372957f7a8) Added tests to doument implicit wait behavior ([@wakaleo](https://github.com/wakaleo))
-- [a6d6cc6](https://github.com/serenity-bdd/serenity-core/commit/a6d6cc62c5763512c53b4c79fbdfc3844de54ea6) Fixed an issue with Cucumber requirements reporting when the name of the feature differs from the name of the feature file. ([@wakaleo](https://github.com/wakaleo))
-- [aa1c3ed](https://github.com/serenity-bdd/serenity-core/commit/aa1c3ed0fa00fc75928c81c234e3102af9d22700) Update CSVTestDataSource.java ([@x-hovo-x](https://github.com/x-hovo-x))
-- [ac60be6](https://github.com/serenity-bdd/serenity-core/commit/ac60be617fe6dd15076a8406347e0be2897ff62e) Fixed an issue with Cucumber requirements reporting when the name of the feature differs from the name of the feature file. ([@wakaleo](https://github.com/wakaleo))
-- [c191b5a](https://github.com/serenity-bdd/serenity-core/commit/c191b5a2b3d0a8cf12bfb189944c91784ec15a35) Added test data for a sample pending report ([@wakaleo](https://github.com/wakaleo))
-- [cd09406](https://github.com/serenity-bdd/serenity-core/commit/cd09406dcb34a96553926e964ebe87a267da19c2) Added test data for a sample pending report ([@wakaleo](https://github.com/wakaleo))
-- [cd9d786](https://github.com/serenity-bdd/serenity-core/commit/cd9d78657ed78aba1c2f66351eb925db3e0daa09) Fixed an issue in the reports where pending test results were not being accurately reported in the pie charts. ([@wakaleo](https://github.com/wakaleo))
-- [d2a2018](https://github.com/serenity-bdd/serenity-core/commit/d2a20188ab24fd4213845331ed79351149d546cd) Update WhenLoadingTestDataFromACSVFile.java ([@x-hovo-x](https://github.com/x-hovo-x))
-- [df893d2](https://github.com/serenity-bdd/serenity-core/commit/df893d20c253dbc94e69edbe96df003d1138e146) Update CSVTestDataSource.java ([@x-hovo-x](https://github.com/x-hovo-x))
- 
-### v1.0.37 (2015/03/03 01:05 +00:00)
- 
- 
-**Commits:**
- 
-- [403003d](https://github.com/serenity-bdd/serenity-core/commit/403003dfbac409d11bac19502210d587cec46f4b) Refactored the dependencies to use both the group and the module names in exclusions, to make the Maven Enforcer plugin happy ([@wakaleo](https://github.com/wakaleo))
-- [9d25a1a](https://github.com/serenity-bdd/serenity-core/commit/9d25a1aa46fcfe3113a1cf013f4269f376f4aa42) Refactored the dependencies to use both the group and the module names in exclusions, to make the Maven Enforcer plugin happy ([@wakaleo](https://github.com/wakaleo))
-- [b3d38fb](https://github.com/serenity-bdd/serenity-core/commit/b3d38fb9a30fd748cf95ef5d4c81b580be76edfa) test:Made a unit test more readable ([@wakaleo](https://github.com/wakaleo))
-- [fe952b9](https://github.com/serenity-bdd/serenity-core/commit/fe952b944bf628da851698e3b02095c31e08e91c) Fixed an issue that had broken the async timeout behavior in the setScriptTimeout() method ([@wakaleo](https://github.com/wakaleo))
- 
-### v1.0.36 (2015/03/02 21:13 +00:00)
- 
-**Pull requests:**
- 
 - [#25](https://github.com/serenity-bdd/serenity-core/pull/25) feat: nested page objects i.e. widget objects ([@CoeJoder](https://github.com/CoeJoder))
 - [#22](https://github.com/serenity-bdd/serenity-core/pull/22) Listelements ([@CoeJoder](https://github.com/CoeJoder))
 - [#20](https://github.com/serenity-bdd/serenity-core/pull/20) Appium support ([@schmurgon](https://github.com/schmurgon))
@@ -1448,7 +1556,9 @@
  
  > This reverts commit 44ec91e92d90ebc3742a6221f82d1a404b1baa57.
 - [0aa2e31](https://github.com/serenity-bdd/serenity-core/commit/0aa2e31aa5f29f3a2452cf14f241587417b436c2) Merged in Appium support and tweaked an internal class as a work-around for potential dependency issues related to commons-lang3 ([@wakaleo](https://github.com/wakaleo))
+- [0c23f3a](https://github.com/serenity-bdd/serenity-core/commit/0c23f3a8c26b06e44854f92fe9433615e6f88c83) test: Temporarily disabling a test that doesn't work on the build server pending further investigation ([@wakaleo](https://github.com/wakaleo))
 - [0e9d614](https://github.com/serenity-bdd/serenity-core/commit/0e9d614b462448a994614470c2fb9a3eb21cca96) Moved most uses of FileUtils to the Java 7 Files class, in order to remove sporadic issues when resizing screenshots ([@wakaleo](https://github.com/wakaleo))
+- [0fa63e2](https://github.com/serenity-bdd/serenity-core/commit/0fa63e2aba5951d2b87ff001fa04895d72f9fad1) Added containsElements() and shouldContainElements() methods to WebElementFacade ([@wakaleo](https://github.com/wakaleo))
 - [11b988b](https://github.com/serenity-bdd/serenity-core/commit/11b988b4948ee76105712fffe1d871bac3ecd97e) Use Durations rather than longs and ints to handle timeout values, in order to avoid coding errors, make the code clearer, and as a basis for more flexible timeout configuration. ([@wakaleo](https://github.com/wakaleo))
 - [1290a90](https://github.com/serenity-bdd/serenity-core/commit/1290a90ccf2c6c394059eaff03f8583bf55945da) Solidified a test ([@wakaleo](https://github.com/wakaleo))
 - [18d5f80](https://github.com/serenity-bdd/serenity-core/commit/18d5f80d55e8b837be57aeaca402a93a5d493092) Improved requirement reporting for JUnit (experimental) ([@wakaleo](https://github.com/wakaleo))
@@ -1457,6 +1567,8 @@
  
  > This reverts commit 7b26344dea3c0ee710ee90fe7040141a6941f97f.
 - [1d7740d](https://github.com/serenity-bdd/serenity-core/commit/1d7740dc9d007c0e84470f30137bb611e9f74336) Fixed an issue in the BinTray deployment ([@wakaleo](https://github.com/wakaleo))
+- [204900f](https://github.com/serenity-bdd/serenity-core/commit/204900f5f48211acb9e1527f40ddc9c065d17e9e) Rewrote much of the timeout APIs ([@wakaleo](https://github.com/wakaleo))
+- [219441f](https://github.com/serenity-bdd/serenity-core/commit/219441fb70fb4b94c54118770940cdae043efc7a) test: Added sample JSON test data ([@wakaleo](https://github.com/wakaleo))
 - [22d5395](https://github.com/serenity-bdd/serenity-core/commit/22d5395e9df2cbc7f8a6a352fc71a516c469f237) Top build: fail fast on dependency convergence problems. #16 ([@jeffjensen](https://github.com/jeffjensen))
  
  > Added &quot;force version&quot; on transitive versions with convergence
@@ -1476,16 +1588,23 @@
 - [2bde33a](https://github.com/serenity-bdd/serenity-core/commit/2bde33abd91afd7aee14fae2a1ff5109eb570c04) refactor: Move tests from thucydides to serenitybdd package ([@mikezx6r](https://github.com/mikezx6r))
 - [2cb5e77](https://github.com/serenity-bdd/serenity-core/commit/2cb5e77f4aa71a61a6fb092c7b1d9564e9344c94) fix: Fixed a bug where the reports fail to generate if there are skipped test results in the outcomes. ([@wakaleo](https://github.com/wakaleo))
 - [2d48ba3](https://github.com/serenity-bdd/serenity-core/commit/2d48ba34363f7e10f3102a72123fa58b1a241420) test:Updated some unit tests ([@wakaleo](https://github.com/wakaleo))
+- [2eca74a](https://github.com/serenity-bdd/serenity-core/commit/2eca74a07bd6db6630d376265d132ade63f37431) fix: Fixed a bug in reading the requirements from the file system. ([@wakaleo](https://github.com/wakaleo))
 - [2ed2864](https://github.com/serenity-bdd/serenity-core/commit/2ed2864f88aaf29666617767cbe492fc8d05fbed) [migrate] Move exceptions ([@mikezx6r](https://github.com/mikezx6r))
 - [2f58c3b](https://github.com/serenity-bdd/serenity-core/commit/2f58c3b419c5330bab8eb141d5a354a57bb12a07) Fixed some formatting and navigation issues in the reports ([@wakaleo](https://github.com/wakaleo))
 - [3026d24](https://github.com/serenity-bdd/serenity-core/commit/3026d248d04401404d5ba128e222306d8ac6b605) test: ensured that HTMLUnit tests closed the drivers to avoid memory leaks during the build. ([@wakaleo](https://github.com/wakaleo))
 - [3049d14](https://github.com/serenity-bdd/serenity-core/commit/3049d1465732d6c384a0a9019b70c1e6366a5328) Initial move over to Serenity from Thucydides ([@wakaleo](https://github.com/wakaleo))
 - [308ec8f](https://github.com/serenity-bdd/serenity-core/commit/308ec8f50c5dbccb0710620feb77886078c0cae6) Updated the changelog to reflect the serenity-core repo. For Bintray this is a bit of a hack, since the BinTray serenity-core package gets artifacts from two repos, serenity-core and serenity-maven-plugin, which are separate only because of the fact that core needs to be built and deployed before the maven plugin generation task in the serenity-maven-plugin build can be done. So the changelogs will be up-to-date on Github for both repos, but the one on bintray will only reflect core. ([@wakaleo](https://github.com/wakaleo))
 - [3144ad1](https://github.com/serenity-bdd/serenity-core/commit/3144ad12699cd6a380a67826eeb5e58c26911855) Upgrade groovy-all version for transitive convergence #16. ([@jeffjensen](https://github.com/jeffjensen))
+- [326a643](https://github.com/serenity-bdd/serenity-core/commit/326a643ba2bcb0d92355dc59a897426d8632003c) Fixed an issue in the reports where pending test results were not being accurately reported in the pie charts. ([@wakaleo](https://github.com/wakaleo))
+- [33ff1a1](https://github.com/serenity-bdd/serenity-core/commit/33ff1a16031cb982ece39dfec2d3c6933f5566c1) Allows explicit waits on web elements in a page ([@wakaleo](https://github.com/wakaleo))
+ 
+ > For example:
+ > withTimeoutOf(5, TimeUnit.SECONDS).waitFor(facebookIcon).click()
 - [3443435](https://github.com/serenity-bdd/serenity-core/commit/3443435570d0e97e9af784edc5ec7dec1b72abeb) Move junit finder classes to serenity_bdd package ([@mikezx6r](https://github.com/mikezx6r))
 - [3620bc2](https://github.com/serenity-bdd/serenity-core/commit/3620bc2af882c4309783aee127d0dff9a9984833) Fine-tuning the release pipeline ([@wakaleo](https://github.com/wakaleo))
 - [36d471f](https://github.com/serenity-bdd/serenity-core/commit/36d471f7c2acdbd9d33dd54c99b33c1df503b964) Repositioned the report timestamp ([@wakaleo](https://github.com/wakaleo))
 - [3705ee4](https://github.com/serenity-bdd/serenity-core/commit/3705ee4ffed330e6063fc70ef085a188ca760a1b) [rename] Create Serenity namespaced class, deprecate Thucydides version and delegate functions ([@mikezx6r](https://github.com/mikezx6r))
+- [3828027](https://github.com/serenity-bdd/serenity-core/commit/38280276b961e60528a675c6f0990434d2cd4647) fix: Fixed a bug in reading the requirements from the file system. ([@wakaleo](https://github.com/wakaleo))
 - [3883042](https://github.com/serenity-bdd/serenity-core/commit/388304241495e0cab71616a06fe753166a61b71d) feat: nested page objects i.e. widget objects ([@CoeJoder](https://github.com/CoeJoder))
  
  > WidgetObject: reusable page fragment with a nested search context implied by the Composition pattern.  This feature was requested here:
@@ -1501,6 +1620,7 @@
  
  > It would appear that the main project was moved into core sub-directory, and
  > these files didn&#39;t get cleaned up.
+- [403003d](https://github.com/serenity-bdd/serenity-core/commit/403003dfbac409d11bac19502210d587cec46f4b) Refactored the dependencies to use both the group and the module names in exclusions, to make the Maven Enforcer plugin happy ([@wakaleo](https://github.com/wakaleo))
 - [40a532d](https://github.com/serenity-bdd/serenity-core/commit/40a532d21efa7763887a7f941d7e1c5e608e15e3) Updated the Ascii Art banner. ([@wakaleo](https://github.com/wakaleo))
 - [40db746](https://github.com/serenity-bdd/serenity-core/commit/40db746819856e7f6f65bc880a705fa0031f5f9c) Enable selection of Mac Os version on SauceLabs
 - [4138f89](https://github.com/serenity-bdd/serenity-core/commit/4138f8900eb6259f9c64bcfb75f713a29cc6eae8) Check if a resized file for a given screenshot already exists, and if so don't perform the resizing ([@wakaleo](https://github.com/wakaleo))
@@ -1511,16 +1631,19 @@
 - [4a119f5](https://github.com/serenity-bdd/serenity-core/commit/4a119f5eb78613da322bc3a69d548e859b2d597e) Added a selector to find buttons by their label, e.g. find(By.buttonText('Add to cart')); ([@wakaleo](https://github.com/wakaleo))
 - [4a132ad](https://github.com/serenity-bdd/serenity-core/commit/4a132ad31b57d7fd42db1bc78770a57e2414f7f4) Added tests to the gradle plugin ([@wakaleo](https://github.com/wakaleo))
 - [4b66966](https://github.com/serenity-bdd/serenity-core/commit/4b6696672cfa00293bd1d2c947fc5edb04f1a5f2) Removed redundant Jackson adaptor classes ([@wakaleo](https://github.com/wakaleo))
+- [4bfdb91](https://github.com/serenity-bdd/serenity-core/commit/4bfdb9133300e0e016beaddcc46ed35e83d4a8de) test: Added sample JSON test data ([@wakaleo](https://github.com/wakaleo))
 - [4c953d8](https://github.com/serenity-bdd/serenity-core/commit/4c953d868707e2cf59ea7edde1a85008966d5e2e) Moved the serenity-maven-plugin to a separate project ([@wakaleo](https://github.com/wakaleo))
 - [50c45e3](https://github.com/serenity-bdd/serenity-core/commit/50c45e31c5432cde0067be0df0b458c3a908137e) Adding an automatically generated change log to the build ([@wakaleo](https://github.com/wakaleo))
 - [527387e](https://github.com/serenity-bdd/serenity-core/commit/527387e98a503f08e74ede8790156cfcf6ae8b3b) Initial release version ([@wakaleo](https://github.com/wakaleo))
 - [52e64ae](https://github.com/serenity-bdd/serenity-core/commit/52e64aef5ebbe285abd1045e35619978aadfbc29) Tidied up some dependencies. ([@wakaleo](https://github.com/wakaleo))
 - [52f0eea](https://github.com/serenity-bdd/serenity-core/commit/52f0eeadcfc82d26a36ffa16d5b757291dfaa717) Missed change to PathProcessor ([@schmurgon](https://github.com/schmurgon))
+- [536bfdf](https://github.com/serenity-bdd/serenity-core/commit/536bfdf46cac5b0f3cc48854f176e74abac441d0) test: Use phantomjs to check implicit timeouts more realisticly ([@wakaleo](https://github.com/wakaleo))
 - [56f672a](https://github.com/serenity-bdd/serenity-core/commit/56f672a7f8d59413bb81c1b767bb5787c7784c2f) Made table formatting more robust by providing support for unicode brackets and new line chars. ([@wakaleo](https://github.com/wakaleo))
 - [581dd47](https://github.com/serenity-bdd/serenity-core/commit/581dd4753b647b37fbe7e3e29403048a0c0cfac4) Rename main class to reflect new project name, and deprecate old ([@mikezx6r](https://github.com/mikezx6r))
  
  > Eventually, all Thucydides references will be removed.
 - [5894af6](https://github.com/serenity-bdd/serenity-core/commit/5894af6eb23439437bb5162894b9046bf0724765) fix: Removed dependency conflicts in the Gradle build. ([@wakaleo](https://github.com/wakaleo))
+- [5a46d71](https://github.com/serenity-bdd/serenity-core/commit/5a46d718876a96a86f3be5affef0432f4b15f828) test: Use phantomjs to check implicit timeouts more realisticly ([@wakaleo](https://github.com/wakaleo))
 - [5caf4a2](https://github.com/serenity-bdd/serenity-core/commit/5caf4a28cbcb818b7642ce5d4b5614ce188f9b22) Changed group to serenity-bdd to make syncing with Maven Central easier ([@wakaleo](https://github.com/wakaleo))
 - [5d3f58a](https://github.com/serenity-bdd/serenity-core/commit/5d3f58a217827dd31050f2d1b79237cc86f245f3) Changed group to serenity-bdd to make syncing with Maven Central easier ([@wakaleo](https://github.com/wakaleo))
 - [5d55b1e](https://github.com/serenity-bdd/serenity-core/commit/5d55b1eae5d424b7185ed1aab68ab6f36c53cbf6) Updated excanvas ([@bmwsedee](https://github.com/bmwsedee))
@@ -1534,6 +1657,7 @@
  
  > Guava 18.0 is already specified in Gradle.
 - [66556bb](https://github.com/serenity-bdd/serenity-core/commit/66556bb4e71cf652362fbedca72788ac5b0eb1ce) Fixed a bug where error messages were incorrectly displayed in the step details ([@wakaleo](https://github.com/wakaleo))
+- [66801ff](https://github.com/serenity-bdd/serenity-core/commit/66801ffbbc769e407f60b93fe8fdae7572ce2188) Added test data for a sample pending report ([@wakaleo](https://github.com/wakaleo))
 - [6780200](https://github.com/serenity-bdd/serenity-core/commit/6780200d8b74535f6d1e8b092c8953a249d5889e) Added the Serenity helper class, as a replacement for the legacy 'Thucydides' class ([@wakaleo](https://github.com/wakaleo))
 - [6925274](https://github.com/serenity-bdd/serenity-core/commit/69252742737e848e5bb10b14061faa76b9e7ae1d) Support for appium annotations, added accessibility and ui automation for IOS and android ([@schmurgon](https://github.com/schmurgon))
 - [6d0f8ee](https://github.com/serenity-bdd/serenity-core/commit/6d0f8ee7d7ee3c266af742c0e930c9ed5c7107e2) jbehave was pulling in hamcrest 1.1. Excluded hamcrest from the jbehave dependency. ([@ptillemans](https://github.com/ptillemans))
@@ -1552,6 +1676,7 @@
 - [7094f8d](https://github.com/serenity-bdd/serenity-core/commit/7094f8dc6dd6baefff894d4646d94dac6de0ec46) Fixed a bug where if a null value was stored in the Serenity session after a failing step, a null pointer exception was thrown. ([@wakaleo](https://github.com/wakaleo))
 - [71d6c5a](https://github.com/serenity-bdd/serenity-core/commit/71d6c5a562d886dc92cef007ecabd03f22cd6e80) Updated the README file to reflect the new commit conventions ([@wakaleo](https://github.com/wakaleo))
 - [71fcf22](https://github.com/serenity-bdd/serenity-core/commit/71fcf22e7fe769309798d67551450f4ef791246b) test: Refactored a few tests to reduce sporadic errors ([@wakaleo](https://github.com/wakaleo))
+- [73ce792](https://github.com/serenity-bdd/serenity-core/commit/73ce792b29c26b4f75dcb49e74e360a5f9e368a4) Removed redundant test ([@wakaleo](https://github.com/wakaleo))
 - [74df029](https://github.com/serenity-bdd/serenity-core/commit/74df0296738f380196774513f93e725690233975) Fine-tuning the release tagging ([@wakaleo](https://github.com/wakaleo))
 - [7a267aa](https://github.com/serenity-bdd/serenity-core/commit/7a267aa8399a3dd9d754e7fc99280c3f5256fed8) Build: Add plugins that help with dep versions. #16 ([@jeffjensen](https://github.com/jeffjensen))
  
@@ -1567,6 +1692,9 @@
 - [7c429c0](https://github.com/serenity-bdd/serenity-core/commit/7c429c02e9f85228b3672b7b7ee04a9791ffaeb7) Migrated the default output directory to target/site/serenity ([@wakaleo](https://github.com/wakaleo))
 - [7cb2a81](https://github.com/serenity-bdd/serenity-core/commit/7cb2a81cae949bdcd6915434313cf03d57c06da6) WIP ([@wakaleo](https://github.com/wakaleo))
 - [7cbe551](https://github.com/serenity-bdd/serenity-core/commit/7cbe55192607ef259bd2e573d6b34a7c85e244d1) The @Pages annotated field in JUnit tests is now optional ([@wakaleo](https://github.com/wakaleo))
+- [8043809](https://github.com/serenity-bdd/serenity-core/commit/8043809da640f99f1eaae165f7774a2d5fe1eb19) Update WhenLoadingTestDataFromACSVFile.java ([@x-hovo-x](https://github.com/x-hovo-x))
+ 
+ > Added all possible parameters for CSVReader to be able to parse special chars like \n \t ...
 - [805dbf1](https://github.com/serenity-bdd/serenity-core/commit/805dbf1a9bf72b6f67eb739a8de251e885daeba7) Logs a message indicating the path of the generated reports after report aggregation. ([@wakaleo](https://github.com/wakaleo))
 - [80e1ef0](https://github.com/serenity-bdd/serenity-core/commit/80e1ef06258e1e5f17487731641eaec8434776b7) Repositioned the report timestamp ([@wakaleo](https://github.com/wakaleo))
 - [80ee2cf](https://github.com/serenity-bdd/serenity-core/commit/80ee2cfb7f92285bab102ac8f889d102605fc292) chore: Automated the generation of the release notes from the git commits ([@wakaleo](https://github.com/wakaleo))
@@ -1574,6 +1702,7 @@
 - [826c30f](https://github.com/serenity-bdd/serenity-core/commit/826c30fb0ea0c9989d91c0d8233f83211f5c40d3) Refactored the PageObject class for better backward compatibility. ([@wakaleo](https://github.com/wakaleo))
 - [828c57a](https://github.com/serenity-bdd/serenity-core/commit/828c57af675ff9d2cd1f69de6be3c60540abf783) Made the JSON tests a bit more robust ([@wakaleo](https://github.com/wakaleo))
 - [82b9866](https://github.com/serenity-bdd/serenity-core/commit/82b98664486be5ddba53b41938aa2ec92667aa31) Migrated the default output directory to target/site/serenity ([@wakaleo](https://github.com/wakaleo))
+- [82d1ab1](https://github.com/serenity-bdd/serenity-core/commit/82d1ab1c848b7d38ea74584597c29913b448561a) tests: test hardening ([@wakaleo](https://github.com/wakaleo))
 - [8344474](https://github.com/serenity-bdd/serenity-core/commit/8344474fc2d7c2393e5d140a0992177cb4379496) Added support for the AssumeThat method for JUnit tests - AssumeThat will result in a test being displayed as 'ignored' in the reports. ([@wakaleo](https://github.com/wakaleo))
 - [878c2a1](https://github.com/serenity-bdd/serenity-core/commit/878c2a1edb79d85808b6c2e4e37e7de79e48f5cc) Added better support for radio buttons in the PageObject class ([@wakaleo](https://github.com/wakaleo))
 - [88dbe9c](https://github.com/serenity-bdd/serenity-core/commit/88dbe9c8342f0d84c9e5e0fc0b82530eb6e7e5ae) Restored release notes ([@wakaleo](https://github.com/wakaleo))
@@ -1598,18 +1727,29 @@
  
  > Signed-off-by: John Ferguson Smart &lt;john.smart[@wakaleo.com&gt](https://github.com/wakaleo.com&gt);
 - [98073bd](https://github.com/serenity-bdd/serenity-core/commit/98073bdbe5ff127561ea662aa6b8ea7eba514e09) Added SerenityRunner and SerenityParameterizedRunner classes as alternative names for ThucydidesRunner and ThucydidesParameterizedRunner, more in line with the new naming schema. ([@wakaleo](https://github.com/wakaleo))
+- [9a6c99d](https://github.com/serenity-bdd/serenity-core/commit/9a6c99dcc3e1949c69b724549685383f505bd449) fix: Fixed a bug in reading the requirements from the file system. ([@wakaleo](https://github.com/wakaleo))
 - [9b7e9c4](https://github.com/serenity-bdd/serenity-core/commit/9b7e9c43d7f6babeb5dc100a803e50686f026a9b) Hardening unit tests ([@wakaleo](https://github.com/wakaleo))
+- [9d25a1a](https://github.com/serenity-bdd/serenity-core/commit/9d25a1aa46fcfe3113a1cf013f4269f376f4aa42) Refactored the dependencies to use both the group and the module names in exclusions, to make the Maven Enforcer plugin happy ([@wakaleo](https://github.com/wakaleo))
+- [9d9c5a4](https://github.com/serenity-bdd/serenity-core/commit/9d9c5a4b6a19c4f11c577553f160c41a08e15bf8) Added a convenience method to allow more fluent waitFor() constructs ([@wakaleo](https://github.com/wakaleo))
 - [9e47250](https://github.com/serenity-bdd/serenity-core/commit/9e47250a7a37d8607e455ba8ba7dac50a7ae4879) Improved release notes to avoid empty tags ([@wakaleo](https://github.com/wakaleo))
+- [9e65332](https://github.com/serenity-bdd/serenity-core/commit/9e653329dd691a596a5ff450a868b4372957f7a8) Added tests to doument implicit wait behavior ([@wakaleo](https://github.com/wakaleo))
 - [9e9711d](https://github.com/serenity-bdd/serenity-core/commit/9e9711d48eca8bbc95c7d5b59a6ad2610e5599d6) Added extra support for handling Cucumber example tables ([@wakaleo](https://github.com/wakaleo))
 - [a05b31f](https://github.com/serenity-bdd/serenity-core/commit/a05b31ffb0928e9bc3b80c809a7a029975fefe22) Undid javascript library updates and added the number of tests for tags on the reports ([@wakaleo](https://github.com/wakaleo))
 - [a1dba09](https://github.com/serenity-bdd/serenity-core/commit/a1dba09cd2737da45d3a6f6de3b74cd47e42e16b) feat: You can now distinguish between AJAX element waits (defaults to 500 ms) and explicit fluent waits (which default to 5 seconds) ([@wakaleo](https://github.com/wakaleo))
 - [a2d3a0f](https://github.com/serenity-bdd/serenity-core/commit/a2d3a0f17b4ad209710aee1a9f5ec7f69a34785a) Refactored optional Spring dependencies into the serenity-spring module - include this module if you want Serenity to honor Spring annotations and dependency injection ([@wakaleo](https://github.com/wakaleo))
 - [a3c95dc](https://github.com/serenity-bdd/serenity-core/commit/a3c95dc54f1165c5ea00fcb2719f14a63acba604) Updated JavaScript InfoVis Toolkit ([@bmwsedee](https://github.com/bmwsedee))
+- [a6d6cc6](https://github.com/serenity-bdd/serenity-core/commit/a6d6cc62c5763512c53b4c79fbdfc3844de54ea6) Fixed an issue with Cucumber requirements reporting when the name of the feature differs from the name of the feature file. ([@wakaleo](https://github.com/wakaleo))
+- [aa1c3ed](https://github.com/serenity-bdd/serenity-core/commit/aa1c3ed0fa00fc75928c81c234e3102af9d22700) Update CSVTestDataSource.java ([@x-hovo-x](https://github.com/x-hovo-x))
+- [ac3de4e](https://github.com/serenity-bdd/serenity-core/commit/ac3de4e6f2f409bce189dc81dcc03affe2ff2804) tests: hardeding the timeout tests ([@wakaleo](https://github.com/wakaleo))
+- [ac60be6](https://github.com/serenity-bdd/serenity-core/commit/ac60be617fe6dd15076a8406347e0be2897ff62e) Fixed an issue with Cucumber requirements reporting when the name of the feature differs from the name of the feature file. ([@wakaleo](https://github.com/wakaleo))
 - [ad3a486](https://github.com/serenity-bdd/serenity-core/commit/ad3a486ced855de8542b79048c26c3fdd56fbcbc) [migrate] Move SessionMap ([@mikezx6r](https://github.com/mikezx6r))
 - [ad4800e](https://github.com/serenity-bdd/serenity-core/commit/ad4800ebcf39afdf66abb76a28d9290f29fd3ad7) Getting the maven plugin build working ([@wakaleo](https://github.com/wakaleo))
 - [afaf0b9](https://github.com/serenity-bdd/serenity-core/commit/afaf0b947f97a8c13ac4a225ea3db378b5cbc08b) Fix to remove 'Session ID is null. Using WebDriver after calling quit()?' messages appearing when the tests are run in threads ([@wakaleo](https://github.com/wakaleo))
+- [b29b7cc](https://github.com/serenity-bdd/serenity-core/commit/b29b7cc6ce97ee96b9d3dc80661f623d805afc79) feature: Added support for a waitUntilClickable() method on web elements ([@wakaleo](https://github.com/wakaleo))
 - [b3340e5](https://github.com/serenity-bdd/serenity-core/commit/b3340e5d3756a26169073690c95f2eea73737fb9) Integrated better support for JBehave ([@wakaleo](https://github.com/wakaleo))
+- [b3d38fb](https://github.com/serenity-bdd/serenity-core/commit/b3d38fb9a30fd748cf95ef5d4c81b580be76edfa) test:Made a unit test more readable ([@wakaleo](https://github.com/wakaleo))
 - [b42d58b](https://github.com/serenity-bdd/serenity-core/commit/b42d58b33af6ea34b2155a2f6b30c1634b323799) Fine-tuning the reports ([@wakaleo](https://github.com/wakaleo))
+- [b497a1d](https://github.com/serenity-bdd/serenity-core/commit/b497a1db76988333b8cafacc057104178bbf90b1) Implemented the timeoutInSeconds attribute on the FindBy annotation. ([@wakaleo](https://github.com/wakaleo))
 - [b52b55a](https://github.com/serenity-bdd/serenity-core/commit/b52b55a39a9d5016fc87306108c5a661915da0d3) Now you can use the -Dserenity.dry.run=true option to skip step executions - useful when testing JBehave or Cucumber step definitions ([@wakaleo](https://github.com/wakaleo))
 - [b55c8cd](https://github.com/serenity-bdd/serenity-core/commit/b55c8cd17404b9a555c02383ee33335b3c0f9cff) feat: Distinguish between element-level timing and "wait-for"-style timing. ([@wakaleo](https://github.com/wakaleo))
 - [b5732dc](https://github.com/serenity-bdd/serenity-core/commit/b5732dc3a744246365f512d30484aae735f0f636) Let the bintray keys be defined by the build server ([@wakaleo](https://github.com/wakaleo))
@@ -1618,23 +1758,31 @@
 - [be15eb4](https://github.com/serenity-bdd/serenity-core/commit/be15eb47c729538f92d1eccbe88f860917bdeeb9) Move Serenity to new package ([@mikezx6r](https://github.com/mikezx6r))
 - [c0a1aa0](https://github.com/serenity-bdd/serenity-core/commit/c0a1aa089cd72aff4996202a1753dcdd2f24c2f6) Moved the ant plugin over to the new Serenity namespace ([@wakaleo](https://github.com/wakaleo))
 - [c12c6dd](https://github.com/serenity-bdd/serenity-core/commit/c12c6ddc076bcb8c3575d4243b211027fcfe33ea) Updated to Selenium 2.44.0 ([@wakaleo](https://github.com/wakaleo))
+- [c191b5a](https://github.com/serenity-bdd/serenity-core/commit/c191b5a2b3d0a8cf12bfb189944c91784ec15a35) Added test data for a sample pending report ([@wakaleo](https://github.com/wakaleo))
 - [c31cb4f](https://github.com/serenity-bdd/serenity-core/commit/c31cb4f4b17a0864e128762cdd4a9931b5224258) Improvements to the reports ([@wakaleo](https://github.com/wakaleo))
 - [c365291](https://github.com/serenity-bdd/serenity-core/commit/c36529114af5daaf93592b609056276aac7bdc76) Updated release notest ([@wakaleo](https://github.com/wakaleo))
 - [c8fd3b9](https://github.com/serenity-bdd/serenity-core/commit/c8fd3b94c1bd867c8d79fe6554b4e36a267c7648) Added bootstrap tabs ([@wakaleo](https://github.com/wakaleo))
 - [c9f9505](https://github.com/serenity-bdd/serenity-core/commit/c9f95050aadcd98861dce9b16d11a3c5876126ff) Upgrade javassist version to match transitive dep. #16 ([@jeffjensen](https://github.com/jeffjensen))
+- [cd09406](https://github.com/serenity-bdd/serenity-core/commit/cd09406dcb34a96553926e964ebe87a267da19c2) Added test data for a sample pending report ([@wakaleo](https://github.com/wakaleo))
+- [cd9d786](https://github.com/serenity-bdd/serenity-core/commit/cd9d78657ed78aba1c2f66351eb925db3e0daa09) Fixed an issue in the reports where pending test results were not being accurately reported in the pie charts. ([@wakaleo](https://github.com/wakaleo))
 - [ceb0c1d](https://github.com/serenity-bdd/serenity-core/commit/ceb0c1d103411a97645454b9e99ec78084514d48) Upgrade htmlunit to Selenium's dep version. #16 ([@jeffjensen](https://github.com/jeffjensen))
 - [cfaae5a](https://github.com/serenity-bdd/serenity-core/commit/cfaae5a78a36fbbb7fecea07762c93237839eca3) rename serenity_bdd to serenitybdd ([@mikezx6r](https://github.com/mikezx6r))
 - [d21e03e](https://github.com/serenity-bdd/serenity-core/commit/d21e03e66f56d862fa20ddf6d97064c331762e33) Standardized the Groovy version used throughout the build to 2.3.6 ([@wakaleo](https://github.com/wakaleo))
+- [d2a2018](https://github.com/serenity-bdd/serenity-core/commit/d2a20188ab24fd4213845331ed79351149d546cd) Update WhenLoadingTestDataFromACSVFile.java ([@x-hovo-x](https://github.com/x-hovo-x))
 - [d5511b6](https://github.com/serenity-bdd/serenity-core/commit/d5511b6706701d49a361192e5a8752e273c23ebe) Cater for rare cases where the driver returns null when an element is not found ([@wakaleo](https://github.com/wakaleo))
 - [d5f35b9](https://github.com/serenity-bdd/serenity-core/commit/d5f35b9cf08b4e6f9c37ee706122a7778cd6dbd0) Switched back to JUnit 4.11 due to API incompatibilities with build tools ([@wakaleo](https://github.com/wakaleo))
 - [d7f4cd3](https://github.com/serenity-bdd/serenity-core/commit/d7f4cd3ab1d16d172b81afe10208394116480cbb) fix: Fixed an issue in which tests were slowed down after a failing step because Serenity continued to try to take screenshots ([@wakaleo](https://github.com/wakaleo))
 - [d84aeed](https://github.com/serenity-bdd/serenity-core/commit/d84aeede8457858be99f934e05636e49e0c97fff) [rename] Create Serenity namespaced class and move some associated test classes ([@mikezx6r](https://github.com/mikezx6r))
+- [d8ccfda](https://github.com/serenity-bdd/serenity-core/commit/d8ccfdabf6a5952f5313a140e6a2fd5889ffbf00) Implemented the timeoutInSeconds attribute on the FindBy annotation. ([@wakaleo](https://github.com/wakaleo))
 - [d9a768a](https://github.com/serenity-bdd/serenity-core/commit/d9a768af4b3eb2acc4fefb401e01aedada972039) Release notes are now triggered manually before the release ([@wakaleo](https://github.com/wakaleo))
+- [dbddf6d](https://github.com/serenity-bdd/serenity-core/commit/dbddf6df434355f7f21ccb8ad2178ad755e4530e) test: Temporarily disabling a test that doesn't work on the build server pending further investigation ([@wakaleo](https://github.com/wakaleo))
+- [df893d2](https://github.com/serenity-bdd/serenity-core/commit/df893d20c253dbc94e69edbe96df003d1138e146) Update CSVTestDataSource.java ([@x-hovo-x](https://github.com/x-hovo-x))
 - [e0a96d7](https://github.com/serenity-bdd/serenity-core/commit/e0a96d7cd7499a43fceeb887a0697b7409c2a8d2) Fix scm url's ([@mikezx6r](https://github.com/mikezx6r))
 - [e1956cf](https://github.com/serenity-bdd/serenity-core/commit/e1956cfd278a505bf7c06db7ed2ab17e077f6466) Enable selection of Mac Os version on SauceLabs
 - [e20146d](https://github.com/serenity-bdd/serenity-core/commit/e20146db9d8e88298f5bd089392f164fbf1e9c56) test:Updated some unit tests ([@wakaleo](https://github.com/wakaleo))
 - [e3ce499](https://github.com/serenity-bdd/serenity-core/commit/e3ce499a6d4f91ec14cb6d7fa7a4454bc7c6cf51) Simplified dependencies a little ([@wakaleo](https://github.com/wakaleo))
 - [e5a13c7](https://github.com/serenity-bdd/serenity-core/commit/e5a13c7723cb73c0a76a1ed9527411ec53196e12) SmartAnnotation needs platform for Appium annotations to work ([@schmurgon](https://github.com/schmurgon))
+- [e7235f7](https://github.com/serenity-bdd/serenity-core/commit/e7235f713c2d37952baec9c54431fa379d4035b5) Refactored wait logic to use distinct values for implicit waits and wait-for waits. ([@wakaleo](https://github.com/wakaleo))
 - [e78dd2c](https://github.com/serenity-bdd/serenity-core/commit/e78dd2cfdd98e23c1e69c92ebafffce27dbf7f5b) Added support for displaying Saucelabs configuration in the build info screen. ([@wakaleo](https://github.com/wakaleo))
 - [e84ac40](https://github.com/serenity-bdd/serenity-core/commit/e84ac40f8da7831e03a899de15418f0d0ff1be9c) Porting changes from thucydides appium-driver-support ([@schmurgon](https://github.com/schmurgon))
 - [e8c1a87](https://github.com/serenity-bdd/serenity-core/commit/e8c1a874c9030db021b596943c4ab3a166f7be8c) Updated to Selenium 2.45.0 ([@wakaleo](https://github.com/wakaleo))
@@ -1648,4 +1796,5 @@
 - [f9d9969](https://github.com/serenity-bdd/serenity-core/commit/f9d996950d02e3147070a4d6113909338f5591ea) Made the log messages for each step include the calling class and method. ([@wakaleo](https://github.com/wakaleo))
 - [fe1ab3e](https://github.com/serenity-bdd/serenity-core/commit/fe1ab3e2ce34859b9bee974c8df0228a0e0280ca) Added a page to the reports containing system and configuration properties and browser capabilities for a given test run. ([@wakaleo](https://github.com/wakaleo))
 - [fe1c3c5](https://github.com/serenity-bdd/serenity-core/commit/fe1c3c5eb2cee95bcc3fc17f0008589f80b16dd0) Added the Serenity utility class, which exposes and delegates to methods of the legacy Thucydides class. ([@wakaleo](https://github.com/wakaleo))
+- [fe952b9](https://github.com/serenity-bdd/serenity-core/commit/fe952b944bf628da851698e3b02095c31e08e91c) Fixed an issue that had broken the async timeout behavior in the setScriptTimeout() method ([@wakaleo](https://github.com/wakaleo))
  

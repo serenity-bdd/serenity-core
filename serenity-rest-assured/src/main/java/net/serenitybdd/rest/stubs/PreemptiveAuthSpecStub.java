@@ -8,7 +8,7 @@ import com.jayway.restassured.specification.RequestSpecification;
  */
 public class PreemptiveAuthSpecStub implements PreemptiveAuthSpec {
     @Override
-    public RequestSpecification basic(String userName, String password) {
+    public RequestSpecification basic(final String userName, final String password) {
         return new RequestSpecificationStub();
     }
 }

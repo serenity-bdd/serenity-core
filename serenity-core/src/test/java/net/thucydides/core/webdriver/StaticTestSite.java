@@ -10,7 +10,7 @@ import java.io.File;
 public class StaticTestSite {
 
     private WebDriverFactory factory;
-    private ThucydidesWebdriverManager webdriverManager;
+    private SerenityWebdriverManager webdriverManager;
     private EnvironmentVariables environmentVariables;
 
     public StaticTestSite() {
@@ -20,7 +20,7 @@ public class StaticTestSite {
     public StaticTestSite(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
         factory = new WebDriverFactory(environmentVariables);
-        webdriverManager = new ThucydidesWebdriverManager(factory, new SystemPropertiesConfiguration(environmentVariables));
+        webdriverManager = new SerenityWebdriverManager(factory, new SystemPropertiesConfiguration(environmentVariables));
     }
 
     private String homepage = "index.html";

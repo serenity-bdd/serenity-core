@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
@@ -185,6 +186,8 @@ public class WebDriverFactory {
                 driver = safariDriver();
             } else if (isAnInternetExplorerDriver(driverClass)) {
                 driver = internetExplorerDriver();
+            } else if (IsAMicrosoftEdgeDriver(driverClass)) {
+                driver = edgeDriver();
             } else if (isAProvidedDriver(driverClass)) {
                 driver = providedDriver();
             } else {
@@ -408,6 +411,10 @@ public class WebDriverFactory {
                 capabilities = DesiredCapabilities.internetExplorer();
                 break;
 
+            case EDGE:
+                capabilities = DesiredCapabilities.edge();
+                break;
+
             case APPIUM:
                 capabilities = appiumCapabilities();
                 break;
@@ -552,6 +559,10 @@ public class WebDriverFactory {
         return webdriverInstanceFactory.newInternetExplorerDriver(enhancedCapabilities(DesiredCapabilities.internetExplorer()));
     }
 
+    private WebDriver edgeDriver() {
+        return webdriverInstanceFactory.newEdgeDriver(enhancedCapabilities(DesiredCapabilities.edge()));
+    }
+
     private Capabilities enhancedCapabilities(DesiredCapabilities capabilities) {
         return addExtraCatabilitiesTo(capabilities);
     }
@@ -609,6 +620,10 @@ public class WebDriverFactory {
 
     private boolean isAnInternetExplorerDriver(Class<? extends WebDriver> driverClass) {
         return (InternetExplorerDriver.class.isAssignableFrom(driverClass));
+    }
+
+    private boolean IsAMicrosoftEdgeDriver(Class<? extends WebDriver> driverClass) {
+        return (EdgeDriver.class.isAssignableFrom(driverClass));
     }
 
     private boolean isAnAppiumDriver(Class<? extends WebDriver> driverClass) {

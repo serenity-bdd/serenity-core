@@ -8,6 +8,7 @@ import java.util.List;
 
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
+import static net.serenitybdd.screenplay.questions.UIFilter.visible;
 
 public class TheCoordinates extends TargetedUIState<org.openqa.selenium.interactions.internal.Coordinates> {
 
@@ -24,6 +25,6 @@ public class TheCoordinates extends TargetedUIState<org.openqa.selenium.interact
     }
 
     public List<org.openqa.selenium.interactions.internal.Coordinates> resolveAll() {
-        return extract(target.resolveAllFor(actor), on(WebElementFacade.class).getCoordinates());
+        return extract(visible(target.resolveAllFor(actor)), on(WebElementFacade.class).getCoordinates());
     }
 }

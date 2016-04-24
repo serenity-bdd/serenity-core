@@ -9,6 +9,7 @@ import java.util.List;
 
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
+import static net.serenitybdd.screenplay.questions.UIFilter.visible;
 
 public class TheLocation extends TargetedUIState<Point> {
 
@@ -25,6 +26,6 @@ public class TheLocation extends TargetedUIState<Point> {
     }
 
     public List<Point> resolveAll() {
-        return extract(target.resolveAllFor(actor), on(WebElementFacade.class).getLocation());
+        return extract(visible(target.resolveAllFor(actor)), on(WebElementFacade.class).getLocation());
     }
 }

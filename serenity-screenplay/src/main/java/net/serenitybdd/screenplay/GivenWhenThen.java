@@ -26,6 +26,10 @@ public class GivenWhenThen {
         return new QuestionConsequence(actual, expected);
     }
 
+    public static <T> Consequence<T> seeThat(Question<Boolean> actual) {
+        return new BooleanQuestionConsequence(actual);
+    }
+
     public static <T> Consequence<T>[] seeThat(Question<? extends T> actual, Matcher<T>... expectedMatchers) {
         List<Consequence<T>> consequences = Lists.newArrayList();
         for(Matcher<T> matcher : expectedMatchers) {

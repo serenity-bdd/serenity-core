@@ -20,72 +20,72 @@ import java.util.Map;
 
 public class RequestSpecificationStub implements RequestSpecification {
     @Override
-    public RequestSpecification body(String body) {
+    public RequestSpecification body(final String body) {
         return this;
     }
 
     @Override
-    public RequestSpecification body(byte[] body) {
+    public RequestSpecification body(final byte[] body) {
         return this;
     }
 
     @Override
-    public RequestSpecification body(File body) {
+    public RequestSpecification body(final File body) {
         return this;
     }
 
     @Override
-    public RequestSpecification body(InputStream body) {
+    public RequestSpecification body(final InputStream body) {
         return this;
     }
 
     @Override
-    public RequestSpecification body(Object object) {
+    public RequestSpecification body(final Object object) {
         return this;
     }
 
     @Override
-    public RequestSpecification body(Object object, ObjectMapper mapper) {
+    public RequestSpecification body(final Object object, final ObjectMapper mapper) {
         return this;
     }
 
     @Override
-    public RequestSpecification body(Object object, ObjectMapperType mapperType) {
+    public RequestSpecification body(final Object object, final ObjectMapperType mapperType) {
         return this;
     }
 
     @Override
-    public RequestSpecification content(String content) {
+    public RequestSpecification content(final String content) {
         return this;
     }
 
     @Override
-    public RequestSpecification content(byte[] content) {
+    public RequestSpecification content(final byte[] content) {
         return this;
     }
 
     @Override
-    public RequestSpecification content(File content) {
+    public RequestSpecification content(final File content) {
         return this;
     }
 
     @Override
-    public RequestSpecification content(InputStream content) {
+    public RequestSpecification content(final InputStream content) {
         return this;
     }
 
     @Override
-    public RequestSpecification content(Object object) {
+    public RequestSpecification content(final Object object) {
         return this;
     }
 
     @Override
-    public RequestSpecification content(Object object, ObjectMapperType mapperType) {
+    public RequestSpecification content(final Object object, final ObjectMapperType mapperType) {
         return this;
     }
 
     @Override
-    public RequestSpecification content(Object object, ObjectMapper mapper) {
+    public RequestSpecification content(final Object object, final ObjectMapper mapper) {
         return this;
     }
 
@@ -95,202 +95,212 @@ public class RequestSpecificationStub implements RequestSpecification {
     }
 
     @Override
-    public RequestSpecification cookies(String firstCookieName, Object firstCookieValue, Object... cookieNameValuePairs) {
+    public RequestSpecification cookies(final String firstCookieName, final Object firstCookieValue,
+                                        final Object... cookieNameValuePairs) {
         return this;
     }
 
     @Override
-    public RequestSpecification cookies(Map<String, ?> cookies) {
+    public RequestSpecification cookies(final Map<String, ?> cookies) {
         return this;
     }
 
     @Override
-    public RequestSpecification cookies(Cookies cookies) {
+    public RequestSpecification cookies(final Cookies cookies) {
         return this;
     }
 
     @Override
-    public RequestSpecification cookie(String cookieName, Object value, Object... additionalValues) {
+    public RequestSpecification cookie(final String cookieName, final Object value,
+                                       final Object... additionalValues) {
         return this;
     }
 
     @Override
-    public RequestSpecification cookie(String cookieName) {
+    public RequestSpecification cookie(final String cookieName) {
         return this;
     }
 
     @Override
-    public RequestSpecification cookie(Cookie cookie) {
+    public RequestSpecification cookie(final Cookie cookie) {
         return this;
     }
 
     @Override
-    public RequestSpecification parameters(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
+    public RequestSpecification parameters(final String firstParameterName, final Object firstParameterValue,
+                                           final Object... parameterNameValuePairs) {
         return this;
     }
 
     @Override
-    public RequestSpecification parameters(Map<String, ?> parametersMap) {
+    public RequestSpecification parameters(final Map<String, ?> parametersMap) {
         return this;
     }
 
     @Override
-    public RequestSpecification parameter(String parameterName, Object... parameterValues) {
+    public RequestSpecification parameter(final String parameterName, final Object... parameterValues) {
         return this;
     }
 
     @Override
-    public RequestSpecification parameter(String parameterName, Collection<?> parameterValues) {
+    public RequestSpecification parameter(final String parameterName, final Collection<?> parameterValues) {
         return this;
     }
 
     @Override
-    public RequestSpecification params(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
+    public RequestSpecification params(final String firstParameterName, final Object firstParameterValue,
+                                       final Object... parameterNameValuePairs) {
         return this;
     }
 
     @Override
-    public RequestSpecification params(Map<String, ?> parametersMap) {
+    public RequestSpecification params(final Map<String, ?> parametersMap) {
         return this;
     }
 
     @Override
-    public RequestSpecification param(String parameterName, Object... parameterValues) {
+    public RequestSpecification param(final String parameterName, final Object... parameterValues) {
         return this;
     }
 
     @Override
-    public RequestSpecification param(String parameterName, Collection<?> parameterValues) {
+    public RequestSpecification param(final String parameterName, final Collection<?> parameterValues) {
         return this;
     }
 
     @Override
-    public RequestSpecification queryParameters(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
+    public RequestSpecification queryParameters(final String firstParameterName, final Object firstParameterValue,
+                                                final Object... parameterNameValuePairs) {
         return this;
     }
 
     @Override
-    public RequestSpecification queryParameters(Map<String, ?> parametersMap) {
+    public RequestSpecification queryParameters(final Map<String, ?> parametersMap) {
         return this;
     }
 
     @Override
-    public RequestSpecification queryParameter(String parameterName, Object... parameterValues) {
+    public RequestSpecification queryParameter(final String parameterName, final Object... parameterValues) {
         return this;
     }
 
     @Override
-    public RequestSpecification queryParameter(String parameterName, Collection<?> parameterValues) {
+    public RequestSpecification queryParameter(final String parameterName, final Collection<?> parameterValues) {
         return this;
     }
 
     @Override
-    public RequestSpecification queryParams(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
+    public RequestSpecification queryParams(final String firstParameterName, final Object firstParameterValue,
+                                            final Object... parameterNameValuePairs) {
         return this;
     }
 
     @Override
-    public RequestSpecification queryParams(Map<String, ?> parametersMap) {
+    public RequestSpecification queryParams(final Map<String, ?> parametersMap) {
         return this;
     }
 
     @Override
-    public RequestSpecification queryParam(String parameterName, Object... parameterValues) {
+    public RequestSpecification queryParam(final String parameterName, final Object... parameterValues) {
         return this;
     }
 
     @Override
-    public RequestSpecification queryParam(String parameterName, Collection<?> parameterValues) {
+    public RequestSpecification queryParam(final String parameterName, final Collection<?> parameterValues) {
         return this;
     }
 
     @Override
-    public RequestSpecification formParameters(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
+    public RequestSpecification formParameters(final String firstParameterName, final Object firstParameterValue,
+                                               final Object... parameterNameValuePairs) {
         return this;
     }
 
     @Override
-    public RequestSpecification formParameters(Map<String, ?> parametersMap) {
+    public RequestSpecification formParameters(final Map<String, ?> parametersMap) {
         return this;
     }
 
     @Override
-    public RequestSpecification formParameter(String parameterName, Object... parameterValues) {
+    public RequestSpecification formParameter(final String parameterName, final Object... parameterValues) {
         return this;
     }
 
     @Override
-    public RequestSpecification formParameter(String parameterName, Collection<?> parameterValues) {
+    public RequestSpecification formParameter(final String parameterName, final Collection<?> parameterValues) {
         return this;
     }
 
     @Override
-    public RequestSpecification formParams(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
+    public RequestSpecification formParams(final String firstParameterName, final Object firstParameterValue,
+                                           final Object... parameterNameValuePairs) {
         return this;
     }
 
     @Override
-    public RequestSpecification formParams(Map<String, ?> parametersMap) {
+    public RequestSpecification formParams(final Map<String, ?> parametersMap) {
         return this;
     }
 
     @Override
-    public RequestSpecification formParam(String parameterName, Object... parameterValues) {
+    public RequestSpecification formParam(final String parameterName, final Object... parameterValues) {
         return this;
     }
 
     @Override
-    public RequestSpecification formParam(String parameterName, Collection<?> parameterValues) {
+    public RequestSpecification formParam(final String parameterName, final Collection<?> parameterValues) {
         return this;
     }
 
     @Override
-    public RequestSpecification pathParameter(String parameterName, Object parameterValue) {
+    public RequestSpecification pathParameter(final String parameterName, final Object parameterValue) {
         return this;
     }
 
     @Override
-    public RequestSpecification pathParameters(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
+    public RequestSpecification pathParameters(final String firstParameterName, final Object firstParameterValue,
+                                               final Object... parameterNameValuePairs) {
         return this;
     }
 
     @Override
-    public RequestSpecification pathParameters(Map<String, ?> parameterNameValuePairs) {
+    public RequestSpecification pathParameters(final Map<String, ?> parameterNameValuePairs) {
         return this;
     }
 
     @Override
-    public RequestSpecification pathParam(String parameterName, Object parameterValue) {
+    public RequestSpecification pathParam(final String parameterName, final Object parameterValue) {
         return this;
     }
 
     @Override
-    public RequestSpecification pathParams(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
+    public RequestSpecification pathParams(final String firstParameterName, final Object firstParameterValue,
+                                           final Object... parameterNameValuePairs) {
         return this;
     }
 
     @Override
-    public RequestSpecification pathParams(Map<String, ?> parameterNameValuePairs) {
+    public RequestSpecification pathParams(final Map<String, ?> parameterNameValuePairs) {
         return this;
     }
 
     @Override
-    public RequestSpecification config(RestAssuredConfig config) {
+    public RequestSpecification config(final RestAssuredConfig config) {
         return this;
     }
 
     @Override
-    public RequestSpecification keystore(String pathToJks, String password) {
+    public RequestSpecification keystore(final String pathToJks, final String password) {
         return this;
     }
 
     @Override
-    public RequestSpecification keystore(File pathToJks, String password) {
+    public RequestSpecification keystore(final File pathToJks, final String password) {
         return this;
     }
 
     @Override
-    public RequestSpecification trustStore(KeyStore trustStore) {
+    public RequestSpecification trustStore(final KeyStore trustStore) {
         return this;
     }
 
@@ -300,112 +310,116 @@ public class RequestSpecificationStub implements RequestSpecification {
     }
 
     @Override
-    public RequestSpecification relaxedHTTPSValidation(String protocol) {
+    public RequestSpecification relaxedHTTPSValidation(final String protocol) {
         return this;
     }
 
     @Override
-    public RequestSpecification headers(String firstHeaderName, Object firstHeaderValue, Object... headerNameValuePairs) {
+    public RequestSpecification headers(final String firstHeaderName,
+                                        final Object firstHeaderValue, final Object... headerNameValuePairs) {
         return this;
     }
 
     @Override
-    public RequestSpecification headers(Map<String, ?> headers) {
+    public RequestSpecification headers(final Map<String, ?> headers) {
         return this;
     }
 
     @Override
-    public RequestSpecification headers(Headers headers) {
+    public RequestSpecification headers(final Headers headers) {
         return this;
     }
 
     @Override
-    public RequestSpecification header(String headerName, Object headerValue, Object... additionalHeaderValues) {
+    public RequestSpecification header(final String headerName, final Object headerValue,
+                                       final Object... additionalHeaderValues) {
         return this;
     }
 
     @Override
-    public RequestSpecification header(Header header) {
+    public RequestSpecification header(final Header header) {
         return this;
     }
 
     @Override
-    public RequestSpecification contentType(ContentType contentType) {
+    public RequestSpecification contentType(final ContentType contentType) {
         return this;
     }
 
     @Override
-    public RequestSpecification contentType(String contentType) {
+    public RequestSpecification contentType(final String contentType) {
         return this;
     }
 
     @Override
-    public RequestSpecification accept(ContentType contentType) {
+    public RequestSpecification accept(final ContentType contentType) {
         return this;
     }
 
     @Override
-    public RequestSpecification accept(String mediaTypes) {
+    public RequestSpecification accept(final String mediaTypes) {
         return this;
     }
 
     @Override
-    public RequestSpecification multiPart(MultiPartSpecification multiPartSpecification) {
+    public RequestSpecification multiPart(final MultiPartSpecification multiPartSpecification) {
         return this;
     }
 
     @Override
-    public RequestSpecification multiPart(File file) {
+    public RequestSpecification multiPart(final File file) {
         return this;
     }
 
     @Override
-    public RequestSpecification multiPart(String controlName, File file) {
+    public RequestSpecification multiPart(final String controlName, final File file) {
         return this;
     }
 
     @Override
-    public RequestSpecification multiPart(String controlName, File file, String mimeType) {
+    public RequestSpecification multiPart(final String controlName, final File file, final String mimeType) {
         return this;
     }
 
     @Override
-    public RequestSpecification multiPart(String controlName, Object object) {
+    public RequestSpecification multiPart(final String controlName, final Object object) {
         return this;
     }
 
     @Override
-    public RequestSpecification multiPart(String controlName, Object object, String mimeType) {
+    public RequestSpecification multiPart(final String controlName, final Object object, final String mimeType) {
         return this;
     }
 
     @Override
-    public RequestSpecification multiPart(String controlName, String fileName, byte[] bytes) {
+    public RequestSpecification multiPart(final String controlName, final String fileName, final byte[] bytes) {
         return this;
     }
 
     @Override
-    public RequestSpecification multiPart(String controlName, String fileName, byte[] bytes, String mimeType) {
+    public RequestSpecification multiPart(final String controlName, final String fileName, final byte[] bytes,
+                                          final String mimeType) {
         return this;
     }
 
     @Override
-    public RequestSpecification multiPart(String controlName, String fileName, InputStream stream) {
+    public RequestSpecification multiPart(final String controlName, final String fileName, final InputStream stream) {
         return this;
     }
 
     @Override
-    public RequestSpecification multiPart(String controlName, String fileName, InputStream stream, String mimeType) {
+    public RequestSpecification multiPart(final String controlName, final String fileName, final InputStream stream,
+                                          final String mimeType) {
         return this;
     }
 
     @Override
-    public RequestSpecification multiPart(String controlName, String contentBody) {
+    public RequestSpecification multiPart(final String controlName, final String contentBody) {
         return this;
     }
 
     @Override
-    public RequestSpecification multiPart(String controlName, String contentBody, String mimeType) {
+    public RequestSpecification multiPart(final String controlName, final String contentBody, final String mimeType) {
         return this;
     }
 
@@ -420,47 +434,47 @@ public class RequestSpecificationStub implements RequestSpecification {
     }
 
     @Override
-    public RequestSpecification port(int port) {
+    public RequestSpecification port(final int port) {
         return this;
     }
 
     @Override
-    public RequestSpecification spec(RequestSpecification requestSpecificationToMerge) {
+    public RequestSpecification spec(final RequestSpecification requestSpecificationToMerge) {
         return this;
     }
 
     @Override
-    public RequestSpecification specification(RequestSpecification requestSpecificationToMerge) {
+    public RequestSpecification specification(final RequestSpecification requestSpecificationToMerge) {
         return this;
     }
 
     @Override
-    public RequestSpecification sessionId(String sessionIdValue) {
+    public RequestSpecification sessionId(final String sessionIdValue) {
         return this;
     }
 
     @Override
-    public RequestSpecification sessionId(String sessionIdName, String sessionIdValue) {
+    public RequestSpecification sessionId(final String sessionIdName, final String sessionIdValue) {
         return this;
     }
 
     @Override
-    public RequestSpecification urlEncodingEnabled(boolean isEnabled) {
+    public RequestSpecification urlEncodingEnabled(final boolean isEnabled) {
         return this;
     }
 
     @Override
-    public RequestSpecification filter(Filter filter) {
+    public RequestSpecification filter(final Filter filter) {
         return this;
     }
 
     @Override
-    public RequestSpecification filters(List<Filter> filters) {
+    public RequestSpecification filters(final List<Filter> filters) {
         return this;
     }
 
     @Override
-    public RequestSpecification filters(Filter filter, Filter... additionalFilter) {
+    public RequestSpecification filters(final Filter filter, final Filter... additionalFilter) {
         return this;
     }
 
@@ -470,7 +484,7 @@ public class RequestSpecificationStub implements RequestSpecification {
     }
 
     @Override
-    public <T extends Filter> RequestSpecification noFiltersOfType(Class<T> filterType) {
+    public <T extends Filter> RequestSpecification noFiltersOfType(final Class<T> filterType) {
         return this;
     }
 
@@ -525,182 +539,182 @@ public class RequestSpecificationStub implements RequestSpecification {
     }
 
     @Override
-    public RequestSpecification baseUri(String baseUri) {
+    public RequestSpecification baseUri(final String baseUri) {
         return this;
     }
 
     @Override
-    public RequestSpecification basePath(String basePath) {
+    public RequestSpecification basePath(final String basePath) {
         return this;
     }
 
     @Override
-    public RequestSpecification proxy(String host, int port) {
+    public RequestSpecification proxy(final String host, int port) {
         return this;
     }
 
     @Override
-    public RequestSpecification proxy(String host) {
+    public RequestSpecification proxy(final String host) {
         return this;
     }
 
     @Override
-    public RequestSpecification proxy(int port) {
+    public RequestSpecification proxy(final int port) {
         return this;
     }
 
     @Override
-    public RequestSpecification proxy(String host, int port, String scheme) {
+    public RequestSpecification proxy(final String host, final int port, final String scheme) {
         return this;
     }
 
     @Override
-    public RequestSpecification proxy(URI uri) {
+    public RequestSpecification proxy(final URI uri) {
         return this;
     }
 
     @Override
-    public RequestSpecification proxy(ProxySpecification proxySpecification) {
+    public RequestSpecification proxy(final ProxySpecification proxySpecification) {
         return this;
     }
 
     @Override
-    public Response get(String path, Object... pathParams) {
+    public Response get(final String path, final Object... pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response get(String path, Map<String, ?> pathParams) {
+    public Response get(final String path, final Map<String, ?> pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response post(String path, Object... pathParams) {
+    public Response post(final String path, final Object... pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response post(String path, Map<String, ?> pathParams) {
+    public Response post(final String path, final Map<String, ?> pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response put(String path, Object... pathParams) {
+    public Response put(final String path, final Object... pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response put(String path, Map<String, ?> pathParams) {
+    public Response put(final String path, final Map<String, ?> pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response delete(String path, Object... pathParams) {
+    public Response delete(final String path, final Object... pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response delete(String path, Map<String, ?> pathParams) {
+    public Response delete(final String path, final Map<String, ?> pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response head(String path, Object... pathParams) {
+    public Response head(final String path, final Object... pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response head(String path, Map<String, ?> pathParams) {
+    public Response head(final String path, final Map<String, ?> pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response patch(String path, Object... pathParams) {
+    public Response patch(final String path, final Object... pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response patch(String path, Map<String, ?> pathParams) {
+    public Response patch(final String path, final Map<String, ?> pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response options(String path, Object... pathParams) {
+    public Response options(final String path, final Object... pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response options(String path, Map<String, ?> pathParams) {
+    public Response options(final String path, final Map<String, ?> pathParams) {
         return new ResponseStub();
     }
 
     @Override
-    public Response get(URI uri) {
+    public Response get(final URI uri) {
         return new ResponseStub();
     }
 
     @Override
-    public Response post(URI uri) {
+    public Response post(final URI uri) {
         return new ResponseStub();
     }
 
     @Override
-    public Response put(URI uri) {
+    public Response put(final URI uri) {
         return new ResponseStub();
     }
 
     @Override
-    public Response delete(URI uri) {
+    public Response delete(final URI uri) {
         return new ResponseStub();
     }
 
     @Override
-    public Response head(URI uri) {
+    public Response head(final URI uri) {
         return new ResponseStub();
     }
 
     @Override
-    public Response patch(URI uri) {
+    public Response patch(final URI uri) {
         return new ResponseStub();
     }
 
     @Override
-    public Response options(URI uri) {
+    public Response options(final URI uri) {
         return new ResponseStub();
     }
 
     @Override
-    public Response get(URL url) {
+    public Response get(final URL url) {
         return new ResponseStub();
     }
 
     @Override
-    public Response post(URL url) {
+    public Response post(final URL url) {
         return new ResponseStub();
     }
 
     @Override
-    public Response put(URL url) {
+    public Response put(final URL url) {
         return new ResponseStub();
     }
 
     @Override
-    public Response delete(URL url) {
+    public Response delete(final URL url) {
         return new ResponseStub();
     }
 
     @Override
-    public Response head(URL url) {
+    public Response head(final URL url) {
         return new ResponseStub();
     }
 
     @Override
-    public Response patch(URL url) {
+    public Response patch(final URL url) {
         return new ResponseStub();
     }
 
     @Override
-    public Response options(URL url) {
+    public Response options(final URL url) {
         return new ResponseStub();
     }
 

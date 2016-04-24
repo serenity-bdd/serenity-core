@@ -51,7 +51,7 @@ class WhenOpeningAndClosingBrowserSessions extends Specification {
         remote.getCapabilities() >> capabilities
         environmentVariables.setProperty("webdriver.driver","htmlunit")
         webDriverFactory = new WebDriverFactory(webdriverInstanceFactory, environmentVariables)
-        webdriverManager = new ThucydidesWebdriverManager(webDriverFactory, new SystemPropertiesConfiguration(environmentVariables));
+        webdriverManager = new SerenityWebdriverManager(webDriverFactory, new SystemPropertiesConfiguration(environmentVariables));
         StepEventBus.eventBus.clear()
     }
 

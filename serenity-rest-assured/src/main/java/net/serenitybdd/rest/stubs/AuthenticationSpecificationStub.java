@@ -12,57 +12,62 @@ import com.jayway.restassured.specification.RequestSpecification;
  */
 public class AuthenticationSpecificationStub implements AuthenticationSpecification {
     @Override
-    public RequestSpecification basic(String userName, String password) {
+    public RequestSpecification basic(final String userName, final String password) {
         return new RequestSpecificationStub();
     }
 
     @Override
-    public RequestSpecification digest(String userName, String password) {
+    public RequestSpecification digest(final String userName, final String password) {
         return new RequestSpecificationStub();
     }
 
     @Override
-    public RequestSpecification form(String userName, String password) {
+    public RequestSpecification form(final String userName, final String password) {
         return new RequestSpecificationStub();
     }
 
     @Override
-    public RequestSpecification form(String userName, String password, FormAuthConfig config) {
+    public RequestSpecification form(final String userName, final String password, final FormAuthConfig config) {
         return new RequestSpecificationStub();
     }
 
     @Override
-    public RequestSpecification certificate(String certURL, String password) {
+    public RequestSpecification certificate(final String certURL, final String password) {
         return new RequestSpecificationStub();
     }
 
     @Override
-    public RequestSpecification certificate(String certURL, String password, CertificateAuthSettings certificateAuthSettings) {
+    public RequestSpecification certificate(final String certURL, final String password,
+                                            final CertificateAuthSettings certificateAuthSettings) {
         return new RequestSpecificationStub();
     }
 
     @Override
-    public RequestSpecification certificate(String certURL, String password, String keystoreType, int port) {
+    public RequestSpecification certificate(final String certURL, final String password, final String keystoreType,
+                                            final int port) {
         return new RequestSpecificationStub();
     }
 
     @Override
-    public RequestSpecification oauth2(String accessToken) {
+    public RequestSpecification oauth2(final String accessToken) {
         return new RequestSpecificationStub();
     }
 
     @Override
-    public RequestSpecification oauth2(String accessToken, OAuthSignature signature) {
+    public RequestSpecification oauth2(final String accessToken, final OAuthSignature signature) {
         return new RequestSpecificationStub();
     }
 
     @Override
-    public RequestSpecification oauth(String consumerKey, String consumerSecret, String accessToken, String secretToken) {
+    public RequestSpecification oauth(final String consumerKey, final String consumerSecret,
+                                      final String accessToken, final String secretToken) {
         return new RequestSpecificationStub();
     }
 
     @Override
-    public RequestSpecification oauth(String consumerKey, String consumerSecret, String accessToken, String secretToken, OAuthSignature signature) {
+    public RequestSpecification oauth(final String consumerKey, final String consumerSecret,
+                                      final String accessToken, final String secretToken,
+                                      final OAuthSignature signature) {
         return new RequestSpecificationStub();
     }
 

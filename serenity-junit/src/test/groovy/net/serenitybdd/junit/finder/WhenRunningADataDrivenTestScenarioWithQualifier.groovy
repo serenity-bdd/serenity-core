@@ -51,7 +51,7 @@ class WhenRunningADataDrivenTestScenarioWithQualifier extends Specification {
             runner.run(new RunNotifier())
             def outcomes = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods()
         then:
-            outcomes.size() == 2
+            outcomes.size() == 1
             def happyDayOutcomes = outcomes.get(0);
             def happyDaySteps = happyDayOutcomes.getTestSteps()
             happyDaySteps.size() == 12;

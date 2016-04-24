@@ -25,7 +25,8 @@ subprojects {
 }
 
 ext {
-    seleniumVersion = '2.52.0'
+    seleniumVersion = '2.53.0'
+    htmlunitVersion = '2.20'
     groovyVersion = '2.4.4'
     gradleVersion = '2.10'
     junitVersion = '4.12'
@@ -38,9 +39,9 @@ ext {
     commonsIoVersion = '2.4'
     commonsCollectionsVersion = '3.2.2'
     commonsLang3Version = '3.4'
-    commonsCodecVersion = '1.9'
+    commonsCodecVersion = '1.10'
     xstreamVersion = '1.4.8'
-    jodaTimeVersion = '2.9.2'
+    jodaTimeVersion = '2.7'
     lambdajVersion = '2.3.3'
     gsonVersion = '2.4'
     typesafeConfigVersion = '1.2.1'

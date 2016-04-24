@@ -84,7 +84,7 @@ public class WhenManagingAWebDriverInstance extends AbstractTestStepRunnerTest {
     }
 
     @Mock
-    ThucydidesWebdriverManager manager;
+    SerenityWebdriverManager manager;
 
     @Test
     public void the_driver_should_be_reset_after_each_test() throws InitializationError {

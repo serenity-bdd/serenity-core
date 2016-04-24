@@ -9,6 +9,7 @@ import net.thucydides.core.guice.Injectors;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -90,6 +91,12 @@ public class WebdriverInstanceFactory {
     public WebDriver newInternetExplorerDriver(Capabilities capabilities) {
         InternetExplorerDriver driver = new InternetExplorerDriver(capabilities);
         driverProperties.registerCapabilities("iexplorer", driver.getCapabilities());
+        return driver;
+    }
+
+    public WebDriver newEdgeDriver(Capabilities capabilities) {
+        EdgeDriver driver = new EdgeDriver(capabilities);
+        driverProperties.registerCapabilities("edge", driver.getCapabilities());
         return driver;
     }
 

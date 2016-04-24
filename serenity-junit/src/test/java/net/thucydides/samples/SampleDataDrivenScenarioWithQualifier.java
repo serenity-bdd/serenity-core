@@ -54,11 +54,6 @@ public class SampleDataDrivenScenarioWithQualifier {
         steps.stepWithTwoParameters(option1, option2);
     }
 
-    @Test
-    public void another_happy_day_scenario() {
-        steps.stepWithParameters(option1,option2);
-    }
-
     public String getOption1() {
         return this.option1;
     }

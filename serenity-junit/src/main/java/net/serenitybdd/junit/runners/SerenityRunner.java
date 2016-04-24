@@ -136,7 +136,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
                           final Configuration configuration,
                           final BatchManager batchManager) throws InitializationError {
         this(klass,
-                new ThucydidesWebdriverManager(webDriverFactory, configuration),
+                new SerenityWebdriverManager(webDriverFactory, configuration),
                 configuration,
                 batchManager
         );

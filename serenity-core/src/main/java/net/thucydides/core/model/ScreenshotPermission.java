@@ -41,10 +41,8 @@ public class ScreenshotPermission {
     }
 
     private Optional<TakeScreenshots> methodOverride() {
-        StackTraceElement[] stackTrace = new Throwable().getStackTrace();
-        for (StackTraceElement stackTraceElement : stackTrace) {
-            Method callingMethod = StackTraceAnalyser.forStackTraceElement(stackTraceElement).getMethod();
-            if (callingMethod != null && callingMethod.getAnnotation(Screenshots.class) != null) {
+        for(Method callingMethod : StackTraceAnalyser.inscopeMethodsIn(new Throwable().getStackTrace())) {
+            if (callingMethod.getAnnotation(Screenshots.class) != null) {
                 return Optional.of(screenshotLevelFrom(callingMethod.getAnnotation(Screenshots.class)));
             }
         }

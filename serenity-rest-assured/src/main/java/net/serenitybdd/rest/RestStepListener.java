@@ -11,9 +11,6 @@ import net.thucydides.core.steps.StepListener;
 
 import java.util.Map;
 
-/**
- * Created by john on 18/05/2015.
- */
 public class RestStepListener implements StepListener {
 
     @Override
@@ -28,7 +25,7 @@ public class RestStepListener implements StepListener {
 
     @Override
     public void testSuiteFinished() {
-        SerenityRest.clearQueryData();
+
     }
 
     @Override
@@ -38,12 +35,12 @@ public class RestStepListener implements StepListener {
 
     @Override
     public void testFinished(TestOutcome result) {
-        SerenityRest.clearQueryData();
+
     }
 
     @Override
     public void testRetried() {
-        SerenityRest.clearQueryData();
+
     }
 
     @Override
@@ -88,22 +85,22 @@ public class RestStepListener implements StepListener {
 
     @Override
     public void testFailed(TestOutcome testOutcome, Throwable cause) {
-        SerenityRest.clearQueryData();
+
     }
 
     @Override
     public void testIgnored() {
-        SerenityRest.clearQueryData();
+
     }
 
     @Override
     public void testSkipped() {
-        SerenityRest.clearQueryData();
+
     }
 
     @Override
     public void testPending() {
-        SerenityRest.clearQueryData();
+
     }
 
     @Override
@@ -133,11 +130,11 @@ public class RestStepListener implements StepListener {
 
     @Override
     public void exampleFinished() {
-        SerenityRest.clearQueryData();
+
     }
 
     @Override
     public void assumptionViolated(String message) {
-        SerenityRest.clearQueryData();
+
     }
 }

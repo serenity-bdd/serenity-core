@@ -4,6 +4,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.SerenitySystemProperties;
 import net.serenitybdd.core.buildinfo.BuildInfoProvider;
+import net.serenitybdd.core.buildinfo.BuildProperties;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
@@ -65,6 +66,8 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     private final EnvironmentVariables environmentVariables;
     private FormatConfiguration formatConfiguration;
 
+    private BuildProperties buildProperties;
+
     public HtmlAggregateStoryReporter(final String projectName) {
         this(projectName, "");
     }
@@ -120,8 +123,10 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     }
 
     private void addBuildInformationToContext(final Map<String, Object> context) {
-        BuildInfoProvider buildInfoProvider = new BuildInfoProvider(getEnvironmentVariables());
-        context.put("build", buildInfoProvider.getBuildProperties());
+        if (buildProperties == null) {
+            buildProperties = new BuildInfoProvider(getEnvironmentVariables()).getBuildProperties();
+        }
+        context.put("build", buildProperties);
     }
 
 

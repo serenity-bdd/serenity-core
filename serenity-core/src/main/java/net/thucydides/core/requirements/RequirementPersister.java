@@ -1,5 +1,6 @@
 package net.thucydides.core.requirements;
 
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -11,7 +12,6 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 import java.util.SortedMap;
 
@@ -41,7 +41,7 @@ public class RequirementPersister {
         try(FileReader reader = new FileReader(jsonFile)) {
             storedRequirementsMap = gson.fromJson(reader, requirementsMapType);
             if (storedRequirementsMap == null) {
-                storedRequirementsMap = Collections.emptySortedMap();
+                storedRequirementsMap = Maps.newTreeMap();
             }
         }
         map.putAll(storedRequirementsMap);

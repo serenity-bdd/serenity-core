@@ -1,10 +1,12 @@
 package net.thucydides.core.reflection;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 
 public class StackTraceAnalyser {
@@ -30,9 +32,9 @@ public class StackTraceAnalyser {
                 }
             }
         } catch (ClassNotFoundException classNotFoundIgnored) {
-            logger.warn("Failed to load class during Stack analysis: " + classNotFoundIgnored.getLocalizedMessage());
+            logger.debug("Couldn't find class during Stack analysis: " + classNotFoundIgnored.getLocalizedMessage());
         } catch (NoClassDefFoundError noClassDefFoundErrorIgnored) {
-            logger.warn("Failed to load class definition during Stack analysis: " + noClassDefFoundErrorIgnored.getLocalizedMessage());
+            logger.debug("Couldn't find class definition during Stack analysis: " + noClassDefFoundErrorIgnored.getLocalizedMessage());
         }
         return null;
     }
@@ -61,5 +63,16 @@ public class StackTraceAnalyser {
 
     private boolean allowedClassName(String className) {
         return !((className.startsWith("sun.")) || (className.startsWith("java.")) || (className.contains("$")));
+    }
+
+    public static List<Method> inscopeMethodsIn(StackTraceElement[] stackTrace) {
+        List<Method> methods = Lists.newArrayList();
+        for(StackTraceElement stackTraceElement : stackTrace) {
+            Method method = StackTraceAnalyser.forStackTraceElement(stackTraceElement).getMethod();
+            if (method != null) {
+                methods.add(method);
+            }
+        }
+        return methods;
     }
 }

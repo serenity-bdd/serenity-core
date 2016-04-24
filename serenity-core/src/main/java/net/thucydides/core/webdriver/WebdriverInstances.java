@@ -36,6 +36,10 @@ public class WebdriverInstances {
     }
 
     public String getCurrentDriverName() {
+        return currentDriver == null ? "" : currentDriver;
+    }
+
+    public String getCurrentDriverType() {
         if (getCurrentDriver() == null) {
             return "";
         }
@@ -133,7 +137,6 @@ public class WebdriverInstances {
         throw new IllegalStateException("No matching driver found in this thread");
     }
 
-
     public final class InstanceRegistration {
         private final String driverName;
 
@@ -159,4 +162,5 @@ public class WebdriverInstances {
             return name.toLowerCase();
         }
     }
+
 }

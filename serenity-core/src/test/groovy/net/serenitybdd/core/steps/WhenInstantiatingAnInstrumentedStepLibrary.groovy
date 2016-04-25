@@ -42,5 +42,84 @@ class WhenInstantiatingAnInstrumentedStepLibrary extends Specification {
 
 
     }
+    public static class AStepLibraryWithAttributesAndDefaultConstructor {
+        private final String firstName;
+        private final String lastName;
 
+        public AStepLibraryWithAttributesAndDefaultConstructor(String firstName, String lastName) {
+            this.firstName = firstName
+            this.lastName = lastName
+        }
+
+        public AStepLibraryWithAttributesAndDefaultConstructor() {
+            this("default", "default")
+        }
+
+        String getFirstName() {
+            return firstName
+        }
+
+        String getLastName() {
+            return lastName
+        }
+    }
+
+    def "should instantiate step librariary with a parameterised constructor if parameterised and default constructor provided"() {
+        when:
+            def stepLibrary = Instrumented.instanceOf(AStepLibraryWithAttributesAndDefaultConstructor)
+                .withProperties("Sarah-Jane", "Smith");
+        then:
+            stepLibrary != null
+        and:
+            stepLibrary.firstName == "Sarah-Jane" &&
+                stepLibrary.lastName == "Smith"
+    }
+
+    def "should instantiate step librariary with a default constructor if parameterised and default constructor provided"() {
+        when:
+            def stepLibrary = Instrumented.instanceOf(AStepLibraryWithAttributesAndDefaultConstructor)
+                .newInstance();
+        then:
+            stepLibrary != null
+        and:
+            stepLibrary.firstName == "default" &&
+                stepLibrary.lastName == "default"
+    }
+
+    public static class AStepLibraryWithMultipleConstructors {
+        private final String firstName;
+        private final String lastName;
+
+        public AStepLibraryWithMultipleConstructors(String firstName, String lastName) {
+            this.firstName = firstName
+            this.lastName = lastName
+        }
+
+        public AStepLibraryWithMultipleConstructors() {
+            this("default", "default")
+        }
+
+        public AStepLibraryWithMultipleConstructors(String firstName) {
+            this(firstName, "default")
+        }
+
+        String getFirstName() {
+            return firstName
+        }
+
+        String getLastName() {
+            return lastName
+        }
+    }
+
+    def "should instantiate step librariary with multiple constructors based on amount of parameters"() {
+        when:
+            def stepLibrary = Instrumented.instanceOf(AStepLibraryWithMultipleConstructors)
+                .withProperties("Sarah-Jane");
+        then:
+            stepLibrary != null
+        and:
+            stepLibrary.firstName == "Sarah-Jane" &&
+                stepLibrary.lastName == "default"
+    }
 }

@@ -390,8 +390,7 @@ public class TestOutcomes {
         for (TestOutcome outcome : outcomes) {
             if (isAnIssue(tag) && (outcome.hasIssue(tag.getName()))) {
                 matchingOutcomes.add(outcome);
-            }
-            if (outcome.hasTag(tag)) {
+            } else if (outcome.hasTag(tag)) {
                 matchingOutcomes.add(outcome);
             }
         }

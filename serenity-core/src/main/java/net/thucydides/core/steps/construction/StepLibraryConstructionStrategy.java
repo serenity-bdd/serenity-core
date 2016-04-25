@@ -37,6 +37,10 @@ public class StepLibraryConstructionStrategy {
         return ConstructionStrategy.DEFAULT_CONSTRUCTOR;
     }
 
+    public boolean hasDefaultConstructor(){
+        return hasAConstructorWithoutParameters(stepLibraryClass);
+    }
+
 
     private <T> boolean isWebdriverStepClass(final Class<T> stepLibraryClass) {
 
@@ -56,6 +60,12 @@ public class StepLibraryConstructionStrategy {
 
     }
 
+    private <T> boolean hasAConstructorWithoutParameters(final Class<T> stepLibraryClass) {
+        ImmutableSet<Constructor<?>> constructors = copyOf(stepLibraryClass.getDeclaredConstructors());
+        return Iterables.any(constructors, withoutParameters());
+
+    }
+
     private <T> boolean hasAPagesField(final Class<T> stepLibraryClass) {
         ImmutableSet<Field> fields = copyOf(Fields.of(stepLibraryClass).allFields());
         return Iterables.any(fields, ofTypePages());
@@ -67,6 +77,15 @@ public class StepLibraryConstructionStrategy {
 
             public boolean apply(Constructor<?> constructor) {
                 return ((constructor.getParameterTypes().length > 0));
+            }
+        };
+    }
+
+    private Predicate<Constructor<?>> withoutParameters() {
+        return new Predicate<Constructor<?>>() {
+
+            public boolean apply(Constructor<?> constructor) {
+                return ((constructor.getParameterTypes().length == 0));
             }
         };
     }

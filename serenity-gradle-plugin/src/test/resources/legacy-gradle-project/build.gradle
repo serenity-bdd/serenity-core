@@ -23,7 +23,7 @@ dependencies {
     compile 'net.serenity-bdd:serenity-junit:1.0.47'
     compile('junit:junit:4.11')
     compile('org.assertj:assertj-core:1.7.0')
-    compile('org.slf4j:slf4j-simple:1.7.7')
+    compile('org.slf4j:slf4j-simple:1.7.21')
 }
 
 gradle.startParameter.continueOnFailure = true

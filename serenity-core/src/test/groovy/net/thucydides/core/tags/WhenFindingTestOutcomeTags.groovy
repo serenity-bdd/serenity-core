@@ -20,8 +20,9 @@ class WhenFindingTestOutcomeTags extends Specification {
         def aTest() {}
     }
 
-    def "should get story tag from the test class by default"() {
+    def "should get story tag from the test class if property set"() {
         given:
+            environmentVariables.setProperty(FeatureStoryTagProvider.getAddStoryTagsPropertyName(), "true")
             def tagProvider = new FeatureStoryTagProvider(environmentVariables)
             def testOutcome = TestOutcome.forTest("aTest", SomeTest)
         when:
@@ -30,10 +31,8 @@ class WhenFindingTestOutcomeTags extends Specification {
             tags.contains(TestTag.withName("Some test").andType("story"))
     }
 
-    def "should not get story tag from the test class if "() {
+    def "should not get story tag from the test class by default "() {
         given:
-            environmentVariables.setProperty("use.test.case.for.story.tag","false")
-        and:
             def tagProvider = new FeatureStoryTagProvider(environmentVariables)
             def testOutcome = TestOutcome.forTest("aTest", SomeTest)
         when:

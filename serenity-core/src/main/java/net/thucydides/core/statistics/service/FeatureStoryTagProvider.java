@@ -43,6 +43,11 @@ public class FeatureStoryTagProvider implements TagProvider, CoreTagProvider {
         }
     }
 
+    public static String getAddStoryTagsPropertyName()
+    {
+        return ThucydidesSystemProperty.USE_TEST_CASE_FOR_STORY_TAG.getPropertyName();
+    }
+
     private boolean shouldAddStoryTags() {
         return ThucydidesSystemProperty.USE_TEST_CASE_FOR_STORY_TAG.booleanFrom(environmentVariables, false);
     }

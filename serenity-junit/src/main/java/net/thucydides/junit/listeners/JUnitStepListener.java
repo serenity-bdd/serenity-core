@@ -70,6 +70,7 @@ public class JUnitStepListener extends RunListener {
         if (testingThisTest(description)) {
             startTestSuiteForFirstTest(description);
             StepEventBus.getEventBus().clear();
+            StepEventBus.getEventBus().setTestSource(StepEventBus.TEST_SOURCE_JUNIT);
             StepEventBus.getEventBus().testStarted(description.getMethodName(),
                                                    description.getTestClass());
             startTest();
@@ -87,6 +88,7 @@ public class JUnitStepListener extends RunListener {
         if (testingThisTest(description)) {
             updateResultsUsingTestAnnotations(description);
             StepEventBus.getEventBus().testFinished();
+            StepEventBus.getEventBus().setTestSource(null);
             endTest();
         }
     }

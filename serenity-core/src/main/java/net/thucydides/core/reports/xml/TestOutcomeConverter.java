@@ -73,6 +73,7 @@ public class TestOutcomeConverter implements Converter {
     private static final String ROW = "row";
     private static final String VALUE = "value";
     private static final String MANUAL = "manual";
+    private static final String TEST_SOURCE = "test-source";
     public static final String NEW_LINE_CHAR = "\n";
     public static final String ESCAPE_CHAR_FOR_NEW_LINE = "&#10;";
     private static final String DEFAULT_ERROR_MESSAGE = "Unspecified failure";
@@ -127,6 +128,9 @@ public class TestOutcomeConverter implements Converter {
         }
         if (isNotEmpty(testOutcome.getSessionId())) {
             writer.addAttribute(SESSION_ID, testOutcome.getSessionId());
+        }
+        if (isNotEmpty(testOutcome.getTestSource())) {
+            writer.addAttribute(TEST_SOURCE, testOutcome.getTestSource());
         }
         addUserStoryTo(writer, testOutcome.getUserStory());
         addIssuesTo(writer, testOutcome.getIssues());
@@ -422,6 +426,8 @@ public class TestOutcomeConverter implements Converter {
         }
         String sessionId = readSessionId(reader);
         testOutcome.setSessionId(sessionId);
+        String source = readSource(reader);
+        testOutcome.setTestSource(source);
         readChildren(reader, testOutcome);
         if (savedAnnotatedResult != null) {
             testOutcome.setAnnotatedResult(savedAnnotatedResult);
@@ -663,6 +669,10 @@ public class TestOutcomeConverter implements Converter {
 
     private String readSessionId(HierarchicalStreamReader reader) {
         return reader.getAttribute(SESSION_ID);
+    }
+
+    private String readSource(HierarchicalStreamReader reader) {
+        return reader.getAttribute(TEST_SOURCE);
     }
 
     private void readTestGroup(final HierarchicalStreamReader reader, final TestOutcome testOutcome) {

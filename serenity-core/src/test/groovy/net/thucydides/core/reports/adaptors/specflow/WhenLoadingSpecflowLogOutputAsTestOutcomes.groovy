@@ -1,11 +1,7 @@
 package net.thucydides.core.reports.adaptors.specflow
 
-import net.thucydides.core.guice.Injectors
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.reports.adaptors.TestOutcomeAdaptor
-import net.thucydides.core.statistics.service.FeatureStoryTagProvider
-import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.core.util.SystemEnvironmentVariables
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
@@ -27,14 +23,8 @@ class WhenLoadingSpecflowLogOutputAsTestOutcomes extends Specification {
    -> done: bla bla bla (0.9s)
 """
 
-    def SystemEnvironmentVariables environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
-    def cleanup() {
-        environmentVariables.clearProperty(FeatureStoryTagProvider.getAddStoryTagsPropertyName())
-    }
-
-    def "should find the scenario and story titles with story tags from test case"() {
+    def "should find the scenario and story titles"() {
         given:
-            environmentVariables.setProperty(FeatureStoryTagProvider.getAddStoryTagsPropertyName(), "true")
             def specflowOutput = fileFrom(simpleSpecflowOutput)
             TestOutcomeAdaptor specflowLoader = new SpecflowAdaptor()
         when:
@@ -48,23 +38,6 @@ class WhenLoadingSpecflowLogOutputAsTestOutcomes extends Specification {
         and:
             testOutcomes.get(0).getTags()
             testOutcomes.get(0).path == "root.packages.MyCapability.SpecFlow.Features.MyFeature"
-    }
-
-    def "should find the scenario and story titles"() {
-        given:
-        environmentVariables.setProperty(FeatureStoryTagProvider.getAddStoryTagsPropertyName(), "false")
-        def specflowOutput = fileFrom(simpleSpecflowOutput)
-        TestOutcomeAdaptor specflowLoader = new SpecflowAdaptor()
-        when:
-        def testOutcomes = specflowLoader.loadOutcomesFrom(specflowOutput)
-        then:
-        testOutcomes.size() == 1
-        and:
-        testOutcomes.get(0).title == "My scenario"
-        and:
-        testOutcomes.get(0).storyTitle == "My feature"
-        and:
-        testOutcomes.get(0).getTags().size() == 0
     }
 
     def "should find the scenario steps"() {
@@ -261,6 +234,7 @@ class WhenLoadingSpecflowLogOutputAsTestOutcomes extends Specification {
     def setup() {
         tmp = temporaryFolder.newFolder()
     }
+
 
     def fileFrom(def contents) {
         def outputFile = new File(tmp, "specflow-output-${System.currentTimeMillis()}.out")

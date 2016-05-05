@@ -3,9 +3,7 @@ package net.thucydides.core.reports.json
 import net.serenitybdd.core.rest.RestMethod
 import net.serenitybdd.core.rest.RestQuery
 import net.thucydides.core.annotations.*
-import net.thucydides.core.annotations.Story
 import net.thucydides.core.digest.Digest
-import net.thucydides.core.guice.Injectors
 import net.thucydides.core.issues.IssueTracking
 import net.thucydides.core.model.*
 import net.thucydides.core.reports.AcceptanceTestLoader
@@ -14,10 +12,7 @@ import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.integration.TestStepFactory
 import net.thucydides.core.reports.json.gson.GsonJSONConverter
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource
-import net.thucydides.core.statistics.service.FeatureStoryTagProvider
-import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
-import net.thucydides.core.util.SystemEnvironmentVariables
 import org.joda.time.DateTime
 import org.joda.time.LocalDateTime
 import org.junit.ComparisonFailure
@@ -35,7 +30,12 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     def AcceptanceTestReporter reporter
     def AcceptanceTestLoader loader
 
-    def SystemEnvironmentVariables environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
+    File outputDirectory
+
+    @Rule
+    TemporaryFolder temporaryFolder
+
+    TestOutcomes allTestOutcomes = Mock();
 
     def setup() {
         outputDirectory = temporaryFolder.newFolder()
@@ -44,17 +44,6 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         reporter.setOutputDirectory(outputDirectory);
         loader.setOutputDirectory(outputDirectory);
     }
-
-    def cleanup() {
-        environmentVariables.clearProperty(FeatureStoryTagProvider.getAddStoryTagsPropertyName())
-    }
-
-    File outputDirectory
-
-    @Rule
-    TemporaryFolder temporaryFolder
-
-    TestOutcomes allTestOutcomes = Mock();
 
     class AUserStory {
     }
@@ -302,9 +291,8 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     }
 
 
-    def "should store annotated tags and issues in the JSON reports with story tag from test case"() {
+    def "should store annotated tags and issues in the JSON reports"() {
         given:
-        environmentVariables.setProperty(FeatureStoryTagProvider.getAddStoryTagsPropertyName(), "true")
         def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioWithTags.class);
         testOutcome.startTime = FIRST_OF_JANUARY
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
@@ -317,21 +305,6 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         reloadedOutcome.tags.containsAll([TestTag.withName("Some test scenario with tags").andType("story"),
                                           TestTag.withName("simple story").andType("story"),
                                           TestTag.withName("important feature").andType("feature")])
-    }
-
-    def "should store annotated tags and issues in the JSON reports"() {
-        given:
-        environmentVariables.setProperty(FeatureStoryTagProvider.getAddStoryTagsPropertyName(), "false")
-        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioWithTags.class);
-        testOutcome.startTime = FIRST_OF_JANUARY
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
-        when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
-        TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
-        then:
-        reloadedOutcome.issues == ["PROJ-123"]
-        and:
-        reloadedOutcome.tags.containsAll([TestTag.withName("important feature").andType("feature")])
     }
 
 
@@ -427,6 +400,19 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         reloadedOutcome.feature.name == "A feature"
     }
 
+
+    def "should record features and stories as tags"() {
+        given:
+        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioInAFeature.class);
+        testOutcome.startTime = FIRST_OF_JANUARY
+        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY));
+        when:
+        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
+        then:
+        reloadedOutcome.tags.contains(TestTag.withName("A user story in a feature").andType("story"))
+        reloadedOutcome.tags.contains(TestTag.withName("A feature").andType("feature"))
+    }
 
     def "should generate an JSON report with a name based on the test run title"() {
         when:
@@ -762,32 +748,4 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         then:
         loadedOutcome.tags
     }
-
-    def "should record features and stories as tags when story tag from test case"() {
-        given:
-        environmentVariables.setProperty(FeatureStoryTagProvider.getAddStoryTagsPropertyName(), "true")
-        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioInAFeature.class);
-        testOutcome.startTime = FIRST_OF_JANUARY
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY));
-        when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
-        TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
-        then:
-        reloadedOutcome.tags.contains(TestTag.withName("A user story in a feature").andType("story"))
-        reloadedOutcome.tags.contains(TestTag.withName("A feature").andType("feature"))
-    }
-
-    def "should record features as tags"() {
-        given:
-
-        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioInAFeature.class);
-        testOutcome.startTime = FIRST_OF_JANUARY
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY));
-        when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
-        TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
-        then:
-        reloadedOutcome.tags.contains(TestTag.withName("A feature").andType("feature"))
-    }
-
 }

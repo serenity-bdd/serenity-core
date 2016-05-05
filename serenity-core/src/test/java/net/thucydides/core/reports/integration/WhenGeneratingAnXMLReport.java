@@ -5,19 +5,14 @@ import com.google.common.collect.Lists;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.annotations.Story;
 import net.thucydides.core.digest.Digest;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.xml.XMLTestOutcomeReporter;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.statistics.service.FeatureStoryTagProvider;
-import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
-import net.thucydides.core.util.SystemEnvironmentVariables;
 import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -41,8 +36,6 @@ public class WhenGeneratingAnXMLReport {
     @Rule
     public ExtendedTemporaryFolder temporaryDirectory = new ExtendedTemporaryFolder();
 
-    private EnvironmentVariables environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
-
     private File outputDirectory;
 
     @Mock
@@ -50,17 +43,12 @@ public class WhenGeneratingAnXMLReport {
     
     @Before
     public void setupTestReporter() throws IOException {
-
-        environmentVariables.setProperty(FeatureStoryTagProvider.getAddStoryTagsPropertyName(),"true");
+        
         MockitoAnnotations.initMocks(this);
+        
         reporter = new XMLTestOutcomeReporter();
         outputDirectory = temporaryDirectory.newFolder("temp");
         reporter.setOutputDirectory(outputDirectory);
-    }
-
-    @After
-    public void cleanup(){
-        environmentVariables.clearProperty(FeatureStoryTagProvider.getAddStoryTagsPropertyName());
     }
 
     class AUserStory {

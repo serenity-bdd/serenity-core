@@ -26,7 +26,7 @@ class WhenDeserializingJSONObjects extends Specification {
 	JavascriptExecutorFacade jsFacade;
 	
 	def setupSpec() {
-		driver = new FirefoxDriver();
+		driver = new ChromeDriver();
 		jsFacade = new JavascriptExecutorFacade(driver)
 	}
 

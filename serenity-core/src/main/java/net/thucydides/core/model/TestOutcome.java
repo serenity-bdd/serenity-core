@@ -1412,7 +1412,7 @@ public class TestOutcome {
 
     public Set<TestTag> getTags() {
         if (tags == null) {
-            tags = getTagsUsingTagProviders(getTagProviderService().getTagProviders());
+            tags = getTagsUsingTagProviders(getTagProviderService().getTagProviders(getTestSource()));
         }
         return ImmutableSet.copyOf(tags);
     }

@@ -31,7 +31,7 @@ class WhenUsingACustomRequirementsProvider extends Specification {
         given:
             ClasspathTagProviderService tagProviderService = new ClasspathTagProviderService() {
                 @Override
-                protected Iterable<TagProvider> loadTagProvidersFromPath() {
+                protected Iterable<TagProvider> loadTagProvidersFromPath(String testSource) {
                     return [ new FileSystemRequirementsTagProvider(), new CustomRequirementsTagProvider()]
                 }
             }

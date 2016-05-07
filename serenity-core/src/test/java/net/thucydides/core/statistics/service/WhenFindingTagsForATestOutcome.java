@@ -52,9 +52,38 @@ public class WhenFindingTagsForATestOutcome {
     }
 
     @Test
+    public void junit_tag_provider_strategy_should_find_the_annotation_tag_provider_by_default() {
+
+        TagProviderStrategy tagProviderStrategy = new JUnitTagProviderStrategy();
+        Iterable<TagProvider> tagProviders = tagProviderStrategy.getTagProviders();
+
+        boolean containsAnnotationTagProvider = false;
+        for(TagProvider provider : tagProviders) {
+            if (provider instanceof AnnotationBasedTagProvider) {
+                containsAnnotationTagProvider = true;
+            }
+        }
+        assertThat(containsAnnotationTagProvider, is(true));
+    }
+
+    @Test
     public void should_also_find_the_file_system_requirements_provider_by_default() {
         TagProviderService tagProviderService = new ClasspathTagProviderService();
         List<TagProvider> tagProviders = tagProviderService.getTagProviders();
+
+        boolean containsRequirementsProvider = false;
+        for(TagProvider provider : tagProviders) {
+            if (provider instanceof FileSystemRequirementsTagProvider) {
+                containsRequirementsProvider = true;
+            }
+        }
+        assertThat(containsRequirementsProvider, is(true));
+    }
+
+    @Test
+    public void junit_tag_provider_strategy_should_also_find_the_file_system_requirements_provider_by_default() {
+        TagProviderStrategy tagProviderStrategy = new JUnitTagProviderStrategy();
+        Iterable<TagProvider> tagProviders = tagProviderStrategy.getTagProviders();
 
         boolean containsRequirementsProvider = false;
         for(TagProvider provider : tagProviders) {

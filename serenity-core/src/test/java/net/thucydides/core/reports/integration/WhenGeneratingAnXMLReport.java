@@ -10,6 +10,7 @@ import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.xml.XMLTestOutcomeReporter;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
 import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
@@ -946,6 +947,23 @@ public class WhenGeneratingAnXMLReport {
         String generatedReportText = getStringFrom(xmlReport);
 
         assertThat(generatedReportText, containsString("sample.steps.FailingStep"));
+    }
+
+    @Test
+    public void should_include_test_source()
+            throws Exception {
+        TestOutcome testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class);
+        testOutcome.setTestSource(StepEventBus.TEST_SOURCE_JUNIT);
+
+        TestStep step = TestStepFactory.failingTestStepCalled("step 1");
+        step.failedWith(new FailingStep().failsWithMessage("Oh nose!"));
+
+        testOutcome.recordStep(step);
+
+        File xmlReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
+        String generatedReportText = getStringFrom(xmlReport);
+
+        assertThat(generatedReportText, containsString(StepEventBus.TEST_SOURCE_JUNIT));
     }
 
     private String getStringFrom(File reportFile) throws IOException {

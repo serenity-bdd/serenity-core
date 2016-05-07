@@ -196,6 +196,10 @@ public class TestOutcome {
      */
     private boolean manual;
 
+    /**
+     * Indicates the test source e.g : junit/jbehave/cucumber
+     */
+    private String testSource;
 
     /**
      * Fields used for serialization
@@ -276,6 +280,11 @@ public class TestOutcome {
 
     public TestOutcome asManualTest() {
         this.manual = true;
+        return this;
+    }
+
+    public TestOutcome withTestSource(String testSource) {
+        this.testSource = testSource;
         return this;
     }
 
@@ -1403,7 +1412,7 @@ public class TestOutcome {
 
     public Set<TestTag> getTags() {
         if (tags == null) {
-            tags = getTagsUsingTagProviders(getTagProviderService().getTagProviders());
+            tags = getTagsUsingTagProviders(getTagProviderService().getTagProviders(getTestSource()));
         }
         return ImmutableSet.copyOf(tags);
     }
@@ -2074,6 +2083,14 @@ public class TestOutcome {
 
     public FailureDetails getFailureDetails() {
         return new FailureDetails(this);
+    }
+
+    public String getTestSource() {
+        return testSource;
+    }
+
+    public void setTestSource(String testSource) {
+        this.testSource = testSource;
     }
 
 }

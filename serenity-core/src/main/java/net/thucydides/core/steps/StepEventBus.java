@@ -33,6 +33,10 @@ public class StepEventBus {
     private static final String CORE_THUCYDIDES_PACKAGE = "net.thucydides.core";
     private static final Logger LOGGER = LoggerFactory.getLogger(StepEventBus.class);
 
+    public static final String TEST_SOURCE_JUNIT = "JUnit";
+    public static final String TEST_SOURCE_JBEHAVE = "JBehave";
+    public static final String TEST_SOURCE_CUCUMBER = "Cucumber";
+
     /**
      * The event bus used to inform listening classes about when tests and test steps start and finish.
      * There is a separate event bus for each thread.
@@ -74,6 +78,11 @@ public class StepEventBus {
 
         Darkroom.isOpenForBusiness();
     }
+
+    /**
+     * Indicates the test source e.g : junit/jbehave/cucumber
+     */
+    private String testSource;
 
     /**
      * Register a listener to receive notification at different points during a test's execution.
@@ -627,4 +636,13 @@ public class StepEventBus {
     public boolean softAssertsActive() {
         return softAssertsEnabled;
     }
+
+    public String getTestSource() {
+        return testSource;
+    }
+
+    public void setTestSource(String testSource) {
+        this.testSource = testSource;
+    }
+
 }

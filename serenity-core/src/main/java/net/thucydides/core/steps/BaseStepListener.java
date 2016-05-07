@@ -309,6 +309,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
      */
     public void testStarted(final String testMethod) {
         TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory);
+        newTestOutcome.setTestSource(StepEventBus.getEventBus().getTestSource());
         testOutcomes.add(newTestOutcome);
         updateSessionIdIfKnown();
         setAnnotatedResult(testMethod);

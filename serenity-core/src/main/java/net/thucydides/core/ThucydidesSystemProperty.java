@@ -630,7 +630,7 @@ public enum ThucydidesSystemProperty {
     SHOW_RELATED_TAGS,
 
     /**
-     * If set to true (the default value is false), a story tag will be extracted from the test case or feature file
+     * If set to true (the default value), a story tag will be extracted from the test case or feature file
      * containing the test.
      */
     USE_TEST_CASE_FOR_STORY_TAG,

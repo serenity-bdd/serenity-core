@@ -25,7 +25,6 @@ public class WhenSeveralActorsBrowsesTheWeb {
 
     @Test
     public void multipleUsersCanShareTheSameBrowser() {
-
         Actor dana = new Actor("Dana");
         dana.can(BrowseTheWeb.with(firstBrowser));
 

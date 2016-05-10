@@ -1,11 +1,13 @@
 package net.serenitybdd.screenplay
 import net.serenitybdd.screenplay.shopping.DanaGoesShoppingSample
 import net.serenitybdd.junit.runners.SerenityRunner
+import net.serenitybdd.screenplay.shopping.tasks.ATaskWithParameters
 import net.thucydides.core.model.TestResult
 import org.junit.runner.notification.RunNotifier
 import spock.lang.Specification
 
 import static OutcomeChecks.resultsFrom
+import static net.serenitybdd.screenplay.Tasks.instrumented
 import static net.thucydides.core.model.TestResult.*
 
 class WhenActorsGoOnAJourney extends Specification{
@@ -88,4 +90,10 @@ class WhenActorsGoOnAJourney extends Specification{
         outcome.testSteps.collect { it.result } == [FAILURE, SKIPPED, SKIPPED]
     }
 
+    def "should allow performables with different parameter types"() {
+        when:
+            ATaskWithParameters someTask = instrumented(ATaskWithParameters, 10, "Bill", BigDecimal.ONE )
+        then:
+            someTask.aPrimitiveType == 10 && someTask.anObject == "Bill" && someTask.aParent == BigDecimal.ONE
+    }
 }

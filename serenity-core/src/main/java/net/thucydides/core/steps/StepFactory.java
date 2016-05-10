@@ -14,6 +14,7 @@ import net.thucydides.core.steps.construction.ConstructionStrategy;
 import net.thucydides.core.steps.construction.StepLibraryConstructionStrategy;
 import net.thucydides.core.steps.construction.StepLibraryType;
 import net.thucydides.core.steps.di.DependencyInjectorService;
+import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,8 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.ImmutableSet.copyOf;
-import static net.thucydides.core.steps.construction.StepLibraryType.ofTypePages;
 import static net.thucydides.core.steps.construction.ConstructionStrategy.*;
+import static net.thucydides.core.steps.construction.StepLibraryType.ofTypePages;
 
 /**
  * Produces an instance of a set of requirement steps for use in the acceptance tests.
@@ -195,7 +196,9 @@ public class StepFactory {
             return false;
         } else {
             for (Class<?> parameterType : parameterTypes) {
-                if (!parameterType.isAssignableFrom(parameters[parameterNumber++].getClass())) {
+
+                if (!ClassUtils.isAssignable(parameters[parameterNumber++].getClass(),parameterType)) {
+             //   if (!parameterType.isAssignableFrom(parameters[parameterNumber++].getClass())) {
                     return false;
                 }
             }

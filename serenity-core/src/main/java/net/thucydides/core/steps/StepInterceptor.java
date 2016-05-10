@@ -123,13 +123,30 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
             return runNormalMethod(obj, method, args, proxy);
         }
 
-        if (shouldSkip(method)) {
+        if (shouldSkip(method) && !stepIsCalledFromJUnitCleanupMethod()) {
             return skipStepMethod(obj, method, args, proxy);
         } else {
             notifyStepStarted(obj, method, args);
             return runTestStep(obj, method, args, proxy);
         }
+    }
 
+    private boolean stepIsCalledFromJUnitCleanupMethod(){
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        for(StackTraceElement stackTraceElement : stackTrace)
+        {
+            try {
+                Method m = Class.forName(stackTraceElement.getClassName()).getMethod(stackTraceElement.getMethodName());
+                if( m.getAnnotations() != null && m.getAnnotations().length > 0) {
+                    for (Annotation a : m.getAnnotations()) {
+                        if (a.toString().indexOf("@org.junit.After") >= 0 || a.toString().indexOf("@org.junit.AfterClass") >= 0) {
+                            return true;
+                        }
+                    }
+                }
+            } catch(Exception ex) {}
+        }
+        return false;
     }
 
     private Object skipStepMethod(final Object obj, Method method, final Object[] args, final MethodProxy proxy) throws Exception {

@@ -790,10 +790,10 @@ public class WebDriverFactory {
                                            : DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
 
     }
-    
+
     public static boolean isAlive(final WebDriver driver) {
         try {
-            driver.getTitle();
+            driver.getCurrentUrl();
         } catch (Exception e) {
             return false;
         }

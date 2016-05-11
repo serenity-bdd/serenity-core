@@ -15,7 +15,7 @@ class WhenTakingScreenshotsFromDiedBrowser extends Specification {
     def "when a photo session with died browser is used it should not take a photo"() {
         given:
             def driver = Mock(WebDriver)
-            driver.getTitle() >> { throw new NoSuchWindowException("Some exception ") };
+            driver.getCurrentUrl() >> { throw new NoSuchWindowException("Some exception ") };
             def session = new PhotoSession(driver, folder.newFolder().toPath(), BlurLevel.NONE)
         when:
             def photo = session.takeScreenshot()
@@ -26,7 +26,7 @@ class WhenTakingScreenshotsFromDiedBrowser extends Specification {
     def "when a for saving page source died  is used browser it should not try to save page source"() {
         given:
             def driver = Mock(WebDriver)
-            driver.getTitle() >> { throw new NoSuchWindowException("Some exception ") };
+            driver.getCurrentUrl() >> { throw new NoSuchWindowException("Some exception ") };
             def recorder = new PageSourceRecorder(driver)
         when:
             def photo = recorder.intoDirectory(folder.newFolder().toPath())

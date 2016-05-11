@@ -790,15 +790,22 @@ public class WebDriverFactory {
                                            : DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
 
     }
-    
+
     public static boolean isAlive(final WebDriver driver) {
         try {
-            driver.getTitle();
+            WebDriver local = driver;
+            if(driver instanceof WebDriverFacade){
+                local = ((WebDriverFacade)driver).getDriverInstance();
+            }
+            if(!(local instanceof AppiumDriver)){
+                local.getCurrentUrl();
+            }
         } catch (Exception e) {
             return false;
         }
         return true;
     }
+
     public static boolean isNotAlive(final WebDriver driver){
         return !isAlive(driver);
     }

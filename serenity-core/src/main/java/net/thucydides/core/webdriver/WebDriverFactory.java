@@ -805,7 +805,7 @@ public class WebDriverFactory {
         }
         return true;
     }
-    
+
     public static boolean isNotAlive(final WebDriver driver){
         return !isAlive(driver);
     }

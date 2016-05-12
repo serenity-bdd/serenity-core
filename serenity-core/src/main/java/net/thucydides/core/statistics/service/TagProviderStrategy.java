@@ -1,6 +1,5 @@
 package net.thucydides.core.statistics.service;
 
-import java.util.Iterator;
 
 public interface TagProviderStrategy {
 

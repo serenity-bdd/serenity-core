@@ -1,1 +1,1 @@
-net.thucydides.core.statistics.service.JUnitCleanupMethodAnnotationProvider
+net.thucydides.core.steps.service.JUnitCleanupMethodAnnotationProvider

@@ -14,7 +14,7 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.stacktrace.StackTraceSanitizer;
-import net.thucydides.core.statistics.service.CleanupMethodAnnotationProvider;
+import net.thucydides.core.steps.service.CleanupMethodAnnotationProvider;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.internal.AssumptionViolatedException;

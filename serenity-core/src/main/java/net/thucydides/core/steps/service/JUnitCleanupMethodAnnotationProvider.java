@@ -1,5 +1,7 @@
-package net.thucydides.core.statistics.service;
+package net.thucydides.core.steps.service;
 
+
+import net.thucydides.core.steps.service.CleanupMethodAnnotationProvider;
 
 import java.util.ArrayList;
 import java.util.List;

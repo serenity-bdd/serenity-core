@@ -1,4 +1,4 @@
-package net.thucydides.core.statistics.service;
+package net.thucydides.core.steps.service;
 
 
 import java.util.List;

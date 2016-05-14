@@ -66,7 +66,8 @@ public class RetryFilteringRunNotifier extends RunNotifierDecorator {
             Method testMethod =  failure.getDescription().getTestClass().getMethod(failure.getDescription().getMethodName());
             Test testAnnotation = testMethod.getAnnotation(Test.class);
             if (testAnnotation.expected() != null) {
-                return (failure.getException().getClass().isAssignableFrom(testAnnotation.expected()));
+                return (testAnnotation.expected().isAssignableFrom(failure.getException().getClass()));
+//                return (failure.getException().getClass().isAssignableFrom(testAnnotation.expected()));
             }
         } catch (NoSuchMethodException e) {
             return false;

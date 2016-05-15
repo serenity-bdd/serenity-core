@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import net.serenitybdd.core.di.DependencyInjector;
+import net.serenitybdd.core.exceptions.StepInitialisationException;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -77,7 +78,11 @@ public class StepFactory {
     }
 
     public <T> T getNewStepLibraryFor(final Class<T> scenarioStepsClass) {
-        return instantiateNewStepLibraryFor(scenarioStepsClass);
+        try {
+            return instantiateNewStepLibraryFor(scenarioStepsClass);
+        } catch (RuntimeException stepCreationFailed) {
+            throw new StepInitialisationException("Failed to create step library for " + scenarioStepsClass.getSimpleName() + ":" + stepCreationFailed.getMessage(), stepCreationFailed);
+        }
     }
 
     public <T> T getUniqueStepLibraryFor(final Class<T> scenarioStepsClass) {

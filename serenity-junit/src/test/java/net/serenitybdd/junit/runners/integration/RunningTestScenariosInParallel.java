@@ -56,7 +56,7 @@ public class RunningTestScenariosInParallel extends AbstractTestStepRunnerTest {
     @Test
     public void the_test_runner_records_the_steps_as_they_are_executed() throws InitializationError, InterruptedException {
 
-        List<ScenarioThread> threads = new ArrayList<ScenarioThread>();
+        List<ScenarioThread> threads = new ArrayList<>();
 
         for(int i = 0; i < 10; i++) {
             threads.add(new ScenarioThread());

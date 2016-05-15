@@ -372,4 +372,5 @@ class WhenReadingUIValues extends Specification {
         Presence.of(target).viewedBy(actor).asList() == [true, false]
     }
 
+
 }

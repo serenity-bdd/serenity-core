@@ -261,8 +261,8 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         return webDriverFactory.currentTimeoutFor(getProxiedDriver());
     }
 
-    public void resetTimeouts() {
-        webDriverFactory.resetTimeouts(getProxiedDriver());
+    public Duration resetTimeouts() {
+        return webDriverFactory.resetTimeouts(getProxiedDriver());
     }
 
 

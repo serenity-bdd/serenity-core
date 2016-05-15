@@ -475,10 +475,11 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     @Override
-    public void resetTimeouts() {
+    public Duration resetTimeouts() {
         if (driver instanceof ConfigurableTimeouts) {
-            ((ConfigurableTimeouts) driver).resetTimeouts();
+            return ((ConfigurableTimeouts) driver).resetTimeouts();
         }
+        return DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
     }
 
     public String getFoundBy() {

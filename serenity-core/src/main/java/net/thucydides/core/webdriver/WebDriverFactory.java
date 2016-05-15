@@ -778,20 +778,23 @@ public class WebDriverFactory {
         return storedTimeoutValue.or(getDefaultImplicitTimeout());
     }
 
-    public void resetTimeouts(WebDriver proxiedDriver) {
+    public Duration resetTimeouts(WebDriver proxiedDriver) {
         Duration currentTimeout = currentTimeoutFor(proxiedDriver);
-        if (timeoutStack.containsTimeoutFor(proxiedDriver)) {
-            timeoutStack.popTimeoutFor(proxiedDriver);
-            Duration previousTimeout = currentTimeoutFor(proxiedDriver);//timeoutStack.popTimeoutFor(proxiedDriver).or(getDefaultImplicitTimeout());
-            if ((currentTimeout != previousTimeout)  && isNotAMocked(proxiedDriver)) {
-                proxiedDriver.manage().timeouts().implicitlyWait(previousTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
-            }
+        if (!timeoutStack.containsTimeoutFor(proxiedDriver)) {
+            return currentTimeout;
         }
+
+        timeoutStack.popTimeoutFor(proxiedDriver);
+        Duration previousTimeout = currentTimeoutFor(proxiedDriver);//timeoutStack.popTimeoutFor(proxiedDriver).or(getDefaultImplicitTimeout());
+        if ((currentTimeout != previousTimeout)  && isNotAMocked(proxiedDriver)) {
+            proxiedDriver.manage().timeouts().implicitlyWait(previousTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
+        }
+        return previousTimeout;
     }
 
     public Duration getDefaultImplicitTimeout() {
-        Integer configuredTimeout = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables);
-        return (configuredTimeout != null) ? new Duration(configuredTimeout, TimeUnit.MILLISECONDS)
+        String configuredTimeoutValue = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.from(environmentVariables);
+        return (configuredTimeoutValue != null) ? new Duration(Integer.valueOf(configuredTimeoutValue), TimeUnit.MILLISECONDS)
                                            : DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
 
     }

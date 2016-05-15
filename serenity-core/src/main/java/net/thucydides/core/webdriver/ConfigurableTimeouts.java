@@ -11,5 +11,5 @@ public interface ConfigurableTimeouts {
 
     Duration getCurrentImplicitTimeout();
 
-    public void resetTimeouts();
+    public Duration resetTimeouts();
 }

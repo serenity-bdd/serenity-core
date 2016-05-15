@@ -89,15 +89,6 @@ public abstract class PageObject {
         setDriverImplicitTimeout(waitForElementTimeout);
     }
 
-    public void resetImplicitTimeout() {
-        if (driver instanceof ConfigurableTimeouts) {
-            ((ConfigurableTimeouts) driver).resetTimeouts();
-        } else {
-            Duration defaultImplicitTimeout = getDefaultImplicitTimeout();
-            driver.manage().timeouts().implicitlyWait(defaultImplicitTimeout.in(MILLISECONDS), MILLISECONDS);
-        }
-    }
-
     private void setDriverImplicitTimeout(Duration implicitTimeout) {
         if (driver instanceof ConfigurableTimeouts) {
             ((ConfigurableTimeouts) driver).setImplicitTimeout(implicitTimeout);
@@ -106,6 +97,14 @@ public abstract class PageObject {
         }
     }
 
+    public void resetImplicitTimeout() {
+        if (driver instanceof ConfigurableTimeouts) {
+            waitForElementTimeout = ((ConfigurableTimeouts) driver).resetTimeouts();
+        } else {
+            waitForElementTimeout = getDefaultImplicitTimeout();
+            driver.manage().timeouts().implicitlyWait(waitForElementTimeout.in(MILLISECONDS), MILLISECONDS);
+        }
+    }
     private Duration getDefaultImplicitTimeout() {
         Integer configuredTimeout = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables);
         return new Duration(configuredTimeout, TimeUnit.MILLISECONDS);

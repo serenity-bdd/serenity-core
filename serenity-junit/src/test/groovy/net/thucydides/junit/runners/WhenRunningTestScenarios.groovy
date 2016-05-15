@@ -1,6 +1,7 @@
 package net.thucydides.junit.runners
 
 import net.serenitybdd.junit.runners.SerenityRunner
+import net.thucydides.core.model.TestResult
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration
@@ -51,6 +52,15 @@ class WhenRunningTestScenarios extends Specification {
         runner.testOutcomes.size() == 3
     }
 
+    def "should be able to use page objects directly in a test"() {
+        given:
+            def runner = new SerenityRunner(SamplePassingScenarioWithPageObjects)
+        when:
+            runner.run(new RunNotifier())
+        then:
+            runner.testOutcomes.get(0).result == TestResult.SUCCESS
+    }
+
 
     def "should be able to record the driver used for a test"() {
         given:
@@ -69,6 +79,7 @@ class WhenRunningTestScenarios extends Specification {
             runner.run(new RunNotifier())
             def drivers = runner.testOutcomes.collect {it.driver}
         then:
+            def results = resultsFrom(outcomes)
             drivers.contains("htmlunit")
     }
 

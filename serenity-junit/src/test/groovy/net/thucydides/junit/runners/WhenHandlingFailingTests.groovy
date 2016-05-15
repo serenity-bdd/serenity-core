@@ -120,13 +120,31 @@ class WhenHandlingFailingTests extends Specification {
         }
     }
 
-    def "should report tests with an unexpected exception as failing"() {
+    def "should report tests with an unexpected exception as errors"() {
         given:
             def runner = new SerenityRunner(ATestWithAnUnexpectedException)
         when:
             runner.run(new RunNotifier())
         then:
             runner.testOutcomes.get(0).result == TestResult.ERROR
+    }
+
+    @RunWith(SerenityRunner)
+    static class ATestWithAnUnexpectedFailure {
+
+        @Test(expected=IllegalStateException)
+        public void shouldThrowAnIllegalStateException() {
+            throw new AssertionError()
+        }
+    }
+
+    def "should report tests with an unexpected failure as failing"() {
+        given:
+            def runner = new SerenityRunner(ATestWithAnUnexpectedFailure)
+        when:
+            runner.run(new RunNotifier())
+        then:
+            runner.testOutcomes.get(0).result == TestResult.FAILURE
     }
 
 }

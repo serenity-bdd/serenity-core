@@ -1,18 +1,15 @@
 package net.thucydides.core.reports
 
-import net.thucydides.core.model.Story
-import net.thucydides.core.model.TestOutcome
-import net.thucydides.core.model.TestResult
-import net.thucydides.core.model.TestStep
-import net.thucydides.core.model.TestTag
+import com.google.common.base.Optional
+import net.thucydides.core.model.*
 import net.thucydides.core.model.features.ApplicationFeature
 import net.thucydides.core.reports.json.JSONTestOutcomeReporter
 import net.thucydides.core.reports.xml.XMLTestOutcomeReporter
 import org.joda.time.DateTime
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
+import spock.lang.Ignore
 import spock.lang.Specification
-import com.google.common.base.Optional
 
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
@@ -54,6 +51,7 @@ class WhenWritingAndReadingTestOutcomes extends Specification {
 
     }
 
+    @Ignore("Deprecated")
     def "should be possible generate and load reports concurrently"(
         def AcceptanceTestReporter reporter, def AcceptanceTestLoader loader) {
         given:

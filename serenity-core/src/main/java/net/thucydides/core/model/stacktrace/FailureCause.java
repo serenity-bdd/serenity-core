@@ -2,6 +2,7 @@ package net.thucydides.core.model.stacktrace;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.exceptions.UnrecognisedException;
 import net.thucydides.core.model.TestFailureException;
@@ -198,16 +199,31 @@ public class FailureCause {
     }
 
     private String withCollapedAssertionError(String message) {
-        return (message.contains("AssertionError")
-                || message.contains("Expected")
-                || message.contains("Expecting")) ?
-                message.replace("\r\n", "")
-                        .replace("\\r\\n", "")
-                        .replace("/r/n", "")
-                        .replace("\n", "")
-                        .replace("\\n","")
-                        .replace("/n", "")
-                        .replace("     ", " ")
-                        .replace("java.lang.AssertionError", "") : message;
+        if (shouldCollapseAssertionsFor(message)) {
+            return message.replace("\r\n", "")
+                            .replace("\\r\\n", "")
+                            .replace("/r/n", "")
+                            .replace("\n", "")
+                            .replace("\\n", "")
+                            .replace("/n", "")
+                            .replace("     ", " ")
+                            .replace("java.lang.AssertionError", "");
+        }
+        return message;
+    }
+
+    private final List<String> COLLAPSE_NEW_LINE_HINTS = ImmutableList.of(
+            "AssertionError",
+            "Expected",
+            "Expecting",
+            "ComparisonFailure");
+
+    private boolean shouldCollapseAssertionsFor(String message) {
+        for(String collapseHint : COLLAPSE_NEW_LINE_HINTS) {
+            if (message.toLowerCase().contains(collapseHint.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

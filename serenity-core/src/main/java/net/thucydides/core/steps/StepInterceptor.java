@@ -389,9 +389,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
                                          final boolean addMarkup) {
         StringBuilder testName = new StringBuilder(method.getName());
         testName.append(": ");
-        if (addMarkup) {
-            testName.append("<span class='step-parameter'>");
-        }
+
         boolean isFirst = true;
         for (Object arg : args) {
             if (!isFirst) {
@@ -399,9 +397,6 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
             }
             testName.append(StepArgumentWriter.readableFormOf(arg));
             isFirst = false;
-        }
-        if (addMarkup) {
-            testName.append("</span>");
         }
         return testName.toString();
     }

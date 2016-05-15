@@ -403,11 +403,9 @@ public class Formatter {
     }
 
     public String formatWithFields(String textToFormat, List<String> fields) {
-        String textWithEscapedFields = textToFormat;
-        for (String field : fields) {
-            textWithEscapedFields = textWithEscapedFields.replaceAll("<" + field + ">", "&lt;" + field + "&gt;");
-        }
+        String textWithEscapedFields = textToFormat.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
         return addLineBreaks(removeMacros(convertAnyTables(textWithEscapedFields)));
+
     }
 
     private String removeMacros(String textToFormat) {

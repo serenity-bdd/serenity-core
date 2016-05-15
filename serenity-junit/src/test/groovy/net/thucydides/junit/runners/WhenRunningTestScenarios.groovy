@@ -79,7 +79,6 @@ class WhenRunningTestScenarios extends Specification {
             runner.run(new RunNotifier())
             def drivers = runner.testOutcomes.collect {it.driver}
         then:
-            def results = resultsFrom(outcomes)
             drivers.contains("htmlunit")
     }
 
@@ -418,7 +417,7 @@ class WhenRunningTestScenarios extends Specification {
         def outcome = runner.testOutcomes[0]
         def firstStep = outcome.testSteps[0]
         then:
-        firstStep.description == "Step with a parameter: <span class='step-parameter'>proportionOf</span>"
+        firstStep.description == "Step with a parameter: proportionOf"
     }
 
     def "steps with multiple parameters should contain the parameter values in the description"() {
@@ -429,7 +428,7 @@ class WhenRunningTestScenarios extends Specification {
         def outcome = runner.testOutcomes[0]
         def firstStep = outcome.testSteps[1]
         then:
-        firstStep.description == "Step with two parameters: <span class='step-parameter'>proportionOf, 2</span>"
+        firstStep.description == "Step with two parameters: proportionOf, 2"
     }
 
     def "should be able to override scenario titles using the @Title annotation"() {

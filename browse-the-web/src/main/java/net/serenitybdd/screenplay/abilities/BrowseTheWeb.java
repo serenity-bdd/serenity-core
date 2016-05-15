@@ -9,6 +9,7 @@ import net.serenitybdd.screenplay.events.ActorAsksQuestion;
 import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorPerforms;
+import net.serenitybdd.screenplay.exceptions.ActorCannotBrowseTheWebException;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.PageObjectDependencyInjector;
@@ -40,6 +41,9 @@ public class BrowseTheWeb extends PageObject implements Ability {
     }
 
     public static BrowseTheWeb as(Actor actor) {
+        if (actor.abilityTo(BrowseTheWeb.class) == null) {
+            throw new ActorCannotBrowseTheWebException(actor.getName());
+        }
         return actor.abilityTo(BrowseTheWeb.class).asActor(actor);
     }
 

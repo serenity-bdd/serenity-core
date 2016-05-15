@@ -1,8 +1,9 @@
 package net.thucydides.junit.runners
 
+import net.serenitybdd.junit.runners.SerenityRunner
 import net.thucydides.core.util.MockEnvironmentVariables
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration
 import net.thucydides.core.webdriver.SerenityWebdriverManager
+import net.thucydides.core.webdriver.SystemPropertiesConfiguration
 import net.thucydides.core.webdriver.WebDriverFactory
 import net.thucydides.core.webdriver.WebdriverInstanceFactory
 import net.thucydides.samples.*
@@ -51,9 +52,40 @@ class WhenRunningTestScenarios extends Specification {
     }
 
 
-    def "should be able to specify a different driver for an individual test"() {
+    def "should be able to record the driver used for a test"() {
         given:
-            def runner = new ThucydidesRunner(SamplePassingScenarioUsingDifferentBrowsersForEachTest, webDriverFactory)
+            def runner = new SerenityRunner(SamplePassingScenarioUsingFirefox);
+        when:
+            runner.run(new RunNotifier())
+            def drivers = runner.testOutcomes.collect {it.driver}
+        then:
+            drivers.contains("firefox")
+    }
+
+    def "should be able to record the driver used for a test when a different driver is specified"() {
+        given:
+            def runner = new SerenityRunner(SamplePassingScenarioUsingHtmlUnit);
+        when:
+            runner.run(new RunNotifier())
+            def drivers = runner.testOutcomes.collect {it.driver}
+        then:
+            drivers.contains("htmlunit")
+    }
+
+    def "should not record a driver used for a non-web test"() {
+        given:
+            def runner = new SerenityRunner(SamplePassingNonWebScenario, webDriverFactory)
+        when:
+            runner.run(new RunNotifier())
+            List<String> drivers = runner.testOutcomes.collect {it.driver}
+        then:
+            drivers.each { driver -> assert driver == null }
+    }
+
+
+    def "should be able to record a different driver for an individual test"() {
+        given:
+            def runner = new SerenityRunner(SamplePassingScenarioUsingDifferentBrowsersForEachTest, webDriverFactory)
         when:
             runner.run(new RunNotifier())
             def drivers = runner.testOutcomes.collect {it.driver}
@@ -94,6 +126,16 @@ class WhenRunningTestScenarios extends Specification {
         results["jills_test"].result == SUCCESS
         results["no_ones_test"].result == SUCCESS
 
+    }
+
+    def "should mark @manual tests as manual"() {
+        given:
+            def runner = new ThucydidesRunner(SampleManualScenario, webDriverFactory)
+        when:
+            runner.run(new RunNotifier())
+            def outcomes = runner.testOutcomes;
+        then:
+            outcomes[0].isManual()
     }
 
     def "an error in a nested non-step method should cause the test to fail"() {

@@ -193,6 +193,11 @@ public class WebDriverFactory {
             } else {
                 driver = newDriverInstanceFrom(driverClass);
             }
+
+            if (driver == null) {
+                throw new UnsupportedDriverException("Failed to instantiate " + driverClass);
+            }
+
             setImplicitTimeoutsIfSpecified(driver);
             redimensionBrowser(driver);
 

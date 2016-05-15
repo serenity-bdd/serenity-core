@@ -18,7 +18,9 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.safari.SafariDriver;
 
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.List;
 
 /**
@@ -38,17 +40,23 @@ public class WebdriverInstanceFactory {
 
     public WebDriver newRemoteDriver(URL remoteUrl, Capabilities capabilities) {
         try {
+            ensureHostIsAvailableAt(remoteUrl);
             RemoteWebDriver driver = new RemoteWebDriver(remoteUrl, capabilities);
             driverProperties.registerCapabilities("remote", driver.getCapabilities());
             return driver;
         } catch (UnreachableBrowserException unreachableBrowser) {
             String errorMessage = unreachableBrowserErrorMessage(unreachableBrowser);
             throw new SerenityManagedException(errorMessage, unreachableBrowser);
-
+        } catch (UnknownHostException unknownHost) {
+            throw new SerenityManagedException(unknownHost.getMessage(), unknownHost);
         }
     }
 
-    private String unreachableBrowserErrorMessage(UnreachableBrowserException unreachableBrowser) {
+    private void ensureHostIsAvailableAt(URL remoteUrl) throws UnknownHostException {
+        InetAddress.getByName(remoteUrl.getHost());
+    }
+
+    private String unreachableBrowserErrorMessage(Exception unreachableBrowser) {
         List<String> errorLines =  Splitter.onPattern("\n").splitToList(unreachableBrowser.getLocalizedMessage());
         Throwable cause = unreachableBrowser.getCause();
         String errorCause = ((cause == null) ? "" :

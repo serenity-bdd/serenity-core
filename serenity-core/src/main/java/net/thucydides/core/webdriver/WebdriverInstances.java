@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver;
 
+import com.google.common.collect.Lists;
 import net.serenitybdd.core.pages.DefaultTimeouts;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
@@ -135,6 +136,36 @@ public class WebdriverInstances {
             }
         }
         throw new IllegalStateException("No matching driver found in this thread");
+    }
+
+    public List<WebDriver> getActiveDrivers() {
+        List<WebDriver> activeDrivers = Lists.newArrayList();
+        for(WebDriver webDriver : driverMap.values() ) {
+            if (!(webDriver instanceof WebDriverFacade)) {
+                activeDrivers.add(webDriver);
+                continue;
+            }
+
+            if (((WebDriverFacade) webDriver).isInstantiated()) {
+                activeDrivers.add(webDriver);
+            }
+        }
+        return activeDrivers;
+    }
+
+    public List<String> getActiveDriverTypes() {
+        List<String> activeDrivers = Lists.newArrayList();
+        for(WebDriver webDriver : driverMap.values() ) {
+            if (!(webDriver instanceof WebDriverFacade)) {
+                activeDrivers.add(driverNameFor(webDriver));
+                continue;
+            }
+
+            if (((WebDriverFacade) webDriver).isInstantiated()) {
+                activeDrivers.add(driverNameFor(webDriver));
+            }
+        }
+        return activeDrivers;
     }
 
     public final class InstanceRegistration {

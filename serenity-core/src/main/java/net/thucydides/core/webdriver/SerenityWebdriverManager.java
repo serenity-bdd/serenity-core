@@ -1,14 +1,17 @@
 package net.thucydides.core.webdriver;
 
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.SessionId;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Manage WebDriver instances.
@@ -29,6 +32,8 @@ public class SerenityWebdriverManager implements WebdriverManager {
     private final Configuration configuration;
 
     private final Set<WebDriver> allWebdriverInstances;
+
+    private Optional<String> overridenDefaultDriverType = Optional.absent();
 
     @Inject
     public SerenityWebdriverManager(final WebDriverFactory webDriverFactory, final Configuration configuration) {
@@ -57,7 +62,7 @@ public class SerenityWebdriverManager implements WebdriverManager {
 
     private static SupportedWebDriver getConfiguredWebDriverWithOverride(final Configuration configuration,
                                                                          final String driver) {
-        if (StringUtils.isEmpty(driver)) {
+        if (isEmpty(driver)) {
             return configuration.getDriverType();
         }  else {
             return SupportedWebDriver.getDriverTypeFor(driver);
@@ -97,7 +102,10 @@ public class SerenityWebdriverManager implements WebdriverManager {
     }
 
     public WebDriver getWebdriver() {
-        return instantiatedThreadLocalWebDriver(configuration, webDriverFactory, inThisTestThread().getCurrentDriverName());
+        return instantiatedThreadLocalWebDriver(configuration,
+                                                webDriverFactory,
+                                                getDefaultDriverType()
+                                                /*inThisTestThread().getCurrentDriverName()*/);
     }
 
     @Override
@@ -121,9 +129,30 @@ public class SerenityWebdriverManager implements WebdriverManager {
         inThisTestThread().setCurrentDriverTo(driver);
     }
 
+    @Override
+    public List<WebDriver> getRegisteredDrivers() {
+        return inThisTestThread().getActiveDrivers();
+    }
+
+    @Override
+    public List<String> getActiveDriverTypes() {
+        return inThisTestThread().getActiveDriverTypes();
+    }
+
     public String getCurrentDriverType() {
         return inThisTestThread().getCurrentDriverType();
     }
+
+    @Override
+    public String getDefaultDriverType() {
+        return overridenDefaultDriverType.or(configuration.getDriverType().name());
+    }
+
+    @Override
+    public void overrideDefaultDriverType(String driverType) {
+        overridenDefaultDriverType = Optional.fromNullable(isEmpty(driverType) ? null : driverType);
+    }
+
 
     public SessionId getSessionId() {
 
@@ -140,7 +169,7 @@ public class SerenityWebdriverManager implements WebdriverManager {
 
     public WebDriver getWebdriver(final String driverName) {
 
-        String name = (StringUtils.isEmpty(driverName)) ?  inThisTestThread().getCurrentDriverName() : driverName;
+        String name = (isEmpty(driverName)) ?  inThisTestThread().getCurrentDriverName() : driverName;
 
         WebDriver activeDriver = instantiatedThreadLocalWebDriver(configuration, webDriverFactory, name);
 
@@ -149,10 +178,13 @@ public class SerenityWebdriverManager implements WebdriverManager {
         return activeDriver;
     }
 
-    public WebDriver getWebdriverByName(String name) {
-        return getWebdriver(":" + name);
+    public WebDriver getWebdriverByName(String name, String driver) {
+        return getWebdriver(driver + ":" + name);
     }
 
+    public WebDriver getWebdriverByName(String name) {
+        return getWebdriverByName(name,configuration.getDriverType().name());
+    }
 
     private void registerDriverInGlobalDrivers(WebDriver activeDriver) {
         allWebdriverInstances.add(activeDriver);
@@ -172,7 +204,13 @@ public class SerenityWebdriverManager implements WebdriverManager {
     }
 
     private static String driverTypeOf(String driverName) {
-        return driverName.contains(":") ? driverName.substring(0, driverName.indexOf(":")) : driverName;
+//        if (driverName.trim().startsWith(":")) {
+//            return driverName.trim().substring(1);
+//        }
+        if (driverName.contains(":")) {
+            return driverName.substring(0, driverName.indexOf(":"));
+        }
+        return driverName;
     }
 
     public static WebdriverInstances inThisTestThread() {

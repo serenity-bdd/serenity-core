@@ -475,9 +475,6 @@ public class StepEventBus {
     }
 
     public void testRunFinished() {
-        //screenshotProcessor.waitUntilDone();
-        //screenshotProcessor.terminate();
-
         Darkroom.waitUntilClose();
 
     }

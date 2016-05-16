@@ -42,14 +42,17 @@ public class WebdriverInstances {
 
     public String getCurrentDriverType() {
         if (getCurrentDriver() == null) {
+            System.out.println("Webdriver Instances current driver = ''");
             return "";
         }
         if (getCurrentDriver() instanceof WebDriverFacade) {
+            System.out.println("Webdriver Instances current driver = " + ((WebDriverFacade) getCurrentDriver()).getDriverName());
             return ((WebDriverFacade) getCurrentDriver()).getDriverName();
         }
         if (getCurrentDriver().getClass().getName().contains("Mockito")) {
             return SupportedWebDriver.forClass(getCurrentDriver().getClass().getSuperclass()).name().toLowerCase();
         }
+        System.out.println("Webdriver Instances current driver = ''");
         return "";
     }
 

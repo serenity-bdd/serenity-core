@@ -139,11 +139,11 @@ public class ThucydidesWebDriverSupport {
 
     public static String getCurrentDriverName() {
         if (getWebdriverManager() == null) {
+            System.out.println("getCurrentDriverName = ''");
             return "";
         }
-//        return getWebdriverManager().getActiveDriverTypes().get(0);
+        System.out.println("getCurrentDriverName = " + getWebdriverManager().getCurrentDriverType());
         return getWebdriverManager().getCurrentDriverType();
-//        return (getWebdriverManager() != null) ? getWebdriverManager().getCurrentDriverType() : "";
     }
 
     public static String getDriversUsed() {

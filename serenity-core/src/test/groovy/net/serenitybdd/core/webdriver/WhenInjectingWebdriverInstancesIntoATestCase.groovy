@@ -6,6 +6,7 @@ import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport
 import net.thucydides.core.webdriver.WebDriverFactory
 import spock.lang.Specification
 
@@ -24,16 +25,7 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
         environmentVariables = new MockEnvironmentVariables();
         configuration = new SystemPropertiesConfiguration(environmentVariables);
         webdriverFactory = new WebDriverFactory(environmentVariables)
-    }
-
-	def "should inject @Managed driver field with a firefox instance by default"() {
-        given:
-            def testCase = new WithADefaultDriver();
-            def webdriverManager = new SerenityWebdriverManager(webdriverFactory, configuration)
-        when:
-            TestCaseAnnotations.forTestCase(testCase).injectDrivers(webdriverManager)
-        then:
-            testCase.driver && testCase.driver.driverClass.name.contains("Firefox")
+        ThucydidesWebDriverSupport.reset()
     }
 
     def "should inject @Managed driver field with the configured browser type by default if defined"() {
@@ -45,6 +37,16 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
             new TestCaseAnnotations(testCase, configuration).injectDrivers(webdriverManager)
         then:
           testCase.driver && testCase.driver.driverClass.name.contains("Chrome")
+    }
+
+    def "should inject @Managed driver field with a firefox instance by default"() {
+        given:
+        def testCase = new WithADefaultDriver();
+        def webdriverManager = new SerenityWebdriverManager(webdriverFactory, configuration)
+        when:
+        TestCaseAnnotations.forTestCase(testCase).injectDrivers(webdriverManager)
+        then:
+        testCase.driver && testCase.driver.driverClass.name.contains("Firefox")
     }
 
     static class WithADriverOfASpecifiedType {

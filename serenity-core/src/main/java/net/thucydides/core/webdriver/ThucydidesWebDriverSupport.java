@@ -32,6 +32,12 @@ public class ThucydidesWebDriverSupport {
         initStepFactoryUsing(getPages());
     }
 
+    public static void reset() {
+        webdriverManagerThreadLocal.remove();
+        pagesThreadLocal.remove();
+        stepFactoryThreadLocal.remove();
+    }
+
     public static boolean isInitialised() {
         return (webdriverManagerThreadLocal.get() != null);
     }

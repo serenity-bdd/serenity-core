@@ -11,17 +11,20 @@ import spock.lang.Specification
 
 class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
 
-
-    EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-    SystemPropertiesConfiguration configuration = new SystemPropertiesConfiguration(environmentVariables);
-
+    EnvironmentVariables environmentVariables;
+    SystemPropertiesConfiguration configuration;
+    WebDriverFactory webdriverFactory;
 
     static class WithADefaultDriver {
         @Managed driver;
     }
 
 
-    def webdriverFactory = new WebDriverFactory(environmentVariables)
+    def setup() {
+        environmentVariables = new MockEnvironmentVariables();
+        configuration = new SystemPropertiesConfiguration(environmentVariables);
+        webdriverFactory = new WebDriverFactory(environmentVariables)
+    }
 
 	def "should inject @Managed driver field with a firefox instance by default"() {
         given:

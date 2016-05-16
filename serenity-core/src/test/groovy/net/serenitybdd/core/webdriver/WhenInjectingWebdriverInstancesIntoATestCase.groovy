@@ -16,14 +16,17 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
     SystemPropertiesConfiguration configuration = new SystemPropertiesConfiguration(environmentVariables);
 
 
-    class WithADefaultDriver {
+    static class WithADefaultDriver {
         @Managed driver;
     }
+
+
+    def webdriverFactory = new WebDriverFactory(environmentVariables)
 
 	def "should inject @Managed driver field with a firefox instance by default"() {
         given:
             def testCase = new WithADefaultDriver();
-            def webdriverManager = new SerenityWebdriverManager(new WebDriverFactory(), configuration)
+            def webdriverManager = new SerenityWebdriverManager(webdriverFactory, configuration)
         when:
             TestCaseAnnotations.forTestCase(testCase).injectDrivers(webdriverManager)
         then:
@@ -33,7 +36,7 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
     def "should inject @Managed driver field with the configured browser type by default if defined"() {
         given:
             def testCase = new WithADefaultDriver();
-            def webdriverManager = new SerenityWebdriverManager(new WebDriverFactory(), configuration)
+            def webdriverManager = new SerenityWebdriverManager(webdriverFactory, configuration)
         when:
             environmentVariables.setProperty("webdriver.driver", "chrome")
             new TestCaseAnnotations(testCase, configuration).injectDrivers(webdriverManager)
@@ -41,21 +44,21 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
           testCase.driver && testCase.driver.driverClass.name.contains("Chrome")
     }
 
-    class WithADriverOfASpecifiedType {
+    static class WithADriverOfASpecifiedType {
         @Managed(driver="chrome") driver;
     }
 
     def "should inject @Managed driver field with a specified type if requested"() {
         given:
             def testCase = new WithADriverOfASpecifiedType();
-            def webdriverManager = new SerenityWebdriverManager(new WebDriverFactory(), configuration)
+            def webdriverManager = new SerenityWebdriverManager(webdriverFactory, configuration)
         when:
             TestCaseAnnotations.forTestCase(testCase).injectDrivers(webdriverManager)
         then:
             testCase.driver && testCase.driver.driverClass.name.contains("Chrome")
     }
 
-    class WithMultipleDrivers {
+    static class WithMultipleDrivers {
         @Managed driver1;
         @Managed driver2;
     }
@@ -63,7 +66,7 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
     def "should inject a different driver for each @Managed field"() {
         given:
             def testCase = new WithMultipleDrivers();
-            def webdriverManager = new SerenityWebdriverManager(new WebDriverFactory(), configuration)
+            def webdriverManager = new SerenityWebdriverManager(webdriverFactory, configuration)
         when:
             TestCaseAnnotations.forTestCase(testCase).injectDrivers(webdriverManager)
         then:
@@ -75,7 +78,7 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
     }
 
 
-    class WithMultipleDriversOfDifferentTypes {
+    static class WithMultipleDriversOfDifferentTypes {
         @Managed(driver = "firefox") driver1;
         @Managed(driver = "chrome") driver2;
     }
@@ -83,7 +86,7 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
     def "should inject a different driver for each @Managed field with different types"() {
         given:
             def testCase = new WithMultipleDriversOfDifferentTypes();
-            def webdriverManager = new SerenityWebdriverManager(new WebDriverFactory(), configuration)
+            def webdriverManager = new SerenityWebdriverManager(webdriverFactory, configuration)
         when:
             TestCaseAnnotations.forTestCase(testCase).injectDrivers(webdriverManager)
         then:
@@ -92,7 +95,7 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
             testCase.driver2 && testCase.driver2.driverClass.name.contains("Chrome")
     }
 
-    class WithMultipleDriversOfDifferentTypeWithADefaultValueFirst {
+    static class WithMultipleDriversOfDifferentTypeWithADefaultValueFirst {
         @Managed driver1;
         @Managed(driver = "chrome") driver2;
     }
@@ -100,7 +103,7 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
     def "should inject a different driver for each @Managed field with a mixture of types and defaults"() {
         given:
         def testCase = new WithMultipleDriversOfDifferentTypeWithADefaultValueFirst();
-        def webdriverManager = new SerenityWebdriverManager(new WebDriverFactory(), configuration)
+        def webdriverManager = new SerenityWebdriverManager(webdriverFactory, configuration)
         when:
         TestCaseAnnotations.forTestCase(testCase).injectDrivers(webdriverManager)
         then:
@@ -110,7 +113,7 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
     }
 
 
-    class WithMultipleDriversOfDifferentTypeWithADefaultValueLast {
+    static class WithMultipleDriversOfDifferentTypeWithADefaultValueLast {
         @Managed(driver = "chrome") driver1;
         @Managed driver2;
         @Managed driver3;
@@ -119,7 +122,7 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
     def "should inject a different driver for each @Managed field with a mixture of types and defaults with the default last"() {
         given:
             def testCase = new WithMultipleDriversOfDifferentTypeWithADefaultValueLast();
-            def webdriverManager = new SerenityWebdriverManager(new WebDriverFactory(), configuration)
+            def webdriverManager = new SerenityWebdriverManager(webdriverFactory, configuration)
         when:
             TestCaseAnnotations.forTestCase(testCase).injectDrivers(webdriverManager)
         then:

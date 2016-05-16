@@ -40,7 +40,7 @@ ext {
     commonsCollectionsVersion = '3.2.2'
     commonsLang3Version = '3.4'
     commonsCodecVersion = '1.10'
-    xstreamVersion = '1.4.8'
+    xstreamVersion = '1.4.9'
     jodaTimeVersion = '2.7'
     lambdajVersion = '2.3.3'
     gsonVersion = '2.4'
@@ -132,7 +132,7 @@ subprojects {
         if (!JavaVersion.current().isJava8Compatible()) {
             jvmArgs += ["-XX:MaxPermSize=256m"]
         }
-        maxParallelForks = Runtime.runtime.availableProcessors()
+//        maxParallelForks = Runtime.runtime.availableProcessors()
     }
 
     task integrationTests(type: Test) {
@@ -148,7 +148,7 @@ subprojects {
         if (!JavaVersion.current().isJava8Compatible()) {
             jvmArgs '-XX:MaxPermSize=256m'
         }
-        maxParallelForks = Runtime.runtime.availableProcessors()
+//        maxParallelForks = Runtime.runtime.availableProcessors()
     }
 
     test {

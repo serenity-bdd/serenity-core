@@ -132,6 +132,9 @@ subprojects {
         if (!JavaVersion.current().isJava8Compatible()) {
             jvmArgs += ["-XX:MaxPermSize=256m"]
         }
+        testLogging {
+            events "passed", "skipped", "failed", "standardOut", "standardError"
+        }
 //        maxParallelForks = Runtime.runtime.availableProcessors()
     }
 

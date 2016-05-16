@@ -67,7 +67,7 @@ dependencies {
         exclude group: 'net.sourceforge.htmlunit', module:'htmlunit'
     }
 
-    compile('io.appium:java-client:3.3.0') {
+    compile('io.appium:java-client:3.4.1') {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
         exclude group: 'cglib', module: 'cglib'

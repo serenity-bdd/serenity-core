@@ -22,14 +22,6 @@ public class TestConfiguration {
         this.theTestIsAnnotated = TestClassAnnotations.forTestClass(testClass);
     }
 
-    public boolean shouldRetryTest() {
-        return (ThucydidesSystemProperty.JUNIT_RETRY_TESTS.booleanFrom(configuration.getEnvironmentVariables()));
-    }
-
-    public int getMaxRetries() {
-        return shouldRetryTest() ? configuration.maxRetries() : 0;
-    }
-
     public boolean shouldClearMetadata() {
         return (!ThucydidesSystemProperty.THUCYDIDES_MAINTAIN_SESSION.booleanFrom(configuration.getEnvironmentVariables()));
     }

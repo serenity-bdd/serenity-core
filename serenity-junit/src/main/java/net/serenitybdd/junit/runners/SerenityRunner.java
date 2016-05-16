@@ -12,11 +12,9 @@ import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.batches.BatchManagerProvider;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.ReportService;
-import net.thucydides.core.statistics.TestCount;
 import net.thucydides.core.steps.PageObjectDependencyInjector;
 import net.thucydides.core.steps.StepAnnotations;
 import net.thucydides.core.steps.StepEventBus;
@@ -264,9 +262,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         if (!latestOutcome().isPresent()) {
             return;
         }
-        if (latestOutcome().get().getResult() == TestResult.IGNORED || latestOutcome().get().getResult() == TestResult.PENDING) {
-            notifier.fireTestIgnored(getDescription());
-        }
     }
 
     private void notifyTestSuiteFinished() {
@@ -327,14 +322,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     }
 
     private RunNotifier initializeRunNotifier(RunNotifier notifier) {
-        if (theTest.shouldRetryTest()) {
-            notifier.addListener(getStepListener());
-            return notifier;
-        } else {
-            RunNotifier notifierForSteps = new RunNotifier();
-            notifierForSteps.addListener(getStepListener());
-            return new RetryFilteringRunNotifier(notifier, notifierForSteps);
-        }
+        notifier.addListener(getStepListener());
+        return notifier;
     }
 
     private boolean shouldRetryTest() {
@@ -431,31 +420,13 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         FailureDetectingStepListener failureDetectingStepListener = new FailureDetectingStepListener();
         StepEventBus.getEventBus().registerListener(failureDetectingStepListener);
 
-        for (int attemptCount = 0; attemptCount < theTest.getMaxRetries() + 1; attemptCount += 1) {
-            if (notifier instanceof RetryFilteringRunNotifier) {
-                ((RetryFilteringRunNotifier) notifier).reset();
-            }
-            if (attemptCount > 0) {
-                logger.warn("{} failed, making attempt number {} out of 1 base call + {} retries",
-                            method.getName(), attemptCount, theTest.getMaxRetries());
-                StepEventBus.getEventBus().testRetried();
-            }
+        initializeTestSession();
+        prepareBrowserForTest();
+        additionalBrowserCleanup();
+        failureDetectingStepListener.reset();
 
-            initializeTestSession();
-            prepareBrowserForTest();
-            additionalBrowserCleanup();
-            failureDetectingStepListener.reset();
+        super.runChild(method, notifier);
 
-            super.runChild(method, notifier);
-
-            if (!failureDetectingStepListener.lastTestFailed()) {
-                break;
-            }
-        }
-
-        if (notifier instanceof RetryFilteringRunNotifier) {
-            ((RetryFilteringRunNotifier) notifier).flush();
-        }
     }
 
     private void clearMetadataIfRequired() {

@@ -22,18 +22,7 @@ import net.thucydides.junit.annotations.Concurrent;
 import net.thucydides.junit.annotations.TestData;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
 import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule;
-import net.thucydides.samples.NestedDatadrivenSteps;
-import net.thucydides.samples.SampleCSVDataDrivenScenario;
-import net.thucydides.samples.SampleDataDrivenIgnoredScenario;
-import net.thucydides.samples.SampleDataDrivenPendingScenario;
-import net.thucydides.samples.SampleDataDrivenScenario;
-import net.thucydides.samples.SampleDataDrivenScenarioWithExternalFailure;
-import net.thucydides.samples.SampleParallelDataDrivenScenario;
-import net.thucydides.samples.SamplePassingScenarioWithTestSpecificData;
-import net.thucydides.samples.SampleScenarioSteps;
-import net.thucydides.samples.SampleSingleDataDrivenScenario;
-import net.thucydides.samples.SampleSingleDataDrivenScenarioWithFailingAssumption;
-import net.thucydides.samples.SampleSingleSessionDataDrivenScenario;
+import net.thucydides.samples.*;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -46,6 +35,7 @@ import org.junit.runner.RunWith;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.WebDriver;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -60,8 +50,6 @@ import static net.thucydides.core.steps.stepdata.StepData.withTestDataFrom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static net.thucydides.core.webdriver.SystemPropertiesConfiguration.JUNIT_RETRY_TESTS;
-import static net.thucydides.core.webdriver.SystemPropertiesConfiguration.MAX_RETRIES;
 
 public class WhenRunningADataDrivenTestScenario {
 
@@ -82,8 +70,6 @@ public class WhenRunningADataDrivenTestScenario {
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
         environmentVariables = new MockEnvironmentVariables();
-        environmentVariables.setProperty(MAX_RETRIES, "1");
-        environmentVariables.setProperty(JUNIT_RETRY_TESTS, "true");
         configuration = new SystemPropertiesConfiguration(environmentVariables);
     }
 

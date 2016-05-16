@@ -1,7 +1,5 @@
 package net.serenitybdd.junit.runners;
 
-import net.serenitybdd.junit.runners.ParameterizedTestsOutcomeAggregator;
-import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.batches.BatchManagerProvider;
 import net.thucydides.core.model.TestOutcome;
@@ -12,9 +10,7 @@ import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
 import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule;
-import net.thucydides.samples.SampleCSVDataDrivenScenario;
 import net.thucydides.samples.SampleCSVDataDrivenScenarioWithDelays;
-import net.thucydides.samples.SampleDataDrivenScenario;
 import net.thucydides.samples.SampleDataDrivenScenarioWithDelays;
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,8 +21,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
-import static net.thucydides.core.webdriver.SystemPropertiesConfiguration.JUNIT_RETRY_TESTS;
-import static net.thucydides.core.webdriver.SystemPropertiesConfiguration.MAX_RETRIES;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -54,8 +48,6 @@ public class WhenRunningADataDrivenTestScenarioToCheckDuration {
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
         environmentVariables = new MockEnvironmentVariables();
-        environmentVariables.setProperty(MAX_RETRIES, "1");
-        environmentVariables.setProperty(JUNIT_RETRY_TESTS, "true");
         configuration = new SystemPropertiesConfiguration(environmentVariables);
     }
 

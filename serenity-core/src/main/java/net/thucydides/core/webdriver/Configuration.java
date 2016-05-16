@@ -61,6 +61,4 @@ public interface Configuration {
     Configuration withEnvironmentVariables(EnvironmentVariables environmentVariables);
 
     EnvironmentVariables getEnvironmentVariables();
-
-    int maxRetries();
 }

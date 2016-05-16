@@ -15,8 +15,6 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.notification.RunNotifier
 import spock.lang.Specification
-import static net.thucydides.core.webdriver.SystemPropertiesConfiguration.JUNIT_RETRY_TESTS
-import static net.thucydides.core.webdriver.SystemPropertiesConfiguration.MAX_RETRIES
 
 class WhenRunningADataDrivenTestScenarioWithQualifier extends Specification {
 
@@ -35,8 +33,6 @@ class WhenRunningADataDrivenTestScenarioWithQualifier extends Specification {
 
     def setup() {
         environmentVariables = new MockEnvironmentVariables();
-        environmentVariables.setProperty(MAX_RETRIES, "1");
-        environmentVariables.setProperty(JUNIT_RETRY_TESTS, "true");
         configuration = new SystemPropertiesConfiguration(environmentVariables);
     }
 

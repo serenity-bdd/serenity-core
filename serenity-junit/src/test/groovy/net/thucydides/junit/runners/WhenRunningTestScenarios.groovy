@@ -244,6 +244,7 @@ class WhenRunningTestScenarios extends Specification {
         results["edge_case_2"].testSteps.size() == 2
     }
 
+    @Unroll
     def "annotated tests should have expected results"() {
         given:
         def runner = new ThucydidesRunner(testclass, webDriverFactory)

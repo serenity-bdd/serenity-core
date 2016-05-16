@@ -44,9 +44,6 @@ public class SystemPropertiesConfiguration implements Configuration {
      */
     public static final String OUTPUT_DIRECTORY_PROPERTY = ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName();
 
-    private static final String MAVEN_BASE_DIR = "project.basedir";
-
-
     /**
      * If in system properties will be defined project.build.directory or project.reporting.OutputDirectory then it will
      * be used for output for serenity test reports.
@@ -71,10 +68,6 @@ public class SystemPropertiesConfiguration implements Configuration {
      */
     public static final String REFUSE_UNTRUSTED_CERTIFICATES
             = ThucydidesSystemProperty.REFUSE_UNTRUSTED_CERTIFICATES.getPropertyName();
-
-    public static final String MAX_RETRIES = "max.retries";
-
-    public static final String JUNIT_RETRY_TESTS="junit.retry.tests";
 
     /**
      * By default, reports will go here.
@@ -113,10 +106,6 @@ public class SystemPropertiesConfiguration implements Configuration {
 
     public EnvironmentVariables getEnvironmentVariables() {
         return environmentVariables;
-    }
-
-    public int maxRetries() {
-        return getEnvironmentVariables().getPropertyAsInteger(MAX_RETRIES, 0);
     }
 
     /**

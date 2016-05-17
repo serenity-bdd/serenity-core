@@ -312,7 +312,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
 
         initStepEventBus();
         if (webtestsAreSupported()) {
-            initPagesObjectUsing(webdriverManager.getWebdriver(requestedDriver));
+            WebDriver driver = ThucydidesWebDriverSupport.getWebdriverManager().getWebdriver(requestedDriver);
+            initPagesObjectUsing(driver);
             setStepListener(initListenersUsing(getPages()));
             initStepFactoryUsing(getPages());
         } else {

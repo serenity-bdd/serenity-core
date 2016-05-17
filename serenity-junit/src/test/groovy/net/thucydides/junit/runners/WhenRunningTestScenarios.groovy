@@ -26,7 +26,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def firefoxDriver = Mock(FirefoxDriver)
     def htmlUnitDriver = Mock(HtmlUnitDriver)
-    def webdriverInstanceFactory = Mock(WebdriverInstanceFactory)
+    def webdriverInstanceFactory = new WebdriverInstanceFactory()
     def environmentVariables = new MockEnvironmentVariables()
     def configuration = new SystemPropertiesConfiguration(environmentVariables)
     def webDriverFactory = new WebDriverFactory(webdriverInstanceFactory, environmentVariables)

@@ -433,8 +433,8 @@
                             <#assign errorMessageTitle = "">
                         </#if>
                         <td width="%" colspan="4" class="error-message-cell">
-                            <span class="error-message ellipsis"
-                                  title='${formatter.htmlAttributeCompatible(errorMessageTitle)}'><pre>${formatter.htmlAttributeCompatible(errorMessageTitle)!''}</pre></span>
+                            <div class="error-message ellipsis"
+                                  title='${formatter.htmlAttributeCompatible(errorMessageTitle)}'><pre>${formatter.htmlAttributeCompatible(errorMessageTitle)!''}</pre></div>
                             <#if step.nestedException?has_content>
                                 <@stacktrace cause=step.nestedException />
                             </#if>

@@ -34,9 +34,10 @@
                                     <#if (testOutcome.manual)><i class="fa fa-user manual" title="Manual test"></i></#if>
                                     <span style="display:none">${testOutcome.result}</span></td>
                                 <td class="${testOutcome.result}-text">
+                                    <div class="ellipsis">
                                     <a href="${relativeLink}${testOutcome.reportName}.html" class="ellipsis" title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage)}">
                                     ${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}
-                                    </a>
+                                    </a></div>
                                 </td>
 
                                 <td class="lightgreentext">${testOutcome.nestedStepCount}</td>

@@ -2,6 +2,7 @@ package net.thucydides.core.steps.stepdata;
 
 import au.com.bytecode.opencsv.CSVReader;
 import ch.lambdaj.function.convert.Converter;
+import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import net.thucydides.core.csv.FailedToInitializeTestData;
@@ -31,18 +32,18 @@ public class CSVTestDataSource implements TestDataSource {
     private final char quotechar;
     private final char escape;
     private final int skipLines;
-    private final String instantiatedPath;
+    private final List<String> instantiatedPaths;
     private List<String[]> csvDataRows;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CSVTestDataSource.class);
     FilePathParser testDataSourcePath = new FilePathParser(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
 
-    public CSVTestDataSource(final String path, final char separatorValue, final char quotechar, final char escape, final int skipLines) throws IOException {
+    public CSVTestDataSource(final List<String> paths, final char separatorValue, final char quotechar, final char escape, final int skipLines) throws IOException {
         this.separator = separatorValue;
         this.quotechar = quotechar;
         this.escape = escape;
         this.skipLines = skipLines;
-        this.instantiatedPath = testDataSourcePath.getInstanciatedPath(path);
+        this.instantiatedPaths = instantiated(paths);
 
 //        List<String[]> csvDataRows = getCSVDataFrom(getDataFileFor(instantiatedPath));
 //        String[] titleRow = csvDataRows.get(0);
@@ -55,27 +56,42 @@ public class CSVTestDataSource implements TestDataSource {
 //        });
     }
 
+    private List<String> instantiated(List<String> paths) {
+        List<String> instantiated = Lists.newArrayList();
+        for(String path : paths) {
+            instantiated.add(testDataSourcePath.getInstanciatedPath(path));
+        }
+        return instantiated;
+    }
+
     List<String[]> getDataRows() {
         if (csvDataRows == null) {
-            try (Reader reader = getDataFileFor(instantiatedPath)) {
-                csvDataRows = getCSVDataFrom(reader);
-            } catch (IOException e) {
-                LOGGER.error("Could not read test data file from {}", instantiatedPath, e);
+            csvDataRows = Lists.newArrayList();
+            for(String instantiatedPath : instantiatedPaths) {
+                try (Reader reader = getDataFileFor(instantiatedPath)) {
+                    csvDataRows.addAll(getCSVDataFrom(reader));
+                } catch (IOException e) {
+                    LOGGER.error("Could not read test data file from {}", instantiatedPath, e);
+                }
             }
         }
         return csvDataRows;
     }
 
     public CSVTestDataSource(final String path) throws IOException {
-        this(path, CSVReader.DEFAULT_SEPARATOR, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
+        this(ImmutableList.<String>of(path), CSVReader.DEFAULT_SEPARATOR, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
+    }
+
+    public CSVTestDataSource(final List<String> paths, final char separatorValue) throws IOException {
+        this(paths, separatorValue, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
     }
 
     public CSVTestDataSource(final String path, final char separatorValue) throws IOException {
-        this(path, separatorValue, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
+        this(ImmutableList.<String>of(path), separatorValue, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
     }
 
     public CSVTestDataSource(final String path, final char separatorValue, final char quotechar, final char escape) throws IOException {
-        this(path, separatorValue, quotechar, escape, CSVReader.DEFAULT_SKIP_LINES);
+        this(ImmutableList.<String>of(path), separatorValue, quotechar, escape, CSVReader.DEFAULT_SKIP_LINES);
     }
 
     public static boolean validTestDataPath(final String path) {
@@ -144,12 +160,15 @@ public class CSVTestDataSource implements TestDataSource {
     }
 
     public List<Map<String, String>> getData() {
-        try (Reader reader = getDataFileFor(instantiatedPath)) {
-            return loadTestDataFrom(getCSVDataFrom(reader));
-        } catch (IOException e) {
-            LOGGER.error("Could not read test data file from {}", instantiatedPath, e);
+        List<Map<String, String>> data = new ArrayList<>();
+        for(String instantiatedPath : instantiatedPaths) {
+            try (Reader reader = getDataFileFor(instantiatedPath)) {
+                data.addAll(loadTestDataFrom(getCSVDataFrom(reader)));
+            } catch (IOException e) {
+                LOGGER.error("Could not read test data file from {}", instantiatedPath, e);
+            }
         }
-        return ImmutableList.of();
+        return data;
     }
 
     public List<String> getHeaders() {

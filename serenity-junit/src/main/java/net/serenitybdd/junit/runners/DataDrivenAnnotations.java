@@ -1,6 +1,7 @@
 package net.serenitybdd.junit.runners;
 
 import ch.lambdaj.function.convert.Converter;
+import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Splitter;
 import net.thucydides.core.steps.stepdata.CSVTestDataSource;
 import net.thucydides.core.steps.stepdata.TestDataSource;
@@ -134,15 +135,19 @@ public class DataDrivenAnnotations {
     }
 
     @SuppressWarnings("MalformedRegex")
-    protected String findTestDataSource() {
+    protected List<String> findTestDataSource() {
         String paths = findTestDataSourcePaths();
+        List<String> validPaths = Lists.newArrayList();
         for (String path : Splitter.on(DATASOURCE_PATH_SEPARATORS).split(paths)) {
             if (CSVTestDataSource.validTestDataPath(path)) {
-                return path;
+                validPaths.add(path);
             }
         }
-        throw new IllegalArgumentException("No test data file found for path: " + paths);
+        if (validPaths.isEmpty()) {
+            throw new IllegalArgumentException("No test data file found for path: " + paths);
+        }
 
+        return validPaths;
     }
 
     protected String findTestDataSourcePaths() {

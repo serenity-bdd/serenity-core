@@ -53,12 +53,7 @@ public final class TestCaseAnnotations {
 
         String suffix = "";
         for(ManagedWebDriverAnnotatedField webDriverField : webDriverFields) {
-            System.out.println("Injecting webdriver field for " + webDriverField);
-            System.out.println("Webdriver field driver attribute =" + webDriverField.getDriver());
-            System.out.println("Configured driver type =" + configuredDriverType());
             String driverRootName = isNotEmpty(webDriverField.getDriver()) ?  webDriverField.getDriver() : configuredDriverType();
-
-
             String driverName = driverRootName + suffix;
             webDriverField.setValue(testCase, webdriverManager.getWebdriver(driverName));
 

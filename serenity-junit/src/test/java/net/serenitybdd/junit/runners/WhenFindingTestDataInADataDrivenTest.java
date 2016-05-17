@@ -320,6 +320,26 @@ public class WhenFindingTestDataInADataDrivenTest {
         MatcherAssert.assertThat(testScenarios.get(1).getAddress(), is("1 Main Street, Smithville"));
     }
 
+    @UseTestDataFrom(value="test-data/simple-semicolon-data.csv,test-data/simple-semicolon-data.csv", separator=';')
+    final static class CSVDataDrivenTestScenarioFromSeveralSourcesUsingSemiColons {}
+
+    @Test
+    public void should_load_test_class_instances_from_several_sources_using_semicolons() throws IOException {
+        TestClass testClass = new TestClass(CSVDataDrivenTestScenarioFromSeveralSourcesUsingSemiColons.class);
+        List<PersonTestScenario> testScenarios
+                = DataDrivenAnnotations.forClass(testClass).getDataAsInstancesOf(PersonTestScenario.class);
+
+        assertThat(testScenarios.size(), is(4));
+        MatcherAssert.assertThat(testScenarios.get(0).getName(), is("Joe Smith"));
+        MatcherAssert.assertThat(testScenarios.get(0).getAddress(), is("10 Main Street, Smithville"));
+        MatcherAssert.assertThat(testScenarios.get(1).getName(), is("Jack Black"));
+        MatcherAssert.assertThat(testScenarios.get(1).getAddress(), is("1 Main Street, Smithville"));
+        MatcherAssert.assertThat(testScenarios.get(2).getName(), is("Joe Smith"));
+        MatcherAssert.assertThat(testScenarios.get(2).getAddress(), is("10 Main Street, Smithville"));
+        MatcherAssert.assertThat(testScenarios.get(3).getName(), is("Jack Black"));
+        MatcherAssert.assertThat(testScenarios.get(3).getAddress(), is("1 Main Street, Smithville"));
+    }
+
     @Test
     public void should_be_able_to_get_data_Table_from_a_semicolon_delimited_csv() throws Throwable {
         TestClass testClass = new TestClass(CSVDataDrivenTestScenarioUsingSemiColons.class);

@@ -237,9 +237,11 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     private void generateNestedRequirementsReportsFor(Requirement parentRequirement, RequirementsOutcomes requirementsOutcomes) throws IOException {
         htmlRequirementsReporter.setOutputDirectory(getOutputDirectory());
         String reportName = reportNameProvider.forRequirement(parentRequirement);
+        String orphanReportName = reportNameProvider.forRequirement(parentRequirement.getName());
         if (!reportTally.contains(parentRequirement)) {
             reportTally.add(parentRequirement);
             htmlRequirementsReporter.generateReportFor(requirementsOutcomes, requirementsOutcomes.getTestOutcomes(), reportName);
+            htmlRequirementsReporter.generateReportFor(requirementsOutcomes, requirementsOutcomes.getTestOutcomes(), orphanReportName);
         }
 
         generateRequirementsReportsForChildRequirements(requirementsOutcomes);

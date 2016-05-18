@@ -36,7 +36,7 @@ public class SmartAnnotations extends Annotations {
 
     private final static Class<?>[] DEFAULT_ANNOTATION_METHOD_ARGUMENTS = new Class<?>[]{};
 
-    private static enum Strategies {
+    private enum Strategies {
         BYUIAUTOMATOR("uiAutomator") {
             @Override
             org.openqa.selenium.By getBy(Annotation annotation) {

@@ -135,7 +135,7 @@ subprojects {
 //        testLogging {
 //            events "passed", "skipped", "failed", "standardOut", "standardError"
 //        }
-//        maxParallelForks = Runtime.runtime.availableProcessors()
+        maxParallelForks = Runtime.runtime.availableProcessors()
     }
 
     task integrationTests(type: Test) {

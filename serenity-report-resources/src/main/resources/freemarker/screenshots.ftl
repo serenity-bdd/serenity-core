@@ -196,7 +196,7 @@
     <div id="contenttilttle">
         <#if (testOutcome.result == "FAILURE" || testOutcome.result == "ERROR")>
             <div class="screenshotFailure panel panel-danger">
-                <div class="panel-heading"><span class='error-caption ellipsis'>${testOutcome.result}: ${testOutcome.failureDetails.conciseErrorMessage}</span></div>
+                <div class="panel-heading"><span class='error-caption ellipsis'>${testOutcome.result}: ${formatter.htmlAttributeCompatible(testOutcome.failureDetails.conciseErrorMessage)}</span></div>
                 <div class="panel-body">
                     <a href="${testOutcome.failureDetails.pageSourceLink}" target="_blank" class="btn btn-info">HTML Source</a>
                 </div>

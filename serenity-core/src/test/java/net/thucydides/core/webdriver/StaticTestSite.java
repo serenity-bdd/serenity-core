@@ -10,7 +10,7 @@ import java.io.File;
 public class StaticTestSite {
 
     private WebDriverFactory factory;
-    private SerenityWebdriverManager webdriverManager;
+   // private SerenityWebdriverManager webdriverManager;
     private EnvironmentVariables environmentVariables;
 
     public StaticTestSite() {
@@ -20,7 +20,7 @@ public class StaticTestSite {
     public StaticTestSite(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
         factory = new WebDriverFactory(environmentVariables);
-        webdriverManager = new SerenityWebdriverManager(factory, new SystemPropertiesConfiguration(environmentVariables));
+        //webdriverManager = new SerenityWebdriverManager(factory, new SystemPropertiesConfiguration(environmentVariables));
     }
 
     private String homepage = "index.html";
@@ -32,12 +32,8 @@ public class StaticTestSite {
 
     public WebDriver open(String driverType) {
         environmentVariables.setProperty("chrome.switches","--homepage=about:blank,--no-first-run");
-        WebDriver driver;
-        if (driverType != null) {
-            driver = webdriverManager.getWebdriver(driverType);
-        } else {
-            driver = webdriverManager.getWebdriver();
-        }
+
+        WebDriver driver = ThucydidesWebDriverSupport.getWebdriverManager(factory, new SystemPropertiesConfiguration(environmentVariables)).getWebdriver(driverType);
         if (factory.usesSauceLabs()) {
             driver.get("http://wakaleo.com/thucydides-tests/" + homepage);
         } else {
@@ -48,11 +44,11 @@ public class StaticTestSite {
     }
 
     public void close() {
-        webdriverManager.closeAllCurrentDrivers();
+        ThucydidesWebDriverSupport.closeCurrentDrivers();
     }
 
     public WebDriver open(String remoteUrl, String correspondingLocalFile, String drivername) {
-        WebDriver driver = webdriverManager.getWebdriver(drivername);
+        WebDriver driver = ThucydidesWebDriverSupport.getWebdriverManager().getWebdriver(drivername);
         if (factory.usesSauceLabs()) {
             driver.get(remoteUrl);
         } else {
@@ -63,7 +59,7 @@ public class StaticTestSite {
     }
 
     public WebDriver open(String remoteUrl, String correspondingLocalFile) {
-        WebDriver driver = webdriverManager.getWebdriver();
+        WebDriver driver = ThucydidesWebDriverSupport.getWebdriverManager().getWebdriver();
         if (factory.usesSauceLabs()) {
             driver.get(remoteUrl);
         } else {

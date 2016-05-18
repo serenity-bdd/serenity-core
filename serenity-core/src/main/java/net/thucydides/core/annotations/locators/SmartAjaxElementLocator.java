@@ -147,7 +147,13 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
     }
 
     private int getTimeOutInSeconds() {
-        return (int) SerenityWebdriverManager.inThisTestThread().getCurrentImplicitTimeout().in(TimeUnit.SECONDS);
+        if (searchContext instanceof WebDriverFacade) {
+            return (int) ((WebDriverFacade) searchContext).getCurrentImplicitTimeout().in(TimeUnit.SECONDS);
+        }
+        if (searchContext instanceof WebElementFacade) {
+            return (int) ((WebElementFacade) searchContext).getCurrentImplicitTimeout().in(TimeUnit.SECONDS);
+        }
+        return 0;
     }
 
     private final static List<WebElement> EMPTY_LIST_OF_WEBELEMENTS = Lists.newArrayList();

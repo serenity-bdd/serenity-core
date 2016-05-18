@@ -17,6 +17,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Duration;
 
 import java.lang.reflect.Field;
+import java.util.concurrent.TimeUnit;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
@@ -49,6 +50,7 @@ public class WhenLocatingWebElements {
         StepEventBus.getEventBus().reset();
 
         when(driver.withTimeoutOf(any(Duration.class))).thenReturn(driver);
+        when(driver.getCurrentImplicitTimeout()).thenReturn(new Duration(0, TimeUnit.SECONDS));
         when(driver.findElement(By.id("someId"))).thenReturn(webElement);
         when(driver.findElements(By.id("someId"))).thenReturn(ImmutableList.of(webElement));
     }

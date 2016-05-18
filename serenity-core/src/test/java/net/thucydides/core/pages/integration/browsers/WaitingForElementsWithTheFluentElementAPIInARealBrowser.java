@@ -4,11 +4,9 @@ package net.thucydides.core.pages.integration.browsers;
 import net.thucydides.core.pages.integration.FluentElementAPITestsBaseClass;
 import net.thucydides.core.pages.integration.StaticSitePage;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.openqa.selenium.By;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -16,19 +14,16 @@ import static org.hamcrest.Matchers.is;
 
 public class WaitingForElementsWithTheFluentElementAPIInARealBrowser extends FluentElementAPITestsBaseClass {
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+    private StaticSitePage staticPage;
 
-    private static StaticSitePage staticPage;
-
-    @BeforeClass
-    public static void openBrowsers() {
+    @Before
+    public void openBrowsers() {
         staticPage = new StaticSitePage(ThucydidesWebDriverSupport.getWebdriverManager().getWebdriver("chrome"));
         staticPage.open();
     }
 
-    @AfterClass
-    public static void quitBrowsers() {
+    @After
+    public void quitBrowsers() {
         ThucydidesWebDriverSupport.getWebdriverManager().closeAllCurrentDrivers();
     }
 
@@ -39,8 +34,7 @@ public class WaitingForElementsWithTheFluentElementAPIInARealBrowser extends Flu
     @Test
     public void should_optionally_type_enter_after_entering_text() {
 
-//        StaticSitePage page = getChromePage();
-        // page.getDriver().navigate().refresh();
+        staticPage.getDriver().navigate().refresh();
 
         assertThat(staticPage.firstName.getAttribute("value"), is("<enter first name>"));
 
@@ -52,7 +46,6 @@ public class WaitingForElementsWithTheFluentElementAPIInARealBrowser extends Flu
     @Test
     public void should_be_able_to_build_composite_wait_until_enabled_clauses() throws InterruptedException {
         StaticSitePage page = getFirefoxPage();
-
         page.waitForCondition().until(page.firstAndLastNameAreEnabled());
     }
 

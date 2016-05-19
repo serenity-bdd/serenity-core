@@ -51,10 +51,10 @@ public class EventBusInterface {
     public boolean aStepHasFailed() { return StepEventBus.getEventBus().getBaseStepListener().aStepHasFailed(); }
 
     public boolean shouldIgnoreConsequences() {
-        if (StepEventBus.getEventBus().softAssertsActive()) {
-            return false;
-        }
-        return (StepEventBus.getEventBus().currentTestIsSuspended() || StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed());
+        if ((StepEventBus.getEventBus().currentTestIsSuspended() || StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed())) {
+            return true;
+        };
+        return (!StepEventBus.getEventBus().softAssertsActive());
     }
 
     public void enableSoftAsserts() {

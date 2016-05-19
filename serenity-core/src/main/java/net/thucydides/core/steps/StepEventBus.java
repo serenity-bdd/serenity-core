@@ -379,7 +379,7 @@ public class StepEventBus {
         if (softAssertsActive()) {
             return !webdriverSuspensions.isEmpty();
         }
-        return aStepInTheCurrentTestHasFailed() || !webdriverSuspensions.isEmpty();
+        return currentTestIsSuspended() || aStepInTheCurrentTestHasFailed() || !webdriverSuspensions.isEmpty();
     }
 
     public void reenableWebdriverCalls() {

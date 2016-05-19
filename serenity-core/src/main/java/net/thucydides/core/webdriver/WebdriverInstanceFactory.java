@@ -6,6 +6,8 @@ import io.appium.java_client.ios.IOSDriver;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -35,10 +37,16 @@ public class WebdriverInstanceFactory {
     }
 
     public WebDriver newInstanceOf(final Class<? extends WebDriver> webdriverClass) throws IllegalAccessException, InstantiationException {
+        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+            return new WebDriverStub();
+        }
         return webdriverClass.newInstance();
     }
 
     public WebDriver newRemoteDriver(URL remoteUrl, Capabilities capabilities) {
+        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+            return new WebDriverStub();
+        }
         try {
             ensureHostIsAvailableAt(remoteUrl);
             RemoteWebDriver driver = new RemoteWebDriver(remoteUrl, capabilities);
@@ -65,18 +73,27 @@ public class WebdriverInstanceFactory {
     }
 
     public WebDriver newFirefoxDriver(Capabilities capabilities) {
+        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+            return new WebDriverStub();
+        }
         FirefoxDriver driver = new FirefoxDriver(capabilities);
         driverProperties.registerCapabilities("firefox", driver.getCapabilities());
         return driver;
     }
 
     public WebDriver newChromeDriver(Capabilities capabilities) {
+        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+            return new WebDriverStub();
+        }
         ChromeDriver driver = new ChromeDriver(capabilities);
         driverProperties.registerCapabilities("chrome", driver.getCapabilities());
         return driver;
     }
 
     public WebDriver newAppiumDriver(URL hub, Capabilities capabilities, MobilePlatform platform) {
+        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+            return new WebDriverStub();
+        }
         switch (platform) {
             case ANDROID:
                 AndroidDriver androidDriver = new AndroidDriver(hub, capabilities);
@@ -91,30 +108,45 @@ public class WebdriverInstanceFactory {
     }
 
     public WebDriver newSafariDriver(Capabilities capabilities) {
+        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+            return new WebDriverStub();
+        }
         SafariDriver driver = new SafariDriver(capabilities);
         driverProperties.registerCapabilities("chrome", driver.getCapabilities());
         return driver;
     }
 
     public WebDriver newInternetExplorerDriver(Capabilities capabilities) {
+        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+            return new WebDriverStub();
+        }
         InternetExplorerDriver driver = new InternetExplorerDriver(capabilities);
         driverProperties.registerCapabilities("iexplorer", driver.getCapabilities());
         return driver;
     }
 
     public WebDriver newEdgeDriver(Capabilities capabilities) {
+        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+            return new WebDriverStub();
+        }
         EdgeDriver driver = new EdgeDriver(capabilities);
         driverProperties.registerCapabilities("edge", driver.getCapabilities());
         return driver;
     }
 
     public WebDriver newHtmlUnitDriver(Capabilities capabilities) {
+        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+            return new WebDriverStub();
+        }
         HtmlUnitDriver driver = new HtmlUnitDriver(capabilities);
         driverProperties.registerCapabilities("htmlunit", driver.getCapabilities());
         return driver;
     }
 
     public WebDriver newPhantomDriver(Capabilities capabilities) {
+        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+            return new WebDriverStub();
+        }
         PhantomJSDriver driver = new PhantomJSDriver(capabilities);
         driverProperties.registerCapabilities("phantomjs", driver.getCapabilities());
         return driver;

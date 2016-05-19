@@ -37,34 +37,27 @@ public class WhenInstanciatingAAppiumDriver {
             environmentVariables.setProperty("appium.browserName", "abc");
             new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
         } catch (UnsupportedDriverException couldNotFindDriver) {
-            assertThat(couldNotFindDriver.getCause().getMessage()).contains("The appium.platformName needs to be specified (either IOS or ANDROID)");
+            assertThat(couldNotFindDriver.getCause().getMessage())
+                    .contains("The appium.platformName needs to be specified (either IOS or ANDROID)");
         }
     }
 
-    @Test
+    @Test(expected = UnsupportedDriverException.class)
     public void should_start_mobile_browser_on_appium() {
-        try {
-            environmentVariables.setProperty("appium.browserName", "Browser");
-            environmentVariables.setProperty("appium.platformName", "Android");
-            environmentVariables.setProperty("appium.deviceName", "emulator-5554");
-            new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
-        } catch (UnsupportedDriverException couldNotFindDriver) {
-            assertThat(couldNotFindDriver.getCause().getMessage()).contains(" Unable to receive message from renderer");
-        }
+        environmentVariables.setProperty("appium.browserName", "Browser");
+        environmentVariables.setProperty("appium.platformName", "Android");
+        environmentVariables.setProperty("appium.deviceName", "emulator-5554");
+        new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
     }
 
-    @Test
-    public void should_ignore_browser_dimensions_on_appium() {
-        try {
-            environmentVariables.setProperty("appium.browserName", "Browser");
-            environmentVariables.setProperty("appium.platformName", "Android");
-            environmentVariables.setProperty("appium.deviceName", "emulator-5554");
-            environmentVariables.setProperty("serenity.browser.width", "1280");
-            environmentVariables.setProperty("serenity.browser.height", "1024");
-            new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
-        } catch (UnsupportedDriverException couldNotFindDriver) {
-            assertThat(couldNotFindDriver.getCause().getMessage()).contains(" Unable to receive message from renderer");
-        }
+    @Test(expected = UnsupportedDriverException.class)
+    public void should_ignoreWhenInstanciatingAAppiumDriver_browser_dimensions_on_appium() {
+        environmentVariables.setProperty("appium.browserName", "Browser");
+        environmentVariables.setProperty("appium.platformName", "Android");
+        environmentVariables.setProperty("appium.deviceName", "emulator-5554");
+        environmentVariables.setProperty("serenity.browser.width", "1280");
+        environmentVariables.setProperty("serenity.browser.height", "1024");
+        new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
     }
 
 }

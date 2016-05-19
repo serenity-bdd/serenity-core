@@ -593,7 +593,7 @@ public class WebDriverFactory {
     }
 
     private boolean supportsScreenResizing(final WebDriver driver) {
-        return isNotAMocked(driver) && (!isAnHtmlUnitDriver(getDriverClass(driver)));
+        return (!isAnAppiumDriver(getDriverClass(driver))) && isNotAMocked(driver) && (!isAnHtmlUnitDriver(getDriverClass(driver)));
     }
 
     private boolean isNotAMocked(WebDriver driver) {

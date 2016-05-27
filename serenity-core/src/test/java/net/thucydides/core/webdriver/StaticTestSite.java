@@ -44,7 +44,7 @@ public class StaticTestSite {
     }
 
     public void close() {
-        ThucydidesWebDriverSupport.closeCurrentDrivers();
+        ThucydidesWebDriverSupport.closeAllDrivers();
     }
 
     public WebDriver open(String remoteUrl, String correspondingLocalFile, String drivername) {

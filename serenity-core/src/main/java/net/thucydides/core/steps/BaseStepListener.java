@@ -292,7 +292,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public void testSuiteFinished() {
         Darkroom.waitUntilClose();
         clearStorywideTagsAndIssues();
-        ThucydidesWebDriverSupport.closeCurrentDrivers();
+        ThucydidesWebDriverSupport.closeAllDrivers();
         suiteStarted = false;
     }
 

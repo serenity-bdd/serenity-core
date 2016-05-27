@@ -44,7 +44,7 @@ public class WhenManagingWebdriverInstances {
         configuration = new SystemPropertiesConfiguration(environmentVariables);
         
         webdriverManager = new SerenityWebdriverManager(factory, configuration);
-        webdriverManager.closeAllCurrentDrivers();
+        webdriverManager.closeAllDrivers();
     }
 
 
@@ -58,7 +58,7 @@ public class WhenManagingWebdriverInstances {
 
     @After
     public void closeDriver() {
-        webdriverManager.closeAllCurrentDrivers();
+        webdriverManager.closeAllDrivers();
     }
 
     @Test
@@ -125,7 +125,7 @@ public class WhenManagingWebdriverInstances {
         aWebdriverManager.getWebdriver("chrome");
 
         assertThat(aWebdriverManager.getCurrentActiveWebdriverCount(), is(3));
-        aWebdriverManager.closeAllCurrentDrivers();
+        aWebdriverManager.closeAllDrivers();
         assertThat(aWebdriverManager.getCurrentActiveWebdriverCount(), is(0));
     }
 

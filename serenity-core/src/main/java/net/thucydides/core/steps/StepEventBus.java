@@ -470,7 +470,7 @@ public class StepEventBus {
             stepListener.testSuiteFinished();
         }
         if (!isUniqueSession()) {
-            ThucydidesWebDriverSupport.closeCurrentDrivers();
+            ThucydidesWebDriverSupport.closeAllDrivers();
         }
         storyUnderTest = null;
     }

@@ -24,7 +24,7 @@ public class WaitingForElementsWithTheFluentElementAPIInARealBrowser extends Flu
 
     @After
     public void quitBrowsers() {
-        ThucydidesWebDriverSupport.getWebdriverManager().closeAllCurrentDrivers();
+        ThucydidesWebDriverSupport.getWebdriverManager().closeAllDrivers();
     }
 
     protected StaticSitePage getFirefoxPage() {

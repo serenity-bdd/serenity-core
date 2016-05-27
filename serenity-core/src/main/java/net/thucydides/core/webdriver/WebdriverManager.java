@@ -28,13 +28,12 @@ public interface WebdriverManager {
     WebDriver getCurrentDriver();
 
     String getDefaultDriverType();
+
     void overrideDefaultDriverType(String driverType);
 
     SessionId getSessionId();
 
     void closeDriver();
-
-    void closeAllCurrentDrivers();
 
     void closeAllDrivers();
 

@@ -116,20 +116,6 @@ public class WebdriverInstances {
         return (driver != null);
     }
 
-//    public Duration getCurrentImplicitTimeout() {
-//        if (getCurrentDriver() instanceof ConfigurableTimeouts) {
-//            return ((ConfigurableTimeouts) getCurrentDriver()).getCurrentImplicitTimeout();
-//        } else {
-//            return getDefaultImplicitTimeout();
-//        }
-//    }
-//
-//    protected Duration getDefaultImplicitTimeout() {
-//        Integer configuredTimeout = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables, -1);
-//        return (configuredTimeout >= 0) ? new Duration(configuredTimeout, TimeUnit.MILLISECONDS)
-//                : DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
-//    }
-
     public void setCurrentDriverTo(WebDriver driver) {
         currentDriver = driverNameFor(driver);
     }

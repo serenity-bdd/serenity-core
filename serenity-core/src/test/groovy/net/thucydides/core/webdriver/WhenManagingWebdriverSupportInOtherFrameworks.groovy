@@ -7,9 +7,15 @@ import spock.lang.Specification
  */
 class WhenManagingWebdriverSupportInOtherFrameworks extends Specification {
 
+    def setup() {
+        ThucydidesWebDriverSupport.clearDefaultDriver()
+        ThucydidesWebDriverSupport.closeAllDrivers()
+    }
+
     def "should be able to declare a default driver"() {
         when:
             ThucydidesWebDriverSupport.useDefaultDriver("htmlunit")
+            ThucydidesWebDriverSupport.getDriver()
         then:
             ThucydidesWebDriverSupport.getCurrentDriverName() == "htmlunit"
     }
@@ -19,6 +25,7 @@ class WhenManagingWebdriverSupportInOtherFrameworks extends Specification {
             ThucydidesWebDriverSupport.useDefaultDriver("htmlunit")
         when:
             ThucydidesWebDriverSupport.clearDefaultDriver()
+            ThucydidesWebDriverSupport.getDriver()
         then:
             ThucydidesWebDriverSupport.getCurrentDriverName() == "firefox"
     }

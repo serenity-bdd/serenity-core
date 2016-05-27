@@ -158,7 +158,7 @@ public class Serenity {
 
     public static void done(boolean closeAllDrivers) {
         if (closeAllDrivers && getWebdriverManager() != null) {
-            getWebdriverManager().closeAllCurrentDrivers();
+            getWebdriverManager().closeAllDrivers();
         }
         resetDependencyInjectors();
     }

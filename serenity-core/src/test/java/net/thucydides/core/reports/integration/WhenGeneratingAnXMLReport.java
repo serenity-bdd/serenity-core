@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.thucydides.core.hamcrest.XMLMatchers.isSimilarTo;
+import static net.thucydides.core.reports.integration.TestStepFactory.successfulTestStepCalled;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -155,6 +156,8 @@ public class WhenGeneratingAnXMLReport {
         DateTime startTime = new DateTime(2013,1,1,0,0,0,0);
         testOutcome.setStartTime(startTime);
 
+        // Approval tests instead of hard-coded text? Okey Dokey - approval testing tool
+        // Approval tests - check the raw XML structure without the attributes
         String expectedReport =
                 "<acceptance-test-run title='Should do this' name='should_do_this' steps='1' successful='1' failures='0' skipped='0' ignored='0' pending='0' result='SUCCESS' duration='0' timestamp='2013-01-01T00:00:00.000-05:00'>\n"
                         + "  <tags>\n"
@@ -166,11 +169,12 @@ public class WhenGeneratingAnXMLReport {
                         + "  </test-step>\n"
                         + "</acceptance-test-run>";
 
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
 
         File xmlReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
         String generatedReportText = getStringFrom(xmlReport);
 
+        // Apache Digester?
         assertThat(generatedReportText, isSimilarTo(expectedReport,"timestamp"));
     }
 
@@ -192,7 +196,7 @@ public class WhenGeneratingAnXMLReport {
                         + "  </test-step>\n"
                         + "</acceptance-test-run>";
 
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
 
         File xmlReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
         String generatedReportText = getStringFrom(xmlReport);
@@ -248,7 +252,7 @@ public class WhenGeneratingAnXMLReport {
                         + "  </test-step>\n"
                         + "</acceptance-test-run>";
 
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
 
         File xmlReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
         String generatedReportText = getStringFrom(xmlReport);
@@ -304,7 +308,7 @@ public class WhenGeneratingAnXMLReport {
                         + "  </test-step>\n"
                         + "</acceptance-test-run>";
 
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
 
         File xmlReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
         String generatedReportText = getStringFrom(xmlReport);
@@ -330,7 +334,7 @@ public class WhenGeneratingAnXMLReport {
                         + "  </test-step>\n"
                         + "</acceptance-test-run>";
 
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
 
         File xmlReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
         String generatedReportText = getStringFrom(xmlReport);
@@ -358,7 +362,7 @@ public class WhenGeneratingAnXMLReport {
                         + "  </test-step>\n"
                         + "</acceptance-test-run>";
 
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
 
         File xmlReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
         String generatedReportText = getStringFrom(xmlReport);
@@ -387,7 +391,7 @@ public class WhenGeneratingAnXMLReport {
                         + "  </test-step>\n"
                         + "</acceptance-test-run>";
 
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
 
         File xmlReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
         String generatedReportText = getStringFrom(xmlReport);
@@ -414,7 +418,7 @@ public class WhenGeneratingAnXMLReport {
                         + "</acceptance-test-run>";
 
         testOutcome.setSessionId("1234");
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
 
         File xmlReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
         String generatedReportText = getStringFrom(xmlReport);
@@ -444,7 +448,7 @@ public class WhenGeneratingAnXMLReport {
                         + "  </test-step>\n"
                         + "</acceptance-test-run>";
 
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
 
         File xmlReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
         String generatedReportText = getStringFrom(xmlReport);
@@ -478,7 +482,7 @@ public class WhenGeneratingAnXMLReport {
                         + "  </test-step>\n"
                         + "</acceptance-test-run>";
 
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
         testOutcome.addVersion("Release 1").addVersion("Version 1.1");
 
         File xmlReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
@@ -507,7 +511,7 @@ public class WhenGeneratingAnXMLReport {
                         + "  </test-step>\n"
                         + "</acceptance-test-run>";
 
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
 
         File xmlReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
         String generatedReportText = getStringFrom(xmlReport);
@@ -536,7 +540,7 @@ public class WhenGeneratingAnXMLReport {
                         + "  </test-step>\n"
                         + "</acceptance-test-run>";
 
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
 
         File xmlReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
         String generatedReportText = getStringFrom(xmlReport);
@@ -562,7 +566,7 @@ public class WhenGeneratingAnXMLReport {
                         + "  </test-step>\n"
                         + "</acceptance-test-run>";
 
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
 
         reporter.setQualifier("qualifier");
         File xmlReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
@@ -589,7 +593,7 @@ public class WhenGeneratingAnXMLReport {
                         + "  </test-step>\n"
                         + "</acceptance-test-run>";
 
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
 
         reporter.setQualifier("a_b");
         File xmlReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
@@ -662,10 +666,10 @@ public class WhenGeneratingAnXMLReport {
                         + "  </test-step>\n"
                         + "</acceptance-test-run>";
 
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
         testOutcome.recordStep(TestStepFactory.ignoredTestStepCalled("step 2"));
         testOutcome.recordStep(TestStepFactory.ignoredTestStepCalled("step 3"));
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 4"));
+        testOutcome.recordStep(successfulTestStepCalled("step 4"));
         testOutcome.recordStep(TestStepFactory.failingTestStepCalled("step 5"));
         testOutcome.recordStep(TestStepFactory.failingTestStepCalled("step 6"));
         testOutcome.recordStep(TestStepFactory.errorTestStepCalled("step 7"));
@@ -724,9 +728,9 @@ public class WhenGeneratingAnXMLReport {
                         + "</acceptance-test-run>";
 
         testOutcome.startGroup("Group 1");
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 2"));
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 3"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 2"));
+        testOutcome.recordStep(successfulTestStepCalled("step 3"));
         testOutcome.endGroup();
 
         File xmlReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
@@ -770,12 +774,12 @@ public class WhenGeneratingAnXMLReport {
                         + "</acceptance-test-run>";
 
         testOutcome.startGroup("Group 1");
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 2"));
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 3"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 2"));
+        testOutcome.recordStep(successfulTestStepCalled("step 3"));
         testOutcome.startGroup("Group 1.1");
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 4"));
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 5"));
+        testOutcome.recordStep(successfulTestStepCalled("step 4"));
+        testOutcome.recordStep(successfulTestStepCalled("step 5"));
         testOutcome.endGroup();
         testOutcome.endGroup();
 
@@ -812,7 +816,7 @@ public class WhenGeneratingAnXMLReport {
         testOutcome.startGroup("Group 1");
         testOutcome.startGroup("Group 1.1");
         testOutcome.startGroup("Group 1.1.1");
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
         testOutcome.endGroup();
         testOutcome.endGroup();
         testOutcome.endGroup();
@@ -850,7 +854,7 @@ public class WhenGeneratingAnXMLReport {
         testOutcome.startGroup("Group 1");
         testOutcome.startGroup("Group 1.1");
         testOutcome.startGroup("Group 1.1.1");
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
+        testOutcome.recordStep(successfulTestStepCalled("step 1"));
         testOutcome.endGroup();
         testOutcome.endGroup();
         testOutcome.endGroup();
@@ -888,7 +892,7 @@ public class WhenGeneratingAnXMLReport {
         File screenshot = temporaryDirectory.newFile("step_1.png");
         File source = temporaryDirectory.newFile("step_1.html");
 
-        TestStep step1 = TestStepFactory.successfulTestStepCalled("step 1");
+        TestStep step1 = successfulTestStepCalled("step 1");
         step1.addScreenshot(new ScreenshotAndHtmlSource(screenshot, source));
         testOutcome.recordStep(step1);
         testOutcome.recordStep(TestStepFactory.failingTestStepCalled("step 2"));
@@ -903,7 +907,7 @@ public class WhenGeneratingAnXMLReport {
     public void should_have_a_qualified_filename_if_qualifier_present() throws Exception {
         TestOutcome testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class);
 
-        TestStep step1 = TestStepFactory.successfulTestStepCalled("step 1");
+        TestStep step1 = successfulTestStepCalled("step 1");
         File screenshot = temporaryDirectory.newFile("step_1.png");
         File source = temporaryDirectory.newFile("step_1.html");
         step1.addScreenshot(new ScreenshotAndHtmlSource(screenshot, source));

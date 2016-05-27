@@ -367,7 +367,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     }
 
     private void closeDrivers() {
-        getWebdriverManager().closeAllCurrentDrivers();
+        getWebdriverManager().closeAllDrivers();
     }
 
     protected WebdriverManager getWebdriverManager() {

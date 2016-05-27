@@ -80,7 +80,7 @@ public class WhenUsingAWebDriverProxy {
         StepEventBus.getEventBus().reset();
         webDriverFacade = (WebDriverFacade) webdriverManager.getWebdriver();
         WebdriverProxyFactory.getFactory().clearMockDriver();
-        webdriverManager.closeAllCurrentDrivers();
+        webdriverManager.closeAllDrivers();
 
         facade = new MockWebDriverFacade();
 

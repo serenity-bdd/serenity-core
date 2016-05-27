@@ -73,6 +73,7 @@ public class ThucydidesWebDriverSupport {
 
     public static void clearDefaultDriver() {
         defaultDriverType.remove();
+//        getWebdriverManager().overrideDefaultDriverType("");
     }
 
     public static void useDriver(WebDriver driver) {
@@ -86,12 +87,6 @@ public class ThucydidesWebDriverSupport {
         }
         return (getWebdriverManager().getCurrentDriver() != null) ?
                 getWebdriverManager().getCurrentDriver()  : getWebdriverManager().getWebdriver();
-    }
-
-    public static void closeCurrentDrivers() {
-        if (webdriversInitialized()) {
-            getWebdriverManager().closeAllCurrentDrivers();
-        }
     }
 
     public static void closeAllDrivers() {
@@ -156,7 +151,7 @@ public class ThucydidesWebDriverSupport {
     }
 
     public static String getCurrentDriverName() {
-        if (getWebdriverManager() == null) {
+        if (!webdriversInitialized()) {
             return "";
         }
         return getWebdriverManager().getCurrentDriverType();

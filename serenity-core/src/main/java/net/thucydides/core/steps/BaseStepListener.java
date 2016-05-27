@@ -293,7 +293,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         Darkroom.waitUntilClose();
         clearStorywideTagsAndIssues();
         ThucydidesWebDriverSupport.closeCurrentDrivers();
-//        webdriverManager.closeAllCurrentDrivers();
         suiteStarted = false;
     }
 
@@ -306,7 +305,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public void testStarted(final String testMethod) {
         TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory);
         testOutcomes.add(newTestOutcome);
-        updateSessionIdIfKnown();
         setAnnotatedResult(testMethod);
     }
 
@@ -347,6 +345,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
         if(currentTestIsABrowserTest()) {
             getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
+            updateSessionIdIfKnown();
         }
         currentStepStack.clear();
     }
@@ -354,11 +353,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private String getDriverUsedInThisTest() {
         return ThucydidesWebDriverSupport.getDriversUsed();
-//        return ThucydidesWebDriverSupport.getCurrentDriverName();// webdriverManager.getCurrentDriverType();
     }
 
     private boolean currentTestIsABrowserTest() {
-        return (!ThucydidesWebDriverSupport.getWebdriverManager().getRegisteredDrivers().isEmpty());
+        return ThucydidesWebDriverSupport.isDriverInstantiated();
     }
 
     public void testRetried() {
@@ -383,7 +381,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (currentTestIsABrowserTest()) {
             takeInitialScreenshot();
         }
-        updateSessionIdIfKnown();
 
     }
 
@@ -491,7 +488,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void stepFinished() {
-        updateSessionIdIfKnown();
+//        updateSessionIdIfKnown();
         takeEndOfStepScreenshotFor(SUCCESS);
         currentStepDone(SUCCESS);
         pauseIfRequired();
@@ -757,7 +754,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public WebDriver getDriver() {
-        return ThucydidesWebDriverSupport.getDriver();// /* (driver != null) ? driver : */webdriverManager.getWebdriver();
+        return ThucydidesWebDriverSupport.getDriver();
+//        return ThucydidesWebDriverSupport.getWebdriverManager().getCurrentDriver();
     }
 
     public boolean aStepHasFailed() {

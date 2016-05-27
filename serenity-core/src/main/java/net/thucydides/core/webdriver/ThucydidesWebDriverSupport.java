@@ -17,6 +17,7 @@ public class ThucydidesWebDriverSupport {
     private static final ThreadLocal<WebdriverManager> webdriverManagerThreadLocal = new ThreadLocal<WebdriverManager>();
     private static final ThreadLocal<Pages> pagesThreadLocal = new ThreadLocal<Pages>();
     private static final ThreadLocal<StepFactory> stepFactoryThreadLocal = new ThreadLocal<StepFactory>();
+    private static final ThreadLocal<String> defaultDriverType = new ThreadLocal<>();
 
     public static void initialize() {
         initialize(null);
@@ -33,9 +34,13 @@ public class ThucydidesWebDriverSupport {
     }
 
     public static void reset() {
+        if (webdriverManagerThreadLocal.get() != null) {
+            webdriverManagerThreadLocal.get().reset();
+        }
         webdriverManagerThreadLocal.remove();
         pagesThreadLocal.remove();
         stepFactoryThreadLocal.remove();
+        defaultDriverType.remove();
     }
 
     public static boolean isInitialised() {
@@ -62,13 +67,25 @@ public class ThucydidesWebDriverSupport {
         return stepFactoryThreadLocal.get();
     }
 
+    public static void useDefaultDriver(String driverName) {
+        defaultDriverType.set(driverName);
+    }
+
+    public static void clearDefaultDriver() {
+        defaultDriverType.remove();
+    }
+
     public static void useDriver(WebDriver driver) {
         getWebdriverManager().registerDriver(driver);
     }
 
 
     public static WebDriver getDriver() {
-        return getWebdriverManager().getWebdriver();
+        if (defaultDriverType.get() != null) {
+            return getWebdriverManager().getWebdriver(defaultDriverType.get());
+        }
+        return (getWebdriverManager().getCurrentDriver() != null) ?
+                getWebdriverManager().getCurrentDriver()  : getWebdriverManager().getWebdriver();
     }
 
     public static void closeCurrentDrivers() {
@@ -82,13 +99,8 @@ public class ThucydidesWebDriverSupport {
             getWebdriverManager().closeAllDrivers();
         }
     }
-//
-//    private static WebdriverManager configuredWebdriverManager() {
-//        Injectors.getInjector().getInstance(WebdriverManager.class);
-//    }
 
     private static void setupWebdriverManager(WebdriverManager webdriverManager , String requestedDriver) {
-//        WebdriverManager webdriverManager = configuredWebdriverManager();//Injectors.getInjector().getInstance(WebdriverManager.class);
         webdriverManager.overrideDefaultDriverType(requestedDriver);
         webdriverManagerThreadLocal.set(webdriverManager);
     }
@@ -132,7 +144,7 @@ public class ThucydidesWebDriverSupport {
 
     public static <T extends WebDriver> T getProxiedDriver() {
         return (T) ((WebDriverFacade) getDriver()).getProxiedDriver();
-    }
+}
 
     public static Class<? extends WebDriver> getDriverClass() {
         return  ((WebDriverFacade) getDriver()).getDriverClass();
@@ -158,6 +170,6 @@ public class ThucydidesWebDriverSupport {
     }
 
     public static boolean isDriverInstantiated() {
-        return getWebdriverManager().isDriverInstantiated();
+        return isInitialised() && getWebdriverManager().hasAnInstantiatedDriver();
     }
 }

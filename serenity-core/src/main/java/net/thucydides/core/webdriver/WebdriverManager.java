@@ -25,6 +25,8 @@ public interface WebdriverManager {
 
     String getCurrentDriverType();
 
+    WebDriver getCurrentDriver();
+
     String getDefaultDriverType();
     void overrideDefaultDriverType(String driverType);
 
@@ -42,7 +44,7 @@ public interface WebdriverManager {
 
     int getActiveWebdriverCount();
 
-    boolean isDriverInstantiated();
+    boolean hasAnInstantiatedDriver();
 
     void setCurrentDriver(WebDriver driver);
 
@@ -51,5 +53,8 @@ public interface WebdriverManager {
     void registerDriver(WebDriver driver);
 
     List<WebDriver> getRegisteredDrivers();
+
     public List<String> getActiveDriverTypes();
+
+    void reset();
 }

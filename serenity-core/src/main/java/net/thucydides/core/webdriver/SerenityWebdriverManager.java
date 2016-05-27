@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Manage WebDriver instances.
@@ -97,15 +98,23 @@ public class SerenityWebdriverManager implements WebdriverManager {
         } catch(Throwable ignored) {}
     }
 
+    public void reset() {
+        inThisTestThread().closeAllDrivers();
+
+    }
+
     public void resetDriver() {
         inThisTestThread().resetCurrentDriver();
     }
 
     public WebDriver getWebdriver() {
+        String currentDriverName = (isNotEmpty(inThisTestThread().getCurrentDriverName())) ?
+            inThisTestThread().getCurrentDriverName() : getDefaultDriverType();
+
+
         return instantiatedThreadLocalWebDriver(configuration,
                                                 webDriverFactory,
-                                                getDefaultDriverType()
-                                                /*inThisTestThread().getCurrentDriverName()*/);
+                                                currentDriverName);
     }
 
     @Override
@@ -153,14 +162,18 @@ public class SerenityWebdriverManager implements WebdriverManager {
         overridenDefaultDriverType = Optional.fromNullable(isEmpty(driverType) ? null : driverType);
     }
 
-
     public SessionId getSessionId() {
 
         WebDriver driver = inThisTestThread().getCurrentDriver();
 
-        if(driver instanceof WebDriverFacade){
-            driver = ((WebDriverFacade) driver).getDriverInstance();
+        if((driver instanceof WebDriverFacade) && (((WebDriverFacade) driver).isInstantiated())){
+            WebDriver proxiedDriver = ((WebDriverFacade) driver).getDriverInstance();
+            return sessionIdOf(proxiedDriver);
         }
+        return sessionIdOf(driver);
+    }
+
+    private SessionId sessionIdOf(WebDriver driver) {
         if (driver instanceof RemoteWebDriver) {
             return ((RemoteWebDriver) driver).getSessionId();
         }
@@ -176,6 +189,10 @@ public class SerenityWebdriverManager implements WebdriverManager {
         registerDriverInGlobalDrivers(activeDriver);
 
         return activeDriver;
+    }
+
+    public WebDriver getCurrentDriver() {
+        return inThisTestThread().getCurrentDriver();
     }
 
     public WebDriver getWebdriverByName(String name, String driver) {
@@ -228,8 +245,8 @@ public class SerenityWebdriverManager implements WebdriverManager {
         return allWebdriverInstances.size();
     }
 
-    public boolean isDriverInstantiated() {
-        return inThisTestThread().isDriverInstantiated();
+    public boolean hasAnInstantiatedDriver() {
+        return inThisTestThread().hasAnInstantiatedDriver();
     }
 
 }

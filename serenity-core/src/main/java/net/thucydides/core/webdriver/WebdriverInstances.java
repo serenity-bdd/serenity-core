@@ -1,16 +1,12 @@
 package net.thucydides.core.webdriver;
 
 import com.google.common.collect.Lists;
-import net.serenitybdd.core.pages.DefaultTimeouts;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.Duration;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * One or more WebDriver drivers that are being used in a test.
@@ -59,13 +55,13 @@ public class WebdriverInstances {
             closedDriver = getCurrentDriver();
             closeAndQuit(closedDriver);
             driverMap.remove(currentDriver);
-            currentDriver  = null;
+            currentDriver = null;
         }
         return closedDriver;
     }
 
     private void closeAndQuit(WebDriver driver) {
-    	//close is not necessary when quitting
+        //close is not necessary when quitting
         driver.quit();
     }
 
@@ -91,7 +87,7 @@ public class WebdriverInstances {
     public Set<WebDriver> closeAllDrivers() {
         Collection<WebDriver> openDrivers = driverMap.values();
         Set<WebDriver> closedDrivers = new HashSet<WebDriver>(openDrivers);
-        for(WebDriver driver : openDrivers) {
+        for (WebDriver driver : openDrivers) {
             closeAndQuit(driver);
         }
         driverMap.clear();
@@ -103,34 +99,43 @@ public class WebdriverInstances {
         return driverMap.size();
     }
 
-    public boolean isDriverInstantiated() {
-        if (getCurrentDriver() instanceof WebDriverFacade) {
-            return ((WebDriverFacade) getCurrentDriver()).isInstantiated();
-        } else {
-            return (getCurrentDriver() != null);
+    public boolean hasAnInstantiatedDriver() {
+        for (WebDriver driver : driverMap.values()) {
+            if (isInstantiated(driver)) {
+                return true;
+            }
         }
+        return false;
     }
 
-    public Duration getCurrentImplicitTimeout() {
-        if (getCurrentDriver() instanceof ConfigurableTimeouts) {
-            return ((ConfigurableTimeouts) getCurrentDriver()).getCurrentImplicitTimeout();
-        } else {
-            return getDefaultImplicitTimeout();
+    private boolean isInstantiated(WebDriver driver) {
+
+        if (driver instanceof WebDriverFacade) {
+            return (((WebDriverFacade) driver).isInstantiated());
         }
+        return (driver != null);
     }
 
-    protected Duration getDefaultImplicitTimeout() {
-        Integer configuredTimeout = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables, -1);
-        return (configuredTimeout >= 0) ? new Duration(configuredTimeout, TimeUnit.MILLISECONDS)
-                : DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
-    }
+//    public Duration getCurrentImplicitTimeout() {
+//        if (getCurrentDriver() instanceof ConfigurableTimeouts) {
+//            return ((ConfigurableTimeouts) getCurrentDriver()).getCurrentImplicitTimeout();
+//        } else {
+//            return getDefaultImplicitTimeout();
+//        }
+//    }
+//
+//    protected Duration getDefaultImplicitTimeout() {
+//        Integer configuredTimeout = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables, -1);
+//        return (configuredTimeout >= 0) ? new Duration(configuredTimeout, TimeUnit.MILLISECONDS)
+//                : DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
+//    }
 
     public void setCurrentDriverTo(WebDriver driver) {
         currentDriver = driverNameFor(driver);
     }
 
     private String driverNameFor(WebDriver driver) {
-        for(String driverName : driverMap.keySet()) {
+        for (String driverName : driverMap.keySet()) {
             if (driverMap.get(driverName) == driver) {
                 return driverName;
             }
@@ -140,7 +145,7 @@ public class WebdriverInstances {
 
     public List<WebDriver> getActiveDrivers() {
         List<WebDriver> activeDrivers = Lists.newArrayList();
-        for(WebDriver webDriver : driverMap.values() ) {
+        for (WebDriver webDriver : driverMap.values()) {
             if (!(webDriver instanceof WebDriverFacade)) {
                 activeDrivers.add(webDriver);
                 continue;
@@ -155,7 +160,7 @@ public class WebdriverInstances {
 
     public List<String> getActiveDriverTypes() {
         List<String> activeDrivers = Lists.newArrayList();
-        for(WebDriver webDriver : driverMap.values() ) {
+        for (WebDriver webDriver : driverMap.values()) {
             if (!(webDriver instanceof WebDriverFacade)) {
                 activeDrivers.add(driverNameFor(webDriver));
                 continue;

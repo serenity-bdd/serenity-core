@@ -121,7 +121,6 @@ public class Serenity {
     }
 
     private static void initStepFactoryUsing(final Pages pagesObject) {
-        StepFactory stepFactory = new StepFactory(pagesObject);
         stepFactoryThreadLocal.set(new StepFactory(pagesObject));
     }
 

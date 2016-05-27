@@ -2,7 +2,11 @@ package net.thucydides.core.reports.json
 
 import net.serenitybdd.core.rest.RestMethod
 import net.serenitybdd.core.rest.RestQuery
-import net.thucydides.core.annotations.*
+import net.thucydides.core.annotations.Story
+import net.thucydides.core.annotations.Issue
+import net.thucydides.core.annotations.WithTag
+import net.thucydides.core.annotations.Feature
+import net.thucydides.core.annotations.Issues
 import net.thucydides.core.digest.Digest
 import net.thucydides.core.issues.IssueTracking
 import net.thucydides.core.model.*
@@ -682,29 +686,29 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     @Unroll
     def "should record test results for #result with no steps"() {
         given:
-        def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class);
-        testOutcome.setStartTime(FIRST_OF_JANUARY);
-        testOutcome.setAnnotatedResult(result)
+            def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class);
+            testOutcome.setStartTime(FIRST_OF_JANUARY);
+            testOutcome.setAnnotatedResult(result)
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+            def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
         then:
-        TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
-        reloadedOutcome.getResult() == result
+            TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
+            reloadedOutcome.getResult() == result
         where:
-        result << [ TestResult.SUCCESS, TestResult.FAILURE, TestResult.ERROR, TestResult.PENDING, TestResult.IGNORED ]
+            result << [ TestResult.SUCCESS, TestResult.FAILURE, TestResult.ERROR, TestResult.PENDING, TestResult.IGNORED ]
     }
 
 
     def "should be able to write a test outcome as a JSON string"() {
         given:
-        def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class);
+            def testOutcome = TestOutcome.forTest("a_nested_test_case", SomeNestedTestScenario.class);
         when:
-        def jsonString = testOutcome.toJson()
+            def jsonString = testOutcome.toJson()
         then:
-        def savedOutcome = new File(outputDirectory,"saved.json")
-        savedOutcome << jsonString
-        TestOutcome reloadedOutcome = loader.loadReportFrom(savedOutcome).get()
-        reloadedOutcome.name == testOutcome.name
+            def savedOutcome = new File(outputDirectory,"saved.json")
+            savedOutcome << jsonString
+            TestOutcome reloadedOutcome = loader.loadReportFrom(savedOutcome).get()
+            reloadedOutcome.name == testOutcome.name
     }
 
     def "should be able to store REST query data if present"() {

@@ -9,6 +9,9 @@ import spock.lang.Specification
 
 class WhenProvidingWebdriverSupportForThucydidesExtensions extends Specification {
 
+    def setup() {
+        ThucydidesWebDriverSupport.reset()
+    }
 
     def "should allow plugins to instantiate a webdriver manager"() {
         when: "we initialize Thucydides support"
@@ -81,7 +84,7 @@ class WhenProvidingWebdriverSupportForThucydidesExtensions extends Specification
         ThucydidesWebDriverSupport.getDriver() != null
     }
 
-    def "should not initialize agail if already initialized with a given driver"() {
+    def "should not initialize again if already initialized with a given driver"() {
         when: "we initialize Thucydides support"
         ThucydidesWebDriverSupport.initialize()
         def firstDriver = ThucydidesWebDriverSupport.driver;

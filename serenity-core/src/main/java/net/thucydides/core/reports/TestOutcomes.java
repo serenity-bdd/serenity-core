@@ -600,6 +600,9 @@ public class TestOutcomes {
         }
 
         public Double withResult(String expectedResult) {
+            if (!TestResult.existsWithName(expectedResult.toUpperCase())) {
+                return 0.0;
+            }
             return withResult(TestResult.valueOf(expectedResult.toUpperCase()));
         }
 

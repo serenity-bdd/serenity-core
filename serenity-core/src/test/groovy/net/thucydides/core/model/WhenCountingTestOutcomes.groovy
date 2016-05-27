@@ -55,6 +55,11 @@ class WhenCountingTestOutcomes extends Specification {
         TestOutcomes.of(outcomes).proportionOf("manual").withResult("failure") == 0.1
     }
 
+    def "should not spit the dummy if an unexpected result type is requested"() {
+        expect:
+        TestOutcomes.of(outcomes).proportionOf("manual").withResult("Unknown") == 0.0
+    }
+
     def "should distinguish manual and automated pending tests"() {
         given:
             def outcome1 = TestOutcome.forTest("test3",SomeTest).recordStep(TestStep.forStepCalled("step1").withResult(TestResult.SUCCESS))

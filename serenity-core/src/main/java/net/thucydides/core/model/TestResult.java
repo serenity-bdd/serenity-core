@@ -1,6 +1,9 @@
 package net.thucydides.core.model;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Acceptance test results. 
  * Records the possible outcomes of tests within an acceptance test case
@@ -57,6 +60,8 @@ public enum TestResult {
 
     private final int priority;
 
+    private static Logger logger = LoggerFactory.getLogger("net.thucydides.core.model.TestResult");
+
     TestResult(int priority) {
         this.priority = priority;
     }
@@ -71,5 +76,15 @@ public enum TestResult {
 
     public boolean isMoreSevereThan(TestResult otherResult) {
         return ordinal() > otherResult.ordinal();
+    }
+
+    public static boolean existsWithName(String expectedResult) {
+        try {
+            valueOf(expectedResult);
+        } catch (IllegalArgumentException noMatchingEnumValue) {
+            logger.warn("No matching test result value found for {}", expectedResult);
+            return false;
+        }
+        return true;
     }
 }

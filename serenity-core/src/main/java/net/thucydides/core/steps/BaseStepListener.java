@@ -226,6 +226,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private void setDriverUsingPagesDriverIfDefined(final Pages pages) {
         if (pages.getDriver() == null) {
+            ThucydidesWebDriverSupport.initialize();
             pages.setDriver(getDriver());
         }
     }

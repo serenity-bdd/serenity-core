@@ -80,8 +80,8 @@ public class WebdriverInstances {
     }
 
     public WebDriver useDriver(final String driverName) {
-        this.currentDriver = normalized(driverName);
-        return driverMap.get(currentDriver);
+       // this.currentDriver = normalized(driverName);
+        return driverMap.get(normalized(driverName));
     }
 
     public Set<WebDriver> closeAllDrivers() {
@@ -169,7 +169,7 @@ public class WebdriverInstances {
 
         public void forDriver(final WebDriver driver) {
             driverMap.put(normalized(driverName), driver);
-            currentDriver = normalized(driverName);
+//            currentDriver = normalized(driverName);
         }
     }
 

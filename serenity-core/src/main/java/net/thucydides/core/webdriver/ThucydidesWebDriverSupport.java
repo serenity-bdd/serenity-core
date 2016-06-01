@@ -79,7 +79,9 @@ public class ThucydidesWebDriverSupport {
 
     public static void clearDefaultDriver() {
         defaultDriverType.remove();
-//        getWebdriverManager().overrideDefaultDriverType("");
+        if (webdriverManagerThreadLocal.get() != null) {
+            webdriverManagerThreadLocal.get().overrideDefaultDriverType("");
+        }
     }
 
     public static void useDriver(WebDriver driver) {

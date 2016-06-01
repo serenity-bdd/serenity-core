@@ -25,14 +25,4 @@ class WhenManagingWebdriverSupportInOtherFrameworks extends Specification {
             ThucydidesWebDriverSupport.getCurrentDriverName() == "htmlunit"
     }
 
-    def "should be able to reset a default driver"() {
-        given:
-            ThucydidesWebDriverSupport.useDefaultDriver("htmlunit")
-        when:
-            ThucydidesWebDriverSupport.clearDefaultDriver()
-            ThucydidesWebDriverSupport.getDriver().manage()
-        then:
-            ThucydidesWebDriverSupport.getCurrentDriverName() != "htmlunit"
-    }
-
 }

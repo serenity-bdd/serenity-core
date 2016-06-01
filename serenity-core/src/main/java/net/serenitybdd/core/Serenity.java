@@ -89,15 +89,16 @@ public class Serenity {
         setupWebDriverFactory();
         setupWebdriverManager();
 
+        ThucydidesWebDriverSupport.initialize();
+        ThucydidesWebDriverSupport.initializeFieldsIn(testCase);
+
         injectDriverInto(testCase);
         injectAnnotatedPagesObjectInto(testCase);
         injectScenarioStepsInto(testCase);
-        ThucydidesWebDriverSupport.initializeFieldsIn(testCase);
         injectDependenciesInto(testCase);
 
         return new SerenityConfigurer();
     }
-
 
 
     private static void initStepListener() {

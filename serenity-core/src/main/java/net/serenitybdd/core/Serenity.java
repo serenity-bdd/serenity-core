@@ -26,9 +26,6 @@ import java.util.List;
 public class Serenity {
 
     private static final ThreadLocal<WebDriverFactory> factoryThreadLocal = new ThreadLocal<WebDriverFactory>();
-    private static final ThreadLocal<WebdriverManager> webdriverManagerThreadLocal = new ThreadLocal<WebdriverManager>();
-    private static final ThreadLocal<Pages> pagesThreadLocal = new ThreadLocal<Pages>();
-    private static final ThreadLocal<StepFactory> stepFactoryThreadLocal = new ThreadLocal<StepFactory>();
     private static final ThreadLocal<StepListener> stepListenerThreadLocal = new ThreadLocal<StepListener>();
     private static final ThreadLocal<TestSessionVariables> testSessionThreadLocal = new ThreadLocal<TestSessionVariables>();
     private static final ThreadLocal<FirefoxProfile> firefoxProfileThreadLocal = new ThreadLocal<>();
@@ -43,16 +40,15 @@ public class Serenity {
         setupWebDriverFactory();
         setupWebdriverManager();
 
-        initPagesObjectUsing(getDriver());
+        ThucydidesWebDriverSupport.initialize();
+        ThucydidesWebDriverSupport.initializeFieldsIn(testCase);
+
         initStepListener();
-        initStepFactoryUsing(getPages());
 
         injectDriverInto(testCase);
         injectAnnotatedPagesObjectInto(testCase);
         injectScenarioStepsInto(testCase);
 
-        ThucydidesWebDriverSupport.initialize();
-        ThucydidesWebDriverSupport.initializeFieldsIn(testCase);
 
         injectDependenciesInto(testCase);
     }
@@ -93,9 +89,6 @@ public class Serenity {
         setupWebDriverFactory();
         setupWebdriverManager();
 
-        initPagesObjectUsing(getDriver());
-        initStepFactoryUsing(getPages());
-
         injectDriverInto(testCase);
         injectAnnotatedPagesObjectInto(testCase);
         injectScenarioStepsInto(testCase);
@@ -117,14 +110,6 @@ public class Serenity {
 
     private static void setupWebDriverFactory() {
         factoryThreadLocal.set(Injectors.getInjector().getInstance(WebDriverFactory.class));
-    }
-
-    private static void initPagesObjectUsing(final WebDriver driver) {
-        pagesThreadLocal.set(new Pages(driver));
-    }
-
-    private static void initStepFactoryUsing(final Pages pagesObject) {
-        stepFactoryThreadLocal.set(new StepFactory(pagesObject));
     }
 
     /**
@@ -178,7 +163,7 @@ public class Serenity {
     }
 
     protected static Pages getPages() {
-        return pagesThreadLocal.get();
+        return ThucydidesWebDriverSupport.getPages();
     }
 
     protected static void stopUsingMockDriver() {
@@ -186,11 +171,11 @@ public class Serenity {
     }
 
     public static WebdriverManager getWebdriverManager() {
-        return webdriverManagerThreadLocal.get();
+        return ThucydidesWebDriverSupport.getWebdriverManager();
     }
 
     public static StepFactory getStepFactory() {
-        return stepFactoryThreadLocal.get();
+        return ThucydidesWebDriverSupport.getStepFactory();
     }
 
     private static void setupWebdriverManager() {
@@ -198,7 +183,7 @@ public class Serenity {
     }
 
     private static void setupWebdriverManager(WebdriverManager webdriverManager) {
-        webdriverManagerThreadLocal.set(webdriverManager);
+        ThucydidesWebDriverSupport.initialize(webdriverManager,"");
     }
 
     public static StepListener getStepListener() {

@@ -18,6 +18,7 @@ public class WaitingForElementsWithTheFluentElementAPIInARealBrowser extends Flu
 
     @Before
     public void openBrowsers() {
+        ThucydidesWebDriverSupport.initialize();
         staticPage = new StaticSitePage(ThucydidesWebDriverSupport.getWebdriverManager().getWebdriver("chrome"));
         staticPage.open();
     }

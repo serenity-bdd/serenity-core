@@ -97,7 +97,7 @@ public class ThucydidesWebDriverSupport {
         if (webdriverManagerThreadLocal.get() == null) {
             return null;
         }
-        
+
         if (defaultDriverType.get() != null) {
             driver = getWebdriverManager().getWebdriver(defaultDriverType.get());
         } else {

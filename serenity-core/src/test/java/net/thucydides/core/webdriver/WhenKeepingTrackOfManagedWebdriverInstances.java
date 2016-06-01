@@ -35,6 +35,8 @@ public class WhenKeepingTrackOfManagedWebdriverInstances {
     public void should_be_able_to_register_a_named_driver() {
         webdriverInstances.registerDriverCalled("firefox").forDriver(firefoxDriver);
 
+        webdriverInstances.setCurrentDriverTo(firefoxDriver);
+
         assertThat(webdriverInstances.getCurrentDriver()).isEqualTo(firefoxDriver);
     }
 
@@ -43,6 +45,8 @@ public class WhenKeepingTrackOfManagedWebdriverInstances {
         WebDriver firefoxDriver = mock(FirefoxDriver.class);
 
         webdriverInstances.registerDriverCalled("firefox").forDriver(firefoxDriver);
+
+        webdriverInstances.setCurrentDriverTo(firefoxDriver);
 
         webdriverInstances.closeCurrentDriver();
         
@@ -53,7 +57,10 @@ public class WhenKeepingTrackOfManagedWebdriverInstances {
     public void should_be_able_to_reset_a_driver() {
         webdriverInstances.registerDriverCalled("firefox").forDriver(webDriverFacade);
 
+        webdriverInstances.setCurrentDriverTo(webDriverFacade);
+
         webdriverInstances.resetCurrentDriver();
+
         verify(webDriverFacade).reset();
     }
 
@@ -61,6 +68,9 @@ public class WhenKeepingTrackOfManagedWebdriverInstances {
     public void should_be_able_to_quit_all_drivers() {
         webdriverInstances.registerDriverCalled("firefox").forDriver(firefoxDriver);
         webdriverInstances.registerDriverCalled("iexplorer").forDriver(iexplorerDriver);
+
+        webdriverInstances.setCurrentDriverTo(firefoxDriver);
+        webdriverInstances.setCurrentDriverTo(iexplorerDriver);
 
         webdriverInstances.closeAllDrivers();
 
@@ -72,6 +82,9 @@ public class WhenKeepingTrackOfManagedWebdriverInstances {
     public void should_remove_current_driver_when_all_are_closed() {
         webdriverInstances.registerDriverCalled("firefox").forDriver(firefoxDriver);
         webdriverInstances.registerDriverCalled("iexplorer").forDriver(iexplorerDriver);
+
+        webdriverInstances.setCurrentDriverTo(firefoxDriver);
+        webdriverInstances.setCurrentDriverTo(iexplorerDriver);
 
         webdriverInstances.closeAllDrivers();
 
@@ -90,7 +103,10 @@ public class WhenKeepingTrackOfManagedWebdriverInstances {
     public void should_quit_the_driver_when_the_driver_is_closed() {
         webdriverInstances.registerDriverCalled("firefox").forDriver(firefoxDriver);
 
+        webdriverInstances.setCurrentDriverTo(firefoxDriver);
+
         webdriverInstances.closeCurrentDriver();
+
         verify(firefoxDriver).quit();
     }
 
@@ -125,6 +141,8 @@ public class WhenKeepingTrackOfManagedWebdriverInstances {
     public void should_know_the_current_driver_in_use() {
         webdriverInstances.registerDriverCalled("firefox").forDriver(firefoxDriver);
 
+        webdriverInstances.setCurrentDriverTo(firefoxDriver);
+
         assertThat(webdriverInstances.getCurrentDriver()).isEqualTo(firefoxDriver);
     }
 
@@ -132,6 +150,9 @@ public class WhenKeepingTrackOfManagedWebdriverInstances {
     public void should_know_the_latest_current_driver_in_use() {
         webdriverInstances.registerDriverCalled("firefox").forDriver(firefoxDriver);
         webdriverInstances.registerDriverCalled("iexplorer").forDriver(iexplorerDriver);
+
+        webdriverInstances.setCurrentDriverTo(firefoxDriver);
+        webdriverInstances.setCurrentDriverTo(iexplorerDriver);
 
         assertThat(webdriverInstances.getCurrentDriver()).isEqualTo(iexplorerDriver);
     }

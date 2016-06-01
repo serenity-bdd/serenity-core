@@ -103,6 +103,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
             proxiedWebDriver = newProxyDriver();
             WebdriverProxyFactory.getFactory().notifyListenersOfWebdriverCreationIn(this);
         }
+        ThucydidesWebDriverSupport.initialize();
         ThucydidesWebDriverSupport.getWebdriverManager().setCurrentDriver(this);
         return proxiedWebDriver;
     }

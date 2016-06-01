@@ -2,6 +2,7 @@ package net.thucydides.core.fixtureservices
 
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SupportedWebDriver
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport
 import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.WebDriverFactory
 import net.thucydides.core.webdriver.WebdriverInstanceFactory
@@ -49,6 +50,7 @@ class WhenUsingFixtureServices extends Specification {
                                                         firefoxProfileEnhancer,fixtureProviderService)
         and:
             def webdriver = new WebDriverFacade(FirefoxDriver, webdriverFactory)
+
         when:
             webdriver.get("http://some.site")
             webdriver.get("http://some.other.site")

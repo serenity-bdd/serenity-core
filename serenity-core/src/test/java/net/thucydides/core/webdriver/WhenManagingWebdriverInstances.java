@@ -130,20 +130,6 @@ public class WhenManagingWebdriverInstances {
     }
 
     @Test
-    public void should_close_individual_driver_in_current_thread() {
-        SerenityWebdriverManager aWebdriverManager = new SerenityWebdriverManager(factory, configuration);
-        aWebdriverManager.getWebdriver("firefox");
-        aWebdriverManager.getWebdriver("htmlunit");
-        aWebdriverManager.getWebdriver("chrome");
-
-        assertThat(aWebdriverManager.getCurrentActiveWebdriverCount(), is(3));
-        assertThat(aWebdriverManager.getActiveWebdriverCount(), is(3));
-        aWebdriverManager.closeDriver();
-        assertThat(aWebdriverManager.getCurrentActiveWebdriverCount(), is(2));
-        assertThat(aWebdriverManager.getActiveWebdriverCount(), is(2));
-    }
-
-    @Test
     public void should_close_drivers_in_all_threads() {
         SerenityWebdriverManager aWebdriverManager = new SerenityWebdriverManager(factory, configuration);
         aWebdriverManager.getWebdriver("firefox");

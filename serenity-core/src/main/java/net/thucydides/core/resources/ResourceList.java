@@ -138,8 +138,8 @@ public class ResourceList {
                     }
                 }
             }
-        } catch (final IOException e1) {
-            throw new ResourceCopyingError("Couldn't close the zip file", e1);
+        } catch (IOException e) {
+            throw new ResourceCopyingError("Couldn't close the zip file " + file, e);
         }
         return retval;
     }

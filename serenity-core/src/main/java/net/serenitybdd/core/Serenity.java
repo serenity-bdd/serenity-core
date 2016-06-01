@@ -50,7 +50,10 @@ public class Serenity {
         injectDriverInto(testCase);
         injectAnnotatedPagesObjectInto(testCase);
         injectScenarioStepsInto(testCase);
+
+        ThucydidesWebDriverSupport.initialize();
         ThucydidesWebDriverSupport.initializeFieldsIn(testCase);
+
         injectDependenciesInto(testCase);
     }
 

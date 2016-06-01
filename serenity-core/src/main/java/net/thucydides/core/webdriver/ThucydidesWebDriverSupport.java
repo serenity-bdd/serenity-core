@@ -18,19 +18,22 @@ public class ThucydidesWebDriverSupport {
     private static final ThreadLocal<Pages> pagesThreadLocal = new ThreadLocal<Pages>();
     private static final ThreadLocal<StepFactory> stepFactoryThreadLocal = new ThreadLocal<StepFactory>();
     private static final ThreadLocal<String> defaultDriverType = new ThreadLocal<>();
+    private static WebdriverManager webdriverManager;
 
     public static void initialize() {
-        initialize(null);
+        if (!webdriversInitialized()) {
+            setWebdriverManager(Injectors.getInjector().getInstance(WebdriverManager.class));
+        }
     }
 
     public static void initialize(String requestedDriver) {
-        initialize(Injectors.getInjector().getInstance(WebdriverManager.class), requestedDriver);
+        setWebdriverManager(Injectors.getInjector().getInstance(WebdriverManager.class));
+        getWebdriverManager().overrideDefaultDriverType(requestedDriver);
     }
 
     public static void initialize(WebdriverManager webdriverManager, String requestedDriver) {
         setupWebdriverManager(webdriverManager, requestedDriver);
         initPagesObjectUsing(getDriver());
-        initStepFactoryUsing(getPages());
     }
 
     public static void reset() {
@@ -51,19 +54,22 @@ public class ThucydidesWebDriverSupport {
         return (webdriverManagerThreadLocal.get() != null);
     }
 
-    private static void lazyInitalize() {
-        if (!webdriversInitialized()) {
-            initialize();
-        }
-    }
+//    private static void lazyInitalize() {
+//        if (!webdriversInitialized()) {
+//            initialize();
+//        }
+//    }
 
     public static void initializeFieldsIn(final Object testCase) {
+        getDriver();
         injectDriverInto(testCase);
         injectAnnotatedPagesObjectInto(testCase);
     }
 
     public static StepFactory getStepFactory() {
-        lazyInitalize();
+        if (pagesThreadLocal.get() == null) {
+            initPagesObjectUsing(getDriver());
+        }
         return stepFactoryThreadLocal.get();
     }
 
@@ -77,16 +83,25 @@ public class ThucydidesWebDriverSupport {
     }
 
     public static void useDriver(WebDriver driver) {
+        initialize();
         getWebdriverManager().registerDriver(driver);
     }
 
 
     public static WebDriver getDriver() {
+        WebDriver driver;
+
         if (defaultDriverType.get() != null) {
-            return getWebdriverManager().getWebdriver(defaultDriverType.get());
+            driver = getWebdriverManager().getWebdriver(defaultDriverType.get());
+        } else {
+            driver = (getWebdriverManager().getCurrentDriver() != null) ?
+                    getWebdriverManager().getCurrentDriver() : getWebdriverManager().getWebdriver();
         }
-        return (getWebdriverManager().getCurrentDriver() != null) ?
-                getWebdriverManager().getCurrentDriver()  : getWebdriverManager().getWebdriver();
+
+        initPagesObjectUsing(driver);
+
+        return driver;
+
     }
 
     public static void closeAllDrivers() {
@@ -95,9 +110,9 @@ public class ThucydidesWebDriverSupport {
         }
     }
 
-    private static void setupWebdriverManager(WebdriverManager webdriverManager , String requestedDriver) {
-        webdriverManager.overrideDefaultDriverType(requestedDriver);
-        webdriverManagerThreadLocal.set(webdriverManager);
+    private static void setupWebdriverManager(WebdriverManager webdriverManager, String requestedDriver) {
+        setWebdriverManager(webdriverManager);
+        getWebdriverManager().overrideDefaultDriverType(requestedDriver);
     }
 
     private static void initStepFactoryUsing(final Pages pagesObject) {
@@ -110,16 +125,19 @@ public class ThucydidesWebDriverSupport {
     }
 
     public static WebdriverManager getWebdriverManager() {
-        lazyInitalize();
+//        lazyInitalize();
         return webdriverManagerThreadLocal.get();
     }
 
     private static void initPagesObjectUsing(final WebDriver driver) {
         pagesThreadLocal.set(new Pages(driver));
+        initStepFactoryUsing(getPages());
     }
 
     public static Pages getPages() {
-        lazyInitalize();
+        if (pagesThreadLocal.get() == null) {
+            initPagesObjectUsing(getDriver());
+        }
         return pagesThreadLocal.get();
     }
 
@@ -142,7 +160,10 @@ public class ThucydidesWebDriverSupport {
 }
 
     public static Class<? extends WebDriver> getDriverClass() {
-        return  ((WebDriverFacade) getDriver()).getDriverClass();
+        if (getDriver() instanceof WebDriverFacade) {
+            return ((WebDriverFacade) getDriver()).getDriverClass();
+        }
+        return getDriver().getClass();
     }
 
     public static SessionId getSessionId() {
@@ -166,5 +187,9 @@ public class ThucydidesWebDriverSupport {
 
     public static boolean isDriverInstantiated() {
         return isInitialised() && getWebdriverManager().hasAnInstantiatedDriver();
+    }
+
+    private static void setWebdriverManager(WebdriverManager webdriverManager) {
+        webdriverManagerThreadLocal.set(webdriverManager);
     }
 }

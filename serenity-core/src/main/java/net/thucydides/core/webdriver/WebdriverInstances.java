@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.util.*;
 
+
 /**
  * One or more WebDriver drivers that are being used in a test.
  */
@@ -80,7 +81,7 @@ public class WebdriverInstances {
     }
 
     public WebDriver useDriver(final String driverName) {
-       // this.currentDriver = normalized(driverName);
+        // this.currentDriver = normalized(driverName);
         return driverMap.get(normalized(driverName));
     }
 
@@ -117,19 +118,43 @@ public class WebdriverInstances {
     }
 
     public void setCurrentDriverTo(WebDriver driver) {
+        if (registeredDriverNameFor(driver) == null) {
+            ThucydidesWebDriverSupport.initialize();
+            ThucydidesWebDriverSupport.getWebdriverManager().registerDriver(driver);
+        }
         currentDriver = driverNameFor(driver);
     }
 
-    private String driverNameFor(WebDriver driver) {
+    private String registeredDriverNameFor(WebDriver driver) {
         for (String driverName : driverMap.keySet()) {
-            if (driverMap.get(driverName) == driver) {
+            WebDriver mappedDriver = driverMap.get(driverName);
+            if (matchingDriver(mappedDriver, driver)) {
                 return driverName;
             }
         }
-        throw new IllegalStateException("No matching driver found in this thread");
+        return null;
     }
 
-    public List<WebDriver> getActiveDrivers() {
+    private String driverNameFor(WebDriver driver) {
+        String driverName = registeredDriverNameFor(driver);
+        if (driverName != null) {
+            return driverName;
+        }
+
+        throw new IllegalStateException("No matching driver found for " + driverName + " in this thread");
+    }
+
+    private boolean matchingDriver(WebDriver mappedDriver, WebDriver driver) {
+        if (mappedDriver == driver) {
+            return true;
+        }
+
+        return ((driver instanceof WebDriverFacade) && (mappedDriver == ((WebDriverFacade) driver).proxiedWebDriver));
+    }
+
+
+    public List<
+            WebDriver> getActiveDrivers() {
         List<WebDriver> activeDrivers = Lists.newArrayList();
         for (WebDriver webDriver : driverMap.values()) {
             if (!(webDriver instanceof WebDriverFacade)) {

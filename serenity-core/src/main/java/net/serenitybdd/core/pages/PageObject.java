@@ -23,6 +23,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
 import net.thucydides.core.webdriver.DefaultPageObjectInitialiser;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webelements.Checkbox;
@@ -137,6 +138,7 @@ public abstract class PageObject {
 
     public PageObject(final WebDriver driver) {
         this();
+        ThucydidesWebDriverSupport.useDriver(driver);
         setDriver(driver);
     }
 

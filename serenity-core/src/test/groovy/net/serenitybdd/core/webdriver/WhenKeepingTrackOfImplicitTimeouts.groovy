@@ -128,8 +128,9 @@ class WhenKeepingTrackOfImplicitTimeouts extends Specification{
 
     def "should be able to set the implicit timeout"() {
         given:
-            def driver = new WebDriverFacade(HtmlUnitDriver, new WebDriverFactory());
+            WebDriverFacade driver = new WebDriverFacade(HtmlUnitDriver, new WebDriverFactory());
             def pageObject = new PageObjectUsingImplicitTimeouts(driver)
+            pageObject.open()
         when:
             pageObject.setImplicitTimeoutTo(3)
         then:

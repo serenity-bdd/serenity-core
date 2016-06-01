@@ -98,6 +98,7 @@ public class SerenityWebdriverManager implements WebdriverManager {
 
     @Override
     public void setCurrentDriver(WebDriver driver) {
+
         inThisTestThread().setCurrentDriverTo(driver);
     }
 
@@ -107,8 +108,17 @@ public class SerenityWebdriverManager implements WebdriverManager {
 
     @Override
     public void registerDriver(WebDriver driver) {
-        inThisTestThread().registerDriverCalled(driver.toString()).forDriver(driver);
-        inThisTestThread().setCurrentDriverTo(driver);
+        if (driver != null) {
+            inThisTestThread().registerDriverCalled(nameOf(driver)).forDriver(driver);
+            inThisTestThread().setCurrentDriverTo(driver);
+        }
+    }
+
+    private String nameOf(WebDriver driver) {
+        if (driver instanceof WebDriverFacade) {
+            return ((WebDriverFacade) driver).getDriverName();
+        }
+        return driver.toString();
     }
 
     @Override

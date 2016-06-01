@@ -10,12 +10,17 @@ class WhenManagingWebdriverSupportInOtherFrameworks extends Specification {
     def setup() {
         ThucydidesWebDriverSupport.clearDefaultDriver()
         ThucydidesWebDriverSupport.closeAllDrivers()
+        ThucydidesWebDriverSupport.initialize()
+    }
+
+    def cleanup() {
+        ThucydidesWebDriverSupport.closeAllDrivers()
     }
 
     def "should be able to declare a default driver"() {
         when:
             ThucydidesWebDriverSupport.useDefaultDriver("htmlunit")
-            ThucydidesWebDriverSupport.getDriver()
+            ThucydidesWebDriverSupport.getDriver().manage()
         then:
             ThucydidesWebDriverSupport.getCurrentDriverName() == "htmlunit"
     }
@@ -25,7 +30,7 @@ class WhenManagingWebdriverSupportInOtherFrameworks extends Specification {
             ThucydidesWebDriverSupport.useDefaultDriver("htmlunit")
         when:
             ThucydidesWebDriverSupport.clearDefaultDriver()
-            ThucydidesWebDriverSupport.getDriver()
+            ThucydidesWebDriverSupport.getDriver().manage()
         then:
             ThucydidesWebDriverSupport.getCurrentDriverName() == "firefox"
     }

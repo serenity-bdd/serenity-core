@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 
 import static net.thucydides.core.annotations.ManagedWebDriverAnnotatedField.*;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
@@ -47,7 +48,7 @@ public final class TestCaseAnnotations {
         }
     }
 
-    public void injectDrivers(final WebdriverManager webdriverManager) {
+    public void injectDrivers(final WebDriver defaultDriver, final WebdriverManager webdriverManager) {
         List<ManagedWebDriverAnnotatedField> webDriverFields = findAnnotatedFields(testCase.getClass());
         int driverCount = 1;
 
@@ -55,7 +56,8 @@ public final class TestCaseAnnotations {
         for(ManagedWebDriverAnnotatedField webDriverField : webDriverFields) {
             String driverRootName = isNotEmpty(webDriverField.getDriver()) ?  webDriverField.getDriver() : configuredDriverType();
             String driverName = driverRootName + suffix;
-            webDriverField.setValue(testCase, webdriverManager.getWebdriver(driverName));
+            WebDriver driver = (isEmpty(driverName)) ? defaultDriver : webdriverManager.getWebdriver(driverName);
+            webDriverField.setValue(testCase, driver);
 
             suffix = nextSuffix(driverCount++);
         }

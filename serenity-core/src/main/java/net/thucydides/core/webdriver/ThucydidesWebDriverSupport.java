@@ -147,7 +147,7 @@ public class ThucydidesWebDriverSupport {
      * Instantiate the @Managed-annotated WebDriver instance with current WebDriver.
      */
     protected static void injectDriverInto(final Object testCase) {
-        TestCaseAnnotations.forTestCase(testCase).injectDrivers(getWebdriverManager());
+        TestCaseAnnotations.forTestCase(testCase).injectDrivers(getDriver(), getWebdriverManager());
     }
 
     /**

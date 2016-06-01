@@ -514,7 +514,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
      * @param testCase A Serenity-annotated test class
      */
     protected void injectDriverInto(final Object testCase) {
-        TestCaseAnnotations.forTestCase(testCase).injectDrivers(getWebdriverManager());
+        TestCaseAnnotations.forTestCase(testCase).injectDrivers(ThucydidesWebDriverSupport.getDriver(),
+                                                                ThucydidesWebDriverSupport.getWebdriverManager());
         dependencyInjector.injectDependenciesInto(testCase);
     }
 

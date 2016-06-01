@@ -32,7 +32,7 @@ class WhenManagingWebdriverSupportInOtherFrameworks extends Specification {
             ThucydidesWebDriverSupport.clearDefaultDriver()
             ThucydidesWebDriverSupport.getDriver().manage()
         then:
-            ThucydidesWebDriverSupport.getCurrentDriverName() == "firefox"
+            ThucydidesWebDriverSupport.getCurrentDriverName() != "htmlunit"
     }
 
 }

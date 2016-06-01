@@ -61,6 +61,7 @@ public class ThucydidesWebDriverSupport {
 //    }
 
     public static void initializeFieldsIn(final Object testCase) {
+        initialize();
         getDriver();
         injectDriverInto(testCase);
         injectAnnotatedPagesObjectInto(testCase);
@@ -93,6 +94,10 @@ public class ThucydidesWebDriverSupport {
     public static WebDriver getDriver() {
         WebDriver driver;
 
+        if (webdriverManagerThreadLocal.get() == null) {
+            return null;
+        }
+        
         if (defaultDriverType.get() != null) {
             driver = getWebdriverManager().getWebdriver(defaultDriverType.get());
         } else {

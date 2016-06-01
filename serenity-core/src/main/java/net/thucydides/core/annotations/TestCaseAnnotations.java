@@ -48,6 +48,10 @@ public final class TestCaseAnnotations {
         }
     }
 
+    public void injectDrivers(final WebdriverManager webdriverManager) {
+        injectDrivers(ThucydidesWebDriverSupport.getDriver(),webdriverManager);
+    }
+
     public void injectDrivers(final WebDriver defaultDriver, final WebdriverManager webdriverManager) {
         List<ManagedWebDriverAnnotatedField> webDriverFields = findAnnotatedFields(testCase.getClass());
         int driverCount = 1;

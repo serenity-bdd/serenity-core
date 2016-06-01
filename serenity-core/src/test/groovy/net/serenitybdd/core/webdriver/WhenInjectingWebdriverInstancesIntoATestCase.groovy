@@ -25,6 +25,7 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
         environmentVariables = new MockEnvironmentVariables();
         configuration = new SystemPropertiesConfiguration(environmentVariables);
         webdriverFactory = new WebDriverFactory(environmentVariables)
+        ThucydidesWebDriverSupport.initialize()
         ThucydidesWebDriverSupport.reset()
     }
 

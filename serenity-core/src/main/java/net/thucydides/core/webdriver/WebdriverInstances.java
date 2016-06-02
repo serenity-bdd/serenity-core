@@ -44,10 +44,22 @@ public class WebdriverInstances {
         if (getCurrentDriver() instanceof WebDriverFacade) {
             return ((WebDriverFacade) getCurrentDriver()).getDriverName();
         }
-        if (getCurrentDriver().getClass().getName().contains("Mockito")) {
-            return SupportedWebDriver.forClass(getCurrentDriver().getClass().getSuperclass()).name().toLowerCase();
+        if (currentDriverIsMocked()) {
+            return currentMockedDriverType();
         }
         return "";
+    }
+
+    private boolean currentDriverIsMocked() {
+        return getCurrentDriver().getClass().getName().contains("Mockito");
+    }
+
+    private String currentMockedDriverType() {
+        String className = getCurrentDriver().getClass().getName();
+        if (className.contains("WebDriver")) {
+            return "firefox";
+        }
+        return SupportedWebDriver.forClass(getCurrentDriver().getClass().getSuperclass()).name().toLowerCase();
     }
 
     public WebDriver closeCurrentDriver() {

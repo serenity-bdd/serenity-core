@@ -7,12 +7,14 @@ import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
 import net.thucydides.core.steps.StepListener;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -49,11 +51,12 @@ public class WhenRunningTestsInIsolation {
 
 
     @Mock
-    WebDriver mockDriver;
+    FirefoxDriver mockDriver;
 
     @Before
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
+        ThucydidesWebDriverSupport.closeAllDrivers();
     }
 
     @After

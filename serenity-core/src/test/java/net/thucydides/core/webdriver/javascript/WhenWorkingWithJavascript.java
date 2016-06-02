@@ -27,8 +27,7 @@ public class WhenWorkingWithJavascript {
     @Mock
     WebDriverFactory factory;
 
-    @Mock
-    WebDriver mockDriver;
+    @Mock FirefoxDriver mockDriver;
 
     @Before
     public void initMocks() {

@@ -110,8 +110,6 @@ public class WhenRecordingStepExecutionResults {
         environmentVariables = new MockEnvironmentVariables();
         configuration = new SystemPropertiesConfiguration(environmentVariables);
 
-        driver = mock(FirefoxDriver.class);
-
         when(driver.getCurrentUrl()).thenReturn("http://www.google.com");
         when(driver.toString()).thenReturn("firefox");
         when(driver.getScreenshotAs(any(OutputType.class))).thenReturn(screenshot1).thenReturn(screenshot2);

@@ -47,7 +47,7 @@ public class FailureCause {
     public FailureCause(String errorType, String message, StackTraceElement[] stackTrace) {
         this.errorType = errorType;
         this.message = parseErrorMessage(message);
-        this.stackTrace = Arrays.copyOf(stackTrace,stackTrace.length);
+        this.stackTrace = (stackTrace == null) ? null : Arrays.copyOf(stackTrace,stackTrace.length);
     }
 
     private String parseErrorMessage(String message) {

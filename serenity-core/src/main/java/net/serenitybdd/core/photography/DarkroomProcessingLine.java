@@ -22,24 +22,24 @@ public class DarkroomProcessingLine implements Runnable {
 
     private final List<? extends PhotoFilter> processors;
 
+    private final List<ScreenshotNegative> queue;
+
+
     public void terminate() {
         done = true;
+
         synchronized (queue) {
             queue.notifyAll();
         }
 
     }
 
-    private final List<ScreenshotNegative> queue;
-
     DarkroomProcessingLine(List<? extends PhotoFilter> processors) {
         this.processors = processors;
         this.queue = Collections.synchronizedList(new LinkedList<ScreenshotNegative>());
-//        this.queue = new ConcurrentLinkedQueue<>();
     }
 
     public ScreenshotReceipt addToProcessingQueue(ScreenshotNegative negative) {
-//        queue.offer(negative);
         queue.add(negative);
         synchronized (queue) {
             queue.notifyAll();
@@ -110,7 +110,7 @@ public class DarkroomProcessingLine implements Runnable {
         try {
             LOGGER.debug("Saving screenshot to " + negative.getScreenshotPath());
             if (!Files.exists(negative.getScreenshotPath())) {
-                Files.createDirectories(negative.getScreenshotPath().getParent());
+                ensureParentDirectoryExistsFor(negative.getScreenshotPath());
                 Files.copy(negative.getTemporaryPath(), negative.getScreenshotPath(), StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (FileAlreadyExistsException noFurtherActionRequired) {
@@ -118,6 +118,14 @@ public class DarkroomProcessingLine implements Runnable {
             LOGGER.warn("Failed to save screenshot", e);
         }
     }
+
+    private void ensureParentDirectoryExistsFor(Path screenshotPath) throws IOException {
+        if (screenshotPath.getParent() != null) {
+            Files.createDirectories(screenshotPath.getParent());
+        }
+
+    }
+
 
     private Path screenshotPathFor(ScreenshotNegative negative) {
         ScreenshotNegative amendedNegative = negative;

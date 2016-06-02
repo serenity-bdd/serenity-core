@@ -52,7 +52,7 @@ class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
             def List<Future<List<ScreenshotPhoto>>> processing = new ArrayList<>();
             def List<ScreenshotPhoto> screenshots = new ArrayList<>();
             def Integer threads = 10
-            def Integer photos = 3
+            def Integer photos = 5
 
             def ExecutorService service = Executors.newFixedThreadPool(10);
         when:

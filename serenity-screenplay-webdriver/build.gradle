@@ -1,5 +1,5 @@
 ext {
-    bintrayPackage = 'serenity-ability-to-browse-the-web'
+    bintrayPackage = 'serenity-screenplay-webdriver'
     projectDescription = 'Webdriver integration for the User Journey pattern in Serenity'
 }
 

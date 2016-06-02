@@ -9,4 +9,4 @@ include 'serenity-test-utils',
         'serenity-rest-assured',
         'serenity-browsermob-plugin',
         'serenity-screenplay',
-        'browse-the-web'
+        'serenity-screenplay-webdriver'

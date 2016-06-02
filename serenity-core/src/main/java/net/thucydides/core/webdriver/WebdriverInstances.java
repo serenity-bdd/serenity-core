@@ -1,8 +1,6 @@
 package net.thucydides.core.webdriver;
 
 import com.google.common.collect.Lists;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
@@ -202,7 +200,9 @@ public class WebdriverInstances {
 
 
         public void forDriver(final WebDriver driver) {
-            driverMap.put(normalized(driverName), driver);
+            if (!driverMap.values().contains(driver)) {
+                driverMap.put(driverName, driver);
+            }
 //            currentDriver = normalized(driverName);
         }
     }

@@ -75,7 +75,6 @@ public class DarkroomProcessingLine implements Runnable {
 
     private void processNegative() {
         while (!queue.isEmpty()) {
-            Queue q;
             ScreenshotNegative negative = queue.remove(0);
             if (negative != null) {
                 process(negative);

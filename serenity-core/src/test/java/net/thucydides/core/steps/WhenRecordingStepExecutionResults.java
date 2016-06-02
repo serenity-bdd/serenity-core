@@ -62,7 +62,7 @@ public class WhenRecordingStepExecutionResults {
     byte[] screenshot1;
     byte[] screenshot2;
 
-//    @Mock
+    @Mock
     FirefoxDriver driver;
 
     @Mock

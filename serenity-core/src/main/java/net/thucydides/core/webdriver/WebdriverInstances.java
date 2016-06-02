@@ -1,8 +1,6 @@
 package net.thucydides.core.webdriver;
 
 import com.google.common.collect.Lists;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
@@ -96,7 +94,7 @@ public class WebdriverInstances {
 
     public Set<WebDriver> closeAllDrivers() {
         Collection<WebDriver> openDrivers = driverMap.values();
-        Set<WebDriver> closedDrivers = new HashSet<WebDriver>(openDrivers);
+        Set<WebDriver> closedDrivers = new HashSet<>(openDrivers);
         for (WebDriver driver : openDrivers) {
             closeAndQuit(driver);
         }
@@ -193,6 +191,16 @@ public class WebdriverInstances {
         return activeDrivers;
     }
 
+    protected void registerDriver(String driverName, WebDriver driver) {
+        if (!driverMap.containsKey(normalized(driverName))) {
+            driverMap.put(normalized(driverName), driver);
+        }
+    }
+
+    public InstanceRegistration registerDriverCalled(final String driverName) {
+        return new InstanceRegistration(normalized(driverName));
+    }
+
     public final class InstanceRegistration {
         private final String driverName;
 
@@ -200,15 +208,9 @@ public class WebdriverInstances {
             this.driverName = normalized(driverName);
         }
 
-
         public void forDriver(final WebDriver driver) {
-            driverMap.put(normalized(driverName), driver);
-//            currentDriver = normalized(driverName);
+            registerDriver(driverName, driver);
         }
-    }
-
-    public InstanceRegistration registerDriverCalled(final String driverName) {
-        return new InstanceRegistration(normalized(driverName));
     }
 
     private String normalized(String name) {

@@ -10,9 +10,9 @@ import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorPerforms;
 import net.serenitybdd.screenplay.exceptions.ActorCannotBrowseTheWebException;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.PageObjectDependencyInjector;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebdriverManager;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ public class BrowseTheWeb extends PageObject implements Ability {
 
     protected BrowseTheWeb(WebDriver browser) {
         super(browser);
-        this.webdriverManager = Injectors.getInjector().getInstance(WebdriverManager.class);
+        this.webdriverManager = ThucydidesWebDriverSupport.getWebdriverManager();// Injectors.getInjector().getInstance(WebdriverManager.class);
         registerForEventNotification();
     }
 

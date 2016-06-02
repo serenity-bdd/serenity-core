@@ -26,7 +26,7 @@ public class ResourceList {
 
     private final Pattern pattern;
 
-    private final long TO_GIVE_THE_OTHER_PROCESS_TIME_TO_RELEASE_THE_ZIP = 500;
+    private static final long TO_GIVE_THE_OTHER_PROCESS_TIME_TO_RELEASE_THE_ZIP = 500;
 
     public static ResourceList forResources(final Pattern pattern) {
         return new ResourceList(pattern);

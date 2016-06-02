@@ -9,7 +9,7 @@ import java.nio.file.Path;
  */
 public class ScreenshotPhoto {
 
-    public static ScreenshotPhoto None = new ScreenshotPhoto(null);
+    public final static ScreenshotPhoto None = new ScreenshotPhoto(null);
 
     private final Path pathToScreenshot;
 

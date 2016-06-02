@@ -323,7 +323,7 @@ public class TestOutcomes {
         return new TestOutcomes(testOutcomesWithRequirements, estimatedAverageStepCount, label, rootOutcomes.orNull(), environmentVariables);
     }
 
-    private class TagFinder {
+    private static class TagFinder {
         private final String tagType;
 
         private TagFinder(String tagType) {
@@ -759,7 +759,7 @@ public class TestOutcomes {
         return new TestOutcomeMatcher(this);
     }
 
-    public final class TestOutcomeMatcher {
+    public static final class TestOutcomeMatcher {
 
         private final TestOutcomes outcomes;
         private Optional<List<Matcher<String>>> nameMatcher = Optional.absent();

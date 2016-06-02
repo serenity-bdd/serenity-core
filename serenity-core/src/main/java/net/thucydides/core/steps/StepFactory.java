@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -192,7 +193,7 @@ public class StepFactory {
                 return parameterTypes;
             }
         }
-        throw new IllegalArgumentException("Could not find a matching constructor for class " + scenarioStepsClass + "with parameters " + parameters);
+        throw new IllegalArgumentException("Could not find a matching constructor for class " + scenarioStepsClass + "with parameters " + Arrays.toString(parameters));
     }
 
     private boolean parametersMatchFor(Object[] parameters, Class<?>[] parameterTypes) {
@@ -228,7 +229,7 @@ public class StepFactory {
         return injectPagesInto(scenarioStepsClass, newStepLibrary);
     }
 
-    class PageInjector {
+    static class PageInjector {
         private final Pages pages;
 
         public PageInjector(Pages pages) {

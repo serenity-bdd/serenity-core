@@ -6,13 +6,15 @@ import net.serenitybdd.screenplay.targets.Target;
 import net.thucydides.core.annotations.Step;
 import org.openqa.selenium.Keys;
 
+import java.util.Arrays;
+
 public class HitTarget implements Action {
 
     private Keys[] keys;
     private Target target;
 
     public HitTarget(Keys[] keys, Target target) {
-        this.keys = keys;
+        this.keys = Arrays.copyOf(keys,keys.length);
         this.target = target;
     }
 

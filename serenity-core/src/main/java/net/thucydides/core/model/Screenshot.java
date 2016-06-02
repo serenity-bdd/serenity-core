@@ -60,7 +60,7 @@ public class Screenshot {
         return new HtmlFormattedInfo(description);
     }
 
-    public class HtmlFormattedInfo {
+    public static class HtmlFormattedInfo {
         private final String description;
 
         public HtmlFormattedInfo(String description) {

@@ -6,6 +6,8 @@ import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 
+import java.util.Arrays;
+
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
 public class Hit {
@@ -17,7 +19,7 @@ public class Hit {
     }
 
     public static Hit the(Keys... keys) {
-        return new Hit(keys);
+        return new Hit(Arrays.copyOf(keys,keys.length));
     }
 
     public Performable into(String cssOrXpathForElement) {

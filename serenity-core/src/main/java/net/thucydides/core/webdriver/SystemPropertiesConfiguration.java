@@ -176,7 +176,7 @@ public class SystemPropertiesConfiguration implements Configuration {
 
         String stepDelayValue = ThucydidesSystemProperty.THUCYDIDES_STEP_DELAY.from(environmentVariables);
         if ((stepDelayValue != null) && (!stepDelayValue.isEmpty())) {
-            stepDelay = Integer.valueOf(stepDelayValue);
+            stepDelay = Integer.parseInt(stepDelayValue);
         }
         return stepDelay;
 
@@ -187,7 +187,7 @@ public class SystemPropertiesConfiguration implements Configuration {
 
         String stepDelayValue = ThucydidesSystemProperty.THUCYDIDES_TIMEOUT.from(environmentVariables);
         if ((stepDelayValue != null) && (!stepDelayValue.isEmpty())) {
-            elementTimeout = Integer.valueOf(stepDelayValue);
+            elementTimeout = Integer.parseInt(stepDelayValue);
         }
         return elementTimeout;
 

@@ -53,7 +53,6 @@ public class RestExecutionHelper {
     }
 
     private static boolean isEnabledDryCleanOnlyForCurrentClass() {
-        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         for (final StackTraceElement element : Thread.currentThread().getStackTrace()) {
             if (classWithDryCleanEnabled.contains(element.getClassName())) {
                 return true;

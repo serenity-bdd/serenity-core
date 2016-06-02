@@ -3,6 +3,8 @@ package net.thucydides.core.steps;
 
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 
+import java.util.Arrays;
+
 /**
  * Description and underlying cause behind a step failure.
  * A <code>StepFailure</code> holds a description of the failed test step and the
@@ -63,6 +65,6 @@ public class StepFailure {
     }
 
     public StackTraceElement[] getStackTraceElements() {
-        return stackTraceElements;
+        return Arrays.copyOf(stackTraceElements, stackTraceElements.length);
     }
 }

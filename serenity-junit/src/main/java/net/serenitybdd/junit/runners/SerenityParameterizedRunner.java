@@ -78,7 +78,7 @@ public class SerenityParameterizedRunner extends Suite {
         int threads = (AVAILABLE_PROCESSORS * 2);
         if (StringUtils.isNotEmpty(threadValue)) {
             if (StringUtils.isNumeric(threadValue)) {
-                threads = Integer.valueOf(threadValue);
+                threads = Integer.parseInt(threadValue);
             } else if (threadValue.endsWith("x")) {
                 threads = getRelativeThreadCount(threadValue);
             }
@@ -98,7 +98,7 @@ public class SerenityParameterizedRunner extends Suite {
     private int getRelativeThreadCount(final String threadValue) {
         try {
             String threadCount = threadValue.substring(0, threadValue.length() - 1);
-            return Integer.valueOf(threadCount) * AVAILABLE_PROCESSORS;
+            return Integer.parseInt(threadCount) * AVAILABLE_PROCESSORS;
         } catch (NumberFormatException cause) {
             throw new IllegalArgumentException("Illegal thread value: " + threadValue, cause);
         }

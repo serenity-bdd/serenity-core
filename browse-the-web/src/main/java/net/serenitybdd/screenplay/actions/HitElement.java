@@ -6,6 +6,8 @@ import net.serenitybdd.screenplay.Actor;
 import net.thucydides.core.annotations.Step;
 import org.openqa.selenium.Keys;
 
+import java.util.Arrays;
+
 public class HitElement implements Action {
 
     private Keys[] keys;
@@ -13,7 +15,7 @@ public class HitElement implements Action {
     private WebElementFacade element;
 
     public HitElement(Keys[] keys, WebElementFacade element) {
-        this.keys = keys;
+        this.keys = Arrays.copyOf(keys,keys.length);
         this.element = element;
     }
 

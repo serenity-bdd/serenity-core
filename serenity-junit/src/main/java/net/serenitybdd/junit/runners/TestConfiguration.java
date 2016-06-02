@@ -71,7 +71,6 @@ public class TestConfiguration {
         private final Class<?> testClass;
 
         public TestConfigurationBuilder(Class<?> testClass) {
-            TestClass t = new TestClass(testClass);
             this.testClass = testClass;
         }
 

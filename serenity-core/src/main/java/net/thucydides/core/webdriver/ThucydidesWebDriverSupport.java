@@ -18,7 +18,6 @@ public class ThucydidesWebDriverSupport {
     private static final ThreadLocal<Pages> pagesThreadLocal = new ThreadLocal<Pages>();
     private static final ThreadLocal<StepFactory> stepFactoryThreadLocal = new ThreadLocal<StepFactory>();
     private static final ThreadLocal<String> defaultDriverType = new ThreadLocal<>();
-    private static WebdriverManager webdriverManager;
 
     public static void initialize() {
         if (!webdriversInitialized()) {

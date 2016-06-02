@@ -94,7 +94,7 @@ public class HtmlTable {
         }
     }
 
-    private class EnoughCellsCheck {
+    private static class EnoughCellsCheck {
         private final int minimumNumberOfCells;
 
         private EnoughCellsCheck(List<String> headings) {

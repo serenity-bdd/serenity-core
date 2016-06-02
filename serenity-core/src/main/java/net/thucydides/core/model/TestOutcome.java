@@ -71,7 +71,7 @@ import static org.hamcrest.Matchers.is;
  */
 public class TestOutcome {
 
-    private static final int RECENT_TEST_RUN_COUNT = 10;
+    private static final Integer RECENT_TEST_RUN_COUNT = 10;
     private static final String ISSUES = "issues";
     private static final String NEW_LINE = System.getProperty("line.separator");
 
@@ -2032,7 +2032,7 @@ public class TestOutcome {
         }
     }
 
-    private class SpecificTagFinder {
+    private static class SpecificTagFinder {
         private final TestTag tag;
 
         public SpecificTagFinder(TestTag tag) {

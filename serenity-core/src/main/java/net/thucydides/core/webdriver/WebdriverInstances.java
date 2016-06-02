@@ -18,11 +18,8 @@ public class WebdriverInstances {
 
     private String currentDriver;
 
-    private EnvironmentVariables environmentVariables;
-
     public WebdriverInstances() {
         this.driverMap = new HashMap<>();
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
     }
 
     public WebDriver getCurrentDriver() {

@@ -794,7 +794,7 @@ public class WebDriverFactory {
 
     public Duration getDefaultImplicitTimeout() {
         String configuredTimeoutValue = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.from(environmentVariables);
-        return (configuredTimeoutValue != null) ? new Duration(Integer.valueOf(configuredTimeoutValue), TimeUnit.MILLISECONDS)
+        return (configuredTimeoutValue != null) ? new Duration(Integer.parseInt(configuredTimeoutValue), TimeUnit.MILLISECONDS)
                                            : DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
 
     }

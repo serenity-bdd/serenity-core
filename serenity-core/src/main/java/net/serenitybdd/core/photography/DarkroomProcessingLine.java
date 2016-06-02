@@ -9,9 +9,10 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class DarkroomProcessingLine implements Runnable {
 
@@ -29,15 +30,17 @@ public class DarkroomProcessingLine implements Runnable {
 
     }
 
-    private final Queue<ScreenshotNegative> queue;
+    private final List<ScreenshotNegative> queue;
 
     DarkroomProcessingLine(List<? extends PhotoFilter> processors) {
         this.processors = processors;
-        this.queue = new ConcurrentLinkedQueue<>();
+        this.queue = Collections.synchronizedList(new LinkedList<ScreenshotNegative>());
+//        this.queue = new ConcurrentLinkedQueue<>();
     }
 
     public ScreenshotReceipt addToProcessingQueue(ScreenshotNegative negative) {
-        queue.offer(negative);
+//        queue.offer(negative);
+        queue.add(negative);
         synchronized (queue) {
             queue.notifyAll();
         }
@@ -72,7 +75,8 @@ public class DarkroomProcessingLine implements Runnable {
 
     private void processNegative() {
         while (!queue.isEmpty()) {
-            ScreenshotNegative negative = queue.poll();
+            Queue q;
+            ScreenshotNegative negative = queue.get(0);
             if (negative != null) {
                 process(negative);
             }

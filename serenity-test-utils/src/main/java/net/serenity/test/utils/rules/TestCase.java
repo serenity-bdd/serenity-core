@@ -1,13 +1,15 @@
 package net.serenity.test.utils.rules;
 
-import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepListener;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * User: YamStranger
@@ -59,7 +61,7 @@ public class TestCase<T extends StepListener> implements MethodRule {
     }
 
     public String name() {
-        return this.name();
+        return this.name;
     }
 
     @Override

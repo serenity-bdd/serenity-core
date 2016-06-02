@@ -487,7 +487,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
 
-    class ExtractText implements Converter<WebElement, String> {
+    static class ExtractText implements Converter<WebElement, String> {
         public String convert(WebElement from) {
             return from.getText();
         }

@@ -29,8 +29,6 @@ import static org.apache.commons.lang3.ObjectUtils.*;
  */
 public class RestReportingHelper {
 
-    private RestQuery query;
-
     public RestReportingHelper() {
         getEventBus().registerListener(new RestStepListener());
     }

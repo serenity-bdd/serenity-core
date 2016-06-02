@@ -801,7 +801,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         try {
             manualTestResult = TestResult.valueOf(manualTestResultValue.toUpperCase());
         } catch (IllegalArgumentException e) {
-            LOGGER.warn("Badly configured value for manual.test.report.result: should be one of " + TestResult.values());
+            LOGGER.warn("Badly configured value for manual.test.report.result: should be one of " + Arrays.toString(TestResult.values()));
         }
         return manualTestResult;
     }

@@ -27,8 +27,7 @@ class BeanPropertyMatcher implements BeanFieldMatcher {
     @Override
     public String toString() {
         String matcherDescription = matcher.toString();
-        String htmlFriendlyMatcherDescription
-                = (matcherDescription != null) ? matcherDescription.replaceAll("\"", "'") : "";
+        String htmlFriendlyMatcherDescription = matcherDescription.replaceAll("\"", "'");
         return fieldName + " " + htmlFriendlyMatcherDescription;
     }
 }

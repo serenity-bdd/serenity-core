@@ -47,7 +47,7 @@ public class FailureCause {
     public FailureCause(String errorType, String message, StackTraceElement[] stackTrace) {
         this.errorType = errorType;
         this.message = parseErrorMessage(message);
-        this.stackTrace = stackTrace;
+        this.stackTrace = Arrays.copyOf(stackTrace,stackTrace.length);
     }
 
     private String parseErrorMessage(String message) {
@@ -91,11 +91,11 @@ public class FailureCause {
     }
 
     public StackTraceElement[] getStackTrace() {
-        return stackTrace;
+        return Arrays.copyOf(stackTrace, stackTrace.length);
     }
 
     public void setStackTrace(StackTraceElement[] stackTrace) {
-        this.stackTrace = stackTrace;
+        this.stackTrace = Arrays.copyOf(stackTrace,stackTrace.length);
     }
 
     public Class<? extends Throwable> exceptionClass() {

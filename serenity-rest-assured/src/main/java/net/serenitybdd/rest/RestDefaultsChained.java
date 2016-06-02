@@ -94,7 +94,7 @@ public class RestDefaultsChained {
         return this;
     }
 
-    public RestDefaultsChained RestDefaultsChainedreplaceFiltersWith(final List<Filter> filters) {
+    public RestDefaultsChained restDefaultsChainedreplaceFiltersWith(final List<Filter> filters) {
         SerenityRest.replaceFiltersWith(filters);
         return this;
     }

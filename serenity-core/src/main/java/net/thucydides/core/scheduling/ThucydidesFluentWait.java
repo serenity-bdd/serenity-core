@@ -19,7 +19,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public abstract class ThucydidesFluentWait<T> implements Wait<T> {
 
-    public static Duration FIVE_HUNDRED_MILLIS = new Duration(500, MILLISECONDS);
+    public final static Duration FIVE_HUNDRED_MILLIS = new Duration(500, MILLISECONDS);
 
     protected Duration timeout = FIVE_HUNDRED_MILLIS;
     protected Duration interval = FIVE_HUNDRED_MILLIS;

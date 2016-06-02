@@ -46,8 +46,6 @@ class ThucydidesContext {
 
     private String defaultDriver;
 
-    private WebDriverFactory webDriverFactory;
-
     private Pages pages;
 
     /**
@@ -67,7 +65,6 @@ class ThucydidesContext {
         outputDirectory = configuration.getOutputDirectory();
         this.defaultDriver = defaultDriver;
         if (defaultDriver != null) {
-            webDriverFactory = new WebDriverFactory();
             pages =  new Pages(getDriver());
             stepFactory = new StepFactory(pages);
         } else {

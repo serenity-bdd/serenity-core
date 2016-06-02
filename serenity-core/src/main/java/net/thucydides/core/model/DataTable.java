@@ -244,7 +244,7 @@ public class DataTable {
 
     }
 
-    public class RowValueAccessor {
+    public static class RowValueAccessor {
         private final DataTable dataTable;
         private final int rowNumber;
 

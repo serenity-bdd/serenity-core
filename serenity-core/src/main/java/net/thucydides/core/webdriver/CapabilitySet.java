@@ -82,14 +82,11 @@ class CapabilitySet {
         return value.startsWith("[") && value.endsWith("]");
     }
 
-    private class CapabilityToken {
+    private static class CapabilityToken {
         private final String name;
         private final String value;
 
         private CapabilityToken(String capability) {
-            List<String> capabilityTokens =
-                    Lists.newArrayList(Splitter.on(CAPABILITY_NAME_VALUE_SEPARATOR).trimResults().split(capability));
-
             int colonIndex = capability.indexOf(":");
             if (colonIndex >= 0)  {
                 name = capability.substring(0, colonIndex);

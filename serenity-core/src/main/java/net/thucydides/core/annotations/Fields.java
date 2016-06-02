@@ -129,7 +129,7 @@ public class Fields {
             return new FieldValueProvider(field, object);
         }
 
-        private class FieldValueProvider {
+        private static class FieldValueProvider {
             Field field;
             Object object;
 

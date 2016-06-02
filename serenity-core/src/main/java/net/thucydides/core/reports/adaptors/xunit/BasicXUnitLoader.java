@@ -116,7 +116,7 @@ public class BasicXUnitLoader implements XUnitLoader {
         }
     }
 
-    private class ExceptionElementBuilder {
+    private static class ExceptionElementBuilder {
         private final Element testCaseElement;
 
         public ExceptionElementBuilder(Element testCaseElement) {

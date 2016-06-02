@@ -3,6 +3,8 @@ package net.serenitybdd.screenplay.questions;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 
+import java.util.Arrays;
+
 public class JavaScript extends UIState<String> {
 
     private final String expression;
@@ -11,7 +13,7 @@ public class JavaScript extends UIState<String> {
     public JavaScript(String expression, Object[] parameters, Actor actor) {
         super(actor);
         this.expression = expression;
-        this.parameters = parameters;
+        this.parameters = Arrays.copyOf(parameters,parameters.length);
     }
 
     public static JavaScriptBuilder evaluate(String expression) {

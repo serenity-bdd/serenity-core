@@ -3,6 +3,7 @@ package net.thucydides.core.steps;
 import ch.lambdaj.function.convert.Converter;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import static ch.lambdaj.Lambda.convert;
 import static ch.lambdaj.Lambda.join;
@@ -26,7 +27,7 @@ public class ReadableMethodName {
         }
 
         public TestNameBuilder withArguments(final Object[] args) {
-            this.args = args;
+            this.args = Arrays.copyOf(args,args.length);
             return this;
         }
 

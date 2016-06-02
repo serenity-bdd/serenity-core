@@ -19,10 +19,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static io.appium.java_client.remote.MobilePlatform.ANDROID;
 import static io.appium.java_client.remote.MobilePlatform.IOS;
@@ -421,7 +418,7 @@ public class SmartAnnotations extends Annotations {
         }
         throw new IllegalArgumentException("@"
                 + mobileBy.getClass().getSimpleName() + ": one of "
-                + Strategies.strategyNames().toString() + " should be filled");
+                + Arrays.toString(Strategies.strategyNames()) + " should be filled");
     }
 
     private static Method[] prepareAnnotationMethods(

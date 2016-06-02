@@ -12,7 +12,6 @@ import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.OutcomeFormat;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,8 +66,10 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
             jsonConverter.toJson(storedTestOutcome, outputStream);
             outputStream.flush();
         }
-        Files.move(temporary.toPath(), report.toPath(),
-                StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
+        Files.move(temporary.toPath(),
+                   report.toPath(),
+                   StandardCopyOption.REPLACE_EXISTING,
+                   StandardCopyOption.ATOMIC_MOVE
         );
         return report;
     }

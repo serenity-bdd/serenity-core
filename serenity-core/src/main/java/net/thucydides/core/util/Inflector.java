@@ -30,7 +30,7 @@ public class Inflector {
         return new MultipleInflection(count);
     }
 
-    protected class Rule {
+    protected static class Rule {
 
         protected final String expression;
         protected final Pattern expressionPattern;

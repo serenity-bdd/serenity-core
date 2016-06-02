@@ -351,7 +351,7 @@ public class Requirement implements Comparable {
         return ImmutableList.copyOf(mergedChildren);
     }
 
-    public class CustomFieldSetter {
+    public static class CustomFieldSetter {
 
         Requirement requirement;
         String fieldName;

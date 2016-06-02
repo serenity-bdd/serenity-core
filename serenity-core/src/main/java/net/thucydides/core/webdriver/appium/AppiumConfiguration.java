@@ -19,7 +19,7 @@ import static org.hamcrest.CoreMatchers.startsWith;
  */
 public class AppiumConfiguration {
 
-    private final String DEFAULT_URL = "http://127.0.0.1:4723/wd/hub";
+    private static final String DEFAULT_URL = "http://127.0.0.1:4723/wd/hub";
     private final EnvironmentVariables environmentVariables;
 
     public AppiumConfiguration(EnvironmentVariables environmentVariables) {

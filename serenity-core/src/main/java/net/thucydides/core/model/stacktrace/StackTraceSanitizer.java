@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SIMPLIFIED_STACK_TRACES;
@@ -50,7 +51,7 @@ public class StackTraceSanitizer {
 
     public StackTraceSanitizer(EnvironmentVariables environmentVariables, StackTraceElement[] stackTrace) {
         this.environmentVariables = environmentVariables;
-        this.stackTrace = stackTrace;
+        this.stackTrace = Arrays.copyOf(stackTrace,stackTrace.length);
     }
 
     public static StackTraceSanitizer forStackTrace(StackTraceElement[] stackTrace) {

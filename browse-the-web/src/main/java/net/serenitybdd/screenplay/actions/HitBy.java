@@ -5,6 +5,8 @@ import net.thucydides.core.annotations.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 
+import java.util.Arrays;
+
 public class HitBy extends ByAction {
 
     private Keys[] keys;
@@ -12,7 +14,7 @@ public class HitBy extends ByAction {
 
     public HitBy(Keys[] keys, By... locators) {
         super(locators);
-        this.keys = keys;
+        this.keys = Arrays.copyOf(keys,keys.length);
     }
 
     @Step("{0} hits the '#keys' key#pluraliser")

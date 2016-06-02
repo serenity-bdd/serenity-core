@@ -12,8 +12,7 @@ public abstract class EnterValue implements Action {
 
     protected final String theText;
     protected final List<Keys> followedByKeys;
-    protected String followedBy;
-    private final String ENTER_KEYS_INTRO_TEXT = " then hits ";
+    private static final String ENTER_KEYS_INTRO_TEXT = " then hits ";
 
     public EnterValue(String theText) {
         this.theText = theText;
@@ -22,7 +21,6 @@ public abstract class EnterValue implements Action {
 
     public EnterValue thenHit(Keys... keys) {
         this.followedByKeys.addAll(Lists.newArrayList(keys));
-        this.followedBy = getFollowedByKeysDescriptionFor(followedByKeys);
         return this;
     }
 

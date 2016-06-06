@@ -285,15 +285,16 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
         }
 
         private boolean areElementsUsable(List<WebElement> elements) {
-            if (elements == null) {
-                return false;
-            }
-            for (WebElement element : elements) {
-                if (!isElementUsable(element)) {
-                    return false;
-                }
-            }
-            return true;
+            return ((elements != null));// && (elements.size() > 0));
+//            if (elements == null) {
+//                return false;
+//            }
+//            for (WebElement element : elements) {
+//                if (!isElementUsable(element)) {
+//                    return false;
+//                }
+//            }
+//            return true;
         }
 
 //		public NoSuchElementException getLastException() {

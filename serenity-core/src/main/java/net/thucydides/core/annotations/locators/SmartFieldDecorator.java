@@ -14,6 +14,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.internal.WrapsElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
@@ -87,7 +88,12 @@ public class SmartFieldDecorator implements FieldDecorator {
             = ImmutableList.of(FindBy.class,
             net.thucydides.core.annotations.findby.FindBy.class,
             org.openqa.selenium.support.FindBy.class,
-            FindBys.class, AndroidFindBy.class, AndroidFindBys.class, iOSFindBy.class, iOSFindBys.class);
+            FindBys.class,
+            FindAll.class,
+            AndroidFindBy.class,
+            AndroidFindBys.class,
+            iOSFindBy.class,
+            iOSFindBys.class);
 
 
     private boolean annotatedByLegalFindByAnnotation(Field field) {

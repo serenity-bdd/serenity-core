@@ -7,6 +7,7 @@ import net.thucydides.core.annotations.Issue
 import net.thucydides.core.annotations.WithTag
 import net.thucydides.core.annotations.Feature
 import net.thucydides.core.annotations.Issues
+import net.thucydides.core.annotations.Story
 import net.thucydides.core.digest.Digest
 import net.thucydides.core.issues.IssueTracking
 import net.thucydides.core.model.*
@@ -16,6 +17,8 @@ import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.integration.TestStepFactory
 import net.thucydides.core.reports.json.gson.GsonJSONConverter
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource
+import net.thucydides.core.steps.BaseStepListener
+import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.joda.time.DateTime
 import org.joda.time.LocalDateTime
@@ -752,4 +755,19 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         then:
         loadedOutcome.tags
     }
+
+    def "should include test source in the JSON report"() {
+        given:
+        def testOutcome = TestOutcome.forTest("should_do_this", ATestScenarioWithIssues.class)
+        testOutcome.startTime = FIRST_OF_JANUARY
+        testOutcome.setTestSource(StepEventBus.TEST_SOURCE_JUNIT)
+
+        when:
+        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        and:
+        TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
+        then:
+        reloadedOutcome.getTestSource() == StepEventBus.TEST_SOURCE_JUNIT
+    }
+
 }

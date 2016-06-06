@@ -20,11 +20,14 @@ public class ClasspathTagProviderService implements TagProviderService {
 
     @Override
     public List<TagProvider> getTagProviders() {
+        return getTagProviders(null);
+    }
+
+    @Override
+    public List<TagProvider> getTagProviders(String testSource) {
         if (tagProviders == null) {
             List<TagProvider> newTagProviders = Lists.newArrayList();
-
-            Iterable<TagProvider> tagProviderServiceLoader = loadTagProvidersFromPath();
-
+            Iterable<TagProvider> tagProviderServiceLoader = loadTagProvidersFromPath(testSource);
             for (TagProvider tagProvider : tagProviderServiceLoader) {
                 newTagProviders.add(tagProvider);
             }
@@ -33,7 +36,17 @@ public class ClasspathTagProviderService implements TagProviderService {
         return tagProviders;
     }
 
-    protected Iterable<TagProvider> loadTagProvidersFromPath() {
-        return ServiceLoader.load(TagProvider.class);
+    protected Iterable<TagProvider> loadTagProvidersFromPath(String testSource) {
+        if (testSource == null) {
+            return ServiceLoader.load(TagProvider.class);
+        } else {
+            Iterable<TagProviderStrategy> tagProviderStrategies = ServiceLoader.load(TagProviderStrategy.class);
+            for (TagProviderStrategy strategy : tagProviderStrategies) {
+                if (strategy.canHandleTestSource(testSource)) {
+                    return strategy.getTagProviders();
+                }
+            }
+        }
+        return null;
     }
 }

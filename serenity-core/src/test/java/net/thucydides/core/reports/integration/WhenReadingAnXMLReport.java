@@ -392,6 +392,25 @@ public class WhenReadingAnXMLReport {
         Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
         assertThat(testOutcome.get().getSessionId(), is("1234"));
     }
+
+    @Test
+    public void should_load_the_test_source_from_xml_file() throws Exception {
+        String storedReportXML =
+                "<acceptance-test-run title='Should do this' name='should_do_this' steps='1' successful='1' failures='0' skipped='0' ignored='0' pending='0' result='SUCCESS' session-id='1234' test-source='JUnit'>\n"
+                        + "  <user-story id='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AUserStory' name='A user story'>\n"
+                        + "    <feature id='myapp.myfeatures.SomeFeature' name='Some feature' />\n"
+                        + "  </user-story>"
+                        + "  <test-step result='SUCCESS'>\n"
+                        + "    <description>step 1</description>\n"
+                        + "  </test-step>\n"
+                        + "</acceptance-test-run>";
+
+        File report = temporaryDirectory.newFile("saved-report.xml");
+        FileUtils.writeStringToFile(report, storedReportXML);
+
+        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        assertThat(testOutcome.get().getTestSource(), is("JUnit"));
+    }
     
     @Test
     public void should_return_null_feature_if_no_feature_is_present() {

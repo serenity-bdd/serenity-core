@@ -27,7 +27,7 @@ public class AnnotatedTitle {
             String fieldName = fieldVariableFor(field.getName());
             Object value = getValueFrom(question, field);
             if (updatedText.contains(fieldName) && (value != null)) {
-                updatedText = StringUtils.replace(text, fieldName, value.toString());
+                updatedText = StringUtils.replace(updatedText, fieldName, value.toString());
             }
         }
         return updatedText;

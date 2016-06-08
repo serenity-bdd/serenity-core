@@ -15,7 +15,7 @@ public class QuestionSubject<T> {
     private Question<T> question;
 
     @SuppressWarnings("unchecked")
-    public static <T> QuestionSubject<T> fromClass(Class<? extends Question> questionClass) {
+    public static <T> QuestionSubject<T> fromClass(Class<?> questionClass) {
         return new QuestionSubject(questionClass);
     }
 
@@ -32,10 +32,18 @@ public class QuestionSubject<T> {
         if (annotationOnMethodOf(questionClass).isPresent()) {
             return Optional.of(annotationOnMethodOf(questionClass)).get();
         }
+        return annotatedSubjectFromClass(questionClass);
+    }
+
+    private Optional<String> annotatedSubjectFromClass(Class<?> questionClass) {
         if (questionClass.getAnnotation(Subject.class) != null) {
-            //return Optional.of(questionClass.getAnnotation(Subject.class).value());
             return Optional.of(annotationOnClass(questionClass)).get();
         }
+
+        if (questionClass.getSuperclass() != null) {
+            return annotatedSubjectFromClass(questionClass.getSuperclass());
+        }
+
         return Optional.absent();
     }
 
@@ -53,7 +61,7 @@ public class QuestionSubject<T> {
         return Optional.absent();
     }
 
-    private Optional<String> annotationOnClass(Class<? extends Question> questionClass) {
+    private Optional<String> annotationOnClass(Class<?> questionClass) {
         if (questionClass.getAnnotation(Subject.class) != null) {
             String annotatedTitle = questionClass.getAnnotation(Subject.class).value();
             annotatedTitle = AnnotatedTitle.injectFieldsInto(annotatedTitle).using(question);

@@ -81,4 +81,15 @@ public class EventualConsequence<T> implements Consequence<T> {
     public Consequence<T> orComplainWith(Class<? extends Error> complaintType, String complaintDetails) {
         return new EventualConsequence(consequenceThatMightTakeSomeTime.orComplainWith(complaintType, complaintDetails));
     }
+
+    @Override
+    public Consequence<T> whenAttemptingTo(Performable performable) {
+        return new EventualConsequence<T>(consequenceThatMightTakeSomeTime.whenAttemptingTo(performable));
+    }
+
+    @Override
+    public Consequence<T> because(String explanation) {
+        return new EventualConsequence<T>(consequenceThatMightTakeSomeTime.because(explanation));
+    }
+
 }

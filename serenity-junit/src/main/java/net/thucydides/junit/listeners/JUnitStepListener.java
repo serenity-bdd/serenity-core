@@ -26,9 +26,9 @@ public class JUnitStepListener extends RunListener {
     private boolean testStarted;
 
     public static JUnitStepListenerBuilder withOutputDirectory(File outputDirectory) {
-        return new JUnitStepListenerBuilder(outputDirectory);     
+        return new JUnitStepListenerBuilder(outputDirectory);
     }
-    
+
     protected JUnitStepListener(Class<?> testClass, BaseStepListener baseStepListener, StepListener... listeners) {
         testStarted = false;
         this.baseStepListener = baseStepListener;
@@ -71,6 +71,7 @@ public class JUnitStepListener extends RunListener {
         if (testingThisTest(description)) {
             startTestSuiteForFirstTest(description);
             StepEventBus.getEventBus().clear();
+            StepEventBus.getEventBus().setTestSource(StepEventBus.TEST_SOURCE_JUNIT);
             StepEventBus.getEventBus().testStarted(
                     Optional.fromNullable(description.getMethodName()).or("Initialisation"),
                     description.getTestClass());
@@ -89,6 +90,7 @@ public class JUnitStepListener extends RunListener {
         if (testingThisTest(description)) {
             updateResultsUsingTestAnnotations(description);
             StepEventBus.getEventBus().testFinished();
+            StepEventBus.getEventBus().setTestSource(null);
             endTest();
         }
     }

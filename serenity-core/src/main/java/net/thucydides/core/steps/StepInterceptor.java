@@ -219,16 +219,15 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         }
     }
 
-    private boolean shouldNotSkipMethod(final Method methodOrStep, final Class callingClass) {
-        return !shouldSkipMethod(methodOrStep, callingClass);
-    }
-
     private boolean shouldSkipMethod(final Method methodOrStep, final Class callingClass) {
         return ((aPreviousStepHasFailed() || testIsPending() || isDryRun()) && declaredInSameDomain(methodOrStep, callingClass));
     }
 
     private boolean shouldSkip(final Method methodOrStep) {
-        return aPreviousStepHasFailed() || testIsPending() || isDryRun() || isPending(methodOrStep) || isIgnored(methodOrStep);
+        if (aPreviousStepHasFailed() && !isSoftAssert()) {
+            return true;
+        }
+        return testIsPending() || isDryRun() || isPending(methodOrStep) || isIgnored(methodOrStep);
     }
 
     private boolean testIsPending() {
@@ -249,6 +248,10 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
 
     private boolean isDryRun() {
         return StepEventBus.getEventBus().isDryRun();
+    }
+
+    private boolean isSoftAssert() {
+        return StepEventBus.getEventBus().softAssertsActive();
     }
 
     private Object runBaseObjectMethod(final Object obj, final Method method, final Object[] args, final MethodProxy proxy)

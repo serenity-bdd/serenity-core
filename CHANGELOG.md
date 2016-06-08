@@ -1,7 +1,20 @@
 ## Serenity BDD core change Log
 
-### upcoming (2016/06/02 06:20 +00:00)
+### v1.1.36 (2016/06/02 19:43 +00:00)
  
+**Pull requests:**
+ 
+ 
+**Commits:**
+ 
+- [0222177](https://github.com/serenity-bdd/serenity-core/commit/022217733bafafbbebbc34375948e5440ec390a6) refactor: Renamed the 'browse-the-web' module ([@wakaleo](https://github.com/wakaleo))
+ 
+ > Renamed the &#39;browse-the-web&#39; module to &#39;serenity-screenplay-webdriver&#39; for more consistancy.
+- [0ea09c7](https://github.com/serenity-bdd/serenity-core/commit/0ea09c7f24809c7bcbc8f31b8b2c170397a91eac) fix: Fixed an issue with the screenplay webdriver integration ([@wakaleo](https://github.com/wakaleo))
+ 
+ > Browser windows were not closing correctly when there were more than one driver used in a single test.
+- [de85892](https://github.com/serenity-bdd/serenity-core/commit/de858923fdfa585110faef5276d08e8997d1b532) chore: General refactoring and fixing minor performance issues. ([@wakaleo](https://github.com/wakaleo))
+- [e9f8131](https://github.com/serenity-bdd/serenity-core/commit/e9f81313bd86b1222667e137fe00a133226cad98) fix: Fixed an issue where the screenplay module was not closing the last browser if several browsers were being used in a test ([@wakaleo](https://github.com/wakaleo))
  
 ### v1.1.35 (2016/05/27 14:12 +00:00)
  
@@ -1357,47 +1370,9 @@
  
 ### v1.0.56 (2015/06/15 15:27 +00:00)
  
- 
-**Commits:**
- 
-- [4350090](https://github.com/serenity-bdd/serenity-core/commit/4350090ac6ec6090d2069105160add52f1d698c0) Fixed an issue with reporting RestAssured assertion failures. ([@wakaleo](https://github.com/wakaleo))
- 
-### v1.0.54 (2015/06/15 06:50 +00:00)
- 
 **Pull requests:**
  
 - [#77](https://github.com/serenity-bdd/serenity-core/pull/77) serenity-spring support for @ContextHierarchy and meta-annotations ([@martinlau](https://github.com/martinlau))
- 
-**Commits:**
- 
-- [05c4283](https://github.com/serenity-bdd/serenity-core/commit/05c4283ddeedcc9cf591b6a3a92fb79a40452033) feat: Add support for Spring [@ContextHierarchy annotation](https://github.com/ContextHierarchy annotation)s
-- [75047a1](https://github.com/serenity-bdd/serenity-core/commit/75047a1b8d6fcda72d12994e09b4f380bf88b6e1) Handle null-value parameters more elegantly. ([@wakaleo](https://github.com/wakaleo))
-- [7bc74de](https://github.com/serenity-bdd/serenity-core/commit/7bc74def0bf22fe413dea72de7a1d83b53bf300b) feat: Added support for Spring meta-annotations for @ContextConfiguration and [@ContextHierarch](https://github.com/ContextHierarch)y
-- [fb614fb](https://github.com/serenity-bdd/serenity-core/commit/fb614fb2bc5bce09ecff3866dfdea949e8d48590) Fixed some timout issues ([@wakaleo](https://github.com/wakaleo))
- 
-### v1.0.53 (2015/06/13 10:44 +00:00)
- 
- 
-**Commits:**
- 
-- [11b84b7](https://github.com/serenity-bdd/serenity-core/commit/11b84b726006eff27c6d0d93d245e1eb57c5f057) More refactoring tests ([@wakaleo](https://github.com/wakaleo))
-- [1345adf](https://github.com/serenity-bdd/serenity-core/commit/1345adf38741118bf29fb24d5f76f654e5e2ccab) Refactoring tests ([@wakaleo](https://github.com/wakaleo))
-- [1a4268c](https://github.com/serenity-bdd/serenity-core/commit/1a4268c8749d0f6b92d258ad5f9c2c618a39a5d2) More refactoring tests ([@wakaleo](https://github.com/wakaleo))
-- [1e636a6](https://github.com/serenity-bdd/serenity-core/commit/1e636a6e0192ade1a0a1012d7e7a9573de7affbe) Refactoring tests ([@wakaleo](https://github.com/wakaleo))
-- [2597415](https://github.com/serenity-bdd/serenity-core/commit/259741557e10c1ff42a91dcfeedd6dc0cbf1fdd6) Handle recursive parameters correctly (#66) ([@wakaleo](https://github.com/wakaleo))
-- [2a4a06f](https://github.com/serenity-bdd/serenity-core/commit/2a4a06f28a3a92bafc00ef8f27e2a45c3d51e1b9) Better reporting of exceptions (fixes #71) ([@wakaleo](https://github.com/wakaleo))
-- [45d11b5](https://github.com/serenity-bdd/serenity-core/commit/45d11b56f149692c3f131ef45fc509cd8835f10c) Refactoring tests ([@wakaleo](https://github.com/wakaleo))
-- [4aee7bb](https://github.com/serenity-bdd/serenity-core/commit/4aee7bb76735218343b8ffffcfb7e3ee2541852f) Temporarily disable some tests with environment-specific issues ([@wakaleo](https://github.com/wakaleo))
-- [6421a4c](https://github.com/serenity-bdd/serenity-core/commit/6421a4ccd0b49648ddbadc2243c7f6ec636b636d) Added better support for reporting exceptions ([@wakaleo](https://github.com/wakaleo))
- 
- > We now support reporting exceptions with a zero-parameter constructor as well as a single-parameter constructor.
-- [778ea06](https://github.com/serenity-bdd/serenity-core/commit/778ea0699595172b426718a1d5364de06d4c3c79) More refactoring tests ([@wakaleo](https://github.com/wakaleo))
-- [eed9a7c](https://github.com/serenity-bdd/serenity-core/commit/eed9a7c1b837c4dba242cff0cc61397c9fc31d09) Refactoring tests ([@wakaleo](https://github.com/wakaleo))
- 
-### v1.0.52 (2015/06/10 15:05 +00:00)
- 
-**Pull requests:**
- 
 - [#70](https://github.com/serenity-bdd/serenity-core/pull/70) Re: Issue #52 - Add support for class level spring annotations ([@ScottDennison](https://github.com/ScottDennison))
 - [#43](https://github.com/serenity-bdd/serenity-core/pull/43) Fix problem with uploading file on Windows.  ([@Tyson1986](https://github.com/Tyson1986))
 - [#42](https://github.com/serenity-bdd/serenity-core/pull/42) ensure unused threads are terminated and removed from executor pool ([@sarinderv](https://github.com/sarinderv))
@@ -1428,6 +1403,7 @@
 - [00de150](https://github.com/serenity-bdd/serenity-core/commit/00de150f4da3aab7b6d281e7a261d5378c656d49) Refactored the gradle plugin ([@wakaleo](https://github.com/wakaleo))
 - [036b26b](https://github.com/serenity-bdd/serenity-core/commit/036b26b9ae631f4002fe74866e3e9bf4ad934941) Refactoring some tests ([@wakaleo](https://github.com/wakaleo))
 - [04cace4](https://github.com/serenity-bdd/serenity-core/commit/04cace4c7b9b0535b49c21f372368e86eb38fa09) Updated banners ([@wakaleo](https://github.com/wakaleo))
+- [05c4283](https://github.com/serenity-bdd/serenity-core/commit/05c4283ddeedcc9cf591b6a3a92fb79a40452033) feat: Add support for Spring [@ContextHierarchy annotation](https://github.com/ContextHierarchy annotation)s
 - [068315f](https://github.com/serenity-bdd/serenity-core/commit/068315f4f0e63d4a9e58bc401cee1cf55af9fb7c) Performance improvements: forces WebDriver to force an immediate response for findElements() calls if no matching elements are found, and some other minor improvements. ([@wakaleo](https://github.com/wakaleo))
  
  > Also improved step logging to include the test class and method as well as the step name.
@@ -1464,16 +1440,20 @@
 - [0dd7d28](https://github.com/serenity-bdd/serenity-core/commit/0dd7d28dbc0a2556bd72b59fcbcd8315b2bd91e1) Fixed a bug related to deriving requirements structures from Cucumber feature files. ([@wakaleo](https://github.com/wakaleo))
 - [0e9d614](https://github.com/serenity-bdd/serenity-core/commit/0e9d614b462448a994614470c2fb9a3eb21cca96) Moved most uses of FileUtils to the Java 7 Files class, in order to remove sporadic issues when resizing screenshots ([@wakaleo](https://github.com/wakaleo))
 - [0fa63e2](https://github.com/serenity-bdd/serenity-core/commit/0fa63e2aba5951d2b87ff001fa04895d72f9fad1) Added containsElements() and shouldContainElements() methods to WebElementFacade ([@wakaleo](https://github.com/wakaleo))
+- [11b84b7](https://github.com/serenity-bdd/serenity-core/commit/11b84b726006eff27c6d0d93d245e1eb57c5f057) More refactoring tests ([@wakaleo](https://github.com/wakaleo))
 - [11b988b](https://github.com/serenity-bdd/serenity-core/commit/11b988b4948ee76105712fffe1d871bac3ecd97e) Use Durations rather than longs and ints to handle timeout values, in order to avoid coding errors, make the code clearer, and as a basis for more flexible timeout configuration. ([@wakaleo](https://github.com/wakaleo))
 - [1290a90](https://github.com/serenity-bdd/serenity-core/commit/1290a90ccf2c6c394059eaff03f8583bf55945da) Solidified a test ([@wakaleo](https://github.com/wakaleo))
+- [1345adf](https://github.com/serenity-bdd/serenity-core/commit/1345adf38741118bf29fb24d5f76f654e5e2ccab) Refactoring tests ([@wakaleo](https://github.com/wakaleo))
 - [137c534](https://github.com/serenity-bdd/serenity-core/commit/137c534cdfb84b06a89ec988dad1e1b2961812dc) Unit test refactoring ([@wakaleo](https://github.com/wakaleo))
 - [17466a5](https://github.com/serenity-bdd/serenity-core/commit/17466a54578f56384a2dca64fcbf4e916cab7460) Display the stack trace for failing tests in the reports ([@wakaleo](https://github.com/wakaleo))
 - [18d5f80](https://github.com/serenity-bdd/serenity-core/commit/18d5f80d55e8b837be57aeaca402a93a5d493092) Improved requirement reporting for JUnit (experimental) ([@wakaleo](https://github.com/wakaleo))
 - [197fab5](https://github.com/serenity-bdd/serenity-core/commit/197fab566647c12c3b8a8963049f04bb94f56b58) Top build: declare transitives as deps. #16 ([@jeffjensen](https://github.com/jeffjensen))
 - [199e60a](https://github.com/serenity-bdd/serenity-core/commit/199e60a595c0830172e8fb648363cb3b068ca660) Updated reporting, attempt 2 ([@bmwsedee](https://github.com/bmwsedee))
+- [1a4268c](https://github.com/serenity-bdd/serenity-core/commit/1a4268c8749d0f6b92d258ad5f9c2c618a39a5d2) More refactoring tests ([@wakaleo](https://github.com/wakaleo))
  
  > This reverts commit 7b26344dea3c0ee710ee90fe7040141a6941f97f.
 - [1d7740d](https://github.com/serenity-bdd/serenity-core/commit/1d7740dc9d007c0e84470f30137bb611e9f74336) Fixed an issue in the BinTray deployment ([@wakaleo](https://github.com/wakaleo))
+- [1e636a6](https://github.com/serenity-bdd/serenity-core/commit/1e636a6e0192ade1a0a1012d7e7a9573de7affbe) Refactoring tests ([@wakaleo](https://github.com/wakaleo))
 - [204900f](https://github.com/serenity-bdd/serenity-core/commit/204900f5f48211acb9e1527f40ddc9c065d17e9e) Rewrote much of the timeout APIs ([@wakaleo](https://github.com/wakaleo))
 - [219441f](https://github.com/serenity-bdd/serenity-core/commit/219441fb70fb4b94c54118770940cdae043efc7a) test: Added sample JSON test data ([@wakaleo](https://github.com/wakaleo))
 - [22d5395](https://github.com/serenity-bdd/serenity-core/commit/22d5395e9df2cbc7f8a6a352fc71a516c469f237) Top build: fail fast on dependency convergence problems. #16 ([@jeffjensen](https://github.com/jeffjensen))
@@ -1491,6 +1471,7 @@
  > .and().body(&quot;name&quot;, equalTo(pet.getName()));
  > ````
 - [23d2752](https://github.com/serenity-bdd/serenity-core/commit/23d27526cd201f3959b47466793e3f799bb2f963) fix: Tidied up dependencies used by the other serenity modules ([@wakaleo](https://github.com/wakaleo))
+- [2597415](https://github.com/serenity-bdd/serenity-core/commit/259741557e10c1ff42a91dcfeedd6dc0cbf1fdd6) Handle recursive parameters correctly (#66) ([@wakaleo](https://github.com/wakaleo))
 - [25e0cd1](https://github.com/serenity-bdd/serenity-core/commit/25e0cd1393bcc9221f782675d150e4d96618a839) Updated release notes
 - [2648daa](https://github.com/serenity-bdd/serenity-core/commit/2648daa127fe42d1f64a9558b9f0559556afe639) refactor: Create serenitybdd version of WebElementFacade classes/interfaces ([@mikezx6r](https://github.com/mikezx6r))
  
@@ -1499,6 +1480,7 @@
 - [26f09b0](https://github.com/serenity-bdd/serenity-core/commit/26f09b00e71da04a63faf96106f8ab31b4a060c3) Fixed issue #23 ([@wakaleo](https://github.com/wakaleo))
 - [27abd5c](https://github.com/serenity-bdd/serenity-core/commit/27abd5ccdb9869e7dc7e0fad6af786d515ff2478) Improved error reporting and performance. ([@wakaleo](https://github.com/wakaleo))
 - [28b9b7b](https://github.com/serenity-bdd/serenity-core/commit/28b9b7bfd02d007582ce950667da771e65aed892) Fixed #61: issue with path checks on remote appium server ([@wakaleo](https://github.com/wakaleo))
+- [2a4a06f](https://github.com/serenity-bdd/serenity-core/commit/2a4a06f28a3a92bafc00ef8f27e2a45c3d51e1b9) Better reporting of exceptions (fixes #71) ([@wakaleo](https://github.com/wakaleo))
 - [2aa92f9](https://github.com/serenity-bdd/serenity-core/commit/2aa92f97522d70524215d577ff205c002d7f9d90) SerenityRunner and SerenityParameterizedRunner now contain functionality, and Thucydides equivalents merely extend ([@mikezx6r](https://github.com/mikezx6r))
  
  > Also move a number of helper classes into serenity_bdd package
@@ -1557,12 +1539,15 @@
 - [42884b1](https://github.com/serenity-bdd/serenity-core/commit/42884b1685a5b2d182aeb4cec6db040381b1d4fc) Don't display the browser icon for non-web tests. ([@wakaleo](https://github.com/wakaleo))
  
  > Distinguish among Serenity Web Tests (Selenium) and Serenity Non-Web Test (#41)
+- [4350090](https://github.com/serenity-bdd/serenity-core/commit/4350090ac6ec6090d2069105160add52f1d698c0) Fixed an issue with reporting RestAssured assertion failures. ([@wakaleo](https://github.com/wakaleo))
 - [4494dee](https://github.com/serenity-bdd/serenity-core/commit/4494dee65ac0b1fb24803ca4baf2d9241ac88e3c) If javadoc is not told to expect UTF-8 in the strings it uses can generate ASCII errors on at least the Mac. ([@ptillemans](https://github.com/ptillemans))
 - [44ec91e](https://github.com/serenity-bdd/serenity-core/commit/44ec91e92d90ebc3742a6221f82d1a404b1baa57) Updated libraries ([@bmwsedee](https://github.com/bmwsedee))
+- [45d11b5](https://github.com/serenity-bdd/serenity-core/commit/45d11b56f149692c3f131ef45fc509cd8835f10c) Refactoring tests ([@wakaleo](https://github.com/wakaleo))
 - [47542e1](https://github.com/serenity-bdd/serenity-core/commit/47542e1b4cfc29c93cf6b0ee295129fd92f01837) Made the Ant plugin a bit more robust. ([@wakaleo](https://github.com/wakaleo))
 - [4931d36](https://github.com/serenity-bdd/serenity-core/commit/4931d367a7d3e801f418eaad15ff401b1f9d5c12) fix: Tidied up dependencies used by the other serenity modules ([@wakaleo](https://github.com/wakaleo))
 - [4a119f5](https://github.com/serenity-bdd/serenity-core/commit/4a119f5eb78613da322bc3a69d548e859b2d597e) Added a selector to find buttons by their label, e.g. find(By.buttonText('Add to cart')); ([@wakaleo](https://github.com/wakaleo))
 - [4a132ad](https://github.com/serenity-bdd/serenity-core/commit/4a132ad31b57d7fd42db1bc78770a57e2414f7f4) Added tests to the gradle plugin ([@wakaleo](https://github.com/wakaleo))
+- [4aee7bb](https://github.com/serenity-bdd/serenity-core/commit/4aee7bb76735218343b8ffffcfb7e3ee2541852f) Temporarily disable some tests with environment-specific issues ([@wakaleo](https://github.com/wakaleo))
 - [4b66966](https://github.com/serenity-bdd/serenity-core/commit/4b6696672cfa00293bd1d2c947fc5edb04f1a5f2) Removed redundant Jackson adaptor classes ([@wakaleo](https://github.com/wakaleo))
 - [4bfdb91](https://github.com/serenity-bdd/serenity-core/commit/4bfdb9133300e0e016beaddcc46ed35e83d4a8de) test: Added sample JSON test data ([@wakaleo](https://github.com/wakaleo))
 - [4c953d8](https://github.com/serenity-bdd/serenity-core/commit/4c953d868707e2cf59ea7edde1a85008966d5e2e) Moved the serenity-maven-plugin to a separate project ([@wakaleo](https://github.com/wakaleo))
@@ -1599,6 +1584,9 @@
 - [6376d99](https://github.com/serenity-bdd/serenity-core/commit/6376d9951792d7b7aa44512bc4d941f3ca21bb7c) This small change makes Serenity compatible with Firefox version 32 or greater ([@marcin-caban](https://github.com/marcin-caban))
  
  > Guava 18.0 is already specified in Gradle.
+- [6421a4c](https://github.com/serenity-bdd/serenity-core/commit/6421a4ccd0b49648ddbadc2243c7f6ec636b636d) Added better support for reporting exceptions ([@wakaleo](https://github.com/wakaleo))
+ 
+ > We now support reporting exceptions with a zero-parameter constructor as well as a single-parameter constructor.
 - [657232a](https://github.com/serenity-bdd/serenity-core/commit/657232a147988a83dbc143557f52c5df7ddbe0f7) Test refactoring ([@wakaleo](https://github.com/wakaleo))
 - [66556bb](https://github.com/serenity-bdd/serenity-core/commit/66556bb4e71cf652362fbedca72788ac5b0eb1ce) Fixed a bug where error messages were incorrectly displayed in the step details ([@wakaleo](https://github.com/wakaleo))
 - [66801ff](https://github.com/serenity-bdd/serenity-core/commit/66801ffbbc769e407f60b93fe8fdae7572ce2188) Added test data for a sample pending report ([@wakaleo](https://github.com/wakaleo))
@@ -1630,7 +1618,9 @@
 - [71fcf22](https://github.com/serenity-bdd/serenity-core/commit/71fcf22e7fe769309798d67551450f4ef791246b) test: Refactored a few tests to reduce sporadic errors ([@wakaleo](https://github.com/wakaleo))
 - [73ce792](https://github.com/serenity-bdd/serenity-core/commit/73ce792b29c26b4f75dcb49e74e360a5f9e368a4) Removed redundant test ([@wakaleo](https://github.com/wakaleo))
 - [74df029](https://github.com/serenity-bdd/serenity-core/commit/74df0296738f380196774513f93e725690233975) Fine-tuning the release tagging ([@wakaleo](https://github.com/wakaleo))
+- [75047a1](https://github.com/serenity-bdd/serenity-core/commit/75047a1b8d6fcda72d12994e09b4f380bf88b6e1) Handle null-value parameters more elegantly. ([@wakaleo](https://github.com/wakaleo))
 - [7586862](https://github.com/serenity-bdd/serenity-core/commit/7586862312bb43a2e6b61a208aba51f8cdb70905) Support for PhantomJS 1.2.1 ([@wakaleo](https://github.com/wakaleo))
+- [778ea06](https://github.com/serenity-bdd/serenity-core/commit/778ea0699595172b426718a1d5364de06d4c3c79) More refactoring tests ([@wakaleo](https://github.com/wakaleo))
 - [7848aaa](https://github.com/serenity-bdd/serenity-core/commit/7848aaa638085986a3ba7ad24f938b4b69e59b38) Refactoring and improving the unit tests. ([@wakaleo](https://github.com/wakaleo))
 - [7a267aa](https://github.com/serenity-bdd/serenity-core/commit/7a267aa8399a3dd9d754e7fc99280c3f5256fed8) Build: Add plugins that help with dep versions. #16 ([@jeffjensen](https://github.com/jeffjensen))
  
@@ -1642,6 +1632,7 @@
 - [7a65f64](https://github.com/serenity-bdd/serenity-core/commit/7a65f64d3bd4d6fe1ab6a798265e0a3729f9df1e) Fixed a failing test ([@wakaleo](https://github.com/wakaleo))
 - [7b26344](https://github.com/serenity-bdd/serenity-core/commit/7b26344dea3c0ee710ee90fe7040141a6941f97f) Removed old versions of libraries ([@bmwsedee](https://github.com/bmwsedee))
 - [7ba0890](https://github.com/serenity-bdd/serenity-core/commit/7ba089050433c51cdf6aaca479904c09b333e83c) feat: Lists of WebElementFacade and subtypes as PageObject members. ([@CoeJoder](https://github.com/CoeJoder))
+- [7bc74de](https://github.com/serenity-bdd/serenity-core/commit/7bc74def0bf22fe413dea72de7a1d83b53bf300b) feat: Added support for Spring meta-annotations for @ContextConfiguration and [@ContextHierarch](https://github.com/ContextHierarch)y
 - [7bde238](https://github.com/serenity-bdd/serenity-core/commit/7bde2389379fa22b4eebe9f1ff8ef19c89b094ef) Rename package in demo to serenity_bdd ([@mikezx6r](https://github.com/mikezx6r))
 - [7c429c0](https://github.com/serenity-bdd/serenity-core/commit/7c429c02e9f85228b3672b7b7ee04a9791ffaeb7) Migrated the default output directory to target/site/serenity ([@wakaleo](https://github.com/wakaleo))
 - [7cb2a81](https://github.com/serenity-bdd/serenity-core/commit/7cb2a81cae949bdcd6915434313cf03d57c06da6) WIP ([@wakaleo](https://github.com/wakaleo))
@@ -1780,6 +1771,7 @@
 - [eb4608f](https://github.com/serenity-bdd/serenity-core/commit/eb4608f6d8c18187608e7112ed6b83f0546eb623) Removed some code that used the JDK 8 libraries ([@wakaleo](https://github.com/wakaleo))
 - [ebb8471](https://github.com/serenity-bdd/serenity-core/commit/ebb84712cf92e625040cc67b49c5cc460665a3a7) Refactoring some old multi-select code ([@wakaleo](https://github.com/wakaleo))
 - [ed62753](https://github.com/serenity-bdd/serenity-core/commit/ed62753b69b522f1321750164cbd035d1ebc4c8d) [namespace] Move Find annotations to serenity_bdd namespace ([@mikezx6r](https://github.com/mikezx6r))
+- [eed9a7c](https://github.com/serenity-bdd/serenity-core/commit/eed9a7c1b837c4dba242cff0cc61397c9fc31d09) Refactoring tests ([@wakaleo](https://github.com/wakaleo))
 - [ef5aebc](https://github.com/serenity-bdd/serenity-core/commit/ef5aebc607c0df5a8771c749fd382968cee713b3) Fixed a bug in the JUnit parameterized reports ([@wakaleo](https://github.com/wakaleo))
 - [f07879c](https://github.com/serenity-bdd/serenity-core/commit/f07879ca4b9418342d144ba78200c76f2a8d323a) Refactored some tests ([@wakaleo](https://github.com/wakaleo))
 - [f0952b4](https://github.com/serenity-bdd/serenity-core/commit/f0952b4b4245ef220d4678ea49246f09bd7cc287) Renamed 'core' to 'serenity-core' ([@wakaleo](https://github.com/wakaleo))
@@ -1790,6 +1782,7 @@
 - [f9d713e](https://github.com/serenity-bdd/serenity-core/commit/f9d713e343d9380cee58edee6154dd09acfb71d5) style: fix typo in logging ([@mikezx6r](https://github.com/mikezx6r))
 - [f9d9969](https://github.com/serenity-bdd/serenity-core/commit/f9d996950d02e3147070a4d6113909338f5591ea) Made the log messages for each step include the calling class and method. ([@wakaleo](https://github.com/wakaleo))
 - [faabd32](https://github.com/serenity-bdd/serenity-core/commit/faabd32b9da94de9c935f1c8e51eb347fdb14139) Refactoring and improving the JUnit test reports ([@wakaleo](https://github.com/wakaleo))
+- [fb614fb](https://github.com/serenity-bdd/serenity-core/commit/fb614fb2bc5bce09ecff3866dfdea949e8d48590) Fixed some timout issues ([@wakaleo](https://github.com/wakaleo))
 - [fe1ab3e](https://github.com/serenity-bdd/serenity-core/commit/fe1ab3e2ce34859b9bee974c8df0228a0e0280ca) Added a page to the reports containing system and configuration properties and browser capabilities for a given test run. ([@wakaleo](https://github.com/wakaleo))
 - [fe1c3c5](https://github.com/serenity-bdd/serenity-core/commit/fe1c3c5eb2cee95bcc3fc17f0008589f80b16dd0) Added the Serenity utility class, which exposes and delegates to methods of the legacy Thucydides class. ([@wakaleo](https://github.com/wakaleo))
 - [fe952b9](https://github.com/serenity-bdd/serenity-core/commit/fe952b944bf628da851698e3b02095c31e08e91c) Fixed an issue that had broken the async timeout behavior in the setScriptTimeout() method ([@wakaleo](https://github.com/wakaleo))

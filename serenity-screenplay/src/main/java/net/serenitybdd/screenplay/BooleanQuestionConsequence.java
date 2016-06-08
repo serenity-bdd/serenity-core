@@ -11,6 +11,8 @@ public class BooleanQuestionConsequence<T> extends BaseConsequence<T> {
     private final Question<Boolean> question;
     private final String subject;
 
+    private final static SilentPerformable DO_NOTHING = new SilentPerformable();
+
     public BooleanQuestionConsequence(Question<Boolean> actual) {
         this.question = actual;
         this.subject = QuestionSubject.fromClass(actual.getClass()).andQuestion(actual).subject();
@@ -18,11 +20,11 @@ public class BooleanQuestionConsequence<T> extends BaseConsequence<T> {
 
     @Override
     public void evaluateFor(Actor actor) {
-        // TODO: Override if running consequences
         if (thisStepShouldBeIgnored() && !StepEventBus.getEventBus().softAssertsActive()) { return; }
 
         Broadcaster.getEventBus().post(new ActorAsksQuestion(question));
         try {
+            optionalPrecondition.or(DO_NOTHING).performAs(actor);
             assertThat(reason(), question.answeredBy(actor), is(true));
         } catch (Throwable actualError) {
 
@@ -46,6 +48,7 @@ public class BooleanQuestionConsequence<T> extends BaseConsequence<T> {
 
     @Override
     public String toString() {
-        return String.format("Then %s", subject);
+        String template = explanation.or("Then %s");
+        return addRecordedInputValuesTo(String.format(template, subject));
     }
 }

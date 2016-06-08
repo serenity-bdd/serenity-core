@@ -9,9 +9,11 @@ import org.hamcrest.Matcher;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class QuestionConsequence<T> extends BaseConsequence<T> {
-    private final Question<T> question;
-    private final Matcher<T> expected;
-    private final String subject;
+    protected final Question<T> question;
+    protected final Matcher<T> expected;
+    protected final String subject;
+
+    private final static SilentPerformable DO_NOTHING = new SilentPerformable();
 
     public QuestionConsequence(Question<T> actual, Matcher<T> expected) {
         this.question = actual;
@@ -21,11 +23,12 @@ public class QuestionConsequence<T> extends BaseConsequence<T> {
 
     @Override
     public void evaluateFor(Actor actor) {
-        // TODO: Override if running consequences
         if (thisStepShouldBeIgnored() && !StepEventBus.getEventBus().softAssertsActive()) { return; }
 
         Broadcaster.getEventBus().post(new ActorAsksQuestion(question));
+
         try {
+            optionalPrecondition.or(DO_NOTHING).performAs(actor);
             assertThat(question.answeredBy(actor), expected);
         } catch (Throwable actualError) {
 
@@ -45,7 +48,8 @@ public class QuestionConsequence<T> extends BaseConsequence<T> {
 
     @Override
     public String toString() {
+        String template = explanation.or("Then %s should be %s");
         String expectedExpression = StripRedundantTerms.from(expected.toString());
-        return String.format("Then %s should be %s", subject, expectedExpression);
+        return addRecordedInputValuesTo(String.format(template, subject, expectedExpression));
     }
 }

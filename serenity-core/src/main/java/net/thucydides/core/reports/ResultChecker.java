@@ -3,6 +3,8 @@ package net.thucydides.core.reports;
 import com.google.common.base.Optional;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +16,8 @@ public class ResultChecker {
 
     private final File outputDirectory;
 
+    private final static Logger logger = LoggerFactory.getLogger(ResultChecker.class);
+
     public ResultChecker(File outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
@@ -21,13 +25,29 @@ public class ResultChecker {
     public void checkTestResults() {
         Optional<TestOutcomes> outcomes = loadOutcomes();
         if (outcomes.isPresent()) {
+            logOutcomesFrom(outcomes.get());
             checkTestResultsIn(outcomes.get());
         } else {
             handleMissingTestResults();
         }
     }
 
+    private void logOutcomesFrom(TestOutcomes testOutcomes) {
+        logger.info("----------------------");
+        logger.info("SERENITY TEST OUTCOMES");
+        logger.info("----------------------");
+
+        logger.info("  - Tests executed: " + testOutcomes.getTotal());
+        logger.info("  - Tests passed: " + testOutcomes.getPassingTests().getTotal());
+        logger.info("  - Tests failed: " + testOutcomes.getFailingTests().getTotal());
+        logger.info("  - Tests with errors: " + testOutcomes.getErrorTests().getTotal());
+        logger.info("  - Tests pending: " + testOutcomes.getPendingTests().getTotal());
+        logger.info("  - Tests compromised: " + testOutcomes.getCompromisedTests().getTotal());
+
+    }
+
     private void checkTestResultsIn(TestOutcomes testOutcomes) {
+
         switch (testOutcomes.getResult()) {
             case ERROR: throw new TestOutcomesError(testOutcomeSummary(testOutcomes));
             case FAILURE: throw new TestOutcomesFailures(testOutcomeSummary(testOutcomes));

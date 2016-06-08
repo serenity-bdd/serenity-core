@@ -44,6 +44,9 @@ public class ElementLocatorFactorySelector {
     }
     
     private static MobilePlatform platformFor(WebDriver driver) {
+        if(driver instanceof WebDriverFacade){
+            driver = ((WebDriverFacade)driver).getProxiedDriver();
+        }
         if (driver instanceof AppiumDriver) {
             AppiumConfiguration appiumConfiguration = AppiumConfiguration.from(
                     Injectors.getInjector().getProvider(EnvironmentVariables.class).get());

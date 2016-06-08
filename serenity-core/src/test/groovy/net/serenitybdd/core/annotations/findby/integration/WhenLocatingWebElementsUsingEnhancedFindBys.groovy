@@ -1,4 +1,4 @@
-package net.serenitybdd.core.webdriver.integration
+package net.serenitybdd.core.annotations.findby.integration
 
 import net.thucydides.core.webdriver.integration.PageWithFindBys
 import org.openqa.selenium.WebDriver

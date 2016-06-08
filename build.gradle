@@ -128,7 +128,7 @@ subprojects {
         exclude '**/samples/**'
         exclude '**/*Sample*'
         minHeapSize = "128m"
-        maxHeapSize = "1024m"
+        maxHeapSize = "1536m"
         if (!JavaVersion.current().isJava8Compatible()) {
             jvmArgs += ["-XX:MaxPermSize=256m"]
         }

@@ -1,6 +1,7 @@
 package net.thucydides.samples;
 
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
+import net.thucydides.core.annotations.Manual;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.junit.annotations.TestData;
 import org.junit.Test;
@@ -43,6 +44,11 @@ public class SampleDataDrivenScenario {
 
     @Test
     public void happy_day_scenario() {
+        steps.stepWithParameters(option1, option2);
+    }
+
+    @Test
+    public void manual_scenario() {
         steps.stepWithParameters(option1, option2);
     }
 

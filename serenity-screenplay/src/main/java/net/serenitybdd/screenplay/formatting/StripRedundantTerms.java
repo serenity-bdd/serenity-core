@@ -6,7 +6,7 @@ import java.util.List;
 
 public class StripRedundantTerms {
 
-    private final static List<String> REDUNDANT_HAMCREST_PREFIXES = ImmutableList.of("is ","be ");
+    private final static List<String> REDUNDANT_HAMCREST_PREFIXES = ImmutableList.of("is ","be ","should be");
 
     public static String from(String expression) {
         for (String prefix : REDUNDANT_HAMCREST_PREFIXES) {

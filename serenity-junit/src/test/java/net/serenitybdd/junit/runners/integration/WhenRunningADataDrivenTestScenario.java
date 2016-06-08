@@ -80,7 +80,17 @@ public class WhenRunningADataDrivenTestScenario {
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).getTestOutcomesForAllParameterSets();
-        assertThat(executedScenarios.size(), is(24));
+        assertThat(executedScenarios.size(), is(36));
+    }
+
+    @Test
+    public void manual_data_driven_tests_should_be_allowed() throws Throwable  {
+
+        SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(AddDifferentSortsOfTodos.class);
+        runner.run(new RunNotifier());
+
+        List<TestOutcome> executedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).getTestOutcomesForAllParameterSets();
+        assertThat(executedScenarios.size(), is(4));
     }
 
     @Test
@@ -90,7 +100,7 @@ public class WhenRunningADataDrivenTestScenario {
         runner.run(new RunNotifier());
 
         List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods();
-        assertThat(aggregatedScenarios.size(), is(2));
+        assertThat(aggregatedScenarios.size(), is(3));
         assertThat(aggregatedScenarios.get(0).getStepCount(), is(12));
         assertThat(aggregatedScenarios.get(1).getStepCount(), is(12));
     }
@@ -200,7 +210,7 @@ public class WhenRunningADataDrivenTestScenario {
         runner.run(new RunNotifier());
 
         File[] reports = reload(outputDirectory).listFiles(new XMLFileFilter());
-        assertThat(reports.length, is(2));
+        assertThat(reports.length, is(3));
     }
 
     @Test
@@ -758,7 +768,7 @@ public class WhenRunningADataDrivenTestScenario {
         runner.run(new RunNotifier());
 
         File[] reports = reload(outputDirectory).listFiles(new HTMLFileFilter());
-        assertThat(reports.length, is(2));
+        assertThat(reports.length, is(3));
     }
 
     private class HTMLFileFilter implements FilenameFilter {

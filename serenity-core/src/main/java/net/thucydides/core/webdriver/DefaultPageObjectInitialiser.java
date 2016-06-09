@@ -16,8 +16,10 @@ public class DefaultPageObjectInitialiser extends AbstractObjectInitialiser<Page
     }
 
     public boolean apply(PageObject page) {
-    	page.setWaitForElementTimeout(ajaxTimeout.in(TimeUnit.MILLISECONDS));
-        elementProxyCreator.proxyElements(page, driver, ajaxTimeoutInSecondsWithAtLeast1Second());
+        if (driver != null) {
+            page.setWaitForElementTimeout(ajaxTimeout.in(TimeUnit.MILLISECONDS));
+            elementProxyCreator.proxyElements(page, driver, ajaxTimeoutInSecondsWithAtLeast1Second());
+        }
         return true;
     }
 }

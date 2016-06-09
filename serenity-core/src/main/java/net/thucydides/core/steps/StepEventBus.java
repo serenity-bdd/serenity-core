@@ -240,7 +240,6 @@ public class StepEventBus {
     }
 
     public void testFinished(TestOutcome result) {
-        //screenshotProcessor.waitUntilDone();
         Darkroom.waitUntilClose();
 
         for (StepListener stepListener : getAllListeners()) {

@@ -196,7 +196,6 @@ class WhenManagingWebdriverTimeouts extends Specification {
             "slowLoadingField"   | false                 // loads in 3 seconds
     }
 
-    // Fixme
     def "The webdriver.timeouts.implicitlywait value is used when loading elements using the findAll() method."() {
         given:
             def page = openStaticPageWith(["webdriver.timeouts.implicitlywait":"50"])

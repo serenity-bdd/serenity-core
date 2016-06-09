@@ -14,7 +14,7 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.stacktrace.StackTraceSanitizer;
-import net.thucydides.core.statistics.service.CleanupMethodAnnotationProvider;
+import net.thucydides.core.steps.service.CleanupMethodAnnotationProvider;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.internal.AssumptionViolatedException;
@@ -219,16 +219,15 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         }
     }
 
-    private boolean shouldNotSkipMethod(final Method methodOrStep, final Class callingClass) {
-        return !shouldSkipMethod(methodOrStep, callingClass);
-    }
-
     private boolean shouldSkipMethod(final Method methodOrStep, final Class callingClass) {
         return ((aPreviousStepHasFailed() || testIsPending() || isDryRun()) && declaredInSameDomain(methodOrStep, callingClass));
     }
 
     private boolean shouldSkip(final Method methodOrStep) {
-        return aPreviousStepHasFailed() || testIsPending() || isDryRun() || isPending(methodOrStep) || isIgnored(methodOrStep);
+        if (aPreviousStepHasFailed() && !isSoftAssert()) {
+            return true;
+        }
+        return testIsPending() || isDryRun() || isPending(methodOrStep) || isIgnored(methodOrStep);
     }
 
     private boolean testIsPending() {
@@ -249,6 +248,10 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
 
     private boolean isDryRun() {
         return StepEventBus.getEventBus().isDryRun();
+    }
+
+    private boolean isSoftAssert() {
+        return StepEventBus.getEventBus().softAssertsActive();
     }
 
     private Object runBaseObjectMethod(final Object obj, final Method method, final Object[] args, final MethodProxy proxy)
@@ -410,9 +413,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
                                          final boolean addMarkup) {
         StringBuilder testName = new StringBuilder(method.getName());
         testName.append(": ");
-        if (addMarkup) {
-            testName.append("<span class='step-parameter'>");
-        }
+
         boolean isFirst = true;
         for (Object arg : args) {
             if (!isFirst) {
@@ -420,9 +421,6 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
             }
             testName.append(StepArgumentWriter.readableFormOf(arg));
             isFirst = false;
-        }
-        if (addMarkup) {
-            testName.append("</span>");
         }
         return testName.toString();
     }

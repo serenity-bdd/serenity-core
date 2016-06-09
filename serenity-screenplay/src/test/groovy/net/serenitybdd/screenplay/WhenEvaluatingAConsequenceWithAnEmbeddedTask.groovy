@@ -1,8 +1,8 @@
 package net.serenitybdd.screenplay
 
+import net.thucydides.core.steps.StepEventBus
 import org.hamcrest.Matchers
 import spock.lang.Specification
-
 /**
  * Created by john on 8/06/2016.
  */
@@ -21,6 +21,10 @@ class WhenEvaluatingAConsequenceWithAnEmbeddedTask extends Specification {
         def <T extends Actor> void performAs(T actor) {
             wasPerformed = true;
         }
+    }
+
+    def setup() {
+        StepEventBus.eventBus.reset()
     }
 
     def "you can ask to perform a task before asking the question in a consequence"() {

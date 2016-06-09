@@ -147,7 +147,7 @@ subprojects {
         reports.junitXml.destination = "${buildDir}/reports/integration-tests"
         reports.html.destination = "${buildDir}/reports/integration-tests"
         minHeapSize = "128m"
-        maxHeapSize = "1024m"
+        maxHeapSize = "1536m"
         if (!JavaVersion.current().isJava8Compatible()) {
             jvmArgs '-XX:MaxPermSize=256m'
         }

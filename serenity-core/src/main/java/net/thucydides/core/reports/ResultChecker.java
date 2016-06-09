@@ -50,8 +50,8 @@ public class ResultChecker {
 
         switch (testOutcomes.getResult()) {
             case ERROR: throw new TestOutcomesError(testOutcomeSummary(testOutcomes));
-            case FAILURE: throw new TestOutcomesFailures(testOutcomeSummary(testOutcomes));
-            case COMPROMISED: throw new TestOutcomesCompromised(testOutcomeSummary(testOutcomes));
+            case FAILURE: throw new TestOutcomesError(testOutcomeSummary(testOutcomes));
+            case COMPROMISED: throw new TestOutcomesError(testOutcomeSummary(testOutcomes));
         }
     }
 

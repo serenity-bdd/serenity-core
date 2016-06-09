@@ -1,5 +1,6 @@
 package net.thucydides.core.reports;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestType;
@@ -27,8 +28,6 @@ public class ResultChecker {
         if (outcomes.isPresent()) {
             logOutcomesFrom(outcomes.get());
             checkTestResultsIn(outcomes.get());
-        } else {
-            handleMissingTestResults();
         }
     }
 
@@ -50,8 +49,8 @@ public class ResultChecker {
 
         switch (testOutcomes.getResult()) {
             case ERROR: throw new TestOutcomesError(testOutcomeSummary(testOutcomes));
-            case FAILURE: throw new TestOutcomesError(testOutcomeSummary(testOutcomes));
-            case COMPROMISED: throw new TestOutcomesError(testOutcomeSummary(testOutcomes));
+            case FAILURE: throw new TestOutcomesFailures(testOutcomeSummary(testOutcomes));
+            case COMPROMISED: throw new TestOutcomesCompromised(testOutcomeSummary(testOutcomes));
         }
     }
 
@@ -59,14 +58,11 @@ public class ResultChecker {
         int errors = testOutcomes.count(TestType.ANY).withResult(TestResult.ERROR);
         int failures = testOutcomes.count(TestType.ANY).withResult(TestResult.FAILURE);
         int compromised = testOutcomes.count(TestType.ANY).withResult(TestResult.COMPROMISED);
-        String errorText = (errors > 0) ? "ERROR COUNT: " + errors : "";
-        String failureText = (failures > 0) ? "FAILURE COUNT: " + failures : "";
-        String compromisedText = (compromised > 0) ? "COMPROMISED COUNT: " + failures : "";
-        return "THUCYDIDES TEST FAILURES: " + errorText + " " + failureText + " " + compromisedText;
-    }
 
-    private void handleMissingTestResults() {
-
+        return Joiner.on(" ").join("THUCYDIDES TEST FAILURES:",
+                OutcomeSummary.forOutcome(TestResult.ERROR).withCount(errors),
+                OutcomeSummary.forOutcome(TestResult.FAILURE).withCount(failures),
+                OutcomeSummary.forOutcome(TestResult.COMPROMISED).withCount(compromised));
     }
 
     private Optional<TestOutcomes> loadOutcomes() {

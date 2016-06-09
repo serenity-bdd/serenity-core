@@ -750,7 +750,17 @@ public enum ThucydidesSystemProperty {
     /**
      * A comma-separated list of tag types for which human-readable report names will be generated.
      */
-    SERENITY_LINKED_TAGS;
+    SERENITY_LINKED_TAGS,
+
+    /**
+     * Should we assume that collections of webdriver elements are already on the page, or if we should wait for them to be available.
+     * This property takes two values: Optimistic or Pessimistic. Optimistic means that the elements are assumed to be on the screen, and will be
+     * loaded as-is immediately. This is the normal WebDriver behavior.
+     * For applications with lots of ASynchronous activity, it is often better to wait until the elements are visible before using them. The Pessimistic
+     * mode waits for at least one element to be visible before proceeding.
+     * For legacy reasons, the default strategy is Pessimistic.
+     */
+    SERENITY_WEBDRIVER_COLLECTION_LOADING_STRATEGY;
 
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;
@@ -852,7 +862,6 @@ public enum ThucydidesSystemProperty {
             return (isDefined(legacyValue)) ? Boolean.valueOf(legacyValue.get()) : defaultValue;
         }
     }
-
 
     public boolean isDefinedIn(EnvironmentVariables environmentVariables) {
         return StringUtils.isNotEmpty(from(environmentVariables));

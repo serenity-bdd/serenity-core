@@ -5,8 +5,15 @@ import com.google.common.collect.Lists;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.annotations.locators.SmartAnnotations;
 import net.serenitybdd.core.pages.WebElementFacade;
+import net.thucydides.core.WebdriverCollectionStrategy;
+import net.thucydides.core.annotations.ElementIsUsable;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.webdriver.*;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.ConfigurableTimeouts;
+import net.thucydides.core.webdriver.MobilePlatform;
+import net.thucydides.core.webdriver.WebDriverFacade;
+import net.thucydides.core.webdriver.WebdriverProxyFactory;
 import net.thucydides.core.webdriver.exceptions.ElementNotFoundAfterTimeoutError;
 import net.thucydides.core.webdriver.exceptions.ElementNotVisibleAfterTimeoutError;
 import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
@@ -29,6 +36,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
     private final Field field;
     private final SearchContext searchContext;
     private final MobilePlatform platform;
+    private final EnvironmentVariables environmentVariables;
 
     /**
      * Main constructor.
@@ -36,7 +44,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
      * @param searchContext    The SearchContext to use when locating elements
      * @param field            The field representing this element
      * @param timeOutInSeconds How long to wait for the element to appear. Measured in seconds.
-     * @deprecated             The timeOutInSeconds parameter is no longer used - implicit timeouts should now be used
+     * @deprecated The timeOutInSeconds parameter is no longer used - implicit timeouts should now be used
      */
     public SmartAjaxElementLocator(SearchContext searchContext, Field field, MobilePlatform platform, int timeOutInSeconds) {
         this(new SystemClock(), searchContext, field, platform);
@@ -72,6 +80,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
             this.searchContext = searchContext;
         }
         this.platform = platform;
+        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
     }
 
     private Optional<Integer> timeoutFrom(Field field) {
@@ -123,10 +132,6 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
             throw new NoSuchElementException("No such element found for criteria " + by.toString());
         }
         return element;
-    }
-
-    protected boolean isElementUsable(WebElement element) {
-        return (element != null) && (element.isDisplayed());
     }
 
     /**
@@ -220,7 +225,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
             if (element != null) {
                 load();
             }
-            if (!isElementUsable(element)) {
+            if (!ElementIsUsable.forElement(element)) {
                 if (lastException.isPresent()) {
                     throw new ElementNotFoundAfterTimeoutError("Element not found", lastException.get());
                 } else {
@@ -285,32 +290,20 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
         }
 
         private boolean areElementsUsable(List<WebElement> elements) {
-            return ((elements != null));// && (elements.size() > 0));
-//            if (elements == null) {
-//                return false;
-//            }
-//            for (WebElement element : elements) {
-//                if (!isElementUsable(element)) {
-//                    return false;
-//                }
-//            }
-//            return true;
-        }
+            WebdriverCollectionStrategy collectionStrategy = WebdriverCollectionStrategy.definedIn(environmentVariables);
+            return WaitForWebElementCollection.accordingTo(collectionStrategy).areElementsReadyIn(elements);
 
-//		public NoSuchElementException getLastException() {
-//			return lastException;
-//		}
+        }
 
         public List<WebElement> getElements() {
             return elements;
         }
-    }
 
-
-    @Override
-    public String toString() {
-        SmartAnnotations annotations = new SmartAnnotations(field, platform);
-        By by = annotations.buildBy();
-        return by.toString();
+        @Override
+        public String toString() {
+            SmartAnnotations annotations = new SmartAnnotations(field, platform);
+            By by = annotations.buildBy();
+            return by.toString();
+        }
     }
 }

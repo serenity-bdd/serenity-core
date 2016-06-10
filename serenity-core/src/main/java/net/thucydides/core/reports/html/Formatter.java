@@ -28,6 +28,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static ch.lambdaj.Lambda.join;
+import static org.apache.commons.lang3.StringUtils.abbreviate;
 
 /**
  * Format text for HTML reports.
@@ -294,6 +295,9 @@ public class Formatter {
                 .replaceAll("\"", "'")));
     }
 
+    public static String htmlAttributeCompatible(Object fieldValue, int maxLength) {
+        return abbreviate(htmlAttributeCompatible(fieldValue), maxLength);
+    }
 
     public ResultIconFormatter resultIcon() {
         return new ResultIconFormatter();

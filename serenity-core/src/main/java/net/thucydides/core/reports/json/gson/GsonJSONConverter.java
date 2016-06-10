@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.json.gson;
 
-import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;

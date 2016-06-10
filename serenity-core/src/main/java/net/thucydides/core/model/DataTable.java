@@ -20,8 +20,8 @@ public class DataTable {
     private final List<String> headers;
     private final List<DataTableRow> rows;
     private final boolean predefinedRows;
-    private AtomicInteger currentRow = new AtomicInteger(0);
     private List<DataSetDescriptor> dataSetDescriptors;
+    private transient AtomicInteger currentRow = new AtomicInteger(0);
 
     private final static List<DataTableRow> NO_ROWS = Lists.newArrayList();
 

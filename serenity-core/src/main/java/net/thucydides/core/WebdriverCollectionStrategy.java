@@ -1,18 +1,30 @@
 package net.thucydides.core;
 
-import net.thucydides.core.reports.TestOutcomesCompromised;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static org.apache.commons.lang3.StringUtils.*;
 
 public enum WebdriverCollectionStrategy {
-    Optimistic, Pessimistic;
+    Optimistic, Pessimistic, Paranoid;
+
+    private static final Logger logger = LoggerFactory.getLogger(WebdriverCollectionStrategy.class);
+
+    private static final WebdriverCollectionStrategy DEFAULT_STRATEGY = Pessimistic;
 
     public static WebdriverCollectionStrategy definedIn(EnvironmentVariables environmentVariables) {
         String configuredStrategy = ThucydidesSystemProperty.SERENITY_WEBDRIVER_COLLECTION_LOADING_STRATEGY.from(environmentVariables,"");
+
         try {
-            return valueOf(configuredStrategy);
+            if (isNotEmpty(configuredStrategy)) {
+                return valueOf(capitalize(lowerCase(configuredStrategy)));
+            }
         } catch(IllegalArgumentException invalidEnumValue) {
-            throw new TestOutcomesCompromised("Illegal value for " + ThucydidesSystemProperty.SERENITY_WEBDRIVER_COLLECTION_LOADING_STRATEGY
-                                            + ", should be one of " + WebdriverCollectionStrategy.values());
+            logger.warn("Illegal value for {} - should be one of {}",
+                        ThucydidesSystemProperty.SERENITY_WEBDRIVER_COLLECTION_LOADING_STRATEGY,
+                        WebdriverCollectionStrategy.values());
         }
+        return DEFAULT_STRATEGY;
     }
 }

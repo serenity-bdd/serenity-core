@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import static net.thucydides.core.WebdriverCollectionStrategy.Optimistic;
+import static net.thucydides.core.WebdriverCollectionStrategy.Paranoid;
 import static net.thucydides.core.WebdriverCollectionStrategy.Pessimistic;
 
 public class WaitForWebElementCollection {
@@ -30,6 +31,17 @@ public class WaitForWebElementCollection {
                 if (elements == null) {
                     return false;
                 }
+                return elements.isEmpty() || elements.get(0).isDisplayed();
+            }
+        });
+
+        COLLECTION_STRATEGY.put(Paranoid, new WaitForWebElements() {
+
+            @Override
+            public boolean areElementsReadyIn(List<WebElement> elements) {
+                if (elements == null) {
+                    return false;
+                }
                 for (WebElement element : elements) {
                     if (!ElementIsUsable.forElement(element)) {
                         return false;
@@ -38,7 +50,6 @@ public class WaitForWebElementCollection {
                 return true;
             }
         });
-
     }
 
     public static WaitForWebElements accordingTo(WebdriverCollectionStrategy collectionStrategy) {

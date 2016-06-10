@@ -760,7 +760,7 @@ public enum ThucydidesSystemProperty {
      * mode waits for at least one element to be visible before proceeding.
      * For legacy reasons, the default strategy is Pessimistic.
      */
-    SERENITY_WEBDRIVER_COLLECTION_LOADING_STRATEGY;
+    SERENITY_WEBDRIVER_COLLECTION_LOADING_STRATEGY("serenity.webdriver.collection_loading_strategy");
 
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;

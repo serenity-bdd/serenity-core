@@ -306,4 +306,9 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
             return by.toString();
         }
     }
+
+    @Override
+    public String toString() {
+        return (searchContext != null)? searchContext.toString() : "";
+    }
 }

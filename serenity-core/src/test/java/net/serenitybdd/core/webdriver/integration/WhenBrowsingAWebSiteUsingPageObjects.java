@@ -127,8 +127,7 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
     @Test
     public void should_print_web_element_facades_in_a_readable_form() {
 
-        assertThat(indexPage.checkbox()
-                .toString(), startsWith("<input id='checkbox' type='checkbox' value='checkbox_value'>"));
+        assertThat(indexPage.checkbox().toString(), startsWith("<input id='checkbox' type='checkbox' value='checkbox_value'>"));
     }
 
     @Test

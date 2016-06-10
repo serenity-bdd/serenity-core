@@ -462,7 +462,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
 
 
     def "waitForAbsenceOf with explicit timeout should wait no more than the time needed for the element to dissapear"() {
-        given: "placetitle will dissapear after 2 seconds"
+        given: "placetitle will dissapear after 3 seconds"
             def page = openStaticPageWith(["webdriver.wait.for.timeout": "10000"])
         when:
             page.withTimeoutOf(1, SECONDS).waitForAbsenceOf("#placetitle")

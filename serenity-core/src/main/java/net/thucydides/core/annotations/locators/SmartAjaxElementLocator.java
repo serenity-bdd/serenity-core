@@ -309,6 +309,6 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 
     @Override
     public String toString() {
-        return (searchContext != null)? searchContext.toString() : "";
+        return (field != null) ? field.getDeclaringClass().getSimpleName() + "." + field.getName() : "";
     }
 }

@@ -74,8 +74,7 @@ public class TestOutcomeLoader {
             for (Future<Set<TestOutcome>> result : reading) {
                 testOutcomes.addAll(result.get());
             }
-            logger.debug(Thread.currentThread().getName()+" readed " + testOutcomes.size());
-            Collections.sort(testOutcomes, byTitle());
+            logger.debug(Thread.currentThread().getName()+" read " + testOutcomes.size());
             return ImmutableList.copyOf(testOutcomes);
         }catch (Exception exception){
             throw new ReportLoadingFailedError("Can not load reports for some reason",exception);

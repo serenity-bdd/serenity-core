@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver;
 
-import io.appium.java_client.AppiumDriver;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.locators.SmartElementLocatorFactory;
 import net.thucydides.core.guice.Injectors;
@@ -16,6 +15,7 @@ public class ElementLocatorFactorySelector {
 
     private final int timeoutInSeconds;
     private final EnvironmentVariables environmentVariables;
+    private final AppiumConfiguration appiumConfiguration;
 
     public ElementLocatorFactorySelector(Configuration configuration) {
         this(configuration.getElementTimeout(), configuration.getEnvironmentVariables());
@@ -24,6 +24,7 @@ public class ElementLocatorFactorySelector {
     public ElementLocatorFactorySelector(int timeoutInSeconds, EnvironmentVariables environmentVariables) {
         this.timeoutInSeconds = timeoutInSeconds;
         this.environmentVariables = environmentVariables.copy();
+        appiumConfiguration = AppiumConfiguration.from(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
     }
 
     public ElementLocatorFactory getLocatorFor(WebDriver driver) {
@@ -43,13 +44,11 @@ public class ElementLocatorFactorySelector {
         }
     }
     
-    private static MobilePlatform platformFor(WebDriver driver) {
-        if (driver instanceof AppiumDriver) {
-            AppiumConfiguration appiumConfiguration = AppiumConfiguration.from(
-                    Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
-            return appiumConfiguration.getTargetPlatform();
+    private MobilePlatform platformFor(WebDriver driver) {
+        if (!WebDriverType.isMobile(driver)) {
+            return MobilePlatform.NONE;
         }
-        return MobilePlatform.NONE;
+        return appiumConfiguration.getTargetPlatform();
     }
 
     public ElementLocatorFactorySelector withTimeout(int timeoutInSeconds) {

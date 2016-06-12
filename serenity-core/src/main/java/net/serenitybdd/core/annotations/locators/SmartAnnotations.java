@@ -1,10 +1,7 @@
 package net.serenitybdd.core.annotations.locators;
 
 import io.appium.java_client.MobileBy;
-import io.appium.java_client.pagefactory.AndroidFindBy;
-import io.appium.java_client.pagefactory.AndroidFindBys;
-import io.appium.java_client.pagefactory.iOSFindBy;
-import io.appium.java_client.pagefactory.iOSFindBys;
+import io.appium.java_client.pagefactory.*;
 import net.serenitybdd.core.annotations.findby.By;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.annotations.findby.How;
@@ -195,26 +192,34 @@ public class SmartAnnotations extends Annotations {
         org.openqa.selenium.By by = null;
 
         // appium additions
-        AndroidFindBy androidBy = field
-                .getAnnotation(AndroidFindBy.class);
+        AndroidFindBy androidBy = field.getAnnotation(AndroidFindBy.class);
         if (androidBy != null && ANDROID.toUpperCase().equals(platform.name())) {
-            by = getMobileBy(androidBy, getFilledValue(androidBy));
+            by = getMobileBy(androidBy, getFieldValue(androidBy));
         }
 
-        AndroidFindBys androidBys = field
-                .getAnnotation(AndroidFindBys.class);
+        AndroidFindBys androidBys = field.getAnnotation(AndroidFindBys.class);
         if (androidBys != null && ANDROID.toUpperCase().equals(platform.name())) {
             by = getComplexMobileBy(androidBys.value(), ByChained.class);
         }
 
+        AndroidFindAll androidFindAll = field.getAnnotation(AndroidFindAll.class);
+        if (androidFindAll != null && ANDROID.toUpperCase().equals(platform.name())) {
+            by = getComplexMobileBy(androidFindAll.value(), ByChained.class);
+        }
+
         iOSFindBy iOSBy = field.getAnnotation(iOSFindBy.class);
         if (iOSBy != null && IOS.toUpperCase().equals(platform.name())) {
-            by = getMobileBy(iOSBy, getFilledValue(iOSBy));
+            by = getMobileBy(iOSBy, getFieldValue(iOSBy));
         }
 
         iOSFindBys iOSBys = field.getAnnotation(iOSFindBys.class);
         if (iOSBys != null && IOS.toUpperCase().equals(platform.name())) {
             by = getComplexMobileBy(iOSBys.value(), ByChained.class);
+        }
+
+        iOSFindAll iOSFindAll = field.getAnnotation(iOSFindAll.class);
+        if (iOSFindAll != null && IOS.toUpperCase().equals(platform.name())) {
+            by = getComplexMobileBy(iOSFindAll.value(), ByChained.class);
         }
 
         //my additions to FindBy
@@ -240,6 +245,11 @@ public class SmartAnnotations extends Annotations {
         org.openqa.selenium.support.FindBy seleniumBy = field.getAnnotation(org.openqa.selenium.support.FindBy.class);
         if (seleniumBy != null) {
             by = super.buildByFromFindBy(seleniumBy);
+        }
+
+        org.openqa.selenium.support.FindAll seleniumFindAll = field.getAnnotation(org.openqa.selenium.support.FindAll.class);
+        if (seleniumFindAll != null) {
+            by = super.buildBysFromFindByOneOf(seleniumFindAll);
         }
 
         if (by == null) {
@@ -388,7 +398,7 @@ public class SmartAnnotations extends Annotations {
         org.openqa.selenium.By[] byArray = new org.openqa.selenium.By[annotations.length];
         for (int i = 0; i < annotations.length; i++) {
             byArray[i] = getMobileBy(annotations[i],
-                    getFilledValue(annotations[i]));
+                    getFieldValue(annotations[i]));
         }
         try {
             Constructor<?> c = requiredByClass.getConstructor(org.openqa.selenium.By[].class);
@@ -399,7 +409,7 @@ public class SmartAnnotations extends Annotations {
         }
     }
 
-    private static String getFilledValue(Annotation mobileBy) {
+    private static String getFieldValue(Annotation mobileBy) {
         Method[] values = prepareAnnotationMethods(mobileBy.getClass());
         for (Method value : values) {
             try {

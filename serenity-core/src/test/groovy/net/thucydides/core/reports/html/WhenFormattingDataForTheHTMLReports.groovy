@@ -34,6 +34,19 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         "<expected \"a\"\nGot \"b\">"          | "(expected 'a' Got 'b')"
 
     }
+
+    @Unroll
+    def "should abbreviate HTML messages if requested"() {
+        expect:
+            def formatter = new Formatter(issueTracking);
+            formatter.htmlAttributeCompatible(message, 15) == formattedMessage
+        where:
+            message             | formattedMessage
+            "<expected \"a\">"  | "(expected 'a')"
+            "<expected \"a\"\nGot \"b\">"          | "(expected 'a..."
+
+    }
+
     @Unroll
     def "should display objects in string form"() {
         expect:

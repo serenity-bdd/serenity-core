@@ -196,7 +196,6 @@ class WhenManagingWebdriverTimeouts extends Specification {
             "slowLoadingField"   | false                 // loads in 3 seconds
     }
 
-    // Fixme
     def "The webdriver.timeouts.implicitlywait value is used when loading elements using the findAll() method."() {
         given:
             def page = openStaticPageWith(["webdriver.timeouts.implicitlywait":"50"])
@@ -463,7 +462,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
 
 
     def "waitForAbsenceOf with explicit timeout should wait no more than the time needed for the element to dissapear"() {
-        given: "placetitle will dissapear after 2 seconds"
+        given: "placetitle will dissapear after 3 seconds"
             def page = openStaticPageWith(["webdriver.wait.for.timeout": "10000"])
         when:
             page.withTimeoutOf(1, SECONDS).waitForAbsenceOf("#placetitle")

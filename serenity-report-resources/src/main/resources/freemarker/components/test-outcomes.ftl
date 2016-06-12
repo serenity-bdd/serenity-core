@@ -35,7 +35,7 @@
                                     <span style="display:none">${testOutcome.result}</span></td>
                                 <td class="${testOutcome.result}-text">
                                     <div class="ellipsis">
-                                    <a href="${relativeLink}${testOutcome.reportName}.html" class="ellipsis" title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage)}">
+                                    <a href="${relativeLink}${testOutcome.reportName}.html" class="ellipsis" title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 40)}">
                                     ${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}
                                     </a></div>
                                 </td>

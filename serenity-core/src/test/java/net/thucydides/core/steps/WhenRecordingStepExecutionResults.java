@@ -98,7 +98,9 @@ public class WhenRecordingStepExecutionResults {
 
     @Before
     public void createStepListenerAndFactory() throws IOException {
+        StepEventBus.getEventBus().reset();
         MockitoAnnotations.initMocks(this);
+        
         outputDirectory = temporaryFolder.newFolder("thucydides");
         File screenshot1File = FileSystemUtils.getResourceAsFile("screenshots/google_page_1.png");
         File screenshot2File = FileSystemUtils.getResourceAsFile("screenshots/google_page_2.png");

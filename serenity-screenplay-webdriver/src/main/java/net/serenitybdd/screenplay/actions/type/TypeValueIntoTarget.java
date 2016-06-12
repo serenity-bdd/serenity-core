@@ -1,22 +1,22 @@
-package net.serenitybdd.screenplay.actions;
+package net.serenitybdd.screenplay.actions.type;
 
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.targets.Target;
 import net.thucydides.core.annotations.Step;
 
-public class EnterValueIntoTarget extends EnterValue {
+public class TypeValueIntoTarget extends TypeValue {
 
     private Target target;
 
-    public EnterValueIntoTarget(String theText, Target target) {
+    public TypeValueIntoTarget(String theText, Target target) {
         super(theText);
         this.target = target;
     }
 
     @Step("{0} enters '#theText' into #target")
     public <T extends Actor> void performAs(T theUser) {
-        target.resolveFor(theUser).type(theText)
-                .sendKeys(getFollowedByKeys());
+        target.resolveFor(theUser).sendKeys(theText);
+        target.resolveFor(theUser).sendKeys(getFollowedByKeys());
 
     }
 }

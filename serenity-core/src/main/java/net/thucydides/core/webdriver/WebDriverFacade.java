@@ -363,23 +363,41 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     public Keyboard getKeyboard() {
+        if (!isEnabled()) {
+            return new KeyboardStub();
+        }
+
         return ((HasInputDevices) getProxiedDriver()).getKeyboard();
     }
 
     public Mouse getMouse() {
+        if (!isEnabled()) {
+            return new MouseStub();
+        }
+
+
         return ((HasInputDevices) getProxiedDriver()).getMouse();
     }
 
     public Object executeScript(String script, Object... parameters) {
+        if (!isEnabled()) {
+            return null;
+        }
         return ((JavascriptExecutor) getProxiedDriver()).executeScript(script, parameters);
     }
 
     public Object executeAsyncScript(String script, Object... parameters) {
+        if (!isEnabled()) {
+            return null;
+        }
         return ((JavascriptExecutor) getProxiedDriver()).executeAsyncScript(script, parameters);
     }
 
     @Override
     public Capabilities getCapabilities() {
+        if (!isEnabled()) {
+            return new CapabilitiesStub();
+        }
         return ((HasCapabilities) getProxiedDriver()).getCapabilities();
     }
 

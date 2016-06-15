@@ -192,5 +192,26 @@ public class WhenMatchingPropertyValuesWithMaps {
         BeanMatcherAsserts.shouldMatch(persons, containsTwoEntries, firstNameIsBill, lastNamesAreDifferent);
     }
 
+    @Test
+    public void should_check_field_absence() {
+        List<Map<String,String>> persons = Arrays.asList(mappedPerson("Bill", "Oddie"),
+                mappedPerson("Bill", "Kidd"),
+                mappedPerson("Graeam", "Garden"),
+                mappedPerson("Tim", "Brooke-Taylor"));
+
+        BeanMatcher firstNameIsJohn = BeanMatchers.the("firstName", is("John"));
+        BeanMatcherAsserts.shouldNotMatch(persons, firstNameIsJohn);
+    }
+
+    @Test(expected = AssertionError.class)
+    public void should_check_field_absence_with_failing_case() {
+        List<Map<String,String>> persons = Arrays.asList(mappedPerson("Bill", "Oddie"),
+                mappedPerson("Bill", "Kidd"),
+                mappedPerson("Graeam", "Garden"),
+                mappedPerson("Tim", "Brooke-Taylor"));
+
+        BeanMatcher firstNameIsBill = BeanMatchers.the("firstName", is("Bill"));
+        BeanMatcherAsserts.shouldNotMatch(persons, firstNameIsBill);
+    }
 
 }

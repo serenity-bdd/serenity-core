@@ -131,8 +131,8 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
 
     public TestOutcomes generateReportsForTestResultsFrom(final File sourceDirectory) throws IOException {
-        TestOutcomes allTestOutcomes = loadTestOutcomesFrom(sourceDirectory);
         copyScreenshotsFrom(sourceDirectory);
+        TestOutcomes allTestOutcomes = loadTestOutcomesFrom(sourceDirectory);
         generateReportsForTestResultsIn(allTestOutcomes);
         return allTestOutcomes;
     }

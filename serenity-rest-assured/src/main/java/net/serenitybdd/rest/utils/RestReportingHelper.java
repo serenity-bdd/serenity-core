@@ -36,7 +36,7 @@ public class RestReportingHelper {
     private static boolean shouldRecordResponseBodyFor(Response result) {
         final ContentType type = ContentType.fromContentType(result.contentType());
         return type != null && (ContentType.JSON == type || ContentType.XML == type
-                || ContentType.TEXT == type);
+                || ContentType.TEXT == type || ContentType.HTML == type);
     }
 
     public RestQuery recordRestSpecificationData(final RestMethod method, final RequestSpecificationDecorated spec,

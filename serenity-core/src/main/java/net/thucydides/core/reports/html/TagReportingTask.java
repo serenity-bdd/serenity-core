@@ -18,7 +18,7 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
 
     private static final String TEST_OUTCOME_TEMPLATE_PATH = "freemarker/home.ftl";
 
-    private ReportNameProvider reportNameProvider;
+    protected ReportNameProvider reportNameProvider;
 
     public TagReportingTask(FreemarkerContext freemarker,
                             EnvironmentVariables environmentVariables,
@@ -36,7 +36,7 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
             generateTagReport(testOutcomes, reportNameProvider, tag);
         }
 
-        LOGGER.debug("Tag reports generated: {} ms", stopwatch.stop());
+        LOGGER.trace("Tag reports generated: {} ms", stopwatch.stop());
     }
 
     Set<String> tagReportTally = Sets.newConcurrentHashSet();

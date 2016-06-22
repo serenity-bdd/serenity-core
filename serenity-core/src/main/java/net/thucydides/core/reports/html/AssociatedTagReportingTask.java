@@ -7,42 +7,45 @@ import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class AssociatedTagReportingTask extends TagReportingTask implements ReportingTask {
+
+    final int batchNumber;
+    final int totalBatches;
 
     public AssociatedTagReportingTask(FreemarkerContext freemarker,
                                       EnvironmentVariables environmentVariables,
                                       File outputDirectory,
                                       ReportNameProvider reportName) {
+        this(freemarker, environmentVariables, outputDirectory, reportName, 1, 1);
+    }
+
+    public AssociatedTagReportingTask(FreemarkerContext freemarker,
+                                      EnvironmentVariables environmentVariables,
+                                      File outputDirectory,
+                                      ReportNameProvider reportName,
+                                      int batchNumber,
+                                      int totalBatches) {
         super(freemarker, environmentVariables, outputDirectory, reportName);
+        this.batchNumber = batchNumber;
+        this.totalBatches = totalBatches;
+
     }
 
     public void generateReportsFor(final TestOutcomes testOutcomes) throws IOException {
 
         Stopwatch stopwatch = Stopwatch.started();
 
-        ExecutorService executor = Executors.newFixedThreadPool(4);
-
+        int tagCounter = 0;
+        int doneCounter = 0;
         for (final TestTag tag : testOutcomes.getTags()) {
-            Runnable worker = new Runnable(){
-
-                @Override
-                public void run() {
-                    try {
-                        generateAssociatedTagReportsForTag(testOutcomes.withTag(tag), tag.getName());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            executor.execute(worker);
+            if (tagCounter % totalBatches == (batchNumber - 1)) {
+                generateAssociatedTagReportsForTag(testOutcomes.withTag(tag), tag.getName());
+                doneCounter++;
+            }
+            tagCounter++;
         }
-        executor.shutdown();
-        while (!executor.isTerminated()) {}
-
-        LOGGER.debug("Associated tag reports generated: {} ms", stopwatch.stop());
+        LOGGER.trace("Associate tag reports generated for batch {} ({} tags): {} ms", batchNumber, doneCounter, stopwatch.stop());
 
     }
 
@@ -53,4 +56,7 @@ public class AssociatedTagReportingTask extends TagReportingTask implements Repo
         }
     }
 
+    public AssociatedTagReportingTask forBatch(int batchNumber, int totalBatches) {
+        return new AssociatedTagReportingTask(freemarker, environmentVariables, outputDirectory, reportNameProvider, batchNumber, totalBatches);
+    }
 }

@@ -63,7 +63,7 @@ public class RequirementsReportingTask extends BaseReportingTask implements Repo
 
         generateReleasesReportFor(testOutcomes, requirementsOutcomes);
 
-        LOGGER.debug("Requirements reports generated: {} ms", stopwatch.stop());
+        LOGGER.trace("Requirements reports generated: {} ms", stopwatch.stop());
     }
 
     private void generateRequirementTypeReports(RequirementsOutcomes requirementsOutcomes) throws IOException {

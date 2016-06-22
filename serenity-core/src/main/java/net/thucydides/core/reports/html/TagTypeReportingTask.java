@@ -32,7 +32,7 @@ public class TagTypeReportingTask extends BaseReportingTask implements Reporting
             generateTagTypeReportsFor(testOutcomes.withTag(name), new ReportNameProvider(name));
         }
 
-        LOGGER.debug("Tag type reports generated: {} ms", stopwatch.stop());
+        LOGGER.trace("Tag type reports generated: {} ms", stopwatch.stop());
     }
 
     private void generateTagTypeReportsFor(TestOutcomes testOutcomes, ReportNameProvider reportNameProvider) throws IOException {

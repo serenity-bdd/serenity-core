@@ -12,7 +12,7 @@ import java.util.concurrent.*;
 public class MultithreadExecutorServiceProvider implements ExecutorServiceProvider {
 
     int corePoolSize = 4;
-    int maximumPoolSize = 8;
+    int maximumPoolSize = 20;
     int keepAliveTime = 60000;
 
     @Inject

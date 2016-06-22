@@ -1,20 +1,17 @@
 package net.thucydides.core.reports.html;
 
+import com.beust.jcommander.internal.Lists;
 import net.serenitybdd.core.SerenitySystemProperties;
-import net.serenitybdd.core.buildinfo.BuildInfoProvider;
-import net.serenitybdd.core.buildinfo.BuildProperties;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.model.NumericalFormatter;
 import net.thucydides.core.reports.*;
 import net.thucydides.core.requirements.RequirementsProviderService;
 import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.requirements.reports.RequirmentsOutcomeFactory;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.Inflector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +19,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -34,7 +30,8 @@ import java.util.concurrent.Executors;
 public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStoryTestReporter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlAggregateStoryReporter.class);
-    public static final int REPORT_GENERATION_THREAD_POOL_SIZE = 10;
+    public static final int REPORT_GENERATION_THREAD_POOL_SIZE = 16;
+    private static final int MAX_BATCHES = 128;
 
     private String projectName;
     private String relativeLink;
@@ -45,8 +42,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     private final RequirementsConfiguration requirementsConfiguration;
     private final EnvironmentVariables environmentVariables;
     private FormatConfiguration formatConfiguration;
-
-    private BuildProperties buildProperties;
 
     private Stopwatch stopwatch = new Stopwatch();
 
@@ -93,23 +88,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         return projectName;
     }
 
-    private void addFormattersToContext(final Map<String, Object> context) {
-        Formatter formatter = new Formatter(issueTracking);
-        context.put("formatter", formatter);
-        context.put("formatted", new NumericalFormatter());
-        context.put("inflection", Inflector.getInstance());
-        context.put("relativeLink", relativeLink);
-        context.put("reportOptions", new ReportOptions(getEnvironmentVariables()));
-    }
-
-    private void addBuildInformationToContext(final Map<String, Object> context) {
-        if (buildProperties == null) {
-            buildProperties = new BuildInfoProvider(getEnvironmentVariables()).getBuildProperties();
-        }
-        context.put("build", buildProperties);
-    }
-
-
     public TestOutcomes generateReportsForTestResultsFrom(final File sourceDirectory) throws IOException {
 
         copyScreenshotsFrom(sourceDirectory);
@@ -148,26 +126,32 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         FreemarkerContext context = new FreemarkerContext(environmentVariables, requirementsService, issueTracking, relativeLink);
 
-        AggregateReportingTask aggregateReportingTask = new AggregateReportingTask(context, environmentVariables, getOutputDirectory());
-        TagReportingTask tagReportingTask = new TagReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider);
-        TagTypeReportingTask tagTypeReportingTask = new TagTypeReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider);
-        AssociatedTagReportingTask associatedTagTypeReportingTask = new AssociatedTagReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider);
-        ResultReportingTask resultReportingTask = new ResultReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider);
-        RequirementsReportingTask requirementsReportingTask = new RequirementsReportingTask(context, environmentVariables, getOutputDirectory(),
-                                                                                            reportNameProvider, requirementsFactory,
-                                                                                            requirementsService, relativeLink);
-        generateReportsFor(testOutcomes,
-                aggregateReportingTask,
-                tagReportingTask,
-                tagTypeReportingTask,
-                associatedTagTypeReportingTask,
-                resultReportingTask,
-                requirementsReportingTask);
+        List<ReportingTask> reportingTasks = Lists.newArrayList();
+
+        reportingTasks.add(new AggregateReportingTask(context, environmentVariables, getOutputDirectory()));
+        reportingTasks.add(new TagReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider));
+        reportingTasks.add(new TagTypeReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider));
+        reportingTasks.add(new ResultReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider));
+        reportingTasks.add(new RequirementsReportingTask(context, environmentVariables, getOutputDirectory(),
+                                                                  reportNameProvider, requirementsFactory,
+                                                                  requirementsService, relativeLink));
+        addAssociatedTagReporters(testOutcomes, context, reportingTasks);
+
+        generateReportsFor(testOutcomes, reportingTasks);
 
         copyTestResultsToOutputDirectory();
     }
 
-    private void generateReportsFor(final TestOutcomes testOutcomes, ReportingTask... reportingTasks) throws IOException {
+    private void addAssociatedTagReporters(TestOutcomes testOutcomes, FreemarkerContext context, List<ReportingTask> reportingTasks) {
+        int maxPossibleBatches = testOutcomes.getTags().size();
+        int totalBatches = (MAX_BATCHES < maxPossibleBatches) ? MAX_BATCHES : maxPossibleBatches;
+        for(int batch = 1; batch <= totalBatches; batch++) {
+            reportingTasks.add(new AssociatedTagReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider)
+                               .forBatch(batch,totalBatches));
+        }
+    }
+
+    private void generateReportsFor(final TestOutcomes testOutcomes, List<ReportingTask> reportingTasks) throws IOException {
         stopwatch.start();
 
         ExecutorService executor = Executors.newFixedThreadPool(REPORT_GENERATION_THREAD_POOL_SIZE);
@@ -186,13 +170,12 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
             };
             executor.execute(worker);
         }
+        LOGGER.debug("Shutting down Test outcome reports generation");
         executor.shutdown();
         while (!executor.isTerminated()) {}
 
         LOGGER.debug("Test outcome reports generated in {} ms", stopwatch.stop());
     }
-
-
 
     private TestOutcomes loadTestOutcomesFrom(File sourceDirectory) throws IOException {
         return TestOutcomeLoader.loadTestOutcomes().inFormat(getFormat()).from(sourceDirectory).withHistory().withRequirementsTags();

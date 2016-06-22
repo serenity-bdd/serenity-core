@@ -34,7 +34,7 @@ public class ResultReportingTask extends BaseReportingTask implements ReportingT
             generateResultReports(testOutcomes.withTag(tag), new ReportNameProvider(tag.getName()), tag);
         }
 
-        LOGGER.debug("Result reports generated: {} ms", stopwatch.stop());
+        LOGGER.trace("Result reports generated: {} ms", stopwatch.stop());
     }
 
     private void generateResultReports(TestOutcomes testOutcomes, ReportNameProvider reportName) throws IOException {

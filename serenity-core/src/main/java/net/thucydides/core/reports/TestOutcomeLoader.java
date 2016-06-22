@@ -14,10 +14,11 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.Callable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 
 /**
  * Loads test outcomes from a given directory, and reports on their contents.
@@ -31,7 +32,7 @@ public class TestOutcomeLoader {
     private final static Logger logger = LoggerFactory.getLogger(TestOutcomeLoader.class);
 
     public TestOutcomeLoader() {
-        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
     }
 
     @Inject
@@ -49,6 +50,7 @@ public class TestOutcomeLoader {
 
         return new TestOutcomeLoader(environmentVariables, new FormatConfiguration(format));
     }
+
     /**
      * Load the test outcomes from a given directory, sorted by Title
      *
@@ -61,36 +63,16 @@ public class TestOutcomeLoader {
             final AcceptanceTestLoader testOutcomeReporter = getOutcomeReporter();
             final List<File> reportFiles = getAllOutcomeFilesFrom(reportDirectory);
             final List<TestOutcome> testOutcomes = Collections.synchronizedList(new ArrayList<TestOutcome>(reportFiles.size()));
-            final List<Future<Set<TestOutcome>>> reading = new ArrayList<>(reportFiles.size());
             for (final File reportFile : reportFiles) {
-                reading.add(this.executor.submit(new Callable<Set<TestOutcome>>() {
-                    @Override
-                    public Set<TestOutcome> call() throws Exception {
-//                        logger.debug(Thread.currentThread().getName() + " is reading report from " + reportFile.getAbsolutePath());
-                        return testOutcomeReporter.loadReportFrom(reportFile).asSet();
-                    }
-                }));
+                testOutcomes.addAll(testOutcomeReporter.loadReportFrom(reportFile).asSet());
             }
-            for (Future<Set<TestOutcome>> result : reading) {
-                testOutcomes.addAll(result.get());
-            }
-            logger.debug(Thread.currentThread().getName()+" read " + testOutcomes.size());
-            return ImmutableList.copyOf(testOutcomes);
-        }catch (Exception exception){
-            throw new ReportLoadingFailedError("Can not load reports for some reason",exception);
+            return testOutcomes;
+        } catch (Exception exception) {
+            throw new ReportLoadingFailedError("Can not load reports for some reason", exception);
         }
     }
 
-    private Comparator<? super TestOutcome> byTitle() {
-        return new Comparator<TestOutcome>() {
-            @Override
-            public int compare(TestOutcome a, TestOutcome b) {
-                return a.getTitle().compareTo(b.getTitle());
-            }
-        };
-    }
-
-    private List<File> getAllOutcomeFilesFrom(final File reportsDirectory) throws IOException{
+    private List<File> getAllOutcomeFilesFrom(final File reportsDirectory) throws IOException {
         File[] matchingFiles = reportsDirectory.listFiles(new SerializedOutcomeFilenameFilter());
         if (matchingFiles == null) {
             throw new IOException("Could not find directory " + reportsDirectory);
@@ -124,14 +106,18 @@ public class TestOutcomeLoader {
 
     public AcceptanceTestLoader getOutcomeReporter() {
         switch (formatConfiguration.getPreferredFormat()) {
-            case XML: return new XMLTestOutcomeReporter();
-            case JSON: return new JSONTestOutcomeReporter();
-            default: throw new IllegalArgumentException("Unsupported report format: " + formatConfiguration.getPreferredFormat());
+            case XML:
+                return new XMLTestOutcomeReporter();
+            case JSON:
+                return new JSONTestOutcomeReporter();
+            default:
+                throw new IllegalArgumentException("Unsupported report format: " + formatConfiguration.getPreferredFormat());
         }
     }
+
     private class SerializedOutcomeFilenameFilter implements FilenameFilter {
         public boolean accept(final File file, final String filename) {
-            return (filename.toLowerCase(Locale.getDefault()).endsWith(formatConfiguration.getPreferredFormat().getExtension()) && (!filename.endsWith(".features.json")) && (!filename.startsWith(JUnitXMLOutcomeReporter.FILE_PREFIX))) ;
+            return (filename.toLowerCase(Locale.getDefault()).endsWith(formatConfiguration.getPreferredFormat().getExtension()) && (!filename.endsWith(".features.json")) && (!filename.startsWith(JUnitXMLOutcomeReporter.FILE_PREFIX)));
         }
     }
 }

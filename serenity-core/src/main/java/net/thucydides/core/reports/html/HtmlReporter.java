@@ -10,6 +10,8 @@ import net.thucydides.core.reports.templates.TemplateManager;
 import net.thucydides.core.reports.util.CopyDirectory;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -51,6 +53,8 @@ public abstract class HtmlReporter extends ThucydidesReporter {
         this.charset = Charset.forName(ThucydidesSystemProperty.JSON_CHARSET.from(environmentVariables, Charset.defaultCharset().name()));
     }
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(HtmlReporter.class);
+
     private TemplateManager getTemplateManager() {
         return templateManager;
     }
@@ -79,7 +83,9 @@ public abstract class HtmlReporter extends ThucydidesReporter {
         Path sourcePath = getSourceDirectoryOrDefault().toPath();
         Path destinationPath = getOutputDirectory().toPath();
         if (Files.exists(sourcePath) && !Files.isSameFile(sourcePath, destinationPath)) {
+            LOGGER.debug("Copying directory contents from {} to {}", sourcePath,destinationPath);
             copyDirectoryContents(sourcePath, destinationPath);
+            LOGGER.debug("Copying directory contents from {} to {} done", sourcePath,destinationPath);
         }
     }
 

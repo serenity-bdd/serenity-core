@@ -9,6 +9,8 @@ import net.thucydides.core.requirements.RequirementsMerger;
 import net.thucydides.core.requirements.RequirementsTagProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -17,6 +19,8 @@ public class RequirmentsOutcomeFactory {
     private final List<RequirementsTagProvider> requirementsTagProviders;
     private final IssueTracking issueTracking;
     private final EnvironmentVariables environmentVariables;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RequirmentsOutcomeFactory.class);
 
     public RequirmentsOutcomeFactory(List<RequirementsTagProvider> requirementsTagProviders, IssueTracking issueTracking) {
         this(requirementsTagProviders, issueTracking, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
@@ -33,10 +37,10 @@ public class RequirmentsOutcomeFactory {
     public RequirementsOutcomes buildRequirementsOutcomesFrom(TestOutcomes testOutcomes) {
         List<Requirement> allRequirements = Lists.newArrayList();
         for(RequirementsTagProvider tagProvider : requirementsTagProviders) {
-            System.out.println("Merging requirements = " + tagProvider.getRequirements());
+            LOGGER.debug("Merging requirements = " + tagProvider.getRequirements());
             allRequirements = new RequirementsMerger().merge(allRequirements, tagProvider.getRequirements());
         }
-        System.out.println("Merged requirements set = " + allRequirements);
+        LOGGER.debug("Merged requirements set = " + allRequirements);
         return new RequirementsOutcomes(allRequirements,
                                         testOutcomes, issueTracking, environmentVariables, requirementsTagProviders);
     }

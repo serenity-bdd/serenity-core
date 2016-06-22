@@ -1,5 +1,72 @@
 ## Serenity BDD core change Log
 
+### upcoming (2016/06/21 18:19 +00:00)
+ 
+ 
+**Commits:**
+ 
+- [b5cd76d](https://github.com/serenity-bdd/serenity-core/commit/b5cd76d68401dad5cb7f3aa0bf23c786e05e7765) feat: add ability to see response body for responses with  HTML content type in report ([@viktor-klymenko](https://github.com/viktor-klymenko))
+ 
+### v1.1.37-rc.5 (2016/06/15 11:28 +00:00)
+ 
+**Pull requests:**
+ 
+- [#454](https://github.com/serenity-bdd/serenity-core/pull/454) Add ability to assert that matched element is not present in collection (#453) ([@viktor-klymenko](https://github.com/viktor-klymenko))
+ 
+**Commits:**
+ 
+- [1010a8d](https://github.com/serenity-bdd/serenity-core/commit/1010a8dac5ac18d5d0a5dc2306c621eb391ccebf) feat: add ability to assert that matched element is not present in collection ([@viktor-klymenko](https://github.com/viktor-klymenko))
+ 
+ > now it is possible to assert that element is not present in collection using BeanMatcherAsserts.shouldNotMatch(List&lt;T&gt; items, BeanMatcher... matchers) method
+ 
+### v1.1.37-rc.4 (2016/06/10 16:53 +00:00)
+ 
+ 
+**Commits:**
+ 
+- [3e547d4](https://github.com/serenity-bdd/serenity-core/commit/3e547d4c53868b0a92d551ba95fbb549b35c18c1) refactor: Improved screenshot test performance. ([@wakaleo](https://github.com/wakaleo))
+ 
+### v1.1.37-rc.3 (2016/06/10 08:41 +00:00)
+ 
+ 
+**Commits:**
+ 
+- [87545d1](https://github.com/serenity-bdd/serenity-core/commit/87545d1a243898e91477167e2e2d8baa0dfa60e6) refactor:Test refactoring ([@wakaleo](https://github.com/wakaleo))
+ 
+### v1.1.37-rc.2 (2016/06/09 09:05 +00:00)
+ 
+**Pull requests:**
+ 
+ 
+**Commits:**
+ 
+- [62dc5f6](https://github.com/serenity-bdd/serenity-core/commit/62dc5f693a35d357584522ea03cb1c447a8e13d9) feat: Improved handling of soft asserts ([@wakaleo](https://github.com/wakaleo))
+ 
+ > You can now use soft asserts to combine a task to be executed, and a check to perform, optionally annotated with a business rule. This makes it much easier to check several business or validation rules on the same screen, in the same test.
+ > Sample code:
+ > &#39;&#39;&#39;
+ > then(alice).should(
+ > seeThat(TheValidationMessages.displayed(), reportsErrors(&quot;BSB must be 6 digits&quot;)).
+ > whenAttemptingTo(EnterABankAccount.bsbValueOf(&quot;1234&quot;)).
+ > because(&quot;BSB cannot be a number with less than 6 digits&quot;),
+ > seeThat(TheValidationMessages.displayed(), reportsErrors(&quot;BSB must be 6 digits&quot;)).
+ > whenAttemptingTo(EnterABankAccount.bsbValueOf(&quot;qwerty&quot;)).
+ > because(&quot;BSB cannot have alphabetical characters&quot;),
+ > seeThat(TheValidationMessages.displayed(), reportsErrors(&quot;BSB must be 6 digits&quot;)).
+ > whenAttemptingTo(EnterABankAccount.bsbValueOf(&quot;~!@#$%^&amp;*(&quot;)).
+ > because(&quot;BSB cannot have symbols&quot;),
+ > );
+ > &#39;&#39;&#39;
+- [8e5571c](https://github.com/serenity-bdd/serenity-core/commit/8e5571cd96af1bc30f6cc65eb5613439246bf824) feat:Added extra diagnostics for the Check gradle and maven tasks ([@wakaleo](https://github.com/wakaleo))
+- [a36b539](https://github.com/serenity-bdd/serenity-core/commit/a36b539ea57112c393fcc25b4b6533079d3cbbc8) refactor: hardening time-based tests and minor refactoring. ([@wakaleo](https://github.com/wakaleo))
+- [a5755b7](https://github.com/serenity-bdd/serenity-core/commit/a5755b767d175e4ec6f74b0683a63cca81443030) refactor: test refactoring ([@wakaleo](https://github.com/wakaleo))
+ 
+### v1.1.37-rc.1 (2016/06/06 20:07 +00:00)
+ 
+**Pull requests:**
+ 
+- [#436](https://github.com/serenity-bdd/serenity-core/pull/436) TestOutcome included in testSource ([@YamStranger](https://github.com/YamStranger))
+ 
 ### v1.1.36 (2016/06/02 19:43 +00:00)
  
 **Pull requests:**
@@ -1344,34 +1411,6 @@
 **Pull requests:**
  
 - [#82](https://github.com/serenity-bdd/serenity-core/pull/82) Fix for setting up the remote webdriver capability: webdriver.remote.browser.version ([@eskape](https://github.com/eskape))
- 
-**Commits:**
- 
-- [395a9a6](https://github.com/serenity-bdd/serenity-core/commit/395a9a64e193991b4387c90db6f81b6150b48d4f) Fixes unit tests - nullpointer exception fix when system property webdriver.remote.driver is not set ([@eskape](https://github.com/eskape))
-- [6f1628b](https://github.com/serenity-bdd/serenity-core/commit/6f1628bc721463cdb3e97ee3700ef979b5dc7d8d) Fixed #87 ([@wakaleo](https://github.com/wakaleo))
-- [cca6cd0](https://github.com/serenity-bdd/serenity-core/commit/cca6cd03b475dbdc256c6e43eb2034d024e2d59a) Fix for setting up the remote webdriver capability: webdriver.remote.browser.version ([@eskape](https://github.com/eskape))
- 
-### v1.0.58 (2015/06/21 13:14 +00:00)
- 
- 
-**Commits:**
- 
-- [5b16d86](https://github.com/serenity-bdd/serenity-core/commit/5b16d86c86702cd500649b1419ab3f3cae361de4) Fixed #79 ([@wakaleo](https://github.com/wakaleo))
-- [8e8b01a](https://github.com/serenity-bdd/serenity-core/commit/8e8b01a5fd49895332442a65c29ceced053dcfd3) Fixeds #81 ([@wakaleo](https://github.com/wakaleo))
-- [b06c399](https://github.com/serenity-bdd/serenity-core/commit/b06c39978f06dad6ab966ddd89bbdfb0af87460b) Refactored tests ([@wakaleo](https://github.com/wakaleo))
- 
-### v1.0.57 (2015/06/18 21:40 +00:00)
- 
- 
-**Commits:**
- 
-- [54529c1](https://github.com/serenity-bdd/serenity-core/commit/54529c12066cd60c141ffb3485c6ed5ed1ec43db) Fixed timeout issues with waitForAbsence* methods ([@wakaleo](https://github.com/wakaleo))
-- [d377729](https://github.com/serenity-bdd/serenity-core/commit/d3777295f2efd743939dbe85820a71271c47be57) Performance improvements ([@wakaleo](https://github.com/wakaleo))
- 
-### v1.0.56 (2015/06/15 15:27 +00:00)
- 
-**Pull requests:**
- 
 - [#77](https://github.com/serenity-bdd/serenity-core/pull/77) serenity-spring support for @ContextHierarchy and meta-annotations ([@martinlau](https://github.com/martinlau))
 - [#70](https://github.com/serenity-bdd/serenity-core/pull/70) Re: Issue #52 - Add support for class level spring annotations ([@ScottDennison](https://github.com/ScottDennison))
 - [#43](https://github.com/serenity-bdd/serenity-core/pull/43) Fix problem with uploading file on Windows.  ([@Tyson1986](https://github.com/Tyson1986))
@@ -1519,6 +1558,7 @@
  > https://groups.google.com/forum/#!topic/thucydides-users/01oNgOD9TnY
  > See attached unit tests for usage examples.
 - [392bc01](https://github.com/serenity-bdd/serenity-core/commit/392bc01b88be7b48f46d2ddf5535c59ec205f1b3) Upgrade SLF4J version for transitive convergence #16. ([@jeffjensen](https://github.com/jeffjensen))
+- [395a9a6](https://github.com/serenity-bdd/serenity-core/commit/395a9a64e193991b4387c90db6f81b6150b48d4f) Fixes unit tests - nullpointer exception fix when system property webdriver.remote.driver is not set ([@eskape](https://github.com/eskape))
 - [39d059a](https://github.com/serenity-bdd/serenity-core/commit/39d059a4b103ea12dae35e5728079de9f7093697) Added a hasClass() method to the WebElementFacade ([@wakaleo](https://github.com/wakaleo))
  
  > This method is a convenient way to check whether a web element has a
@@ -1563,6 +1603,7 @@
 - [52e64ae](https://github.com/serenity-bdd/serenity-core/commit/52e64aef5ebbe285abd1045e35619978aadfbc29) Tidied up some dependencies. ([@wakaleo](https://github.com/wakaleo))
 - [52f0eea](https://github.com/serenity-bdd/serenity-core/commit/52f0eeadcfc82d26a36ffa16d5b757291dfaa717) Missed change to PathProcessor ([@schmurgon](https://github.com/schmurgon))
 - [536bfdf](https://github.com/serenity-bdd/serenity-core/commit/536bfdf46cac5b0f3cc48854f176e74abac441d0) test: Use phantomjs to check implicit timeouts more realisticly ([@wakaleo](https://github.com/wakaleo))
+- [54529c1](https://github.com/serenity-bdd/serenity-core/commit/54529c12066cd60c141ffb3485c6ed5ed1ec43db) Fixed timeout issues with waitForAbsence* methods ([@wakaleo](https://github.com/wakaleo))
 - [56f672a](https://github.com/serenity-bdd/serenity-core/commit/56f672a7f8d59413bb81c1b767bb5787c7784c2f) Made table formatting more robust by providing support for unicode brackets and new line chars. ([@wakaleo](https://github.com/wakaleo))
 - [5705bc2](https://github.com/serenity-bdd/serenity-core/commit/5705bc2b828760858d3cd1f229495ded74d5b399) Support Cucumber feature files written in other languages. ([@wakaleo](https://github.com/wakaleo))
 - [581dd47](https://github.com/serenity-bdd/serenity-core/commit/581dd4753b647b37fbe7e3e29403048a0c0cfac4) Rename main class to reflect new project name, and deprecate old ([@mikezx6r](https://github.com/mikezx6r))
@@ -1570,6 +1611,7 @@
  > Eventually, all Thucydides references will be removed.
 - [5894af6](https://github.com/serenity-bdd/serenity-core/commit/5894af6eb23439437bb5162894b9046bf0724765) fix: Removed dependency conflicts in the Gradle build. ([@wakaleo](https://github.com/wakaleo))
 - [5a46d71](https://github.com/serenity-bdd/serenity-core/commit/5a46d718876a96a86f3be5affef0432f4b15f828) test: Use phantomjs to check implicit timeouts more realisticly ([@wakaleo](https://github.com/wakaleo))
+- [5b16d86](https://github.com/serenity-bdd/serenity-core/commit/5b16d86c86702cd500649b1419ab3f3cae361de4) Fixed #79 ([@wakaleo](https://github.com/wakaleo))
 - [5caf4a2](https://github.com/serenity-bdd/serenity-core/commit/5caf4a28cbcb818b7642ce5d4b5614ce188f9b22) Changed group to serenity-bdd to make syncing with Maven Central easier ([@wakaleo](https://github.com/wakaleo))
 - [5d3f58a](https://github.com/serenity-bdd/serenity-core/commit/5d3f58a217827dd31050f2d1b79237cc86f245f3) Changed group to serenity-bdd to make syncing with Maven Central easier ([@wakaleo](https://github.com/wakaleo))
 - [5d55b1e](https://github.com/serenity-bdd/serenity-core/commit/5d55b1eae5d424b7185ed1aab68ab6f36c53cbf6) Updated excanvas ([@bmwsedee](https://github.com/bmwsedee))
@@ -1609,6 +1651,7 @@
 - [6edddb2](https://github.com/serenity-bdd/serenity-core/commit/6edddb2d16a2796675b390c06feadc0c7e8252fb) Fixed incorrect timeout issue ([@wakaleo](https://github.com/wakaleo))
 - [6ee7578](https://github.com/serenity-bdd/serenity-core/commit/6ee7578c7e241b6a7bba5719dd4fc832909fbf62) Added better support for comments in feature files, and better formatting in the 'Related Tabs' table ([@wakaleo](https://github.com/wakaleo))
 - [6f12e53](https://github.com/serenity-bdd/serenity-core/commit/6f12e5389a8499e2f9f9b69478b329f90367d4fb) Refactoring to facilitate easier migrating to new versions of the libraries ([@bmwsedee](https://github.com/bmwsedee))
+- [6f1628b](https://github.com/serenity-bdd/serenity-core/commit/6f1628bc721463cdb3e97ee3700ef979b5dc7d8d) Fixed #87 ([@wakaleo](https://github.com/wakaleo))
 - [7020e78](https://github.com/serenity-bdd/serenity-core/commit/7020e788a36a4c28dcdd241276ed403990a96677) Removing Jackson ([@wakaleo](https://github.com/wakaleo))
 - [70325bb](https://github.com/serenity-bdd/serenity-core/commit/70325bb74775cb3575502f905a0f62dff1e5db1d) Upgrade commons-lang3 to htmlunit's dep version. #16 ([@jeffjensen](https://github.com/jeffjensen))
  
@@ -1664,6 +1707,7 @@
 - [8ba6aeb](https://github.com/serenity-bdd/serenity-core/commit/8ba6aeb194a96bbcaad15918632d57d88aeb0b5b) Honor both 'thucydides.properties' and 'serenity.properties' files for local project configuration ([@wakaleo](https://github.com/wakaleo))
 - [8bdaf7d](https://github.com/serenity-bdd/serenity-core/commit/8bdaf7db8f1f501e932c7efafc5fc32bab8ce953) [rename] Move SerenityListeners and create deprecated ThucydidesListeners ([@mikezx6r](https://github.com/mikezx6r))
 - [8d8b0bf](https://github.com/serenity-bdd/serenity-core/commit/8d8b0bf5fb05fcec0ace6eb62c511645caf6945b) You can now use serenity.* instead of thucydides.* system properties. The thucydides.* system properties are still supported, but a warning is printed to the logs. ([@wakaleo](https://github.com/wakaleo))
+- [8e8b01a](https://github.com/serenity-bdd/serenity-core/commit/8e8b01a5fd49895332442a65c29ceced053dcfd3) Fixeds #81 ([@wakaleo](https://github.com/wakaleo))
 - [8fb2e5e](https://github.com/serenity-bdd/serenity-core/commit/8fb2e5e5e0b82042c88e25a01db0f46e40dc0f60) Better error reporting for errors around the @DefaultUrl definitions for Page Objects. ([@wakaleo](https://github.com/wakaleo))
 - [8fee3ad](https://github.com/serenity-bdd/serenity-core/commit/8fee3ad848950836be8030dd82c9a5fb50d068f1) Chrome no longer opens a new window when you specify the browser size. ([@wakaleo](https://github.com/wakaleo))
  
@@ -1708,6 +1752,7 @@
 - [ad4800e](https://github.com/serenity-bdd/serenity-core/commit/ad4800ebcf39afdf66abb76a28d9290f29fd3ad7) Getting the maven plugin build working ([@wakaleo](https://github.com/wakaleo))
 - [ad83c2a](https://github.com/serenity-bdd/serenity-core/commit/ad83c2afa1652aca1e6ea5a5ea52a43f86fb0a7b) Display full screenshots in the slideshow view. ([@wakaleo](https://github.com/wakaleo))
 - [afaf0b9](https://github.com/serenity-bdd/serenity-core/commit/afaf0b947f97a8c13ac4a225ea3db378b5cbc08b) Fix to remove 'Session ID is null. Using WebDriver after calling quit()?' messages appearing when the tests are run in threads ([@wakaleo](https://github.com/wakaleo))
+- [b06c399](https://github.com/serenity-bdd/serenity-core/commit/b06c39978f06dad6ab966ddd89bbdfb0af87460b) Refactored tests ([@wakaleo](https://github.com/wakaleo))
 - [b184b84](https://github.com/serenity-bdd/serenity-core/commit/b184b84b1d9701e9991b60cdcc113aae07c32d16) Modifying screenshot code to work better with Windows (see #69) ([@wakaleo](https://github.com/wakaleo))
 - [b29b7cc](https://github.com/serenity-bdd/serenity-core/commit/b29b7cc6ce97ee96b9d3dc80661f623d805afc79) feature: Added support for a waitUntilClickable() method on web elements ([@wakaleo](https://github.com/wakaleo))
 - [b3340e5](https://github.com/serenity-bdd/serenity-core/commit/b3340e5d3756a26169073690c95f2eea73737fb9) Integrated better support for JBehave ([@wakaleo](https://github.com/wakaleo))
@@ -1734,6 +1779,7 @@
 - [c8ab82b](https://github.com/serenity-bdd/serenity-core/commit/c8ab82bc59925ba1ab2dc2a5b1793c60c4f93e28) General refactoring ([@wakaleo](https://github.com/wakaleo))
 - [c8fd3b9](https://github.com/serenity-bdd/serenity-core/commit/c8fd3b94c1bd867c8d79fe6554b4e36a267c7648) Added bootstrap tabs ([@wakaleo](https://github.com/wakaleo))
 - [c9f9505](https://github.com/serenity-bdd/serenity-core/commit/c9f95050aadcd98861dce9b16d11a3c5876126ff) Upgrade javassist version to match transitive dep. #16 ([@jeffjensen](https://github.com/jeffjensen))
+- [cca6cd0](https://github.com/serenity-bdd/serenity-core/commit/cca6cd03b475dbdc256c6e43eb2034d024e2d59a) Fix for setting up the remote webdriver capability: webdriver.remote.browser.version ([@eskape](https://github.com/eskape))
 - [cd09406](https://github.com/serenity-bdd/serenity-core/commit/cd09406dcb34a96553926e964ebe87a267da19c2) Added test data for a sample pending report ([@wakaleo](https://github.com/wakaleo))
 - [cd9d786](https://github.com/serenity-bdd/serenity-core/commit/cd9d78657ed78aba1c2f66351eb925db3e0daa09) Fixed an issue in the reports where pending test results were not being accurately reported in the pie charts. ([@wakaleo](https://github.com/wakaleo))
 - [ceb0c1d](https://github.com/serenity-bdd/serenity-core/commit/ceb0c1d103411a97645454b9e99ec78084514d48) Upgrade htmlunit to Selenium's dep version. #16 ([@jeffjensen](https://github.com/jeffjensen))
@@ -1743,6 +1789,7 @@
 - [d21e03e](https://github.com/serenity-bdd/serenity-core/commit/d21e03e66f56d862fa20ddf6d97064c331762e33) Standardized the Groovy version used throughout the build to 2.3.6 ([@wakaleo](https://github.com/wakaleo))
 - [d296863](https://github.com/serenity-bdd/serenity-core/commit/d296863429cfdabe1206b0f45421dec403f5e07a) Support for detection of feature file directories. ([@wakaleo](https://github.com/wakaleo))
 - [d2a2018](https://github.com/serenity-bdd/serenity-core/commit/d2a20188ab24fd4213845331ed79351149d546cd) Update WhenLoadingTestDataFromACSVFile.java ([@x-hovo-x](https://github.com/x-hovo-x))
+- [d377729](https://github.com/serenity-bdd/serenity-core/commit/d3777295f2efd743939dbe85820a71271c47be57) Performance improvements ([@wakaleo](https://github.com/wakaleo))
 - [d4404c1](https://github.com/serenity-bdd/serenity-core/commit/d4404c10e741ea0918deb9f136219e955b6c4425) Fixed #65 - temporary screenshots not deleted ([@wakaleo](https://github.com/wakaleo))
 - [d5511b6](https://github.com/serenity-bdd/serenity-core/commit/d5511b6706701d49a361192e5a8752e273c23ebe) Cater for rare cases where the driver returns null when an element is not found ([@wakaleo](https://github.com/wakaleo))
 - [d5dfc1e](https://github.com/serenity-bdd/serenity-core/commit/d5dfc1ea82b7954cef2f22b897ff9fb4925d98a2) Fixed an issue that prevented screenshots from being taken correctly in Cucumber scenarios ([@wakaleo](https://github.com/wakaleo))

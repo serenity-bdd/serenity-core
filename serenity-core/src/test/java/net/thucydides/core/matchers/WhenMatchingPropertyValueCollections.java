@@ -276,6 +276,46 @@ public class WhenMatchingPropertyValueCollections {
     }
 
     @Test
+    public void should_check_field_similarities() {
+        List<Person> persons = Arrays.asList(billoddie, tim, graeme, billoddie);
+
+        BeanMatcher containsTwoEntries = the_count(is(2));
+        BeanMatcher lastNamesAreDifferent = each("lastName").isDifferent();
+        BeanMatcher firstNameIsBill = the("firstName", is("Bill"));
+
+        shouldNotMatch(persons, containsTwoEntries, firstNameIsBill, lastNamesAreDifferent);
+    }
+
+    @Test(expected = AssertionError.class)
+    public void should_check_field_similarities_when_all_unique() {
+        List<Person> persons = Arrays.asList(billoddie, tim, graeme, billkidd);
+
+        BeanMatcher containsTwoEntries = the_count(is(2));
+        BeanMatcher lastNamesAreDifferent = each("lastName").isDifferent();
+        BeanMatcher firstNameIsBill = the("firstName", is("Bill"));
+
+        shouldNotMatch(persons, containsTwoEntries, firstNameIsBill, lastNamesAreDifferent);
+    }
+
+    @Test
+    public void should_check_element_is_not_present() {
+        List<Person> persons = Arrays.asList(billoddie, tim, graeme, billoddie);
+
+        BeanMatcher firstNameIsJohn = the("firstName", is("John"));
+
+        shouldNotMatch(persons, firstNameIsJohn);
+    }
+
+    @Test(expected = AssertionError.class)
+    public void should_check_element_is_not_present_with_failing_case() {
+        List<Person> persons = Arrays.asList(billoddie, tim, graeme, billkidd);
+
+        BeanMatcher firstNameIsBill = the("firstName", is("Bill"));
+
+        shouldNotMatch(persons, firstNameIsBill);
+    }
+
+    @Test
     public void should_check_multiple_different_types_of_matches() {
         List<Person> persons = Arrays.asList(billoddie, tim, graeme, billkidd);
 

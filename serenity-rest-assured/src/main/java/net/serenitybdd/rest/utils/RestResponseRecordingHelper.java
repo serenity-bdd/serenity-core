@@ -39,6 +39,7 @@ public class RestResponseRecordingHelper {
                     }
                     recordingStream.flush();
                     String recorded = new String(output.toByteArray(), StandardCharsets.UTF_8);
+                    output.reset();
                     recorded = recorded.replaceAll("^(" +
                             "(Proxy:)|(Body:)|(Cookies:)|(Headers:)|(Multiparts:)|(Request path:)" +
                             ")\\s*\\n*", "");

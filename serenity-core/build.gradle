@@ -167,6 +167,10 @@ dependencies {
     }
 }
 
+task integrationTests(type: Test) {
+    maxParallelForks = 1
+}
+
 processResources {
     filter ReplaceTokens, tokens: [
             "application.version": "" + version

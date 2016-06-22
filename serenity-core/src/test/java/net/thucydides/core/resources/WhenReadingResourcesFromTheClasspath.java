@@ -36,28 +36,28 @@ public class WhenReadingResourcesFromTheClasspath {
     @Test
     public void should_return_a_list_of_resources_on_the_classpath() {
         Pattern pattern = Pattern.compile(".*");
-        Collection<String> resources = ResourceList.forResources(pattern).list();
+        Collection<String> resources = ResourceList.forResources("",pattern).list();
         assertThat(resources.isEmpty(), is(false));
     }
 
     @Test
     public void should_exclude_trailing_pom_files() {
         Pattern pattern = Pattern.compile(".*[\\\\/]resourcelist[\\\\/].*");
-        Collection<String> resources = ResourceList.forResources(pattern).list();
+        Collection<String> resources = ResourceList.forResources("",pattern).list();
         //TODO: JDK
         // assertThat(resources, not(hasItem(endsWith("pom.xml"))));
     }
     @Test
     public void should_return_a_list_of_resources_in_a_given_package() {
         Pattern pattern = Pattern.compile(".*[\\\\/]resourcelist[\\\\/].*");
-        Collection<String> resources = ResourceList.forResources(pattern).list();
+        Collection<String> resources = ResourceList.forResources("",pattern).list();
         assertThat(resources.size() ,greaterThan(0));
     }
     
     @Test
     public void should_return_a_list_of_resources_in_a_given_package_containing_matching_resources() {
         Pattern pattern = Pattern.compile(".*[\\\\/]resourcelist[\\\\/].*");
-        Collection<String> resources = ResourceList.forResources(pattern).list();
+        Collection<String> resources = ResourceList.forResources("",pattern).list();
         // TODO: JDK
         // assertThat(resources, hasItems(containsString("resourcelist"),endsWith("sample.css"),endsWith("sample.xsl")));
     }
@@ -65,7 +65,7 @@ public class WhenReadingResourcesFromTheClasspath {
     @Test
     public void should_return_a_list_of_resources_in_a_given_package_even_from_a_dependency() {
         Pattern pattern = Pattern.compile(".*/findElement.js");
-        Collection<String> resources = ResourceList.forResources(pattern).list();
+        Collection<String> resources = ResourceList.forResources("",pattern).list();
         assertThat(resources.isEmpty(), is(false));
     }
 
@@ -181,7 +181,7 @@ public class WhenReadingResourcesFromTheClasspath {
     static class ErrorProneResourceList extends ResourceList {
 
         protected ErrorProneResourceList(final Pattern pattern) {
-            super(pattern);
+            super("", pattern);
         }
 
         @Override
@@ -199,7 +199,7 @@ public class WhenReadingResourcesFromTheClasspath {
     class MockResourceList extends ResourceList {
 
         protected MockResourceList(final Pattern pattern) {
-            super(pattern);
+            super("", pattern);
         }
 
         @Override

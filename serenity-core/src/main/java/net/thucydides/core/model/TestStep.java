@@ -25,12 +25,11 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * An acceptance test run is made up of test steps.
  * Test steps can be either concrete steps or groups of steps.
  * Each concrete step should represent an action by the user, and (generally) an expected outcome.
- * A test step is described by a narrative-style phrase (e.g. "the user clicks 
+ * A test step is described by a narrative-style phrase (e.g. "the user clicks
  * on the 'Search' button', "the user fills in the registration form', etc.).
  * A screenshot is stored for each step.
- * 
- * @author johnsmart
  *
+ * @author johnsmart
  */
 public class TestStep {
 
@@ -82,7 +81,7 @@ public class TestStep {
     }
 
     private int renumberChildrenFrom(int count) {
-        for(TestStep step :children) {
+        for (TestStep step : children) {
             count = step.renumberFrom(count);
         }
         return count;
@@ -113,6 +112,7 @@ public class TestStep {
             return step;
         }
     }
+
     @Override
     public String toString() {
         if (!hasChildren()) {
@@ -213,8 +213,10 @@ public class TestStep {
     public boolean needsScreenshots() {
         return (!isAGroup() && getScreenshots() != null);
     }
+
     /**
      * Each test step has a result, indicating the outcome of this step.
+     *
      * @param result The test outcome associated with this step.
      */
     public void setResult(final TestResult result) {
@@ -223,7 +225,7 @@ public class TestStep {
 
     public TestResult getResult() {
         if (isAGroup() && !groupResultOverridesChildren()) {
-            return (result != null) ? TestResultList.of(result, getResultFromChildren()).getOverallResult() : getResultFromChildren();
+            return (result != null) ? TestResultComparison.overallResultFor(result, getResultFromChildren()) : getResultFromChildren();
         } else {
             return getResultFromThisStep();
         }
@@ -242,16 +244,16 @@ public class TestStep {
     }
 
     private TestResult getResultFromChildren() {
-        TestResultList resultList = TestResultList.of(getChildResults());
-        return resultList.getOverallResult();
+        return TestResultList.overallResultFrom(getChildResults());
     }
 
+
     private List<TestResult> getChildResults() {
-        List<TestResult> results = new ArrayList<>();
+        List<TestResult> childResults = new ArrayList<>();
         for (TestStep step : getChildren()) {
-            results.add(step.getResult());
+            childResults.add(step.getResult());
         }
-        return results;
+        return childResults;
     }
 
     public Boolean isSuccessful() {
@@ -259,7 +261,7 @@ public class TestStep {
     }
 
     public Boolean isFailure() {
-        return  getResult() == FAILURE;
+        return getResult() == FAILURE;
     }
 
     public Boolean isError() {
@@ -271,15 +273,15 @@ public class TestStep {
     }
 
     public Boolean isIgnored() {
-        return  getResult() == IGNORED;
+        return getResult() == IGNORED;
     }
 
     public Boolean isSkipped() {
-        return  getResult() == SKIPPED;
+        return getResult() == SKIPPED;
     }
 
     public Boolean isPending() {
-        return  getResult() == PENDING;
+        return getResult() == PENDING;
     }
 
     public void setDuration(final long duration) {
@@ -296,6 +298,7 @@ public class TestStep {
 
     /**
      * Indicate that this step failed with a given error.
+     *
      * @param cause why the test failed.
      */
     public void failedWith(final Throwable cause) {
@@ -345,8 +348,8 @@ public class TestStep {
         this.exception = null;
     }
 
-    public FailureCause getNestedException(){
-        for(TestStep step : getFlattenedSteps()) {
+    public FailureCause getNestedException() {
+        for (TestStep step : getFlattenedSteps()) {
             if (step.getException() != null) {
                 return step.getException();
             }
@@ -356,7 +359,7 @@ public class TestStep {
 
     public List<? extends TestStep> getFlattenedSteps() {
         List<TestStep> flattenedSteps = new ArrayList<>();
-        for(TestStep child : getChildren()) {
+        for (TestStep child : getChildren()) {
             flattenedSteps.add(child);
             if (child.isAGroup()) {
                 flattenedSteps.addAll(child.getFlattenedSteps());
@@ -370,7 +373,7 @@ public class TestStep {
     }
 
     public boolean hasNestedErrors() {
-        for(TestStep child : getFlattenedSteps()) {
+        for (TestStep child : getFlattenedSteps()) {
             if (child.isFailure() || child.isError()) {
                 return true;
             }
@@ -389,7 +392,7 @@ public class TestStep {
 
     public Collection<? extends TestStep> getLeafTestSteps() {
         List<TestStep> leafSteps = new ArrayList<>();
-        for(TestStep child : getChildren()) {
+        for (TestStep child : getChildren()) {
             if (child.isAGroup()) {
                 leafSteps.addAll(child.getLeafTestSteps());
             } else {

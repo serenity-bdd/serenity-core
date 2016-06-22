@@ -45,8 +45,7 @@ public class DataTableRow {
         if (newResult == TestResult.UNDEFINED) {
             setResult(newResult);
         } else {
-            TestResultList testResults = TestResultList.of(this.result, newResult);
-            setResult(testResults.getOverallResult());
+            setResult(TestResultComparison.overallResultFor(this.result, newResult));
         }
     }
 

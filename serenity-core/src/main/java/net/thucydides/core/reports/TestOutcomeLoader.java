@@ -66,7 +66,7 @@ public class TestOutcomeLoader {
                 reading.add(this.executor.submit(new Callable<Set<TestOutcome>>() {
                     @Override
                     public Set<TestOutcome> call() throws Exception {
-                        logger.debug(Thread.currentThread().getName() + " is reading report from " + reportFile.getAbsolutePath());
+//                        logger.debug(Thread.currentThread().getName() + " is reading report from " + reportFile.getAbsolutePath());
                         return testOutcomeReporter.loadReportFrom(reportFile).asSet();
                     }
                 }));

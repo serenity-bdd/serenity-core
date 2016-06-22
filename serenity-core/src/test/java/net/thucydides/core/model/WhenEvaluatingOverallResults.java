@@ -64,10 +64,6 @@ public class WhenEvaluatingOverallResults {
 
     @Test
     public void should_produce_correct_overall_result_from_a_list_of_step_results() {
-
-        TestResultList overallResult = TestResultList.of(results);
-
-        assertThat(overallResult.getOverallResult(), is(expectedOverallResult));
+        assertThat(TestResultList.overallResultFrom(results), is(expectedOverallResult));
     }
-
 }

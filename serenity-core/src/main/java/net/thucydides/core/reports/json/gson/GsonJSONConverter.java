@@ -51,7 +51,7 @@ public class GsonJSONConverter implements JSONConverter {
     @Override
     public TestOutcome fromJson(Reader jsonReader) {
         TestOutcome testOutcome = gson.fromJson(jsonReader, TestOutcome.class);
-        LOGGER.debug("Read test outcome from JSON: " + testOutcome.toJson());
+//        LOGGER.debug("Read test outcome from JSON: " + testOutcome.toJson());
         return isValid(testOutcome) ? testOutcome : null;
     }
 

@@ -1,5 +1,6 @@
 package net.thucydides.core.reports;
 
+import ch.lambdaj.Lambda;
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
@@ -22,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+//import static ch.lambdaj.Lambda.*;
 import static ch.lambdaj.Lambda.*;
 import static net.thucydides.core.model.TestResult.*;
 import static net.thucydides.core.reports.matchers.TestOutcomeMatchers.*;
@@ -55,6 +57,13 @@ public class TestOutcomes {
      */
     private static final Integer DEFAULT_ESTIMATED_TOTAL_STEPS = 3;
 
+    static int outcomeCount = 0;
+
+    public <T> T sum(Object iterable, T argument) {
+        System.out.println("lambda sum");
+        return Lambda.sum(iterable, argument);
+    }
+
     @Inject
     protected TestOutcomes(List<? extends TestOutcome> outcomes,
                            double estimatedAverageStepCount,
@@ -62,7 +71,9 @@ public class TestOutcomes {
                            TestTag testTag,
                            TestOutcomes rootOutcomes,
                            EnvironmentVariables environmentVariables) {
-        this.outcomes = ImmutableList.copyOf(outcomes);
+        outcomeCount = outcomeCount + outcomes.size();
+        //System.out.println("Creating new TestOutcomes: " + outcomeCount);
+        this.outcomes = outcomes;// ImmutableList.copyOf(outcomes);
         this.estimatedAverageStepCount = estimatedAverageStepCount;
         this.label = label;
         this.testTag = testTag;
@@ -76,7 +87,9 @@ public class TestOutcomes {
                            String label,
                            TestOutcomes rootOutcomes,
                            EnvironmentVariables environmentVariables) {
-        this.outcomes = ImmutableList.copyOf(outcomes);
+        outcomeCount = outcomeCount + outcomes.size();
+        //System.out.println("Creating new TestOutcomes: " + outcomeCount);
+        this.outcomes = outcomes;//ImmutableList.copyOf(outcomes);
         this.estimatedAverageStepCount = estimatedAverageStepCount;
         this.label = label;
         this.testTag = null;
@@ -114,9 +127,40 @@ public class TestOutcomes {
         return havingResult(TestResult.valueOf(result.toUpperCase()));
     }
 
+    List<TestOutcome> outcomesFilteredByResult(TestResult result) {
+        List<TestOutcome> filteredOutcomes = Lists.newArrayList();
+        for(TestOutcome outcome : outcomes) {
+            if (outcome.getResult() == result) {
+                filteredOutcomes.add(outcome);
+            }
+        }
+        return filteredOutcomes;
+    }
+
+    List<TestOutcome> outcomesFilteredByTag(TestTag tag) {
+        List<TestOutcome> filteredOutcomes = Lists.newArrayList();
+        for(TestOutcome outcome : outcomes) {
+            if (outcome.getTags().contains(tag)) {
+                filteredOutcomes.add(outcome);
+            }
+        }
+        return filteredOutcomes;
+    }
+
+
+    List<TestOutcome> outcomesFilteredByTag(String tag) {
+        List<TestOutcome> filteredOutcomes = Lists.newArrayList();
+        for(TestOutcome outcome : outcomes) {
+            if (outcome.getTags().contains(tag)) {
+                filteredOutcomes.add(outcome);
+            }
+        }
+        return filteredOutcomes;
+    }
+
     public TestOutcomes havingResult(TestResult result) {
 
-        return TestOutcomes.of(filter(withResult(result), outcomes))
+        return TestOutcomes.of(outcomesFilteredByResult(result))
                 .withLabel(labelForTestsWithStatus(result.name()))
                 .withRootOutcomes(getRootOutcomes());
     }
@@ -352,7 +396,7 @@ public class TestOutcomes {
     }
 
     private TestOutcomes withRootOutcomes(TestOutcomes rootOutcomes) {
-        return new TestOutcomes(this.outcomes, this.estimatedAverageStepCount, this.label, rootOutcomes, environmentVariables);
+        return new TestOutcomes(this.outcomes, this.estimatedAverageStepCount, this.label, this.testTag, rootOutcomes, environmentVariables);
     }
 
     /**
@@ -428,19 +472,19 @@ public class TestOutcomes {
      * @return A new set of test outcomes containing only the failing tests
      */
     public TestOutcomes getFailingTests() {
-        return TestOutcomes.of(filter(withResult(TestResult.FAILURE), outcomes))
+        return TestOutcomes.of(outcomesFilteredByResult(TestResult.FAILURE))
                 .withLabel(labelForTestsWithStatus("failing tests"))
                 .withRootOutcomes(getRootOutcomes());
     }
 
     public TestOutcomes getErrorTests() {
-        return TestOutcomes.of(filter(withResult(TestResult.ERROR), outcomes))
+        return TestOutcomes.of(outcomesFilteredByResult(TestResult.ERROR))
                 .withLabel(labelForTestsWithStatus("tests with errors"))
                 .withRootOutcomes(getRootOutcomes());
     }
 
     public TestOutcomes getCompromisedTests() {
-        return TestOutcomes.of(filter(withResult(TestResult.COMPROMISED), outcomes))
+        return TestOutcomes.of(outcomesFilteredByResult(TestResult.COMPROMISED))
                 .withLabel(labelForTestsWithStatus("compromised tests"))
                 .withRootOutcomes(getRootOutcomes());
     }
@@ -459,7 +503,7 @@ public class TestOutcomes {
      * @return A new set of test outcomes containing only the successful tests
      */
     public TestOutcomes getPassingTests() {
-        return TestOutcomes.of(filter(withResult(TestResult.SUCCESS), outcomes))
+        return TestOutcomes.of(outcomesFilteredByResult(TestResult.SUCCESS))
                 .withLabel(labelForTestsWithStatus("passing tests"))
                 .withRootOutcomes(getRootOutcomes());
     }
@@ -519,7 +563,12 @@ public class TestOutcomes {
      * @return The total number of test runs in this set (including rows in data-driven tests).
      */
     public int getTotal() {
-        return sum(outcomes, on(TestOutcome.class).getTestCount());
+        int total = 0;
+        for(TestOutcome outcome : outcomes) {
+            total += outcome.getTestCount();
+        }
+        return total;
+//        return sum(outcomes, on(TestOutcome.class).getTestCount());
     }
 
     /**
@@ -530,15 +579,14 @@ public class TestOutcomes {
     }
 
     public List<? extends TestOutcome> getOutcomes() {
-        return ImmutableList.copyOf(outcomes);
+        return outcomes;//ImmutableList.copyOf(outcomes);
     }
 
     /**
      * @return The overall result for the tests in this test outcome set.
      */
     public TestResult getResult() {
-        TestResultList testResults = TestResultList.of(getCurrentTestResults());
-        return testResults.getOverallResult();
+        return TestResultList.overallResultFrom(getCurrentTestResults());
     }
 
     private List<TestResult> getCurrentTestResults() {
@@ -557,7 +605,12 @@ public class TestOutcomes {
      * @return The total number of nested steps in these test outcomes.
      */
     public int getStepCount() {
-        return sum(extract(outcomes, on(TestOutcome.class).getNestedStepCount())).intValue();
+        int stepCount = 0;
+        for (TestOutcome outcome : outcomes) {
+            stepCount += outcome.getNestedStepCount();
+        }
+        return stepCount;
+//        return sum(extract(outcomes, on(TestOutcome.class).getNestedStepCount())).intValue();
     }
 
     /**
@@ -686,7 +739,12 @@ public class TestOutcomes {
     }
 
     private int countStepsWithResult(TestResult expectedResult, TestType testType) {
-        int stepCount = sum(outcomes, on(TestOutcome.class).countNestedStepsWithResult(expectedResult, testType));
+//        int stepCount = sum(outcomes, on(TestOutcome.class).countNestedStepsWithResult(expectedResult, testType));
+        int stepCount = 0;
+        for(TestOutcome outcome : outcomes) {
+            stepCount += outcome.countNestedStepsWithResult(expectedResult, testType);
+        }
+
         if ((stepCount == 0) && aMatchingTestExists(expectedResult, testType)) {
             return (int) Math.round(getAverageTestSize());
         }
@@ -698,7 +756,12 @@ public class TestOutcomes {
     }
 
     protected int countTestsWithResult(TestResult expectedResult, TestType testType) {
-        return sum(outcomes, on(TestOutcome.class).countResults(expectedResult, testType));
+        int total = 0;
+        for(TestOutcome outcome : outcomes) {
+            total += outcome.countResults(expectedResult, testType);
+        }
+        return total;
+//        return sum(outcomes, on(TestOutcome.class).countResults(expectedResult, testType));
     }
 
     private Integer getEstimatedTotalStepCount() {
@@ -718,41 +781,63 @@ public class TestOutcomes {
         }
     }
 
-    public double getRecentStability() {
-        if (outcomes.isEmpty()) {
-            return 0.0;
-        } else {
-            return sum(outcomes, on(TestOutcome.class).getRecentStability()) / getTestCount();
-        }
-    }
+//    public double getRecentStability() {
+//        if (outcomes.isEmpty()) {
+//            return 0.0;
+//        } else {
+//            return sum(outcomes, on(TestOutcome.class).getRecentStability()) / getTestCount();
+//        }
+//    }
 
-    public double getOverallStability() {
-        if (outcomes.isEmpty()) {
-            return 0.0;
-        } else {
-            return sum(outcomes, on(TestOutcome.class).getOverallStability()) / getTestCount();
-        }
-    }
+//    public double getOverallStability() {
+//        if (outcomes.isEmpty()) {
+//            return 0.0;
+//        } else {
+//            return sum(outcomes, on(TestOutcome.class).getOverallStability()) / getTestCount();
+//        }
+//    }
 
     private int totalUnimplementedTests() {
         return getTotal() - totalImplementedTests();
     }
 
     public int getTestCount() {
-        return sum(outcomes, on(TestOutcome.class).getTestCount());
+        int total = 0;
+        for(TestOutcome outcome : outcomes) {
+            total += outcome.getTestCount();
+        }
+        return total;
+//        return sum(outcomes, on(TestOutcome.class).getTestCount());
     }
 
     private int totalImplementedTests() {
-        return sum(outcomes, on(TestOutcome.class).getImplementedTestCount());
+        int total = 0;
+        for(TestOutcome outcome : outcomes) {
+            total += outcome.getImplementedTestCount();
+        }
+        return total;
+//        return sum(outcomes, on(TestOutcome.class).getImplementedTestCount());
     }
 
     public boolean hasDataDrivenTests() {
-        return !filter(having(on(TestOutcome.class).isDataDriven(), is(true)), outcomes).isEmpty();
+        for(TestOutcome outcome : outcomes) {
+            if (outcome.isDataDriven()) {
+                return true;
+            }
+        }
+        return false;
+ //       return !filter(having(on(TestOutcome.class).isDataDriven(), is(true)), outcomes).isEmpty();
     }
 
     public int getTotalDataRows() {
-        List<? extends TestOutcome> datadrivenTestOutcomes = filter(having(on(TestOutcome.class).isDataDriven(), is(true)), outcomes);
-        return sum(datadrivenTestOutcomes, on(TestOutcome.class).getDataTable().getSize());
+        int total = 0;
+        for(TestOutcome outcome : outcomes) {
+            total += (outcome.getDataTable() != null) ? outcome.getDataTable().getSize() : 0;
+        }
+        return total;
+
+//        List<? extends TestOutcome> datadrivenTestOutcomes = filter(having(on(TestOutcome.class).isDataDriven(), is(true)), outcomes);
+//        return sum(datadrivenTestOutcomes, on(TestOutcome.class).getDataTable().getSize());
     }
 
     public TestOutcomeMatcher findMatchingTags() {

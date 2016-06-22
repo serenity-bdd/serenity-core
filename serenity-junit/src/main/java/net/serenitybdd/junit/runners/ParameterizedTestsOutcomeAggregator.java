@@ -102,8 +102,7 @@ public class ParameterizedTestsOutcomeAggregator {
     }
 
     private TestResult overallResultFrom(List<DataTableRow> rows) {
-        TestResultList rowResults = TestResultList.of(extract(rows, on(DataTableRow.class).getResult()));
-        return rowResults.getOverallResult();
+        return TestResultList.overallResultFrom(extract(rows, on(DataTableRow.class).getResult()));
     }
 
     private String normalizeTestStepDescription(String description, int index) {

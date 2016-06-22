@@ -1,8 +1,5 @@
 package net.thucydides.core.model;
 
-import com.google.common.base.Preconditions;
-
-import java.util.Arrays;
 import java.util.List;
 
 import static net.thucydides.core.model.TestResult.*;
@@ -12,25 +9,7 @@ import static net.thucydides.core.model.TestResult.*;
  */
 public class TestResultList {
 
-    private final List<TestResult> testResults;
-
-    protected TestResultList(final List<TestResult> testResults) {
-        this.testResults = testResults;
-    }
-
-    public static TestResultList of(final List<TestResult> testResults) {
-        return new TestResultList(testResults);
-    }
-
-    public static TestResultList of(TestResult... testResults) {
-        return new TestResultList(Arrays.asList(testResults));
-    }
-
-    public boolean isEmpty() {
-        return testResults.isEmpty();
-    }
-
-    public TestResult getOverallResult() {
+    public static TestResult overallResultFrom(List<TestResult> testResults) {
         if (testResults.isEmpty()) {
             return SUCCESS;
         }
@@ -51,31 +30,40 @@ public class TestResultList {
             return PENDING;
         }
 
-        if (containsOnly(IGNORED)) {
+        if (containsOnly(testResults, IGNORED)) {
             return IGNORED;
         }
 
-        if (containsOnly(SKIPPED)) {
+        if (containsOnly(testResults, SKIPPED)) {
             return SKIPPED;
         }
 
-        if (containsOnly(SUCCESS, IGNORED, SKIPPED)) {
+        if (containsOnly(testResults, SUCCESS, IGNORED, SKIPPED)) {
             return SUCCESS;
         }
         return SUCCESS;
     }
 
-    private boolean containsOnly(final TestResult... values) {
-        Preconditions.checkState(!isEmpty());
-
-        List<TestResult> authorizedTypes = Arrays.asList(values);
+    private static boolean containsOnly(final List<TestResult> testResults, final TestResult... values) {
         for (TestResult result : testResults) {
-            if (!authorizedTypes.contains(result)) {
+            if (!AuthorisedResults.allows(values, result)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    private static class AuthorisedResults {
+
+        public static boolean allows(TestResult[] allowedValues, TestResult result) {
+            for(TestResult allowedValue : allowedValues) {
+                if (result == allowedValue) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
 }

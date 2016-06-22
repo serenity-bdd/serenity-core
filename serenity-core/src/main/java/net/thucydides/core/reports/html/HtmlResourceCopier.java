@@ -16,12 +16,12 @@ import java.util.regex.Pattern;
 public class HtmlResourceCopier {
 
     private String resourceDirectory;
-
-//    private static final Object htmlReportResources = new Object();
+    private Pattern resourcePattern;
 
     public HtmlResourceCopier(final String resourceDirectory) {
         super();
         this.resourceDirectory = resourceDirectory;
+        resourcePattern = allFilesInDirectory(resourceDirectory);
     }
 
     /**
@@ -36,10 +36,9 @@ public class HtmlResourceCopier {
         }
 
         recordResourceMarkerIn(targetDirectory);
-        Pattern resourcePattern = allFilesInDirectory(resourceDirectory);
         FileResources fileResource = FileResources.from(resourceDirectory);
 
-        Collection<String> reportResources = ResourceList.forResources(resourcePattern).list();
+        Collection<String> reportResources = ResourceList.forResources(resourceDirectory, resourcePattern).list();
 
         for (String resourcePath : reportResources) {
             if (fileResourceFromAJar(resourcePath)) {

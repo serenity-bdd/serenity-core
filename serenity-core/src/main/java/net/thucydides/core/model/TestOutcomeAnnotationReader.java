@@ -20,28 +20,26 @@ class TestOutcomeAnnotationReader {
         this.testOutcome = testOutcome;
     }
 
-    public List<String> readIssues() {
+    public static List<String> readIssuesIn(TestOutcome testOutcome) {
         List<String> taggedIssues = Lists.newArrayList();
         if (testOutcome.getTestCase() != null) {
-            addMethodLevelIssuesTo(taggedIssues);
-            addClassLevelIssuesTo(taggedIssues);
+            addMethodLevelIssuesTo(testOutcome, taggedIssues);
+            addClassLevelIssuesTo(testOutcome, taggedIssues);
         }
-        addTitleLevelIssuesTo(taggedIssues);
+        addTitleLevelIssuesTo(testOutcome, taggedIssues);
         return taggedIssues;
     }
 
-
-    public List<String> readVersions() {
+    public static List<String> readVersionsIn(TestOutcome testOutcome) {
         List<String> taggedVersions = Lists.newArrayList();
         if (testOutcome.getTestCase() != null) {
-            addMethodLevelVersionsTo(taggedVersions);
-            addClassLevelVersionsTo(taggedVersions);
+            addMethodLevelVersionsTo(testOutcome, taggedVersions);
+            addClassLevelVersionsTo(testOutcome, taggedVersions);
         }
         return taggedVersions;
     }
 
-
-    private void addClassLevelIssuesTo(List<String> issues) {
+    private static void addClassLevelIssuesTo(TestOutcome testOutcome, List<String> issues) {
         String classIssue = TestAnnotations.forClass(testOutcome.getTestCase()).getAnnotatedIssueForTestCase(testOutcome.getTestCase());
         if (classIssue != null) {
             issues.add(classIssue);
@@ -52,7 +50,7 @@ class TestOutcomeAnnotationReader {
         }
     }
 
-    private void addMethodLevelIssuesTo(List<String> issues) {
+    private static void addMethodLevelIssuesTo(TestOutcome testOutcome, List<String> issues) {
         Optional<String> issue = TestAnnotations.forClass(testOutcome.getTestCase()).getAnnotatedIssueForMethod(testOutcome.getName());
         if (issue.isPresent()) {
             issues.add(issue.get());
@@ -61,7 +59,7 @@ class TestOutcomeAnnotationReader {
         issues.addAll(Arrays.asList(multipleIssues));
     }
 
-    private void addTitleLevelIssuesTo(List<String> issues) {
+    private static void addTitleLevelIssuesTo(TestOutcome testOutcome, List<String> issues) {
         List<String> titleIssues = Formatter.issuesIn(testOutcome.getTitle());
         if (!titleIssues.isEmpty()) {
             issues.addAll(titleIssues);
@@ -69,14 +67,14 @@ class TestOutcomeAnnotationReader {
     }
 
 
-    private void addClassLevelVersionsTo(List<String> versions) {
+    private static void addClassLevelVersionsTo(TestOutcome testOutcome, List<String> versions) {
         String classVersion = TestAnnotations.forClass(testOutcome.getTestCase()).getAnnotatedVersionForTestCase(testOutcome.getTestCase());
         if (classVersion != null) {
             versions.add(classVersion);
         }
     }
 
-    private void addMethodLevelVersionsTo(List<String> versions) {
+    private static void addMethodLevelVersionsTo(TestOutcome testOutcome, List<String> versions) {
         Optional<String> version = TestAnnotations.forClass(testOutcome.getTestCase()).getAnnotatedVersionForMethod(testOutcome.getName());
         if (version.isPresent()) {
             versions.add(version.get());

@@ -10,8 +10,6 @@ import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.issues.SystemPropertiesIssueTracking;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.pages.Pages;
-import net.thucydides.core.statistics.model.TestRunTag;
-import net.thucydides.core.statistics.model.TestStatistics;
 import net.thucydides.core.steps.ScenarioSteps;
 import net.thucydides.core.steps.StepFailureException;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -1145,36 +1143,36 @@ public class WhenRecordingNewTestOutcomes {
         assertThat(testOutcome.lastStep().getDescription(), is("Step 3"));
     }
 
-    @Test
-    public void should_calculate_the_overall_success_rate_from_provided_statistics() {
-        TestStatistics statistics = new TestStatistics(10L, 7L, 3L,
-                                                       ImmutableList.of(SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,FAILURE,FAILURE,FAILURE),
-                                                       ImmutableList.of(new TestRunTag("MYPROJECT","A story","story")));
-
-        testOutcome.setStatistics(statistics);
-        assertThat(testOutcome.getOverallStability(), is(0.7));
-    }
-
-    @Test
-    public void should_calculate_the_recent_success_rate_from_provided_statistics() {
-        TestStatistics statistics = new TestStatistics(10L, 7L, 3L,
-                ImmutableList.of(SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,FAILURE,FAILURE,FAILURE),
-                ImmutableList.of(new TestRunTag("MYPROJECT","A story","story")));
-
-        testOutcome.setStatistics(statistics);
-        assertThat(testOutcome.getRecentStability(), is(0.7));
-    }
-
-    @Test
-    public void should_count_the_recent_test_runs_from_provided_statistics() {
-        TestStatistics statistics = new TestStatistics(8L, 5L, 3L,
-                ImmutableList.of(FAILURE,FAILURE,PENDING,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS),
-                ImmutableList.of(new TestRunTag("MYPROJECT","A story","story")));
-
-        testOutcome.setStatistics(statistics);
-        assertThat(testOutcome.getRecentTestRunCount() , is(8L));
-        assertThat(testOutcome.getRecentFailCount() , is(2));
-        assertThat(testOutcome.getRecentPassCount() , is(5));
-        assertThat(testOutcome.getRecentPendingCount() , is(1));
-    }
+//    @Test
+//    public void should_calculate_the_overall_success_rate_from_provided_statistics() {
+//        TestStatistics statistics = new TestStatistics(10L, 7L, 3L,
+//                                                       ImmutableList.of(SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,FAILURE,FAILURE,FAILURE),
+//                                                       ImmutableList.of(new TestRunTag("MYPROJECT","A story","story")));
+//
+//        testOutcome.setStatistics(statistics);
+//        assertThat(testOutcome.getOverallStability(), is(0.7));
+//    }
+//
+//    @Test
+//    public void should_calculate_the_recent_success_rate_from_provided_statistics() {
+//        TestStatistics statistics = new TestStatistics(10L, 7L, 3L,
+//                ImmutableList.of(SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,FAILURE,FAILURE,FAILURE),
+//                ImmutableList.of(new TestRunTag("MYPROJECT","A story","story")));
+//
+//        testOutcome.setStatistics(statistics);
+//        assertThat(testOutcome.getRecentStability(), is(0.7));
+//    }
+//
+//    @Test
+//    public void should_count_the_recent_test_runs_from_provided_statistics() {
+//        TestStatistics statistics = new TestStatistics(8L, 5L, 3L,
+//                ImmutableList.of(FAILURE,FAILURE,PENDING,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS),
+//                ImmutableList.of(new TestRunTag("MYPROJECT","A story","story")));
+//
+//        testOutcome.setStatistics(statistics);
+//        assertThat(testOutcome.getRecentTestRunCount() , is(8L));
+//        assertThat(testOutcome.getRecentFailCount() , is(2));
+//        assertThat(testOutcome.getRecentPassCount() , is(5));
+//        assertThat(testOutcome.getRecentPendingCount() , is(1));
+//    }
 }

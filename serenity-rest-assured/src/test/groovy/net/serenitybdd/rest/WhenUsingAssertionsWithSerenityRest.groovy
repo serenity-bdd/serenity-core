@@ -48,7 +48,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
     static class RestSteps {
         @Step
         def successfulGet(final String url) {
-            given().get("$url/{id}", 1000).then().body("id", Matchers.equalTo(1000));
+            rest().get("$url/{id}", 1000).then().body("id", Matchers.equalTo(1000));
             given().get("$url/{id}", 1000).then().body(Matchers.equalTo("/pets/id"))
         }
 

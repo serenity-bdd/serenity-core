@@ -4,9 +4,6 @@ ext {
 }
 
 buildscript {
-    repositories {
-        jcenter()
-    }
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
     }
@@ -37,24 +34,4 @@ publishing {
             from components.shadow
         }
     }
-    repositories {
-        maven {
-            url "http://repo.myorg.com"
-        }
-    }
 }
-
-bintray {
-    user = bintrayUsername //this usually comes form gradle.properties file in ~/.gradle
-    key = bintrayApiKey //this usually comes form gradle.properties file in ~/.gradle
-    publications = ['shadow'] // see publications closure
-    pkg {
-        repo = 'maven'
-        userOrg = 'serenity'
-        name = 'serenity-cli'
-        desc = 'Serenity CLI libraries'
-        licenses = ['Apache-2.0']
-        labels = ['serenity', 'bdd']
-    }
-}
-

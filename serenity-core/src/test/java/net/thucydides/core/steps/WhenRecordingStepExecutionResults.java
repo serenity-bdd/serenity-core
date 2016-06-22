@@ -96,9 +96,13 @@ public class WhenRecordingStepExecutionResults {
 
     Configuration configuration;
 
+    StepEventBus eventBus;
+    
     @Before
     public void createStepListenerAndFactory() throws IOException {
-        StepEventBus.getEventBus().reset();
+
+        eventBus = new StepEventBus(environmentVariables);
+
         MockitoAnnotations.initMocks(this);
         
         outputDirectory = temporaryFolder.newFolder("thucydides");

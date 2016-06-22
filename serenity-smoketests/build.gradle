@@ -71,7 +71,7 @@ test {
     /* Pass all system properties: */
     systemProperties System.getProperties()
 
-    maxParallelForks = Runtime.runtime.availableProcessors()
+    maxParallelForks = Runtime.runtime.availableProcessors() * 4
 }
 
 task wrapper(type: Wrapper) {

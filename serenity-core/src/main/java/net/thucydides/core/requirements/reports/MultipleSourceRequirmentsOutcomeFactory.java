@@ -14,21 +14,25 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class RequirmentsOutcomeFactory {
+/**
+ * Merges and consolidates requirements hierarchies coming from several sources.
+ * For example, if JUnit tests use a package hierarchy and Cucumber tests use a directory structure hierarchy.
+ */
+public class MultipleSourceRequirmentsOutcomeFactory {
 
     private final List<RequirementsTagProvider> requirementsTagProviders;
     private final IssueTracking issueTracking;
     private final EnvironmentVariables environmentVariables;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequirmentsOutcomeFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MultipleSourceRequirmentsOutcomeFactory.class);
 
-    public RequirmentsOutcomeFactory(List<RequirementsTagProvider> requirementsTagProviders, IssueTracking issueTracking) {
+    public MultipleSourceRequirmentsOutcomeFactory(List<RequirementsTagProvider> requirementsTagProviders, IssueTracking issueTracking) {
         this(requirementsTagProviders, issueTracking, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
     }
 
-    public RequirmentsOutcomeFactory(List<RequirementsTagProvider> requirementsTagProviders,
-                                     IssueTracking issueTracking,
-                                     EnvironmentVariables environmentVariables) {
+    public MultipleSourceRequirmentsOutcomeFactory(List<RequirementsTagProvider> requirementsTagProviders,
+                                                   IssueTracking issueTracking,
+                                                   EnvironmentVariables environmentVariables) {
         this.requirementsTagProviders = ImmutableList.copyOf(requirementsTagProviders);
         this.issueTracking = issueTracking;
         this.environmentVariables = environmentVariables;

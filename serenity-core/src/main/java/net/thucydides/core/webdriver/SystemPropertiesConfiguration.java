@@ -130,7 +130,6 @@ public class SystemPropertiesConfiguration implements Configuration {
             newOutputDirectory = resolveIfMavenIsUsed(newOutputDirectory);
         }
         newOutputDirectory.mkdirs();
-        LOGGER.info("OutputDirectory" + " : " + newOutputDirectory.getAbsolutePath());
         return newOutputDirectory;
     }
 
@@ -156,8 +155,6 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     private String getMavenBuildDirectory() {
-        LOGGER.info(PROJECT_BUILD_DIRECTORY + " : " + getEnvironmentVariables().getProperty(PROJECT_BUILD_DIRECTORY));
-        LOGGER.info(PROJECT_REPORTING_OUTPUT_DIRECTORY + " : " + getEnvironmentVariables().getProperty(PROJECT_REPORTING_OUTPUT_DIRECTORY));
         String mavenBuildDirectory = getEnvironmentVariables().getProperty(PROJECT_BUILD_DIRECTORY);
         String mavenReportsDirectory = getEnvironmentVariables().getProperty(PROJECT_REPORTING_OUTPUT_DIRECTORY);
         String defaultMavenRelativeTargetDirectory = null;

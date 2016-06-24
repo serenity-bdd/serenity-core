@@ -168,6 +168,8 @@ public enum ThucydidesSystemProperty {
 
     THUCYDIDES_REPORT_SHOW_TAG_MENUS,
 
+    THUCYDIDES_REPORT_TAG_MENUS,
+
     /**
      * Restart the browser every so often during data-driven tests.
      */

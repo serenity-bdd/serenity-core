@@ -54,7 +54,7 @@ public class CSVReporter extends ThucydidesReporter {
                 new java.io.OutputStreamWriter(
                         new java.io.FileOutputStream(getOutputFile(reportName)), encoding))) {
             writeTitleRow(writer);
-            writeEachRow(testOutcomes.withHistory(), writer);
+            writeEachRow(testOutcomes, writer);
         }
         return getOutputFile(reportName);
     }

@@ -52,7 +52,7 @@ public class WhenUsingAReportService {
 
         reportService.generateReportsFor(testOutcomeResults);
 
-        verify(reporter).generateReportFor(eq(testOutcome), Matchers.any(TestOutcomes.class));
+        verify(reporter).generateReportFor(eq(testOutcome));
     }
 
     public static final class ATestCase {}
@@ -73,7 +73,7 @@ public class WhenUsingAReportService {
 
         reportService.generateReportsFor(testOutcomeResults);
 
-        verify(reporter, times(1000)).generateReportFor(Matchers.any(TestOutcome.class), Matchers.any(TestOutcomes.class));
+        verify(reporter, times(1000)).generateReportFor(Matchers.any(TestOutcome.class));
     }
 
 

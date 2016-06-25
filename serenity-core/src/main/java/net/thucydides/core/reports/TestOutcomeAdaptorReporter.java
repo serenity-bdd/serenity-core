@@ -42,8 +42,7 @@ public class TestOutcomeAdaptorReporter extends ThucydidesReporter {
     public void generateReports(Optional<File> sourceDirectory) throws Exception {
         setupOutputDirectoryIfRequired();
         for (TestOutcomeAdaptor adaptor : adaptors) {
-            List<TestOutcome> outcomes = sourceDirectory.isPresent() ?
-                    adaptor.loadOutcomesFrom(sourceDirectory.get()) : adaptor.loadOutcomes();
+            List<TestOutcome> outcomes = sourceDirectory.isPresent() ? adaptor.loadOutcomesFrom(sourceDirectory.get()) : adaptor.loadOutcomes();
             generateReportsFor(outcomes);
         }
     }
@@ -58,12 +57,12 @@ public class TestOutcomeAdaptorReporter extends ThucydidesReporter {
         TestOutcomes allOutcomes = TestOutcomes.of(outcomes);
         for (TestOutcome outcome : allOutcomes.getOutcomes()) {
             if (shouldGenerate(OutcomeFormat.XML)) {
-                getXMLReporter().generateReportFor(outcome, allOutcomes);
+                getXMLReporter().generateReportFor(outcome);
             }
             if (shouldGenerate(OutcomeFormat.JSON)) {
-                getJsonReporter().generateReportFor(outcome, allOutcomes);
+                getJsonReporter().generateReportFor(outcome);
             }
-            getHTMLReporter().generateReportFor(outcome, allOutcomes);
+            getHTMLReporter().generateReportFor(outcome);
         }
     }
 

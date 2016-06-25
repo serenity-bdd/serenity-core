@@ -12,7 +12,6 @@ import net.thucydides.core.model.*;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.OutcomeFormat;
 import net.thucydides.core.reports.ReportOptions;
-import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.screenshots.ScreenshotFormatter;
 import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.Requirement;
@@ -76,17 +75,17 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     /**
      * Generate an HTML report for a given test run.
      */
-    public File generateReportFor(final TestOutcome testOutcome, TestOutcomes allTestOutcomes) throws IOException {
+    public File generateReportFor(final TestOutcome testOutcome) throws IOException {
 
         Preconditions.checkNotNull(getOutputDirectory());
 
         TestOutcome storedTestOutcome = testOutcome.withQualifier(qualifier);
 
         Map<String, Object> context = new HashMap<>();
-        addTestOutcomeToContext(storedTestOutcome, allTestOutcomes, context);
+        addTestOutcomeToContext(storedTestOutcome, context);
 
         if (containsScreenshots(storedTestOutcome)) {
-            generateScreenshotReportsFor(storedTestOutcome, allTestOutcomes);
+            generateScreenshotReportsFor(storedTestOutcome);
         }
 
         addFormattersToContext(context);
@@ -113,8 +112,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         };
     }
 
-    private void addTestOutcomeToContext(final TestOutcome testOutcome, final TestOutcomes allTestOutcomes, final Map<String, Object> context) {
-        context.put("allTestOutcomes", allTestOutcomes);
+    private void addTestOutcomeToContext(final TestOutcome testOutcome, final Map<String, Object> context) {
         context.put("testOutcome", testOutcome);
         context.put("currentTag", TestTag.EMPTY_TAG);
         context.put("inflection", Inflector.getInstance());
@@ -172,7 +170,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         context.put("buildNumber", versionProvider.getBuildNumberText());
     }
 
-    private void generateScreenshotReportsFor(final TestOutcome testOutcome, final TestOutcomes allTestOutcomes) throws IOException {
+    private void generateScreenshotReportsFor(final TestOutcome testOutcome) throws IOException {
 
         Preconditions.checkNotNull(getOutputDirectory());
 
@@ -181,7 +179,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         String screenshotReport = testOutcome.getReportName() + "_screenshots.html";
 
         Map<String, Object> context = new HashMap<>();
-        addTestOutcomeToContext(testOutcome, allTestOutcomes, context);
+        addTestOutcomeToContext(testOutcome, context);
         addFormattersToContext(context);
         context.put("screenshots", screenshots);
         context.put("narrativeView", testOutcome.getReportName());
@@ -190,13 +188,15 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     }
 
     private List<Screenshot> expandScreenshots(List<Screenshot> screenshots) throws IOException {
-        return convert(screenshots, new ExpandedScreenshotConverter(maxScreenshotHeightIn(screenshots)));
+        return convert(screenshots, new ExpandedScreenshotConverter(getSourceDirectory(), maxScreenshotHeightIn(screenshots)));
     }
 
     private class ExpandedScreenshotConverter implements Converter<Screenshot, Screenshot> {
+        private final File sourceDirectory;
         private final int maxHeight;
 
-        public ExpandedScreenshotConverter(int maxHeight) {
+        public ExpandedScreenshotConverter(File sourceDirectory, int maxHeight) {
+            this.sourceDirectory = sourceDirectory;
             this.maxHeight = maxHeight;
         }
 
@@ -204,7 +204,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
             try {
 
                 return ScreenshotFormatter.forScreenshot(screenshot)
-                        .inDirectory(getOutputDirectory())
+                        .inDirectory(sourceDirectory)
                         .keepOriginals(shouldKeepOriginalScreenshots())
                         .expandToHeight(maxHeight);
             } catch (IOException e) {

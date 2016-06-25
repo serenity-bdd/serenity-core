@@ -16,8 +16,6 @@ import static org.mockito.Mockito.mock;
 
 public class WhenManagingWebdriverInstances {
 
-    WebdriverInstanceFactory webdriverInstanceFactory;
-
     MockEnvironmentVariables environmentVariables;
     
     WebdriverManager webdriverManager;
@@ -32,14 +30,7 @@ public class WhenManagingWebdriverInstances {
 
         firefoxProfile = mock(FirefoxProfile.class);
 
-        webdriverInstanceFactory = new WebdriverInstanceFactory();
-        factory = new WebDriverFactory(webdriverInstanceFactory, environmentVariables) {
-            @Override
-            protected FirefoxProfile createNewFirefoxProfile() {
-                return firefoxProfile;
-            }
-        };
-
+        factory = new WebDriverFactory(environmentVariables);
 
         configuration = new SystemPropertiesConfiguration(environmentVariables);
         

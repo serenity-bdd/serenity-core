@@ -36,10 +36,4 @@ public class JavascriptSupport {
     private static boolean isNotAMockedDriver(Class<? extends WebDriver> driverClass) {
         return (driverClass != null) && !driverClass.getName().contains("Mock");
     }
-
-    public static void activateJavascriptSupportFor(WebDriver driver) {
-        if (HtmlUnitDriver.class.isAssignableFrom(driver.getClass())) {
-            ((HtmlUnitDriver)driver).setJavascriptEnabled(true);
-        }
-    }
 }

@@ -5,7 +5,6 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFactory;
-import net.thucydides.core.webdriver.WebdriverInstanceFactory;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
 import net.thucydides.samples.SamplePassingScenario;
 import org.junit.Before;
@@ -16,8 +15,6 @@ import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.List;
@@ -26,8 +23,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class WhenRunningTestBatches extends AbstractTestStepRunnerTest {
-
-    WebdriverInstanceFactory webdriverInstanceFactory;
 
     @Mock
     FirefoxDriver firefoxDriver;
@@ -46,16 +41,8 @@ public class WhenRunningTestBatches extends AbstractTestStepRunnerTest {
     public void createATestableDriverFactory() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        webdriverInstanceFactory = new WebdriverInstanceFactory() {
-            @Override
-            public WebDriver newFirefoxDriver(Capabilities profile) {
-                return firefoxDriver;
-            }
-
-        };
-
         environmentVariables = new MockEnvironmentVariables();
-        webDriverFactory = new WebDriverFactory(webdriverInstanceFactory, environmentVariables);
+        webDriverFactory = new WebDriverFactory(environmentVariables);
         StepEventBus.getEventBus().clear();
 
     }

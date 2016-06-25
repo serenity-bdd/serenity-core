@@ -34,10 +34,6 @@ public class WhenSettingScreenDimensions {
         }
 
         public boolean screenWasResized;
-        @Override
-        protected void resizeBrowserTo(WebDriver driver, int height, int width) {
-            screenWasResized = true;
-        }
     }
 
     @Test

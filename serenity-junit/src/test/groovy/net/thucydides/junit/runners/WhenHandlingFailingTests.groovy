@@ -5,9 +5,6 @@ import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.util.MockEnvironmentVariables
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration
-import net.thucydides.core.webdriver.WebDriverFactory
-import net.thucydides.core.webdriver.WebdriverInstanceFactory
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -21,10 +18,7 @@ class WhenHandlingFailingTests extends Specification {
 
     def firefoxDriver = Mock(FirefoxDriver)
     def htmlUnitDriver = Mock(HtmlUnitDriver)
-    def webdriverInstanceFactory = Mock(WebdriverInstanceFactory)
     def environmentVariables = new MockEnvironmentVariables()
-    def configuration = new SystemPropertiesConfiguration(environmentVariables)
-    def webDriverFactory = new WebDriverFactory(webdriverInstanceFactory, environmentVariables)
     File temporaryDirectory
 
     @Rule
@@ -32,8 +26,6 @@ class WhenHandlingFailingTests extends Specification {
 
     def setup() {
         temporaryDirectory = temporaryFolder.newFolder()
-        webdriverInstanceFactory.newFirefoxDriver(_) >> firefoxDriver
-        webdriverInstanceFactory.newHtmlUnitDriver(_) >> htmlUnitDriver
     }
 
 

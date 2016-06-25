@@ -19,6 +19,12 @@ public class FailureCause {
     public static final String ERROR_MESSAGE_LABEL_1 = "{'errorMessage':";
     public static final String ERROR_MESSAGE_LABEL_2 = "{\"errorMessage\":";
 
+    private final static List<String> COLLAPSE_NEW_LINE_HINTS = ImmutableList.of(
+            "AssertionError",
+            "Expected",
+            "Expecting",
+            "ComparisonFailure");
+
     private String errorType;
     private String message;
     private StackTraceElement[] stackTrace;
@@ -211,12 +217,6 @@ public class FailureCause {
         }
         return message;
     }
-
-    private final List<String> COLLAPSE_NEW_LINE_HINTS = ImmutableList.of(
-            "AssertionError",
-            "Expected",
-            "Expecting",
-            "ComparisonFailure");
 
     private boolean shouldCollapseAssertionsFor(String message) {
         for(String collapseHint : COLLAPSE_NEW_LINE_HINTS) {

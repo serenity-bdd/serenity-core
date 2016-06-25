@@ -24,16 +24,19 @@ public class ResourceList {
     private static final List<String> UNREQUIRED_FILES = ImmutableList.of("pom.xml");
     private static final String PATH_SEPARATOR = System.getProperty("path.separator");
 
-    private final Pattern pattern;
+    final Pattern pattern;
+    final String resourceDirectory;
 
     private static final long TO_GIVE_THE_OTHER_PROCESS_TIME_TO_RELEASE_THE_ZIP = 500;
 
-    public static ResourceList forResources(final Pattern pattern) {
-        return new ResourceList(pattern);
+    protected ResourceList(String resourceDirectory, Pattern pattern) {
+
+        this.pattern = pattern;
+        this.resourceDirectory = resourceDirectory;
     }
 
-    protected ResourceList(final Pattern pattern) {
-        this.pattern = pattern;
+    public static ResourceList forResources(final String resourceDirectory, final Pattern pattern) {
+        return new ResourceList(resourceDirectory, pattern);
     }
 
     /**
@@ -58,12 +61,18 @@ public class ResourceList {
     private void addResourcesFromUrlClassLoader(ArrayList<String> resources, URLClassLoader classLoader) {
         URL[] classPathElements = classLoader.getURLs();
         for(URL classPathElement : classPathElements) {
-            resources.addAll(getResources(classPathElement.getFile(), pattern));
+            if (isASerenityResourceJarFile(classPathElement.getFile())) {
+                resources.addAll(getResources(classPathElement.getFile(), pattern));
+            }
         }
     }
 
+    private boolean isASerenityResourceJarFile(String file) {
+        return file.contains("serenity-core");
+    }
 
-    public Collection<String> systemPropertiesClasspathElements() {
+
+    private Collection<String> systemPropertiesClasspathElements() {
         final ArrayList<String> resources = new ArrayList<>();
         final String classPath = System.getProperty("java.class.path", ".");
         final String[] classPathElements = classPath.split(PATH_SEPARATOR);
@@ -121,19 +130,20 @@ public class ResourceList {
     }
 
     private Collection<String> getResourcesFromJarFile(final File file, final Pattern pattern) {
-        final ArrayList<String> retval = new ArrayList<>();
+        final ArrayList<String> matchingResources = new ArrayList<>();
         try{
             if (file.exists()) {
                 try (ZipFile zf = zipFileFor(file)) {
                     @SuppressWarnings("rawtypes")
                     final Enumeration e = zf.entries();
                     while (e.hasMoreElements()) {
-                        final ZipEntry ze = (ZipEntry) e.nextElement();
-                        final String fileName = ze.getName();
+                        final ZipEntry entry = (ZipEntry) e.nextElement();
+                        final String fileName = entry.getName();
 
-                        final boolean accept = pattern.matcher(fileName).matches();
-                        if (accept) {
-                            retval.add(fileName);
+                        if (resourceDirectory.isEmpty() || fileName.contains(resourceDirectory)) {
+                            if (pattern.matcher(fileName).matches()) {
+                                matchingResources.add(fileName);
+                            }
                         }
                     }
                 }
@@ -141,7 +151,7 @@ public class ResourceList {
         } catch (IOException e) {
             throw new ResourceCopyingError("Couldn't close the zip file " + file, e);
         }
-        return retval;
+        return matchingResources;
     }
 
     private Collection<String> getResourcesFromDirectory(final File directory, final Pattern pattern) {

@@ -26,7 +26,6 @@ import net.thucydides.core.reports.html.Formatter;
 import net.thucydides.core.reports.json.JSONConverter;
 import net.thucydides.core.reports.saucelabs.LinkGenerator;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.statistics.model.TestStatistics;
 import net.thucydides.core.statistics.service.TagProvider;
 import net.thucydides.core.statistics.service.TagProviderService;
 import net.thucydides.core.steps.StepFailure;
@@ -56,7 +55,6 @@ import static net.thucydides.core.model.TestResult.*;
 import static net.thucydides.core.util.NameConverter.humanize;
 import static net.thucydides.core.util.NameConverter.withNoArguments;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.hamcrest.Matchers.is;
 
 /**
  * Represents the results of a test (or "scenario") execution. This
@@ -174,7 +172,7 @@ public class TestOutcome {
      * Test statistics, read from the statistics database.
      * This data is only loaded when required, and added to the TestOutcome using the corresponding setter.
      */
-    private TestStatistics statistics;
+//    private TestStatistics statistics;
 
     /**
      * Returns a set of tag provider classes that are used to determine the tags to associate with a test outcome.
@@ -938,7 +936,7 @@ public class TestOutcome {
                 flattenedTestSteps.addAll(step.getFlattenedSteps());
             }
         }
-        return ImmutableList.copyOf(flattenedTestSteps);
+        return flattenedTestSteps;
     }
 
     public List<TestStep> getLeafTestSteps() {
@@ -974,8 +972,7 @@ public class TestOutcome {
                 return TestResult.ERROR;
             }
         }
-        TestResultList testResults = TestResultList.of(getCurrentTestResults());
-        return testResults.getOverallResult();
+        return TestResultList.overallResultFrom(getCurrentTestResults());
     }
 
     public TestOutcome recordSteps(final List<TestStep> steps) {
@@ -1004,11 +1001,19 @@ public class TestOutcome {
 
     private void addStep(TestStep step) {
         testSteps.add(step);
+        clearCalulatedTestResults();
         renumberTestSteps();
+    }
+
+    private void clearCalulatedTestResults() {
+        if (testResults != null) {
+            testResults.clear();
+        }
     }
 
     private void addSteps(List<TestStep> steps) {
         testSteps.addAll(steps);
+        clearCalulatedTestResults();
         renumberTestSteps();
     }
 
@@ -1047,8 +1052,18 @@ public class TestOutcome {
         this.title = title;
     }
 
+
+    transient List<TestResult> testResults;
+
     private List<TestResult> getCurrentTestResults() {
-        return convert(testSteps, new ExtractTestResultsConverter());
+        if (testResults != null) {
+            return testResults;
+        }
+        testResults = Lists.newArrayList();
+        for(TestStep step : testSteps) {
+            testResults.add(step.getResult());
+        }
+        return testResults;
     }
 
     /**
@@ -1112,15 +1127,6 @@ public class TestOutcome {
         return testSteps.get(testSteps.size() - 1);
     }
 
-    private Optional<TestStep> lastUnfinishedStepIn(final List<TestStep> testSteps) {
-        TestStep lastStep = testSteps.get(testSteps.size() - 1);
-        if (lastStep.getResult() == null) {
-            return Optional.of(lastStep);
-        } else {
-            return Optional.absent();
-        }
-    }
-
     public TestStep currentGroup() {
         checkState(inGroup());
         return groupStack.peek();
@@ -1161,7 +1167,7 @@ public class TestOutcome {
         } else {
             this.testFailureClassname = AssertionError.class.getName();
             this.testFailureMessage = this.testFailureMessage + System.lineSeparator() + failureCause.getTestFailureMessage();
-            this.setAnnotatedResult(TestResultList.of(this.getAnnotatedResult(), failureCause.getAnnotatedResult()).getOverallResult());
+            this.setAnnotatedResult(TestResultComparison.overallResultFor(this.getAnnotatedResult(), failureCause.getAnnotatedResult()));
         }
 
     }
@@ -1235,7 +1241,7 @@ public class TestOutcome {
     public void setAnnotatedResult(final TestResult annotatedResult) {
         if (this.annotatedResult != PENDING) {
             this.annotatedResult = (this.annotatedResult == null) ?
-                    annotatedResult : TestResultList.of(this.annotatedResult, annotatedResult).getOverallResult();
+                    annotatedResult : TestResultComparison.overallResultFor(this.annotatedResult, annotatedResult);
         }
     }
 
@@ -1274,7 +1280,7 @@ public class TestOutcome {
     }
 
     private List<String> readVersions() {
-        return TestOutcomeAnnotationReader.forTestOutcome(this).readVersions();
+        return TestOutcomeAnnotationReader.readVersionsIn(this);
     }
 
 
@@ -1356,7 +1362,7 @@ public class TestOutcome {
     }
 
     private List<String> readIssues() {
-        return TestOutcomeAnnotationReader.forTestOutcome(this).readIssues();
+        return TestOutcomeAnnotationReader.readIssuesIn(this);
     }
 
     public String getFormattedIssues() {
@@ -1590,9 +1596,14 @@ public class TestOutcome {
     }
 
     private int countDataRowsWithResult(TestResult expectedResult) {
-        List<DataTableRow> matchingRows
-                = filter(having(on(DataTableRow.class).getResult(), is(expectedResult)), getDataTable().getRows());
-        return matchingRows.size();
+        int matchingRowCount = 0;
+        for(DataTableRow row : getDataTable().getRows()) {
+            matchingRowCount += (row.getResult() == expectedResult) ? 1 : 0;
+        }
+        return matchingRowCount;
+//        List<DataTableRow> matchingRows
+//                = filter(having(on(DataTableRow.class).getResult(), is(expectedResult)), getDataTable().getRows());
+//        return matchingRows.size();
     }
 
     public int countNestedStepsWithResult(TestResult expectedResult, TestType testType) {
@@ -1672,11 +1683,11 @@ public class TestOutcome {
         }
     }
 
-    private static class ExtractTestResultsConverter implements Converter<TestStep, TestResult> {
-        public TestResult convert(final TestStep step) {
-            return step.getResult();
-        }
-    }
+//    private static class ExtractTestResultsConverter implements Converter<TestStep, TestResult> {
+//        public TestResult convert(final TestStep step) {
+//            return step.getResult();
+//        }
+//    }
 
     public Integer getStepCount() {
         return testSteps.size();
@@ -1885,43 +1896,43 @@ public class TestOutcome {
         };
     }
 
-    public void setStatistics(TestStatistics statistics) {
-        this.statistics = statistics;
-    }
+//    public void setStatistics(TestStatistics statistics) {
+//        this.statistics = statistics;
+//    }
+//
+//    public TestStatistics getStatistics() {
+//        return statistics;
+//    }
 
-    public TestStatistics getStatistics() {
-        return statistics;
-    }
-
-    public double getOverallStability() {
-        if (getStatistics() == null) return 0.0;
-        return getStatistics().getOverallPassRate();
-    }
-
-    public double getRecentStability() {
-        if (getStatistics() == null) return 0.0;
-        return getStatistics().getPassRate().overTheLast(RECENT_TEST_RUN_COUNT).testRuns();
-    }
-
-    public Long getRecentTestRunCount() {
-        if (getStatistics() == null) return 0L;
-        return (getStatistics().getTotalTestRuns() > RECENT_TEST_RUN_COUNT) ? RECENT_TEST_RUN_COUNT : getStatistics().getTotalTestRuns();
-    }
-
-    public int getRecentPassCount() {
-        if (getStatistics() == null) return 0;
-        return getStatistics().countResults().overTheLast(RECENT_TEST_RUN_COUNT).whereTheOutcomeWas(TestResult.SUCCESS);
-    }
-
-    public int getRecentFailCount() {
-        if (getStatistics() == null) return 0;
-        return getStatistics().countResults().overTheLast(RECENT_TEST_RUN_COUNT).whereTheOutcomeWas(TestResult.FAILURE);
-    }
-
-    public int getRecentPendingCount() {
-        if (getStatistics() == null) return 0;
-        return getStatistics().countResults().overTheLast(RECENT_TEST_RUN_COUNT).whereTheOutcomeWas(TestResult.PENDING);
-    }
+//    public double getOverallStability() {
+//        if (getStatistics() == null) return 0.0;
+//        return getStatistics().getOverallPassRate();
+//    }
+//
+//    public double getRecentStability() {
+//        if (getStatistics() == null) return 0.0;
+//        return getStatistics().getPassRate().overTheLast(RECENT_TEST_RUN_COUNT).testRuns();
+//    }
+//
+//    public Long getRecentTestRunCount() {
+//        if (getStatistics() == null) return 0L;
+//        return (getStatistics().getTotalTestRuns() > RECENT_TEST_RUN_COUNT) ? RECENT_TEST_RUN_COUNT : getStatistics().getTotalTestRuns();
+//    }
+//
+//    public int getRecentPassCount() {
+//        if (getStatistics() == null) return 0;
+//        return getStatistics().countResults().overTheLast(RECENT_TEST_RUN_COUNT).whereTheOutcomeWas(TestResult.SUCCESS);
+//    }
+//
+//    public int getRecentFailCount() {
+//        if (getStatistics() == null) return 0;
+//        return getStatistics().countResults().overTheLast(RECENT_TEST_RUN_COUNT).whereTheOutcomeWas(TestResult.FAILURE);
+//    }
+//
+//    public int getRecentPendingCount() {
+//        if (getStatistics() == null) return 0;
+//        return getStatistics().countResults().overTheLast(RECENT_TEST_RUN_COUNT).whereTheOutcomeWas(TestResult.PENDING);
+//    }
 
     public DateTime getStartTime() {
         return new DateTime(startTime);
@@ -1969,12 +1980,6 @@ public class TestOutcome {
             sampleScenario.append(getMethodNameWithoutParameters(step.getDescription())).append("\n");
         }
         return sampleScenario.length() > 1 ? sampleScenario.substring(0, sampleScenario.length() - 1) : "";
-    }
-
-
-
-    private TestStep lastOf(List<TestStep> children) {
-        return children.get(children.size() - 1);
     }
 
     public DataTable getDataTable() {

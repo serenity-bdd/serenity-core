@@ -112,6 +112,14 @@ public class BeanMatcherAsserts {
         }
     }
 
+    public static <T> void shouldNotMatch(List<T> items, BeanMatcher... matchers) {
+        if (matches(items, matchers)) {
+            throw new AssertionError("Found unneeded matching elements for " + join(matchers)
+                    + NEW_LINE
+                    +"Elements where " + join(items));
+        }
+    }
+
     private static String descriptionOf(Object bean) {
 
         if (isAMap(bean)) {

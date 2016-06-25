@@ -1,0 +1,41 @@
+ext {
+    bintrayPackage = 'serenity-cli'
+    projectDescription = 'Serenity Command Line API'
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'maven-publish'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+mainClassName = 'net.serenitybdd.cli.Serenity'
+
+dependencies {
+    compile project(':serenity-core')
+    compile 'commons-cli:commons-cli:1.3.1'
+    compile 'args4j:args4j:2.33'
+    compile ("ch.qos.logback:logback-classic:1.1.7") {
+        exclude group: "org.slf4j"
+    }
+
+    testCompile project(':serenity-test-utils')
+    testCompile 'org.assertj:assertj-core:1.7.1'
+}
+
+publishing {
+    publications {
+        shadow(MavenPublication) {
+            from components.shadow
+        }
+    }
+}
+

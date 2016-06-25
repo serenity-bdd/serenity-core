@@ -9,6 +9,12 @@ public class Stopwatch {
 
     long startTime = 0;
 
+    public static Stopwatch started() {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.start();
+        return stopwatch;
+    }
+
     public void start() {
         startTime = System.currentTimeMillis();
     }

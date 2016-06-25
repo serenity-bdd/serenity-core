@@ -58,20 +58,6 @@ class WhenGeneratingRequirementsReports extends Specification {
         then:
             firstRequirement.childType() == 'feature'
     }
-    
-    def "Should generate reports for child requirements"() {
-        given: "there are some associated tests"
-            issueTracking.getIssueTrackerUrl() >> "http://my.issue.tracker/MY-PROJECT/browse/ISSUE-{0}"
-            def someTestOutcomes = TestOutcomes.of(someTestResults())
-        when: "we generate the capability reports"
-            aggregateReporter.setOutputDirectory(outputDirectory);
-            def outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(someTestOutcomes)
-            aggregateReporter.generateRequirementsReportsFor(outcomes)
-            report = RequirementsReport.inDirectory(outputDirectory)
-        then: "there should be test results for each capability"
-            def rows = report.requirements;
-            // TODO
-    }
 
     def someTestResults() {
 

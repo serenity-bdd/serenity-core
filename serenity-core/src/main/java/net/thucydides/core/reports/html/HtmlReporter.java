@@ -10,12 +10,14 @@ import net.thucydides.core.reports.templates.TemplateManager;
 import net.thucydides.core.reports.util.CopyDirectory;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,6 +38,7 @@ public abstract class HtmlReporter extends ThucydidesReporter {
     private String resourceDirectory = DEFAULT_RESOURCE_DIRECTORY;
     private final TemplateManager templateManager;
     private final EnvironmentVariables environmentVariables;
+    private final Charset charset;
 
     protected static final String TIMESTAMP_FORMAT = "dd-MM-YYYY HH:mm";
 
@@ -47,7 +50,10 @@ public abstract class HtmlReporter extends ThucydidesReporter {
         super();
         this.templateManager = Injectors.getInjector().getInstance(TemplateManager.class);
         this.environmentVariables = environmentVariables;
+        this.charset = Charset.forName(ThucydidesSystemProperty.JSON_CHARSET.from(environmentVariables, Charset.defaultCharset().name()));
     }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HtmlReporter.class);
 
     private TemplateManager getTemplateManager() {
         return templateManager;
@@ -77,7 +83,9 @@ public abstract class HtmlReporter extends ThucydidesReporter {
         Path sourcePath = getSourceDirectoryOrDefault().toPath();
         Path destinationPath = getOutputDirectory().toPath();
         if (Files.exists(sourcePath) && !Files.isSameFile(sourcePath, destinationPath)) {
+            LOGGER.debug("Copying directory contents from {} to {}", sourcePath,destinationPath);
             copyDirectoryContents(sourcePath, destinationPath);
+            LOGGER.debug("Copying directory contents from {} to {} done", sourcePath,destinationPath);
         }
     }
 
@@ -113,7 +121,7 @@ public abstract class HtmlReporter extends ThucydidesReporter {
 
     private void writeToFile(String htmlContents, File report) throws IOException {
         String lines[] = htmlContents.split("\\r?\\n");
-        try (BufferedWriter writer = Files.newBufferedWriter(report.toPath(), StandardCharsets.UTF_8)){
+        try (BufferedWriter writer = Files.newBufferedWriter(report.toPath(), charset)){
             for(String line : lines){
                 writer.write(line);
                 writer.newLine();

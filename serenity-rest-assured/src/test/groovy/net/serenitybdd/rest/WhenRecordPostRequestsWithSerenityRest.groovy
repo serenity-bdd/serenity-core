@@ -143,4 +143,112 @@ class WhenRecordPostRequestsWithSerenityRest extends Specification {
         and:
             result.statusCode(200)
     }
+
+    def "Should record RestAssured post() method calls with cookies"() {
+        given:
+        def JsonObject json = new JsonObject()
+        json.addProperty("Number", "9999")
+        json.addProperty("Price", "100")
+        def body = gson.toJson(json)
+        json.addProperty("SomeValue","value")
+        def requestBody = gson.toJson(json)
+
+        def base = "http://localhost:${wire.port()}"
+        def path = "/test/number"
+        def url = "$base$path"
+        def header = "Content-Type: $APPLICATION_JSON"
+        def cookie = "__smToken=Nguv2UFVaztFaBguF9YF7yyF"
+
+        stubFor(WireMock.post(urlEqualTo(path))
+                .withRequestBody(matching(".*"))
+                .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "$APPLICATION_JSON")
+                .withHeader("Set-Cookie:", cookie)
+                .withBody(body)));
+        when:
+        def result = given().contentType("$APPLICATION_JSON").body(requestBody).post(url).then()
+        then: "The JSON request with cookies should be recorded in the test steps"
+        1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
+            assert "$query" == "POST $url"
+            assert query.method == POST
+            assert "${query.path}" == url
+            assert query.statusCode == 200
+            assert query.responseHeaders.contains(header)
+            assert query.responseCookies == cookie
+            assert formatted(query.responseBody) == formatted(body)
+            assert formatted(query.content) == formatted(requestBody)
+        }
+        and:
+        result.statusCode(200)
+    }
+
+    def "Should record RestAssured post() method calls with no cookies"() {
+        given:
+        def JsonObject json = new JsonObject()
+        json.addProperty("Number", "9999")
+        json.addProperty("Price", "100")
+        def body = gson.toJson(json)
+        json.addProperty("SomeValue","value")
+        def requestBody = gson.toJson(json)
+
+        def base = "http://localhost:${wire.port()}"
+        def path = "/test/number"
+        def url = "$base$path"
+        def header = "Content-Type: $APPLICATION_JSON"
+
+        stubFor(WireMock.post(urlEqualTo(path))
+                .withRequestBody(matching(".*"))
+                .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "$APPLICATION_JSON")
+                .withBody(body)));
+        when:
+        def result = given().contentType("$APPLICATION_JSON").body(requestBody).post(url).then()
+        then: "The JSON request with empty cookies should be recorded in the test steps"
+        1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
+            assert "$query" == "POST $url"
+            assert query.method == POST
+            assert "${query.path}" == url
+            assert query.statusCode == 200
+            assert query.responseHeaders.contains(header)
+            assert query.responseCookies == ""
+            assert formatted(query.responseBody) == formatted(body)
+            assert formatted(query.content) == formatted(requestBody)
+        }
+        and:
+        result.statusCode(200)
+    }
+
+    def "Should record RestAssured post() method calls with body for HTML content type"() {
+        given:
+        def JsonObject json = new JsonObject()
+        json.addProperty("Number", "9999")
+        json.addProperty("Price", "100")
+        def body = gson.toJson(json)
+        def requestBody = gson.toJson(json)
+
+        def base = "http://localhost:${wire.port()}"
+        def path = "/test/number"
+        def url = "$base$path"
+
+        stubFor(WireMock.post(urlEqualTo(path))
+                .withRequestBody(matching(".*"))
+                .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "$HTML")
+                .withBody(requestBody)));
+        when:
+        def result = given().contentType("$HTML").body(requestBody).post(url).then()
+        then: "The JSON request with body should be recorded in the test steps"
+        1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
+            assert "$query" == "POST $url"
+            assert query.method == POST
+            assert "${query.path}" == url
+            assert query.statusCode == 200
+            assert query.responseBody.contains(body)
+        }
+        and:
+        result.statusCode(200)
+    }
 }

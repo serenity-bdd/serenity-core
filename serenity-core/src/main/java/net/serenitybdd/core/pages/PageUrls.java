@@ -66,7 +66,7 @@ public class PageUrls {
             } catch (MalformedURLException e) {
                 if (requestedUrl == null) {
                     throw new AssertionError("Undefined default URL for page object "
-                                             + pageObject.getClass().getSimpleName());
+                                             + pageObject.getClass().getSuperclass().getSimpleName());
                 } else {
                     throw new AssertionError("Invalid URL: " + requestedUrl);
                 }

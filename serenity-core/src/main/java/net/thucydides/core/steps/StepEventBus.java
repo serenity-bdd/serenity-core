@@ -43,7 +43,7 @@ public class StepEventBus {
      */
     public static synchronized StepEventBus getEventBus() {
         if (stepEventBusThreadLocal.get() == null) {
-            stepEventBusThreadLocal.set(Injectors.getInjector().getInstance(StepEventBus.class));
+            stepEventBusThreadLocal.set(new StepEventBus(Injectors.getInjector().getInstance(EnvironmentVariables.class)));
         }
         return stepEventBusThreadLocal.get();
     }

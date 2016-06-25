@@ -7,10 +7,8 @@ import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.webtests.model.Client;
 import net.serenitybdd.screenplay.webtests.pages.ProfilePage;
 import net.serenitybdd.screenplay.webtests.questions.ProfileQuestion;
-import net.serenitybdd.screenplay.webtests.tasks.LegacyViewMyProfile;
-import net.serenitybdd.screenplay.webtests.tasks.OpenTheApplication;
-import net.serenitybdd.screenplay.webtests.tasks.UpdateHerProfile;
-import net.serenitybdd.screenplay.webtests.tasks.ViewMyProfile;
+import net.serenitybdd.screenplay.webtests.questions.TheValidationMessages;
+import net.serenitybdd.screenplay.webtests.tasks.*;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Test;
@@ -19,6 +17,7 @@ import org.openqa.selenium.WebDriver;
 
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static net.serenitybdd.screenplay.matchers.ConsequenceMatchers.displays;
+import static net.serenitybdd.screenplay.matchers.ReportedErrorMessages.reportsErrors;
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
 import static net.serenitybdd.screenplay.questions.WebElementQuestion.the;
 import static org.hamcrest.Matchers.equalTo;
@@ -97,6 +96,51 @@ public class WhenDanaBrowsesTheWeb {
                 isCurrentlyVisible(),
                 isEnabled()));
     }
+
+    /*
+  public void should_not_be_able_to_add_invalid_or_impossible_bank_account_details() {
+        givenThat(alice).wasAbleTo(AddADriverProfileViaApi.forASydneyIndependentDriver());
+        givenThat(alice).wasAbleTo(Login.toToIngogoPortal());
+
+        when(alice).attemptsTo(ViewTheDrivers.profileDetails());
+
+        then(alice).should(
+
+                seeThat(TheValidationMessages.displayed(), reportsErrors("BSB must be 6 digits")).
+                        whenAttemptingTo(EnterABankAccount.bsbValueOf("qwerty")).
+                        because("BSB cannot have alphabetical characters"),
+
+                seeThat(TheValidationMessages.displayed(), reportsErrors("BSB must be 6 digits")).
+                        whenAttemptingTo(EnterABankAccount.bsbValueOf("~!@#$%^&*(")).
+                        because("BSB cannot have symbols"),
+
+                seeThat(TheValidationMessages.displayed(), reportsErrors("BSB must be 6 digits")).
+                        whenAttemptingTo(EnterABankAccount.bsbValueOf("1234")).
+                        because("BSB cannot be a number with less than 6 digits")
+
+ */
+    @Test
+    public void itShouldBeEasyForDanaToEnterAccurateBankAccountDetails() {
+
+        Actor dana = new Actor("Dana");
+        dana.can(BrowseTheWeb.with(firstBrowser));
+
+        givenThat(dana).has(openedTheApplication);
+
+        when(dana).attemptsTo(viewHerProfile);
+
+        then(dana).should(
+                seeThat(TheValidationMessages.displayed(), reportsErrors("BSB must be 6 digits")).
+                        whenAttemptingTo(EnterABankAccount.bsbValueOf("qwerty")).
+                        because("BSB cannot have alphabetical characters")
+        );
+        then(dana).should(
+                seeThat(TheValidationMessages.displayed(), reportsErrors("BSB must be 6 digits")).
+                        whenAttemptingTo(EnterABankAccount.bsbValueOf("12345")).
+                        because("BSB cannot have less than 6 digits")
+        );
+    }
+
 
     @Test
     public void multipleUsersCanUpdateTheirProfilesSimultaneously() {

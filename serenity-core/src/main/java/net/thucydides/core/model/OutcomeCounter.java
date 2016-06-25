@@ -3,9 +3,6 @@ package net.thucydides.core.model;
 import net.thucydides.core.reports.TestOutcomeCounter;
 import net.thucydides.core.reports.TestOutcomes;
 
-import static ch.lambdaj.Lambda.on;
-import static ch.lambdaj.Lambda.sum;
-
 public class OutcomeCounter extends TestOutcomeCounter {
 
     private final TestOutcomes outcomes;
@@ -20,7 +17,12 @@ public class OutcomeCounter extends TestOutcomeCounter {
     }
 
     public int withResult(TestResult expectedResult) {
-        return sum(outcomes.getOutcomes(), on(TestOutcome.class).countResults(expectedResult));
+        int totalResults = 0;
+        for(TestOutcome outcome : outcomes.getOutcomes()) {
+            totalResults += outcome.countResults(expectedResult);
+        }
+        return totalResults;
+//        return sum(outcomes.getOutcomes(), on(TestOutcome.class).countResults(expectedResult));
     }
 
     public int getTotal() {

@@ -73,7 +73,7 @@ public class SpecflowAdaptor extends FilebasedOutcomeAdaptor {
         for(SpecflowTableRow row : scenario.getRows()) {
             List<TestStep> rowSteps = stepsFrom(row.getRowSteps());
             SpecflowScenarioTitleLine rowTitle = new SpecflowScenarioTitleLine(row.getRowTitle());
-            TestResult rowResult = TestResultList.of(getTestResults(rowSteps)).getOverallResult();
+            TestResult rowResult = TestResultList.overallResultFrom(getTestResults(rowSteps));
 
             DataTableRow dataTableRow = new DataTableRow(rowTitle.getArguments());
             dataTableRow.setResult(rowResult);

@@ -51,6 +51,9 @@ public class ResizableImage {
         if (dimension != null) {
             return dimension;
         }
+        if (!screenshotFile.exists()) {
+            return new Dimension(0,0);
+        }
 
         String suffix = this.getFileSuffix(screenshotFile.getPath());
         Iterator<ImageReader> imageReaders = ImageIO.getImageReadersBySuffix(suffix);

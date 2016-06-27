@@ -4,7 +4,6 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFactory;
-import net.thucydides.core.webdriver.WebdriverInstanceFactory;
 import net.thucydides.junit.rules.DisableThucydidesHistoryRule;
 import net.thucydides.samples.MultipleNonWebTestScenario;
 import net.thucydides.samples.SingleNonWebTestScenario;
@@ -16,8 +15,6 @@ import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class WhenLoggingTestScenarioResults extends AbstractTestStepRunnerTest {
@@ -26,8 +23,6 @@ public class WhenLoggingTestScenarioResults extends AbstractTestStepRunnerTest {
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
     }
-
-    WebdriverInstanceFactory webdriverInstanceFactory;
 
     @Mock
     FirefoxDriver firefoxDriver;
@@ -47,17 +42,8 @@ public class WhenLoggingTestScenarioResults extends AbstractTestStepRunnerTest {
 
         MockitoAnnotations.initMocks(this);
 
-        webdriverInstanceFactory = new WebdriverInstanceFactory() {
-            @Override
-            public WebDriver newFirefoxDriver(Capabilities profile) {
-                return firefoxDriver;
-            }
-
-
-        };
-
         environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get() ;
-        webDriverFactory = new WebDriverFactory(webdriverInstanceFactory, environmentVariables);
+        webDriverFactory = new WebDriverFactory(environmentVariables);
         StepEventBus.getEventBus().clear();
 
     }

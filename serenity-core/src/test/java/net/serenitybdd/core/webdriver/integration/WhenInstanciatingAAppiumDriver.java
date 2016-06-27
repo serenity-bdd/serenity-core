@@ -25,7 +25,7 @@ public class WhenInstanciatingAAppiumDriver {
         try {
             new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
         } catch (UnsupportedDriverException couldNotFindDriver) {
-            assertThat(couldNotFindDriver.getCause().getMessage()).contains("The browser under test or path to the app needs to be provided in the appium.app or appium.browserName property.");
+            assertThat(couldNotFindDriver.getCause().getMessage()).contains("The appium.platformName needs to be specified (either IOS or ANDROID)");
         }
     }
 

@@ -10,7 +10,6 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.AcceptanceTestLoader;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.OutcomeFormat;
-import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,8 +49,7 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
     }
 
     @Override
-    public File generateReportFor(TestOutcome testOutcome,
-                                  TestOutcomes allTestOutcomes) throws IOException {
+    public File generateReportFor(TestOutcome testOutcome) throws IOException {
         TestOutcome storedTestOutcome = testOutcome.withQualifier(qualifier);
         Preconditions.checkNotNull(outputDirectory);
         String reportFilename = reportFor(storedTestOutcome);
@@ -104,6 +102,9 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
 
     @Override
     public Optional<TestOutcome> loadReportFrom(final File reportFile) {
+        if (!reportFile.getName().toLowerCase().endsWith(".json")) {
+            return Optional.absent();
+        }
         try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(reportFile), encoding))) {
             TestOutcome fromJson = jsonConverter.fromJson(in);
             return Optional.fromNullable(fromJson);

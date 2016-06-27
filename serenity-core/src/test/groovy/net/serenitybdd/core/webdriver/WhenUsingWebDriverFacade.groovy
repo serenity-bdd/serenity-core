@@ -2,18 +2,18 @@ package net.serenitybdd.core.webdriver
 
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.SupportedWebDriver
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration
-import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFactory
-import net.thucydides.core.webdriver.WebdriverInstanceFactory
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import org.openqa.selenium.remote.RemoteWebDriver
 import org.openqa.selenium.remote.SessionId
 import spock.lang.Specification
-import static org.mockito.Mockito.*
 
+import static org.mockito.Matchers.any
+import static org.mockito.Mockito.*
 /**
  * User: YamStranger
  * Date: 2/8/16
@@ -28,9 +28,6 @@ class WhenUsingWebDriverFacade extends Specification {
     SessionId session
 
     def EnvironmentVariables environmentVariables
-
-    @Mock
-    def WebdriverInstanceFactory webdriverInstanceFactory
 
     def configuration
 

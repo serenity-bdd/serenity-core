@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.NumericalFormatter;
+import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.ReportOptions;
 import net.thucydides.core.reports.TestOutcomes;
@@ -18,6 +19,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 
 public class HtmlRequirementsReporter extends HtmlReporter {
 
@@ -55,15 +58,15 @@ public class HtmlRequirementsReporter extends HtmlReporter {
 
         Preconditions.checkNotNull(getOutputDirectory());
 
-        Map<String,Object> context = new HashMap<String,Object>();
+        Map<String,Object> context = new HashMap<>();
 
         context.put("requirements", requirementsOutcomes);
         context.put("requirementTypes", requirementsService.getRequirementTypes());
         context.put("testOutcomes", requirementsOutcomes.getTestOutcomes());
         context.put("allTestOutcomes", testOutcomes);
         context.put("timestamp", timestampFrom(testOutcomes));
-        context.put("reportName", new ReportNameProvider());
-        context.put("absoluteReportName", new ReportNameProvider());
+        context.put("reportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService));
+        context.put("absoluteReportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService));
         context.put("reportOptions", new ReportOptions(getEnvironmentVariables()));
         context.put("relativeLink", relativeLink);
 

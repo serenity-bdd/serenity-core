@@ -1,8 +1,11 @@
 package net.thucydides.core.reports;
 
+import com.google.common.base.Splitter;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.util.EnvironmentVariables;
+
+import java.util.List;
 
 import static net.thucydides.core.ThucydidesSystemProperty.*;
 
@@ -21,8 +24,13 @@ public class ReportOptions {
     final private String projectName;
     final private RequirementsService requirementsService;
     final private boolean displayPiechart;
+    final private List<String> firstClassTagTypes;
 
     public ReportOptions(EnvironmentVariables environmentVariables) {
+        this(environmentVariables, Injectors.getInjector().getInstance(RequirementsService.class));
+    }
+
+    public ReportOptions(EnvironmentVariables environmentVariables, RequirementsService requirementsService) {
         showStepDetails = Boolean.valueOf(THUCYDIDES_REPORTS_SHOW_STEP_DETAILS.from(environmentVariables, "false"));
         showManualTests = Boolean.valueOf(THUCYDIDES_REPORT_SHOW_MANUAL_TESTS.from(environmentVariables, "true"));
         showReleases = Boolean.valueOf(THUCYDIDES_REPORT_SHOW_RELEASES.from(environmentVariables, "true"));
@@ -32,7 +40,12 @@ public class ReportOptions {
         showRelatedTags = Boolean.valueOf(SHOW_RELATED_TAGS.from(environmentVariables, "true"));
         displayPiechart = Boolean.valueOf(SHOW_PIE_CHARTS.from(environmentVariables, "true"));
         projectName = THUCYDIDES_PROJECT_NAME.from(environmentVariables,"");
-        requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
+        this.requirementsService = requirementsService;
+        firstClassTagTypes = Splitter.on(",").omitEmptyStrings().splitToList(THUCYDIDES_REPORT_TAG_MENUS.from(environmentVariables,""));
+    }
+
+    public List<String> getFirstClassTagTypes() {
+        return firstClassTagTypes;
     }
 
     public boolean isShowStepDetails() {

@@ -3,7 +3,6 @@ package net.thucydides.core.reports.integration
 import net.serenitybdd.core.SerenitySystemProperties
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.issues.IssueTracking
-import net.thucydides.core.reports.FormatConfiguration
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.junit.Rule
@@ -38,7 +37,7 @@ public class WhenGeneratingAggregateHtmlReports extends Specification {
         outputDirectory.mkdirs()
         reporter.outputDirectory = outputDirectory;
         environmentVariables.setProperty("output.formats","xml")
-        reporter.formatConfiguration = new FormatConfiguration(environmentVariables)
+        //reporter.formatConfiguration = new FormatConfiguration(environmentVariables)
 
         reporter.generateReportsForTestResultsFrom directory("/test-outcomes/containing-features-and-stories")
     }

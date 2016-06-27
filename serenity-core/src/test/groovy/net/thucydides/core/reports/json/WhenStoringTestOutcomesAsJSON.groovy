@@ -2,12 +2,7 @@ package net.thucydides.core.reports.json
 
 import net.serenitybdd.core.rest.RestMethod
 import net.serenitybdd.core.rest.RestQuery
-import net.thucydides.core.annotations.Story
-import net.thucydides.core.annotations.Issue
-import net.thucydides.core.annotations.WithTag
-import net.thucydides.core.annotations.Feature
-import net.thucydides.core.annotations.Issues
-import net.thucydides.core.annotations.Story
+import net.thucydides.core.annotations.*
 import net.thucydides.core.digest.Digest
 import net.thucydides.core.issues.IssueTracking
 import net.thucydides.core.model.*
@@ -17,7 +12,6 @@ import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.integration.TestStepFactory
 import net.thucydides.core.reports.json.gson.GsonJSONConverter
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource
-import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.joda.time.DateTime
@@ -157,7 +151,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").
                 startingAt(FIRST_OF_JANUARY))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         and:
         def reloadedTestOutcome = loader.loadReportFrom(jsonReport)
         then:
@@ -176,7 +170,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").
                 startingAt(FIRST_OF_JANUARY))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         then:
         !jsonReport.text.contains("  ")
     }
@@ -194,7 +188,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         environmentVariables.setProperty("json.pretty.printing","true")
         when:
         reporter.jsonConverter = new GsonJSONConverter(environmentVariables)
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         then:
         jsonReport.text.contains("  ")
     }
@@ -210,7 +204,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome = testOutcome.forProject("Some Project").inTestRunTimestamped(SECOND_OF_JANUARY)
 
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         and:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         then:
@@ -227,7 +221,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").
                 startingAt(FIRST_OF_JANUARY).addScreenshot(new ScreenshotAndHtmlSource(new File("screenshot1.png"))))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         and:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         then:
@@ -241,7 +235,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.startTime = FIRST_OF_JANUARY
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         and:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         then:
@@ -257,7 +251,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").
                 startingAt(FIRST_OF_JANUARY))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         and:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         then:
@@ -274,7 +268,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.startTime = FIRST_OF_JANUARY
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         and:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome = reloadedOutcome.usingIssueTracking(issueTracking)
@@ -290,7 +284,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.startTime = FIRST_OF_JANUARY
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         and:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         then:
@@ -304,7 +298,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.startTime = FIRST_OF_JANUARY
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         then:
         reloadedOutcome.issues == ["PROJ-123"]
@@ -323,7 +317,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.setSessionId("1234");
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         then:
         reloadedOutcome.sessionId == "1234"
@@ -336,7 +330,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.setAnnotatedResult(TestResult.IGNORED)
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         then:
         reloadedOutcome.getResult() == TestResult.IGNORED
@@ -355,7 +349,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.addRow(["a":"2", "b":"3", "c":"4"]);
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         then:
         reloadedOutcome.dataTable.headers == ["a","b","c"]
@@ -379,7 +373,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
 
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         then:
         def reloadedDataSets = reloadedOutcome.dataTable.dataSets
@@ -401,7 +395,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.setSessionId("1234");
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         then:
         reloadedOutcome.feature.name == "A feature"
@@ -414,7 +408,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.startTime = FIRST_OF_JANUARY
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY));
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         then:
         reloadedOutcome.tags.contains(TestTag.withName("A user story in a feature").andType("story"))
@@ -424,7 +418,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     def "should generate an JSON report with a name based on the test run title"() {
         when:
         def testOutcome = new TestOutcome("a_simple_test_case");
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
+        def jsonReport = reporter.generateReportFor(testOutcome);
 
         then:
         jsonReport.name == Digest.ofTextValue("a_simple_test_case") + ".json";
@@ -433,7 +427,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     def "should generate a JSON report in the target directory"() {
         when:
         def testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class);
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
+        def jsonReport = reporter.generateReportFor(testOutcome);
 
         then:
         jsonReport.path.startsWith(outputDirectory.path);
@@ -446,7 +440,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.recordStep(step);
         when:
         reporter.setQualifier("qualifier");
-        def report = reporter.generateReportFor(testOutcome, allTestOutcomes);
+        def report = reporter.generateReportFor(testOutcome);
         then:
         report.name == Digest.ofTextValue("net.thucydides.core.reports.json.WhenStoringTestOutcomesAsJSON/a_user_story_a_simple_test_case_qualifier") + ".json";
     }
@@ -460,7 +454,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         step.failedWith(new IllegalArgumentException("Oh nose!"))
         testOutcome.recordStep(step)
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         def generatedReportText = jsonReport.text
         then:
         generatedReportText.contains "Oh nose!"
@@ -477,7 +471,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         step.failedWith(new FailingStep().failsWithMessage("Oh nose!"));
         testOutcome.recordStep(step);
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes);
+        def jsonReport = reporter.generateReportFor(testOutcome);
         then:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.testSteps[0].exception.stackTrace.size() > 0
@@ -491,7 +485,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY));
         reporter.setQualifier("qualifier");
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         then:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.title == "A simple test case [qualifier]"
@@ -505,7 +499,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         reporter.setQualifier("a_b");
 
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         then:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.title == "A simple test case [a_b]"
@@ -524,7 +518,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 3").startingAt(FIRST_OF_JANUARY))
         testOutcome.endGroup()
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         then:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.testSteps.size() == 1
@@ -547,7 +541,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.endGroup();
         testOutcome.endGroup();
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         then:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.testSteps.size() == 1
@@ -568,7 +562,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.recordStep(step1);
         testOutcome.recordStep(TestStepFactory.failingTestStepCalled("step 2").startingAt(FIRST_OF_JANUARY));
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         then:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.testSteps[0].screenshotCount == 1
@@ -589,7 +583,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.recordStep(step1);
         testOutcome.recordStep(TestStepFactory.failingTestStepCalled("step 2").startingAt(FIRST_OF_JANUARY));
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         then:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.testSteps[0].screenshotCount == 1
@@ -604,7 +598,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
             testOutcome.setStartTime(FIRST_OF_JANUARY);
             testOutcome.recordStep(TestStep.forStepCalled("some step").withResult(result))
         when:
-            def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+            def jsonReport = reporter.generateReportFor(testOutcome)
         then:
             TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
             reloadedOutcome.getResult() == result
@@ -619,7 +613,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.recordStep(TestStep.forStepCalled("some step").withResult(TestResult.SUCCESS))
         testOutcome.lastStepFailedWith(new AssertionError("a failure"))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         then:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.getResult() == TestResult.FAILURE
@@ -633,7 +627,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.recordStep(TestStep.forStepCalled("some step").withResult(TestResult.SUCCESS))
         testOutcome.lastStepFailedWith(new RuntimeException("an error"))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         then:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.getResult() == TestResult.ERROR
@@ -647,7 +641,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.setAnnotatedResult(TestResult.ERROR);
         testOutcome.determineTestFailureCause(new RuntimeException("an error"))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         then:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.getResult() == TestResult.ERROR
@@ -662,7 +656,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.setAnnotatedResult(TestResult.FAILURE);
         testOutcome.determineTestFailureCause(new AssertionError("a failure"))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         then:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.getResult() == TestResult.FAILURE
@@ -678,7 +672,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.setAnnotatedResult(TestResult.FAILURE);
         testOutcome.determineTestFailureCause(new ComparisonFailure("a failure","1","2"))
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         then:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         reloadedOutcome.getResult() == TestResult.FAILURE
@@ -693,7 +687,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
             testOutcome.setStartTime(FIRST_OF_JANUARY);
             testOutcome.setAnnotatedResult(result)
         when:
-            def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+            def jsonReport = reporter.generateReportFor(testOutcome)
         then:
             TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
             reloadedOutcome.getResult() == result
@@ -763,7 +757,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.setTestSource(StepEventBus.TEST_SOURCE_JUNIT)
 
         when:
-        def jsonReport = reporter.generateReportFor(testOutcome, allTestOutcomes)
+        def jsonReport = reporter.generateReportFor(testOutcome)
         and:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         then:

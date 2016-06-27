@@ -5,29 +5,19 @@ import net.thucydides.core.annotations.Pending
 import net.thucydides.core.annotations.Steps
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.util.MockEnvironmentVariables
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration
-import net.thucydides.core.webdriver.WebDriverFactory
-import net.thucydides.core.webdriver.WebdriverInstanceFactory
 import net.thucydides.samples.SampleScenarioSteps
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.junit.runner.notification.RunNotifier
-import org.openqa.selenium.firefox.FirefoxDriver
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import spock.lang.Specification
 
 import static org.assertj.core.api.Assertions.assertThat
 
 class WhenReportingOnTestOutcomesInJunit extends Specification {
 
-    def firefoxDriver = Mock(FirefoxDriver)
-    def htmlUnitDriver = Mock(HtmlUnitDriver)
-    def webdriverInstanceFactory = Mock(WebdriverInstanceFactory)
     def environmentVariables = new MockEnvironmentVariables()
-    def configuration = new SystemPropertiesConfiguration(environmentVariables)
-    def webDriverFactory = new WebDriverFactory(webdriverInstanceFactory, environmentVariables)
     File temporaryDirectory
 
     @Rule

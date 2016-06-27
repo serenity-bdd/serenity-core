@@ -3,7 +3,6 @@ package net.thucydides.junit.runners;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.AcceptanceTestReporter;
-import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule;
 import net.thucydides.samples.AnnotatedSingleTestScenario;
 import org.junit.Before;
@@ -45,6 +44,6 @@ public class WhenGeneratingTestReports extends AbstractTestStepRunnerTest {
 
         runner.run(new RunNotifier());
 
-        verify(mockReporter).generateReportFor(any(TestOutcome.class), any(TestOutcomes.class));
+        verify(mockReporter).generateReportFor(any(TestOutcome.class));
     }
 }

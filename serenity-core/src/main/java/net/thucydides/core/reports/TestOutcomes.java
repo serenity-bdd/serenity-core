@@ -60,7 +60,6 @@ public class TestOutcomes {
     static int outcomeCount = 0;
 
     public <T> T sum(Object iterable, T argument) {
-        System.out.println("lambda sum");
         return Lambda.sum(iterable, argument);
     }
 
@@ -72,7 +71,6 @@ public class TestOutcomes {
                            TestOutcomes rootOutcomes,
                            EnvironmentVariables environmentVariables) {
         outcomeCount = outcomeCount + outcomes.size();
-        //System.out.println("Creating new TestOutcomes: " + outcomeCount);
         this.outcomes = outcomes;// ImmutableList.copyOf(outcomes);
         this.estimatedAverageStepCount = estimatedAverageStepCount;
         this.label = label;
@@ -88,8 +86,7 @@ public class TestOutcomes {
                            TestOutcomes rootOutcomes,
                            EnvironmentVariables environmentVariables) {
         outcomeCount = outcomeCount + outcomes.size();
-        //System.out.println("Creating new TestOutcomes: " + outcomeCount);
-        this.outcomes = outcomes;//ImmutableList.copyOf(outcomes);
+        this.outcomes = outcomes;
         this.estimatedAverageStepCount = estimatedAverageStepCount;
         this.label = label;
         this.testTag = null;
@@ -354,17 +351,15 @@ public class TestOutcomes {
     }
 
     public TestOutcomes withRequirementsTags() {
-        List<TestOutcome> testOutcomesWithRequirements = Lists.newArrayList();
         for (TestOutcome outcome : outcomes) {
-            Set<TestTag> outcomeTags = Sets.newHashSet(outcome.getTags());
+            List<TestTag> outcomeTags = Lists.newArrayList(outcome.getTags());
             List<Requirement> parentRequirements = requirementsService.getAncestorRequirementsFor(outcome);
             for(Requirement requirement : parentRequirements) {
                 outcomeTags.add(requirement.asTag());
             }
-            testOutcomesWithRequirements.add(outcome.withTags(outcomeTags));
+            outcome.addTags(outcomeTags);
         }
-
-        return new TestOutcomes(testOutcomesWithRequirements, estimatedAverageStepCount, label, rootOutcomes.orNull(), environmentVariables);
+        return this;
     }
 
     private static class TagFinder {
@@ -443,27 +438,6 @@ public class TestOutcomes {
 
     private boolean isAnIssue(TestTag tag) {
         return tag.getType().equalsIgnoreCase("issue");
-    }
-
-    /**
-     * Return a copy of the current test outcomes, with test run history and statistics.
-     *
-     * @return a TestOutcome instance containing a list of TestOutcomeWithHistory instances.
-     */
-    public TestOutcomes withHistory() {
-        return TestOutcomes.of(convert(outcomes, toOutcomesWithHistory()));
-    }
-
-    private Converter<TestOutcome, TestOutcome> toOutcomesWithHistory() {
-        return new Converter<TestOutcome, TestOutcome>() {
-
-            public TestOutcome convert(TestOutcome testOutcome) {
-                // TODO: Here's where the stats go
-                //TestStatistics statistics = testStatisticsProvider.statisticsForTests(With.title(testOutcome.getTitle()));
-                //testOutcome.setStatistics(statistics);
-                return testOutcome;
-            }
-        };
     }
 
     /**

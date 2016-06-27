@@ -11,7 +11,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 
 import java.util.List;
@@ -19,8 +18,6 @@ import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 public class WhenWorkingWithJavascript {
 
@@ -71,23 +68,6 @@ public class WhenWorkingWithJavascript {
     public void javascript_support_can_be_checked_on_a_driver_facade() {
         WebDriverFacade webDriverFacade = new WebDriverFacade(FirefoxDriver.class, factory);
         assertThat(JavascriptSupport.javascriptIsSupportedIn(webDriverFacade), is(true));
-    }
-
-
-    @Test
-    public void should_activate_javascript_support_in_htmlunit() {
-        HtmlUnitDriver driver = mock(HtmlUnitDriver.class);
-
-        JavascriptSupport.activateJavascriptSupportFor(driver);
-        
-        verify(driver).setJavascriptEnabled(true);
-    }
-
-    @Test
-    public void should_not_need_to_activate_javascript_support_for_firefox() {
-        FirefoxDriver driver = mock(FirefoxDriver.class);
-
-        JavascriptSupport.activateJavascriptSupportFor(driver);
     }
 
     static class JavascriptWebdriver implements JavascriptExecutor, WebDriver {

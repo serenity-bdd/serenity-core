@@ -113,13 +113,12 @@ class WhenWritingAndReadingTestOutcomes extends Specification {
         given:
             def directory = temporary.getRoot()
             def Set<TestOutcome> outcomes = generate(10)
-            def TestOutcomes testOutcomes = TestOutcomes.of(new ArrayList<TestOutcome>(outcomes))
             reporter.setOutputDirectory(directory)
             def List<Future<File>> result = new ArrayList<>()
         when:
             100.times {
                 outcomes.each { outcome ->
-                    reporter.generateReportFor(outcome, testOutcomes)
+                    reporter.generateReportFor(outcome)
                 }
             }
             def notFountOutcomes = {

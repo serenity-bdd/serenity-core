@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -50,7 +51,8 @@ public abstract class HtmlReporter extends ThucydidesReporter {
         super();
         this.templateManager = Injectors.getInjector().getInstance(TemplateManager.class);
         this.environmentVariables = environmentVariables;
-        this.charset = Charset.forName(ThucydidesSystemProperty.JSON_CHARSET.from(environmentVariables, Charset.defaultCharset().name()));
+        this.charset = Charset.forName(ThucydidesSystemProperty.JSON_CHARSET.from(environmentVariables,
+                                                                                  StandardCharsets.UTF_8.name()));
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlReporter.class);

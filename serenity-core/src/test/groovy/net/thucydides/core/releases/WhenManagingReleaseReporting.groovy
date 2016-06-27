@@ -129,7 +129,7 @@ class WhenManagingReleaseReporting extends Specification {
         },
         "children": [],
         "label": "Iteration 1.1",
-        "reportName": "8e5dc84bfe3cb643f0a317a065f8e1ea4c72db50cd352256db8fa690bacb3f3f.html",
+        "reportName": "30ba48934f711d51fc05abc1b94a9cbf.html",
         "parents": [
           {
             "releaseTag": {
@@ -138,7 +138,7 @@ class WhenManagingReleaseReporting extends Specification {
             },
             "children": [],
             "label": "Release 1.0",
-            "reportName": "5c2ec3497821f4f23d865a2ff33fe12563fbc80d44661a7ba83f78f34d37a1a5.html",
+            "reportName": "26f026356fbb43a9edfabb12638b1e22.html",
             "parents": []
           }
         ]
@@ -150,7 +150,7 @@ class WhenManagingReleaseReporting extends Specification {
         },
         "children": [],
         "label": "Iteration 1.3",
-        "reportName": "24307a38716cb7c650b8a0202a9a15680813e6ede7aadd9440fbfe90c5f55ed2.html",
+        "reportName": "9e9f764cb1c1c42483255af597e4f45f.html",
         "parents": [
           {
             "releaseTag": {
@@ -159,14 +159,14 @@ class WhenManagingReleaseReporting extends Specification {
             },
             "children": [],
             "label": "Release 1.0",
-            "reportName": "5c2ec3497821f4f23d865a2ff33fe12563fbc80d44661a7ba83f78f34d37a1a5.html",
+            "reportName": "26f026356fbb43a9edfabb12638b1e22.html",
             "parents": []
           }
         ]
       }
     ],
     "label": "Release 1.0",
-    "reportName": "5c2ec3497821f4f23d865a2ff33fe12563fbc80d44661a7ba83f78f34d37a1a5.html",
+    "reportName": "26f026356fbb43a9edfabb12638b1e22.html",
     "parents": []
   },
   {
@@ -182,7 +182,7 @@ class WhenManagingReleaseReporting extends Specification {
         },
         "children": [],
         "label": "Iteration 2.1",
-        "reportName": "f687e4e3341aa1d8b2648a37036f7f26c1adee02d0d379a03847fb25554c8518.html",
+        "reportName": "457064a7c30a1499b6f851b4a067fd3d.html",
         "parents": [
           {
             "releaseTag": {
@@ -191,14 +191,14 @@ class WhenManagingReleaseReporting extends Specification {
             },
             "children": [],
             "label": "Release 2.0",
-            "reportName": "ebf50a7a7c6b63aa4494768dd9732cd383c1db686107a6e81bd896aa95939de5.html",
+            "reportName": "2004077d2caed9cbf16f8cd4a6f83922.html",
             "parents": []
           }
         ]
       }
     ],
     "label": "Release 2.0",
-    "reportName": "ebf50a7a7c6b63aa4494768dd9732cd383c1db686107a6e81bd896aa95939de5.html",
+    "reportName": "2004077d2caed9cbf16f8cd4a6f83922.html",
     "parents": []
   }
 ]"""

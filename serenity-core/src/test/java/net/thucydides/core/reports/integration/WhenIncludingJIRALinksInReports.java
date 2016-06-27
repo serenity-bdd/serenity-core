@@ -57,7 +57,7 @@ public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTes
 
         recordSimpleTest(testOutcome);
 
-        reporter.generateReportFor(testOutcome, allTestOutcomes);
+        reporter.generateReportFor(testOutcome);
 
         File screenshotReport = new File(outputDirectory, Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_a_simple_test_case") + ".html");
         String reportContents = FileUtils.readFileToString(screenshotReport);
@@ -73,7 +73,7 @@ public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTes
 
         recordSimpleTest(testOutcome);
 
-        reporter.generateReportFor(testOutcome, allTestOutcomes);
+        reporter.generateReportFor(testOutcome);
 
         File screenshotReport = new File(outputDirectory, Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_a_simple_test_case") + ".html");
         String reportContents = FileUtils.readFileToString(screenshotReport);
@@ -88,7 +88,7 @@ public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTes
 
         recordSimpleTest(testOutcome);
 
-        reporter.generateReportFor(testOutcome, allTestOutcomes);
+        reporter.generateReportFor(testOutcome);
 
         File screenshotReport = new File(outputDirectory, Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_a_simple_test_case") + ".html");
         String reportContents = FileUtils.readFileToString(screenshotReport);
@@ -104,7 +104,7 @@ public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTes
 
         recordSimpleTest(testOutcome);
 
-        reporter.generateReportFor(testOutcome, allTestOutcomes);
+        reporter.generateReportFor(testOutcome);
 
         File screenshotReport = new File(outputDirectory, Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_a_simple_test_case") + ".html");
         String reportContents = FileUtils.readFileToString(screenshotReport);
@@ -119,7 +119,7 @@ public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTes
 
         recordSimpleTest(testOutcome);
 
-        reporter.generateReportFor(testOutcome, allTestOutcomes);
+        reporter.generateReportFor(testOutcome);
 
         File screenshotReport = new File(outputDirectory, Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_should_do_this_too") + ".html");
         String reportContents = FileUtils.readFileToString(screenshotReport);

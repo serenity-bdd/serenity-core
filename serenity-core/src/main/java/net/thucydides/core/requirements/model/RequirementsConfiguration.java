@@ -22,7 +22,7 @@ public class RequirementsConfiguration {
     public final static List<String> DEFAULT_CAPABILITY_TYPES = ImmutableList.of("capability", "feature", "story");
     protected static final String DEFAULT_ROOT_DIRECTORY = "stories";
 
-    private EnvironmentVariables environmentVariables;
+    private final EnvironmentVariables environmentVariables;
 
 
     // Used for testing at this stage

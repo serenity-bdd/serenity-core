@@ -6,7 +6,6 @@ import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration
 import net.thucydides.core.webdriver.WebDriverFactory
-import net.thucydides.core.webdriver.WebdriverInstanceFactory
 import net.thucydides.samples.*
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
@@ -26,10 +25,9 @@ class WhenRunningTestScenarios extends Specification {
 
     def firefoxDriver = Mock(FirefoxDriver)
     def htmlUnitDriver = Mock(HtmlUnitDriver)
-    def webdriverInstanceFactory = new WebdriverInstanceFactory()
     def environmentVariables = new MockEnvironmentVariables()
     def configuration = new SystemPropertiesConfiguration(environmentVariables)
-    def webDriverFactory = new WebDriverFactory(webdriverInstanceFactory, environmentVariables)
+    def webDriverFactory = new WebDriverFactory(environmentVariables)
     File temporaryDirectory
 
     @Rule
@@ -37,8 +35,6 @@ class WhenRunningTestScenarios extends Specification {
 
     def setup() {
         temporaryDirectory = temporaryFolder.newFolder()
-        webdriverInstanceFactory.newFirefoxDriver(_) >> firefoxDriver
-        webdriverInstanceFactory.newHtmlUnitDriver(_) >> htmlUnitDriver
     }
 
 
@@ -511,7 +507,7 @@ class WhenRunningTestScenarios extends Specification {
     def "should be able to only run tests with a given tag at the class level"() {
         given:
             environmentVariables.setProperty("tags",tag)
-            def webDriverFactory = new WebDriverFactory(webdriverInstanceFactory, environmentVariables)
+            def webDriverFactory = new WebDriverFactory(environmentVariables)
             def runner = new ThucydidesRunner(SamplePassingScenario, webDriverFactory, configuration)
         when:
             runner.run(new RunNotifier())
@@ -528,7 +524,7 @@ class WhenRunningTestScenarios extends Specification {
     def "should be able to only run tests with a given tag at the test level"() {
         given:
             environmentVariables.setProperty("tags",tag)
-            def webDriverFactory = new WebDriverFactory(webdriverInstanceFactory, environmentVariables)
+            def webDriverFactory = new WebDriverFactory(environmentVariables)
             def runner = new ThucydidesRunner(SamplePassingScenario, webDriverFactory, configuration)
         when:
             runner.run(new RunNotifier())

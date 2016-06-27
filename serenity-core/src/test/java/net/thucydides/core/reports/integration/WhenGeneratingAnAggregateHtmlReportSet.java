@@ -9,7 +9,6 @@ import net.thucydides.core.reports.TestOutcomesFailures;
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.reports.html.ReportProperties;
-import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import org.hamcrest.Matcher;
@@ -46,10 +45,8 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
     @BeforeClass
     public static void generateReports() throws IOException {
         IssueTracking issueTracking = mock(IssueTracking.class);
-        RequirementsService requirementsService = mock(RequirementsService.class);
         environmentVariables.setProperty("output.formats", "xml");
-        HtmlAggregateStoryReporter reporter = new HtmlAggregateStoryReporter("project", "", issueTracking,
-                requirementsService, environmentVariables);
+        HtmlAggregateStoryReporter reporter = new HtmlAggregateStoryReporter("project", "", issueTracking, environmentVariables);
         outputDirectory = newTemporaryDirectory();
         reporter.setOutputDirectory(outputDirectory);
 

@@ -558,8 +558,8 @@ public class WebElementFacadeStub implements WebElementFacade {
     }
 
     @Override
-    public void resetTimeouts() {
-
+    public Duration resetTimeouts() {
+        return null;
     }
 
     @Override

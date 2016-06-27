@@ -6,6 +6,7 @@ import io.appium.java_client.AppiumDriver;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -51,6 +52,11 @@ public enum SupportedWebDriver {
      * Internet Explorer
      */
     IEXPLORER(InternetExplorerDriver.class),
+
+    /**
+     * Microsoft Edge
+     */
+    EDGE(EdgeDriver.class),
 
     /**
      * Safari

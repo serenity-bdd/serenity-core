@@ -62,7 +62,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     private final WebdriverManager webdriverManager;
     private String requestedDriver;
     private ReportService reportService;
-    private final TestCount testCount;
     private final TestConfiguration theTest;
     /**
      * Special listener that keeps track of test step execution and results.
@@ -136,7 +135,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
                           final Configuration configuration,
                           final BatchManager batchManager) throws InitializationError {
         this(klass,
-                new ThucydidesWebdriverManager(webDriverFactory, configuration),
+                ThucydidesWebDriverSupport.getWebdriverManager(webDriverFactory, configuration),
                 configuration,
                 batchManager
         );
@@ -160,8 +159,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         this.configuration = configuration;
         this.requestedDriver = getSpecifiedDriver(klass);
         this.tagScanner = new TagScanner(configuration.getEnvironmentVariables());
-
-        this.testCount = Injectors.getInjector().getInstance(TestCount.class);
 
         if (TestCaseAnnotations.supportsWebTests(klass)) {
             checkRequestedDriverType();

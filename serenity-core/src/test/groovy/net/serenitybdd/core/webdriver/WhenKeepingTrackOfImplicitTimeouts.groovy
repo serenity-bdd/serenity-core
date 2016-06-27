@@ -1,13 +1,17 @@
 package net.serenitybdd.core.webdriver
 
 import com.google.common.base.Optional
+import net.serenitybdd.core.pages.PageObject
+import net.thucydides.core.annotations.DefaultUrl
 import net.thucydides.core.webdriver.TimeoutStack
+import net.thucydides.core.webdriver.WebDriverFacade
+import net.thucydides.core.webdriver.WebDriverFactory
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.support.ui.Duration
 import spock.lang.Specification
 
 import java.util.concurrent.TimeUnit
-
 /**
  * Created by john on 12/03/15.
  */
@@ -104,6 +108,61 @@ class WhenKeepingTrackOfImplicitTimeouts extends Specification{
             storedDuration1.get() == timeout2
         and:
             storedDuration2.get() == timeout1
+    }
+
+    @DefaultUrl("classpath:static-site/index.html")
+    static class PageObjectUsingImplicitTimeouts extends PageObject {
+
+        PageObjectUsingImplicitTimeouts(WebDriver driver) {
+            super(driver)
+        }
+
+        public void setImplicitTimeoutTo(int timeout) {
+            setImplicitTimeout(timeout, TimeUnit.SECONDS);
+        }
+
+        public long getImplicitTimoutMilliseconds() {
+            return implicitTimoutMilliseconds();
+        }
+    }
+
+    def "should be able to set the implicit timeout"() {
+        given:
+            def driver = new WebDriverFacade(HtmlUnitDriver, new WebDriverFactory());
+            def pageObject = new PageObjectUsingImplicitTimeouts(driver)
+        when:
+            pageObject.setImplicitTimeoutTo(3)
+        then:
+            pageObject.getImplicitTimoutMilliseconds() == 3000
+    }
+
+    def "should be able to reset the implicit timeout"() {
+        given:
+            def driver = new WebDriverFacade(HtmlUnitDriver, new WebDriverFactory());
+            def pageObject = new PageObjectUsingImplicitTimeouts(driver)
+            def originalTimeout = pageObject.getImplicitTimoutMilliseconds()
+        when:
+            pageObject.setImplicitTimeoutTo(12)
+        and:
+            pageObject.resetImplicitTimeout()
+        then:
+            pageObject.getImplicitTimoutMilliseconds() == originalTimeout
+    }
+
+    def "should be able to set and reset the implicit timeout using nested calls"() {
+        given:
+            def driver = new WebDriverFacade(HtmlUnitDriver, new WebDriverFactory());
+            def pageObject = new PageObjectUsingImplicitTimeouts(driver)
+            def originalTimeout = pageObject.getImplicitTimoutMilliseconds()
+        when:
+            pageObject.setImplicitTimeoutTo(6)
+            pageObject.setImplicitTimeoutTo(12)
+        then:
+            pageObject.getImplicitTimoutMilliseconds() == 12000
+            pageObject.resetImplicitTimeout()
+            pageObject.getImplicitTimoutMilliseconds() == 6000
+            pageObject.resetImplicitTimeout()
+            pageObject.getImplicitTimoutMilliseconds() == originalTimeout
     }
 
 }

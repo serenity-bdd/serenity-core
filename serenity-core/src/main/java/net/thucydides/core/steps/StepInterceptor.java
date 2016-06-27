@@ -14,6 +14,7 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.stacktrace.StackTraceSanitizer;
+import net.thucydides.core.steps.service.CleanupMethodAnnotationProvider;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.internal.AssumptionViolatedException;
@@ -22,9 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static net.thucydides.core.steps.ErrorConvertor.forError;
 
@@ -41,10 +40,15 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     private Throwable error = null;
     private static final Logger LOGGER = LoggerFactory.getLogger(StepInterceptor.class);
     private final EnvironmentVariables environmentVariables;
+    private final List<String> cleanupMethodsAnnotations = new ArrayList<>();
 
     public StepInterceptor(final Class<?> testStepClass) {
         this.testStepClass = testStepClass;
         this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        Iterable<CleanupMethodAnnotationProvider> cleanupMethodAnnotationProviders = ServiceLoader.load(CleanupMethodAnnotationProvider.class);
+        for(CleanupMethodAnnotationProvider cleanupMethodAnnotationProvider : cleanupMethodAnnotationProviders) {
+            cleanupMethodsAnnotations.addAll(cleanupMethodAnnotationProvider.getCleanupMethodAnnotations());
+        }
     }
 
     public Object intercept(final Object obj, final Method method,
@@ -123,13 +127,30 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
             return runNormalMethod(obj, method, args, proxy);
         }
 
-        if (shouldSkip(method)) {
+        if (shouldSkip(method) && !stepIsCalledFromCleanupMethod()) {
             return skipStepMethod(obj, method, args, proxy);
         } else {
             notifyStepStarted(obj, method, args);
             return runTestStep(obj, method, args, proxy);
         }
+    }
 
+    private boolean stepIsCalledFromCleanupMethod(){
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        for(StackTraceElement stackTraceElement : stackTrace)
+        {
+            try {
+                Method m = Class.forName(stackTraceElement.getClassName()).getMethod(stackTraceElement.getMethodName());
+                if( m.getAnnotations() != null && m.getAnnotations().length > 0) {
+                    for (Annotation a : m.getAnnotations()) {
+                        if (cleanupMethodsAnnotations.contains(a.toString())) {
+                            return true;
+                        }
+                    }
+                }
+            } catch(Exception ex) {}
+        }
+        return false;
     }
 
     private Object skipStepMethod(final Object obj, Method method, final Object[] args, final MethodProxy proxy) throws Exception {
@@ -389,9 +410,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
                                          final boolean addMarkup) {
         StringBuilder testName = new StringBuilder(method.getName());
         testName.append(": ");
-        if (addMarkup) {
-            testName.append("<span class='step-parameter'>");
-        }
+
         boolean isFirst = true;
         for (Object arg : args) {
             if (!isFirst) {
@@ -399,9 +418,6 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
             }
             testName.append(StepArgumentWriter.readableFormOf(arg));
             isFirst = false;
-        }
-        if (addMarkup) {
-            testName.append("</span>");
         }
         return testName.toString();
     }

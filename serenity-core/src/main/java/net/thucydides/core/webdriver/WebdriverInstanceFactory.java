@@ -9,6 +9,7 @@ import net.thucydides.core.guice.Injectors;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -17,7 +18,9 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.safari.SafariDriver;
 
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.List;
 
 /**
@@ -37,17 +40,23 @@ public class WebdriverInstanceFactory {
 
     public WebDriver newRemoteDriver(URL remoteUrl, Capabilities capabilities) {
         try {
+            ensureHostIsAvailableAt(remoteUrl);
             RemoteWebDriver driver = new RemoteWebDriver(remoteUrl, capabilities);
             driverProperties.registerCapabilities("remote", driver.getCapabilities());
             return driver;
         } catch (UnreachableBrowserException unreachableBrowser) {
             String errorMessage = unreachableBrowserErrorMessage(unreachableBrowser);
             throw new SerenityManagedException(errorMessage, unreachableBrowser);
-
+        } catch (UnknownHostException unknownHost) {
+            throw new SerenityManagedException(unknownHost.getMessage(), unknownHost);
         }
     }
 
-    private String unreachableBrowserErrorMessage(UnreachableBrowserException unreachableBrowser) {
+    private void ensureHostIsAvailableAt(URL remoteUrl) throws UnknownHostException {
+        InetAddress.getByName(remoteUrl.getHost());
+    }
+
+    private String unreachableBrowserErrorMessage(Exception unreachableBrowser) {
         List<String> errorLines =  Splitter.onPattern("\n").splitToList(unreachableBrowser.getLocalizedMessage());
         Throwable cause = unreachableBrowser.getCause();
         String errorCause = ((cause == null) ? "" :
@@ -90,6 +99,12 @@ public class WebdriverInstanceFactory {
     public WebDriver newInternetExplorerDriver(Capabilities capabilities) {
         InternetExplorerDriver driver = new InternetExplorerDriver(capabilities);
         driverProperties.registerCapabilities("iexplorer", driver.getCapabilities());
+        return driver;
+    }
+
+    public WebDriver newEdgeDriver(Capabilities capabilities) {
+        EdgeDriver driver = new EdgeDriver(capabilities);
+        driverProperties.registerCapabilities("edge", driver.getCapabilities());
         return driver;
     }
 

@@ -15,8 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.*;
 
 @SuppressWarnings("serial")
 public class SampleScenarioSteps extends ScenarioSteps {
@@ -49,6 +48,7 @@ public class SampleScenarioSteps extends ScenarioSteps {
     @Step
     public void stepThatUsesABrowser() {
         indexPage.open();
+        assertThat(indexPage.getTitle(), not(isEmptyString()));
     }
 
     @Step

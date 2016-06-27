@@ -2,14 +2,16 @@ package net.thucydides.core.webdriver;
 
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.SessionId;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Manage WebDriver instances.
@@ -21,9 +23,9 @@ import java.util.Set;
  * @author johnsmart
  *
  */
-public class ThucydidesWebdriverManager implements WebdriverManager {
+public class SerenityWebdriverManager implements WebdriverManager {
 
-    private static final ThreadLocal<WebdriverInstances> webdriverInstancesThreadLocal = new ThreadLocal<WebdriverInstances>();
+    private static final ThreadLocal<WebdriverInstances> webdriverInstancesThreadLocal = new ThreadLocal<>();
 
     private final WebDriverFactory webDriverFactory;
 
@@ -31,8 +33,10 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
 
     private final Set<WebDriver> allWebdriverInstances;
 
+    private Optional<String> overridenDefaultDriverType = Optional.absent();
+
     @Inject
-    public ThucydidesWebdriverManager(final WebDriverFactory webDriverFactory, final Configuration configuration) {
+    public SerenityWebdriverManager(final WebDriverFactory webDriverFactory, final Configuration configuration) {
         this.webDriverFactory = webDriverFactory;
         this.configuration = configuration;
         this.allWebdriverInstances =  Collections.synchronizedSet(new HashSet<WebDriver>());
@@ -58,7 +62,7 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
 
     private static SupportedWebDriver getConfiguredWebDriverWithOverride(final Configuration configuration,
                                                                          final String driver) {
-        if (StringUtils.isEmpty(driver)) {
+        if (isEmpty(driver)) {
             return configuration.getDriverType();
         }  else {
             return SupportedWebDriver.getDriverTypeFor(driver);
@@ -80,13 +84,13 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
     public void closeAllDrivers() {
         synchronized (allWebdriverInstances) {
             for(WebDriver driver : allWebdriverInstances) {
-                closeSafely(driver);
+                safelyClose(driver);
             }
             allWebdriverInstances.clear();
         }
     }
 
-    private void closeSafely(WebDriver driver) {
+    private void safelyClose(WebDriver driver) {
         try {
             driver.close();
             driver.quit();
@@ -98,7 +102,10 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
     }
 
     public WebDriver getWebdriver() {
-        return currentDriver.or(getThreadLocalWebDriver(configuration, webDriverFactory, inThisTestThread().getCurrentDriverName()));
+        return instantiatedThreadLocalWebDriver(configuration,
+                                                webDriverFactory,
+                                                getDefaultDriverType()
+                                                /*inThisTestThread().getCurrentDriverName()*/);
     }
 
     @Override
@@ -106,17 +113,14 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
         return new WebdriverContext(this, context);
     }
 
-    private Optional<WebDriver> currentDriver = Optional.absent();
-
     @Override
     public void setCurrentDriver(WebDriver driver) {
-        currentDriver = Optional.fromNullable(driver);
         inThisTestThread().setCurrentDriverTo(driver);
     }
 
     @Override
     public void clearCurrentDriver() {
-        currentDriver = Optional.absent();
+
     }
 
     @Override
@@ -125,13 +129,35 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
         inThisTestThread().setCurrentDriverTo(driver);
     }
 
-    public String getCurrentDriverName() {
-        return inThisTestThread().getCurrentDriverName();
+    @Override
+    public List<WebDriver> getRegisteredDrivers() {
+        return inThisTestThread().getActiveDrivers();
     }
 
+    @Override
+    public List<String> getActiveDriverTypes() {
+        return inThisTestThread().getActiveDriverTypes();
+    }
+
+    public String getCurrentDriverType() {
+        return inThisTestThread().getCurrentDriverType();
+    }
+
+    @Override
+    public String getDefaultDriverType() {
+        return overridenDefaultDriverType.or(configuration.getDriverType().name());
+    }
+
+    @Override
+    public void overrideDefaultDriverType(String driverType) {
+        overridenDefaultDriverType = Optional.fromNullable(isEmpty(driverType) ? null : driverType);
+    }
+
+
     public SessionId getSessionId() {
-        WebDriver driver = getThreadLocalWebDriver(configuration, webDriverFactory,
-                                                   inThisTestThread().getCurrentDriverName());
+
+        WebDriver driver = inThisTestThread().getCurrentDriver();
+
         if(driver instanceof WebDriverFacade){
             driver = ((WebDriverFacade) driver).getDriverInstance();
         }
@@ -142,23 +168,31 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
     }
 
     public WebDriver getWebdriver(final String driverName) {
-        WebDriver activeDriver;
-        if (StringUtils.isEmpty(driverName)) {
-            activeDriver = getWebdriver();
-        } else {
-            activeDriver = getThreadLocalWebDriver(configuration, webDriverFactory, driverName);
-        }
+
+        String name = (isEmpty(driverName)) ?  inThisTestThread().getCurrentDriverName() : driverName;
+
+        WebDriver activeDriver = instantiatedThreadLocalWebDriver(configuration, webDriverFactory, name);
+
         registerDriverInGlobalDrivers(activeDriver);
+
         return activeDriver;
+    }
+
+    public WebDriver getWebdriverByName(String name, String driver) {
+        return getWebdriver(driver + ":" + name);
+    }
+
+    public WebDriver getWebdriverByName(String name) {
+        return getWebdriverByName(name,configuration.getDriverType().name());
     }
 
     private void registerDriverInGlobalDrivers(WebDriver activeDriver) {
         allWebdriverInstances.add(activeDriver);
     }
 
-    private static WebDriver getThreadLocalWebDriver(final Configuration configuration,
-                                                     final WebDriverFactory webDriverFactory,
-                                                     final String driver) {
+    private static WebDriver instantiatedThreadLocalWebDriver(final Configuration configuration,
+                                                              final WebDriverFactory webDriverFactory,
+                                                              final String driver) {
 
 
         if (!inThisTestThread().driverIsRegisteredFor(driver)) {
@@ -170,7 +204,13 @@ public class ThucydidesWebdriverManager implements WebdriverManager {
     }
 
     private static String driverTypeOf(String driverName) {
-        return driverName.contains(":") ? driverName.substring(0, driverName.indexOf(":")) : driverName;
+//        if (driverName.trim().startsWith(":")) {
+//            return driverName.trim().substring(1);
+//        }
+        if (driverName.contains(":")) {
+            return driverName.substring(0, driverName.indexOf(":"));
+        }
+        return driverName;
     }
 
     public static WebdriverInstances inThisTestThread() {

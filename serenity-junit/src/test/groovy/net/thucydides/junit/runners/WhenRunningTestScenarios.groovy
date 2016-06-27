@@ -1,8 +1,10 @@
 package net.thucydides.junit.runners
 
+import net.serenitybdd.junit.runners.SerenityRunner
+import net.thucydides.core.model.TestResult
 import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration
-import net.thucydides.core.webdriver.ThucydidesWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFactory
 import net.thucydides.core.webdriver.WebdriverInstanceFactory
 import net.thucydides.samples.*
@@ -16,7 +18,6 @@ import spock.lang.Unroll
 
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.concurrent.TimeUnit
 
 import static net.thucydides.core.model.TestResult.*
 import static net.thucydides.junit.runners.TestOutcomeChecks.resultsFrom
@@ -51,10 +52,50 @@ class WhenRunningTestScenarios extends Specification {
         runner.testOutcomes.size() == 3
     }
 
-
-    def "should be able to specify a different driver for an individual test"() {
+    def "should be able to use page objects directly in a test"() {
         given:
-            def runner = new ThucydidesRunner(SamplePassingScenarioUsingDifferentBrowsersForEachTest, webDriverFactory)
+            def runner = new SerenityRunner(SamplePassingScenarioWithPageObjects)
+        when:
+            runner.run(new RunNotifier())
+        then:
+            runner.testOutcomes.get(0).result == TestResult.SUCCESS
+    }
+
+
+    def "should be able to record the driver used for a test"() {
+        given:
+            def runner = new SerenityRunner(SamplePassingScenarioUsingFirefox);
+        when:
+            runner.run(new RunNotifier())
+            def drivers = runner.testOutcomes.collect {it.driver}
+        then:
+            drivers.contains("firefox")
+    }
+
+    def "should be able to record the driver used for a test when a different driver is specified"() {
+        given:
+            def runner = new SerenityRunner(SamplePassingScenarioUsingHtmlUnit);
+        when:
+            runner.run(new RunNotifier())
+            def drivers = runner.testOutcomes.collect {it.driver}
+        then:
+            drivers.contains("htmlunit")
+    }
+
+    def "should not record a driver used for a non-web test"() {
+        given:
+            def runner = new SerenityRunner(SamplePassingNonWebScenario, webDriverFactory)
+        when:
+            runner.run(new RunNotifier())
+            List<String> drivers = runner.testOutcomes.collect {it.driver}
+        then:
+            drivers.each { driver -> assert driver == null }
+    }
+
+
+    def "should be able to record a different driver for an individual test"() {
+        given:
+            def runner = new SerenityRunner(SamplePassingScenarioUsingDifferentBrowsersForEachTest, webDriverFactory)
         when:
             runner.run(new RunNotifier())
             def drivers = runner.testOutcomes.collect {it.driver}
@@ -95,6 +136,16 @@ class WhenRunningTestScenarios extends Specification {
         results["jills_test"].result == SUCCESS
         results["no_ones_test"].result == SUCCESS
 
+    }
+
+    def "should mark @manual tests as manual"() {
+        given:
+            def runner = new ThucydidesRunner(SampleManualScenario, webDriverFactory)
+        when:
+            runner.run(new RunNotifier())
+            def outcomes = runner.testOutcomes;
+        then:
+            outcomes[0].isManual()
     }
 
     def "an error in a nested non-step method should cause the test to fail"() {
@@ -366,7 +417,7 @@ class WhenRunningTestScenarios extends Specification {
         def outcome = runner.testOutcomes[0]
         def firstStep = outcome.testSteps[0]
         then:
-        firstStep.description == "Step with a parameter: <span class='step-parameter'>proportionOf</span>"
+        firstStep.description == "Step with a parameter: proportionOf"
     }
 
     def "steps with multiple parameters should contain the parameter values in the description"() {
@@ -377,7 +428,7 @@ class WhenRunningTestScenarios extends Specification {
         def outcome = runner.testOutcomes[0]
         def firstStep = outcome.testSteps[1]
         then:
-        firstStep.description == "Step with two parameters: <span class='step-parameter'>proportionOf, 2</span>"
+        firstStep.description == "Step with two parameters: proportionOf, 2"
     }
 
     def "should be able to override scenario titles using the @Title annotation"() {
@@ -410,7 +461,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should ignore close if the webdriver is not defined"() {
         when:
-        def manager = new ThucydidesWebdriverManager(webDriverFactory, new SystemPropertiesConfiguration(environmentVariables));
+        def manager = new SerenityWebdriverManager(webDriverFactory, new SystemPropertiesConfiguration(environmentVariables));
         then:
         manager.closeDriver()
     }

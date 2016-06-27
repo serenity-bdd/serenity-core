@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
@@ -153,11 +154,11 @@ public class WebDriverFactory {
     public boolean usesSauceLabs() {
         return StringUtils.isNotEmpty(sauceRemoteDriverCapabilities.getUrl());
     }
-    
+
     public boolean usesBrowserStack() {
         return StringUtils.isNotEmpty(browserStackRemoteDriverCapabilities.getUrl());
     }
-    
+
     /**
      * This method is synchronized because multiple webdriver instances can be created in parallel.
      * However, they may use common system resources such as ports, so may potentially interfere
@@ -185,11 +186,18 @@ public class WebDriverFactory {
                 driver = safariDriver();
             } else if (isAnInternetExplorerDriver(driverClass)) {
                 driver = internetExplorerDriver();
+            } else if (IsAMicrosoftEdgeDriver(driverClass)) {
+                driver = edgeDriver();
             } else if (isAProvidedDriver(driverClass)) {
                 driver = providedDriver();
             } else {
                 driver = newDriverInstanceFrom(driverClass);
             }
+
+            if (driver == null) {
+                throw new UnsupportedDriverException("Failed to instantiate " + driverClass);
+            }
+
             setImplicitTimeoutsIfSpecified(driver);
             redimensionBrowser(driver);
 
@@ -293,7 +301,7 @@ public class WebDriverFactory {
     private boolean browserStackUrlIsDefined() {
         return StringUtils.isNotEmpty(browserStackRemoteDriverCapabilities.getUrl());
     }
-    
+
     private WebDriver buildSaucelabsDriver() throws MalformedURLException {
         String saucelabsUrl = sauceRemoteDriverCapabilities.getUrl();
         WebDriver driver = webdriverInstanceFactory.newRemoteDriver(new URL(saucelabsUrl), findSaucelabsCapabilities());
@@ -305,13 +313,13 @@ public class WebDriverFactory {
         }
         return driver;
     }
-    
+
     private WebDriver buildBrowserStackDriver() throws MalformedURLException{
     	String browserStackUrl = browserStackRemoteDriverCapabilities.getUrl();
         WebDriver driver = webdriverInstanceFactory.newRemoteDriver(new URL(browserStackUrl), findbrowserStackCapabilities());
         return driver;
     }
-    
+
 
     public static String getDriverFrom(EnvironmentVariables environmentVariables, String defaultDriver) {
         String driver = getDriverFrom(environmentVariables);
@@ -333,13 +341,13 @@ public class WebDriverFactory {
 
         return sauceRemoteDriverCapabilities.getCapabilities(capabilities);
     }
-    
-    
+
+
     private Capabilities findbrowserStackCapabilities() {
 
     	String driver = getDriverFrom(environmentVariables);
     	DesiredCapabilities capabilities = capabilitiesForDriver(driver);
-    	
+
         return browserStackRemoteDriverCapabilities.getCapabilities(capabilities);
 
     }
@@ -406,6 +414,10 @@ public class WebDriverFactory {
 
             case IEXPLORER:
                 capabilities = DesiredCapabilities.internetExplorer();
+                break;
+
+            case EDGE:
+                capabilities = DesiredCapabilities.edge();
                 break;
 
             case APPIUM:
@@ -552,6 +564,10 @@ public class WebDriverFactory {
         return webdriverInstanceFactory.newInternetExplorerDriver(enhancedCapabilities(DesiredCapabilities.internetExplorer()));
     }
 
+    private WebDriver edgeDriver() {
+        return webdriverInstanceFactory.newEdgeDriver(enhancedCapabilities(DesiredCapabilities.edge()));
+    }
+
     private Capabilities enhancedCapabilities(DesiredCapabilities capabilities) {
         return addExtraCatabilitiesTo(capabilities);
     }
@@ -609,6 +625,10 @@ public class WebDriverFactory {
 
     private boolean isAnInternetExplorerDriver(Class<? extends WebDriver> driverClass) {
         return (InternetExplorerDriver.class.isAssignableFrom(driverClass));
+    }
+
+    private boolean IsAMicrosoftEdgeDriver(Class<? extends WebDriver> driverClass) {
+        return (EdgeDriver.class.isAssignableFrom(driverClass));
     }
 
     private boolean isAnAppiumDriver(Class<? extends WebDriver> driverClass) {
@@ -758,21 +778,43 @@ public class WebDriverFactory {
         return storedTimeoutValue.or(getDefaultImplicitTimeout());
     }
 
-    public void resetTimeouts(WebDriver proxiedDriver) {
+    public Duration resetTimeouts(WebDriver proxiedDriver) {
         Duration currentTimeout = currentTimeoutFor(proxiedDriver);
-        if (timeoutStack.containsTimeoutFor(proxiedDriver)) {
-            timeoutStack.popTimeoutFor(proxiedDriver);
-            Duration previousTimeout = currentTimeoutFor(proxiedDriver);//timeoutStack.popTimeoutFor(proxiedDriver).or(getDefaultImplicitTimeout());
-            if ((currentTimeout != previousTimeout)  && isNotAMocked(proxiedDriver)) {
-                proxiedDriver.manage().timeouts().implicitlyWait(previousTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
-            }
+        if (!timeoutStack.containsTimeoutFor(proxiedDriver)) {
+            return currentTimeout;
         }
+
+        timeoutStack.popTimeoutFor(proxiedDriver);
+        Duration previousTimeout = currentTimeoutFor(proxiedDriver);//timeoutStack.popTimeoutFor(proxiedDriver).or(getDefaultImplicitTimeout());
+        if ((currentTimeout != previousTimeout)  && isNotAMocked(proxiedDriver)) {
+            proxiedDriver.manage().timeouts().implicitlyWait(previousTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
+        }
+        return previousTimeout;
     }
 
     public Duration getDefaultImplicitTimeout() {
-        Integer configuredTimeout = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables);
-        return (configuredTimeout != null) ? new Duration(configuredTimeout, TimeUnit.MILLISECONDS)
+        String configuredTimeoutValue = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.from(environmentVariables);
+        return (configuredTimeoutValue != null) ? new Duration(Integer.valueOf(configuredTimeoutValue), TimeUnit.MILLISECONDS)
                                            : DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
 
+    }
+
+    public static boolean isAlive(final WebDriver driver) {
+        try {
+            WebDriver local = driver;
+            if(driver instanceof WebDriverFacade){
+                local = ((WebDriverFacade)driver).getDriverInstance();
+            }
+            if(!(local instanceof AppiumDriver)){
+                local.getCurrentUrl();
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean isNotAlive(final WebDriver driver){
+        return !isAlive(driver);
     }
 }

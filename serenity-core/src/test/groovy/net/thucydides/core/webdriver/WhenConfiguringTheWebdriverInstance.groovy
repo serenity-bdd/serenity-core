@@ -142,8 +142,7 @@ class WhenConfiguringTheWebdriverInstance extends Specification {
             webDriverFactory.newInstanceOf(SupportedWebDriver.REMOTE)
         then:
             def e = thrown(SerenityManagedException)
-            e.message.contains("Could not start a new session. Possible causes are invalid address of the remote server or browser start-up failure.")
-            e.message.contains("UnknownHostException - host-does-not-exist")
+            e.message.contains("host-does-not-exist")
     }
 
 

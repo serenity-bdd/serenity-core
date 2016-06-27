@@ -9,7 +9,7 @@ import net.thucydides.core.steps.StepFailure
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.StaticTestSite
-import net.thucydides.core.webdriver.ThucydidesWebdriverManager
+import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeDisabledException
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeEnabledException
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeInvisibleException
@@ -53,7 +53,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
     }
 
     def cleanup() {
-        ThucydidesWebdriverManager.inThisTestThread().closeAllDrivers();
+        SerenityWebdriverManager.inThisTestThread().closeAllDrivers();
     }
 
     def StaticSitePage openTestPageUsing(String browser) {

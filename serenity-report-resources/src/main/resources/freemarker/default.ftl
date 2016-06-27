@@ -319,12 +319,28 @@
                                 <#if restQuery.contentType?has_content>
                                     <p>Content Type: ${restQuery.contentType}</p>
                                 </#if>
+                                <#if restQuery.requestHeaders?has_content>
+                                    <h5>Request Headers</h5>
+                                    <pre>${(formatter.renderHeaders(restQuery.requestHeaders))!}</pre>
+                                </#if>
                                 <#if restQuery.content?has_content>
                                     <h5>Content Body</h5>
-                                    <pre>${(formatter.renderXML(restQuery.content))!}</pre>
+                                    <pre>${(formatter.renderText(restQuery.content))!}</pre>
+                                </#if>
+                                <#if restQuery.requestCookies?has_content>
+                                    <h5>Request Cookies</h5>
+                                    <pre>${(formatter.renderText(restQuery.requestCookies))!}</pre>
+                                </#if>
+                                <#if restQuery.responseHeaders?has_content>
+                                    <h5>Response Headers</h5>
+                                    <pre>${(formatter.renderHeaders(restQuery.responseHeaders))!}</pre>
                                 </#if>
                                 <h5>Response Body</h5>
-                                <pre>${formatter.renderXML(restQuery.responseBody)}</pre>
+                                <pre>${formatter.renderText(restQuery.responseBody)}</pre>
+                                <#if restQuery.responseCookies?has_content && (!(restQuery.requestCookies?has_content) || restQuery.responseCookies!=restQuery.requestCookies)>
+                                    <h5>Response Cookies</h5>
+                                    <pre>${(formatter.renderText(restQuery.responseCookies))!}</pre>
+                                </#if>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">

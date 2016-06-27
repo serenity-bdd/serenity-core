@@ -1,6 +1,7 @@
 package net.thucydides.core.webdriver;
 
 import com.gargoylesoftware.htmlunit.ScriptException;
+import io.appium.java_client.android.AndroidDriver;
 import net.serenitybdd.core.pages.DefaultTimeouts;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
@@ -260,8 +261,8 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         return webDriverFactory.currentTimeoutFor(getProxiedDriver());
     }
 
-    public void resetTimeouts() {
-        webDriverFactory.resetTimeouts(getProxiedDriver());
+    public Duration resetTimeouts() {
+        return webDriverFactory.resetTimeouts(getProxiedDriver());
     }
 
 
@@ -272,13 +273,18 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     public void close() {
         if (proxyInstanciated()) {
         	//if there is only one window closing it means quitting the web driver
-        	if (getDriverInstance().getWindowHandles() != null && getDriverInstance().getWindowHandles().size() == 1){
+        	if (areWindowHandlesAllowed(getDriverInstance()) &&
+                    getDriverInstance().getWindowHandles() != null && getDriverInstance().getWindowHandles().size() == 1){
         		this.quit();
         	} else{
         		getDriverInstance().close();
         	}
             webDriverFactory.shutdownFixtureServices();
         }
+    }
+
+    private boolean areWindowHandlesAllowed(final WebDriver driver){
+        return !(driver instanceof AndroidDriver);
     }
 
     public void quit() {
@@ -339,7 +345,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     public boolean canTakeScreenshots() {
     	if (driverClass != null) {
     		if (driverClass == ProvidedDriver.class) {
-    			return TakesScreenshot.class.isAssignableFrom(getProxiedDriver().getClass()) 
+    			return TakesScreenshot.class.isAssignableFrom(getProxiedDriver().getClass())
     					|| (getProxiedDriver().getClass() == RemoteWebDriver.class);
     		} else {
     			return TakesScreenshot.class.isAssignableFrom(driverClass)

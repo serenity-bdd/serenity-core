@@ -154,7 +154,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
                 assert query.method == POST
                 assert query.statusCode == 200
                 assert query.contentType == "application/json"
-                assert query.content == body
+                assert JsonConverter.formatted(query.content) == JsonConverter.formatted(body)
 
             }
         and:
@@ -186,7 +186,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
                 assert query.method == PATCH
                 assert query.statusCode == 200
                 assert query.contentType == "application/json"
-                assert query.content == body
+                assert JsonConverter.formatted(query.content) == JsonConverter.formatted(body)
 
             }
         and:
@@ -218,7 +218,7 @@ class WhenRunningRestTestsThroughSerenity extends Specification {
                 assert query.method == PUT
                 assert query.statusCode == 200
                 assert query.contentType == "application/json"
-                assert query.content == body
+                assert JsonConverter.formatted(query.content) == JsonConverter.formatted(body)
 
             }
         and:

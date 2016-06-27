@@ -1,6 +1,8 @@
 package net.thucydides.core.model
 
+import net.serenitybdd.core.model.FailureDetails
 import net.thucydides.core.webdriver.exceptions.ElementShouldBePresentException
+import org.junit.ComparisonFailure
 import spock.lang.Specification
 
 
@@ -86,4 +88,35 @@ class WhenRecordingTestOutcomeErrors extends Specification {
         testOutcome.result == TestResult.FAILURE
         testOutcome.errorMessage.contains "oh crap!"
     }
+
+    def "should format error messages in a readable way"() {
+        given:
+            def testOutcome = TestOutcome.forTestInStory("aTest", Story.called("a story"))
+
+        when:
+            testOutcome.determineTestFailureCause(new ComparisonFailure("oh crap!","a","z"))
+            FailureDetails failureDetails = new FailureDetails(testOutcome)
+
+        then:
+            failureDetails.conciseErrorMessage == "oh crap! expected:<[a]> but was:<[z]>"
+    }
+
+    def "should format comparison failures containing new lines in a readable way"() {
+        given:
+            def testOutcome = TestOutcome.forTestInStory("aTest", Story.called("a story"))
+
+        when:
+            testOutcome.determineTestFailureCause(new ComparisonFailure("oh crap!",
+"""a
+b
+c""",
+"""x
+y
+z"""))
+            FailureDetails failureDetails = new FailureDetails(testOutcome)
+
+        then:
+            failureDetails.conciseErrorMessage == "oh crap! expected:<[a\nb\nc]> but was:<[x\ny\nz]>"
+    }
+
 }

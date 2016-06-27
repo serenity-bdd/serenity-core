@@ -5,7 +5,6 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.StepAnnotations;
 import net.thucydides.core.steps.StepFactory;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
 
@@ -18,25 +17,23 @@ public class ThucydidesWebDriverSupport {
     private static final ThreadLocal<WebdriverManager> webdriverManagerThreadLocal = new ThreadLocal<WebdriverManager>();
     private static final ThreadLocal<Pages> pagesThreadLocal = new ThreadLocal<Pages>();
     private static final ThreadLocal<StepFactory> stepFactoryThreadLocal = new ThreadLocal<StepFactory>();
-    private static final ThreadLocal<String> currentRequestedDriver = new ThreadLocal<String>();
-
-    public static void initialize(String requestedDriver) {
-        setRequestedDriverIfPresent(requestedDriver);
-        setupWebdriverManager();
-        initPagesObjectUsing(getDriver());
-        initStepFactoryUsing(getPages());
-    }
 
     public static void initialize() {
         initialize(null);
     }
 
-    private static void setRequestedDriverIfPresent(String requestedDriver) {
-        if (StringUtils.isNotEmpty(requestedDriver)) {
-            currentRequestedDriver.set(requestedDriver);
-        } else {
-            currentRequestedDriver.remove();
-        }
+    public static void initialize(String requestedDriver) {
+        initialize(Injectors.getInjector().getInstance(WebdriverManager.class), requestedDriver);
+    }
+
+    public static void initialize(WebdriverManager webdriverManager, String requestedDriver) {
+        setupWebdriverManager(webdriverManager, requestedDriver);
+        initPagesObjectUsing(getDriver());
+        initStepFactoryUsing(getPages());
+    }
+
+    public static boolean isInitialised() {
+        return (webdriverManagerThreadLocal.get() != null);
     }
 
     private static boolean webdriversInitialized() {
@@ -65,11 +62,7 @@ public class ThucydidesWebDriverSupport {
 
 
     public static WebDriver getDriver() {
-        if (currentRequestedDriver.get() != null) {
-            return getWebdriverManager().getWebdriver(currentRequestedDriver.get());
-        } else {
-            return getWebdriverManager().getWebdriver();
-        }
+        return getWebdriverManager().getWebdriver();
     }
 
     public static void closeCurrentDrivers() {
@@ -83,12 +76,14 @@ public class ThucydidesWebDriverSupport {
             getWebdriverManager().closeAllDrivers();
         }
     }
+//
+//    private static WebdriverManager configuredWebdriverManager() {
+//        Injectors.getInjector().getInstance(WebdriverManager.class);
+//    }
 
-    private static void setupWebdriverManager() {
-        setupWebdriverManager(Injectors.getInjector().getInstance(WebdriverManager.class));
-    }
-
-    private static void setupWebdriverManager(WebdriverManager webdriverManager) {
+    private static void setupWebdriverManager(WebdriverManager webdriverManager , String requestedDriver) {
+//        WebdriverManager webdriverManager = configuredWebdriverManager();//Injectors.getInjector().getInstance(WebdriverManager.class);
+        webdriverManager.overrideDefaultDriverType(requestedDriver);
         webdriverManagerThreadLocal.set(webdriverManager);
     }
 
@@ -96,6 +91,10 @@ public class ThucydidesWebDriverSupport {
         stepFactoryThreadLocal.set(new StepFactory(pagesObject));
     }
 
+    public static WebdriverManager getWebdriverManager(WebDriverFactory webDriverFactory, Configuration configuration) {
+        initialize(new SerenityWebdriverManager(webDriverFactory, configuration), "");
+        return webdriverManagerThreadLocal.get();
+    }
 
     public static WebdriverManager getWebdriverManager() {
         lazyInitalize();
@@ -115,7 +114,6 @@ public class ThucydidesWebDriverSupport {
      * Instantiate the @Managed-annotated WebDriver instance with current WebDriver.
      */
     protected static void injectDriverInto(final Object testCase) {
-//        TestCaseAnnotations.forTestCase(testCase).injectDriver(getDriver());
         TestCaseAnnotations.forTestCase(testCase).injectDrivers(getWebdriverManager());
     }
 
@@ -140,7 +138,19 @@ public class ThucydidesWebDriverSupport {
     }
 
     public static String getCurrentDriverName() {
-        return getWebdriverManager().getCurrentDriverName();
+        if (getWebdriverManager() == null) {
+            return "";
+        }
+//        return getWebdriverManager().getActiveDriverTypes().get(0);
+        return getWebdriverManager().getCurrentDriverType();
+//        return (getWebdriverManager() != null) ? getWebdriverManager().getCurrentDriverType() : "";
+    }
+
+    public static String getDriversUsed() {
+        if (getWebdriverManager() == null) {
+            return "";
+        }
+        return getWebdriverManager().getActiveDriverTypes().get(0);
     }
 
     public static boolean isDriverInstantiated() {

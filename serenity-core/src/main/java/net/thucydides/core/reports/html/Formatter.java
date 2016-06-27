@@ -84,11 +84,20 @@ public class Formatter {
         }
     }
 
-    public String renderXML(String text) {
+    public String renderText(String text) {
         if (text == null) {
             return "";
         }
-        return concatLines(BASIC_XML.translate(stringFormOf(text)));
+        return concatLines(BASIC_XML.translate(stringFormOf(text)),"<br>")
+                .replaceAll("\\t", "&nbsp; &nbsp; &nbsp;");
+    }
+
+    public String renderHeaders(String text) {
+        if (text == null) {
+            return "";
+        }
+        return concatLines(BASIC_XML.translate(stringFormOf(text)),"<br>")
+                .replaceAll("\\t", "");
     }
 
     static class IssueExtractor {
@@ -295,8 +304,12 @@ public class Formatter {
     }
 
     private static String concatLines(String message) {
+        return concatLines(message," ");
+    }
+
+    private static String concatLines(String message, String replace) {
         String[] lines = message.replaceAll("\\r", "").split("\\n");
-        return StringUtils.join(lines," ");
+        return StringUtils.join(lines,replace);
     }
 
     private static String stringFormOf(Object fieldValue) {
@@ -390,11 +403,9 @@ public class Formatter {
     }
 
     public String formatWithFields(String textToFormat, List<String> fields) {
-        String textWithEscapedFields = textToFormat;
-        for (String field : fields) {
-            textWithEscapedFields = textWithEscapedFields.replaceAll("<" + field + ">", "&lt;" + field + "&gt;");
-        }
+        String textWithEscapedFields = textToFormat.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
         return addLineBreaks(removeMacros(convertAnyTables(textWithEscapedFields)));
+
     }
 
     private String removeMacros(String textToFormat) {

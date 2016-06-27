@@ -4,15 +4,18 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import net.serenitybdd.core.di.DependencyInjector;
+import net.serenitybdd.core.exceptions.StepInitialisationException;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
+import net.thucydides.core.steps.construction.ConstructionStrategy;
 import net.thucydides.core.steps.construction.StepLibraryConstructionStrategy;
 import net.thucydides.core.steps.construction.StepLibraryType;
 import net.thucydides.core.steps.di.DependencyInjectorService;
+import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.ImmutableSet.copyOf;
+import static net.thucydides.core.steps.construction.ConstructionStrategy.*;
 import static net.thucydides.core.steps.construction.StepLibraryType.ofTypePages;
 
 /**
@@ -74,7 +78,11 @@ public class StepFactory {
     }
 
     public <T> T getNewStepLibraryFor(final Class<T> scenarioStepsClass) {
-        return instantiateNewStepLibraryFor(scenarioStepsClass);
+        try {
+            return instantiateNewStepLibraryFor(scenarioStepsClass);
+        } catch (RuntimeException stepCreationFailed) {
+            throw new StepInitialisationException("Failed to create step library for " + scenarioStepsClass.getSimpleName() + ":" + stepCreationFailed.getMessage(), stepCreationFailed);
+        }
     }
 
     public <T> T getUniqueStepLibraryFor(final Class<T> scenarioStepsClass) {
@@ -146,7 +154,7 @@ public class StepFactory {
         T steps = createProxyStepLibrary(scenarioStepsClass, stepInterceptor, parameters);
 
         instantiateAnyNestedStepLibrariesIn(steps, scenarioStepsClass);
-        
+
         injectOtherDependenciesInto(steps);
 
         return steps;
@@ -160,11 +168,16 @@ public class StepFactory {
         e.setSuperclass(scenarioStepsClass);
         e.setCallback(interceptor);
 
-        switch (StepLibraryConstructionStrategy.forClass(scenarioStepsClass).getStrategy()) {
-            case STEP_LIBRARY_WITH_WEBDRIVER: return webEnabledStepLibrary(scenarioStepsClass, e);
-            case STEP_LIBRARY_WITH_PAGES: return stepLibraryWithPages(scenarioStepsClass, e);
-            case CONSTRUCTOR_WITH_PARAMETERS: return immutableStepLibrary(scenarioStepsClass, e,  parameters);
-            default: return (T) e.create();
+        final ConstructionStrategy strategy = StepLibraryConstructionStrategy.forClass(scenarioStepsClass)
+                .getStrategy();
+        if (STEP_LIBRARY_WITH_WEBDRIVER.equals(strategy)) {
+            return webEnabledStepLibrary(scenarioStepsClass, e);
+        } else if (STEP_LIBRARY_WITH_PAGES.equals(strategy)) {
+            return stepLibraryWithPages(scenarioStepsClass, e);
+        } else if (CONSTRUCTOR_WITH_PARAMETERS.equals(strategy) && parameters.length > 0) {
+            return immutableStepLibrary(scenarioStepsClass, e,  parameters);
+        } else{
+            return (T) e.create();
         }
     }
 
@@ -184,9 +197,15 @@ public class StepFactory {
 
     private boolean parametersMatchFor(Object[] parameters, Class<?>[] parameterTypes) {
         int parameterNumber = 0;
-        for(Class<?> parameterType : parameterTypes) {
-            if (!parameterType.isAssignableFrom(parameters[parameterNumber++].getClass())) {
-                return false;
+        if (parameters.length != parameterTypes.length) {
+            return false;
+        } else {
+            for (Class<?> parameterType : parameterTypes) {
+
+                if (!ClassUtils.isAssignable(parameters[parameterNumber++].getClass(),parameterType)) {
+             //   if (!parameterType.isAssignableFrom(parameters[parameterNumber++].getClass())) {
+                    return false;
+                }
             }
         }
         return true;

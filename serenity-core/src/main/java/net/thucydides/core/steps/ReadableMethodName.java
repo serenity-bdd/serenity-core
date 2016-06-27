@@ -20,7 +20,6 @@ public class ReadableMethodName {
 
         Method method;
         Object[] args = new Object[]{};
-        boolean addMarkup = false;
 
         public TestNameBuilder(Method method) {
             this.method = method;
@@ -28,11 +27,6 @@ public class ReadableMethodName {
 
         public TestNameBuilder withArguments(final Object[] args) {
             this.args = args;
-            return this;
-        }
-
-        public TestNameBuilder andMarkup() {
-            this.addMarkup = true;
             return this;
         }
 
@@ -45,17 +39,7 @@ public class ReadableMethodName {
             if (args.length == 0) {
                 return "";
             }
-            return ": " + optionalMarkupStart(addMarkup)
-                        + join(convert(args, toReadableForm()))
-                        + optionalMarkupEnd(addMarkup);
-        }
-
-        private String optionalMarkupStart(boolean addMarkup) {
-            return (addMarkup) ? "<span class='step-parameter'>" : "";
-        }
-
-        private String optionalMarkupEnd(boolean addMarkup) {
-            return (addMarkup) ? "</span>" : "";
+            return ": " + join(convert(args, toReadableForm()));
         }
 
         private Converter<Object, String> toReadableForm() {

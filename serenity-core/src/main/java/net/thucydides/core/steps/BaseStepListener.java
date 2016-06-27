@@ -79,8 +79,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private WebDriver driver;
 
-//    private WebdriverManager webdriverManager;
-
     private File outputDirectory;
 
     private WebdriverProxyFactory proxyFactory;
@@ -88,8 +86,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private Story testedStory;
 
     private Configuration configuration;
-
-    //ScreenshotProcessor screenshotProcessor;
 
     private boolean inFluentStepSequence;
 
@@ -357,11 +353,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
 
     private String getDriverUsedInThisTest() {
-        return ThucydidesWebDriverSupport.getCurrentDriverName();// webdriverManager.getCurrentDriverName();
+        return ThucydidesWebDriverSupport.getDriversUsed();
+//        return ThucydidesWebDriverSupport.getCurrentDriverName();// webdriverManager.getCurrentDriverType();
     }
 
     private boolean currentTestIsABrowserTest() {
-        return (ThucydidesWebDriverSupport.getWebdriverManager().isDriverInstantiated());
+        return (!ThucydidesWebDriverSupport.getWebdriverManager().getRegisteredDrivers().isEmpty());
     }
 
     public void testRetried() {
@@ -861,8 +858,11 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public void recordRestQuery(RestQuery restQuery) {
         stepStarted(ExecutedStepDescription.withTitle(restQuery.toString()));
-        getCurrentStep().recordRestQuery(restQuery);
+        addRestQuery(restQuery);
         stepFinished();
     }
 
+    public void addRestQuery(RestQuery restQuery) {
+        getCurrentStep().recordRestQuery(restQuery);
+    }
 }

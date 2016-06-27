@@ -8,6 +8,7 @@ import java.util.List;
 
 import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
+import static net.serenitybdd.screenplay.questions.UIFilter.visible;
 
 public class Enabled extends TargetedUIState<Boolean> {
 
@@ -24,6 +25,6 @@ public class Enabled extends TargetedUIState<Boolean> {
     }
 
     public List<Boolean> resolveAll() {
-        return extract(target.resolveAllFor(actor), on(WebElementFacade.class).isEnabled());
+        return extract(visible(target.resolveAllFor(actor)), on(WebElementFacade.class).isEnabled());
     }
 }

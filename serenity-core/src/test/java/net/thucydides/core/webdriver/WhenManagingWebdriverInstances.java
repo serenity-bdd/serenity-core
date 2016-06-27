@@ -43,7 +43,7 @@ public class WhenManagingWebdriverInstances {
 
         configuration = new SystemPropertiesConfiguration(environmentVariables);
         
-        webdriverManager = new ThucydidesWebdriverManager(factory, configuration);
+        webdriverManager = new SerenityWebdriverManager(factory, configuration);
         webdriverManager.closeAllCurrentDrivers();
     }
 
@@ -119,7 +119,7 @@ public class WhenManagingWebdriverInstances {
 
     @Test
     public void should_close_drivers_in_current_thread() {
-        ThucydidesWebdriverManager aWebdriverManager = new ThucydidesWebdriverManager(factory, configuration);
+        SerenityWebdriverManager aWebdriverManager = new SerenityWebdriverManager(factory, configuration);
         aWebdriverManager.getWebdriver("firefox");
         aWebdriverManager.getWebdriver("htmlunit");
         aWebdriverManager.getWebdriver("chrome");
@@ -131,7 +131,7 @@ public class WhenManagingWebdriverInstances {
 
     @Test
     public void should_close_individual_driver_in_current_thread() {
-        ThucydidesWebdriverManager aWebdriverManager = new ThucydidesWebdriverManager(factory, configuration);
+        SerenityWebdriverManager aWebdriverManager = new SerenityWebdriverManager(factory, configuration);
         aWebdriverManager.getWebdriver("firefox");
         aWebdriverManager.getWebdriver("htmlunit");
         aWebdriverManager.getWebdriver("chrome");
@@ -145,7 +145,7 @@ public class WhenManagingWebdriverInstances {
 
     @Test
     public void should_close_drivers_in_all_threads() {
-        ThucydidesWebdriverManager aWebdriverManager = new ThucydidesWebdriverManager(factory, configuration);
+        SerenityWebdriverManager aWebdriverManager = new SerenityWebdriverManager(factory, configuration);
         aWebdriverManager.getWebdriver("firefox");
         aWebdriverManager.getWebdriver("htmlunit");
         aWebdriverManager.getWebdriver("chrome");
@@ -157,7 +157,7 @@ public class WhenManagingWebdriverInstances {
 
     @Test
     public void should_close_drivers_in_all_threads_after_driver_resets() {
-        ThucydidesWebdriverManager aWebdriverManager = new ThucydidesWebdriverManager(factory, configuration);
+        SerenityWebdriverManager aWebdriverManager = new SerenityWebdriverManager(factory, configuration);
         aWebdriverManager.getWebdriver("firefox");
         aWebdriverManager.getWebdriver("htmlunit");
         aWebdriverManager.getWebdriver("chrome");

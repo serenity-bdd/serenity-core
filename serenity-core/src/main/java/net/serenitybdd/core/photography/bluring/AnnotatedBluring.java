@@ -13,10 +13,8 @@ public class AnnotatedBluring {
     }
 
     private static BlurLevel fromAnnotation() {
-        StackTraceElement[] stackTrace = new Throwable().getStackTrace();
-        for (StackTraceElement stackTraceElement : stackTrace) {
-            Method callingMethod = StackTraceAnalyser.forStackTraceElement(stackTraceElement).getMethod();
-            if (callingMethod != null && callingMethod.getAnnotation(BlurScreenshots.class) != null) {
+        for(Method callingMethod : StackTraceAnalyser.inscopeMethodsIn(new Throwable().getStackTrace())) {
+            if (callingMethod.getAnnotation(BlurScreenshots.class) != null) {
                 return callingMethod.getAnnotation(BlurScreenshots.class).value();
             }
         }

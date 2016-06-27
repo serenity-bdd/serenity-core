@@ -1,13 +1,16 @@
 package net.thucydides.core.annotations;
 
 import com.google.common.base.Optional;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebdriverManager;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
 
 import static net.thucydides.core.annotations.ManagedWebDriverAnnotatedField.*;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Utility class used to inject fields into a test case.
@@ -17,9 +20,16 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 public final class TestCaseAnnotations {
 
     private final Object testCase;
+    private final SystemPropertiesConfiguration configuration;
+
+    public TestCaseAnnotations(final Object testCase, SystemPropertiesConfiguration configuration) {
+        this.testCase = testCase;
+        this.configuration = configuration;
+    }
 
     public TestCaseAnnotations(final Object testCase) {
         this.testCase = testCase;
+        this.configuration = Injectors.getInjector().getInstance(SystemPropertiesConfiguration.class);
     }
 
     public static TestCaseAnnotations forTestCase(final Object testCase) {
@@ -43,8 +53,8 @@ public final class TestCaseAnnotations {
 
         String suffix = "";
         for(ManagedWebDriverAnnotatedField webDriverField : webDriverFields) {
-            String driverRootName = isEmpty(webDriverField.getDriver()) ?
-                    webdriverManager.getCurrentDriverName() : webDriverField.getDriver();
+            String driverRootName = isNotEmpty(webDriverField.getDriver()) ?  webDriverField.getDriver() : configuredDriverType();
+
 
             String driverName = driverRootName + suffix;
             webDriverField.setValue(testCase, webdriverManager.getWebdriver(driverName));
@@ -53,8 +63,15 @@ public final class TestCaseAnnotations {
         }
     }
 
+    private String configuredDriverType() {
+        if (ThucydidesWebDriverSupport.isInitialised()) {
+            return ThucydidesWebDriverSupport.getCurrentDriverName();
+        }
+        return configuration.getDriverType().name();
+    }
+
     private String nextSuffix(int driverCount) {
-        return ":" + driverCount + 1;
+        return String.format(":%d", driverCount + 1);
     }
 
     /**

@@ -6,7 +6,7 @@ ext {
 
 dependencies {
     compile project(':serenity-core')
-    compile('net.lightbody.bmp:browsermob-core-littleproxy:2.1.0-beta-4') {
+    compile('net.lightbody.bmp:browsermob-core-littleproxy:2.1.1') {
      	exclude group: 'org.seleniumhq.selenium', module:'selenium-java'
      	exclude group: 'org.seleniumhq.selenium', module:'selenium-server'
      	exclude group: 'org.seleniumhq.selenium', module:'selenium-remote-driver'

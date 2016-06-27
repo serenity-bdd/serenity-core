@@ -7,6 +7,7 @@ import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.history.DateProvider
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
 import net.thucydides.core.reports.html.HtmlRequirementsReporter
+import net.thucydides.core.reports.html.ReportNameProvider
 import net.thucydides.core.requirements.FileSystemRequirementsTagProvider
 import net.thucydides.core.requirements.model.Requirement
 import net.thucydides.core.requirements.reportpages.RequirementsReport
@@ -52,7 +53,7 @@ class WhenGeneratingRequirementsReports extends Specification {
     def "Should know the type of child requirements"() {
         given: "we read the requirements from the directory structure"
             def noTestOutcomes = TestOutcomes.of(Collections.EMPTY_LIST)
-            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory([requirementsProvider], issueTracking)
+            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory([requirementsProvider], issueTracking, new ReportNameProvider())
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         when: "we get the child requirement type of a requirement"
             Requirement firstRequirement = outcomes.getRequirementOutcomes().get(0).getRequirement();

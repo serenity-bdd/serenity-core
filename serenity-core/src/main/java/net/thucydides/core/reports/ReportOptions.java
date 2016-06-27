@@ -27,6 +27,10 @@ public class ReportOptions {
     final private List<String> firstClassTagTypes;
 
     public ReportOptions(EnvironmentVariables environmentVariables) {
+        this(environmentVariables, Injectors.getInjector().getInstance(RequirementsService.class));
+    }
+
+    public ReportOptions(EnvironmentVariables environmentVariables, RequirementsService requirementsService) {
         showStepDetails = Boolean.valueOf(THUCYDIDES_REPORTS_SHOW_STEP_DETAILS.from(environmentVariables, "false"));
         showManualTests = Boolean.valueOf(THUCYDIDES_REPORT_SHOW_MANUAL_TESTS.from(environmentVariables, "true"));
         showReleases = Boolean.valueOf(THUCYDIDES_REPORT_SHOW_RELEASES.from(environmentVariables, "true"));
@@ -36,7 +40,7 @@ public class ReportOptions {
         showRelatedTags = Boolean.valueOf(SHOW_RELATED_TAGS.from(environmentVariables, "true"));
         displayPiechart = Boolean.valueOf(SHOW_PIE_CHARTS.from(environmentVariables, "true"));
         projectName = THUCYDIDES_PROJECT_NAME.from(environmentVariables,"");
-        requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
+        this.requirementsService = requirementsService;
         firstClassTagTypes = Splitter.on(",").omitEmptyStrings().splitToList(THUCYDIDES_REPORT_TAG_MENUS.from(environmentVariables,""));
     }
 

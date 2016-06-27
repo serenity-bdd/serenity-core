@@ -33,6 +33,7 @@ import java.util.Set;
 import static ch.lambdaj.Lambda.convert;
 import static com.google.common.collect.Iterables.any;
 import static net.thucydides.core.model.ReportType.HTML;
+import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 
 /**
  * Generates acceptance test results in HTML form.
@@ -49,7 +50,6 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
     private final IssueTracking issueTracking;
     private RequirementsService requirementsService;
-    private ReportNameProvider reportNameProvider = new ReportNameProvider();
 
     public void setQualifier(final String qualifier) {
         this.qualifier = qualifier;
@@ -61,11 +61,21 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
     }
 
+    public HtmlAcceptanceTestReporter(RequirementsService requirementsService) {
+        super();
+        this.requirementsService = requirementsService;
+        this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
+    }
+
     public HtmlAcceptanceTestReporter(final EnvironmentVariables environmentVariables,
                                       final IssueTracking issueTracking) {
         super(environmentVariables);
         this.issueTracking = issueTracking;
         this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
+    }
+
+    private ReportNameProvider getReportNameProvider() {
+        return new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService);
     }
 
     public String getName() {
@@ -133,13 +143,13 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
             context.put("parentRequirement", parentRequirement);
             context.put("featureOrStory", Optional.absent());
             context.put("parentTitle", parentTitle);
-            context.put("parentLink", reportNameProvider.forRequirement(parentRequirement.get()));
+            context.put("parentLink", getReportNameProvider().forRequirement(parentRequirement.get()));
         } else if (featureOrStory.isPresent()) {
             parentTitle = featureOrStory.get().getName();
             context.put("parentRequirement", Optional.absent());
             context.put("featureOrStory",featureOrStory);
             context.put("parentTitle", parentTitle);
-            context.put("parentLink", reportNameProvider.forTag(featureOrStory.get().asTag()));
+            context.put("parentLink", getReportNameProvider().forTag(featureOrStory.get().asTag()));
         }
 
         addBreadcrumbs(testOutcome, context);
@@ -159,11 +169,10 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
     private void addFormattersToContext(final Map<String, Object> context) {
         Formatter formatter = new Formatter(issueTracking);
-        context.put("reportOptions", new ReportOptions(getEnvironmentVariables()));
+        context.put("reportOptions", new ReportOptions(getEnvironmentVariables(), requirementsService));
         context.put("formatter", formatter);
-        context.put("reportName", new ReportNameProvider());
-        context.put("absoluteReportName", new ReportNameProvider());
-        context.put("reportOptions", new ReportOptions(getEnvironmentVariables()));
+        context.put("reportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService));
+        context.put("absoluteReportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService));
 
         VersionProvider versionProvider = new VersionProvider(getEnvironmentVariables());
         context.put("serenityVersionNumber", versionProvider.getVersion());

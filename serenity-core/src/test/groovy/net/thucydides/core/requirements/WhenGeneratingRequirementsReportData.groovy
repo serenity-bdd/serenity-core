@@ -5,20 +5,27 @@ import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.issues.IssueTracking
 import net.thucydides.core.model.*
 import net.thucydides.core.reports.TestOutcomes
+import net.thucydides.core.reports.html.ReportNameProvider
+import net.thucydides.core.requirements.reports.MultipleSourceRequirmentsOutcomeFactory
 import net.thucydides.core.requirements.reports.RequirementsOutcomes
-import net.thucydides.core.requirements.reports.RequirmentsOutcomeFactory
+import net.thucydides.core.requirements.reports.RequirementsOutcomeFactory
 import net.thucydides.core.util.MockEnvironmentVariables
 import spock.lang.Specification
+
+import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT
 
 class WhenGeneratingRequirementsReportData extends Specification {
 
     public static final String ROOT_DIRECTORY = "annotatedstories"
 
-    def requirementsProviders
+    List<RequirementsTagProvider> requirementsProviders
+    ReportNameProvider reportNameProvider
+    
     def setup() {
         def vars = new MockEnvironmentVariables()
         vars.setProperty(ThucydidesSystemProperty.THUCYDIDES_ANNOTATED_REQUIREMENTS_DIR.propertyName, ROOT_DIRECTORY)
         requirementsProviders = [new FileSystemRequirementsTagProvider(), new PackageAnnotationBasedTagProvider(vars)]
+        reportNameProvider =  new ReportNameProvider(NO_CONTEXT, ReportType.HTML, new MultiSourceRequirementsService())
     }
 
     def issueTracking = Mock(IssueTracking)
@@ -28,7 +35,8 @@ class WhenGeneratingRequirementsReportData extends Specification {
         given: "there are no associated tests"
             def noTestOutcomes = TestOutcomes.of(Collections.EMPTY_LIST)
         and: "we read the requirements from the directory structure"
-            RequirmentsOutcomeFactory requirmentsOutcomeFactory = new RequirmentsOutcomeFactory(requirementsProviders,issueTracking)
+            RequirementsOutcomeFactory requirmentsOutcomeFactory =
+                    new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking,reportNameProvider)
         when: "we generate the capability outcomes"
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         then: "all the known capabilities should be listed"
@@ -43,7 +51,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
         given: "there are no associated tests"
             def noTestOutcomes = TestOutcomes.of(Collections.EMPTY_LIST)
         and: "we read the requirements from the directory structure"
-            RequirmentsOutcomeFactory requirmentsOutcomeFactory = new RequirmentsOutcomeFactory(requirementsProviders,issueTracking)
+            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking,reportNameProvider)
         when: "we generate the capability outcomes"
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         then: "the test results for the requirements should be empty"
@@ -54,7 +62,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
     def "should report narrative test for each requirement"() {
         given: "we read the requirements from the directory structure"
             def noTestOutcomes = TestOutcomes.of(Collections.EMPTY_LIST)
-            def requirmentsOutcomeFactory = new RequirmentsOutcomeFactory(requirementsProviders,issueTracking)
+            def requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking,reportNameProvider)
         when: "we generate the requirement outcomes"
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         then: "the requirement outcomes will contain the requirement narratives when specified"
@@ -67,7 +75,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
     public void "should report test results associated with specified requirements"() {
         given: "we have a set of test outcomes"
             def someTestOutcomes = TestOutcomes.of(someTestResults())
-            def requirmentsOutcomeFactory = new RequirmentsOutcomeFactory(requirementsProviders,issueTracking)
+            def requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking,reportNameProvider)
         when: "we generate the requirement outcomes"
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(someTestOutcomes)
         then: "the number of tests for each requirement should be recorded in the requirements outcome"
@@ -79,7 +87,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
         given: "there are no associated tests"
             def noTestOutcomes = TestOutcomes.of(Collections.EMPTY_LIST)
         and: "we read the requirements from the directory structure"
-            RequirmentsOutcomeFactory requirmentsOutcomeFactory = new RequirmentsOutcomeFactory(requirementsProviders,issueTracking)
+            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking,reportNameProvider)
         when: "we generate the capability outcomes"
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         then: "the overall outcome should all be pending"
@@ -90,7 +98,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
         given: "there are no associated tests"
             def noTestOutcomes = TestOutcomes.of(someTestResults())
         and: "we read the requirements from the directory structure"
-            RequirmentsOutcomeFactory requirmentsOutcomeFactory = new RequirmentsOutcomeFactory(requirementsProviders,issueTracking)
+            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking,reportNameProvider)
         when: "we generate the capability outcomes"
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         then: "the overall outcome should all be pending"
@@ -102,7 +110,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
         given: "there are some passing tests"
             def noTestOutcomes = TestOutcomes.of(somePassingTestResults())
         and: "we read the requirements from the directory structure"
-            RequirmentsOutcomeFactory requirmentsOutcomeFactory = new RequirmentsOutcomeFactory(requirementsProviders,issueTracking)
+            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking,reportNameProvider)
         when: "we generate the capability outcomes"
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         then: "requirements with passing tests should be completed"
@@ -113,7 +121,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
         given: "there are some passing tests"
             def noTestOutcomes = TestOutcomes.of(someFailingTestResults())
         and: "we read the requirements from the directory structure"
-            RequirmentsOutcomeFactory requirmentsOutcomeFactory = new RequirmentsOutcomeFactory(requirementsProviders,issueTracking)
+            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking,reportNameProvider)
         when: "we generate the capability outcomes"
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         then: "requirements with passing tests should be completed"
@@ -124,7 +132,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
         given: "there are some passing tests"
         def noTestOutcomes = TestOutcomes.of(somePendingTestResults())
         and: "we read the requirements from the directory structure"
-        RequirmentsOutcomeFactory requirmentsOutcomeFactory = new RequirmentsOutcomeFactory(requirementsProviders,issueTracking)
+        RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking,reportNameProvider)
         when: "we generate the capability outcomes"
         RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         then: "requirements with pending tests should be pending"
@@ -135,7 +143,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
         given: "there are some test results"
             def noTestOutcomes = TestOutcomes.of(someVariedTestResults())
         and: "we read the requirements from the directory structure"
-            RequirmentsOutcomeFactory requirmentsOutcomeFactory = new RequirmentsOutcomeFactory(requirementsProviders,issueTracking)
+            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking,reportNameProvider)
         when: "we generate the capability outcomes"
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         then: "the number of failing, passing and total tests should be reported"
@@ -168,7 +176,11 @@ class WhenGeneratingRequirementsReportData extends Specification {
             def environmentVariables = new MockEnvironmentVariables()
             environmentVariables.setProperty("thucydides.estimated.tests.per.requirement", "3")
         and: "we read the requirements from the directory structure"
-            RequirmentsOutcomeFactory requirmentsOutcomeFactory = new RequirmentsOutcomeFactory(requirementsProviders,issueTracking, environmentVariables)
+            RequirementsOutcomeFactory requirmentsOutcomeFactory =
+                    new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,
+                                                                issueTracking,
+                                                                environmentVariables,
+                                                                new ReportNameProvider())
         when: "we generate the capability outcomes"
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         then: "the proportionOf of failing, passing and total steps should include estimations for requirements with no tests"
@@ -199,7 +211,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
             def environmentVariables = new MockEnvironmentVariables()
             environmentVariables.setProperty("thucydides.estimated.tests.per.requirement", "2")
         and: "we read the requirements from the directory structure"
-            RequirmentsOutcomeFactory requirmentsOutcomeFactory = new RequirmentsOutcomeFactory(requirementsProviders,issueTracking, environmentVariables)
+            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking, environmentVariables, new ReportNameProvider())
         when: "we generate the capability outcomes"
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         then: "the proportionOf of failing, passing and total steps should include estimations for requirements with no tests"
@@ -231,7 +243,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
             def testOutcomes = TestOutcomes.of(someVariedTestResults())
             def environmentVariables = new MockEnvironmentVariables()
         and: "we read the requirements from the directory structure"
-            RequirmentsOutcomeFactory requirmentsOutcomeFactory = new RequirmentsOutcomeFactory(requirementsProviders,issueTracking, environmentVariables)
+            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking, environmentVariables, new ReportNameProvider())
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(testOutcomes)
         when:
             RequirementsOutcomes releasedOutcomes = outcomes.getReleasedRequirementsFor(Release.ofVersion("Release 1"))
@@ -249,7 +261,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
             def testOutcomes = TestOutcomes.of(someVariedTestResults())
             def environmentVariables = new MockEnvironmentVariables()
         and: "we read the requirements from the directory structure"
-            RequirmentsOutcomeFactory requirmentsOutcomeFactory = new RequirmentsOutcomeFactory(requirementsProviders,issueTracking, environmentVariables)
+            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking, environmentVariables, new ReportNameProvider())
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(testOutcomes)
         when:
             RequirementsOutcomes releasedOutcomes = outcomes.getReleasedRequirementsFor(Release.ofVersion("Iteration 1.1"))
@@ -266,7 +278,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
             def testOutcomes = TestOutcomes.of(someVariedTestResults())
             def environmentVariables = new MockEnvironmentVariables()
         and: "we read the requirements from the directory structure"
-            RequirmentsOutcomeFactory requirmentsOutcomeFactory = new RequirmentsOutcomeFactory(requirementsProviders,issueTracking, environmentVariables)
+            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory(requirementsProviders,issueTracking, environmentVariables, new ReportNameProvider())
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(testOutcomes)
         when:
             RequirementsOutcomes releasedOutcomes = outcomes.getReleasedRequirementsFor(Release.ofVersion("Release 3"))

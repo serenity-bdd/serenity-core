@@ -1,6 +1,7 @@
 package net.thucydides.core.reports
 
 import net.thucydides.core.model.TestTag
+import net.thucydides.core.util.MockEnvironmentVariables
 import spock.lang.Specification
 
 class WhenManagingTestResultTags extends Specification {
@@ -24,21 +25,23 @@ class WhenManagingTestResultTags extends Specification {
     }
 
 
-    def "should list all of the tag types that are not requirements"() {
+    def "should list all of the tag types configured to appear on the menu"() {
+        given:
+            def environmentVariables = new MockEnvironmentVariables()
+            environmentVariables.setProperty("serenity.report.tag.menus","color,flavor")
         when:
-            testOutcomes.tests[0].addTags([TestTag.withName("chocolate").andType("flavor")])
-            testOutcomes.tests[0].addTags([TestTag.withName("orange").andType("color")])
+            ReportOptions options = new ReportOptions(environmentVariables)
         then:
-            testOutcomes.firstClassTagTypes == ['color','flavor']
+            options.firstClassTagTypes == ['color','flavor']
     }
 
-    def "should list all of the tag types that are not requirements or versions"() {
+    def "by default no tag types are configured to appear on the menu"() {
+        given:
+        def environmentVariables = new MockEnvironmentVariables()
         when:
-            testOutcomes.tests[0].addTags([TestTag.withName("chocolate").andType("flavor")])
-            testOutcomes.tests[0].addTags([TestTag.withName("orange").andType("color")])
-            testOutcomes.tests[0].addTags([TestTag.withName("1.1").andType("version")])
+        ReportOptions options = new ReportOptions(environmentVariables)
         then:
-            testOutcomes.firstClassTagTypes == ['color','flavor']
+        options.firstClassTagTypes.isEmpty()
     }
 
 }

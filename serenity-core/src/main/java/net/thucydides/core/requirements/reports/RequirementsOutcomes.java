@@ -30,8 +30,9 @@ public class RequirementsOutcomes {
     private final Optional<Requirement> parentRequirement;
     private final EnvironmentVariables environmentVariables;
     private final IssueTracking issueTracking;
-    private final List<RequirementsTagProvider> requirementsTagProviders;
+    private final List<? extends RequirementsTagProvider> requirementsTagProviders;
     private final ReleaseManager releaseManager;
+    private final ReportNameProvider reportNameProvider;
 
     public final static Integer DEFAULT_TESTS_PER_REQUIREMENT = 4;
 
@@ -39,27 +40,29 @@ public class RequirementsOutcomes {
                                 TestOutcomes testOutcomes,
                                 IssueTracking issueTracking,
                                 EnvironmentVariables environmentVariables,
-                                List<RequirementsTagProvider> requirementsTagProviders) {
-        this(null, requirements, testOutcomes, issueTracking, environmentVariables, requirementsTagProviders);
+                                List<? extends RequirementsTagProvider> requirementsTagProviders,
+                                ReportNameProvider reportNameProvider) {
+        this(null, requirements, testOutcomes, issueTracking, environmentVariables, requirementsTagProviders, reportNameProvider);
     }
 
     public RequirementsOutcomes(Requirement parentRequirement, List<Requirement> requirements, TestOutcomes testOutcomes,
                                 IssueTracking issueTracking, EnvironmentVariables environmentVariables,
-                                List<RequirementsTagProvider> requirementsTagProviders) {
+                                List<? extends RequirementsTagProvider> requirementsTagProviders,
+                                ReportNameProvider reportNameProvider) {
         this.testOutcomes = testOutcomes;
         this.parentRequirement = Optional.fromNullable(parentRequirement);
         this.environmentVariables = environmentVariables;
         this.issueTracking = issueTracking;
         this.requirementsTagProviders = requirementsTagProviders;
-        this.requirementOutcomes = buildRequirementOutcomes(requirements, requirementsTagProviders);
-        this.releaseManager = new ReleaseManager(environmentVariables, new ReportNameProvider());
+        this.requirementOutcomes = buildRequirementOutcomes(requirements);
+        this.reportNameProvider = reportNameProvider;
+        this.releaseManager = new ReleaseManager(environmentVariables, reportNameProvider);
     }
 
-    private List<RequirementOutcome> buildRequirementOutcomes(List<Requirement> requirements,
-                                                              List<RequirementsTagProvider> requirementsTagProviders) {
+    private List<RequirementOutcome> buildRequirementOutcomes(List<Requirement> requirements) {
         List<RequirementOutcome> outcomes = Lists.newArrayList();
         for (Requirement requirement : requirements) {
-            buildRequirements(outcomes, requirementsTagProviders, requirement);
+            buildRequirements(outcomes, requirement);
         }
         return outcomes;
     }
@@ -67,7 +70,7 @@ public class RequirementsOutcomes {
     public RequirementsOutcomes requirementsOfType(String type) {
         List<Requirement> matchingRequirements = Lists.newArrayList();
         List<TestOutcome> matchingTests = Lists.newArrayList();
-        for(RequirementOutcome requirementOutcome : getFlattenedRequirementOutcomes()) {
+        for (RequirementOutcome requirementOutcome : getFlattenedRequirementOutcomes()) {
             if (requirementOutcome.getRequirement().getType().equalsIgnoreCase(type)) {
                 matchingRequirements.add(requirementOutcome.getRequirement());
                 matchingTests.addAll(requirementOutcome.getTestOutcomes().getOutcomes());
@@ -75,24 +78,27 @@ public class RequirementsOutcomes {
         }
 
         return new RequirementsOutcomes(matchingRequirements,
-                                        TestOutcomes.of(matchingTests),
-                                        issueTracking, environmentVariables, requirementsTagProviders);
+                TestOutcomes.of(matchingTests),
+                issueTracking,
+                environmentVariables,
+                requirementsTagProviders,
+                reportNameProvider);
     }
 
-    private void buildRequirements(List<RequirementOutcome> outcomes, List<RequirementsTagProvider> requirementsTagProviders, Requirement requirement) {
+    private void buildRequirements(List<RequirementOutcome> outcomes, Requirement requirement) {
         TestOutcomes outcomesForRequirement = testOutcomes.forRequirement(requirement);
 
         int requirementsWithoutTests = countRequirementsWithoutTestsIn(requirement);
         int estimatedUnimplementedTests = requirementsWithoutTests * estimatedTestsPerRequirement();
         outcomes.add(new RequirementOutcome(requirement, outcomesForRequirement, requirementsWithoutTests,
-                                            estimatedUnimplementedTests, issueTracking));
+                estimatedUnimplementedTests, issueTracking));
     }
 
     private int countRequirementsWithoutTestsIn(Requirement rootRequirement) {
         List<Requirement> flattenedRequirements = getFlattenedRequirements(rootRequirement);
 
         int requirementsWithoutTests = 0;
-        for(Requirement requirement : flattenedRequirements) {
+        for (Requirement requirement : flattenedRequirements) {
             TestOutcomes matchingOutcomes = testOutcomes.withTag(requirement.asTag());
             if (matchingOutcomes.getTotal() == 0) {
                 requirementsWithoutTests++;
@@ -240,7 +246,7 @@ public class RequirementsOutcomes {
         for (RequirementOutcome outcome : requirementOutcomes) {
             addFlattenedRequirements(outcome.getRequirement(), allRequirements);
         }
-        return ImmutableList.copyOf(allRequirements);
+        return allRequirements;
     }
 
     public int getTotalRequirements() {
@@ -268,7 +274,7 @@ public class RequirementsOutcomes {
 
         for (RequirementOutcome requirementOutcome : outcomes) {
             flattenedOutcomes.add(requirementOutcome);
-            for(Requirement requirement : requirementOutcome.getRequirement().getChildren()) {
+            for (Requirement requirement : requirementOutcome.getRequirement().getChildren()) {
 
 //                TestTag requirementTag = TestTag.withName(requirement.getName()).andType(requirement.getType());
 //                TestOutcomes testOutcomesForRequirement = requirementOutcome.getTestOutcomes().withTag(requirementTag);
@@ -276,13 +282,12 @@ public class RequirementsOutcomes {
                 TestOutcomes testOutcomesForRequirement = requirementOutcome.getTestOutcomes().withTag(requirement.asTag());
 
 
-
                 flattenedOutcomes.add(new RequirementOutcome(requirement, testOutcomesForRequirement, issueTracking));
 
                 List<Requirement> childRequirements = requirement.getChildren();
                 RequirementsOutcomes childOutcomes =
                         new RequirementsOutcomes(childRequirements, testOutcomesForRequirement, issueTracking,
-                                                 environmentVariables, requirementsTagProviders);
+                                environmentVariables, requirementsTagProviders, reportNameProvider);
                 flattenedOutcomes.addAll(getFlattenedRequirementOutcomes(childOutcomes.getRequirementOutcomes()));
             }
         }
@@ -355,7 +360,7 @@ public class RequirementsOutcomes {
         List<RequirementOutcome> requirementOutcomes
                 = releaseManager.enrichRequirementsOutcomesWithReleaseTags(getRequirementOutcomes());
 
-        for(RequirementOutcome outcome : requirementOutcomes) {
+        for (RequirementOutcome outcome : requirementOutcomes) {
             Collection<String> releaseVersions = outcome.getReleaseVersions();
             if (releaseVersions.contains(release.getName())) {
                 List<TestOutcome> outcomesForRelease = outcomesForRelease(outcome.getTestOutcomes().getOutcomes(), release.getName());
@@ -367,15 +372,16 @@ public class RequirementsOutcomes {
         }
         matchingRequirements = removeRequirementsWithoutTestsFrom(matchingRequirements);
         return new RequirementsOutcomes(Lists.newArrayList(matchingRequirements),
-                                        TestOutcomes.of(matchingTestOutcomes),
-                                        issueTracking,
-                                        environmentVariables,
-                                        requirementsTagProviders);
+                TestOutcomes.of(matchingTestOutcomes),
+                issueTracking,
+                environmentVariables,
+                requirementsTagProviders,
+                reportNameProvider);
     }
 
     private List<Requirement> removeRequirementsWithoutTestsFrom(List<Requirement> requirements) {
         List<Requirement> prunedRequirements = Lists.newArrayList();
-        for(Requirement requirement : requirements) {
+        for (Requirement requirement : requirements) {
             if (testsExistFor(requirement)) {
                 List<Requirement> prunedChildren = removeRequirementsWithoutTestsFrom(requirement.getChildren());
                 prunedRequirements.add(requirement.withChildren(prunedChildren));

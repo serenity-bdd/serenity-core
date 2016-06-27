@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.Release;
+import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.TestOutcomes;
@@ -26,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 import static org.hamcrest.Matchers.containsString;
@@ -39,8 +41,12 @@ public class ReleaseManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(RequirementsTagProvider.class);
 
     public ReleaseManager(EnvironmentVariables environmentVariables, ReportNameProvider reportNameProvider) {
+        this(environmentVariables, reportNameProvider, Injectors.getInjector().getInstance(RequirementsService.class));
+    }
+
+    public ReleaseManager(EnvironmentVariables environmentVariables, ReportNameProvider reportNameProvider, RequirementsService requirementsService) {
         this.reportNameProvider = reportNameProvider;
-        this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
+        this.requirementsService = requirementsService;
         String typeValues = ThucydidesSystemProperty.THUCYDIDES_RELEASE_TYPES.from(environmentVariables, DEFAULT_RELEASE_TYPES);
         releaseTypes = Splitter.on(",").trimResults().splitToList(typeValues);
     }
@@ -179,7 +185,7 @@ public class ReleaseManager {
 
     private ReportNameProvider getReportNameProvider() {
         if (defaultNameProvider == null) {
-            defaultNameProvider = new ReportNameProvider();
+            defaultNameProvider = new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService);
         }
         return defaultNameProvider;
     }

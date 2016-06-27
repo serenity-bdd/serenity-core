@@ -27,6 +27,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -48,7 +49,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private final static String DEFAULT_ROOT_DIRECTORY = "stories";
     private final static String FEATURES_ROOT_DIRECTORY = "features";
     private final static String DEFAULT_RESOURCE_DIRECTORY = "src/test/resources";
-    private static final String WORKING_DIR = "user.dir";
     private static final List<Requirement> NO_REQUIREMENTS = Lists.newArrayList();
     private static final List<TestTag> NO_TEST_TAGS = Lists.newArrayList();
     public static final String STORY_EXTENSION = "story";
@@ -67,8 +67,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 environmentVariables);
     }
 
-    public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables, String root) {
-        this(root, 0, environmentVariables);
+    public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables, String rootDirectoryPath) {
+        this(rootDirectoryPath, 0, environmentVariables);
     }
 
     public FileSystemRequirementsTagProvider() {
@@ -130,8 +130,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
             try {
                 Set<Requirement> allRequirements = Sets.newHashSet();
                 Set<String> directoryPaths = getRootDirectoryPaths();
-                for (String rootDirectoryPath : directoryPaths) {
-                    File rootDirectory = new File(rootDirectoryPath);
+                for (String path : directoryPaths) {
+                    File rootDirectory = new File(path);
                     logger.debug("Loading requirements from {}", rootDirectory);
                     if (rootDirectory.exists()) {
                         allRequirements.addAll(loadCapabilitiesFrom(rootDirectory.listFiles(thatAreDirectories())));
@@ -174,13 +174,19 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         if (ThucydidesSystemProperty.THUCYDIDES_TEST_REQUIREMENTS_BASEDIR.isDefinedIn(environmentVariables)) {
             return getRootDirectoryFromRequirementsBaseDir().asSet();
         } else {
-            Set<String> rootDirectoryOnClasspath = getRootDirectoryFromClasspath();
-            if (!rootDirectoryOnClasspath.isEmpty()) {
-                return rootDirectoryOnClasspath;
-            } else {
-                return getRootDirectoryFromWorkingDirectory();
+            return firstDefinedOf(getRootDirectoryFromClasspath(),
+                    getRootDirectoryFromWorkingDirectory(),
+                    getFileSystemDefinedDirectory());
+        }
+    }
+
+    private Set<String> firstDefinedOf(Set<String>... paths) {
+        for(Set<String> path : paths) {
+            if (!path.isEmpty()) {
+                return path;
             }
         }
+        return Sets.newHashSet();
     }
 
     private Set<String> getRootDirectoryFromClasspath() throws IOException {
@@ -208,6 +214,13 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         } catch (UnsupportedEncodingException e) {
             return StringUtils.replace(path, "%20", " ");
         }
+    }
+
+    private Set<String> getFileSystemDefinedDirectory() throws IOException {
+        if (Paths.get(rootDirectoryPath).toAbsolutePath().toFile().exists()) {
+            return Sets.newHashSet(Paths.get(rootDirectoryPath).toAbsolutePath().toString());
+        }
+        return Sets.newHashSet();
     }
 
     private Set<String> getRootDirectoryFromWorkingDirectory() throws IOException {
@@ -257,7 +270,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return getClass().getClassLoader().getResources(rootUri.getPath());
     }
 
-    private final Pattern WINDOWS_PATH = Pattern.compile("([a-zA-Z]:)?(\\\\[a-zA-Z0-9_-]+)+\\\\?");
+    private static final Pattern WINDOWS_PATH = Pattern.compile("([a-zA-Z]:)?(\\\\[a-zA-Z0-9_-]+)+\\\\?");
 
     private boolean isWindowsPath(String rootWithEscapedSpaces) {
         return WINDOWS_PATH.matcher(rootWithEscapedSpaces).find();

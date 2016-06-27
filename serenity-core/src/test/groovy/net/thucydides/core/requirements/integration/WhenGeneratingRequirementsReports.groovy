@@ -10,8 +10,9 @@ import net.thucydides.core.reports.html.HtmlRequirementsReporter
 import net.thucydides.core.requirements.FileSystemRequirementsTagProvider
 import net.thucydides.core.requirements.model.Requirement
 import net.thucydides.core.requirements.reportpages.RequirementsReport
+import net.thucydides.core.requirements.reports.MultipleSourceRequirmentsOutcomeFactory
 import net.thucydides.core.requirements.reports.RequirementsOutcomes
-import net.thucydides.core.requirements.reports.RequirmentsOutcomeFactory
+import net.thucydides.core.requirements.reports.RequirementsOutcomeFactory
 import org.joda.time.DateTime
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
@@ -30,7 +31,7 @@ class WhenGeneratingRequirementsReports extends Specification {
     def requirementsProvider = new FileSystemRequirementsTagProvider()
     def htmlRequirementsReporter = new HtmlRequirementsReporter()
     def issueTracking = Mock(IssueTracking)
-    def requirmentsOutcomeFactory = new RequirmentsOutcomeFactory([], issueTracking);
+    def requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory([], issueTracking);
     def aggregateReporter = new HtmlAggregateStoryReporter("project", issueTracking)
 
     RequirementsReport report
@@ -51,7 +52,7 @@ class WhenGeneratingRequirementsReports extends Specification {
     def "Should know the type of child requirements"() {
         given: "we read the requirements from the directory structure"
             def noTestOutcomes = TestOutcomes.of(Collections.EMPTY_LIST)
-            RequirmentsOutcomeFactory requirmentsOutcomeFactory = new RequirmentsOutcomeFactory([requirementsProvider], issueTracking)
+            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory([requirementsProvider], issueTracking)
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         when: "we get the child requirement type of a requirement"
             Requirement firstRequirement = outcomes.getRequirementOutcomes().get(0).getRequirement();

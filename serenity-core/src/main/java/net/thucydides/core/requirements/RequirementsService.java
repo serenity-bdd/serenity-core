@@ -8,6 +8,9 @@ import net.thucydides.core.requirements.model.Requirement;
 
 import java.util.List;
 
+/**
+ * Find the requirements hierarchy or the requirements associated with a given test outcome
+ */
 public interface RequirementsService {
     List<Requirement> getRequirements();
 

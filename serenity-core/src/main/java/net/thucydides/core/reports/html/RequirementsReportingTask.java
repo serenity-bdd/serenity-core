@@ -10,7 +10,7 @@ import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.requirements.reports.RequirementOutcome;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
-import net.thucydides.core.requirements.reports.RequirmentsOutcomeFactory;
+import net.thucydides.core.requirements.reports.RequirementsOutcomeFactory;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import org.apache.commons.lang3.StringUtils;
@@ -27,9 +27,10 @@ public class RequirementsReportingTask extends BaseReportingTask implements Repo
     private static final String RELEASES_TEMPLATE_PATH = "freemarker/releases.ftl";
 
     private ReportNameProvider reportNameProvider;
-    private RequirmentsOutcomeFactory requirementsFactory;
+    private RequirementsOutcomeFactory requirementsFactory;
     private HtmlRequirementsReporter htmlRequirementsReporter;
     private ReleaseManager releaseManager;
+
     private final RequirementsService requirementsService;
     private final RequirementsConfiguration requirementsConfiguration;
 
@@ -37,17 +38,18 @@ public class RequirementsReportingTask extends BaseReportingTask implements Repo
                                      EnvironmentVariables environmentVariables,
                                      File outputDirectory,
                                      ReportNameProvider reportNameProvider,
-                                     RequirmentsOutcomeFactory requirementsFactory,
+                                     RequirementsOutcomeFactory requirementsFactory,
                                      RequirementsService requirementsService,
                                      String relativeLink) {
         super(freemarker, environmentVariables, outputDirectory);
         this.reportNameProvider = reportNameProvider;
-        this.requirementsFactory = requirementsFactory;
-        this.htmlRequirementsReporter = new HtmlRequirementsReporter(relativeLink);
-        this.requirementsService = requirementsService;
 
+        this.requirementsFactory = requirementsFactory;
+        this.requirementsService = requirementsService;
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
-        htmlRequirementsReporter.setOutputDirectory(outputDirectory);
+
+        this.htmlRequirementsReporter = new HtmlRequirementsReporter(relativeLink);
+        this.htmlRequirementsReporter.setOutputDirectory(outputDirectory);
 
     }
 
@@ -55,7 +57,7 @@ public class RequirementsReportingTask extends BaseReportingTask implements Repo
 
         Stopwatch stopwatch = Stopwatch.started();
 
-        RequirementsOutcomes requirementsOutcomes = requirementsFactory.buildRequirementsOutcomesFrom(testOutcomes.withRequirementsTags());
+        RequirementsOutcomes requirementsOutcomes = requirementsFactory.buildRequirementsOutcomesFrom(testOutcomes);
 
         generateRequirementTypeReports(requirementsOutcomes);
 
@@ -67,17 +69,14 @@ public class RequirementsReportingTask extends BaseReportingTask implements Repo
     }
 
     private void generateRequirementTypeReports(RequirementsOutcomes requirementsOutcomes) throws IOException {
-        List<String> requirementTypes = requirementsOutcomes.getTypes();
-        for (String requirementType : requirementTypes) {
+        for (String requirementType : requirementsOutcomes.getTypes()) {
             generateRequirementTypeReportFor(requirementType,
-                    requirementsOutcomes.requirementsOfType(requirementType),
-                    new ReportNameProvider());
+                                             requirementsOutcomes.requirementsOfType(requirementType));
         }
     }
 
     private void generateRequirementTypeReportFor(String requirementType,
-                                                  RequirementsOutcomes requirementsOutcomes,
-                                                  ReportNameProvider reporter) throws IOException {
+                                                  RequirementsOutcomes requirementsOutcomes) throws IOException {
 
         Map<String, Object> context = freemarker.getBuildContext(requirementsOutcomes.getTestOutcomes(), reportNameProvider, true);
 
@@ -85,7 +84,7 @@ public class RequirementsReportingTask extends BaseReportingTask implements Repo
         context.put("requirementType", requirementType);
         context.put("requirements", requirementsOutcomes);
 
-        String reportName = reporter.forRequirementType(requirementType);
+        String reportName = reportNameProvider.forRequirementType(requirementType);
         generateReportPage(context, REQUIREMENT_TYPE_TEMPLATE_PATH, reportName);
 
     }
@@ -194,8 +193,7 @@ public class RequirementsReportingTask extends BaseReportingTask implements Repo
 
     private ReleaseManager getReleaseManager() {
         if (releaseManager == null) {
-            ReportNameProvider defaultNameProvider = new ReportNameProvider();
-            releaseManager = new ReleaseManager(environmentVariables, defaultNameProvider);
+            releaseManager = new ReleaseManager(environmentVariables, reportNameProvider);
         }
         return releaseManager;
     }

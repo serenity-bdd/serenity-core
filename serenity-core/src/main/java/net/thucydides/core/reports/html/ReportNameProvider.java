@@ -23,7 +23,7 @@ public class ReportNameProvider {
         this.requirementsService = requirementsService;
     }
 
-    private final static Optional<String> NO_CONTEXT = Optional.absent();
+    public final static Optional<String> NO_CONTEXT = Optional.absent();
 
     public ReportNameProvider() {
         this(NO_CONTEXT, ReportType.HTML);
@@ -38,7 +38,7 @@ public class ReportNameProvider {
         this(context, type, Injectors.getInjector().getInstance(RequirementsService.class));
     }
 
-    protected ReportNameProvider(Optional<String> context, ReportType type, RequirementsService requirementsService) {
+    public ReportNameProvider(Optional<String> context, ReportType type, RequirementsService requirementsService) {
         this.context = context;
         this.reportNamer = ReportNamer.forReportType(type);
         this.requirementsService = requirementsService;
@@ -83,9 +83,11 @@ public class ReportNameProvider {
 
     public ReportNameProvider withPrefix(TestTag tag) {
         if (tag.equals(TestTag.EMPTY_TAG)) {
-            return new ReportNameProvider();
+            return new ReportNameProvider(NO_CONTEXT, reportNamer, requirementsService);
         } else {
-            return new ReportNameProvider(tag.getType().toLowerCase() + ":" + tag.getName().toLowerCase());
+            return new ReportNameProvider(Optional.of(tag.getType().toLowerCase() + ":" + tag.getName().toLowerCase()),
+                                          reportNamer,
+                                          requirementsService);
         }
     }
 
@@ -106,7 +108,12 @@ public class ReportNameProvider {
     }
 
     public String forRequirementOrTag(TestTag tag) {
-        return (requirementsService.isRequirementsTag(tag)) ? forRequirement(tag.getName()) : forTag(tag);
+        if (requirementsService == null) {
+            int i = 0;
+        }
+        return (requirementsService.isRequirementsTag(tag))
+                ? forRequirement(tag.getName())
+                : forTag(tag);
     }
 
     public String forRequirement(String requirementName) {

@@ -1,5 +1,7 @@
 package net.thucydides.core.model;
 
+import com.google.common.collect.ImmutableList;
+
 import java.util.List;
 
 import static net.thucydides.core.model.TestResult.*;
@@ -9,7 +11,9 @@ import static net.thucydides.core.model.TestResult.*;
  */
 public class TestResultList {
 
-    public static TestResult overallResultFrom(List<TestResult> testResults) {
+    public static TestResult overallResultFrom(List<TestResult> results) {
+        List<TestResult> testResults = ImmutableList.copyOf(results);
+        
         if (testResults.isEmpty()) {
             return SUCCESS;
         }

@@ -21,7 +21,7 @@ public class WhenInstanciatingAAppiumDriver {
     }
 
     @Test
-        void should_verify_appium_config_params() {
+    public void should_verify_appium_config_params() {
         try {
             new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
         } catch (UnsupportedDriverException couldNotFindDriver) {

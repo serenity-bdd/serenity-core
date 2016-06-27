@@ -4,13 +4,12 @@ import com.beust.jcommander.internal.Lists;
 import net.serenitybdd.core.SerenitySystemProperties;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
+import net.thucydides.core.model.ReportType;
 import net.thucydides.core.reports.*;
-import net.thucydides.core.requirements.RequirementsProviderService;
-import net.thucydides.core.requirements.RequirementsService;
+import net.thucydides.core.requirements.DefaultRequirements;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
-import net.thucydides.core.requirements.reports.RequirmentsOutcomeFactory;
+import net.thucydides.core.requirements.Requirements;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +20,9 @@ import java.nio.file.*;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static net.thucydides.core.guice.Injectors.getInjector;
+import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 
 /**
  * Generates an aggregate acceptance test report in HTML form.
@@ -35,13 +37,14 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     private String projectName;
     private String relativeLink;
-    private ReportNameProvider reportNameProvider;
     private final IssueTracking issueTracking;
-    private final RequirementsService requirementsService;
-    private final RequirmentsOutcomeFactory requirementsFactory;
+
     private final RequirementsConfiguration requirementsConfiguration;
+    private final ReportNameProvider reportNameProvider;
+    private final Requirements requirements;
+
     private final EnvironmentVariables environmentVariables;
-    private FormatConfiguration formatConfiguration;
+    private final FormatConfiguration formatConfiguration;
 
     private Stopwatch stopwatch = new Stopwatch();
 
@@ -49,35 +52,51 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         this(projectName, "");
     }
 
+    public HtmlAggregateStoryReporter(final String projectName, final Requirements requirements) {
+        this(projectName,
+                "",
+                getInjector().getInstance(IssueTracking.class),
+                getInjector().getProvider(EnvironmentVariables.class).get(),
+                requirements);
+
+    }
+
     public HtmlAggregateStoryReporter(final String projectName, final String relativeLink) {
-        this(projectName, relativeLink,
-                Injectors.getInjector().getInstance(IssueTracking.class),
-                Injectors.getInjector().getInstance(RequirementsService.class),
-                Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+        this(projectName,
+                relativeLink,
+                getInjector().getInstance(IssueTracking.class),
+                getInjector().getProvider(EnvironmentVariables.class).get());
     }
 
     public HtmlAggregateStoryReporter(final String projectName,
                                       final IssueTracking issueTracking) {
-        this(projectName, "", issueTracking, Injectors.getInjector().getInstance(RequirementsService.class),
-                Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+        this(projectName,
+                "",
+                issueTracking,
+                getInjector().getProvider(EnvironmentVariables.class).get(),
+                new DefaultRequirements());
     }
 
     public HtmlAggregateStoryReporter(final String projectName,
                                       final String relativeLink,
                                       final IssueTracking issueTracking,
-                                      final RequirementsService requirementsService,
                                       final EnvironmentVariables environmentVariables) {
+        this(projectName,relativeLink, issueTracking, environmentVariables, new DefaultRequirements());
+    }
+
+    public HtmlAggregateStoryReporter(final String projectName,
+                                      final String relativeLink,
+                                      final IssueTracking issueTracking,
+                                      final EnvironmentVariables environmentVariables,
+                                      final Requirements requirements) {
         this.projectName = projectName;
         this.relativeLink = relativeLink;
         this.issueTracking = issueTracking;
-        this.reportNameProvider = new ReportNameProvider();
-
-        RequirementsProviderService requirementsProviderService = Injectors.getInjector().getInstance(RequirementsProviderService.class);
-        this.requirementsFactory = new RequirmentsOutcomeFactory(requirementsProviderService.getRequirementsProviders(), issueTracking);
-        this.requirementsService = requirementsService;
         this.requirementsConfiguration = new RequirementsConfiguration(getEnvironmentVariables());
         this.environmentVariables = environmentVariables;
         this.formatConfiguration = new FormatConfiguration(environmentVariables);
+        this.reportNameProvider = new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirements.getRequirementsService());
+        this.requirements = requirements;
     }
 
     public OutcomeFormat getFormat() {
@@ -124,17 +143,19 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         copyResourcesToOutputDirectory();
 
-        FreemarkerContext context = new FreemarkerContext(environmentVariables, requirementsService, issueTracking, relativeLink);
+        FreemarkerContext context = new FreemarkerContext(environmentVariables, requirements, issueTracking, relativeLink);
 
         List<ReportingTask> reportingTasks = Lists.newArrayList();
 
-        reportingTasks.add(new AggregateReportingTask(context, environmentVariables, getOutputDirectory()));
+        reportingTasks.add(new AggregateReportingTask(context, environmentVariables, requirements.getRequirementsService(), getOutputDirectory()));
         reportingTasks.add(new TagReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider));
         reportingTasks.add(new TagTypeReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider));
         reportingTasks.add(new ResultReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider));
         reportingTasks.add(new RequirementsReportingTask(context, environmentVariables, getOutputDirectory(),
-                                                                  reportNameProvider, requirementsFactory,
-                                                                  requirementsService, relativeLink));
+                reportNameProvider,
+                requirements.getRequirementsOutcomeFactory(),
+                requirements.getRequirementsService(),
+                relativeLink));
         addAssociatedTagReporters(testOutcomes, context, reportingTasks);
 
         generateReportsFor(testOutcomes, reportingTasks);
@@ -145,9 +166,9 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     private void addAssociatedTagReporters(TestOutcomes testOutcomes, FreemarkerContext context, List<ReportingTask> reportingTasks) {
         int maxPossibleBatches = testOutcomes.getTags().size();
         int totalBatches = (MAX_BATCHES < maxPossibleBatches) ? MAX_BATCHES : maxPossibleBatches;
-        for(int batch = 1; batch <= totalBatches; batch++) {
+        for (int batch = 1; batch <= totalBatches; batch++) {
             reportingTasks.add(new AssociatedTagReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider)
-                               .forBatch(batch,totalBatches));
+                    .forBatch(batch, totalBatches));
         }
     }
 
@@ -156,8 +177,8 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         ExecutorService executor = Executors.newFixedThreadPool(REPORT_GENERATION_THREAD_POOL_SIZE);
 
-        for(final ReportingTask reportingTask : reportingTasks) {
-            Runnable worker = new Runnable(){
+        for (final ReportingTask reportingTask : reportingTasks) {
+            Runnable worker = new Runnable() {
 
                 @Override
                 public void run() {
@@ -178,7 +199,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     }
 
     private TestOutcomes loadTestOutcomesFrom(File sourceDirectory) throws IOException {
-        return TestOutcomeLoader.loadTestOutcomes().inFormat(getFormat()).from(sourceDirectory).withHistory().withRequirementsTags();
+        return TestOutcomeLoader.loadTestOutcomes().inFormat(getFormat()).from(sourceDirectory).withRequirementsTags();
     }
 
     protected SerenitySystemProperties getSystemProperties() {
@@ -216,7 +237,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     }
 
     public List<String> getRequirementTypes() {
-        List<String> types = requirementsService.getRequirementTypes();
+        List<String> types = requirements.getTypes();
         if (types.isEmpty()) {
             LOGGER.warn("No requirement types found in the test outcome requirements: using default requirements");
             return requirementsConfiguration.getRequirementTypes();

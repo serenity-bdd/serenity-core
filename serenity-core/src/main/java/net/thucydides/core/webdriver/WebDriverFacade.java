@@ -92,9 +92,6 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     public Class<? extends WebDriver>  getDriverClass() {
-        if (driverClass.isAssignableFrom(SupportedWebDriver.PROVIDED.getWebdriverClass())) {
-            return getProxiedDriver().getClass();
-        }
         return driverClass;
     }
 

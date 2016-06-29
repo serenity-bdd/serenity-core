@@ -1,10 +1,33 @@
 ## Serenity BDD core change Log
 
-### upcoming (2016/06/21 18:19 +00:00)
+### upcoming (2016/06/29 15:37 +00:00)
  
+**Pull requests:**
+ 
+- [#463](https://github.com/serenity-bdd/serenity-core/pull/463) Update BMP to 2.1.1 ([@hazmeister](https://github.com/hazmeister))
  
 **Commits:**
  
+- [08ff8a6](https://github.com/serenity-bdd/serenity-core/commit/08ff8a67edfd7eb294e410a699d89b81d9eb3f14) refactor: Remove unnecessary legacy code. ([@wakaleo](https://github.com/wakaleo))
+- [46ea87b](https://github.com/serenity-bdd/serenity-core/commit/46ea87b28c5a9ebab3971bae63ea1c7aa9e32e51) refactor: minor refactoring ([@wakaleo](https://github.com/wakaleo))
+- [535d687](https://github.com/serenity-bdd/serenity-core/commit/535d687317c4b50fc43011e31348a7974375ae50) refactor: refactored the webdriver instance handling for easier maintenance. ([@wakaleo](https://github.com/wakaleo))
+- [67b5fdf](https://github.com/serenity-bdd/serenity-core/commit/67b5fdfc5fe0ec55be1d54c71650462265a0bc35) refactor: minor optimisation of the screenshot processing. ([@wakaleo](https://github.com/wakaleo))
+ 
+ > Avoid trying to read a screenshot file if it is not in the working directory.
+- [6947f1f](https://github.com/serenity-bdd/serenity-core/commit/6947f1f4dc387876135616f72ab4bd582e790914) refactor: refactored tests to use MD5 filenames ([@wakaleo](https://github.com/wakaleo))
+- [8fa16c0](https://github.com/serenity-bdd/serenity-core/commit/8fa16c02f615ea611a300b0947c0ade34b7efee5) refactor: allow HTML reports to be generated uniquely from the JSON ([@wakaleo](https://github.com/wakaleo))
+ 
+### v1.1.37-rc.6 (2016/06/22 20:43 +00:00)
+ 
+**Pull requests:**
+ 
+- [#457](https://github.com/serenity-bdd/serenity-core/pull/457) Add ability to see response body for responses with  HTML content type in report ([@viktor-klymenko](https://github.com/viktor-klymenko))
+ 
+**Commits:**
+ 
+- [11532ae](https://github.com/serenity-bdd/serenity-core/commit/11532ae11710c5600d5c6fd8dc395aba2db75221) refactor: tweaked the parallel tests in the Gradle build. ([@wakaleo](https://github.com/wakaleo))
+- [12b9bf2](https://github.com/serenity-bdd/serenity-core/commit/12b9bf2d21a0353c9d71934611a9548cf30f67b8) refactor: ensure the use of threadlocal StepEventBus instances. ([@wakaleo](https://github.com/wakaleo))
+- [4daf2f8](https://github.com/serenity-bdd/serenity-core/commit/4daf2f80b8b6b7c6470b00036208a08b5457df4f) refactor: fixing Gradle build ([@wakaleo](https://github.com/wakaleo))
 - [b5cd76d](https://github.com/serenity-bdd/serenity-core/commit/b5cd76d68401dad5cb7f3aa0bf23c786e05e7765) feat: add ability to see response body for responses with  HTML content type in report ([@viktor-klymenko](https://github.com/viktor-klymenko))
  
 ### v1.1.37-rc.5 (2016/06/15 11:28 +00:00)
@@ -1399,15 +1422,6 @@
  
 ### v1.0.61 (2015/07/13 06:12 +00:00)
  
- 
-**Commits:**
- 
-- [0fbada9](https://github.com/serenity-bdd/serenity-core/commit/0fbada91e9c3ccf9657066718c5857031d215571) chore:Updating the version of the gradle-git plugin ([@wakaleo](https://github.com/wakaleo))
-- [197d009](https://github.com/serenity-bdd/serenity-core/commit/197d00981b482a5265eb01faa5901cc376de93f8) chore:Removed dependency on bintray plugin. ([@wakaleo](https://github.com/wakaleo))
-- [400fca7](https://github.com/serenity-bdd/serenity-core/commit/400fca7439f69a46325dc7b81a0406e5d9c726fc) feat: Dropdown.selectByValue() ([@kassemsandarusi](https://github.com/kassemsandarusi))
- 
-### v1.0.59 (2015/06/30 06:31 +00:00)
- 
 **Pull requests:**
  
 - [#82](https://github.com/serenity-bdd/serenity-core/pull/82) Fix for setting up the remote webdriver capability: webdriver.remote.browser.version ([@eskape](https://github.com/eskape))
@@ -1479,6 +1493,7 @@
 - [0dd7d28](https://github.com/serenity-bdd/serenity-core/commit/0dd7d28dbc0a2556bd72b59fcbcd8315b2bd91e1) Fixed a bug related to deriving requirements structures from Cucumber feature files. ([@wakaleo](https://github.com/wakaleo))
 - [0e9d614](https://github.com/serenity-bdd/serenity-core/commit/0e9d614b462448a994614470c2fb9a3eb21cca96) Moved most uses of FileUtils to the Java 7 Files class, in order to remove sporadic issues when resizing screenshots ([@wakaleo](https://github.com/wakaleo))
 - [0fa63e2](https://github.com/serenity-bdd/serenity-core/commit/0fa63e2aba5951d2b87ff001fa04895d72f9fad1) Added containsElements() and shouldContainElements() methods to WebElementFacade ([@wakaleo](https://github.com/wakaleo))
+- [0fbada9](https://github.com/serenity-bdd/serenity-core/commit/0fbada91e9c3ccf9657066718c5857031d215571) chore:Updating the version of the gradle-git plugin ([@wakaleo](https://github.com/wakaleo))
 - [11b84b7](https://github.com/serenity-bdd/serenity-core/commit/11b84b726006eff27c6d0d93d245e1eb57c5f057) More refactoring tests ([@wakaleo](https://github.com/wakaleo))
 - [11b988b](https://github.com/serenity-bdd/serenity-core/commit/11b988b4948ee76105712fffe1d871bac3ecd97e) Use Durations rather than longs and ints to handle timeout values, in order to avoid coding errors, make the code clearer, and as a basis for more flexible timeout configuration. ([@wakaleo](https://github.com/wakaleo))
 - [1290a90](https://github.com/serenity-bdd/serenity-core/commit/1290a90ccf2c6c394059eaff03f8583bf55945da) Solidified a test ([@wakaleo](https://github.com/wakaleo))
@@ -1486,6 +1501,7 @@
 - [137c534](https://github.com/serenity-bdd/serenity-core/commit/137c534cdfb84b06a89ec988dad1e1b2961812dc) Unit test refactoring ([@wakaleo](https://github.com/wakaleo))
 - [17466a5](https://github.com/serenity-bdd/serenity-core/commit/17466a54578f56384a2dca64fcbf4e916cab7460) Display the stack trace for failing tests in the reports ([@wakaleo](https://github.com/wakaleo))
 - [18d5f80](https://github.com/serenity-bdd/serenity-core/commit/18d5f80d55e8b837be57aeaca402a93a5d493092) Improved requirement reporting for JUnit (experimental) ([@wakaleo](https://github.com/wakaleo))
+- [197d009](https://github.com/serenity-bdd/serenity-core/commit/197d00981b482a5265eb01faa5901cc376de93f8) chore:Removed dependency on bintray plugin. ([@wakaleo](https://github.com/wakaleo))
 - [197fab5](https://github.com/serenity-bdd/serenity-core/commit/197fab566647c12c3b8a8963049f04bb94f56b58) Top build: declare transitives as deps. #16 ([@jeffjensen](https://github.com/jeffjensen))
 - [199e60a](https://github.com/serenity-bdd/serenity-core/commit/199e60a595c0830172e8fb648363cb3b068ca660) Updated reporting, attempt 2 ([@bmwsedee](https://github.com/bmwsedee))
 - [1a4268c](https://github.com/serenity-bdd/serenity-core/commit/1a4268c8749d0f6b92d258ad5f9c2c618a39a5d2) More refactoring tests ([@wakaleo](https://github.com/wakaleo))
@@ -1571,6 +1587,7 @@
  
  > It would appear that the main project was moved into core sub-directory, and
  > these files didn&#39;t get cleaned up.
+- [400fca7](https://github.com/serenity-bdd/serenity-core/commit/400fca7439f69a46325dc7b81a0406e5d9c726fc) feat: Dropdown.selectByValue() ([@kassemsandarusi](https://github.com/kassemsandarusi))
 - [403003d](https://github.com/serenity-bdd/serenity-core/commit/403003dfbac409d11bac19502210d587cec46f4b) Refactored the dependencies to use both the group and the module names in exclusions, to make the Maven Enforcer plugin happy ([@wakaleo](https://github.com/wakaleo))
 - [40a532d](https://github.com/serenity-bdd/serenity-core/commit/40a532d21efa7763887a7f941d7e1c5e608e15e3) Updated the Ascii Art banner. ([@wakaleo](https://github.com/wakaleo))
 - [40db746](https://github.com/serenity-bdd/serenity-core/commit/40db746819856e7f6f65bc880a705fa0031f5f9c) Enable selection of Mac Os version on SauceLabs

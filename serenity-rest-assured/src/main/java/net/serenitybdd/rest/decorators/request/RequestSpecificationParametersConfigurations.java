@@ -27,9 +27,8 @@ abstract class RequestSpecificationParametersConfigurations extends RequestSpeci
 
     @Override
     public RequestSpecification parameters(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
-        notNull(firstParameterName, "firstParameterName");
-        notNull(firstParameterValue, "firstParameterValue");
-        return parameters(MapCreator.createMapFromParams(firstParameterName, firstParameterValue, parameterNameValuePairs));
+        core.parameters(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        return this;
     }
 
     @Override
@@ -52,17 +51,20 @@ abstract class RequestSpecificationParametersConfigurations extends RequestSpeci
 
     @Override
     public RequestSpecification params(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
-        return parameters(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        core.params(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        return this;
     }
 
     @Override
     public RequestSpecification params(Map<String, ?> parametersMap) {
-        return parameters(parametersMap);
+        core.params(parametersMap);
+        return this;
     }
 
     @Override
     public RequestSpecification param(String parameterName, Object... parameterValues) {
-        return parameters(parameterName, parameterValues);
+        core.param(parameterName, parameterValues);
+        return this;
     }
 
     @Override
@@ -72,9 +74,8 @@ abstract class RequestSpecificationParametersConfigurations extends RequestSpeci
 
     @Override
     public RequestSpecification queryParameters(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
-        notNull(firstParameterName, "firstParameterName");
-        notNull(firstParameterValue, "firstParameterValue");
-        return queryParameters(MapCreator.createMapFromParams(firstParameterName, firstParameterValue, parameterNameValuePairs));
+        core.queryParameters(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        return this;
     }
 
     @Override
@@ -98,29 +99,32 @@ abstract class RequestSpecificationParametersConfigurations extends RequestSpeci
 
     @Override
     public RequestSpecification queryParams(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
-        return queryParameters(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        core.queryParams(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        return this;
     }
 
     @Override
     public RequestSpecification queryParams(Map<String, ?> parametersMap) {
-        return queryParameters(parametersMap);
+        core.queryParams(parametersMap);
+        return this;
     }
 
     @Override
     public RequestSpecification queryParam(String parameterName, Object... parameterValues) {
-        return queryParameters(parameterName, parameterValues);
+        core.queryParam(parameterName, parameterValues);
+        return this;
     }
 
     @Override
     public RequestSpecification queryParam(String parameterName, Collection<?> parameterValues) {
-        return queryParameters(parameterName, parameterValues);
+        core.queryParam(parameterName, parameterValues);
+        return this;
     }
 
     @Override
     public RequestSpecification formParameters(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
-        notNull(firstParameterName, "firstParameterName");
-        notNull(firstParameterValue, "firstParameterValue");
-        return formParameters(MapCreator.createMapFromParams(firstParameterName, firstParameterValue, parameterNameValuePairs));
+        core.formParameters(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        return this;
     }
 
     @Override
@@ -143,17 +147,20 @@ abstract class RequestSpecificationParametersConfigurations extends RequestSpeci
 
     @Override
     public RequestSpecification formParams(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
-        return formParameters(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        core.formParams(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        return this;
     }
 
     @Override
     public RequestSpecification formParams(Map<String, ?> parametersMap) {
-        return formParameters(parametersMap);
+        core.formParams(parametersMap);
+        return this;
     }
 
     @Override
     public RequestSpecification formParam(String parameterName, Object... parameterValues) {
-        return formParameter(parameterName, parameterValues);
+        core.formParam(parameterName, parameterValues);
+        return this;
     }
 
     @Override
@@ -169,9 +176,8 @@ abstract class RequestSpecificationParametersConfigurations extends RequestSpeci
 
     @Override
     public RequestSpecification pathParameters(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
-        notNull(firstParameterName, "firstParameterName");
-        notNull(firstParameterValue, "firstParameterValue");
-        return pathParameters(MapCreator.createMapFromParams(firstParameterName, firstParameterValue, parameterNameValuePairs));
+        core.pathParameters(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        return this;
     }
 
     @Override
@@ -182,17 +188,20 @@ abstract class RequestSpecificationParametersConfigurations extends RequestSpeci
 
     @Override
     public RequestSpecification pathParam(String parameterName, Object parameterValue) {
-        return pathParameter(parameterName, parameterValue);
+        core.pathParam(parameterName, parameterValue);
+        return this;
     }
 
     @Override
     public RequestSpecification pathParams(String firstParameterName, Object firstParameterValue, Object... parameterNameValuePairs) {
-        return pathParameters(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        core.pathParams(firstParameterName, firstParameterValue, parameterNameValuePairs);
+        return this;
     }
 
     @Override
     public RequestSpecification pathParams(Map<String, ?> parameterNameValuePairs) {
-        return pathParameters(parameterNameValuePairs);
+        core.pathParams(parameterNameValuePairs);
+        return this;
     }
 
     @Override

@@ -25,7 +25,7 @@ subprojects {
 }
 
 ext {
-    seleniumVersion = '2.53.0'
+    seleniumVersion = '2.53.1'
     htmlunitVersion = '2.20'
     groovyVersion = '2.4.4'
     gradleVersion = '2.10'

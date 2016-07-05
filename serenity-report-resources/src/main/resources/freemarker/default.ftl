@@ -409,7 +409,8 @@
                     </td>
                     <#if testOutcome.hasScreenshots()>
                         <td width="100" class="${step.result}-text">
-                            <#if !step.isAGroup() && step.firstScreenshot??>
+                            <#--<#if !step.isAGroup() && step.firstScreenshot??>-->
+                            <#if step.firstScreenshot??>
                                 <a href="${relativeLink!}${testOutcome.screenshotReportName}.html#screenshots?screenshot=${screenshotCount}">
                                     <!-- Added invalid href-attribute to img for imgpreviewer -->
                                     <img src="${step.firstScreenshot.screenshot.name}"

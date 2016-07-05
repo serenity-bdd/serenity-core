@@ -876,8 +876,9 @@ public class TestOutcome {
     }
 
     public List<ScreenshotAndHtmlSource> getScreenshotAndHtmlSources() {
-        List<TestStep> testStepsWithScreenshots = select(getFlattenedTestSteps(),
-                having(on(TestStep.class).needsScreenshots()));
+        List<TestStep> testStepsWithScreenshots = getFlattenedTestSteps();
+//                select(getFlattenedTestSteps(),
+//                having(on(TestStep.class).needsScreenshots()));
 
         return flatten(extract(testStepsWithScreenshots, on(TestStep.class).getScreenshots()));
     }
@@ -885,8 +886,8 @@ public class TestOutcome {
     public List<Screenshot> getScreenshots() {
         List<Screenshot> screenshots = new ArrayList<Screenshot>();
 
-        List<TestStep> testStepsWithScreenshots = select(getFlattenedTestSteps(),
-                having(on(TestStep.class).needsScreenshots()));
+        List<TestStep> testStepsWithScreenshots = getFlattenedTestSteps();// select(getFlattenedTestSteps(),
+//                having(on(TestStep.class).needsScreenshots()));
 
         for (TestStep currentStep : testStepsWithScreenshots) {
             screenshots.addAll(screenshotsIn(currentStep));

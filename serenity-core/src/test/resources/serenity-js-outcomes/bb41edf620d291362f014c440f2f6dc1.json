@@ -1,0 +1,83 @@
+{
+  "name": "Adding an item to a list with other items (2)",
+  "title": "Adding an item to a list with other items (2)",
+  "description": "",
+  "tags": [],
+  "startTime": 1467722230137,
+  "manual": false,
+  "duration": 1775,
+  "result": "SUCCESS",
+  "testSteps": [
+    {
+      "description": "Given that James has an empty todo list",
+      "startTime": 1467722230139,
+      "duration": 2,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "description": "James starts with a todo list containing no items",
+          "startTime": 1467722230139,
+          "duration": 2,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "description": "James opens the http://todomvc.dev/examples/angularjs/",
+              "startTime": 1467722230139,
+              "duration": 1,
+              "result": "SUCCESS",
+              "children": []
+            },
+            {
+              "description": "James adds the todo items called: ",
+              "startTime": 1467722230140,
+              "duration": 1,
+              "result": "SUCCESS",
+              "children": [],
+              "screenshots": [
+                {
+                  "screenshot": "19886bdb078420a1dc2f57295a949df9.png"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "When he adds 'Walk the dog' to his list",
+      "startTime": 1467722230142,
+      "duration": 1,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "description": "James adds a todo item called: Walk the dog",
+          "startTime": 1467722230142,
+          "duration": 1,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "description": "James enters 'Walk the dog' into By(css selector, *[id=\"new-todo\"])",
+              "startTime": 1467722230142,
+              "duration": 1,
+              "result": "SUCCESS",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Then 'Walk the dog' should be recorded in his list",
+      "startTime": 1467722230144,
+      "duration": 1767,
+      "result": "SUCCESS",
+      "children": []
+    }
+  ],
+  "userStory": {
+    "id": "add-new-items-to-the-todo-list",
+    "storyName": "Add new items to the todo list",
+    "path": "/Users/janek/Documents/projects/serenity/screenplay-js-demo/acceptance/features/record_todos/add_new_items.feature",
+    "type": "feature"
+  }
+}

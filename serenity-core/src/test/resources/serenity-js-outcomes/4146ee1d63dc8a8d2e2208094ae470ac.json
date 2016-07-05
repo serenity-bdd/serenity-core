@@ -1,0 +1,114 @@
+{
+  "name": "Adding an item to a list with other items",
+  "title": "Adding an item to a list with other items",
+  "description": "",
+  "tags": [],
+  "startTime": 1467722226164,
+  "manual": false,
+  "duration": 2057,
+  "result": "SUCCESS",
+  "testSteps": [
+    {
+      "description": "Given that James has a todo list containing Buy some cookies, Walk the dog",
+      "startTime": 1467722226167,
+      "duration": 8,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "description": "James starts with a todo list containing Buy some cookies, Walk the dog",
+          "startTime": 1467722226168,
+          "duration": 6,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "description": "James opens the http://todomvc.dev/examples/angularjs/",
+              "startTime": 1467722226168,
+              "duration": 2,
+              "result": "SUCCESS",
+              "children": []
+            },
+            {
+              "description": "James adds the todo items called: Buy some cookies, Walk the dog",
+              "startTime": 1467722226170,
+              "duration": 4,
+              "result": "SUCCESS",
+              "children": [
+                {
+                  "description": "James adds a todo item called: Buy some cookies",
+                  "startTime": 1467722226170,
+                  "duration": 1,
+                  "result": "SUCCESS",
+                  "children": [
+                    {
+                      "description": "James enters 'Buy some cookies' into By(css selector, *[id=\"new-todo\"])",
+                      "startTime": 1467722226170,
+                      "duration": 1,
+                      "result": "SUCCESS",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "description": "James adds a todo item called: Walk the dog",
+                  "startTime": 1467722226172,
+                  "duration": 1,
+                  "result": "SUCCESS",
+                  "children": [
+                    {
+                      "description": "James enters 'Walk the dog' into By(css selector, *[id=\"new-todo\"])",
+                      "startTime": 1467722226172,
+                      "duration": 1,
+                      "result": "SUCCESS",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "screenshots": [
+                {
+                  "screenshot": "9d25b58015edf1921dbdb46cf9967a97.png"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "When he adds 'Buy some cereal' to his list",
+      "startTime": 1467722226176,
+      "duration": 2,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "description": "James adds a todo item called: Buy some cereal",
+          "startTime": 1467722226176,
+          "duration": 2,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "description": "James enters 'Buy some cereal' into By(css selector, *[id=\"new-todo\"])",
+              "startTime": 1467722226176,
+              "duration": 2,
+              "result": "SUCCESS",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Then his todo list should contain Buy some cookies, Walk the dog, Buy some cereal",
+      "startTime": 1467722226179,
+      "duration": 2040,
+      "result": "SUCCESS",
+      "children": []
+    }
+  ],
+  "userStory": {
+    "id": "add-new-items-to-the-todo-list",
+    "storyName": "Add new items to the todo list",
+    "path": "/Users/janek/Documents/projects/serenity/screenplay-js-demo/acceptance/features/record_todos/add_new_items.feature",
+    "type": "feature"
+  }
+}

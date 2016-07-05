@@ -2,7 +2,6 @@ package net.thucydides.core.steps;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
-import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.thucydides.core.annotations.*;
@@ -296,11 +295,4 @@ public final class AnnotatedStepDescription {
         return testMethod != null && TestStatus.of(testMethod).isIgnored();
     }
 
-    public boolean isFluent() {
-        if (description.getTestMethod() != null) {
-            Step step = description.getTestMethod().getAnnotation(Step.class);
-            return ((step != null) && (step.fluent()));
-        }
-        return false;
-    }
 }

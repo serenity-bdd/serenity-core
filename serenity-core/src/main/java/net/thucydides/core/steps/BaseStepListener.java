@@ -25,7 +25,6 @@ import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebdriverManager;
 import net.thucydides.core.webdriver.WebdriverProxyFactory;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
 import org.slf4j.Logger;
@@ -207,8 +206,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         this(outputDirectory);
         if (pages != null) {
             setDriverUsingPagesDriverIfDefined(pages);
-        }
-        else {
+        } else {
             createNewDriver();
         }
     }
@@ -346,7 +344,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         // TODO: Disable when run from an IDE
         getCurrentTestOutcome().addTags(storywideTags);
 
-        if(currentTestIsABrowserTest()) {
+        if (currentTestIsABrowserTest()) {
             getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
             updateSessionIdIfKnown();
         }
@@ -392,55 +390,17 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void recordStep(ExecutedStepDescription description) {
-        String stepName = AnnotatedStepDescription.from(description).getName();
+        TestStep step = new TestStep( AnnotatedStepDescription.from(description).getName() );
 
-        updateFluentStepStatus(description, stepName);
+        startNewGroupIfNested();
+        setDefaultResultFromAnnotations(step, description);
 
-        if (justStartedAFluentSequenceFor(description) || notInAFluentSequence()) {
-
-            TestStep step = new TestStep(stepName);
-
-            startNewGroupIfNested();
-            setDefaultResultFromAnnotations(step, description);
-
-            currentStepStack.push(step);
-            recordStepToCurrentTestOutcome(step);
-        }
-        inFluentStepSequence = AnnotatedStepDescription.from(description).isFluent();
+        currentStepStack.push(step);
+        recordStepToCurrentTestOutcome(step);
     }
 
     private void recordStepToCurrentTestOutcome(TestStep step) {
         getCurrentTestOutcome().recordStep(step);
-    }
-
-    private void updateFluentStepStatus(ExecutedStepDescription description, String stepName) {
-        if (currentlyInAFluentSequenceFor(description) || justFinishedAFluentSequenceFor(description)) {
-            addToFluentStepName(stepName);
-        }
-    }
-
-    private void addToFluentStepName(String stepName) {
-        String updatedStepName = getCurrentStep().getDescription() + " " + StringUtils.uncapitalize(stepName);
-        getCurrentStep().setDescription(updatedStepName);
-    }
-
-    private boolean notInAFluentSequence() {
-        return !inFluentStepSequence;
-    }
-
-    private boolean justFinishedAFluentSequenceFor(ExecutedStepDescription description) {
-        boolean thisStepIsFluent = AnnotatedStepDescription.from(description).isFluent();
-        return (inFluentStepSequence && !thisStepIsFluent);
-    }
-
-    private boolean justStartedAFluentSequenceFor(ExecutedStepDescription description) {
-        boolean thisStepIsFluent = AnnotatedStepDescription.from(description).isFluent();
-        return (!inFluentStepSequence && thisStepIsFluent);
-    }
-
-    private boolean currentlyInAFluentSequenceFor(ExecutedStepDescription description) {
-        boolean thisStepIsFluent = AnnotatedStepDescription.from(description).isFluent();
-        return (inFluentStepSequence && thisStepIsFluent);
     }
 
     private void setDefaultResultFromAnnotations(final TestStep step, final ExecutedStepDescription description) {
@@ -713,13 +673,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
         if (pathOf(outputDirectory) != null) { // Output directory may be null for some tests
             newPhoto = photographer.takesAScreenshot()
-                                   .with(getDriver())
-                                   .andWithBlurring(AnnotatedBluring.blurLevel())
-                                   .andSaveToDirectory(pathOf(outputDirectory));
+                    .with(getDriver())
+                    .andWithBlurring(AnnotatedBluring.blurLevel())
+                    .andSaveToDirectory(pathOf(outputDirectory));
 
             pageSource = soundEngineer.ifRequiredForResult(result)
-                                     .recordPageSourceUsing(getDriver())
-                                     .intoDirectory(pathOf(outputDirectory));
+                    .recordPageSourceUsing(getDriver())
+                    .intoDirectory(pathOf(outputDirectory));
 
         }
         return (newPhoto == ScreenshotPhoto.None) ?
@@ -767,8 +727,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public boolean aStepHasFailed() {
         return ((!getTestOutcomes().isEmpty()) &&
                 (getCurrentTestOutcome().getResult() == TestResult.FAILURE
-                 || getCurrentTestOutcome().getResult() == TestResult.ERROR
-                 || getCurrentTestOutcome().getResult() == TestResult.COMPROMISED));
+                        || getCurrentTestOutcome().getResult() == TestResult.ERROR
+                        || getCurrentTestOutcome().getResult() == TestResult.COMPROMISED));
     }
 
     public FailureCause getTestFailureCause() {
@@ -801,7 +761,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private TestResult defaulManualTestReportResult() {
         String manualTestResultValue = ThucydidesSystemProperty.MANUAL_TEST_REPORT_RESULT.from(configuration.getEnvironmentVariables(),
-                                                                                          TestResult.PENDING.toString());
+                TestResult.PENDING.toString());
         TestResult manualTestResult = TestResult.PENDING;
         try {
             manualTestResult = TestResult.valueOf(manualTestResultValue.toUpperCase());

@@ -14,7 +14,6 @@ import net.thucydides.core.pages.Pages;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.screenshots.ScreenshotException;
 import net.thucydides.core.steps.samples.FlatScenarioSteps;
-import net.thucydides.core.steps.samples.FluentScenarioSteps;
 import net.thucydides.core.steps.samples.NestedScenarioSteps;
 import net.thucydides.core.steps.samples.StepsDerivedFromADifferentDomain;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
@@ -1071,21 +1070,6 @@ public class WhenRecordingStepExecutionResults {
         assertThat(testOutcome.getTestSteps().get(0).getDescription(), is("A step with a title"));
     }
 
-    @Test
-    public void a_series_of_fluent_steps_should_be_recorded_as_one_step() {
-
-        StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
-        StepEventBus.getEventBus().testStarted("app_should_work");
-
-        FluentScenarioSteps steps = stepFactory.getStepLibraryFor(FluentScenarioSteps.class);
-
-        steps.when().someone().does().this_sort_of_thing();
-
-        List<TestOutcome> results = stepListener.getTestOutcomes();
-        TestOutcome testOutcome = results.get(0);
-
-        assertThat(testOutcome.getTestSteps().get(0).getDescription(), is("When someone does this sort of thing"));
-    }
 
     @Test
     public void a_test_group_without_an_annotated_title_should_record_the_humanized_group_name() {

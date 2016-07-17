@@ -99,7 +99,7 @@ public class RequirementsOutcomes {
 
         int requirementsWithoutTests = 0;
         for (Requirement requirement : flattenedRequirements) {
-            TestOutcomes matchingOutcomes = testOutcomes.withTag(requirement.asTag());
+            TestOutcomes matchingOutcomes = testOutcomes.forRequirement(requirement);
             if (matchingOutcomes.getTotal() == 0) {
                 requirementsWithoutTests++;
             }
@@ -279,7 +279,7 @@ public class RequirementsOutcomes {
 //                TestTag requirementTag = TestTag.withName(requirement.getName()).andType(requirement.getType());
 //                TestOutcomes testOutcomesForRequirement = requirementOutcome.getTestOutcomes().withTag(requirementTag);
 
-                TestOutcomes testOutcomesForRequirement = requirementOutcome.getTestOutcomes().withTag(requirement.asTag());
+                TestOutcomes testOutcomesForRequirement = requirementOutcome.getTestOutcomes().forRequirement(requirement);
 
 
                 flattenedOutcomes.add(new RequirementOutcome(requirement, testOutcomesForRequirement, issueTracking));
@@ -391,9 +391,7 @@ public class RequirementsOutcomes {
     }
 
     private boolean testsExistFor(Requirement requirement) {
-        TestTag requirementTag = TestTag.withName(requirement.getName()).andType(requirement.getType());
-        return !getTestOutcomes().withTag(requirementTag).getOutcomes().isEmpty();
-        //return !getTestOutcomes().withTag(requirement.asTag()).getOutcomes().isEmpty();
+        return !getTestOutcomes().forRequirement(requirement).getOutcomes().isEmpty();
     }
 
     private List<TestOutcome> outcomesForRelease(List<? extends TestOutcome> outcomes,

@@ -139,7 +139,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         for (int level = 0; level < packageNames.length; level++) {
             currentPath = (currentPath.isEmpty()) ? packageNames[level] : Joiner.on(".").join(currentPath, packageNames[level]);
             String defaultRequirementType = getDefaultType(level, maxDepth);
-            Requirement currentRequirement = null;
+            Requirement currentRequirement;
             if (requirementsByPath.containsKey(currentPath)) {
                 currentRequirement = requirementsByPath.get(currentPath);
             } else {

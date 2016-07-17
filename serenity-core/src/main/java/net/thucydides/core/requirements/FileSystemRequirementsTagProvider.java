@@ -5,6 +5,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.files.TheDirectoryStructure;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
@@ -15,25 +16,22 @@ import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.regex.Pattern;
 
 import static ch.lambdaj.Lambda.convert;
 import static net.thucydides.core.requirements.RequirementsPath.pathElements;
 import static net.thucydides.core.requirements.RequirementsPath.stripRootFromPath;
+import static net.thucydides.core.requirements.RootDirectory.defaultRootDirectoryPathFrom;
 import static net.thucydides.core.util.NameConverter.humanize;
 import static org.apache.commons.io.FilenameUtils.removeExtension;
 
@@ -46,9 +44,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private final static Logger logger = LoggerFactory.getLogger(FileSystemRequirementsTagProvider.class);
 
-    private final static String DEFAULT_ROOT_DIRECTORY = "stories";
-    private final static String FEATURES_ROOT_DIRECTORY = "features";
-    private final static String DEFAULT_RESOURCE_DIRECTORY = "src/test/resources";
     private static final List<Requirement> NO_REQUIREMENTS = Lists.newArrayList();
     private static final List<TestTag> NO_TEST_TAGS = Lists.newArrayList();
     public static final String STORY_EXTENSION = "story";
@@ -75,23 +70,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         this(defaultRootDirectoryPathFrom(Injectors.getInjector().getProvider(EnvironmentVariables.class).get()));
     }
 
-    public static String defaultRootDirectoryPathFrom(EnvironmentVariables environmentVariables) {
-
-        if (ThucydidesSystemProperty.THUCYDIDES_REQUIREMENTS_DIR.isDefinedIn(environmentVariables)) {
-            return ThucydidesSystemProperty.THUCYDIDES_REQUIREMENTS_DIR.from(environmentVariables);
-        }
-        Optional<String> resourceDirectory = getResourceDirectory(environmentVariables);
-        if (resourceDirectory.isPresent()) {
-            String resourceDir = resourceDirectory.get();
-            if (new File(resourceDir, DEFAULT_ROOT_DIRECTORY).exists()) {
-                return DEFAULT_ROOT_DIRECTORY;
-            } else if (new File(resourceDir, FEATURES_ROOT_DIRECTORY).exists()) {
-                return FEATURES_ROOT_DIRECTORY;
-            }
-        }
-        return DEFAULT_ROOT_DIRECTORY;
-    }
-
     public FileSystemRequirementsTagProvider(String rootDirectory, int level) {
         this(filePathFormOf(rootDirectory), level, Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
     }
@@ -112,7 +90,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         this.rootDirectoryPath = rootDirectory;
         this.level = level;
         this.narrativeReader = NarrativeReader.forRootDirectory(rootDirectory)
-                .withRequirementTypes(getRequirementTypes());
+                                              .withRequirementTypes(getRequirementTypes());
     }
 
     public FileSystemRequirementsTagProvider(String rootDirectory) {
@@ -134,7 +112,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                     File rootDirectory = new File(path);
                     logger.debug("Loading requirements from {}", rootDirectory);
                     if (rootDirectory.exists()) {
-                        allRequirements.addAll(loadCapabilitiesFrom(rootDirectory.listFiles(thatAreDirectories())));
+                        allRequirements.addAll(loadCapabilitiesFrom(rootDirectory.listFiles(thatAreFeatureDirectories())));
                         allRequirements.addAll(loadStoriesFrom(rootDirectory.listFiles(thatAreStories())));
                     }
                 }
@@ -166,121 +144,34 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return augmentedRequirements;
     }
 
+
     /**
      * Find the root directory in the classpath or on the file system from which the requirements will be read.
      */
     public Set<String> getRootDirectoryPaths() throws IOException {
-
-        if (ThucydidesSystemProperty.THUCYDIDES_TEST_REQUIREMENTS_BASEDIR.isDefinedIn(environmentVariables)) {
-            return getRootDirectoryFromRequirementsBaseDir().asSet();
-        } else {
-            return firstDefinedOf(getRootDirectoryFromClasspath(),
-                    getRootDirectoryFromWorkingDirectory(),
-                    getFileSystemDefinedDirectory());
-        }
-    }
-
-    private Set<String> firstDefinedOf(Set<String>... paths) {
-        for(Set<String> path : paths) {
-            if (!path.isEmpty()) {
-                return path;
-            }
-        }
-        return Sets.newHashSet();
-    }
-
-    private Set<String> getRootDirectoryFromClasspath() throws IOException {
-        List<URL> resourceRoots;
-        try {
-            Enumeration<URL> requirementResources = getDirectoriesFrom(rootDirectoryPath);
-            resourceRoots = Collections.list(requirementResources);
-        } catch (URISyntaxException e) {
-            throw new IOException(e);
-        }
-        return restoreSpacesIn(resourceRoots);
-    }
-
-    private Set<String> restoreSpacesIn(List<URL> resourceRoots) {
-        Set<String> urlsWithRestoredSpaces = Sets.newHashSet();
-        for (URL resourceRoot : resourceRoots) {
-            urlsWithRestoredSpaces.add(withRestoredSpaces(resourceRoot.getPath()));
-        }
-        return urlsWithRestoredSpaces;
-    }
-
-    private String withRestoredSpaces(String path) {
-        try {
-            return URLDecoder.decode(path, StandardCharsets.UTF_8.name());
-        } catch (UnsupportedEncodingException e) {
-            return StringUtils.replace(path, "%20", " ");
-        }
-    }
-
-    private Set<String> getFileSystemDefinedDirectory() throws IOException {
-        if (Paths.get(rootDirectoryPath).toAbsolutePath().toFile().exists()) {
-            return Sets.newHashSet(Paths.get(rootDirectoryPath).toAbsolutePath().toString());
-        }
-        return Sets.newHashSet();
-    }
-
-    private Set<String> getRootDirectoryFromWorkingDirectory() throws IOException {
-        final String workingDirectory = System.getProperty("user.dir");
-        final String mavenBuildDir = System.getProperty(SystemPropertiesConfiguration.PROJECT_BUILD_DIRECTORY);
-        String resultDir = "";
-        if (!StringUtils.isEmpty(mavenBuildDir)) {
-            resultDir = mavenBuildDir;
-        } else {
-            resultDir = workingDirectory;
-        }
-        return getRootDirectoryFromParentDir(resultDir).asSet();
-    }
-
-    private Optional<String> configuredRelativeRootDirectory;
-
-    private Optional<String> getRootDirectoryFromRequirementsBaseDir() {
-        if (configuredRelativeRootDirectory == null) {
-            configuredRelativeRootDirectory
-                    = getRootDirectoryFromParentDir(ThucydidesSystemProperty.THUCYDIDES_TEST_REQUIREMENTS_BASEDIR
-                    .from(environmentVariables, ""));
-        }
-        return configuredRelativeRootDirectory;
-    }
-
-    private Optional<String> getRootDirectoryFromParentDir(String parentDir) {
-        File resourceDirectory = getResourceDirectory(environmentVariables).isPresent() ? new File(parentDir, getResourceDirectory(environmentVariables).get()) : new File(parentDir);
-        File requirementsDirectory = absolutePath(rootDirectoryPath) ? new File(rootDirectoryPath) : new File(resourceDirectory, rootDirectoryPath);
-        if (!requirementsDirectory.exists()) {
-            requirementsDirectory = new File(resourceDirectory, FEATURES_ROOT_DIRECTORY); //features
-        }
-        if (requirementsDirectory.exists()) {
-            return Optional.of(requirementsDirectory.getAbsolutePath());
-        } else {
-            return Optional.absent();
-        }
-    }
-
-    private boolean absolutePath(String rootDirectoryPath) {
-        return (new File(rootDirectoryPath).isAbsolute() || rootDirectoryPath.startsWith("/"));
-    }
-
-
-    private Enumeration<URL> getDirectoriesFrom(String root) throws IOException, URISyntaxException {
-        String rootWithEscapedSpaces = root.replaceAll(" ", "%20");
-        URI rootUri = (isWindowsPath(rootWithEscapedSpaces)) ? new File(root).toPath().toUri() : new URI(rootWithEscapedSpaces);
-        return getClass().getClassLoader().getResources(rootUri.getPath());
-    }
-
-    private static final Pattern WINDOWS_PATH = Pattern.compile("([a-zA-Z]:)?(\\\\[a-zA-Z0-9_-]+)+\\\\?");
-
-    private boolean isWindowsPath(String rootWithEscapedSpaces) {
-        return WINDOWS_PATH.matcher(rootWithEscapedSpaces).find();
+        return new RootDirectory(environmentVariables, rootDirectoryPath).getRootDirectoryPaths();
     }
 
     public Set<TestTag> getTagsFor(final TestOutcome testOutcome) {
+        //
+        // For the FileSystemRequirements tag provider, the test outcome provides a path, which might be:
+        //   - a feature file for Cucumber ("add_an_item.feature"),
+        //   - a story file with a path (JBehave) ("stories/manage_items/add_an_item.story")
+        //
         Set<TestTag> tags = new HashSet<>();
         if (testOutcome.getPath() != null) {
+
+            Optional<Requirement> matchingRequirement = requirementWithMatchingFeatureFile(testOutcome.getPath());
+
+            if (matchingRequirement.isPresent()) {
+                tags.add(matchingRequirement.get().asTag());
+                tags.addAll(parentRequirementsOf(matchingRequirement.get().asTag()));
+            }
+
+            // Strategy used if a full path is provided
             List<String> storyPathElements = stripRootFrom(pathElements(stripRootPathFrom(testOutcome.getPath())));
             tags.addAll(getMatchingCapabilities(getRequirements(), stripStorySuffixFrom(storyPathElements)));
+
             if (tags.isEmpty() && storyOrFeatureDescribedIn(storyPathElements).isPresent()) {
                 Optional<TestTag> matchingRequirementTag = getMatchingRequirementTagsFor(storyOrFeatureDescribedIn(storyPathElements).get());
                 if (matchingRequirementTag.isPresent()) {
@@ -291,6 +182,21 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
         return tags;
     }
+
+    private Collection<? extends TestTag> tagsFromRequirements(Optional<Requirement> requirement) {
+        return null;
+    }
+
+    Optional<Requirement> requirementWithMatchingFeatureFile(String path) {
+        for(Requirement requirement : getFlattenedRequirements()) {
+            if ((requirement.getFeatureFileName() != null) && (requirement.getFeatureFileName().equalsIgnoreCase(path))) {
+                return Optional.of(requirement);
+            }
+        }
+        return Optional.absent();
+    }
+
+
 
     private Collection<TestTag> parentRequirementsOf(TestTag requirementTag) {
         List<TestTag> matchingTags = Lists.newArrayList();
@@ -372,21 +278,22 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     public Optional<Requirement> getParentRequirementOf(final TestOutcome testOutcome) {
-        if (testOutcome.getFeatureTag().isPresent()) {
-            return requirementWithMatchingFeatureTag(testOutcome.getFeatureTag().get());
-        } else if (testOutcome.getPath() != null) {
-            List<String> storyPathElements = stripStorySuffixFrom(stripRootFrom(pathElements(stripRootPathFrom(testOutcome.getPath()))));
-            return lastRequirementFrom(storyPathElements);
-        } else {
-            return mostSpecificTagRequirementFor(testOutcome);
-        }
+        return firstRequirementFoundIn(
+                parentRequirementFromPackagePath(testOutcome),
+                featureTagRequirementIn(testOutcome),
+                mostSpecificTagRequirementFor(testOutcome),
+                requirementWithMatchingPath(testOutcome));
     }
 
-    private Optional<Requirement> requirementWithMatchingFeatureTag(TestTag featureTag) {
-        for (Requirement requirement : getFlattenedRequirements()) {
-            if (requirement.asUnqualifiedTag().equals(featureTag)) {
-                return Optional.of(requirement);
-            }
+    private Optional<Requirement> featureTagRequirementIn(TestOutcome testOutcome) {
+        List<String> storyPathElements = stripStorySuffixFrom(stripRootFrom(pathElements(stripRootPathFrom(testOutcome.getPath()))));
+        return lastRequirementFrom(storyPathElements);
+    }
+
+    private Optional<Requirement> parentRequirementFromPackagePath(TestOutcome testOutcome) {
+        if (testOutcome.getPath() != null) {
+            List<String> storyPathElements = stripStorySuffixFrom(stripRootFrom(pathElements(stripRootPathFrom(testOutcome.getPath()))));
+            return lastRequirementFrom(storyPathElements);
         }
         return Optional.absent();
     }
@@ -408,6 +315,18 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return mostSpecificRequirement;
     }
 
+    private Optional<Requirement> requirementWithMatchingPath(TestOutcome testOutcome) {
+        for (Requirement requirement : getFlattenedRequirements()) {
+            if (requirement.getFeatureFileName() != null
+                    && testOutcome.getPath() != null
+                    && Paths.get(testOutcome.getPath()).equals(Paths.get(requirement.getFeatureFileName()))) {
+                return Optional.of(requirement);
+            }
+        }
+        return Optional.absent();
+    }
+
+
     public Optional<Requirement> getRequirementFor(TestTag testTag) {
         for (Requirement requirement : getFlattenedRequirements()) {
             if (requirement.getName().equalsIgnoreCase(testTag.getName()) && requirement.getType().equalsIgnoreCase(testTag.getType())) {
@@ -415,24 +334,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
             }
         }
         return Optional.absent();
-    }
-
-    private List<Requirement> getFlattenedRequirements() {
-        List<Requirement> allRequirements = Lists.newArrayList();
-        for (Requirement requirement : getRequirements()) {
-            allRequirements.add(requirement);
-            allRequirements.addAll(childRequirementsOf(requirement));
-        }
-        return allRequirements;
-    }
-
-    private Collection<Requirement> childRequirementsOf(Requirement requirement) {
-        List<Requirement> childRequirements = Lists.newArrayList();
-        for (Requirement childRequirement : requirement.getChildren()) {
-            childRequirements.add(childRequirement);
-            childRequirements.addAll(childRequirementsOf(childRequirement));
-        }
-        return childRequirements;
     }
 
     private Optional<Requirement> lastRequirementFrom(List<String> storyPathElements) {
@@ -487,7 +388,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private List<TestTag> concat(TestTag thisTag, List<TestTag> remainingTags) {
-        List<TestTag> totalTags = new ArrayList<TestTag>();
+        List<TestTag> totalTags = new ArrayList<>();
         totalTags.add(thisTag);
         totalTags.addAll(remainingTags);
         return totalTags;
@@ -716,12 +617,16 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
     }
 
-    private FileFilter thatAreDirectories() {
+    private FileFilter thatAreFeatureDirectories() {
         return new FileFilter() {
             public boolean accept(File file) {
-                return file.isDirectory() && !file.getName().startsWith(".");
+                return !file.getName().startsWith(".") && storyOrFeatureFilesExistIn(file);
             }
         };
+    }
+
+    private boolean storyOrFeatureFilesExistIn(File directory) {
+        return TheDirectoryStructure.startingAt(directory).containsFiles(thatAreStories(), thatAreNarratives());
     }
 
     private FileFilter thatAreStories() {
@@ -737,12 +642,12 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         };
     }
 
-    public static Optional<String> getResourceDirectory(EnvironmentVariables environmentVariables) {
-        if (ThucydidesSystemProperty.THUCYDIDES_REQUIREMENTS_DIR.isDefinedIn(environmentVariables)) {
-            return Optional.absent();
-        } else {
-            return Optional.of(DEFAULT_RESOURCE_DIRECTORY);
-        }
+    private FileFilter thatAreNarratives() {
+        return new FileFilter() {
+            public boolean accept(File file) {
+                return file.getName().toLowerCase().equals("narrative.txt") || file.getName().toLowerCase().equals("placeholder.txt");
+            }
+        };
     }
 
     private boolean isSupportedFileStoryExtension(String storyFileExtension) {

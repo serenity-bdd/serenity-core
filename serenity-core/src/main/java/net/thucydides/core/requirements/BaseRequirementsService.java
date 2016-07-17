@@ -13,6 +13,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -88,6 +89,8 @@ public abstract class BaseRequirementsService implements RequirementsService {
 
     public List<Requirement> getAncestorRequirementsFor(TestOutcome testOutcome) {
         for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
+
+
             Optional<Requirement> requirement = getParentRequirementOf(testOutcome, tagProvider);
             if (requirement.isPresent()) {
                 LOGGER.debug("Requirement found for test outcome " + testOutcome.getTitle() + "-" + testOutcome.getIssueKeys() + ": " + requirement);
@@ -180,13 +183,32 @@ public abstract class BaseRequirementsService implements RequirementsService {
         return releases;
     }
 
-    public List<String> getRequirementTypes() {
+    public List<String> getTopLevelRequirementTypes() {
         Set<String> requirementTypes = Sets.newHashSet();
         for(Requirement requirement : getRequirements()) {
             requirementTypes.add(requirement.getType());
         }
         return ImmutableList.copyOf(requirementTypes);
     }
+
+    public List<String> getRequirementTypes() {
+        Set<String> requirementTypes = Sets.newHashSet();
+        requirementTypes.addAll(requirementTypesDefinedIn(getRequirements()));
+
+        return ImmutableList.copyOf(requirementTypes);
+    }
+
+    private Collection<? extends String> requirementTypesDefinedIn(List<Requirement> requirements) {
+        Set<String> requirementTypes = Sets.newHashSet();
+        for(Requirement requirement : requirements) {
+            requirementTypes.add(requirement.getType());
+            if (!requirement.getChildren().isEmpty()) {
+                requirementTypes.addAll(requirementTypesDefinedIn(requirement.getChildren()));
+            }
+        }
+        return requirementTypes;
+    }
+
 
     @Override
     public List<String> getReleaseVersionsFor(TestOutcome testOutcome) {

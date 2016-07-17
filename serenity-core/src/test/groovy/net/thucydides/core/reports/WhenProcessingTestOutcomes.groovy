@@ -56,7 +56,7 @@ class WhenProcessingTestOutcomes extends Specification {
         when:
             def tags = testOutcomes.getTagNames()
         then:
-            tags == ["a feature", "a story", "an epic", "another different story", "another story"]
+            tags == ["a feature", "a story", "a user story in a feature", "an epic", "another different story", "another story"]
     }
 
     def "should list all the tags of a given type for the test outcomes"() {
@@ -65,7 +65,7 @@ class WhenProcessingTestOutcomes extends Specification {
         when:
         def tags = testOutcomes.getTagsOfType('story')
         then:
-        tags.collect({it.shortName.toLowerCase()}) as Set == ["another story", "a story", "another different story"] as Set
+        tags.collect({it.shortName.toLowerCase()}) as Set == ["another story", "a story", "a user story in a feature", "another different story"] as Set
     }
 
     def "should list all the tags of a given type for the test outcomes except for specified tags"() {
@@ -74,7 +74,7 @@ class WhenProcessingTestOutcomes extends Specification {
         when:
         def tags = testOutcomes.getTagsOfTypeExcluding 'story', 'a story'
         then:
-        tags.collect({it.shortName.toLowerCase()}) as Set  == ["another different story", "another story"] as Set
+        tags.collect({it.shortName.toLowerCase()}) as Set  == ["another different story", "another story", "a user story in a feature"] as Set
     }
 
     def "should list all the tags of a given type for the test outcomes except for specified tags for different cases"() {
@@ -83,7 +83,7 @@ class WhenProcessingTestOutcomes extends Specification {
         when:
         def tags = testOutcomes.getTagsOfTypeExcluding 'story', 'A Story'
         then:
-        tags.collect({it.shortName.toLowerCase()}) as Set  == ["another different story", "another story"] as Set
+        tags.collect({it.shortName.toLowerCase()}) as Set  == ["another different story", "another story", "a user story in a feature"] as Set
     }
 
     def "should list all the tags of a single type for the test outcomes"() {
@@ -101,7 +101,7 @@ class WhenProcessingTestOutcomes extends Specification {
         when:
             Set<String> tagTypes = testOutcomes.withTagType("feature").getTagTypes()
         then:
-            tagTypes == ["feature","story"] as Set
+            tagTypes == ["epic", "feature","story"] as Set
     }
 
     def "should list all the tag types for a given name"() {
@@ -110,7 +110,7 @@ class WhenProcessingTestOutcomes extends Specification {
         when:
             Set<String> tagTypes = testOutcomes.withTag("an epic").getTagTypes()
         then:
-            tagTypes == ["epic","story"] as Set
+            tagTypes == ["epic","feature","story"] as Set
     }
 
     def "should list tests in alphabetical order"() {

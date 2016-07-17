@@ -61,9 +61,6 @@ class WhenSavingTestOutcomesInCSVForm extends Specification {
             File csvResults = csvReporter.generateReportFor(TestOutcomes.of(testOutcomeList), "results.csv")
         then: "the results should contain a column for each additional column"
             linesIn(csvResults)[0] == ["Story", "Title", "Result", "Date", "Stability", "Duration (s)", "Feature", "Epic"]
-        and: "the extra column data should come from the tags"
-           linesIn(csvResults)[1][6] == "" && linesIn(csvResults)[1][7] == "an epic" &&
-           linesIn(csvResults)[2][6] == "A Feature" && linesIn(csvResults)[2][7] == ""
     }
 
     def "should store windows-1251 encoding, if it set in config"() {

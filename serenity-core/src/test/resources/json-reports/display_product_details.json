@@ -139,10 +139,6 @@
   "description": "",
   "tags": [
     {
-      "name": "Search/Display product details",
-      "type": "story"
-    },
-    {
       "name": "ETSY-101",
       "type": "issue"
     },

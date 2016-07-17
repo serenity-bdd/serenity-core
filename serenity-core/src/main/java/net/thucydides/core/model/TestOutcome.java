@@ -52,7 +52,6 @@ import static com.google.common.collect.Lists.reverse;
 import static net.thucydides.core.model.ReportType.HTML;
 import static net.thucydides.core.model.ReportType.ROOT;
 import static net.thucydides.core.model.TestResult.*;
-import static net.thucydides.core.util.NameConverter.humanize;
 import static net.thucydides.core.util.NameConverter.withNoArguments;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -97,6 +96,8 @@ public class TestOutcome {
      * A test can be linked to the user story it tests using the Story annotation.
      */
     private Story userStory;
+
+    private Optional<TestTag> featureTag = Optional.absent();
 
     private String title;
     private String description;
@@ -313,7 +314,7 @@ public class TestOutcome {
         this.testCaseName = nameOf(testCase);
         this.additionalIssues = Lists.newArrayList();
         this.additionalVersions = Lists.newArrayList();
-        this.userStory = userStory;
+        setUserStory(userStory);
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
     }
@@ -371,7 +372,7 @@ public class TestOutcome {
         this.additionalVersions = removeDuplicates(additionalVersions);
         this.additionalIssues = additionalIssues;
         this.tags = tags;
-        this.userStory = userStory;
+        setUserStory(userStory);
         this.testFailureCause = testFailureCause;
         this.testFailureClassname = testFailureClassname;
         this.testFailureMessage = testFailureMessage;
@@ -1133,8 +1134,11 @@ public class TestOutcome {
         return groupStack.peek();
     }
 
+    private static final Optional<TestTag> NO_DEFINED_FEATURE = Optional.absent();
+
     public void setUserStory(Story story) {
         this.userStory = story;
+        this.featureTag = FeatureTagAsDefined.in(story, getPath());
     }
 
     public void determineTestFailureCause(Throwable cause) {
@@ -1421,7 +1425,16 @@ public class TestOutcome {
         if (tags == null) {
             tags = getTagsUsingTagProviders(getTagProviderService().getTagProviders(getTestSource()));
         }
-        return ImmutableSet.copyOf(tags);
+        Set<TestTag> augmentedTags = Sets.newHashSet(tags);
+        augmentedTags.addAll(getFeatureTag().asSet());
+        addUserStoryFeatureTo(augmentedTags);
+        return ImmutableSet.copyOf(augmentedTags);//tags);
+    }
+
+    private void addUserStoryFeatureTo(Set<TestTag> augmentedTags) {
+        if (userStory != null && userStory.getFeature() != null) {
+            augmentedTags.add(TestTag.withName(userStory.getFeature().getName()).andType("feature"));
+        }
     }
 
 
@@ -1642,6 +1655,18 @@ public class TestOutcome {
     public boolean hasTag(TestTag tag) {
         return getTags().contains(tag);
     }
+
+
+    public boolean hasAMoreGeneralFormOfTag(TestTag specificTag) {
+        for(TestTag tag : getTags()) {
+            if (specificTag.isAsOrMoreSpecificThan(tag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     public void setStartTime(DateTime startTime) {
         this.startTime = startTime.toDate().getTime();
@@ -2017,16 +2042,20 @@ public class TestOutcome {
 
 
     public Optional<TestTag> getFeatureTag() {
-        if (getPath() != null) {
-            if (getPath().endsWith(".feature")) {
-                String featureName = humanize(new File(getPath()).getName().replace(".feature", ""));
-                return Optional.of(TestTag.withName(featureName).andType("feature"));
-            } else if (getPath().endsWith(".story")) {
-                String featureName = humanize(new File(getPath()).getName().replace(".story", ""));
-                return Optional.of(TestTag.withName(featureName).andType("story"));
-            }
+        if (!featureTag.isPresent()) {
+            featureTag = FeatureTagAsDefined.in(userStory, getPath());
         }
-        return Optional.absent();
+        return featureTag;
+//        if (getPath() != null) {
+//            if (getPath().endsWith(".feature")) {
+//                String featureName = humanize(new File(getPath()).getName().replace(".feature", ""));
+//                return Optional.of(TestTag.withName(featureName).andType("feature"));
+//            } else if (getPath().endsWith(".story")) {
+//                String featureName = humanize(new File(getPath()).getName().replace(".story", ""));
+//                return Optional.of(TestTag.withName(featureName).andType("story"));
+//            }
+//        }
+//        return Optional.absent();
     }
 
     private class StepResetBuilder {

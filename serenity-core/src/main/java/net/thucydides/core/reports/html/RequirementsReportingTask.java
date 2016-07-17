@@ -108,7 +108,7 @@ public class RequirementsReportingTask extends BaseReportingTask implements Repo
         for (RequirementOutcome outcome : requirementOutcomes) {
             Requirement requirement = outcome.getRequirement();
             if (!reportTally.contains(requirement)) {
-                TestOutcomes testOutcomesForThisRequirement = outcome.getTestOutcomes().withTag(requirement.asTag());
+                TestOutcomes testOutcomesForThisRequirement = outcome.getTestOutcomes().forRequirement(requirement);
                 RequirementsOutcomes requirementOutcomesForThisRequirement = requirementsFactory.buildRequirementsOutcomesFrom(requirement, testOutcomesForThisRequirement);
                 generateNestedRequirementsReportsFor(requirement, requirementOutcomesForThisRequirement);
             }

@@ -75,9 +75,9 @@
     }
   ],
   "userStory": {
-    "id": "add-new-items-to-the-todo-list",
-    "storyName": "Add new items to the todo list",
-    "path": "/Users/janek/Documents/projects/serenity/screenplay-js-demo/acceptance/features/record_todos/add_new_items.feature",
+    "id": "filtering-todos",
+    "storyName": "Filtering todos",
+    "path": "/Users/janek/Documents/projects/serenity/screenplay-js-demo/acceptance/features/maintain_my_todo_list/filtering_todos.feature",
     "type": "feature"
   }
 }

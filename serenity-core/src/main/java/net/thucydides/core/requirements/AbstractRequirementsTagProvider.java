@@ -1,13 +1,17 @@
 package net.thucydides.core.requirements;
 
+import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 
+import java.util.Collection;
 import java.util.List;
 
-public class AbstractRequirementsTagProvider {
+public abstract class AbstractRequirementsTagProvider {
 
     protected final EnvironmentVariables environmentVariables;
     protected final String rootDirectory;
@@ -54,6 +58,8 @@ public class AbstractRequirementsTagProvider {
         }
     }
 
+    public abstract List<Requirement> getRequirements();
+
     protected String getDefaultType(int level) {
         return getDefaultType(level, getRequirementTypes().size() - 1);
     }
@@ -65,4 +71,33 @@ public class AbstractRequirementsTagProvider {
     protected String getDefaultRootDirectory() {
         return requirementsConfiguration.getDefaultRootDirectory();
     }
+
+    protected List<Requirement> getFlattenedRequirements() {
+        List<Requirement> allRequirements = Lists.newArrayList();
+        for (Requirement requirement : getRequirements()) {
+            allRequirements.add(requirement);
+            allRequirements.addAll(childRequirementsOf(requirement));
+        }
+        return allRequirements;
+    }
+
+    protected Collection<Requirement> childRequirementsOf(Requirement requirement) {
+        List<Requirement> childRequirements = Lists.newArrayList();
+        for (Requirement childRequirement : requirement.getChildren()) {
+            childRequirements.add(childRequirement);
+            childRequirements.addAll(childRequirementsOf(childRequirement));
+        }
+        return childRequirements;
+    }
+
+    protected Optional<Requirement> firstRequirementFoundIn(Optional<Requirement>... requirements) {
+        for(Optional<Requirement> requirement : requirements) {
+            if (requirement.isPresent()) {
+                return requirement;
+            }
+        }
+        return Optional.absent();
+    }
+
+
 }

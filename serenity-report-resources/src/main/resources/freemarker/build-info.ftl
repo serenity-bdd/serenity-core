@@ -186,7 +186,7 @@
     <div id="contenttop">
     <#--<div class="leftbg"></div>-->
         <div class="middlebg">
-            <span class="breadcrumbs"><a href="index.html">Home</a></span>
+            <span class="breadcrumbs"><a href="index.html">Home</a> > Environment details</span>
         </div>
         <div class="rightbg"></div>
     </div>
@@ -201,7 +201,7 @@
     <div id="results-dashboard">
         <div class="middlb">
             <div class="table">
-                <h2>Build Information</h2>
+                <h2>Environment details</h2>
 
                 <#assign keys = build.generalProperties?keys>
                 <table class="table table-striped build-info">

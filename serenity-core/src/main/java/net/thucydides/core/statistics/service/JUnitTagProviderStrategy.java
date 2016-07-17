@@ -1,9 +1,10 @@
 package net.thucydides.core.statistics.service;
 
 
+import com.google.common.collect.ImmutableSet;
+import net.thucydides.core.requirements.FileSystemRequirementsTagProvider;
+import net.thucydides.core.requirements.PackageRequirementsTagProvider;
 import net.thucydides.core.steps.StepEventBus;
-
-import java.util.ServiceLoader;
 
 
 public class JUnitTagProviderStrategy implements TagProviderStrategy {
@@ -14,7 +15,12 @@ public class JUnitTagProviderStrategy implements TagProviderStrategy {
     }
 
     @Override
-    public Iterable<TagProvider> getTagProviders() {
-        return ServiceLoader.load(TagProvider.class);
+    public Iterable<? extends TagProvider> getTagProviders() {
+        return ImmutableSet.of(
+                new PackageRequirementsTagProvider(),
+                new AnnotationBasedTagProvider(),
+//                new PackageAnnotationBasedTagProvider(),
+                new FileSystemRequirementsTagProvider()
+        );
     }
 }

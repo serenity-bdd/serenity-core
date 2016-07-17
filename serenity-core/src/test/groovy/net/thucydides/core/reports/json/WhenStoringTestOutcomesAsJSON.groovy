@@ -49,7 +49,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     class AUserStory {
     }
 
-    @Story(AUserStory.class)
+    @net.thucydides.core.annotations.Story(AUserStory.class)
     class SomeTestScenario {
         public void a_simple_test_case() {
         }
@@ -81,7 +81,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         }
     }
 
-    @Story(AFeature.AUserStoryInAFeature.class)
+    @net.thucydides.core.annotations.Story(AFeature.AUserStoryInAFeature.class)
     class SomeTestScenarioInAFeature {
         public void should_do_this() {
         }
@@ -101,7 +101,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         }
     }
 
-    @Story(AUserStory.class)
+    @net.thucydides.core.annotations.Story(AUserStory.class)
     @Issues(["#123", "#456"])
     class ATestScenarioWithIssues {
         public void a_simple_test_case() {
@@ -116,7 +116,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     }
 
 
-    @Story(AUserStory.class)
+    @net.thucydides.core.annotations.Story(AUserStory.class)
     @Issues(["PROJ-123", "PROJ-456"])
     class ATestScenarioWithLongIssues {
         public void a_simple_test_case() {
@@ -130,7 +130,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         }
     }
 
-    @Story(AUserStory.class)
+    @net.thucydides.core.annotations.Story(AUserStory.class)
     class SomeNestedTestScenario {
         public void a_nested_test_case() {
         };
@@ -308,6 +308,19 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
                                           TestTag.withName("important feature").andType("feature")])
     }
 
+    def "should store the featureTag in the JSON reports"() {
+        given:
+        def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioWithTags.class);
+        testOutcome.startTime = FIRST_OF_JANUARY
+        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
+        when:
+        def jsonReport = reporter.generateReportFor(testOutcome)
+        TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
+        then:
+        reloadedOutcome.featureTag.isPresent()
+        and:
+        reloadedOutcome.featureTag.get() == TestTag.withName("Some test scenario with tags").andType("story")
+    }
 
 
     def "should include the session id if provided"() {
@@ -361,7 +374,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         given:
         def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioWithTags.class);
         testOutcome.startTime = FIRST_OF_JANUARY
-        testOutcome.useExamplesFrom(DataTable.withHeaders(["a","b","c"])
+        testOutcome.useExamplesFrom(DataTable.withHeaders(["a", "b", "c"])
                 .andTitle("a title")
                 .andDescription("a description").build())
         testOutcome.addRow(["a":"1", "b":"2", "c":"3"]);
@@ -692,7 +705,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
             TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
             reloadedOutcome.getResult() == result
         where:
-            result << [ TestResult.SUCCESS, TestResult.FAILURE, TestResult.ERROR, TestResult.PENDING, TestResult.IGNORED ]
+            result << [TestResult.SUCCESS, TestResult.FAILURE, TestResult.ERROR, TestResult.PENDING, TestResult.IGNORED ]
     }
 
 

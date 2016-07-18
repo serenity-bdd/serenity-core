@@ -180,6 +180,7 @@
             <table>
                 <thead>
                 <tr>
+                    <th>#</th>
                     <#list testOutcome.dataTable.headers as header>
                         <th>${inflection.of(header).asATitle()}</th>
                     </#list>
@@ -189,9 +190,9 @@
                     <#assign rowIndex = dataSet.startRow >
                     <#list dataSet.rows as row>
                     <tr>
+                        <td class="test-${row.result}"><a href="#${rowIndex}">${rowIndex + 1}</a></td>
                         <#list row.values as value>
-                            <td class="test-${row.result}"><a href="#${rowIndex}">${formatter.htmlCompatible(value)}</a>
-                            </td>
+                            <td class="test-${row.result}"><a href="#${rowIndex}">${formatter.htmlCompatible(value)}</a></td>
                         </#list>
                     </tr>
                         <#assign rowIndex = rowIndex + 1 >
@@ -515,9 +516,7 @@
 
     <script type="text/javascript">
         $('.example-table table').DataTable({
-            "order": [
-                [1, "asc"]
-            ],
+            "order": [[ 0, "asc" ]],
             "pageLength": 25,
             "scrollX": "100%",
             "scrollXInner": "100%",

@@ -5,6 +5,7 @@
 <#assign ignoredCount = testOutcomes.totalTests.withResult("ignored") >
 <#assign failureCount = testOutcomes.totalTests.withResult("failure") >
 <#assign errorCount = testOutcomes.totalTests.withResult("error") >
+<#assign compromisedCount = testOutcomes.totalTests.withResult("compromised") >
 <#assign failureOrErrorCount = testOutcomes.totalTests.withFailureOrError() >
 
 <#assign autoTotalCount = testOutcomes.count("AUTOMATED").total >

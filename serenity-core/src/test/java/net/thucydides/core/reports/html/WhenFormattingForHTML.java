@@ -249,6 +249,7 @@ public class WhenFormattingForHTML {
         assertThat(formattedValue, is("A table:<br><table class='embedded'><thead><th>name</th><th>age</th></thead><tbody><tr><td>Bill</td><td>20</td></tr></tbody></table>"));
     }
 
+
     @Test
     public void should_convert_embedded_text_tables__with_square_brackets_into_html_tables() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);

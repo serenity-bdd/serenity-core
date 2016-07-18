@@ -120,18 +120,6 @@ class WhenRunningTestScenarios extends Specification {
         results["edge_case_2"].testSteps.size() == 2
     }
 
-    def "should record well formated error messages for classic JUnit asserts"() {
-        given:
-        def runner = new ThucydidesRunner(SampleFailingScenarioUsingHtmlUnit, webDriverFactory)
-        when:
-        runner.run(new RunNotifier())
-        def outcomes = runner.testOutcomes
-        def results = resultsFrom(outcomes)
-        then:
-        results["edge_case_2"].title == "Edge case 2"
-        results["edge_case_2"].testSteps.size() == 2
-    }
-
     def "should record state between steps"() {
         given:
         def runner = new ThucydidesRunner(SampleScenarioWithStateVariables, webDriverFactory)

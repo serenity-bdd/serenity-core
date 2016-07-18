@@ -7,12 +7,12 @@ import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
 import net.thucydides.junit.runners.ThucydidesRunner;
-import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Ignore;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -96,9 +96,7 @@ public class SampleScenarioSteps extends ScenarioSteps {
 
     @Step
     public void stepThatFails() {
-//        assertThat(1, is(2));
-        Assert.assertEquals("Sorry, we don['t recognize that email address. Please try again",
-                "Sorry, we don't recognize that email address. Please try again");
+        assertThat(1, is(2));
     }
 
     @Step

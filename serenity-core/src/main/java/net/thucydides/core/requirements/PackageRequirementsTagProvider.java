@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.reflect.ClassPath;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
@@ -97,21 +98,17 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
     private List<Requirement> requirementsReadFromClasspath() {
         try {
-            Set<Requirement> allRequirements = Sets.newHashSet();
 
-            List<String> requirementPaths = Lists.newArrayList();
-            ClassPath classpath = ClassPath.from(Thread.currentThread().getContextClassLoader());
-            for (ClassPath.ClassInfo classInfo : classpath.getTopLevelClassesRecursive(rootPackage)) {
-                if ((classInfo.load().getAnnotation(RunWith.class) != null)) {
-                    requirementPaths.add(classInfo.getName());
-                }
-            }
-
+            List<String> requirementPaths = requirementPathsStartingFrom(rootPackage);
             int requirementsDepth = longestPathIn(requirementPaths);
+
+            Set<Requirement> allRequirements = Sets.newHashSet();
             for (String path : requirementPaths) {
                 addRequirementsDefinedIn(path, requirementsDepth, allRequirements);
             }
+
             allRequirements = removeChildrenFromTopLevelRequirementsIn(allRequirements);
+
             requirements = Lists.newArrayList(allRequirements);
             Collections.sort(requirements);
 
@@ -122,6 +119,33 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
             requirements = new ArrayList<>();
         }
         return requirements;
+    }
+
+    private List<String> requirementPathsStartingFrom(String rootPackage) throws IOException {
+        List<String> requirementPaths = requirementPathsFromClassesInPackage(rootPackage);
+        return requirementPaths;
+    }
+
+    private List<String> requirementPathsFromClassesInPackage(String rootPackage) throws IOException {
+        List<String> requirementPaths = Lists.newArrayList();
+        ClassPath classpath = ClassPath.from(Thread.currentThread().getContextClassLoader());
+
+        for (ClassPath.ClassInfo classInfo : classpath.getTopLevelClassesRecursive(rootPackage)) {
+            if (classRepresentsARequirementIn(classInfo)) {
+                requirementPaths.add(classInfo.getName());
+            }
+        }
+        return requirementPaths;
+    }
+
+    private boolean classRepresentsARequirementIn(ClassPath.ClassInfo classInfo) {
+        if ((classInfo.load().getAnnotation(RunWith.class) != null)) {
+            return true;
+        }
+        if (classInfo.load().getPackage().getAnnotation(Narrative.class) != null) {
+            return true;
+        }
+        return false;
     }
 
     private Set<Requirement> removeChildrenFromTopLevelRequirementsIn(Set<Requirement> allRequirements) {
@@ -149,6 +173,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     private void addRequirementsDefinedIn(String path, int requirementsDepth, Collection<Requirement> allRequirements) {
 
         Requirement leafRequirement = addStoryDefinedIn(path)
+                .withAMaximumRequirementsDepthOf(requirementsDepth)
                 .startingAt(rootPackage)
                 .to(allRequirements);
 
@@ -163,39 +188,11 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
     @Override
     public Optional<Requirement> getParentRequirementOf(TestOutcome testOutcome) {
-
         return getTestCaseRequirementOf(testOutcome);
-//        if (containingRequirement.isPresent() && containingRequirement.get().getParent() != null) {
-//            return getRequirementCalled(containingRequirement.get().getParent());
-//        }
-
-//        Optional<Requirement> requirement = requirementFromUserStoryTagIn(testOutcome);
-//        if (requirement != null) return requirement;
-//        return Optional.absent();
-    }
-
-    private Optional<Requirement> requirementFromUserStoryTagIn(TestOutcome testOutcome) {
-        testOutcome.getUserStory().asTag();
-        for (Requirement requirement : getFlattenedRequirements()) {
-            if (requirement.asTag().isAsOrMoreSpecificThan(testOutcome.getUserStory().asTag())) {
-                return Optional.of(requirement);
-            }
-        }
-        return null;
-    }
-
-    private Optional<Requirement> getRequirementCalled(String requirementName) {
-        for (Requirement requirement : getFlattenedRequirements()) {
-            if (requirement.asTag().isAsOrMoreSpecificThan(TestTag.withName(requirementName).andType(requirement.getType()))) {
-                return Optional.of(requirement);
-            }
-        }
-        return Optional.absent();
     }
 
     public Optional<Requirement> getTestCaseRequirementOf(TestOutcome testOutcome) {
-        testOutcome.getUserStory().asTag();
-        for (Requirement requirement : getFlattenedRequirements()) {
+        for (Requirement requirement : AllRequirements.in(getRequirements())) {
             if (requirement.asTag().isAsOrMoreSpecificThan(testOutcome.getUserStory().asTag())) {
                 return Optional.of(requirement);
             }
@@ -203,75 +200,9 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         return Optional.absent();
     }
 
-//    private Optional<Requirement> lowestLevelRequirementIn(Set<TestTag> requirementTags) {
-//        for (String requirementType : reverse(getRequirementTypes())) {
-//            for (TestTag testTag : requirementTags) {
-//                if (testTag.getType().equalsIgnoreCase(requirementType)) {
-//                    return Optional.of(Requirement.named(testTag.getName()).withType(testTag.getType())
-//                            .withNarrative(textFormOf(narrativeFor(testTag))));
-//                }
-//            }
-//        }
-//        return Optional.absent();
-//    }
-//
-//    private String textFormOf(Narrative narrative) {
-//        if (narrative.getTitle().isPresent()) {
-//            return narrative.getTitle().get() + System.lineSeparator() + narrative.getText().trim();
-//        } else {
-//            return narrative.getText().trim();
-//        }
-//    }
-//
-//    private Narrative narrativeFor(TestTag testTag) {
-//        String packagePath = asPackageName(testTag);
-//        String resourceDirectory = new File(asResourcePath(testTag)).getAbsolutePath();
-//        String featureDirectory = new File(asFeatureDirectoryPath(testTag)).getAbsolutePath();
-//        String storyDirectory = new File(asFeatureDirectoryPath(testTag)).getAbsolutePath();
-//        String packageDirectory = pathToPackage(packagePath);
-//
-//        return reader.loadFrom(new File(packageDirectory)).
-//                or(reader.loadFrom(new File(resourceDirectory)).
-//                        or(reader.loadFrom(new File(featureDirectory)).
-//                                or(reader.loadFrom(new File(storyDirectory)).
-//                                        or(emptyNarrativeOfType(testTag.getType())))));
-//    }
-
-//    private String pathToPackage(String packagePath) {
-//        try {
-//            return Resources.getResource(packagePath).getFile();
-//        } catch (IllegalArgumentException noSuchNarrative) {
-//            return "";
-//        }
-//    }
-//
-//    private Narrative emptyNarrativeOfType(String type) {
-//        return new Narrative(type, "");
-//    }
-//
-//    private String asPackageName(TestTag testTag) {
-//        return (renderedRootPackage() + testTag.getName()).replaceAll("\\.", File.separator).replaceAll(" ", "_").toLowerCase();
-//    }
-//
-//    private String renderedRootPackage() {
-//        return (rootPackage == null) ? "" : rootPackage + File.separator;
-//    }
-//
-//    private String asResourcePath(TestTag testTag) {
-//        return ("src/test/resources/" + renderedRootPackage() + testTag.getName()).replaceAll("\\.", File.separator).replaceAll(" ", "_").toLowerCase();
-//    }
-//
-//    private String asFeatureDirectoryPath(TestTag testTag) {
-//        return ("src/test/resources/features/" + testTag.getName()).replaceAll("\\.", File.separator).replaceAll(" ", "_").toLowerCase();
-//    }
-//
-//    private String asStoryDirectoryPath(TestTag testTag) {
-//        return ("src/test/resources/stories/" + testTag.getName()).replaceAll("\\.", File.separator).replaceAll(" ", "_").toLowerCase();
-//    }
-
     @Override
     public Optional<Requirement> getRequirementFor(TestTag testTag) {
-        for (Requirement requirement : getFlattenedRequirements()) {
+        for (Requirement requirement : AllRequirements.in(getRequirements())) {
             if (requirement.asTag().isAsOrMoreSpecificThan(testTag)) {
                 return Optional.of(requirement);
             }
@@ -302,7 +233,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     private Optional<Requirement> parentOf(Requirement child) {
-        for (Requirement requirement : getFlattenedRequirements()) {
+        for (Requirement requirement : AllRequirements.in(requirements)) {
             if (requirement.getChildren().contains(child)) {
                 return Optional.of(requirement);
             }

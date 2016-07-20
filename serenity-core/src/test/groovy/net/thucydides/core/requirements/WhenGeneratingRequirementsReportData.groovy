@@ -133,7 +133,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
         when: "we generate the capability outcomes"
         RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         then: "requirements with pending tests should be pending"
-        outcomes.pendingRequirementsCount == 6
+        outcomes.pendingRequirementsCount == 1
     }
 
     def "should report on the number of passing, failing and pending tests for a requirement"() {
@@ -149,6 +149,7 @@ class WhenGeneratingRequirementsReportData extends Specification {
             outcomes.total.withResult(TestResult.PENDING) == 1
             outcomes.total.withResult(TestResult.SKIPPED) == 1
             outcomes.totalTestCount == 12
+
     }
 
     /*
@@ -181,24 +182,24 @@ class WhenGeneratingRequirementsReportData extends Specification {
         when: "we generate the capability outcomes"
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         then: "the proportionOf of failing, passing and total steps should include estimations for requirements with no tests"
-            outcomes.proportion.withResult(TestResult.SUCCESS) ==0.21428571428571427
+            outcomes.proportion.withResult(TestResult.SUCCESS) == 0.3333333333333333
         outcomes.proportion.withResult(TestResult.FAILURE) > 0.0
             outcomes.proportion.withIndeterminateResult() > 0.0
         and: "the number of requirements should be available"
             outcomes.flattenedRequirementCount == 15
-            outcomes.requirementsWithoutTestsCount == 10
+            outcomes.requirementsWithoutTestsCount == 5
         and: "the number of tests should be available"
             outcomes.total.total == 12
             outcomes.total.withResult(TestResult.SUCCESS) == 9
             outcomes.total.withResult(TestResult.FAILURE) == 1
             outcomes.total.withResult(TestResult.PENDING) == 1
             outcomes.total.withResult(TestResult.SKIPPED) == 1
-            outcomes.estimatedUnimplementedTests == 30
+            outcomes.estimatedUnimplementedTests == 15
         and: "the results should be available as formatted values"
-            outcomes.formattedPercentage.withResult(TestResult.SUCCESS) == "21.4%"
+            outcomes.formattedPercentage.withResult(TestResult.SUCCESS) == "33.3%"
         and: "we can also display the test results by type"
-            outcomes.getFormattedPercentage(TestType.ANY).withResult(TestResult.SUCCESS) == "21.4%"
-            outcomes.getFormattedPercentage("ANY").withResult(TestResult.SUCCESS) == "21.4%"
+            outcomes.getFormattedPercentage(TestType.ANY).withResult(TestResult.SUCCESS) == "33.3%"
+            outcomes.getFormattedPercentage("ANY").withResult(TestResult.SUCCESS) == "33.3%"
     }
 
     def "functional coverage should cater for requirements with no tests at the requirement outcome level"() {

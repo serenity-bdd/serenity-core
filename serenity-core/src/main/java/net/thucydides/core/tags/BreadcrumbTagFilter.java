@@ -3,8 +3,10 @@ package net.thucydides.core.tags;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.RequirementsService;
+import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 
 import java.util.Collection;
@@ -30,6 +32,15 @@ public class BreadcrumbTagFilter {
         List<TestTag> requirementTypeTags = Lists.newArrayList();
         for(String requirementType : requirementsService.getRequirementTypes()) {
             requirementTypeTags.addAll(requirementTagOfType(requirementType).in(tags).asSet());
+
+        }
+        return requirementTypeTags;
+    }
+
+    public List<TestTag> getRequirementBreadcrumbsFrom(TestOutcome testOutcome) {
+        List<TestTag> requirementTypeTags = Lists.newArrayList();
+        for(Requirement ancestor : requirementsService.getAncestorRequirementsFor(testOutcome)) {
+            requirementTypeTags.add(ancestor.asTag());
 
         }
         return requirementTypeTags;

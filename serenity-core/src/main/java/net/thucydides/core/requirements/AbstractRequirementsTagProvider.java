@@ -1,14 +1,12 @@
 package net.thucydides.core.requirements;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 
-import java.util.Collection;
 import java.util.List;
 
 public abstract class AbstractRequirementsTagProvider {
@@ -18,12 +16,20 @@ public abstract class AbstractRequirementsTagProvider {
     protected final RequirementsConfiguration requirementsConfiguration;
     protected final RequirementsService requirementsService;
 
+    protected AbstractRequirementsTagProvider(EnvironmentVariables environmentVariables, String rootDirectory) {
+        this.environmentVariables = environmentVariables;
+        this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
+        this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
+        this.rootDirectory = rootDirectory;
+    }
+
     protected AbstractRequirementsTagProvider(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
         this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
         this.rootDirectory = getDefaultRootDirectory();
     }
+
 
     protected String humanReadableVersionOf(String name) {
         String underscoredName = Inflector.getInstance().underscore(name);
@@ -72,23 +78,6 @@ public abstract class AbstractRequirementsTagProvider {
         return requirementsConfiguration.getDefaultRootDirectory();
     }
 
-    protected List<Requirement> getFlattenedRequirements() {
-        List<Requirement> allRequirements = Lists.newArrayList();
-        for (Requirement requirement : getRequirements()) {
-            allRequirements.add(requirement);
-            allRequirements.addAll(childRequirementsOf(requirement));
-        }
-        return allRequirements;
-    }
-
-    protected Collection<Requirement> childRequirementsOf(Requirement requirement) {
-        List<Requirement> childRequirements = Lists.newArrayList();
-        for (Requirement childRequirement : requirement.getChildren()) {
-            childRequirements.add(childRequirement);
-            childRequirements.addAll(childRequirementsOf(childRequirement));
-        }
-        return childRequirements;
-    }
 
     protected Optional<Requirement> firstRequirementFoundIn(Optional<Requirement>... requirements) {
         for(Optional<Requirement> requirement : requirements) {

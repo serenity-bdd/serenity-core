@@ -8,10 +8,17 @@ import net.thucydides.core.model.TestTag
 import net.thucydides.core.requirements.model.Requirement
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
+import org.assertj.core.util.Files
 import spock.lang.Specification
 
 class WhenLoadingRequirementsFromAPackageStructure extends Specification {
     public static final String ROOT_DIRECTORY = "annotatedstorieswithcontents"
+
+    def setup() {
+        if (new File("target/site/serenity/requirements/package-requirements.json").exists()) {
+            Files.delete(new File("target/site/serenity/requirements/package-requirements.json"))
+        }
+    }
 
     def "Should be able to load capabilities from the default package structure"() {
         given: "We are using the Annotation provider"
@@ -257,4 +264,23 @@ class WhenLoadingRequirementsFromAPackageStructure extends Specification {
         then: "the requirements are the one found in otherannotatedstories"
             capabilities.collect{it.name} == ["Theother1", "Theother2"]
     }
+
+    def "should read requirements from packages containing only package-info"() {
+        given: "We using the package requirement provider"
+            EnvironmentVariables vars = new MockEnvironmentVariables();
+            vars.setProperty("serenity.test.root", "packagerequirements")
+            def capabilityProvider = new PackageRequirementsTagProvider(vars)
+        when: "We load requirements"
+            def capabilities = capabilityProvider.getRequirements()
+        then: "the requirements are the one found in otherannotatedstories"
+            capabilities.collect{it.name} == ["Apples", "Nice zucchinis", "Potatoes"]
+        and: "the requirements narratives are read from the package-info files"
+            Requirement apples = capabilities.find { it.name == 'Apples' }
+            apples.narrative.text.contains("For apples")
+        and:
+            Requirement zucchinis = capabilities.find { it.name == 'Nice zucchinis' }
+            zucchinis.narrative.text.contains("For Nice Zuchinnis")
+
+    }
+
 }

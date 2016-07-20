@@ -73,7 +73,8 @@ public class RequirementOutcome {
     }
 
     public boolean isPending() {
-        return (getTestOutcomes().getTestCount() == 0) || getTestOutcomes().getResult() == TestResult.PENDING || anyChildRequirementsArePending();
+//        return (getTestOutcomes().getTestCount() == 0) || getTestOutcomes().getResult() == TestResult.PENDING || anyChildRequirementsArePending();
+        return getTestOutcomes().getResult() == TestResult.PENDING || anyChildRequirementsArePending();
     }
 
     public boolean isIgnored() {

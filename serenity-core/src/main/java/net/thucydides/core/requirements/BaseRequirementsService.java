@@ -147,23 +147,22 @@ public abstract class BaseRequirementsService implements RequirementsService {
     Map<TestOutcome, Optional<Requirement>> requirementCache = Maps.newConcurrentMap();
 
     private Optional<Requirement> getParentRequirementOf(TestOutcome testOutcome, RequirementsTagProvider tagProvider) {
-        if (requirementCache.containsKey(testOutcome)) {
-            return requirementCache.get(testOutcome);
-        }
+//        if (requirementCache.containsKey(testOutcome)) {
+//            return requirementCache.get(testOutcome);
+//        }
 
         Optional<Requirement> parentDefinedInTags = tagProvider.getParentRequirementOf(testOutcome);
         if (parentDefinedInTags.isPresent()) {
             Optional<Requirement> matchingIndexedParentRequirement = findMatchingIndexedRequirement(parentDefinedInTags.get());
-            requirementCache.put(testOutcome, matchingIndexedParentRequirement);
+//            requirementCache.put(testOutcome, matchingIndexedParentRequirement);
             return matchingIndexedParentRequirement;
-        } else {
-            return Optional.absent();
         }
 
+        return Optional.absent();
     }
 
     private Optional<Requirement> findMatchingIndexedRequirement(Requirement requirement) {
-        for(Requirement indexedRequirement : getRequirements()) {
+        for(Requirement indexedRequirement : AllRequirements.in(requirements)) {
             if (requirement.matches(indexedRequirement)) {
                 return Optional.of(indexedRequirement);
             }

@@ -143,7 +143,7 @@
                             </div>
                         </#if>
                         </td>
-                        <td valign="top" align="right>
+                        <td valign="top" align="right">
                         <#list filteredTags as tag>
                             <#assign tagReport = absoluteReportName.forTag(tag) />
                             <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
@@ -186,11 +186,9 @@
 <#if (testOutcome.isDataDriven())>
     <div class="story-title">
         <h3>Scenario:</h3>
-
         <div class="scenario">${formatter.formatWithFields(testOutcome.dataDrivenSampleScenario, testOutcome.exampleFields)}</div>
     </div>
 </#if>
-
 
     <div id="beforetable"></div>
     <div id="contenttilttle">

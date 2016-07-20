@@ -21,8 +21,10 @@ public class ChildElementAdder {
     }
 
     public void in(Collection<Requirement> requirements) {
-        requirements.remove(parent);
-        requirements.add(parent.withChild(child));
+        if (parent != null) {
+            requirements.remove(parent);
+            requirements.add(parent.withChild(child));
+        }
     }
 
     public static class ChildElementAdderBuilder{

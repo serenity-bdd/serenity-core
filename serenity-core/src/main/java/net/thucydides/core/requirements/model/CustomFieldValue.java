@@ -1,5 +1,7 @@
 package net.thucydides.core.requirements.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 public class CustomFieldValue {
 
     private String name;
@@ -33,5 +35,14 @@ public class CustomFieldValue {
 
     public String getRenderedText() {
         return (renderedText != null) ? renderedText : text;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("name", name)
+                .append("text", text)
+                .append("renderedText", renderedText)
+                .toString();
     }
 }

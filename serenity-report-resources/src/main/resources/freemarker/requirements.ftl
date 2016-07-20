@@ -23,45 +23,46 @@
 <#include "components/test-outcomes.ftl">
 <#include "components/requirements-list.ftl">
 
-<#assign successfulManualTests = (requirements.count("manual").withResult("SUCCESS") > 0)>
-<#assign pendingManualTests = (requirements.count("manual").withResult("PENDING") > 0)>
-<#assign ignoredManualTests = (requirements.count("manual").withResult("IGNORED") > 0)>
-<#assign failingManualTests = (requirements.count("manual").withResult("FAILURE") > 0)>
+
+<#list requirements.types as requirementType>
+    <#assign successfulRequirements= requirements.requirementsOfType(requirementType).completedRequirementsCount >
+    <#assign pendingRequirements = requirements.requirementsOfType(requirementType).pendingRequirementsCount>
+    <#assign ignoredRequirements = requirements.requirementsOfType(requirementType).ignoredRequirementsCount >
+    <#assign failingRequirements = requirements.requirementsOfType(requirementType).failingRequirementsCount >
+    <#assign errorRequirements = requirements.requirementsOfType(requirementType).errorRequirementsCount  >
+    <#assign compromisedRequirements = requirements.requirementsOfType(requirementType).compromisedRequirementsCount  >
+    <#assign untesteddRequirements = requirements.requirementsOfType(requirementType).requirementsWithoutTestsCount >
+<#else>
+    <#assign successfulRequirements= testOutcomes.totalTests.withResult("success") >
+    <#assign pendingRequirements = testOutcomes.totalTests.withResult("pending") >
+    <#assign ignoredRequirements = testOutcomes.totalTests.withResult("ignored") + testOutcomes.totalTests.withResult("skipped")>
+    <#assign failingRequirements = testOutcomes.totalTests.withResult("failure") >
+    <#assign errorRequirements = testOutcomes.totalTests.withResult("error") >
+    <#assign compromisedRequirements = testOutcomes.totalTests.withResult("compromised") >
+    <#assign untesteddRequirements = 0 >
+</#list>
 
     <script class="code" type="text/javascript">$(document).ready(function () {
         var plot1 = $.jqplot('coverage_pie_chart', [
             [
-                ['Passing', ${requirements.proportionOf("automated").withResult("SUCCESS")}],
-            <#if (successfulManualTests == true)>
-                ['Passing (manual)', ${requirements.proportionOf("manual").withResult("SUCCESS")}],
-            </#if>
-                ['Pending', ${requirements.proportionOf("automated").withResult("PENDING")}],
-            <#if (pendingManualTests)>
-                ['Pending (manual)', ${requirements.proportionOf("manual").withResult("PENDING")}],
-            </#if>
-                ['Ignored', ${requirements.proportionOf("automated").withResult("IGNORED")}],
-            <#if (ignoredManualTests)>
-                ['Ignored (manual)', ${requirements.proportionOf("manual").withResult("IGNORED")}],
-            </#if>
-                ['Failing', ${requirements.proportionOf("automated").withResult("FAILURE")}],
-            <#if (failingManualTests)>
-                ['Failing (manual)', ${requirements.proportionOf("manual").withResult("FAILURE")}],
-            </#if>
-                ['Errors',  ${requirements.proportion.withResult("ERROR")}],
-                ['Compromised Tests',  ${requirements.proportion.withResult("COMPROMISED")}],
+                ['Passing', ${successfulRequirements}],
+                ['Pending', ${pendingRequirements}],
+                ['Ignored', ${ignoredRequirements}],
+                ['Failing', ${failingRequirements}],
+                ['Errors',  ${errorRequirements}],
+                ['Compromised',  ${compromisedRequirements}],
+                ['Untested',  ${untesteddRequirements}],
             ]
         ], {
             gridPadding: {top: 0, bottom: 38, left: 0, right: 0},
-            seriesColors: ['#30cb23',
-                <#if (successfulManualTests)>'#009818',</#if>
+            seriesColors: [
+                '#30cb23',
                 '#a2f2f2',
-                <#if (pendingManualTests)>'#8bb1df',</#if>
                 '#eeeadd',
-                <#if (ignoredManualTests)>'#d3d3d3',</#if>
                 '#f8001f',
-                <#if (failingManualTests)>'#a20019',</#if>
                 '#fc6e1f',
-                'fuchsia'],
+                'fuchsia',
+                'darkgrey'],
             seriesDefaults: {
                 renderer: $.jqplot.PieRenderer,
                 trendline: {show: false},
@@ -77,11 +78,13 @@
                 marginTop: '15px'
             },
             series: [
-                {label: '${requirements.formattedPercentage.withResult("SUCCESS")} requirements tested successfully'},
-                {label: '${requirements.formattedPercentage.withIndeterminateResult()} requirements untested'},
-                {label: '${requirements.formattedPercentage.withResult("FAILURE")}} requirements failing'},
-                {label: '${requirements.formattedPercentage.withResult("ERROR")}} requirements with errors'},
-                {label: '${requirements.formattedPercentage.withResult("COMPROMISED")}} requirements with compromised tests'}
+                {label: '${successfulRequirements} requirements tested successfully'},
+                {label: '${pendingRequirements} requirements pending'},
+                {label: '${ignoredRequirements}} requirements skipped'},
+                {label: '${failingRequirements}} requirements with failures'},
+                {label: '${errorRequirements}} requirements with errors'},
+                {label: '${compromisedRequirements}} requirements compromised'},
+                {label: '${untesteddRequirements}} requirements untested'},
             ]
         });
         // Results table
@@ -196,7 +199,6 @@
             <#if (requirements.parentRequirement.isPresent())>
                 <div>
                     <h2><i class="fa fa-book"></i> ${parentType}: ${issueNumber} ${parentTitle}</h2>
-
                     <#if parentRequirement.narrative.renderedText?has_content>
                         <div class="requirementNarrativeTitle">
                         ${formatter.renderDescription(parentRequirement.narrative.renderedText)}
@@ -219,6 +221,10 @@
             </#if>
 
             <#if (requirements.totalTestCount > 0 || requirements.flattenedRequirementCount > 0)>
+                <#assign untestedCount = 0>
+                <#foreach requirementType in requirements.types>
+                    <#assign untestedCount = untestedCount + requirements.requirementsOfType(requirementType).requirementsWithoutTestsCount>
+                </#foreach>
                 <div id="requirements-summary">
                     <div id="coverage_pie_chart"
                          style="margin-top:10px; margin-left:10px; width:250px; height:250px;"></div>
@@ -234,7 +240,9 @@
                                         <th>Fail&nbsp;<i class="icon-thumbs-down"></i></th>
                                         <th>Pending&nbsp;<i class="icon-calendar"></i></th>
                                         <th>Ignored&nbsp;<i class="icon-ban-circle"></i></th>
-                                        <th>Untested&nbsp;<i class="icon-question"></i></th>
+                                        <#if (untestedCount > 0)>
+                                            <th>Untested&nbsp;<i class="icon-question"></i></th>
+                                        </#if>
                                     </tr>
                                 </head>
                                 <body>
@@ -242,12 +250,14 @@
                                     <tr>
                                         <#assign requirementTitle = inflection.of(requirementType).inPluralForm().asATitle() />
                                         <td class="summary-leading-column">${requirementTitle}</td>
-                                        <td>${requirements.requirementsOfType(requirementType).requirementCount + requirements.requirementsOfType(requirementType).requirementsWithoutTestsCount}</td>
+                                        <td>${requirements.requirementsOfType(requirementType).requirementCount}</td>
                                         <td>${requirements.requirementsOfType(requirementType).completedRequirementsCount}</td>
                                         <td>${requirements.requirementsOfType(requirementType).failingRequirementsCount}</td>
                                         <td>${requirements.requirementsOfType(requirementType).pendingRequirementsCount}</td>
                                         <td>${requirements.requirementsOfType(requirementType).ignoredRequirementsCount}</td>
-                                        <td>${requirements.requirementsOfType(requirementType).requirementsWithoutTestsCount}</td>
+                                        <#if (untestedCount > 0)>
+                                            <td>${requirements.requirementsOfType(requirementType).requirementsWithoutTestsCount}</td>
+                                        </#if>
                                     </tr>
                                     </#foreach>
 

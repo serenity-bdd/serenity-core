@@ -3,6 +3,7 @@ package net.thucydides.core.requirements.model;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.List;
 
@@ -45,5 +46,14 @@ public class Narrative {
 
     public List<String> getVersionNumbers() {
         return ImmutableList.copyOf(versionNumbers);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("title", title)
+                .append("text", text)
+                .append("type", type)
+                .toString();
     }
 }

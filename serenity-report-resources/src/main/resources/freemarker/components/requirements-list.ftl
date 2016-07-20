@@ -81,12 +81,6 @@
                     <#assign errorCount = requirementOutcome.testOutcomes.totalTests.withResult("error") >
                     <#assign compromisedCount = requirementOutcome.testOutcomes.totalTests.withResult("compromised") >
 
-                <#--<td class="bluetext requirementRowCell">${requirementOutcome.testOutcomes.total}</td>-->
-                <#--<td class="greentext requirementRowCell">${successCount}</td>-->
-                <#--<td class="redtext requirementRowCell">${failureCount}</td>-->
-                <#--<td class="lightredtext requirementRowCell">${errorCount}</td>-->
-                <#--<td class="bluetext requirementRowCell">${indeterminateCount}</td>-->
-
                     <#assign totalAutomated = requirementOutcome.tests.count("AUTOMATED").withAnyResult()/>
                     <#assign automatedPassedPercentage = requirementOutcome.tests.getFormattedPercentage("AUTOMATED").withResult("SUCCESS")/>
                     <#assign automatedFailedPercentage = requirementOutcome.tests.getFormattedPercentage("AUTOMATED").withFailureOrError()/>
@@ -140,7 +134,6 @@
                         <#assign errorbar = (percentPassing + percentFailing + percentError)*125>
                         <#assign failingbar = (percentPassing + percentFailing)*125>
                         <#assign passingbar = percentPassing*125>
-
 
                         <#assign tests = inflection.of(requirementOutcome.testOutcomes.total).times("test") >
 

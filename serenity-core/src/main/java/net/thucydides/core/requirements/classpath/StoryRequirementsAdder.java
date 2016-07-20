@@ -1,10 +1,6 @@
 package net.thucydides.core.requirements.classpath;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
-import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.requirements.annotations.NarrativeFinder;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -14,13 +10,13 @@ import java.util.List;
 
 import static net.thucydides.core.requirements.classpath.PathElements.*;
 import static net.thucydides.core.util.NameConverter.humanize;
-import static org.apache.http.util.TextUtils.isEmpty;
 import static org.codehaus.groovy.runtime.DefaultGroovyMethods.last;
 
 public class StoryRequirementsAdder {
 
     private final String path;
     private final String rootPackage;
+    private final int requirementsDepth;
 
     RequirementsConfiguration requirementsConfiguration;
 
@@ -31,6 +27,7 @@ public class StoryRequirementsAdder {
     public static class StoryRequirementsAdderBuilder {
 
         private final String path;
+        private int requirementsDepth;
 
         public StoryRequirementsAdderBuilder(String path) {
 
@@ -38,17 +35,36 @@ public class StoryRequirementsAdder {
         }
 
         public StoryRequirementsAdder startingAt(String rootPackage) {
-            return new StoryRequirementsAdder(path, rootPackage);
+            return new StoryRequirementsAdder(path, requirementsDepth, rootPackage);
         }
+
+        public StoryRequirementsAdderBuilder withAMaximumRequirementsDepthOf(int requirementsDepth) {
+            this.requirementsDepth = requirementsDepth;
+            return this;
+        }
+
     }
 
-    protected StoryRequirementsAdder(String path, String rootPackage) {
+    protected StoryRequirementsAdder(String path, int requirementsDepth, String rootPackage) {
         this.path = path;
         this.rootPackage = rootPackage;
+        this.requirementsDepth = requirementsDepth;
         this.requirementsConfiguration = new RequirementsConfiguration(Injectors.getInjector().getInstance(EnvironmentVariables.class));
     }
 
+
     public Requirement to(Collection<Requirement> allRequirements) {
+
+        Requirement newRequirement = PackageInfoClass.isDefinedIn(path) ?
+                requirementDefinedByNarrativeAt(path) : requirementDefinedByClassNameAt(path);
+
+        allRequirements.add(newRequirement);
+
+        return newRequirement;
+    }
+
+    private Requirement requirementDefinedByClassNameAt(String path) {
+
         List<String> pathElements = elementsOf(path, rootPackage);
         String storyName = humanize(lastOf(pathElements));
 
@@ -57,40 +73,70 @@ public class StoryRequirementsAdder {
             parent = humanize(secondLastOf(pathElements));
         }
 
-        Requirement story = Requirement.named(storyName)
-                .withType(narrativeTypeDefinedIn(path).or(leafRequirementType()))
-                .withNarrative(narrativeTextDefinedIn(path).or(""))
-                .withParent(parent);
+        String narrativeText = PackageInfoNarrative.text().definedInPath(path)
+                               .or(ClassNarrative.text().definedInPath(path))
+                               .or("");
 
-        allRequirements.add(story);
+        String narrativeType = PackageInfoNarrative.type().definedInPath(path)
+                .or(ClassNarrative.type().definedInPath(path))
+                .or(leafRequirementType());
+
+        Requirement story = Requirement.named(storyName)
+                .withType(narrativeType)
+                .withNarrative(narrativeText)
+                .withParent(parent);
 
         return story;
     }
 
-    private Optional<String> narrativeTypeDefinedIn(String path) {
-        Optional<Narrative> narrative = getClassLevelNarrativeFor(path);
-        if (!narrative.isPresent() || (isEmpty(narrative.get().type()))) {
-            return Optional.absent();
+    private Requirement requirementDefinedByNarrativeAt(String path) {
+
+        List<String> pathElements = elementsOf(path, rootPackage);
+        List<String> featurePathElements = allButLast(pathElements);
+        String featureName = humanize(lastOf(featurePathElements));
+
+        String parent = null;
+        if (featurePathElements.size() >= 2) {
+            parent = humanize(secondLastOf(featurePathElements));
         }
-        return Optional.of(narrative.get().type());
+
+        int startFromRequirementLevel = requirementsConfiguration.getRequirementTypes().size() - requirementsDepth;
+        String typeByLevel = requirementsConfiguration.getRequirementType(startFromRequirementLevel + featurePathElements.size() - 1);
+
+
+        Requirement story = Requirement.named(featureName)
+                .withType(PackageInfoNarrative.type().definedInPath(path).or(typeByLevel))
+                .withNarrative(PackageInfoNarrative.text().definedInPath(path).or(""))
+                .withParent(parent);
+
+        return story;
     }
 
-    private Optional<String> narrativeTextDefinedIn(String path) {
-        Optional<Narrative> narrative = getClassLevelNarrativeFor(path);
-        if (!narrative.isPresent()) {
-            return Optional.absent();
-        }
-        String narrativeText = Joiner.on("\n").join(narrative.get().text());
-        return Optional.of((narrative.get().title() + System.lineSeparator() + narrativeText).trim());
-    }
 
-    public Optional<Narrative> getClassLevelNarrativeFor(String path) {
-        try {
-            return NarrativeFinder.forClass(getClass().getClassLoader().loadClass(path));
-        } catch (ClassNotFoundException e) {
-            return Optional.absent();
-        }
-    }
+//    private Optional<String> narrativeTypeDefinedIn(String path) {
+//        Optional<Narrative> narrative = getClassLevelNarrativeFor(path);
+//        if (!narrative.isPresent() || (isEmpty(narrative.get().type()))) {
+//            return Optional.absent();
+//        }
+//        return Optional.of(narrative.get().type());
+//    }
+//
+//    private Optional<String> narrativeTextDefinedIn(String path) {
+//        Optional<Narrative> narrative = getClassLevelNarrativeFor(path);
+//        if (!narrative.isPresent()) {
+//            return Optional.absent();
+//        }
+//        String narrativeText = Joiner.on("\n").join(narrative.get().text());
+//        return Optional.of((narrative.get().title() + System.lineSeparator() + narrativeText).trim());
+//    }
+//
+//    public Optional<Narrative> getClassLevelNarrativeFor(String path) {
+//        try {
+//            return NarrativeFinder.forClass(getClass().getClassLoader().loadClass(path));
+//        } catch (ClassNotFoundException e) {
+//            return Optional.absent();
+//        }
+//    }
 
     private String leafRequirementType() {
         return last(requirementsConfiguration.getRequirementTypes());

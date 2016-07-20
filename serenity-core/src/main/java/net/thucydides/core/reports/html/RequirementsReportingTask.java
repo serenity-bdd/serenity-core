@@ -2,6 +2,8 @@ package net.thucydides.core.reports.html;
 
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.time.Stopwatch;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.Release;
 import net.thucydides.core.releases.ReleaseManager;
 import net.thucydides.core.reports.TestOutcomes;
@@ -48,7 +50,9 @@ public class RequirementsReportingTask extends BaseReportingTask implements Repo
         this.requirementsService = requirementsService;
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
 
-        this.htmlRequirementsReporter = new HtmlRequirementsReporter(relativeLink);
+        this.htmlRequirementsReporter = new HtmlRequirementsReporter(relativeLink,
+                                                                     Injectors.getInjector().getInstance(IssueTracking.class),
+                                                                     requirementsService);
         this.htmlRequirementsReporter.setOutputDirectory(outputDirectory);
 
     }

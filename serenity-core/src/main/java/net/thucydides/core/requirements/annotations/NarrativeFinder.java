@@ -6,6 +6,6 @@ import net.thucydides.core.annotations.Narrative;
 
 public class NarrativeFinder {
     public static Optional<Narrative> forClass(Class<?> annotatedClass) {
-        return Optional.fromNullable((Narrative) annotatedClass.getAnnotation(Narrative.class));
+        return Optional.fromNullable(annotatedClass.getAnnotation(Narrative.class));
     }
 }

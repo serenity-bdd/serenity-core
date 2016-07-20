@@ -163,7 +163,8 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     }
 
     private void addBreadcrumbs(TestOutcome testOutcome, Map<String, Object> context) {
-        List<TestTag> breadcrumbs = new BreadcrumbTagFilter().getRequirementBreadcrumbsFrom(testOutcome.getTags());
+        requirementsService.getAncestorRequirementsFor(testOutcome);
+        List<TestTag> breadcrumbs = new BreadcrumbTagFilter(requirementsService).getRequirementBreadcrumbsFrom(testOutcome);
         context.put("breadcrumbs", breadcrumbs);
     }
 

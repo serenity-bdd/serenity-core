@@ -190,10 +190,24 @@ public class RequirementsOutcomes {
         return completedRequirements;
     }
 
+    public int getUnsuccessfulRequirementsCount() {
+        return getErrorRequirementsCount() + getFailingRequirementsCount() + getCompromisedRequirementsCount();
+    }
+
+    public int getErrorRequirementsCount() {
+        int failingRequirements = 0;
+        for (RequirementOutcome requirementOutcome : requirementOutcomes) {
+            if (requirementOutcome.isError()) {
+                failingRequirements++;
+            }
+        }
+        return failingRequirements;
+    }
+
     public int getFailingRequirementsCount() {
         int failingRequirements = 0;
         for (RequirementOutcome requirementOutcome : requirementOutcomes) {
-            if (requirementOutcome.isFailure() || requirementOutcome.isError() || requirementOutcome.isCompromised()) {
+            if (requirementOutcome.isFailure()) {
                 failingRequirements++;
             }
         }
@@ -204,6 +218,16 @@ public class RequirementsOutcomes {
         int total = 0;
         for (RequirementOutcome requirementOutcome : requirementOutcomes) {
             if (requirementOutcome.isPending()) {
+                total++;
+            }
+        }
+        return total;
+    }
+
+    public int getCompromisedRequirementsCount() {
+        int total = 0;
+        for (RequirementOutcome requirementOutcome : requirementOutcomes) {
+            if (requirementOutcome.isCompromised()) {
                 total++;
             }
         }
@@ -222,18 +246,29 @@ public class RequirementsOutcomes {
 
     public int getRequirementsWithoutTestsCount() {
         int requirementsWithNoTests = 0;
-        List<RequirementOutcome> flattenedRequirementOutcomes = getFlattenedRequirementOutcomes();
+//        List<RequirementOutcome> flattenedRequirementOutcomes = getFlattenedRequirementOutcomes();
 
-        for (Requirement requirement : getAllRequirements()) {
-            if (!testsRecordedFor(flattenedRequirementOutcomes, requirement)) {
+//        for (Requirement requirement : getAllRequirements()) {
+//            if (!testsRecordedFor(flattenedRequirementOutcomes, requirement)) {
+        for (Requirement requirement : getTopLevelRequirements()) {
+            if (!testsRecordedFor(requirement) && !isPending(requirement)) {
                 requirementsWithNoTests++;
             }
         }
         return requirementsWithNoTests;
     }
 
-    private boolean testsRecordedFor(List<RequirementOutcome> outcomes, Requirement requirement) {
-        for (RequirementOutcome outcome : outcomes) {
+    private boolean isPending(Requirement requirement) {
+        for(RequirementOutcome requirementOutcome : requirementOutcomes) {
+            if (requirementOutcome.getRequirement().equals(requirement) && requirementOutcome.isPending()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean testsRecordedFor(Requirement requirement) {
+        for (RequirementOutcome outcome : requirementOutcomes) {
             if (outcome.testsRequirement(requirement) && outcome.getTestCount() > 0) {
                 return true;
             }
@@ -247,6 +282,14 @@ public class RequirementsOutcomes {
             addFlattenedRequirements(outcome.getRequirement(), allRequirements);
         }
         return allRequirements;
+    }
+
+    private List<Requirement> getTopLevelRequirements() {
+        List<Requirement> requirements = Lists.newArrayList();
+        for (RequirementOutcome outcome : requirementOutcomes) {
+            requirements.add(outcome.getRequirement());
+        }
+        return requirements;
     }
 
     public int getTotalRequirements() {

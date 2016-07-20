@@ -9,7 +9,8 @@ import java.util.Collection;
 import java.util.List;
 
 import static net.thucydides.core.requirements.classpath.ChildElementAdder.addChild;
-import static net.thucydides.core.requirements.classpath.PathElements.*;
+import static net.thucydides.core.requirements.classpath.PathElements.allButLast;
+import static net.thucydides.core.requirements.classpath.PathElements.elementsOf;
 import static net.thucydides.core.util.NameConverter.humanize;
 
 /**
@@ -32,11 +33,12 @@ public class NonLeafRequirementsAdder {
 
     public void to(Collection<Requirement> allRequirements) {
 
-        List<String> parentElements = allButLast(elementsOf(path, rootPackage));
+        List<String> parentElements =
+                PackageInfoClass.isDefinedIn(path) ?
+                        allButLast(allButLast(elementsOf(path, rootPackage))) :
+                        allButLast(elementsOf(path, rootPackage));
 
         int startFromRequirementLevel = getRequirementTypes().size() - requirementsDepth;
-
-        List<String> requirementTypes = allButLast(getRequirementTypes());
 
         String fullPath = rootPackage;
         int level = startFromRequirementLevel;
@@ -44,7 +46,7 @@ public class NonLeafRequirementsAdder {
         Requirement parent = null;
         for (String pathElement : parentElements) {
 
-            String type = getRequirementType(requirementTypes, level++);
+            String type = requirementsConfiguration.getRequirementType(level++);
 
             fullPath = fullPath + "." + pathElement;
 
@@ -52,14 +54,16 @@ public class NonLeafRequirementsAdder {
 
             String parentName = (parent != null) ? parent.getName() : null;
 
-            if (requirementExistsCalled(humanize(pathElement),allRequirements)) {
+            if (requirementExistsCalled(humanize(pathElement), allRequirements)) {
                 nextRequirement = requirementCalled(humanize(pathElement), allRequirements).withParent(parentName);
                 if (parent != null) {
                     addChild(nextRequirement).toParent(parent).in(allRequirements);
                 }
             } else {
-                String narrativeText = NarrativeText.definedIn(fullPath, type);
-                nextRequirement = (Requirement.named(humanize(pathElement)).withType(type).withNarrative(narrativeText)).withParent(parentName);
+
+                String narrativeText = PackageInfoNarrative.text().definedInPath(fullPath).or(NarrativeText.definedIn(fullPath, type));
+                String narrativeType = PackageInfoNarrative.type().definedInPath(fullPath).or(type);
+                nextRequirement = (Requirement.named(humanize(pathElement)).withType(narrativeType).withNarrative(narrativeText)).withParent(parentName);
                 allRequirements.add(nextRequirement);
             }
             parent = nextRequirement;
@@ -77,7 +81,7 @@ public class NonLeafRequirementsAdder {
     }
 
     private Requirement requirementCalled(String name, Collection<Requirement> allRequirements) {
-        for(Requirement requirement : allRequirements) {
+        for (Requirement requirement : allRequirements) {
             if (requirement.getName().equals(name)) {
                 return requirement;
             }
@@ -88,14 +92,6 @@ public class NonLeafRequirementsAdder {
 
     public static NonLeafRequirementsAdderBuilder addParentsOf(Requirement leafRequirement) {
         return new NonLeafRequirementsAdderBuilder(leafRequirement);
-    }
-
-    String getRequirementType(List<String> types, int level) {
-        if (level >= types.size()) {
-            return lastOf(types);
-        } else {
-            return types.get(level);
-        }
     }
 
 

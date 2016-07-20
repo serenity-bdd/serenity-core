@@ -49,7 +49,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     public static final String STORY_EXTENSION = "story";
     public static final String FEATURE_EXTENSION = "feature";
 
-    private final String rootDirectoryPath;
     private final NarrativeReader narrativeReader;
     private final int level;
 
@@ -86,8 +85,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     public FileSystemRequirementsTagProvider(String rootDirectory, int level, EnvironmentVariables environmentVariables) {
-        super(environmentVariables);
-        this.rootDirectoryPath = rootDirectory;
+        super(environmentVariables, rootDirectory);
         this.level = level;
         this.narrativeReader = NarrativeReader.forRootDirectory(rootDirectory)
                                               .withRequirementTypes(getRequirementTypes());
@@ -120,7 +118,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 Collections.sort(requirements);
             } catch (IOException e) {
                 requirements = NO_REQUIREMENTS;
-                throw new IllegalArgumentException("Could not load requirements from '" + rootDirectoryPath + "'", e);
+                throw new IllegalArgumentException("Could not load requirements from '" + rootDirectory + "'", e);
             }
             if (level == 0) {
                 requirements = addParentsTo(requirements);
@@ -137,6 +135,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         List<Requirement> augmentedRequirements = Lists.newArrayList();
         for (Requirement requirement : requirements) {
             // !!! NEW CODE
+            // TODO: Concurrent modification exception here
             List<Requirement> children = requirement.hasChildren()
                     ? addParentsTo(requirement.getChildren(), requirement.qualifiedName()) : NO_REQUIREMENTS;
             augmentedRequirements.add(requirement.withParent(parent).withChildren(children));
@@ -149,7 +148,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
      * Find the root directory in the classpath or on the file system from which the requirements will be read.
      */
     public Set<String> getRootDirectoryPaths() throws IOException {
-        return new RootDirectory(environmentVariables, rootDirectoryPath).getRootDirectoryPaths();
+        return new RootDirectory(environmentVariables, rootDirectory).getRootDirectoryPaths();
     }
 
     public Set<TestTag> getTagsFor(final TestOutcome testOutcome) {
@@ -188,7 +187,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     Optional<Requirement> requirementWithMatchingFeatureFile(String path) {
-        for(Requirement requirement : getFlattenedRequirements()) {
+        for(Requirement requirement : AllRequirements.in(getRequirements()) ) {
             if ((requirement.getFeatureFileName() != null) && (requirement.getFeatureFileName().equalsIgnoreCase(path))) {
                 return Optional.of(requirement);
             }
@@ -211,7 +210,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private Optional<Requirement> parentRequirementsOf(Requirement matchingRequirement) {
-        for(Requirement requirement : getFlattenedRequirements()) {
+        for(Requirement requirement : AllRequirements.in(getRequirements())) {
             if (requirement.getChildren().contains(matchingRequirement)) {
                 return Optional.of(requirement);
             }
@@ -234,7 +233,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private Optional<Requirement> getMatchingRequirementFor(TestTag storyOrFeatureTag) {
-        for(Requirement requirement : getFlattenedRequirements()) {
+        for(Requirement requirement : AllRequirements.in(getRequirements())) {
             if (requirement.asTag().isAsOrMoreSpecificThan(storyOrFeatureTag)) {
                 return Optional.of(requirement);
             }
@@ -316,7 +315,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private Optional<Requirement> requirementWithMatchingPath(TestOutcome testOutcome) {
-        for (Requirement requirement : getFlattenedRequirements()) {
+        for (Requirement requirement : AllRequirements.in(getRequirements())) {
             if (requirement.getFeatureFileName() != null
                     && testOutcome.getPath() != null
                     && Paths.get(testOutcome.getPath()).equals(Paths.get(requirement.getFeatureFileName()))) {
@@ -328,7 +327,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
 
     public Optional<Requirement> getRequirementFor(TestTag testTag) {
-        for (Requirement requirement : getFlattenedRequirements()) {
+        for (Requirement requirement : AllRequirements.in(getRequirements())) {
             if (requirement.getName().equalsIgnoreCase(testTag.getName()) && requirement.getType().equalsIgnoreCase(testTag.getType())) {
                 return Optional.of(requirement);
             }
@@ -375,7 +374,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private List<String> stripRootFrom(List<String> storyPathElements) {
-        return stripRootFromPath(rootDirectoryPath, storyPathElements);
+        return stripRootFromPath(rootDirectory, storyPathElements);
     }
 
     private String stripRootPathFrom(String testOutcomePath) {
@@ -537,7 +536,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private List<Requirement> readChildrenFrom(File requirementDirectory) {
-        String childDirectory = rootDirectoryPath + "/" + requirementDirectory.getName();
+        String childDirectory = rootDirectory + "/" + requirementDirectory.getName();
         if (childrenExistFor(childDirectory)) {
             RequirementsTagProvider childReader = new FileSystemRequirementsTagProvider(childDirectory, level + 1, environmentVariables);
             return childReader.getRequirements();

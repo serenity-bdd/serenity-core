@@ -4,7 +4,7 @@ import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import spock.lang.Specification
 
-class WhenLoadingRequirementOutcomeUniquelyFromTheClassPath extends Specification {
+class WhenLoadingRequirementOutcomesFromTheFileSystem extends Specification {
 
     def "Should be able to load capabilities from the default directory structure"() {
         given: "We are using the default requirements service"

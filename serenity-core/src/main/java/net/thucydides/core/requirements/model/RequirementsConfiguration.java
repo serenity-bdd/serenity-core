@@ -18,6 +18,8 @@ import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
 
+import static net.thucydides.core.requirements.classpath.PathElements.lastOf;
+
 public class RequirementsConfiguration {
     public final static List<String> DEFAULT_CAPABILITY_TYPES = ImmutableList.of("capability", "feature", "story");
     protected static final String DEFAULT_ROOT_DIRECTORY = "stories";
@@ -101,6 +103,14 @@ public class RequirementsConfiguration {
             return Optional.absent();
         }
         return Optional.absent();
+    }
+
+    public String getRequirementType(int level) {
+        if (level >= getRequirementTypes().size()) {
+            return lastOf(getRequirementTypes());
+        } else {
+            return getRequirementTypes().get(level);
+        }
     }
 
     private Path findResourcePath(String path) throws URISyntaxException {

@@ -250,7 +250,7 @@
                                     <tr>
                                         <#assign requirementTitle = inflection.of(requirementType).inPluralForm().asATitle() />
                                         <td class="summary-leading-column">${requirementTitle}</td>
-                                        <td>${requirements.requirementsOfType(requirementType).requirementCount + requirements.requirementsOfType(requirementType).requirementsWithoutTestsCount}</td>
+                                        <td>${requirements.requirementsOfType(requirementType).requirementCount}</td>
                                         <td>${requirements.requirementsOfType(requirementType).completedRequirementsCount}</td>
                                         <td>${requirements.requirementsOfType(requirementType).failingRequirementsCount}</td>
                                         <td>${requirements.requirementsOfType(requirementType).pendingRequirementsCount}</td>

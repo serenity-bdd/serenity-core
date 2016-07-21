@@ -47,30 +47,6 @@
             <tbody>
 
                 <#foreach requirementOutcome in requirements.requirementOutcomes>
-                    <#assign status_icon = formatter.resultIcon().forResult(requirementOutcome.testOutcomes.result) />
-                    <#assign status_rank = formatter.resultRank().forResult(requirementOutcome.testOutcomes.result) />
-
-                <tr class="test-${requirementOutcome.testOutcomes.result} requirementRow">
-                    <td class="requirementRowCell">
-                        <span class="status_icon">${status_icon}</span>
-                        <span style="display:none">${status_rank}</span>
-                    </td>
-                    <td class="cardNumber requirementRowCell">${requirementOutcome.cardNumberWithLinks}</td>
-
-                    <#assign requirementReport = reportName.forRequirement(requirementOutcome.requirement) >
-                    <td class="${requirementOutcome.testOutcomes.result}-text requirementRowCell">
-                    <a href="javaScript:void(0)" class="read-more-link">
-                        <#--<i class="fa fa-plus-square-o" class="read-more-link"></i>-->
-                    <img src="images/plus.png" height="16"/></a>
-                        <span class="requirementName"><a
-                                href="${requirementReport}">${requirementOutcome.requirement.displayName}</a></span>
-
-                        <div class="requirementNarrative read-more-text">${formatter.renderDescription(requirementOutcome.requirement.narrative.renderedText)}</div>
-                    </td>
-
-                    <#if (requirements.childrenType?has_content) >
-                        <td class="bluetext requirementRowCell">${requirementOutcome.requirement.childrenCount}</td>
-                    </#if>
 
                     <#assign successCount = requirementOutcome.testOutcomes.totalTests.withResult("success") >
                     <#assign pendingCount = requirementOutcome.testOutcomes.totalTests.withResult("pending") >
@@ -98,6 +74,38 @@
                     <#assign manualPassed = requirementOutcome.tests.count("MANUAL").withResult("SUCCESS")/>
                     <#assign manualFailed = requirementOutcome.tests.count("MANUAL").withResult("FAILURE")/>
                     <#assign manualError = requirementOutcome.tests.count("MANUAL").withResult("ERROR")/>
+
+
+                    <#assign status_icon = formatter.resultIcon().forResult(requirementOutcome.testOutcomes.result) />
+                    <#assign status_rank = formatter.resultRank().forResult(requirementOutcome.testOutcomes.result) />
+                    <#assign background_bar_style = 'percentagebar'>
+                    <#if (totalAutomated + totalManual == 0) >
+                        <#assign status_icon = formatter.resultIcon().forResult('PENDING') />
+                        <#assign status_rank = formatter.resultRank().forResult('PENDING') />
+                        <#assign background_bar_style = 'darkpercentagebar'>
+                    </#if>
+
+                <tr class="test-${requirementOutcome.testOutcomes.result} requirementRow">
+                    <td class="requirementRowCell">
+                        <span class="status_icon">${status_icon}</span>
+                        <span style="display:none">${status_rank}</span>
+                    </td>
+                    <td class="cardNumber requirementRowCell">${requirementOutcome.cardNumberWithLinks}</td>
+
+                    <#assign requirementReport = reportName.forRequirement(requirementOutcome.requirement) >
+                    <td class="${requirementOutcome.testOutcomes.result}-text requirementRowCell">
+                        <a href="javaScript:void(0)" class="read-more-link">
+                        <#--<i class="fa fa-plus-square-o" class="read-more-link"></i>-->
+                            <img src="images/plus.png" height="16"/></a>
+                        <span class="requirementName"><a
+                                href="${requirementReport}">${requirementOutcome.requirement.displayName}</a></span>
+
+                        <div class="requirementNarrative read-more-text">${formatter.renderDescription(requirementOutcome.requirement.narrative.renderedText)}</div>
+                    </td>
+
+                    <#if (requirements.childrenType?has_content) >
+                        <td class="bluetext requirementRowCell">${requirementOutcome.requirement.childrenCount}</td>
+                    </#if>
 
                     <td class="greentext highlighted-value requirementRowCell">${totalAutomated}</td>
                     <td class="greentext requirementRowCell">${automatedPassed}</td>
@@ -129,6 +137,7 @@
                         <#assign ignored = requirementOutcome.formattedPercentage.withSkippedOrIgnored()>
                         <#assign indeterminate = requirementOutcome.formattedPercentage.withIndeterminateResult()>
 
+                        <#assign pendingbar = (percentPassing + percentFailing + percentError + percentCompromised + percentIgnored)*125>
                         <#assign ignoredbar = (percentPassing + percentFailing + percentError + percentCompromised + percentIgnored)*125>
                         <#assign compromisedbar = (percentPassing + percentFailing + percentError + percentCompromised)*125>
                         <#assign errorbar = (percentPassing + percentFailing + percentError)*125>

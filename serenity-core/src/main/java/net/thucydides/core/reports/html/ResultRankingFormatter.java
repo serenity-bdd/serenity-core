@@ -7,6 +7,10 @@ import net.thucydides.core.model.TestResult;
  */
 public class ResultRankingFormatter {
 
+    public Integer forResult(String result) {
+        return forResult(TestResult.valueOf(result));
+    }
+
     public Integer forResult(TestResult result) {
         return (result == null)? 0 : result.getPriority();
     }

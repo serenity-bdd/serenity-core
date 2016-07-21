@@ -44,6 +44,10 @@ public class ResultIconFormatter {
         return this;
     }
 
+    public String forResult(String result) {
+        return forResult(TestResult.valueOf(result));
+    }
+
     public String forResult(TestResult result) {
 
         TestResult testResult = Optional.fromNullable(result).or(TestResult.PENDING);

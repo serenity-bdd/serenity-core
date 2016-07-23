@@ -58,7 +58,7 @@ public class TestTag implements Comparable<TestTag> {
         if (this.equals(testTag)) {
             return true;
         }
-        if ((this.getName().endsWith("/" + testTag.getName())) && (this.getType().equals(testTag.getType()))) {
+        if ((this.getName().toLowerCase().endsWith("/" + testTag.getName().toLowerCase())) && (this.getType().equals(testTag.getType()))) {
             return true;
         }
         return false;

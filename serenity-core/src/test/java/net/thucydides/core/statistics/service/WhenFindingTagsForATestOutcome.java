@@ -1,13 +1,16 @@
 package net.thucydides.core.statistics.service;
 
 import com.google.common.base.Optional;
+import com.google.common.io.Resources;
 import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTagValuesOf;
 import net.thucydides.core.annotations.WithTags;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
+import net.thucydides.core.reports.TestOutcomeStream;
 import net.thucydides.core.requirements.FileSystemRequirementsTagProvider;
+import net.thucydides.core.requirements.PackageRequirementsTagProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import org.junit.Before;
@@ -16,7 +19,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Set;
 
@@ -55,7 +60,7 @@ public class WhenFindingTagsForATestOutcome {
     public void junit_tag_provider_strategy_should_find_the_annotation_tag_provider_by_default() {
 
         TagProviderStrategy tagProviderStrategy = new JUnitTagProviderStrategy();
-        Iterable<TagProvider> tagProviders = tagProviderStrategy.getTagProviders();
+        Iterable<? extends TagProvider> tagProviders = tagProviderStrategy.getTagProviders();
 
         boolean containsAnnotationTagProvider = false;
         for(TagProvider provider : tagProviders) {
@@ -81,13 +86,13 @@ public class WhenFindingTagsForATestOutcome {
     }
 
     @Test
-    public void junit_tag_provider_strategy_should_also_find_the_file_system_requirements_provider_by_default() {
+    public void junit_tag_provider_strategy_should_also_find_the_package_requirements_provider_by_default() {
         TagProviderStrategy tagProviderStrategy = new JUnitTagProviderStrategy();
-        Iterable<TagProvider> tagProviders = tagProviderStrategy.getTagProviders();
+        Iterable<? extends TagProvider> tagProviders = tagProviderStrategy.getTagProviders();
 
         boolean containsRequirementsProvider = false;
         for(TagProvider provider : tagProviders) {
-            if (provider instanceof FileSystemRequirementsTagProvider) {
+            if (provider instanceof PackageRequirementsTagProvider) {
                 containsRequirementsProvider = true;
             }
         }
@@ -354,23 +359,6 @@ public class WhenFindingTagsForATestOutcome {
         assertThat(requirement.get().getNarrative().getText(), containsString("So that I can harvest them later on"));
     }
 
-/*
-    fixme:
-    @Test
-    public void should_get_requirement_from_feature_when_only_the_feature_file_name_is_provided() {
-        FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider();
-        Story userStory = Story.called("Watering the potatoes");
-        when(testOutcome.getPath()).thenReturn("WaterPotatoes.feature");
-        when(testOutcome.getUserStory()).thenReturn(userStory);
-        when(testOutcome.getFeatureTag()).thenReturn(Optional.<TestTag>absent());
-
-        Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
-
-        assertThat(requirement.isPresent(), is(true));
-        assertThat(requirement.get().getName(), is("Watering the potatoes"));
-    }
-     */
-
     @Test
     public void should_get_requirement_from_feature_in_a_foreign_language() throws URISyntaxException {
 
@@ -397,6 +385,69 @@ public class WhenFindingTagsForATestOutcome {
 
         assertThat(featureRequirement.getName(), is("Planting some potatoes"));
     }
+
+    @Test
+    public void should_skip_directories_without_nested_feature_files() throws URISyntaxException {
+
+        FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider(environmentVariables,"src/test/resources/serenity-js/features");
+
+        List<Requirement> requirements = tagProvider.getRequirements();
+
+        assertThat(requirements.size(), is(2));
+    }
+
+    @Test
+    public void should_match_requirements_path_for_serenity_js_outcomes() throws URISyntaxException {
+
+        FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider(environmentVariables,"src/test/resources/serenity-js/features");
+
+        Story userStory = Story.called("Add new items to the todo list");
+        TestTag featureTag = TestTag.withName("Add new items to the todo list").andType("feature");
+
+        when(testOutcome.getPath()).thenReturn("add_new_items.feature");
+        when(testOutcome.getUserStory()).thenReturn(userStory);
+        when(testOutcome.getFeatureTag()).thenReturn(Optional.of(featureTag));
+
+        Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
+
+        assertThat(requirement.isPresent(), is(true));
+        assertThat(requirement.get().getName(), is("Add new items to the todo list"));
+        assertThat(requirement.get().getParent(), is("Record todos"));
+    }
+
+    @Test
+    public void should_match_requirements_path_for_serenity_js_outcomes_with_long_path() throws URISyntaxException {
+
+        FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider(environmentVariables,"src/test/resources/serenity-js/features");
+
+        Story userStory = Story.called("Add new items to the todo list");
+        TestTag featureTag = TestTag.withName("Add new items to the todo list").andType("feature");
+
+        when(testOutcome.getPath()).thenReturn("src/test/resources/serenity-js/features/record_todos/add_new_items.feature");
+        when(testOutcome.getUserStory()).thenReturn(userStory);
+        when(testOutcome.getFeatureTag()).thenReturn(Optional.of(featureTag));
+
+        Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
+
+        assertThat(requirement.isPresent(), is(true));
+        assertThat(requirement.get().getName(), is("Add new items to the todo list"));
+        assertThat(requirement.get().getParent(), is("Record todos"));
+    }
+
+    @Test
+    public void should_match_requirements_path_for_cucumber_jvm_outcomes() throws URISyntaxException, IOException {
+
+        FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider(environmentVariables,"src/test/resources/serenity-cucumber/features");
+
+        for(TestOutcome outcome : TestOutcomeStream.testOutcomesInDirectory(Paths.get(Resources.getResource("serenity-cucumber/json").toURI()))) {
+            Optional<Requirement> feature = tagProvider.getParentRequirementOf(outcome);
+            assertThat(feature.isPresent(), is(true));
+            assertThat(feature.get().getName(), equalToIgnoringCase(outcome.getFeatureTag().get().getName()));
+            assertThat(feature.get().getParent(), not(isEmptyString()));
+        }
+    }
+
+
 
 }
 

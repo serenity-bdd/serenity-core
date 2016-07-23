@@ -29,11 +29,11 @@ public class AggregateReportingTask extends BaseReportingTask implements Reporti
                 outputDirectory);
     }
 
-    public AggregateReportingTask(FreemarkerContext freemarker,
+    public AggregateReportingTask(FreemarkerContext context,
                                   EnvironmentVariables environmentVariables,
                                   RequirementsService requirementsService,
                                   File outputDirectory) {
-        super(freemarker, environmentVariables, outputDirectory);
+        super(context, environmentVariables, outputDirectory);
         this.requirementsService = requirementsService;
     }
 
@@ -44,7 +44,9 @@ public class AggregateReportingTask extends BaseReportingTask implements Reporti
         ReportNameProvider defaultNameProvider = new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService);
 
         Map<String, Object> context = freemarker.getBuildContext(testOutcomes, defaultNameProvider, true);
+
         context.put("report", ReportProperties.forAggregateResultsReport());
+        context.put("requirementTypes", requirementsService.getRequirementTypes());
         context.put("csvReport", "results.csv");
 
         generateReportPage(context, TEST_OUTCOME_TEMPLATE_PATH, "index.html");

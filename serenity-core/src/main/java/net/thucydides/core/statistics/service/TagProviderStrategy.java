@@ -4,5 +4,5 @@ public interface TagProviderStrategy {
 
     boolean canHandleTestSource(String testSource);
 
-    Iterable<TagProvider> getTagProviders();
+    Iterable<? extends TagProvider> getTagProviders();
 }

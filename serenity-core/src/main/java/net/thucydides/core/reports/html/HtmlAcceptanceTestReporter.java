@@ -197,7 +197,10 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     }
 
     private List<Screenshot> expandScreenshots(List<Screenshot> screenshots) throws IOException {
-        return convert(screenshots, new ExpandedScreenshotConverter(getSourceDirectory(), maxScreenshotHeightIn(screenshots)));
+        return convert(screenshots,
+                       new ExpandedScreenshotConverter(
+                               Optional.fromNullable(getSourceDirectory()).or(getOutputDirectory()),
+                               maxScreenshotHeightIn(screenshots)));
     }
 
     private class ExpandedScreenshotConverter implements Converter<Screenshot, Screenshot> {

@@ -22,22 +22,10 @@ class WhenIdentifyingGherkinFeaturesInTestOutcomes extends Specification {
 
         where:
         path                    | featureIsPresent | featureName | featureType
-        "a_feature.feature"     | true             | "a feature" | "feature"
-        "a/b/a_feature.feature" | true             | "a feature" | "feature"
-        "a_story.story"         | true             | "a story"   | "story"
-        "a/b/a_story.story"     | true             | "a story"   | "story"
-    }
-
-
-    @Unroll
-    def "should not return a feature tag for a test outcome generated from other test types"() {
-        given:
-        def testOutcome = TestOutcome.forTestInStory("some test", Story.called("my test").withPath("a/b/ATest"))
-        when:
-        def featureTag = testOutcome.getFeatureTag()
-        then:
-        !featureTag.isPresent()
-
+        "a_feature.feature"     | true             | "my story" | "feature"
+        "a/b/a_feature.feature" | true             | "my story" | "feature"
+        "a_story.story"         | true             | "my story"   | "story"
+        "a/b/a_story.story"     | true             | "my story"   | "story"
     }
 
 }

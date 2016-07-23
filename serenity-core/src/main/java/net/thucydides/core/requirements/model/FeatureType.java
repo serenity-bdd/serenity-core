@@ -4,7 +4,7 @@ package net.thucydides.core.requirements.model;
  * Created by john on 6/03/15.
  */
 public enum FeatureType {
-    FEATURE(".feature"), STORY(".story");
+    UNDEFINED(""), FEATURE(".feature"), STORY(".story");
 
     private final String extension;
 

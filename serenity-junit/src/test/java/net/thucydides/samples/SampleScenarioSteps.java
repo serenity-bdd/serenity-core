@@ -12,6 +12,7 @@ import org.junit.Ignore;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.hamcrest.MatcherAssert.assertThat;

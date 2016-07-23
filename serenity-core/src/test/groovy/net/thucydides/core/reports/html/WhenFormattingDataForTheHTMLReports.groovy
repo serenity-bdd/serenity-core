@@ -36,6 +36,18 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     }
 
     @Unroll
+    def "should work with classic JUnit assertion messages"() {
+        expect:
+        def formatter = new Formatter(issueTracking);
+        formatter.htmlAttributeCompatible(message) == formattedMessage
+        where:
+        message             | formattedMessage
+        "expected:<Sorry, we don[[]'t recognize that em...> but was:<Sorry, we don[]'t recognize that em...>"  | "expected:(Sorry, we don[[]'t recognize that em...) but was:(Sorry, we don[]'t recognize that em...)"
+
+    }
+
+
+    @Unroll
     def "should abbreviate HTML messages if requested"() {
         expect:
             def formatter = new Formatter(issueTracking);

@@ -2,9 +2,9 @@ package net.thucydides.core.model;
 
 import net.thucydides.core.annotations.Feature;
 import net.thucydides.core.model.features.ApplicationFeature;
-import net.thucydides.core.util.NameConverter;
 
 import static net.thucydides.core.model.ReportType.ROOT;
+import static net.thucydides.core.util.NameConverter.humanize;
 
 /**
  * Represents a given user story or feature.
@@ -21,13 +21,20 @@ public class Story {
     private  RequirementType type;
 
     public enum RequirementType {
-        story, feature
+        story, feature;
+
+        public static RequirementType forFilename(String storyPath) {
+            if (storyPath.toLowerCase().endsWith(".feature")) {
+                return feature;
+            }
+            return story;
+        }
     }
 
     protected Story(final Class<?> userStoryClass) {
         this.id = userStoryClass.getCanonicalName();
         this.storyClassName = userStoryClass.getName();
-        this.storyName = NameConverter.humanize(userStoryClass.getSimpleName());
+        this.storyName = humanize(userStoryClass.getSimpleName());
         this.feature = findFeatureFrom(userStoryClass);
         this.path = pathOf(userStoryClass);
         this.type = RequirementType.story;
@@ -242,8 +249,8 @@ public class Story {
         return type;
     }
 
-    public Story withPath(String storyPath) {
-        return new Story(this.id, this.storyName, this.feature, storyPath);
+    public Story withPath(String path) {
+        return new Story(this.id, this.storyName, this.storyClassName, path,this.feature,this.narrative, RequirementType.forFilename(path));
     }
 
     public Story asFeature() {

@@ -23,6 +23,10 @@ public class Narrative {
         this.text = text;
     }
 
+    public Narrative(String type, String text) {
+        this(Optional.<String>absent(), Optional.<String>absent(), ImmutableList.<String>of(), type, text);
+    }
+
     public Optional<String> getTitle() {
         return title;
     }

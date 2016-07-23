@@ -242,7 +242,7 @@
                                     <tr>
                                         <#assign requirementTitle = inflection.of(requirementType).inPluralForm().asATitle() />
                                         <td class="summary-leading-column">${requirementTitle}</td>
-                                        <td>${requirements.requirementsOfType(requirementType).requirementCount}</td>
+                                        <td>${requirements.requirementsOfType(requirementType).requirementCount + requirements.requirementsOfType(requirementType).requirementsWithoutTestsCount}</td>
                                         <td>${requirements.requirementsOfType(requirementType).completedRequirementsCount}</td>
                                         <td>${requirements.requirementsOfType(requirementType).failingRequirementsCount}</td>
                                         <td>${requirements.requirementsOfType(requirementType).pendingRequirementsCount}</td>
@@ -250,15 +250,20 @@
                                         <td>${requirements.requirementsOfType(requirementType).requirementsWithoutTestsCount}</td>
                                     </tr>
                                     </#foreach>
+
+                                    <#assign requirementTestsTotalCount = testOutcomes.totalTests.total >
+                                    <#assign requirementTestsSuccessCount = testOutcomes.totalTests.withResult("success") >
+                                    <#assign requirementTestsPendingCount = testOutcomes.totalTests.withResult("pending") >
+                                    <#assign requirementTestsIgnoredCount = testOutcomes.totalTests.withResult("ignored") >
+                                    <#assign requirementTestsSkippedCount = testOutcomes.totalTests.withResult("skipped") >
+                                    <#assign requirementTestsFailureOrErrorCount = testOutcomes.totalTests.withFailureOrError() >
                                 <tr>
                                     <td class="summary-leading-column">Acceptance Criteria (tests)</td>
-                                    <td>${requirements.testOutcomes.testCount}</td>
-                                    <td>${requirements.testOutcomes.havingResult("success").testCount}</td>
-                                    <td>${requirements.testOutcomes.havingResult("failure").testCount
-                                    + requirements.testOutcomes.havingResult("error").testCount
-                                    + requirements.testOutcomes.havingResult("compromised").testCount}</td>
-                                    <td>${requirements.testOutcomes.havingResult("pending").testCount}</td>
-                                    <td>${requirements.testOutcomes.havingResult("ignored").testCount + requirements.testOutcomes.havingResult("skipped").testCount}</td>
+                                    <td>${requirementTestsTotalCount}</td>
+                                    <td>${requirementTestsSuccessCount}</td>
+                                    <td>${requirementTestsFailureOrErrorCount}</td>
+                                    <td>${requirementTestsPendingCount}</td>
+                                    <td>${requirementTestsIgnoredCount + requirementTestsSkippedCount}</td>
                                     <td></td>
                                 </tr>
                                 </body>

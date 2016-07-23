@@ -180,6 +180,7 @@
             <table>
                 <thead>
                 <tr>
+                    <th>#</th>
                     <#list testOutcome.dataTable.headers as header>
                         <th>${inflection.of(header).asATitle()}</th>
                     </#list>
@@ -189,9 +190,9 @@
                     <#assign rowIndex = dataSet.startRow >
                     <#list dataSet.rows as row>
                     <tr>
+                        <td class="test-${row.result}"><a href="#${rowIndex}">${rowIndex + 1}</a></td>
                         <#list row.values as value>
-                            <td class="test-${row.result}"><a href="#${rowIndex}">${formatter.htmlCompatible(value)}</a>
-                            </td>
+                            <td class="test-${row.result}"><a href="#${rowIndex}">${formatter.htmlCompatible(value)}</a></td>
                         </#list>
                     </tr>
                         <#assign rowIndex = rowIndex + 1 >
@@ -276,7 +277,7 @@
                                 </h4>
                             </div>
                             <div class="modal-body">
-                                <#if (cause.message)??><h4>${cause.message}</h4></#if>
+                                <#if (cause.message)??><h5>${formatter.htmlAttributeCompatible(cause.message)}</h5></#if>
                                 <#list cause.stackTrace as element>
                                 ${element.className}.${element.methodName}(${(element.fileName)!""}
                                     :${element.lineNumber}) <br>
@@ -409,7 +410,8 @@
                     </td>
                     <#if testOutcome.hasScreenshots()>
                         <td width="100" class="${step.result}-text">
-                            <#if !step.isAGroup() && step.firstScreenshot??>
+                            <#--<#if !step.isAGroup() && step.firstScreenshot??>-->
+                            <#if step.firstScreenshot??>
                                 <a href="${relativeLink!}${testOutcome.screenshotReportName}.html#screenshots?screenshot=${screenshotCount}">
                                     <!-- Added invalid href-attribute to img for imgpreviewer -->
                                     <img src="${step.firstScreenshot.screenshot.name}"
@@ -434,7 +436,9 @@
                         </#if>
                         <td width="%" colspan="4" class="error-message-cell">
                             <div class="error-message ellipsis"
-                                  title='${formatter.htmlAttributeCompatible(errorMessageTitle,40)}'><pre>${formatter.htmlAttributeCompatible(errorMessageTitle,40)!''}</pre></div>
+                                  title='${formatter.htmlAttributeCompatible(errorMessageTitle,100)}'>
+                                <pre>${formatter.htmlAttributeCompatible(errorMessageTitle,100)!''}</pre>
+                            </div>
                             <#if step.nestedException?has_content>
                                 <@stacktrace cause=step.nestedException />
                             </#if>
@@ -451,26 +455,32 @@
                     <tr class="test-${testOutcome.result}">
                         <td width="40">${step_outcome_icon}
                         </td>
-                        <td width="%">
-                            <span class="top-level-step">An error occurred outside of step execution.</span>
-                        </td>
+                        <#if testOutcome.hasScreenshots()>
+                            <td width="%" colspan="2">
+                        <#else>
+                            <td width="%" colspan="1">
+                        </#if>
+                                <span class="top-level-step">An error occurred outside of step execution.</span>
+                            </td>
                         <td width="100"><span class="top-level-step">${testOutcome.result}</span></td>
                         <td width="100"><span class="top-level-step">${testOutcome.durationInSeconds}s</span></td>
                     </tr>
                     <tr class="test-${testOutcome.result}">
                         <td width="40">&nbsp</td>
                         <#if testOutcome.hasScreenshots()>
-                            <td width="%" colspan="3">
+                            <td width="%" colspan="4">
                         <#else>
-                            <td width="%" colspan="2">
+                            <td width="%" colspan="3">
                         </#if>
-                            <#if (testOutcome.errorMessage)??>
-                                <span class="error-message"
-                                      title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage,40)}">${testOutcome.conciseErrorMessage}</span>
-                                <#if (testOutcome.nestedTestFailureCause)??>
-                                    <@stacktrace cause=testOutcome.nestedTestFailureCause />
-                                </#if>
+                        <#if (testOutcome.errorMessage)??>
+                            <span class="error-message"
+                                  title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage,100)}">
+                                ${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage)}
+                            </span>
+                            <#if (testOutcome.nestedTestFailureCause)??>
+                                <@stacktrace cause=testOutcome.nestedTestFailureCause />
                             </#if>
+                        </#if>
                         </td>
                     </tr>
                 <#--</#if>-->
@@ -514,9 +524,7 @@
 
     <script type="text/javascript">
         $('.example-table table').DataTable({
-            "order": [
-                [1, "asc"]
-            ],
+            "order": [[ 0, "asc" ]],
             "pageLength": 25,
             "scrollX": "100%",
             "scrollXInner": "100%",

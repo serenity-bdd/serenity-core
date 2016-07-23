@@ -262,7 +262,7 @@ public class RenderedPageObjectView {
             }
             @Override
             public String toString() {
-                return "Expecting title present: '" + expectedTitle +"'";
+                return "Expecting title present: '" + expectedTitle +"', but found '" + driver.getTitle() + "' instead.'" ;
             }
         };
     }
@@ -322,7 +322,7 @@ public class RenderedPageObjectView {
 
             @Override
             public String toString() {
-                return "Expecting title present: '" + expectedTitle + "'";
+                return "Expecting title present: '" + expectedTitle +"', but found '" + driver.getTitle() + "' instead." ;
             }        };
     }
 

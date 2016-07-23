@@ -1,0 +1,83 @@
+{
+  "name": "Adding an item to an empty list",
+  "title": "Adding an item to an empty list",
+  "description": "",
+  "tags": [],
+  "startTime": 1467722224920,
+  "manual": false,
+  "duration": 1229,
+  "result": "SUCCESS",
+  "testSteps": [
+    {
+      "description": "Given that James has an empty todo list",
+      "startTime": 1467722224925,
+      "duration": 9,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "description": "James starts with a todo list containing no items",
+          "startTime": 1467722224927,
+          "duration": 5,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "description": "James opens the http://todomvc.dev/examples/angularjs/",
+              "startTime": 1467722224927,
+              "duration": 4,
+              "result": "SUCCESS",
+              "children": []
+            },
+            {
+              "description": "James adds the todo items called: ",
+              "startTime": 1467722224931,
+              "duration": 1,
+              "result": "SUCCESS",
+              "children": [],
+              "screenshots": [
+                {
+                  "screenshot": "19886bdb078420a1dc2f57295a949df9.png"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "When he adds 'Buy some milk' to his list",
+      "startTime": 1467722224935,
+      "duration": 4,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "description": "James adds a todo item called: Buy some milk",
+          "startTime": 1467722224935,
+          "duration": 3,
+          "result": "SUCCESS",
+          "children": [
+            {
+              "description": "James enters 'Buy some milk' into By(css selector, *[id=\"new-todo\"])",
+              "startTime": 1467722224936,
+              "duration": 2,
+              "result": "SUCCESS",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Then 'Buy some milk' should be recorded in his list",
+      "startTime": 1467722224940,
+      "duration": 1206,
+      "result": "SUCCESS",
+      "children": []
+    }
+  ],
+  "userStory": {
+    "id": "filtering-todos",
+    "storyName": "Filtering todos",
+    "path": "/Users/janek/Documents/projects/serenity/screenplay-js-demo/acceptance/features/maintain_my_todo_list/filtering_todos.feature",
+    "type": "feature"
+  }
+}

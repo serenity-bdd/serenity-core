@@ -11,6 +11,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
 import net.thucydides.core.model.formatters.TestCoverageFormatter;
 import net.thucydides.core.requirements.RequirementsService;
+import net.thucydides.core.requirements.RequirementsTree;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
@@ -18,16 +19,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matcher;
 import org.joda.time.DateTime;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-//import static ch.lambdaj.Lambda.*;
 import static ch.lambdaj.Lambda.*;
 import static net.thucydides.core.model.TestResult.*;
-import static net.thucydides.core.reports.matchers.TestOutcomeMatchers.*;
+import static net.thucydides.core.reports.matchers.TestOutcomeMatchers.havingTagName;
+import static net.thucydides.core.reports.matchers.TestOutcomeMatchers.havingTagType;
 import static org.hamcrest.Matchers.is;
+
+//import static ch.lambdaj.Lambda.*;
 
 /**
  * A set of test outcomes, which lets you perform query operations on the test outcomes.
@@ -64,14 +64,14 @@ public class TestOutcomes {
     }
 
     @Inject
-    protected TestOutcomes(List<? extends TestOutcome> outcomes,
+    protected TestOutcomes(Collection<? extends TestOutcome> outcomes,
                            double estimatedAverageStepCount,
                            String label,
                            TestTag testTag,
                            TestOutcomes rootOutcomes,
                            EnvironmentVariables environmentVariables) {
         outcomeCount = outcomeCount + outcomes.size();
-        this.outcomes = outcomes;// ImmutableList.copyOf(outcomes);
+        this.outcomes = ImmutableList.copyOf(outcomes);
         this.estimatedAverageStepCount = estimatedAverageStepCount;
         this.label = label;
         this.testTag = testTag;
@@ -95,7 +95,7 @@ public class TestOutcomes {
         this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
     }
 
-    protected TestOutcomes(List<? extends TestOutcome> outcomes,
+    protected TestOutcomes(Collection<? extends TestOutcome> outcomes,
                            double estimatedAverageStepCount,
                            String label) {
         this(outcomes, estimatedAverageStepCount, label, null, null, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
@@ -108,7 +108,7 @@ public class TestOutcomes {
         this(outcomes, estimatedAverageStepCount, label, tag, null, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
     }
 
-    protected TestOutcomes(List<? extends TestOutcome> outcomes,
+    protected TestOutcomes(Collection<? extends TestOutcome> outcomes,
                            double estimatedAverageStepCount) {
         this(outcomes, estimatedAverageStepCount, "");
     }
@@ -162,7 +162,7 @@ public class TestOutcomes {
                 .withRootOutcomes(getRootOutcomes());
     }
 
-    public static TestOutcomes of(List<? extends TestOutcome> outcomes) {
+    public static TestOutcomes of(Collection<? extends TestOutcome> outcomes) {
         return new TestOutcomes(outcomes,
                 Injectors.getInjector().getInstance(Configuration.class).getEstimatedAverageStepCount());
     }
@@ -329,7 +329,18 @@ public class TestOutcomes {
     }
 
     public TestOutcomes forRequirement(Requirement requirement) {
-        return withTag(requirement.asTag());
+
+        Set<TestOutcome> testOutcomesForThisRequirement = Sets.newHashSet();
+        for(Requirement childRequirement : RequirementsTree.forRequirement(requirement).asFlattenedList()) {
+            testOutcomesForThisRequirement.addAll(
+                    withTag(childRequirement.asTag()).getOutcomes()
+            );
+        }
+
+        return TestOutcomes.of(testOutcomesForThisRequirement)
+                .withLabel(requirement.getDisplayName())
+                .withTestTag(requirement.asTag())
+                .withRootOutcomes(getRootOutcomes());
     }
 
     public boolean containsTag(TestTag testTag) {
@@ -430,6 +441,8 @@ public class TestOutcomes {
             if (isAnIssue(tag) && (outcome.hasIssue(tag.getName()))) {
                 matchingOutcomes.add(outcome);
             } else if (outcome.hasTag(tag)) {
+                matchingOutcomes.add(outcome);
+            } else if (outcome.hasAMoreGeneralFormOfTag(tag)) {
                 matchingOutcomes.add(outcome);
             }
         }
@@ -553,7 +566,7 @@ public class TestOutcomes {
     }
 
     public List<? extends TestOutcome> getOutcomes() {
-        return outcomes;//ImmutableList.copyOf(outcomes);
+        return outcomes; //ImmutableList.copyOf(outcomes);
     }
 
     /**

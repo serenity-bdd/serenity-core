@@ -99,6 +99,7 @@ class WhenRunningTestScenarios extends Specification {
             drivers.contains("firefox") && drivers.contains("htmlunit")
     }
 
+
     def "should record the steps that are executed"() {
         given:
         def runner = new ThucydidesRunner(SamplePassingScenario, webDriverFactory)

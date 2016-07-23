@@ -10,6 +10,9 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+import static net.thucydides.core.reports.TestOutcomeStream.NextItemIs.*;
 
 public class TestOutcomeStream implements Iterable<TestOutcome>, Closeable {
 
@@ -27,16 +30,28 @@ public class TestOutcomeStream implements Iterable<TestOutcome>, Closeable {
         return new TestOutcomeStream(sourceDirectory);
     }
 
+
+    enum NextItemIs {
+        Unknown, ReadyToRetrieve, Retrieved
+    }
+
     @Override
     public Iterator<TestOutcome> iterator() {
         return new Iterator() {
 
             Optional<TestOutcome> nextOutcome;
 
+            NextItemIs nextItemIs = Unknown;
+
             @Override
             public boolean hasNext() {
-                nextOutcome = findNextValidTestOutcomeIn(directoryStreamIterator);
+                fetchNext();
                 return nextOutcome.isPresent();
+            }
+
+            private void fetchNext() {
+                nextOutcome = findNextValidTestOutcomeIn(directoryStreamIterator);
+                nextItemIs = ReadyToRetrieve;
             }
 
             private Optional<TestOutcome> findNextValidTestOutcomeIn(Iterator<Path> directoryStream) {
@@ -51,6 +66,14 @@ public class TestOutcomeStream implements Iterable<TestOutcome>, Closeable {
 
             @Override
             public Object next() {
+                if (nextItemIs == Unknown) {
+                    fetchNext();
+                }
+
+                if (!nextOutcome.isPresent()) {
+                    throw new NoSuchElementException();
+                }
+                nextItemIs = Retrieved;
                 return nextOutcome.get();
             }
 

@@ -24,6 +24,7 @@ import java.util.*;
 import static com.google.common.collect.Sets.newHashSet;
 import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT;
 import static net.thucydides.core.reflection.ClassFinder.loadClasses;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * A requirements Provider that reads requirement from class or package annotation.
@@ -39,7 +40,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
 
     private final Configuration configuration;
     private final RequirementPersister persister;
-    private final String rootPackage;
+    private String rootPackage;
     SortedMap<String, Requirement> requirementsByPath = null;
 
     public PackageAnnotationBasedTagProvider() {
@@ -227,10 +228,10 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
 
     private Requirement getRequirement(Class candidateClass, String packageName, int level, String requirementTitle, String requirementType, String narrativeText, String cardNumber, Optional<Narrative> narrative) {
         if (narrative.isPresent()) {
-            requirementTitle = narrative.get().title();
-            requirementType = narrative.get().type();
-            narrativeText = Joiner.on("\n").join(narrative.get().text());
-            cardNumber = narrative.get().cardNumber();
+            requirementTitle = isNotEmpty(narrative.get().title()) ? narrative.get().title() : requirementTitle;
+            requirementType = isNotEmpty(narrative.get().type()) ? narrative.get().type() : requirementType;
+            narrativeText = isNotEmpty(narrativeText) ? Joiner.on("\n").join(narrative.get().text()) : narrativeText;
+            cardNumber = isNotEmpty(narrative.get().cardNumber()) ? narrative.get().cardNumber() : cardNumber;
         }
         if (StringUtils.isEmpty(requirementType)) {
             requirementType = getRequirementType(level, candidateClass);
@@ -328,7 +329,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         public List<Requirement> in(Collection<Requirement> requirements) {
             List<Requirement> children = Lists.newArrayList();
             for (Requirement requirement : requirements) {
-                if (StringUtils.isNotEmpty(requirement.getParent()) && requirement.getParent().equals(parent.getName())) {
+                if (isNotEmpty(requirement.getParent()) && requirement.getParent().equals(parent.getName())) {
                     children.add(requirement);
                 }
             }
@@ -376,7 +377,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         }
 
         public boolean matchesOrIsADescendantOf(String path) {
-            if (StringUtils.isNotEmpty(path)) {
+            if (isNotEmpty(path)) {
                 return path.startsWith(requirementPath) || requirementPath.startsWith(path);
             } else {
                 return false;

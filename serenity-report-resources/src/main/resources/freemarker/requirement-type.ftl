@@ -99,6 +99,7 @@
 <div class="table">
 
 <#if (requirements.requirementOutcomes?has_content || testOutcomes.total > 0)>
+    <#assign workingRequirementsTitle = inflection.of(requirements.type).inPluralForm().asATitle() >
     <div id="tabs">
         <#if (requirements.requirementOutcomes?has_content || (requirements.parentRequirement.isPresent() && requirements.parentRequirement.get().hasExamples()))>
             <ul>
@@ -114,7 +115,7 @@
         </#if>
         <#if (requirements.requirementOutcomes?has_content)>
             <div id="tabs-1" class="capabilities-table">
-                <@requirements_results requirements=requirements title=requirementTypeTitle id="req-results-table"/>
+                <@requirements_results requirements=requirements title=requirementTypeTitle requirementType=workingRequirementsTitle id="req-results-table"/>
             </div>
         </#if>
     </div>

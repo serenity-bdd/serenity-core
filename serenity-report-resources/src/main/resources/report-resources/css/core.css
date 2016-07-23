@@ -752,11 +752,19 @@ font-family:euphemia, verdana, sans-serif; font-size:16px; color: #88a717; font-
 }
 
 .percentagebar {
-    background-color: #a2f2f2; border: thin solid gray; height: 1.1em;
+    background-color: darkgrey; border: thin solid gray; height: 1.1em;
 }
 
-.darkpercentagebar {
-    background-color: #darkgray; border: thin solid gray; height: 1.1em;
+.percentagebarbackground {
+    background-color: darkgrey; border: thin solid gray; height: 1.1em;
+}
+
+.untestedbar {
+    background-color: darkgrey; height: 1.1em;
+}
+
+.pendingbar {
+    background-color: #a2f2f2; height: 1.1em;
 }
 
 .errorbar {

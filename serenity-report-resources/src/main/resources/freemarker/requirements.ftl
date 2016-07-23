@@ -304,7 +304,7 @@
                     <#if (requirements.requirementOutcomes?has_content)>
                         <div id="tabs-1" class="capabilities-table">
                             <div id="tabs-1" class="capabilities-table">
-                                <@requirements_results requirements=requirements title=requirementTypeTitle id="req-results-table"/>
+                                <@requirements_results requirements=requirements title=requirementTypeTitle requirementType=requirementsSectionTitle id="req-results-table"/>
                             </div>
                         </div>
                     </#if>

@@ -268,6 +268,14 @@ public class RequirementOutcome {
         return percentage(TestType.ANY);
     }
 
+    public PercentageRequirementCounter getPercentRequirements() {
+        return new PercentageRequirementCounter(requirement, testOutcomes);
+    }
+
+    public SubrequirementsCount getSubrequirements() {
+        return new SubrequirementsCount(requirement, testOutcomes);
+    }
+
     public RequirementsProportionCounter percentage(String testType) {
         return percentage(TestType.valueOf(testType.toUpperCase()));
     }

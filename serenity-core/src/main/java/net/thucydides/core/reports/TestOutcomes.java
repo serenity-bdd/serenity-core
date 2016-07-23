@@ -361,6 +361,16 @@ public class TestOutcomes {
         return TestOutcomes.of(filteredOutcomes);
     }
 
+    public TestOutcomes withResult(TestResult result) {
+        List<TestOutcome> filteredOutcomes = Lists.newArrayList();
+        for(TestOutcome outcome : outcomes) {
+            if (outcome.getResult() == result) {
+                filteredOutcomes.add(outcome);
+            }
+        }
+        return TestOutcomes.of(filteredOutcomes);
+    }
+
     public TestOutcomes withRequirementsTags() {
         for (TestOutcome outcome : outcomes) {
             List<TestTag> outcomeTags = Lists.newArrayList(outcome.getTags());

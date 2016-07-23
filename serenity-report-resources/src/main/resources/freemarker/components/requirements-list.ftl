@@ -1,4 +1,4 @@
-<#macro requirements_results(requirements, title, id)>
+<#macro requirements_results(requirements, title, requirementType, id)>
 <div id="req_list_tests" class="table">
     <div class="test-results">
         <table id="${id}">
@@ -42,20 +42,30 @@
                 </#if>
 
 
-                <th width="125px" class="test-results-heading">Coverage</th>
+                <th width="125px" class="test-results-heading">Working ${requirementType}</th>
             </tr>
             <tbody>
 
                 <#foreach requirementOutcome in requirements.requirementOutcomes>
 
-                    <#assign successCount = requirementOutcome.testOutcomes.totalTests.withResult("success") >
-                    <#assign pendingCount = requirementOutcome.testOutcomes.totalTests.withResult("pending") >
-                    <#assign ignoredCount = requirementOutcome.testOutcomes.totalTests.withResult("ignored") >
-                    <#assign indeterminateCount = requirementOutcome.testOutcomes.totalTests.withIndeterminateResult() >
-                    <#assign skipCount = requirementOutcome.testOutcomes.totalTests.withResult("skipped") >
-                    <#assign failureCount = requirementOutcome.testOutcomes.totalTests.withResult("failure") >
-                    <#assign errorCount = requirementOutcome.testOutcomes.totalTests.withResult("error") >
-                    <#assign compromisedCount = requirementOutcome.testOutcomes.totalTests.withResult("compromised") >
+                    <#assign successCount = requirementOutcome.subrequirements.withResult("success") >
+                    <#assign pendingCount = requirementOutcome.subrequirements.withResult("pending") >
+                    <#assign ignoredCount = requirementOutcome.subrequirements.withResult("ignored") >
+                    <#assign skipCount = requirementOutcome.subrequirements.withResult("skipped") >
+                    <#assign failureCount = requirementOutcome.subrequirements.withResult("failure") >
+                    <#assign errorCount = requirementOutcome.subrequirements.withResult("error") >
+                    <#assign compromisedCount = requirementOutcome.subrequirements.withResult("compromised") >
+                    <#assign untestedCount = requirementOutcome.subrequirements.withNoTests() >
+
+                    <#--<#assign successCount = requirementOutcome.testOutcomes.totalTests.withResult("success") >-->
+                    <#--<#assign pendingCount = requirementOutcome.testOutcomes.totalTests.withResult("pending") >-->
+                    <#--<#assign ignoredCount = requirementOutcome.testOutcomes.totalTests.withResult("ignored") >-->
+                    <#--<#assign indeterminateCount = requirementOutcome.testOutcomes.totalTests.withIndeterminateResult() >-->
+                    <#--<#assign skipCount = requirementOutcome.testOutcomes.totalTests.withResult("skipped") >-->
+                    <#--<#assign failureCount = requirementOutcome.testOutcomes.totalTests.withResult("failure") >-->
+                    <#--<#assign errorCount = requirementOutcome.testOutcomes.totalTests.withResult("error") >-->
+                    <#--<#assign compromisedCount = requirementOutcome.testOutcomes.totalTests.withResult("compromised") >-->
+                    <#--<#assign requirementsWithoutTestsCount = requirementOutcome.testOutcomes.totalTests.withResult("compromised") >-->
 
                     <#assign totalAutomated = requirementOutcome.tests.count("AUTOMATED").withAnyResult()/>
                     <#assign automatedPassedPercentage = requirementOutcome.tests.getFormattedPercentage("AUTOMATED").withResult("SUCCESS")/>
@@ -67,6 +77,7 @@
                     <#assign automatedError = requirementOutcome.tests.count("AUTOMATED").withResult("ERROR")/>
                     <#assign automatedCompromised = requirementOutcome.tests.count("AUTOMATED").withResult("COMPROMISED")/>
                     <#assign totalManual = requirementOutcome.tests.count("MANUAL").withAnyResult()/>
+
                     <#assign manualPassedPercentage = requirementOutcome.tests.getFormattedPercentage("MANUAL").withResult("SUCCESS")/>
                     <#assign manualFailedPercentage = requirementOutcome.tests.getFormattedPercentage("MANUAL").withFailureOrError()/>
                     <#assign manualPending = requirementOutcome.tests.count("MANUAL").withIndeterminateResult()/>
@@ -122,49 +133,48 @@
                     </#if>
 
                     <td width="125px" class="lightgreentext requirementRowCell">
-                        <#assign percentPending = requirementOutcome.percent.withResult("PENDING")/>
-                        <#assign percentIgnored = requirementOutcome.percent.withResult("IGNORED") + requirementOutcome.percent.withResult("SKIPPED")/>
-                        <#assign percentError = requirementOutcome.percent.withResult("ERROR")/>
-                        <#assign percentCompromised = requirementOutcome.percent.withResult("COMPROMISED")/>
-                        <#assign percentFailing = requirementOutcome.percent.withResult("FAILURE")/>
-                        <#assign percentPassing = requirementOutcome.percent.withResult("SUCCESS")/>
-                        <#assign percentIndeterminate = requirementOutcome.percent.withIndeterminateResult()/>
-                        <#assign passing = requirementOutcome.formattedPercentage.withResult("SUCCESS")>
-                        <#assign failing = requirementOutcome.formattedPercentage.withResult("FAILURE")>
-                        <#assign error = requirementOutcome.formattedPercentage.withResult("ERROR")>
-                        <#assign compromised = requirementOutcome.formattedPercentage.withResult("COMPROMISED")>
-                        <#assign pending = requirementOutcome.formattedPercentage.withResult("PENDING")>
-                        <#assign ignored = requirementOutcome.formattedPercentage.withSkippedOrIgnored()>
-                        <#assign indeterminate = requirementOutcome.formattedPercentage.withIndeterminateResult()>
+                        <#assign barWidth = 125 />
 
-                        <#assign pendingbar = (percentPassing + percentFailing + percentError + percentCompromised + percentIgnored)*125>
-                        <#assign ignoredbar = (percentPassing + percentFailing + percentError + percentCompromised + percentIgnored)*125>
-                        <#assign compromisedbar = (percentPassing + percentFailing + percentError + percentCompromised)*125>
-                        <#assign errorbar = (percentPassing + percentFailing + percentError)*125>
-                        <#assign failingbar = (percentPassing + percentFailing)*125>
-                        <#assign passingbar = percentPassing*125>
+                        <#assign percentUntested = requirementOutcome.subrequirements.proportion.withNoTests()/>
+                        <#assign percentPending = requirementOutcome.subrequirements.proportion.withResult("PENDING")/>
+                        <#assign percentIgnored = requirementOutcome.subrequirements.proportion.withSkippedOrIgnored() />
+                        <#assign percentError = requirementOutcome.subrequirements.proportion.withResult("ERROR")/>
+                        <#assign percentCompromised = requirementOutcome.subrequirements.proportion.withResult("COMPROMISED")/>
+                        <#assign percentFailing = requirementOutcome.subrequirements.proportion.withResult("FAILURE")/>
+                        <#assign percentPassing = requirementOutcome.subrequirements.proportion.withResult("SUCCESS")/>
+
+                        <#assign passing = requirementOutcome.subrequirements.percentage.withResult("SUCCESS")>
+                        <#assign failing = requirementOutcome.subrequirements.percentage.withResult("FAILURE")>
+                        <#assign error = requirementOutcome.subrequirements.percentage.withResult("ERROR")>
+                        <#assign compromised = requirementOutcome.subrequirements.percentage.withResult("COMPROMISED")>
+                        <#assign pending = requirementOutcome.subrequirements.percentage.withResult("PENDING")>
+                        <#assign ignored = requirementOutcome.subrequirements.percentage.withSkippedOrIgnored()>
+                        <#assign untested = requirementOutcome.subrequirements.percentage.withNoTests()>
+
+                        <#assign passingbar = percentPassing*barWidth>
+                        <#assign failingbar = (percentPassing + percentFailing)*barWidth>
+                        <#assign errorbar = (percentPassing + percentFailing + percentError)*barWidth>
+                        <#assign compromisedbar = (percentPassing + percentFailing + percentError + percentCompromised)*barWidth>
+                        <#assign ignoredbar = (percentPassing + percentFailing + percentError + percentCompromised + percentIgnored)*barWidth>
+                        <#assign pendingbar = (percentPassing + percentFailing + percentError + percentCompromised + percentIgnored + percentPending)*barWidth>
+                        <#assign untestedbar = (percentPassing + percentFailing + percentError + percentCompromised + percentIgnored + percentPending + percentUntested)*barWidth>
 
                         <#assign tests = inflection.of(requirementOutcome.testOutcomes.total).times("test") >
 
                         <#assign overviewCaption =
-                        "${requirementOutcome.requirement.displayName}
-Tests implemented: ${requirementOutcome.testCount}
-  - Passing tests: ${successCount} (${passing} of specified requirements)
-  - Failing tests: ${failureCount} (${failing} of specified requirements)
-  - Tests with errors: ${errorCount} (${error} of specified requirements)
-  - Compromised tests ${compromisedCount} (${compromised} of specified requirements)
+"${requirementOutcome.requirement.displayName}
+${requirementType} completed: ${passing}
+  - Passing ${requirementType}: ${successCount} (${passing})
 
-Tests not implemented or not executed: ${pendingCount + ignoredCount}
-  - Pending tests: ${pendingCount} (${pending} of specified requirements)
-  - Ignored or skipped tests: ${ignoredCount} (${ignored} of specified requirements)
+${requirementType} incomplete or broken: ${failing + error + compromised}
+  - ${requirementType} Failing: ${failureCount} (${failing})
+  - ${requirementType} Failing with errors: ${errorCount} (${error})
+  - Compromised ${requirementType}: ${compromisedCount} (${compromised})
 
-Requirements specified:     ${requirementOutcome.flattenedRequirementCount}
-Requirements with no tests: ${requirementOutcome.requirementsWithoutTestsCount}
-
-
-Estimated unimplemented tests: ${requirementOutcome.estimatedUnimplementedTests}
-Estimated unimplemented or pending requirements: ${pending}
-Estimated ignored or skipped requirements: ${ignored}"
+${requirementType} not implemented or not executed: ${pendingCount + ignoredCount + untestedCount}
+  - Pending ${requirementType}: ${pendingCount} (${pending})
+  - Ignored or skipped ${requirementType}: ${ignoredCount} (${ignored})
+  - Untested ${requirementType}: ${untestedCount} (${untested})"
                         >
 
                         <table>
@@ -173,30 +183,62 @@ Estimated ignored or skipped requirements: ${ignored}"
                                     <div class="small">${passing}</div>
                                 </td>
                                 <td width="125px">
-                                    <div class="percentagebar"
-                                         title="${overviewCaption}"
-                                         style="width: 125px;">
-                                        <div class="ignoredbar"
-                                             style="width: ${ignoredbar?string("0")}px;"
-                                             title="${overviewCaption}">
-                                            <div class="compromisedbar"
-                                                 style="width: ${compromisedbar?string("0")}px;"
-                                                 title="${overviewCaption}">
-                                                <div class="errorbar"
-                                                     style="width: ${errorbar?string("0")}px;"
+                                    <#--<div class="untestedbar"-->
+                                         <#--title="${overviewCaption}"-->
+                                         <#--style="width: 125px;">-->
+                                        <#--<div class="pendingbar"-->
+                                             <#--title="${overviewCaption}"-->
+                                             <#--style="width: ${pendingbar?string("0")}px;">-->
+                                            <#--<div class="ignoredbar"-->
+                                                 <#--style="width: ${ignoredbar?string("0")}px;"-->
+                                                 <#--title="${overviewCaption}">-->
+                                                <#--<div class="compromisedbar"-->
+                                                     <#--style="width: ${compromisedbar?string("0")}px;"-->
+                                                     <#--title="${overviewCaption}">-->
+                                                    <#--<div class="errorbar"-->
+                                                         <#--style="width: ${errorbar?string("0")}px;"-->
+                                                         <#--title="${overviewCaption}">-->
+                                                        <#--<div class="failingbar"-->
+                                                             <#--style="width: ${failingbar?string("0")}px;"-->
+                                                             <#--title="${overviewCaption}">-->
+                                                            <#--<div class="passingbar"-->
+                                                                 <#--style="width: ${passingbar?string("0")}px;"-->
+                                                                 <#--title="${overviewCaption}">-->
+                                                            <#--</div>-->
+                                                        <#--</div>-->
+                                                    <#--</div>-->
+                                                <#--</div>-->
+                                            <#--</div>-->
+                                        <#--</div>-->
+                                    <#--</div>-->
+                                        <div class="percentagebar"
+                                             title="${overviewCaption}"
+                                             style="width: 125px;">
+                                            <div class="pendingbar"
+                                                 title="${overviewCaption}"
+                                                 style="width: ${pendingbar?string("0")}px;">
+                                                <div class="ignoredbar"
+                                                     style="width: ${ignoredbar?string("0")}px;"
                                                      title="${overviewCaption}">
-                                                    <div class="failingbar"
-                                                         style="width: ${failingbar?string("0")}px;"
+                                                    <div class="compromisedbar"
+                                                         style="width: ${compromisedbar?string("0")}px;"
                                                          title="${overviewCaption}">
-                                                        <div class="passingbar"
-                                                             style="width: ${passingbar?string("0")}px;"
+                                                        <div class="errorbar"
+                                                             style="width: ${errorbar?string("0")}px;"
                                                              title="${overviewCaption}">
+                                                            <div class="failingbar"
+                                                                 style="width: ${failingbar?string("0")}px;"
+                                                                 title="${overviewCaption}">
+                                                                <div class="passingbar"
+                                                                     style="width: ${passingbar?string("0")}px;"
+                                                                     title="${overviewCaption}">
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
                                 </td>
                             </tr>
                         </table>

@@ -37,7 +37,7 @@ class WhenLocatingWebElementsUsingEnhancedFindBys extends Specification {
         when:
             def options = page.allTheInputAndOptionsFields
         then:
-            options.size() == 28
+            options.size() == (20 + 8)
     }
 
     def setupSpec() {

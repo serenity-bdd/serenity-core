@@ -198,7 +198,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
 
     def "The webdriver.timeouts.implicitlywait value is used when loading elements using the findAll() method."() {
         given:
-            def page = openStaticPageWith(["webdriver.timeouts.implicitlywait":"50"])
+            def page = openStaticPageWith(["webdriver.timeouts.implicitlywait":"5"])
         when: "We fetch a list of elements using findElements"
             def elements = page.findAll(By.cssSelector("#elements option"))
         then:

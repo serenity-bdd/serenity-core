@@ -262,8 +262,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
 
     @Override
     public Optional<Requirement> getParentRequirementOf(TestOutcome testOutcome) {
-        if (testOutcome.getUserStory() == null
-                || testOutcome.getUserStory().getStoryClassName() == null) {
+        if (testOutcome.getUserStory() == null || testOutcome.getUserStory().getStoryClassName() == null) {
             return Optional.absent();
         }
         String name = testOutcome.getUserStory().getStoryClassName().replace(rootPackage + ".", "");

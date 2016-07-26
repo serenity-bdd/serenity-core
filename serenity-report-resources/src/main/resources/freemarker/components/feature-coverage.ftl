@@ -1,12 +1,12 @@
 <#macro feature_coverage(requirementOutcome, requirementType, barWidth)>
 
-    <#assign percentUntested = requirementOutcome.subrequirements.proportion.withNoTests()/>
     <#assign percentPending = requirementOutcome.subrequirements.proportion.withResult("PENDING")/>
     <#assign percentIgnored = requirementOutcome.subrequirements.proportion.withSkippedOrIgnored() />
     <#assign percentError = requirementOutcome.subrequirements.proportion.withResult("ERROR")/>
     <#assign percentCompromised = requirementOutcome.subrequirements.proportion.withResult("COMPROMISED")/>
     <#assign percentFailing = requirementOutcome.subrequirements.proportion.withResult("FAILURE")/>
     <#assign percentPassing = requirementOutcome.subrequirements.proportion.withResult("SUCCESS")/>
+    <#assign percentUntested = requirementOutcome.subrequirements.proportion.withNoTests()/>
 
     <#assign successCount = requirementOutcome.subrequirements.withResult("success") >
     <#assign pendingCount = requirementOutcome.subrequirements.withResult("pending") >
@@ -37,13 +37,13 @@
 
     <#assign overviewCaption =
     "${requirementOutcome.requirement.displayName}:
-  - Passing ${requirementType}: ${successCount} (${passing})
-  - ${requirementType} Failing: ${failureCount} (${failing})
-  - ${requirementType} Failing with errors: ${errorCount} (${error})
-  - Compromised ${requirementType}: ${compromisedCount} (${compromised})
-  - Pending ${requirementType}: ${pendingCount} (${pending})
-  - Ignored or skipped ${requirementType}: ${ignoredCount} (${ignored})
-  - Untested ${requirementType}: ${untestedCount} (${untested})"
+  - Passing ${requirementType}: ${successCount} (${passing}
+  - ${requirementType} Failing: ${failureCount} (${failing}
+  - ${requirementType} Failing with errors: ${errorCount}
+  - Compromised ${requirementType}: ${compromisedCount}
+  - Pending ${requirementType}: ${pendingCount}
+  - Ignored or skipped ${requirementType}: ${ignoredCount}
+  - Untested ${requirementType}: ${untestedCount} (${untested}"
     >
 
 <table>

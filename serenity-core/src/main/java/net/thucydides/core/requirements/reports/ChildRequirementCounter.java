@@ -43,6 +43,11 @@ public class ChildRequirementCounter implements RequirmentCalculator {
     }
 
     private TestResult testResultFor(Requirement req) {
+
+        if (testOutcomes.forRequirement(req).getOutcomes().isEmpty()) {
+            return TestResult.UNDEFINED;
+        }
+
         return testOutcomes.forRequirement(req).getResult();
     }
 }

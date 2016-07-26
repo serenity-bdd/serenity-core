@@ -147,6 +147,19 @@ public class RequirementsOutcomes {
         return typeOfFirstChildPresent();
     }
 
+//    public Optional<String> typeOf() {
+//        boolean grandChildrenFound = false;
+//        for (RequirementOutcome outcome : requirementOutcomes) {
+//            if (!outcome.getRequirement().getChildren().isEmpty()) {
+//                for(Requirement child : outcome.getRequirement().getChildren()) {
+//                    if (!child.getChildren().isEmpty())
+//                        return typeOfFirstChildPresentIn(child.getChildren());
+//                }
+//            }
+//        }
+//        return grandChildrenFound;
+//    }
+
     public List<String> getTypes() {
         List<Requirement> requirements = getAllRequirements();
         List<String> types = Lists.newArrayList();

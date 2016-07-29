@@ -24,6 +24,7 @@ import java.util.*;
 import static com.google.common.collect.Sets.newHashSet;
 import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT;
 import static net.thucydides.core.reflection.ClassFinder.loadClasses;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
@@ -219,6 +220,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
 
         Optional<Narrative> narrative = NarrativeFinder.forClass(candidateClass);
 
+
         Requirement newRequirement = getRequirement(candidateClass, packageName, level, requirementTitle, requirementType, narrativeText, cardNumber, narrative);
         if (parentRequirement != null) {
             newRequirement = newRequirement.withParent(parentRequirement.getName());
@@ -230,16 +232,16 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         if (narrative.isPresent()) {
             requirementTitle = isNotEmpty(narrative.get().title()) ? narrative.get().title() : requirementTitle;
             requirementType = isNotEmpty(narrative.get().type()) ? narrative.get().type() : requirementType;
-            narrativeText = isNotEmpty(narrativeText) ? Joiner.on("\n").join(narrative.get().text()) : narrativeText;
+            narrativeText = (narrative.get().text().length > 0) ? Joiner.on("\n").join(narrative.get().text()) : narrativeText;
             cardNumber = isNotEmpty(narrative.get().cardNumber()) ? narrative.get().cardNumber() : cardNumber;
         }
-        if (StringUtils.isEmpty(requirementType)) {
+        if (isEmpty(requirementType)) {
             requirementType = getRequirementType(level, candidateClass);
         }
 
         return Requirement.named(humanReadableVersionOf(packageName))
                 .withOptionalCardNumber(cardNumber)
-                .withOptionalDisplayName(StringUtils.isEmpty(requirementTitle) ? humanReadableVersionOf(packageName) : humanReadableVersionOf(requirementTitle))
+                .withOptionalDisplayName(isEmpty(requirementTitle) ? humanReadableVersionOf(packageName) : humanReadableVersionOf(requirementTitle))
                 .withType(requirementType)
                 .withNarrative(narrativeText);
     }

@@ -15,7 +15,7 @@ public class StoryFileStrategy implements FeatureTagStrategy {
 //        Optional<Narrative> narrative = storyReader.narrativeLoadedFrom(featureFile, ".story");
 //
 //        String featureName = FeatureTitle.isDefinedIn(narrative) ?
-//                FeatureTitle.definedIn(narrative) : humanize(featureFile.getName().replace(".story", ""));
+//                FeatureTitle.leafRequirementDefinedIn(narrative) : humanize(featureFile.getName().replace(".story", ""));
 //
 //        return Optional.of(TestTag.withName(featureName).andType("story"));
     }

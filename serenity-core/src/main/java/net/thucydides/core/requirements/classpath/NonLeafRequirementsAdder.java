@@ -56,19 +56,17 @@ public class NonLeafRequirementsAdder {
 
             if (requirementExistsCalled(humanize(pathElement), allRequirements)) {
                 nextRequirement = requirementCalled(humanize(pathElement), allRequirements).withParent(parentName);
-                if (parent != null) {
-                    addChild(nextRequirement).toParent(parent).in(allRequirements);
-                }
             } else {
-
                 String narrativeText = PackageInfoNarrative.text().definedInPath(fullPath).or(NarrativeText.definedIn(fullPath, type));
                 String narrativeType = PackageInfoNarrative.type().definedInPath(fullPath).or(type);
                 nextRequirement = (Requirement.named(humanize(pathElement)).withType(narrativeType).withNarrative(narrativeText)).withParent(parentName);
                 allRequirements.add(nextRequirement);
             }
+            if (parent != null) {
+                addChild(nextRequirement).toParent(parent).in(allRequirements);
+            }
             parent = nextRequirement;
         }
-
         addChild(leafRequirement).toParent(parent).in(allRequirements);
     }
 

@@ -143,7 +143,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         copyResourcesToOutputDirectory();
 
-        FreemarkerContext context = new FreemarkerContext(environmentVariables, requirements, issueTracking, relativeLink);
+        FreemarkerContext context = new FreemarkerContext(environmentVariables, requirements.getRequirementsService(), issueTracking, relativeLink);
 
         List<ReportingTask> reportingTasks = Lists.newArrayList();
 

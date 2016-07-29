@@ -172,6 +172,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
             def BaseStepListener listener = new BaseStepListener(outputDirectory)
             eventBus.registerListener(listener)
         when:
+            eventBus.testSuiteStarted(Story.called("A data driven test suite"))
             eventBus.testStarted("aDataDrivenTest")
             eventBus.useExamplesFrom(DataTable.withHeaders(["firstName","lastName","age"]).
                                                andRows([["Joe", "Smith",20],
@@ -188,6 +189,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
             def BaseStepListener listener = new BaseStepListener(outputDirectory)
             eventBus.registerListener(listener)
         when:
+            eventBus.testSuiteStarted(Story.called("A data driven test suite"))
             eventBus.testStarted("aDataDrivenTest")
             eventBus.useExamplesFrom(DataTable.withHeaders(["firstName","lastName","age"]).
                     andRows([["Joe", "Smith",20],
@@ -214,6 +216,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
         def BaseStepListener listener = new BaseStepListener(outputDirectory)
         eventBus.registerListener(listener)
         when:
+        eventBus.testSuiteStarted(Story.called("A data driven test suite"))
         eventBus.testStarted("aDataDrivenTest")
         eventBus.useExamplesFrom(DataTable.withHeaders(["firstName","lastName","age"]).
                 andRows([["Joe", "Smith",20],
@@ -245,6 +248,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
             def BaseStepListener listener = new BaseStepListener(outputDirectory)
             eventBus.registerListener(listener)
         when:
+            eventBus.testSuiteStarted(Story.called("A data driven test suite"))
             eventBus.testStarted("aDataDrivenTest")
             eventBus.useExamplesFrom(DataTable.withHeaders(["firstName","lastName","age"]).
                     andRows([["Joe", "Smith",20],
@@ -294,6 +298,7 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
             def BaseStepListener listener = new BaseStepListener(outputDirectory)
             eventBus.registerListener(listener)
         when:
+            eventBus.testSuiteStarted(Story.called("A data driven test suite"))
             eventBus.testStarted("aDataDrivenTest")
             eventBus.useExamplesFrom(DataTable.withHeaders(["firstName","lastName","age"]).build())
 

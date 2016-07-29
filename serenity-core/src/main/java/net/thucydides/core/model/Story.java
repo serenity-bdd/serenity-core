@@ -2,6 +2,7 @@ package net.thucydides.core.model;
 
 import net.thucydides.core.annotations.Feature;
 import net.thucydides.core.model.features.ApplicationFeature;
+import net.thucydides.core.requirements.model.FeatureType;
 
 import static net.thucydides.core.model.ReportType.ROOT;
 import static net.thucydides.core.util.NameConverter.humanize;
@@ -18,18 +19,19 @@ public class Story {
     private  String path;
     private  String narrative;
     private  ApplicationFeature feature;
-    private  RequirementType type;
+//    private  RequirementType type;
+    private  String type;
 
-    public enum RequirementType {
-        story, feature;
-
-        public static RequirementType forFilename(String storyPath) {
-            if (storyPath.toLowerCase().endsWith(".feature")) {
-                return feature;
-            }
-            return story;
-        }
-    }
+//    public enum RequirementType {
+//        story, feature;
+//
+//        public static RequirementType forFilename(String storyPath) {
+//            if (storyPath.toLowerCase().endsWith(".feature")) {
+//                return feature;
+//            }
+//            return story;
+//        }
+//    }
 
     protected Story(final Class<?> userStoryClass) {
         this.id = userStoryClass.getCanonicalName();
@@ -37,7 +39,8 @@ public class Story {
         this.storyName = humanize(userStoryClass.getSimpleName());
         this.feature = findFeatureFrom(userStoryClass);
         this.path = pathOf(userStoryClass);
-        this.type = RequirementType.story;
+        this.type = FeatureType.STORY.toString();
+        //this.type = RequirementType.story;
     }
 
     private String pathOf(Class<?> userStoryClass) {
@@ -68,7 +71,7 @@ public class Story {
         this.feature = feature;
         this.path = path;
         this.narrative = null;
-        this.type = RequirementType.story;
+        this.type = FeatureType.STORY.toString();
     }
 
 
@@ -78,7 +81,7 @@ public class Story {
                  final String path,
                  final ApplicationFeature feature,
                  final String narrative) {
-        this(id, storyName,storyClassName, path, feature, narrative, RequirementType.story);
+        this(id, storyName,storyClassName, path, feature, narrative, FeatureType.STORY.toString());
     }
 
 
@@ -88,7 +91,7 @@ public class Story {
                  final String path,
                  final ApplicationFeature feature,
                  final String narrative,
-                 final RequirementType type) {
+                 final String type) {
         this.id = id;
         this.storyName = storyName;
         this.storyClassName = storyClassName;
@@ -107,7 +110,7 @@ public class Story {
         this.storyClassName = null;
         this.feature = feature;
         this.path = path;
-        this.type = RequirementType.story;
+        this.type = FeatureType.STORY.toString();
     }
 
 
@@ -134,6 +137,10 @@ public class Story {
     }
 
     public Story withNarrative(String narrative)  {
+        return new Story(id, storyName, storyClassName, path, feature, narrative, type);
+    }
+
+    public Story withType(String type)  {
         return new Story(id, storyName, storyClassName, path, feature, narrative, type);
     }
 
@@ -245,16 +252,16 @@ public class Story {
         return narrative;
     }
 
-    public RequirementType getType() {
+    public String getType() {
         return type;
     }
 
     public Story withPath(String path) {
-        return new Story(this.id, this.storyName, this.storyClassName, path,this.feature,this.narrative, RequirementType.forFilename(path));
+        return new Story(this.id, this.storyName, this.storyClassName, path,this.feature,this.narrative, FeatureType.forFilename(path).toString());
     }
 
     public Story asFeature() {
-        return new Story(this.id, this.storyName, this.storyClassName, this.path,this.feature,this.narrative, RequirementType.feature);
+        return new Story(this.id, this.storyName, this.storyClassName, this.path,this.feature,this.narrative, FeatureType.FEATURE.toString());
     }
 
     public TestTag asTag() {

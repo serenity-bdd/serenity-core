@@ -46,7 +46,6 @@ public class AggregateReportingTask extends BaseReportingTask implements Reporti
         Map<String, Object> context = freemarker.getBuildContext(testOutcomes, defaultNameProvider, true);
 
         context.put("report", ReportProperties.forAggregateResultsReport());
-        context.put("requirementTypes", requirementsService.getRequirementTypes());
         context.put("csvReport", "results.csv");
 
         generateReportPage(context, TEST_OUTCOME_TEMPLATE_PATH, "index.html");

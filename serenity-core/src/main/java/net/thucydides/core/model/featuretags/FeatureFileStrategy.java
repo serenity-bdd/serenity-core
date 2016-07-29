@@ -23,7 +23,7 @@ public class FeatureFileStrategy implements FeatureTagStrategy {
 //        Optional<Narrative> narrative = cucumberParser.loadFeatureNarrative(featureFile);
 //
 //        String featureName = FeatureTitle.isDefinedIn(narrative) ?
-//                FeatureTitle.definedIn(narrative) : humanize(featureFile.getName().replace(".feature", ""));
+//                FeatureTitle.leafRequirementDefinedIn(narrative) : humanize(featureFile.getName().replace(".feature", ""));
 //
 //        return Optional.of(TestTag.withName(featureName).andType("feature"));
     }

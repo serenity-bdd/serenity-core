@@ -36,6 +36,7 @@ import net.thucydides.core.util.NameConverter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.NotNull;
@@ -208,7 +209,7 @@ public class TestOutcome {
     List<String> versions;
 
 
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(TestOutcome.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestOutcome.class);
 
     private TestOutcome() {
         groupStack = new Stack<>();
@@ -231,6 +232,16 @@ public class TestOutcome {
     }
 
     public TestOutcome(final String name, final Class<?> testCase) {
+        this(name, testCase, Injectors.getInjector().getInstance(EnvironmentVariables.class));
+    }
+        /**
+         * Create a test outcome based on a test method in a test class.
+         * The requirement type will be derived if possible using the class package.
+         *
+         * @param name
+         * @param testCase
+         */
+    public TestOutcome(final String name, final Class<?> testCase, EnvironmentVariables environmentVariables) {
         startTime = now().toDate().getTime();
         this.name = name;
         this.testCase = testCase;
@@ -240,9 +251,18 @@ public class TestOutcome {
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
         this.qualifier = Optional.absent();
+        this.environmentVariables = environmentVariables;
         if (testCase != null) {
-            initializeStoryFrom(testCase);
+            setUserStory(leafRequirementDefinedIn().testCase(testCase));
         }
+    }
+
+    public static TestOutcomeWithEnvironmentBuilder inEnvironment(EnvironmentVariables environmentVariables) {
+        return new TestOutcomeWithEnvironmentBuilder(environmentVariables);
+    }
+
+    private PackageBasedLeafRequirements leafRequirementDefinedIn() {
+        return new PackageBasedLeafRequirements(getEnvironmentVariables());
     }
 
     /**
@@ -299,24 +319,36 @@ public class TestOutcome {
         return environmentVariables;
     }
 
-    /**
-     * A test outcome should relate to a particular test class or user story class.
-     *
-     * @param name      The name of the Java method implementing this test, if the test is a JUnit or TestNG test (for example)
-     * @param testCase  The test class that contains this test method, if the test is a JUnit or TestNG test
-     * @param userStory If the test is not implemented by a Java class (e.g. an easyb story), we may just use the Story class to
-     *                  represent the story in which the test is implemented.
-     */
     protected TestOutcome(final String name, final Class<?> testCase, final Story userStory) {
+        this(name, testCase, userStory, Injectors.getInjector().getInstance(EnvironmentVariables.class));
+    }
+
+        /**
+         * A test outcome should relate to a particular test class or user story class.
+         *
+         * @param name      The name of the Java method implementing this test, if the test is a JUnit or TestNG test (for example)
+         * @param testCase  The test class that contains this test method, if the test is a JUnit or TestNG test
+         * @param userStory If the test is not implemented by a Java class (e.g. an easyb story), we may just use the Story class to
+         *                  represent the story in which the test is implemented.
+         */
+    protected TestOutcome(final String name, final Class<?> testCase, final Story userStory, EnvironmentVariables environmentVariables) {
         startTime = now().toDate().getTime();
         this.name = name;
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
         this.additionalIssues = Lists.newArrayList();
         this.additionalVersions = Lists.newArrayList();
-        setUserStory(userStory);
+        if ((testCase != null) || (userStory != null)) {
+            setUserStory(storyDefinedIn(testCase).or(userStory));
+        }
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
+        this.environmentVariables = environmentVariables;
+    }
+
+    private Optional<Story> storyDefinedIn(Class<?> testCase) {
+        if (testCase == null) { return Optional.absent(); }
+        return Optional.of(leafRequirementDefinedIn().testCase(testCase));
     }
 
     public TestOutcome copy() {
@@ -338,7 +370,8 @@ public class TestOutcome {
                 this.dataTable,
                 this.qualifier,
                 this.driver,
-                this.manual);
+                this.manual,
+                this.environmentVariables);
     }
 
     protected TestOutcome(final Long startTime,
@@ -359,7 +392,8 @@ public class TestOutcome {
                           final DataTable dataTable,
                           final Optional<String> qualifier,
                           final String driver,
-                          final boolean manualTest) {
+                          final boolean manualTest,
+                          final EnvironmentVariables environmentVariables) {
         this.startTime = startTime;
         this.duration = duration;
         this.title = title;
@@ -383,6 +417,7 @@ public class TestOutcome {
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
         this.driver = driver;
         this.manual = manualTest;
+        this.environmentVariables = environmentVariables;
     }
 
     private List<String> removeDuplicates(List<String> issues) {
@@ -428,7 +463,8 @@ public class TestOutcome {
                     this.dataTable,
                     Optional.fromNullable(qualifier),
                     this.driver,
-                    this.manual);
+                    this.manual,
+                    this.environmentVariables);
         } else {
             return this;
         }
@@ -453,7 +489,8 @@ public class TestOutcome {
                 this.dataTable,
                 this.qualifier,
                 this.driver,
-                this.manual);
+                this.manual,
+                this.environmentVariables);
     }
 
     public TestOutcome withTags(Set<TestTag> tags) {
@@ -475,7 +512,8 @@ public class TestOutcome {
                 this.dataTable,
                 this.qualifier,
                 this.driver,
-                this.manual);
+                this.manual,
+                this.environmentVariables);
     }
 
     public TestOutcome withMethodName(String methodName) {
@@ -498,20 +536,11 @@ public class TestOutcome {
                     this.dataTable,
                     this.qualifier,
                     this.driver,
-                    this.manual);
+                    this.manual,
+                    this.environmentVariables);
         } else {
             return this;
         }
-    }
-
-    private void initializeStoryFrom(final Class<?> testCase) {
-        Story story;
-        if (Story.testedInTestCase(testCase) != null) {
-            story = Story.from(Story.testedInTestCase(testCase));
-        } else {
-            story = Story.from(testCase);
-        }
-        setUserStory(story);
     }
 
     /**
@@ -645,6 +674,23 @@ public class TestOutcome {
         return Optional.absent();
     }
 
+    private static class TestOutcomeWithEnvironmentBuilder {
+        private final EnvironmentVariables environmentVariables;
+
+        public TestOutcomeWithEnvironmentBuilder(EnvironmentVariables environmentVariables) {
+            this.environmentVariables = environmentVariables;
+        }
+
+        public Object forTest(String methodName, Class<?> testCase) {
+            return new TestOutcome(methodName, testCase, environmentVariables);
+        }
+
+        public Object forTest(String methodName, Class<?> testCase, Story story) {
+            return new TestOutcome(methodName, testCase, story, environmentVariables);
+        }
+
+    }
+
     private class GetLastStepBuilder {
 
         int maxCount;
@@ -772,7 +818,7 @@ public class TestOutcome {
             jsonConverter.toJson(this, outputStream);
             return outputStream.toString();
         } catch (IOException e) {
-            LOGGER.error("serialization error for testOutcome with name \""+this.getName()+"\"",e);
+            LOGGER.error("serialization error for testOutcome with name \"" + this.getName() + "\"", e);
             return "";
         }
     }
@@ -1062,7 +1108,7 @@ public class TestOutcome {
             return testResults;
         }
         testResults = Lists.newArrayList();
-        for(TestStep step : testSteps) {
+        for (TestStep step : testSteps) {
             testResults.add(step.getResult());
         }
         return testResults;
@@ -1611,7 +1657,7 @@ public class TestOutcome {
 
     private int countDataRowsWithResult(TestResult expectedResult) {
         int matchingRowCount = 0;
-        for(DataTableRow row : getDataTable().getRows()) {
+        for (DataTableRow row : getDataTable().getRows()) {
             matchingRowCount += (row.getResult() == expectedResult) ? 1 : 0;
         }
         return matchingRowCount;
@@ -1658,14 +1704,13 @@ public class TestOutcome {
 
 
     public boolean hasAMoreGeneralFormOfTag(TestTag specificTag) {
-        for(TestTag tag : getTags()) {
+        for (TestTag tag : getTags()) {
             if (specificTag.isAsOrMoreSpecificThan(tag)) {
                 return true;
             }
         }
         return false;
     }
-
 
 
     public void setStartTime(DateTime startTime) {

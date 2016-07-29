@@ -1,8 +1,7 @@
 @Narrative(
         text = {"This is a narrative",
-                "For a potato"},
-        type="mytype"
+                "For Nice Zuchinnis"}
 )
-package annotatedstorieswithcontents.potatoes;
+package deeppackagerequirements.veges.nice_zucchinis;
 
 import net.thucydides.core.annotations.Narrative;

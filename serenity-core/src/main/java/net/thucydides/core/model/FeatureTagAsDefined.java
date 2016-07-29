@@ -28,14 +28,14 @@ public class FeatureTagAsDefined {
     }
 
     private static FeatureType featureTypeFor(Story story, String path) {
-        if ((story != null) && (story.getType() == Story.RequirementType.feature)) {
+        if ((story != null) && (story.getType() == "feature")) {
             return FeatureType.FEATURE;
         }
         if (path != null && path.endsWith(".feature")) {
             return FeatureType.FEATURE;
         }
 
-        if ((story != null) && (story.getType() == Story.RequirementType.story)) {
+        if ((story != null) && (story.getType() == "story")) {
             return FeatureType.STORY;
         }
         if (path != null && path.endsWith(".story")) {

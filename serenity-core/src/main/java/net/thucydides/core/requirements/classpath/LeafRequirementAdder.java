@@ -2,6 +2,7 @@ package net.thucydides.core.requirements.classpath;
 
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.requirements.model.Requirement;
+import net.thucydides.core.requirements.model.RequirementTypeAt;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 
@@ -10,45 +11,51 @@ import java.util.List;
 
 import static net.thucydides.core.requirements.classpath.PathElements.*;
 import static net.thucydides.core.util.NameConverter.humanize;
-import static org.codehaus.groovy.runtime.DefaultGroovyMethods.last;
 
-public class StoryRequirementsAdder {
+public class LeafRequirementAdder {
 
     private final String path;
     private final String rootPackage;
     private final int requirementsDepth;
+    private List<String> activeRequirementTypes;
 
     RequirementsConfiguration requirementsConfiguration;
 
-    public static StoryRequirementsAdderBuilder addStoryDefinedIn(String path) {
-        return new StoryRequirementsAdderBuilder(path);
+    public static LeafRequirementsAdderBuilder addLeafRequirementDefinedIn(String path) {
+        return new LeafRequirementsAdderBuilder(path);
     }
 
-    public static class StoryRequirementsAdderBuilder {
+    public static class LeafRequirementsAdderBuilder {
 
         private final String path;
         private int requirementsDepth;
+        private List<String> activeRequirementTypes;
 
-        public StoryRequirementsAdderBuilder(String path) {
+        public LeafRequirementsAdderBuilder(String path) {
 
             this.path = path;
         }
 
-        public StoryRequirementsAdder startingAt(String rootPackage) {
-            return new StoryRequirementsAdder(path, requirementsDepth, rootPackage);
+        public LeafRequirementAdder startingAt(String rootPackage) {
+            return new LeafRequirementAdder(path, requirementsDepth, rootPackage, activeRequirementTypes);
         }
 
-        public StoryRequirementsAdderBuilder withAMaximumRequirementsDepthOf(int requirementsDepth) {
+        public LeafRequirementsAdderBuilder withAMaximumRequirementsDepthOf(int requirementsDepth) {
             this.requirementsDepth = requirementsDepth;
             return this;
         }
 
+        public LeafRequirementsAdderBuilder usingRequirementTypes(List<String> activeRequirementTypes) {
+            this.activeRequirementTypes = activeRequirementTypes;
+            return this;
+        }
     }
 
-    protected StoryRequirementsAdder(String path, int requirementsDepth, String rootPackage) {
+    protected LeafRequirementAdder(String path, int requirementsDepth, String rootPackage, List<String> activeRequirementTypes) {
         this.path = path;
         this.rootPackage = rootPackage;
         this.requirementsDepth = requirementsDepth;
+        this.activeRequirementTypes = activeRequirementTypes;
         this.requirementsConfiguration = new RequirementsConfiguration(Injectors.getInjector().getInstance(EnvironmentVariables.class));
     }
 
@@ -79,7 +86,7 @@ public class StoryRequirementsAdder {
 
         String narrativeType = PackageInfoNarrative.type().definedInPath(path)
                 .or(ClassNarrative.type().definedInPath(path))
-                .or(leafRequirementType());
+                .or(leafRequirementTypeFrom(pathElements));
 
         Requirement story = Requirement.named(storyName)
                 .withType(narrativeType)
@@ -112,7 +119,6 @@ public class StoryRequirementsAdder {
         return story;
     }
 
-
 //    private Optional<String> narrativeTypeDefinedIn(String path) {
 //        Optional<Narrative> narrative = getClassLevelNarrativeFor(path);
 //        if (!narrative.isPresent() || (isEmpty(narrative.get().type()))) {
@@ -138,7 +144,8 @@ public class StoryRequirementsAdder {
 //        }
 //    }
 
-    private String leafRequirementType() {
-        return last(requirementsConfiguration.getRequirementTypes());
+    private String leafRequirementTypeFrom(List<String> pathElements) {
+        return RequirementTypeAt.level(pathElements.size() - 1).in(activeRequirementTypes);
+//        return requirementsConfiguration.getRequirementType(pathElements.size() - 1);// ;requirementsDepth
     }
 }

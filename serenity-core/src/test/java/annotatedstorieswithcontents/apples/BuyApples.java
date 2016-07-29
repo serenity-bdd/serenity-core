@@ -8,7 +8,7 @@ import org.junit.Test;
         text = {"A Narrative for test 1",
                 "Multiple lines"}
 )
-public class TestSample1 {
+public class BuyApples {
     @Test
     public void someTest() {}
 }

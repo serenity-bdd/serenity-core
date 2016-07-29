@@ -21,15 +21,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import static java.lang.Math.max;
+import static net.thucydides.core.requirements.annotations.ClassInfoAnnotations.theClassDefinedIn;
 import static net.thucydides.core.requirements.classpath.NonLeafRequirementsAdder.addParentsOf;
-import static net.thucydides.core.requirements.classpath.StoryRequirementsAdder.addStoryDefinedIn;
+import static net.thucydides.core.requirements.classpath.LeafRequirementAdder.addLeafRequirementDefinedIn;
 
 /**
  * Load a set of requirements (epics/themes,...) from the directory structure.
  * This will typically be the directory structure containing the tests (for JUnit) or stories (e.g. for JBehave).
  * By default, the tests
  */
-public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvider implements RequirementsTagProvider, OverridableTagProvider {
+public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvider
+        implements RequirementsTagProvider, OverridableTagProvider, RequirementTypesProvider {
 
     private final EnvironmentVariables environmentVariables;
 
@@ -48,7 +51,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         this.environmentVariables = environmentVariables;
         this.rootPackage = rootPackage;
         this.configuration = Injectors.getInjector().getInstance(Configuration.class);
-        this.requirementsStore = new RequirementsStore(getRequirementsDirectory(), "package-requirements.json");
+        this.requirementsStore = new RequirementsStore(getRequirementsDirectory(), rootPackage + "-package-requirements.json");
 
         if (rootPackage == null) {
             logger.warn("To generate correct requirements coverage reports you need to set the 'serenity.test.root' property to the package representing the top of your requirements hierarchy.");
@@ -84,8 +87,9 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     private void fetchRequirements() {
-        Optional<List<Requirement>> reloadedRequirements = reloadedRequirements();
-        requirements =  reloadedRequirements.isPresent() ? reloadedRequirements.get() : requirementsReadFromClasspath();
+        requirements = reloadedRequirements()
+                            .or(requirementsReadFromClasspath()
+                                    .or(NO_REQUIREMENTS));
     }
 
     private Optional<List<Requirement>> reloadedRequirements() {
@@ -96,9 +100,11 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         }
     }
 
-    private List<Requirement> requirementsReadFromClasspath() {
-        try {
+    private Optional<List<Requirement>> requirementsReadFromClasspath() {
 
+        List<Requirement> classpathRequirements = null;
+
+        try {
             List<String> requirementPaths = requirementPathsStartingFrom(rootPackage);
             int requirementsDepth = longestPathIn(requirementPaths);
 
@@ -109,26 +115,37 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
             allRequirements = removeChildrenFromTopLevelRequirementsIn(allRequirements);
 
-            requirements = Lists.newArrayList(allRequirements);
-            Collections.sort(requirements);
+            if (!allRequirements.isEmpty()) {
+                classpathRequirements = Lists.newArrayList(allRequirements);
+                Collections.sort(classpathRequirements);
 
-            requirementsStore.write(requirements);
-
+                requirementsStore.write(classpathRequirements);
+            }
 
         } catch (IOException e) {
-            requirements = new ArrayList<>();
+            return Optional.absent();
         }
-        return requirements;
+
+        return Optional.fromNullable(classpathRequirements);
     }
 
-    private List<String> requirementPathsStartingFrom(String rootPackage) throws IOException {
-        List<String> requirementPaths = requirementPathsFromClassesInPackage(rootPackage);
+    List<String> requirementPaths;
+    private List<String> requirementPathsStartingFrom(String rootPackage){
+        if (requirementPaths == null) {
+            requirementPaths = requirementPathsFromClassesInPackage(rootPackage);
+        }
         return requirementPaths;
     }
 
-    private List<String> requirementPathsFromClassesInPackage(String rootPackage) throws IOException {
+    private List<String> requirementPathsFromClassesInPackage(String rootPackage) {
         List<String> requirementPaths = Lists.newArrayList();
-        ClassPath classpath = ClassPath.from(Thread.currentThread().getContextClassLoader());
+
+        ClassPath classpath;
+        try {
+            classpath = ClassPath.from(Thread.currentThread().getContextClassLoader());
+        } catch (IOException e) {
+            throw new CouldNotLoadRequirementsException(e);
+        }
 
         for (ClassPath.ClassInfo classInfo : classpath.getTopLevelClassesRecursive(rootPackage)) {
             if (classRepresentsARequirementIn(classInfo)) {
@@ -139,14 +156,11 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     private boolean classRepresentsARequirementIn(ClassPath.ClassInfo classInfo) {
-        if ((classInfo.load().getAnnotation(RunWith.class) != null)) {
-            return true;
-        }
-        if (classInfo.load().getPackage().getAnnotation(Narrative.class) != null) {
-            return true;
-        }
-        return false;
+        return (theClassDefinedIn(classInfo).hasAnAnnotation(RunWith.class, Narrative.class))
+                || (theClassDefinedIn(classInfo).hasAPackageAnnotation(Narrative.class))
+                || (theClassDefinedIn(classInfo).containsTests());
     }
+
 
     private Set<Requirement> removeChildrenFromTopLevelRequirementsIn(Set<Requirement> allRequirements) {
         Set<Requirement> prunedRequirements = Sets.newHashSet();
@@ -172,8 +186,9 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
     private void addRequirementsDefinedIn(String path, int requirementsDepth, Collection<Requirement> allRequirements) {
 
-        Requirement leafRequirement = addStoryDefinedIn(path)
+        Requirement leafRequirement = addLeafRequirementDefinedIn(path)
                 .withAMaximumRequirementsDepthOf(requirementsDepth)
+                .usingRequirementTypes(getActiveRequirementTypes())
                 .startingAt(rootPackage)
                 .to(allRequirements);
 
@@ -207,7 +222,11 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
                 return Optional.of(requirement);
             }
         }
-        return Optional.absent();
+        return uniqueRequirementWithName(testTag.getName());
+    }
+
+    private Optional<Requirement> uniqueRequirementWithName(String name) {
+        return RequirementsList.of(getRequirements()).findByUniqueName(name);
     }
 
     @Override
@@ -242,7 +261,26 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     private File getRequirementsDirectory() {
-        return new File(configuration.getOutputDirectory(),"requirements");
+        return new File(configuration.getOutputDirectory(), "requirements");
     }
 
+
+    public void clearCache() {
+        requirementsStore.clear();
+    }
+
+    @Override
+    public List<String> getActiveRequirementTypes() {
+        List<String> allRequirementTypes = requirementsConfiguration.getRequirementTypes();
+
+        int maxDepth = longestPathIn(requirementPathsStartingFrom(rootPackage));// RequirementsList.of(getRequirements()).maxDepth();
+
+        return applicableRequirements(allRequirementTypes, maxDepth);
+    }
+
+    private List<String> applicableRequirements(List<String> allRequirementTypes, int maxDepth) {
+        int startingLevel = max(allRequirementTypes.size() - maxDepth, 0);
+        int endingLevel = allRequirementTypes.size();
+        return allRequirementTypes.subList(startingLevel, endingLevel);
+    }
 }

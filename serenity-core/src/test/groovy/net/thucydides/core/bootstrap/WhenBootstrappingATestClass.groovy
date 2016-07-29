@@ -44,6 +44,8 @@ class WhenBootstrappingATestClass extends Specification {
             def testCase = new SampleTestClass()
         when: "we enrich the object"
             new ThucydidesAgent(Optional.absent()).enrich(testCase)
+        and: "we start the test suite"
+            StepEventBus.getEventBus().testSuiteStarted(testCase.class)
         and: "we start the test"
             StepEventBus.getEventBus().testStarted("Test Something");
         and: "we call a @Step-annotated method in the step library"
@@ -51,17 +53,6 @@ class WhenBootstrappingATestClass extends Specification {
         then: "the method should have been recorded in the test result"
             latestTestOutcome.name == 'Test Something'
             latestTestOutcome.testSteps.collect {it.description} == ["Step1","Step2"]
-    }
-
-    def "should generate reports when the tests are finished"() {
-        given: "a test class object with a field annotated with @Step"
-            def testCase = new SampleTestClass()
-        when: "we run the test"
-            new ThucydidesAgent(Optional.absent()).enrich(testCase)
-            StepEventBus.getEventBus().testStarted("Test Something");
-            testCase.testSomething()
-        then:
-            true
     }
 
     def getLatestTestOutcome() {

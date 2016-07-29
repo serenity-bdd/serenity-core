@@ -15,8 +15,8 @@ import java.util.List;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
- * A capability represents a high-level business goal that will appear in the result summary report.
- * This report summarizes the state of the application in terms of what capabilities have been implemented.
+ * A requirement represents a high-level business goal that will appear in the result summary report.
+ * This report summarizes the state of the application in terms of what /** have been implemented.
  * Capabilities are implemented via <em>features</em>, which in turn are tested by scenarios.
  */
 public class Requirement implements Comparable {

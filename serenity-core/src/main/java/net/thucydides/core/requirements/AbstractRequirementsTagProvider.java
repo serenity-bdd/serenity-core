@@ -70,7 +70,7 @@ public abstract class AbstractRequirementsTagProvider {
         return getDefaultType(level, getRequirementTypes().size() - 1);
     }
 
-    protected List<String> getRequirementTypes() {
+    public List<String> getRequirementTypes() {
         return requirementsConfiguration.getRequirementTypes();
     }
 

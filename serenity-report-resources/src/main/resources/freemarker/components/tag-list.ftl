@@ -99,7 +99,7 @@
                                 <td class="related-tag-percentage"><span title="${passingCaption}">${passing}</span></td>
                                 <td width="150px">
                                     <a href="${tagReport}">
-                                        <div class="percentagebar"
+                                        <div class="pendingbar"
                                              title="${pendingCaption}"
                                              style="width: 150px;">
                                             <div class="ignoredbar"

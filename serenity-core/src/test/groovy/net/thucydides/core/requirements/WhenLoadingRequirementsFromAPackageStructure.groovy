@@ -15,23 +15,23 @@ class WhenLoadingRequirementsFromAPackageStructure extends Specification {
     public static final String ROOT_DIRECTORY = "annotatedstorieswithcontents"
 
     def setup() {
-        if (new File("target/site/serenity/requirements/package-requirements.json").exists()) {
-            Files.delete(new File("target/site/serenity/requirements/package-requirements.json"))
+        if (new File("target/site/serenity/requirements/annotatedstorieswithcontents-package-requirements.json").exists()) {
+            Files.delete(new File("target/site/serenity/requirements/annotatedstorieswithcontents-package-requirements.json"))
         }
     }
 
     def "Should be able to load capabilities from the default package structure"() {
         given: "We are using the Annotation provider"
             def vars = new MockEnvironmentVariables()
-            vars.setProperty(ThucydidesSystemProperty.THUCYDIDES_ANNOTATED_REQUIREMENTS_DIR.propertyName, ROOT_DIRECTORY)
-            RequirementsTagProvider capabilityProvider = new PackageAnnotationBasedTagProvider(vars)
+            vars.setProperty(ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT.propertyName, ROOT_DIRECTORY)
+            RequirementsTagProvider capabilityProvider = new PackageRequirementsTagProvider(vars)
         when: "We load the available requirements"
             def capabilities = capabilityProvider.getRequirements();
             def capabilityNames = capabilities.collect {it.name}
             def capabilitiyTexts = capabilities.collect {it.narrative.renderedText}
         then:
             capabilityNames == ["Apples", "Nice zucchinis", "Potatoes"]
-            capabilitiyTexts == ["This is a narrative\nFor apples", "This is a narrative\nFor NiceZuchinnis",
+            capabilitiyTexts == ["apples\nThis is a narrative\nFor apples", "This is a narrative\nFor Nice Zuchinnis",
                     "This is a narrative\nFor a potato"]
     }
 
@@ -223,7 +223,7 @@ class WhenLoadingRequirementsFromAPackageStructure extends Specification {
         then: "the nested requirements should be recorded"
             def capabilityNames = capabilities.get(2).children.collect {it.name}
             //we've got both a narrative from a test and from a directory
-            capabilityNames == ["Test2", "Big potatoes"]
+            capabilityNames == ["Plant potatoes", "Big potatoes"]
     }
 
     def "nested capability types are set by convention if no Narrative annotation are present"() {
@@ -236,7 +236,7 @@ class WhenLoadingRequirementsFromAPackageStructure extends Specification {
         then: "The nested requirement are of type 'feature'"
             def capabilityTypes = capabilities.get(2).children.collect{it.type}
             capabilities.collect{it.type} == ["capability", "capability", "mytype"]
-            capabilityTypes == ["story", "feature"]
+            capabilityTypes == ["feature","feature"]
     }
 
     def "default nested requirement types can be overriden using an environment variable"() {
@@ -250,7 +250,7 @@ class WhenLoadingRequirementsFromAPackageStructure extends Specification {
             def capabilities = capabilityProvider.getRequirements()
         then: "the second-level requirement are of type 'epic'"
             capabilities.collect{it.type} == ["theme", "theme", "mytype"]
-            capabilities.get(2).children.collect{it.type} == ["story", "epic"]
+            capabilities.get(2).children.collect{it.type} == ["epic","epic"]
     }
 
     def "default requirement directory can be overriden using an environment variable"() {
@@ -273,7 +273,7 @@ class WhenLoadingRequirementsFromAPackageStructure extends Specification {
         when: "We load requirements"
             def capabilities = capabilityProvider.getRequirements()
         then: "the requirements are the one found in otherannotatedstories"
-            capabilities.collect{it.name} == ["Apples", "Nice zucchinis", "Potatoes"]
+            capabilities.collect{it.name} == ["Apples", "Nice zucchinis", "Pears", "Potatoes"]
         and: "the requirements narratives are read from the package-info files"
             Requirement apples = capabilities.find { it.name == 'Apples' }
             apples.narrative.text.contains("For apples")

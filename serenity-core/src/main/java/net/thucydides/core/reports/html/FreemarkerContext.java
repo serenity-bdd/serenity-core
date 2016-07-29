@@ -8,7 +8,7 @@ import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.ReportOptions;
 import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.requirements.Requirements;
+import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import net.thucydides.core.util.VersionProvider;
@@ -26,13 +26,13 @@ import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 public class FreemarkerContext {
 
     private final EnvironmentVariables environmentVariables;
-    private final Requirements requirements;
+    private final RequirementsService requirements;
     private final IssueTracking issueTracking;
     private final String relativeLink;
     private final BuildProperties buildProperties;
 
     public FreemarkerContext(EnvironmentVariables environmentVariables,
-                             Requirements requirements,
+                             RequirementsService requirements,
                              IssueTracking issueTracking,
                              String relativeLink) {
         this.environmentVariables = environmentVariables;
@@ -40,11 +40,6 @@ public class FreemarkerContext {
         this.issueTracking = issueTracking;
         this.relativeLink = relativeLink;
         buildProperties = new BuildInfoProvider(environmentVariables).getBuildProperties();
-    }
-
-    private Map<String, Object> getBuildContext(TestOutcomes testOutcomesForTagType,
-                                                ReportNameProvider reportName) {
-        return getBuildContext(testOutcomesForTagType, reportName, false);
     }
 
     public Map<String, Object> getBuildContext(TestOutcomes testOutcomesForTagType,
@@ -62,11 +57,11 @@ public class FreemarkerContext {
         context.put("currentTag", TestTag.EMPTY_TAG);
         context.put("reportName", reportName);
 
-        context.put("absoluteReportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirements.getRequirementsService()));
+        context.put("absoluteReportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirements));
 
         context.put("reportOptions", new ReportOptions(environmentVariables));
         context.put("timestamp", timestampFrom(new DateTime()));
-        context.put("requirementTypes", requirements.getTypes());
+        context.put("requirementTypes", requirements.getRequirementTypes());
         addFormattersToContext(context);
 
 

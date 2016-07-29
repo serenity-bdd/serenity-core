@@ -127,8 +127,15 @@ public class StepEventBus {
     }
 
     public void testStarted(final String newTestName, final Class<?> testClass) {
+        ensureThatTheTestSuiteStartedWith(testClass);
         if (newTestName != null) {
             testStarted(newTestName);
+        }
+    }
+
+    private void ensureThatTheTestSuiteStartedWith(Class<?> testClass) {
+        if (!getBaseStepListener().testSuiteRunning()) {
+            testSuiteStarted(testClass);
         }
     }
 

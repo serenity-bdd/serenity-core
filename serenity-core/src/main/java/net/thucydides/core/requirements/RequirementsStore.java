@@ -55,13 +55,19 @@ public class RequirementsStore {
 
 
     public void write(List<Requirement> requirements) throws IOException {
-        if (!outputDirectory.exists()) {
-            Files.createDirectory(outputDirectory.toPath());
-        }
-        System.out.println("STORING REQUIREMENTS TO " + jsonRequirementsFile());
+
+        if (requirements.isEmpty()) { return; }
+
+        ensureThatTheOutputDirectoryExists();
 
         try( Writer writer = new FileWriter(jsonRequirementsFile())) {
             gson.toJson(requirements, writer);
+        }
+    }
+
+    private void ensureThatTheOutputDirectoryExists() throws IOException {
+        if (!outputDirectory.exists()) {
+            Files.createDirectory(outputDirectory.toPath());
         }
     }
 

@@ -1,7 +1,7 @@
 package net.thucydides.core.requirements
 
-import annotatedstorieswithcontents.apples.TestSample1
-import annotatedstorieswithcontents.potatoes.big_potatoes.BigPotatoeSampleTest1
+import annotatedstorieswithcontents.apples.BuyApples
+import annotatedstorieswithcontents.potatoes.big_potatoes.PlantBigPotatoes
 import com.google.common.base.Optional
 import net.thucydides.core.annotations.Narrative
 import net.thucydides.core.model.Story
@@ -17,7 +17,7 @@ class WhenReadingTagsFromAnnotations extends Specification {
 
     def "should get narrative from a concrete class"() {
         given:
-            def testClass = TestSample1
+            def testClass = BuyApples
         when:
             Optional<Narrative> narrative = NarrativeFinder.forClass(testClass)
         then:
@@ -28,13 +28,13 @@ class WhenReadingTagsFromAnnotations extends Specification {
 
     def "should get narrative from a package-info class"() {
         given:
-            def testClass = Class.forName("annotatedstorieswithcontents.potatoes.package-info")
+            def testClass = Class.forName("annotatedstorieswithcontents.apples.package-info")
         when:
             Optional<Narrative> narrative = NarrativeFinder.forClass(testClass)
         then:
             narrative.isPresent()
         and:
-            narrative.get().title() == "Potatoes title"
+            narrative.get().title() == "apples"
     }
 
 
@@ -47,9 +47,9 @@ class WhenReadingTagsFromAnnotations extends Specification {
         then:
             requirements.collect { it.name } == ["Apples", "Nice zucchinis", "Potatoes"]
         and:
-            requirements[2].children.collect { it.name } == ["Test2", "Big potatoes"]
+            requirements[2].children.collect { it.name } == ["Plant potatoes", "Big potatoes"]
         and:
-            requirements[2].children[1].children[0].collect { it.name }== ["Big potatoe sample test1"]
+            requirements[2].children[1].children[0].collect { it.name }== ["Plant big potatoes"]
     }
 
     def "should read requirements from the stored JSON file if the classes are unavailable"() {
@@ -70,9 +70,9 @@ class WhenReadingTagsFromAnnotations extends Specification {
         then:
             requirements.collect { it.name } == ["Apples", "Nice zucchinis", "Potatoes"]
         and:
-            requirements[2].children.collect { it.name } == ["Test2", "Big potatoes"]
+            requirements[2].children.collect { it.name } == ["Plant potatoes", "Big potatoes"]
         and:
-            requirements[2].children[1].children[0].collect { it.name }== ["Big potatoe sample test1"]
+            requirements[2].children[1].children[0].collect { it.name }== ["Plant big potatoes"]
     }
 
     def "should return no requirements if nothing is available"() {
@@ -93,15 +93,16 @@ class WhenReadingTagsFromAnnotations extends Specification {
     def "should find correct requirement for a test outcome based on its package"() {
         given:
             environmentVariables.setProperty("thucydides.test.root","annotatedstorieswithcontents")
-            def tagProvider = new PackageAnnotationBasedTagProvider(environmentVariables)
+            def tagProvider =  new PackageRequirementsTagProvider(environmentVariables, "annotatedstorieswithcontents")// new PackageAnnotationBasedTagProvider(environmentVariables)
+            tagProvider.clearCache()
         and:
-            def testOutcome = TestOutcome.forTest("someSampleTest", TestSample1)
+            def testOutcome = TestOutcome.inEnvironment(environmentVariables).forTest("someTest", BuyApples)
         when:
             def requirement = tagProvider.getParentRequirementOf(testOutcome)
         then:
             requirement.isPresent()
         and:
-            requirement.get().name == "Test sample1" && requirement.get().type == "story"
+            requirement.get().name == "Buy apples" && requirement.get().type == "feature"
     }
 
     def "should get all tags for a given outcome"() {
@@ -109,11 +110,11 @@ class WhenReadingTagsFromAnnotations extends Specification {
             environmentVariables.setProperty("thucydides.test.root","annotatedstorieswithcontents")
             def tagProvider = new PackageAnnotationBasedTagProvider(environmentVariables)
         and:
-            def testOutcome = TestOutcome.forTest("someSampleTest", BigPotatoeSampleTest1)
+            def testOutcome = TestOutcome.forTest("someSampleTest", PlantBigPotatoes)
         when:
             def tags = tagProvider.getTagsFor(testOutcome)
         then:
-            tags.collect { it.name }.containsAll(["Big potatoes/Big potatoe sample test1", "Potatoes/Big potatoes", "Potatoes"])
+            tags.collect { it.name }.containsAll(["Big potatoes/Plant big potatoes", "Potatoes/Big potatoes", "Potatoes"])
     }
 
     def "should get all tags for non-JUnit outcomes"() {

@@ -7,7 +7,7 @@ import org.junit.Test;
         text = {"This is a narrative for",
                 "test big potato"}
 )
-public class BigPotatoeSampleTest1 {
+public class PlantBigPotatoes {
     @Test
     public void someTest(){}
 }

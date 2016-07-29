@@ -7,5 +7,5 @@ import net.thucydides.core.annotations.Narrative;
         text = {"A text for Narrative",
                 "For test 3"}
 )
-public class Test3 {
+public class BuyZucchinis {
 }

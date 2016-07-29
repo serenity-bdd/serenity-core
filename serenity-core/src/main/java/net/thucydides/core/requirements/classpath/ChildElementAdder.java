@@ -21,10 +21,30 @@ public class ChildElementAdder {
     }
 
     public void in(Collection<Requirement> requirements) {
-        if (parent != null) {
-            requirements.remove(parent);
-            requirements.add(parent.withChild(child));
+
+        Requirement ancestor = parent;
+        Requirement immediateDescendant = child;
+
+        while(ancestor != null) {
+            Requirement updatedAncestor = ancestor.withChild(immediateDescendant);
+            replaceIn(requirements, ancestor, updatedAncestor);
+            immediateDescendant = updatedAncestor;
+            ancestor = requirementCalled(ancestor.getParent(), requirements);
         }
+    }
+
+    private Requirement requirementCalled(String requirementName, Collection<Requirement> requirements) {
+        for(Requirement requirement : requirements) {
+            if (requirement.getName().equals(requirementName)) {
+                return requirement;
+            }
+        }
+        return null;
+    }
+
+    private void replaceIn(Collection<Requirement> requirements, Requirement oldParent, Requirement updatedParent) {
+        requirements.remove(oldParent);
+        requirements.add(updatedParent);
     }
 
     public static class ChildElementAdderBuilder{

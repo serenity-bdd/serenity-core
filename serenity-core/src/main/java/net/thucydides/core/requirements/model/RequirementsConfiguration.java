@@ -105,12 +105,9 @@ public class RequirementsConfiguration {
         return Optional.absent();
     }
 
+
     public String getRequirementType(int level) {
-        if (level >= getRequirementTypes().size()) {
-            return lastOf(getRequirementTypes());
-        } else {
-            return getRequirementTypes().get(level);
-        }
+        return RequirementTypeAt.level(level).in(getRequirementTypes());
     }
 
     private Path findResourcePath(String path) throws URISyntaxException {

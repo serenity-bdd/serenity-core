@@ -260,6 +260,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public void testSuiteStarted(final Class<?> startedTestSuite) {
         testSuite = startedTestSuite;
         testedStory = findStoryFrom(startedTestSuite);
+        suiteStarted = true;
         clearStorywideTagsAndIssues();
     }
 

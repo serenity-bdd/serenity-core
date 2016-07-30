@@ -30,7 +30,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  *
  * @author johnsmart
  */
-public class TestStep {
+public class TestStep implements Cloneable {
 
     private int number;
     private String description;

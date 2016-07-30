@@ -107,7 +107,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     public SerenityRunner(final Class<?> klass,
                           final Injector injector) throws InitializationError {
         this(klass,
-                injector.getInstance(WebdriverManager.class),
+//                injector.getInstance(WebdriverManager.class),
+                ThucydidesWebDriverSupport.getWebdriverManager(),
                 injector.getInstance(Configuration.class),
                 injector.getInstance(BatchManager.class)
         );
@@ -141,7 +142,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
 
     public SerenityRunner(final Class<?> klass, final BatchManager batchManager) throws InitializationError {
         this(klass,
-                Injectors.getInjector().getInstance(WebdriverManager.class),
+                ThucydidesWebDriverSupport.getWebdriverManager(),
                 Injectors.getInjector().getInstance(Configuration.class),
                 batchManager);
     }

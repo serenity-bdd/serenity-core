@@ -38,7 +38,7 @@ public class MultiSourceRequirementsService extends BaseRequirementsService impl
     public List<Requirement> getRequirements() {
         RequirementsMerger merger = new RequirementsMerger();
 
-        if (requirements == null) {
+        if ((requirements == null) || (requirements.isEmpty())) {
             requirements = newArrayList();
             for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
                 LOGGER.debug("Reading requirements from " + tagProvider);

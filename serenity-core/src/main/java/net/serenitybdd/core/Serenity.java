@@ -37,10 +37,11 @@ public class Serenity {
      * @param testCase any object (testcase or other) containing injectable Serenity components
      */
     public static void initialize(final Object testCase) {
+        ThucydidesWebDriverSupport.initialize();
+
         setupWebDriverFactory();
         setupWebdriverManager();
 
-        ThucydidesWebDriverSupport.initialize();
         ThucydidesWebDriverSupport.initializeFieldsIn(testCase);
 
         initStepListener();
@@ -181,7 +182,7 @@ public class Serenity {
     }
 
     private static void setupWebdriverManager() {
-        setupWebdriverManager(Injectors.getInjector().getInstance(WebdriverManager.class));
+        setupWebdriverManager(ThucydidesWebDriverSupport.getWebdriverManager());
     }
 
     private static void setupWebdriverManager(WebdriverManager webdriverManager) {

@@ -7,7 +7,7 @@ import net.thucydides.core.pages.Pages;
 import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.steps.*;
 import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.WebDriverFactory;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebdriverManager;
 import org.openqa.selenium.WebDriver;
 
@@ -61,7 +61,7 @@ class ThucydidesContext {
 
     private ThucydidesContext(String defaultDriver, StepListener... additionalListeners) {
         configuration = Injectors.getInjector().getInstance(Configuration.class);
-        webdriverManager = Injectors.getInjector().getInstance(WebdriverManager.class);
+        webdriverManager = ThucydidesWebDriverSupport.getWebdriverManager();// Injectors.getInjector().getInstance(WebdriverManager.class);
         outputDirectory = configuration.getOutputDirectory();
         this.defaultDriver = defaultDriver;
         if (defaultDriver != null) {

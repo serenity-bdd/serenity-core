@@ -36,8 +36,6 @@ public class RequirementsStore {
             return Optional.absent();
         }
 
-        System.out.println("READING REQUIREMENTS FROM " + jsonRequirementsFile());
-
         List<Requirement> requirements;
         Type requirementsListType = new TypeToken<List<Requirement>>(){}.getType();
         try(InputStreamReader reader = new InputStreamReader(new FileInputStream(jsonFile), StandardCharsets.UTF_8)) {

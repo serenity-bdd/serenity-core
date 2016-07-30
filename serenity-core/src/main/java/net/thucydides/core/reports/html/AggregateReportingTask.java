@@ -15,7 +15,7 @@ import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 
 public class AggregateReportingTask extends BaseReportingTask implements ReportingTask  {
 
-    private static final String TEST_OUTCOME_TEMPLATE_PATH = "freemarker/home.ftl";
+    private static final String HOME_PAGE_TEMPLATE_PATH = "freemarker/home.ftl";
     private static final String BUILD_INFO_TEMPLATE_PATH = "freemarker/build-info.ftl";
 
     private RequirementsService requirementsService;
@@ -48,7 +48,7 @@ public class AggregateReportingTask extends BaseReportingTask implements Reporti
         context.put("report", ReportProperties.forAggregateResultsReport());
         context.put("csvReport", "results.csv");
 
-        generateReportPage(context, TEST_OUTCOME_TEMPLATE_PATH, "index.html");
+        generateReportPage(context, HOME_PAGE_TEMPLATE_PATH, "index.html");
         generateReportPage(context, BUILD_INFO_TEMPLATE_PATH, "build-info.html");
         generateCSVReportFor(testOutcomes, "results.csv");
 

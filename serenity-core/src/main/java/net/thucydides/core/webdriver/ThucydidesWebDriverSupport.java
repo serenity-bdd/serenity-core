@@ -7,6 +7,8 @@ import net.thucydides.core.steps.StepAnnotations;
 import net.thucydides.core.steps.StepFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A utility class that provides services to initialize web testing and reporting-related fields in arbitrary objects.
@@ -19,15 +21,28 @@ public class ThucydidesWebDriverSupport {
     private static final ThreadLocal<StepFactory> stepFactoryThreadLocal = new ThreadLocal<StepFactory>();
     private static final ThreadLocal<String> defaultDriverType = new ThreadLocal<>();
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ThucydidesWebDriverSupport.class);
+
+
     public static void initialize() {
         if (!webdriversInitialized()) {
-            setWebdriverManager(Injectors.getInjector().getInstance(WebdriverManager.class));
+            setWebdriverManager(newWebdriverManager());
         }
     }
 
     public static void initialize(String requestedDriver) {
-        setWebdriverManager(Injectors.getInjector().getInstance(WebdriverManager.class));
+
+        WebdriverManager webdriverManagerForThisThread = newWebdriverManager();
+
+        setWebdriverManager(webdriverManagerForThisThread);//Injectors.getInjector().getInstance(WebdriverManager.class));
         getWebdriverManager().overrideDefaultDriverType(requestedDriver);
+    }
+
+    private static WebdriverManager newWebdriverManager() {
+        WebDriverFactory webDriverFactoryForThisThread = new WebDriverFactory();
+        Configuration globalConfiguration = Injectors.getInjector().getInstance(Configuration.class);
+
+        return new SerenityWebdriverManager(webDriverFactoryForThisThread, globalConfiguration);
     }
 
     public static void initialize(WebdriverManager webdriverManager, String requestedDriver) {
@@ -132,6 +147,10 @@ public class ThucydidesWebDriverSupport {
 
     public static WebdriverManager getWebdriverManager() {
 //        lazyInitalize();
+        if (webdriverManagerIsNotInstantiated()) {
+            initialize();
+        }
+        LOGGER.debug("Using WebDriver Manager " + webdriverManagerThreadLocal.get());
         return webdriverManagerThreadLocal.get();
     }
 
@@ -185,10 +204,14 @@ public class ThucydidesWebDriverSupport {
     }
 
     public static String getDriversUsed() {
-        if (getWebdriverManager() == null) {
+        if (webdriverManagerIsNotInstantiated()) {
             return "";
         }
         return getWebdriverManager().getActiveDriverTypes().get(0);
+    }
+
+    private static boolean webdriverManagerIsNotInstantiated() {
+        return (webdriverManagerThreadLocal.get() == null);
     }
 
     public static boolean isDriverInstantiated() {

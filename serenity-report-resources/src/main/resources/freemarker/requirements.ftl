@@ -111,7 +111,7 @@
             ],
             "pageLength": 25
         });
-        $("#tabs").tabs();
+        $("#requirements-tabs").tabs();
         $("#test-tabs").tabs();
     })
     ;
@@ -248,8 +248,13 @@
                                 <body>
                                     <#foreach requirementType in requirements.types>
                                     <tr>
+                                        <#if requirements.type == requirementType>
+                                            <#assign requirementReport = "#requirements-tabs" />
+                                        <#else>
+                                            <#assign requirementReport = reportName.forRequirementType(requirementType) />
+                                        </#if>
                                         <#assign requirementTitle = inflection.of(requirementType).inPluralForm().asATitle() />
-                                        <td class="summary-leading-column">${requirementTitle}</td>
+                                        <td class="summary-leading-column"><a href="${requirementReport}">${requirementTitle}</a></td>
                                         <td>${requirements.requirementsOfType(requirementType).requirementCount}</td>
                                         <td>${requirements.requirementsOfType(requirementType).completedRequirementsCount}</td>
                                         <td>${requirements.requirementsOfType(requirementType).failingRequirementsCount}</td>
@@ -268,7 +273,7 @@
                                     <#assign requirementTestsSkippedCount = testOutcomes.totalTests.withResult("skipped") >
                                     <#assign requirementTestsFailureOrErrorCount = testOutcomes.totalTests.withFailureOrError() >
                                 <tr>
-                                    <td class="summary-leading-column">Acceptance Criteria (tests)</td>
+                                    <td class="summary-leading-column"><a href="#test-results-table">Acceptance Criteria (tests)</a></td>
                                     <td>${requirementTestsTotalCount}</td>
                                     <td>${requirementTestsSuccessCount}</td>
                                     <td>${requirementTestsFailureOrErrorCount}</td>
@@ -287,7 +292,7 @@
             </#if>
 
             <#if (requirements.requirementOutcomes?has_content || testOutcomes.total > 0)>
-                <div id="tabs">
+                <div id="requirements-tabs">
                     <#if (requirements.requirementOutcomes?has_content || (requirements.parentRequirement.isPresent() && requirements.parentRequirement.get().hasExamples()))>
                         <ul>
                             <#if (requirements.requirementOutcomes?has_content)>

@@ -143,6 +143,18 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
+    public void data_driven_tests_should_pass_even_if_no_steps_are_called() throws Throwable  {
+
+        SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SimpleSuccessfulParametrizedTestSample.class);
+        runner.run(new RunNotifier());
+
+        List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods();
+
+        assertThat(aggregatedScenarios.get(0).getResult(), is(TestResult.SUCCESS));
+        assertThat(aggregatedScenarios.get(1).getResult(), is(TestResult.SUCCESS));
+    }
+
+    @Test
     public void an_ignored_data_driven_test_should_have_result_status_as_ignored() throws Throwable  {
 
         SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleDataDrivenIgnoredScenario.class);

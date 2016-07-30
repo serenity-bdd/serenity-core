@@ -9,7 +9,6 @@ import net.thucydides.core.model.failures.FailureAnalysis;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.jsoup.Jsoup;
 
@@ -232,11 +231,10 @@ public class TestStep {
     }
 
     private TestResult getResultFromThisStep() {
-        if (result != null) {
-            return result;
-        } else {
-            return TestResult.PENDING;
+        if (result == null) {
+            return TestResult.SUCCESS;
         }
+        return result;
     }
 
     private boolean groupResultOverridesChildren() {
@@ -447,14 +445,6 @@ public class TestStep {
         if (result != testStep.result) return false;
         return !(screenshots != null ? !screenshots.equals(testStep.screenshots) : testStep.screenshots != null);
 
-    }
-
-    private boolean exceptionsAreEqual(Throwable exception, Throwable otherException) {
-        if ((exception == null) && (otherException == null)) {
-            return true;
-        }
-        return (StringUtils.equals(exception.getMessage(), otherException.getMessage())
-                && (exceptionsAreEqual(exception.getCause(), otherException.getCause())));
     }
 
     @Override

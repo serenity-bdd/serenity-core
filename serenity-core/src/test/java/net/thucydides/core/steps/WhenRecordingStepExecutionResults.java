@@ -1264,10 +1264,10 @@ public class WhenRecordingStepExecutionResults {
     }
 
     @Test
-    public void the_result_of_a_step_group_with_an_undefined_result_is_pending() {
+    public void the_result_of_a_step_group_with_an_undefined_result_is_successful_unless_annotated_otherwise() {
         TestStep group = new TestStep("Test Group");
         group.addChildStep(new TestStep("Child step"));
-        assertThat(group.getResult(), is(TestResult.PENDING));
+        assertThat(group.getResult(), is(TestResult.SUCCESS));
 
     }
 

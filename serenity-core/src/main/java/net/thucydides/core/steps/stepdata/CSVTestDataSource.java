@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static ch.lambdaj.Lambda.convert;
@@ -106,9 +107,9 @@ public class CSVTestDataSource implements TestDataSource {
     private Reader getDataFileFor(final String path) throws FileNotFoundException {
         Preconditions.checkNotNull(path, "Test data source was not defined");
         if (isAClasspathResource(path)) {
-        		return new InputStreamReader(getClass().getClassLoader().getResourceAsStream(path));
+            return new InputStreamReader(getClass().getClassLoader().getResourceAsStream(path), StandardCharsets.UTF_8);
         } else if (validFileSystemPath(path)){
-        	return new FileReader(new File(path));
+        	return new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8);
         }
     	throw new FileNotFoundException("Could not load test data from " + path);
     }

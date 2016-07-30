@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by john on 30/10/2014.
@@ -33,6 +34,6 @@ public class FileToDownload {
     }
 
     public String asString() throws IOException {
-        return new String(asByteArray());
+        return new String(asByteArray(), StandardCharsets.UTF_8);
     }
 }

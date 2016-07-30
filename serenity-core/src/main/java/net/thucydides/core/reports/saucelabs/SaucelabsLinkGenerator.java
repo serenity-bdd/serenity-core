@@ -8,6 +8,7 @@ import org.apache.commons.codec.binary.Hex;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 
@@ -64,7 +65,7 @@ public class SaucelabsLinkGenerator implements LinkGenerator {
 
     private String generateHMACFor(String secretKey, String message) {
         try {
-            byte[] keyBytes = secretKey.getBytes();
+            byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
             Key key = new SecretKeySpec(keyBytes, 0, keyBytes.length, "HmacMD5");
             Mac mac = Mac.getInstance("HmacMD5");
             mac.init(key);

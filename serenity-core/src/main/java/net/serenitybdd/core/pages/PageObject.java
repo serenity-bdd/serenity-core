@@ -40,6 +40,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -207,7 +208,7 @@ public abstract class PageObject {
 
     public FileToUpload uploadData(String data) throws IOException {
         Path datafile = Files.createTempFile("upload", "data");
-        Files.write(datafile, data.getBytes());
+        Files.write(datafile, data.getBytes(StandardCharsets.UTF_8));
         return new FileToUpload(datafile.toAbsolutePath().toString()).useRemoteDriver(isDefinedRemoteUrl());
     }
 

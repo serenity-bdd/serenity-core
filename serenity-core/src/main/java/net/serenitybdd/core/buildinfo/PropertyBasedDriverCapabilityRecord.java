@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryIteratorException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -44,7 +45,7 @@ public class PropertyBasedDriverCapabilityRecord implements DriverCapabilityReco
         }
         try {
             File browserProperties = new File(configuration.getOutputDirectory(), "browser-" + driver.toLowerCase() + ".properties");
-            try (Writer writer = new FileWriter(browserProperties)) {
+            try (Writer writer = new OutputStreamWriter(new FileOutputStream(browserProperties), StandardCharsets.UTF_8.toString()))  {
                 properties.store(writer, "");
             }
         } catch (IOException e) {

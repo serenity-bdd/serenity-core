@@ -2,7 +2,6 @@ package net.serenitybdd.core.photography;
 
 
 import com.google.common.base.Optional;
-import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -10,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -37,6 +37,6 @@ public class PageSourceRecorder {
 
     private byte[] pageSource() {
         if (driver.getPageSource() == null) {  return new byte[]{}; }
-        return driver.getPageSource().getBytes();
+        return driver.getPageSource().getBytes(StandardCharsets.UTF_8);
     }
 }

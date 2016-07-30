@@ -10,6 +10,7 @@ import net.thucydides.core.requirements.model.Requirement;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Collection;
 import java.util.Map;
@@ -38,7 +39,7 @@ public class RequirementPersister {
 
         SortedMap<String, Requirement> storedRequirementsMap;
         Type requirementsMapType = new TypeToken<SortedMap<String, Requirement>>(){}.getType();
-        try(FileReader reader = new FileReader(jsonFile)) {
+        try(InputStreamReader reader = new InputStreamReader(new FileInputStream(jsonFile), StandardCharsets.UTF_8)) {
             storedRequirementsMap = gson.fromJson(reader, requirementsMapType);
             if (storedRequirementsMap == null) {
                 storedRequirementsMap = Maps.newTreeMap();
@@ -69,7 +70,10 @@ public class RequirementPersister {
         if (!outputDirectory.exists()) {
             Files.createDirectory(outputDirectory.toPath());
         }
-        try( Writer writer = new FileWriter(new File(outputDirectory, rootDirectory + ".json"))) {
+
+        ;
+
+        try( Writer writer = new OutputStreamWriter(new FileOutputStream(new File(outputDirectory, rootDirectory + ".json")), StandardCharsets.UTF_8)) {
             gson.toJson(map, writer);
             writer.flush();
             writer.close();

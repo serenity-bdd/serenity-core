@@ -8,9 +8,7 @@ public class NoFeatureStrategy implements FeatureTagStrategy {
 
         @Override
         public Optional<TestTag> getFeatureTag(Story story, String path) {
-            if ((story == null) && (path == null)) {
-                return Optional.absent();
-            }
+            if (story == null) { return Optional.absent(); }
             return Optional.fromNullable(story.asTag());
         }
     }

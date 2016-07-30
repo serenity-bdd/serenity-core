@@ -108,9 +108,6 @@ public class ReportNameProvider {
     }
 
     public String forRequirementOrTag(TestTag tag) {
-        if (requirementsService == null) {
-            int i = 0;
-        }
         return (requirementsService.isRequirementsTag(tag))
                 ? forRequirement(tag.getName())
                 : forTag(tag);

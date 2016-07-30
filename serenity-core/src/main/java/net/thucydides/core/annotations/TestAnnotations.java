@@ -2,6 +2,7 @@ package net.thucydides.core.annotations;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.html.Formatter;
 import org.apache.commons.lang3.StringUtils;
@@ -232,13 +233,16 @@ public class TestAnnotations {
         return getTags(testClass);
     }
 
+    private final List<TestTag> NO_TAGS = Lists.newArrayList();
+
     private List<TestTag> getTags(Class<?> testClass) {
         List<TestTag> tags = new ArrayList<>();
-        if (testClass != null) {
-            addTagValues(tags, testClass.getAnnotation(WithTagValuesOf.class));
-            addTags(tags, testClass.getAnnotation(WithTags.class));
-            addTag(tags, testClass.getAnnotation(WithTag.class));
-        }
+
+        if (testClass == null) { return NO_TAGS; }
+
+        addTagValues(tags, testClass.getAnnotation(WithTagValuesOf.class));
+        addTags(tags, testClass.getAnnotation(WithTags.class));
+        addTag(tags, testClass.getAnnotation(WithTag.class));
         if (testClass.getSuperclass() != Object.class) {
             tags.addAll(getTags(testClass.getSuperclass()));
         }

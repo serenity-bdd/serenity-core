@@ -400,7 +400,7 @@ public class Formatter {
         Collections.sort(sortedIssues, new Comparator<String>() {
             @Override
             public int compare(String a, String b) {
-                return Integer.valueOf(-a.length()).compareTo(new Integer(b.length()));
+                return Integer.valueOf(-a.length()).compareTo(Integer.valueOf(b.length()));
             }
         });
         return sortedIssues;

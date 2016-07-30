@@ -845,7 +845,7 @@ public enum ThucydidesSystemProperty {
             return Integer.parseInt(newPropertyValue.get());
         } else {
             Optional<String> legacyValue = legacyPropertyValueIfPresentIn(environmentVariables);
-            return (isDefined(legacyValue)) ? Integer.valueOf(legacyValue.get()) : defaultValue;
+            return (isDefined(legacyValue)) ? Integer.parseInt(legacyValue.get()) : defaultValue;
         }
     }
 

@@ -40,15 +40,16 @@ public class NonLeafRequirementsAdder {
 
         int startFromRequirementLevel = getRequirementTypes().size() - requirementsDepth;
 
-        String fullPath = rootPackage;
         int level = startFromRequirementLevel;
 
         Requirement parent = null;
+
+        StringBuilder fullPath = new StringBuilder(rootPackage);
         for (String pathElement : parentElements) {
 
             String type = requirementsConfiguration.getRequirementType(level++);
 
-            fullPath = fullPath + "." + pathElement;
+            fullPath.append(".").append(pathElement);
 
             Requirement nextRequirement;
 
@@ -57,8 +58,8 @@ public class NonLeafRequirementsAdder {
             if (requirementExistsCalled(humanize(pathElement), allRequirements)) {
                 nextRequirement = requirementCalled(humanize(pathElement), allRequirements).withParent(parentName);
             } else {
-                String narrativeText = PackageInfoNarrative.text().definedInPath(fullPath).or(NarrativeText.definedIn(fullPath, type));
-                String narrativeType = PackageInfoNarrative.type().definedInPath(fullPath).or(type);
+                String narrativeText = PackageInfoNarrative.text().definedInPath(fullPath.toString()).or(NarrativeText.definedIn(fullPath.toString(), type));
+                String narrativeType = PackageInfoNarrative.type().definedInPath(fullPath.toString()).or(type);
                 nextRequirement = (Requirement.named(humanize(pathElement)).withType(narrativeType).withNarrative(narrativeText)).withParent(parentName);
                 allRequirements.add(nextRequirement);
             }

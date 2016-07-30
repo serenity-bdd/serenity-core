@@ -1754,12 +1754,6 @@ public class TestOutcome {
         }
     }
 
-//    private static class ExtractTestResultsConverter implements Converter<TestStep, TestResult> {
-//        public TestResult convert(final TestStep step) {
-//            return step.getResult();
-//        }
-//    }
-
     public Integer getStepCount() {
         return testSteps.size();
     }
@@ -1967,44 +1961,6 @@ public class TestOutcome {
         };
     }
 
-//    public void setStatistics(TestStatistics statistics) {
-//        this.statistics = statistics;
-//    }
-//
-//    public TestStatistics getStatistics() {
-//        return statistics;
-//    }
-
-//    public double getOverallStability() {
-//        if (getStatistics() == null) return 0.0;
-//        return getStatistics().getOverallPassRate();
-//    }
-//
-//    public double getRecentStability() {
-//        if (getStatistics() == null) return 0.0;
-//        return getStatistics().getPassRate().overTheLast(RECENT_TEST_RUN_COUNT).testRuns();
-//    }
-//
-//    public Long getRecentTestRunCount() {
-//        if (getStatistics() == null) return 0L;
-//        return (getStatistics().getTotalTestRuns() > RECENT_TEST_RUN_COUNT) ? RECENT_TEST_RUN_COUNT : getStatistics().getTotalTestRuns();
-//    }
-//
-//    public int getRecentPassCount() {
-//        if (getStatistics() == null) return 0;
-//        return getStatistics().countResults().overTheLast(RECENT_TEST_RUN_COUNT).whereTheOutcomeWas(TestResult.SUCCESS);
-//    }
-//
-//    public int getRecentFailCount() {
-//        if (getStatistics() == null) return 0;
-//        return getStatistics().countResults().overTheLast(RECENT_TEST_RUN_COUNT).whereTheOutcomeWas(TestResult.FAILURE);
-//    }
-//
-//    public int getRecentPendingCount() {
-//        if (getStatistics() == null) return 0;
-//        return getStatistics().countResults().overTheLast(RECENT_TEST_RUN_COUNT).whereTheOutcomeWas(TestResult.PENDING);
-//    }
-
     public DateTime getStartTime() {
         return new DateTime(startTime);
     }
@@ -2091,16 +2047,6 @@ public class TestOutcome {
             featureTag = FeatureTagAsDefined.in(userStory, getPath());
         }
         return featureTag;
-//        if (getPath() != null) {
-//            if (getPath().endsWith(".feature")) {
-//                String featureName = humanize(new File(getPath()).getName().replace(".feature", ""));
-//                return Optional.of(TestTag.withName(featureName).andType("feature"));
-//            } else if (getPath().endsWith(".story")) {
-//                String featureName = humanize(new File(getPath()).getName().replace(".story", ""));
-//                return Optional.of(TestTag.withName(featureName).andType("story"));
-//            }
-//        }
-//        return Optional.absent();
     }
 
     private class StepResetBuilder {

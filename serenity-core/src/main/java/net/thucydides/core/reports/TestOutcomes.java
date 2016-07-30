@@ -144,17 +144,6 @@ public class TestOutcomes {
         return filteredOutcomes;
     }
 
-
-    List<TestOutcome> outcomesFilteredByTag(String tag) {
-        List<TestOutcome> filteredOutcomes = Lists.newArrayList();
-        for(TestOutcome outcome : outcomes) {
-            if (outcome.getTags().contains(tag)) {
-                filteredOutcomes.add(outcome);
-            }
-        }
-        return filteredOutcomes;
-    }
-
     public TestOutcomes havingResult(TestResult result) {
 
         return TestOutcomes.of(outcomesFilteredByResult(result))

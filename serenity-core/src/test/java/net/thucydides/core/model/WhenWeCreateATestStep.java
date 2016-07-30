@@ -222,19 +222,19 @@ public class WhenWeCreateATestStep {
     }
 
     @Test
-    public void a_test_step_with_empty_child_steps_is_pending() throws InterruptedException {
+    public void a_test_step_with_empty_child_steps_is_successful_unless_marked_as_pending() throws InterruptedException {
         TestStep step = new TestStep("a narrative description");
         step.addChildStep(new TestStep("child step 1"));
         step.addChildStep(new TestStep("child step 2"));
         step.addChildStep(new TestStep("child step 3"));
 
-        assertThat(step.getResult(), is(TestResult.PENDING));
+        assertThat(step.getResult(), is(TestResult.SUCCESS));
     }
 
     @Test
-    public void an_empty_step_is_pending() throws InterruptedException {
+    public void an_empty_step_is_successful_unless_annotated_as_pending() throws InterruptedException {
         TestStep step = new TestStep("a narrative description");
-        assertThat(step.getResult(), is(TestResult.PENDING));
+        assertThat(step.getResult(), is(TestResult.SUCCESS));
     }
 
     @Test

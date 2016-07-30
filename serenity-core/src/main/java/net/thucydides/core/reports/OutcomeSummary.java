@@ -14,6 +14,6 @@ public class OutcomeSummary {
     }
 
     public String withCount(int count) {
-        return String.format("%s COUNT: %n", outcome.name(), count);
+        return String.format("%s COUNT: %d", outcome.name(), count);
     }
 }

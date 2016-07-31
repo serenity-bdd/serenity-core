@@ -135,8 +135,9 @@ public class LoadedNarrative {
         if (!lines.isEmpty()) {
             String firstLine = lines.get(0);
             if (!isMarkup(firstLine)) {
+                Optional<String> title = Optional.of(stripFeatureFrom(firstLine));
                 lines.remove(0);
-                return Optional.of(stripFeatureFrom(firstLine));
+                return title;
             }
         }
         return Optional.absent();

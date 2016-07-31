@@ -1,6 +1,7 @@
 package net.thucydides.core.reports;
 
-import com.google.common.collect.ImmutableList;
+import ch.lambdaj.Lambda;
+import com.beust.jcommander.internal.Lists;
 import com.google.inject.Inject;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
@@ -12,13 +13,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
+
+import static ch.lambdaj.Lambda.on;
+import static java.nio.file.Files.newDirectoryStream;
 
 /**
  * Loads test outcomes from a given directory, and reports on their contents.
@@ -59,25 +62,33 @@ public class TestOutcomeLoader {
      * @throws ReportLoadingFailedError Thrown if the specified directory was invalid or loading finished with error.
      */
     public List<TestOutcome> loadFrom(final File reportDirectory) throws ReportLoadingFailedError {
-        try {
-            final AcceptanceTestLoader testOutcomeReporter = getOutcomeReporter();
-            final List<File> reportFiles = getAllOutcomeFilesFrom(reportDirectory);
-            final List<TestOutcome> testOutcomes = Collections.synchronizedList(new ArrayList<TestOutcome>(reportFiles.size()));
-            for (final File reportFile : reportFiles) {
-                testOutcomes.addAll(testOutcomeReporter.loadReportFrom(reportFile).asSet());
+        List<TestOutcome> testOutcomes = Lists.newArrayList();
+        final AcceptanceTestLoader testOutcomeReporter = getOutcomeReporter();
+
+        Path fromTheReportDirectory = reportDirectory.toPath();
+        try (DirectoryStream<Path> directoryContents = newDirectoryStream(fromTheReportDirectory, thatContainsTestOutcomeFiles())) {
+            for (Path sourceFile : directoryContents) {
+                testOutcomes.addAll(testOutcomeReporter.loadReportFrom(sourceFile).asSet());
+
             }
-            return testOutcomes;
-        } catch (Exception exception) {
-            throw new ReportLoadingFailedError("Can not load reports for some reason", exception);
+        } catch (IOException e) {
+            throw new ReportLoadingFailedError("Can not load reports for some reason", e);
         }
+
+        return inOrderOfTestExecution(testOutcomes);
     }
 
-    private List<File> getAllOutcomeFilesFrom(final File reportsDirectory) throws IOException {
-        File[] matchingFiles = reportsDirectory.listFiles(new SerializedOutcomeFilenameFilter());
-        if (matchingFiles == null) {
-            throw new IOException("Could not find directory " + reportsDirectory);
-        }
-        return ImmutableList.copyOf(matchingFiles);
+
+    private DirectoryStream.Filter<? super Path> thatContainsTestOutcomeFiles() {
+        return new DirectoryStream.Filter<Path>() {
+            @Override
+            public boolean accept(Path entry) throws IOException {
+                String standardFormatFilename = entry.getFileName().toString().toLowerCase(Locale.getDefault());
+                return (standardFormatFilename.endsWith(formatConfiguration.getPreferredFormat().getExtension())
+                        && (!standardFormatFilename.endsWith(".features.json"))
+                        && (!standardFormatFilename.startsWith(JUnitXMLOutcomeReporter.FILE_PREFIX)));
+            }
+        };
     }
 
     public static TestOutcomeLoaderBuilder loadTestOutcomes() {
@@ -104,6 +115,10 @@ public class TestOutcomeLoader {
         return TestOutcomes.of(loader.loadFrom(reportsDirectory));
     }
 
+    private static List<TestOutcome> inOrderOfTestExecution(List<TestOutcome> testOutcomes) {
+       return Lambda.sort(testOutcomes, on(TestOutcome.class).getStartTime());
+    }
+
     public AcceptanceTestLoader getOutcomeReporter() {
         switch (formatConfiguration.getPreferredFormat()) {
             case XML:
@@ -112,12 +127,6 @@ public class TestOutcomeLoader {
                 return new JSONTestOutcomeReporter();
             default:
                 throw new IllegalArgumentException("Unsupported report format: " + formatConfiguration.getPreferredFormat());
-        }
-    }
-
-    private class SerializedOutcomeFilenameFilter implements FilenameFilter {
-        public boolean accept(final File file, final String filename) {
-            return (filename.toLowerCase(Locale.getDefault()).endsWith(formatConfiguration.getPreferredFormat().getExtension()) && (!filename.endsWith(".features.json")) && (!filename.startsWith(JUnitXMLOutcomeReporter.FILE_PREFIX)));
         }
     }
 }

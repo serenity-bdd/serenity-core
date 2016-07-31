@@ -242,6 +242,16 @@ public enum ThucydidesSystemProperty {
     JIRA_PASSWORD,
 
     /**
+     *  The JIRA workflow is defined in this file.
+     */
+    SERENITY_JIRA_WORKFLOW,
+
+    /**
+     *  If set to true, JIRA Workflow is active.
+     */
+    SERENITY_JIRA_WORKFLOW_ACTIVE,
+
+    /**
      * Base directory in which history files are stored.
      */
     THUCYDIDES_HISTORY,

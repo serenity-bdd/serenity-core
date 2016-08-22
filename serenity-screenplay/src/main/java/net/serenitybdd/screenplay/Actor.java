@@ -56,6 +56,13 @@ public class Actor implements PerformsTasks, SkipNested {
         return (T) abilities.get(doSomething);
     }
 
+    /**
+     * A more readable way to access an actor's abilities.
+     */
+    public <T extends Ability> T usingAbilityTo(Class<? extends T> doSomething) {
+        return abilityTo(doSomething);
+    }
+
     public final void has(Performable... todos) {
         attemptsTo(todos);
     }

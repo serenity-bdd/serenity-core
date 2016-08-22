@@ -44,7 +44,9 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     public <T extends Ability> Actor can(T doSomething) {
-        doSomething.asActor(this);
+        if (doSomething instanceof RefersToActor) {
+            ((RefersToActor)doSomething).asActor(this);
+        }
         abilities.put(doSomething.getClass(), doSomething);
         return this;
     }

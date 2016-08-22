@@ -5,8 +5,8 @@ import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.RefersToActor;
 import net.serenitybdd.screenplay.events.ActorAsksQuestion;
-import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorPerforms;
 import net.serenitybdd.screenplay.exceptions.ActorCannotBrowseTheWebException;
@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * Gives an actor the ability to browse theValue web.
  * This extends the classic Serenity PageObject class.
  */
-public class BrowseTheWeb extends PageObject implements Ability {
+public class BrowseTheWeb extends PageObject implements Ability, RefersToActor {
 
     private final WebdriverManager webdriverManager;
 
@@ -33,7 +33,6 @@ public class BrowseTheWeb extends PageObject implements Ability {
     protected BrowseTheWeb(WebDriver browser) {
         super(browser);
         this.webdriverManager = ThucydidesWebDriverSupport.getWebdriverManager();
-        //Injectors.getInjector().getInstance(WebdriverManager.class);
         registerForEventNotification();
     }
 
@@ -59,16 +58,6 @@ public class BrowseTheWeb extends PageObject implements Ability {
     }
     public <T extends PageObject> T on(Class<T> pageObjectClass) {
         return Pages.instrumentedPageObjectUsing(pageObjectClass, getDriver());
-    }
-
-    @Subscribe public void beginPerformance(ActorBeginsPerformanceEvent performanceEvent) {
-        try {
-//            if (performanceEvent.getName().equals(actor.getName())) {
-//                webdriverManager.setCurrentDriver(getDriver());
-//            }
-        } catch(Throwable e) {
-            logger.warn("Failed to notify begin performance event for actor " + performanceEvent.getName(),e);
-        }
     }
 
     @Subscribe public void perform(ActorPerforms performAction) {

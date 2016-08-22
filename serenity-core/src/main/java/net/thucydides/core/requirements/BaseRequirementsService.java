@@ -97,7 +97,7 @@ public abstract class BaseRequirementsService implements RequirementsService {
                 if (getRequirementAncestors().containsKey(requirement.get())) {
                     return getRequirementAncestors().get(requirement.get());
                 } else {
-                    LOGGER.warn("Requirement without identified ancestors found:" + requirement.get().getCardNumber());
+                    LOGGER.warn("Requirement without identified ancestors found test outcome " + testOutcome.getTitle() + "-" + testOutcome.getIssueKeys() + ": " + requirement);
                 }
             }
         }

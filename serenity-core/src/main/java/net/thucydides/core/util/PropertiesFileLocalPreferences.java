@@ -111,7 +111,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         Properties preferenceProperties = new Properties();
         if (preferencesFile.exists()) {
             try(InputStream preferences = new FileInputStream(preferencesFile)) {
-                LOGGER.info("LOADING LOCAL PROPERTIES FROM {} ", preferencesFile.getAbsolutePath());
+                LOGGER.debug("LOADING LOCAL PROPERTIES FROM {} ", preferencesFile.getAbsolutePath());
                 preferenceProperties.load(preferences);
             }
         }

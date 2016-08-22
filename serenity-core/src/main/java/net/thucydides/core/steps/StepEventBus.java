@@ -164,7 +164,7 @@ public class StepEventBus {
                 try {
                     StepListener listener = listenerImplementations.next();
                     if (!isACore(listener)) {
-                        LOGGER.info("Registering custom listener " + listener);
+                        LOGGER.debug("Registering custom listener " + listener);
                         customListeners.add(listener);
                     }
                 } catch (ServiceConfigurationError e) {

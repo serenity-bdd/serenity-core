@@ -1,7 +1,5 @@
 package net.serenitybdd.rest;
 
-import com.jayway.restassured.specification.RequestSpecification;
-import net.serenitybdd.core.Serenity;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
@@ -136,5 +134,9 @@ public class RestStepListener implements StepListener {
     @Override
     public void assumptionViolated(String message) {
 
+    }
+
+    @Override
+    public void testRunFinished() {
     }
 }

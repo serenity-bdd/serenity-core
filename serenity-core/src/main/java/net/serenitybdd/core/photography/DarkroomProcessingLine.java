@@ -17,7 +17,7 @@ public class DarkroomProcessingLine implements Runnable {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    boolean done = false;
+    boolean openForBusiness;
 
     private final List<? extends PhotoFilter> processors;
 
@@ -25,7 +25,7 @@ public class DarkroomProcessingLine implements Runnable {
 
 
     public void terminate() {
-        done = true;
+        openForBusiness = false;
 
         synchronized (queue) {
             queue.notifyAll();
@@ -36,6 +36,7 @@ public class DarkroomProcessingLine implements Runnable {
     DarkroomProcessingLine(List<? extends PhotoFilter> processors) {
         this.processors = processors;
         this.queue = Collections.synchronizedList(new LinkedList<ScreenshotNegative>());
+        this.openForBusiness = true;
     }
 
     public ScreenshotReceipt addToProcessingQueue(ScreenshotNegative negative) {
@@ -52,11 +53,11 @@ public class DarkroomProcessingLine implements Runnable {
 
     public void run() {
         LOGGER.debug("Darkroom processing line starting up");
-        while (!done) {
+        while (openForBusiness) {
             synchronized (queue) {
                 processNegative();
                 try {
-                    if (!done) {
+                    if (!openForBusiness) {
                         queue.wait();
                     } else {
                         finishProcessingNegatives();
@@ -134,6 +135,6 @@ public class DarkroomProcessingLine implements Runnable {
     }
 
     private void ensureThatTheDarkroomIsStillOpen() {
-        Preconditions.checkArgument(!done,"The darkroom is closed and cannot accept any more negatives");
+        Preconditions.checkArgument(openForBusiness,"The darkroom is closed and cannot accept any more negatives");
     }
 }

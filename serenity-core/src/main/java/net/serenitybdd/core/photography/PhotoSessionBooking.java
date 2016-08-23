@@ -8,9 +8,15 @@ import java.nio.file.Path;
 
 public class PhotoSessionBooking {
 
+    private final Darkroom darkroom;
     private WebDriver driver;
     private Path outputDirectory;
     private BlurLevel blurLevel;
+
+    public PhotoSessionBooking(Darkroom darkroom) {
+
+        this.darkroom = darkroom;
+    }
 
     public PhotoSessionBooking with(WebDriver driver) {
         this.driver = driver;
@@ -32,6 +38,6 @@ public class PhotoSessionBooking {
     }
 
     private PhotoSession inPhotoSession() {
-        return new PhotoSession(driver, outputDirectory, blurLevel);
+        return new PhotoSession(driver, darkroom, outputDirectory, blurLevel);
     }
 }

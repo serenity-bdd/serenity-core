@@ -10,43 +10,40 @@ import java.util.List;
 
 public class Darkroom {
 
+    static int darkroomCounter = 0;
+
     private final static Logger LOGGER = LoggerFactory.getLogger(Darkroom.class);
     private List<? extends PhotoFilter> processors = ImmutableList.of(new Resizer(), new Blurer());
     private DarkroomProcessingLine processingLine;
     private Thread screenshotThread;
 
-
-
-    private static ThreadLocal<Darkroom> theDarkroom = new ThreadLocal();
-
-    public static void isOpenForBusiness() {
+    public void isOpenForBusiness() {
         if (theDarkroomIsClosed()) {
             LOGGER.debug("Opening darkroom");
-            theDarkroom.set(new Darkroom());
+            start();
         }
     }
 
-    public Darkroom() {
-        start();
+    public Darkroom() { }
+
+    private boolean theDarkroomIsClosed() {
+        return !theDarkroomIsOpen();
     }
 
-    private static boolean theDarkroomIsClosed() {
-        return (theDarkroom.get() == null);
+    private boolean theDarkroomIsOpen() {
+        return (processingLine != null && processingLine.openForBusiness);
     }
 
-    private static boolean theDarkroomIsOpen() {
-        return (theDarkroom.get() != null);
-    }
-
-    public static void waitUntilClose() {
+    public void waitUntilClose() {
         LOGGER.debug("Closing darkroom");
         if (theDarkroomIsOpen()) {
-            theDarkroom.get().terminate();
-            theDarkroom.remove();
+            terminate();
         }
     }
 
     public void start() {
+
+        System.out.println("DARKROOM COUNT: " + ++darkroomCounter);
         this.processingLine = new DarkroomProcessingLine(processors);
         screenshotThread = new Thread(processingLine,"Darkroom Processing Line");
         screenshotThread.setDaemon(true);
@@ -54,24 +51,38 @@ public class Darkroom {
     }
 
     public void terminate() {
+        if (processingLine != null) {
+            shutdownProcessingLine();
+        }
+        DarkroomFileSystem.close();
+    }
+
+    public ScreenshotReceipt submitForProcessing(ScreenshotNegative negative) {
+        ensureThatTheProcessingLineIsRunning();
+        return processingLine.addToProcessingQueue(negative);
+    }
+
+    private void ensureThatTheProcessingLineIsRunning() {
+        if (processingLine == null) {
+            start();
+        }
+    }
+
+    private void shutdownProcessingLine() {
+        System.out.println("DARKROOM COUNT: " + --darkroomCounter);
         processingLine.terminate();
         try {
             screenshotThread.join();
         } catch (InterruptedException e) {
             LOGGER.error("Screenshot processing interrupted",e);
         }
-        DarkroomFileSystem.close();
-    }
-
-    public ScreenshotReceipt submitForProcessing(ScreenshotNegative negative) {
-        return processingLine.addToProcessingQueue(negative);
     }
 
     /**
      * Returns a receipt of the screenshot negative with the definitive destination path
      */
-    public static ScreenshotReceipt sendNegative(ScreenshotNegative screenshotNegative) {
+    public ScreenshotReceipt sendNegative(ScreenshotNegative screenshotNegative) {
         LOGGER.debug("Send negative for processing for " + screenshotNegative.getScreenshotPath());
-        return theDarkroom.get().submitForProcessing(screenshotNegative);
+        return submitForProcessing(screenshotNegative);
     }
 }

@@ -131,6 +131,7 @@ public class WhenRecordingStepExecutionResults {
 
     @After
     public void dropListener() {
+        stepListener.testSuiteFinished();
         StepEventBus.getEventBus().dropListener(stepListener);
     }
 

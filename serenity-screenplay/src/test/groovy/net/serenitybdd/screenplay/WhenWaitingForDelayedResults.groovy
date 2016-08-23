@@ -16,6 +16,10 @@ class WhenWaitingForDelayedResults extends Specification {
         StepEventBus.eventBus.testStarted("some test")
     }
 
+    def cleanup() {
+        Serenity.done();
+    }
+
     def "should get a result immediately by default"() {
         given:
             Actor jane = Actor.named("Jane")

@@ -15,21 +15,24 @@ import java.util.concurrent.Future
 
 class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
 
+    Darkroom darkroom
+
     def "when a photographer takes a series of screenshots they all should be stored"() {
         given:
-            def photographer = new Photographer();
+            def photographer = new Photographer(darkroom);
         when:
             List<ScreenshotPhoto> photos = Lists.newArrayList();
             def driver
             try {
                 driver = new PhantomJSDriver()
-                Darkroom.isOpenForBusiness();
+                darkroom = new Darkroom()
+                darkroom.isOpenForBusiness();
                 for (photoCount in 0..10) {
                     photos.add(photographer.takesAScreenshot()
                         .with(driver)
                         .andSaveToDirectory(screenshotDirectory));
                 }
-                Darkroom.waitUntilClose();
+                darkroom.waitUntilClose();
             } finally {
                 try {
                     if (driver) {
@@ -48,7 +51,7 @@ class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
 
     def "should handle multiple screenshots in parallel"() {
         given:
-            def photographer = new Photographer();
+            def photographer = new Photographer(darkroom);
             def List<Future<List<ScreenshotPhoto>>> processing = new ArrayList<>();
             def List<ScreenshotPhoto> screenshots = new ArrayList<>();
             def Integer threads = 10
@@ -61,7 +64,8 @@ class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
                     @Override
                     List<ScreenshotPhoto> call() throws Exception {
                         def List<ScreenshotPhoto> photo = new ArrayList<>()
-                        Darkroom.isOpenForBusiness();
+                        darkroom = new Darkroom()
+                        darkroom.isOpenForBusiness();
                         def driver = null
                         try {
                             driver = new PhantomJSDriver()
@@ -83,7 +87,7 @@ class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
                             } catch (some) {
                             }
                         }
-                        Darkroom.waitUntilClose();
+                        darkroom.waitUntilClose();
                         return photo
                     }
                 })
@@ -106,18 +110,19 @@ class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
     def setup() {
         screenshotDirectory = Files.createTempDirectory("screenshots")
         startTime = System.currentTimeMillis()
+        darkroom = new Darkroom()
+        darkroom.isOpenForBusiness()
+    }
 
-        Darkroom.isOpenForBusiness();
+    def cleanup() {
+        darkroom.terminate()
+        println "Test duration: " + (System.currentTimeMillis() - startTime) + " ms"
     }
 
     String siteFromUrlAt(String path) {
         File baseDir = new File(System.getProperty("user.dir"));
         File testSite = new File(baseDir, "src/test/resources" + path);
         return "file://" + testSite.getAbsolutePath();
-    }
-
-    def cleanup() {
-        println "Test duration: " + (System.currentTimeMillis() - startTime) + " ms"
     }
 
 }

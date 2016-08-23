@@ -464,6 +464,13 @@ public class ConsoleLoggingListener implements StepListener {
         }
     }
 
+    @Override
+    public void testRunFinished() {
+        if (loggingLevelIsAtLeast(LoggingLevel.VERBOSE)) {
+            getLogger().info("FINISHING TEST RUN");
+        }
+    }
+
     private boolean showColoredOutput() {
         return ThucydidesSystemProperty.THUCYDIDES_CONSOLE_COLORS.booleanFrom(environmentVariables,false);
     }

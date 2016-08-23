@@ -22,7 +22,7 @@ class WhenActorsHaveAbilities extends Specification{
         when:
         actor.can(new PlayTheGuitar())
         then:
-        actor.abilityTo(PlayTheGuitar) != null
+        actor.usingAbilityTo(PlayTheGuitar) != null
     }
 
     def "actors can be associated with Abilities that are Self Aware"() {

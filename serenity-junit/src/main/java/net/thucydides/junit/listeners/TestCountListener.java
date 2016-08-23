@@ -161,4 +161,9 @@ public class TestCountListener implements StepListener {
     @Override
     public void assumptionViolated(String message) {
     }
+
+    @Override
+    public void testRunFinished() {
+
+    }
 }

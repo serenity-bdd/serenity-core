@@ -145,4 +145,9 @@ public class FailureDetectingStepListener implements StepListener {
     public void assumptionViolated(String message) {
 
     }
+
+    @Override
+    public void testRunFinished() {
+
+    }
 }

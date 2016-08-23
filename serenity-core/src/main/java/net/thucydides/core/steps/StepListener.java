@@ -144,4 +144,6 @@ public interface StepListener {
     void exampleFinished();
 
     void assumptionViolated(String message);
+
+    void testRunFinished();
 }

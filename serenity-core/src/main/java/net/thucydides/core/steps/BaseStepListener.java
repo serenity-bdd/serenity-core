@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.photography.Darkroom;
+import net.serenitybdd.core.photography.Photographer;
 import net.serenitybdd.core.photography.ScreenshotPhoto;
 import net.serenitybdd.core.photography.SoundEngineer;
 import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
@@ -92,7 +93,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private List<TestTag> storywideTags;
 
-    private net.serenitybdd.core.photography.Photographer photographer = new net.serenitybdd.core.photography.Photographer();
+    private Darkroom darkroom;
+    private Photographer photographer;
     private SoundEngineer soundEngineer = new SoundEngineer();
 
     public void setEventBus(StepEventBus eventBus) {
@@ -104,6 +106,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
             eventBus = StepEventBus.getEventBus();
         }
         return eventBus;
+    }
+
+    private Darkroom getDarkroom() {
+        if (darkroom == null) {
+            darkroom = new Darkroom();
+        }
+        return darkroom;
     }
 
     public Optional<TestStep> cloneCurrentStep() {
@@ -131,6 +140,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public void updateOverallResults() {
         getCurrentTestOutcome().updateOverallResults();
+    }
+
+    public Photographer getPhotographer() {
+        if (photographer == null) {
+            photographer = new Photographer(getDarkroom());
+        }
+        return photographer;
     }
 
     public class StepMerger {
@@ -290,8 +306,15 @@ public class BaseStepListener implements StepListener, StepPublisher {
         storywideTags.addAll(tags);
     }
 
+    private void closeDarkroom() {
+        if (darkroom != null) {
+            darkroom.waitUntilClose();
+        }
+
+    }
+
     public void testSuiteFinished() {
-        Darkroom.waitUntilClose();
+        closeDarkroom();
         clearStorywideTagsAndIssues();
         ThucydidesWebDriverSupport.closeAllDrivers();
         suiteStarted = false;
@@ -391,7 +414,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void recordStep(ExecutedStepDescription description) {
-        TestStep step = new TestStep( AnnotatedStepDescription.from(description).getName() );
+        TestStep step = new TestStep(AnnotatedStepDescription.from(description).getName());
 
         startNewGroupIfNested();
         setDefaultResultFromAnnotations(step, description);
@@ -542,6 +565,11 @@ public class BaseStepListener implements StepListener, StepPublisher {
         testIgnored();
     }
 
+    @Override
+    public void testRunFinished() {
+        closeDarkroom();
+    }
+
     private void currentStepDone(TestResult result) {
         if ((!inFluentStepSequence) && currentStepExists()) {
             TestStep finishedStep = currentStepStack.pop();
@@ -673,7 +701,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         Optional<File> pageSource = Optional.absent();
 
         if (pathOf(outputDirectory) != null) { // Output directory may be null for some tests
-            newPhoto = photographer.takesAScreenshot()
+            newPhoto = getPhotographer().takesAScreenshot()
                     .with(getDriver())
                     .andWithBlurring(AnnotatedBluring.blurLevel())
                     .andSaveToDirectory(pathOf(outputDirectory));

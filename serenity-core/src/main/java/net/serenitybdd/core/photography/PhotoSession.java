@@ -18,15 +18,18 @@ public class PhotoSession {
 
     private final WebDriver driver;
     private final Path outputDirectory;
+    private final Darkroom darkroom;
     private BlurLevel blurLevel;
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    public PhotoSession(WebDriver driver, Path outputDirectory, BlurLevel blurLevel) {
+    public PhotoSession(WebDriver driver,  Darkroom darkroom, Path outputDirectory, BlurLevel blurLevel) {
         this.driver = driver;
         this.outputDirectory = outputDirectory;
         this.blurLevel = blurLevel;
-        Darkroom.isOpenForBusiness();
+        this.darkroom = darkroom;
+
+        darkroom.isOpenForBusiness();
     }
 
     public ScreenshotPhoto takeScreenshot() {
@@ -64,7 +67,7 @@ public class PhotoSession {
                 .andBlurringOf(blurLevel)
                 .andTargetPathOf(screenshotPath);
 
-        return Darkroom.sendNegative(screenshotNegative);
+        return darkroom.sendNegative(screenshotNegative);
     }
 
     private Path screenshotPathFor(byte[] screenshotData) {

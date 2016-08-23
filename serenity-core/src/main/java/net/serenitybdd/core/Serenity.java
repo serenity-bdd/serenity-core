@@ -1,5 +1,6 @@
 package net.serenitybdd.core;
 
+import com.beust.jcommander.internal.Lists;
 import com.google.common.collect.ImmutableList;
 import net.serenitybdd.core.di.DependencyInjector;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
@@ -151,7 +152,14 @@ public class Serenity {
         if (closeAllDrivers && getWebdriverManager() != null) {
             getWebdriverManager().closeAllDrivers();
         }
+        notifyTestFinished();
         resetDependencyInjectors();
+    }
+
+    private static void notifyTestFinished() {
+        for (StepListener listener : stepListeners()) {
+            listener.testRunFinished();
+        }
     }
 
     public static String getCurrentSessionID() {
@@ -187,6 +195,13 @@ public class Serenity {
 
     private static void setupWebdriverManager(WebdriverManager webdriverManager) {
         ThucydidesWebDriverSupport.initialize(webdriverManager,"");
+    }
+
+    private static List<StepListener> stepListeners() {
+        if (getStepListener() == null) {
+           return Lists.newArrayList();
+        }
+        return Lists.newArrayList(getStepListener());
     }
 
     public static StepListener getStepListener() {

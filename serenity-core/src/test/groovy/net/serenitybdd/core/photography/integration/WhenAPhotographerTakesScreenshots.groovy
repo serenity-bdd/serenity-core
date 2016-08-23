@@ -20,36 +20,35 @@ import static net.thucydides.core.ThucydidesSystemProperty.DEFAULT_WIDTH
 
 class WhenAPhotographerTakesScreenshots extends Specification {
 
+    Darkroom darkroom
+
     def "when a photographer takes a screenshot the photographer returns the future path of the screenshot"() {
         given:
-            Darkroom.isOpenForBusiness();
-            def photographer = new Photographer();
+            def photographer = new Photographer(darkroom);
         when:
             ScreenshotPhoto photo = photographer.takesAScreenshot()
                                                 .with(driver)
                                                 .andSaveToDirectory(screenshotDirectory);
         then:
-            Darkroom.waitUntilClose();
+            darkroom.waitUntilClose();
             photo.getPathToScreenshot().startsWith(screenshotDirectory)
     }
 
     def "when a photographer takes a screenshot the screenshot should be stored after processing"() {
         given:
-            Darkroom.isOpenForBusiness();
-            def photographer = new Photographer();
+        def photographer = new Photographer(darkroom);
         when:
             ScreenshotPhoto photo = photographer.takesAScreenshot()
                     .with(driver)
                     .andSaveToDirectory(screenshotDirectory);
         then:
-            Darkroom.waitUntilClose();
+            darkroom.waitUntilClose();
             Files.exists(photo.getPathToScreenshot())
     }
 
     def "a screenshot that has already been stored should not be stored again"() {
         given:
-            Darkroom.isOpenForBusiness();
-            def photographer = new Photographer();
+        def photographer = new Photographer(darkroom);
             ScreenshotPhoto previousPhoto = photographer.takesAScreenshot()
                                                          .with(driver)
                                                          .andSaveToDirectory(screenshotDirectory);
@@ -58,15 +57,14 @@ class WhenAPhotographerTakesScreenshots extends Specification {
                     .with(driver)
                     .andSaveToDirectory(screenshotDirectory);
         then:
-            Darkroom.waitUntilClose();
+            darkroom.waitUntilClose();
             previousPhoto == newPhoto
     }
 
 
     def "a screenshot that is already the correct dimensions should not be resized"() {
         given:
-            Darkroom.isOpenForBusiness();
-            def photographer = new Photographer();
+        def photographer = new Photographer(darkroom);
             driver.manage().window().setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT))
 
         when:
@@ -74,15 +72,14 @@ class WhenAPhotographerTakesScreenshots extends Specification {
                     .with(driver)
                     .andSaveToDirectory(screenshotDirectory);
         then:
-            Darkroom.waitUntilClose();
+            darkroom.waitUntilClose();
             newPhoto
     }
 
     @BlurScreenshots(BlurLevel.HEAVY)
     def "blurred screenshots should be blurred"() {
         given:
-            Darkroom.isOpenForBusiness();
-            def photographer = new Photographer();
+            def photographer = new Photographer(darkroom);
             driver.manage().window().setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT))
 
         when:
@@ -90,15 +87,14 @@ class WhenAPhotographerTakesScreenshots extends Specification {
                     .with(driver)
                     .andWithBlurring(AnnotatedBluring.blurLevel())
                     .andSaveToDirectory(screenshotDirectory);
-            Darkroom.waitUntilClose();
+            darkroom.waitUntilClose();
         then:
             newPhoto.pathToScreenshot.toString().contains("BLURRED_HEAVY")
     }
 
     def "unblurred screenshots should not be blurred"() {
         given:
-            Darkroom.isOpenForBusiness();
-            def photographer = new Photographer();
+        def photographer = new Photographer(darkroom);
             driver.manage().window().setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT))
 
         when:
@@ -106,7 +102,7 @@ class WhenAPhotographerTakesScreenshots extends Specification {
                     .with(driver)
                     .andWithBlurring(AnnotatedBluring.blurLevel())
                     .andSaveToDirectory(screenshotDirectory);
-            Darkroom.waitUntilClose();
+            darkroom.waitUntilClose();
         then:
             !newPhoto.pathToScreenshot.toString().contains("BLURRED")
     }
@@ -121,6 +117,10 @@ class WhenAPhotographerTakesScreenshots extends Specification {
         driver = new PhantomJSDriver();//new FirefoxDriver()
         driver.get(siteFromUrlAt("/static-site/unchanging-page.html"))
         startTime = System.currentTimeMillis()
+
+        darkroom = new Darkroom()
+        darkroom.isOpenForBusiness();
+
     }
 
     String siteFromUrlAt(String path) {
@@ -131,6 +131,7 @@ class WhenAPhotographerTakesScreenshots extends Specification {
 
     def cleanup() {
         println "Test duration: " + (System.currentTimeMillis() - startTime) + " ms"
+        darkroom.terminate()
         if (driver){
             driver.quit()
         }

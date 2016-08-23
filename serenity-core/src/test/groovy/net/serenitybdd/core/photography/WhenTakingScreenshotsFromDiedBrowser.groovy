@@ -12,11 +12,21 @@ class WhenTakingScreenshotsFromDiedBrowser extends Specification {
     @Rule
     TemporaryFolder folder = new TemporaryFolder();
 
+    Darkroom darkroom
+
+    def setup() {
+        darkroom = new Darkroom()
+    }
+
+    def cleanup() {
+        darkroom.terminate()
+    }
+
     def "when a photo session with died browser is used it should not take a photo"() {
         given:
             def driver = Mock(WebDriver)
             driver.getCurrentUrl() >> { throw new NoSuchWindowException("Some exception ") };
-            def session = new PhotoSession(driver, folder.newFolder().toPath(), BlurLevel.NONE)
+            def session = new PhotoSession(driver, darkroom,  folder.newFolder().toPath(), BlurLevel.NONE)
         when:
             def photo = session.takeScreenshot()
         then:

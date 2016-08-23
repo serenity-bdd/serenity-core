@@ -62,6 +62,7 @@ public class WhenRunningTestsInIsolation {
     @After
     public void clearMockDriver() {
         Serenity.stopUsingMockDriver();
+        Serenity.done();
     }
 
     @Test

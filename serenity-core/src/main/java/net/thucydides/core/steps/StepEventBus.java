@@ -1,21 +1,20 @@
 package net.thucydides.core.steps;
 
         import com.google.common.base.Optional;
-        import com.google.common.base.Preconditions;
-        import com.google.common.collect.ImmutableList;
-        import com.google.common.collect.Lists;
-        import com.google.inject.Inject;
-        import net.serenitybdd.core.eventbus.Broadcaster;
-        import net.serenitybdd.core.photography.Darkroom;
-        import net.thucydides.core.ThucydidesSystemProperty;
-        import net.thucydides.core.guice.Injectors;
-        import net.thucydides.core.model.*;
-        import net.thucydides.core.util.EnvironmentVariables;
-        import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
-        import org.slf4j.Logger;
-        import org.slf4j.LoggerFactory;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.inject.Inject;
+import net.serenitybdd.core.eventbus.Broadcaster;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.model.*;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-        import java.util.*;
+import java.util.*;
 
 /**
  * An event bus for Step-related notifications.
@@ -76,7 +75,7 @@ public class StepEventBus {
     public StepEventBus(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
 
-        Darkroom.isOpenForBusiness();
+//        Darkroom.isOpenForBusiness();
     }
 
     /**
@@ -237,7 +236,7 @@ public class StepEventBus {
 
     public void testFinished() {
         //screenshotProcessor.waitUntilDone();
-        Darkroom.waitUntilClose();
+//        Darkroom.waitUntilClose();
 
         TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
         for (StepListener stepListener : getAllListeners()) {
@@ -247,7 +246,7 @@ public class StepEventBus {
     }
 
     public void testFinished(TestOutcome result) {
-        Darkroom.waitUntilClose();
+//        Darkroom.waitUntilClose();
 
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testFinished(result);
@@ -491,8 +490,10 @@ public class StepEventBus {
     }
 
     public void testRunFinished() {
-        Darkroom.waitUntilClose();
-
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.testRunFinished();
+        }
+//        Darkroom.waitUntilClose();
     }
 
     public void updateCurrentStepTitle(String stepTitle) {

@@ -57,7 +57,7 @@ public class DarkroomProcessingLine implements Runnable {
             synchronized (queue) {
                 processNegative();
                 try {
-                    if (!openForBusiness) {
+                    if (openForBusiness) {
                         queue.wait();
                     } else {
                         finishProcessingNegatives();

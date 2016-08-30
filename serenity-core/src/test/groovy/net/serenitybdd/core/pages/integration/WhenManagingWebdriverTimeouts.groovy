@@ -178,7 +178,6 @@ class WhenManagingWebdriverTimeouts extends Specification {
             "hiddenField"        | false                 // Invisible
             "firstName"          | true                  // Immediately visible
             "city"               | true                  // loads in 500 ms
-            "slowLoadingField"   | false                 // loads in 4 seconds
     }
 
     @Unroll
@@ -194,7 +193,6 @@ class WhenManagingWebdriverTimeouts extends Specification {
             "hiddenField"        | false                 // Invisible
             "firstName"          | true                  // Immediately visible
             "city"               | false                 // loads in 500 ms
-            "slowLoadingField"   | false                 // loads in 3 seconds
     }
 
     def "The webdriver.timeouts.implicitlywait value is used when loading elements using the findAll() method."() {

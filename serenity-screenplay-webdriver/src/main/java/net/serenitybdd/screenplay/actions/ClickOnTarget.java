@@ -1,11 +1,11 @@
 package net.serenitybdd.screenplay.actions;
 
-import net.serenitybdd.screenplay.Action;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.targets.Target;
 import net.thucydides.core.annotations.Step;
 
-public class ClickOnTarget implements Action {
+public class ClickOnTarget implements Interaction {
     private final Target target;
 
     @Step("{0} clicks on #target")

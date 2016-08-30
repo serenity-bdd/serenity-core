@@ -1,11 +1,11 @@
 package net.serenitybdd.screenplay.actions.selectactions;
 
 import net.serenitybdd.core.pages.WebElementFacade;
-import net.serenitybdd.screenplay.Action;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
 import net.thucydides.core.annotations.Step;
 
-public class SelectByIndexFromElement implements Action {
+public class SelectByIndexFromElement implements Interaction {
     private final WebElementFacade element;
     private final Integer index;
 

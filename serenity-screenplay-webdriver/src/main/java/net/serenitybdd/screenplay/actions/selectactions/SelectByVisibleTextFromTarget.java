@@ -1,11 +1,11 @@
 package net.serenitybdd.screenplay.actions.selectactions;
 
-import net.serenitybdd.screenplay.Action;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.targets.Target;
 import net.thucydides.core.annotations.Step;
 
-public class SelectByVisibleTextFromTarget implements Action{
+public class SelectByVisibleTextFromTarget implements Interaction {
     private final Target target;
     private final String visibleText;
 

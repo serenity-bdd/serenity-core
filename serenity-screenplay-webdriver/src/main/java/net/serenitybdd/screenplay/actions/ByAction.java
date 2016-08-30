@@ -2,8 +2,8 @@ package net.serenitybdd.screenplay.actions;
 
 import com.google.common.collect.ImmutableList;
 import net.serenitybdd.core.pages.WebElementFacade;
-import net.serenitybdd.screenplay.Action;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -12,7 +12,7 @@ import java.util.List;
 
 import static net.serenitybdd.screenplay.targets.EnsureFieldVisible.ensureThat;
 
-public abstract class ByAction  implements Action {
+public abstract class ByAction  implements Interaction {
     protected final List<By> locators;
 
     public ByAction(By... locators) {

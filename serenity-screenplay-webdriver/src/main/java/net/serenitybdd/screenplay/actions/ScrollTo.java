@@ -1,11 +1,11 @@
 package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.Performable;
+import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import org.openqa.selenium.WebElement;
 
-public abstract class ScrollTo implements Performable {
+public abstract class ScrollTo implements Interaction {
 
     protected Boolean alignToTop;
 

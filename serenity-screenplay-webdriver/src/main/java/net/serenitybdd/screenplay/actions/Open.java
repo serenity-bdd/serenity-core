@@ -1,15 +1,15 @@
 package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.core.pages.PageObject;
-import net.serenitybdd.screenplay.Action;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.thucydides.core.annotations.Step;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
 //@Task("Opens the #targetPage {0}")
-public class Open implements Action {
+public class Open implements Interaction {
 
     private PageObject targetPage;
 

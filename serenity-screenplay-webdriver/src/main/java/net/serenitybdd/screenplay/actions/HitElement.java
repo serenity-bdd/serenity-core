@@ -1,14 +1,14 @@
 package net.serenitybdd.screenplay.actions;
 
 import net.serenitybdd.core.pages.WebElementFacade;
-import net.serenitybdd.screenplay.Action;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
 import net.thucydides.core.annotations.Step;
 import org.openqa.selenium.Keys;
 
 import java.util.Arrays;
 
-public class HitElement implements Action {
+public class HitElement implements Interaction {
 
     private Keys[] keys;
     private String pluraliser;

@@ -1,11 +1,11 @@
 package net.serenitybdd.screenplay.actions.selectactions;
 
-import net.serenitybdd.screenplay.Action;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.targets.Target;
 import net.thucydides.core.annotations.Step;
 
-public class SelectByIndexFromTarget implements Action {
+public class SelectByIndexFromTarget implements Interaction {
     private final Target target;
     private final Integer index;
 

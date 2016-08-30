@@ -1,14 +1,14 @@
 package net.serenitybdd.screenplay.actions;
 
-import net.serenitybdd.screenplay.Action;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.targets.Target;
 import net.thucydides.core.annotations.Step;
 import org.openqa.selenium.Keys;
 
 import java.util.Arrays;
 
-public class HitTarget implements Action {
+public class HitTarget implements Interaction {
 
     private Keys[] keys;
     private Target target;

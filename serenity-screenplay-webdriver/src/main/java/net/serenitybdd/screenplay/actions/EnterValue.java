@@ -1,18 +1,15 @@
 package net.serenitybdd.screenplay.actions;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import net.serenitybdd.screenplay.Action;
+import net.serenitybdd.screenplay.Interaction;
 import org.openqa.selenium.Keys;
 
 import java.util.List;
 
-public abstract class EnterValue implements Action {
+public abstract class EnterValue implements Interaction {
 
     protected final String theText;
     protected final List<Keys> followedByKeys;
-    private static final String ENTER_KEYS_INTRO_TEXT = " then hits ";
 
     public EnterValue(String theText) {
         this.theText = theText;
@@ -28,22 +25,5 @@ public abstract class EnterValue implements Action {
         return followedByKeys.toArray(new Keys[]{});
     }
 
-    private String getFollowedByKeysDescriptionFor(List<Keys> keys) {
-        if (keys.isEmpty()) {
-            return "";
-        }
-        if (keys.size() == 1) {
-            return ENTER_KEYS_INTRO_TEXT + KeyNames.of(keys);
-        }
-        if (keys.size() == 2) {
-            return ENTER_KEYS_INTRO_TEXT + Joiner.on(" and ").join(KeyNames.of(keys));
-        }
-
-        String allButLastTwo = Joiner.on(", ").join(KeyNames.allButLastTwo(keys));
-        String lastTwoKeys = Joiner.on(" and ").join(KeyNames.lastTwoOf(keys));
-        String allKeys = Joiner.on(", ").join(ImmutableList.of(allButLastTwo, lastTwoKeys));
-
-        return ENTER_KEYS_INTRO_TEXT + allKeys;
-    }
 
 }

@@ -3,13 +3,13 @@ package net.serenitybdd.screenplay.actions.type;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import net.serenitybdd.screenplay.Action;
+import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.actions.KeyNames;
 import org.openqa.selenium.Keys;
 
 import java.util.List;
 
-public abstract class TypeValue implements Action {
+public abstract class TypeValue implements Interaction {
 
     protected final String theText;
     protected final List<Keys> followedByKeys;

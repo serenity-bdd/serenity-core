@@ -132,7 +132,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         given: "The #slow-loader field takes 3 seconds to load"
             def page = openStaticPage()
         when: "We override the implicit timeout to allow the slow-loader field to load"
-            page.setImplicitTimeout(5, SECONDS)
+            page.setImplicitTimeout(10, SECONDS)
         then: "we should be able to access the slow-loader field"
             page.firstElementItem.isVisible()
         and: "we can reset the driver timeouts to the default value once we are done"
@@ -145,11 +145,11 @@ class WhenManagingWebdriverTimeouts extends Specification {
         given: "The #slow-loader WebElementFacade field takes 3 seconds to load"
             def page = openStaticPage()
         when: "We override the implicit timeout to allow the slow-loader field to load"
-            page.setImplicitTimeout(5, SECONDS)
+            page.setImplicitTimeout(10, SECONDS)
         then: "isCurrently* methods should not use the implicit timeout"
             !page.slowLoadingField.isCurrentlyVisible()
         then: "we can reset the driver timeouts to the default value once we are done"
-            page.driver.currentImplicitTimeout.in(SECONDS) == 5
+            page.driver.currentImplicitTimeout.in(SECONDS) == 10
         then: "we can reload a slow loading WebElementFacade normally"
             page.slowLoadingField.isDisplayed()
     }
@@ -342,7 +342,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         given:
             def page = openStaticPage()
         when:
-            page.initiallyDisabled.withTimeoutOf(5, SECONDS).waitUntilClickable().click()
+            page.initiallyDisabled.withTimeoutOf(10, SECONDS).waitUntilClickable().click()
         then:
             noExceptionThrown()
     }
@@ -389,7 +389,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         given:
             def page = openStaticPageWith(["webdriver.timeouts.implicitlywait":"50","webdriver.wait.for.timeout": "50"])
         when:
-            page.withTimeoutOf(5, SECONDS).waitForPresenceOf(By.cssSelector("#elements option"))
+            page.withTimeoutOf(10, SECONDS).waitForPresenceOf(By.cssSelector("#elements option"))
         then:
             page.elementItems.size() == 4
     }
@@ -399,7 +399,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         given:
             def page = openStaticPageWith(["webdriver.timeouts.implicitlywait":"50","webdriver.wait.for.timeout": "50"])
         when:
-            page.withTimeoutOf(5, SECONDS).waitFor(By.cssSelector("#city"))
+            page.withTimeoutOf(10, SECONDS).waitFor(By.cssSelector("#city"))
         then:
             page.city.isCurrentlyVisible()
             page.isElementVisible(By.cssSelector("#city"))
@@ -420,7 +420,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         given:
             def page = openStaticPageWith(["webdriver.timeouts.implicitlywait":"50","webdriver.wait.for.timeout": "50"])
         when:
-            def elements = page.withTimeoutOf(5, SECONDS).findAll("#elements option")
+            def elements = page.withTimeoutOf(10, SECONDS).findAll("#elements option")
         then:
             elements.size() == 4
     }
@@ -440,7 +440,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         given:
             def page = openStaticPageWith(["webdriver.timeouts.implicitlywait":"50","webdriver.wait.for.timeout": "50"])
         when:
-            WebElementFacade city = page.withTimeoutOf(5, SECONDS).find("#city")
+            WebElementFacade city = page.withTimeoutOf(10, SECONDS).find("#city")
         then:
             city.isCurrentlyVisible()
     }

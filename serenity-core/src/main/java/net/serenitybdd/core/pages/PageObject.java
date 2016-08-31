@@ -900,9 +900,8 @@ public abstract class PageObject {
      * Provides a fluent API for querying web elements.
      */
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(By bySelector) {
-        WebElement webElement = getDriver().findElement(bySelector);
         return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver,
-                webElement,
+                bySelector,
                 getImplicitWaitTimeout().in(MILLISECONDS),
                 getWaitForTimeout().in(MILLISECONDS),
                 bySelector.toString());

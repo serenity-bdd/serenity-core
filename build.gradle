@@ -43,7 +43,7 @@ ext {
     xstreamVersion = '1.4.9'
     jodaTimeVersion = '2.7'
     lambdajVersion = '2.3.3'
-    gsonVersion = '2.6.2'
+    gsonVersion = '2.6.1'
     typesafeConfigVersion = '1.2.1'
     freemarkerVersion = '2.3.23'
     wiremockCoreVersion = '1.58'

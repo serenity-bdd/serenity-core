@@ -5,35 +5,30 @@ import com.google.common.collect.Lists;
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureException;
 import net.thucydides.core.fixtureservices.FixtureService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.ThucydidesSystemProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.io.IOException;
-import java.net.ServerSocket;
 import java.util.List;
 
+import static net.thucydides.browsermob.fixtureservices.BrowserMobSystemProperties.BROWSER_MOB_PROXY;
 import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
 
 public class BrowserMobFixtureService implements FixtureService {
 
     public static final int DEFAULT_PORT = 5555;
-
-    private static final int PORT_RANGE = 1000;
     private static final int MIN_AVAILABLE_PORT = 49152;
-    private static final int MAX_AVAILABLE_PORT = MIN_AVAILABLE_PORT + PORT_RANGE;
 
     private final EnvironmentVariables environmentVariables;
+    private Ports ports;
 
-    private int port = 0;
-
-    private ThreadLocal<BrowserMobProxy> threadLocalproxyServer = new  ThreadLocal<BrowserMobProxy>();
+    private ThreadLocal<BrowserMobProxy> threadLocalproxyServer = new  ThreadLocal<>();
 
     public BrowserMobFixtureService() {
         this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
@@ -41,6 +36,12 @@ public class BrowserMobFixtureService implements FixtureService {
 
     public BrowserMobFixtureService(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
+        ports = new Ports(defaultPortDefinedIn(environmentVariables));
+    }
+
+    public BrowserMobFixtureService(EnvironmentVariables environmentVariables, Ports ports) {
+        this.environmentVariables = environmentVariables;
+        this.ports = ports;
     }
 
     @Override
@@ -55,26 +56,26 @@ public class BrowserMobFixtureService implements FixtureService {
     }
 
     public BrowserMobProxy getProxyServer() {
-        return threadLocalproxyServer.get();
+        return getBrowserMobProxy();
     }
 
     private void initializeProxy(int port) throws Exception {
         boolean refuseUntrustedCertificates = environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.REFUSE_UNTRUSTED_CERTIFICATES, false);
-        setPort(port);
         threadLocalproxyServer.set(new BrowserMobProxyServer());
-        if(refuseUntrustedCertificates) {
-            threadLocalproxyServer.setTrustAllServers(false);
-        } else {
-            threadLocalproxyServer.setTrustAllServers(true);
-        }
-        threadLocalproxyServer.get().start(getPort());
+
+        getBrowserMobProxy().setTrustAllServers(!refuseUntrustedCertificates);
+        getBrowserMobProxy().start(port);
+    }
+
+    private BrowserMobProxy getBrowserMobProxy() {
+        return threadLocalproxyServer.get();
     }
 
     @Override
     public void shutdown() {
-        if (threadLocalproxyServer.get() != null) {
+        if (getBrowserMobProxy() != null) {
             try {
-                threadLocalproxyServer.get().stop();
+                getBrowserMobProxy().stop();
             } catch (Exception e) {
                 throw new FixtureException("Could not shut down BrowserMob proxy", e);
             }
@@ -87,12 +88,12 @@ public class BrowserMobFixtureService implements FixtureService {
         if (!proxyServerRunning()) {
             setup();
         }
-        Proxy seleniumProxy = ClientUtil.createSeleniumProxy(threadLocalproxyServer.get());
+        Proxy seleniumProxy = ClientUtil.createSeleniumProxy(getBrowserMobProxy());
         capabilities.setCapability(CapabilityType.PROXY, seleniumProxy);
     }
 
     private boolean proxyServerRunning() {
-        return (threadLocalproxyServer.get() != null);
+        return (getBrowserMobProxy() != null);
     }
 
     private boolean useBrowserMobProxyManager() {
@@ -106,49 +107,20 @@ public class BrowserMobFixtureService implements FixtureService {
         return StringUtils.isEmpty(currentDriver) || allowedBrowsers.contains(currentDriver.toLowerCase());
     }
 
-    private void setPort(int port) {
-        this.port = port;
-    }
-
     public int getPort() {
-        return port;
+        return (threadLocalproxyServer.get() != null) ? threadLocalproxyServer.get().getPort() : 0;
     }
 
     protected int getAvailablePort() {
-        int defaultPort = environmentVariables.getPropertyAsInteger(BrowserMobSystemProperties.BROWSER_MOB_PROXY, DEFAULT_PORT);
-        if (isAvailable(defaultPort)) {
+        int defaultPort = environmentVariables.getPropertyAsInteger(BROWSER_MOB_PROXY, DEFAULT_PORT);
+        if (ports.isAvailable(defaultPort)) {
             return defaultPort;
         } else {
-            return nextAvailablePort(MIN_AVAILABLE_PORT);
+            return ports.nextAvailablePort(MIN_AVAILABLE_PORT);
         }
     }
 
-    private int nextAvailablePort(int portNumber) {
-        if (portNumber > MAX_AVAILABLE_PORT) {
-            throw new IllegalStateException("No available ports found");
-        }
-        if (isAvailable(portNumber)) {
-            return portNumber;
-        } else {
-            return nextAvailablePort(portNumber + 1);
-        }
-    }
-
-    protected boolean isAvailable(int portNumber) {
-        ServerSocket socket = null;
-        boolean available = false;
-        try {
-            socket = new ServerSocket(portNumber);
-            available = true;
-        } catch (IOException e) {
-            available = false;
-        } finally {
-            if (socket != null) {
-                try {
-                    socket.close();
-                } catch (IOException ignored) {}
-            }
-        }
-        return available;
+    private int defaultPortDefinedIn(EnvironmentVariables environmentVariables) {
+        return environmentVariables.getPropertyAsInteger(BROWSER_MOB_PROXY, DEFAULT_PORT);
     }
 }

@@ -2,7 +2,6 @@ package net.thucydides.browsermob.fixtureservices
 
 import net.thucydides.core.fixtureservices.ClasspathFixtureProviderService
 import net.thucydides.core.fixtureservices.FixtureException
-import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.openqa.selenium.remote.DesiredCapabilities
 import spock.lang.Specification
@@ -131,21 +130,16 @@ class WhenUsingABrowsermobService extends Specification {
             service2.port != 8888
     }
 
-    class BrowserMobFixtureServiceWithNoPorts extends BrowserMobFixtureService {
-
-        BrowserMobFixtureServiceWithNoPorts(EnvironmentVariables environmentVariables) {
-            super(environmentVariables)
-        }
-
+    Ports withNoPorts = new Ports(8888) {
         @Override
-        protected boolean isAvailable(int portNumber) { false }
-
-
+        boolean isAvailable(int portNumber) {
+            return false;
+        }
     }
 
     def "should fail elegantly if no ports are available"() {
         given:
-            service = new BrowserMobFixtureServiceWithNoPorts(environmentVariables)
+            service = new BrowserMobFixtureService(environmentVariables, withNoPorts)
         when:
             service.setup()
         then:

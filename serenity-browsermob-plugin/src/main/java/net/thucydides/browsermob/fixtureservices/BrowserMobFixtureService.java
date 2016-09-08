@@ -1,6 +1,5 @@
 package net.thucydides.browsermob.fixtureservices;
 
-
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import net.lightbody.bmp.BrowserMobProxy;
@@ -10,6 +9,7 @@ import net.thucydides.core.fixtureservices.FixtureException;
 import net.thucydides.core.fixtureservices.FixtureService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.ThucydidesSystemProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.remote.CapabilityType;
@@ -59,8 +59,14 @@ public class BrowserMobFixtureService implements FixtureService {
     }
 
     private void initializeProxy(int port) throws Exception {
+        boolean refuseUntrustedCertificates = environmentVariables.getPropertyAsBoolean(ThucydidesSystemProperty.REFUSE_UNTRUSTED_CERTIFICATES, false);
         setPort(port);
         threadLocalproxyServer.set(new BrowserMobProxyServer());
+        if(refuseUntrustedCertificates) {
+            threadLocalproxyServer.setTrustAllServers(false);
+        } else {
+            threadLocalproxyServer.setTrustAllServers(true);
+        }
         threadLocalproxyServer.get().start(getPort());
     }
 

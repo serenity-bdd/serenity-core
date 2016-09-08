@@ -135,7 +135,7 @@ subprojects {
 //        testLogging {
 //            events "passed", "skipped", "failed", "standardOut", "standardError"
 //        }
-        maxParallelForks = ${System.getProperty("forks","1")}
+        maxParallelForks = Integer.parseInt(System.getProperty("forks","1"))
     }
 
     task integrationTests(type: Test) {

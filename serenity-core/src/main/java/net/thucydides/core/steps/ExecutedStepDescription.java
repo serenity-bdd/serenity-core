@@ -25,6 +25,7 @@ public class ExecutedStepDescription implements Cloneable {
 
     private final static Map<String,Object> NO_FIELDS = Maps.newHashMap();
     private final static List<String> NO_ARGUMENTS = Lists.newArrayList();
+    private boolean isAQuestion ;
 
     protected ExecutedStepDescription(final Class<? extends Object> stepsClass,
                                       final String name,
@@ -36,6 +37,7 @@ public class ExecutedStepDescription implements Cloneable {
         this.argumentsList = argumentsList;
         this.displayedFields = displayedFields;
         this.isAGroup = isAGroup;
+        this.isAQuestion = false;
     }
 
     protected ExecutedStepDescription(final Class<? extends Object> stepsClass,
@@ -114,7 +116,7 @@ public class ExecutedStepDescription implements Cloneable {
         isAGroup = aGroup;
     }
 
-    public Method getTestMethod() {
+    public Method getStepMethod() {
         if (getStepClass() != null) {
             return methodCalled(withNoArguments(getName()), getStepClass());
         } else {
@@ -122,6 +124,9 @@ public class ExecutedStepDescription implements Cloneable {
         }
     }
 
+    public boolean isAQuestion() {
+        return isAQuestion;
+    }
 
     private Method methodCalled(final String methodName, final Class<?> testClass) {
         Method method = MethodFinder.inClass(testClass).getMethodNamed(methodName);
@@ -145,5 +150,10 @@ public class ExecutedStepDescription implements Cloneable {
 
     public Map<String, Object> getDisplayedFields() {
         return displayedFields;
+    }
+
+    public ExecutedStepDescription asAQuestion() {
+        isAQuestion = true;
+        return this;
     }
 }

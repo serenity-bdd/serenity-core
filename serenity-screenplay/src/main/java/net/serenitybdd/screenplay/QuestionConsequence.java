@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay;
 
+import com.google.common.base.Optional;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.events.ActorAsksQuestion;
 import net.serenitybdd.screenplay.formatting.StripRedundantTerms;
@@ -16,9 +17,14 @@ public class QuestionConsequence<T> extends BaseConsequence<T> {
     private final static SilentPerformable DO_NOTHING = new SilentPerformable();
 
     public QuestionConsequence(Question<T> actual, Matcher<T> expected) {
+        this(null, actual, expected);
+    }
+
+    public QuestionConsequence(String subjectText, Question<T> actual, Matcher<T> expected) {
         this.question = actual;
         this.expected = expected;
         this.subject = QuestionSubject.fromClass(actual.getClass()).andQuestion(actual).subject();
+        this.subjectText = Optional.fromNullable(subjectText);
     }
 
     @Override
@@ -50,6 +56,6 @@ public class QuestionConsequence<T> extends BaseConsequence<T> {
     public String toString() {
         String template = explanation.or("Then %s should be %s");
         String expectedExpression = StripRedundantTerms.from(expected.toString());
-        return addRecordedInputValuesTo(String.format(template, subject, expectedExpression));
+        return addRecordedInputValuesTo(String.format(template, subjectText.or(subject), expectedExpression));
     }
 }

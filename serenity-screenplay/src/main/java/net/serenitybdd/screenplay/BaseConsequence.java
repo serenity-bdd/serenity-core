@@ -11,6 +11,7 @@ public abstract class BaseConsequence<T> implements Consequence<T> {
     private String complaintDetails;
     protected Optional<Performable> optionalPrecondition = Optional.absent();
     protected Optional<String> explanation = Optional.absent();
+    protected Optional<String> subjectText = Optional.absent();
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 

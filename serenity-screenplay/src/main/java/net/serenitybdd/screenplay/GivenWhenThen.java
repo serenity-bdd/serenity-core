@@ -26,14 +26,30 @@ public class GivenWhenThen {
         return new QuestionConsequence(actual, expected);
     }
 
+    public static <T> Consequence<T> seeThat(String subject, Question<? extends T> actual, Matcher<T> expected) {
+        return new QuestionConsequence(subject, actual, expected);
+    }
+
     public static <T> Consequence<T> seeThat(Question<Boolean> actual) {
         return new BooleanQuestionConsequence(actual);
+    }
+
+    public static <T> Consequence<T> seeThat(String subject, Question<Boolean> actual) {
+        return new BooleanQuestionConsequence(subject, actual);
     }
 
     public static <T> Consequence<T>[] seeThat(Question<? extends T> actual, Matcher<T>... expectedMatchers) {
         List<Consequence<T>> consequences = Lists.newArrayList();
         for(Matcher<T> matcher : expectedMatchers) {
             consequences.add(new QuestionConsequence(actual, matcher));
+        }
+        return consequences.toArray(new Consequence[]{});
+    }
+
+    public static <T> Consequence<T>[] seeThat(String subject, Question<? extends T> actual, Matcher<T>... expectedMatchers) {
+        List<Consequence<T>> consequences = Lists.newArrayList();
+        for(Matcher<T> matcher : expectedMatchers) {
+            consequences.add(new QuestionConsequence(subject, actual, matcher));
         }
         return consequences.toArray(new Consequence[]{});
     }

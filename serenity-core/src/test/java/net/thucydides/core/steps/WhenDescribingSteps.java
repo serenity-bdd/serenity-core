@@ -37,7 +37,7 @@ public class WhenDescribingSteps {
     @Test (expected=IllegalArgumentException.class)
     public void an_exception_should_be_thrown_if_the_name_is_incorrect() {
         ExecutedStepDescription description = new ExecutedStepDescription(SampleTestSteps.class, "not_a_step");
-        description.getTestMethod();
+        description.getStepMethod();
     }
 
     @Test
@@ -81,14 +81,14 @@ public class WhenDescribingSteps {
     public void the_description_should_return_the_step_method() {
         ExecutedStepDescription description = new ExecutedStepDescription(SampleTestSteps.class, "a_step");
 
-        assertThat(description.getTestMethod().getName(), is("a_step"));
+        assertThat(description.getStepMethod().getName(), is("a_step"));
     }
 
     @Test
     public void the_description_should_return_the_step_method_if_the_name_has_parameters() {
         ExecutedStepDescription description = new ExecutedStepDescription(SampleTestSteps.class, "a_step_with_parameters: Joe");
 
-        assertThat(description.getTestMethod().getName(), is("a_step_with_parameters"));
+        assertThat(description.getStepMethod().getName(), is("a_step_with_parameters"));
     }
 
     @Test
@@ -102,7 +102,7 @@ public class WhenDescribingSteps {
     public void a_description_without_a_class_should_have_no_method() {
         ExecutedStepDescription description = ExecutedStepDescription.withTitle("a_step");
 
-        assertThat(description.getTestMethod(), is(nullValue()));
+        assertThat(description.getStepMethod(), is(nullValue()));
     }
 
     @Test
@@ -111,7 +111,7 @@ public class WhenDescribingSteps {
         ExecutedStepDescription clone = description.clone();
 
         assertThat(clone.getName(), is(description.getName()));
-        assertThat(clone.getTestMethod(), is(description.getTestMethod()));
+        assertThat(clone.getStepMethod(), is(description.getStepMethod()));
         assertThat(clone.isAGroup(), is(description.isAGroup()));
         assertThat(clone.getArguments(), is(description.getArguments()));
     }
@@ -120,7 +120,7 @@ public class WhenDescribingSteps {
     public void a_description_can_be_created_without_arguments_list() {
         ExecutedStepDescription description = new ExecutedStepDescription(SampleTestSteps.class, "a_step");
 
-        assertThat(description.getTestMethod().getName(), is("a_step"));
+        assertThat(description.getStepMethod().getName(), is("a_step"));
         assertThat(description.getArguments(), notNullValue());
         assertThat(description.getArguments().size(), is(0));
     }
@@ -129,7 +129,7 @@ public class WhenDescribingSteps {
     public void a_description_can_be_created_with_arguments_list() {
         ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class, "a_step_with_parameters", new Object[] {"Joe"});
 
-        assertThat(description.getTestMethod().getName(), is("a_step_with_parameters"));
+        assertThat(description.getStepMethod().getName(), is("a_step_with_parameters"));
         assertThat(description.getArguments(), notNullValue());
         assertThat(description.getArguments().size(), is(1));
         assertThat(description.getArguments().get(0), is("Joe"));

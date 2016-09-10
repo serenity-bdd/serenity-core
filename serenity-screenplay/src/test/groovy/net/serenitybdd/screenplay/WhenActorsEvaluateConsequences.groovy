@@ -1,14 +1,11 @@
 package net.serenitybdd.screenplay
-import net.serenitybdd.screenplay.shopping.DanaGoesShoppingSample
+
 import net.serenitybdd.junit.runners.SerenityRunner
+import net.serenitybdd.screenplay.shopping.DanaGoesShoppingSample
 import org.junit.runner.notification.RunNotifier
 import spock.lang.Specification
 
-import static OutcomeChecks.resultsFrom
-import static net.serenitybdd.screenplay.GivenWhenThen.seeThat
-import static net.serenitybdd.screenplay.shopping.questions.ThankYouMessage.theThankYouMessage
 import static net.thucydides.core.model.TestResult.*
-import static org.hamcrest.Matchers.equalTo
 
 class WhenActorsEvaluateConsequences extends Specification{
 

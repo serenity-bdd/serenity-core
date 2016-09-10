@@ -45,6 +45,6 @@ public class DeleteTodos {
 
         when(joe).attemptsTo(DeleteAnItem.called("Buy the milk"));
 
-        then(joe).should(seeThat(theDisplayedItems, contains("Walk the dog")));
+        then(joe).should(seeThat("displayed items", theDisplayedItems, contains("Walk the dog")));
     }
 }

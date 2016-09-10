@@ -566,7 +566,7 @@ public class WhenRecordingStepExecutionResults {
         ExecutedStepDescription executedStepDescription
                 = new ExecutedStepDescription(FlatScenarioSteps.class, "stepWithLongName");
 
-        assertThat(executedStepDescription.getTestMethod().getName(), is("stepWithLongName"));
+        assertThat(executedStepDescription.getStepMethod().getName(), is("stepWithLongName"));
     }
 
 
@@ -575,7 +575,7 @@ public class WhenRecordingStepExecutionResults {
         ExecutedStepDescription executedStepDescription
                 = new ExecutedStepDescription(FlatScenarioSteps.class, "stepWithoutMethod");
 
-        executedStepDescription.getTestMethod();
+        executedStepDescription.getStepMethod();
     }
 
     @Test
@@ -583,7 +583,7 @@ public class WhenRecordingStepExecutionResults {
         ExecutedStepDescription executedStepDescription
                 = new ExecutedStepDescription(FlatScenarioSteps.class, "stepWithParameters: tom");
 
-        assertThat(executedStepDescription.getTestMethod().getName(), is("stepWithParameters"));
+        assertThat(executedStepDescription.getStepMethod().getName(), is("stepWithParameters"));
     }
 
     @Test

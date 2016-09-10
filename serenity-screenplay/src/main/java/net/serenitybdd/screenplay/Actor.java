@@ -129,10 +129,6 @@ public class Actor implements PerformsTasks, SkipNested {
         }
     }
 
-    private <T extends Performable> void logSkippedTask() {
-        StepEventBus.getEventBus().testSkipped();
-    }
-
     private boolean pendingOrIgnore(Throwable exception) {
         return exception instanceof IgnoreStepException ||
                 exception instanceof PendingStepException;
@@ -171,7 +167,7 @@ public class Actor implements PerformsTasks, SkipNested {
 
     private <T> void check(Consequence<T> consequence, ErrorTally errorTally) {
         try {
-            eventBusInterface.reportNewStepWithTitle(FormattedTitle.ofConsequence(consequence));
+            eventBusInterface.startQuestion(FormattedTitle.ofConsequence(consequence));
             if (eventBusInterface.shouldIgnoreConsequences()) {
                 StepEventBus.getEventBus().stepIgnored();
             } else {

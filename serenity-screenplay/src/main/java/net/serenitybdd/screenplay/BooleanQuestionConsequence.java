@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay;
 
+import com.google.common.base.Optional;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.events.ActorAsksQuestion;
 import net.thucydides.core.steps.StepEventBus;
@@ -14,8 +15,13 @@ public class BooleanQuestionConsequence<T> extends BaseConsequence<T> {
     private final static SilentPerformable DO_NOTHING = new SilentPerformable();
 
     public BooleanQuestionConsequence(Question<Boolean> actual) {
+        this(null, actual);
+    }
+
+    public BooleanQuestionConsequence(String subjectText, Question<Boolean> actual) {
         this.question = actual;
         this.subject = QuestionSubject.fromClass(actual.getClass()).andQuestion(actual).subject();
+        this.subjectText = Optional.fromNullable(subjectText);
     }
 
     @Override
@@ -49,6 +55,6 @@ public class BooleanQuestionConsequence<T> extends BaseConsequence<T> {
     @Override
     public String toString() {
         String template = explanation.or("Then %s");
-        return addRecordedInputValuesTo(String.format(template, subject));
+        return addRecordedInputValuesTo(String.format(template, subjectText.or(subject)));
     }
 }

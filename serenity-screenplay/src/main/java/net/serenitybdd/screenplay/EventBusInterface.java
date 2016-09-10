@@ -29,8 +29,8 @@ public class EventBusInterface {
         StepEventBus.getEventBus().updateOverallResults();
     }
 
-    public void reportNewStepWithTitle(String title) {
-        StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(title));
+    public void startQuestion(String title) {
+        StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(title).asAQuestion());
     }
 
     public void reportStepFinished() {

@@ -100,7 +100,7 @@ public class WhenDescribingTestMethodsUsingAnnotations {
 
         AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
 
-        annotatedStepDescription.getTestMethod();
+        annotatedStepDescription.getStepMethod();
 
     }
 
@@ -110,7 +110,7 @@ public class WhenDescribingTestMethodsUsingAnnotations {
 
         AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
 
-        assertThat(annotatedStepDescription.getTestMethod().getName(), is("a_step"));
+        assertThat(annotatedStepDescription.getStepMethod().getName(), is("a_step"));
     }
 
     @Test
@@ -119,7 +119,7 @@ public class WhenDescribingTestMethodsUsingAnnotations {
 
         AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
 
-        assertThat(annotatedStepDescription.getTestMethod().getName(), is("a_step_with_parameters"));
+        assertThat(annotatedStepDescription.getStepMethod().getName(), is("a_step_with_parameters"));
     }
 
     @Test

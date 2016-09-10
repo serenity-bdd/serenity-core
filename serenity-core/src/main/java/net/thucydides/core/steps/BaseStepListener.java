@@ -404,10 +404,30 @@ public class BaseStepListener implements StepListener, StepPublisher {
      * @param description the description of the test that is about to be run
      */
     public void stepStarted(final ExecutedStepDescription description) {
-        currentStepMethodStack.push(description.getTestMethod());
+        pushStepMethodIn(description);
         recordStep(description);
         if (currentTestIsABrowserTest()) {
             takeInitialScreenshot();
+        }
+    }
+
+    private void pushStepMethodIn(ExecutedStepDescription description) {
+        if (description.isAQuestion()) {
+            currentStepMethodStack.push(tokenQuestionMethod());
+        } else {
+            currentStepMethodStack.push(description.getStepMethod());
+        }
+    }
+
+    static class Question {
+        public void ask(){}
+    }
+
+    private Method tokenQuestionMethod() {
+        try {
+            return Question.class.getMethod("ask");
+        } catch (NoSuchMethodException e) {
+            return null;
         }
     }
 
@@ -439,10 +459,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void setDefaultResultFromAnnotations(final TestStep step, final ExecutedStepDescription description) {
-        if (TestAnnotations.isPending(description.getTestMethod())) {
+        if (TestAnnotations.isPending(description.getStepMethod())) {
             step.setResult(TestResult.PENDING);
         }
-        if (TestAnnotations.isIgnored(description.getTestMethod())) {
+        if (TestAnnotations.isIgnored(description.getStepMethod())) {
             step.setResult(TestResult.IGNORED);
         }
     }

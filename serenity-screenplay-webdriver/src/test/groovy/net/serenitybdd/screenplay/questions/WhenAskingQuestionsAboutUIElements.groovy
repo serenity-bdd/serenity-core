@@ -36,7 +36,7 @@ class WhenAskingQuestionsAboutUIElements extends Specification {
             actor.can(BrowseTheWeb.with(browser))
             aTestHasStarted()
         then:
-            actor.should(seeThat(TheTarget.valueOf(target), equalTo("some value")))
+            actor.should(seeThat("a value", TheTarget.valueOf(target), equalTo("some value")))
 
     }
 

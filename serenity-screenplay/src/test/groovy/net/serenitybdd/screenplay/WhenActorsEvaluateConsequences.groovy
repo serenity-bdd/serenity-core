@@ -5,6 +5,7 @@ import net.serenitybdd.screenplay.shopping.DanaGoesShoppingSample
 import org.junit.runner.notification.RunNotifier
 import spock.lang.Specification
 
+import static OutcomeChecks.resultsFrom
 import static net.thucydides.core.model.TestResult.*
 
 class WhenActorsEvaluateConsequences extends Specification{

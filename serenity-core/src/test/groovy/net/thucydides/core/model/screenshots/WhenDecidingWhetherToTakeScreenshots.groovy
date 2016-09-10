@@ -1,7 +1,8 @@
-package net.thucydides.core.model
+package net.thucydides.core.model.screenshots
 
 import com.google.common.base.Optional
 import net.thucydides.core.annotations.Screenshots
+import net.thucydides.core.model.TakeScreenshots
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.Configuration
@@ -12,6 +13,10 @@ import spock.lang.Unroll
 class WhenDecidingWhetherToTakeScreenshots extends Specification {
 
     def configuration = Mock(Configuration)
+
+    def setup() {
+        configuration.screenshotLevel >> Optional.absent()
+    }
 
     @Unroll
     def "should be able to configure screenshots using the legacy system properties"() {
@@ -26,13 +31,13 @@ class WhenDecidingWhetherToTakeScreenshots extends Specification {
             permissions.areAllowed(screenshotLevel) == shouldBeAllowed
 
         where:
-        onlyTakeFailingverboseScreenshots | takeVerboseScreenshots | screenshotLevel                            | shouldBeAllowed
-        true                              | true                    | TakeScreenshots.FOR_EACH_ACTION           | false
-        true                              | true                    | TakeScreenshots.BEFORE_AND_AFTER_EACH_STEP| false
-        true                              | true                    | TakeScreenshots.AFTER_EACH_STEP           | false
-        true                              | true                    | TakeScreenshots.FOR_FAILURES              | true
+        onlyTakeFailingverboseScreenshots | takeVerboseScreenshots | screenshotLevel                             | shouldBeAllowed
+        true                              | true                    | TakeScreenshots.FOR_EACH_ACTION            | false
+        true                              | true                    | TakeScreenshots.BEFORE_AND_AFTER_EACH_STEP | false
+        true                              | true                    | TakeScreenshots.AFTER_EACH_STEP            | false
+        true                              | true                    | TakeScreenshots.FOR_FAILURES               | true
 
-        false                             | false                   | TakeScreenshots.FOR_EACH_ACTION           | false
+        false                             | false                   | TakeScreenshots.FOR_EACH_ACTION            | false
         false                             | false                   | TakeScreenshots.BEFORE_AND_AFTER_EACH_STEP| true
         false                             | false                   | TakeScreenshots.AFTER_EACH_STEP           | true
         false                             | false                   | TakeScreenshots.FOR_FAILURES              | true

@@ -24,7 +24,7 @@ public class StackTraceAnalyser {
 
     public Method getMethod() {
         try {
-            if (allowedClassName(stackTraceElement.getClassName()) && !lambda(stackTraceElement.getClassName()) ) {
+            if (allowedClassName(stackTraceElement.getClassName()) && !lambda(stackTraceElement.getClassName())) {
                 Class callingClass = Class.forName(stackTraceElement.getClassName());
                 Method matchingMethod = extractMethod(stackTraceElement, callingClass);
                 if (matchingMethod != null) {
@@ -39,11 +39,26 @@ public class StackTraceAnalyser {
         return null;
     }
 
+    public Method getUnfilteredMethod() {
+        try {
+            Class callingClass = Class.forName(stackTraceElement.getClassName());
+            Method matchingMethod = extractMethod(stackTraceElement, callingClass);
+            if (matchingMethod != null) {
+                return matchingMethod;
+            }
+        } catch (ClassNotFoundException classNotFoundIgnored) {
+            logger.debug("Couldn't find class during Stack analysis: " + classNotFoundIgnored.getLocalizedMessage());
+        } catch (NoClassDefFoundError noClassDefFoundErrorIgnored) {
+            logger.debug("Couldn't find class definition during Stack analysis: " + noClassDefFoundErrorIgnored.getLocalizedMessage());
+        }
+        return null;
+    }
+
     private boolean lambda(String className) {
         return className.contains("$$Lambda$");
     }
 
-    public static Method extractMethod(StackTraceElement stackTraceElement, Class callingClass)  {
+    public static Method extractMethod(StackTraceElement stackTraceElement, Class callingClass) {
         Class targetClass;
         if (isInstrumentedMethod(stackTraceElement)) {
             targetClass = callingClass.getSuperclass();
@@ -67,7 +82,7 @@ public class StackTraceAnalyser {
 
     public static List<Method> inscopeMethodsIn(StackTraceElement[] stackTrace) {
         List<Method> methods = Lists.newArrayList();
-        for(StackTraceElement stackTraceElement : stackTrace) {
+        for (StackTraceElement stackTraceElement : stackTrace) {
             Method method = StackTraceAnalyser.forStackTraceElement(stackTraceElement).getMethod();
             if (method != null) {
                 methods.add(method);
@@ -75,4 +90,5 @@ public class StackTraceAnalyser {
         }
         return methods;
     }
+
 }

@@ -5,3 +5,5 @@ lib
 target
 *.iml
 *.log
+/serenity-core.ipr
+/serenity-core.iws

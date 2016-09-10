@@ -20,6 +20,7 @@ import net.thucydides.core.model.failures.FailureAnalysis;
 import net.thucydides.core.model.features.ApplicationFeature;
 import net.thucydides.core.model.results.MergeStepResultStrategy;
 import net.thucydides.core.model.results.StepResultMergeStragegy;
+import net.thucydides.core.model.screenshots.Screenshot;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
 import net.thucydides.core.reports.html.Formatter;

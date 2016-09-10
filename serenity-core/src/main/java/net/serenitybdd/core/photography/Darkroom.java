@@ -43,7 +43,6 @@ public class Darkroom {
 
     public void start() {
 
-        System.out.println("DARKROOM COUNT: " + ++darkroomCounter);
         this.processingLine = new DarkroomProcessingLine(processors);
         screenshotThread = new Thread(processingLine,"Darkroom Processing Line");
         screenshotThread.setDaemon(true);
@@ -69,7 +68,6 @@ public class Darkroom {
     }
 
     private void shutdownProcessingLine() {
-        System.out.println("DARKROOM COUNT: " + --darkroomCounter);
         processingLine.terminate();
         try {
             screenshotThread.join();

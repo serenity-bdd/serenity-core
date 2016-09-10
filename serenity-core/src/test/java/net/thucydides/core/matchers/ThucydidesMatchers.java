@@ -1,6 +1,6 @@
 package net.thucydides.core.matchers;
 
-import net.thucydides.core.model.Screenshot;
+import net.thucydides.core.model.screenshots.Screenshot;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 

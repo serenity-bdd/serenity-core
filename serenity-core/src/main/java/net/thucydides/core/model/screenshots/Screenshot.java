@@ -1,5 +1,6 @@
-package net.thucydides.core.model;
+package net.thucydides.core.model.screenshots;
 
+import net.thucydides.core.model.ErrorMessageFormatter;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import org.apache.commons.lang3.StringEscapeUtils;
 

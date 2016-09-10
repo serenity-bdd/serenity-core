@@ -18,6 +18,7 @@ import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
 import net.thucydides.core.model.failures.FailureAnalysis;
+import net.thucydides.core.model.screenshots.ScreenshotPermission;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
@@ -32,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -402,18 +404,27 @@ public class BaseStepListener implements StepListener, StepPublisher {
      * @param description the description of the test that is about to be run
      */
     public void stepStarted(final ExecutedStepDescription description) {
+        currentStepMethodStack.push(description.getTestMethod());
         recordStep(description);
         if (currentTestIsABrowserTest()) {
             takeInitialScreenshot();
         }
-
     }
 
     public void skippedStepStarted(final ExecutedStepDescription description) {
         recordStep(description);
     }
 
+
+
+    Stack<Method> currentStepMethodStack = new Stack<>();
+
+    public Optional<Method> getCurrentStepMethod() {
+        return currentStepMethodStack.empty() ? Optional.<Method>absent() : Optional.fromNullable(currentStepMethodStack.peek());
+    }
+
     private void recordStep(ExecutedStepDescription description) {
+
         TestStep step = new TestStep(AnnotatedStepDescription.from(description).getName());
 
         startNewGroupIfNested();
@@ -571,6 +582,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void currentStepDone(TestResult result) {
+        if (!currentStepMethodStack.isEmpty()) {
+            currentStepMethodStack.pop();
+        }
         if ((!inFluentStepSequence) && currentStepExists()) {
             TestStep finishedStep = currentStepStack.pop();
             finishedStep.recordDuration();

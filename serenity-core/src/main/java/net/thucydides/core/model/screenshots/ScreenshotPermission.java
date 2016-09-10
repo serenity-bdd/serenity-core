@@ -1,8 +1,10 @@
-package net.thucydides.core.model;
+package net.thucydides.core.model.screenshots;
 
 import com.google.common.base.Optional;
 import net.thucydides.core.annotations.Screenshots;
+import net.thucydides.core.model.TakeScreenshots;
 import net.thucydides.core.reflection.StackTraceAnalyser;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.Configuration;
 
 import java.lang.reflect.Method;
@@ -17,12 +19,19 @@ public class ScreenshotPermission {
 
 
     public boolean areAllowed(TakeScreenshots takeScreenshots) {
-        Optional<TakeScreenshots> overrideLevel = methodOverride();
-        if (overrideLevel.isPresent()) {
-            return takeScreenshotLevel(takeScreenshots).isAtLeast(overrideLevel.get());
-        }
+//
+//
+//        if (overrideLevel.isPresent()) {
+//            return takeScreenshotLevel(takeScreenshots).isAtLeast(overrideLevel.get());
+//        }
+//
+//
+//        Optional<TakeScreenshots> configuredLevel = configuration.getScreenshotLevel();
 
-        Optional<TakeScreenshots> configuredLevel = configuration.getScreenshotLevel();
+        Optional<TakeScreenshots> configuredLevel = methodOverride()
+                                                    .or(classOverride())
+                                                    .or(configuration.getScreenshotLevel());
+
         if (configuredLevel.isPresent()) {
             return takeScreenshotLevel(takeScreenshots).isAtLeast(configuredLevel.get());
         } else {
@@ -42,10 +51,33 @@ public class ScreenshotPermission {
 
     private Optional<TakeScreenshots> methodOverride() {
         for(Method callingMethod : StackTraceAnalyser.inscopeMethodsIn(new Throwable().getStackTrace())) {
-            if (callingMethod.getAnnotation(Screenshots.class) != null) {
-                return Optional.of(screenshotLevelFrom(callingMethod.getAnnotation(Screenshots.class)));
+            Optional<TakeScreenshots> overriddenScreenshotPreference = overriddenScreenshotPreferenceFor(callingMethod);
+            if (overriddenScreenshotPreference.isPresent()) {
+                return overriddenScreenshotPreference;
             }
         }
+        return Optional.absent();
+    }
+
+    private Optional<TakeScreenshots> classOverride() {
+        if (StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
+            Optional<Method> currentStepMethod = StepEventBus.getEventBus().getBaseStepListener().getCurrentStepMethod();
+            if (currentStepMethod.isPresent()) {
+                return overriddenScreenshotPreferenceForClass(currentStepMethod.get().getDeclaringClass());
+            }
+        }
+        return Optional.absent();
+    }
+
+    private Optional<TakeScreenshots> overriddenScreenshotPreferenceForClass(Class<?> declaringClass) {
+        return ScreenshotPreferencesByClass.forClass(declaringClass).withEnvironmentVariables(configuration.getEnvironmentVariables()).getScreenshotPreference();
+    }
+
+    private Optional<TakeScreenshots> overriddenScreenshotPreferenceFor(Method callingMethod) {
+        if (callingMethod.getAnnotation(Screenshots.class) != null) {
+            return Optional.of(screenshotLevelFrom(callingMethod.getAnnotation(Screenshots.class)));
+        }
+
         return Optional.absent();
     }
 

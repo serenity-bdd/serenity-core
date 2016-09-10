@@ -100,6 +100,10 @@ public class StepEventBus {
         return this;
     }
 
+    public boolean isBaseStepListenerRegistered() {
+        return baseStepListener != null;
+    }
+
     public BaseStepListener getBaseStepListener() {
         Preconditions.checkNotNull(baseStepListener, "No BaseStepListener has been registered");
         return baseStepListener;

@@ -691,6 +691,10 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return StepEventBus.getEventBus().webdriverCallsAreSuspended();
     }
 
+    /**
+     * Returns true if an element is present on the screen, whether visible or not.
+     * @return
+     */
     public boolean isPresent() {
         if (driverIsDisabled()) {
             return false;
@@ -1079,6 +1083,15 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return getElement().findElement(by);
     }
 
+    /**
+     * Is this element displayed or not? This method avoids the problem of having to parse an
+     * element's "style" attribute.
+     * This method respects the semantics of the Selenium isDisplayed() method, and will throw an
+     * exception if the element is not found. To simply return true or false depending on whether an element
+     * is
+     *
+     * @return Whether or not the element is displayed
+     */
     public boolean isDisplayed() {
         return getElement().isDisplayed();
     }

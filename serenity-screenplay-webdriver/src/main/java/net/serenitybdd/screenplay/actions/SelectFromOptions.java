@@ -6,6 +6,9 @@ import net.serenitybdd.screenplay.actions.selectactions.*;
 import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
 public class SelectFromOptions {

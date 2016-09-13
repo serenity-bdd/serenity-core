@@ -781,7 +781,7 @@ public abstract class PageObject {
     }
 
     final public void openAt(String startingUrl) {
-        openPageAtUrl(startingUrl);
+        openPageAtUrl(updateUrlWithBaseUrlIfDefined(startingUrl));
         callWhenPageOpensMethods();
     }
 

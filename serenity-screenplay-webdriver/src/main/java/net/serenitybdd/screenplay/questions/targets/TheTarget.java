@@ -22,8 +22,8 @@ public class TheTarget {
         return new TargetSelectedVisibleText(target);
     }
 
-    public static Question<List<String>> selectedOptionsOf(Target target) {
-        return new TargetSelectedOptions(target);
+    public static Question<List<String>> selectOptionsOf(Target target) {
+        return new TargetSelectOptions(target);
     }
 
     public static TargetAttributeBuilder attributeNamed(String name) {

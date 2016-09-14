@@ -176,14 +176,14 @@ class WhenReadingUIValues extends Specification {
         when:
             element.getSelectOptions() >> ["value1", "value2"]
         then:
-            SelectedOptions.of(target).viewedBy(actor).as(String) == "[value1, value2]"
+            SelectOptions.of(target).viewedBy(actor).as(String) == "[value1, value2]"
     }
 
     def "should read selected options"() {
         when:
             element.getSelectOptions() >> ["value1", "value2"]
         then:
-            SelectedOptions.of(target).viewedBy(actor).value() == ["value1", "value2"]
+            SelectOptions.of(target).viewedBy(actor).value() == ["value1", "value2"]
     }
 
     def "should read multiple selected options"() {
@@ -191,7 +191,7 @@ class WhenReadingUIValues extends Specification {
             element.getSelectOptions() >> ["value1", "value2"]
             element2.getSelectOptions() >> ["value3", "value4"]
         then:
-            SelectedOptions.of(target).viewedBy(actor).asList() == [["value1", "value2"], ["value3", "value4"]]
+            SelectOptions.of(target).viewedBy(actor).asList() == [["value1", "value2"], ["value3", "value4"]]
     }
 
     def "should be able to read values without calling value() directly"() {

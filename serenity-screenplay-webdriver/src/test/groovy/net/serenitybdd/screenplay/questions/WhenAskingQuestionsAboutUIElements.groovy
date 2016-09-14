@@ -80,7 +80,7 @@ class WhenAskingQuestionsAboutUIElements extends Specification {
         when:
             element.selectOptions >> ["value1","value2"]
         and:
-            Question<String> question = TheTarget.selectedOptionsOf(target);
+            Question<String> question = TheTarget.selectOptionsOf(target);
         then:
             question.answeredBy(actor) == ["value1","value2"]
     }

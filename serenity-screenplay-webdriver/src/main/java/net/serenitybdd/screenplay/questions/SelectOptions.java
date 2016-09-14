@@ -10,14 +10,14 @@ import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
 import static net.serenitybdd.screenplay.questions.UIFilter.visible;
 
-public class SelectedOptions extends TargetedUIState<List<String>> {
+public class SelectOptions extends TargetedUIState<List<String>> {
 
-    public SelectedOptions(Target target, Actor actor) {
+    public SelectOptions(Target target, Actor actor) {
         super(target,actor);
     }
 
-    public static UIStateReaderBuilder<SelectedOptions> of(Target target) {
-        return new UIStateReaderBuilder(target, SelectedOptions.class);
+    public static UIStateReaderBuilder<SelectOptions> of(Target target) {
+        return new UIStateReaderBuilder(target, SelectOptions.class);
     }
 
     public List<String> resolve() {

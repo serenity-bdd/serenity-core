@@ -16,10 +16,6 @@ public class OpenPage implements Interaction {
         this.targetPage = targetPage;
     }
 
-    public Interaction the(PageObject targetPage) {
-        return instrumented(OpenPage.class, targetPage);
-    }
-
     @Step("{0} opens the #targetPage")
     public <T extends Actor> void performAs(T theUser) {
         targetPage.setDriver(BrowseTheWeb.as(theUser).getDriver());

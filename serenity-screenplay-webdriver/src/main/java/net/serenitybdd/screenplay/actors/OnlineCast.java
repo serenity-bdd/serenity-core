@@ -11,8 +11,6 @@ import org.openqa.selenium.WebDriver;
  */
 public class OnlineCast extends Cast {
 
-    private final String WITH_NO_SPECIFIED_DRIVER = "";
-
     @Override
     public Actor actorNamed(String actorName, Ability... abilities) {
         Actor newActor = super.actorNamed(actorName, abilities);

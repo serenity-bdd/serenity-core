@@ -906,7 +906,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public boolean isSelected() {
-        waitUntilVisible();
         return getElement().isSelected();
     }
 

@@ -34,7 +34,7 @@ public class TheTarget {
         return new TargetCSSBuilder(name);
     }
 
-    private static class TargetAttributeBuilder {
+    public static class TargetAttributeBuilder {
         private final String name;
 
         public TargetAttributeBuilder(String name) {
@@ -46,7 +46,7 @@ public class TheTarget {
         }
     }
 
-    private static class TargetCSSBuilder {
+    public static class TargetCSSBuilder {
         private final String name;
 
         public TargetCSSBuilder(String name) {

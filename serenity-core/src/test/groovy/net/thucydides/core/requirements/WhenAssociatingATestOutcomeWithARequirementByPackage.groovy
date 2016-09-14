@@ -26,7 +26,6 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
             EnvironmentVariables vars = new MockEnvironmentVariables();
             vars.setProperty("serenity.test.root", "packagerequirements")
             PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars)
-            capabilityProvider.clearCache()
 
         when: "We load the requirements structure"
             List<Requirement> requirements = capabilityProvider.getRequirements()
@@ -39,7 +38,6 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
         EnvironmentVariables vars = new MockEnvironmentVariables();
         vars.setProperty("serenity.test.root", "deeppackagerequirements")
         PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars)
-        capabilityProvider.clearCache()
 
         when: "We load the requirements structure"
         List<Requirement> requirements = capabilityProvider.getRequirements()
@@ -54,7 +52,6 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
         EnvironmentVariables vars = new MockEnvironmentVariables();
         vars.setProperty("serenity.test.root", "packagerequirements.pears")
         PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars)
-        capabilityProvider.clearCache()
 
         when: "We load the requirements structure"
         List<Requirement> requirements = capabilityProvider.getRequirements()

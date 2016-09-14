@@ -23,7 +23,6 @@ import net.thucydides.core.steps.stepdata.StepData;
 import net.thucydides.core.tags.TagScanner;
 import net.thucydides.core.webdriver.*;
 import net.thucydides.junit.listeners.JUnitStepListener;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
@@ -39,6 +38,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static net.serenitybdd.core.Serenity.initializeTestSession;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * A test runner for WebDriver-based web tests. This test runner initializes a
@@ -107,7 +107,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     public SerenityRunner(final Class<?> klass,
                           final Injector injector) throws InitializationError {
         this(klass,
-//                injector.getInstance(WebdriverManager.class),
                 ThucydidesWebDriverSupport.getWebdriverManager(),
                 injector.getInstance(Configuration.class),
                 injector.getInstance(BatchManager.class)
@@ -208,7 +207,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     }
 
     private boolean requestedDriverSpecified() {
-        return !StringUtils.isEmpty(this.requestedDriver);
+        return !isEmpty(this.requestedDriver);
     }
 
     public File getOutputDirectory() {
@@ -369,12 +368,9 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     }
 
     private void closeDrivers() {
-        getWebdriverManager().closeAllDrivers();
+        ThucydidesWebDriverSupport.closeAllDrivers();
     }
 
-    protected WebdriverManager getWebdriverManager() {
-        return webdriverManager;
-    }
 
     private ReportService getReportService() {
         if (reportService == null) {
@@ -551,11 +547,13 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     }
 
     protected WebDriver getDriver() {
-        return getWebdriverManager().getWebdriver(requestedDriver);
+        return (isEmpty(requestedDriver)) ? ThucydidesWebDriverSupport.getWebdriverManager().getWebdriver()
+                : ThucydidesWebDriverSupport.getWebdriverManager().getWebdriver(requestedDriver);
     }
 
     protected WebDriver getDriver(final String driver) {
-        return getWebdriverManager().getWebdriver(driver);
+        return (isEmpty(driver)) ? ThucydidesWebDriverSupport.getWebdriverManager().getWebdriver()
+                                 : ThucydidesWebDriverSupport.getWebdriverManager().getWebdriver(driver);
     }
 
     /**

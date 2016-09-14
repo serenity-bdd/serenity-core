@@ -40,22 +40,27 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
     private List<Requirement> requirements;
 
-    private final Configuration configuration;
-
     private final RequirementsStore requirementsStore;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables, String rootPackage) {
+    public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables,
+                                          String rootPackage,
+                                          RequirementsStore requirementsStore) {
         super(environmentVariables);
         this.environmentVariables = environmentVariables;
         this.rootPackage = rootPackage;
-        this.configuration = Injectors.getInjector().getInstance(Configuration.class);
-        this.requirementsStore = new RequirementsStore(getRequirementsDirectory(), rootPackage + "-package-requirements.json");
+        this.requirementsStore = requirementsStore;
 
         if (rootPackage == null) {
             logger.warn("To generate correct requirements coverage reports you need to set the 'serenity.test.root' property to the package representing the top of your requirements hierarchy.");
         }
+    }
+
+    public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables, String rootPackage) {
+        this(environmentVariables, rootPackage,
+                new FileSystemRequirementsStore(getRequirementsDirectory(Injectors.getInjector().getInstance(Configuration.class).getOutputDirectory()),
+                                                rootPackage + "-package-requirements.json"));
     }
 
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables) {
@@ -70,6 +75,10 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
     public void clear() {
         requirementsStore.clear();
+    }
+
+    public PackageRequirementsTagProvider withCacheDisabled() {
+        return new PackageRequirementsTagProvider(environmentVariables, rootPackage, new DisabledRequirementsStore());
     }
 
     @Override
@@ -260,8 +269,8 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         return Optional.absent();
     }
 
-    private File getRequirementsDirectory() {
-        return new File(configuration.getOutputDirectory(), "requirements");
+    private static File getRequirementsDirectory(File directory) {
+        return new File(directory, "requirements");
     }
 
 

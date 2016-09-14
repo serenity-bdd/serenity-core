@@ -16,16 +16,11 @@ import spock.lang.Specification
 
 class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification {
 
-    def setup() {
-        PackageRequirementsTagProvider capabilityProvider = new PackageRequirementsTagProvider()
-        capabilityProvider.clear()
-    }
-
     def "Should read requirements structure from the package directory structure"() {
         given: "We define the root package in the 'thucydides.test.root' property"
             EnvironmentVariables vars = new MockEnvironmentVariables();
             vars.setProperty("serenity.test.root", "packagerequirements")
-            PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars)
+            PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars).withCacheDisabled()
 
         when: "We load the requirements structure"
             List<Requirement> requirements = capabilityProvider.getRequirements()
@@ -37,7 +32,7 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
         given: "We define the root package in the 'thucydides.test.root' property"
         EnvironmentVariables vars = new MockEnvironmentVariables();
         vars.setProperty("serenity.test.root", "deeppackagerequirements")
-        PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars)
+        PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars).withCacheDisabled()
 
         when: "We load the requirements structure"
         List<Requirement> requirements = capabilityProvider.getRequirements()
@@ -51,7 +46,7 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
         given: "We define the root package in the 'thucydides.test.root' property"
         EnvironmentVariables vars = new MockEnvironmentVariables();
         vars.setProperty("serenity.test.root", "packagerequirements.pears")
-        PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars)
+        PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars).withCacheDisabled()
 
         when: "We load the requirements structure"
         List<Requirement> requirements = capabilityProvider.getRequirements()
@@ -64,7 +59,7 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
         EnvironmentVariables vars = new MockEnvironmentVariables();
         and: "We define the root package in the 'thucydides.test.root' property"
         vars.setProperty("serenity.test.root", "net.thucydides.core.requirements.stories")
-        PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars)
+        PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars).withCacheDisabled()
         when: "We load requirements with nested capability directories and no .narrative files"
         def testOutcome = TestOutcome.inEnvironment(vars).forTest("someTest", ASampleTestWithACapability)
         then:
@@ -79,7 +74,7 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
         EnvironmentVariables vars = new MockEnvironmentVariables();
         and: "We define the root package in the 'thucydides.test.root' property"
         vars.setProperty("serenity.test.root", "net.thucydides.core.requirements.stories")
-        PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars)
+        PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars).withCacheDisabled()
         when: "We load requirements with nested capability directories and no .narrative files"
         def testOutcome = TestOutcome.inEnvironment(vars).forTest("someTest", ASampleNestedTestWithACapability)
         then:
@@ -94,7 +89,7 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
         EnvironmentVariables vars = new MockEnvironmentVariables();
         and: "We define the root package in the 'thucydides.test.root' property"
         vars.setProperty("serenity.test.root", "net.thucydides.core.requirements.stories")
-        PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars)
+        PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars).withCacheDisabled()
         when: "We load requirements with nested capability directories and no .narrative files"
         def testOutcome = TestOutcome.inEnvironment(vars).forTest("someTest", ASampleTestWithNoCapability)
         then:
@@ -145,7 +140,7 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
         EnvironmentVariables vars = new MockEnvironmentVariables();
         and: "We define the root package in the 'thucydides.test.root' property"
         vars.setProperty("serenity.test.root", "net.thucydides.core.requirements.stories")
-        PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars)
+        PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars).withCacheDisabled()
         when: "We load requirements with nested capability directories and no .narrative files"
         def testOutcome = new TestOutcome("someTest", ASampleNestedTestWithACapability)
         then:
@@ -158,7 +153,7 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
         EnvironmentVariables vars = new MockEnvironmentVariables();
         and: "We define the root package in the 'thucydides.test.root' property"
         vars.setProperty("serenity.test.root", "net.thucydides.core.requirements.stories")
-        PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars)
+        PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars).withCacheDisabled()
         when: "We load requirements with nested capability directories and no .narrative files"
         def testOutcome = new TestOutcome("someTest", ASampleNestedTestWithACapability)
         then:
@@ -172,7 +167,7 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
         EnvironmentVariables vars = new MockEnvironmentVariables();
         and: "We define the root package in the 'thucydides.test.root' property"
         vars.setProperty("serenity.test.root", "net.thucydides.core.requirements.stories")
-        PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars)
+        PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars).withCacheDisabled()
         when: "We load requirements with nested capability directories and no .narrative files"
         def growPotatoesTag = TestTag.withName("Grow potatoes").andType("capability")
         then:

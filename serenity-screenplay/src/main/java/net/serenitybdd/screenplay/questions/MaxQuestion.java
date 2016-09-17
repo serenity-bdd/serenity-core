@@ -10,9 +10,9 @@ import java.util.Collections;
 @Subject("the maximum value of #listQuestion")
 public class MaxQuestion<T extends Object & Comparable<? super T>> implements Question<T> {
 
-    private final Question<Collection<T>> listQuestion;
+    private final Question<? extends Collection<T>> listQuestion;
 
-    public MaxQuestion(Question<Collection<T>> listQuestion) {
+    public MaxQuestion(Question<? extends Collection<T>> listQuestion) {
         this.listQuestion = listQuestion;
     }
 

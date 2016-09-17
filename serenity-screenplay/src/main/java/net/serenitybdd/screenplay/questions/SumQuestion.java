@@ -9,9 +9,9 @@ import java.util.Collection;
 @Subject("the sum of #listQuestion")
 public class SumQuestion implements Question<Integer> {
 
-    private final Question<Collection<Integer>> listQuestion;
+    private final Question<? extends Collection<Integer>> listQuestion;
 
-    public SumQuestion(Question<Collection<Integer>> listQuestion) {
+    public SumQuestion(Question<? extends Collection<Integer>> listQuestion) {
         this.listQuestion = listQuestion;
     }
 

@@ -10,9 +10,9 @@ import java.util.Collections;
 @Subject("the minimum value of #listQuestion")
 public class MinQuestion<T extends Object & Comparable<? super T>> implements Question<T> {
 
-    private final Question<Collection<T>> listQuestion;
+    private final Question<? extends Collection<T>> listQuestion;
 
-    public MinQuestion(Question<Collection<T>> listQuestion) {
+    public MinQuestion(Question<? extends Collection<T>> listQuestion) {
         this.listQuestion = listQuestion;
     }
 

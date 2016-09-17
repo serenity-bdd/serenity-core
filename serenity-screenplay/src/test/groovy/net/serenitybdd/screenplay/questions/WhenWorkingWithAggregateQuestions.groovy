@@ -6,7 +6,7 @@ import spock.lang.Specification
 
 class WhenWorkingWithAggregateQuestions extends Specification {
 
-    def "counting the number of items in a list"() {
+    def "counting the number of items in a set"() {
         given:
             Actor tracy = Actor.named("Tracy")
 
@@ -19,6 +19,22 @@ class WhenWorkingWithAggregateQuestions extends Specification {
             }
         then:
             AggregateQuestions.theTotalNumberOf(whatColours).answeredBy(tracy) == 3
+
+    }
+
+    def "counting the number of items in a list"() {
+        given:
+        Actor tracy = Actor.named("Tracy")
+
+        when:
+        Question<List<String>> whatColours = new Question<List<String>>() {
+            @Override
+            List<String> answeredBy(Actor actor) {
+                return ["Red","Blue","Green"]
+            }
+        }
+        then:
+        AggregateQuestions.theTotalNumberOf(whatColours).answeredBy(tracy) == 3
 
     }
 
@@ -93,14 +109,14 @@ class WhenWorkingWithAggregateQuestions extends Specification {
         Actor tracy = Actor.named("Tracy")
 
         when:
-        Question<List<String>> ages = new Question<List<Integer>>() {
+        Question<List<String>> ages = new Question<List<String>>() {
             @Override
-            List<String> answeredBy(Actor actor) {
-                return [10,20,30]
+            ArrayList<String> answeredBy(Actor actor) {
+                return new ArrayList<String>("10","20","30")
             }
         }
         then:
-        AggregateQuestions.theReverse(ages).answeredBy(tracy) == [30,20,10]
+        AggregateQuestions.theReverse(ages).answeredBy(tracy) == ["30","20","10"]
 
     }
 

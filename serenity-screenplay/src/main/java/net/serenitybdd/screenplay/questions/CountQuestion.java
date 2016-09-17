@@ -9,9 +9,9 @@ import java.util.Collection;
 @Subject("the total number of #listQuestion")
 public class CountQuestion implements Question<Integer> {
 
-    private final Question<Collection<String>> listQuestion;
+    private final Question<? extends Collection> listQuestion;
 
-    public CountQuestion(Question<Collection<String>> listQuestion) {
+    public CountQuestion(Question<? extends Collection> listQuestion) {
         this.listQuestion = listQuestion;
     }
 

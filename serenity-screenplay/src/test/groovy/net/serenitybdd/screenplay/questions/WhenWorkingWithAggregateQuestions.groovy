@@ -1,5 +1,7 @@
 package net.serenitybdd.screenplay.questions
 
+import com.beust.jcommander.internal.Lists
+import com.google.common.collect.Sets
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.Question
 import spock.lang.Specification
@@ -76,9 +78,9 @@ class WhenWorkingWithAggregateQuestions extends Specification {
         Actor tracy = Actor.named("Tracy")
 
         when:
-        Question<Set<String>> ages = new Question<Set<Integer>>() {
+        Question<Set<Integer>> ages = new Question<Set<Integer>>() {
             @Override
-            Set<String> answeredBy(Actor actor) {
+            Set<Integer> answeredBy(Actor actor) {
                 return [10,20,30]
             }
         }
@@ -92,10 +94,10 @@ class WhenWorkingWithAggregateQuestions extends Specification {
         Actor tracy = Actor.named("Tracy")
 
         when:
-        Question<Set<String>> ages = new Question<Set<Integer>>() {
+        Question<Set<Integer>> ages = new Question<Set<Integer>>() {
             @Override
-            Set<String> answeredBy(Actor actor) {
-                return [10,20,30]
+            Set<Integer> answeredBy(Actor actor) {
+                return Sets.newHashSet(10,20,30)
             }
         }
         then:
@@ -103,6 +105,80 @@ class WhenWorkingWithAggregateQuestions extends Specification {
 
     }
 
+
+    def "getting the sorted items in a list"() {
+        given:
+        Actor tracy = Actor.named("Tracy")
+
+        when:
+        Question<List<String>> ages = new Question<List<String>>() {
+            @Override
+            ArrayList<String> answeredBy(Actor actor) {
+                return Lists.newArrayList("Cat", "Dog", "Alligator")
+            }
+        }
+        then:
+        AggregateQuestions.theSorted(ages).answeredBy(tracy) == ["Alligator","Cat","Dog"]
+
+    }
+
+    def "getting the sorted items using a comparator in a list"() {
+        given:
+        Actor tracy = Actor.named("Tracy")
+
+        when:
+        Question<List<String>> pets = new Question<List<String>>() {
+            @Override
+            ArrayList<String> answeredBy(Actor actor) {
+                return Lists.newArrayList("Cat", "Alligator", "Pigeon")
+            }
+        }
+        then:
+        AggregateQuestions.theSorted(pets, byWordLength()).answeredBy(tracy) == ["Cat", "Pigeon","Alligator"]
+
+    }
+
+    def "getting the max items using a comparator in a list"() {
+        given:
+        Actor tracy = Actor.named("Tracy")
+
+        when:
+        Question<List<String>> pets = new Question<List<String>>() {
+            @Override
+            ArrayList<String> answeredBy(Actor actor) {
+                return Lists.newArrayList("Cat", "Alligator", "Pigeon")
+            }
+        }
+        then:
+        AggregateQuestions.theMaximumOf(pets, byWordLength()).answeredBy(tracy) == "Alligator"
+
+    }
+
+    def "getting the min items using a comparator in a list"() {
+        given:
+        Actor tracy = Actor.named("Tracy")
+
+        when:
+        Question<List<String>> pets = new Question<List<String>>() {
+            @Override
+            ArrayList<String> answeredBy(Actor actor) {
+                return Lists.newArrayList("Cat", "Alligator", "Pigeon")
+            }
+        }
+        then:
+        AggregateQuestions.theMinimumOf(pets, byWordLength()).answeredBy(tracy) == "Cat"
+
+    }
+
+
+    def byWordLength() {
+        new Comparator<String>() {
+            @Override
+            int compare(String o1, String o2) {
+                return Integer.compare(o1.length(),o2.length());
+            }
+        }
+    }
 
     def "getting the reverse of the items in a list"() {
         given:
@@ -112,7 +188,7 @@ class WhenWorkingWithAggregateQuestions extends Specification {
         Question<List<String>> ages = new Question<List<String>>() {
             @Override
             ArrayList<String> answeredBy(Actor actor) {
-                return new ArrayList<String>("10","20","30")
+                return Lists.newArrayList("10", "20", "30")
             }
         }
         then:

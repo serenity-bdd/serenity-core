@@ -7,8 +7,8 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.safari.SafariDriver;
 
 public class InternetExplorerDriverBuilder implements DriverBuilder {
 
@@ -27,7 +27,7 @@ public class InternetExplorerDriverBuilder implements DriverBuilder {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
-        SafariDriver driver = new SafariDriver(enhancer.enhanced(DesiredCapabilities.internetExplorer()));
+        InternetExplorerDriver driver = new InternetExplorerDriver(enhancer.enhanced(DesiredCapabilities.internetExplorer()));
         driverProperties.registerCapabilities("iexplorer", driver.getCapabilities());
         return driver;
     }

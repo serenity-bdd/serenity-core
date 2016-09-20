@@ -163,8 +163,7 @@ public class WhenDescribingStepsUsingAnnotations {
                 new Object[] {"Joe"})
                 .withDisplayedFields(ImmutableMap.of("color",(Object)"red", "emptyField", Fields.FieldValue.UNDEFINED));
 
-        AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
-        System.out.println(annotatedStepDescription.getName());
+        AnnotatedStepDescription.from(description);
     }
 
     @Test

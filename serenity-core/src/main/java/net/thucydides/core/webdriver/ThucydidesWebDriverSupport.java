@@ -150,7 +150,6 @@ public class ThucydidesWebDriverSupport {
         if (webdriverManagerIsNotInstantiated()) {
             initialize();
         }
-        LOGGER.debug("Using WebDriver Manager " + webdriverManagerThreadLocal.get());
         return webdriverManagerThreadLocal.get();
     }
 

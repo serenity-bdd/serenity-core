@@ -110,7 +110,6 @@ public abstract class BaseRequirementsService implements RequirementsService {
         for (Requirement requirement : requirements) {
             List<Requirement> requirementPath = ImmutableList.of(requirement);
             requirementAncestors.put(requirement, ImmutableList.of(requirement));
-            LOGGER.debug("Requirement ancestors for:" + requirement + " = " + requirementPath);
             indexChildRequirements(requirementPath, requirement.getChildren());
         }
     }
@@ -121,7 +120,6 @@ public abstract class BaseRequirementsService implements RequirementsService {
             List<Requirement> requirementPath = newArrayList(ancestors);
             requirementPath.add(requirement);
             requirementAncestors.put(requirement, ImmutableList.copyOf(requirementPath));
-            LOGGER.debug("Requirement ancestors for:" + requirement + " = " + requirementPath);
             indexChildRequirements(requirementPath, requirement.getChildren());
         }
     }

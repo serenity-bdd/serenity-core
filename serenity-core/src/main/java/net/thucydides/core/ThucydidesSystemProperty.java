@@ -63,6 +63,11 @@ public enum ThucydidesSystemProperty {
     WEBDRIVER_CHROME_DRIVER,
 
     /**
+     * Path to the Chrome binary, if it is not on the system path.
+     */
+    WEBDRIVER_CHROME_BINARY,
+
+    /**
      * A unique identifier for the project under test, used to record test statistics.
      */
     THUCYDIDES_PROJECT_KEY,

@@ -20,7 +20,9 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     public DesiredCapabilities getCapabilities() {
         DesiredCapabilities capabilities = DesiredCapabilities.chrome();
         String chromeSwitches = environmentVariables.getProperty(ThucydidesSystemProperty.CHROME_SWITCHES);
-        capabilities.setCapability(ChromeOptions.CAPABILITY, optionsFromSwitches(chromeSwitches));
+        ChromeOptions chromeOptions = optionsFromSwitches(chromeSwitches);
+        updateChromeBinaryIfSpecified(chromeOptions);
+        capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
         capabilities.setCapability("chrome.switches", chromeSwitches);
         return capabilities;
     }
@@ -35,4 +37,12 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
         }
         return options;
     }
+
+    private void updateChromeBinaryIfSpecified(ChromeOptions options) {
+        String chromeBinary = environmentVariables.getProperty(ThucydidesSystemProperty.WEBDRIVER_CHROME_BINARY);
+        if (StringUtils.isNotEmpty(chromeBinary)) {
+            options.setBinary(chromeBinary);
+        }
+    }
+
 }

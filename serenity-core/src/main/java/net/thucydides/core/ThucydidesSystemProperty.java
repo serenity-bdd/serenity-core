@@ -58,6 +58,11 @@ public enum ThucydidesSystemProperty {
     WEBDRIVER_REMOTE_OS,
 
     /**
+     * Path to the Internet Explorer driver, if it is not on the system path.
+     */
+    WEBDRIVER_IE_DRIVER,
+
+    /**
      * Path to the Chrome driver, if it is not on the system path.
      */
     WEBDRIVER_CHROME_DRIVER,

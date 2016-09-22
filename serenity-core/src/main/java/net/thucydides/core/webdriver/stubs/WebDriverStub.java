@@ -1,12 +1,12 @@
 package net.thucydides.core.webdriver.stubs;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class WebDriverStub implements WebDriver {
     @Override
@@ -15,12 +15,12 @@ public class WebDriverStub implements WebDriver {
 
     @Override
     public String getCurrentUrl() {
-        return null;
+        return StringUtils.EMPTY;
     }
 
     @Override
     public String getTitle() {
-        return null;
+        return StringUtils.EMPTY;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class WebDriverStub implements WebDriver {
 
     @Override
     public String getPageSource() {
-        return null;
+        return StringUtils.EMPTY;
     }
 
     @Override
@@ -50,17 +50,17 @@ public class WebDriverStub implements WebDriver {
 
     @Override
     public Set<String> getWindowHandles() {
-        return null;
+        return new HashSet<>();
     }
 
     @Override
     public String getWindowHandle() {
-        return null;
+        return StringUtils.EMPTY;
     }
 
     @Override
     public TargetLocator switchTo() {
-        return null;
+        return new TargetLocatorStub(this);
     }
 
     @Override

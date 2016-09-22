@@ -10,29 +10,26 @@ public class XPathOrCssTarget extends Target {
 
     private final String cssOrXPathSelector;
 
-    public XPathOrCssTarget(String targetElementName, String cssOrXPathSelector) {
-        super(targetElementName);
+    public XPathOrCssTarget(String targetElementName, String cssOrXPathSelector, IFrame iFrame) {
+        super(targetElementName, iFrame);
         this.cssOrXPathSelector = cssOrXPathSelector;
     }
 
     public WebElementFacade resolveFor(Actor theActor) {
-        TargetResolver resolver = new TargetResolver(BrowseTheWeb.as(theActor).getDriver());
-        WebElementFacade resolvedTarget = resolver.findBy(cssOrXPathSelector);
-        return resolvedTarget;
+        return new TargetResolver(BrowseTheWeb.as(theActor).getDriver()).findBy(cssOrXPathSelector);
     }
 
     public List<WebElementFacade> resolveAllFor(Actor actor) {
-        TargetResolver resolver = new TargetResolver(BrowseTheWeb.as(actor).getDriver());
-        return resolver.findAll(cssOrXPathSelector);
+        return new TargetResolver(BrowseTheWeb.as(actor).getDriver()).findAll(cssOrXPathSelector);
     }
 
     public Target of(String... parameters) {
         return new XPathOrCssTarget(instantiated(targetElementName, parameters),
-                                    instantiated(cssOrXPathSelector, parameters));
+                                    instantiated(cssOrXPathSelector, parameters), iFrame);
     }
 
     public Target called(String name) {
-        return new XPathOrCssTarget(name, cssOrXPathSelector);
+        return new XPathOrCssTarget(name, cssOrXPathSelector, iFrame);
     }
 
     public String getCssOrXPathSelector() {

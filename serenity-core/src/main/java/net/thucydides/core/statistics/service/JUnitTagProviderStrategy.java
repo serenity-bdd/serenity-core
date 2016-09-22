@@ -22,4 +22,9 @@ public class JUnitTagProviderStrategy implements TagProviderStrategy {
                 new FileSystemRequirementsTagProvider()
         );
     }
+
+    @Override
+    public boolean hasHighPriority() {
+        return false;
+    }
 }

@@ -37,15 +37,28 @@ public class ClasspathTagProviderService implements TagProviderService {
     }
 
     protected Iterable<? extends TagProvider> loadTagProvidersFromPath(String testSource) {
+        Iterable<TagProviderStrategy> tagProviderStrategies = ServiceLoader.load(TagProviderStrategy.class);
+        Iterable<? extends TagProvider> tagProvidersWithHighPriority = tagProvidersWithHighPriority(tagProviderStrategies);
+        if( tagProvidersWithHighPriority != null) {
+            return tagProvidersWithHighPriority;
+        }
         if (testSource == null) {
-            return allKnownTagProviders();// ServiceLoader.load(TagProvider.class);
+            return allKnownTagProviders(tagProviderStrategies);// ServiceLoader.load(TagProvider.class);
         } else {
-            return tagProvidersThatCanProcess(testSource);
+            return tagProvidersThatCanProcess(tagProviderStrategies, testSource);
         }
     }
 
-    private Iterable<? extends TagProvider> tagProvidersThatCanProcess(String testSource) {
-        Iterable<TagProviderStrategy> tagProviderStrategies = ServiceLoader.load(TagProviderStrategy.class);
+    private Iterable<? extends TagProvider> tagProvidersWithHighPriority(Iterable<TagProviderStrategy> tagProviderStrategies) {
+        for (TagProviderStrategy strategy : tagProviderStrategies) {
+            if (strategy.hasHighPriority()) {
+                return strategy.getTagProviders();
+            }
+        }
+        return null;
+    }
+
+    private Iterable<? extends TagProvider> tagProvidersThatCanProcess(Iterable<TagProviderStrategy> tagProviderStrategies,String testSource) {
         for (TagProviderStrategy strategy : tagProviderStrategies) {
             if (strategy.canHandleTestSource(testSource)) {
                 return strategy.getTagProviders();
@@ -54,10 +67,9 @@ public class ClasspathTagProviderService implements TagProviderService {
         return Lists.newArrayList();
     }
 
-    private Iterable<TagProvider> allKnownTagProviders() {
+    private Iterable<TagProvider> allKnownTagProviders(Iterable<TagProviderStrategy> tagProviderStrategies) {
         List<TagProvider> tagProviders = Lists.newArrayList();
 
-        Iterable<TagProviderStrategy> tagProviderStrategies = ServiceLoader.load(TagProviderStrategy.class);
         for (TagProviderStrategy strategy : tagProviderStrategies) {
             tagProviders.addAll(Lists.newArrayList(strategy.getTagProviders()));
         }

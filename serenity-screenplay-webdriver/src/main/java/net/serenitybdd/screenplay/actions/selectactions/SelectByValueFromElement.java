@@ -14,9 +14,9 @@ public class SelectByValueFromElement implements Interaction {
         this.value = value;
     }
 
-    @Step("{0} clicks on #target")
+    @Step("{0} selects #value in #target")
     public <T extends Actor> void performAs(T theUser) {
-        element.selectByVisibleText(value);
+        element.selectByValue(value);
     }
 
 

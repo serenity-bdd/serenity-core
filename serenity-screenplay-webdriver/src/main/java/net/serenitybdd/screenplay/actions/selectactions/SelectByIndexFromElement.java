@@ -14,7 +14,7 @@ public class SelectByIndexFromElement implements Interaction {
         this.index = index;
     }
 
-    @Step("{0} clicks on #target")
+    @Step("{0} selects index #index")
     public <T extends Actor> void performAs(T theUser) {
         element.selectByIndex(index);
     }

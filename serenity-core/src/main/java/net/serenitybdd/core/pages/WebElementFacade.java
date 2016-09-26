@@ -77,6 +77,14 @@ public interface WebElementFacade extends WebElement, WrapsElement, Locatable, W
 
     public void setWindowFocus();
 
+    public <T extends WebElementFacade> T deselectAll();
+
+    public <T extends WebElementFacade> T deselectByVisibleText(String label);
+
+    public <T extends WebElementFacade> T deselectByValue(String value);
+
+    public <T extends WebElementFacade> T deselectByIndex(int indexValue);
+
     public <T extends WebElementFacade> T selectByVisibleText(String label);
 
     public <T extends WebElementFacade> T selectByValue(String value);

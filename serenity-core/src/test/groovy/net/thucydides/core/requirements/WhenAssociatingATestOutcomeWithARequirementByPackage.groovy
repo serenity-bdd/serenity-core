@@ -38,7 +38,7 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
             List<Requirement> requirements = capabilityProvider.getRequirements()
             Requirement fruit = requirements.find {it.name.equalsIgnoreCase("Fruit")}
             Requirement apples = fruit.getChildren().find {it.name.equalsIgnoreCase("Apples")}
-            Requirement buyingApples = apples.getChildren().find {it.name.equalsIgnoreCase("Buying apples")}
+            Requirement buyingApples = apples.getChildren().get(0)
         then:
             fruit.type == "capability"
             apples.type == "feature"

@@ -36,15 +36,17 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
 
         when: "We load the requirements structure"
             List<Requirement> requirements = capabilityProvider.getRequirements()
+
+            assert requirements != null
+
             Requirement fruit = requirements.find {it.name == "Fruit"}
-            Requirement apples = fruit.getChildren().find {it.name == "Apples"}
-            Requirement buyingApples = apples.getChildren().find {it.name == "Buying apples"}
-            assert requirements == null
+            Requirement pears = fruit.getChildren().find {it.name == "Pears"}
+            Requirement pickingPears = pears.getChildren().find {it.name == "Picking pears"}
 
         then:
             fruit.type == "capability"
-            apples.type == "feature"
-            buyingApples.type == "story"
+            pears.type == "feature"
+            pickingPears.type == "story"
     }
 
     def "Should read requirements structure from a one-level package directory structure"() {

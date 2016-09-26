@@ -1,7 +1,5 @@
 package net.thucydides.core.requirements.model;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 public class CustomFieldValue {
 
     private String name;
@@ -37,12 +35,14 @@ public class CustomFieldValue {
         return (renderedText != null) ? renderedText : text;
     }
 
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("name", name)
-                .append("text", text)
-                .append("renderedText", renderedText)
-                .toString();
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", text='").append(text).append('\'');
+        sb.append(", renderedText='").append(renderedText).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

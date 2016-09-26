@@ -23,8 +23,8 @@ import java.util.*;
 
 import static java.lang.Math.max;
 import static net.thucydides.core.requirements.annotations.ClassInfoAnnotations.theClassDefinedIn;
-import static net.thucydides.core.requirements.classpath.NonLeafRequirementsAdder.addParentsOf;
 import static net.thucydides.core.requirements.classpath.LeafRequirementAdder.addLeafRequirementDefinedIn;
+import static net.thucydides.core.requirements.classpath.NonLeafRequirementsAdder.addParentsOf;
 
 /**
  * Load a set of requirements (epics/themes,...) from the directory structure.

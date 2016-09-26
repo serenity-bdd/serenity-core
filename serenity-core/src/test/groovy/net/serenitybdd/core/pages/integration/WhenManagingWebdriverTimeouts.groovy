@@ -395,7 +395,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
     // fixme
     def "The withTimeoutOf() method can be used to override the global timeouts for elements"() {
         given:
-            def page = openStaticPageWith(["webdriver.timeouts.implicitlywait":"50","webdriver.wait.for.timeout": "50"])
+            def page = openStaticPageWith(["webdriver .timeouts.implicitlywait":"50","webdriver.wait.for.timeout": "50"])
         when:
             page.withTimeoutOf(10, SECONDS).waitFor(By.cssSelector("#city"))
         then:

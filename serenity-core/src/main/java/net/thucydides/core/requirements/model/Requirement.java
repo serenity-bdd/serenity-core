@@ -259,6 +259,7 @@ public class Requirement implements Comparable {
                 ", type='" + type + '\'' + " parent = '" + parent + '\'' +
                 ", cardNumber='" + cardNumber + '\'' +
                 ", narrative ='" + narrative + '\'' +
+                ", children ='" + children + '\'' +
                 '}';
     }
 

@@ -28,7 +28,7 @@ class WhenLoadingRequirementsFromAPackageStructure extends Specification {
         when: "We load the available requirements"
             def capabilities = capabilityProvider.getRequirements();
             def capabilityNames = capabilities.collect {it.name}
-            def capabilitiyTexts = capabilities.collect {it.narrative.renderedText}
+            def capabilitiyTexts = capabilities.collect {it.narrative.renderedText.replace("\r\n","\n").replace("\r","\n")}
         then:
             capabilityNames == ["Apples", "Nice zucchinis", "Potatoes"]
             capabilitiyTexts == ["apples\nThis is a narrative\nFor apples", "This is a narrative\nFor Nice Zuchinnis",

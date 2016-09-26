@@ -13,7 +13,7 @@ import java.io.File;
 public class NarrativeText {
 
     public static String definedIn(String fullPath, String type) {
-        String narrativePath = (fullPath + File.separator + "narrative").replaceAll("\\.", File.separator) + ".txt";
+        String narrativePath = (fullPath + File.separator + "narrative").replace("\\.", File.separator) + ".txt";
         try {
             String narrativeFilePath = Resources.getResource(narrativePath).getFile();
             if (new File(narrativeFilePath).exists()) {

@@ -37,8 +37,6 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
         when: "We load the requirements structure"
             List<Requirement> requirements = capabilityProvider.getRequirements()
 
-            assert requirements == null
-
             Requirement fruit = requirements.find {it.name == "Fruit"}
             Requirement pears = fruit.getChildren().find {it.name == "Pears"}
             Requirement pickingPears = pears.getChildren().find {it.name == "Picking pears"}

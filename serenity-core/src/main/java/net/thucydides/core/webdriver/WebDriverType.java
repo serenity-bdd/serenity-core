@@ -1,13 +1,13 @@
 package net.thucydides.core.webdriver;
 
-import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileDriver;
 import org.openqa.selenium.WebDriver;
 
 public class WebDriverType {
     public static boolean isMobile(WebDriver driver) {
         if(driver instanceof WebDriverFacade){
-            return ((WebDriverFacade)driver).getDriverClass().isAssignableFrom(AppiumDriver.class);
+            return (MobileDriver.class.isAssignableFrom(((WebDriverFacade) driver).getDriverClass()));
         }
-        return (driver.getClass().isAssignableFrom(AppiumDriver.class));
+        return (driver instanceof MobileDriver);
     }
 }

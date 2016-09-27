@@ -118,6 +118,9 @@ public class SerenityWebdriverManager implements WebdriverManager {
         if (driver instanceof WebDriverFacade) {
             return ((WebDriverFacade) driver).getDriverName();
         }
+        if (driver instanceof RemoteWebDriver) {
+            return ((RemoteWebDriver) driver).getCapabilities().getBrowserName();
+        }
         return driver.toString();
     }
 

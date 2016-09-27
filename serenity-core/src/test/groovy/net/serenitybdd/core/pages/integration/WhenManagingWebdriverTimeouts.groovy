@@ -6,6 +6,7 @@ import net.thucydides.core.steps.ExecutedStepDescription
 import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.steps.StepFailure
 import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.util.SystemEnvironmentVariables
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.WebDriverFactory
@@ -15,11 +16,11 @@ import net.thucydides.core.webdriver.exceptions.ElementShouldBeInvisibleExceptio
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.TimeoutException
-import org.openqa.selenium.phantomjs.PhantomJSDriver
-import spock.lang.Ignore
-import spock.lang.Specification
-import spock.lang.Timeout
-import spock.lang.Unroll
+import org.openqa.selenium.WebDriver
+import org.openqa.selenium.chrome.ChromeDriverService
+import org.openqa.selenium.remote.DesiredCapabilities
+import org.openqa.selenium.remote.RemoteWebDriver
+import spock.lang.*
 
 import java.util.concurrent.TimeUnit
 
@@ -38,13 +39,38 @@ import static java.util.concurrent.TimeUnit.SECONDS
  */
 class WhenManagingWebdriverTimeouts extends Specification {
 
+    WebDriver driver
+
+    @Shared ChromeDriverService chromeDriverService;
+
+    def setupSpec() {
+        chromeDriverService = new ChromeDriverService.Builder()
+                .usingAnyFreePort()
+                .build();
+        chromeDriverService.start()
+    }
+
+    def cleanupSpec() {
+        chromeDriverService.stop()
+    }
+
     def setup() {
         StepEventBus.eventBus.clear()
+        driver = null
     }
 
     def cleanup() {
         SerenityWebdriverManager.inThisTestThread().closeAllDrivers();
+        if (driver) {
+            driver.quit();
+        }
     }
+
+    public WebDriver newDriver() {
+        driver = new RemoteWebDriver(chromeDriverService.getUrl(), DesiredCapabilities.chrome());
+        return driver
+    }
+
 
     //
     // IMPLICIT WAITS
@@ -80,14 +106,16 @@ class WhenManagingWebdriverTimeouts extends Specification {
         for(String key : variables.keySet()) {
             environmentVariables.setProperty(key, variables[key]);
         }
-        def driver = new WebDriverFacade(PhantomJSDriver.class, new WebDriverFactory(), environmentVariables); // HtmlUnitDriver();
-        def page = new StaticSitePage(driver, environmentVariables)
+        WebDriverFacade driverFacade = new WebDriverFacade(newDriver(), new WebDriverFactory(), environmentVariables);
+        def page = new StaticSitePage(driverFacade, environmentVariables)
         page.open()
         return page
     }
 
     private StaticSitePage openStaticPage() {
-        def driver = new WebDriverFacade(PhantomJSDriver.class, new WebDriverFactory()); // HtmlUnitDriver();
+//        def page = new StaticSitePage(newDriver())
+//        driver = new WebDriverFacade(ChromeDriver.class, new WebDriverFactory()); // HtmlUnitDriver();
+        def driver = new WebDriverFacade(newDriver(), new WebDriverFactory(), new SystemEnvironmentVariables()); // HtmlUnitDriver();
         def page = new StaticSitePage(driver)
         page.open()
         return page

@@ -38,8 +38,8 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
             List<Requirement> requirements = capabilityProvider.getRequirements()
 
             Requirement fruit = requirements.find {it.name == "Fruit"}
-            Requirement pears = fruit.getChildren().find {it.name == "Pears"}
-            Requirement pickingPears = pears.getChildren().find {it.name == "Picking pears"}
+            Requirement pears = fruit.getChildren().find {it.name == "Apples"}
+            Requirement pickingPears = pears.getChildren().find {it.name == "Picking apples"}
 
         then:
             fruit.type == "capability"

@@ -35,4 +35,7 @@ public class RequirementBuilderNameStep {
             return new RequirementBuilderTypeStep(this, type);
         }
 
+    public Requirement withTypeOf(String type) {
+        return new Requirement(name, displayName, cardNumber, parent, type, new CustomFieldValue("Narrative", ""));
     }
+}

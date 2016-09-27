@@ -353,6 +353,11 @@ public class Requirement implements Comparable {
         return ImmutableList.copyOf(mergedChildren);
     }
 
+    public Requirement withNarrative(String narrativeText) {
+        return new Requirement(name, displayName, cardNumber, parent, type, new CustomFieldValue("Narrative", narrativeText));
+    }
+
+
     public static class CustomFieldSetter {
 
         Requirement requirement;

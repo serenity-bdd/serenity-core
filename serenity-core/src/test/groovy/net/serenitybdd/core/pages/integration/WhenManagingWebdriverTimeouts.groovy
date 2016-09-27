@@ -39,9 +39,9 @@ import static java.util.concurrent.TimeUnit.SECONDS
  */
 class WhenManagingWebdriverTimeouts extends Specification {
 
-    WebDriver driver
-
     @Shared ChromeDriverService chromeDriverService;
+
+    WebDriver driver
 
     def setupSpec() {
         chromeDriverService = new ChromeDriverService.Builder()
@@ -54,6 +54,11 @@ class WhenManagingWebdriverTimeouts extends Specification {
         chromeDriverService.stop()
     }
 
+    def WebDriver newDriver() {
+        driver = new RemoteWebDriver(chromeDriverService.getUrl(), DesiredCapabilities.chrome());
+        return driver
+    }
+
     def setup() {
         StepEventBus.eventBus.clear()
         driver = null
@@ -64,11 +69,6 @@ class WhenManagingWebdriverTimeouts extends Specification {
         if (driver) {
             driver.quit();
         }
-    }
-
-    public WebDriver newDriver() {
-        driver = new RemoteWebDriver(chromeDriverService.getUrl(), DesiredCapabilities.chrome());
-        return driver
     }
 
 

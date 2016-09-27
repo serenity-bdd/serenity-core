@@ -72,15 +72,6 @@ public class LeafRequirementAdder {
         return newRequirement;
     }
 
-    private Optional<Requirement> findMatchingRequirement(Collection<Requirement> allRequirements, Requirement newRequirement) {
-        for(Requirement requirement : allRequirements) {
-            if (requirement.matches(newRequirement)) {
-                return Optional.of(requirement);
-            }
-        }
-        return Optional.absent();
-    }
-
     private Requirement requirementDefinedByClassNameAt(String path) {
 
         List<String> pathElements = elementsOf(path, rootPackage);
@@ -124,6 +115,9 @@ public class LeafRequirementAdder {
 
         Optional<Requirement> knownMatchingRequirement = findMatchingRequirementWithName(knownRequirements, featureName, type);
 
+        if (knownMatchingRequirement.isPresent()) {
+            knownRequirements.remove(knownMatchingRequirement);
+        }
         return knownMatchingRequirement.or(Requirement.named(featureName).withTypeOf(type))
                                 .withNarrative(PackageInfoNarrative.text().definedInPath(path).or(""))
                                 .withParent(parent);

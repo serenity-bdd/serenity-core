@@ -39,7 +39,7 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
 
             Requirement fruit = requirements.find {it.name == "Fruit"}
             Requirement apples = fruit.getChildren().find {it.name == "Apples"}
-            Requirement pickingApple = pears.getChildren().find {it.name == "Picking apples"}
+            Requirement pickingApple = apples.getChildren().find {it.name == "Picking apples"}
 
         then:
             fruit.type == "capability"

@@ -354,7 +354,8 @@ public class Requirement implements Comparable {
     }
 
     public Requirement withNarrative(String narrativeText) {
-        return new Requirement(name, displayName, cardNumber, parent, type, new CustomFieldValue("Narrative", narrativeText));
+        return new Requirement(this.name, this.displayName, this.cardNumber, parent, this.type, new CustomFieldValue("Narrative", narrativeText),
+                               children, examples, releaseVersions, customFields, featureFileName);
     }
 
 

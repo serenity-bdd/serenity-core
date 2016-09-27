@@ -38,13 +38,13 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
             List<Requirement> requirements = capabilityProvider.getRequirements()
 
             Requirement fruit = requirements.find {it.name == "Fruit"}
-            Requirement pears = fruit.getChildren().find {it.name == "Apples"}
-            Requirement pickingPears = pears.getChildren().find {it.name == "Picking apples"}
+            Requirement apples = fruit.getChildren().find {it.name == "Apples"}
+            Requirement pickingApple = pears.getChildren().find {it.name == "Picking apples"}
 
         then:
             fruit.type == "capability"
-            pears.type == "feature"
-            pickingPears.type == "story"
+            apples.type == "feature"
+            pickingApple.type == "story"
     }
 
     def "Should read requirements structure from a one-level package directory structure"() {

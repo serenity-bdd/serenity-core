@@ -1,6 +1,7 @@
 package net.serenitybdd.core.pages.integration
 
 import net.serenitybdd.core.pages.WebElementFacade
+import net.serenitybdd.core.support.ChromeService
 import net.thucydides.core.pages.integration.StaticSitePage
 import net.thucydides.core.steps.ExecutedStepDescription
 import net.thucydides.core.steps.StepEventBus
@@ -17,9 +18,6 @@ import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.TimeoutException
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.chrome.ChromeDriverService
-import org.openqa.selenium.remote.DesiredCapabilities
-import org.openqa.selenium.remote.RemoteWebDriver
 import spock.lang.*
 
 import java.util.concurrent.TimeUnit
@@ -39,23 +37,21 @@ import static java.util.concurrent.TimeUnit.SECONDS
  */
 class WhenManagingWebdriverTimeouts extends Specification {
 
-    @Shared ChromeDriverService chromeDriverService;
+    @Shared ChromeService chromeService;
 
     WebDriver driver
 
     def setupSpec() {
-        chromeDriverService = new ChromeDriverService.Builder()
-                .usingAnyFreePort()
-                .build();
-        chromeDriverService.start()
+        chromeService = new ChromeService()
+        chromeService.start()
     }
 
     def cleanupSpec() {
-        chromeDriverService.stop()
+        chromeService.stop()
     }
 
     def WebDriver newDriver() {
-        driver = new RemoteWebDriver(chromeDriverService.getUrl(), DesiredCapabilities.chrome());
+        driver = chromeService.newDriver();
         return driver
     }
 
@@ -113,8 +109,6 @@ class WhenManagingWebdriverTimeouts extends Specification {
     }
 
     private StaticSitePage openStaticPage() {
-//        def page = new StaticSitePage(newDriver())
-//        driver = new WebDriverFacade(ChromeDriver.class, new WebDriverFactory()); // HtmlUnitDriver();
         def driver = new WebDriverFacade(newDriver(), new WebDriverFactory(), new SystemEnvironmentVariables()); // HtmlUnitDriver();
         def page = new StaticSitePage(driver)
         page.open()

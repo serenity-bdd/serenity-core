@@ -1,43 +1,33 @@
 package net.serenitybdd.core.annotations.findby.integration
 
+import net.serenitybdd.core.support.ChromeService
 import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.integration.PageWithFindBys
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.chrome.ChromeDriverService
-import org.openqa.selenium.remote.DesiredCapabilities
-import org.openqa.selenium.remote.RemoteWebDriver
 import spock.lang.Shared
 import spock.lang.Specification
 
 class WhenLocatingWebElementsUsingEnhancedFindBys extends Specification {
-    
-    @Shared ChromeDriverService chromeDriverService;
 
+
+    @Shared ChromeService chromeService;
     WebDriver driver
 
     def setupSpec() {
-        chromeDriverService = new ChromeDriverService.Builder()
-                .usingAnyFreePort()
-                .build();
-        chromeDriverService.start()
-
+        chromeService = new ChromeService()
+        chromeService.start()
         StepEventBus.eventBus.clear()
 
     }
 
     def cleanupSpec() {
-        chromeDriverService.stop()
-    }
-
-    def WebDriver newDriver() {
-        driver = new RemoteWebDriver(chromeDriverService.getUrl(), DesiredCapabilities.chrome());
-        return driver
+        chromeService.stop()
     }
 
     def setup() {
         StepEventBus.eventBus.clear()
-        driver = newDriver()
+        driver = chromeService.newDriver()
     }
 
     def cleanup() {

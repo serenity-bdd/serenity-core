@@ -1,6 +1,7 @@
 package net.thucydides.core.screenshots.integration
 
 import net.serenitybdd.core.Serenity
+import net.serenitybdd.core.support.ChromeService
 import net.thucydides.core.model.TestStep
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource
 import net.thucydides.core.steps.BaseStepListener
@@ -8,9 +9,12 @@ import net.thucydides.core.steps.ExecutedStepDescription
 import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
+import org.openqa.selenium.WebDriver
+import spock.lang.Shared
 import spock.lang.Specification
 
 class WhenTakingScreenshots extends Specification {
@@ -20,8 +24,33 @@ class WhenTakingScreenshots extends Specification {
 
     EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
 
+    @Shared ChromeService chromeService;
+    WebDriver driver
+
+    def setupSpec() {
+        chromeService = new ChromeService()
+        chromeService.start()
+        StepEventBus.eventBus.clear()
+
+    }
+
+    def cleanupSpec() {
+        chromeService.stop()
+    }
+
+    def cleanup() {
+        SerenityWebdriverManager.inThisTestThread().closeAllDrivers();
+        if (driver) {
+            driver.quit();
+        }
+    }
+
+
     def setup() {
         temporaryDirectory = temporaryFolder.newFolder()
+        StepEventBus.eventBus.clear()
+        driver = chromeService.newDriver()
+        ThucydidesWebDriverSupport.useDriver(driver)
     }
 
     def "should take an extra screenshot at any time if requested"() {
@@ -36,7 +65,6 @@ class WhenTakingScreenshots extends Specification {
 
     def "should add screenshots to the current test outcome"() {
         given:
-            ThucydidesWebDriverSupport.initialize("phantomjs")
             ThucydidesWebDriverSupport.getDriver().get("http://localhost")
         and:
             BaseStepListener stepListener = new BaseStepListener(temporaryDirectory)
@@ -50,7 +78,6 @@ class WhenTakingScreenshots extends Specification {
 
     def "should not store HTML source by default"() {
         given:
-            ThucydidesWebDriverSupport.initialize("phantomjs")
             ThucydidesWebDriverSupport.getDriver().get("http://localhost")
         and:
             BaseStepListener stepListener = new BaseStepListener(temporaryDirectory)
@@ -66,7 +93,6 @@ class WhenTakingScreenshots extends Specification {
 
     def "identical screenshots should not be duplicated within steps"() {
         given:
-            ThucydidesWebDriverSupport.initialize("phantomjs")
             ThucydidesWebDriverSupport.getDriver().get("http://localhost")
         and:
             BaseStepListener stepListener = new BaseStepListener(temporaryDirectory)

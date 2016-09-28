@@ -68,9 +68,8 @@ public class ResourceList {
     }
 
     private boolean isASerenityResourceJarFile(String file) {
-        return file.contains("serenity-core");
+        return file.contains("serenity-core") || file.contains("serenity-report-resources") ;
     }
-
 
     private Collection<String> systemPropertiesClasspathElements() {
         final ArrayList<String> resources = new ArrayList<>();

@@ -1,9 +1,10 @@
 package net.thucydides.core.steps;
 
-        import com.google.common.base.Optional;
+import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -449,6 +450,22 @@ public class StepEventBus {
 
     public void suspendTest() {
         suspendedTest = true;
+    }
+
+    public void suspendTest(TestResult result) {
+        suspendTest();
+        switch (result) {
+            case PENDING:
+                testPending();
+                break;
+            case IGNORED:
+                testIgnored();
+                break;
+            case SKIPPED:
+                testSkipped();
+                break;
+        }
+
     }
 
     public boolean currentTestIsSuspended() {

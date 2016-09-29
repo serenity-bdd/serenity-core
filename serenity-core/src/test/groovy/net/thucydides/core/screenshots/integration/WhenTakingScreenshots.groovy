@@ -17,6 +17,8 @@ import org.openqa.selenium.WebDriver
 import spock.lang.Shared
 import spock.lang.Specification
 
+import static net.thucydides.core.webdriver.StaticTestSite.fileInClasspathCalled
+
 class WhenTakingScreenshots extends Specification {
     @Rule
     TemporaryFolder temporaryFolder
@@ -45,67 +47,71 @@ class WhenTakingScreenshots extends Specification {
         }
     }
 
+    String staticSite;
 
     def setup() {
         temporaryDirectory = temporaryFolder.newFolder()
         StepEventBus.eventBus.clear()
         driver = chromeService.newDriver()
         ThucydidesWebDriverSupport.useDriver(driver)
+
+        staticSite = "file://" + fileInClasspathCalled("static-site/static-index.html").getAbsolutePath();
+
     }
 
     def "should take an extra screenshot at any time if requested"() {
         given:
-            def baseStepListener = Mock(BaseStepListener)
-            StepEventBus.eventBus.registerListener(baseStepListener)
+        def baseStepListener = Mock(BaseStepListener)
+        StepEventBus.eventBus.registerListener(baseStepListener)
         when: "we ask for a screenshot at an arbitrary point in a step"
-            Serenity.takeScreenshot()
+        Serenity.takeScreenshot()
         then: "a screenshot should always be recorded"
-            1 * baseStepListener.takeScreenshot()
+        1 * baseStepListener.takeScreenshot()
     }
 
     def "should add screenshots to the current test outcome"() {
         given:
-            ThucydidesWebDriverSupport.getDriver().get("http://localhost")
+        ThucydidesWebDriverSupport.getDriver().get(staticSite)
         and:
-            BaseStepListener stepListener = new BaseStepListener(temporaryDirectory)
-            stepListener.testStarted("someTest")
-            stepListener.stepStarted(ExecutedStepDescription.withTitle("some step"))
+        BaseStepListener stepListener = new BaseStepListener(temporaryDirectory)
+        stepListener.testStarted("someTest")
+        stepListener.stepStarted(ExecutedStepDescription.withTitle("some step"))
         when:
-            stepListener.takeScreenshot()
+        stepListener.takeScreenshot()
         then:
-            stepListener.getTestOutcomes().get(0).getScreenshots().size() == 1
+        stepListener.getTestOutcomes().get(0).getScreenshots().size() == 1
     }
 
     def "should not store HTML source by default"() {
         given:
-            ThucydidesWebDriverSupport.getDriver().get("http://localhost")
+        ThucydidesWebDriverSupport.getDriver().get(staticSite)
         and:
-            BaseStepListener stepListener = new BaseStepListener(temporaryDirectory)
-            stepListener.testStarted("someTest")
+        BaseStepListener stepListener = new BaseStepListener(temporaryDirectory)
+        stepListener.testStarted("someTest")
         when:
-            stepListener.stepStarted(ExecutedStepDescription.withTitle("some step"))
-            stepListener.stepFinished()
+        stepListener.stepStarted(ExecutedStepDescription.withTitle("some step"))
+        stepListener.stepFinished()
         then:
-            TestStep firstStep = stepListener.getTestOutcomes().get(0).getTestSteps().get(0);
-            ScreenshotAndHtmlSource screenshot = firstStep.getScreenshots().get(0);
-            !screenshot.getHtmlSource().isPresent()
+        TestStep firstStep = stepListener.getTestOutcomes().get(0).getTestSteps().get(0);
+        ScreenshotAndHtmlSource screenshot = firstStep.getScreenshots().get(0);
+        !screenshot.getHtmlSource().isPresent()
     }
 
     def "identical screenshots should not be duplicated within steps"() {
         given:
-            ThucydidesWebDriverSupport.getDriver().get("http://localhost")
+        ThucydidesWebDriverSupport.getDriver().get(staticSite)
         and:
-            BaseStepListener stepListener = new BaseStepListener(temporaryDirectory)
-            stepListener.testStarted("someTest")
+        BaseStepListener stepListener = new BaseStepListener(temporaryDirectory)
+        stepListener.testStarted("someTest")
         when:
 
-            stepListener.stepStarted(ExecutedStepDescription.withTitle("step 1"))
-            stepListener.takeScreenshot();
-            stepListener.stepFinished()
+        stepListener.stepStarted(ExecutedStepDescription.withTitle("step 1"))
+        stepListener.takeScreenshot();
+        stepListener.stepFinished()
 
         then:
-            TestStep firstStep = stepListener.getTestOutcomes().get(0).getTestSteps().get(0);
-            firstStep.getScreenshots().size() == 1
+        TestStep firstStep = stepListener.getTestOutcomes().get(0).getTestSteps().get(0);
+        firstStep.getScreenshots().size() == 1
     }
 
 

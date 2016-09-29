@@ -1,7 +1,7 @@
 package net.thucydides.core.pages.integration;
 
 
-import net.serenitybdd.core.support.ManagedDriverService;
+import net.serenitybdd.core.support.ChromeService;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.StaticTestSite;
 import org.junit.After;
@@ -19,11 +19,11 @@ public class FluentElementAPITestsBaseClass {
     private static WebDriver driver;
     private static StaticSitePage staticSitePage;
 
-    private static ManagedDriverService chromeService;
+    private static ChromeService chromeService;
 
     @BeforeClass
     public static void openBrowsers() throws IOException {
-        chromeService = new ManagedDriverService();
+        chromeService = new ChromeService();
         chromeService.start();
         StepEventBus.getEventBus().clear();
 

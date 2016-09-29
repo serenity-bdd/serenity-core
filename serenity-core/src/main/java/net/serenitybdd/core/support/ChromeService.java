@@ -1,6 +1,8 @@
 package net.serenitybdd.core.support;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class ChromeService extends ManagedDriverService{
     public ChromeService() {
@@ -8,4 +10,8 @@ public class ChromeService extends ManagedDriverService{
                 .usingAnyFreePort()
                 .build());
     }
+    public WebDriver newDriver() {
+        return newDriver(DesiredCapabilities.chrome());
+    }
+
 }

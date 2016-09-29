@@ -1472,18 +1472,14 @@ public class TestOutcome {
         if (tags == null) {
             tags = getTagsUsingTagProviders(getTagProviderService().getTagProviders(getTestSource()));
         }
-        Set<TestTag> augmentedTags = Sets.newHashSet(tags);
-        augmentedTags.addAll(getFeatureTag().asSet());
-        addUserStoryFeatureTo(augmentedTags);
-        return ImmutableSet.copyOf(augmentedTags);//tags);
+        return ImmutableSet.copyOf(tags);
     }
 
-    private void addUserStoryFeatureTo(Set<TestTag> augmentedTags) {
+    public void addUserStoryFeatureTo(Set<TestTag> augmentedTags) {
         if (userStory != null && userStory.getFeature() != null) {
             augmentedTags.add(TestTag.withName(userStory.getFeature().getName()).andType("feature"));
         }
     }
-
 
     private Set<TestTag> getTagsUsingTagProviders(List<TagProvider> tagProviders) {
         Set<TestTag> tags = Sets.newHashSet();

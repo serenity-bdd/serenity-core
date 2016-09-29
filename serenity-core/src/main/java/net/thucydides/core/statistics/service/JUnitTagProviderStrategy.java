@@ -19,7 +19,8 @@ public class JUnitTagProviderStrategy implements TagProviderStrategy {
         return ImmutableSet.of(
                 new PackageRequirementsTagProvider(),
                 new AnnotationBasedTagProvider(),
-                new FileSystemRequirementsTagProvider()
+                new FileSystemRequirementsTagProvider(),
+                new FeatureStoryTagProvider()
         );
     }
 

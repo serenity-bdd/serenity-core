@@ -1,6 +1,7 @@
 package net.thucydides.core.screenshots.integration
 
 import net.serenitybdd.core.Serenity
+import net.serenitybdd.core.support.ChromeService
 import net.serenitybdd.core.support.ManagedDriverService
 import net.thucydides.core.model.TestStep
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource
@@ -30,7 +31,7 @@ class WhenTakingScreenshots extends Specification {
     WebDriver driver
 
     def setupSpec() {
-        chromeService = new ManagedDriverService()
+        chromeService = new ChromeService()
         chromeService.start()
         StepEventBus.eventBus.clear()
 

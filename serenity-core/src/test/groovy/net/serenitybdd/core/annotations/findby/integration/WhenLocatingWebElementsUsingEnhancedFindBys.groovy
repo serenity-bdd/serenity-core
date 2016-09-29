@@ -1,5 +1,6 @@
 package net.serenitybdd.core.annotations.findby.integration
 
+import net.serenitybdd.core.support.ChromeService
 import net.serenitybdd.core.support.ManagedDriverService
 import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.webdriver.SerenityWebdriverManager
@@ -15,7 +16,7 @@ class WhenLocatingWebElementsUsingEnhancedFindBys extends Specification {
     WebDriver driver
 
     def setupSpec() {
-        chromeService = new ManagedDriverService()
+        chromeService = new ChromeService()
         chromeService.start()
         StepEventBus.eventBus.clear()
 

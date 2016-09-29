@@ -2,17 +2,12 @@ package net.thucydides.core.pages.integration;
 
 
 import net.thucydides.core.pages.components.HtmlTable;
-import net.thucydides.core.webdriver.WebDriverFacade;
-import net.thucydides.core.webdriver.WebDriverFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 import java.util.List;
 import java.util.Map;
@@ -24,20 +19,11 @@ import static org.hamcrest.Matchers.*;
 
 public class ReadingTableData extends FluentElementAPITestsBaseClass {
 
-    static WebDriver driver;
-    static StaticSitePage page;
+     StaticSitePage page;
 
-    @BeforeClass
-    public static void openStaticPage() {
-        driver = new WebDriverFacade(PhantomJSDriver.class, new WebDriverFactory());
-        page = new StaticSitePage(driver, 1);
-        page.setWaitForTimeout(500);
-        page.open();
-    }
-
-    @AfterClass
-    public static void closeDriver() {
-        driver.quit();
+    @Before
+    public void openPage() {
+        page = getPage();
     }
 
     @Test

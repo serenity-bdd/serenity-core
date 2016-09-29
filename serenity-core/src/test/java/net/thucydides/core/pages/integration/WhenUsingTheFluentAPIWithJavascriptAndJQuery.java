@@ -3,14 +3,9 @@ package net.thucydides.core.pages.integration;
 
 import net.thucydides.core.webdriver.jquery.ByJQuery;
 import net.thucydides.core.webdriver.jquery.ByJQuerySelector;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
-import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import java.util.List;
 
@@ -18,34 +13,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 
-public class WhenUsingTheFluentAPIWithJavascriptAndJQuery {
+public class WhenUsingTheFluentAPIWithJavascriptAndJQuery extends FluentElementAPITestsBaseClass {
 
-    private static StaticSitePage page;
-    private static WebDriver driver;
-
-    @BeforeClass
-    public static void openDriver() {
-        driver = new PhantomJSDriver();
-        page = new StaticSitePage(driver, 1000);
-        page.open();
-    }
-
-    @AfterClass
-    public static void shutdownDriver() {
-        driver.quit();
-    }
 
     @Test
     public void should_inject_jquery_into_the_page() {
-        WebDriver driver = new PhantomJSDriver();
         getPage().open();
 
         getPage().evaluateJavascript("$('#firstname').focus();");
 
         Boolean jqueryInjected = (Boolean) getPage().evaluateJavascript("return (typeof jQuery === 'function')");
         assertThat(jqueryInjected, is(true));
-
-        driver.quit();
     }
 
     @Test
@@ -99,13 +77,4 @@ public class WhenUsingTheFluentAPIWithJavascriptAndJQuery {
         assertThat(jQuerySelector.toString(), containsString("a[title='Click Me']"));
     }
 
-    public StaticSitePage getPage() {
-        try {
-            page.getTitle();
-        } catch (UnreachableBrowserException e) {
-            driver = new PhantomJSDriver();
-            page = new StaticSitePage(driver, 1000);            
-        }
-        return page;
-    }
 }

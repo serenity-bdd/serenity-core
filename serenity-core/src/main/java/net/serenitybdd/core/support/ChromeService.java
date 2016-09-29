@@ -25,6 +25,10 @@ public class ChromeService {
     }
 
     public WebDriver newDriver() {
-        return new RemoteWebDriver(chromeDriverService.getUrl(), DesiredCapabilities.chrome());
+        return newDriver(DesiredCapabilities.chrome());
+    }
+
+    public WebDriver newDriver(DesiredCapabilities capabilities) {
+        return new RemoteWebDriver(chromeDriverService.getUrl(), capabilities);
     }
 }

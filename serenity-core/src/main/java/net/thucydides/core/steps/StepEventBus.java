@@ -4,10 +4,10 @@ import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -48,7 +48,7 @@ public class StepEventBus {
         return stepEventBusThreadLocal.get();
     }
 
-    private List<StepListener> registeredListeners = new ArrayList<StepListener>();
+    private List<StepListener> registeredListeners = new ArrayList<>();
     /**
      * A reference to the base step listener, if registered.
      */
@@ -56,8 +56,8 @@ public class StepEventBus {
 
     private TestResultTally resultTally;
 
-    private Stack<String> stepStack = new Stack<String>();
-    private Stack<Boolean> webdriverSuspensions = new Stack<Boolean>();
+    private Stack<String> stepStack = new Stack<>();
+    private Stack<Boolean> webdriverSuspensions = new Stack<>();
 
     private Set<StepListener> customListeners;
 
@@ -191,6 +191,7 @@ public class StepEventBus {
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testSuiteStarted(testClass);
         }
+        TestLifecycleEvents.postEvent(TestLifecycleEvents.testSuiteStarted());
     }
 
     private void updateClassUnderTest(final Class<?> testClass) {
@@ -208,6 +209,7 @@ public class StepEventBus {
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testSuiteStarted(story);
         }
+        TestLifecycleEvents.postEvent(TestLifecycleEvents.testSuiteStarted());
     }
 
     public void clear() {
@@ -507,6 +509,7 @@ public class StepEventBus {
         if (!isUniqueSession()) {
             ThucydidesWebDriverSupport.closeAllDrivers();
         }
+        TestLifecycleEvents.postEvent(TestLifecycleEvents.testSuiteFinished());
         storyUnderTest = null;
     }
 

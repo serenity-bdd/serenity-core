@@ -1,6 +1,6 @@
 package net.serenitybdd.core.annotations.findby.integration
 
-import net.serenitybdd.core.support.ChromeService
+import net.serenitybdd.core.support.ManagedDriverService
 import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.integration.PageWithFindBys
@@ -11,11 +11,11 @@ import spock.lang.Specification
 class WhenLocatingWebElementsUsingEnhancedFindBys extends Specification {
 
 
-    @Shared ChromeService chromeService;
+    @Shared ManagedDriverService chromeService;
     WebDriver driver
 
     def setupSpec() {
-        chromeService = new ChromeService()
+        chromeService = new ManagedDriverService()
         chromeService.start()
         StepEventBus.eventBus.clear()
 

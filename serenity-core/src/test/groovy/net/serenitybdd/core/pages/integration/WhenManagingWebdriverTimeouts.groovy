@@ -1,7 +1,7 @@
 package net.serenitybdd.core.pages.integration
 
 import net.serenitybdd.core.pages.WebElementFacade
-import net.serenitybdd.core.support.ChromeService
+import net.serenitybdd.core.support.ManagedDriverService
 import net.thucydides.core.pages.integration.StaticSitePage
 import net.thucydides.core.steps.ExecutedStepDescription
 import net.thucydides.core.steps.StepEventBus
@@ -37,12 +37,12 @@ import static java.util.concurrent.TimeUnit.SECONDS
  */
 class WhenManagingWebdriverTimeouts extends Specification {
 
-    @Shared ChromeService chromeService;
+    @Shared ManagedDriverService chromeService;
 
     WebDriver driver
 
     def setupSpec() {
-        chromeService = new ChromeService()
+        chromeService = new ManagedDriverService()
         chromeService.start()
     }
 

@@ -1,10 +1,9 @@
 package net.thucydides.core.webdriver.strategies;
 
-import com.google.common.eventbus.Subscribe;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.support.ChromeService;
+import net.serenitybdd.core.support.ManagedDriverService;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -24,33 +23,22 @@ public class ChromeDriverBuilder implements DriverBuilder {
     private final EnvironmentVariables environmentVariables;
     private final CapabilityEnhancer enhancer;
     private final DriverCapabilityRecord driverProperties;
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChromeService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChromeDriverBuilder.class);
 
-    private ThreadLocal<ChromeService> chromeDriverService = new ThreadLocal<>();
+    private ThreadLocal<ManagedDriverService> driverService = new ThreadLocal<>();
 
-    private ChromeService getChromeDriverService() throws IOException {
-        if (chromeDriverService.get() == null) {
-            chromeDriverService.set(new ChromeService());
-            chromeDriverService.get().start();
+    private ManagedDriverService getDriverService() throws IOException {
+        if (driverService.get() == null) {
+            driverService.set(new ChromeService());
+            driverService.get().start();
         }
-        return chromeDriverService.get();
+        return driverService.get();
     }
 
     public ChromeDriverBuilder(EnvironmentVariables environmentVariables, CapabilityEnhancer enhancer) {
         this.environmentVariables = environmentVariables;
         this.enhancer = enhancer;
         this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
-
-         TestLifecycleEvents.register(this);
-    }
-
-
-    @Subscribe
-    public void shutdownChromeService(TestLifecycleEvents.TestSuiteFinished testSuiteFinished) {
-        if (chromeDriverService.get() != null) {
-            chromeDriverService.get().stop();
-            chromeDriverService.remove();
-        }
     }
 
     @Override
@@ -64,7 +52,7 @@ public class ChromeDriverBuilder implements DriverBuilder {
         DesiredCapabilities desiredCapabilities = enhancer.enhanced(capabilities);
         WebDriver driver;
         try {
-            driver = getChromeDriverService().newDriver(desiredCapabilities);
+            driver = getDriverService().newDriver(desiredCapabilities);
         } catch (IOException couldNotStartChromeServer) {
             LOGGER.warn("Failed to start the chrome driver service, using a native driver instead",  couldNotStartChromeServer.getMessage());
             driver = new ChromeDriver(enhancer.enhanced(capabilities));

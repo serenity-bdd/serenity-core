@@ -30,16 +30,21 @@ class WhenAssociatingATestOutcomeWithARequirementByPackage extends Specification
 
     def "Should read requirements structure from a 3 level package directory structure"() {
         given: "We define the root package in the 'thucydides.test.root' property"
-        EnvironmentVariables vars = new MockEnvironmentVariables();
-        vars.setProperty("serenity.test.root", "deeppackagerequirements")
-        PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars).withCacheDisabled()
+            EnvironmentVariables vars = new MockEnvironmentVariables();
+            vars.setProperty("serenity.test.root", "deeppackagerequirements")
+            PackageRequirementsTagProvider capabilityProvider = packageRequirementsTagProviderUsing(vars).withCacheDisabled()
 
         when: "We load the requirements structure"
-        List<Requirement> requirements = capabilityProvider.getRequirements()
+            List<Requirement> requirements = capabilityProvider.getRequirements()
+
+            Requirement fruit = requirements.find {it.name == "Fruit"}
+            Requirement apples = fruit.getChildren().find {it.name == "Apples"}
+            Requirement pickingApple = apples.getChildren().find {it.name == "Picking apples"}
+
         then:
-        requirements.get(0).type == "capability" &&
-                requirements.get(0).getChildren().get(0).type == "feature" &&
-                requirements.get(0).getChildren().get(0).getChildren().get(0).type == "story"
+            fruit.type == "capability"
+            apples.type == "feature"
+            pickingApple.type == "story"
     }
 
     def "Should read requirements structure from a one-level package directory structure"() {

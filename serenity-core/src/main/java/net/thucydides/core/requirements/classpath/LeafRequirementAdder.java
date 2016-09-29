@@ -1,5 +1,6 @@
 package net.thucydides.core.requirements.classpath;
 
+import com.google.common.base.Optional;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementTypeAt;
@@ -63,7 +64,8 @@ public class LeafRequirementAdder {
     public Requirement to(Collection<Requirement> allRequirements) {
 
         Requirement newRequirement = PackageInfoClass.isDefinedIn(path) ?
-                requirementDefinedByNarrativeAt(path) : requirementDefinedByClassNameAt(path);
+                requirementDefinedByNarrativeAt(path, allRequirements)
+                : requirementDefinedByClassNameAt(path);
 
         allRequirements.add(newRequirement);
 
@@ -96,7 +98,7 @@ public class LeafRequirementAdder {
         return story;
     }
 
-    private Requirement requirementDefinedByNarrativeAt(String path) {
+    private Requirement requirementDefinedByNarrativeAt(String path, Collection<Requirement> knownRequirements) {
 
         List<String> pathElements = elementsOf(path, rootPackage);
         List<String> featurePathElements = allButLast(pathElements);
@@ -109,43 +111,28 @@ public class LeafRequirementAdder {
 
         int startFromRequirementLevel = requirementsConfiguration.getRequirementTypes().size() - requirementsDepth;
         String typeByLevel = requirementsConfiguration.getRequirementType(startFromRequirementLevel + featurePathElements.size() - 1);
+        String type = PackageInfoNarrative.type().definedInPath(path).or(typeByLevel);
 
+        Optional<Requirement> knownMatchingRequirement = findMatchingRequirementWithName(knownRequirements, featureName, type);
 
-        Requirement story = Requirement.named(featureName)
-                .withType(PackageInfoNarrative.type().definedInPath(path).or(typeByLevel))
-                .withNarrative(PackageInfoNarrative.text().definedInPath(path).or(""))
-                .withParent(parent);
-
-        return story;
+        if (knownMatchingRequirement.isPresent()) {
+            knownRequirements.remove(knownMatchingRequirement);
+        }
+        return knownMatchingRequirement.or(Requirement.named(featureName).withTypeOf(type))
+                                .withNarrative(PackageInfoNarrative.text().definedInPath(path).or(""))
+                                .withParent(parent);
     }
 
-//    private Optional<String> narrativeTypeDefinedIn(String path) {
-//        Optional<Narrative> narrative = getClassLevelNarrativeFor(path);
-//        if (!narrative.isPresent() || (isEmpty(narrative.get().type()))) {
-//            return Optional.absent();
-//        }
-//        return Optional.of(narrative.get().type());
-//    }
-//
-//    private Optional<String> narrativeTextDefinedIn(String path) {
-//        Optional<Narrative> narrative = getClassLevelNarrativeFor(path);
-//        if (!narrative.isPresent()) {
-//            return Optional.absent();
-//        }
-//        String narrativeText = Joiner.on("\n").join(narrative.get().text());
-//        return Optional.of((narrative.get().title() + System.lineSeparator() + narrativeText).trim());
-//    }
-//
-//    public Optional<Narrative> getClassLevelNarrativeFor(String path) {
-//        try {
-//            return NarrativeFinder.forClass(getClass().getClassLoader().loadClass(path));
-//        } catch (ClassNotFoundException e) {
-//            return Optional.absent();
-//        }
-//    }
+    private Optional<Requirement> findMatchingRequirementWithName(Collection<Requirement> knownRequirements, String featureName, String featureType) {
+        for(Requirement requirement : knownRequirements) {
+            if (requirement.getName().equalsIgnoreCase(featureName) && requirement.getType().equalsIgnoreCase(featureType)) {
+                return Optional.of(requirement);
+            }
+        }
+        return Optional.absent();
+    }
 
     private String leafRequirementTypeFrom(List<String> pathElements) {
         return RequirementTypeAt.level(pathElements.size() - 1).in(activeRequirementTypes);
-//        return requirementsConfiguration.getRequirementType(pathElements.size() - 1);// ;requirementsDepth
     }
 }

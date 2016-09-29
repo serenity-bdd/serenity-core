@@ -2,6 +2,6 @@
         text = {"This is a narrative",
                 "For Nice Zuchinnis"}
 )
-package deeppackagerequirements.veges.nice_zucchinis;
+package deeppackagerequirements.veges;
 
 import net.thucydides.core.annotations.Narrative;

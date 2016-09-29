@@ -1,11 +1,14 @@
 package net.serenitybdd.core.pages.integration
 
 import net.serenitybdd.core.pages.WebElementFacade
+import net.serenitybdd.core.support.ChromeService
+import net.serenitybdd.core.support.ManagedDriverService
 import net.thucydides.core.pages.integration.StaticSitePage
 import net.thucydides.core.steps.ExecutedStepDescription
 import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.steps.StepFailure
 import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.util.SystemEnvironmentVariables
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.WebDriverFactory
@@ -15,11 +18,8 @@ import net.thucydides.core.webdriver.exceptions.ElementShouldBeInvisibleExceptio
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.TimeoutException
-import org.openqa.selenium.phantomjs.PhantomJSDriver
-import spock.lang.Ignore
-import spock.lang.Specification
-import spock.lang.Timeout
-import spock.lang.Unroll
+import org.openqa.selenium.WebDriver
+import spock.lang.*
 
 import java.util.concurrent.TimeUnit
 
@@ -38,13 +38,36 @@ import static java.util.concurrent.TimeUnit.SECONDS
  */
 class WhenManagingWebdriverTimeouts extends Specification {
 
+    @Shared ManagedDriverService chromeService;
+
+    WebDriver driver
+
+    def setupSpec() {
+        chromeService = new ChromeService()
+        chromeService.start()
+    }
+
+    def cleanupSpec() {
+        chromeService.stop()
+    }
+
+    def WebDriver newDriver() {
+        driver = chromeService.newDriver();
+        return driver
+    }
+
     def setup() {
         StepEventBus.eventBus.clear()
+        driver = null
     }
 
     def cleanup() {
         SerenityWebdriverManager.inThisTestThread().closeAllDrivers();
+        if (driver) {
+            driver.quit();
+        }
     }
+
 
     //
     // IMPLICIT WAITS
@@ -80,14 +103,14 @@ class WhenManagingWebdriverTimeouts extends Specification {
         for(String key : variables.keySet()) {
             environmentVariables.setProperty(key, variables[key]);
         }
-        def driver = new WebDriverFacade(PhantomJSDriver.class, new WebDriverFactory(), environmentVariables); // HtmlUnitDriver();
-        def page = new StaticSitePage(driver, environmentVariables)
+        WebDriverFacade driverFacade = new WebDriverFacade(newDriver(), new WebDriverFactory(), environmentVariables);
+        def page = new StaticSitePage(driverFacade, environmentVariables)
         page.open()
         return page
     }
 
     private StaticSitePage openStaticPage() {
-        def driver = new WebDriverFacade(PhantomJSDriver.class, new WebDriverFactory()); // HtmlUnitDriver();
+        def driver = new WebDriverFacade(newDriver(), new WebDriverFactory(), new SystemEnvironmentVariables()); // HtmlUnitDriver();
         def page = new StaticSitePage(driver)
         page.open()
         return page
@@ -395,7 +418,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
     // fixme
     def "The withTimeoutOf() method can be used to override the global timeouts for elements"() {
         given:
-            def page = openStaticPageWith(["webdriver.timeouts.implicitlywait":"50","webdriver.wait.for.timeout": "50"])
+            def page = openStaticPageWith(["webdriver .timeouts.implicitlywait":"50","webdriver.wait.for.timeout": "50"])
         when:
             page.withTimeoutOf(10, SECONDS).waitFor(By.cssSelector("#city"))
         then:

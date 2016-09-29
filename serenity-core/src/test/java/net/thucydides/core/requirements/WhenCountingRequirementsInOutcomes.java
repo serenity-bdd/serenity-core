@@ -29,8 +29,9 @@ public class WhenCountingRequirementsInOutcomes {
 
     @Before
     public void findSourceDirectories() throws URISyntaxException {
-        featuresDirectory = Paths.get(Resources.getResource("serenity-cucumber/features").toURI().getPath()).toFile();
-        outcomeDirectory = Paths.get(Resources.getResource("serenity-cucumber/json").toURI().getPath()).toFile();
+        featuresDirectory = new File("build/resources/test/serenity-cucumber/features");
+        outcomeDirectory =  new File("build/resources/test/serenity-cucumber/json");
+        		//Paths.get(Resources.getResource("serenity-cucumber/json").toURI().getPath()).toFile();
     }
 
     @Test
@@ -69,8 +70,8 @@ public class WhenCountingRequirementsInOutcomes {
     @Test
     public void should_find_correct_requirement_outcome_count_for_requirements_without_tests_in_cucumber_jvm_outcomes() throws URISyntaxException, IOException {
 
-        featuresDirectory = Paths.get(Resources.getResource("serenity-cucumber/features").toURI().getPath()).toFile();
-        outcomeDirectory = Paths.get(Resources.getResource("serenity-cucumber/json").toURI().getPath()).toFile();
+//        featuresDirectory = Paths.get(Resources.getResource("serenity-cucumber/features").toURI().getPath()).toFile();
+//        outcomeDirectory = Paths.get(Resources.getResource("serenity-cucumber/json").toURI().getPath()).toFile();
 
         FileSystemRequirements fileSystemRequirements = new FileSystemRequirements(featuresDirectory.getPath());
 
@@ -85,8 +86,8 @@ public class WhenCountingRequirementsInOutcomes {
     @Ignore
     public void should_find_correct_requirement_outcome_count_for_top_level_requirements_in_cucumber_js_outcomes() throws URISyntaxException, IOException {
 
-        featuresDirectory = Paths.get(Resources.getResource("serenity-js/features").toURI().getPath()).toFile();
-        outcomeDirectory = Paths.get(Resources.getResource("serenity-js-outcomes").toURI().getPath()).toFile();
+//        featuresDirectory = Paths.get(Resources.getResource("serenity-js/features").toURI().getPath()).toFile();
+//        outcomeDirectory = Paths.get(Resources.getResource("serenity-js-outcomes").toURI().getPath()).toFile();
 
         FileSystemRequirements fileSystemRequirements = new FileSystemRequirements(featuresDirectory.getPath());
 

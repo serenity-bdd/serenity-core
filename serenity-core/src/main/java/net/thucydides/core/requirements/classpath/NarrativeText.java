@@ -7,13 +7,15 @@ import net.thucydides.core.requirements.model.Narrative;
 
 import java.io.File;
 
+import static org.apache.commons.lang3.StringUtils.replaceChars;
+
 /**
  * Created by john on 13/07/2016.
  */
 public class NarrativeText {
 
     public static String definedIn(String fullPath, String type) {
-        String narrativePath = (fullPath + File.separator + "narrative").replaceAll("\\.", File.separator) + ".txt";
+        String narrativePath = fileSystemPathOfNarrativeInPackage(fullPath) + ".txt";
         try {
             String narrativeFilePath = Resources.getResource(narrativePath).getFile();
             if (new File(narrativeFilePath).exists()) {
@@ -25,6 +27,11 @@ public class NarrativeText {
         } catch(IllegalArgumentException noNarrativeFileFound){}
 
         return "";
+    }
+
+    private static String fileSystemPathOfNarrativeInPackage(String fullPath) {
+        String narrativePath = (fullPath + File.separator + "narrative");
+        return replaceChars(narrativePath,".", File.separator);
     }
 
 }

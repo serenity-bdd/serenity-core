@@ -1,16 +1,11 @@
 package net.thucydides.core.pages.integration;
 
 
-import net.thucydides.core.webdriver.WebDriverFacade;
-import net.thucydides.core.webdriver.WebDriverFactory;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.concurrent.TimeUnit;
@@ -21,26 +16,17 @@ import static org.hamcrest.Matchers.is;
 
 public class CheckingVisibilityWithTheFluentElementAPI extends FluentElementAPITestsBaseClass {
 
-    static WebDriver localDriver;
     static StaticSitePage page;
 
-    @BeforeClass
-    public static void openStaticPage() {
-        localDriver = new WebDriverFacade(HtmlUnitDriver.class, new WebDriverFactory());
-        page = new StaticSitePage(localDriver, 1);
-        page.setWaitForTimeout(2000);
-        page.open();
+
+    @Before
+    public void openPage() {
+        page = getPage();
     }
 
     @Test
     public void should_report_if_element_is_visible() {
         assertThat(page.element(page.firstName).isVisible(), is(true));
-    }
-
-
-    @AfterClass
-    public static void closeDriver() {
-        localDriver.quit();
     }
 
     @Test

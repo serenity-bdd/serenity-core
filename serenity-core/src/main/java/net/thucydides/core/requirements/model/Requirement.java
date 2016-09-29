@@ -259,6 +259,7 @@ public class Requirement implements Comparable {
                 ", type='" + type + '\'' + " parent = '" + parent + '\'' +
                 ", cardNumber='" + cardNumber + '\'' +
                 ", narrative ='" + narrative + '\'' +
+                ", children ='" + children + '\'' +
                 '}';
     }
 
@@ -351,6 +352,12 @@ public class Requirement implements Comparable {
         }
         return ImmutableList.copyOf(mergedChildren);
     }
+
+    public Requirement withNarrative(String narrativeText) {
+        return new Requirement(this.name, this.displayName, this.cardNumber, parent, this.type, new CustomFieldValue("Narrative", narrativeText),
+                               children, examples, releaseVersions, customFields, featureFileName);
+    }
+
 
     public static class CustomFieldSetter {
 

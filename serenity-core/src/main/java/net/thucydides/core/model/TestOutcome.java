@@ -235,13 +235,13 @@ public class TestOutcome {
     public TestOutcome(final String name, final Class<?> testCase) {
         this(name, testCase, Injectors.getInjector().getInstance(EnvironmentVariables.class));
     }
-        /**
-         * Create a test outcome based on a test method in a test class.
-         * The requirement type will be derived if possible using the class package.
-         *
-         * @param name
-         * @param testCase
-         */
+    /**
+     * Create a test outcome based on a test method in a test class.
+     * The requirement type will be derived if possible using the class package.
+     *
+     * @param name
+     * @param testCase
+     */
     public TestOutcome(final String name, final Class<?> testCase, EnvironmentVariables environmentVariables) {
         startTime = now().toDate().getTime();
         this.name = name;
@@ -324,14 +324,14 @@ public class TestOutcome {
         this(name, testCase, userStory, Injectors.getInjector().getInstance(EnvironmentVariables.class));
     }
 
-        /**
-         * A test outcome should relate to a particular test class or user story class.
-         *
-         * @param name      The name of the Java method implementing this test, if the test is a JUnit or TestNG test (for example)
-         * @param testCase  The test class that contains this test method, if the test is a JUnit or TestNG test
-         * @param userStory If the test is not implemented by a Java class (e.g. an easyb story), we may just use the Story class to
-         *                  represent the story in which the test is implemented.
-         */
+    /**
+     * A test outcome should relate to a particular test class or user story class.
+     *
+     * @param name      The name of the Java method implementing this test, if the test is a JUnit or TestNG test (for example)
+     * @param testCase  The test class that contains this test method, if the test is a JUnit or TestNG test
+     * @param userStory If the test is not implemented by a Java class (e.g. an easyb story), we may just use the Story class to
+     *                  represent the story in which the test is implemented.
+     */
     protected TestOutcome(final String name, final Class<?> testCase, final Story userStory, EnvironmentVariables environmentVariables) {
         startTime = now().toDate().getTime();
         this.name = name;
@@ -1295,6 +1295,10 @@ public class TestOutcome {
             this.annotatedResult = (this.annotatedResult == null) ?
                     annotatedResult : TestResultComparison.overallResultFor(this.annotatedResult, annotatedResult);
         }
+    }
+
+    public void setResult(final TestResult annotatedResult) {
+        this.annotatedResult = annotatedResult;
     }
 
     public TestResult getAnnotatedResult() {

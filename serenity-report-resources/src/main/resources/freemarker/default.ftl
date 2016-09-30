@@ -436,8 +436,8 @@
                         </#if>
                         <td width="%" colspan="4" class="error-message-cell">
                             <div class="error-message ellipsis"
-                                  title='${formatter.htmlAttributeCompatible(errorMessageTitle,100)}'>
-                                <pre>${formatter.htmlAttributeCompatible(errorMessageTitle,100)!''}</pre>
+                                  title='${formatter.htmlAttributeCompatible(errorMessageTitle)}'>
+                                <pre>${formatter.htmlAttributeCompatible(errorMessageTitle,244)!''}</pre>
                             </div>
                             <#if step.nestedException?has_content>
                                 <@stacktrace cause=step.nestedException />
@@ -474,8 +474,8 @@
                         </#if>
                         <#if (testOutcome.errorMessage)??>
                             <span class="error-message"
-                                  title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage,100)}">
-                                ${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage)}
+                                  title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage)}">
+                                ${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 244)}
                             </span>
                             <#if (testOutcome.nestedTestFailureCause)??>
                                 <@stacktrace cause=testOutcome.nestedTestFailureCause />

@@ -1,22 +1,26 @@
 package net.serenitybdd.screenplay.shopping;
 
+import com.google.common.collect.ImmutableList;
 import net.serenitybdd.PeopleAreTerriblyIncorrect;
-import net.serenitybdd.screenplay.shopping.tasks.HaveItemsDelivered;
-import net.serenitybdd.screenplay.shopping.tasks.Purchase;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.shopping.tasks.HaveItemsDelivered;
+import net.serenitybdd.screenplay.shopping.tasks.Purchase;
 import net.thucydides.core.annotations.Steps;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.Every;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.List;
+
+import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static net.serenitybdd.screenplay.shopping.questions.ThankYouMessage.theThankYouMessage;
 import static net.serenitybdd.screenplay.shopping.questions.TotalCost.theTotalCost;
 import static net.serenitybdd.screenplay.shopping.questions.TotalCostIncludingDelivery.theTotalCostIncludingDelivery;
 import static net.serenitybdd.screenplay.shopping.tasks.Purchase.*;
-import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.*;
 
 @RunWith(SerenityRunner.class)
 public class DanaGoesShoppingSample {
@@ -75,6 +79,7 @@ public class DanaGoesShoppingSample {
                 seeThat(theThankYouMessage(), equalTo("You're welcome"))
                         .orComplainWith(PeopleAreSoImpolite.class,"You should say something nice"));
     }
+
     @Test
     public void shouldBeAbleToAskForNiceThings() {
         Integer totalCost = dana.asksFor(theTotalCost());
@@ -82,9 +87,19 @@ public class DanaGoesShoppingSample {
     }
 
     @Test
-    public void shouldBeAbleToRememberThingsInAVeryReadableWay() {
+    public void shouldBeAbleToRememberAnswersToQuestions() {
         dana.remember("Total Cost", theTotalCost());
         assertThat(dana.recall("Total Cost")).isEqualTo(14);
+    }
+
+    @Test
+    public void shouldBeAbleToRememberValues() {
+        dana.remember("Total Cost", 14);
+        assertThat(dana.recall("Total Cost")).isEqualTo(14);
+
+        List<String> colorSet = ImmutableList.of("red","green","blue");
+
+        MatcherAssert.assertThat(colorSet, (Every.everyItem(isOneOf("red","green","blue","yellow"))));
     }
 
     @Test

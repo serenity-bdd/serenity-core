@@ -130,8 +130,9 @@ public class RemoteDriverBuilder implements DriverBuilder {
         }
         try {
             ensureHostIsAvailableAt(remoteUrl);
+
             RemoteWebDriver driver = new RemoteWebDriver(remoteUrl, capabilities);
-            driverProperties.registerCapabilities("remote", driver.getCapabilities());
+            driverProperties.registerCapabilities(capabilities.getBrowserName(), driver.getCapabilities());
             return driver;
         } catch (UnreachableBrowserException unreachableBrowser) {
             String errorMessage = unreachableBrowserErrorMessage(unreachableBrowser);

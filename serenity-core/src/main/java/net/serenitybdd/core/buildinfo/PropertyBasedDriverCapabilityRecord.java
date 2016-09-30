@@ -49,7 +49,7 @@ public class PropertyBasedDriverCapabilityRecord implements DriverCapabilityReco
                 properties.store(writer, "");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.warn("Failed to store browser configuration for " + capabilities);
         }
     }
 

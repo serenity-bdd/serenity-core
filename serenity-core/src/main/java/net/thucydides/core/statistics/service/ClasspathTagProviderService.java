@@ -51,11 +51,19 @@ public class ClasspathTagProviderService implements TagProviderService {
 
     private Iterable<? extends TagProvider> tagProvidersWithHighPriority(Iterable<TagProviderStrategy> tagProviderStrategies) {
         for (TagProviderStrategy strategy : tagProviderStrategies) {
-            if (strategy.hasHighPriority()) {
+            if (isHighPriority(strategy)) {
                 return strategy.getTagProviders();
             }
         }
         return null;
+    }
+
+    private boolean isHighPriority(TagProviderStrategy strategy) {
+        try {
+            return strategy.hasHighPriority();
+        } catch(AbstractMethodError usingAnOldAPI) {
+            return false;
+        }
     }
 
     private Iterable<? extends TagProvider> tagProvidersThatCanProcess(Iterable<TagProviderStrategy> tagProviderStrategies,String testSource) {

@@ -8,6 +8,7 @@ import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.RequirementOutcome;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -82,6 +83,7 @@ public class WhenCountingRequirementsInOutcomes {
     }
 
     @Test
+    @Ignore
     public void should_find_correct_requirement_outcome_count_for_top_level_requirements_in_cucumber_js_outcomes() throws URISyntaxException, IOException {
 
 //        featuresDirectory = Paths.get(Resources.getResource("serenity-js/features").toURI().getPath()).toFile();

@@ -35,7 +35,7 @@ class WhenAssociatingATestOutcomeWithARequirementInAFeatureFile extends Specific
         def testOutcome = TestOutcome.forTestInStory("someTest", Story.withIdAndPath("PlantPotatoes","Plant potatoes","PlantPotatoes.story"))
         then:
             capabilityProvider.getParentRequirementOf(testOutcome).isPresent()
-            capabilityProvider.getParentRequirementOf(testOutcome).get().name == "Plant potatoes"
+            capabilityProvider.getParentRequirementOf(testOutcome).get().name == "Grow potatoes"
     }
 
     def "Should find the requirement for a given tag"() {

@@ -99,6 +99,12 @@ public class ThucydidesWebDriverSupport {
         }
     }
 
+    public static void clearSession() {
+        if (getWebdriverManager().getCurrentDriver() != null) {
+            getWebdriverManager().getCurrentDriver().manage().deleteAllCookies();
+        }
+    }
+
     public static void useDriver(WebDriver driver) {
         initialize();
         getWebdriverManager().registerDriver(driver);

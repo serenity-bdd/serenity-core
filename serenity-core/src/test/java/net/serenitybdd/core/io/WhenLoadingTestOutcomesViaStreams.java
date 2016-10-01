@@ -40,7 +40,7 @@ public class WhenLoadingTestOutcomesViaStreams {
                 outcomes.add(outcome);
             }
         }
-        assertThat(outcomes).hasSize(11);
+        assertThat(outcomes).hasSize(12);
     }
 
 

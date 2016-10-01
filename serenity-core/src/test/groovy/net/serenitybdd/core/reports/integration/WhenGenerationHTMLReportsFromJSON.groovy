@@ -3,9 +3,13 @@ package net.serenitybdd.core.reports.integration
 import net.thucydides.core.issues.IssueTracking
 import net.thucydides.core.issues.SystemPropertiesIssueTracking
 import net.thucydides.core.model.TestOutcome
+import net.thucydides.core.model.TestResult
+import net.thucydides.core.reports.AcceptanceTestLoader
 import net.thucydides.core.reports.AcceptanceTestReporter
 import net.thucydides.core.reports.TestOutcomeStream
+import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.html.HtmlAcceptanceTestReporter
+import net.thucydides.core.reports.json.JSONTestOutcomeReporter
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.assertj.core.util.Files
 import spock.lang.Shared
@@ -46,4 +50,18 @@ class WhenGenerationHTMLReportsFromJSON extends Specification {
         then:
             outcomeReports.findAll { !it.contains(">Screenshot<") }.isEmpty()
     }
+
+    def "failures in example tables show be reflected individually in the overall report"() {
+        given:
+            Path report = directoryInClasspathCalled("/json-test-outcomes/test-outcome-with-failing-example.json").toPath();
+        when:
+            AcceptanceTestLoader loader = new JSONTestOutcomeReporter()
+            TestOutcome outcome = loader.loadReportFrom(report).get()
+            TestOutcomes outcomes = TestOutcomes.of([outcome])
+        then:
+            outcomes.totalTests.withResult(TestResult.SUCCESS) == 1
+        and:
+            outcomes.totalTests.withFailureOrError() == 1
+    }
+
 }

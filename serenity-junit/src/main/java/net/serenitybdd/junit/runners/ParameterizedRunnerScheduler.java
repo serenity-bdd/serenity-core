@@ -20,14 +20,13 @@ class ParameterizedRunnerScheduler implements RunnerScheduler {
     public ParameterizedRunnerScheduler(final Class<?> klass, final int threadCount) {
 
 
-        executorService = Executors.newFixedThreadPool(threadCount,
-                new NamedThreadFactory(klass.getSimpleName()));
-        completionService = new ExecutorCompletionService<Void>(executorService);
-        tasks = new LinkedList<Future<Void>>();
+        executorService = Executors.newFixedThreadPool(threadCount, new NamedThreadFactory(klass.getSimpleName()));
+        completionService = new ExecutorCompletionService<>(executorService);
+        tasks = new LinkedList<>();
     }
 
     protected Queue<Future<Void>> getTaskQueue() {
-        return new LinkedList<Future<Void>>(ImmutableList.copyOf(tasks));
+        return new LinkedList<>(ImmutableList.copyOf(tasks));
     }
 
     public void schedule(final Runnable childStatement) {

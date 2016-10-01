@@ -1631,14 +1631,15 @@ public class TestOutcome {
     }
 
     public int countResults(TestResult expectedResult, TestType expectedType) {
-        if (annotatedResult != null) {
+        if (annotatedResult != null && !annotatedResult.executedResultsCount()) {
             return annotatedResultCount(expectedResult, expectedType);
         }
+
         if (isDataDriven()) {
             return countDataRowsWithResult(expectedResult);
-        } else {
-            return (getResult() == expectedResult) && (typeCompatibleWith(expectedType)) ? 1 : 0;
         }
+
+        return (getResult() == expectedResult) && (typeCompatibleWith(expectedType)) ? 1 : 0;
     }
 
     private int annotatedResultCount(TestResult expectedResult, TestType expectedType) {

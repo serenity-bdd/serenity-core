@@ -1,0 +1,386 @@
+{
+  "name": "Adding items to several peoples lists",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Given that James has a todo list containing Buy some milk, Walk the dog",
+      "duration": 8403,
+      "startTime": 1475308940483,
+      "screenshots": [
+        {
+          "screenshot": "402e0c0ce2f05b23c16107018f901d55.png"
+        }
+      ],
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 2,
+          "description": "James starts with a todo list containing Buy some milk, Walk the dog",
+          "duration": 8272,
+          "startTime": 1475308940488,
+          "screenshots": [
+            {
+              "screenshot": "6a498288d1955534d2deeebc3abc1099.png"
+            }
+          ],
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 3,
+              "description": "James opens the Application home page",
+              "duration": 6273,
+              "startTime": 1475308940492,
+              "screenshots": [
+                {
+                  "screenshot": "2b10b5127bf80bcc7310761807204c9b.png"
+                }
+              ],
+              "result": "SUCCESS"
+            },
+            {
+              "number": 4,
+              "description": "James adds the todo items called: [Buy some milk, Walk the dog]",
+              "duration": 1848,
+              "startTime": 1475308946786,
+              "screenshots": [
+                {
+                  "screenshot": "faa7c23515cf9e082f6b28c7fc089b98.png"
+                },
+                {
+                  "screenshot": "6a498288d1955534d2deeebc3abc1099.png"
+                }
+              ],
+              "result": "SUCCESS",
+              "children": [
+                {
+                  "number": 5,
+                  "description": "James adds a todo item called: Buy some milk",
+                  "duration": 934,
+                  "startTime": 1475308946955,
+                  "screenshots": [
+                    {
+                      "screenshot": "faa7c23515cf9e082f6b28c7fc089b98.png"
+                    },
+                    {
+                      "screenshot": "2c773105be8a1f8c90123a26b135affc.png"
+                    }
+                  ],
+                  "result": "SUCCESS",
+                  "children": [
+                    {
+                      "number": 6,
+                      "description": "James enters \u0027Buy some milk\u0027 into \u0027What needs to be done?\u0027 field",
+                      "duration": 576,
+                      "startTime": 1475308947184,
+                      "screenshots": [
+                        {
+                          "screenshot": "2b10b5127bf80bcc7310761807204c9b.png"
+                        },
+                        {
+                          "screenshot": "2c773105be8a1f8c90123a26b135affc.png"
+                        }
+                      ],
+                      "result": "SUCCESS"
+                    }
+                  ]
+                },
+                {
+                  "number": 7,
+                  "description": "James adds a todo item called: Walk the dog",
+                  "duration": 617,
+                  "startTime": 1475308947891,
+                  "screenshots": [
+                    {
+                      "screenshot": "2c773105be8a1f8c90123a26b135affc.png"
+                    },
+                    {
+                      "screenshot": "6a498288d1955534d2deeebc3abc1099.png"
+                    }
+                  ],
+                  "result": "SUCCESS",
+                  "children": [
+                    {
+                      "number": 8,
+                      "description": "James enters \u0027Walk the dog\u0027 into \u0027What needs to be done?\u0027 field",
+                      "duration": 360,
+                      "startTime": 1475308948021,
+                      "screenshots": [
+                        {
+                          "screenshot": "2c773105be8a1f8c90123a26b135affc.png"
+                        },
+                        {
+                          "screenshot": "6a498288d1955534d2deeebc3abc1099.png"
+                        }
+                      ],
+                      "result": "SUCCESS"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "description": "And that Jill has a todo list containing Buy some milk, Buy some cheese",
+      "duration": 6259,
+      "startTime": 1475308948886,
+      "screenshots": [
+        {
+          "screenshot": "5edb676f1444ddd6fe94ca0d502bd45a.png"
+        }
+      ],
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 10,
+          "description": "Jill starts with a todo list containing Buy some milk, Buy some cheese",
+          "duration": 5985,
+          "startTime": 1475308949016,
+          "screenshots": [
+            {
+              "screenshot": "5edb676f1444ddd6fe94ca0d502bd45a.png"
+            }
+          ],
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 11,
+              "description": "Jill opens the Application home page",
+              "duration": 3560,
+              "startTime": 1475308949019,
+              "screenshots": [
+                {
+                  "screenshot": "ce7ea5d8133b92cb4be53c131bae58ca.png"
+                }
+              ],
+              "result": "SUCCESS"
+            },
+            {
+              "number": 12,
+              "description": "Jill adds the todo items called: [Buy some milk, Buy some cheese]",
+              "duration": 2280,
+              "startTime": 1475308952592,
+              "screenshots": [
+                {
+                  "screenshot": "de4f371cc4609a2688505dcb21692f75.png"
+                },
+                {
+                  "screenshot": "5edb676f1444ddd6fe94ca0d502bd45a.png"
+                }
+              ],
+              "result": "SUCCESS",
+              "children": [
+                {
+                  "number": 13,
+                  "description": "Jill adds a todo item called: Buy some milk",
+                  "duration": 1025,
+                  "startTime": 1475308952816,
+                  "screenshots": [
+                    {
+                      "screenshot": "de4f371cc4609a2688505dcb21692f75.png"
+                    },
+                    {
+                      "screenshot": "032d234a7cd69a2af5b6def259a64fdd.png"
+                    }
+                  ],
+                  "result": "SUCCESS",
+                  "children": [
+                    {
+                      "number": 14,
+                      "description": "Jill enters \u0027Buy some milk\u0027 into \u0027What needs to be done?\u0027 field",
+                      "duration": 577,
+                      "startTime": 1475308953043,
+                      "screenshots": [
+                        {
+                          "screenshot": "de4f371cc4609a2688505dcb21692f75.png"
+                        },
+                        {
+                          "screenshot": "032d234a7cd69a2af5b6def259a64fdd.png"
+                        }
+                      ],
+                      "result": "SUCCESS"
+                    }
+                  ]
+                },
+                {
+                  "number": 15,
+                  "description": "Jill adds a todo item called: Buy some cheese",
+                  "duration": 828,
+                  "startTime": 1475308953844,
+                  "screenshots": [
+                    {
+                      "screenshot": "032d234a7cd69a2af5b6def259a64fdd.png"
+                    },
+                    {
+                      "screenshot": "5edb676f1444ddd6fe94ca0d502bd45a.png"
+                    }
+                  ],
+                  "result": "SUCCESS",
+                  "children": [
+                    {
+                      "number": 16,
+                      "description": "Jill enters \u0027Buy some cheese\u0027 into \u0027What needs to be done?\u0027 field",
+                      "duration": 424,
+                      "startTime": 1475308954009,
+                      "screenshots": [
+                        {
+                          "screenshot": "032d234a7cd69a2af5b6def259a64fdd.png"
+                        },
+                        {
+                          "screenshot": "5edb676f1444ddd6fe94ca0d502bd45a.png"
+                        }
+                      ],
+                      "result": "SUCCESS"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "description": "When she adds \u0027Buy some cereal\u0027 to her list",
+      "duration": 1068,
+      "startTime": 1475308955146,
+      "screenshots": [
+        {
+          "screenshot": "6158861d11576b3b0fb6ca27bdf07b33.png"
+        }
+      ],
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 18,
+          "description": "Jill adds a todo item called: Buy some cereal",
+          "duration": 812,
+          "startTime": 1475308955276,
+          "screenshots": [
+            {
+              "screenshot": "147422d7981afbc9d9931f22f51b12e9.png"
+            },
+            {
+              "screenshot": "6158861d11576b3b0fb6ca27bdf07b33.png"
+            }
+          ],
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 19,
+              "description": "Jill enters \u0027Buy some cereal\u0027 into \u0027What needs to be done?\u0027 field",
+              "duration": 450,
+              "startTime": 1475308955415,
+              "screenshots": [
+                {
+                  "screenshot": "147422d7981afbc9d9931f22f51b12e9.png"
+                },
+                {
+                  "screenshot": "6158861d11576b3b0fb6ca27bdf07b33.png"
+                }
+              ],
+              "result": "SUCCESS"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "description": "Then Jill\u0027s todo list should contain Buy some milk, Buy some cheese, Buy some cereal",
+      "duration": 677,
+      "startTime": 1475308956214,
+      "screenshots": [
+        {
+          "screenshot": "a11ad4a534b369174663e931760ce543.png"
+        },
+        {
+          "screenshot": "6158861d11576b3b0fb6ca27bdf07b33.png"
+        }
+      ],
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 21,
+          "description": "Then the displayed todo items should be ([Buy some milk, Buy some cheese, Buy some cereal])",
+          "duration": 421,
+          "startTime": 1475308956344,
+          "screenshots": [
+            {
+              "screenshot": "a11ad4a534b369174663e931760ce543.png"
+            }
+          ],
+          "result": "SUCCESS"
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "description": "And James\u0027s todo list should contain Buy some milk, Walk the dog",
+      "duration": 594,
+      "startTime": 1475308956891,
+      "screenshots": [
+        {
+          "screenshot": "6a498288d1955534d2deeebc3abc1099.png"
+        }
+      ],
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 23,
+          "description": "Then the displayed todo items should be ([Buy some milk, Walk the dog])",
+          "duration": 348,
+          "startTime": 1475308957014,
+          "screenshots": [
+            {
+              "screenshot": "6a498288d1955534d2deeebc3abc1099.png"
+            }
+          ],
+          "result": "SUCCESS"
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "add-new-items-to-the-todo-list",
+    "storyName": "Add new items to the todo list",
+    "path": "add_new_items_to_the_todo_list.feature",
+    "narrative": "\nIn order to avoid having to remember things that need doing\nAs a forgetful person\nI want to be able to record what I need to do in a place where I won\u0027t forget about them",
+    "type": "feature"
+  },
+  "featureTag": {
+    "name": "Add new items to the todo list",
+    "type": "feature"
+  },
+  "title": "Adding items to several peoples lists",
+  "description": "",
+  "tags": [
+    {
+      "name": "cucumber",
+      "type": "tag"
+    },
+    {
+      "name": "Add new items to the todo list",
+      "type": "feature"
+    },
+    {
+      "name": "Record todos/Add new items to the todo list",
+      "type": "feature"
+    },
+    {
+      "name": "Record todos",
+      "type": "capability"
+    }
+  ],
+  "startTime": 1475308940478,
+  "duration": 17007,
+  "sessionId": "2ead91b3659ff3dce19235f343ff7e61",
+  "driver": "chrome:jill",
+  "manual": false,
+  "testSource": "Cucumber",
+  "result": "SUCCESS"
+}

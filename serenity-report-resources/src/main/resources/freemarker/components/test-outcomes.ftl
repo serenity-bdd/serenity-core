@@ -29,6 +29,11 @@
                             <#foreach testOutcome in testResultSet>
                                 <#assign test_outcome_icon = formatter.resultIcon().forResult(testOutcome.result) />
 
+                                <#assign exampleCount = "" />
+                                <#if testOutcome.dataDriven>
+                                    <#assign exampleCount>&nbsp;(${testOutcome.dataTable.size}  examples)</#assign>
+                                </#if>
+
                             <tr class="test-${testOutcome.result}">
                                 <td><span class="summary-icon">${test_outcome_icon}</span>
                                     <#if (testOutcome.manual)><i class="fa fa-user manual" title="Manual test"></i></#if>
@@ -36,7 +41,7 @@
                                 <td class="${testOutcome.result}-text">
                                     <div class="ellipsis">
                                     <a href="${relativeLink}${testOutcome.reportName}.html" class="ellipsis" title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 40)}">
-                                    ${testOutcome.unqualified.titleWithLinks} ${testOutcome.formattedIssues}
+                                    ${testOutcome.unqualified.titleWithLinks}${exampleCount} ${testOutcome.formattedIssues}
                                     </a></div>
                                 </td>
 

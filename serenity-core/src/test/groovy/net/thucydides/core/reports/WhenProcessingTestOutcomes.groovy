@@ -31,7 +31,7 @@ class WhenProcessingTestOutcomes extends Specification {
         when:
             List<TestOutcome> testOutcomes = loader.forFormat(OutcomeFormat.JSON).loadFrom(directoryInClasspathCalled("/json-test-outcomes"));
         then:
-            testOutcomes.size() == 11
+            testOutcomes.size() == 12
     }
 
     def "should not load test outcome from an invalid directory"() {

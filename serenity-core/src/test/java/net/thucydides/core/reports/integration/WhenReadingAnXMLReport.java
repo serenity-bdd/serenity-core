@@ -144,7 +144,7 @@ public class WhenReadingAnXMLReport {
         FileUtils.writeStringToFile(report, storedReportXML);
 
         Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
-        assertThat(testOutcome.get().getTags().size(), is(3));
+        assertThat(testOutcome.get().getTags().size(), is(2));
     }
 
     @Test

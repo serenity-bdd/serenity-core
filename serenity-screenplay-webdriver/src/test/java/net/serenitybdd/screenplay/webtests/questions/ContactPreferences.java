@@ -1,0 +1,22 @@
+package net.serenitybdd.screenplay.webtests.questions;
+
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Question;
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.serenitybdd.screenplay.webtests.pages.ProfilePage;
+
+import java.util.Set;
+
+public class ContactPreferences {
+
+    public static Question<Set<String>> nowSelected() {
+        return new Question<Set<String>>() {
+            @Override
+            public Set<String> answeredBy(Actor actor) {
+                WebElementFacade webElementFacade = ProfilePage.CONTACT_PREFERENCES.resolveFor(actor);
+                return BrowseTheWeb.as(actor).getSelectedOptionLabelsFrom(webElementFacade);
+            }
+        };
+    }
+}

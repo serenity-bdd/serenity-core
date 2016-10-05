@@ -6,9 +6,6 @@ import net.serenitybdd.screenplay.actions.selectactions.*;
 import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
 public class SelectFromOptions {
@@ -22,21 +19,21 @@ public class SelectFromOptions {
     }
 
     public static SelectFromOptions byValue(String value) {
-        SelectFromOptions enterAction = new SelectFromOptions(SelectStrategy.ByValue);
-        enterAction.theText = value;
-        return enterAction;
+        SelectFromOptions selectFromOptions = new SelectFromOptions(SelectStrategy.ByValue);
+        selectFromOptions.theText = value;
+        return selectFromOptions;
     }
 
     public static SelectFromOptions byVisibleText(String value) {
-        SelectFromOptions enterAction = new SelectFromOptions(SelectStrategy.ByVisibleText);
-        enterAction.theText = value;
-        return enterAction;
+        SelectFromOptions selectFromOptions = new SelectFromOptions(SelectStrategy.ByVisibleText);
+        selectFromOptions.theText = value;
+        return selectFromOptions;
     }
 
     public static SelectFromOptions byIndex(Integer indexValue) {
-        SelectFromOptions enterAction = new SelectFromOptions( SelectStrategy.ByIndex);
-        enterAction.indexValue = indexValue;
-        return enterAction;
+        SelectFromOptions selectFromOptions = new SelectFromOptions( SelectStrategy.ByIndex);
+        selectFromOptions.indexValue = indexValue;
+        return selectFromOptions;
     }
 
     public Performable from(String cssOrXpathForElement) {

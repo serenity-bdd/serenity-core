@@ -317,6 +317,26 @@ public class WebElementFacadeStub implements WebElementFacade {
     }
 
     @Override
+    public WebElementFacade deselectAll() {
+        return this;
+    }
+
+    @Override
+    public WebElementFacade deselectByVisibleText(String label) {
+        return this;
+    }
+
+    @Override
+    public WebElementFacade deselectByValue(String value) {
+        return this;
+    }
+
+    @Override
+    public WebElementFacade deselectByIndex(int indexValue) {
+        return this;
+    }
+
+    @Override
     public WebElementFacade selectByVisibleText(final String label) {
         return this;
     }
@@ -403,7 +423,7 @@ public class WebElementFacadeStub implements WebElementFacade {
     }
 
     @Override
-    public <T extends WebElementFacade> T waitUntilClickable() {
+    public WebElementFacade waitUntilClickable() {
         return null;
     }
 

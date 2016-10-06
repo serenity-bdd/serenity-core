@@ -20,6 +20,7 @@ import static net.serenitybdd.screenplay.matchers.ConsequenceMatchers.displays;
 import static net.serenitybdd.screenplay.matchers.ReportedErrorMessages.reportsErrors;
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
 import static net.serenitybdd.screenplay.questions.WebElementQuestion.the;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
@@ -78,6 +79,35 @@ public class WhenDanaBrowsesTheWeb {
         and(dana).should(seeThat(the(ProfilePage.NAME), isEnabled()));
         and(dana).should(seeThat(the(ProfilePage.NAME), isCurrentlyEnabled()));
         and(dana).should(seeThat(TheProfileName.isDisplayed()));
+    }
+
+    @Test
+    public void danaCanWaitForTheStateOfTheWebPage() {
+
+        Actor dana = new Actor("Dana");
+        dana.can(BrowseTheWeb.with(firstBrowser));
+
+        givenThat(dana).has(openedTheApplication);
+
+        when(dana).attemptsTo();
+
+        assertThat(profilePage.nameField, isVisible());
+    }
+
+
+    ProfilePage profilePage;
+
+    @Test
+    public void danaCanMakeAssertionsAboutRawWebElements() {
+
+        Actor dana = new Actor("Dana");
+        dana.can(BrowseTheWeb.with(firstBrowser));
+
+        givenThat(dana).has(openedTheApplication);
+
+        when(dana).attemptsTo(viewHerProfile);
+
+        assertThat(profilePage.nameField, isVisible());
     }
 
     @Test

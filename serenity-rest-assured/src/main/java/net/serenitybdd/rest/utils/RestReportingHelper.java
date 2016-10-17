@@ -3,7 +3,9 @@ package net.serenitybdd.rest.utils;
 import com.jayway.restassured.filter.Filter;
 import com.jayway.restassured.filter.log.LogDetail;
 import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.internal.support.Prettifier;
 import com.jayway.restassured.response.Response;
+import com.jayway.restassured.response.ResponseOptions;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.rest.RestMethod;
 import net.serenitybdd.core.rest.RestQuery;
@@ -19,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static net.thucydides.core.steps.StepEventBus.getEventBus;
-import static org.apache.commons.lang3.ObjectUtils.*;
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 
 /**
@@ -67,7 +69,9 @@ public class RestReportingHelper {
                 LogDetail.HEADERS, LogDetail.COOKIES);
         final Map<LogDetail, String> values = helper.print(response);
         if (shouldRecordResponseBodyFor(response)) {
-            restQuery = restQuery.withResponse(response.getBody().prettyPrint());
+            String renderedBody = new Prettifier().getPrettifiedBodyIfPossible(
+                    (ResponseOptions) response.getBody(), response.getBody());
+            restQuery = restQuery.withResponse(renderedBody);
         }
         restQuery = restQuery.withStatusCode(response.getStatusCode())
                 .withResponseHeaders(firstNonNull(values.get(LogDetail.HEADERS), ""))

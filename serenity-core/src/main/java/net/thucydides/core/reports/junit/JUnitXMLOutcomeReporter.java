@@ -7,6 +7,7 @@ import net.thucydides.core.model.ReportNamer;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.TestOutcomes;
+import net.thucydides.core.reports.io.SafelyMoveFiles;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +15,6 @@ import org.slf4j.LoggerFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -61,9 +60,7 @@ public class JUnitXMLOutcomeReporter  {
             } catch (TransformerException e) {
                 throw new IOException(e);
             }
-            Files.move(temporary.toPath(), report.toPath(),
-                    StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
-            );
+            SafelyMoveFiles.withMaxRetriesOf(3).from(temporary.toPath()).to(report.toPath());
         }
     }
 

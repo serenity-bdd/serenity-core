@@ -32,7 +32,7 @@ import static java.util.concurrent.TimeUnit.SECONDS
  * (see http://docs.seleniumhq.org/docs/04_webdriver_advanced.jsp#implicit-waits).
  * <quote>"An implicit wait is to tell WebDriver to poll the DOM for a certain amount of
  * time when trying to find an element or elements if they are not immediately available."</quote>
- * The WebDriver default is 0. It can be overriden using Sthe webdriver.timeouts.implicitlywait system property.
+ * The WebDriver default is 0. It can be overriden using the webdriver.timeouts.implicitlywait system property.
  *
  *
  */
@@ -94,7 +94,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
             def page = openStaticPage()
 
             page.verySlowLoadingField.isDisplayed()
-        then: "Not error should not be thrown"
+        then: "No error should be thrown"
             notThrown(org.openqa.selenium.ElementNotVisibleException)
     }
 
@@ -258,7 +258,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         then:
             NoSuchElementException timeout = thrown()
         and:
-            timeout.message.contains("Timed out after 1 second")
+            timeout.message.contains("Expected condition failed: waiting for StaticSitePage.slowLoadingField to be displayed")
     }
 
     def "You can wait for elements to be not visible"() {

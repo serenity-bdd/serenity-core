@@ -31,12 +31,12 @@ import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static ch.lambdaj.Lambda.convert;
+import static net.serenitybdd.core.pages.WebElementExpectations.*;
 import static net.serenitybdd.core.selectors.Selectors.isXPath;
 
 
@@ -738,7 +738,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     private void checkPresenceOfWebElement() {
         try {
             if (!driverIsDisabled()) {
-                waitForCondition().until(elementIsDisplayed());
+                waitForCondition().until(WebElementExpectations.elementIsDisplayed(this));
             }
         } catch (Throwable error) {
             if (webElement != null) {
@@ -759,7 +759,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     public WebElementFacade waitUntilPresent() {
         try {
             if (!driverIsDisabled()) {
-                waitForCondition().until(elementIsPresent());
+                waitForCondition().until(WebElementExpectations.elementIsPresent(this));
             }
         } catch (TimeoutException timeout) {
             throwShouldBePresentErrorWithCauseIfPresent(timeout, timeout.getMessage());
@@ -792,83 +792,12 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         throw new ElementShouldBePresentException(finalMessage, timeout);
     }
 
-    private ExpectedCondition<Boolean> elementIsDisplayed() {
-        return new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver driver) {
-                return isCurrentlyVisible();
-            }
-        };
-    }
-
-    private ExpectedCondition<Boolean> elementIsPresent() {
-        return new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver driver) {
-                return isPresent();
-            }
-        };
-    }
-
-    private ExpectedCondition<Boolean> elementIsNotDisplayed() {
-        return new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver driver) {
-                return !isCurrentlyVisible();
-            }
-        };
-    }
-
-    private ExpectedCondition<Boolean> elementIsEnabled() {
-        return new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver driver) {
-                WebElement element = getElement();
-                return ((element != null) && (!isDisabledField(element)));
-            }
-        };
-    }
-    private ExpectedCondition<Boolean> elementIsClickable() {
-
-        return new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver driver) {
-                WebElement element = getElement();
-                return ((element != null) && (element.isDisplayed()) && element.isEnabled());
-            }
-        };
-    }
-
-
-    private boolean isDisabledField(WebElement element) {
-        return (isAFormElement(element) && (!element.isEnabled()));
-    }
-
-    private final List<String> HTML_FORM_TAGS = Arrays.asList("input", "button", "select", "textarea", "link", "option");
-
-    private boolean isAFormElement(WebElement element) {
-        if ((element == null) || (element.getTagName() == null)) {
-            return false;
-        }
-        String tag = element.getTagName().toLowerCase();
-        return HTML_FORM_TAGS.contains(tag);
-
-    }
-
     private static final List<String> HTML_ELEMENTS_WITH_VALUE_ATTRIBUTE = ImmutableList.of("input", "button", "option");
 
     private boolean hasValueAttribute(WebElement element) {
         String tag = element.getTagName().toLowerCase();
         return HTML_ELEMENTS_WITH_VALUE_ATTRIBUTE.contains(tag);
 
-    }
-
-    private ExpectedCondition<Boolean> elementIsNotEnabled() {
-        return new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver driver) {
-                return ((getElement() != null) && (!getElement().isEnabled()));
-            }
-
-            @Override
-            public String toString() {
-                return "Element is not enabled: " + getElement();
-            }
-        };
     }
 
     @Override
@@ -890,7 +819,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     public WebElementFacade waitUntilNotVisible() {
         try {
             if (!driverIsDisabled()) {
-                waitForCondition().until(elementIsNotDisplayed());
+                waitForCondition().until(elementIsNotDisplayed(this));
             }
         } catch (TimeoutException timeout) {
             throwShouldBeInvisibleErrorWithCauseIfPresent(timeout, "Expected hidden element was displayed");
@@ -920,7 +849,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     public WebElementFacade waitUntilEnabled() {
         try {
             if (!driverIsDisabled()) {
-                waitForCondition().until(elementIsEnabled());
+                waitForCondition().until(elementIsEnabled(this));
             }
         } catch (TimeoutException timeout) {
             throw new ElementShouldBeEnabledException("Expected enabled element was not enabled", timeout);
@@ -932,7 +861,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     public WebElementFacade waitUntilClickable() {
         try {
             if (!driverIsDisabled()) {
-                waitForCondition().until(elementIsClickable());
+                waitForCondition().until(elementIsClickable(this));
             }
         } catch (TimeoutException timeout) {
             throw new ElementShouldBeEnabledException("Expected enabled element was not enabled", timeout);
@@ -944,7 +873,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     public WebElementFacade waitUntilDisabled() {
         try {
             if (!driverIsDisabled()) {
-                waitForCondition().until(elementIsNotEnabled());
+                waitForCondition().until(elementIsNotEnabled(this));
             }
         } catch (TimeoutException timeout) {
             throw new ElementShouldBeDisabledException("Expected disabled element was not disabled", timeout);

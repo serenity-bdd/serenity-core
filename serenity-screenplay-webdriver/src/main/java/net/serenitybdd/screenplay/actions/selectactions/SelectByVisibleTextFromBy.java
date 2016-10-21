@@ -14,7 +14,7 @@ public class SelectByVisibleTextFromBy extends ByAction {
         this.visibleText = visibleText;
     }
 
-    @Step("{0} clicks on #target")
+    @Step("{0} selects #visibleText")
     public <T extends Actor> void performAs(T theUser) {
         BrowseTheWeb.as(theUser).find(locators).selectByVisibleText(visibleText);
     }

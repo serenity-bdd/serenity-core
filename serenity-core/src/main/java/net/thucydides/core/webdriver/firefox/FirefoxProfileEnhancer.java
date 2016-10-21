@@ -39,11 +39,17 @@ public class FirefoxProfileEnhancer {
     }
 
     public void addFirebugsTo(final FirefoxProfile profile) {
-        profile.addExtension(this.getClass(), FIREBUGS_XPI_FILE);
-        profile.setPreference("extensions.firebug.currentVersion", MAX_FIREBUGS_VERSION); // Avoid startup screen
-
-        profile.addExtension(this.getClass(), FIREFINDER_XPI_FILE);
-        profile.setPreference("extensions.firebug.currentVersion", MAX_FIREFINDER_VERSION); // Avoid startup screen
+//        try {
+//  TODO: Make this work for recent versions of FireFox
+//            profile.addExtension(this.getClass(), FIREBUGS_XPI_FILE);
+//            profile.setPreference("extensions.firebug.currentVersion", MAX_FIREBUGS_VERSION); // Avoid startup screen
+//
+//            profile.addExtension(this.getClass(), FIREFINDER_XPI_FILE);
+//            profile.setPreference("extensions.firebug.currentVersion", MAX_FIREFINDER_VERSION); // Avoid startup screen
+//
+//        } catch (IOException e) {
+//            LOGGER.warn("Failed to add Firebugs extension to Firefox");
+//        }
     }
 
     public void configureJavaSupport(FirefoxProfile profile) {

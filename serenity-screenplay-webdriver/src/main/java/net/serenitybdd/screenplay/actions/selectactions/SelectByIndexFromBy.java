@@ -14,7 +14,7 @@ public class SelectByIndexFromBy extends ByAction {
         this.index = index;
     }
 
-    @Step("{0} clicks on #target")
+    @Step("{0} selects index #index")
     public <T extends Actor> void performAs(T theUser) {
         BrowseTheWeb.as(theUser).find(locators).selectByIndex(index);
     }

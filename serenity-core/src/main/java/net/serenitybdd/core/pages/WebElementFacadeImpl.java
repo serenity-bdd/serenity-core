@@ -648,6 +648,30 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return new DropdownSelector(this);
     }
 
+    private DropdownDeselector deselect() {
+        return new DropdownDeselector(this);
+    }
+
+    @Override
+    public WebElementFacade deselectAll() {
+        return deselect().all();
+    }
+
+    @Override
+    public WebElementFacade deselectByIndex(int indexValue) {
+        return deselect().byIndex(indexValue);
+    }
+
+    @Override
+    public WebElementFacade deselectByVisibleText(String label) {
+        return deselect().byVisibleText(label);
+    }
+
+    @Override
+    public WebElementFacade deselectByValue(String value) {
+        return deselect().byValue(value);
+    }
+
     @Override
     public WebElementFacade selectByVisibleText(final String label) {
         return select().byVisibleText(label);

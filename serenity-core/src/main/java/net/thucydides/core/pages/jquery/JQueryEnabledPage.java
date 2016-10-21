@@ -5,7 +5,6 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
-import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,14 +88,9 @@ public class JQueryEnabledPage {
 
     public void activateJQuery() {
 
-        try {
-            if (isJQueryIntegrationEnabled() && !isJQueryAvailable()) {
-                injectJQuery();
-                injectJQueryPlugins();
-            }
-        } catch (JavascriptException couldNotActivateJQuery) {
-            String firstLineInStacktrace = couldNotActivateJQuery.getMessage().split("\n")[0];
-            LOGGER.warn("Could not inject JQuery into the page: {}", firstLineInStacktrace);
+        if (isJQueryIntegrationEnabled() && !isJQueryAvailable()) {
+            injectJQuery();
+            injectJQueryPlugins();
         }
     }
 }

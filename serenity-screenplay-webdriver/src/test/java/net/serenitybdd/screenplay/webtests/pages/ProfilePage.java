@@ -7,7 +7,8 @@ import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.targets.Target;
 
 public class ProfilePage extends PageObject {
-    // Journey-pattern selectors
+
+    // Screenplay selectors
     public static Target NAME = Target.the("Name").locatedBy("#name");
     public static Target COUNTRY = Target.the("Country of residence").located(By.cssSelector("#country"));
     public static Target COLOR = Target.the("Favorite Color").locatedBy("#color");

@@ -17,9 +17,12 @@ import java.util.Date;
 import java.util.regex.Pattern;
 import java.util.zip.ZipFile;
 
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -58,13 +61,12 @@ public class WhenReadingResourcesFromTheClasspath {
     public void should_return_a_list_of_resources_in_a_given_package_containing_matching_resources() {
         Pattern pattern = Pattern.compile(".*[\\\\/]resourcelist[\\\\/].*");
         Collection<String> resources = ResourceList.forResources("",pattern).list();
-        // TODO: JDK
-        // assertThat(resources, hasItems(containsString("resourcelist"),endsWith("sample.css"),endsWith("sample.xsl")));
+        assertThat(resources, hasItems(containsString("resourcelist"),endsWith("sample.css"),endsWith("sample.xsl")));
     }
 
     @Test
     public void should_return_a_list_of_resources_in_a_given_package_even_from_a_dependency() {
-        Pattern pattern = Pattern.compile(".*/findElement.js");
+        Pattern pattern = Pattern.compile(".*/*.js");
         Collection<String> resources = ResourceList.forResources("",pattern).list();
         assertThat(resources.isEmpty(), is(false));
     }

@@ -8,7 +8,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
@@ -53,7 +54,7 @@ public class WhenUploadingFiles {
 
     @BeforeClass
     public static void open_local_static_site() {
-        driver = new HtmlUnitDriver();
+        driver = new ChromeDriver();
         pageFactory = new Pages(driver);
         openStaticTestSite(driver);
     }

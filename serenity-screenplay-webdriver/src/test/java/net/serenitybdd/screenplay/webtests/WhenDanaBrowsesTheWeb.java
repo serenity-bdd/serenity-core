@@ -89,7 +89,7 @@ public class WhenDanaBrowsesTheWeb {
 
         givenThat(dana).has(openedTheApplication);
 
-        when(dana).attemptsTo();
+        when(dana).attemptsTo(viewHerProfile);
 
         assertThat(profilePage.nameField, isVisible());
     }

@@ -9,7 +9,7 @@ import net.thucydides.core.webdriver.WebDriverFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -44,7 +44,9 @@ public class WhenResizingTheBrowser {
         page = new StaticSitePage(driver, 1000);
         page.open();
 
-        int width = ((Long)(((JavascriptExecutor)driver).executeScript("return window.innerWidth"))).intValue();
-        assertThat(width, allOf(lessThanOrEqualTo(450), greaterThan(350)));
+        Dimension screenSize = driver.manage().window().getSize();
+//        int width = screenSize.width;// ((Long)(((JavascriptExecutor)driver).executeScript("return window.innerWidth"))).intValue();
+        assertThat(screenSize.width, is(400));
+        assertThat(screenSize.height, is(200));
     }
 }

@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ThreadGuard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,13 +27,21 @@ public class ChromeDriverBuilder implements DriverBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChromeDriverBuilder.class);
 
     private ThreadLocal<ManagedDriverService> driverService = new ThreadLocal<>();
+    private static ManagedDriverService chromeDriverService = null;
+
 
     private ManagedDriverService getDriverService() throws IOException {
-        if (driverService.get() == null) {
-            driverService.set(new ChromeService());
-            driverService.get().start();
+//        if (driverService.get() == null) {
+//            driverService.set(new ChromeService());
+//            driverService.get().start();
+//        }
+//        return driverService.get();
+        if (chromeDriverService == null) {
+            System.out.println("CRETING NEW CHROMESERVICE INSTANCE");
+            chromeDriverService = new ChromeService();
+            chromeDriverService.start();
         }
-        return driverService.get();
+        return chromeDriverService;
     }
 
     public ChromeDriverBuilder(EnvironmentVariables environmentVariables, CapabilityEnhancer enhancer) {
@@ -52,7 +61,7 @@ public class ChromeDriverBuilder implements DriverBuilder {
         DesiredCapabilities desiredCapabilities = enhancer.enhanced(capabilities);
         WebDriver driver;
         try {
-            driver = getDriverService().newDriver(desiredCapabilities);
+            driver = ThreadGuard.protect(getDriverService().newDriver(desiredCapabilities));
         } catch (IOException couldNotStartChromeServer) {
             LOGGER.warn("Failed to start the chrome driver service, using a native driver instead",  couldNotStartChromeServer.getMessage());
             driver = new ChromeDriver(enhancer.enhanced(capabilities));

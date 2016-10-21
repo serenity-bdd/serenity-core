@@ -90,9 +90,16 @@ public class DriverCapabilities {
                 return DesiredCapabilities.edge();
             }
         });
+        selectors.put(PHANTOMJS,new DriverCapabilitiesProvider() {
+            @Override
+            public DesiredCapabilities getCapabilities() {
+                return DesiredCapabilities.phantomjs();
+            }
+        });
 
         return selectors;
     }
+
     public DesiredCapabilities realBrowserCapabilities(SupportedWebDriver driverType) {
         return enhancer.enhanced(driverCapabilitiesSelector().get(driverType).getCapabilities());
     }

@@ -11,13 +11,12 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FirefoxProfileEnhancer {
 
-    private static final String FIREBUGS_VERSION = "2.0.4-fx";
+    private static final String FIREBUGS_VERSION = "2.0.17-fx";
     private static final String MAX_FIREBUGS_VERSION = "999.99.0";
     private static final String FIREBUGS_XPI_FILE = "/firefox/firebug-" + FIREBUGS_VERSION + ".xpi";
 
@@ -40,16 +39,11 @@ public class FirefoxProfileEnhancer {
     }
 
     public void addFirebugsTo(final FirefoxProfile profile) {
-        try {
-            profile.addExtension(this.getClass(), FIREBUGS_XPI_FILE);
-            profile.setPreference("extensions.firebug.currentVersion", MAX_FIREBUGS_VERSION); // Avoid startup screen
+        profile.addExtension(this.getClass(), FIREBUGS_XPI_FILE);
+        profile.setPreference("extensions.firebug.currentVersion", MAX_FIREBUGS_VERSION); // Avoid startup screen
 
-            profile.addExtension(this.getClass(), FIREFINDER_XPI_FILE);
-            profile.setPreference("extensions.firebug.currentVersion", MAX_FIREFINDER_VERSION); // Avoid startup screen
-
-        } catch (IOException e) {
-            LOGGER.warn("Failed to add Firebugs extension to Firefox");
-        }
+        profile.addExtension(this.getClass(), FIREFINDER_XPI_FILE);
+        profile.setPreference("extensions.firebug.currentVersion", MAX_FIREFINDER_VERSION); // Avoid startup screen
     }
 
     public void configureJavaSupport(FirefoxProfile profile) {

@@ -11,6 +11,8 @@ public class JavascriptSupport {
     }
 
     public static boolean javascriptIsSupportedIn(WebDriver driver) {
+        if (driver == null) { return false; }
+
         if (driver instanceof HtmlUnitDriver) {
             return ((HtmlUnitDriver) driver).isJavascriptEnabled();
         } else {

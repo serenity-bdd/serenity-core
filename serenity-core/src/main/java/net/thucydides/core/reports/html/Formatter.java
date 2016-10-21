@@ -289,6 +289,8 @@ public class Formatter {
     }
 
     public static String htmlAttributeCompatible(Object fieldValue) {
+        if (fieldValue == null) { return ""; }
+
         return concatLines(ESCAPE_SPECIAL_CHARS.translate(stringFormOf(fieldValue)
                 .replaceAll("<", "(")
                 .replaceAll(">", ")")

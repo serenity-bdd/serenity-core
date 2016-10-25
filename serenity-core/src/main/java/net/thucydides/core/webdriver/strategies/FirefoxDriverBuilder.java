@@ -31,7 +31,10 @@ public class FirefoxDriverBuilder implements DriverBuilder {
         if (geckoDriverIsOnTheClasspath()) {
             capabilities.setCapability("marionette", true);
         }
-        FirefoxDriver driver = new FirefoxDriver(capabilities);
+
+        DesiredCapabilities enhancedCapabilities = enhancer.enhanced(capabilities);
+
+        FirefoxDriver driver = new FirefoxDriver(enhancedCapabilities);
 
         driverProperties.registerCapabilities("firefox", driver.getCapabilities());
         return driver;

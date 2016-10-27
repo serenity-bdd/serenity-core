@@ -25,6 +25,8 @@ public class OnStage {
     private static Stage stage() { return stage.get(); }
 
     public static void drawTheCurtain() {
-        stage().drawTheCurtain();
+        if (stage() != null) {
+            stage().drawTheCurtain();
+        }
     }
 }

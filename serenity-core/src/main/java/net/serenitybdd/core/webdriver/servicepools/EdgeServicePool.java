@@ -1,26 +1,45 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeDriverService;
 
 import java.io.File;
 
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_IE_DRIVER;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_EDGE_DRIVER;
 
 public class EdgeServicePool extends DriverServicePool<EdgeDriverService> {
 
     @Override
-    protected EdgeDriverService newDriverService() {
-
-        return isNotEmpty(environmentVariables.getProperty(WEBDRIVER_IE_DRIVER)) ?
-                new EdgeDriverService.Builder().usingAnyFreePort()
-                        .usingDriverExecutable(new File(environmentVariables.getProperty(WEBDRIVER_IE_DRIVER)))
-                        .build()
-                : new EdgeDriverService.Builder()
-                .usingAnyFreePort()
-                .build();
-    }
-
     protected String serviceName(){ return "edge"; }
 
+    @Override
+    protected WebDriver newDriverInstance(Capabilities capabilities) {
+        return new EdgeDriver(capabilities);
+    }
+
+    @Override
+    protected EdgeDriverService newDriverService() {
+
+        EdgeDriverService newService =  new EdgeDriverService.Builder()
+                        .usingDriverExecutable(edgeDriverExecutable())
+                        .usingAnyFreePort()
+                        .build();
+
+        DriverPathConfiguration.updateSystemProperty(WEBDRIVER_EDGE_DRIVER.getPropertyName())
+                               .withExecutablePath(edgeDriverExecutable());
+
+        Runtime.getRuntime().addShutdownHook(new StopServiceHook(newService));
+
+        return newService;
+    }
+
+    private File edgeDriverExecutable() {
+        return DriverServiceExecutable.called("MicrosoftWebDriver.exe")
+                .withSystemProperty(WEBDRIVER_EDGE_DRIVER.getPropertyName())
+                .usingEnvironmentVariables(environmentVariables)
+                .andDownloadableFrom("https://www.microsoft.com/en-us/download/details.aspx?id=48212")
+                .asAFile();
+    }
 }

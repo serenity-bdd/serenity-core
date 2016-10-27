@@ -56,6 +56,7 @@ public class RemoteDriverProvider implements DriverProvider {
             return new WebDriverStub();
         }
         WebDriver driver;
+
         if (saucelabsUrlIsDefined()) {
             driver = buildSaucelabsDriver();
         } else if (browserStackUrlIsDefined()){

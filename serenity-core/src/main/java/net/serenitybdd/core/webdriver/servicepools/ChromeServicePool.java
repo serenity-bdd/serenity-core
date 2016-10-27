@@ -1,31 +1,44 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.util.EnvironmentVariables;
-import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
+
+import java.io.File;
+
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_CHROME_DRIVER;
 
 public class ChromeServicePool extends DriverServicePool<ChromeDriverService> {
 
-    public ChromeServicePool() {
-        super();
-        updateChromePathIfSpecifiedIn(environmentVariables);
-    }
-
+    @Override
     protected String serviceName(){ return "chrome"; }
 
     @Override
+    protected WebDriver newDriverInstance(Capabilities capabilities) {
+        return new ChromeDriver(capabilities);
+    }
+
+    @Override
     protected ChromeDriverService newDriverService() {
-        return new ChromeDriverService.Builder()
-                .usingAnyFreePort()
-                .build();
+        ChromeDriverService newService = new ChromeDriverService.Builder()
+                                                                .usingDriverExecutable(chromeDriverExecutable())
+                                                                .usingAnyFreePort()
+                                                                .build();
+
+        DriverPathConfiguration.updateSystemProperty(WEBDRIVER_CHROME_DRIVER.getPropertyName())
+                               .withExecutablePath(chromeDriverExecutable());
+
+        Runtime.getRuntime().addShutdownHook(new StopServiceHook(newService));
+
+        return newService;
     }
 
-    private void updateChromePathIfSpecifiedIn(EnvironmentVariables environmentVariables) {
-        String environmentDefinedChromeDriverPath = environmentVariables.getProperty(ThucydidesSystemProperty.WEBDRIVER_CHROME_DRIVER);
-        if (StringUtils.isNotEmpty(environmentDefinedChromeDriverPath)) {
-            System.setProperty(ThucydidesSystemProperty.WEBDRIVER_CHROME_DRIVER.toString(), environmentDefinedChromeDriverPath);
-        }
+    private File chromeDriverExecutable() {
+        return DriverServiceExecutable.called("chromedriver")
+                .withSystemProperty(WEBDRIVER_CHROME_DRIVER.getPropertyName())
+                .usingEnvironmentVariables(environmentVariables)
+                .andDownloadableFrom("https://sites.google.com/a/chromium.org/chromedriver/downloads")
+                .asAFile();
     }
-
 }

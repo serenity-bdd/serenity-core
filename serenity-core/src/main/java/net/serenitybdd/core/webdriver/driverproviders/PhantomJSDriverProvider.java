@@ -4,9 +4,11 @@ import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.serenitybdd.core.webdriver.servicepools.PhantomJSServicePool;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.phantomjs.PhantomJSCapabilityEnhancer;
+import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -19,46 +21,45 @@ import java.io.IOException;
 public class PhantomJSDriverProvider implements DriverProvider {
 
     private final EnvironmentVariables environmentVariables;
-    private final CapabilityEnhancer defaultCapabilitiyEnhancer;
+    private final CapabilityEnhancer enhancer;
     private final DriverCapabilityRecord driverProperties;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(PhantomJSDriverProvider.class);
 
-    private static DriverServicePool driverService = null;
+    private final DriverServicePool driverServicePool = new PhantomJSServicePool();
 
-    private DriverServicePool getDriverService() throws IOException {
-        if (driverService == null) {
-            driverService = new PhantomJSServicePool();
-            driverService.start();
-        }
-        return driverService;
+    private DriverServicePool getDriverServicePool() throws IOException {
+        driverServicePool.ensureServiceIsRunning();
+        return driverServicePool;
     }
-
 
     public PhantomJSDriverProvider(EnvironmentVariables environmentVariables, CapabilityEnhancer enhancer) {
         this.environmentVariables = environmentVariables;
-        this.defaultCapabilitiyEnhancer = enhancer;
+        this.enhancer = enhancer;
         this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     @Override
     public WebDriver newInstance() {
-        DesiredCapabilities capabilities = DesiredCapabilities.phantomjs();
-        PhantomJSCapabilityEnhancer enhancer = new PhantomJSCapabilityEnhancer(environmentVariables);
-        enhancer.enhanceCapabilities(capabilities);
-
-        WebDriver driver;
-
-        DesiredCapabilities enhancedCapabilities = defaultCapabilitiyEnhancer.enhanced(capabilities);
-
-        try {
-            driver = getDriverService().newDriver(enhancedCapabilities);
-        } catch (IOException couldNotStartChromeServer) {
-            LOGGER.warn("Failed to start the chrome driver service, using a native driver instead",  couldNotStartChromeServer.getMessage());
-            driver = new PhantomJSDriver(enhancedCapabilities);
+        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+            return new WebDriverStub();
         }
 
+        DesiredCapabilities enhancedCapabilities = requestedPhantomJSCapabilities();
         driverProperties.registerCapabilities("phantomjs", enhancedCapabilities);
-        return ThreadGuard.protect(driver);
+
+        try {
+            return ThreadGuard.protect(getDriverServicePool().newDriver(enhancedCapabilities));
+        } catch (IOException couldNotStartChromeServer) {
+            LOGGER.warn("Failed to start the phantomJS driver service, using a native driver instead",  couldNotStartChromeServer.getMessage());
+            return ThreadGuard.protect(new PhantomJSDriver(enhancedCapabilities));
+        }
     }
+
+    private DesiredCapabilities requestedPhantomJSCapabilities() {
+        DesiredCapabilities capabilities = DesiredCapabilities.phantomjs();
+        PhantomJSCapabilityEnhancer phantomEnhancer = new PhantomJSCapabilityEnhancer(environmentVariables);
+        phantomEnhancer.enhanceCapabilities(capabilities);
+        return enhancer.enhanced(capabilities);
+    }
+
 }

@@ -29,8 +29,11 @@ public class HtmlDriverProvider implements DriverProvider {
         }
         DesiredCapabilities capabilities = DesiredCapabilities.htmlUnit();
         capabilities.setJavascriptEnabled(true);
-        HtmlUnitDriver driver = new HtmlUnitDriver(capabilities);
-        driverProperties.registerCapabilities("htmlunit", driver.getCapabilities());
+
+        DesiredCapabilities enhancedCapabilities = enhancer.enhanced(capabilities);
+
+        HtmlUnitDriver driver = new HtmlUnitDriver(enhancedCapabilities);
+        driverProperties.registerCapabilities("htmlunit", enhancedCapabilities);
         return driver;
     }
 

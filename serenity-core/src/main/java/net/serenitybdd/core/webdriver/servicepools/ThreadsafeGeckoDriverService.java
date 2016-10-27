@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
+import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.firefox.GeckoDriverService;
 
 import java.io.File;
@@ -14,14 +15,17 @@ public class ThreadsafeGeckoDriverService extends GeckoDriverService {
 
     ThreadLocal<GeckoDriverService> threadLocalDriverService = new ThreadLocal<>();
 
-    public ThreadsafeGeckoDriverService() throws IOException {
+    private final EnvironmentVariables environmentVariables;
+
+    public ThreadsafeGeckoDriverService(EnvironmentVariables environmentVariables) throws IOException {
         super(new File(""), 0, null, null);
+        this.environmentVariables = environmentVariables;
     }
 
 
-    public static GeckoDriverService createThreadsafeService() {
+    public static GeckoDriverService createThreadsafeService(EnvironmentVariables environmentVariables) {
         try {
-            return new ThreadsafeGeckoDriverService();
+            return new ThreadsafeGeckoDriverService(environmentVariables);
         } catch (IOException e) {
             throw new IllegalStateException("Failed to create threadsafe service", e);
         }
@@ -29,8 +33,10 @@ public class ThreadsafeGeckoDriverService extends GeckoDriverService {
 
     protected GeckoDriverService getThreadlocalGeckoService() {
         if (threadLocalDriverService.get() == null) {
-
-            GeckoDriverService newService = GeckoDriverService.createDefaultService();
+            GeckoDriverService newService = new GeckoDriverService.Builder()
+                    .usingDriverExecutable(GeckoDriverServiceExecutable.inEnvironment(environmentVariables))
+                    .usingAnyFreePort()
+                    .build();
 
             Runtime.getRuntime().addShutdownHook(new StopServiceHook(newService));
 

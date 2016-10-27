@@ -2,7 +2,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
-import net.serenitybdd.core.webdriver.servicepools.IEServicePool;
+import net.serenitybdd.core.webdriver.servicepools.InternetExplorerServicePool;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -25,7 +25,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
     private final DriverCapabilityRecord driverProperties;
     private static final Logger LOGGER = LoggerFactory.getLogger(InternetExplorerDriverProvider.class);
 
-    private final DriverServicePool driverServicePool = new IEServicePool();
+    private final DriverServicePool driverServicePool = new InternetExplorerServicePool();
 
     private DriverServicePool getDriverServicePool() throws IOException {
         driverServicePool.ensureServiceIsRunning();

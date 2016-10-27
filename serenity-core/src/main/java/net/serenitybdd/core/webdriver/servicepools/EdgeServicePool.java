@@ -1,5 +1,7 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
+import io.github.bonigarcia.wdm.EdgeDriverManager;
+import net.thucydides.core.ThucydidesSystemProperty;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -36,6 +38,10 @@ public class EdgeServicePool extends DriverServicePool<EdgeDriverService> {
     }
 
     private File edgeDriverExecutable() {
+        if (ThucydidesSystemProperty.AUTOMATIC_DRIVER_DOWNLOAD.booleanFrom(environmentVariables, true)) {
+            EdgeDriverManager.getInstance().setup();
+        }
+
         return DriverServiceExecutable.called("MicrosoftWebDriver.exe")
                 .withSystemProperty(WEBDRIVER_EDGE_DRIVER.getPropertyName())
                 .usingEnvironmentVariables(environmentVariables)

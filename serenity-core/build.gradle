@@ -1,4 +1,5 @@
 import org.apache.tools.ant.filters.*
+
 ext {
     bintrayPackage = 'serenity-core'
 }
@@ -60,11 +61,11 @@ dependencies {
         exclude group: 'xml-apis', module: 'xml-apis'
     }
 
-    compile("org.seleniumhq.selenium:htmlunit-driver:${htmlunitVersion}"){
+    compile("org.seleniumhq.selenium:htmlunit-driver:${htmlunitVersion}") {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
         exclude group: 'commons-codec', module: 'commons-codec'
-        exclude group: 'net.sourceforge.htmlunit', module:'htmlunit'
+        exclude group: 'net.sourceforge.htmlunit', module: 'htmlunit'
     }
 
     compile('io.appium:java-client:4.0.0') {
@@ -109,10 +110,10 @@ dependencies {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
         exclude group: 'org.apache.httpcomponents', module: 'httpmime'
     }
-    compile ('org.apache.httpcomponents:httpclient:4.5.2') {
+    compile('org.apache.httpcomponents:httpclient:4.5.2') {
         exclude group: 'commons-codec', module: 'commons-codec'
     }
-    compile ('org.apache.httpcomponents:httpmime:4.5.2'){
+    compile('org.apache.httpcomponents:httpmime:4.5.2') {
         exclude group: 'commons-codec', module: 'commons-codec'
     }
 
@@ -122,7 +123,7 @@ dependencies {
     }
     compile "com.jhlabs:filters:2.0.235"
     compile("org.asciidoctor:asciidoctor-java-integration:0.1.4") {
-        exclude group: 'com.beust', module:'jcommander'
+        exclude group: 'com.beust', module: 'jcommander'
     }
 
     compile 'org.imgscalr:imgscalr-lib:4.2'
@@ -135,10 +136,10 @@ dependencies {
     compile "org.objenesis:objenesis:2.1"
     compile "xml-apis:xml-apis:1.4.01"
     compile("xalan:xalan:2.7.2") {
-        exclude group: 'xalan', module:'serializer'
+        exclude group: 'xalan', module: 'serializer'
     }
     compile("xalan:serializer:2.7.2") {
-        exclude group: 'xml-apis', module:'xml-apis'
+        exclude group: 'xml-apis', module: 'xml-apis'
     }
 
     compile('com.jayway.awaitility:awaitility:1.6.3') {
@@ -148,8 +149,14 @@ dependencies {
     compile('org.jsoup:jsoup:1.8.3') {
         exclude group: 'junit', module: 'junit'
     }
-    compile ('com.google.jimfs:jimfs:1.0') {
+    compile('com.google.jimfs:jimfs:1.0') {
         exclude group: 'com.google.guava', module: 'guava'
+    }
+
+    compile('io.github.bonigarcia:webdrivermanager:1.4.10') {
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+        exclude group: 'com.google.code.gson', module: 'gson'
+        exclude group: 'org.jsoup', module: 'jsoup'
     }
 
     testCompile "junit:junit:${junitVersion}"

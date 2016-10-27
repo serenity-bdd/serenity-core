@@ -1,5 +1,7 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
+import io.github.bonigarcia.wdm.PhantomJsDriverManager;
+import net.thucydides.core.ThucydidesSystemProperty;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
@@ -26,6 +28,10 @@ public class PhantomJSServicePool extends DriverServicePool<PhantomJSDriverServi
     }
 
     private File phantomJSBinary() {
+        if (ThucydidesSystemProperty.AUTOMATIC_DRIVER_DOWNLOAD.booleanFrom(environmentVariables, true)) {
+            PhantomJsDriverManager.getInstance().setup();
+        }
+
         return DriverServiceExecutable.called("phantomjs")
                 .usingEnvironmentVariables(environmentVariables)
                 .withSystemProperty(PHANTOMJS_BINARY_PATH.getPropertyName())

@@ -1,11 +1,13 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
+import net.thucydides.core.ThucydidesSystemProperty;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.GeckoDriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import io.github.bonigarcia.wdm.MarionetteDriverManager;
 
 import java.io.File;
 
@@ -34,6 +36,10 @@ public class GeckoServicePool extends DriverServicePool<GeckoDriverService> {
     }
 
     private void configureGeckoDriverBinaries() {
+        if (ThucydidesSystemProperty.AUTOMATIC_DRIVER_DOWNLOAD.booleanFrom(environmentVariables, true)) {
+            MarionetteDriverManager.getInstance().setup();
+        }
+
         File geckoBinary = GeckoDriverServiceExecutable.inEnvironment(environmentVariables);
         DriverPathConfiguration.updateSystemProperty(WEBDRIVER_GECKO_DRIVER.getPropertyName())
                                .withExecutablePath(geckoBinary);

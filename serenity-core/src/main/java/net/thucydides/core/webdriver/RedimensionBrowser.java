@@ -5,6 +5,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 
 import static net.thucydides.core.ThucydidesSystemProperty.DEFAULT_HEIGHT;
 import static net.thucydides.core.ThucydidesSystemProperty.DEFAULT_WIDTH;
@@ -22,11 +23,11 @@ public class RedimensionBrowser {
         this.driverClass = driverClass;
     }
 
-    public void resizeDriver(final WebDriver driver) {
+    public void withDriver(final WebDriver driver) {
         if (supportsScreenResizing(driver) && browserDimensionsSpecified()) {
             resizeBrowserTo(driver,
-                    getRequestedBrowserSize().height,
-                    getRequestedBrowserSize().width);
+                            getRequestedBrowserSize().height,
+                            getRequestedBrowserSize().width);
         }
     }
 
@@ -44,10 +45,9 @@ public class RedimensionBrowser {
     }
 
     private boolean supportsScreenResizing(final WebDriver driver) {
-        boolean isAnAppiumDriver = DriverStrategySelector.inEnvironment(environmentVariables).isAnAppiumDriver(driverClass);
-        boolean isAnHtmlUnitDriver = DriverStrategySelector.inEnvironment(environmentVariables).isAnHtmlUnitDriver(driverClass);
+        boolean supportsResizing = DriverStrategySelector.inEnvironment(environmentVariables).supportsResizing(driverClass);
 
-        return (!isAnAppiumDriver) && isNotAMocked(driver) && (!isAnHtmlUnitDriver);
+        return (supportsResizing) && isNotAMocked(driver);
     }
 
     private boolean isNotAMocked(WebDriver driver) {
@@ -55,8 +55,18 @@ public class RedimensionBrowser {
     }
 
     protected void resizeBrowserTo(WebDriver driver, int height, int width) {
-        driver.manage().window().setSize(new Dimension(width, height));
-        driver.manage().window().setPosition(new Point(0,0));
+        try {
+            driver.manage().window().setSize(new Dimension(width, height));
+            driver.manage().window().setPosition(new Point(0, 0));
+        } catch (WebDriverException couldNotResizeScreen) {
+            if (couldNotResizeScreen.getMessage().contains("Invalid requested size")) {
+                maximiseBrowser(driver);
+            }
+        }
+    }
+
+    private void maximiseBrowser(WebDriver driver) {
+        driver.manage().window().maximize();
     }
 
 }

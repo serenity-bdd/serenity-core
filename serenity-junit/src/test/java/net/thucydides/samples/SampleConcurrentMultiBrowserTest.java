@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RunWith(SerenityParameterizedRunner.class)
-@Concurrent(threads = "2")
+@Concurrent(threads = "8")
 public class SampleConcurrentMultiBrowserTest {
 
     @TestData
@@ -26,6 +26,7 @@ public class SampleConcurrentMultiBrowserTest {
                 {"wash the dishes"},
                 {"feed the ferrets"},
                 {"count the rabbits"},
+                {"catch the fish"}
         });
     }
 
@@ -82,4 +83,84 @@ public class SampleConcurrentMultiBrowserTest {
         steps.stepThatIsPending();
     }
 
+    @Test
+    @WithDriver("firefox")
+    public void edge_case_4() {
+        steps.stepThatUsesABrowser();
+        steps.stepThatSucceeds();
+        steps.anotherStepThatSucceeds();
+        steps.stepThatIsPending();
+    }
+
+    @Test
+    @WithDriver("firefox")
+    public void edge_case_5() {
+        steps.stepThatUsesABrowser();
+        steps.stepThatSucceeds();
+        steps.anotherStepThatSucceeds();
+        steps.stepThatIsPending();
+    }
+
+    @Test
+    @WithDriver("phantomjs")
+    public void edge_case_6() {
+        steps.stepThatUsesABrowser();
+        steps.stepThatSucceeds();
+        steps.anotherStepThatSucceeds();
+        steps.stepThatIsPending();
+    }
+
+    @Test
+    @WithDriver("phantomjs")
+    public void edge_case_7() {
+        steps.stepThatUsesABrowser();
+        steps.stepThatSucceeds();
+        steps.anotherStepThatSucceeds();
+        steps.stepThatIsPending();
+    }
+
+    @Test
+    @WithDriver("htmlunit")
+    public void edge_case_8() {
+        steps.stepThatUsesABrowser();
+        steps.stepThatSucceeds();
+        steps.anotherStepThatSucceeds();
+        steps.stepThatIsPending();
+    }
+
+    @Test
+    @WithDriver("htmlunit")
+    public void edge_case_9() {
+        steps.stepThatUsesABrowser();
+        steps.stepThatSucceeds();
+        steps.anotherStepThatSucceeds();
+        steps.stepThatIsPending();
+    }
+
+//    @Test
+//    @WithDriver("safari")
+//    public void edge_case_10() {
+//        steps.stepThatUsesABrowser();
+//        steps.stepThatSucceeds();
+//        steps.anotherStepThatSucceeds();
+//        steps.stepThatIsPending();
+//    }
+//
+//    @Test
+//    @WithDriver("safari")
+//    public void edge_case_11() {
+//        steps.stepThatUsesABrowser();
+//        steps.stepThatSucceeds();
+//        steps.anotherStepThatSucceeds();
+//        steps.stepThatIsPending();
+//    }
+//
+//    @Test
+//    @WithDriver("safari")
+//    public void edge_case_12() {
+//        steps.stepThatUsesABrowser();
+//        steps.stepThatSucceeds();
+//        steps.anotherStepThatSucceeds();
+//        steps.stepThatIsPending();
+//    }
 }

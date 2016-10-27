@@ -16,7 +16,7 @@ import java.util.List;
 
 public class FirefoxProfileEnhancer {
 
-    private static final String FIREBUGS_VERSION = "2.0.17-fx";
+    private static final String FIREBUGS_VERSION = "2.0.18";
     private static final String MAX_FIREBUGS_VERSION = "999.99.0";
     private static final String FIREBUGS_XPI_FILE = "/firefox/firebug-" + FIREBUGS_VERSION + ".xpi";
 
@@ -40,7 +40,7 @@ public class FirefoxProfileEnhancer {
 
     public void addFirebugsTo(final FirefoxProfile profile) {
 //        try {
-//  TODO: Make this work for recent versions of FireFox
+//  TODO: Make this work for recent versions of FireFox. It fails due to an apparent bug in Firefox
 //            profile.addExtension(this.getClass(), FIREBUGS_XPI_FILE);
 //            profile.setPreference("extensions.firebug.currentVersion", MAX_FIREBUGS_VERSION); // Avoid startup screen
 //

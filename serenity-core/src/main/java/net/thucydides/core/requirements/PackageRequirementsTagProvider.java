@@ -52,9 +52,9 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         this.rootPackage = rootPackage;
         this.requirementsStore = requirementsStore;
 
-        if (rootPackage == null) {
-            logger.warn("To generate correct requirements coverage reports you need to set the 'serenity.test.root' property to the package representing the top of your requirements hierarchy.");
-        }
+//        if (rootPackage == null) {
+//            logger.warn("To generate correct requirements coverage reports you need to set the 'serenity.test.root' property to the package representing the top of your requirements hierarchy.");
+//        }
     }
 
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables, String rootPackage) {

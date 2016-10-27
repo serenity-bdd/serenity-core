@@ -8,11 +8,11 @@ public class IsNotSelectedMatcher<T extends WebElementState> extends TypeSafeMat
 
     @Override
     protected boolean matchesSafely(T element) {
-        return element.isSelected();
+        return !element.isSelected();
     }
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("is selected");
+        description.appendText("is not selected");
     }
 }

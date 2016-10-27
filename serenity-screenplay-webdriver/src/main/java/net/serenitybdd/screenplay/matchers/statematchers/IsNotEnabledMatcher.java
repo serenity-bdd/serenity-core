@@ -8,11 +8,11 @@ public class IsNotEnabledMatcher<T extends WebElementState> extends TypeSafeMatc
 
     @Override
     protected boolean matchesSafely(T element) {
-        return element.isEnabled();
+        return !element.isEnabled();
     }
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("is enabled");
+        description.appendText("is not enabled");
     }
 }

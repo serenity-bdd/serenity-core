@@ -8,11 +8,11 @@ public class IsNotVisibleMatcher<T extends WebElementState> extends TypeSafeMatc
 
     @Override
     protected boolean matchesSafely(T element) {
-        return element.isVisible();
+        return !element.isVisible();
     }
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("is visible");
+        description.appendText("is not visible");
     }
 }

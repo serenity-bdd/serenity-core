@@ -8,11 +8,11 @@ public class IsNotPresentMatcher<T extends WebElementState> extends TypeSafeMatc
 
     @Override
     protected boolean matchesSafely(T element) {
-        return element.isPresent();
+        return !element.isPresent();
     }
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("is present");
+        description.appendText("is not present");
     }
 }

@@ -24,7 +24,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
     protected SystemEnvironmentVariables(Properties systemProperties, Map<String, String> systemValues) {
         this.systemProperties = PropertiesUtil.copyOf(systemProperties);
-        this.systemValues = new HashMap<String, String>(systemValues);
+        this.systemValues = new HashMap<>(systemValues);
     }
 
     public String getValue(final String name) {

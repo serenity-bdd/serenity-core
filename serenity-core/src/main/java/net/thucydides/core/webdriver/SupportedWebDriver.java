@@ -32,6 +32,7 @@ public enum SupportedWebDriver {
     /**
      * Opera - use it with SauceLabs
      */
+    @Deprecated
     OPERA(OperaDriver.class),
 
     /**
@@ -116,11 +117,12 @@ public enum SupportedWebDriver {
     }
 
     public static SupportedWebDriver forClass(Class<?> driverClass) {
-       for(SupportedWebDriver supportedWebDriver : values()) {
-           if (supportedWebDriver.getWebdriverClass().equals(driverClass)) {
-               return supportedWebDriver;
-           }
-       }
+        for (SupportedWebDriver supportedWebDriver : values()) {
+            if (supportedWebDriver.getWebdriverClass().isAssignableFrom(driverClass)) {
+                return supportedWebDriver;
+            }
+        }
+
         throw new IllegalArgumentException("Driver not supported: " + driverClass);
     }
 }

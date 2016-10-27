@@ -1,8 +1,8 @@
 package net.thucydides.core.screenshots.integration
 
 import net.serenitybdd.core.Serenity
-import net.serenitybdd.core.support.ChromeService
-import net.serenitybdd.core.support.ManagedDriverService
+import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool
+import net.serenitybdd.core.webdriver.servicepools.DriverServicePool
 import net.thucydides.core.model.TestStep
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource
 import net.thucydides.core.steps.BaseStepListener
@@ -27,11 +27,11 @@ class WhenTakingScreenshots extends Specification {
 
     EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
 
-    @Shared ManagedDriverService chromeService;
+    @Shared DriverServicePool chromeService;
     WebDriver driver
 
     def setupSpec() {
-        chromeService = new ChromeService()
+        chromeService = new ChromeServicePool()
         chromeService.start()
         StepEventBus.eventBus.clear()
 

@@ -12,7 +12,7 @@ import net.thucydides.core.fixtureservices.FixtureService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.SauceRemoteDriverCapabilities;
-import net.thucydides.core.webdriver.strategies.*;
+import net.serenitybdd.core.webdriver.driverproviders.*;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -41,6 +41,8 @@ public class WebDriverFactory {
     private final EnvironmentVariables environmentVariables;
     private final FixtureProviderService fixtureProviderService;
     private final SauceRemoteDriverCapabilities sauceRemoteDriverCapabilities;
+
+    private Map<SupportedWebDriver, DriverProvider> driverProvidersByDriverType;
 
     private final TimeoutStack timeoutStack;
 
@@ -84,22 +86,26 @@ public class WebDriverFactory {
         return StringUtils.isNotEmpty(sauceRemoteDriverCapabilities.getUrl());
     }
 
-    private Map<DriverStrategy, DriverBuilder> driverBuilders() {
-        Map<DriverStrategy, DriverBuilder> builderMap = Maps.newHashMap();
-        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
+    private Map<SupportedWebDriver, DriverProvider> driverProviders() {
 
-        builderMap.put(DriverStrategy.Appium, new AppiumDriverBuilder(environmentVariables, enhancer));
-        builderMap.put(DriverStrategy.Remote, new RemoteDriverBuilder(environmentVariables, enhancer));
-        builderMap.put(DriverStrategy.Firefox, new FirefoxDriverBuilder(environmentVariables, enhancer));
-        builderMap.put(DriverStrategy.HtmlUnit, new HtmlDriverBuilder(environmentVariables, enhancer));
-        builderMap.put(DriverStrategy.PhantomJS, new PhantomJSDriverBuilder(environmentVariables, enhancer));
-        builderMap.put(DriverStrategy.Chrome, new ChromeDriverBuilder(environmentVariables, enhancer));
-        builderMap.put(DriverStrategy.Safari, new SafariDriverBuilder(environmentVariables, enhancer));
-        builderMap.put(DriverStrategy.IE, new InternetExplorerDriverBuilder(environmentVariables, enhancer));
-        builderMap.put(DriverStrategy.Edge, new EdgeDriverBuilder(environmentVariables, enhancer));
-        builderMap.put(DriverStrategy.Provided, new ProvidedDriverBuilder(environmentVariables, enhancer));
+        if (driverProvidersByDriverType == null) {
+            driverProvidersByDriverType = Maps.newHashMap();
 
-        return builderMap;
+            CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
+
+            driverProvidersByDriverType.put(SupportedWebDriver.APPIUM, new AppiumDriverProvider(environmentVariables, enhancer));
+            driverProvidersByDriverType.put(SupportedWebDriver.REMOTE, new RemoteDriverProvider(environmentVariables, enhancer));
+            driverProvidersByDriverType.put(SupportedWebDriver.FIREFOX, new FirefoxDriverProvider(environmentVariables, enhancer));
+            driverProvidersByDriverType.put(SupportedWebDriver.HTMLUNIT, new HtmlDriverProvider(environmentVariables, enhancer));
+            driverProvidersByDriverType.put(SupportedWebDriver.PHANTOMJS, new PhantomJSDriverProvider(environmentVariables, enhancer));
+            driverProvidersByDriverType.put(SupportedWebDriver.CHROME, new ChromeDriverProvider(environmentVariables, enhancer));
+            driverProvidersByDriverType.put(SupportedWebDriver.SAFARI, new SafariDriverProvider(environmentVariables, enhancer));
+            driverProvidersByDriverType.put(SupportedWebDriver.IEXPLORER, new InternetExplorerDriverProvider(environmentVariables, enhancer));
+            driverProvidersByDriverType.put(SupportedWebDriver.EDGE, new EdgeDriverProvider(environmentVariables, enhancer));
+            driverProvidersByDriverType.put(SupportedWebDriver.PROVIDED, new ProvidedDriverProvider(environmentVariables, enhancer));
+
+        }
+        return driverProvidersByDriverType;
     }
 
     /**
@@ -112,20 +118,16 @@ public class WebDriverFactory {
     protected synchronized WebDriver newWebdriverInstance(final Class<? extends WebDriver> driverClass) {
         RedimensionBrowser redimensionBrowser = new RedimensionBrowser(environmentVariables, driverClass);
         try {
-            DriverStrategy strategy = inEnvironment(environmentVariables).forDriverClass(driverClass);
-            WebDriver driver = driverBuilders().get(strategy).newInstance();
-
-            if (driver == null) {
-                throw new UnsupportedDriverException("Failed to instantiate " + driverClass);
-            }
+            SupportedWebDriver supportedDriverType = inEnvironment(environmentVariables).forDriverClass(driverClass);
+            WebDriver driver = driverProviders().get(supportedDriverType).newInstance();
             setImplicitTimeoutsIfSpecified(driver);
-            redimensionBrowser.resizeDriver(driver);
+            redimensionBrowser.withDriver(driver);
 
             return driver;
         } catch (SerenityManagedException toPassThrough) {
             throw toPassThrough;
         } catch (Exception cause) {
-             throw new UnsupportedDriverException("Could not instantiate " + driverClass, cause);
+             throw new UnsupportedDriverException("Could not instantiate new webdriver instance of type " + driverClass, cause);
         }
     }
 

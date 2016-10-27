@@ -63,6 +63,11 @@ public enum ThucydidesSystemProperty {
     WEBDRIVER_IE_DRIVER,
 
     /**
+     * Path to the Edge driver, if it is not on the system path.
+     */
+    WEBDRIVER_EDGE_DRIVER,
+
+    /**
      * Path to the Chrome driver, if it is not on the system path.
      */
     WEBDRIVER_CHROME_DRIVER,
@@ -640,6 +645,11 @@ public enum ThucydidesSystemProperty {
     PHANTOMJS_BINARY_PATH,
 
     /**
+     * Path to the Gecko driver binary
+     */
+    WEBDRIVER_GECKO_DRIVER,
+
+    /**
      * If set to true, don't format embedded tables in JBehave or Gherkin steps.
      * False by default.
      */
@@ -782,7 +792,19 @@ public enum ThucydidesSystemProperty {
      * mode waits for at least one element to be visible before proceeding.
      * For legacy reasons, the default strategy is Pessimistic.
      */
-    SERENITY_WEBDRIVER_COLLECTION_LOADING_STRATEGY("serenity.webdriver.collection_loading_strategy");
+    SERENITY_WEBDRIVER_COLLECTION_LOADING_STRATEGY("serenity.webdriver.collection_loading_strategy"),
+
+    /**
+     * If the Gecko Driver is on the system path, it will be used (with Marionnette) by default.
+     * If you want to use the old-style Firefox driver, but have gecko on the system path,
+     * then set this property to false.
+     */
+    USE_GECKO_DRIVER,
+
+    /**
+     * Use this property to pass options to Marionette using the 'moz:firefoxOptions' capability option.
+     */
+    GECKO_FIREFOX_OPTIONS;
 
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;

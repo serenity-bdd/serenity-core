@@ -10,8 +10,6 @@ import net.thucydides.samples.*
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.notification.RunNotifier
-import org.openqa.selenium.firefox.FirefoxDriver
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -23,8 +21,6 @@ import static net.thucydides.junit.runners.TestOutcomeChecks.resultsFrom
 
 class WhenRunningTestScenarios extends Specification {
 
-    def firefoxDriver = Mock(FirefoxDriver)
-    def htmlUnitDriver = Mock(HtmlUnitDriver)
     def environmentVariables = new MockEnvironmentVariables()
     def configuration = new SystemPropertiesConfiguration(environmentVariables)
     def webDriverFactory = new WebDriverFactory(environmentVariables)
@@ -75,7 +71,7 @@ class WhenRunningTestScenarios extends Specification {
             runner.run(new RunNotifier())
             def drivers = runner.testOutcomes.collect {it.driver}
         then:
-            drivers.contains("htmlunit")
+            drivers.contains("firefox")
     }
 
     def "should not record a driver used for a non-web test"() {
@@ -500,7 +496,7 @@ class WhenRunningTestScenarios extends Specification {
             new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
             def htmlReports = reload(temporaryDirectory).list().findAll {it.toLowerCase().endsWith(".html")}
         then:
-            htmlReports.size() == 3
+            htmlReports.size() == 4
     }
 
 

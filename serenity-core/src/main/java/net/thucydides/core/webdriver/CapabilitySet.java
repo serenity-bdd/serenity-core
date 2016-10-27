@@ -22,7 +22,6 @@ import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_DRIVER_CAP
 class CapabilitySet {
     private final EnvironmentVariables environmentVariables;
     private static final CharMatcher CAPABILITY_SEPARATOR = CharMatcher.anyOf(";");
-    private static final char CAPABILITY_NAME_VALUE_SEPARATOR = ':';
 
     CapabilitySet(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables.copy();

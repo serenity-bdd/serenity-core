@@ -18,12 +18,10 @@ public class TestLifecycleEvents {
         eventBus.unregister(listener);
     }
 
-    public static Object testSuiteStarted() {
+    public static TestSuiteStarted testSuiteStarted() {
         return new TestSuiteStarted();
     }
-    public static Object testSuiteFinished() {
-        return new TestSuiteFinished();
-    }
+    public static TestSuiteFinished testSuiteFinished() { return new TestSuiteFinished();}
 
     public static class TestSuiteStarted {}
     public static class TestSuiteFinished {}

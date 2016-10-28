@@ -22,7 +22,7 @@ public class GeckoDriverServiceExecutable {
     private File executablePath() {
         File geckoBinary = geckoBinaryCalled("geckodriver");
 
-        if (!geckoBinary.exists()) {
+        if (geckoBinary == null || !geckoBinary.exists()) {
             geckoBinary = geckoBinaryCalled("wires");
         }
 

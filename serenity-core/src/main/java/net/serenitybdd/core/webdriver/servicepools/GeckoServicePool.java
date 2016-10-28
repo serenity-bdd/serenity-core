@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
+import com.google.common.base.Optional;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -34,9 +35,11 @@ public class GeckoServicePool extends DriverServicePool<GeckoDriverService> {
     }
 
     private void configureGeckoDriverBinaries() {
-        File geckoBinary = GeckoDriverServiceExecutable.inEnvironment(environmentVariables);
+        Optional<File> geckoBinary = GeckoDriverServiceExecutable.inEnvironment(environmentVariables);
 
-        DriverPathConfiguration.updateSystemProperty(WEBDRIVER_GECKO_DRIVER.getPropertyName())
-                               .withExecutablePath(geckoBinary);
+        if (geckoBinary.isPresent()) {
+            DriverPathConfiguration.updateSystemProperty(WEBDRIVER_GECKO_DRIVER.getPropertyName())
+                    .withExecutablePath(geckoBinary.get());
+        }
     }
 }

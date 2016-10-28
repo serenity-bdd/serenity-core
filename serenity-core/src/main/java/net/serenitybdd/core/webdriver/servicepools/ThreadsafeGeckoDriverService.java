@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
+import com.google.common.base.Optional;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.firefox.GeckoDriverService;
 
@@ -33,12 +34,21 @@ public class ThreadsafeGeckoDriverService extends GeckoDriverService {
 
     protected GeckoDriverService getThreadlocalGeckoService() {
         if (threadLocalDriverService.get() == null) {
-            GeckoDriverService newService = new GeckoDriverService.Builder()
-                    .usingDriverExecutable(GeckoDriverServiceExecutable.inEnvironment(environmentVariables))
-                    .usingAnyFreePort()
-                    .build();
 
-            Runtime.getRuntime().addShutdownHook(new StopServiceHook(newService));
+            Optional<File> geckoExecutable = GeckoDriverServiceExecutable.inEnvironment(environmentVariables);
+
+            GeckoDriverService newService;
+
+            if (geckoExecutable.isPresent()) {
+                newService = new GeckoDriverService.Builder()
+                        .usingDriverExecutable(geckoExecutable.get())
+                        .usingAnyFreePort()
+                        .build();
+
+                Runtime.getRuntime().addShutdownHook(new StopServiceHook(newService));
+            } else {
+                newService = DisabledGeckoDriverService.build();
+            }
 
             threadLocalDriverService.set(newService);
         }

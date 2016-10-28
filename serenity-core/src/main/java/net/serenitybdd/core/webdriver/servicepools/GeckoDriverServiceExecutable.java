@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
+import com.google.common.base.Optional;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
@@ -15,29 +16,18 @@ public class GeckoDriverServiceExecutable {
         this.environmentVariables = environmentVariables;
     }
 
-    public static File inEnvironment(EnvironmentVariables environmentVariables) {
+    public static Optional<File> inEnvironment(EnvironmentVariables environmentVariables) {
         return new GeckoDriverServiceExecutable(environmentVariables).executablePath();
     }
 
-    private File executablePath() {
+    private Optional<File> executablePath() {
         File geckoBinary = geckoBinaryCalled("geckodriver");
 
         if (geckoBinary == null || !geckoBinary.exists()) {
             geckoBinary = geckoBinaryCalled("wires");
         }
 
-        checkForPresenceOfBinary();
-
-        return geckoBinary;
-    }
-
-    private void checkForPresenceOfBinary() {
-        DriverServiceExecutable.called("geckodriver")
-                .withSystemProperty(WEBDRIVER_GECKO_DRIVER.getPropertyName())
-                .usingEnvironmentVariables(environmentVariables)
-                .reportMissingBinary()
-                .downloadableFrom("https://github.com/jgraham/wires")
-                .asAFile();
+        return Optional.fromNullable(geckoBinary);
     }
 
     private File geckoBinaryCalled(String driverName) {

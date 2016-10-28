@@ -45,7 +45,8 @@ public class EdgeServicePool extends DriverServicePool<EdgeDriverService> {
         return DriverServiceExecutable.called("MicrosoftWebDriver.exe")
                 .withSystemProperty(WEBDRIVER_EDGE_DRIVER.getPropertyName())
                 .usingEnvironmentVariables(environmentVariables)
-                .andDownloadableFrom("https://www.microsoft.com/en-us/download/details.aspx?id=48212")
+                .reportMissingBinary()
+                .downloadableFrom("https://www.microsoft.com/en-us/download/details.aspx?id=48212")
                 .asAFile();
     }
 }

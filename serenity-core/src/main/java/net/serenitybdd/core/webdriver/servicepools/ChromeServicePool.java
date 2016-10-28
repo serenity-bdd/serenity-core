@@ -1,7 +1,5 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
-import io.github.bonigarcia.wdm.ChromeDriverManager;
-import net.thucydides.core.ThucydidesSystemProperty;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -38,13 +36,11 @@ public class ChromeServicePool extends DriverServicePool<ChromeDriverService> {
 
     private File chromeDriverExecutable() {
 
-        if (ThucydidesSystemProperty.AUTOMATIC_DRIVER_DOWNLOAD.booleanFrom(environmentVariables, true)) {
-            ChromeDriverManager.getInstance().setup();
-        }
         File executable = DriverServiceExecutable.called("chromedriver")
                 .withSystemProperty(WEBDRIVER_CHROME_DRIVER.getPropertyName())
                 .usingEnvironmentVariables(environmentVariables)
-                .andDownloadableFrom("https://sites.google.com/a/chromium.org/chromedriver/downloads")
+                .reportMissingBinary()
+                .downloadableFrom("https://sites.google.com/a/chromium.org/chromedriver/downloads")
                 .asAFile();
 
         return executable;

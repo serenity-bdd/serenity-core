@@ -146,17 +146,11 @@ dependencies {
         exclude group: 'cglib', module: 'cglib-nodep'
     }
     compile "com.typesafe:config:${typesafeConfigVersion}"
-    compile('org.jsoup:jsoup:1.8.3') {
+    compile('org.jsoup:jsoup:1.9.2') {
         exclude group: 'junit', module: 'junit'
     }
     compile('com.google.jimfs:jimfs:1.0') {
         exclude group: 'com.google.guava', module: 'guava'
-    }
-
-    compile('io.github.bonigarcia:webdrivermanager:1.4.10') {
-        exclude group: 'org.slf4j', module: 'slf4j-api'
-        exclude group: 'com.google.code.gson', module: 'gson'
-        exclude group: 'org.jsoup', module: 'jsoup'
     }
 
     testCompile "junit:junit:${junitVersion}"

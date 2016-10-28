@@ -12,11 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class DriverServicePool<T extends DriverService> {
 
-    private final static Map<String, DriverService> DRIVER_SERVICES = Maps.newConcurrentMap();
+    private static final ConcurrentMap<String, DriverService> DRIVER_SERVICES = Maps.newConcurrentMap();
 
     protected final EnvironmentVariables environmentVariables;
 
@@ -28,6 +29,7 @@ public abstract class DriverServicePool<T extends DriverService> {
 
     /**
      * Used as a fallback if the driver service cannot be used for some reason.
+     *
      * @param capabilities
      */
     protected abstract WebDriver newDriverInstance(Capabilities capabilities);
@@ -50,14 +52,19 @@ public abstract class DriverServicePool<T extends DriverService> {
         return driverServiceWithName(serviceName());
     }
 
+    private static Integer addServiceGateway = 0;
+
+    private final ReentrantLock lock = new ReentrantLock();
+
     private T driverServiceWithName(String serviceName) {
-        synchronized (DRIVER_SERVICES) {
-            if (!DRIVER_SERVICES.containsKey(serviceName)) {
-                T newDriverService = newDriverService();
-                DRIVER_SERVICES.put(serviceName(), newDriverService);
-            }
+
+        if (DRIVER_SERVICES.get(serviceName) != null) {
             return (T) DRIVER_SERVICES.get(serviceName);
         }
+
+        DRIVER_SERVICES.putIfAbsent(serviceName, newDriverService());
+
+        return (T) DRIVER_SERVICES.get(serviceName);
     }
 
     public synchronized void start() throws IOException {
@@ -77,7 +84,7 @@ public abstract class DriverServicePool<T extends DriverService> {
             logger.debug("Creating new driver instance with capabilities: {}", capabilities);
             return new RemoteWebDriver(getDriverService().getUrl(), capabilities);
         } catch (WebDriverException couldNotReachDriverService) {
-            logger.warn("Remote driver creation failed ({}), falling back on default driver creation",couldNotReachDriverService.getMessage().split("\n")[0]);
+            logger.warn("Remote driver creation failed ({}), falling back on default driver creation", couldNotReachDriverService.getMessage().split("\n")[0]);
             return newDriverInstance(capabilities);
         }
     }

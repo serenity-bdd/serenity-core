@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RunWith(SerenityParameterizedRunner.class)
-@Concurrent(threads = "8")
+@Concurrent(threads = "4")
 public class SampleConcurrentMultiBrowserTest {
 
     @TestData
@@ -137,30 +137,30 @@ public class SampleConcurrentMultiBrowserTest {
         steps.stepThatIsPending();
     }
 
-//    @Test
-//    @WithDriver("safari")
-//    public void edge_case_10() {
-//        steps.stepThatUsesABrowser();
-//        steps.stepThatSucceeds();
-//        steps.anotherStepThatSucceeds();
-//        steps.stepThatIsPending();
-//    }
-//
-//    @Test
-//    @WithDriver("safari")
-//    public void edge_case_11() {
-//        steps.stepThatUsesABrowser();
-//        steps.stepThatSucceeds();
-//        steps.anotherStepThatSucceeds();
-//        steps.stepThatIsPending();
-//    }
-//
-//    @Test
-//    @WithDriver("safari")
-//    public void edge_case_12() {
-//        steps.stepThatUsesABrowser();
-//        steps.stepThatSucceeds();
-//        steps.anotherStepThatSucceeds();
-//        steps.stepThatIsPending();
-//    }
+    @Test
+    @WithDriver("safari")
+    public void edge_case_10() {
+        steps.stepThatUsesABrowser();
+        steps.stepThatSucceeds();
+        steps.anotherStepThatSucceeds();
+        steps.stepThatIsPending();
+    }
+
+    @Test
+    @WithDriver("safari")
+    public void edge_case_11() {
+        steps.stepThatUsesABrowser();
+        steps.stepThatSucceeds();
+        steps.anotherStepThatSucceeds();
+        steps.stepThatIsPending();
+    }
+
+    @Test
+    @WithDriver("safari")
+    public void edge_case_12() {
+        steps.stepThatUsesABrowser();
+        steps.stepThatSucceeds();
+        steps.anotherStepThatSucceeds();
+        steps.stepThatIsPending();
+    }
 }

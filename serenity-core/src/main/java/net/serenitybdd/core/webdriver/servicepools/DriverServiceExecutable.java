@@ -5,6 +5,8 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.os.CommandLine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
@@ -17,17 +19,22 @@ public class DriverServiceExecutable {
     private final String documentationUrl;
     private final String downloadUrl;
     private final EnvironmentVariables environmentVariables;
+    private final boolean reportMissingBinary;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public DriverServiceExecutable(String exeName,
                                    String exeProperty,
                                    String documentationUrl,
                                    String downloadUrl,
-                                   EnvironmentVariables environmentVariables) {
+                                   EnvironmentVariables environmentVariables,
+                                   boolean checkExecutable) {
         this.exeName = exeName;
         this.exeProperty = exeProperty;
         this.documentationUrl = documentationUrl;
         this.downloadUrl = downloadUrl;
         this.environmentVariables = environmentVariables;
+        this.reportMissingBinary = checkExecutable;
     }
 
 
@@ -41,6 +48,7 @@ public class DriverServiceExecutable {
         private String exeProperty;
         private String documentationUrl;
         private Optional<EnvironmentVariables> environmentVariables = Optional.absent();
+        private boolean checkExecutable = false;
 
         public DriverServiceExecutableBuilder(String exeName) {
             this.exeName = exeName;
@@ -56,13 +64,19 @@ public class DriverServiceExecutable {
             return this;
         }
 
-        public DriverServiceExecutable andDownloadableFrom(String downloadUrl) {
+        public DriverServiceExecutableBuilder reportMissingBinary() {
+            this.checkExecutable = checkExecutable;
+            return this;
+        }
+
+        public DriverServiceExecutable downloadableFrom(String downloadUrl) {
             return new DriverServiceExecutable(exeName,
                     exeProperty,
                     documentationUrl,
                     downloadUrl,
                     environmentVariables.or(
-                            Injectors.getInjector().getInstance(EnvironmentVariables.class))
+                            Injectors.getInjector().getInstance(EnvironmentVariables.class)),
+                    checkExecutable
             );
         }
 
@@ -76,23 +90,29 @@ public class DriverServiceExecutable {
         Optional<String> defaultPath = Optional.fromNullable(CommandLine.find(exeName));
 
         Optional<String> configuredBinaryPath = Optional.fromNullable(environmentVariables.getProperty(exeProperty));
-        String exePath = configuredBinaryPath.or(defaultPath).orNull();
+        String exePath = configuredBinaryPath.or(defaultPath).or("");
 
+        File executableLocation = new File(exePath);
+
+        if (reportMissingBinary) {
+            checkForMissingBinaries(executableLocation);
+        }
+        return executableLocation;
+    }
+
+    private void checkForMissingBinaries(File executableLocation) {
         String documentationSource = Optional.fromNullable(documentationUrl).or(downloadUrl);
 
-        checkState(exePath != null,
+        checkState(executableLocation != null,
                 "The path to the %s driver executable must be set by the %s system property;"
                         + " for more information, see %s. "
                         + "The latest version can be downloaded from %s",
                 exeName, exeProperty, documentationSource, downloadUrl);
-
-        File exe = new File(exePath);
-        checkExecutable(exe);
-        return exe;
+        checkExecutable(executableLocation);
     }
 
-
     protected static void checkExecutable(File exe) {
+
         checkState(exe.exists(),
                 "The driver executable does not exist: %s", exe.getAbsolutePath());
         checkState(!exe.isDirectory(),

@@ -45,7 +45,8 @@ public class InternetExplorerServicePool extends DriverServicePool<InternetExplo
         return DriverServiceExecutable.called("IEDriverServer.exe")
                 .withSystemProperty(WEBDRIVER_IE_DRIVER.getPropertyName())
                 .usingEnvironmentVariables(environmentVariables)
-                .andDownloadableFrom("https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver")
+                .reportMissingBinary()
+                .downloadableFrom("https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver")
                 .asAFile();
     }
 }

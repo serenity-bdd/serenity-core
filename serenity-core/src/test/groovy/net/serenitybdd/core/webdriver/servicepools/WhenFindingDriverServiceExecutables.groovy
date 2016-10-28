@@ -15,7 +15,7 @@ class WhenFindingDriverServiceExecutables extends Specification {
         when:
             File gitExe = DriverServiceExecutable.called("git")
                                    .withSystemProperty("undefined.property")
-                                   .andDownloadableFrom("the internet")
+                                   .downloadableFrom("the internet")
                                    .asAFile()
         then:
             gitExe.exists()
@@ -30,7 +30,7 @@ class WhenFindingDriverServiceExecutables extends Specification {
             File gitExe = DriverServiceExecutable.called("git")
                     .withSystemProperty("my.exe.path")
                     .usingEnvironmentVariables(environmentVariables)
-                    .andDownloadableFrom("the internet")
+                    .downloadableFrom("the internet")
                     .asAFile()
         then:
             gitExe.getAbsolutePath() == configuredPath
@@ -40,7 +40,7 @@ class WhenFindingDriverServiceExecutables extends Specification {
         when:
         DriverServiceExecutable.called("myexe")
                 .withSystemProperty("my.exe.path")
-                .andDownloadableFrom("the internet")
+                .downloadableFrom("the internet")
                 .asAFile()
 
         then:
@@ -53,7 +53,7 @@ class WhenFindingDriverServiceExecutables extends Specification {
         DriverServiceExecutable.called("myexe")
                 .withSystemProperty("my.exe.path")
                 .documentedAt("the website")
-                .andDownloadableFrom("the internet")
+                .downloadableFrom("the internet")
                 .asAFile()
 
         then:

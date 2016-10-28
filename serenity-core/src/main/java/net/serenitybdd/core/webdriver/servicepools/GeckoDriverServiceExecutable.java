@@ -1,5 +1,7 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
+import io.github.bonigarcia.wdm.MarionetteDriverManager;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
@@ -20,20 +22,38 @@ public class GeckoDriverServiceExecutable {
     }
 
     private File executablePath() {
-        File geckoBinary;
-        try {
-            geckoBinary = geckoBinaryCalled("geckodriver");
-        } catch (IllegalStateException geckodriverNotFoundSoTryWiresBinary) {
+        File geckoBinary = geckoBinaryCalled("geckodriver");
+
+        if (!geckoBinary.exists()) {
             geckoBinary = geckoBinaryCalled("wires");
         }
+
+        // Only download Gecko if requested
+        // TODO: Make this automatic with Selenium 3
+        if (!geckoBinary.exists()
+                && ThucydidesSystemProperty.USE_GECKO_DRIVER.booleanFrom(environmentVariables, false)) {
+            MarionetteDriverManager.getInstance().setup();
+        }
+
+        checkForPresenceOfBinary();
+
         return geckoBinary;
+    }
+
+    private void checkForPresenceOfBinary() {
+        DriverServiceExecutable.called("geckodriver")
+                .withSystemProperty(WEBDRIVER_GECKO_DRIVER.getPropertyName())
+                .usingEnvironmentVariables(environmentVariables)
+                .reportMissingBinary()
+                .downloadableFrom("https://github.com/jgraham/wires")
+                .asAFile();
     }
 
     private File geckoBinaryCalled(String driverName) {
         return DriverServiceExecutable.called(driverName)
                 .withSystemProperty(WEBDRIVER_GECKO_DRIVER.getPropertyName())
                 .usingEnvironmentVariables(environmentVariables)
-                .andDownloadableFrom("https://github.com/jgraham/wires")
+                .downloadableFrom("https://github.com/jgraham/wires")
                 .asAFile();
     }
 

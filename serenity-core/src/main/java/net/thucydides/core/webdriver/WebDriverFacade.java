@@ -18,6 +18,8 @@ import org.openqa.selenium.support.ui.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -175,12 +177,38 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     private void openIgnoringHtmlUnitScriptErrors(final String url) {
         try {
-            getProxiedDriver().get(url);
+            ignoreUndefinedErrorsIfTheUrlIsCorrectFor(getProxiedDriver(), url);
             setTimeouts();
         } catch (WebDriverException e) {
             if (!htmlunitScriptError(e)) {
                 throw e;
             }
+        }
+    }
+
+    private void ignoreUndefinedErrorsIfTheUrlIsCorrectFor(WebDriver driver, String url) {
+        try {
+            driver.get(url);
+        } catch (WebDriverException potentiallyIgnorableError) {
+            if (!currentUrlFor(driver).equals(urlDeclaredIn(url))) {
+                throw potentiallyIgnorableError;
+            }
+        }
+    }
+
+    private URL urlDeclaredIn(String url) {
+        try {
+            return new URL(url);
+        } catch (MalformedURLException e) {
+            throw new WebDriverException(e);
+        }
+    }
+
+    private URL currentUrlFor(WebDriver driver) {
+        try {
+            return new URL(driver.getCurrentUrl());
+        } catch (MalformedURLException e) {
+            throw new WebDriverException(e);
         }
     }
 
@@ -251,8 +279,11 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         if (!isEnabled()) {
             return StringUtils.EMPTY;
         }
-
-        return getProxiedDriver().getPageSource();
+        try {
+            return getProxiedDriver().getPageSource();
+        } catch (WebDriverException pageSourceNotSupported) {
+            return StringUtils.EMPTY;
+        }
     }
 
     public void setImplicitTimeout(Duration implicitTimeout) {

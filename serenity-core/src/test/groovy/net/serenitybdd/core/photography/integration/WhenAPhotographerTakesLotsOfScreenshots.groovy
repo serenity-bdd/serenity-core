@@ -5,6 +5,7 @@ import net.serenitybdd.core.photography.Darkroom
 import net.serenitybdd.core.photography.Photographer
 import net.serenitybdd.core.photography.ScreenshotPhoto
 import org.openqa.selenium.phantomjs.PhantomJSDriver
+import spock.lang.Ignore
 import spock.lang.Specification
 import java.nio.file.Files
 import java.nio.file.Path
@@ -49,6 +50,7 @@ class WhenAPhotographerTakesLotsOfScreenshots extends Specification {
 
     }
 
+    @Ignore("For exploratory and performance testing")
     def "should handle multiple screenshots in parallel"() {
         given:
             def photographer = new Photographer(darkroom);

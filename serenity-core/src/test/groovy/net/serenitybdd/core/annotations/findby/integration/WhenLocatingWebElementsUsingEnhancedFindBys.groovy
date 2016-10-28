@@ -6,6 +6,7 @@ import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.integration.PageWithFindBys
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.remote.DesiredCapabilities
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -23,12 +24,12 @@ class WhenLocatingWebElementsUsingEnhancedFindBys extends Specification {
     }
 
     def cleanupSpec() {
-        chromeService.stop()
+        chromeService.shutdown()
     }
 
     def setup() {
         StepEventBus.eventBus.clear()
-        driver = chromeService.newDriver()
+        driver = chromeService.newDriver(DesiredCapabilities.chrome())
     }
 
     def cleanup() {

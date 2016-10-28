@@ -136,31 +136,31 @@ public class SampleConcurrentMultiBrowserTest {
         steps.anotherStepThatSucceeds();
         steps.stepThatIsPending();
     }
-
-    @Test
-    @WithDriver("safari")
-    public void edge_case_10() {
-        steps.stepThatUsesABrowser();
-        steps.stepThatSucceeds();
-        steps.anotherStepThatSucceeds();
-        steps.stepThatIsPending();
-    }
-
-    @Test
-    @WithDriver("safari")
-    public void edge_case_11() {
-        steps.stepThatUsesABrowser();
-        steps.stepThatSucceeds();
-        steps.anotherStepThatSucceeds();
-        steps.stepThatIsPending();
-    }
-
-    @Test
-    @WithDriver("safari")
-    public void edge_case_12() {
-        steps.stepThatUsesABrowser();
-        steps.stepThatSucceeds();
-        steps.anotherStepThatSucceeds();
-        steps.stepThatIsPending();
-    }
+//
+//    @Test
+//    @WithDriver("safari")
+//    public void edge_case_10() {
+//        steps.stepThatUsesABrowser();
+//        steps.stepThatSucceeds();
+//        steps.anotherStepThatSucceeds();
+//        steps.stepThatIsPending();
+//    }
+//
+//    @Test
+//    @WithDriver("safari")
+//    public void edge_case_11() {
+//        steps.stepThatUsesABrowser();
+//        steps.stepThatSucceeds();
+//        steps.anotherStepThatSucceeds();
+//        steps.stepThatIsPending();
+//    }
+//
+//    @Test
+//    @WithDriver("safari")
+//    public void edge_case_12() {
+//        steps.stepThatUsesABrowser();
+//        steps.stepThatSucceeds();
+//        steps.anotherStepThatSucceeds();
+//        steps.stepThatIsPending();
+//    }
 }

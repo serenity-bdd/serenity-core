@@ -71,7 +71,7 @@ class WhenRunningTestScenarios extends Specification {
             runner.run(new RunNotifier())
             def drivers = runner.testOutcomes.collect {it.driver}
         then:
-            drivers.contains("firefox")
+            drivers.contains("htmlunit")
     }
 
     def "should not record a driver used for a non-web test"() {
@@ -496,7 +496,7 @@ class WhenRunningTestScenarios extends Specification {
             new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
             def htmlReports = reload(temporaryDirectory).list().findAll {it.toLowerCase().endsWith(".html")}
         then:
-            htmlReports.size() == 4
+            htmlReports.size() == 3
     }
 
 

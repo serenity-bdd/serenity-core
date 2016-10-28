@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.thucydides.core.guice.Injectors;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -98,7 +99,9 @@ public class WebdriverProxyFactory implements Serializable {
     public static void clearBrowserSession(WebDriver driver) {
         if (((WebDriverFacade) driver).isInstantiated()) {
             driver.manage().deleteAllCookies();
-            ((JavascriptExecutor) driver).executeScript(String.format("window.localStorage.clear();"));
+            try {
+                ((JavascriptExecutor) driver).executeScript(String.format("window.localStorage.clear();"));
+            } catch (WebDriverException driverDoesntSupportJavascriptTooBad) {}
         }
     }
 }

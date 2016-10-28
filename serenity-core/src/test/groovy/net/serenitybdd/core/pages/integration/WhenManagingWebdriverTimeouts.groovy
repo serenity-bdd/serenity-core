@@ -19,6 +19,7 @@ import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.TimeoutException
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.chrome.ChromeDriver
 import spock.lang.*
 
 import java.util.concurrent.TimeUnit
@@ -38,21 +39,21 @@ import static java.util.concurrent.TimeUnit.SECONDS
  */
 class WhenManagingWebdriverTimeouts extends Specification {
 
-    @Shared DriverServicePool chromeService;
+    @Shared DriverServicePool driverService;
 
     WebDriver driver
 
     def setupSpec() {
-        chromeService = new ChromeServicePool()
-        chromeService.start()
+        driverService = new ChromeServicePool()
+        driverService.start()
     }
 
     def cleanupSpec() {
-        chromeService.stop()
+        driverService.shutdown()
     }
 
     def WebDriver newDriver() {
-        driver = chromeService.newDriver();
+        driver = new ChromeDriver()// driverService.newDriver(DesiredCapabilities.chrome());
         return driver
     }
 
@@ -92,7 +93,6 @@ class WhenManagingWebdriverTimeouts extends Specification {
             StepEventBus.getEventBus().stepFailed(stepFailure);
         when: "We access the field"
             def page = openStaticPage()
-
             page.verySlowLoadingField.isDisplayed()
         then: "No error should be thrown"
             notThrown(org.openqa.selenium.ElementNotVisibleException)
@@ -258,7 +258,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         then:
             NoSuchElementException timeout = thrown()
         and:
-            timeout.message.contains("Expected condition failed: waiting for StaticSitePage.slowLoadingField to be displayed")
+            timeout.message.contains("Timed out after 1 seconds waiting for StaticSitePage.slowLoadingField to be displayed")
     }
 
     def "You can wait for elements to be not visible"() {

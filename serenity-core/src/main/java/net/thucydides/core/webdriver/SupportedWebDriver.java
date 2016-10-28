@@ -52,12 +52,12 @@ public enum SupportedWebDriver {
     /**
      * Internet Explorer
      */
-    IEXPLORER(InternetExplorerDriver.class),
+    IEXPLORER(InternetExplorerDriver.class, false),
 
     /**
      * Microsoft Edge
      */
-    EDGE(EdgeDriver.class),
+    EDGE(EdgeDriver.class, false),
 
     /**
      * Safari
@@ -76,8 +76,16 @@ public enum SupportedWebDriver {
 
     private final Class<? extends WebDriver> webdriverClass;
 
+    private final boolean supportsJavascriptInjection;
+
+    private SupportedWebDriver(Class<? extends WebDriver> webdriverClass, boolean supportsJavascriptInjection) {
+        this.webdriverClass = webdriverClass;
+        this.supportsJavascriptInjection = supportsJavascriptInjection;
+    }
+
     private SupportedWebDriver(Class<? extends WebDriver> webdriverClass) {
         this.webdriverClass = webdriverClass;
+        this.supportsJavascriptInjection = true;
     }
 
     public Class<? extends WebDriver> getWebdriverClass() {
@@ -118,11 +126,15 @@ public enum SupportedWebDriver {
 
     public static SupportedWebDriver forClass(Class<?> driverClass) {
         for (SupportedWebDriver supportedWebDriver : values()) {
-            if (supportedWebDriver.getWebdriverClass().isAssignableFrom(driverClass)) {
+            if (driverClass.isAssignableFrom(supportedWebDriver.getWebdriverClass())) {
                 return supportedWebDriver;
             }
         }
 
         throw new IllegalArgumentException("Driver not supported: " + driverClass);
+    }
+
+    public boolean supportsJavascriptInjection() {
+        return supportsJavascriptInjection;
     }
 }

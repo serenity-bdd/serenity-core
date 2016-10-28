@@ -21,10 +21,7 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.WaitForBuilder;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
-import net.thucydides.core.webdriver.ConfigurableTimeouts;
-import net.thucydides.core.webdriver.DefaultPageObjectInitialiser;
-import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
-import net.thucydides.core.webdriver.WebDriverFacade;
+import net.thucydides.core.webdriver.*;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webelements.Checkbox;
 import net.thucydides.core.webelements.RadioButtonGroup;
@@ -51,6 +48,7 @@ import java.util.concurrent.TimeUnit;
 import static ch.lambdaj.Lambda.convert;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static net.serenitybdd.core.selectors.Selectors.xpathOrCssSelector;
+import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_JQUERY_INTEGRATION;
 import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascriptIsSupportedIn;
 
 /**
@@ -973,10 +971,26 @@ public abstract class PageObject {
     }
 
     public void addJQuerySupport() {
-        if (pageIsLoaded()) {
+        if (pageIsLoaded() && jqueryIntegrationIsActivated() && driverIsJQueryCompatible()) {
             JQueryEnabledPage jQueryEnabledPage = JQueryEnabledPage.withDriver(getDriver());
             jQueryEnabledPage.activateJQuery();
         }
+    }
+
+    protected boolean driverIsJQueryCompatible() {
+        try {
+            if (getDriver() instanceof WebDriverFacade) {
+                return SupportedWebDriver.forClass(((WebDriverFacade) getDriver()).getDriverClass())
+                        .supportsJavascriptInjection();
+            }
+            return SupportedWebDriver.forClass(getDriver().getClass()).supportsJavascriptInjection();
+        } catch (IllegalArgumentException probablyAMockedDriver) {
+            return false;
+        }
+    }
+
+    private Boolean jqueryIntegrationIsActivated() {
+        return THUCYDIDES_JQUERY_INTEGRATION.booleanFrom(environmentVariables, true);
     }
 
     public RadioButtonGroup inRadioButtonGroup(String name) {

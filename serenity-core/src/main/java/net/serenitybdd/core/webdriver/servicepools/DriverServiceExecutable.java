@@ -48,7 +48,7 @@ public class DriverServiceExecutable {
         private String exeProperty;
         private String documentationUrl;
         private Optional<EnvironmentVariables> environmentVariables = Optional.absent();
-        private boolean checkExecutable = false;
+        private boolean reportMissingBinary = false;
 
         public DriverServiceExecutableBuilder(String exeName) {
             this.exeName = exeName;
@@ -65,7 +65,7 @@ public class DriverServiceExecutable {
         }
 
         public DriverServiceExecutableBuilder reportMissingBinary() {
-            this.checkExecutable = checkExecutable;
+            this.reportMissingBinary = true;
             return this;
         }
 
@@ -76,7 +76,7 @@ public class DriverServiceExecutable {
                     downloadUrl,
                     environmentVariables.or(
                             Injectors.getInjector().getInstance(EnvironmentVariables.class)),
-                    checkExecutable
+                    reportMissingBinary
             );
         }
 
@@ -90,9 +90,9 @@ public class DriverServiceExecutable {
         Optional<String> defaultPath = Optional.fromNullable(CommandLine.find(exeName));
 
         Optional<String> configuredBinaryPath = Optional.fromNullable(environmentVariables.getProperty(exeProperty));
-        String exePath = configuredBinaryPath.or(defaultPath).or("");
+        String exePath = configuredBinaryPath.or(defaultPath).orNull();
 
-        File executableLocation = new File(exePath);
+        File executableLocation = (exePath != null) ? new File(exePath) : null;
 
         if (reportMissingBinary) {
             checkForMissingBinaries(executableLocation);

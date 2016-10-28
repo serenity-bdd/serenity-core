@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class DriverServicePool<T extends DriverService> {
 
@@ -40,21 +39,11 @@ public abstract class DriverServicePool<T extends DriverService> {
 
     public DriverServicePool(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
-//
-//        Runtime.getRuntime().addShutdownHook(new Thread(){
-//            public void run() {
-//                shutdown();
-//            }
-//        });
     }
 
     protected T getDriverService() {
         return driverServiceWithName(serviceName());
     }
-
-    private static Integer addServiceGateway = 0;
-
-    private final ReentrantLock lock = new ReentrantLock();
 
     private T driverServiceWithName(String serviceName) {
 

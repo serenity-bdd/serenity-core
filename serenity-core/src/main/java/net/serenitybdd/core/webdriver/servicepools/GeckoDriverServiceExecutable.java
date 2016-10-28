@@ -1,7 +1,5 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
-import io.github.bonigarcia.wdm.MarionetteDriverManager;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
@@ -26,13 +24,6 @@ public class GeckoDriverServiceExecutable {
 
         if (!geckoBinary.exists()) {
             geckoBinary = geckoBinaryCalled("wires");
-        }
-
-        // Only download Gecko if requested
-        // TODO: Make this automatic with Selenium 3
-        if (!geckoBinary.exists()
-                && ThucydidesSystemProperty.USE_GECKO_DRIVER.booleanFrom(environmentVariables, false)) {
-            MarionetteDriverManager.getInstance().setup();
         }
 
         checkForPresenceOfBinary();

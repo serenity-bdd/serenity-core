@@ -1,7 +1,5 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
-import io.github.bonigarcia.wdm.InternetExplorerDriverManager;
-import net.thucydides.core.ThucydidesSystemProperty;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -38,10 +36,6 @@ public class InternetExplorerServicePool extends DriverServicePool<InternetExplo
     }
 
     private File driverExecutable() {
-        if (ThucydidesSystemProperty.AUTOMATIC_DRIVER_DOWNLOAD.booleanFrom(environmentVariables, true)) {
-            InternetExplorerDriverManager.getInstance().setup();
-        }
-
         return DriverServiceExecutable.called("IEDriverServer.exe")
                 .withSystemProperty(WEBDRIVER_IE_DRIVER.getPropertyName())
                 .usingEnvironmentVariables(environmentVariables)

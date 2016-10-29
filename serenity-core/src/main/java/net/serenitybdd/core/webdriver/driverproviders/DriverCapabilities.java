@@ -50,7 +50,7 @@ public class DriverCapabilities {
             throw new AssertionError("Unsupported driver for webdriver.driver or webdriver.remote.driver: " + driver
                     + ". Did you mean " + closestDriver.toString().toLowerCase() + "?");
         }
-        return SupportedWebDriver.valueOf(normalizedDriverName);
+        return SupportedWebDriver.valueOrSynonymOf(normalizedDriverName);
     }
 
     private Map<SupportedWebDriver, DriverCapabilitiesProvider> driverCapabilitiesSelector() {
@@ -94,6 +94,18 @@ public class DriverCapabilities {
             @Override
             public DesiredCapabilities getCapabilities() {
                 return DesiredCapabilities.phantomjs();
+            }
+        });
+        selectors.put(IPHONE,new DriverCapabilitiesProvider() {
+            @Override
+            public DesiredCapabilities getCapabilities() {
+                return DesiredCapabilities.iphone();
+            }
+        });
+        selectors.put(ANDROID,new DriverCapabilitiesProvider() {
+            @Override
+            public DesiredCapabilities getCapabilities() {
+                return DesiredCapabilities.android();
             }
         });
 

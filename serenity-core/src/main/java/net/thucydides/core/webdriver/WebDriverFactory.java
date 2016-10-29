@@ -155,6 +155,17 @@ public class WebDriverFactory {
         return driver;
     }
 
+    public static String getBrowserStackDriverFrom(EnvironmentVariables environmentVariables) {
+        String driver = ThucydidesSystemProperty.BROWSERSTACK_BROWSER.from(environmentVariables);
+        if (driver == null) {
+            driver = ThucydidesSystemProperty.BROWSERSTACK_BROWSERNAME.from(environmentVariables);
+        }
+        if (driver == null) {
+            driver = getDriverFrom(environmentVariables);
+        }
+        return driver;
+    }
+
 
     public void setupFixtureServices() throws FixtureException {
         for(FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {

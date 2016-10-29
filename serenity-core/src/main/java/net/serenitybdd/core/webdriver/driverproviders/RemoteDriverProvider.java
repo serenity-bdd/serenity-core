@@ -18,6 +18,8 @@ import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -26,6 +28,7 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static net.thucydides.core.webdriver.WebDriverFactory.getBrowserStackDriverFrom;
 import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
@@ -38,6 +41,8 @@ public class RemoteDriverProvider implements DriverProvider {
     private final BrowserStackRemoteDriverCapabilities browserStackRemoteDriverCapabilities;
     private final SauceRemoteDriverCapabilities sauceRemoteDriverCapabilities;
     private final DriverCapabilities remoteDriverCapabilities;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RemoteDriverProvider.class);
 
 
     public RemoteDriverProvider(EnvironmentVariables environmentVariables, CapabilityEnhancer enhancer) {
@@ -96,7 +101,9 @@ public class RemoteDriverProvider implements DriverProvider {
 
     private WebDriver buildRemoteDriver() throws MalformedURLException {
         String remoteUrl = ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.from(environmentVariables);
-        return newRemoteDriver(new URL(remoteUrl), buildRemoteCapabilities());
+        Capabilities capabilities = buildRemoteCapabilities();
+        LOGGER.info("Building remote driver with capabilitites " + capabilities);
+        return newRemoteDriver(new URL(remoteUrl), capabilities);
     }
 
     private Capabilities findSaucelabsCapabilities() {
@@ -110,7 +117,7 @@ public class RemoteDriverProvider implements DriverProvider {
 
     private Capabilities findbrowserStackCapabilities() {
 
-        String driver = getDriverFrom(environmentVariables);
+        String driver = getBrowserStackDriverFrom(environmentVariables);
         DesiredCapabilities capabilities = remoteDriverCapabilities.forDriver(driver);
 
         return browserStackRemoteDriverCapabilities.getCapabilities(capabilities);
@@ -129,6 +136,8 @@ public class RemoteDriverProvider implements DriverProvider {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
+
+
         try {
             ensureHostIsAvailableAt(remoteUrl);
 

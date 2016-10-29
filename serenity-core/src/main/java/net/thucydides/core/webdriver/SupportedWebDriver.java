@@ -1,6 +1,8 @@
 package net.thucydides.core.webdriver;
 
+import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableList;
 import com.opera.core.systems.OperaDriver;
 import io.appium.java_client.AppiumDriver;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +15,9 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The list of supported web drivers.
@@ -49,10 +54,14 @@ public enum SupportedWebDriver {
      */
     REMOTE(RemoteWebDriver.class),
 
+    IPHONE(RemoteWebDriver.class),
+
+    ANDROID(RemoteWebDriver.class),
+
     /**
      * Internet Explorer
      */
-    IEXPLORER(InternetExplorerDriver.class, false),
+    IEXPLORER(InternetExplorerDriver.class, false, ImmutableList.of("IE")),
 
     /**
      * Microsoft Edge
@@ -78,25 +87,53 @@ public enum SupportedWebDriver {
 
     private final boolean supportsJavascriptInjection;
 
-    private SupportedWebDriver(Class<? extends WebDriver> webdriverClass, boolean supportsJavascriptInjection) {
+    private final List<String> synonyms;
+
+    private SupportedWebDriver(Class<? extends WebDriver> webdriverClass,
+                               boolean supportsJavascriptInjection,
+                               List<String> synonyms) {
         this.webdriverClass = webdriverClass;
         this.supportsJavascriptInjection = supportsJavascriptInjection;
+        this.synonyms = ImmutableList.copyOf(synonyms);
+    }
+
+    private SupportedWebDriver(Class<? extends WebDriver> webdriverClass, boolean supportsJavascriptInjection) {
+        this(webdriverClass, supportsJavascriptInjection, new ArrayList<String>());
     }
 
     private SupportedWebDriver(Class<? extends WebDriver> webdriverClass) {
-        this.webdriverClass = webdriverClass;
-        this.supportsJavascriptInjection = true;
+        this(webdriverClass, true, new ArrayList<String>());
+    }
+
+    public static SupportedWebDriver valueOrSynonymOf(String driverName) {
+        for(SupportedWebDriver supportedWebDriver : values()) {
+            if (driverName.equalsIgnoreCase(supportedWebDriver.name())) {
+                return supportedWebDriver;
+            }
+            if (supportedWebDriver.synonyms.contains(driverName)) {
+                return supportedWebDriver;
+            }
+        }
+        throw new IllegalArgumentException("Unsupported driver type: " + driverName);
     }
 
     public Class<? extends WebDriver> getWebdriverClass() {
         return webdriverClass;
     }
 
-    /**
-     * HTMLUnit - mainly for testing, as this driver does not support screenshots or much AJAX.
-     */
     public static String listOfSupportedDrivers() {
-        return Joiner.on(", ").join(SupportedWebDriver.values());
+
+        String enumValues = Joiner.on(", ").join(SupportedWebDriver.values());
+
+        return Joiner.on(", ").join(getSynonymes(), enumValues);
+    }
+
+    private static String getSynonymes() {
+        List<String> synonymeValues = Lists.newArrayList();
+        for(SupportedWebDriver supportedWebDriver : values()) {
+            synonymeValues.addAll(supportedWebDriver.synonyms);
+        }
+        return Joiner.on(", ").join(synonymeValues);
     }
 
     public static SupportedWebDriver getClosestDriverValueTo(final String value) {
@@ -114,7 +151,7 @@ public enum SupportedWebDriver {
 
     public static SupportedWebDriver getDriverTypeFor(final String value) throws UnsupportedDriverException {
         try {
-            return SupportedWebDriver.valueOf(value.toUpperCase());
+            return SupportedWebDriver.valueOrSynonymOf(value.toUpperCase());
         } catch (IllegalArgumentException e) {
             SupportedWebDriver closestMatchingDriver = getClosestDriverValueTo(value);
             throw new UnsupportedDriverException("Unsupported browser type: " + value

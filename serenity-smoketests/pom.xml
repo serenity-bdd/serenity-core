@@ -11,31 +11,37 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <serenity.version>1.1.37-SNAPSHOT</serenity.version>
-        <serenity.maven.version>1.1.36</serenity.maven.version>
+        <serenity.version>1.2.0-SNAPSHOT</serenity.version>
+        <serenity.maven.version>1.1.42</serenity.maven.version>
         <webdriver.driver>firefox</webdriver.driver>
         <parallel.tests>4</parallel.tests>
+        <browserstack.url></browserstack.url>
+        <browserstack.os></browserstack.os>
+        <browserstack.os_version></browserstack.os_version>
+        <browserstack.browserName></browserstack.browserName>
+        <browserstack.version></browserstack.version>
+        <webdriver.driver>remote</webdriver.driver>
     </properties>
 
     <repositories>
-      <repository>
-        <snapshots>
-        <enabled>false</enabled>
-        </snapshots>
-        <id>central</id>
-        <name>bintray</name>
-        <url>http://jcenter.bintray.com</url>
-      </repository>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central</id>
+            <name>bintray</name>
+            <url>http://jcenter.bintray.com</url>
+        </repository>
     </repositories>
     <pluginRepositories>
-      <pluginRepository>
-        <snapshots>
-        <enabled>false</enabled>
-        </snapshots>
-        <id>central</id>
-        <name>bintray-plugins</name>
-        <url>http://jcenter.bintray.com</url>
-      </pluginRepository>
+        <pluginRepository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central</id>
+            <name>bintray-plugins</name>
+            <url>http://jcenter.bintray.com</url>
+        </pluginRepository>
     </pluginRepositories>
 
     <dependencies>
@@ -56,7 +62,7 @@
         </dependency>
         <dependency>
             <groupId>net.serenity-bdd</groupId>
-            <artifactId>browse-the-web</artifactId>
+            <artifactId>serenity-screenplay-webdriver</artifactId>
             <version>${serenity.version}</version>
         </dependency>
         <dependency>
@@ -107,6 +113,14 @@
                     <parallel>classes</parallel>
                     <threadCount>${parallel.tests}</threadCount>
                     <forkCount>${parallel.tests}</forkCount>
+                    <systemPropertyVariables>
+                        <browserstack.url>${browserstack.url}</browserstack.url>
+                        <browserstack.os>${browserstack.os}</browserstack.os>
+                        <browserstack.os_version>${browserstack.os.version}</browserstack.os_version>
+                        <browserstack.browserName>${browserstack.browserName}</browserstack.browserName>
+                        <browserstack.version>${browserstack.version}</browserstack.version>
+                        <webdriver.driver>${webdriver.driver}</webdriver.driver>
+                    </systemPropertyVariables>
                 </configuration>
                 <executions>
                     <execution>
@@ -137,9 +151,9 @@
                         <version>${serenity.version}</version>
                     </dependency>
                     <!--<dependency>-->
-                        <!--<groupId>net.serenitybdd.demos.todos</groupId>-->
-                        <!--<artifactId>todo-demo</artifactId>-->
-                        <!--<version>${project.version}</version>-->
+                    <!--<groupId>net.serenitybdd.demos.todos</groupId>-->
+                    <!--<artifactId>todo-demo</artifactId>-->
+                    <!--<version>${project.version}</version>-->
                     <!--</dependency>-->
                 </dependencies>
                 <executions>

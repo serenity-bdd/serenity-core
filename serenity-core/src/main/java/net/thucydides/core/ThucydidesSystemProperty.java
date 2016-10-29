@@ -437,7 +437,15 @@ public enum ThucydidesSystemProperty {
 
     BROWSERSTACK_OS_VERSION,
 
+    /**
+     * Browserstack uses this property for desktop browsers, like firefox, chrome and IE.
+     */
     BROWSERSTACK_BROWSER,
+
+    /**
+     * Browserstack uses this one for android and iphone.
+     */
+    BROWSERSTACK_BROWSERNAME("browserstack.browserName"),
 
     BROWSERSTACK_BROWSER_VERSION,
 

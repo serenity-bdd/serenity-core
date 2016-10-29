@@ -68,7 +68,7 @@ it will be included in release notes as:
 
 Please take a look at release notes to find some more examples of mutiline commits. 
 
-**More you can find in Contributing guide for this repo**
+**For more information, read the Contributing guide for this repo.**
 
 Starting from version 1.1.26, any commits without one of these prefixes will not appear in the release notes.
 

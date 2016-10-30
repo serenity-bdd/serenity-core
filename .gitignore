@@ -7,3 +7,5 @@ target
 *.log
 /serenity-core.ipr
 /serenity-core.iws
+/serenity-smoketests/todo-demo.ipr
+/serenity-smoketests/todo-demo.iws

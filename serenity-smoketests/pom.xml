@@ -13,14 +13,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <serenity.version>1.2.0-SNAPSHOT</serenity.version>
         <serenity.maven.version>1.1.42</serenity.maven.version>
-        <webdriver.driver>firefox</webdriver.driver>
         <parallel.tests>4</parallel.tests>
         <browserstack.url></browserstack.url>
         <browserstack.os></browserstack.os>
         <browserstack.os_version></browserstack.os_version>
         <browserstack.browserName></browserstack.browserName>
+        <browserstack.browser></browserstack.browser>
         <browserstack.version></browserstack.version>
-        <webdriver.driver>remote</webdriver.driver>
     </properties>
 
     <repositories>
@@ -116,7 +115,8 @@
                     <systemPropertyVariables>
                         <browserstack.url>${browserstack.url}</browserstack.url>
                         <browserstack.os>${browserstack.os}</browserstack.os>
-                        <browserstack.os_version>${browserstack.os.version}</browserstack.os_version>
+                        <browserstack.os_version>${browserstack.os_version}</browserstack.os_version>
+                        <browserstack.browser>${browserstack.browserName}</browserstack.browser>
                         <browserstack.browserName>${browserstack.browserName}</browserstack.browserName>
                         <browserstack.version>${browserstack.version}</browserstack.version>
                         <webdriver.driver>${webdriver.driver}</webdriver.driver>

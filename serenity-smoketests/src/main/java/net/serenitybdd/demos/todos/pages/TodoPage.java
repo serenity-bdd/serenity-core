@@ -26,6 +26,7 @@ public class TodoPage extends PageObject {
     public List<String> getActions() {
         return findAll(".view").stream()
                                .map(WebElementFacade::getText)
+                               .map(String::trim)
                                .collect(Collectors.toList());
     }
 

@@ -350,7 +350,7 @@
                     <table>
                         <tr>
                             <td colspan="2">
-                                <span class="caption">Test results weighted by test size in steps (average steps per test: ${testOutcomes.averageTestSize}) .</span>
+                                <span class="caption">Test results weighted by test size in steps (average steps per test: ${testOutcomes.averageTestSize?round=0}) .</span>
                                 <span class="togglePieChart" id="toggleWeightedPieChart"><a href="#">Show/Hide Pie
                                     Chart</a></span>
                             </td>

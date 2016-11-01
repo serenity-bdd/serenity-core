@@ -396,6 +396,8 @@ public enum ThucydidesSystemProperty {
      */
     THUCYDIDES_JQUERY_INTEGRATION,
 
+    SAUCELABS_BROWSERNAME("saucelabs.browserName"),
+
     SAUCELABS_TARGET_PLATFORM,
 
     SAUCELABS_DRIVER_VERSION,
@@ -435,7 +437,7 @@ public enum ThucydidesSystemProperty {
 
     BROWSERSTACK_OS,
 
-    BROWSERSTACK_OS_VERSION,
+    BROWSERSTACK_OS_VERSION("browserstack.os_version"),
 
     /**
      * Browserstack uses this property for desktop browsers, like firefox, chrome and IE.

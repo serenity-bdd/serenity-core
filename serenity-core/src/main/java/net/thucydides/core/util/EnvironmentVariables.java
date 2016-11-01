@@ -41,4 +41,6 @@ public interface EnvironmentVariables {
     List<String> getKeys();
 
     Properties getProperties();
+
+    Properties getPropertiesWithPrefix(String prefix);
 }

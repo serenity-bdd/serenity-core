@@ -2,16 +2,19 @@ package net.thucydides.core.util;
 
 import ch.lambdaj.Lambda;
 import ch.lambdaj.function.convert.DefaultStringConverter;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import net.thucydides.core.guice.Injectors;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 public class MockEnvironmentVariables implements EnvironmentVariables {
 
     private Properties properties = new Properties();
-    private Properties values = new Properties();
+    private Map<String, String> values = Maps.newHashMap();
 
     public MockEnvironmentVariables() {
         this.properties.setProperty("user.home", System.getProperty("user.home"));
@@ -32,9 +35,9 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         this.properties = PropertiesUtil.copyOf(properties);
     }
 
-    protected MockEnvironmentVariables(Properties properties, Properties values) {
+    protected MockEnvironmentVariables(Properties properties, Map<String, String> values) {
         this.properties = PropertiesUtil.copyOf(properties);
-        this.values = PropertiesUtil.copyOf(values);
+        this.values = ImmutableMap.copyOf(values);
     }
 
     public static EnvironmentVariables fromSystemEnvironment() {
@@ -46,7 +49,7 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
     }
 
     public String getValue(String name) {
-        return values.getProperty(name);
+        return values.get(name);
     }
 
 
@@ -55,9 +58,8 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
     }
 
     public String getValue(String name, String defaultValue) {
-        return values.getProperty(name, defaultValue);
+        return values.get(name) == null ? defaultValue : values.get(name);
     }
-
 
     public String getValue(Enum<?> property, String defaultValue) {
         return getValue(property.toString(), defaultValue);
@@ -131,8 +133,13 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         return new Properties(properties);
     }
 
+    @Override
+    public Properties getPropertiesWithPrefix(String prefix) {
+        return new SystemEnvironmentVariables(properties, values).getPropertiesWithPrefix(prefix);
+    }
+
     public void setValue(String name, String value) {
-        values.setProperty(name, value);
+        values.put(name, value);
     }
 
 }

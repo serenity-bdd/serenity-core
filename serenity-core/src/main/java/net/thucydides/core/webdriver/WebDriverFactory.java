@@ -127,7 +127,7 @@ public class WebDriverFactory {
         } catch (SerenityManagedException toPassThrough) {
             throw toPassThrough;
         } catch (Exception cause) {
-             throw new UnsupportedDriverException("Could not instantiate new webdriver instance of type " + driverClass, cause);
+             throw new UnsupportedDriverException("Could not instantiate new webdriver instance of type " + driverClass + " (" + cause.getMessage(), cause);
         }
     }
 
@@ -166,6 +166,13 @@ public class WebDriverFactory {
         return driver;
     }
 
+    public static String getSaucelabsDriverFrom(EnvironmentVariables environmentVariables) {
+        String driver = ThucydidesSystemProperty.SAUCELABS_BROWSERNAME.from(environmentVariables);
+        if (driver == null) {
+            driver = getDriverFrom(environmentVariables);
+        }
+        return driver;
+    }
 
     public void setupFixtureServices() throws FixtureException {
         for(FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {

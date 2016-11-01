@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 import static net.thucydides.core.webdriver.WebDriverFactory.getBrowserStackDriverFrom;
 import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
+import static net.thucydides.core.webdriver.WebDriverFactory.getSaucelabsDriverFrom;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class RemoteDriverProvider implements DriverProvider {
@@ -108,7 +109,7 @@ public class RemoteDriverProvider implements DriverProvider {
 
     private Capabilities findSaucelabsCapabilities() {
 
-        String driver = getDriverFrom(environmentVariables);
+        String driver = getSaucelabsDriverFrom(environmentVariables);
         DesiredCapabilities capabilities = remoteDriverCapabilities.forDriver(driver);
 
         return sauceRemoteDriverCapabilities.getCapabilities(capabilities);

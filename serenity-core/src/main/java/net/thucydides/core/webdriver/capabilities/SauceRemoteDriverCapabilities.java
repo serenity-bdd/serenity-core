@@ -3,15 +3,15 @@ package net.thucydides.core.webdriver.capabilities;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.NameConverter;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.lang.reflect.Method;
+import java.util.Properties;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
@@ -35,9 +35,14 @@ public class SauceRemoteDriverCapabilities implements RemoteDriverCapabilities {
     @Override
     public DesiredCapabilities getCapabilities(DesiredCapabilities capabilities) {
 
-        configureBrowserVersion(capabilities);
+        Properties saucelabsProperties = environmentVariables.getPropertiesWithPrefix("saucelabs.");
 
-        configureTargetPlatform(capabilities);
+        for(String propertyName : saucelabsProperties.stringPropertyNames()) {
+            String unprefixedPropertyName = unprefixed(propertyName);
+            capabilities.setCapability(unprefixedPropertyName, typed(saucelabsProperties.getProperty(propertyName)));
+        }
+
+        addBuildNumberTo(capabilities);
 
         configureTestName(capabilities);
 
@@ -46,70 +51,32 @@ public class SauceRemoteDriverCapabilities implements RemoteDriverCapabilities {
         return capabilities;
     }
 
-    private void configureBrowserVersion(DesiredCapabilities capabilities) {
-        String driverVersion = ThucydidesSystemProperty.SAUCELABS_DRIVER_VERSION.from(environmentVariables);
-        if (isNotEmpty(driverVersion)) {
-            capabilities.setCapability("version", driverVersion);
+    private void addBuildNumberTo(DesiredCapabilities capabilities) {
+        if (environmentVariables.getProperty("BUILD_NUMBER") != null) {
+            capabilities.setCapability("build", environmentVariables.getProperty("BUILD_NUMBER"));
         }
     }
 
-    private void configureTargetPlatform(DesiredCapabilities capabilities) {
-        setAppropriateSaucelabsPlatformVersion(capabilities);
-        if (capabilities.getBrowserName().equals("safari")) {
-            setAppropriateSaucelabsPlatformVersionForSafari(capabilities);
+    private Object typed(String value) {
+        if (isABoolean(value)) {
+            return Boolean.parseBoolean(value);
         }
-
-        String remotePlatform = environmentVariables.getProperty("remote.platform");
-        if (isNotEmpty(remotePlatform)) {
-            capabilities.setPlatform(Platform.valueOf(remotePlatform));
+        if (isAnInteger(value)) {
+            return Integer.parseInt(value);
         }
-
+        return value;
     }
 
-    private void setAppropriateSaucelabsPlatformVersion(DesiredCapabilities capabilities) {
-        String platformValue = ThucydidesSystemProperty.SAUCELABS_TARGET_PLATFORM
-                .from(environmentVariables);
-        if (isEmpty(platformValue)) {
-            return;
-        }
-        if (platformValue.equalsIgnoreCase("snowleopard")) {
-            capabilities.setCapability("platform", "OS X 10.6");
-        } else if (platformValue.equalsIgnoreCase("mountainlion")) {
-            capabilities.setCapability("platform", "OS X 10.8");
-        } else if (platformValue.equalsIgnoreCase("mavericks")) {
-            capabilities.setCapability("platform", "OS X 10.9");
-        } else if (platformValue.equalsIgnoreCase("yosemite")) {
-            capabilities.setCapability("platform", "OS X 10.10");
-        } else {
-            capabilities.setCapability("platform", platformFrom(platformValue));
-
-        }
+    private boolean isAnInteger(String value) {
+        return StringUtils.isNumeric(value);
     }
 
-    private void setAppropriateSaucelabsPlatformVersionForSafari(DesiredCapabilities capabilities)
-    {
-        if (ThucydidesSystemProperty.SAUCELABS_TARGET_PLATFORM.from(environmentVariables).equalsIgnoreCase(
-                "mac"))
-        {
-            String browserVersion = ThucydidesSystemProperty.SAUCELABS_DRIVER_VERSION.from(
-                    environmentVariables);
-            if (browserVersion.equals("5"))
-            {
-                capabilities.setCapability("platform", "OS X 10.6");
-            }
-            else if (browserVersion.equals("6"))
-            {
-                capabilities.setCapability("platform", "OS X 10.8");
-            }
-            else if (browserVersion.equals("7"))
-            {
-                capabilities.setCapability("platform", "OS X 10.9");
-            }
-            else if (browserVersion.equals("8"))
-            {
-                capabilities.setCapability("platform", "OS X 10.10");
-            }
-        }
+    private boolean isABoolean(String value) {
+        return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false") ;
+    }
+
+    private String unprefixed(String propertyName) {
+        return propertyName.replace("saucelabs.","");
     }
 
     private void configureTestName(DesiredCapabilities capabilities) {
@@ -148,9 +115,5 @@ public class SauceRemoteDriverCapabilities implements RemoteDriverCapabilities {
     private boolean isASetupMethod(Method callingMethod) {
         return (callingMethod.getAnnotation(Before.class) != null)
                 || (callingMethod.getAnnotation(BeforeClass.class) != null);
-    }
-
-    private Platform platformFrom(String platformValue) {
-        return Platform.valueOf(platformValue.toUpperCase());
     }
 }

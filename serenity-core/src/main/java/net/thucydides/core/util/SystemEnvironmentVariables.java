@@ -58,6 +58,17 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         return new Properties(systemProperties);
     }
 
+    @Override
+    public Properties getPropertiesWithPrefix(String prefix) {
+        Properties filteredProperties = new Properties();
+        for (String key : systemProperties.stringPropertyNames()) {
+            if (key.startsWith(prefix)) {
+                filteredProperties.put(key, systemProperties.getProperty(key));
+            }
+        }
+        return filteredProperties;
+    }
+
 
     public Integer getPropertyAsInteger(String property, Integer defaultValue) {
         String value = (String) systemProperties.get(property);

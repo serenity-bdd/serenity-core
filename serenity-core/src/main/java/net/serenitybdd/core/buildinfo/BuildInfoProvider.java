@@ -32,7 +32,7 @@ public class BuildInfoProvider {
 
     public BuildProperties getBuildProperties() {
         Map<String, String> generalProperties = Maps.newHashMap();
-        generalProperties.put("Default Driver",ThucydidesSystemProperty.DRIVER.from(environmentVariables,"firefox"));
+        generalProperties.put("Default Driver", ThucydidesSystemProperty.DRIVER.from(environmentVariables,"firefox"));
         generalProperties.put("Operating System",System.getProperty("os.name") + " version " + System.getProperty("os.version"));
         addRemoteDriverPropertiesTo(generalProperties);
         addSaucelabsPropertiesTo(generalProperties);

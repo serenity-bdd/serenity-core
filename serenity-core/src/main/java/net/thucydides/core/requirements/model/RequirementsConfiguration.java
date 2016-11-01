@@ -18,8 +18,6 @@ import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
 
-import static net.thucydides.core.requirements.classpath.PathElements.lastOf;
-
 public class RequirementsConfiguration {
     public final static List<String> DEFAULT_CAPABILITY_TYPES = ImmutableList.of("capability", "feature", "story");
     protected static final String DEFAULT_ROOT_DIRECTORY = "stories";

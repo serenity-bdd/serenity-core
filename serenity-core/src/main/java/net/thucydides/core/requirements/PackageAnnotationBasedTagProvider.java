@@ -5,6 +5,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
@@ -29,11 +30,11 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * A requirements Provider that reads requirement from class or package annotation.
- * The root package is defined using {@link net.thucydides.core.ThucydidesSystemProperty#THUCYDIDES_TEST_ROOT}
+ * The root package is defined using {@link ThucydidesSystemProperty#THUCYDIDES_TEST_ROOT}
  * It is recommended to change the root package if the {@link FileSystemRequirementsTagProvider} is used.
  *
  * @see Narrative
- * @see net.thucydides.core.ThucydidesSystemProperty#THUCYDIDES_TEST_ROOT
+ * @see ThucydidesSystemProperty#THUCYDIDES_TEST_ROOT
  */
 public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagProvider implements RequirementsTagProvider, OverridableTagProvider {
     private static final String DOT_REGEX = "\\.";

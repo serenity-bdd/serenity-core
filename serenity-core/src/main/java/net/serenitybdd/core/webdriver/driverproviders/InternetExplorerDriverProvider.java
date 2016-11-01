@@ -1,6 +1,7 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
+import net.serenitybdd.core.time.InternalSystemClock;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.serenitybdd.core.webdriver.servicepools.InternetExplorerServicePool;
 import net.thucydides.core.guice.Injectors;
@@ -8,6 +9,7 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
@@ -50,10 +52,20 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         driverProperties.registerCapabilities("iexplorer", desiredCapabilities);
 
         try {
-            return getDriverServicePool().newDriver(desiredCapabilities);
-        } catch (IOException couldNotStartServer) {
-            LOGGER.warn("Failed to start the edge driver service, using a native driver instead", couldNotStartServer.getMessage());
+            return retryCreateDriverOnNoSuchSession(desiredCapabilities);
+        } catch (Exception couldNotStartServer) {
+            LOGGER.warn("Failed to start the Internet driver service, using a native driver instead - " + couldNotStartServer.getMessage());
             return ThreadGuard.protect(new InternetExplorerDriver(desiredCapabilities));
+        }
+    }
+
+    private WebDriver retryCreateDriverOnNoSuchSession(DesiredCapabilities desiredCapabilities) throws IOException {
+        try {
+            return getDriverServicePool().newDriver(desiredCapabilities);
+        } catch (NoSuchSessionException e) {
+            LOGGER.error(e.getClass().getCanonicalName() + " happened - retrying in 2 seconds");
+            new InternalSystemClock().pauseFor(2000);
+            return retryCreateDriverOnNoSuchSession(desiredCapabilities);
         }
     }
 

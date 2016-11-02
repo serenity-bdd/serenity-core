@@ -303,7 +303,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         then:
         reloadedOutcome.issues == ["PROJ-123"]
         and:
-        reloadedOutcome.tags.containsAll([TestTag.withName("Some test scenario with tags").andType("story"),
+        reloadedOutcome.tags.containsAll([TestTag.withName("When storing test outcomes as JSON/Some test scenario with tags").andType("story"),
                                           TestTag.withName("simple story").andType("story"),
                                           TestTag.withName("important feature").andType("feature")])
     }
@@ -319,7 +319,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         then:
         reloadedOutcome.featureTag.isPresent()
         and:
-        reloadedOutcome.featureTag.get() == TestTag.withName("Some test scenario with tags").andType("story")
+        reloadedOutcome.featureTag.get() == TestTag.withName("When storing test outcomes as JSON/Some test scenario with tags").andType("story")
     }
 
 
@@ -424,7 +424,7 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         def jsonReport = reporter.generateReportFor(testOutcome)
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         then:
-        reloadedOutcome.tags.contains(TestTag.withName("A user story in a feature").andType("story"))
+        reloadedOutcome.tags.contains(TestTag.withName("A feature/A user story in a feature").andType("story"))
         reloadedOutcome.tags.contains(TestTag.withName("A feature").andType("feature"))
     }
 

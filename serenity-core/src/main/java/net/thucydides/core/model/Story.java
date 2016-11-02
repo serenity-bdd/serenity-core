@@ -1,8 +1,12 @@
 package net.thucydides.core.model;
 
+import com.google.common.base.Splitter;
 import net.thucydides.core.annotations.Feature;
 import net.thucydides.core.model.features.ApplicationFeature;
 import net.thucydides.core.requirements.model.FeatureType;
+
+import java.util.List;
+import java.util.regex.Pattern;
 
 import static net.thucydides.core.model.ReportType.ROOT;
 import static net.thucydides.core.util.NameConverter.humanize;
@@ -265,6 +269,31 @@ public class Story {
     }
 
     public TestTag asTag() {
-        return TestTag.withName(storyName).andType(type.toString());
+        return asQualifiedTag();// TestTag.withName(storyName).andType(type.toString());
     }
+
+    public TestTag asQualifiedTag() {
+        String parentName = (getPath() != null) ? humanize(lastElementOf(getPath())) : null;
+
+        return (parentName != null) ?
+                TestTag.withName(parentName + "/" + storyName).andType(type.toString()) :
+                TestTag.withName(storyName).andType(type.toString());
+    }
+
+    private String lastElementOf(String path) {
+        List<String> pathElements =  Splitter.on(Pattern.compile("[\\.|/]"))
+                .splitToList(withoutFeatureFileSuffixes(path));
+        return pathElements.get(pathElements.size() - 1);
+    }
+
+    private String withoutFeatureFileSuffixes(String path) {
+        if (path.endsWith(".feature")) {
+            return path.substring(0, path.length() - 8);
+        }
+        if (path.endsWith(".story")) {
+            return path.substring(0, path.length() - 6);
+        }
+        return path;
+    }
+
 }

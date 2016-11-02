@@ -240,6 +240,7 @@ public class Requirement implements Comparable {
     public boolean matches(Requirement that) {
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        if (parent != null ? !parent.equals(that.parent) : that.parent != null) return false;
         if (StringUtils.isNotEmpty(cardNumber) ? !cardNumber.equals(that.cardNumber) : that.cardNumber != null) return false;
 
         return true;

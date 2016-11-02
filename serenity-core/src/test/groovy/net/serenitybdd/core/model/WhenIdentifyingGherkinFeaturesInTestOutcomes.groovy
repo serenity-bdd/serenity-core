@@ -22,10 +22,10 @@ class WhenIdentifyingGherkinFeaturesInTestOutcomes extends Specification {
 
         where:
         path                    | featureIsPresent | featureName | featureType
-        "a_feature.feature"     | true             | "my story" | "feature"
-        "a/b/a_feature.feature" | true             | "my story" | "feature"
-        "a_story.story"         | true             | "my story"   | "story"
-        "a/b/a_story.story"     | true             | "my story"   | "story"
+        "a_feature.feature"     | true             | "A feature/my story" | "feature"
+        "a/b/a_feature.feature" | true             | "A feature/my story" | "feature"
+        "a_story.story"         | true             | "A story/my story"   | "story"
+        "a/b/a_story.story"     | true             | "A story/my story"   | "story"
     }
 
 }

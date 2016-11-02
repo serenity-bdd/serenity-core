@@ -125,14 +125,14 @@ public class WhenGeneratingAnXMLReport {
     @Test
     public void should_get_tags_from_user_story_if_present() {
         TestOutcome testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class);
-        assertThat(testOutcome.getTags(), hasItem(TestTag.withName("A user story").andType("story")));
+        assertThat(testOutcome.getTags(), hasItem(TestTag.withName("When generating an XML report/A user story").andType("story")));
     }
 
 
     @Test
     public void should_get_tags_from_user_stories_and_features_if_present() {
         TestOutcome testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenarioInAFeature.class);
-        assertThat(testOutcome.getTags(), allOf(hasItem(TestTag.withName("A user story in a feature").andType("story")),
+        assertThat(testOutcome.getTags(), allOf(hasItem(TestTag.withName("A feature/A user story in a feature").andType("story")),
                                                 hasItem(TestTag.withName("A feature").andType("feature"))));
     }
 
@@ -146,7 +146,7 @@ public class WhenGeneratingAnXMLReport {
     @Test
     public void should_add_a_story_tag_based_on_the_class_name_if_nothing_else_is_specified() {
         TestOutcome testOutcome = TestOutcome.forTest("should_do_this", ATestScenarioWithoutAStory.class);
-        assertThat(testOutcome.getTags(), hasItem(TestTag.withName("A test scenario without a story").andType("story")));
+        assertThat(testOutcome.getTags(), hasItem(TestTag.withName("When generating an XML report/A test scenario without a story").andType("story")));
     }
 
 
@@ -162,7 +162,7 @@ public class WhenGeneratingAnXMLReport {
         String expectedReport =
                 "<acceptance-test-run title='Should do this' name='should_do_this' steps='1' successful='1' failures='0' skipped='0' ignored='0' pending='0' result='SUCCESS' duration='0' timestamp='2013-01-01T00:00:00.000-05:00'>\n"
                         + "  <tags>\n"
-                        + "    <tag name='A user story' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
                         + "  </tags>"
                         + "  <user-story id='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AUserStory' name='A user story' path='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport'/>\n"
                         + "  <test-step result='SUCCESS' duration='0'>\n"
@@ -189,7 +189,7 @@ public class WhenGeneratingAnXMLReport {
         String expectedReport =
                 "<acceptance-test-run title='Should do this' name='should_do_this' description='Some description' steps='1' successful='1' failures='0' skipped='0' ignored='0' pending='0' result='SUCCESS' duration='0' timestamp='2013-01-01T00:00:00.000-05:00' manual='true'>\n"
                         + "  <tags>\n"
-                        + "    <tag name='A user story' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
                         + "  </tags>"
                         + "  <user-story id='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AUserStory' name='A user story' path='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport'/>\n"
                         + "  <test-step result='SUCCESS' duration='0'>\n"
@@ -223,7 +223,7 @@ public class WhenGeneratingAnXMLReport {
         String expectedReport =
                 "<acceptance-test-run title='Should do this' name='should_do_this' steps='1' successful='1' failures='0' skipped='0' ignored='0' pending='0' result='SUCCESS' duration='0' timestamp='2013-01-01T00:00:00.000-05:00'>\n"
                         + "  <tags>\n"
-                        + "    <tag name='A user story' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
                         + "  </tags>\n"
                         + "  <examples>\n"
                         + "    <datasets>\n"
@@ -279,7 +279,7 @@ public class WhenGeneratingAnXMLReport {
         String expectedReport =
                 "<acceptance-test-run title='Should do this' name='should_do_this' steps='1' successful='1' failures='0' skipped='0' ignored='0' pending='0' result='SUCCESS' duration='0' timestamp='2013-01-01T00:00:00.000-05:00'>\n"
                         + "  <tags>\n"
-                        + "    <tag name='A user story' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
                         + "  </tags>\n"
                         + "  <examples>\n"
                         + "    <datasets>\n"
@@ -327,7 +327,7 @@ public class WhenGeneratingAnXMLReport {
         String expectedReport =
                 "<acceptance-test-run title='Should do this [a qualifier]' name='should_do_this' qualifier='a qualifier' steps='1' successful='1' failures='0' skipped='0' ignored='0' pending='0' result='SUCCESS' duration='0' timestamp='2013-01-01T00:00:00.000-05:00'>\n"
                         + "  <tags>\n"
-                        + "    <tag name='A user story' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
                         + "  </tags>"
                         + "  <user-story id='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AUserStory' name='A user story' path='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport'/>\n"
                         + "  <test-step result='SUCCESS' duration='0'>\n"
@@ -355,7 +355,7 @@ public class WhenGeneratingAnXMLReport {
                         " a new line]' name='should_do_this' qualifier='a qualifier with &amp;#10;" +
                         " a new line' steps='1' successful='1' failures='0' skipped='0' ignored='0' pending='0' result='SUCCESS' duration='0' timestamp='2013-01-01T00:00:00.000-05:00'>\n"
                         + "  <tags>\n"
-                        + "    <tag name='A user story' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
                         + "  </tags>"
                         + "  <user-story id='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AUserStory' name='A user story' path='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport'/>\n"
                         + "  <test-step result='SUCCESS' duration='0'>\n"
@@ -385,7 +385,7 @@ public class WhenGeneratingAnXMLReport {
                         + "  <tags>\n"
                         + "    <tag name='important feature' type='feature' />\n"
                         + "    <tag name='simple story' type='story' />\n"
-                        + "    <tag name='Some test scenario with tags' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/Some test scenario with tags' type='story'/>\n"
                         + "  </tags>\n"
                         + "  <test-step result='SUCCESS' duration='0'>\n"
                         + "    <description>step 1</description>\n"
@@ -411,7 +411,7 @@ public class WhenGeneratingAnXMLReport {
                 "<acceptance-test-run title='Should do this' name='should_do_this' steps='1' successful='1' failures='0' skipped='0' ignored='0' pending='0' result='SUCCESS' duration='0'   timestamp='2013-01-01T00:00:00.000-05:00' session-id='1234'>\n"
                         + "  <user-story id='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AUserStory' name='A user story' path='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport'/>\n"
                         + "  <tags>\n"
-                        + "    <tag name='A user story' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
                         + "  </tags>\n"
                         + "  <test-step result='SUCCESS' duration='0'>\n"
                         + "    <description>step 1</description>\n"
@@ -442,7 +442,7 @@ public class WhenGeneratingAnXMLReport {
                         + "    <issue>#456</issue>\n"
                         + "  </issues>\n"
                         + "  <tags>\n"
-                        + "    <tag name='A user story' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
                         + "  </tags>\n"
                         + "  <test-step result='SUCCESS' duration='0'>\n"
                         + "    <description>step 1</description>\n"
@@ -476,7 +476,7 @@ public class WhenGeneratingAnXMLReport {
                         + "    <version>Version 1.1</version>\n"
                         + "  </versions>\n"
                         + "  <tags>\n"
-                        + "    <tag name='A user story' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
                         + "  </tags>\n"
                         + "  <test-step result='SUCCESS' duration='0'>\n"
                         + "    <description>step 1</description>\n"
@@ -505,7 +505,7 @@ public class WhenGeneratingAnXMLReport {
                         + "  </user-story>\n"
                         + "  <tags>\n"
                         + "    <tag name='A feature' type='feature'/>\n"
-                        + "    <tag name='A user story in a feature' type='story'/>\n"
+                        + "    <tag name='A feature/A user story in a feature' type='story'/>\n"
                         + "  </tags>"
                         + "  <test-step result='SUCCESS' duration='0'>\n"
                         + "    <description>step 1</description>\n"
@@ -534,7 +534,7 @@ public class WhenGeneratingAnXMLReport {
                         + "  </user-story>\n"
                         + "  <tags>\n"
                         + "    <tag name='A feature' type='feature' />\n"
-                        + "    <tag name='A user story in a feature' type='story' />\n"
+                        + "    <tag name='A feature/A user story in a feature' type='story' />\n"
                         + "  </tags>\n"
                         + "  <test-step result='SUCCESS' duration='0'>\n"
                         + "    <description>step 1</description>\n"
@@ -560,7 +560,7 @@ public class WhenGeneratingAnXMLReport {
                 "<acceptance-test-run title='A simple test case [qualifier]' name='a_simple_test_case' qualifier='qualifier' steps='1' successful='1' failures='0' skipped='0' ignored='0' pending='0' result='SUCCESS' duration='0' timestamp='2013-01-01T00:00:00.000-05:00'>\n"
                         + "  <user-story id='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AUserStory' name='A user story' path='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport'/>\n"
                         + "  <tags>\n"
-                        + "    <tag name='A user story' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
                         + "  </tags>\n"
                         + "  <test-step result='SUCCESS' duration='0'>\n"
                         + "    <description>step 1</description>\n"
@@ -587,7 +587,7 @@ public class WhenGeneratingAnXMLReport {
                 "<acceptance-test-run title='A simple test case [a_b]' name='a_simple_test_case' qualifier='a_b' steps='1' successful='1' failures='0' skipped='0' ignored='0' pending='0' result='SUCCESS' duration='0' timestamp='2013-01-01T00:00:00.000-05:00'>\n"
                         + "  <user-story id='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AUserStory' name='A user story' path='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport'/>\n"
                         + "  <tags>\n"
-                        + "    <tag name='A user story' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
                         + "  </tags>\n"
                         + "  <test-step result='SUCCESS' duration='0'>\n"
                         + "    <description>step 1</description>\n"
@@ -633,7 +633,7 @@ public class WhenGeneratingAnXMLReport {
                 "<acceptance-test-run title='A simple test case' name='a_simple_test_case' steps='9' successful='2' failures='2' errors='1' skipped='1' ignored='2' pending='1' result='ERROR' duration='0' timestamp='2013-01-01T00:00:00.000-05:00'>\n"
                         + "  <user-story id='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AUserStory' name='A user story' path='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport'/>\n"
                         + "  <tags>\n"
-                        + "    <tag name='A user story' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
                         + "  </tags>\n"
                         + "  <test-step result='SUCCESS' duration='0'>\n"
                         + "    <description>step 1</description>\n"
@@ -713,7 +713,7 @@ public class WhenGeneratingAnXMLReport {
                 "<acceptance-test-run title='A nested test case' name='a_nested_test_case' steps='3' successful='3' failures='0' skipped='0' ignored='0' pending='0' result='SUCCESS' duration='0' timestamp='2013-01-01T00:00:00.000-05:00'>\n"
                         + "  <user-story id='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AUserStory' name='A user story' path='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport'/>\n"
                         + "  <tags>\n"
-                        + "    <tag name='A user story' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
                         + "  </tags>\n"
                         + "  <test-group name='Group 1' result='SUCCESS'>\n"
                         + "    <test-step result='SUCCESS' duration='0'>\n"
@@ -751,7 +751,7 @@ public class WhenGeneratingAnXMLReport {
                 "<acceptance-test-run title='A nested test case' name='a_nested_test_case' steps='5' successful='5' failures='0' skipped='0' ignored='0' pending='0' result='SUCCESS' duration='0' timestamp='2013-01-01T00:00:00.000-05:00'>\n"
                         + "  <user-story id='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AUserStory' name='A user story' path='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport'/>\n"
                         + "  <tags>\n"
-                        + "    <tag name='A user story' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
                         + "  </tags>\n"
                         + "  <test-group name='Group 1' result='SUCCESS'>\n"
                         + "    <test-step result='SUCCESS' duration='0'>\n"
@@ -801,7 +801,7 @@ public class WhenGeneratingAnXMLReport {
                 "<acceptance-test-run title='A nested test case' name='a_nested_test_case' steps='1' successful='1' failures='0' skipped='0' ignored='0' pending='0' result='SUCCESS' duration='0' timestamp='2013-01-01T00:00:00.000-05:00'>\n"
                         + "  <user-story id='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AUserStory' name='A user story' path='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport'/>\n"
                         + "  <tags>\n"
-                        + "    <tag name='A user story' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
                         + "  </tags>\n"
                         + "  <test-group name='Group 1' result='SUCCESS'>\n"
                         + "    <test-group name='Group 1.1' result='SUCCESS'>\n"
@@ -839,7 +839,7 @@ public class WhenGeneratingAnXMLReport {
                 "<acceptance-test-run title='A nested test case' name='a_nested_test_case' steps='1' successful='1' failures='0' skipped='0' ignored='0' pending='0' result='SUCCESS' duration='0' timestamp='2013-01-01T00:00:00.000-05:00'>\n"
                         + "  <user-story id='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AUserStory' name='A user story' path='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport'/>\n"
                         + "  <tags>\n"
-                        + "    <tag name='A user story' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
                         + "  </tags>\n"
                         + "  <test-group name='Group 1' result='SUCCESS'>\n"
                         + "    <test-group name='Group 1.1' result='SUCCESS'>\n"
@@ -876,7 +876,7 @@ public class WhenGeneratingAnXMLReport {
                 "<acceptance-test-run title='A simple test case' name='a_simple_test_case' steps='2' successful='1' failures='1' skipped='0' ignored='0' pending='0' result='FAILURE' duration='0' timestamp='2013-01-01T00:00:00.000-05:00'>\n"
                         + "  <user-story id='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AUserStory' name='A user story' path='net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport'/>\n"
                         + "  <tags>\n"
-                        + "    <tag name='A user story' type='story'/>\n"
+                        + "    <tag name='When generating an XML report/A user story' type='story'/>\n"
                         + "  </tags>\n"
                         + "  <test-step result='SUCCESS' duration='0'>\n"
                         + "    <screenshots>\n"

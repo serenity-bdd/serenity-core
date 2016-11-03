@@ -150,11 +150,11 @@ public class WhenFormattingForHTML {
     }
 
     @Test
-    public void formatter_should_not_render_asciidoc_not_if_configured() {
+    public void formatter_should_render_markdown_by_default() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         Formatter formatter = new Formatter(issueTracking, environmentVariables);
         String formatted = formatter.renderDescription("a quick *brown* fox\njumped over a log");
-        assertThat(formatted, is("a quick *brown* fox<br>jumped over a log"));
+        assertThat(formatted, containsString("a quick <em>brown</em> fox"));
     }
 
     private final String htmlDescription = "<h2><a name=\"ScenarioDosometests\"></a>Scenario Do some tests</h2>\n"+
@@ -374,10 +374,21 @@ public class WhenFormattingForHTML {
         Formatter formatter = new Formatter(issueTracking);
 
         List<String> fields = ImmutableList.of("name","age");
-        String formattedValue = formatter.formatWithFields("Given a person named <name>\nand aged <age>", fields);
+        String formattedValue = formatter.formatWithFields("Given a person named <name>\nand aged <age>");
 
         assertThat(formattedValue, is("Given a person named &lt;name&gt;<br>and aged &lt;age&gt;"));
     }
+
+    @Test
+    public void should_allow_markdown_formatting() {
+        Formatter formatter = new Formatter(issueTracking);
+
+        List<String> fields = ImmutableList.of();
+        String formattedValue = formatter.formatWithFields("Given a **person** named _Joe_");
+
+        assertThat(formattedValue, is("Given a <strong>person</strong> named <em>Joe</em>"));
+    }
+
 
     @Test
     public void formatter_should_round_doubles_to_a_given_precision() {

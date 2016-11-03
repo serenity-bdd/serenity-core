@@ -94,7 +94,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         and:
         def formatter = new Formatter(issueTracking);
         when:
-        def formattedDescription = formatter.formatWithFields(stepDescription, [])
+        def formattedDescription = formatter.formatWithFields(stepDescription)
         then:
         formattedDescription.contains("Given the following accounts:")
         formattedDescription.contains("<table class='embedded'><thead><th>owner</th><th>points</th><th>statusPoints</th></thead>")
@@ -115,7 +115,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         and:
         def formatter = new Formatter(issueTracking);
         when:
-        def formattedDescription = formatter.formatWithFields(stepDescription, [])
+        def formattedDescription = formatter.formatWithFields(stepDescription)
         then:
         formattedDescription.contains("Given the following accounts:")
         formattedDescription.contains("<table class='embedded'><thead><th>owner</th><th>points</th><th>statusPoints</th></thead>")
@@ -134,7 +134,7 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         and:
         def formatter = new Formatter(issueTracking);
         when:
-        def formattedDescription = formatter.formatWithFields(stepDescription, [])
+        def formattedDescription = formatter.formatWithFields(stepDescription)
         then:
         formattedDescription.contains("Given the following accounts:")
         formattedDescription.contains("<table class='embedded'><thead><th>owner</th><th>points</th><th>statusPoints</th></thead>")

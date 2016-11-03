@@ -72,7 +72,7 @@
                         <#--<i class="fa fa-plus-square-o" class="read-more-link"></i>-->
                             <img src="images/plus.png" height="16"/></a>
                         <span class="requirementName"><a
-                                href="${requirementReport}">${requirementOutcome.requirement.displayName}</a></span>
+                                href="${requirementReport}">${formatter.htmlCompatible(requirementOutcome.requirement.displayName)}</a></span>
 
                         <div class="requirementNarrative read-more-text">${formatter.renderDescription(requirementOutcome.requirement.narrative.renderedText)}</div>
                     </td>

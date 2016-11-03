@@ -152,6 +152,7 @@ dependencies {
     compile('com.google.jimfs:jimfs:1.0') {
         exclude group: 'com.google.guava', module: 'guava'
     }
+    compile 'org.commonjava.googlecode.markdown4j:markdown4j:2.2-cj-1.1'
 
     testCompile "junit:junit:${junitVersion}"
     testCompile "org.springframework:spring-test:${springVersion}"

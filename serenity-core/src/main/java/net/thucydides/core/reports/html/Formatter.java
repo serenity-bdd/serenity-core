@@ -15,6 +15,9 @@ import org.apache.commons.lang3.text.translate.AggregateTranslator;
 import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
 import org.apache.commons.lang3.text.translate.EntityArrays;
 import org.apache.commons.lang3.text.translate.LookupTranslator;
+import org.markdown4j.Markdown4jProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,6 +46,7 @@ public class Formatter {
     private final static String ISSUE_LINK_FORMAT = "<a target=\"_blank\" href=\"{0}\">{1}</a>";
     private static final String ELIPSE = "&hellip;";
     private static final String ASCIIDOC = "asciidoc";
+    private static final String MARKDOWN = "markdown";
     private static final String NEW_LINE = "\n";
 
     private final static String NEWLINE_CHAR = "\u2424";
@@ -50,15 +54,19 @@ public class Formatter {
     private final static String LINE_SEPARATOR = "\u2028";
     private final static String PARAGRAPH_SEPARATOR = "\u2029";
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(Formatter.class);
+
     private final IssueTracking issueTracking;
     private final EnvironmentVariables environmentVariables;
     private final MarkupRenderer asciidocRenderer;
+    private final Markdown4jProcessor markdown4jProcessor;
 
     @Inject
     public Formatter(IssueTracking issueTracking, EnvironmentVariables environmentVariables) {
         this.issueTracking = issueTracking;
         this.environmentVariables = environmentVariables;
         this.asciidocRenderer = Injectors.getInjector().getInstance(Key.get(MarkupRenderer.class, Asciidoc.class));
+        markdown4jProcessor = new Markdown4jProcessor();
 
     }
 
@@ -68,6 +76,26 @@ public class Formatter {
 
     public String renderAsciidoc(String text) {
         return stripNewLines(asciidocRenderer.render(text));
+    }
+
+    public String renderMarkdown(String text) {
+        if (!ThucydidesSystemProperty.ENABLE_MARKDOWN.booleanFrom(environmentVariables,true)) {
+            return text;
+        }
+
+        try {
+            return stripSurroundingParagraphTagsFrom(markdown4jProcessor.process(text));
+        } catch (IOException e) {
+            LOGGER.warn("Failed to process markdown notation for '{0}' ({1})",text, e.getLocalizedMessage());
+            return text;
+        }
+    }
+
+    private String stripSurroundingParagraphTagsFrom(String text) {
+        if (text == null) { return ""; }
+
+        return text.toLowerCase().startsWith("<p>") ?
+                text.substring(3, text.length() - 5) : text;
     }
 
     private String stripNewLines(String render) {
@@ -167,8 +195,10 @@ public class Formatter {
         String format = environmentVariables.getProperty(ThucydidesSystemProperty.NARRATIVE_FORMAT,"");
         if (isRenderedHtml(text)) {
             return text;
-        } else if (format.equalsIgnoreCase(ASCIIDOC)) {
+        } else if (format.equalsIgnoreCase(ASCIIDOC)) {  // Use ASCIIDOC if configured
             return renderAsciidoc(text);
+        } else if (format.equalsIgnoreCase(MARKDOWN) ||ThucydidesSystemProperty.ENABLE_MARKDOWN.booleanFrom(environmentVariables, true) ) {
+            return renderMarkdown(text);
         } else {
             return addLineBreaks(text);
         }
@@ -284,11 +314,13 @@ public class Formatter {
             new LookupTranslator(EntityArrays.BASIC_ESCAPE())
     );
 
-    public static String htmlCompatible(Object fieldValue) {
-        return addLineBreaks(ESCAPE_SPECIAL_CHARS.translate(fieldValue != null ? stringFormOf(fieldValue) : ""));
+    public String htmlCompatible(Object fieldValue) {
+        return renderMarkdown(
+                addLineBreaks(ESCAPE_SPECIAL_CHARS.translate(fieldValue != null ? stringFormOf(fieldValue) : ""))
+        ).trim();
     }
 
-    public static String htmlAttributeCompatible(Object fieldValue) {
+    public String htmlAttributeCompatible(Object fieldValue) {
         if (fieldValue == null) { return ""; }
 
         return concatLines(ESCAPE_SPECIAL_CHARS.translate(stringFormOf(fieldValue)
@@ -297,7 +329,7 @@ public class Formatter {
                 .replaceAll("\"", "'")));
     }
 
-    public static String htmlAttributeCompatible(Object fieldValue, int maxLength) {
+    public String htmlAttributeCompatible(Object fieldValue, int maxLength) {
         return abbreviate(htmlAttributeCompatible(fieldValue), maxLength);
     }
 
@@ -327,7 +359,7 @@ public class Formatter {
     }
 
     public String truncatedHtmlCompatible(String text, int length) {
-        return addLineBreaks(ESCAPE_SPECIAL_CHARS.translate(truncate(text, length)));
+        return renderMarkdown(addLineBreaks(ESCAPE_SPECIAL_CHARS.translate(truncate(text, length))));
     }
 
     private String truncate(String text, int length) {
@@ -408,9 +440,11 @@ public class Formatter {
         return sortedIssues;
     }
 
-    public String formatWithFields(String textToFormat, List<String> fields) {
+    public String formatWithFields(String textToFormat) {
         String textWithEscapedFields = textToFormat.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-        return addLineBreaks(removeMacros(convertAnyTables(textWithEscapedFields)));
+        return renderMarkdown(
+                addLineBreaks(removeMacros(convertAnyTables(textWithEscapedFields)))
+               );
 
     }
 

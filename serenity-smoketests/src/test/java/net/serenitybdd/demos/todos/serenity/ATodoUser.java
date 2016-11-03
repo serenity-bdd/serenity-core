@@ -23,7 +23,7 @@ public class ATodoUser {
         onTheTodoHomePage.addAnActionCalled(actionName);
     }
 
-    @Step
+    @Step("Joe compelted **many** tasks")
     public void has_added_actions_called(String... actionNames) {
         newArrayList(actionNames).forEach(
                 action -> adds_an_action_called(action)

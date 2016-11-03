@@ -112,7 +112,7 @@
                             <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
                             <p class="tag">
                                 <span class="badge tag-badge">
-                                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" href="${tagReport}">${tagTitle}
+                                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" href="${tagReport}">${formatter.htmlCompatible(tagTitle)}
                                     (${tag.type})</a>
                                 </span>
                             </p>
@@ -134,7 +134,7 @@
                             <span class="test-case-title">
                             <#assign testOutcomeTitle = inflection.of(testOutcome.unqualified.titleWithLinks).asATitle() >
 
-                                <span class="${outcome_text}">${testOutcomeTitle}
+                                <span class="${outcome_text}">${formatter.htmlCompatible(testOutcomeTitle)}
                                     <span class="related-issue-title">${testOutcome.formattedIssues}</span>
                             </span>
                         </span>
@@ -154,7 +154,7 @@
     <div class="story-title">
         <h3 class="story-header">Scenario:</h3>
 
-        <div class="scenario">${formatter.formatWithFields(testOutcome.dataDrivenSampleScenario, testOutcome.exampleFields)}</div>
+        <div class="scenario">${formatter.formatWithFields(testOutcome.dataDrivenSampleScenario)}</div>
 
     </div>
 </#if>
@@ -396,7 +396,7 @@
                             <a href="javaScript:void(0)" onClick="toggleDiv('stepSection${step_number}')"
                                style="display:block;">
                             </#if>
-                            <span class="${step_class_root}-step">${formatter.formatWithFields(step.description,testOutcome.exampleFields)}</span>
+                            <span class="${step_class_root}-step">${formatter.formatWithFields(step.description)}</span>
                             <#if showAccordion>
                             </a>
                             </#if>

@@ -172,7 +172,7 @@
                     <#assign rootTitle = inflection.of(requirements.parentRequirement.get().parent!).asATitle() >
                     > <a href="${rootReport}">${rootTitle}</a>
                 </#if>
-                > ${parentTitle}
+                > ${formatter.htmlCompatible(parentTitle)}
             </#if>
             </span>
         </div>
@@ -198,7 +198,7 @@
             <div class="table">
             <#if (requirements.parentRequirement.isPresent())>
                 <div>
-                    <h2><i class="fa fa-book"></i> ${parentType}: ${issueNumber} ${parentTitle}</h2>
+                    <h2><i class="fa fa-book"></i> ${parentType}: ${issueNumber} ${formatter.htmlCompatible(parentTitle)}</h2>
                     <#if parentRequirement.narrative.renderedText?has_content>
                         <div class="requirementNarrativeTitle">
                         ${formatter.renderDescription(parentRequirement.narrative.renderedText)}

@@ -650,6 +650,11 @@ public enum ThucydidesSystemProperty {
     OUTPUT_FORMATS,
 
     /**
+     * If set to true (the default), allow markdown formatting in step titles and descriptions
+     */
+    ENABLE_MARKDOWN,
+
+    /**
      * Path to PhantomJS executable
      */
     PHANTOMJS_BINARY_PATH,

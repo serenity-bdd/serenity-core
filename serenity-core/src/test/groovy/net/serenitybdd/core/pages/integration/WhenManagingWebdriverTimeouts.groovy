@@ -256,9 +256,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         when: "We wait for a field to appear that takes 2 seconds to load"
             page.slowLoadingField.waitUntilVisible()
         then:
-            NoSuchElementException timeout = thrown()
-        and:
-            timeout.message.contains("Timed out after 1 seconds waiting for StaticSitePage.slowLoadingField to be displayed")
+            thrown(NoSuchElementException)
     }
 
     def "You can wait for elements to be not visible"() {

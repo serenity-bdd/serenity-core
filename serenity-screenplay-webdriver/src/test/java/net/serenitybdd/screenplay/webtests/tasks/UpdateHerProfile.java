@@ -62,6 +62,9 @@ public class UpdateHerProfile implements Performable {
                 UpdateHerProfile.dob().to(dob),
                 UpdateHerProfile.color().to(color)
         );
+
+        ProfilePage.INVISIBLE.resolveFor(theUser).waitUntilNotVisible();
+        ProfilePage.INEXISTANT.resolveFor(theUser).waitUntilNotVisible();
     }
 
 }

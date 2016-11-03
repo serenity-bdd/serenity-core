@@ -14,6 +14,8 @@ public class ProfilePage extends PageObject {
     public static Target COLOR = Target.the("Favorite Color").locatedBy("#color");
     public static Target DATE_OF_BIRTH = Target.the("Date of Birth").locatedBy("#dob");
     public static Target CONTACT_PREFERENCES = Target.the("Contact Preferences").locatedBy("#contactPreferances");
+    public static Target INVISIBLE = Target.the("Invisible field").locatedBy("#invisible");
+    public static Target INEXISTANT = Target.the("Inexistant field").locatedBy("#inexistant");
 
     @FindBy(id="name")
     public WebElementFacade nameField;

@@ -132,10 +132,12 @@
                                                                                     height="25" alt="Video"/></a>
                         </#if>
                             <span class="test-case-title">
-                            <#assign testOutcomeTitle = inflection.of(testOutcome.unqualified.titleWithLinks).asATitle() >
+                            <#assign testOutcomeTitle = testOutcome.unqualified.titleWithLinks >
 
                                 <span class="${outcome_text}">${formatter.htmlCompatible(testOutcomeTitle)}
-                                    <span class="related-issue-title">${testOutcome.formattedIssues}</span>
+                                    <#if (!testOutcome.titleWithIssues)>
+                                        <span class="related-issue-title">${testOutcome.formattedIssues}</span>
+                                    </#if>
                             </span>
                         </span>
                         <#if (testOutcome.manual)>

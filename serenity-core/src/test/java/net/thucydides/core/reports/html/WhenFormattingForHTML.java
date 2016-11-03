@@ -3,6 +3,8 @@ package net.thucydides.core.reports.html;
 import com.google.common.collect.ImmutableList;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.NumericalFormatter;
+import net.thucydides.core.model.Story;
+import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import org.junit.After;
@@ -47,6 +49,21 @@ public class WhenFormattingForHTML {
         String formattedValue = formatter.addLinks("Fixes issue #123");
 
         assertThat(formattedValue, is("Fixes issue <a target=\"_blank\" href=\"http://my.issue.tracker/MY-PROJECT/browse/ISSUE-123\">#123</a>"));
+    }
+
+    @Test
+    public void should_identify_titles_containing_issue_links() {
+        when(issueTracking.getIssueTrackerUrl()).thenReturn("http://my.issue.tracker/MY-PROJECT/browse/{0}");
+        when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn("http://my.issue.tracker/MY-PROJECT/browse/ISSUE-{0}");
+
+        TestOutcome outcomeWithIssues = TestOutcome.forTestInStory("Fix for #123", Story.called("some story"));
+        outcomeWithIssues.usingIssueTracking(issueTracking);
+
+        TestOutcome outcomeWithNoIssues = TestOutcome.forTestInStory("A simple test", Story.called("some story"));
+        outcomeWithNoIssues.usingIssueTracking(issueTracking);
+
+        assertThat(outcomeWithIssues.isTitleWithIssues(), is(true));
+        assertThat(outcomeWithNoIssues.isTitleWithIssues(), is(false));
     }
 
     @Test

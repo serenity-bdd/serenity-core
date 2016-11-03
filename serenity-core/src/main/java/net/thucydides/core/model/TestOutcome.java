@@ -33,6 +33,7 @@ import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepFailureException;
 import net.thucydides.core.steps.TestFailureCause;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.util.Inflector;
 import net.thucydides.core.util.NameConverter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
@@ -744,6 +745,10 @@ public class TestOutcome {
         return (previousStep.getResult() == ERROR || previousStep.getResult() == FAILURE || previousStep.getResult() == COMPROMISED);
     }
 
+    public boolean isTitleWithIssues() {
+        return (!getTitle().equalsIgnoreCase(getUnqualified().getTitleWithLinks()));
+    }
+
     public class TitleBuilder {
         private final boolean qualified;
         private final TestOutcome testOutcome;
@@ -754,7 +759,8 @@ public class TestOutcome {
         }
 
         public String getTitleWithLinks() {
-            return getFormatter().addLinks(getTitle());
+            String title = Inflector.getInstance().of(getTitle()).asATitle().toString();
+            return getFormatter().addLinks(title);
         }
 
         public String getTitle() {
@@ -1425,7 +1431,7 @@ public class TestOutcome {
         Set<String> issues = Sets.newHashSet(getIssues());
         if (!issues.isEmpty()) {
             List<String> orderedIssues = sort(issues, on(String.class));
-            return "(" + getFormatter().addLinks(StringUtils.join(orderedIssues, ", ")) + ")";
+            return "(" + getFormatter().addLinks(join(orderedIssues, ", ")) + ")";
         } else {
             return "";
         }

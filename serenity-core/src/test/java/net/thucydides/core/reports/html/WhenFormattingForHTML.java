@@ -204,9 +204,9 @@ public class WhenFormattingForHTML {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
         Formatter formatter = new Formatter(issueTracking);
 
-        String formattedValue = formatter.addLinks("A scenario with about issues #123 and #456");
+        String formattedValue = formatter.addLinks("A scenario about issues #123 and #456");
 
-        assertThat(formattedValue, is("A scenario with about issues #123 and #456"));
+        assertThat(formattedValue, is("A scenario about issues #123 and #456"));
     }
 
     @Test

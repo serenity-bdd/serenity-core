@@ -1,5 +1,6 @@
 package net.thucydides.core.reports.html;
 
+import com.github.rjeschke.txtmark.Processor;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Key;
@@ -15,7 +16,6 @@ import org.apache.commons.lang3.text.translate.AggregateTranslator;
 import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
 import org.apache.commons.lang3.text.translate.EntityArrays;
 import org.apache.commons.lang3.text.translate.LookupTranslator;
-import org.markdown4j.Markdown4jProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,15 +59,13 @@ public class Formatter {
     private final IssueTracking issueTracking;
     private final EnvironmentVariables environmentVariables;
     private final MarkupRenderer asciidocRenderer;
-    private final Markdown4jProcessor markdown4jProcessor;
+//    private final Markdown4jProcessor markdown4jProcessor;
 
     @Inject
     public Formatter(IssueTracking issueTracking, EnvironmentVariables environmentVariables) {
         this.issueTracking = issueTracking;
         this.environmentVariables = environmentVariables;
         this.asciidocRenderer = Injectors.getInjector().getInstance(Key.get(MarkupRenderer.class, Asciidoc.class));
-        markdown4jProcessor = new Markdown4jProcessor();
-
     }
 
     public Formatter(IssueTracking issueTracking) {
@@ -82,18 +80,12 @@ public class Formatter {
         if (!ThucydidesSystemProperty.ENABLE_MARKDOWN.booleanFrom(environmentVariables,true)) {
             return text;
         }
+        if (text == null) { return ""; }
 
-        try {
-            return stripSurroundingParagraphTagsFrom(markdown4jProcessor.process(text));
-        } catch (IOException e) {
-            LOGGER.warn("Failed to process markdown notation for '{0}' ({1})",text, e.getLocalizedMessage());
-            return text;
-        }
+        return stripSurroundingParagraphTagsFrom(Processor.process(text));
     }
 
     private String stripSurroundingParagraphTagsFrom(String text) {
-        if (text == null) { return ""; }
-
         return text.toLowerCase().startsWith("<p>") ?
                 text.substring(3, text.length() - 5) : text;
     }
@@ -193,6 +185,7 @@ public class Formatter {
 
     public String renderDescription(final String text) {
         String format = environmentVariables.getProperty(ThucydidesSystemProperty.NARRATIVE_FORMAT,"");
+
         if (isRenderedHtml(text)) {
             return text;
         } else if (format.equalsIgnoreCase(ASCIIDOC)) {  // Use ASCIIDOC if configured

@@ -222,7 +222,7 @@ subprojects {
         compile "org.objenesis:objenesis:2.1"
         compile "org.slf4j:slf4j-api:1.7.21"
         compile "xml-apis:xml-apis:1.4.01"
-        compile 'info.cukes:cucumber-core:1.2.4'
+        compile 'info.cukes:cucumber-core:1.2.5'
 
         compile 'commons-logging:commons-logging:1.2'
         compile "junit:junit:${junitVersion}"

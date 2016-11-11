@@ -6,5 +6,5 @@ import org.openqa.selenium.WebDriver;
 public interface CloseBrowser {
     void closeIfConfiguredForANew(RestartBrowserForEach event);
 
-    void whenTheTestsAreFinished(WebDriver driver);
+    void closeWhenTheTestsAreFinished(WebDriver driver);
 }

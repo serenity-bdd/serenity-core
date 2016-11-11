@@ -191,6 +191,13 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_RESTART_BROWSER_FREQUENCY,
 
     /**
+     * Indicate when a browser should be restarted during a test run.
+     * Can be one of: example, scenario, story, feature, never
+     *
+     */
+    THUCYDIDES_RESTART_BROWSER_FOR_EACH,
+
+    /**
      * Pause (in ms) between each test step.
      */
     THUCYDIDES_STEP_DELAY,

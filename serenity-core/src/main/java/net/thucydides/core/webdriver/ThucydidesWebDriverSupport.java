@@ -137,6 +137,12 @@ public class ThucydidesWebDriverSupport {
         }
     }
 
+    public static void closeDriver() {
+        if (webdriversInitialized()) {
+            getWebdriverManager().closeDriver();
+        }
+    }
+
     private static void setupWebdriverManager(WebdriverManager webdriverManager, String requestedDriver) {
         setWebdriverManager(webdriverManager);
         getWebdriverManager().overrideDefaultDriverType(requestedDriver);

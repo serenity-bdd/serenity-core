@@ -11,6 +11,7 @@ import net.thucydides.core.annotations.Step;
 public class ViewMyProfile implements Performable {
 
     Target theProfileButton = Target.the("View profile button").locatedBy(HomePage.VIEW_PROFILE);
+    Target profileName = Target.the("View profile button").locatedBy(HomePage.VIEW_PROFILE);
 
     HomePage homePage;
 

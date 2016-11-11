@@ -4,7 +4,6 @@ import net.serenitybdd.demos.todos.serenity.ATodoUser;
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
-import net.thucydides.junit.annotations.Concurrent;
 import net.thucydides.junit.annotations.TestData;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +17,7 @@ import java.util.Collection;
  * This example illustrates using Serenity Steps with JUnit.
  */
 @RunWith(SerenityParameterizedRunner.class)
-@Concurrent
+//@Concurrent
 public class AddDifferentSortsOfTodos {
 
     @Managed

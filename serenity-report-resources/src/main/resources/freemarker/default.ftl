@@ -144,6 +144,13 @@
                         <#if (testOutcome.manual)>
                             <i class="fa fa-user manual" alt="Manual test" title="Manual test"></i>
                         </#if>
+                        <#if (testOutcome.descriptionText.isPresent() && testOutcome.descriptionText.get()?has_content)>
+                            <div class="story-title">
+                                <div class="requirementNarrativeTitle">
+                                ${formatter.renderDescription(testOutcome.descriptionText.get())}
+                                </div>
+                            </div>
+                        </#if>
                         </td>
                     </tr>
                 </table>
@@ -163,14 +170,6 @@
 </#if>
 
     <div id="beforetable"></div>
-
-<#if (testOutcome.descriptionText.isPresent() && testOutcome.descriptionText.get()?has_content)>
-    <div class="story-title">
-        <div class="requirementNarrativeTitle">
-        ${formatter.renderDescription(testOutcome.descriptionText.get())}
-        </div>
-    </div>
-</#if>
 
 <#if (testOutcome.isDataDriven())>
 

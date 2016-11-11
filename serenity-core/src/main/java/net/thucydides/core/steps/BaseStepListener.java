@@ -1,7 +1,6 @@
 package net.thucydides.core.steps;
 
 import com.google.common.base.Optional;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
@@ -23,10 +22,7 @@ import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.screenshots.ScreenshotException;
-import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
-import net.thucydides.core.webdriver.WebdriverManager;
-import net.thucydides.core.webdriver.WebdriverProxyFactory;
+import net.thucydides.core.webdriver.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
 import org.slf4j.Logger;
@@ -37,6 +33,7 @@ import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.*;
 
+import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.*;
 import static net.thucydides.core.model.Stories.findStoryFrom;
 import static net.thucydides.core.model.TestResult.*;
 import static net.thucydides.core.steps.BaseStepListener.ScreenshotType.MANDATORY_SCREENSHOT;
@@ -98,6 +95,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private Darkroom darkroom;
     private Photographer photographer;
     private SoundEngineer soundEngineer = new SoundEngineer();
+
+    private final CloseBrowser closeBrowser;
 
     public void setEventBus(StepEventBus eventBus) {
         this.eventBus = eventBus;
@@ -187,6 +186,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
         this.clock = injector.getInstance(SystemClock.class);
         this.configuration = injector.getInstance(Configuration.class);
         //this.screenshotProcessor = injector.getInstance(ScreenshotProcessor.class);
+        this.closeBrowser = Injectors.getInjector().getInstance(CloseBrowser.class);
+
     }
 
     /**
@@ -253,7 +254,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     protected TestOutcome getCurrentTestOutcome() {
-        Preconditions.checkState(!testOutcomes.isEmpty());
         return latestTestOutcome().get();
     }
 
@@ -318,7 +318,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public void testSuiteFinished() {
         closeDarkroom();
         clearStorywideTagsAndIssues();
-        ThucydidesWebDriverSupport.closeAllDrivers();
+
+        closeBrowser.closeIfConfiguredForANew(STORY);
+
         suiteStarted = false;
     }
 
@@ -373,6 +375,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (currentTestIsABrowserTest()) {
             getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
             updateSessionIdIfKnown();
+            closeBrowser.closeIfConfiguredForANew(SCENARIO);
         }
         currentStepStack.clear();
     }
@@ -799,24 +802,37 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void testFailed(TestOutcome testOutcome, final Throwable cause) {
+        if (!testOutcomeRecorded()) { return; }
+
         getCurrentTestOutcome().determineTestFailureCause(cause);
     }
 
     public void testIgnored() {
+        if (!testOutcomeRecorded()) { return; }
         getCurrentTestOutcome().setAnnotatedResult(IGNORED);
     }
 
     public void testSkipped() {
+        if (!testOutcomeRecorded()) { return; }
+
         getCurrentTestOutcome().setAnnotatedResult(SKIPPED);
     }
 
     public void testPending() {
+        if (!testOutcomeRecorded()) { return; }
+
         getCurrentTestOutcome().setAnnotatedResult(PENDING);
         updateExampleTableIfNecessary(PENDING);
     }
 
+    private boolean testOutcomeRecorded() {
+        return !testOutcomes.isEmpty();
+    }
+
     @Override
     public void testIsManual() {
+        if (!testOutcomeRecorded()) { return; }
+
         getCurrentTestOutcome().asManualTest();
         getCurrentTestOutcome().addTag(TestTag.withName("Manual").andType("External Tests"));
         getCurrentTestOutcome().setAnnotatedResult(defaulManualTestReportResult());
@@ -881,6 +897,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public void exampleFinished() {
         currentStepDone(null);
         getCurrentTestOutcome().moveToNextRow();
+        closeBrowser.closeIfConfiguredForANew(EXAMPLE);
     }
 
     public void recordRestQuery(RestQuery restQuery) {

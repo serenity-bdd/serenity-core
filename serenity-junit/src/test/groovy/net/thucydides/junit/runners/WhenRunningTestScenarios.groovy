@@ -10,6 +10,7 @@ import net.thucydides.samples.*
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.notification.RunNotifier
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -53,7 +54,7 @@ class WhenRunningTestScenarios extends Specification {
             runner.testOutcomes.get(0).result == TestResult.SUCCESS
     }
 
-
+    @Ignore
     def "should be able to record the driver used for a test"() {
         given:
             def runner = new SerenityRunner(SamplePassingScenarioUsingFirefox);
@@ -64,6 +65,7 @@ class WhenRunningTestScenarios extends Specification {
             drivers.contains("firefox")
     }
 
+    @Ignore
     def "should be able to record the driver used for a test when a different driver is specified"() {
         given:
             def runner = new SerenityRunner(SamplePassingScenarioUsingHtmlUnit);
@@ -84,7 +86,7 @@ class WhenRunningTestScenarios extends Specification {
             drivers.each { driver -> assert driver == null }
     }
 
-
+    @Ignore
     def "should be able to record a different driver for an individual test"() {
         given:
             def runner = new SerenityRunner(SamplePassingScenarioUsingDifferentBrowsersForEachTest, webDriverFactory)

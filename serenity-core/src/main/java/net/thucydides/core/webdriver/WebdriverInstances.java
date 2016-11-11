@@ -144,11 +144,10 @@ public class WebdriverInstances {
 
     private String driverNameFor(WebDriver driver) {
         String driverName = registeredDriverNameFor(driver);
-        if (driverName != null) {
-            return driverName;
+        if (driverName == null) {
+            throw new IllegalStateException("No matching driver found for " + driverName + " in this thread");
         }
-
-        throw new IllegalStateException("No matching driver found for " + driverName + " in this thread");
+        return driverName;
     }
 
     private boolean matchingDriver(WebDriver mappedDriver, WebDriver driver) {

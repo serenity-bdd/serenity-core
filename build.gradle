@@ -10,7 +10,6 @@ buildscript {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.5'
         classpath 'org.ajoberstar:gradle-git:1.6.0'
         classpath 'org.pegdown:pegdown:1.4.1'
-//        classpath 'com.github.ben-manes:gradle-versions-plugin:0.11.3'
     }
 }
 
@@ -65,7 +64,6 @@ ext {
 
 allprojects {
     apply plugin: 'project-report'
-//    apply plugin: 'com.github.ben-manes.versions'
 
     configurations.all {
         resolutionStrategy {
@@ -86,10 +84,7 @@ allprojects {
 
 release {
     grgit = Grgit.open()
-    // versionStrategy Strategies.FINAL
-    // versionStrategy Strategies.PRE_RELEASE
-//    defaultVersionStrategy Strategies.SNAPSHOT
-    versionStrategy Strategies.SNAPSHOT
+    defaultVersionStrategy Strategies.SNAPSHOT
 }
 
 subprojects {

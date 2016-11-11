@@ -145,10 +145,9 @@
                             <i class="fa fa-user manual" alt="Manual test" title="Manual test"></i>
                         </#if>
                         <#if (testOutcome.descriptionText.isPresent() && testOutcome.descriptionText.get()?has_content)>
-                            <div class="story-title">
-                                <div class="requirementNarrativeTitle">
+                            <div class="discreet-requirement-narrative-title">
+                                <br/>
                                 ${formatter.renderDescription(testOutcome.descriptionText.get())}
-                                </div>
                             </div>
                         </#if>
                         </td>

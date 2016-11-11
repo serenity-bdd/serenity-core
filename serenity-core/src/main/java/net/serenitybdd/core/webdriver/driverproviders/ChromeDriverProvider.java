@@ -11,7 +11,6 @@ import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ThreadGuard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,10 +45,10 @@ public class ChromeDriverProvider implements DriverProvider {
         driverProperties.registerCapabilities("chrome", capabilities);
 
         try {
-            return ThreadGuard.protect(getDriverServicePool().newDriver(capabilities));
+            return getDriverServicePool().newDriver(capabilities);
         } catch (IOException couldNotStartChromeServer) {
             LOGGER.warn("Failed to start the chrome driver service, using a native driver instead",  couldNotStartChromeServer.getMessage());
-            return ThreadGuard.protect(new ChromeDriver(enhancer.enhanced(capabilities)));
+            return new ChromeDriver(enhancer.enhanced(capabilities));
         }
     }
 

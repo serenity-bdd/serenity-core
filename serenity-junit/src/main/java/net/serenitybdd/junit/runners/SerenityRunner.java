@@ -247,7 +247,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
             notifyTestSuiteFinished();
             generateReports();
             dropListeners(notifier);
-            closeDrivers();
         }
     }
 
@@ -266,11 +265,19 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
 
     private void notifyTestSuiteFinished() {
         try {
-            StepEventBus.getEventBus().testSuiteFinished();
+            if (dataDrivenTest()) {
+                StepEventBus.getEventBus().exampleFinished();
+            } else {
+                StepEventBus.getEventBus().testSuiteFinished();
+            }
         } catch (Throwable listenerException) {
             // We report and ignore listener exceptions so as not to mess up the rest of the test mechanics.
             logger.error("Test event bus error: " + listenerException.getMessage(), listenerException);
         }
+    }
+
+    private boolean dataDrivenTest() {
+        return this instanceof TestClassRunnerForParameters;
     }
 
     private void dropListeners(final RunNotifier notifier) {
@@ -366,11 +373,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     private void initStepFactory() {
         stepFactory = new StepFactory();
     }
-
-    private void closeDrivers() {
-        ThucydidesWebDriverSupport.closeAllDrivers();
-    }
-
 
     private ReportService getReportService() {
         if (reportService == null) {
@@ -472,10 +474,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     }
 
     protected void prepareBrowserForTest() {
-        if (theTest.needsToRestartTheBrowser()) {
-            WebdriverProxyFactory.resetDriver(getDriver());
-        }
-
         if (theTest.shouldClearTheBrowserSession()) {
             WebdriverProxyFactory.clearBrowserSession(getDriver());
         }

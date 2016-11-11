@@ -42,6 +42,8 @@ public class WebDriverFactory {
     private final FixtureProviderService fixtureProviderService;
     private final SauceRemoteDriverCapabilities sauceRemoteDriverCapabilities;
 
+    private final CloseBrowser closeBrowser;
+
     private Map<SupportedWebDriver, DriverProvider> driverProvidersByDriverType;
 
     private final TimeoutStack timeoutStack;
@@ -62,6 +64,7 @@ public class WebDriverFactory {
         this.fixtureProviderService = fixtureProviderService;
         this.sauceRemoteDriverCapabilities = new SauceRemoteDriverCapabilities(environmentVariables);
         this.timeoutStack = new TimeoutStack();
+        this.closeBrowser = Injectors.getInjector().getInstance(CloseBrowser.class);
     }
 
     /**
@@ -122,6 +125,8 @@ public class WebDriverFactory {
             WebDriver driver = driverProviders().get(supportedDriverType).newInstance();
             setImplicitTimeoutsIfSpecified(driver);
             redimensionBrowser.withDriver(driver);
+
+            closeBrowser.closeWhenTheTestsAreFinished(driver);
 
             return driver;
         } catch (SerenityManagedException toPassThrough) {

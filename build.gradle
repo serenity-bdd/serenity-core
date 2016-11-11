@@ -88,7 +88,8 @@ release {
     grgit = Grgit.open()
     // versionStrategy Strategies.FINAL
     // versionStrategy Strategies.PRE_RELEASE
-    defaultVersionStrategy Strategies.SNAPSHOT
+//    defaultVersionStrategy Strategies.SNAPSHOT
+    versionStrategy Strategies.SNAPSHOT
 }
 
 subprojects {

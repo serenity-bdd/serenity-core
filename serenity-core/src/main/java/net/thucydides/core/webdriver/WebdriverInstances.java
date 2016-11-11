@@ -62,7 +62,6 @@ public class WebdriverInstances {
         if (getCurrentDriver() != null) {
             closedDriver = getCurrentDriver();
             closeAndQuit(closedDriver);
-            driverMap.remove(currentDriver);
             currentDriver = null;
         }
         return closedDriver;

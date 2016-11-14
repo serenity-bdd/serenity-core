@@ -595,7 +595,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public WebElementFacade type(final String value) {
         logIfVerbose("Type '" + value + "'");
-        enableHighlightingIfRequired();
         waitUntilElementAvailable();
         clear();
         getElement().sendKeys(value);
@@ -627,7 +626,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public WebElementFacade typeAndTab(final String value) {
         logIfVerbose("Type and tab '" + value + "'");
-        enableHighlightingIfRequired();
         waitUntilElementAvailable();
         clear();
 
@@ -948,7 +946,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      */
     @Override
     public void click() {
-        enableHighlightingIfRequired();
         waitUntilElementAvailable();
         logClick();
         getElement().click();

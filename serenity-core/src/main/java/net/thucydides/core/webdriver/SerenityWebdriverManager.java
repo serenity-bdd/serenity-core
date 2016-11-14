@@ -68,6 +68,10 @@ public class SerenityWebdriverManager implements WebdriverManager {
         inThisTestThread().closeCurrentDriver();
     }
 
+    public void closeCurrentDrivers() {
+        inThisTestThread().closeCurrentDrivers();
+    }
+
     public void closeAllDrivers() {
         inThisTestThread().closeAllDrivers();
     }

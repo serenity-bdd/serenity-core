@@ -1,7 +1,9 @@
 package net.thucydides.core.webdriver;
 
 import com.google.common.collect.Lists;
-import org.apache.commons.lang3.StringUtils;
+import com.google.common.collect.Sets;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
 import java.util.*;
@@ -13,11 +15,16 @@ import java.util.*;
 public class WebdriverInstances {
 
     private final Map<String, WebDriver> driverMap;
+    private final ThreadLocal<Set<String>> driversUsedInCurrentThread;
+    private final DriverName driverNamer;
 
     private String currentDriver;
 
     public WebdriverInstances() {
         this.driverMap = new HashMap<>();
+        this.driversUsedInCurrentThread = new ThreadLocal<>();
+        this.driversUsedInCurrentThread.set(Sets.<String>newHashSet());
+        this.driverNamer = new DriverName(Injectors.getInjector().getInstance(EnvironmentVariables.class));
     }
 
     public WebDriver getCurrentDriver() {
@@ -83,23 +90,39 @@ public class WebdriverInstances {
     }
 
     public boolean driverIsRegisteredFor(String driverName) {
-        return driverMap.containsKey(normalized(driverName));
+        return driverMap.containsKey(driverNamer.normalisedFormOf(driverName));
     }
 
     public WebDriver useDriver(final String driverName) {
-        // this.currentDriver = normalized(driverName);
-        return driverMap.get(normalized(driverName));
+        driversUsedInCurrentThread.get().add(driverNamer.normalisedFormOf(driverName));
+        return driverMap.get(driverNamer.normalisedFormOf(driverName));
     }
 
     public Set<WebDriver> closeAllDrivers() {
         Collection<WebDriver> openDrivers = driverMap.values();
-        Set<WebDriver> closedDrivers = new HashSet<WebDriver>(openDrivers);
+        Set<WebDriver> closedDrivers = new HashSet<>(openDrivers);
         for (WebDriver driver : openDrivers) {
             closeAndQuit(driver);
         }
         driverMap.clear();
+        clearDriversInCurrentThread();
         currentDriver = null;
         return closedDrivers;
+    }
+
+    private void clearDriversInCurrentThread() {
+        driversUsedInCurrentThread.get().clear();
+    }
+
+    public void closeCurrentDrivers() {
+        closeCurrentDriver();
+        for(String driverName : driversUsedInCurrentThread.get()) {
+            WebDriverFacade openDriver = (WebDriverFacade) driverMap.get(driverName);
+            if (openDriver.isInstantiated()) {
+                closeAndQuit(openDriver);
+            }
+        }
+        currentDriver = null;
     }
 
     public int getActiveWebdriverCount() {
@@ -193,7 +216,7 @@ public class WebdriverInstances {
         private final String driverName;
 
         public InstanceRegistration(final String driverName) {
-            this.driverName = normalized(driverName);
+            this.driverName = driverNamer.normalisedFormOf(driverName);
         }
 
 
@@ -201,20 +224,11 @@ public class WebdriverInstances {
             if (!driverMap.values().contains(driver)) {
                 driverMap.put(driverName, driver);
             }
-//            currentDriver = normalized(driverName);
         }
     }
 
     public InstanceRegistration registerDriverCalled(final String driverName) {
-        return new InstanceRegistration(normalized(driverName));
-    }
-
-    private String normalized(String name) {
-        if (StringUtils.isEmpty(name)) {
-            return WebDriverFactory.DEFAULT_DRIVER;
-        } else {
-            return name.toLowerCase();
-        }
+        return new InstanceRegistration(driverNamer.normalisedFormOf(driverName));
     }
 
 }

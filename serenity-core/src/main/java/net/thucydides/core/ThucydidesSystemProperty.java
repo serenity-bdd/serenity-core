@@ -198,6 +198,13 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_RESTART_BROWSER_FOR_EACH,
 
     /**
+     * When multiple actors are used with the Screenplay pattern, a separate browser is configured for each actor.
+     * Set this property to false if you want actors use a common browser.
+     * This can be useful if actors are used to illustrate the intent of a test, but no tests use more than one actor simultaneously
+     */
+    THUCYDIDES_DIFFERENT_BROWSER_FOR_EACH_ACTOR,
+
+    /**
      * Pause (in ms) between each test step.
      */
     THUCYDIDES_STEP_DELAY,

@@ -22,7 +22,7 @@ public class WebdriverCloseBrowser implements CloseBrowser {
     @Override
     public void closeIfConfiguredForANew(RestartBrowserForEach event) {
         if (restartBrowserForANew(event)) {
-            ThucydidesWebDriverSupport.closeDriver();
+            ThucydidesWebDriverSupport.closeCurrentDrivers();
         }
     }
 

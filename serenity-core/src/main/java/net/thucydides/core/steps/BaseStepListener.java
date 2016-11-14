@@ -96,7 +96,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private Photographer photographer;
     private SoundEngineer soundEngineer = new SoundEngineer();
 
-    private final CloseBrowser closeBrowser;
+    private final CloseBrowser closeBrowsers;
 
     public void setEventBus(StepEventBus eventBus) {
         this.eventBus = eventBus;
@@ -186,7 +186,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         this.clock = injector.getInstance(SystemClock.class);
         this.configuration = injector.getInstance(Configuration.class);
         //this.screenshotProcessor = injector.getInstance(ScreenshotProcessor.class);
-        this.closeBrowser = Injectors.getInjector().getInstance(CloseBrowser.class);
+        this.closeBrowsers = Injectors.getInjector().getInstance(CloseBrowser.class);
 
     }
 
@@ -319,7 +319,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         closeDarkroom();
         clearStorywideTagsAndIssues();
 
-        closeBrowser.closeIfConfiguredForANew(STORY);
+        closeBrowsers.closeIfConfiguredForANew(STORY);
 
         suiteStarted = false;
     }
@@ -375,7 +375,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (currentTestIsABrowserTest()) {
             getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
             updateSessionIdIfKnown();
-            closeBrowser.closeIfConfiguredForANew(SCENARIO);
+            closeBrowsers.closeIfConfiguredForANew(SCENARIO);
         }
         currentStepStack.clear();
     }
@@ -897,7 +897,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public void exampleFinished() {
         currentStepDone(null);
         getCurrentTestOutcome().moveToNextRow();
-        closeBrowser.closeIfConfiguredForANew(EXAMPLE);
+        closeBrowsers.closeIfConfiguredForANew(EXAMPLE);
     }
 
     public void recordRestQuery(RestQuery restQuery) {

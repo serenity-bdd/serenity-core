@@ -33,7 +33,6 @@ class DropdownDeselector {
 
     public WebElementFacade byValue(String value) {
         if (webElementFacade.driverIsDisabled()) { return webElementFacade; }
-        webElementFacade.enableHighlightingIfRequired();
         webElementFacade.waitUntilElementAvailable();
         Select select = new Select(webElementFacade.getElement());
         select.deselectByValue(value);
@@ -43,7 +42,6 @@ class DropdownDeselector {
 
     public WebElementFacade byIndex(int indexValue) {
         if (webElementFacade.driverIsDisabled()) { return webElementFacade; }
-        webElementFacade.enableHighlightingIfRequired();
         webElementFacade.waitUntilElementAvailable();
         Select select = new Select(webElementFacade.getElement());
         select.deselectByIndex(indexValue);

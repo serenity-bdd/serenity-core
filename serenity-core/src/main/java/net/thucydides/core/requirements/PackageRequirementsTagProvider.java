@@ -116,7 +116,8 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         try {
             List<String> requirementPaths = requirementPathsStartingFrom(rootPackage);
             Collections.sort(requirementPaths, byDescendingPackageLength());
-            int requirementsDepth = longestPathIn(requirementPaths);
+            int requirementsDepth = shortestPathIn(requirementPaths);
+//            int requirementsDepth = longestPathIn(requirementPaths);
 
             Set<Requirement> allRequirements = Sets.newHashSet();
             for (String path : requirementPaths) {
@@ -203,6 +204,18 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
             }
         }
         return maxDepth;
+    }
+
+    private int shortestPathIn(List<String> requirementPaths) {
+        int minDepth = Integer.MAX_VALUE;
+        for (String path : requirementPaths) {
+            String pathWithoutRootPackage = path.replace(rootPackage + ".", "");
+            int pathDepth = Splitter.on(".").splitToList(pathWithoutRootPackage).size();
+            if (pathDepth < minDepth) {
+                minDepth = pathDepth;
+            }
+        }
+        return minDepth;
     }
 
     private void addRequirementsDefinedIn(String path, int requirementsDepth, Collection<Requirement> allRequirements) {

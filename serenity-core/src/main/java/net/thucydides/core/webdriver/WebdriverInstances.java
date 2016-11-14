@@ -117,8 +117,8 @@ public class WebdriverInstances {
     public void closeCurrentDrivers() {
         closeCurrentDriver();
         for(String driverName : driversUsedInCurrentThread.get()) {
-            WebDriverFacade openDriver = (WebDriverFacade) driverMap.get(driverName);
-            if (openDriver.isInstantiated()) {
+            WebDriver openDriver = driverMap.get(driverName);
+            if (isInstantiated(openDriver)) {
                 closeAndQuit(openDriver);
             }
         }
@@ -181,8 +181,7 @@ public class WebdriverInstances {
     }
 
 
-    public List<
-            WebDriver> getActiveDrivers() {
+    public List<WebDriver> getActiveDrivers() {
         List<WebDriver> activeDrivers = Lists.newArrayList();
         for (WebDriver webDriver : driverMap.values()) {
             if (!(webDriver instanceof WebDriverFacade)) {

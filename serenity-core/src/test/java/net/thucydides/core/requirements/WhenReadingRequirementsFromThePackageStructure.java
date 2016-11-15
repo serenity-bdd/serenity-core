@@ -18,7 +18,7 @@ public class WhenReadingRequirementsFromThePackageStructure {
         // GIVEN
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("serenity.test.root", "packagerequirements");
-        PackageRequirementsTagProvider tagProvider = new PackageRequirementsTagProvider(environmentVariables);
+        PackageRequirementsTagProvider tagProvider = new PackageRequirementsTagProvider(environmentVariables).withCacheDisabled();
 
         List<Requirement> requirements = tagProvider.getRequirements();
 
@@ -33,7 +33,7 @@ public class WhenReadingRequirementsFromThePackageStructure {
         // GIVEN
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("serenity.test.root", "twolevelpackagerequirements");
-        PackageRequirementsTagProvider tagProvider = new PackageRequirementsTagProvider(environmentVariables);
+        PackageRequirementsTagProvider tagProvider = new PackageRequirementsTagProvider(environmentVariables).withCacheDisabled();
 
         List<Requirement> requirements = tagProvider.getRequirements();
 
@@ -48,7 +48,7 @@ public class WhenReadingRequirementsFromThePackageStructure {
         // GIVEN
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("serenity.test.root", "unevenpackagerequirements");
-        PackageRequirementsTagProvider tagProvider = new PackageRequirementsTagProvider(environmentVariables);
+        PackageRequirementsTagProvider tagProvider = new PackageRequirementsTagProvider(environmentVariables).withCacheDisabled();
 
         List<Requirement> requirements = tagProvider.getRequirements();
 

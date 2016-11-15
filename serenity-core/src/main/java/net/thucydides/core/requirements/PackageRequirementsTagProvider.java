@@ -14,8 +14,6 @@ import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,8 +41,6 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
     private final RequirementsStore requirementsStore;
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables,
                                           String rootPackage,
                                           RequirementsStore requirementsStore) {
@@ -52,10 +48,6 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         this.environmentVariables = environmentVariables;
         this.rootPackage = rootPackage;
         this.requirementsStore = requirementsStore;
-
-//        if (rootPackage == null) {
-//            logger.warn("To generate correct requirements coverage reports you need to set the 'serenity.test.root' property to the package representing the top of your requirements hierarchy.");
-//        }
     }
 
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables, String rootPackage) {

@@ -4,6 +4,7 @@ import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.matchers.WebElementStateMatchers;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.waits.WaitUntil;
@@ -267,6 +268,7 @@ public class WhenDanaBrowsesTheWeb {
 
         when(dana).attemptsTo(viewHerOldProfile);
         and(dana).attemptsTo(
+                Click.on(ProfilePage.SOME_BUTTON),
                 UpdateHerProfile
                         .withName("Dana")
                         .andCountryOfResidence("France")

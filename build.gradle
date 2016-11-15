@@ -85,6 +85,7 @@ allprojects {
 release {
     grgit = Grgit.open()
     defaultVersionStrategy Strategies.SNAPSHOT
+    versionStrategy Strategies.SNAPSHOT
 }
 
 subprojects {

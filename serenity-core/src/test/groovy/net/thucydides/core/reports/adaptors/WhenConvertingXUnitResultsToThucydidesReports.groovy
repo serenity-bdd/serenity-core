@@ -20,7 +20,7 @@ class WhenConvertingXUnitResultsToThucydidesReports extends Specification {
         temporaryDirectory = temporaryFolder.newFolder()
     }
 
-    def "should convert xUnit files to thucydides TestOutcome xml files"() {
+    def "should convert xUnit files to thucydides TestOutcome json files"() {
         given:
             def xunitFileDirectory = fileInClasspathCalled("/xunit-sample-output")
             def xunitReporter = new TestOutcomeAdaptorReporter()
@@ -30,15 +30,15 @@ class WhenConvertingXUnitResultsToThucydidesReports extends Specification {
         when:
             xunitReporter.generateReportsFrom(xunitFileDirectory)
         then:
-            generatedXmlFiles().size() == 3
+            generatedJsonFiles().size() == 3
             generatedHtmlFiles().size() == 3
     }
 
-    def generatedXmlFiles() {
+    def generatedJsonFiles() {
         temporaryDirectory.list(new FilenameFilter() {
             @Override
             boolean accept(File dir, String name) {
-                name.endsWith(".xml")
+                name.endsWith(".json")
             }
         })
     }
@@ -51,7 +51,7 @@ class WhenConvertingXUnitResultsToThucydidesReports extends Specification {
             }
         })
     }
-    def "should convert xUnit files from lettuce to thucydides TestOutcome xml files"() {
+    def "should convert xUnit files from lettuce to thucydides TestOutcome json files"() {
         given:
             def xunitFileDirectory = fileInClasspathCalled("/lettuce-xunit-reports/normal")
             def xunitReporter = new TestOutcomeAdaptorReporter()
@@ -61,7 +61,7 @@ class WhenConvertingXUnitResultsToThucydidesReports extends Specification {
         when:
             xunitReporter.generateReportsFrom(xunitFileDirectory)
         then:
-            generatedXmlFiles().size() == 4
+            generatedJsonFiles().size() == 4
             generatedHtmlFiles().size() == 4
     }
 

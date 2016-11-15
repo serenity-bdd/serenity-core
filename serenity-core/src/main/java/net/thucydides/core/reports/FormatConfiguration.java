@@ -17,7 +17,7 @@ public class FormatConfiguration {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(FormatConfiguration.class);
 
-    public final static String DEFAULT_FORMATS = "json,xml,html";
+    public final static String DEFAULT_FORMATS = "json,html";
 
     private final List<OutcomeFormat> formats;
 

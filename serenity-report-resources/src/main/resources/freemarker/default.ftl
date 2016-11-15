@@ -67,7 +67,7 @@
                         <td>
                         <#if (parentRequirement?? && parentRequirement.isPresent())>
                             <div>
-                                <#assign parentTitle = inflection.of(parentRequirement.get().name).asATitle() >
+                                <#assign parentTitle = formatter.renderDescription(inflection.of(parentRequirement.get().name).asATitle()) >
                                 <#assign parentType = inflection.of(parentRequirement.get().type).asATitle() >
                                 <#if (parentRequirement.get().cardNumber?has_content) >
                                     <#assign issueNumber = "[" + formatter.addLinks(parentRequirement.get().cardNumber) + "]" >

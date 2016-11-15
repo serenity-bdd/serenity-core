@@ -474,23 +474,23 @@ class WhenRunningTestScenarios extends Specification {
     }
 
 
-    def "xml test results should be written to the output directory"() {
+    def "JSON test results should be written to the output directory"() {
         given:
         def runner = new ATestableThucydidesRunnerSample(SamplePassingScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
-        def xmlReports = reload(temporaryDirectory).list().findAll {it.endsWith(".xml") && !it.startsWith("SERENITY-")}
+        def jsonReports = reload(temporaryDirectory).list().findAll {it.endsWith(".json")}
         then:
-        xmlReports.size() == 3
+        jsonReports.size() == 3
     }
 
     def "tests for multiple stories should be written to the output directory"() {
         when:
             new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
             new ATestableThucydidesRunnerSample(SampleFailingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
-            def xmlReports = reload(temporaryDirectory).list().findAll {it.toLowerCase().endsWith(".xml") && !it.startsWith("SERENITY-")}
+            def jsonReports = reload(temporaryDirectory).list().findAll {it.toLowerCase().endsWith(".json") && !it.startsWith("SERENITY-")}
         then:
-            xmlReports.size() == 6
+        jsonReports.size() == 6
     }
 
     def "HTML test results should be written to the output directory"() {

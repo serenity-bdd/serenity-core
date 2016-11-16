@@ -9,7 +9,7 @@ import net.thucydides.core.screenshots.BlurLevel
 import org.apache.commons.io.FileUtils
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.phantomjs.PhantomJSDriver
+import org.openqa.selenium.chrome.ChromeDriver
 import spock.lang.Specification
 
 import java.nio.file.Files
@@ -114,7 +114,7 @@ class WhenAPhotographerTakesScreenshots extends Specification {
 
     def setup() {
         screenshotDirectory =  Files.createTempDirectory("screenshots");//Files.createDirectories(Paths.get("./build/screenshots"));// Files.createTempDirectory("screenshots")
-        driver = new PhantomJSDriver();//new FirefoxDriver()
+        driver = new ChromeDriver()
         driver.get(siteFromUrlAt("/static-site/unchanging-page.html"))
         startTime = System.currentTimeMillis()
 

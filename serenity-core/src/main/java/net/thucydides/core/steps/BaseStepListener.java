@@ -875,7 +875,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public void addNewExamplesFrom(DataTable table) {
         getCurrentTestOutcome().addNewExamplesFrom(table);
-        currentExample = 0;
+        //currentExample = 0;
     }
 
 
@@ -887,17 +887,25 @@ public class BaseStepListener implements StepListener, StepPublisher {
             }
         }
         currentExample++;
-        getEventBus().stepStarted(ExecutedStepDescription.withTitle(exampleTitle(currentExample, data)));
+        if (newStepForEachExample()) {
+            getEventBus().stepStarted(ExecutedStepDescription.withTitle(exampleTitle(currentExample, data)));
+        }
     }
 
     private String exampleTitle(int exampleNumber, Map<String, String> data) {
-        return String.format("[%s] %s", exampleNumber, data);
+        return String.format("%s #%s: %s", getCurrentTestOutcome().getTitle(), exampleNumber, data);
     }
 
     public void exampleFinished() {
-        currentStepDone(null);
+        if (newStepForEachExample()) {
+            currentStepDone(null);
+        }
         getCurrentTestOutcome().moveToNextRow();
         closeBrowsers.closeIfConfiguredForANew(EXAMPLE);
+    }
+
+    private boolean newStepForEachExample() {
+        return !getCurrentTestOutcome().getTestSource().equalsIgnoreCase("junit");
     }
 
     public void recordRestQuery(RestQuery restQuery) {

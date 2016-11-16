@@ -6,6 +6,7 @@ import net.serenitybdd.core.photography.ScreenshotPhoto
 import net.serenitybdd.core.photography.bluring.AnnotatedBluring
 import net.thucydides.core.annotations.BlurScreenshots
 import net.thucydides.core.screenshots.BlurLevel
+import org.apache.commons.io.FileUtils
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriver
@@ -13,7 +14,6 @@ import spock.lang.Specification
 
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 
 import static net.thucydides.core.ThucydidesSystemProperty.DEFAULT_HEIGHT
 import static net.thucydides.core.ThucydidesSystemProperty.DEFAULT_WIDTH
@@ -113,7 +113,7 @@ class WhenAPhotographerTakesScreenshots extends Specification {
     long startTime;
 
     def setup() {
-        screenshotDirectory = Files.createDirectories(Paths.get("./build/screenshots"));// Files.createTempDirectory("screenshots")
+        screenshotDirectory =  Files.createTempDirectory("screenshots");//Files.createDirectories(Paths.get("./build/screenshots"));// Files.createTempDirectory("screenshots")
         driver = new PhantomJSDriver();//new FirefoxDriver()
         driver.get(siteFromUrlAt("/static-site/unchanging-page.html"))
         startTime = System.currentTimeMillis()
@@ -135,5 +135,6 @@ class WhenAPhotographerTakesScreenshots extends Specification {
         if (driver){
             driver.quit()
         }
+        FileUtils.deleteDirectory(screenshotDirectory.toFile());
     }
 }

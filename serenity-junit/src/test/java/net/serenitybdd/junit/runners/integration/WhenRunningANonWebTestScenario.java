@@ -359,7 +359,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
             return testOutputDirectory;
         }
     }
-    
+
     @Test
     public void html_test_results_are_written_to_the_output_directory()  throws Exception {
 

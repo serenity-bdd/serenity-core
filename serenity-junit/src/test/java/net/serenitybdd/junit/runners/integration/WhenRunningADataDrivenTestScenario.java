@@ -211,7 +211,7 @@ public class WhenRunningADataDrivenTestScenario {
 
 
     @Test
-    public void a_separate_xml_report_should_be_generated_for_each_scenario() throws Throwable  {
+    public void a_separate_json_report_should_be_generated_for_each_scenario() throws Throwable  {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
@@ -221,12 +221,12 @@ public class WhenRunningADataDrivenTestScenario {
 
         runner.run(new RunNotifier());
 
-        File[] reports = reload(outputDirectory).listFiles(new XMLFileFilter());
+        File[] reports = reload(outputDirectory).listFiles(new JSONFileFilter());
         assertThat(reports.length, is(3));
     }
 
     @Test
-    public void a_separate_xml_report_should_be_generated_for_each_scenario_when_using_data_from_a_CSV_file() throws Throwable  {
+    public void a_separate_json_report_should_be_generated_for_each_scenario_when_using_data_from_a_CSV_file() throws Throwable  {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
@@ -236,12 +236,12 @@ public class WhenRunningADataDrivenTestScenario {
 
         runner.run(new RunNotifier());
 
-        File[] reports = reload(outputDirectory).listFiles(new XMLFileFilter());
+        File[] reports = reload(outputDirectory).listFiles(new JSONFileFilter());
         assertThat(reports.length, is(2));
     }
 
     @Test
-    public void xml_report_contents_should_reflect_the_test_data_from_the_csv_file() throws Throwable  {
+    public void json_report_contents_should_reflect_the_test_data_from_the_csv_file() throws Throwable  {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
@@ -251,7 +251,7 @@ public class WhenRunningADataDrivenTestScenario {
 
         runner.run(new RunNotifier());
 
-        List<String> reportContents = contentsOf(reload(outputDirectory).listFiles(new XMLFileFilter()));
+        List<String> reportContents = contentsOf(reload(outputDirectory).listFiles(new JSONFileFilter()));
 
         assertThat(reportContents, hasItemContainsString("Jack Black"));
         assertThat(reportContents, hasItemContainsString("Joe Smith"));
@@ -291,7 +291,7 @@ public class WhenRunningADataDrivenTestScenario {
 
         runner.run(new RunNotifier());
 
-        List reportContents = contentsOf(reload(outputDirectory).listFiles(new XMLFileFilter()));
+        List reportContents = contentsOf(reload(outputDirectory).listFiles(new JSONFileFilter()));
         assertThat(reportContents.size(), is(1));
     }
 
@@ -623,7 +623,7 @@ public class WhenRunningADataDrivenTestScenario {
 
         runner.run(new RunNotifier());
 
-        List<String> reportContents = contentsOf(reload(outputDirectory).listFiles(new XMLFileFilter()));
+        List<String> reportContents = contentsOf(reload(outputDirectory).listFiles(new JSONFileFilter()));
 
         assertThat(reportContents.size(), is(2));
 
@@ -640,14 +640,11 @@ public class WhenRunningADataDrivenTestScenario {
 
         runner.run(new RunNotifier());
 
-        List<String> reportContents = contentsOf(reload(outputDirectory).listFiles(new XMLFileFilter()));
+        List<String> reportContents = contentsOf(reload(outputDirectory).listFiles(new JSONFileFilter()));
 
-        assertThat(reportContents, hasItemContainsString("<value>a</value>"));
-        assertThat(reportContents, hasItemContainsString("<value>1</value>"));
-        assertThat(reportContents, hasItemContainsString("<value>b</value>"));
-        assertThat(reportContents, hasItemContainsString("<value>2</value>"));
-        assertThat(reportContents, hasItemContainsString("<value>c</value>"));
-        assertThat(reportContents, hasItemContainsString("<value>3</value>"));
+        assertThat(reportContents, hasItemContainsString("Step with parameters: a, 1"));
+        assertThat(reportContents, hasItemContainsString("Step with parameters: b, 2"));
+        assertThat(reportContents, hasItemContainsString("Step with parameters: c, 3"));
 
     }
 
@@ -789,9 +786,9 @@ public class WhenRunningADataDrivenTestScenario {
         }
     }
 
-    private class XMLFileFilter implements FilenameFilter {
+    private class JSONFileFilter implements FilenameFilter {
         public boolean accept(File directory, String filename) {
-            return filename.endsWith(".xml") && (!filename.startsWith("SERENITY-"));
+            return filename.endsWith(".json");
         }
     }
 

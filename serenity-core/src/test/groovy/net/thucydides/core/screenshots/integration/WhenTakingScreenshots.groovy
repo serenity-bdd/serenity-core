@@ -10,7 +10,6 @@ import net.thucydides.core.steps.ExecutedStepDescription
 import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
-import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
@@ -28,22 +27,21 @@ class WhenTakingScreenshots extends Specification {
 
     EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
 
-    @Shared DriverServicePool chromeService;
+    @Shared DriverServicePool driverService;
     WebDriver driver
 
     def setupSpec() {
-        chromeService = new ChromeServicePool()
-        chromeService.start()
+        driverService = new ChromeServicePool()
+        driverService.start()
         StepEventBus.eventBus.clear()
 
     }
 
     def cleanupSpec() {
-        chromeService.shutdown()
+        driverService.shutdown()
     }
 
     def cleanup() {
-        SerenityWebdriverManager.inThisTestThread().closeAllDrivers();
         if (driver) {
             driver.quit();
         }
@@ -54,7 +52,7 @@ class WhenTakingScreenshots extends Specification {
     def setup() {
         temporaryDirectory = temporaryFolder.newFolder()
         StepEventBus.eventBus.clear()
-        driver = chromeService.newDriver(DesiredCapabilities.chrome())
+        driver = driverService.newDriver(DesiredCapabilities.chrome())
         ThucydidesWebDriverSupport.useDriver(driver)
 
         staticSite = "file://" + fileInClasspathCalled("static-site/static-index.html").getAbsolutePath();

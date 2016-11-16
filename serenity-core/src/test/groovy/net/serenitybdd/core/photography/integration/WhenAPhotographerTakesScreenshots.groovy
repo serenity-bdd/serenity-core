@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import java.nio.file.Files
@@ -34,6 +35,7 @@ class WhenAPhotographerTakesScreenshots extends Specification {
             photo.getPathToScreenshot().startsWith(screenshotDirectory)
     }
 
+    @Ignore("Unstable on SnapCI")
     def "when a photographer takes a screenshot the screenshot should be stored after processing"() {
         given:
         def photographer = new Photographer(darkroom);

@@ -905,7 +905,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private boolean newStepForEachExample() {
-        return !getCurrentTestOutcome().getTestSource().equalsIgnoreCase("junit");
+        return (getCurrentTestOutcome().getTestSource() != null) && (!getCurrentTestOutcome().getTestSource().equalsIgnoreCase("junit"));
     }
 
     public void recordRestQuery(RestQuery restQuery) {

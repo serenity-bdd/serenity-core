@@ -106,6 +106,18 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
+    public void a_data_driven_test_driver_should_record_a_sample_scenario() throws Throwable  {
+
+        SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleDataDrivenScenario.class);
+        runner.run(new RunNotifier());
+
+        List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods();
+        assertThat(aggregatedScenarios.get(0).getDataDrivenSampleScenario(), containsString("Step with parameters\n" +
+                "Step that succeeds\n" +
+                "Another step that succeeds"));
+    }
+
+    @Test
     public void a_data_driven_test_driver_should_record_a_table_of_example() throws Throwable  {
 
         SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleSingleDataDrivenScenario.class);

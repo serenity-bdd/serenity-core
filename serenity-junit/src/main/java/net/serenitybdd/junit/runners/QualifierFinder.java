@@ -30,7 +30,7 @@ public class QualifierFinder {
             String qualifierValue = (String) MethodInvoker.on(testCase).run(getQualifiedMethod());
             return (qualifierValue != null) ? qualifierValue : "<UNSPECIFIED>";
         } else {
-            return testCase.toString();
+            return "";
         }
     }
 

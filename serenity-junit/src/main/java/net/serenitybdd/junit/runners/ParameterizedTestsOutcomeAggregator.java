@@ -123,7 +123,7 @@ public class ParameterizedTestsOutcomeAggregator {
     private String alternativeMethodName(TestOutcome testOutcome) {
         Optional<String> qualifier = testOutcome.getQualifier();
         if (qualifier.isPresent()) {
-            return testOutcome.getTitle(false) +
+            return testOutcome.getTitle(false) + " " +
                     testOutcome.getQualifier().get();
         } else {
             return testOutcome.getTitle();

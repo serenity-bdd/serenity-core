@@ -206,14 +206,6 @@ public class WhenFindingTestDataInADataDrivenTest {
 
     }
 
-    @Test
-    public void toString_should_be_used_as_a_default_qualifier_for_test_case_instances() {
-        SimpleDataDrivenScenario testCase = new SimpleDataDrivenScenario();
-        String qualifier = QualifierFinder.forTestCase(testCase).getQualifier();
-
-        assertThat(qualifier, is(testCase.toString()));
-    }
-
     public class AnnotatedDataDrivenScenario {
 
         private String name;

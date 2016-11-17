@@ -161,7 +161,7 @@
 
 <#if (testOutcome.isDataDriven())>
     <div class="story-title">
-        <h3 class="story-header">Scenario:</h3>
+        <h3 class="story-header">Scenario Outline</h3>
 
         <div class="scenario">${formatter.formatWithFields(testOutcome.dataDrivenSampleScenario)}</div>
 

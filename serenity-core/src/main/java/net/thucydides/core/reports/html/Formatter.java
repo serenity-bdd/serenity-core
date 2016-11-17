@@ -99,7 +99,7 @@ public class Formatter {
             return "";
         }
         if (title.contains("[")) {
-            return title.substring(0,title.lastIndexOf("["));
+            return title.substring(0,title.lastIndexOf("[")).trim();
         } else {
             return title;
         }

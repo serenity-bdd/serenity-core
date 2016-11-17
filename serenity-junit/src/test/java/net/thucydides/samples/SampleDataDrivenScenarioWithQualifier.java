@@ -41,7 +41,7 @@ public class SampleDataDrivenScenarioWithQualifier {
 
     @Qualifier
     public String description() {
-        return " for " + option1+" and " + option2;
+        return "for " + option1+" and " + option2;
     }
 
     @Steps

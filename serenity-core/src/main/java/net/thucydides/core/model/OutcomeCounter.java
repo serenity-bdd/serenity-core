@@ -22,7 +22,6 @@ public class OutcomeCounter extends TestOutcomeCounter {
             totalResults += outcome.countResults(expectedResult);
         }
         return totalResults;
-//        return sum(outcomes.getOutcomes(), on(TestOutcome.class).countResults(expectedResult));
     }
 
     public int getTotal() {

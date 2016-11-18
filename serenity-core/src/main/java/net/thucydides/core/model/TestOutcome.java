@@ -301,6 +301,7 @@ public class TestOutcome {
 
     public TestOutcome asManualTest() {
         this.manual = true;
+        addTag(TestTag.withName("Manual").andType("External Tests"));
         return this;
     }
 
@@ -1638,7 +1639,7 @@ public class TestOutcome {
         }
 
         if (isDataDriven()) {
-            return countDataRowsWithResult(expectedResult);
+            return countDataRowsWithResult(expectedResult, expectedType);
         }
 
         return (getResult() == expectedResult) && (typeCompatibleWith(expectedType)) ? 1 : 0;
@@ -1663,10 +1664,12 @@ public class TestOutcome {
         }
     }
 
-    private int countDataRowsWithResult(TestResult expectedResult) {
+    private int countDataRowsWithResult(TestResult expectedResult, TestType expectedType) {
         int matchingRowCount = 0;
-        for (DataTableRow row : getDataTable().getRows()) {
-            matchingRowCount += (row.getResult() == expectedResult) ? 1 : 0;
+        if (typeCompatibleWith(expectedType)) {
+            for (DataTableRow row : getDataTable().getRows()) {
+                matchingRowCount += (row.getResult() == expectedResult) ? 1 : 0;
+            }
         }
         return matchingRowCount;
 //        List<DataTableRow> matchingRows
@@ -1676,14 +1679,14 @@ public class TestOutcome {
 
     public int countNestedStepsWithResult(TestResult expectedResult, TestType testType) {
         if (isDataDriven()) {
-            return countDataRowStepsWithResult(expectedResult);
+            return countDataRowStepsWithResult(expectedResult, testType);
         } else {
             return (getResult() == expectedResult) && (typeCompatibleWith(testType)) ? getNestedStepCount() : 0;
         }
     }
 
-    private int countDataRowStepsWithResult(TestResult expectedResult) {
-        int rowsWithResult = countDataRowsWithResult(expectedResult);
+    private int countDataRowStepsWithResult(TestResult expectedResult, TestType testType) {
+        int rowsWithResult = countDataRowsWithResult(expectedResult, testType);
         int totalRows = getDataTable().getSize();
         int totalSteps = getNestedStepCount();
         return totalSteps * rowsWithResult / totalRows;

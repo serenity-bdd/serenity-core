@@ -124,10 +124,11 @@ public class TestOutcomes {
         return havingResult(TestResult.valueOf(result.toUpperCase()));
     }
 
-    List<TestOutcome> outcomesFilteredByResult(TestResult result) {
+    List<TestOutcome> outcomesFilteredByResult(TestResult... results) {
         List<TestOutcome> filteredOutcomes = Lists.newArrayList();
+        List<TestResult> eligableResults = Lists.newArrayList(results);
         for(TestOutcome outcome : outcomes) {
-            if (outcome.getResult() == result) {
+            if (eligableResults.contains(outcome.getResult())) {
                 filteredOutcomes.add(outcome);
             }
         }
@@ -452,6 +453,12 @@ public class TestOutcomes {
         return tag.getType().equalsIgnoreCase("issue");
     }
 
+    public TestOutcomes getFailingOrErrorTests() {
+        return TestOutcomes.of(outcomesFilteredByResult(TestResult.ERROR, TestResult.FAILURE))
+                .withLabel(labelForTestsWithStatus("unsuccessful tests"))
+                .withRootOutcomes(getRootOutcomes());
+    }
+
     /**
      * Find the failing test outcomes in this set
      *
@@ -464,6 +471,12 @@ public class TestOutcomes {
     }
 
     public TestOutcomes getErrorTests() {
+        return TestOutcomes.of(outcomesFilteredByResult(TestResult.ERROR))
+                .withLabel(labelForTestsWithStatus("tests with errors"))
+                .withRootOutcomes(getRootOutcomes());
+    }
+
+    public TestOutcomes getManualTests() {
         return TestOutcomes.of(outcomesFilteredByResult(TestResult.ERROR))
                 .withLabel(labelForTestsWithStatus("tests with errors"))
                 .withRootOutcomes(getRootOutcomes());

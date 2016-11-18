@@ -1,5 +1,6 @@
 package net.thucydides.junit.runners
 
+import net.serenitybdd.junit.runners.SerenityParameterizedRunner
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.util.MockEnvironmentVariables
@@ -141,6 +142,16 @@ class WhenRunningTestScenarios extends Specification {
             def outcomes = runner.testOutcomes;
         then:
             outcomes[0].isManual()
+    }
+
+    def "should mark @manual data-driven tests as manual"() {
+        given:
+        def runner = new SerenityParameterizedRunner(SampleDataDrivenScenario)
+        when:
+        runner.run(new RunNotifier())
+        def outcomes = runner.runners
+        then:
+        outcomes
     }
 
     def "an error in a nested non-step method should cause the test to fail"() {

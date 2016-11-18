@@ -453,6 +453,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     private void markAsManual(FrameworkMethod method) {
         testStarted(method);
         StepEventBus.getEventBus().testIsManual();
+        StepEventBus.getEventBus().testPending();
         StepEventBus.getEventBus().testFinished();
     }
 

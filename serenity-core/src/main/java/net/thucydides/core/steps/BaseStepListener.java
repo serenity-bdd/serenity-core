@@ -834,7 +834,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (!testOutcomeRecorded()) { return; }
 
         getCurrentTestOutcome().asManualTest();
-        getCurrentTestOutcome().addTag(TestTag.withName("Manual").andType("External Tests"));
         getCurrentTestOutcome().setAnnotatedResult(defaulManualTestReportResult());
     }
 

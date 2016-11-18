@@ -42,11 +42,15 @@ public class ParameterizedTestsOutcomeAggregator {
             TestOutcome scenarioOutcome = scenarioOutcomeFor(normalizedMethodName, testOutcome, scenarioOutcomes);
             recordTestOutcomeAsSteps(testOutcome, scenarioOutcome);
 
+            if (testOutcome.isManual()) {
+                scenarioOutcome = scenarioOutcome.asManualTest();
+            }
+
             if (testOutcome.isDataDriven()) {
                 updateResultsForAnyExternalFailures(testOutcome, scenarioOutcomes.get(normalizedMethodName));
                 scenarioOutcome.addDataFrom(testOutcome.getDataTable());
-            }
 
+            }
         }
 
         List<TestOutcome> aggregatedScenarioOutcomes = new ArrayList<>();

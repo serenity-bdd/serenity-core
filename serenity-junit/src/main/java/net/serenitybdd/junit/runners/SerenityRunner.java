@@ -38,6 +38,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static net.serenitybdd.core.Serenity.initializeTestSession;
+import static net.thucydides.core.ThucydidesSystemProperty.TEST_RETRY_COUNT;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
@@ -339,6 +340,11 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         return (ThucydidesSystemProperty.JUNIT_RETRY_TESTS.booleanFrom(configuration.getEnvironmentVariables()));
     }
 
+    private int maxRetries() {
+        return TEST_RETRY_COUNT.integerFrom(configuration.getEnvironmentVariables(), 0);
+    }
+
+
     protected void initStepEventBus() {
         StepEventBus.getEventBus().clear();
     }
@@ -427,6 +433,17 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         failureDetectingStepListener.reset();
 
         super.runChild(method, notifier);
+
+        if (failureDetectingStepListener.lastTestFailed() && maxRetries() > 0) {
+            int currentAttempt = 0;
+            while( (currentAttempt < maxRetries()) && failureDetectingStepListener.lastTestFailed()) {
+                super.runChild(method, notifier);
+                currentAttempt++;
+                logger.info("Rerun test (" + currentAttempt +")"  + method.getDeclaringClass() + " " + method.getMethod().getName());
+            }
+        }
+        failureDetectingStepListener.reset();
+        StepEventBus.getEventBus().dropListener(failureDetectingStepListener);
 
     }
 

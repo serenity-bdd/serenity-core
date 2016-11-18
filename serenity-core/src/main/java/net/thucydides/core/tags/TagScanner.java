@@ -22,34 +22,70 @@ public class TagScanner {
     }
 
     public boolean shouldRunClass(Class<?> testClass) {
-        List<TestTag> expectedTags = expectedTags();
+        List<TestTag> providedTags = providedTags();
 
-        if (expectedTags.isEmpty()) {
+        if (providedTags.isEmpty()) {
             return true;
         } else {
-            return testClassContainsAtLeastOneExpectedTag(testClass, expectedTags);
+            return
+                    testClassContainsAtLeastOneExpectedTag(testClass, providedTags)
+                            && testClassDoesNotContainAtLeastOneNegatedTag(testClass, providedTags);
         }
     }
 
     public boolean shouldRunMethod(Class<?> testClass, String methodName) {
-        List<TestTag> expectedTags = expectedTags();
+        List<TestTag> providedTags = providedTags();
 
-        if (expectedTags.isEmpty()) {
+        if (providedTags.isEmpty()) {
             return true;
         } else {
-            return testMethodContainsAtLeastOneExpectedTag(testClass, methodName, expectedTags);
+            return testMethodContainsAtLeastOneExpectedTag(testClass, methodName, providedTags)
+                    && testMethodDoesNotContainAtLeastOneNegatedTag(testClass, methodName, providedTags);
         }
     }
 
     private boolean testClassContainsAtLeastOneExpectedTag(Class<?> testClass, List<TestTag> expectedTags) {
         List<TestTag> tags = TestAnnotations.forClass(testClass).getTags();
-        return tagsMatch(expectedTags, tags);
+        return tagsMatch(expectedTags, positive(tags));
     }
+
+    private boolean testClassDoesNotContainAtLeastOneNegatedTag(Class<?> testClass, List<TestTag> negatedTags) {
+        List<TestTag> tags = TestAnnotations.forClass(testClass).getTags();
+        return !tagsMatch(negatedTags, negative(tags));
+    }
+
+    private List<TestTag> positive(List<TestTag> tags) {
+        List<TestTag> positiveTags = Lists.newArrayList();
+        for (TestTag tag : tags) {
+            if (!tag.getName().startsWith("!")) {
+                positiveTags.add(tag);
+            }
+        }
+        return positiveTags;
+    }
+
+    private List<TestTag> negative(List<TestTag> tags) {
+        List<TestTag> negativeTags = Lists.newArrayList();
+        for (TestTag tag : tags) {
+            if (tag.getName().startsWith("!")) {
+                negativeTags.add(tag);
+            }
+        }
+        return negativeTags;
+    }
+
 
     private boolean testMethodContainsAtLeastOneExpectedTag(Class<?> testClass, String methodName, List<TestTag> expectedTags) {
         List<TestTag> tags = TestAnnotations.forClass(testClass).getTagsForMethod(methodName);
-        return tagsMatch(expectedTags, tags);
+        return tagsMatch(expectedTags, positive(tags));
     }
+
+    private boolean testMethodDoesNotContainAtLeastOneNegatedTag(Class<?> testClass, String methodName, List<TestTag> expectedTags) {
+        List<TestTag> tags = TestAnnotations.forClass(testClass).getTagsForMethod(methodName);
+        return !tagsMatch(expectedTags, negative(tags));
+    }
+
+
 
     private boolean tagsMatch(List<TestTag> expectedTags, List<TestTag> tags) {
         for (TestTag expectedTag : expectedTags) {
@@ -60,7 +96,7 @@ public class TagScanner {
         return false;
     }
 
-    private List<TestTag> expectedTags() {
+    private List<TestTag> providedTags() {
         String tagListValue = environmentVariables.getProperty(ThucydidesSystemProperty.TAGS);
         if (StringUtils.isNotEmpty(tagListValue)) {
             List<String> tagList = Lists.newArrayList(Splitter.on(",").trimResults().split(tagListValue));
@@ -70,5 +106,14 @@ public class TagScanner {
         }
     }
 
+    private List<TestTag> negatedTags() {
+        String tagListValue = environmentVariables.getProperty(ThucydidesSystemProperty.TAGS);
+        if (StringUtils.isNotEmpty(tagListValue)) {
+            List<String> tagList = Lists.newArrayList(Splitter.on(",").trimResults().split(tagListValue));
+            return convert(tagList, fromStringValuesToTestTags());
+        } else {
+            return Lists.newArrayList();
+        }
+    }
 
 }

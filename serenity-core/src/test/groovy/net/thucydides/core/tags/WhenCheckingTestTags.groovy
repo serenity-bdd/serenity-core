@@ -31,17 +31,17 @@ class WhenCheckingTestTags extends Specification {
     @Unroll
     def "should find tags on a class"() {
         given:
-            def scanner = new TagScanner(environmentVariables)
-        when:
             environmentVariables.setProperty("tags",tagExpression)
+        when:
+            def scanner = new TagScanner(environmentVariables)
         then:
             scanner.shouldRunClass(classUnderTest) == expectedMatch
         where:
             classUnderTest  | tagExpression       | expectedMatch
+            ClassWithNoTags | "color:red"         | false
             ClassWithNoTags | ""                  | true
             ClassWithTag    | ""                  | true
             ClassWithTags   | ""                  | true
-            ClassWithNoTags | "color:red"         | false
             ClassWithNoTags | "color:blue"        | false
             ClassWithTag    | "flavor:strawberry" | false
             ClassWithTag    | "color:red"         | true
@@ -55,9 +55,9 @@ class WhenCheckingTestTags extends Specification {
     @Unroll
     def "should find tags on a method"() {
         given:
-            def scanner = new TagScanner(environmentVariables)
-        when:
             environmentVariables.setProperty("tags",tagExpression)
+        when:
+            def scanner = new TagScanner(environmentVariables)
         then:
             scanner.shouldRunMethod(classUnderTest,methodUnderTest) == expectedMatch
         where:
@@ -65,9 +65,36 @@ class WhenCheckingTestTags extends Specification {
             ClassWithTags   | "blue"            | "color:blue"        | true
             ClassWithTags   | "blue"            | "flavor:strawberry" | true
             ClassWithTags   | "blue"            | "color:yellow"      | false
+            ClassWithTags   | "blue"            | "~color:yellow"     | true
+            ClassWithTags   | "blue"            | "~color:blue"       | false
             ClassWithTags   | "doesnotexist"    | "color:yellow"      | false
             ClassWithTags   | "orange"          | "flavor:licorice"   | true
             ClassWithTags   | "red"             | "red"               | true
+    }
+
+    @Unroll
+    def "should find tags on a list of tags"() {
+        given:
+            environmentVariables.setProperty("tags",tagExpression)
+        when:
+            def scanner = new TagScanner(environmentVariables)
+        then:
+            scanner.shouldRunForTags(["color:red","flavor:strawberry"]) == expectedMatch
+        where:
+           tagExpression        | expectedMatch
+            "color:red"         | true
+            "color=red"         | true
+            "@color:red"        | true
+            "@color=red"        | true
+            ""                  | true
+            "color:blue"        | false
+            "flavor:strawberry" | true
+            "~flavor:strawberry"| false
+            "~color:red"        | false
+            "~color:red"        | false
+            "~color:blue"       | true
+            "~@color:red"       | false
+            "~@color:blue"      | true
     }
 
 

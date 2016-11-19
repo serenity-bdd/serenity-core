@@ -899,7 +899,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (newStepForEachExample()) {
             currentStepDone(null);
         }
-        getCurrentTestOutcome().moveToNextRow();
+        if (latestTestOutcome().isPresent()) {
+            latestTestOutcome().get().moveToNextRow();
+        }
         closeBrowsers.closeIfConfiguredForANew(EXAMPLE);
     }
 

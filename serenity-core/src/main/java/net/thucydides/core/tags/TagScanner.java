@@ -15,76 +15,100 @@ import static net.thucydides.core.tags.TagConverters.fromStringValuesToTestTags;
 
 public class TagScanner {
 
-    private final EnvironmentVariables environmentVariables;
+    private final List<TestTag> providedTags;
 
     public TagScanner(EnvironmentVariables environmentVariables) {
-        this.environmentVariables = environmentVariables;
+        this.providedTags = tagsProvidedBy(environmentVariables);
+    }
+
+    public boolean shouldRunForTags(List<String> tags) {
+        if (providedTags.isEmpty()) { return true; }
+
+        return tagsMatchAPositiveTag(tags, providedTags) && !tagsMatchANegativeTag(tags, providedTags);
     }
 
     public boolean shouldRunClass(Class<?> testClass) {
-        List<TestTag> providedTags = providedTags();
+        if (providedTags.isEmpty()) { return true; }
 
-        if (providedTags.isEmpty()) {
-            return true;
-        } else {
-            return
-                    testClassContainsAtLeastOneExpectedTag(testClass, providedTags)
-                            && testClassDoesNotContainAtLeastOneNegatedTag(testClass, providedTags);
-        }
+        return testClassMatchesAPositiveTag(testClass, providedTags)
+               && testClassDoesNotMatchANegativeTag(testClass, providedTags);
     }
 
     public boolean shouldRunMethod(Class<?> testClass, String methodName) {
-        List<TestTag> providedTags = providedTags();
+        if (providedTags.isEmpty()) { return true; }
 
-        if (providedTags.isEmpty()) {
-            return true;
-        } else {
-            return testMethodContainsAtLeastOneExpectedTag(testClass, methodName, providedTags)
-                    && testMethodDoesNotContainAtLeastOneNegatedTag(testClass, methodName, providedTags);
-        }
+        return testMethodMatchesAPositiveTag(testClass, methodName, providedTags)
+                && testMethodDoesNotMatchANegativeTag(testClass, methodName, providedTags);
     }
 
-    private boolean testClassContainsAtLeastOneExpectedTag(Class<?> testClass, List<TestTag> expectedTags) {
+    private boolean testClassMatchesAPositiveTag(Class<?> testClass, List<TestTag> expectedTags) {
         List<TestTag> tags = TestAnnotations.forClass(testClass).getTags();
-        return tagsMatch(expectedTags, positive(tags));
+        return containsAPositiveMatch(expectedTags, tags);
     }
 
-    private boolean testClassDoesNotContainAtLeastOneNegatedTag(Class<?> testClass, List<TestTag> negatedTags) {
+    private boolean tagsMatchAPositiveTag(List<String> tagValues, List<TestTag> expectedTags) {
+        List<TestTag> tags = definedIn(tagValues);
+        return containsAPositiveMatch(expectedTags, tags);
+    }
+
+    private boolean tagsMatchANegativeTag(List<String> tagValues, List<TestTag> expectedTags) {
+        List<TestTag> tags = definedIn(tagValues);
+        return containsANegativeMatch(expectedTags, tags);
+    }
+
+    private List<TestTag> definedIn(List<String> tagValues) {
+        return convert(tagValues, fromStringValuesToTestTags());
+    }
+
+    private boolean containsAPositiveMatch(List<TestTag> expectedTags, List<TestTag> tags) {
+        return positive(expectedTags).isEmpty() || tagsMatch(positive(expectedTags), tags);
+    }
+
+    private boolean testClassDoesNotMatchANegativeTag(Class<?> testClass, List<TestTag> negatedTags) {
         List<TestTag> tags = TestAnnotations.forClass(testClass).getTags();
-        return !tagsMatch(negatedTags, negative(tags));
+        return !containsANegativeMatch(negatedTags, tags);
     }
 
     private List<TestTag> positive(List<TestTag> tags) {
         List<TestTag> positiveTags = Lists.newArrayList();
         for (TestTag tag : tags) {
-            if (!tag.getName().startsWith("!")) {
+            if (!isANegative(tag)) {
                 positiveTags.add(tag);
             }
         }
         return positiveTags;
     }
 
+    private boolean isANegative(TestTag tag) {
+        return tag.getType().startsWith("~");
+    }
+
     private List<TestTag> negative(List<TestTag> tags) {
         List<TestTag> negativeTags = Lists.newArrayList();
         for (TestTag tag : tags) {
-            if (tag.getName().startsWith("!")) {
-                negativeTags.add(tag);
+            if (isANegative(tag)) {
+                negativeTags.add(TestTag.withName(tag.getName()).andType(tag.getType().substring(1)));
             }
         }
         return negativeTags;
     }
 
 
-    private boolean testMethodContainsAtLeastOneExpectedTag(Class<?> testClass, String methodName, List<TestTag> expectedTags) {
+    private boolean testMethodMatchesAPositiveTag(Class<?> testClass, String methodName, List<TestTag> expectedTags) {
         List<TestTag> tags = TestAnnotations.forClass(testClass).getTagsForMethod(methodName);
-        return tagsMatch(expectedTags, positive(tags));
+        return containsAPositiveMatch(expectedTags, tags);
     }
 
-    private boolean testMethodDoesNotContainAtLeastOneNegatedTag(Class<?> testClass, String methodName, List<TestTag> expectedTags) {
+    private boolean testMethodDoesNotMatchANegativeTag(Class<?> testClass, String methodName, List<TestTag> expectedTags) {
         List<TestTag> tags = TestAnnotations.forClass(testClass).getTagsForMethod(methodName);
-        return !tagsMatch(expectedTags, negative(tags));
+        return !containsANegativeMatch(expectedTags, tags);
     }
 
+    private boolean containsANegativeMatch(List<TestTag> expectedTags, List<TestTag> tags) {
+        if (negative(expectedTags).isEmpty()) {return false;}
+
+        return tagsMatch(negative(expectedTags), tags);
+    }
 
 
     private boolean tagsMatch(List<TestTag> expectedTags, List<TestTag> tags) {
@@ -96,7 +120,7 @@ public class TagScanner {
         return false;
     }
 
-    private List<TestTag> providedTags() {
+    private List<TestTag> tagsProvidedBy(EnvironmentVariables environmentVariables) {
         String tagListValue = environmentVariables.getProperty(ThucydidesSystemProperty.TAGS);
         if (StringUtils.isNotEmpty(tagListValue)) {
             List<String> tagList = Lists.newArrayList(Splitter.on(",").trimResults().split(tagListValue));
@@ -105,15 +129,4 @@ public class TagScanner {
             return Lists.newArrayList();
         }
     }
-
-    private List<TestTag> negatedTags() {
-        String tagListValue = environmentVariables.getProperty(ThucydidesSystemProperty.TAGS);
-        if (StringUtils.isNotEmpty(tagListValue)) {
-            List<String> tagList = Lists.newArrayList(Splitter.on(",").trimResults().split(tagListValue));
-            return convert(tagList, fromStringValuesToTestTags());
-        } else {
-            return Lists.newArrayList();
-        }
-    }
-
 }

@@ -839,7 +839,12 @@ public enum ThucydidesSystemProperty {
     /**
      * Use this property to pass options to Marionette using the 'moz:firefoxOptions' capability option.
      */
-    GECKO_FIREFOX_OPTIONS;
+    GECKO_FIREFOX_OPTIONS,
+
+    /**
+     * Use this property to specify the maximum number of times to rerun the failing tests.
+     */
+    TEST_RETRY_COUNT;
 
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;

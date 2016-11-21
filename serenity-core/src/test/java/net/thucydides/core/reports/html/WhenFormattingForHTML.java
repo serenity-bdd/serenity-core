@@ -326,7 +326,7 @@ public class WhenFormattingForHTML {
 
         String formattedValue = formatter.htmlCompatible("<ul style='margin-left:5%'><li>Line one</li><li>Line two</li><li>Line three</li></ul>");
 
-        assertThat(formattedValue, is("<ul style='margin-left:5%'><li>Line one</li><li>Line two</li><li>Line three</li></ul>"));
+        assertThat(formattedValue.trim(), is("<ul style='margin-left:5%'><li>Line one</li><li>Line two</li><li>Line three</li></ul>"));
     }
 
     @Test

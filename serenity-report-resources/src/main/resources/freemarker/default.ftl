@@ -193,7 +193,7 @@
                     <tr>
                         <td class="test-${row.result}"><a href="#${rowIndex}">${rowIndex + 1}</a></td>
                         <#list row.values as value>
-                            <td class="test-${row.result}"><a href="#${rowIndex}">${formatter.htmlCompatible(value)}</a>
+                            <td class="test-${row.result}"><a href="#${rowIndex}">${formatter.plainHtmlCompatible(value)}</a>
                             </td>
                         </#list>
                     </tr>

@@ -308,9 +308,11 @@ public class Formatter {
     );
 
     public String htmlCompatible(Object fieldValue) {
-        return renderMarkdown(
-                addLineBreaks(ESCAPE_SPECIAL_CHARS.translate(fieldValue != null ? stringFormOf(fieldValue) : ""))
-        ).trim();
+        return renderMarkdown(plainHtmlCompatible(fieldValue));
+    }
+
+    public String plainHtmlCompatible(Object fieldValue) {
+        return addLineBreaks(ESCAPE_SPECIAL_CHARS.translate(fieldValue != null ? stringFormOf(fieldValue) : "")).trim();
     }
 
     public String htmlAttributeCompatible(Object fieldValue) {

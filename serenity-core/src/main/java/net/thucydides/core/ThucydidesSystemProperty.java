@@ -725,11 +725,6 @@ public enum ThucydidesSystemProperty {
     JSON_CHARSET,
 
     /**
-     * If set to true, the RetryFilteringRunNotifier will be used to attempt to rerun failing tests.
-     */
-    JUNIT_RETRY_TESTS,
-
-    /**
      * Stack traces are by default decluttered for readability.
      * For example, calls to instrumented code or internal test libraries is removed.
      * This behaviour can be deactivated by setting this property to false.

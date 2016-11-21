@@ -45,7 +45,7 @@ public class FailureDetectingStepListener implements StepListener {
 
 
     public void testStarted(String description) {
-
+        lastTestFailed = false;
     }
 
 

@@ -666,4 +666,11 @@ public class StepEventBus {
         this.testSource = testSource;
     }
 
+    public void cancelPreviousTest() {
+        baseStepListener.cancelPreviousTest();
+    }
+
+    public void lastTestPassedAfterRetries(int remainingTries) {
+        baseStepListener.lastTestPassedAfterRetries(remainingTries);
+    }
 }

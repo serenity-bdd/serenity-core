@@ -5,7 +5,6 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.ManagedWebDriverAnnotatedField;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.core.batches.BatchManager;
@@ -68,6 +67,9 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     private JUnitStepListener stepListener;
 
     private PageObjectDependencyInjector dependencyInjector;
+
+    private FailureDetectingStepListener failureDetectingStepListener = new FailureDetectingStepListener();
+
 
     /**
      * Retrieve the runner getConfiguration().from an external source.
@@ -239,6 +241,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
 
         try {
             RunNotifier localNotifier = initializeRunNotifier(notifier);
+            StepEventBus.getEventBus().registerListener(failureDetectingStepListener);
+
             super.run(localNotifier);
             fireNotificationsBasedOnTestResultsTo(notifier);
         } catch (Throwable someFailure) {
@@ -336,10 +340,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         return notifier;
     }
 
-    private boolean shouldRetryTest() {
-        return (ThucydidesSystemProperty.JUNIT_RETRY_TESTS.booleanFrom(configuration.getEnvironmentVariables()));
-    }
-
     private int maxRetries() {
         return TEST_RETRY_COUNT.integerFrom(configuration.getEnvironmentVariables(), 0);
     }
@@ -424,27 +424,61 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
             processTestMethodAnnotationsFor(method);
         }
 
-        FailureDetectingStepListener failureDetectingStepListener = new FailureDetectingStepListener();
-        StepEventBus.getEventBus().registerListener(failureDetectingStepListener);
-
         initializeTestSession();
         prepareBrowserForTest();
         additionalBrowserCleanup();
-        failureDetectingStepListener.reset();
 
-        super.runChild(method, notifier);
+        performRunChild(method, notifier);
 
         if (failureDetectingStepListener.lastTestFailed() && maxRetries() > 0) {
-            int currentAttempt = 0;
-            while( (currentAttempt < maxRetries()) && failureDetectingStepListener.lastTestFailed()) {
-                super.runChild(method, notifier);
-                currentAttempt++;
-                logger.info("Rerun test (" + currentAttempt +")"  + method.getDeclaringClass() + " " + method.getMethod().getName());
-            }
+            retryAtMost(maxRetries(), new RerunSerenityTest(method, notifier));
         }
-        failureDetectingStepListener.reset();
-        StepEventBus.getEventBus().dropListener(failureDetectingStepListener);
 
+    }
+
+    private void retryAtMost(int remainingTries,
+                             RerunTest rerunTest) {
+        if (remainingTries <= 0) { return; }
+
+        logger.info(rerunTest.toString() + ": attempt " + (maxRetries() - remainingTries));
+        StepEventBus.getEventBus().cancelPreviousTest();
+        rerunTest.perform();
+
+        if (failureDetectingStepListener.lastTestFailed()) {
+            retryAtMost(remainingTries - 1, rerunTest);
+        } else {
+            StepEventBus.getEventBus().lastTestPassedAfterRetries(remainingTries);
+        }
+    }
+
+
+    private void performRunChild(FrameworkMethod method, RunNotifier notifier) {
+        failureDetectingStepListener.reset();
+        super.runChild(method, notifier);
+    }
+
+    interface RerunTest {
+        void perform();
+    }
+
+    class RerunSerenityTest implements RerunTest {
+        private final FrameworkMethod method;
+        private final RunNotifier notifier;
+
+        RerunSerenityTest(FrameworkMethod method, RunNotifier notifier) {
+            this.method = method;
+            this.notifier = notifier;
+        }
+
+        @Override
+        public void perform() {
+            performRunChild(method, notifier);
+        }
+
+        @Override
+        public String toString() {
+            return "Retrying " + method.getDeclaringClass() + " " + method.getMethod().getName();
+        }
     }
 
     private void clearMetadataIfRequired() {

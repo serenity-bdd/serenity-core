@@ -150,6 +150,20 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return photographer;
     }
 
+    public void cancelPreviousTest() {
+        synchronized (testOutcomes) {
+            if (!testOutcomes.isEmpty()) {
+                testOutcomes.remove(testOutcomes.size() - 1);
+            }
+        }
+    }
+
+    public void lastTestPassedAfterRetries(int remainingTries) {
+        if (latestTestOutcome().isPresent()) {
+            latestTestOutcome().get().addTag(TestTag.withName("Retries: " + (remainingTries - 1)).andType("unstable test"));
+        }
+    }
+
     public class StepMerger {
 
         final int maxStepsToMerge;

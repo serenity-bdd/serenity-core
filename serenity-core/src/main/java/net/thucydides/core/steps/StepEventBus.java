@@ -670,7 +670,7 @@ public class StepEventBus {
         baseStepListener.cancelPreviousTest();
     }
 
-    public void lastTestPassedAfterRetries(int remainingTries) {
-        baseStepListener.lastTestPassedAfterRetries(remainingTries);
+    public void lastTestPassedAfterRetries(int remainingTries, List<String> failureMessages) {
+        baseStepListener.lastTestPassedAfterRetries(remainingTries, failureMessages);
     }
 }

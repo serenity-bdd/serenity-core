@@ -1,5 +1,7 @@
 package net.thucydides.core.steps;
 
+import ch.lambdaj.function.convert.Converter;
+import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -33,6 +35,7 @@ import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.*;
 
+import static ch.lambdaj.Lambda.convert;
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.*;
 import static net.thucydides.core.model.Stories.findStoryFrom;
 import static net.thucydides.core.model.TestResult.*;
@@ -158,10 +161,24 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
-    public void lastTestPassedAfterRetries(int remainingTries) {
+    public void lastTestPassedAfterRetries(int remainingTries, List<String> failureMessages) {
         if (latestTestOutcome().isPresent()) {
+            latestTestOutcome().get().recordStep(
+                    TestStep.forStepCalled("UNSTABLE TEST:\n" + failureHistoryFor(failureMessages))
+                            .withResult(TestResult.IGNORED));
+
             latestTestOutcome().get().addTag(TestTag.withName("Retries: " + (remainingTries - 1)).andType("unstable test"));
         }
+    }
+
+    private String failureHistoryFor(List<String> failureMessages) {
+        List<String> bulletPoints = convert(failureMessages, new Converter<String, String>() {
+            @Override
+            public String convert(String from) {
+                return "* " + from;
+            }
+        });
+        return Joiner.on("\n").join(bulletPoints);
     }
 
     public class StepMerger {

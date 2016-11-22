@@ -5,12 +5,8 @@ import net.thucydides.junit.runners.ThucydidesRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @RunWith(ThucydidesRunner.class)
 public class SampleNonWebScenarioWithErrorThatEventuallyWorks {
-
-    static int testCount = 1;
 
     @Steps
     public SampleNonWebSteps steps;
@@ -20,8 +16,6 @@ public class SampleNonWebScenarioWithErrorThatEventuallyWorks {
         steps.stepThatSucceeds();
         steps.stepThatIsIgnored();
         steps.anotherStepThatSucceeds();
-
-        boolean shouldPass = testCount++ % 2 == 0;
-        assertThat(shouldPass).isTrue();
+        steps.aStepThatFailsOnOddTries();
     }
 }

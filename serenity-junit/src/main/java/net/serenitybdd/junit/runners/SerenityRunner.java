@@ -68,7 +68,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
 
     private PageObjectDependencyInjector dependencyInjector;
 
-    private FailureDetectingStepListener failureDetectingStepListener = new FailureDetectingStepListener();
+    private FailureDetectingStepListener failureDetectingStepListener;
 
 
     /**
@@ -160,6 +160,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         this.configuration = configuration;
         this.requestedDriver = getSpecifiedDriver(klass);
         this.tagScanner = new TagScanner(configuration.getEnvironmentVariables());
+        this.failureDetectingStepListener = new FailureDetectingStepListener();
 
         if (TestCaseAnnotations.supportsWebTests(klass)) {
             checkRequestedDriverType();
@@ -447,13 +448,14 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         if (failureDetectingStepListener.lastTestFailed()) {
             retryAtMost(remainingTries - 1, rerunTest);
         } else {
-            StepEventBus.getEventBus().lastTestPassedAfterRetries(remainingTries);
+            StepEventBus.getEventBus().lastTestPassedAfterRetries(remainingTries,
+                                                                  failureDetectingStepListener.getFailureMessages());
         }
     }
 
 
     private void performRunChild(FrameworkMethod method, RunNotifier notifier) {
-        failureDetectingStepListener.reset();
+//        failureDetectingStepListener.reset();
         super.runChild(method, notifier);
     }
 

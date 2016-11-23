@@ -664,7 +664,9 @@ public enum ThucydidesSystemProperty {
     OUTPUT_FORMATS,
 
     /**
-     * If set to true (the default), allow markdown formatting in step titles and descriptions
+     * If set to true (the default), allow markdown formatting in test outcome titles and descriptions.
+     * This is a comma-separated lists of values from the following: story, narrative, step
+     * By default, Markdown is enabled for story titles and narrative texts, but not for steps.
      */
     ENABLE_MARKDOWN,
 

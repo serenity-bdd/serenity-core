@@ -31,6 +31,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static ch.lambdaj.Lambda.join;
+import static net.thucydides.core.reports.html.MarkdownRendering.RenderedElements.narrative;
+import static net.thucydides.core.reports.html.MarkdownRendering.RenderedElements.step;
 import static org.apache.commons.lang3.StringUtils.abbreviate;
 
 /**
@@ -77,11 +79,7 @@ public class Formatter {
     }
 
     public String renderMarkdown(String text) {
-        if (!ThucydidesSystemProperty.ENABLE_MARKDOWN.booleanFrom(environmentVariables,true)) {
-            return text;
-        }
         if (text == null) { return ""; }
-
         return stripSurroundingParagraphTagsFrom(Processor.process(text));
     }
 
@@ -190,7 +188,7 @@ public class Formatter {
             return text;
         } else if (format.equalsIgnoreCase(ASCIIDOC)) {  // Use ASCIIDOC if configured
             return renderAsciidoc(text);
-        } else if (format.equalsIgnoreCase(MARKDOWN) ||ThucydidesSystemProperty.ENABLE_MARKDOWN.booleanFrom(environmentVariables, true) ) {
+        } else if (format.equalsIgnoreCase(MARKDOWN) ||  (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(narrative)) ) {
             return renderMarkdown(text);
         } else {
             return addLineBreaks(text);
@@ -308,7 +306,12 @@ public class Formatter {
     );
 
     public String htmlCompatible(Object fieldValue) {
-        return renderMarkdown(plainHtmlCompatible(fieldValue));
+        return plainHtmlCompatible(fieldValue);
+    }
+
+    public String htmlCompatibleStoryTitle(Object fieldValue) {
+        return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(narrative)) ?
+            renderMarkdown(htmlCompatible(fieldValue)) : htmlCompatible(fieldValue);
     }
 
     public String plainHtmlCompatible(Object fieldValue) {
@@ -437,9 +440,12 @@ public class Formatter {
 
     public String formatWithFields(String textToFormat) {
         String textWithEscapedFields = textToFormat.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-        return renderMarkdown(
-                addLineBreaks(removeMacros(convertAnyTables(textWithEscapedFields)))
-               );
+
+        String renderedText = addLineBreaks(removeMacros(convertAnyTables(textWithEscapedFields)));
+        if (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(step)) {
+            renderedText = renderMarkdown(renderedText);
+        }
+        return renderedText;
 
     }
 

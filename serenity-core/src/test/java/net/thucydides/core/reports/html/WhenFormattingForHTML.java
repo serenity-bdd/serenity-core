@@ -397,15 +397,26 @@ public class WhenFormattingForHTML {
     }
 
     @Test
-    public void should_allow_markdown_formatting() {
-        Formatter formatter = new Formatter(issueTracking);
+    public void should_disable_markdown_formatting_if_configured() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+        environmentVariables.setProperty("enable.markdown", "story");
+        Formatter formatter = new Formatter(issueTracking, environmentVariables);
 
-        List<String> fields = ImmutableList.of();
+        String formattedValue = formatter.formatWithFields("Given a **person** named _Joe_");
+
+        assertThat(formattedValue, is("Given a **person** named _Joe_"));
+    }
+
+    @Test
+    public void should_allow_markdown_formatting_if_configured() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+        environmentVariables.setProperty("enable.markdown", "step");
+        Formatter formatter = new Formatter(issueTracking, environmentVariables);
+
         String formattedValue = formatter.formatWithFields("Given a **person** named _Joe_");
 
         assertThat(formattedValue, is("Given a <strong>person</strong> named <em>Joe</em>"));
     }
-
 
     @Test
     public void formatter_should_round_doubles_to_a_given_precision() {

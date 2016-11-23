@@ -70,9 +70,14 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
     }
 
     private boolean shouldGenerateLinkableReportsFor(TestTag tag, ReportNameProvider reportName) {
+        if (reportName.getContext().isEmpty()) {
+            return false;
+        }
+
         List<String> linkableTags = Splitter.on(",").trimResults().splitToList(
                 ThucydidesSystemProperty.SERENITY_LINKED_TAGS.from(environmentVariables, "").toLowerCase());
-        return reportName.getContext().isEmpty() && containsTag(linkableTags, tag.getType().toLowerCase());
+
+        return containsTag(linkableTags, tag.getType().toLowerCase()) || containsTag(linkableTags, tag.getName().toLowerCase());
     }
 
     private boolean containsTag(List<String> linkableTags, String tag) {

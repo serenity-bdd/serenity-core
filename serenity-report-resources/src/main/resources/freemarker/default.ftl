@@ -135,7 +135,7 @@
                             <span class="test-case-title">
                                 <#assign testOutcomeTitle = testOutcome.unqualified.titleWithLinks >
                                 <span class="${outcome_text!ignore_color}">
-                                    ${formatter.htmlCompatible(testOutcomeTitle)}
+                                    ${formatter.htmlCompatibleStoryTitle(testOutcomeTitle)}
                                     <#if (!testOutcome.titleWithIssues)>
                                         <span class="related-issue-title">${testOutcome.formattedIssues}</span>
                                     </#if>
@@ -280,7 +280,7 @@
                             </div>
                             <div class="modal-body">
                                 <#if (cause.message)??>
-                                    <h5>${formatter.htmlAttributeCompatible(cause.message)}</h5></#if>
+                                    <h5>${formatter.plainHtmlCompatible(cause.message)}</h5></#if>
                                 <#list cause.stackTrace as element>
                                 ${element.className}.${element.methodName}(${(element.fileName)!""}
                                     :${element.lineNumber}) <br>

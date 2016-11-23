@@ -169,7 +169,7 @@
                                                                                     height="25" alt="Video"/></a>
                         </#if>
                             <span class="test-case-title">
-                                <span class="${outcome_text}">${formatter.htmlCompatible(testOutcome.unqualified.titleWithLinks)}
+                                <span class="${outcome_text}">${formatter.htmlCompatibleStoryTitle(testOutcome.unqualified.titleWithLinks)}
                                     <span class="related-issue-title">${testOutcome.formattedIssues}</span>
                                 </span>
                             </span>

@@ -1,7 +1,8 @@
 package net.thucydides.core.model;
 
 import net.thucydides.core.digest.Digest;
-import net.thucydides.core.util.NameConverter;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
 import static net.thucydides.core.util.NameConverter.*;
@@ -21,7 +22,9 @@ public class ReportNamer {
     private boolean compressedFilename = true;
 
     private ReportNamer(final ReportType type) {
-        this(type, true);
+        this(type,
+             Injectors.getInjector().getInstance(EnvironmentVariables.class)
+                     .getPropertyAsBoolean("serenity.compress.filenames", true));
     }
 
     public ReportNamer(ReportType type, boolean compressedFilename) {
@@ -36,18 +39,19 @@ public class ReportNamer {
     public String getNormalizedTestNameFor(final TestOutcome testOutcome) {
         String testName = getBaseTestNameFor(testOutcome);
         String testNameWithoutIndex = stripIndexesFrom(testName);
-        return appendSuffixTo(Digest.ofTextValue(testNameWithoutIndex));
+        return normalizedVersionOf(testNameWithoutIndex);
+            // appendSuffixTo(Digest.ofTextValue(testNameWithoutIndex));
     }
 
     private String getBaseTestNameFor(TestOutcome testOutcome) {
         String testName = "";
 
         if (testOutcome.getUserStory() != null) {
-            testName = NameConverter.underscore(testOutcome.getUserStory().getName());
+            testName = underscore(testOutcome.getUserStory().getName());
         } else if (testOutcome.getPath() != null) {
-            testName = NameConverter.underscore(testOutcome.getPath());
+            testName = underscore(testOutcome.getPath());
         }
-        String scenarioName = NameConverter.underscore(testOutcome.getQualifiedMethodName());
+        String scenarioName = underscore(testOutcome.getQualifiedMethodName());
         return pathFrom(testOutcome) + withNoIssueNumbers(appendToIfNotNull(testName, scenarioName));
     }
 
@@ -59,9 +63,9 @@ public class ReportNamer {
     public String getSimpleTestNameFor(final TestOutcome testOutcome) {
         String testName = "";
         if (testOutcome.getUserStory() != null) {
-            testName = NameConverter.underscore(testOutcome.getUserStory().getName());
+            testName = underscore(testOutcome.getUserStory().getName());
         }
-        String scenarioName = NameConverter.underscore(testOutcome.getName());
+        String scenarioName = underscore(testOutcome.getName());
         testName = pathFrom(testOutcome) + withNoIssueNumbers(withNoArguments(appendToIfNotNull(testName, scenarioName)));
         return appendSuffixTo(Digest.ofTextValue(testName));
     }
@@ -83,9 +87,11 @@ public class ReportNamer {
     }
 
     public String getNormalizedTestNameFor(String name) {
-        String testNameWithUnderscores = NameConverter.underscore(name.toLowerCase());
-        return (compressedFilename) ? appendSuffixTo(Digest.ofTextValue(testNameWithUnderscores))
-                : appendSuffixTo(testNameWithUnderscores);
+        return normalizedVersionOf(underscore(name.toLowerCase()));
+    }
+
+    private String normalizedVersionOf(String text) {
+        return (compressedFilename) ? appendSuffixTo(Digest.ofTextValue(text)) : appendSuffixTo(text);
     }
 
     private String appendSuffixTo(final String testNameWithUnderscores) {

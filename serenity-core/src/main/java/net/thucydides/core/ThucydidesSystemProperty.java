@@ -710,6 +710,12 @@ public enum ThucydidesSystemProperty {
     DASHBOARD_TAG_LIST,
 
     /**
+     * If set to false, render report names in a readable form as opposed to a hash format.
+     * Note: this can cause problems on operating systems that limit path lengths such as Windows.
+     */
+    SERENITY_COMPRESSED_FILENAMES,
+
+    /**
      * If set, this will define the list of tag types to be excluded from the dashboard screens
      */
     DASHBOARD_EXCLUDED_TAG_LIST,

@@ -8,15 +8,16 @@ import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.reports.*;
 import net.thucydides.core.requirements.DefaultRequirements;
-import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.requirements.Requirements;
+import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.CopyOption;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -44,9 +45,10 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     private final Requirements requirements;
 
     private final EnvironmentVariables environmentVariables;
-    private final FormatConfiguration formatConfiguration;
+    private FormatConfiguration formatConfiguration;
 
     private Stopwatch stopwatch = new Stopwatch();
+    public static final CopyOption[] COPY_OPTIONS = new CopyOption[]{StandardCopyOption.COPY_ATTRIBUTES};
 
     public HtmlAggregateStoryReporter(final String projectName) {
         this(projectName, "");
@@ -109,34 +111,24 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     public TestOutcomes generateReportsForTestResultsFrom(final File sourceDirectory) throws IOException {
 
+        Stopwatch stopwatch = Stopwatch.started();
         copyScreenshotsFrom(sourceDirectory);
+
+        LOGGER.debug("Copied screenshots after {} ms",stopwatch.lapTime());
 
         TestOutcomes allTestOutcomes = loadTestOutcomesFrom(sourceDirectory);
 
+        LOGGER.debug("Loaded test outcomes after {} ms",stopwatch.lapTime());
+
         generateReportsForTestResultsIn(allTestOutcomes);
+
+        LOGGER.debug("Generated reports after {} ms",stopwatch.lapTime());
 
         return allTestOutcomes;
     }
 
     private void copyScreenshotsFrom(File sourceDirectory) {
-        if ((getOutputDirectory() == null) || (getOutputDirectory().equals(sourceDirectory))) {
-            return;
-        }
-
-        CopyOption[] options = new CopyOption[]{StandardCopyOption.COPY_ATTRIBUTES};
-
-        Path targetPath = Paths.get(getOutputDirectory().toURI());
-        Path sourcePath = Paths.get(sourceDirectory.toURI());
-        try (DirectoryStream<Path> directoryContents = Files.newDirectoryStream(sourcePath)) {
-            for (Path sourceFile : directoryContents) {
-                Path destinationFile = targetPath.resolve(sourceFile.getFileName());
-                if (Files.notExists(destinationFile)) {
-                    Files.copy(sourceFile, destinationFile, options);
-                }
-            }
-        } catch (IOException e) {
-            LOGGER.error("Error during copying files to the target directory", e);
-        }
+        CopyFiles.from(sourceDirectory).to(getOutputDirectory());
     }
 
     public void generateReportsForTestResultsIn(TestOutcomes testOutcomes) throws IOException {

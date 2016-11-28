@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Home</title>
+
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+<!--[if IE 7]>
+<link rel="stylesheet" href="font-awesome/css/font-awesome-ie7.min.css">
+<![endif]--><!-- JQuery -->
+<script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script><!-- Bootstrap -->
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="bootstrap/js/bootstrap.min.js"></script><link rel="stylesheet" href="css/core.css"/>
+<link rel="stylesheet" href="css/link.css"/>
+<link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet"/><!-- JQuery-UI -->
+<link type="text/css" href="jqueryui/1.11.2-start/jquery-ui.min.css" rel="Stylesheet" />
+<script type="text/javascript" src="jqueryui/1.11.2-start/jquery-ui.min.js"></script><!-- DataTables -->
+<link type="text/css" href="datatables/1.10.4/media/jqueryui/dataTables.jqueryui.css" rel="Stylesheet"/>
+<link type="text/css" href="css/tables.css" rel="stylesheet" />
+
+<script type="text/javascript" src="datatables/1.10.4/media/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="datatables/1.10.4/media/jqueryui/dataTables.jqueryui.min.js"></script>
+    <script class="code" type="text/javascript">$(document).ready(function () {
+
+        // Results table
+        $('#tag-list-table').DataTable( {
+            "order": [
+                [ 1, "asc" ]
+            ],
+            "pageLength": 25
+        } );
+
+        $("test-list").tabs();
+    });
+    </script>
+</head>
+
+<body>
+<div id="topheader">
+    <div id="topbanner">
+        <div id="logo"><a href="index.html"><img src="images/serenity-bdd-logo.png" border="0"/></a></div>
+        <div id="projectname-banner" style="float:right">
+            <span class="projectname"></span>
+        </div>
+    </div>
+</div>
+
+<div class="middlecontent">
+
+    <div id="contenttop">
+        <div class="middlebg">
+            <span class="breadcrumbs"><a href="index.html">Home</a> 
+                > Features
+            </span>
+        </div>
+        <div class="rightbg"></div>
+    </div>
+
+    <div class="clr"></div>
+
+    <!--/* starts second table*/-->
+<div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#"><i class="fa fa-check-square-o"></i> Overall Test Results</a>
+        </li>
+        <li >
+            <a href="capabilities.html"><i class="fa fa-book"></i> Requirements</a>
+        </li>
+        <li >
+            <a href="e3a5a59a6d792683cf33d050ee0f6f92.html"><i class="fa fa-comments-o"></i> Capabilities</a>
+        </li>
+        <li >
+            <a href="d782c44557441225cc92a5e35bf4b23b.html"><i class="fa fa-comments-o"></i> Features</a>
+        </li>
+    </ul>
+    <span class="date-and-time"><a href="build-info.html"><i class="fa fa-info-circle"></i></a> Report generated 24-11-2016 14:05</span>
+    <br style="clear:left"/>
+</div>
+
+
+
+   <div class="clr"></div>
+    <div id="beforetable"></div>
+    <div id="results-dashboard">
+        <div class="middlb">
+            <div class="table">
+                <table>
+                 <tr>
+                   <td>
+                    <div id="test-list">
+                        <ul>
+                            <li><a href="test-list-1">Features</a></li>
+                        </ul>
+                    </div>
+                    <div id="test-list-1" class="table">
+                        <div class="test-results">
+                            <table id="tag-list-table">
+                                <thead>
+                                    <tr>
+                                        <th width="30" class="test-results-heading">&nbsp;</th>
+                                        <th width="750" class="test-results-heading">Feature</th>
+                                        <th width="70" class="test-results-heading">Tests</th>
+                                        <th width="70" class="test-results-heading">Steps</th>
+                                        <th width="65" class="test-results-heading">Duration</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><h3>Learn about the application</h3></td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr class="test-SUCCESS">
+                                        <td><span class="summary-icon"/><i class='fa fa-check-square-o success-icon fa-2x' title='SUCCESS'></i></span><span style="display:none">SUCCESS</span></td>
+                                        <td class="SUCCESS-text"><a href="2e438c5fc797857b772b51345f7ddb51.html">Learn About The Application</a></td>
+
+                                        <td class="lightgreentext">8</td>
+                                        <td class="lightgreentext">26</td>
+
+                                        <td class="lightgreentext">31.589</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><h3>Complete a todo</h3></td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr class="test-SUCCESS">
+                                        <td><span class="summary-icon"/><i class='fa fa-check-square-o success-icon fa-2x' title='SUCCESS'></i></span><span style="display:none">SUCCESS</span></td>
+                                        <td class="SUCCESS-text"><a href="92c43b46ed24bcbf72d50a45b7f6897b.html">Complete A Todo</a></td>
+
+                                        <td class="lightgreentext">2</td>
+                                        <td class="lightgreentext">21</td>
+
+                                        <td class="lightgreentext">15.489</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><h3>Toggle all todos</h3></td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr class="test-SUCCESS">
+                                        <td><span class="summary-icon"/><i class='fa fa-check-square-o success-icon fa-2x' title='SUCCESS'></i></span><span style="display:none">SUCCESS</span></td>
+                                        <td class="SUCCESS-text"><a href="c6f07bba74b7e2198ad4ce8518b419fd.html">Toggle All Todos</a></td>
+
+                                        <td class="lightgreentext">4</td>
+                                        <td class="lightgreentext">46</td>
+
+                                        <td class="lightgreentext">30.005</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><h3>Clear completed todos</h3></td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr class="test-SUCCESS">
+                                        <td><span class="summary-icon"/><i class='fa fa-check-square-o success-icon fa-2x' title='SUCCESS'></i></span><span style="display:none">SUCCESS</span></td>
+                                        <td class="SUCCESS-text"><a href="527f18cb0da4d225419d1ed8e3b00130.html">Clear Completed Todos</a></td>
+
+                                        <td class="lightgreentext">3</td>
+                                        <td class="lightgreentext">32</td>
+
+                                        <td class="lightgreentext">21.185</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><h3>Complete a todo</h3></td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr class="test-SUCCESS">
+                                        <td><span class="summary-icon"/><i class='fa fa-check-square-o success-icon fa-2x' title='SUCCESS'></i></span><span style="display:none">SUCCESS</span></td>
+                                        <td class="SUCCESS-text"><a href="abff866ccebee81bda2a7fb1e231081c.html">Complete A Todo</a></td>
+
+                                        <td class="lightgreentext">4</td>
+                                        <td class="lightgreentext">41</td>
+
+                                        <td class="lightgreentext">27.026</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><h3>Delete todos</h3></td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr class="test-SUCCESS">
+                                        <td><span class="summary-icon"/><i class='fa fa-check-square-o success-icon fa-2x' title='SUCCESS'></i></span><span style="display:none">SUCCESS</span></td>
+                                        <td class="SUCCESS-text"><a href="33c486b86fda2730dee0b1c5defb1744.html">Delete Todos</a></td>
+
+                                        <td class="lightgreentext">4</td>
+                                        <td class="lightgreentext">40</td>
+
+                                        <td class="lightgreentext">27.219</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><h3>Filtering todos</h3></td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr class="test-SUCCESS">
+                                        <td><span class="summary-icon"/><i class='fa fa-check-square-o success-icon fa-2x' title='SUCCESS'></i></span><span style="display:none">SUCCESS</span></td>
+                                        <td class="SUCCESS-text"><a href="64c1fe3cc33164e42d42cb50b75ac76b.html">Filtering Todos</a></td>
+
+                                        <td class="lightgreentext">5</td>
+                                        <td class="lightgreentext">71</td>
+
+                                        <td class="lightgreentext">43.763</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><h3>Todos belong to a user</h3></td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr class="test-SUCCESS">
+                                        <td><span class="summary-icon"/><i class='fa fa-check-square-o success-icon fa-2x' title='SUCCESS'></i></span><span style="display:none">SUCCESS</span></td>
+                                        <td class="SUCCESS-text"><a href="14fd0abc488bb6f34b744c0e0a6d9c5a.html">Todos Belong To A User</a></td>
+
+                                        <td class="lightgreentext">4</td>
+                                        <td class="lightgreentext">76</td>
+
+                                        <td class="lightgreentext">51.903</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><h3>Add different sorts of todos</h3></td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr class="test-SUCCESS">
+                                        <td><span class="summary-icon"/><i class='fa fa-check-square-o success-icon fa-2x' title='SUCCESS'></i></span><span style="display:none">SUCCESS</span></td>
+                                        <td class="SUCCESS-text"><a href="5c6ac57b59fcb1c1f89ddda1437e2fdf.html">Add Different Sorts Of Todos</a></td>
+
+                                        <td class="lightgreentext">9</td>
+                                        <td class="lightgreentext">54</td>
+
+                                        <td class="lightgreentext">38.301</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><h3>Add foreign sorts of todos</h3></td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr class="test-SUCCESS">
+                                        <td><span class="summary-icon"/><i class='fa fa-check-square-o success-icon fa-2x' title='SUCCESS'></i></span><span style="display:none">SUCCESS</span></td>
+                                        <td class="SUCCESS-text"><a href="1c035dc74bf946f69d7e3072c72e3765.html">Add Foreign Sorts Of Todos</a></td>
+
+                                        <td class="lightgreentext">12</td>
+                                        <td class="lightgreentext">72</td>
+
+                                        <td class="lightgreentext">52.649</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><h3>Add more different sorts of todos</h3></td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr class="test-SUCCESS">
+                                        <td><span class="summary-icon"/><i class='fa fa-check-square-o success-icon fa-2x' title='SUCCESS'></i></span><span style="display:none">SUCCESS</span></td>
+                                        <td class="SUCCESS-text"><a href="2a12f20a8910a76a507aa9a7562a77e6.html">Add More Different Sorts Of Todos</a></td>
+
+                                        <td class="lightgreentext">9</td>
+                                        <td class="lightgreentext">54</td>
+
+                                        <td class="lightgreentext">41.052</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><h3>Add new todos</h3></td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr class="test-SUCCESS">
+                                        <td><span class="summary-icon"/><i class='fa fa-check-square-o success-icon fa-2x' title='SUCCESS'></i></span><span style="display:none">SUCCESS</span></td>
+                                        <td class="SUCCESS-text"><a href="37e1c9d2edd3a1ddd3235121c35b824c.html">Add New Todos</a></td>
+
+                                        <td class="lightgreentext">8</td>
+                                        <td class="lightgreentext">75</td>
+
+                                        <td class="lightgreentext">52.777</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><h3>Add other different sorts of todos</h3></td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr class="test-SUCCESS">
+                                        <td><span class="summary-icon"/><i class='fa fa-check-square-o success-icon fa-2x' title='SUCCESS'></i></span><span style="display:none">SUCCESS</span></td>
+                                        <td class="SUCCESS-text"><a href="6dcb76c6a1b5f85685e3e17fec317e84.html">Add Other Different Sorts Of Todos</a></td>
+
+                                        <td class="lightgreentext">9</td>
+                                        <td class="lightgreentext">54</td>
+
+                                        <td class="lightgreentext">38.165</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                   </td>
+                  </tr>
+                 </table>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="beforefooter"></div>
+<div id="bottomfooter"></div>
+
+</body>
+</html>

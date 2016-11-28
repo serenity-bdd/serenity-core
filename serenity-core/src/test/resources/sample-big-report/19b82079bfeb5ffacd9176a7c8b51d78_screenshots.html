@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Screenshots</title>
+
+    <link rel="shortcut icon" href="favicon.ico">
+
+<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+<!--[if IE 7]>
+<link rel="stylesheet" href="font-awesome/css/font-awesome-ie7.min.css">
+<![endif]--><!-- JQuery -->
+<script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script><!-- Bootstrap -->
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="bootstrap/js/bootstrap.min.js"></script><link rel="stylesheet" href="css/core.css"/>
+<link rel="stylesheet" href="css/link.css"/>
+<link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet"/><!-- Nivo Slider -->
+<link rel="stylesheet" href="nivo-slider/3.2/nivo-slider.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="nivo-slider/3.2/themes/default/default.css" type="text/css" media="screen" />
+<script src="nivo-slider/3.2/jquery.nivo.slider.pack.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        function getUrlVars() {
+            var vars = {};
+            var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+                vars[key] = value;
+            });
+            return vars;
+        }
+
+        var screenshotIndex = getUrlVars()["screenshot"];
+
+        $(window).load(function () {
+            $('#slider').nivoSlider({
+                startSlide: screenshotIndex,
+                effect: 'fade',
+                animSpeed: 200,
+                manualAdvance: true
+            });
+        });
+
+        $(window).keydown(function(e) {
+            switch(e.which) {
+                case 37:
+                    $('a.nivo-prevNav').click();
+                    break;
+                case 39:
+                    $('a.nivo-nextNav').click();
+                    break;
+            }
+        });
+    </script>
+
+</head>
+
+<body>
+<div id="topheader">
+    <div id="topbanner">
+        <div id="logo"><a href="index.html"><img src="images/serenity-bdd-logo.png" border="0"/></a></div>
+        <div id="projectname-banner" style="float:right">
+            <span class="projectname">Demo Project using Serenity and Cucumber</span>
+        </div>
+    </div>
+</div>
+
+<div class="middlecontent">
+    <div id="contenttop">
+        <div class="middlebg">
+            <span class="breadcrumbs">
+                <a href="index.html">Home</a>
+                > <a
+                    href="01d1ad3f8addb0bd1564270aabcda92d.html">Add Other Different Sorts Of Todos</a>
+                > <a
+                    href="19b82079bfeb5ffacd9176a7c8b51d78.html">Adding other task </a>
+                > Screenshots
+            </span>
+        </div>
+        <div class="rightbg"></div>
+    </div>
+
+    <div class="clr"></div>
+
+    <!--/* starts second table*/-->
+<div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#"><i class="fa fa-check-square-o"></i> Overall Test Results</a>
+        </li>
+        <li >
+            <a href="capabilities.html"><i class="fa fa-book"></i> Requirements</a>
+        </li>
+        <li >
+            <a href="e3a5a59a6d792683cf33d050ee0f6f92.html"><i class="fa fa-comments-o"></i> Capabilities</a>
+        </li>
+        <li >
+            <a href="d782c44557441225cc92a5e35bf4b23b.html"><i class="fa fa-comments-o"></i> Features</a>
+        </li>
+    </ul>
+    <span class="date-and-time"><a href="build-info.html"><i class="fa fa-info-circle"></i></a> Report generated 24-11-2016 12:30</span>
+    <br style="clear:left"/>
+</div>
+
+    <div class="clr"></div>
+
+
+    <div id="contentbody">
+        <div class="titlebar">
+            <div class="story-title">
+                <table class="outcome-header">
+                    <tr>
+                        <td>
+                            <div>
+                                <h3 class="discreet-story-header">
+                                    <i class="fa fa-2x fa-comments-o"></i>
+                                    <span class="story-header-title">Add Other Different Sorts Of Todos </span>
+                                    <span class="badge tag-badge">Feature</span>
+                                </h3>
+
+                                <div class="discreet-requirement-narrative-title">
+                                
+                                </div>
+                            </div>
+
+                        </td>
+                        <td valign="top" align="right">
+                            <p class="tag">
+                                <span class="badge tag-badge">
+                                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" href="f182430807c1cbb494fad9896dc3d484.html">Screenplay Pattern
+                                    (tag)</a>
+                                </span>
+                            </p>
+                            <p class="tag">
+                                <span class="badge tag-badge">
+                                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" href="2c989a8647e192562ebe1c1dd723c33b.html">Record Todos
+                                    (capability)</a>
+                                </span>
+                            </p>
+                            <p class="tag">
+                                <span class="badge tag-badge">
+                                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" href="06cf53cb86155ece4e15158c27d80d22.html">Release-3
+                                    (version)</a>
+                                </span>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="story-title">
+                <table class="outcome-header">
+                    <tr>
+                        <td colspan="2" class="test-title-bar">
+                            <span class="outcome-icon"><i class='fa fa-check-square-o success-icon fa-3x' title='SUCCESS'></i></span>
+                            <span class="test-case-title">
+                                <span class="success-color">Adding Other Task
+                                    <span class="related-issue-title"></span>
+                                </span>
+                            </span>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="clr"></div>
+
+    <div class="story-title">
+        <h3>Scenario:</h3>
+        <div class="scenario">James starts with **no items**<br>James adds a todo item called<br>Then the displayed todo items should be a collection containing 'walk the lion'</div>
+    </div>
+
+    <div id="beforetable"></div>
+    <div id="contenttilttle">
+        <div class="slider-wrapper theme-default">
+            <div id="slider">
+                <img src="4fabc37b68470020361ff08cf5098fe3.png" title="James starts with **no items**" width="960"/>
+                <img src="665c645d1484d0e0a89a0bc7a6a04af8.png" title="James opens the Application home page" width="960"/>
+                <img src="f76e16a6523336da9d6a6c12ee5c5953.png" title="James adds a todo item called: walk the lion" width="960"/>
+                <img src="f76e16a6523336da9d6a6c12ee5c5953.png" title="James enters 'walk the lion' into 'What needs to be done?' field" width="960"/>
+                <img src="b1891851b743896b91b95f1b713b2f74.png" title="Then the displayed todo items should be a collection containing 'walk the lion'" width="960"/>
+                <img src="4fabc37b68470020361ff08cf5098fe3.png" title="James starts with **no items**" width="960"/>
+                <img src="665c645d1484d0e0a89a0bc7a6a04af8.png" title="James opens the Application home page" width="960"/>
+                <img src="fc7046360ec226307421c1a54ff64645.png" title="James adds a todo item called: wash the dishes" width="960"/>
+                <img src="fc7046360ec226307421c1a54ff64645.png" title="James enters 'wash the dishes' into 'What needs to be done?' field" width="960"/>
+                <img src="067dc769d5049c0d019d688224a310c2.png" title="Then the displayed todo items should be a collection containing 'wash the dishes'" width="960"/>
+                <img src="4fabc37b68470020361ff08cf5098fe3.png" title="James starts with **no items**" width="960"/>
+                <img src="665c645d1484d0e0a89a0bc7a6a04af8.png" title="James opens the Application home page" width="960"/>
+                <img src="0bb7c1f0d6e3fa57b0692404f8799cf9.png" title="James adds a todo item called: feed the ferrets" width="960"/>
+                <img src="665c645d1484d0e0a89a0bc7a6a04af8.png" title="James enters 'feed the ferrets' into 'What needs to be done?' field" width="960"/>
+                <img src="0bb7c1f0d6e3fa57b0692404f8799cf9.png" title="James enters 'feed the ferrets' into 'What needs to be done?' field" width="960"/>
+                <img src="d71c353861d431e1b35a509744f0c349.png" title="Then the displayed todo items should be a collection containing 'feed the ferrets'" width="960"/>
+                <img src="665c645d1484d0e0a89a0bc7a6a04af8.png" title="James starts with **no items**" width="960"/>
+                <img src="665c645d1484d0e0a89a0bc7a6a04af8.png" title="James opens the Application home page" width="960"/>
+                <img src="4fabc37b68470020361ff08cf5098fe3.png" title="James adds a todo item called: count the rabbits" width="960"/>
+                <img src="66597972bc3b721b0c391803c06583ed.png" title="James adds a todo item called: count the rabbits" width="960"/>
+                <img src="4fabc37b68470020361ff08cf5098fe3.png" title="James enters 'count the rabbits' into 'What needs to be done?' field" width="960"/>
+                <img src="scaled_118c767317f6c9b20bb48c15230c1472.png" title="James enters 'count the rabbits' into 'What needs to be done?' field" width="960"/>
+                <img src="3f4d0b565487f4f5b6a9707538c7d7cd.png" title="Then the displayed todo items should be a collection containing 'count the rabbits'" width="960"/>
+                <img src="4fabc37b68470020361ff08cf5098fe3.png" title="James starts with **no items**" width="960"/>
+                <img src="665c645d1484d0e0a89a0bc7a6a04af8.png" title="James opens the Application home page" width="960"/>
+                <img src="f0e47f9c59213c286991c7c8ba278d28.png" title="James adds a todo item called: ride the horses" width="960"/>
+                <img src="665c645d1484d0e0a89a0bc7a6a04af8.png" title="James enters 'ride the horses' into 'What needs to be done?' field" width="960"/>
+                <img src="f0e47f9c59213c286991c7c8ba278d28.png" title="James enters 'ride the horses' into 'What needs to be done?' field" width="960"/>
+                <img src="17b2dce9845073e7afb1a3616c76329b.png" title="Then the displayed todo items should be a collection containing 'ride the horses'" width="960"/>
+                <img src="4fabc37b68470020361ff08cf5098fe3.png" title="James starts with **no items**" width="960"/>
+                <img src="665c645d1484d0e0a89a0bc7a6a04af8.png" title="James opens the Application home page" width="960"/>
+                <img src="33ab7bdba2bd09d1193dd7e6dcbd4086.png" title="James adds a todo item called: ride the camels" width="960"/>
+                <img src="665c645d1484d0e0a89a0bc7a6a04af8.png" title="James enters 'ride the camels' into 'What needs to be done?' field" width="960"/>
+                <img src="33ab7bdba2bd09d1193dd7e6dcbd4086.png" title="James enters 'ride the camels' into 'What needs to be done?' field" width="960"/>
+                <img src="8710d4ade267728ae77ac40c06df0b15.png" title="Then the displayed todo items should be a collection containing 'ride the camels'" width="960"/>
+                <img src="665c645d1484d0e0a89a0bc7a6a04af8.png" title="James starts with **no items**" width="960"/>
+                <img src="665c645d1484d0e0a89a0bc7a6a04af8.png" title="James opens the Application home page" width="960"/>
+                <img src="4fabc37b68470020361ff08cf5098fe3.png" title="James adds a todo item called: ride the donkeys" width="960"/>
+                <img src="f51473c5683db9f272988a5099656fc2.png" title="James adds a todo item called: ride the donkeys" width="960"/>
+                <img src="4fabc37b68470020361ff08cf5098fe3.png" title="James enters 'ride the donkeys' into 'What needs to be done?' field" width="960"/>
+                <img src="f51473c5683db9f272988a5099656fc2.png" title="James enters 'ride the donkeys' into 'What needs to be done?' field" width="960"/>
+                <img src="391c3cc375c5e3b5b3885594f6ff03d5.png" title="Then the displayed todo items should be a collection containing 'ride the donkeys'" width="960"/>
+                <img src="4fabc37b68470020361ff08cf5098fe3.png" title="James starts with **no items**" width="960"/>
+                <img src="665c645d1484d0e0a89a0bc7a6a04af8.png" title="James opens the Application home page" width="960"/>
+                <img src="adcac33858fc568623734246ec9e879a.png" title="James adds a todo item called: free the pigeons" width="960"/>
+                <img src="adcac33858fc568623734246ec9e879a.png" title="James enters 'free the pigeons' into 'What needs to be done?' field" width="960"/>
+                <img src="8e67261cb2173cc0e5e653bd300d434d.png" title="Then the displayed todo items should be a collection containing 'free the pigeons'" width="960"/>
+                <img src="4fabc37b68470020361ff08cf5098fe3.png" title="James starts with **no items**" width="960"/>
+                <img src="665c645d1484d0e0a89a0bc7a6a04af8.png" title="James opens the Application home page" width="960"/>
+                <img src="589b58e5c10789f5a564eb023a333de2.png" title="James adds a todo item called: wrap the BIG_WIDGIT_CODE products" width="960"/>
+                <img src="589b58e5c10789f5a564eb023a333de2.png" title="James enters 'wrap the BIG_WIDGIT_CODE products' into 'What needs to be done?' field" width="960"/>
+                <img src="92b435f4f99432268b121525d3e99478.png" title="Then the displayed todo items should be a collection containing 'wrap the BIG_WIDGIT_CODE products': <span class='success-color'>SUCCESS</span>" width="960"/>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<div id="beforefooter"></div>
+<div id="bottomfooter">
+    <span class="version">Serenity BDD version 1.2.1-SNAPSHOT</span>
+</div>
+</body>
+</html>

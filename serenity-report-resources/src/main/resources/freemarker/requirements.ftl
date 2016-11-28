@@ -161,7 +161,7 @@
     <div id="contenttop">
         <div class="middlebg">
             <span class="breadcrumbs">
-            <a href='index.html'>Home</a> > Requirements
+            <a href='index.html'>Home</a> > <a href="capabilities.html">Requirements</a>
             <#if requirements.parentRequirement.isPresent()>
 
                 <#assign parent = requirements.parentRequirement.get()>
@@ -172,7 +172,7 @@
                     <#assign rootTitle = inflection.of(requirements.parentRequirement.get().parent!).asATitle() >
                     > <a href="${rootReport}">${rootTitle}</a>
                 </#if>
-                > ${formatter.htmlCompatible(parentTitle)}
+                > ${formatter.htmlCompatibleStoryTitle(parentTitle)}
             </#if>
             </span>
         </div>

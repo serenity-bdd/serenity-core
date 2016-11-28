@@ -1,0 +1,4 @@
+"Story","Title","Result","Date","Stability","Duration (s)"
+"Clear completed todos","Should be able to clear completed todos in screenplay","SUCCESS","2016-11-24T12:24:13.398Z","0.0","7.73"
+"Clear completed todos","Should be able to remove completed todos in screenplay","SUCCESS","2016-11-24T12:24:05.821Z","0.0","7.52"
+"Clear completed todos","Should not be able to clear completed todos if none are complete in screenplay","SUCCESS","2016-11-24T12:24:21.180Z","0.0","5.93"

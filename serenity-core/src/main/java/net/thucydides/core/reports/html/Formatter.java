@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
 
 import static ch.lambdaj.Lambda.join;
 import static net.thucydides.core.reports.html.MarkdownRendering.RenderedElements.narrative;
+import static net.thucydides.core.reports.html.MarkdownRendering.RenderedElements.scenario;
 import static net.thucydides.core.reports.html.MarkdownRendering.RenderedElements.step;
 import static org.apache.commons.lang3.StringUtils.abbreviate;
 
@@ -311,7 +312,12 @@ public class Formatter {
 
     public String htmlCompatibleStoryTitle(Object fieldValue) {
         return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(narrative)) ?
-            renderMarkdown(htmlCompatible(fieldValue)) : htmlCompatible(fieldValue);
+                renderMarkdown(htmlCompatible(fieldValue)) : htmlCompatible(fieldValue);
+    }
+
+    public String htmlCompatibleTestTitle(Object fieldValue) {
+        return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(scenario)) ?
+                renderMarkdown(htmlCompatible(fieldValue)) : htmlCompatible(fieldValue);
     }
 
     public String plainHtmlCompatible(Object fieldValue) {

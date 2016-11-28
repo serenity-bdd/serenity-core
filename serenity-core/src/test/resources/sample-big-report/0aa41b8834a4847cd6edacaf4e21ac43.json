@@ -1,0 +1,250 @@
+{
+  "name": "should_be_able_to_view_only_not_done_todos",
+  "testCaseName": "net.serenitybdd.demos.todos.screenplay.features.maintain_my_todo_list.FilteringTodos",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "James starts with **a todo list containing Walk the dog, Put out the garbage**",
+      "duration": 5257,
+      "startTime": 1479990322159,
+      "screenshots": [
+        {
+          "screenshot": "e5ef9c264a64559807977f7f8b4d2466.png"
+        }
+      ],
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 2,
+          "description": "James opens the Application home page",
+          "duration": 2469,
+          "startTime": 1479990322160,
+          "screenshots": [
+            {
+              "screenshot": "665c645d1484d0e0a89a0bc7a6a04af8.png"
+            }
+          ],
+          "result": "SUCCESS"
+        },
+        {
+          "number": 3,
+          "description": "James adds the todo items called: [Walk the dog, Put out the garbage]",
+          "duration": 2572,
+          "startTime": 1479990324633,
+          "screenshots": [
+            {
+              "screenshot": "4fabc37b68470020361ff08cf5098fe3.png"
+            },
+            {
+              "screenshot": "3ea59cfc65a6233857b32364ba53d59c.png"
+            }
+          ],
+          "result": "SUCCESS",
+          "children": [
+            {
+              "number": 4,
+              "description": "James adds a todo item called: Walk the dog",
+              "duration": 1134,
+              "startTime": 1479990324873,
+              "screenshots": [
+                {
+                  "screenshot": "4fabc37b68470020361ff08cf5098fe3.png"
+                },
+                {
+                  "screenshot": "4641b4ebcac94f8901baf401a9cf8a02.png"
+                }
+              ],
+              "result": "SUCCESS",
+              "children": [
+                {
+                  "number": 5,
+                  "description": "James enters \u0027Walk the dog\u0027 into \u0027What needs to be done?\u0027 field",
+                  "duration": 671,
+                  "startTime": 1479990325112,
+                  "screenshots": [
+                    {
+                      "screenshot": "665c645d1484d0e0a89a0bc7a6a04af8.png"
+                    },
+                    {
+                      "screenshot": "4641b4ebcac94f8901baf401a9cf8a02.png"
+                    }
+                  ],
+                  "result": "SUCCESS"
+                }
+              ]
+            },
+            {
+              "number": 6,
+              "description": "James adds a todo item called: Put out the garbage",
+              "duration": 976,
+              "startTime": 1479990326008,
+              "screenshots": [
+                {
+                  "screenshot": "4641b4ebcac94f8901baf401a9cf8a02.png"
+                },
+                {
+                  "screenshot": "3ea59cfc65a6233857b32364ba53d59c.png"
+                }
+              ],
+              "result": "SUCCESS",
+              "children": [
+                {
+                  "number": 7,
+                  "description": "James enters \u0027Put out the garbage\u0027 into \u0027What needs to be done?\u0027 field",
+                  "duration": 531,
+                  "startTime": 1479990326232,
+                  "screenshots": [
+                    {
+                      "screenshot": "e08c270aed6a45aee88133303f779bd1.png"
+                    },
+                    {
+                      "screenshot": "3ea59cfc65a6233857b32364ba53d59c.png"
+                    }
+                  ],
+                  "result": "SUCCESS"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "description": "James completes the item called: Walk the dog",
+      "duration": 942,
+      "startTime": 1479990327422,
+      "screenshots": [
+        {
+          "screenshot": "feb5e38a47dfafa81e5683d32cb9984b.png"
+        }
+      ],
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 9,
+          "description": "James clicks on Complete item tick box",
+          "duration": 506,
+          "startTime": 1479990327640,
+          "screenshots": [
+            {
+              "screenshot": "3ea59cfc65a6233857b32364ba53d59c.png"
+            },
+            {
+              "screenshot": "757577c3b7321830e29ae3d9db35ffb3.png"
+            }
+          ],
+          "result": "SUCCESS"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "description": "James filters items by Active",
+      "duration": 920,
+      "startTime": 1479990328365,
+      "screenshots": [
+        {
+          "screenshot": "3b103f35675be863cd3d398ccbe4328c.png"
+        },
+        {
+          "screenshot": "b33709519473dea11a92c2257d2bfde7.png"
+        }
+      ],
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 11,
+          "description": "James clicks on filter by Active",
+          "duration": 488,
+          "startTime": 1479990328582,
+          "screenshots": [
+            {
+              "screenshot": "3b103f35675be863cd3d398ccbe4328c.png"
+            },
+            {
+              "screenshot": "b33709519473dea11a92c2257d2bfde7.png"
+            }
+          ],
+          "result": "SUCCESS"
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "description": "Then the displayed todo items should be iterable containing [\u0027Put out the garbage\u0027]",
+      "duration": 444,
+      "startTime": 1479990329286,
+      "screenshots": [
+        {
+          "screenshot": "b33709519473dea11a92c2257d2bfde7.png"
+        }
+      ],
+      "result": "SUCCESS"
+    },
+    {
+      "number": 13,
+      "description": "Then the displayed todo items should be not iterable containing [\u0027Walk the dog\u0027]",
+      "duration": 424,
+      "startTime": 1479990329731,
+      "screenshots": [
+        {
+          "screenshot": "b33709519473dea11a92c2257d2bfde7.png"
+        }
+      ],
+      "result": "SUCCESS"
+    },
+    {
+      "number": 14,
+      "description": "Then the displayed todo items should be (Active)",
+      "duration": 446,
+      "startTime": 1479990330158,
+      "screenshots": [
+        {
+          "screenshot": "b33709519473dea11a92c2257d2bfde7.png"
+        }
+      ],
+      "result": "SUCCESS"
+    }
+  ],
+  "userStory": {
+    "id": "net.serenitybdd.demos.todos.screenplay.features.maintain_my_todo_list.FilteringTodos",
+    "storyName": "Filtering todos",
+    "storyClassName": "net.serenitybdd.demos.todos.screenplay.features.maintain_my_todo_list.FilteringTodos",
+    "path": "net.serenitybdd.demos.todos.screenplay.features.maintain_my_todo_list",
+    "type": "feature"
+  },
+  "featureTag": {
+    "name": "Maintain my todo list/Filtering todos",
+    "type": "feature"
+  },
+  "title": "Should be able to view only not done todos",
+  "tags": [
+    {
+      "name": "Screenplay pattern",
+      "type": "tag"
+    },
+    {
+      "name": "Maintain my todo list",
+      "type": "capability"
+    },
+    {
+      "name": "RELEASE-2",
+      "type": "version"
+    },
+    {
+      "name": "Maintain my todo list/Filtering todos",
+      "type": "feature"
+    }
+  ],
+  "startTime": 1479990322020,
+  "duration": 8584,
+  "sessionId": "c5c400cadbefd0554f294a53bfc24137",
+  "driver": "chrome",
+  "manual": false,
+  "testSource": "JUnit",
+  "result": "SUCCESS",
+  "versions": [
+    "RELEASE-2"
+  ]
+}

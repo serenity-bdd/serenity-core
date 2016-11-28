@@ -7,7 +7,6 @@ import net.thucydides.core.util.MockEnvironmentVariables
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.openqa.selenium.WebDriver
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import static net.thucydides.core.util.TestResources.directoryInClasspathCalled
@@ -43,7 +42,7 @@ public class WhenGeneratingAggregateHtmlReportsForLargeVolumes extends Specifica
         }
     }
 
-    @Ignore
+//    @Ignore
     def "should cope with large volumes"() {
         when:
             reporter.sourceDirectory = new File("target/site/resources",temporaryDirectory)

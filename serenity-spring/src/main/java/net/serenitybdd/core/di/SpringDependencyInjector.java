@@ -1,5 +1,7 @@
 package net.serenitybdd.core.di;
 
+import java.lang.annotation.Annotation;
+
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
@@ -12,7 +14,7 @@ public class SpringDependencyInjector implements DependencyInjector {
      * @param target
      */
     public void injectDependenciesInto(Object target) {
-        if (springIsOnClasspath() && annotatedWithSpringContext(target)) {
+        if (springIsOnClasspath() && (annotatedWithSpringContext(target) || annotatedWithSpringBootTest(target))) {
             TestContextManager contextManager = getTestContextManager(target.getClass());
             try {
                 contextManager.prepareTestInstance(target);
@@ -29,6 +31,16 @@ public class SpringDependencyInjector implements DependencyInjector {
 
         return (AnnotationUtils.findAnnotation(target.getClass(), ContextConfiguration.class) != null) || (AnnotationUtils.findAnnotation(target.getClass(), ContextHierarchy.class) != null);
     }
+
+    private boolean annotatedWithSpringBootTest(Object target) {
+        try {
+            Class<?> bootTest = Class.forName("org.springframework.boot.test.context.SpringBootTest");
+            Class<? extends Annotation> bootTestAnnotation = (Class<? extends Annotation>) bootTest;
+            return null != AnnotationUtils.findAnnotation(target.getClass(), bootTestAnnotation);
+        } catch(ClassNotFoundException e) {
+            return false;
+        }
+	}
 
     private boolean springIsOnClasspath() {
         try {

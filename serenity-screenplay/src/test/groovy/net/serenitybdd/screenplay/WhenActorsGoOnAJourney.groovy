@@ -96,4 +96,12 @@ class WhenActorsGoOnAJourney extends Specification{
         then:
             someTask.aPrimitiveType == 10 && someTask.anObject == "Bill" && someTask.aParent == BigDecimal.ONE
     }
+
+    def "should allow performables with null parameter values"() {
+        when:
+        ATaskWithParameters someTask = instrumented(ATaskWithParameters, 10, null, BigDecimal.ONE )
+        then:
+        someTask.aPrimitiveType == 10 && someTask.anObject == null && someTask.aParent == BigDecimal.ONE
+    }
+
 }

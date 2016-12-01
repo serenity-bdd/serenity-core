@@ -203,13 +203,27 @@ public class StepFactory {
         } else {
             for (Class<?> parameterType : parameterTypes) {
 
-                if (!ClassUtils.isAssignable(parameters[parameterNumber++].getClass(),parameterType)) {
-             //   if (!parameterType.isAssignableFrom(parameters[parameterNumber++].getClass())) {
+                if (parameter(parameters[parameterNumber]).cannotBeAssignedTo(parameterType)) {
                     return false;
                 }
+                if ((parameters[parameterNumber] != null)
+                        && (!ClassUtils.isAssignable(parameters[parameterNumber].getClass(),parameterType))) {
+                    return false;
+                }
+                parameterNumber++;
             }
         }
         return true;
+    }
+
+    private ParameterAssignementChecker parameter(Object parameter) {
+        return new ParameterAssignementChecker(parameter);
+    }
+
+    private Class<?> forTheClassOfParameter(Object parameter) {
+        if (parameter == null) { return Object.class; }
+
+        return parameter.getClass();
     }
 
 
@@ -268,4 +282,18 @@ public class StepFactory {
         StepAnnotations.injectNestedScenarioStepsInto(steps, this, scenarioStepsClass);
     }
 
+    private class ParameterAssignementChecker {
+        private static final boolean PARAMETER_CAN_BE_ASSIGNED = false;
+        private final Object parameter;
+
+        public ParameterAssignementChecker(Object parameter) {
+            this.parameter = parameter;
+        }
+
+        public boolean cannotBeAssignedTo(Class<?> parameterType) {
+            if (parameter == null) { return PARAMETER_CAN_BE_ASSIGNED; }
+
+            return (!ClassUtils.isAssignable(parameter.getClass(),parameterType));
+        }
+    }
 }

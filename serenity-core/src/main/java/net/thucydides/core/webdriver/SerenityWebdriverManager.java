@@ -1,7 +1,6 @@
 package net.thucydides.core.webdriver;
 
 import com.google.common.base.Optional;
-import com.google.inject.Inject;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.SessionId;
@@ -31,7 +30,6 @@ public class SerenityWebdriverManager implements WebdriverManager {
 
     private Optional<String> overridenDefaultDriverType = Optional.absent();
 
-    @Inject
     public SerenityWebdriverManager(final WebDriverFactory webDriverFactory, final Configuration configuration) {
         this.webDriverFactory = webDriverFactory;
         this.configuration = configuration;

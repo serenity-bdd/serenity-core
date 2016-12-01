@@ -61,7 +61,7 @@ class ThucydidesContext {
 
     private ThucydidesContext(String defaultDriver, StepListener... additionalListeners) {
         configuration = Injectors.getInjector().getInstance(Configuration.class);
-        webdriverManager = ThucydidesWebDriverSupport.getWebdriverManager();// Injectors.getInjector().getInstance(WebdriverManager.class);
+        webdriverManager = ThucydidesWebDriverSupport.getWebdriverManager();
         outputDirectory = configuration.getOutputDirectory();
         this.defaultDriver = defaultDriver;
         if (defaultDriver != null) {

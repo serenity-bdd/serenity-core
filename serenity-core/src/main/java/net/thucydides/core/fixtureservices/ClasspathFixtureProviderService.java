@@ -16,7 +16,7 @@ public class ClasspathFixtureProviderService implements FixtureProviderService {
     @Override
     public List<FixtureService> getFixtureServices() {
         if (fixtureServices == null) {
-            fixtureServices = new ArrayList<FixtureService>();
+            fixtureServices = new ArrayList<>();
 
             ServiceLoader<FixtureService> fixtureServiceLoader = ServiceLoader.load(FixtureService.class);
 

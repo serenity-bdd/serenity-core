@@ -2,6 +2,7 @@ package net.serenitybdd.screenplay;
 
 import com.google.common.base.Optional;
 import net.serenitybdd.core.eventbus.Broadcaster;
+import net.serenitybdd.screenplay.conditions.SilentPerformable;
 import net.serenitybdd.screenplay.events.ActorAsksQuestion;
 import net.thucydides.core.steps.StepEventBus;
 

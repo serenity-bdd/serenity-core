@@ -34,7 +34,7 @@ public class ThucydidesWebDriverSupport {
 
         WebdriverManager webdriverManagerForThisThread = newWebdriverManager();
 
-        setWebdriverManager(webdriverManagerForThisThread);//Injectors.getInjector().getInstance(WebdriverManager.class));
+        setWebdriverManager(webdriverManagerForThisThread);
         getWebdriverManager().overrideDefaultDriverType(requestedDriver);
     }
 

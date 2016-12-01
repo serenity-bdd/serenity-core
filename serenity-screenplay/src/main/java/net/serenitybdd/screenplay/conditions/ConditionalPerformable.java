@@ -3,7 +3,6 @@ package net.serenitybdd.screenplay.conditions;
 import com.google.common.collect.Maps;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.SilentPerformable;
 
 import java.util.Map;
 

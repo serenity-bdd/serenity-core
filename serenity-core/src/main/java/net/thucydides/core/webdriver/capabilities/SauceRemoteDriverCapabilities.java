@@ -7,11 +7,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.lang.reflect.Method;
 import java.util.Properties;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
@@ -35,6 +37,10 @@ public class SauceRemoteDriverCapabilities implements RemoteDriverCapabilities {
     @Override
     public DesiredCapabilities getCapabilities(DesiredCapabilities capabilities) {
 
+
+        configureBrowserVersion(capabilities);
+        configureTargetPlatform(capabilities);
+
         Properties saucelabsProperties = environmentVariables.getPropertiesWithPrefix("saucelabs.");
 
         for(String propertyName : saucelabsProperties.stringPropertyNames()) {
@@ -55,6 +61,24 @@ public class SauceRemoteDriverCapabilities implements RemoteDriverCapabilities {
         if (environmentVariables.getProperty("BUILD_NUMBER") != null) {
             capabilities.setCapability("build", environmentVariables.getProperty("BUILD_NUMBER"));
         }
+    }
+
+
+    private void configureBrowserVersion(DesiredCapabilities capabilities) {
+        String driverVersion = ThucydidesSystemProperty.SAUCELABS_DRIVER_VERSION.from(environmentVariables);
+        if (isNotEmpty(driverVersion)) {
+            capabilities.setCapability("version", driverVersion);
+        }
+    }
+
+    private void configureTargetPlatform(DesiredCapabilities capabilities) {
+        SetAppropriateSaucelabsPlatformVersion.inCapabilities(capabilities).from(environmentVariables);
+
+        String remotePlatform = environmentVariables.getProperty("remote.platform");
+        if (isNotEmpty(remotePlatform)) {
+            capabilities.setPlatform(Platform.valueOf(remotePlatform));
+        }
+
     }
 
     private Object typed(String value) {

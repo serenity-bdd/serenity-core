@@ -34,8 +34,10 @@ public abstract class BaseReportingTask implements ReportingTask {
     protected void generateReportPage(final Map<String, Object> context,
                                     final String template,
                                     final String outputFile) throws IOException {
-        writeReportToOutputDirectory(outputFile,
-                                     mergeTemplate(template).usingContext(context));
+
+        try(BufferedWriter writer = Files.newBufferedWriter(outputDirectory.toPath().resolve(outputFile), StandardCharsets.UTF_8)) {
+            mergeTemplate(template).withContext(context).to(writer);
+        }
     }
 
     protected Merger mergeTemplate(final String templateFile) {
@@ -47,23 +49,4 @@ public abstract class BaseReportingTask implements ReportingTask {
         CSVReporter csvReporter = new CSVReporter(outputDirectory, environmentVariables);
         csvReporter.generateReportFor(testOutcomes, reportName);
     }
-
-    protected File writeReportToOutputDirectory(final String reportFilename, final String htmlContents) throws
-            IOException {
-        File report = new File(outputDirectory, reportFilename);
-        writeToFile(htmlContents, report);
-        return report;
-    }
-
-    private void writeToFile(String htmlContents, File report) throws IOException {
-        String lines[] = htmlContents.split("\\r?\\n");
-        try (BufferedWriter writer = Files.newBufferedWriter(report.toPath(), StandardCharsets.UTF_8)){
-            for(String line : lines){
-                writer.write(line);
-                writer.newLine();
-            }
-        }
-    }
-
-
 }

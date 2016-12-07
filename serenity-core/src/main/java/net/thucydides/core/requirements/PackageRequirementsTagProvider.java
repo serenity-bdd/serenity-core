@@ -5,6 +5,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.reflect.ClassPath;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.guice.Injectors;
@@ -52,7 +53,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables, String rootPackage) {
         this(environmentVariables, rootPackage,
-                new FileSystemRequirementsStore(getRequirementsDirectory(Injectors.getInjector().getInstance(Configuration.class).getOutputDirectory()),
+                new FileSystemRequirementsStore(getRequirementsDirectory(ConfiguredEnvironment.getConfiguration().getOutputDirectory()),
                                                 rootPackage + "-package-requirements.json"));
     }
 
@@ -61,7 +62,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     public PackageRequirementsTagProvider() {
-        this(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        this(ConfiguredEnvironment.getEnvironmentVariables());
     }
 
     private final List<Requirement> NO_REQUIREMENTS = Lists.newArrayList();

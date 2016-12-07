@@ -1,8 +1,8 @@
 package net.thucydides.core.requirements;
 
 import com.google.common.io.Resources;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
@@ -22,7 +22,7 @@ public class FeatureOrStoryFile {
     public FeatureOrStoryFile(String filename, FeatureOrStory type) {
         this.filename = filename;
         this.type = type;
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.environmentVariables = ConfiguredEnvironment.getEnvironmentVariables();
     }
 
     public static FeatureOrStoryFile forFeatureDescribedIn(String filename) {

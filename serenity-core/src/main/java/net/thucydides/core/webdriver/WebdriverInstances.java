@@ -2,8 +2,7 @@ package net.thucydides.core.webdriver;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import org.openqa.selenium.WebDriver;
 
 import java.util.*;
@@ -24,7 +23,7 @@ public class WebdriverInstances {
         this.driverMap = new HashMap<>();
         this.driversUsedInCurrentThread = new ThreadLocal<>();
         this.driversUsedInCurrentThread.set(Sets.<String>newHashSet());
-        this.driverNamer = new DriverName(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        this.driverNamer = new DriverName(ConfiguredEnvironment.getEnvironmentVariables());
     }
 
     public WebDriver getCurrentDriver() {

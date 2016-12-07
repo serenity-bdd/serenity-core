@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver;
 
 import com.google.common.collect.ImmutableList;
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -31,7 +31,7 @@ public class WebdriverProxyFactory implements Serializable {
 
     private WebdriverProxyFactory() {
         webDriverFactory = new WebDriverFactory();
-        this.configuration = Injectors.getInjector().getInstance(Configuration.class);
+        this.configuration = ConfiguredEnvironment.getConfiguration();
     }
 
     public static WebdriverProxyFactory getFactory() {
@@ -47,7 +47,7 @@ public class WebdriverProxyFactory implements Serializable {
     public WebDriverFacade proxyFor(final Class<? extends WebDriver> driverClass) {
        return proxyFor(driverClass,
                        new WebDriverFactory(),
-                       Injectors.getInjector().getInstance(Configuration.class));
+                       ConfiguredEnvironment.getConfiguration());
     }
 
     public WebDriverFacade proxyFor(final Class<? extends WebDriver> driverClass,
@@ -79,7 +79,7 @@ public class WebdriverProxyFactory implements Serializable {
         Class<? extends WebDriver> driverClass = webDriverFactory.getClassFor(configuration.getDriverType());
         return proxyFor(driverClass,
                         webDriverFactory,
-                        Injectors.getInjector().getInstance(Configuration.class));
+                        ConfiguredEnvironment.getConfiguration());
     }
 
     public static void resetDriver(final WebDriver driver) {

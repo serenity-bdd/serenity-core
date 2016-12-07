@@ -5,10 +5,10 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.events.TestLifecycleEvents;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class StepEventBus {
      */
     public static synchronized StepEventBus getEventBus() {
         if (stepEventBusThreadLocal.get() == null) {
-            stepEventBusThreadLocal.set(new StepEventBus(Injectors.getInjector().getInstance(EnvironmentVariables.class)));
+            stepEventBusThreadLocal.set(new StepEventBus(ConfiguredEnvironment.getEnvironmentVariables()));
         }
         return stepEventBusThreadLocal.get();
     }

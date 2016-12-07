@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver;
 
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.annotations.TestCaseAnnotations;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.StepAnnotations;
 import net.thucydides.core.steps.StepFactory;
@@ -40,7 +40,7 @@ public class ThucydidesWebDriverSupport {
 
     private static WebdriverManager newWebdriverManager() {
         WebDriverFactory webDriverFactoryForThisThread = new WebDriverFactory();
-        Configuration globalConfiguration = Injectors.getInjector().getInstance(Configuration.class);
+        Configuration globalConfiguration = ConfiguredEnvironment.getConfiguration();
 
         return new SerenityWebdriverManager(webDriverFactoryForThisThread, globalConfiguration);
     }

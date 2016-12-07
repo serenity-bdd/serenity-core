@@ -4,10 +4,10 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.annotations.locators.SmartAnnotations;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.thucydides.core.WebdriverCollectionStrategy;
 import net.thucydides.core.annotations.ElementIsUsable;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
@@ -80,7 +80,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
             this.searchContext = searchContext;
         }
         this.platform = platform;
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.environmentVariables = ConfiguredEnvironment.getEnvironmentVariables();
     }
 
     private Optional<Integer> timeoutFrom(Field field) {

@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.model.FailureDetails;
 import net.serenitybdd.core.time.SystemClock;
@@ -234,7 +235,7 @@ public class TestOutcome {
     }
 
     public TestOutcome(final String name, final Class<?> testCase) {
-        this(name, testCase, Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        this(name, testCase, ConfiguredEnvironment.getEnvironmentVariables());
     }
     /**
      * Create a test outcome based on a test method in a test class.
@@ -323,7 +324,7 @@ public class TestOutcome {
     }
 
     protected TestOutcome(final String name, final Class<?> testCase, final Story userStory) {
-        this(name, testCase, userStory, Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        this(name, testCase, userStory, ConfiguredEnvironment.getEnvironmentVariables());
     }
 
     /**

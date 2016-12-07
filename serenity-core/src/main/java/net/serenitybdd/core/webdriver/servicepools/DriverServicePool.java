@@ -1,7 +1,7 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
 import com.google.common.collect.Maps;
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
@@ -34,7 +34,7 @@ public abstract class DriverServicePool<T extends DriverService> {
     protected abstract WebDriver newDriverInstance(Capabilities capabilities);
 
     public DriverServicePool() {
-        this(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        this(ConfiguredEnvironment.getEnvironmentVariables());
     }
 
     public DriverServicePool(EnvironmentVariables environmentVariables) {

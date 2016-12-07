@@ -4,9 +4,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import cucumber.api.PendingException;
 import net.serenitybdd.core.PendingStepException;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.exceptions.CausesAssertionFailure;
 import net.serenitybdd.core.exceptions.CausesCompromisedTestFailure;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepFailureException;
@@ -31,7 +31,7 @@ import static net.thucydides.core.model.TestResult.*;
 public class FailureAnalysis {
 
     public FailureAnalysis() {
-        this(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        this(ConfiguredEnvironment.getEnvironmentVariables());
     }
 
     private final FailureAnalysisConfiguration configured;

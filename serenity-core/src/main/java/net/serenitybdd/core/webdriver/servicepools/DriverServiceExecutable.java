@@ -1,7 +1,7 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
 import com.google.common.base.Optional;
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.os.CommandLine;
@@ -75,7 +75,7 @@ public class DriverServiceExecutable {
                     documentationUrl,
                     downloadUrl,
                     environmentVariables.or(
-                            Injectors.getInjector().getInstance(EnvironmentVariables.class)),
+                            ConfiguredEnvironment.getEnvironmentVariables()),
                     reportMissingBinary
             );
         }

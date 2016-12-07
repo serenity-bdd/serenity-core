@@ -1,8 +1,8 @@
 package net.thucydides.core.issues;
 
 import com.google.inject.Inject;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -15,7 +15,7 @@ public class SystemPropertiesIssueTracking implements IssueTracking {
     private EnvironmentVariables environmentVariables;
     
     public SystemPropertiesIssueTracking() {
-        this(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        this(ConfiguredEnvironment.getEnvironmentVariables());
     }
 
     @Inject

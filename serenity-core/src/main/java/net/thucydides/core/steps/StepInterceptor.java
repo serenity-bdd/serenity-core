@@ -7,12 +7,12 @@ import net.serenitybdd.core.IgnoredStepException;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SkipNested;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.*;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.stacktrace.StackTraceSanitizer;
 import net.thucydides.core.steps.service.CleanupMethodAnnotationProvider;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -44,7 +44,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
 
     public StepInterceptor(final Class<?> testStepClass) {
         this.testStepClass = testStepClass;
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.environmentVariables = ConfiguredEnvironment.getEnvironmentVariables();
         Iterable<CleanupMethodAnnotationProvider> cleanupMethodAnnotationProviders = ServiceLoader.load(CleanupMethodAnnotationProvider.class);
         for(CleanupMethodAnnotationProvider cleanupMethodAnnotationProvider : cleanupMethodAnnotationProviders) {
             cleanupMethodsAnnotations.addAll(cleanupMethodAnnotationProvider.getCleanupMethodAnnotations());

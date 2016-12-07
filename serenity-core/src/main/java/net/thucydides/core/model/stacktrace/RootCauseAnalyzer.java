@@ -1,7 +1,7 @@
 package net.thucydides.core.model.stacktrace;
 
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.failures.FailureAnalysis;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.WebdriverAssertionError;
@@ -17,7 +17,7 @@ public class RootCauseAnalyzer {
 
     public RootCauseAnalyzer(Throwable thrownException) {
         this.thrownException = thrownException;
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.environmentVariables = ConfiguredEnvironment.getEnvironmentVariables();
         failureAnalysis = new FailureAnalysis(environmentVariables);
     }
 

@@ -1,12 +1,12 @@
 package net.thucydides.core.requirements;
 
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.reports.FileSystemRequirmentsOutcomeFactory;
 import net.thucydides.core.requirements.reports.RequirementsOutcomeFactory;
-import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class FileSystemRequirements implements Requirements {
     public FileSystemRequirements(String path) {
         this.requirementsService = new FileSystemRequirementsService(path);
         this.requirmentsOutcomeFactory = new FileSystemRequirmentsOutcomeFactory(
-                Injectors.getInjector().getInstance(EnvironmentVariables.class),
+                ConfiguredEnvironment.getEnvironmentVariables(),
                 Injectors.getInjector().getInstance(IssueTracking.class),
                 new ReportNameProvider(NO_CONTEXT, ReportType.HTML, getRequirementsService()),
                 path);

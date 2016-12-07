@@ -1,7 +1,7 @@
 package net.serenitybdd.core;
 
 import com.google.common.collect.ImmutableList;
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.Listeners;
@@ -60,7 +60,7 @@ public class SerenityListeners {
      */
     protected Configuration getSystemConfiguration() {
         if (systemConfiguration == null) {
-            systemConfiguration = Injectors.getInjector().getInstance(Configuration.class);
+            systemConfiguration = ConfiguredEnvironment.getConfiguration();
         }
         return systemConfiguration;
     }

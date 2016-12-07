@@ -5,8 +5,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.AcceptanceTestLoader;
 import net.thucydides.core.reports.AcceptanceTestReporter;
@@ -37,7 +37,7 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
 
     private transient String qualifier;
 
-    private final EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+    private final EnvironmentVariables environmentVariables = ConfiguredEnvironment.getEnvironmentVariables();
 
     private final String encoding;
 

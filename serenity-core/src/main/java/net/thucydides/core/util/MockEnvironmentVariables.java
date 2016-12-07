@@ -4,7 +4,7 @@ import ch.lambdaj.Lambda;
 import ch.lambdaj.function.convert.DefaultStringConverter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
     }
 
     private EnvironmentVariables localEnvironment() {
-        return Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        return ConfiguredEnvironment.getEnvironmentVariables();
     }
 
     protected MockEnvironmentVariables(Properties properties) {

@@ -1,7 +1,7 @@
 package net.thucydides.core.annotations.locators;
 
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.pages.PageObject;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.ElementLocatorFactorySelector;
 import net.thucydides.core.webdriver.ElementProxyCreator;
@@ -29,7 +29,7 @@ public class SmartElementProxyCreator implements ElementProxyCreator {
 	}
 	
 	private ElementLocatorFactorySelector getElementLocatorFactorySelector() {
-	    Configuration configuration = Injectors.getInjector().getInstance(Configuration.class);
+	    Configuration configuration = ConfiguredEnvironment.getConfiguration();
 	    return new ElementLocatorFactorySelector(configuration);
 	}
 

@@ -1,7 +1,8 @@
 package net.thucydides.core.annotations;
 
 import com.google.common.base.Optional;
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebdriverManager;
@@ -21,7 +22,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 public final class TestCaseAnnotations {
 
     private final Object testCase;
-    private final SystemPropertiesConfiguration configuration;
+    private final Configuration configuration;
 
     public TestCaseAnnotations(final Object testCase, SystemPropertiesConfiguration configuration) {
         this.testCase = testCase;
@@ -30,7 +31,7 @@ public final class TestCaseAnnotations {
 
     public TestCaseAnnotations(final Object testCase) {
         this.testCase = testCase;
-        this.configuration = Injectors.getInjector().getInstance(SystemPropertiesConfiguration.class);
+        this.configuration = ConfiguredEnvironment.getConfiguration();
     }
 
     public static TestCaseAnnotations forTestCase(final Object testCase) {

@@ -2,11 +2,10 @@ package net.serenitybdd.core.injectors;
 
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.di.DependencyInjector;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.annotations.Fields;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -18,11 +17,11 @@ import java.util.Set;
 public class EnvironmentDependencyInjector implements DependencyInjector {
 
     private final EnvironmentVariables environmentVariables;
-    private final SystemPropertiesConfiguration systemPropertiesConfiguration;
+    private final Configuration systemPropertiesConfiguration;
 
     public EnvironmentDependencyInjector() {
-        environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
-        systemPropertiesConfiguration = Injectors.getInjector().getInstance(SystemPropertiesConfiguration.class);
+        environmentVariables = ConfiguredEnvironment.getEnvironmentVariables();
+        systemPropertiesConfiguration = ConfiguredEnvironment.getConfiguration();
     }
 
     public void injectDependenciesInto(Object target) {

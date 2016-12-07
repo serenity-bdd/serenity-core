@@ -2,9 +2,9 @@ package net.thucydides.core.webdriver;
 
 import com.gargoylesoftware.htmlunit.ScriptException;
 import io.appium.java_client.android.AndroidDriver;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.pages.DefaultTimeouts;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.stubs.*;
@@ -50,7 +50,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     public WebDriverFacade(final Class<? extends WebDriver> driverClass,
                            final WebDriverFactory webDriverFactory) {
-        this(driverClass, webDriverFactory, Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        this(driverClass, webDriverFactory, ConfiguredEnvironment.getEnvironmentVariables());
     }
 
     public WebDriverFacade(final Class<? extends WebDriver> driverClass,

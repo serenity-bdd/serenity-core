@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
 import net.thucydides.core.model.formatters.TestCoverageFormatter;
@@ -14,7 +15,6 @@ import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.RequirementsTree;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matcher;
 import org.joda.time.DateTime;
@@ -154,14 +154,14 @@ public class TestOutcomes {
 
     public static TestOutcomes of(Collection<? extends TestOutcome> outcomes) {
         return new TestOutcomes(outcomes,
-                Injectors.getInjector().getInstance(Configuration.class).getEstimatedAverageStepCount());
+                ConfiguredEnvironment.getConfiguration().getEstimatedAverageStepCount());
     }
 
     private static List<TestOutcome> NO_OUTCOMES = ImmutableList.of();
 
     public static TestOutcomes withNoResults() {
         return new TestOutcomes(NO_OUTCOMES,
-                                Injectors.getInjector().getInstance(Configuration.class).getEstimatedAverageStepCount());
+                                ConfiguredEnvironment.getConfiguration().getEstimatedAverageStepCount());
     }
 
 

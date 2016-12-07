@@ -1,8 +1,8 @@
 package net.serenitybdd.core.photography.resizing;
 
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.photography.PhotoFilter;
 import net.serenitybdd.core.photography.ScreenshotNegative;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.Dimension;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class Resizer implements PhotoFilter {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     public Resizer() {
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        this.environmentVariables = ConfiguredEnvironment.getEnvironmentVariables();
     }
 
     @Override

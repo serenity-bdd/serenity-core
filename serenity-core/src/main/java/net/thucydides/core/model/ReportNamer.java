@@ -1,8 +1,7 @@
 package net.thucydides.core.model;
 
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.digest.Digest;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
 import static net.thucydides.core.util.NameConverter.*;
@@ -23,7 +22,7 @@ public class ReportNamer {
 
     private ReportNamer(final ReportType type) {
         this(type,
-             Injectors.getInjector().getInstance(EnvironmentVariables.class)
+             ConfiguredEnvironment.getEnvironmentVariables()
                      .getPropertyAsBoolean("serenity.compress.filenames", true));
     }
 

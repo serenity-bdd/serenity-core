@@ -3,6 +3,7 @@ package net.serenitybdd.core;
 import com.beust.jcommander.internal.Lists;
 import com.google.common.collect.ImmutableList;
 import net.serenitybdd.core.di.DependencyInjector;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.serenitybdd.core.sessions.TestSessionVariables;
 import net.thucydides.core.annotations.TestCaseAnnotations;
@@ -104,7 +105,7 @@ public class Serenity {
 
 
     private static void initStepListener() {
-        Configuration configuration = Injectors.getInjector().getInstance(Configuration.class);
+        Configuration configuration = ConfiguredEnvironment.getConfiguration();
         File outputDirectory = configuration.getOutputDirectory();
         StepListener listener  = new BaseStepListener(outputDirectory, getPages());
         stepListenerThreadLocal.set(listener);

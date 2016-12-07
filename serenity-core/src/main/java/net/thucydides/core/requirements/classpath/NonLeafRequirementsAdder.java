@@ -1,9 +1,8 @@
 package net.thucydides.core.requirements.classpath;
 
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
-import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,7 +26,7 @@ public class NonLeafRequirementsAdder {
         this.path = path;
         this.rootPackage = rootPackage;
         this.leafRequirement = leafRequirement;
-        this.requirementsConfiguration = new RequirementsConfiguration(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        this.requirementsConfiguration = new RequirementsConfiguration(ConfiguredEnvironment.getEnvironmentVariables());
         this.requirementsDepth = requirementsDepth;
     }
 

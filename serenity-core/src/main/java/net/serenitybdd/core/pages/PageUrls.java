@@ -1,10 +1,10 @@
 package net.serenitybdd.core.pages;
 
 import com.google.common.base.Optional;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.annotations.DefaultUrl;
 import net.thucydides.core.annotations.NamedUrl;
 import net.thucydides.core.annotations.NamedUrls;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.webdriver.Configuration;
 import org.apache.commons.lang3.StringUtils;
 
@@ -33,7 +33,7 @@ public class PageUrls {
     }
 
     public PageUrls(final Object pageObject) {
-        this(pageObject, Injectors.getInjector().getInstance(Configuration.class));
+        this(pageObject, ConfiguredEnvironment.getConfiguration());
     }
 
     public String getStartingUrl() {

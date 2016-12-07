@@ -23,10 +23,11 @@ public class PageSourceRecorder {
     }
 
     public Optional<File> intoDirectory(Path path) {
-        if (WebDriverFactory.isAlive(driver)) {
+        byte[] pageSource = getPageSource();
+        if (WebDriverFactory.isAlive(driver) && (pageSource.length > 0)) {
             try {
                 Path pageSourceFile = Files.createTempFile(path, "pagesource", ".html.txt");
-                Files.write(pageSourceFile, pageSource());
+                Files.write(pageSourceFile, pageSource);
                 return Optional.of(pageSourceFile.toFile());
             } catch (IOException couldNotCreatePageSourcce) {
                 LOGGER.warn("Could not save the page source HTML file", couldNotCreatePageSourcce);
@@ -35,7 +36,7 @@ public class PageSourceRecorder {
         return Optional.absent();
     }
 
-    private byte[] pageSource() {
+    private byte[] getPageSource() {
         if (driver.getPageSource() == null) {  return new byte[]{}; }
         return driver.getPageSource().getBytes(StandardCharsets.UTF_8);
     }

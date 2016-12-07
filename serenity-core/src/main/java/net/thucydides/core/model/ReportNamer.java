@@ -39,8 +39,7 @@ public class ReportNamer {
     public String getNormalizedTestNameFor(final TestOutcome testOutcome) {
         String testName = getBaseTestNameFor(testOutcome);
         String testNameWithoutIndex = stripIndexesFrom(testName);
-        return normalizedVersionOf(testNameWithoutIndex);
-            // appendSuffixTo(Digest.ofTextValue(testNameWithoutIndex));
+        return underscore(normalizedVersionOf(testNameWithoutIndex));
     }
 
     private String getBaseTestNameFor(TestOutcome testOutcome) {
@@ -52,7 +51,7 @@ public class ReportNamer {
             testName = underscore(testOutcome.getPath());
         }
         String scenarioName = underscore(testOutcome.getQualifiedMethodName());
-        return pathFrom(testOutcome) + withNoIssueNumbers(appendToIfNotNull(testName, scenarioName));
+        return pathFrom(testOutcome) + underscore(withNoIssueNumbers(appendToIfNotNull(testName, scenarioName)));
     }
 
 

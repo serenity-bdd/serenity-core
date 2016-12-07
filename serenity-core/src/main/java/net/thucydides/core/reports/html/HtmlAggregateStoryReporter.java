@@ -133,6 +133,10 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     public void generateReportsForTestResultsIn(TestOutcomes testOutcomes) throws IOException {
 
+        Stopwatch stopwatch = Stopwatch.started();
+        LOGGER.info("Generating test results for {} tests",testOutcomes.getTestCount());
+
+        LOGGER.info("Copying resources to directory");
         copyResourcesToOutputDirectory();
 
         FreemarkerContext context = new FreemarkerContext(environmentVariables, requirements.getRequirementsService(), issueTracking, relativeLink);
@@ -150,9 +154,14 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                 relativeLink));
         addAssociatedTagReporters(testOutcomes, context, reportingTasks);
 
+        LOGGER.info("Starting generating reports: {} ms", stopwatch.lapTime());
         generateReportsFor(testOutcomes, reportingTasks);
 
+        LOGGER.info("Starting copying test results after {} ms", stopwatch.lapTime());
+
         copyTestResultsToOutputDirectory();
+
+        LOGGER.info("Finished generating test results for {} tests after {} ms",testOutcomes.getTestCount(), stopwatch.stop());
     }
 
     private void addAssociatedTagReporters(TestOutcomes testOutcomes, FreemarkerContext context, List<ReportingTask> reportingTasks) {

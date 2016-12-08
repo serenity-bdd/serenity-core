@@ -19,8 +19,10 @@ import java.io.IOException;
 import java.nio.file.CopyOption;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import static net.thucydides.core.guice.Injectors.getInjector;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
@@ -144,15 +146,14 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         List<ReportingTask> reportingTasks = Lists.newArrayList();
 
         reportingTasks.add(new AggregateReportingTask(context, environmentVariables, requirements.getRequirementsService(), getOutputDirectory()));
-        reportingTasks.add(new TagReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider));
         reportingTasks.add(new TagTypeReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider));
+        reportingTasks.addAll(TagReportingTask.tagReportsFor(testOutcomes).using(context, environmentVariables, getOutputDirectory(), reportNameProvider));
         reportingTasks.add(new ResultReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider));
         reportingTasks.add(new RequirementsReportingTask(context, environmentVariables, getOutputDirectory(),
                 reportNameProvider,
                 requirements.getRequirementsOutcomeFactory(),
                 requirements.getRequirementsService(),
                 relativeLink));
-        addAssociatedTagReporters(testOutcomes, context, reportingTasks);
 
         LOGGER.info("Starting generating reports: {} ms", stopwatch.lapTime());
         generateReportsFor(testOutcomes, reportingTasks);
@@ -164,37 +165,23 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         LOGGER.info("Finished generating test results for {} tests after {} ms",testOutcomes.getTestCount(), stopwatch.stop());
     }
 
-    private void addAssociatedTagReporters(TestOutcomes testOutcomes, FreemarkerContext context, List<ReportingTask> reportingTasks) {
-        int maxPossibleBatches = testOutcomes.getTags().size();
-        int totalBatches = (MAX_BATCHES < maxPossibleBatches) ? MAX_BATCHES : maxPossibleBatches;
-        for (int batch = 1; batch <= totalBatches; batch++) {
-            reportingTasks.add(new AssociatedTagReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider)
-                    .forBatch(batch, totalBatches));
-        }
-    }
-
     private void generateReportsFor(final TestOutcomes testOutcomes, List<ReportingTask> reportingTasks) throws IOException {
         stopwatch.start();
 
-        ExecutorService executor = Executors.newFixedThreadPool(REPORT_GENERATION_THREAD_POOL_SIZE);
+        try {
 
-        for (final ReportingTask reportingTask : reportingTasks) {
-            Runnable worker = new Runnable() {
+            final List<Callable<Void>> partitions = Lists.newArrayList();
+            for (ReportingTask reportingTask : reportingTasks) {
+                partitions.add(new ReportExecutor(reportingTask, testOutcomes));
+            }
 
-                @Override
-                public void run() {
-                    try {
-                        reportingTask.generateReportsFor(testOutcomes);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            executor.execute(worker);
+            final ExecutorService executorPool = Executors.newFixedThreadPool(NumberOfThreads.forIOOperations());
+            for (Future<Void> executedTask : executorPool.invokeAll(partitions)) {
+                executedTask.get();
+            }
+        } catch (Exception e) {
+            LOGGER.error("Report generation failed", e);
         }
-        LOGGER.debug("Shutting down Test outcome reports generation");
-        executor.shutdown();
-        while (!executor.isTerminated()) {}
 
         LOGGER.debug("Test outcome reports generated in {} ms", stopwatch.stop());
     }
@@ -246,5 +233,25 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
             return types;
         }
     }
+
+
+    private class ReportExecutor implements Callable<Void> {
+        private final ReportingTask reportingTask;
+        private final TestOutcomes testOutcomes;
+
+        public ReportExecutor(ReportingTask reportingTask, TestOutcomes testOutcomes) {
+            this.reportingTask = reportingTask;
+            this.testOutcomes = testOutcomes;
+        }
+
+        @Override
+        public Void call() throws Exception {
+            Stopwatch reportingStopwatch = Stopwatch.started();
+            reportingTask.generateReportsFor(testOutcomes);
+            LOGGER.info("{} generated in {} ms", reportingTask.toString(), reportingStopwatch.stop());
+            return null;
+        }
+    }
+
 }
 

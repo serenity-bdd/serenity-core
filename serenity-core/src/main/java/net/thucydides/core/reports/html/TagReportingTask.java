@@ -1,5 +1,6 @@
 package net.thucydides.core.reports.html;
 
+import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
 import net.serenitybdd.core.time.Stopwatch;
@@ -14,28 +15,33 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static ch.lambdaj.Lambda.convert;
+
 public class TagReportingTask extends BaseReportingTask implements ReportingTask {
 
     private static final String TEST_OUTCOME_TEMPLATE_PATH = "freemarker/home.ftl";
 
     protected ReportNameProvider reportNameProvider;
+    private final TestTag tag;
 
-    public TagReportingTask(FreemarkerContext freemarker,
-                            EnvironmentVariables environmentVariables,
-                            File outputDirectory,
-                            ReportNameProvider reportNameProvider) {
+    protected TagReportingTask(FreemarkerContext freemarker,
+                                EnvironmentVariables environmentVariables,
+                                File outputDirectory,
+                                ReportNameProvider reportNameProvider,
+                                TestTag tag) {
         super(freemarker, environmentVariables, outputDirectory);
         this.reportNameProvider = reportNameProvider;
+        this.tag = tag;
+    }
+
+    public static TagReportBuilder tagReportsFor(TestOutcomes testOutcomes) {
+        return new TagReportBuilder(testOutcomes);
     }
 
     public void generateReportsFor(TestOutcomes testOutcomes) throws IOException {
 
         Stopwatch stopwatch = Stopwatch.started();
-
-        for (TestTag tag : testOutcomes.getTags()) {
-            generateTagReport(testOutcomes, reportNameProvider, tag);
-        }
-
+        generateTagReport(testOutcomes, reportNameProvider, tag);
         LOGGER.trace("Tag reports generated: {} ms", stopwatch.stop());
     }
 
@@ -87,5 +93,37 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
             }
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "TagReportingTask for " + tag;
+    }
+
+    public static class TagReportBuilder {
+        private final TestOutcomes testOutcomes;
+
+        public TagReportBuilder(TestOutcomes testOutcomes) {
+            this.testOutcomes = testOutcomes;
+        }
+
+        public List<ReportingTask> using(final FreemarkerContext freemarker,
+                                         final EnvironmentVariables environmentVariables,
+                                         final File outputDirectory,
+                                         final ReportNameProvider reportNameProvider) {
+            return convert(testOutcomes.getTags(), toTagReports(freemarker, environmentVariables, outputDirectory, reportNameProvider));
+        }
+
+        private Converter<TestTag, ReportingTask> toTagReports(final FreemarkerContext freemarker,
+                                                               final EnvironmentVariables environmentVariables,
+                                                               final File outputDirectory,
+                                                               final ReportNameProvider reportNameProvider) {
+            return new Converter<TestTag, ReportingTask>() {
+                @Override
+                public ReportingTask convert(TestTag tag) {
+                    return new TagReportingTask(freemarker,  environmentVariables, outputDirectory, reportNameProvider, tag);
+                }
+            };
+        }
     }
 }

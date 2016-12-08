@@ -1,5 +1,6 @@
 package net.serenitybdd.junit.runners;
 
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.DataTable;

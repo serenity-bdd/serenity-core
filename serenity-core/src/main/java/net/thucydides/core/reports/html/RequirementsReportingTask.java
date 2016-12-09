@@ -11,16 +11,19 @@ import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.requirements.reports.RequirementOutcome;
-import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.requirements.reports.RequirementsOutcomeFactory;
+import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static net.thucydides.core.reports.html.RequirementsTypeReportingTask.requirementTypeReports;
 
 public class RequirementsReportingTask extends BaseReportingTask implements ReportingTask  {
 
@@ -35,6 +38,7 @@ public class RequirementsReportingTask extends BaseReportingTask implements Repo
 
     private final RequirementsService requirementsService;
     private final RequirementsConfiguration requirementsConfiguration;
+    private final TestOutcomes testOutcomes;
 
     public RequirementsReportingTask(FreemarkerContext freemarker,
                                      EnvironmentVariables environmentVariables,
@@ -42,7 +46,8 @@ public class RequirementsReportingTask extends BaseReportingTask implements Repo
                                      ReportNameProvider reportNameProvider,
                                      RequirementsOutcomeFactory requirementsFactory,
                                      RequirementsService requirementsService,
-                                     String relativeLink) {
+                                     String relativeLink,
+                                     TestOutcomes testOutcomes) {
         super(freemarker, environmentVariables, outputDirectory);
         this.reportNameProvider = reportNameProvider;
 
@@ -54,44 +59,53 @@ public class RequirementsReportingTask extends BaseReportingTask implements Repo
                                                                      Injectors.getInjector().getInstance(IssueTracking.class),
                                                                      requirementsService);
         this.htmlRequirementsReporter.setOutputDirectory(outputDirectory);
+        this.testOutcomes = testOutcomes;
 
     }
 
-    public void generateReportsFor(TestOutcomes testOutcomes) throws IOException {
+    public void generateReports() throws IOException {
 
         Stopwatch stopwatch = Stopwatch.started();
 
         RequirementsOutcomes requirementsOutcomes = requirementsFactory.buildRequirementsOutcomesFrom(testOutcomes);
 
-        generateRequirementTypeReports(requirementsOutcomes);
+
+        List<ReportingTask> reportingTasks = new ArrayList<>();
+        reportingTasks.addAll(requirementTypeReports(requirementsOutcomes, freemarker, environmentVariables, outputDirectory, reportNameProvider));
+//      generateRequirementTypeReports(requirementsOutcomes);
 
         generateRequirementsReportsFor(requirementsOutcomes);
 
-        generateReleasesReportFor(testOutcomes, requirementsOutcomes);
+        // Release reports have been removed from version 1.2.1
+        // generateReleasesReportFor(testOutcomes, requirementsOutcomes);
+
+        Reporter.generateReportsFor(reportingTasks);
 
         LOGGER.trace("Requirements reports generated: {} ms", stopwatch.stop());
     }
 
-    private void generateRequirementTypeReports(RequirementsOutcomes requirementsOutcomes) throws IOException {
-        for (String requirementType : requirementsOutcomes.getTypes()) {
-            generateRequirementTypeReportFor(requirementType,
-                                             requirementsOutcomes.requirementsOfType(requirementType));
-        }
-    }
 
-    private void generateRequirementTypeReportFor(String requirementType,
-                                                  RequirementsOutcomes requirementsOutcomes) throws IOException {
 
-        Map<String, Object> context = freemarker.getBuildContext(requirementsOutcomes.getTestOutcomes(), reportNameProvider, true);
+//    private void generateRequirementTypeReports(RequirementsOutcomes requirementsOutcomes) throws IOException {
+//        for (String requirementType : requirementsOutcomes.getTypes()) {
+//            generateRequirementTypeReportFor(requirementType,
+//                                             requirementsOutcomes.requirementsOfType(requirementType));
+//        }
+//    }
 
-        context.put("report", ReportProperties.forAggregateResultsReport());
-        context.put("requirementType", requirementType);
-        context.put("requirements", requirementsOutcomes);
-
-        String reportName = reportNameProvider.forRequirementType(requirementType);
-        generateReportPage(context, REQUIREMENT_TYPE_TEMPLATE_PATH, reportName);
-
-    }
+//    private void generateRequirementTypeReportFor(String requirementType,
+//                                                  RequirementsOutcomes requirementsOutcomes) throws IOException {
+//
+//        Map<String, Object> context = freemarker.getBuildContext(requirementsOutcomes.getTestOutcomes(), reportNameProvider, true);
+//
+//        context.put("report", ReportProperties.forAggregateResultsReport());
+//        context.put("requirementType", requirementType);
+//        context.put("requirements", requirementsOutcomes);
+//
+//        String reportName = reportNameProvider.forRequirementType(requirementType);
+//        generateReportPage(context, REQUIREMENT_TYPE_TEMPLATE_PATH, reportName);
+//
+//    }
 
     List<Requirement> reportTally = Lists.newArrayList();
 

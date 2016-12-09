@@ -10,6 +10,7 @@ import net.thucydides.core.reports.*;
 import net.thucydides.core.requirements.DefaultRequirements;
 import net.thucydides.core.requirements.Requirements;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
+import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -156,25 +157,26 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                                                                 requirementTypes,
                                                                 testOutcomes.getTags()));
 
-        reportingTasks.add(new ResultReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider));
         reportingTasks.add(new ResultReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider, testOutcomes));
 
-        reportingTasks.add(new ResultReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider));
         reportingTasks.add(new ResultReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider, testOutcomes));
+
+        RequirementsOutcomes requirementsOutcomes = requirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(testOutcomes);
 
         reportingTasks.add(new RequirementsReportingTask(context, environmentVariables, getOutputDirectory(),
                 reportNameProvider,
                 requirements.getRequirementsOutcomeFactory(),
                 requirements.getRequirementsService(),
-                relativeLink));
+                relativeLink,
+                testOutcomes));
 
         LOGGER.info("Starting generating reports: {} ms", stopwatch.lapTime());
-        generateReportsFor(testOutcomes, reportingTasks);
+        generateReportsFor(reportingTasks);
 
         LOGGER.info("Finished generating test results for {} tests after {} ms",testOutcomes.getTestCount(), stopwatch.stop());
     }
 
-    private void generateReportsFor(final TestOutcomes testOutcomes, List<ReportingTask> reportingTasks) throws IOException {
+    private void generateReportsFor(List<ReportingTask> reportingTasks) throws IOException {
         stopwatch.start();
 
         try {
@@ -182,7 +184,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
             final List<Callable<Void>> partitions = Lists.newArrayList();
             for (ReportingTask reportingTask : reportingTasks) {
-                partitions.add(new ReportExecutor(reportingTask, testOutcomes));
+                partitions.add(new ReportExecutor(reportingTask));
             }
 
             final ExecutorService executorPool = Executors.newFixedThreadPool(NumberOfThreads.forIOOperations());
@@ -247,17 +249,15 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     private class ReportExecutor implements Callable<Void> {
         private final ReportingTask reportingTask;
-        private final TestOutcomes testOutcomes;
 
-        public ReportExecutor(ReportingTask reportingTask, TestOutcomes testOutcomes) {
+        public ReportExecutor(ReportingTask reportingTask) {
             this.reportingTask = reportingTask;
-            this.testOutcomes = testOutcomes;
         }
 
         @Override
         public Void call() throws Exception {
             Stopwatch reportingStopwatch = Stopwatch.started();
-            reportingTask.generateReportsFor(testOutcomes);
+            reportingTask.generateReports();
             LOGGER.info("{} generated in {} ms", reportingTask.toString(), reportingStopwatch.stop());
             return null;
         }

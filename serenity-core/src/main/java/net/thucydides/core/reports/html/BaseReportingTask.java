@@ -1,5 +1,6 @@
 package net.thucydides.core.reports.html;
 
+import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.csv.CSVReporter;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 
 public abstract class BaseReportingTask implements ReportingTask {
@@ -35,9 +37,22 @@ public abstract class BaseReportingTask implements ReportingTask {
                                     final String template,
                                     final String outputFile) throws IOException {
 
-        try(BufferedWriter writer = Files.newBufferedWriter(outputDirectory.toPath().resolve(outputFile), StandardCharsets.UTF_8)) {
+        Stopwatch stopwatch = Stopwatch.started();
+
+        LOGGER.info("Generating report in {}", outputFile);
+
+        Path outputPath = outputDirectory.toPath().resolve(outputFile);
+        try(BufferedWriter writer = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8)) {
             mergeTemplate(template).withContext(context).to(writer);
+            writer.flush();
         }
+
+
+        if (Files.size(outputPath) == 0) {
+            throw new IOException("Failed to write to " + outputPath);
+        }
+
+        LOGGER.info("Generated report {} in {} ms", outputFile, stopwatch.stop());
     }
 
     protected Merger mergeTemplate(final String templateFile) {

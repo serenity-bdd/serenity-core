@@ -26,6 +26,7 @@ import java.util.concurrent.Future;
 
 import static net.thucydides.core.guice.Injectors.getInjector;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
+import static net.thucydides.core.reports.html.TagReportingTask.tagReportsFor;
 
 /**
  * Generates an aggregate acceptance test report in HTML form.
@@ -138,17 +139,27 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         Stopwatch stopwatch = Stopwatch.started();
         LOGGER.info("Generating test results for {} tests",testOutcomes.getTestCount());
 
-        LOGGER.info("Copying resources to directory");
-        copyResourcesToOutputDirectory();
-
         FreemarkerContext context = new FreemarkerContext(environmentVariables, requirements.getRequirementsService(), issueTracking, relativeLink);
 
         List<ReportingTask> reportingTasks = Lists.newArrayList();
 
+        List<String> requirementTypes = requirements.getRequirementsService().getRequirementTypes();
+
+        reportingTasks.add(new CopyResourcesTask());
+        reportingTasks.add(new CopyTestResultsTask());
         reportingTasks.add(new AggregateReportingTask(context, environmentVariables, requirements.getRequirementsService(), getOutputDirectory()));
         reportingTasks.add(new TagTypeReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider));
-        reportingTasks.addAll(TagReportingTask.tagReportsFor(testOutcomes).using(context, environmentVariables, getOutputDirectory(), reportNameProvider));
+        reportingTasks.addAll(tagReportsFor(testOutcomes).using(context,
+                                                                environmentVariables,
+                                                                getOutputDirectory(),
+                                                                reportNameProvider,
+                                                                requirementTypes,
+                                                                testOutcomes.getTags()));
+
         reportingTasks.add(new ResultReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider));
+
+        reportingTasks.add(new ResultReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider));
+
         reportingTasks.add(new RequirementsReportingTask(context, environmentVariables, getOutputDirectory(),
                 reportNameProvider,
                 requirements.getRequirementsOutcomeFactory(),
@@ -157,10 +168,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         LOGGER.info("Starting generating reports: {} ms", stopwatch.lapTime());
         generateReportsFor(testOutcomes, reportingTasks);
-
-        LOGGER.info("Starting copying test results after {} ms", stopwatch.lapTime());
-
-        copyTestResultsToOutputDirectory();
 
         LOGGER.info("Finished generating test results for {} tests after {} ms",testOutcomes.getTestCount(), stopwatch.stop());
     }
@@ -253,5 +260,19 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         }
     }
 
+    private class CopyResourcesTask implements ReportingTask {
+        @Override
+        public void generateReportsFor(TestOutcomes testOutcomes) throws IOException {
+            LOGGER.info("Copying resources to directory");
+            copyResourcesToOutputDirectory();
+        }
+    }
+
+    private class CopyTestResultsTask implements ReportingTask {
+        @Override
+        public void generateReportsFor(TestOutcomes testOutcomes) throws IOException {
+            copyTestResultsToOutputDirectory();
+        }
+    }
 }
 

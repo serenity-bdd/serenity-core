@@ -32,13 +32,13 @@ public class FreemarkerReportTemplate implements ReportTemplate {
         try {
             Environment environment = template.createProcessingEnvironment(context, writer);
             environment.setOutputEncoding(StandardCharsets.UTF_8.name());
-            environment.process();
             environment.setTemplateExceptionHandler(new TemplateExceptionHandler() {
                 @Override
                 public void handleTemplateException(TemplateException te, Environment env, Writer out) throws TemplateException {
                     te.printStackTrace();
                 }
             });
+            environment.process();
         } catch (TemplateException templateException) {
             LOGGER.error("Syntax error in report template: {}\n{}", templateException.getMessage(), templateException.getFTLInstructionStack());
             throw new TemplateMergeException("Failed to process FreeMarker template", templateException);

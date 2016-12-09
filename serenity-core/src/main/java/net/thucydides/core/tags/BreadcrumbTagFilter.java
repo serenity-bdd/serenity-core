@@ -1,6 +1,7 @@
 package net.thucydides.core.tags;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
@@ -35,6 +36,14 @@ public class BreadcrumbTagFilter {
 
         }
         return requirementTypeTags;
+    }
+
+    public List<TestTag> getRequirementBreadcrumbsFrom(TestTag tag) {
+        List<TestTag> requirementTypeTags = Lists.newArrayList();
+        Optional<Requirement> displayedRequirement = requirementsService.getRequirementFor(tag);
+
+        return displayedRequirement.isPresent()
+                ? ImmutableList.of(displayedRequirement.get().asTag()) : ImmutableList.<TestTag>of();
     }
 
     public List<TestTag> getRequirementBreadcrumbsFrom(TestOutcome testOutcome) {

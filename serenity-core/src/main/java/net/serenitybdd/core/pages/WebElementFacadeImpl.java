@@ -714,7 +714,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     /**
      * Returns true if an element is present on the screen, whether visible or not.
-     * @return
      */
     public boolean isPresent() {
         if (driverIsDisabled()) {

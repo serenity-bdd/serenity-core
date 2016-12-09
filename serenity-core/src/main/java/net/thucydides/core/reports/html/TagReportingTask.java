@@ -23,6 +23,7 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
     private final TestTag tag;
     private final List<String> requirementTypes;
     private final List<TestTag> allTags;
+    private final TestOutcomes testOutcomes;
 
     protected TagReportingTask(final FreemarkerContext freemarker,
                                final EnvironmentVariables environmentVariables,
@@ -30,19 +31,21 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                                final ReportNameProvider reportNameProvider,
                                final List<String> requirementTypes,
                                final TestTag tag,
-                               final List<TestTag> allTags) {
+                               final List<TestTag> allTags,
+                               final TestOutcomes testOutcomes) {
         super(freemarker, environmentVariables, outputDirectory);
         this.reportNameProvider = reportNameProvider;
         this.tag = tag;
         this.requirementTypes = requirementTypes;
         this.allTags = allTags;
+        this.testOutcomes = testOutcomes;
     }
 
     public static TagReportBuilder tagReportsFor(TestOutcomes testOutcomes) {
         return new TagReportBuilder(testOutcomes);
     }
 
-    public void generateReportsFor(TestOutcomes testOutcomes) throws IOException {
+    public void generateReports() throws IOException {
 
         Stopwatch stopwatch = Stopwatch.started();
         generateTagReport(testOutcomes, reportNameProvider, tag);
@@ -143,7 +146,7 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
             return new Converter<TestTag, ReportingTask>() {
                 @Override
                 public ReportingTask convert(TestTag tag) {
-                    return new TagReportingTask(freemarker, environmentVariables, outputDirectory, reportNameProvider, requirementTypes, tag, allTags);
+                    return new TagReportingTask(freemarker, environmentVariables, outputDirectory, reportNameProvider, requirementTypes, tag, allTags, testOutcomes);
                 }
             };
         }

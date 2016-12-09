@@ -13,16 +13,19 @@ public class TagTypeReportingTask extends BaseReportingTask implements Reporting
     private static final String TAGTYPE_TEMPLATE_PATH = "freemarker/results-by-tagtype.ftl";
 
     private ReportNameProvider reportNameProvider;
+    private final TestOutcomes testOutcomes;
 
     public TagTypeReportingTask(FreemarkerContext freemarker,
                                 EnvironmentVariables environmentVariables,
                                 File outputDirectory,
-                                ReportNameProvider reportNameProvider) {
+                                ReportNameProvider reportNameProvider,
+                                TestOutcomes testOutcomes) {
         super(freemarker, environmentVariables, outputDirectory);
         this.reportNameProvider = reportNameProvider;
+        this.testOutcomes = testOutcomes;
     }
 
-    public void generateReportsFor(TestOutcomes testOutcomes) throws IOException {
+    public void generateReports() throws IOException {
 
         Stopwatch stopwatch = Stopwatch.started();
 

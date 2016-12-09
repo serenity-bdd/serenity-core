@@ -14,17 +14,20 @@ public class ResultReportingTask extends BaseReportingTask implements ReportingT
 
     private static final String TEST_OUTCOME_TEMPLATE_PATH = "freemarker/home.ftl";
 
-    private ReportNameProvider reportNameProvider;
+    private final ReportNameProvider reportNameProvider;
+    private final TestOutcomes testOutcomes;
 
     public ResultReportingTask(FreemarkerContext freemarker,
                                EnvironmentVariables environmentVariables,
                                File outputDirectory,
-                               ReportNameProvider reportNameProvider) {
+                               ReportNameProvider reportNameProvider,
+                               TestOutcomes testOutcomes) {
         super(freemarker, environmentVariables, outputDirectory);
         this.reportNameProvider = reportNameProvider;
+        this.testOutcomes = testOutcomes;
     }
 
-    public void generateReportsFor(TestOutcomes testOutcomes) throws IOException {
+    public void generateReports() throws IOException {
 
         Stopwatch stopwatch = Stopwatch.started();
 

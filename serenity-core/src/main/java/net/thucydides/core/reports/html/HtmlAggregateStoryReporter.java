@@ -141,14 +141,14 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         FreemarkerContext context = new FreemarkerContext(environmentVariables, requirements.getRequirementsService(), issueTracking, relativeLink);
 
-        List<ReportingTask> reportingTasks = Lists.newArrayList();
-
         List<String> requirementTypes = requirements.getRequirementsService().getRequirementTypes();
+
+        List<ReportingTask> reportingTasks = Lists.newArrayList();
 
         reportingTasks.add(new CopyResourcesTask());
         reportingTasks.add(new CopyTestResultsTask());
-        reportingTasks.add(new AggregateReportingTask(context, environmentVariables, requirements.getRequirementsService(), getOutputDirectory()));
-        reportingTasks.add(new TagTypeReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider));
+        reportingTasks.add(new AggregateReportingTask(context, environmentVariables, requirements.getRequirementsService(), getOutputDirectory(), testOutcomes));
+        reportingTasks.add(new TagTypeReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider, testOutcomes));
         reportingTasks.addAll(tagReportsFor(testOutcomes).using(context,
                                                                 environmentVariables,
                                                                 getOutputDirectory(),
@@ -157,8 +157,10 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                                                                 testOutcomes.getTags()));
 
         reportingTasks.add(new ResultReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider));
+        reportingTasks.add(new ResultReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider, testOutcomes));
 
         reportingTasks.add(new ResultReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider));
+        reportingTasks.add(new ResultReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider, testOutcomes));
 
         reportingTasks.add(new RequirementsReportingTask(context, environmentVariables, getOutputDirectory(),
                 reportNameProvider,
@@ -176,6 +178,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         stopwatch.start();
 
         try {
+        Reporter.generateReportsFor(reportingTasks);
 
             final List<Callable<Void>> partitions = Lists.newArrayList();
             for (ReportingTask reportingTask : reportingTasks) {
@@ -262,7 +265,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     private class CopyResourcesTask implements ReportingTask {
         @Override
-        public void generateReportsFor(TestOutcomes testOutcomes) throws IOException {
+        public void generateReports() throws IOException {
             LOGGER.info("Copying resources to directory");
             copyResourcesToOutputDirectory();
         }
@@ -270,7 +273,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     private class CopyTestResultsTask implements ReportingTask {
         @Override
-        public void generateReportsFor(TestOutcomes testOutcomes) throws IOException {
+        public void generateReports() throws IOException {
             copyTestResultsToOutputDirectory();
         }
     }

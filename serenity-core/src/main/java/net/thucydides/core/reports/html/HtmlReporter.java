@@ -9,7 +9,6 @@ import net.thucydides.core.reports.templates.ReportTemplate;
 import net.thucydides.core.reports.templates.TemplateManager;
 import net.thucydides.core.reports.util.CopyDirectory;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -132,19 +131,12 @@ public abstract class HtmlReporter extends ThucydidesReporter {
     }
 
     protected String timestampFrom(TestOutcomes rootOutcomes) {
-        return timestampFrom(currentTime());
+        return TestOutcomeTimestamp.from(rootOutcomes);
     }
 
-    protected String timestampFrom(DateTime startTime) {
-        return startTime == null ? "" : startTime.toString(TIMESTAMP_FORMAT);
-    }
 
     protected void addTimestamp(TestOutcome testOutcome, Map<String, Object> context) {
-        context.put("timestamp", timestampFrom(currentTime()));
-    }
-
-    protected DateTime currentTime() {
-        return new DateTime();
+        context.put("timestamp", TestOutcomeTimestamp.from(testOutcome));
     }
 
     protected Merger mergeTemplate(final String templateFile) {

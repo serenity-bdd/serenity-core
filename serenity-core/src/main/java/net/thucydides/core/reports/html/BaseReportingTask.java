@@ -31,7 +31,7 @@ public abstract class BaseReportingTask implements ReportingTask {
         this.outputDirectory = outputDirectory;
     }
 
-    public abstract void generateReportsFor(TestOutcomes testOutcomes) throws IOException;
+    public abstract void generateReports() throws IOException;
 
     protected void generateReportPage(final Map<String, Object> context,
                                     final String template,
@@ -39,7 +39,7 @@ public abstract class BaseReportingTask implements ReportingTask {
 
         Stopwatch stopwatch = Stopwatch.started();
 
-        LOGGER.info("Generating report in {}", outputFile);
+        LOGGER.debug("Generating report in {}", outputFile);
 
         Path outputPath = outputDirectory.toPath().resolve(outputFile);
         try(BufferedWriter writer = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8)) {
@@ -52,7 +52,7 @@ public abstract class BaseReportingTask implements ReportingTask {
             throw new IOException("Failed to write to " + outputPath);
         }
 
-        LOGGER.info("Generated report {} in {} ms", outputFile, stopwatch.stop());
+        LOGGER.debug("Generated report {} in {} ms", outputFile, stopwatch.stop());
     }
 
     protected Merger mergeTemplate(final String templateFile) {

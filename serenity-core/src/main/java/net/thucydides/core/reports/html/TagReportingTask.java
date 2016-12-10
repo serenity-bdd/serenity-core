@@ -20,6 +20,7 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
     private static final String TEST_OUTCOME_TEMPLATE_PATH = "freemarker/home.ftl";
 
     protected ReportNameProvider reportNameProvider;
+    private final List<String> knownRequirementReportNames;
     private final TestTag tag;
     private final List<String> requirementTypes;
     private final List<TestTag> allTags;
@@ -30,11 +31,13 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                                final File outputDirectory,
                                final ReportNameProvider reportNameProvider,
                                final List<String> requirementTypes,
+                               final List<String> knownRequirementReportNames,
                                final TestTag tag,
                                final List<TestTag> allTags,
                                final TestOutcomes testOutcomes) {
         super(freemarker, environmentVariables, outputDirectory);
         this.reportNameProvider = reportNameProvider;
+        this.knownRequirementReportNames = knownRequirementReportNames;
         this.tag = tag;
         this.requirementTypes = requirementTypes;
         this.allTags = allTags;
@@ -54,6 +57,9 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
 
     void generateTagReport(TestOutcomes testOutcomes, ReportNameProvider reportName, TestTag tag) throws IOException {
 
+        String report = reportName.forTag(tag);
+        if (knownRequirementReportNames.contains(report)) { return; }
+
         LOGGER.debug("GENERATE TAG REPORTS FOR " + tag);
 
         TestOutcomes testOutcomesForTag = testOutcomes.withTag(tag);
@@ -66,8 +72,6 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
         context.put("csvReport", csvReport);
 
         context.put("breadcrumbs", Breadcrumbs.forRequirementsTag(tag).fromTagsIn(allTags));
-
-        String report = reportName.forTag(tag);
 
         generateReportPage(context, TEST_OUTCOME_TEMPLATE_PATH, report);
         generateDefaultRequirementsPage(context, reportName, tag, requirementTypes);
@@ -128,12 +132,14 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                                          final File outputDirectory,
                                          final ReportNameProvider reportNameProvider,
                                          final List<String> requirementTypes,
-                                         final List<TestTag> allTags) {
+                                         final List<TestTag> allTags,
+                                         final List<String> knownRequirementReportNames) {
             return convert(testOutcomes.getTags(), toTagReports(freemarker,
                                                                 environmentVariables,
                                                                 outputDirectory,
                                                                 reportNameProvider,
                                                                 requirementTypes,
+                                                                knownRequirementReportNames,
                                                                 allTags));
         }
 
@@ -142,11 +148,12 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                                                                final File outputDirectory,
                                                                final ReportNameProvider reportNameProvider,
                                                                final List<String> requirementTypes,
+                                                               final List<String> knownRequirementReportNames,
                                                                final List<TestTag> allTags) {
             return new Converter<TestTag, ReportingTask>() {
                 @Override
                 public ReportingTask convert(TestTag tag) {
-                    return new TagReportingTask(freemarker, environmentVariables, outputDirectory, reportNameProvider, requirementTypes, tag, allTags, testOutcomes);
+                    return new TagReportingTask(freemarker, environmentVariables, outputDirectory, reportNameProvider, requirementTypes, knownRequirementReportNames, tag, allTags, testOutcomes);
                 }
             };
         }

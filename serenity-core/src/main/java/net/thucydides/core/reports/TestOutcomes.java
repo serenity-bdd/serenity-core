@@ -624,6 +624,10 @@ public class TestOutcomes {
         return count(TestType.ANY);
     }
 
+    public ScenarioOutcomeCounter getTotalScenarios() {
+        return new ScenarioOutcomeCounter(TestType.ANY, this);
+    }
+
     public OutcomeCounter count(String testType) {
         return count(TestType.valueOf(testType.toUpperCase()));
     }

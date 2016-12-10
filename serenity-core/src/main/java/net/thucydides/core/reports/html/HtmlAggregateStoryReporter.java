@@ -1,5 +1,6 @@
 package net.thucydides.core.reports.html;
 
+import ch.lambdaj.function.convert.Converter;
 import com.beust.jcommander.internal.Lists;
 import net.serenitybdd.core.SerenitySystemProperties;
 import net.serenitybdd.core.time.Stopwatch;
@@ -10,6 +11,7 @@ import net.thucydides.core.reports.*;
 import net.thucydides.core.requirements.DefaultRequirements;
 import net.thucydides.core.requirements.Requirements;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
+import net.thucydides.core.requirements.reports.RequirementOutcome;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
@@ -25,6 +27,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import static ch.lambdaj.Lambda.convert;
 import static net.thucydides.core.guice.Injectors.getInjector;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 import static net.thucydides.core.reports.html.TagReportingTask.tagReportsFor;
@@ -143,6 +146,9 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         FreemarkerContext context = new FreemarkerContext(environmentVariables, requirements.getRequirementsService(), issueTracking, relativeLink);
 
         List<String> requirementTypes = requirements.getRequirementsService().getRequirementTypes();
+        RequirementsOutcomes requirementsOutcomes = requirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(testOutcomes);
+
+        List<String> knownRequirementReportNames = requirementReportNamesFrom(requirementsOutcomes, reportNameProvider);
 
         List<ReportingTask> reportingTasks = Lists.newArrayList();
 
@@ -155,25 +161,37 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                                                                 getOutputDirectory(),
                                                                 reportNameProvider,
                                                                 requirementTypes,
-                                                                testOutcomes.getTags()));
+                                                                testOutcomes.getTags(),
+                                                                knownRequirementReportNames));
 
-        reportingTasks.add(new ResultReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider, testOutcomes));
-
-        reportingTasks.add(new ResultReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider, testOutcomes));
-
-        RequirementsOutcomes requirementsOutcomes = requirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(testOutcomes);
-
-        reportingTasks.add(new RequirementsReportingTask(context, environmentVariables, getOutputDirectory(),
+        reportingTasks.addAll(ResultReports.resultReportsFor(testOutcomes,context, environmentVariables, getOutputDirectory(),reportNameProvider));
+        reportingTasks.addAll(RequirementsReports.requirementsReportsFor(
+                context, environmentVariables, getOutputDirectory(),
                 reportNameProvider,
                 requirements.getRequirementsOutcomeFactory(),
                 requirements.getRequirementsService(),
                 relativeLink,
-                testOutcomes));
+                testOutcomes,
+                requirementsOutcomes
+        ));
 
         LOGGER.info("Starting generating reports: {} ms", stopwatch.lapTime());
         generateReportsFor(reportingTasks);
 
         LOGGER.info("Finished generating test results for {} tests after {} ms",testOutcomes.getTestCount(), stopwatch.stop());
+    }
+
+    private List<String> requirementReportNamesFrom(RequirementsOutcomes requirementsOutcomes, ReportNameProvider reportNameProvider) {
+        return convert(requirementsOutcomes.getFlattenedRequirementOutcomes(), toRequirementReportNames(reportNameProvider));
+    }
+
+    private Converter<RequirementOutcome, String> toRequirementReportNames(final ReportNameProvider reportNameProvider) {
+            return new Converter<RequirementOutcome, String>() {
+                @Override
+                public String convert(RequirementOutcome from) {
+                    return reportNameProvider.forRequirement(from.getRequirement());
+                }
+            };
     }
 
     private void generateReportsFor(List<ReportingTask> reportingTasks) throws IOException {

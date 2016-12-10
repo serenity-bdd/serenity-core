@@ -260,13 +260,13 @@
             <#assign skippedReport = reportName.withPrefix(currentTag).forTestResult("skipped") >
             <#assign ignoredReport = reportName.withPrefix(currentTag).forTestResult("ignored") >
 
-            <#assign totalCount   = testOutcomes.totalTests.total >
-            <#assign successCount = testOutcomes.totalTests.withResult("success") >
-            <#assign pendingCount = testOutcomes.totalTests.withResult("pending") >
-            <#assign ignoredCount = testOutcomes.totalTests.withResult("ignored") >
-            <#assign skippedCount = testOutcomes.totalTests.withResult("skipped") >
-            <#assign failureCount = testOutcomes.totalTests.withResult("failure") >
-            <#assign errorCount   = testOutcomes.totalTests.withResult("error") >
+            <#assign totalCount   = testOutcomes.totalScenarios.total >
+            <#assign successCount = testOutcomes.totalScenarios.withResult("success") >
+            <#assign pendingCount = testOutcomes.totalScenarios.withResult("pending") >
+            <#assign ignoredCount = testOutcomes.totalScenarios.withResult("ignored") >
+            <#assign skippedCount = testOutcomes.totalScenarios.withResult("skipped") >
+            <#assign failureCount = testOutcomes.totalScenarios.withResult("failure") >
+            <#assign errorCount   = testOutcomes.totalScenarios.withResult("error") >
             <#assign brokenCount  = failureCount + errorCount >
             <#assign compromisedCount = testOutcomes.totalTests.withResult("compromised") >
 
@@ -291,7 +291,7 @@
                         ${brokenCount}
                         <#if (report.shouldDisplayResultLink)>
                             <a href="${relativeLink}${brokenReport}">unsuccessful</a>
-                        <#else>failed</#if>
+                        <#else>unsuccessful</#if>
                     </span>(
                     <span class="test-count">
                         ${failureCount}
@@ -348,7 +348,7 @@
                     <table>
                         <tr>
                             <td colspan="2">
-                                <span class="caption">Total number of tests that pass, fail, or are pending.</span>
+                                <span class="caption">Distribution of tests (including rows in data-driven tests) by test result.</span>
                                 <span class="togglePieChart" id="toggleNormalPieChart"><a href="#">Show/Hide Pie Chart</a></span>
                             </td>
                         </tr>

@@ -47,11 +47,6 @@ public abstract class BaseReportingTask implements ReportingTask {
             writer.flush();
         }
 
-
-        if (Files.size(outputPath) == 0) {
-            throw new IOException("Failed to write to " + outputPath);
-        }
-
         LOGGER.debug("Generated report {} in {} ms", outputFile, stopwatch.stop());
     }
 

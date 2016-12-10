@@ -60,7 +60,7 @@ class RequirementsTypeReportingTask extends BaseReportingTask implements Reporti
 
         context.put("report", ReportProperties.forAggregateResultsReport());
         context.put("requirementType", requirementType);
-        context.put("requirements", requirementsOutcomes);
+        context.put("requirements", requirementsOutcomes.requirementsOfType(requirementType));
 
         String reportName = reportNameProvider.forRequirementType(requirementType);
         generateReportPage(context, REQUIREMENT_TYPE_TEMPLATE_PATH, reportName);

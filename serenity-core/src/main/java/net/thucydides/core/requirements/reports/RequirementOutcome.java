@@ -13,6 +13,7 @@ import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.Formatter;
 import net.thucydides.core.requirements.model.Requirement;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -304,6 +305,21 @@ public class RequirementOutcome {
         return ImmutableSet.copyOf(releaseVersions);
     }
 
+    public RequirementOutcome withoutUnrelatedRequirements() {
+        List<Requirement> childRequirementsWithTests = new ArrayList<>();
+        for(Requirement childRequirement : getRequirement().getChildren())  {
+            if (isTested(childRequirement)) {
+                childRequirementsWithTests.add(childRequirement);
+            }
+        }
+        Requirement prunedRequirement = getRequirement().withChildren(childRequirementsWithTests);
+        return new RequirementOutcome(prunedRequirement, testOutcomes, requirementsWithoutTests, estimatedUnimplementedTests, issueTracking);
+    }
+
+    private boolean isTested(Requirement childRequirement) {
+        return !testOutcomes.forRequirement(childRequirement).getOutcomes().isEmpty();
+    }
+
     public class OutcomeCounter extends TestOutcomeCounter {
 
         public OutcomeCounter(TestType testType) {
@@ -332,5 +348,4 @@ public class RequirementOutcome {
             return testOutcomes.getTotal();
         }
     }
-
 }

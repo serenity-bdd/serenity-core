@@ -185,6 +185,8 @@ public enum ThucydidesSystemProperty {
 
     THUCYDIDES_REPORT_TAG_MENUS,
 
+    THUCYDIDES_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE,
+
     /**
      * Restart the browser every so often during data-driven tests.
      */

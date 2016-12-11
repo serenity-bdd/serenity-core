@@ -21,7 +21,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.CopyOption;
 import java.nio.file.StandardCopyOption;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -40,8 +43,6 @@ import static net.thucydides.core.reports.html.TagReportingTask.tagReportsFor;
 public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStoryTestReporter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlAggregateStoryReporter.class);
-    public static final int REPORT_GENERATION_THREAD_POOL_SIZE = 16;
-    private static final int MAX_BATCHES = 128;
 
     private String projectName;
     private String relativeLink;
@@ -148,9 +149,16 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         List<String> requirementTypes = requirements.getRequirementsService().getRequirementTypes();
         RequirementsOutcomes requirementsOutcomes = requirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(testOutcomes);
 
+        LOGGER.info("{} requirements loaded after {} ms",requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTime());
+
+        requirementsOutcomes = requirementsOutcomes.withoutUnrelatedRequirements();
+
+        LOGGER.info("{} related requirements found after {} ms",requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTime());
+
+
         List<String> knownRequirementReportNames = requirementReportNamesFrom(requirementsOutcomes, reportNameProvider);
 
-        List<ReportingTask> reportingTasks = Lists.newArrayList();
+        Set<ReportingTask> reportingTasks = new HashSet<>();
 
         reportingTasks.add(new CopyResourcesTask());
         reportingTasks.add(new CopyTestResultsTask());
@@ -160,7 +168,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                                                                 environmentVariables,
                                                                 getOutputDirectory(),
                                                                 reportNameProvider,
-                                                                requirementTypes,
                                                                 testOutcomes.getTags(),
                                                                 knownRequirementReportNames));
 
@@ -194,11 +201,11 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
             };
     }
 
-    private void generateReportsFor(List<ReportingTask> reportingTasks) throws IOException {
+    private void generateReportsFor(Collection<ReportingTask> reportingTasks) throws IOException {
         stopwatch.start();
 
         try {
-        Reporter.generateReportsFor(reportingTasks);
+            Reporter.generateReportsFor(reportingTasks);
 
             final List<Callable<Void>> partitions = Lists.newArrayList();
             for (ReportingTask reportingTask : reportingTasks) {
@@ -276,7 +283,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         public Void call() throws Exception {
             Stopwatch reportingStopwatch = Stopwatch.started();
             reportingTask.generateReports();
-            LOGGER.info("{} generated in {} ms", reportingTask.toString(), reportingStopwatch.stop());
+            LOGGER.debug("{} generated in {} ms", reportingTask.toString(), reportingStopwatch.stop());
             return null;
         }
     }

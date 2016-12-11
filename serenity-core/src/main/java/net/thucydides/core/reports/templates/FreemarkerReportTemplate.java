@@ -35,7 +35,8 @@ public class FreemarkerReportTemplate implements ReportTemplate {
             environment.setTemplateExceptionHandler(new TemplateExceptionHandler() {
                 @Override
                 public void handleTemplateException(TemplateException te, Environment env, Writer out) throws TemplateException {
-                    te.printStackTrace();
+                    LOGGER.warn("Report generation failed", te);
+                    throw te;
                 }
             });
             environment.process();

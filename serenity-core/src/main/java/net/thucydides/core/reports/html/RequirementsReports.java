@@ -1,7 +1,5 @@
 package net.thucydides.core.reports.html;
 
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.releases.ReleaseManager;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.requirements.RequirementsService;
@@ -15,7 +13,9 @@ import net.thucydides.core.util.EnvironmentVariables;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static net.thucydides.core.reports.html.RequirementsTypeReportingTask.requirementTypeReports;
 
@@ -23,7 +23,6 @@ public class RequirementsReports {
 
     private ReportNameProvider reportNameProvider;
     private RequirementsOutcomeFactory requirementsFactory;
-    private HtmlRequirementsReporter htmlRequirementsReporter;
     private ReleaseManager releaseManager;
     private final String relativeLink;
 
@@ -51,26 +50,26 @@ public class RequirementsReports {
         this.requirementsService = requirementsService;
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
 
-        this.htmlRequirementsReporter = new HtmlRequirementsReporter(relativeLink,
-                                                                     Injectors.getInjector().getInstance(IssueTracking.class),
-                                                                     requirementsService);
-        this.htmlRequirementsReporter.setOutputDirectory(outputDirectory);
+//        this.htmlRequirementsReporter = new HtmlRequirementsReporter(relativeLink,
+//                                                                     Injectors.getInjector().getInstance(IssueTracking.class),
+//                                                                     requirementsService);
+//        this.htmlRequirementsReporter.setOutputDirectory(outputDirectory);
         this.testOutcomes = testOutcomes;
         this.relativeLink = relativeLink;
 
     }
 
-    public static List<ReportingTask> requirementsReportsFor(FreemarkerContext freemarker,
-                                                             EnvironmentVariables environmentVariables,
-                                                             File outputDirectory,
-                                                             ReportNameProvider reportNameProvider,
-                                                             RequirementsOutcomeFactory requirementsFactory,
-                                                             RequirementsService requirementsService,
-                                                             String relativeLink,
-                                                             TestOutcomes testOutcomes,
-                                                             RequirementsOutcomes requirementsOutcomes) throws IOException {
+    public static Set<ReportingTask> requirementsReportsFor(FreemarkerContext freemarker,
+                                                            EnvironmentVariables environmentVariables,
+                                                            File outputDirectory,
+                                                            ReportNameProvider reportNameProvider,
+                                                            RequirementsOutcomeFactory requirementsFactory,
+                                                            RequirementsService requirementsService,
+                                                            String relativeLink,
+                                                            TestOutcomes testOutcomes,
+                                                            RequirementsOutcomes requirementsOutcomes) throws IOException {
 
-        List<ReportingTask> reportingTasks = new ArrayList<>();
+        Set<ReportingTask> reportingTasks = new HashSet<>();
 
         RequirementsReports reporter = new RequirementsReports(freemarker, environmentVariables, outputDirectory, reportNameProvider, requirementsFactory, requirementsService, relativeLink, testOutcomes);
 
@@ -81,7 +80,7 @@ public class RequirementsReports {
                 outputDirectory,
                 reportNameProvider,
                 requirementsService,
-                requirementsOutcomes,
+                requirementsOutcomes.withoutUnrelatedRequirements(),
                 relativeLink,
                 testOutcomes));
 
@@ -99,7 +98,7 @@ public class RequirementsReports {
         for (RequirementOutcome outcome : requirementsOutcomes.getRequirementOutcomes()) {
             Requirement requirement = outcome.getRequirement();
             TestOutcomes testOutcomesForThisRequirement = outcome.getTestOutcomes().forRequirement(requirement);
-            RequirementsOutcomes requirementOutcomesForThisRequirement = requirementsFactory.buildRequirementsOutcomesFrom(requirement, testOutcomesForThisRequirement);
+            RequirementsOutcomes requirementOutcomesForThisRequirement = requirementsFactory.buildRequirementsOutcomesFrom(requirement, testOutcomesForThisRequirement).withoutUnrelatedRequirements();
 
             reportingTasks.addAll(nestedRequirementsReportsFor(requirement, requirementOutcomesForThisRequirement));
         }

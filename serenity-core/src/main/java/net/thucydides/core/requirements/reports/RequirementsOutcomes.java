@@ -1,12 +1,16 @@
 package net.thucydides.core.requirements.reports;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.model.*;
+import net.thucydides.core.model.OutcomeCounter;
+import net.thucydides.core.model.Release;
+import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestType;
 import net.thucydides.core.releases.ReleaseManager;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.ReportNameProvider;
@@ -14,11 +18,10 @@ import net.thucydides.core.requirements.RequirementsTagProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static ch.lambdaj.Lambda.*;
+import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE;
 import static org.hamcrest.Matchers.hasItem;
 
 /**
@@ -33,6 +36,7 @@ public class RequirementsOutcomes {
     private final List<? extends RequirementsTagProvider> requirementsTagProviders;
     private final ReleaseManager releaseManager;
     private final ReportNameProvider reportNameProvider;
+    List<RequirementOutcome> flattenedRequirementOutcomes = null;
 
     public final static Integer DEFAULT_TESTS_PER_REQUIREMENT = 4;
 
@@ -59,6 +63,17 @@ public class RequirementsOutcomes {
         this.releaseManager = new ReleaseManager(environmentVariables, reportNameProvider);
     }
 
+    RequirementsOutcomes(ReportNameProvider reportNameProvider, List<RequirementOutcome> requirementOutcomes, TestOutcomes testOutcomes, Optional<Requirement> parentRequirement, EnvironmentVariables environmentVariables, IssueTracking issueTracking, List<? extends RequirementsTagProvider> requirementsTagProviders, ReleaseManager releaseManager) {
+        this.reportNameProvider = reportNameProvider;
+        this.requirementOutcomes = requirementOutcomes;
+        this.testOutcomes = testOutcomes;
+        this.parentRequirement = parentRequirement;
+        this.environmentVariables = environmentVariables;
+        this.issueTracking = issueTracking;
+        this.requirementsTagProviders = requirementsTagProviders;
+        this.releaseManager = releaseManager;
+    }
+
     private List<RequirementOutcome> buildRequirementOutcomes(List<Requirement> requirements) {
         List<RequirementOutcome> outcomes = Lists.newArrayList();
         for (Requirement requirement : requirements) {
@@ -82,7 +97,7 @@ public class RequirementsOutcomes {
                 issueTracking,
                 environmentVariables,
                 requirementsTagProviders,
-                reportNameProvider);
+                reportNameProvider).withoutUnrelatedRequirements();
     }
 
     private void buildRequirements(List<RequirementOutcome> outcomes, Requirement requirement) {
@@ -160,9 +175,9 @@ public class RequirementsOutcomes {
 //        return grandChildrenFound;
 //    }
 
-    public List<String> getTypes() {
+    public Set<String> getTypes() {
         List<Requirement> requirements = getAllRequirements();
-        List<String> types = Lists.newArrayList();
+        Set<String> types = new HashSet<>();
         for (Requirement requirement : requirements) {
             if (!types.contains(requirement.getType())) {
                 types.add(requirement.getType());
@@ -272,7 +287,7 @@ public class RequirementsOutcomes {
     }
 
     private boolean isPending(Requirement requirement) {
-        for(RequirementOutcome requirementOutcome : requirementOutcomes) {
+        for (RequirementOutcome requirementOutcome : requirementOutcomes) {
             if (requirementOutcome.getRequirement().equals(requirement) && requirementOutcome.isPending()) {
                 return true;
             }
@@ -316,8 +331,6 @@ public class RequirementsOutcomes {
         }
     }
 
-    List<RequirementOutcome> flattenedRequirementOutcomes = null;
-
     public List<RequirementOutcome> getFlattenedRequirementOutcomes() {
         if (flattenedRequirementOutcomes == null) {
             flattenedRequirementOutcomes = getFlattenedRequirementOutcomes(requirementOutcomes);
@@ -343,7 +356,7 @@ public class RequirementsOutcomes {
                 List<Requirement> childRequirements = requirement.getChildren();
                 RequirementsOutcomes childOutcomes =
                         new RequirementsOutcomes(childRequirements, testOutcomesForRequirement, issueTracking,
-                                environmentVariables, requirementsTagProviders, reportNameProvider);
+                                environmentVariables, requirementsTagProviders, reportNameProvider).withoutUnrelatedRequirements();
                 flattenedOutcomes.addAll(getFlattenedRequirementOutcomes(childOutcomes.getRequirementOutcomes()));
             }
         }
@@ -432,7 +445,7 @@ public class RequirementsOutcomes {
                 issueTracking,
                 environmentVariables,
                 requirementsTagProviders,
-                reportNameProvider);
+                reportNameProvider).withoutUnrelatedRequirements();
     }
 
     private List<Requirement> removeRequirementsWithoutTestsFrom(List<Requirement> requirements) {
@@ -454,5 +467,42 @@ public class RequirementsOutcomes {
                                                  String releaseName) {
         releaseManager.enrichOutcomesWithReleaseTags(outcomes);
         return (List<TestOutcome>) filter(having(on(TestOutcome.class).getVersions(), hasItem(releaseName)), outcomes);
+    }
+
+    public RequirementsOutcomes withoutUnrelatedRequirements() {
+        return new RequirementsOutcomes(
+                reportNameProvider,
+                pruned(requirementOutcomes),
+                testOutcomes,
+                parentRequirement,
+                environmentVariables,
+                issueTracking,
+                requirementsTagProviders,
+                releaseManager);
+    }
+
+    private final static String DEFAULT_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE = "capability,epic,feature";
+
+    private List<String> excludedUnrelatedRequirementsTypes() {
+        String unrleatedRequirementTypes =
+                THUCYDIDES_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE.from(environmentVariables,
+                DEFAULT_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE);
+
+        return Splitter.on(",").trimResults().splitToList(unrleatedRequirementTypes);
+    }
+    private List<RequirementOutcome> pruned(List<RequirementOutcome> requirementOutcomes) {
+        List<RequirementOutcome> prunedRequirementsOutcomes = new ArrayList<>();
+
+        for (RequirementOutcome requirementOutcome : requirementOutcomes) {
+            if (!shouldPrune(requirementOutcome)) {
+                prunedRequirementsOutcomes.add(requirementOutcome.withoutUnrelatedRequirements());
+            }
+        }
+        return prunedRequirementsOutcomes;
+    }
+
+    public boolean shouldPrune(RequirementOutcome requirementOutcome) {
+        return ((requirementOutcome.getTestCount() == 0)
+                 && excludedUnrelatedRequirementsTypes().contains(requirementOutcome.getRequirement().getType()));
     }
 }

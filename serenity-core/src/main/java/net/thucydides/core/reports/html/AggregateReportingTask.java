@@ -1,7 +1,6 @@
 package net.thucydides.core.reports.html;
 
 import net.serenitybdd.core.time.Stopwatch;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.requirements.RequirementsService;
@@ -21,16 +20,6 @@ public class AggregateReportingTask extends BaseReportingTask implements Reporti
     private final RequirementsService requirementsService;
     private final TestOutcomes testOutcomes;
 
-    public AggregateReportingTask(FreemarkerContext freemarker,
-                                  EnvironmentVariables environmentVariables,
-                                  File outputDirectory,
-                                  TestOutcomes testOutcomes) {
-        this(freemarker,
-                environmentVariables,
-                Injectors.getInjector().getInstance(RequirementsService.class),
-                outputDirectory,
-                testOutcomes);
-    }
 
     public AggregateReportingTask(FreemarkerContext context,
                                   EnvironmentVariables environmentVariables,

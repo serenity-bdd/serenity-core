@@ -100,7 +100,7 @@ public class ReportNameProvider {
     }
 
     public String forRequirement(Requirement requirement) {
-        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + "requirement_" + requirement.qualifiedName());
+        return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + requirement.getType() + "_" + requirement.qualifiedName());
     }
 
     public String forRequirement(TestTag tag) {

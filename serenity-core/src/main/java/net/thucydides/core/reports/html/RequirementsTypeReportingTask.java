@@ -2,13 +2,15 @@ package net.thucydides.core.reports.html;
 
 import ch.lambdaj.Lambda;
 import ch.lambdaj.function.convert.Converter;
+import com.google.common.base.Objects;
+import com.google.common.collect.Sets;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 class RequirementsTypeReportingTask extends BaseReportingTask implements ReportingTask {
 
@@ -17,6 +19,7 @@ class RequirementsTypeReportingTask extends BaseReportingTask implements Reporti
     private final ReportNameProvider reportNameProvider;
     private final RequirementsOutcomes requirementsOutcomes;
     private final String requirementType;
+    private final String reportName;
 
     RequirementsTypeReportingTask(FreemarkerContext freemarker,
                                          EnvironmentVariables environmentVariables,
@@ -28,15 +31,21 @@ class RequirementsTypeReportingTask extends BaseReportingTask implements Reporti
         this.reportNameProvider = reportNameProvider;
         this.requirementsOutcomes = requirementsOutcomes;
         this.requirementType = requirementType;
+        this.reportName = reportNameProvider.forRequirementType(requirementType);
     }
 
-    public static List<ReportingTask> requirementTypeReports(final RequirementsOutcomes requirementsOutcomes,
-                                                             final FreemarkerContext freemarker,
-                                                             final EnvironmentVariables environmentVariables,
-                                                             final File outputDirectory,
-                                                             final ReportNameProvider reportNameProvider) {
-        return Lambda.convert(requirementsOutcomes.getTypes(),
-                toRequirementTypeReports(requirementsOutcomes, freemarker, environmentVariables, outputDirectory, reportNameProvider));
+    public static Set<ReportingTask> requirementTypeReports(final RequirementsOutcomes requirementsOutcomes,
+                                                            final FreemarkerContext freemarker,
+                                                            final EnvironmentVariables environmentVariables,
+                                                            final File outputDirectory,
+                                                            final ReportNameProvider reportNameProvider) {
+        return Sets.newHashSet(
+                Lambda.convert(requirementsOutcomes.getTypes(),
+                               toRequirementTypeReports(requirementsOutcomes,
+                                                        freemarker,
+                                                        environmentVariables,
+                                                        outputDirectory,
+                                                        reportNameProvider)));
     }
 
     private static Converter<String, ReportingTask> toRequirementTypeReports(final RequirementsOutcomes requirementsOutcomes,
@@ -60,10 +69,22 @@ class RequirementsTypeReportingTask extends BaseReportingTask implements Reporti
 
         context.put("report", ReportProperties.forAggregateResultsReport());
         context.put("requirementType", requirementType);
-        context.put("requirements", requirementsOutcomes.requirementsOfType(requirementType));
+        context.put("requirements", requirementsOutcomes.requirementsOfType(requirementType).withoutUnrelatedRequirements());
 
-        String reportName = reportNameProvider.forRequirementType(requirementType);
         generateReportPage(context, REQUIREMENT_TYPE_TEMPLATE_PATH, reportName);
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RequirementsTypeReportingTask that = (RequirementsTypeReportingTask) o;
+        return Objects.equal(reportName, that.reportName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(reportName);
     }
 }

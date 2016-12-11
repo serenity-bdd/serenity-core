@@ -103,10 +103,11 @@ class WhenNamingReports extends Specification {
             def reportNameProvider = new ReportNameProvider()
             def requirement = Mock(Requirement)
             requirement.qualifiedName() >> "foo"
+            requirement.getType() >> "feature"
         when:
             def reportName = reportNameProvider.forRequirement(requirement)
         then:
-            reportName == Digest.ofTextValue("requirement_foo") + ".html"
+            reportName == Digest.ofTextValue("feature_foo") + ".html"
     }
 
 
@@ -115,10 +116,11 @@ class WhenNamingReports extends Specification {
             def reportNameProvider = new ReportNameProvider("sometest")
             def requirement = Mock(Requirement)
             requirement.qualifiedName() >> "foo"
+            requirement.getType() >> "feature"
         when:
             def reportName = reportNameProvider.forRequirement(requirement)
         then:
-            reportName == Digest.ofTextValue("context_sometest_requirement_foo") + ".html"
+            reportName == Digest.ofTextValue("context_sometest_feature_foo") + ".html"
     }
 
 

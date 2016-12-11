@@ -6,10 +6,8 @@ import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ResultReports {
 
@@ -88,26 +86,7 @@ public class ResultReports {
                                               final ReportNameProvider reportName,
                                               final TestTag tag,
                                               final String testResult) {
-        return new BaseReportingTask(freemarker, environmentVariables, outputDirectory) {
-
-            @Override
-            public void generateReports() throws IOException {
-                Map<String, Object> context = freemarker.getBuildContext(testOutcomes, reportName, true);
-                context.put("report", ReportProperties.forTestResultsReport());
-                context.put("currentTagType", tag.getType());
-                context.put("currentTag", tag);
-
-                String csvReport = reportName.forCSVFiles().forTestResult(testResult);
-                context.put("csvReport", csvReport);
-                String report = reportName.withPrefix(tag).forTestResult(testResult);
-                generateReportPage(context, TEST_OUTCOME_TEMPLATE_PATH, report);
-                generateCSVReportFor(testOutcomes, csvReport);
-            }
-        };
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
+        return new ResultReportingTask(freemarker, environmentVariables, outputDirectory,
+                                       testOutcomes,reportName, tag, testResult);
     }
 }

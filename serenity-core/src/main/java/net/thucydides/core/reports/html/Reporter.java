@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -17,7 +18,7 @@ class Reporter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlAggregateStoryReporter.class);
 
-    public static void generateReportsFor(List<ReportingTask> reportingTasks) throws IOException {
+    public static void generateReportsFor(Collection<ReportingTask> reportingTasks) throws IOException {
         Stopwatch stopwatch = Stopwatch.started();
 
         try {
@@ -49,7 +50,7 @@ class Reporter {
         public Void call() throws Exception {
             Stopwatch reportingStopwatch = Stopwatch.started();
             reportingTask.generateReports();
-            LOGGER.info("{} generated in {} ms", reportingTask.toString(), reportingStopwatch.stop());
+            LOGGER.debug("{} generated in {} ms", reportingTask.toString(), reportingStopwatch.stop());
             return null;
         }
     }

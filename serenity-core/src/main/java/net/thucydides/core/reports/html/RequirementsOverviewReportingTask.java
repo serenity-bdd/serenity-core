@@ -1,5 +1,6 @@
 package net.thucydides.core.reports.html;
 
+import com.google.common.base.Objects;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestTag;
@@ -76,7 +77,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
 
         Map<String, Object> context = freemarker.getBuildContext(requirementsOutcomes.getTestOutcomes(), reportNameProvider, true);
 
-        context.put("requirements", requirementsOutcomes);
+        context.put("requirements", requirementsOutcomes.withoutUnrelatedRequirements());
         context.put("requirementTypes", requirementsService.getRequirementTypes());
         context.put("testOutcomes", requirementsOutcomes.getTestOutcomes());
         context.put("allTestOutcomes", testOutcomes);
@@ -88,7 +89,6 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
 
         addBreadcrumbs(requirementsOutcomes, context);
 
-        ReportTally.aReportWasGeneratedFor(reportName);
         generateReportPage(context, DEFAULT_REQUIREMENTS_REPORT, reportName);
         LOGGER.trace("Requirements report generated: {} in {} ms", reportName, stopwatch.stop());
 
@@ -102,5 +102,18 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
     @Override
     public String toString() {
         return "Requirements report " + reportName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RequirementsOverviewReportingTask that = (RequirementsOverviewReportingTask) o;
+        return Objects.equal(reportName, that.reportName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(reportName);
     }
 }

@@ -74,8 +74,7 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
     }
 
     private String reportFor(final TestOutcome testOutcome) {
-        return testOutcome.withQualifier(qualifier).getReportName(
-                ReportType.JSON);
+        return testOutcome.withQualifier(qualifier).getReportName(ReportType.JSON);
     }
 
     @Override

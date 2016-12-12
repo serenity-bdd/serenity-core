@@ -94,7 +94,7 @@ public abstract class BaseRequirementsService implements RequirementsService {
             Optional<Requirement> requirement = getParentRequirementOf(testOutcome, tagProvider);
             if (requirement.isPresent()) {
                 LOGGER.debug("Requirement found for test outcome " + testOutcome.getTitle() + "-" + testOutcome.getIssueKeys() + ": " + requirement);
-                if (getRequirementAncestors().containsKey(requirement.get())) {
+                if ((getRequirementAncestors() != null) && (getRequirementAncestors().containsKey(requirement.get()))) {
                     return getRequirementAncestors().get(requirement.get());
                 } else {
                     LOGGER.warn("Requirement without identified ancestors found test outcome " + testOutcome.getTitle() + "-" + testOutcome.getIssueKeys() + ": " + requirement);

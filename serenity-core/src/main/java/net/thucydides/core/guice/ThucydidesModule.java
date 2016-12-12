@@ -72,6 +72,7 @@ public class ThucydidesModule extends AbstractModule {
         bind(MarkupRenderer.class).annotatedWith(Asciidoc.class).to(AsciidocMarkupRenderer.class).in(Singleton.class);
         bind(DriverCapabilityRecord.class).to(PropertyBasedDriverCapabilityRecord.class);
         bind(ExecutorServiceProvider.class).to(MultithreadExecutorServiceProvider.class).in(Singleton.class);
+        bind(CloseBrowser.class).to(WebdriverCloseBrowser.class).in(Singleton.class);
     }
 
     @Provides

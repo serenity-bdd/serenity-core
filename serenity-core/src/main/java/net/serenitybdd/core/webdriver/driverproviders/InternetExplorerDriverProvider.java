@@ -14,7 +14,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ThreadGuard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +54,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
             return retryCreateDriverOnNoSuchSession(desiredCapabilities);
         } catch (Exception couldNotStartServer) {
             LOGGER.warn("Failed to start the Internet driver service, using a native driver instead - " + couldNotStartServer.getMessage());
-            return ThreadGuard.protect(new InternetExplorerDriver(desiredCapabilities));
+            return new InternetExplorerDriver(desiredCapabilities);
         }
     }
 

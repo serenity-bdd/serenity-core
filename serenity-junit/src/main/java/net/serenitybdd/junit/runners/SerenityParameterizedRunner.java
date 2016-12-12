@@ -6,6 +6,7 @@ import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.ReportService;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.junit.ThucydidesJUnitSystemProperties;
@@ -181,6 +182,7 @@ public class SerenityParameterizedRunner extends Suite {
         try {
             super.run(notifier);
         } finally {
+            StepEventBus.getEventBus().testSuiteFinished();
             generateReports();
         }
     }

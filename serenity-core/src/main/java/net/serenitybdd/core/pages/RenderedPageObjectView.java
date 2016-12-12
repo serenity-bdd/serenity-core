@@ -1,7 +1,6 @@
 package net.serenitybdd.core.pages;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import net.thucydides.core.scheduling.NormalFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
 import net.thucydides.core.steps.StepEventBus;
@@ -14,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_NO_WAIT;
 import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_WAIT;
 import static net.serenitybdd.core.selectors.Selectors.xpathOrCssSelector;
@@ -58,14 +58,20 @@ public class RenderedPageObjectView {
         return new NormalFluentWait<>(driver, webdriverClock, sleeper)
                 .withTimeout(waitForTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS)
                 .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
-                .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
+                .ignoring(NoSuchElementException.class,
+                        NoSuchFrameException.class,
+                        StaleElementReferenceException.class,
+                        InvalidElementStateException.class);
     }
 
     public FluentWait<WebDriver> doWait() {
         return new FluentWait(driver)
                 .withTimeout(waitForTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS)
-                    .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
-                    .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
+                .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
+                .ignoreAll(newArrayList(NoSuchElementException.class,
+                        NoSuchFrameException.class,
+                        StaleElementReferenceException.class,
+                        InvalidElementStateException.class));
     }
 
     private ExpectedCondition<Boolean> elementDisplayed(final By byElementCriteria) {
@@ -101,7 +107,7 @@ public class RenderedPageObjectView {
 
     public WebElementFacade waitFor(final WebElement webElement) {
         return (webElement instanceof WebElementFacade) ?
-                waitForElement((WebElementFacade)webElement) :
+                waitForElement((WebElementFacade) webElement) :
                 waitForElement(pageObject.element(webElement));
     }
 
@@ -140,8 +146,8 @@ public class RenderedPageObjectView {
 
     private boolean elementIsNotDisplayed(final By byElementCriteria) {
         List<WebElementFacade> matchingElements = findAllWithNoWait(byElementCriteria);
-        for(WebElementFacade matchingElement : matchingElements) {
-            if ( matchingElement.isCurrentlyVisible()) {
+        for (WebElementFacade matchingElement : matchingElements) {
+            if (matchingElement.isCurrentlyVisible()) {
                 return false;
             }
         }
@@ -162,7 +168,7 @@ public class RenderedPageObjectView {
     }
 
     private boolean allElementsVisibleIn(List<WebElementFacade> webElements) {
-        for(WebElementFacade element: webElements) {
+        for (WebElementFacade element : webElements) {
             if (!element.isCurrentlyVisible()) {
                 return false;
             }
@@ -225,7 +231,7 @@ public class RenderedPageObjectView {
 
             @Override
             public String toString() {
-                return "Expecting text present: '" + expectedText +"'";
+                return "Expecting text present: '" + expectedText + "'";
             }
         };
     }
@@ -244,7 +250,7 @@ public class RenderedPageObjectView {
 
             @Override
             public String toString() {
-                return "Expecting text present in element: '" + expectedText +"'";
+                return "Expecting text present in element: '" + expectedText + "'";
             }
         };
     }
@@ -260,9 +266,10 @@ public class RenderedPageObjectView {
             public Boolean apply(WebDriver driver) {
                 return titleIs(expectedTitle);
             }
+
             @Override
             public String toString() {
-                return "Expecting title present: '" + expectedTitle +"', but found '" + driver.getTitle() + "' instead.'" ;
+                return "Expecting title present: '" + expectedTitle + "', but found '" + driver.getTitle() + "' instead.'";
             }
         };
     }
@@ -293,7 +300,7 @@ public class RenderedPageObjectView {
 
             @Override
             public String toString() {
-                return "Expecting text not present: '" + expectedText +"'";
+                return "Expecting text not present: '" + expectedText + "'";
             }
         };
     }
@@ -306,13 +313,13 @@ public class RenderedPageObjectView {
         }
     }
 
-	public void waitForTextToAppear(final String expectedText, final long timeout) {
+    public void waitForTextToAppear(final String expectedText, final long timeout) {
         if (!driverIsDisabled()) {
             waitForCondition()
                     .withTimeout(timeout, TimeUnit.MILLISECONDS)
                     .until(textPresent(expectedText));
         }
-	}
+    }
 
     private ExpectedCondition<Boolean> titleNotPresent(final String expectedTitle) {
         return new ExpectedCondition<Boolean>() {
@@ -322,8 +329,9 @@ public class RenderedPageObjectView {
 
             @Override
             public String toString() {
-                return "Expecting title present: '" + expectedTitle +"', but found '" + driver.getTitle() + "' instead." ;
-            }        };
+                return "Expecting title present: '" + expectedTitle + "', but found '" + driver.getTitle() + "' instead.";
+            }
+        };
     }
 
     public void waitForTitleToDisappear(final String expectedTitle) {
@@ -354,7 +362,7 @@ public class RenderedPageObjectView {
 
             @Override
             public String toString() {
-                return "Expecting any text present in element: '" + Arrays.toString(expectedTexts) +"'";
+                return "Expecting any text present in element: '" + Arrays.toString(expectedTexts) + "'";
             }
 
         };
@@ -393,16 +401,17 @@ public class RenderedPageObjectView {
     private ExpectedCondition<Boolean> allTextPresent(final String... expectedTexts) {
         return new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
-                for(String expectedText : expectedTexts) {
+                for (String expectedText : expectedTexts) {
                     if (!containsText(expectedText)) {
                         return false;
                     }
                 }
                 return true;
             }
+
             @Override
             public String toString() {
-                return "Expecting all texts present in element: '" + Arrays.toString(expectedTexts) +"'";
+                return "Expecting all texts present in element: '" + Arrays.toString(expectedTexts) + "'";
             }
         };
     }
@@ -418,9 +427,10 @@ public class RenderedPageObjectView {
             public Boolean apply(WebDriver driver) {
                 return (elementIsNotDisplayed(byElementCriteria));
             }
+
             @Override
             public String toString() {
-                return "Expecting element not displayed: " + byElementCriteria ;
+                return "Expecting element not displayed: " + byElementCriteria;
             }
         };
     }
@@ -434,19 +444,21 @@ public class RenderedPageObjectView {
     private ExpectedCondition<Boolean> anyElementPresent(final By... expectedElements) {
         return new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
-                for(By expectedElement : expectedElements) {
+                for (By expectedElement : expectedElements) {
                     if (elementIsDisplayed(expectedElement)) {
                         return true;
                     }
                 }
                 return false;
             }
+
             @Override
             public String toString() {
-                return "Expecting any element present: " + Arrays.toString(expectedElements)  ;
+                return "Expecting any element present: " + Arrays.toString(expectedElements);
             }
         };
     }
+
     public void waitForAnyRenderedElementOf(final By[] expectedElements) {
         if (!driverIsDisabled()) {
             waitForCondition().until(anyElementPresent(expectedElements));
@@ -481,7 +493,7 @@ public class RenderedPageObjectView {
             }
             pageObject.resetImplicitTimeout();
         } catch (TimeoutException e) {
-            return Lists.newArrayList();
+            return newArrayList();
         }
         return results;
     }

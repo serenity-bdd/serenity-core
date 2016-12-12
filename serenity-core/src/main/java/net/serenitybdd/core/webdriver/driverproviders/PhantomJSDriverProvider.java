@@ -12,7 +12,6 @@ import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ThreadGuard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,10 +47,10 @@ public class PhantomJSDriverProvider implements DriverProvider {
         driverProperties.registerCapabilities("phantomjs", enhancedCapabilities);
 
         try {
-            return ThreadGuard.protect(getDriverServicePool().newDriver(enhancedCapabilities));
+            return getDriverServicePool().newDriver(enhancedCapabilities);
         } catch (IOException couldNotStartChromeServer) {
             LOGGER.warn("Failed to start the phantomJS driver service, using a native driver instead",  couldNotStartChromeServer.getMessage());
-            return ThreadGuard.protect(new PhantomJSDriver(enhancedCapabilities));
+            return new PhantomJSDriver(enhancedCapabilities);
         }
     }
 

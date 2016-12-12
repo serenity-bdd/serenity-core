@@ -9,6 +9,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
 
@@ -77,6 +78,15 @@ public class SampleNonWebSteps {
 
     public void throw_element_not_found_exception() {
         throw new NoSuchElementException("It ain't there, boss");
+    }
+
+
+    static int testCount = 1;
+
+    public void aStepThatFailsOnOddTries() {
+        boolean shouldPass = testCount++ % 2 == 0;
+        assertThat(shouldPass).isTrue();
+
     }
 
 

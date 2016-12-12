@@ -16,6 +16,7 @@ public class ProfilePage extends PageObject {
     public static Target CONTACT_PREFERENCES = Target.the("Contact Preferences").locatedBy("#contactPreferances");
     public static Target INVISIBLE = Target.the("Invisible field").locatedBy("#invisible");
     public static Target INEXISTANT = Target.the("Inexistant field").locatedBy("#inexistant");
+    public static Target SOME_BUTTON = Target.the("Button").locatedBy("#button");
 
     @FindBy(id="name")
     public WebElementFacade nameField;

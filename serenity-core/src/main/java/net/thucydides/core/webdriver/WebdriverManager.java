@@ -37,6 +37,8 @@ public interface WebdriverManager {
 
     void closeAllDrivers();
 
+    void closeCurrentDrivers();
+
     void resetDriver();
 
     int getCurrentActiveWebdriverCount();
@@ -53,7 +55,7 @@ public interface WebdriverManager {
 
     List<WebDriver> getRegisteredDrivers();
 
-    public List<String> getActiveDriverTypes();
+    List<String> getActiveDriverTypes();
 
     void reset();
 }

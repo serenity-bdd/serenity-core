@@ -1,3 +1,6 @@
+import org.ajoberstar.gradle.git.release.opinion.Strategies
+import org.ajoberstar.grgit.Grgit
+
 group = 'net.serenity-bdd'
 buildscript {
     repositories {
@@ -5,16 +8,12 @@ buildscript {
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.5'
-        classpath 'org.ajoberstar:gradle-git:1.4.0-rc.1'
+        classpath 'org.ajoberstar:gradle-git:1.6.0'
         classpath 'org.pegdown:pegdown:1.4.1'
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.11.3'
     }
 }
 
 apply plugin: 'org.ajoberstar.release-opinion'
-
-import org.ajoberstar.gradle.git.release.opinion.Strategies
-import org.ajoberstar.grgit.Grgit
 
 task wrapper(type: Wrapper) {
     gradleVersion = "${gradleVersion}"
@@ -32,7 +31,8 @@ ext {
 
     junitVersion = '4.12'
     hamcrestVersion = '1.3'
-    springVersion = '4.1.6.RELEASE'
+    springVersion = '4.3.4.RELEASE'
+    springBootVersion = '1.4.2.RELEASE'
     guavaVersion = '19.0'
     restAssuredVersion = '2.4.1'
     mockitoCoreVersion = '1.10.19'
@@ -65,7 +65,6 @@ ext {
 
 allprojects {
     apply plugin: 'project-report'
-    apply plugin: 'com.github.ben-manes.versions'
 
     configurations.all {
         resolutionStrategy {
@@ -86,9 +85,8 @@ allprojects {
 
 release {
     grgit = Grgit.open()
-    // versionStrategy Strategies.FINAL
-    // versionStrategy Strategies.PRE_RELEASE
     defaultVersionStrategy Strategies.SNAPSHOT
+    versionStrategy Strategies.SNAPSHOT
 }
 
 subprojects {
@@ -222,7 +220,7 @@ subprojects {
         compile "org.objenesis:objenesis:2.1"
         compile "org.slf4j:slf4j-api:1.7.21"
         compile "xml-apis:xml-apis:1.4.01"
-        compile 'info.cukes:cucumber-core:1.2.4'
+        compile 'info.cukes:cucumber-core:1.2.5'
 
         compile 'commons-logging:commons-logging:1.2'
         compile "junit:junit:${junitVersion}"

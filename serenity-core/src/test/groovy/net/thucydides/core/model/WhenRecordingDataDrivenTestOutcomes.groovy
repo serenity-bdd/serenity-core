@@ -242,56 +242,6 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
 
     def failure = Mock(StepFailure)
 
-    def "Should be able to update the table results via the event bus"() {
-        given:
-            def eventBus = new StepEventBus(environmentVariables)
-            def BaseStepListener listener = new BaseStepListener(outputDirectory)
-            eventBus.registerListener(listener)
-        when:
-            eventBus.testSuiteStarted(Story.called("A data driven test suite"))
-            eventBus.testStarted("aDataDrivenTest")
-            eventBus.useExamplesFrom(DataTable.withHeaders(["firstName","lastName","age"]).
-                    andRows([["Joe", "Smith",20],
-                            ["Jack", "Smith",21],
-                            ["Jack", "Smith",21]]).build())
-
-            eventBus.exampleStarted(["firstName":"Joe","lastName":"Smith","age":20])
-            eventBus.stepStarted(ExecutedStepDescription.of(SomeTest.class,"step1"));
-            eventBus.stepFinished()
-            eventBus.stepStarted(ExecutedStepDescription.of(SomeTest.class,"step2"));
-            eventBus.stepFinished()
-            eventBus.stepStarted(ExecutedStepDescription.of(SomeTest.class,"step3"));
-            eventBus.stepFinished()
-            eventBus.exampleFinished()
-
-            eventBus.exampleStarted(["firstName":"Jack","lastName":"Smith","age":21])
-            eventBus.stepStarted(ExecutedStepDescription.of(SomeTest.class,"step1"));
-            eventBus.stepFinished()
-            eventBus.stepStarted(ExecutedStepDescription.of(SomeTest.class,"step2"));
-            eventBus.stepFinished()
-            eventBus.stepStarted(ExecutedStepDescription.of(SomeTest.class,"step3"));
-            eventBus.stepPending()
-            eventBus.exampleFinished()
-
-            eventBus.exampleStarted(["firstName":"Jack","lastName":"Smith","age":21])
-            eventBus.stepStarted(ExecutedStepDescription.of(SomeTest.class,"step1"));
-            eventBus.stepFinished()
-            eventBus.stepStarted(ExecutedStepDescription.of(SomeTest.class,"step2"));
-            eventBus.stepFinished()
-            eventBus.stepStarted(ExecutedStepDescription.of(SomeTest.class,"step3"));
-            eventBus.stepFailed(failure);
-            eventBus.exampleFinished()
-
-            eventBus.testFinished()
-        then: "all scenarios should be recorded"
-            def testOutcomeWithExamples =  listener.testOutcomes[0]
-            testOutcomeWithExamples.dataTable.rows.collect { it.result } == [SUCCESS, PENDING, FAILURE]
-        and: "should provide the list of data fields"
-            testOutcomeWithExamples.exampleFields == ["firstName","lastName","age"]
-        and: "should provide a sample scenario"
-            testOutcomeWithExamples.dataDrivenSampleScenario == "Step1\nStep2\nStep3"
-    }
-
     def "Should be able to update the table results incrementally via the event bus"() {
         given:
             def eventBus = new StepEventBus(environmentVariables)

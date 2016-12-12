@@ -13,6 +13,7 @@ dependencies {
     testCompile "org.springframework:spring-jdbc:${springVersion}"
     testCompile "org.springframework:spring-aop:${springVersion}"
     testCompile "org.springframework:spring-orm:${springVersion}"
+    testCompile "org.springframework.boot:spring-boot-test:${springBootVersion}"
     testCompile 'commons-dbcp:commons-dbcp:1.4'
 
     testCompile ("org.hibernate:hibernate-entitymanager:3.5.4-Final") {

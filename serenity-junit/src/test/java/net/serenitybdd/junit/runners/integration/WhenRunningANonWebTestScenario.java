@@ -361,21 +361,6 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     }
 
     @Test
-    public void xml_test_results_are_written_to_the_output_directory() throws Exception {
-
-        File outputDirectory = temporaryFolder.newFolder();
-
-        SerenityRunner runner = new TestableSerenityRunnerSample(SamplePassingNonWebScenario.class,
-                outputDirectory);
-        runner.run(new RunNotifier());
-
-        List<String> generatedXMLReports = Arrays.asList(outputDirectory.list(new XMLFileFilter()));
-        assertThat(generatedXMLReports.size(), is(3));
-
-
-    }
-
-    @Test
     public void html_test_results_are_written_to_the_output_directory()  throws Exception {
 
         File outputDirectory =  temporaryFolder.newFolder();

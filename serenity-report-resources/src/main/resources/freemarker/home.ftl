@@ -252,6 +252,7 @@
                     rows of test data)</#if></span>
                 <div>
             <#assign successReport = reportName.withPrefix(currentTag).forTestResult("success") >
+            <#assign brokenReport = reportName.withPrefix(currentTag).forTestResult("broken") >
             <#assign failureReport = reportName.withPrefix(currentTag).forTestResult("failure") >
             <#assign errorReport = reportName.withPrefix(currentTag).forTestResult("error") >
             <#assign compromisedReport = reportName.withPrefix(currentTag).forTestResult("compromised") >
@@ -259,59 +260,81 @@
             <#assign skippedReport = reportName.withPrefix(currentTag).forTestResult("skipped") >
             <#assign ignoredReport = reportName.withPrefix(currentTag).forTestResult("ignored") >
 
-            <#assign totalCount = testOutcomes.totalTests.total >
+            <#assign totalCount   = testOutcomes.totalTests.total >
             <#assign successCount = testOutcomes.totalTests.withResult("success") >
             <#assign pendingCount = testOutcomes.totalTests.withResult("pending") >
             <#assign ignoredCount = testOutcomes.totalTests.withResult("ignored") >
             <#assign skippedCount = testOutcomes.totalTests.withResult("skipped") >
             <#assign failureCount = testOutcomes.totalTests.withResult("failure") >
-            <#assign errorCount = testOutcomes.totalTests.withResult("error") >
+            <#assign errorCount   = testOutcomes.totalTests.withResult("error") >
+            <#assign brokenCount  = failureCount + errorCount >
             <#assign compromisedCount = testOutcomes.totalTests.withResult("compromised") >
 
-                <span class="test-count">
-                    ${successCount}
-                    <#if (successCount > 0 && report.shouldDisplayResultLink)>
-                        <a href="${relativeLink}${successReport}">passed</a>
-                    <#else>passed</#if>,
-                </span>
-                <span class="test-count">
-                    ${pendingCount}
-                    <#if (pendingCount > 0 && report.shouldDisplayResultLink)>
-                        <a href="${relativeLink}${pendingReport}">pending</a>
-                    <#else>pending</#if>,
-                </span>
-                <span class="test-count">
-                    ${failureCount}
-                    <#if (failureCount > 0 && report.shouldDisplayResultLink)>
-                        <a href="${relativeLink}${failureReport}">failed</a>
-                    <#else>failed</#if>,
-                </span>
-                <span class="test-count">
-                    ${errorCount}
-                    <#if (errorCount > 0 && report.shouldDisplayResultLink)>
-                        <a href="${relativeLink}${errorReport}">with errors</a>
-                    <#else>errors</#if>,
-                </span>
-                <span class="test-count">
-                    ${compromisedCount}
-                    <#if (compromisedCount > 0 && report.shouldDisplayResultLink)>
-                        <a href="${relativeLink}${compromisedReport}">compromised tests</a>
-                    <#else>compromised</#if>,
-                </span>
-                <span class="test-count">
-                    ${ignoredCount}
-                    <#if (ignoredCount > 0 && report.shouldDisplayResultLink)>
-                        <a href="${relativeLink}${ignoredReport}">ignored</a>
-                    <#else>ignored</#if>,
-                </span>
-                <span class="test-count">
+                <#if (successCount > 0)>
+                    <span class="test-count"> |
+                        ${successCount}
+                        <#if (report.shouldDisplayResultLink)>
+                            <a href="${relativeLink}${successReport}">passed</a>
+                        <#else>passed</#if>
+                    </span>
+                </#if>
+                <#if (pendingCount > 0)>
+                    <span class="test-count"> |
+                        ${pendingCount}
+                        <#if (report.shouldDisplayResultLink)>
+                            <a href="${relativeLink}${pendingReport}">pending</a>
+                        <#else>pending</#if>
+                    </span>
+                </#if>
+                <#if (brokenCount > 0)>
+                    <span class="test-count"> |
+                        ${brokenCount}
+                        <#if (report.shouldDisplayResultLink)>
+                            <a href="${relativeLink}${brokenReport}">unsuccessful</a>
+                        <#else>failed</#if>
+                    </span>(
+                    <span class="test-count">
+                        ${failureCount}
+                        <#if (report.shouldDisplayResultLink)>
+                            <a href="${relativeLink}${failureReport}">failed</a>
+                        <#else>failed</#if>,
+                    </span>
+                    <span class="test-count">
+                        ${errorCount}
+                        <#if (report.shouldDisplayResultLink)>
+                            <a href="${relativeLink}${errorReport}">with errors</a>
+                        <#else>errors</#if>
+                    </span>)
+                </#if>
+
+                <#if (compromisedCount > 0)> |
+                    <span class="test-count">
+                        ${compromisedCount}
+                        <#if (report.shouldDisplayResultLink)>
+                            <a href="${relativeLink}${compromisedReport}">compromised tests</a>
+                        <#else>compromised</#if>
+                    </span>
+                </#if>
+
+                <#if (ignoredCount > 0)>
+                    <span class="test-count"> |
+                        ${ignoredCount}
+                        <#if (report.shouldDisplayResultLink)>
+                            <a href="${relativeLink}${ignoredReport}">ignored</a>
+                        <#else>ignored</#if>
+                    </span>
+                </#if>
+
+                <#if (skippedCount > 0)>
+                <span class="test-count"> |
                     ${skippedCount}
                     <#if (skippedCount > 0 && report.shouldDisplayResultLink)>
                         <a href="${relativeLink}${skippedReport}">skipped</a>
                     <#else>skipped</#if>
                 </span>
-                <#if (csvReport! != '')>
-                    <a href="${csvReport}">[CSV]</a>
+                </#if>
+                <#if (csvReport! != '')> |
+                    <a href="${csvReport}" title="Download CSV"> <i class="fa fa-download" title="Download CSV"></i></a>
                 </#if>
                 </div>
             </div>

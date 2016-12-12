@@ -11,7 +11,6 @@ import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -506,9 +505,6 @@ public class StepEventBus {
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testSuiteFinished();
         }
-        if (!isUniqueSession()) {
-            ThucydidesWebDriverSupport.closeAllDrivers();
-        }
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testSuiteFinished());
         storyUnderTest = null;
     }
@@ -517,7 +513,6 @@ public class StepEventBus {
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testRunFinished();
         }
-//        Darkroom.waitUntilClose();
     }
 
     public void updateCurrentStepTitle(String stepTitle) {
@@ -543,9 +538,6 @@ public class StepEventBus {
     public void addDescriptionToCurrentTest(String description) {
         getBaseStepListener().getCurrentTestOutcome().setDescription(description);
     }
-
-
-
 
     public void setBackgroundTitle(String title) {
         getBaseStepListener().getCurrentTestOutcome().setBackgroundTitle(title);
@@ -674,4 +666,11 @@ public class StepEventBus {
         this.testSource = testSource;
     }
 
+    public void cancelPreviousTest() {
+        baseStepListener.cancelPreviousTest();
+    }
+
+    public void lastTestPassedAfterRetries(int remainingTries, List<String> failureMessages) {
+        baseStepListener.lastTestPassedAfterRetries(remainingTries, failureMessages);
+    }
 }

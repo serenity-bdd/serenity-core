@@ -1,5 +1,7 @@
 package net.serenitybdd.junit.runners;
 
+import com.beust.jcommander.internal.Lists;
+import com.google.common.collect.ImmutableList;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
@@ -7,14 +9,17 @@ import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepListener;
 
+import java.util.List;
 import java.util.Map;
 
 public class FailureDetectingStepListener implements StepListener {
 
     private boolean lastTestFailed = false;
+    private List<String> failureMessages = Lists.newArrayList();
 
     public void reset() {
         lastTestFailed = false;
+        failureMessages.clear();
     }
 
     public boolean lastTestFailed() {
@@ -23,6 +28,8 @@ public class FailureDetectingStepListener implements StepListener {
 
     public void testFailed(TestOutcome testOutcome, Throwable cause) {
         lastTestFailed = true;
+        String failingStep = testOutcome.getFailingStep().isPresent() ? testOutcome.getFailingStep().get().getDescription() + ":" : "";
+        failureMessages.add(failingStep + testOutcome.getErrorMessage());
     }
 
     public void lastStepFailed(StepFailure failure) {
@@ -45,7 +52,7 @@ public class FailureDetectingStepListener implements StepListener {
 
 
     public void testStarted(String description) {
-
+        lastTestFailed = false;
     }
 
 
@@ -149,5 +156,9 @@ public class FailureDetectingStepListener implements StepListener {
     @Override
     public void testRunFinished() {
 
+    }
+
+    public List<String> getFailureMessages() {
+        return ImmutableList.copyOf(failureMessages);
     }
 }

@@ -5,7 +5,6 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.ManagedWebDriverAnnotatedField;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.core.batches.BatchManager;
@@ -38,6 +37,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static net.serenitybdd.core.Serenity.initializeTestSession;
+import static net.thucydides.core.ThucydidesSystemProperty.TEST_RETRY_COUNT;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
@@ -67,6 +67,9 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     private JUnitStepListener stepListener;
 
     private PageObjectDependencyInjector dependencyInjector;
+
+    private FailureDetectingStepListener failureDetectingStepListener;
+
 
     /**
      * Retrieve the runner getConfiguration().from an external source.
@@ -157,6 +160,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         this.configuration = configuration;
         this.requestedDriver = getSpecifiedDriver(klass);
         this.tagScanner = new TagScanner(configuration.getEnvironmentVariables());
+        this.failureDetectingStepListener = new FailureDetectingStepListener();
 
         if (TestCaseAnnotations.supportsWebTests(klass)) {
             checkRequestedDriverType();
@@ -238,6 +242,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
 
         try {
             RunNotifier localNotifier = initializeRunNotifier(notifier);
+            StepEventBus.getEventBus().registerListener(failureDetectingStepListener);
+
             super.run(localNotifier);
             fireNotificationsBasedOnTestResultsTo(notifier);
         } catch (Throwable someFailure) {
@@ -247,7 +253,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
             notifyTestSuiteFinished();
             generateReports();
             dropListeners(notifier);
-            closeDrivers();
         }
     }
 
@@ -266,11 +271,19 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
 
     private void notifyTestSuiteFinished() {
         try {
-            StepEventBus.getEventBus().testSuiteFinished();
+            if (dataDrivenTest()) {
+                StepEventBus.getEventBus().exampleFinished();
+            } else {
+                StepEventBus.getEventBus().testSuiteFinished();
+            }
         } catch (Throwable listenerException) {
             // We report and ignore listener exceptions so as not to mess up the rest of the test mechanics.
             logger.error("Test event bus error: " + listenerException.getMessage(), listenerException);
         }
+    }
+
+    private boolean dataDrivenTest() {
+        return this instanceof TestClassRunnerForParameters;
     }
 
     private void dropListeners(final RunNotifier notifier) {
@@ -328,9 +341,10 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         return notifier;
     }
 
-    private boolean shouldRetryTest() {
-        return (ThucydidesSystemProperty.JUNIT_RETRY_TESTS.booleanFrom(configuration.getEnvironmentVariables()));
+    private int maxRetries() {
+        return TEST_RETRY_COUNT.integerFrom(configuration.getEnvironmentVariables(), 0);
     }
+
 
     protected void initStepEventBus() {
         StepEventBus.getEventBus().clear();
@@ -366,11 +380,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     private void initStepFactory() {
         stepFactory = new StepFactory();
     }
-
-    private void closeDrivers() {
-        ThucydidesWebDriverSupport.closeAllDrivers();
-    }
-
 
     private ReportService getReportService() {
         if (reportService == null) {
@@ -416,16 +425,62 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
             processTestMethodAnnotationsFor(method);
         }
 
-        FailureDetectingStepListener failureDetectingStepListener = new FailureDetectingStepListener();
-        StepEventBus.getEventBus().registerListener(failureDetectingStepListener);
-
         initializeTestSession();
         prepareBrowserForTest();
         additionalBrowserCleanup();
-        failureDetectingStepListener.reset();
 
+        performRunChild(method, notifier);
+
+        if (failureDetectingStepListener.lastTestFailed() && maxRetries() > 0) {
+            retryAtMost(maxRetries(), new RerunSerenityTest(method, notifier));
+        }
+
+    }
+
+    private void retryAtMost(int remainingTries,
+                             RerunTest rerunTest) {
+        if (remainingTries <= 0) { return; }
+
+        logger.info(rerunTest.toString() + ": attempt " + (maxRetries() - remainingTries));
+        StepEventBus.getEventBus().cancelPreviousTest();
+        rerunTest.perform();
+
+        if (failureDetectingStepListener.lastTestFailed()) {
+            retryAtMost(remainingTries - 1, rerunTest);
+        } else {
+            StepEventBus.getEventBus().lastTestPassedAfterRetries(remainingTries,
+                                                                  failureDetectingStepListener.getFailureMessages());
+        }
+    }
+
+
+    private void performRunChild(FrameworkMethod method, RunNotifier notifier) {
+//        failureDetectingStepListener.reset();
         super.runChild(method, notifier);
+    }
 
+    interface RerunTest {
+        void perform();
+    }
+
+    class RerunSerenityTest implements RerunTest {
+        private final FrameworkMethod method;
+        private final RunNotifier notifier;
+
+        RerunSerenityTest(FrameworkMethod method, RunNotifier notifier) {
+            this.method = method;
+            this.notifier = notifier;
+        }
+
+        @Override
+        public void perform() {
+            performRunChild(method, notifier);
+        }
+
+        @Override
+        public String toString() {
+            return "Retrying " + method.getDeclaringClass() + " " + method.getMethod().getName();
+        }
     }
 
     private void clearMetadataIfRequired() {
@@ -451,6 +506,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     private void markAsManual(FrameworkMethod method) {
         testStarted(method);
         StepEventBus.getEventBus().testIsManual();
+        StepEventBus.getEventBus().testPending();
         StepEventBus.getEventBus().testFinished();
     }
 
@@ -472,10 +528,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     }
 
     protected void prepareBrowserForTest() {
-        if (theTest.needsToRestartTheBrowser()) {
-            WebdriverProxyFactory.resetDriver(getDriver());
-        }
-
         if (theTest.shouldClearTheBrowserSession()) {
             WebdriverProxyFactory.clearBrowserSession(getDriver());
         }

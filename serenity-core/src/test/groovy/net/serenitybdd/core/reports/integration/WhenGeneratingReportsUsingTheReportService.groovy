@@ -34,7 +34,7 @@ class WhenGeneratingReportsUsingTheReportService extends Specification {
             Thread.sleep(1000)
         then:
             outputDir.list().findAll { it.endsWith(".html")}.size() == 1
-            outputDir.list().findAll { it.endsWith(".xml")}.size() == 2
+            outputDir.list().findAll { it.endsWith(".xml")}.size() == 1
             outputDir.list().findAll { it.endsWith(".json")}.size() == 1
     }
 }

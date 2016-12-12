@@ -279,9 +279,9 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     public Optional<Requirement> getParentRequirementOf(final TestOutcome testOutcome) {
         return firstRequirementFoundIn(
                 parentRequirementFromPackagePath(testOutcome),
+                requirementWithMatchingPath(testOutcome),
                 featureTagRequirementIn(testOutcome),
-                mostSpecificTagRequirementFor(testOutcome),
-                requirementWithMatchingPath(testOutcome));
+                mostSpecificTagRequirementFor(testOutcome));
     }
 
     private Optional<Requirement> featureTagRequirementIn(TestOutcome testOutcome) {

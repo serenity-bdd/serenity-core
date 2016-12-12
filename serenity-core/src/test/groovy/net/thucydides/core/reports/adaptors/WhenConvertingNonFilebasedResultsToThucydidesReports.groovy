@@ -40,15 +40,15 @@ class WhenConvertingNonFilebasedResultsToThucydidesReports extends Specification
         when:
             reporter.generateReports()
         then:
-            generatedXmlFiles().size() == 2
-            generatedHtmlFiles().size() == 2
+        generatedJsonFiles().size() == 2
+        generatedHtmlFiles().size() == 2
     }
 
-    def generatedXmlFiles() {
+    def generatedJsonFiles() {
         temporaryDirectory.list(new FilenameFilter() {
             @Override
             boolean accept(File dir, String name) {
-                name.endsWith(".xml")
+                name.endsWith(".json")
             }
         })
     }

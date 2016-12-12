@@ -11,7 +11,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <serenity.version>1.2.0-SNAPSHOT</serenity.version>
+        <serenity.version>1.2.1-SNAPSHOT</serenity.version>
         <serenity.maven.version>1.1.42</serenity.maven.version>
         <parallel.tests>4</parallel.tests>
         <browserstack.url></browserstack.url>
@@ -109,18 +109,18 @@
                         <include>**/features/**/*.java</include>
                     </includes>
                     <argLine>-Xmx512m</argLine>
-                    <parallel>classes</parallel>
-                    <threadCount>${parallel.tests}</threadCount>
-                    <forkCount>${parallel.tests}</forkCount>
-                    <systemPropertyVariables>
-                        <browserstack.url>${browserstack.url}</browserstack.url>
-                        <browserstack.os>${browserstack.os}</browserstack.os>
-                        <browserstack.os_version>${browserstack.os_version}</browserstack.os_version>
-                        <browserstack.browser>${browserstack.browserName}</browserstack.browser>
-                        <browserstack.browserName>${browserstack.browserName}</browserstack.browserName>
-                        <browserstack.version>${browserstack.version}</browserstack.version>
-                        <webdriver.driver>${webdriver.driver}</webdriver.driver>
-                    </systemPropertyVariables>
+                    <!--<parallel>classes</parallel>-->
+                    <!--<threadCount>${parallel.tests}</threadCount>-->
+                    <!--<forkCount>${parallel.tests}</forkCount>-->
+                    <!--<systemPropertyVariables>-->
+                        <!--<browserstack.url>${browserstack.url}</browserstack.url>-->
+                        <!--<browserstack.os>${browserstack.os}</browserstack.os>-->
+                        <!--<browserstack.os_version>${browserstack.os_version}</browserstack.os_version>-->
+                        <!--<browserstack.browser>${browserstack.browserName}</browserstack.browser>-->
+                        <!--<browserstack.browserName>${browserstack.browserName}</browserstack.browserName>-->
+                        <!--<browserstack.version>${browserstack.version}</browserstack.version>-->
+                        <!--<webdriver.driver>${webdriver.driver}</webdriver.driver>-->
+                    <!--</systemPropertyVariables>-->
                 </configuration>
                 <executions>
                     <execution>

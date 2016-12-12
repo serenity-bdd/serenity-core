@@ -42,11 +42,15 @@ public class ParameterizedTestsOutcomeAggregator {
             TestOutcome scenarioOutcome = scenarioOutcomeFor(normalizedMethodName, testOutcome, scenarioOutcomes);
             recordTestOutcomeAsSteps(testOutcome, scenarioOutcome);
 
+            if (testOutcome.isManual()) {
+                scenarioOutcome = scenarioOutcome.asManualTest();
+            }
+
             if (testOutcome.isDataDriven()) {
                 updateResultsForAnyExternalFailures(testOutcome, scenarioOutcomes.get(normalizedMethodName));
                 scenarioOutcome.addDataFrom(testOutcome.getDataTable());
-            }
 
+            }
         }
 
         List<TestOutcome> aggregatedScenarioOutcomes = new ArrayList<>();
@@ -123,7 +127,7 @@ public class ParameterizedTestsOutcomeAggregator {
     private String alternativeMethodName(TestOutcome testOutcome) {
         Optional<String> qualifier = testOutcome.getQualifier();
         if (qualifier.isPresent()) {
-            return testOutcome.getTitle(false) +
+            return testOutcome.getTitle(false) + " " +
                     testOutcome.getQualifier().get();
         } else {
             return testOutcome.getTitle();

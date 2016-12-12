@@ -11,7 +11,6 @@ import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ThreadGuard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,8 +52,7 @@ public class FirefoxDriverProvider implements DriverProvider {
 
         driverProperties.registerCapabilities("firefox", capabilities);
 
-        return ThreadGuard.protect(driver);
-
+        return driver;
     }
 
     private boolean shouldUseGeckoDriver() {

@@ -191,6 +191,20 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_RESTART_BROWSER_FREQUENCY,
 
     /**
+     * Indicate when a browser should be restarted during a test run.
+     * Can be one of: example, scenario, story, feature, never
+     *
+     */
+    THUCYDIDES_RESTART_BROWSER_FOR_EACH,
+
+    /**
+     * When multiple actors are used with the Screenplay pattern, a separate browser is configured for each actor.
+     * Set this property to false if you want actors use a common browser.
+     * This can be useful if actors are used to illustrate the intent of a test, but no tests use more than one actor simultaneously
+     */
+    THUCYDIDES_DIFFERENT_BROWSER_FOR_EACH_ACTOR,
+
+    /**
      * Pause (in ms) between each test step.
      */
     THUCYDIDES_STEP_DELAY,
@@ -650,7 +664,9 @@ public enum ThucydidesSystemProperty {
     OUTPUT_FORMATS,
 
     /**
-     * If set to true (the default), allow markdown formatting in step titles and descriptions
+     * If set to true (the default), allow markdown formatting in test outcome titles and descriptions.
+     * This is a comma-separated lists of values from the following: story, narrative, step
+     * By default, Markdown is enabled for story titles and narrative texts, but not for steps.
      */
     ENABLE_MARKDOWN,
 
@@ -694,6 +710,12 @@ public enum ThucydidesSystemProperty {
     DASHBOARD_TAG_LIST,
 
     /**
+     * If set to false, render report names in a readable form as opposed to a hash format.
+     * Note: this can cause problems on operating systems that limit path lengths such as Windows.
+     */
+    SERENITY_COMPRESSED_FILENAMES,
+
+    /**
      * If set, this will define the list of tag types to be excluded from the dashboard screens
      */
     DASHBOARD_EXCLUDED_TAG_LIST,
@@ -709,11 +731,6 @@ public enum ThucydidesSystemProperty {
      * Defaults to UTF-8
      */
     JSON_CHARSET,
-
-    /**
-     * If set to true, the RetryFilteringRunNotifier will be used to attempt to rerun failing tests.
-     */
-    JUNIT_RETRY_TESTS,
 
     /**
      * Stack traces are by default decluttered for readability.
@@ -825,7 +842,12 @@ public enum ThucydidesSystemProperty {
     /**
      * Use this property to pass options to Marionette using the 'moz:firefoxOptions' capability option.
      */
-    GECKO_FIREFOX_OPTIONS;
+    GECKO_FIREFOX_OPTIONS,
+
+    /**
+     * Use this property to specify the maximum number of times to rerun the failing tests.
+     */
+    TEST_RETRY_COUNT;
 
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;

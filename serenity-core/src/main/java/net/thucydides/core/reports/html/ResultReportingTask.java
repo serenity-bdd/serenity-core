@@ -48,6 +48,10 @@ public class ResultReportingTask extends BaseReportingTask implements ReportingT
         if (testOutcomesForThisTag.getTotalTests().withResult(TestResult.PENDING) > 0) {
             generateResultReport(testOutcomesForThisTag.getPendingTests(), reportName, tag, "pending");
         }
+        if ((testOutcomesForThisTag.getTotalTests().withResult(TestResult.FAILURE) > 0)
+                || (testOutcomesForThisTag.getTotalTests().withResult(TestResult.ERROR) > 0)) {
+            generateResultReport(testOutcomesForThisTag.getFailingOrErrorTests(), reportName, tag, "broken");
+        }
         if (testOutcomesForThisTag.getTotalTests().withResult(TestResult.FAILURE) > 0) {
             generateResultReport(testOutcomesForThisTag.getFailingTests(), reportName, tag, "failure");
         }

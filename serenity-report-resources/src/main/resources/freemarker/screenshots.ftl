@@ -121,7 +121,7 @@
                             </div>
                         <#elseif (featureOrStory?? && featureOrStory.isPresent())>
                             <div>
-                                <#assign parentTitle = inflection.of(featureOrStory.get().name).asATitle() >
+                                <#assign parentTitle = formatter.renderDescription(inflection.of(featureOrStory.get().name).asATitle())>
                                 <#assign parentType = inflection.of(featureOrStory.get().type).asATitle() >
                                 <h3 class="discreet-story-header">
                                     <i class="fa fa-2x fa-comments-o"></i>
@@ -169,7 +169,7 @@
                                                                                     height="25" alt="Video"/></a>
                         </#if>
                             <span class="test-case-title">
-                                <span class="${outcome_text}">${formatter.htmlCompatible(testOutcome.unqualified.titleWithLinks)}
+                                <span class="${outcome_text}">${formatter.htmlCompatibleStoryTitle(testOutcome.unqualified.titleWithLinks)}
                                     <span class="related-issue-title">${testOutcome.formattedIssues}</span>
                                 </span>
                             </span>

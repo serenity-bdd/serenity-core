@@ -35,13 +35,18 @@ public class TestTag implements Comparable<TestTag> {
 
     public static TestTag withValue(String value) {
         if (value.contains(":")) {
-            int separatorPosition = value.indexOf(":");
-            String type = value.substring(0, separatorPosition).trim();
-            String name = value.substring(separatorPosition + 1).trim();
-            return TestTag.withName(name).andType(type);
+            return getTestTag(value, value.indexOf(":"));
+        } else if (value.contains("=")) {
+            return getTestTag(value, value.indexOf("="));
         } else {
             return TestTag.withName(value.trim()).andType("tag");
         }
+    }
+
+    private static TestTag getTestTag(String value, int separatorPosition) {
+        String type = value.substring(0, separatorPosition).trim();
+        String name = value.substring(separatorPosition + 1).trim();
+        return TestTag.withName(name).andType(type);
     }
 
     @Override
@@ -72,8 +77,12 @@ public class TestTag implements Comparable<TestTag> {
         }
         
         public TestTag andType(String type) {
-            return new TestTag(name, type);
-        } 
+            return new TestTag(name, withoutTagSymbol(type));
+        }
+
+        private String withoutTagSymbol(String type) {
+            return type.startsWith("@") ? type.substring(1) : type;
+        }
     }
 
     @Override

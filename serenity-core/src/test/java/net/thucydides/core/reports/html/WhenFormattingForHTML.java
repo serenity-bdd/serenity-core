@@ -326,7 +326,7 @@ public class WhenFormattingForHTML {
 
         String formattedValue = formatter.htmlCompatible("<ul style='margin-left:5%'><li>Line one</li><li>Line two</li><li>Line three</li></ul>");
 
-        assertThat(formattedValue, is("<ul style='margin-left:5%'><li>Line one</li><li>Line two</li><li>Line three</li></ul>"));
+        assertThat(formattedValue.trim(), is("<ul style='margin-left:5%'><li>Line one</li><li>Line two</li><li>Line three</li></ul>"));
     }
 
     @Test
@@ -397,15 +397,26 @@ public class WhenFormattingForHTML {
     }
 
     @Test
-    public void should_allow_markdown_formatting() {
-        Formatter formatter = new Formatter(issueTracking);
+    public void should_disable_markdown_formatting_if_configured() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+        environmentVariables.setProperty("enable.markdown", "story");
+        Formatter formatter = new Formatter(issueTracking, environmentVariables);
 
-        List<String> fields = ImmutableList.of();
+        String formattedValue = formatter.formatWithFields("Given a **person** named _Joe_");
+
+        assertThat(formattedValue, is("Given a **person** named _Joe_"));
+    }
+
+    @Test
+    public void should_allow_markdown_formatting_if_configured() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+        environmentVariables.setProperty("enable.markdown", "step");
+        Formatter formatter = new Formatter(issueTracking, environmentVariables);
+
         String formattedValue = formatter.formatWithFields("Given a **person** named _Joe_");
 
         assertThat(formattedValue, is("Given a <strong>person</strong> named <em>Joe</em>"));
     }
-
 
     @Test
     public void formatter_should_round_doubles_to_a_given_precision() {

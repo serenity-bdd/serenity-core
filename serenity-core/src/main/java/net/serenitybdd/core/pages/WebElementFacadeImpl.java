@@ -14,7 +14,6 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.locators.MethodTiming;
 import net.thucydides.core.annotations.locators.WithConfigurableTimeout;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.pages.jquery.JQueryEnabledPage;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
@@ -595,7 +594,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public WebElementFacade type(final String value) {
         logIfVerbose("Type '" + value + "'");
-        enableHighlightingIfRequired();
         waitUntilElementAvailable();
         clear();
         getElement().sendKeys(value);
@@ -627,7 +625,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public WebElementFacade typeAndTab(final String value) {
         logIfVerbose("Type and tab '" + value + "'");
-        enableHighlightingIfRequired();
         waitUntilElementAvailable();
         clear();
 
@@ -948,7 +945,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      */
     @Override
     public void click() {
-        enableHighlightingIfRequired();
         waitUntilElementAvailable();
         logClick();
         getElement().click();
@@ -980,13 +976,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
             getElement().sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
         }
         getElement().clear();
-    }
-
-    protected void enableHighlightingIfRequired() {
-        JQueryEnabledPage jQueryEnabledPage = JQueryEnabledPage.withDriver(driver);
-        if (jQueryEnabledPage.isJQueryIntegrationEnabled() && !jQueryEnabledPage.isJQueryAvailable()) {
-            jQueryEnabledPage.injectJQueryPlugins();
-        }
     }
 
     protected void notifyScreenChange() {

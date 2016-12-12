@@ -1,5 +1,6 @@
 package net.thucydides.junit.runners
 
+import net.serenitybdd.junit.runners.SerenityParameterizedRunner
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.util.MockEnvironmentVariables
@@ -10,6 +11,7 @@ import net.thucydides.samples.*
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.notification.RunNotifier
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -53,7 +55,7 @@ class WhenRunningTestScenarios extends Specification {
             runner.testOutcomes.get(0).result == TestResult.SUCCESS
     }
 
-
+    @Ignore
     def "should be able to record the driver used for a test"() {
         given:
             def runner = new SerenityRunner(SamplePassingScenarioUsingFirefox);
@@ -64,6 +66,7 @@ class WhenRunningTestScenarios extends Specification {
             drivers.contains("firefox")
     }
 
+    @Ignore
     def "should be able to record the driver used for a test when a different driver is specified"() {
         given:
             def runner = new SerenityRunner(SamplePassingScenarioUsingHtmlUnit);
@@ -84,7 +87,7 @@ class WhenRunningTestScenarios extends Specification {
             drivers.each { driver -> assert driver == null }
     }
 
-
+    @Ignore
     def "should be able to record a different driver for an individual test"() {
         given:
             def runner = new SerenityRunner(SamplePassingScenarioUsingDifferentBrowsersForEachTest, webDriverFactory)
@@ -139,6 +142,16 @@ class WhenRunningTestScenarios extends Specification {
             def outcomes = runner.testOutcomes;
         then:
             outcomes[0].isManual()
+    }
+
+    def "should mark @manual data-driven tests as manual"() {
+        given:
+        def runner = new SerenityParameterizedRunner(SampleDataDrivenScenario)
+        when:
+        runner.run(new RunNotifier())
+        def outcomes = runner.runners
+        then:
+        outcomes
     }
 
     def "an error in a nested non-step method should cause the test to fail"() {
@@ -472,23 +485,23 @@ class WhenRunningTestScenarios extends Specification {
     }
 
 
-    def "xml test results should be written to the output directory"() {
+    def "JSON test results should be written to the output directory"() {
         given:
         def runner = new ATestableThucydidesRunnerSample(SamplePassingScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
-        def xmlReports = reload(temporaryDirectory).list().findAll {it.endsWith(".xml") && !it.startsWith("SERENITY-")}
+        def jsonReports = reload(temporaryDirectory).list().findAll {it.endsWith(".json")}
         then:
-        xmlReports.size() == 3
+        jsonReports.size() == 3
     }
 
     def "tests for multiple stories should be written to the output directory"() {
         when:
             new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
             new ATestableThucydidesRunnerSample(SampleFailingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
-            def xmlReports = reload(temporaryDirectory).list().findAll {it.toLowerCase().endsWith(".xml") && !it.startsWith("SERENITY-")}
+            def jsonReports = reload(temporaryDirectory).list().findAll {it.toLowerCase().endsWith(".json") && !it.startsWith("SERENITY-")}
         then:
-            xmlReports.size() == 6
+        jsonReports.size() == 6
     }
 
     def "HTML test results should be written to the output directory"() {

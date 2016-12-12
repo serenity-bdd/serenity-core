@@ -3,7 +3,6 @@ package net.thucydides.core.steps;
 import net.thucydides.core.annotations.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestStep;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.samples.FlatScenarioStepsWithoutPages;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
@@ -165,6 +164,7 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
         assertThat(testOutcome.getResult(), is(TestResult.SUCCESS));
     }
 
+
     @Test
     public void a_failing_step_should_record_the_failure_for_non_webtest_steps() {
 
@@ -213,22 +213,6 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
         TestOutcome testOutcome = results.get(0);
 
         assertThat(testOutcome.toString(), is("App should work:Step one, Grouped steps [Nested step one, Nested step two, Nested step one, Nested step two]"));
-    }
-
-    @Test
-    public void screenshots_should_not_be_taken_after_steps_for_non_webtest_steps() {
-
-        StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
-        StepEventBus.getEventBus().testStarted("app_should_work");
-
-        FlatScenarioStepsWithoutPages steps = stepFactory.getStepLibraryFor(FlatScenarioStepsWithoutPages.class);
-        steps.step_one();
-        steps.step_two();
-        StepEventBus.getEventBus().testFinished(testOutcome);
-
-        List<TestStep> stepOutomes = stepListener.getTestOutcomes().get(0).getTestSteps();
-        assertThat(stepOutomes.get(0).getScreenshots().size(), is(0));
-        assertThat(stepOutomes.get(1).getScreenshots().size(), is(0));
     }
 
     @Test

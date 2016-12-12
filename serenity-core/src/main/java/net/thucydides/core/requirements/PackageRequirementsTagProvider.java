@@ -14,14 +14,13 @@ import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
 import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static net.thucydides.core.requirements.annotations.ClassInfoAnnotations.theClassDefinedIn;
 import static net.thucydides.core.requirements.classpath.LeafRequirementAdder.addLeafRequirementDefinedIn;
 import static net.thucydides.core.requirements.classpath.NonLeafRequirementsAdder.addParentsOf;
@@ -42,8 +41,6 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
     private final RequirementsStore requirementsStore;
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables,
                                           String rootPackage,
                                           RequirementsStore requirementsStore) {
@@ -51,10 +48,6 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         this.environmentVariables = environmentVariables;
         this.rootPackage = rootPackage;
         this.requirementsStore = requirementsStore;
-
-//        if (rootPackage == null) {
-//            logger.warn("To generate correct requirements coverage reports you need to set the 'serenity.test.root' property to the package representing the top of your requirements hierarchy.");
-//        }
     }
 
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables, String rootPackage) {
@@ -116,6 +109,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         try {
             List<String> requirementPaths = requirementPathsStartingFrom(rootPackage);
             Collections.sort(requirementPaths, byDescendingPackageLength());
+//            int requirementsDepth = shortestPathIn(requirementPaths);
             int requirementsDepth = longestPathIn(requirementPaths);
 
             Set<Requirement> allRequirements = Sets.newHashSet();
@@ -202,7 +196,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
                 maxDepth = pathDepth;
             }
         }
-        return maxDepth;
+        return min(maxDepth, requirementsConfiguration.getRequirementTypes().size());
     }
 
     private void addRequirementsDefinedIn(String path, int requirementsDepth, Collection<Requirement> allRequirements) {

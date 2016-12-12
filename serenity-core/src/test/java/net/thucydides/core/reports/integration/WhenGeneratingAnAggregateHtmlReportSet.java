@@ -154,14 +154,13 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
         driver.get(urlFor(report));
 
         List<String> testCountLabels = convertToStrings(driver.findElements(By.cssSelector(".test-count")));
-        assertThat(testCountLabels, hasSize(9));
+        assertThat(testCountLabels, hasSize(8));
         Matcher<Iterable<? super String>> passedMatcher = hasItem(containsString("2 passed"));
         Matcher<Iterable<? super String>> pendingMatcher = hasItem(containsString("2 pending"));
         Matcher<Iterable<? super String>> failedMatcher = hasItem(containsString("2 failed"));
         Matcher<Iterable<? super String>> errorMatcher = hasItem(containsString("1 with errors"));
-        Matcher<Iterable<? super String>> skippedMatcher = hasItem(containsString("0 skipped"));
         Matcher<Iterable<? super String>> ignoredMatcher = hasItem(containsString("1 ignored"));
-        assertThat(testCountLabels, allOf(passedMatcher, pendingMatcher, failedMatcher, errorMatcher, skippedMatcher, ignoredMatcher));
+        assertThat(testCountLabels, allOf(passedMatcher, pendingMatcher, failedMatcher, errorMatcher, ignoredMatcher));
     }
 
     private List<String> convertToStrings(List<WebElement> elements) {

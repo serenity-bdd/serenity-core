@@ -27,7 +27,8 @@ public class XPathOrCssTarget extends Target {
     }
 
     public Target of(String... parameters) {
-        return new XPathOrCssTarget(targetElementName, instantiated(cssOrXPathSelector, parameters));
+        return new XPathOrCssTarget(instantiated(targetElementName, parameters),
+                                    instantiated(cssOrXPathSelector, parameters));
     }
 
     public Target called(String name) {

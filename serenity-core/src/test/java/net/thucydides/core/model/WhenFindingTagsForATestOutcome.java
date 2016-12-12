@@ -1,17 +1,15 @@
-package net.thucydides.core.statistics.service;
+package net.thucydides.core.model;
 
 import com.google.common.base.Optional;
 import com.google.common.io.Resources;
 import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTagValuesOf;
 import net.thucydides.core.annotations.WithTags;
-import net.thucydides.core.model.Story;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.TestOutcomeStream;
 import net.thucydides.core.requirements.FileSystemRequirementsTagProvider;
 import net.thucydides.core.requirements.PackageRequirementsTagProvider;
 import net.thucydides.core.requirements.model.Requirement;
+import net.thucydides.core.statistics.service.*;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
@@ -446,8 +444,6 @@ public class WhenFindingTagsForATestOutcome {
             assertThat(feature.get().getParent(), not(isEmptyString()));
         }
     }
-
-
 
 }
 

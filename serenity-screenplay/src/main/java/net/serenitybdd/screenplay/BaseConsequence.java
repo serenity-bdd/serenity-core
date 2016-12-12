@@ -24,7 +24,6 @@ public abstract class BaseConsequence<T> implements Consequence<T> {
 
     protected void throwComplaintTypeErrorIfSpecified(Error actualError) {
         if (complaintType != null) {
-            LOGGER.error("Could not resolve question", actualError);
             throw Complaint.from(complaintType, complaintDetails, actualError);
         }
     }

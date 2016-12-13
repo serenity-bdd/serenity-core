@@ -1,7 +1,6 @@
 package net.thucydides.core.requirements.reports;
 
 import com.google.common.base.Optional;
-import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -14,6 +13,7 @@ import net.thucydides.core.model.TestType;
 import net.thucydides.core.releases.ReleaseManager;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.ReportNameProvider;
+import net.thucydides.core.requirements.ExcludedUnrelatedRequirementTypes;
 import net.thucydides.core.requirements.RequirementsTagProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -21,7 +21,6 @@ import net.thucydides.core.util.EnvironmentVariables;
 import java.util.*;
 
 import static ch.lambdaj.Lambda.*;
-import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE;
 import static org.hamcrest.Matchers.hasItem;
 
 /**
@@ -481,15 +480,6 @@ public class RequirementsOutcomes {
                 releaseManager);
     }
 
-    private final static String DEFAULT_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE = "capability,epic,feature";
-
-    private List<String> excludedUnrelatedRequirementsTypes() {
-        String unrleatedRequirementTypes =
-                THUCYDIDES_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE.from(environmentVariables,
-                DEFAULT_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE);
-
-        return Splitter.on(",").trimResults().splitToList(unrleatedRequirementTypes);
-    }
     private List<RequirementOutcome> pruned(List<RequirementOutcome> requirementOutcomes) {
         List<RequirementOutcome> prunedRequirementsOutcomes = new ArrayList<>();
 
@@ -503,6 +493,7 @@ public class RequirementsOutcomes {
 
     public boolean shouldPrune(RequirementOutcome requirementOutcome) {
         return ((requirementOutcome.getTestCount() == 0)
-                 && excludedUnrelatedRequirementsTypes().contains(requirementOutcome.getRequirement().getType()));
+                 && ExcludedUnrelatedRequirementTypes.definedIn(environmentVariables)
+                .excludeUntestedRequirementOfType(requirementOutcome.getRequirement().getType()));
     }
 }

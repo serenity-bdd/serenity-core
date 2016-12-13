@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
@@ -11,7 +12,9 @@ import net.thucydides.core.model.TestType;
 import net.thucydides.core.reports.TestOutcomeCounter;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.Formatter;
+import net.thucydides.core.requirements.ExcludedUnrelatedRequirementTypes;
 import net.thucydides.core.requirements.model.Requirement;
+import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +29,7 @@ public class RequirementOutcome {
     private IssueTracking issueTracking;
     private final int requirementsWithoutTests;
     private final int estimatedUnimplementedTests;
+    private final EnvironmentVariables environmentVariables;
 
     public RequirementOutcome(Requirement requirement, TestOutcomes testOutcomes,
                               int requirementsWithoutTests, int estimatedUnimplementedTests,
@@ -35,6 +39,7 @@ public class RequirementOutcome {
         this.requirementsWithoutTests = requirementsWithoutTests;
         this.estimatedUnimplementedTests = estimatedUnimplementedTests;
         this.issueTracking = issueTracking;
+        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
     }
 
     public RequirementOutcome(Requirement requirement, TestOutcomes testOutcomes, IssueTracking issueTracking) {
@@ -306,6 +311,11 @@ public class RequirementOutcome {
     }
 
     public RequirementOutcome withoutUnrelatedRequirements() {
+
+        if (!shouldPrune(this)) {
+            return this;
+        }
+
         List<Requirement> childRequirementsWithTests = new ArrayList<>();
         for(Requirement childRequirement : getRequirement().getChildren())  {
             if (isTested(childRequirement)) {
@@ -315,6 +325,12 @@ public class RequirementOutcome {
         Requirement prunedRequirement = getRequirement().withChildren(childRequirementsWithTests);
         return new RequirementOutcome(prunedRequirement, testOutcomes, requirementsWithoutTests, estimatedUnimplementedTests, issueTracking);
     }
+
+    public boolean shouldPrune(RequirementOutcome requirementOutcome) {
+        return ExcludedUnrelatedRequirementTypes.definedIn(environmentVariables)
+                .excludeUntestedChildrenOfRequirementOfType(requirementOutcome.getRequirement().getType());
+    }
+
 
     private boolean isTested(Requirement childRequirement) {
         return !testOutcomes.forRequirement(childRequirement).getOutcomes().isEmpty();

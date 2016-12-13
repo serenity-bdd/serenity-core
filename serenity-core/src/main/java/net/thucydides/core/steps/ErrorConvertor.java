@@ -19,7 +19,6 @@ public class ErrorConvertor implements Serializable {
         if (RuntimeException.class.isAssignableFrom(throwable.getClass())) {
             return throwable;
         } else {
-//            return new WebdriverAssertionError(throwable);
             return new SerenityManagedException(throwable);
         }
     }

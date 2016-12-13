@@ -27,4 +27,9 @@ public class ConfiguredEnvironment {
         }
         return Injectors.getInjector().getInstance(Configuration.class);
     }
+
+    public static void reset() {
+        testEnvironmentVariables.remove();
+        testConfiguration.remove();
+    }
 }

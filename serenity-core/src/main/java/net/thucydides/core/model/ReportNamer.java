@@ -4,6 +4,7 @@ import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.digest.Digest;
 import org.apache.commons.lang3.StringUtils;
 
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_COMPRESS_FILENAMES;
 import static net.thucydides.core.util.NameConverter.*;
 
 /**
@@ -23,7 +24,7 @@ public class ReportNamer {
     private ReportNamer(final ReportType type) {
         this(type,
              ConfiguredEnvironment.getEnvironmentVariables()
-                     .getPropertyAsBoolean("serenity.compress.filenames", true));
+                     .getPropertyAsBoolean(SERENITY_COMPRESS_FILENAMES.getPropertyName(), true));
     }
 
     public ReportNamer(ReportType type, boolean compressedFilename) {

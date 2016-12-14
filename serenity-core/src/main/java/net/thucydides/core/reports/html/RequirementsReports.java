@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 import static net.thucydides.core.reports.html.RequirementsTypeReportingTask.requirementTypeReports;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class RequirementsReports {
 
@@ -109,7 +110,8 @@ public class RequirementsReports {
         List<ReportingTask> reportingTasks = new ArrayList<>();
 
         String reportName = reportNameProvider.forRequirement(parentRequirement);
-        String orphanReportName = reportNameProvider.forRequirement(parentRequirement.getName());
+        String parentPrefix = isNotEmpty(parentRequirement.getParent()) ? parentRequirement.getParent().toLowerCase() + "_" : "";
+        String orphanReportName = reportNameProvider.forRequirement(parentPrefix + parentRequirement.getName());
 
         reportingTasks.add(
                 new RequirementsOverviewReportingTask(freemarker,

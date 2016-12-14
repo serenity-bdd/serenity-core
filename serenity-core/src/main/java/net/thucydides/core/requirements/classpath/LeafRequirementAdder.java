@@ -108,7 +108,8 @@ public class LeafRequirementAdder {
             parent = humanize(secondLastOf(featurePathElements));
         }
 
-        int startFromRequirementLevel = requirementsConfiguration.getRequirementTypes().size() - requirementsDepth;
+        int startFromRequirementLevel = requirementsConfiguration.startLevelForADepthOf(requirementsDepth);
+
         String typeByLevel = requirementsConfiguration.getRequirementType(startFromRequirementLevel + featurePathElements.size() - 1);
         String type = PackageInfoNarrative.type().definedInPath(path).or(typeByLevel);
 

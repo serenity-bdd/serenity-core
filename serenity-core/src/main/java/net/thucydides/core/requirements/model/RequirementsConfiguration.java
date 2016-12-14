@@ -149,4 +149,7 @@ public class RequirementsConfiguration {
         return (getCucumberFileMatcher().isPresent() && getCucumberFileMatcher().get().hasMatchingFiles());
     }
 
+    public int startLevelForADepthOf(int requirementsDepth) {
+        return Math.max(0, getRequirementTypes().size() - requirementsDepth);
+    }
 }

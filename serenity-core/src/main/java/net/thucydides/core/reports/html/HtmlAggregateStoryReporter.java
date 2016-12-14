@@ -146,7 +146,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         FreemarkerContext context = new FreemarkerContext(environmentVariables, requirements.getRequirementsService(), issueTracking, relativeLink);
 
-        List<String> requirementTypes = requirements.getRequirementsService().getRequirementTypes();
         RequirementsOutcomes requirementsOutcomes = requirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(testOutcomes);
 
         LOGGER.info("{} requirements loaded after {} ms",requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTime());

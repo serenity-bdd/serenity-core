@@ -319,7 +319,7 @@ public class Requirement implements Comparable {
     public Requirement merge(Requirement newRequirement) {
 
         String mergedCardNumber = isEmpty(cardNumber) ? newRequirement.cardNumber : cardNumber;
-        String mergedDisplayName= isEmpty(displayName) ? newRequirement.displayName : displayName;
+        String mergedDisplayName= (isEmpty(displayName) || name.equalsIgnoreCase(displayName))  ? newRequirement.displayName : displayName;
         String mergedNarrativeText = isEmpty(narrative.getText()) ? newRequirement.narrative.getText() : narrative.getText();
         String mergedFeatureFileName = isEmpty(featureFileName) ? newRequirement.featureFileName : featureFileName;
         List<String> mergedReleasVersions = ListUtils.union(releaseVersions, newRequirement.releaseVersions) ;

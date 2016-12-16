@@ -177,7 +177,7 @@
         <#if dataSet.description??>
             <div class="requirementNarrative">${dataSet.description}</div>
         </#if>
-        <div class="example-table">
+        <div class="datagrid">
             <table>
                 <thead>
                 <tr>

@@ -2016,9 +2016,24 @@ public class TestOutcome {
         }
         StringBuilder sampleScenario = new StringBuilder();
         for (TestStep step : getStepChildren()) {
-            sampleScenario.append(getMethodNameWithoutParameters(step.getDescription())).append("\n");
+            sampleScenario.append(
+                    withPlaceholderSubstitutes(step.getDescription()))
+                    .append("\n");
         }
         return sampleScenario.length() > 1 ? sampleScenario.substring(0, sampleScenario.length() - 1) : "";
+    }
+
+    private String withPlaceholderSubstitutes(String stepName) {
+        if (dataTable == null || dataTable.getRows().isEmpty()) { return stepName; }
+
+        int column = 0;
+        for(String header : dataTable.getHeaders()) {
+            String correspondingValueInFirstRow = dataTable.getRows().get(0).getStringValues().get(column);
+            stepName = StringUtils.replace(stepName, correspondingValueInFirstRow, "<" + header + ">" );
+            column++;
+
+        }
+        return stepName;
     }
 
     public DataTable getDataTable() {

@@ -46,7 +46,6 @@ import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static ch.lambdaj.Lambda.*;
@@ -2000,16 +1999,6 @@ public class TestOutcome {
         return firstLevel;
     }
 
-    private String getMethodNameWithoutParameters(final String value) {
-        final Pattern methodName = Pattern.compile("(?<method>^\\w+[^\\:]+)(?<parameters>.*)");
-        final Matcher matcher = methodName.matcher(value);
-        String processed = value;
-        if (matcher.find()) {
-            processed = matcher.group("method");
-        }
-        return processed;
-    }
-
     public String getDataDrivenSampleScenario() {
         if (!isDataDriven() || getTestSteps().isEmpty() || !getTestSteps().get(0).hasChildren()) {
             return "";
@@ -2026,14 +2015,7 @@ public class TestOutcome {
     private String withPlaceholderSubstitutes(String stepName) {
         if (dataTable == null || dataTable.getRows().isEmpty()) { return stepName; }
 
-        int column = 0;
-        for(String header : dataTable.getHeaders()) {
-            String correspondingValueInFirstRow = dataTable.getRows().get(0).getStringValues().get(column);
-            stepName = StringUtils.replace(stepName, correspondingValueInFirstRow, "<" + header + ">" );
-            column++;
-
-        }
-        return stepName;
+        return dataTable.restoreVariablesIn(stepName);
     }
 
     public DataTable getDataTable() {

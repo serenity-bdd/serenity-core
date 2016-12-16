@@ -51,6 +51,24 @@ class WhenRecordingDataDrivenTestOutcomes extends Specification {
 
     }
 
+    def "Should be able restore variables in the step description"() {
+        when:
+        def table = DataTable.withHeaders(["firstName","lastName","age"]).
+                andRows([["Joe", "Smith",20],
+                         ["Jack", "Jones",21]]).build();
+        then:
+        table.restoreVariablesIn("A person named Joe Smith") == "A person named <firstName> <lastName>"
+    }
+
+    def "Should be able restore variables in the step description and only include separate words"() {
+        when:
+        def table = DataTable.withHeaders(["firstName","lastName","age"]).
+                andRows([["Joe", "Smith",20],
+                         ["Jack", "Jones",21]]).build();
+        then:
+        table.restoreVariablesIn("Joesphine and Joe Smith") == "Joesphine and <firstName> <lastName>"
+    }
+
 
     def "A data table should have a single data set by default"() {
         when:

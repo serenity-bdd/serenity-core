@@ -268,5 +268,16 @@ public class DataTable {
             return rowData;
 
         }
+
+    }
+
+    public String restoreVariablesIn(String stepDescription) {
+        int column = 0;
+        for(String header : getHeaders()) {
+            String correspondingValueInFirstRow = getRows().get(0).getStringValues().get(column);
+            stepDescription = stepDescription.replaceAll("\\b" + correspondingValueInFirstRow + "\\b", "<" + header + ">");
+            column++;
+        }
+        return stepDescription;
     }
 }

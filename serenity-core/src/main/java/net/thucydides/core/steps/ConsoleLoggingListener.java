@@ -40,17 +40,20 @@ public class ConsoleLoggingListener implements StepListener {
             "|_______/    |_______|| _| `._____||_______||__| \\__| |__|     |__|         |__|    \n" +
             "-------------------------------------------------------------------------------------\n";
 
-    public static final String SERENITY_SMALL_BANNER = "\n--------------\n" +
+    public static final String SERENITY_SMALL_BANNER =
+            "\n--------------\n" +
             "- SERENITY   -\n" +
             "--------------";
 
     // STAR WARS
     private static final List<String> BANNER_HEADINGS = ImmutableList.of(
+            "SERENITY TESTS",
             SERENITY_SMALL_BANNER,
             SERENITY_BIG_BANNER);
 
     // Standard
     private static final List<String> TEST_STARTED_HEADINGS = ImmutableList.of(
+            "",
             "\n----------------\n" +
             "- TEST STARTED -\n" +
             "----------------",
@@ -62,6 +65,7 @@ public class ConsoleLoggingListener implements StepListener {
                 "                                                                  \n");
 
     private static final List<String> TEST_PASSED_HEADINGS = ImmutableList.of(
+            "",
             "\n---------------\n" +
             "- TEST PASSED -\n" +
             "---------------",
@@ -73,6 +77,7 @@ public class ConsoleLoggingListener implements StepListener {
                     "        /_/                                                                \n");
 
     private static final List<String> TEST_FAILED_HEADINGS =  ImmutableList.of(
+            "",
             "\n----------------\n" +
                     "- TEST FAILED -\n" +
                     "----------------",
@@ -84,6 +89,7 @@ public class ConsoleLoggingListener implements StepListener {
                     "          \\_\\                                                            \n");
 
     private static final List<String> TEST_ERROR_HEADINGS =  ImmutableList.of(
+            "",
             "\n--------------------------\n" +
                     "- TEST FAILED WITH ERROR-\n" +
                     "--------------------------",
@@ -95,6 +101,7 @@ public class ConsoleLoggingListener implements StepListener {
                     "        \\_\\                                                         \n");
 
     private static final List<String> TEST_COMPROMISED_HEADINGS =  ImmutableList.of(
+            "",
             "\n--------------------------\n" +
                     "- TEST COMPROMISED -\n" +
                     "--------------------------",
@@ -111,6 +118,7 @@ public class ConsoleLoggingListener implements StepListener {
                     " \\____\\___/|_|  |_|_|   |_| \\_\\\\___/|_|  |_|___|____/|_____|____/\n");
 
     private static final List<String> TEST_SKIPPED_HEADINGS  = ImmutableList.of(
+            "",
             "\n----------------\n" +
             "- TEST SKIPPED -\n" +
             "----------------",
@@ -122,6 +130,7 @@ public class ConsoleLoggingListener implements StepListener {
                     "                                                                                \n");
 
     private static final List<String> TEST_PENDING_HEADINGS  = ImmutableList.of(
+            "",
             "\n----------------\n" +
                     "- TEST PENDING -\n" +
                     "----------------",
@@ -133,6 +142,7 @@ public class ConsoleLoggingListener implements StepListener {
                     "                                                                                \n");
 
     private static List<String>  FAILURE_HEADINGS  = ImmutableList.of(
+            "",
             "\n-----------\n" +
             "- FAILURE -\n" +
             "-----------",
@@ -144,6 +154,7 @@ public class ConsoleLoggingListener implements StepListener {
                     "                                         \n");
 
     private static List<String>  ERROR_HEADINGS  = ImmutableList.of(
+            "",
             "\n-----------\n" +
                     "- FAILED WITH ERROR -\n" +
                     "-----------",
@@ -159,7 +170,7 @@ public class ConsoleLoggingListener implements StepListener {
     private final int headingStyle;
     private final FailureAnalysis analysis;
 
-    private enum HeadingStyle { NORMAL, ASCII}
+    private enum HeadingStyle { MINIMAL, NORMAL, ASCII}
 
     public ConsoleLoggingListener(EnvironmentVariables environmentVariables,
                                   Logger logger) {
@@ -171,12 +182,17 @@ public class ConsoleLoggingListener implements StepListener {
         String headerStyleValue = ThucydidesSystemProperty.THUCYDIDES_CONSOLE_HEADINGS.from(environmentVariables, HeadingStyle.ASCII.toString())
                                   .toUpperCase();
 
-        if (HeadingStyle.NORMAL.toString().equals(headerStyleValue)) {
-            headingStyle = 0;
-        } else {
-            headingStyle = 1;
-        }
+        headingStyle = headingStyleFrom(headerStyleValue);
+
         logBanner();
+    }
+
+    private int headingStyleFrom(String headerStyleValue) {
+        try {
+            return HeadingStyle.valueOf(headerStyleValue.toUpperCase()).ordinal();
+        } catch(IllegalArgumentException e) {
+            return 1;
+        }
     }
 
     @Inject

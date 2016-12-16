@@ -21,6 +21,11 @@ public class CustomRequirementsTagProvider implements RequirementsTagProvider {
     }
 
     @Override
+    public Optional<Requirement> getParentRequirementOf(Requirement requirement) {
+        return Optional.absent();
+    }
+
+    @Override
     public Optional<Requirement> getRequirementFor(TestTag testTag) {
         return Optional.absent();
     }

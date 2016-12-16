@@ -88,5 +88,15 @@ public abstract class AbstractRequirementsTagProvider {
         return Optional.absent();
     }
 
+    public Optional<Requirement> getParentRequirementOf(Requirement requirement) {
+        for (Requirement candidateParent : RequirementsList.of(getRequirements()).asFlattenedList()) {
+            if (candidateParent.getChildren().contains(requirement)) {
+                return Optional.of(candidateParent);
+            }
+        }
+        return Optional.absent();
+    }
+
+
 
 }

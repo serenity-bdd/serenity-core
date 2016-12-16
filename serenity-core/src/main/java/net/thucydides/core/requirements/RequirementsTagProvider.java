@@ -19,5 +19,6 @@ import java.util.List;
 public interface RequirementsTagProvider extends TagProvider {
     List<Requirement> getRequirements();
     Optional<Requirement> getParentRequirementOf(final TestOutcome testOutcome);
+    Optional<Requirement> getParentRequirementOf(final Requirement requirement);
     Optional<Requirement> getRequirementFor(TestTag testTag);
 }

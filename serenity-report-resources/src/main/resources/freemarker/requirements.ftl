@@ -167,12 +167,13 @@
                 <#assign parent = requirements.parentRequirement.get()>
                 <#assign parentTitle = inflection.of(parent.asTag().shortName).asATitle() >
 
-                <#if (requirements.parentRequirement.get().parent?has_content)>
-                    <#assign rootReport = reportName.forRequirement(requirements.parentRequirement.get().parent) >
-                    <#assign rootTitle = inflection.of(requirements.parentRequirement.get().parent!).asATitle() >
-                    > <a href="${rootReport}">${rootTitle}</a>
+                <#if (requirements.grandparentRequirement.isPresent())>
+                    <#assign ancestor = reportName.forRequirement(requirements.grandparentRequirement.get()) >
+                    <#assign rootReport = reportName.forRequirement(requirements.grandparentRequirement.get()) >
+                    <#assign rootTitle = inflection.of(requirements.grandparentRequirement.get().displayName).asATitle() >
+                    > <a href="${rootReport}" title="${rootTitle}">${formatter.truncatedHtmlCompatible(rootTitle,40)}</a>
                 </#if>
-                > ${formatter.htmlCompatibleStoryTitle(parentTitle)}
+                > ${formatter.truncatedHtmlCompatible(parentTitle,50)}
             </#if>
             </span>
         </div>

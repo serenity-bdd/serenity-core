@@ -21,6 +21,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import java.util.*;
 
 import static ch.lambdaj.Lambda.*;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.hamcrest.Matchers.hasItem;
 
 /**
@@ -139,6 +140,22 @@ public class RequirementsOutcomes {
 
     public Optional<Requirement> getParentRequirement() {
         return parentRequirement;
+    }
+
+    public Optional<Requirement> getGrandparentRequirement() {
+        if (!parentRequirement.isPresent()) { return Optional.absent(); }
+        if (isEmpty(parentRequirement.get().getParent())) { return Optional.absent(); }
+
+        return parentRequirementOf(parentRequirement.get());
+    }
+
+    private Optional<Requirement> parentRequirementOf(Requirement requirement) {
+        for (RequirementsTagProvider tagProvider : this.requirementsTagProviders) {
+            if (tagProvider.getParentRequirementOf(requirement).isPresent()) {
+                return tagProvider.getParentRequirementOf(requirement);
+            }
+        }
+        return Optional.absent();
     }
 
     public int getRequirementCount() {

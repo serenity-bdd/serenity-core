@@ -34,14 +34,14 @@ public class RequirementsList {
     }
 
     public List<Requirement> asFlattenedList() {
-        List<Requirement> requirements = Lists.newArrayList();
+        List<Requirement> flattenedRequirements = Lists.newArrayList();
         for(Requirement requirement : requirements) {
-            requirements.add(requirement);
+            flattenedRequirements.add(requirement);
             if (requirement.hasChildren()) {
-                requirements.addAll(RequirementsList.of(requirement.getChildren()).asFlattenedList());
+                flattenedRequirements.addAll(RequirementsList.of(requirement.getChildren()).asFlattenedList());
             }
         }
-        return requirements;
+        return flattenedRequirements;
     }
 
     public Optional<Requirement> findByUniqueName(String name) {

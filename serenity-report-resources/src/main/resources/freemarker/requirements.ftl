@@ -201,7 +201,7 @@
                     <h2><i class="fa fa-book"></i> ${parentType}: ${issueNumber} ${formatter.htmlCompatible(parentTitle)}</h2>
                     <#if parentRequirement.narrative.renderedText?has_content>
                         <div class="requirementNarrativeTitle">
-                        ${formatter.renderDescription(parentRequirement.narrative.renderedText)}
+                        ${formatter.addLineBreaks(formatter.renderDescription(parentRequirement.narrative.renderedText))}
                         </div>
                     </#if>
 

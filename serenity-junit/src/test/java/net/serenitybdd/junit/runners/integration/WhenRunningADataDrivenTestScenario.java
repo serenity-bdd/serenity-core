@@ -112,7 +112,7 @@ public class WhenRunningADataDrivenTestScenario {
         runner.run(new RunNotifier());
 
         List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods();
-        assertThat(aggregatedScenarios.get(0).getDataDrivenSampleScenario(), containsString("Step with parameters\n" +
+        assertThat(aggregatedScenarios.get(0).getDataDrivenSampleScenario(), containsString("Step with parameters: <Parameter 1>, <Parameter 2>\n" +
                 "Step that succeeds\n" +
                 "Another step that succeeds"));
     }

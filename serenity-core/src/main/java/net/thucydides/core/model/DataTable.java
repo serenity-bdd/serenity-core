@@ -3,6 +3,7 @@ package net.thucydides.core.model;
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -272,12 +273,17 @@ public class DataTable {
     }
 
     public String restoreVariablesIn(String stepDescription) {
-        int column = 0;
-        for(String header : getHeaders()) {
+        for(int column = 0; column < getHeaders().size(); column++) {
             String correspondingValueInFirstRow = getRows().get(0).getStringValues().get(column);
-            stepDescription = stepDescription.replaceAll("\\b" + correspondingValueInFirstRow + "\\b", "<" + header + ">");
-            column++;
+            stepDescription = stepDescription.replaceAll("\\b" + correspondingValueInFirstRow + "\\b", "{{" + column + "}}");
         }
+
+        int field = 0;
+        for(String header : getHeaders()) {
+            stepDescription = StringUtils.replace(stepDescription, "{{" + field + "}}", "<" + header + ">");
+            field++;
+        }
+
         return stepDescription;
     }
 }

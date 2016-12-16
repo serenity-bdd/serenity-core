@@ -173,7 +173,7 @@
 <#if (testOutcome.isDataDriven())>
 
     <#list testOutcome.dataTable.dataSets as dataSet >
-        <h3 class="story-header">Examples:<#if dataSet.title??>&nbsp;${dataSet.title}</#if></h3>
+        <h3 class="story-header">Examples:<#if dataSet.name??>&nbsp;${dataSet.name}</#if></h3>
         <#if dataSet.description??>
             <div class="requirementNarrative">${dataSet.description}</div>
         </#if>

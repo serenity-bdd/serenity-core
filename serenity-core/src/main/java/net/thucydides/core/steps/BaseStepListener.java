@@ -181,6 +181,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return Joiner.on("\n").join(bulletPoints);
     }
 
+    public void currentStepIsAPrecondition(boolean isPrecondition) {
+        getCurrentStep().setPrecondition(isPrecondition);
+    }
+
     public class StepMerger {
 
         final int maxStepsToMerge;
@@ -375,14 +379,28 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
-    public void updateCurrentStepTitle(String updatedStepTitle) {
+    public StepMutator updateCurrentStepTitle(String updatedStepTitle) {
         if (currentStepExists()) {
             getCurrentStep().setDescription(updatedStepTitle);
         } else {
             stepStarted(ExecutedStepDescription.withTitle(updatedStepTitle));
         }
+        return new StepMutator(this);
     }
 
+    public class StepMutator {
+
+        private final BaseStepListener baseStepListener;
+
+        public StepMutator(BaseStepListener baseStepListener) {
+            this.baseStepListener = baseStepListener;
+        }
+
+        public void asAPrecondition() {
+            baseStepListener.getCurrentStep().setPrecondition(true);
+        }
+
+    }
     private void setAnnotatedResult(String testMethod) {
         if (TestAnnotations.forClass(testSuite).isIgnored(testMethod)) {
             getCurrentTestOutcome().setAnnotatedResult(IGNORED);

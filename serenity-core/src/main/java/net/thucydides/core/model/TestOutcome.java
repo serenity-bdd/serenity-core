@@ -1991,12 +1991,21 @@ public class TestOutcome {
     }
 
     private List<TestStep> getStepChildren() {
-        TestStep firstExample = getTestSteps().get(0);
-        List<TestStep> firstLevel = firstExample.getChildren();
+        List<TestStep> firstLevel = firstNonPreconditionStepChildren();
         if (firstLevel.size() > 0 && firstLevel.get(0).getDescription().matches("^\\[\\d+\\]\\s\\{.+")) {
             firstLevel = firstLevel.get(0).getChildren();
         }
         return firstLevel;
+    }
+
+    private List<TestStep> firstNonPreconditionStepChildren() {
+
+        for(TestStep step : getTestSteps()) {
+            if (!step.isAPrecondition()) {
+                return step.getChildren();
+            }
+        }
+        return new ArrayList<>();
     }
 
     public String getDataDrivenSampleScenario() {

@@ -40,6 +40,7 @@ public class TestStep implements Cloneable {
     private FailureCause exception;
     private TestResult result;
     private RestQuery restQuery;
+    private Boolean precondition;
 
     private List<TestStep> children = new ArrayList<>();
 
@@ -98,6 +99,10 @@ public class TestStep implements Cloneable {
         }
     }
 
+    public void setPrecondition(boolean precondition) {
+        this.precondition = precondition;
+    }
+
     public static class TestStepBuilder {
         private final String description;
 
@@ -151,6 +156,7 @@ public class TestStep implements Cloneable {
         newTestStep.result = result;
         newTestStep.number = number;
         newTestStep.children = Lists.newArrayList(children);
+        newTestStep.precondition = precondition;
         return newTestStep;
     }
 
@@ -280,6 +286,10 @@ public class TestStep implements Cloneable {
 
     public Boolean isPending() {
         return getResult() == PENDING;
+    }
+
+    public Boolean isAPrecondition() {
+        return precondition;
     }
 
     public void setDuration(final long duration) {

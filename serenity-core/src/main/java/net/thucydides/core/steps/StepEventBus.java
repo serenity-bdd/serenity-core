@@ -292,11 +292,21 @@ public class StepEventBus {
      */
     public void stepStarted(final ExecutedStepDescription stepDescription) {
 
+        stepStarted(stepDescription, false);
+    }
+
+    /**
+     * Start the execution of a test step.
+     */
+    public void stepStarted(final ExecutedStepDescription stepDescription, boolean isPrecondition) {
+
         pushStep(stepDescription.getName());
 
         for (StepListener stepListener : getAllListeners()) {
             stepListener.stepStarted(stepDescription);
         }
+
+        baseStepListener.currentStepIsAPrecondition(isPrecondition);
     }
 
     /**
@@ -516,7 +526,11 @@ public class StepEventBus {
     }
 
     public void updateCurrentStepTitle(String stepTitle) {
-        getBaseStepListener().updateCurrentStepTitle(stepTitle);
+        updateCurrentStepTitle(stepTitle);
+    }
+
+    public void updateCurrentStepTitleAsPrecondition(String stepTitle) {
+        getBaseStepListener().updateCurrentStepTitle(stepTitle).asAPrecondition();
     }
 
     public void addIssuesToCurrentStory(List<String> issues) {

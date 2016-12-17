@@ -306,7 +306,9 @@ public class StepEventBus {
             stepListener.stepStarted(stepDescription);
         }
 
-        baseStepListener.currentStepIsAPrecondition(isPrecondition);
+        if (isPrecondition) {
+            baseStepListener.currentStepIsAPrecondition();
+        }
     }
 
     /**

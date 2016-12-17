@@ -181,8 +181,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return Joiner.on("\n").join(bulletPoints);
     }
 
-    public void currentStepIsAPrecondition(boolean isPrecondition) {
-        getCurrentStep().setPrecondition(isPrecondition);
+    public void currentStepIsAPrecondition() {
+        getCurrentStep().setPrecondition(true);
     }
 
     public class StepMerger {

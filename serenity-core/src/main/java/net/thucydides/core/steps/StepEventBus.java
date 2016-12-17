@@ -528,7 +528,7 @@ public class StepEventBus {
     }
 
     public void updateCurrentStepTitle(String stepTitle) {
-        updateCurrentStepTitle(stepTitle);
+        getBaseStepListener().updateCurrentStepTitle(stepTitle);
     }
 
     public void updateCurrentStepTitleAsPrecondition(String stepTitle) {

@@ -2,11 +2,13 @@ package net.thucydides.core.reports.html;
 
 import ch.lambdaj.function.convert.Converter;
 import com.beust.jcommander.internal.Lists;
+import com.google.common.base.Splitter;
 import net.serenitybdd.core.SerenitySystemProperties;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.ReportType;
+import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.*;
 import net.thucydides.core.requirements.DefaultRequirements;
 import net.thucydides.core.requirements.Requirements;
@@ -21,10 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.CopyOption;
 import java.nio.file.StandardCopyOption;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -46,6 +45,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     private String projectName;
     private String relativeLink;
+    private String tags;
     private final IssueTracking issueTracking;
 
     private final RequirementsConfiguration requirementsConfiguration;
@@ -122,15 +122,18 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         Stopwatch stopwatch = Stopwatch.started();
         copyScreenshotsFrom(sourceDirectory);
 
-        LOGGER.debug("Copied screenshots after {} ms",stopwatch.lapTime());
+        LOGGER.debug("Copied screenshots after {} ms", stopwatch.lapTime());
 
         TestOutcomes allTestOutcomes = loadTestOutcomesFrom(sourceDirectory);
 
-        LOGGER.debug("Loaded test outcomes after {} ms",stopwatch.lapTime());
+        if (tags != null) {
+            allTestOutcomes = allTestOutcomes.withTags(getTags());
+        }
+        LOGGER.debug("Loaded test outcomes after {} ms", stopwatch.lapTime());
 
         generateReportsForTestResultsIn(allTestOutcomes);
 
-        LOGGER.debug("Generated reports after {} ms",stopwatch.lapTime());
+        LOGGER.debug("Generated reports after {} ms", stopwatch.lapTime());
 
         return allTestOutcomes;
     }
@@ -254,6 +257,10 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         }
     }
 
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
     public void setJiraPassword(String jiraPassword) {
         if (jiraPassword != null) {
             getSystemProperties().setValue(ThucydidesSystemProperty.JIRA_PASSWORD, jiraPassword);
@@ -268,6 +275,25 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         } else {
             return types;
         }
+    }
+
+    public List<TestTag> getTags() {
+        if (tags == null) {
+            return new ArrayList<>();
+        }
+
+        List<String> tagValues = Splitter.on(",").trimResults().splitToList(tags);
+        return convert(tagValues, toTags());
+    }
+
+    private Converter<String, TestTag> toTags() {
+        return new Converter<String, TestTag>(){
+
+            @Override
+            public TestTag convert(String from) {
+                return TestTag.withValue(from);
+            }
+        };
     }
 
 

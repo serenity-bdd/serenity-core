@@ -275,7 +275,7 @@ public class DataTable {
     public String restoreVariablesIn(String stepDescription) {
         for(int column = 0; column < getHeaders().size(); column++) {
             String correspondingValueInFirstRow = getRows().get(0).getStringValues().get(column);
-            stepDescription = stepDescription.replaceAll("\\b" + correspondingValueInFirstRow + "\\b", "{{" + column + "}}");
+            stepDescription = stepDescription.replaceAll("\\b" + withEscapedRegExChars(correspondingValueInFirstRow) + "\\b", "{{" + column + "}}");
         }
 
         int field = 0;
@@ -285,5 +285,17 @@ public class DataTable {
         }
 
         return stepDescription;
+    }
+
+    private static String[] REGEX_CHARS = new String[] {
+            "(",")","[","]","\\",".","?","*","+"
+    };
+
+    private static String[] ESCAPED_REGEX_CHARS = new String[] {
+            "\\(","\\)","\\[","\\]","\\\\","\\.","\\?","\\*","\\+"
+    };
+
+    private String withEscapedRegExChars(String value) {
+        return StringUtils.replaceEach(value, REGEX_CHARS, ESCAPED_REGEX_CHARS);
     }
 }

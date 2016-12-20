@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Iterator;
@@ -140,8 +141,12 @@ public class ResizableImage {
      * Otherwise we should be applying the saveTo() method on the ResizedImage class.
      */
     public void saveTo(final File savedFile) throws IOException {
+        if (savedFile.exists()) {
+            return;
+        }
+
         try {
             Files.copy(screenshotFile.toPath(), savedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (FileAlreadyExistsException ignored) {}
+        } catch (FileSystemException fileAlreadyBeingSavedByAnotherThread) {}
     }
 }

@@ -48,6 +48,7 @@ public class Formatter {
     private static final String ELIPSE = "&hellip;";
     private static final String ASCIIDOC = "asciidoc";
     private static final String MARKDOWN = "markdown";
+    private static final String TEXT = "";
     private static final String NEW_LINE = "\n";
 
     private final static String NEWLINE_CHAR = "\u2424";
@@ -83,8 +84,14 @@ public class Formatter {
     }
 
     private String stripSurroundingParagraphTagsFrom(String text) {
-        return text.toLowerCase().startsWith("<p>") ?
-                text.substring(3, text.length() - 5) : text;
+        if (text.toLowerCase().startsWith("<p>")) {
+            text = text.substring(3);
+        }
+
+        if (text.toLowerCase().endsWith("</p>")) {
+            text = text.substring(0, text.length() - 4);
+        }
+        return text;
     }
 
     private String stripNewLines(String render) {
@@ -181,7 +188,7 @@ public class Formatter {
 
 
     public String renderDescription(final String text) {
-        String format = environmentVariables.getProperty(ThucydidesSystemProperty.NARRATIVE_FORMAT,"");
+        String format = environmentVariables.getProperty(ThucydidesSystemProperty.NARRATIVE_FORMAT, TEXT);
 
         if (isRenderedHtml(text)) {
             return text;

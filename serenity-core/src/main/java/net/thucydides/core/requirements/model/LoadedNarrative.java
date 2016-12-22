@@ -74,8 +74,7 @@ public class LoadedNarrative {
 
     private boolean thereIsUsefulInformationIn(String nextLine) {
         String normalizedText = normalizedLine(nextLine);
-        return !normalizedText.isEmpty()
-                && !normalizedText.startsWith("#")
+        return !normalizedText.startsWith("#")
                 && !normalizedText.startsWith("meta:")
                 && !normalizedText.startsWith("background:")
                 && !(normalizedText.startsWith("@")

@@ -816,6 +816,10 @@ font-family:euphemia, verdana, sans-serif; font-size:16px; color: #88a717; font-
     border-radius: 10px;
 }
 
+.requirementNarrativeTitle ul,ol,dl {
+    margin-left: 40px;
+}
+
 #accordion ul {
     list-style: none;
     padding: 0 0 0 0;

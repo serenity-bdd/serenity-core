@@ -116,6 +116,13 @@ public class StepEventBus {
         }
     }
 
+    public void testStarted(final String testName, final String id) {
+        clear();
+        for (StepListener stepListener : getAllListeners()) {
+            stepListener.testStarted(testName, id);
+        }
+    }
+
     public boolean isUniqueSession() {
         return uniqueSession;
     }

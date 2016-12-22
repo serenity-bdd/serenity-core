@@ -80,6 +80,11 @@ public class TestCountListener implements StepListener {
         }
     }
 
+    @Override
+    public void testStarted(String description, String id) {
+        testStarted(description);
+    }
+
 
     public void testFinished(TestOutcome result) {
     }

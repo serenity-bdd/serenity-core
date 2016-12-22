@@ -186,7 +186,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         Set<TestTag> tags = new HashSet<>();
         if (testOutcome.getPath() != null) {
 
-            Optional<Requirement> matchingRequirement = requirementWithMatchingFeatureFile(testOutcome.getPath());
+            Optional<Requirement> matchingRequirement = requirementWithMatchingFeatureFile(testOutcome);
 
             if (matchingRequirement.isPresent()) {
                 tags.add(matchingRequirement.get().asTag());
@@ -212,9 +212,17 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return null;
     }
 
-    Optional<Requirement> requirementWithMatchingFeatureFile(String path) {
+    Optional<Requirement> requirementWithMatchingFeatureFile(TestOutcome testOutcome) {
+        String candidatePath = testOutcome.getPath();
+        String parentRequirementId = testOutcome.getParentId();
+
         for(Requirement requirement : AllRequirements.in(getRequirements()) ) {
-            if ((requirement.getFeatureFileName() != null) && (requirement.getFeatureFileName().equalsIgnoreCase(path))) {
+
+            if (requirement.getId() != null && requirement.getId().equals(parentRequirementId)) {
+                return Optional.of(requirement);
+            }
+
+            if ((requirement.getFeatureFileName() != null) && (requirement.getFeatureFileName().equalsIgnoreCase(candidatePath))) {
                 return Optional.of(requirement);
             }
         }
@@ -305,6 +313,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     public Optional<Requirement> getParentRequirementOf(final TestOutcome testOutcome) {
         return firstRequirementFoundIn(
                 parentRequirementFromPackagePath(testOutcome),
+                requirementWithMatchingParentId(testOutcome),
                 requirementWithMatchingPath(testOutcome),
                 featureTagRequirementIn(testOutcome),
                 mostSpecificTagRequirementFor(testOutcome));
@@ -351,6 +360,14 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return Optional.absent();
     }
 
+    private Optional<Requirement> requirementWithMatchingParentId(TestOutcome testOutcome) {
+        for (Requirement requirement : AllRequirements.in(getRequirements())) {
+            if (requirement.getId() != null && testOutcome.getParentId() != null && (requirement.getId().equals(testOutcome.getParentId()))) {
+                return Optional.of(requirement);
+            }
+        }
+        return Optional.absent();
+    }
 
     public Optional<Requirement> getRequirementFor(TestTag testTag) {
         for (Requirement requirement : AllRequirements.in(getRequirements())) {
@@ -487,7 +504,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         String storyName = (optionalNarrative.isPresent()) ? optionalNarrative.get().getTitle().or(defaultStoryName) : defaultStoryName;
 
         Requirement requirement = (optionalNarrative.isPresent()) ?
-                leafRequirementWithNarrative(humanReadableVersionOf(storyName), optionalNarrative.get()).withType(type.toString())
+                leafRequirementWithNarrative(humanReadableVersionOf(storyName), storyFile.getPath(), optionalNarrative.get()).withType(type.toString())
                 : storyNamed(storyName).withType(type.toString());
 
         return requirement.definedInFile(storyFile);
@@ -533,12 +550,13 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return Requirement.named(shortName).withType(STORY_EXTENSION).withNarrative(shortName);
     }
 
-    private Requirement leafRequirementWithNarrative(String shortName, Narrative requirementNarrative) {
+    private Requirement leafRequirementWithNarrative(String shortName, String path, Narrative requirementNarrative) {
         String displayName = getTitleFromNarrativeOrDirectoryName(requirementNarrative, shortName);
         String cardNumber = requirementNarrative.getCardNumber().orNull();
         String type = requirementNarrative.getType();
         List<String> releaseVersions = requirementNarrative.getVersionNumbers();
         return Requirement.named(shortName)
+                .withId(requirementNarrative.getId().or(path))
                 .withOptionalDisplayName(displayName)
                 .withOptionalCardNumber(cardNumber)
                 .withType(type)

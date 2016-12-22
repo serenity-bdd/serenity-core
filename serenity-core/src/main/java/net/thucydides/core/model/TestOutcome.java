@@ -57,6 +57,7 @@ import static net.thucydides.core.model.ReportType.ROOT;
 import static net.thucydides.core.model.TestResult.*;
 import static net.thucydides.core.util.NameConverter.withNoArguments;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.hamcrest.Matchers.is;
 
 /**
  * Represents the results of a test (or "scenario") execution. This
@@ -81,6 +82,11 @@ public class TestOutcome {
      */
     @NotNull
     private String name;
+
+    /**
+     * A unique identifier for this test, if available
+     */
+    private String id;
 
     /**
      * The class containing the test method, if the test is implemented in a Java class.
@@ -236,6 +242,20 @@ public class TestOutcome {
     public TestOutcome(final String name, final Class<?> testCase) {
         this(name, testCase, ConfiguredEnvironment.getEnvironmentVariables());
     }
+
+    private static String identifierFrom(String testName, Class<?> testCase, Story userStory) {
+        String qualifier = null;
+        if (testCase != null) {
+            qualifier = testCase.getName();
+        }
+
+        if (userStory != null) {
+            qualifier = userStory.getId();
+        }
+
+        return ((qualifier != null) ? qualifier + ":" : "") + testName;
+    }
+
     /**
      * Create a test outcome based on a test method in a test class.
      * The requirement type will be derived if possible using the class package.
@@ -246,6 +266,7 @@ public class TestOutcome {
     public TestOutcome(final String name, final Class<?> testCase, EnvironmentVariables environmentVariables) {
         startTime = now().toDate().getTime();
         this.name = name;
+        this.id = identifierFrom(name, testCase, userStory);
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
         this.additionalIssues = Lists.newArrayList();
@@ -337,6 +358,7 @@ public class TestOutcome {
     protected TestOutcome(final String name, final Class<?> testCase, final Story userStory, EnvironmentVariables environmentVariables) {
         startTime = now().toDate().getTime();
         this.name = name;
+        this.id = identifierFrom(name, testCase, userStory);
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
         this.additionalIssues = Lists.newArrayList();
@@ -360,6 +382,7 @@ public class TestOutcome {
                 this.title,
                 this.description,
                 this.name,
+                this.id,
                 this.testCase,
                 this.testSteps,
                 this.coreIssues,
@@ -382,6 +405,7 @@ public class TestOutcome {
                           final String title,
                           final String description,
                           final String name,
+                          final String id,
                           final Class<?> testCase,
                           final List<TestStep> testSteps,
                           final List<String> issues,
@@ -402,6 +426,7 @@ public class TestOutcome {
         this.title = title;
         this.description = description;
         this.name = name;
+        this.id = id;
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
         addSteps(testSteps);
@@ -453,6 +478,7 @@ public class TestOutcome {
                     this.title,
                     this.description,
                     this.name,
+                    this.id,
                     this.testCase,
                     this.testSteps,
                     this.coreIssues,
@@ -479,6 +505,7 @@ public class TestOutcome {
                 this.title,
                 this.description,
                 this.name,
+                this.id,
                 this.testCase,
                 this.testSteps,
                 (issues == null) ? issues : ImmutableList.copyOf(issues),
@@ -502,6 +529,7 @@ public class TestOutcome {
                 this.title,
                 this.description,
                 this.name,
+                this.id,
                 this.testCase,
                 this.testSteps,
                 this.coreIssues,
@@ -526,6 +554,7 @@ public class TestOutcome {
                     this.title,
                     this.description,
                     methodName,
+                    identifierFrom(methodName, testCase, userStory),
                     this.testCase,
                     this.getTestSteps(),
                     this.coreIssues,
@@ -675,6 +704,47 @@ public class TestOutcome {
             }
         }
         return Optional.absent();
+    }
+
+    public String getId() {
+        updateIdIfNotDefinedForLegacyPersistedFormats();
+        return id;
+    }
+
+    public String getParentId() {
+        if (id != null && id.contains(";")) { return Splitter.on(";").splitToList(id).get(0); }
+
+        return null;
+    }
+
+    private void updateIdIfNotDefinedForLegacyPersistedFormats() {
+        if (id == null) {
+            id = identifierFrom(testCaseName, testCase, userStory);
+        }
+    }
+
+    public TestOutcome withId(String id) {
+        return new TestOutcome(this.startTime,
+                this.duration,
+                this.title,
+                this.description,
+                this.name,
+                id,
+                this.testCase,
+                this.testSteps,
+                this.coreIssues,
+                this.additionalIssues,
+                (tags == null) ? tags : ImmutableSet.copyOf(tags),
+                this.userStory,
+                this.testFailureCause,
+                this.testFailureClassname,
+                this.testFailureMessage,
+                this.annotatedResult,
+                this.dataTable,
+                this.qualifier,
+                this.driver,
+                this.manual,
+                this.environmentVariables);
     }
 
     private static class TestOutcomeWithEnvironmentBuilder {
@@ -1573,6 +1643,14 @@ public class TestOutcome {
         }
     }
 
+    public String getQualifiedId() {
+        if ((qualifier != null) && (qualifier.isPresent())) {
+            String qualifierWithoutSpaces = qualifier.get().replaceAll(" ", "_");
+            return getId() + "_" + qualifierWithoutSpaces;
+        } else {
+            return getId();
+        }
+    }
     /**
      * Returns the name of the test prefixed by the name of the story.
      */
@@ -2001,7 +2079,7 @@ public class TestOutcome {
     private List<TestStep> firstNonPreconditionStepChildren() {
 
         for(TestStep step : getTestSteps()) {
-            if (!step.isAPrecondition()) {
+            if (!step.isAPrecondition() && step.hasChildren()) {
                 return step.getChildren();
             }
         }
@@ -2009,7 +2087,7 @@ public class TestOutcome {
     }
 
     public String getDataDrivenSampleScenario() {
-        if (!isDataDriven() || getTestSteps().isEmpty() || !getTestSteps().get(0).hasChildren()) {
+        if (!isDataDriven() || getTestSteps().isEmpty() || !atLeastOneStepHasChildren()) {
             return "";
         }
         StringBuilder sampleScenario = new StringBuilder();
@@ -2019,6 +2097,10 @@ public class TestOutcome {
                     .append("\n");
         }
         return sampleScenario.length() > 1 ? sampleScenario.substring(0, sampleScenario.length() - 1) : "";
+    }
+
+    private boolean atLeastOneStepHasChildren() {
+        return !filter(having(on(TestStep.class).hasChildren(), is(true)), getTestSteps()).isEmpty();
     }
 
     private String withPlaceholderSubstitutes(String stepName) {
@@ -2039,6 +2121,7 @@ public class TestOutcome {
         TestOutcome that = (TestOutcome) o;
 
         if (manual != that.manual) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (qualifier != null ? !qualifier.equals(that.qualifier) : that.qualifier != null) return false;
         if (testCaseName != null ? !testCaseName.equals(that.testCaseName) : that.testCaseName != null) return false;

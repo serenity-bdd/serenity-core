@@ -31,9 +31,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static ch.lambdaj.Lambda.join;
-import static net.thucydides.core.reports.html.MarkdownRendering.RenderedElements.narrative;
-import static net.thucydides.core.reports.html.MarkdownRendering.RenderedElements.scenario;
-import static net.thucydides.core.reports.html.MarkdownRendering.RenderedElements.step;
+import static net.thucydides.core.reports.html.MarkdownRendering.RenderedElements.*;
 import static org.apache.commons.lang3.StringUtils.abbreviate;
 
 /**
@@ -310,8 +308,13 @@ public class Formatter {
         return plainHtmlCompatible(fieldValue);
     }
 
+    public String htmlCompatibleListEntry(Object fieldValue) {
+        return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(list)) ?
+                renderMarkdown(htmlCompatible(fieldValue)) : htmlCompatible(fieldValue);
+    }
+
     public String htmlCompatibleStoryTitle(Object fieldValue) {
-        return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(narrative)) ?
+        return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(story)) ?
                 renderMarkdown(htmlCompatible(fieldValue)) : htmlCompatible(fieldValue);
     }
 

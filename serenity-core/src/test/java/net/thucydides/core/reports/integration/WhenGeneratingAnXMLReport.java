@@ -906,23 +906,6 @@ public class WhenGeneratingAnXMLReport {
     }
 
     @Test
-    public void should_have_a_qualified_filename_if_qualifier_present() throws Exception {
-        TestOutcome testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class);
-
-        TestStep step1 = successfulTestStepCalled("step 1");
-        File screenshot = temporaryDirectory.newFile("step_1.png");
-        File source = temporaryDirectory.newFile("step_1.html");
-        step1.addScreenshot(new ScreenshotAndHtmlSource(screenshot, source));
-        testOutcome.recordStep(step1);
-
-        reporter.setQualifier("qualifier");
-
-        File xmlReport = reporter.generateReportFor(testOutcome);
-        assertThat(xmlReport.getName(), is(Digest.ofTextValue("net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport/a_user_story_a_simple_test_case_qualifier") + ".xml"));
-
-    }
-
-    @Test
     public void should_include_error_message_for_failing_test()
             throws Exception {
         TestOutcome testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class);

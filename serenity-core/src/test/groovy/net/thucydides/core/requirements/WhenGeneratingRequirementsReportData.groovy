@@ -283,8 +283,6 @@ class WhenGeneratingRequirementsReportData extends Specification {
         then:
             releasedOutcomes.requirementOutcomes.size() == 1
         and:
-            releasedOutcomes.flattenedRequirementOutcomes.size() ==1
-        and:
             releasedOutcomes.testOutcomes.outcomes.size() == 3
     }
 

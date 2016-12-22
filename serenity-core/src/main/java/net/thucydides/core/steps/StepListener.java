@@ -35,6 +35,7 @@ public interface StepListener {
      * A test with a given name has started.
      */
     void testStarted(final String description);
+    void testStarted(final String description, final String id);
 
     /**
      * Called when a test finishes.

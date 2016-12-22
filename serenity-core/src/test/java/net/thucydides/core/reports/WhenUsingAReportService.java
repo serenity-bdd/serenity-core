@@ -38,6 +38,9 @@ public class WhenUsingAReportService {
     public void initMocks() throws IOException {
         MockitoAnnotations.initMocks(this);
         when(testOutcome.getTestCaseName()).thenReturn("someTestCase");
+        when(testOutcome.getId()).thenReturn("someId");
+        when(testOutcome.getQualifiedId()).thenReturn("someId");
+
         outputDirectory = folder.newFolder();
     }
 

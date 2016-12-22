@@ -55,6 +55,11 @@ public class FailureDetectingStepListener implements StepListener {
         lastTestFailed = false;
     }
 
+    @Override
+    public void testStarted(String description, String id) {
+        lastTestFailed = false;
+    }
+
 
     public void testFinished(TestOutcome result) {
 

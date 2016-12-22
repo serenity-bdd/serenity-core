@@ -249,6 +249,13 @@ public class ConsoleLoggingListener implements StepListener {
         }
     }
 
+    @Override
+    public void testStarted(String description, String id) {
+        if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
+            getLogger().info(testStartedHeadings() + "\nTEST STARTED: " + description + underline(TEST_STARTED_HEADINGS.get(headingStyle)) + "(" + id + ")");
+        }
+    }
+
     private String testStartedHeadings() {
         return TEST_STARTED_HEADINGS.get(headingStyle);
     }

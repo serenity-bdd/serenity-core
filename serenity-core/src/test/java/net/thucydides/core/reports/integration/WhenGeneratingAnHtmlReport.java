@@ -76,38 +76,6 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
         assertThat(htmlReport.exists(), is(true));
     }
 
-    @Test
-    public void should_generate_an_HTML_report_for_an_acceptance_test_run_with_spaces_in_the_test_name() throws Exception {
-
-        TestOutcome testOutcome = new TestOutcome("A simple test case");
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
-
-        File htmlReport = reporter.generateReportFor(testOutcome);
-
-        assertThat(htmlReport.getName(), is(Digest.ofTextValue("a_simple_test_case") + ".html"));
-    }
-
-    @Test
-    public void should_generate_an_HTML_report_for_an_acceptance_test_run_with_an_issue_number_in_the_test_name() throws Exception {
-
-        TestOutcome testOutcome = new TestOutcome("A simple test case (#ISSUE-123)");
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
-
-        File htmlReport = reporter.generateReportFor(testOutcome);
-
-        assertThat(htmlReport.getName(), is(Digest.ofTextValue("a_simple_test_case") + ".html"));
-    }
-
-    @Test
-    public void should_generate_an_HTML_report_for_an_acceptance_test_run_with_issue_numbers_in_the_test_name() throws Exception {
-
-        TestOutcome testOutcome = new TestOutcome("A simple test case (#ISSUE-123, #ISSUE-145)");
-        testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1"));
-
-        File htmlReport = reporter.generateReportFor(testOutcome);
-
-        assertThat(htmlReport.getName(), is(Digest.ofTextValue("a_simple_test_case") + ".html"));
-    }
 
     @Test
     public void css_stylesheets_should_also_be_copied_to_the_output_directory() throws Exception {
@@ -159,9 +127,9 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
         step1.addScreenshot(new ScreenshotAndHtmlSource(screenshot,screenshotSource));
         testOutcome.recordStep(step1);
 
-        reporter.generateReportFor(testOutcome);
+        File report = reporter.generateReportFor(testOutcome);
+        File screenshotReport = withSuffix(report,"_screenshots");
 
-        File screenshotReport = new File(outputDirectory, Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_should_do_this") + "_screenshots.html");
         assertThat(screenshotReport.exists(), is(true));
 
     }
@@ -174,9 +142,9 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
         recordStepWithScreenshot(testOutcome, "View the results", "google_page_2.png");
         recordStepWithScreenshot(testOutcome, "Display a resulting page", "google_page_3.png");
 
-        reporter.generateReportFor(testOutcome);
+        File report = reporter.generateReportFor(testOutcome);
+        File screenshotReport = withSuffix(report,"_screenshots");
 
-        File screenshotReport = new File(outputDirectory, Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_search_for_cats") + "_screenshots.html");
         String reportContents = FileUtils.readFileToString(screenshotReport);
         assertThat(reportContents, allOf(containsString("src=\"scaled_google_page_1.png\""),
                                         containsString("src=\"scaled_google_page_2.png\""),
@@ -191,9 +159,9 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
         recordStepWithScreenshot(testOutcome, "View the results", "google_page_2.png");
         recordStepWithScreenshot(testOutcome, "Display a resulting page", "google_page_3.png");
 
-        reporter.generateReportFor(testOutcome);
+        File report = reporter.generateReportFor(testOutcome);
+        File screenshotReport = withSuffix(report,"_screenshots");
 
-        File screenshotReport = new File(outputDirectory,  Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_should_do_this") + "_screenshots.html");
         String reportContents = FileUtils.readFileToString(screenshotReport);
         assertThat(reportContents, allOf(containsString("title=\"Search cats on Google\""),
                 containsString("title=\"View the results\""),
@@ -208,11 +176,15 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
         recordStepWithScreenshot(testOutcome, "View the results", "google_page_2.png");
         recordStepWithScreenshot(testOutcome, "Display a resulting page", "google_page_3.png");
 
-        reporter.generateReportFor(testOutcome);
+        File report = reporter.generateReportFor(testOutcome);
 
-        File screenshotReport = new File(outputDirectory, Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_should_do_this") + "_screenshots.html");
+        File screenshotReport = withSuffix(report,"_screenshots");
         String reportContents = FileUtils.readFileToString(screenshotReport);
         assertThat(reportContents, containsString("Should do this"));
+    }
+
+    private File withSuffix(File filename, String suffix) {
+        return new File(filename.getAbsolutePath().replace(".html","") + suffix + ".html");
     }
 
     @Test
@@ -226,68 +198,13 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
         step1.addScreenshot(new ScreenshotAndHtmlSource(screenshot,screenshotSource));
         testOutcome.recordStep(step1);
 
-        reporter.generateReportFor(testOutcome);
+        File report = reporter.generateReportFor(testOutcome);
+        File screenshotReport = withSuffix(report,"_screenshots");
 
-        File screenshotReport = new File(outputDirectory, Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_should_do_this") + "_screenshots.html");
         String reportContents = FileUtils.readFileToString(screenshotReport);
         assertThat(reportContents, containsString("step 1"));
 
     }
-
-
-    @Test
-    public void report_html_should_contain_a_link_to_the_screenshots_report()  throws Exception {
-        TestOutcome testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class);
-
-        TestStep step1 = TestStepFactory.successfulTestStepCalled("step 1");
-        File screenshot = temporaryDirectory.newFile("google_page_1.png");
-        File screenshotSource = temporaryDirectory.newFile("google_page_1.html");
-        step1.addScreenshot(new ScreenshotAndHtmlSource(screenshot,screenshotSource));
-        testOutcome.recordStep(step1);
-
-        reporter.generateReportFor(testOutcome);
-
-        File testReport = new File(outputDirectory, Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_should_do_this") + ".html");
-        String reportContents = FileUtils.readFileToString(testReport);
-        assertThat(reportContents, containsString("<a href=\"" + Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_should_do_this")
-                                                  + "_screenshots.html#screenshots?screenshot=0\">"));
-    }
-
-
-    @Test
-    public void should_have_a_qualified_filename_if_qualifier_present()  throws Exception {
-        TestOutcome testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class);
-
-        TestStep step1 = TestStepFactory.successfulTestStepCalled("step 1");
-        File screenshot = temporaryDirectory.newFile("google_page_1.png");
-        File screenshotSource = temporaryDirectory.newFile("google_page_1.html");
-        step1.addScreenshot(new ScreenshotAndHtmlSource(screenshot,screenshotSource));
-        testOutcome.recordStep(step1);
-
-        reporter.setQualifier("qualifier");
-
-        File xmlReport = reporter.generateReportFor(testOutcome);
-        assertThat(xmlReport.getName(), is(Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_should_do_this_qualifier") + ".html"));
-
-    }
-
-    @Test
-    public void spaces_in_the_qualifier_are_converted_to_underscores_for_the_report_name()  throws Exception {
-        TestOutcome testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class);
-
-        TestStep step1 = TestStepFactory.successfulTestStepCalled("step 1");
-        File screenshot = temporaryDirectory.newFile("google_page_1.png");
-        File screenshotSource = temporaryDirectory.newFile("google_page_1.html");
-        step1.addScreenshot(new ScreenshotAndHtmlSource(screenshot,screenshotSource));
-        testOutcome.recordStep(step1);
-
-        reporter.setQualifier("a b c");
-
-        File xmlReport = reporter.generateReportFor(testOutcome);
-        assertThat(xmlReport.getName(), is(Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_should_do_this_a_b_c") + ".html"));
-
-    }
-
 
     @Test
     public void the_resources_can_come_from_a_different_location_in_a_jar_file() throws Exception {

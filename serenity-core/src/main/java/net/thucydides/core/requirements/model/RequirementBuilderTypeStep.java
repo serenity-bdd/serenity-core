@@ -14,6 +14,7 @@ public class RequirementBuilderTypeStep {
         String displayName = requirementBuilderNameStep.displayName;
         String cardNumber = requirementBuilderNameStep.cardNumber;
         String parent = requirementBuilderNameStep.parent;
-        return new Requirement(name, displayName, cardNumber, parent, type, new CustomFieldValue("Narrative", narrativeText));
+        String id = requirementBuilderNameStep.id;
+        return new Requirement(name, id, displayName, cardNumber, parent, type, new CustomFieldValue("Narrative", narrativeText));
     }
 }

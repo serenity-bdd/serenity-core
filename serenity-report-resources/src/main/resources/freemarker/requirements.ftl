@@ -173,7 +173,7 @@
                     <#assign rootTitle = inflection.of(requirements.grandparentRequirement.get().displayName).asATitle() >
                     > <a href="${rootReport}" title="${rootTitle}">${formatter.truncatedHtmlCompatible(rootTitle,40)}</a>
                 </#if>
-                > ${formatter.truncatedHtmlCompatible(parentTitle,50)}
+                > ${formatter.truncatedHtmlCompatible(parentTitle,40)}
             </#if>
             </span>
         </div>

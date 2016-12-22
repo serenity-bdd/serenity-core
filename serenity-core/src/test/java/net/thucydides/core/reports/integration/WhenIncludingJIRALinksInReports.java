@@ -2,7 +2,6 @@ package net.thucydides.core.reports.integration;
 
 import net.thucydides.core.annotations.Story;
 import net.thucydides.core.annotations.Title;
-import net.thucydides.core.digest.Digest;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.issues.SystemPropertiesIssueTracking;
 import net.thucydides.core.model.TestOutcome;
@@ -57,9 +56,8 @@ public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTes
 
         recordSimpleTest(testOutcome);
 
-        reporter.generateReportFor(testOutcome);
+        File screenshotReport = reporter.generateReportFor(testOutcome);
 
-        File screenshotReport = new File(outputDirectory, Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_a_simple_test_case") + ".html");
         String reportContents = FileUtils.readFileToString(screenshotReport);
         assertThat(reportContents, containsString("<a target=\"_blank\" href=\"http://my.issue.tracker/1234\">#1234</a>"));
     }
@@ -73,9 +71,7 @@ public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTes
 
         recordSimpleTest(testOutcome);
 
-        reporter.generateReportFor(testOutcome);
-
-        File screenshotReport = new File(outputDirectory, Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_a_simple_test_case") + ".html");
+        File screenshotReport = reporter.generateReportFor(testOutcome);
         String reportContents = FileUtils.readFileToString(screenshotReport);
         assertThat(reportContents, containsString("<a target=\"_blank\" href=\"http://my.issue.tracker/1234\">#1234</a>"));
     }
@@ -88,9 +84,8 @@ public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTes
 
         recordSimpleTest(testOutcome);
 
-        reporter.generateReportFor(testOutcome);
+        File screenshotReport =reporter.generateReportFor(testOutcome);
 
-        File screenshotReport = new File(outputDirectory, Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_a_simple_test_case") + ".html");
         String reportContents = FileUtils.readFileToString(screenshotReport);
         assertThat(reportContents, containsString("<a target=\"_blank\" href=\"http://my.jira/browse/1234\">#1234</a>"));
     }
@@ -104,9 +99,8 @@ public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTes
 
         recordSimpleTest(testOutcome);
 
-        reporter.generateReportFor(testOutcome);
+        File screenshotReport = reporter.generateReportFor(testOutcome);
 
-        File screenshotReport = new File(outputDirectory, Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_a_simple_test_case") + ".html");
         String reportContents = FileUtils.readFileToString(screenshotReport);
         assertThat(reportContents, containsString("<a target=\"_blank\" href=\"http://my.jira/browse/MYPROJECT-1234\">#1234</a>"));
     }
@@ -119,9 +113,8 @@ public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTes
 
         recordSimpleTest(testOutcome);
 
-        reporter.generateReportFor(testOutcome);
+        File screenshotReport = reporter.generateReportFor(testOutcome);
 
-        File screenshotReport = new File(outputDirectory, Digest.ofTextValue("net.thucydides.core.reports.integration.AbstractReportGenerationTest/a_user_story_should_do_this_too") + ".html");
         String reportContents = FileUtils.readFileToString(screenshotReport);
         assertThat(reportContents, allOf(containsString("<a target=\"_blank\" href=\"http://my.issue.tracker/1234\">#1234</a>"),
                                          containsString("<a target=\"_blank\" href=\"http://my.issue.tracker/2345\">#2345</a>")));

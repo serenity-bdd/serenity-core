@@ -33,9 +33,10 @@
         <#list breadcrumbs as breadcrumb>
             <#assign breadcrumbReport = absoluteReportName.forRequirement(breadcrumb) />
             <#assign breadcrumbTitle = inflection.of(breadcrumb.shortName).asATitle() >
-            > <a href="${breadcrumbReport}">${formatter.truncatedHtmlCompatible(breadcrumbTitle,40)}</a>
+            <#assign breadcrumbType = inflection.of(breadcrumb.type).asATitle() >
+            > <a href="${breadcrumbReport}" title="${breadcrumbTitle} (breadcrumbType)">${formatter.truncatedHtmlCompatible(breadcrumbTitle,20)}</a>
         </#list>
-            > ${formatter.truncatedHtmlCompatible(testOutcome.title,80)}
+            > ${formatter.truncatedHtmlCompatible(testOutcome.title,60)}
         </span>
         </div>
         <div class="rightbg"></div>

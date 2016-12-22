@@ -32,9 +32,11 @@ public class LoadedNarrative {
             String text = readNarrativeFrom(lines);
             reader.close();
             return Optional.of(new Narrative(Optional.fromNullable(title),
+                    Optional.of(narrativeFile.getPath()),
                     Optional.fromNullable(cardNumber),
                     versionNumbers,
-                    type, text));
+                    type,
+                    text));
         } catch (IOException ex) {
             ex.printStackTrace();
         }

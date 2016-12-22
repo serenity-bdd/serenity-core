@@ -453,9 +453,12 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         testOutcome.recordStep(step);
         when:
         reporter.setQualifier("qualifier");
-        def report = reporter.generateReportFor(testOutcome);
+        def reportWithQualifier = reporter.generateReportFor(testOutcome);
+        and:
+        reporter.setQualifier(null)
+        def reportWithoutQualifier = reporter.generateReportFor(testOutcome);
         then:
-        report.name == Digest.ofTextValue("net.thucydides.core.reports.json.WhenStoringTestOutcomesAsJSON/a_user_story_a_simple_test_case_qualifier") + ".json";
+        reportWithQualifier != reportWithoutQualifier
     }
 
     def "should include error message for failing test"() {

@@ -55,8 +55,10 @@ public class CucumberParser {
             List<String> versionNumbers = findVersionNumberInTags(tagsDefinedIn(gherkinStructure));
             String title = gherkinStructure.getFeature().getName();
             String text = gherkinStructure.getFeature().getDescription();
+            String id = gherkinStructure.getFeature().getId();
 
             return Optional.of(new Narrative(Optional.fromNullable(title),
+                    Optional.fromNullable(id),
                     Optional.fromNullable(cardNumber),
                     versionNumbers,
                     "feature",

@@ -39,19 +39,26 @@ public class ReportNamer {
     public String getNormalizedTestNameFor(final TestOutcome testOutcome) {
         String testName = getBaseTestNameFor(testOutcome);
         String testNameWithoutIndex = stripIndexesFrom(testName);
-        return underscore(normalizedVersionOf(testNameWithoutIndex));
+        return normalizedVersionOf(underscore(testNameWithoutIndex));
+    }
+
+    private String optionallyCompressed(String text) {
+        return compressedFilename ? Digest.ofTextValue(text) : text;
     }
 
     private String getBaseTestNameFor(TestOutcome testOutcome) {
-        String testName = "";
+//        return underscore(withNoIssueNumbers(testOutcome.getId()));
+//        String testName = "";
+//
+//        if (testOutcome.getUserStory() != null) {
+//            testName = underscore(testOutcome.getUserStory().getName());
+//        } else if (testOutcome.getPath() != null) {
+//            testName = underscore(testOutcome.getPath());
+//        }
+//        String scenarioName = underscore(testOutcome.getQualifiedMethodName());
+//        return pathFrom(testOutcome) + underscore(withNoIssueNumbers(appendToIfNotNull(testName, scenarioName)));
 
-        if (testOutcome.getUserStory() != null) {
-            testName = underscore(testOutcome.getUserStory().getName());
-        } else if (testOutcome.getPath() != null) {
-            testName = underscore(testOutcome.getPath());
-        }
-        String scenarioName = underscore(testOutcome.getQualifiedMethodName());
-        return pathFrom(testOutcome) + underscore(withNoIssueNumbers(appendToIfNotNull(testName, scenarioName)));
+        return withNoIssueNumbers(testOutcome.getQualifiedId());
     }
 
 
@@ -60,13 +67,15 @@ public class ReportNamer {
      * version should have no spaces and have the XML file suffix.
      */
     public String getSimpleTestNameFor(final TestOutcome testOutcome) {
-        String testName = "";
-        if (testOutcome.getUserStory() != null) {
-            testName = underscore(testOutcome.getUserStory().getName());
-        }
-        String scenarioName = underscore(testOutcome.getName());
-        testName = pathFrom(testOutcome) + withNoIssueNumbers(withNoArguments(appendToIfNotNull(testName, scenarioName)));
-        return appendSuffixTo(Digest.ofTextValue(testName));
+        return optionallyCompressed(appendSuffixTo(withNoIssueNumbers(testOutcome.getQualifiedId())));
+//        String testName = "";
+//        if (testOutcome.getUserStory() != null) {
+//            testName = underscore(testOutcome.getUserStory().getName());
+//        }
+////        String scenarioName = underscore(testOutcome.getName());
+//        String scenarioName = underscore(testOutcome.getId());
+//        testName = pathFrom(testOutcome) + withNoIssueNumbers(withNoArguments(appendToIfNotNull(testName, scenarioName)));
+//        return appendSuffixTo(Digest.ofTextValue(testName));
     }
 
     private String pathFrom(TestOutcome testOutcome) {

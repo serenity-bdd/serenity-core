@@ -126,13 +126,6 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
     }
 
     @Test
-    public void should_generate_overall_passed_failed_and_pending_reports_for_each_tag() throws Exception {
-        assertThat(new File(outputDirectory, digest("context_feature_a_feature_result_success") + ".html"), exists());
-        assertThat(new File(outputDirectory, digest("context_feature_a_feature_result_pending") + ".html"), exists());
-        assertThat(new File(outputDirectory, digest("context_feature_a_feature_result_pending") + ".html"), exists());
-    }
-
-    @Test
     public void aggregate_dashboard_should_contain_a_list_of_all_tag_types() throws Exception {
 
         File report = new File(outputDirectory, "index.html");

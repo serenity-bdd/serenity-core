@@ -159,14 +159,15 @@ public final class NameConverter {
     public static String underscore(final String name) {
         if (name != null) {
             return name.replaceAll(" ", "_")
-                    .replaceAll("<", "_")
-                    .replaceAll(">", "_")
-                    .replaceAll("'", "_")
-                    .replaceAll(",", "_")
-                    .replaceAll(":", "_")
-                    .replaceAll("/", "_")
-                    .replaceAll("\"", "_")
-                    .replaceAll("=", "_")
+                    .replaceAll("<", "_lt_")
+                    .replaceAll(">", "_gt_")
+                    .replaceAll("'", "_sq_")
+                    .replaceAll("\"", "_dq_")
+                    .replaceAll(",", "_c_")
+                    .replaceAll(":", "_cl_")
+                    .replaceAll(";", "_sc_")
+                    .replaceAll("/", "_sl_")
+                    .replaceAll("=", "_eq_")
                     .toLowerCase(Locale.getDefault()).trim();
         } else {
             return "";

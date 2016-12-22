@@ -191,9 +191,9 @@ public class RequirementsOutcomes {
 //        return grandChildrenFound;
 //    }
 
-    public Set<String> getTypes() {
+    public List<String> getTypes() {
         List<Requirement> requirements = getAllRequirements();
-        Set<String> types = new HashSet<>();
+        List<String> types = new ArrayList<>();
         for (Requirement requirement : requirements) {
             if (!types.contains(requirement.getType())) {
                 types.add(requirement.getType());
@@ -486,6 +486,9 @@ public class RequirementsOutcomes {
     }
 
     public RequirementsOutcomes withoutUnrelatedRequirements() {
+        if (!ThucydidesSystemProperty.THUCYDIDES_EXCLUDE_UNRELATED_REQUIREMENTS.booleanFrom(environmentVariables, false)) {
+            return this;
+        }
         return new RequirementsOutcomes(
                 reportNameProvider,
                 pruned(requirementOutcomes),

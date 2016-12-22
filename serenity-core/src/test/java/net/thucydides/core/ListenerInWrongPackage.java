@@ -27,6 +27,11 @@ public class ListenerInWrongPackage implements StepListener {
         
     }
 
+    @Override
+    public void testStarted(String description, String id) {
+
+    }
+
     public void testFinished(TestOutcome result) {
         
     }

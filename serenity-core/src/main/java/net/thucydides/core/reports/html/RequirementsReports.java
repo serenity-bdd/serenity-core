@@ -111,7 +111,7 @@ public class RequirementsReports {
 
         String reportName = reportNameProvider.forRequirement(parentRequirement);
         String parentPrefix = isNotEmpty(parentRequirement.getParent()) ? parentRequirement.getParent().toLowerCase() + "_" : "";
-        String orphanReportName = reportNameProvider.forRequirement(parentPrefix + parentRequirement.getName());
+//        String orphanReportName = reportNameProvider.forRequirement(parentPrefix + parentRequirement.getName());
 
         reportingTasks.add(
                 new RequirementsOverviewReportingTask(freemarker,
@@ -126,17 +126,17 @@ public class RequirementsReports {
         );
 
 
-        reportingTasks.add(
-                new RequirementsOverviewReportingTask(freemarker,
-                        environmentVariables,
-                        outputDirectory,
-                        reportNameProvider,
-                        requirementsService,
-                        requirementsOutcomes,
-                        relativeLink,
-                        requirementsOutcomes.getTestOutcomes(),
-                        orphanReportName)
-        );
+//        reportingTasks.add(
+//                new RequirementsOverviewReportingTask(freemarker,
+//                        environmentVariables,
+//                        outputDirectory,
+//                        reportNameProvider,
+//                        requirementsService,
+//                        requirementsOutcomes,
+//                        relativeLink,
+//                        requirementsOutcomes.getTestOutcomes(),
+//                        orphanReportName)
+//        );
 
         reportingTasks.addAll(requirementsReportsForChildRequirements(requirementsOutcomes));
 

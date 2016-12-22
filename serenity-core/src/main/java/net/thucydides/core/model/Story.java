@@ -20,19 +20,7 @@ public class Story {
     private  String path;
     private  String narrative;
     private  ApplicationFeature feature;
-//    private  RequirementType type;
     private  String type;
-
-//    public enum RequirementType {
-//        story, feature;
-//
-//        public static RequirementType forFilename(String storyPath) {
-//            if (storyPath.toLowerCase().endsWith(".feature")) {
-//                return feature;
-//            }
-//            return story;
-//        }
-//    }
 
     protected Story(final Class<?> userStoryClass) {
         this.id = userStoryClass.getCanonicalName();
@@ -41,7 +29,6 @@ public class Story {
         this.feature = findFeatureFrom(userStoryClass);
         this.path = pathOf(userStoryClass);
         this.type = FeatureType.STORY.toString();
-        //this.type = RequirementType.story;
     }
 
     private String pathOf(Class<?> userStoryClass) {

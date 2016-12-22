@@ -32,6 +32,11 @@ public class RestStepListener implements StepListener {
     }
 
     @Override
+    public void testStarted(String description, String id) {
+
+    }
+
+    @Override
     public void testFinished(TestOutcome result) {
 
     }

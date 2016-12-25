@@ -160,7 +160,7 @@ public class ReportService {
             }));
         }
         generateJUnitTestResults(testOutcomes);
-        waitForReportGenerationToFinish(executorService, tasks);
+        waitForReportGenerationToFinish(tasks);
         LOGGER.debug("Reports generated in: " + (System.currentTimeMillis() - t0) + " ms");
 
     }
@@ -176,7 +176,7 @@ public class ReportService {
         }
     }
 
-    private void waitForReportGenerationToFinish(ExecutorService executorService, List<Future> tasks) {
+    private void waitForReportGenerationToFinish(List<Future> tasks) {
         try {
             for (Future task : tasks) {
                 task.get();

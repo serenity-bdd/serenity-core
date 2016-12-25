@@ -316,7 +316,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     private class CopyResourcesTask implements ReportingTask {
         @Override
         public void generateReports() throws IOException {
-            LOGGER.info("Copying resources to directory");
             copyResourcesToOutputDirectory();
         }
     }

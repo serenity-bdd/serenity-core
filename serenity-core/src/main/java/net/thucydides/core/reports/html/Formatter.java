@@ -84,12 +84,12 @@ public class Formatter {
     }
 
     private String stripSurroundingParagraphTagsFrom(String text) {
-        if (text.toLowerCase().startsWith("<p>")) {
-            text = text.substring(3);
+        if (text.toLowerCase().trim().startsWith("<p>")) {
+            text = text.trim().substring(3);
         }
 
-        if (text.toLowerCase().endsWith("</p>")) {
-            text = text.substring(0, text.length() - 4);
+        if (text.toLowerCase().trim().endsWith("</p>")) {
+            text = text.trim().substring(0, text.length() - 4);
         }
         return text;
     }

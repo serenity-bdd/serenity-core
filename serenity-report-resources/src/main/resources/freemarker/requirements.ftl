@@ -148,7 +148,7 @@
 
 <#if (requirements.parentRequirement.isPresent())>
     <#assign parentRequirement = requirements.parentRequirement.get() >
-    <#assign parentTitle = inflection.of(parentRequirement.name).asATitle() >
+    <#assign parentTitle = inflection.of(parentRequirement.displayName).asATitle() >
     <#assign parentType = inflection.of(parentRequirement.type).asATitle() >
     <#if (parentRequirement.cardNumber?has_content) >
         <#assign issueNumber = "[" + formatter.addLinks(parentRequirement.cardNumber) + "]" >
@@ -165,7 +165,7 @@
             <#if requirements.parentRequirement.isPresent()>
 
                 <#assign parent = requirements.parentRequirement.get()>
-                <#assign parentTitle = inflection.of(parent.asTag().shortName).asATitle() >
+                <#assign parentTitle = inflection.of(parent.displayName).asATitle() >
 
                 <#if (requirements.grandparentRequirement.isPresent())>
                     <#assign ancestor = reportName.forRequirement(requirements.grandparentRequirement.get()) >

@@ -209,6 +209,10 @@ public class Story {
         return storyName;
     }
 
+    public String getDisplayName() {
+        return storyName;
+    }
+
     public String getStoryClassName() {
         return storyClassName;
     }

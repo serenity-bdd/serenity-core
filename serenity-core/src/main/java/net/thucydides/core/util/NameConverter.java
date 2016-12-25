@@ -3,7 +3,9 @@ package net.thucydides.core.util;
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Utility class to convert test case and method names into human-readable form.
@@ -160,7 +162,7 @@ public final class NameConverter {
         if (name != null) {
             return name.replaceAll(" ", "_")
                     .replaceAll("<", "_lt_")
-                    .replaceAll(">", "_gt_")
+                    .replaceAll(">", "underscore_gt_")
                     .replaceAll("'", "_sq_")
                     .replaceAll("\"", "_dq_")
                     .replaceAll(",", "_c_")
@@ -172,6 +174,46 @@ public final class NameConverter {
         } else {
             return "";
         }
+    }
+
+    private final static Map<Character, String> EXCLUDE_FROM_FILENAMES = new HashMap<>();
+    static {
+        EXCLUDE_FROM_FILENAMES.put('$', "_");
+        EXCLUDE_FROM_FILENAMES.put('/', "_");
+        EXCLUDE_FROM_FILENAMES.put('\\', "_");
+        EXCLUDE_FROM_FILENAMES.put(':', "_");
+        EXCLUDE_FROM_FILENAMES.put(';', "_");
+        EXCLUDE_FROM_FILENAMES.put('<', "_lt_");
+        EXCLUDE_FROM_FILENAMES.put('>', "_gt_");
+        EXCLUDE_FROM_FILENAMES.put('[', "_obr_");
+        EXCLUDE_FROM_FILENAMES.put(']', "_cbr_");
+        EXCLUDE_FROM_FILENAMES.put('{', "_obrc_");
+        EXCLUDE_FROM_FILENAMES.put('}', "_cbrc_");
+        EXCLUDE_FROM_FILENAMES.put('*', "_star_");
+        EXCLUDE_FROM_FILENAMES.put('^', "_caret_");
+        EXCLUDE_FROM_FILENAMES.put('%', "_per_");
+        EXCLUDE_FROM_FILENAMES.put('"', "_quote_");
+        EXCLUDE_FROM_FILENAMES.put('?', "_question_");
+        EXCLUDE_FROM_FILENAMES.put('|', "_pipe_");
+        EXCLUDE_FROM_FILENAMES.put('&', "_amp_");
+        EXCLUDE_FROM_FILENAMES.put(',', "_comma_");
+        EXCLUDE_FROM_FILENAMES.put('=', "_equals_");
+        EXCLUDE_FROM_FILENAMES.put('\'', "_");
+        EXCLUDE_FROM_FILENAMES.put('\"', "_");
+        EXCLUDE_FROM_FILENAMES.put('@', "_at_");
+        EXCLUDE_FROM_FILENAMES.put('#', "_hash_");
+        EXCLUDE_FROM_FILENAMES.put('+', "_plus_");
+        EXCLUDE_FROM_FILENAMES.put(' ', "_");
+    }
+
+    public static String filesystemSafe(final String name) {
+        if (name == null) { return name; }
+
+        String safeName = name.trim();
+        for(Character substitutableChar : EXCLUDE_FROM_FILENAMES.keySet()) {
+            safeName = StringUtils.replace(safeName, substitutableChar.toString(), EXCLUDE_FROM_FILENAMES.get(substitutableChar));
+        }
+        return safeName.toLowerCase();
     }
 
 }

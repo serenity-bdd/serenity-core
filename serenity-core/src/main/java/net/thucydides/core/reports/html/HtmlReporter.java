@@ -3,19 +3,15 @@ package net.thucydides.core.reports.html;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.ThucydidesReporter;
-import net.thucydides.core.reports.templates.ReportTemplate;
 import net.thucydides.core.reports.templates.TemplateManager;
 import net.thucydides.core.reports.util.CopyDirectory;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitOption;
@@ -110,30 +106,6 @@ public abstract class HtmlReporter extends ThucydidesReporter {
         }
     }
 
-    /**
-     * Write the actual HTML report to a file with the specified name in the output directory.
-     */
-    protected File writeReportToOutputDirectory(final String reportFilename, final String htmlContents) throws
-            IOException {
-        File report = new File(getOutputDirectory(), reportFilename);
-        writeToFile(htmlContents, report);
-        return report;
-    }
-
-    private void writeToFile(String htmlContents, File report) throws IOException {
-        String lines[] = htmlContents.split("\\r?\\n");
-        try (BufferedWriter writer = Files.newBufferedWriter(report.toPath(), charset)){
-            for(String line : lines){
-                writer.write(line);
-                writer.newLine();
-            }
-        }
-    }
-
-    protected String timestampFrom(TestOutcomes rootOutcomes) {
-        return TestOutcomeTimestamp.from(rootOutcomes);
-    }
-
 
     protected void addTimestamp(TestOutcome testOutcome, Map<String, Object> context) {
         context.put("timestamp", TestOutcomeTimestamp.from(testOutcome));
@@ -143,23 +115,5 @@ public abstract class HtmlReporter extends ThucydidesReporter {
         return new Merger(templateFile);
     }
 
-    protected class Merger {
-        final String templateFile;
-
-        public Merger(final String templateFile) {
-            this.templateFile = templateFile;
-        }
-
-        public String usingContext(final Map<String, Object> context) {
-            try {
-                ReportTemplate template = getTemplateManager().getTemplateFrom(templateFile);
-                StringWriter sw = new StringWriter();
-                template.merge(context, sw);
-                return sw.toString();
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to merge template: " + e.getMessage(), e);
-            }
-        }
-    }
 
 }

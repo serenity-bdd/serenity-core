@@ -62,7 +62,7 @@ public class Requirement implements Comparable {
         Preconditions.checkNotNull(type);
         this.name = name;
         this.id = id;
-        this.displayName = displayName;
+        this.displayName = (displayName != null) ? displayName : name;
         this.cardNumber = cardNumber;
         this.type = type;
         this.parent = parent;
@@ -83,7 +83,7 @@ public class Requirement implements Comparable {
         Preconditions.checkNotNull(type);
         this.name = name;
         this.id = id;
-        this.displayName = displayName;
+        this.displayName = (displayName != null) ? displayName : name;;
         this.cardNumber = cardNumber;
         this.type = type;
         this.parent = parent;
@@ -103,7 +103,7 @@ public class Requirement implements Comparable {
     }
 
     public String getDisplayName() {
-        return displayName;
+        return (displayName != null) ? displayName : name;
     }
 
     public String getType() {

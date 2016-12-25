@@ -39,7 +39,7 @@ public class ReportNamer {
     public String getNormalizedTestNameFor(final TestOutcome testOutcome) {
         String testName = getBaseTestNameFor(testOutcome);
         String testNameWithoutIndex = stripIndexesFrom(testName);
-        return normalizedVersionOf(underscore(testNameWithoutIndex));
+        return normalizedVersionOf(filesystemSafe(testNameWithoutIndex));
     }
 
     private String optionallyCompressed(String text) {

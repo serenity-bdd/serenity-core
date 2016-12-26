@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.html;
 
-import com.google.common.base.*;
 import com.google.common.base.Objects;
+import com.google.common.base.Splitter;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestTag;
@@ -10,7 +10,10 @@ import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class TagReportingTask extends BaseReportingTask implements ReportingTask {
 
@@ -145,4 +148,5 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
             return reportingTasks;
         }
     }
+
 }

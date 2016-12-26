@@ -2,7 +2,6 @@ package net.thucydides.core.model;
 
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.digest.Digest;
-import org.apache.commons.lang3.StringUtils;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_COMPRESS_FILENAMES;
 import static net.thucydides.core.util.NameConverter.*;
@@ -47,17 +46,6 @@ public class ReportNamer {
     }
 
     private String getBaseTestNameFor(TestOutcome testOutcome) {
-//        return underscore(withNoIssueNumbers(testOutcome.getId()));
-//        String testName = "";
-//
-//        if (testOutcome.getUserStory() != null) {
-//            testName = underscore(testOutcome.getUserStory().getName());
-//        } else if (testOutcome.getPath() != null) {
-//            testName = underscore(testOutcome.getPath());
-//        }
-//        String scenarioName = underscore(testOutcome.getQualifiedMethodName());
-//        return pathFrom(testOutcome) + underscore(withNoIssueNumbers(appendToIfNotNull(testName, scenarioName)));
-
         return withNoIssueNumbers(testOutcome.getQualifiedId());
     }
 
@@ -68,26 +56,6 @@ public class ReportNamer {
      */
     public String getSimpleTestNameFor(final TestOutcome testOutcome) {
         return optionallyCompressed(appendSuffixTo(withNoIssueNumbers(testOutcome.getQualifiedId())));
-//        String testName = "";
-//        if (testOutcome.getUserStory() != null) {
-//            testName = underscore(testOutcome.getUserStory().getName());
-//        }
-////        String scenarioName = underscore(testOutcome.getName());
-//        String scenarioName = underscore(testOutcome.getId());
-//        testName = pathFrom(testOutcome) + withNoIssueNumbers(withNoArguments(appendToIfNotNull(testName, scenarioName)));
-//        return appendSuffixTo(Digest.ofTextValue(testName));
-    }
-
-    private String pathFrom(TestOutcome testOutcome) {
-        return (testOutcome.getPath() != null) ? testOutcome.getPath() + "/" : "";
-    }
-
-    private String appendToIfNotNull(final String baseString, final String nextElement) {
-        if (StringUtils.isNotEmpty(baseString)) {
-            return baseString + "_" + nextElement;
-        } else {
-            return nextElement;
-        }
     }
 
     public String getNormalizedTestNameFor(final Story userStory) {

@@ -44,7 +44,7 @@ import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 /**
  * Generates acceptance test results in HTML form.
  */
-public class HtmlAcceptanceTestReporter extends HtmlReporter implements AcceptanceTestReporter {
+public class HtmlAcceptanceTestReporter extends HtmlReporter implements AcceptanceTestReporter{
 
     private static final String DEFAULT_ACCEPTANCE_TEST_REPORT = "freemarker/default.ftl";
     private static final String DEFAULT_ACCEPTANCE_TEST_SCREENSHOT = "freemarker/screenshots.ftl";
@@ -80,6 +80,14 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
     }
 
+    public HtmlAcceptanceTestReporter(final EnvironmentVariables environmentVariables,
+                                      final RequirementsService requirementsService,
+                                      final IssueTracking issueTracking) {
+        super(environmentVariables);
+        this.issueTracking = issueTracking;
+        this.requirementsService = requirementsService;
+    }
+
     private ReportNameProvider getReportNameProvider() {
         return new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService);
     }
@@ -92,6 +100,8 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
      * Generate an HTML report for a given test run.
      */
     public File generateReportFor(final TestOutcome testOutcome) throws IOException {
+
+        LOGGER.debug("GENERATE TEST OUTCOME REPORT FOR " + testOutcome.getName() + " in " + testOutcome.getReportName());
 
         Preconditions.checkNotNull(getOutputDirectory());
 
@@ -109,7 +119,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
         String reportFilename = reportFor(storedTestOutcome);
 
-        LOGGER.debug("GENERATING HTML REPORT FOR " + storedTestOutcome.getCompleteName() + (StringUtils.isNotEmpty(qualifier) ? "/" + qualifier : "") + " => " + reportFilename);
+        LOGGER.info("GENERATING HTML REPORT FOR " + storedTestOutcome.getCompleteName() + (StringUtils.isNotEmpty(qualifier) ? "/" + qualifier : "") + " => " + reportFilename);
 
         copyResourcesToOutputDirectory();
 

@@ -267,8 +267,6 @@ public class Requirement implements Comparable {
                 "name='" + name + '\'' +
                 ", type='" + type + '\'' + " parent = '" + parent + '\'' +
                 ", cardNumber='" + cardNumber + '\'' +
-                ", narrative ='" + narrative + '\'' +
-                ", children ='" + children + '\'' +
                 '}';
     }
 
@@ -313,9 +311,6 @@ public class Requirement implements Comparable {
     }
 
     public String qualifier() {
-//        if (getCardNumber() != null) {
-//            return getCardNumber();
-//        }
         return (getParent() != null) ? getParent() : null;
     }
 

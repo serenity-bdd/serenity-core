@@ -1,7 +1,6 @@
 package net.thucydides.core.reports.html;
 
 import ch.lambdaj.function.convert.Converter;
-import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.SerenitySystemProperties;
 import net.serenitybdd.core.time.Stopwatch;
@@ -23,14 +22,14 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.CopyOption;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static ch.lambdaj.Lambda.convert;
 import static net.thucydides.core.guice.Injectors.getInjector;
+import static net.thucydides.core.reports.html.HtmlTestOutcomeReportingTask.testOutcomeReportsFor;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 import static net.thucydides.core.reports.html.TagReportingTask.tagReportsFor;
 
@@ -54,6 +53,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     private final EnvironmentVariables environmentVariables;
     private FormatConfiguration formatConfiguration;
+    private Boolean generateTestOutcomeReports = false;
 
     private Stopwatch stopwatch = new Stopwatch();
     public static final CopyOption[] COPY_OPTIONS = new CopyOption[]{StandardCopyOption.COPY_ATTRIBUTES};
@@ -162,6 +162,11 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         Set<ReportingTask> reportingTasks = new HashSet<>();
 
+        LOGGER.info("Generating test outcome reports: " + generateTestOutcomeReports);
+        if (generateTestOutcomeReports) {
+            reportingTasks.addAll(testOutcomeReportsFor(testOutcomes).using(environmentVariables, requirements.getRequirementsService(), getOutputDirectory(), issueTracking));
+        }
+
         reportingTasks.add(new CopyResourcesTask());
         reportingTasks.add(new CopyTestResultsTask());
         reportingTasks.add(new AggregateReportingTask(context, environmentVariables, requirements.getRequirementsService(), getOutputDirectory(), testOutcomes));
@@ -172,6 +177,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                                                                 reportNameProvider,
                                                                 testOutcomes.getTags(),
                                                                 knownRequirementReportNames));
+
 
         reportingTasks.addAll(ResultReports.resultReportsFor(testOutcomes,context, environmentVariables, getOutputDirectory(),reportNameProvider));
         reportingTasks.addAll(RequirementsReports.requirementsReportsFor(
@@ -185,7 +191,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         ));
 
         LOGGER.info("Starting generating reports: {} ms", stopwatch.lapTime());
-        generateReportsFor(reportingTasks);
+        new ReportGenerator().generateReportsFor(reportingTasks);
 
         LOGGER.info("Finished generating test results for {} tests after {} ms",testOutcomes.getTestCount(), stopwatch.stop());
     }
@@ -201,28 +207,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                     return reportNameProvider.forRequirement(from.getRequirement());
                 }
             };
-    }
-
-    private void generateReportsFor(Collection<ReportingTask> reportingTasks) throws IOException {
-        stopwatch.start();
-
-        try {
-            Reporter.generateReportsFor(reportingTasks);
-
-            final List<Callable<Void>> partitions = Lists.newArrayList();
-            for (ReportingTask reportingTask : reportingTasks) {
-                partitions.add(new ReportExecutor(reportingTask));
-            }
-
-            final ExecutorService executorPool = Executors.newFixedThreadPool(NumberOfThreads.forIOOperations());
-            for (Future<Void> executedTask : executorPool.invokeAll(partitions)) {
-                executedTask.get();
-            }
-        } catch (Exception e) {
-            LOGGER.error("Report generation failed", e);
-        }
-
-        LOGGER.debug("Test outcome reports generated in {} ms", stopwatch.stop());
     }
 
     private TestOutcomes loadTestOutcomesFrom(File sourceDirectory) throws IOException {
@@ -296,21 +280,8 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         };
     }
 
-
-    private class ReportExecutor implements Callable<Void> {
-        private final ReportingTask reportingTask;
-
-        public ReportExecutor(ReportingTask reportingTask) {
-            this.reportingTask = reportingTask;
-        }
-
-        @Override
-        public Void call() throws Exception {
-            Stopwatch reportingStopwatch = Stopwatch.started();
-            reportingTask.generateReports();
-            LOGGER.debug("{} generated in {} ms", reportingTask.toString(), reportingStopwatch.stop());
-            return null;
-        }
+    public void setGenerateTestOutcomeReports(Boolean generateTestOutcomeReports) {
+        this.generateTestOutcomeReports = generateTestOutcomeReports;
     }
 
     private class CopyResourcesTask implements ReportingTask {

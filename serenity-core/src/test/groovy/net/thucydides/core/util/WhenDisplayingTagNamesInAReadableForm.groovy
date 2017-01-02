@@ -6,10 +6,10 @@ class WhenDisplayingTagNamesInAReadableForm extends Specification {
 
     def inflection = Inflector.instance
 
-    def "should transform singular nouns into plurals"() {
+    def "tag names expressed as singular nouns can be displayed in plural form"() {
         when: "I find the plural form of a single word"
             def pluralForm = inflection.of(singleForm).inPluralForm().toString();
-        then: "the plural form should be gramatically correct"
+        then: "the plural form should be grammatically correct"
             pluralForm == expectedPluralForm
         where:
             singleForm          | expectedPluralForm
@@ -25,6 +25,7 @@ class WhenDisplayingTagNamesInAReadableForm extends Specification {
             'parenthesis'       | 'parentheses'
             ''                  | ''
     }
+
 
     def "should transform plural nouns into singles"() {
         when: "I find the singular form of a single word"
@@ -85,6 +86,17 @@ class WhenDisplayingTagNamesInAReadableForm extends Specification {
         word                           | expectedCapitalizedForm
             'epic'                     | 'Epic'
             'x-men: the last stand'    | 'X-Men: The Last Stand'
+    }
+
+    def "should respect acronyms"() {
+        when:
+            def capitalized = inflection.of(word).asATitle().toString()
+        then:
+            capitalized == expectedCapitalizedForm
+        where:
+            word                           | expectedCapitalizedForm
+            'ASCII code'                   | 'ASCII Code'
+            'the ABC'                      | 'The ABC'
     }
 
     def "should convert variable expressions into human-readable form"() {

@@ -53,7 +53,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     private final EnvironmentVariables environmentVariables;
     private FormatConfiguration formatConfiguration;
-    private Boolean generateTestOutcomeReports = false;
+    private boolean generateTestOutcomeReports = false;
 
     private Stopwatch stopwatch = new Stopwatch();
     public static final CopyOption[] COPY_OPTIONS = new CopyOption[]{StandardCopyOption.COPY_ATTRIBUTES};
@@ -280,8 +280,8 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         };
     }
 
-    public void setGenerateTestOutcomeReports(Boolean generateTestOutcomeReports) {
-        this.generateTestOutcomeReports = generateTestOutcomeReports;
+    public void setGenerateTestOutcomeReports() {
+        this.generateTestOutcomeReports = true;
     }
 
     private class CopyResourcesTask implements ReportingTask {

@@ -55,6 +55,17 @@ class WhenConfiguringScreenshotsByClassType extends Specification {
             screenshotPreferencesByClass.screenshotPreference.isPresent() && screenshotPreferencesByClass.screenshotPreference.get() == TakeScreenshots.DISABLED
     }
 
+
+    def "should override the screenshot configuration based on the specific form of the name of a class"() {
+        given:
+        environmentVariables.setProperty("serenity.take.screenshots.for.someaction","disabled")
+        when:
+        ScreenshotPreferencesByClass screenshotPreferencesByClass = ScreenshotPreferencesByClass.forClass(SomeAction)
+                .withEnvironmentVariables(environmentVariables)
+        then:
+        screenshotPreferencesByClass.screenshotPreference.isPresent() && screenshotPreferencesByClass.screenshotPreference.get() == TakeScreenshots.DISABLED
+    }
+
     def "should report no configuration for unconfigured classes"() {
         given:
             environmentVariables.setProperty("serenity.take.screenshots.for.actions","disabled")

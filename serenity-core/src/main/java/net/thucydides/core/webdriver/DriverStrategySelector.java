@@ -1,13 +1,11 @@
 package net.thucydides.core.webdriver;
 
-import io.appium.java_client.AppiumDriver;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.BrowserStackRemoteDriverCapabilities;
 import net.thucydides.core.webdriver.capabilities.SauceRemoteDriverCapabilities;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 
@@ -56,9 +54,4 @@ public class DriverStrategySelector {
     public boolean browserStackUrlIsDefined() {
         return StringUtils.isNotEmpty(browserStackRemoteDriverCapabilities.getUrl());
     }
-
-    public boolean supportsResizing(Class<? extends WebDriver> driverClass) {
-        return !( (AppiumDriver.class.isAssignableFrom(driverClass)) || (HtmlUnitDriver.class.isAssignableFrom(driverClass)));
-    }
-
 }

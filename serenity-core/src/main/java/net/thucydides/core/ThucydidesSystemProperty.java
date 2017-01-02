@@ -299,6 +299,11 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_BROWSER_WIDTH,
 
     /**
+     * Set to true to get WebDriver to maximise the Browser window before the tests are executed.
+     */
+    THUCYDIDES_BROWSER_MAXIMIZED,
+
+    /**
      * If set, resize screenshots to this size to save space.
      */
     THUCYDIDES_RESIZED_IMAGE_WIDTH,

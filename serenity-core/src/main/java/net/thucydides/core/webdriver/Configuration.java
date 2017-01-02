@@ -52,8 +52,6 @@ public interface Configuration {
      */
     Optional<TakeScreenshots> getScreenshotLevel();
 
-    boolean storeHtmlSourceCode();
-
     void setIfUndefined(String property, String value);
 
     Configuration copy();

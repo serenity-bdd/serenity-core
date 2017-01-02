@@ -240,10 +240,6 @@ public class SystemPropertiesConfiguration implements Configuration {
         }
     }
 
-    public boolean storeHtmlSourceCode() {
-        return getEnvironmentVariables().getPropertyAsBoolean(THUCYDIDES_STORE_HTML_SOURCE, false);
-    }
-
     public void setIfUndefined(String property, String value) {
         if (getEnvironmentVariables().getProperty(property) == null) {
             getEnvironmentVariables().setProperty(property, value);

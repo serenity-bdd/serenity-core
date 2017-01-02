@@ -634,7 +634,7 @@ public enum ThucydidesSystemProperty {
      * Set to true if you want the HTML source code to be recorded as well as the screenshots.
      * This is not currently used in the reports.
      */
-    THUCYDIDES_STORE_HTML_SOURCE,
+    //    THUCYDIDES_STORE_HTML_SOURCE,
 
     /**
      * If set to true, a copy of the original screenshot will be kept when screenshots are scaled for the reports.

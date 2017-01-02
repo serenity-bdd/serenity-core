@@ -354,7 +354,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         closeDarkroom();
         clearStorywideTagsAndIssues();
 
-        closeBrowsers.closeIfConfiguredForANew(STORY);
+        closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(STORY);
 
         suiteStarted = false;
     }
@@ -433,7 +433,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (currentTestIsABrowserTest()) {
             getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
             updateSessionIdIfKnown();
-            closeBrowsers.closeIfConfiguredForANew(SCENARIO);
+            closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(SCENARIO);
         }
         currentStepStack.clear();
     }
@@ -960,7 +960,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (latestTestOutcome().isPresent()) {
             latestTestOutcome().get().moveToNextRow();
         }
-        closeBrowsers.closeIfConfiguredForANew(EXAMPLE);
+        closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(EXAMPLE);
     }
 
     private boolean newStepForEachExample() {

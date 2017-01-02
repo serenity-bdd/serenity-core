@@ -40,10 +40,15 @@ public class WebdriverCloseBrowser implements CloseBrowser {
                     try {
                         driver.quit();
                     } catch (WebDriverException mostLikelyLostContactWithTheBrowser) {
-                        LOGGER.debug("Failed to close a broswer: {}", mostLikelyLostContactWithTheBrowser.getMessage());
+                        LOGGER.debug("Failed to close a browser: {}", mostLikelyLostContactWithTheBrowser.getMessage());
                     }
                 }
             }
         });
+    }
+
+    @Override
+    public CloseBrowser forTestSuite(Class<?> testSuite) {
+        return (testSuite == null) ? this : new TestSuiteCloseBrowser(environmentVariables, testSuite);
     }
 }

@@ -7,4 +7,6 @@ public interface CloseBrowser {
     void closeIfConfiguredForANew(RestartBrowserForEach event);
 
     void closeWhenTheTestsAreFinished(WebDriver driver);
+
+    CloseBrowser forTestSuite(Class<?> testSuite);
 }

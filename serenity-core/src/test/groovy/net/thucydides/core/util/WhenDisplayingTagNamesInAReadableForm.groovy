@@ -1,5 +1,6 @@
 package net.thucydides.core.util
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 class WhenDisplayingTagNamesInAReadableForm extends Specification {
@@ -88,6 +89,7 @@ class WhenDisplayingTagNamesInAReadableForm extends Specification {
             'x-men: the last stand'    | 'X-Men: The Last Stand'
     }
 
+    @Ignore
     def "should respect acronyms"() {
         when:
             def capitalized = inflection.of(word).asATitle().toString()

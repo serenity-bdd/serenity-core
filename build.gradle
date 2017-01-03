@@ -26,6 +26,7 @@ subprojects {
 ext {
     seleniumVersion = '2.53.1'
     htmlunitVersion = '2.21'
+
     groovyVersion = '2.4.4'
     gradleVersion = '2.10'
 
@@ -37,7 +38,7 @@ ext {
     restAssuredVersion = '2.4.1'
     mockitoCoreVersion = '1.10.19'
     jbehaveCoreVersion = '4.0.5'
-    commonsIoVersion = '2.4'
+    commonsIoVersion = '2.5'
     commonsCollectionsVersion = '3.2.2'
     commonsLang3Version = '3.4'
     commonsCodecVersion = '1.10'
@@ -69,7 +70,7 @@ allprojects {
     configurations.all {
         resolutionStrategy {
             // fail fast on dependency convergence problems
-            failOnVersionConflict()
+           failOnVersionConflict()
 
             // force versions to fix dependency convergence problems
             // when updating this list, update Serenity's declared deps if exists

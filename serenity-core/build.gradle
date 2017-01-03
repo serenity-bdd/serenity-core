@@ -104,6 +104,7 @@ dependencies {
     compile("net.sourceforge.htmlunit:htmlunit:${htmlunitVersion}") {
         exclude group: 'org.apache.commons', module: 'commons-lang3'
         exclude group: 'commons-logging', module: 'commons-logging'
+        exclude group: 'commons-io', module: 'commons-io'
         exclude group: 'xml-apis', module: 'xml-apis'
         exclude group: 'xalan', module: 'xalan'
         exclude group: 'commons-codec', module: 'commons-codec'

@@ -6,12 +6,13 @@ ext {
 
 dependencies {
     compile project(':serenity-core')
-    compile('net.lightbody.bmp:browsermob-core:2.1.1') {
+    compile('net.lightbody.bmp:browsermob-core:2.1.4') {
      	exclude group: 'org.seleniumhq.selenium', module:'selenium-java'
      	exclude group: 'org.seleniumhq.selenium', module:'selenium-server'
      	exclude group: 'org.seleniumhq.selenium', module:'selenium-remote-driver'
         exclude group: 'org.seleniumhq.selenium', module:'selenium-api'
         exclude group: 'org.apache.commons', module:'commons-lang3'
+        exclude group: 'commons-io', module:'commons-io'
      	exclude group: 'org.bouncycastle', module:'bcprov-jdk15on'
      	exclude group: 'com.google.guava'
     	exclude group: 'com.fasterxml.jackson.core', module:'jackson-databind'

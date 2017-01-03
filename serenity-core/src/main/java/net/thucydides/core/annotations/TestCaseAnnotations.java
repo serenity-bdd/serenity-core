@@ -6,6 +6,7 @@ import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebdriverManager;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
@@ -99,11 +100,17 @@ public final class TestCaseAnnotations {
     }
 
     public static boolean isWebTest(Class<?> testClass) {
-        return findOptionalAnnotatedField(testClass).isPresent();
+        return (testClass != null) && findOptionalAnnotatedField(testClass).isPresent();
     }
 
     public static boolean shouldClearCookiesBeforeEachTestIn(Class<?> testClass) {
         ManagedWebDriverAnnotatedField webDriverField = findFirstAnnotatedField(testClass);
         return webDriverField.getClearCookiesPolicy() == ClearCookiesPolicy.BeforeEachTest;
+    }
+
+    public static boolean isASerenityTestCase(Class<?> testClass) {
+        return (testClass != null)
+                && (testClass.getAnnotation(RunWith.class) != null)
+                && (testClass.getAnnotation(RunWith.class).value().toString().contains("Serenity"));
     }
 }

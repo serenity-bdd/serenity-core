@@ -17,6 +17,7 @@ import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.junit.SerenityJUnitTestCase;
 import net.thucydides.core.model.*;
 import net.thucydides.core.model.failures.FailureAnalysis;
 import net.thucydides.core.model.screenshots.ScreenshotPermission;
@@ -444,7 +445,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private boolean currentTestIsABrowserTest() {
-        return ThucydidesWebDriverSupport.isDriverInstantiated();
+        return SerenityJUnitTestCase.inClass(testSuite).isAWebTest()
+                || (testSuite == null && ThucydidesWebDriverSupport.isDriverInstantiated());
     }
 
     public void testRetried() {

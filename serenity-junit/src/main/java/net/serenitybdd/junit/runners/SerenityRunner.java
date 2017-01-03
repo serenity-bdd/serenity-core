@@ -415,12 +415,12 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         }
 
         if (theMethod.isManual()) {
-            markAsManual(method);
             notifier.fireTestIgnored(describeChild(method));
+            markAsManual(method);
             return;
         } else if (theMethod.isPending()) {
-            markAsPending(method);
             notifier.fireTestIgnored(describeChild(method));
+            markAsPending(method);
             return;
         } else {
             processTestMethodAnnotationsFor(method);

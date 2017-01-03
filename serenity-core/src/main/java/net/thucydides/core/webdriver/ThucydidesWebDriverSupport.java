@@ -228,6 +228,9 @@ public class ThucydidesWebDriverSupport {
         if (webdriverManagerIsNotInstantiated()) {
             return "";
         }
+        if (getWebdriverManager().getActiveDriverTypes().isEmpty()) {
+            return "";
+        }
         return getWebdriverManager().getActiveDriverTypes().get(0);
     }
 

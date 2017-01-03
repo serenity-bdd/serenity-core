@@ -129,7 +129,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
         assertThat(executedSteps.size(), is(3));
 
         assertThat(inTheTesOutcomes(executedSteps).theResultFor("happy_day_scenario"), is(TestResult.SUCCESS));
-        assertThat(inTheTesOutcomes(executedSteps).theResultFor("edge_case_1"), is(TestResult.SUCCESS));
+        assertThat(inTheTesOutcomes(executedSteps).theResultFor("edge_case_1"), is(TestResult.IGNORED));
         assertThat(inTheTesOutcomes(executedSteps).theResultFor("edge_case_2"), is(TestResult.PENDING));
 
     }

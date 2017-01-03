@@ -269,7 +269,7 @@
             <#assign failureCount = testOutcomes.totalScenarios.withResult("failure") >
             <#assign errorCount   = testOutcomes.totalScenarios.withResult("error") >
             <#assign brokenCount  = failureCount + errorCount >
-            <#assign compromisedCount = testOutcomes.totalTests.withResult("compromised") >
+            <#assign compromisedCount = testOutcomes.totalScenarios.withResult("compromised") >
 
                 <#if (successCount > 0)>
                     <span class="test-count"> |

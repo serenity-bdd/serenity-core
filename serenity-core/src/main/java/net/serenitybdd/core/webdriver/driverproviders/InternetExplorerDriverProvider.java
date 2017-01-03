@@ -45,9 +45,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
             return new WebDriverStub();
         }
 
-        DesiredCapabilities desiredCapabilities = enhancer.enhanced(DesiredCapabilities.internetExplorer());
-        addInternetExplorerCapabilitiesTo(desiredCapabilities);
-
+        DesiredCapabilities desiredCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities());
         driverProperties.registerCapabilities("iexplorer", desiredCapabilities);
 
         try {
@@ -82,11 +80,13 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         }
     }
 
-    private void addInternetExplorerCapabilitiesTo(DesiredCapabilities browserCapabilities) {
-        browserCapabilities.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING, true);
-        browserCapabilities.setCapability(InternetExplorerDriver.NATIVE_EVENTS, false);
-        browserCapabilities.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, false);
-        browserCapabilities.setJavascriptEnabled(true);
-        browserCapabilities.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
+    private DesiredCapabilities recommendedDefaultInternetExplorerCapabilities() {
+        DesiredCapabilities defaults = DesiredCapabilities.internetExplorer();
+        defaults.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING, true);
+        defaults.setCapability(InternetExplorerDriver.NATIVE_EVENTS, false);
+        defaults.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, false);
+        defaults.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
+        defaults.setJavascriptEnabled(true);
+        return defaults;
     }
 }

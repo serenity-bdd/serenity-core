@@ -70,6 +70,11 @@ public class WhenMakingTestNamesMoreReadable {
     }
 
     @Test
+    public void acronyms_in_underscored_test_names_should_be_conserved() {
+        assertThat(NameConverter.humanize("ABC_test_method"), is("ABC test method"));
+    }
+
+    @Test
     public void human_test_names_should_be_converted_to_underscore_filenames() {
         assertThat(NameConverter.underscore("A test method"), is("a_test_method"));
     }

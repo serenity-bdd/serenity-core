@@ -917,10 +917,6 @@ public class TestOutcome {
         }
     }
 
-    private String obtainUnqualifiedTitleFromAnnotationOrMethodName() {
-        return getBaseTitleFromAnnotationOrMethodName();
-    }
-
     private String getBaseTitleFromAnnotationOrMethodName() {
         Optional<String> annotatedTitle = TestAnnotations.forClass(testCase).getAnnotatedTitleForMethod(name);
         return annotatedTitle.or(NameConverter.humanize(withNoArguments(name)));

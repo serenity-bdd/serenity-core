@@ -86,6 +86,7 @@ class WhenDisplayingTagNamesInAReadableForm extends Specification {
         word                           | expectedCapitalizedForm
             'epic'                     | 'Epic'
             'x-men: the last stand'    | 'X-Men: The Last Stand'
+            'X-MEN: the last stand'    | 'X-MEN: The Last Stand'
     }
 
     def "should find acronyms in a text"() {

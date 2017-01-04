@@ -117,6 +117,9 @@ public class WhenRecordingNewTestOutcomes {
 
         public void should_do_that() {
         }
+
+        public void should_do_THIS_as_well() {
+        }
     }
 
     @Story(AUserStory.class)
@@ -297,6 +300,13 @@ public class WhenRecordingNewTestOutcomes {
         assertThat(outcome.getTitleWithLinks() , is("Really should do this! (#<a target=\"_blank\" href=\"http://my.issue.tracker/MY-PROJECT/browse/ISSUE-ISSUE-123\">ISSUE-123</a>)"));
     }
 
+    @Test
+    public void the_test_outcome_title_should_respect_acronyms() {
+        when(issueTracking.getIssueTrackerUrl()).thenReturn("http://my.issue.tracker/MY-PROJECT/browse/ISSUE-{0}");
+        TestOutcome outcome = TestOutcome.forTest("should_do_THIS_as_well", SomeAnnotatedTestScenarioWithAnIssue.class).usingIssueTracking(issueTracking);
+
+        assertThat(outcome.getTitleWithLinks() , is("Should do THIS as well"));
+    }
 
 
     @Test

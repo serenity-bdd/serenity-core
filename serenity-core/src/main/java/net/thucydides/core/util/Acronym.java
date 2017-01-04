@@ -22,7 +22,7 @@ class Acronym {
     public static Set<Acronym> acronymsIn(String text) {
         Set<Acronym> acronyms = Sets.newHashSet();
 
-        List<String> words = Splitter.on(Pattern.compile("\\s")).splitToList(text);
+        List<String> words = Splitter.on(Pattern.compile("\\W")).omitEmptyStrings().splitToList(text);
         for (String word : words) {
             if (isAnAcronym(word)) {
                 acronyms.addAll(appearencesOf(word, text));
@@ -51,8 +51,8 @@ class Acronym {
         return acronyms;
     }
 
-    private static boolean isAnAcronym(String word) {
-        return Character.isUpperCase(firstLetterIn(word)) && Character.isUpperCase(lastLetterIn(word));
+    public static boolean isAnAcronym(String word) {
+        return (word.length() > 1) && Character.isUpperCase(firstLetterIn(word)) && Character.isUpperCase(lastLetterIn(word));
     }
 
     private static char firstLetterIn(String word) {

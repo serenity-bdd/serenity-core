@@ -288,11 +288,11 @@ public class DataTable {
     }
 
     private static String[] REGEX_CHARS = new String[] {
-            "(",")","[","]","\\",".","?","*","+"
+            "{","}","(",")","[","]","\\",".","?","*","+","^","$","|"
     };
 
     private static String[] ESCAPED_REGEX_CHARS = new String[] {
-            "\\(","\\)","\\[","\\]","\\\\","\\.","\\?","\\*","\\+"
+            "\\{","\\}","\\(","\\)","\\[","\\]","\\\\","\\.","\\?","\\*","\\+","\\^","\\$","\\|"
     };
 
     private String withEscapedRegExChars(String value) {

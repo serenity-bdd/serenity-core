@@ -2,6 +2,7 @@ package net.thucydides.core.webdriver;
 
 import com.google.inject.Inject;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
+import net.thucydides.core.junit.SerenityJUnitTestCase;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -49,6 +50,12 @@ public class WebdriverCloseBrowser implements CloseBrowser {
 
     @Override
     public CloseBrowser forTestSuite(Class<?> testSuite) {
-        return (testSuite == null) ? this : new TestSuiteCloseBrowser(environmentVariables, testSuite);
+        if (testSuite == null) {
+            return this;
+        }
+        if (SerenityJUnitTestCase.inClass(testSuite).isAWebTest()) {
+            return new TestSuiteCloseBrowser(environmentVariables, testSuite);
+        }
+        return new DeactivatedCloseBrowser();
     }
 }

@@ -1,5 +1,21 @@
 # Change Log
 
+## [v1.2.2-rc.7](https://github.com/serenity-bdd/serenity-core/tree/v1.2.2-rc.7) (2017-01-04)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.2.2-rc.6...v1.2.2-rc.7)
+
+**Fixed bugs:**
+
+- Webdriver not initializing from @BeforeStories [\#472](https://github.com/serenity-bdd/serenity-core/issues/472)
+- Serenity + RestAssured Integration: parameters values are always serialized as Arrays [\#444](https://github.com/serenity-bdd/serenity-core/issues/444)
+
+**Closed issues:**
+
+- Method toString\(\) in parameterized tests is no longer respected [\#643](https://github.com/serenity-bdd/serenity-core/issues/643)
+- Error in FreeMarker template when passing Map in Parameterized test as a parameter [\#642](https://github.com/serenity-bdd/serenity-core/issues/642)
+- InvalidManagedWebDriverFieldException when "@Managed was found in the test case" [\#641](https://github.com/serenity-bdd/serenity-core/issues/641)
+- Acronyms are poorly rendered in the reports [\#640](https://github.com/serenity-bdd/serenity-core/issues/640)
+- net.thucydides.core.pages.WrongPageError: The page object class xylooks dodgy [\#619](https://github.com/serenity-bdd/serenity-core/issues/619)
+
 ## [v1.2.2-rc.6](https://github.com/serenity-bdd/serenity-core/tree/v1.2.2-rc.6) (2017-01-03)
 [Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.2.2-rc.5...v1.2.2-rc.6)
 
@@ -38,7 +54,7 @@
 - Retry failed test isn't working [\#638](https://github.com/serenity-bdd/serenity-core/issues/638)
 
 ## [v1.2.2-rc.4](https://github.com/serenity-bdd/serenity-core/tree/v1.2.2-rc.4) (2016-12-20)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.2.2-rc.2...v1.2.2-rc.4)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.2.2-rc.3...v1.2.2-rc.4)
 
 **Implemented enhancements:**
 
@@ -49,11 +65,11 @@
 
 - Sometime build tests fails during taking screenshots or generating reports. [\#173](https://github.com/serenity-bdd/serenity-core/issues/173)
 
-## [v1.2.2-rc.2](https://github.com/serenity-bdd/serenity-core/tree/v1.2.2-rc.2) (2016-12-20)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.2.2-rc.3...v1.2.2-rc.2)
-
 ## [v1.2.2-rc.3](https://github.com/serenity-bdd/serenity-core/tree/v1.2.2-rc.3) (2016-12-20)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.2.2-rc.1...v1.2.2-rc.3)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.2.2-rc.2...v1.2.2-rc.3)
+
+## [v1.2.2-rc.2](https://github.com/serenity-bdd/serenity-core/tree/v1.2.2-rc.2) (2016-12-20)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.2.2-rc.1...v1.2.2-rc.2)
 
 **Closed issues:**
 
@@ -460,7 +476,7 @@
 [Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.35-rc.1...v1.1.35)
 
 ## [v1.1.35-rc.1](https://github.com/serenity-bdd/serenity-core/tree/v1.1.35-rc.1) (2016-05-27)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.34...v1.1.35-rc.1)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.34-rc.1...v1.1.35-rc.1)
 
 **Fixed bugs:**
 
@@ -470,11 +486,11 @@
 
 - max.retries is broken in 1.1.33 [\#422](https://github.com/serenity-bdd/serenity-core/issues/422)
 
-## [v1.1.34](https://github.com/serenity-bdd/serenity-core/tree/v1.1.34) (2016-05-20)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.34-rc.1...v1.1.34)
-
 ## [v1.1.34-rc.1](https://github.com/serenity-bdd/serenity-core/tree/v1.1.34-rc.1) (2016-05-20)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.33...v1.1.34-rc.1)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.34...v1.1.34-rc.1)
+
+## [v1.1.34](https://github.com/serenity-bdd/serenity-core/tree/v1.1.34) (2016-05-20)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.33-rc.1...v1.1.34)
 
 **Fixed bugs:**
 
@@ -489,11 +505,11 @@
 
 - Omit resizing on appium [\#415](https://github.com/serenity-bdd/serenity-core/pull/415) ([hypery2k](https://github.com/hypery2k))
 
-## [v1.1.33](https://github.com/serenity-bdd/serenity-core/tree/v1.1.33) (2016-05-18)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.33-rc.1...v1.1.33)
-
 ## [v1.1.33-rc.1](https://github.com/serenity-bdd/serenity-core/tree/v1.1.33-rc.1) (2016-05-18)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.32...v1.1.33-rc.1)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.33...v1.1.33-rc.1)
+
+## [v1.1.33](https://github.com/serenity-bdd/serenity-core/tree/v1.1.33) (2016-05-18)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.32...v1.1.33)
 
 **Implemented enhancements:**
 
@@ -564,7 +580,7 @@
 - Fixed initialization of step classes with multiple constructors [\#389](https://github.com/serenity-bdd/serenity-core/pull/389) ([YamStranger](https://github.com/YamStranger))
 
 ## [v1.1.32-rc.1](https://github.com/serenity-bdd/serenity-core/tree/v1.1.32-rc.1) (2016-04-20)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.31-rc.1...v1.1.32-rc.1)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.31...v1.1.32-rc.1)
 
 **Implemented enhancements:**
 
@@ -578,11 +594,11 @@
 
 - updating changelog [\#383](https://github.com/serenity-bdd/serenity-core/pull/383) ([YamStranger](https://github.com/YamStranger))
 
-## [v1.1.31-rc.1](https://github.com/serenity-bdd/serenity-core/tree/v1.1.31-rc.1) (2016-04-20)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.31...v1.1.31-rc.1)
-
 ## [v1.1.31](https://github.com/serenity-bdd/serenity-core/tree/v1.1.31) (2016-04-20)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.30-rc.1...v1.1.31)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.31-rc.1...v1.1.31)
+
+## [v1.1.31-rc.1](https://github.com/serenity-bdd/serenity-core/tree/v1.1.31-rc.1) (2016-04-20)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.30-rc.1...v1.1.31-rc.1)
 
 **Implemented enhancements:**
 
@@ -671,7 +687,7 @@
 - Updated store/load of outcomes - serenity.report.encoding property will be used with UTF-8 as default [\#330](https://github.com/serenity-bdd/serenity-core/pull/330) ([cliviu](https://github.com/cliviu))
 
 ## [v1.1.29-rc.1](https://github.com/serenity-bdd/serenity-core/tree/v1.1.29-rc.1) (2016-03-02)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.28...v1.1.29-rc.1)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.28-rc.1...v1.1.29-rc.1)
 
 **Fixed bugs:**
 
@@ -688,11 +704,11 @@
 - Updated processing of names to keep abbreviations of JSON CSV XML [\#332](https://github.com/serenity-bdd/serenity-core/pull/332) ([YamStranger](https://github.com/YamStranger))
 - Updated appium configuration to be compatible with Appium 1.5 -  appium.app is no longer required if appium.browserName is supplied [\#331](https://github.com/serenity-bdd/serenity-core/pull/331) ([hazmeister](https://github.com/hazmeister))
 
-## [v1.1.28](https://github.com/serenity-bdd/serenity-core/tree/v1.1.28) (2016-03-01)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.28-rc.1...v1.1.28)
-
 ## [v1.1.28-rc.1](https://github.com/serenity-bdd/serenity-core/tree/v1.1.28-rc.1) (2016-03-01)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.27...v1.1.28-rc.1)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.28...v1.1.28-rc.1)
+
+## [v1.1.28](https://github.com/serenity-bdd/serenity-core/tree/v1.1.28) (2016-03-01)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.27...v1.1.28)
 
 **Fixed bugs:**
 
@@ -856,13 +872,13 @@
 - Report for configuration [\#251](https://github.com/serenity-bdd/serenity-core/pull/251) ([YamStranger](https://github.com/YamStranger))
 
 ## [v1.1.22](https://github.com/serenity-bdd/serenity-core/tree/v1.1.22) (2016-01-10)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.22-rc.16...v1.1.22)
-
-## [v1.1.22-rc.16](https://github.com/serenity-bdd/serenity-core/tree/v1.1.22-rc.16) (2016-01-10)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.24...v1.1.22-rc.16)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.24...v1.1.22)
 
 ## [v1.1.24](https://github.com/serenity-bdd/serenity-core/tree/v1.1.24) (2016-01-10)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.23...v1.1.24)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.22-rc.16...v1.1.24)
+
+## [v1.1.22-rc.16](https://github.com/serenity-bdd/serenity-core/tree/v1.1.22-rc.16) (2016-01-10)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.23...v1.1.22-rc.16)
 
 ## [v1.1.23](https://github.com/serenity-bdd/serenity-core/tree/v1.1.23) (2016-01-10)
 [Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.22-rc.15...v1.1.23)
@@ -1026,13 +1042,13 @@
 - Fixing getdrivername method to take this.driverClass instead of the g… [\#168](https://github.com/serenity-bdd/serenity-core/pull/168) ([willhuang85](https://github.com/willhuang85))
 
 ## [v1.1.22-rc.1](https://github.com/serenity-bdd/serenity-core/tree/v1.1.22-rc.1) (2015-11-09)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.21-rc.1...v1.1.22-rc.1)
-
-## [v1.1.21-rc.1](https://github.com/serenity-bdd/serenity-core/tree/v1.1.21-rc.1) (2015-11-06)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.21...v1.1.21-rc.1)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.21...v1.1.22-rc.1)
 
 ## [v1.1.21](https://github.com/serenity-bdd/serenity-core/tree/v1.1.21) (2015-11-06)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.20...v1.1.21)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.21-rc.1...v1.1.21)
+
+## [v1.1.21-rc.1](https://github.com/serenity-bdd/serenity-core/tree/v1.1.21-rc.1) (2015-11-06)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.20...v1.1.21-rc.1)
 
 ## [v1.1.20](https://github.com/serenity-bdd/serenity-core/tree/v1.1.20) (2015-11-05)
 [Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.1.20-rc.1...v1.1.20)
@@ -1505,20 +1521,20 @@
 - rename serenity\_bdd to serenitybdd [\#13](https://github.com/serenity-bdd/serenity-core/pull/13) ([mikezx6r](https://github.com/mikezx6r))
 
 ## [v1.0.22](https://github.com/serenity-bdd/serenity-core/tree/v1.0.22) (2014-12-21)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.0.20...v1.0.22)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.0.21...v1.0.22)
 
 **Merged pull requests:**
 
 - More package renaming [\#12](https://github.com/serenity-bdd/serenity-core/pull/12) ([mikezx6r](https://github.com/mikezx6r))
 
-## [v1.0.20](https://github.com/serenity-bdd/serenity-core/tree/v1.0.20) (2014-12-16)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.0.19...v1.0.20)
+## [v1.0.21](https://github.com/serenity-bdd/serenity-core/tree/v1.0.21) (2014-12-16)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.0.19...v1.0.21)
 
 ## [v1.0.19](https://github.com/serenity-bdd/serenity-core/tree/v1.0.19) (2014-12-16)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.0.21...v1.0.19)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.0.20...v1.0.19)
 
-## [v1.0.21](https://github.com/serenity-bdd/serenity-core/tree/v1.0.21) (2014-12-16)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.0.18...v1.0.21)
+## [v1.0.20](https://github.com/serenity-bdd/serenity-core/tree/v1.0.20) (2014-12-16)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.0.18...v1.0.20)
 
 ## [v1.0.18](https://github.com/serenity-bdd/serenity-core/tree/v1.0.18) (2014-12-15)
 [Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.0.17...v1.0.18)
@@ -1554,13 +1570,13 @@
 [Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.0.12-rc.1...v1.0.12)
 
 ## [v1.0.12-rc.1](https://github.com/serenity-bdd/serenity-core/tree/v1.0.12-rc.1) (2014-12-04)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/1.0.10...v1.0.12-rc.1)
-
-## [1.0.10](https://github.com/serenity-bdd/serenity-core/tree/1.0.10) (2014-12-04)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.0.11...1.0.10)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.0.11...v1.0.12-rc.1)
 
 ## [v1.0.11](https://github.com/serenity-bdd/serenity-core/tree/v1.0.11) (2014-12-04)
-[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.0.9...v1.0.11)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/1.0.10...v1.0.11)
+
+## [1.0.10](https://github.com/serenity-bdd/serenity-core/tree/1.0.10) (2014-12-04)
+[Full Changelog](https://github.com/serenity-bdd/serenity-core/compare/v1.0.9...1.0.10)
 
 **Merged pull requests:**
 

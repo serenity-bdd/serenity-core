@@ -1,6 +1,5 @@
 package net.thucydides.core.util
 
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class WhenDisplayingTagNamesInAReadableForm extends Specification {
@@ -89,7 +88,45 @@ class WhenDisplayingTagNamesInAReadableForm extends Specification {
             'x-men: the last stand'    | 'X-Men: The Last Stand'
     }
 
-    @Ignore
+    def "should find acronyms in a text"() {
+        when:
+            def acronyms = Acronym.acronymsIn(word)
+        then:
+            acronyms.size() == 1
+            acronyms == [new Acronym(acronym, start, end)] as Set
+        where:
+        word                           | acronym    | start | end
+        'ASCII code'                   | 'ASCII'    | 0     | 5
+        'big ASCII code'               | 'ASCII'    | 4     | 9
+        'big AsciI'                    | 'AsciI'    | 4     | 9
+    }
+
+    def "should find multiple acronyms in a text"() {
+        when:
+            def acronyms = Acronym.acronymsIn(word)
+        then:
+            acronyms.size() == count
+        where:
+        word                           | acronym    | count
+        'ASCII code ASCII'             | 'ASCII'    | 2
+        'big ASCII code'               | 'ASCII'    | 1
+        'big AsciI CODE'               | 'AsciI'    | 2
+    }
+
+    def "should restore acronyms in text"() {
+        given:
+            def acronyms = Acronym.acronymsIn(original)
+        when:
+            String restoredForm = acronyms[0].restoreIn(lowercase)
+        then:
+            restoredForm == restored
+        where:
+        original       | lowercase      | restored
+        "The BIG boat" | "The Big Boat" | "The BIG Boat"
+        "The big BOAT" | "The Big Boat" | "The Big BOAT"
+        "THE big boat" | "The Big Boat" | "THE Big Boat"
+    }
+
     def "should respect acronyms"() {
         when:
             def capitalized = inflection.of(word).asATitle().toString()
@@ -99,6 +136,8 @@ class WhenDisplayingTagNamesInAReadableForm extends Specification {
             word                           | expectedCapitalizedForm
             'ASCII code'                   | 'ASCII Code'
             'the ABC'                      | 'The ABC'
+            'the QoS RAM'                  | 'The QoS RAM'
+            'the QoS RAM of QoS'           | 'The QoS RAM Of QoS'
     }
 
     def "should convert variable expressions into human-readable form"() {

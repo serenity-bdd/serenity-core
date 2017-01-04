@@ -8,20 +8,20 @@ import java.util.Map;
 
 public abstract class ConditionalPerformable implements Performable {
 
-    protected final Map<Boolean, Performable> outcomeToPerform;
+    protected final Map<Boolean, Performable[]> outcomeToPerform;
 
     public ConditionalPerformable() {
         this.outcomeToPerform = Maps.newHashMap();
-        outcomeToPerform.put(true, new SilentPerformable());
-        outcomeToPerform.put(false, new SilentPerformable());
+        outcomeToPerform.put(true, new Performable[]{ new SilentPerformable() });
+        outcomeToPerform.put(false, new Performable[]{ new SilentPerformable() });
     }
 
-    public ConditionalPerformable andIfSo(Performable taskToPerform) {
+    public ConditionalPerformable andIfSo(Performable... taskToPerform) {
         outcomeToPerform.put(true, taskToPerform);
         return this;
     }
 
-    public ConditionalPerformable otherwise(Performable taskToPerform) {
+    public ConditionalPerformable otherwise(Performable... taskToPerform) {
         outcomeToPerform.put(false, taskToPerform);
         return this;
     }

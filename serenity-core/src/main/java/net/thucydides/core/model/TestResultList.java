@@ -2,6 +2,7 @@ package net.thucydides.core.model;
 
 import com.google.common.collect.ImmutableList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static net.thucydides.core.model.TestResult.*;
@@ -12,8 +13,8 @@ import static net.thucydides.core.model.TestResult.*;
 public class TestResultList {
 
     public static TestResult overallResultFrom(List<TestResult> results) {
-        List<TestResult> testResults = ImmutableList.copyOf(results);
-        
+        List<TestResult> testResults = withoutResultsUndefined(ImmutableList.copyOf(results));
+
         if (testResults.isEmpty()) {
             return SUCCESS;
         }
@@ -46,6 +47,16 @@ public class TestResultList {
             return SUCCESS;
         }
         return SUCCESS;
+    }
+
+    private static List<TestResult> withoutResultsUndefined(List<TestResult> testResults) {
+        List<TestResult> filteredResults = new ArrayList<>();
+        for(TestResult result : testResults) {
+            if (result != UNDEFINED) {
+                filteredResults.add(result);
+            }
+        }
+        return filteredResults;
     }
 
     private static boolean containsOnly(final List<TestResult> testResults, final TestResult... values) {

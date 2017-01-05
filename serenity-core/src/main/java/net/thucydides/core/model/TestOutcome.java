@@ -1096,6 +1096,16 @@ public class TestOutcome {
         if (annotatedResult != null) {
             return annotatedResult;
         }
+
+        TestResult testResultFromFailureClassname = testResultFromFailureClassname();
+
+        List<TestResult> overallResults = Lists.newArrayList(getCurrentTestResults());
+        overallResults.add(testResultFromFailureClassname);
+
+        return TestResultList.overallResultFrom(overallResults);
+    }
+
+    private TestResult testResultFromFailureClassname() {
         if (testFailureClassname != null) {
             try {
                 return new FailureAnalysis().resultFor(Class.forName(testFailureClassname));
@@ -1103,7 +1113,7 @@ public class TestOutcome {
                 return TestResult.ERROR;
             }
         }
-        return TestResultList.overallResultFrom(getCurrentTestResults());
+        return TestResult.UNDEFINED;
     }
 
     public TestOutcome recordSteps(final List<TestStep> steps) {

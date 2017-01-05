@@ -1,7 +1,6 @@
 package net.thucydides.junit.listeners;
 
 import net.serenitybdd.core.Serenity;
-import net.serenitybdd.junit.finder.TestFinder;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.logging.LoggingLevel;
 import net.thucydides.core.model.DataTable;
@@ -12,7 +11,6 @@ import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepListener;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,22 +26,10 @@ public class TestCountListener implements StepListener {
         this.logger = logger;
         this.environmentVariables = environmentVariables;
         this.testCount = testCount;
-        logTotalTestCount();
     }
 
     public TestCountListener(EnvironmentVariables environmentVariables, TestCount testCount) {
         this(environmentVariables, LoggerFactory.getLogger(Serenity.class), testCount);
-    }
-
-    private void logTotalTestCount() {
-        String rootPackage = ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT.from(environmentVariables);
-        if (StringUtils.isNotEmpty(rootPackage)) {
-            TestFinder finder = TestFinder.thatFinds().allTests().inPackage(rootPackage);
-            int testMethodCount = finder.countTestMethods();
-            if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
-                getLogger().info("PREPARING TO EXECUTE {} TESTS", testMethodCount);
-            }
-        }
     }
 
     private boolean loggingLevelIsAtLeast(LoggingLevel minimumLoggingLevel) {

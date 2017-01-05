@@ -747,6 +747,15 @@ public class TestOutcome {
                 this.environmentVariables);
     }
 
+    public void updateTopLevelStepResultsTo(TestResult result) {
+        for(TestStep step : testSteps) {
+            step.setResult(result);
+        }
+        if (dataTable != null) {
+            dataTable.updateRowResultsTo(result);
+        }
+    }
+
     private static class TestOutcomeWithEnvironmentBuilder {
         private final EnvironmentVariables environmentVariables;
 
@@ -1364,7 +1373,7 @@ public class TestOutcome {
     }
 
     public void setAnnotatedResult(final TestResult annotatedResult) {
-        if (this.annotatedResult != PENDING) {
+        if (this.annotatedResult != PENDING){
             this.annotatedResult = (this.annotatedResult == null) ?
                     annotatedResult : TestResultComparison.overallResultFor(this.annotatedResult, annotatedResult);
         }

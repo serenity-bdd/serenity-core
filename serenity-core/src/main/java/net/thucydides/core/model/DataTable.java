@@ -167,6 +167,12 @@ public class DataTable {
         return dataSets;
     }
 
+    public void updateRowResultsTo(TestResult result) {
+        for(DataTableRow row : rows) {
+            row.setResult(result);
+        }
+    }
+
     public static class DataTableBuilder {
         final List<String> headers;
         final List<DataTableRow> rows;

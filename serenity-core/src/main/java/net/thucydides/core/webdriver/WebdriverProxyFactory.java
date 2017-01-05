@@ -2,6 +2,7 @@ package net.thucydides.core.webdriver;
 
 import com.google.common.collect.ImmutableList;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.thucydides.core.steps.StepEventBus;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -97,6 +98,9 @@ public class WebdriverProxyFactory implements Serializable {
     }
 
     public static void clearBrowserSession(WebDriver driver) {
+
+        if (StepEventBus.getEventBus().isDryRun()) { return; }
+
         if (((WebDriverFacade) driver).isInstantiated()) {
             driver.manage().deleteAllCookies();
             try {

@@ -431,12 +431,24 @@ public class BaseStepListener implements StepListener, StepPublisher {
         // TODO: Disable when run from an IDE
         getCurrentTestOutcome().addTags(storywideTags);
 
+        if (StepEventBus.getEventBus().isDryRun() || getCurrentTestOutcome().getResult() == IGNORED) {
+            testAndTopLevelStepsShouldBeIgnored();
+        }
+
         if (currentTestIsABrowserTest()) {
             getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
             updateSessionIdIfKnown();
             closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(SCENARIO);
         }
         currentStepStack.clear();
+    }
+
+    private void testAndTopLevelStepsShouldBeIgnored() {
+        getCurrentTestOutcome().setResult(IGNORED);
+        if (getCurrentTestOutcome().isDataDriven()) {
+            getCurrentTestOutcome().updateTopLevelStepResultsTo(IGNORED);
+        }
+
     }
 
 

@@ -696,4 +696,8 @@ public class StepEventBus {
     public void lastTestPassedAfterRetries(int remainingTries, List<String> failureMessages) {
         baseStepListener.lastTestPassedAfterRetries(remainingTries, failureMessages);
     }
+
+    public static void overrideEventBusWith(StepEventBus stepEventBus) {
+        stepEventBusThreadLocal.set(stepEventBus);
+    }
 }

@@ -1,31 +1,40 @@
 package net.serenitybdd.junit.runners;
 
+import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepPublisher;
-import org.junit.internal.AssumptionViolatedException;
+import org.junit.AssumptionViolatedException;
 import org.junit.runners.model.Statement;
 
 /**
  * A JUnit statement that runs a Serenity-enabled test and then publishes the results via JUnit.
  */
-public class SerenityStatement extends Statement {
+class SerenityStatement extends Statement {
 
     private final Statement statement;
     private final StepPublisher publisher;
 
-    public SerenityStatement(final Statement statement, final StepPublisher publisher) {
+    SerenityStatement(final Statement statement, final StepPublisher publisher) {
         this.statement = statement;
         this.publisher = publisher;
+    }
+
+    StepEventBus stepEventBus() {
+        if (publisher instanceof BaseStepListener) {
+            return ((BaseStepListener) publisher).getEventBus();
+        }
+        return StepEventBus.getEventBus();
     }
 
     @Override
     public void evaluate() throws Throwable {
         try {
+            updateCurrentEventBusFrom(publisher);
             statement.evaluate();
         } catch (AssumptionViolatedException assumptionViolated) {
-            StepEventBus.getEventBus().assumptionViolated(assumptionViolated.getMessage());
+            stepEventBus().assumptionViolated(assumptionViolated.getMessage());
         } catch (AssertionError assertionError) {
-            if (!StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed()) {
+            if (!stepEventBus().aStepInTheCurrentTestHasFailed()) {
                 throw assertionError;
             }
         }
@@ -33,16 +42,21 @@ public class SerenityStatement extends Statement {
         checkForAssumptionViolations();
     }
 
+    private void updateCurrentEventBusFrom(StepPublisher publisher) {
+        if (StepEventBus.getEventBus() != stepEventBus()) {
+            StepEventBus.overrideEventBusWith(stepEventBus());
+        }
+    }
+
     private void checkForStepFailures() throws Throwable {
         if (publisher.aStepHasFailed()) {
-            String message = publisher.getTestFailureCause().getErrorType() + ": " + publisher.getTestFailureCause().getMessage();
             throw publisher.getTestFailureCause().toException();
         }
     }
 
     private void checkForAssumptionViolations() {
-        if (StepEventBus.getEventBus().assumptionViolated()) {
-            throw new AssumptionViolatedException(StepEventBus.getEventBus().getAssumptionViolatedMessage());
+        if (stepEventBus().assumptionViolated()) {
+            throw new AssumptionViolatedException(stepEventBus().getAssumptionViolatedMessage());
         }
     }
 }

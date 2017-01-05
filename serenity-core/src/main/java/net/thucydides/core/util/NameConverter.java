@@ -108,10 +108,8 @@ public final class NameConverter {
 
     private static String lowercaseOrAcronym(String word) {
         if (Acronym.isAnAcronym(word)) {
-            System.out.println(word + "-> Acronym");
             return word;
         } else {
-            System.out.println(word + "-> to lower case");
             return StringUtils.lowerCase(word);
         }
     }

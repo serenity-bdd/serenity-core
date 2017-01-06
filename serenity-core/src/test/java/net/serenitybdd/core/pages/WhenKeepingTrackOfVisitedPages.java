@@ -6,7 +6,7 @@ import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.WrongPageError;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebdriverProxyFactory;
 import org.junit.Before;

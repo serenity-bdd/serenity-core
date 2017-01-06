@@ -3,6 +3,7 @@ package net.thucydides.core.webdriver
 import net.thucydides.core.annotations.locators.SmartElementLocatorFactory
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory

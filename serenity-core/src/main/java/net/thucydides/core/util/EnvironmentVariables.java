@@ -43,4 +43,8 @@ public interface EnvironmentVariables {
     Properties getProperties();
 
     Properties getPropertiesWithPrefix(String prefix);
+
+    boolean aValueIsDefinedFor(final Enum<?> property);
+
+    boolean aValueIsDefinedFor(String property);
 }

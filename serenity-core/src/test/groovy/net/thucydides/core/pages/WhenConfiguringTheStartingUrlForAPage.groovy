@@ -6,7 +6,7 @@ import net.thucydides.core.annotations.NamedUrl
 import net.thucydides.core.annotations.NamedUrls
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration
+import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import spock.lang.Specification
 import spock.lang.Unroll
 

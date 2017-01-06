@@ -107,6 +107,7 @@ public enum ThucydidesSystemProperty {
      * Where should reports be generated (use the system property 'thucydides.outputDirectory').
      */
     THUCYDIDES_OUTPUT_DIRECTORY("thucydides.outputDirectory"),
+    SERENITY_OUTPUT_DIRECTORY("serenity.outputDirectory"),
 
     /**
      * Default name of report with configurations. It will contains some values that was used during generation of reports

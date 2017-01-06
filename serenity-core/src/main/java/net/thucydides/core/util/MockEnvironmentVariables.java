@@ -138,6 +138,16 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         return new SystemEnvironmentVariables(properties, values).getPropertiesWithPrefix(prefix);
     }
 
+    @Override
+    public boolean aValueIsDefinedFor(Enum<?> property) {
+        return properties.contains(property.toString());
+    }
+
+    @Override
+    public boolean aValueIsDefinedFor(String property) {
+        return properties.contains(property);
+    }
+
     public void setValue(String name, String value) {
         values.put(name, value);
     }

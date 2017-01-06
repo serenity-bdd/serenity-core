@@ -3,7 +3,7 @@ package net.serenitybdd.core.environment;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 
 public class ConfiguredEnvironment {
     private static final ThreadLocal<EnvironmentVariables> testEnvironmentVariables = new ThreadLocal<>();

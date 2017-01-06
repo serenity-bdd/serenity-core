@@ -5,7 +5,7 @@ import net.serenitybdd.junit.runners.SerenityRunner
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SerenityWebdriverManager
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration
+import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import net.thucydides.core.webdriver.WebDriverFactory
 import net.thucydides.samples.*
 import org.junit.Rule

@@ -2,6 +2,7 @@ package net.thucydides.core.webdriver
 
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import org.openqa.selenium.firefox.FirefoxProfile
 import spock.lang.Ignore
 import spock.lang.Specification

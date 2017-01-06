@@ -14,7 +14,7 @@ import net.thucydides.core.requirements.annotations.NarrativeFinder;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.runner.RunWith;
 

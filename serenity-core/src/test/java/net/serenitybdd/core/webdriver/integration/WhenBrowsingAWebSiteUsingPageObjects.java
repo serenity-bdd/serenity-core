@@ -6,7 +6,7 @@ import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WebElementFacadeImpl;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.webelements.RadioButtonGroup;
 import org.junit.AfterClass;
 import org.junit.Before;

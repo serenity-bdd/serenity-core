@@ -1,4 +1,4 @@
-package net.thucydides.core.webdriver;
+package net.thucydides.core.configuration;
 
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
@@ -6,15 +6,15 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TakeScreenshots;
 import net.thucydides.core.steps.FilePathParser;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.thucydides.core.webdriver.Configuration;
+import net.thucydides.core.webdriver.SupportedWebDriver;
+import net.thucydides.core.webdriver.UnsupportedDriverException;
 
 import java.io.File;
-import java.nio.file.Paths;
 
 import static net.thucydides.core.ThucydidesSystemProperty.*;
 import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Centralized configuration of the test runner. You can configure the output
@@ -23,8 +23,6 @@ import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
  *
  */
 public class SystemPropertiesConfiguration implements Configuration {
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(SystemPropertiesConfiguration.class);
 
     /**
      * The default browser is Firefox.
@@ -42,7 +40,7 @@ public class SystemPropertiesConfiguration implements Configuration {
      * Use this property to define the output directory in which reports will be
      * stored.
      */
-    public static final String OUTPUT_DIRECTORY_PROPERTY = ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName();
+    public static final String OUTPUT_DIRECTORY_PROPERTY = THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName();
 
     /**
      * If in system properties will be defined project.build.directory or project.reporting.OutputDirectory then it will
@@ -72,7 +70,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     /**
      * By default, reports will go here.
      */
-    private static final String DEFAULT_OUTPUT_DIRECTORY = "target/site/serenity";
+    public static final String DEFAULT_OUTPUT_DIRECTORY = "target/site/serenity";
 
     /**
      * HTML and XML reports will be generated in this directory.
@@ -121,15 +119,15 @@ public class SystemPropertiesConfiguration implements Configuration {
      * Where should the reports go?
      */
     public File loadOutputDirectoryFromSystemProperties() {
-        String systemDirectoryProperty = ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.from(environmentVariables, getMavenBuildDirectory());
-        String instantiatedPath = filePathParser.getInstanciatedPath(systemDirectoryProperty);
-        String systemDefinedDirectory = (instantiatedPath != null) ? instantiatedPath : DEFAULT_OUTPUT_DIRECTORY;
+
+        String systemDefinedDirectory = MavenOrGradleBuildPath.specifiedIn(environmentVariables).getBuildDirectory();
+
+        systemDefinedDirectory = filePathParser.getInstanciatedPath(systemDefinedDirectory);
 
         File newOutputDirectory = new File(systemDefinedDirectory);
-        if (!outputDirectoryResolvedAgainstBuildDir && !newOutputDirectory.isAbsolute()) {
-            newOutputDirectory = resolveIfMavenIsUsed(newOutputDirectory);
-        }
+
         newOutputDirectory.mkdirs();
+
         return newOutputDirectory;
     }
 
@@ -140,33 +138,32 @@ public class SystemPropertiesConfiguration implements Configuration {
         setOutputDirectory(loadOutputDirectoryFromSystemProperties());
     }
 
-    /**
-     * should be base on module dir and not root project dir (if multimodule project iused with maven plugin)
-     *
-     * @param path to dir with reports, "outputDir"
-     * @return if maven used, path should be resolved instead module dir but not against working dir.
-     */
-    private File resolveIfMavenIsUsed(File path) {
-        String mavenBuildDirectory = getEnvironmentVariables().getProperty(PROJECT_BUILD_DIRECTORY);
-        if (StringUtils.isNotEmpty(mavenBuildDirectory)) {
-            return Paths.get(mavenBuildDirectory).resolve(path.toPath()).toFile();
-        }
-        return path;
-    }
-
-    private String getMavenBuildDirectory() {
-        String mavenBuildDirectory = getEnvironmentVariables().getProperty(PROJECT_BUILD_DIRECTORY);
-        String mavenReportsDirectory = getEnvironmentVariables().getProperty(PROJECT_REPORTING_OUTPUT_DIRECTORY);
-        String defaultMavenRelativeTargetDirectory = null;
-        if (StringUtils.isNotEmpty(mavenReportsDirectory)) {
-            defaultMavenRelativeTargetDirectory = mavenReportsDirectory.concat(File.separator).concat("serenity");
-            outputDirectoryResolvedAgainstBuildDir = true;
-        } else if (StringUtils.isNotEmpty(mavenBuildDirectory)) {
-            defaultMavenRelativeTargetDirectory = mavenBuildDirectory.concat(File.separator).concat(DEFAULT_OUTPUT_DIRECTORY);
-            outputDirectoryResolvedAgainstBuildDir = true;
-        }
-        return defaultMavenRelativeTargetDirectory;
-    }
+//    /**
+//     * should be base on module dir and not root project dir (if multimodule project iused with maven plugin)
+//     *
+//     * @param path to dir with reports, "outputDir"
+//     * @return if maven used, path should be resolved instead module dir but not against working dir.
+//     */
+//    private File resolveIfMavenIsUsed(File path) {
+//        if (!getEnvironmentVariables().aValueIsDefinedFor(PROJECT_BUILD_DIRECTORY)) { return null; }
+//
+//        String mavenBuildDirectory = getEnvironmentVariables().getProperty(PROJECT_BUILD_DIRECTORY);
+//        return Paths.get(mavenBuildDirectory).resolve(path.toPath()).toFile();
+//    }
+//
+//    private String getMavenBuildDirectory() {
+//        String mavenBuildDirectory = getEnvironmentVariables().getProperty(PROJECT_BUILD_DIRECTORY);
+//        String mavenReportsDirectory = getEnvironmentVariables().getProperty(PROJECT_REPORTING_OUTPUT_DIRECTORY);
+//        String defaultMavenRelativeTargetDirectory = null;
+//        if (isNotEmpty(mavenReportsDirectory)) {
+//            defaultMavenRelativeTargetDirectory = mavenReportsDirectory.concat(File.separator).concat("serenity");
+//            outputDirectoryResolvedAgainstBuildDir = true;
+//        } else if (isNotEmpty(mavenBuildDirectory)) {
+//            defaultMavenRelativeTargetDirectory = mavenBuildDirectory.concat(File.separator).concat(DEFAULT_OUTPUT_DIRECTORY);
+//            outputDirectoryResolvedAgainstBuildDir = true;
+//        }
+//        return defaultMavenRelativeTargetDirectory;
+//    }
 
     public int getStepDelay() {
         int stepDelay = 0;
@@ -233,7 +230,7 @@ public class SystemPropertiesConfiguration implements Configuration {
 
     public Optional<TakeScreenshots> getScreenshotLevel() {
         String takeScreenshotsLevel = THUCYDIDES_TAKE_SCREENSHOTS.from(getEnvironmentVariables());
-        if (StringUtils.isNotEmpty(takeScreenshotsLevel)) {
+        if (isNotEmpty(takeScreenshotsLevel)) {
             return Optional.of(TakeScreenshots.valueOf(takeScreenshotsLevel.toUpperCase()));
         } else {
             return Optional.absent();

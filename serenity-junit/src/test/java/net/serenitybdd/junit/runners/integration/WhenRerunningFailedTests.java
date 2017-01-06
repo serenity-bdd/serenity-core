@@ -8,7 +8,7 @@ import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.samples.SampleNonWebScenarioWithError;
 import net.thucydides.samples.SampleNonWebScenarioWithErrorThatEventuallyWorks;

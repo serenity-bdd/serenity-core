@@ -2,7 +2,7 @@ package serenity.example;
 
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.util.SystemEnvironmentVariables;
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import org.junit.Assert;
 
 /**

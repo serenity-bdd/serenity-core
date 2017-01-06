@@ -4,7 +4,7 @@ import net.serenitybdd.core.SerenityReports
 import net.thucydides.core.model.Story
 import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.util.MockEnvironmentVariables
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration
+import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import spock.lang.Specification
 
 import java.nio.file.Files

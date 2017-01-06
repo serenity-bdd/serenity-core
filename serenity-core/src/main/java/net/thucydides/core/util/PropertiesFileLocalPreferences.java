@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigValue;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

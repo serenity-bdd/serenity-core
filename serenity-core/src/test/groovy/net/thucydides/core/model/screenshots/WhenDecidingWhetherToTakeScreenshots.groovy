@@ -6,7 +6,7 @@ import net.thucydides.core.model.TakeScreenshots
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.Configuration
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration
+import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import spock.lang.Specification
 import spock.lang.Unroll
 

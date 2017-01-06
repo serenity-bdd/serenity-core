@@ -6,7 +6,7 @@ import net.thucydides.core.pages.WebElementFacade;
 import net.thucydides.core.pages.WebElementFacadeImpl;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.webelements.RadioButtonGroup;
 import org.junit.After;
 import org.junit.Before;

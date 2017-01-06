@@ -4,7 +4,7 @@ import net.thucydides.core.guice.Injectors
 import net.thucydides.core.reports.ResultChecker
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
 import net.thucydides.core.webdriver.Configuration
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration
+import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

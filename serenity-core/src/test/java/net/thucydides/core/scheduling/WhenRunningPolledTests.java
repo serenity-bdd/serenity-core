@@ -6,7 +6,7 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.SystemPropertiesConfiguration;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

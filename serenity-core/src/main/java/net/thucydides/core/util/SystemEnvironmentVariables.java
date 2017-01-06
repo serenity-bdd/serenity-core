@@ -69,6 +69,15 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         return filteredProperties;
     }
 
+    @Override
+    public boolean aValueIsDefinedFor(Enum<?> property) {
+        return aValueIsDefinedFor(property.toString());
+    }
+
+    @Override
+    public boolean aValueIsDefinedFor(String property) {
+        return systemProperties.contains(property);
+    }
 
     public Integer getPropertyAsInteger(String property, Integer defaultValue) {
         String value = (String) systemProperties.get(property);

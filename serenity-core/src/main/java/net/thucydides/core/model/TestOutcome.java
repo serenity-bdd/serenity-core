@@ -72,7 +72,6 @@ import static org.hamcrest.Matchers.is;
  */
 public class TestOutcome {
 
-    private static final Integer RECENT_TEST_RUN_COUNT = 10;
     private static final String ISSUES = "issues";
     private static final String NEW_LINE = System.getProperty("line.separator");
 
@@ -147,6 +146,7 @@ public class TestOutcome {
     private FailureCause testFailureCause;
     private String testFailureClassname;
     private String testFailureMessage;
+    private String testFailureSummary;
 
     /**
      * Used to determine what result should be returned if there are no steps in this test.
@@ -756,6 +756,10 @@ public class TestOutcome {
         }
     }
 
+    public String getTestFailureSummary() {
+        return testFailureSummary;
+    }
+
     private static class TestOutcomeWithEnvironmentBuilder {
         private final EnvironmentVariables environmentVariables;
 
@@ -1273,8 +1277,6 @@ public class TestOutcome {
         return groupStack.peek();
     }
 
-    private static final Optional<TestTag> NO_DEFINED_FEATURE = Optional.absent();
-
     public void setUserStory(Story story) {
         this.userStory = story;
         this.featureTag = FeatureTagAsDefined.in(story, getPath());
@@ -1286,31 +1288,53 @@ public class TestOutcome {
             FailureCause rootCause = rootCauseAnalyser.getRootCause();
             this.testFailureClassname = rootCauseAnalyser.getRootCause().getErrorType();
             this.testFailureMessage = rootCauseAnalyser.getMessage();
-            this.setAnnotatedResult(new FailureAnalysis().resultFor(rootCause.exceptionClass()));
             this.testFailureCause = rootCause;
+            this.testFailureSummary = failureSummaryFrom(rootCause);
+            this.setAnnotatedResult(new FailureAnalysis().resultFor(rootCause.exceptionClass()));
         } else {
-            this.testFailureCause = null;
-            this.testFailureClassname = "";
-            this.testFailureMessage = "";
+            noTestFailureIsDefined();
         }
+    }
+
+    private final String FAILURE_SUMMARY = "%s;%s;%s;%s";
+
+    private String failureSummaryFrom(FailureCause rootCause) {
+        return String.format(FAILURE_SUMMARY,
+                             getResult(),
+                             rootCause.getErrorType(),
+                             rootCause.getMessage(),
+                             stackTraceSourceFrom(rootCause));
+    }
+
+    private String stackTraceSourceFrom(FailureCause rootCause) {
+        if (rootCause.getStackTrace().length == 0) { return ""; }
+
+        return rootCause.getStackTrace()[0].getFileName() + ":"  + rootCause.getStackTrace()[0].getLineNumber();
+    }
+
+    private void noTestFailureIsDefined() {
+        this.testFailureCause = null;
+        this.testFailureClassname = "";
+        this.testFailureMessage = "";
+        this.testFailureSummary = "";
     }
 
     public void appendTestFailure(TestFailureCause failureCause) {
         if (!failureCause.isDefined()) {
-            this.testFailureCause = null;
-            this.testFailureClassname = "";
-            this.testFailureMessage = "";
+            noTestFailureIsDefined();
             return;
         }
 
         if (noStepHasFailedSoFar()) {
             this.testFailureClassname = failureCause.getRootCause().getErrorType();
             this.testFailureMessage = failureCause.getTestFailureMessage();
-            this.setAnnotatedResult(failureCause.getAnnotatedResult());
             this.testFailureCause = failureCause.getRootCause();
+            this.testFailureSummary = failureSummaryFrom(failureCause.getRootCause());
+            this.setAnnotatedResult(failureCause.getAnnotatedResult());
         } else {
             this.testFailureClassname = AssertionError.class.getName();
             this.testFailureMessage = this.testFailureMessage + System.lineSeparator() + failureCause.getTestFailureMessage();
+            this.testFailureSummary = failureSummaryFrom(failureCause.getRootCause());
             this.setAnnotatedResult(TestResultComparison.overallResultFor(this.getAnnotatedResult(), failureCause.getAnnotatedResult()));
         }
 
@@ -1318,15 +1342,6 @@ public class TestOutcome {
 
     private boolean noStepHasFailedSoFar() {
         return this.testFailureCause == null;
-    }
-
-
-    public void setTestFailureCause(FailureCause testFailureCause) {
-        this.testFailureCause = testFailureCause;
-    }
-
-    public void setTestFailureClassname(String testFailureClassname) {
-        this.testFailureClassname = testFailureClassname;
     }
 
     public FailureCause getTestFailureCause() {

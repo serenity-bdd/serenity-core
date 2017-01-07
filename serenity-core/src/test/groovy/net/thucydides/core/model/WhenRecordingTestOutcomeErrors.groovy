@@ -25,6 +25,18 @@ class WhenRecordingTestOutcomeErrors extends Specification {
         testOutcome.result == TestResult.FAILURE
     }
 
+    def "should record failure summary"() {
+
+        given:
+        def testOutcome = TestOutcome.forTestInStory("aTest", Story.called("a story"))
+
+        when:
+        testOutcome.determineTestFailureCause(new AssertionError("oh crap!"))
+
+        then:
+        testOutcome.testFailureSummary == "FAILURE;java.lang.AssertionError;oh crap!;"
+    }
+
     def "should record failure message in steps"() {
 
         given:

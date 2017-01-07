@@ -58,7 +58,7 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
         File report = new File(getOutputDirectory(), reportFilename);
         report.createNewFile();
 
-        LOGGER.debug("Generating JSON report for {} to file {} (using temp file {})", testOutcome.getTitle(), report.getAbsolutePath(), temporary.getAbsolutePath());
+        LOGGER.info("Generating JSON report for {} to file {} (using temp file {})", testOutcome.getTitle(), report.getAbsolutePath(), temporary.getAbsolutePath());
 
         try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(temporary))){
             jsonConverter.toJson(storedTestOutcome, outputStream);

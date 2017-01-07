@@ -119,7 +119,10 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
         String reportFilename = reportFor(storedTestOutcome);
 
-        LOGGER.info("GENERATING HTML REPORT FOR " + storedTestOutcome.getCompleteName() + (StringUtils.isNotEmpty(qualifier) ? "/" + qualifier : "") + " => " + reportFilename);
+        LOGGER.info("GENERATING HTML REPORT FOR {} in {} in directory {}  ",
+                storedTestOutcome.getCompleteName() + (StringUtils.isNotEmpty(qualifier) ? "/" + qualifier : ""),
+                reportFilename,
+                getOutputDirectory());
 
         copyResourcesToOutputDirectory();
 

@@ -37,12 +37,6 @@ public class SystemPropertiesConfiguration implements Configuration {
     public static final Integer DEFAULT_ESTIMATED_AVERAGE_STEP_COUNT = 5;
 
     /**
-     * Use this property to define the output directory in which reports will be
-     * stored.
-     */
-    public static final String OUTPUT_DIRECTORY_PROPERTY = THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName();
-
-    /**
      * If in system properties will be defined project.build.directory or project.reporting.OutputDirectory then it will
      * be used for output for serenity test reports.
      * By default maven NEVER push this properties to system environment, but they are available in maven pm.
@@ -53,8 +47,6 @@ public class SystemPropertiesConfiguration implements Configuration {
     /**
      * This property is used when maven/gradle build conta subprojects by serenity  plugins
      */
-    private static final String PROJECT_REPORTING_OUTPUT_DIRECTORY = "project.reporting.OutputDirectory";
-
     /**
      * By default, when accepting untrusted SSL certificates, assume that these certificates will come from an
      * untrusted issuer or will be self signed. Due to limitation within Firefox, it is easy to find out if the
@@ -68,16 +60,9 @@ public class SystemPropertiesConfiguration implements Configuration {
             = ThucydidesSystemProperty.REFUSE_UNTRUSTED_CERTIFICATES.getPropertyName();
 
     /**
-     * By default, reports will go here.
-     */
-    public static final String DEFAULT_OUTPUT_DIRECTORY = "target/site/serenity";
-
-    /**
      * HTML and XML reports will be generated in this directory.
      */
     private File outputDirectory;
-
-    private boolean outputDirectoryResolvedAgainstBuildDir = false;
 
     private String defaultBaseUrl;
 
@@ -137,33 +122,6 @@ public class SystemPropertiesConfiguration implements Configuration {
     public void reloadOutputDirectory(){
         setOutputDirectory(loadOutputDirectoryFromSystemProperties());
     }
-
-//    /**
-//     * should be base on module dir and not root project dir (if multimodule project iused with maven plugin)
-//     *
-//     * @param path to dir with reports, "outputDir"
-//     * @return if maven used, path should be resolved instead module dir but not against working dir.
-//     */
-//    private File resolveIfMavenIsUsed(File path) {
-//        if (!getEnvironmentVariables().aValueIsDefinedFor(PROJECT_BUILD_DIRECTORY)) { return null; }
-//
-//        String mavenBuildDirectory = getEnvironmentVariables().getProperty(PROJECT_BUILD_DIRECTORY);
-//        return Paths.get(mavenBuildDirectory).resolve(path.toPath()).toFile();
-//    }
-//
-//    private String getMavenBuildDirectory() {
-//        String mavenBuildDirectory = getEnvironmentVariables().getProperty(PROJECT_BUILD_DIRECTORY);
-//        String mavenReportsDirectory = getEnvironmentVariables().getProperty(PROJECT_REPORTING_OUTPUT_DIRECTORY);
-//        String defaultMavenRelativeTargetDirectory = null;
-//        if (isNotEmpty(mavenReportsDirectory)) {
-//            defaultMavenRelativeTargetDirectory = mavenReportsDirectory.concat(File.separator).concat("serenity");
-//            outputDirectoryResolvedAgainstBuildDir = true;
-//        } else if (isNotEmpty(mavenBuildDirectory)) {
-//            defaultMavenRelativeTargetDirectory = mavenBuildDirectory.concat(File.separator).concat(DEFAULT_OUTPUT_DIRECTORY);
-//            outputDirectoryResolvedAgainstBuildDir = true;
-//        }
-//        return defaultMavenRelativeTargetDirectory;
-//    }
 
     public int getStepDelay() {
         int stepDelay = 0;

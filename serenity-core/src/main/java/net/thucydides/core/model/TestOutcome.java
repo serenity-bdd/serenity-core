@@ -1296,7 +1296,7 @@ public class TestOutcome {
         }
     }
 
-    private final String FAILURE_SUMMARY = "%s;%s;%s;%s";
+    private final static String FAILURE_SUMMARY = "%s;%s;%s;%s";
 
     private String failureSummaryFrom(FailureCause rootCause) {
         return String.format(FAILURE_SUMMARY,

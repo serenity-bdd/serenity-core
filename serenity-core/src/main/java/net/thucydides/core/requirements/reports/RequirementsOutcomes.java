@@ -18,7 +18,10 @@ import net.thucydides.core.requirements.RequirementsTagProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 import static ch.lambdaj.Lambda.*;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -361,11 +364,7 @@ public class RequirementsOutcomes {
             flattenedOutcomes.add(requirementOutcome);
             for (Requirement requirement : requirementOutcome.getRequirement().getChildren()) {
 
-//                TestTag requirementTag = TestTag.withName(requirement.getName()).andType(requirement.getType());
-//                TestOutcomes testOutcomesForRequirement = requirementOutcome.getTestOutcomes().withTag(requirementTag);
-
                 TestOutcomes testOutcomesForRequirement = requirementOutcome.getTestOutcomes().forRequirement(requirement);
-
 
                 flattenedOutcomes.add(new RequirementOutcome(requirement, testOutcomesForRequirement, issueTracking));
 
@@ -486,7 +485,7 @@ public class RequirementsOutcomes {
     }
 
     public RequirementsOutcomes withoutUnrelatedRequirements() {
-        if (!ThucydidesSystemProperty.THUCYDIDES_EXCLUDE_UNRELATED_REQUIREMENTS.booleanFrom(environmentVariables, false)) {
+        if (isEmpty(ThucydidesSystemProperty.THUCYDIDES_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE.from(environmentVariables))) {
             return this;
         }
         return new RequirementsOutcomes(

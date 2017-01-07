@@ -1319,10 +1319,8 @@ public class TestOutcome {
         }
     }
 
-    private final static String FAILURE_SUMMARY = "%s;%s;%s;%s";
-
     private String failureSummaryFrom(FailureCause rootCause) {
-        return String.format(FAILURE_SUMMARY,
+        return String.format("%s;%s;%s;%s",
                              getResult(),
                              rootCause.getErrorType(),
                              rootCause.getMessage(),

@@ -149,6 +149,12 @@ public class TestOutcome {
     private String testFailureSummary;
 
     /**
+     * An externally-provided field that identifies the project that this test belongs to.
+     * Read from the serenity.project.key system property.
+     */
+    private String projectKey;
+
+    /**
      * Used to determine what result should be returned if there are no steps in this test.
      */
     private TestResult annotatedResult = null;
@@ -369,6 +375,7 @@ public class TestOutcome {
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
         this.environmentVariables = environmentVariables;
+        this.projectKey = ThucydidesSystemProperty.THUCYDIDES_PROJECT_KEY.from(environmentVariables, "");
     }
 
     private Optional<Story> storyDefinedIn(Class<?> testCase) {
@@ -392,11 +399,13 @@ public class TestOutcome {
                 this.testFailureCause,
                 this.testFailureClassname,
                 this.testFailureMessage,
+                this.testFailureSummary,
                 this.annotatedResult,
                 this.dataTable,
                 this.qualifier,
                 this.driver,
                 this.manual,
+                this.projectKey,
                 this.environmentVariables);
     }
 
@@ -415,11 +424,13 @@ public class TestOutcome {
                           final FailureCause testFailureCause,
                           final String testFailureClassname,
                           final String testFailureMessage,
+                          final String testFailureSummary,
                           final TestResult annotatedResult,
                           final DataTable dataTable,
                           final Optional<String> qualifier,
                           final String driver,
                           final boolean manualTest,
+                          final String projectKey,
                           final EnvironmentVariables environmentVariables) {
         this.startTime = startTime;
         this.duration = duration;
@@ -438,6 +449,7 @@ public class TestOutcome {
         this.testFailureCause = testFailureCause;
         this.testFailureClassname = testFailureClassname;
         this.testFailureMessage = testFailureMessage;
+        this.testFailureSummary = testFailureSummary;
         this.qualifier = qualifier;
         this.annotatedResult = annotatedResult;
         this.dataTable = dataTable;
@@ -445,6 +457,7 @@ public class TestOutcome {
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
         this.driver = driver;
         this.manual = manualTest;
+        this.projectKey = projectKey;
         this.environmentVariables = environmentVariables;
     }
 
@@ -488,11 +501,13 @@ public class TestOutcome {
                     this.testFailureCause,
                     this.testFailureClassname,
                     this.testFailureMessage,
+                    this.testFailureSummary,
                     this.annotatedResult,
                     this.dataTable,
                     Optional.fromNullable(qualifier),
                     this.driver,
                     this.manual,
+                    this.projectKey,
                     this.environmentVariables);
         } else {
             return this;
@@ -515,11 +530,13 @@ public class TestOutcome {
                 this.testFailureCause,
                 this.testFailureClassname,
                 this.testFailureMessage,
+                this.testFailureSummary,
                 this.annotatedResult,
                 this.dataTable,
                 this.qualifier,
                 this.driver,
                 this.manual,
+                this.projectKey,
                 this.environmentVariables);
     }
 
@@ -539,11 +556,13 @@ public class TestOutcome {
                 this.testFailureCause,
                 this.testFailureClassname,
                 this.testFailureMessage,
+                this.testFailureSummary,
                 this.annotatedResult,
                 this.dataTable,
                 this.qualifier,
                 this.driver,
                 this.manual,
+                this.projectKey,
                 this.environmentVariables);
     }
 
@@ -564,11 +583,13 @@ public class TestOutcome {
                     this.testFailureCause,
                     this.testFailureClassname,
                     this.testFailureMessage,
+                    this.testFailureSummary,
                     this.annotatedResult,
                     this.dataTable,
                     this.qualifier,
                     this.driver,
                     this.manual,
+                    this.projectKey,
                     this.environmentVariables);
         } else {
             return this;
@@ -739,11 +760,13 @@ public class TestOutcome {
                 this.testFailureCause,
                 this.testFailureClassname,
                 this.testFailureMessage,
+                this.testFailureSummary,
                 this.annotatedResult,
                 this.dataTable,
                 this.qualifier,
                 this.driver,
                 this.manual,
+                this.projectKey,
                 this.environmentVariables);
     }
 

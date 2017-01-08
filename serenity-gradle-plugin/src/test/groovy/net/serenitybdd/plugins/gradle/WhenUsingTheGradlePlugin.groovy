@@ -1,14 +1,13 @@
 package net.serenitybdd.plugins.gradle
 
+import net.thucydides.core.util.TestResources
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
-import org.junit.Ignore
-import spock.lang.Specification
 import spock.lang.Ignore
-import net.thucydides.core.util.TestResources
+import spock.lang.Specification
+
 import java.nio.file.Files
 import java.nio.file.Paths
-
 /**
  * Created by john on 9/11/2014.
  */
@@ -99,6 +98,35 @@ class WhenUsingTheGradlePlugin extends Specification {
             Files.exists reports
             Files.isDirectory reports
             Files.exists reports.resolve("index.html")
+    }
+
+    def "should assemble aggregate report of gradle project in a different directory"() {
+        given: "simple project for aggregation task"
+            def testProject = TestResources
+                    .directoryInClasspathCalled "simple-gradle-project"
+            def project = ProjectBuilder.builder().withProjectDir(testProject)
+                    .build()
+            def plugin = new SerenityPlugin()
+            def reports = project.projectDir.toPath()
+
+        when: "project build and aggregation plugin called"
+            System.setProperty("serenity.outputDirectory","different-dir")
+
+            project.apply plugin: 'java'
+            plugin.apply(project)
+            def folders = project.serenity.outputDirectory.split "\\|/"
+            folders.each { reports = reports.resolve(it) }
+
+            ["compileJava", "processResources", "classes",
+             "assemble", "compileTestJava", "processTestResources", "testClasses",
+             "test", "aggregate"
+            ].each {
+                project.getTasksByName(it, false).first().execute()
+            }
+
+        then: "report generated in ${project.serenity.outputDirectory} dir"
+            project.projectDir.toPath().resolve("different-dir").toFile().exists()
+            System.clearProperty("serenity.outputDirectory")
     }
 
     @Ignore('should be upgraded to use gradle 2.10 features')

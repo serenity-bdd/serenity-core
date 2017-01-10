@@ -126,7 +126,10 @@ class WhenDisplayingTagNamesInAReadableForm extends Specification {
         "The BIG boat" | "The Big Boat" | "The BIG Boat"
         "The big BOAT" | "The Big Boat" | "The Big BOAT"
         "THE big boat" | "The Big Boat" | "THE Big Boat"
+        "TOP"          | "top"          | "TOP"
+
     }
+
 
     def "should respect acronyms"() {
         when:

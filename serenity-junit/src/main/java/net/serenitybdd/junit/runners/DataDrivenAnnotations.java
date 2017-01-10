@@ -3,11 +3,11 @@ package net.serenitybdd.junit.runners;
 import ch.lambdaj.function.convert.Converter;
 import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Splitter;
-import net.thucydides.core.steps.stepdata.CSVTestDataSource;
-import net.thucydides.core.steps.stepdata.TestDataSource;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.steps.FilePathParser;
+import net.thucydides.core.steps.stepdata.CSVTestDataSource;
+import net.thucydides.core.steps.stepdata.TestDataSource;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.junit.annotations.TestData;
 import net.thucydides.junit.annotations.UseTestDataFrom;
@@ -18,6 +18,7 @@ import org.junit.runners.model.TestClass;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -102,16 +103,20 @@ public class DataDrivenAnnotations {
 
 
     private List<String> split(String columnNamesString, int numberOfColumns) {
-        String[] columnNames = new String[numberOfColumns];
-        if (columnNamesString.equals("")) {
-            for (int i = 0; i < numberOfColumns; i++) {
-                columnNames[i] = "Parameter " + (i + 1);
-            }
-        } else {
-            columnNames = StringUtils.split(columnNamesString, ",", numberOfColumns);
+
+        if (StringUtils.isEmpty(columnNamesString)) {
+            return numberedColumnHeadings(numberOfColumns);
         }
 
-        return Arrays.asList(columnNames);
+        return Splitter.on(",").trimResults().omitEmptyStrings().splitToList(columnNamesString);
+    }
+
+    private List<String> numberedColumnHeadings(int numberOfColumns) {
+        List<String> columnNames = new ArrayList<>();
+        for (int i = 0; i < numberOfColumns; i++) {
+            columnNames.add("Parameter " + (i + 1));
+        }
+        return columnNames;
     }
 
     public FrameworkMethod getTestDataMethod() throws Exception {

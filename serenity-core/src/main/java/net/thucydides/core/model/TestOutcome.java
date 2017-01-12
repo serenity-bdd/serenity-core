@@ -1330,7 +1330,7 @@ public class TestOutcome {
     private String stackTraceSourceFrom(FailureCause rootCause) {
         if (rootCause.getStackTrace().length == 0) { return ""; }
 
-        return rootCause.getStackTrace()[0].getFileName() + ":"  + rootCause.getStackTrace()[0].getLineNumber();
+        return rootCause.getStackTrace()[0].getFileName();
     }
 
     private void noTestFailureIsDefined() {

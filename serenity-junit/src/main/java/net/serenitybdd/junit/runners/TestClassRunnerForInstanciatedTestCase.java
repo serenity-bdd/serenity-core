@@ -11,6 +11,8 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 class TestClassRunnerForInstanciatedTestCase extends QualifiedTestsRunner {
     private final int parameterSetNumber;
     private final Object instanciatedTest;
@@ -57,7 +59,8 @@ class TestClassRunnerForInstanciatedTestCase extends QualifiedTestsRunner {
 
     @Override
     protected String getName() {
-        return QualifierFinder.forTestCase(instanciatedTest).getQualifier();
+        String qualifier = QualifierFinder.forTestCase(instanciatedTest).getQualifier();
+        return (isEmpty(qualifier)) ? super.getName() : qualifier;
     }
 
     @Override

@@ -71,6 +71,7 @@ class WhenUsingTheGradlePlugin extends Specification {
             Files.exists reports.resolve("index.html")
     }
 
+    @Ignore("To review")
     def "should assemble aggregate report of gradle project"() {
         given: "simple project for aggregation task"
             def testProject = TestResources

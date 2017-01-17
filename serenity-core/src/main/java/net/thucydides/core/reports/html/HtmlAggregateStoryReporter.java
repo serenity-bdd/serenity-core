@@ -192,8 +192,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         ));
 
         LOGGER.info("Starting generating reports: {} ms", stopwatch.lapTime());
-        new ReportGenerator().generateReportsFor(reportingTasks);
-
+        Reporter.generateReportsFor(reportingTasks);
         LOGGER.info("Finished generating test results for {} tests after {} ms",testOutcomes.getTestCount(), stopwatch.stop());
     }
 

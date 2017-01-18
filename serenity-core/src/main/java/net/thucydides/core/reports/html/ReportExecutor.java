@@ -3,13 +3,15 @@ package net.thucydides.core.reports.html;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Callable;
 
-import static net.thucydides.core.reports.html.RequirementsOverviewReportingTask.LOGGER;
-
 class ReportExecutor implements Callable<Void> {
     private final ReportingTask reportingTask;
+
+    protected static final Logger LOGGER = LoggerFactory.getLogger(ReportExecutor.class);
 
     private final EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
 

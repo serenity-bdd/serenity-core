@@ -551,7 +551,7 @@ public class TestOutcome {
                 this.testSteps,
                 this.coreIssues,
                 this.additionalIssues,
-                (tags == null) ? tags : ImmutableSet.copyOf(tags),
+                tags,
                 this.userStory,
                 this.testFailureCause,
                 this.testFailureClassname,
@@ -755,7 +755,7 @@ public class TestOutcome {
                 this.testSteps,
                 this.coreIssues,
                 this.additionalIssues,
-                (tags == null) ? tags : ImmutableSet.copyOf(tags),
+                tags,
                 this.userStory,
                 this.testFailureCause,
                 this.testFailureClassname,
@@ -1604,7 +1604,7 @@ public class TestOutcome {
         if (tags == null) {
             tags = getTagsUsingTagProviders(getTagProviderService().getTagProviders(getTestSource()));
         }
-        return ImmutableSet.copyOf(tags);
+        return tags;
     }
 
     public void addUserStoryFeatureTo(Set<TestTag> augmentedTags) {
@@ -1624,7 +1624,7 @@ public class TestOutcome {
             }
         }
         tags = removeRedundantTagsFrom(tags);
-        return tags;
+        return ImmutableSet.copyOf(tags);
     }
 
     private Set<TestTag> removeRedundantTagsFrom(Set<TestTag> tags) {

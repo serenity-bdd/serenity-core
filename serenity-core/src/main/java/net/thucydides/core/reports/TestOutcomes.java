@@ -377,13 +377,13 @@ public class TestOutcomes {
         private final String tagType;
 
         private TagFinder(String tagType) {
-            this.tagType = tagType;
+            this.tagType = tagType.toLowerCase();
         }
 
         List<TestTag> in(TestOutcome testOutcome) {
             List<TestTag> matchingTags = Lists.newArrayList();
             for (TestTag tag : testOutcome.getTags()) {
-                if (tag.getType().compareToIgnoreCase(tagType) == 0) {
+                if (tag.normalisedType().equals(tagType)) {
                     matchingTags.add(tag);
                 }
             }

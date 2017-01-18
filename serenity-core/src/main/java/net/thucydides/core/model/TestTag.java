@@ -10,12 +10,16 @@ public class TestTag implements Comparable<TestTag> {
 
     private final String name;
     private final String type;
+    private final String normalisedName;
+    private final String normalisedType;
 
     private TestTag(String name, String type) {
         Preconditions.checkNotNull(name);
         Preconditions.checkNotNull(type);
         this.name = name;
         this.type = type;
+        this.normalisedName = name.toLowerCase();
+        this.normalisedType = type.toLowerCase();
     }
 
     public String getName() {
@@ -63,7 +67,7 @@ public class TestTag implements Comparable<TestTag> {
         if (this.equals(testTag)) {
             return true;
         }
-        if ((this.getName().toLowerCase().endsWith("/" + testTag.getName().toLowerCase())) && (this.getType().equals(testTag.getType()))) {
+        if ((this.normalisedName.endsWith("/" + testTag.normalisedName)) && (this.getType().equals(testTag.getType()))) {
             return true;
         }
         return false;
@@ -92,16 +96,16 @@ public class TestTag implements Comparable<TestTag> {
 
         TestTag testTag = (TestTag) o;
 
-        if (!name.equalsIgnoreCase(testTag.name)) return false;
-        if (!type.equalsIgnoreCase(testTag.type)) return false;
+        if (!normalisedName.equals(testTag.normalisedName)) return false;
+        if (!normalisedType.equals(testTag.normalisedType)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = name.toLowerCase().hashCode();
-        result = 31 * result + type.toLowerCase().hashCode();
+        int result = normalisedName.hashCode();
+        result = 31 * result + normalisedType.hashCode();
         return result;
     }
 

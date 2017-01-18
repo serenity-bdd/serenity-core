@@ -41,7 +41,7 @@ public class RequirementsOutcomes {
 
     public final static Integer DEFAULT_TESTS_PER_REQUIREMENT = 4;
 
-    private final Map<String, Integer> totalCountCache = new ConcurrentHashMap<String, Integer>();
+    private final Map<String, Integer> totalCountCache = new ConcurrentHashMap<>();
 
     public RequirementsOutcomes(List<Requirement> requirements,
                                 TestOutcomes testOutcomes,
@@ -85,7 +85,13 @@ public class RequirementsOutcomes {
         return outcomes;
     }
 
+    RequirementsOutcomesOfTypeCache requirementsOfTypeCache = new RequirementsOutcomesOfTypeCache(this);
+
     public RequirementsOutcomes requirementsOfType(String type) {
+        return requirementsOfTypeCache.byType(type);
+    }
+
+    public RequirementsOutcomes ofType(String type) {
         List<Requirement> matchingRequirements = Lists.newArrayList();
         List<TestOutcome> matchingTests = Lists.newArrayList();
         for (RequirementOutcome requirementOutcome : getFlattenedRequirementOutcomes()) {

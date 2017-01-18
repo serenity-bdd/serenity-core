@@ -25,20 +25,22 @@
 
 
 <#list requirements.types as requirementType>
-    <#assign successfulRequirements= requirements.requirementsOfType(requirementType).completedRequirementsCount >
-    <#assign pendingRequirements = requirements.requirementsOfType(requirementType).pendingRequirementsCount>
-    <#assign ignoredRequirements = requirements.requirementsOfType(requirementType).ignoredRequirementsCount >
-    <#assign failingRequirements = requirements.requirementsOfType(requirementType).failingRequirementsCount >
-    <#assign errorRequirements = requirements.requirementsOfType(requirementType).errorRequirementsCount  >
-    <#assign compromisedRequirements = requirements.requirementsOfType(requirementType).compromisedRequirementsCount  >
-    <#assign untesteddRequirements = requirements.requirementsOfType(requirementType).requirementsWithoutTestsCount >
+    <#assign requirementsOfType = requirements.requirementsOfType(requirementType) />
+    <#assign successfulRequirements= requirementsOfType.completedRequirementsCount >
+    <#assign pendingRequirements = requirementsOfType.pendingRequirementsCount>
+    <#assign ignoredRequirements = requirementsOfType.ignoredRequirementsCount >
+    <#assign failingRequirements = requirementsOfType.failingRequirementsCount >
+    <#assign errorRequirements = requirementsOfType.errorRequirementsCount  >
+    <#assign compromisedRequirements = requirementsOfType.compromisedRequirementsCount  >
+    <#assign untesteddRequirements = requirementsOfType.requirementsWithoutTestsCount >
 <#else>
-    <#assign successfulRequirements= testOutcomes.totalTests.withResult("success") >
-    <#assign pendingRequirements = testOutcomes.totalTests.withResult("pending") >
-    <#assign ignoredRequirements = testOutcomes.totalTests.withResult("ignored") + testOutcomes.totalTests.withResult("skipped")>
-    <#assign failingRequirements = testOutcomes.totalTests.withResult("failure") >
-    <#assign errorRequirements = testOutcomes.totalTests.withResult("error") >
-    <#assign compromisedRequirements = testOutcomes.totalTests.withResult("compromised") >
+    <#assign totalTests= testOutcomes.totalTests >
+    <#assign successfulRequirements= totalTests.withResult("success") >
+    <#assign pendingRequirements = totalTests.withResult("pending") >
+    <#assign ignoredRequirements = totalTests.withResult("ignored") + testOutcomes.totalTests.withResult("skipped")>
+    <#assign failingRequirements = totalTests.withResult("failure") >
+    <#assign errorRequirements = totalTests.withResult("error") >
+    <#assign compromisedRequirements = totalTests.withResult("compromised") >
     <#assign untesteddRequirements = 0 >
 </#list>
 

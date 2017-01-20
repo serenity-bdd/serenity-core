@@ -1,14 +1,19 @@
 package net.thucydides.core.reports;
 
+import ch.lambdaj.Lambda;
+import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
+import com.google.common.base.Splitter;
 import net.thucydides.core.model.TestResult;
+import net.thucydides.core.model.TestTag;
 import net.thucydides.core.model.TestType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by john on 22/09/2014.
@@ -17,10 +22,27 @@ public class ResultChecker {
 
     private final File outputDirectory;
 
+    private final List<TestTag> tags;
+
     private final static Logger logger = LoggerFactory.getLogger(ResultChecker.class);
 
-    public ResultChecker(File outputDirectory) {
+    public ResultChecker(File outputDirectory, String tags) {
         this.outputDirectory = outputDirectory;
+        this.tags = tagsFrom(tags);
+    }
+
+    private List<TestTag> tagsFrom(String tags) {
+        List<String> tagValues = Splitter.on(",").trimResults().splitToList(tags);
+        return Lambda.convert(tagValues, toTags());
+    }
+
+    private Converter<String, TestTag> toTags() {
+        return new Converter<String, TestTag>() {
+            @Override
+            public TestTag convert(String value) {
+                return TestTag.withValue(value);
+            }
+        };
     }
 
     public void checkTestResults() {
@@ -71,6 +93,10 @@ public class ResultChecker {
             outcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(outputDirectory);
             if (outcomes.getTotal() == 0) {
                 outcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.XML).from(outputDirectory);
+            }
+
+            if (!tags.isEmpty()) {
+                outcomes = outcomes.withTags(tags);
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -20,11 +20,16 @@ import java.util.List;
  */
 public class ResultChecker {
 
+    private static final String WITH_NO_TAGS = "";
     private final File outputDirectory;
 
     private final List<TestTag> tags;
 
     private final static Logger logger = LoggerFactory.getLogger(ResultChecker.class);
+
+    public ResultChecker(File outputDirectory) {
+        this(outputDirectory, WITH_NO_TAGS);
+    }
 
     public ResultChecker(File outputDirectory, String tags) {
         this.outputDirectory = outputDirectory;

@@ -142,6 +142,7 @@ class WhenDisplayingTagNamesInAReadableForm extends Specification {
             'the ABC'                      | 'The ABC'
             'the QoS RAM'                  | 'The QoS RAM'
             'the QoS RAM of QoS'           | 'The QoS RAM Of QoS'
+            '__the QoS RAM of QoS'         | 'The QoS RAM Of QoS'
     }
 
     def "should convert variable expressions into human-readable form"() {
@@ -157,4 +158,5 @@ class WhenDisplayingTagNamesInAReadableForm extends Specification {
             'AnotherTest'       | 'Another test'
             'AN_ENUM_NAME'      | 'An enum name'
     }
+
 }

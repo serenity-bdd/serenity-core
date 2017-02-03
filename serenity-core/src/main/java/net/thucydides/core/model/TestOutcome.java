@@ -144,6 +144,7 @@ public class TestOutcome {
     private String project;
 
     private FailureCause testFailureCause;
+    private TestFailureCause flakyTestFailureCause;
     private String testFailureClassname;
     private String testFailureMessage;
     private String testFailureSummary;
@@ -781,6 +782,14 @@ public class TestOutcome {
 
     public String getTestFailureSummary() {
         return testFailureSummary;
+    }
+
+    public TestFailureCause getFlakyTestFailureCause() {
+        return flakyTestFailureCause;
+    }
+
+    public void setFlakyTestFailureCause(TestFailureCause flakyTestFailureCause) {
+        this.flakyTestFailureCause = flakyTestFailureCause;
     }
 
     private static class TestOutcomeWithEnvironmentBuilder {

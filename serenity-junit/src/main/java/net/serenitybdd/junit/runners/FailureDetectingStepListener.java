@@ -8,6 +8,7 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepListener;
+import net.thucydides.core.steps.TestFailureCause;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ public class FailureDetectingStepListener implements StepListener {
 
     private boolean lastTestFailed = false;
     private List<String> failureMessages = Lists.newArrayList();
+    private TestFailureCause testFailureCause;
 
     public void reset() {
         lastTestFailed = false;
@@ -30,6 +32,7 @@ public class FailureDetectingStepListener implements StepListener {
         lastTestFailed = true;
         String failingStep = testOutcome.getFailingStep().isPresent() ? testOutcome.getFailingStep().get().getDescription() + ":" : "";
         failureMessages.add(failingStep + testOutcome.getErrorMessage());
+        testFailureCause = TestFailureCause.from(cause);
     }
 
     public void lastStepFailed(StepFailure failure) {
@@ -161,6 +164,10 @@ public class FailureDetectingStepListener implements StepListener {
     @Override
     public void testRunFinished() {
 
+    }
+
+    public TestFailureCause getTestFailureCause(){
+        return testFailureCause;
     }
 
     public List<String> getFailureMessages() {

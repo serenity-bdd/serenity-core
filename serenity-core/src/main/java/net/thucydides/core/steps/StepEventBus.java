@@ -693,8 +693,8 @@ public class StepEventBus {
         baseStepListener.cancelPreviousTest();
     }
 
-    public void lastTestPassedAfterRetries(int remainingTries, List<String> failureMessages) {
-        baseStepListener.lastTestPassedAfterRetries(remainingTries, failureMessages);
+    public void lastTestPassedAfterRetries(int remainingTries, List<String> failureMessages,TestFailureCause testFailureCause) {
+        baseStepListener.lastTestPassedAfterRetries(remainingTries, failureMessages,testFailureCause);
     }
 
     public static void overrideEventBusWith(StepEventBus stepEventBus) {

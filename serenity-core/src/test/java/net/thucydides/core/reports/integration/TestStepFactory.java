@@ -31,9 +31,18 @@ public class TestStepFactory {
         return createNewTestStep(description, PENDING);
     }
 
+    public static TestStep flakyTestStepCalled(String description) {
+        return createNewFlakyTestStep(description);
+    }
+
     private static TestStep createNewTestStep(String description, TestResult result) {
         TestStep step = new TestStep(description);
         step.setResult(result);
         return step;
     }
+
+    private static TestStep createNewFlakyTestStep(String description) {
+        return TestStep.forStepCalled(description).withResult(TestResult.IGNORED);
+    }
+
 }

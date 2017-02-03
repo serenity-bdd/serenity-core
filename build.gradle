@@ -79,7 +79,9 @@ allprojects {
             force  "com.thoughtworks.xstream:xstream:${xstreamVersion}",
                    "commons-collections:commons-collections:${commonsCollectionsVersion}",
                    'commons-logging:commons-logging:1.2',
-                   'xml-apis:xml-apis:1.4.01'
+                   'xml-apis:xml-apis:1.4.01',
+                    'org.springframework:spring-context:4.3.5.RELEASE'
+
         }
     }
 }

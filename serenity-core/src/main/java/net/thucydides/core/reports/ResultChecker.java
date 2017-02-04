@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 /**
  * Created by john on 22/09/2014.
  */
@@ -100,12 +102,16 @@ public class ResultChecker {
                 outcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.XML).from(outputDirectory);
             }
 
-            if (!tags.isEmpty()) {
+            if (thereAreTagsIn(tags)) {
                 outcomes = outcomes.withTags(tags);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return Optional.of(outcomes);
+    }
+
+    private boolean thereAreTagsIn(List<TestTag> tags) {
+        return !(tags.isEmpty() || isBlank(tags.get(0).getName()));
     }
 }

@@ -450,7 +450,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
             retryAtMost(remainingTries - 1, rerunTest);
         } else {
             StepEventBus.getEventBus().lastTestPassedAfterRetries(remainingTries,
-                                                                  failureDetectingStepListener.getFailureMessages());
+                                                                  failureDetectingStepListener.getFailureMessages(),failureDetectingStepListener.getTestFailureCause());
         }
     }
 

@@ -1,12 +1,11 @@
 package net.thucydides.core.reports.junit;
 
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.model.TestType;
+import net.thucydides.core.model.*;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.reports.TestOutcomes;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,6 +17,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Set;
 
 public class JUnitXMLConverter {
 
@@ -66,10 +66,29 @@ public class JUnitXMLConverter {
             addCompromisedElement(doc, outcome, testCaseElement);
         } else  if (outcome.isSkipped() || outcome.isPending()) {
             testCaseElement.appendChild(doc.createElement("skipped"));
+        } else {
+            String flakyTestDescription = getFlakyTestDescription(outcome);
+            if (flakyTestDescription != null) {
+                addFlakyFailureElement(doc, outcome, testCaseElement, flakyTestDescription);
+            }
         }
-
         return testCaseElement;
 
+    }
+
+    private String getFlakyTestDescription(TestOutcome outcome) {
+        Set<TestTag> tags = outcome.getTags();
+        for(TestTag tag : tags) {
+            if(tag.getType().equals("unstable test")) {
+                List<TestStep> testSteps = outcome.getTestSteps();
+                for(TestStep step: testSteps) {
+                    if(step.getDescription().startsWith("UNSTABLE TEST:")) {
+                        return step.getDescription();
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private void addErrorElement(Document doc, TestOutcome outcome, Element testCaseElement) {
@@ -93,6 +112,13 @@ public class JUnitXMLConverter {
         }
     }
 
+    private void addFlakyFailureElement(Document doc, TestOutcome outcome, Element testCaseElement,String flakyTestDescription) {
+        Node flakyFailureElement = testCaseElement.appendChild(flakyFailureElement(doc, outcome, flakyTestDescription));
+        if (outcome.getFlakyTestFailureCause() != null) {
+            flakyFailureElement.appendChild(syserrorElement(doc, outcome.getFlakyTestFailureCause().getRootCause()));
+        }
+    }
+
     private Element syserrorElement(Document doc, FailureCause nestedTestFailureCause) {
         Element testCaseElement = doc.createElement("system-err");
 
@@ -113,10 +139,26 @@ public class JUnitXMLConverter {
         return testCaseElement;
     }
 
+    private Element flakyFailureElement(Document doc, TestOutcome outcome,String flakyTestDescription) {
+        Element testCaseElement = doc.createElement("flakyFailure");
+        addFlakyFailureCause(doc, testCaseElement, outcome.getFlakyTestFailureCause().getRootCause(),flakyTestDescription);
+        return testCaseElement;
+    }
+
     private void addFailureCause(Document doc, Element testCaseElement, FailureCause failureCause) {
         if ((failureCause != null) && (failureCause.getMessage() != null)) {
             testCaseElement.setAttribute("message", failureCause.getMessage());
             testCaseElement.appendChild(doc.createTextNode(failureCause.getMessage()));
+        }
+        if ((failureCause != null) && (failureCause.getErrorType() != null)) {
+            testCaseElement.setAttribute("type", failureCause.getErrorType());
+        }
+    }
+
+    private void addFlakyFailureCause(Document doc, Element testCaseElement, FailureCause failureCause,String failureCauseDescription) {
+        if ((failureCause != null) && (failureCause.getMessage() != null)) {
+            testCaseElement.setAttribute("message", failureCause.getMessage());
+            testCaseElement.appendChild(doc.createTextNode(failureCauseDescription));
         }
         if ((failureCause != null) && (failureCause.getErrorType() != null)) {
             testCaseElement.setAttribute("type", failureCause.getErrorType());

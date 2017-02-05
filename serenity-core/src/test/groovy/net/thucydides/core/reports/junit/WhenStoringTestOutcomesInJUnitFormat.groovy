@@ -1,8 +1,10 @@
 package net.thucydides.core.reports.junit
 
 import net.thucydides.core.model.TestOutcome
+import net.thucydides.core.model.TestTag
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.integration.TestStepFactory
+import net.thucydides.core.steps.TestFailureCause
 import org.joda.time.DateTime
 import org.joda.time.LocalDateTime
 import org.junit.Rule
@@ -123,4 +125,40 @@ class WhenStoringTestOutcomesInJUnitFormat extends Specification {
         junitXMLReport.contains '<failure message="Oh noses!" type="java.lang.AssertionError">Oh noses!</failure>'
     }
 
+    def "JUnit XML report should handle skipped tests"() {
+        given:
+        def testOutcome1 = TestOutcome.forTest("should_do_this", SomeTestScenario.class)
+        testOutcome1.startTime = FIRST_OF_JANUARY
+        testOutcome1.description = "Some description"
+        testOutcome1.recordStep(TestStepFactory.skippedTestStepCalled("Skipped ").startingAt(FIRST_OF_JANUARY))
+
+        def testOutcomes = TestOutcomes.of([testOutcome1])
+
+        when:
+        reporter.generateReportsFor(testOutcomes)
+        def junitXMLReport = new File(outputDirectory.getAbsolutePath(), outputDirectory.list()[0]).text
+
+        then:
+        junitXMLReport.contains '''<skipped/>'''
+    }
+
+    def "JUnit XML report should handle flaky tests"() {
+        given:
+        def testOutcome1 = TestOutcome.forTest("should_do_this", SomeTestScenario.class)
+        testOutcome1.startTime = FIRST_OF_JANUARY
+        testOutcome1.description = "Some description"
+        testOutcome1.addTag(TestTag.withName("Retries: 1").andType("unstable test"));
+        testOutcome1.setFlakyTestFailureCause(TestFailureCause.from(new AssertionError("Flaky test assertion error")))
+        testOutcome1.recordStep(TestStepFactory.flakyTestStepCalled("UNSTABLE TEST:FailureHistory").startingAt(FIRST_OF_JANUARY))
+        testOutcome1.recordStep(TestStepFactory.successfulTestStepCalled("step 1").startingAt(FIRST_OF_JANUARY))
+
+        def testOutcomes = TestOutcomes.of([testOutcome1])
+
+        when:
+        reporter.generateReportsFor(testOutcomes)
+        def junitXMLReport = new File(outputDirectory.getAbsolutePath(), outputDirectory.list()[0]).text
+
+        then:
+        junitXMLReport.contains '''<flakyFailure message="Flaky test assertion error" type="java.lang.AssertionError">UNSTABLE TEST:FailureHistory<system-err>Flaky test assertion error\n</system-err></flakyFailure>'''
+    }
 }

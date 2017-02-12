@@ -13,7 +13,7 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
 import java.io.File;
-import java.util.List;
+import java.util.*;
 
 /**
  * Intercepts JUnit events and reports them to Thucydides.
@@ -22,6 +22,7 @@ public class JUnitStepListener extends RunListener {
 
     private BaseStepListener baseStepListener;
     private StepListener[] extraListeners;
+    private Map<String,List<String>> failedTests = Collections.synchronizedMap(new HashMap<String,List<String>>());
     private Class<?> testClass;
     private boolean testStarted;
 
@@ -115,8 +116,19 @@ public class JUnitStepListener extends RunListener {
         if (testingThisTest(failure.getDescription())) {
             startTestIfNotYetStarted(failure.getDescription());
             stepEventBus().testFailed(failure.getException());
+            updateFailureList(failure);
             endTest();
         }
+    }
+
+    private void updateFailureList(Failure failure) {
+        String failedClassName = failure.getDescription().getClassName();
+        List<String> failedMethods = failedTests.get(failedClassName);
+        if(failedMethods == null) {
+            failedMethods = new ArrayList<>();
+            failedTests.put(failedClassName,failedMethods);
+        }
+        failedMethods.add(failure.getDescription().getMethodName());
     }
 
     private void startTestIfNotYetStarted(Description description) {
@@ -165,6 +177,10 @@ public class JUnitStepListener extends RunListener {
 
     protected Class<?> getTestClass() {
         return testClass;
+    }
+
+    public Map<String,List<String>> getFailedTests(){
+        return failedTests;
     }
 
 }

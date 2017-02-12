@@ -855,7 +855,22 @@ public enum ThucydidesSystemProperty {
     /**
      * Use this property to specify the maximum number of times to rerun the failing tests.
      */
-    TEST_RETRY_COUNT;
+    TEST_RETRY_COUNT,
+
+    /**
+     * Record failures to a file specified by property rerun.failures.file or rerun.xml in current directory
+     */
+    RECORD_FAILURES,
+
+    /**
+     * Replay failures from a file specified by property rerun.failures.file or rerun.xml in current directory
+     */
+    REPLAY_FAILURES,
+
+    /**
+     * Location of the file where the failures are recorded.
+     */
+    RERUN_FAILURES_FILE;
 
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;

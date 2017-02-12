@@ -6,10 +6,12 @@ import com.google.inject.Module;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.ManagedWebDriverAnnotatedField;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.batches.BatchManagerProvider;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.pages.Pages;
@@ -33,12 +35,14 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import java.io.File;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static net.serenitybdd.core.Serenity.initializeTestSession;
-import static net.thucydides.core.ThucydidesSystemProperty.TEST_RETRY_COUNT;
+import static net.thucydides.core.ThucydidesSystemProperty.*;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
@@ -91,7 +95,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
      * Creates a new test runner for WebDriver web tests.
      *
      * @param klass the class under test
-     * @throws org.junit.runners.model.InitializationError if some JUnit-related initialization problem occurred
+     * @throws InitializationError if some JUnit-related initialization problem occurred
      */
     public SerenityRunner(final Class<?> klass) throws InitializationError {
         this(klass, Injectors.getInjector());
@@ -102,7 +106,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
      *
      * @param klass the class under test
      * @param module used to inject a custom Guice module
-     * @throws org.junit.runners.model.InitializationError if some JUnit-related initialization problem occurred
+     * @throws InitializationError if some JUnit-related initialization problem occurred
      */
     public SerenityRunner(Class<?> klass, Module module) throws InitializationError {
         this(klass, Injectors.getInjector(module));
@@ -253,7 +257,58 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         } finally {
             notifyTestSuiteFinished();
             generateReports();
+            recordFailedTestsToRerunFile();
             dropListeners(notifier);
+        }
+    }
+
+    private void recordFailedTestsToRerunFile() {
+        if(!RECORD_FAILURES.booleanFrom(getConfiguration().getEnvironmentVariables(), false))
+        {
+            return;
+        }
+        Map<String, List<String>> failedTests = stepListener.getFailedTests();
+        if(failedTests.size() == 0) {
+            logger.info(" no failed tests to record" );
+            return;
+        }
+        String defaultRerunFileName = "rerun.xml";
+        String rerunFileName = ThucydidesSystemProperty.RERUN_FAILURES_FILE.from(getConfiguration().getEnvironmentVariables(), defaultRerunFileName);
+        File rerunFile = new File(rerunFileName);
+        try {
+            logger.info("recording failing tests in file " + rerunFile);
+            RerunnableClasses existingRerunnableClasses = null;
+            Set<RerunnableClass> allRerunnableClasses = new HashSet<>();
+            if(rerunFile.exists()) { //create binder
+                JAXBContext jaxbContext = JAXBContext.newInstance(RerunnableClasses.class);
+                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+                existingRerunnableClasses = (RerunnableClasses) jaxbUnmarshaller.unmarshal(rerunFile);
+                allRerunnableClasses = existingRerunnableClasses.getRerunnableClasses();
+            }
+            for(Map.Entry<String,List<String>> entry : failedTests.entrySet()) {
+                RerunnableClass rerunnableClass =  null;
+                if(existingRerunnableClasses != null) {
+                    rerunnableClass = existingRerunnableClasses.getRerunnableClassWithName(entry.getKey());
+                }
+                if(rerunnableClass == null) {
+                    rerunnableClass = new RerunnableClass();
+                    rerunnableClass.setClassName(entry.getKey().replace("$","."));
+                    allRerunnableClasses.add(rerunnableClass);
+                }
+                for(String failedTestMethodName : entry.getValue()) {
+                    logger.info("Adding failedTestMethodName " + failedTestMethodName);
+                    rerunnableClass.getMethodNames().add(failedTestMethodName);
+                }
+            }
+            RerunnableClasses rerunnableClasses = new RerunnableClasses();
+            rerunnableClasses.setRerunnableClasses(allRerunnableClasses);
+
+            JAXBContext jaxbContext = JAXBContext.newInstance(RerunnableClasses.class);
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            jaxbMarshaller.marshal(rerunnableClasses, rerunFile);
+        } catch(Throwable th) {
+            logger.error("Error recording failing tests " + th.getMessage(), th);
         }
     }
 
@@ -410,6 +465,11 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
 
         clearMetadataIfRequired();
 
+        if(!mustRerunMethod(method))
+        {
+            return;
+        }
+
         if (shouldSkipTest(method)) {
             return;
         }
@@ -435,7 +495,35 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         if (failureDetectingStepListener.lastTestFailed() && maxRetries() > 0) {
             retryAtMost(maxRetries(), new RerunSerenityTest(method, notifier));
         }
+    }
 
+    private boolean mustRerunMethod(FrameworkMethod method) {
+
+        if(!REPLAY_FAILURES.booleanFrom(getConfiguration().getEnvironmentVariables(), false))
+        {
+            return true;
+        }
+        logger.info("Check if must rerun method " + method.getDeclaringClass().getCanonicalName() + " " + method.getMethod().getName());
+        try {
+            String defaultRerunFileName = getConfiguration().getEnvironmentVariables().getProperty(SystemPropertiesConfiguration.PROJECT_BUILD_DIRECTORY) + File.separator + "rerun.xml";
+            String rerunFileName = ThucydidesSystemProperty.RERUN_FAILURES_FILE.from(getConfiguration().getEnvironmentVariables(), defaultRerunFileName);
+            File rerunFile = new File(rerunFileName);
+            if(rerunFile.exists()) {
+                Unmarshaller jaxbUnmarshaller = JAXBContext.newInstance(RerunnableClasses.class).createUnmarshaller();
+                RerunnableClasses rerunnableClasses = (RerunnableClasses) jaxbUnmarshaller.unmarshal(rerunFile);
+                for (RerunnableClass rerunnableClass : rerunnableClasses.getRerunnableClasses()) {
+                    if(rerunnableClass.getClassName().equals(method.getDeclaringClass().getCanonicalName())) {
+                        if (rerunnableClass.getMethodNames().contains(method.getMethod().getName())) {
+                            logger.info("Found rerunnable method " + method.getMethod().getName());
+                            return true;
+                        }
+                    }
+                }
+            }
+        } catch(Throwable th) {
+            logger.error("Error when checking if method must be rerun: " + th.getMessage(), th);
+        }
+        return false;
     }
 
     private void retryAtMost(int remainingTries,
@@ -456,7 +544,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
 
 
     private void performRunChild(FrameworkMethod method, RunNotifier notifier) {
-//        failureDetectingStepListener.reset();
         super.runChild(method, notifier);
     }
 

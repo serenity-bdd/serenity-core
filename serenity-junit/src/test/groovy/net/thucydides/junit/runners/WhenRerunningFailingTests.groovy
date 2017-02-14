@@ -45,11 +45,7 @@ class WhenRerunningFailingTests extends Specification {
 
     def "should rerun only tests specified in rerun file"() {
         given:
-
             def runner = new SerenityRunner(ATestWithMoreTestMethods,webDriverFactory, new SystemPropertiesConfiguration().withEnvironmentVariables(environmentVariables))
-            def dir = System.getProperty("user.dir");
-            System.out.println(dir);
-
         when:
             runner.run(new RunNotifier())
         then:

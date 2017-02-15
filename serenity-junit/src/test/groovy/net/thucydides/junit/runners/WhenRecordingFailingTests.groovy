@@ -22,7 +22,7 @@ class WhenRecordingFailingTests extends Specification {
 
     def setup() {
         temporaryDirectory = temporaryFolder.newFolder()
-        environmentVariables.setProperty("rerun.failures.file", temporaryFolder.getRoot().getCanonicalPath() + File.separator + "rerun.xml")
+        environmentVariables.setProperty("rerun.failures.directory", temporaryFolder.getRoot().getCanonicalPath() + File.separator + "rerun")
         environmentVariables.setProperty("record.failures","true")
     }
 
@@ -51,15 +51,14 @@ class WhenRecordingFailingTests extends Specification {
             runner.run(new RunNotifier())
         then:
             runner.testOutcomes.size() == 3
-            String fileContents = new File(temporaryFolder.getRoot().getCanonicalPath() + File.separator + "rerun.xml").text.trim()
+            String fileContents = new File(temporaryFolder.getRoot().getCanonicalPath() + File.separator + "rerun" +  File.separator + "net.thucydides.junit.runners.WhenRecordingFailingTests.ATestWithMoreTestMethods_rerun.xml").text.trim()
             fileContents == '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<rerunnableClasses>
-    <rerunnableClass>
-        <className>net.thucydides.junit.runners.WhenRecordingFailingTests.ATestWithMoreTestMethods</className>
-        <methodName>testMethod2</methodName>
-        <methodName>testMethod1</methodName>
-    </rerunnableClass>
-</rerunnableClasses>'''.trim()
+<rerunnableClass>
+    <className>net.thucydides.junit.runners.WhenRecordingFailingTests.ATestWithMoreTestMethods</className>
+    <methodName>testMethod2</methodName>
+    <methodName>testMethod1</methodName>
+</rerunnableClass>
+'''.trim()
     }
 
 

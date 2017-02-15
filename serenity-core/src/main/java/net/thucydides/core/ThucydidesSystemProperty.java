@@ -868,9 +868,9 @@ public enum ThucydidesSystemProperty {
     REPLAY_FAILURES,
 
     /**
-     * Location of the file where the failures are recorded.
+     * Location of the directory where the failure files are recorded.
      */
-    RERUN_FAILURES_FILE;
+    RERUN_FAILURES_DIRECTORY;
 
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;

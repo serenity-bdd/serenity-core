@@ -22,7 +22,7 @@ class WhenRerunningFailingTests extends Specification {
 
     def setup() {
         temporaryDirectory = temporaryFolder.newFolder()
-        environmentVariables.setProperty("rerun.failures.file",System.getProperty("user.dir") + File.separator + "src/test/resources/rerun.xml")
+        environmentVariables.setProperty("rerun.failures.directory",System.getProperty("user.dir") + File.separator + "src/test/resources/rerun")
         environmentVariables.setProperty("replay.failures","true")
     }
 

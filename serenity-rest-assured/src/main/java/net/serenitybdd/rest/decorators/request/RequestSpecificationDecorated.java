@@ -16,6 +16,7 @@ import java.util.Map;
 
 import static com.jayway.restassured.internal.assertion.AssertParameter.notNull;
 import static net.serenitybdd.core.rest.RestMethod.*;
+import static net.thucydides.core.steps.StepEventBus.getEventBus;
 
 /**
  * User: YamStranger
@@ -252,9 +253,15 @@ public class RequestSpecificationDecorated extends RequestSpecificationAdvancedC
             } else {
                 response = stubbed();
             }
-            reporting.registerCall(method, this, path, exception, pathParams);
-        } else {
+            if (getEventBus().isBaseStepListenerRegistered()) {
+                reporting.registerCall(method, this, path, exception, pathParams);
+            } else {
+                log.info("No BaseStepListener, {} {} not registered.", method.toString(), path);
+            }
+        } else if (getEventBus().isBaseStepListenerRegistered()) {
             reporting.registerCall(method, response, this, path, pathParams);
+        } else {
+            log.info("No BaseStepListener, {} {} not registered.", method.toString(), path);
         }
         this.lastResponse = response;
         return response;

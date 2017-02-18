@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static net.serenitybdd.core.Serenity.initializeTestSession;
 import static net.thucydides.core.ThucydidesSystemProperty.TEST_RETRY_COUNT;
@@ -62,6 +63,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
     private String requestedDriver;
     private ReportService reportService;
     private final TestConfiguration theTest;
+    private FailureRerunner failureRerunner;
     /**
      * Special listener that keeps track of test step execution and results.
      */
@@ -91,7 +93,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
      * Creates a new test runner for WebDriver web tests.
      *
      * @param klass the class under test
-     * @throws org.junit.runners.model.InitializationError if some JUnit-related initialization problem occurred
+     * @throws InitializationError if some JUnit-related initialization problem occurred
      */
     public SerenityRunner(final Class<?> klass) throws InitializationError {
         this(klass, Injectors.getInjector());
@@ -102,7 +104,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
      *
      * @param klass the class under test
      * @param module used to inject a custom Guice module
-     * @throws org.junit.runners.model.InitializationError if some JUnit-related initialization problem occurred
+     * @throws InitializationError if some JUnit-related initialization problem occurred
      */
     public SerenityRunner(Class<?> klass, Module module) throws InitializationError {
         this(klass, Injectors.getInjector(module));
@@ -162,6 +164,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         this.requestedDriver = getSpecifiedDriver(klass);
         this.tagScanner = new TagScanner(configuration.getEnvironmentVariables());
         this.failureDetectingStepListener = new FailureDetectingStepListener();
+        this.failureRerunner = new FailureRerunnerXml(configuration);
 
         if (TestCaseAnnotations.supportsWebTests(klass)) {
             checkRequestedDriverType();
@@ -253,9 +256,13 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         } finally {
             notifyTestSuiteFinished();
             generateReports();
+            Map<String, List<String>> failedTests = stepListener.getFailedTests();
+            failureRerunner.recordFailedTests(failedTests);
             dropListeners(notifier);
         }
     }
+
+
 
     private Optional<TestOutcome> latestOutcome() {
         if (StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes().isEmpty()) {
@@ -410,6 +417,11 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
 
         clearMetadataIfRequired();
 
+        if(!failureRerunner.hasToRunTest(method.getDeclaringClass().getCanonicalName(),method.getMethod().getName()))
+        {
+            return;
+        }
+
         if (shouldSkipTest(method)) {
             return;
         }
@@ -435,7 +447,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         if (failureDetectingStepListener.lastTestFailed() && maxRetries() > 0) {
             retryAtMost(maxRetries(), new RerunSerenityTest(method, notifier));
         }
-
     }
 
     private void retryAtMost(int remainingTries,
@@ -456,7 +467,6 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
 
 
     private void performRunChild(FrameworkMethod method, RunNotifier notifier) {
-//        failureDetectingStepListener.reset();
         super.runChild(method, notifier);
     }
 

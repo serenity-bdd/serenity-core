@@ -858,6 +858,11 @@ public enum ThucydidesSystemProperty {
     TEST_RETRY_COUNT,
 
     /**
+     * Use this property to specify the maximum number of times to rerun the failing tests for cucumber tests.
+     */
+    TEST_RETRY_COUNT_CUCUMBER,
+
+    /**
      * Record failures to a file specified by property rerun.failures.file or rerun.xml in current directory
      */
     RECORD_FAILURES,

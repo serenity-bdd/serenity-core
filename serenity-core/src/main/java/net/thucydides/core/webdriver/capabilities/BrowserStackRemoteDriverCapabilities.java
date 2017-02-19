@@ -2,9 +2,14 @@ package net.thucydides.core.webdriver.capabilities;
 
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.util.NameConverter;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.*;
@@ -62,6 +67,33 @@ public class BrowserStackRemoteDriverCapabilities implements RemoteDriverCapabil
         if (isNotEmpty(remotePlatform)) {
             capabilities.setPlatform(Platform.valueOf(remotePlatform));
         }
+
+        capabilities.setCapability("name",  bestGuessOfTestName());
     }
 
+    private String bestGuessOfTestName() {
+        for (StackTraceElement elt : Thread.currentThread().getStackTrace()) {
+            try {
+                Class callingClass = Class.forName(elt.getClassName());
+                Method callingMethod = callingClass.getMethod(elt.getMethodName());
+                if (isATestMethod(callingMethod)) {
+                    return NameConverter.humanize(elt.getMethodName());
+                } else if (isASetupMethod(callingMethod)) {
+                    return NameConverter.humanize(callingClass.getSimpleName());
+                }
+            } catch (ClassNotFoundException e) {
+            } catch (NoSuchMethodException e) {
+            }
+        }
+        return null;
+    }
+
+    private boolean isATestMethod(Method callingMethod) {
+        return callingMethod.getAnnotation(Test.class) != null;
+    }
+
+    private boolean isASetupMethod(Method callingMethod) {
+        return (callingMethod.getAnnotation(Before.class) != null)
+                || (callingMethod.getAnnotation(BeforeClass.class) != null);
+    }
 }

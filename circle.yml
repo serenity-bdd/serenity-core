@@ -18,11 +18,11 @@ general:
 
 test:
   override:
-    - ./gradlew test
+    - ./gradlew test:
         timeout: 900
-    - ./gradlew integrationTests -is
+    - ./gradlew integrationTests:
         timeout: 900
-    - ./gradlew browserTests
+    - ./gradlew browserTests:
         timeout: 900
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/

@@ -1,6 +1,4 @@
 machine:
-  timezone:
-    UK/London
   java:
     version:
       oraclejdk8

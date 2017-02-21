@@ -2,6 +2,7 @@ package net.thucydides.core.reports.json.gson
 
 import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.reports.integration.TestStepFactory
+import net.thucydides.core.reports.json.AScenarioHasNoNameException
 import net.thucydides.core.steps.samples.SomeTestScenario
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
@@ -37,7 +38,7 @@ class WhenSerializingJSONObjectWithGSON extends Specification {
 
         and:
             InputStream stream = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
-            def loadedTestOutcome = converter.fromJson(stream)
+            def loadedTestOutcome = converter.fromJson(stream).get()
         then:
             loadedTestOutcome == testOutcome
     }
@@ -48,7 +49,7 @@ class WhenSerializingJSONObjectWithGSON extends Specification {
         and:
             def jsonFile = this.class.getResource(filename).getPath()
         when:
-            def loadedTestOutcome = converter.fromJson(new FileInputStream(new File(jsonFile)))
+            def loadedTestOutcome = converter.fromJson(new FileInputStream(new File(jsonFile))).get()
         then:
             loadedTestOutcome != null && loadedTestOutcome.name == name
         where:
@@ -65,12 +66,21 @@ class WhenSerializingJSONObjectWithGSON extends Specification {
         and:
             def jsonFile = this.class.getResource('/json-reports/display_product_details.json').getPath()
         when:
-            def loadedTestOutcome = converter.fromJson(new FileInputStream(new File(jsonFile)))
+            def loadedTestOutcome = converter.fromJson(new FileInputStream(new File(jsonFile))).get()
         then:
             loadedTestOutcome != null  &&
             loadedTestOutcome.name == "Display product details from the search list" &&
             loadedTestOutcome.tags.size() == 4
-
     }
 
+    def "should report an error if a JSON scenario has no name"() {
+        given:
+            GsonJSONConverter converter = new GsonJSONConverter(environmentVariables)
+        and:
+            def jsonFile = this.class.getResource('/invalid-json-reports/with-no-name.json').getPath()
+        when:
+            converter.fromJson(new FileInputStream(new File(jsonFile)))
+        then:
+            thrown(AScenarioHasNoNameException)
+    }
 }

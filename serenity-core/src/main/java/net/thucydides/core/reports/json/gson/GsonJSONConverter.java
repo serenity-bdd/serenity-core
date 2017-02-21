@@ -1,10 +1,12 @@
 package net.thucydides.core.reports.json.gson;
 
+import com.google.common.base.Optional;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.reports.json.AScenarioHasNoNameException;
 import net.thucydides.core.reports.json.JSONConverter;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
@@ -14,6 +16,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class GsonJSONConverter implements JSONConverter {
@@ -44,19 +47,28 @@ public class GsonJSONConverter implements JSONConverter {
     }
 
     @Override
-    public TestOutcome fromJson(InputStream inputStream) throws IOException {
+    public Optional<TestOutcome> fromJson(InputStream inputStream) throws IOException {
         return fromJson(new InputStreamReader(inputStream, encoding));
     }
 
     @Override
-    public TestOutcome fromJson(Reader jsonReader) {
+    public Optional<TestOutcome> fromJson(Reader jsonReader) {
         TestOutcome testOutcome = gson.fromJson(jsonReader, TestOutcome.class);
-//        LOGGER.debug("Read test outcome from JSON: " + testOutcome.toJson());
-        return isValid(testOutcome) ? testOutcome : null;
+        return isValid(testOutcome) ? Optional.of(testOutcome) : Optional.<TestOutcome>absent();
     }
 
     private boolean isValid(TestOutcome testOutcome) {
-        return isNotEmpty(testOutcome.getName());
+        boolean isValidJsonForm = isNotEmpty(testOutcome.getId());
+        if (isValidJsonForm) {
+            checkForRequiredFieldsIn(testOutcome);
+        }
+        return isValidJsonForm;
+    }
+
+    private void checkForRequiredFieldsIn(TestOutcome testOutcome) {
+        if (isEmpty(testOutcome.getName())) {
+            throw new AScenarioHasNoNameException(testOutcome.getId());
+        }
     }
 
 

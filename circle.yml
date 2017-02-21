@@ -16,7 +16,7 @@ general:
 
 test:
   override:
-    - case $CIRCLE_NODE_INDEX in 0) ./gradlew test: ;; 1) ./gradlew integrationTests 2) ./gradlew browserTests ;; esac:
+    - case $CIRCLE_NODE_INDEX in 0) ./gradlew test: ;; 1) ./gradlew integrationTests ;; 2) ./gradlew browserTests ;; esac:
         parallel: true
         timeout: 900
 

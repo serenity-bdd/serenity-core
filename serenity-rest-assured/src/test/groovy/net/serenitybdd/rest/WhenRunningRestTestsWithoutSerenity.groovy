@@ -8,7 +8,7 @@ import spock.lang.Specification
 import static com.github.tomakehurst.wiremock.client.WireMock.*
 import static net.serenitybdd.rest.SerenityRest.rest
 
-class WhenRunningRestTestsThroughJUnitWithoutSerenity extends Specification {
+class WhenRunningRestTestsWithoutSerenity extends Specification {
     @Rule
     WireMockRule wire = new WireMockRule(0)
 

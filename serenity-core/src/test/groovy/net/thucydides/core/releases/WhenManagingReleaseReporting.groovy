@@ -116,7 +116,6 @@ class WhenManagingReleaseReporting extends Specification {
             def releasesData = releaseManager.getJSONReleasesFrom(testOutcomes)
         then:
             def expectedReleasesData = """[
-  [
   {
     "releaseTag": {
       "name": "Release 1.0",

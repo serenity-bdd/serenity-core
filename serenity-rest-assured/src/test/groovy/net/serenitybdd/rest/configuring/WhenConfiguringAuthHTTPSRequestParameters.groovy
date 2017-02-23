@@ -29,7 +29,7 @@ class WhenConfiguringAuthHTTPSRequestParameters extends Specification {
 
     @Rule
     def WireMockRule wire = new WireMockRule(wireMockConfig()
-        .httpsPort(0)
+        .httpsPort(NextAvailablePort.number())
         .keystorePath(FileSystemUtils.getResourceAsFile("wiremock/keystore.jks").getAbsolutePath())
         .keystorePassword("serenitybdd"));
 

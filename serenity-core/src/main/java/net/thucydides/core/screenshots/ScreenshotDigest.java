@@ -22,7 +22,7 @@ public class ScreenshotDigest {
 
     public String forScreenshot(File screenshotFile) throws IOException {
         try(InputStream screenshot = new FileInputStream(screenshotFile)){
-            return DigestUtils.md5Hex(screenshot)
+            return DigestUtils.sha256Hex(screenshot)
                 + "_" + blurLevel.or(BlurLevel.NONE).toString()
                 + optionalWidth()
                 + ".png";

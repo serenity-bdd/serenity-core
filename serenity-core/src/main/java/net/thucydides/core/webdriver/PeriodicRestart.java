@@ -12,6 +12,9 @@ public class PeriodicRestart {
     }
 
     public boolean forTestNumber(int currentTestNumber) {
-        return (restartFrequency == 0) || (currentTestNumber % restartFrequency) == 0;
+        if (restartFrequency == 0) { return false; }
+        if (currentTestNumber == 0) { return false; }
+        
+        return (currentTestNumber % restartFrequency) == 0;
     }
 }

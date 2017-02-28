@@ -11,6 +11,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.*;
 import net.thucydides.core.steps.di.DependencyInjectorService;
+import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebDriverFactory;
@@ -20,6 +21,8 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 
 import java.io.File;
 import java.util.List;
+
+import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.*;
 
 /**
  * A utility class that provides services to initialize web testing and reporting-related fields in arbitrary objects.
@@ -31,7 +34,6 @@ public class Serenity {
     private static final ThreadLocal<StepListener> stepListenerThreadLocal = new ThreadLocal<StepListener>();
     private static final ThreadLocal<TestSessionVariables> testSessionThreadLocal = new ThreadLocal<TestSessionVariables>();
     private static final ThreadLocal<FirefoxProfile> firefoxProfileThreadLocal = new ThreadLocal<>();
-    private static final boolean AND_CLOSE_ALL_DRIVERS = true;
 
     /**
      * Initialize Serenity-related fields in the specified object.
@@ -79,8 +81,8 @@ public class Serenity {
     }
 
     private static List<DependencyInjector> getDefaultDependencyInjectors() {
-        return ImmutableList.of((DependencyInjector) new PageObjectDependencyInjector(getPages()),
-                (DependencyInjector) new EnvironmentDependencyInjector());
+        return ImmutableList.of(new PageObjectDependencyInjector(getPages()),
+                                new EnvironmentDependencyInjector());
     }
 
     /**
@@ -146,7 +148,10 @@ public class Serenity {
      * Indicate that the test run using this object is finished, and reports can be generated.
      */
     public static void done() {
-        done(AND_CLOSE_ALL_DRIVERS);
+        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        boolean restartBrowserIfNecessary = !configuredIn(environmentVariables).restartBrowserForANew(NEVER);
+
+        done(restartBrowserIfNecessary);
     }
 
     public static void done(boolean closeAllDrivers) {

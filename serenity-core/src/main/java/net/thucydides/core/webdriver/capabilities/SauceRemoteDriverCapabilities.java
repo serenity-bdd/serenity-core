@@ -13,7 +13,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.lang.reflect.Method;
 import java.util.Properties;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
@@ -45,6 +44,7 @@ public class SauceRemoteDriverCapabilities implements RemoteDriverCapabilities {
 
         for(String propertyName : saucelabsProperties.stringPropertyNames()) {
             String unprefixedPropertyName = unprefixed(propertyName);
+            capabilities.setCapability(propertyName, typed(saucelabsProperties.getProperty(propertyName)));
             capabilities.setCapability(unprefixedPropertyName, typed(saucelabsProperties.getProperty(propertyName)));
         }
 

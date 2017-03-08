@@ -3,6 +3,7 @@ package net.thucydides.core.steps;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import net.serenitybdd.core.di.DependencyInjector;
 import net.serenitybdd.core.exceptions.StepInitialisationException;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
@@ -21,10 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.google.common.collect.ImmutableSet.copyOf;
 import static net.thucydides.core.steps.construction.ConstructionStrategy.*;
@@ -66,8 +64,9 @@ public class StepFactory {
      * Returns a new ScenarioSteps instance, of the specified type.
      * This is actually a proxy that allows reporting and screenshots to
      * be performed at each step.
+     *
      * @param scenarioStepsClass the scenario step class
-     * @param <T> the scenario step class type
+     * @param <T>                the scenario step class type
      * @return the instrumented step library
      */
     public <T> T getStepLibraryFor(final Class<T> scenarioStepsClass) {
@@ -138,7 +137,7 @@ public class StepFactory {
         List<DependencyInjector> dependencyInjectors = dependencyInjectorService.findDependencyInjectors();
         dependencyInjectors.addAll(getDefaultDependencyInjectors());
 
-        for(DependencyInjector dependencyInjector : dependencyInjectors) {
+        for (DependencyInjector dependencyInjector : dependencyInjectors) {
             dependencyInjector.injectDependenciesInto(steps);
         }
     }
@@ -146,7 +145,7 @@ public class StepFactory {
     private ImmutableList<? extends DependencyInjector> getDefaultDependencyInjectors() {
         return (pages != null) ?
                 ImmutableList.of(new PageObjectDependencyInjector(pages),
-                                 new EnvironmentDependencyInjector()) :
+                        new EnvironmentDependencyInjector()) :
                 ImmutableList.of(new EnvironmentDependencyInjector());
     }
 
@@ -176,8 +175,8 @@ public class StepFactory {
         } else if (STEP_LIBRARY_WITH_PAGES.equals(strategy)) {
             return stepLibraryWithPages(scenarioStepsClass, e);
         } else if (CONSTRUCTOR_WITH_PARAMETERS.equals(strategy) && parameters.length > 0) {
-            return immutableStepLibrary(scenarioStepsClass, e,  parameters);
-        } else{
+            return immutableStepLibrary(scenarioStepsClass, e, parameters);
+        } else {
             return (T) e.create();
         }
     }
@@ -187,13 +186,25 @@ public class StepFactory {
     }
 
     private Class<?>[] argumentTypesFrom(Class<?> scenarioStepsClass, Object[] parameters) {
-        for (Constructor<?> candidateConstructor :scenarioStepsClass.getDeclaredConstructors()) {
+        for (Constructor<?> candidateConstructor : inOrderOfIncreasingParameters(scenarioStepsClass.getDeclaredConstructors())) {
             Class<?>[] parameterTypes = candidateConstructor.getParameterTypes();
             if (parametersMatchFor(parameters, parameterTypes)) {
                 return parameterTypes;
             }
         }
         throw new IllegalArgumentException("Could not find a matching constructor for class " + scenarioStepsClass + "with parameters " + Arrays.toString(parameters));
+    }
+
+    private Constructor<?>[] inOrderOfIncreasingParameters(Constructor<?>[] declaredConstructors) {
+        List<Constructor<?>> sortedConstructors = Lists.newArrayList(declaredConstructors);
+        Collections.sort(sortedConstructors,
+                new Comparator<Constructor<?>>() {
+                    @Override
+                    public int compare(Constructor<?> o1, Constructor<?> o2) {
+                        return Integer.compare(o1.getParameterTypes().length, o2.getParameterTypes().length);
+                    }
+                });
+        return sortedConstructors.toArray(new Constructor<?>[]{});
     }
 
     private boolean parametersMatchFor(Object[] parameters, Class<?>[] parameterTypes) {
@@ -203,11 +214,16 @@ public class StepFactory {
         } else {
             for (Class<?> parameterType : parameterTypes) {
 
+                if (parameterNumber >= parameterTypes.length) {
+                    return false;
+                }
+
                 if (parameter(parameters[parameterNumber]).cannotBeAssignedTo(parameterType)) {
                     return false;
                 }
+                
                 if ((parameters[parameterNumber] != null)
-                        && (!ClassUtils.isAssignable(parameters[parameterNumber].getClass(),parameterType))) {
+                        && (!ClassUtils.isAssignable(parameters[parameterNumber].getClass(), parameterType))) {
                     return false;
                 }
                 parameterNumber++;
@@ -221,7 +237,9 @@ public class StepFactory {
     }
 
     private Class<?> forTheClassOfParameter(Object parameter) {
-        if (parameter == null) { return Object.class; }
+        if (parameter == null) {
+            return Object.class;
+        }
 
         return parameter.getClass();
     }
@@ -251,11 +269,11 @@ public class StepFactory {
         }
 
         public <T> T injectPagesInto(final Class<T> stepLibraryClass, T newStepLibrary) {
-            if (ScenarioSteps.class.isAssignableFrom(stepLibraryClass))  {
+            if (ScenarioSteps.class.isAssignableFrom(stepLibraryClass)) {
                 ((ScenarioSteps) newStepLibrary).setPages(pages);
             } else if (StepLibraryType.ofClass(stepLibraryClass).hasAPagesField()) {
                 ImmutableSet<Field> fields = copyOf(Fields.of(stepLibraryClass).allFields());
-                Field pagesField =  Iterables.find(fields, ofTypePages());
+                Field pagesField = Iterables.find(fields, ofTypePages());
                 pagesField.setAccessible(true);
                 try {
                     pagesField.set(newStepLibrary, pages);
@@ -291,9 +309,11 @@ public class StepFactory {
         }
 
         public boolean cannotBeAssignedTo(Class<?> parameterType) {
-            if (parameter == null) { return PARAMETER_CAN_BE_ASSIGNED; }
+            if (parameter == null) {
+                return PARAMETER_CAN_BE_ASSIGNED;
+            }
 
-            return (!ClassUtils.isAssignable(parameter.getClass(),parameterType));
+            return (!ClassUtils.isAssignable(parameter.getClass(), parameterType));
         }
     }
 }

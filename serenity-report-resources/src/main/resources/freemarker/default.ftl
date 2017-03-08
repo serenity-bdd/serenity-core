@@ -179,7 +179,7 @@
             <div class="requirementNarrative">${dataSet.description}</div>
         </#if>
         <div class="datagrid">
-            <table>
+            <table id="examples">
                 <thead>
                 <tr>
                     <th>#</th>
@@ -529,10 +529,9 @@
     </script>
 
     <script type="text/javascript">
-        $('.example-table table').DataTable({
-            "order": [[0, "asc"]],
+        $('#examples').DataTable({
             "pageLength": 25,
-            "scrollX": "100%",
+            "scrollX":true,
             "scrollXInner": "100%",
             "scrollCollapse": true
         });

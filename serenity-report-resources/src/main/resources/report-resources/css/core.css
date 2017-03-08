@@ -1221,7 +1221,7 @@ h4 {
 }
 .datagrid table { border-collapse: collapse; text-align: left; width: 100%; }
 .datagrid {
-    font: normal 15px/150% euphemia, verdana, sans-serif;
+    font: normal 14px/150% euphemia, verdana, sans-serif;
     background: #fff; overflow: hidden; border: 1px solid #e7e8e3;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -1232,14 +1232,14 @@ h4 {
 .datagrid table th {
     padding: 3px 10px;
     font-family:euphemia, verdana, sans-serif;
-    font-size:15px; color: #0d78ae; font-weight: normal;
+    font-size:14px; color: #0d78ae; font-weight: normal;
 }
 .datagrid table thead th {
     background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #36752D), color-stop(1, #275420) );
     background:-moz-linear-gradient( center top, #36752D 5%, #275420 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#36752D', endColorstr='#275420');
     background-color:#36752D;
     color:#FFFFFF;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: bold;
     border-left: 1px solid #36752D;
 }

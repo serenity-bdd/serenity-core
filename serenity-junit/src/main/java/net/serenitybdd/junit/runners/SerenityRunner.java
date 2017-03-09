@@ -535,6 +535,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner {
         if (isIgnored(method)) {
             testStarted(method);
             StepEventBus.getEventBus().testIgnored();
+            StepEventBus.getEventBus().testFinished();
         }
     }
 

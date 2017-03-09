@@ -281,7 +281,9 @@ public class DataTable {
     public String restoreVariablesIn(String stepDescription) {
         for(int column = 0; column < getHeaders().size(); column++) {
             String correspondingValueInFirstRow = getRows().get(0).getStringValues().get(column);
-            stepDescription = stepDescription.replaceAll("\\b" + withEscapedRegExChars(correspondingValueInFirstRow) + "\\b", "{{" + column + "}}");
+            if (StringUtils.isNotEmpty(correspondingValueInFirstRow)) {
+                stepDescription = stepDescription.replaceAll("\\b" + withEscapedRegExChars(correspondingValueInFirstRow) + "\\b", "{{" + column + "}}");
+            }
         }
 
         int field = 0;

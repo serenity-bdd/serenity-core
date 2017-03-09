@@ -111,6 +111,10 @@ public class RenderedPageObjectView {
                 waitForElement(pageObject.element(webElement));
     }
 
+    public WebElementFacade waitFor(final WebElementFacade webElement) {
+        return waitForElement(webElement);
+    }
+
     public List<WebElementFacade> waitFor(final List<WebElementFacade> webElements) {
         return waitForElements(webElements);
     }

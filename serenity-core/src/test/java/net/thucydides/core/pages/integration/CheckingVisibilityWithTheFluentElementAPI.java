@@ -91,6 +91,17 @@ public class CheckingVisibilityWithTheFluentElementAPI extends FluentElementAPIT
     }
 
     @Test
+    public void should_wait_for_hidden_web_elements_facades() {
+        page.withTimeoutOf(10, TimeUnit.SECONDS).waitFor(page.city);
+    }
+
+
+    @Test
+    public void should_wait_for_web_elements() {
+        page.withTimeoutOf(10, TimeUnit.SECONDS).waitFor(page.lastName);
+    }
+
+    @Test
     public void should_be_able_to_set_the_timeout_for_waits() {
         assertThat(page.withTimeoutOf(10, TimeUnit.SECONDS).getWaitForTimeout().in(TimeUnit.SECONDS), is(10L));
     }

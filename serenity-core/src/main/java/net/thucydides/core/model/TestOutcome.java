@@ -955,11 +955,14 @@ public class TestOutcome {
     }
 
     private String obtainQualifiedTitleFromAnnotationOrMethodName() {
+        String title = "";
         if ((qualifier != null) && (qualifier.isPresent())) {
-            return qualified(getBaseTitleFromAnnotationOrMethodName());
+            title = qualified(getBaseTitleFromAnnotationOrMethodName());
         } else {
-            return getBaseTitleFromAnnotationOrMethodName();
+            title = getBaseTitleFromAnnotationOrMethodName();
         }
+
+        return withPlaceholderSubstitutes(title);
     }
 
     private String getBaseTitleFromAnnotationOrMethodName() {

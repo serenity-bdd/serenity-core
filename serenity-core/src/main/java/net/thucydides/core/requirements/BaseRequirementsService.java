@@ -3,7 +3,6 @@ package net.thucydides.core.requirements;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import net.thucydides.core.model.Release;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
@@ -15,10 +14,8 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.EMPTY_LIST;
@@ -32,7 +29,7 @@ public abstract class BaseRequirementsService implements RequirementsService {
 
     protected final EnvironmentVariables environmentVariables;
 
-    private static final List<Requirement> NO_REQUIREMENTS = Lists.newArrayList();
+    private static final List<Requirement> NO_REQUIREMENTS = Collections.synchronizedList(new ArrayList<Requirement>());
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseRequirementsService.class);
 
     public BaseRequirementsService(EnvironmentVariables environmentVariables) {
@@ -108,7 +105,7 @@ public abstract class BaseRequirementsService implements RequirementsService {
 
 
     protected void indexRequirements() {
-        requirementAncestors = Maps.newHashMap();
+        requirementAncestors = new ConcurrentHashMap();
         for (Requirement requirement : requirements) {
             List<Requirement> requirementPath = ImmutableList.of(requirement);
             requirementAncestors.put(requirement, ImmutableList.of(requirement));
@@ -144,17 +141,11 @@ public abstract class BaseRequirementsService implements RequirementsService {
         return requirementAncestors;
     }
 
-    Map<TestOutcome, Optional<Requirement>> requirementCache = Maps.newConcurrentMap();
-
     private Optional<Requirement> getParentRequirementOf(TestOutcome testOutcome, RequirementsTagProvider tagProvider) {
-//        if (requirementCache.containsKey(testOutcome)) {
-//            return requirementCache.get(testOutcome);
-//        }
 
         Optional<Requirement> parentDefinedInTags = tagProvider.getParentRequirementOf(testOutcome);
         if (parentDefinedInTags.isPresent()) {
             Optional<Requirement> matchingIndexedParentRequirement = findMatchingIndexedRequirement(parentDefinedInTags.get());
-//            requirementCache.put(testOutcome, matchingIndexedParentRequirement);
             return matchingIndexedParentRequirement;
         }
 

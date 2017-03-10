@@ -201,19 +201,19 @@ public abstract class PageObject {
     }
 
     public FileToUpload upload(final String filename) {
-        return new FileToUpload(filename).useRemoteDriver(isDefinedRemoteUrl());
+        return new FileToUpload(driver, filename).useRemoteDriver(isDefinedRemoteUrl());
     }
 
     public FileToUpload uploadData(String data) throws IOException {
         Path datafile = Files.createTempFile("upload", "data");
         Files.write(datafile, data.getBytes(StandardCharsets.UTF_8));
-        return new FileToUpload(datafile.toAbsolutePath().toString()).useRemoteDriver(isDefinedRemoteUrl());
+        return new FileToUpload(driver, datafile.toAbsolutePath().toString()).useRemoteDriver(isDefinedRemoteUrl());
     }
 
     public FileToUpload uploadData(byte[] data) throws IOException {
         Path datafile = Files.createTempFile("upload", "data");
         Files.write(datafile, data);
-        return new FileToUpload(datafile.toAbsolutePath().toString()).useRemoteDriver(isDefinedRemoteUrl());
+        return new FileToUpload(driver, datafile.toAbsolutePath().toString()).useRemoteDriver(isDefinedRemoteUrl());
     }
 
     private boolean isDefinedRemoteUrl() {

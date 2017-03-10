@@ -1,8 +1,10 @@
 package net.thucydides.core.pages.components;
 
 import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.core.webdriver.ConfigureFileDetector;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebElement;
@@ -19,9 +21,12 @@ public class FileToUpload {
     static final String WINDOWS_PATH_PATTERN = "^[A-Z]:\\\\.*";
 
     private static Pattern fullWindowsPath = Pattern.compile(WINDOWS_PATH_PATTERN);
+    private final WebDriver driver;
     private boolean remoteDriver = false;
 
-    public FileToUpload(final String filename) {
+    public FileToUpload(WebDriver driver, final String filename) {
+        this.driver = driver;
+
         if (isOnTheClasspath(filename)) {
             this.filename = getFileFromResourcePath(filename);
         } else {
@@ -98,6 +103,11 @@ public class FileToUpload {
     private String windowsNative(final String fileToUpload) {
         String bareFilename = (fileToUpload.charAt(0) == '/') ? fileToUpload.substring(1) : fileToUpload;
         return StringUtils.replace(bareFilename,"/","\\");
+    }
+
+    public FileToUpload fromLocalMachine() {
+        ConfigureFileDetector.forDriver(driver);
+        return this;
     }
 
     private class LocalFilePathLocator implements FilePathLocator {

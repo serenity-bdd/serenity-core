@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
@@ -37,6 +36,10 @@ public class WhenUploadingFiles {
 
         public void uploadFile(String filename) {
             upload(filename).to(uploadField);
+        }
+
+        public void uploadFileFromLocal(String filename) {
+            upload(filename).fromLocalMachine().to(uploadField);
         }
 
         public void uploadFileData(String data) throws IOException {
@@ -92,6 +95,13 @@ public class WhenUploadingFiles {
     }
 
     @Test
+    public void should_upload_a_file_from_the_classpath_on_the_local_mahcine() {
+        UploadPage uploadPage = pageFactory.get(UploadPage.class);
+        uploadPage.uploadFileFromLocal("/report-resources/css/core.css");
+        assertThat(uploadPage.uploadField.getAttribute("value"), containsString("core.css"));
+    }
+
+    @Test
     public void should_upload_a_file_data_in_string_form() throws IOException, URISyntaxException {
         UploadPage uploadPage = pageFactory.get(UploadPage.class);
 
@@ -116,7 +126,7 @@ public class WhenUploadingFiles {
         if (!runningOnWindows()) {
             WebElement field = mock(WebElement.class);
 
-            FileToUpload fileToUpload = new FileToUpload(unixPath);
+            FileToUpload fileToUpload = new FileToUpload(driver, unixPath);
             fileToUpload.to(field);
 
             verify(field).sendKeys(unixPath);
@@ -129,7 +139,7 @@ public class WhenUploadingFiles {
         if (runningOnWindows()) {
             WebElement field = mock(WebElement.class);
 
-            FileToUpload fileToUpload = new FileToUpload(windowsPath);
+            FileToUpload fileToUpload = new FileToUpload(driver, windowsPath);
             fileToUpload.to(field);
 
             verify(field).sendKeys(windowsPath);

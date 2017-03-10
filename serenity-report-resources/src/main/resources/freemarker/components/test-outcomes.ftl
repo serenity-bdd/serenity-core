@@ -40,9 +40,10 @@
                                     <span style="display:none">${testOutcome.result}</span></td>
                                 <td class="${testOutcome.result}-text">
                                     <div class="ellipsis">
-                                        <#assign testOutcomeTitle = testOutcome.unqualified.titleWithLinks >
+                                        <#assign testOutcomeTitle = testOutcome.unqualified.title >
 
-                                        <a href="${relativeLink}${testOutcome.reportName}.html" class="ellipsis" title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 40)}">
+                                        <a href="${relativeLink}${testOutcome.reportName}.html" class="ellipsis"
+                                           title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 40)}">
                                             ${formatter.htmlCompatibleTestTitle(testOutcomeTitle)}${exampleCount}
                                             <#if (!testOutcome.titleWithIssues)>
                                                 <span class="related-issue-title">${testOutcome.formattedIssues}</span>

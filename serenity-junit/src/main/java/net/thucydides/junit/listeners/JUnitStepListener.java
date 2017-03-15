@@ -141,7 +141,6 @@ public class JUnitStepListener extends RunListener {
     public void testIgnored(final Description description) throws Exception {
         if (testingThisTest(description)) {
             stepEventBus().testIgnored();
-            stepEventBus().testFinished();
             endTest();
         }
     }

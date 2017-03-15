@@ -158,8 +158,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private List<Requirement> addParentsTo(List<Requirement> requirements, String parent) {
         List<Requirement> augmentedRequirements = Lists.newArrayList();
         for (Requirement requirement : requirements) {
-            // !!! NEW CODE
-            // TODO: Concurrent modification exception here
             List<Requirement> children = requirement.hasChildren()
                     ? addParentsTo(requirement.getChildren(), requirement.qualifiedName()) : NO_REQUIREMENTS;
             augmentedRequirements.add(requirement.withParent(parent).withChildren(children));

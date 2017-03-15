@@ -25,6 +25,7 @@ import static ch.lambdaj.Lambda.*;
 import static net.thucydides.core.model.TestResult.*;
 import static net.thucydides.core.reports.matchers.TestOutcomeMatchers.havingTagName;
 import static net.thucydides.core.reports.matchers.TestOutcomeMatchers.havingTagType;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.hamcrest.Matchers.is;
 
 //import static ch.lambdaj.Lambda.*;
@@ -98,14 +99,14 @@ public class TestOutcomes {
     protected TestOutcomes(Collection<? extends TestOutcome> outcomes,
                            double estimatedAverageStepCount,
                            String label) {
-        this(outcomes, estimatedAverageStepCount, label, null, null, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(outcomes, estimatedAverageStepCount, label, null, null, Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
     }
 
     protected TestOutcomes(List<? extends TestOutcome> outcomes,
                            double estimatedAverageStepCount,
                            String label,
                            TestTag tag) {
-        this(outcomes, estimatedAverageStepCount, label, tag, null, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(outcomes, estimatedAverageStepCount, label, tag, null, Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
     }
 
     protected TestOutcomes(Collection<? extends TestOutcome> outcomes,
@@ -120,6 +121,7 @@ public class TestOutcomes {
     public EnvironmentVariables getEnvironmentVariables() {
         return environmentVariables;
     }
+
     public TestOutcomes havingResult(String result) {
         return havingResult(TestResult.valueOf(result.toUpperCase()));
     }
@@ -127,7 +129,7 @@ public class TestOutcomes {
     List<TestOutcome> outcomesFilteredByResult(TestResult... results) {
         List<TestOutcome> filteredOutcomes = Lists.newArrayList();
         List<TestResult> eligableResults = Lists.newArrayList(results);
-        for(TestOutcome outcome : outcomes) {
+        for (TestOutcome outcome : outcomes) {
             if (eligableResults.contains(outcome.getResult())) {
                 filteredOutcomes.add(outcome);
             }
@@ -137,7 +139,7 @@ public class TestOutcomes {
 
     List<TestOutcome> outcomesFilteredByTag(TestTag tag) {
         List<TestOutcome> filteredOutcomes = Lists.newArrayList();
-        for(TestOutcome outcome : outcomes) {
+        for (TestOutcome outcome : outcomes) {
             if (outcome.getTags().contains(tag)) {
                 filteredOutcomes.add(outcome);
             }
@@ -161,7 +163,7 @@ public class TestOutcomes {
 
     public static TestOutcomes withNoResults() {
         return new TestOutcomes(NO_OUTCOMES,
-                                ConfiguredEnvironment.getConfiguration().getEstimatedAverageStepCount());
+                ConfiguredEnvironment.getConfiguration().getEstimatedAverageStepCount());
     }
 
 
@@ -193,15 +195,15 @@ public class TestOutcomes {
     }
 
     public List<String> getRequirementTagTypes() {
-       List<String> tagTypes = Lists.newArrayList();
+        List<String> tagTypes = Lists.newArrayList();
 
-       List<String> candidateTagTypes = requirementsService.getRequirementTypes();
-       for(String tagType : candidateTagTypes) {
-           if (getTagTypes().contains(tagType)) {
-               tagTypes.add(tagType);
-           }
-       }
-       return ImmutableList.copyOf(tagTypes);
+        List<String> candidateTagTypes = requirementsService.getRequirementTypes();
+        for (String tagType : candidateTagTypes) {
+            if (getTagTypes().contains(tagType)) {
+                tagTypes.add(tagType);
+            }
+        }
+        return ImmutableList.copyOf(tagTypes);
     }
 
     /**
@@ -271,7 +273,7 @@ public class TestOutcomes {
     private List<TestTag> removeGeneralTagsFrom(List<TestTag> tags) {
         List<TestTag> specificTags = Lists.newArrayList();
 
-        for(TestTag tag : tags) {
+        for (TestTag tag : tags) {
             if (!moreSpecificTagExists(tag, tags)) {
                 specificTags.add(tag);
             }
@@ -280,7 +282,7 @@ public class TestOutcomes {
     }
 
     private boolean moreSpecificTagExists(TestTag generalTag, List<TestTag> tags) {
-        for(TestTag tag : tags) {
+        for (TestTag tag : tags) {
             if (tag.getName().endsWith("/" + generalTag.getName())) {
                 return true;
             }
@@ -302,7 +304,7 @@ public class TestOutcomes {
 
     private List<TestTag> removeExcluded(List<TestTag> allTagsOfType, String excludedTag) {
         List<TestTag> tags = Lists.newArrayList();
-        for (TestTag tag: allTagsOfType) {
+        for (TestTag tag : allTagsOfType) {
             if (!tag.getName().equalsIgnoreCase(excludedTag)) {
                 tags.add(tag);
             }
@@ -321,10 +323,15 @@ public class TestOutcomes {
     public TestOutcomes forRequirement(Requirement requirement) {
 
         Set<TestOutcome> testOutcomesForThisRequirement = Sets.newHashSet();
-        for(Requirement childRequirement : RequirementsTree.forRequirement(requirement).asFlattenedList()) {
+        for (Requirement childRequirement : RequirementsTree.forRequirement(requirement).asFlattenedList()) {
             testOutcomesForThisRequirement.addAll(
                     withTag(childRequirement.asTag()).getOutcomes()
             );
+            if (isNotEmpty(childRequirement.getCardNumber())) {
+                testOutcomesForThisRequirement.addAll(
+                        withCardNumber(childRequirement.getCardNumber()).getOutcomes()
+                );
+            }
         }
 
         return TestOutcomes.of(testOutcomesForThisRequirement)
@@ -343,7 +350,7 @@ public class TestOutcomes {
 
     public TestOutcomes ofType(TestType testType) {
         List<TestOutcome> filteredOutcomes = Lists.newArrayList();
-        for(TestOutcome outcome : outcomes) {
+        for (TestOutcome outcome : outcomes) {
             if (outcome.typeCompatibleWith(testType)) {
                 filteredOutcomes.add(outcome);
             }
@@ -353,7 +360,7 @@ public class TestOutcomes {
 
     public TestOutcomes withResult(TestResult result) {
         List<TestOutcome> filteredOutcomes = Lists.newArrayList();
-        for(TestOutcome outcome : outcomes) {
+        for (TestOutcome outcome : outcomes) {
             if (outcome.getResult() == result) {
                 filteredOutcomes.add(outcome);
             }
@@ -365,7 +372,7 @@ public class TestOutcomes {
         for (TestOutcome outcome : outcomes) {
             List<TestTag> outcomeTags = Lists.newArrayList(outcome.getTags());
             List<Requirement> parentRequirements = requirementsService.getAncestorRequirementsFor(outcome);
-            for(Requirement requirement : parentRequirements) {
+            for (Requirement requirement : parentRequirements) {
                 outcomeTags.add(requirement.asTag());
             }
             outcome.addTags(outcomeTags);
@@ -418,9 +425,17 @@ public class TestOutcomes {
     public TestOutcomes withTag(TestTag tag) {
         List<? extends TestOutcome> outcomesWithMatchingTag = matchingOutcomes(outcomes, tag);
         return TestOutcomes.of(outcomesWithMatchingTag)
-                           .withLabel(tag.getShortName())
-                           .withTestTag(tag)
-                           .withRootOutcomes(getRootOutcomes());
+                .withLabel(tag.getShortName())
+                .withTestTag(tag)
+                .withRootOutcomes(getRootOutcomes());
+    }
+
+    public TestOutcomes withCardNumber(String issueCardNumber) {
+        List<? extends TestOutcome> outcomesWithMatchingTag
+                = matchingOutcomes(outcomes, TestTag.withName(issueCardNumber).andType("issue"));
+        return TestOutcomes.of(outcomesWithMatchingTag)
+                .withCardNumber(issueCardNumber)
+                .withRootOutcomes(getRootOutcomes());
     }
 
     private TestOutcomes withTestTag(TestTag tag) {
@@ -437,6 +452,7 @@ public class TestOutcomes {
 
     private List<? extends TestOutcome> matchingOutcomes(List<? extends TestOutcome> outcomes, TestTag tag) {
         List<TestOutcome> matchingOutcomes = Lists.newArrayList();
+
         for (TestOutcome outcome : outcomes) {
             if (isAnIssue(tag) && (outcome.hasIssue(tag.getName()))) {
                 matchingOutcomes.add(outcome);
@@ -448,6 +464,7 @@ public class TestOutcomes {
         }
         return matchingOutcomes;
     }
+
 
     private boolean isAnIssue(TestTag tag) {
         return tag.getType().equalsIgnoreCase("issue");
@@ -563,7 +580,7 @@ public class TestOutcomes {
      */
     public int getTotal() {
         int total = 0;
-        for(TestOutcome outcome : outcomes) {
+        for (TestOutcome outcome : outcomes) {
             total += outcome.getTestCount();
         }
         return total;
@@ -664,15 +681,16 @@ public class TestOutcomes {
 
         public Double withResult(TestResult testResult) {
             int matchingTestCount = countTestsWithResult(testResult, testType);
-            return (getTotal() == 0) ? 0 :  (matchingTestCount / (double) getTotal());
+            return (getTotal() == 0) ? 0 : (matchingTestCount / (double) getTotal());
         }
 
         public Double withIndeterminateResult() {
             int pendingCount = countTestsWithResult(TestResult.PENDING, testType);
-            int ignoredCount =  countTestsWithResult(TestResult.IGNORED, testType);
-            int skippedCount =  countTestsWithResult(TestResult.SKIPPED, testType);
+            int ignoredCount = countTestsWithResult(TestResult.IGNORED, testType);
+            int skippedCount = countTestsWithResult(TestResult.SKIPPED, testType);
             return (getTotal() == 0) ? 0 : ((pendingCount + skippedCount + ignoredCount) / (double) getTotal());
         }
+
         public Double withFailureOrError() {
             return withResult(TestResult.FAILURE) + withResult(TestResult.ERROR) + withResult(TestResult.COMPROMISED);
         }
@@ -694,7 +712,7 @@ public class TestOutcomes {
         return new OutcomeProportionStepCounter(TestType.valueOf(testType.toUpperCase()));
     }
 
-    public class OutcomeProportionStepCounter extends TestOutcomeCounter  {
+    public class OutcomeProportionStepCounter extends TestOutcomeCounter {
 
         public OutcomeProportionStepCounter(TestType testType) {
             super(testType);
@@ -711,8 +729,8 @@ public class TestOutcomes {
 
         public Double withIndeterminateResult() {
             int pendingCount = countStepsWithResult(TestResult.PENDING, testType);
-            int ignoredCount =  countStepsWithResult(TestResult.IGNORED, testType);
-            int skippedCount =  countStepsWithResult(TestResult.SKIPPED, testType);
+            int ignoredCount = countStepsWithResult(TestResult.IGNORED, testType);
+            int skippedCount = countStepsWithResult(TestResult.SKIPPED, testType);
             return ((pendingCount + skippedCount + ignoredCount) / (double) getEstimatedTotalStepCount());
         }
     }
@@ -744,7 +762,7 @@ public class TestOutcomes {
     private int countStepsWithResult(TestResult expectedResult, TestType testType) {
 //        int stepCount = sum(outcomes, on(TestOutcome.class).countNestedStepsWithResult(expectedResult, testType));
         int stepCount = 0;
-        for(TestOutcome outcome : outcomes) {
+        for (TestOutcome outcome : outcomes) {
             stepCount += outcome.countNestedStepsWithResult(expectedResult, testType);
         }
 
@@ -760,7 +778,7 @@ public class TestOutcomes {
 
     protected int countTestsWithResult(TestResult expectedResult, TestType testType) {
         int total = 0;
-        for(TestOutcome outcome : outcomes) {
+        for (TestOutcome outcome : outcomes) {
             total += outcome.countResults(expectedResult, testType);
         }
         return total;
@@ -806,7 +824,7 @@ public class TestOutcomes {
 
     public int getTestCount() {
         int total = 0;
-        for(TestOutcome outcome : outcomes) {
+        for (TestOutcome outcome : outcomes) {
             total += outcome.getTestCount();
         }
         return total;
@@ -815,7 +833,7 @@ public class TestOutcomes {
 
     private int totalImplementedTests() {
         int total = 0;
-        for(TestOutcome outcome : outcomes) {
+        for (TestOutcome outcome : outcomes) {
             total += outcome.getImplementedTestCount();
         }
         return total;
@@ -823,18 +841,18 @@ public class TestOutcomes {
     }
 
     public boolean hasDataDrivenTests() {
-        for(TestOutcome outcome : outcomes) {
+        for (TestOutcome outcome : outcomes) {
             if (outcome.isDataDriven()) {
                 return true;
             }
         }
         return false;
- //       return !filter(having(on(TestOutcome.class).isDataDriven(), is(true)), outcomes).isEmpty();
+        //       return !filter(having(on(TestOutcome.class).isDataDriven(), is(true)), outcomes).isEmpty();
     }
 
     public int getTotalDataRows() {
         int total = 0;
-        for(TestOutcome outcome : outcomes) {
+        for (TestOutcome outcome : outcomes) {
             total += (outcome.getDataTable() != null) ? outcome.getDataTable().getSize() : 0;
         }
         return total;
@@ -864,7 +882,7 @@ public class TestOutcomes {
             return this;
         }
 
-        public TestOutcomeMatcher withNameIn(List<Matcher<String>>  nameMatchers) {
+        public TestOutcomeMatcher withNameIn(List<Matcher<String>> nameMatchers) {
             List<Matcher<String>> matchers = Lists.newArrayList(nameMatchers);
             this.nameMatcher = Optional.of(matchers);
             return this;
@@ -885,7 +903,7 @@ public class TestOutcomes {
 
         public List<TestTag> list() {
             List<TestTag> matches = Lists.newArrayList();
-            for(TestTag tag : outcomes.getTags()) {
+            for (TestTag tag : outcomes.getTags()) {
                 if (compatibleTag(tag)) {
                     matches.add(tag);
                 }
@@ -909,7 +927,7 @@ public class TestOutcomes {
         }
 
         private boolean matches(String name, List<Matcher<String>> matchers) {
-            for(Matcher<String> match : matchers) {
+            for (Matcher<String> match : matchers) {
                 if (match.matches(name)) {
                     return true;
                 }

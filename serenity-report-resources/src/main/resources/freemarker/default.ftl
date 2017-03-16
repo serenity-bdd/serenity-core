@@ -483,7 +483,7 @@
                         ${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 244)}
                             </span>
                         <#if (testOutcome.nestedTestFailureCause)??>
-                            <@stacktrace cause=testOutcome.nestedTestFailureCause />
+                            <@stacktrace cause=testOutcome.nestedTestFailureCause id="overall" />
                         </#if>
                     </#if>
                 </td>

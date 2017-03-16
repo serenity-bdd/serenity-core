@@ -156,7 +156,6 @@ subprojects {
     }
 
     test {
-        maxParallelForks = 4
         testLogging {
             events "failed"//, "passed", "skipped"
             exceptionFormat = 'full'

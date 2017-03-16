@@ -4,6 +4,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import net.serenitybdd.junit.runners.AbstractTestStepRunnerTest;
 import net.serenitybdd.junit.runners.SerenityRunner;
+import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.guice.ThucydidesModule;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
@@ -14,6 +15,7 @@ import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.junit.rules.DisableThucydidesHistoryRule;
 import net.thucydides.samples.*;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -118,20 +120,70 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
                 hasItem(TestTag.withName("Manual").andType("External Tests")));
     }
 
-//
+    public static final class ATestWithNoSteps {
+        @Test
+        public void test_with_no_steps() {}
+    }
+
     @Test
     public void tests_with_no_steps_should_be_marked_as_successful() throws InitializationError {
 
-        SerenityRunner runner = new SerenityRunner(SamplePassingNonWebScenarioWithEmptyTests.class);
+        SerenityRunner runner = new SerenityRunner(ATestWithNoSteps.class);
         runner.run(new RunNotifier());
 
         List<TestOutcome> executedSteps = runner.getTestOutcomes();
-        assertThat(executedSteps.size(), is(3));
 
-        assertThat(inTheTesOutcomes(executedSteps).theResultFor("happy_day_scenario"), is(TestResult.SUCCESS));
-        assertThat(inTheTesOutcomes(executedSteps).theResultFor("edge_case_1"), is(TestResult.IGNORED));
-        assertThat(inTheTesOutcomes(executedSteps).theResultFor("edge_case_2"), is(TestResult.PENDING));
+        assertThat(inTheTesOutcomes(executedSteps).theResultFor("test_with_no_steps"), is(TestResult.SUCCESS));
+    }
 
+    public static final class AnIgnoredTest {
+        @Test
+        public void previous_test() {}
+
+        @Ignore
+        @Test
+        public void ignored_test() {}
+
+        @Test
+        public void following_test() {}
+    }
+
+    @Test
+    public void ignored_tests_should_be_flagged_as_ignored() throws InitializationError {
+
+        SerenityRunner runner = new SerenityRunner(AnIgnoredTest.class);
+        runner.run(new RunNotifier());
+
+        List<TestOutcome> executedSteps = runner.getTestOutcomes();
+
+        assertThat(inTheTesOutcomes(executedSteps).theResultFor("previous_test"), is(TestResult.SUCCESS));
+        assertThat(inTheTesOutcomes(executedSteps).theResultFor("ignored_test"), is(TestResult.IGNORED));
+        assertThat(inTheTesOutcomes(executedSteps).theResultFor("following_test"), is(TestResult.SUCCESS));
+    }
+
+    public static final class APendingTest {
+        @Test
+        public void previous_test() {}
+
+        @Pending
+        @Test
+        public void pending_test() {}
+
+        @Test
+        public void following_test() {}
+    }
+
+    @Test
+    public void pending_tests_should_be_flagged_as_pending() throws InitializationError {
+
+        SerenityRunner runner = new SerenityRunner(APendingTest.class);
+        runner.run(new RunNotifier());
+
+        List<TestOutcome> executedSteps = runner.getTestOutcomes();
+
+        assertThat(inTheTesOutcomes(executedSteps).theResultFor("previous_test"), is(TestResult.SUCCESS));
+        assertThat(inTheTesOutcomes(executedSteps).theResultFor("pending_test"), is(TestResult.PENDING));
+        assertThat(inTheTesOutcomes(executedSteps).theResultFor("following_test"), is(TestResult.SUCCESS));
     }
 
 
@@ -383,13 +435,6 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 
         List<String> generatedHtmlReports = Arrays.asList(outputDirectory.list(new JSONFileFilter()));
         assertThat(generatedHtmlReports.size(), is(3));
-    }
-
-
-    private class XMLFileFilter implements FilenameFilter {
-        public boolean accept(File file, String filename) {
-            return filename.toLowerCase().endsWith(".xml") && !filename.startsWith("SERENITY-");
-        }
     }
 
     private class HTMLFileFilter implements FilenameFilter {

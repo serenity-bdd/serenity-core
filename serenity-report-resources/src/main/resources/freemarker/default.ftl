@@ -33,10 +33,9 @@
         <#list breadcrumbs as breadcrumb>
             <#assign breadcrumbReport = absoluteReportName.forRequirement(breadcrumb) />
             <#assign breadcrumbTitle = inflection.of(breadcrumb.shortName).asATitle() >
-            <#assign breadcrumbType = inflection.of(breadcrumb.type).asATitle() >
-            > <a href="${breadcrumbReport}" title="${breadcrumbTitle} (breadcrumbType)">${formatter.truncatedHtmlCompatible(breadcrumbTitle,20)}</a>
+            > <a href="${breadcrumbReport}">${formatter.truncatedHtmlCompatible(breadcrumbTitle,40)}</a>
         </#list>
-            > ${formatter.truncatedHtmlCompatible(testOutcome.title,60)}
+            > ${formatter.truncatedHtmlCompatible(testOutcome.title,80)}
         </span>
         </div>
         <div class="rightbg"></div>
@@ -68,7 +67,7 @@
                         <td>
                         <#if (parentRequirement?? && parentRequirement.isPresent())>
                             <div>
-                                <#assign parentTitle = formatter.renderDescription(inflection.of(parentRequirement.get().displayName).asATitle()) >
+                                <#assign parentTitle = formatter.renderDescription(inflection.of(parentRequirement.get().name).asATitle()) >
                                 <#assign parentType = inflection.of(parentRequirement.get().type).asATitle() >
                                 <#if (parentRequirement.get().cardNumber?has_content) >
                                     <#assign issueNumber = "[" + formatter.addLinks(parentRequirement.get().cardNumber) + "]" >
@@ -86,7 +85,7 @@
                             </div>
                         <#elseif (featureOrStory?? && featureOrStory.isPresent())>
                             <div>
-                                <#assign parentTitle = inflection.of(featureOrStory.get().displayName).asATitle() >
+                                <#assign parentTitle = inflection.of(featureOrStory.get().name).asATitle() >
                                 <#assign parentType = inflection.of(featureOrStory.get().type).asATitle() >
                                 <h3 class="discreet-story-header">
                                     <i class="fa fa-2x fa-comments-o"></i>
@@ -135,7 +134,7 @@
                         </#if>
                             <span class="test-case-title">
                                 <#assign testOutcomeTitle = testOutcome.unqualified.titleWithLinks >
-                                <span class="${outcome_text!ignore_color}">
+                                    <span class="${outcome_text!ignore_color}">
                                     ${formatter.htmlCompatibleStoryTitle(testOutcomeTitle)}
                                     <#if (!testOutcome.titleWithIssues)>
                                         <span class="related-issue-title">${testOutcome.formattedIssues}</span>
@@ -148,7 +147,7 @@
                         <#if (testOutcome.descriptionText.isPresent() && testOutcome.descriptionText.get()?has_content)>
                             <div class="discreet-requirement-narrative-title">
                                 <br/>
-                                ${formatter.renderDescription(testOutcome.descriptionText.get())}
+                            ${formatter.renderDescription(testOutcome.descriptionText.get())}
                             </div>
                         </#if>
                         </td>
@@ -174,12 +173,12 @@
 <#if (testOutcome.isDataDriven())>
 
     <#list testOutcome.dataTable.dataSets as dataSet >
-        <h3 class="story-header">Examples:<#if dataSet.name??>&nbsp;${dataSet.name}</#if></h3>
+        <h3 class="story-header">Examples:<#if dataSet.title??>&nbsp;${dataSet.title}</#if></h3>
         <#if dataSet.description??>
             <div class="requirementNarrative">${dataSet.description}</div>
         </#if>
-        <div class="datagrid">
-            <table id="examples">
+        <div class="example-table">
+            <table>
                 <thead>
                 <tr>
                     <th>#</th>
@@ -259,15 +258,15 @@
                 </#if>
             </#macro>
 
-            <#macro stacktrace(cause) >
+            <#macro stacktrace(cause, id) >
                 <div><!-- Stack trace -->
                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                            data-target="#stacktraceModal">
+                            data-target="#stacktraceModal-${id}">
                         View stack trace
                     </button>
                 </div>
                 <!-- Modal -->
-                <div class="modal fade" id="stacktraceModal" tabindex="-1" role="dialog"
+                <div class="modal fade" id="stacktraceModal-${id}" tabindex="-1" role="dialog"
                      aria-labelledby="stacktraceModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
@@ -446,7 +445,7 @@
                                 <pre>${formatter.htmlAttributeCompatible(errorMessageTitle,244)!''}</pre>
                             </div>
                             <#if step.nestedException?has_content>
-                                <@stacktrace cause=step.nestedException />
+                                <@stacktrace cause=step.nestedException id=step.number />
                             </#if>
                         </td>
                     </tr>
@@ -529,9 +528,10 @@
     </script>
 
     <script type="text/javascript">
-        $('#examples').DataTable({
+        $('.example-table table').DataTable({
+            "order": [[0, "asc"]],
             "pageLength": 25,
-            "scrollX":true,
+            "scrollX": "100%",
             "scrollXInner": "100%",
             "scrollCollapse": true
         });

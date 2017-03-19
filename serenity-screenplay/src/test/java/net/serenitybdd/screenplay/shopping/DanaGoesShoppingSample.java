@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.serenitybdd.PeopleAreTerriblyIncorrect;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.shopping.questions.NestedThankYouMessage;
 import net.serenitybdd.screenplay.shopping.tasks.HaveItemsDelivered;
 import net.serenitybdd.screenplay.shopping.tasks.Purchase;
 import net.thucydides.core.annotations.Steps;
@@ -15,6 +16,9 @@ import org.junit.runner.RunWith;
 import java.util.List;
 
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
+import static net.serenitybdd.screenplay.shopping.questions.DisplayedPrices.thePriceIsCorrectlyDisplayed;
+import static net.serenitybdd.screenplay.shopping.questions.DisplayedPrices.thePriceIsIncorrectlyDisplayed;
+import static net.serenitybdd.screenplay.shopping.questions.DisplayedPrices.thePriceIsIncorrectlyDisplayedWithAnError;
 import static net.serenitybdd.screenplay.shopping.questions.ThankYouMessage.theThankYouMessage;
 import static net.serenitybdd.screenplay.shopping.questions.TotalCost.theTotalCost;
 import static net.serenitybdd.screenplay.shopping.questions.TotalCostIncludingDelivery.theTotalCostIncludingDelivery;
@@ -79,6 +83,90 @@ public class DanaGoesShoppingSample {
                 seeThat(theThankYouMessage(), equalTo("You're welcome"))
                         .orComplainWith(PeopleAreSoImpolite.class,"You should say something nice"));
     }
+
+
+    @Test
+    public void shouldBeABleToEvaluateAllTheConsequencesInAGroup() {
+        givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
+                andPurchased().aPear().thatCosts(5).dollars());
+
+        when(dana).attemptsTo(haveThemDelivered);
+
+        then(dana).should("{0} should see the correct messages",
+                seeThat(theThankYouMessage(), equalTo("You're welcome")),
+                seeThat(theThankYouMessage(), equalTo("No problem")),
+                seeThat(theThankYouMessage(), equalTo("Thank you!"))
+        );
+    }
+
+    @Test
+    public void shouldBeAbleToEvaluateConsequenceGroups() {
+        givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
+                andPurchased().aPear().thatCosts(5).dollars());
+
+        when(dana).attemptsTo(haveThemDelivered);
+
+        then(dana).should(seeThat(thePriceIsCorrectlyDisplayed()));
+    }
+
+    @Test
+    public void shouldBeAbleToEvaluateFailingConsequenceGroups() {
+        givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
+                andPurchased().aPear().thatCosts(5).dollars());
+
+        when(dana).attemptsTo(haveThemDelivered);
+
+        then(dana).should(seeThat(thePriceIsIncorrectlyDisplayed()));
+    }
+
+    @Test
+    public void shouldBeAbleToEvaluateErrorConsequenceGroups() {
+        givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
+                andPurchased().aPear().thatCosts(5).dollars());
+
+        when(dana).attemptsTo(haveThemDelivered);
+
+        then(dana).should(seeThat(thePriceIsIncorrectlyDisplayedWithAnError()));
+    }
+
+    @Test
+    public void shouldBeABleToEvaluateNestedGroup() {
+        givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
+                andPurchased().aPear().thatCosts(5).dollars());
+
+        when(dana).attemptsTo(haveThemDelivered);
+
+        then(dana).should(
+                seeThat(NestedThankYouMessage.theNestedThankYouMessage(), equalTo("Thank you!"))
+        );
+    }
+
+    @Test
+    public void shouldBeABleToEvaluateAVoidNestedGroup() {
+        givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
+                andPurchased().aPear().thatCosts(5).dollars());
+
+        when(dana).attemptsTo(haveThemDelivered);
+
+        then(dana).should(
+                seeThat(NestedThankYouMessage.theNestedThankYouMessage(), equalTo("Thank you!"))
+        );
+    }
+
+    @Test
+    public void shouldBeAbleToEvaluateAllTheConsequencesInANestedGroup() {
+        givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
+                andPurchased().aPear().thatCosts(5).dollars());
+
+        when(dana).attemptsTo(haveThemDelivered);
+
+        then(dana).should(
+                seeThat(theThankYouMessage(), equalTo("You're welcome")),
+                seeThat(theThankYouMessage(), equalTo("No problem")),
+                seeThat(theThankYouMessage(), equalTo("Thank you!"))
+        );
+    }
+
 
     @Test
     public void shouldBeAbleToAskForNiceThings() {

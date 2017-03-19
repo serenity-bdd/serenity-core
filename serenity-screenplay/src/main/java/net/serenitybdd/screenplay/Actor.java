@@ -9,6 +9,7 @@ import net.serenitybdd.screenplay.events.*;
 import net.serenitybdd.screenplay.exceptions.IgnoreStepException;
 import net.serenitybdd.screenplay.formatting.FormattedTitle;
 import net.thucydides.core.annotations.Pending;
+import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
 
 import java.lang.reflect.Method;
@@ -143,6 +144,23 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
 
+    public final void should(String groupStepName, Consequence... consequences) {
+
+        try {
+            String groupTitle = injectActorInto(groupStepName);
+            StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(groupTitle));
+            should(consequences);
+
+        } catch (Throwable error) {
+            throw error;
+        } finally {
+            StepEventBus.getEventBus().stepFinished();
+        }
+    }
+
+    private String injectActorInto(String groupStepName) {
+        return groupStepName.replaceAll("\\{0\\}", this.toString());
+    }
 
     public final void should(Consequence... consequences) {
 

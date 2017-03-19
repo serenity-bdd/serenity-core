@@ -1,6 +1,7 @@
 package net.serenitybdd.screenplay;
 
 import com.beust.jcommander.internal.Lists;
+import net.serenitybdd.screenplay.questions.ConsequenceGroup;
 import org.hamcrest.Matcher;
 
 import java.util.List;
@@ -39,11 +40,29 @@ public class GivenWhenThen {
     }
 
     public static <T> Consequence<T>[] seeThat(Question<? extends T> actual, Matcher<T>... expectedMatchers) {
+
+        if (thereAreNo(expectedMatchers)) {
+            return consequenceGroupFor(actual);
+        } else {
+            return consequencesForEachMatcher(actual, expectedMatchers);
+        }
+    }
+
+    private static <T> Consequence<T>[] consequenceGroupFor(Question<? extends T> actual) {
+        return new Consequence[]{ new ConsequenceGroup(actual)};
+    }
+
+    private static <T> Consequence<T>[] consequencesForEachMatcher(Question<? extends T> actual, Matcher<T>[] expectedMatchers) {
         List<Consequence<T>> consequences = Lists.newArrayList();
+
         for(Matcher<T> matcher : expectedMatchers) {
             consequences.add(new QuestionConsequence(actual, matcher));
         }
         return consequences.toArray(new Consequence[]{});
+    }
+
+    private static <T> boolean thereAreNo(Matcher<T>[] expectedMatchers) {
+        return expectedMatchers.length == 0;
     }
 
     public static <T> Consequence<T>[] seeThat(String subject, Question<? extends T> actual, Matcher<T>... expectedMatchers) {

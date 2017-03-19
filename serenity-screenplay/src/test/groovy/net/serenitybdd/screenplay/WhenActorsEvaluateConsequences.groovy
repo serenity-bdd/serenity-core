@@ -32,10 +32,71 @@ class WhenActorsEvaluateConsequences extends Specification{
         runner.run(new RunNotifier())
         def results = resultsFrom(runner.testOutcomes)
         then:
-        def outcome = results["shouldBeAbleToPurchaseAnItemWithAllTheRightDetails"]
+        def outcome = results["shouldBeABleToEvaluateAllTheConsequencesInAGroup"]
         outcome.result == FAILURE
-        outcome.testSteps.collect { it.result } == [SUCCESS, SUCCESS, FAILURE, FAILURE]
+        outcome.testSteps.collect { it.result } == [SUCCESS, SUCCESS, SUCCESS, FAILURE]
+        outcome.testSteps.get(3).getDescription() == "Dana should see the correct messages"
     }
+
+    def "should evaluate all the consequences in a group of nested consequences"() {
+        given:
+        def runner = new SerenityRunner(DanaGoesShoppingSample)
+        when:
+        runner.run(new RunNotifier())
+        def results = resultsFrom(runner.testOutcomes)
+        then:
+        def outcome = results["shouldBeABleToEvaluateNestedGroup"]
+        outcome.result == FAILURE
+        outcome.testSteps.collect { it.result } == [SUCCESS, SUCCESS, SUCCESS, FAILURE]
+        outcome.testSteps.get(3).getDescription() == "Dana should see the correct messages"
+    }
+
+    def "should evaluate all the consequences in a consequence group"() {
+        given:
+        def runner = new SerenityRunner(DanaGoesShoppingSample)
+        when:
+        runner.run(new RunNotifier())
+        def results = resultsFrom(runner.testOutcomes)
+        then:
+        def outcome = results["shouldBeAbleToEvaluateConsequenceGroups"]
+        outcome.result == SUCCESS
+        outcome.testSteps.collect { it.result } == [SUCCESS, SUCCESS, SUCCESS, SUCCESS]
+        outcome.testSteps.get(3).getDescription() == "Then the prices should be correctly displayed"
+    }
+
+
+    def "should evaluate all the consequences in a failing consequence group"() {
+        given:
+        def runner = new SerenityRunner(DanaGoesShoppingSample)
+        when:
+        runner.run(new RunNotifier())
+        def results = resultsFrom(runner.testOutcomes)
+        then:
+        def outcome = results["shouldBeAbleToEvaluateFailingConsequenceGroups"]
+        outcome.result == FAILURE
+        outcome.testSteps.collect { it.result } == [SUCCESS, SUCCESS, SUCCESS, FAILURE]
+        outcome.testSteps.get(3).getDescription() == "Then the prices should be correctly displayed"
+        outcome.testSteps.get(3).getChildren().collect { it.result } == [SUCCESS, FAILURE, SUCCESS]
+
+    }
+
+
+    def "should evaluate all the consequences in a consequence group with an error"() {
+        given:
+        def runner = new SerenityRunner(DanaGoesShoppingSample)
+        when:
+        runner.run(new RunNotifier())
+        def results = resultsFrom(runner.testOutcomes)
+        then:
+        def outcome = results["shouldBeAbleToEvaluateErrorConsequenceGroups"]
+        outcome.result == ERROR
+        outcome.testSteps.collect { it.result } == [SUCCESS, SUCCESS, SUCCESS, ERROR]
+        outcome.testSteps.get(3).getDescription() == "Then the prices should be correctly displayed"
+        outcome.testSteps.get(3).getChildren().collect { it.result } == [SUCCESS, ERROR, SUCCESS]
+
+    }
+
+
 
     def "should skip the consequences following a failed group of consequences"() {
         given:

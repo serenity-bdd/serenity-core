@@ -189,11 +189,11 @@ public class Actor implements PerformsTasks, SkipNested {
         try {
             eventBusInterface.startQuestion(FormattedTitle.ofConsequence(consequence));
             if (eventBusInterface.shouldIgnoreConsequences()) {
-                StepEventBus.getEventBus().stepIgnored();
+                eventBusInterface.reportStepIgnored();
             } else {
                 consequence.evaluateFor(this);
+                eventBusInterface.reportStepFinished();
             }
-            eventBusInterface.reportStepFinished();
         } catch (IgnoreStepException e) {
             eventBusInterface.reportStepIgnored();
         } catch (Throwable e) {

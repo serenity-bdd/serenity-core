@@ -45,10 +45,10 @@ class WhenActorsEvaluateConsequences extends Specification{
         runner.run(new RunNotifier())
         def results = resultsFrom(runner.testOutcomes)
         then:
-        def outcome = results["shouldBeABleToEvaluateNestedGroup"]
+        def outcome = results["shouldBeAbleToEvaluateNestedGroup"]
         outcome.result == FAILURE
         outcome.testSteps.collect { it.result } == [SUCCESS, SUCCESS, SUCCESS, FAILURE]
-        outcome.testSteps.get(3).getDescription() == "Dana should see the correct messages"
+        outcome.testSteps.get(3).getDescription() == "Then nested thank you message should be 'Thank you!'"
     }
 
     def "should evaluate all the consequences in a consequence group"() {

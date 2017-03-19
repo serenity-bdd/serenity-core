@@ -130,7 +130,7 @@ public class DanaGoesShoppingSample {
     }
 
     @Test
-    public void shouldBeABleToEvaluateNestedGroup() {
+    public void shouldBeAbleToEvaluateNestedGroup() {
         givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
                 andPurchased().aPear().thatCosts(5).dollars());
 

@@ -99,7 +99,6 @@ public class WhenDanaBrowsesTheWeb {
         and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
 
         then(dana).should(seeThat(the(ProfilePage.NAME), hasValue("Dana")));
-        then(dana).should(seeThat(the(ProfilePage.NAME), WebElementStateMatchers.isNotVisible()));
     }
 
     @Ignore("In progress")

@@ -60,6 +60,11 @@ public class UnresolvedTargetWebElementState implements WebElementState {
     }
 
     @Override
+    public boolean containsValue(String value) {
+        return false;
+    }
+
+    @Override
     public boolean containsOnlyText(String value) {
         return false;
     }

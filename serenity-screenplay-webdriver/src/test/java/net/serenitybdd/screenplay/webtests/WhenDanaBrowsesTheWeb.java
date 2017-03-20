@@ -86,6 +86,22 @@ public class WhenDanaBrowsesTheWeb {
         and(dana).should(seeThat(TheProfileName.isDisplayed()));
     }
 
+
+    @Test
+    public void danaCanMakeAssertionsAboutTheContentsOfWebElements() {
+
+        Actor dana = new Actor("Dana");
+        dana.can(BrowseTheWeb.with(firstBrowser));
+
+        givenThat(dana).has(openedTheApplication);
+
+        when(dana).attemptsTo(viewHerProfile);
+        and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
+
+        then(dana).should(seeThat(the(ProfilePage.NAME), hasValue("Dana")));
+        then(dana).should(seeThat(the(ProfilePage.NAME), WebElementStateMatchers.isNotVisible()));
+    }
+
     @Ignore("In progress")
     @Test
     public void danaCanWaitForTheStateOfTheWebPage() {

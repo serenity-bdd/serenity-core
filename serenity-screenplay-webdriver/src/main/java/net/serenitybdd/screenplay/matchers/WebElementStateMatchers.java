@@ -45,6 +45,10 @@ public class WebElementStateMatchers {
         return new ContainsTextMatcher(expectedText);
     }
 
+    public static <T extends WebElementState> Matcher<T> hasValue(String expectedText) {
+        return new HasValueMatcher<>(expectedText);
+    }
+
     public static <T extends WebElementState> Matcher<T> containsOnlyText(String expectedText) {
         return new ContainsOnlyTextMatcher(expectedText);
     }

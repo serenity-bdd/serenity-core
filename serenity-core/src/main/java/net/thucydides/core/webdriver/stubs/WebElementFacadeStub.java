@@ -216,6 +216,11 @@ public class WebElementFacadeStub implements WebElementFacade {
         return false;
     }
 
+    @Override
+    public boolean containsValue(String value) {
+        return false;
+    }
+
     /**
      * Does this element exactly match  given text?
      */

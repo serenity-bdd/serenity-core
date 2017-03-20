@@ -19,6 +19,14 @@ public class ContainsSelectOptionMatcher<T extends WebElementState> extends Type
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("contains option").appendText(expectedOption);
+        description.appendText("an element containing the option'").appendText(expectedOption).appendText("'");
     }
+
+    @Override
+    protected void describeMismatchSafely(T item, Description mismatchDescription) {
+        mismatchDescription.appendText("was ")
+                .appendValueList("[",",","]",item.getSelectOptions())
+                .appendText(WebElementStateDescription.forElement(item));
+    }
+
 }

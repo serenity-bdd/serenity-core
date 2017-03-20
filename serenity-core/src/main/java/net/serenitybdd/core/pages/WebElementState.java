@@ -1,5 +1,7 @@
 package net.serenitybdd.core.pages;
 
+import java.util.List;
+
 /**
  * This interface is a way of presenting state information about a web element without exposing (too much) of the
  * WebDriver API.
@@ -58,6 +60,11 @@ public interface WebElementState {
     boolean containsText(String value);
 
     /**
+     * Does this element contain a given value attribute?
+     */
+    boolean containsValue(String value);
+
+    /**
      * Does this element exactly match  given text?
      */
     boolean containsOnlyText(String value);
@@ -99,6 +106,8 @@ public interface WebElementState {
     String getSelectedVisibleTextValue();
 
     String getSelectedValue();
+
+    List<String> getSelectOptions();
 
     boolean isPresent();
 

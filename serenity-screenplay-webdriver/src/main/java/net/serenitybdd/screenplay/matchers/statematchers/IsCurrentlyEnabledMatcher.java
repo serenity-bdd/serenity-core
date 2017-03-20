@@ -12,6 +12,12 @@ public class IsCurrentlyEnabledMatcher<T extends WebElementState> extends BaseWe
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("is currently enabled");
+        description.appendText("an element that is currently enabled");
     }
+
+    @Override
+    protected void describeMismatchSafely(T item, Description mismatchDescription) {
+        mismatchDescription.appendText(WebElementStateDescription.forElement(item)).appendText(" was not enabled");
+    }
+
 }

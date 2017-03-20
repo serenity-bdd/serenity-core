@@ -13,6 +13,11 @@ public class IsCurrentlyVisibleMatcher<T extends WebElementState> extends TypeSa
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("is currently visible");
+        description.appendText("an element that is currently visible");
+    }
+
+    @Override
+    protected void describeMismatchSafely(T item, Description mismatchDescription) {
+        mismatchDescription.appendText(WebElementStateDescription.forElement(item)).appendText("was not visible");
     }
 }

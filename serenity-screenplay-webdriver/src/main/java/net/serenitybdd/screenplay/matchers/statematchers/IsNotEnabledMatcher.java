@@ -13,6 +13,12 @@ public class IsNotEnabledMatcher<T extends WebElementState> extends TypeSafeMatc
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("is not enabled");
+        description.appendText("an element that is not enabled");
     }
+
+    @Override
+    protected void describeMismatchSafely(T item, Description mismatchDescription) {
+        mismatchDescription.appendText(WebElementStateDescription.forElement(item)).appendText(" was enabled or not found");
+    }
+
 }

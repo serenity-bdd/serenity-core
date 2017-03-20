@@ -13,6 +13,11 @@ public class IsNotSelectedMatcher<T extends WebElementState> extends TypeSafeMat
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("is not selected");
+        description.appendText("an element that is not selected");
+    }
+
+    @Override
+    protected void describeMismatchSafely(T item, Description mismatchDescription) {
+        mismatchDescription.appendText(WebElementStateDescription.forElement(item)).appendText(" was selected");
     }
 }

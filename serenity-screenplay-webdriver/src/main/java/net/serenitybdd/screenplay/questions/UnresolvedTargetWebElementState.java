@@ -2,6 +2,9 @@ package net.serenitybdd.screenplay.questions;
 
 import net.serenitybdd.core.pages.WebElementState;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by john on 14/01/2016.
  */
@@ -115,6 +118,11 @@ public class UnresolvedTargetWebElementState implements WebElementState {
     @Override
     public String getSelectedValue() {
         return null;
+    }
+
+    @Override
+    public List<String> getSelectOptions() {
+        return new ArrayList<>();
     }
 
     @Override

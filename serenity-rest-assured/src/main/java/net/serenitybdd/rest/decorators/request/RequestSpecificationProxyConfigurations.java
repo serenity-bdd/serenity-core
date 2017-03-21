@@ -22,38 +22,4 @@ abstract class RequestSpecificationProxyConfigurations extends RequestSpecificat
         super(core);
     }
 
-    @Override
-    public RequestSpecification proxy(String host, int port) {
-        return core.proxy(host, port);
-    }
-
-    @Override
-    public RequestSpecification proxy(String host) {
-        return core.proxy(host);
-    }
-
-    @Override
-    public RequestSpecification proxy(int port) {
-        return core.proxy(port);
-    }
-
-    @Override
-    public RequestSpecification proxy(URI uri) {
-        return core.proxy(uri);
-    }
-
-    @Override
-    public RequestSpecification proxy(ProxySpecification proxySpecification) {
-        return core.proxy(proxySpecification);
-    }
-
-    @Override
-    public RequestSpecification proxy(String host, int port, String scheme) {
-        return core.proxy(host, port, scheme);
-    }
-
-    @Override
-    public ProxySpecification getProxySpecification() {
-        return core.getProxySpecification();
-    }
 }

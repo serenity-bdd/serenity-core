@@ -3,12 +3,15 @@ package net.serenitybdd.rest.decorators.request;
 import com.jayway.restassured.config.RestAssuredConfig;
 import com.jayway.restassured.internal.RequestSpecificationImpl;
 import com.jayway.restassured.internal.ResponseSpecificationImpl;
-import com.jayway.restassured.response.*;
-import com.jayway.restassured.specification.*;
-import net.serenitybdd.rest.utils.RestReportingHelper;
-import net.serenitybdd.rest.utils.ReflectionHelper;
+import com.jayway.restassured.response.Response;
+import com.jayway.restassured.specification.FilterableRequestSpecification;
+import com.jayway.restassured.specification.RequestSpecification;
+import com.jayway.restassured.specification.ResponseSpecification;
 import net.serenitybdd.rest.decorators.ResponseDecorated;
 import net.serenitybdd.rest.decorators.ResponseSpecificationDecorated;
+import net.serenitybdd.rest.utils.ReflectionHelper;
+import net.serenitybdd.rest.utils.RestReportingHelper;
+import net.serenitybdd.rest.utils.RestSpecificationFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,7 +104,7 @@ abstract class RequestSpecificationInitialisation implements FilterableRequestSp
         if (specification instanceof ResponseSpecificationDecorated) {
             return specification;
         } else {
-            return new ResponseSpecificationDecorated((ResponseSpecificationImpl) specification);
+            return RestSpecificationFactory.getInstrumentedResponseSpecification((ResponseSpecificationImpl) specification);
         }
     }
 

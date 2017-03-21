@@ -65,11 +65,6 @@ abstract class RequestSpecificationSecurityConfigurations extends RequestSpecifi
         return authentication();
     }
 
-    @Override
-    public AuthenticationScheme getAuthenticationScheme() {
-        return core.getAuthenticationScheme();
-    }
-
     /**
      * Method created ONLY for using in groovy (rest assured internals)
      */

@@ -1,6 +1,5 @@
 package net.serenitybdd.rest.decorators.request;
 
-import com.jayway.restassured.internal.MapCreator;
 import com.jayway.restassured.internal.RequestSpecificationImpl;
 import com.jayway.restassured.specification.FilterableRequestSpecification;
 import com.jayway.restassured.specification.RequestSpecification;
@@ -9,8 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Map;
-
-import static com.jayway.restassured.internal.assertion.AssertParameter.notNull;
 
 /**
  * User: YamStranger
@@ -202,25 +199,5 @@ abstract class RequestSpecificationParametersConfigurations extends RequestSpeci
     public RequestSpecification pathParams(Map<String, ?> parameterNameValuePairs) {
         core.pathParams(parameterNameValuePairs);
         return this;
-    }
-
-    @Override
-    public Map<String, ?> getPathParams() {
-        return core.getPathParams();
-    }
-
-    @Override
-    public Map<String, ?> getQueryParams() {
-        return core.getQueryParams();
-    }
-
-    @Override
-    public Map<String, ?> getRequestParams() {
-        return core.getRequestParams();
-    }
-
-    @Override
-    public Map<String, ?> getFormParams() {
-        return core.getFormParams();
     }
 }

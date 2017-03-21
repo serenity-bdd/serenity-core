@@ -1,12 +1,12 @@
 package net.serenitybdd.rest.decorators.request;
 
 import com.jayway.restassured.internal.RequestSpecificationImpl;
-import com.jayway.restassured.response.*;
-import com.jayway.restassured.specification.*;
+import com.jayway.restassured.response.Response;
+import com.jayway.restassured.specification.FilterableRequestSpecification;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.rest.RestMethod;
-import net.serenitybdd.rest.utils.RestExecutionHelper;
 import net.serenitybdd.rest.stubs.ResponseStub;
+import net.serenitybdd.rest.utils.RestExecutionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ import static net.thucydides.core.steps.StepEventBus.getEventBus;
  * Date: 3/16/16
  * Time: 2:08 PM
  */
-public class RequestSpecificationDecorated extends RequestSpecificationAdvancedConfiguration
+public abstract class RequestSpecificationDecorated extends RequestSpecificationAdvancedConfiguration
         implements FilterableRequestSpecification {
     private static final Logger log = LoggerFactory.getLogger(RequestSpecificationDecorated.class);
     private Response lastResponse;

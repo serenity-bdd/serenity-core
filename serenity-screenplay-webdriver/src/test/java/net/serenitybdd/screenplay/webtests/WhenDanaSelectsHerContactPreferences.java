@@ -66,7 +66,22 @@ public class WhenDanaSelectsHerContactPreferences {
         when(dana).attemptsTo(DeselectAll.contactPreferences());
         then(dana).should(seeThat(ContactPreferences.nowSelected(), empty()));
     }
+    
+    @Test
+    public void danaCanSelectHerCountry() {
 
+        Actor dana = new Actor("Dana");
+        dana.can(BrowseTheWeb.with(firstBrowser));
+
+        givenThat(dana).has(openedTheApplication);
+
+        when(dana).attemptsTo(viewedHerProfile);
+        then(dana).should(seeThat(ContactPreferences.nowSelected(), hasItems("Email", "Post")));
+
+        and(dana).attemptsTo(SelectContactPreference.withText("SMS Message"));
+
+        then(dana).should(seeThat(ContactPreferences.nowSelected(), hasItems("Email", "Post", "SMS Message")));
+    }
 
     @Steps
     OpenTheApplication openedTheApplication;

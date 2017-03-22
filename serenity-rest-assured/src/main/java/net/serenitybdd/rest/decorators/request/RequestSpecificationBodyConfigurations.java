@@ -15,22 +15,13 @@ import java.io.InputStream;
 
 import static net.serenitybdd.rest.HeaderNames.*;
 
-/**
- * User: YamStranger
- * Date: 3/16/16
- * Time: 2:08 PM
- */
+
 abstract class RequestSpecificationBodyConfigurations extends RequestSpecificationHeaderConfigurations
         implements FilterableRequestSpecification {
     private static final Logger log = LoggerFactory.getLogger(RequestSpecificationBodyConfigurations.class);
 
     public RequestSpecificationBodyConfigurations(RequestSpecificationImpl core) {
         super(core);
-    }
-
-    @Override
-    public <T> T getBody() {
-        return core.getBody();
     }
 
     @Override
@@ -57,11 +48,6 @@ abstract class RequestSpecificationBodyConfigurations extends RequestSpecificati
 
         core.body(object, mapperType);
         return this;
-    }
-
-    @Override
-    public String getRequestContentType() {
-        return core.getRequestContentType();
     }
 
     @Override

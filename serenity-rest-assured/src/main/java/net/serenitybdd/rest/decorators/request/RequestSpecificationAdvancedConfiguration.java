@@ -18,8 +18,5 @@ abstract class RequestSpecificationAdvancedConfiguration extends RequestSpecific
     public RequestSpecificationAdvancedConfiguration(RequestSpecificationImpl core) {
         super(core);
     }
-    @Override
-    public HttpClient getHttpClient() {
-        return core.getHttpClient();
-    }
+
 }

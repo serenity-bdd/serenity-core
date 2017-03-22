@@ -21,11 +21,6 @@ abstract class RequestSpecificationConfigurable extends RequestSpecificationInit
     }
 
     @Override
-    public int getPort() {
-        return core.getPort();
-    }
-
-    @Override
     public RequestSpecification config(final RestAssuredConfig config) {
         core.config(config);
         return this;
@@ -43,19 +38,9 @@ abstract class RequestSpecificationConfigurable extends RequestSpecificationInit
     }
 
     @Override
-    public String getBaseUri() {
-        return core.getBaseUri();
-    }
-
-    @Override
     public RequestSpecification basePath(final String basePath) {
         core.basePath(basePath);
         return this;
-    }
-
-    @Override
-    public String getBasePath() {
-        return core.getBasePath();
     }
 
     @Override

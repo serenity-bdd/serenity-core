@@ -16,7 +16,7 @@ public class SelectByValueFromTarget implements Interaction {
 
     @Step("{0} selects #value in #target")
     public <T extends Actor> void performAs(T theUser) {
-        target.resolveFor(theUser).selectByVisibleText(value);
+        target.resolveFor(theUser).selectByValue(value);
     }
 
 

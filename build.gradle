@@ -231,6 +231,7 @@ subprojects {
             exclude group: "org.hamcrest", module:"hamcrest-core"
             exclude group: "org.objenesis", module:"objenesis"
         }
+        compile 'net.bytebuddy:byte-buddy:1.6.12'
 
         testCompile ("ch.qos.logback:logback-classic:1.1.7") {
             exclude group: "org.slf4j", module: 'slf4j-api'

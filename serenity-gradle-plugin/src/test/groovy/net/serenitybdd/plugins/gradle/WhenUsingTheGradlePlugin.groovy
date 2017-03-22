@@ -25,12 +25,12 @@ class WhenUsingTheGradlePlugin extends Specification {
     @Ignore('should be upgraded to use gradle 2.10 features')
     def "the 'serenity' project property is used to configure the build"() {
         given:
-        Project project = ProjectBuilder.builder().build()
+            Project project = ProjectBuilder.builder().build()
         when:
-        project.apply plugin: 'java'
-        project.apply plugin: 'net.serenity-bdd.aggregator'
+            project.apply plugin: 'java'
+            project.apply plugin: 'net.serenity-bdd.aggregator'
         then:
-        project.serenity.outputDirectory == Paths.get("").resolve('target/site/serenity').toAbsolutePath()
+            project.serenity.outputDirectory == Paths.get("").resolve('target/site/serenity').toAbsolutePath()
     }
 
     def "should add the checkOutcomes task to a project"() {

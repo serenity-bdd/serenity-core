@@ -4,6 +4,7 @@ import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.webtests.questions.ContactPreferences;
+import net.serenitybdd.screenplay.webtests.questions.CountryQuestion;
 import net.serenitybdd.screenplay.webtests.tasks.*;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
@@ -76,11 +77,11 @@ public class WhenDanaSelectsHerContactPreferences {
         givenThat(dana).has(openedTheApplication);
 
         when(dana).attemptsTo(viewedHerProfile);
-        then(dana).should(seeThat(ContactPreferences.nowSelected(), hasItems("Email", "Post")));
+        then(dana).should(seeThat(CountryQuestion.nowSelected(), hasItems("United Kingdom")));
 
         and(dana).attemptsTo(SelectCountry.withCountryCode("ES"));
 
-        then(dana).should(seeThat(ContactPreferences.nowSelected(), hasItems("Email", "Post", "SMS Message")));
+        then(dana).should(seeThat(CountryQuestion.nowSelected(), hasItems("Spain")));
     }
 
     @Steps

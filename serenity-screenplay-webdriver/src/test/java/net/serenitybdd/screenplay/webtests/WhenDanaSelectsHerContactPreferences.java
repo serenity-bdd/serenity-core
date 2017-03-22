@@ -78,7 +78,7 @@ public class WhenDanaSelectsHerContactPreferences {
         when(dana).attemptsTo(viewedHerProfile);
         then(dana).should(seeThat(ContactPreferences.nowSelected(), hasItems("Email", "Post")));
 
-        and(dana).attemptsTo(SelectContactPreference.withText("SMS Message"));
+        and(dana).attemptsTo(SelectCountry.withCountryCode("ES"));
 
         then(dana).should(seeThat(ContactPreferences.nowSelected(), hasItems("Email", "Post", "SMS Message")));
     }

@@ -1364,13 +1364,20 @@ public class TestOutcome {
             this.testFailureCause = failureCause.getRootCause();
             this.testFailureSummary = failureSummaryFrom(failureCause.getRootCause());
             this.setAnnotatedResult(failureCause.getAnnotatedResult());
-        } else {
+        } else if (isMoreSevereThanPreviousErrors(failureCause)) {
             this.testFailureClassname = AssertionError.class.getName();
             this.testFailureMessage = this.testFailureMessage + System.lineSeparator() + failureCause.getTestFailureMessage();
             this.testFailureSummary = failureSummaryFrom(failureCause.getRootCause());
             this.setAnnotatedResult(TestResultComparison.overallResultFor(this.getAnnotatedResult(), failureCause.getAnnotatedResult()));
         }
 
+    }
+
+    private FailureAnalysis failureAnalysis = new FailureAnalysis();
+
+    private boolean isMoreSevereThanPreviousErrors(TestFailureCause failureCause) {
+        TestResult latestFailure = failureAnalysis.resultFor(this.getTestFailureCause().exceptionClass());
+        return latestFailure.isMoreSevereThan(getResult());
     }
 
     private boolean noStepHasFailedSoFar() {

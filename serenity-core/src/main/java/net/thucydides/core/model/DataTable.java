@@ -52,7 +52,7 @@ public class DataTable {
     }
 
     public Optional<String> scenarioOutline() {
-        return Optional.of(scenarioOutline);
+        return Optional.fromNullable(scenarioOutline);
     }
 
     public List<String> getHeaders() {

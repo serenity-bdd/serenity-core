@@ -40,7 +40,6 @@ a:active {
 
 body {
     background-color: #f7f8f3;
-    color: #0E78AD
 }
 
 .results-page {
@@ -50,6 +49,10 @@ body {
 .outcome-icon {
     width: 25px;
     height: 25px;
+}
+
+.step-icon {
+    color: #0E78AD;
 }
 
 .middlecontent

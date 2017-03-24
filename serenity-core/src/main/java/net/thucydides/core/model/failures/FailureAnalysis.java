@@ -52,22 +52,22 @@ public class FailureAnalysis {
         return ERROR;
     }
 
-    private final List<Class<?>> DEFAULT_FAILURE_TYPES = Lists.newArrayList();
+    private static final List<Class<?>> DEFAULT_FAILURE_TYPES = Lists.newArrayList();
     {
         DEFAULT_FAILURE_TYPES.addAll(ImmutableList.of(AssertionError.class, CausesAssertionFailure.class));
     }
 
-    private final List<Class<?>> DEFAULT_COMPROMISED_TYPES = Lists.newArrayList();
+    private static final List<Class<?>> DEFAULT_COMPROMISED_TYPES = Lists.newArrayList();
     {
         DEFAULT_COMPROMISED_TYPES.addAll(ImmutableList.of(CausesCompromisedTestFailure.class));
     }
 
-    private final List<Class<?>> DEFAULT_PENDING_TYPES = Lists.newArrayList();
+    private static final List<Class<?>> DEFAULT_PENDING_TYPES = Lists.newArrayList();
     {
         DEFAULT_PENDING_TYPES.addAll(ImmutableList.of(PendingStepException.class, PendingException.class));
     }
 
-    private final List<Class<?>> DEFAULT_ERROR = Lists.newArrayList();
+    private static final List<Class<?>> DEFAULT_ERROR = Lists.newArrayList();
     {
         DEFAULT_ERROR.addAll(ImmutableList.of(Error.class));
     }

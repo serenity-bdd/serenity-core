@@ -1,6 +1,7 @@
 package net.thucydides.core.model;
 
 import ch.lambdaj.function.convert.Converter;
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
@@ -21,20 +22,22 @@ public class DataTable {
     private final List<String> headers;
     private final List<DataTableRow> rows;
     private final boolean predefinedRows;
+    private final String scenarioOutline;
     private List<DataSetDescriptor> dataSetDescriptors;
     private transient AtomicInteger currentRow = new AtomicInteger(0);
 
     private final static List<DataTableRow> NO_ROWS = Lists.newArrayList();
 
     protected DataTable(List<String> headers, List<DataTableRow> rows) {
-        this(headers, new CopyOnWriteArrayList(rows), null, null, ImmutableList.of(DataSetDescriptor.DEFAULT_DESCRIPTOR));
+        this(null, headers, new CopyOnWriteArrayList(rows), null, null, ImmutableList.of(DataSetDescriptor.DEFAULT_DESCRIPTOR));
     }
 
     protected DataTable(List<String> headers, List<DataTableRow> rows, String title, String description) {
-        this(headers, new CopyOnWriteArrayList(rows), title, description, ImmutableList.of(new DataSetDescriptor(0,0,title, description)));
+        this(null, headers, new CopyOnWriteArrayList(rows), title, description, ImmutableList.of(new DataSetDescriptor(0,0,title, description)));
     }
 
-    protected DataTable(List<String> headers, List<DataTableRow> rows, String title, String description, List<DataSetDescriptor> dataSetDescriptors) {
+    protected DataTable(String scenarioOutline, List<String> headers, List<DataTableRow> rows, String title, String description, List<DataSetDescriptor> dataSetDescriptors) {
+        this.scenarioOutline = scenarioOutline;
         this.headers = headers;
         this.rows = new CopyOnWriteArrayList(rows);
         this.predefinedRows = !rows.isEmpty();
@@ -46,6 +49,10 @@ public class DataTable {
 
     public static DataTableBuilder withHeaders(List<String> headers) {
         return new DataTableBuilder(headers);
+    }
+
+    public Optional<String> scenarioOutline() {
+        return Optional.of(scenarioOutline);
     }
 
     public List<String> getHeaders() {
@@ -174,6 +181,7 @@ public class DataTable {
     }
 
     public static class DataTableBuilder {
+        final String scenarioOutline;
         final List<String> headers;
         final List<DataTableRow> rows;
         final String description;
@@ -181,11 +189,12 @@ public class DataTable {
         final List<DataSetDescriptor> descriptors;
 
         public DataTableBuilder(List<String> headers) {
-            this(headers, NO_ROWS, null, null, ImmutableList.of(DataSetDescriptor.DEFAULT_DESCRIPTOR));
+            this(null, headers, NO_ROWS, null, null, ImmutableList.of(DataSetDescriptor.DEFAULT_DESCRIPTOR));
         }
 
-        public DataTableBuilder(List<String> headers, List<DataTableRow> rows, String title,
+        public DataTableBuilder(String scenarioOutline, List<String> headers, List<DataTableRow> rows, String title,
                                 String description, List<DataSetDescriptor> descriptors) {
+            this.scenarioOutline = scenarioOutline;
             this.headers = headers;
             this.rows = rows;
             this.description = description;
@@ -193,35 +202,39 @@ public class DataTable {
             this.descriptors = descriptors;
         }
 
+        public DataTableBuilder andScenarioOutline(String scenarioOutline) {
+            return new DataTableBuilder(scenarioOutline, headers, rows, title, description, descriptors);
+        }
+
         public DataTableBuilder andCopyRowDataFrom(DataTableRow row) {
             List<DataTableRow> rows = new ArrayList<DataTableRow>();
             rows.add(new DataTableRow(row.getValues()));
-            return new DataTableBuilder(headers, rows, title, description, descriptors);
+            return new DataTableBuilder(scenarioOutline, headers, rows, title, description, descriptors);
         }
 
         public DataTableBuilder andTitle(String title) {
-            return new DataTableBuilder(headers, rows, title, description, descriptors);
+            return new DataTableBuilder(scenarioOutline, headers, rows, title, description, descriptors);
         }
 
         public DataTableBuilder andDescription(String description) {
-            return new DataTableBuilder(headers, rows, title, description, descriptors);
+            return new DataTableBuilder(scenarioOutline, headers, rows, title, description, descriptors);
         }
 
         public DataTable build() {
-            return new DataTable(headers, rows, title, description, descriptors);
+            return new DataTable(scenarioOutline, headers, rows, title, description, descriptors);
         }
 
         public DataTableBuilder andRows(List<List<Object>> rows) {
-            return new DataTableBuilder(headers, convert(rows, toDataTableRows()), title, description, descriptors);
+            return new DataTableBuilder(scenarioOutline, headers, convert(rows, toDataTableRows()), title, description, descriptors);
         }
 
         public DataTableBuilder andRowData(List<DataTableRow> rows) {
-            return new DataTableBuilder(headers, rows, title, description, descriptors);
+            return new DataTableBuilder(scenarioOutline, headers, rows, title, description, descriptors);
         }
 
 
         public DataTableBuilder andDescriptors(List<DataSetDescriptor> descriptors) {
-            return new DataTableBuilder(headers, rows, title, description, descriptors);
+            return new DataTableBuilder(scenarioOutline, headers, rows, title, description, descriptors);
         }
 
         public DataTableBuilder andMappedRows(List<? extends Map<String, ? extends Object>> mappedRows) {
@@ -229,7 +242,7 @@ public class DataTable {
             for (Map<String, ? extends Object> mappedRow : mappedRows) {
                 rowData.add(rowDataFrom(mappedRow));
             }
-            return new DataTableBuilder(headers, convert(rowData, toDataTableRows()), title, description, descriptors);
+            return new DataTableBuilder(scenarioOutline, headers, convert(rowData, toDataTableRows()), title, description, descriptors);
         }
 
         private Converter<List<Object>, DataTableRow> toDataTableRows() {

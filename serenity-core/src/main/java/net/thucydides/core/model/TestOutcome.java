@@ -1373,11 +1373,18 @@ public class TestOutcome {
 
     }
 
-    private FailureAnalysis failureAnalysis = new FailureAnalysis();
-
     private boolean isMoreSevereThanPreviousErrors(TestFailureCause failureCause) {
-        TestResult latestFailure = failureAnalysis.resultFor(this.getTestFailureCause().exceptionClass());
+        TestResult latestFailure = new FailureAnalysis().resultFor(this.getTestFailureCause().exceptionClass());
         return latestFailure.isMoreSevereThan(getResult());
+    }
+
+    public Optional<TestStep> testStepWithDescription(String expectedDescription) {
+        for (TestStep step : reverse(getFlattenedTestSteps())) {
+            if (step.getDescription().equalsIgnoreCase(expectedDescription)) {
+                return Optional.of(step);
+            }
+        }
+        return Optional.absent();
     }
 
     private boolean noStepHasFailedSoFar() {
@@ -1917,6 +1924,22 @@ public class TestOutcome {
         return testSteps.size();
     }
 
+    public Integer getRunningStepCount() {
+        return runningStepCountOf(testSteps);
+    }
+
+    private Integer runningStepCountOf(List<TestStep> steps) {
+        if (tailOf(steps).isPresent() && tailOf(steps).get().hasChildren()) {
+            return runningStepCountOf(tailOf(steps).get().getChildren());
+        } else {
+            return steps.size();
+        }
+    }
+
+    private Optional<TestStep> tailOf(List<TestStep> testSteps) {
+        return (testSteps.isEmpty()) ? Optional.<TestStep>absent() : Optional.of(testSteps.get(testSteps.size() - 1));
+    }
+
     public Integer getNestedStepCount() {
         return getFlattenedTestSteps().size();
     }
@@ -2160,6 +2183,11 @@ public class TestOutcome {
         if (!isDataDriven() || getTestSteps().isEmpty() || !atLeastOneStepHasChildren()) {
             return "";
         }
+
+        if (dataTable.scenarioOutline().isPresent()) {
+            return dataTable.scenarioOutline().get();
+        }
+
         StringBuilder sampleScenario = new StringBuilder();
         for (TestStep step : getStepChildren()) {
             sampleScenario.append(

@@ -17,8 +17,8 @@ public class EventBusInterface {
         StepEventBus.getEventBus().stepFailed(new StepFailure(consequenceDescription, e));
     }
 
-    public int getStepCount() {
-        return StepEventBus.getEventBus().getBaseStepListener().getStepCount();
+    public int getRunningStepCount() {
+        return StepEventBus.getEventBus().getBaseStepListener().getRunningStepCount();
     }
 
     public void mergePreviousStep() {
@@ -31,6 +31,10 @@ public class EventBusInterface {
 
     public void startQuestion(String title) {
         StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(title).asAQuestion());
+    }
+
+    public void finishQuestion() {
+        StepEventBus.getEventBus().stepFinished();
     }
 
     public void reportStepFinished() {
@@ -49,6 +53,7 @@ public class EventBusInterface {
 
 
     public boolean aStepHasFailed() { return StepEventBus.getEventBus().getBaseStepListener().aStepHasFailed(); }
+    public boolean aStepHasFailedInTheCurrentExample() { return StepEventBus.getEventBus().getBaseStepListener().aStepHasFailedInTheCurrentExample(); }
 
     public boolean shouldIgnoreConsequences() {
         if (StepEventBus.getEventBus().softAssertsActive() && !StepEventBus.getEventBus().currentTestIsSuspended() ) {
@@ -65,4 +70,7 @@ public class EventBusInterface {
         StepEventBus.getEventBus().disableSoftAsserts();
     }
 
+    public boolean stepsAreRunning() {
+        return StepEventBus.getEventBus().areStepsRunning();
+    }
 }

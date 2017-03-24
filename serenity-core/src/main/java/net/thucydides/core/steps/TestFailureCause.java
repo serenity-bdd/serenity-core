@@ -11,9 +11,10 @@ public class TestFailureCause {
     private final String testFailureClassname;
     private final String testFailureMessage;
     private final TestResult annotatedResult;
+    private final transient Throwable originalCause;
 
-    public TestFailureCause(FailureCause rootCause, String testFailureClassname, String testFailureMessage, TestResult annotatedResult) {
-
+    public TestFailureCause(Throwable originalCause, FailureCause rootCause, String testFailureClassname, String testFailureMessage, TestResult annotatedResult) {
+        this.originalCause = originalCause;
         this.rootCause = rootCause;
         this.testFailureClassname = testFailureClassname;
         this.testFailureMessage = testFailureMessage;
@@ -27,9 +28,9 @@ public class TestFailureCause {
             String testFailureClassname = rootCauseAnalyser.getRootCause().getErrorType();
             String testFailureMessage = rootCauseAnalyser.getMessage();
             TestResult annotatedResult = new FailureAnalysis().resultFor(rootCause.exceptionClass());
-            return new TestFailureCause(rootCause, testFailureClassname, testFailureMessage, annotatedResult);
+            return new TestFailureCause(cause, rootCause, testFailureClassname, testFailureMessage, annotatedResult);
         } else {
-            return new TestFailureCause(null, "", "", TestResult.UNDEFINED);
+            return new TestFailureCause(null, null, "", "", TestResult.UNDEFINED);
         }
     }
 
@@ -52,4 +53,6 @@ public class TestFailureCause {
     public boolean isDefined() {
         return (!testFailureClassname.isEmpty());
     }
+
+    public Throwable getOriginalCause() { return originalCause; }
 }

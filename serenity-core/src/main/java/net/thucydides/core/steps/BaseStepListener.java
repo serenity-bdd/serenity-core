@@ -90,8 +90,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private Configuration configuration;
 
-    private boolean inFluentStepSequence;
-
     private List<String> storywideIssues;
 
     private List<TestTag> storywideTags;
@@ -141,6 +139,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public int getStepCount() {
         return getCurrentTestOutcome().getStepCount();
+    }
+
+    public int getRunningStepCount() {
+        return getCurrentTestOutcome().getRunningStepCount();
     }
 
     public void updateOverallResults() {
@@ -216,7 +218,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         this.currentStepStack = new Stack<>();
         this.currentGroupStack = new Stack<>();
         this.outputDirectory = outputDirectory;
-        this.inFluentStepSequence = false;
         this.storywideIssues = Lists.newArrayList();
         this.storywideTags = Lists.newArrayList();
         //this.webdriverManager = injector.getInstance(WebdriverManager.class);
@@ -626,6 +627,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public void lastStepFailed(StepFailure failure) {
         takeEndOfStepScreenshotFor(FAILURE);
         getCurrentTestOutcome().lastStepFailedWith(failure);
+        lastFailingExample = currentExample;
     }
 
 
@@ -636,6 +638,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (shouldTagErrors()) {
             addTagFor(getCurrentTestOutcome());
         }
+        lastFailingExample = currentExample;
     }
 
     private void addTagFor(TestOutcome testOutcome) {
@@ -681,7 +684,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (!currentStepMethodStack.isEmpty()) {
             currentStepMethodStack.pop();
         }
-        if ((!inFluentStepSequence) && currentStepExists()) {
+        if (currentStepExists()) {
             TestStep finishedStep = currentStepStack.pop();
             finishedStep.recordDuration();
             if (result != null) {
@@ -870,6 +873,13 @@ public class BaseStepListener implements StepListener, StepPublisher {
                         || getCurrentTestOutcome().getResult() == TestResult.COMPROMISED));
     }
 
+    public boolean aStepHasFailedInTheCurrentExample() {
+        if (currentExample == 0) {
+            return aStepHasFailed();
+        }
+        return (aStepHasFailed() && (currentExample == lastFailingExample));
+    }
+
     public FailureCause getTestFailureCause() {
         return getCurrentTestOutcome().getTestFailureCause();
     }
@@ -936,6 +946,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     int currentExample = 0;
+    int lastFailingExample = 0;
 
     /**
      * The current scenario is a data-driven scenario using test data from the specified table.
@@ -943,6 +954,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public void useExamplesFrom(DataTable table) {
         getCurrentTestOutcome().useExamplesFrom(table);
         currentExample = 0;
+        lastFailingExample = 0;
     }
 
     public void addNewExamplesFrom(DataTable table) {

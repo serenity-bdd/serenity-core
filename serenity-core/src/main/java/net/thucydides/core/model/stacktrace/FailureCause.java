@@ -28,6 +28,10 @@ public class FailureCause {
     private String errorType;
     private String message;
     private StackTraceElement[] stackTrace;
+    /**
+     * Used within a test run but not stored for reporting
+     */
+    private transient Throwable originalCause;
 
     public FailureCause() {
     }
@@ -36,10 +40,19 @@ public class FailureCause {
         this.errorType = exceptionClassName(cause);
         this.message = cause.getMessage();
         this.stackTrace = cause.getStackTrace();
+        this.originalCause = cause;
     }
 
     public FailureCause(Throwable cause, StackTraceElement[] stackTrace) {
-        this(exceptionClassName(cause), cause.getMessage(), stackTrace);
+        this(cause, exceptionClassName(cause), cause.getMessage(), stackTrace);
+    }
+
+    public FailureCause(Throwable cause, String exceptionClassName, String message, StackTraceElement[] stackTrace) {
+        this.errorType = exceptionClassName;
+        this.message = message;
+        this.stackTrace = stackTrace;
+        this.originalCause = cause;
+
     }
 
     private static String exceptionClassName(Throwable cause) {
@@ -79,6 +92,8 @@ public class FailureCause {
     public String getErrorType() {
         return errorType;
     }
+
+    public Throwable getOriginalCause() { return originalCause; }
 
     public String getSimpleErrorType() {
         return NameConverter.humanize(lastElementOf(Splitter.on(".").splitToList(errorType)));

@@ -28,6 +28,7 @@ public class Actor implements PerformsTasks, SkipNested {
     private Map<String, Object> notepad = newHashMap();
     private Map<Class, Ability> abilities = newHashMap();
 
+
     public Actor(String name) {
         this.name = name;
     }
@@ -181,8 +182,11 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     private boolean anOutOfStepErrorOccurred() {
-        return eventBusInterface.aStepHasFailed()
-                && eventBusInterface.getStepCount() > taskTally.getPerformedTaskCount();
+        if (eventBusInterface.aStepHasFailedInTheCurrentExample()) {
+            return (eventBusInterface.getRunningStepCount()) > taskTally.getPerformedTaskCount();
+        } else {
+            return false;
+        }
     }
 
     private <T> void check(Consequence<T> consequence, ErrorTally errorTally) {

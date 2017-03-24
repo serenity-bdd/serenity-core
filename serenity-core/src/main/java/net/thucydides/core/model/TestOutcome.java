@@ -2144,6 +2144,15 @@ public class TestOutcome {
 
     final static private List<String> NO_HEADERS = Lists.newArrayList();
 
+    private List<TestStep> getStepChildren() {
+        List<TestStep> firstLevel = firstNonPreconditionStepChildren();
+        if (firstLevel.size() > 0 && firstLevel.get(0).getDescription().matches("^\\[\\d+\\]\\s\\{.+")) {
+            firstLevel = firstLevel.get(0).getChildren();
+        }
+        return firstLevel;
+    }
+
+
     public List<String> getExampleFields() {
         return (isDataDriven()) ? getDataTable().getHeaders() : NO_HEADERS;
     }
@@ -2162,8 +2171,26 @@ public class TestOutcome {
         if (!isDataDriven() || getTestSteps().isEmpty() || !atLeastOneStepHasChildren()) {
             return "";
         }
-        return dataTable.scenarioOutline().or("");
+
+        if (dataTable.scenarioOutline().isPresent()) {
+            return dataTable.scenarioOutline().get();
+        }
+
+        StringBuilder sampleScenario = new StringBuilder();
+        for (TestStep step : getStepChildren()) {
+            sampleScenario.append(
+                    withPlaceholderSubstitutes(step.getDescription()))
+                    .append("\n");
+        }
+        return sampleScenario.length() > 1 ? sampleScenario.substring(0, sampleScenario.length() - 1) : "";
     }
+
+    private String withPlaceholderSubstitutes(String stepName) {
+        if (dataTable == null || dataTable.getRows().isEmpty()) { return stepName; }
+
+        return dataTable.restoreVariablesIn(stepName);
+    }
+
 
     private boolean atLeastOneStepHasChildren() {
         return !filter(having(on(TestStep.class).hasChildren(), is(true)), getTestSteps()).isEmpty();

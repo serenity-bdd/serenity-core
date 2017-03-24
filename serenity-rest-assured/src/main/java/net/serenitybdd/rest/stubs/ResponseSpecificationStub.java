@@ -1,5 +1,6 @@
 package net.serenitybdd.rest.stubs;
 
+import com.jayway.restassured.function.RestAssuredFunction;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.parsing.Parser;
 import com.jayway.restassured.response.Response;
@@ -13,6 +14,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by john on 23/07/2015.
@@ -35,6 +37,16 @@ public class ResponseSpecificationStub implements ResponseSpecification {
 
     @Override
     public ResponseSpecification content(final String key, final Matcher<?> matcher, final Object... additionalKeyMatcherPairs) {
+        return this;
+    }
+
+    @Override
+    public ResponseSpecification time(Matcher<Long> matcher) {
+        return this;
+    }
+
+    @Override
+    public ResponseSpecification time(Matcher<Long> matcher, TimeUnit timeUnit) {
         return this;
     }
 
@@ -80,6 +92,11 @@ public class ResponseSpecificationStub implements ResponseSpecification {
 
     @Override
     public ResponseSpecification header(final String headerName, final Matcher<?> expectedValueMatcher) {
+        return this;
+    }
+
+    @Override
+    public <T> ResponseSpecification header(String s, RestAssuredFunction<String, T> restAssuredFunction, Matcher<? super T> matcher) {
         return this;
     }
 

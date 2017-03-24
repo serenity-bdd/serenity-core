@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 
 import java.io.InputStream;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by john on 23/07/2015.
@@ -225,4 +226,26 @@ public class ResponseStub implements Response {
     public int getStatusCode() {
         return 0;
     }
+
+    @Override
+    public long time() {
+        return System.currentTimeMillis();
+    }
+
+    @Override
+    public long timeIn(TimeUnit timeUnit) {
+        return System.currentTimeMillis();
+    }
+
+    @Override
+    public long getTime() {
+        return System.currentTimeMillis();
+    }
+
+    @Override
+    public long getTimeIn(TimeUnit timeUnit) {
+        return System.currentTimeMillis();
+    }
+
+
 }

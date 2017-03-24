@@ -962,7 +962,7 @@ public class TestOutcome {
             title = getBaseTitleFromAnnotationOrMethodName();
         }
 
-        return withPlaceholderSubstitutes(title);
+        return title;
     }
 
     private String getBaseTitleFromAnnotationOrMethodName() {
@@ -1132,7 +1132,7 @@ public class TestOutcome {
      * @return The outcome of this test.
      */
     public TestResult getResult() {
-        if (annotatedResult != null) {
+        if ((IGNORED == annotatedResult) || (SKIPPED == annotatedResult) || PENDING == annotatedResult) {
             return annotatedResult;
         }
 
@@ -1141,7 +1141,8 @@ public class TestOutcome {
         List<TestResult> overallResults = Lists.newArrayList(getCurrentTestResults());
         overallResults.add(testResultFromFailureClassname);
 
-        return TestResultList.overallResultFrom(overallResults);
+        TestResult testResultFromSteps = TestResultList.overallResultFrom(overallResults);
+        return (annotatedResult != null) ? TestResultList.overallResultFrom(ImmutableList.of(testResultFromSteps, annotatedResult)) : testResultFromSteps;
     }
 
     private TestResult testResultFromFailureClassname() {
@@ -1181,19 +1182,11 @@ public class TestOutcome {
 
     private void addStep(TestStep step) {
         testSteps.add(step);
-        clearCalulatedTestResults();
         renumberTestSteps();
-    }
-
-    private void clearCalulatedTestResults() {
-        if (testResults != null) {
-            testResults.clear();
-        }
     }
 
     private void addSteps(List<TestStep> steps) {
         testSteps.addAll(steps);
-        clearCalulatedTestResults();
         renumberTestSteps();
     }
 
@@ -1232,14 +1225,8 @@ public class TestOutcome {
         this.title = title;
     }
 
-
-    transient List<TestResult> testResults;
-
     private List<TestResult> getCurrentTestResults() {
-        if (testResults != null) {
-            return testResults;
-        }
-        testResults = Lists.newArrayList();
+        List<TestResult> testResults = Lists.newArrayList();
         for (TestStep step : testSteps) {
             testResults.add(step.getResult());
         }

@@ -300,7 +300,22 @@ public class RequestSpecificationStub implements RequestSpecification {
     }
 
     @Override
+    public RequestSpecification trustStore(String s, String s1) {
+        return this;
+    }
+
+    @Override
+    public RequestSpecification trustStore(File file, String s) {
+        return this;
+    }
+
+    @Override
     public RequestSpecification trustStore(final KeyStore trustStore) {
+        return this;
+    }
+
+    @Override
+    public RequestSpecification keyStore(KeyStore keyStore) {
         return this;
     }
 
@@ -388,6 +403,11 @@ public class RequestSpecificationStub implements RequestSpecification {
 
     @Override
     public RequestSpecification multiPart(final String controlName, final Object object, final String mimeType) {
+        return this;
+    }
+
+    @Override
+    public RequestSpecification multiPart(String s, String s1, Object o, String s2) {
         return this;
     }
 

@@ -6,7 +6,9 @@ import com.jayway.restassured.internal.filter.FilterContextImpl;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.FilterableRequestSpecification;
 import com.jayway.restassured.specification.FilterableResponseSpecification;
+import net.serenitybdd.rest.stubs.ResponseStub;
 import net.serenitybdd.rest.utils.ReflectionHelper;
+import net.serenitybdd.rest.utils.RestExecutionHelper;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -34,7 +36,16 @@ public class UpdatingContextFilter implements Filter {
             helper.setValueTo("filters", new SkipClassIterator((Iterator<Filter>) iterator, skipping));
             return ctx.next(requestSpec, responseSpec);
         } catch (Throwable e) {
+            if (RestExecutionHelper.restCallsAreEnabled()) {
+                return stubbed();
+            }
             throw new RuntimeException("Incorrect implementation, should update field without any problem", e);
         }
     }
+
+    private Response stubbed() {
+        return new ResponseStub();
+    }
+
+
 }

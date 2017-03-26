@@ -330,6 +330,11 @@ public class Formatter {
                 renderMarkdown(htmlCompatible(fieldValue)) : htmlCompatible(fieldValue);
     }
 
+    public String htmlCompatibleStepDescription(Object fieldValue) {
+        return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(step)) ?
+                renderMarkdown(htmlCompatible(fieldValue)) : htmlCompatible(fieldValue);
+    }
+
     public String plainHtmlCompatible(Object fieldValue) {
         return addLineBreaks(ESCAPE_SPECIAL_CHARS.translate(fieldValue != null ? stringFormOf(fieldValue) : "")).trim();
     }

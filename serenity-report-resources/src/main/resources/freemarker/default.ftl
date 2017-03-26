@@ -467,7 +467,7 @@
                     </#if>
                     <span class="top-level-step">An error occurred outside of step execution.</span>
                 </td>
-                    <td width="100"><span class="top-level-step">${testOutcome.result}</span></td>
+                    <td width="100"><span class="top-level-step">${formatter.htmlCompatibleStepDescription(testOutcome.result)}</span></td>
                     <td width="100"><span class="top-level-step">${testOutcome.durationInSeconds}s</span></td>
                 </tr>
                 <tr class="test-${testOutcome.result}">

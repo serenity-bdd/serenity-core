@@ -522,6 +522,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private void recordStep(ExecutedStepDescription description) {
 
+        if (!latestTestOutcome().isPresent()) {
+            return;
+        }
+
         TestStep step = new TestStep(AnnotatedStepDescription.from(description).getName());
 
         startNewGroupIfNested();

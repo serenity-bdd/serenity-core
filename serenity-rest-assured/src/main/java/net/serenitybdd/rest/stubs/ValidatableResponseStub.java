@@ -1,5 +1,6 @@
 package net.serenitybdd.rest.stubs;
 
+import com.jayway.restassured.function.RestAssuredFunction;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.internal.RestAssuredResponseOptionsImpl;
 import com.jayway.restassured.internal.ValidatableResponseImpl;
@@ -15,6 +16,7 @@ import org.hamcrest.Matcher;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by john on 23/07/2015.
@@ -87,6 +89,11 @@ public class ValidatableResponseStub implements ValidatableResponse {
 
     @Override
     public ValidatableResponse header(String headerName, Matcher<?> expectedValueMatcher) {
+        return this;
+    }
+
+    @Override
+    public <V> ValidatableResponse header(String s, RestAssuredFunction<String, V> restAssuredFunction, Matcher<? super V> matcher) {
         return this;
     }
 
@@ -257,6 +264,16 @@ public class ValidatableResponseStub implements ValidatableResponse {
 
     @Override
     public ValidatableResponseLogSpec<ValidatableResponse, Response> log() {
+        return new ValidatableResponseImpl("",null,null,null,null,null);
+    }
+
+    @Override
+    public ValidatableResponse time(Matcher<Long> matcher) {
+        return new ValidatableResponseImpl("",null,null,null,null,null);
+    }
+
+    @Override
+    public ValidatableResponse time(Matcher<Long> matcher, TimeUnit timeUnit) {
         return new ValidatableResponseImpl("",null,null,null,null,null);
     }
 }

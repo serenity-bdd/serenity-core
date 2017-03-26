@@ -11,4 +11,9 @@ public class PreemptiveAuthSpecStub implements PreemptiveAuthSpec {
     public RequestSpecification basic(final String userName, final String password) {
         return new RequestSpecificationStub();
     }
+
+    @Override
+    public RequestSpecification oauth2(String var1){
+        return new RequestSpecificationStub();
+    }
 }

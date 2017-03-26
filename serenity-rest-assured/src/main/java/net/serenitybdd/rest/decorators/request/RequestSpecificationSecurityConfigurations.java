@@ -22,6 +22,7 @@ abstract class RequestSpecificationSecurityConfigurations extends RequestSpecifi
         implements FilterableRequestSpecification {
     private static final Logger log = LoggerFactory.getLogger(RequestSpecificationSecurityConfigurations.class);
 
+
     public RequestSpecificationSecurityConfigurations(RequestSpecificationImpl core) {
         super(core);
     }
@@ -46,7 +47,14 @@ abstract class RequestSpecificationSecurityConfigurations extends RequestSpecifi
 
     @Override
     public RequestSpecification relaxedHTTPSValidation() {
-        return relaxedHTTPSValidation(RequestSpecificationImpl.SSL);
+        String protocol = "SSL";
+        try {
+            protocol = (String)helper.getValueFrom("SSL");
+        } catch(IllegalAccessException | NoSuchFieldException ex) {
+            log.error("Error when getting value of SSL field from RequestSpecification");
+            protocol = "SSL";
+        }
+        return relaxedHTTPSValidation(protocol);
     }
 
     @Override

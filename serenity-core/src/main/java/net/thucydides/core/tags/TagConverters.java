@@ -16,6 +16,16 @@ public class TagConverters {
         };
     }
 
+
+    public static Converter<String, TestTag> fromStringsToTestTags() {
+        return new Converter<String, TestTag>() {
+
+            public TestTag convert(String tag) {
+                return TestTag.withValue(tag);
+            }
+        };
+    }
+
     public static Converter<Object, TestTag> fromStringValuesToTestTags() {
         return new Converter<Object, TestTag>() {
 

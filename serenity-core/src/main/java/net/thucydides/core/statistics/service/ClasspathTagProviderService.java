@@ -29,8 +29,8 @@ public class ClasspathTagProviderService implements TagProviderService {
 
     protected Iterable<? extends TagProvider> loadTagProvidersFromPath(String testSource) {
         Iterable<TagProviderStrategy> tagProviderStrategies = ServiceLoader.load(TagProviderStrategy.class);
-        Iterable<? extends TagProvider> tagProvidersWithHighPriority = tagProvidersWithHighPriority(tagProviderStrategies);
-        if( tagProvidersWithHighPriority != null) {
+        Iterable<? extends TagProvider> tagProvidersWithHighPriority = tagProvidersWithHighPriority(tagProviderStrategies, testSource);
+        if( tagProvidersWithHighPriority != null){
             return tagProvidersWithHighPriority;
         }
         if (testSource == null) {
@@ -40,9 +40,9 @@ public class ClasspathTagProviderService implements TagProviderService {
         }
     }
 
-    private Iterable<? extends TagProvider> tagProvidersWithHighPriority(Iterable<TagProviderStrategy> tagProviderStrategies) {
+    private Iterable<? extends TagProvider> tagProvidersWithHighPriority(Iterable<TagProviderStrategy> tagProviderStrategies, String testSource) {
         for (TagProviderStrategy strategy : tagProviderStrategies) {
-            if (isHighPriority(strategy)) {
+            if (isHighPriority(strategy) && strategy.canHandleTestSource(testSource)) {
                 return strategy.getTagProviders();
             }
         }

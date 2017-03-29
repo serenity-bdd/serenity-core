@@ -10,6 +10,7 @@ import net.thucydides.core.requirements.FileSystemRequirementsTagProvider;
 import net.thucydides.core.requirements.PackageRequirementsTagProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.statistics.service.*;
+import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import org.junit.Before;
 import org.junit.Test;
@@ -178,6 +179,39 @@ public class WhenFindingTagsForATestOutcome {
         assertThat(tags.size(), is(2));
     }
 
+    @Test
+    public void injected_tags_should_be_fetched_from_environment_variables() {
+        // GIVEN
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+        environmentVariables.setProperty("injected.tags","color:red,flavor:strawberry");
+
+        InjectedTagProvider injectedTagProvider = new InjectedTagProvider(environmentVariables);
+        TestOutcome testOutcome = TestOutcome.forTest("some_test_method", SomeTestCaseWithTagOnMethodAndClass.class);
+
+        // WHEN
+        Set<TestTag> tags = injectedTagProvider.getTagsFor(testOutcome);
+
+        // THEN
+        assertThat(tags, hasItem(TestTag.withName("red").andType("color")));
+        assertThat(tags, hasItem(TestTag.withName("strawberry").andType("flavor")));
+
+    }
+
+    @Test
+    public void injected_tags_should_be_empty_if_none_are_defined_in_the_environment_variables() {
+        // GIVEN
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+
+        InjectedTagProvider injectedTagProvider = new InjectedTagProvider(environmentVariables);
+        TestOutcome testOutcome = TestOutcome.forTest("some_test_method", SomeTestCaseWithTagOnMethodAndClass.class);
+
+        // WHEN
+        Set<TestTag> tags = injectedTagProvider.getTagsFor(testOutcome);
+
+        // THEN
+        assertThat(tags.size(), is(0));
+
+    }
 
     class SomeTestCaseWithAShortenedTagOnAMethod {
         @WithTag("pillar:Car sales")

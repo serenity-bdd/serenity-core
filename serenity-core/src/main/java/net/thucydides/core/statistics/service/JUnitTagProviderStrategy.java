@@ -20,7 +20,8 @@ public class JUnitTagProviderStrategy implements TagProviderStrategy {
                 new PackageRequirementsTagProvider(),
                 new AnnotationBasedTagProvider(),
                 new FileSystemRequirementsTagProvider(),
-                new FeatureStoryTagProvider()
+                new FeatureStoryTagProvider(),
+                new InjectedTagProvider()
         );
     }
 

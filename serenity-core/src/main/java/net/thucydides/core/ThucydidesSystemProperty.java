@@ -652,6 +652,11 @@ public enum ThucydidesSystemProperty {
     TAGS,
 
     /**
+     * If provided, each test in a test run will have these tags added.
+     */
+    INJECTED_TAGS,
+
+    /**
      * Add extra columns to the CSV output, obtained from tag values.
      */
     THUCYDIDES_CSV_EXTRA_COLUMNS,

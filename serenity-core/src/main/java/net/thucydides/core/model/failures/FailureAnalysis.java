@@ -53,24 +53,26 @@ public class FailureAnalysis {
     }
 
     private static final List<Class<?>> DEFAULT_FAILURE_TYPES = Lists.newArrayList();
-    {
+
+    static {
         DEFAULT_FAILURE_TYPES.addAll(ImmutableList.of(AssertionError.class, CausesAssertionFailure.class));
     }
 
     private static final List<Class<?>> DEFAULT_COMPROMISED_TYPES = Lists.newArrayList();
-    {
+    static {
         DEFAULT_COMPROMISED_TYPES.addAll(ImmutableList.of(CausesCompromisedTestFailure.class));
     }
 
     private static final List<Class<?>> DEFAULT_PENDING_TYPES = Lists.newArrayList();
-    {
+    static {
         DEFAULT_PENDING_TYPES.addAll(ImmutableList.of(PendingStepException.class, PendingException.class));
     }
 
     private static final List<Class<?>> DEFAULT_ERROR = Lists.newArrayList();
-    {
+    static {
         DEFAULT_ERROR.addAll(ImmutableList.of(Error.class));
     }
+
     public boolean reportAsFailure(Class<?> testFailureCause) {
         if (testFailureCause == null) {
             return false;

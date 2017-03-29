@@ -107,10 +107,10 @@ public enum SupportedWebDriver {
 
     public static SupportedWebDriver valueOrSynonymOf(String driverName) {
         for(SupportedWebDriver supportedWebDriver : values()) {
-            if (driverName.equalsIgnoreCase(supportedWebDriver.name())) {
+            if (driverName.trim().equalsIgnoreCase(supportedWebDriver.name())) {
                 return supportedWebDriver;
             }
-            if (supportedWebDriver.synonyms.contains(driverName)) {
+            if (supportedWebDriver.synonyms.contains(driverName.trim())) {
                 return supportedWebDriver;
             }
         }

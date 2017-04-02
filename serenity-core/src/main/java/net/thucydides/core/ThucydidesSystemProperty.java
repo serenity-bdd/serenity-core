@@ -657,6 +657,18 @@ public enum ThucydidesSystemProperty {
     INJECTED_TAGS,
 
     /**
+     * If set to true, historical flags will be displayed in test lists.
+     * This must be set in conjunction with the serenity.history.dir property
+     */
+    SHOW_HISTORY_FLAGS,
+
+    /**
+     * Serenity will look in this directory for the previous build results, to use as a basis for the
+     * historical flags shown in the test results.
+     */
+    SERENITY_HISTORY_DIRECTORY,
+
+    /**
      * Add extra columns to the CSV output, obtained from tag values.
      */
     THUCYDIDES_CSV_EXTRA_COLUMNS,

@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.flags.Flag;
 import net.thucydides.core.reports.json.AScenarioHasNoNameException;
 import net.thucydides.core.reports.json.JSONConverter;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -40,6 +41,7 @@ public class GsonJSONConverter implements JSONConverter {
         GsonBuilder gsonBuilder = new GsonBuilder()
                                             .registerTypeAdapterFactory(OptionalTypeAdapter.FACTORY)
                                             .registerTypeHierarchyAdapter(Collection.class, new CollectionAdapter())
+                                            .registerTypeAdapter(Flag.class, new InterfaceAdapter<Flag>())
                                             .registerTypeAdapter(File.class, new FileSerializer())
                                             .registerTypeAdapter(File.class, new FileDeserializer())
                                             .registerTypeAdapter(Class.class, new ClassTypeAdapter());

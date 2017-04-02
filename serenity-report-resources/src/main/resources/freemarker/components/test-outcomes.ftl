@@ -37,6 +37,9 @@
                             <tr class="test-${testOutcome.result}">
                                 <td><span class="summary-icon">${test_outcome_icon}</span>
                                     <#if (testOutcome.manual)><i class="fa fa-user manual" title="Manual test"></i></#if>
+                                    <#list testOutcome.flags as flag>
+                                        <i class="fa fa-${flag.symbol} flag-color" alt="${flag.message}" title="${flag.message}"></i>
+                                    </#list>
                                     <span style="display:none">${testOutcome.result}</span></td>
                                 <td class="${testOutcome.result}-text">
                                     <div class="ellipsis">

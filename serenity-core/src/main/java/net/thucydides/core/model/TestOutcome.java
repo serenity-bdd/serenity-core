@@ -19,6 +19,8 @@ import net.thucydides.core.images.ResizableImage;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.failures.FailureAnalysis;
 import net.thucydides.core.model.features.ApplicationFeature;
+import net.thucydides.core.model.flags.Flag;
+import net.thucydides.core.model.flags.FlagProvider;
 import net.thucydides.core.model.results.MergeStepResultStrategy;
 import net.thucydides.core.model.results.StepResultMergeStragegy;
 import net.thucydides.core.model.screenshots.Screenshot;
@@ -185,6 +187,9 @@ public class TestOutcome {
 
     private transient LinkGenerator linkGenerator;
 
+    private transient FlagProvider flagProvider;
+
+
     /**
      * Test statistics, read from the statistics database.
      * This data is only loaded when required, and added to the TestOutcome using the corresponding setter.
@@ -212,6 +217,12 @@ public class TestOutcome {
     private boolean manual;
 
     /**
+     * Indicates something interesting about this test.
+     * Currently used mainly to indicate if a failing test represents a new failure.
+     */
+    private Set<? extends Flag> flags;
+
+    /**
      * Indicates the test source e.g : junit/jbehave/cucumber
      */
     private String testSource;
@@ -232,6 +243,7 @@ public class TestOutcome {
         this.additionalVersions = Lists.newArrayList();
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
+        this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
         this.qualifier = Optional.absent();
         this.groupStack = new Stack<>();
     }
@@ -280,6 +292,7 @@ public class TestOutcome {
         this.additionalVersions = Lists.newArrayList();
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
+        this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
         this.qualifier = Optional.absent();
         this.environmentVariables = environmentVariables;
         if (testCase != null) {
@@ -339,6 +352,14 @@ public class TestOutcome {
     }
 
 
+    /**
+     * Set the current flag provider; only used for testing purposes.
+     */
+    protected TestOutcome withFlagProvider(FlagProvider flagProvider) {
+        this.flagProvider = flagProvider;
+        return this;
+    }
+
     public void setEnvironmentVariables(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
     }
@@ -375,6 +396,7 @@ public class TestOutcome {
         }
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
+        this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
         this.environmentVariables = environmentVariables;
         this.projectKey = ThucydidesSystemProperty.THUCYDIDES_PROJECT_KEY.from(environmentVariables, "");
     }
@@ -456,6 +478,7 @@ public class TestOutcome {
         this.dataTable = dataTable;
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
+        this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
         this.driver = driver;
         this.manual = manualTest;
         this.projectKey = projectKey;
@@ -1876,6 +1899,13 @@ public class TestOutcome {
 
     public boolean isManual() {
         return manual;
+    }
+
+    public Set<? extends Flag> getFlags() {
+        if (flags == null) {
+            flags = flagProvider.getFlagsFor(this);
+        }
+        return flags;
     }
 
     public boolean isStartTimeNotDefined() {

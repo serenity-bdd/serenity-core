@@ -424,6 +424,10 @@ i.tag {
     color: #CC0033;
 }
 
+.flag-color {
+    color: red;
+}
+
 .ignore-color {
     color: #CCCC33;
 }

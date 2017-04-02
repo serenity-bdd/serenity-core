@@ -5,6 +5,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.buildinfo.PropertyBasedDriverCapabilityRecord;
+import net.serenitybdd.core.failurehistory.HistoricalFlagProvider;
 import net.serenitybdd.core.time.InternalSystemClock;
 import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.annotations.locators.SmartElementProxyCreator;
@@ -16,6 +17,7 @@ import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.issues.SystemPropertiesIssueTracking;
 import net.thucydides.core.logging.ThucydidesLogging;
+import net.thucydides.core.model.flags.FlagProvider;
 import net.thucydides.core.reports.ExecutorServiceProvider;
 import net.thucydides.core.reports.MultithreadExecutorServiceProvider;
 import net.thucydides.core.reports.json.JSONConverter;
@@ -74,6 +76,7 @@ public class ThucydidesModule extends AbstractModule {
         bind(DriverCapabilityRecord.class).to(PropertyBasedDriverCapabilityRecord.class);
         bind(ExecutorServiceProvider.class).to(MultithreadExecutorServiceProvider.class).in(Singleton.class);
         bind(CloseBrowser.class).to(WebdriverCloseBrowser.class).in(Singleton.class);
+        bind(FlagProvider.class).to(HistoricalFlagProvider.class).in(Singleton.class);
     }
 
     @Provides

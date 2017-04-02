@@ -10,6 +10,8 @@ import com.google.inject.Inject;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
+import net.thucydides.core.model.flags.Flag;
+import net.thucydides.core.model.flags.FlagCounts;
 import net.thucydides.core.model.formatters.TestCoverageFormatter;
 import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.RequirementsTree;
@@ -164,6 +166,30 @@ public class TestOutcomes {
                                 ConfiguredEnvironment.getConfiguration().getEstimatedAverageStepCount());
     }
 
+    private Map<? extends Flag, Integer> flagCount = null;
+
+    public Map<? extends Flag, Integer> getFlagCounts() {
+
+        if (flagCount != null) { return flagCount; }
+
+        flagCount = FlagCounts.in(getOutcomes()).asAMap();
+
+        return flagCount;
+    }
+
+    public boolean haveFlags() {
+        return !flags().isEmpty();
+    }
+
+    public Set<? extends Flag> flags() {
+        return getFlagCounts().keySet();
+    }
+
+    public Integer flagCountFor(Flag flag) {
+        return getFlagCounts().get(flag);
+    }
+
+
 
     public String getLabel() {
         return label;
@@ -177,6 +203,7 @@ public class TestOutcomes {
         for (TestOutcome outcome : outcomes) {
             addTagTypesFrom(outcome, tagTypes);
         }
+new HashMap<>();
         return sort(ImmutableList.copyOf(tagTypes), on(String.class));
     }
 

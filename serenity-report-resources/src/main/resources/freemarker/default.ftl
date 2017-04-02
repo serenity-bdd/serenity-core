@@ -144,6 +144,9 @@
                         <#if (testOutcome.manual)>
                             <i class="fa fa-user manual" alt="Manual test" title="Manual test"></i>
                         </#if>
+                        <#list testOutcome.flags as flag>
+                            <i class="fa fa-2x fa-${flag.symbol} flag-color" alt="${flag.message}" title="${flag.message}"></i>
+                        </#list>
                         <#if (testOutcome.descriptionText.isPresent() && testOutcome.descriptionText.get()?has_content)>
                             <div class="discreet-requirement-narrative-title">
                                 <br/>

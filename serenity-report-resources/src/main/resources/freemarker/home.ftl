@@ -337,6 +337,17 @@
                     <#else>skipped</#if>
                 </span>
                 </#if>
+
+                <#if testOutcomes.haveFlags()>
+                    <span class="test-count"> |
+                        <#list testOutcomes.flags as flag>
+                            <#assign flagCount = testOutcomes.flagCountFor(flag)>
+                            <#assign flagTitle = inflection.of(flag.message).inPluralForm().asATitle() >
+                            <i class="fa fa fa-${flag.symbol} flag-color" alt="${flag.message}" title="${flag.message}"></i> ${flagTitle} (${flagCount})
+                        </#list>
+                    </span>
+                </#if>
+
                 <#if (csvReport! != '')> |
                     <a href="${csvReport}" title="Download CSV"> <i class="fa fa-download" title="Download CSV"></i></a>
                 </#if>

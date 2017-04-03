@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class ResponseSpecificationDecorated implements FilterableResponseSpecification {
     private static final Logger log = LoggerFactory.getLogger(ResponseSpecificationDecorated.class);
-    private final ResponseSpecificationImpl core;
+    protected final ResponseSpecificationImpl core;
     private final ReflectionHelper<ResponseSpecificationImpl> helper;
 
     public ResponseSpecificationDecorated(final ResponseSpecificationImpl core) {

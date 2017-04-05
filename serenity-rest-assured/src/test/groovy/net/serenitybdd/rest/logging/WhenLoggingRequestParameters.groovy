@@ -2,6 +2,8 @@ package net.serenitybdd.rest.logging
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
+import com.jayway.restassured.config.RestAssuredConfig
+import com.jayway.restassured.config.SSLConfig
 import com.jayway.restassured.specification.FilterableRequestSpecification
 import net.serenity.test.utils.rules.TestCase
 import net.serenitybdd.rest.decorators.ResponseDecorated
@@ -73,7 +75,8 @@ class WhenLoggingRequestParameters extends Specification {
         given: "request initialised"
             def request = (FilterableRequestSpecification) given();
         when: "logging from request and getting response"
-            def responseAfterLog = request.log().parameters().response()
+            def responseAfterLog = request.log().parameters().
+                    config(new RestAssuredConfig().sslConfig(SSLConfig.sslConfig().allowAllHostnames())).response()
         then: "wrapped response specification should be returned after log operation"
             responseAfterLog instanceof ResponseSpecificationDecorated
     }

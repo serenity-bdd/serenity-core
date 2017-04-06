@@ -1,5 +1,6 @@
 package net.serenitybdd.rest.decorators;
 
+import com.jayway.restassured.config.RestAssuredConfig;
 import com.jayway.restassured.internal.ResponseParserRegistrar;
 import com.jayway.restassured.internal.ResponseSpecificationImpl;
 import com.jayway.restassured.response.Response;
@@ -152,6 +153,14 @@ public abstract class ResponseSpecificationDecorated implements FilterableRespon
 
     public boolean hasBodyAssertionsDefined() {
         return core.hasBodyAssertionsDefined();
+    }
+
+    public void setConfig(final RestAssuredConfig config) {
+        core.setConfig(config);
+    }
+
+    public RestAssuredConfig getConfig() {
+        return core.getConfig();
     }
 
 }

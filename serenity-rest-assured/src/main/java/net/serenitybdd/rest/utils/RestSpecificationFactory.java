@@ -16,6 +16,7 @@ import net.serenitybdd.rest.filters.UpdatingContextFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -29,28 +30,42 @@ public class RestSpecificationFactory {
 
     private static final Logger log = LoggerFactory.getLogger(RestSpecificationFactory.class);
 
+    private static Constructor<?> requestSpecificationDecoratedConstructor;
 
-    private final static Class<?> requestSpecificationDecoratedClass = new ByteBuddy()
-            .subclass(RequestSpecificationDecorated.class)
-            .method(isDeclaredBy(RequestSpecification.class).or(isDeclaredBy(RequestSenderOptions.class)).or(isDeclaredBy(FilterableRequestSpecification.class)))
-            .intercept(MethodDelegation.toField("core"))
-            .make()
-            .load(SerenityRest.class.getClassLoader())
-            .getLoaded();
+    private static Constructor<?> responseSpecificationDecoratedConstructor;
 
-    private final static Class<?> responseSpecificationDecoratedClass = new ByteBuddy()
-            .subclass(ResponseSpecificationDecorated.class)
-            .method(isDeclaredBy(ResponseSpecification.class).or(isDeclaredBy(RequestSenderOptions.class)).or(isDeclaredBy(FilterableResponseSpecification.class)))
-            .intercept(MethodDelegation.toField("core"))
-            .make()
-            .load(SerenityRest.class.getClassLoader())
-            .getLoaded();
+    static {
+        final Class<?>  requestSpecificationDecoratedClass = new ByteBuddy()
+                .subclass(RequestSpecificationDecorated.class)
+                .method(isDeclaredBy(RequestSpecification.class).or(isDeclaredBy(RequestSenderOptions.class)).or(isDeclaredBy(FilterableRequestSpecification.class)))
+                .intercept(MethodDelegation.toField("core"))
+                .make()
+                .load(SerenityRest.class.getClassLoader())
+                .getLoaded();
+        final Class<?> responseSpecificationDecoratedClass = new ByteBuddy()
+                .subclass(ResponseSpecificationDecorated.class)
+                .method(isDeclaredBy(ResponseSpecification.class).or(isDeclaredBy(RequestSenderOptions.class)).or(isDeclaredBy(FilterableResponseSpecification.class)))
+                .intercept(MethodDelegation.toField("core"))
+                .make()
+                .load(SerenityRest.class.getClassLoader())
+                .getLoaded();
+        try {
+            requestSpecificationDecoratedConstructor = requestSpecificationDecoratedClass.getConstructor(RequestSpecificationImpl.class);
+        } catch (NoSuchMethodException e) {
+            log.error("Cannot found constructor for RequestSpecificationDecorated ",e);
+        }
 
+        try {
+            responseSpecificationDecoratedConstructor = responseSpecificationDecoratedClass.getConstructor(ResponseSpecificationImpl.class);
+        } catch (NoSuchMethodException e) {
+            log.error("Cannot found constructor for ResponseSpecificationDecorated ",e);
+        }
+    }
 
     public static RequestSpecificationDecorated getInstrumentedRequestSpecification(RequestSpecificationImpl delegate) {
         RequestSpecificationDecorated instrumentedResponse = null;
         try {
-            instrumentedResponse = (RequestSpecificationDecorated) requestSpecificationDecoratedClass.getConstructor(RequestSpecificationImpl.class).newInstance((delegate));
+            instrumentedResponse = (RequestSpecificationDecorated) requestSpecificationDecoratedConstructor.newInstance((delegate));
             final List<Filter> filters = new LinkedList<>();
             for (final LogDetail logDetail : Arrays.asList(HEADERS, COOKIES, BODY, PARAMS, METHOD, PATH)) {
                 filters.add(new FieldsRecordingFilter(true, logDetail));
@@ -59,7 +74,7 @@ public class RestSpecificationFactory {
                 filters.add(new UpdatingContextFilter(SendRequestFilter.class));
             }
             instrumentedResponse.filters(filters);
-        } catch(InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
+        } catch(InstantiationException | IllegalAccessException | InvocationTargetException ex) {
             log.error("Cannot instrument RequestSpecificationImpl ", ex);
         }
         return instrumentedResponse;
@@ -68,8 +83,8 @@ public class RestSpecificationFactory {
     public static ResponseSpecificationDecorated getInstrumentedResponseSpecification(ResponseSpecificationImpl delegate) {
         ResponseSpecificationDecorated instrumentedResponseSpec = null;
         try {
-            instrumentedResponseSpec = (ResponseSpecificationDecorated) responseSpecificationDecoratedClass.getConstructor(ResponseSpecificationImpl.class).newInstance(delegate);
-        } catch(InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
+            instrumentedResponseSpec = (ResponseSpecificationDecorated) responseSpecificationDecoratedConstructor.newInstance(delegate);
+        } catch(InstantiationException | IllegalAccessException | InvocationTargetException ex) {
             log.error("Cannot instrument ResponseSpecificationDecorated ", ex);
         }
         return instrumentedResponseSpec;

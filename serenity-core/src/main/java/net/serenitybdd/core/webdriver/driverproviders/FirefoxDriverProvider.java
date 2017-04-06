@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 import static net.thucydides.core.ThucydidesSystemProperty.USE_GECKO_DRIVER;
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_GECKO_DRIVER;
 
 public class FirefoxDriverProvider implements DriverProvider {
 
@@ -56,11 +57,11 @@ public class FirefoxDriverProvider implements DriverProvider {
     }
 
     private boolean shouldUseGeckoDriver() {
-        return geckoDriverIsOnTheClasspath() && geckoIsNotDisabled();
+        return (geckoDriverIsInEnvironmentVariable() || geckoDriverIsOnTheClasspath()) && geckoIsNotDisabled();
     }
 
     private boolean geckoIsNotDisabled() {
-        return USE_GECKO_DRIVER.booleanFrom(environmentVariables, true) && geckoDriverIsOnTheClasspath();
+        return USE_GECKO_DRIVER.booleanFrom(environmentVariables, true);
     }
 
     private WebDriver newFirefoxDriver(DesiredCapabilities capabilities) {
@@ -89,6 +90,15 @@ public class FirefoxDriverProvider implements DriverProvider {
             } catch (Exception wiresBinaryNotFound) {
                 return false;
             }
+        }
+    }
+
+    private boolean geckoDriverIsInEnvironmentVariable() {
+        try {
+            new ProcessBuilder().command(WEBDRIVER_GECKO_DRIVER.from(environmentVariables), "--help").start();
+            return true;
+        } catch (Exception geckodriverBinaryNotFound) {
+            return false;
         }
     }
 

@@ -1,14 +1,12 @@
 package net.thucydides.core.util;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 public class WhenReadingEnvironmentVariables {
 
@@ -112,12 +110,23 @@ public class WhenReadingEnvironmentVariables {
         assertThat(value, is(true));
     }
 
+    @Test
+    public void should_read_blank_boolean_system_properties_from_the_system_from_default() {
+        System.setProperty("some.boolean.property","");
+
+        EnvironmentVariables environmentVariables = new SystemEnvironmentVariables();
+
+        assertThat(environmentVariables.getPropertyAsBoolean("some.boolean.property",false), is(false));
+        assertThat(environmentVariables.getPropertyAsBoolean("some.boolean.property",true), is(true));
+    }
 
     @Test
     public void should_read_boolean_system_properties_from_the_system_with_a_default() {
         EnvironmentVariables environmentVariables = new SystemEnvironmentVariables();
-        boolean value = environmentVariables.getPropertyAsBoolean("some.unknown.boolean.property",false);
-        assertThat(value, is(false));
+
+        assertThat(environmentVariables.getPropertyAsBoolean("some.unknown.boolean.property",false), is(false));
+        assertThat(environmentVariables.getPropertyAsBoolean("some.unknown.boolean.property",true), is(true));
+
     }
 
     @Test

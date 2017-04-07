@@ -1,10 +1,8 @@
 package net.thucydides.core.util;
 
-import ch.lambdaj.Lambda;
 import ch.lambdaj.function.convert.DefaultStringConverter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -13,6 +11,11 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import static ch.lambdaj.Lambda.convert;
+import static java.lang.Boolean.parseBoolean;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Return system environment variable values.
@@ -26,7 +29,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         this(System.getProperties(), System.getenv());
     }
 
-    protected SystemEnvironmentVariables(Properties systemProperties, Map<String, String> systemValues) {
+    SystemEnvironmentVariables(Properties systemProperties, Map<String, String> systemValues) {
 
         Map<String, String> propertyValues = new HashMap<>();
         for(String property : systemProperties.stringPropertyNames()) {
@@ -47,11 +50,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
     public String getValue(final String name, final String defaultValue) {
         String value = systemValues.get(name);
-        if (value == null) {
-            return defaultValue;
-        } else {
-            return value;
-        }
+        return (value == null) ? defaultValue : value;
     }
 
 
@@ -60,7 +59,11 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
     public List<String> getKeys() {
-        return Lambda.convert(properties.keySet(), new DefaultStringConverter());
+        return convert(properties.keySet(), toStrings());
+    }
+
+    private DefaultStringConverter toStrings() {
+        return new DefaultStringConverter();
     }
 
     @Override
@@ -95,11 +98,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
     public Integer getPropertyAsInteger(String property, Integer defaultValue) {
         String value = properties.get(property);
-        if (value != null) {
-            return Integer.valueOf(value);
-        } else {
-            return defaultValue;
-        }
+        return (value != null) ? Integer.valueOf(value) : defaultValue;
     }
 
 
@@ -108,13 +107,11 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
     public Boolean getPropertyAsBoolean(String name, boolean defaultValue) {
-        if (getProperty(name) == null) {
+        if (isEmpty(getProperty(name)) || isBlank(getProperty(name))) {
             return defaultValue;
-        } else if (StringUtils.isBlank(getProperty(name))) {
-            return true;
-        } else {
-            return Boolean.parseBoolean(getProperty(name, "false"));
         }
+
+        return parseBoolean(getProperty(name, "false"));
     }
 
 
@@ -136,11 +133,9 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         return (value != null) ? value : defaultValue;
     }
 
-
     public String getProperty(Enum<?> property, String defaultValue) {
         return getProperty(property.toString(), defaultValue);
     }
-
 
     private final Lock propertySetLock = new ReentrantLock();
 

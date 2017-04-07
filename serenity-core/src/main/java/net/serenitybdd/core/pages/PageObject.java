@@ -217,9 +217,9 @@ public abstract class PageObject {
     }
 
     private boolean isDefinedRemoteUrl() {
-        boolean isRemoteUrl = ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.isDefinedIn(pages.getConfiguration().getEnvironmentVariables());
-        boolean isSaucelabsUrl = ThucydidesSystemProperty.SAUCELABS_URL.isDefinedIn(pages.getConfiguration().getEnvironmentVariables());
-        boolean isBrowserStack = ThucydidesSystemProperty.BROWSERSTACK_URL.isDefinedIn(pages.getConfiguration().getEnvironmentVariables());
+        boolean isRemoteUrl = ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.isDefinedIn(environmentVariables);
+        boolean isSaucelabsUrl = ThucydidesSystemProperty.SAUCELABS_URL.isDefinedIn(environmentVariables);
+        boolean isBrowserStack = ThucydidesSystemProperty.BROWSERSTACK_URL.isDefinedIn(environmentVariables);
         return isRemoteUrl || isSaucelabsUrl || isBrowserStack;
     }
 

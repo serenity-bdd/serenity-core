@@ -2,6 +2,8 @@ package net.thucydides.core.util;
 
 import ch.lambdaj.Lambda;
 import ch.lambdaj.function.convert.DefaultStringConverter;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -9,13 +11,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Return system environment variable values.
  */
 public class SystemEnvironmentVariables implements EnvironmentVariables {
 
-    private Properties systemProperties;
+    private Map<String, String> properties;
     private Map<String, String> systemValues;
 
     public SystemEnvironmentVariables() {
@@ -23,8 +27,14 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
     protected SystemEnvironmentVariables(Properties systemProperties, Map<String, String> systemValues) {
-        this.systemProperties = PropertiesUtil.copyOf(systemProperties);
-        this.systemValues = new HashMap<>(systemValues);
+
+        Map<String, String> propertyValues = new HashMap<>();
+        for(String property : systemProperties.stringPropertyNames()) {
+            propertyValues.put(property, systemProperties.getProperty(property));
+        }
+
+        this.properties = ImmutableMap.copyOf(propertyValues);
+        this.systemValues = ImmutableMap.copyOf(systemValues);
     }
 
     public String getValue(final String name) {
@@ -50,20 +60,24 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
     public List<String> getKeys() {
-        return Lambda.convert(systemProperties.keySet(), new DefaultStringConverter());
+        return Lambda.convert(properties.keySet(), new DefaultStringConverter());
     }
 
     @Override
     public Properties getProperties() {
-        return new Properties(systemProperties);
+        Properties props = new Properties();
+        for (String key : properties.keySet()) {
+            props.setProperty(key, properties.get(key));
+        }
+        return props;
     }
 
     @Override
     public Properties getPropertiesWithPrefix(String prefix) {
         Properties filteredProperties = new Properties();
-        for (String key : systemProperties.stringPropertyNames()) {
+        for (String key : properties.keySet()) {
             if (key.startsWith(prefix)) {
-                filteredProperties.put(key, systemProperties.getProperty(key));
+                filteredProperties.put(key, properties.get(key));
             }
         }
         return filteredProperties;
@@ -76,11 +90,11 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
     @Override
     public boolean aValueIsDefinedFor(String property) {
-        return systemProperties.contains(property);
+        return properties.containsKey(property);
     }
 
     public Integer getPropertyAsInteger(String property, Integer defaultValue) {
-        String value = (String) systemProperties.get(property);
+        String value = properties.get(property);
         if (value != null) {
             return Integer.valueOf(value);
         } else {
@@ -109,7 +123,7 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
     public String getProperty(final String name) {
-        return (String) systemProperties.get(name);
+        return properties.get(name);
     }
 
 
@@ -118,7 +132,8 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
     public String getProperty(final String name, final String defaultValue) {
-        return systemProperties.getProperty(name, defaultValue);
+        String value = properties.get(name);
+        return (value != null) ? value : defaultValue;
     }
 
 
@@ -127,17 +142,32 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
 
+    private final Lock propertySetLock = new ReentrantLock();
+
     public void setProperty(String name, String value) {
-        systemProperties.setProperty(name, value);
+
+        propertySetLock.lock();
+
+        HashMap<String, String> workingCopy = Maps.newHashMap(properties);
+        workingCopy.put(name, value);
+        properties = ImmutableMap.copyOf(workingCopy);
+
+        propertySetLock.unlock();
     }
 
 
     public void clearProperty(String name) {
-        systemProperties.remove(name);
+        propertySetLock.lock();
+
+        HashMap<String, String> workingCopy = Maps.newHashMap(properties);
+        workingCopy.remove(name);
+        properties = ImmutableMap.copyOf(workingCopy);
+
+        propertySetLock.unlock();
     }
 
     public EnvironmentVariables copy() {
-        return new SystemEnvironmentVariables(systemProperties, systemValues);
+        return new SystemEnvironmentVariables(getProperties(), systemValues);
     }
 
     public static EnvironmentVariables createEnvironmentVariables() {

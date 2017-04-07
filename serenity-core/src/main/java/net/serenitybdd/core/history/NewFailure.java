@@ -1,8 +1,11 @@
-package net.serenitybdd.core.failurehistory;
+package net.serenitybdd.core.history;
 
 import net.thucydides.core.model.flags.Flag;
 
-public class NewFailureFlag implements Flag {
+public enum NewFailure implements Flag {
+
+    FLAG;
+
     @Override
     public String getType() {
         return "new-failure";
@@ -17,4 +20,6 @@ public class NewFailureFlag implements Flag {
     public String getSymbol() {
         return "flag";
     }
+
+
 }

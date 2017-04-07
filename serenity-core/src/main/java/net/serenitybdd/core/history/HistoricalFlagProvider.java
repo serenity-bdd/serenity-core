@@ -1,4 +1,4 @@
-package net.serenitybdd.core.failurehistory;
+package net.serenitybdd.core.history;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
@@ -25,7 +25,8 @@ public class HistoricalFlagProvider implements FlagProvider {
     public Set<? extends Flag> getFlagsFor(TestOutcome testOutcome) {
         if (!historicalFlagsAreActivated()) { return ImmutableSet.of(); }
 
-        return ImmutableSet.of(new NewFailureFlag());
+
+        return ImmutableSet.of(NewFailure.FLAG);
     }
 
     private boolean historicalFlagsAreActivated() {

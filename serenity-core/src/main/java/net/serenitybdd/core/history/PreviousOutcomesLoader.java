@@ -1,4 +1,4 @@
-package net.thucydides.core.reports;
+package net.serenitybdd.core.history;
 
 import ch.lambdaj.Lambda;
 import com.beust.jcommander.internal.Lists;
@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.reports.*;
 import net.thucydides.core.reports.json.JSONTestOutcomeReporter;
 import net.thucydides.core.reports.junit.JUnitXMLOutcomeReporter;
 import net.thucydides.core.reports.xml.XMLTestOutcomeReporter;
@@ -30,42 +31,38 @@ import java.util.concurrent.Future;
 
 import static ch.lambdaj.Lambda.on;
 
-/**
- * Loads test outcomes from a given directory, and reports on their contents.
- * This class is used for aggregate reporting.
- */
-public class TestOutcomeLoader {
+public class PreviousOutcomesLoader {
 
     private final EnvironmentVariables environmentVariables;
     private final FormatConfiguration formatConfiguration;
     private final ExecutorService executor;
     private final static Logger logger = LoggerFactory.getLogger(TestOutcomeLoader.class);
 
-    public TestOutcomeLoader() {
+    public PreviousOutcomesLoader() {
         this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
     }
 
     @Inject
-    public TestOutcomeLoader(EnvironmentVariables environmentVariables) {
+    public PreviousOutcomesLoader(EnvironmentVariables environmentVariables) {
         this(environmentVariables, new FormatConfiguration(environmentVariables));
     }
 
-    public TestOutcomeLoader(EnvironmentVariables environmentVariables, FormatConfiguration formatConfiguration) {
+    public PreviousOutcomesLoader(EnvironmentVariables environmentVariables, FormatConfiguration formatConfiguration) {
         this.environmentVariables = environmentVariables;
         this.formatConfiguration = formatConfiguration;
         this.executor = Injectors.getInjector().getInstance(ExecutorServiceProvider.class).getExecutorService();
     }
 
-    public TestOutcomeLoader forFormat(OutcomeFormat format) {
+    public PreviousOutcomesLoader forFormat(OutcomeFormat format) {
 
-        return new TestOutcomeLoader(environmentVariables, new FormatConfiguration(format));
+        return new PreviousOutcomesLoader(environmentVariables, new FormatConfiguration(format));
     }
 
     /**
-     * Load the test outcomes from a given directory, sorted by Title
+     * Load the previous test outcome minimal information from a given directory
      *
      * @param reportDirectory An existing directory that contains the test outcomes in XML or JSON format.
-     * @return The full list of test outcomes.
+     * @return The full list of test outcome summaries.
      * @throws ReportLoadingFailedError Thrown if the specified directory was invalid or loading finished with error.
      */
     public List<TestOutcome> loadFrom(final File reportDirectory) throws ReportLoadingFailedError {
@@ -78,7 +75,7 @@ public class TestOutcomeLoader {
                 partitions.add(new TestOutcomeLoaderCallable(testOutcomeReporter,sourceFile));
             }
 
-            final ExecutorService executorPool = Executors.newFixedThreadPool(20);//NumberOfThreads.forIOOperations());
+            final ExecutorService executorPool = Executors.newFixedThreadPool(NumberOfThreads.forIOOperations());
             final List<Future<Set<TestOutcome>>> loadedTestOutcomes = executorPool.invokeAll(partitions);
 
             List<TestOutcome> testOutcomes = Lists.newArrayList();
@@ -93,10 +90,6 @@ public class TestOutcomeLoader {
         }
 
     }
-
-    private final static List<? extends OutcomeAugmenter> AUGMENTERS = ImmutableList.of(
-            new FlagsAugmenter()
-    );
 
     class TestOutcomeLoaderCallable implements Callable<Set<TestOutcome>> {
 
@@ -113,21 +106,14 @@ public class TestOutcomeLoader {
             Optional<TestOutcome> loadedTestOutcome = testOutcomeReporter.loadReportFrom(sourceFile);
 
             if (loadedTestOutcome.isPresent()) {
-                return ImmutableSet.of(augmented(loadedTestOutcome.get()));
+                return ImmutableSet.of(loadedTestOutcome.get());
             }
 
             return ImmutableSet.of();
         }
-
-        private TestOutcome augmented(TestOutcome testOutcome) {
-            for(OutcomeAugmenter augmenter : AUGMENTERS) {
-                testOutcome = augmenter.augment(testOutcome);
-            }
-            return testOutcome;
-        }
     }
 
-    private List<File> getAllOutcomeFilesFrom(final File reportsDirectory) throws IOException{
+    private List<File> getAllOutcomeFilesFrom(final File reportsDirectory) throws IOException {
         File[] matchingFiles = reportsDirectory.listFiles(new SerializedOutcomeFilenameFilter());
         if (matchingFiles == null) {
             throw new IOException("Could not find directory " + reportsDirectory);
@@ -147,8 +133,8 @@ public class TestOutcomeLoader {
         };
     }
 
-    public static TestOutcomeLoaderBuilder loadTestOutcomes() {
-        return new TestOutcomeLoaderBuilder();
+    public static TestOutcomeLoader.TestOutcomeLoaderBuilder loadTestOutcomes() {
+        return new TestOutcomeLoader.TestOutcomeLoaderBuilder();
     }
 
     public static final class TestOutcomeLoaderBuilder {
@@ -172,7 +158,7 @@ public class TestOutcomeLoader {
     }
 
     private static List<TestOutcome> inOrderOfTestExecution(List<TestOutcome> testOutcomes) {
-       return Lambda.sort(testOutcomes, on(TestOutcome.class).getStartTime());
+        return Lambda.sort(testOutcomes, on(TestOutcome.class).getStartTime());
     }
 
     public AcceptanceTestLoader getOutcomeReporter() {

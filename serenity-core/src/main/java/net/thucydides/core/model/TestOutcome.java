@@ -47,6 +47,7 @@ import org.slf4j.LoggerFactory;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -962,7 +963,7 @@ public class TestOutcome {
         JSONConverter jsonConverter = Injectors.getInjector().getInstance(JSONConverter.class);
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             jsonConverter.toJson(this, outputStream);
-            return outputStream.toString();
+            return outputStream.toString(Charset.defaultCharset());
         } catch (IOException e) {
             LOGGER.error("serialization error for testOutcome with name \"" + this.getName() + "\"", e);
             return "";
@@ -1465,6 +1466,11 @@ public class TestOutcome {
         this.annotatedResult = annotatedResult;
     }
 
+    public TestOutcome withResult(final TestResult annotatedResult) {
+        this.setResult(annotatedResult);
+        return this;
+    }
+
     public TestResult getAnnotatedResult() {
         return annotatedResult;
     }
@@ -1904,8 +1910,15 @@ public class TestOutcome {
     public Set<? extends Flag> getFlags() {
         if (flags == null) {
             flags = flagProvider.getFlagsFor(this);
+            addFlagTagsFor(flags);
         }
         return flags;
+    }
+
+    private void addFlagTagsFor(Set<? extends Flag> flags) {
+        for(Flag flag : flags) {
+            this.addTag(TestTag.withName(flag.getMessage()).andType("flag"));
+        }
     }
 
     public boolean isStartTimeNotDefined() {

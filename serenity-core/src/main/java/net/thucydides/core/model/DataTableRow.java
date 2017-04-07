@@ -1,9 +1,9 @@
 package net.thucydides.core.model;
 
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DataTableRow {
@@ -15,12 +15,12 @@ public class DataTableRow {
     }
 
     public DataTableRow(List<? extends Object> values, TestResult result) {
-        this.values = ImmutableList.copyOf(values);
+        this.values = new ArrayList<>(values);
         this.result = result;
     }
 
     public List<? extends Object> getValues() {
-        return ImmutableList.copyOf(values);
+        return new ArrayList<>(values);
     }
 
     public List<String> getStringValues() {

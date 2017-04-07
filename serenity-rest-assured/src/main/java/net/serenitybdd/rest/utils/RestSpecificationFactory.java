@@ -30,18 +30,27 @@ public class RestSpecificationFactory {
     private static final Logger log = LoggerFactory.getLogger(RestSpecificationFactory.class);
 
 
-    public static RequestSpecificationDecorated getInstrumentedRequestSpecification(RequestSpecificationImpl delegate) {
+    private final static Class<?> requestSpecificationDecoratedClass = new ByteBuddy()
+            .subclass(RequestSpecificationDecorated.class)
+            .method(isDeclaredBy(RequestSpecification.class).or(isDeclaredBy(RequestSenderOptions.class)).or(isDeclaredBy(FilterableRequestSpecification.class)))
+            .intercept(MethodDelegation.toField("core"))
+            .make()
+            .load(SerenityRest.class.getClassLoader())
+            .getLoaded();
 
-        Class<?> dynamicType = new ByteBuddy()
-                .subclass(RequestSpecificationDecorated.class)
-                .method(isDeclaredBy(RequestSpecification.class).or(isDeclaredBy(RequestSenderOptions.class)).or(isDeclaredBy(FilterableRequestSpecification.class)))
-                .intercept(MethodDelegation.to(delegate))
-                .make()
-                .load(SerenityRest.class.getClassLoader())
-                .getLoaded();
+    private final static Class<?> responseSpecificationDecoratedClass = new ByteBuddy()
+            .subclass(ResponseSpecificationDecorated.class)
+            .method(isDeclaredBy(ResponseSpecification.class).or(isDeclaredBy(RequestSenderOptions.class)).or(isDeclaredBy(FilterableResponseSpecification.class)))
+            .intercept(MethodDelegation.toField("core"))
+            .make()
+            .load(SerenityRest.class.getClassLoader())
+            .getLoaded();
+
+
+    public static RequestSpecificationDecorated getInstrumentedRequestSpecification(RequestSpecificationImpl delegate) {
         RequestSpecificationDecorated instrumentedResponse = null;
         try {
-            instrumentedResponse = (RequestSpecificationDecorated) dynamicType.getConstructor(RequestSpecificationImpl.class).newInstance((delegate));
+            instrumentedResponse = (RequestSpecificationDecorated) requestSpecificationDecoratedClass.getConstructor(RequestSpecificationImpl.class).newInstance((delegate));
             final List<Filter> filters = new LinkedList<>();
             for (final LogDetail logDetail : Arrays.asList(HEADERS, COOKIES, BODY, PARAMS, METHOD, PATH)) {
                 filters.add(new FieldsRecordingFilter(true, logDetail));
@@ -57,17 +66,9 @@ public class RestSpecificationFactory {
     }
 
     public static ResponseSpecificationDecorated getInstrumentedResponseSpecification(ResponseSpecificationImpl delegate) {
-
-        Class<?> dynamicType = new ByteBuddy()
-                .subclass(ResponseSpecificationDecorated.class)
-                .method(isDeclaredBy(ResponseSpecification.class).or(isDeclaredBy(RequestSenderOptions.class)).or(isDeclaredBy(FilterableResponseSpecification.class)))
-                .intercept(MethodDelegation.to(delegate))
-                .make()
-                .load(SerenityRest.class.getClassLoader())
-                .getLoaded();
         ResponseSpecificationDecorated instrumentedResponseSpec = null;
         try {
-            instrumentedResponseSpec = (ResponseSpecificationDecorated) dynamicType.getConstructor(ResponseSpecificationImpl.class).newInstance(delegate);
+            instrumentedResponseSpec = (ResponseSpecificationDecorated) responseSpecificationDecoratedClass.getConstructor(ResponseSpecificationImpl.class).newInstance(delegate);
         } catch(InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
             log.error("Cannot instrument ResponseSpecificationDecorated ", ex);
         }

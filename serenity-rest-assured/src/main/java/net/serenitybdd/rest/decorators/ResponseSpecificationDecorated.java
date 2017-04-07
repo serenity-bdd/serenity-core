@@ -1,5 +1,6 @@
 package net.serenitybdd.rest.decorators;
 
+import com.jayway.restassured.config.RestAssuredConfig;
 import com.jayway.restassured.internal.ResponseParserRegistrar;
 import com.jayway.restassured.internal.ResponseSpecificationImpl;
 import com.jayway.restassured.response.Response;
@@ -19,7 +20,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class ResponseSpecificationDecorated implements FilterableResponseSpecification {
     private static final Logger log = LoggerFactory.getLogger(ResponseSpecificationDecorated.class);
-    private final ResponseSpecificationImpl core;
+    protected final ResponseSpecificationImpl core;
     private final ReflectionHelper<ResponseSpecificationImpl> helper;
 
     public ResponseSpecificationDecorated(final ResponseSpecificationImpl core) {
@@ -152,6 +153,14 @@ public abstract class ResponseSpecificationDecorated implements FilterableRespon
 
     public boolean hasBodyAssertionsDefined() {
         return core.hasBodyAssertionsDefined();
+    }
+
+    public void setConfig(final RestAssuredConfig config) {
+        core.setConfig(config);
+    }
+
+    public RestAssuredConfig getConfig() {
+        return core.getConfig();
     }
 
 }

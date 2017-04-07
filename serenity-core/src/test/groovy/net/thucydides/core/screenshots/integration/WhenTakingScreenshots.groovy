@@ -1,8 +1,8 @@
 package net.thucydides.core.screenshots.integration
 
 import net.serenitybdd.core.Serenity
-import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool
+import net.serenitybdd.core.webdriver.servicepools.PhantomJSServicePool
 import net.thucydides.core.model.TestStep
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource
 import net.thucydides.core.steps.BaseStepListener
@@ -31,7 +31,7 @@ class WhenTakingScreenshots extends Specification {
     WebDriver driver
 
     def setupSpec() {
-        driverService = new ChromeServicePool()
+        driverService = new PhantomJSServicePool()
         driverService.start()
         StepEventBus.eventBus.clear()
 

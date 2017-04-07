@@ -22,4 +22,7 @@ public abstract class AbstractObjectInitialiser<T> implements Predicate<T> {
     
 	@Override
 	public abstract boolean apply(T input);
+
+    public boolean test(T input) { return apply(input); };
+
 }

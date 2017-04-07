@@ -7,6 +7,7 @@ import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
@@ -49,19 +50,19 @@ public class StepLibraryConstructionStrategy {
     }
 
     private <T> boolean hasAPagesConstructor(final Class<T> stepLibraryClass) {
-        ImmutableSet<Constructor<?>> constructors = copyOf(stepLibraryClass.getDeclaredConstructors());
+        ImmutableSet<? extends Constructor<?>> constructors = copyOf(stepLibraryClass.getDeclaredConstructors());
         return Iterables.any(constructors, withASinglePagesParameter());
 
     }
 
     private <T> boolean hasAConstructorWithParameters(final Class<T> stepLibraryClass) {
-        ImmutableSet<Constructor<?>> constructors = copyOf(stepLibraryClass.getDeclaredConstructors());
+        ImmutableSet<? extends Constructor<?>> constructors = copyOf(stepLibraryClass.getDeclaredConstructors());
         return Iterables.any(constructors, withAnyParameters());
 
     }
 
     private <T> boolean hasAConstructorWithoutParameters(final Class<T> stepLibraryClass) {
-        ImmutableSet<Constructor<?>> constructors = copyOf(stepLibraryClass.getDeclaredConstructors());
+        ImmutableSet<? extends Constructor<?>> constructors = copyOf(stepLibraryClass.getDeclaredConstructors());
         return Iterables.any(constructors, withoutParameters());
 
     }
@@ -75,8 +76,13 @@ public class StepLibraryConstructionStrategy {
     private Predicate<Constructor<?>> withAnyParameters() {
         return new Predicate<Constructor<?>>() {
 
+            @Override
             public boolean apply(Constructor<?> constructor) {
                 return ((constructor.getParameterTypes().length > 0));
+            }
+
+            public boolean test(@Nullable Constructor<?> input) {
+                return apply(input);
             }
         };
     }
@@ -84,8 +90,13 @@ public class StepLibraryConstructionStrategy {
     private Predicate<Constructor<?>> withoutParameters() {
         return new Predicate<Constructor<?>>() {
 
+            @Override
             public boolean apply(Constructor<?> constructor) {
                 return ((constructor.getParameterTypes().length == 0));
+            }
+
+            public boolean test(@Nullable Constructor<?> input) {
+                return apply(input);
             }
         };
     }
@@ -93,9 +104,14 @@ public class StepLibraryConstructionStrategy {
     private Predicate<Constructor<?>> withASinglePagesParameter() {
         return new Predicate<Constructor<?>>() {
 
+            @Override
             public boolean apply(Constructor<?> constructor) {
                 return ((constructor.getParameterTypes().length == 1)
                         && (constructor.getParameterTypes()[0] == Pages.class));
+            }
+
+            public boolean test(@Nullable Constructor<?> input) {
+                return apply(input);
             }
         };
     }
@@ -106,8 +122,13 @@ public class StepLibraryConstructionStrategy {
 
     private Predicate<Field> ofTypePages() {
         return new Predicate<Field>() {
+            @Override
             public boolean apply(Field field) {
                 return (field.getType() == Pages.class);
+            }
+
+            public boolean test(@Nullable Field input) {
+                return apply(input);
             }
         };
     }

@@ -8,6 +8,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.WebDriver;
 
+import javax.annotation.Nullable;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -31,11 +33,16 @@ public class WhenUsingCustomLogicForElementsInit {
 
         public PageObjectWithCustomLogic(final WebDriver driver) {
             super(driver,new Predicate<PageObject>() {
+                @Override
                 public boolean apply(PageObject page) {
                     PageObjectWithCustomLogic customPage = (PageObjectWithCustomLogic)page;
                     assertFalse("Page was populated before actual population", customPage.pagesPopulated);
                     customPage.pagesPopulated = true; //in real HtmlElementLoader.populatePageObject(page, driver);
                     return true;
+                }
+
+                public boolean test(@Nullable PageObject input) {
+                    return false;
                 }
             });
         }

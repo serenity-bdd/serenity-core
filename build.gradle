@@ -34,7 +34,7 @@ ext {
     hamcrestVersion = '1.3'
     springVersion = '4.3.5.RELEASE'
     springBootVersion = '1.4.3.RELEASE'
-    guavaVersion = '20.0'
+    guavaVersion = '21.0'
     restAssuredVersion = '2.9.0'
     mockitoCoreVersion = '1.10.19'
     jbehaveCoreVersion = '4.1'

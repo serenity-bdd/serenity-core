@@ -6,6 +6,7 @@ import com.google.common.collect.Iterables;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.pages.Pages;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
@@ -19,18 +20,18 @@ public class StepLibraryType {
         this.stepLibraryClass = stepLibraryClass;
     }
 
-    public static StepLibraryType ofClass(final Class<?> stepLibraryClass)  {
+    public static StepLibraryType ofClass(final Class<?> stepLibraryClass) {
         return new StepLibraryType(stepLibraryClass);
     }
 
     public <T> boolean hasAPagesConstructor() {
-        ImmutableSet<Constructor<?>> constructors = copyOf(stepLibraryClass.getDeclaredConstructors());
+        ImmutableSet<? extends Constructor<?>> constructors = copyOf(stepLibraryClass.getDeclaredConstructors());
         return Iterables.any(constructors, withASinglePagesParameter());
 
     }
 
     public <T> boolean hasAConstructorWithParameters() {
-        ImmutableSet<Constructor<?>> constructors = copyOf(stepLibraryClass.getDeclaredConstructors());
+        ImmutableSet<? extends Constructor<?>> constructors = copyOf(stepLibraryClass.getDeclaredConstructors());
         return Iterables.any(constructors, withAnyParameters());
 
     }
@@ -40,29 +41,47 @@ public class StepLibraryType {
         return Iterables.any(fields, ofTypePages());
 
     }
+
     private Predicate<Constructor<?>> withAnyParameters() {
         return new Predicate<Constructor<?>>() {
 
+            @Override
             public boolean apply(Constructor<?> constructor) {
                 return ((constructor.getParameterTypes().length > 0));
+            }
+
+
+            public boolean test(@Nullable Constructor<?> input) {
+                return apply(input);
             }
         };
     }
 
     private Predicate<Constructor<?>> withASinglePagesParameter() {
+
         return new Predicate<Constructor<?>>() {
 
-            public boolean apply(Constructor<?> constructor) {
+            @Override
+            public boolean apply(@Nullable Constructor<?> constructor) {
                 return ((constructor.getParameterTypes().length == 1)
                         && (constructor.getParameterTypes()[0] == Pages.class));
+            }
+
+            public boolean test(@Nullable Constructor<?> input) {
+                return apply(input);
             }
         };
     }
 
     public static Predicate<Field> ofTypePages() {
         return new Predicate<Field>() {
-            public boolean apply(Field field) {
-                return (field.getType() == Pages.class);
+            @Override
+            public boolean apply(@Nullable Field input) {
+                return (input.getType() == Pages.class);
+            }
+
+            public boolean test(@Nullable Field input) {
+                return apply(input);
             }
         };
     }

@@ -9,6 +9,7 @@ import com.google.common.collect.Iterables;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import org.openqa.selenium.WebDriver;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -80,8 +81,13 @@ public class ManagedWebDriverAnnotatedField {
 
     private static Predicate<Field> withCorrectAnnotations() {
         return new Predicate<Field>() {
+            @Override
             public boolean apply(Field field) {
                 return isFieldAnnotated(field);
+            }
+
+            public boolean test(@Nullable Field input) {
+                return apply(input);
             }
         };
     }

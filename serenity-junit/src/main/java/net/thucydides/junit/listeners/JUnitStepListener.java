@@ -139,10 +139,10 @@ public class JUnitStepListener extends RunListener {
 
     @Override
     public void testIgnored(final Description description) throws Exception {
-        if (testingThisTest(description)) {
-            stepEventBus().testIgnored();
-            endTest();
-        }
+//        if (testingThisTest(description)) {
+//            stepEventBus().testIgnored();
+//            endTest();
+//        }
     }
 
     public List<TestOutcome> getTestOutcomes() {
@@ -172,7 +172,7 @@ public class JUnitStepListener extends RunListener {
     }
 
     private boolean testingThisTest(Description description) {
-        return description.getTestClass().equals(testClass);
+        return (description.getTestClass() != null) && (description.getTestClass().equals(testClass));
     }
 
     protected Class<?> getTestClass() {

@@ -483,7 +483,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public void stepStarted(final ExecutedStepDescription description) {
         pushStepMethodIn(description);
         recordStep(description);
-        if (currentTestIsABrowserTest()) {
+        if (currentTestIsABrowserTest() && browserIsOpen()) {
             takeInitialScreenshot();
         }
     }

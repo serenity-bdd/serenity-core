@@ -3,8 +3,6 @@ package net.serenitybdd.core.webdriver.servicepools;
 import com.google.common.base.Optional;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.openqa.selenium.io.FileHandler;
-import org.openqa.selenium.os.CommandLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,7 +85,9 @@ public class DriverServiceExecutable {
     }
 
     public File asAFile() {
-        Optional<String> defaultPath = Optional.fromNullable(CommandLine.find(exeName));
+
+        String pathOnFilesystem = new ExecutableFinder().find(exeName);
+        Optional<String> defaultPath = Optional.fromNullable(pathOnFilesystem);
 
         Optional<String> configuredBinaryPath = Optional.fromNullable(environmentVariables.getProperty(exeProperty));
         String exePath = configuredBinaryPath.or(defaultPath).orNull();
@@ -117,7 +117,7 @@ public class DriverServiceExecutable {
                 "The driver executable does not exist: %s", exe.getAbsolutePath());
         checkState(!exe.isDirectory(),
                 "The driver executable is a directory: %s", exe.getAbsolutePath());
-        checkState(FileHandler.canExecute(exe),
+        checkState(exe.canExecute(),
                 "The driver is not executable: %s", exe.getAbsolutePath());
     }
 }

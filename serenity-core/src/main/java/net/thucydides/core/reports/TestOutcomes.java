@@ -178,10 +178,10 @@ public class TestOutcomes {
     }
 
     public boolean haveFlags() {
-        return !flags().isEmpty();
+        return !getFlags().isEmpty();
     }
 
-    public Set<? extends Flag> flags() {
+    public Set<? extends Flag> getFlags() {
         return getFlagCounts().keySet();
     }
 
@@ -782,7 +782,6 @@ new HashMap<>();
     }
 
     private int countStepsWithResult(TestResult expectedResult, TestType testType) {
-//        int stepCount = sum(outcomes, on(TestOutcome.class).countNestedStepsWithResult(expectedResult, testType));
         int stepCount = 0;
         for(TestOutcome outcome : outcomes) {
             stepCount += outcome.countNestedStepsWithResult(expectedResult, testType);
@@ -804,7 +803,6 @@ new HashMap<>();
             total += outcome.countResults(expectedResult, testType);
         }
         return total;
-//        return sum(outcomes, on(TestOutcome.class).countResults(expectedResult, testType));
     }
 
     private Integer getEstimatedTotalStepCount() {
@@ -850,7 +848,6 @@ new HashMap<>();
             total += outcome.getTestCount();
         }
         return total;
-//        return sum(outcomes, on(TestOutcome.class).getTestCount());
     }
 
     private int totalImplementedTests() {
@@ -859,7 +856,6 @@ new HashMap<>();
             total += outcome.getImplementedTestCount();
         }
         return total;
-//        return sum(outcomes, on(TestOutcome.class).getImplementedTestCount());
     }
 
     public boolean hasDataDrivenTests() {
@@ -869,7 +865,6 @@ new HashMap<>();
             }
         }
         return false;
- //       return !filter(having(on(TestOutcome.class).isDataDriven(), is(true)), outcomes).isEmpty();
     }
 
     public int getTotalDataRows() {
@@ -878,9 +873,6 @@ new HashMap<>();
             total += (outcome.getDataTable() != null) ? outcome.getDataTable().getSize() : 0;
         }
         return total;
-
-//        List<? extends TestOutcome> datadrivenTestOutcomes = filter(having(on(TestOutcome.class).isDataDriven(), is(true)), outcomes);
-//        return sum(datadrivenTestOutcomes, on(TestOutcome.class).getDataTable().getSize());
     }
 
     public TestOutcomeMatcher findMatchingTags() {

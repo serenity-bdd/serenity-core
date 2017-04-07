@@ -48,7 +48,7 @@
     <#assign percentageSuccessCount = successCount / totalCount >
     <#assign percentagePendingCount = pendingCount / totalCount  >
     <#assign percentageIgnoredCount = ignoredCount / totalCount  >
-    <#assign percentageFailureOrErrorCount = failureCount / totalCount  >
+    <#assign percentageFailureOrErrorCount = (manualFailureOrErrorCount + autoFailureOrErrorCount) / totalCount  >
 <#else>
     <#assign percentageSuccessCount = 0.0 >
     <#assign percentagePendingCount = 0.0 >

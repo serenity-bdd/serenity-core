@@ -109,17 +109,7 @@ public class WhenReadingEnvironmentVariables {
         boolean value = environmentVariables.getPropertyAsBoolean("some.boolean.property",false);
         assertThat(value, is(true));
     }
-
-    @Test
-    public void should_read_blank_boolean_system_properties_from_the_system_from_default() {
-        System.setProperty("some.boolean.property","");
-
-        EnvironmentVariables environmentVariables = new SystemEnvironmentVariables();
-
-        assertThat(environmentVariables.getPropertyAsBoolean("some.boolean.property",false), is(false));
-        assertThat(environmentVariables.getPropertyAsBoolean("some.boolean.property",true), is(true));
-    }
-
+    
     @Test
     public void should_read_boolean_system_properties_from_the_system_with_a_default() {
         EnvironmentVariables environmentVariables = new SystemEnvironmentVariables();

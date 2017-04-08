@@ -5,13 +5,16 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.buildinfo.PropertyBasedDriverCapabilityRecord;
+import net.serenitybdd.core.history.FileSystemTestOutcomeSummaryRecorder;
 import net.serenitybdd.core.history.HistoricalFlagProvider;
+import net.serenitybdd.core.history.TestOutcomeSummaryRecorder;
 import net.serenitybdd.core.time.InternalSystemClock;
 import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.annotations.locators.SmartElementProxyCreator;
 import net.thucydides.core.annotations.locators.SmartWidgetProxyCreator;
 import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.batches.BatchManagerProvider;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.fixtureservices.ClasspathFixtureProviderService;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.issues.IssueTracking;
@@ -30,9 +33,9 @@ import net.thucydides.core.reports.saucelabs.SaucelabsLinkGenerator;
 import net.thucydides.core.reports.templates.FreeMarkerTemplateManager;
 import net.thucydides.core.reports.templates.TemplateManager;
 import net.thucydides.core.requirements.ClasspathRequirementsProviderService;
+import net.thucydides.core.requirements.MultiSourceRequirementsService;
 import net.thucydides.core.requirements.RequirementsProviderService;
 import net.thucydides.core.requirements.RequirementsService;
-import net.thucydides.core.requirements.MultiSourceRequirementsService;
 import net.thucydides.core.statistics.AtomicTestCount;
 import net.thucydides.core.statistics.TestCount;
 import net.thucydides.core.statistics.service.ClasspathTagProviderService;
@@ -44,7 +47,6 @@ import net.thucydides.core.steps.di.DependencyInjectorService;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.SystemEnvironmentVariables;
 import net.thucydides.core.webdriver.*;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 
 public class ThucydidesModule extends AbstractModule {
 
@@ -77,6 +79,7 @@ public class ThucydidesModule extends AbstractModule {
         bind(ExecutorServiceProvider.class).to(MultithreadExecutorServiceProvider.class).in(Singleton.class);
         bind(CloseBrowser.class).to(WebdriverCloseBrowser.class).in(Singleton.class);
         bind(FlagProvider.class).to(HistoricalFlagProvider.class).in(Singleton.class);
+        bind(TestOutcomeSummaryRecorder.class).to(FileSystemTestOutcomeSummaryRecorder.class).in(Singleton.class);
     }
 
     @Provides

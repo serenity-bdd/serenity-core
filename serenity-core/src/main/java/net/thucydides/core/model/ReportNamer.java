@@ -19,6 +19,7 @@ public class ReportNamer {
 
     private ReportType type;
     private boolean compressedFilename = true;
+    private String prefix = "";
 
     private ReportNamer(final ReportType type) {
         this(type,
@@ -67,7 +68,7 @@ public class ReportNamer {
     }
 
     private String normalizedVersionOf(String text) {
-        return (compressedFilename) ? appendSuffixTo(Digest.ofTextValue(text)) : appendSuffixTo(text);
+        return prefix + ((compressedFilename) ? appendSuffixTo(Digest.ofTextValue(text)) : appendSuffixTo(text));
     }
 
     private String appendSuffixTo(final String testNameWithUnderscores) {
@@ -80,5 +81,10 @@ public class ReportNamer {
 
     public ReportNamer withNoCompression() {
         return new ReportNamer(type, false);
+    }
+
+    public ReportNamer withPrefix(String prefix) {
+        this.prefix = prefix;
+        return this;
     }
 }

@@ -658,15 +658,15 @@ public enum ThucydidesSystemProperty {
 
     /**
      * If set to true, historical flags will be displayed in test lists.
-     * This must be set in conjunction with the serenity.history.dir property
+     * This must be set in conjunction with the serenity.historyDirectory property
      */
     SHOW_HISTORY_FLAGS,
 
     /**
      * Serenity will look in this directory for the previous build results, to use as a basis for the
-     * historical flags shown in the test results.
+     * historical flags shown in the test results. By default, the 'history' folder in the working directory will be used.
      */
-    SERENITY_HISTORY_DIRECTORY,
+    SERENITY_HISTORY_DIRECTORY("serenity.historyDirectory"),
 
     /**
      * Add extra columns to the CSV output, obtained from tag values.

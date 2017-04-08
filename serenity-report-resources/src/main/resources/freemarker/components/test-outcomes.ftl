@@ -46,7 +46,7 @@
                                         <#assign testOutcomeTitle = testOutcome.unqualified.title >
 
                                         <a href="${relativeLink}${testOutcome.reportName}.html" class="ellipsis"
-                                           title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 40)}">
+                                           title="${formatter.htmlAttributeCompatible(testOutcomeTitle)} ${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 40)}">
                                             ${formatter.htmlCompatibleTestTitle(testOutcomeTitle)}${exampleCount}
                                             <#if (!testOutcome.titleWithIssues)>
                                                 <span class="related-issue-title">${testOutcome.formattedIssues}</span>

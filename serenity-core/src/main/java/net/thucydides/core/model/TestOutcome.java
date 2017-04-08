@@ -358,6 +358,7 @@ public class TestOutcome {
      */
     protected TestOutcome withFlagProvider(FlagProvider flagProvider) {
         this.flagProvider = flagProvider;
+        this.flags = null;
         return this;
     }
 

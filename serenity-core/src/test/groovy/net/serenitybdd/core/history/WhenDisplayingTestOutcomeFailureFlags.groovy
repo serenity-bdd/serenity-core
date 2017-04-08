@@ -3,9 +3,7 @@ package net.serenitybdd.core.history
 import net.thucydides.core.model.Story
 import net.thucydides.core.model.flags.FlagProvider
 import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.util.MockEnvironmentVariables
 import spock.lang.Specification
-import spock.lang.Unroll
 
 import static net.thucydides.core.model.TestOutcome.forTestInStory
 
@@ -16,33 +14,6 @@ class WhenDisplayingTestOutcomeFailureFlags extends Specification {
         def testOutcome = forTestInStory("my test", Story.called("my story"))
         then:
         testOutcome.getFlags().isEmpty()
-    }
-
-    private static final String UNDEFINED = ""
-
-    @Unroll
-    def "You can activate historical flags in test outcomes using the show.historical.flags property and by defining a history directory"() {
-        given:
-            def environmentVariables = new MockEnvironmentVariables()
-            String historyDirectoryPath = (historyDirectory == UNDEFINED) ? "" : new File("src/test/resources/" + historyDirectory).getAbsolutePath();
-            String sourceDirectoryPath = new File("src/test/resources/json-reports").getAbsolutePath();
-        and:
-            environmentVariables.setProperty("show.history.flags", historicalFlags)
-            environmentVariables.setProperty("serenity.history.directory", historyDirectoryPath)
-            environmentVariables.setProperty("serenity.sourceDirectory", sourceDirectoryPath)
-
-            def flagProvider = new HistoricalFlagProvider(environmentVariables)
-
-            def testOutcome = forTestInStory("my test", Story.called("my story"))
-        when:
-            testOutcome = testOutcome.withFlagProvider(flagProvider)
-        then:
-            !testOutcome.flags.isEmpty() == testFlagsShouldBeFound
-        where:
-            historicalFlags | historyDirectory     | testFlagsShouldBeFound
-                    "false" | "historical-reports" | false
-                    "true"  | "historical-reports" | true
-                    "true"  | UNDEFINED            | false
     }
 
     def "test outcomes should provide the total number of flags"() {

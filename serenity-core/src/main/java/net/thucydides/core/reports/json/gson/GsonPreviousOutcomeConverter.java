@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import net.serenitybdd.core.history.PreviousTestOutcome;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +46,7 @@ public class GsonPreviousOutcomeConverter {
     }
 
     private boolean isValid(PreviousTestOutcome testOutcome) {
-        return !testOutcome.getId().isEmpty();
+        return !StringUtils.isEmpty(testOutcome.getId());
     }
 
     public void toJson(PreviousTestOutcome testOutcome, OutputStream outputStream) throws IOException {

@@ -3,6 +3,7 @@ package net.thucydides.core.util;
 import ch.lambdaj.function.convert.DefaultStringConverter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -13,9 +14,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static ch.lambdaj.Lambda.convert;
-import static java.lang.Boolean.parseBoolean;
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Return system environment variable values.
@@ -107,11 +105,13 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     }
 
     public Boolean getPropertyAsBoolean(String name, boolean defaultValue) {
-        if (isEmpty(getProperty(name)) || isBlank(getProperty(name))) {
+        if (getProperty(name) == null) {
             return defaultValue;
+        } else if (StringUtils.isBlank(getProperty(name))) {
+            return true;
+        } else {
+            return Boolean.parseBoolean(getProperty(name, "false"));
         }
-
-        return parseBoolean(getProperty(name, "false"));
     }
 
 

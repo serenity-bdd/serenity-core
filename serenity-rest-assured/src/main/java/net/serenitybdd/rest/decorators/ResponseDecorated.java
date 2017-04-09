@@ -1,13 +1,16 @@
 package net.serenitybdd.rest.decorators;
 
-import com.jayway.restassured.internal.RestAssuredResponseOptionsImpl;
-import com.jayway.restassured.internal.mapper.ObjectMapperType;
-import com.jayway.restassured.mapper.ObjectMapper;
-import com.jayway.restassured.path.json.JsonPath;
-import com.jayway.restassured.path.json.config.JsonPathConfig;
-import com.jayway.restassured.path.xml.XmlPath;
-import com.jayway.restassured.path.xml.config.XmlPathConfig;
-import com.jayway.restassured.response.*;
+import io.restassured.http.Cookie;
+import io.restassured.http.Cookies;
+import io.restassured.http.Headers;
+import io.restassured.internal.RestAssuredResponseOptionsImpl;
+import io.restassured.mapper.ObjectMapperType;
+import io.restassured.mapper.ObjectMapper;
+import io.restassured.path.json.JsonPath;
+import io.restassured.path.json.config.JsonPathConfig;
+import io.restassured.path.xml.XmlPath;
+import io.restassured.path.xml.config.XmlPathConfig;
+import io.restassured.response.*;
 
 import java.io.InputStream;
 import java.util.Map;

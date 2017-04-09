@@ -2,10 +2,10 @@ package net.serenitybdd.rest.requests
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.jayway.restassured.RestAssured
-import com.jayway.restassured.specification.RequestSender
-import com.jayway.restassured.specification.RequestSpecification
-import com.jayway.restassured.specification.ResponseSpecification
+import io.restassured.RestAssured
+import io.restassured.specification.RequestSender
+import io.restassured.specification.RequestSpecification
+import io.restassured.specification.ResponseSpecification
 import net.serenity.test.utils.rules.TestCase
 import net.serenitybdd.rest.decorators.ResponseDecorated
 import net.serenitybdd.rest.rules.RestConfigurationAction
@@ -147,7 +147,7 @@ class WhenExecutingPatchRequest extends Specification {
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
         when: "creating new request and making patch request"
-            def response = expect().patch(url)
+            def response = when().patch(url)
         then: "created response should be decorated"
             response instanceof ResponseDecorated
         and: "returned status should be correct"
@@ -169,7 +169,7 @@ class WhenExecutingPatchRequest extends Specification {
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
         when: "creating new request and making patch request"
-            def response = expect().patch("$url?status={status}", ["status": "available"])
+            def response = when().patch("$url?status={status}", ["status": "available"])
         then: "created response should be decorated"
             response instanceof ResponseDecorated
         and: "returned status should be correct"
@@ -191,7 +191,7 @@ class WhenExecutingPatchRequest extends Specification {
                 .withHeader("Content-Type", "application/xml")
                 .withBody(body)));
         when: "creating new request and making patch request"
-            def response = expect().patch("$url?status={status}", "available")
+            def response = when().patch("$url?status={status}", "available")
         then: "created response should be decorated"
             response instanceof ResponseDecorated
         and: "returned status should be correct"

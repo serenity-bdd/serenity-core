@@ -1,7 +1,7 @@
 package net.serenitybdd.rest.decorators.request;
 
-import com.jayway.restassured.internal.RequestSpecificationImpl;
-import com.jayway.restassured.specification.FilterableRequestSpecification;
+import io.restassured.internal.RequestSpecificationImpl;
+import io.restassured.specification.FilterableRequestSpecification;
 import org.apache.http.client.HttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

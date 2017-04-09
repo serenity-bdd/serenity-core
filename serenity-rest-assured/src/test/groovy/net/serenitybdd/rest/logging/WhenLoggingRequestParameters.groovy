@@ -2,9 +2,9 @@ package net.serenitybdd.rest.logging
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.jayway.restassured.config.RestAssuredConfig
-import com.jayway.restassured.config.SSLConfig
-import com.jayway.restassured.specification.FilterableRequestSpecification
+import io.restassured.config.RestAssuredConfig
+import io.restassured.config.SSLConfig
+import io.restassured.specification.FilterableRequestSpecification
 import net.serenity.test.utils.rules.TestCase
 import net.serenitybdd.rest.decorators.ResponseDecorated
 import net.serenitybdd.rest.decorators.ResponseSpecificationDecorated

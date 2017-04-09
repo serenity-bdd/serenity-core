@@ -1,17 +1,17 @@
 package net.serenitybdd.rest.stubs;
 
-import com.jayway.restassured.function.RestAssuredFunction;
-import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.internal.RestAssuredResponseOptionsImpl;
-import com.jayway.restassured.internal.ValidatableResponseImpl;
-import com.jayway.restassured.matcher.ResponseAwareMatcher;
-import com.jayway.restassured.parsing.Parser;
-import com.jayway.restassured.response.ExtractableResponse;
-import com.jayway.restassured.response.Response;
-import com.jayway.restassured.response.ValidatableResponse;
-import com.jayway.restassured.response.ValidatableResponseLogSpec;
-import com.jayway.restassured.specification.Argument;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.function.RestAssuredFunction;
+import io.restassured.http.ContentType;
+import io.restassured.internal.RestAssuredResponseOptionsImpl;
+import io.restassured.internal.ValidatableResponseImpl;
+import io.restassured.matcher.ResponseAwareMatcher;
+import io.restassured.parsing.Parser;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
+import io.restassured.response.ValidatableResponseLogSpec;
+import io.restassured.specification.Argument;
+import io.restassured.specification.ResponseSpecification;
 import org.hamcrest.Matcher;
 
 import java.util.List;
@@ -89,6 +89,11 @@ public class ValidatableResponseStub implements ValidatableResponse {
 
     @Override
     public ValidatableResponse header(String headerName, Matcher<?> expectedValueMatcher) {
+        return this;
+    }
+
+    @Override
+    public ValidatableResponse header(String s, ResponseAwareMatcher<Response> responseAwareMatcher) {
         return this;
     }
 

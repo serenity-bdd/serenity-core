@@ -1,13 +1,12 @@
 package net.serenitybdd.rest.stubs;
 
-import com.jayway.restassured.function.RestAssuredFunction;
-import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.parsing.Parser;
-import com.jayway.restassured.response.Response;
-import com.jayway.restassured.specification.Argument;
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseLogSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.function.RestAssuredFunction;
+import io.restassured.http.ContentType;
+import io.restassured.parsing.Parser;
+import io.restassured.response.Response;
+import io.restassured.specification.*;
+import org.apache.commons.lang3.NotImplementedException;
+import org.apache.http.MethodNotSupportedException;
 import org.hamcrest.Matcher;
 
 import java.net.URI;
@@ -211,8 +210,8 @@ public class ResponseSpecificationStub implements ResponseSpecification {
     }
 
     @Override
-    public ResponseSpecification when() {
-        return this;
+    public RequestSender when() {
+        throw new NotImplementedException("when()");
     }
 
     @Override
@@ -275,178 +274,4 @@ public class ResponseSpecificationStub implements ResponseSpecification {
         return this;
     }
 
-    @Override
-    public Response get(final String path, final Object... pathParams) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response get(final String path, final Map<String, ?> pathParams) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response post(final String path, final Object... pathParams) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response post(final String path, final Map<String, ?> pathParams) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response put(final String path, final Object... pathParams) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response put(final String path, final Map<String, ?> pathParams) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response delete(final String path, final Object... pathParams) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response delete(final String path, final Map<String, ?> pathParams) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response head(final String path, final Object... pathParams) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response head(final String path, final Map<String, ?> pathParams) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response patch(final String path, final Object... pathParams) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response patch(final String path, final Map<String, ?> pathParams) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response options(final String path, final Object... pathParams) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response options(final String path, final Map<String, ?> pathParams) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response get(final URI uri) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response post(final URI uri) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response put(final URI uri) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response delete(final URI uri) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response head(final URI uri) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response patch(final URI uri) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response options(final URI uri) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response get(final URL url) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response post(final URL url) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response put(final URL url) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response delete(final URL url) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response head(final URL url) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response patch(final URL url) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response options(final URL url) {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response get() {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response post() {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response put() {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response delete() {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response head() {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response patch() {
-        return new ResponseStub();
-    }
-
-    @Override
-    public Response options() {
-        return new ResponseStub();
-    }
 }

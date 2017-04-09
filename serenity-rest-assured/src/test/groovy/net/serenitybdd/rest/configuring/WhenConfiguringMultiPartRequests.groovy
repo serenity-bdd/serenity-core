@@ -1,6 +1,6 @@
 package net.serenitybdd.rest.configuring
 
-import com.jayway.restassured.specification.FilterableRequestSpecification
+import io.restassured.specification.FilterableRequestSpecification
 import net.serenitybdd.rest.decorators.request.RequestSpecificationDecorated
 import net.serenitybdd.rest.rules.RestConfigurationAction
 import net.serenitybdd.rest.rules.RestConfigurationRule
@@ -8,8 +8,8 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-import static com.jayway.restassured.http.ContentType.ANY
-import static com.jayway.restassured.http.ContentType.XML
+import static io.restassured.http.ContentType.ANY
+import static io.restassured.http.ContentType.XML
 import static net.serenitybdd.rest.SerenityRest.given
 import static net.serenitybdd.rest.SerenityRest.reset
 

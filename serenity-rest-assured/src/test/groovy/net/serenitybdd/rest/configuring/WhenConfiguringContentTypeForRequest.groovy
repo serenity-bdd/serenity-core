@@ -2,8 +2,8 @@ package net.serenitybdd.rest.configuring
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.jayway.restassured.http.ContentType
-import com.jayway.restassured.specification.FilterableRequestSpecification
+import io.restassured.http.ContentType
+import io.restassured.specification.FilterableRequestSpecification
 import net.serenity.test.utils.rules.TestCase
 import net.serenitybdd.rest.decorators.ResponseDecorated
 import net.serenitybdd.rest.rules.RestConfigurationAction
@@ -49,7 +49,7 @@ class WhenConfiguringContentTypeForRequest extends Specification {
         then: "same request should be returned after setting content type"
             requestAfterLog == request
         and: "correct content type should be returned"
-            request.getRequestContentType().contains(ContentType.JSON.toString())
+            request.getContentType().contains(ContentType.JSON.toString())
     }
 
     def "should be returned wrapped response after setting content type and executing request"() {
@@ -76,6 +76,6 @@ class WhenConfiguringContentTypeForRequest extends Specification {
         and: "status code returned as expected"
             responseAfterExecutingRequest.then().statusCode(200)
         and: "correct content type should be returned"
-            request.getRequestContentType().contains(ContentType.XML.toString())
+            request.getContentType().contains(ContentType.XML.toString())
     }
 }

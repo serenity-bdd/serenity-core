@@ -1,8 +1,8 @@
 package net.serenitybdd.rest.stubs;
 
-import com.jayway.restassured.filter.log.LogDetail;
-import com.jayway.restassured.specification.ResponseLogSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.specification.ResponseLogSpecification;
+import io.restassured.specification.ResponseSpecification;
 import org.hamcrest.Matcher;
 
 /**

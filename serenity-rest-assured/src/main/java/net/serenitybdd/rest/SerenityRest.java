@@ -1,22 +1,22 @@
 package net.serenitybdd.rest;
 
 import com.google.common.base.Preconditions;
-import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.authentication.*;
-import com.jayway.restassured.config.LogConfig;
-import com.jayway.restassured.config.RestAssuredConfig;
-import com.jayway.restassured.config.SSLConfig;
-import com.jayway.restassured.filter.Filter;
-import com.jayway.restassured.filter.log.LogDetail;
-import com.jayway.restassured.internal.RequestSpecificationImpl;
-import com.jayway.restassured.internal.ResponseSpecificationImpl;
-import com.jayway.restassured.internal.TestSpecificationImpl;
-import com.jayway.restassured.internal.UriValidator;
-import com.jayway.restassured.mapper.ObjectMapper;
-import com.jayway.restassured.parsing.Parser;
-import com.jayway.restassured.response.Response;
-import com.jayway.restassured.response.ValidatableResponse;
-import com.jayway.restassured.specification.*;
+import io.restassured.RestAssured;
+import io.restassured.authentication.*;
+import io.restassured.config.LogConfig;
+import io.restassured.config.RestAssuredConfig;
+import io.restassured.config.SSLConfig;
+import io.restassured.filter.Filter;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.internal.RequestSpecificationImpl;
+import io.restassured.internal.ResponseSpecificationImpl;
+import io.restassured.internal.TestSpecificationImpl;
+import io.restassured.internal.UriValidator;
+import io.restassured.mapper.ObjectMapper;
+import io.restassured.parsing.Parser;
+import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
+import io.restassured.specification.*;
 import net.serenitybdd.rest.decorators.ResponseSpecificationDecorated;
 import net.serenitybdd.rest.decorators.request.RequestSpecificationDecorated;
 import net.serenitybdd.rest.utils.RestDecorationHelper;
@@ -31,7 +31,7 @@ import java.security.KeyStore;
 import java.util.List;
 import java.util.Map;
 
-import static com.jayway.restassured.specification.ProxySpecification.host;
+import static io.restassured.specification.ProxySpecification.host;
 
 /**
  * User: YamStranger
@@ -366,17 +366,17 @@ public class SerenityRest {
     }
 
     public static SSLConfig keystore(final File pathToJks, final String password) {
-        RestAssured.keystore(pathToJks, password);
+        RestAssured.keyStore(pathToJks, password);
         return config().getSSLConfig();
     }
 
     public static SSLConfig keystore(final String password) {
-        RestAssured.keystore(password);
+        RestAssured.keyStore(password);
         return config().getSSLConfig();
     }
 
     public static SSLConfig keystore(final String pathToJks, final String password) {
-        RestAssured.keystore(pathToJks, password);
+        RestAssured.keyStore(pathToJks, password);
         return config().getSSLConfig();
     }
 

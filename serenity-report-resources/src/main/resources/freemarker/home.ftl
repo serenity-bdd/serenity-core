@@ -35,7 +35,7 @@
                 <#if (successfulManualTests)>['Passing (manual)', ${testOutcomes.proportionOf("manual").withResult("success")}],</#if>
                 ['Pending', ${testOutcomes.proportionOf("automated").withResult("pending")}],
                 <#if (pendingManualTests)>['Pending (manual)', ${testOutcomes.proportionOf("manual").withResult("pending")}],</#if>
-                ['Ignored', ${testOutcomes.proportionOf("automated").withResult("ignored")}],
+                ['Ignored/Skipped', ${testOutcomes.proportionOf("automated").withResult("ignored") + testOutcomes.proportionOf("automated").withResult("skipped")}],
                 <#if (ignoredManualTests)>['Ignored (manual)', ${testOutcomes.proportionOf("manual").withResult("ignored")}],</#if>
                 ['Failing', ${testOutcomes.proportionOf("automated").withResult("failure")}],
                 <#if (failingManualTests)>['Failing (manual)', ${testOutcomes.proportionOf("manual").withResult("failure")}],</#if>
@@ -78,7 +78,7 @@
             <#if (pendingManualTests)>
                 {label: '${manualTests.withResult("pending")} / ${testOutcomes.total} manual tests pending' },
             </#if>
-                {label: '${automatedTests.withResult("ignored")} / ${testOutcomes.total} tests not executed'},
+                {label: '${automatedTests.withResult("ignored") + automatedTests.withResult("skipped")} / ${testOutcomes.total} tests not executed'},
             <#if (ignoredManualTests)>
                 {label: '${manualTests.withResult("ignored")} / ${testOutcomes.total} manual tests not executed' },
             </#if>
@@ -97,7 +97,7 @@
                 <#if (successfulManualTests)>['Passing (manual)', ${testOutcomes.proportionalStepsOf("manual").withResult("success")}],</#if>
                 ['Pending', ${testOutcomes.proportionalStepsOf("automated").withResult("pending")}],
                 <#if (pendingManualTests)>['Pending (manual)', ${testOutcomes.proportionalStepsOf("manual").withResult("pending")}],</#if>
-                ['Ignored', ${testOutcomes.proportionalStepsOf("automated").withResult("ignored")}],
+                ['Ignored', ${testOutcomes.proportionalStepsOf("automated").withResult("ignored") + testOutcomes.proportionalStepsOf("automated").withResult("skipped")}],
                 <#if (ignoredManualTests)>['Ignored (manual)', ${testOutcomes.proportionalStepsOf("manual").withResult("ignored")}],</#if>
                 ['Failing', ${testOutcomes.proportionalStepsOf("automated").withResult("failure")}],
                 <#if (failingManualTests)>['Failing (manual)', ${testOutcomes.proportionalStepsOf("manual").withResult("failure")}],</#if>
@@ -141,7 +141,7 @@
             <#if (pendingManualTests)>
                 {label: '${manualTests.withResult("pending")} / ${testOutcomes.total} manual tests pending' },
             </#if>
-                {label: '${automatedTests.withResult("ignored")} / ${testOutcomes.total} tests not executed'},
+                {label: '${automatedTests.withResult("ignored") + automatedTests.withResult("skipped")} / ${testOutcomes.total} tests not executed'},
             <#if (ignoredManualTests)>
                 {label: '${manualTests.withResult("ignored")} / ${testOutcomes.total} manual tests not executed' },
             </#if>

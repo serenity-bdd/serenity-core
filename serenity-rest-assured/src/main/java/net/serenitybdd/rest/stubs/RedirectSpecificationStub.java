@@ -1,7 +1,7 @@
 package net.serenitybdd.rest.stubs;
 
-import com.jayway.restassured.specification.RedirectSpecification;
-import com.jayway.restassured.specification.RequestSpecification;
+import io.restassured.specification.RedirectSpecification;
+import io.restassured.specification.RequestSpecification;
 
 /**
  * Created by john on 23/07/2015.

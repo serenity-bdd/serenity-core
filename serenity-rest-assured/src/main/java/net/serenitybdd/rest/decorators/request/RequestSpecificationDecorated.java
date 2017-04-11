@@ -1,8 +1,8 @@
 package net.serenitybdd.rest.decorators.request;
 
-import com.jayway.restassured.internal.RequestSpecificationImpl;
-import com.jayway.restassured.response.Response;
-import com.jayway.restassured.specification.FilterableRequestSpecification;
+import io.restassured.internal.RequestSpecificationImpl;
+import io.restassured.response.Response;
+import io.restassured.specification.FilterableRequestSpecification;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.rest.RestMethod;
 import net.serenitybdd.rest.stubs.ResponseStub;
@@ -14,9 +14,10 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Map;
 
-import static com.jayway.restassured.internal.assertion.AssertParameter.notNull;
+//import static io.restassured.internal.assertion.AssertParameter.notNull;
 import static net.serenitybdd.core.rest.RestMethod.*;
 import static net.thucydides.core.steps.StepEventBus.getEventBus;
+import static org.apache.http.util.Args.notNull;
 
 /**
  * User: YamStranger

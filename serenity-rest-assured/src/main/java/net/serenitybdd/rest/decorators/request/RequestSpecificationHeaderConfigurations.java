@@ -1,13 +1,13 @@
 package net.serenitybdd.rest.decorators.request;
 
 import com.google.common.base.Preconditions;
-import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.internal.MapCreator;
-import com.jayway.restassured.internal.RequestSpecificationImpl;
-import com.jayway.restassured.response.Header;
-import com.jayway.restassured.response.Headers;
-import com.jayway.restassured.specification.FilterableRequestSpecification;
-import com.jayway.restassured.specification.RequestSpecification;
+import io.restassured.http.ContentType;
+import io.restassured.internal.MapCreator;
+import io.restassured.internal.RequestSpecificationImpl;
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
+import io.restassured.specification.FilterableRequestSpecification;
+import io.restassured.specification.RequestSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +42,7 @@ abstract class RequestSpecificationHeaderConfigurations extends RequestSpecifica
 
     @Override
     public RequestSpecification headers(String firstHeaderName, Object firstHeaderValue, Object... headerNameValuePairs) {
-        return headers(MapCreator.createMapFromParams(firstHeaderName, firstHeaderValue, headerNameValuePairs));
+        return headers(MapCreator.createMapFromParams(MapCreator.CollisionStrategy.OVERWRITE, firstHeaderName, firstHeaderValue, headerNameValuePairs));
     }
 
     @Override

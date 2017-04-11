@@ -1,12 +1,12 @@
 package net.serenitybdd.rest.filters;
 
-import com.jayway.restassured.filter.Filter;
-import com.jayway.restassured.filter.FilterContext;
-import com.jayway.restassured.filter.log.LogDetail;
-import com.jayway.restassured.filter.log.RequestLoggingFilter;
-import com.jayway.restassured.response.Response;
-import com.jayway.restassured.specification.FilterableRequestSpecification;
-import com.jayway.restassured.specification.FilterableResponseSpecification;
+import io.restassured.filter.Filter;
+import io.restassured.filter.FilterContext;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.response.Response;
+import io.restassured.specification.FilterableRequestSpecification;
+import io.restassured.specification.FilterableResponseSpecification;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

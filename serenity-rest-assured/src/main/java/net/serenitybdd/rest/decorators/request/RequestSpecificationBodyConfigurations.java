@@ -1,12 +1,12 @@
 package net.serenitybdd.rest.decorators.request;
 
 import com.google.common.base.Preconditions;
-import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.internal.RequestSpecificationImpl;
-import com.jayway.restassured.internal.mapper.ObjectMapperType;
-import com.jayway.restassured.mapper.ObjectMapper;
-import com.jayway.restassured.specification.FilterableRequestSpecification;
-import com.jayway.restassured.specification.RequestSpecification;
+import io.restassured.http.ContentType;
+import io.restassured.internal.RequestSpecificationImpl;
+import io.restassured.mapper.ObjectMapperType;
+import io.restassured.mapper.ObjectMapper;
+import io.restassured.specification.FilterableRequestSpecification;
+import io.restassured.specification.RequestSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

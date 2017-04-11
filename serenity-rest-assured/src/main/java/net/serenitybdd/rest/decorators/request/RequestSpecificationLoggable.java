@@ -1,10 +1,10 @@
 package net.serenitybdd.rest.decorators.request;
 
-import com.jayway.restassured.internal.RequestLogSpecificationImpl;
-import com.jayway.restassured.internal.RequestSpecificationImpl;
-import com.jayway.restassured.internal.log.LogRepository;
-import com.jayway.restassured.specification.FilterableRequestSpecification;
-import com.jayway.restassured.specification.RequestLogSpecification;
+import io.restassured.internal.RequestLogSpecificationImpl;
+import io.restassured.internal.RequestSpecificationImpl;
+import io.restassured.internal.log.LogRepository;
+import io.restassured.specification.FilterableRequestSpecification;
+import io.restassured.specification.RequestLogSpecification;
 import net.serenitybdd.rest.utils.ReflectionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

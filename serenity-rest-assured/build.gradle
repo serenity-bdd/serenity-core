@@ -5,13 +5,13 @@ ext {
 
 dependencies {
     compile project(':serenity-core')
-    compile ("com.jayway.restassured:rest-assured:${restAssuredVersion}") {
-    	exclude group: 'org.apache.httpcomponents', module:'httpclient'
-    	exclude group: 'org.apache.httpcomponents', module:'httpmime'
+    compile ("io.rest-assured:rest-assured:${restAssuredVersion}") {
+        //exclude group: 'io.rest-assured', module:'json-path'
+        //exclude group: 'io.rest-assured', module:'xml-path'
+        exclude group: 'org.apache.httpcomponents', module:'httpclient'
+        exclude group: 'org.apache.httpcomponents', module:'httpmime'
         exclude group: 'org.codehaus.groovy', module:'groovy'
-        exclude group: 'org.codehaus.groovy', module:'groovy-json'
-        exclude group: 'org.codehaus.groovy', module:'groovy-xml'
-        exclude group: 'org.apache.commons', module:'commons-lang3'
+        exclude group: 'commons-codec', module:'commons-codec'
     }
     testCompile ("com.github.tomakehurst:wiremock:$wiremockCoreVersion") {
         exclude group: 'com.google.guava', module:'guava'

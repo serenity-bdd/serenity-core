@@ -1,11 +1,11 @@
 package net.serenitybdd.rest.utils;
 
-import com.jayway.restassured.filter.Filter;
-import com.jayway.restassured.filter.log.LogDetail;
-import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.internal.support.Prettifier;
-import com.jayway.restassured.response.Response;
-import com.jayway.restassured.response.ResponseOptions;
+import io.restassured.filter.Filter;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.http.ContentType;
+import io.restassured.internal.support.Prettifier;
+import io.restassured.response.Response;
+import io.restassured.response.ResponseOptions;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.rest.RestMethod;
 import net.serenitybdd.core.rest.RestQuery;
@@ -51,9 +51,9 @@ public class RestReportingHelper {
             }
         }
         final RestQuery query = RestQuery.
-                withMethod(method).andPath(ObjectUtils.firstNonNull(values.get(LogDetail.PATH), "")).
+                withMethod(method).andPath(ObjectUtils.firstNonNull(values.get(LogDetail.URI).replaceFirst("^Request URI:\t", ""), "")).
                 withContentType(String.valueOf(
-                                ContentType.fromContentType(spec.getRequestContentType()))
+                                ContentType.fromContentType(spec.getContentType()))
                 ).
                 withContent(firstNonNull(values.get(LogDetail.BODY), "")).
                 withRequestCookies(firstNonNull(values.get(LogDetail.COOKIES), "")).

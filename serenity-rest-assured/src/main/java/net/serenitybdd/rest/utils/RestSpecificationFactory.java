@@ -1,11 +1,11 @@
 package net.serenitybdd.rest.utils;
 
-import com.jayway.restassured.filter.Filter;
-import com.jayway.restassured.filter.log.LogDetail;
-import com.jayway.restassured.internal.RequestSpecificationImpl;
-import com.jayway.restassured.internal.ResponseSpecificationImpl;
-import com.jayway.restassured.internal.filter.SendRequestFilter;
-import com.jayway.restassured.specification.*;
+import io.restassured.filter.Filter;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.internal.RequestSpecificationImpl;
+import io.restassured.internal.ResponseSpecificationImpl;
+import io.restassured.internal.filter.SendRequestFilter;
+import io.restassured.specification.*;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.serenitybdd.rest.SerenityRest;
@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.jayway.restassured.filter.log.LogDetail.*;
+import static io.restassured.filter.log.LogDetail.*;
 import static net.bytebuddy.matcher.ElementMatchers.isDeclaredBy;
 
 
@@ -67,7 +67,7 @@ public class RestSpecificationFactory {
         try {
             instrumentedResponse = (RequestSpecificationDecorated) requestSpecificationDecoratedConstructor.newInstance((delegate));
             final List<Filter> filters = new LinkedList<>();
-            for (final LogDetail logDetail : Arrays.asList(HEADERS, COOKIES, BODY, PARAMS, METHOD, PATH)) {
+            for (final LogDetail logDetail : Arrays.asList(HEADERS, COOKIES, BODY, PARAMS, METHOD, URI)) {
                 filters.add(new FieldsRecordingFilter(true, logDetail));
             }
             if (RestExecutionHelper.restCallsAreEnabled()) {

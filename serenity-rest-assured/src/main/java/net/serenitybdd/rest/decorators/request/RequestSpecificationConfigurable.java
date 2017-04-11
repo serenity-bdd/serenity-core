@@ -1,9 +1,9 @@
 package net.serenitybdd.rest.decorators.request;
 
-import com.jayway.restassured.config.RestAssuredConfig;
-import com.jayway.restassured.config.SessionConfig;
-import com.jayway.restassured.internal.RequestSpecificationImpl;
-import com.jayway.restassured.specification.*;
+import io.restassured.config.RestAssuredConfig;
+import io.restassured.config.SessionConfig;
+import io.restassured.internal.RequestSpecificationImpl;
+import io.restassured.specification.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

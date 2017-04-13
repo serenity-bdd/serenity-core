@@ -2,23 +2,24 @@ package net.thucydides.core.requirements;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.reflect.ClassPath;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Narrative;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
 import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -41,6 +42,8 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     private List<Requirement> requirements;
 
     private final RequirementsStore requirementsStore;
+
+    List<String> requirementPaths;
 
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables,
                                           String rootPackage,
@@ -109,7 +112,6 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
         try {
             List<String> requirementPaths = requirementPathsStartingFrom(rootPackage);
-            Collections.sort(requirementPaths, byDescendingPackageLength());
 //            int requirementsDepth = shortestPathIn(requirementPaths);
             int requirementsDepth = longestPathIn(requirementPaths);
 
@@ -145,10 +147,16 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         };
     }
 
-    List<String> requirementPaths;
+    private final Lock readingPaths = new ReentrantLock();
+
     private List<String> requirementPathsStartingFrom(String rootPackage){
+
         if (requirementPaths == null) {
-            requirementPaths = requirementPathsFromClassesInPackage(rootPackage);
+            readingPaths.lock();
+            List<String> paths = requirementPathsFromClassesInPackage(rootPackage);
+            Collections.sort(paths, byDescendingPackageLength());
+            requirementPaths = ImmutableList.copyOf(paths);
+            readingPaths.unlock();
         }
         return requirementPaths;
     }

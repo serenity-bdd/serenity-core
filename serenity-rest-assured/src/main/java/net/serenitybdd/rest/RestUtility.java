@@ -1,8 +1,8 @@
 package net.serenitybdd.rest;
 
-import com.jayway.restassured.authentication.*;
-import com.jayway.restassured.config.RestAssuredConfig;
-import com.jayway.restassured.specification.*;
+import io.restassured.authentication.*;
+import io.restassured.config.RestAssuredConfig;
+import io.restassured.specification.*;
 
 import java.util.List;
 

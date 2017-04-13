@@ -1,11 +1,11 @@
 package net.serenitybdd.rest.filters;
 
-import com.jayway.restassured.filter.Filter;
-import com.jayway.restassured.filter.FilterContext;
-import com.jayway.restassured.internal.filter.FilterContextImpl;
-import com.jayway.restassured.response.Response;
-import com.jayway.restassured.specification.FilterableRequestSpecification;
-import com.jayway.restassured.specification.FilterableResponseSpecification;
+import io.restassured.filter.Filter;
+import io.restassured.filter.FilterContext;
+import io.restassured.internal.filter.FilterContextImpl;
+import io.restassured.response.Response;
+import io.restassured.specification.FilterableRequestSpecification;
+import io.restassured.specification.FilterableResponseSpecification;
 import net.serenitybdd.rest.stubs.ResponseStub;
 import net.serenitybdd.rest.utils.ReflectionHelper;
 import net.serenitybdd.rest.utils.RestExecutionHelper;

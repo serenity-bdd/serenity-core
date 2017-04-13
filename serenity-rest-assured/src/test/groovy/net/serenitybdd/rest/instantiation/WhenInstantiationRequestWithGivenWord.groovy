@@ -1,7 +1,7 @@
 package net.serenitybdd.rest.instantiation
 
-import com.jayway.restassured.RestAssured
-import com.jayway.restassured.specification.FilterableRequestSpecification
+import io.restassured.RestAssured
+import io.restassured.specification.FilterableRequestSpecification
 import net.serenitybdd.rest.decorators.request.RequestSpecificationDecorated
 import net.serenitybdd.rest.decorators.ResponseSpecificationDecorated
 import net.serenitybdd.rest.rules.RestConfigurationAction

@@ -1,9 +1,9 @@
 package net.serenitybdd.rest.decorators.request;
 
-import com.jayway.restassured.internal.RequestSpecificationImpl;
-import com.jayway.restassured.specification.FilterableRequestSpecification;
-import com.jayway.restassured.specification.MultiPartSpecification;
-import com.jayway.restassured.specification.RequestSpecification;
+import io.restassured.internal.RequestSpecificationImpl;
+import io.restassured.specification.FilterableRequestSpecification;
+import io.restassured.specification.MultiPartSpecification;
+import io.restassured.specification.RequestSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,8 +11,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
-import static com.jayway.restassured.http.ContentType.ANY;
-import static com.jayway.restassured.http.ContentType.JSON;
+import static io.restassured.http.ContentType.ANY;
+import static io.restassured.http.ContentType.JSON;
 
 /**
  * User: YamStranger
@@ -82,7 +82,7 @@ abstract class RequestSpecificationMultiPartConfigurations extends RequestSpecif
     @Override
     public RequestSpecification multiPart(String controlName, Object object) {
         return multiPart(controlName, object,
-                ANY.toString().equals(getRequestContentType()) ? JSON.toString() : getRequestContentType());
+                ANY.toString().equals(getContentType()) ? JSON.toString() : getContentType());
     }
 
     @Override

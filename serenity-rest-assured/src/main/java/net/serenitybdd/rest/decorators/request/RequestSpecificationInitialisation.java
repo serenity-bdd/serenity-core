@@ -1,12 +1,12 @@
 package net.serenitybdd.rest.decorators.request;
 
-import com.jayway.restassured.config.RestAssuredConfig;
-import com.jayway.restassured.internal.RequestSpecificationImpl;
-import com.jayway.restassured.internal.ResponseSpecificationImpl;
-import com.jayway.restassured.response.Response;
-import com.jayway.restassured.specification.FilterableRequestSpecification;
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.config.RestAssuredConfig;
+import io.restassured.internal.RequestSpecificationImpl;
+import io.restassured.internal.ResponseSpecificationImpl;
+import io.restassured.response.Response;
+import io.restassured.specification.FilterableRequestSpecification;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import net.serenitybdd.rest.decorators.ResponseDecorated;
 import net.serenitybdd.rest.decorators.ResponseSpecificationDecorated;
 import net.serenitybdd.rest.utils.ReflectionHelper;

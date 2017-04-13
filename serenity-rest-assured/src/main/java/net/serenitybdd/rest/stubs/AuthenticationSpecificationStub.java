@@ -1,11 +1,11 @@
 package net.serenitybdd.rest.stubs;
 
-import com.jayway.restassured.authentication.CertificateAuthSettings;
-import com.jayway.restassured.authentication.FormAuthConfig;
-import com.jayway.restassured.authentication.OAuthSignature;
-import com.jayway.restassured.specification.AuthenticationSpecification;
-import com.jayway.restassured.specification.PreemptiveAuthSpec;
-import com.jayway.restassured.specification.RequestSpecification;
+import io.restassured.authentication.CertificateAuthSettings;
+import io.restassured.authentication.FormAuthConfig;
+import io.restassured.authentication.OAuthSignature;
+import io.restassured.specification.AuthenticationSpecification;
+import io.restassured.specification.PreemptiveAuthSpec;
+import io.restassured.specification.RequestSpecification;
 
 /**
  * Created by john on 23/07/2015.
@@ -42,11 +42,13 @@ public class AuthenticationSpecificationStub implements AuthenticationSpecificat
         return new RequestSpecificationStub();
     }
 
+    /*
     @Override
     public RequestSpecification certificate(final String certURL, final String password, final String keystoreType,
                                             final int port) {
         return new RequestSpecificationStub();
     }
+*/
 
     @Override
     public RequestSpecification oauth2(final String accessToken) {

@@ -1,9 +1,9 @@
 package net.serenitybdd.rest;
 
-import com.jayway.restassured.response.Response;
-import com.jayway.restassured.specification.RequestSender;
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSender;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 
 import java.net.URI;
 import java.net.URL;

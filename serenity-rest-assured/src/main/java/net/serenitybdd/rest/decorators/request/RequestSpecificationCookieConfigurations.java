@@ -1,12 +1,12 @@
 package net.serenitybdd.rest.decorators.request;
 
 import com.google.common.base.Preconditions;
-import com.jayway.restassured.internal.MapCreator;
-import com.jayway.restassured.internal.RequestSpecificationImpl;
-import com.jayway.restassured.response.Cookie;
-import com.jayway.restassured.response.Cookies;
-import com.jayway.restassured.specification.FilterableRequestSpecification;
-import com.jayway.restassured.specification.RequestSpecification;
+import io.restassured.internal.MapCreator;
+import io.restassured.internal.RequestSpecificationImpl;
+import io.restassured.http.Cookie;
+import io.restassured.http.Cookies;
+import io.restassured.specification.FilterableRequestSpecification;
+import io.restassured.specification.RequestSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,7 +75,7 @@ abstract class RequestSpecificationCookieConfigurations extends RequestSpecifica
 
     @Override
     public RequestSpecification cookies(String firstCookieName, Object firstCookieValue, Object... cookieNameValuePairs) {
-        return cookies(MapCreator.createMapFromParams(firstCookieName, firstCookieValue, cookieNameValuePairs));
+        return cookies(MapCreator.createMapFromParams(MapCreator.CollisionStrategy.OVERWRITE, firstCookieName, firstCookieValue, cookieNameValuePairs));
     }
 
     protected String serializeIfNeeded(final Object object) {

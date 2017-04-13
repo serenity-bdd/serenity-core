@@ -1,13 +1,13 @@
 package net.serenitybdd.rest.stubs;
 
-import com.jayway.restassured.config.RestAssuredConfig;
-import com.jayway.restassured.filter.Filter;
-import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.internal.RequestLogSpecificationImpl;
-import com.jayway.restassured.internal.mapper.ObjectMapperType;
-import com.jayway.restassured.mapper.ObjectMapper;
-import com.jayway.restassured.response.*;
-import com.jayway.restassured.specification.*;
+import io.restassured.config.RestAssuredConfig;
+import io.restassured.filter.Filter;
+import io.restassured.http.*;
+import io.restassured.internal.RequestLogSpecificationImpl;
+import io.restassured.mapper.ObjectMapperType;
+import io.restassured.mapper.ObjectMapper;
+import io.restassured.response.*;
+import io.restassured.specification.*;
 
 import java.io.File;
 import java.io.InputStream;
@@ -290,12 +290,12 @@ public class RequestSpecificationStub implements RequestSpecification {
     }
 
     @Override
-    public RequestSpecification keystore(final String pathToJks, final String password) {
+    public RequestSpecification keyStore(final String pathToJks, final String password) {
         return this;
     }
 
     @Override
-    public RequestSpecification keystore(final File pathToJks, final String password) {
+    public RequestSpecification keyStore(final File pathToJks, final String password) {
         return this;
     }
 
@@ -770,6 +770,46 @@ public class RequestSpecificationStub implements RequestSpecification {
 
     @Override
     public Response options() {
+        return new ResponseStub();
+    }
+
+    @Override
+    public Response request(Method method) {
+        return new ResponseStub();
+    }
+
+    @Override
+    public Response request(String s) {
+        return new ResponseStub();
+    }
+
+    @Override
+    public Response request(Method method, String s, Object... objects) {
+        return new ResponseStub();
+    }
+
+    @Override
+    public Response request(String s, String s1, Object... objects) {
+        return new ResponseStub();
+    }
+
+    @Override
+    public Response request(Method method, URI uri) {
+        return new ResponseStub();
+    }
+
+    @Override
+    public Response request(Method method, URL url) {
+        return new ResponseStub();
+    }
+
+    @Override
+    public Response request(String s, URI uri) {
+        return new ResponseStub();
+    }
+
+    @Override
+    public Response request(String s, URL url) {
         return new ResponseStub();
     }
 }

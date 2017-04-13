@@ -1,12 +1,12 @@
 package net.serenitybdd.rest.decorators.request;
 
-import com.jayway.restassured.authentication.AuthenticationScheme;
-import com.jayway.restassured.config.RestAssuredConfig;
-import com.jayway.restassured.internal.AuthenticationSpecificationImpl;
-import com.jayway.restassured.internal.RequestSpecificationImpl;
-import com.jayway.restassured.specification.AuthenticationSpecification;
-import com.jayway.restassured.specification.FilterableRequestSpecification;
-import com.jayway.restassured.specification.RequestSpecification;
+import io.restassured.authentication.AuthenticationScheme;
+import io.restassured.config.RestAssuredConfig;
+import io.restassured.internal.AuthenticationSpecificationImpl;
+import io.restassured.internal.RequestSpecificationImpl;
+import io.restassured.specification.AuthenticationSpecification;
+import io.restassured.specification.FilterableRequestSpecification;
+import io.restassured.specification.RequestSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,14 +28,14 @@ abstract class RequestSpecificationSecurityConfigurations extends RequestSpecifi
     }
 
     @Override
-    public RequestSpecification keystore(String pathToJks, String password) {
-        core.keystore(pathToJks, password);
+    public RequestSpecification keyStore(String pathToJks, String password) {
+        core.keyStore(pathToJks, password);
         return this;
     }
 
     @Override
-    public RequestSpecification keystore(File pathToJks, String password) {
-        core.keystore(pathToJks, password);
+    public RequestSpecification keyStore(File pathToJks, String password) {
+        core.keyStore(pathToJks, password);
         return this;
     }
 

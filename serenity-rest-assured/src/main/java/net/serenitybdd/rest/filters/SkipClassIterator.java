@@ -2,7 +2,7 @@ package net.serenitybdd.rest.filters;
 
 import java.util.*;
 
-import com.jayway.restassured.filter.Filter;
+import io.restassured.filter.Filter;
 
 /**
  * User: YamStranger

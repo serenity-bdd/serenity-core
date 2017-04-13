@@ -1,8 +1,8 @@
 package net.serenitybdd.rest.utils;
 
-import com.jayway.restassured.filter.log.LogDetail;
-import com.jayway.restassured.internal.print.ResponsePrinter;
-import com.jayway.restassured.response.Response;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.internal.print.ResponsePrinter;
+import io.restassured.response.Response;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

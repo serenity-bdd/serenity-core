@@ -1,6 +1,6 @@
 package net.serenitybdd.rest;
 
-import com.jayway.restassured.http.ContentType;
+import io.restassured.http.ContentType;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.HashMap;

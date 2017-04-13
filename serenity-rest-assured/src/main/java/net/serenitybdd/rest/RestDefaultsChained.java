@@ -1,14 +1,14 @@
 package net.serenitybdd.rest;
 
-import com.jayway.restassured.authentication.AuthenticationScheme;
-import com.jayway.restassured.config.RestAssuredConfig;
-import com.jayway.restassured.filter.Filter;
-import com.jayway.restassured.filter.log.LogDetail;
-import com.jayway.restassured.mapper.ObjectMapper;
-import com.jayway.restassured.parsing.Parser;
-import com.jayway.restassured.specification.ProxySpecification;
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
+import io.restassured.authentication.AuthenticationScheme;
+import io.restassured.config.RestAssuredConfig;
+import io.restassured.filter.Filter;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.mapper.ObjectMapper;
+import io.restassured.parsing.Parser;
+import io.restassured.specification.ProxySpecification;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 
 import java.io.File;
 import java.net.URI;

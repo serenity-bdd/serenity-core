@@ -7,6 +7,7 @@ import io.restassured.internal.ResponseSpecificationImpl;
 import io.restassured.internal.filter.SendRequestFilter;
 import io.restassured.specification.*;
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.serenitybdd.rest.SerenityRest;
 import net.serenitybdd.rest.decorators.ResponseSpecificationDecorated;
@@ -17,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +33,10 @@ public class RestSpecificationFactory {
     private static Constructor<?> requestSpecificationDecoratedConstructor;
 
     private static Constructor<?> responseSpecificationDecoratedConstructor;
+
+    private static RequestSpecificationDecoratedFactory requestSpecificationDecoratedFactory;
+
+    private static ResponseSpecificationDecoratedFactory responseSpecificationDecoratedFactory;
 
     static {
         final Class<?>  requestSpecificationDecoratedClass = new ByteBuddy()
@@ -60,33 +64,52 @@ public class RestSpecificationFactory {
         } catch (NoSuchMethodException e) {
             log.error("Cannot found constructor for ResponseSpecificationDecorated ",e);
         }
+
+        try {
+            requestSpecificationDecoratedFactory = new ByteBuddy()
+                    .subclass(RequestSpecificationDecoratedFactory.class)
+                    .method(isDeclaredBy(RequestSpecificationDecoratedFactory.class))
+                    .intercept(MethodCall
+                            .construct(requestSpecificationDecoratedConstructor)
+                            .withArgument(0))
+                    .make()
+                    .load(requestSpecificationDecoratedClass.getClassLoader())
+                    .getLoaded().newInstance();
+        } catch (InstantiationException | IllegalAccessException  e) {
+            log.error("Cannot create requestSpecificationDecoratedFactory ",e);
+        }
+
+        try {
+            responseSpecificationDecoratedFactory = new ByteBuddy()
+                    .subclass(ResponseSpecificationDecoratedFactory.class)
+                    .method(isDeclaredBy(ResponseSpecificationDecoratedFactory.class))
+                    .intercept(MethodCall
+                            .construct(responseSpecificationDecoratedConstructor)
+                            .withArgument(0))
+                    .make()
+                    .load(responseSpecificationDecoratedClass.getClassLoader())
+                    .getLoaded().newInstance();
+        } catch (InstantiationException | IllegalAccessException  e) {
+            log.error("Cannot create responseSpecificationDecoratedFactory ",e);
+        }
+
     }
 
     public static RequestSpecificationDecorated getInstrumentedRequestSpecification(RequestSpecificationImpl delegate) {
-        RequestSpecificationDecorated instrumentedResponse = null;
-        try {
-            instrumentedResponse = (RequestSpecificationDecorated) requestSpecificationDecoratedConstructor.newInstance((delegate));
-            final List<Filter> filters = new LinkedList<>();
-            for (final LogDetail logDetail : Arrays.asList(HEADERS, COOKIES, BODY, PARAMS, METHOD, URI)) {
-                filters.add(new FieldsRecordingFilter(true, logDetail));
-            }
-            if (RestExecutionHelper.restCallsAreEnabled()) {
-                filters.add(new UpdatingContextFilter(SendRequestFilter.class));
-            }
-            instrumentedResponse.filters(filters);
-        } catch(InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-            log.error("Cannot instrument RequestSpecificationImpl ", ex);
+        RequestSpecificationDecorated instrumentedResponse  = (RequestSpecificationDecorated) requestSpecificationDecoratedFactory.create((delegate));
+        final List<Filter> filters = new LinkedList<>();
+        for (final LogDetail logDetail : Arrays.asList(HEADERS, COOKIES, BODY, PARAMS, METHOD, URI)) {
+            filters.add(new FieldsRecordingFilter(true, logDetail));
         }
+        if (RestExecutionHelper.restCallsAreEnabled()) {
+            filters.add(new UpdatingContextFilter(SendRequestFilter.class));
+        }
+        instrumentedResponse.filters(filters);
+
         return instrumentedResponse;
     }
 
     public static ResponseSpecificationDecorated getInstrumentedResponseSpecification(ResponseSpecificationImpl delegate) {
-        ResponseSpecificationDecorated instrumentedResponseSpec = null;
-        try {
-            instrumentedResponseSpec = (ResponseSpecificationDecorated) responseSpecificationDecoratedConstructor.newInstance(delegate);
-        } catch(InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-            log.error("Cannot instrument ResponseSpecificationDecorated ", ex);
-        }
-        return instrumentedResponseSpec;
+        return  (ResponseSpecificationDecorated) responseSpecificationDecoratedFactory.create(delegate);
     }
 }

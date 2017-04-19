@@ -51,7 +51,7 @@ public class FileSystemTestOutcomeSummaryRecorder implements TestOutcomeSummaryR
      */
     public FileSystemTestOutcomeSummaryRecorder(Path historyDirectory, Boolean deletePreviousHistory) {
         this.historyDirectory = historyDirectory;
-        this.deletePreviousHistory = deletePreviousHistory;
+        this.deletePreviousHistory = Optional.fromNullable(deletePreviousHistory).or(false);
         previousOutcomeConverter = new GsonPreviousOutcomeConverter(Injectors.getInjector().getInstance(EnvironmentVariables.class));
     }
 
@@ -60,6 +60,7 @@ public class FileSystemTestOutcomeSummaryRecorder implements TestOutcomeSummaryR
 
         try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(sourceDirectory)) {
 
+            System.out.println("deletePreviousHistory = " + deletePreviousHistory);
             usingDeleteStrategyFor(deletePreviousHistory).prepareHistoryDirectory(historyDirectory);
 
             for (Path path : directoryStream) {
@@ -74,6 +75,8 @@ public class FileSystemTestOutcomeSummaryRecorder implements TestOutcomeSummaryR
         for (TestOutcome testOutcome : testOutcomes) {
             PreviousTestOutcome summary = PreviousTestOutcome.from(testOutcome);
             File summaryFile = summaryFileFor(testOutcome);
+
+            Files.createDirectories(summaryFile.toPath().getParent());
 
             try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(summaryFile))) {
                 previousOutcomeConverter.toJson(summary, outputStream);

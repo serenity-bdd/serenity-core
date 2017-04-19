@@ -9,6 +9,8 @@ class ClearDirectoryContents implements PrepareHistoryDirectory {
 
     @Override
     public void prepareHistoryDirectory(Path historyDirectory) throws IOException {
-        FileUtils.cleanDirectory(historyDirectory.toFile());
+        if (historyDirectory.toFile().exists()) {
+            FileUtils.cleanDirectory(historyDirectory.toFile());
+        }
     }
 }

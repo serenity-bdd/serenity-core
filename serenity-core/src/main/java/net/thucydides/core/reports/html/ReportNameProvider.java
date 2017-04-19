@@ -23,6 +23,10 @@ public class ReportNameProvider {
         this.requirementsService = requirementsService;
     }
 
+    public ReportNameProvider getWithoutContext() {
+        return new ReportNameProvider(NO_CONTEXT, reportNamer, requirementsService);
+    }
+
     public final static Optional<String> NO_CONTEXT = Optional.absent();
 
     public ReportNameProvider() {

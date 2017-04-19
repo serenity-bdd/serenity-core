@@ -5,8 +5,10 @@ import com.google.common.base.Splitter;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestTag;
+import net.thucydides.core.model.flags.Flag;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.util.Inflector;
 
 import java.io.File;
 import java.io.IOException;
@@ -128,6 +130,8 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                                         final List<TestTag> allTags,
                                         final List<String> knownRequirementReportNames) {
 
+            Inflector inflection = Inflector.getInstance();
+
             Set<ReportingTask> reportingTasks = new HashSet<>();
 
             for (TestTag tag : testOutcomes.getTags()) {
@@ -140,6 +144,23 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                                     reportNameProvider,
                                     reportName,
                                     tag,
+                                    allTags,
+                                    testOutcomes)
+                    );
+                }
+            }
+            for(Flag flag : testOutcomes.getFlags()) {
+                String flagName = inflection.of(flag.getMessage()).asATitle().toString();
+                TestTag flagTag = TestTag.withName(flagName).andType("flag");
+                String reportName = reportNameProvider.forTag(flagTag);
+                if (!knownRequirementReportNames.contains(reportName)) {
+                    reportingTasks.add(
+                            new TagReportingTask(freemarker,
+                                    environmentVariables,
+                                    outputDirectory,
+                                    reportNameProvider,
+                                    reportName,
+                                    flagTag,
                                     allTags,
                                     testOutcomes)
                     );

@@ -305,7 +305,7 @@
                     </span>
                     <span class="test-count">
                         ${errorCount}
-                        <#if (report.shouldDisplayResultLink)>
+                        <#if (report.shouldDisplayResultLink && errorCount gt 0)>
                             <a href="${relativeLink}${errorReport}">with errors</a>
                         <#else>errors</#if>
                     </span>)
@@ -341,9 +341,11 @@
                 <#if testOutcomes.haveFlags()>
                     <span class="test-count"> |
                         <#list testOutcomes.flags as flag>
-                            <#assign flagCount = testOutcomes.flagCountFor(flag)>
                             <#assign flagTitle = inflection.of(flag.message).inPluralForm().asATitle() >
-                            <i class="fa fa fa-${flag.symbol} flag-color" alt="${flag.message}" title="${flag.message}"></i> ${flagTitle} (${flagCount})
+                            <#assign flagTag = "flag_${inflection.of(flag.message).asATitle()}" >
+                            <#assign flagReport = reportName.forTag(flagTag) >
+                            <#assign flagCount = testOutcomes.flagCountFor(flag)>
+                            <i class="fa fa fa-${flag.symbol} flag-color" alt="${flag.message}" title="${flag.message}"></i> <a href="${flagReport}">${flagTitle}</a> (${flagCount})
                         </#list>
                     </span>
                 </#if>

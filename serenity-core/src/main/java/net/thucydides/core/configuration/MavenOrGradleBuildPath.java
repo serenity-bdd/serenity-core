@@ -70,6 +70,13 @@ public class MavenOrGradleBuildPath {
         return (serenityOutputDurectory != null) ? serenityOutputDurectory : thucydidesOutputDurectory;
     }
 
+    public String getHistoryDirectory() {
+        String serenityOutputDurectory = environmentVariables.getProperty(ThucydidesSystemProperty.SERENITY_HISTORY_DIRECTORY);
+
+        return (serenityOutputDurectory != null) ? serenityOutputDurectory : ThucydidesSystemProperty.DEFAULT_HISTORY_DIRECTORY;
+    }
+
+
     public File resolve(File relativeDirectory) {
         if (isEmpty(projectMavenBuildDirectory())) {
             return relativeDirectory;

@@ -240,9 +240,9 @@ subprojects {
         testCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
-        testCompile('org.spockframework:spock-core:1.0-groovy-2.4') {
+        testCompile('org.spockframework:spock-core:1.1-groovy-2.4-rc-4') {
             exclude group: "junit"
-            exclude group:"org.codehaus.groovy", module: "groovy-all"
+            exclude module: "groovy-all"
 
         }
         testCompile("com.github.goldin:spock-extensions:0.1.4") {

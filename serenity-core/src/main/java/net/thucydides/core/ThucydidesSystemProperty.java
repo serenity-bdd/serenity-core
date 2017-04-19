@@ -669,6 +669,11 @@ public enum ThucydidesSystemProperty {
     SERENITY_HISTORY_DIRECTORY("serenity.historyDirectory"),
 
     /**
+     * Delete the history directory before a new set of results is recorded
+     */
+    DELETE_HISTORY_DIRECTORY,
+
+    /**
      * Add extra columns to the CSV output, obtained from tag values.
      */
     THUCYDIDES_CSV_EXTRA_COLUMNS,
@@ -900,6 +905,9 @@ public enum ThucydidesSystemProperty {
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;
     public static final int DEFAULT_WIDTH = 960;
+
+    public static final String DEFAULT_HISTORY_DIRECTORY = "history";
+
 
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(ThucydidesSystemProperty.class);
 

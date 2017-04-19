@@ -64,6 +64,8 @@ public class SystemPropertiesConfiguration implements Configuration {
      */
     private File outputDirectory;
 
+    private File historyDirectory;
+
     private String defaultBaseUrl;
 
     private final EnvironmentVariables environmentVariables;
@@ -106,6 +108,19 @@ public class SystemPropertiesConfiguration implements Configuration {
     public File loadOutputDirectoryFromSystemProperties() {
 
         String systemDefinedDirectory = MavenOrGradleBuildPath.specifiedIn(environmentVariables).getBuildDirectory();
+
+        systemDefinedDirectory = filePathParser.getInstanciatedPath(systemDefinedDirectory);
+
+        File newOutputDirectory = new File(systemDefinedDirectory);
+
+        newOutputDirectory.mkdirs();
+
+        return newOutputDirectory;
+    }
+
+    public File loadHistoryDirectoryFromSystemProperties() {
+
+        String systemDefinedDirectory = MavenOrGradleBuildPath.specifiedIn(environmentVariables).getHistoryDirectory();
 
         systemDefinedDirectory = filePathParser.getInstanciatedPath(systemDefinedDirectory);
 
@@ -170,6 +185,14 @@ public class SystemPropertiesConfiguration implements Configuration {
             outputDirectory = loadOutputDirectoryFromSystemProperties();
         }
         return outputDirectory;
+    }
+
+    @Override
+    public File getHistoryDirectory() {
+        if (historyDirectory == null) {
+            historyDirectory = loadHistoryDirectoryFromSystemProperties();
+        }
+        return historyDirectory;
     }
 
     public double getEstimatedAverageStepCount() {

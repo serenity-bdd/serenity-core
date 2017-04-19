@@ -248,4 +248,8 @@ public class WebDriverFactory {
     public static boolean isNotAlive(final WebDriver driver){
         return !isAlive(driver);
     }
+
+    public void releaseTimoutFor(WebDriver driverInstance) {
+        timeoutStack.popTimeoutFor(driverInstance);
+    }
 }

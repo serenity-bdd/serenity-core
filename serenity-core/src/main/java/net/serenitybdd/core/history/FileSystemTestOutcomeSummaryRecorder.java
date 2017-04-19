@@ -60,7 +60,6 @@ public class FileSystemTestOutcomeSummaryRecorder implements TestOutcomeSummaryR
 
         try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(sourceDirectory)) {
 
-            System.out.println("deletePreviousHistory = " + deletePreviousHistory);
             usingDeleteStrategyFor(deletePreviousHistory).prepareHistoryDirectory(historyDirectory);
 
             for (Path path : directoryStream) {

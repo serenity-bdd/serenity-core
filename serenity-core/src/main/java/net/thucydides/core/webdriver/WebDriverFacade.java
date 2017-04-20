@@ -338,7 +338,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     public Set<String> getWindowHandles() {
         if (!isEnabled()) {
-            return new HashSet<String>();
+            return new HashSet<>();
         }
 
         return getProxiedDriver().getWindowHandles();

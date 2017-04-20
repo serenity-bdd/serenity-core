@@ -40,12 +40,11 @@ public class WhenResizingTheBrowser {
         environmentVariables.setProperty("thucydides.browser.height", "200");
         environmentVariables.setProperty("thucydides.browser.width", "400");
 
-        driver = factory.newInstanceOf(SupportedWebDriver.FIREFOX);
+        driver = factory.newInstanceOf(SupportedWebDriver.PHANTOMJS);
         page = new StaticSitePage(driver, 1000);
         page.open();
 
         Dimension screenSize = driver.manage().window().getSize();
-//        int width = screenSize.width;// ((Long)(((JavascriptExecutor)driver).executeScript("return window.innerWidth"))).intValue();
         assertThat(screenSize.width, is(400));
         assertThat(screenSize.height, is(200));
     }

@@ -88,7 +88,8 @@ public class FileSystemTestOutcomeSummaryRecorder implements TestOutcomeSummaryR
     public List<PreviousTestOutcome> loadSummaries() {
         List<PreviousTestOutcome> previousTestOutcomes = new ArrayList<>();
 
-        if (historyDirectory.toFile().exists()) {
+
+        if (Files.exists(historyDirectory)) {
             try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(historyDirectory)) {
                 for (Path path : directoryStream) {
                     previousTestOutcomes.addAll(previousTestOutcomesFrom(path).asSet());

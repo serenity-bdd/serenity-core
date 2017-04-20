@@ -65,6 +65,7 @@ public class FirefoxDriverProvider implements DriverProvider {
     }
 
     private WebDriver newFirefoxDriver(DesiredCapabilities capabilities) {
+        capabilities.setCapability("marionette", false);
         return new FirefoxDriver(enhancer.enhanced(capabilities));
     }
 

@@ -28,7 +28,7 @@ ext {
     htmlunitVersion = '2.21'
 
     groovyVersion = '2.4.10'
-    gradleVersion = '2.10'
+    gradleVersion = '3.5'
 
     junitVersion = '4.12'
     hamcrestVersion = '1.3'

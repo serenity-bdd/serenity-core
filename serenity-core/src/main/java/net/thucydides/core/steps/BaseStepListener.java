@@ -434,6 +434,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
      * @param outcome the result of the test that just finished.
      */
     public void testFinished(final TestOutcome outcome) {
+
+        if (!StepEventBus.getEventBus().areStepsRunning()) { return; }
+
         recordTestDuration();
         getCurrentTestOutcome().addIssues(storywideIssues);
         // TODO: Disable when run from an IDE

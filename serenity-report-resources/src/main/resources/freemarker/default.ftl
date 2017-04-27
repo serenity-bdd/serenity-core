@@ -413,6 +413,7 @@
                                 <span class="rest-query">
                                     <@restQueryData restQuery=step.restQuery number=step.number />
                                 </span>
+
                             </#if>
                         </div>
                     </td>

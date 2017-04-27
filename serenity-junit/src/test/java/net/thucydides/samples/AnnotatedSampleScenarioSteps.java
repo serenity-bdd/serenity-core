@@ -19,6 +19,14 @@ public class AnnotatedSampleScenarioSteps extends ScenarioSteps {
     public void stepThatSucceeds() {
     }
 
+    public static enum Color {
+        RED, BLUE, DARK_GREEN
+    }
+
+    @Step("A step that has a parameter of {0} and stuff")
+    public void stepWithParameter(Color color) {
+    }
+
     @Step
     public void anotherStepThatSucceeds() {
     }

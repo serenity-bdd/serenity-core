@@ -26,6 +26,7 @@ public class AnnotatedSingleTestScenario {
     @Title("Oh happy days!")
     public void happy_day_scenario() {
         steps.stepThatSucceeds();
+        steps.stepWithParameter(AnnotatedSampleScenarioSteps.Color.DARK_GREEN);
         steps.stepThatIsIgnored();
         steps.stepThatIsPending();
         steps.anotherStepThatSucceeds();

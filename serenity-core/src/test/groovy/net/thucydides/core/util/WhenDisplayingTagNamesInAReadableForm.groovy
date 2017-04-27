@@ -151,12 +151,12 @@ class WhenDisplayingTagNamesInAReadableForm extends Specification {
         then:
             humanized == expectedHumanizedForm
         where:
-        word          | expectedHumanizedForm
+            word          | expectedHumanizedForm
             'employee_salary'   | 'Employee salary'
             'author_id'         | 'Author'
             'someTest'          | 'Some test'
             'AnotherTest'       | 'Another test'
             'AN_ENUM_NAME'      | 'An enum name'
+            'ENUM_NAME'         | 'Enum name'
     }
-
 }

@@ -251,8 +251,6 @@ public class StepEventBus {
         //screenshotProcessor.waitUntilDone();
 //        Darkroom.waitUntilClose();
 
-        if (thereAreNoTestOutcomes()) { return; }
-
         TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testFinished(outcome);

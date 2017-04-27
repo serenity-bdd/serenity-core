@@ -102,11 +102,11 @@ public class NarrativeReader {
 
     private int findRootDirectoryStart(String normalizedNarrativePath, String normalizedRootPath) {
         if (normalizedNarrativePath.contains(normalizedRootPath)) {
-            return normalizedNarrativePath.lastIndexOf(normalizedRootPath);
+            return normalizedNarrativePath.indexOf(normalizedRootPath);
         } else if (normalizedNarrativePath.contains("/stories/")) {
-            return normalizedNarrativePath.lastIndexOf("/stories/");
+            return normalizedNarrativePath.indexOf("/stories/");
         } else if (normalizedNarrativePath.contains("/features/")) {
-            return normalizedNarrativePath.lastIndexOf("/features/");
+            return normalizedNarrativePath.indexOf("/features/");
         }
         return 0;
     }

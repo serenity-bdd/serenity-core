@@ -128,9 +128,15 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void exceptionExpected(Class<? extends Throwable> expected) {
+        if (isNotAnException(expected.getName())) { return; }
+
         if ((getCurrentTestOutcome().getTestFailureCause() != null) && (getCurrentTestOutcome().getTestFailureCause().getErrorType().equals(expected.getName()))) {
             getCurrentTestOutcome().resetFailingStepsCausedBy(expected);
         }
+    }
+
+    private boolean isNotAnException(String name) {
+        return name.toLowerCase().endsWith("$none");
     }
 
     public StepMerger mergeLast(int maxStepsToMerge) {

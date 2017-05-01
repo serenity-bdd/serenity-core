@@ -784,6 +784,15 @@ public enum ThucydidesSystemProperty {
     FEATURE_FILE_LANGUAGE,
 
     /**
+     * Display the context in the test title.
+     * Set to false by default.
+     * If the context is a browser type (chrome, ie, firefox, safari, opera), the browser icon will be displayed
+     * If the context is an OS (linux, mac, windows, android, iphone), an icon will be displayed
+     * Otherwise, the context name will be displayed at the start of the test title.
+     */
+    THUCYDIDES_DISPLAY_CONTEXT,
+
+    /**
      * What encoding to use for reading Cucumber feature files?
      * Defaults to system default encoding
      */
@@ -900,7 +909,14 @@ public enum ThucydidesSystemProperty {
     /**
      * Location of the directory where the failure files are recorded.
      */
-    RERUN_FAILURES_DIRECTORY;
+    RERUN_FAILURES_DIRECTORY,
+
+    /**
+     * Provide a text that distinguishes tests run in a particular environment or context from the same test
+     * run in a different environment or context.
+     */
+    CONTEXT
+    ;
 
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;
@@ -995,6 +1011,8 @@ public enum ThucydidesSystemProperty {
     }
 
     public Boolean booleanFrom(EnvironmentVariables environmentVariables, Boolean defaultValue) {
+        if (environmentVariables == null) { return defaultValue; }
+
         Optional<String> newPropertyValue
                 = Optional.fromNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
 

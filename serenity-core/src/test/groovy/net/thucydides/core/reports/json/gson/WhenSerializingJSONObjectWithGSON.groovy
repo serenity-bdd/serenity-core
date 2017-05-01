@@ -43,6 +43,28 @@ class WhenSerializingJSONObjectWithGSON extends Specification {
             loadedTestOutcome == testOutcome
     }
 
+    def "should serialize TestOutcomes with context to JSON"() {
+        given:
+           GsonJSONConverter converter = new GsonJSONConverter(environmentVariables)
+           environmentVariables.setProperty("context","chrome")
+        and:
+            def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class).withQualifier("foo")
+            testOutcome.environmentVariables = environmentVariables
+            testOutcome.startTime = DateTime.parse("2015-01-01")
+
+            testOutcome.description = "Some description"
+
+        when:
+            OutputStream outputStream = new ByteArrayOutputStream()
+            converter.toJson(testOutcome, outputStream)
+            def json = outputStream.toString()
+        and:
+            InputStream stream = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
+            def loadedTestOutcome = converter.fromJson(stream).get()
+        then:
+            loadedTestOutcome.context == "chrome"
+    }
+
     def "should load serialized test outcomes from JSON"() {
         given:
             GsonJSONConverter converter = new GsonJSONConverter(environmentVariables)

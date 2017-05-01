@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import jnr.x86asm.OP;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.model.FailureDetails;
@@ -207,6 +208,8 @@ public class TestOutcome {
      */
     private Optional<String> qualifier;
 
+    private String context;
+
     /**
      * Used to store the table of examples used in an example-driven test outcome.
      */
@@ -246,6 +249,7 @@ public class TestOutcome {
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
         this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
         this.qualifier = Optional.absent();
+        this.context = null;
         this.groupStack = new Stack<>();
     }
 
@@ -264,16 +268,16 @@ public class TestOutcome {
     }
 
     private static String identifierFrom(String testName, Class<?> testCase, Story userStory) {
-        String qualifier = null;
+        String identifer = null;
         if (testCase != null) {
-            qualifier = testCase.getName();
+            identifer = testCase.getName();
         }
 
         if (userStory != null) {
-            qualifier = userStory.getId();
+            identifer = userStory.getId();
         }
 
-        return ((qualifier != null) ? qualifier + ":" : "") + testName;
+        return ((identifer != null) ? identifer + ":" : "") + testName;
     }
 
     /**
@@ -296,9 +300,14 @@ public class TestOutcome {
         this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
         this.qualifier = Optional.absent();
         this.environmentVariables = environmentVariables;
+        this.context = contextFrom(environmentVariables);
         if (testCase != null) {
             setUserStory(leafRequirementDefinedIn().testCase(testCase));
         }
+    }
+
+    private String contextFrom(EnvironmentVariables environmentVariables) {
+        return (environmentVariables == null) ? null : ThucydidesSystemProperty.CONTEXT.from(environmentVariables);
     }
 
     public static TestOutcomeWithEnvironmentBuilder inEnvironment(EnvironmentVariables environmentVariables) {
@@ -364,11 +373,13 @@ public class TestOutcome {
 
     public void setEnvironmentVariables(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
+        this.context = contextFrom(environmentVariables);
     }
 
     public EnvironmentVariables getEnvironmentVariables() {
         if (environmentVariables == null) {
             environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
+            this.context = contextFrom(environmentVariables);
         }
         return environmentVariables;
     }
@@ -400,6 +411,8 @@ public class TestOutcome {
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
         this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
         this.environmentVariables = environmentVariables;
+        this.context = contextFrom(environmentVariables);
+
         this.projectKey = ThucydidesSystemProperty.THUCYDIDES_PROJECT_KEY.from(environmentVariables, "");
     }
 
@@ -661,11 +674,11 @@ public class TestOutcome {
     }
 
     public TitleBuilder getUnqualified() {
-        return new TitleBuilder(this, false);
+        return new TitleBuilder(this, issueTracking, environmentVariables, false);
     }
 
     public TitleBuilder getQualified() {
-        return new TitleBuilder(this, true);
+        return new TitleBuilder(this, issueTracking,environmentVariables,true);
     }
 
     public void setAllStepsTo(TestResult result) {
@@ -888,26 +901,6 @@ public class TestOutcome {
 
     public boolean isTitleWithIssues() {
         return (!getTitle().equalsIgnoreCase(getUnqualified().getTitleWithLinks()));
-    }
-
-    public class TitleBuilder {
-        private final boolean qualified;
-        private final TestOutcome testOutcome;
-
-        public TitleBuilder(TestOutcome testOutcome, boolean qualified) {
-            this.testOutcome = testOutcome;
-            this.qualified = qualified;
-        }
-
-        public String getTitleWithLinks() {
-            String title = Inflector.getInstance().of(getTitle()).asATitle().toString();
-            return getFormatter().addLinks(title);
-        }
-
-        public String getTitle() {
-            return testOutcome.getTitle(qualified);
-        }
-
     }
 
     public void setDescription(String description) {
@@ -1738,12 +1731,20 @@ public class TestOutcome {
     }
 
     public String getQualifiedId() {
+        return Joiner.on("_").skipNulls().join(getId(), getQualifierText(), context);
+    }
+
+    private String getQualifierText() {
         if ((qualifier != null) && (qualifier.isPresent())) {
-            String qualifierWithoutSpaces = qualifier.get().replaceAll(" ", "_");
-            return getId() + "_" + qualifierWithoutSpaces;
-        } else {
-            return getId();
+            return qualifier.get().replaceAll(" ", "_");
         }
+        return null;
+    }
+
+    public String getContext() {
+        if (context == null) { context = contextFrom(environmentVariables); }
+
+        return context;
     }
     /**
      * Returns the name of the test prefixed by the name of the story.

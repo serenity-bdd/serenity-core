@@ -83,7 +83,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
             thrown(org.openqa.selenium.ElementNotVisibleException)
     }
 
-    @Timeout(2)
+    @Timeout(5)
     def "Slow loading fields should not wait once a step has failed"() {
         given: "The #slow-loader field takes 4 seconds to load"
         and: "A step has failed"

@@ -48,7 +48,7 @@ public class TagScanner {
     // with the real filtering.
     private boolean isATaggable(Class<?> testClass) {
         RunWith runWith = testClass.getAnnotation(RunWith.class);
-        return (runWith != null && Taggable.class.isAssignableFrom(runWith.value().getClass()));
+        return (runWith != null && Taggable.class.isAssignableFrom(runWith.value()));
     }
 
     private boolean testClassMatchesAPositiveTag(Class<?> testClass, List<TestTag> expectedTags) {

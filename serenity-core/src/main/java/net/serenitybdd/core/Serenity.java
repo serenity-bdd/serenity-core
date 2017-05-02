@@ -303,4 +303,15 @@ public class Serenity {
             return this;
         }
     }
+
+    public static void setContext(String context) {
+        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        environmentVariables.setProperty("context", context);
+    }
+
+    public static void clearContext() {
+        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        environmentVariables.clearProperty("context");
+    }
+
 }

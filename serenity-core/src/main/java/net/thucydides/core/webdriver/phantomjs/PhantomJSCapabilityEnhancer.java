@@ -3,6 +3,7 @@ package net.thucydides.core.webdriver.phantomjs;
 import com.google.common.collect.Lists;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.capabilities.AddCustomCapabilities;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -48,6 +49,8 @@ public class PhantomJSCapabilityEnhancer {
         else {
             cliArgs.add("--ssl-protocol=any");
         }
+
+        AddCustomCapabilities.startingWith("phantomjs.").from(environmentVariables).to(capabilities);
 
         capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, cliArgs.toArray(new String[]{}));
     }

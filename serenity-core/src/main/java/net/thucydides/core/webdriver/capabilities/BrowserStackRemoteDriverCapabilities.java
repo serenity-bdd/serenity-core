@@ -54,6 +54,9 @@ public class BrowserStackRemoteDriverCapabilities implements RemoteDriverCapabil
     private void configureBrowserStackCapabilities(DesiredCapabilities capabilities) {
         List<String> browserStackProperties = filter(having(on(String.class), startsWith("browserstack.")),
                                                      environmentVariables.getKeys());
+
+        capabilities.setCapability("name",  bestGuessOfTestName());
+
         for(String propertyKey : browserStackProperties) {
             String preparedPropertyKey = getPreparedPropertyKey(propertyKey);
             String propertyValue = environmentVariables.getProperty(propertyKey);
@@ -67,8 +70,6 @@ public class BrowserStackRemoteDriverCapabilities implements RemoteDriverCapabil
         if (isNotEmpty(remotePlatform)) {
             capabilities.setPlatform(Platform.valueOf(remotePlatform));
         }
-
-        capabilities.setCapability("name",  bestGuessOfTestName());
     }
 
     private String bestGuessOfTestName() {

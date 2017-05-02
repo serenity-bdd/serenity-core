@@ -21,6 +21,7 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepFactory;
 import net.thucydides.core.steps.stepdata.StepData;
 import net.thucydides.core.tags.TagScanner;
+import net.thucydides.core.tags.Taggable;
 import net.thucydides.core.webdriver.*;
 import net.thucydides.junit.listeners.JUnitStepListener;
 import org.junit.runner.Description;
@@ -51,7 +52,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  *
  * @author johnsmart
  */
-public class SerenityRunner extends BlockJUnit4ClassRunner {
+public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
 
     /**
      * Provides a proxy of the ScenarioSteps object used to invoke the test steps.

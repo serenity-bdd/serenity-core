@@ -7,6 +7,7 @@ import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.runner.RunWith;
 
 import java.util.List;
 
@@ -35,10 +36,19 @@ public class TagScanner {
     }
 
     public boolean shouldRunMethod(Class<?> testClass, String methodName) {
+        if (!isATaggable(testClass)) { return true; }
         if (providedTags.isEmpty()) { return true; }
 
         return testMethodMatchesAPositiveTag(testClass, methodName, providedTags)
                 && testMethodDoesNotMatchANegativeTag(testClass, methodName, providedTags);
+    }
+
+    // Cucumber and JBehave have their own filtering mechanisms.
+    // If the default tag scanner is applied to these test runners, it will interfere
+    // with the real filtering.
+    private boolean isATaggable(Class<?> testClass) {
+        RunWith runWith = testClass.getAnnotation(RunWith.class);
+        return (runWith != null && Taggable.class.isAssignableFrom(runWith.value().getClass()));
     }
 
     private boolean testClassMatchesAPositiveTag(Class<?> testClass, List<TestTag> expectedTags) {

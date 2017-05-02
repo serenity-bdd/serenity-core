@@ -26,6 +26,7 @@ public class TitleBuilder {
         FONTAWESOME_ICONS_FOR_COMMON_CONTEXTS.put("safari", "<i class=\"fa fa-safari\" aria-hidden=\"true\"></i>");
         FONTAWESOME_ICONS_FOR_COMMON_CONTEXTS.put("opera", "<i class=\"fa fa-opera\" aria-hidden=\"true\"></i>");
         FONTAWESOME_ICONS_FOR_COMMON_CONTEXTS.put("ie", "<i class=\"fa fa-ie\" aria-hidden=\"true\"></i>");
+        FONTAWESOME_ICONS_FOR_COMMON_CONTEXTS.put("phantomjs", "<i class=\"fa fa-snapchat-ghost\" aria-hidden=\"true\"></i>");
 
         FONTAWESOME_ICONS_FOR_COMMON_CONTEXTS.put("linux", "<i class=\"fa fa-linux\" aria-hidden=\"true\"></i>");
         FONTAWESOME_ICONS_FOR_COMMON_CONTEXTS.put("mac", "<i class=\"fa fa-apple\" aria-hidden=\"true\"></i>");

@@ -42,4 +42,8 @@ public class TimeoutStack {
             return Optional.absent();
         }
     }
+
+    public void releaseTimeoutFor(WebDriver driverInstance) {
+        timeouts.remove(driverInstance);
+    }
 }

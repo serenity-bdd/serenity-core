@@ -250,6 +250,6 @@ public class WebDriverFactory {
     }
 
     public void releaseTimoutFor(WebDriver driverInstance) {
-        timeoutStack.popTimeoutFor(driverInstance);
+        timeoutStack.releaseTimeoutFor(driverInstance);
     }
 }

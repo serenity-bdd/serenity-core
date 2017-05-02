@@ -30,16 +30,28 @@ public class FreemarkerContext {
     private final IssueTracking issueTracking;
     private final String relativeLink;
     private final BuildProperties buildProperties;
+    private final TestTag parentTag;
+
 
     public FreemarkerContext(EnvironmentVariables environmentVariables,
                              RequirementsService requirements,
                              IssueTracking issueTracking,
-                             String relativeLink) {
+                             String relativeLink,
+                             TestTag parentTag) {
         this.environmentVariables = environmentVariables;
         this.requirements = requirements;
         this.issueTracking = issueTracking;
         this.relativeLink = relativeLink;
         buildProperties = new BuildInfoProvider(environmentVariables).getBuildProperties();
+        this.parentTag = parentTag;
+    }
+
+
+    public FreemarkerContext(EnvironmentVariables environmentVariables,
+                             RequirementsService requirements,
+                             IssueTracking issueTracking,
+                             String relativeLink) {
+        this(environmentVariables, requirements, issueTracking,relativeLink, TestTag.EMPTY_TAG);
     }
 
     public Map<String, Object> getBuildContext(TestOutcomes testOutcomesForTagType,
@@ -55,6 +67,7 @@ public class FreemarkerContext {
             context.put("tagTypes", testOutcomesForTagType.getTagTypes());
         }
         context.put("currentTag", TestTag.EMPTY_TAG);
+        context.put("parentTag", parentTag);
         context.put("reportName", reportName);
 
         context.put("absoluteReportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirements));
@@ -85,5 +98,9 @@ public class FreemarkerContext {
 
     protected String timestampFrom(DateTime startTime) {
         return startTime == null ? "" : startTime.toString(TIMESTAMP_FORMAT);
+    }
+
+    public FreemarkerContext withParentTag(TestTag knownTag) {
+        return new FreemarkerContext(environmentVariables, requirements, issueTracking, relativeLink, knownTag);
     }
 }

@@ -12,10 +12,7 @@ import net.thucydides.core.util.Inflector;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class TagReportingTask extends BaseReportingTask implements ReportingTask {
 
@@ -137,6 +134,8 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
             for (TestTag tag : testOutcomes.getTags()) {
                 String reportName = reportNameProvider.forTag(tag);
                 if (!knownRequirementReportNames.contains(reportName)) {
+                    List<TestTag> fullTagList = new ArrayList<>(allTags);
+                    fullTagList.add(tag);
                     reportingTasks.add(
                             new TagReportingTask(freemarker,
                                     environmentVariables,
@@ -144,7 +143,7 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                                     reportNameProvider,
                                     reportName,
                                     tag,
-                                    allTags,
+                                    fullTagList,
                                     testOutcomes)
                     );
                 }

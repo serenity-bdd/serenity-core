@@ -1,4 +1,4 @@
-<#macro list_tags(weighted)>
+<#macro list_tags(weighted, context)>
 <table class="tags-summary-table">
     <tr>
         <td width="300px"><h3>${tagsTitle}</h3></td>
@@ -15,14 +15,13 @@
         <table class="test-summary-table">
             <tr>
                 <td colspan="3">
-                    <div class="tagTypeTitle">${tagTypeTitle}
-                    </div>
+                    <div class="tagTypeTitle">${tagTypeTitle}</div>
                 </td>
             </tr>
             <#foreach tag in tags>
                 <#assign tagTitle = formatter.htmlCompatible(inflection.of(tag.shortName).asATitle()) >
                 <#assign tagLabel = inflection.of(tag.name).asATitle() >
-                <#assign tagReport = reportName.forRequirementOrTag(tag) >
+                <#assign tagReport = reportName.inContext(currentTag.completeName).forRequirementOrTag(tag) >
                 <#assign outcomesForTag = testOutcomes.withTag(tag) >
                 <#assign count = outcomesForTag.total>
                 <#assign testCountLabel = inflection.of(count).times("test").inPluralForm() >

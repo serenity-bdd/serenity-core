@@ -365,6 +365,8 @@ new HashMap<>();
                 .withRootOutcomes(getRootOutcomes());
     }
 
+    public TestTag getTestTag() { return testTag; }
+
     public boolean containsTag(TestTag testTag) {
         return getTags().contains(testTag);
     }

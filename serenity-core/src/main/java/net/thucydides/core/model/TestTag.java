@@ -1,8 +1,11 @@
 package net.thucydides.core.model;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import org.apache.commons.lang3.StringUtils;
 
 import static org.apache.commons.lang3.ObjectUtils.compare;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class TestTag implements Comparable<TestTag> {
 
@@ -30,6 +33,13 @@ public class TestTag implements Comparable<TestTag> {
         if (normalisedType == null) { normalisedType = type.toLowerCase(); }
         return normalisedType;
     }
+
+    public String getCompleteName() {
+        if (isEmpty(name) && isEmpty(type)) { return ""; }
+
+        return Joiner.on("_").join(normalisedType(), normalisedName());
+    }
+
 
     public String getName() {
         return name;

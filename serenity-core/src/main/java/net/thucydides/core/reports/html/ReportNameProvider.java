@@ -10,6 +10,8 @@ import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.NameConverter;
 
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
 public class ReportNameProvider {
 
     private final Optional<String> context;
@@ -38,6 +40,11 @@ public class ReportNameProvider {
 
     }
 
+    public ReportNameProvider inContext(String context) {
+        Optional<String> newContext = (isNotEmpty(context)) ? Optional.of(context) : NO_CONTEXT;
+        return new ReportNameProvider(newContext, reportNamer, requirementsService);
+    }
+
     protected ReportNameProvider(Optional<String> context, ReportType type) {
         this(context, type, Injectors.getInjector().getInstance(RequirementsService.class));
     }
@@ -49,11 +56,7 @@ public class ReportNameProvider {
     }
 
     public String getContext() {
-        if(context.isPresent()) {
-            return context.get();
-        } else {
-            return "";
-        }
+        return context.or("");
      }
 
     public ReportNameProvider forCSVFiles() {
@@ -96,7 +99,7 @@ public class ReportNameProvider {
     }
 
     private String prefixUsing(Optional <String> context) {
-        if (context.isPresent()) {
+        if (context.isPresent() && isNotEmpty(getContext())) {
             return "context_" + NameConverter.underscore(context.get()) + "_";
         } else {
             return "";

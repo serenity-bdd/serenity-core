@@ -205,6 +205,7 @@
     <#assign pageTitle = 'Test Results: All Tests' >
 <#else>
     <#assign resultsContext = '> ' + testOutcomes.label>
+
     <#if (currentTagType! != '')>
         <#assign pageTitle = "<i class='fa fa-tags'></i> " + inflection.of(currentTagType!"").asATitle() + ': ' +  inflection.of(testOutcomes.label).asATitle() >
     <#else>
@@ -215,6 +216,11 @@
 <#--<div class="leftbg"></div>-->
     <div class="middlebg">
         <span class="breadcrumbs"><a href="index.html">Home</a>
+        <#if (parentTag?has_content && parentTag.name! != '')>
+            <#assign titleContext = " (with " + inflection.of(parentTag.type!"").asATitle() + " " + inflection.of(parentTag.name!"").asATitle() + ")" >
+        <#else>
+            <#assign titleContext = "" >
+        </#if>
         <#if (breadcrumbs?has_content)>
             <#list breadcrumbs as breadcrumb>
                 <#assign breadcrumbReport = absoluteReportName.forRequirementOrTag(breadcrumb) />
@@ -224,7 +230,7 @@
             </#list>
         <#else>
             <#if currentTagType?has_content>
-                > ${inflection.of(currentTagType!"").asATitle()}
+                > ${inflection.of(currentTagType!"").asATitle()} ${titleContext}
             </#if>
         </#if>
             <#if testOutcomes.label?has_content>
@@ -379,7 +385,7 @@
                                 </div>
                                 <div>
                                 <#if reportOptions.showRelatedTags>
-                                    <@list_tags weighted="false"/>
+                                    <@list_tags weighted="false" context=reportName.context/>
                                 </#if>
                                 </div>
                             </td>
@@ -405,7 +411,7 @@
                                 </div>
                                 <div>
                                 <#if reportOptions.showRelatedTags>
-                                   <@list_tags weighted="true"/>
+                                   <@list_tags weighted="true" context=reportName.context/>
                                 </#if>
                                 </div>
                             </td>

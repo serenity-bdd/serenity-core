@@ -179,6 +179,15 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                                                                 testOutcomes.getTags(),
                                                                 knownRequirementReportNames));
 
+        for(TestTag knownTag : testOutcomes.getTags()) {
+            reportingTasks.addAll(tagReportsFor(testOutcomes.withTag(knownTag)).using(
+                    context.withParentTag(knownTag),
+                    environmentVariables,
+                    getOutputDirectory(),
+                    reportNameProvider.inContext(knownTag.getCompleteName()),
+                    testOutcomes.getTags(),
+                    knownRequirementReportNames));
+        }
 
         reportingTasks.addAll(ResultReports.resultReportsFor(testOutcomes,context, environmentVariables, getOutputDirectory(),reportNameProvider));
         reportingTasks.addAll(RequirementsReports.requirementsReportsFor(

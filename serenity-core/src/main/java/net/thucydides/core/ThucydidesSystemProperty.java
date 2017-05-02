@@ -793,6 +793,12 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_DISPLAY_CONTEXT,
 
     /**
+     * Include a context tag with a test if one is provided.
+     * Set to 'true' by default
+     */
+    THUCYDIDES_ADD_CONTEXT_TAG,
+
+    /**
      * What encoding to use for reading Cucumber feature files?
      * Defaults to system default encoding
      */

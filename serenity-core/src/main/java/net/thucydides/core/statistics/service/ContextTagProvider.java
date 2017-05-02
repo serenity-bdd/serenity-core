@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import static ch.lambdaj.Lambda.convert;
+import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_ADD_CONTEXT_TAG;
 import static net.thucydides.core.tags.TagConverters.fromStringsToTestTags;
 
 /**
@@ -36,6 +37,10 @@ public class ContextTagProvider implements TagProvider, CoreTagProvider {
     public Set<TestTag> getTagsFor(final TestOutcome testOutcome) {
 
         if (StringUtils.isEmpty(testOutcome.getContext())) { return new HashSet<>(); }
+
+        if (!THUCYDIDES_ADD_CONTEXT_TAG.booleanFrom(environmentVariables,true)) {
+            return new HashSet<>();
+        }
 
         return ImmutableSet.of(TestTag.withName(testOutcome.getContext()).andType("context"));
     }

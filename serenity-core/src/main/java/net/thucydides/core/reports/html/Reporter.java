@@ -1,5 +1,6 @@
 package net.thucydides.core.reports.html;
 
+import ch.lambdaj.function.convert.Converter;
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.configuration.TimeoutConfiguration;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.*;
+
+import static ch.lambdaj.Lambda.convert;
 
 class Reporter {
 
@@ -41,11 +44,9 @@ class Reporter {
 
         ErrorTally errorTally = new ErrorTally();
         try {
-            final List<ReportExecutor> partitions = getReportExecutors(reportingTasks);
-
-            List<ReportExecutorFuture> futures = getReportExecutorFutures(executorPool, partitions);
-
-            TimeoutValue timeout = TimeoutConfiguration.from(environmentVariables).forProperty("report.timeout", DEFAULT_TIMEOUT);
+            final List<ReportExecutor> partitions = convert(reportingTasks, toReportExecutors());
+            final List<ReportExecutorFuture> futures = convert(partitions, toReportExecutorFutures());
+            final TimeoutValue timeout = TimeoutConfiguration.from(environmentVariables).forProperty("report.timeout", DEFAULT_TIMEOUT);
 
             for (ReportExecutorFuture executedTask : futures) {
                 try {
@@ -95,8 +96,8 @@ class Reporter {
             this.threadDump = threadDump;
         }
     }
-    private  class ErrorTally {
-        private final List<ErrorRecord> errors = new ArrayList<>();
+    private class ErrorTally {
+        private final List<ErrorRecord> errors = Lists.newCopyOnWriteArrayList();
 
         public boolean hasErrors() { return !errors.isEmpty(); }
 
@@ -113,22 +114,6 @@ class Reporter {
             }
             return errorMessage.toString();
         }
-    }
-
-    private List<ReportExecutorFuture> getReportExecutorFutures(ExecutorService executorPool, List<ReportExecutor> partitions) {
-        List<ReportExecutorFuture> futures = new ArrayList<>();
-        for(ReportExecutor reportGenerationTask : partitions) {
-            futures.add(new ReportExecutorFuture(executorPool.submit(reportGenerationTask), reportGenerationTask.getReportingTask()));
-        }
-        return futures;
-    }
-
-    private List<ReportExecutor> getReportExecutors(Collection<ReportingTask> reportingTasks) {
-        final List<ReportExecutor> partitions = Lists.newArrayList();
-        for (ReportingTask reportingTask : reportingTasks) {
-            partitions.add(new ReportExecutor(reportingTask));
-        }
-        return partitions;
     }
 
     private String errorCauseOf(Throwable e) {
@@ -162,4 +147,25 @@ class Reporter {
             return reportTask.toString();
         }
     }
+
+    private Converter<ReportingTask, ReportExecutor> toReportExecutors() {
+        return new Converter<ReportingTask, ReportExecutor>() {
+
+            @Override
+            public ReportExecutor convert(ReportingTask reportingTask) {
+                return new ReportExecutor(reportingTask);
+            }
+        };
+    }
+
+    private Converter<ReportExecutor, ReportExecutorFuture> toReportExecutorFutures() {
+        return new Converter<ReportExecutor, ReportExecutorFuture>() {
+
+            @Override
+            public ReportExecutorFuture convert(ReportExecutor reportGenerationTask) {
+                return new ReportExecutorFuture(executorPool.submit(reportGenerationTask), reportGenerationTask.getReportingTask());
+            }
+        };
+    }
+
 }

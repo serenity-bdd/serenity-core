@@ -2,6 +2,7 @@ package net.thucydides.core.reports.html;
 
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Sets;
 import net.serenitybdd.core.SerenitySystemProperties;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -55,7 +56,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     private FormatConfiguration formatConfiguration;
     private boolean generateTestOutcomeReports = false;
 
-    private Stopwatch stopwatch = new Stopwatch();
     public static final CopyOption[] COPY_OPTIONS = new CopyOption[]{StandardCopyOption.COPY_ATTRIBUTES};
 
     public HtmlAggregateStoryReporter(final String projectName) {
@@ -160,7 +160,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         List<String> knownRequirementReportNames = requirementReportNamesFrom(requirementsOutcomes, reportNameProvider);
 
-        Set<ReportingTask> reportingTasks = new HashSet<>();
+        Set<ReportingTask> reportingTasks = Sets.newConcurrentHashSet();
 
         LOGGER.info("Generating test outcome reports: " + generateTestOutcomeReports);
         if (generateTestOutcomeReports) {
@@ -179,17 +179,10 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                                                                 testOutcomes.getTags(),
                                                                 knownRequirementReportNames));
 
-        for(TestTag knownTag : testOutcomes.getTags()) {
-            reportingTasks.addAll(tagReportsFor(testOutcomes.withTag(knownTag)).using(
-                    context.withParentTag(knownTag),
-                    environmentVariables,
-                    getOutputDirectory(),
-                    reportNameProvider.inContext(knownTag.getCompleteName()),
-                    testOutcomes.getTags(),
-                    knownRequirementReportNames));
-        }
+        reportingTasks.addAll(nestedTagReports(testOutcomes, context, knownRequirementReportNames));
 
         reportingTasks.addAll(ResultReports.resultReportsFor(testOutcomes,context, environmentVariables, getOutputDirectory(),reportNameProvider));
+
         reportingTasks.addAll(RequirementsReports.requirementsReportsFor(
                 context, environmentVariables, getOutputDirectory(),
                 reportNameProvider,
@@ -203,6 +196,21 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         LOGGER.info("Starting generating reports: {} ms", stopwatch.lapTime());
         Reporter.generateReportsFor(reportingTasks);
         LOGGER.info("Finished generating test results for {} tests after {} ms",testOutcomes.getTestCount(), stopwatch.stop());
+    }
+
+    private Set<ReportingTask> nestedTagReports(TestOutcomes testOutcomes, FreemarkerContext context, List<String> knownRequirementReportNames) {
+        Set<ReportingTask> reportingTasks = new HashSet<>();
+
+        for(TestTag knownTag : testOutcomes.getTags()) {
+            reportingTasks.addAll(tagReportsFor(testOutcomes.withTag(knownTag)).using(
+                    context.withParentTag(knownTag),
+                    environmentVariables,
+                    getOutputDirectory(),
+                    reportNameProvider.inContext(knownTag.getCompleteName()),
+                    testOutcomes.getTags(),
+                    knownRequirementReportNames));
+        }
+        return reportingTasks;
     }
 
     private List<String> requirementReportNamesFrom(RequirementsOutcomes requirementsOutcomes, ReportNameProvider reportNameProvider) {

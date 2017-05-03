@@ -18,7 +18,7 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
 
     private static final String TEST_OUTCOME_TEMPLATE_PATH = "freemarker/home.ftl";
 
-    protected ReportNameProvider reportNameProvider;
+    protected final ReportNameProvider reportNameProvider;
     private final TestTag tag;
     private final List<TestTag> allTags;
     private final TestOutcomes testOutcomes;

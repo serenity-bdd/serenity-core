@@ -112,7 +112,6 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
         try {
             List<String> requirementPaths = requirementPathsStartingFrom(rootPackage);
-//            int requirementsDepth = shortestPathIn(requirementPaths);
             int requirementsDepth = longestPathIn(requirementPaths);
 
             Set<Requirement> allRequirements = Sets.newHashSet();

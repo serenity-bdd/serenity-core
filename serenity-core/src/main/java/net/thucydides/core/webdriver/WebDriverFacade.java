@@ -153,12 +153,12 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         if (proxyInstanciated() && driverCanTakeScreenshots()) {
             try {
                 return ((TakesScreenshot) getProxiedDriver()).getScreenshotAs(target);
-            } catch (WebDriverException e) {
-                LOGGER.warn("Failed to take screenshot - driver closed already? (" + e.getMessage() + ")");
             } catch (OutOfMemoryError outOfMemoryError) {
                 // Out of memory errors can happen with extremely big screens, and currently Selenium does
                 // not handle them correctly/at all.
                 LOGGER.error("Failed to take screenshot - out of memory", outOfMemoryError);
+            } catch (RuntimeException e) {
+                LOGGER.warn("Failed to take screenshot (" + e.getMessage() + ")");
             }
         }
         return null;
@@ -282,6 +282,9 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         try {
             return getProxiedDriver().getPageSource();
         } catch (WebDriverException pageSourceNotSupported) {
+            return StringUtils.EMPTY;
+        } catch (RuntimeException pageSourceFailedForSomeReason) {
+            LOGGER.warn("Failed to get the page source code (" + pageSourceFailedForSomeReason.getMessage() + ")");
             return StringUtils.EMPTY;
         }
     }

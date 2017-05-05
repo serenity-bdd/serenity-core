@@ -33,6 +33,7 @@ import static net.thucydides.core.guice.Injectors.getInjector;
 import static net.thucydides.core.reports.html.HtmlTestOutcomeReportingTask.testOutcomeReportsFor;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 import static net.thucydides.core.reports.html.TagReportingTask.tagReportsFor;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Generates an aggregate acceptance test report in HTML form.
@@ -279,7 +280,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     }
 
     public List<TestTag> getTags() {
-        if (tags == null) {
+        if (isEmpty(tags)) {
             return new ArrayList<>();
         }
 

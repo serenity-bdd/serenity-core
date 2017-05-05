@@ -44,9 +44,13 @@ public class JQueryEnabledPage {
     public boolean isJQueryAvailable() {
         boolean jqueryIntegrationEnabled = isJQueryIntegrationEnabled();
         if (jqueryIntegrationEnabled && javascriptIsSupportedIn(driver)) {
-            JavascriptExecutorFacade js = new JavascriptExecutorFacade(driver);
-            Boolean result = (Boolean) js.executeScript("return (typeof jQuery === 'function')");
-            return ((result != null) && (result));
+            try {
+                JavascriptExecutorFacade js = new JavascriptExecutorFacade(driver);
+                Boolean result = (Boolean) js.executeScript("return (typeof jQuery === 'function')");
+                return ((result != null) && (result));
+            } catch (RuntimeException jsExecutionFailed) {
+                return false;
+            }
         }
         return false;
     }

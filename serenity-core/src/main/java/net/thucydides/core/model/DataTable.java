@@ -22,7 +22,7 @@ public class DataTable {
     private final List<String> headers;
     private final List<DataTableRow> rows;
     private final boolean predefinedRows;
-    private final String scenarioOutline;
+    private String scenarioOutline;
     private List<DataSetDescriptor> dataSetDescriptors;
     private transient AtomicInteger currentRow = new AtomicInteger(0);
 
@@ -58,8 +58,8 @@ public class DataTable {
         this.currentRow = currentRow;
     }
 
-    public DataTable withScenarioOutline(String scenarioOutline) {
-        return new DataTable(headers, rows, predefinedRows, scenarioOutline, dataSetDescriptors, currentRow);
+    public void setScenarioOutline(String scenarioOutline) {
+        this.scenarioOutline = scenarioOutline;
     }
     public static DataTableBuilder withHeaders(List<String> headers) {
         return new DataTableBuilder(headers);

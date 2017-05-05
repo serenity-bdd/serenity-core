@@ -47,6 +47,20 @@ public class DataTable {
         }
     }
 
+    protected DataTable(List<String> headers, List<DataTableRow> rows, boolean predefinedRows,
+                        String scenarioOutline, List<DataSetDescriptor> dataSetDescriptors,
+                        AtomicInteger currentRow) {
+        this.headers = headers;
+        this.rows = rows;
+        this.predefinedRows = predefinedRows;
+        this.scenarioOutline = scenarioOutline;
+        this.dataSetDescriptors = dataSetDescriptors;
+        this.currentRow = currentRow;
+    }
+
+    public DataTable withScenarioOutline(String scenarioOutline) {
+        return new DataTable(headers, rows, predefinedRows, scenarioOutline, dataSetDescriptors, currentRow);
+    }
     public static DataTableBuilder withHeaders(List<String> headers) {
         return new DataTableBuilder(headers);
     }

@@ -31,11 +31,10 @@ public class AddCustomCapabilities {
     }
 
     public void to(DesiredCapabilities capabilities) {
-        List<String> browserStackProperties = filter(having(on(String.class), startsWith("browserstack.")),
+        List<String> propertiesWithPrefix = filter(having(on(String.class), startsWith(prefix)),
                 environmentVariables.getKeys());
 
-
-        for(String propertyKey : browserStackProperties) {
+        for(String propertyKey : propertiesWithPrefix) {
             String preparedPropertyKey = getPreparedPropertyKey(propertyKey);
             String propertyValue = environmentVariables.getProperty(propertyKey);
             if (isNotEmpty(propertyValue)) {

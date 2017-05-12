@@ -56,6 +56,8 @@ public class EventBusInterface {
     public boolean aStepHasFailedInTheCurrentExample() { return StepEventBus.getEventBus().getBaseStepListener().aStepHasFailedInTheCurrentExample(); }
 
     public boolean shouldIgnoreConsequences() {
+        if (StepEventBus.getEventBus().isDryRun()) { return true; }
+
         if (StepEventBus.getEventBus().softAssertsActive() && !StepEventBus.getEventBus().currentTestIsSuspended() ) {
             return false;
         }

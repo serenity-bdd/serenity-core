@@ -165,7 +165,7 @@ public class Actor implements PerformsTasks, SkipNested {
 
     public final void should(Consequence... consequences) {
 
-        if (StepEventBus.getEventBus().isDryRun()) { return; }
+        //if (StepEventBus.getEventBus().isDryRun()) { return; }
 
         ErrorTally errorTally = new ErrorTally(eventBusInterface);
 

@@ -181,6 +181,19 @@ public class StepFactory {
         }
     }
 
+    private <T> T createProxyStepLibrary(Class<T> scenarioStepsClass,
+                                         MethodInterceptor interceptor) {
+        Enhancer e = new Enhancer();
+        e.setSuperclass(scenarioStepsClass);
+        e.setCallback(interceptor);
+
+        switch (StepLibraryConstructionStrategy.forClass(scenarioStepsClass).getStrategy()) {
+            case STEP_LIBRARY_WITH_WEBDRIVER: return webEnabledStepLibrary(scenarioStepsClass, e);
+            case STEP_LIBRARY_WITH_PAGES: return stepLibraryWithPages(scenarioStepsClass, e);
+            default: return (T) e.create();
+        }
+    }
+
     private <T> T immutableStepLibrary(Class<T> scenarioStepsClass, Enhancer e, Object[] parameters) {
         return (T) e.create(argumentTypesFrom(scenarioStepsClass, parameters), parameters);
     }

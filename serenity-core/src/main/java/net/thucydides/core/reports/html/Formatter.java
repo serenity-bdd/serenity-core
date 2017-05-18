@@ -1,5 +1,6 @@
 package net.thucydides.core.reports.html;
 
+import com.github.rjeschke.txtmark.Configuration;
 import com.github.rjeschke.txtmark.Processor;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
@@ -62,12 +63,16 @@ public class Formatter {
     private final EnvironmentVariables environmentVariables;
     private final MarkupRenderer asciidocRenderer;
 //    private final Markdown4jProcessor markdown4jProcessor;
+    Configuration markdownEncodingConfiguration;
 
     @Inject
     public Formatter(IssueTracking issueTracking, EnvironmentVariables environmentVariables) {
         this.issueTracking = issueTracking;
         this.environmentVariables = environmentVariables;
         this.asciidocRenderer = Injectors.getInjector().getInstance(Key.get(MarkupRenderer.class, Asciidoc.class));
+
+        String encoding = ThucydidesSystemProperty.REPORT_CHARSET.from(environmentVariables,"UTF-8");
+        markdownEncodingConfiguration = Configuration.builder().setEncoding(encoding).build();
     }
 
     public Formatter(IssueTracking issueTracking) {
@@ -80,7 +85,7 @@ public class Formatter {
 
     public String renderMarkdown(String text) {
         if (text == null) { return ""; }
-        return stripSurroundingParagraphTagsFrom(Processor.process(text));
+        return stripSurroundingParagraphTagsFrom(Processor.process(text, markdownEncodingConfiguration));
     }
 
     private String stripSurroundingParagraphTagsFrom(String text) {
@@ -460,7 +465,8 @@ public class Formatter {
     }
 
     public String formatWithFields(String textToFormat) {
-        String textWithEscapedFields = textToFormat.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+        String textWithEscapedFields  = textToFormat.replaceAll("<", "&lt;")
+                                                    .replaceAll(">", "&gt;");
 
         String renderedText = addLineBreaks(removeMacros(convertAnyTables(textWithEscapedFields)));
         if (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(step)) {

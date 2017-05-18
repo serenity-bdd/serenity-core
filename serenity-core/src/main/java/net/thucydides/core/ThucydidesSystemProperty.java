@@ -967,6 +967,12 @@ public enum ThucydidesSystemProperty {
     JSON_CHARSET,
 
     /**
+     * What charset to use for report generation.
+     * Defaults to UTF-8
+     */
+    REPORT_CHARSET,
+
+    /**
      * Stack traces are by default decluttered for readability.
      * For example, calls to instrumented code or internal test libraries is removed.
      * This behaviour can be deactivated by setting this property to false.

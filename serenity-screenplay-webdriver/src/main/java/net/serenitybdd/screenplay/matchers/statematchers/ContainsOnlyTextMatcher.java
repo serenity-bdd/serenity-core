@@ -19,11 +19,11 @@ public class ContainsOnlyTextMatcher<T extends WebElementState> extends TypeSafe
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("an element containing only '").appendText(expectedText).appendText("'");
+        description.appendText(" an element containing only '").appendText(expectedText).appendText("'");
     }
 
     @Override
     protected void describeMismatchSafely(T item, Description mismatchDescription) {
-        mismatchDescription.appendText("was ").appendText(WebElementStateDescription.forElement(item));
+        mismatchDescription.appendText(" was ").appendText(WebElementStateDescription.forElement(item));
     }
 }

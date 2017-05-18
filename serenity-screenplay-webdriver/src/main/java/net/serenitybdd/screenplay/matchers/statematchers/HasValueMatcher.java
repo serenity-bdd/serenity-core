@@ -23,6 +23,6 @@ public class HasValueMatcher<T extends WebElementState> extends TypeSafeMatcher<
 
     @Override
     protected void describeMismatchSafely(T item, Description mismatchDescription) {
-        mismatchDescription.appendText("was ").appendText(WebElementStateDescription.forElement(item));
+        mismatchDescription.appendText(" was ").appendText(WebElementStateDescription.forElement(item));
     }
 }

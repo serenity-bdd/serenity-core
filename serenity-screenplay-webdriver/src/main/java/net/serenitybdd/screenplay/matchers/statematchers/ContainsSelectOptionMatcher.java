@@ -24,7 +24,7 @@ public class ContainsSelectOptionMatcher<T extends WebElementState> extends Type
 
     @Override
     protected void describeMismatchSafely(T item, Description mismatchDescription) {
-        mismatchDescription.appendText("was ")
+        mismatchDescription.appendText(" was ")
                 .appendValueList("[",",","]",item.getSelectOptions())
                 .appendText(WebElementStateDescription.forElement(item));
     }

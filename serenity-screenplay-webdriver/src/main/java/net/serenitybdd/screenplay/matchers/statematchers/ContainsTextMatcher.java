@@ -24,7 +24,7 @@ public class ContainsTextMatcher<T extends WebElementState> extends TypeSafeMatc
 
     @Override
     protected void describeMismatchSafely(T item, Description mismatchDescription) {
-        mismatchDescription.appendText("was ").appendText(WebElementStateDescription.forElement(item));
+        mismatchDescription.appendText(" was ").appendText(WebElementStateDescription.forElement(item));
     }
 
 }

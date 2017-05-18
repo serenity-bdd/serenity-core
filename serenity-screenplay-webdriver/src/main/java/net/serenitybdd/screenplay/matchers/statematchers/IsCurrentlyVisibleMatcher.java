@@ -18,6 +18,6 @@ public class IsCurrentlyVisibleMatcher<T extends WebElementState> extends TypeSa
 
     @Override
     protected void describeMismatchSafely(T item, Description mismatchDescription) {
-        mismatchDescription.appendText(WebElementStateDescription.forElement(item)).appendText("was not visible");
+        mismatchDescription.appendText(WebElementStateDescription.forElement(item)).appendText(" was not visible");
     }
 }

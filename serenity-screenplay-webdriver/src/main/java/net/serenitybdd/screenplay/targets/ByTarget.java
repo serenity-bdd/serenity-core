@@ -11,22 +11,21 @@ public class ByTarget extends Target {
 
     private final By locator;
 
-    public ByTarget(String targetElementName, By locator) {
-        super(targetElementName);
+    public ByTarget(String targetElementName, By locator, IFrame iFrame) {
+        super(targetElementName, iFrame);
         this.locator = locator;
     }
 
-    public WebElementFacade resolveFor(Actor theActor) {
-        TargetResolver resolver = new TargetResolver(BrowseTheWeb.as(theActor).getDriver());
+    public WebElementFacade resolveFor(Actor actor) {
+        TargetResolver resolver = TargetResolver.switchIFrameIfRequired(BrowseTheWeb.as(actor).getDriver(), this);
         WebElementFacade resolvedTarget = resolver.find(locator);
         return resolvedTarget;
     }
 
     public List<WebElementFacade> resolveAllFor(Actor actor) {
-        TargetResolver resolver = new TargetResolver(BrowseTheWeb.as(actor).getDriver());
+        TargetResolver resolver = TargetResolver.switchIFrameIfRequired(BrowseTheWeb.as(actor).getDriver(), this);
         return resolver.findAll(locator);
     }
-
 
     public XPathOrCssTarget of(String... parameters) {
         throw new UnsupportedOperationException("The of() method is not supported for By-type Targets");
@@ -38,6 +37,6 @@ public class ByTarget extends Target {
     }
 
     public ByTarget called(String name) {
-        return new ByTarget(name, locator);
+        return new ByTarget(name, locator, iFrame);
     }
 }

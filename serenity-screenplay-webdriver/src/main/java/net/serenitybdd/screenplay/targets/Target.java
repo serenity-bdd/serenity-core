@@ -8,9 +8,11 @@ import java.util.List;
 public abstract class Target {
 
     protected final String targetElementName;
+    protected final IFrame iFrame;
 
-    public Target(String targetElementName) {
+    public Target(String targetElementName, IFrame iFrame) {
         this.targetElementName = targetElementName;
+        this.iFrame = iFrame;
     }
 
     @Override
@@ -31,6 +33,10 @@ public abstract class Target {
     public abstract Target of(String... parameters);
 
     public abstract String getCssOrXPathSelector();
+
+    public IFrame getIFrame() {
+        return iFrame;
+    }
 
     public String getName() {
         return targetElementName;

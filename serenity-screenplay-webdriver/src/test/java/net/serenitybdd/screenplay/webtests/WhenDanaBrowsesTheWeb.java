@@ -10,9 +10,14 @@ import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.waits.WaitUntil;
 import net.serenitybdd.screenplay.webtests.model.Client;
 import net.serenitybdd.screenplay.webtests.pages.ProfilePage;
+import net.serenitybdd.screenplay.webtests.questions.BankBalanceQuestion;
 import net.serenitybdd.screenplay.webtests.questions.ProfileQuestion;
 import net.serenitybdd.screenplay.webtests.questions.TheValidationMessages;
-import net.serenitybdd.screenplay.webtests.tasks.*;
+import net.serenitybdd.screenplay.webtests.tasks.EnterABankAccount;
+import net.serenitybdd.screenplay.webtests.tasks.LegacyViewMyProfile;
+import net.serenitybdd.screenplay.webtests.tasks.OpenTheApplication;
+import net.serenitybdd.screenplay.webtests.tasks.UpdateHerProfile;
+import net.serenitybdd.screenplay.webtests.tasks.ViewMyProfile;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Ignore;
@@ -20,10 +25,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
-import static net.serenitybdd.screenplay.GivenWhenThen.*;
+import static net.serenitybdd.screenplay.GivenWhenThen.and;
+import static net.serenitybdd.screenplay.GivenWhenThen.andThat;
+import static net.serenitybdd.screenplay.GivenWhenThen.givenThat;
+import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
+import static net.serenitybdd.screenplay.GivenWhenThen.then;
+import static net.serenitybdd.screenplay.GivenWhenThen.when;
 import static net.serenitybdd.screenplay.matchers.ConsequenceMatchers.displays;
 import static net.serenitybdd.screenplay.matchers.ReportedErrorMessages.reportsErrors;
-import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isCurrentlyEnabled;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isCurrentlyVisible;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isEnabled;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
 import static net.serenitybdd.screenplay.questions.WebElementQuestion.the;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -39,6 +52,8 @@ public class WhenDanaBrowsesTheWeb {
     WebDriver anotherBrowser;
 
     ProfileQuestion profile = new ProfileQuestion();
+
+    BankBalanceQuestion balances = new BankBalanceQuestion();
 
     @Test
     public void danaCanUpdateHerProfile() {
@@ -196,6 +211,18 @@ public class WhenDanaBrowsesTheWeb {
         );
     }
 
+    @Test
+    public void danaShouldBeAbleToSeeHerBankBalancesEvenIfTheyAreInANestedIFrame() {
+
+        Actor dana = new Actor("Dana");
+        dana.can(BrowseTheWeb.with(firstBrowser));
+
+        givenThat(dana).has(openedTheApplication);
+
+        when(dana).attemptsTo(viewHerProfile);
+        then(dana).should(seeThat(balances, displays("currentAccount", equalTo("£100.36"))));
+        and(dana).should(seeThat(balances, displays("savingsAccount", equalTo("£1024.12"))));
+    }
 
     @Test
     public void multipleUsersCanUpdateTheirProfilesSimultaneously() {

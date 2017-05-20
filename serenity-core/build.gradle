@@ -52,17 +52,23 @@ dependencies {
         exclude group: 'com.google.guava', module: 'guava'
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
         exclude group: 'net.sourceforge.htmlunit', module: 'htmlunit'
+        exclude group: 'org.seleniumhq.selenium', module: 'htmlunit-driver'
+        exclude group: 'com.codeborne', module: 'phantomjsdriver'
         exclude group: 'org.mortbay.jetty', module: 'servlet-api-2.5'
+        exclude group: 'org.eclipse.jetty', module: 'jetty-util'
+        exclude group: 'org.eclipse.jetty', module: 'jetty-io'
     }
 
-    compile('com.codeborne:phantomjsdriver:1.2.1') {
+    compile("com.codeborne:phantomjsdriver:${phantomJsVersion}") {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-api'
         exclude group: 'xml-apis', module: 'xml-apis'
     }
 
     compile("org.seleniumhq.selenium:htmlunit-driver:${htmlunitVersion}") {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-api'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
         exclude group: 'commons-codec', module: 'commons-codec'
         exclude group: 'net.sourceforge.htmlunit', module: 'htmlunit'
@@ -111,10 +117,10 @@ dependencies {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
         exclude group: 'org.apache.httpcomponents', module: 'httpmime'
     }
-    compile('org.apache.httpcomponents:httpclient:4.5.2') {
+    compile('org.apache.httpcomponents:httpclient:4.5.3') {
         exclude group: 'commons-codec', module: 'commons-codec'
     }
-    compile('org.apache.httpcomponents:httpmime:4.5.2') {
+    compile('org.apache.httpcomponents:httpmime:4.5.3') {
         exclude group: 'commons-codec', module: 'commons-codec'
     }
 

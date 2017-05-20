@@ -24,8 +24,9 @@ subprojects {
 }
 
 ext {
-    seleniumVersion = '2.53.1'
-    htmlunitVersion = '2.21'
+    seleniumVersion = '3.4.0'
+    htmlunitVersion = '2.26'
+    phantomJsVersion = '1.4.2'
 
     groovyVersion = '2.4.10'
     gradleVersion = '3.5'
@@ -46,7 +47,7 @@ ext {
     xstreamVersion = '1.4.9'
     jodaTimeVersion = '2.7'
     lambdajVersion = '2.3.3'
-    gsonVersion = '2.6.1'
+    gsonVersion = '2.8.0'
     typesafeConfigVersion = '1.2.1'
     freemarkerVersion = '2.3.23'
     wiremockCoreVersion = '1.58'
@@ -102,8 +103,8 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.bintray'
 
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
     repositories {
         mavenLocal()

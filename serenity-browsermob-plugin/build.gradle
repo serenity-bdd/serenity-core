@@ -13,12 +13,12 @@ dependencies {
         exclude group: 'org.seleniumhq.selenium', module:'selenium-api'
         exclude group: 'org.apache.commons', module:'commons-lang3'
         exclude group: 'commons-io', module:'commons-io'
-     	exclude group: 'org.bouncycastle', module:'bcprov-jdk15on'
      	exclude group: 'com.google.guava'
     	exclude group: 'com.fasterxml.jackson.core', module:'jackson-databind'
         exclude module: "slf4j-api"
      	exclude group: 'com.google.code.findbugs', module:'jsr305'
-        exclude group:'org.bouncycastle' ,module:'bcpkix-jdk15on'
+//     	exclude group: 'org.bouncycastle', module:'bcprov-jdk15on'
+//        exclude group:'org.bouncycastle' ,module:'bcpkix-jdk15on'
         exclude group:'commons-codec' ,module:'commons-codec'
         exclude group:'io.netty' ,module:'netty-all'
 	}

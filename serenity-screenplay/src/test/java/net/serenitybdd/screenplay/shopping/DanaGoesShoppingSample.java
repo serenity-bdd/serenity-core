@@ -10,6 +10,7 @@ import net.serenitybdd.screenplay.shopping.tasks.Purchase;
 import net.thucydides.core.annotations.Steps;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.Every;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -177,13 +178,13 @@ public class DanaGoesShoppingSample {
     @Test
     public void shouldBeAbleToRememberAnswersToQuestions() {
         dana.remember("Total Cost", theTotalCost());
-        assertThat(dana.recall("Total Cost")).isEqualTo(14);
+        Assert.assertThat(dana.recall("Total Cost"), equalTo(14));
     }
 
     @Test
     public void shouldBeAbleToRememberValues() {
         dana.remember("Total Cost", 14);
-        assertThat(dana.recall("Total Cost")).isEqualTo(14);
+        Assert.assertThat(dana.recall("Total Cost"), equalTo(14));
 
         List<String> colorSet = ImmutableList.of("red","green","blue");
 

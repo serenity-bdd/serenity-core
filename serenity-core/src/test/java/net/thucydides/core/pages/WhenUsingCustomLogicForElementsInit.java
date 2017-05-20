@@ -1,6 +1,5 @@
 package net.thucydides.core.pages;
 
-import com.google.common.base.Predicate;
 import net.serenitybdd.core.pages.PageObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +8,8 @@ import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.WebDriver;
 
 import javax.annotation.Nullable;
+
+import java.util.function.Predicate;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -32,18 +33,11 @@ public class WhenUsingCustomLogicForElementsInit {
         public boolean pagesPopulated; //don't put false here, callback is applied _before_ this is defined.
 
         public PageObjectWithCustomLogic(final WebDriver driver) {
-            super(driver,new Predicate<PageObject>() {
-                @Override
-                public boolean apply(PageObject page) {
-                    PageObjectWithCustomLogic customPage = (PageObjectWithCustomLogic)page;
-                    assertFalse("Page was populated before actual population", customPage.pagesPopulated);
-                    customPage.pagesPopulated = true; //in real HtmlElementLoader.populatePageObject(page, driver);
-                    return true;
-                }
-
-                public boolean test(@Nullable PageObject input) {
-                    return false;
-                }
+            super(driver, page -> {
+                PageObjectWithCustomLogic customPage = (PageObjectWithCustomLogic)page;
+                assertFalse("Page was populated before actual population", customPage.pagesPopulated);
+                customPage.pagesPopulated = true; //in real HtmlElementLoader.populatePageObject(page, driver);
+                return true;
             });
         }
     }

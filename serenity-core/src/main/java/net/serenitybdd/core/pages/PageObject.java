@@ -1,8 +1,6 @@
 package net.serenitybdd.core.pages;
 
 import ch.lambdaj.function.convert.Converter;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;
@@ -41,9 +39,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 
 import static ch.lambdaj.Lambda.convert;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -127,7 +127,7 @@ public abstract class PageObject {
     protected PageObject(final WebDriver driver, Predicate<? super PageObject> callback) {
         this();
         this.driver = driver;
-        callback.apply(this);
+        callback.test(this);
     }
 
     public PageObject(final WebDriver driver, final int ajaxTimeout) {
@@ -918,7 +918,7 @@ public abstract class PageObject {
     }
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(By... selectors) {
-        return find(Lists.newArrayList(selectors));
+        return find(Arrays.asList(selectors));
     }
 
     public List<net.serenitybdd.core.pages.WebElementFacade> findAll(By bySelector) {
@@ -1027,7 +1027,7 @@ public abstract class PageObject {
     }
 
     public WebElementFacade waitFor(WebElement webElement) {
-        return waitFor($(webElement));
+        return waitFor((WebElementFacade) $(webElement));
     }
 
     public WebElementFacade waitFor(WebElementFacade webElement) {

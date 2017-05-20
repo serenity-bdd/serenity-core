@@ -326,18 +326,25 @@ subprojects {
 
                 from components.java
 
+                artifact jar {
+                    appendix = 'se3'
+                    classifier "sources"
+                }
+
                 artifact sourcesJar {
+                    appendix = 'se3'
                     classifier "sources"
                 }
 
                 artifact javadocJar {
+                    appendix = 'se3'
                     classifier "javadoc"
                 }
 
                 pom.withXml {
                     asNode().children().last() + {
                         resolveStrategy = Closure.DELEGATE_FIRST
-                        name "$artifactId"
+                        name "se3-$project.name"
                         description "$projectDescription"
 
                         url 'https://github.com/serenity-bdd/serenity-core'

@@ -296,7 +296,7 @@ subprojects {
             name = 'serenity-core'
             desc = 'Serenity core libraries'
             licenses = ['Apache-2.0']
-            labels = ['serenity', 'bdd']
+            labels = ['serenity', 'bdd', 'selenium 3']
         }
     }
 
@@ -322,12 +322,15 @@ subprojects {
 
                 from components.java
 
+                artifact jar {
+                    classifier "selenium-3"
+                }
                 artifact sourcesJar {
-                    classifier "sources"
+                    classifier "selenium-3-sources"
                 }
 
                 artifact javadocJar {
-                    classifier "javadoc"
+                    classifier "selenium-3-javadoc"
                 }
 
                 pom.withXml {

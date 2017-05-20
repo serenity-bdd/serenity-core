@@ -2,6 +2,7 @@ import org.ajoberstar.gradle.git.release.opinion.Strategies
 import org.ajoberstar.grgit.Grgit
 
 group = 'net.serenity-bdd'
+
 buildscript {
     repositories {
         jcenter()
@@ -14,6 +15,7 @@ buildscript {
 }
 
 apply plugin: 'org.ajoberstar.release-opinion'
+//apply plugin: 'org.ajoberstar.release-base'
 
 task wrapper(type: Wrapper) {
     gradleVersion = "${gradleVersion}"
@@ -273,6 +275,8 @@ subprojects {
     }
 
     jar {
+        appendix = 'se3'
+
         manifest.attributes["Created-By"] =
                 "${System.getProperty("java.version")} (${System.getProperty("java.specification.vendor")})"
         manifest.attributes["Implementation-Title"] = project.name
@@ -301,11 +305,13 @@ subprojects {
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {
+        appendix = 'se3'
         classifier = 'sources'
         from sourceSets.main.allSource
     }
 
     task javadocJar(type: Jar, dependsOn: javadoc) {
+        appendix = 'se3'
         classifier = 'javadoc'
         from javadoc.destinationDir
     }
@@ -318,25 +324,20 @@ subprojects {
         publications {
             mavenJava(MavenPublication) {
 
-                println "Publishing $project.name:$project.group:$project.version"
-
                 from components.java
 
-                artifact jar {
-                    classifier "selenium-3"
-                }
                 artifact sourcesJar {
-                    classifier "selenium-3-sources"
+                    classifier "sources"
                 }
 
                 artifact javadocJar {
-                    classifier "selenium-3-javadoc"
+                    classifier "javadoc"
                 }
 
                 pom.withXml {
                     asNode().children().last() + {
                         resolveStrategy = Closure.DELEGATE_FIRST
-                        name "$project.name"
+                        name "$artifactId"
                         description "$projectDescription"
 
                         url 'https://github.com/serenity-bdd/serenity-core'

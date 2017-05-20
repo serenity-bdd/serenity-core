@@ -63,11 +63,11 @@ public class PhantomJSCapabilityEnhancer {
     }
 
     private void setProxyOptions(ArrayList<String> cliArgs) {
-        String proxyUrl = ThucydidesSystemProperty.THUCYDIDES_PROXY_HTTP.from(environmentVariables);
-        String proxyPort = ThucydidesSystemProperty.THUCYDIDES_PROXY_HTTP_PORT.from(environmentVariables);
-        String proxyType = ThucydidesSystemProperty.THUCYDIDES_PROXY_TYPE.from(environmentVariables);
-        String proxyUser = ThucydidesSystemProperty.THUCYDIDES_PROXY_USER.from(environmentVariables);
-        String proxyPassword = ThucydidesSystemProperty.THUCYDIDES_PROXY_PASSWORD.from(environmentVariables);
+        String proxyUrl = ThucydidesSystemProperty.SERENITY_PROXY_HTTP.from(environmentVariables);
+        String proxyPort = ThucydidesSystemProperty.SERENITY_PROXY_HTTP_PORT.from(environmentVariables);
+        String proxyType = ThucydidesSystemProperty.SERENITY_PROXY_TYPE.from(environmentVariables);
+        String proxyUser = ThucydidesSystemProperty.SERENITY_PROXY_USER.from(environmentVariables);
+        String proxyPassword = ThucydidesSystemProperty.SERENITY_PROXY_PASSWORD.from(environmentVariables);
         if (StringUtils.isEmpty(proxyPort)) {
             cliArgs.add("--proxy=" + proxyUrl);
         } else {

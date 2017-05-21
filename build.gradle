@@ -284,7 +284,7 @@ subprojects {
         manifest.attributes["Implementation-Title"] = project.name
         manifest.attributes["Implementation-Version"] = project.version
 
-        classifier "se3"
+        appendix = "se3"
 
         from("${rootProject.projectDir}/src/dist") {
             include "license.txt"
@@ -316,11 +316,13 @@ subprojects {
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {
+        appendix = "se3"
         classifier = 'sources'
         from sourceSets.main.allSource
     }
 
     task javadocJar(type: Jar, dependsOn: javadoc) {
+        appendix = "se3"
         classifier = 'javadoc'
         from javadoc.destinationDir
     }
@@ -336,11 +338,13 @@ subprojects {
                 from components.java
 
                 artifact sourcesJar {
-                    classifier "se3-sources"
+                    appendix = "se3"
+                    classifier "sources"
                 }
 
                 artifact javadocJar {
-                    classifier "se3-javadoc"
+                    appendix = "se3"
+                    classifier "javadoc"
                 }
 
                 pom.withXml {

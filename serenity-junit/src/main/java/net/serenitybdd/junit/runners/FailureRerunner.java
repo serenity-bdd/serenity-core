@@ -15,9 +15,6 @@ public interface FailureRerunner {
 
     /**
      * Returns true if a test given by className and method name has to be run.
-     * @param className
-     * @param methodName
-     * @return
      */
     public boolean hasToRunTest(String className, String methodName);
 }

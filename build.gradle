@@ -284,7 +284,7 @@ subprojects {
         manifest.attributes["Implementation-Title"] = project.name
         manifest.attributes["Implementation-Version"] = project.version
 
-        appendix = "se3"
+        classifier = 'selenium3'
 
         from("${rootProject.projectDir}/src/dist") {
             include "license.txt"
@@ -316,13 +316,11 @@ subprojects {
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {
-        appendix = "se3"
         classifier = 'sources'
         from sourceSets.main.allSource
     }
 
     task javadocJar(type: Jar, dependsOn: javadoc) {
-        appendix = "se3"
         classifier = 'javadoc'
         from javadoc.destinationDir
     }
@@ -338,12 +336,10 @@ subprojects {
                 from components.java
 
                 artifact sourcesJar {
-                    appendix = "se3"
                     classifier "sources"
                 }
 
                 artifact javadocJar {
-                    appendix = "se3"
                     classifier "javadoc"
                 }
 

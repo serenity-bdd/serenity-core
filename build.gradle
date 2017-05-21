@@ -279,6 +279,19 @@ subprojects {
                 "${System.getProperty("java.version")} (${System.getProperty("java.specification.vendor")})"
         manifest.attributes["Implementation-Title"] = project.name
         manifest.attributes["Implementation-Version"] = project.version
+        manifest.attributes["Created-By"] =
+                "${System.getProperty("java.version")} (${System.getProperty("java.specification.vendor")})"
+        manifest.attributes["Implementation-Title"] = project.name
+        manifest.attributes["Implementation-Version"] = project.version
+
+        classifier "se3"
+
+        from("${rootProject.projectDir}/src/dist") {
+            include "license.txt"
+            include "notice.txt"
+            into "META-INF"
+            expand(copyright: new Date().format("yyyy"), version: project.version)
+        }
 
         from("${rootProject.projectDir}/src/dist") {
             include "license.txt"
@@ -323,11 +336,11 @@ subprojects {
                 from components.java
 
                 artifact sourcesJar {
-                    classifier "sources"
+                    classifier "se3-sources"
                 }
 
                 artifact javadocJar {
-                    classifier "javadoc"
+                    classifier "se3-javadoc"
                 }
 
                 pom.withXml {

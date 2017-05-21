@@ -5,6 +5,7 @@ group = 'net.serenity-bdd'
 
 buildscript {
     repositories {
+        mavenLocal()
         jcenter()
     }
     dependencies {
@@ -275,12 +276,12 @@ subprojects {
     }
 
     jar {
-        appendix = 'se3'
-
         manifest.attributes["Created-By"] =
                 "${System.getProperty("java.version")} (${System.getProperty("java.specification.vendor")})"
         manifest.attributes["Implementation-Title"] = project.name
         manifest.attributes["Implementation-Version"] = project.version
+
+        classifier = 'se3'
 
         from("${rootProject.projectDir}/src/dist") {
             include "license.txt"
@@ -305,14 +306,12 @@ subprojects {
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {
-        appendix = 'se3'
-        classifier = 'sources'
+        classifier = 'se3-sources'
         from sourceSets.main.allSource
     }
 
     task javadocJar(type: Jar, dependsOn: javadoc) {
-        appendix = 'se3'
-        classifier = 'javadoc'
+        classifier = 'se3-javadoc'
         from javadoc.destinationDir
     }
 
@@ -326,25 +325,17 @@ subprojects {
 
                 from components.java
 
-                artifact jar {
-                    appendix = 'se3'
-                    classifier "sources"
-                }
-
                 artifact sourcesJar {
-                    appendix = 'se3'
-                    classifier "sources"
+                    classifier "se3-sources"
                 }
 
                 artifact javadocJar {
-                    appendix = 'se3'
-                    classifier "javadoc"
+                    classifier "se3-javadoc"
                 }
 
                 pom.withXml {
                     asNode().children().last() + {
                         resolveStrategy = Closure.DELEGATE_FIRST
-                        name "se3-$project.name"
                         description "$projectDescription"
 
                         url 'https://github.com/serenity-bdd/serenity-core'

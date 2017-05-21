@@ -16,7 +16,6 @@ buildscript {
 }
 
 apply plugin: 'org.ajoberstar.release-opinion'
-//apply plugin: 'org.ajoberstar.release-base'
 
 task wrapper(type: Wrapper) {
     gradleVersion = "${gradleVersion}"
@@ -281,8 +280,6 @@ subprojects {
         manifest.attributes["Implementation-Title"] = project.name
         manifest.attributes["Implementation-Version"] = project.version
 
-        classifier = 'se3'
-
         from("${rootProject.projectDir}/src/dist") {
             include "license.txt"
             include "notice.txt"
@@ -306,12 +303,12 @@ subprojects {
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {
-        classifier = 'se3-sources'
+        classifier = 'sources'
         from sourceSets.main.allSource
     }
 
     task javadocJar(type: Jar, dependsOn: javadoc) {
-        classifier = 'se3-javadoc'
+        classifier = 'javadoc'
         from javadoc.destinationDir
     }
 
@@ -326,11 +323,11 @@ subprojects {
                 from components.java
 
                 artifact sourcesJar {
-                    classifier "se3-sources"
+                    classifier "sources"
                 }
 
                 artifact javadocJar {
-                    classifier "se3-javadoc"
+                    classifier "javadoc"
                 }
 
                 pom.withXml {

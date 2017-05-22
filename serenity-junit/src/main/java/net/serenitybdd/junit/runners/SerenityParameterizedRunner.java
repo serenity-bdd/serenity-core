@@ -8,6 +8,7 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.tags.Taggable;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.junit.ThucydidesJUnitSystemProperties;
@@ -27,7 +28,7 @@ import java.util.List;
  * Run a Serenity test suite using a set of data.
  * Similar to the JUnit parameterized tests, but better ;-).
  */
-public class SerenityParameterizedRunner extends Suite {
+public class SerenityParameterizedRunner extends Suite implements Taggable {
 
     private static final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
 

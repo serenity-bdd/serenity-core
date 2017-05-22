@@ -25,7 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nullable;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -156,11 +156,11 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     private Predicate<TestStep> hasScreenshot() {
         return new Predicate<TestStep>() {
             @Override
-            public boolean apply(@Nullable TestStep testStep) {
+            public boolean apply(TestStep testStep) {
                 return ((testStep.getScreenshots() != null) && (!testStep.getScreenshots().isEmpty()));
             }
 
-            public boolean test(@Nullable TestStep input) {
+            public boolean test(TestStep input) {
                 return apply(input);
             }
         };

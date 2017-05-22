@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.WebDriver;
 
-import javax.annotation.Nullable;
+
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -41,7 +41,7 @@ public class WhenUsingCustomLogicForElementsInit {
                     return true;
                 }
 
-                public boolean test(@Nullable PageObject input) {
+                public boolean test(PageObject input) {
                     return false;
                 }
             });

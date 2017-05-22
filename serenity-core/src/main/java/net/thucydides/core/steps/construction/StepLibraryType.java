@@ -6,7 +6,7 @@ import com.google.common.collect.Iterables;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.pages.Pages;
 
-import javax.annotation.Nullable;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
@@ -51,7 +51,7 @@ public class StepLibraryType {
             }
 
 
-            public boolean test(@Nullable Constructor<?> input) {
+            public boolean test(Constructor<?> input) {
                 return apply(input);
             }
         };
@@ -62,12 +62,12 @@ public class StepLibraryType {
         return new Predicate<Constructor<?>>() {
 
             @Override
-            public boolean apply(@Nullable Constructor<?> constructor) {
+            public boolean apply(Constructor<?> constructor) {
                 return ((constructor.getParameterTypes().length == 1)
                         && (constructor.getParameterTypes()[0] == Pages.class));
             }
 
-            public boolean test(@Nullable Constructor<?> input) {
+            public boolean test(Constructor<?> input) {
                 return apply(input);
             }
         };
@@ -76,11 +76,11 @@ public class StepLibraryType {
     public static Predicate<Field> ofTypePages() {
         return new Predicate<Field>() {
             @Override
-            public boolean apply(@Nullable Field input) {
+            public boolean apply(Field input) {
                 return (input.getType() == Pages.class);
             }
 
-            public boolean test(@Nullable Field input) {
+            public boolean test(Field input) {
                 return apply(input);
             }
         };

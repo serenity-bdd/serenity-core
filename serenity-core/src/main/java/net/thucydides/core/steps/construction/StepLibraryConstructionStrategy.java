@@ -7,7 +7,7 @@ import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
 
-import javax.annotation.Nullable;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
@@ -81,7 +81,7 @@ public class StepLibraryConstructionStrategy {
                 return ((constructor.getParameterTypes().length > 0));
             }
 
-            public boolean test(@Nullable Constructor<?> input) {
+            public boolean test(Constructor<?> input) {
                 return apply(input);
             }
         };
@@ -95,7 +95,7 @@ public class StepLibraryConstructionStrategy {
                 return ((constructor.getParameterTypes().length == 0));
             }
 
-            public boolean test(@Nullable Constructor<?> input) {
+            public boolean test(Constructor<?> input) {
                 return apply(input);
             }
         };
@@ -110,7 +110,7 @@ public class StepLibraryConstructionStrategy {
                         && (constructor.getParameterTypes()[0] == Pages.class));
             }
 
-            public boolean test(@Nullable Constructor<?> input) {
+            public boolean test(Constructor<?> input) {
                 return apply(input);
             }
         };
@@ -127,7 +127,7 @@ public class StepLibraryConstructionStrategy {
                 return (field.getType() == Pages.class);
             }
 
-            public boolean test(@Nullable Field input) {
+            public boolean test(Field input) {
                 return apply(input);
             }
         };

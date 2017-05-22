@@ -14,6 +14,7 @@ import static org.hamcrest.Matchers.startsWith;
 
 public class AddCustomCapabilities {
     private final String prefix;
+    private boolean withPrefix = false;
     private EnvironmentVariables environmentVariables;
 
     public AddCustomCapabilities(String prefix) {
@@ -38,8 +39,10 @@ public class AddCustomCapabilities {
             String preparedPropertyKey = getPreparedPropertyKey(propertyKey);
             String propertyValue = environmentVariables.getProperty(propertyKey);
             if (isNotEmpty(propertyValue)) {
-                capabilities.setCapability(preparedPropertyKey, propertyValue);
-                capabilities.setCapability(propertyKey, propertyValue);
+                capabilities.setCapability(preparedPropertyKey, asObject(propertyValue));
+                if (withPrefix) {
+                    capabilities.setCapability(propertyKey, asObject(propertyValue));
+                }
             }
         }
     }
@@ -54,5 +57,22 @@ public class AddCustomCapabilities {
         return shortenedPropertyKey;
     }
 
+    private Object asObject(String propertyValue) {
+        try {
+            Integer integerValue = Integer.parseInt(propertyValue);
+            return integerValue;
+        } catch(NumberFormatException noBiggy) {}
 
+
+        if (propertyValue.equalsIgnoreCase("true") || propertyValue.equalsIgnoreCase("false")) {
+            return Boolean.parseBoolean(propertyValue);
+        }
+
+        return propertyValue;
+    }
+
+    public AddCustomCapabilities withAndWithoutPrefixes() {
+        withPrefix = true;
+        return this;
+    }
 }

@@ -18,6 +18,13 @@ public class FailureDetails {
         return testOutcome.testFailureMessage().or("");
     }
 
+    public String getCompleteErrorMessage() {
+        if (testOutcome.firstStepWithErrorMessage().isPresent()) {
+            return testOutcome.firstStepWithErrorMessage().get().getErrorMessage();
+        }
+        return testOutcome.testFailureMessage().or("");
+    }
+
     public String getPageSourceLink() {
         for(TestStep testStep : testOutcome.getFlattenedTestSteps()) {
             for(ScreenshotAndHtmlSource screenshot : testStep.getScreenshots()) {

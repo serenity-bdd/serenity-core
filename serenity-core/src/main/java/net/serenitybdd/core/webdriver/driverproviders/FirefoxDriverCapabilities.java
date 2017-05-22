@@ -76,7 +76,7 @@ public class FirefoxDriverCapabilities  implements DriverCapabilitiesProvider {
 
 
     private boolean shouldEnableNativeEvents() {
-        return Boolean.valueOf(ThucydidesSystemProperty.THUCYDIDES_NATIVE_EVENTS.from(environmentVariables,"true"));
+        return Boolean.valueOf(ThucydidesSystemProperty.SERENITY_NATIVE_EVENTS.from(environmentVariables,"true"));
     }
 
     private void activateProxyFor(FirefoxProfile profile, FirefoxProfileEnhancer firefoxProfileEnhancer) {
@@ -86,7 +86,7 @@ public class FirefoxDriverCapabilities  implements DriverCapabilitiesProvider {
     }
 
     private String getProxyPortFromEnvironmentVariables() {
-        return ThucydidesSystemProperty.THUCYDIDES_PROXY_HTTP_PORT.from(environmentVariables);
+        return ThucydidesSystemProperty.SERENITY_PROXY_HTTP_PORT.from(environmentVariables);
     }
 
     private boolean shouldActivateProxy() {
@@ -95,7 +95,7 @@ public class FirefoxDriverCapabilities  implements DriverCapabilitiesProvider {
     }
 
     private String getProxyUrlFromEnvironmentVariables() {
-        return ThucydidesSystemProperty.THUCYDIDES_PROXY_HTTP.from(environmentVariables);
+        return ThucydidesSystemProperty.SERENITY_PROXY_HTTP.from(environmentVariables);
     }
 
     private FirefoxProfile getProfileFrom(final String profileName) {

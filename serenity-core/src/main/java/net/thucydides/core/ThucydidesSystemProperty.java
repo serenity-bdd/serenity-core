@@ -549,6 +549,11 @@ public enum ThucydidesSystemProperty {
     CHROME_SWITCHES,
 
     /**
+     * Path to a Chrome-driver specific extensions file
+     */
+    CHROME_EXTENSION,
+
+    /**
      * Preferences to be passed to the Firefox driver, separated by semi-colons (commas often appear in the preference
      * values.
      */

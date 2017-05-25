@@ -64,14 +64,14 @@ public final class AnnotatedStepDescription {
 
     public Method getTestMethod() {
         if (getTestClass() != null) {
-            return methodCalled(withNoArguments(description.getName()), getTestClass());
+            return methodCalled(description, getTestClass());
         } else {
             return null;
         }
     }
 
     public Method getTestMethodIfPresent() {
-        return findMethodCalled(withNoArguments(description.getName()), getTestClass());
+        return findMethodCalled(description, getTestClass());
     }
 
     private String withNoArguments(final String methodName) {
@@ -96,7 +96,7 @@ public final class AnnotatedStepDescription {
         return description.getStepClass();
     }
 
-    private Method methodCalled(final String methodName, final Class<?> testClass) {
+    private Method methodCalled(final ExecutedStepDescription methodName, final Class<?> testClass) {
         Method methodFound = findMethodCalled(methodName, testClass);
         if (methodFound == null) {
             throw new IllegalArgumentException("No test method called " + methodName + " was found in " + testClass);
@@ -104,8 +104,8 @@ public final class AnnotatedStepDescription {
         return methodFound;
     }
 
-    private Method findMethodCalled(final String methodName, final Class<?> testClass) {
-        return MethodFinder.inClass(testClass).getMethodNamed(methodName);
+    private Method findMethodCalled(final ExecutedStepDescription method, final Class<?> testClass) {
+        return MethodFinder.inClass(testClass).getMethodNamed(withNoArguments(method.getName()), method.getArguments().size());
     }
 
     public String getAnnotatedTitle() {

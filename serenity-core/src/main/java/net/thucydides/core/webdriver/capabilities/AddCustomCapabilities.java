@@ -48,7 +48,7 @@ public class AddCustomCapabilities {
     }
 
     private String getPreparedPropertyKey(String propertyKey) {
-        String shortenedPropertyKey = propertyKey.replace(prefix + ".","");
+        String shortenedPropertyKey = propertyKey.replace(prefix,"");
         if (shortenedPropertyKey.equals("os.version")) {
             return "os_version";
         } else if (shortenedPropertyKey.equals("browser.version")) {

@@ -308,11 +308,11 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         	//if there is only one window closing it means quitting the web driver
         	if (areWindowHandlesAllowed(getDriverInstance()) &&
                     getDriverInstance().getWindowHandles() != null && getDriverInstance().getWindowHandles().size() == 1){
-        		this.quit();
-        	} else{
-        		getDriverInstance().close();
-        	}
-            webDriverFactory.shutdownFixtureServices();
+                this.quit();
+                webDriverFactory.shutdownFixtureServices();
+            } else{
+                getDriverInstance().close();
+            }
         }
     }
 

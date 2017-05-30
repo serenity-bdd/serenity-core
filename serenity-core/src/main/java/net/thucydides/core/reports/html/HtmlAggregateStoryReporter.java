@@ -16,6 +16,7 @@ import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.requirements.reports.RequirementOutcome;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -127,7 +128,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         TestOutcomes allTestOutcomes = loadTestOutcomesFrom(sourceDirectory);
 
-        if (tags != null) {
+        if (isEmpty(tags)) {
             allTestOutcomes = allTestOutcomes.withTags(getTags());
         }
         LOGGER.debug("Loaded test outcomes after {} ms", stopwatch.lapTime());
@@ -280,22 +281,17 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     }
 
     public List<TestTag> getTags() {
+
+        List<TestTag> tagList = new ArrayList<>();
+
         if (isEmpty(tags)) {
-            return new ArrayList<>();
+            return tagList;
         }
 
-        List<String> tagValues = Splitter.on(",").trimResults().splitToList(tags);
-        return convert(tagValues, toTags());
-    }
-
-    private Converter<String, TestTag> toTags() {
-        return new Converter<String, TestTag>(){
-
-            @Override
-            public TestTag convert(String from) {
-                return TestTag.withValue(from);
-            }
-        };
+        for(String tagValue : StringUtils.split(tags,",")) {
+            tagList.add(TestTag.withValue(tagValue.trim()));
+        }
+        return tagList;
     }
 
     public void setGenerateTestOutcomeReports() {

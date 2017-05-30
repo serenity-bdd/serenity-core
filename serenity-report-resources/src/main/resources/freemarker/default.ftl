@@ -343,7 +343,11 @@
                                     <pre>${(formatter.renderHeaders(restQuery.responseHeaders))!}</pre>
                                 </#if>
                                 <h5>Response Body</h5>
-                                <pre>${formatter.renderText(restQuery.responseBody)}</pre>
+                                <#if restQuery.responseHeaders?has_content>
+                                    <pre>
+                                        ${formatter.renderText(restQuery.responseBody)}
+                                    </pre>
+                                </#if>
                                 <#if restQuery.responseCookies?has_content && (!(restQuery.requestCookies?has_content) || restQuery.responseCookies!=restQuery.requestCookies)>
                                     <h5>Response Cookies</h5>
                                     <pre>${(formatter.renderText(restQuery.responseCookies))!}</pre>

@@ -2,6 +2,7 @@ package net.thucydides.core.reports.html;
 
 import com.github.rjeschke.txtmark.Configuration;
 import com.github.rjeschke.txtmark.Processor;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Key;
@@ -34,6 +35,7 @@ import java.util.regex.Pattern;
 import static ch.lambdaj.Lambda.join;
 import static net.thucydides.core.reports.html.MarkdownRendering.RenderedElements.*;
 import static org.apache.commons.lang3.StringUtils.abbreviate;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Format text for HTML reports.
@@ -50,7 +52,7 @@ public class Formatter {
     private static final String ASCIIDOC = "asciidoc";
     private static final String MARKDOWN = "markdown";
     private static final String TEXT = "";
-    private static final String NEW_LINE = "\n";
+    private static final String STANDARD_NEW_LINE = "\n";
 
     private final static String NEWLINE_CHAR = "\u2424";
     private final static String NEWLINE = "\u0085";
@@ -58,6 +60,9 @@ public class Formatter {
     private final static String PARAGRAPH_SEPARATOR = "\u2029";
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Formatter.class);
+    public static final String FOUR_SPACES = "&nbsp; &nbsp; &nbsp; &nbsp;";
+    public static final String TAB = "\\t";
+    public static final String NEW_LINE_ON_ANY_OS = "\\r?\\n";
 
     private final IssueTracking issueTracking;
     private final EnvironmentVariables environmentVariables;
@@ -115,11 +120,11 @@ public class Formatter {
     }
 
     public String renderText(String text) {
-        if (text == null) {
+        if (isEmpty(text.trim())) {
             return "";
         }
-        return concatLines(BASIC_XML.translate(stringFormOf(text)),"<br>")
-                .replaceAll("\\t", "&nbsp; &nbsp; &nbsp;");
+        return concatLines(BASIC_XML.translate(text),"<br>")
+                .replaceAll(TAB, FOUR_SPACES);
     }
 
     public String renderHeaders(String text) {
@@ -238,10 +243,10 @@ public class Formatter {
     }
 
     private String convertNonStandardNLChars(String text) {
-        text = StringUtils.replace(text, NEWLINE_CHAR, NEW_LINE);
-        text = StringUtils.replace(text, NEWLINE, NEW_LINE);
-        text = StringUtils.replace(text, LINE_SEPARATOR, NEW_LINE);
-        text = StringUtils.replace(text, PARAGRAPH_SEPARATOR, NEW_LINE);
+        text = StringUtils.replace(text, NEWLINE_CHAR, STANDARD_NEW_LINE);
+        text = StringUtils.replace(text, NEWLINE, STANDARD_NEW_LINE);
+        text = StringUtils.replace(text, LINE_SEPARATOR, STANDARD_NEW_LINE);
+        text = StringUtils.replace(text, PARAGRAPH_SEPARATOR, STANDARD_NEW_LINE);
         return text;
     }
 
@@ -303,7 +308,7 @@ public class Formatter {
         } else if (text.contains("\r")) {
             return "\r";
         } else {
-            return NEW_LINE;
+            return STANDARD_NEW_LINE;
         }
     }
 
@@ -369,9 +374,9 @@ public class Formatter {
         return concatLines(message," ");
     }
 
-    private static String concatLines(String message, String replace) {
-        String[] lines = message.replaceAll("\\r", "").split("\\n");
-        return StringUtils.join(lines,replace);
+    private static String concatLines(String message, String newLine) {
+        List<String> lines = Splitter.onPattern(NEW_LINE_ON_ANY_OS).splitToList(message);
+        return StringUtils.join(lines,newLine);
     }
 
     private static String stringFormOf(Object fieldValue) {

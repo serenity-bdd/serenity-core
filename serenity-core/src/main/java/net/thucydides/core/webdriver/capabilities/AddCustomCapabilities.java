@@ -58,17 +58,27 @@ public class AddCustomCapabilities {
     }
 
     private Object asObject(String propertyValue) {
+
+        if (isAQuoted(propertyValue))
+
         try {
             Integer integerValue = Integer.parseInt(propertyValue);
             return integerValue;
         } catch(NumberFormatException noBiggy) {}
-
 
         if (propertyValue.equalsIgnoreCase("true") || propertyValue.equalsIgnoreCase("false")) {
             return Boolean.parseBoolean(propertyValue);
         }
 
         return propertyValue;
+    }
+
+    private boolean isAQuoted(String propertyValue) {
+        return (surroundedBy("\"", propertyValue) || surroundedBy("'", propertyValue));
+    }
+
+    private boolean surroundedBy(String quote, String propertyValue) {
+        return propertyValue.startsWith(quote) && propertyValue.endsWith(quote);
     }
 
     public AddCustomCapabilities withAndWithoutPrefixes() {

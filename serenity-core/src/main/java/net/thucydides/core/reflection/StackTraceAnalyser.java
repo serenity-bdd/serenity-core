@@ -76,8 +76,19 @@ public class StackTraceAnalyser {
         return StringUtils.isNotEmpty(stackTraceElement.getFileName()) && (stackTraceElement.getFileName().equals("<generated>"));
     }
 
+    private final static List<String> HIDDEN_PACKAGES = Lists.newArrayList("sun.","java","org.gradle");
     private boolean allowedClassName(String className) {
-        return !((className.startsWith("sun.")) || (className.startsWith("java.")) || (className.contains("$")));
+        if (className.contains("$")) { return false; }
+        if (inHiddenPackage(className)) { return false; }
+
+        return true;
+    }
+
+    private boolean inHiddenPackage(String className) {
+        for(String hiddenPackage : HIDDEN_PACKAGES) {
+            if (className.startsWith(hiddenPackage)) { return true; }
+        }
+        return false;
     }
 
     public static List<Method> inscopeMethodsIn(StackTraceElement[] stackTrace) {

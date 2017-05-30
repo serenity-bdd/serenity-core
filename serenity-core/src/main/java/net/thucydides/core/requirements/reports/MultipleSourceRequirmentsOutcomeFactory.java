@@ -9,6 +9,7 @@ import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.RequirementsMerger;
 import net.thucydides.core.requirements.RequirementsTagProvider;
 import net.thucydides.core.requirements.model.Requirement;
+import net.thucydides.core.requirements.model.RequirementTree;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,10 +48,9 @@ public class MultipleSourceRequirmentsOutcomeFactory implements RequirementsOutc
     public RequirementsOutcomes buildRequirementsOutcomesFrom(TestOutcomes testOutcomes) {
         List<Requirement> allRequirements = Lists.newArrayList();
         for (RequirementsTagProvider tagProvider : requirementsTagProviders) {
-            LOGGER.debug("Merging requirements: {}", tagProvider.getRequirements());
             allRequirements = new RequirementsMerger().merge(allRequirements, tagProvider.getRequirements());
         }
-        LOGGER.debug("Merged requirements set {}", allRequirements);
+        LOGGER.debug("Merged requirements set:{}{}", System.lineSeparator(), RequirementTree.withRequirements(allRequirements));
         return new RequirementsOutcomes(allRequirements,
                 testOutcomes,
                 issueTracking,

@@ -128,7 +128,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         TestOutcomes allTestOutcomes = loadTestOutcomesFrom(sourceDirectory);
 
-        if (isEmpty(tags)) {
+        if (!isEmpty(tags)) {
             allTestOutcomes = allTestOutcomes.withTags(getTags());
         }
         LOGGER.debug("Loaded test outcomes after {} ms", stopwatch.lapTime());

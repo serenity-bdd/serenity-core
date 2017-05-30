@@ -53,8 +53,12 @@ public class WhenDescribingStepsUsingAnnotations {
         @Step("a step with a parameter called '{0}'")
         public void a_customized_step_with_parameters(String name) {}
 
+        @Step("a step with first parameter called '{0}' and second parameter called '{1}'")
+        public void a_customized_step_with_parameters(String first, String second) {}
+
         @Step("a step with a parameter called '{0}' and a field called #color")
         public void a_customized_step_with_parameters_and_fields(String name) {}
+
 
         @Step("a step with a parameter called '{0}' and a field called #emptyField")
         public void a_customized_step_with_parameters_and_empty_field_value(String name) {}
@@ -129,7 +133,6 @@ public class WhenDescribingStepsUsingAnnotations {
         assertThat(annotatedStepDescription.getName(), is("A step group with an annotation"));
     }
 
-
     @Test
     public void a_step_can_be_annotated_to_provide_a_more_readable_name_including_a_parameter() {
         ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
@@ -139,6 +142,17 @@ public class WhenDescribingStepsUsingAnnotations {
         AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
 
         assertThat(annotatedStepDescription.getName(), is("a step with a parameter called 'Joe'"));
+    }
+
+    @Test
+    public void a_step_can_be_annotated_to_provide_a_more_readable_name_including_multiple_parameters() {
+        ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
+                "a_customized_step_with_parameters: Joe, Doe",
+                new Object[]{"Joe", "Doe"});
+
+        AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
+
+        assertThat(annotatedStepDescription.getName(), is("a step with first parameter called 'Joe' and second parameter called 'Doe'"));
     }
 
     @Test

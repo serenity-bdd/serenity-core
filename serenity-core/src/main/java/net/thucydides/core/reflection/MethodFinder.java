@@ -47,4 +47,19 @@ public class MethodFinder {
         }
         return methodFound;
     }
+
+    public Method getMethodNamed(String methodName, int argumentCount) {
+        List<Method> methods = getAllMethods();
+        Method methodFound = null;
+        for (Method method : methods) {
+            if (method.getName().equals(methodName)) {
+                methodFound = method;
+                if (method.getParameterTypes().length == argumentCount){
+                    methodFound = method;
+                    break;
+                }
+            }
+        }
+        return methodFound;
+    }
 }

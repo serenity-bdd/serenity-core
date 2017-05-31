@@ -1,6 +1,7 @@
 package net.serenitybdd.core.model
 
 import net.thucydides.core.model.LastElement
+import net.thucydides.core.reports.NumberOfThreads
 import spock.lang.Specification
 import spock.lang.Unroll
 

@@ -1,6 +1,8 @@
 package net.serenitybdd.core.reports
 
 import net.serenitybdd.core.SerenityReports
+import net.thucydides.core.reports.NumberOfThreads
+import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import spock.lang.Specification
@@ -30,4 +32,25 @@ class WhenSettingUpReportServices extends Specification {
         then:
             listeners.getResults() == listeners.baseStepListener.testOutcomes
     }
+
+    def "should be able to configure the thread coefficient"() {
+        given:
+            EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
+        when:
+            environmentVariables.setProperty("io.blocking.coefficient", "0.5");
+        then:
+            new NumberOfThreads().forIO() != new NumberOfThreads(environmentVariables).forIO();
+
+    }
+
+    def "should be able to configure the thread count"() {
+        given:
+            EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
+        when:
+            environmentVariables.setProperty("report.threads", "16");
+        then:
+            new NumberOfThreads(environmentVariables).forIO() == 16;
+
+    }
+
 }

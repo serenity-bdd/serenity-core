@@ -10,19 +10,32 @@ public class NumberOfThreads {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NumberOfThreads.class);
 
-    static final double BLOCKING_COEFFICIENT_FOR_IO = 0.9;
+    static final Double DEFAULT_BLOCKING_COEFFICIENT_FOR_IO = 0.8;
 
-    private final static EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+    private final EnvironmentVariables environmentVariables;
+    private final double blockingCoefficientForIO;
 
     public static int forIOOperations() {
+        return new NumberOfThreads().forIO();
+    }
 
+    protected NumberOfThreads() {
+        this(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+    }
+
+    protected NumberOfThreads(EnvironmentVariables environmentVariables) {
+        this.environmentVariables = environmentVariables;
+        this.blockingCoefficientForIO = Double.parseDouble(environmentVariables.getProperty("io.blocking.coefficient", DEFAULT_BLOCKING_COEFFICIENT_FOR_IO.toString()));
+    }
+
+    public int forIO() {
         final int numberOfCores = Runtime.getRuntime().availableProcessors();
-        int reportThreads = configuredReportThreads().or((int) (numberOfCores / (1 - BLOCKING_COEFFICIENT_FOR_IO)));
+        int reportThreads = configuredReportThreads().or((int) (numberOfCores / (1 - blockingCoefficientForIO)));
         LOGGER.info("Configured report threads: {}", reportThreads);
         return reportThreads;
     }
 
-    private static Optional<Integer> configuredReportThreads() {
+    private Optional<Integer> configuredReportThreads() {
         return Optional.fromNullable(environmentVariables.getPropertyAsInteger("report.threads", null));
     }
 }

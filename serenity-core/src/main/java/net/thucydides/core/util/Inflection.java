@@ -3,16 +3,18 @@ package net.thucydides.core.util;
 public class Inflection {
     private final static int DEFAULT_PLURAL_COUNT = 2;
 
-    private final String word;
-    private final int pluralCount;
+    private String word;
+    private int pluralCount;
+    private final Inflector inflector;
 
-    protected Inflection(String word) {
-        this(word, DEFAULT_PLURAL_COUNT);
+    Inflection(String word, Inflector inflector) {
+        this(word, DEFAULT_PLURAL_COUNT, inflector);
     }
 
-    protected Inflection(String word, int pluralCount) {
+    Inflection(String word, int pluralCount, Inflector inflector) {
         this.word = word;
         this.pluralCount = pluralCount;
+        this.inflector = inflector;
     }
 
     public String toString() {
@@ -20,27 +22,32 @@ public class Inflection {
     }
 
     public Inflection inPluralForm() {
-        return new Inflection(Inflector.getInstance().pluralize(word, pluralCount));
+        this.word = inflector.pluralize(word, pluralCount);
+        return this;
     }
 
     public Inflection inSingularForm() {
-        return new Inflection(Inflector.getInstance().singularize(word));
+        this.word = inflector.singularize(word);
+        return this;
     }
     
     public Inflection startingWithACapital() {
-        return new Inflection(Inflector.getInstance().capitalize(word));
+        this.word = inflector.capitalize(word);
+        return this;
     }
     
     public Inflection inHumanReadableForm() {
-        Inflector inflector = Inflector.getInstance();
-        return new Inflection(inflector.humanize(inflector.underscore(word)));
+        this.word = inflector.humanize(inflector.underscore(word));
+        return this;
     }
 
     public Inflection withUnderscores() {
-        return new Inflection(Inflector.getInstance().underscore(word));
+        this.word = inflector.underscore(word);
+        return this;
     }
 
     public Inflection asATitle() {
-        return new Inflection(Inflector.getInstance().titleCase(word));
+        this.word = inflector.titleCase(word);
+        return this;
     }
 }

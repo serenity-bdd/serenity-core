@@ -18,25 +18,25 @@ import java.util.regex.Pattern;
  */
 public class Inflector {
 
-    protected static final Inflector INSTANCE = new Inflector();
+    private static final Inflector INSTANCE = new Inflector();
 
     public static Inflector getInstance() {
         return INSTANCE;
     }
 
     public Inflection of(String word) {
-        return new Inflection(word);
+        return new Inflection(word, this);
     }
 
     public MultipleInflection of(int count) {
-        return new MultipleInflection(count);
+        return new MultipleInflection(count, this);
     }
 
     protected static class Rule {
 
         protected final String expression;
-        protected final Pattern expressionPattern;
-        protected final String replacement;
+        final Pattern expressionPattern;
+        final String replacement;
 
         protected Rule( String expression,
                         String replacement ) {
@@ -110,8 +110,8 @@ public class Inflector {
         return wordStr;
     }
 
-    public String pluralize( Object word,
-                             int count ) {
+    String pluralize(Object word,
+                     int count) {
         if (word == null) return null;
         if (count == 1 || count == -1) {
             return word.toString();
@@ -202,8 +202,8 @@ public class Inflector {
         return StringUtils.capitalize(result);
     }
 
-    protected String humanReadableFormOf(String lowerCaseAndUnderscoredWords,
-                                         String... removableTokens) {
+    private String humanReadableFormOf(String lowerCaseAndUnderscoredWords,
+                                       String... removableTokens) {
         if (lowerCaseAndUnderscoredWords == null) return null;
         String result = lowerCaseAndUnderscoredWords.trim();
         if (result.length() == 0) return "";
@@ -276,8 +276,8 @@ public class Inflector {
      * @param removableTokens optional array of tokens that are to be removed
      * @return the title-case version of the supplied words
      */
-    public String titleCase( String words,
-                             String... removableTokens ) {
+    String titleCase(String words,
+                     String... removableTokens) {
         String result = humanize(words, removableTokens);
         result = replaceAllWithUppercase(result, "\\b([a-z])", 1); // change first char of each word to uppercase
         return result.trim();
@@ -294,32 +294,32 @@ public class Inflector {
      * @param word the word
      * @return true if the plural and singular forms of the word are the same
      */
-    public boolean isUncountable( String word ) {
+    private boolean isUncountable(String word) {
         String trimmedLower = word.trim().toLowerCase();
         return this.uncountables.contains(trimmedLower);
     }
 
-    public void addPluralize( String rule,
-                              String replacement ) {
+    private void addPluralize(String rule,
+                              String replacement) {
         final Rule pluralizeRule = new Rule(rule, replacement);
         this.plurals.addFirst(pluralizeRule);
     }
 
-    public void addSingularize( String rule,
-                                String replacement ) {
+    private void addSingularize(String rule,
+                                String replacement) {
         final Rule singularizeRule = new Rule(rule, replacement);
         this.singulars.addFirst(singularizeRule);
     }
 
-    public void addIrregular( String singular,
-                              String plural ) {
+    private void addIrregular(String singular,
+                              String plural) {
         String singularRemainder = singular.length() > 1 ? singular.substring(1) : "";
         String pluralRemainder = plural.length() > 1 ? plural.substring(1) : "";
         addPluralize("(" + singular.charAt(0) + ")" + singularRemainder + "$", "$1" + pluralRemainder);
         addSingularize("(" + plural.charAt(0) + ")" + pluralRemainder + "$", "$1" + singularRemainder);
     }
 
-    public void addUncountable( String... words ) {
+    private void addUncountable(String... words) {
         for (String word : words) {
             uncountables.add(word.trim().toLowerCase());
         }
@@ -339,9 +339,9 @@ public class Inflector {
      * @param groupNumberToUppercase the regex group to convert to uppercase
      * @return the input string with the appropriate characters converted to upper-case
      */
-    protected static String replaceAllWithUppercase( String input,
-                                                     String regex,
-                                                     int groupNumberToUppercase ) {
+    private static String replaceAllWithUppercase(String input,
+                                                  String regex,
+                                                  int groupNumberToUppercase) {
         Pattern underscoreAndDotPattern = Pattern.compile(regex);
         Matcher matcher = underscoreAndDotPattern.matcher(input);
         StringBuffer sb = new StringBuffer();
@@ -353,69 +353,68 @@ public class Inflector {
     }
 
     protected void initialize() {
-        Inflector inflect = this;
-        inflect.addPluralize("$", "s");
-        inflect.addPluralize("s$", "s");
-        inflect.addPluralize("(ax|test)is$", "$1es");
-        inflect.addPluralize("(octop|vir)us$", "$1i");
-        inflect.addPluralize("(octop|vir)i$", "$1i"); // already plural
-        inflect.addPluralize("(alias|status)$", "$1es");
-        inflect.addPluralize("(bu)s$", "$1ses");
-        inflect.addPluralize("(buffal|tomat)o$", "$1oes");
-        inflect.addPluralize("([ti])um$", "$1a");
-        inflect.addPluralize("([ti])a$", "$1a"); // already plural
-        inflect.addPluralize("sis$", "ses");
-        inflect.addPluralize("(?:([^f])fe|([lr])f)$", "$1$2ves");
-        inflect.addPluralize("(hive)$", "$1s");
-        inflect.addPluralize("([^aeiouy]|qu)y$", "$1ies");
-        inflect.addPluralize("(x|ch|ss|sh)$", "$1es");
-        inflect.addPluralize("(matr|vert|ind)ix|ex$", "$1ices");
-        inflect.addPluralize("([m|l])ouse$", "$1ice");
-        inflect.addPluralize("([m|l])ice$", "$1ice");
-        inflect.addPluralize("^(ox)$", "$1en");
-        inflect.addPluralize("(quiz)$", "$1zes");
+        addPluralize("$", "s");
+        addPluralize("s$", "s");
+        addPluralize("(ax|test)is$", "$1es");
+        addPluralize("(octop|vir)us$", "$1i");
+        addPluralize("(octop|vir)i$", "$1i"); // already plural
+        addPluralize("(alias|status)$", "$1es");
+        addPluralize("(bu)s$", "$1ses");
+        addPluralize("(buffal|tomat)o$", "$1oes");
+        addPluralize("([ti])um$", "$1a");
+        addPluralize("([ti])a$", "$1a"); // already plural
+        addPluralize("sis$", "ses");
+        addPluralize("(?:([^f])fe|([lr])f)$", "$1$2ves");
+        addPluralize("(hive)$", "$1s");
+        addPluralize("([^aeiouy]|qu)y$", "$1ies");
+        addPluralize("(x|ch|ss|sh)$", "$1es");
+        addPluralize("(matr|vert|ind)ix|ex$", "$1ices");
+        addPluralize("([m|l])ouse$", "$1ice");
+        addPluralize("([m|l])ice$", "$1ice");
+        addPluralize("^(ox)$", "$1en");
+        addPluralize("(quiz)$", "$1zes");
         // Need to check for the following words that are already pluralized:
-        inflect.addPluralize("(people|men|children|sexes|moves|stadiums)$", "$1"); // irregulars
-        inflect.addPluralize("(oxen|octopi|viri|aliases|quizzes)$", "$1"); // special rules
+        addPluralize("(people|men|children|sexes|moves|stadiums)$", "$1"); // irregulars
+        addPluralize("(oxen|octopi|viri|aliases|quizzes)$", "$1"); // special rules
 
-        inflect.addSingularize("s$", "");
-        inflect.addSingularize("(s|si|u)s$", "$1s"); // '-us' and '-ss' are already singular
-        inflect.addSingularize("(n)ews$", "$1ews");
-        inflect.addSingularize("([ti])a$", "$1um");
-        inflect.addSingularize("((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$", "$1$2sis");
-        inflect.addSingularize("(^analy)ses$", "$1sis");
-        inflect.addSingularize("(^analy)sis$", "$1sis"); // already singular, but ends in 's'
-        inflect.addSingularize("([^f])ves$", "$1fe");
-        inflect.addSingularize("(hive)s$", "$1");
-        inflect.addSingularize("(tive)s$", "$1");
-        inflect.addSingularize("([lr])ves$", "$1f");
-        inflect.addSingularize("([^aeiouy]|qu)ies$", "$1y");
-        inflect.addSingularize("(s)eries$", "$1eries");
-        inflect.addSingularize("(m)ovies$", "$1ovie");
-        inflect.addSingularize("(x|ch|ss|sh)es$", "$1");
-        inflect.addSingularize("([m|l])ice$", "$1ouse");
-        inflect.addSingularize("(bus)es$", "$1");
-        inflect.addSingularize("(o)es$", "$1");
-        inflect.addSingularize("(shoe)s$", "$1");
-        inflect.addSingularize("(cris|ax|test)is$", "$1is"); // already singular, but ends in 's'
-        inflect.addSingularize("(cris|ax|test)es$", "$1is");
-        inflect.addSingularize("(octop|vir)i$", "$1us");
-        inflect.addSingularize("(octop|vir)us$", "$1us"); // already singular, but ends in 's'
-        inflect.addSingularize("(alias|status)es$", "$1");
-        inflect.addSingularize("(alias|status)$", "$1"); // already singular, but ends in 's'
-        inflect.addSingularize("^(ox)en", "$1");
-        inflect.addSingularize("(vert|ind)ices$", "$1ex");
-        inflect.addSingularize("(matr)ices$", "$1ix");
-        inflect.addSingularize("(quiz)zes$", "$1");
+        addSingularize("s$", "");
+        addSingularize("(s|si|u)s$", "$1s"); // '-us' and '-ss' are already singular
+        addSingularize("(n)ews$", "$1ews");
+        addSingularize("([ti])a$", "$1um");
+        addSingularize("((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$", "$1$2sis");
+        addSingularize("(^analy)ses$", "$1sis");
+        addSingularize("(^analy)sis$", "$1sis"); // already singular, but ends in 's'
+        addSingularize("([^f])ves$", "$1fe");
+        addSingularize("(hive)s$", "$1");
+        addSingularize("(tive)s$", "$1");
+        addSingularize("([lr])ves$", "$1f");
+        addSingularize("([^aeiouy]|qu)ies$", "$1y");
+        addSingularize("(s)eries$", "$1eries");
+        addSingularize("(m)ovies$", "$1ovie");
+        addSingularize("(x|ch|ss|sh)es$", "$1");
+        addSingularize("([m|l])ice$", "$1ouse");
+        addSingularize("(bus)es$", "$1");
+        addSingularize("(o)es$", "$1");
+        addSingularize("(shoe)s$", "$1");
+        addSingularize("(cris|ax|test)is$", "$1is"); // already singular, but ends in 's'
+        addSingularize("(cris|ax|test)es$", "$1is");
+        addSingularize("(octop|vir)i$", "$1us");
+        addSingularize("(octop|vir)us$", "$1us"); // already singular, but ends in 's'
+        addSingularize("(alias|status)es$", "$1");
+        addSingularize("(alias|status)$", "$1"); // already singular, but ends in 's'
+        addSingularize("^(ox)en", "$1");
+        addSingularize("(vert|ind)ices$", "$1ex");
+        addSingularize("(matr)ices$", "$1ix");
+        addSingularize("(quiz)zes$", "$1");
 
-        inflect.addIrregular("person", "people");
-        inflect.addIrregular("man", "men");
-        inflect.addIrregular("child", "children");
-        inflect.addIrregular("sex", "sexes");
-        inflect.addIrregular("move", "moves");
-        inflect.addIrregular("stadium", "stadiums");
+        addIrregular("person", "people");
+        addIrregular("man", "men");
+        addIrregular("child", "children");
+        addIrregular("sex", "sexes");
+        addIrregular("move", "moves");
+        addIrregular("stadium", "stadiums");
 
-        inflect.addUncountable("equipment", "information", "rice", "money", "species", "series", "fish", "sheep");
+        addUncountable("equipment", "information", "rice", "money", "species", "series", "fish", "sheep");
     }
 
 }

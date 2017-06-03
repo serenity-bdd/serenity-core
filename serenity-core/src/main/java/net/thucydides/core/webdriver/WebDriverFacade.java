@@ -106,8 +106,16 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
             WebdriverProxyFactory.getFactory().notifyListenersOfWebdriverCreationIn(this);
         }
         ThucydidesWebDriverSupport.initialize();
-        ThucydidesWebDriverSupport.getWebdriverManager().setCurrentDriver(this);
+        if (!mocked(proxiedWebDriver)) {
+            ThucydidesWebDriverSupport.getWebdriverManager().setCurrentDriver(this);
+        }
         return proxiedWebDriver;
+    }
+
+    private boolean mocked(WebDriver proxiedWebDriver) {
+        return (proxiedWebDriver != null)
+                && ((proxiedWebDriver.getClass().getName().contains("Mocked")
+                    || (proxiedWebDriver.getClass().getName().contains("EnhancerByMockito"))));
     }
 
     public boolean isEnabled() {

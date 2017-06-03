@@ -3,12 +3,15 @@ package net.thucydides.core.pages.integration;
 
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
+import org.assertj.core.api.Assertions;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -16,22 +19,11 @@ import static org.hamcrest.Matchers.is;
 
 public class UsingFormsWithTheFluentElementAPI extends FluentElementAPITestsBaseClass {
 
-    static WebDriver localDriver;
     StaticSitePage page;
-
-    @BeforeClass
-    public static void openDriver() {
-        localDriver = new WebDriverFacade(HtmlUnitDriver.class, new WebDriverFactory());
-    }
-
-    @AfterClass
-    public static void closeDriver() {
-        localDriver.quit();
-    }
 
     @Before
     public void openPage() {
-        page = new StaticSitePage(localDriver, 1);
+        page = getPage();
         page.setWaitForTimeout(750);
         page.open();
     }
@@ -44,6 +36,12 @@ public class UsingFormsWithTheFluentElementAPI extends FluentElementAPITestsBase
     @Test
     public void should_find_web_elements_using_selectors() {
         assertThat(page.element(By.id("lastname")).getText(), is(""));
+    }
+
+
+    @Test
+    public void should_be_able_to_view_a_field_with_a_configured_timeout() {
+        Assertions.assertThat(page.country.isVisible()).isTrue();
     }
 
     @Test

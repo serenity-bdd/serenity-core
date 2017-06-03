@@ -63,6 +63,7 @@ public class Formatter {
     public static final String FOUR_SPACES = "&nbsp; &nbsp; &nbsp; &nbsp;";
     public static final String TAB = "\\t";
     public static final String NEW_LINE_ON_ANY_OS = "\\r?\\n";
+    public static final String UTF_8_NEW_LINE = "␤";
 
     private final IssueTracking issueTracking;
     private final EnvironmentVariables environmentVariables;
@@ -216,8 +217,9 @@ public class Formatter {
     }
 
     public static String addLineBreaks(final String text) {
-        return (text != null) ?
-                text.replaceAll(IOUtils.LINE_SEPARATOR_WINDOWS, "<br>").replaceAll(IOUtils.LINE_SEPARATOR_UNIX, "<br>") : "";
+        return (text != null) ? concatLines(text, "<br>") : "";
+//                text.replaceAll(IOUtils.LINE_SEPARATOR_WINDOWS, "<br>")
+//                    .replaceAll(IOUtils.LINE_SEPARATOR_UNIX, "<br>") : "";
     }
 
     public String convertAnyTables(String text) {
@@ -375,6 +377,7 @@ public class Formatter {
     }
 
     private static String concatLines(String message, String newLine) {
+        message = StringUtils.replace(message, UTF_8_NEW_LINE, newLine);
         List<String> lines = Splitter.onPattern(NEW_LINE_ON_ANY_OS).splitToList(message);
         return StringUtils.join(lines,newLine);
     }

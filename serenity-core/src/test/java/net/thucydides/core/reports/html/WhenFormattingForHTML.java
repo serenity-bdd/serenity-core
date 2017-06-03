@@ -387,6 +387,26 @@ public class WhenFormattingForHTML {
     }
 
     @Test
+    public void should_keep_utf8_new_line_chars_in_json() {
+        when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
+        Formatter formatter = new Formatter(issueTracking);
+
+        String formattedValue = formatter.renderText("{␤" +
+                "    \"id\": 1409959379,␤" +
+                "    \"name\": \"Fido\",␤" +
+                "    \"photoUrls\": [],␤" +
+                "    \"tags\": [],␤" +
+                "    \"status\": \"available\"␤" +
+                "}");
+
+        assertThat(formattedValue, is("{<br>    &quot;id&quot;: 1409959379,<br>" +
+                "    &quot;name&quot;: &quot;Fido&quot;,<br> " +
+                "   &quot;photoUrls&quot;: [],<br> " +
+                "   &quot;tags&quot;: [],<br> " +
+                "   &quot;status&quot;: &quot;available&quot;<br>}"));
+    }
+
+    @Test
     public void should_escape_table_fields() {
         Formatter formatter = new Formatter(issueTracking);
 

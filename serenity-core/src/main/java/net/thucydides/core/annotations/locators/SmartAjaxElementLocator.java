@@ -61,15 +61,14 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
         this.annotatedTimeoutInSeconds = timeoutFrom(field);
         this.clock = clock;
         this.field = field;
-//        if (searchContext instanceof WebDriverFacade) {
+        if (searchContext instanceof WebDriverFacade) {
 //            if (annotatedTimeoutInSeconds.isPresent()) {
 //                this.searchContext = ((WebDriverFacade) searchContext)
 //                        .withTimeoutOf(new Duration(annotatedTimeoutInSeconds.get(), TimeUnit.SECONDS));
 //            } else {
-//                this.searchContext = searchContext;
+                this.searchContext = searchContext;
 //            }
-//        } else
-        if (searchContext instanceof WebElementFacade) {
+        } else if (searchContext instanceof WebElementFacade) {
             if (annotatedTimeoutInSeconds.isPresent()) {
                 this.searchContext = ((WebElementFacade) searchContext).withTimeoutOf(annotatedTimeoutInSeconds.get(), TimeUnit.SECONDS);
             } else {

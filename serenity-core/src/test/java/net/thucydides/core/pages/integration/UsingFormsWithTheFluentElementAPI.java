@@ -19,11 +19,22 @@ import static org.hamcrest.Matchers.is;
 
 public class UsingFormsWithTheFluentElementAPI extends FluentElementAPITestsBaseClass {
 
+    static WebDriver localDriver;
     StaticSitePage page;
+
+    @BeforeClass
+    public static void openDriver() {
+        localDriver = new WebDriverFacade(HtmlUnitDriver.class, new WebDriverFactory());
+    }
+
+    @AfterClass
+    public static void closeDriver() {
+        localDriver.quit();
+    }
 
     @Before
     public void openPage() {
-        page = getPage();
+        page = new StaticSitePage(localDriver, 1);
         page.setWaitForTimeout(750);
         page.open();
     }

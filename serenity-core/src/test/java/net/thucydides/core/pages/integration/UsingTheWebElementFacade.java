@@ -1,9 +1,13 @@
 package net.thucydides.core.pages.integration;
 
 
+import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
+import net.serenitybdd.core.webdriver.servicepools.PhantomJSServicePool;
 import net.thucydides.core.pages.WebElementFacade;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -24,10 +28,16 @@ public class UsingTheWebElementFacade extends FluentElementAPITestsBaseClass {
 
     @BeforeClass
     public static void openStaticPage() {
+
         localDirver = new WebDriverFacade(HtmlUnitDriver.class, new WebDriverFactory());
         page = new StaticSitePageWithFacades(localDirver, 1);
         page.setWaitForTimeout(750);
         page.open();
+    }
+
+    @AfterClass
+    public static void shutdown() {
+        localDirver.quit();
     }
 
     @Test
@@ -96,6 +106,7 @@ public class UsingTheWebElementFacade extends FluentElementAPITestsBaseClass {
     public void should_allow_nested_queries_returning_lists_on_legacy_webelements() {
         assertThat(page.legacyClients.thenFindAll(".firstname")).hasSize(3);
     }
+
     @Test
     public void should_support_legacy_web_element_facades() {
         assertThat(page.legacyFirstName.isVisible()).isTrue();
@@ -149,8 +160,8 @@ public class UsingTheWebElementFacade extends FluentElementAPITestsBaseClass {
     @Test
     public void should_find_multiple_nested_elements_by_css_selectors() {
         assertThat(page.demoForm.then(By.cssSelector("#multiselect"))
-                       .thenFindAll("option"))
-                       .hasSize(5);
+                .thenFindAll("option"))
+                .hasSize(5);
     }
 
     @Test

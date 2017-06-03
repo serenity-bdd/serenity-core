@@ -1,8 +1,10 @@
 package net.serenitybdd.core.pages.integration
 
 import net.serenitybdd.core.pages.WebElementFacade
+import net.serenitybdd.core.time.Stopwatch
 import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool
+import net.serenitybdd.core.webdriver.servicepools.PhantomJSServicePool
 import net.thucydides.core.pages.integration.StaticSitePage
 import net.thucydides.core.steps.ExecutedStepDescription
 import net.thucydides.core.steps.StepEventBus
@@ -20,6 +22,7 @@ import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.TimeoutException
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.remote.DesiredCapabilities
 import spock.lang.*
 
 import java.util.concurrent.TimeUnit
@@ -44,7 +47,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
     WebDriver driver
 
     def setupSpec() {
-        driverService = new ChromeServicePool()
+        driverService = new PhantomJSServicePool();// ChromeServicePool()
         driverService.start()
     }
 
@@ -52,8 +55,8 @@ class WhenManagingWebdriverTimeouts extends Specification {
         driverService.shutdown()
     }
 
-    def WebDriver newDriver() {
-        driver = new ChromeDriver()// driverService.newDriver(DesiredCapabilities.chrome());
+    WebDriver newDriver() {
+        driver = driverService.newDriver(DesiredCapabilities.phantomjs());
         return driver
     }
 
@@ -83,19 +86,22 @@ class WhenManagingWebdriverTimeouts extends Specification {
             thrown(org.openqa.selenium.ElementNotVisibleException)
     }
 
-    @Timeout(5)
     def "Slow loading fields should not wait once a step has failed"() {
         given: "The #slow-loader field takes 4 seconds to load"
+            def page = openStaticPage()
         and: "A step has failed"
             def stepFailure = Mock(StepFailure)
             StepEventBus.getEventBus().testStarted("a test")
             StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle("a step"))
             StepEventBus.getEventBus().stepFailed(stepFailure);
         when: "We access the field"
-            def page = openStaticPage()
+            Stopwatch stopwatch = new Stopwatch()
+            stopwatch.start()
             page.verySlowLoadingField.isDisplayed()
         then: "No error should be thrown"
             notThrown(org.openqa.selenium.ElementNotVisibleException)
+        and: "the response should be returned instantly"
+            stopwatch.stop() < 100
     }
 
     private StaticSitePage openStaticPageWith(Map<String, String> variables) {
@@ -464,7 +470,6 @@ class WhenManagingWebdriverTimeouts extends Specification {
             city.isCurrentlyVisible()
     }
 
-    @Timeout(5)
     def "waitForAbsenceOf should return immediately if no elements are present"() {
         when:
             def page = openStaticPageWith(["webdriver.wait.for.timeout": "50000"])
@@ -472,14 +477,12 @@ class WhenManagingWebdriverTimeouts extends Specification {
             page.waitForAbsenceOf("#does-not-exist")
     }
 
-    @Timeout(8)
     def "waitForAbsenceOf should wait no more than the time needed for the element to dissapear"() {
         when: "placetitle will dissapear after 2 seconds"
             def page = openStaticPageWith(["webdriver.wait.for.timeout": "10000"])
         then:
             page.waitForAbsenceOf("#placetitle")
     }
-
 
     def "waitForAbsenceOf with explicit timeout should wait no more than the time needed for the element to dissapear"() {
         given: "placetitle will dissapear after 3 seconds"
@@ -490,7 +493,6 @@ class WhenManagingWebdriverTimeouts extends Specification {
             thrown(org.openqa.selenium.TimeoutException)
     }
 
-    // Fixme
     def "Timeouts for individual fields can be specified using the timeoutInSeconds parameter of the FindBy annotation"() {
         given:
             def page = openStaticPageWith(["webdriver.timeouts.implicitlywait":"0"])

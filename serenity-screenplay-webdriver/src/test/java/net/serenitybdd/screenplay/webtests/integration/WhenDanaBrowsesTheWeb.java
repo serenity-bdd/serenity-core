@@ -1,4 +1,4 @@
-package net.serenitybdd.screenplay.webtests;
+package net.serenitybdd.screenplay.webtests.integration;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
@@ -15,6 +15,7 @@ import net.serenitybdd.screenplay.webtests.questions.TheValidationMessages;
 import net.serenitybdd.screenplay.webtests.tasks.*;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
+import net.thucydides.junit.annotations.Concurrent;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,12 +31,13 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 @RunWith(SerenityRunner.class)
+@Concurrent(threads = "4")
 public class WhenDanaBrowsesTheWeb {
 
-    @Managed(driver = "phantomjs")
+    @Managed(driver = "htmlunit")
     WebDriver firstBrowser;
 
-    @Managed(driver = "phantomjs")
+    @Managed(driver = "htmlunit")
     WebDriver anotherBrowser;
 
     ProfileQuestion profile = new ProfileQuestion();
@@ -101,7 +103,6 @@ public class WhenDanaBrowsesTheWeb {
         then(dana).should(seeThat(the(ProfilePage.NAME), hasValue("Dana")));
     }
 
-    @Ignore("In progress")
     @Test
     public void danaCanWaitForTheStateOfTheWebPage() {
 

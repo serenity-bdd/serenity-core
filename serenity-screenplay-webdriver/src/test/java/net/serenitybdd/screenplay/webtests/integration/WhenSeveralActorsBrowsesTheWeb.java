@@ -1,4 +1,4 @@
-package net.serenitybdd.screenplay.webtests;
+package net.serenitybdd.screenplay.webtests.integration;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
@@ -18,28 +18,21 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 
 @RunWith(SerenityRunner.class)
-public class WhenSeveralActorsBrowsesTheWebWithDifferentBrowsers {
+public class WhenSeveralActorsBrowsesTheWeb {
 
     @Managed(driver = "htmlunit")
     WebDriver firstBrowser;
 
-    @Managed(driver = "htmlunit")
-    WebDriver secondBrowser;
-
-    @Managed(driver = "htmlunit")
-    WebDriver thirdBrowser;
-
     @Test
-    public void multipleUsersCanUseDifferentBrowsers() {
-
+    public void multipleUsersCanShareTheSameBrowser() {
         Actor dana = new Actor("Dana");
         dana.can(BrowseTheWeb.with(firstBrowser));
 
         Actor jane = new Actor("Jane");
-        jane.can(BrowseTheWeb.with(secondBrowser));
+        jane.can(BrowseTheWeb.with(firstBrowser));
 
         Actor jill = new Actor("Jill");
-        jill.can(BrowseTheWeb.with(thirdBrowser));
+        jill.can(BrowseTheWeb.with(firstBrowser));
 
         givenThat(dana).has(openedTheApplication);
 
@@ -65,41 +58,6 @@ public class WhenSeveralActorsBrowsesTheWebWithDifferentBrowsers {
 
     }
 
-
-    @Test
-    public void multipleUsersCanUseDifferentBrowsersInDifferentOrders() {
-
-        Actor dana = new Actor("Dana");
-        dana.can(BrowseTheWeb.with(firstBrowser));
-
-        Actor jane = new Actor("Jane");
-        jane.can(BrowseTheWeb.with(secondBrowser));
-
-        Actor jill = new Actor("Jill");
-        jill.can(BrowseTheWeb.with(thirdBrowser));
-
-        givenThat(dana).has(openedTheApplication);
-        andThat(jane).has(openedTheApplication);
-        andThat(jill).has(openedTheApplication);
-
-        when(dana).attemptsTo(viewHerProfile);
-        and(dana).attemptsTo(UpdateHerProfile.withName("Dana").andCountryOfResidence("France"));
-        and(jane).attemptsTo(viewHerProfile);
-        and(jane).attemptsTo(UpdateHerProfile.withName("Jane").andCountryOfResidence("United Kingdom"));
-
-        then(dana).should(seeThat(herProfile, hasProperty("name", equalTo("Dana"))));
-        and(dana).should(seeThat(herProfile, hasProperty("country", equalTo("France"))));
-
-        then(jane).should(seeThat(herProfile, hasProperty("name", equalTo("Jane"))));
-        and(jane).should(seeThat(herProfile, hasProperty("country", equalTo("United Kingdom"))));
-
-        when(jill).attemptsTo(viewHerProfile);
-        and(jill).attemptsTo(UpdateHerProfile.withName("Jill").andCountryOfResidence("France"));
-
-        then(jill).should(seeThat(herProfile, hasProperty("name", equalTo("Jill"))));
-        and(jill).should(seeThat(herProfile, hasProperty("country", equalTo("France"))));
-
-    }
     @Steps
     OpenTheApplication openedTheApplication;
 

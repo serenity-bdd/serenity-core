@@ -59,7 +59,9 @@ public class AddCustomCapabilities {
 
     private Object asObject(String propertyValue) {
 
-        if (isAQuoted(propertyValue))
+        if (isAQuoted(propertyValue)) {
+            return propertyValue;
+        }
 
         try {
             Integer integerValue = Integer.parseInt(propertyValue);

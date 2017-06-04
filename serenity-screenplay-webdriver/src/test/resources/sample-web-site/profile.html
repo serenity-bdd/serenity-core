@@ -3,14 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>My Profile Page</title>
+
+    <script type="text/javascript">
+        <!--
+
+        function initFields() {
+            hide('name')
+            displayFieldsAfterDelay();
+        }
+
+        function hide(id) {
+            var e = document.getElementById(id);
+            e.style.display = 'none';
+        }
+
+        function show(id) {
+            var e = document.getElementById(id);
+            e.style.display = 'block';
+        }
+
+        function displayNamwField() {
+            show('name')
+        }
+
+        function displayFieldsAfterDelay() {
+            setTimeout("displayNamwField()", 500);
+        }
+
+        //-->
+    </script>
 </head>
-<body>
+<body onLoad="initFields()">
 
 <h1>My profile</h1>
 
 <form>
     <div>
-        Name: <input type="text" id="name">
+        Name: <input type="text" id="name" style="display:none;">
     </div>
     <div>
         Date of birth <input type="text" id="dob">

@@ -56,7 +56,7 @@ public abstract class AbstractSingleItemHandler<T> implements InvocationHandler 
 		if (webElementFacadeExt == null) {
 			return "<" + locator.toString() + ">";
 		} else {
-			return new WebElementDescriber().webElementDescription((WebElement) webElementFacadeExt,locator);
+			return webElementFacadeExt.toString();//new WebElementDescriber().webElementDescription((WebElement) webElementFacadeExt,locator);
 		}
 	}
 

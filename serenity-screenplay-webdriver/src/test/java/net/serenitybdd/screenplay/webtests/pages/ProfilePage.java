@@ -21,6 +21,9 @@ public class ProfilePage extends PageObject {
     @FindBy(id="name")
     public WebElementFacade nameField;
 
+    @FindBy(id="dob")
+    public WebElementFacade dob;
+
     // Illulstrations of classic page object methods
 
     public void updateNameTo(String name) {

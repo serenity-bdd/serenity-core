@@ -34,10 +34,10 @@ import static org.hamcrest.Matchers.is;
 @Concurrent(threads = "4")
 public class WhenDanaBrowsesTheWeb {
 
-    @Managed(driver = "htmlunit")
+    @Managed(driver = "phantomjs")
     WebDriver firstBrowser;
 
-    @Managed(driver = "htmlunit")
+    @Managed(driver = "phantomjs")
     WebDriver anotherBrowser;
 
     ProfileQuestion profile = new ProfileQuestion();
@@ -106,6 +106,8 @@ public class WhenDanaBrowsesTheWeb {
     @Test
     public void danaCanWaitForTheStateOfTheWebPage() {
 
+        Target nameField = Target.the("nameField").locatedBy("#name");
+
         Actor dana = new Actor("Dana");
         dana.can(BrowseTheWeb.with(firstBrowser));
 
@@ -113,11 +115,9 @@ public class WhenDanaBrowsesTheWeb {
 
         when(dana).attemptsTo(viewHerProfile);
 
-        and(dana).attemptsTo(
-                WaitUntil.the(Target.the("nameField").locatedBy("#name"),
-                        WebElementStateMatchers.isVisible()));
+        and(dana).attemptsTo(WaitUntil.the(nameField,  isVisible()));
 
-        assertThat(profilePage.nameField, isVisible());
+        assertThat(the(nameField).answeredBy(dana), isVisible());
     }
 
 
@@ -133,7 +133,8 @@ public class WhenDanaBrowsesTheWeb {
 
         when(dana).attemptsTo(viewHerProfile);
 
-        assertThat(profilePage.nameField, isVisible());
+        profilePage.setDriver(firstBrowser);
+        assertThat(profilePage.dob, isVisible());
     }
 
     @Test

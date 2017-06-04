@@ -6,6 +6,7 @@ import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.webtests.pages.HomePage;
+import net.serenitybdd.screenplay.webtests.pages.ProfilePage;
 import net.thucydides.core.annotations.Step;
 
 public class ViewMyProfile implements Performable {
@@ -14,6 +15,7 @@ public class ViewMyProfile implements Performable {
     Target profileName = Target.the("View profile button").locatedBy(HomePage.VIEW_PROFILE);
 
     HomePage homePage;
+    ProfilePage profilePage;
 
     @Step("{0} views her profile")
     public <T extends Actor> void performAs(T actor) {

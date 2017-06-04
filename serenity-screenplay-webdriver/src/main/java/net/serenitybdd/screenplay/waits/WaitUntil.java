@@ -23,8 +23,7 @@ public class WaitUntil implements Interaction {
 
     @Override
     public <A extends Actor> void performAs(A actor) {
-        actor.should(eventually(seeThat(WebElementQuestion.the(target),
-                expectedState)));
+        actor.should(eventually(seeThat(WebElementQuestion.the(target), expectedState)));
     }
 
     public static Interaction the(Target target, Matcher<WebElementState> expectedState) {

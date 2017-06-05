@@ -115,6 +115,8 @@ public class ThucydidesWebDriverSupport {
 
         initialize();
 
+        initialize();
+
         if (webdriverManagerThreadLocal.get() == null) {
             return null;
         }

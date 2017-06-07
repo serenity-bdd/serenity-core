@@ -121,7 +121,7 @@ public class Formatter {
     }
 
     public String renderText(String text) {
-        if (isEmpty(text.trim())) {
+        if (isEmpty(text)) {
             return "";
         }
         return concatLines(BASIC_XML.translate(text),"<br>")

@@ -655,7 +655,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void addTagFor(TestOutcome testOutcome) {
-        testOutcome.addTag(TestTag.withName(testOutcome.getTestFailureCause().getSimpleErrorType()).andType("error type"));
+        testOutcome.addTag(TestTag.withName(testOutcome.getTestFailureCause().getSimpleErrorType()).andType("error"));
     }
 
     private boolean shouldTagErrors() {

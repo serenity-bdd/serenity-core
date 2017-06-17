@@ -21,8 +21,6 @@ import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.issues.SystemPropertiesIssueTracking;
 import net.thucydides.core.logging.ThucydidesLogging;
 import net.thucydides.core.model.flags.FlagProvider;
-import net.thucydides.core.reports.ExecutorServiceProvider;
-import net.thucydides.core.reports.MultithreadExecutorServiceProvider;
 import net.thucydides.core.reports.json.JSONConverter;
 import net.thucydides.core.reports.json.gson.GsonJSONConverter;
 import net.thucydides.core.reports.renderer.Asciidoc;
@@ -56,10 +54,8 @@ public class ThucydidesModule extends AbstractModule {
         bind(TemplateManager.class).to(FreeMarkerTemplateManager.class).in(Singleton.class);
         bind(Configuration.class).to(SystemPropertiesConfiguration.class).in(Singleton.class);
         bind(IssueTracking.class).to(SystemPropertiesIssueTracking.class).in(Singleton.class);
-        //bind(WebdriverManager.class).to(SerenityWebdriverManager.class).in(Singleton.class);
         bind(BatchManager.class).toProvider(BatchManagerProvider.class).in(Singleton.class);
         bind(LinkGenerator.class).to(SaucelabsLinkGenerator.class).in(Singleton.class);
-//        bind(ScreenshotProcessor.class).to(SingleThreadScreenshotProcessor.class).in(Singleton.class);
         bind(JSONConverter.class).to(GsonJSONConverter.class).in(Singleton.class);
 
         bind(TagProviderService.class).to(ClasspathTagProviderService.class).in(Singleton.class);
@@ -76,7 +72,6 @@ public class ThucydidesModule extends AbstractModule {
 
         bind(MarkupRenderer.class).annotatedWith(Asciidoc.class).to(AsciidocMarkupRenderer.class).in(Singleton.class);
         bind(DriverCapabilityRecord.class).to(PropertyBasedDriverCapabilityRecord.class);
-        bind(ExecutorServiceProvider.class).to(MultithreadExecutorServiceProvider.class).in(Singleton.class);
         bind(CloseBrowser.class).to(WebdriverCloseBrowser.class).in(Singleton.class);
         bind(FlagProvider.class).to(HistoricalFlagProvider.class).in(Singleton.class);
         bind(TestOutcomeSummaryRecorder.class).to(FileSystemTestOutcomeSummaryRecorder.class).in(Singleton.class);

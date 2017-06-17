@@ -23,10 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 /**
  * Generates different Thucydides reports in a given output directory.
@@ -34,6 +31,7 @@ import java.util.concurrent.Future;
 @SuppressWarnings("restriction")
 public class ReportService {
 
+    private final int maximumPoolSize;
     /**
      * Where will the reports go?
      */
@@ -46,31 +44,34 @@ public class ReportService {
 
     private JUnitXMLOutcomeReporter jUnitXMLOutcomeReporter;
 
-    private ExecutorServiceProvider executorServiceProvider;
-
     private final static Logger LOGGER = LoggerFactory.getLogger(ReportService.class);
 
     @Inject
     public ReportService(final Configuration configuration) {
-        this(configuration.getOutputDirectory(), getDefaultReporters());
+        this(configuration.getOutputDirectory(), getDefaultReporters(), configuration.getEnvironmentVariables());
     }
 
-    /**
-     * Reports are generated using the test results in a given directory.
-     * The actual reports are generated using a set of reporter objects. The report service passes test outcomes
-     * to the reporter objects, which generate different types of reports.
-     *
-     * @param outputDirectory     Where the test data is stored, and where the generated reports will go.
-     * @param subscribedReporters A set of reporters that generate the actual reports.
-     */
     public ReportService(final File outputDirectory, final Collection<AcceptanceTestReporter> subscribedReporters) {
+        this(outputDirectory, subscribedReporters, Injectors.getInjector().getInstance(EnvironmentVariables.class));
+    }
+        /**
+         * Reports are generated using the test results in a given directory.
+         * The actual reports are generated using a set of reporter objects. The report service passes test outcomes
+         * to the reporter objects, which generate different types of reports.
+         *
+         * @param outputDirectory     Where the test data is stored, and where the generated reports will go.
+         * @param subscribedReporters A set of reporters that generate the actual reports.
+         */
+    public ReportService(final File outputDirectory,
+                         final Collection<AcceptanceTestReporter> subscribedReporters,
+                         final EnvironmentVariables environmentVariables) {
         this.outputDirectory = outputDirectory;
         if(!this.outputDirectory.exists()){
             this.outputDirectory.mkdirs();
         }
         getSubscribedReporters().addAll(subscribedReporters);
         jUnitXMLOutcomeReporter = new JUnitXMLOutcomeReporter(outputDirectory);
-        this.executorServiceProvider = Injectors.getInjector().getInstance(ExecutorServiceProvider.class);
+        this.maximumPoolSize = ThucydidesSystemProperty.REPORT_MAX_THREADS.integerFrom(environmentVariables, Runtime.getRuntime().availableProcessors());
     }
 
     public void setOutputDirectory(File outputDirectory) {
@@ -148,25 +149,26 @@ public class ReportService {
 
         List<? extends TestOutcome> outcomes = testOutcomes.getOutcomes();
 
-        ExecutorService executorService = executorServiceProvider.getExecutorService();
+        ExecutorService executorService = Executors.newFixedThreadPool(maximumPoolSize);
 
-        final ArrayList<Future> tasks=new ArrayList<>(outcomes.size());
-        for(final TestOutcome outcome : outcomes) {
-            tasks.add(executorService.submit(new Runnable() {
-                @Override
-                public void run() {
-                    LOGGER.debug("Processing test outcome " + outcome.getCompleteName());
-                    generateReportFor(outcome, reporter);
-                    LOGGER.debug("Processing test outcome " + outcome.getCompleteName() + " done");
-                }
-            }));
+        try {
+            final ArrayList<Future> tasks = new ArrayList<>(outcomes.size());
+            for (final TestOutcome outcome : outcomes) {
+                tasks.add(executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        LOGGER.debug("Processing test outcome " + outcome.getCompleteName());
+                        generateReportFor(outcome, reporter);
+                        LOGGER.debug("Processing test outcome " + outcome.getCompleteName() + " done");
+                    }
+                }));
+            }
+            generateJUnitTestResults(testOutcomes);
+            waitForReportGenerationToFinish(tasks);
+        } finally {
+            LOGGER.debug("Shutting down executor service");
+            executorService.shutdown();
         }
-        generateJUnitTestResults(testOutcomes);
-        waitForReportGenerationToFinish(tasks);
-
-        LOGGER.debug("Shutting down executor service");
-
-        executorServiceProvider.shutdown();
 
         LOGGER.debug("Reports generated in: " + (System.currentTimeMillis() - t0) + " ms");
 

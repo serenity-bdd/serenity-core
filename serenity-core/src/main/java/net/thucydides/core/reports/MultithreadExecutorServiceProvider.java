@@ -5,30 +5,55 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.concurrent.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by john on 23/07/2015.
  */
 public class MultithreadExecutorServiceProvider implements ExecutorServiceProvider {
 
-    int corePoolSize = 4;
     int maximumPoolSize = 20;
-    int keepAliveTime = 60000;
 
     @Inject
     public MultithreadExecutorServiceProvider(EnvironmentVariables environmentVariables) {
-        corePoolSize = ThucydidesSystemProperty.REPORT_THREADS.integerFrom(environmentVariables, Runtime.getRuntime().availableProcessors());
         maximumPoolSize = ThucydidesSystemProperty.REPORT_MAX_THREADS.integerFrom(environmentVariables, Runtime.getRuntime().availableProcessors());
-        keepAliveTime = ThucydidesSystemProperty.REPORT_KEEP_ALIVE_TIME.integerFrom(environmentVariables, 60000);
     }
 
     private ExecutorService executorService;
 
+    ReentrantLock lock = new ReentrantLock();
+
     @Override
     public ExecutorService getExecutorService() {
+
+        lock.lock();
+
         if (executorService == null)  {
             executorService = Executors.newFixedThreadPool(maximumPoolSize);
         }
+
+        ensureTheExecutorServiceShutsdownEventually();
+
+        lock.unlock();
+
         return executorService;
+    }
+
+    @Override
+    public void shutdown() {
+        lock.lock();
+        executorService.shutdown();
+        executorService = null;
+        lock.unlock();
+    }
+
+    private void ensureTheExecutorServiceShutsdownEventually() {
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                if (executorService != null) {
+                    executorService.shutdown();
+                }
+            }
+        });
     }
 }

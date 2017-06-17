@@ -53,9 +53,9 @@ public class CopyFiles {
             }
         } catch (Exception e) {
             LOGGER.error("Error during copying files to the target directory", e);
+        } finally {
+            executorPool.shutdown();
         }
-        executorPool.shutdown();
-
     }
 
 

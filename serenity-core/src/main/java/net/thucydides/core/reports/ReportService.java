@@ -46,7 +46,7 @@ public class ReportService {
 
     private JUnitXMLOutcomeReporter jUnitXMLOutcomeReporter;
 
-    private ExecutorService executorService;
+    private ExecutorServiceProvider executorServiceProvider;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ReportService.class);
 
@@ -70,7 +70,7 @@ public class ReportService {
         }
         getSubscribedReporters().addAll(subscribedReporters);
         jUnitXMLOutcomeReporter = new JUnitXMLOutcomeReporter(outputDirectory);
-        this.executorService = Injectors.getInjector().getInstance(ExecutorServiceProvider.class).getExecutorService();
+        this.executorServiceProvider = Injectors.getInjector().getInstance(ExecutorServiceProvider.class);
     }
 
     public void setOutputDirectory(File outputDirectory) {
@@ -148,6 +148,8 @@ public class ReportService {
 
         List<? extends TestOutcome> outcomes = testOutcomes.getOutcomes();
 
+        ExecutorService executorService = executorServiceProvider.getExecutorService();
+
         final ArrayList<Future> tasks=new ArrayList<>(outcomes.size());
         for(final TestOutcome outcome : outcomes) {
             tasks.add(executorService.submit(new Runnable() {
@@ -161,6 +163,11 @@ public class ReportService {
         }
         generateJUnitTestResults(testOutcomes);
         waitForReportGenerationToFinish(tasks);
+
+        LOGGER.debug("Shutting down executor service");
+
+        executorServiceProvider.shutdown();
+
         LOGGER.debug("Reports generated in: " + (System.currentTimeMillis() - t0) + " ms");
 
     }

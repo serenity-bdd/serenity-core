@@ -197,7 +197,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         LOGGER.info("Starting generating reports: {} ms", stopwatch.lapTime());
         Reporter.generateReportsFor(reportingTasks);
-        LOGGER.info("Finished generating test results for {} tests after {} ms",testOutcomes.getTestCount(), stopwatch.stop());
+        LOGGER.info("Test results for {} tests generated in {} ms",testOutcomes.getTestCount(), stopwatch.stop());
     }
 
     private Set<ReportingTask> nestedTagReports(TestOutcomes testOutcomes, FreemarkerContext context, List<String> knownRequirementReportNames) {

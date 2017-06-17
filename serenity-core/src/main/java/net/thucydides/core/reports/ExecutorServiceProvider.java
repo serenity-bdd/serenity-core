@@ -8,4 +8,6 @@ import java.util.concurrent.ExecutorService;
 public interface ExecutorServiceProvider  {
 
     ExecutorService getExecutorService();
+
+    void shutdown();
 }

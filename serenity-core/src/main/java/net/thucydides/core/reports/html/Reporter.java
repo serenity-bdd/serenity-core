@@ -29,8 +29,6 @@ class Reporter {
 
     private final EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
 
-    private final ExecutorService executorPool = Executors.newFixedThreadPool(NumberOfThreads.forIOOperations());
-
     Reporter(Collection<ReportingTask> reportingTasks) {
         this.reportingTasks = reportingTasks;
     }
@@ -42,10 +40,12 @@ class Reporter {
     private void generateReports() {
         Stopwatch stopwatch = Stopwatch.started();
 
+        ExecutorService executorPool = Executors.newFixedThreadPool(NumberOfThreads.forIOOperations());
+
         ErrorTally errorTally = new ErrorTally();
         try {
             final List<ReportExecutor> partitions = convert(reportingTasks, toReportExecutors());
-            final List<ReportExecutorFuture> futures = convert(partitions, toReportExecutorFutures());
+            final List<ReportExecutorFuture> futures = convert(partitions, toReportExecutorFutures(executorPool));
             final TimeoutValue timeout = TimeoutConfiguration.from(environmentVariables).forProperty("report.timeout", DEFAULT_TIMEOUT);
 
             for (ReportExecutorFuture executedTask : futures) {
@@ -67,7 +67,10 @@ class Reporter {
             }
         } catch (Exception e) {
             LOGGER.error("Report generation failed", e);
+        } finally {
+            executorPool.shutdown();
         }
+
         LOGGER.debug("Test outcome reports generated in {} ms", stopwatch.stop());
         if (errorTally.hasErrors()) {
             LOGGER.warn(errorTally.errorSummary());
@@ -158,7 +161,7 @@ class Reporter {
         };
     }
 
-    private Converter<ReportExecutor, ReportExecutorFuture> toReportExecutorFutures() {
+    private Converter<ReportExecutor, ReportExecutorFuture> toReportExecutorFutures(final ExecutorService executorPool) {
         return new Converter<ReportExecutor, ReportExecutorFuture>() {
 
             @Override

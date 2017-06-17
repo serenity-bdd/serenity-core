@@ -38,7 +38,6 @@ public class TestOutcomeLoader {
 
     private final EnvironmentVariables environmentVariables;
     private final FormatConfiguration formatConfiguration;
-    private final ExecutorService executor;
     private final static Logger logger = LoggerFactory.getLogger(TestOutcomeLoader.class);
 
     public TestOutcomeLoader() {
@@ -53,7 +52,6 @@ public class TestOutcomeLoader {
     public TestOutcomeLoader(EnvironmentVariables environmentVariables, FormatConfiguration formatConfiguration) {
         this.environmentVariables = environmentVariables;
         this.formatConfiguration = formatConfiguration;
-        this.executor = Injectors.getInjector().getInstance(ExecutorServiceProvider.class).getExecutorService();
     }
 
     public TestOutcomeLoader forFormat(OutcomeFormat format) {

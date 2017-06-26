@@ -7,7 +7,6 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
-import static ch.lambdaj.Lambda.*;
 import static org.hamcrest.Matchers.is;
 
 public final class TestOutcomeMatchers {
@@ -71,7 +70,17 @@ public final class TestOutcomeMatchers {
     }
     
     public static Matcher<TestOutcome> withResult(final TestResult expectedResult) {
-        return having(on(TestOutcome.class).getResult(), is(expectedResult));
+        return new BaseMatcher<TestOutcome>() {
+            @Override
+            public boolean matches(Object item) {
+                return (item != null) && (item instanceof TestOutcome) && ((TestOutcome) item).getResult() == expectedResult;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("test outcome with result ").appendValue(expectedResult);
+            }
+        };
     }
 
 }

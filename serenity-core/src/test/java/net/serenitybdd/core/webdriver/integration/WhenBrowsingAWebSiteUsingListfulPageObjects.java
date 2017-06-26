@@ -1,6 +1,5 @@
 package net.serenitybdd.core.webdriver.integration;
 
-import ch.lambdaj.function.convert.Converter;
 import net.serenitybdd.core.annotations.ImplementedBy;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.pages.PageObject;
@@ -21,8 +20,8 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.convert;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.is;
@@ -80,13 +79,11 @@ public class WhenBrowsingAWebSiteUsingListfulPageObjects {
 
 		@Override
 		public List<Row> getBodyRows() {
-			return convert(findElements(By.cssSelector("tbody tr")), new Converter<WebElement, Row>() {
-				@Override
-				public Row convert(WebElement from) {
-					return new RowImpl(driver, null, from, getImplicitTimeoutInMilliseconds());
-				}
-			});
-    	}
+
+			return findElements(By.cssSelector("tbody tr")).stream()
+					.map(elt -> new RowImpl(driver, null, elt, getImplicitTimeoutInMilliseconds()))
+					.collect(Collectors.toList());
+		}
     }
     
     public static class RowImpl extends WebElementFacadeImpl implements Row {
@@ -191,31 +188,33 @@ public class WhenBrowsingAWebSiteUsingListfulPageObjects {
     @Test
     public void should_find_nested_content_using_custom_facade_type_list() {
     	Table table = findDataTable(indexPage.customFacadeTables);
-    	assertThat(convert(table.getBodyRows(), toCsvContent()), everyItem(is(DATA_TABLE_ROW_CONTENT)));
+		List<String> csvContent = table.getBodyRows().stream()
+				.map(row -> row.getCsvContent())
+				.collect(Collectors.toList());
+
+		assertThat(csvContent, everyItem(is(DATA_TABLE_ROW_CONTENT)));
     }
     
     @Test
     public void should_find_nested_content_using_web_element_facade_list() {
     	WebElementFacade elm = findDataTable(indexPage.facadeTables);
     	Table table = tableFromElement(indexPage, elm);
-    	assertThat(convert(table.getBodyRows(), toCsvContent()), 
-    			everyItem(is(DATA_TABLE_ROW_CONTENT)));
+		List<String> csvContent = table.getBodyRows().stream()
+				.map(row -> row.getCsvContent())
+				.collect(Collectors.toList());
+
+    	assertThat(csvContent, everyItem(is(DATA_TABLE_ROW_CONTENT)));
     }
     
     @Test
     public void should_find_nested_content_using_web_element_list() {
     	WebElement elm = findDataTable(indexPage.elementTables);
     	Table table = tableFromElement(indexPage, elm);
-    	assertThat(convert(table.getBodyRows(), toCsvContent()), 
-    			everyItem(is(DATA_TABLE_ROW_CONTENT)));
+    	List<String> csvContent = table.getBodyRows().stream()
+				.map(row -> row.getCsvContent())
+				.collect(Collectors.toList());
+
+    	assertThat(csvContent, everyItem(is(DATA_TABLE_ROW_CONTENT)));
     }
-    
-    private Converter<Row, String> toCsvContent() {
-    	return new Converter<Row, String>() {
-    		@Override
-    		public String convert(Row from) {
-    			return from.getCsvContent();
-    		}
-    	};
-    }
+
 }

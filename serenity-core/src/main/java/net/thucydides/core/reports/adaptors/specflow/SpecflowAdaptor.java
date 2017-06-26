@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.adaptors.specflow;
 
-import ch.lambdaj.function.convert.Converter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.thucydides.core.model.*;
@@ -12,8 +11,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-
-import static ch.lambdaj.Lambda.convert;
+import java.util.stream.Collectors;
 
 /**
  * Loads TestOutcomes from a specflow output file
@@ -43,31 +41,28 @@ public class SpecflowAdaptor extends FilebasedOutcomeAdaptor {
 
     private List<TestOutcome> outcomesFromFile(File outputFile) throws IOException {
         List<String> outputLines = Files.readAllLines(outputFile.toPath(), Charset.defaultCharset());
-        return convert(scenarioOutputsFrom(outputLines), toTestOutcomes());
+
+        return scenarioOutputsFrom(outputLines).stream()
+                .map( outputLine -> testOutcomeFrom(outputLines) )
+                .collect(Collectors.toList());
     }
 
-    private Converter<List<String>, TestOutcome> toTestOutcomes() {
-        return new Converter<List<String>, TestOutcome>() {
+    public TestOutcome testOutcomeFrom(List<String> outputLines) {
+        SpecflowScenarioTitleLine titleLine = new SpecflowScenarioTitleLine(outputLines.get(0));
+        Story story = Story.called(titleLine.getStoryTitle()).withPath(titleLine.getStoryPath());
+        TestOutcome outcome = TestOutcome.forTestInStory(titleLine.getScenarioTitle(), story);
 
-            @Override
-            public TestOutcome convert(List<String> outputLines) {
-                SpecflowScenarioTitleLine titleLine = new SpecflowScenarioTitleLine(outputLines.get(0));
-                Story story = Story.called(titleLine.getStoryTitle()).withPath(titleLine.getStoryPath());
-                TestOutcome outcome = TestOutcome.forTestInStory(titleLine.getScenarioTitle(), story);
-
-                for(SpecflowScenario scenario : ScenarioSplitter.on(outputLines).split()) {
-                    if (scenario.usesDataTable()) {
-                        DataTable dataTable = DataTable.withHeaders(headersFrom(titleLine)).build();
-                        outcome.useExamplesFrom(dataTable);
-                        recordRowSteps(outcome, scenario);
-                    } else {
-                        outcome.recordSteps(stepsFrom(scenario.getSteps()));
-                    }
-                }
-
-                return outcome;
+        for(SpecflowScenario scenario : ScenarioSplitter.on(outputLines).split()) {
+            if (scenario.usesDataTable()) {
+                DataTable dataTable = DataTable.withHeaders(headersFrom(titleLine)).build();
+                outcome.useExamplesFrom(dataTable);
+                recordRowSteps(outcome, scenario);
+            } else {
+                outcome.recordSteps(stepsFrom(scenario.getSteps()));
             }
-        };
+        }
+
+        return outcome;
     }
 
     private void recordRowSteps(TestOutcome outcome, SpecflowScenario scenario) {
@@ -132,12 +127,6 @@ public class SpecflowAdaptor extends FilebasedOutcomeAdaptor {
     }
 
     private List<TestResult> getTestResults(List<TestStep> testSteps) {
-        return convert(testSteps, new ExtractTestResultsConverter());
-    }
-
-    private static class ExtractTestResultsConverter implements Converter<TestStep, TestResult> {
-        public TestResult convert(final TestStep step) {
-            return step.getResult();
-        }
+        return testSteps.stream().map(TestStep::getResult).collect(Collectors.toList());
     }
 }

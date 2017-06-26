@@ -1,6 +1,5 @@
 package net.serenitybdd.junit.runners;
 
-import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Splitter;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.DataTable;
@@ -22,8 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-import static ch.lambdaj.Lambda.convert;
 
 public class DataDrivenAnnotations {
 
@@ -80,12 +77,20 @@ public class DataDrivenAnnotations {
             throw new RuntimeException("Could not obtain test data from the test class", e);
         }
 
-        return createParametersTableFrom(columnNamesString, convert(parametersList, toListOfObjects()));
+        List<List<Object>> parametersAsListsOfObjects = new ArrayList<>();
+        for(Object parameterList : parametersList) {
+            parametersAsListsOfObjects.add(listOfObjectsFrom((Object[]) parameterList));
+        }
+
+        return createParametersTableFrom(columnNamesString, parametersAsListsOfObjects);
+//        return createParametersTableFrom(columnNamesString, convert(parametersList, toListOfObjects()));
     }
 
-    private Converter<Object[], List<Object>> toListOfObjects() {
-        return parameters -> Arrays.asList(parameters);
-    }
+//    private Converter<Object[], List<Object>> toListOfObjects() {
+//        return parameters -> Arrays.asList(parameters);
+//    }
+//
+    private List<Object> listOfObjectsFrom(Object[] parameters) { return Arrays.asList(parameters); }
 
     private DataTable createParametersTableFrom(String columnNamesString, List<List<Object>> parametersList) {
         int numberOfColumns = parametersList.isEmpty() ? 0 : parametersList.get(0).size();

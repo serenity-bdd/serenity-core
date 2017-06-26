@@ -8,7 +8,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
 import static ch.lambdaj.Lambda.*;
-import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.hamcrest.Matchers.is;
 
 public final class TestOutcomeMatchers {
@@ -20,7 +19,9 @@ public final class TestOutcomeMatchers {
             @Override
             public boolean matches(Object matchee) {
                 TestOutcome testOutcome =  (TestOutcome) matchee;
-                return exists(testOutcome.getTags(), having(on(TestTag.class).getType(), is(tagType)));
+
+                return testOutcome.getTags().stream()
+                                  .anyMatch(testTag -> testTag.getType().equals(tagType));
             }
 
             @Override
@@ -37,7 +38,10 @@ public final class TestOutcomeMatchers {
             @Override
             public boolean matches(Object matchee) {
                 TestOutcome testOutcome =  (TestOutcome) matchee;
-                return exists(testOutcome.getTags(), having(on(TestTag.class).getName(), equalToIgnoringCase(tagName)));
+
+                return testOutcome.getTags().stream()
+                        .anyMatch(testTag -> testTag.getName().equalsIgnoreCase(tagName));
+
             }
 
             @Override
@@ -54,7 +58,9 @@ public final class TestOutcomeMatchers {
             @Override
             public boolean matches(Object matchee) {
                 TestOutcome testOutcome =  (TestOutcome) matchee;
-                return exists(testOutcome.getTags(), having(on(TestTag.class), is(expectedTag)));
+
+                return testOutcome.getTags().stream()
+                        .anyMatch(testTag -> testTag.equals(expectedTag));
             }
 
             @Override

@@ -1,20 +1,17 @@
 package net.serenitybdd.core.io;
 
-import com.beust.jcommander.internal.Lists;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.TestOutcomeStream;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import static net.thucydides.core.util.TestResources.directoryInClasspathCalled;
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Created by john on 23/06/2016.
- */
 public class WhenLoadingTestOutcomesViaStreams {
 
     @Test
@@ -34,7 +31,7 @@ public class WhenLoadingTestOutcomesViaStreams {
 
         Path directory = directoryInClasspathCalled("/json-test-outcomes").toPath();
 
-        List<TestOutcome> outcomes = Lists.newArrayList();
+        List<TestOutcome> outcomes = new ArrayList<>();
         try(TestOutcomeStream stream = TestOutcomeStream.testOutcomesInDirectory(directory)) {
             for(TestOutcome outcome : stream) {
                 outcomes.add(outcome);
@@ -49,7 +46,7 @@ public class WhenLoadingTestOutcomesViaStreams {
 
         Path directory = directoryInClasspathCalled("/features").toPath();
 
-        List<TestOutcome> outcomes = Lists.newArrayList();
+        List<TestOutcome> outcomes = new ArrayList<>();
         try(TestOutcomeStream stream = TestOutcomeStream.testOutcomesInDirectory(directory)) {
             for(TestOutcome outcome : stream) {
                 outcomes.add(outcome);

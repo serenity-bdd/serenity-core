@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import net.thucydides.core.model.TestStep;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +36,7 @@ public class ScenarioStepReader {
     }
 
     private List<String> consumeLinesFromNextStep(List<String> lines) {
-        List<String> stepLines = Lists.newArrayList();
+        List<String> stepLines = new ArrayList<>();
 
         String title = lines.remove(0);
         stepLines.add(title);

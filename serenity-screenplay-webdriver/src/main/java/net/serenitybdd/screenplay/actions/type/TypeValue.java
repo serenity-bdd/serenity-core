@@ -7,6 +7,7 @@ import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.actions.KeyNames;
 import org.openqa.selenium.Keys;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class TypeValue implements Interaction {
@@ -17,7 +18,7 @@ public abstract class TypeValue implements Interaction {
 
     public TypeValue(String theText) {
         this.theText = theText;
-        this.followedByKeys = Lists.newArrayList();
+        this.followedByKeys = new ArrayList<>();
     }
 
     public TypeValue thenHit(Keys... keys) {

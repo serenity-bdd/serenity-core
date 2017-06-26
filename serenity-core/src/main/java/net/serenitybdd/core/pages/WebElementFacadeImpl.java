@@ -1,6 +1,5 @@
 package net.serenitybdd.core.pages;
 
-import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
@@ -30,11 +29,12 @@ import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.convert;
 import static net.serenitybdd.core.pages.WebElementExpectations.*;
 import static net.serenitybdd.core.selectors.Selectors.isXPath;
 
@@ -230,7 +230,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     private List<WebElementFacade> webElementFacadesFrom(List<WebElement> nestedElements) {
-        List<WebElementFacade> results = Lists.newArrayList();
+        List<WebElementFacade> results = new ArrayList<>();
         for (WebElement element : nestedElements) {
             results.add(wrapWebElement(driver, element, timeoutInMilliseconds(), waitForTimeoutInMilliseconds, element.toString()));
         }
@@ -466,8 +466,9 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         List<WebElement> results = Collections.emptyList();
         if (getElement() != null) {
             results = findElements(By.tagName("option"));
+            return results.stream().map(WebElement::getText).collect(Collectors.toList());
         }
-        return convert(results, new ExtractText());
+        return Collections.emptyList();
     }
 
     public ElementLocator getLocator() {
@@ -512,12 +513,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return foundBy;
     }
 
-
-    static class ExtractText implements Converter<WebElement, String> {
-        public String convert(WebElement from) {
-            return from.getText();
-        }
-    }
 
     /**
      * Check that an element contains a text value

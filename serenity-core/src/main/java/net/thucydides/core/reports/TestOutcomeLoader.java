@@ -1,10 +1,7 @@
 package net.thucydides.core.reports;
 
-import ch.lambdaj.Lambda;
-import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
@@ -12,23 +9,16 @@ import net.thucydides.core.reports.json.JSONTestOutcomeReporter;
 import net.thucydides.core.reports.junit.JUnitXMLOutcomeReporter;
 import net.thucydides.core.reports.xml.XMLTestOutcomeReporter;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import static ch.lambdaj.Lambda.on;
+import java.util.stream.Collectors;
 
 /**
  * Loads test outcomes from a given directory, and reports on their contents.
@@ -38,7 +28,6 @@ public class TestOutcomeLoader {
 
     private final EnvironmentVariables environmentVariables;
     private final FormatConfiguration formatConfiguration;
-    private final static Logger logger = LoggerFactory.getLogger(TestOutcomeLoader.class);
 
     public TestOutcomeLoader() {
         this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
@@ -49,7 +38,7 @@ public class TestOutcomeLoader {
         this(environmentVariables, new FormatConfiguration(environmentVariables));
     }
 
-    public TestOutcomeLoader(EnvironmentVariables environmentVariables, FormatConfiguration formatConfiguration) {
+    private TestOutcomeLoader(EnvironmentVariables environmentVariables, FormatConfiguration formatConfiguration) {
         this.environmentVariables = environmentVariables;
         this.formatConfiguration = formatConfiguration;
     }
@@ -69,7 +58,7 @@ public class TestOutcomeLoader {
     public List<TestOutcome> loadFrom(final File reportDirectory) throws ReportLoadingFailedError {
 
         try {
-            final List<Callable<Set<TestOutcome>>> partitions = Lists.newArrayList();
+            final List<Callable<Set<TestOutcome>>> partitions = new ArrayList<>();
             final AcceptanceTestLoader testOutcomeReporter = getOutcomeReporter();
 
             for(File sourceFile : getAllOutcomeFilesFrom(reportDirectory)) {
@@ -79,7 +68,7 @@ public class TestOutcomeLoader {
             final ExecutorService executorPool = Executors.newFixedThreadPool(20);//NumberOfThreads.forIOOperations());
             final List<Future<Set<TestOutcome>>> loadedTestOutcomes = executorPool.invokeAll(partitions);
 
-            List<TestOutcome> testOutcomes = Lists.newArrayList();
+            List<TestOutcome> testOutcomes = new ArrayList<>();
             for(Future<Set<TestOutcome>> loadedTestOutcome : loadedTestOutcomes) {
                 testOutcomes.addAll(loadedTestOutcome.get());
             }
@@ -108,19 +97,19 @@ public class TestOutcomeLoader {
 
         @Override
         public Set<TestOutcome> call() throws Exception {
-            Optional<TestOutcome> loadedTestOutcome = testOutcomeReporter.loadReportFrom(sourceFile);
+            java.util.Optional<TestOutcome> loadedTestOutcome = testOutcomeReporter.loadReportFrom(sourceFile);
 
-            if (loadedTestOutcome.isPresent()) {
-                return ImmutableSet.of(augmented(loadedTestOutcome.get()));
-            }
-
-            return ImmutableSet.of();
+            return loadedTestOutcome.map(Collections::singleton).orElse(Collections.emptySet())
+                    .stream()
+                    .map(this::augmented)
+                    .collect(Collectors.toSet());
         }
 
-        private TestOutcome augmented(TestOutcome testOutcome) {
-            for(OutcomeAugmenter augmenter : AUGMENTERS) {
-                testOutcome = augmenter.augment(testOutcome);
-            }
+        private TestOutcome augmented(final TestOutcome testOutcome) {
+
+            AUGMENTERS.forEach(
+                    augmenter -> augmenter.augment(testOutcome)
+            );
             return testOutcome;
         }
     }
@@ -131,18 +120,6 @@ public class TestOutcomeLoader {
             throw new IOException("Could not find directory " + reportsDirectory);
         }
         return ImmutableList.copyOf(matchingFiles);
-    }
-
-    private DirectoryStream.Filter<? super Path> thatContainsTestOutcomeFiles() {
-        return new DirectoryStream.Filter<Path>() {
-            @Override
-            public boolean accept(Path entry) throws IOException {
-                String standardFormatFilename = entry.getFileName().toString().toLowerCase(Locale.getDefault());
-                return (standardFormatFilename.endsWith(formatConfiguration.getPreferredFormat().getExtension())
-                        && (!standardFormatFilename.endsWith(".features.json"))
-                        && (!standardFormatFilename.startsWith(JUnitXMLOutcomeReporter.FILE_PREFIX)));
-            }
-        };
     }
 
     public static TestOutcomeLoaderBuilder loadTestOutcomes() {
@@ -170,10 +147,15 @@ public class TestOutcomeLoader {
     }
 
     private static List<TestOutcome> inOrderOfTestExecution(List<TestOutcome> testOutcomes) {
-       return Lambda.sort(testOutcomes, on(TestOutcome.class).getStartTime());
+            return testOutcomes.stream()
+                    .sorted(Comparator.comparing(TestOutcome::getStartTime,
+                            Comparator.nullsFirst(Comparator.naturalOrder())))
+                    .collect(Collectors.toList());
+
+
     }
 
-    public AcceptanceTestLoader getOutcomeReporter() {
+    private AcceptanceTestLoader getOutcomeReporter() {
         switch (formatConfiguration.getPreferredFormat()) {
             case XML:
                 return new XMLTestOutcomeReporter();

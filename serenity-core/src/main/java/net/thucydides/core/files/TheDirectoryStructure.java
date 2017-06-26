@@ -9,6 +9,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -37,10 +38,10 @@ public class TheDirectoryStructure {
 
     private List<File> nestedFilesIn(File directory) {
         if (!directory.isDirectory()) {
-            return Lists.newArrayList();
+            return new ArrayList<>();
         }
 
-        List<File> nestedFiles = Lists.newArrayList();
+        List<File> nestedFiles = new ArrayList<>();
         for(File file : directory.listFiles()) {
             if (file.isDirectory()) {
                 nestedFiles.addAll(nestedFilesIn(file));

@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 
 public interface JSONConverter {
-    Optional<TestOutcome> fromJson(InputStream inputStream) throws IOException;
-    Optional<TestOutcome> fromJson(Reader in);
+    java.util.Optional<TestOutcome> fromJson(InputStream inputStream) throws IOException;
+    java.util.Optional<TestOutcome> fromJson(Reader in);
     void toJson(TestOutcome storedTestOutcome, OutputStream outputStream) throws IOException;
 }

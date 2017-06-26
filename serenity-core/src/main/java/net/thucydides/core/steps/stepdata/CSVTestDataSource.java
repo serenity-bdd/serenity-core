@@ -1,8 +1,6 @@
 package net.thucydides.core.steps.stepdata;
 
 import au.com.bytecode.opencsv.CSVReader;
-import ch.lambdaj.function.convert.Converter;
-import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import net.thucydides.core.csv.FailedToInitializeTestData;
@@ -20,8 +18,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-
-import static ch.lambdaj.Lambda.convert;
+import java.util.stream.Collectors;
 
 /**
  * Test data from a CSV file.
@@ -45,20 +42,10 @@ public class CSVTestDataSource implements TestDataSource {
         this.escape = escape;
         this.skipLines = skipLines;
         this.instantiatedPaths = instantiated(paths);
-
-//        List<String[]> csvDataRows = getCSVDataFrom(getDataFileFor(instantiatedPath));
-//        String[] titleRow = csvDataRows.get(0);
-
-//        this.headers = convert(titleRow, new Converter<String, String>() {
-//            @Override
-//            public String convert(String str) {
-//                return StringUtils.strip(str);
-//            }
-//        });
     }
 
     private List<String> instantiated(List<String> paths) {
-        List<String> instantiated = Lists.newArrayList();
+        List<String> instantiated = new ArrayList<>();
         for(String path : paths) {
             instantiated.add(testDataSourcePath.getInstanciatedPath(path));
         }
@@ -67,7 +54,7 @@ public class CSVTestDataSource implements TestDataSource {
 
     List<String[]> getDataRows() {
         if (csvDataRows == null) {
-            csvDataRows = Lists.newArrayList();
+            csvDataRows = new ArrayList<>();
             for(String instantiatedPath : instantiatedPaths) {
                 try (Reader reader = getDataFileFor(instantiatedPath)) {
                     csvDataRows.addAll(getCSVDataFrom(reader));
@@ -173,12 +160,10 @@ public class CSVTestDataSource implements TestDataSource {
     }
 
     public List<String> getHeaders() {
-        return convert(getTitleRow(), new Converter<String, String>() {
-            @Override
-            public String convert(String str) {
-                return StringUtils.strip(str);
-            }
-        });
+
+        return Arrays.stream(getTitleRow())
+                .map(StringUtils::strip)
+                .collect(Collectors.toList());
     }
 
     private String[] getTitleRow() {

@@ -99,7 +99,7 @@ public class FirefoxProfileEnhancer {
     }
 
     private List<PreferenceValue> getPreferenceValuesFrom(String preferences) {
-        List<PreferenceValue> preferenceValues = Lists.newArrayList();
+        List<PreferenceValue> preferenceValues = new ArrayList<>();
         if (StringUtils.isNotEmpty(preferences)) {
             List<String> arguments = split(preferences, ";");
             for(String argument : arguments) {

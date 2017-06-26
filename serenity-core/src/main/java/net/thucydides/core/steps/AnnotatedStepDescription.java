@@ -196,7 +196,7 @@ public final class AnnotatedStepDescription {
         }
 
         private String keyNamesFor(Keys[] keyValues) {
-            List<String> keyNames = Lists.newArrayList();
+            List<String> keyNames = new ArrayList<>();
             for(Keys keyValue: keyValues) {
                 keyNames.add((keyValue.name()));
             }

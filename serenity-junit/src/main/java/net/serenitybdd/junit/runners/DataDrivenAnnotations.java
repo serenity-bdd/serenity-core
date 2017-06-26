@@ -1,7 +1,6 @@
 package net.serenitybdd.junit.runners;
 
 import ch.lambdaj.function.convert.Converter;
-import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Splitter;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.DataTable;
@@ -85,12 +84,7 @@ public class DataDrivenAnnotations {
     }
 
     private Converter<Object[], List<Object>> toListOfObjects() {
-        return new Converter<Object[], List<Object>>() {
-
-            public List<Object> convert(Object[] parameters) {
-                return Arrays.asList(parameters);
-            }
-        };
+        return parameters -> Arrays.asList(parameters);
     }
 
     private DataTable createParametersTableFrom(String columnNamesString, List<List<Object>> parametersList) {
@@ -142,7 +136,7 @@ public class DataDrivenAnnotations {
     @SuppressWarnings("MalformedRegex")
     protected List<String> findTestDataSource() {
         String paths = findTestDataSourcePaths();
-        List<String> validPaths = Lists.newArrayList();
+        List<String> validPaths = new ArrayList<>();
         for (String path : Splitter.on(DATASOURCE_PATH_SEPARATORS).split(paths)) {
             if (CSVTestDataSource.validTestDataPath(path)) {
                 validPaths.add(path);

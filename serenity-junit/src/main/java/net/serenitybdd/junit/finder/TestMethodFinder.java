@@ -1,12 +1,8 @@
 package net.serenitybdd.junit.finder;
 
-import ch.lambdaj.function.matcher.Predicate;
-import org.hamcrest.Matcher;
-
 import java.lang.reflect.Method;
 import java.util.List;
-
-import static ch.lambdaj.Lambda.filter;
+import java.util.stream.Collectors;
 
 public class TestMethodFinder {
 
@@ -17,15 +13,8 @@ public class TestMethodFinder {
     }
 
     public List<Method> withNameContaining(String partialName) {
-        return filter(methodsWithPartialName(partialName), testFinder.getAllTestMethods());
+        return testFinder.getAllTestMethods().stream()
+                .filter(testMethod -> testMethod.getName().contains(partialName))
+                .collect(Collectors.toList());
     }
-
-    Matcher<Method> methodsWithPartialName(final String partialName) {
-        return new Predicate<Method>() {
-            public boolean apply(Method testMethod) {
-                return testMethod.getName().contains(partialName);
-            }
-        };
-    }
-
 }

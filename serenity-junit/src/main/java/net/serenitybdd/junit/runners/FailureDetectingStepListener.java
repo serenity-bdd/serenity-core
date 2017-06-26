@@ -10,13 +10,14 @@ import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepListener;
 import net.thucydides.core.steps.TestFailureCause;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class FailureDetectingStepListener implements StepListener {
 
     private boolean lastTestFailed = false;
-    private List<String> failureMessages = Lists.newArrayList();
+    private List<String> failureMessages = new ArrayList<>();
     private TestFailureCause testFailureCause;
 
     public void reset() {

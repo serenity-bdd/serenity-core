@@ -33,9 +33,8 @@ dependencies {
 
     compile "commons-codec:commons-codec:${commonsCodecVersion}"
     compile "commons-io:commons-io:${commonsIoVersion}"
-    compile 'xml-apis:xml-apis:1.4.01'
 
-    compile("com.opera:operadriver:1.5") {
+    compile("com.opera:operadriver:${operaDriverVersion}") {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
         exclude group: 'com.google.guava', module: 'guava'
@@ -55,7 +54,7 @@ dependencies {
         exclude group: 'org.mortbay.jetty', module: 'servlet-api-2.5'
     }
 
-    compile('com.codeborne:phantomjsdriver:1.2.1') {
+    compile("com.codeborne:phantomjsdriver:${phantomjsDriverVersion}") {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
         exclude group: 'xml-apis', module: 'xml-apis'
@@ -68,7 +67,7 @@ dependencies {
         exclude group: 'net.sourceforge.htmlunit', module: 'htmlunit'
     }
 
-    compile('io.appium:java-client:4.0.0') {
+    compile("io.appium:java-client:${appiumJavaClientVersion}") {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
         exclude group: 'cglib', module: 'cglib'
@@ -77,12 +76,13 @@ dependencies {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
         exclude group: 'com.google.code.gson', module: 'gson'
         exclude group: 'commons-logging', module: 'commons-logging'
+        exclude group: 'org.apache.commons', module: 'commons-lang3'
     }
 
     compile "org.codehaus.groovy:groovy:${groovyVersion}"
 
-    compile "net.sf.opencsv:opencsv:2.0"
-    compile("commons-beanutils:commons-beanutils-core:1.8.3") {
+    compile "net.sf.opencsv:opencsv:${openCsvVersion}"
+    compile("commons-beanutils:commons-beanutils-core:${beanUtilsVersion}") {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
 
@@ -96,7 +96,7 @@ dependencies {
     compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
     compile "commons-collections:commons-collections:${commonsCollectionsVersion}"
     compile "org.freemarker:freemarker:${freemarkerVersion}"
-    compile("net.sourceforge.jexcelapi:jxl:2.6.12") {
+    compile("net.sourceforge.jexcelapi:jxl:${jexcelapiVersion}") {
         exclude group: 'log4j', module: 'log4j'
     }
     compile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
@@ -111,46 +111,47 @@ dependencies {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
         exclude group: 'org.apache.httpcomponents', module: 'httpmime'
     }
-    compile('org.apache.httpcomponents:httpclient:4.5.2') {
+    compile("org.apache.httpcomponents:httpclient:${httpclientVersion}") {
         exclude group: 'commons-codec', module: 'commons-codec'
     }
-    compile('org.apache.httpcomponents:httpmime:4.5.2') {
+    compile("org.apache.httpcomponents:httpmime:${httpclientVersion}") {
         exclude group: 'commons-codec', module: 'commons-codec'
     }
 
-    compile("org.fluentlenium:fluentlenium-core:0.10.2") {
+    compile("org.fluentlenium:fluentlenium-core:${fluentleniumVersion}") {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
         exclude group: 'junit', module: 'junit-dep'
     }
-    compile "com.jhlabs:filters:2.0.235"
-    compile("org.asciidoctor:asciidoctor-java-integration:0.1.4") {
+    compile "com.jhlabs:filters:${jhlabfiltersVersion}"
+    compile("org.asciidoctor:asciidoctor-java-integration:${asciidocVersion}") {
         exclude group: 'com.beust', module: 'jcommander'
     }
 
-    compile 'org.imgscalr:imgscalr-lib:4.2'
+    compile "org.imgscalr:imgscalr-lib:${imgscalrVersion}"
 
-    compile "javax.validation:validation-api:1.1.0.Final"
-    compile "org.hibernate:hibernate-validator:5.1.1.Final"
-    compile "javax.el:javax.el-api:2.2.4"
-    compile "org.glassfish.web:javax.el:2.2.4"
+    compile "javax.validation:validation-api:${javaxValidationVersion}"
+    compile "org.hibernate:hibernate-validator:${hibernateValidatorVersion}"
+    compile "javax.el:javax.el-api:${elApiVersion}"
+    compile "org.glassfish.web:javax.el:${elApiVersion}"
 
-    compile "org.objenesis:objenesis:2.1"
-    compile "xml-apis:xml-apis:1.4.01"
-    compile("xalan:xalan:2.7.2") {
+    compile("xalan:xalan:${xalanVersion}") {
         exclude group: 'xalan', module: 'serializer'
     }
-    compile("xalan:serializer:2.7.2") {
+    compile("xalan:serializer:${xalanVersion}") {
         exclude group: 'xml-apis', module: 'xml-apis'
     }
 
-    compile('com.jayway.awaitility:awaitility:1.6.3') {
+
+//    compile("com.jayway.awaitility:awaitility:${awaitilityVersion}") {
+    compile("org.awaitility:awaitility:${awaitilityVersion}") {
         exclude group: 'cglib', module: 'cglib-nodep'
+        exclude group: 'org.objenesis', module: 'objenesis'
     }
     compile "com.typesafe:config:${typesafeConfigVersion}"
-    compile('org.jsoup:jsoup:1.9.2') {
+    compile("org.jsoup:jsoup:${jsoupVersion}") {
         exclude group: 'junit', module: 'junit'
     }
-    compile('com.google.jimfs:jimfs:1.0') {
+    compile("com.google.jimfs:jimfs:${jimfsVersion}") {
         exclude group: 'com.google.guava', module: 'guava'
     }
     compile 'es.nitaur.markdown:txtmark:0.16'
@@ -161,10 +162,11 @@ dependencies {
     testCompile "org.springframework:spring-context:${springVersion}"
     testCompile "org.springframework:spring-context-support:${springVersion}"
 
+
     testCompile project(':serenity-sample-alternative-resources')
     testCompile project(':serenity-test-utils')
-    testCompile "org.skyscreamer:jsonassert:1.2.0"
-    testCompile("org.jbehave:jbehave:4.0.5") {
+    testCompile "org.skyscreamer:jsonassert:${jsonassertVersion}"
+    testCompile("org.jbehave:jbehave:${jbehaveVersion}") {
         exclude module: 'freemarker'
         exclude module: 'junit'
         exclude module: 'xstream'
@@ -177,17 +179,19 @@ processResources {
     ]
 }
 
-task writeNewPom << {
-    pom {
-        project {
-            inceptionYear '2011'
-            licenses {
-                license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    distribution 'repo'
+task writeNewPom {
+    doLast {
+        pom {
+            project {
+                inceptionYear '2011'
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
                 }
             }
-        }
-    }.writeTo("pom.xml")
+        }.writeTo("pom.xml")
+    }
 }

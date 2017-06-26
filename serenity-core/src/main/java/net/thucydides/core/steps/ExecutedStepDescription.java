@@ -5,9 +5,11 @@ import com.google.common.collect.Maps;
 import net.thucydides.core.reflection.MethodFinder;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static io.vavr.API.List;
 import static net.thucydides.core.util.NameConverter.humanize;
 import static net.thucydides.core.util.NameConverter.withNoArguments;
 
@@ -24,7 +26,7 @@ public class ExecutedStepDescription implements Cloneable {
     private boolean isAGroup;
 
     private final static Map<String,Object> NO_FIELDS = Maps.newHashMap();
-    private final static List<String> NO_ARGUMENTS = Lists.newArrayList();
+    private final static List<String> NO_ARGUMENTS = new ArrayList<>();
     private boolean isAQuestion ;
 
     protected ExecutedStepDescription(final Class<? extends Object> stepsClass,
@@ -97,11 +99,7 @@ public class ExecutedStepDescription implements Cloneable {
     }
 
     private static List<String> convertArguments(Object[] arguments) {
-        List<String> listResult = Lists.newArrayList();
-        for (Object argument : arguments) {
-            listResult.add(StepArgumentWriter.readableFormOf(argument));
-        }
-        return listResult;
+        return List(arguments).map(StepArgumentWriter::readableFormOf).asJava();
     }
 
     public static ExecutedStepDescription withTitle(final String name) {

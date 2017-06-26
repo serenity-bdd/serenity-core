@@ -7,6 +7,7 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -55,9 +56,9 @@ public final class StepData {
     }
 
     private List<List<Object>> rowsFrom(TestDataSource testdata) {
-        List<List<Object>> rows = Lists.newArrayList();
+        List<List<Object>> rows = new ArrayList<>();
         for (Map<String,String> rowData : testdata.getData()) {
-            List<Object> row = Lists.newArrayList();
+            List<Object> row = new ArrayList<>();
             for(String header : testdata.getHeaders()) {
                 row.add(rowData.get(header));
             }

@@ -1,10 +1,10 @@
 package net.serenitybdd.core.buildinfo;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import groovy.lang.Binding;
 import groovy.lang.GroovyRuntimeException;
 import groovy.lang.GroovyShell;
+import io.vavr.collection.List;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -38,10 +37,10 @@ public class BuildInfoProvider {
         addSaucelabsPropertiesTo(generalProperties);
         addCustomPropertiesTo(generalProperties);
 
-        List<String> drivers = driverCapabilityRecord.getDrivers();
+        List<String> drivers = List.ofAll(driverCapabilityRecord.getDrivers());
         Map<String, Properties> driverPropertiesMap = driverCapabilityRecord.getDriverCapabilities();
 
-        return new BuildProperties(generalProperties, drivers, driverPropertiesMap);
+        return new BuildProperties(generalProperties, drivers.toJavaList(), driverPropertiesMap);
     }
 
     private void addRemoteDriverPropertiesTo(Map<String, String> buildProperties) {
@@ -82,7 +81,7 @@ public class BuildInfoProvider {
 
     private void addCustomPropertiesTo(Map<String, String> buildProperties) {
 
-        List<String> sysInfoKeys = sysInfoKeysIn(environmentVariables.getKeys());
+        List<String> sysInfoKeys = sysInfoKeysIn(List.ofAll(environmentVariables.getKeys()));
         for(String key : sysInfoKeys) {
             String simplifiedKey = key.replace("sysinfo.", "");
             String expression = environmentVariables.getProperty(key);
@@ -94,13 +93,7 @@ public class BuildInfoProvider {
     }
 
     private List<String> sysInfoKeysIn(List<String> keys) {
-        List<String> filteredKeys = Lists.newArrayList();
-        for(String key : keys) {
-            if (key.startsWith("sysinfo.")) {
-                filteredKeys.add(key);
-            }
-        }
-        return filteredKeys;
+        return keys.filter( key -> key.startsWith("sysinfo.") );
     }
 
     private boolean isGroovyExpression(String expression) {

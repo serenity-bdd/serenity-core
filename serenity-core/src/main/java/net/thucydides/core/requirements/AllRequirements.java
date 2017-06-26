@@ -3,6 +3,7 @@ package net.thucydides.core.requirements;
 import com.google.common.collect.Lists;
 import net.thucydides.core.requirements.model.Requirement;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -10,10 +11,10 @@ public class AllRequirements {
 
     public static List<Requirement> in(List<Requirement> requirements) {
         if (requirements == null) {
-            return Lists.newArrayList();
+            return new ArrayList<>();
         }
 
-        List<Requirement> allRequirements = Lists.newArrayList();
+        List<Requirement> allRequirements = new ArrayList<>();
         for (Requirement requirement : requirements) {
             allRequirements.add(requirement);
             allRequirements.addAll(childRequirementsOf(requirement));
@@ -22,7 +23,7 @@ public class AllRequirements {
     }
 
     protected static Collection<Requirement> childRequirementsOf(Requirement requirement) {
-        List<Requirement> childRequirements = Lists.newArrayList();
+        List<Requirement> childRequirements = new ArrayList<>();
         for (Requirement childRequirement : requirement.getChildren()) {
             childRequirements.add(childRequirement);
             childRequirements.addAll(childRequirementsOf(childRequirement));

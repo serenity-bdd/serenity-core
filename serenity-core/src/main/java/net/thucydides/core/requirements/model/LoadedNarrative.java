@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LoadedNarrative {
@@ -16,7 +17,7 @@ public class LoadedNarrative {
         return new LoadedNarrative();
     }
 
-    public Optional<Narrative> fromFile(File narrativeFile, String defaultType) {
+    public java.util.Optional<Narrative> fromFile(File narrativeFile, String defaultType) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(narrativeFile), StandardCharsets.UTF_8))) {
             List<String> lines = readPreambleFrom(reader);
 
@@ -31,7 +32,7 @@ public class LoadedNarrative {
             }
             String text = readNarrativeFrom(lines);
             reader.close();
-            return Optional.of(new Narrative(Optional.fromNullable(title),
+            return java.util.Optional.of(new Narrative(Optional.fromNullable(title),
                     Optional.of(narrativeFile.getPath()),
                     Optional.fromNullable(cardNumber),
                     versionNumbers,
@@ -40,12 +41,12 @@ public class LoadedNarrative {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        return Optional.absent();
+        return java.util.Optional.empty();
     }
 
 
     private List<String> readPreambleFrom(BufferedReader reader) throws IOException {
-        List<String> usefulLines = Lists.newArrayList();
+        List<String> usefulLines = new ArrayList<>();
 
         boolean preambleFinished = false;
         while (!preambleFinished) {

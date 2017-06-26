@@ -14,6 +14,7 @@ import java.nio.file.DirectoryIteratorException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -55,11 +56,10 @@ public class PropertyBasedDriverCapabilityRecord implements DriverCapabilityReco
 
     @Override
     public List<String> getDrivers() {
-        List<String> drivers = Lists.newArrayList();
+        List<String> drivers = new ArrayList<>();
         try (DirectoryStream<Path> stream = driverCapabilityRecords()) {
             for (Path file : stream) {
-                String driverName = driverNameFrom(file);
-                drivers.add(driverName);
+                drivers.add(driverNameFrom(file));
             }
         } catch (IOException | DirectoryIteratorException x) {
             LOGGER.error("Exception during getting drivers", x);

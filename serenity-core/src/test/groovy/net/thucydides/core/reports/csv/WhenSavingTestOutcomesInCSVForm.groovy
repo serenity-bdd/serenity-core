@@ -73,7 +73,9 @@ class WhenSavingTestOutcomesInCSVForm extends Specification {
             def csvReporter = new CSVReporter(temporaryDirectory, environmentVariables)
             File csvResults = csvReporter.generateReportFor(TestOutcomes.of(testOutcomeList), "results.csv")
         then: "the results should contain a column for each additional column"
-            linesIn(csvResults)[1][1] == "Другой приемлемый" || linesIn(csvResults)[1][1] == "Применимый тестовый запуск" || linesIn(csvResults)[1][1] == "Третий приемлемый"
+            linesIn(csvResults)[1][1] == "Другой приемлемый" ||
+                    linesIn(csvResults)[1][1] == "Приемлемый тестовый запуск" ||
+                    linesIn(csvResults)[1][1] == "Третий приемлемый"
     }
 
     def linesIn(File csvResults) {

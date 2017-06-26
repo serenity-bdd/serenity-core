@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.html;
 
-import ch.lambdaj.function.convert.Converter;
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.configuration.TimeoutConfiguration;
@@ -12,12 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.*;
-
-import static ch.lambdaj.Lambda.convert;
+import java.util.stream.Collectors;
 
 class Reporter {
 
@@ -29,7 +26,7 @@ class Reporter {
 
     private final EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
 
-    Reporter(Collection<ReportingTask> reportingTasks) {
+    private Reporter(Collection<ReportingTask> reportingTasks) {
         this.reportingTasks = reportingTasks;
     }
 
@@ -44,8 +41,16 @@ class Reporter {
 
         ErrorTally errorTally = new ErrorTally();
         try {
-            final List<ReportExecutor> partitions = convert(reportingTasks, toReportExecutors());
-            final List<ReportExecutorFuture> futures = convert(partitions, toReportExecutorFutures(executorPool));
+            final List<ReportExecutor> partitions
+                    = reportingTasks.stream()
+                    .map(ReportExecutor::new)
+                    .collect(Collectors.toList());
+
+            final List<ReportExecutorFuture> futures
+                    = partitions.stream()
+                    .map( partition -> new ReportExecutorFuture(executorPool.submit(partition), partition.getReportingTask()) )
+                    .collect(Collectors.toList());
+
             final TimeoutValue timeout = TimeoutConfiguration.from(environmentVariables).forProperty("report.timeout", DEFAULT_TIMEOUT);
 
             for (ReportExecutorFuture executedTask : futures) {
@@ -102,18 +107,22 @@ class Reporter {
     private class ErrorTally {
         private final List<ErrorRecord> errors = Lists.newCopyOnWriteArrayList();
 
-        public boolean hasErrors() { return !errors.isEmpty(); }
+        boolean hasErrors() { return !errors.isEmpty(); }
 
-        public void recordReportFailure(String errorMessage) {
+        void recordReportFailure(String errorMessage) {
             String threadDump = (showThreaddumpOnReportTimeout()) ? ThreadDump.forAllThreads() : "";
             errors.add(new ErrorRecord(errorMessage, threadDump));
         }
 
 
-        public String errorSummary() {
-            StringBuffer errorMessage = new StringBuffer("SOME REPORT PAGES COULD NOT BE GENERATED\n");
+        String errorSummary() {
+            StringBuilder errorMessage = new StringBuilder("SOME REPORT PAGES COULD NOT BE GENERATED\n");
             for(ErrorRecord error: errors) {
-                errorMessage.append(" * " + error.message + "\n" + error.threadDump + "\n");
+                errorMessage.append(" * ")
+                        .append(error.message)
+                        .append("\n")
+                        .append(error.threadDump)
+                        .append("\n");
             }
             return errorMessage.toString();
         }
@@ -150,25 +159,4 @@ class Reporter {
             return reportTask.toString();
         }
     }
-
-    private Converter<ReportingTask, ReportExecutor> toReportExecutors() {
-        return new Converter<ReportingTask, ReportExecutor>() {
-
-            @Override
-            public ReportExecutor convert(ReportingTask reportingTask) {
-                return new ReportExecutor(reportingTask);
-            }
-        };
-    }
-
-    private Converter<ReportExecutor, ReportExecutorFuture> toReportExecutorFutures(final ExecutorService executorPool) {
-        return new Converter<ReportExecutor, ReportExecutorFuture>() {
-
-            @Override
-            public ReportExecutorFuture convert(ReportExecutor reportGenerationTask) {
-                return new ReportExecutorFuture(executorPool.submit(reportGenerationTask), reportGenerationTask.getReportingTask());
-            }
-        };
-    }
-
 }

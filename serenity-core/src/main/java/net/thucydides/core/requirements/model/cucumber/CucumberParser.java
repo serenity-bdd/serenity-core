@@ -14,6 +14,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -39,7 +40,7 @@ public class CucumberParser {
         this.encoding = ThucydidesSystemProperty.FEATURE_FILE_ENCODING.from(environmentVariables, Charset.defaultCharset().name());
     }
 
-    public Optional<Narrative> loadFeatureNarrative(File narrativeFile)  {
+    public java.util.Optional<Narrative> loadFeatureNarrative(File narrativeFile)  {
 
         CucumberFeatureListener gherkinStructure = new CucumberFeatureListener();
         Parser parser = new Parser(gherkinStructure, true, "root", false, locale);
@@ -48,7 +49,7 @@ public class CucumberParser {
             parser.parse(gherkinScenarios, narrativeFile.getName(),0);
 
             if (featureFileCouldNotBeReadFor(gherkinStructure)) {
-                return Optional.absent();
+                return java.util.Optional.empty();
             }
 
             String cardNumber = findCardNumberInTags(tagsDefinedIn(gherkinStructure));
@@ -57,7 +58,7 @@ public class CucumberParser {
             String text = gherkinStructure.getFeature().getDescription();
             String id = gherkinStructure.getFeature().getId();
 
-            return Optional.of(new Narrative(Optional.fromNullable(title),
+            return java.util.Optional.of(new Narrative(Optional.fromNullable(title),
                     Optional.fromNullable(id),
                     Optional.fromNullable(cardNumber),
                     versionNumbers,
@@ -66,7 +67,7 @@ public class CucumberParser {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        return Optional.absent();
+        return java.util.Optional.empty();
     }
 
     private boolean featureFileCouldNotBeReadFor(CucumberFeatureListener gherkinStructure) {
@@ -106,7 +107,7 @@ public class CucumberParser {
     }
 
     private List<String> findVersionNumberInTags(List<Tag> tags) {
-        List<String> versionNumbers = Lists.newArrayList();
+        List<String> versionNumbers = new ArrayList<>();
         for(Tag tag : tags) {
             if (tag.getName().toLowerCase().startsWith("@version:")) {
                 versionNumbers.add(tag.getName().replaceAll("@version:", ""));

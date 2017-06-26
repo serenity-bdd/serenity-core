@@ -5,6 +5,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -20,7 +21,7 @@ public class ExampleTable {
     private final static String RIGHT_BRACKET = "\u0FF3D";
 
     List<String> headers;
-    List<List<String>> rows = Lists.newArrayList();
+    List<List<String>> rows = new ArrayList<>();
     final static Pattern NEW_LINE
             = Pattern.compile("(\\r\\n)|(\\n)|(\\r)|(" + NEWLINE_CHAR + ")|(" + LINE_SEPARATOR + ")|(" + PARAGRAPH_SEPARATOR + ")|(\\r" + NEWLINE_CHAR + ")");
     private static final String SQUARE_BRACKETS_OR_WHITE_SPACE = "[]" + LEFT_BRACKET + RIGHT_BRACKET + "\t";

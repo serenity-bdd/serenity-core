@@ -1,11 +1,11 @@
 package net.thucydides.core.requirements.classpath;
 
-import com.google.common.base.Optional;
 import com.google.common.io.Resources;
 import net.thucydides.core.requirements.model.LoadedNarrative;
 import net.thucydides.core.requirements.model.Narrative;
 
 import java.io.File;
+import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.replaceChars;
 

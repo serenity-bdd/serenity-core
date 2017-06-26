@@ -12,11 +12,12 @@ import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestOutcomeAdaptorReporter extends ThucydidesReporter {
 
-    private List<TestOutcomeAdaptor> adaptors = Lists.newArrayList();
+    private List<TestOutcomeAdaptor> adaptors = new ArrayList<>();
 
     private final Optional<File> NO_SOURCE_FILE = Optional.absent();
 

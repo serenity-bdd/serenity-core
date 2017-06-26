@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.serenitybdd.screenplay.exceptions.UnexpectedEnumValueException;
 import net.thucydides.core.annotations.Methods;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EnumValues {
@@ -31,7 +32,7 @@ public class EnumValues {
     }
 
     public <T> List<T> getValuesOf(List<?> values) {
-        List<T> convertedValues = Lists.newArrayList();
+        List<T> convertedValues = new ArrayList<>();
         Object lastAttemptedValue = null;
         try {
             for(Object value : values) {

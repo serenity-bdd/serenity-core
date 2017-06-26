@@ -3,13 +3,14 @@ package net.thucydides.core.steps.di;
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.di.DependencyInjector;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
 
 public class ClasspathDependencyInjectorService implements DependencyInjectorService {
 
     public List<DependencyInjector> findDependencyInjectors() {
-        List<DependencyInjector> dependencyInjectors = Lists.newArrayList();
+        List<DependencyInjector> dependencyInjectors = new ArrayList<>();
 
         ServiceLoader<DependencyInjector> serviceLoader = ServiceLoader.load(DependencyInjector.class);
 

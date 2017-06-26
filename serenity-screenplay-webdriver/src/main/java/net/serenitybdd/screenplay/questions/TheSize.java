@@ -6,10 +6,7 @@ import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.Dimension;
 
 import java.util.List;
-
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
-import static net.serenitybdd.screenplay.questions.UIFilter.visible;
+import java.util.stream.Collectors;
 
 public class TheSize extends TargetedUIState<Dimension> {
 
@@ -18,7 +15,7 @@ public class TheSize extends TargetedUIState<Dimension> {
     }
 
     public static UIStateReaderBuilder<TheSize> of(Target target) {
-        return new UIStateReaderBuilder(target, TheSize.class);
+        return new UIStateReaderBuilder<>(target, TheSize.class);
     }
 
     public Dimension resolve() {
@@ -26,6 +23,8 @@ public class TheSize extends TargetedUIState<Dimension> {
     }
 
     public List<Dimension> resolveAll() {
-        return extract(visible(target.resolveAllFor(actor)), on(WebElementFacade.class).getSize());
+        return resolvedElements()
+                .map(WebElementFacade::getSize)
+                .collect(Collectors.toList());
     }
 }

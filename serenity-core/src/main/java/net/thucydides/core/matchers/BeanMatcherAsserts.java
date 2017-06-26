@@ -1,9 +1,7 @@
 package net.thucydides.core.matchers;
 
-import ch.lambdaj.Lambda;
-import ch.lambdaj.function.convert.Converter;
-import com.google.common.collect.ImmutableList;
 import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -13,8 +11,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.*;
+import static org.apache.commons.lang3.StringUtils.join;
 import static org.hamcrest.Matchers.*;
 
 public class BeanMatcherAsserts {
@@ -58,48 +57,44 @@ public class BeanMatcherAsserts {
     }
 
     private static List<BeanCollectionMatcher> collectionMatchersIn(final BeanMatcher[] matchers) {
-        List<BeanMatcher> compatibleMatchers = Lambda.filter(instanceOf(BeanCollectionMatcher.class), matchers);
-        return convert(compatibleMatchers, toBeanCollectionMatchers());
-    }
 
-    private static Converter<BeanMatcher, BeanCollectionMatcher> toBeanCollectionMatchers() {
-        return new Converter<BeanMatcher, BeanCollectionMatcher>() {
-            @Override
-            public BeanCollectionMatcher convert(BeanMatcher from) {
-                return (BeanCollectionMatcher) from;
-            }
-        };
+        List<BeanMatcher> compatibleMatchers = Arrays.stream(matchers)
+                .filter(matcher -> matcher instanceof BeanCollectionMatcher)
+                .collect(Collectors.toList());
+
+        return compatibleMatchers.stream()
+                .map( matcher -> (BeanCollectionMatcher) matcher)
+                .collect(Collectors.toList());
     }
 
     public static <T> List<T> filterElements(final List<T> elements, final BeanMatcher... matchers) {
-        List<T> filteredItems = ImmutableList.copyOf(elements);
 
-        for(BeanFieldMatcher matcher : propertyMatchersIn(matchers)) {
-            filteredItems = filter(matcher.getMatcher(), filteredItems);
-        }
+        List<BeanFieldMatcher> propertyMatchers = propertyMatchersIn(matchers);
 
-        return filteredItems;
+        return elements.stream()
+                .filter( element -> elementMatches(element, propertyMatchers) )
+                .collect(Collectors.toList());
+    }
+
+    private static <T> boolean elementMatches(T element, List<BeanFieldMatcher> propertyMatchers) {
+        return propertyMatchers.stream().allMatch(
+                propertyMatcher -> propertyMatcher.matches(element)
+        );
     }
 
     private static List<BeanFieldMatcher> propertyMatchersIn(BeanMatcher[] matchers) {
-        List<BeanMatcher> compatibleMatchers = filter(instanceOf(BeanFieldMatcher.class), matchers);
-        return convert(compatibleMatchers, toBeanFieldMatchers());
-    }
+        List<BeanMatcher> compatibleMatchers = Arrays.stream(matchers)
+                .filter( matcher -> matcher instanceof BeanFieldMatcher)
+                .collect(Collectors.toList());
 
-    private static Converter<BeanMatcher, BeanFieldMatcher> toBeanFieldMatchers() {
-        return new Converter<BeanMatcher, BeanFieldMatcher>() {
-            @Override
-            public BeanFieldMatcher convert(BeanMatcher from) {
-                return (BeanFieldMatcher) from;
-            }
-        };
+        return compatibleMatchers.stream().map(matcher -> (BeanFieldMatcher) matcher).collect(Collectors.toList());
     }
 
     public static <T> void shouldMatch(List<T> items, BeanMatcher... matchers) {
         if (!matches(items, matchers)) {
-            throw new AssertionError("Failed to find matching elements for " + join(matchers)
+            throw new AssertionError("Failed to find matching elements for " + StringUtils.join(matchers)
                                      + NEW_LINE
-                                     +"Elements where " + join(items));
+                                     +"Elements where " + StringUtils.join(items));
         }
     }
 

@@ -181,7 +181,7 @@ public class WebdriverInstances {
 
 
     public List<WebDriver> getActiveDrivers() {
-        List<WebDriver> activeDrivers = Lists.newArrayList();
+        List<WebDriver> activeDrivers = new ArrayList<>();
         for (WebDriver webDriver : driverMap.values()) {
             if (!(webDriver instanceof WebDriverFacade)) {
                 activeDrivers.add(webDriver);
@@ -196,7 +196,7 @@ public class WebdriverInstances {
     }
 
     public List<String> getActiveDriverTypes() {
-        List<String> activeDrivers = Lists.newArrayList();
+        List<String> activeDrivers = new ArrayList<>();
         for (WebDriver webDriver : driverMap.values()) {
             if (!(webDriver instanceof WebDriverFacade)) {
                 activeDrivers.add(driverNameFor(webDriver));

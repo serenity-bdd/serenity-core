@@ -85,7 +85,7 @@ public class ClassFinder {
             assert classLoader != null;
             String path = packageName.replace('.', '/');
             Enumeration resources = classLoader.getResources(path);
-            List<URI> dirs = Lists.newArrayList();
+            List<URI> dirs = new ArrayList<>();
             while (resources.hasMoreElements()) {
                 URL resource = (URL) resources.nextElement();
                 dirs.add(resource.toURI());
@@ -94,7 +94,7 @@ public class ClassFinder {
             for (URI directory : dirs) {
                 classes.addAll(findClasses(directory, packageName));
             }
-            List<Class<?>> classList = Lists.newArrayList();
+            List<Class<?>> classList = new ArrayList<>();
             for (String className : classes) {
                 try {
                     if (className.startsWith(packageName) && isNotAnInnerClass(className)) {

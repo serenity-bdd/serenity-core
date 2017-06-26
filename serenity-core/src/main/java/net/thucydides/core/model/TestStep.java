@@ -1,5 +1,6 @@
 package net.thucydides.core.model;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.rest.RestQuery;
@@ -12,11 +13,15 @@ import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import org.joda.time.DateTime;
 import org.jsoup.Jsoup;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.*;
 import static net.thucydides.core.model.TestResult.*;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -35,17 +40,26 @@ public class TestStep implements Cloneable {
     private int number;
     private String description;
     private long duration;
-    private long startTime;
+    private ZonedDateTime startTime;
     private List<ScreenshotAndHtmlSource> screenshots = new ArrayList<>();
     private FailureCause exception;
     private TestResult result;
     private RestQuery restQuery;
     private boolean precondition;
 
+
+    public final static Predicate<TestStep> IGNORED_TESTSTEPS = testStep -> testStep.getResult() == IGNORED;
+    public final static Predicate<TestStep> COMPROMISED_TESTSTEPS = testStep -> testStep.getResult() == COMPROMISED;
+    public final static Predicate<TestStep> SUCCESSFUL_TESTSTEPS = testStep -> testStep.getResult() == SUCCESS;
+    public final static Predicate<TestStep> FAILING_TESTSTEPS = testStep -> testStep.getResult() == FAILURE;
+    public final static Predicate<TestStep> ERROR_TESTSTEPS = testStep -> testStep.getResult() == ERROR;
+    public final static Predicate<TestStep> SKIPPED_TESTSTEPS = testStep -> testStep.getResult() == SKIPPED;
+
+
     private List<TestStep> children = new ArrayList<>();
 
     public TestStep() {
-        startTime = now().getMillis();
+        startTime = now();
     }
 
     protected void setNumber(int number) {
@@ -56,7 +70,7 @@ public class TestStep implements Cloneable {
         return Injectors.getInjector().getInstance(SystemClock.class);
     }
 
-    private DateTime now() {
+    private ZonedDateTime now() {
         return getSystemClock().getCurrentTime();
     }
 
@@ -122,7 +136,7 @@ public class TestStep implements Cloneable {
         if (!hasChildren()) {
             return description;
         } else {
-            String childDescriptions = join(extract(children, on(TestStep.class).toString()));
+            String childDescriptions = children.stream().map(TestStep::toString).collect(Collectors.joining(", "));
             return description + " [" + childDescriptions + "]";
         }
     }
@@ -132,15 +146,34 @@ public class TestStep implements Cloneable {
         this.description = description;
     }
 
-    public TestStep(final DateTime startTime, final String description) {
+    public TestStep(final ZonedDateTime startTime, final String description) {
         this();
-        this.startTime = startTime.getMillis();
+        this.startTime = startTime;
         this.description = description;
     }
 
-    public TestStep startingAt(DateTime time) {
+    @Deprecated
+    public TestStep(final DateTime startTime, final String description) {
+        this();
+
+        ZonedDateTime time =
+                ZonedDateTime.of(startTime.year().get(),
+                        startTime.monthOfYear().get(),
+                        startTime.dayOfMonth().get(),
+                        startTime.hourOfDay().get(),
+                        startTime.minuteOfHour().get(),
+                        startTime.secondOfMinute().get(),
+                        startTime.millisOfSecond().get() * 1000,
+                        ZoneId.systemDefault());
+
+        this.startTime = time;
+        this.description = description;
+    }
+
+
+    public TestStep startingAt(ZonedDateTime time) {
         TestStep newTestStep = copyOfThisTestStep();
-        newTestStep.startTime = time.getMillis();
+        newTestStep.startTime = time;
         return newTestStep;
     }
 
@@ -166,7 +199,9 @@ public class TestStep implements Cloneable {
 
 
     public void recordDuration() {
-        setDuration(now().getMillis() - startTime);
+        setDuration(
+                ChronoUnit.MILLIS.between(startTime, now())
+        );
     }
 
     public int getNumber() {
@@ -426,7 +461,7 @@ public class TestStep implements Cloneable {
         }
     }
 
-    public long getStartTime() {
+    public ZonedDateTime getStartTime() {
         return startTime;
     }
 
@@ -447,7 +482,7 @@ public class TestStep implements Cloneable {
 
         if (duration != testStep.duration) return false;
         if (number != testStep.number) return false;
-        if (startTime != testStep.startTime) return false;
+        if (!startTime.equals(testStep.startTime)) return false;
         // TODO
 //        if (exception != null ? !exceptionsAreEqual(exception, testStep.exception) : testStep.exception != null) return false;
         if (!children.equals(testStep.children)) return false;
@@ -459,14 +494,6 @@ public class TestStep implements Cloneable {
 
     @Override
     public int hashCode() {
-        int result1 = number;
-        result1 = 31 * result1 + description.hashCode();
-        result1 = 31 * result1 + (int) (duration ^ (duration >>> 32));
-        result1 = 31 * result1 + (int) (startTime ^ (startTime >>> 32));
-        result1 = 31 * result1 + (screenshots != null ? screenshots.hashCode() : 0);
-        result1 = 31 * result1 + (exception != null ? exception.hashCode() : 0);
-        result1 = 31 * result1 + result.hashCode();
-        result1 = 31 * result1 + children.hashCode();
-        return result1;
+        return Objects.hashCode(number, description, duration, startTime, screenshots, exception, result, restQuery, precondition, children);
     }
 }

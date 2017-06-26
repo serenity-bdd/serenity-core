@@ -10,6 +10,7 @@ buildscript {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.5'
         classpath 'org.ajoberstar:gradle-git:1.6.0'
         classpath 'org.pegdown:pegdown:1.4.1'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.15.0'
     }
 }
 
@@ -24,37 +25,7 @@ subprojects {
 }
 
 ext {
-    seleniumVersion = '2.53.1'
-    htmlunitVersion = '2.21'
-
-    groovyVersion = '2.4.11'
-    gradleVersion = '4.0'
-
-    junitVersion = '4.12'
-    hamcrestVersion = '1.3'
-    springVersion = '4.3.5.RELEASE'
-    springBootVersion = '1.4.3.RELEASE'
-    guavaVersion = '20.0'
-    // restAssuredVersion = '2.9.0'
-    restAssuredVersion = '3.0.2'
-    mockitoCoreVersion = '1.10.19'
-    jbehaveCoreVersion = '4.1'
-    commonsIoVersion = '2.5'
-    commonsCollectionsVersion = '3.2.2'
-    commonsLang3Version = '3.4'
-    commonsCodecVersion = '1.10'
-    xstreamVersion = '1.4.9'
-    jodaTimeVersion = '2.7'
-    lambdajVersion = '2.3.3'
-    gsonVersion = '2.6.1'
-    typesafeConfigVersion = '1.2.1'
-    freemarkerVersion = '2.3.23'
-    wiremockCoreVersion = '1.58'
     // Bintray configuration
-    bintrayBaseUrl = 'https://api.bintray.com/maven'
-    bintrayRepository = 'maven'
-    bintrayPackage = 'serenity-core'
-    projectDescription = 'Serenity Core'
 
     if (!project.hasProperty("bintrayUsername")) {
         bintrayUsername = 'wakaleo'
@@ -67,11 +38,25 @@ ext {
 
 allprojects {
     apply plugin: 'project-report'
+    apply plugin: 'com.github.ben-manes.versions'
+
+    dependencyUpdates.resolutionStrategy = {
+        componentSelection { rules ->
+            rules.all { ComponentSelection selection ->
+                boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm', 'atlassian'].any { qualifier ->
+                    selection.candidate.version.toLowerCase() ==~ /(?i).*[.-]${qualifier}[.\d-]*/
+                }
+                if (rejected) {
+                    selection.reject('Release candidate')
+                }
+            }
+        }
+    }
 
     configurations.all {
         resolutionStrategy {
             // fail fast on dependency convergence problems
-           failOnVersionConflict()
+//            failOnVersionConflict()
 
             // force versions to fix dependency convergence problems
             // when updating this list, update Serenity's declared deps if exists
@@ -102,8 +87,8 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.bintray'
 
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
     repositories {
         mavenLocal()
@@ -147,8 +132,8 @@ subprojects {
         exclude '**/*Sample*'
         exclude '**/integration/browsers**'
         include '**/integration/**'
-        reports.junitXml.destination = "${buildDir}/reports/integration-tests"
-        reports.html.destination = "${buildDir}/reports/integration-tests"
+        reports.junitXml.destination = file("${buildDir}/reports/integration-tests")
+        reports.html.destination = file("${buildDir}/reports/integration-tests")
         minHeapSize = "128m"
         maxHeapSize = "1536m"
         if (!JavaVersion.current().isJava8Compatible()) {
@@ -209,55 +194,57 @@ subprojects {
     dependencies {
         compile "com.google.guava:guava:${guavaVersion}"
 //        compile "com.google.code.findbugs:jsr305:3.0.1"
-        compile("com.google.inject:guice:3.0") {
+        compile("com.google.inject:guice:${guiceVersion}") {
             exclude group:"org.ow2.asm", module:"asm"
             exclude group:"asm", module:"asm"
             exclude group:"org.sonatype.sisu.inject", module:"cglib"
         }
 
-        compile ('cglib:cglib:3.1') {
+        compile ("cglib:cglib:${cglibVersion}") {
             exclude group:"org.ow2.asm", module:"asm"
         }
-        compile ('org.ow2.asm:asm:5.0.3')
+        compile ("org.ow2.asm:asm:${asmVersion}")
 
         compile "commons-codec:commons-codec:${commonsCodecVersion}"
-        compile "org.objenesis:objenesis:2.1"
-        compile "org.slf4j:slf4j-api:1.7.21"
-        compile "xml-apis:xml-apis:1.4.01"
-        compile 'info.cukes:cucumber-core:1.2.5'
+        compile "org.objenesis:objenesis:${objenesisVersion}"
+        compile "org.slf4j:slf4j-api:${slf4jVersion}"
+        compile "xml-apis:xml-apis:${xmlApisVersion}"
+        compile "info.cukes:cucumber-core:${cucumberVersion}"
 
-        compile 'commons-logging:commons-logging:1.2'
+        compile 'commons-logging:commons-logging:{commonsLoggingVersion}'
         compile "junit:junit:${junitVersion}"
         compile("org.mockito:mockito-core:${mockitoCoreVersion}") {
             exclude group: "org.hamcrest", module:"hamcrest-core"
             exclude group: "org.objenesis", module:"objenesis"
         }
-        compile 'net.bytebuddy:byte-buddy:1.6.12'
+        compile "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
 
-        testCompile ("ch.qos.logback:logback-classic:1.1.7") {
+        compile "io.vavr:vavr:${vavrVersion}"
+
+        testCompile ("ch.qos.logback:logback-classic:${logbackVersion}") {
             exclude group: "org.slf4j", module: 'slf4j-api'
         }
         testCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
-        testCompile('org.spockframework:spock-core:1.1-groovy-2.4-rc-4') {
+        testCompile("org.spockframework:spock-core:${spockVersion}") {
             exclude group: "junit"
             exclude module: "groovy-all"
 
         }
-        testCompile("com.github.goldin:spock-extensions:0.1.4") {
+        testCompile("com.github.goldin:spock-extensions:${spockExtensionsVersion}") {
             exclude group:"org.spockframework", module: "spock-core"
             exclude group:"org.slf4j", module: "slf4j-api"
             exclude group:"asm", module: "asm"
         }
         testCompile("org.codehaus.groovy:groovy-all:${groovyVersion}")
-        testCompile 'org.assertj:assertj-core:1.7.1'
+        testCompile "org.assertj:assertj-core:${assertjVersion}"
     }
 
     configurations.all {
         resolutionStrategy.eachDependency { DependencyResolveDetails details ->
             if (details.requested.name == 'mockito-all') {
-                details.useTarget group: 'org.mockito', name: 'mockito-core', version: '1.9.5'
+                details.useTarget group: 'org.mockito', name: 'mockito-core', version: "${mockitoVersion}"
             }
             if (details.requested.name == 'hamcrest-core') {
                 details.useTarget group: 'org.hamcrest', name: 'hamcrest-core', version: "${hamcrestVersion}"

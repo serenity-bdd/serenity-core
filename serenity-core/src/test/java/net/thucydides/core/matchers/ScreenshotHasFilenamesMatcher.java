@@ -6,9 +6,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
+import java.util.stream.Collectors;
 
 /**
  * Does a list of screenshot objects contain a specified list of screenshot filenames?
@@ -22,7 +20,11 @@ public class ScreenshotHasFilenamesMatcher extends TypeSafeMatcher<List<Screensh
     }
 
     public boolean matchesSafely(final List<Screenshot> screenshots) {
-        List<String> screenshotFilenames = extract(screenshots, on(Screenshot.class).getFilename());
+
+
+        List<String> screenshotFilenames = screenshots.stream()
+                                                      .map(Screenshot::getFilename)
+                                                      .collect(Collectors.toList());
 
         for(String expectedFilename : expectedFilenames) {
             if (!screenshotFilenames.contains(expectedFilename)) {

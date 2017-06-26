@@ -1,9 +1,7 @@
 package net.thucydides.core.reports;
 
-import ch.lambdaj.Lambda;
-import ch.lambdaj.function.convert.Converter;
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
@@ -19,17 +17,16 @@ import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matcher;
-import org.joda.time.DateTime;
 
+import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static ch.lambdaj.Lambda.*;
+import static java.util.Comparator.naturalOrder;
 import static net.thucydides.core.model.TestResult.*;
-import static net.thucydides.core.reports.matchers.TestOutcomeMatchers.havingTagName;
-import static net.thucydides.core.reports.matchers.TestOutcomeMatchers.havingTagType;
 import static org.hamcrest.Matchers.is;
-
-//import static ch.lambdaj.Lambda.*;
 
 /**
  * A set of test outcomes, which lets you perform query operations on the test outcomes.
@@ -61,10 +58,6 @@ public class TestOutcomes {
 
     static int outcomeCount = 0;
 
-    public <T> T sum(Object iterable, T argument) {
-        return Lambda.sum(iterable, argument);
-    }
-
     @Inject
     protected TestOutcomes(Collection<? extends TestOutcome> outcomes,
                            double estimatedAverageStepCount,
@@ -73,28 +66,39 @@ public class TestOutcomes {
                            TestOutcomes rootOutcomes,
                            EnvironmentVariables environmentVariables) {
         outcomeCount = outcomeCount + outcomes.size();
-        this.outcomes = ImmutableList.copyOf(outcomes);
+
+        this.outcomes = Collections.unmodifiableList(sorted(outcomes));
+
         this.estimatedAverageStepCount = estimatedAverageStepCount;
         this.label = label;
         this.testTag = testTag;
-        this.rootOutcomes = Optional.fromNullable(rootOutcomes);
+        this.rootOutcomes = Optional.ofNullable(rootOutcomes);
         this.environmentVariables = environmentVariables;
         this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
     }
 
-    protected TestOutcomes(List<? extends TestOutcome> outcomes,
+    protected TestOutcomes(Collection<? extends TestOutcome> outcomes,
                            double estimatedAverageStepCount,
                            String label,
                            TestOutcomes rootOutcomes,
                            EnvironmentVariables environmentVariables) {
         outcomeCount = outcomeCount + outcomes.size();
-        this.outcomes = outcomes;
+        this.outcomes = Collections.unmodifiableList(sorted(outcomes));
         this.estimatedAverageStepCount = estimatedAverageStepCount;
         this.label = label;
         this.testTag = null;
-        this.rootOutcomes = Optional.fromNullable(rootOutcomes);
+        this.rootOutcomes = Optional.ofNullable(rootOutcomes);
         this.environmentVariables = environmentVariables;
         this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
+    }
+
+    private List<TestOutcome> sorted(Collection<? extends TestOutcome> outcomes) {
+        return outcomes.stream()
+                .sorted(Comparator.comparing(TestOutcome::getPath,
+                        Comparator.nullsFirst(naturalOrder()))
+                .thenComparing(Comparator.comparing(TestOutcome::getStartTime,
+                               Comparator.nullsFirst(naturalOrder()))))
+                .collect(Collectors.toList());
     }
 
     protected TestOutcomes(Collection<? extends TestOutcome> outcomes,
@@ -127,24 +131,19 @@ public class TestOutcomes {
     }
 
     List<TestOutcome> outcomesFilteredByResult(TestResult... results) {
-        List<TestOutcome> filteredOutcomes = Lists.newArrayList();
+
         List<TestResult> eligableResults = Lists.newArrayList(results);
-        for(TestOutcome outcome : outcomes) {
-            if (eligableResults.contains(outcome.getResult())) {
-                filteredOutcomes.add(outcome);
-            }
-        }
-        return filteredOutcomes;
+
+        return outcomes.stream()
+                .filter(outcome -> eligableResults.contains(outcome.getResult()))
+                .collect(Collectors.toList());
+
     }
 
     List<TestOutcome> outcomesFilteredByTag(TestTag tag) {
-        List<TestOutcome> filteredOutcomes = Lists.newArrayList();
-        for(TestOutcome outcome : outcomes) {
-            if (outcome.getTags().contains(tag)) {
-                filteredOutcomes.add(outcome);
-            }
-        }
-        return filteredOutcomes;
+        return outcomes.stream()
+                .filter(outcome -> outcome.getTags().contains(tag))
+                .collect(Collectors.toList());
     }
 
     public TestOutcomes havingResult(TestResult result) {
@@ -199,87 +198,72 @@ public class TestOutcomes {
      * @return The list of all of the different tag types that appear in the test outcomes.
      */
     public List<String> getTagTypes() {
-        Set<String> tagTypes = Sets.newHashSet();
-        for (TestOutcome outcome : outcomes) {
-            addTagTypesFrom(outcome, tagTypes);
-        }
-new HashMap<>();
-        return sort(ImmutableList.copyOf(tagTypes), on(String.class));
+        return outcomes.stream()
+                .flatMap(this::tagTypesIn)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
+    private final Set<String> SECOND_CLASS_TAG_TYPES = ImmutableSet.of("version","feature", "story");
+
     public List<String> getFirstClassTagTypes() {
-        Set<String> tagTypes = Sets.newHashSet();
-        for (TestOutcome outcome : outcomes) {
-            addTagTypesFrom(outcome, tagTypes);
-        }
-        tagTypes.remove("version");
-        tagTypes.remove("feature");
-        tagTypes.remove("story");
-        tagTypes.removeAll(getRequirementTagTypes());
-        return sort(ImmutableList.copyOf(tagTypes), on(String.class));
+        return getTagTypes()
+                    .stream()
+                    .filter(tagType -> !SECOND_CLASS_TAG_TYPES.contains(tagType))
+                    .filter(tagType -> !getRequirementTagTypes().contains(tagType))
+                    .collect(Collectors.toList());
     }
 
     public List<String> getRequirementTagTypes() {
-       List<String> tagTypes = Lists.newArrayList();
-
-       List<String> candidateTagTypes = requirementsService.getRequirementTypes();
-       for(String tagType : candidateTagTypes) {
-           if (getTagTypes().contains(tagType)) {
-               tagTypes.add(tagType);
-           }
-       }
-       return ImmutableList.copyOf(tagTypes);
+       return requirementsService.getRequirementTypes()
+               .stream()
+               .filter(tagType -> getTagTypes().contains(tagType))
+               .collect(Collectors.toList());
     }
 
     /**
      * @return The list of all the names of the different tags in these test outcomes
      */
     public List<String> getTagNames() {
-        Set<String> tags = Sets.newHashSet();
-        for (TestOutcome outcome : outcomes) {
-            addTagNamesFrom(outcome, tags);
-        }
-        return sort(ImmutableList.copyOf(tags), on(String.class));
+        return outcomes.stream()
+                .flatMap(this::tagNamesIn)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
-    private void addTagNamesFrom(TestOutcome outcome, Set<String> tags) {
-        for (TestTag tag : outcome.getTags()) {
-            String normalizedForm = tag.getName().toLowerCase();
-            if (!tags.contains(normalizedForm)) {
-                tags.add(normalizedForm);
-            }
-        }
+    private Stream<String> tagTypesIn(TestOutcome outcome) {
+        return outcome.getTags()
+                .stream()
+                .map(tag -> tag.getType().toLowerCase());
     }
 
-    private void addTagTypesFrom(TestOutcome outcome, Set<String> tags) {
-        for (TestTag tag : outcome.getTags()) {
-            String normalizedForm = tag.getType().toLowerCase();
-            if (!tags.contains(normalizedForm)) {
-                tags.add(normalizedForm);
-            }
-        }
+    private Stream<String> tagNamesIn(TestOutcome outcome) {
+        return outcome.getTags()
+                .stream()
+                .map(tag -> tag.getName().toLowerCase());
     }
 
     /**
      * @return The list of all the different tags in these test outcomes
      */
     public List<TestTag> getTags() {
-        Set<TestTag> tags = Sets.newHashSet();
-        for (TestOutcome outcome : outcomes) {
-            tags.addAll(outcome.getTags());
-        }
-        return ImmutableList.copyOf(tags);
+        return outcomes.stream()
+                .flatMap(outcome -> outcome.getTags().stream())
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     /**
      * @return The list of all the tags associated with a given tag type.
      */
     public List<TestTag> getTagsOfType(String tagType) {
-        Set<TestTag> tags = Sets.newHashSet();
-        for (TestOutcome outcome : outcomes) {
-            tags.addAll(tagsOfType(tagType).in(outcome));
-        }
-        return sort(ImmutableList.copyOf(tags), on(String.class));
+        return outcomes.stream()
+                .flatMap(outcome -> tagsOfType(tagType).from(outcome))
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
 
@@ -287,54 +271,46 @@ new HashMap<>();
      * @return The list of all the tags associated with a given tag type.
      */
     public List<TestTag> getMostSpecificTagsOfType(String tagType) {
-        Set<TestTag> tags = Sets.newHashSet();
-        for (TestOutcome outcome : outcomes) {
-            List<TestTag> mostSpecificOutcomeTags = removeGeneralTagsFrom(tagsOfType(tagType).in(outcome));
-            tags.addAll(mostSpecificOutcomeTags);
-        }
-        return sort(ImmutableList.copyOf(tags), on(String.class));
+        return outcomes.stream()
+                .flatMap(outcome -> removeGeneralTagsFrom(tagsOfType(tagType).in(outcome)))
+                .sorted()
+                .collect(Collectors.toList());
     }
 
-    private List<TestTag> removeGeneralTagsFrom(List<TestTag> tags) {
-        List<TestTag> specificTags = Lists.newArrayList();
-
-        for(TestTag tag : tags) {
-            if (!moreSpecificTagExists(tag, tags)) {
-                specificTags.add(tag);
-            }
-        }
-        return specificTags;
+    private Stream<TestTag> removeGeneralTagsFrom(List<TestTag> tags) {
+        return tags.stream().filter(
+                tag -> !moreSpecificTagExists(tag, tags)
+        );
     }
 
     private boolean moreSpecificTagExists(TestTag generalTag, List<TestTag> tags) {
-        for(TestTag tag : tags) {
-            if (tag.getName().endsWith("/" + generalTag.getName())) {
-                return true;
-            }
-        }
-        return false;
+        return tags.stream()
+                .anyMatch(tag -> tag.getName().endsWith("/" + generalTag.getName()));
     }
 
 
     public List<TestTag> getTagsOfTypeExcluding(String tagType, String excludedTag) {
-        Set<TestTag> tags = Sets.newHashSet();
 
-        for (TestOutcome outcome : outcomes) {
-            List<TestTag> allTagsOfType = removeGeneralTagsFrom(tagsOfType(tagType).in(outcome));
-            allTagsOfType = removeExcluded(allTagsOfType, excludedTag);
-            tags.addAll(allTagsOfType);
-        }
-        return sort(ImmutableList.copyOf(tags), on(String.class));
+        Predicate<TestTag> withExcludedTags = tag -> !tag.getName().equalsIgnoreCase(excludedTag);
+
+        List<TestTag> allTags = outcomes.stream()
+                .flatMap(outcome -> tagsOfType(tagType).from(outcome))
+                .collect(Collectors.toList());
+
+        return allTags.stream()
+                .filter( tag -> !moreSpecificTagExists(tag, allTags) )
+                .filter( withExcludedTags )
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     private List<TestTag> removeExcluded(List<TestTag> allTagsOfType, String excludedTag) {
-        List<TestTag> tags = Lists.newArrayList();
-        for (TestTag tag: allTagsOfType) {
-            if (!tag.getName().equalsIgnoreCase(excludedTag)) {
-                tags.add(tag);
-            }
-        }
-        return tags;
+        Predicate<TestTag> withExcludedTags = tag -> !tag.getName().equalsIgnoreCase(excludedTag);
+
+        return allTagsOfType.stream()
+                .filter(withExcludedTags)
+                .collect(Collectors.toList());
     }
 
     private TagFinder tagsOfType(String tagType) {
@@ -342,7 +318,7 @@ new HashMap<>();
     }
 
     public TestOutcomes getRootOutcomes() {
-        return rootOutcomes.or(this);
+        return rootOutcomes.orElse(this);
     }
 
     public TestOutcomes forRequirement(Requirement requirement) {
@@ -371,12 +347,16 @@ new HashMap<>();
         return getTags().contains(testTag);
     }
 
-    public DateTime getStartTime() {
-        return min(outcomes, on(TestOutcome.class).getStartTime());
+    public Optional<ZonedDateTime> getStartTime() {
+        return outcomes.stream()
+                .filter(outcome -> outcome.getStartTime() != null)
+                .map(TestOutcome::getStartTime)
+                .sorted()
+                .findFirst();
     }
 
     public TestOutcomes ofType(TestType testType) {
-        List<TestOutcome> filteredOutcomes = Lists.newArrayList();
+        List<TestOutcome> filteredOutcomes = new ArrayList<>();
         for(TestOutcome outcome : outcomes) {
             if (outcome.typeCompatibleWith(testType)) {
                 filteredOutcomes.add(outcome);
@@ -386,7 +366,7 @@ new HashMap<>();
     }
 
     public TestOutcomes withResult(TestResult result) {
-        List<TestOutcome> filteredOutcomes = Lists.newArrayList();
+        List<TestOutcome> filteredOutcomes = new ArrayList<>();
         for(TestOutcome outcome : outcomes) {
             if (outcome.getResult() == result) {
                 filteredOutcomes.add(outcome);
@@ -414,8 +394,13 @@ new HashMap<>();
             this.tagType = tagType.toLowerCase();
         }
 
+        Stream<TestTag> from(TestOutcome outcome) {
+            return outcome.getTags().stream()
+                    .filter(tag -> tag.normalisedType().equals(tagType));
+        }
+
         List<TestTag> in(TestOutcome testOutcome) {
-            List<TestTag> matchingTags = Lists.newArrayList();
+            List<TestTag> matchingTags = new ArrayList<>();
             for (TestTag tag : testOutcome.getTags()) {
                 if (tag.normalisedType().equals(tagType)) {
                     matchingTags.add(tag);
@@ -432,7 +417,12 @@ new HashMap<>();
      * @return A new set of test outcomes for this tag type
      */
     public TestOutcomes withTagType(String tagType) {
-        return TestOutcomes.of(filter(havingTagType(tagType), outcomes)).withLabel(tagType).withRootOutcomes(this.getRootOutcomes());
+
+        List<TestOutcome> testOutcomesWithTags = outcomes.stream()
+                .filter(outcome -> outcome.hasTagWithType(tagType))
+                .collect(Collectors.toList());
+
+        return TestOutcomes.of(testOutcomesWithTags).withLabel(tagType).withRootOutcomes(getRootOutcomes());
     }
 
     private TestOutcomes withRootOutcomes(TestOutcomes rootOutcomes) {
@@ -446,7 +436,15 @@ new HashMap<>();
      * @return A new set of test outcomes for this tag name
      */
     public TestOutcomes withTag(String tagName) {
-        return TestOutcomes.of(filter(havingTagName(tagName), outcomes)).withLabel(tagName).withRootOutcomes(getRootOutcomes());
+
+        List<TestOutcome> testOutcomesWithTags = outcomes.stream()
+                .filter(outcome -> outcome.hasTagWithName(tagName))
+                .collect(Collectors.toList());
+
+        return TestOutcomes.of(testOutcomesWithTags).withLabel(tagName).withRootOutcomes(getRootOutcomes());
+
+
+        //    return TestOutcomes.of(filter(havingTagName(tagName), outcomes)).withLabel(tagName).withRootOutcomes(getRootOutcomes());
     }
 
     public TestOutcomes withTag(TestTag tag) {
@@ -469,7 +467,7 @@ new HashMap<>();
     }
 
     public TestOutcomes withTags(List<TestTag> tags) {
-        List<TestOutcome> filteredOutcomes = Lists.newArrayList();
+        List<TestOutcome> filteredOutcomes = new ArrayList<>();
         for (TestTag tag : tags) {
             filteredOutcomes.addAll(matchingOutcomes(outcomes, tag));
         }
@@ -477,7 +475,7 @@ new HashMap<>();
     }
 
     private List<? extends TestOutcome> matchingOutcomes(List<? extends TestOutcome> outcomes, TestTag tag) {
-        List<TestOutcome> matchingOutcomes = Lists.newArrayList();
+        List<TestOutcome> matchingOutcomes = new ArrayList<>();
         for (TestOutcome outcome : outcomes) {
             if (isAnIssue(tag) && (outcome.hasIssue(tag.getName()))) {
                 matchingOutcomes.add(outcome);
@@ -565,7 +563,7 @@ new HashMap<>();
 
     private List<TestOutcome> outcomesWithResults(List<? extends TestOutcome> outcomes,
                                                   TestResult... possibleResults) {
-        List<TestOutcome> validOutcomes = Lists.newArrayList();
+        List<TestOutcome> validOutcomes = new ArrayList<>();
         List<TestResult> possibleResultsList = Arrays.asList(possibleResults);
         for (TestOutcome outcome : outcomes) {
             if (possibleResultsList.contains(outcome.getResult())) {
@@ -579,18 +577,16 @@ new HashMap<>();
      * @return The list of TestOutcomes contained in this test outcome set.
      */
     public List<? extends TestOutcome> getTests() {
-        return sort(outcomes, on(TestOutcome.class).getTitle());
+        return outcomes;
     }
 
     /**
      * @return The total duration of all of the tests in this set in milliseconds.
      */
     public Long getDuration() {
-        Long total = 0L;
-        for (TestOutcome outcome : outcomes) {
-            total += outcome.getDuration();
-        }
-        return total;
+        return outcomes.stream()
+                .mapToLong(TestOutcome::getDuration)
+                .sum();
     }
 
     /**
@@ -604,12 +600,9 @@ new HashMap<>();
      * @return The total number of test runs in this set (including rows in data-driven tests).
      */
     public int getTotal() {
-        int total = 0;
-        for(TestOutcome outcome : outcomes) {
-            total += outcome.getTestCount();
-        }
-        return total;
-//        return sum(outcomes, on(TestOutcome.class).getTestCount());
+        return outcomes.stream()
+                .mapToInt(TestOutcome::getTestCount)
+                .sum();
     }
 
     /**
@@ -631,34 +624,30 @@ new HashMap<>();
     }
 
     private List<TestResult> getCurrentTestResults() {
-        return convert(outcomes, toTestResults());
-    }
-
-    private Converter<? extends TestOutcome, TestResult> toTestResults() {
-        return new Converter<TestOutcome, TestResult>() {
-            public TestResult convert(final TestOutcome step) {
-                return step.getResult();
-            }
-        };
+        return outcomes.stream()
+                .map(TestOutcome::getResult)
+                .collect(Collectors.toList());
     }
 
     /**
      * @return The total number of nested steps in these test outcomes.
      */
     public int getStepCount() {
-        int stepCount = 0;
-        for (TestOutcome outcome : outcomes) {
-            stepCount += outcome.getNestedStepCount();
-        }
-        return stepCount;
-//        return sum(extract(outcomes, on(TestOutcome.class).getNestedStepCount())).intValue();
+        return outcomes.stream()
+                .mapToInt(TestOutcome::getNestedStepCount)
+                .sum();
     }
 
     /**
      * @param testType 'manual' or 'automated' (this is a string because it is mainly called from the freemarker templates
      */
     public int successCount(String testType) {
-        return sum(outcomes, on(TestOutcome.class).countResults(SUCCESS, TestType.valueOf(testType.toUpperCase())));
+
+        TestType expectedTestType = TestType.valueOf(testType.toUpperCase());
+
+        return outcomes.stream()
+                        .mapToInt(outcome -> outcome.countResults(SUCCESS, expectedTestType))
+                        .sum();
     }
 
 
@@ -784,10 +773,10 @@ new HashMap<>();
     }
 
     private int countStepsWithResult(TestResult expectedResult, TestType testType) {
-        int stepCount = 0;
-        for(TestOutcome outcome : outcomes) {
-            stepCount += outcome.countNestedStepsWithResult(expectedResult, testType);
-        }
+
+        int stepCount =  outcomes.stream()
+                .mapToInt(outcome -> outcome.countNestedStepsWithResult(expectedResult, testType))
+                .sum();
 
         if ((stepCount == 0) && aMatchingTestExists(expectedResult, testType)) {
             return (int) Math.round(getAverageTestSize());
@@ -800,11 +789,9 @@ new HashMap<>();
     }
 
     protected int countTestsWithResult(TestResult expectedResult, TestType testType) {
-        int total = 0;
-        for(TestOutcome outcome : outcomes) {
-            total += outcome.countResults(expectedResult, testType);
-        }
-        return total;
+        return outcomes.stream()
+                .mapToInt(outcome -> outcome.countResults(expectedResult, testType))
+                .sum();
     }
 
     private Integer getEstimatedTotalStepCount() {
@@ -824,57 +811,30 @@ new HashMap<>();
         }
     }
 
-//    public double getRecentStability() {
-//        if (outcomes.isEmpty()) {
-//            return 0.0;
-//        } else {
-//            return sum(outcomes, on(TestOutcome.class).getRecentStability()) / getTestCount();
-//        }
-//    }
-
-//    public double getOverallStability() {
-//        if (outcomes.isEmpty()) {
-//            return 0.0;
-//        } else {
-//            return sum(outcomes, on(TestOutcome.class).getOverallStability()) / getTestCount();
-//        }
-//    }
-
     private int totalUnimplementedTests() {
         return getTotal() - totalImplementedTests();
     }
 
     public int getTestCount() {
-        int total = 0;
-        for(TestOutcome outcome : outcomes) {
-            total += outcome.getTestCount();
-        }
-        return total;
+        return outcomes.stream()
+                .mapToInt(TestOutcome::getTestCount)
+                .sum();
     }
 
     private int totalImplementedTests() {
-        int total = 0;
-        for(TestOutcome outcome : outcomes) {
-            total += outcome.getImplementedTestCount();
-        }
-        return total;
+        return outcomes.stream()
+                .mapToInt(TestOutcome::getImplementedTestCount)
+                .sum();
     }
 
     public boolean hasDataDrivenTests() {
-        for(TestOutcome outcome : outcomes) {
-            if (outcome.isDataDriven()) {
-                return true;
-            }
-        }
-        return false;
+        return outcomes.stream().anyMatch(TestOutcome::isDataDriven);
     }
 
     public int getTotalDataRows() {
-        int total = 0;
-        for(TestOutcome outcome : outcomes) {
-            total += (outcome.getDataTable() != null) ? outcome.getDataTable().getSize() : 0;
-        }
-        return total;
+        return outcomes.stream()
+                .mapToInt(TestOutcome::getDataTableRowCount)
+                .sum();
     }
 
     public TestOutcomeMatcher findMatchingTags() {
@@ -884,8 +844,8 @@ new HashMap<>();
     public static final class TestOutcomeMatcher {
 
         private final TestOutcomes outcomes;
-        private Optional<List<Matcher<String>>> nameMatcher = Optional.absent();
-        private Optional<Matcher<String>> typeMatcher = Optional.absent();
+        private List<Matcher<String>> nameMatcher = null;
+        private Matcher<String> typeMatcher = null;
 
         public TestOutcomeMatcher(TestOutcomes outcomes) {
             this.outcomes = outcomes;
@@ -893,14 +853,12 @@ new HashMap<>();
 
         @SuppressWarnings("unchecked")
         public TestOutcomeMatcher withName(Matcher<String> nameMatcher) {
-            List<Matcher<String>> matchers = Lists.newArrayList(nameMatcher);
-            this.nameMatcher = Optional.of(matchers);
+            this.nameMatcher = Lists.newArrayList(nameMatcher);
             return this;
         }
 
         public TestOutcomeMatcher withNameIn(List<Matcher<String>>  nameMatchers) {
-            List<Matcher<String>> matchers = Lists.newArrayList(nameMatchers);
-            this.nameMatcher = Optional.of(matchers);
+            this.nameMatcher = Lists.newArrayList(nameMatchers);
             return this;
         }
 
@@ -909,7 +867,7 @@ new HashMap<>();
         }
 
         public TestOutcomeMatcher withType(Matcher<String> typeMatcher) {
-            this.typeMatcher = Optional.of(typeMatcher);
+            this.typeMatcher = typeMatcher;
             return this;
         }
 
@@ -918,24 +876,21 @@ new HashMap<>();
         }
 
         public List<TestTag> list() {
-            List<TestTag> matches = Lists.newArrayList();
-            for(TestTag tag : outcomes.getTags()) {
-                if (compatibleTag(tag)) {
-                    matches.add(tag);
-                }
-            }
-            Collections.sort(matches);
-            return matches;
+            return outcomes.getTags().stream()
+                    .filter(this::compatibleTag)
+                    .sorted()
+                    .collect(Collectors.toList());
         }
 
         private boolean compatibleTag(TestTag tag) {
-            if (nameMatcher.isPresent()) {
-                if (!matches(tag.getName(), nameMatcher.get())) {
+
+            if (nameMatcher != null) {
+                if (!matches(tag.getName(), nameMatcher)) {
                     return false;
                 }
             }
-            if (typeMatcher.isPresent()) {
-                if (!typeMatcher.get().matches(tag.getType())) {
+            if (typeMatcher != null) {
+                if (!typeMatcher.matches(tag.getType())) {
                     return false;
                 }
             }

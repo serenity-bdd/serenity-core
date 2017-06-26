@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.reports.html.Formatter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,7 +22,7 @@ class TestOutcomeAnnotationReader {
     }
 
     public static List<String> readIssuesIn(TestOutcome testOutcome) {
-        List<String> taggedIssues = Lists.newArrayList();
+        List<String> taggedIssues = new ArrayList<>();
         if (testOutcome.getTestCase() != null) {
             addMethodLevelIssuesTo(testOutcome, taggedIssues);
             addClassLevelIssuesTo(testOutcome, taggedIssues);
@@ -31,7 +32,7 @@ class TestOutcomeAnnotationReader {
     }
 
     public static List<String> readVersionsIn(TestOutcome testOutcome) {
-        List<String> taggedVersions = Lists.newArrayList();
+        List<String> taggedVersions = new ArrayList<>();
         if (testOutcome.getTestCase() != null) {
             addMethodLevelVersionsTo(testOutcome, taggedVersions);
             addClassLevelVersionsTo(testOutcome, taggedVersions);
@@ -51,10 +52,8 @@ class TestOutcomeAnnotationReader {
     }
 
     private static void addMethodLevelIssuesTo(TestOutcome testOutcome, List<String> issues) {
-        Optional<String> issue = TestAnnotations.forClass(testOutcome.getTestCase()).getAnnotatedIssueForMethod(testOutcome.getName());
-        if (issue.isPresent()) {
-            issues.add(issue.get());
-        }
+        java.util.Optional<String> issue = TestAnnotations.forClass(testOutcome.getTestCase()).getAnnotatedIssueForMethod(testOutcome.getName());
+        issue.ifPresent(issues::add);
         String[] multipleIssues = TestAnnotations.forClass(testOutcome.getTestCase()).getAnnotatedIssuesForMethod(testOutcome.getName());
         issues.addAll(Arrays.asList(multipleIssues));
     }
@@ -75,10 +74,8 @@ class TestOutcomeAnnotationReader {
     }
 
     private static void addMethodLevelVersionsTo(TestOutcome testOutcome, List<String> versions) {
-        Optional<String> version = TestAnnotations.forClass(testOutcome.getTestCase()).getAnnotatedVersionForMethod(testOutcome.getName());
-        if (version.isPresent()) {
-            versions.add(version.get());
-        }
+        java.util.Optional<String> version = TestAnnotations.forClass(testOutcome.getTestCase()).getAnnotatedVersionForMethod(testOutcome.getName());
+        version.ifPresent(versions::add);
     }
 
 

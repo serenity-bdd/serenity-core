@@ -10,10 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The TestFinder class lets you find the Thucydides tests or test methods underneath a given package.
@@ -83,7 +80,7 @@ public abstract class TestFinder {
     }
 
     private List<Method> findMethodsFrom(List<Class<?>> testClasses) {
-        List<Method> methods = Lists.newArrayList();
+        List<Method> methods = new ArrayList<>();
 
         for (Class<?> testClass : testClasses) {
             addEachMatchingTestMethodFrom(testClass).to(methods);

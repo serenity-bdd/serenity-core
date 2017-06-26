@@ -5,12 +5,9 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.filter;
-import static ch.lambdaj.Lambda.having;
-import static ch.lambdaj.Lambda.on;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-import static org.hamcrest.Matchers.startsWith;
 
 public class AddCustomCapabilities {
     private final String prefix;
@@ -32,8 +29,10 @@ public class AddCustomCapabilities {
     }
 
     public void to(DesiredCapabilities capabilities) {
-        List<String> propertiesWithPrefix = filter(having(on(String.class), startsWith(prefix)),
-                environmentVariables.getKeys());
+        List<String> propertiesWithPrefix = environmentVariables.getKeys()
+                .stream()
+                .filter(key -> key.startsWith(prefix))
+                .collect(Collectors.toList());
 
         for(String propertyKey : propertiesWithPrefix) {
             String preparedPropertyKey = getPreparedPropertyKey(propertyKey);

@@ -11,9 +11,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static ch.lambdaj.Lambda.convert;
-import static net.thucydides.core.tags.TagConverters.fromStringsToTestTags;
+import java.util.stream.Collectors;
 
 /**
  * Allows tags to be added via the injected.tag system property.
@@ -37,6 +35,9 @@ public class InjectedTagProvider implements TagProvider, CoreTagProvider {
         if (injectedTagValues.isEmpty()) { return new HashSet<>(); }
 
         List<String> tags = Splitter.on(",").trimResults().splitToList(injectedTagValues);
-        return new HashSet<>(convert(tags, fromStringsToTestTags()));
+
+        return tags.stream()
+                .map(TestTag::withValue)
+                .collect(Collectors.toSet());
     }
 }

@@ -73,7 +73,7 @@ public class ReleaseManager {
     }
 
     private List<Release> flattened(List<Release> releases) {
-        List<Release> flattenedReleases = Lists.newArrayList();
+        List<Release> flattenedReleases = new ArrayList<>();
         for (Release release : releases) {
             flattenedReleases.add(release);
             flattenedReleases.addAll(flattened(release.getChildren()));
@@ -97,7 +97,7 @@ public class ReleaseManager {
     }
 
     private List<Release> extractReleasesFromTestOutcomeAnnotations(TestOutcomes testOutcomes) {
-        List<Release> releases = Lists.newArrayList();
+        List<Release> releases = new ArrayList<>();
         List<TestTag> releaseTags = testOutcomes.findMatchingTags()
                 .withType("version")
                 .withNameIn(matchingNames(releaseTypes.get(0)))
@@ -109,7 +109,7 @@ public class ReleaseManager {
     }
 
     private List<Matcher<String>> matchingNames(String possibleNames) {
-        List<Matcher<String>> matchers = Lists.newArrayList();
+        List<Matcher<String>> matchers = new ArrayList<>();
         List<String> nameCandidates = Splitter.on(":").trimResults().splitToList(possibleNames.toLowerCase());
         for(String nameCandidate : nameCandidates) {
             matchers.add((containsString(nameCandidate)));
@@ -120,7 +120,7 @@ public class ReleaseManager {
     }
 
     public List<RequirementOutcome> enrichRequirementsOutcomesWithReleaseTags(List<? extends RequirementOutcome> outcomes) {
-        List<RequirementOutcome> requirementOutcomes = Lists.newArrayList();
+        List<RequirementOutcome> requirementOutcomes = new ArrayList<>();
         for (RequirementOutcome outcome : outcomes) {
             List<TestOutcome> enrichedOutcomes = enrichOutcomesWithReleaseTags(outcome.getTestOutcomes().getOutcomes());
             requirementOutcomes.add(outcome.withTestOutcomes(TestOutcomes.of(enrichedOutcomes)));
@@ -129,7 +129,7 @@ public class ReleaseManager {
     }
 
     public List<TestOutcome> enrichOutcomesWithReleaseTags(List<? extends TestOutcome> outcomes) {
-        List<TestOutcome> enrichedOutcomes = Lists.newArrayList();
+        List<TestOutcome> enrichedOutcomes = new ArrayList<>();
         for (TestOutcome outcome : outcomes) {
             List<String> releaseVersions = requirementsService.getReleaseVersionsFor(outcome);
             outcome.addTags(releaseTagsFrom(releaseVersions));
@@ -140,7 +140,7 @@ public class ReleaseManager {
     }
 
     private List<TestTag> releaseTagsFrom(List<String> releaseVersions) {
-        List<TestTag> tags = Lists.newArrayList();
+        List<TestTag> tags = new ArrayList<>();
         for (String releaseVersion : releaseVersions) {
             tags.add(TestTag.withName(releaseVersion).andType("version"));
         }
@@ -161,7 +161,7 @@ public class ReleaseManager {
                     .withType("version")
                     .withNameIn(matchingNames(childReleaseType))
                     .list();
-            List<Release> children = Lists.newArrayList();
+            List<Release> children = new ArrayList<>();
             for (TestTag tag : childReleaseTags) {
                 children.add(extractReleaseFor(tag, testOutcomes.withTag(tag), level + 1, ancestors));
             }
@@ -191,7 +191,7 @@ public class ReleaseManager {
     }
 
     private List<Release> extractReleasesOfTypeLevel(List<List<String>> releaseVersions) {
-        List<Release> releases = Lists.newArrayList();
+        List<Release> releases = new ArrayList<>();
         Set<String> distinctReleases = getDistinct(releaseVersions);
         for (String release : distinctReleases) {
             if (releaseIsOfType(release, releaseTypes.get(0))) {
@@ -238,12 +238,12 @@ public class ReleaseManager {
                                                     String release,
                                                     int level,
                                                     List<Release> parents) {
-        List<Release> subReleases = Lists.newArrayList();
+        List<Release> subReleases = new ArrayList<>();
         if (level < releaseTypes.size()) {
             for (List<String> releaseVersionSet : releaseVersions) {
                 if (releaseVersionSet.contains(release)) {
                     for (String subRelease : releasesOfType(releaseTypes.get(level), releaseVersionSet)) {
-                        List<Release> ancestors = Lists.newArrayList();
+                        List<Release> ancestors = new ArrayList<>();
                         ancestors.add(lightweightReleaseNamed(release));
                         List<Release> subSubReleases = extractSubReleasesOfLevel(releaseVersions,
                                                                                  subRelease,
@@ -266,7 +266,7 @@ public class ReleaseManager {
     }
 
     private List<String> releasesOfType(String type, List<String> releaseVersionSet) {
-        List<String> matchingReleases = Lists.newArrayList();
+        List<String> matchingReleases = new ArrayList<>();
         for (String release : releaseVersionSet) {
             if (releaseIsOfType(release, type)) {
                 matchingReleases.add(release);

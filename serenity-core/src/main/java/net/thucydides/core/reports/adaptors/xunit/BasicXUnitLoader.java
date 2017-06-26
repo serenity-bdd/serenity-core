@@ -15,6 +15,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BasicXUnitLoader implements XUnitLoader {
@@ -22,7 +23,7 @@ public class BasicXUnitLoader implements XUnitLoader {
     @Override
     public List<TestSuite> loadFrom(final File xUnitReport) throws IOException {
 
-        List<TestSuite> testSuites = Lists.newArrayList();
+        List<TestSuite> testSuites = new ArrayList<>();
         Document doc = parseDocument(xUnitReport);
         NodeList testSuiteElements = doc.getElementsByTagName("testsuite");
         shouldHaveAtLeastOneTestSuite(testSuiteElements, xUnitReport);
@@ -48,7 +49,7 @@ public class BasicXUnitLoader implements XUnitLoader {
 
     private List<TestCase> testCasesFrom(Element testSuiteElement) {
         NodeList testCaseElements = testSuiteElement.getElementsByTagName("testcase");
-        List<TestCase> testCases = Lists.newArrayList();
+        List<TestCase> testCases = new ArrayList<>();
         for (int i = 0; i < testCaseElements.getLength(); i++) {
             testCases.add(testCaseFrom(testCaseElements.item(i)));
         }

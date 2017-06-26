@@ -5,9 +5,8 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.targets.Target;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
 
 public class Presence extends TargetedUIState<Boolean> {
 
@@ -24,6 +23,8 @@ public class Presence extends TargetedUIState<Boolean> {
     }
 
     public List<Boolean> resolveAll() {
-        return extract(target.resolveAllFor(actor), on(WebElementFacade.class).isPresent());
+        return target.resolveAllFor(actor).stream()
+                .map(WebElementFacade::isPresent)
+                .collect(Collectors.toList());
     }
 }

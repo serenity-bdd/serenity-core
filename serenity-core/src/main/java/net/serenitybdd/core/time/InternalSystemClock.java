@@ -1,8 +1,9 @@
 package net.serenitybdd.core.time;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.time.ZonedDateTime;
 
 /**
  * Object that encapsulates system clock operations.
@@ -32,7 +33,7 @@ public class InternalSystemClock implements SystemClock {
     /**
      * Find the current system time.
      */
-    public DateTime getCurrentTime() {
-        return new DateTime();
+    public ZonedDateTime getCurrentTime() {
+        return ZonedDateTime.now();
     }
 }

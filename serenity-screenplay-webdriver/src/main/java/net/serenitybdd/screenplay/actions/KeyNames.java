@@ -1,17 +1,13 @@
 package net.serenitybdd.screenplay.actions;
 
-import com.google.common.collect.Lists;
 import org.openqa.selenium.Keys;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class KeyNames {
     public static List<String> of(List<Keys> keys) {
-        List<String> pressedKeys = Lists.newArrayList();
-        for(Keys key : keys) {
-            pressedKeys.add(key.name());
-        }
-        return pressedKeys;
+        return keys.stream().map(Enum::name).collect(Collectors.toList());
     }
 
     public static List<String> lastTwoOf(List<Keys> keys) {

@@ -10,13 +10,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.filter;
-import static org.hamcrest.CoreMatchers.startsWith;
-
-/**
- * Created by john on 28/10/2014.
- */
 public class AppiumConfiguration {
 
     private static final String DEFAULT_URL = "http://127.0.0.1:4723/wd/hub";
@@ -66,7 +61,12 @@ public class AppiumConfiguration {
 
     private Properties appiumPropertiesFrom(EnvironmentVariables environmentVariables) {
         Properties appiumProperties = new Properties();
-        List<String> appiumKeys = filter(startsWith("appium."), environmentVariables.getKeys());
+        List<String> appiumKeys =
+                environmentVariables.getKeys()
+                        .stream()
+                        .filter(key -> key.startsWith("appium."))
+                        .collect(Collectors.toList());
+
         for (String key : appiumKeys) {
             String value = isAppProperty(key) ? appPathFrom(environmentVariables.getProperty(key)) : environmentVariables.getProperty(key);
             String simplifiedKey = key.replace("appium.", "");

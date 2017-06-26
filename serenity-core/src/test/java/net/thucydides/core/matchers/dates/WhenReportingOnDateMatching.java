@@ -38,8 +38,8 @@ public class WhenReportingOnDateMatching {
                 {new DateTimeIsBeforeMatcher(januaryOne2000), "a date that is before 1 Jan 2000 01:00:00"},
                 {new DateTimeIsBetweenMatcher(januaryOne2000, januaryOne2001), "a date that is between 1 Jan 2000 01:00:00 and 1 Jan 2001 01:00:00"},
                 {new DateTimeIsSameAsMatcher(januaryOne2000), "a date that is 1 Jan 2000 01:00:00"},
-                {new DateCollectionContainsSameDatesMatcher(dates),         "a collection of dates containing [1 Jan 2000 01:00:00, 1 Jan 2001 01:00:00]"},
-                {new DateTimeCollectionContainsSameDatesMatcher(dateTimes), "a collection of dates containing [1 Jan 2000 01:00:00, 1 Jan 2001 01:00:00]"}}
+                {new DateCollectionContainsSameDatesMatcher(dates),         "a collection of dates containing [<Sat Jan 01 01:00:00 GMT 2000>,<Mon Jan 01 01:00:00 GMT 2001>]"},
+                {new DateTimeCollectionContainsSameDatesMatcher(dateTimes), "a collection of dates containing [<2000-01-01T01:00:00.000Z>,<2001-01-01T01:00:00.000Z>]"}}
     );
     }
 

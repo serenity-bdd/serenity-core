@@ -9,6 +9,7 @@ import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,10 +37,10 @@ public class Requirement implements Comparable {
 
     public Requirement() {
         // Used by Jackson
-        children = Lists.newArrayList();
-        examples = Lists.newArrayList();
-        releaseVersions = Lists.newArrayList();
-        customFields = Lists.newArrayList();
+        children = new ArrayList<>();
+        examples = new ArrayList<>();
+        releaseVersions = new ArrayList<>();
+        customFields = new ArrayList<>();
     }
 
     protected Requirement(String name, String id, String displayName, String cardNumber, String parent, String type, CustomFieldValue narrative,
@@ -213,7 +214,7 @@ public class Requirement implements Comparable {
     }
 
     public List<Requirement> getNestedChildren() {
-        List<Requirement> nestedChildren = Lists.newArrayList();
+        List<Requirement> nestedChildren = new ArrayList<>();
         for(Requirement child : children) {
             nestedChildren.add(child);
             nestedChildren.addAll(child.getNestedChildren());
@@ -295,7 +296,7 @@ public class Requirement implements Comparable {
     }
 
     public List<String> getCustomFields() {
-        List<String> customFieldNames = Lists.newArrayList();
+        List<String> customFieldNames = new ArrayList<>();
         for(CustomFieldValue field : customFields) {
             customFieldNames.add(field.getName());
         }

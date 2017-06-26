@@ -19,9 +19,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 
 public class JSONTestOutcomeReporter implements AcceptanceTestReporter, AcceptanceTestLoader {
 
@@ -93,21 +91,21 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
     }
 
     @Override
-    public Optional<TestOutcome> loadReportFrom(final Path reportFile) {
+    public java.util.Optional<TestOutcome> loadReportFrom(final Path reportFile) {
         return loadReportFrom(reportFile.toFile());
     }
 
     @Override
-    public Optional<TestOutcome> loadReportFrom(final File reportFile) {
+    public java.util.Optional<TestOutcome> loadReportFrom(final File reportFile) {
         if (!reportFile.getName().toLowerCase().endsWith(".json")) {
-            return Optional.absent();
+            return java.util.Optional.empty();
         }
         try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(reportFile), encoding))) {
             return jsonConverter.fromJson(in);
         } catch (Throwable e) {
             LOGGER.warn("This file was not a valid JSON Serenity test report: " + reportFile.getName()
                     + System.lineSeparator() + e.getMessage());
-            return Optional.absent();
+            return java.util.Optional.empty();
         }
     }
 
@@ -119,10 +117,10 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
     @Override
     public List<TestOutcome> loadReportsFrom(File outputDirectory) {
         File[] reportFiles = getAllJsonFilesFrom(outputDirectory);
-        List<TestOutcome> testOutcomes = Lists.newArrayList();
+        List<TestOutcome> testOutcomes = new ArrayList<>();
         if (reportFiles != null) {
             for (File reportFile : reportFiles) {
-                testOutcomes.addAll(loadReportFrom(reportFile).asSet());
+                testOutcomes.addAll(loadReportFrom(reportFile).map(Collections::singleton).orElse(Collections.emptySet()));
             }
         }
         return testOutcomes;

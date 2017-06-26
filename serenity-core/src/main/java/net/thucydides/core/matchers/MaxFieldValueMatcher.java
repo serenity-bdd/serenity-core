@@ -1,12 +1,11 @@
 package net.thucydides.core.matchers;
 
-import ch.lambdaj.function.convert.Converter;
 import org.hamcrest.Matcher;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.convert;
 import static java.util.Collections.max;
 import static net.thucydides.core.matchers.dates.BeanFields.fieldValueIn;
 
@@ -27,21 +26,16 @@ class MaxFieldValueMatcher implements BeanCollectionMatcher {
     public <T> boolean matches(Collection<T> elements) {
         Comparable maximumValue = null;
         try {
-            List<Comparable> fieldValues = convert(elements, toComparable());
+            List<Comparable> fieldValues = elements.stream()
+                    .map(element -> (Comparable) fieldValueIn(element).forField(fieldName))
+                    .collect(Collectors.toList());
+
             maximumValue = max(fieldValues);
+
         } catch (Exception e) {
             throw new IllegalArgumentException("Could not find property value for " + fieldName);
         }
         return valueMatcher.matches(maximumValue);
-    }
-
-    private <T> Converter<T, Comparable> toComparable() {
-        return new Converter<T, Comparable>() {
-            @Override
-            public Comparable convert(T bean) {
-                return (Comparable) fieldValueIn(bean).forField(fieldName);
-            }
-        };
     }
 
     @Override

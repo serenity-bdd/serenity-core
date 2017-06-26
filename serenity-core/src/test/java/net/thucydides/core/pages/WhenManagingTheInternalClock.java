@@ -1,14 +1,16 @@
 package net.thucydides.core.pages;
 
 import net.serenitybdd.core.time.InternalSystemClock;
-import org.joda.time.DateTime;
 import org.junit.Test;
+
+import java.time.ZonedDateTime;
 
 import static net.thucydides.core.matchers.dates.DateMatchers.isAfter;
 import static net.thucydides.core.matchers.dates.DateMatchers.isBefore;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertTrue;
 
 public class WhenManagingTheInternalClock {
 
@@ -38,12 +40,12 @@ public class WhenManagingTheInternalClock {
     public void the_system_date_provider_uses_the_system_clock_to_find_the_current_date() {
         InternalSystemClock clock = new InternalSystemClock();
 
-        DateTime before = new DateTime();
-        DateTime systemDate = clock.getCurrentTime();
-        DateTime after = new DateTime();
+        ZonedDateTime before = ZonedDateTime.now().minusSeconds(1);
+        ZonedDateTime systemDate = clock.getCurrentTime();
+        ZonedDateTime after = ZonedDateTime.now().plusSeconds(1);
 
-        assertThat(before, not(isAfter(systemDate)));
-        assertThat(after, not(isBefore(systemDate)));
+        assertTrue(before.isBefore(systemDate));
+        assertTrue(after.isAfter(systemDate));
     }
 
 

@@ -129,7 +129,7 @@ public enum SupportedWebDriver {
     }
 
     private static String getSynonymes() {
-        List<String> synonymeValues = Lists.newArrayList();
+        List<String> synonymeValues = new ArrayList<>();
         for(SupportedWebDriver supportedWebDriver : values()) {
             synonymeValues.addAll(supportedWebDriver.synonyms);
         }

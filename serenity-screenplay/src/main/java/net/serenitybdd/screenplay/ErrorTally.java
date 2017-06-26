@@ -1,54 +1,46 @@
 package net.serenitybdd.screenplay;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
 import net.serenitybdd.core.Serenity;
 
-import java.util.List;
+import static io.vavr.API.List;
+import io.vavr.collection.List;
+import static java.lang.String.join;
 
-public class ErrorTally {
+class ErrorTally {
 
-        private final EventBusInterface eventBusInterface;
+    private final EventBusInterface eventBusInterface;
 
-        private final List<FailedConsequence> errors;
+    private List<FailedConsequence> errors;
 
-        public ErrorTally(EventBusInterface eventBusInterface) {
-            this.eventBusInterface = eventBusInterface;
-            this.errors = Lists.newArrayList();
+    ErrorTally(EventBusInterface eventBusInterface) {
+        this.eventBusInterface = eventBusInterface;
+        this.errors = List();
+    }
+
+    void recordError(Consequence<?> consequence, Throwable cause) {
+        errors = errors.append(new FailedConsequence(consequence, cause));
+        eventBusInterface.reportStepFailureFor(consequence, cause);
+    }
+
+    void reportAnyErrors() {
+        if (errors.isEmpty()) {
+            return;
         }
-
-        public void recordError(Consequence consequence, Throwable cause) {
-            errors.add(new FailedConsequence(consequence, cause));
-            eventBusInterface.reportStepFailureFor(consequence, cause);
+        if (Serenity.shouldThrowErrorsImmediately()) {
+            throwSummaryExceptionFrom(errorCausesIn(errors));
         }
-
-        public void reportAnyErrors() {
-            if (errors.isEmpty()) {
-                return;
-            }
-            if (Serenity.shouldThrowErrorsImmediately()) {
-                throwSummaryExceptionFrom(errorCausesIn(errors));
-            }
-        }
+    }
 
     private void throwSummaryExceptionFrom(List<Throwable> errorCauses) {
-        String overallErrorMessage = Joiner.on(System.lineSeparator()).join(errorMessagesIn(errorCauses));
+        String overallErrorMessage = join(System.lineSeparator(), errorMessagesIn(errorCauses));
         throw new AssertionError(overallErrorMessage);
     }
 
     private List<Throwable> errorCausesIn(List<FailedConsequence> failedConsequences) {
-        List<Throwable> causes = Lists.newArrayList();
-        for(FailedConsequence consequence : failedConsequences) {
-            causes.add(consequence.getCause());
-        }
-        return causes;
+        return failedConsequences.map(FailedConsequence::getCause);
     }
 
     private List<String> errorMessagesIn(List<Throwable> errorCauses) {
-        List<String> errorMessages = Lists.newArrayList();
-        for(Throwable cause : errorCauses) {
-            errorMessages.add(cause.getMessage());
-        }
-        return errorMessages;
+        return errorCauses.map(Throwable::getMessage);
     }
 }

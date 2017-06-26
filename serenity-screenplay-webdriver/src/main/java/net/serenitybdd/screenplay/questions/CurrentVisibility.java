@@ -5,9 +5,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.targets.Target;
 
 import java.util.List;
-
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
+import java.util.stream.Collectors;
 
 public class CurrentVisibility extends TargetedUIState<Boolean> {
 
@@ -24,6 +22,8 @@ public class CurrentVisibility extends TargetedUIState<Boolean> {
     }
 
     public List<Boolean> resolveAll() {
-        return extract(target.resolveAllFor(actor), on(WebElementFacade.class).isCurrentlyVisible());
+        return target.resolveAllFor(actor).stream()
+                .map(WebElementFacade::isCurrentlyVisible)
+                .collect(Collectors.toList());
     }
 }

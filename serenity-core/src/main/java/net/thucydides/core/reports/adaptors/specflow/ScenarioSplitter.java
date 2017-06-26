@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class ScenarioSplitter {
     }
 
     public List<SpecflowScenario> split() {
-        List<SpecflowScenario> scenarios = Lists.newArrayList();
+        List<SpecflowScenario> scenarios = new ArrayList<>();
 
         String currentTitle = null;
         SpecflowScenario currentScenario = null;
@@ -60,14 +61,14 @@ public class ScenarioSplitter {
     }
 
     private List<List<String>> splitScenarios(List<String> outputLines) {
-        List<List<String>> scenarios = Lists.newArrayList();
+        List<List<String>> scenarios = new ArrayList<>();
         List<String> current = null;
         for (String line : outputLines) {
             if (isTitle(line)) {
                 if (current != null) {
                     scenarios.add(current);
                 }
-                current = Lists.newArrayList();
+                current = new ArrayList<>();
                 current.add(line);
             } else {
                 current.add(line);

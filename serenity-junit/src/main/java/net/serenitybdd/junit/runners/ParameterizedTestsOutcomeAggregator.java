@@ -1,15 +1,12 @@
 package net.serenitybdd.junit.runners;
 
-import com.google.common.collect.Lists;
 import net.thucydides.core.model.*;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.runner.Runner;
 import com.google.common.base.Optional;
 
 import java.util.*;
-
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
+import java.util.stream.Collectors;
 
 public class ParameterizedTestsOutcomeAggregator {
     private final SerenityParameterizedRunner serenityParameterizedRunner;
@@ -27,7 +24,7 @@ public class ParameterizedTestsOutcomeAggregator {
         List<TestOutcome> allOutcomes = getTestOutcomesForAllParameterSets();
 
         if (allOutcomes.isEmpty()) {
-            return Lists.newArrayList();
+            return new ArrayList<>();
         } else {
             return  aggregatedScenarioOutcomes(allOutcomes);
         }
@@ -106,7 +103,12 @@ public class ParameterizedTestsOutcomeAggregator {
     }
 
     private TestResult overallResultFrom(List<DataTableRow> rows) {
-        return TestResultList.overallResultFrom(extract(rows, on(DataTableRow.class).getResult()));
+
+        List<TestResult> resultsOfEachRow = rows.stream()
+                .map(DataTableRow::getResult)
+                .collect(Collectors.toList());
+
+        return TestResultList.overallResultFrom(resultsOfEachRow);
     }
 
     private String normalizeTestStepDescription(String description, int index) {

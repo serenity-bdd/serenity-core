@@ -12,6 +12,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FailureAnalysisConfiguration {
@@ -20,22 +21,22 @@ public class FailureAnalysisConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FailureAnalysisConfiguration.class);
 
-    private final List<Class<?>> DEFAULT_FAILURE_TYPES = Lists.newArrayList();
+    private final List<Class<?>> DEFAULT_FAILURE_TYPES = new ArrayList<>();
     {
         DEFAULT_FAILURE_TYPES.addAll(ImmutableList.of(AssertionError.class, CausesAssertionFailure.class));
     }
 
-    private final List<Class<?>> DEFAULT_COMPROMISED_TYPES = Lists.newArrayList();
+    private final List<Class<?>> DEFAULT_COMPROMISED_TYPES = new ArrayList<>();
     {
         DEFAULT_COMPROMISED_TYPES.addAll(ImmutableList.of(CausesCompromisedTestFailure.class));
     }
 
-    private final List<Class<?>> DEFAULT_PENDING_TYPES = Lists.newArrayList();
+    private final List<Class<?>> DEFAULT_PENDING_TYPES = new ArrayList<>();
     {
         DEFAULT_PENDING_TYPES.addAll(ImmutableList.of(PendingStepException.class, PendingException.class));
     }
 
-    private final List<Class<?>> DEFAULT_ERROR_TYPES = Lists.newArrayList();
+    private final List<Class<?>> DEFAULT_ERROR_TYPES = new ArrayList<>();
     {
         DEFAULT_ERROR_TYPES.addAll(ImmutableList.of(Error.class));
     }
@@ -109,7 +110,7 @@ public class FailureAnalysisConfiguration {
 
     private List<Class<?>> typesDefinedIn(ThucydidesSystemProperty typeListProperty, EnvironmentVariables environmentVariables) {
 
-        List<Class<?>> definedTypes  = Lists.newArrayList();
+        List<Class<?>> definedTypes  = new ArrayList<>();
         List<String> classNames = Splitter.on(",")
                 .trimResults()
                 .omitEmptyStrings()

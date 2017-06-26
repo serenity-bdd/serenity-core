@@ -3,6 +3,7 @@ package net.thucydides.core.requirements;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -28,14 +29,14 @@ public class RequirementsPath {
 
     public static List<String> pathElements(String path) {
         if (path == null) {
-            return Lists.newArrayList();
+            return new ArrayList<>();
         }
         return toList(Splitter.on(PATH_SEPARATORS).omitEmptyStrings().trimResults().split(path).iterator());
     }
 
     public static List<String> fileSystemPathElements(String path) {
         if (path == null) {
-            return Lists.newArrayList();
+            return new ArrayList<>();
         }
         return toList(Splitter.on(FILE_SYSTEM_PATH_SEPARATORS).omitEmptyStrings().trimResults().split(path).iterator());
     }

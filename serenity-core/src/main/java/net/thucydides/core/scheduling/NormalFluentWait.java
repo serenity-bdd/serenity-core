@@ -4,6 +4,8 @@ import org.openqa.selenium.support.ui.Clock;
 import org.openqa.selenium.support.ui.Sleeper;
 import org.openqa.selenium.support.ui.SystemClock;
 
+import java.util.function.Function;
+
 public class NormalFluentWait<T> extends ThucydidesFluentWait<T> {
 
     public NormalFluentWait(T input) {

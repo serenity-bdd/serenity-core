@@ -1,12 +1,12 @@
 package net.thucydides.core.requirements.model;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.List;
+import java.util.Optional;
 
 import static net.thucydides.core.requirements.RequirementsPath.fileSystemPathElements;
 
@@ -45,7 +45,7 @@ public class NarrativeReader {
     public Optional<Narrative> loadFrom(File directory, int requirementsLevel) {
         File[] narrativeFiles = directory.listFiles(calledNarrativeDotTxt());
         if (narrativeFiles == null || narrativeFiles.length == 0) {
-            return Optional.absent();
+            return Optional.empty();
         } else {
             return narrativeLoadedFrom(narrativeFiles[0], requirementsLevel);
         }
@@ -58,7 +58,7 @@ public class NarrativeReader {
         } else if (storyFile.getName().endsWith(".feature")) {
             return featureNarrativeLoadedFrom(storyFile);
         } else {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

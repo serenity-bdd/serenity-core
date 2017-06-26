@@ -52,7 +52,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
         assertThat(testOutcome.get().getIssues(), hasItems("#123", "#456", "#789"));
         assertThat(testOutcome.get().getStartTime(), notNullValue());
         assertThat(testOutcome.get().getDescription(), is("Some description"));
@@ -76,7 +76,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
         assertThat(testOutcome.get().isManual(), is(true));
     }
 
@@ -98,7 +98,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
         assertThat(testOutcome.get().getQualifier().get(), is("a qualifier"));
         assertThat(testOutcome.get().getTitle(), containsString("[a qualifier]"));
     }
@@ -121,7 +121,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
         assertThat(testOutcome.get().getQualifier().get(), is("a qualifier with \n a new line"));
         assertThat(testOutcome.get().getTitle(), containsString("[a qualifier with \n a new line]"));
     }
@@ -143,7 +143,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
         assertThat(testOutcome.get().getTags().size(), is(2));
     }
 
@@ -183,7 +183,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
         DataTable table = testOutcome.get().getDataTable();
         assertThat(table.getHeaders(), hasItems("firstName","lastName","age"));
         assertThat(table.getRows().size(), is(2));
@@ -230,7 +230,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
         DataTable table = testOutcome.get().getDataTable();
         assertThat(table.getHeaders(), hasItems("firstName","lastName","age"));
         assertThat(table.getRows().size(), is(2));
@@ -257,7 +257,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
         assertThat(testOutcome.get().getTitle(), is("Should do this"));
         assertThat(testOutcome.get().getVersions(),hasItem("Release 1"));
         assertThat(testOutcome.get().getVersions(),hasItem("Version 1.1"));
@@ -276,7 +276,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
         assertThat(testOutcome.get().getTitle(), is("Should do this"));
     }
 
@@ -296,7 +296,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
 
         TestStep testStep = (TestStep) testOutcome.get().getTestSteps().get(0);
         assertThat(testOutcome.get().getTestSteps().size(), is(1));
@@ -322,7 +322,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
 
         TestStep testStep = (TestStep) testOutcome.get().getTestSteps().get(0);
         assertThat(testOutcome.get().getTestSteps().size(), is(1));
@@ -346,7 +346,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
         assertThat(testOutcome.get().getUserStory(), is(Story.withId("net.thucydides.core.reports.integration.WhenGeneratingAnXMLReport.AUserStory", "A user story")));
     }
 
@@ -365,7 +365,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
         testOutcome.get().getFeature();
 
         ApplicationFeature expectedFeature = new ApplicationFeature("myapp.myfeatures.SomeFeature", "Some feature");
@@ -389,7 +389,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
         assertThat(testOutcome.get().getSessionId(), is("1234"));
     }
 
@@ -408,7 +408,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
         assertThat(testOutcome.get().getTestSource(), is("JUnit"));
     }
     
@@ -437,7 +437,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
 
         assertThat(testOutcome.get().getTitle(), is("A nested test case"));
         
@@ -462,7 +462,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
 
         assertThat(testOutcome.get().getTitle(), is("A nested test case"));
         
@@ -487,7 +487,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
 
         assertThat(testOutcome.get().getTitle(), is("A simple test case"));
         assertThat(testOutcome.get().getTestSteps().size(), is(2));
@@ -510,7 +510,7 @@ public class WhenReadingAnXMLReport {
         File report = temporaryDirectory.newFile("saved-report.xml");
         FileUtils.writeStringToFile(report, storedReportXML);
 
-        Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
+        java.util.Optional<TestOutcome> testOutcome = outcomeReporter.loadReportFrom(report);
 
         assertThat(testOutcome.get().getTitle(), is("Search for news [euro]"));
         assertThat(testOutcome.get().getTitleWithLinks(), is("Search for news [euro]"));

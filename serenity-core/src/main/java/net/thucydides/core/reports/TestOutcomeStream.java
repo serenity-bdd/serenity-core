@@ -1,6 +1,5 @@
 package net.thucydides.core.reports;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.json.JSONTestOutcomeReporter;
 
@@ -11,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static net.thucydides.core.reports.TestOutcomeStream.NextItemIs.*;
 
@@ -20,7 +20,7 @@ public class TestOutcomeStream implements Iterable<TestOutcome>, Closeable {
     private final Iterator<Path> directoryStreamIterator;
     private final AcceptanceTestLoader loader;
 
-    protected TestOutcomeStream(Path sourceDirectory) throws IOException {
+    private TestOutcomeStream(Path sourceDirectory) throws IOException {
         this.directoryStream = Files.newDirectoryStream(sourceDirectory);
         this.directoryStreamIterator = Files.newDirectoryStream(sourceDirectory).iterator();
         this.loader = new JSONTestOutcomeReporter();
@@ -37,8 +37,9 @@ public class TestOutcomeStream implements Iterable<TestOutcome>, Closeable {
 
     @Override
     public Iterator<TestOutcome> iterator() {
-        return new Iterator() {
+        return new Iterator<TestOutcome>() {
 
+            @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
             Optional<TestOutcome> nextOutcome;
 
             NextItemIs nextItemIs = Unknown;
@@ -54,27 +55,23 @@ public class TestOutcomeStream implements Iterable<TestOutcome>, Closeable {
                 nextItemIs = ReadyToRetrieve;
             }
 
-            private Optional<TestOutcome> findNextValidTestOutcomeIn(Iterator<Path> directoryStream) {
+            private java.util.Optional<TestOutcome> findNextValidTestOutcomeIn(Iterator<Path> directoryStream) {
                 while (directoryStream.hasNext()) {
-                    Optional<TestOutcome> nextOutcomeFromStream = loader.loadReportFrom(directoryStream.next());
+                    java.util.Optional<TestOutcome> nextOutcomeFromStream = loader.loadReportFrom(directoryStream.next());
                     if (nextOutcomeFromStream.isPresent()) {
                         return nextOutcomeFromStream;
                     }
                 }
-                return Optional.absent();
+                return java.util.Optional.empty();
             }
 
             @Override
-            public Object next() {
+            public TestOutcome next() {
                 if (nextItemIs == Unknown) {
                     fetchNext();
                 }
-
-                if (!nextOutcome.isPresent()) {
-                    throw new NoSuchElementException();
-                }
                 nextItemIs = Retrieved;
-                return nextOutcome.get();
+                return nextOutcome.orElseThrow(NoSuchElementException::new);
             }
 
             @Override

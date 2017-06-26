@@ -7,6 +7,8 @@ import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import spock.lang.Specification
 
+import java.util.function.Supplier
+
 import static net.thucydides.core.reports.matchers.TestOutcomeMatchers.*
 import static net.thucydides.core.util.TestResources.directoryInClasspathCalled
 import static org.junit.matchers.JUnitMatchers.everyItem
@@ -88,7 +90,9 @@ class WhenProcessingTestOutcomes extends Specification {
 
     def "should list all the tags of a single type for the test outcomes"() {
         given:
-            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.XML).from(directoryInClasspathCalled("/tagged-test-outcomes"));
+            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes()
+                                                         .inFormat(OutcomeFormat.XML)
+                                                         .from(directoryInClasspathCalled("/tagged-test-outcomes"));
         when:
             def tags = testOutcomes.getTagsOfType 'feature'
         then:
@@ -113,24 +117,17 @@ class WhenProcessingTestOutcomes extends Specification {
             tagTypes == ["epic","story"] as Set
     }
 
-    def "should list tests in alphabetical order"() {
-        given:
-            TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.XML).from(directoryInClasspathCalled("/tagged-test-outcomes"));
-        when:
-            def tests = testOutcomes.getTests()
-        then:
-            tests.size() == 3
-            tests[0].getTitle() <= tests[1].getTitle()
-            tests[1].getTitle() <= tests[2].getTitle()
-    }
-
     def "should list tests for a given tag type"() {
         given:
             TestOutcomes testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.XML).from(directoryInClasspathCalled("/tagged-test-outcomes"));
         when:
             def tests = testOutcomes.withTagType("feature").getTests()
         then:
-            tests everyItem(havingTagType("feature"))
+            tests.each {
+                it.tags.find {
+                    tag -> tag.getType().equalsIgnoreCase("feature")
+                }
+            }
     }
 
     def "should list tests for a given issue using a tag notation"() {

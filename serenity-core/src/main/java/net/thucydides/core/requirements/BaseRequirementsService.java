@@ -47,7 +47,7 @@ public abstract class BaseRequirementsService implements RequirementsService {
     }
 
     protected List<Requirement> addParentsTo(List<Requirement> requirements, String parent) {
-        List<Requirement> augmentedRequirements = Lists.newArrayList();
+        List<Requirement> augmentedRequirements = new ArrayList<>();
         for(Requirement requirement : requirements) {
             List<Requirement> children = requirement.hasChildren()
                     ? addParentsTo(requirement.getChildren(),requirement.getName()) : NO_REQUIREMENTS;

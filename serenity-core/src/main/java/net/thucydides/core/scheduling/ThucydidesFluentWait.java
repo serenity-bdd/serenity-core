@@ -1,6 +1,5 @@
 package net.thucydides.core.scheduling;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import net.thucydides.core.steps.StepEventBus;
 import org.openqa.selenium.TimeoutException;
@@ -13,6 +12,7 @@ import org.openqa.selenium.support.ui.Wait;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -48,6 +48,7 @@ public abstract class ThucydidesFluentWait<T> implements Wait<T> {
         return sleeper;
     }
 
+    @Override
     public <V> V until(Function<? super T, V> isTrue) {
         long end = getClock().laterBy(timeout.in(MILLISECONDS));
         RuntimeException lastException = null;

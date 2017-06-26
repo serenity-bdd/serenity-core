@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.convert;
@@ -30,7 +31,7 @@ public class SpecflowAdaptor extends FilebasedOutcomeAdaptor {
     @Override
     public List<TestOutcome> loadOutcomesFrom(File source) throws IOException {
         if (source.isDirectory()) {
-            List<TestOutcome> outcomes = Lists.newArrayList();
+            List<TestOutcome> outcomes = new ArrayList<>();
             for(File outputFile : source.listFiles()) {
                 outcomes.addAll(outcomesFromFile(outputFile));
             }
@@ -88,7 +89,7 @@ public class SpecflowAdaptor extends FilebasedOutcomeAdaptor {
 
     private List<String> headersFrom(SpecflowScenarioTitleLine titleLine) {
         // TODO: This should eventually come from the .feature file
-        List<String> headers = Lists.newArrayList();
+        List<String> headers = new ArrayList<>();
         for(int i = 0; i < titleLine.getArguments().size(); i++) {
             headers.add(Character.toString( (char) (65 + i)));
         }
@@ -96,7 +97,7 @@ public class SpecflowAdaptor extends FilebasedOutcomeAdaptor {
     }
 
     private List<TestStep> stepsFrom(List<String> scenarioOutput) {
-        List<TestStep> discoveredSteps = Lists.newArrayList();
+        List<TestStep> discoveredSteps = new ArrayList<>();
         ScenarioStepReader stepReader = new ScenarioStepReader();
         List<String> lines = Lists.newArrayList(scenarioOutput);
         while (!lines.isEmpty()) {
@@ -106,7 +107,7 @@ public class SpecflowAdaptor extends FilebasedOutcomeAdaptor {
     }
 
     private List<List<String>> scenarioOutputsFrom(List<String> outputLines) {
-        List<List<String>> scenarios = Lists.newArrayList();
+        List<List<String>> scenarios = new ArrayList<>();
 
         List<String> currentScenario = null;
         SpecflowScenarioTitleLine currentTitle = null;
@@ -115,7 +116,7 @@ public class SpecflowAdaptor extends FilebasedOutcomeAdaptor {
                 SpecflowScenarioTitleLine newTitleLine = new SpecflowScenarioTitleLine(line);
                 if (currentTitle == null || !newTitleLine.getTitleName().equals(currentTitle.getTitleName())) {
                     currentTitle = new SpecflowScenarioTitleLine(line);
-                    currentScenario = Lists.newArrayList();
+                    currentScenario = new ArrayList<>();
                     scenarios.add(currentScenario);
                 }
             }

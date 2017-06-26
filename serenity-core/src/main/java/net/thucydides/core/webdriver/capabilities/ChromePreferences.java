@@ -1,23 +1,18 @@
 package net.thucydides.core.webdriver.capabilities;
 
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.xpath.operations.Bool;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.*;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-import static org.hamcrest.Matchers.startsWith;
 
 public class ChromePreferences {
     private final String prefix;
 
-    public ChromePreferences(String prefix) {
+    private ChromePreferences(String prefix) {
         this.prefix = prefix;
     }
 
@@ -26,10 +21,13 @@ public class ChromePreferences {
     }
 
     public Map<String, Object> from(EnvironmentVariables environmentVariables) {
-        List<String> propertiesWithPrefix = filter(having(on(String.class), startsWith(prefix)), environmentVariables.getKeys());
+        List<String> propertiesWithPrefix =
+            environmentVariables.getKeys()
+                    .stream()
+                    .filter( key -> key.startsWith(prefix))
+                    .collect(Collectors.toList());
 
         Map<String, Object> preferences = new HashMap<>();
-
 
         for(String propertyKey : propertiesWithPrefix) {
             String preparedPropertyKey = getPreparedPropertyKey(propertyKey);
@@ -44,8 +42,7 @@ public class ChromePreferences {
 
     private Object asObject(String propertyValue) {
         try {
-            Integer integerValue = Integer.parseInt(propertyValue);
-            return integerValue;
+            return Integer.parseInt(propertyValue);
         } catch(NumberFormatException noBiggy) {}
 
 

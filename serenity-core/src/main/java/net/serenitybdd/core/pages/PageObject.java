@@ -1,6 +1,5 @@
 package net.serenitybdd.core.pages;
 
-import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -45,7 +44,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static ch.lambdaj.Lambda.convert;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static net.serenitybdd.core.selectors.Selectors.xpathOrCssSelector;
 import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_JQUERY_INTEGRATION;
@@ -921,17 +919,19 @@ public abstract class PageObject {
         return find(Lists.newArrayList(selectors));
     }
 
-    public List<net.serenitybdd.core.pages.WebElementFacade> findAll(By bySelector) {
-        List<WebElement> matchingWebElements = driver.findElements(bySelector);
-        return convert(matchingWebElements, toWebElementFacades());
-    }
+    public List<WebElementFacade> findAll(By bySelector) {
 
-    private Converter<WebElement, net.serenitybdd.core.pages.WebElementFacade> toWebElementFacades() {
-        return new Converter<WebElement, net.serenitybdd.core.pages.WebElementFacade>() {
-            public net.serenitybdd.core.pages.WebElementFacade convert(WebElement from) {
-                return element(from);
-            }
-        };
+        List<WebElement> matchingWebElements = driver.findElements(bySelector);
+        List<WebElementFacade> allElements = new ArrayList<>();
+        for(WebElement matchingElement : matchingWebElements) {
+            allElements.add($(matchingElement));
+        }
+//
+//        List<WebElementFacade> allElements =matchingWebElements
+//                .stream()
+//                .map(e -> $(e)).collect(Collectors.toList());
+
+        return allElements;
     }
 
     /**
@@ -1027,7 +1027,7 @@ public abstract class PageObject {
     }
 
     public WebElementFacade waitFor(WebElement webElement) {
-        return waitFor($(webElement));
+        return getRenderedView().waitFor(webElement);
     }
 
     public WebElementFacade waitFor(WebElementFacade webElement) {

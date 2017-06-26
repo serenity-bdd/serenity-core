@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -92,7 +93,7 @@ public class StackTraceAnalyser {
     }
 
     public static List<Method> inscopeMethodsIn(StackTraceElement[] stackTrace) {
-        List<Method> methods = Lists.newArrayList();
+        List<Method> methods = new ArrayList<>();
         for (StackTraceElement stackTraceElement : stackTrace) {
             Method method = StackTraceAnalyser.forStackTraceElement(stackTraceElement).getMethod();
             if (method != null) {

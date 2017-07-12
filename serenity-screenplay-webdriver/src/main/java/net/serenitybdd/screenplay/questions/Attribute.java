@@ -1,14 +1,9 @@
 package net.serenitybdd.screenplay.questions;
 
+import io.vavr.collection.List;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.targets.Target;
-
-import java.util.List;
-
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
-import static net.serenitybdd.screenplay.questions.UIFilter.visible;
 
 public class Attribute extends TargetedUIState<String> {
 
@@ -20,14 +15,15 @@ public class Attribute extends TargetedUIState<String> {
     }
 
     public static UIStateReaderWithNameBuilder<Attribute> of(Target target) {
-        return new UIStateReaderWithNameBuilder(target, Attribute.class);
+        return new UIStateReaderWithNameBuilder<>(target, Attribute.class);
     }
 
     public String resolve() {
         return target.resolveFor(actor).getAttribute(attributeName);
     }
 
-    public List<String> resolveAll() {
-        return extract(visible(target.resolveAllFor(actor)), on(WebElementFacade.class).getAttribute(attributeName));
+    public java.util.List<String> resolveAll() {
+        List<WebElementFacade> resolvedElements = List.ofAll(target.resolveAllFor(actor));
+        return resolvedElements.map(element -> element.getAttribute(attributeName)).asJava();
     }
 }

@@ -10,6 +10,7 @@ import net.thucydides.core.model.TestTag;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -63,7 +64,7 @@ public class TagFilter {
 
 
     private List<String> onlyKeepAllowedTypes(List<String> tags, List<String> displayedTags) {
-        List<String> allowedTags = Lists.newArrayList();
+        List<String> allowedTags = new ArrayList<>();
         for (String tag : tags) {
             if (displayedTags.contains(tag.toLowerCase())) {
                 allowedTags.add(tag);
@@ -98,7 +99,7 @@ public class TagFilter {
         if (StringUtils.isNotEmpty(displayTags)) {
             return ImmutableList.copyOf(Splitter.on(",").omitEmptyStrings().trimResults().split(displayTags.toLowerCase()));
         } else {
-            return Lists.newArrayList();
+            return new ArrayList<>();
         }
     }
 }

@@ -3,6 +3,7 @@ package net.thucydides.core.model;
 import com.google.common.collect.Lists;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  */
 public class TestOutcomeSummary {
 
-    private List<String> issues = Lists.newArrayList();
+    private List<String> issues = new ArrayList<>();
     private String title;
     private Path linkToTestReport;
     private TestResult testResult;

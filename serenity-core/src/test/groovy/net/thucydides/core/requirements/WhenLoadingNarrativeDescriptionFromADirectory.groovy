@@ -13,7 +13,7 @@ class WhenLoadingNarrativeDescriptionFromADirectory extends Specification {
             File directoryContainingANarrative = directoryInClasspathAt("sample-story-directories/capabilities_and_features/grow_apples")
         when: "We try to load the narrativeText from the directory"
             def reader = NarrativeReader.forRootDirectory("sample-story-directories/capabilities_and_features")
-            Optional<Narrative> narrative = reader.loadFrom(directoryContainingANarrative)
+            def narrative = reader.loadFrom(directoryContainingANarrative)
         then: "the narrativeText should be found"
             narrative.present
         and: "the narrativeText title and description should be loaded"
@@ -30,7 +30,7 @@ class WhenLoadingNarrativeDescriptionFromADirectory extends Specification {
             File directoryContainingANarrative = directoryInClasspathAt("sample-story-directories/capabilities_and_features/grow_potatoes")
         when: "We try to load the narrativeText from the directory"
             def reader = NarrativeReader.forRootDirectory("sample-story-directories/capabilities_and_features")
-            Optional<Narrative> narrative = reader.loadFrom(directoryContainingANarrative)
+            def narrative = reader.loadFrom(directoryContainingANarrative)
         then: "the narrativeText should be found"
             narrative.present
         and: "the narrative type should be derived from the first line in the narrative"
@@ -43,7 +43,7 @@ class WhenLoadingNarrativeDescriptionFromADirectory extends Specification {
             File directoryContainingANarrative = directoryInClasspathAt("sample-story-directories/capabilities_and_features/grow_apples/grow_red_apples")
         when: "We try to load the narrativeText from the directory"
             def reader = NarrativeReader.forRootDirectory("sample-story-directories/capabilities_and_features")
-            Optional<Narrative> narrative = reader.loadFrom(directoryContainingANarrative)
+            def narrative = reader.loadFrom(directoryContainingANarrative)
         then: "the narrativeText should be found"
             narrative.present
         and: "the narrativeText title and description should be loaded"
@@ -57,7 +57,7 @@ class WhenLoadingNarrativeDescriptionFromADirectory extends Specification {
             File reqDirectory = directoryInClasspathAt("sample-story-directories/capabilities_and_features/grow_apples/grow_granny_smiths")
         when: "We try to load the narrativeText from the directory"
             def reader = NarrativeReader.forRootDirectory("sample-story-directories/capabilities_and_features")
-            Optional<Narrative> narrative = reader.loadFromStoryFile(new File(reqDirectory, "PlantingASmallAppleTree.story"))
+            def narrative = reader.loadFromStoryFile(new File(reqDirectory, "PlantingASmallAppleTree.story"))
         then: "the narrativeText should be found"
             narrative.present
         and: "the narrativeText title should not be loaded"
@@ -69,7 +69,7 @@ class WhenLoadingNarrativeDescriptionFromADirectory extends Specification {
         File reqDirectory = directoryInClasspathAt("sample-story-directories/capabilities_and_features/grow_apples/grow_red_apples/grow_special_red_apples")
         when: "We try to load a feature file"
         def reader = NarrativeReader.forRootDirectory("sample-story-directories/capabilities_and_features")
-        Optional<Narrative> narrative = reader.loadFromStoryFile(new File(reqDirectory, "PlantingADifferentAppleTree.feature"))
+        def narrative = reader.loadFromStoryFile(new File(reqDirectory, "PlantingADifferentAppleTree.feature"))
         then: "the narrativeText should be found"
         narrative.present
         narrative.get().title.get() == 'Planting a new apple tree'
@@ -81,7 +81,7 @@ class WhenLoadingNarrativeDescriptionFromADirectory extends Specification {
             File directoryContainingANarrative = directoryInClasspathAt("sample-story-directories/capabilities_and_features/grow_apples/grow_red_apples/grow_special_red_apples")
         when: "We try to load the narrativeText from the directory"
             def reader = NarrativeReader.forRootDirectory("sample-story-directories/capabilities_and_features")
-            Optional<Narrative> narrative = reader.loadFrom(directoryContainingANarrative)
+            def narrative = reader.loadFrom(directoryContainingANarrative)
         then: "the narrativeText should be found"
             narrative.present
         and: "the narrativeText title and description should be loaded"
@@ -95,7 +95,7 @@ class WhenLoadingNarrativeDescriptionFromADirectory extends Specification {
             File directoryContainingANarrative = directoryInClasspathAt("sample-story-directories/capabilities_and_features/grow_apples/grow_red_apples/grow_special_red_apples")
         when: "We try to load the narrativeText from the directory"
             def reader = NarrativeReader.forRootDirectory("sample-story-directories/capabilities_and_features")
-            Optional<Narrative> narrative = reader.loadFrom(directoryContainingANarrative)
+            def narrative = reader.loadFrom(directoryContainingANarrative)
         then: "the narrativeText should be found"
             narrative.present
         and: "the narrativeText should contain release version numbers"
@@ -107,7 +107,7 @@ class WhenLoadingNarrativeDescriptionFromADirectory extends Specification {
             File storyFile = directoryInClasspathAt("sample-story-directories/capabilities_and_features/grow_apples/grow_red_apples/grow_special_red_apples/PlantingAnotherAppleTree.story")
         when: "We try to load the narrativeText from the directory"
             def reader = NarrativeReader.forRootDirectory("sample-story-directories/capabilities_and_features")
-            Optional<Narrative> narrative = reader.loadFromStoryFile(storyFile)
+            def narrative = reader.loadFromStoryFile(storyFile)
         then: "the narrativeText should be found"
             narrative.present
         and: "the narrative text should be loaded"

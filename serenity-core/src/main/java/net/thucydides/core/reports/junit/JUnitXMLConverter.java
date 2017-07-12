@@ -16,11 +16,13 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.OutputStream;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 
 public class JUnitXMLConverter {
 
+    private final static DateTimeFormatter TIMESTAMP_FORMAT = DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss");
 
     public void write(String testCaseName, List<TestOutcome> outcomes, OutputStream outputStream) throws ParserConfigurationException, TransformerException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -190,9 +192,11 @@ public class JUnitXMLConverter {
         testSuiteElement.setAttribute("errors", Integer.toString(errors));
         testSuiteElement.setAttribute("skipped", Integer.toString(skipped));
         testSuiteElement.setAttribute("failures", Integer.toString(failures));
-        if (testCaseOutcomes.getStartTime() != null) {
-            testSuiteElement.setAttribute("timestamp", testCaseOutcomes.getStartTime().toString("YYYY-MM-DD hh:mm:ss"));
-        }
+
+        testCaseOutcomes.getStartTime().ifPresent(
+                startTime -> testSuiteElement.setAttribute("timestamp", startTime.toString())
+        );
+
         return testSuiteElement;
     }
 }

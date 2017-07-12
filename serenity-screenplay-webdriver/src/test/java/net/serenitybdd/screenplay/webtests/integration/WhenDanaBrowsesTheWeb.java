@@ -31,7 +31,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 @RunWith(SerenityRunner.class)
-@Concurrent(threads = "4")
 public class WhenDanaBrowsesTheWeb {
 
     @Managed(driver = "phantomjs")

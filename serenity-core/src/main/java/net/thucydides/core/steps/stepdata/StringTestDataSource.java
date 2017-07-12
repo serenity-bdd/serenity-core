@@ -51,7 +51,7 @@ public class StringTestDataSource implements TestDataSource {
     }
 
     private List<List<String>> getRows() {
-        List<List<String>> expandedRows = Lists.newArrayList();
+        List<List<String>> expandedRows = new ArrayList<>();
         for (String row : rows) {
            expandedRows.add(Splitter.on(separator).splitToList(row));
         }

@@ -4,11 +4,7 @@ import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.targets.Target;
 
-import java.util.List;
-
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
-import static net.serenitybdd.screenplay.questions.UIFilter.visible;
+import java.util.stream.Collectors;
 
 public class Text extends TargetedUIState<String> {
 
@@ -17,14 +13,16 @@ public class Text extends TargetedUIState<String> {
     }
 
     public static UIStateReaderBuilder<Text> of(Target target) {
-        return new UIStateReaderBuilder(target, Text.class);
+        return new UIStateReaderBuilder<>(target, Text.class);
     }
 
     public String resolve() {
         return target.resolveFor(actor).getText();
     }
 
-    public List<String> resolveAll() {
-        return extract(visible(target.resolveAllFor(actor)), on(WebElementFacade.class).getText());
+    public java.util.List<String> resolveAll() {
+        return target.resolveAllFor(actor).stream()
+                     .map(WebElementFacade::getText)
+                     .collect(Collectors.toList());
     }
 }

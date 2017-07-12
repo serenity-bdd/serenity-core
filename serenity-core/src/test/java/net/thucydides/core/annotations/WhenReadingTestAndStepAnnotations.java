@@ -92,7 +92,7 @@ public class WhenReadingTestAndStepAnnotations {
 
     @Test
     public void shouldReadSingleIssueAnnotationFromATestClass() {
-        Optional<String> issue = TestAnnotations.forClass(SampleTestCase.class)
+        java.util.Optional<String> issue = TestAnnotations.forClass(SampleTestCase.class)
                                          .getAnnotatedIssueForMethod("testWithAnnotatedIssue");
 
         assertThat(issue.get(), is("#MYPROJECT-123"));

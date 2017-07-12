@@ -13,6 +13,7 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class FileSystemRequirementsStore implements RequirementsStore {
         try(InputStreamReader reader = new InputStreamReader(new FileInputStream(jsonFile), StandardCharsets.UTF_8)) {
             requirements = gson.fromJson(reader, requirementsListType);
             if (requirements == null) {
-                requirements = Lists.newArrayList();
+                requirements = new ArrayList<>();
             }
         }
 

@@ -25,17 +25,20 @@ import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
 
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
 import static net.thucydides.core.matchers.ThucydidesMatchers.hasFilenames;
 import static net.thucydides.core.matchers.dates.DateMatchers.isBetween;
 import static net.thucydides.core.model.TestResult.*;
 import static net.thucydides.core.model.TestStepFactory.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -191,10 +194,11 @@ public class WhenRecordingNewTestOutcomes {
 
     @Test
     public void a_test_outcome_should_record_the_start_time() {
-        DateTime beforeDate = DateTime.now();
+        ZonedDateTime beforeDate = ZonedDateTime.now().minusMinutes(1);
         TestOutcome outcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class);
-        DateTime afterDate = DateTime.now();
-        assertThat(outcome.getStartTime(), isBetween(beforeDate, afterDate));
+        ZonedDateTime afterDate = ZonedDateTime.now().plusMinutes(1);
+        assertTrue(beforeDate.isBefore(outcome.getStartTime()));
+        assertTrue(afterDate.isAfter(outcome.getStartTime()));
     }
 
     /**
@@ -599,7 +603,10 @@ public class WhenRecordingNewTestOutcomes {
         testOutcome.endGroup();
         testOutcome.recordStep(forASuccessfulTestStepCalled("step_3"));
 
-        List<String> screenshots = extract(testOutcome.getScreenshots(), on(Screenshot.class).getFilename());
+        List<String> screenshots = testOutcome.getScreenshots().stream()
+                .map(Screenshot::getFilename)
+                .collect(Collectors.toList());
+
         assertThat(screenshots, hasItems("step_1.png", "step_2.1.1.1.png","step_2.1.2.png", "step_2.2.png", "step_3.png"));
     }
 
@@ -788,7 +795,7 @@ public class WhenRecordingNewTestOutcomes {
         testOutcome.recordStep(forASuccessfulTestStepCalled("Step 2"));
         testOutcome.recordStep(forASuccessfulTestStepCalled("Step 3"));
 
-        assertThat(testOutcome.getSuccessCount(), is(3));
+        assertThat(testOutcome.getSuccessCount(), is(3L));
     }
 
     @Test
@@ -800,7 +807,7 @@ public class WhenRecordingNewTestOutcomes {
         testOutcome.recordStep(forABrokenTestStepCalled("Step 4", new AssertionError("Oh bother!")));
         testOutcome.recordStep(forASkippedTestStepCalled("Step 5"));
 
-        assertThat(testOutcome.getSuccessCount(), is(2));
+        assertThat(testOutcome.getSuccessCount(), is(2L));
     }
 
     @Test
@@ -813,7 +820,7 @@ public class WhenRecordingNewTestOutcomes {
         testOutcome.recordStep(forABrokenTestStepCalled("Step 5", new AssertionError("Oh bother!")));
         testOutcome.recordStep(forASkippedTestStepCalled("Step 6"));
 
-        assertThat(testOutcome.getFailureCount(), is(2));
+        assertThat(testOutcome.getFailureCount(), is(2L));
     }
 
     @Test
@@ -829,7 +836,7 @@ public class WhenRecordingNewTestOutcomes {
         testOutcome.recordStep(forASkippedTestStepCalled("Step 8"));
         testOutcome.recordStep(forASkippedTestStepCalled("Step 9"));
 
-        assertThat(testOutcome.getIgnoredCount(), is(1));
+        assertThat(testOutcome.getIgnoredCount(), is(1L));
     }
 
     @Test
@@ -845,8 +852,8 @@ public class WhenRecordingNewTestOutcomes {
         testOutcome.recordStep(forASkippedTestStepCalled("Step 8"));
         testOutcome.recordStep(forASkippedTestStepCalled("Step 9"));
 
-        assertThat(testOutcome.getSkippedCount(), is(4));
-        assertThat(testOutcome.getSkippedOrIgnoredCount(), is(5));
+        assertThat(testOutcome.getSkippedCount(), is(4L));
+        assertThat(testOutcome.getSkippedOrIgnoredCount(), is(5L));
     }
 
     @Test
@@ -862,7 +869,7 @@ public class WhenRecordingNewTestOutcomes {
         testOutcome.recordStep(forAPendingTestStepCalled("Step 8"));
         testOutcome.recordStep(forAPendingTestStepCalled("Step 9"));
 
-        assertThat(testOutcome.getPendingCount(), is(3));
+        assertThat(testOutcome.getPendingCount(), is(3L));
     }
 
 
@@ -919,35 +926,35 @@ public class WhenRecordingNewTestOutcomes {
     @Test
     public void an_acceptance_test_run_can_count_all_the_successful_nested_test_steps() {
         createNestedTestRun();
-        assertThat(testOutcome.getSuccessCount(), is(6));
+        assertThat(testOutcome.getSuccessCount(), is(6L));
     }
 
     @Test
     public void an_acceptance_test_run_can_count_all_the_failing_nested_test_steps() {
         createNestedTestRun();
 
-        assertThat(testOutcome.getFailureCount(), is(3));
+        assertThat(testOutcome.getFailureCount(), is(3L));
     }
 
     @Test
     public void an_acceptance_test_run_can_count_all_the_pending_nested_test_steps() {
         createNestedTestRun();
 
-        assertThat(testOutcome.getPendingCount(), is(4));
+        assertThat(testOutcome.getPendingCount(), is(4L));
     }
 
     @Test
     public void an_acceptance_test_run_can_count_all_the_ignored_nested_test_steps() {
         createNestedTestRun();
 
-        assertThat(testOutcome.getIgnoredCount(), is(1));
+        assertThat(testOutcome.getIgnoredCount(), is(1L));
     }
 
     @Test
     public void an_acceptance_test_run_can_count_all_the_skipped_test_steps() {
         createNestedTestRun();
 
-        assertThat(testOutcome.getSkippedCount(), is(1));
+        assertThat(testOutcome.getSkippedCount(), is(1L));
     }
 
     private void createNestedTestRun() {

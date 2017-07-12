@@ -68,7 +68,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         this(ConfiguredEnvironment.getEnvironmentVariables());
     }
 
-    private final List<Requirement> NO_REQUIREMENTS = Lists.newArrayList();
+    private final List<Requirement> NO_REQUIREMENTS = new ArrayList<>();
 
     public void clear() {
         requirementsStore.clear();
@@ -161,7 +161,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     private List<String> requirementPathsFromClassesInPackage(String rootPackage) {
-        List<String> requirementPaths = Lists.newArrayList();
+        List<String> requirementPaths = new ArrayList<>();
 
         ClassPath classpath;
         try {

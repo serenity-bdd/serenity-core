@@ -2,7 +2,6 @@ package net.thucydides.core.model;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
-import org.apache.commons.lang3.StringUtils;
 
 import static org.apache.commons.lang3.ObjectUtils.compare;
 import static org.apache.commons.lang3.StringUtils.isEmpty;

@@ -10,6 +10,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -39,7 +40,7 @@ public class CopyFiles {
 
         List<Path> filesToCopy = filesToCopyBetween(sourcePath, targetDirectory);
         int numberOfThreads = NumberOfThreads.forIOOperations();
-        final List<Callable<Path>> partitions = Lists.newArrayList();
+        final List<Callable<Path>> partitions = new ArrayList<>();
 
         for (Path fileToCopy : filesToCopy) {
             partitions.add(new FileCopier(fileToCopy, targetDirectory));
@@ -65,7 +66,7 @@ public class CopyFiles {
 
 
     private List<Path> filesToCopyBetween(Path sourcePath, Path targetPath) {
-        List<Path> filesToCopy = Lists.newArrayList();
+        List<Path> filesToCopy = new ArrayList<>();
         try (DirectoryStream<Path> directoryContents = Files.newDirectoryStream(sourcePath)) {
             for (Path sourceFile : directoryContents) {
                 Path destinationFile = targetPath.resolve(sourceFile.getFileName());

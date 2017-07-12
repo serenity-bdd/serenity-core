@@ -3,6 +3,7 @@ package net.thucydides.core.statistics.service;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
@@ -33,7 +34,7 @@ public class ClasspathTagProviderService implements TagProviderService {
     }
 
     private List<TagProvider> tagProvidersFor(String testSource) {
-        List<TagProvider> newTagProviders = Lists.newArrayList();
+        List<TagProvider> newTagProviders = new ArrayList<>();
         Iterable<? extends TagProvider> tagProviderServiceLoader = loadTagProvidersFromPath(testSource);
         for (TagProvider tagProvider : tagProviderServiceLoader) {
             newTagProviders.add(tagProvider);
@@ -81,11 +82,11 @@ public class ClasspathTagProviderService implements TagProviderService {
                 return strategy.getTagProviders();
             }
         }
-        return Lists.newArrayList();
+        return new ArrayList<>();
     }
 
     private Iterable<TagProvider> allKnownTagProviders(Iterable<TagProviderStrategy> tagProviderStrategies) {
-        List<TagProvider> tagProviders = Lists.newArrayList();
+        List<TagProvider> tagProviders = new ArrayList<>();
 
         for (TagProviderStrategy strategy : tagProviderStrategies) {
             tagProviders.addAll(Lists.newArrayList(strategy.getTagProviders()));

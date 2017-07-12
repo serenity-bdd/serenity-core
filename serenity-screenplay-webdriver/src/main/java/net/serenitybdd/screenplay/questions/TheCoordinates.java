@@ -5,10 +5,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.targets.Target;
 
 import java.util.List;
-
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
-import static net.serenitybdd.screenplay.questions.UIFilter.visible;
+import java.util.stream.Collectors;
 
 public class TheCoordinates extends TargetedUIState<org.openqa.selenium.interactions.internal.Coordinates> {
 
@@ -17,7 +14,7 @@ public class TheCoordinates extends TargetedUIState<org.openqa.selenium.interact
     }
 
     public static UIStateReaderBuilder<TheCoordinates> of(Target target) {
-        return new UIStateReaderBuilder(target, TheCoordinates.class);
+        return new UIStateReaderBuilder<>(target, TheCoordinates.class);
     }
 
     public org.openqa.selenium.interactions.internal.Coordinates resolve() {
@@ -25,6 +22,8 @@ public class TheCoordinates extends TargetedUIState<org.openqa.selenium.interact
     }
 
     public List<org.openqa.selenium.interactions.internal.Coordinates> resolveAll() {
-        return extract(visible(target.resolveAllFor(actor)), on(WebElementFacade.class).getCoordinates());
+        return resolvedElements()
+                .map(WebElementFacade::getCoordinates)
+                .collect(Collectors.toList());
     }
 }

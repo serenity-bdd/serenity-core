@@ -1,19 +1,14 @@
 package net.thucydides.core.annotations;
 
 
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Find the annotated fields in a given class.
@@ -46,7 +41,7 @@ public class Fields {
     }
 
     public Set<Field> allFields() {
-        Set<Field> fields = new HashSet<Field>();
+        Set<Field> fields = new HashSet<>();
         fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
         fields.addAll(Arrays.asList(clazz.getFields()));
         if (clazz != Object.class) {
@@ -63,7 +58,7 @@ public class Fields {
 
     public Set<Field> nonStaticFields() {
         Set<Field> fields = allFields();
-        Set<Field> nonStaticFields = new HashSet<Field>();
+        Set<Field> nonStaticFields = new HashSet<>();
         for(Field field : fields) {
             if (!Modifier.isStatic(field.getModifiers())) {
                 nonStaticFields.add(field);
@@ -74,23 +69,19 @@ public class Fields {
     }
 
     public Optional<Field> withName(String pages) {
-        for(Field field : allFields()) {
-            if (field.getName().equals(pages)){
-                return Optional.of(field);
-            }
-        }
-        return Optional.absent();
+        return allFields()
+                .stream()
+                .filter(field -> field.getName().equals(pages))
+                .findFirst();
     }
 
     public Set<Field> fieldsAnnotatedBy(Class<? extends Annotation> annotationClass) {
-        Set<Field> fields = allFields();
-        Set<Field> annotatedFields = new HashSet<>();
-        for(Field field : fields) {
-            if (field.getAnnotation(annotationClass) != null) {
-                annotatedFields.add(field);
-            }
-        }
-        return annotatedFields;
+        return allFields()
+                .stream()
+                .filter(
+                      field -> field.getAnnotation(annotationClass) != null
+                )
+                .collect(Collectors.toSet());
     }
 
     public static FieldValueBuilder of(Object object) {
@@ -100,12 +91,12 @@ public class Fields {
     public static class FieldValueBuilder {
         private final Object object;
 
-        public FieldValueBuilder(Object object) {
+        FieldValueBuilder(Object object) {
             this.object = object;
         }
 
         public Map<String, Object> asMap() {
-            Map<String, Object> fieldValues = Maps.newHashMap();
+            Map<String, Object> fieldValues = new HashMap<>();
             for(Field field : Fields.of(object.getClass()).allFields()) {
                 try {
                     field.setAccessible(true);
@@ -118,7 +109,7 @@ public class Fields {
             }
             fieldValues.put("self",object);
             fieldValues.put("this",object);
-            return ImmutableMap.copyOf(fieldValues);
+            return fieldValues;
         }
 
         private boolean isValid(Field field) {
@@ -133,7 +124,7 @@ public class Fields {
             Field field;
             Object object;
 
-            public FieldValueProvider(Field field, Object object) {
+            FieldValueProvider(Field field, Object object) {
                 this.field = field;
                 this.object = object;
             }

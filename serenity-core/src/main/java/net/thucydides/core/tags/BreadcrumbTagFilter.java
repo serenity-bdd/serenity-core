@@ -10,6 +10,7 @@ import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class BreadcrumbTagFilter {
     }
 
     public List<TestTag> getRequirementBreadcrumbsFrom(Collection<TestTag> tags) {
-        List<TestTag> requirementTypeTags = Lists.newArrayList();
+        List<TestTag> requirementTypeTags = new ArrayList<>();
         for(String requirementType : requirementsService.getRequirementTypes()) {
             requirementTypeTags.addAll(requirementTagOfType(requirementType).in(tags).asSet());
 
@@ -39,7 +40,7 @@ public class BreadcrumbTagFilter {
     }
 
     public List<TestTag> getRequirementBreadcrumbsFrom(TestTag tag) {
-        List<TestTag> requirementTypeTags = Lists.newArrayList();
+        List<TestTag> requirementTypeTags = new ArrayList<>();
         Optional<Requirement> displayedRequirement = requirementsService.getRequirementFor(tag);
 
         return displayedRequirement.isPresent()
@@ -47,7 +48,7 @@ public class BreadcrumbTagFilter {
     }
 
     public List<TestTag> getRequirementBreadcrumbsFrom(TestOutcome testOutcome) {
-        List<TestTag> requirementTypeTags = Lists.newArrayList();
+        List<TestTag> requirementTypeTags = new ArrayList<>();
         for(Requirement ancestor : requirementsService.getAncestorRequirementsFor(testOutcome)) {
             requirementTypeTags.add(ancestor.asTag());
 
@@ -60,7 +61,7 @@ public class BreadcrumbTagFilter {
     }
 
     public List<TestTag> getRequirementBreadcrumbsFrom(RequirementsOutcomes requirementsOutcomes) {
-        List<TestTag> breadcrumbs = Lists.newArrayList();
+        List<TestTag> breadcrumbs = new ArrayList<>();
         if (requirementsOutcomes.getParentRequirement().isPresent()) {
            breadcrumbs.add(requirementsOutcomes.getParentRequirement().get().asTag());
         }

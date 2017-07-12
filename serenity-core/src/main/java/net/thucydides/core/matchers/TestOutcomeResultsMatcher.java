@@ -8,9 +8,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
+import java.util.stream.Collectors;
 
 /**
  * Does a test outcome contain a given list of results, in the specified order?
@@ -26,7 +24,11 @@ public class TestOutcomeResultsMatcher extends TypeSafeMatcher<TestOutcome> {
     @Override
     public boolean matchesSafely(TestOutcome testOutcome) {
         List<TestStep> allSteps = testOutcome.getFlattenedTestSteps();
-        List<TestResult> allTestResults = extract(allSteps, on(TestStep.class).getResult());
+
+        List<TestResult> allTestResults = allSteps.stream()
+                .map(step -> step.getResult())
+                .collect(Collectors.toList());
+
         return allTestResults.equals(expectedTestResults);
     }
 

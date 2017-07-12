@@ -9,6 +9,7 @@ import net.thucydides.core.pages.Pages;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -34,7 +35,7 @@ public class PageObjectDependencyInjector implements DependencyInjector {
     }
 
     private List<Field> nonAbstract(List<Field> pageObjectFields) {
-        List<Field> concretePageObjectFields = Lists.newArrayList();
+        List<Field> concretePageObjectFields = new ArrayList<>();
         for(Field field : pageObjectFields) {
             if (!Modifier.isAbstract(field.getType().getModifiers())) {
                 concretePageObjectFields.add(field);
@@ -71,7 +72,7 @@ public class PageObjectDependencyInjector implements DependencyInjector {
 
     private List<Field> pageObjectFieldsIn(Object target) {
         Set<Field> allFields = Fields.of(target.getClass()).allFields();
-        List<Field> pageObjectFields = Lists.newArrayList();
+        List<Field> pageObjectFields = new ArrayList<>();
         for(Field field : allFields) {
             if (PageObject.class.isAssignableFrom(field.getType())) {
                 pageObjectFields.add(field);

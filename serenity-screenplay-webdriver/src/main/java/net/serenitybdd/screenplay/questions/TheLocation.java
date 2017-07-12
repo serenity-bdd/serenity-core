@@ -6,10 +6,7 @@ import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.Point;
 
 import java.util.List;
-
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
-import static net.serenitybdd.screenplay.questions.UIFilter.visible;
+import java.util.stream.Collectors;
 
 public class TheLocation extends TargetedUIState<Point> {
 
@@ -18,7 +15,7 @@ public class TheLocation extends TargetedUIState<Point> {
     }
 
     public static UIStateReaderBuilder<TheLocation> of(Target target) {
-        return new UIStateReaderBuilder(target, TheLocation.class);
+        return new UIStateReaderBuilder<>(target, TheLocation.class);
     }
 
     public Point resolve() {
@@ -26,6 +23,8 @@ public class TheLocation extends TargetedUIState<Point> {
     }
 
     public List<Point> resolveAll() {
-        return extract(visible(target.resolveAllFor(actor)), on(WebElementFacade.class).getLocation());
+        return resolvedElements()
+                .map(WebElementFacade::getLocation)
+                .collect(Collectors.toList());
     }
 }

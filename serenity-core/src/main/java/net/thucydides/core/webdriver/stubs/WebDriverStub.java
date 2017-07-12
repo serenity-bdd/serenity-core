@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -25,7 +26,7 @@ public class WebDriverStub implements WebDriver {
 
     @Override
     public List<WebElement> findElements(By by) {
-        return Lists.newArrayList();
+        return new ArrayList<>();
     }
 
     @Override

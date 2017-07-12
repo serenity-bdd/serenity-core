@@ -1,21 +1,17 @@
 package net.thucydides.core.annotations;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.html.Formatter;
+import net.thucydides.core.tags.TagConverters;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.convert;
-import static net.thucydides.core.tags.TagConverters.fromStringValuesToTestTags;
-import static net.thucydides.core.tags.TagConverters.toTestTags;
+import static java.util.Arrays.asList;
 import static net.thucydides.core.util.NameConverter.withNoArguments;
 
 /**
@@ -33,15 +29,15 @@ public class TestAnnotations {
         return new TestAnnotations(testClass);
     }
 
-    public Optional<String> getAnnotatedTitleForMethod(final String methodName) {
+    public java.util.Optional<String> getAnnotatedTitleForMethod(final String methodName) {
         if ((testClass != null) && (testClassHasMethodCalled(methodName))) {
             return getAnnotatedTitle(methodName);
         }
-        return Optional.absent();
+        return java.util.Optional.empty();
     }
 
     public boolean isPending(final String methodName) {
-        Optional<Method> method = getMethodCalled(methodName);
+        java.util.Optional<Method> method = getMethodCalled(methodName);
         return method.isPresent() && isPending(method.get());
     }
 
@@ -50,10 +46,7 @@ public class TestAnnotations {
     }
 
     public static boolean isIgnored(final Method method) {
-        if (method != null) {
-            return hasAnnotationCalled(method, "Ignore");
-        }
-        return false;
+        return method != null && hasAnnotationCalled(method, "Ignore");
     }
 
     public static boolean shouldSkipNested(Method method) {
@@ -66,28 +59,26 @@ public class TestAnnotations {
 
     private static boolean hasAnnotationCalled(Method method, String annotationName) {
         Annotation[] annotations = method.getAnnotations();
-        for (Annotation annotation : annotations) {
-            if (annotation.annotationType().getSimpleName().equals(annotationName)) {
-                return true;
-            }
-        }
-        return false;
+
+        return Arrays.stream(annotations).anyMatch(
+              annotation -> annotation.annotationType().getSimpleName().equals(annotationName)
+        );
     }
 
     public boolean isIgnored(final String methodName) {
-        Optional<Method> method = getMethodCalled(methodName);
+        java.util.Optional<Method> method = getMethodCalled(methodName);
         return method.isPresent() && isIgnored(method.get());
     }
 
-    private Optional<String> getAnnotatedTitle(String methodName) {
-        Optional<Method> testMethod = getMethodCalled(methodName);
+    private java.util.Optional<String> getAnnotatedTitle(String methodName) {
+        java.util.Optional<Method> testMethod = getMethodCalled(methodName);
         if (testMethod.isPresent()) {
             Title titleAnnotation = testMethod.get().getAnnotation(Title.class);
             if (titleAnnotation != null) {
-                return Optional.of(titleAnnotation.value());
+                return java.util.Optional.of(titleAnnotation.value());
             }
         }
-        return Optional.absent();
+        return java.util.Optional.empty();
     }
 
     private boolean testClassHasMethodCalled(final String methodName) {
@@ -95,53 +86,49 @@ public class TestAnnotations {
 
     }
 
-    private Optional<Method> getMethodCalled(final String methodName) {
+    private java.util.Optional<Method> getMethodCalled(final String methodName) {
         if (testClass == null) {
-            return Optional.absent();
+            return java.util.Optional.empty();
         }
         String baseMethodName = withNoArguments(methodName);
         try {
             if (baseMethodName == null) {
-                return Optional.absent();
+                return java.util.Optional.empty();
             } else {
-                return Optional.fromNullable(testClass.getMethod(baseMethodName));
+                return java.util.Optional.ofNullable(testClass.getMethod(baseMethodName));
             }
         } catch (NoSuchMethodException e) {
-            return Optional.absent();
+            return java.util.Optional.empty();
         }
     }
 
     /**
      * Return a list of the issues mentioned in the title annotation of this method.
      */
-    public List<String> getAnnotatedIssuesForMethodTitle(String methodName) {
-        Optional<String> title = getAnnotatedTitleForMethod(methodName);
-        if (title.isPresent()) {
-            return Formatter.issuesIn(title.get());
-        } else {
-            return Formatter.issuesIn(methodName);
-        }
+    List<String> getAnnotatedIssuesForMethodTitle(String methodName) {
+        java.util.Optional<String> title = getAnnotatedTitleForMethod(methodName);
+        return title.map(Formatter::issuesIn).orElseGet(() -> Formatter.issuesIn(methodName));
     }
 
 
-    public Optional<String> getAnnotatedIssue(String methodName) {
-        Optional<Method> testMethod = getMethodCalled(methodName);
+    private Optional<String> getAnnotatedIssue(String methodName) {
+        java.util.Optional<Method> testMethod = getMethodCalled(methodName);
         if ((testMethod.isPresent()) && (testMethod.get().getAnnotation(Issue.class) != null)) {
             return Optional.of(testMethod.get().getAnnotation(Issue.class).value());
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private Optional<String> getAnnotatedVersion(String methodName) {
-        Optional<Method> testMethod = getMethodCalled(methodName);
+        java.util.Optional<Method> testMethod = getMethodCalled(methodName);
         if ((testMethod.isPresent()) && (testMethod.get().getAnnotation(Version.class) != null)) {
             return Optional.of(testMethod.get().getAnnotation(Version.class).value());
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private String[] getAnnotatedIssues(String methodName) {
-        Optional<Method> testMethod = getMethodCalled(methodName);
+        java.util.Optional<Method> testMethod = getMethodCalled(methodName);
         if ((testMethod.isPresent()) && (testMethod.get().getAnnotation(Issues.class) != null)) {
             return testMethod.get().getAnnotation(Issues.class).value();
         }
@@ -192,8 +179,8 @@ public class TestAnnotations {
         }
     }
 
-    public List<String> getIssuesForMethod(String methodName) {
-        List<String> issues = new ArrayList<String>();
+    List<String> getIssuesForMethod(String methodName) {
+        List<String> issues = new ArrayList<>();
 
         if (testClass != null) {
             addIssuesFromMethod(methodName, issues);
@@ -209,7 +196,7 @@ public class TestAnnotations {
 
     private void addIssuesFromMethod(String methodName, List<String> issues) {
         if (getAnnotatedIssues(methodName) != null) {
-            issues.addAll(Arrays.asList(getAnnotatedIssues(methodName)));
+            issues.addAll(asList(getAnnotatedIssues(methodName)));
         }
 
         if (getAnnotatedIssue(methodName).isPresent()) {
@@ -233,7 +220,7 @@ public class TestAnnotations {
         return getTags(testClass);
     }
 
-    private final List<TestTag> NO_TAGS = Lists.newArrayList();
+    private final List<TestTag> NO_TAGS = new ArrayList<>();
 
     private List<TestTag> getTags(Class<?> testClass) {
         List<TestTag> tags = new ArrayList<>();
@@ -257,22 +244,31 @@ public class TestAnnotations {
 
     private void addTags(List<TestTag> tags, WithTags tagSet) {
         if (tagSet != null) {
-            tags.addAll(convert(tagSet.value(), toTestTags()));
+
+            Set<TestTag> newTags = Arrays.stream(tagSet.value())
+                    .map(TagConverters::convertToTestTag)
+                    .collect(Collectors.toSet());
+
+            tags.addAll(newTags);
         }
     }
 
     private void addTagValues(List<TestTag> tags, WithTagValuesOf tagSet) {
         if (tagSet != null) {
-            tags.addAll(convert(tagSet.value(), fromStringValuesToTestTags()));
+
+            Set<TestTag> newTags = Arrays.stream(tagSet.value())
+                    .map(TestTag::withValue)
+                    .collect(Collectors.toSet());
+
+            tags.addAll(newTags);
         }
     }
 
 
-
     private List<TestTag> getTagsFor(String methodName) {
-        List<TestTag> tags = new ArrayList<TestTag>();
+        List<TestTag> tags = new ArrayList<>();
 
-        Optional<Method> testMethod = getMethodCalled(methodName);
+        java.util.Optional<Method> testMethod = getMethodCalled(methodName);
         if (testMethod.isPresent()) {
             addTagValues(tags, testMethod.get().getAnnotation(WithTagValuesOf.class));
             addTags(tags, testMethod.get().getAnnotation(WithTags.class));
@@ -281,7 +277,7 @@ public class TestAnnotations {
         return tags;
     }
 
-    public TestTag convertToTestTag(WithTag withTag) {
+    private TestTag convertToTestTag(WithTag withTag) {
         if (StringUtils.isEmpty(withTag.value())) {
             return TestTag.withName(withTag.name()).andType(withTag.type());
         } else {

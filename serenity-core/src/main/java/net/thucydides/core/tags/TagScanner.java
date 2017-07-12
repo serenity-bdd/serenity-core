@@ -9,10 +9,9 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import static ch.lambdaj.Lambda.convert;
-import static net.thucydides.core.tags.TagConverters.fromStringValuesToTestTags;
+import java.util.stream.Collectors;
 
 public class TagScanner {
 
@@ -67,7 +66,10 @@ public class TagScanner {
     }
 
     private List<TestTag> definedIn(List<String> tagValues) {
-        return convert(tagValues, fromStringValuesToTestTags());
+
+        return tagValues.stream()
+                .map(TestTag::withValue)
+                .collect(Collectors.toList());
     }
 
     private boolean containsAPositiveMatch(List<TestTag> expectedTags, List<TestTag> tags) {
@@ -80,7 +82,7 @@ public class TagScanner {
     }
 
     private List<TestTag> positive(List<TestTag> tags) {
-        List<TestTag> positiveTags = Lists.newArrayList();
+        List<TestTag> positiveTags = new ArrayList<>();
         for (TestTag tag : tags) {
             if (!isANegative(tag)) {
                 positiveTags.add(tag);
@@ -94,7 +96,7 @@ public class TagScanner {
     }
 
     private List<TestTag> negative(List<TestTag> tags) {
-        List<TestTag> negativeTags = Lists.newArrayList();
+        List<TestTag> negativeTags = new ArrayList<>();
         for (TestTag tag : tags) {
             if (isANegative(tag)) {
                 negativeTags.add(TestTag.withName(tag.getName()).andType(tag.getType().substring(1)));
@@ -134,9 +136,11 @@ public class TagScanner {
         String tagListValue = environmentVariables.getProperty(ThucydidesSystemProperty.TAGS);
         if (StringUtils.isNotEmpty(tagListValue)) {
             List<String> tagList = Lists.newArrayList(Splitter.on(",").trimResults().split(tagListValue));
-            return convert(tagList, fromStringValuesToTestTags());
+            return tagList.stream()
+                    .map(TestTag::withValue)
+                    .collect(Collectors.toList());
         } else {
-            return Lists.newArrayList();
+            return new ArrayList<>();
         }
     }
 }

@@ -14,6 +14,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,7 +47,7 @@ public class MultipleSourceRequirmentsOutcomeFactory implements RequirementsOutc
     }
 
     public RequirementsOutcomes buildRequirementsOutcomesFrom(TestOutcomes testOutcomes) {
-        List<Requirement> allRequirements = Lists.newArrayList();
+        List<Requirement> allRequirements = new ArrayList<>();
         for (RequirementsTagProvider tagProvider : requirementsTagProviders) {
             allRequirements = new RequirementsMerger().merge(allRequirements, tagProvider.getRequirements());
         }

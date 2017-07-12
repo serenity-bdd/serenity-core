@@ -1,6 +1,5 @@
 package net.thucydides.core.model;
 
-import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
@@ -8,7 +7,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import jnr.x86asm.OP;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.model.FailureDetails;
@@ -17,6 +15,7 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.images.ResizableImage;
+import net.thucydides.core.issues.IssueKeyFormat;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.failures.FailureAnalysis;
 import net.thucydides.core.model.features.ApplicationFeature;
@@ -37,7 +36,6 @@ import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepFailureException;
 import net.thucydides.core.steps.TestFailureCause;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.Inflector;
 import net.thucydides.core.util.NameConverter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
@@ -49,19 +47,25 @@ import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalField;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.*;
 import static com.google.common.base.Preconditions.*;
 import static com.google.common.collect.Lists.partition;
 import static com.google.common.collect.Lists.reverse;
 import static net.thucydides.core.model.ReportType.HTML;
 import static net.thucydides.core.model.ReportType.ROOT;
 import static net.thucydides.core.model.TestResult.*;
+import static net.thucydides.core.model.TestStep.*;
 import static net.thucydides.core.util.NameConverter.withNoArguments;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.hamcrest.Matchers.is;
 
 /**
  * Represents the results of a test (or "scenario") execution. This
@@ -130,7 +134,7 @@ public class TestOutcome {
     /**
      * When did this test start.
      */
-    private Long startTime;
+    private ZonedDateTime startTime;
 
     /**
      * How long did it last in milliseconds.
@@ -140,7 +144,7 @@ public class TestOutcome {
     /**
      * When did the current test batch start
      */
-    private Date testRunTimestamp;
+    private ZonedDateTime testRunTimestamp;
 
     /**
      * Identifies the project associated with this test.
@@ -243,8 +247,8 @@ public class TestOutcome {
 
     private TestOutcome() {
         groupStack = new Stack<>();
-        this.additionalIssues = Lists.newArrayList();
-        this.additionalVersions = Lists.newArrayList();
+        this.additionalIssues = new ArrayList<>();
+        this.additionalVersions = new ArrayList<>();
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
         this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
@@ -288,13 +292,13 @@ public class TestOutcome {
      * @param testCase
      */
     public TestOutcome(final String name, final Class<?> testCase, EnvironmentVariables environmentVariables) {
-        startTime = now().toDate().getTime();
+        startTime = ZonedDateTime.now();
         this.name = name;
         this.id = identifierFrom(name, testCase, userStory);
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
-        this.additionalIssues = Lists.newArrayList();
-        this.additionalVersions = Lists.newArrayList();
+        this.additionalIssues = new ArrayList<>();
+        this.additionalVersions = new ArrayList<>();
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
         this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
@@ -397,13 +401,13 @@ public class TestOutcome {
      *                  represent the story in which the test is implemented.
      */
     protected TestOutcome(final String name, final Class<?> testCase, final Story userStory, EnvironmentVariables environmentVariables) {
-        startTime = now().toDate().getTime();
+        startTime = ZonedDateTime.now();
         this.name = name;
         this.id = identifierFrom(name, testCase, userStory);
         this.testCase = testCase;
         this.testCaseName = nameOf(testCase);
-        this.additionalIssues = Lists.newArrayList();
-        this.additionalVersions = Lists.newArrayList();
+        this.additionalIssues = new ArrayList<>();
+        this.additionalVersions = new ArrayList<>();
         if ((testCase != null) || (userStory != null)) {
             setUserStory(storyDefinedIn(testCase).or(userStory));
         }
@@ -417,7 +421,9 @@ public class TestOutcome {
     }
 
     private Optional<Story> storyDefinedIn(Class<?> testCase) {
-        if (testCase == null) { return Optional.absent(); }
+        if (testCase == null) {
+            return Optional.absent();
+        }
         return Optional.of(leafRequirementDefinedIn().testCase(testCase));
     }
 
@@ -447,7 +453,7 @@ public class TestOutcome {
                 this.environmentVariables);
     }
 
-    protected TestOutcome(final Long startTime,
+    protected TestOutcome(final ZonedDateTime startTime,
                           final long duration,
                           final String title,
                           final String description,
@@ -501,7 +507,7 @@ public class TestOutcome {
     }
 
     private List<String> removeDuplicates(List<String> issues) {
-        List<String> issuesWithNoDuplicates = Lists.newArrayList();
+        List<String> issuesWithNoDuplicates = new ArrayList<>();
         if (issues != null) {
             for (String issue : issues) {
                 if (!issuesWithNoDuplicates.contains(issue)) {
@@ -652,7 +658,10 @@ public class TestOutcome {
 
     @Override
     public String toString() {
-        return getTitle() + ":" + join(extract(testSteps, on(TestStep.class).toString()));
+
+        return getTitle() + ":" + testSteps.stream()
+                                           .map(TestStep::toString)
+                                           .collect(Collectors.joining(", "));
     }
 
     /**
@@ -678,7 +687,7 @@ public class TestOutcome {
     }
 
     public TitleBuilder getQualified() {
-        return new TitleBuilder(this, issueTracking,environmentVariables,true);
+        return new TitleBuilder(this, issueTracking, environmentVariables, true);
     }
 
     public void setAllStepsTo(TestResult result) {
@@ -772,7 +781,9 @@ public class TestOutcome {
     }
 
     public String getParentId() {
-        if (id != null && id.contains(";")) { return Splitter.on(";").splitToList(id).get(0); }
+        if (id != null && id.contains(";")) {
+            return Splitter.on(";").splitToList(id).get(0);
+        }
 
         return null;
     }
@@ -810,7 +821,7 @@ public class TestOutcome {
     }
 
     public void updateTopLevelStepResultsTo(TestResult result) {
-        for(TestStep step : testSteps) {
+        for (TestStep step : testSteps) {
             step.setResult(result);
         }
         if (dataTable != null) {
@@ -828,6 +839,23 @@ public class TestOutcome {
 
     public void setFlakyTestFailureCause(TestFailureCause flakyTestFailureCause) {
         this.flakyTestFailureCause = flakyTestFailureCause;
+    }
+
+    public boolean hasTagWithName(String tagName) {
+        return java.util.Optional.ofNullable(tags).orElse(Collections.emptySet())
+                .stream()
+                .anyMatch( tag -> tag.getName().equalsIgnoreCase(tagName) );
+    }
+
+    public boolean hasTagWithType(String tagType) {
+        return java.util.Optional.ofNullable(tags).orElse(Collections.emptySet())
+                .stream()
+                .anyMatch( tag -> tag.getType().equalsIgnoreCase(tagType) );
+    }
+
+    public int getDataTableRowCount() {
+        if (dataTable == null) { return 0; }
+        return dataTable.getSize();
     }
 
     private static class TestOutcomeWithEnvironmentBuilder {
@@ -984,8 +1012,8 @@ public class TestOutcome {
     }
 
     private String getBaseTitleFromAnnotationOrMethodName() {
-        Optional<String> annotatedTitle = TestAnnotations.forClass(testCase).getAnnotatedTitleForMethod(name);
-        return annotatedTitle.or(NameConverter.humanize(withNoArguments(name)));
+        java.util.Optional<String> annotatedTitle = TestAnnotations.forClass(testCase).getAnnotatedTitleForMethod(name);
+        return annotatedTitle.orElse(NameConverter.humanize(withNoArguments(name)));
     }
 
     private String qualified(String rootTitle) {
@@ -1064,14 +1092,14 @@ public class TestOutcome {
 
     public List<ScreenshotAndHtmlSource> getScreenshotAndHtmlSources() {
         List<TestStep> testStepsWithScreenshots = getFlattenedTestSteps();
-//                select(getFlattenedTestSteps(),
-//                having(on(TestStep.class).needsScreenshots()));
 
-        return flatten(extract(testStepsWithScreenshots, on(TestStep.class).getScreenshots()));
+        return testStepsWithScreenshots.stream()
+                .flatMap(testStep -> testStep.getScreenshots().stream())
+                .collect(Collectors.toList());
     }
 
     public List<Screenshot> getScreenshots() {
-        List<Screenshot> screenshots = new ArrayList<Screenshot>();
+        List<Screenshot> screenshots = new ArrayList<>();
 
         List<TestStep> testStepsWithScreenshots = getFlattenedTestSteps();// select(getFlattenedTestSteps(),
 //                having(on(TestStep.class).needsScreenshots()));
@@ -1084,21 +1112,19 @@ public class TestOutcome {
     }
 
     private List<Screenshot> screenshotsIn(TestStep currentStep) {
-        return convert(currentStep.getScreenshots(), toScreenshotsFor(currentStep));
+        return currentStep.getScreenshots().stream().map(
+                screenshotAndHtmlSource -> extractScreenshot(currentStep, screenshotAndHtmlSource)
+        ).collect(Collectors.toList());
     }
 
-    private Converter<ScreenshotAndHtmlSource, Screenshot> toScreenshotsFor(final TestStep currentStep) {
-        return new Converter<ScreenshotAndHtmlSource, Screenshot>() {
-            public Screenshot convert(ScreenshotAndHtmlSource from) {
-                return new Screenshot(from.getScreenshot().getName(),
-                        currentStep.getDescription(),
-                        widthOf(from.getScreenshot()),
-                        currentStep.getException());
-            }
-        };
+    public static Screenshot extractScreenshot(TestStep currentStep, ScreenshotAndHtmlSource from) {
+        return new Screenshot(from.getScreenshot().getName(),
+                currentStep.getDescription(),
+                widthOf(from.getScreenshot()),
+                currentStep.getException());
     }
 
-    private int widthOf(final File screenshot) {
+    private static int widthOf(final File screenshot) {
         try {
             return new ResizableImage(screenshot).getWidth();
         } catch (IOException e) {
@@ -1244,11 +1270,9 @@ public class TestOutcome {
     }
 
     private List<TestResult> getCurrentTestResults() {
-        List<TestResult> testResults = Lists.newArrayList();
-        for (TestStep step : testSteps) {
-            testResults.add(step.getResult());
-        }
-        return testResults;
+        return testSteps.stream()
+                .map(TestStep::getResult)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -1338,14 +1362,16 @@ public class TestOutcome {
 
     private String failureSummaryFrom(FailureCause rootCause) {
         return String.format("%s;%s;%s;%s",
-                             getResult(),
-                             rootCause.getErrorType(),
-                             rootCause.getMessage(),
-                             stackTraceSourceFrom(rootCause));
+                getResult(),
+                rootCause.getErrorType(),
+                rootCause.getMessage(),
+                stackTraceSourceFrom(rootCause));
     }
 
     private String stackTraceSourceFrom(FailureCause rootCause) {
-        if (rootCause.getStackTrace().length == 0) { return ""; }
+        if (rootCause.getStackTrace().length == 0) {
+            return "";
+        }
 
         return rootCause.getStackTrace()[0].getFileName();
     }
@@ -1401,25 +1427,21 @@ public class TestOutcome {
     }
 
     public FailureCause getNestedTestFailureCause() {
-        for (TestStep step : getFlattenedTestSteps()) {
-            if (step.getException() != null) {
-                return step.getException();
-            }
-        }
-        return getTestFailureCause();
+        return getFlattenedTestSteps().stream()
+                .filter(step -> step.getException() != null)
+                .map(TestStep::getException)
+                .findFirst()
+                .orElse(getTestFailureCause());
     }
 
-    public Optional<TestStep> firstStepWithErrorMessage() {
-        for (TestStep step : getFlattenedTestSteps()) {
-            if (isNotBlank(step.getErrorMessage())) {
-                return Optional.of(step);
-            }
-        }
-        return Optional.absent();
+    public java.util.Optional<TestStep> firstStepWithErrorMessage() {
+        return getFlattenedTestSteps().stream()
+                .filter(step -> isNotBlank(step.getErrorMessage()))
+                .findFirst();
     }
 
-    public Optional<String> testFailureMessage() {
-        return Optional.fromNullable(testFailureMessage);
+    public java.util.Optional<String> testFailureMessage() {
+        return java.util.Optional.ofNullable(testFailureMessage);
 
     }
 
@@ -1427,14 +1449,14 @@ public class TestOutcome {
         if (firstStepWithErrorMessage().isPresent()) {
             return firstStepWithErrorMessage().get().getErrorMessage();
         }
-        return testFailureMessage().or("");
+        return testFailureMessage().orElse("");
     }
 
     public String getConciseErrorMessage() {
         if (firstStepWithErrorMessage().isPresent()) {
             return firstStepWithErrorMessage().get().getConciseErrorMessage();
         }
-        return testFailureMessage().or("");
+        return testFailureMessage().orElse("");
     }
 
     public void setTestFailureMessage(String testFailureMessage) {
@@ -1450,7 +1472,7 @@ public class TestOutcome {
     }
 
     public void setAnnotatedResult(final TestResult annotatedResult) {
-        if (this.annotatedResult != PENDING){
+        if (this.annotatedResult != PENDING) {
             this.annotatedResult = (this.annotatedResult == null) ?
                     annotatedResult : TestResultComparison.overallResultFor(this.annotatedResult, annotatedResult);
         }
@@ -1485,7 +1507,7 @@ public class TestOutcome {
     }
 
     public List<String> getIssues() {
-        List<String> allIssues = new ArrayList(issues());
+        List<String> allIssues = new ArrayList<>(issues());
         if (thereAre(additionalIssues)) {
             allIssues.addAll(additionalIssues);
         }
@@ -1505,7 +1527,7 @@ public class TestOutcome {
 
 
     public List<String> getVersions() {
-        List<String> allVersions = new ArrayList(versions());
+        List<String> allVersions = new ArrayList<>(versions());
         if (thereAre(additionalVersions)) {
             allVersions.addAll(additionalVersions);
         }
@@ -1567,13 +1589,13 @@ public class TestOutcome {
         return project;
     }
 
-    public TestOutcome inTestRunTimestamped(DateTime testRunTimestamp) {
+    public TestOutcome inTestRunTimestamped(ZonedDateTime testRunTimestamp) {
         setTestRunTimestamp(testRunTimestamp);
         return this;
     }
 
-    public void setTestRunTimestamp(DateTime testRunTimestamp) {
-        this.testRunTimestamp = testRunTimestamp.toDate();
+    public void setTestRunTimestamp(ZonedDateTime testRunTimestamp) {
+        this.testRunTimestamp = testRunTimestamp;
     }
 
 
@@ -1588,8 +1610,9 @@ public class TestOutcome {
     public String getFormattedIssues() {
         Set<String> issues = Sets.newHashSet(getIssues());
         if (!issues.isEmpty()) {
-            List<String> orderedIssues = sort(issues, on(String.class));
-            return "(" + getFormatter().addLinks(join(orderedIssues, ", ")) + ")";
+            List<String> orderedIssues = issues.stream().sorted().collect(Collectors.toList());
+            String formattedIssues =  orderedIssues.stream().collect(Collectors.joining(", "));
+            return "(" + getFormatter().addLinks(formattedIssues) + ")";
         } else {
             return "";
         }
@@ -1695,30 +1718,9 @@ public class TestOutcome {
     }
 
     public List<String> getIssueKeys() {
-        return convert(getIssues(), toIssueKeys());
-    }
-
-    private Converter<String, String> toIssueKeys() {
-        return new Converter<String, String>() {
-
-            public String convert(String issueNumber) {
-                String issueKey = issueNumber;
-                if (issueKey.startsWith("#")) {
-                    issueKey = issueKey.substring(1);
-                }
-                if (StringUtils.isNumeric(issueKey) && (getProjectPrefix() != null)) {
-                    Joiner joiner = Joiner.on("-");
-                    issueKey = joiner.join(getProjectPrefix(), issueKey);
-                }
-                return issueKey;
-            }
-
-
-        };
-    }
-
-    private String getProjectPrefix() {
-        return ThucydidesSystemProperty.THUCYDIDES_PROJECT_KEY.from(getEnvironmentVariables());
+        return getIssues().stream()
+                .map(issue -> IssueKeyFormat.forEnvironment(environmentVariables).andKey(issue))
+                .collect(Collectors.toList());
     }
 
     public String getQualifiedMethodName() {
@@ -1742,10 +1744,13 @@ public class TestOutcome {
     }
 
     public String getContext() {
-        if (context == null) { context = contextFrom(environmentVariables); }
+        if (context == null) {
+            context = contextFrom(environmentVariables);
+        }
 
         return context;
     }
+
     /**
      * Returns the name of the test prefixed by the name of the story.
      */
@@ -1897,8 +1902,23 @@ public class TestOutcome {
     }
 
 
+    public void setStartTime(ZonedDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    @Deprecated
     public void setStartTime(DateTime startTime) {
-        this.startTime = startTime.toDate().getTime();
+        ZonedDateTime time =
+                ZonedDateTime.of(startTime.year().get(),
+                        startTime.monthOfYear().get(),
+                        startTime.dayOfMonth().get(),
+                        startTime.hourOfDay().get(),
+                        startTime.minuteOfHour().get(),
+                        startTime.secondOfMinute().get(),
+                        startTime.millisOfSecond().get() * 1000,
+                        ZoneId.systemDefault());
+
+        this.startTime = time;
     }
 
     public void clearStartTime() {
@@ -1918,7 +1938,7 @@ public class TestOutcome {
     }
 
     private void addFlagTagsFor(Set<? extends Flag> flags) {
-        for(Flag flag : flags) {
+        for (Flag flag : flags) {
             this.addTag(TestTag.withName(flag.getMessage()).andType("flag"));
         }
     }
@@ -1931,7 +1951,7 @@ public class TestOutcome {
         return Injectors.getInjector().getInstance(SystemClock.class);
     }
 
-    private DateTime now() {
+    private ZonedDateTime now() {
         return getSystemClock().getCurrentTime();
     }
 
@@ -1976,37 +1996,35 @@ public class TestOutcome {
         return getFlattenedTestSteps().size();
     }
 
-    public Integer getSuccessCount() {
-        return count(successfulSteps()).in(getLeafTestSteps());
+    public Long getSuccessCount() {
+        return count(SUCCESSFUL_TESTSTEPS).in(getLeafTestSteps());
     }
 
-    public Integer getFailureCount() {
-        return count(failingSteps()).in(getLeafTestSteps());
+    public Long getFailureCount() {
+        return count(FAILING_TESTSTEPS).in(getLeafTestSteps());
     }
 
-    public Integer getErrorCount() {
-        return count(errorSteps()).in(getLeafTestSteps());
+    public Long getErrorCount() {
+        return count(ERROR_TESTSTEPS).in(getLeafTestSteps());
     }
 
-    public Integer getCompromisedCount() {
-        return count(compromisedSteps()).in(getLeafTestSteps());
+    public Long getCompromisedCount() {
+        return count(COMPROMISED_TESTSTEPS).in(getLeafTestSteps());
     }
 
-    public Integer getIgnoredCount() {
-        return count(ignoredSteps()).in(getLeafTestSteps());
-    }
+    public Long getIgnoredCount() { return count(IGNORED_TESTSTEPS).in(getLeafTestSteps()); }
 
-    public Integer getSkippedOrIgnoredCount() {
+    public Long getSkippedOrIgnoredCount() {
         return getIgnoredCount() + getSkippedCount();
     }
 
-    public Integer getSkippedCount() {
-        return count(skippedSteps()).in(getLeafTestSteps());
-    }
+    public Long getSkippedCount() { return count(SKIPPED_TESTSTEPS).in(getLeafTestSteps()); }
 
-    public Integer getPendingCount() {
-        List<TestStep> allTestSteps = getLeafTestSteps();
-        return select(allTestSteps, having(on(TestStep.class).isPending())).size();
+    public Long getPendingCount() {
+        return getLeafTestSteps()
+                .stream()
+                .filter(TestStep::isPending)
+                .count();
     }
 
     public Boolean isSuccess() {
@@ -2038,7 +2056,9 @@ public class TestOutcome {
     }
 
     public void recordDuration() {
-        setDuration(System.currentTimeMillis() - startTime);
+        setDuration(
+                ChronoUnit.MILLIS.between(startTime, ZonedDateTime.now())
+        );
     }
 
     public void setDuration(final long duration) {
@@ -2046,11 +2066,12 @@ public class TestOutcome {
     }
 
     public Long getDuration() {
-        if ((duration == 0) && (testSteps.size() > 0)) {
-            return sum(testSteps, on(TestStep.class).getDuration());
-        } else {
-            return duration;
-        }
+        if (duration > 0) { return duration; }
+
+        return testSteps
+                .stream()
+                .mapToLong(TestStep::getDuration)
+                .sum();
     }
 
     /**
@@ -2077,25 +2098,20 @@ public class TestOutcome {
         this.sessionId = sessionId;
     }
 
-    StepCountBuilder count(StepFilter filter) {
+    private StepCountBuilder count(Predicate<TestStep> filter) {
         return new StepCountBuilder(filter);
     }
-
     public static class StepCountBuilder {
-        private final StepFilter filter;
+        private final Predicate<TestStep> stepFilter;
 
-        public StepCountBuilder(StepFilter filter) {
-            this.filter = filter;
+        private StepCountBuilder(Predicate<TestStep> filter) {
+            this.stepFilter = filter;
         }
 
-        int in(List<TestStep> steps) {
-            int count = 0;
-            for (TestStep step : steps) {
-                if (filter.apply(step)) {
-                    count++;
-                }
-            }
-            return count;
+        long in(List<TestStep> steps) {
+            return steps.stream()
+                    .filter( stepFilter )
+                    .count();
         }
     }
 
@@ -2175,19 +2191,19 @@ public class TestOutcome {
         };
     }
 
-    public DateTime getStartTime() {
-        return new DateTime(startTime);
+    public ZonedDateTime getStartTime() {
+        return startTime;
     }
 
-    public DateTime getTestRunTimestamp() {
-        return new DateTime(testRunTimestamp);
+    public ZonedDateTime getTestRunTimestamp() {
+        return testRunTimestamp;
     }
 
     public boolean isDataDriven() {
         return dataTable != null;
     }
 
-    final static private List<String> NO_HEADERS = Lists.newArrayList();
+    final static private List<String> NO_HEADERS = new ArrayList<>();
 
     private List<TestStep> getStepChildren() {
         List<TestStep> firstLevel = firstNonPreconditionStepChildren();
@@ -2204,7 +2220,7 @@ public class TestOutcome {
 
     private List<TestStep> firstNonPreconditionStepChildren() {
 
-        for(TestStep step : getTestSteps()) {
+        for (TestStep step : getTestSteps()) {
             if (!step.isAPrecondition() && step.hasChildren()) {
                 return step.getChildren();
             }
@@ -2231,14 +2247,16 @@ public class TestOutcome {
     }
 
     private String withPlaceholderSubstitutes(String stepName) {
-        if (dataTable == null || dataTable.getRows().isEmpty()) { return stepName; }
+        if (dataTable == null || dataTable.getRows().isEmpty()) {
+            return stepName;
+        }
 
         return dataTable.restoreVariablesIn(stepName);
     }
 
 
     private boolean atLeastOneStepHasChildren() {
-        return !filter(having(on(TestStep.class).hasChildren(), is(true)), getTestSteps()).isEmpty();
+        return getTestSteps().stream().anyMatch(TestStep::hasChildren);
     }
 
     public DataTable getDataTable() {

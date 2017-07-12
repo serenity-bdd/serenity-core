@@ -1,10 +1,7 @@
 package net.thucydides.core.steps;
 
-import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.photography.Darkroom;
@@ -35,8 +32,8 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.convert;
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.*;
 import static net.thucydides.core.model.Stories.findStoryFrom;
 import static net.thucydides.core.model.TestResult.*;
@@ -182,12 +179,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private String failureHistoryFor(List<String> failureMessages) {
-        List<String> bulletPoints = convert(failureMessages, new Converter<String, String>() {
-            @Override
-            public String convert(String from) {
-                return "* " + from;
-            }
-        });
+        List<String> bulletPoints = failureMessages.stream()
+                .map(from -> "* " + from)
+                .collect(Collectors.toList());
+
         return Joiner.on("\n").join(bulletPoints);
     }
 
@@ -220,12 +215,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     public BaseStepListener(final File outputDirectory, Injector injector) {
         this.proxyFactory = WebdriverProxyFactory.getFactory();
-        this.testOutcomes = Lists.newArrayList();
+        this.testOutcomes = new ArrayList<>();
         this.currentStepStack = new Stack<>();
         this.currentGroupStack = new Stack<>();
         this.outputDirectory = outputDirectory;
-        this.storywideIssues = Lists.newArrayList();
-        this.storywideTags = Lists.newArrayList();
+        this.storywideIssues = new ArrayList<>();
+        this.storywideTags = new ArrayList<>();
         //this.webdriverManager = injector.getInstance(WebdriverManager.class);
         this.clock = injector.getInstance(SystemClock.class);
         this.configuration = injector.getInstance(Configuration.class);
@@ -855,21 +850,14 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public List<TestOutcome> getTestOutcomes() {
-        List<TestOutcome> sortedOutcomes = Lists.newArrayList(testOutcomes);
-        Collections.sort(sortedOutcomes, byStartTimeAndName());
-        return ImmutableList.copyOf(sortedOutcomes);
+        return testOutcomes.stream()
+                .sorted((o1, o2) -> {
+                    String creationTimeAndName1 = o1.getStartTime() + "_" + o1.getName();
+                    String creationTimeAndName2 = o1.getStartTime() + "_" + o1.getName();
+                    return creationTimeAndName1.compareTo(creationTimeAndName2);
+                })
+                .collect(Collectors.toList());
     }
-
-    private Comparator<? super TestOutcome> byStartTimeAndName() {
-        return new Comparator<TestOutcome>() {
-            public int compare(TestOutcome testOutcome1, TestOutcome testOutcome2) {
-                String creationTimeAndName1 = testOutcome1.getStartTime().getMillis() + "_" + testOutcome1.getName();
-                String creationTimeAndName2 = testOutcome2.getStartTime().getMillis() + "_" + testOutcome2.getName();
-                return creationTimeAndName1.compareTo(creationTimeAndName2);
-            }
-        };
-    }
-
 
     public void setDriver(final WebDriver driver) {
         this.driver = driver;

@@ -4,14 +4,15 @@ package net.thucydides.core.reports.adaptors.xunit.model;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestSuite {
 
     private String name;
-    private List<TestCase> testCases = Lists.newArrayList();
+    private List<TestCase> testCases = new ArrayList<>();
 
-    private static List<TestCase> NO_TEST_CASES = Lists.newArrayList();
+    private static List<TestCase> NO_TEST_CASES = new ArrayList<>();
 
     private TestSuite(String name, List<TestCase> testCases) {
         this.name = name;

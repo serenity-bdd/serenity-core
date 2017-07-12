@@ -6,17 +6,20 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestStepFactory;
 import org.joda.time.DateTime;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TestOutcomesBuilder {
 
-    public final static DateTime EARLY_DATE = new DateTime(2013,1,1,0,0);
-    public final static DateTime LATE_DATE = new DateTime(2013,1,2,0,0);
+    public final static ZonedDateTime EARLY_DATE = ZonedDateTime.of(2013, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault());
+    public final static ZonedDateTime LATE_DATE =  ZonedDateTime.of(2013, 1, 2, 0, 0, 0, 0, ZoneId.systemDefault());
 
     @Feature
     class WidgetFeature {
-        class PurchaseNewWidget{}
+        class PurchaseNewWidget {
+        }
     }
 
     public TestOutcomes getDefaultResults() {
@@ -43,7 +46,7 @@ public class TestOutcomesBuilder {
 
     public TestOutcome thatSucceedsFor(Story story, int stepCount) {
         TestOutcome testOutcome = TestOutcome.forTestInStory("a test", story);
-        for(int i = 1; i <= stepCount; i++ ){
+        for (int i = 1; i <= stepCount; i++) {
             testOutcome.recordStep(TestStepFactory.forASuccessfulTestStepCalled("Step " + i));
         }
         testOutcome.setStartTime(EARLY_DATE);
@@ -52,7 +55,7 @@ public class TestOutcomesBuilder {
 
     public TestOutcome thatIsPendingFor(Story story, int stepCount) {
         TestOutcome testOutcome = TestOutcome.forTestInStory("a test", story);
-        for(int i = 1; i <= stepCount; i++ ){
+        for (int i = 1; i <= stepCount; i++) {
             testOutcome.recordStep(TestStepFactory.forAPendingTestStepCalled("Step " + i));
         }
         testOutcome.setStartTime(LATE_DATE);
@@ -61,7 +64,7 @@ public class TestOutcomesBuilder {
 
     public TestOutcome thatIsIgnoredFor(Story story, int stepCount) {
         TestOutcome testOutcome = TestOutcome.forTestInStory("a test", story);
-        for(int i = 1; i <= stepCount; i++ ){
+        for (int i = 1; i <= stepCount; i++) {
             testOutcome.recordStep(TestStepFactory.forAnIgnoredTestStepCalled("Step " + i));
         }
         return testOutcome;
@@ -69,7 +72,7 @@ public class TestOutcomesBuilder {
 
     public TestOutcome thatIsFailingFor(Story story, int stepCount) {
         TestOutcome testOutcome = TestOutcome.forTestInStory("a test", story);
-        for(int i = 1; i <= stepCount; i++ ){
+        for (int i = 1; i <= stepCount; i++) {
             testOutcome.recordStep(TestStepFactory.forABrokenTestStepCalled("Step " + i, new AssertionError()));
         }
         testOutcome.setStartTime(LATE_DATE);

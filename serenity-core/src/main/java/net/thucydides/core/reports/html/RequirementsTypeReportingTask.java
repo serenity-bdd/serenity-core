@@ -1,9 +1,6 @@
 package net.thucydides.core.reports.html;
 
-import ch.lambdaj.Lambda;
-import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Objects;
-import com.google.common.collect.Sets;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
 
@@ -11,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 class RequirementsTypeReportingTask extends BaseReportingTask implements ReportingTask {
 
@@ -21,12 +19,12 @@ class RequirementsTypeReportingTask extends BaseReportingTask implements Reporti
     private final String requirementType;
     private final String reportName;
 
-    RequirementsTypeReportingTask(FreemarkerContext freemarker,
-                                         EnvironmentVariables environmentVariables,
-                                         File outputDirectory,
-                                         ReportNameProvider reportNameProvider,
-                                         RequirementsOutcomes requirementsOutcomes,
-                                         String requirementType) {
+    private RequirementsTypeReportingTask(FreemarkerContext freemarker,
+                                          EnvironmentVariables environmentVariables,
+                                          File outputDirectory,
+                                          ReportNameProvider reportNameProvider,
+                                          RequirementsOutcomes requirementsOutcomes,
+                                          String requirementType) {
         super(freemarker, environmentVariables, outputDirectory);
         this.reportNameProvider = reportNameProvider;
         this.requirementsOutcomes = requirementsOutcomes;
@@ -34,33 +32,22 @@ class RequirementsTypeReportingTask extends BaseReportingTask implements Reporti
         this.reportName = reportNameProvider.forRequirementType(requirementType);
     }
 
-    public static Set<ReportingTask> requirementTypeReports(final RequirementsOutcomes requirementsOutcomes,
-                                                            final FreemarkerContext freemarker,
-                                                            final EnvironmentVariables environmentVariables,
-                                                            final File outputDirectory,
-                                                            final ReportNameProvider reportNameProvider) {
-        return Sets.newHashSet(
-                Lambda.convert(requirementsOutcomes.getTypes(),
-                               toRequirementTypeReports(requirementsOutcomes,
-                                                        freemarker,
-                                                        environmentVariables,
-                                                        outputDirectory,
-                                                        reportNameProvider)));
-    }
+    static Set<ReportingTask> requirementTypeReports(final RequirementsOutcomes requirementsOutcomes,
+                                                     final FreemarkerContext freemarker,
+                                                     final EnvironmentVariables environmentVariables,
+                                                     final File outputDirectory,
+                                                     final ReportNameProvider reportNameProvider) {
 
-    private static Converter<String, ReportingTask> toRequirementTypeReports(final RequirementsOutcomes requirementsOutcomes,
-                                                                             final FreemarkerContext freemarker,
-                                                                             final EnvironmentVariables environmentVariables,
-                                                                             final File outputDirectory,
-                                                                             final ReportNameProvider reportNameProvider) {
-        return new Converter<String, ReportingTask>() {
+        return requirementsOutcomes.getTypes().stream()
+                .map(
+                        type -> new RequirementsTypeReportingTask(freemarker,
+                                environmentVariables,
+                                outputDirectory,
+                                reportNameProvider,
+                                requirementsOutcomes,
+                                type)
+                ).collect(Collectors.toSet());
 
-            @Override
-            public ReportingTask convert(final String requirementType) {
-                return new RequirementsTypeReportingTask(freemarker, environmentVariables, outputDirectory,
-                                                         reportNameProvider, requirementsOutcomes, requirementType);
-            }
-        };
     }
 
     @Override

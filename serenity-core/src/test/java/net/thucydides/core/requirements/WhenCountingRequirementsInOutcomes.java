@@ -19,9 +19,6 @@ import java.nio.file.Paths;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-/**
- * Created by john on 8/07/2016.
- */
 public class WhenCountingRequirementsInOutcomes {
 
     File featuresDirectory;

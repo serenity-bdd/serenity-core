@@ -1,14 +1,12 @@
 package net.thucydides.core.pages.components;
 
-import ch.lambdaj.function.convert.Converter;
 import net.thucydides.core.matchers.BeanMatcher;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.*;
-
-import static ch.lambdaj.Lambda.convert;
+import java.util.stream.Collectors;
 
 /**
  * Class designed to make it easier reading from and reasoning about data in HTML tables.
@@ -33,7 +31,7 @@ public class HtmlTable {
 
     public List<Map<Object, String>> getRows() {
 
-        List<Map<Object, String>> results = new ArrayList<Map<Object, String>>();
+        List<Map<Object, String>> results = new ArrayList<>();
 
         List<String> headings = getHeadings();
         List<WebElement> rows = getRowElementsFor(headings);
@@ -81,7 +79,7 @@ public class HtmlTable {
     public static class HtmlTableBuilder {
         private final List<String> headings;
 
-        public HtmlTableBuilder(List<String> headings) {
+        HtmlTableBuilder(List<String> headings) {
             this.headings = headings;
         }
 
@@ -112,9 +110,16 @@ public class HtmlTable {
 
     public List<String> getHeadings() {
         if (headings == null) {
-            List<String> thHeadings = convert(headingElements(), toTextValues());
+            List<String> thHeadings = headingElements()
+                                            .stream()
+                                            .map(WebElement::getText)
+                                            .collect(Collectors.toList());
+
             if (thHeadings.isEmpty()) {
-                headings = convert(firstRowElements(), toTextValues());
+                headings = firstRowElements()
+                            .stream()
+                            .map(WebElement::getText)
+                            .collect(Collectors.toList());
             } else {
                 headings = thHeadings;
             }
@@ -222,14 +227,6 @@ public class HtmlTable {
 
     private String cellValueAt(final int column, final List<WebElement> cells) {
         return cells.get(column).getText();
-    }
-
-    private Converter<WebElement, String> toTextValues() {
-        return new Converter<WebElement, String>() {
-            public String convert(WebElement from) {
-                return from.getText();
-            }
-        };
     }
 
     public static List<Map<Object, String>> rowsFrom(final WebElement table) {

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class Methods {
 
     private final Class<?> clazz;
 
-    private List<Method> currentResults = Lists.newArrayList();
+    private List<Method> currentResults = new ArrayList<>();
 
     public static Methods of(final Class<?> testClass) {
         return new Methods(testClass);
@@ -34,7 +35,7 @@ public class Methods {
     }
 
     private List<Method> filterByName(List<Method> currentResults, String name) {
-        List<Method> filteredResults = Lists.newArrayList();
+        List<Method> filteredResults = new ArrayList<>();
         for (Method method : currentResults) {
             if (method.getName().equals(name)) {
                 filteredResults.add(method);

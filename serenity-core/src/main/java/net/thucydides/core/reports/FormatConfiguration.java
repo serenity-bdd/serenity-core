@@ -9,6 +9,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class FormatConfiguration {
                                                    .splitToList(ThucydidesSystemProperty.OUTPUT_FORMATS
                                                            .from(environmentVariables, DEFAULT_FORMATS));
 
-        formats = Lists.newArrayList();
+        formats = new ArrayList<>();
         for(String format : formatNames) {
             formats.addAll(outcomeFormatFrom(format).asSet());
         }

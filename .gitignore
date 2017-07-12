@@ -5,6 +5,7 @@ lib
 target
 *.iml
 *.log
+.DS_Store
 /serenity-core.ipr
 /serenity-core.iws
 /serenity-smoketests/todo-demo.ipr

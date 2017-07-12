@@ -19,9 +19,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 
 import static net.thucydides.core.model.ReportType.XML;
 
@@ -109,12 +107,12 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
     }
 
     @Override
-    public Optional<TestOutcome> loadReportFrom(final Path reportFile) {
+    public java.util.Optional<TestOutcome> loadReportFrom(final Path reportFile) {
         return loadReportFrom(reportFile.toFile());
     }
 
     @Override
-    public Optional<TestOutcome> loadReportFrom(final File reportFile) {
+    public java.util.Optional<TestOutcome> loadReportFrom(final File reportFile) {
         try(
                 InputStream input = new FileInputStream(reportFile);
                 InputStreamReader reader = new InputStreamReader(input, encoding);
@@ -122,16 +120,16 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
             XStream xstream = new XStream();
             xstream.alias("acceptance-test-run", TestOutcome.class);
             xstream.registerConverter(usingXmlConverter());
-            return Optional.of((TestOutcome) xstream.fromXML(reader));
+            return java.util.Optional.of((TestOutcome) xstream.fromXML(reader));
         } catch (CannotResolveClassException e) {
             LOGGER.warn("Tried to load a file that is not a thucydides report: " + reportFile);
-            return Optional.absent();
+            return java.util.Optional.empty();
         } catch (FileNotFoundException e) {
             LOGGER.warn("Tried to load a file that is not a thucydides report: " + reportFile);
-            return Optional.absent();
+            return java.util.Optional.empty();
         } catch (IOException e) {
             LOGGER.warn("Could not load a report for some reason" + e.getMessage());
-            return Optional.absent();
+            return java.util.Optional.empty();
         }
     }
 
@@ -152,10 +150,10 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
     @Override
     public List<TestOutcome> loadReportsFrom(File outputDirectory) {
         File[] reportFiles = getAllXMLFilesFrom(outputDirectory);
-        List<TestOutcome> testOutcomes = Lists.newArrayList();
+        List<TestOutcome> testOutcomes = new ArrayList<>();
         if (reportFiles != null) {
             for (File reportFile : reportFiles) {
-                testOutcomes.addAll(loadReportFrom(reportFile).asSet());
+                testOutcomes.addAll(loadReportFrom(reportFile).map(Collections::singleton).orElse(Collections.emptySet()));
             }
         }
         return testOutcomes;

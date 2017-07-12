@@ -10,11 +10,13 @@ import org.joda.time.DateTime
 import spock.lang.Specification
 
 import java.nio.charset.StandardCharsets
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
-/**
- * Created by john on 7/02/15.
- */
 class WhenSerializingJSONObjectWithGSON extends Specification {
+
+    private static final ZonedDateTime FIRST_OF_JANUARY = ZonedDateTime.of(2013, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault())
+    private static final ZonedDateTime SECOND_OF_JANUARY = ZonedDateTime.of(2013, 1, 2, 0, 0, 0, 0, ZoneId.systemDefault())
 
     EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
 
@@ -23,11 +25,11 @@ class WhenSerializingJSONObjectWithGSON extends Specification {
             GsonJSONConverter converter = new GsonJSONConverter(environmentVariables)
         and:
             def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class).withQualifier("foo")
-            testOutcome.startTime = DateTime.parse("2015-01-01")
+            testOutcome.startTime = FIRST_OF_JANUARY
 
             testOutcome.description = "Some description"
             testOutcome.recordStep(TestStepFactory.successfulTestStepCalled("step 1").
-                    startingAt(DateTime.parse("2015-01-01")))
+                    startingAt(FIRST_OF_JANUARY))
 
         when:
             OutputStream outputStream = new ByteArrayOutputStream()
@@ -50,7 +52,7 @@ class WhenSerializingJSONObjectWithGSON extends Specification {
         and:
             def testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class).withQualifier("foo")
             testOutcome.environmentVariables = environmentVariables
-            testOutcome.startTime = DateTime.parse("2015-01-01")
+            testOutcome.startTime = FIRST_OF_JANUARY
 
             testOutcome.description = "Some description"
 

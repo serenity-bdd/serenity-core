@@ -11,12 +11,15 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.time.ZoneId
+import java.time.ZonedDateTime
+
 class WhenStoringTestStepsAsJSON extends Specification {
 
     @Shared
     def environmentVars = new MockEnvironmentVariables();
 
-    private static final DateTime FIRST_OF_JANUARY = new LocalDateTime(2013, 1, 1, 0, 0, 0, 0).toDateTime()
+    private static final ZonedDateTime FIRST_OF_JANUARY = ZonedDateTime.of(2013, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault())
 
     static TestStep simpleStep = TestStep.forStepCalled("some step").withResult(TestResult.SUCCESS)
             .startingAt(FIRST_OF_JANUARY)
@@ -27,7 +30,7 @@ class WhenStoringTestStepsAsJSON extends Specification {
   "description" : "some step",
   "duration" : 0,
   "result" : "SUCCESS",
-  "startTime" : ${FIRST_OF_JANUARY.millis}
+  "startTime" : "${FIRST_OF_JANUARY.toString()}"
 }
 """
 

@@ -3,12 +3,13 @@ package net.thucydides.core.reports.adaptors.specflow;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SpecflowScenario {
 
     private final String titleLine;
-    private List<String> steps = Lists.newArrayList();
+    private List<String> steps = new ArrayList<>();
     private List<SpecflowTableRow> rows;
 
     public SpecflowScenario(String titleLine) {
@@ -29,7 +30,7 @@ public class SpecflowScenario {
 
     public void convertToTable(String firstRowTitle) {
         if (rows == null) {
-            rows = Lists.newArrayList();
+            rows = new ArrayList<>();
             addRow(firstRowTitle, steps);
             steps.clear();
         }

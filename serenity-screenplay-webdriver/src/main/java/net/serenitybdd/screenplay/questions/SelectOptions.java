@@ -5,10 +5,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.targets.Target;
 
 import java.util.List;
-
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
-import static net.serenitybdd.screenplay.questions.UIFilter.visible;
+import java.util.stream.Collectors;
 
 public class SelectOptions extends TargetedUIState<List<String>> {
 
@@ -17,7 +14,7 @@ public class SelectOptions extends TargetedUIState<List<String>> {
     }
 
     public static UIStateReaderBuilder<SelectOptions> of(Target target) {
-        return new UIStateReaderBuilder(target, SelectOptions.class);
+        return new UIStateReaderBuilder<>(target, SelectOptions.class);
     }
 
     public List<String> resolve() {
@@ -25,6 +22,8 @@ public class SelectOptions extends TargetedUIState<List<String>> {
     }
 
     public List<List<String>> resolveAll() {
-        return extract(visible(target.resolveAllFor(actor)), on(WebElementFacade.class).getSelectOptions());
+        return resolvedElements()
+                .map(WebElementFacade::getSelectOptions)
+                .collect(Collectors.toList());
     }
 }

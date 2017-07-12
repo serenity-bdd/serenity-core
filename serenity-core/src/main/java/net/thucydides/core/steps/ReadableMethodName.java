@@ -1,16 +1,10 @@
 package net.thucydides.core.steps;
 
-import ch.lambdaj.function.convert.Converter;
-
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.convert;
-import static ch.lambdaj.Lambda.join;
-
-/**
- * Created by john on 7/08/2015.
- */
 public class ReadableMethodName {
 
     public static TestNameBuilder forMethod(final Method method) {
@@ -40,16 +34,12 @@ public class ReadableMethodName {
             if (args.length == 0) {
                 return "";
             }
-            return ": " + join(convert(args, toReadableForm()));
-        }
+            List<String> readableArguments
+                    = Arrays.stream(args)
+                            .map(StepArgumentWriter::readableFormOf)
+                            .collect(Collectors.toList());
 
-        private Converter<Object, String> toReadableForm() {
-            return new Converter<Object, String>() {
-                @Override
-                public String convert(Object argument) {
-                    return StepArgumentWriter.readableFormOf(argument);
-                }
-            };
+            return ": " + String.join(", ", readableArguments);
         }
     }
 }

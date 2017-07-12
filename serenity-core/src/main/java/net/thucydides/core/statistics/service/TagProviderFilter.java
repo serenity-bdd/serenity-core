@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.thucydides.core.requirements.CoreTagProvider;
 import net.thucydides.core.requirements.OverridableTagProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TagProviderFilter<T extends TagProvider> {
@@ -26,7 +27,7 @@ public class TagProviderFilter<T extends TagProvider> {
     }
 
     private List<T> removeOverridableProvidersFrom(List<T> providers) {
-        List<T> retainedProviders = Lists.newArrayList();
+        List<T> retainedProviders = new ArrayList<>();
         for(T provider : providers) {
             if (!OverridableTagProvider.class.isAssignableFrom(provider.getClass())) {
                 retainedProviders.add(provider);

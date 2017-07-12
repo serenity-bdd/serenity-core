@@ -1,24 +1,29 @@
 package net.thucydides.core.reports.html;
 
-import ch.lambdaj.Lambda;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.TestOutcomes;
-import org.joda.time.DateTime;
 
-import static ch.lambdaj.Lambda.on;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class TestOutcomeTimestamp {
 
-    protected static final String TIMESTAMP_FORMAT = "dd-MM-YYYY HH:mm";
+    private static final DateTimeFormatter TIMESTAMP_FORMAT = DateTimeFormatter.ofPattern("dd-MM-YYYY HH:mm");
+
 
     public static String from(TestOutcomes testOutcomes) {
-        DateTime startTime = Lambda.min(testOutcomes.getOutcomes(), on(TestOutcome.class).getStartTime());
-        return startTime == null ? "" : startTime.toString(TIMESTAMP_FORMAT);
+        return testOutcomes.getOutcomes().stream()
+                .filter(outcome -> outcome.getStartTime() != null)
+                .map(TestOutcome::getStartTime)
+                .sorted()
+                .findFirst()
+                .map(TIMESTAMP_FORMAT::format)
+                .orElse("");
     }
 
     public static String from(TestOutcome testOutcome) {
-        DateTime startTime = testOutcome.getStartTime();
-        return startTime == null ? "" : startTime.toString(TIMESTAMP_FORMAT);
+        ZonedDateTime startTime = testOutcome.getStartTime();
+        return startTime == null ? "" : TIMESTAMP_FORMAT.format(startTime);
     }
 
 }

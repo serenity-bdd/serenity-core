@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -43,20 +44,21 @@ public class GsonJSONConverter implements JSONConverter {
                                             .registerTypeHierarchyAdapter(Collection.class, new CollectionAdapter())
                                             .registerTypeAdapter(Flag.class, new InterfaceAdapter<Flag>())
                                             .registerTypeAdapter(File.class, new FileSerializer())
+                                            .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeAdapter())
                                             .registerTypeAdapter(File.class, new FileDeserializer())
                                             .registerTypeAdapter(Class.class, new ClassTypeAdapter());
         this.gson = (usePrettyPrinting()) ? gsonBuilder.setPrettyPrinting().create() : gsonBuilder.create();
     }
 
     @Override
-    public Optional<TestOutcome> fromJson(InputStream inputStream) throws IOException {
+    public java.util.Optional<TestOutcome> fromJson(InputStream inputStream) throws IOException {
         return fromJson(new InputStreamReader(inputStream, encoding));
     }
 
     @Override
-    public Optional<TestOutcome> fromJson(Reader jsonReader) {
+    public java.util.Optional<TestOutcome> fromJson(Reader jsonReader) {
         TestOutcome testOutcome = gson.fromJson(jsonReader, TestOutcome.class);
-        return isValid(testOutcome) ? Optional.of(testOutcome) : Optional.<TestOutcome>absent();
+        return isValid(testOutcome) ? java.util.Optional.of(testOutcome) : java.util.Optional.<TestOutcome>empty();
     }
 
     private boolean isValid(TestOutcome testOutcome) {

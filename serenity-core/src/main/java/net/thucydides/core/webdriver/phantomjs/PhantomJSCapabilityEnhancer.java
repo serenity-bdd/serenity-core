@@ -24,7 +24,7 @@ public class PhantomJSCapabilityEnhancer {
                     environmentVariables.getProperty(ThucydidesSystemProperty.PHANTOMJS_BINARY_PATH));
         }
 
-        ArrayList<String> cliArgs = Lists.newArrayList();
+        ArrayList<String> cliArgs = new ArrayList<>();
         setSecurityOptions(cliArgs);
         setLoggingOptions(cliArgs);
 

@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements;
 
-import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -24,8 +23,8 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.convert;
 import static net.thucydides.core.files.TheDirectoryStructure.startingAt;
 import static net.thucydides.core.requirements.RequirementsPath.pathElements;
 import static net.thucydides.core.requirements.RequirementsPath.stripRootFromPath;
@@ -42,8 +41,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private final static Logger logger = LoggerFactory.getLogger(FileSystemRequirementsTagProvider.class);
 
-    private static final List<Requirement> NO_REQUIREMENTS = Lists.newArrayList();
-    private static final List<TestTag> NO_TEST_TAGS = Lists.newArrayList();
+    private static final List<Requirement> NO_REQUIREMENTS = new ArrayList<>();
+    private static final List<TestTag> NO_TEST_TAGS = new ArrayList<>();
     public static final String STORY_EXTENSION = "story";
     public static final String FEATURE_EXTENSION = "feature";
 
@@ -156,7 +155,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private List<Requirement> addParentsTo(List<Requirement> requirements, String parent) {
-        List<Requirement> augmentedRequirements = Lists.newArrayList();
+        List<Requirement> augmentedRequirements = new ArrayList<>();
         for (Requirement requirement : requirements) {
             List<Requirement> children = requirement.hasChildren()
                     ? addParentsTo(requirement.getChildren(), requirement.qualifiedName()) : NO_REQUIREMENTS;
@@ -227,7 +226,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
 
     private Collection<TestTag> parentRequirementsOf(TestTag requirementTag) {
-        List<TestTag> matchingTags = Lists.newArrayList();
+        List<TestTag> matchingTags = new ArrayList<>();
 
         Optional<Requirement> matchingRequirement = getMatchingRequirementFor(requirementTag);
         Optional<Requirement> parent = parentRequirementsOf(matchingRequirement.get());
@@ -451,34 +450,21 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private List<Requirement> loadCapabilitiesFrom(File[] requirementDirectories) {
-        return convert(requirementDirectories, toRequirements());
+
+        return Arrays.stream(requirementDirectories)
+                .map(this::readRequirementFrom)
+                .collect(Collectors.toList());
     }
 
 
     private List<Requirement> loadStoriesFrom(File[] storyFiles) {
-        return convert(storyFiles, toStoryRequirements());
-    }
-
-    private Converter<File, Requirement> toRequirements() {
-        return new Converter<File, Requirement>() {
-
-            public Requirement convert(File requirementFileOrDirectory) {
-                return readRequirementFrom(requirementFileOrDirectory);
-            }
-        };
-    }
-
-    private Converter<File, Requirement> toStoryRequirements() {
-        return new Converter<File, Requirement>() {
-
-            public Requirement convert(File storyFile) {
-                return readRequirementsFromStoryOrFeatureFile(storyFile);
-            }
-        };
+        return Arrays.stream(storyFiles)
+                .map(this::readRequirementsFromStoryOrFeatureFile)
+                .collect(Collectors.toList());
     }
 
     public Requirement readRequirementFrom(File requirementDirectory) {
-        Optional<Narrative> requirementNarrative = narrativeReader.loadFrom(requirementDirectory, level);
+        java.util.Optional<Narrative> requirementNarrative = narrativeReader.loadFrom(requirementDirectory, level);
 
         if (requirementNarrative.isPresent()) {
             return requirementWithNarrative(requirementDirectory,
@@ -493,7 +479,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         FeatureType type = featureTypeOf(storyFile);
         String defaultStoryName = storyFile.getName().replace(type.getExtension(), "");
 
-        Optional<Narrative> optionalNarrative = (type == FeatureType.STORY) ? loadFromStoryFile(storyFile) : loadFromFeatureFile(storyFile);
+        java.util.Optional<Narrative> optionalNarrative = (type == FeatureType.STORY) ? loadFromStoryFile(storyFile) : loadFromFeatureFile(storyFile);
 
         String storyName = (optionalNarrative.isPresent()) ? optionalNarrative.get().getTitle().or(defaultStoryName) : defaultStoryName;
 
@@ -504,11 +490,11 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return requirement.definedInFile(storyFile);
     }
 
-    private Optional<Narrative> loadFromStoryFile(File storyFile) {
+    private java.util.Optional<Narrative> loadFromStoryFile(File storyFile) {
         return narrativeReader.loadFromStoryFile(storyFile);
     }
 
-    private Optional<Narrative> loadFromFeatureFile(File storyFile) {
+    private java.util.Optional<Narrative> loadFromFeatureFile(File storyFile) {
         String explicitLocale = readLocaleFromFeatureFile(storyFile);
         CucumberParser parser = (explicitLocale != null) ?
                 new CucumberParser(explicitLocale, environmentVariables) : new CucumberParser(environmentVariables);

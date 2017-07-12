@@ -14,9 +14,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ch.lambdaj.Lambda.filter;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 
 public class WhenAddingJQuerySupportToPageObjects {
@@ -81,9 +79,11 @@ public class WhenAddingJQuerySupportToPageObjects {
         @Override
         protected boolean matchesSafely(TestableJQueryEnabledPage page) {
             if (shouldHaveExecutedScript) {
-                return !filter(containsString(scriptName), page.executedScripts).isEmpty();
+                return page.executedScripts.stream()
+                        .anyMatch(script -> script.contains(scriptName));
             } else {
-                return filter(containsString(scriptName), page.executedScripts).isEmpty();
+                return !page.executedScripts.stream()
+                        .anyMatch(script -> script.contains(scriptName));
             }
         }
 

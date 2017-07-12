@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.serenitybdd.screenplay.Interaction;
 import org.openqa.selenium.Keys;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class EnterValue implements Interaction {
@@ -13,7 +14,7 @@ public abstract class EnterValue implements Interaction {
 
     public EnterValue(String theText) {
         this.theText = theText;
-        this.followedByKeys = Lists.newArrayList();
+        this.followedByKeys = new ArrayList<>();
     }
 
     public EnterValue thenHit(Keys... keys) {

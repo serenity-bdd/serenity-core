@@ -4,6 +4,7 @@ import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Optional;
 import net.thucydides.core.requirements.model.Requirement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.max;
@@ -34,7 +35,7 @@ public class RequirementsList {
     }
 
     public List<Requirement> asFlattenedList() {
-        List<Requirement> flattenedRequirements = Lists.newArrayList();
+        List<Requirement> flattenedRequirements = new ArrayList<>();
         for(Requirement requirement : requirements) {
             flattenedRequirements.add(requirement);
             if (requirement.hasChildren()) {

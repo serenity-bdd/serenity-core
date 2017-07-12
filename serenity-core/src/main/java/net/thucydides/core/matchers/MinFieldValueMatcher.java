@@ -1,12 +1,11 @@
 package net.thucydides.core.matchers;
 
-import ch.lambdaj.function.convert.Converter;
 import org.hamcrest.Matcher;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.convert;
 import static java.util.Collections.min;
 import static net.thucydides.core.matchers.dates.BeanFields.fieldValueIn;
 
@@ -20,17 +19,12 @@ class MinFieldValueMatcher implements BeanCollectionMatcher {
     }
 
     public <T> boolean matches(Collection<T> elements) {
-        List<Comparable> fieldValues = convert(elements, toComparable());
-        return valueMatcher.matches(min(fieldValues));
-    }
 
-    private <T> Converter<T, Comparable> toComparable() {
-        return new Converter<T, Comparable>() {
-            @Override
-            public Comparable convert(T bean) {
-                return (Comparable) fieldValueIn(bean).forField(fieldName);
-            }
-        };
+        List<Comparable> fieldValues = elements.stream()
+                .map(element -> (Comparable) fieldValueIn(element).forField(fieldName))
+                .collect(Collectors.toList());
+
+        return valueMatcher.matches(min(fieldValues));
     }
 
     @Override

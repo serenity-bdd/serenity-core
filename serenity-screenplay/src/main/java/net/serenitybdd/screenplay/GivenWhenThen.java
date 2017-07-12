@@ -4,6 +4,7 @@ import com.beust.jcommander.internal.Lists;
 import net.serenitybdd.screenplay.questions.ConsequenceGroup;
 import org.hamcrest.Matcher;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -53,7 +54,7 @@ public class GivenWhenThen {
     }
 
     private static <T> Consequence<T>[] consequencesForEachMatcher(Question<? extends T> actual, Matcher<T>[] expectedMatchers) {
-        List<Consequence<T>> consequences = Lists.newArrayList();
+        List<Consequence<T>> consequences = new ArrayList<>();
 
         for(Matcher<T> matcher : expectedMatchers) {
             consequences.add(new QuestionConsequence(actual, matcher));
@@ -66,7 +67,7 @@ public class GivenWhenThen {
     }
 
     public static <T> Consequence<T>[] seeThat(String subject, Question<? extends T> actual, Matcher<T>... expectedMatchers) {
-        List<Consequence<T>> consequences = Lists.newArrayList();
+        List<Consequence<T>> consequences = new ArrayList<>();
         for(Matcher<T> matcher : expectedMatchers) {
             consequences.add(new QuestionConsequence(subject, actual, matcher));
         }

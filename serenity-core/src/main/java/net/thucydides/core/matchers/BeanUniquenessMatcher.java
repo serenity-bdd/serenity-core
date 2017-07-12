@@ -1,13 +1,11 @@
 package net.thucydides.core.matchers;
 
-import ch.lambdaj.function.convert.Converter;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.convert;
 import static net.thucydides.core.matchers.dates.BeanFields.fieldValueIn;
 
 class BeanUniquenessMatcher implements BeanCollectionMatcher {
@@ -24,19 +22,15 @@ class BeanUniquenessMatcher implements BeanCollectionMatcher {
     }
 
     public <T> boolean matches(Collection<T> elements) {
-        List<Object> allFieldValues = convert(elements, new FieldValueExtractor());
+        List<Object> allFieldValues = elements.stream()
+                .map(element -> fieldValueIn(element).forField(fieldName))
+                .collect(Collectors.toList());
+
         Set<Object> uniquefieldValues = new HashSet<Object>();
 
         uniquefieldValues.addAll(allFieldValues);
 
         return (uniquefieldValues.size() == elements.size());
-    }
-
-    public class FieldValueExtractor implements Converter<Object, Object> {
-        @Override
-        public Object convert(Object bean) {
-            return fieldValueIn(bean).forField(fieldName);
-        }
     }
 
     @Override

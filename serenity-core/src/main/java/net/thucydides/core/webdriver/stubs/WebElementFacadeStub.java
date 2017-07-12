@@ -1,7 +1,5 @@
 package net.thucydides.core.webdriver.stubs;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WebElementState;
@@ -13,9 +11,11 @@ import org.openqa.selenium.support.ui.Duration;
 import org.openqa.selenium.support.ui.Wait;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 public class WebElementFacadeStub implements WebElementFacade {
 
@@ -82,11 +82,11 @@ public class WebElementFacadeStub implements WebElementFacade {
 
     @Override
     public List<WebElementFacade> thenFindAll(String xpathOrCssSelector) {
-        return Lists.newArrayList();
+        return new ArrayList<>();
     }
 
     private List<WebElementFacade> webElementFacadesFrom(List<WebElement> nestedElements) {
-        return Lists.newArrayList();
+        return new ArrayList<>();
     }
 
     @Override
@@ -111,7 +111,7 @@ public class WebElementFacadeStub implements WebElementFacade {
 
     @Override
     public List<WebElementFacade> thenFindAll(By selector) {
-        return Lists.newArrayList();
+        return new ArrayList<>();
     }
 
     @Override
@@ -239,7 +239,7 @@ public class WebElementFacadeStub implements WebElementFacade {
 
     @Override
     public List<String> getSelectOptions() {
-        return Lists.newArrayList();
+        return new ArrayList<>();
     }
 
     /**
@@ -483,7 +483,7 @@ public class WebElementFacadeStub implements WebElementFacade {
     }
 
     public List<WebElement> findElements(By by) {
-        return Lists.newArrayList();
+        return new ArrayList<>();
     }
 
     public WebElement findElement(By by) {
@@ -549,7 +549,7 @@ public class WebElementFacadeStub implements WebElementFacade {
 
     @Override
     public List<WebElement> findElementsByAccessibilityId(String using) {
-        return Lists.newArrayList();
+        return new ArrayList<>();
     }
 
     @Override
@@ -559,7 +559,7 @@ public class WebElementFacadeStub implements WebElementFacade {
 
     @Override
     public List<WebElement> findElementsByAndroidUIAutomator(String using) {
-        return Lists.newArrayList();
+        return new ArrayList<>();
     }
 
     @Override
@@ -569,7 +569,7 @@ public class WebElementFacadeStub implements WebElementFacade {
 
     @Override
     public List<WebElement> findElementsByIosUIAutomation(String using) {
-        return Lists.newArrayList();
+        return new ArrayList<>();
     }
 
     @Override

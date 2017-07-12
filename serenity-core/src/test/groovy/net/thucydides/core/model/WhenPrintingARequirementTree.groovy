@@ -2,7 +2,6 @@ package net.thucydides.core.model
 
 import net.thucydides.core.requirements.model.Requirement
 import net.thucydides.core.requirements.model.RequirementTree
-import org.bouncycastle.ocsp.Req
 import spock.lang.Specification
 
 class WhenPrintingARequirementTree extends Specification {

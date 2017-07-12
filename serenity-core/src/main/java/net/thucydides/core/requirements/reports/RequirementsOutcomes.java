@@ -20,8 +20,8 @@ import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.*;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.hamcrest.Matchers.hasItem;
 
@@ -78,7 +78,7 @@ public class RequirementsOutcomes {
     }
 
     private List<RequirementOutcome> buildRequirementOutcomes(List<Requirement> requirements) {
-        List<RequirementOutcome> outcomes = Lists.newArrayList();
+        List<RequirementOutcome> outcomes = new ArrayList<>();
         for (Requirement requirement : requirements) {
             buildRequirements(outcomes, requirement);
         }
@@ -92,8 +92,8 @@ public class RequirementsOutcomes {
     }
 
     public RequirementsOutcomes ofType(String type) {
-        List<Requirement> matchingRequirements = Lists.newArrayList();
-        List<TestOutcome> matchingTests = Lists.newArrayList();
+        List<Requirement> matchingRequirements = new ArrayList<>();
+        List<TestOutcome> matchingTests = new ArrayList<>();
         for (RequirementOutcome requirementOutcome : getFlattenedRequirementOutcomes()) {
             if (requirementOutcome.getRequirement().getType().equalsIgnoreCase(type)) {
                 matchingRequirements.add(requirementOutcome.getRequirement());
@@ -154,7 +154,7 @@ public class RequirementsOutcomes {
     private boolean totalIsCachedFor(String key) { return totalCountCache.containsKey(key); }
 
     private List<Requirement> getFlattenedRequirements(Requirement rootRequirement) {
-        List<Requirement> flattenedRequirements = Lists.newArrayList();
+        List<Requirement> flattenedRequirements = new ArrayList<>();
         flattenedRequirements.add(rootRequirement);
         flattenedRequirements.addAll(rootRequirement.getNestedChildren());
         return flattenedRequirements;
@@ -340,7 +340,7 @@ public class RequirementsOutcomes {
     }
 
     private List<Requirement> getAllRequirements() {
-        List<Requirement> allRequirements = Lists.newArrayList();
+        List<Requirement> allRequirements = new ArrayList<>();
         for (RequirementOutcome outcome : requirementOutcomes) {
             addFlattenedRequirements(outcome.getRequirement(), allRequirements);
         }
@@ -348,7 +348,7 @@ public class RequirementsOutcomes {
     }
 
     private List<Requirement> getTopLevelRequirements() {
-        List<Requirement> requirements = Lists.newArrayList();
+        List<Requirement> requirements = new ArrayList<>();
         for (RequirementOutcome outcome : requirementOutcomes) {
             requirements.add(outcome.getRequirement());
         }
@@ -452,8 +452,8 @@ public class RequirementsOutcomes {
     }
 
     public RequirementsOutcomes getReleasedRequirementsFor(Release release) {
-        List<Requirement> matchingRequirements = Lists.newArrayList();
-        List<TestOutcome> matchingTestOutcomes = Lists.newArrayList();
+        List<Requirement> matchingRequirements = new ArrayList<>();
+        List<TestOutcome> matchingTestOutcomes = new ArrayList<>();
 
         // Add all test outcomes with a matching release
 
@@ -480,7 +480,7 @@ public class RequirementsOutcomes {
     }
 
     private List<Requirement> removeRequirementsWithoutTestsFrom(List<Requirement> requirements) {
-        List<Requirement> prunedRequirements = Lists.newArrayList();
+        List<Requirement> prunedRequirements = new ArrayList<>();
         for (Requirement requirement : requirements) {
             if (testsExistFor(requirement)) {
                 List<Requirement> prunedChildren = removeRequirementsWithoutTestsFrom(requirement.getChildren());
@@ -497,7 +497,10 @@ public class RequirementsOutcomes {
     private List<TestOutcome> outcomesForRelease(List<? extends TestOutcome> outcomes,
                                                  String releaseName) {
         releaseManager.enrichOutcomesWithReleaseTags(outcomes);
-        return (List<TestOutcome>) filter(having(on(TestOutcome.class).getVersions(), hasItem(releaseName)), outcomes);
+
+        return outcomes.stream()
+                .filter(outcome -> outcome.getVersions().contains(releaseName))
+                .collect(Collectors.toList());
     }
 
     public RequirementsOutcomes withoutUnrelatedRequirements() {

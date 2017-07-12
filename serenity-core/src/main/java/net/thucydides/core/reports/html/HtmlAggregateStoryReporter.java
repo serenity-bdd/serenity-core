@@ -1,7 +1,5 @@
 package net.thucydides.core.reports.html;
 
-import ch.lambdaj.function.convert.Converter;
-import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
 import net.serenitybdd.core.SerenitySystemProperties;
 import net.serenitybdd.core.time.Stopwatch;
@@ -28,8 +26,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.convert;
 import static net.thucydides.core.guice.Injectors.getInjector;
 import static net.thucydides.core.reports.html.HtmlTestOutcomeReportingTask.testOutcomeReportsFor;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
@@ -215,17 +213,12 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         return reportingTasks;
     }
 
-    private List<String> requirementReportNamesFrom(RequirementsOutcomes requirementsOutcomes, ReportNameProvider reportNameProvider) {
-        return convert(requirementsOutcomes.getFlattenedRequirementOutcomes(), toRequirementReportNames(reportNameProvider));
-    }
+    private List<String> requirementReportNamesFrom(RequirementsOutcomes requirementsOutcomes,
+                                                    ReportNameProvider reportNameProvider) {
 
-    private Converter<RequirementOutcome, String> toRequirementReportNames(final ReportNameProvider reportNameProvider) {
-            return new Converter<RequirementOutcome, String>() {
-                @Override
-                public String convert(RequirementOutcome from) {
-                    return reportNameProvider.forRequirement(from.getRequirement());
-                }
-            };
+        return requirementsOutcomes.getFlattenedRequirementOutcomes().stream()
+                .map( req -> reportNameProvider.forRequirement(req.getRequirement()) )
+                .collect(Collectors.toList());
     }
 
     private TestOutcomes loadTestOutcomesFrom(File sourceDirectory) throws IOException {

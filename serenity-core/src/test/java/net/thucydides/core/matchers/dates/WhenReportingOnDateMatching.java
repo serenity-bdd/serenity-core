@@ -36,10 +36,7 @@ public class WhenReportingOnDateMatching {
                 {new DateIsSameAsMatcher(januaryOne2000.toDate()), "a date that is 1 Jan 2000 01:00:00"},
                 {new DateTimeIsAfterMatcher(januaryOne2000), "a date that is after 1 Jan 2000 01:00:00"},
                 {new DateTimeIsBeforeMatcher(januaryOne2000), "a date that is before 1 Jan 2000 01:00:00"},
-                {new DateTimeIsBetweenMatcher(januaryOne2000, januaryOne2001), "a date that is between 1 Jan 2000 01:00:00 and 1 Jan 2001 01:00:00"},
-                {new DateTimeIsSameAsMatcher(januaryOne2000), "a date that is 1 Jan 2000 01:00:00"},
-                {new DateCollectionContainsSameDatesMatcher(dates),         "a collection of dates containing [1 Jan 2000 01:00:00, 1 Jan 2001 01:00:00]"},
-                {new DateTimeCollectionContainsSameDatesMatcher(dateTimes), "a collection of dates containing [1 Jan 2000 01:00:00, 1 Jan 2001 01:00:00]"}}
+                {new DateTimeIsBetweenMatcher(januaryOne2000, januaryOne2001), "a date that is between 1 Jan 2000 01:00:00 and 1 Jan 2001 01:00:00"}}
     );
     }
 

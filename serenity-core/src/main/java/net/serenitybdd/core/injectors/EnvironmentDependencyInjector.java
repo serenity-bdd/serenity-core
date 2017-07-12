@@ -8,6 +8,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -64,7 +65,7 @@ public class EnvironmentDependencyInjector implements DependencyInjector {
 
     private List<Field> matchingFieldsIn(Object target, Class fieldClass) {
         Set<Field> allFields = Fields.of(target.getClass()).allFields();
-        List<Field> matchingFields = Lists.newArrayList();
+        List<Field> matchingFields = new ArrayList<>();
         for(Field field : allFields) {
             if (fieldClass.isAssignableFrom(field.getType())) {
                 matchingFields.add(field);

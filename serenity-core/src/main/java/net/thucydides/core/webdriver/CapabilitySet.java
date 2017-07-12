@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver;
 
-import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
@@ -10,9 +9,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.convert;
-import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_DRIVER_CAPABILITIES;
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_DRIVER_CAPABILITIES;
 
 /**
  * A set of user-defined capabilities to be used to configure the WebDriver driver.
@@ -30,7 +29,7 @@ class CapabilitySet {
     public Map<String,Object> getCapabilities() {
         Map<String,Object> capabilitiesMap = Maps.newHashMap();
 
-        String specifiedCapabilities = THUCYDIDES_DRIVER_CAPABILITIES.from(environmentVariables);
+        String specifiedCapabilities = SERENITY_DRIVER_CAPABILITIES.from(environmentVariables);
         if (StringUtils.isNotEmpty(specifiedCapabilities)) {
             Iterable<String> capabilityValues = Splitter.on(CAPABILITY_SEPARATOR).trimResults().split(specifiedCapabilities);
             capabilitiesMap = addCapabilityMapValues(capabilityValues);
@@ -63,18 +62,11 @@ class CapabilitySet {
     }
 
     private List<Object> asList(String value) {
-        String listContents = StringUtils.removeEnd(StringUtils.removeStart(value,"["),"]");
+        String listContents = StringUtils.removeEnd(StringUtils.removeStart(value, "["), "]");
         List<String> items = Lists.newArrayList(Splitter.on(",").trimResults().split(listContents));
-        return convert(items, toObject());
-    }
-
-    private Converter<String, Object> toObject() {
-        return new Converter<String, Object>() {
-
-            public Object convert(String from) {
-                return asObject(from);
-            }
-        };
+        return items.stream()
+                .map(this::asObject)
+                .collect(Collectors.toList());
     }
 
     private boolean isAList(String value) {

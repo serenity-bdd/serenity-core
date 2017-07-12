@@ -7,6 +7,7 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
@@ -22,7 +23,7 @@ public class SearchForFilesOfType extends SimpleFileVisitor<Path> {
     public SearchForFilesOfType(Path root, String suffix) {
         this.suffix = suffix;
         this.root = root;
-        this.matchingFiles = Lists.newArrayList();
+        this.matchingFiles = new ArrayList<>();
         this.maxDepth = 0;
     }
 

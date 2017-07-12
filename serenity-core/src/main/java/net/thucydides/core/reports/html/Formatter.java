@@ -12,7 +12,6 @@ import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.reports.renderer.Asciidoc;
 import net.thucydides.core.reports.renderer.MarkupRenderer;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.translate.AggregateTranslator;
 import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
@@ -32,7 +31,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static ch.lambdaj.Lambda.join;
 import static net.thucydides.core.reports.html.MarkdownRendering.RenderedElements.*;
 import static org.apache.commons.lang3.StringUtils.abbreviate;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -147,7 +145,7 @@ public class Formatter {
         public List<String> getShortenedIssues() {
             Matcher matcher = shortIssueNumberPattern.matcher(workingCopy);
 
-            ArrayList<String> issues = Lists.newArrayList();
+            ArrayList<String> issues = new ArrayList<>();
             while (matcher.find()) {
                 String issue = matcher.group();
                 issues.add(issue);
@@ -160,7 +158,7 @@ public class Formatter {
         public List<String> getFullIssues() {
             Matcher unhashedMatcher = fullIssueNumberPattern.matcher(workingCopy);
 
-            ArrayList<String> issues = Lists.newArrayList();
+            ArrayList<String> issues = new ArrayList<>();
             while (unhashedMatcher.find()) {
                 String issue = unhashedMatcher.group();
                 issues.add(issue);
@@ -269,7 +267,7 @@ public class Formatter {
     }
 
     private List<String> getEmbeddedTablesIn(String text) {
-        List<String> embeddedTables = Lists.newArrayList();
+        List<String> embeddedTables = new ArrayList<>();
         StringBuffer tableText = new StringBuffer();
         try (BufferedReader reader = new BufferedReader(new StringReader(text))) {
             boolean inTable = false;
@@ -384,7 +382,7 @@ public class Formatter {
 
     private static String stringFormOf(Object fieldValue) {
         if (Iterable.class.isAssignableFrom(fieldValue.getClass())) {
-            return "[" + join(fieldValue) + "]";
+            return "[" + StringUtils.join((Iterable)fieldValue, ", ") +"]";
         } else {
             return fieldValue.toString();
         }

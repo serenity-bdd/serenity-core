@@ -10,11 +10,7 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.lang.reflect.Method;
-import java.util.List;
-
-import static ch.lambdaj.Lambda.*;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-import static org.hamcrest.Matchers.startsWith;
 
 /**
  * Provides BrowserStack specific capabilities

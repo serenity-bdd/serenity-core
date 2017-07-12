@@ -1,9 +1,7 @@
 package net.thucydides.core.reports.html;
 
-import ch.lambdaj.function.convert.Converter;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Predicate;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
@@ -25,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -36,8 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.convert;
 import static com.google.common.collect.Iterables.any;
 import static net.thucydides.core.model.ReportType.HTML;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
@@ -81,9 +78,9 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
     }
 
-    public HtmlAcceptanceTestReporter(final EnvironmentVariables environmentVariables,
-                                      final RequirementsService requirementsService,
-                                      final IssueTracking issueTracking) {
+    HtmlAcceptanceTestReporter(final EnvironmentVariables environmentVariables,
+                               final RequirementsService requirementsService,
+                               final IssueTracking issueTracking) {
         super(environmentVariables);
         this.issueTracking = issueTracking;
         this.requirementsService = requirementsService;
@@ -131,7 +128,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     }
 
 
-    protected File generateReportPage(final Map<String, Object> context,
+    private File generateReportPage(final Map<String, Object> context,
                                       final String template,
                                       final String outputFile) throws IOException {
 
@@ -150,20 +147,12 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     }
 
     private boolean containsScreenshots(TestOutcome testOutcome) {
-        return any(testOutcome.getFlattenedTestSteps(), hasScreenshot());
-    }
 
-    private Predicate<TestStep> hasScreenshot() {
-        return new Predicate<TestStep>() {
-            @Override
-            public boolean apply(TestStep testStep) {
-                return ((testStep.getScreenshots() != null) && (!testStep.getScreenshots().isEmpty()));
-            }
-
-            public boolean test(TestStep input) {
-                return apply(input);
-            }
-        };
+        return testOutcome.getFlattenedTestSteps()
+                .stream()
+                .anyMatch(
+                        step -> step.getScreenshots() != null && (!step.getScreenshots().isEmpty())
+                );
     }
 
     private void addTestOutcomeToContext(final TestOutcome testOutcome, final Map<String, Object> context) {
@@ -243,40 +232,34 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     }
 
     private List<Screenshot> expandScreenshots(List<Screenshot> screenshots) throws IOException {
-        return convert(screenshots,
-                       new ExpandedScreenshotConverter(
-                               Optional.fromNullable(getSourceDirectory()).or(getOutputDirectory()),
-                               maxScreenshotHeightIn(screenshots)));
+
+        File sourceDirectory = java.util.Optional.ofNullable(getSourceDirectory()).orElse(getOutputDirectory());
+        int maxHeight = maxScreenshotHeightIn(screenshots);
+
+        return screenshots.stream().map(
+                screenshot -> expandScreenshot(screenshot, sourceDirectory, maxHeight)
+        ).collect(Collectors.toList());
     }
 
-    private class ExpandedScreenshotConverter implements Converter<Screenshot, Screenshot> {
-        private final File sourceDirectory;
-        private final int maxHeight;
+    private Screenshot expandScreenshot(Screenshot screenshot, File sourceDirectory, int maxHeight) {
+        try {
 
-        public ExpandedScreenshotConverter(File sourceDirectory, int maxHeight) {
-            this.sourceDirectory = sourceDirectory;
-            this.maxHeight = maxHeight;
-        }
-
-        public Screenshot convert(Screenshot screenshot) {
-            try {
-
-                return ScreenshotFormatter.forScreenshot(screenshot)
-                        .inDirectory(sourceDirectory)
-                        .keepOriginals(shouldKeepOriginalScreenshots())
-                        .expandToHeight(maxHeight);
-            } catch (IOException e) {
-                LOGGER.info("NOTE: I couldn't convert scaled screenshot for {}: {}", screenshot.getFilename(), e.getMessage(), e);
-                return screenshot;
-            }
+            return ScreenshotFormatter.forScreenshot(screenshot)
+                    .inDirectory(sourceDirectory)
+                    .keepOriginals(shouldKeepOriginalScreenshots())
+                    .expandToHeight(maxHeight);
+        } catch (IOException e) {
+            LOGGER.info("NOTE: Failed to convert scaled screenshot for {}: {}", screenshot.getFilename(), e.getMessage(), e);
+            return screenshot;
         }
     }
 
     private boolean shouldKeepOriginalScreenshots() {
-        return ThucydidesSystemProperty.THUCYDIDES_KEEP_UNSCALED_SCREENSHOTS.booleanFrom(getEnvironmentVariables());
+        return ThucydidesSystemProperty.SERENITY_KEEP_UNSCALED_SCREENSHOTS.booleanFrom(getEnvironmentVariables());
     }
 
     private int maxScreenshotHeightIn(List<Screenshot> screenshots) throws IOException {
+
         int maxHeight = 0;
         for (Screenshot screenshot : screenshots) {
             File screenshotFile = new File(getOutputDirectory(), screenshot.getFilename());

@@ -15,14 +15,14 @@ public class FailureDetails {
         if (testOutcome.firstStepWithErrorMessage().isPresent()) {
             return testOutcome.firstStepWithErrorMessage().get().getConciseErrorMessage();
         }
-        return testOutcome.testFailureMessage().or("");
+        return testOutcome.testFailureMessage().orElse("");
     }
 
     public String getCompleteErrorMessage() {
         if (testOutcome.firstStepWithErrorMessage().isPresent()) {
             return testOutcome.firstStepWithErrorMessage().get().getErrorMessage();
         }
-        return testOutcome.testFailureMessage().or("");
+        return testOutcome.testFailureMessage().orElse("");
     }
 
     public String getPageSourceLink() {

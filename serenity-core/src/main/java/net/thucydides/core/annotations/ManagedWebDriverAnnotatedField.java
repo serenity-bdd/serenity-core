@@ -1,20 +1,14 @@
 package net.thucydides.core.annotations;
 
-import ch.lambdaj.function.convert.Converter;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import org.openqa.selenium.WebDriver;
-
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.NoSuchElementException;
-
-import static ch.lambdaj.Lambda.convert;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The WebDriver driver is stored as an annotated field in the test classes.
@@ -32,15 +26,19 @@ public class ManagedWebDriverAnnotatedField {
     /**
      * Find the first field in the class annotated with the <b>Managed</b> annotation.
      */
-    public static Optional<ManagedWebDriverAnnotatedField> findOptionalAnnotatedField(final Class<?> testClass) {
+    static Optional<ManagedWebDriverAnnotatedField> findOptionalAnnotatedField(final Class<?> testClass) {
 
         try {
-            Field annotatedField = Iterables.find(fieldsIn(testClass), withCorrectAnnotations());
-            return Optional.of(new ManagedWebDriverAnnotatedField(annotatedField));
+            return fieldsIn(testClass)
+                    .stream()
+                    .filter(ManagedWebDriverAnnotatedField::isFieldAnnotated)
+                    .map(ManagedWebDriverAnnotatedField::new)
+                    .findFirst();
         } catch(NoSuchElementException e) {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
+
     /**
      * Find the first field in the class annotated with the <b>Managed</b> annotation.
      */
@@ -54,42 +52,24 @@ public class ManagedWebDriverAnnotatedField {
         }
     }
 
-    public static List<ManagedWebDriverAnnotatedField> findAnnotatedFields(final Class<?> testClass) {
-        List<Field> managedFields = ImmutableList.copyOf(Iterables.filter(fieldsIn(testClass), withCorrectAnnotations()));
-        return convert(managedFields, toManagedAnnotatedFields());
-    }
+    static List<ManagedWebDriverAnnotatedField> findAnnotatedFields(final Class<?> testClass) {
 
-    private static Converter<Field, ManagedWebDriverAnnotatedField> toManagedAnnotatedFields() {
-        return new Converter<Field, ManagedWebDriverAnnotatedField>() {
-
-            @Override
-            public ManagedWebDriverAnnotatedField convert(Field field) {
-                return new ManagedWebDriverAnnotatedField(field);
-            }
-        };
+        return Fields.of(testClass).allFields()
+                .stream()
+                .filter(ManagedWebDriverAnnotatedField::isFieldAnnotated)
+                .map(ManagedWebDriverAnnotatedField::new)
+                .collect(Collectors.toList());
     }
 
     public static boolean hasManagedWebdriverField(final Class<?> testClass) {
 
         try {
-            Iterables.find(fieldsIn(testClass), withCorrectAnnotations());
-            return true;
+            return fieldsIn(testClass)
+                    .stream()
+                    .anyMatch(ManagedWebDriverAnnotatedField::isFieldAnnotated);
         } catch(NoSuchElementException e) {
             return false;
         }
-    }
-
-    private static Predicate<Field> withCorrectAnnotations() {
-        return new Predicate<Field>() {
-            @Override
-            public boolean apply(Field field) {
-                return isFieldAnnotated(field);
-            }
-
-            public boolean test(Field input) {
-                return apply(input);
-            }
-        };
     }
 
     private static boolean isFieldAnnotated(final Field field) {
@@ -105,7 +85,7 @@ public class ManagedWebDriverAnnotatedField {
         return (field.getAnnotation(Managed.class) != null);
     }
 
-    protected ManagedWebDriverAnnotatedField(final Field field) {
+    private ManagedWebDriverAnnotatedField(final Field field) {
         this.field = field;
     }
 
@@ -120,15 +100,15 @@ public class ManagedWebDriverAnnotatedField {
         }
     }
 
-    private static ImmutableSet<Field> fieldsIn(Class clazz) {
-        return ImmutableSet.copyOf(Fields.of(clazz).allFields());
+    private static Set<Field> fieldsIn(Class clazz) {
+        return Fields.of(clazz).allFields();
     }
 
     public boolean isUniqueSession() {
         return field.getAnnotation(Managed.class).uniqueSession();
     }
 
-    public ClearCookiesPolicy getClearCookiesPolicy() {
+    ClearCookiesPolicy getClearCookiesPolicy() {
         return field.getAnnotation(Managed.class).clearCookies();
     }
 

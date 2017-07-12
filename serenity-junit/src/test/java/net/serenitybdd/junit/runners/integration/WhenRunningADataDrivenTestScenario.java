@@ -1,6 +1,5 @@
 package net.serenitybdd.junit.runners.integration;
 
-import com.google.common.collect.Lists;
 import net.serenitybdd.junit.runners.ParameterizedTestsOutcomeAggregator;
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.serenitybdd.junit.runners.SerenityRunner;
@@ -45,7 +44,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static ch.lambdaj.Lambda.filter;
 import static net.thucydides.core.steps.stepdata.StepData.withTestDataFrom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -283,7 +281,8 @@ public class WhenRunningADataDrivenTestScenario {
 
         @Override
         protected boolean matchesSafely(List<String> values) {
-            return !filter(containsString(expectedValue), values).isEmpty();
+            return values.stream()
+                         .anyMatch(value -> value.contains(expectedValue));
         }
 
         public void describeTo(Description description) {
@@ -762,7 +761,7 @@ public class WhenRunningADataDrivenTestScenario {
 
 
     private List<String> contentsOf(File[] files) throws IOException {
-        List<String> contents = Lists.newArrayList();
+        List<String> contents = new ArrayList<>();
         for(File file : files) {
             contents.add(stringContentsOf(file));
         }

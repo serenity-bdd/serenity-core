@@ -9,6 +9,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SpecflowScenarioTitleLine {
@@ -46,10 +47,10 @@ public class SpecflowScenarioTitleLine {
      */
     private List<String> argumentsFrom(String titleLine) {
         if(!titleLine.contains(START_ARGUMENT)) {
-            return Lists.newArrayList();
+            return new ArrayList<>();
         }
         String argumentString = titleLine.substring(titleLine.indexOf(START_ARGUMENT) + 1, titleLine.lastIndexOf(END_ARGUMENT));
-        List<String> result = Lists.newArrayList();
+        List<String> result = new ArrayList<>();
         StringBuilder currentResult = new StringBuilder();
         boolean inString = false;
         for (int i = 0; i < argumentString.length(); i++) {

@@ -25,6 +25,7 @@ import org.openqa.selenium.support.ui.SlowLoadableComponent;
 import org.openqa.selenium.support.ui.SystemClock;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -161,7 +162,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
         return 0;
     }
 
-    private final static List<WebElement> EMPTY_LIST_OF_WEBELEMENTS = Lists.newArrayList();
+    private final static List<WebElement> EMPTY_LIST_OF_WEBELEMENTS = new ArrayList<>();
 
     /**
      * Will poll the interface on a regular basis until at least one element is present.

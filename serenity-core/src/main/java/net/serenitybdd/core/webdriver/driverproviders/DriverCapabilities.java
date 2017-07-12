@@ -69,7 +69,7 @@ public class DriverCapabilities {
         selectors.put(HTMLUNIT,new DriverCapabilitiesProvider() {
             @Override
             public DesiredCapabilities getCapabilities() {
-                return DesiredCapabilities.htmlUnitWithJs();
+                return DesiredCapabilities.htmlUnit();
             }
         });
         selectors.put(OPERA,new DriverCapabilitiesProvider() {

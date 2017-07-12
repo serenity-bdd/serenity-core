@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.xml;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.converters.Converter;
@@ -14,9 +13,9 @@ import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 
 import java.io.File;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -74,12 +73,12 @@ public class TestOutcomeConverter implements Converter {
     private static final String VALUE = "value";
     private static final String MANUAL = "manual";
     private static final String TEST_SOURCE = "test-source";
-    public static final String NEW_LINE_CHAR = "\n";
-    public static final String ESCAPE_CHAR_FOR_NEW_LINE = "&#10;";
+    private static final String NEW_LINE_CHAR = "\n";
+    private static final String ESCAPE_CHAR_FOR_NEW_LINE = "&#10;";
     private static final String DEFAULT_ERROR_MESSAGE = "Unspecified failure";
 
 
-    public TestOutcomeConverter() {
+    TestOutcomeConverter() {
     }
 
     /**
@@ -107,15 +106,15 @@ public class TestOutcomeConverter implements Converter {
         if (testOutcome.getQualifier() != null && testOutcome.getQualifier().isPresent()) {
             writer.addAttribute(QUALIFIER_FIELD, escape(testOutcome.getQualifier().get()));
         }
-        writer.addAttribute(STEPS_FIELD, Integer.toString(testOutcome.countTestSteps()));
-        writer.addAttribute(SUCCESSFUL_FIELD, Integer.toString(testOutcome.getSuccessCount()));
-        writer.addAttribute(FAILURES_FIELD, Integer.toString(testOutcome.getFailureCount()));
+        writer.addAttribute(STEPS_FIELD, Long.toString(testOutcome.countTestSteps()));
+        writer.addAttribute(SUCCESSFUL_FIELD, Long.toString(testOutcome.getSuccessCount()));
+        writer.addAttribute(FAILURES_FIELD, Long.toString(testOutcome.getFailureCount()));
         if (testOutcome.getErrorCount() > 0) {
-            writer.addAttribute(ERRORS_FIELD, Integer.toString(testOutcome.getErrorCount()));
+            writer.addAttribute(ERRORS_FIELD, Long.toString(testOutcome.getErrorCount()));
         }
-        writer.addAttribute(SKIPPED_FIELD, Integer.toString(testOutcome.getSkippedCount()));
-        writer.addAttribute(IGNORED_FIELD, Integer.toString(testOutcome.getIgnoredCount()));
-        writer.addAttribute(PENDING_FIELD, Integer.toString(testOutcome.getPendingCount()));
+        writer.addAttribute(SKIPPED_FIELD, Long.toString(testOutcome.getSkippedCount()));
+        writer.addAttribute(IGNORED_FIELD, Long.toString(testOutcome.getIgnoredCount()));
+        writer.addAttribute(PENDING_FIELD, Long.toString(testOutcome.getPendingCount()));
         if (testOutcome.getAnnotatedResult() != null) {
             writer.addAttribute(ANNOTATED_RESULT_FIELD, testOutcome.getAnnotatedResult().name());
         }
@@ -143,7 +142,7 @@ public class TestOutcomeConverter implements Converter {
         }
     }
 
-    private String formattedTimestamp(DateTime startTime) {
+    private String formattedTimestamp(ZonedDateTime startTime) {
         return startTime.toString();
     }
 
@@ -227,23 +226,19 @@ public class TestOutcomeConverter implements Converter {
 
 
     private void addIssuesTo(final HierarchicalStreamWriter writer, final List<String> issues) {
-        if (!issues.isEmpty()) {
-            writer.startNode(ISSUES);
-            for (String issue : issues) {
-                writer.startNode(ISSUE);
-                writer.setValue(issue);
-                writer.endNode();
-            }
-            writer.endNode();
-        }
+        addNodeTo(writer, issues, ISSUES, ISSUE);
     }
 
     private void addVersionsTo(final HierarchicalStreamWriter writer, final List<String> versions) {
-        if (!versions.isEmpty()) {
-            writer.startNode(VERSIONS);
-            for (String version : versions) {
-                writer.startNode(VERSION);
-                writer.setValue(version);
+        addNodeTo(writer, versions, VERSIONS, VERSION);
+    }
+
+    private void addNodeTo(final HierarchicalStreamWriter writer, final List<String> entries, String groupName, String itemName) {
+        if (!entries.isEmpty()) {
+            writer.startNode(groupName);
+            for (String entry : entries) {
+                writer.startNode(itemName);
+                writer.setValue(entry);
                 writer.endNode();
             }
             writer.endNode();
@@ -416,7 +411,7 @@ public class TestOutcomeConverter implements Converter {
         }
         Long duration = readDuration(reader);
         testOutcome.setDuration(duration);
-        Optional<DateTime> startTime = readTimestamp(reader);
+        Optional<ZonedDateTime> startTime = readTimestamp(reader);
         if (startTime.isPresent()) {
             testOutcome.setStartTime(startTime.get());
         }
@@ -451,20 +446,28 @@ public class TestOutcomeConverter implements Converter {
         while (reader.hasMoreChildren()) {
             reader.moveDown();
             String childNode = reader.getNodeName();
-            if (childNode.equals(TEST_STEP)) {
-                readTestStep(reader, testOutcome);
-            } else if (childNode.equals(TEST_GROUP)) {
-                readTestGroup(reader, testOutcome);
-            } else if (childNode.equals(ISSUES)) {
-                readTestRunIssues(reader, testOutcome);
-            } else if (childNode.equals(VERSIONS)) {
-                readTestRunVersions(reader, testOutcome);
-            } else if (childNode.equals(USER_STORY)) {
-                readUserStory(reader, testOutcome);
-            } else if (childNode.equals(TAGS)) {
-                readTags(reader, testOutcome);
-            } else if (childNode.equals(EXAMPLES)) {
-                readExamples(reader, testOutcome);
+            switch (childNode) {
+                case TEST_STEP:
+                    readTestStep(reader, testOutcome);
+                    break;
+                case TEST_GROUP:
+                    readTestGroup(reader, testOutcome);
+                    break;
+                case ISSUES:
+                    readTestRunIssues(reader, testOutcome);
+                    break;
+                case VERSIONS:
+                    readTestRunVersions(reader, testOutcome);
+                    break;
+                case USER_STORY:
+                    readUserStory(reader, testOutcome);
+                    break;
+                case TAGS:
+                    readTags(reader, testOutcome);
+                    break;
+                case EXAMPLES:
+                    readExamples(reader, testOutcome);
+                    break;
             }
             reader.moveUp();
         }
@@ -526,7 +529,7 @@ public class TestOutcomeConverter implements Converter {
 
     private void readTags(final HierarchicalStreamReader reader,
                           final TestOutcome testOutcome) {
-        Set<TestTag> tags = new HashSet<TestTag>();
+        Set<TestTag> tags = new HashSet<>();
         while (reader.hasMoreChildren()) {
             reader.moveDown();
             String childNode = reader.getNodeName();
@@ -540,18 +543,22 @@ public class TestOutcomeConverter implements Converter {
 
     private void readExamples(final HierarchicalStreamReader reader,
                               final TestOutcome testOutcome) {
-        List<String> headers = Lists.newArrayList();
-        List<DataTableRow> rows = Lists.newArrayList();
-        List<DataSetDescriptor> descriptors = Lists.newArrayList();
+        List<String> headers = new ArrayList<>();
+        List<DataTableRow> rows = new ArrayList<>();
+        List<DataSetDescriptor> descriptors = new ArrayList<>();
         while (reader.hasMoreChildren()) {
             reader.moveDown();
             String childNode = reader.getNodeName();
-            if (childNode.equals(HEADERS)) {
-                headers = readHeaders(reader);
-            } else if (childNode.equals(ROWS)) {
-                rows = readRows(reader);
-            } else if (childNode.equals("datasets")) {
-                descriptors = readDescriptors(reader);
+            switch (childNode) {
+                case HEADERS:
+                    headers = readHeaders(reader);
+                    break;
+                case ROWS:
+                    rows = readRows(reader);
+                    break;
+                case "datasets":
+                    descriptors = readDescriptors(reader);
+                    break;
             }
             reader.moveUp();
         }
@@ -561,7 +568,7 @@ public class TestOutcomeConverter implements Converter {
     }
 
     private List<String> readHeaders(final HierarchicalStreamReader reader) {
-        List<String> headers = Lists.newArrayList();
+        List<String> headers = new ArrayList<>();
         while (reader.hasMoreChildren()) {
             reader.moveDown();
             String childNode = reader.getNodeName();
@@ -574,7 +581,7 @@ public class TestOutcomeConverter implements Converter {
     }
 
     private List<DataTableRow> readRows(final HierarchicalStreamReader reader) {
-        List<DataTableRow> rows = Lists.newArrayList();
+        List<DataTableRow> rows = new ArrayList<>();
         while (reader.hasMoreChildren()) {
             reader.moveDown();
             String childNode = reader.getNodeName();
@@ -587,7 +594,7 @@ public class TestOutcomeConverter implements Converter {
     }
 
     private List<DataSetDescriptor> readDescriptors(final HierarchicalStreamReader reader) {
-        List<DataSetDescriptor> descriptors = Lists.newArrayList();
+        List<DataSetDescriptor> descriptors = new ArrayList<>();
         while (reader.hasMoreChildren()) {
             reader.moveDown();
             String childNode = reader.getNodeName();
@@ -605,7 +612,7 @@ public class TestOutcomeConverter implements Converter {
 
 
     private DataTableRow readRow(final HierarchicalStreamReader reader) {
-        List<String> rowValues = Lists.newArrayList();
+        List<String> rowValues = new ArrayList<>();
         TestResult result = null;
         String resultValue = reader.getAttribute("result");
         while (reader.hasMoreChildren()) {
@@ -660,11 +667,9 @@ public class TestOutcomeConverter implements Converter {
         }
     }
 
-    private static final Optional<DateTime> NO_TIMESTAMP = Optional.absent();
-
-    private Optional<DateTime> readTimestamp(HierarchicalStreamReader reader) {
+    private Optional<ZonedDateTime> readTimestamp(HierarchicalStreamReader reader) {
         String timestamp = reader.getAttribute(TIMESTAMP);
-        return (timestamp != null) ? Optional.of(DateTime.parse(reader.getAttribute(TIMESTAMP))) : NO_TIMESTAMP;
+        return (timestamp != null) ? Optional.of(ZonedDateTime.parse(reader.getAttribute(TIMESTAMP))) : Optional.empty();
     }
 
     private String readSessionId(HierarchicalStreamReader reader) {

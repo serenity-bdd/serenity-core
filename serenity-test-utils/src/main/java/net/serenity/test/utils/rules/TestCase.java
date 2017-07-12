@@ -6,10 +6,7 @@ import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * User: YamStranger
@@ -22,16 +19,16 @@ public class TestCase<T extends StepListener> implements MethodRule {
     private boolean finished;
     private String name;
 
+    @SafeVarargs
     public TestCase(T... listener) {
         this(UUID.randomUUID().toString(), listener);
     }
 
+    @SafeVarargs
     public TestCase(final String name, final T... listener) {
-        this.listeners = new ArrayList<>(listener.length);
+        this.listeners = new ArrayList<>();
         register(listener);
-        for (T regiter : listener) {
-            this.listeners.add(regiter);
-        }
+        this.listeners.addAll(Arrays.asList(listener));
         this.name = name;
     }
 
@@ -40,7 +37,8 @@ public class TestCase<T extends StepListener> implements MethodRule {
         return new ArrayList<T>(this.listeners);
     }
 
-    public void register(final T... listener) {
+    @SafeVarargs
+    public final void register(final T... listener) {
         for (T regiter : listener) {
             this.listeners.add(regiter);
             StepEventBus.getEventBus().registerListener(regiter);

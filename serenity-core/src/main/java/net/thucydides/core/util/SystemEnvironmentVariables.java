@@ -1,6 +1,5 @@
 package net.thucydides.core.util;
 
-import ch.lambdaj.function.convert.DefaultStringConverter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
@@ -12,8 +11,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import static ch.lambdaj.Lambda.convert;
+import java.util.stream.Collectors;
 
 /**
  * Return system environment variable values.
@@ -56,12 +54,11 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         return getValue(property.toString(), defaultValue);
     }
 
-    public List<String> getKeys() {
-        return convert(properties.keySet(), toStrings());
-    }
 
-    private DefaultStringConverter toStrings() {
-        return new DefaultStringConverter();
+    public List<String> getKeys() {
+        return properties.keySet().stream()
+                .map(Object::toString)
+                .collect(Collectors.toList());
     }
 
     @Override

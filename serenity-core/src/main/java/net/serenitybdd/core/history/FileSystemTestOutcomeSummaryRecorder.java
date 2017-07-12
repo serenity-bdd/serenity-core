@@ -19,10 +19,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_HISTORY_DIRECTORY;
 
@@ -63,7 +60,7 @@ public class FileSystemTestOutcomeSummaryRecorder implements TestOutcomeSummaryR
             usingDeleteStrategyFor(deletePreviousHistory).prepareHistoryDirectory(historyDirectory);
 
             for (Path path : directoryStream) {
-                storeOutcomesFrom(testOutcomeReporter.loadReportFrom(path).asSet());
+                storeOutcomesFrom(testOutcomeReporter.loadReportFrom(path).map(Collections::singleton).orElse(Collections.emptySet()));
             }
         } catch (IOException ex) {
             LOGGER.warn("Unable to store test outcome for posterity", ex);

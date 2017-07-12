@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.integration;
 
-import com.google.common.collect.Lists;
 import net.thucydides.core.digest.Digest;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.reports.ResultChecker;
@@ -25,9 +24,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
 import static net.thucydides.core.matchers.FileMatchers.exists;
 import static net.thucydides.core.util.TestResources.directoryInClasspathCalled;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -121,10 +119,6 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
         assertThat(driver.findElement(By.cssSelector(".date-and-time")).isDisplayed(), is(true));
     }
 
-    private String digest(String value) {
-        return Digest.ofTextValue(value);
-    }
-
     @Test
     public void aggregate_dashboard_should_contain_a_list_of_all_tag_types() throws Exception {
 
@@ -132,7 +126,10 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
         driver.get(urlFor(report));
 
         List<WebElement> tagTypes = driver.findElements(By.cssSelector(".tagTypeTitle"));
-        List<String> tagTypeNames = extract(tagTypes, on(WebElement.class).getText());
+        List<String> tagTypeNames =
+                tagTypes.stream()
+                        .map(WebElement::getText)
+                        .collect(Collectors.toList());
         assertThat(tagTypeNames, hasItems("Stories", "Features", "Epics"));
     }
 
@@ -157,11 +154,9 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
     }
 
     private List<String> convertToStrings(List<WebElement> elements) {
-        List<String> labels = Lists.newArrayList();
-        for (WebElement element : elements) {
-            labels.add(element.getText());
-        }
-        return labels;
+        return elements.stream()
+                .map(WebElement::getText)
+                .collect(Collectors.toList());
     }
 
     @Test

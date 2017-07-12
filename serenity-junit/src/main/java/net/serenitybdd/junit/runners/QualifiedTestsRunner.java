@@ -17,6 +17,7 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -107,7 +108,7 @@ abstract class QualifiedTestsRunner extends SerenityRunner {
     }
 
     private List<TestOutcome> qualified(List<TestOutcome> testOutcomes) {
-        List<TestOutcome> qualifiedOutcomes = Lists.newArrayList();
+        List<TestOutcome> qualifiedOutcomes = new ArrayList<>();
 
         if (this.test != null) {
             useQualifier(QualifierFinder.forTestCase(test).getQualifier());

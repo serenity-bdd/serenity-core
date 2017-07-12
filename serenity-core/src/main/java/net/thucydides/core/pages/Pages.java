@@ -1,6 +1,5 @@
 package net.thucydides.core.pages;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.PageObjects;
@@ -248,15 +247,22 @@ public class Pages implements Serializable {
     }
 
     private boolean hasPageFactoryProperty(Object pageObject) {
-        Optional<Field> pagesField = Fields.of(pageObject.getClass()).withName("pages");
+        java.util.Optional<Field> pagesField = Fields.of(pageObject.getClass()).withName("pages");
         return ((pagesField.isPresent()) && (pagesField.get().getType() == Pages.class));
     }
 
     private void setPageFactory(Object pageObject) throws IllegalAccessException {
-        Optional<Field> pagesField = Fields.of(pageObject.getClass()).withName("pages");
-        if (pagesField.isPresent()) {
-            pagesField.get().setAccessible(true);
-            pagesField.get().set(pageObject, this);
+        Fields.of(pageObject.getClass()).withName("pages").ifPresent(
+                field -> assignTo(field, pageObject)
+        );
+    }
+
+    private void assignTo(Field pagesField, Object pageObject) {
+        try {
+            pagesField.setAccessible(true);
+            pagesField.set(pageObject, this);
+        } catch (IllegalAccessException e) {
+            LOGGER.warn("Failed to assign page object field: ", e);
         }
     }
 

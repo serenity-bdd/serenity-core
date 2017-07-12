@@ -17,6 +17,7 @@ import net.thucydides.core.reports.adaptors.xunit.model.TestSuite;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class LettuceXUnitAdaptor extends FilebasedOutcomeAdaptor {
     BasicXUnitLoader loader = new BasicXUnitLoader();
 
     public List<TestOutcome> loadOutcomesFrom(final File source) throws IOException {
-        List<TestOutcome> loadedOutcomes = Lists.newArrayList();
+        List<TestOutcome> loadedOutcomes = new ArrayList<>();
         for(File xunitFile : XUnitFiles.in(source)) {
             loadedOutcomes.addAll(testOutcomesIn(xunitFile));
         }
@@ -39,7 +40,7 @@ public class LettuceXUnitAdaptor extends FilebasedOutcomeAdaptor {
     }
 
     private List<TestOutcome> groupTestCasesByClassname(List<TestSuite> testSuites) {
-        List<TestOutcome> groupedOutcomes = Lists.newArrayList();
+        List<TestOutcome> groupedOutcomes = new ArrayList<>();
         for(TestSuite suite : testSuites) {
             groupedOutcomes.addAll(testOutcomesWithGroupedTestCases(suite));
         }
@@ -49,7 +50,7 @@ public class LettuceXUnitAdaptor extends FilebasedOutcomeAdaptor {
 
     private List<TestOutcome> testOutcomesWithGroupedTestCases(TestSuite testSuite) {
         List<TestCase> rawTestCases = testSuite.getTestCases();
-        List<TestOutcome> groupedTestOutcomes = Lists.newArrayList();
+        List<TestOutcome> groupedTestOutcomes = new ArrayList<>();
         Map<String, TestOutcome> testOutcomesIndex = Maps.newHashMap();
 
         for(TestCase testCase : rawTestCases) {

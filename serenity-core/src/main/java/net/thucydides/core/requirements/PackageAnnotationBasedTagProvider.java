@@ -74,7 +74,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     private List<Requirement> rootRequirementsIn(Collection<Requirement> allRequirements) {
-        List<Requirement> rootRequirements = Lists.newArrayList();
+        List<Requirement> rootRequirements = new ArrayList<>();
         for (Requirement requirement : allRequirements) {
             if (requirement.getParent() == null) {
                 rootRequirements.add(requirement);
@@ -329,7 +329,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         }
 
         public List<Requirement> in(Collection<Requirement> requirements) {
-            List<Requirement> children = Lists.newArrayList();
+            List<Requirement> children = new ArrayList<>();
             for (Requirement requirement : requirements) {
                 if (isNotEmpty(requirement.getParent()) && requirement.getParent().equals(parent.getName())) {
                     children.add(requirement);

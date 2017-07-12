@@ -20,9 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static ch.lambdaj.Lambda.on;
-import static ch.lambdaj.Lambda.sum;
-
 public class RequirementOutcome {
     private final Requirement requirement;
     private final TestOutcomes testOutcomes;
@@ -347,7 +344,9 @@ public class RequirementOutcome {
         }
 
         public int withResult(TestResult expectedResult) {
-            return sum(testOutcomes.getOutcomes(), on(TestOutcome.class).countResults(expectedResult, testType));
+            return testOutcomes.getOutcomes().stream()
+                    .mapToInt(outcome -> outcome.countResults(expectedResult, testType))
+                    .sum();
         }
 
         public int withIndeterminateResult() {

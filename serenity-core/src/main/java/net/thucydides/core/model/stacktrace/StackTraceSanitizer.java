@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class StackTraceSanitizer {
     }
 
     private StackTraceElement[] simplifiedStackTrace(StackTraceElement[] stackTrace) {
-        List<StackTraceElement> cleanStackTrace = Lists.newArrayList();
+        List<StackTraceElement> cleanStackTrace = new ArrayList<>();
         for(StackTraceElement element : stackTrace) {
             if (shouldDisplayInStackTrace(element)) {
                 cleanStackTrace.add(element);

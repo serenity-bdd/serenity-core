@@ -1,6 +1,5 @@
 package net.thucydides.core.annotations;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
@@ -43,11 +42,9 @@ public final class TestCaseAnnotations {
      * Instantiate the @Managed-annotated WebDriver instance with current WebDriver if the annotated field is present.
      */
     public void injectDriver(final WebDriver driver) {
-        Optional<ManagedWebDriverAnnotatedField> webDriverField
+        java.util.Optional<ManagedWebDriverAnnotatedField> webDriverField
                 = findOptionalAnnotatedField(testCase.getClass());
-        if (webDriverField.isPresent()) {
-            webDriverField.get().setValue(testCase, driver);
-        }
+        webDriverField.ifPresent(managedWebDriverAnnotatedField -> managedWebDriverAnnotatedField.setValue(testCase, driver));
     }
 
     public void injectDrivers(final WebdriverManager webdriverManager) {

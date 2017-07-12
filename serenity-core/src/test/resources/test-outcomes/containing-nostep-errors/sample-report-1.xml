@@ -5,6 +5,7 @@
   <tags>
       <tag name="a feature" type="feature"/>
       <tag name="a story" type="story"/>
+      <tag name="red" type="colour"/>
   </tags>
   <test-step result="SUCCESS">
     <description>The customer navigates from metro jobs link.</description>

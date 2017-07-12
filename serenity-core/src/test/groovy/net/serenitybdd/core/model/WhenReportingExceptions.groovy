@@ -7,6 +7,7 @@ import net.thucydides.core.model.failures.FailureAnalysis
 import net.thucydides.core.steps.StepFailureException
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.WebdriverAssertionError
+import org.assertj.core.api.SoftAssertionError
 import org.junit.internal.ArrayComparisonFailure
 import org.openqa.selenium.WebDriverException
 import spock.lang.Specification
@@ -27,20 +28,22 @@ class WhenReportingExceptions extends Specification {
             result == expectedResult
 
         where:
-            exception                                                                               | expectedResult
-            new WebdriverAssertionError(new NullPointerException())                                 | ERROR
-            new WebdriverAssertionError(new NoSuchElementException())                               | ERROR
-            new StepFailureException("bother", new NoSuchElementException())                        | ERROR
-            new AssertionError("test message")                                                      | FAILURE
-            new ArrayComparisonFailure("test message", new AssertionError("wrapped exception"),1)   | FAILURE
-            new WebdriverAssertionError(new AssertionError("wrapped assertion error"))              | FAILURE
-            new StepFailureException("bother", new AssertionError("test message"))                  | FAILURE
-            new RuntimeException("message")                                                         | ERROR
-            new NullPointerException()                                                              | ERROR
-            new WebDriverException()                                                                | ERROR
-            new PendingStepException("step is pending")                                             | PENDING
-            new PendingException("step is pending")                                                 | PENDING
-            new TestCompromisedException("test is compromised")                                     | COMPROMISED
+            exception                                                                  | expectedResult
+            new WebdriverAssertionError(new NullPointerException())                    | ERROR
+            new WebdriverAssertionError(new NoSuchElementException())                  | ERROR
+            new StepFailureException("bother", new NoSuchElementException())           | ERROR
+            new AssertionError("test message")                            | FAILURE
+            new SoftAssertionError(["test message"])                                     | FAILURE
+            new ArrayComparisonFailure("test message",
+                                        new AssertionError("wrapped exception"), 1)    | FAILURE
+            new WebdriverAssertionError(new AssertionError("wrapped assertion error")) | FAILURE
+            new StepFailureException("bother", new AssertionError("test message"))     | FAILURE
+            new RuntimeException("message")                                                             | ERROR
+            new NullPointerException()                                                                  | ERROR
+            new WebDriverException()                                                                    | ERROR
+            new PendingStepException("step is pending")                                                 | PENDING
+            new PendingException("step is pending")                                                     | PENDING
+            new TestCompromisedException("test is compromised")                                         | COMPROMISED
     }
 
     def "non-assertion exceptions should be reported as Errors by default"() {

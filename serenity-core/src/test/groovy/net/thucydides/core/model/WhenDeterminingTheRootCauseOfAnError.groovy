@@ -31,7 +31,7 @@ class WhenDeterminingTheRootCauseOfAnError extends Specification {
             rootCause.errorType == "org.openqa.selenium.ElementNotVisibleException"
     }
 
-    public static class AppCompromised extends Error implements CausesCompromisedTestFailure {
+    static class AppCompromised extends Error implements CausesCompromisedTestFailure {
         AppCompromised(String message) {
             super(message)
         }

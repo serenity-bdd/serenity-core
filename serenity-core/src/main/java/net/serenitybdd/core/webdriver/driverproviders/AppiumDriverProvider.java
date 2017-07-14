@@ -29,17 +29,17 @@ public class AppiumDriverProvider implements DriverProvider {
     }
 
     @Override
-    public WebDriver newInstance() {
+    public WebDriver newInstance(String options) {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
         switch (appiumTargetPlatform()) {
             case ANDROID:
-                AndroidDriver androidDriver = new AndroidDriver(appiumUrl(), enhancer.enhanced(appiumCapabilities()) );
+                AndroidDriver androidDriver = new AndroidDriver(appiumUrl(), enhancer.enhanced(appiumCapabilities(options)) );
                 driverProperties.registerCapabilities("appium", androidDriver.getCapabilities());
                 return androidDriver;
             case IOS:
-                IOSDriver iosDriver = new IOSDriver(appiumUrl(), enhancer.enhanced(appiumCapabilities()));
+                IOSDriver iosDriver = new IOSDriver(appiumUrl(), enhancer.enhanced(appiumCapabilities(options)));
                 driverProperties.registerCapabilities("appium", iosDriver.getCapabilities());
                 return iosDriver;
         }
@@ -47,8 +47,8 @@ public class AppiumDriverProvider implements DriverProvider {
 
     }
 
-    private DesiredCapabilities appiumCapabilities() {
-        return AppiumConfiguration.from(environmentVariables).getCapabilities();
+    private DesiredCapabilities appiumCapabilities(String options) {
+        return AppiumConfiguration.from(environmentVariables).getCapabilities(options);
     }
 
     private MobilePlatform appiumTargetPlatform() {

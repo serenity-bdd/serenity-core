@@ -57,18 +57,18 @@ public class RemoteDriverProvider implements DriverProvider {
     }
 
     @Override
-    public WebDriver newInstance() throws MalformedURLException {
+    public WebDriver newInstance(String options) throws MalformedURLException {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
         WebDriver driver;
 
         if (saucelabsUrlIsDefined()) {
-            driver = buildSaucelabsDriver();
+            driver = buildSaucelabsDriver(options);
         } else if (browserStackUrlIsDefined()){
-            driver = buildBrowserStackDriver();
+            driver = buildBrowserStackDriver(options);
         } else {
-            driver = buildRemoteDriver();
+            driver = buildRemoteDriver(options);
         }
         Augmenter augmenter = new Augmenter();
         return augmenter.augment(driver);
@@ -82,9 +82,9 @@ public class RemoteDriverProvider implements DriverProvider {
         return StringUtils.isNotEmpty(browserStackRemoteDriverCapabilities.getUrl());
     }
 
-    private WebDriver buildSaucelabsDriver() throws MalformedURLException {
+    private WebDriver buildSaucelabsDriver(String options) throws MalformedURLException {
         String saucelabsUrl = sauceRemoteDriverCapabilities.getUrl();
-        WebDriver driver = newRemoteDriver(new URL(saucelabsUrl), findSaucelabsCapabilities());
+        WebDriver driver = newRemoteDriver(new URL(saucelabsUrl), findSaucelabsCapabilities(options));
 
         if (isNotEmpty(ThucydidesSystemProperty.SAUCELABS_IMPLICIT_TIMEOUT.from(environmentVariables))) {
             int implicitWait = ThucydidesSystemProperty.SAUCELABS_IMPLICIT_TIMEOUT.integerFrom(environmentVariables, 30);
@@ -94,43 +94,43 @@ public class RemoteDriverProvider implements DriverProvider {
         return driver;
     }
 
-    private WebDriver buildBrowserStackDriver() throws MalformedURLException{
+    private WebDriver buildBrowserStackDriver(String options) throws MalformedURLException{
         String browserStackUrl = browserStackRemoteDriverCapabilities.getUrl();
-        WebDriver driver = newRemoteDriver(new URL(browserStackUrl), findbrowserStackCapabilities());
+        WebDriver driver = newRemoteDriver(new URL(browserStackUrl), findbrowserStackCapabilities(options));
         return driver;
     }
 
-    private WebDriver buildRemoteDriver() throws MalformedURLException {
+    private WebDriver buildRemoteDriver(String options) throws MalformedURLException {
         String remoteUrl = ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.from(environmentVariables);
-        Capabilities capabilities = buildRemoteCapabilities();
+        Capabilities capabilities = buildRemoteCapabilities(options);
         LOGGER.info("Building remote driver with capabilitites " + capabilities);
         return newRemoteDriver(new URL(remoteUrl), capabilities);
     }
 
-    private Capabilities findSaucelabsCapabilities() {
+    private Capabilities findSaucelabsCapabilities(String options) {
 
         String driver = getSaucelabsDriverFrom(environmentVariables);
-        DesiredCapabilities capabilities = remoteDriverCapabilities.forDriver(driver);
+        DesiredCapabilities capabilities = remoteDriverCapabilities.forDriver(driver, options);
 
         return sauceRemoteDriverCapabilities.getCapabilities(capabilities);
     }
 
 
-    private Capabilities findbrowserStackCapabilities() {
+    private Capabilities findbrowserStackCapabilities(String options) {
 
         String driver = getBrowserStackDriverFrom(environmentVariables);
-        DesiredCapabilities capabilities = remoteDriverCapabilities.forDriver(driver);
+        DesiredCapabilities capabilities = remoteDriverCapabilities.forDriver(driver, options);
 
         return browserStackRemoteDriverCapabilities.getCapabilities(capabilities);
 
     }
 
-    private Capabilities buildRemoteCapabilities() {
+    private Capabilities buildRemoteCapabilities(String options) {
         String driver = ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables);
         if (driver == null) {
             driver = getDriverFrom(environmentVariables);
         }
-        return remoteDriverCapabilities.forDriver(driver);
+        return remoteDriverCapabilities.forDriver(driver, options);
     }
 
     public WebDriver newRemoteDriver(URL remoteUrl, Capabilities capabilities) {

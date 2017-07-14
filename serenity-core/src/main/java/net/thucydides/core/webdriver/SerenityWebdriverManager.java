@@ -1,12 +1,14 @@
 package net.thucydides.core.webdriver;
 
-import com.google.common.base.Optional;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.SessionId;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.StringJoiner;
 
+import static org.apache.commons.lang3.StringUtils.SPACE;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
@@ -28,11 +30,21 @@ public class SerenityWebdriverManager implements WebdriverManager {
 
     private final Configuration configuration;
 
-    private Optional<String> overridenDefaultDriverType = Optional.absent();
+    private final String options;
+
+    private String overridenDefaultDriverType = null;
+
 
     public SerenityWebdriverManager(final WebDriverFactory webDriverFactory, final Configuration configuration) {
+        this(webDriverFactory, configuration, "");
+    }
+
+    public SerenityWebdriverManager(final WebDriverFactory webDriverFactory,
+                                    final Configuration configuration,
+                                    final String options) {
         this.webDriverFactory = webDriverFactory;
         this.configuration = configuration;
+        this.options = options;
     }
 
     /**
@@ -40,17 +52,19 @@ public class SerenityWebdriverManager implements WebdriverManager {
      * override this method to use a custom driver if you really know what you
      * are doing.
      *
-     * @throws net.thucydides.core.webdriver.UnsupportedDriverException
+     * @throws UnsupportedDriverException
      *             if the driver type is not supported.
      */
     private static WebDriver newDriver(final Configuration configuration,
                                        final WebDriverFactory webDriverFactory,
-                                       final String driver) {
+                                       final String driver,
+                                       final String options) {
         SupportedWebDriver supportedDriverType = getConfiguredWebDriverWithOverride(configuration, driver);
         Class<? extends WebDriver> webDriverType = webDriverFactory.getClassFor(supportedDriverType);
         return WebdriverProxyFactory.getFactory().proxyFor(webDriverType,
                                                            webDriverFactory,
-                                                           configuration);
+                                                           configuration,
+                                                           options);
     }
 
     private static SupportedWebDriver getConfiguredWebDriverWithOverride(final Configuration configuration,
@@ -79,6 +93,11 @@ public class SerenityWebdriverManager implements WebdriverManager {
 
     }
 
+    @Override
+    public WebdriverManager withOptions(String driverOptions) {
+        return new SerenityWebdriverManager(webDriverFactory, configuration, driverOptions);
+    }
+
     public void resetDriver() {
         inThisTestThread().resetCurrentDriver();
     }
@@ -90,7 +109,8 @@ public class SerenityWebdriverManager implements WebdriverManager {
 
         return instantiatedThreadLocalWebDriver(configuration,
                                                 webDriverFactory,
-                                                currentDriverName);
+                                                currentDriverName,
+                                                options);
     }
 
     @Override
@@ -142,12 +162,12 @@ public class SerenityWebdriverManager implements WebdriverManager {
 
     @Override
     public String getDefaultDriverType() {
-        return overridenDefaultDriverType.or(configuration.getDriverType().name());
+        return Optional.ofNullable(overridenDefaultDriverType).orElse(configuration.getDriverType().name());
     }
 
     @Override
     public void overrideDefaultDriverType(String driverType) {
-        overridenDefaultDriverType = Optional.fromNullable(isEmpty(driverType) ? null : driverType);
+        overridenDefaultDriverType = isEmpty(driverType) ? null : driverType;
     }
 
     public SessionId getSessionId() {
@@ -172,11 +192,10 @@ public class SerenityWebdriverManager implements WebdriverManager {
 
         String name = (isEmpty(driverName)) ?  inThisTestThread().getCurrentDriverName() : driverName;
 
-        WebDriver activeDriver = instantiatedThreadLocalWebDriver(configuration, webDriverFactory, name);
+        return instantiatedThreadLocalWebDriver(configuration, webDriverFactory, name, options);
 
        // registerDriverInGlobalDrivers(activeDriver);
-
-        return activeDriver;
+       // return activeDriver;
     }
 
     public WebDriver getCurrentDriver() {
@@ -193,15 +212,24 @@ public class SerenityWebdriverManager implements WebdriverManager {
 
     private static WebDriver instantiatedThreadLocalWebDriver(final Configuration configuration,
                                                               final WebDriverFactory webDriverFactory,
-                                                              final String driver) {
+                                                              final String driver,
+                                                              final String options) {
 
+        String uniqueDriverName = uniqueDriverNameFor(driver, options);
 
-        if (!inThisTestThread().driverIsRegisteredFor(driver)) {
-            inThisTestThread().registerDriverCalled(driver)
-                              .forDriver(newDriver(configuration, webDriverFactory, driverTypeOf(driver)));
+        if (!inThisTestThread().driverIsRegisteredFor(uniqueDriverName)) {
+            inThisTestThread().registerDriverCalled(uniqueDriverName)
+                              .forDriver(newDriver(configuration,
+                                         webDriverFactory,
+                                         driverTypeOf(driver),
+                                         options));
 
         }
-        return inThisTestThread().useDriver(driver);
+        return inThisTestThread().useDriver(uniqueDriverName);
+    }
+
+    private static String uniqueDriverNameFor(String driver, String options) {
+        return driver + ((isEmpty(options)) ? "" : ":" + options);
     }
 
     private static String driverTypeOf(String driverName) {

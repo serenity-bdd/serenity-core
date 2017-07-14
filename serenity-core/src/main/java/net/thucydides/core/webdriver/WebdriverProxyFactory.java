@@ -54,10 +54,17 @@ public class WebdriverProxyFactory implements Serializable {
     public WebDriverFacade proxyFor(final Class<? extends WebDriver> driverClass,
                                     final WebDriverFactory webDriverFactory,
                                     Configuration configuration) {
+        return proxyFor(driverClass,webDriverFactory,configuration,"");
+    }
+
+    public WebDriverFacade proxyFor(final Class<? extends WebDriver> driverClass,
+                                    final WebDriverFactory webDriverFactory,
+                                    Configuration configuration,
+                                    String options) {
         if (mockDriver != null) {
             return mockDriver;
         } else {
-            return new WebDriverFacade(driverClass, webDriverFactory, configuration.getEnvironmentVariables());
+            return new WebDriverFacade(driverClass, webDriverFactory, configuration.getEnvironmentVariables()).withOptions(options);
         }
     }
 

@@ -28,16 +28,13 @@ import static net.thucydides.core.webdriver.DriverStrategySelector.inEnvironment
 
 /**
  * Provides an instance of a supported WebDriver.
- * When you instanciate a Webdriver instance for Firefox or Chrome, it opens a new browser.
+ * When you instantiate a WebDriver instance for Firefox or Chrome, it opens a new browser.
  *
  * @author johnsmart
  */
 public class WebDriverFactory {
     public static final String DEFAULT_DRIVER = "firefox";
     public static final String REMOTE_DRIVER = "remote";
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebDriverFactory.class);
-
 
     private final EnvironmentVariables environmentVariables;
     private final FixtureProviderService fixtureProviderService;
@@ -120,10 +117,14 @@ public class WebDriverFactory {
      * @param driverClass
      */
     protected synchronized WebDriver newWebdriverInstance(final Class<? extends WebDriver> driverClass) {
+        return newWebdriverInstance(driverClass, "");
+    }
+
+    protected synchronized WebDriver newWebdriverInstance(final Class<? extends WebDriver> driverClass, String options) {
         RedimensionBrowser redimensionBrowser = new RedimensionBrowser(environmentVariables, driverClass);
         try {
             SupportedWebDriver supportedDriverType = inEnvironment(environmentVariables).forDriverClass(driverClass);
-            WebDriver driver = driverProviders().get(supportedDriverType).newInstance();
+            WebDriver driver = driverProviders().get(supportedDriverType).newInstance(options);
             setImplicitTimeoutsIfSpecified(driver);
             redimensionBrowser.withDriver(driver);
 

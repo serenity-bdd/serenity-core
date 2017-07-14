@@ -33,10 +33,12 @@ import static org.hamcrest.Matchers.is;
 @RunWith(SerenityRunner.class)
 public class WhenDanaBrowsesTheWeb {
 
-    @Managed(driver = "phantomjs")
+//    @Managed(driver = "chrome", options = "--headless")
+    @Managed(driver = "htmlunit")
     WebDriver firstBrowser;
 
-    @Managed(driver = "phantomjs")
+//    @Managed(driver = "chrome", options = "--headless")
+    @Managed(driver = "htmlunit")
     WebDriver anotherBrowser;
 
     ProfileQuestion profile = new ProfileQuestion();

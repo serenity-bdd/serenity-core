@@ -19,7 +19,7 @@ import org.openqa.selenium.WebDriver;
 @RunWith(ThucydidesRunner.class)
 public class WhenOpeningStaticDemoPageWithSamePage {
 
-    @Managed(driver = "phantomjs")
+    @Managed(driver = "chrome", options = "--headless")
     public WebDriver webdriver;
 
     @ManagedPages

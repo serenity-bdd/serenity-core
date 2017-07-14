@@ -66,9 +66,9 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         when:
         def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
         then:
-        appiumConfiguration.capabilities.getCapability("platformVersion") == "7.1"
-        appiumConfiguration.capabilities.getCapability("deviceName") == "iPhone Simulator"
-        appiumConfiguration.capabilities.getCapability("browserName") == ""
+        AppiumConfiguration.getCapabilities.getCapability("platformVersion") == "7.1"
+        AppiumConfiguration.getCapabilities.getCapability("deviceName") == "iPhone Simulator"
+        AppiumConfiguration.getCapabilities.getCapability("browserName") == ""
     }
 
     def "The Appium app can be specified as a full file path"() {
@@ -78,7 +78,7 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         when:
         def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
         then:
-        def appPath = appiumConfiguration.capabilities.getCapability("app").toString()
+        def appPath = AppiumConfiguration.getCapabilities.getCapability("app").toString()
         appPath == fullAppPath
     }
 
@@ -88,7 +88,7 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         when:
         def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
         then:
-        def appPath = appiumConfiguration.capabilities.getCapability("app").toString()
+        def appPath = AppiumConfiguration.getCapabilities.getCapability("app").toString()
         def expectedEnding = FileSeparatorUtil.changeSeparatorIfRequired("/apps/dummy-app")
         appPath.endsWith(expectedEnding)
     }
@@ -98,7 +98,7 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         environmentVariables.setProperty("appium.platformName", "IOS")
         def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
         when:
-        appiumConfiguration.capabilities
+        AppiumConfiguration.getCapabilities
         then:
         ThucydidesConfigurationException invalidConfiguration = thrown()
         invalidConfiguration.message.contains("The browser under test or path to the app needs to be provided in the appium.app or appium.browserName property.")

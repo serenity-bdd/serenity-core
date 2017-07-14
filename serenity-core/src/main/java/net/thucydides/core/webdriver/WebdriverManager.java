@@ -58,4 +58,6 @@ public interface WebdriverManager {
     List<String> getActiveDriverTypes();
 
     void reset();
+
+    WebdriverManager withOptions(String driverOptions);
 }

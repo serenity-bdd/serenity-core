@@ -19,4 +19,5 @@ public @interface Managed {
     boolean uniqueSession() default false;
     ClearCookiesPolicy clearCookies() default BeforeEachTest;
     String driver() default "";
+    String options() default "";
 }

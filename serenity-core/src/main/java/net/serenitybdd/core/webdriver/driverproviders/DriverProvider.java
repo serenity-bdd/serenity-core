@@ -5,5 +5,5 @@ import org.openqa.selenium.WebDriver;
 import java.net.MalformedURLException;
 
 public interface DriverProvider {
-    WebDriver newInstance() throws MalformedURLException;
+    WebDriver newInstance(String options) throws MalformedURLException;
 }

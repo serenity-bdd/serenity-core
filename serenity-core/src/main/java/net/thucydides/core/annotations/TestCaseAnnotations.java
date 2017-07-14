@@ -59,7 +59,8 @@ public final class TestCaseAnnotations {
         for(ManagedWebDriverAnnotatedField webDriverField : webDriverFields) {
             String driverRootName = isNotEmpty(webDriverField.getDriver()) ?  webDriverField.getDriver() : configuredDriverType();
             String driverName = driverRootName + suffix;
-            WebDriver driver = (isEmpty(driverName)) ? defaultDriver : webdriverManager.getWebdriver(driverName);
+            String driverOptions = webDriverField.getOptions();
+            WebDriver driver = (isEmpty(driverName)) ? defaultDriver : webdriverManager.withOptions(driverOptions).getWebdriver(driverName);
             webDriverField.setValue(testCase, driver);
 
             suffix = nextSuffix(driverCount++);

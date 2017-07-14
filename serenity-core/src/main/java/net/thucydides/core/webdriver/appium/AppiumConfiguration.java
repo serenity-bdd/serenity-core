@@ -1,14 +1,18 @@
 package net.thucydides.core.webdriver.appium;
 
+import com.google.common.base.Splitter;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.PathProcessor;
 import net.thucydides.core.webdriver.MobilePlatform;
+import net.thucydides.core.webdriver.OptionsMap;
 import net.thucydides.core.webdriver.ThucydidesConfigurationException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -45,9 +49,9 @@ public class AppiumConfiguration {
         }
     }
 
-    public DesiredCapabilities getCapabilities() {
+    public DesiredCapabilities getCapabilities(String options) {
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        Properties appiumProperties = getProperties();
+        Properties appiumProperties = getProperties(options);
         for (Object key : appiumProperties.keySet()) {
             capabilities.setCapability(key.toString(), appiumProperties.getProperty(key.toString()));
             capabilities.asMap();
@@ -55,11 +59,12 @@ public class AppiumConfiguration {
         return capabilities;
     }
 
-    public Properties getProperties() {
-        return appiumPropertiesFrom(environmentVariables);
+    public Properties getProperties(String options) {
+        return appiumPropertiesFrom(environmentVariables, options);
     }
 
-    private Properties appiumPropertiesFrom(EnvironmentVariables environmentVariables) {
+    private Properties appiumPropertiesFrom(EnvironmentVariables environmentVariables, String options) {
+
         Properties appiumProperties = new Properties();
         List<String> appiumKeys =
                 environmentVariables.getKeys()
@@ -71,6 +76,11 @@ public class AppiumConfiguration {
             String value = isAppProperty(key) ? appPathFrom(environmentVariables.getProperty(key)) : environmentVariables.getProperty(key);
             String simplifiedKey = key.replace("appium.", "");
             appiumProperties.setProperty(simplifiedKey, value.trim());
+        }
+
+        Map<String, String> optionsMap = OptionsMap.from(options);
+        for(String key : optionsMap.keySet()) {
+            appiumProperties.setProperty(key, optionsMap.get(key));
         }
         ensureAppOrBrowserPathDefinedIn(appiumProperties);
         return appiumProperties;

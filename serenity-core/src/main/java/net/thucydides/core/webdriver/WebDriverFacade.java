@@ -43,10 +43,12 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     private EnvironmentVariables environmentVariables;
 
+    private String options = "";
+
     /**
      * Implicit timeout values recorded to that they can be restored after calling findElements()
      */
-    protected Duration implicitTimeout;
+    Duration implicitTimeout;
 
     public WebDriverFacade(final Class<? extends WebDriver> driverClass,
                            final WebDriverFactory webDriverFactory) {
@@ -88,6 +90,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         this.proxiedWebDriver = proxiedWebDriver;
         this.implicitTimeout = implicitTimeout;
     }
+
 
     public WebDriverFacade withTimeoutOf(Duration implicitTimeout) {
         return new WebDriverFacade(driverClass, webDriverFactory, proxiedWebDriver, implicitTimeout);
@@ -131,7 +134,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         }
     }
 
-    protected WebDriver newProxyDriver() {
+    private WebDriver newProxyDriver() {
         return newDriverInstance();
     }
 
@@ -140,8 +143,8 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
             if (StepEventBus.getEventBus().isDryRun()) {
                 return new WebDriverStub();
             } else {
-            webDriverFactory.setupFixtureServices();
-            return webDriverFactory.newWebdriverInstance(driverClass);
+                webDriverFactory.setupFixtureServices();
+                return webDriverFactory.newWebdriverInstance(driverClass, options);
             }
         } catch (UnsupportedDriverException e) {
             LOGGER.error("FAILED TO CREATE NEW WEBDRIVER_DRIVER INSTANCE " + driverClass + ": " + e.getMessage(), e);
@@ -241,34 +244,30 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         return getProxiedDriver().getTitle();
     }
 
-    public List<WebElement> findElements(final By by) {
+    public <T extends WebElement> List<T> findElements(final By by) {
         if (!isEnabled()) {
             return Collections.emptyList();
         }
-        List<WebElement> elements;
+        List<T> elements;
         try {
             webDriverFactory.setTimeouts(getProxiedDriver(), getCurrentImplicitTimeout());
             elements = getProxiedDriver().findElements(by);
-        } catch (Throwable e) {
-            throw e;
         } finally {
             webDriverFactory.resetTimeouts(getProxiedDriver());
         }
         return elements;
     }
 
-    public WebElement findElement(final By by) {
+    public <T extends WebElement> T findElement(final By by) {
         if (!isEnabled()) {
-            return new WebElementFacadeStub();
+            return (T) new WebElementFacadeStub();
         }
 
-        WebElement element;
+        T element;
 
         try {
             webDriverFactory.setTimeouts(getProxiedDriver(), getCurrentImplicitTimeout());
             element = getProxiedDriver().findElement(by);
-        } catch(Throwable e) {
-            throw e;
         } finally {
             webDriverFactory.resetTimeouts(getProxiedDriver());
         }
@@ -443,5 +442,10 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     @Override
     public String toString() {
         return "WebDriverFacade for " + getDriverName();
+    }
+
+    public WebDriverFacade withOptions(String options) {
+        this.options = options;
+        return this;
     }
 }

@@ -38,7 +38,7 @@ public class PhantomJSDriverProvider implements DriverProvider {
     }
 
     @Override
-    public WebDriver newInstance() {
+    public WebDriver newInstance(String options) {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }

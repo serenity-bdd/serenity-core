@@ -37,11 +37,11 @@ public class ChromeDriverProvider implements DriverProvider {
     }
 
     @Override
-    public WebDriver newInstance() {
+    public WebDriver newInstance(String options) {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
-        DesiredCapabilities capabilities = requestedChromeCapabilities();
+        DesiredCapabilities capabilities = requestedChromeCapabilities(options);
         driverProperties.registerCapabilities("chrome", capabilities);
 
         try {
@@ -52,8 +52,8 @@ public class ChromeDriverProvider implements DriverProvider {
         }
     }
 
-    private DesiredCapabilities requestedChromeCapabilities() {
-        DesiredCapabilities capabilities = new ChromeDriverCapabilities(environmentVariables).getCapabilities();
+    private DesiredCapabilities requestedChromeCapabilities(String options) {
+        DesiredCapabilities capabilities = new ChromeDriverCapabilities(environmentVariables, options).getCapabilities();
         return enhancer.enhanced(capabilities);
     }
 }

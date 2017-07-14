@@ -7,19 +7,19 @@ import net.thucydides.core.webdriver.capabilities.ChromePreferences;
 import net.thucydides.core.webdriver.chrome.OptionsSplitter;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
     private final EnvironmentVariables environmentVariables;
+    private final String driverOptions;
 
-    public ChromeDriverCapabilities(EnvironmentVariables environmentVariables) {
+    public ChromeDriverCapabilities(EnvironmentVariables environmentVariables, String driverOptions) {
         this.environmentVariables = environmentVariables;
+        this.driverOptions = driverOptions;
     }
 
     public DesiredCapabilities getCapabilities() {
@@ -40,20 +40,30 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     private ChromeOptions configuredOptions() {
         ChromeOptions options = new ChromeOptions();
 
-        addSwitchesTo(options);
+        addEnvironmentSwitchesTo(options);
+        addRuntimeOptionsTo(options);
         addPreferencesTo(options);
         updateChromeBinaryIfSpecified(options);
 
         return options;
     }
 
-    private void addSwitchesTo(ChromeOptions options) {
+    private void addEnvironmentSwitchesTo(ChromeOptions options) {
 
         String chromeSwitches = environmentVariables.getProperty(ThucydidesSystemProperty.CHROME_SWITCHES);
 
         options.addArguments("test-type");
         if (StringUtils.isNotEmpty(chromeSwitches)) {
             List<String> arguments = new OptionsSplitter().split(chromeSwitches);
+            options.addArguments(arguments);
+        }
+    }
+
+    private void addRuntimeOptionsTo(ChromeOptions options) {
+
+        options.addArguments("test-type");
+        if (StringUtils.isNotEmpty(driverOptions)) {
+            List<String> arguments = new OptionsSplitter().split(driverOptions);
             options.addArguments(arguments);
         }
     }

@@ -27,7 +27,7 @@ public class DriverCapabilities {
         this.enhancer = enhancer;
     }
 
-    public DesiredCapabilities forDriver(String driver) {
+    public DesiredCapabilities forDriver(String driver, String options) {
         if (driver == null) {
             driver = REMOTE_DRIVER;
         }
@@ -36,9 +36,9 @@ public class DriverCapabilities {
         Preconditions.checkNotNull(driverType, "Unsupported remote driver type: " + driver);
 
         if (shouldUseARemoteDriver()) {
-            return enhancer.enhanced(remoteCapabilities());
+            return enhancer.enhanced(remoteCapabilities(options));
         } else {
-            return enhancer.enhanced(realBrowserCapabilities(driverType));
+            return enhancer.enhanced(realBrowserCapabilities(driverType, options));
         }
     }
 
@@ -53,12 +53,12 @@ public class DriverCapabilities {
         return SupportedWebDriver.valueOrSynonymOf(normalizedDriverName);
     }
 
-    private Map<SupportedWebDriver, DriverCapabilitiesProvider> driverCapabilitiesSelector() {
+    private Map<SupportedWebDriver, DriverCapabilitiesProvider> driverCapabilitiesSelector(String options) {
         Map<SupportedWebDriver, DriverCapabilitiesProvider> selectors = Maps.newHashMap();
 
-        selectors.put(CHROME,new ChromeDriverCapabilities(environmentVariables));
+        selectors.put(CHROME,new ChromeDriverCapabilities(environmentVariables, options));
         selectors.put(FIREFOX,new FirefoxDriverCapabilities(environmentVariables));
-        selectors.put(APPIUM,new AppiumDriverCapabilities(environmentVariables));
+        selectors.put(APPIUM,new AppiumDriverCapabilities(environmentVariables, options));
         selectors.put(PROVIDED,new ProvidedDriverCapabilities(environmentVariables));
         selectors.put(SAFARI,new DriverCapabilitiesProvider() {
             @Override
@@ -112,17 +112,17 @@ public class DriverCapabilities {
         return selectors;
     }
 
-    public DesiredCapabilities realBrowserCapabilities(SupportedWebDriver driverType) {
-        return enhancer.enhanced(driverCapabilitiesSelector().get(driverType).getCapabilities());
+    public DesiredCapabilities realBrowserCapabilities(SupportedWebDriver driverType, String options) {
+        return enhancer.enhanced(driverCapabilitiesSelector(options).get(driverType).getCapabilities());
     }
 
-    private DesiredCapabilities remoteCapabilities() {
+    private DesiredCapabilities remoteCapabilities(String options) {
         String remoteBrowser = ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables, getDriverFrom(environmentVariables));
         if (remoteBrowser == null) {
             remoteBrowser = "firefox";
         }
 
-        DesiredCapabilities capabilities = realBrowserCapabilities(driverTypeFor(remoteBrowser));
+        DesiredCapabilities capabilities = realBrowserCapabilities(driverTypeFor(remoteBrowser), options);
         capabilities.setCapability("idle-timeout",EXTRA_TIME_TO_TAKE_SCREENSHOTS);
 
         Boolean recordScreenshotsInSaucelabs = ThucydidesSystemProperty.SAUCELABS_RECORD_SCREENSHOTS.booleanFrom(environmentVariables);

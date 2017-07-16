@@ -127,7 +127,7 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
             String currentPropertyValue = environmentVariables.getProperty(propertyName);
 
             if ((currentPropertyValue == null) && (localPropertyValue != null)) {
-                LOGGER.info(propertyName + "=" + localPropertyValue);
+                LOGGER.debug(propertyName + "=" + localPropertyValue);
                 environmentVariables.setProperty(propertyName, localPropertyValue);
             }
         }

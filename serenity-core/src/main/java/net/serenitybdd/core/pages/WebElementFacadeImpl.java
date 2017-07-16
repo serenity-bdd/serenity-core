@@ -4,10 +4,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.FindsByAccessibilityId;
-import io.appium.java_client.FindsByAndroidUIAutomator;
-import io.appium.java_client.FindsByIosUIAutomation;
+import io.appium.java_client.*;
 import net.serenitybdd.core.time.InternalSystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.locators.MethodTiming;
@@ -1025,6 +1022,21 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return getElement().findElement(by);
     }
 
+    @Override
+    public WebElement findElement(String by, String using) {
+        if (getElement() instanceof MobileElement) {
+            return ((MobileElement)getElement()).findElement(by, using);
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List findElements(String by, String using) {
+        if (getElement() instanceof MobileElement) {
+            return ((MobileElement)getElement()).findElements(by, using);
+        }
+        throw new UnsupportedOperationException();
+    }
     /**
      * Is this element displayed or not? This method avoids the problem of having to parse an
      * element's "style" attribute.
@@ -1103,4 +1115,5 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         this.foundBy = foundBy;
         return this;
     }
+
 }

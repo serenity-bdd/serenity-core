@@ -6,6 +6,7 @@ import net.serenitybdd.core.annotations.findby.By;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.annotations.findby.How;
 import net.thucydides.core.webdriver.MobilePlatform;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.support.ByIdOrName;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.pagefactory.Annotations;
@@ -17,9 +18,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static io.appium.java_client.remote.MobilePlatform.ANDROID;
 import static io.appium.java_client.remote.MobilePlatform.IOS;
+import static org.apache.commons.lang3.StringUtils.isAlpha;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 
@@ -322,6 +325,12 @@ public class SmartAnnotations extends Annotations {
             case ANDROID_UI_AUTOMATOR:
                 return MobileBy.AndroidUIAutomator(using);
 
+            case IOS_CLASS_CHAIN:
+                return MobileBy.iOSClassChain(using);
+
+            case IOS_NS_PREDICATE_STRING:
+                return MobileBy.iOSNsPredicateString(using);
+
             default:
                 // Note that this shouldn't happen (eg, the above matches all
                 // possible values for the How enum)
@@ -411,18 +420,14 @@ public class SmartAnnotations extends Annotations {
 
     private static String getFieldValue(Annotation mobileBy) {
         Method[] values = prepareAnnotationMethods(mobileBy.getClass());
+
         for (Method value : values) {
             try {
-                String strategyParameter = value.invoke(mobileBy,
-                        new Object[]{}).toString();
-                if (!"".equals(strategyParameter)) {
+                String strategyParameter = value.invoke(mobileBy).toString();
+                if (isNotEmpty(strategyParameter) && isAlpha(strategyParameter) ) {
                     return value.getName();
                 }
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (IllegalArgumentException e) {
-                throw new RuntimeException(e);
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 throw new RuntimeException(e);
             }
         }

@@ -489,6 +489,15 @@ public class WebElementFacadeStub implements WebElementFacade {
         return this;
     }
 
+    public WebElement findElement(String by, String using) {
+        return this;
+    }
+
+    public List findElements(String by, String using) {
+        return new ArrayList();
+    }
+
+
     public boolean isDisplayed() {
         return false;
     }
@@ -615,5 +624,6 @@ public class WebElementFacadeStub implements WebElementFacade {
     public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
         return null;
     }
+
 }
 

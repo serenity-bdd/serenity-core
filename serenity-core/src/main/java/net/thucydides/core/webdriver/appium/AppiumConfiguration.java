@@ -49,6 +49,10 @@ public class AppiumConfiguration {
         }
     }
 
+    public DesiredCapabilities getCapabilities() {
+        return getCapabilities("");
+    }
+
     public DesiredCapabilities getCapabilities(String options) {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         Properties appiumProperties = getProperties(options);

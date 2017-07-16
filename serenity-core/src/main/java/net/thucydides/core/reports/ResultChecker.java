@@ -29,7 +29,7 @@ public class ResultChecker {
         this(outputDirectory, WITH_NO_TAGS);
     }
 
-    private ResultChecker(File outputDirectory, String tags) {
+    public ResultChecker(File outputDirectory, String tags) {
         this.outputDirectory = outputDirectory;
         this.tags = tagsFrom(tags);
     }

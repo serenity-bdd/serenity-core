@@ -10,6 +10,8 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
+
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
@@ -38,7 +40,10 @@ public class BrowserStackRemoteDriverCapabilities implements RemoteDriverCapabil
     }
 
     private void configureBrowserStackCapabilities(DesiredCapabilities capabilities) {
-        capabilities.setCapability("name",  bestGuessOfTestName());
+        Optional<String> guessedTestName = RemoteTestName.fromCurrentTest();
+        guessedTestName.ifPresent(
+                name -> capabilities.setCapability("name", name)
+        );
 
         AddCustomCapabilities.startingWith("browserstack.").from(environmentVariables).withAndWithoutPrefixes().to(capabilities);
 
@@ -48,29 +53,5 @@ public class BrowserStackRemoteDriverCapabilities implements RemoteDriverCapabil
         }
     }
 
-    private String bestGuessOfTestName() {
-        for (StackTraceElement elt : Thread.currentThread().getStackTrace()) {
-            try {
-                Class callingClass = Class.forName(elt.getClassName());
-                Method callingMethod = callingClass.getMethod(elt.getMethodName());
-                if (isATestMethod(callingMethod)) {
-                    return NameConverter.humanize(elt.getMethodName());
-                } else if (isASetupMethod(callingMethod)) {
-                    return NameConverter.humanize(callingClass.getSimpleName());
-                }
-            } catch (ClassNotFoundException e) {
-            } catch (NoSuchMethodException e) {
-            }
-        }
-        return null;
-    }
 
-    private boolean isATestMethod(Method callingMethod) {
-        return callingMethod.getAnnotation(Test.class) != null;
-    }
-
-    private boolean isASetupMethod(Method callingMethod) {
-        return (callingMethod.getAnnotation(Before.class) != null)
-                || (callingMethod.getAnnotation(BeforeClass.class) != null);
-    }
 }

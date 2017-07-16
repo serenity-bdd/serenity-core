@@ -11,8 +11,10 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.Properties;
 
+import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_TEST_NAME;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
@@ -104,40 +106,14 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
     }
 
     private void configureTestName(DesiredCapabilities capabilities) {
-        String testName = ThucydidesSystemProperty.SAUCELABS_TEST_NAME.from(environmentVariables);
+        String testName = SAUCELABS_TEST_NAME.from(environmentVariables);
         if (isNotEmpty(testName)) {
             capabilities.setCapability("name", testName);
         } else {
-            String guessedTestName = bestGuessOfTestName();
-            if (guessedTestName != null) {
-                capabilities.setCapability("name", bestGuessOfTestName());
-            }
+            Optional<String> guessedTestName = RemoteTestName.fromCurrentTest();
+            guessedTestName.ifPresent(
+                    name -> capabilities.setCapability("name", name)
+            );
         }
-    }
-
-    private String bestGuessOfTestName() {
-        for (StackTraceElement elt : Thread.currentThread().getStackTrace()) {
-            try {
-                Class callingClass = Class.forName(elt.getClassName());
-                Method callingMethod = callingClass.getMethod(elt.getMethodName());
-                if (isATestMethod(callingMethod)) {
-                    return NameConverter.humanize(elt.getMethodName());
-                } else if (isASetupMethod(callingMethod)) {
-                    return NameConverter.humanize(callingClass.getSimpleName());
-                }
-            } catch (ClassNotFoundException e) {
-            } catch (NoSuchMethodException e) {
-            }
-        }
-        return null;
-    }
-
-    private boolean isATestMethod(Method callingMethod) {
-        return callingMethod.getAnnotation(Test.class) != null;
-    }
-
-    private boolean isASetupMethod(Method callingMethod) {
-        return (callingMethod.getAnnotation(Before.class) != null)
-                || (callingMethod.getAnnotation(BeforeClass.class) != null);
     }
 }

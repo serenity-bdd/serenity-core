@@ -34,12 +34,13 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
     def AcceptanceTestReporter reporter
     def AcceptanceTestLoader loader
 
-    File outputDirectory
+
+    TestOutcomes allTestOutcomes = Mock();
 
     @Rule
     TemporaryFolder temporaryFolder
 
-    TestOutcomes allTestOutcomes = Mock();
+    File outputDirectory
 
     def setup() {
         outputDirectory = temporaryFolder.newFolder()

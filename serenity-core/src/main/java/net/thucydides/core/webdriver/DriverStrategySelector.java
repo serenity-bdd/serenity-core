@@ -3,7 +3,7 @@ package net.thucydides.core.webdriver;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.BrowserStackRemoteDriverCapabilities;
-import net.thucydides.core.webdriver.capabilities.SauceRemoteDriverCapabilities;
+import net.thucydides.core.webdriver.capabilities.SaucelabsRemoteDriverCapabilities;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -15,13 +15,13 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 public class DriverStrategySelector {
 
     private final EnvironmentVariables environmentVariables;
-    private final SauceRemoteDriverCapabilities sauceRemoteDriverCapabilities;
+    private final SaucelabsRemoteDriverCapabilities sauceRemoteDriverCapabilities;
     private final BrowserStackRemoteDriverCapabilities browserStackRemoteDriverCapabilities;
 
     public DriverStrategySelector(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
         this.browserStackRemoteDriverCapabilities = new BrowserStackRemoteDriverCapabilities(environmentVariables);
-        this.sauceRemoteDriverCapabilities = new SauceRemoteDriverCapabilities(environmentVariables);
+        this.sauceRemoteDriverCapabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
     }
 
     public static DriverStrategySelector inEnvironment(EnvironmentVariables environmentVariables) {

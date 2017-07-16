@@ -107,6 +107,10 @@ public class DataTable {
         currentRow.set(rows.size() - 1);
     }
 
+    public void appendRow(Map<String, ?> data) {
+        appendRow(new DataTableRow(ImmutableList.copyOf(data.values())));
+    }
+
     void appendRow(DataTableRow dataTableRow) {
         rows.add(dataTableRow);
     }

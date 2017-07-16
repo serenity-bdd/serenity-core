@@ -60,54 +60,14 @@ public class DriverCapabilities {
         selectors.put(FIREFOX,new FirefoxDriverCapabilities(environmentVariables));
         selectors.put(APPIUM,new AppiumDriverCapabilities(environmentVariables, options));
         selectors.put(PROVIDED,new ProvidedDriverCapabilities(environmentVariables));
-        selectors.put(SAFARI,new DriverCapabilitiesProvider() {
-            @Override
-            public DesiredCapabilities getCapabilities() {
-                return DesiredCapabilities.safari();
-            }
-        });
-        selectors.put(HTMLUNIT,new DriverCapabilitiesProvider() {
-            @Override
-            public DesiredCapabilities getCapabilities() {
-                return DesiredCapabilities.htmlUnit();
-            }
-        });
-        selectors.put(OPERA,new DriverCapabilitiesProvider() {
-            @Override
-            public DesiredCapabilities getCapabilities() {
-                return DesiredCapabilities.operaBlink();
-            }
-        });
-        selectors.put(IEXPLORER,new DriverCapabilitiesProvider() {
-            @Override
-            public DesiredCapabilities getCapabilities() {
-                return DesiredCapabilities.internetExplorer();
-            }
-        });
-        selectors.put(EDGE,new DriverCapabilitiesProvider() {
-            @Override
-            public DesiredCapabilities getCapabilities() {
-                return DesiredCapabilities.edge();
-            }
-        });
-        selectors.put(PHANTOMJS,new DriverCapabilitiesProvider() {
-            @Override
-            public DesiredCapabilities getCapabilities() {
-                return DesiredCapabilities.phantomjs();
-            }
-        });
-        selectors.put(IPHONE,new DriverCapabilitiesProvider() {
-            @Override
-            public DesiredCapabilities getCapabilities() {
-                return DesiredCapabilities.iphone();
-            }
-        });
-        selectors.put(ANDROID,new DriverCapabilitiesProvider() {
-            @Override
-            public DesiredCapabilities getCapabilities() {
-                return DesiredCapabilities.android();
-            }
-        });
+        selectors.put(SAFARI, DesiredCapabilities::safari);
+        selectors.put(HTMLUNIT, DesiredCapabilities::htmlUnit);
+        selectors.put(OPERA, DesiredCapabilities::operaBlink);
+        selectors.put(IEXPLORER, DesiredCapabilities::internetExplorer);
+        selectors.put(EDGE, DesiredCapabilities::edge);
+        selectors.put(PHANTOMJS, DesiredCapabilities::phantomjs);
+        selectors.put(IPHONE, DesiredCapabilities::iphone);
+        selectors.put(ANDROID, DesiredCapabilities::android);
 
         return selectors;
     }

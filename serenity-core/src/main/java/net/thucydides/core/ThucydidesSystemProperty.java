@@ -306,7 +306,7 @@ public enum ThucydidesSystemProperty {
 
     /**
      * Use the same browser for all tests (the "Highlander" rule)
-     * @Deprecated: Use THUCYDIDES_RESTART_BROWSER_FOR_EACH instead.
+     * Deprecated: Use THUCYDIDES_RESTART_BROWSER_FOR_EACH instead.
      */
     @Deprecated
     THUCYDIDES_USE_UNIQUE_BROWSER,

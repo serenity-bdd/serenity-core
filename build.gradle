@@ -211,7 +211,7 @@ subprojects {
         compile "xml-apis:xml-apis:${xmlApisVersion}"
         compile "info.cukes:cucumber-core:${cucumberVersion}"
 
-        compile 'commons-logging:commons-logging:{commonsLoggingVersion}'
+        compile("commons-logging:commons-logging:${commonsLoggingVersion}")
         compile "junit:junit:${junitVersion}"
         compile("org.mockito:mockito-core:${mockitoCoreVersion}") {
             exclude group: "org.hamcrest", module:"hamcrest-core"

@@ -20,11 +20,11 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  *
  * @author Imran Khan
  */
-public class SauceRemoteDriverCapabilities implements RemoteDriverCapabilities {
+public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabilities {
 
     private final EnvironmentVariables environmentVariables;
 
-    public SauceRemoteDriverCapabilities(EnvironmentVariables environmentVariables){
+    public SaucelabsRemoteDriverCapabilities(EnvironmentVariables environmentVariables){
         this.environmentVariables = environmentVariables;
     }
 

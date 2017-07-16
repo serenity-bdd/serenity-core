@@ -11,15 +11,13 @@ import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.fixtureservices.FixtureService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.capabilities.SauceRemoteDriverCapabilities;
+import net.thucydides.core.webdriver.capabilities.SaucelabsRemoteDriverCapabilities;
 import net.serenitybdd.core.webdriver.driverproviders.*;
 import net.thucydides.core.webdriver.redimension.RedimensionBrowser;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Duration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +36,7 @@ public class WebDriverFactory {
 
     private final EnvironmentVariables environmentVariables;
     private final FixtureProviderService fixtureProviderService;
-    private final SauceRemoteDriverCapabilities sauceRemoteDriverCapabilities;
+    private final SaucelabsRemoteDriverCapabilities sauceRemoteDriverCapabilities;
 
     private final CloseBrowser closeBrowser;
 
@@ -60,7 +58,7 @@ public class WebDriverFactory {
                             FixtureProviderService fixtureProviderService) {
         this.environmentVariables = environmentVariables;
         this.fixtureProviderService = fixtureProviderService;
-        this.sauceRemoteDriverCapabilities = new SauceRemoteDriverCapabilities(environmentVariables);
+        this.sauceRemoteDriverCapabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
         this.timeoutStack = new TimeoutStack();
         this.closeBrowser = Injectors.getInjector().getInstance(CloseBrowser.class);
     }

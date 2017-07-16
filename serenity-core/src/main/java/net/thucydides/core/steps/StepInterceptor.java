@@ -42,7 +42,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     private final EnvironmentVariables environmentVariables;
     private final List<String> cleanupMethodsAnnotations = new ArrayList<>();
 
-    public StepInterceptor(final Class<?> testStepClass) {
+    StepInterceptor(final Class<?> testStepClass) {
         this.testStepClass = testStepClass;
         this.environmentVariables = ConfiguredEnvironment.getEnvironmentVariables();
         Iterable<CleanupMethodAnnotationProvider> cleanupMethodAnnotationProviders = ServiceLoader.load(CleanupMethodAnnotationProvider.class);
@@ -113,9 +113,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         try {
             method.getClass().getDeclaredField("root").setAccessible(true);
             return (Method) method.getClass().getDeclaredField("root").get(method);
-        } catch (IllegalAccessException e) {
-            return method;
-        } catch (NoSuchFieldException e) {
+        } catch (IllegalAccessException | NoSuchFieldException e) {
             return method;
         }
     }
@@ -148,7 +146,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
                         }
                     }
                 }
-            } catch(Exception ex) {}
+            } catch(Exception ignored) {}
         }
         return false;
     }
@@ -203,7 +201,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         return (SkipNested.class.isAssignableFrom(testStepClass));
     }
 
-    Object appropriateReturnObject(final Object returnedValue, final Object obj, final Method method) {
+    private Object appropriateReturnObject(final Object returnedValue, final Object obj, final Method method) {
         if (returnedValue != null) {
             return returnedValue;
         } else {
@@ -211,16 +209,53 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         }
     }
 
+    enum PrimitiveReturnType {
+        STRING, LONG, INTEGER, DOUBLE, FLOAT, BOOLEAN, UNSUPPORTED
+    }
+
+    private PrimitiveReturnType returnTypeOf(final Method method) {
+        if (method.getReturnType() == String.class) {
+            return PrimitiveReturnType.STRING;
+        }
+
+        if (Long.class.isAssignableFrom(method.getReturnType())) {
+            return PrimitiveReturnType.LONG;
+        }
+
+        if (Integer.class.isAssignableFrom(method.getReturnType())) {
+            return PrimitiveReturnType.INTEGER;
+        }
+
+        if (Double.class.isAssignableFrom(method.getReturnType())) {
+            return PrimitiveReturnType.DOUBLE;
+        }
+
+        if (Float.class.isAssignableFrom(method.getReturnType())) {
+            return PrimitiveReturnType.FLOAT;
+        }
+
+        if (Boolean.class.isAssignableFrom(method.getReturnType())) {
+            return PrimitiveReturnType.BOOLEAN;
+        }
+
+        return PrimitiveReturnType.UNSUPPORTED;
+
+    }
+
     Object appropriateReturnObject(final Object obj, final Method method) {
         if (method.getReturnType().isAssignableFrom(obj.getClass())) {
             return obj;
-        } else {
-            return null;
         }
-    }
 
-    private boolean shouldSkipMethod(final Method methodOrStep, final Class callingClass) {
-        return ((aPreviousStepHasFailed() || testIsPending() || isDryRun()) && declaredInSameDomain(methodOrStep, callingClass));
+        switch (returnTypeOf(method)) {
+            case STRING: return "";
+            case LONG: return 0L;
+            case INTEGER: return 0;
+            case FLOAT: return 0.0F;
+            case DOUBLE: return 0.0D;
+            case BOOLEAN: return Boolean.FALSE;
+            default: return null;
+        }
     }
 
     private boolean shouldSkip(final Method methodOrStep) {
@@ -287,18 +322,6 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         notifyOfStepFailure(obj, method, args, assertionError);
     }
 
-
-    private Object invokeMethodAndNotifyFailures(Object obj, Method method, Object[] args, MethodProxy proxy, Object result) throws Throwable {
-        try {
-            result = invokeMethod(obj, args, proxy);
-        } catch (Throwable generalException) {
-            error = SerenityManagedException.detachedCopyOf(generalException);
-            Throwable assertionError = forError(error).convertToAssertion();
-            notifyStepStarted(obj, method, args);
-            notifyOfStepFailure(obj, method, args, assertionError);
-        }
-        return result;
-    }
 
     private boolean isAnnotatedWithAValidStepAnnotation(final Method method) {
         Annotation[] annotations = method.getAnnotations();
@@ -397,20 +420,15 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     }
 
     private String getTestNameFrom(final Method method, final Object[] args) {
-        return getTestNameFrom(method, args, true);
-    }
-
-    private String getTestNameFrom(final Method method, final Object[] args, final boolean addMarkup) {
         if ((args == null) || (args.length == 0)) {
             return method.getName();
         } else {
-            return testNameWithArguments(method, args, addMarkup);
+            return testNameWithArguments(method, args);
         }
     }
 
     private String testNameWithArguments(final Method method,
-                                         final Object[] args,
-                                         final boolean addMarkup) {
+                                         final Object[] args) {
         StringBuilder testName = new StringBuilder(method.getName());
         testName.append(": ");
 
@@ -468,7 +486,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         StepEventBus.getEventBus().skippedStepStarted(description);
     }
 
-    public String testContext() {
+    String testContext() {
         StackTraceSanitizer stackTraceSanitizer = StackTraceSanitizer.forStackTrace(new RuntimeException().getStackTrace());
         StackTraceElement[] stackTrace = stackTraceSanitizer.getSanitizedStackTrace();
         return (stackTrace.length > 0) ?

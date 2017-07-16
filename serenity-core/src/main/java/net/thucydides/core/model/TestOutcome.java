@@ -50,6 +50,7 @@ import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalField;
 import java.util.*;
@@ -2195,8 +2196,12 @@ public class TestOutcome {
         return startTime;
     }
 
-    public ZonedDateTime getTestRunTimestamp() {
-        return testRunTimestamp;
+    public String getStartedAt() {
+            return startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+    }
+
+    public String getTimestamp() {
+        return startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     public boolean isDataDriven() {

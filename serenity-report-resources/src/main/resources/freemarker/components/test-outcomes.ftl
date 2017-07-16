@@ -21,7 +21,8 @@
                                 <th width="65" class="test-results-heading">Ignore</th>
                                 <th width="65" class="test-results-heading">Skip</th>
                             </#if>
-                            <th width="100" class="test-results-heading">Duration<br>(seconds)</th>
+                            <th width="100" class="test-results-heading">Started</th>
+                            <th width="100" class="test-results-heading">Took<br>(secs)</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -56,7 +57,7 @@
                                     </div>
                                 </td>
 
-                                <td class="lightgreentext">${testOutcome.nestedStepCount}</td>
+                                <td class="${testOutcome.result}-text">${testOutcome.nestedStepCount}</td>
 
                                 <#if reportOptions.showStepDetails>
                                     <td class="redtext">${testOutcome.failureCount}</td>
@@ -67,7 +68,9 @@
                                     <td class="bluetext">${testOutcome.ignoredCount}</td>
                                 </#if>
 
-                                <td class="lightgreentext">${testOutcome.durationInSeconds}</td>
+                                <td class="${testOutcome.result}-text" data-sort="${testOutcome.timestamp}">${testOutcome.startedAt}</td>
+
+                                <td class="${testOutcome.result}-text">${testOutcome.durationInSeconds}</td>
                             </tr>
                             </#foreach>
                         </tbody>

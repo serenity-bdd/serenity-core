@@ -29,7 +29,7 @@
                 </tr>
             </table>
         </div>
-        <div id="logo"><a href="index.html"><img src="images/serenity-bdd-logo.png" border="0"/></a></div>
+        <div id="logo"><a href="index.html"><img src="images/serenity-logo.png" border="0"/></a></div>
     </div>
 </div>
 
@@ -38,7 +38,7 @@
         <div class="leftbg"></div>
         <div class="middlebg">
             <div style="height:30px;"><span class="bluetext"><a href="index.html" class="bluetext">Home</a></span> /
-            </div>
+            </div>\
         </div>
         <div class="rightbg"></div>
     </div>

@@ -56,18 +56,19 @@ allprojects {
     configurations.all {
         resolutionStrategy {
             // fail fast on dependency convergence problems
-//            failOnVersionConflict()
+
+            failOnVersionConflict()
 
             // force versions to fix dependency convergence problems
-            // when updating this list, update Serenity's declared deps if exists
+            // whe//n updating this list, update Serenity's declared deps if exists
             // TODO make work for generated Maven POM...
             // it's working for gradle build, but also had to exclude old transitives for geio.appiumnerated POM
             force  "com.thoughtworks.xstream:xstream:${xstreamVersion}",
                    "commons-collections:commons-collections:${commonsCollectionsVersion}",
-                   'commons-logging:commons-logging:1.2',
-                   'xml-apis:xml-apis:1.4.01',
-                    'org.springframework:spring-context:4.3.5.RELEASE'
-
+                   "commons-logging:commons-logging:${commonsLoggingVersion}",
+                   "xml-apis:xml-apis:${xmlApisVersion}",
+                   "org.springframework:spring-context:${springVersion}"
+                  //  "org.eclipse.jetty:jetty-util:${jettyUtilVersion}"
         }
     }
 }
@@ -197,6 +198,7 @@ subprojects {
         compile("com.google.inject:guice:${guiceVersion}") {
             exclude group:"org.ow2.asm", module:"asm"
             exclude group:"asm", module:"asm"
+            exclude group:"com.google.guava", module:"guava"
             exclude group:"org.sonatype.sisu.inject", module:"cglib"
         }
 

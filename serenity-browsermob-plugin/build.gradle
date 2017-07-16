@@ -19,6 +19,6 @@ dependencies {
         exclude group:'commons-codec' ,module:'commons-codec'
         exclude group:'io.netty' ,module:'netty-all'
 	}
-    compile('io.netty:netty-all:4.0.33.Final')
-    compile("org.bouncycastle:bcprov-jdk15on:1.57")
+    compile("io.netty:netty-all:${nettyVersion}")
+    compile("org.bouncycastle:bcprov-jdk15on:${bouncycastleVersion}")
 }

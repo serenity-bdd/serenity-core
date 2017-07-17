@@ -287,6 +287,14 @@ class WhenObtainingResultSummariesFromTestOutcomes extends Specification {
             testOutcomes.totalTestScenarios  == 4
     }
 
+    def "should distinguish custom failures and errors"() {
+        when:
+        def testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(directoryInClasspathCalled("/test-outcomes/errors-and-failures"));
+        then:
+        testOutcomes.totalTests.withResult("failure") == 4
+        testOutcomes.totalTests.withResult("error") == 1
+    }
+
     def "should count percentage results correctly in mixed data-driven and normal tests"() {
         when:
             def testOutcomes = TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.XML).from(directoryInClasspathCalled("/test-outcomes/somedatadriven"));

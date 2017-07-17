@@ -1177,6 +1177,7 @@ public class TestOutcome {
      * @return The outcome of this test.
      */
     public TestResult getResult() {
+        System.out.println("getResult ");
         if ((IGNORED == annotatedResult) || (SKIPPED == annotatedResult) || PENDING == annotatedResult) {
             return annotatedResult;
         }
@@ -1195,7 +1196,7 @@ public class TestOutcome {
             try {
                 return new FailureAnalysis().resultFor(Class.forName(testFailureClassname));
             } catch (ReflectiveOperationException e) {
-                return TestResult.ERROR;
+                return HeuristicTestResult.from(testFailureClassname);
             }
         }
         return TestResult.UNDEFINED;

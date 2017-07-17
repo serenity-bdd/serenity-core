@@ -12,10 +12,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.util.List;
 
 abstract class RemoteDriverBuilder {
@@ -51,12 +48,28 @@ abstract class RemoteDriverBuilder {
     }
 
     private void ensureHostIsAvailableAt(URL remoteUrl) throws UnknownHostException {
-        try {
-            if (!InetAddress.getByName(remoteUrl.getHost()).isReachable(WITHIN_THREE_SECONDS)) {
-                theRemoteServerIsUnavailable(remoteUrl.getHost() + " could not be reached");
-            }
+        if (!hostIsAvailableAt(remoteUrl)) {
+            theRemoteServerIsUnavailable(remoteUrl.getHost() + " could not be reached");
+        }
+    }
+
+    private boolean hostIsAvailableAt(URL remoteUrl) {
+        try (Socket socket = new Socket()) {
+            int port = (remoteUrl.getPort() > 0) ? remoteUrl.getPort() : remoteUrl.getDefaultPort();
+            socket.connect(new InetSocketAddress(remoteUrl.getHost(), port), WITHIN_THREE_SECONDS);
+            return true;
         } catch (IOException e) {
-            theRemoteServerIsUnavailable(e.getMessage());
+            return false; // Either timeout or unreachable or failed DNS lookup.
+        }
+    }
+
+
+    public static boolean pingHost(String host, int port, int timeout) {
+        try (Socket socket = new Socket()) {
+            socket.connect(new InetSocketAddress(host, port), timeout);
+            return true;
+        } catch (IOException e) {
+            return false; // Either timeout or unreachable or failed DNS lookup.
         }
     }
 

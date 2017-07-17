@@ -15,6 +15,8 @@ class WhenGuessingTestResultsFromExceptionNames extends Specification {
         exceptionName           | expectedResult
         "MyFancyAssertionError" | TestResult.FAILURE
         "ClusterFailure"        | TestResult.FAILURE
+        "SoftAssertionError"    | TestResult.FAILURE
+        "MyAssertError"         | TestResult.FAILURE
         "SomeOtherError"        | TestResult.ERROR
     }
 }

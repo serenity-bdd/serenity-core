@@ -1177,7 +1177,6 @@ public class TestOutcome {
      * @return The outcome of this test.
      */
     public TestResult getResult() {
-        System.out.println("getResult ");
         if ((IGNORED == annotatedResult) || (SKIPPED == annotatedResult) || PENDING == annotatedResult) {
             return annotatedResult;
         }

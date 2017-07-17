@@ -16,39 +16,25 @@ public class WaitForWebElementCollection {
 
     static Map<WebdriverCollectionStrategy,WaitForWebElements> COLLECTION_STRATEGY = new HashMap();
     static {
-        COLLECTION_STRATEGY.put(Optimistic, new WaitForWebElements() {
+        COLLECTION_STRATEGY.put(Optimistic, elements -> ((elements != null)));
 
-            @Override
-            public boolean areElementsReadyIn(List<WebElement> elements) {
-                return ((elements != null));
+        COLLECTION_STRATEGY.put(Pessimistic, elements -> {
+            if (elements == null) {
+                return false;
             }
+            return elements.isEmpty() || elements.get(0).isDisplayed();
         });
 
-        COLLECTION_STRATEGY.put(Pessimistic, new WaitForWebElements() {
-
-            @Override
-            public boolean areElementsReadyIn(List<WebElement> elements) {
-                if (elements == null) {
+        COLLECTION_STRATEGY.put(Paranoid, elements -> {
+            if (elements == null) {
+                return false;
+            }
+            for (WebElement element : elements) {
+                if (!ElementIsUsable.forElement(element)) {
                     return false;
                 }
-                return elements.isEmpty() || elements.get(0).isDisplayed();
             }
-        });
-
-        COLLECTION_STRATEGY.put(Paranoid, new WaitForWebElements() {
-
-            @Override
-            public boolean areElementsReadyIn(List<WebElement> elements) {
-                if (elements == null) {
-                    return false;
-                }
-                for (WebElement element : elements) {
-                    if (!ElementIsUsable.forElement(element)) {
-                        return false;
-                    }
-                }
-                return true;
-            }
+            return true;
         });
     }
 

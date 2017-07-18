@@ -289,6 +289,25 @@
                                     :${element.lineNumber}) <br>
                                 </#list>
                             </div>
+
+                            <#if (cause.rootCause.isPresent())>
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close"><span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title" id="stacktraceModalLabel">
+                                    Caused by: ${cause.rootCause.get().errorType}
+                                    </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <#if (cause.rootCause.get().message)??>
+                                        <h5>${formatter.plainHtmlCompatible(cause.rootCause.get().message)}</h5></#if>
+                                    <#list cause.rootCause.get().stackTrace as element>
+                                        ${element.className}.${element.methodName}(${(element.fileName)!""} :${element.lineNumber}) <br>
+                                    </#list>
+                                </div>
+
+                            </#if>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">
                                     Close

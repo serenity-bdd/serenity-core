@@ -28,6 +28,8 @@ public class FailureCause {
     private String errorType;
     private String message;
     private StackTraceElement[] stackTrace;
+    private FailureCause rootCause;
+
     /**
      * Used within a test run but not stored for reporting
      */
@@ -41,6 +43,15 @@ public class FailureCause {
         this.message = cause.getMessage();
         this.stackTrace = cause.getStackTrace();
         this.originalCause = cause;
+        this.rootCause = rootCauseOf(cause);
+    }
+
+    private FailureCause rootCauseOf(Throwable cause) {
+        if (cause.getCause() == null || cause.getCause() == cause) {
+            return null;
+        }
+        StackTraceSanitizer stackTraceSanitizer = StackTraceSanitizer.forStackTrace(cause.getCause().getStackTrace());
+        return new FailureCause(cause.getCause(), stackTraceSanitizer.getSanitizedStackTrace());
     }
 
     public FailureCause(Throwable cause, StackTraceElement[] stackTrace) {
@@ -52,7 +63,7 @@ public class FailureCause {
         this.message = message;
         this.stackTrace = stackTrace;
         this.originalCause = cause;
-
+        this.rootCause = rootCauseOf(cause);
     }
 
     private static String exceptionClassName(Throwable cause) {
@@ -91,6 +102,11 @@ public class FailureCause {
 
     public String getErrorType() {
         return errorType;
+    }
+
+    public java.util.Optional<FailureCause> getRootCause() {
+        return java.util.Optional.ofNullable(rootCause);
+
     }
 
     public Throwable getOriginalCause() { return originalCause; }

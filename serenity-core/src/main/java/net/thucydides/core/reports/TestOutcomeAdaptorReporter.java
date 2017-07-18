@@ -57,24 +57,15 @@ public class TestOutcomeAdaptorReporter extends ThucydidesReporter {
     private void generateReportsFor(List<TestOutcome> outcomes) throws Exception {
         TestOutcomes allOutcomes = TestOutcomes.of(outcomes);
         for (TestOutcome outcome : allOutcomes.getOutcomes()) {
-            if (shouldGenerate(OutcomeFormat.XML)) {
-                getXMLReporter().generateReportFor(outcome);
+            getJsonReporter().generateReportFor(outcome);
+            if (shouldGenerate(OutcomeFormat.HTML)) {
+                getHTMLReporter().generateReportFor(outcome);
             }
-            if (shouldGenerate(OutcomeFormat.JSON)) {
-                getJsonReporter().generateReportFor(outcome);
-            }
-            getHTMLReporter().generateReportFor(outcome);
         }
     }
 
     private boolean shouldGenerate(OutcomeFormat format) {
         return formatConfiguration.getFormats().contains(format);
-    }
-
-    private AcceptanceTestReporter getXMLReporter() {
-        XMLTestOutcomeReporter reporter = new XMLTestOutcomeReporter();
-        reporter.setOutputDirectory(getOutputDirectory());
-        return reporter;
     }
 
     private AcceptanceTestReporter getJsonReporter() {

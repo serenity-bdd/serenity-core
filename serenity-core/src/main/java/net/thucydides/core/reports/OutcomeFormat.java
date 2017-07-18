@@ -6,7 +6,7 @@ public enum OutcomeFormat {
 
     private String extension;
 
-    private OutcomeFormat(String extension) {
+    OutcomeFormat(String extension) {
         this.extension = extension;
     }
 

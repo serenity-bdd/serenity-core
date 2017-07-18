@@ -1,24 +1,20 @@
 package net.thucydides.core.reports;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class FormatConfiguration {
 
 
     private final static Logger LOGGER = LoggerFactory.getLogger(FormatConfiguration.class);
 
-    public final static String DEFAULT_FORMATS = "json,html";
+    private final static String DEFAULT_FORMATS = "json,html";
 
     private final List<OutcomeFormat> formats;
 
@@ -30,11 +26,11 @@ public class FormatConfiguration {
 
         formats = new ArrayList<>();
         for(String format : formatNames) {
-            formats.addAll(outcomeFormatFrom(format).asSet());
+            formats.addAll(outcomeFormatFrom(format).map(Collections::singleton).orElse(Collections.emptySet()));
         }
     }
 
-    public FormatConfiguration(OutcomeFormat... formatValues) {
+    FormatConfiguration(OutcomeFormat... formatValues) {
         formats = Arrays.asList(formatValues);
     }
 
@@ -43,7 +39,7 @@ public class FormatConfiguration {
             return Optional.of(OutcomeFormat.valueOf(value.toUpperCase()));
         } catch (IllegalArgumentException e) {
             LOGGER.warn("Illegal outcome format ignored: " + value);
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

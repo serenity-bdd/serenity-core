@@ -17,6 +17,7 @@ import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
 
 public class DriverCapabilities {
 
+    public static final DriverCapabilitiesProvider DEFAULT_CAPABILITIES = DesiredCapabilities::firefox;
     private final EnvironmentVariables environmentVariables;
     private final CapabilityEnhancer enhancer;
 
@@ -68,12 +69,16 @@ public class DriverCapabilities {
         selectors.put(PHANTOMJS, DesiredCapabilities::phantomjs);
         selectors.put(IPHONE, DesiredCapabilities::iphone);
         selectors.put(ANDROID, DesiredCapabilities::android);
-
         return selectors;
     }
 
     public DesiredCapabilities realBrowserCapabilities(SupportedWebDriver driverType, String options) {
-        return enhancer.enhanced(driverCapabilitiesSelector(options).get(driverType).getCapabilities());
+
+        return enhancer.enhanced(
+                driverCapabilitiesSelector(options)
+                        .getOrDefault(driverType, DEFAULT_CAPABILITIES)
+                        .getCapabilities()
+        );
     }
 
     private DesiredCapabilities remoteCapabilities(String options) {

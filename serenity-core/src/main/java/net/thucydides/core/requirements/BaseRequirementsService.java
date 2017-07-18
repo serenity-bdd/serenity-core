@@ -143,7 +143,7 @@ public abstract class BaseRequirementsService implements RequirementsService {
 
     private Optional<Requirement> getParentRequirementOf(TestOutcome testOutcome, RequirementsTagProvider tagProvider) {
 
-        Optional<Requirement> parentDefinedInTags = tagProvider.getParentRequirementOf(testOutcome);
+        Optional<Requirement> parentDefinedInTags = ParentRequirementsProvided.by(tagProvider).forOutcome(testOutcome);
         if (parentDefinedInTags.isPresent()) {
             Optional<Requirement> matchingIndexedParentRequirement = findMatchingIndexedRequirement(parentDefinedInTags.get());
             return matchingIndexedParentRequirement;

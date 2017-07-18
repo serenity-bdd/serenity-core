@@ -1,12 +1,12 @@
 package net.thucydides.core.requirements.reports;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.RequirementsMerger;
+import net.thucydides.core.requirements.RequirementsProvided;
 import net.thucydides.core.requirements.RequirementsTagProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementTree;
@@ -48,8 +48,9 @@ public class MultipleSourceRequirmentsOutcomeFactory implements RequirementsOutc
 
     public RequirementsOutcomes buildRequirementsOutcomesFrom(TestOutcomes testOutcomes) {
         List<Requirement> allRequirements = new ArrayList<>();
+
         for (RequirementsTagProvider tagProvider : requirementsTagProviders) {
-            allRequirements = new RequirementsMerger().merge(allRequirements, tagProvider.getRequirements());
+            allRequirements = new RequirementsMerger().merge(allRequirements, RequirementsProvided.by(tagProvider));
         }
         LOGGER.debug("Merged requirements set:{}{}", System.lineSeparator(), RequirementTree.withRequirements(allRequirements));
         return new RequirementsOutcomes(allRequirements,
@@ -59,6 +60,7 @@ public class MultipleSourceRequirmentsOutcomeFactory implements RequirementsOutc
                 requirementsTagProviders,
                 reportNameProvider);
     }
+
 
     public RequirementsOutcomes buildRequirementsOutcomesFrom(Requirement parentRequirement, TestOutcomes testOutcomes) {
         List<Requirement> childRequirements = parentRequirement.getChildren();

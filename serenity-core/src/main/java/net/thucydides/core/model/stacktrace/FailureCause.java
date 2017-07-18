@@ -50,6 +50,7 @@ public class FailureCause {
         if (cause.getCause() == null || cause.getCause() == cause) {
             return null;
         }
+
         StackTraceSanitizer stackTraceSanitizer = StackTraceSanitizer.forStackTrace(cause.getCause().getStackTrace());
         return new FailureCause(cause.getCause(), stackTraceSanitizer.getSanitizedStackTrace());
     }

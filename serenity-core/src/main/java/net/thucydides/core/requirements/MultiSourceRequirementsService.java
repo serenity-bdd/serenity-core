@@ -12,6 +12,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,8 +43,7 @@ public class MultiSourceRequirementsService extends BaseRequirementsService impl
             requirements = newArrayList();
             for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
                 LOGGER.trace("Reading requirements from " + tagProvider);
-                List<Requirement> newRequirements = tagProvider.getRequirements();
-                requirements = merger.merge(requirements, newRequirements);
+                requirements = merger.merge(requirements, RequirementsProvided.by(tagProvider));
             }
             requirements = addParentsTo(requirements);
             indexRequirements();
@@ -51,6 +51,7 @@ public class MultiSourceRequirementsService extends BaseRequirementsService impl
         }
         return requirements;
     }
+
 
     public Optional<ReleaseProvider> getReleaseProvider() {
         List<RequirementsTagProvider> requirementsTagProviders = getRequirementsTagProviders();

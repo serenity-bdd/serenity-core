@@ -20,7 +20,6 @@ class RemoteTestName {
                     return Optional.of(NameConverter.humanize(callingClass.getSimpleName()));
                 }
             } catch (ClassNotFoundException | NoSuchMethodException e) {
-                return Optional.empty();
             }
         }
         return Optional.empty();

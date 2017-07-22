@@ -1,0 +1,9 @@
+== The Serenity Screenplay WebDriver module
+
+This module provides WebDriver integration with Serenity Screenplay. A number of sample test scenarios using Serenity Screenplay WebDriver can be found here:
+
+  * https://github.com/serenity-bdd/serenity-core/blob/master/serenity-screenplay-webdriver/src/test/java/net/serenitybdd/screenplay/webtests/integration/WhenDanaBrowsesTheWeb.java[Some simple web tests]
+  * https://github.com/serenity-bdd/serenity-core/blob/master/serenity-screenplay-webdriver/src/test/java/net/serenitybdd/screenplay/webtests/integration/WhenDanaInteractsWithAPageObject.java[How to interact with Page Objects]
+  * https://github.com/serenity-bdd/serenity-core/blob/master/serenity-screenplay-webdriver/src/test/java/net/serenitybdd/screenplay/webtests/integration/WhenDanaSelectsHerContactPreferences.java[Querying and updating field values]
+  * https://github.com/serenity-bdd/serenity-core/blob/master/serenity-screenplay-webdriver/src/test/java/net/serenitybdd/screenplay/webtests/integration/WhenSeveralActorsBrowsesTheWeb.java[Tests with multiple actors]
+  * https://github.com/serenity-bdd/serenity-core/blob/master/serenity-screenplay-webdriver/src/test/java/net/serenitybdd/screenplay/webtests/integration/WhenSeveralActorsBrowsesTheWebWithDifferentBrowsers.java[Tests with multiple actors in different browsers]

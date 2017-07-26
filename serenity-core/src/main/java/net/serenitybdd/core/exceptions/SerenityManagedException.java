@@ -14,10 +14,12 @@ public class SerenityManagedException extends RuntimeException {
     public static Throwable detachedCopyOf(Throwable testErrorException) {
         if (!(testErrorException instanceof WebDriverException)) {
             return testErrorException;
-        } else if (testErrorException instanceof SerenityManagedException) {
+        } else if ( SerenityManagedException.class.isAssignableFrom(testErrorException.getClass())) {
             return testErrorException;
         } else {
-            return new SerenityManagedException(testErrorException);
+            return new SerenityManagedException(
+                    "The following error occurred: " + testErrorException.getMessage(),
+                    testErrorException);
         }
     }
 

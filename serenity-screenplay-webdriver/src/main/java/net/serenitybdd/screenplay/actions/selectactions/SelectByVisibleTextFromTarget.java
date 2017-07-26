@@ -14,7 +14,7 @@ public class SelectByVisibleTextFromTarget implements Interaction {
         this.visibleText = visibleText;
     }
 
-    @Step("{0} clicks on #target")
+    @Step("{0} select #visibleText on #target")
     public <T extends Actor> void performAs(T theUser) {
         target.resolveFor(theUser).selectByVisibleText(visibleText);
     }

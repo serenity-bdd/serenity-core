@@ -2313,7 +2313,7 @@ public class TestOutcome {
         }
 
         public void causedBy(Class<? extends Throwable> expected) {
-            if (step.getException().getErrorType().equals(expected.getName())) {
+            if ((step.getException() != null) && (step.getException().getErrorType() != null) && step.getException().getErrorType().equals(expected.getName())) {
                 step.clearException();
                 step.setResult(TestResult.SUCCESS);
             }

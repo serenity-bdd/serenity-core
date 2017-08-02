@@ -31,12 +31,14 @@ public class WhenOpeningStaticDemoPageWithSamePage {
     @Test
     @Title("The user opens the index page")
     public void the_user_opens_the_page() {
+        steps.opensPage();
         steps.should_display("A visible title");
     }    
     
     @Test
     @Title("The user selects a value")
     public void the_user_selects_a_value() {
+        steps.opensPage();
         steps.enter_values("Label 2", true);
         steps.onSamePage(DemoSiteSteps.class).should_have_selected_value("2");
     }
@@ -44,6 +46,7 @@ public class WhenOpeningStaticDemoPageWithSamePage {
     @Test
     @Title("The user enters different values.")
     public void the_user_opens_another_page() {
+        steps.opensPage();
         steps.enter_values("Label 3", true);
         steps.onSamePage(DemoSiteSteps.class).do_something();
         steps.onSamePage(DemoSiteSteps.class).should_have_selected_value("3");
@@ -51,6 +54,7 @@ public class WhenOpeningStaticDemoPageWithSamePage {
 
     @Test(expected = IllegalArgumentException.class)
     public void should_throw_correct_exception() {
+        steps.opensPage();
         steps.throw_exception();
     }
 }

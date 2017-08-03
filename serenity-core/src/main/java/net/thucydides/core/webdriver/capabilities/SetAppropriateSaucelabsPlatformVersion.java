@@ -44,13 +44,12 @@ class SetAppropriateSaucelabsPlatformVersion {
     }
 
     public void from(EnvironmentVariables environmentVariables) {
-        String platformValue = ThucydidesSystemProperty.SAUCELABS_TARGET_PLATFORM
-                                                       .from(environmentVariables)
-                                                       .toLowerCase();
-
-        if (isEmpty(platformValue)) {
+        String platformValue = ThucydidesSystemProperty.SAUCELABS_TARGET_PLATFORM.from(environmentVariables);
+        if (platformValue == null || isEmpty(platformValue)) {
             return;
         }
+        platformValue = platformValue.toLowerCase();
+
         if (OS_PLATFORM_NAMES.containsKey(platformValue)) {
             capabilities.setCapability("platform",OS_PLATFORM_NAMES.get(platformValue));
         } else {

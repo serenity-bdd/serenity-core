@@ -19,8 +19,7 @@ public class SmartElementProxyCreator implements ElementProxyCreator {
 	@Override
 	public void proxyElements(PageObject pageObject, WebDriver driver) {
 		if(driver instanceof WebDriverFacade) {
-			WebDriver proxiedDriver = ((WebDriverFacade) driver).getProxiedDriver();
-			if(proxiedDriver instanceof AppiumDriver) {
+			if (((WebDriverFacade) driver).isAProxyFor(AppiumDriver.class)) {
 				PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 			} else {
 				ElementLocatorFactory finder = getElementLocatorFactorySelector().getLocatorFor(driver);
@@ -36,8 +35,7 @@ public class SmartElementProxyCreator implements ElementProxyCreator {
 	@Override
 	public void proxyElements(PageObject pageObject, WebDriver driver, int timeoutInSeconds) {
 		if(driver instanceof WebDriverFacade) {
-			WebDriver proxiedDriver = ((WebDriverFacade) driver).getProxiedDriver();
-			if(proxiedDriver instanceof AppiumDriver) {
+			if (((WebDriverFacade) driver).isAProxyFor(AppiumDriver.class)) {
 				PageFactory.initElements(new AppiumFieldDecorator(driver, timeoutInSeconds, TimeUnit.SECONDS), this);
 			} else {
 				ElementLocatorFactory finder = getElementLocatorFactorySelector().withTimeout(timeoutInSeconds).getLocatorFor(driver);

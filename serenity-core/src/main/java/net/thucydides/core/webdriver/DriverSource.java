@@ -17,4 +17,14 @@ public interface DriverSource {
      */
     boolean takesScreenshots();
 
+    /**
+     * Return the type of the webdriver being proxied.
+     * Helps Serenity do internal stuff better.
+     */
+    default Class<? extends WebDriver> driverType() { return UnknownDriver.class; }
+
+    /**
+     * Used to indicate that the provided driver has not been specified by the driverType() method.
+     */
+    interface UnknownDriver extends WebDriver {}
 }

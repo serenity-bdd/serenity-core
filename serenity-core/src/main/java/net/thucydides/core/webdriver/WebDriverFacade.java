@@ -1,6 +1,7 @@
 package net.thucydides.core.webdriver;
 
 import com.gargoylesoftware.htmlunit.ScriptException;
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.pages.DefaultTimeouts;
@@ -98,7 +99,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     public Class<? extends WebDriver>  getDriverClass() {
         if (driverClass.isAssignableFrom(SupportedWebDriver.PROVIDED.getWebdriverClass())) {
-            return getProxiedDriver().getClass();
+            return new ProvidedDriverConfiguration(environmentVariables).getDriverSource().driverType();
         }
         return driverClass;
     }
@@ -168,7 +169,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     private boolean driverCanTakeScreenshots() {
-        return (TakesScreenshot.class.isAssignableFrom(getProxiedDriver().getClass()));
+        return (TakesScreenshot.class.isAssignableFrom(getDriverClass()));
     }
 
     public void get(final String url) {
@@ -381,8 +382,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     public boolean canTakeScreenshots() {
     	if (driverClass != null) {
     		if (driverClass == ProvidedDriver.class) {
-    			return TakesScreenshot.class.isAssignableFrom(getProxiedDriver().getClass())
-    					|| (getProxiedDriver().getClass() == RemoteWebDriver.class);
+    			return TakesScreenshot.class.isAssignableFrom(getDriverClass()) || (getDriverClass() == RemoteWebDriver.class);
     		} else {
     			return TakesScreenshot.class.isAssignableFrom(driverClass)
     					|| (driverClass == RemoteWebDriver.class);
@@ -447,5 +447,9 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     public WebDriverFacade withOptions(String options) {
         this.options = options;
         return this;
+    }
+
+    public boolean isAProxyFor(Class<? extends WebDriver> somedriverClass) {
+        return getDriverClass().isAssignableFrom(somedriverClass);
     }
 }

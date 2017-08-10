@@ -40,12 +40,6 @@ public class WhenUsingAProvidedDriver {
         MockWebDriverFacade(EnvironmentVariables environmentVariables) {
             super(ProvidedDriver.class, factory, environmentVariables);
         }
-
-        @Override
-        public WebDriver getProxiedDriver() {
-            return driver;
-        }
-
     }
 
     @Before

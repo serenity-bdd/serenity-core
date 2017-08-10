@@ -450,6 +450,6 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     }
 
     public boolean isAProxyFor(Class<? extends WebDriver> somedriverClass) {
-        return getDriverClass().isAssignableFrom(somedriverClass);
+        return somedriverClass.isAssignableFrom(getDriverClass());
     }
 }

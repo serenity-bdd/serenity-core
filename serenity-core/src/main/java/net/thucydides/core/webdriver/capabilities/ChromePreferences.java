@@ -54,7 +54,7 @@ public class ChromePreferences {
     }
 
     private String getPreparedPropertyKey(String propertyKey) {
-        return propertyKey.replace(prefix + ".","");
+        return propertyKey.replace(prefix,"");
     }
 
 

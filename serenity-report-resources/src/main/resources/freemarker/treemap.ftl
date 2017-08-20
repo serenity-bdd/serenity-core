@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Home</title>
-    <link rel="shortcut icon" href="favicon.ico" >
+<#include "libraries/favicon.ftl">
 
     <#include "libraries/common.ftl">
     <#include "libraries/jit.ftl">

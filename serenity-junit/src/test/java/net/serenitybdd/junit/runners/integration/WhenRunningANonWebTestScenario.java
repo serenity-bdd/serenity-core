@@ -444,7 +444,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     }
     private class JSONFileFilter implements FilenameFilter {
         public boolean accept(File file, String filename) {
-            return filename.toLowerCase().endsWith(".json");
+            return filename.toLowerCase().endsWith(".json") && !filename.startsWith("manifest");
         }
     }
 }

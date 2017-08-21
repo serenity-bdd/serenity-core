@@ -38,7 +38,7 @@ class WhenConvertingXUnitResultsToThucydidesReports extends Specification {
         temporaryDirectory.list(new FilenameFilter() {
             @Override
             boolean accept(File dir, String name) {
-                name.endsWith(".json")
+                name.endsWith(".json") && !name.startsWith("manifest")
             }
         })
     }

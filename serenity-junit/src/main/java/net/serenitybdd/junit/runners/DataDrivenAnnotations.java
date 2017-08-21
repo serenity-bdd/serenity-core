@@ -10,6 +10,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.junit.annotations.TestData;
 import net.thucydides.junit.annotations.UseTestDataFrom;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.TestClass;
 
@@ -62,6 +63,15 @@ public class DataDrivenAnnotations {
         return DataTable.withHeaders(headers)
                 .andMappedRows(testData)
                 .build();
+    }
+
+    public FrameworkMethod getTestMethod() {
+        List<FrameworkMethod> methods = testClass.getAnnotatedMethods(Test.class);
+
+        return methods.stream()
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Parameterized test should have at least one @Test method"));
+
     }
 
     public DataTable getParametersTableFromTestDataAnnotation() {

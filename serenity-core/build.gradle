@@ -62,6 +62,8 @@ dependencies {
     compile("com.codeborne:phantomjsdriver:${phantomjsDriverVersion}") {
         exclude group: 'xml-apis', module: 'xml-apis'
         exclude group: "commons-codec", module:"commons-codec"
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-api'
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
     }
 
     compile "commons-codec:commons-codec:${commonsCodecVersion}"
@@ -71,13 +73,17 @@ dependencies {
 
     compile("org.seleniumhq.selenium:htmlunit-driver:${htmlunitVersion}") {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-server'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-api'
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-support'
         exclude group: 'commons-codec', module: 'commons-codec'
         exclude group: 'net.sourceforge.htmlunit', module: 'htmlunit'
     }
 
     compile("io.appium:java-client:${appiumJavaClientVersion}") {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-api'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
         exclude group: 'cglib', module: 'cglib'
         exclude group: 'junit', module: 'junit'

@@ -41,7 +41,7 @@ public class SmartAnnotations extends Annotations {
         //default implementation in case if org.openqa.selenium.support.FindBy was used
         org.openqa.selenium.support.FindBy findBy = field.getAnnotation(org.openqa.selenium.support.FindBy.class);
         if (ans == null && findBy != null) {
-            ans = super.buildByFromFindBy(findBy);
+            ans = super.buildBy();
         }
 
 
@@ -50,13 +50,6 @@ public class SmartAnnotations extends Annotations {
         if (ans == null && myFindBy != null) {
             ans = buildByFromFindBy(myFindBy);
         }
-
-
-        FindBys findBys = field.getAnnotation(FindBys.class);
-        if (ans == null && findBys != null) {
-            ans = buildByFromFindBys(findBys);
-        }
-
 
         if (ans == null) {
             ans = buildByFromDefault();

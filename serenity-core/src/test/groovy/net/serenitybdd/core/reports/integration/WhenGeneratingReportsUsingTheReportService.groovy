@@ -35,6 +35,6 @@ class WhenGeneratingReportsUsingTheReportService extends Specification {
         then:
             outputDir.list().findAll { it.endsWith(".html")}.size() == 1
             outputDir.list().findAll { it.endsWith(".xml")}.size() == 1
-            outputDir.list().findAll { it.endsWith(".json")}.size() == 1
+            outputDir.list().findAll { it.endsWith(".json") && !it.startsWith("manifest")}.size() == 1
     }
 }

@@ -34,7 +34,7 @@ import static net.thucydides.core.steps.construction.StepLibraryType.ofTypePages
  */
 public class StepFactory {
 
-    private final Pages pages;
+    private Pages pages;
 
     private final Map<Class<?>, Object> index = new HashMap<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(StepFactory.class);
@@ -259,6 +259,10 @@ public class StepFactory {
     private <T> T stepLibraryWithPages(final Class<T> scenarioStepsClass, final Enhancer e) {
         T newStepLibrary = (T) e.create();
         return injectPagesInto(scenarioStepsClass, newStepLibrary);
+    }
+
+    public void usePageFactory(Pages pages) {
+        this.pages = pages;
     }
 
     static class PageInjector {

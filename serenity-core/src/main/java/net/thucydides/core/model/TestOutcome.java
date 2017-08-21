@@ -2197,11 +2197,13 @@ public class TestOutcome {
     }
 
     public String getStartedAt() {
-            return startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+            return Optional.fromNullable(startTime).or(now())
+                    .format(DateTimeFormatter.ofPattern("HH:mm:ss"));
     }
 
     public String getTimestamp() {
-        return startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        return Optional.fromNullable(startTime).or(now())
+               .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     public boolean isDataDriven() {

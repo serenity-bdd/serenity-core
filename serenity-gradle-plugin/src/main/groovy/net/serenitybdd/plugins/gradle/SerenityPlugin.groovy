@@ -7,6 +7,7 @@ import net.thucydides.core.reports.ResultChecker
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
 import net.thucydides.core.webdriver.Configuration
 import net.thucydides.core.configuration.SystemPropertiesConfiguration
+import org.apache.commons.io.FileUtils
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -68,7 +69,7 @@ class SerenityPlugin implements Plugin<Project> {
             doLast {
                 updateProperties(project)
                 reportDirectory = prepareReportDirectory(project)
-                Files.delete(reportDirectory)
+                FileUtils.deleteDirectory(reportDirectory.toFile())
             }
         }
 
@@ -110,7 +111,7 @@ class SerenityPlugin implements Plugin<Project> {
     }
 
     static def prepareReportDirectory(Project project) {
-        Path outputDir = project.serenity.outputDirectory
+        Path outputDir = Paths.get(project.serenity.outputDirectory)
         if (!outputDir.isAbsolute()) {
             outputDir = project.projectDir.toPath().resolve(outputDir)
         }

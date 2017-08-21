@@ -490,7 +490,7 @@ class WhenRunningTestScenarios extends Specification {
         def runner = new ATestableThucydidesRunnerSample(SamplePassingScenario, webDriverFactory)
         when:
         runner.run(new RunNotifier())
-        def jsonReports = reload(temporaryDirectory).list().findAll {it.endsWith(".json")}
+        def jsonReports = reload(temporaryDirectory).list().findAll {it.endsWith(".json") && !it.startsWith("manifest")}
         then:
         jsonReports.size() == 3
     }
@@ -499,7 +499,7 @@ class WhenRunningTestScenarios extends Specification {
         when:
             new ATestableThucydidesRunnerSample(SamplePassingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
             new ATestableThucydidesRunnerSample(SampleFailingScenarioUsingHtmlUnit, webDriverFactory).run(new RunNotifier())
-            def jsonReports = reload(temporaryDirectory).list().findAll {it.toLowerCase().endsWith(".json") && !it.startsWith("SERENITY-")}
+            def jsonReports = reload(temporaryDirectory).list().findAll {it.toLowerCase().endsWith(".json") && !it.startsWith("SERENITY-") && !it.startsWith("manifest")}
         then:
         jsonReports.size() == 6
     }

@@ -129,6 +129,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
         if ((getCurrentTestOutcome().getTestFailureCause() != null) && (getCurrentTestOutcome().getTestFailureCause().getErrorType().equals(expected.getName()))) {
             getCurrentTestOutcome().resetFailingStepsCausedBy(expected);
+            getCurrentTestOutcome().recordStep(
+                    TestStep.forStepCalled("Expected exception thrown : " + expected.getName())
+                            .withResult(TestResult.SUCCESS)
+            );
         }
     }
 

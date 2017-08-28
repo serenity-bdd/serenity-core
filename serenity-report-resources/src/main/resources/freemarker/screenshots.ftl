@@ -68,7 +68,7 @@
                     href="${parentLink}">${formatter.htmlCompatible(inflection.of(parentTitle).asATitle())}</a></span>
             </#if>
                 > <span class="truncate-60"><a
-                    href="${narrativeView}.html">${formatter.htmlCompatible(testOutcome.unqualified.title,60)} </a></span>
+                    href="${narrativeView}.html">${formatter.htmlCompatible(testOutcome.unqualified.title)} </a></span>
                 > Screenshots
             </span>
         </div>

@@ -5,6 +5,7 @@ lib
 target
 *.iml
 *.log
+out
 .DS_Store
 /serenity-core.ipr
 /serenity-core.iws

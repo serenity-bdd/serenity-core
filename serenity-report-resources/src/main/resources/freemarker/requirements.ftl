@@ -173,9 +173,10 @@
                     <#assign ancestor = reportName.forRequirement(requirements.grandparentRequirement.get()) >
                     <#assign rootReport = reportName.forRequirement(requirements.grandparentRequirement.get()) >
                     <#assign rootTitle = inflection.of(requirements.grandparentRequirement.get().displayName).asATitle() >
-                    > <a href="${rootReport}" title="${rootTitle}">${formatter.truncatedHtmlCompatible(rootTitle,40)}</a>
+                    > <a href="${rootReport}" title="${rootTitle}"><span class="truncate-40">${formatter.htmlCompatible(rootTitle)}</span></a>
                 </#if>
-                > ${formatter.truncatedHtmlCompatible(parentTitle,40)}
+                <#--> ${formatter.truncatedHtmlCompatible(parentTitle,40)}-->
+                > <span class="truncate-40">${formatter.htmlCompatibleStoryTitle(parentTitle)}</span>
             </#if>
             </span>
         </div>
@@ -201,7 +202,7 @@
             <div class="table">
             <#if (requirements.parentRequirement.isPresent())>
                 <div>
-                    <h2><i class="fa fa-book"></i> ${parentType}: ${issueNumber} ${formatter.htmlCompatible(parentTitle)}</h2>
+                    <h2><i class="fa fa-book"></i> ${parentType}: ${issueNumber} ${formatter.htmlCompatibleStoryTitle(parentTitle)}</h2>
                     <#if parentRequirement.narrative.renderedText?has_content>
                         <div class="requirementNarrativeTitle">
                         ${formatter.addLineBreaks(formatter.renderDescription(parentRequirement.narrative.renderedText))}

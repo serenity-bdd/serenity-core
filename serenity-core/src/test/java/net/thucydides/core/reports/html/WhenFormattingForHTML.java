@@ -174,6 +174,16 @@ public class WhenFormattingForHTML {
         assertThat(formatted, containsString("a quick <em>brown</em> fox"));
     }
 
+    @Test
+    public void markdown_should_not_affect_escaped_html_characters() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+
+        Formatter formatter = new Formatter(issueTracking, environmentVariables);
+        String htmlFormatted = formatter.htmlCompatible(formatter.renderMarkdown("&Eacute;rintett befogad&aacute;sa"));
+
+        assertThat(htmlFormatted, equalTo("&Eacute;rintett befogad&aacute;sa"));
+    }
+
     private final String htmlDescription = "<h2><a name=\"ScenarioDosometests\"></a>Scenario Do some tests</h2>\n"+
             "<p><b>Given</b> we want to test some stuff<br/>\n"+
             "<b>When</b> we do some tests<br/>\n"+

@@ -35,6 +35,16 @@ import static net.thucydides.core.reports.html.MarkdownRendering.RenderedElement
 import static org.apache.commons.lang3.StringUtils.abbreviate;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
+
+//////
+
+import com.vladsch.flexmark.ast.Node;
+import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension;
+import com.vladsch.flexmark.ext.tables.TablesExtension;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.options.MutableDataSet;
+
 /**
  * Format text for HTML reports.
  * In particular, this integrates JIRA links into the generated reports.
@@ -69,6 +79,9 @@ public class Formatter {
 //    private final Markdown4jProcessor markdown4jProcessor;
     Configuration markdownEncodingConfiguration;
 
+    Parser parser;
+    HtmlRenderer renderer;
+
     @Inject
     public Formatter(IssueTracking issueTracking, EnvironmentVariables environmentVariables) {
         this.issueTracking = issueTracking;
@@ -77,6 +90,20 @@ public class Formatter {
 
         String encoding = ThucydidesSystemProperty.REPORT_CHARSET.from(environmentVariables,"UTF-8");
         markdownEncodingConfiguration = Configuration.builder().setEncoding(encoding).build();
+
+
+        /////////////
+        MutableDataSet options = new MutableDataSet();
+
+        // uncomment to set optional extensions
+        //options.set(Parser.EXTENSIONS, Arrays.asList(TablesExtension.create(), StrikethroughExtension.create()));
+
+        // uncomment to convert soft-breaks to hard breaks
+        //options.set(HtmlRenderer.SOFT_BREAK, "<br />\n");
+
+        parser = Parser.builder(options).build();
+        renderer = HtmlRenderer.builder(options).build();
+
     }
 
     public Formatter(IssueTracking issueTracking) {
@@ -89,7 +116,11 @@ public class Formatter {
 
     public String renderMarkdown(String text) {
         if (text == null) { return ""; }
-        return stripSurroundingParagraphTagsFrom(Processor.process(text, markdownEncodingConfiguration));
+
+        Node document = parser.parse(text);
+        String html = renderer.render(document);
+
+        return stripSurroundingParagraphTagsFrom(html);
     }
 
     private String stripSurroundingParagraphTagsFrom(String text) {
@@ -327,22 +358,22 @@ public class Formatter {
 
     public String htmlCompatibleListEntry(Object fieldValue) {
         return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(list)) ?
-                renderMarkdown(htmlCompatible(fieldValue)) : htmlCompatible(fieldValue);
+                (htmlCompatible(renderMarkdown(fieldValue.toString()))) : htmlCompatible(fieldValue);
     }
 
     public String htmlCompatibleStoryTitle(Object fieldValue) {
         return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(story)) ?
-                renderMarkdown(htmlCompatible(fieldValue)) : htmlCompatible(fieldValue);
+                (htmlCompatible(renderMarkdown(fieldValue.toString()))) : htmlCompatible(fieldValue);
     }
 
     public String htmlCompatibleTestTitle(Object fieldValue) {
         return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(scenario)) ?
-                renderMarkdown(htmlCompatible(fieldValue)) : htmlCompatible(fieldValue);
+                (htmlCompatible(renderMarkdown(fieldValue.toString()))) : htmlCompatible(fieldValue);
     }
 
     public String htmlCompatibleStepDescription(Object fieldValue) {
         return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(step)) ?
-                renderMarkdown(htmlCompatible(fieldValue)) : htmlCompatible(fieldValue);
+                (htmlCompatible(renderMarkdown(fieldValue.toString()))) : htmlCompatible(fieldValue);
     }
 
     public String plainHtmlCompatible(Object fieldValue) {
@@ -389,17 +420,10 @@ public class Formatter {
     }
 
     public String truncatedHtmlCompatible(String text, int length) {
-        return renderMarkdown(addLineBreaks(ESCAPE_SPECIAL_CHARS.translate(truncate(text, length))));
+        return htmlCompatible(text);
+//        return renderMarkdown(addLineBreaks(ESCAPE_SPECIAL_CHARS.translate(truncate(text, length))));
+//        return ESCAPE_SPECIAL_CHARS.translate(renderMarkdown(addLineBreaks(truncate(text, length))));
     }
-
-    private String truncate(String text, int length) {
-        if (text.length() > length) {
-            return text.substring(0, length).trim() + ELIPSE;
-        } else {
-            return text;
-        }
-    }
-
 
     private String replaceWithTokens(String value, List<String> issues) {
         List<String> sortedIssues = inOrderOfDecreasingLength(issues);

@@ -79,7 +79,7 @@
 <div id="contenttop">
     <div class="middlebg">
         <span class="breadcrumbs"><a href="index.html">Home</a>
-            > ${formatter.truncatedHtmlCompatible(pageTitle,60)}
+            > <span class="truncate-60">${formatter.htmlCompatible(pageTitle)}</span>
         </span>
     </div>
     <div class="rightbg"></div>
@@ -106,7 +106,7 @@
                 <#if (requirements.requirementOutcomes?has_content)>
                     <li><a href="#tabs-1">
                     ${pageTitle} (${requirements.requirementCount})
-                    </a></li>
+                    </a></li>`
                 </#if>
                 <#if (requirements.parentRequirement.isPresent() && requirements.parentRequirement.get().hasExamples())>
                     <li><a href="#tabs-2">Examples (${requirements.parentRequirement.get().exampleCount})</a></li>

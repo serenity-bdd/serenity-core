@@ -52,7 +52,7 @@
         <#--<div class="leftbg"></div>-->
         <div class="middlebg">
             <span class="breadcrumbs"><a href="index.html">Home</a> ${contextTitle}
-                > <span class="truncate-60">${formatter.htmlCompatible(pageTitle)</span>}
+                > <span class="truncate-60">${formatter.htmlCompatible(pageTitle)}</span>
             </span>
         </div>
         <div class="rightbg"></div>

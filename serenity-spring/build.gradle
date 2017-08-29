@@ -5,7 +5,7 @@ ext {
 
 dependencies {
     compile project(':serenity-core')
-	  compile project(':serenity-junit')
+    compile project(':serenity-junit')
     compile ("org.springframework:spring-test:${springVersion}")
     compile ("org.springframework:spring-context:${springVersion}")
     compile ("org.springframework:spring-context-support:${springVersion}")
@@ -16,12 +16,15 @@ dependencies {
     testCompile "org.springframework.boot:spring-boot-test:${springBootVersion}"
     testCompile 'commons-dbcp:commons-dbcp:1.4'
 
-    testCompile ("org.hibernate:hibernate-entitymanager:3.5.4-Final") {
+    testCompile ("org.hibernate:hibernate-entitymanager:5.2.10.Final") {
         exclude group: 'commons-logging'
         exclude group: 'org.slf4j'
         exclude group: 'commons-collections'
         exclude group: 'cglib'
         exclude group: 'javassist'
+        exclude group: 'net.bytebuddy'
+        exclude group: 'org.jboss.logging'
+        exclude group: 'com.fasterxml', module:'classmate'
     }
 }
 

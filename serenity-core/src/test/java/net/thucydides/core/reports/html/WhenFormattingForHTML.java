@@ -175,6 +175,18 @@ public class WhenFormattingForHTML {
     }
 
     @Test
+    public void formatter_should_render_markdown_headings_by_default() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+        Formatter formatter = new Formatter(issueTracking, environmentVariables);
+        String formatted = formatter.renderDescription("# Heading");
+        assertThat(formatted, containsString("<h1>Heading</h1>"));
+        formatted = formatter.renderDescription("## Sub-heading");
+        assertThat(formatted, containsString("<h2>Sub-heading</h2>"));
+        formatted = formatter.renderDescription("### Another deeper heading");
+        assertThat(formatted, containsString("<h3>Another deeper heading</h3>"));
+    }
+
+    @Test
     public void markdown_should_not_affect_escaped_html_characters() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
 

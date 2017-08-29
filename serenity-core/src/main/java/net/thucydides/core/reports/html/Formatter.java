@@ -356,11 +356,6 @@ public class Formatter {
         return plainHtmlCompatible(fieldValue);
     }
 
-    public String htmlCompatibleListEntry(Object fieldValue) {
-        return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(list)) ?
-                (htmlCompatible(renderMarkdown(fieldValue.toString()))) : htmlCompatible(fieldValue);
-    }
-
     public String htmlCompatibleStoryTitle(Object fieldValue) {
         return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(story)) ?
                 (htmlCompatible(renderMarkdown(fieldValue.toString()))) : htmlCompatible(fieldValue);

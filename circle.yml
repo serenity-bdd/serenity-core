@@ -22,7 +22,3 @@ test:
         timeout: 900
     - ./gradlew browserTests:
         timeout: 900
-
-  post:
-    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;

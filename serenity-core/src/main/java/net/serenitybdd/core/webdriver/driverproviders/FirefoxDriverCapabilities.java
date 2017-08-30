@@ -39,7 +39,7 @@ public class FirefoxDriverCapabilities  implements DriverCapabilitiesProvider {
         return capabilities;
     }
 
-    protected FirefoxProfile buildFirefoxProfile() {
+    private FirefoxProfile buildFirefoxProfile() {
         String profileName = ThucydidesSystemProperty.WEBDRIVER_FIREFOX_PROFILE.from(environmentVariables);
         FilePathParser parser = new FilePathParser(environmentVariables);
         DesiredCapabilities firefoxCapabilities = DesiredCapabilities.firefox();
@@ -55,12 +55,8 @@ public class FirefoxDriverCapabilities  implements DriverCapabilitiesProvider {
         }
 
         firefoxProfileEnhancer.allowWindowResizeFor(profile);
-        firefoxProfileEnhancer.activateNativeEventsFor(profile, shouldEnableNativeEvents());
         if (shouldActivateProxy()) {
             activateProxyFor(profile, firefoxProfileEnhancer);
-        }
-        if (firefoxProfileEnhancer.shouldActivateFirebugs()) {
-            firefoxProfileEnhancer.addFirebugsTo(profile);
         }
         if (refuseUntrustedCertificates()) {
             profile.setAssumeUntrustedCertificateIssuer(false);
@@ -72,11 +68,6 @@ public class FirefoxDriverCapabilities  implements DriverCapabilitiesProvider {
         firefoxProfileEnhancer.configureJavaSupport(profile);
         firefoxProfileEnhancer.addPreferences(profile);
         return profile;
-    }
-
-
-    private boolean shouldEnableNativeEvents() {
-        return Boolean.valueOf(ThucydidesSystemProperty.SERENITY_NATIVE_EVENTS.from(environmentVariables,"true"));
     }
 
     private void activateProxyFor(FirefoxProfile profile, FirefoxProfileEnhancer firefoxProfileEnhancer) {
@@ -107,14 +98,14 @@ public class FirefoxDriverCapabilities  implements DriverCapabilitiesProvider {
     }
 
 
-    protected ProfilesIni getAllProfiles() {
+    private ProfilesIni getAllProfiles() {
         if (allProfiles == null) {
             allProfiles = new ProfilesIni();
         }
         return allProfiles;
     }
 
-    protected FirefoxProfile createNewFirefoxProfile() {
+    private FirefoxProfile createNewFirefoxProfile() {
         FirefoxProfile profile;
         if (Serenity.getFirefoxProfile() != null) {
             profile = Serenity.getFirefoxProfile();
@@ -122,12 +113,11 @@ public class FirefoxDriverCapabilities  implements DriverCapabilitiesProvider {
             profile = new FirefoxProfile();
             profile.setPreference("network.proxy.socks_port",9999);
             profile.setAlwaysLoadNoFocusLib(true);
-            profile.setEnableNativeEvents(true);
         }
         return profile;
     }
 
-    protected FirefoxProfile useExistingFirefoxProfile(final File profileDirectory) {
+    private FirefoxProfile useExistingFirefoxProfile(final File profileDirectory) {
         return new FirefoxProfile(profileDirectory);
     }
 

@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver.firefox;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -8,23 +7,14 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.firefox.FirefoxProfile;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class FirefoxProfileEnhancer {
 
-    private static final String FIREBUGS_VERSION = "2.0.18";
-    private static final String MAX_FIREBUGS_VERSION = "999.99.0";
-    private static final String FIREBUGS_XPI_FILE = "/firefox/firebug-" + FIREBUGS_VERSION + ".xpi";
-
-    private static final String FIREFINDER_VERSION = "1.4-fx";
-    private static final String MAX_FIREFINDER_VERSION = "999.9";
-    private static final String FIREFINDER_XPI_FILE = "/firefox/firefinder_for_firebug-" + FIREFINDER_VERSION + ".xpi";
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(FirefoxProfileEnhancer.class);
     private static final String FIREFOX_NETWORK_PROXY_TYPE = "network.proxy.type";
     private static final String FIREFOX_NETWORK_PROXY_HTTP = "network.proxy.http";
     private static final String FIREFOX_NETWORK_PROXY_HTTP_PORT = "network.proxy.http_port";
@@ -32,24 +22,6 @@ public class FirefoxProfileEnhancer {
 
     public FirefoxProfileEnhancer(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
-    }
-
-    public boolean shouldActivateFirebugs() {
-        return ThucydidesSystemProperty.THUCYDIDES_ACTIVATE_FIREBUGS.booleanFrom(environmentVariables);
-    }
-
-    public void addFirebugsTo(final FirefoxProfile profile) {
-//        try {
-//  TODO: Make this work for recent versions of FireFox. It fails due to an apparent bug in Firefox
-//            profile.addExtension(this.getClass(), FIREBUGS_XPI_FILE);
-//            profile.setPreference("extensions.firebug.currentVersion", MAX_FIREBUGS_VERSION); // Avoid startup screen
-//
-//            profile.addExtension(this.getClass(), FIREFINDER_XPI_FILE);
-//            profile.setPreference("extensions.firebug.currentVersion", MAX_FIREFINDER_VERSION); // Avoid startup screen
-//
-//        } catch (IOException e) {
-//            LOGGER.warn("Failed to add Firebugs extension to Firefox");
-//        }
     }
 
     public void configureJavaSupport(FirefoxProfile profile) {
@@ -67,10 +39,6 @@ public class FirefoxProfileEnhancer {
         profile.setPreference(FIREFOX_NETWORK_PROXY_TYPE, 1);
     }
 
-    public void activateNativeEventsFor(FirefoxProfile profile, boolean enabled) {
-        profile.setEnableNativeEvents(enabled);
-    }
-
     static class PreferenceValue {
         private final String key;
         private final Object value;
@@ -80,7 +48,7 @@ public class FirefoxProfileEnhancer {
             this.value = value;
         }
 
-        public void applyTo(FirefoxProfile profile) {
+        void applyTo(FirefoxProfile profile) {
             if (value instanceof Boolean) {
                 profile.setPreference(key, (Boolean) value);
             } else if (value instanceof Integer) {
@@ -100,10 +68,14 @@ public class FirefoxProfileEnhancer {
 
     private List<PreferenceValue> getPreferenceValuesFrom(String preferences) {
         List<PreferenceValue> preferenceValues = new ArrayList<>();
+        String preferenceSeparator = environmentVariables.getProperty(ThucydidesSystemProperty.FIREFOX_PREFERENCE_SEPARATOR,";");
+        System.out.println("Separator = " + preferenceSeparator);
+
         if (StringUtils.isNotEmpty(preferences)) {
-            List<String> arguments = split(preferences, ";");
+            List<String> arguments = split(preferences, preferenceSeparator);
             for(String argument : arguments) {
-                preferenceValues.addAll(convertToPreferenceValue(argument).asSet());
+                System.out.println("arg = " + argument);
+                preferenceValues.addAll(convertToPreferenceValue(argument).map(Collections::singleton).orElse(Collections.emptySet()));
             }
         }
         return preferenceValues;
@@ -119,7 +91,7 @@ public class FirefoxProfileEnhancer {
             String value = arguments.get(1);
             return Optional.of(new PreferenceValue(key,argumentValueOf(value)));
         } else {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

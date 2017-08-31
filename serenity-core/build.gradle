@@ -101,11 +101,6 @@ dependencies {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
 
-    compile("com.googlecode.lambdaj:lambdaj:${lambdajVersion}") {
-        exclude group: 'org.hamcrest', module: 'hamcrest-all'
-        exclude group: 'cglib', module: 'cglib-nodep'
-        exclude group: 'org.objenesis', module: 'objenesis'
-    }
     compile "joda-time:joda-time:${jodaTimeVersion}"
     compile "com.thoughtworks.xstream:xstream:${xstreamVersion}"
     compile "org.apache.commons:commons-lang3:${commonsLang3Version}"

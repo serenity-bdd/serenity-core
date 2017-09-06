@@ -1,7 +1,7 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-import gherkin.formatter.Formatter;
-import gherkin.formatter.model.*;
+//import gherkin.formatter.Formatter;
+//import gherkin.formatter.model.*;
 
 import java.util.List;
 

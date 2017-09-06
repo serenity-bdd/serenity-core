@@ -216,7 +216,7 @@ subprojects {
         compile "org.objenesis:objenesis:${objenesisVersion}"
         compile "org.slf4j:slf4j-api:${slf4jVersion}"
         compile "xml-apis:xml-apis:${xmlApisVersion}"
-        compile "info.cukes:cucumber-core:${cucumberVersion}"
+        compile "io.cucumber:cucumber-core:${cucumberVersion}"
 
         compile("commons-logging:commons-logging:${commonsLoggingVersion}")
         compile "junit:junit:${junitVersion}"

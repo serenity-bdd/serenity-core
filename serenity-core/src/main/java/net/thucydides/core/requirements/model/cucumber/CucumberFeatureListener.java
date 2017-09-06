@@ -2,75 +2,76 @@ package net.thucydides.core.requirements.model.cucumber;
 
 //import gherkin.formatter.Formatter;
 //import gherkin.formatter.model.*;
+import gherkin.ast.*;
 
 import java.util.List;
 
-class CucumberFeatureListener implements Formatter {
+class CucumberFeatureListener /*implements Formatter*/ {
 
         Feature feature;
         Background background;
 
-        @Override
+        //@Override
         public void syntaxError(String state, String event, List<String> legalEvents, String uri, Integer line) {
 
         }
 
-        @Override
+        //@Override
         public void uri(String uri) {
 
         }
 
-        @Override
+        //@Override
         public void feature(Feature feature) {
             this.feature = feature;
         }
 
-        @Override
+        //@Override
         public void scenarioOutline(ScenarioOutline scenarioOutline) {
 
         }
 
-        @Override
+        //@Override
         public void examples(Examples examples) {
 
         }
 
-        @Override
+        //@Override
         public void startOfScenarioLifeCycle(Scenario scenario) {
 
         }
 
-        @Override
+        //@Override
         public void background(Background background) {
             this.background = background;
         }
 
-        @Override
+        //@Override
         public void scenario(Scenario scenario) {
 
         }
 
-        @Override
+        //@Override
         public void step(Step step) {
 
         }
 
-        @Override
+        //@Override
         public void endOfScenarioLifeCycle(Scenario scenario) {
 
         }
 
-        @Override
+        //@Override
         public void done() {
 
         }
 
-        @Override
+        //@Override
         public void close() {
 
         }
 
-        @Override
+        //@Override
         public void eof() {
 
         }

@@ -1,9 +1,12 @@
 package net.thucydides.core.requirements.model.cucumber;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import cucumber.runtime.io.MultiLoader;
 import cucumber.runtime.model.CucumberFeature;
 import gherkin.ast.GherkinDocument;
+import gherkin.ast.Tag;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.requirements.model.Narrative;
@@ -42,38 +45,26 @@ public class CucumberParser {
 
     public java.util.Optional<Narrative> loadFeatureNarrative(File narrativeFile)  {
 
-        //CucumberFeatureListener gherkinStructure = new CucumberFeatureListener();
-        //Parser parser = new Parser(gherkinStructure, true, "root", false, locale);
         List<String> listOfFiles = new ArrayList<>();
         listOfFiles.add(narrativeFile.getAbsolutePath());
         List<CucumberFeature> cucumberFeatures = CucumberFeature.load(new MultiLoader(CucumberParser.class.getClassLoader()), listOfFiles);
         try {
-            /*String gherkinScenarios = filterOutCommentsFrom(FileUtils.readFileToString(narrativeFile, encoding));
-            parser.parse(gherkinScenarios, narrativeFile.getName(),0);
-
-            if (featureFileCouldNotBeReadFor(gherkinStructure)) {
-                return java.util.Optional.empty();
-            }*/
-
             if (cucumberFeatures.size() == 0) {
                 return java.util.Optional.empty();
             }
             CucumberFeature cucumberFeature = cucumberFeatures.get(0);
-
-            /* TODO
-            String cardNumber = findCardNumberInTags(tagsDefinedIn(gherkinStructure));
-            List<String> versionNumbers = findVersionNumberInTags(tagsDefinedIn(gherkinStructure));
-            String title = gherkinStructure.getFeature().getName();
-            String text = gherkinStructure.getFeature().getDescription();
-            String id = gherkinStructure.getFeature().getId();*/
-
-            List<String> versionNumbers = new ArrayList<>(); //TODO
             GherkinDocument gherkinDocument = cucumberFeature.getGherkinFeature();
+            if (featureFileCouldNotBeReadFor(gherkinDocument)) {
+                return java.util.Optional.empty();
+            }
+
+            //TODO add tests
+            String cardNumber = findCardNumberInTags(tagsDefinedIn(cucumberFeature));
+            List<String> versionNumbers = findVersionNumberInTags(tagsDefinedIn(cucumberFeature));
             String title = gherkinDocument.getFeature().getName();
             String text = gherkinDocument.getFeature().getDescription();
-            String id = "";//TODO
-            String cardNumber = "";//TODO
-
+            //TODO - check what Id was before
+            String id = cucumberFeature.getGherkinFeature().getFeature().getKeyword();
 
             return java.util.Optional.of(new Narrative(Optional.fromNullable(title),
                     Optional.fromNullable(id),
@@ -87,7 +78,7 @@ public class CucumberParser {
         return java.util.Optional.empty();
     }
 
-    private boolean featureFileCouldNotBeReadFor(CucumberFeatureListener gherkinStructure) {
+    private boolean featureFileCouldNotBeReadFor(GherkinDocument gherkinStructure) {
         return gherkinStructure.getFeature() == null;
     }
 
@@ -105,9 +96,9 @@ public class CucumberParser {
         return filteredGherkin.toString();
     }
 
-    /** TODO
-    private List<Tag> tagsDefinedIn(CucumberFeatureListener gherkinStructure) {
-        return(gherkinStructure.getFeature() != null) ?  gherkinStructure.getFeature().getTags() : Lists.<Tag>newArrayList();
+
+    private List<Tag> tagsDefinedIn(CucumberFeature cucumberFeature) {
+        return  cucumberFeature.getGherkinFeature().getFeature().getTags();
     }
 
     private String findCardNumberInTags(List<Tag> tags) {
@@ -137,5 +128,4 @@ public class CucumberParser {
         }
         return versionNumbers;
     }
-    */
 }

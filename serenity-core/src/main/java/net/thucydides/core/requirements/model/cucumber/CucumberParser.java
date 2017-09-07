@@ -70,7 +70,7 @@ public class CucumberParser {
             List<String> versionNumbers = new ArrayList<>(); //TODO
             GherkinDocument gherkinDocument = cucumberFeature.getGherkinFeature();
             String title = gherkinDocument.getFeature().getName();
-            String text = gherkinDocument.getFeature().getDescription().trim();
+            String text = gherkinDocument.getFeature().getDescription();
             String id = "";//TODO
             String cardNumber = "";//TODO
 
@@ -80,7 +80,7 @@ public class CucumberParser {
                     Optional.fromNullable(cardNumber),
                     versionNumbers,
                     "feature",
-                    text));
+                    text !=null ? text : ""));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

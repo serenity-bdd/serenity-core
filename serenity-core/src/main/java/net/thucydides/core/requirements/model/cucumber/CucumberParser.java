@@ -2,7 +2,6 @@ package net.thucydides.core.requirements.model.cucumber;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 import cucumber.runtime.io.MultiLoader;
 import cucumber.runtime.model.CucumberFeature;
 import gherkin.ast.GherkinDocument;
@@ -18,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-//import gherkin.pickles.;
-//import gherkin.parser.Parser;
 
 /**
  * Created by john on 5/03/15.
@@ -63,8 +60,7 @@ public class CucumberParser {
             List<String> versionNumbers = findVersionNumberInTags(tagsDefinedIn(cucumberFeature));
             String title = gherkinDocument.getFeature().getName();
             String text = gherkinDocument.getFeature().getDescription();
-            //TODO - check what Id was before
-            String id = cucumberFeature.getGherkinFeature().getFeature().getKeyword();
+            String id = getIdFromName(title);
 
             return java.util.Optional.of(new Narrative(Optional.fromNullable(title),
                     Optional.fromNullable(id),
@@ -76,6 +72,10 @@ public class CucumberParser {
             ex.printStackTrace();
         }
         return java.util.Optional.empty();
+    }
+
+    private String getIdFromName(String name) {
+        return name.replaceAll("[\\s_]", "-").toLowerCase();
     }
 
     private boolean featureFileCouldNotBeReadFor(GherkinDocument gherkinStructure) {

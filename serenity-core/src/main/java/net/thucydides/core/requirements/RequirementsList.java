@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements;
 
-import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Optional;
 import net.thucydides.core.requirements.model.Requirement;
 

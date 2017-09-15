@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver;
 
-import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Optional;
 import io.appium.java_client.AppiumDriver;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
@@ -19,6 +18,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Duration;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -88,7 +88,7 @@ public class WebDriverFactory {
     private Map<SupportedWebDriver, DriverProvider> driverProviders() {
 
         if (driverProvidersByDriverType == null) {
-            driverProvidersByDriverType = Maps.newHashMap();
+            driverProvidersByDriverType = new HashMap<>();
 
             CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
 

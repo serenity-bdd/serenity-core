@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver;
 
-import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.opera.core.systems.OperaDriver;

@@ -1,6 +1,5 @@
 package net.thucydides.core.annotations;
 
-import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

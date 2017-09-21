@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <title>${testOutcome.unqualified.title}</title>
-    <link rel="shortcut icon" href="favicon.ico">
+<#include "libraries/favicon.ftl">
 
 <#include "libraries/common.ftl">
 <#include "libraries/jquery-ui.ftl">
@@ -33,9 +33,9 @@
         <#list breadcrumbs as breadcrumb>
             <#assign breadcrumbReport = absoluteReportName.forRequirement(breadcrumb) />
             <#assign breadcrumbTitle = inflection.of(breadcrumb.shortName).asATitle() >
-            > <a href="${breadcrumbReport}">${formatter.truncatedHtmlCompatible(breadcrumbTitle,40)}</a>
+            > <a href="${breadcrumbReport}">${formatter.htmlCompatibleStoryTitle(breadcrumbTitle)}</a>
         </#list>
-            > ${formatter.truncatedHtmlCompatible(testOutcome.title,80)}
+        > ${formatter.htmlCompatibleTestTitle(testOutcome.title)}
         </span>
         </div>
         <div class="rightbg"></div>
@@ -135,7 +135,7 @@
                             <span class="test-case-title">
                                 <#assign testOutcomeTitle = testOutcome.unqualified.titleWithLinks >
                                     <span class="${outcome_text!ignore_color}">
-                                    ${formatter.htmlCompatibleStoryTitle(testOutcomeTitle)}
+                                    ${formatter.htmlCompatibleTestTitle(testOutcomeTitle)}
                                     <#if (!testOutcome.titleWithIssues)>
                                         <span class="related-issue-title">${testOutcome.formattedIssues}</span>
                                     </#if>

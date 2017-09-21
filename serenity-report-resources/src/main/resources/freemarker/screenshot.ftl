@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>${screenshot.description}</title>
-    <link rel="shortcut icon" href="favicon.ico">
+<#include "libraries/favicon.ftl">
 
     <#include "libraries/common.ftl">
 

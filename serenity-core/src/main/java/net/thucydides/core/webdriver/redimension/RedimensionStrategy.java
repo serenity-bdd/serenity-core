@@ -21,7 +21,7 @@ enum RedimensionStrategy {
         }
 
         if (redimensionConfiguration.isBrowserMaximised()) {
-            return RedimensionToSpecifiedSize;
+            return Maximize;
         }
 
         return DoNotRedimension;

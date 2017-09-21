@@ -76,7 +76,3 @@ Starting from version 1.1.26, any commits without one of these prefixes will not
 ## Licensing
 
 This distribution, as a whole, is licensed under the terms of the Apache License, Version 2.0
-
-[![Build Status](https://snap-ci.com/serenity-bdd/serenity-core/branch/master/build_image)](https://snap-ci.com/serenity-bdd/serenity-core/branch/master)
-
-

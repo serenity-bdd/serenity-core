@@ -9,7 +9,7 @@ import spock.lang.Unroll
 
 class WhenFormattingDataForTheHTMLReports extends Specification {
 
-    IssueTracking issueTracking = Mock();
+    IssueTracking issueTracking = Mock()
 
     @Unroll
     def "should display foreign characters as HTML entities"() {
@@ -21,6 +21,90 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         "François"          | "Fran&ccedil;ois"
         "störunterdrückung" | "st&ouml;runterdr&uuml;ckung"
         "CatÃ¡logo"         | "Cat&Atilde;&iexcl;logo"
+    }
+
+    @Unroll
+    def "should render story titles with foreign characters"() {
+        expect:
+        def formatter = new Formatter(issueTracking);
+        formatter.htmlCompatibleStoryTitle(foreignWord) == formattedWord
+        where:
+        foreignWord         | formattedWord
+        "Érintett Befogadása Alapadatokkal"          | "&Eacute;rintett Befogad&aacute;sa Alapadatokkal"
+        "Érintett _Befogadása_ Alapadatokkal"          | "&Eacute;rintett <em>Befogad&aacute;sa</em> Alapadatokkal"
+    }
+
+    @Unroll
+    def "should render story titles with foreign characters when markdown disabled"() {
+        expect:
+        def environmentVariables = new MockEnvironmentVariables()
+        environmentVariables.setProperty("enable.markdown","not_enabled")
+        def formatter = new Formatter(issueTracking,environmentVariables)
+        formatter.htmlCompatibleStoryTitle(foreignWord) == formattedWord
+        where:
+        foreignWord         | formattedWord
+        "Érintett Befogadása Alapadatokkal"          | "&Eacute;rintett Befogad&aacute;sa Alapadatokkal"
+        "Érintett _Befogadása_ Alapadatokkal"          | "&Eacute;rintett _Befogad&aacute;sa_ Alapadatokkal"
+    }
+
+
+    @Unroll
+    def "should render story titles with foreign characters and markdown"() {
+        expect:
+        def formatter = new Formatter(issueTracking);
+        formatter.htmlCompatibleStoryTitle(foreignWord) == formattedWord
+        where:
+        foreignWord         | formattedWord
+        "Érintett **Befogadása** Alapadatokkal"          | "&Eacute;rintett <strong>Befogad&aacute;sa</strong> Alapadatokkal"
+        "Érintett _Befogadása_ Alapadatokkal"          | "&Eacute;rintett <em>Befogad&aacute;sa</em> Alapadatokkal"
+    }
+
+    @Unroll
+    def "should render story titles with foreign characters and no markdown"() {
+        expect:
+        def environmentVariables = new MockEnvironmentVariables()
+        environmentVariables.setProperty("enable.markdown","not_enabled")
+        def formatter = new Formatter(issueTracking,environmentVariables);
+        formatter.htmlCompatibleStoryTitle(foreignWord) == formattedWord
+        where:
+        foreignWord         | formattedWord
+        "Érintett **Befogadása** Alapadatokkal"          | "&Eacute;rintett **Befogad&aacute;sa** Alapadatokkal"
+        "Érintett _Befogadása_ Alapadatokkal"          | "&Eacute;rintett _Befogad&aacute;sa_ Alapadatokkal"
+    }
+
+    @Unroll
+    def "should render simple titles with foreign characters"() {
+        expect:
+        def formatter = new Formatter(issueTracking);
+        formatter.htmlCompatible(foreignWord) == formattedWord
+        where:
+        foreignWord         | formattedWord
+        "Érintett Befogadása"          | "&Eacute;rintett Befogad&aacute;sa"
+        "Érintett_Befogadása"          | "&Eacute;rintett_Befogad&aacute;sa"
+    }
+    
+    @Unroll
+    def "should render scenario titles with foreign characters and no markdown"() {
+        expect:
+        def environmentVariables = new MockEnvironmentVariables()
+        environmentVariables.setProperty("enable.markdown","not_enabled")
+        def formatter = new Formatter(issueTracking, environmentVariables);
+        formatter.htmlCompatibleTestTitle(foreignWord) == formattedWord
+        where:
+        foreignWord         | formattedWord
+        "Érintett Befogadása Alapadatokkal"          | "&Eacute;rintett Befogad&aacute;sa Alapadatokkal"
+        "Érintett **Befogadása** Alapadatokkal"          | "&Eacute;rintett **Befogad&aacute;sa** Alapadatokkal"
+    }
+
+    @Unroll
+    def "should render scenario titles with foreign characters and markdown"() {
+        expect:
+        def formatter = new Formatter(issueTracking);
+        formatter.htmlCompatibleTestTitle(foreignWord) == formattedWord
+        where:
+        foreignWord         | formattedWord
+        "Érintett Befogadása Alapadatokkal"          | "&Eacute;rintett Befogad&aacute;sa Alapadatokkal"
+        "Érintett **Befogadása** Alapadatokkal"          | "&Eacute;rintett <strong>Befogad&aacute;sa</strong> Alapadatokkal"
     }
 
     @Unroll
@@ -69,20 +153,6 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
         [1,2,3]                         | "[1, 2, 3]"
         ["a":"1","b":2]                 | "{a=1, b=2}"
         ImmutableList.of("a","b","c")   | "[a, b, c]"
-    }
-
-
-    @Unroll
-    def "should shorten long lines if requested"() {
-        expect:
-        def formatter = new net.thucydides.core.reports.html.Formatter(issueTracking);
-        formatter.truncatedHtmlCompatible(value, length) == formattedValue
-        where:
-        value                 | length |  formattedValue
-        "the quick brown dog" | 3      | "the&hellip;"
-        "the quick brown dog" | 10     | "the quick&hellip;"
-        "the quick brown dog" | 20     | "the quick brown dog"
-        "François"            | 5      | "Fran&ccedil;&hellip;"
     }
 
     def "should format embedded tables"() {

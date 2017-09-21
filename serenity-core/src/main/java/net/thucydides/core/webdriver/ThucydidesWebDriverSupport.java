@@ -159,7 +159,11 @@ public class ThucydidesWebDriverSupport {
     }
 
     private static void initStepFactoryUsing(final Pages pagesObject) {
-        stepFactoryThreadLocal.set(new StepFactory(pagesObject));
+        if (stepFactoryThreadLocal.get() != null) {
+            stepFactoryThreadLocal.get().usePageFactory(pagesObject);
+        } else {
+            stepFactoryThreadLocal.set(new StepFactory(pagesObject));
+        }
     }
 
     public static WebdriverManager getWebdriverManager(WebDriverFactory webDriverFactory, Configuration configuration) {

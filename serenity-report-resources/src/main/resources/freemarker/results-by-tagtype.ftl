@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <title>Home</title>
 
-    <link rel="shortcut icon" href="favicon.ico">
+<#include "libraries/favicon.ftl">
 
     <#include "libraries/common.ftl">
     <#include "libraries/jquery-ui.ftl">
@@ -52,7 +52,7 @@
         <#--<div class="leftbg"></div>-->
         <div class="middlebg">
             <span class="breadcrumbs"><a href="index.html">Home</a> ${contextTitle}
-                > ${formatter.truncatedHtmlCompatible(pageTitle,60)}
+                <span class="truncate-60">${formatter.htmlCompatible(pageTitle)}</span>
             </span>
         </div>
         <div class="rightbg"></div>

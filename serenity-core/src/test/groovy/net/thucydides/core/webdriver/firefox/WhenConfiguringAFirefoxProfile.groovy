@@ -12,18 +12,6 @@ class WhenConfiguringAFirefoxProfile extends Specification {
     def profileEnhancer = new FirefoxProfileEnhancer(environmentVariables)
     def profile = Mock(FirefoxProfile)
 
-    def "should know when to activate firebugs based on system properties"() {
-        when:
-            environmentVariables.setProperty("thucydides.activate.firebugs","true")
-        then:
-            profileEnhancer.shouldActivateFirebugs()
-    }
-
-    def "should not activate firebugs by default"() {
-        expect:
-           !profileEnhancer.shouldActivateFirebugs()
-    }
-
     def "should configure java support if requested"() {
         given:
             environmentVariables.setProperty("security.enable_java","true")
@@ -32,16 +20,6 @@ class WhenConfiguringAFirefoxProfile extends Specification {
         then:
             1 * profile.setPreference("security.enable_java", true)
 
-    }
-
-    @Ignore("This currently doesnt work due to a Firefox bug")
-    def "should add firebugs to profile"() {
-        when:
-            profileEnhancer.addFirebugsTo(profile)
-        then:
-            1 * profile.addExtension(_, {it.contains("firebug")});
-        and:
-            1 * profile.addExtension(_, {it.contains("firefinder")});
     }
 
     def "should activate firefox proxy"() {
@@ -64,6 +42,21 @@ class WhenConfiguringAFirefoxProfile extends Specification {
             1 * profile.setPreference("browser.download.dir", "c:\\downloads")
 
     }
+
+    def "should add complex user agent preferences to the profile"() {
+
+        given: "the user provides a user agent firefox preference values"
+            environmentVariables.setProperty("firefox.preferences","general.useragent.override=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36&browser.download.dir=c:\\downloads")
+            environmentVariables.setProperty("firefox.preference.separator","&")
+        when:
+            profileEnhancer.addPreferences(profile)
+        then:
+            1 * profile.setPreference("browser.download.dir","c:\\downloads")
+        and:
+            1 * profile.setPreference("general.useragent.override","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36")
+    }
+
+
 
     def "should add Firefox-specific options"() {
         given:

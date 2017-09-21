@@ -8,7 +8,7 @@ public class MarkdownRendering {
     private final String DEFAULT_MARKDOWN_ON = "story,narrative,scenario";
 
     public enum RenderedElements {
-        list, story, narrative, scenario, step
+        story, narrative, scenario, step
     }
 
     private final EnvironmentVariables environmentVariables;

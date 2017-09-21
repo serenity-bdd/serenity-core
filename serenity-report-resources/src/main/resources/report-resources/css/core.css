@@ -1128,6 +1128,34 @@ h4 {
     -o-text-overflow: ellipsis;
 }
 
+.truncate-20 {
+    overflow: hidden;
+    max-width: 40ch;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}
+
+.truncate-40 {
+    overflow: hidden;
+    max-width: 40ch;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}
+
+.truncate-60 {
+    overflow: hidden;
+    max-width: 60ch;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}
+
+.truncate-80 {
+    overflow: hidden;
+    max-width: 80ch;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}
+
 .tag-count-header {
     font-size: 0.9em;
 }

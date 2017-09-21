@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Screenshots</title>
 
-    <link rel="shortcut icon" href="favicon.ico">
+<#include "libraries/favicon.ftl">
 
 <#include "libraries/common.ftl">
 <#include "libraries/nivo-slider.ftl">
@@ -64,11 +64,11 @@
             <span class="breadcrumbs">
                 <a href="index.html">Home</a>
             <#if (parentLink?has_content)>
-                > <a
-                    href="${parentLink}">${formatter.truncatedHtmlCompatible(inflection.of(parentTitle).asATitle(),40)}</a>
+                > <span class="truncate-40"><a
+                    href="${parentLink}">${formatter.htmlCompatible(inflection.of(parentTitle).asATitle())}</a></span>
             </#if>
-                > <a
-                    href="${narrativeView}.html">${formatter.truncatedHtmlCompatible(testOutcome.unqualified.title,60)} </a>
+                > <span class="truncate-60"><a
+                    href="${narrativeView}.html">${formatter.htmlCompatible(testOutcome.unqualified.title)} </a></span>
                 > Screenshots
             </span>
         </div>

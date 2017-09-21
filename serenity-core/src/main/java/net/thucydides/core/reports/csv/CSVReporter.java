@@ -1,6 +1,7 @@
 package net.thucydides.core.reports.csv;
 
 import au.com.bytecode.opencsv.CSVWriter;
+import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -32,7 +33,7 @@ public class CSVReporter extends ThucydidesReporter {
     private final String encoding;
 
     public CSVReporter(File outputDirectory) {
-        this(outputDirectory, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+        this(outputDirectory, Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
     }
 
     public CSVReporter(File outputDirectory, EnvironmentVariables environmentVariables) {
@@ -42,12 +43,12 @@ public class CSVReporter extends ThucydidesReporter {
     }
 
     private List<String> extraColumnsDefinedIn(EnvironmentVariables environmentVariables) {
-        String columns = ThucydidesSystemProperty.SERENITY_CSV_EXTRA_COLUMNS.from(environmentVariables,"");
+        String columns = ThucydidesSystemProperty.SERENITY_CSV_EXTRA_COLUMNS.from(environmentVariables, "");
         return ImmutableList.copyOf(Splitter.on(",").omitEmptyStrings().trimResults().split(columns));
     }
 
     public File generateReportFor(TestOutcomes testOutcomes, String reportName) throws IOException {
-        try(CSVWriter writer = new CSVWriter(
+        try (CSVWriter writer = new CSVWriter(
                 new java.io.OutputStreamWriter(
                         new java.io.FileOutputStream(getOutputFile(reportName)), encoding))) {
             writeTitleRow(writer);
@@ -60,7 +61,7 @@ public class CSVReporter extends ThucydidesReporter {
         Inflector inflector = Inflector.getInstance();
         List<String> titles = new ArrayList<>();
         titles.addAll(Arrays.asList(TITLE_LINE));
-        for(String extraColumn : extraColumns) {
+        for (String extraColumn : extraColumns) {
             titles.add(inflector.of(extraColumn).asATitle().toString());
         }
         writer.writeNext(titles.toArray(OF_STRINGS));
@@ -77,22 +78,26 @@ public class CSVReporter extends ThucydidesReporter {
     }
 
     private String[] withRowDataFrom(TestOutcome outcome) {
-        List<? extends Serializable> defaultValues = ImmutableList.of(outcome.getStoryTitle(),
-                                                                      outcome.getTitle(),
-                                                                      outcome.getResult(),
-                                                                      outcome.getStartTime(),
-                                                                      passRateFor(outcome),
-                                                                      outcome.getDurationInSeconds());
+        List<? extends Serializable> defaultValues = ImmutableList.of(blankIfNull(outcome.getStoryTitle()),
+                blankIfNull(outcome.getTitle()),
+                outcome.getResult(),
+                blankIfNull(outcome.getStartedAt()),
+                passRateFor(outcome),
+                outcome.getDurationInSeconds());
         List<String> cellValues =
                 defaultValues.stream().map(Object::toString).collect(Collectors.toList());
         cellValues.addAll(extraValuesFrom(outcome));
         return cellValues.toArray(OF_STRINGS);
     }
 
+    private String blankIfNull(String value) {
+        return Optional.fromNullable(value).or("");
+    }
+
     private Collection<String> extraValuesFrom(TestOutcome outcome) {
         List<String> extraValues = new ArrayList<>();
 
-        for(String extraColumn : extraColumns) {
+        for (String extraColumn : extraColumns) {
             extraValues.add(outcome.getTagValue(extraColumn).or(""));
         }
         return extraValues;

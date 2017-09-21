@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
+import net.serenitybdd.core.exceptions.TheErrorType;
 import net.serenitybdd.core.model.FailureDetails;
 import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -2197,11 +2198,13 @@ public class TestOutcome {
     }
 
     public String getStartedAt() {
-            return startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+            return Optional.fromNullable(startTime).or(now())
+                    .format(DateTimeFormatter.ofPattern("HH:mm:ss"));
     }
 
     public String getTimestamp() {
-        return startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        return Optional.fromNullable(startTime).or(now())
+               .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     public boolean isDataDriven() {
@@ -2313,7 +2316,9 @@ public class TestOutcome {
         }
 
         public void causedBy(Class<? extends Throwable> expected) {
-            if ((step.getException() != null) && (step.getException().getErrorType() != null) && step.getException().getErrorType().equals(expected.getName())) {
+            if ((step.getException() != null)
+                    && (step.getException().getErrorType() != null)
+                    && TheErrorType.causedBy(step.getException().getErrorType()).isAKindOf(expected)) {
                 step.clearException();
                 step.setResult(TestResult.SUCCESS);
             }

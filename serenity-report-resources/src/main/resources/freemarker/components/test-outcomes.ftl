@@ -1,5 +1,4 @@
 <#macro test_results(testOutcomes, title, id)>
-<#--- Test Results -->
 <table>
     <tr>
         <td>
@@ -81,5 +80,4 @@
     </tr>
 </table>
 </div>
-<#--- Test Results end -->
 </#macro>

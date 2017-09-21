@@ -8,6 +8,7 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.ReportService;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.tags.TagScanner;
 import net.thucydides.core.tags.Taggable;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFactory;
@@ -17,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.Suite;
+import org.junit.runners.model.FrameworkMethod;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,11 +34,12 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
 
     private static final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
 
-    private final List<Runner> runners = new ArrayList<Runner>();
+    private List<Runner> runners = new ArrayList<>();
 
     private final Configuration configuration;
     private ReportService reportService;
     private final ParameterizedTestsOutcomeAggregator parameterizedTestsOutcomeAggregator = ParameterizedTestsOutcomeAggregator.from(this);
+    private TagScanner tagScanner;
 
     /**
      * Test runner used for testing purposes.
@@ -54,6 +57,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
     ) throws Throwable {
         super(klass, Collections.<Runner>emptyList());
         this.configuration = configuration;
+        this.tagScanner = new TagScanner(configuration.getEnvironmentVariables());
 
         if (runTestsInParallelFor(klass)) {
             scheduleParallelTestRunsFor(klass);
@@ -61,9 +65,9 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
 
         DataDrivenAnnotations testClassAnnotations = getTestAnnotations();
         if (testClassAnnotations.hasTestDataDefined()) {
-            buildTestRunnersForEachDataSetUsing(webDriverFactory, batchManager);
+            runners = buildTestRunnersForEachDataSetUsing(webDriverFactory, batchManager);
         } else if (testClassAnnotations.hasTestDataSourceDefined()) {
-            buildTestRunnersFromADataSourceUsing(webDriverFactory, batchManager);
+            runners = buildTestRunnersFromADataSourceUsing(webDriverFactory, batchManager);
         }
     }
 
@@ -107,8 +111,14 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
         }
     }
 
-    private void buildTestRunnersForEachDataSetUsing(final WebDriverFactory webDriverFactory,
+    private List<Runner> buildTestRunnersForEachDataSetUsing(final WebDriverFactory webDriverFactory,
                                                      final BatchManager batchManager) throws Throwable {
+
+        if (shouldSkipTest(getTestAnnotations().getTestMethod())) {
+            return new ArrayList<>();
+        }
+
+        List<Runner> runners = new ArrayList<>();
         DataTable parametersTable = getTestAnnotations().getParametersTableFromTestDataAnnotation();
         for (int i = 0; i < parametersTable.getRows().size(); i++) {
             Class<?> testClass = getTestClass().getJavaClass();
@@ -121,11 +131,17 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
             runner.useQualifier(from(parametersTable.getRows().get(i).getValues()));
             runners.add(runner);
         }
+        return runners;
     }
 
-    private void buildTestRunnersFromADataSourceUsing(final WebDriverFactory webDriverFactory,
+    private List<Runner> buildTestRunnersFromADataSourceUsing(final WebDriverFactory webDriverFactory,
                                                       final BatchManager batchManager) throws Throwable {
 
+        if (shouldSkipTest(getTestAnnotations().getTestMethod())) {
+            return new ArrayList<>();
+        }
+
+        List<Runner> runners = new ArrayList<>();
         List<?> testCases = getTestAnnotations().getDataAsInstancesOf(getTestClass().getJavaClass());
         DataTable parametersTable = getTestAnnotations().getParametersTableFromTestDataSource();
         for (int i = 0; i < testCases.size(); i++) {
@@ -139,6 +155,11 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
             runner.useQualifier(getQualifierFor(testCase));
             runners.add(runner);
         }
+        return runners;
+    }
+
+    private boolean shouldSkipTest(FrameworkMethod method) {
+        return !tagScanner.shouldRunMethod(getTestClass().getJavaClass(), method.getName());
     }
 
     private String getQualifierFor(final Object testCase) {

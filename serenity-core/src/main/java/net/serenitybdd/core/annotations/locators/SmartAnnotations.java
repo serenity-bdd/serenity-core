@@ -239,20 +239,24 @@ public class SmartAnnotations extends Annotations {
         }
         //END - [dep2] ***
 
-        FindBys thucydidesBys = field.getAnnotation(FindBys.class);
-        if (thucydidesBys != null) {
-            by = buildByFromFindBys(thucydidesBys);
-        }
-
-        // default implementation in case if org.openqa.selenium.support.FindBy was used
-        org.openqa.selenium.support.FindBy seleniumBy = field.getAnnotation(org.openqa.selenium.support.FindBy.class);
-        if (seleniumBy != null) {
-            by = super.buildByFromFindBy(seleniumBy);
-        }
-
-        org.openqa.selenium.support.FindAll seleniumFindAll = field.getAnnotation(org.openqa.selenium.support.FindAll.class);
-        if (seleniumFindAll != null) {
-            by = super.buildBysFromFindByOneOf(seleniumFindAll);
+//        FindBys thucydidesBys = field.getAnnotation(FindBys.class);
+//        if (thucydidesBys != null) {
+//            by = buildByFromFindBys(thucydidesBys);
+//        }
+//
+//        // default implementation in case if org.openqa.selenium.support.FindBy was used
+//        org.openqa.selenium.support.FindBy seleniumBy = field.getAnnotation(org.openqa.selenium.support.FindBy.class);
+//        if (seleniumBy != null) {
+//            by = super.buildByFromFindBy(seleniumBy);
+//        }
+//
+//        org.openqa.selenium.support.FindAll seleniumFindAll = field.getAnnotation(org.openqa.selenium.support.FindAll.class);
+//        if (seleniumFindAll != null) {
+//            by = super.buildBysFromFindByOneOf(seleniumFindAll);
+//        }
+//
+        if (by == null) {
+            by = super.buildBy();
         }
 
         if (by == null) {

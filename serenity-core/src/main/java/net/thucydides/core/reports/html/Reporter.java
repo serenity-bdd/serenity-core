@@ -6,6 +6,7 @@ import net.thucydides.core.configuration.TimeoutConfiguration;
 import net.thucydides.core.configuration.TimeoutValue;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.reports.NumberOfThreads;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +68,7 @@ class Reporter {
                 } catch (ExecutionException reportGenerationFailed) {
                     String errorMessage = reportFailureMessage("Failed to generate report", executedTask, reportGenerationFailed);
                     errorTally.recordReportFailure(errorMessage);
-                    LOGGER.warn(errorMessage);
+                    LOGGER.warn(errorMessage, reportGenerationFailed);
                 }
             }
         } catch (Exception e) {

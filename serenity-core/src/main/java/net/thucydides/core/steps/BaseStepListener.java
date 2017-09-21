@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
+import net.serenitybdd.core.exceptions.TheErrorType;
 import net.serenitybdd.core.photography.Darkroom;
 import net.serenitybdd.core.photography.Photographer;
 import net.serenitybdd.core.photography.ScreenshotPhoto;
@@ -127,8 +128,14 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public void exceptionExpected(Class<? extends Throwable> expected) {
         if (isNotAnException(expected.getName())) { return; }
 
-        if ((getCurrentTestOutcome().getTestFailureCause() != null) && (getCurrentTestOutcome().getTestFailureCause().getErrorType().equals(expected.getName()))) {
+
+        if ((getCurrentTestOutcome().getTestFailureCause() != null)
+                && TheErrorType.causedBy(getCurrentTestOutcome().getTestFailureCause().getErrorType()).isAKindOf(expected)) {
             getCurrentTestOutcome().resetFailingStepsCausedBy(expected);
+            getCurrentTestOutcome().recordStep(
+                    TestStep.forStepCalled("Expected exception thrown : " + expected.getName())
+                            .withResult(TestResult.SUCCESS)
+            );
         }
     }
 

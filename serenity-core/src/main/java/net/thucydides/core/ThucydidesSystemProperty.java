@@ -1139,8 +1139,13 @@ public enum ThucydidesSystemProperty {
      * Provide a text that distinguishes tests run in a particular environment or context from the same test
      * run in a different environment or context.
      */
-    CONTEXT
-    ;
+    CONTEXT,
+
+    /**
+     * The character to be used to separate firefox preference key-value pairs when using the "firefox.preferences" property.
+     * By default this is a semicolon, but sometimes semicolon appears in the preference values.
+     */
+    FIREFOX_PREFERENCE_SEPARATOR;
 
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;

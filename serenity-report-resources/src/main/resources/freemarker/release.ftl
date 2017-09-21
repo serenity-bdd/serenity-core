@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <title>${release.name}</title>
-    <link rel="shortcut icon" href="favicon.ico">
+<#include "libraries/favicon.ftl">
 
     <#include "libraries/common.ftl">
     <#include "libraries/jquery-ui.ftl">

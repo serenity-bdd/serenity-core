@@ -72,7 +72,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void a_data_driven_test_driver_should_run_one_test_per_row_of_data() throws Throwable  {
+    public void a_data_driven_test_driver_should_run_one_test_per_row_of_data() throws Throwable {
 
         SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleDataDrivenScenario.class);
         runner.run(new RunNotifier());
@@ -82,7 +82,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void manual_data_driven_tests_should_be_allowed() throws Throwable  {
+    public void manual_data_driven_tests_should_be_allowed() throws Throwable {
 
         SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(AddDifferentSortsOfTodos.class);
         runner.run(new RunNotifier());
@@ -92,7 +92,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void a_data_driven_test_driver_should_aggregate_test_outcomes() throws Throwable  {
+    public void a_data_driven_test_driver_should_aggregate_test_outcomes() throws Throwable {
 
         SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleDataDrivenScenario.class);
         runner.run(new RunNotifier());
@@ -104,7 +104,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void a_data_driven_test_driver_should_record_a_sample_scenario() throws Throwable  {
+    public void a_data_driven_test_driver_should_record_a_sample_scenario() throws Throwable {
 
         SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleDataDrivenScenario.class);
         runner.run(new RunNotifier());
@@ -116,7 +116,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void a_data_driven_test_driver_should_record_a_table_of_example() throws Throwable  {
+    public void a_data_driven_test_driver_should_record_a_table_of_example() throws Throwable {
 
         SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleSingleDataDrivenScenario.class);
         runner.run(new RunNotifier());
@@ -127,7 +127,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void a_data_driven_test_with_a_failing_assumption_should_be_ignored() throws Throwable  {
+    public void a_data_driven_test_with_a_failing_assumption_should_be_ignored() throws Throwable {
 
         SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleSingleDataDrivenScenarioWithFailingAssumption.class);
         runner.run(new RunNotifier());
@@ -135,13 +135,13 @@ public class WhenRunningADataDrivenTestScenario {
         List<TestOutcome> aggregatedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).aggregateTestOutcomesByTestMethods();
         assertThat(aggregatedScenarios.size(), is(1));
         assertThat(aggregatedScenarios.get(0).getStepCount(), is(15));
-        for(TestStep step :aggregatedScenarios.get(0).getTestSteps()) {
+        for (TestStep step : aggregatedScenarios.get(0).getTestSteps()) {
             assertThat(step.getResult(), is(TestResult.IGNORED));
         }
     }
 
     @Test
-    public void a_data_driven_test_driver_should_aggregate_test_outcomes_without_steps() throws Throwable  {
+    public void a_data_driven_test_driver_should_aggregate_test_outcomes_without_steps() throws Throwable {
 
         SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SimpleSuccessfulParametrizedTestSample.class);
         runner.run(new RunNotifier());
@@ -153,7 +153,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void data_driven_tests_should_pass_even_if_no_steps_are_called() throws Throwable  {
+    public void data_driven_tests_should_pass_even_if_no_steps_are_called() throws Throwable {
 
         SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SimpleSuccessfulParametrizedTestSample.class);
         runner.run(new RunNotifier());
@@ -165,7 +165,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void an_ignored_data_driven_test_should_have_result_status_as_ignored() throws Throwable  {
+    public void an_ignored_data_driven_test_should_have_result_status_as_ignored() throws Throwable {
 
         SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleDataDrivenIgnoredScenario.class);
         runner.run(new RunNotifier());
@@ -176,7 +176,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void an_ignored_data_driven_test_should_have_a_step_for_each_row() throws Throwable  {
+    public void an_ignored_data_driven_test_should_have_a_step_for_each_row() throws Throwable {
 
         SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleDataDrivenIgnoredScenario.class);
         runner.run(new RunNotifier());
@@ -187,7 +187,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void a_pending_data_driven_test_should_have_result_status_as_pending() throws Throwable  {
+    public void a_pending_data_driven_test_should_have_result_status_as_pending() throws Throwable {
 
         SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleDataDrivenPendingScenario.class);
         runner.run(new RunNotifier());
@@ -198,7 +198,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void a_pending_data_driven_test_should_have_a_test_step_for_each_row() throws Throwable  {
+    public void a_pending_data_driven_test_should_have_a_test_step_for_each_row() throws Throwable {
 
         SerenityParameterizedRunner runner = getStubbedTestRunnerUsing(SampleDataDrivenPendingScenario.class);
         runner.run(new RunNotifier());
@@ -209,7 +209,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void a_data_driven_test_should_also_be_able_to_use_data_from_a_CSV_file() throws Throwable  {
+    public void a_data_driven_test_should_also_be_able_to_use_data_from_a_CSV_file() throws Throwable {
 
         SerenityParameterizedRunner runner = getTestRunnerUsing(SampleCSVDataDrivenScenario.class);
         runner.run(new RunNotifier());
@@ -221,11 +221,11 @@ public class WhenRunningADataDrivenTestScenario {
 
 
     @Test
-    public void a_separate_json_report_should_be_generated_for_each_scenario() throws Throwable  {
+    public void a_separate_json_report_should_be_generated_for_each_scenario() throws Throwable {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-                                         outputDirectory.getAbsolutePath());
+                outputDirectory.getAbsolutePath());
 
         SerenityParameterizedRunner runner = getTestRunnerUsing(SampleDataDrivenScenario.class);
 
@@ -236,11 +236,11 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void a_separate_json_report_should_be_generated_for_each_scenario_when_using_data_from_a_CSV_file() throws Throwable  {
+    public void a_separate_json_report_should_be_generated_for_each_scenario_when_using_data_from_a_CSV_file() throws Throwable {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-                            outputDirectory.getAbsolutePath());
+                outputDirectory.getAbsolutePath());
 
         SerenityParameterizedRunner runner = getTestRunnerUsing(SampleCSVDataDrivenScenario.class);
 
@@ -251,11 +251,11 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void json_report_contents_should_reflect_the_test_data_from_the_csv_file() throws Throwable  {
+    public void json_report_contents_should_reflect_the_test_data_from_the_csv_file() throws Throwable {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-                            outputDirectory.getAbsolutePath());
+                outputDirectory.getAbsolutePath());
 
         SerenityParameterizedRunner runner = getTestRunnerUsing(SampleCSVDataDrivenScenario.class);
 
@@ -282,7 +282,7 @@ public class WhenRunningADataDrivenTestScenario {
         @Override
         protected boolean matchesSafely(List<String> values) {
             return values.stream()
-                         .anyMatch(value -> value.contains(expectedValue));
+                    .anyMatch(value -> value.contains(expectedValue));
         }
 
         public void describeTo(Description description) {
@@ -292,11 +292,11 @@ public class WhenRunningADataDrivenTestScenario {
 
 
     @Test
-    public void when_test_data_is_provided_for_a_step_a_single_test_should_be_executed() throws Throwable  {
+    public void when_test_data_is_provided_for_a_step_a_single_test_should_be_executed() throws Throwable {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-                                         outputDirectory.getAbsolutePath());
+                outputDirectory.getAbsolutePath());
 
         SerenityRunner runner = getNormalTestRunnerUsing(SamplePassingScenarioWithTestSpecificData.class);
 
@@ -307,11 +307,11 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void when_a_step_fails_for_a_row_the_other_rows_should_be_executed() throws Throwable  {
+    public void when_a_step_fails_for_a_row_the_other_rows_should_be_executed() throws Throwable {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-                            outputDirectory.getAbsolutePath());
+                outputDirectory.getAbsolutePath());
 
         SerenityRunner runner = getNormalTestRunnerUsing(ScenarioWithTestSpecificDataAndAFailingTestSample.class);
 
@@ -327,11 +327,11 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void when_a_step_is_skipped_for_a_row_the_other_rows_should_be_executed() throws Throwable  {
+    public void when_a_step_is_skipped_for_a_row_the_other_rows_should_be_executed() throws Throwable {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-                            outputDirectory.getAbsolutePath());
+                outputDirectory.getAbsolutePath());
 
         SerenityRunner runner = getNormalTestRunnerUsing(ScenarioWithTestSpecificDataAndAFailingTestSample.class);
 
@@ -348,11 +348,11 @@ public class WhenRunningADataDrivenTestScenario {
 
 
     @Test
-    public void browser_should_be_restarted_periodically_if_requested() throws Throwable  {
+    public void browser_should_be_restarted_periodically_if_requested() throws Throwable {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(), outputDirectory.getAbsolutePath());
-        environmentVariables.setProperty("thucydides.restart.browser.frequency","5");
+        environmentVariables.setProperty("thucydides.restart.browser.frequency", "5");
 
         SerenityParameterizedRunner runner = getTestRunnerUsing(SampleSingleSessionDataDrivenScenario.class);
 
@@ -361,11 +361,11 @@ public class WhenRunningADataDrivenTestScenario {
 
 
     @Test
-    public void when_a_step_fails_for_a_row_the_other_rows_should_not_be_skipped() throws Throwable  {
+    public void when_a_step_fails_for_a_row_the_other_rows_should_not_be_skipped() throws Throwable {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-                            outputDirectory.getAbsolutePath());
+                outputDirectory.getAbsolutePath());
 
         SerenityRunner runner = getNormalTestRunnerUsing(ScenarioWithTestSpecificDataAndAFailingTestSample.class);
 
@@ -383,7 +383,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void when_a_parameterized_test_fails_outside_a_step_a_failure_should_be_recorded() throws Throwable  {
+    public void when_a_parameterized_test_fails_outside_a_step_a_failure_should_be_recorded() throws Throwable {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
@@ -401,11 +401,11 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void when_a_step_fails_with_an_error_for_a_row_the_other_rows_should_be_executed() throws Throwable  {
+    public void when_a_step_fails_with_an_error_for_a_row_the_other_rows_should_be_executed() throws Throwable {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-                            outputDirectory.getAbsolutePath());
+                outputDirectory.getAbsolutePath());
 
         SerenityRunner runner = getNormalTestRunnerUsing(ScenarioWithTestSpecificDataAndABreakingTestSample.class);
 
@@ -424,7 +424,7 @@ public class WhenRunningADataDrivenTestScenario {
     @RunWith(SerenityRunner.class)
     public static class ScenarioWithTestSpecificDataSample {
 
-        @Managed(driver="htmlunit")
+        @Managed(driver = "htmlunit")
         public WebDriver webdriver;
 
         @ManagedPages(defaultUrl = "http://www.google.com")
@@ -443,7 +443,7 @@ public class WhenRunningADataDrivenTestScenario {
     @RunWith(SerenityRunner.class)
     public static class ScenarioWithNestedTestSpecificDataSample {
 
-        @Managed(driver="htmlunit")
+        @Managed(driver = "htmlunit")
         public WebDriver webdriver;
 
         @ManagedPages(defaultUrl = "http://www.google.com")
@@ -463,7 +463,7 @@ public class WhenRunningADataDrivenTestScenario {
     @RunWith(SerenityRunner.class)
     public static class ScenarioWithDeeplyNestedTestSpecificDataSample {
 
-        @Managed(driver="htmlunit")
+        @Managed(driver = "htmlunit")
         public WebDriver webdriver;
 
         @ManagedPages(defaultUrl = "http://www.google.com")
@@ -483,7 +483,7 @@ public class WhenRunningADataDrivenTestScenario {
     @RunWith(SerenityRunner.class)
     public static class ScenarioWithTestSpecificDataAndAFailingTestSample {
 
-        @Managed(driver="htmlunit")
+        @Managed(driver = "htmlunit")
         public WebDriver webdriver;
 
         @ManagedPages(defaultUrl = "http://www.google.com")
@@ -502,7 +502,7 @@ public class WhenRunningADataDrivenTestScenario {
     @RunWith(SerenityRunner.class)
     public static class ScenarioWithTestSpecificDataAndASkippedTestSample {
 
-        @Managed(driver="htmlunit")
+        @Managed(driver = "htmlunit")
         public WebDriver webdriver;
 
         @ManagedPages(defaultUrl = "http://www.google.com")
@@ -521,7 +521,7 @@ public class WhenRunningADataDrivenTestScenario {
     @RunWith(SerenityRunner.class)
     public static class ScenarioWithTestSpecificDataAndABreakingTestSample {
 
-        @Managed(driver="htmlunit")
+        @Managed(driver = "htmlunit")
         public WebDriver webdriver;
 
         @ManagedPages(defaultUrl = "http://www.google.com")
@@ -538,11 +538,11 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void when_test_data_is_provided_for_a_step_then_a_step_should_be_reported_for_each_data_row() throws Throwable  {
+    public void when_test_data_is_provided_for_a_step_then_a_step_should_be_reported_for_each_data_row() throws Throwable {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-                            outputDirectory.getAbsolutePath());
+                outputDirectory.getAbsolutePath());
 
         SerenityRunner runner = getNormalTestRunnerUsing(ScenarioWithTestSpecificDataSample.class);
 
@@ -558,7 +558,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void when_test_data_is_provided_for_a_nested_step_then_a_step_should_be_reported_for_each_data_row() throws Throwable  {
+    public void when_test_data_is_provided_for_a_nested_step_then_a_step_should_be_reported_for_each_data_row() throws Throwable {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
@@ -578,7 +578,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void when_test_data_is_provided_for_a_deeply_nested_step_then_a_step_should_be_reported_for_each_data_row() throws Throwable  {
+    public void when_test_data_is_provided_for_a_deeply_nested_step_then_a_step_should_be_reported_for_each_data_row() throws Throwable {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
@@ -596,12 +596,13 @@ public class WhenRunningADataDrivenTestScenario {
         assertThat(dataDrivenSteps.size(), is(3));
 
     }
+
     @Test
-    public void test_step_data_should_appear_in_the_step_titles() throws Throwable  {
+    public void test_step_data_should_appear_in_the_step_titles() throws Throwable {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-                            outputDirectory.getAbsolutePath());
+                outputDirectory.getAbsolutePath());
 
         SerenityRunner runner = getNormalTestRunnerUsing(ScenarioWithTestSpecificDataSample.class);
 
@@ -624,11 +625,11 @@ public class WhenRunningADataDrivenTestScenario {
 
 
     @Test
-    public void running_a_simple_parameterized_test_should_produce_an_outcome_per_data_row() throws Throwable  {
+    public void running_a_simple_parameterized_test_should_produce_an_outcome_per_data_row() throws Throwable {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-            outputDirectory.getAbsolutePath());
+                outputDirectory.getAbsolutePath());
 
         SerenityParameterizedRunner runner = getTestRunnerUsing(SimpleSuccessfulParametrizedTestSample.class);
 
@@ -641,11 +642,11 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void when_the_Concurrent_annotation_is_used_tests_should_be_run_in_parallel() throws Throwable  {
+    public void when_the_Concurrent_annotation_is_used_tests_should_be_run_in_parallel() throws Throwable {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-                            outputDirectory.getAbsolutePath());
+                outputDirectory.getAbsolutePath());
 
         SerenityParameterizedRunner runner = getTestRunnerUsing(SampleParallelDataDrivenScenario.class);
 
@@ -660,7 +661,7 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void the_Concurrent_annotation_indicates_that_tests_should_be_run_in_parallel() throws Throwable  {
+    public void the_Concurrent_annotation_indicates_that_tests_should_be_run_in_parallel() throws Throwable {
 
         SerenityParameterizedRunner runner = getTestRunnerUsing(SampleParallelDataDrivenScenario.class);
 
@@ -685,15 +686,19 @@ public class WhenRunningADataDrivenTestScenario {
     public static final class ParallelDataDrivenScenarioWithSpecifiedThreadCountSample {
         @TestData
         public static Collection testData() {
-                return Arrays.asList(new Object[][]{ });
-            }
+            return Arrays.asList(new Object[][]{});
+        }
+        @Test
+        public void foo() {
+        }
+
     }
 
     @Test
-    public void the_number_of_threads_can_be_overridden_in_the_concurrent_annotation() throws Throwable  {
+    public void the_number_of_threads_can_be_overridden_in_the_concurrent_annotation() throws Throwable {
 
         SerenityParameterizedRunner runner
-                   = getTestRunnerUsing(ParallelDataDrivenScenarioWithSpecifiedThreadCountSample.class);
+                = getTestRunnerUsing(ParallelDataDrivenScenarioWithSpecifiedThreadCountSample.class);
         int threadCount = runner.getThreadCountFor(ParallelDataDrivenScenarioWithSpecifiedThreadCountSample.class);
 
         assertThat(threadCount, is(7));
@@ -703,9 +708,9 @@ public class WhenRunningADataDrivenTestScenario {
     @Test
     public void the_number_of_threads_can_be_overridden_with_a_system_property() throws Throwable {
 
-        environmentVariables.setProperty("thucydides.concurrent.threads","4");
+        environmentVariables.setProperty("thucydides.concurrent.threads", "4");
         SerenityParameterizedRunner runner
-            = getTestRunnerUsing(ParallelDataDrivenScenarioWithSpecifiedThreadCountSample.class);
+                = getTestRunnerUsing(ParallelDataDrivenScenarioWithSpecifiedThreadCountSample.class);
         int threadCount = runner.getThreadCountFor(ParallelDataDrivenScenarioWithSpecifiedThreadCountSample.class);
 
         assertThat(threadCount, is(4));
@@ -717,15 +722,19 @@ public class WhenRunningADataDrivenTestScenario {
     public static final class ParallelDataDrivenScenarioWithRelativeThreadCountSample {
         @TestData
         public static Collection testData() {
-                return Arrays.asList(new Object[][]{ });
-            }
+            return Arrays.asList(new Object[][]{});
+        }
+
+        @Test
+        public void foo() {
+        }
     }
 
     @Test
-    public void the_number_of_threads_can_be_overridden_in_the_concurrent_annotation_using_a_relative_value() throws Throwable  {
+    public void the_number_of_threads_can_be_overridden_in_the_concurrent_annotation_using_a_relative_value() throws Throwable {
 
         SerenityParameterizedRunner runner
-                   = getTestRunnerUsing(ParallelDataDrivenScenarioWithRelativeThreadCountSample.class);
+                = getTestRunnerUsing(ParallelDataDrivenScenarioWithRelativeThreadCountSample.class);
         int threadCount = runner.getThreadCountFor(ParallelDataDrivenScenarioWithRelativeThreadCountSample.class);
 
         int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
@@ -739,21 +748,26 @@ public class WhenRunningADataDrivenTestScenario {
     public static final class ParallelDataDrivenScenarioWithInvalidThreadCountSample {
         @TestData
         public static Collection testData() {
-                return Arrays.asList(new Object[][]{ });
-            }
+            return Arrays.asList(new Object[][]{});
+        }
+
+        @Test
+        public void foo() {
+        }
     }
+
     @Test(expected = IllegalArgumentException.class)
-    public void if_the_thread_count_is_invalid_an_exception_should_be_thrown() throws Throwable  {
+    public void if_the_thread_count_is_invalid_an_exception_should_be_thrown() throws Throwable {
 
         SerenityParameterizedRunner runner
-                   = getTestRunnerUsing(ParallelDataDrivenScenarioWithInvalidThreadCountSample.class);
+                = getTestRunnerUsing(ParallelDataDrivenScenarioWithInvalidThreadCountSample.class);
         runner.getThreadCountFor(ParallelDataDrivenScenarioWithInvalidThreadCountSample.class);
 
     }
 
     private List<String> filenamesOf(File[] files) {
         List filenames = new ArrayList<String>();
-        for(File file : files) {
+        for (File file : files) {
             filenames.add(file.getName());
         }
         return filenames;
@@ -762,7 +776,7 @@ public class WhenRunningADataDrivenTestScenario {
 
     private List<String> contentsOf(File[] files) throws IOException {
         List<String> contents = new ArrayList<>();
-        for(File file : files) {
+        for (File file : files) {
             contents.add(stringContentsOf(file));
         }
         return contents;
@@ -777,11 +791,11 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     @Test
-    public void a_separate_html_report_should_be_generated_from_each_scenario() throws Throwable  {
+    public void a_separate_html_report_should_be_generated_from_each_scenario() throws Throwable {
 
         File outputDirectory = tempFolder.newFolder("thucydides");
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.getPropertyName(),
-                                         outputDirectory.getAbsolutePath());
+                outputDirectory.getAbsolutePath());
 
         SerenityParameterizedRunner runner = getTestRunnerUsing(SampleDataDrivenScenario.class);
 
@@ -799,7 +813,7 @@ public class WhenRunningADataDrivenTestScenario {
 
     private class JSONFileFilter implements FilenameFilter {
         public boolean accept(File directory, String filename) {
-            return filename.endsWith(".json");
+            return filename.endsWith(".json") && !filename.startsWith("manifest");
         }
     }
 

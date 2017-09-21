@@ -165,11 +165,7 @@ public class StaticSitePage extends PageObject {
     }
 
     public ExpectedCondition<Boolean> firstAndLastNameAreEnabled() {
-        return new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver driver) {
-                return (firstName.isEnabled() && lastName.isEnabled());
-            }
-        };
+        return driver -> (firstName.isEnabled() && lastName.isEnabled());
     }
 
     public ExpectedCondition<Boolean> twoFieldsAreDisabled() {

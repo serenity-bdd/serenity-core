@@ -417,6 +417,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
         TestMethodConfiguration theMethod = TestMethodConfiguration.forMethod(method);
 
         clearMetadataIfRequired();
+        resetStepLibrariesIfRequired();
 
         if(!failureRerunner.hasToRunTest(method.getDeclaringClass().getCanonicalName(),method.getMethod().getName()))
         {
@@ -498,6 +499,12 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     private void clearMetadataIfRequired() {
         if (theTest.shouldClearMetadata()) {
             Serenity.getCurrentSession().clearMetaData();
+        }
+    }
+
+    private void resetStepLibrariesIfRequired() {
+        if (theTest.shouldResetStepLibraries()) {
+            stepFactory.reset();
         }
     }
 

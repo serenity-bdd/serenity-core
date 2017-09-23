@@ -54,9 +54,9 @@ abstract class RemoteDriverBuilder {
     }
 
     private boolean hostIsAvailableAt(URL remoteUrl) {
-        try (Socket socket = new Socket()) {
-            int port = (remoteUrl.getPort() > 0) ? remoteUrl.getPort() : remoteUrl.getDefaultPort();
-            socket.connect(new InetSocketAddress(remoteUrl.getHost(), port), WITHIN_THREE_SECONDS);
+        try {
+            URLConnection urlConnection = remoteUrl.openConnection();
+            urlConnection.connect();
             return true;
         } catch (IOException e) {
             return false; // Either timeout or unreachable or failed DNS lookup.

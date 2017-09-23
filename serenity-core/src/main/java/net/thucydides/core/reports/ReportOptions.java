@@ -39,7 +39,7 @@ public class ReportOptions {
         showTagMenus = Boolean.valueOf(THUCYDIDES_REPORT_SHOW_TAG_MENUS.from(environmentVariables, "false"));
         showRelatedTags = Boolean.valueOf(SHOW_RELATED_TAGS.from(environmentVariables, "true"));
         displayPiechart = Boolean.valueOf(SHOW_PIE_CHARTS.from(environmentVariables, "true"));
-        projectName = THUCYDIDES_PROJECT_NAME.from(environmentVariables,"");
+        projectName = SERENITY_PROJECT_NAME.from(environmentVariables,"");
         this.requirementsService = requirementsService;
         firstClassTagTypes = Splitter.on(",").omitEmptyStrings().splitToList(THUCYDIDES_REPORT_TAG_MENUS.from(environmentVariables,""));
     }

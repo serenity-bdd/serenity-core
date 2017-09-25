@@ -1,6 +1,5 @@
 package net.thucydides.core.steps.stepdata;
 
-import com.google.common.collect.Lists;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.steps.DataDrivenStepFactory;
 import net.thucydides.core.steps.StepEventBus;

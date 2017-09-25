@@ -1142,6 +1142,14 @@ public enum ThucydidesSystemProperty {
     CONTEXT,
 
     /**
+     * By default, new @Steps libraries are made as new instances, unless declared `shared`, in which case they are
+     * cached by type. Use this property to make Serenity use the older strategy, which was to default to 'shared' and
+     * only create new instances for step libraries with the uniqueInstance attribute.
+     * Possible values are: default (the default value), and legacy.
+     */
+    STEP_CREATION_STRATEGY,
+
+    /**
      * The character to be used to separate firefox preference key-value pairs when using the "firefox.preferences" property.
      * By default this is a semicolon, but sometimes semicolon appears in the preference values.
      */

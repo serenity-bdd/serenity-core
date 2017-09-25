@@ -602,7 +602,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
      * @param testCase A Serenity-annotated test class
      */
     protected void injectScenarioStepsInto(final Object testCase) {
-        StepAnnotations.injectScenarioStepsInto(testCase, stepFactory);
+        StepAnnotations.injector().injectScenarioStepsInto(testCase, stepFactory);
     }
 
     /**
@@ -610,7 +610,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
      * @param testCase A Serenity-annotated test class
          */
     protected void injectAnnotatedPagesObjectInto(final Object testCase) {
-        StepAnnotations.injectAnnotatedPagesObjectInto(testCase, pages);
+        StepAnnotations.injector().injectAnnotatedPagesObjectInto(testCase, pages);
     }
 
     protected void injectEnvironmentVariablesInto(final Object testCase) {

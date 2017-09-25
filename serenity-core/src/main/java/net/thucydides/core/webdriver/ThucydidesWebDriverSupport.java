@@ -202,7 +202,7 @@ public class ThucydidesWebDriverSupport {
      * Instantiates the @ManagedPages-annotated Pages instance using current WebDriver.
      */
     protected static void injectAnnotatedPagesObjectInto(final Object testCase) {
-        StepAnnotations.injectOptionalAnnotatedPagesObjectInto(testCase, getPages());
+        StepAnnotations.injector().injectOptionalAnnotatedPagesObjectInto(testCase, getPages());
     }
 
     public static <T extends WebDriver> T getProxiedDriver() {

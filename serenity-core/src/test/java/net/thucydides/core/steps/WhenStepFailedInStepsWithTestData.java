@@ -94,7 +94,7 @@ public class WhenStepFailedInStepsWithTestData {
 
     @Test
     public void should_skip_step_after_first_failed_in_one_iteration() throws IOException {
-        TestSteps steps = factory.getStepLibraryFor(TestSteps.class);
+        TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
 
         setDefaultStepFactory(factory);
 
@@ -108,7 +108,7 @@ public class WhenStepFailedInStepsWithTestData {
 
     @Test
     public void should_skip_step_after_first_failed() throws IOException {
-        TestSteps steps = factory.getStepLibraryFor(TestSteps.class);
+        TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
 
         setDefaultStepFactory(factory);
 

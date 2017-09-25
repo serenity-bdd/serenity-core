@@ -367,7 +367,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_execute_steps_transparently() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.step_one();
         steps.step2();
@@ -380,7 +380,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_store_step_method_parameters() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.step_with_parameter("Joe");
 
@@ -393,7 +393,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_store_multiple_step_method_parameters() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.step_with_parameters("Joe", 10);
 
@@ -406,7 +406,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_store_list_parameters_in_human_readable_form() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         List<Integer> numbers = Arrays.asList(1,2,3);
         steps.step_with_parameters(numbers);
@@ -420,7 +420,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_store_array_parameters_in_human_readable_form() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         Integer[] numbers = {1,2,3};
         steps.step_with_array(numbers);
@@ -435,7 +435,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_when_tests_are_starting() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.step_one();
         steps.step2();
@@ -455,7 +455,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
     public void the_proxy_should_notify_listeners_when_tests_are_starting_with_details_about_step_name_and_class() {
         ArgumentCaptor<ExecutedStepDescription> argument = ArgumentCaptor.forClass(ExecutedStepDescription.class);
 
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         listener.testSuiteStarted(ATestCase.class);
         listener.testStarted("app_should_work");
@@ -470,7 +470,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_when_tests_have_finished() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.step_one();
         steps.step2();
@@ -481,7 +481,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_when_tests_have_finished_with_description_details() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.step_one();
 
@@ -491,7 +491,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_when_test_groups_start_and_finish() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.step_group1();
 
@@ -501,7 +501,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_execute_ignored_steps_but_disable_webdriver() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.step_one();
         steps.ignored_step();
@@ -515,7 +515,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_skip_tests_after_a_failure() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.step_one();
         steps.failing_step();
@@ -528,7 +528,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_skip_pending_tests() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.step_one();
         steps.ignored_step();
@@ -542,7 +542,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_of_ignored_tests_as_skipped() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.ignored_step();
 
@@ -552,7 +552,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_of_pending_tests_as_pending() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.pending_step();
 
@@ -562,7 +562,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_when_a_step_fails() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.failing_step();
 
@@ -571,7 +571,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_with_a_description_and_a_cause_when_a_step_fails() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.failing_step();
 
@@ -588,7 +588,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_when_a_failure_occurs_in_a_group() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.step_group_with_failure();
 
@@ -597,7 +597,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_with_a_description_and_a_cause_when_a_failure_occurs_in_a_group() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.step_group_with_failure();
 
@@ -613,7 +613,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_when_a_web_step_fails() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.failing_web_step();
 
@@ -623,7 +623,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_when_a_web_step_fails_to_find_an_element() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.no_such_element_web_step();
 
@@ -634,7 +634,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_with_a_description_and_a_cause_when_a_web_step_fails() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.failing_web_step();
 
@@ -650,7 +650,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_when_a_method_that_is_not_a_step_fails() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.step_with_failing_ordinary_method();
 
@@ -659,7 +659,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_with_a_description_and_a_cause_when_a_non_step_fails() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.step_with_failing_ordinary_method();
 
@@ -670,7 +670,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_when_a_web_method_that_is_not_a_step_fails() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.step_with_failing_web_method();
 
@@ -679,7 +679,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_with_a_description_and_a_cause_when_a_web_non_step_fails() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         steps.step_with_failing_web_method();
 
@@ -691,7 +691,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_notifies_listeners_of_the_test_outome_when_the_test_is_finished() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("SimpleTestScenarioSteps");
         steps.step_one();
@@ -709,7 +709,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_calls_nested_step_methods() {
-        SimpleTestScenarioSteps steps =  factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps =  factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("SimpleTestScenarioSteps");
         steps.nested_steps();
@@ -723,7 +723,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_skipped_nested_step_methods_after_failure_if_nested_calls_are_disabled() {
-        NestedDatabaseScenarioSteps steps =  factory.getStepLibraryFor(NestedDatabaseScenarioSteps.class);
+        NestedDatabaseScenarioSteps steps =  factory.getSharedStepLibraryFor(NestedDatabaseScenarioSteps.class);
 
         DatabaseAPI databaseAPI = Mockito.mock(DatabaseAPI.class);
         steps.databaseAPI = databaseAPI;
@@ -737,7 +737,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_skipped_nested_step_methods_after_errors_if_nested_calls_are_disabled() {
-        NestedDatabaseScenarioSteps steps =  factory.getStepLibraryFor(NestedDatabaseScenarioSteps.class);
+        NestedDatabaseScenarioSteps steps =  factory.getSharedStepLibraryFor(NestedDatabaseScenarioSteps.class);
 
         DatabaseAPI databaseAPI = Mockito.mock(DatabaseAPI.class);
         steps.databaseAPI = databaseAPI;
@@ -751,7 +751,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_skipped_nested_step_methods_after_ignored_steps_if_nested_calls_are_disabled() {
-        NestedDatabaseScenarioSteps steps =  factory.getStepLibraryFor(NestedDatabaseScenarioSteps.class);
+        NestedDatabaseScenarioSteps steps =  factory.getSharedStepLibraryFor(NestedDatabaseScenarioSteps.class);
 
         DatabaseAPI databaseAPI = Mockito.mock(DatabaseAPI.class);
         steps.databaseAPI = databaseAPI;
@@ -764,7 +764,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_runs_nested_step_methods_if_no_failure_has_occurred_even_if_nested_calls_are_disabled() {
-        NestedDatabaseScenarioSteps steps =  factory.getStepLibraryFor(NestedDatabaseScenarioSteps.class);
+        NestedDatabaseScenarioSteps steps =  factory.getSharedStepLibraryFor(NestedDatabaseScenarioSteps.class);
 
         DatabaseAPI databaseAPI = Mockito.mock(DatabaseAPI.class);
         steps.databaseAPI = databaseAPI;

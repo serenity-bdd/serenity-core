@@ -13,10 +13,7 @@ import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.*;
 import net.thucydides.core.steps.di.DependencyInjectorService;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
-import net.thucydides.core.webdriver.WebDriverFactory;
-import net.thucydides.core.webdriver.WebdriverManager;
+import net.thucydides.core.webdriver.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
@@ -135,7 +132,7 @@ public class Serenity {
      * @param testCase any object (testcase or other) containing injectable Serenity components
      */
     public static void injectScenarioStepsInto(final Object testCase) {
-        StepAnnotations.injectScenarioStepsInto(testCase, getStepFactory());
+        StepAnnotations.injector().injectScenarioStepsInto(testCase, getStepFactory());
     }
 
     /**
@@ -143,7 +140,7 @@ public class Serenity {
      * @param testCase any object (testcase or other) containing injectable Serenity components
      */
     protected static void injectAnnotatedPagesObjectInto(final Object testCase) {
-        StepAnnotations.injectOptionalAnnotatedPagesObjectInto(testCase, getPages());
+        StepAnnotations.injector().injectOptionalAnnotatedPagesObjectInto(testCase, getPages());
     }
 
    /**
@@ -154,6 +151,11 @@ public class Serenity {
         boolean restartBrowserIfNecessary = !configuredIn(environmentVariables).restartBrowserForANew(NEVER);
 
         done(restartBrowserIfNecessary);
+    }
+
+    public static boolean currentDriverIsDisabled() {
+        WebDriver currentDriver = getWebdriverManager().getCurrentDriver();
+        return (currentDriver != null) && (currentDriver instanceof WebDriverFacade) && ( ((WebDriverFacade)currentDriver).isDisabled());
     }
 
     public static void done(boolean closeAllDrivers) {

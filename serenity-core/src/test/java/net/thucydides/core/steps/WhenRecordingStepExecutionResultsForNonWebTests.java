@@ -117,7 +117,7 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
 
         StepEventBus.getEventBus().testStarted("app_should_work", MyTestCase.class);
 
-        FlatScenarioStepsWithoutPages steps = stepFactory.getStepLibraryFor(FlatScenarioStepsWithoutPages.class);
+        FlatScenarioStepsWithoutPages steps = stepFactory.getSharedStepLibraryFor(FlatScenarioStepsWithoutPages.class);
 
         steps.step_one();
         steps.step_two();
@@ -136,7 +136,7 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work", MyTestCase.class);
 
-        FlatScenarioStepsWithoutPages steps = stepFactory.getStepLibraryFor(FlatScenarioStepsWithoutPages.class);
+        FlatScenarioStepsWithoutPages steps = stepFactory.getSharedStepLibraryFor(FlatScenarioStepsWithoutPages.class);
 
         steps.step_one();
         steps.step_two();
@@ -153,7 +153,7 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioStepsWithoutPages steps = stepFactory.getStepLibraryFor(FlatScenarioStepsWithoutPages.class);
+        FlatScenarioStepsWithoutPages steps = stepFactory.getSharedStepLibraryFor(FlatScenarioStepsWithoutPages.class);
         steps.step_one();
         steps.step_two();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -171,7 +171,7 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioStepsWithoutPages steps = stepFactory.getStepLibraryFor(FlatScenarioStepsWithoutPages.class);
+        FlatScenarioStepsWithoutPages steps = stepFactory.getSharedStepLibraryFor(FlatScenarioStepsWithoutPages.class);
         steps.step_one();
         steps.failingStep();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -187,7 +187,7 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioStepsWithoutPages steps = stepFactory.getStepLibraryFor(FlatScenarioStepsWithoutPages.class);
+        FlatScenarioStepsWithoutPages steps = stepFactory.getSharedStepLibraryFor(FlatScenarioStepsWithoutPages.class);
         steps.step_one();
         steps.failingStep();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -204,7 +204,7 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioStepsWithoutPages steps = stepFactory.getStepLibraryFor(FlatScenarioStepsWithoutPages.class);
+        FlatScenarioStepsWithoutPages steps = stepFactory.getSharedStepLibraryFor(FlatScenarioStepsWithoutPages.class);
         steps.step_one();
         steps.grouped_steps();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -221,7 +221,7 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioStepsWithoutPages steps =  stepFactory.getStepLibraryFor(FlatScenarioStepsWithoutPages.class);
+        FlatScenarioStepsWithoutPages steps =  stepFactory.getSharedStepLibraryFor(FlatScenarioStepsWithoutPages.class);
         steps.failingAssumption();
         steps.step_one();
         steps.step_two();

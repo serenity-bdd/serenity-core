@@ -457,4 +457,8 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
     public boolean isAProxyFor(Class<? extends WebDriver> somedriverClass) {
         return somedriverClass.isAssignableFrom(getDriverClass());
     }
+
+    public boolean isDisabled() {
+        return (proxyInstanciated() && proxiedWebDriver.getClass().getName().endsWith("Stub"));
+    }
 }

@@ -19,15 +19,6 @@ public class ScreenshotPermission {
 
 
     public boolean areAllowed(TakeScreenshots takeScreenshots) {
-//
-//
-//        if (overrideLevel.isPresent()) {
-//            return takeScreenshotLevel(takeScreenshots).isAtLeast(overrideLevel.get());
-//        }
-//
-//
-//        Optional<TakeScreenshots> configuredLevel = configuration.getScreenshotLevel();
-
         Optional<TakeScreenshots> configuredLevel = methodOverride()
                                                     .or(classOverride())
                                                     .or(configuration.getScreenshotLevel());
@@ -70,7 +61,11 @@ public class ScreenshotPermission {
     }
 
     private Optional<TakeScreenshots> overriddenScreenshotPreferenceForClass(Class<?> declaringClass) {
-        return ScreenshotPreferencesByClass.forClass(declaringClass).withEnvironmentVariables(configuration.getEnvironmentVariables()).getScreenshotPreference();
+        java.util.Optional<TakeScreenshots> optionalScreenshotPreference
+                = ScreenshotPreferencesByClass.forClass(declaringClass)
+                                              .withEnvironmentVariables(configuration.getEnvironmentVariables()).getScreenshotPreference();
+
+        return Optional.fromJavaUtil(optionalScreenshotPreference);
     }
 
     private Optional<TakeScreenshots> overriddenScreenshotPreferenceFor(Method callingMethod) {

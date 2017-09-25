@@ -153,12 +153,6 @@ subprojects {
             events "failed"//, "passed", "skipped"
             exceptionFormat = 'full'
         }
-//        beforeTest { desc ->
-//            println "Executing test ${desc.name} [${desc.className}]"
-//        }
-//        afterTest { desc ->
-//            println "Finished test ${desc.name} [${desc.className}]"
-//        }
     }
 
     integrationTests {
@@ -166,12 +160,6 @@ subprojects {
             events "failed"//, "passed", "skipped"
             exceptionFormat = 'full'
         }
-//        beforeTest { desc ->
-//            println "Executing test ${desc.name} [${desc.className}]"
-//        }
-//        afterTest { desc ->
-//            println "Finished test ${desc.name} [${desc.className}]"
-//        }
     }
 
     task browserTests(type: Test) {

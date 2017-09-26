@@ -1,0 +1,20 @@
+machine:
+  java:
+    version: oraclejdk8
+
+general:
+  branches:
+    only:
+      - master # only build/deploy from master
+  artifacts:
+    - "serenity-core/build/reports/tests" # preserve the generated HTML test reports
+    - "serenity-junit/build/reports/tests" # preserve the generated HTML test reports
+    - "serenity-screenplay/build/reports/tests" # preserve the generated HTML test reports
+    - "serenity-screenplay-webdriver/build/reports/tests" # preserve the generated HTML test reports
+
+test:
+  override:
+    - ./gradlew test -is
+  post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;

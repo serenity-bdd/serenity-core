@@ -138,18 +138,9 @@ public class SmartAnnotations extends Annotations {
         private static String getValue(Annotation annotation,
                                        Strategies strategy) {
             try {
-                Method m = annotation.getClass().getMethod(strategy.valueName,
-                        DEFAULT_ANNOTATION_METHOD_ARGUMENTS);
+                Method m = annotation.getClass().getMethod(strategy.valueName, DEFAULT_ANNOTATION_METHOD_ARGUMENTS);
                 return m.invoke(annotation, new Object[]{}).toString();
-            } catch (NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            } catch (SecurityException e) {
-                throw new RuntimeException(e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (IllegalArgumentException e) {
-                throw new RuntimeException(e);
-            } catch (InvocationTargetException e) {
+            } catch (NoSuchMethodException | SecurityException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);
             }
         }

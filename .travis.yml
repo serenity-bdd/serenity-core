@@ -1,5 +1,0 @@
-language: java
-
-script:
-- gradle test
-- gradle integrationTests

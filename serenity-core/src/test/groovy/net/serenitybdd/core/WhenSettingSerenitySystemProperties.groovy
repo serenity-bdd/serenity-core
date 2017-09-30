@@ -42,7 +42,6 @@ class WhenSettingSerenitySystemProperties extends Specification{
             ThucydidesSystemProperty.THUCYDIDES_BATCH_SIZE.integerFrom(environmentVariables,0) == 4
     }
 
-
     def "serenity.* system properties should take priority over legacy thuycydides.* ones"() {
         given:
             def environmentVariables = new MockEnvironmentVariables()
@@ -52,6 +51,4 @@ class WhenSettingSerenitySystemProperties extends Specification{
         then:
             ThucydidesSystemProperty.THUCYDIDES_TAKE_SCREENSHOTS.from(environmentVariables) == "FOR_EACH_ACTION"
     }
-
-
 }

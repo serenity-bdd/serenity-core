@@ -125,7 +125,7 @@ public class SerenityWebdriverManager implements WebdriverManager {
     }
 
     public void clearCurrentDriver() {
-
+        inThisTestThread().resetCurrentDriver();
     }
 
     @Override

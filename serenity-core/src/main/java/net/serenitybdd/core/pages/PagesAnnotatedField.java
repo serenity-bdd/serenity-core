@@ -1,6 +1,5 @@
 package net.serenitybdd.core.pages;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.pages.Pages;
@@ -9,6 +8,7 @@ import net.thucydides.core.steps.InvalidManagedPagesFieldException;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Optional;
 
 /**
  * The Pages object keeps track of the Page Objects used during the tests.
@@ -39,7 +39,7 @@ public class PagesAnnotatedField {
                 return Optional.of(new PagesAnnotatedField(field, fieldAnnotation));
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private static ManagedPages annotationFrom(final Field aField) {

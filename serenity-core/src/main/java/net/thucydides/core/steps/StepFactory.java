@@ -34,6 +34,8 @@ import static net.thucydides.core.steps.construction.StepLibraryType.ofTypePages
  */
 public class StepFactory {
 
+    private static final boolean WITH_NO_CACHING = false;
+    private static final boolean WITH_CACHING = true;
     private Pages pages;
 
     private final Map<Class<?>, Object> index = new HashMap<>();
@@ -69,19 +71,37 @@ public class StepFactory {
      * @param <T>                the scenario step class type
      * @return the instrumented step library
      */
-    public <T> T getStepLibraryFor(final Class<T> scenarioStepsClass) {
+    public <T> T getSharedStepLibraryFor(final Class<T> scenarioStepsClass) {
         if (isStepLibraryInstantiatedFor(scenarioStepsClass)) {
-            return getManagedStepLibraryFor(scenarioStepsClass);
+            return getStepLibraryFromCacheFor(scenarioStepsClass);
         } else {
-            return getNewStepLibraryFor(scenarioStepsClass);
+            return getNewCachedStepLibraryFor(scenarioStepsClass);
         }
     }
 
     public <T> T getNewStepLibraryFor(final Class<T> scenarioStepsClass) {
         try {
-            return instantiateNewStepLibraryFor(scenarioStepsClass);
+            return instantiateNewStepLibraryFor(scenarioStepsClass, WITH_NO_CACHING);
+        } catch (RecursiveOrCyclicStepLibraryReferenceException recurciveCallException) {
+            throw recurciveCallException;
         } catch (RuntimeException stepCreationFailed) {
-            throw new StepInitialisationException("Failed to create step library for " + scenarioStepsClass.getSimpleName() + ":" + stepCreationFailed.getMessage(), stepCreationFailed);
+            throw new StepInitialisationException("Failed to create step library for "
+                                                    + scenarioStepsClass.getSimpleName()
+                                                    + ":" + stepCreationFailed.getMessage(),
+                                                  stepCreationFailed);
+        }
+    }
+
+    public <T> T getNewCachedStepLibraryFor(final Class<T> scenarioStepsClass) {
+        try {
+            return instantiateNewStepLibraryFor(scenarioStepsClass, WITH_CACHING);
+        } catch (RecursiveOrCyclicStepLibraryReferenceException recursiveCallException) {
+            throw recursiveCallException;
+        } catch (RuntimeException stepCreationFailed) {
+            throw new StepInitialisationException("Failed to create step library for "
+                    + scenarioStepsClass.getSimpleName()
+                    + ":" + stepCreationFailed.getMessage(),
+                    stepCreationFailed);
         }
     }
 
@@ -103,7 +123,7 @@ public class StepFactory {
 
 
     @SuppressWarnings("unchecked")
-    private <T> T getManagedStepLibraryFor(Class<T> scenarioStepsClass) {
+    private <T> T getStepLibraryFromCacheFor(Class<T> scenarioStepsClass) {
         return (T) index.get(scenarioStepsClass);
     }
 
@@ -112,19 +132,22 @@ public class StepFactory {
      * This method will instrument the class appropriately and inject any nested step libraries or
      * other dependencies.
      */
-    public <T> T instantiateNewStepLibraryFor(Class<T> scenarioStepsClass) {
+    public <T> T instantiateNewStepLibraryFor(Class<T> scenarioStepsClass, boolean cacheNewInstance) {
         StepInterceptor stepInterceptor = new StepInterceptor(scenarioStepsClass);
-        return instantiateNewStepLibraryFor(scenarioStepsClass, stepInterceptor);
+        return instantiateNewStepLibraryFor(scenarioStepsClass, stepInterceptor, cacheNewInstance);
     }
 
     /**
      * Create a new instance of a class containing test steps using custom interceptors.
      */
     public <T> T instantiateNewStepLibraryFor(Class<T> scenarioStepsClass,
-                                              MethodInterceptor interceptor) {
+                                              MethodInterceptor interceptor,
+                                              boolean useCache) {
         T steps = createProxyStepLibrary(scenarioStepsClass, interceptor);
 
-        indexStepLibrary(scenarioStepsClass, steps);
+        if (useCache) {
+            indexStepLibrary(scenarioStepsClass, steps);
+        }
 
         instantiateAnyNestedStepLibrariesIn(steps, scenarioStepsClass);
 
@@ -301,7 +324,7 @@ public class StepFactory {
 
     private <T> void instantiateAnyNestedStepLibrariesIn(final T steps,
                                                          final Class<T> scenarioStepsClass) {
-        StepAnnotations.injectNestedScenarioStepsInto(steps, this, scenarioStepsClass);
+        StepAnnotations.injector().injectNestedScenarioStepsInto(steps, this, scenarioStepsClass);
     }
 
     private class ParameterAssignementChecker {

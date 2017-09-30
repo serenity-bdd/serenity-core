@@ -73,28 +73,28 @@ class WhenInstanciatingStepLibraries extends Specification {
 
     def "the step factory should provide new instantiated step libraries"() {
         when:
-            def myStepLibrary = stepFactory.getStepLibraryFor(MyStepLibrary)
+            def myStepLibrary = stepFactory.getSharedStepLibraryFor(MyStepLibrary)
         then:
             myStepLibrary != null
     }
 
     def "should instantiate any uninitialized page objects in a step class"() {
         when:
-            def myStepLibrary = stepFactory.getStepLibraryFor(MyStepLibrary)
+            def myStepLibrary = stepFactory.getSharedStepLibraryFor(MyStepLibrary)
         then:
             myStepLibrary.myPageObject != null
     }
 
     def "should instantiate any uninitialized page objects in a step class with no page constructor"() {
         when:
-            def myStepLibrary = stepFactory.getStepLibraryFor(MyExtraSimpleStepLibrary)
+            def myStepLibrary = stepFactory.getSharedStepLibraryFor(MyExtraSimpleStepLibrary)
         then:
             myStepLibrary.getPages() != null
     }
 
     def "should instantiate any uninitialized simplified page objects in a step class"() {
         when:
-            def myStepLibrary = stepFactory.getStepLibraryFor(MySimpleStepLibrary)
+            def myStepLibrary = stepFactory.getSharedStepLibraryFor(MySimpleStepLibrary)
         then:
             myStepLibrary.myPageObject != null
         and:
@@ -104,21 +104,21 @@ class WhenInstanciatingStepLibraries extends Specification {
 
     def "should not instantiate page objects that are already instantiated"() {
         when:
-            def myStepLibrary = stepFactory.getStepLibraryFor(MyStepLibrary)
+            def myStepLibrary = stepFactory.getSharedStepLibraryFor(MyStepLibrary)
         then:
             myStepLibrary.myInstantiatedPageObject == myOtherPageObject
     }
 
     def "should instantiate environment variable fields"() {
         when:
-        def myStepLibrary = stepFactory.getStepLibraryFor(MyStepLibrary)
+        def myStepLibrary = stepFactory.getSharedStepLibraryFor(MyStepLibrary)
         then:
         myStepLibrary.environmentVariables != null
     }
 
     def "should instantiate system configuration variable fields"() {
         when:
-        def myStepLibrary = stepFactory.getStepLibraryFor(MyStepLibrary)
+        def myStepLibrary = stepFactory.getSharedStepLibraryFor(MyStepLibrary)
         then:
         myStepLibrary.configuration != null
     }

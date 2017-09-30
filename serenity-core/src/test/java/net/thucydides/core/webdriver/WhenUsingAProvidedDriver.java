@@ -14,10 +14,6 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 @RunWith(MockitoJUnitRunner.class)
 public class WhenUsingAProvidedDriver {
 
-
-    @Mock
-    WebDriverFactory factory;
-
     MockWebDriverFacade facade;
 
     static class MyDriverSource implements DriverSource {
@@ -38,7 +34,7 @@ public class WhenUsingAProvidedDriver {
 
     class MockWebDriverFacade extends WebDriverFacade {
         MockWebDriverFacade(EnvironmentVariables environmentVariables) {
-            super(ProvidedDriver.class, factory, environmentVariables);
+            super(ProvidedDriver.class, new WebDriverFactory(environmentVariables), environmentVariables);
         }
     }
 
@@ -52,7 +48,14 @@ public class WhenUsingAProvidedDriver {
     }
 
     @Test
-    public void the_web_driver_facade_should_expose_the_proxied_driver_class() {
+    public void the_web_driver_facade_should_expose_the_proxied_driver_class_for_an_uninstantiated_driver() {
         Assert.assertEquals(facade.getDriverClass(), HtmlUnitDriver.class);
     }
+
+    @Test
+    public void the_web_driver_facade_should_expose_the_proxied_driver_class_for_an_instantiated_driver() {
+        facade.getProxiedDriver();
+        Assert.assertEquals(facade.getDriverClass(), HtmlUnitDriver.class);
+    }
+
 }

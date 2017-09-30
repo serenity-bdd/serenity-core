@@ -72,15 +72,7 @@ public class BrowseTheWeb extends PageObject implements Ability, RefersToActor {
         injector.injectDependenciesInto(questionEvent.getQuestion());
     }
 
-    @Subscribe public void endPerformance(ActorEndsPerformanceEvent performanceEvent) {
-        try {
-            if (performanceEvent.getName().equals(actor.getName())) {
-                webdriverManager.clearCurrentDriver();
-            }
-        } catch(Throwable e) {
-            logger.warn("Failed to notify end performance event for actor " + performanceEvent.getName(),e);
-        }
-    }
+    @Subscribe public void endPerformance(ActorEndsPerformanceEvent performanceEvent) {}
 
     @Override
     public <T extends Ability> T asActor(Actor actor) {

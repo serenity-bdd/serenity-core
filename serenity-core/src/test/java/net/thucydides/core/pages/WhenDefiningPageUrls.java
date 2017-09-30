@@ -43,13 +43,7 @@ public class WhenDefiningPageUrls {
             super(driver);
         }
     }
-    
-    @DefaultUrl("http://test.myapp.org/somepage")
-    final class PageObjectWithFullUrlAndPageDefinition extends PageObject {
-        public PageObjectWithFullUrlAndPageDefinition(WebDriver driver) {
-            super(driver);
-        }
-    }
+
 
     @DefaultUrl("http://test.myapp.org:9000/somepage")
     final class PageObjectWithFullUrlAndPageAndPortDefinition extends PageObject {
@@ -125,6 +119,13 @@ public class WhenDefiningPageUrls {
         }
     }
 
+    @DefaultUrl("http://test.myapp.org/somepage")
+    final class PageObjectWithFullUrlAndPageDefinition extends PageObject {
+        PageObjectWithFullUrlAndPageDefinition(WebDriver driver) {
+            super(driver);
+        }
+    }
+
     @Test
     public void the_webdriver_base_url_system_property_should_not_override_pages() {
         PageObject page = new PageObjectWithFullUrlAndPageDefinition(webdriver);
@@ -135,6 +136,18 @@ public class WhenDefiningPageUrls {
         page.open();
 
         verify(webdriver).get("http://staging.myapp.org/somepage");
+    }
+
+    @Test
+    public void the_webdriver_base_url_system_property_should_allow_sub_domains() {
+        PageObject page = new PageObjectWithFullUrlAndPageDefinition(webdriver);
+        PageUrls pageUrls = new PageUrls(page, configuration);
+        page.setPageUrls(pageUrls);
+
+        environmentVariables.setProperty("webdriver.base.url","http://staging.myapp.org/somewhere");
+        page.open();
+
+        verify(webdriver).get("http://staging.myapp.org/somewhere/somepage");
     }
 
     @Test

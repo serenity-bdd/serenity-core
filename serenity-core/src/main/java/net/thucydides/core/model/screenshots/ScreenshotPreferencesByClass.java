@@ -1,8 +1,5 @@
 package net.thucydides.core.model.screenshots;
 
-import com.beust.jcommander.internal.Lists;
-import com.google.common.base.Optional;
-import com.google.common.collect.Maps;
 import net.thucydides.core.model.TakeScreenshots;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
@@ -10,17 +7,17 @@ import net.thucydides.core.util.Inflector;
 import java.util.*;
 
 public class ScreenshotPreferencesByClass {
-    public static final String SERENITY_TAKE_SCREENSHOTS_FOR = "serenity.take.screenshots.for.";
+    private static final String SERENITY_TAKE_SCREENSHOTS_FOR = "serenity.take.screenshots.for.";
     private final Class<?> declaringClass;
     private final Map<String, TakeScreenshots> classNameToScreenshotPreference;
 
-    public ScreenshotPreferencesByClass(Class<?> declaringClass, EnvironmentVariables environmentVariables) {
+    ScreenshotPreferencesByClass(Class<?> declaringClass, EnvironmentVariables environmentVariables) {
         this.declaringClass = declaringClass;
         this.classNameToScreenshotPreference = classNameToScreenshotPreferencesDefinedIn(environmentVariables);
     }
 
     private Map<String, TakeScreenshots> classNameToScreenshotPreferencesDefinedIn(EnvironmentVariables environmentVariables) {
-        Map<String, TakeScreenshots> screenshotPreference = Maps.newHashMap();
+        Map<String, TakeScreenshots> screenshotPreference = new HashMap<>();
 
         for (String key : environmentVariables.getKeys()) {
             if (key.startsWith(SERENITY_TAKE_SCREENSHOTS_FOR)) {
@@ -65,7 +62,7 @@ public class ScreenshotPreferencesByClass {
             }
         }
 
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private List<Class<?>> getSuperClassesAndInterfacesFrom(Class<?> declaringClass) {
@@ -83,7 +80,7 @@ public class ScreenshotPreferencesByClass {
 
     private Collection<Class<?>> interfacesFrom(Class<?> declaringClass) {
         List<Class<?>> interfaces = new ArrayList<>();
-        interfaces.addAll(Lists.newArrayList(declaringClass.getInterfaces()));
+        interfaces.addAll(Arrays.asList(declaringClass.getInterfaces()));
         for(Class<?> anInterface : declaringClass.getInterfaces()) {
             interfaces.addAll(superclassesFrom(anInterface));
             interfaces.addAll(interfacesFrom(anInterface));
@@ -113,7 +110,7 @@ public class ScreenshotPreferencesByClass {
     public static class ScreenshotPreferencesByClassBuilder {
         private final Class<?> declaringClass;
 
-        public ScreenshotPreferencesByClassBuilder(Class<?> declaringClass) {
+        ScreenshotPreferencesByClassBuilder(Class<?> declaringClass) {
             this.declaringClass = declaringClass;
         }
         public ScreenshotPreferencesByClass withEnvironmentVariables(EnvironmentVariables environmentVariables) {

@@ -1,6 +1,5 @@
 package net.thucydides.core.files;
 
-import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Splitter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;

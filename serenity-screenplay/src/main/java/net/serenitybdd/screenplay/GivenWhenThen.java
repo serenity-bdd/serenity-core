@@ -1,6 +1,5 @@
 package net.serenitybdd.screenplay;
 
-import com.beust.jcommander.internal.Lists;
 import net.serenitybdd.screenplay.questions.ConsequenceGroup;
 import org.hamcrest.Matcher;
 

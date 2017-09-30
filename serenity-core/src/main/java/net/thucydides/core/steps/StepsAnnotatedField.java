@@ -22,6 +22,10 @@ public class StepsAnnotatedField {
     private static final String NO_ANNOTATED_FIELD_ERROR
         = "No field annotated with @Steps was found in the test case.";
 
+    public String getFieldName() {
+        return field.getName();
+    }
+
     /**
      * Find the first field in the class annotated with the <b>Managed</b> annotation.
      */
@@ -99,7 +103,12 @@ public class StepsAnnotatedField {
         return field.getType();
     }
 
+    public boolean isSharedInstance() {
+        return field.getAnnotation(Steps.class).shared();
+    }
+
     public boolean isUniqueInstance() {
         return field.getAnnotation(Steps.class).uniqueInstance();
     }
+
 }

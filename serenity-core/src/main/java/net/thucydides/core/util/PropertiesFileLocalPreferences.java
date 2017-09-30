@@ -6,7 +6,6 @@ import com.typesafe.config.ConfigValue;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.StrSubstitutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,10 +13,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import static java.util.regex.Pattern.compile;
+import java.util.Enumeration;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
 import static org.apache.commons.lang3.StringUtils.strip;
 
 /**
@@ -104,7 +104,6 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
 
     private void updatePreferencesFrom(Properties... propertySets) throws IOException {
         for (Properties localPreferences : propertySets) {
-            expandPropertyAndEnvironmentReferences(localPreferences);
             setUndefinedSystemPropertiesFrom(localPreferences);
         }
     }
@@ -175,24 +174,4 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         return ThucydidesSystemProperty.PROPERTIES.from(environmentVariables, "thucydides.properties");
     }
 
-    private void expandPropertyAndEnvironmentReferences(Properties properties) {
-
-        Set<String> names = properties.stringPropertyNames();
-
-        Map<String, String> runnerEnvironmentVariables = System.getenv();
-
-        for (String name : names) {
-
-            String value = properties.getProperty(name);
-
-            // Replace System Property References ${sys.property.any}
-            String expandedValue = StrSubstitutor.replaceSystemProperties(value);
-
-            // Replace Environment  References ${A_DEFINED_ENVIRONMENT_VARIABLE}
-            expandedValue = StrSubstitutor.replace(expandedValue,runnerEnvironmentVariables);
-
-            properties.setProperty(name, expandedValue);
-        }
-
-    }
 }

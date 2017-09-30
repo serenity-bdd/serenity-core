@@ -1480,6 +1480,10 @@ public class TestOutcome {
         }
     }
 
+    public void overrideAnnotatedResult(final TestResult annotatedResult) {
+        this.annotatedResult = annotatedResult;
+    }
+
     public void setResult(final TestResult annotatedResult) {
         this.annotatedResult = annotatedResult;
     }

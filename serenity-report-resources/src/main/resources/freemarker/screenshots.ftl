@@ -91,7 +91,7 @@
 <#else><#assign outcome_text = "ignore-color">
 </#if>
 
-<#assign title_outcome_icon =  formatter.resultIcon().inExtraLarge().forResult(testOutcome.result) />
+<#assign title_outcome_icon =  formatter.resultIcon().inLarge().forResult(testOutcome.result) />
 
 <#-- TEST TITLE-->
     <div id="contentbody">

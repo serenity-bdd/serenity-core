@@ -116,7 +116,7 @@ body {
 {
     min-width:1007px;
     max-width:1007px;
-    height:30px;
+    height:3.5em;
     padding: 0px;
     padding-left: 10px;
     float:left;
@@ -204,7 +204,7 @@ body {
     margin-left: 40px;
     padding-top: 16px;
     font-family:euphemia, verdana, sans-serif;
-    font-size:1.5em; color: #88a717; font-style:normal;
+    font-size:1.3em; color: #88a717; font-style:normal;
     font-weight:normal; font-size-adjust:inherit;
 }
 
@@ -864,6 +864,7 @@ font-family:euphemia, verdana, sans-serif; font-size:16px; color: #88a717; font-
 
 .tag-title {
     width: 100%;
+    display: inline-block;
 }
 
 .menu {
@@ -1123,6 +1124,14 @@ h4 {
 .ellipsis {
     white-space: nowrap;
     width: 55em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}
+
+.truncated-tag-title {
+    white-space: nowrap;
+    width: 25em;
     overflow: hidden;
     text-overflow: ellipsis;
     -o-text-overflow: ellipsis;

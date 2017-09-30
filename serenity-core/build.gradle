@@ -189,8 +189,9 @@ dependencies {
 }
 
 processResources {
+    println "PROJECT = " + project.version
     filter ReplaceTokens, tokens: [
-            "application.version": "" + version
+            "application.version": "" + project.version
     ]
 }
 

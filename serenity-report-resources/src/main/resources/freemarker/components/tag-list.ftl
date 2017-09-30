@@ -27,7 +27,7 @@
                 <#assign testCountLabel = inflection.of(count).times("test").inPluralForm() >
                 <tr>
                     <td class="bluetext" class="tag-title">
-                        <span class="${outcomesForTag.result}-text ellipsis">
+                        <span class="${outcomesForTag.result}-text truncated-tag-title">
                             <#if testOutcomes.label == tag.name>
                                 <a href="${tagReport}" title="${tagLabel}" class="currentTag">${tagTitle}</a>
                             <#else>

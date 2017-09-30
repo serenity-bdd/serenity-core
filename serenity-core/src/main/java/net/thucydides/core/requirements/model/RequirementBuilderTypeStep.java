@@ -10,11 +10,17 @@ public class RequirementBuilderTypeStep {
     }
 
     public Requirement withNarrative(String narrativeText) {
+
+        String nonLifecycleNarrativeText = nonLifecycle(narrativeText);
         String name = requirementBuilderNameStep.name;
         String displayName = requirementBuilderNameStep.displayName;
         String cardNumber = requirementBuilderNameStep.cardNumber;
         String parent = requirementBuilderNameStep.parent;
         String id = requirementBuilderNameStep.id;
-        return new Requirement(name, id, displayName, cardNumber, parent, type, new CustomFieldValue("Narrative", narrativeText));
+        return new Requirement(name, id, displayName, cardNumber, parent, type, new CustomFieldValue("Narrative", nonLifecycleNarrativeText));
+    }
+
+    private String nonLifecycle(String narrativeText) {
+        return narrativeText.startsWith("Lifecycle:") ? "" : narrativeText;
     }
 }

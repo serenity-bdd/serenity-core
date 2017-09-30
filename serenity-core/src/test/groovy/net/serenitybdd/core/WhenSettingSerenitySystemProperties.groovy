@@ -53,5 +53,24 @@ class WhenSettingSerenitySystemProperties extends Specification{
             ThucydidesSystemProperty.THUCYDIDES_TAKE_SCREENSHOTS.from(environmentVariables) == "FOR_EACH_ACTION"
     }
 
+    def "should expand any references to system properties in serenity.*"() {
+        given:
+            def environmentVariables = new MockEnvironmentVariables()
+            System.setProperty("sys.example.property","/path/45372635/results")
+        when:
+            environmentVariables.setProperty("serenity.outputDirectory","${sys.example.property}")
+        then:
+            ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.from(environmentVariables,"NOT_FOUND!") == "/path/45372635/results"
+    }
 
+    def "should expand any references to environment variables in serenity.*"() {
+        given:
+            def environmentVariables = new MockEnvironmentVariables()
+            Map<String, String> processEnvironmentVariables = System.getenv()
+            def correctPath = existingEnvironmentVariables.get("PATH")
+        when:
+            environmentVariables.setProperty("serenity.outputDirectory","${PATH}")
+        then:
+            ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.from(environmentVariables,"NOT_FOUND!") == correctPath
+    }
 }

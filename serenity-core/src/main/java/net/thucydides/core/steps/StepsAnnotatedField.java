@@ -4,10 +4,17 @@ import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.annotations.InvalidStepsFieldException;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.reflection.FieldSetter;
+import net.thucydides.core.util.Inflection;
+import net.thucydides.core.util.Inflector;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Used to identify Step library fields that need to be instantiated.
@@ -81,11 +88,11 @@ public class StepsAnnotatedField {
         return new FieldSetter(field, targetObject);
     }
 
-    public void setValue(final Object testCase, final Object steps) {
+    public void setValue(final Object field, final Object value) {
         try {
-            set(testCase).to(steps);
+            set(field).to(value);
         } catch (IllegalAccessException e) {
-            throw new InvalidStepsFieldException("Could not access or set @Steps field: " + field, e);
+            throw new InvalidStepsFieldException("Could not access or set field: " + field, e);
         }
     }
 
@@ -109,6 +116,47 @@ public class StepsAnnotatedField {
 
     public boolean isUniqueInstance() {
         return field.getAnnotation(Steps.class).uniqueInstance();
+    }
+
+    public Optional<String> name() {
+        String nameValue = field.getAnnotation(Steps.class).name();
+        if (isBlank(nameValue)) {
+            return Optional.empty();
+        }
+        return Optional.of(nameValue);
+    }
+
+    public void assignNameIn(Object steps) {
+
+        String personaName = name().orElse(humanReadable(getFieldName()));
+
+        if (isNotBlank(personaName)) {
+            nameFieldIn(steps).ifPresent(
+                    (Field field) -> {
+                        assignValueToField(field, steps, personaName);
+                    }
+            );
+        }
+    }
+
+    private String humanReadable(String fieldName) {
+        return new Inflector().of(fieldName).asATitle().toString();
+    }
+
+    private void assignValueToField(Field field, Object steps, String value) {
+        field.setAccessible(true);
+        try {
+            field.set(steps, value);
+        } catch (IllegalAccessException e) {
+            throw new InvalidStepsFieldException("Could not access or set name field: " + field, e);
+        }
+    }
+
+    private Optional<Field> nameFieldIn(Object steps) {
+        return Arrays.stream(steps.getClass().getSuperclass().getDeclaredFields())
+                .filter(field -> field.getName().equals("name")
+                        && field.getType().equals(String.class))
+                .findFirst();
     }
 
 }

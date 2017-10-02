@@ -89,6 +89,24 @@ public class WhenDescribingStepsUsingAnnotations {
     }
 
     @Test
+    public void the_() {
+        ExecutedStepDescription description = new ExecutedStepDescription(SampleTestSteps.class, "a_step");
+
+        AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
+
+        assertThat(annotatedStepDescription.getName(), is("A step"));
+    }
+
+    @Test
+    public void if_a_name_is_provided_it_will_be_added_to_the_start_of_the_step() {
+        ExecutedStepDescription description = new ExecutedStepDescription(SampleTestSteps.class, "a_step");
+
+        AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
+
+        assertThat(annotatedStepDescription.getName(), is("A step"));
+    }
+
+    @Test
     public void a_step_can_be_annotated_to_provide_a_more_readable_name() {
         ExecutedStepDescription description = new ExecutedStepDescription(SampleTestSteps.class, "an_annotated_step");
 

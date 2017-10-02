@@ -75,6 +75,7 @@ public final class StepAnnotations {
                                              .initiateStepsFor(scenarioStepsClass);
 
             stepsField.setValue(testCaseOrSteps, steps);
+            stepsField.assignNameIn(steps);
             injectNestedScenarioStepsInto(steps, stepFactory, scenarioStepsClass);
         }
     }

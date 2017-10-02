@@ -10,8 +10,7 @@ import java.lang.annotation.Target;
  * Use the "shared" attribute to use the same instance of a given step library class whenever this class is referred to.
  * This is false by default.
  * The "uniqueInstance" is no longer used.
- * The optional name attribute can be used to instantiate a String field called name in a step library. This
- * name will then be prefixed to any step titles.
+ * The optional actor attribute can be used to instantiate a String field called actor in a step library.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
@@ -19,5 +18,5 @@ public @interface Steps {
     @Deprecated
     boolean uniqueInstance() default false;
     boolean shared() default false;
-    String name() default "";
+    String actor() default "";
 }

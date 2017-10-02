@@ -4,7 +4,6 @@ import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.annotations.InvalidStepsFieldException;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.reflection.FieldSetter;
-import net.thucydides.core.util.Inflection;
 import net.thucydides.core.util.Inflector;
 
 import java.lang.reflect.Field;
@@ -118,22 +117,22 @@ public class StepsAnnotatedField {
         return field.getAnnotation(Steps.class).uniqueInstance();
     }
 
-    public Optional<String> name() {
-        String nameValue = field.getAnnotation(Steps.class).name();
+    public Optional<String> actor() {
+        String nameValue = field.getAnnotation(Steps.class).actor();
         if (isBlank(nameValue)) {
             return Optional.empty();
         }
         return Optional.of(nameValue);
     }
 
-    public void assignNameIn(Object steps) {
+    public void assignActorNameIn(Object steps) {
 
-        String personaName = name().orElse(humanReadable(getFieldName()));
+        String actorName = actor().orElse(humanReadable(getFieldName()));
 
-        if (isNotBlank(personaName)) {
-            nameFieldIn(steps).ifPresent(
+        if (isNotBlank(actorName)) {
+            actorFieldIn(steps).ifPresent(
                     (Field field) -> {
-                        assignValueToField(field, steps, personaName);
+                        assignValueToField(field, steps, actorName);
                     }
             );
         }
@@ -152,9 +151,9 @@ public class StepsAnnotatedField {
         }
     }
 
-    private Optional<Field> nameFieldIn(Object steps) {
+    private Optional<Field> actorFieldIn(Object steps) {
         return Arrays.stream(steps.getClass().getSuperclass().getDeclaredFields())
-                .filter(field -> field.getName().equals("name")
+                .filter(field -> field.getName().equals("actor")
                         && field.getType().equals(String.class))
                 .findFirst();
     }

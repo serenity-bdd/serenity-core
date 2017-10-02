@@ -18,13 +18,13 @@ public class WhenUsingStepsAsNamedPersonas {
 
     public static class Traveller {
 
-        private String name;
+        private String actor;
 
-        @Step("#name flies to {0}")
+        @Step("#actor flies to {0}")
         void fliesTo(String destination) {}
     }
 
-    @Steps(name = "Tracy")
+    @Steps(actor = "Tracy")
     Traveller tracy;
 
     @Test
@@ -37,12 +37,12 @@ public class WhenUsingStepsAsNamedPersonas {
 
     public static class FirstClassTraveller extends Traveller {
 
-        @Step("#name flies in First to {0}")
+        @Step("#actor flies in First to {0}")
         void fliesTo(String destination) {}
 
     }
 
-    @Steps(name = "Fred")
+    @Steps(actor = "Fred")
     Traveller fred;
 
     @Test
@@ -72,7 +72,7 @@ public class WhenUsingStepsAsNamedPersonas {
             this.name = name;
         }
 
-        @Step("#name flies to {0}")
+        @Step("#actor flies to {0}")
         void fliesTo(String destination) {}
     }
 

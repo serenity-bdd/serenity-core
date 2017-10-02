@@ -274,7 +274,8 @@ public class WhenDanaBrowsesTheWeb {
 
     }
 
-    @Test
+    //@Test
+    //Test Case is no more valid as SOME_BUTTON doesn't exist
     public void shouldSeeCorrectLegacyClientDetails() {
 
         Actor dana = new Actor("Dana");

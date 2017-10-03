@@ -79,7 +79,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
             def listener = new BaseStepListener(temporaryFolder.newFolder())
             test.register(listener)
             StepFactory factory = new StepFactory();
-            def restSteps = factory.getStepLibraryFor(RestSteps)
+            def restSteps = factory.getSharedStepLibraryFor(RestSteps)
 
             def JsonObject json = new JsonObject()
             json.addProperty("Food", "sushi")
@@ -142,7 +142,7 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
             def listener = new BaseStepListener(temporaryFolder.newFolder())
             test.register(listener)
             StepFactory factory = new StepFactory();
-            def restSteps = factory.getStepLibraryFor(RestSteps)
+            def restSteps = factory.getSharedStepLibraryFor(RestSteps)
             def JsonObject json = new JsonObject()
             json.addProperty("Object", "Groot")
             json.addProperty("id", 7)

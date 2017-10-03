@@ -357,13 +357,17 @@ public class Formatter {
     }
 
     public String htmlCompatibleStoryTitle(Object fieldValue) {
+        String firstLine = fieldValue.toString().split("\\n")[0];
+
         return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(story)) ?
-                (htmlCompatible(renderMarkdown(fieldValue.toString()))) : htmlCompatible(fieldValue);
+                (htmlCompatible(renderMarkdown(firstLine))) : htmlCompatible(firstLine);
     }
 
     public String htmlCompatibleTestTitle(Object fieldValue) {
+        String firstLine = fieldValue.toString().split("\\n")[0];
+
         return (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(scenario)) ?
-                (htmlCompatible(renderMarkdown(fieldValue.toString()))) : htmlCompatible(fieldValue);
+                (htmlCompatible(renderMarkdown(firstLine))) : htmlCompatible(firstLine);
     }
 
     public String htmlCompatibleStepDescription(Object fieldValue) {

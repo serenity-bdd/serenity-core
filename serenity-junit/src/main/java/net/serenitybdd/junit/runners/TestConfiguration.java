@@ -34,6 +34,10 @@ public class TestConfiguration {
         return (isAWebTest() && TestCaseAnnotations.shouldClearCookiesBeforeEachTestIn(testClass().getJavaClass()));
     }
 
+    public boolean shouldResetStepLibraries() {
+        return !TestCaseAnnotations.shouldUsePersistantStepLibraries(testClass);
+    }
+
     public static class TestConfigurationBuilder {
 
         private final Class<?> testClass;

@@ -1,11 +1,10 @@
 package net.thucydides.core.steps
 
 import net.thucydides.core.annotations.Steps
+import net.thucydides.core.util.MockEnvironmentVariables
 import spock.lang.Specification
 
-import static net.thucydides.core.steps.StepAnnotations.injectScenarioStepsInto
-
-public class WhenUsingMultipleInstancesOfTheSameStepsLibraryInATest extends Specification {
+class WhenUsingMultipleInstancesOfTheSameStepsLibraryInATest extends Specification {
 
     static class SampleStepLibrary {
 
@@ -27,39 +26,90 @@ public class WhenUsingMultipleInstancesOfTheSameStepsLibraryInATest extends Spec
         SampleStepLibrary steps2;
 
         @Steps(uniqueInstance=true)
-        SampleStepLibrary steps3
+        SampleStepLibrary uniqueInstanceSteps1
 
         @Steps(uniqueInstance=true)
-        SampleStepLibrary steps4
+        SampleStepLibrary uniqueInstanceSteps2
 
     }
 
-    def "should instantiate a new singlton step library for each @Steps annotation by default"() {
+    static class SimpleTestSampleSupportingSharedInstances {
+        @Steps
+        SampleStepLibrary steps1;
+
+        @Steps
+        SampleStepLibrary steps2;
+
+        @Steps(shared=true)
+        SampleStepLibrary sharedSteps1
+
+        @Steps(shared=true)
+        SampleStepLibrary sharedSteps2
+
+    }
+    def stepFactory = new StepFactory()
+    def environmentVariables = new MockEnvironmentVariables()
+
+    def "Should instantiate a new singlton step library for each @Steps annotation by default"() {
         given:
-            def stepFactory = new StepFactory()
-            def testCase = new SimpleTestSampleSupportingMultipleInstances()
+            def testCase = new SimpleTestSampleWithDefaultSteps()
         when: "we get two instances of the same step library"
-            injectScenarioStepsInto(testCase, stepFactory);
-            def stepLibrary1 = testCase.steps1
-            def stepLibrary2 = testCase.steps2
+            StepAnnotations.withEnvironmentVariables(environmentVariables).injectScenarioStepsInto(testCase, stepFactory);
         then: "the step libraries should be instantiated"
-            stepLibrary1 != null && stepLibrary2 != null
-        then: "by default the same instance should be used"
-            stepLibrary1 == stepLibrary2
+            testCase.steps1 != null && testCase.steps2 != null
+        and: "by default different instances should be used"
+            testCase.steps1 != testCase.steps2
     }
 
-    def "should be able to instantiate multiple instances of the same step library class"() {
+    def "Should instantiate a shared singlton step library for each @Steps annotation in legacy mode"() {
         given:
-            def stepFactory = new StepFactory()
-        when: "we get two instances of the same step library"
             def testCase = new SimpleTestSampleSupportingMultipleInstances()
-            injectScenarioStepsInto(testCase, stepFactory);
+        when: "we get two instances of the same step library"
+            environmentVariables.setProperty("step.creation.strategy","legacy")
+        and:
+            StepAnnotations.withEnvironmentVariables(environmentVariables).injectScenarioStepsInto(testCase, stepFactory);
         then: "the step libraries should be instantiated"
-            testCase.steps1 != null && testCase.steps2 != null && testCase.steps3 != null
-        then: "by default the same instance should be used"
+            testCase.steps1 != null && testCase.steps2 != null
+        and: "the same shared instance should be used"
             testCase.steps1 == testCase.steps2
-        and: "a new instance should be used if specified"
-            testCase.steps3 != testCase.steps2 && testCase.steps3 != testCase.steps1
-            testCase.steps4 != testCase.steps3 && testCase.steps4 != testCase.steps1
+    }
+
+    def "Should instantiate different step library instances in legacy mode when 'uniqueInstance' is used"() {
+        given:
+            def testCase = new SimpleTestSampleSupportingMultipleInstances()
+        when: "we get two instances of the same step library"
+            environmentVariables.setProperty("step.creation.strategy","legacy")
+        and:
+            StepAnnotations.withEnvironmentVariables(environmentVariables).injectScenarioStepsInto(testCase, stepFactory);
+        then:
+            testCase.uniqueInstanceSteps1 != null && testCase.uniqueInstanceSteps2 != null
+        and: "different instances should be used"
+            testCase.uniqueInstanceSteps1 != testCase.uniqueInstanceSteps2
+    }
+
+    def "Should instantiate a new step libraries for each @Steps annotation in default mode"() {
+        given:
+            def testCase = new SimpleTestSampleSupportingSharedInstances()
+        when: "we get two instances of the same step library"
+            environmentVariables.setProperty("step.creation.strategy","default")
+        and:
+            StepAnnotations.withEnvironmentVariables(environmentVariables).injectScenarioStepsInto(testCase, stepFactory);
+        then: "the step libraries should be instantiated"
+            testCase.steps1 != null && testCase.steps2 != null
+        and: "the different instances should be used"
+            testCase.steps1 != testCase.steps2
+    }
+
+    def "Should instantiate shared step libraries for each shared @Steps annotation in default mode"() {
+        given:
+            def testCase = new SimpleTestSampleSupportingSharedInstances()
+        when: "we get two instances of the same step library"
+            environmentVariables.setProperty("step.creation.strategy","default")
+        and:
+            StepAnnotations.withEnvironmentVariables(environmentVariables).injectScenarioStepsInto(testCase, stepFactory);
+        then: "the step libraries should be instantiated"
+            testCase.sharedSteps1 != null && testCase.sharedSteps2 != null
+        and: "the different instances should be used"
+            testCase.sharedSteps1 == testCase.sharedSteps2
     }
 }

@@ -109,6 +109,7 @@ public abstract class PageObject {
 
     }
 
+
     private enum OpenMode {
         CHECK_URL_PATTERNS,
         IGNORE_URL_PATTERNS

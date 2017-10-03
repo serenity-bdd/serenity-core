@@ -29,8 +29,10 @@ public class ConsoleLoggingListener implements StepListener {
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_PURPLE = "\u001B[95m";
     public static final String ANSI_CYAN = "\u001B[96m";
+    public static final String ANSI_SERENITY_GREEN = "\u001B[36m";
 
     public static final String SERENITY_BIG_BANNER =
+            ANSI_SERENITY_GREEN +
             "\n\n-------------------------------------------------------------------------------------\n" +
             "     _______. _______ .______       _______ .__   __.  __  .___________.____    ____ \n" +
             "    /       ||   ____||   _  \\     |   ____||  \\ |  | |  | |           |\\   \\  /   / \n" +
@@ -38,7 +40,14 @@ public class ConsoleLoggingListener implements StepListener {
             "    \\   \\    |   __|  |      /     |   __|  |  . `  | |  |     |  |       \\_    _/   \n" +
             ".----)   |   |  |____ |  |\\  \\----.|  |____ |  |\\   | |  |     |  |         |  |     \n" +
             "|_______/    |_______|| _| `._____||_______||__| \\__| |__|     |__|         |__|    \n" +
-            "-------------------------------------------------------------------------------------\n";
+            "                                                                                     \n" +
+            " News and tutorials at http://www.serenity-bdd.info                                  \n" +
+            " Documentation at https://wakaleo.gitbooks.io/the-serenity-book/content/             \n" +
+            " Join the Serenity Community on Rocket Chat at https://serenity-bdd.rocket.chat      \n" +
+            " Serenity BDD Support and Training at http://serenity-bdd.info/#/trainingandsupport  \n" +
+            " Learn Serenity BDD online at http://serenity-dojo.com                               \n" +
+            "-------------------------------------------------------------------------------------\n"
+            + ANSI_RESET;
 
     public static final String SERENITY_SMALL_BANNER =
             "\n--------------\n" +

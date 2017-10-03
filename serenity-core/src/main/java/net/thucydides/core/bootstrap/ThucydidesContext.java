@@ -112,7 +112,7 @@ class ThucydidesContext {
      * @param testCase
      */
     public void initialize(Object testCase) {
-        StepAnnotations.injectScenarioStepsInto(testCase, stepFactory);
+        StepAnnotations.injector().injectScenarioStepsInto(testCase, stepFactory);
     }
 
 

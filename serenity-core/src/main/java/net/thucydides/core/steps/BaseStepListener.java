@@ -120,9 +120,17 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return (Optional<TestStep>) ((currentStepExists()) ? Optional.of(getCurrentStep().clone()) : Optional.absent());
     }
 
+    public java.util.Optional<TestResult> getAnnotatedResult() {
+        return java.util.Optional.ofNullable(getCurrentTestOutcome().getAnnotatedResult());
+    }
+
     public void setAllStepsTo(TestResult result) {
         getCurrentTestOutcome().setAnnotatedResult(result);
         getCurrentTestOutcome().setAllStepsTo(result);
+    }
+
+    public void overrideResultTo(TestResult result) {
+        getCurrentTestOutcome().overrideAnnotatedResult(result);
     }
 
     public void exceptionExpected(Class<? extends Throwable> expected) {

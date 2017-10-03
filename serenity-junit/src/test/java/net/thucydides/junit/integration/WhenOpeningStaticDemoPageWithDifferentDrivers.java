@@ -1,5 +1,6 @@
 package net.thucydides.junit.integration;
 
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.junit.runners.ThucydidesRunner;
@@ -7,21 +8,22 @@ import net.thucydides.samples.DemoSiteSteps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 /**
  * This is a very simple scenario of testing a single page.
  * @author johnsmart
  *
  */
-@RunWith(ThucydidesRunner.class)
+@RunWith(SerenityRunner.class)
 public class WhenOpeningStaticDemoPageWithDifferentDrivers {
 
-    @Managed(driver = "firefox")
+    @Managed(driver = "htmlunit")
     public WebDriver webdriver;
 
     @ManagedPages(defaultUrl = "classpath:static-site/index.html")
     public Pages pages;
-    
+
     @Steps
     public DemoSiteSteps steps;
         
@@ -30,7 +32,7 @@ public class WhenOpeningStaticDemoPageWithDifferentDrivers {
     public void the_user_opens_the_page() {
         steps.opensPage();
         steps.should_display("A visible title");
-    }    
+    }
     
     @Test
     @Title("The user selects a value")

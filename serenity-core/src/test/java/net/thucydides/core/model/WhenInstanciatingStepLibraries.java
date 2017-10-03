@@ -5,6 +5,7 @@ import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.model.samples.MyInheritedStepLibrary;
 import net.thucydides.core.pages.Pages;
+import net.thucydides.core.steps.RecursiveOrCyclicStepLibraryReferenceException;
 import net.thucydides.core.steps.ScenarioSteps;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepFactory;
@@ -105,6 +106,22 @@ public class WhenInstanciatingStepLibraries {
         public void step2() {}
     }
 
+    public static class ASharedRecursiveNonWebStepLibrary  {
+
+        ASharedRecursiveNonWebStepLibrary() {}
+
+        @Steps(shared = true)
+        ASharedRecursiveNonWebStepLibrary aRecursiveNonWebStepLibrary;
+
+        @Step
+        public void step1() {
+            aRecursiveNonWebStepLibrary.step2();
+        }
+
+        @Step
+        public void step2() {}
+    }
+
     public static class ANestedStepLibrary extends ScenarioSteps {
         ANestedStepLibrary(Pages pages) {
             super(pages);
@@ -174,6 +191,44 @@ public class WhenInstanciatingStepLibraries {
         public void step2() {}
     }
 
+    public static class ASharedRecursiveNestedStepLibrary extends ScenarioSteps {
+        ASharedRecursiveNestedStepLibrary(Pages pages) {
+            super(pages);
+        }
+
+        @Steps
+        public AStepLibrary aStepLibrary;
+
+        @Steps(shared = true)
+        public ASharedRecursiveNestedStepLibrary aRecursiveNestedStepLibrary;
+
+        @Step
+        public void step1() {}
+
+        @Step
+        public void step2() {}
+    }
+
+    public static class ASharedCyclicNestedStepLibrary extends ScenarioSteps {
+        ASharedCyclicNestedStepLibrary(Pages pages) {
+            super(pages);
+        }
+
+        @Steps
+        public AStepLibrary aStepLibrary;
+
+        @Steps(shared = true)
+        public ASharedRecursiveNestedStepLibrary aRecursiveNestedStepLibrary;
+
+        @Steps(shared = true)
+        public ASharedCyclicNestedStepLibrary aCyclicNestedStepLibrary;
+
+        @Step
+        public void step1() {}
+
+        @Step
+        public void step2() {}
+    }
     @Before
     public void startTest() {
         Serenity.initialize(this);
@@ -189,21 +244,21 @@ public class WhenInstanciatingStepLibraries {
 
     @Test
     public void should_instanciate_step_library_instance() {
-        AStepLibrary steps = stepFactory.getStepLibraryFor(AStepLibrary.class);
+        AStepLibrary steps = stepFactory.getSharedStepLibraryFor(AStepLibrary.class);
 
         assertThat(steps, is(notNullValue()));
     }
 
     @Test
     public void should_instanciate_step_library_instance_for_parentless_step_classes() {
-        ASimpleStepLibrary steps = stepFactory.getStepLibraryFor(ASimpleStepLibrary.class);
+        ASimpleStepLibrary steps = stepFactory.getSharedStepLibraryFor(ASimpleStepLibrary.class);
 
         assertThat(steps, is(notNullValue()));
     }
 
     @Test
     public void should_instanciate_step_library_instances_with_a_pages_field() {
-        ASimpleStepLibraryWithAPagesField steps = stepFactory.getStepLibraryFor(ASimpleStepLibraryWithAPagesField.class);
+        ASimpleStepLibraryWithAPagesField steps = stepFactory.getSharedStepLibraryFor(ASimpleStepLibraryWithAPagesField.class);
 
         assertThat(steps.getPages(), is(notNullValue()));
     }
@@ -211,7 +266,7 @@ public class WhenInstanciatingStepLibraries {
 
     @Test
     public void should_instanciate_nested_step_library_instances() {
-        ANestedStepLibrary steps = stepFactory.getStepLibraryFor(ANestedStepLibrary.class);
+        ANestedStepLibrary steps = stepFactory.getSharedStepLibraryFor(ANestedStepLibrary.class);
 
         assertThat(steps, is(notNullValue()));
         assertThat(steps.aStepLibrary, is(notNullValue()));
@@ -219,16 +274,16 @@ public class WhenInstanciatingStepLibraries {
 
     @Test
     public void should_instanciate_non_web_nested_step_library_instances() {
-        ANonWebNestedStepLibrary steps = stepFactory.getStepLibraryFor(ANonWebNestedStepLibrary.class);
+        ANonWebNestedStepLibrary steps = stepFactory.getSharedStepLibraryFor(ANonWebNestedStepLibrary.class);
 
         assertThat(steps, is(notNullValue()));
         assertThat(steps.aStepLibrary, is(notNullValue()));
     }
 
 
-    @Test
-    public void should_correctly_instanciate_recursive_nested_step_library_instances() {
-        ARecursiveNestedStepLibrary steps = stepFactory.getStepLibraryFor(ARecursiveNestedStepLibrary.class);
+    @Test(expected = RecursiveOrCyclicStepLibraryReferenceException.class)
+    public void should_report_error_when_instantiating_recursive_nested_step_library_instances() {
+        ARecursiveNestedStepLibrary steps = stepFactory.getSharedStepLibraryFor(ARecursiveNestedStepLibrary.class);
 
         assertThat(steps, notNullValue());
         assertThat(steps.aStepLibrary, is(notNullValue()));
@@ -236,17 +291,44 @@ public class WhenInstanciatingStepLibraries {
     }
 
     @Test
-    public void should_correctly_instanciate_recursive_nested_non_web_step_library_instances() {
-        ARecursiveNonWebStepLibrary steps = stepFactory.getStepLibraryFor(ARecursiveNonWebStepLibrary.class);
+    public void should_correctly_instantiate_shared_recursive_nested_step_library_instances() {
+        ASharedRecursiveNestedStepLibrary steps = stepFactory.getSharedStepLibraryFor(ASharedRecursiveNestedStepLibrary.class);
+
+        assertThat(steps, notNullValue());
+        assertThat(steps.aStepLibrary, is(notNullValue()));
+        assertThat(steps.aRecursiveNestedStepLibrary, is(notNullValue()));
+    }
+
+    @Test(expected = RecursiveOrCyclicStepLibraryReferenceException.class)
+    public void should_report_error_when_instantiating_recursive_nested_non_web_step_library_instances() {
+        ARecursiveNonWebStepLibrary steps = stepFactory.getSharedStepLibraryFor(ARecursiveNonWebStepLibrary.class);
 
         assertThat(steps, notNullValue());
         assertThat(steps.aRecursiveNonWebStepLibrary, is(notNullValue()));
     }
 
+    @Test
+    public void should_correctly_instantiate_recursive_nested_non_web_step_library_instances() {
+        ASharedRecursiveNonWebStepLibrary steps = stepFactory.getSharedStepLibraryFor(ASharedRecursiveNonWebStepLibrary.class);
+
+        assertThat(steps, notNullValue());
+        assertThat(steps.aRecursiveNonWebStepLibrary, is(notNullValue()));
+    }
+
+    @Test(expected = RecursiveOrCyclicStepLibraryReferenceException.class)
+    public void should_report_an_error_when_instantiating_cyclic_nested_step_library_instances() {
+        ACyclicNestedStepLibrary steps = stepFactory.getSharedStepLibraryFor(ACyclicNestedStepLibrary.class);
+
+        assertThat(steps, notNullValue());
+        assertThat(steps.aStepLibrary, is(notNullValue()));
+        assertThat(steps.aCyclicNestedStepLibrary, is(notNullValue()));
+        assertThat(steps.aRecursiveNestedStepLibrary, is(notNullValue()));
+    }
+
 
     @Test
-    public void should_correctly_instanciate_cyclic_nested_step_library_instances() {
-        ACyclicNestedStepLibrary steps = stepFactory.getStepLibraryFor(ACyclicNestedStepLibrary.class);
+    public void should_correctly_instantiate_shared_cyclic_nested_step_library_instances() {
+        ASharedCyclicNestedStepLibrary steps = stepFactory.getSharedStepLibraryFor(ASharedCyclicNestedStepLibrary.class);
 
         assertThat(steps, notNullValue());
         assertThat(steps.aStepLibrary, is(notNullValue()));
@@ -256,14 +338,14 @@ public class WhenInstanciatingStepLibraries {
 
     @Test
     public void should_support_calling_protected_steps_in_parent_classes() {
-        MyInheritedStepLibrary myStepLibrary = stepFactory.getStepLibraryFor(MyInheritedStepLibrary.class);
+        MyInheritedStepLibrary myStepLibrary = stepFactory.getSharedStepLibraryFor(MyInheritedStepLibrary.class);
         assertThat(myStepLibrary.aStepWithAProtectedMethod(), is(true));
         assertThat(StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed(), is(false));
     }
 
     @Test
     public void should_support_calling_protected_methods_in_parent_classes() {
-        MyInheritedStepLibrary myStepLibrary = stepFactory.getStepLibraryFor(MyInheritedStepLibrary.class);
+        MyInheritedStepLibrary myStepLibrary = stepFactory.getSharedStepLibraryFor(MyInheritedStepLibrary.class);
         assertThat(myStepLibrary.anotherStep(), is(true));
         assertThat(StepEventBus.getEventBus().aStepInTheCurrentTestHasFailed(), is(false));
     }

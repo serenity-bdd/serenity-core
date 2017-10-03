@@ -109,7 +109,7 @@ public class WhenRunningNonWebStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_execute_steps_transparently() {
-        SimpleSteps steps = factory.getStepLibraryFor(SimpleSteps.class);
+        SimpleSteps steps = factory.getSharedStepLibraryFor(SimpleSteps.class);
 
         steps.step1();
         steps.step2();
@@ -120,7 +120,7 @@ public class WhenRunningNonWebStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_execute_nested_steps_transparently() {
-        SimpleSteps steps = factory.getStepLibraryFor(SimpleSteps.class);
+        SimpleSteps steps = factory.getSharedStepLibraryFor(SimpleSteps.class);
 
         steps.nested_steps();
         assertThat(listener.toString(), allOf(containsString("nested_steps"),
@@ -132,7 +132,7 @@ public class WhenRunningNonWebStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_store_step_method_parameters() {
-        SimpleSteps steps = factory.getStepLibraryFor(SimpleSteps.class);
+        SimpleSteps steps = factory.getSharedStepLibraryFor(SimpleSteps.class);
 
         steps.step_with_parameter("Joe");
 
@@ -142,7 +142,7 @@ public class WhenRunningNonWebStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_store_multiple_step_method_parameters() {
-        SimpleSteps steps = factory.getStepLibraryFor(SimpleSteps.class);
+        SimpleSteps steps = factory.getSharedStepLibraryFor(SimpleSteps.class);
 
         steps.step_with_parameters("Joe", 10);
 
@@ -154,7 +154,7 @@ public class WhenRunningNonWebStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_record_execution_structure() {
-        SimpleSteps steps = factory.getStepLibraryFor(SimpleSteps.class);
+        SimpleSteps steps = factory.getSharedStepLibraryFor(SimpleSteps.class);
 
         steps.step1();
         steps.step2();
@@ -184,7 +184,7 @@ public class WhenRunningNonWebStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_when_tests_are_starting() {
-        SimpleSteps steps = factory.getStepLibraryFor(SimpleSteps.class);
+        SimpleSteps steps = factory.getSharedStepLibraryFor(SimpleSteps.class);
 
         steps.step1();
         steps.step2();
@@ -207,7 +207,7 @@ public class WhenRunningNonWebStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_when_tests_are_starting_with_details_about_step_name_and_class() {
-        SimpleSteps steps = factory.getStepLibraryFor(SimpleSteps.class);
+        SimpleSteps steps = factory.getSharedStepLibraryFor(SimpleSteps.class);
 
         steps.step1();
 
@@ -218,7 +218,7 @@ public class WhenRunningNonWebStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_notify_listeners_when_tests_have_finished() {
-        SimpleSteps steps = factory.getStepLibraryFor(SimpleSteps.class);
+        SimpleSteps steps = factory.getSharedStepLibraryFor(SimpleSteps.class);
 
         steps.step1();
         steps.step2();
@@ -230,7 +230,7 @@ public class WhenRunningNonWebStepsThroughAScenarioProxy {
 
     @Test
     public void the_proxy_should_skip_tests_after_a_failure() {
-        SimpleSteps steps = factory.getStepLibraryFor(SimpleSteps.class);
+        SimpleSteps steps = factory.getSharedStepLibraryFor(SimpleSteps.class);
 
         steps.step1();
         steps.failing_step();

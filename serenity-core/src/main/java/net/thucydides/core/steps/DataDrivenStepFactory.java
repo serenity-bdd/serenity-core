@@ -17,6 +17,6 @@ public class DataDrivenStepFactory {
                                             final List<?> instantiatedSteps) {
 
         DataDrivenStepInterceptor stepInterceptor = new DataDrivenStepInterceptor(instantiatedSteps);
-        return factory.instantiateNewStepLibraryFor(scenarioStepsClass, stepInterceptor);
+        return factory.instantiateNewStepLibraryFor(scenarioStepsClass, stepInterceptor, true);
     }
 }

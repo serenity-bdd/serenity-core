@@ -120,7 +120,7 @@ public class WhenListeningForTestEvents {
     @Test
     public void a_junit_listener_should_keep_track_of_failed_test_steps() throws Exception {
 
-        MyTestSteps steps =  stepFactory.getStepLibraryFor(MyTestSteps.class);
+        MyTestSteps steps =  stepFactory.getSharedStepLibraryFor(MyTestSteps.class);
 
         steps.step1();
         steps.failingStep();
@@ -132,7 +132,7 @@ public class WhenListeningForTestEvents {
     @Test
     public void a_junit_listener_should_keep_track_of_failed_non_step_methods() throws Exception {
 
-        MyTestSteps steps =  stepFactory.getStepLibraryFor(MyTestSteps.class);
+        MyTestSteps steps =  stepFactory.getSharedStepLibraryFor(MyTestSteps.class);
 
         steps.failingNormalMethod();
 

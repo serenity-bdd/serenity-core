@@ -196,7 +196,7 @@ public class WhenRunningStepsWithTestData {
     @Test
     public void should_invoke_step_method_for_each_row_in_the_csv_file() throws IOException {
 
-        TestSteps steps = factory.getStepLibraryFor(TestSteps.class);
+        TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
 
         withTestDataFrom("testdata/test.csv").usingFactory(factory).run(steps).step1();
 
@@ -206,7 +206,7 @@ public class WhenRunningStepsWithTestData {
     @Test
     public void should_invoke_step_method_for_each_row_in_a_list_of_strings() throws IOException {
 
-        TestSteps steps = factory.getStepLibraryFor(TestSteps.class);
+        TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
 
         withTestDataFrom(
                 "Name, Address, Date of birth",
@@ -221,7 +221,7 @@ public class WhenRunningStepsWithTestData {
     @Test
     public void should_pass_test_data_into_invoked_methods() throws IOException {
 
-        TestSteps steps = factory.getStepLibraryFor(TestSteps.class);
+        TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
 
         StepEventBus.getEventBus().testStarted("some test");
         withTestDataFrom("testdata/test.csv").usingFactory(factory).run(steps).step1();
@@ -234,7 +234,7 @@ public class WhenRunningStepsWithTestData {
     @Test
     public void should_execute_all_tests_even_if_one_of_the_steps_fails() throws IOException {
 
-        TestSteps steps = factory.getStepLibraryFor(TestSteps.class);
+        TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
 
         StepEventBus.getEventBus().testStarted("some test");
         withTestDataFrom("testdata/test.csv").usingFactory(factory).run(steps).fail_sometimes();
@@ -247,7 +247,7 @@ public class WhenRunningStepsWithTestData {
     @Test
     public void should_notify_listeners_if_one_of_the_steps_fails() throws IOException {
 
-        TestSteps steps = factory.getStepLibraryFor(TestSteps.class);
+        TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
 
         StepEventBus.getEventBus().testStarted("some test");
         withTestDataFrom("testdata/test.csv")
@@ -261,7 +261,7 @@ public class WhenRunningStepsWithTestData {
     @Test
     public void should_be_able_to_define_a_default_factory_before_the_step() throws IOException {
 
-        TestSteps steps = factory.getStepLibraryFor(TestSteps.class);
+        TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
 
         setDefaultStepFactory(factory);
 
@@ -277,7 +277,7 @@ public class WhenRunningStepsWithTestData {
     @Test
     public void should_be_able_to_define_a_default_test_step_class_before_the_step() throws IOException {
 
-        TestSteps steps = factory.getStepLibraryFor(TestSteps.class);
+        TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
 
         StepEventBus.getEventBus().testStarted("some test");
         withTestDataFrom("testdata/test.csv").usingFactory(factory).run(steps).step1();
@@ -290,7 +290,7 @@ public class WhenRunningStepsWithTestData {
     @Test
     public void should_be_able_to_define_default_factory_and_test_step_class_before_the_step() throws IOException {
 
-        TestSteps steps = factory.getStepLibraryFor(TestSteps.class);
+        TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
 
         setDefaultStepFactory(factory);
 
@@ -305,7 +305,7 @@ public class WhenRunningStepsWithTestData {
     @Test
     public void should_be_able_to_use_test_data_with_semicolons() throws IOException {
 
-        TestSteps steps =  factory.getStepLibraryFor(TestSteps.class);
+        TestSteps steps =  factory.getSharedStepLibraryFor(TestSteps.class);
 
         setDefaultStepFactory(factory);
 
@@ -320,8 +320,8 @@ public class WhenRunningStepsWithTestData {
     @Test
     public void should_be_able_to_use_different_step_libraries_in_the_same_test() throws IOException {
 
-        TestSteps steps =  factory.getStepLibraryFor(TestSteps.class);
-        DifferentTestSteps differentSteps = factory.getStepLibraryFor(DifferentTestSteps.class);
+        TestSteps steps =  factory.getSharedStepLibraryFor(TestSteps.class);
+        DifferentTestSteps differentSteps = factory.getSharedStepLibraryFor(DifferentTestSteps.class);
 
         StepEventBus.getEventBus().testStarted("some test");
         setDefaultStepFactory(factory);
@@ -337,7 +337,7 @@ public class WhenRunningStepsWithTestData {
 
     @Test
     public void should_be_able_to_use_a_step_library_with_public_fields_and_no_setters() throws IOException {
-        TestStepsWithNoSetters steps = factory.getStepLibraryFor(TestStepsWithNoSetters.class);
+        TestStepsWithNoSetters steps = factory.getSharedStepLibraryFor(TestStepsWithNoSetters.class);
 
         setDefaultStepFactory(factory);
 
@@ -352,7 +352,7 @@ public class WhenRunningStepsWithTestData {
     @Test
     public void should_work_with_private_fields() throws IOException {
         TestStepsWithNoSettersAndInaccessibleFields steps
-                = factory.getStepLibraryFor(TestStepsWithNoSettersAndInaccessibleFields.class);
+                = factory.getSharedStepLibraryFor(TestStepsWithNoSettersAndInaccessibleFields.class);
 
         setDefaultStepFactory(factory);
 
@@ -364,7 +364,7 @@ public class WhenRunningStepsWithTestData {
     public void should_instantiate_any_uninitialized_page_objects_in_a_step_class_when_using_data_driven_approach()
     	throws IOException {
 
-		TestSteps steps = factory.getStepLibraryFor(TestSteps.class);
+		TestSteps steps = factory.getSharedStepLibraryFor(TestSteps.class);
         StepEventBus.getEventBus().testStarted("some test");
 		withTestDataFrom("testdata/test.csv").usingFactory(factory).run(steps).verifyPage();
 		verify(driver, times(3)).get("TestPageObject");

@@ -180,7 +180,7 @@ public class WhenRecordingStepExecutionResults {
 
         StepEventBus.getEventBus().testStarted("app_should_work", MyTestCase.class);
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
 
         steps.step_one();
         steps.step_two();
@@ -197,7 +197,7 @@ public class WhenRecordingStepExecutionResults {
 
         StepEventBus.getEventBus().testStarted("app_should_work", MyTestCase.class);
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
 
         steps.given_some_state();
         steps.when_we_do_something();
@@ -215,7 +215,7 @@ public class WhenRecordingStepExecutionResults {
 
         StepEventBus.getEventBus().testStarted("app_should_work", MyTestCase.class);
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
 
         steps.step_one();
         steps.step_two();
@@ -231,7 +231,7 @@ public class WhenRecordingStepExecutionResults {
     @Test
     public void the_listener_should_record_issue_tags_for_multiple_scenarios_in_a_story() {
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
 
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().addIssuesToCurrentStory(Lists.newArrayList("issue-123"));
@@ -266,7 +266,7 @@ public class WhenRecordingStepExecutionResults {
     @Test
     public void the_listener_should_be_able_to_update_step_names() {
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
 
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work", MyTestCase.class);
@@ -287,7 +287,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work", MyTestCase.class);
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
 
         steps.step_one();
         steps.step_two();
@@ -445,7 +445,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCaseWithoutAStory.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
 
         steps.step_one();
         steps.step_two();
@@ -462,7 +462,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyStory.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
 
         steps.step_one();
         steps.step_two();
@@ -491,7 +491,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCaseForAFeature.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.step_two();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -507,7 +507,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCaseForAFeature.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.step_two();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -580,7 +580,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
 
         steps.step_one();
         steps.step_two();
@@ -597,7 +597,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCaseWithoutAStory.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.step_two();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -626,7 +626,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.step_two();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -643,7 +643,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.failingStep();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -659,7 +659,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         String stringValue = steps.toString();
         steps.step_two();
@@ -677,7 +677,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        StepsDerivedFromADifferentDomain steps = stepFactory.getStepLibraryFor(StepsDerivedFromADifferentDomain.class);
+        StepsDerivedFromADifferentDomain steps = stepFactory.getSharedStepLibraryFor(StepsDerivedFromADifferentDomain.class);
         steps.step_one();
         String stringValue = steps.returnFoo();
         steps.step_two();
@@ -695,7 +695,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        StepsInSomeOtherPlace steps = stepFactory.getStepLibraryFor(StepsInSomeOtherPlace.class);
+        StepsInSomeOtherPlace steps = stepFactory.getSharedStepLibraryFor(StepsInSomeOtherPlace.class);
         steps.step_one();
         String stringValue = steps.returnFoo();
         steps.step_two();
@@ -714,7 +714,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        StepsInSomeOtherPlace steps = stepFactory.getStepLibraryFor(StepsInSomeOtherPlace.class);
+        StepsInSomeOtherPlace steps = stepFactory.getSharedStepLibraryFor(StepsInSomeOtherPlace.class);
         steps.step_one();
         steps.step_that_fails();
         String stringValue = steps.returnFoo();
@@ -733,7 +733,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.failingStep();
         String stringValue = steps.toString();
@@ -752,7 +752,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.failingStep();
         steps.stepCausingANullPointerException();
@@ -769,7 +769,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.failingStep();
         steps.unannotatedStepCausingANullPointerException();
@@ -786,7 +786,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.failingStep();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -829,7 +829,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.failingStep();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -848,7 +848,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.ignoredStep();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -865,7 +865,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.programmaticallyPendingStep();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -882,7 +882,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.programmaticallyPendingStep();
         steps.step_two();
@@ -901,7 +901,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.programmaticallyIgnoredStep();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -918,7 +918,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.programmaticallyIgnoredStep();
         steps.step_two();
@@ -939,7 +939,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.grouped_steps();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -956,7 +956,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.grouped_steps();
         StepEventBus.getEventBus().testFinished(testOutcome);
 
@@ -972,7 +972,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.deeply_grouped_steps();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -989,7 +989,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.pendingStep();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -1007,7 +1007,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
 
         steps.step_one();
         steps.pending_group();
@@ -1027,7 +1027,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
 
         steps.step_one();
         steps.ignored_group();
@@ -1047,7 +1047,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
 
         steps.step_with_title();
 
@@ -1066,7 +1066,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
 
         steps.a_plain_step_group();
 
@@ -1082,7 +1082,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
 
         steps.grouped_steps();
 
@@ -1098,7 +1098,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.failingStep();
         steps.step_two();
@@ -1117,7 +1117,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        NestedScenarioSteps steps = stepFactory.getStepLibraryFor(NestedScenarioSteps.class);
+        NestedScenarioSteps steps = stepFactory.getSharedStepLibraryFor(NestedScenarioSteps.class);
         steps.step1();
         steps.nestedFailingStep();
         steps.step2();
@@ -1141,7 +1141,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        NestedScenarioSteps steps = stepFactory.getStepLibraryFor(NestedScenarioSteps.class);
+        NestedScenarioSteps steps = stepFactory.getSharedStepLibraryFor(NestedScenarioSteps.class);
         steps.step1();
         steps.nestedFailingStep();
         steps.step2();
@@ -1162,7 +1162,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.ignoredStep();
         steps.step_two();
@@ -1182,7 +1182,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        NestedScenarioSteps steps = stepFactory.getStepLibraryFor(NestedScenarioSteps.class);
+        NestedScenarioSteps steps = stepFactory.getSharedStepLibraryFor(NestedScenarioSteps.class);
         steps.step1();
         steps.step_with_nested_failure();
 
@@ -1200,7 +1200,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        NestedScenarioSteps steps = stepFactory.getStepLibraryFor(NestedScenarioSteps.class);
+        NestedScenarioSteps steps = stepFactory.getSharedStepLibraryFor(NestedScenarioSteps.class);
         steps.step1();
         steps.step_with_nested_failure();
 
@@ -1214,7 +1214,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.a_step_group();
 
 
@@ -1230,7 +1230,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
 
         environmentVariables.setProperty(ThucydidesSystemProperty.THUCYDIDES_STEP_DELAY.getPropertyName(), "100");
 
@@ -1292,7 +1292,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.pendingStep();
         StepEventBus.getEventBus().testFinished(testOutcome);
 
@@ -1306,7 +1306,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        FlatScenarioSteps steps = stepFactory.getStepLibraryFor(FlatScenarioSteps.class);
+        FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
         steps.step_one();
         steps.pendingStep();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -1323,7 +1323,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
         StepEventBus.getEventBus().testStarted("app_should_work");
 
-        NestedScenarioSteps steps = stepFactory.getStepLibraryFor(NestedScenarioSteps.class);
+        NestedScenarioSteps steps = stepFactory.getSharedStepLibraryFor(NestedScenarioSteps.class);
         steps.step1();
         steps.step2();
         StepEventBus.getEventBus().testFinished(testOutcome);

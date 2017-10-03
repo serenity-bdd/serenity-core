@@ -4,10 +4,16 @@ import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.annotations.InvalidStepsFieldException;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.reflection.FieldSetter;
+import net.thucydides.core.util.Inflector;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Used to identify Step library fields that need to be instantiated.
@@ -21,6 +27,10 @@ public class StepsAnnotatedField {
     
     private static final String NO_ANNOTATED_FIELD_ERROR
         = "No field annotated with @Steps was found in the test case.";
+
+    public String getFieldName() {
+        return field.getName();
+    }
 
     /**
      * Find the first field in the class annotated with the <b>Managed</b> annotation.
@@ -77,11 +87,11 @@ public class StepsAnnotatedField {
         return new FieldSetter(field, targetObject);
     }
 
-    public void setValue(final Object testCase, final Object steps) {
+    public void setValue(final Object field, final Object value) {
         try {
-            set(testCase).to(steps);
+            set(field).to(value);
         } catch (IllegalAccessException e) {
-            throw new InvalidStepsFieldException("Could not access or set @Steps field: " + field, e);
+            throw new InvalidStepsFieldException("Could not access or set field: " + field, e);
         }
     }
 
@@ -99,7 +109,53 @@ public class StepsAnnotatedField {
         return field.getType();
     }
 
+    public boolean isSharedInstance() {
+        return field.getAnnotation(Steps.class).shared();
+    }
+
     public boolean isUniqueInstance() {
         return field.getAnnotation(Steps.class).uniqueInstance();
     }
+
+    public Optional<String> actor() {
+        String nameValue = field.getAnnotation(Steps.class).actor();
+        if (isBlank(nameValue)) {
+            return Optional.empty();
+        }
+        return Optional.of(nameValue);
+    }
+
+    public void assignActorNameIn(Object steps) {
+
+        String actorName = actor().orElse(humanReadable(getFieldName()));
+
+        if (isNotBlank(actorName)) {
+            actorFieldIn(steps).ifPresent(
+                    (Field field) -> {
+                        assignValueToField(field, steps, actorName);
+                    }
+            );
+        }
+    }
+
+    private String humanReadable(String fieldName) {
+        return new Inflector().of(fieldName).asATitle().toString();
+    }
+
+    private void assignValueToField(Field field, Object steps, String value) {
+        field.setAccessible(true);
+        try {
+            field.set(steps, value);
+        } catch (IllegalAccessException e) {
+            throw new InvalidStepsFieldException("Could not access or set name field: " + field, e);
+        }
+    }
+
+    private Optional<Field> actorFieldIn(Object steps) {
+        return Arrays.stream(steps.getClass().getSuperclass().getDeclaredFields())
+                .filter(field -> field.getName().equals("actor")
+                        && field.getType().equals(String.class))
+                .findFirst();
+    }
+
 }

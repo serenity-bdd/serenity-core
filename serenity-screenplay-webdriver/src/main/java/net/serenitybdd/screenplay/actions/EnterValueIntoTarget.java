@@ -15,8 +15,9 @@ public class EnterValueIntoTarget extends EnterValue {
 
     @Step("{0} enters '#theText' into #target")
     public <T extends Actor> void performAs(T theUser) {
-        target.resolveFor(theUser).type(theText)
-                .sendKeys(getFollowedByKeys());
-
+        target.resolveFor(theUser).type(theText);
+        if (getFollowedByKeys().length > 0) {
+            target.resolveFor(theUser).sendKeys(getFollowedByKeys());
+        }
     }
 }

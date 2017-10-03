@@ -219,7 +219,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void should_execute_steps_transparently() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("some_test", SampleTestScenario.class);
         steps.step1();
@@ -234,7 +234,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void the_step_event_bus_can_be_used_to_sent_notification_events_about_steps() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testSuiteStarted(SampleTestScenario.class);
         StepEventBus.getEventBus().testStarted("some_test");
@@ -247,7 +247,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void should_notify_listeners_when_a_step_starts() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("some_test", SampleTestScenario.class);
         steps.step1();
@@ -262,7 +262,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void should_record_when_a_test_starts_and_finishes() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("a_test", SampleTestScenario.class);
         steps.step1();
@@ -278,7 +278,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void should_notify_listeners_when_the_test_suite_finishes() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testSuiteStarted(SampleTestScenario.class);
         StepEventBus.getEventBus().testStarted("some_test", SampleTestScenario.class);
@@ -290,7 +290,7 @@ public class WhenUsingTheStepEventBus {
     }
     @Test
     public void should_record_nested_test_steps() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("a_test", SampleTestScenario.class);
         steps.step4();
@@ -310,7 +310,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void should_record_groups_as_nested_test_steps() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("a_test", SampleTestScenario.class);
         steps.nested_steps();
@@ -355,7 +355,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void should_record_deeply_nested_test_steps() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
         StepEventBus.getEventBus().testStarted("a_test", SampleTestScenario.class);
         steps.legacyStepGroup();
         StepEventBus.getEventBus().testFinished(testOutcome);
@@ -376,7 +376,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void should_record_step_failures() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("a_test", SampleTestScenario.class);
         steps.step1();
@@ -395,7 +395,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void should_be_able_to_record_step_failures_after_a_step_ends() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("a_test", SampleTestScenario.class);
         steps.step1();
@@ -419,7 +419,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void should_record_pending_steps() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("a_test", SampleTestScenario.class);
         steps.step1();
@@ -440,7 +440,7 @@ public class WhenUsingTheStepEventBus {
     @Test
     @Ignore
     public void should_record_nested_step_failures_when_configured() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("a_test", SampleTestScenario.class);
         steps.step1();
@@ -472,7 +472,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void should_record_nested_pending_steps() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("a_test", SampleTestScenario.class);
         steps.step1();
@@ -505,7 +505,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void should_skip_steps_after_a_step_failure() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("a_test", SampleTestScenario.class);
         steps.step1();
@@ -530,7 +530,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void should_skip_steps_after_a_failed_assumption() {
-        SampleTestScenarioWithFailedAssumption sampleTest = factory.getStepLibraryFor(SampleTestScenarioWithFailedAssumption.class);
+        SampleTestScenarioWithFailedAssumption sampleTest = factory.getSharedStepLibraryFor(SampleTestScenarioWithFailedAssumption.class);
 
         StepEventBus.getEventBus().testStarted("a_test", SampleTestScenarioWithFailedAssumption.class);
         sampleTest.sampleTest();
@@ -554,7 +554,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void should_skip_nested_steps_after_a_step_failure() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("a_test", SampleTestScenario.class);
         steps.step1();
@@ -579,7 +579,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void should_not_use_the_browser() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("a_test", SampleTestScenario.class);
         steps.step1();
@@ -604,7 +604,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void a_step_can_return_a_step_object() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("a_test", SampleTestScenario.class);
         steps.stepThatReturnsAStep().stepThatReturnsAStep().stepThatReturnsAStep();
@@ -624,7 +624,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void a_step_can_return_a_step_object_if_a_failure_occurs() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("a_test", SampleTestScenario.class);
         steps.stepThatFailsAndReturnsAStep().stepThatReturnsAStep();
@@ -642,7 +642,7 @@ public class WhenUsingTheStepEventBus {
 
     @Test
     public void when_an_entier_test_is_pending_all_the_contained_steps_are_skipped() {
-        SimpleTestScenarioSteps steps = factory.getStepLibraryFor(SimpleTestScenarioSteps.class);
+        SimpleTestScenarioSteps steps = factory.getSharedStepLibraryFor(SimpleTestScenarioSteps.class);
 
         StepEventBus.getEventBus().testStarted("a_test", SampleTestScenario.class);
         StepEventBus.getEventBus().testPending();

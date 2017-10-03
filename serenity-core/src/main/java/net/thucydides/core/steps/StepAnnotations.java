@@ -1,79 +1,114 @@
 package net.thucydides.core.steps;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.core.pages.PagesAnnotatedField;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
+import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Utility class used to inject fields into a test case.
- * @author johnsmart
- *
  */
 public final class StepAnnotations {
-    
-    private StepAnnotations() {}
+
+    public static final int MAX_ALLOWED_STEP_LIBRARY_NESTING = 16;
+    private final EnvironmentVariables environmentVariables;
+
+    private StepAnnotations() {
+        this(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+    }
+
+    private StepAnnotations(EnvironmentVariables environmentVariables) {
+        this.environmentVariables = environmentVariables;
+    }
+
+    public static StepAnnotations injector() {
+        return new StepAnnotations();
+    }
+
+    private static StepAnnotations withEnvironmentVariables(EnvironmentVariables environmentVariables) {
+        return new StepAnnotations(environmentVariables);
+    }
 
     /**
      * Instantiates the step scenario fields in a test case.
      */
-    public static void injectScenarioStepsInto(final Object testCase, final StepFactory stepFactory) {
+    public void injectScenarioStepsInto(final Object testCase, final StepFactory stepFactory) {
         List<StepsAnnotatedField> stepsFields = StepsAnnotatedField.findOptionalAnnotatedFields(testCase.getClass());
         instanciateScenarioStepFields(testCase, stepFactory, stepsFields);
-     }
+    }
 
     /**
      * Instantiates the step scenario fields in a test case.
      */
-    public static void injectNestedScenarioStepsInto(final Object scenarioSteps,
-                                                     final StepFactory stepFactory,
-                                                     final Class<?> scenarioStepsClass) {
+    void injectNestedScenarioStepsInto(final Object scenarioSteps,
+                                       final StepFactory stepFactory,
+                                       final Class<?> scenarioStepsClass) {
         List<StepsAnnotatedField> stepsFields = StepsAnnotatedField.findOptionalAnnotatedFields(scenarioStepsClass);
         instanciateScenarioStepFields(scenarioSteps, stepFactory, stepsFields);
-     }
+    }
 
 
-    private static void instanciateScenarioStepFields(
+    private void instanciateScenarioStepFields(
             final Object testCaseOrSteps, final StepFactory stepFactory,
             final List<StepsAnnotatedField> stepsFields) {
-        for(StepsAnnotatedField stepsField : stepsFields) {
+        for (StepsAnnotatedField stepsField : stepsFields) {
             instantiateAnyUnitiaializedSteps(testCaseOrSteps, stepFactory, stepsField);
         }
     }
 
-    private static void instantiateAnyUnitiaializedSteps(Object testCaseOrSteps,
-                                                         StepFactory stepFactory,
-                                                         StepsAnnotatedField stepsField) {
+    private void instantiateAnyUnitiaializedSteps(Object testCaseOrSteps,
+                                                  StepFactory stepFactory,
+                                                  StepsAnnotatedField stepsField) {
         if (!stepsField.isInstantiated(testCaseOrSteps)) {
-           Class<?> scenarioStepsClass = stepsField.getFieldClass();
-           Object steps = (useUniqueInstanceFor(stepsField)) ?
-                   stepFactory.getNewStepLibraryFor(scenarioStepsClass) :
-                   stepFactory.getStepLibraryFor(scenarioStepsClass) ;
-           stepsField.setValue(testCaseOrSteps, steps);
-           injectNestedScenarioStepsInto(steps, stepFactory, scenarioStepsClass);
-       }
+
+            ensureThatThisFieldIsNotCyclicOrRecursive(stepsField);
+
+            Class<?> scenarioStepsClass = stepsField.getFieldClass();
+
+            Object steps = StepLibraryCreator.usingConfiguredCreationStrategy(stepFactory,
+                                                                              stepsField,
+                                                                              environmentVariables)
+                                             .initiateStepsFor(scenarioStepsClass);
+
+            stepsField.setValue(testCaseOrSteps, steps);
+            stepsField.assignActorNameIn(steps);
+            injectNestedScenarioStepsInto(steps, stepFactory, scenarioStepsClass);
+        }
     }
 
-    private static boolean useUniqueInstanceFor(StepsAnnotatedField stepsField) {
-        return stepsField.isUniqueInstance();
+    private void ensureThatThisFieldIsNotCyclicOrRecursive(StepsAnnotatedField stepsAnnotatedField) {
+        StackTraceElement[] stackTrace = new Exception().getStackTrace();
+        long levelsOfNesting = Stream.of(stackTrace).filter( element -> element.getMethodName().equals("instantiateAnyUnitiaializedSteps"))
+                                     .count();
+
+        if (levelsOfNesting > MAX_ALLOWED_STEP_LIBRARY_NESTING) {
+            String message = String.format(
+                    "A recursive or cyclic reference was detected for the @Steps-annotated field %s in class %s. " +
+                    "You may need to use @Steps(shared=true) to ensure that the same step library instance is used everywhere.",
+                    stepsAnnotatedField.getFieldName(), stepsAnnotatedField.getFieldClass().getName());
+            throw new RecursiveOrCyclicStepLibraryReferenceException(message);
+        }
     }
 
     /**
      * Instantiates the @ManagedPages-annotated Pages instance using current WebDriver.
      */
-    public static void injectAnnotatedPagesObjectInto(final Object testCase, final Pages pages) {
-       Optional<PagesAnnotatedField> pagesField = PagesAnnotatedField.findFirstAnnotatedField(testCase.getClass());
-       if (pagesField.isPresent()) {
-           pages.setDefaultBaseUrl(pagesField.get().getDefaultBaseUrl());
-           pagesField.get().setValue(testCase, pages);
-       }
+    public void injectAnnotatedPagesObjectInto(final Object testCase, final Pages pages) {
+        Optional<PagesAnnotatedField> pagesField = PagesAnnotatedField.findFirstAnnotatedField(testCase.getClass());
+        if (pagesField.isPresent()) {
+            pages.setDefaultBaseUrl(pagesField.get().getDefaultBaseUrl());
+            pagesField.get().setValue(testCase, pages);
+        }
     }
 
     /**
      * Instantiates the @ManagedPages-annotated Pages instance using current WebDriver, if the field is present.
      */
-    public static void injectOptionalAnnotatedPagesObjectInto(final Object testCase, final Pages pages) {
+    public void injectOptionalAnnotatedPagesObjectInto(final Object testCase, final Pages pages) {
         Optional<PagesAnnotatedField> pagesField = PagesAnnotatedField.findOptionalAnnotatedField(testCase.getClass());
         if (pagesField.isPresent()) {
             pages.setDefaultBaseUrl(pagesField.get().getDefaultBaseUrl());

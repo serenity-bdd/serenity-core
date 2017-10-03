@@ -106,6 +106,10 @@ public final class TestCaseAnnotations {
         return webDriverField.getClearCookiesPolicy() == ClearCookiesPolicy.BeforeEachTest;
     }
 
+    public static boolean shouldUsePersistantStepLibraries(Class<?> testClass) {
+        return (testClass != null) && (testClass.getAnnotation(UsePersistantStepLibraries.class) != null);
+    }
+
     public static boolean isASerenityTestCase(Class<?> testClass) {
         return (testClass != null)
                 && (testClass.getAnnotation(RunWith.class) != null)

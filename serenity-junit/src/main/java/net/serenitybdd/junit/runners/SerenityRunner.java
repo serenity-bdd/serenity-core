@@ -417,6 +417,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
         TestMethodConfiguration theMethod = TestMethodConfiguration.forMethod(method);
 
         clearMetadataIfRequired();
+        resetStepLibrariesIfRequired();
 
         if(!failureRerunner.hasToRunTest(method.getDeclaringClass().getCanonicalName(),method.getMethod().getName()))
         {
@@ -498,6 +499,12 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     private void clearMetadataIfRequired() {
         if (theTest.shouldClearMetadata()) {
             Serenity.getCurrentSession().clearMetaData();
+        }
+    }
+
+    private void resetStepLibrariesIfRequired() {
+        if (theTest.shouldResetStepLibraries()) {
+            stepFactory.reset();
         }
     }
 
@@ -595,7 +602,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
      * @param testCase A Serenity-annotated test class
      */
     protected void injectScenarioStepsInto(final Object testCase) {
-        StepAnnotations.injectScenarioStepsInto(testCase, stepFactory);
+        StepAnnotations.injector().injectScenarioStepsInto(testCase, stepFactory);
     }
 
     /**
@@ -603,7 +610,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
      * @param testCase A Serenity-annotated test class
          */
     protected void injectAnnotatedPagesObjectInto(final Object testCase) {
-        StepAnnotations.injectAnnotatedPagesObjectInto(testCase, pages);
+        StepAnnotations.injector().injectAnnotatedPagesObjectInto(testCase, pages);
     }
 
     protected void injectEnvironmentVariablesInto(final Object testCase) {

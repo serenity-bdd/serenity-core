@@ -284,7 +284,6 @@ public class WhenDanaBrowsesTheWeb {
 
         when(dana).attemptsTo(viewHerOldProfile);
         and(dana).attemptsTo(
-                Click.on(ProfilePage.SOME_BUTTON),
                 UpdateHerProfile
                         .withName("Dana")
                         .andCountryOfResidence("France")

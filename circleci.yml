@@ -36,4 +36,11 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       # run tests!
-      - run: gradle test
+      - run:
+        - gradle test
+        - gradle integrationTests
+
+      test:
+        post:
+          - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+          - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;

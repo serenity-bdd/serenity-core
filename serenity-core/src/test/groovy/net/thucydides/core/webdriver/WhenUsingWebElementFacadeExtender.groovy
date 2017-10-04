@@ -1,5 +1,7 @@
 package net.thucydides.core.webdriver
 
+import net.thucydides.core.webdriver.DefaultPageObjectInitialiser
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriver
 import sample.page.TestPage
 import spock.lang.Shared
@@ -8,7 +10,7 @@ import spock.lang.Specification
 class WhenUsingWebElementFacadeExtender extends Specification {
 	
 	@Shared
-	def driver = new PhantomJSDriver();//  new WebDriverFacade(HtmlUnitDriver, new WebDriverFactory())
+	def driver = new HtmlUnitDriver();//  new WebDriverFacade(HtmlUnitDriver, new WebDriverFactory())
 
 	@Shared
 	def page = new TestPage(driver)

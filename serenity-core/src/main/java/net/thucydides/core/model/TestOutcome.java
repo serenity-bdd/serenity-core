@@ -970,7 +970,7 @@ public class TestOutcome {
     }
 
     private Optional<String> getDescriptionFrom(String storedTitle) {
-        List<String> multilineTitle = Splitter.on(Pattern.compile("\r?\n")).splitToList(storedTitle);
+        List<String> multilineTitle = new ArrayList(Splitter.on(Pattern.compile("\r?\n")).splitToList(storedTitle));
         if (multilineTitle.size() > 1) {
             multilineTitle.remove(0);
             return Optional.of(Joiner.on(NEW_LINE).join(multilineTitle));

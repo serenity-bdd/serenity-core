@@ -1,13 +1,9 @@
 package net.thucydides.core.reflection;
 
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class MethodFinder {
 
@@ -23,11 +19,11 @@ public class MethodFinder {
 
 
     public List<Method> getAllMethods() {
-        Set<Method> allMethods = Sets.newHashSet();
+        Set<Method> allMethods = new HashSet<>();
         allMethods.addAll(Arrays.asList(targetClass.getDeclaredMethods()));
         allMethods.addAll(Arrays.asList(targetClass.getMethods()));
         addParentMethods(allMethods,targetClass);
-        return Lists.newArrayList(allMethods);
+        return new ArrayList<>(allMethods);
     }
 
     private void addParentMethods(Set<Method> allMethods, Class targetClass) {

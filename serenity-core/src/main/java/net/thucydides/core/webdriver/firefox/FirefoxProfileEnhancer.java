@@ -1,7 +1,6 @@
 package net.thucydides.core.webdriver.firefox;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
@@ -105,7 +104,7 @@ public class FirefoxProfileEnhancer {
         }
     }
 
-    private ArrayList<String> split(String values, String separator) {
-        return Lists.newArrayList(Splitter.on(separator).trimResults().split(values));
+    private List<String> split(String values, String separator) {
+        return Splitter.on(separator).trimResults().splitToList(values);
     }
 }

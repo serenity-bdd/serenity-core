@@ -5,7 +5,6 @@ import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
@@ -48,12 +47,10 @@ import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalField;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -767,7 +764,7 @@ public class TestOutcome {
     }
 
     public Optional<TestStep> getFailingStep() {
-        List<TestStep> stepsInReverseOrder = Lists.newArrayList(getFlattenedTestSteps());
+        List<TestStep> stepsInReverseOrder = new ArrayList(getFlattenedTestSteps());
         Collections.reverse(stepsInReverseOrder);
         for (TestStep step : stepsInReverseOrder) {
             if (step.isError() || step.isFailure()) {
@@ -973,7 +970,7 @@ public class TestOutcome {
     }
 
     private Optional<String> getDescriptionFrom(String storedTitle) {
-        List<String> multilineTitle = Lists.newArrayList(Splitter.on(Pattern.compile("\r?\n")).split(storedTitle));
+        List<String> multilineTitle = Splitter.on(Pattern.compile("\r?\n")).splitToList(storedTitle);
         if (multilineTitle.size() > 1) {
             multilineTitle.remove(0);
             return Optional.of(Joiner.on(NEW_LINE).join(multilineTitle));
@@ -1184,7 +1181,7 @@ public class TestOutcome {
 
         TestResult testResultFromFailureClassname = testResultFromFailureClassname();
 
-        List<TestResult> overallResults = Lists.newArrayList(getCurrentTestResults());
+        List<TestResult> overallResults = new ArrayList<>(getCurrentTestResults());
         overallResults.add(testResultFromFailureClassname);
 
         TestResult testResultFromSteps = TestResultList.overallResultFrom(overallResults);

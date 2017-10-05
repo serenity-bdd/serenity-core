@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.collect.Lists;
 import net.thucydides.core.requirements.model.Requirement;
 
 import java.util.ArrayList;

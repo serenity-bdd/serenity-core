@@ -1,7 +1,5 @@
 package net.thucydides.core.reports.adaptors.specflow;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -21,7 +19,7 @@ public class ScenarioSplitter {
     }
 
     public ScenarioSplitter(List<String> outputLines) {
-        this.outputLines = ImmutableList.copyOf(outputLines);
+        this.outputLines = new ArrayList<>(outputLines);
     }
 
     public List<SpecflowScenario> split() {
@@ -85,6 +83,6 @@ public class ScenarioSplitter {
     }
 
     private List<String> tail(List<String> outlineLines) {
-        return ImmutableList.copyOf(outlineLines.subList(1, outlineLines.size()));
+        return new ArrayList<>(outlineLines.subList(1, outlineLines.size()));
     }
 }

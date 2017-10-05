@@ -1,8 +1,5 @@
 package net.thucydides.core.reflection;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
@@ -47,7 +44,7 @@ public class ClassFinder {
     }
 
     private List<Class<?>> filtered(Collection<Class<?>> classes) {
-        List<Class<?>> matchingClasses = new ArrayList<Class<?>>();
+        List<Class<?>> matchingClasses = new ArrayList<>();
 
         for (Class clazz : classes) {
             if (matchesConstraints(clazz)) {
@@ -90,7 +87,7 @@ public class ClassFinder {
                 URL resource = (URL) resources.nextElement();
                 dirs.add(resource.toURI());
             }
-            Set<String> classes = Sets.newTreeSet();
+            Set<String> classes = new TreeSet<>();
             for (URI directory : dirs) {
                 classes.addAll(findClasses(directory, packageName));
             }
@@ -133,7 +130,7 @@ public class ClassFinder {
     private static TreeSet<String> findClassesInJar(URI jarDirectory) throws Exception {
         final String schemeSpecificPart = jarDirectory.getSchemeSpecificPart();
 
-        TreeSet<String> classes = Sets.newTreeSet();
+        TreeSet<String> classes = new TreeSet<>();
 
         String[] split = schemeSpecificPart.split("!");
         URL jar = new URL(split[0]);
@@ -153,7 +150,7 @@ public class ClassFinder {
     }
 
     private static TreeSet<String> findClassesInFileSystemDirectory(URI fileSystemDirectory, String packageName) throws Exception {
-        TreeSet<String> classes = Sets.newTreeSet();
+        TreeSet<String> classes = new TreeSet<>();
 
         File dir = new File(fileSystemDirectory);
         if (!dir.exists()) {

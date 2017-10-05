@@ -1,10 +1,8 @@
 package net.thucydides.core.model;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DataTableRow {
     private List<? extends Object> values;  // A list of strings or integers
@@ -25,12 +23,9 @@ public class DataTableRow {
 
     public List<String> getStringValues() {
 
-        return Lists.transform(values, new Function<Object, String>() {
-            @Override
-            public String apply(Object o) {
-                return o== null ? "" : o.toString();
-            }
-        });
+        return values.stream().map(
+                value -> (value == null) ? "" : value.toString()
+        ).collect(Collectors.toList());
     }
 
     public TestResult getResult() {

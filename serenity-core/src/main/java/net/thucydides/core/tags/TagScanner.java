@@ -1,7 +1,6 @@
 package net.thucydides.core.tags;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.model.TestTag;
@@ -35,8 +34,7 @@ public class TagScanner {
     }
 
     public boolean shouldRunMethod(Class<?> testClass, String methodName) {
-        if (!isATaggable(testClass)) { return true; }
-        if (providedTags.isEmpty()) { return true; }
+        if (!isATaggable(testClass) || (providedTags.isEmpty()) )  { return true; }
 
         return testMethodMatchesAPositiveTag(testClass, methodName, providedTags)
                 && testMethodDoesNotMatchANegativeTag(testClass, methodName, providedTags);
@@ -135,7 +133,7 @@ public class TagScanner {
     private List<TestTag> tagsProvidedBy(EnvironmentVariables environmentVariables) {
         String tagListValue = environmentVariables.getProperty(ThucydidesSystemProperty.TAGS);
         if (StringUtils.isNotEmpty(tagListValue)) {
-            List<String> tagList = Lists.newArrayList(Splitter.on(",").trimResults().split(tagListValue));
+            List<String> tagList = Splitter.on(",").trimResults().splitToList(tagListValue);
             return tagList.stream()
                     .map(TestTag::withValue)
                     .collect(Collectors.toList());

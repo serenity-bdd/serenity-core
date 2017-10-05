@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver.phantomjs;
 
-import com.google.common.collect.Lists;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.AddCustomCapabilities;

@@ -129,8 +129,8 @@ public class WhenUploadingFiles {
     @Test
     public void should_upload_a_file_from_the_classpath_on_the_local_machine() {
         UploadPage uploadPage = pageFactory.get(UploadPage.class);
-        uploadPage.uploadFileFromLocal("/report-resources/css/core.css");
-        assertThat(uploadPage.uploadField.getAttribute("value")).contains("core.css");
+        uploadPage.uploadFileFromLocal("/uploads/readme.txt");
+        assertThat(uploadPage.uploadField.getAttribute("value")).contains("readme.txt");
     }
 
     @Test

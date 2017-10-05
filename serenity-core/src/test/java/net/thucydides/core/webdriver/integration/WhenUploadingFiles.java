@@ -111,15 +111,15 @@ public class WhenUploadingFiles {
     @Test
     public void should_upload_a_file_from_the_classpath() {
         UploadPage uploadPage = pageFactory.get(UploadPage.class);
-        uploadPage.uploadFileFromClasspath("report-resources/css/core.css");
-        assertThat(uploadPage.uploadField.getAttribute("value")).contains("core.css");
+        uploadPage.uploadFileFromClasspath("uploads/readme.txt");
+        assertThat(uploadPage.uploadField.getAttribute("value")).contains("readme.txt");
     }
 
     @Test
     public void should_fail_with_a_sensible_error_if_the_classpath_file_doesn_not_exist() {
         UploadPage uploadPage = pageFactory.get(UploadPage.class);
 
-        Throwable thrown = catchThrowable(() -> { uploadPage.uploadFileFromClasspath("report-resources/css/does_not_exist.txt"); });
+        Throwable thrown = catchThrowable(() -> { uploadPage.uploadFileFromClasspath("uploads/does_not_exist.txt"); });
 
         assertThat(thrown).isInstanceOf(InvalidArgumentException.class)
                 .hasMessageStartingWith("File not found on classpath:")

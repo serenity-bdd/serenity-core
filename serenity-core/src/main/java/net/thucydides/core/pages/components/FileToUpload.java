@@ -4,6 +4,7 @@ import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.webdriver.ConfigureFileDetector;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
+import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.LocalFileDetector;
@@ -11,27 +12,45 @@ import org.openqa.selenium.remote.RemoteWebElement;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 /**
  * A class that helps upload a file to an HTML form in using a fluent API.
  */
 public class FileToUpload {
-    private final String filename;
+    /**
+     *
+     * The filename the user asked to upload
+     */
+    private final String requestedFilename;
+    /**
+     * The full path we resolved the requested filename to
+     */
+    private String resolvedFilename;
+
     static final String WINDOWS_PATH_PATTERN = "^[A-Z]:\\\\.*";
 
     private static Pattern fullWindowsPath = Pattern.compile(WINDOWS_PATH_PATTERN);
     private final WebDriver driver;
     private boolean remoteDriver = false;
 
-    public FileToUpload(WebDriver driver, final String filename) {
+    public FileToUpload(WebDriver driver, final String requestedFilename) {
         this.driver = driver;
+        this.requestedFilename = requestedFilename;
+        this.resolvedFilename = resolveAsBestWeCan(requestedFilename);
+    }
 
-        if (isOnTheClasspath(filename)) {
-            this.filename = getFileFromResourcePath(filename);
-        } else {
-            this.filename = getFileFromFileSystem(filename);
-        }
+    private String resolveAsBestWeCan(String requestedFilename) {
+
+        URL resourceOnTheClassPath = Optional.ofNullable(resourceOnClasspath(requestedFilename))
+                                              .orElse(resourceOnClasspath(stripLeadingSlashFrom(requestedFilename)));
+
+        return (resourceOnTheClassPath != null) ? resourceOnTheClassPath.getPath() : getFileFromFileSystem(requestedFilename);
+    }
+
+    private String stripLeadingSlashFrom(String requestedFilename) {
+        return requestedFilename.startsWith("/") ? requestedFilename.substring(1) : requestedFilename;
     }
 
 
@@ -72,7 +91,7 @@ public class FileToUpload {
 
     public void to(final WebElement uploadFileField) {
 
-        String filePath = uploadableFilePathTo(uploadFileField).forFile(filename);
+        String filePath = uploadableFilePathTo(uploadFileField).forFile(resolvedFilename);
 
         uploadFileField.sendKeys(osSpecificPathOf(filePath));
     }
@@ -107,6 +126,14 @@ public class FileToUpload {
 
     public FileToUpload fromLocalMachine() {
         ConfigureFileDetector.forDriver(driver);
+        return this;
+    }
+
+    public FileToUpload fromClasspath() {
+        URL systemResource =  Optional.ofNullable(ClassLoader.getSystemResource(requestedFilename))
+                .orElseThrow(() -> new InvalidArgumentException("File not found on classpath: " + requestedFilename));
+
+        this.resolvedFilename = systemResource.getPath();
         return this;
     }
 

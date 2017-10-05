@@ -4,11 +4,13 @@ import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.components.FileToUpload;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
@@ -18,8 +20,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -42,6 +44,11 @@ public class WhenUploadingFiles {
             upload(filename).fromLocalMachine().to(uploadField);
         }
 
+        public void uploadFileFromClasspath(String filename) {
+            upload(filename).fromClasspath().to(uploadField);
+        }
+
+
         public void uploadFileData(String data) throws IOException {
             uploadData(data).to(uploadField);
         }
@@ -57,15 +64,19 @@ public class WhenUploadingFiles {
 
     @BeforeClass
     public static void open_local_static_site() {
-        driver = new ChromeDriver();
+        driver = new FirefoxDriver();//ChromeDriver();
         pageFactory = new Pages(driver);
         openStaticTestSite(driver);
+    }
+
+    @Before
+    public void refreshScreen() {
+        driver.navigate().refresh();
     }
 
     @AfterClass
     public static void closeBrowser() {
         if (driver != null) {
-            driver.close();
             driver.quit();
         }
     }
@@ -78,27 +89,48 @@ public class WhenUploadingFiles {
 
 
     @Test
-    public void should_upload_a_file_from_the_resources_directory() {
+    public void should_upload_unqualified_filenames_from_the_src_test_resources_directory() {
         UploadPage uploadPage = pageFactory.get(UploadPage.class);
 
         uploadPage.uploadFile("uploads/readme.txt");
 
-        assertThat(uploadPage.uploadField.getAttribute("value"), containsString("readme.txt"));
+        assertThat(uploadPage.uploadField.getAttribute("value")).contains("readme.txt");
+    }
 
+    @Test
+    public void should_fail_with_a_sensible_error_if_the_file_doesn_not_exist() {
+        UploadPage uploadPage = pageFactory.get(UploadPage.class);
+
+        Throwable thrown = catchThrowable(() -> { uploadPage.uploadFile("uploads/does_not_exist.txt"); });
+
+        assertThat(thrown).isInstanceOf(InvalidArgumentException.class)
+                          .hasMessageStartingWith("File not found:")
+                          .hasMessageContaining("does_not_exist.txt");
     }
 
     @Test
     public void should_upload_a_file_from_the_classpath() {
         UploadPage uploadPage = pageFactory.get(UploadPage.class);
-        uploadPage.uploadFile("/report-resources/css/core.css");
-        assertThat(uploadPage.uploadField.getAttribute("value"), containsString("core.css"));
+        uploadPage.uploadFileFromClasspath("report-resources/css/core.css");
+        assertThat(uploadPage.uploadField.getAttribute("value")).contains("core.css");
     }
 
     @Test
-    public void should_upload_a_file_from_the_classpath_on_the_local_mahcine() {
+    public void should_fail_with_a_sensible_error_if_the_classpath_file_doesn_not_exist() {
+        UploadPage uploadPage = pageFactory.get(UploadPage.class);
+
+        Throwable thrown = catchThrowable(() -> { uploadPage.uploadFileFromClasspath("report-resources/css/does_not_exist.txt"); });
+
+        assertThat(thrown).isInstanceOf(InvalidArgumentException.class)
+                .hasMessageStartingWith("File not found on classpath:")
+                .hasMessageContaining("does_not_exist.txt");
+    }
+
+    @Test
+    public void should_upload_a_file_from_the_classpath_on_the_local_machine() {
         UploadPage uploadPage = pageFactory.get(UploadPage.class);
         uploadPage.uploadFileFromLocal("/report-resources/css/core.css");
-        assertThat(uploadPage.uploadField.getAttribute("value"), containsString("core.css"));
+        assertThat(uploadPage.uploadField.getAttribute("value")).contains("core.css");
     }
 
     @Test
@@ -107,7 +139,7 @@ public class WhenUploadingFiles {
 
         uploadPage.uploadFileData("data data data");
 
-        assertThat(uploadPage.uploadField.getAttribute("value"), not(isEmptyString()));
+        assertThat(uploadPage.uploadField.getAttribute("value")).isNotBlank();
     }
 
     @Test
@@ -116,7 +148,7 @@ public class WhenUploadingFiles {
 
         uploadPage.uploadFileData("data data data".getBytes());
 
-        assertThat(uploadPage.uploadField.getAttribute("value"), not(isEmptyString()));
+        assertThat(uploadPage.uploadField.getAttribute("value")).isNotBlank();
 
     }
 
@@ -152,32 +184,17 @@ public class WhenUploadingFiles {
 
     @Test
     public void should_recognize_a_simple_windows_path() {
-        assertThat(FileToUpload.isAFullWindowsPath("C:\\Projects\\somefile.pdf"), is(true));
+        assertThat(FileToUpload.isAFullWindowsPath("C:\\Projects\\somefile.pdf")).isTrue();
     }
 
     @Test
     public void should_recognize_a_unix_path() {
-        assertThat(FileToUpload.isAFullWindowsPath("/home/john/somefile.pdf"), is(false));
+        assertThat(FileToUpload.isAFullWindowsPath("/home/john/somefile.pdf")).isFalse();
     }
 
     @Test
     public void should_recognize_a_complex_unix_path() {
-        assertThat(FileToUpload.isAFullWindowsPath("/home/myuser/target/test-classes/documentUpload/somefile.pdf"), is(false));
-    }
-
-    @Test
-    public void should_upload_a_relative_path_from_the_current_working_directory() throws IOException {
-
-        Path tempPath = Files.createTempDirectory("temp");
-        File targetDirectory = tempPath.toFile();
-        File uploadedFile = new File(targetDirectory, "upload.txt");
-        writeTextToFile(uploadedFile);
-
-        UploadPage uploadPage = pageFactory.get(UploadPage.class);
-
-        uploadPage.uploadFile("target/upload.txt");
-
-        assertThat(uploadPage.uploadField.getAttribute("value"), containsString("upload.txt"));
+        assertThat(FileToUpload.isAFullWindowsPath("/home/myuser/target/test-classes/documentUpload/somefile.pdf")).isFalse();
     }
 
     private void writeTextToFile(File uploadedFile) throws IOException {

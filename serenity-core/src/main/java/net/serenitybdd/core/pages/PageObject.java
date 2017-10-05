@@ -109,7 +109,6 @@ public abstract class PageObject {
 
     }
 
-
     private enum OpenMode {
         CHECK_URL_PATTERNS,
         IGNORE_URL_PATTERNS
@@ -199,6 +198,10 @@ public abstract class PageObject {
         return pages.getPage(pageObjectClass);
     }
 
+    /**
+     * Upload a file via an HTML form.
+     * By default, this will look for a file on the file system, at the location provided.
+     */
     public FileToUpload upload(final String filename) {
         return new FileToUpload(driver, filename).useRemoteDriver(isDefinedRemoteUrl());
     }

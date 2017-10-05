@@ -3,6 +3,7 @@ package net.thucydides.core.webdriver.integration;
 import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.components.FileToUpload;
+import net.thucydides.core.pages.components.FileToUploadCouldNotBeFoundException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -17,8 +19,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -64,7 +64,7 @@ public class WhenUploadingFiles {
 
     @BeforeClass
     public static void open_local_static_site() {
-        driver = new FirefoxDriver();//ChromeDriver();
+        driver = new ChromeDriver();
         pageFactory = new Pages(driver);
         openStaticTestSite(driver);
     }
@@ -103,7 +103,7 @@ public class WhenUploadingFiles {
 
         Throwable thrown = catchThrowable(() -> { uploadPage.uploadFile("uploads/does_not_exist.txt"); });
 
-        assertThat(thrown).isInstanceOf(InvalidArgumentException.class)
+        assertThat(thrown).isInstanceOf(FileToUploadCouldNotBeFoundException.class)
                           .hasMessageStartingWith("File not found:")
                           .hasMessageContaining("does_not_exist.txt");
     }
@@ -150,19 +150,6 @@ public class WhenUploadingFiles {
 
         assertThat(uploadPage.uploadField.getAttribute("value")).isNotBlank();
 
-    }
-
-    @Test
-    public void should_leave_a_unix_java_path_alone_when_running_on_unix() {
-        String unixPath = "/home/myuser/target/test-classes/documentUpload/somefile.pdf";
-        if (!runningOnWindows()) {
-            WebElement field = mock(WebElement.class);
-
-            FileToUpload fileToUpload = new FileToUpload(driver, unixPath);
-            fileToUpload.to(field);
-
-            verify(field).sendKeys(unixPath);
-        }
     }
 
     @Test

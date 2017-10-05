@@ -3,7 +3,6 @@ package net.thucydides.core.pages.components;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.webdriver.ConfigureFileDetector;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,8 +11,12 @@ import org.openqa.selenium.remote.RemoteWebElement;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.regex.Pattern;
+
+import static java.nio.file.Files.exists;
 
 /**
  * A class that helps upload a file to an HTML form in using a fluent API.
@@ -29,7 +32,7 @@ public class FileToUpload {
      */
     private String resolvedFilename;
 
-    static final String WINDOWS_PATH_PATTERN = "^[A-Z]:\\\\.*";
+    static private final String WINDOWS_PATH_PATTERN = "^[A-Z]:\\\\.*";
 
     private static Pattern fullWindowsPath = Pattern.compile(WINDOWS_PATH_PATTERN);
     private final WebDriver driver;
@@ -53,34 +56,13 @@ public class FileToUpload {
         return requestedFilename.startsWith("/") ? requestedFilename.substring(1) : requestedFilename;
     }
 
-
-    private boolean isOnTheClasspath(final String filename) {
-        if (isOnTheUnixFileSystem(filename) || isOnTheWindowsFileSystem(filename)) {
-            return false;
-        } else {
-            return (resourceOnClasspath(filename) != null);
-        }
-    }
-
     private URL resourceOnClasspath(final String filename) {
         ClassLoader cldr = Thread.currentThread().getContextClassLoader();
         return cldr.getResource(filename);
     }
 
-    public static boolean isOnTheWindowsFileSystem(final String filename) {
-        return (SystemUtils.IS_OS_WINDOWS) && new File(filename).exists();
-    }
-
     public static boolean isAFullWindowsPath(final String filename) {
         return fullWindowsPath.matcher(filename).find();
-    }
-
-    public static boolean isOnTheUnixFileSystem(final String filename) {
-        return (SystemUtils.IS_OS_UNIX) && new File(filename).exists();
-    }
-
-    private String getFileFromResourcePath(final String filename) {
-        return new File(resourceOnClasspath(filename).getFile()).getAbsolutePath();
     }
 
     private String getFileFromFileSystem(final String filename) {
@@ -93,7 +75,15 @@ public class FileToUpload {
 
         String filePath = uploadableFilePathTo(uploadFileField).forFile(resolvedFilename);
 
+        checkThatFileExistsFor(filePath);
+
         uploadFileField.sendKeys(osSpecificPathOf(filePath));
+    }
+
+    private void checkThatFileExistsFor(String filePath) {
+        if (!exists(Paths.get(filePath))) {
+            throw new FileToUploadCouldNotBeFoundException(filePath);
+        }
     }
 
     private FilePathLocator uploadableFilePathTo(WebElement uploadFileField) {
@@ -101,7 +91,7 @@ public class FileToUpload {
     }
 
 
-    public boolean isRemoteDriver() {
+    private boolean isRemoteDriver() {
         return remoteDriver;
     }
 
@@ -139,7 +129,7 @@ public class FileToUpload {
 
     private class LocalFilePathLocator implements FilePathLocator {
 
-        public LocalFilePathLocator() {}
+        LocalFilePathLocator() {}
 
         @Override
         public String forFile(String filename) {
@@ -155,7 +145,7 @@ public class FileToUpload {
 
         private final WebElement uploadFileField;
 
-        public RemoteFilePathLocator(WebElement uploadFileField) {
+        RemoteFilePathLocator(WebElement uploadFileField) {
 
             this.uploadFileField = uploadFileField;
         }

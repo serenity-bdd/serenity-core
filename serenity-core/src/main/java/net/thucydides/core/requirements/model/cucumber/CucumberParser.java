@@ -55,7 +55,6 @@ public class CucumberParser {
                 return java.util.Optional.empty();
             }
 
-            //TODO add tests
             String cardNumber = findCardNumberInTags(tagsDefinedIn(cucumberFeature));
             List<String> versionNumbers = findVersionNumberInTags(tagsDefinedIn(cucumberFeature));
             String title = gherkinDocument.getFeature().getName();

@@ -94,7 +94,7 @@ Also, make sure you try with the latest version of Serenity - your bug may alrea
 
 ### Use living documentation
 
-It is easier for us to fix something we can see breaking. If someone has to volunteer an hour of there time to reproduce a defect, Start of with one of the Serenity started projects (like (https://github.com/serenity-bdd/serenity-cucumber-starter)[this one]) and add a scenario or test case that both illustrates and describes your issue. If possible, write the test to describe the behaviour you expect, so that it fails when the defect is present, and that it will pass when the defect is fixed.
+It is easier for us to fix something we can see breaking. If someone has to volunteer an hour of there time to reproduce a defect, Start of with one of the Serenity started projects (like [this one](https://github.com/serenity-bdd/serenity-cucumber-starter) and add a scenario or test case that both illustrates and describes your issue. If possible, write the test to describe the behaviour you expect, so that it fails when the defect is present, and that it will pass when the defect is fixed.
 
 ### Submit a Pull Request
 
@@ -102,6 +102,6 @@ The fastest way to fix a defect is often to dig into the code and to submit a pu
 
 ### Ask for commercial support
 
-If you are using Serenity for your company projects, and need faster or more in-depth support, why not ask your company to get some (https://johnfergusonsmart.com/serenity-bdd/)[commercial support]? We provide a range of support options including prioritied tickets, custom Serenity work, and remote mentoring/pair programming sessions, depending on your needs.
+If you are using Serenity for your company projects, and need faster or more in-depth support, why not ask your company to get some [commercial support](https://johnfergusonsmart.com/serenity-bdd/)? We provide a range of support options including prioritied tickets, custom Serenity work, and remote mentoring/pair programming sessions, depending on your needs.
 
-Take a look at (https://opensource.guide/how-to-contribute/#communicating-effectively)[This article] for more information.
+Take a look at [this article](https://opensource.guide/how-to-contribute/#communicating-effectively) for more information.

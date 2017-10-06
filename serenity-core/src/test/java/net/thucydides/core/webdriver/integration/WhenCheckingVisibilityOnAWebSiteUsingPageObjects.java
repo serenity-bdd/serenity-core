@@ -10,6 +10,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import static net.thucydides.core.webdriver.StaticTestSite.fileInClasspathCalled;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,6 +38,8 @@ public class WhenCheckingVisibilityOnAWebSiteUsingPageObjects {
     @BeforeClass
     public static void openStaticTestSite() {
         String url = "file://" + fileInClasspathCalled("static-site/index.html").getAbsolutePath();
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
         driver = new ChromeDriver();
         driver.get(url);
     }

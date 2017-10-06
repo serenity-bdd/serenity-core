@@ -12,6 +12,7 @@ import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -64,6 +65,8 @@ public class WhenUploadingFiles {
 
     @BeforeClass
     public static void open_local_static_site() {
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
         driver = new ChromeDriver();
         pageFactory = new Pages(driver);
         openStaticTestSite(driver);

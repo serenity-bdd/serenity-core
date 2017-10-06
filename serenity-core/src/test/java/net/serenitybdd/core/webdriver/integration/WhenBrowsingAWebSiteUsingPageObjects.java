@@ -14,6 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
@@ -89,7 +90,9 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
 
     @BeforeClass
     public static void openDriver() {
-        driver = new ChromeDriver();//FirefoxDriver();
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
+        driver = new ChromeDriver();
     }
 
     @Before

@@ -20,6 +20,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,6 +51,9 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
 
         File sourceDirectory = directoryInClasspathCalled("/test-outcomes/containing-nostep-errors");
         reporter.generateReportsForTestResultsFrom(sourceDirectory);
+
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
         driver = new ChromeDriver();
     }
 

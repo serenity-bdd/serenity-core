@@ -233,17 +233,6 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
         assertThat(steps.get(5).isIgnored(), is(true));
     }
 
-
-    @Test
-    public void the_test_runner_should_notify_test_failures() throws Exception {
-
-        SerenityRunner runner = new SerenityRunner(SingleNonWebTestScenario.class);
-        RunNotifier notifier = mock(RunNotifier.class);
-        runner.run(notifier);
-
-        verify(notifier, atLeast(1)).fireTestFailure((Failure) anyObject());
-    }
-
     @Test
     public void the_test_runner_records_the_name_of_the_test_scenario() throws InitializationError {
 

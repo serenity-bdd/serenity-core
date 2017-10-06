@@ -24,6 +24,7 @@ import net.thucydides.core.pages.Pages;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.screenshots.ScreenshotException;
 import net.thucydides.core.webdriver.*;
+import org.mockito.Mockito;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
 import org.slf4j.Logger;
@@ -138,7 +139,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
 
         if ((getCurrentTestOutcome().getTestFailureCause() != null)
-                && TheErrorType.causedBy(getCurrentTestOutcome().getTestFailureCause().getErrorType()).isAKindOf(expected)) {
+                && TheErrorType.causedBy(getCurrentTestOutcome().getTestFailureErrorType()).isAKindOf(expected)) {
             getCurrentTestOutcome().resetFailingStepsCausedBy(expected);
             getCurrentTestOutcome().recordStep(
                     TestStep.forStepCalled("Expected exception thrown : " + expected.getName())
@@ -308,7 +309,15 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     protected TestOutcome getCurrentTestOutcome() {
-        return latestTestOutcome().get();
+        return latestTestOutcome().or(unavailableTestOutcome());
+    }
+
+    private TestOutcome unavailableTestOutcome() {
+        return Mockito.mock(TestOutcome.class);
+    }
+
+    public boolean isAvailable() {
+        return true;
     }
 
     protected Optional<TestOutcome> latestTestOutcome() {
@@ -585,7 +594,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private Optional<TestStep> getPreviousStep() {
-        if (getCurrentTestOutcome().getTestSteps().size() > 1) {
+        if (getCurrentTestOutcome().getTestStepCount() > 1) {
             List<TestStep> currentTestSteps = getCurrentTestOutcome().getTestSteps();
             return Optional.of(currentTestSteps.get(currentTestSteps.size() - 2));
         } else {
@@ -631,8 +640,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void markCurrentStepAs(final TestResult result) {
-        getCurrentTestOutcome().currentStep().setResult(result);
-        updateExampleTableIfNecessary(result);
+        if (getCurrentTestOutcome().currentStep() != null) {
+            getCurrentTestOutcome().currentStep().setResult(result);
+            updateExampleTableIfNecessary(result);
+        }
     }
 
     FailureAnalysis failureAnalysis = new FailureAnalysis();

@@ -857,6 +857,10 @@ public class TestOutcome {
         return dataTable.getSize();
     }
 
+    public int getTestStepCount() {
+        return getTestSteps().size();
+    }
+
     private static class TestOutcomeWithEnvironmentBuilder {
         private final EnvironmentVariables environmentVariables;
 
@@ -1423,6 +1427,10 @@ public class TestOutcome {
 
     public FailureCause getTestFailureCause() {
         return testFailureCause;
+    }
+
+    public String getTestFailureErrorType() {
+        return getTestFailureCause().getErrorType();
     }
 
     public FailureCause getNestedTestFailureCause() {

@@ -6,6 +6,7 @@ import com.typesafe.config.ConfigValue;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,11 +14,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import static java.util.regex.Pattern.compile;
 import static org.apache.commons.lang3.StringUtils.strip;
 
 /**
@@ -100,10 +100,10 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         }
         return properties;
     }
-
-
+    
     private void updatePreferencesFrom(Properties... propertySets) throws IOException {
         for (Properties localPreferences : propertySets) {
+            PropertiesUtil.expandPropertyAndEnvironmentReferences(System.getenv(), localPreferences);
             setUndefinedSystemPropertiesFrom(localPreferences);
         }
     }
@@ -173,5 +173,6 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     private String legacyPropertiesFileName() {
         return ThucydidesSystemProperty.PROPERTIES.from(environmentVariables, "thucydides.properties");
     }
+
 
 }

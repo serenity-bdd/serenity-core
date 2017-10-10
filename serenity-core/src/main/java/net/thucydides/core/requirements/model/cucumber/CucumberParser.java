@@ -2,21 +2,21 @@ package net.thucydides.core.requirements.model.cucumber;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
-import gherkin.formatter.model.Tag;
-import gherkin.parser.Parser;
+import cucumber.runtime.io.MultiLoader;
+import cucumber.runtime.model.CucumberFeature;
+import gherkin.ast.GherkinDocument;
+import gherkin.ast.Tag;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.requirements.model.Narrative;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 
 /**
  * Created by john on 5/03/15.
@@ -42,35 +42,42 @@ public class CucumberParser {
 
     public java.util.Optional<Narrative> loadFeatureNarrative(File narrativeFile)  {
 
-        CucumberFeatureListener gherkinStructure = new CucumberFeatureListener();
-        Parser parser = new Parser(gherkinStructure, true, "root", false, locale);
+        List<String> listOfFiles = new ArrayList<>();
+        listOfFiles.add(narrativeFile.getAbsolutePath());
+        List<CucumberFeature> cucumberFeatures = CucumberFeature.load(new MultiLoader(CucumberParser.class.getClassLoader()), listOfFiles);
         try {
-            String gherkinScenarios = filterOutCommentsFrom(FileUtils.readFileToString(narrativeFile, encoding));
-            parser.parse(gherkinScenarios, narrativeFile.getName(),0);
-
-            if (featureFileCouldNotBeReadFor(gherkinStructure)) {
+            if (cucumberFeatures.size() == 0) {
+                return java.util.Optional.empty();
+            }
+            CucumberFeature cucumberFeature = cucumberFeatures.get(0);
+            GherkinDocument gherkinDocument = cucumberFeature.getGherkinFeature();
+            if (featureFileCouldNotBeReadFor(gherkinDocument)) {
                 return java.util.Optional.empty();
             }
 
-            String cardNumber = findCardNumberInTags(tagsDefinedIn(gherkinStructure));
-            List<String> versionNumbers = findVersionNumberInTags(tagsDefinedIn(gherkinStructure));
-            String title = gherkinStructure.getFeature().getName();
-            String text = gherkinStructure.getFeature().getDescription();
-            String id = gherkinStructure.getFeature().getId();
+            String cardNumber = findCardNumberInTags(tagsDefinedIn(cucumberFeature));
+            List<String> versionNumbers = findVersionNumberInTags(tagsDefinedIn(cucumberFeature));
+            String title = gherkinDocument.getFeature().getName();
+            String text = gherkinDocument.getFeature().getDescription();
+            String id = getIdFromName(title);
 
             return java.util.Optional.of(new Narrative(Optional.fromNullable(title),
                     Optional.fromNullable(id),
                     Optional.fromNullable(cardNumber),
                     versionNumbers,
                     "feature",
-                    text));
-        } catch (IOException ex) {
+                    text !=null ? text : ""));
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return java.util.Optional.empty();
     }
 
-    private boolean featureFileCouldNotBeReadFor(CucumberFeatureListener gherkinStructure) {
+    private String getIdFromName(String name) {
+        return name.replaceAll("[\\s_]", "-").toLowerCase();
+    }
+
+    private boolean featureFileCouldNotBeReadFor(GherkinDocument gherkinStructure) {
         return gherkinStructure.getFeature() == null;
     }
 
@@ -88,8 +95,9 @@ public class CucumberParser {
         return filteredGherkin.toString();
     }
 
-    private List<Tag> tagsDefinedIn(CucumberFeatureListener gherkinStructure) {
-        return(gherkinStructure.getFeature() != null) ?  gherkinStructure.getFeature().getTags() : Lists.<Tag>newArrayList();
+
+    private List<Tag> tagsDefinedIn(CucumberFeature cucumberFeature) {
+        return  cucumberFeature.getGherkinFeature().getFeature().getTags();
     }
 
     private String findCardNumberInTags(List<Tag> tags) {

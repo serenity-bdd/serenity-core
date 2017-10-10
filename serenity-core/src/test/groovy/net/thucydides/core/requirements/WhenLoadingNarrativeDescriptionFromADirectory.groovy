@@ -1,7 +1,5 @@
 package net.thucydides.core.requirements
 
-import com.google.common.base.Optional
-import net.thucydides.core.requirements.model.Narrative
 import net.thucydides.core.requirements.model.NarrativeReader
 import net.thucydides.core.util.FileSystemUtils
 import spock.lang.Specification
@@ -73,7 +71,7 @@ class WhenLoadingNarrativeDescriptionFromADirectory extends Specification {
         then: "the narrativeText should be found"
         narrative.present
         narrative.get().title.get() == 'Planting a new apple tree'
-        narrative.get().text.replace("\r\n", "\n").replace("\r","\n") == "As a farmer\nI want to plant an apple tree\nSo that I can grow apples\n\nThis is really important"
+        narrative.get().text.replace("\r\n", "\n").replace("\r","\n") == "  As a farmer\n  I want to plant an apple tree\n  So that I can grow apples\n\n  This is really important"
     }
 
     def "Should use the lowest requirement type for deeply nested requirements"() {

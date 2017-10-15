@@ -1,5 +1,7 @@
 package net.thucydides.core.webdriver
 
+import net.thucydides.core.steps.StepEventBus
+import net.thucydides.core.steps.StepFailure
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import spock.lang.Specification
@@ -21,6 +23,11 @@ class WhenProvidingYourOwnWebdriverInstance extends Specification {
             driver.quit()
         }
     }
+
+    def setup() {
+        StepEventBus.eventBus.clear()
+    }
+
     def "should be able to ask the WebDriverFactory to provide a custom driver"() {
 
         given:

@@ -45,4 +45,13 @@ class WhenUsingScenarioActors extends Specification {
             scenario.salesperson.getActorName() == "Sam"
     }
 
+    def "the default toString() of the actor is the actor name"() {
+
+        given:
+            AScenarioUsingActors scenario = new AScenarioUsingActors();
+        when:
+            Serenity.injectScenarioStepsInto(scenario)
+        then:
+            scenario.toString() == "Sam"
+    }
 }

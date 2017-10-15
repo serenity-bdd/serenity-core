@@ -29,7 +29,7 @@ class WhenManipulatingWebElements extends Specification {
     def setup() {
         StepEventBus.eventBus.clear()
     }
-    
+
     @Unroll
     def "web element facade should be printed as the web element"() {
         given:

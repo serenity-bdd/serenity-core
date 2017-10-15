@@ -13,4 +13,9 @@ public class ScenarioActor {
     public String getActorName() {
         return actor;
     }
+
+    @Override
+    public String toString() {
+        return actor;
+    }
 }

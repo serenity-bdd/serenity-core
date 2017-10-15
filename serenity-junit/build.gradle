@@ -3,6 +3,10 @@ ext {
     projectDescription = 'Serenity JUnit integration'
 }
 
+test {
+    maxParallelForks = Integer.parseInt(System.getProperty("forks","1"))
+}
+
 dependencies {
     compile project(':serenity-core')
     compile "junit:junit:${junitVersion}"

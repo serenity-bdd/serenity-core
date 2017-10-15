@@ -868,13 +868,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                 .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
     }
 
-    private Wait<WebDriver> waitBriefly() {
-        return new FluentWait<>(driver, webdriverClock, sleeper)
-                .withTimeout(500, TimeUnit.MILLISECONDS)
-                .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
-                .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
-    }
-
     @Override
     public WebElementFacade waitUntilNotVisible() {
         try {
@@ -900,7 +893,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public String getText() {
-//        waitUntilVisible();
         checkPresenceOfWebElement();
         return getElement().getText();
     }

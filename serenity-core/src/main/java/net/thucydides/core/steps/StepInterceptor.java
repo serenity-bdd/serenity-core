@@ -18,7 +18,6 @@ import net.thucydides.core.steps.service.CleanupMethodAnnotationProvider;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.internal.AssumptionViolatedException;
-import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +46,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         this.testStepClass = testStepClass;
         this.environmentVariables = ConfiguredEnvironment.getEnvironmentVariables();
         Iterable<CleanupMethodAnnotationProvider> cleanupMethodAnnotationProviders = ServiceLoader.load(CleanupMethodAnnotationProvider.class);
-        for (CleanupMethodAnnotationProvider cleanupMethodAnnotationProvider : cleanupMethodAnnotationProviders) {
+        for(CleanupMethodAnnotationProvider cleanupMethodAnnotationProvider : cleanupMethodAnnotationProviders) {
             cleanupMethodsAnnotations.addAll(cleanupMethodAnnotationProvider.getCleanupMethodAnnotations());
         }
     }
@@ -134,20 +133,20 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         }
     }
 
-    private boolean stepIsCalledFromCleanupMethod() {
+    private boolean stepIsCalledFromCleanupMethod(){
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        for (StackTraceElement stackTraceElement : stackTrace) {
+        for(StackTraceElement stackTraceElement : stackTrace)
+        {
             try {
                 Method m = Class.forName(stackTraceElement.getClassName()).getMethod(stackTraceElement.getMethodName());
-                if (m.getAnnotations() != null && m.getAnnotations().length > 0) {
+                if( m.getAnnotations() != null && m.getAnnotations().length > 0) {
                     for (Annotation a : m.getAnnotations()) {
                         if (cleanupMethodsAnnotations.contains(a.toString())) {
                             return true;
                         }
                     }
                 }
-            } catch (Exception ignored) {
-            }
+            } catch(Exception ignored) {}
         }
         return false;
     }
@@ -156,7 +155,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         if ((aPreviousStepHasFailed() || testAssumptionViolated()) && (!shouldExecuteNestedStepsAfterFailures())) {
             notifySkippedStepStarted(obj, method, args);
             notifySkippedStepFinishedFor(method, args);
-            return appropriateReturnObject(obj, method);
+            return null;
         } else {
             notifySkippedStepStarted(obj, method, args);
             return skipTestStep(obj, method, args, proxy);
@@ -211,37 +210,32 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     }
 
     enum PrimitiveReturnType {
-        STRING, LONG, INTEGER, DOUBLE, FLOAT, BOOLEAN, VOID, UNSUPPORTED
+        STRING, LONG, INTEGER, DOUBLE, FLOAT, BOOLEAN, UNSUPPORTED
     }
 
     private PrimitiveReturnType returnTypeOf(final Method method) {
-        Class<?> returnType = method.getReturnType();
-        if (returnType == String.class) {
+        if (method.getReturnType() == String.class) {
             return PrimitiveReturnType.STRING;
         }
 
-        if (Long.class.isAssignableFrom(returnType) || returnType.getName().equals("long")) {
+        if (Long.class.isAssignableFrom(method.getReturnType())) {
             return PrimitiveReturnType.LONG;
         }
 
-        if (Integer.class.isAssignableFrom(returnType) || returnType.getName().equals("int")) {
+        if (Integer.class.isAssignableFrom(method.getReturnType())) {
             return PrimitiveReturnType.INTEGER;
         }
 
-        if (Double.class.isAssignableFrom(returnType) || returnType.getName().equals("double")) {
+        if (Double.class.isAssignableFrom(method.getReturnType())) {
             return PrimitiveReturnType.DOUBLE;
         }
 
-        if (Float.class.isAssignableFrom(returnType) || returnType.getName().equals("float")) {
+        if (Float.class.isAssignableFrom(method.getReturnType())) {
             return PrimitiveReturnType.FLOAT;
         }
 
-        if (Boolean.class.isAssignableFrom(returnType) || returnType.getName().equals("boolean")) {
+        if (Boolean.class.isAssignableFrom(method.getReturnType())) {
             return PrimitiveReturnType.BOOLEAN;
-        }
-
-        if (returnType.getName().equals("void")) {
-            return PrimitiveReturnType.VOID;
         }
 
         return PrimitiveReturnType.UNSUPPORTED;
@@ -253,42 +247,14 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
             return obj;
         }
 
-        if (returnTypeIsPrimativeFor(method)) {
-            return primativeDefaultValueFor(method);
-        }
-        return mockedReturnObjectFor(method);
-    }
-
-    private Object mockedReturnObjectFor(Method method) {
-        try {
-            return Mockito.mock(method.getReturnType());
-        } catch(RuntimeException tooHardToMockLetsJustCallItQuits) {
-            return null;
-        }
-    }
-
-    private boolean returnTypeIsPrimativeFor(Method method) {
-        return returnTypeOf(method) != PrimitiveReturnType.UNSUPPORTED;
-    }
-
-    private Object primativeDefaultValueFor(Method method) {
         switch (returnTypeOf(method)) {
-            case VOID:
-                return null;
-            case STRING:
-                return "";
-            case LONG:
-                return 0L;
-            case INTEGER:
-                return 0;
-            case FLOAT:
-                return 0.0F;
-            case DOUBLE:
-                return 0.0D;
-            case BOOLEAN:
-                return Boolean.FALSE;
-            default:
-                return null;
+            case STRING: return "";
+            case LONG: return 0L;
+            case INTEGER: return 0;
+            case FLOAT: return 0.0F;
+            case DOUBLE: return 0.0D;
+            case BOOLEAN: return Boolean.FALSE;
+            default: return null;
         }
     }
 
@@ -333,6 +299,10 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
 
         Object result = DefaultValue.defaultReturnValueFor(method, obj);
 
+//        if (shouldNotSkipMethod(method, obj.getClass())) {
+//            result = invokeMethodAndNotifyFailures(obj, method, args, proxy, result);
+//        }
+//        return result;
         return withNonStepMethodRunner(method, obj.getClass())
                 .invokeMethodAndNotifyFailures(obj, method, args, proxy, result);
     }

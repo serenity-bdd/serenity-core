@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -16,12 +17,12 @@ public class WebDriverStub implements WebDriver {
 
     @Override
     public String getCurrentUrl() {
-        return null;
+        return "";
     }
 
     @Override
     public String getTitle() {
-        return null;
+        return "";
     }
 
     @Override
@@ -36,7 +37,7 @@ public class WebDriverStub implements WebDriver {
 
     @Override
     public String getPageSource() {
-        return null;
+        return "";
     }
 
     @Override
@@ -51,17 +52,17 @@ public class WebDriverStub implements WebDriver {
 
     @Override
     public Set<String> getWindowHandles() {
-        return null;
+        return new HashSet<>();
     }
 
     @Override
     public String getWindowHandle() {
-        return null;
+        return "";
     }
 
     @Override
     public TargetLocator switchTo() {
-        return null;
+        return new TargetLocatorStub(this);
     }
 
     @Override

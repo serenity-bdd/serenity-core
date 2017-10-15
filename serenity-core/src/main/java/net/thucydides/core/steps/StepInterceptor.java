@@ -211,7 +211,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     }
 
     enum PrimitiveReturnType {
-        STRING, LONG, INTEGER, DOUBLE, FLOAT, BOOLEAN, UNSUPPORTED
+        STRING, LONG, INTEGER, DOUBLE, FLOAT, BOOLEAN, VOID, UNSUPPORTED
     }
 
     private PrimitiveReturnType returnTypeOf(final Method method) {
@@ -240,6 +240,10 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
             return PrimitiveReturnType.BOOLEAN;
         }
 
+        if (returnType.getName().equals("void")) {
+            return PrimitiveReturnType.VOID;
+        }
+
         return PrimitiveReturnType.UNSUPPORTED;
 
     }
@@ -256,7 +260,11 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     }
 
     private Object mockedReturnObjectFor(Method method) {
-        return Mockito.mock(method.getReturnType());
+        try {
+            return Mockito.mock(method.getReturnType());
+        } catch(RuntimeException tooHardToMockLetsJustCallItQuits) {
+            return null;
+        }
     }
 
     private boolean returnTypeIsPrimativeFor(Method method) {
@@ -265,6 +273,8 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
 
     private Object primativeDefaultValueFor(Method method) {
         switch (returnTypeOf(method)) {
+            case VOID:
+                return null;
             case STRING:
                 return "";
             case LONG:

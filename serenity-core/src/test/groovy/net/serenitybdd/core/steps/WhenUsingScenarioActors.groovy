@@ -52,6 +52,6 @@ class WhenUsingScenarioActors extends Specification {
         when:
             Serenity.injectScenarioStepsInto(scenario)
         then:
-            scenario.toString() == "Sam"
+            scenario.sally.toString() == "Sally"
     }
 }

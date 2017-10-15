@@ -1,5 +1,6 @@
 package net.serenitybdd.core.pages
 
+import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeDisabledException
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeEnabledException
@@ -25,6 +26,10 @@ class WhenManipulatingWebElements extends Specification {
     ElementLocator locator = Mock();
     PageObject parentPage = Mock();
 
+    def setup() {
+        StepEventBus.eventBus.clear()
+    }
+    
     @Unroll
     def "web element facade should be printed as the web element"() {
         given:

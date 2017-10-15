@@ -260,11 +260,12 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     }
 
     private Object mockedReturnObjectFor(Method method) {
-        try {
-            return Mockito.mock(method.getReturnType());
-        } catch(RuntimeException tooHardToMockLetsJustCallItQuits) {
-            return null;
-        }
+        return null;
+//        try {
+//            return Mockito.mock(method.getReturnType());
+//        } catch(RuntimeException tooHardToMockLetsJustCallItQuits) {
+//            return null;
+//        }
     }
 
     private boolean returnTypeIsPrimativeFor(Method method) {

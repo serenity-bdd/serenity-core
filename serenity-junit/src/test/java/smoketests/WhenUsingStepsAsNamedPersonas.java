@@ -1,6 +1,7 @@
 package smoketests;
 
 import net.serenitybdd.core.steps.Instrumented;
+import net.serenitybdd.core.steps.ScenarioActor;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
@@ -24,8 +25,25 @@ public class WhenUsingStepsAsNamedPersonas {
         void fliesTo(String destination) {}
     }
 
+    public static class Salesperson extends ScenarioActor {
+
+
+        @Step("#actor makes a sale")
+        void makesASale() {}
+    }
+
     @Steps(actor = "Tracy")
     Traveller tracy;
+
+    @Steps
+    Salesperson sam;
+
+
+    @Steps(actor = "Sam")
+    Salesperson namedSalesman;
+
+    @Steps
+    Salesperson anonymousSalesman;
 
     @Test
     public void shouldBeAbleToNameAPersona() {
@@ -66,10 +84,10 @@ public class WhenUsingStepsAsNamedPersonas {
 
     public static class NamedTraveller {
 
-        private final String name;
+        private final String actor;
 
         public NamedTraveller(String name) {
-            this.name = name;
+            this.actor = name;
         }
 
         @Step("#actor flies to {0}")
@@ -81,7 +99,32 @@ public class WhenUsingStepsAsNamedPersonas {
 
         NamedTraveller traveller = Instrumented.instanceOf(NamedTraveller.class).withProperties("Natalie");
 
-        assertThat(traveller.name).isEqualTo("Natalie");
+        assertThat(traveller.actor).isEqualTo("Natalie");
+    }
+
+    @Test
+    public void shouldBeAbleToUseTheNameOfAScenarioActor() {
+
+        sam.makesASale();
+
+        assertThat(stepDescriptionFor("shouldBeAbleToUseTheNameOfAScenarioActor")).isEqualTo("Sam makes a sale");
+    }
+
+    @Test
+    public void shouldBeAbleToUseTheAnnotatedNameOfAScenarioActor() {
+
+        namedSalesman.makesASale();
+
+        assertThat(stepDescriptionFor("shouldBeAbleToUseTheAnnotatedNameOfAScenarioActor")).isEqualTo("Sam makes a sale");
+    }
+
+    @Test
+    public void shouldBeAbleToNameActorsAfterCreation() {
+
+        anonymousSalesman.isCalled("Sam");
+        anonymousSalesman.makesASale();
+
+        assertThat(stepDescriptionFor("shouldBeAbleToNameActorsAfterCreation")).isEqualTo("Sam makes a sale");
     }
 
     private String stepDescriptionFor(String testName) {

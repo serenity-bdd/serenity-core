@@ -152,7 +152,9 @@ public class StepsAnnotatedField {
     }
 
     private Optional<Field> actorFieldIn(Object steps) {
-        return Arrays.stream(steps.getClass().getSuperclass().getDeclaredFields())
+
+
+        return Fields.of(steps.getClass()).allFields().stream()
                 .filter(field -> field.getName().equals("actor")
                         && field.getType().equals(String.class))
                 .findFirst();

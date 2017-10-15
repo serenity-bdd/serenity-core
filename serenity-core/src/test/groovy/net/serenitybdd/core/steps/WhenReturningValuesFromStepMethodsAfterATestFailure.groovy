@@ -1,6 +1,7 @@
 package net.serenitybdd.core.steps
 
 import net.thucydides.core.annotations.Step
+import net.thucydides.core.steps.StepEventBus
 import spock.lang.Specification
 
 import static org.assertj.core.api.Java6Assertions.assertThat
@@ -108,7 +109,7 @@ class WhenReturningValuesFromStepMethodsAfterATestFailure extends Specification 
 
     def "should return false for booleans"() {
         expect:
-        stepLibrary.returnsABoolean() == false && stepLibrary.returnsAPrimitiveBoolean() == false
+        stepLibrary.returnsABoolean() == Boolean.FALSE && stepLibrary.returnsAPrimitiveBoolean() == false
     }
 
     def "should return mocked out domain objects"() {

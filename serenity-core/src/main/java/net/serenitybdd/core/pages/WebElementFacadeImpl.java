@@ -906,6 +906,9 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         } catch (TimeoutException timeout) {
             throw new ElementShouldBeEnabledException("Expected enabled element was not enabled", timeout);
         }
+        if (webElement == null) {
+            throw new ElementShouldBeEnabledException("Expected enabled element was not enabled for " + this.toString());
+        }
         return this;
     }
 

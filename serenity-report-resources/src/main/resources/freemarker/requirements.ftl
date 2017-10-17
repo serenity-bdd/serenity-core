@@ -164,20 +164,20 @@
         <div class="middlebg">
             <span class="breadcrumbs">
             <a href='index.html'>Home</a> > <a href="capabilities.html">Requirements</a>
-            <#if requirements.parentRequirement.isPresent()>
 
+            <#list breadcrumbs as breadcrumb>
+                <#assign breadcrumbReport = absoluteReportName.forRequirement(breadcrumb) />
+                <#assign breadcrumbTitle = inflection.of(breadcrumb.shortName).asATitle() >
+                > <a href="${breadcrumbReport}">${formatter.htmlCompatibleStoryTitle(breadcrumbTitle)}</a>
+            </#list>
+
+            <#if requirements.parentRequirement.isPresent()>
                 <#assign parent = requirements.parentRequirement.get()>
                 <#assign parentTitle = inflection.of(parent.displayName).asATitle() >
 
-                <#if (requirements.grandparentRequirement.isPresent())>
-                    <#assign ancestor = reportName.forRequirement(requirements.grandparentRequirement.get()) >
-                    <#assign rootReport = reportName.forRequirement(requirements.grandparentRequirement.get()) >
-                    <#assign rootTitle = inflection.of(requirements.grandparentRequirement.get().displayName).asATitle() >
-                    > <a href="${rootReport}" title="${rootTitle}"><span class="truncate-40">${formatter.htmlCompatible(rootTitle)}</span></a>
-                </#if>
-                <#--> ${formatter.truncatedHtmlCompatible(parentTitle,40)}-->
                 > <span class="truncate-40">${formatter.htmlCompatibleStoryTitle(parentTitle)}</span>
             </#if>
+
             </span>
         </div>
         <div class="rightbg"></div>

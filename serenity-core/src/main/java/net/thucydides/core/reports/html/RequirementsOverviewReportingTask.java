@@ -87,16 +87,20 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         context.put("reportOptions", new ReportOptions(getEnvironmentVariables()));
         context.put("relativeLink", relativeLink);
 
-        addBreadcrumbs(requirementsOutcomes, context);
+        addBreadcrumbs(requirementsOutcomes, context, requirementsOutcomes.getTestOutcomes().getTags());
 
         generateReportPage(context, DEFAULT_REQUIREMENTS_REPORT, reportName);
         LOGGER.trace("Requirements report generated: {} in {} ms", reportName, stopwatch.stop());
 
     }
 
-    private void addBreadcrumbs(RequirementsOutcomes requirementsOutcomes, Map<String, Object> context) {
-        List<TestTag> breadcrumbs = new BreadcrumbTagFilter().getRequirementBreadcrumbsFrom(requirementsOutcomes);
-        context.put("breadcrumbs", breadcrumbs);
+    private void addBreadcrumbs(RequirementsOutcomes requirementsOutcomes, Map<String, Object> context, List<TestTag> allTags) {
+        if (this.requirementsOutcomes.getParentRequirement().isPresent()) {
+            context.put("breadcrumbs", Breadcrumbs.forRequirementsTag(this.requirementsOutcomes.getParentRequirement().get().asTag())
+                                                  .fromTagsIn(allTags));
+        } else {
+            context.put("breadcrumbs", new BreadcrumbTagFilter().getRequirementBreadcrumbsFrom(requirementsOutcomes));
+        }
     }
 
     @Override

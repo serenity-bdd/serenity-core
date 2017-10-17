@@ -1,7 +1,6 @@
 import org.ajoberstar.gradle.git.release.opinion.Strategies
 import org.ajoberstar.grgit.Grgit
 
-group = 'net.serenity-bdd'
 buildscript {
     repositories {
         jcenter()
@@ -14,8 +13,12 @@ buildscript {
     }
 }
 
-apply plugin: 'org.ajoberstar.release-opinion'
-apply plugin: 'project-report'
+plugins {
+    id 'org.ajoberstar.release-opinion' version '1.7.2'
+    id 'project-report'
+}
+
+group = 'net.serenity-bdd'
 
 task wrapper(type: Wrapper) {
     gradleVersion = "${gradleVersion}"

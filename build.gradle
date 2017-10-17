@@ -222,17 +222,12 @@ subprojects {
         testCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
+        testCompile("org.codehaus.groovy:groovy-all:${groovyVersion}")
         testCompile("org.spockframework:spock-core:${spockVersion}") {
             exclude group: "junit"
-            exclude module: "groovy-all"
+            exclude group: "org.codehaus.groovy"
 
         }
-        testCompile("com.github.goldin:spock-extensions:${spockExtensionsVersion}") {
-            exclude group:"org.spockframework", module: "spock-core"
-            exclude group:"org.slf4j", module: "slf4j-api"
-            exclude group:"asm", module: "asm"
-        }
-        testCompile("org.codehaus.groovy:groovy-all:${groovyVersion}")
         testCompile "org.assertj:assertj-core:${assertjVersion}"
     }
 

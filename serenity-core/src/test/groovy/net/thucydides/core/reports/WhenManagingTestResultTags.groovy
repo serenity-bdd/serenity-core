@@ -8,6 +8,24 @@ class WhenManagingTestResultTags extends Specification {
 
     def testOutcomes = new TestOutcomesBuilder().defaultResults
 
+    def "test outcomes tags should be returned as a set of unique tags"() {
+        when:
+            testOutcomes.tests[0].addTags([TestTag.withValue("flavor:chocolate")])
+            testOutcomes.tests[0].addTags([TestTag.withValue("color:orange")])
+        and:
+            testOutcomes.tests[1].addTags([TestTag.withValue("flavor:chocolate")])
+            testOutcomes.tests[1].addTags([TestTag.withValue("color:red")])
+
+        then:
+            testOutcomes.tags.size() == 5
+            testOutcomes.tags as Set == [TestTag.withValue("feature:widget feature"),
+                                      TestTag.withValue("flavor:chocolate"),
+                                      TestTag.withValue("story:Widget feature/Purchase new widget"),
+                                      TestTag.withValue("color:orange"),
+                                      TestTag.withValue("color:red")] as Set
+    }
+
+
     def "should list all of the tag names in a set of outcomes"() {
         when:
             testOutcomes.tests[0].addTags([TestTag.withName("chocolate").andType("flavor")])

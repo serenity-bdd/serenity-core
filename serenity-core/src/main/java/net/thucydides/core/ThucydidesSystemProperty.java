@@ -1,6 +1,7 @@
 package net.thucydides.core;
 
 import com.google.common.base.Optional;
+import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;

@@ -149,7 +149,8 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
                             reportName,
                             reportName.forTag(tag),
                             tag,
-                            concat(allTags, tag),
+                            allTags,
+//                            concat(allTags, tag),
                             testOutcomes))
                     .collect(Collectors.toSet());
 
@@ -160,6 +161,9 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
         }
 
         private List<TestTag> concat(List<TestTag> allTags, TestTag tag) {
+            if (allTags.contains(tag)) {
+                return allTags;
+            }
             return Lists.asList(tag, allTags.toArray(new TestTag[]{}));
         }
 

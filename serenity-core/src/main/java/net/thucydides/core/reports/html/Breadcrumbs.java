@@ -1,11 +1,11 @@
 package net.thucydides.core.reports.html;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import net.thucydides.core.model.TestTag;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Breadcrumbs {
 
@@ -64,7 +64,7 @@ public class Breadcrumbs {
                         return Optional.of(tag);
                     }
                 }
-                return Optional.absent();
+                return Optional.empty();
             }
         }
     }

@@ -9,6 +9,7 @@ public class StoryFileStrategy implements FeatureTagStrategy {
     @Override
     public Optional<TestTag> getFeatureTag(Story story, String featureFilename) {
 
+        System.out.println("Story name for " + featureFilename + " => " + story.asTag());
         return Optional.of(story.asTag());
 //        File featureFile = FeatureOrStoryFile.forStoryDescribedIn(featureFilename).asFile();
 //

@@ -32,6 +32,7 @@ import static net.thucydides.core.requirements.RequirementsPath.stripRootFromPat
 import static net.thucydides.core.requirements.RootDirectory.defaultRootDirectoryPathFrom;
 import static net.thucydides.core.util.NameConverter.humanize;
 import static org.apache.commons.io.FilenameUtils.removeExtension;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Load a set of requirements (epics/themes,...) from the directory structure.
@@ -490,17 +491,29 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         FeatureType type = featureTypeOf(storyFile);
         String defaultStoryName = storyFile.getName().replace(type.getExtension(), "");
 
-        java.util.Optional<Narrative> optionalNarrative = (type == FeatureType.STORY) ? loadFromStoryFile(storyFile) : loadFromFeatureFile(storyFile);
+        java.util.Optional<Narrative> narrative = (type == FeatureType.STORY) ? loadFromStoryFile(storyFile) : loadFromFeatureFile(storyFile);
 
-        String storyName = optionalNarrative.map(narrative -> narrative.getTitle().or(defaultStoryName)).orElse(defaultStoryName);
+        String storyName = storyNameFrom(narrative, type, storyFile);
 
-        Requirement requirement = optionalNarrative.map(
-                narrative -> leafRequirementWithNarrative(humanReadableVersionOf(storyName), storyFile.getPath(), narrative)
-                              .withType(type.toString()))
-                .orElseGet(
-                        () -> storyNamed(storyName).withType(type.toString()));
+        Requirement requirement;
+        if (narrative.isPresent()) {
+            requirement = leafRequirementWithNarrative(humanReadableVersionOf(storyName),
+                                                       storyFile.getPath(),
+                                                       narrative.get()).withType(type.toString());
+        } else {
+            requirement = storyNamed(storyName).withType(type.toString());
+        }
 
         return requirement.definedInFile(storyFile);
+    }
+
+    private String storyNameFrom(java.util.Optional<Narrative> narrative, FeatureType type, File storyFile) {
+        if (narrative.isPresent() && isNotBlank(narrative.get().getTitle().or(""))) {
+            return narrative.get().getTitle().get();
+        } else {
+            return storyFile.getName().replace(type.getExtension(), "");
+        }
+
     }
 
     private java.util.Optional<Narrative> loadFromStoryFile(File storyFile) {
@@ -634,7 +647,10 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private String getTitleFromNarrativeOrDirectoryName(Narrative requirementNarrative, String nameIfNoNarrativePresent) {
-        return requirementNarrative.getTitle().or(nameIfNoNarrativePresent);
+        if (requirementNarrative.getTitle().isPresent() && isNotBlank(requirementNarrative.getTitle().get())) {
+            return requirementNarrative.getTitle().get();
+        }
+        return nameIfNoNarrativePresent;
     }
 
     private FileFilter thatAreFeatureDirectories() {

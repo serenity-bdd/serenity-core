@@ -69,6 +69,17 @@ body {
     background-color:#999999;*/
 }
 
+td.tag-title {
+    /* essential */
+
+    text-overflow: ellipsis;
+    width: 17.5em;
+    max-width: 17.5em;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+
 .story-coverage
 {
     border-left: 1px solid #88a717; padding-left: 10px

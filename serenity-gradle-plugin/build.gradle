@@ -49,8 +49,5 @@ task copySerenityJunit(dependsOn: ':serenity-junit:jar') {
 }
 
 dependencies {
-    //compile gradleApi()
-
     compile project(':serenity-core')
-//    compile project(':serenity-junit')
 }

@@ -29,10 +29,19 @@ public class Breadcrumbs {
 
             if (!parentTag.isPresent()) { return new ArrayList<>(); }
 
-            List<TestTag> ancestors = Breadcrumbs.forRequirementsTag(parentTag.get()).fromTagsIn(allTags);
+            List<TestTag> ancestorParents = removeTagFrom(allTags, parentTag.get());
+
+            List<TestTag> ancestors = Breadcrumbs.forRequirementsTag(parentTag.get()).fromTagsIn(ancestorParents);
+
             ancestors.add(parentTag.get());
 
             return ancestors;
+        }
+
+        private List<TestTag> removeTagFrom(List<TestTag> allTags, TestTag testTag) {
+            List<TestTag> trimmedTags = new ArrayList<>(allTags);
+            trimmedTags.remove(testTag);
+            return trimmedTags;
         }
 
         private boolean isAnOrphan(String name) {

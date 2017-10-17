@@ -48,9 +48,8 @@ task copySerenityJunit(dependsOn: ':serenity-junit:jar') {
 
 dependencies {
     compile gradleApi()
-    localGroovy()
-    gradleTestKit()
 
+    compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
     compile project(':serenity-core')
     compile project(':serenity-junit')
 }

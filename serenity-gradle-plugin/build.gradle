@@ -2,6 +2,8 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
+apply plugin: 'java-gradle-plugin'
+
 ext {
     bintrayPackage = 'serenity-gradle-plugin'
     projectDescription = 'Serenity Gradle Plugin'
@@ -47,7 +49,7 @@ task copySerenityJunit(dependsOn: ':serenity-junit:jar') {
 }
 
 dependencies {
-    compile gradleApi()
+    //compile gradleApi()
 
     compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
     compile project(':serenity-core')

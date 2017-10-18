@@ -11,7 +11,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <serenity.version>1.2.3-SNAPSHOT</serenity.version>
+        <serenity.version>1.2.3-</serenity.version>
         <serenity.maven.version>1.2.2</serenity.maven.version>
         <parallel.tests>4</parallel.tests>
         <browserstack.url></browserstack.url>

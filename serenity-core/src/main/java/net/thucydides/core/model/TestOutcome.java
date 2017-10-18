@@ -2216,6 +2216,12 @@ public class TestOutcome {
                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
+
+    public String getTimestamp(DateTimeFormatter formater) {
+        return Optional.fromNullable(startTime).or(now())
+                .format(formater);
+
+    }
     public boolean isDataDriven() {
         return dataTable != null;
     }

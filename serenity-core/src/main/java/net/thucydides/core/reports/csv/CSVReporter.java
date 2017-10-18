@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -78,10 +79,11 @@ public class CSVReporter extends ThucydidesReporter {
     }
 
     private String[] withRowDataFrom(TestOutcome outcome) {
-        List<? extends Serializable> defaultValues = ImmutableList.of(blankIfNull(outcome.getStoryTitle()),
+        List<? extends Serializable> defaultValues = ImmutableList.of(
+                blankIfNull(outcome.getStoryTitle()),
                 blankIfNull(outcome.getTitle()),
                 outcome.getResult(),
-                blankIfNull(outcome.getStartedAt()),
+                blankIfNull(outcome.getTimestamp(DateTimeFormatter.ISO_ZONED_DATE_TIME)),
                 passRateFor(outcome),
                 outcome.getDurationInSeconds());
         List<String> cellValues =

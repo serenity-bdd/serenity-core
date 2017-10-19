@@ -415,6 +415,12 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_RESIZED_IMAGE_WIDTH,
 
     /**
+     * Set to false if you don't want Serenity to resize the browser page at the start of a test
+     * (Can be useful for custom Appium drivers)
+     */
+    SERENITY_BROWSER_RESIZING,
+
+    /**
      * If set, resize screenshots to this size to save space.
      */
     SERENITY_RESIZED_IMAGE_WIDTH,

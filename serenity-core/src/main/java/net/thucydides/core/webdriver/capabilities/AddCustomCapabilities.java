@@ -63,9 +63,8 @@ public class AddCustomCapabilities {
         }
 
         try {
-            Integer integerValue = Integer.parseInt(propertyValue);
-            return integerValue;
-        } catch(NumberFormatException noBiggy) {}
+            return Integer.parseInt(propertyValue);
+        } catch(NumberFormatException noBiggyWeWillTrySomethingElse) {}
 
         if (propertyValue.equalsIgnoreCase("true") || propertyValue.equalsIgnoreCase("false")) {
             return Boolean.parseBoolean(propertyValue);

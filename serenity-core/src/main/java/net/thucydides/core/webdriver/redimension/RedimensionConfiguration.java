@@ -42,4 +42,8 @@ class RedimensionConfiguration {
     public int getHeight() {
         return ThucydidesSystemProperty.THUCYDIDES_BROWSER_HEIGHT.integerFrom(environmentVariables, 0);
     }
+
+    public boolean isDisabled() {
+        return ThucydidesSystemProperty.SERENITY_BROWSER_RESIZING.booleanFrom(environmentVariables, true);
+    }
 }

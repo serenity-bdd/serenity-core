@@ -12,7 +12,7 @@ enum RedimensionStrategy {
 
         RedimensionConfiguration redimensionConfiguration = new RedimensionConfiguration(environmentVariables);
 
-        if (!redimensionConfiguration.supportsScreenResizing(driver)) {
+        if (redimensionConfiguration.isDisabled() || !redimensionConfiguration.supportsScreenResizing(driver)) {
             return DoNotRedimension;
         }
 

@@ -44,6 +44,6 @@ class RedimensionConfiguration {
     }
 
     public boolean isDisabled() {
-        return ThucydidesSystemProperty.SERENITY_BROWSER_RESIZING.booleanFrom(environmentVariables, true);
+        return !ThucydidesSystemProperty.SERENITY_BROWSER_RESIZING.booleanFrom(environmentVariables, true);
     }
 }

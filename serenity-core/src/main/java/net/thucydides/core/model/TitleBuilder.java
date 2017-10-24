@@ -52,7 +52,7 @@ public class TitleBuilder {
     }
 
     public String getTitleWithLinks() {
-        String title = Inflector.getInstance().of(getTitle()).asATitle().toString();
+        String title = Inflector.getInstance().of(getTitle()).toString();
         return getFormatter().addLinks(title);
     }
 

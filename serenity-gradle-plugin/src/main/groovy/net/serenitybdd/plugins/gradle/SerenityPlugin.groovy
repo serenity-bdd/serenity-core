@@ -56,7 +56,7 @@ class SerenityPlugin implements Plugin<Project> {
                 updateProperties(project)
                 reportDirectory = prepareReportDirectory(project)
                 logger.lifecycle("Checking serenity results for ${project.serenity.projectKey} in directory $reportDirectory")
-                if (reportDirectory.exists()) {
+                if (reportDirectory.toFile().exists()) {
                     def checker = new ResultChecker(reportDirectory.toFile())
                     checker.checkTestResults()
                 }
@@ -110,7 +110,7 @@ class SerenityPlugin implements Plugin<Project> {
         }
     }
 
-    static def prepareReportDirectory(Project project) {
+    static Path prepareReportDirectory(Project project) {
         Path outputDir = Paths.get(project.serenity.outputDirectory)
         if (!outputDir.isAbsolute()) {
             outputDir = project.projectDir.toPath().resolve(outputDir)

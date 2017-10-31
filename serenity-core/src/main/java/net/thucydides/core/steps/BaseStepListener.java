@@ -976,8 +976,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
         take(MANDATORY_SCREENSHOT);
     }
 
-    int currentExample = 0;
-    int lastFailingExample = 0;
+    private int currentExample = 0;
+    private int lastFailingExample = 0;
 
     /**
      * The current scenario is a data-driven scenario using test data from the specified table.

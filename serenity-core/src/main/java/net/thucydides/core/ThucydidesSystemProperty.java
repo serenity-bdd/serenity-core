@@ -1243,10 +1243,10 @@ public enum ThucydidesSystemProperty {
                 = Optional.fromNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
 
         if (isDefined(newPropertyValue)) {
-            return Integer.parseInt(newPropertyValue.get());
+            return Integer.parseInt(newPropertyValue.get().trim());
         } else {
             Optional<String> legacyValue = legacyPropertyValueIfPresentIn(environmentVariables);
-            return (isDefined(legacyValue)) ? Integer.parseInt(legacyValue.get()) : defaultValue;
+            return (isDefined(legacyValue)) ? Integer.parseInt(legacyValue.get().trim()) : defaultValue;
         }
     }
 
@@ -1261,10 +1261,10 @@ public enum ThucydidesSystemProperty {
                 = Optional.fromNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
 
         if (isDefined(newPropertyValue)) {
-            return Boolean.valueOf(newPropertyValue.get());
+            return Boolean.valueOf(newPropertyValue.get().trim());
         } else {
             Optional<String> legacyValue = legacyPropertyValueIfPresentIn(environmentVariables);
-            return (isDefined(legacyValue)) ? Boolean.valueOf(legacyValue.get()) : defaultValue;
+            return (isDefined(legacyValue)) ? Boolean.valueOf(legacyValue.get().trim()) : defaultValue;
         }
     }
 

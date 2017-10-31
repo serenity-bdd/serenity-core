@@ -12,20 +12,19 @@ import java.net.URL;
 import static net.thucydides.core.webdriver.WebDriverFactory.getBrowserStackDriverFrom;
 
 class BrowserStackDriverBuilder extends RemoteDriverBuilder {
-    private final EnvironmentVariables environmentVariables;
     private final DriverCapabilities remoteDriverCapabilities;
 
     private final BrowserStackRemoteDriverCapabilities browserStackRemoteDriverCapabilities;
 
     BrowserStackDriverBuilder(EnvironmentVariables environmentVariables, DriverCapabilities remoteDriverCapabilities) {
-        this.environmentVariables = environmentVariables;
+        super(environmentVariables);
         this.remoteDriverCapabilities = remoteDriverCapabilities;
         this.browserStackRemoteDriverCapabilities = new BrowserStackRemoteDriverCapabilities(environmentVariables);
     }
 
     WebDriver buildWithOptions(String options) throws MalformedURLException {
         String browserStackUrl = browserStackRemoteDriverCapabilities.getUrl();
-        return newRemoteDriver(new URL(browserStackUrl), findbrowserStackCapabilities(options));
+        return newRemoteDriver(new URL(browserStackUrl), findbrowserStackCapabilities(options), options);
     }
 
     private Capabilities findbrowserStackCapabilities(String options) {

@@ -17,12 +17,11 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 class SaucelabsDriverBuilder extends RemoteDriverBuilder {
 
     private final SaucelabsRemoteDriverCapabilities saucelabsRemoteDriverCapabilities;
-    private final EnvironmentVariables environmentVariables;
     private final DriverCapabilities remoteDriverCapabilities;
 
     SaucelabsDriverBuilder(EnvironmentVariables environmentVariables,
-                                  DriverCapabilities remoteDriverCapabilities) {
-        this.environmentVariables = environmentVariables;
+                           DriverCapabilities remoteDriverCapabilities) {
+        super(environmentVariables);
         this.saucelabsRemoteDriverCapabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
         this.remoteDriverCapabilities = remoteDriverCapabilities;
     }
@@ -30,14 +29,20 @@ class SaucelabsDriverBuilder extends RemoteDriverBuilder {
 
     WebDriver buildWithOptions(String options) throws MalformedURLException {
         String saucelabsUrl = saucelabsRemoteDriverCapabilities.getUrl();
-        WebDriver driver = newRemoteDriver(new URL(saucelabsUrl), findSaucelabsCapabilities(options));
 
+        WebDriver driver = newRemoteDriver(new URL(saucelabsUrl), findSaucelabsCapabilities(options), options);
+
+        setImplicitTimeoutsFor(driver);
+
+        return driver;
+    }
+
+    private void setImplicitTimeoutsFor(WebDriver driver) {
         if (isNotEmpty(ThucydidesSystemProperty.SAUCELABS_IMPLICIT_TIMEOUT.from(environmentVariables))) {
             int implicitWait = ThucydidesSystemProperty.SAUCELABS_IMPLICIT_TIMEOUT.integerFrom(environmentVariables, 30);
 
             driver.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);
         }
-        return driver;
     }
 
     private Capabilities findSaucelabsCapabilities(String options) {

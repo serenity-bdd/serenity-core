@@ -15,7 +15,7 @@ public class RedimensionBrowser {
 
     private final EnvironmentVariables environmentVariables;
 
-    public RedimensionBrowser(EnvironmentVariables environmentVariables, Class<? extends WebDriver> driverClass) {
+    public RedimensionBrowser(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
     }
 
@@ -29,7 +29,6 @@ public class RedimensionBrowser {
 
     public void withDriver(final WebDriver driver) {
         RedimensionStrategy strategy = RedimensionStrategy.strategyFor(driver, environmentVariables);
-
         getRedimensionerStrategies().get(strategy).redimension(driver);
     }
 }

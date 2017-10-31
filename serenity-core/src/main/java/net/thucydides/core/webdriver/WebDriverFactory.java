@@ -111,15 +111,13 @@ public class WebDriverFactory {
      * This method is synchronized because multiple webdriver instances can be created in parallel.
      * However, they may use common system resources such as ports, so may potentially interfere
      * with each other.
-     *
-     * @param driverClass
      */
     protected synchronized WebDriver newWebdriverInstance(final Class<? extends WebDriver> driverClass) {
         return newWebdriverInstance(driverClass, "");
     }
 
     protected synchronized WebDriver newWebdriverInstance(final Class<? extends WebDriver> driverClass, String options) {
-        RedimensionBrowser redimensionBrowser = new RedimensionBrowser(environmentVariables, driverClass);
+        RedimensionBrowser redimensionBrowser = new RedimensionBrowser(environmentVariables);
         try {
             SupportedWebDriver supportedDriverType = inEnvironment(environmentVariables).forDriverClass(driverClass);
             WebDriver driver = driverProviders().get(supportedDriverType).newInstance(options);

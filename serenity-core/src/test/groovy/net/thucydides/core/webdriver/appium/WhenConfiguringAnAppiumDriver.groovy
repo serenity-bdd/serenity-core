@@ -6,6 +6,7 @@ import net.thucydides.core.util.PathProcessor
 import net.thucydides.core.webdriver.MobilePlatform
 import net.thucydides.core.webdriver.ThucydidesConfigurationException
 import spock.lang.Specification
+import spock.lang.Unroll
 
 /**
  * Created by Ben on 10/11/14.

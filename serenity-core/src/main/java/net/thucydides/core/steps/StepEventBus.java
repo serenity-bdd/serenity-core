@@ -476,7 +476,6 @@ public class StepEventBus {
     }
 
     public void suspendTest(TestResult result) {
-        suspendTest();
         switch (result) {
             case PENDING:
                 testPending();

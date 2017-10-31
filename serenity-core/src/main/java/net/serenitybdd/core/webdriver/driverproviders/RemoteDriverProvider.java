@@ -14,8 +14,11 @@ import java.util.Map;
 
 import static net.thucydides.core.ThucydidesSystemProperty.BROWSERSTACK_URL;
 import static net.thucydides.core.ThucydidesSystemProperty.SAUCELABS_URL;
-import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
 
+/**
+ * A Remote Driver using Saucelabs or Browserstack (for remote web tesing), or Selenium Grid.
+ * This class should not be used for Appium testing, as Appium is already a remote driver.
+ */
 public class RemoteDriverProvider implements DriverProvider {
 
     private final EnvironmentVariables environmentVariables;
@@ -38,7 +41,7 @@ public class RemoteDriverProvider implements DriverProvider {
     @Override
     public WebDriver newInstance(String options) throws MalformedURLException {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
-            return new WebDriverStub();
+            return RemoteWebdriverStub.from(environmentVariables);
         }
 
         WebDriver driver = DRIVER_BUILDERS.get(remoteDriverType()).buildWithOptions(options);
@@ -47,6 +50,7 @@ public class RemoteDriverProvider implements DriverProvider {
     }
 
     private RemoteDriverType remoteDriverType() {
+
         if (saucelabsUrlIsDefined()) {
             return RemoteDriverType.SAUCELABS;
         } else if (browserStackUrlIsDefined()){

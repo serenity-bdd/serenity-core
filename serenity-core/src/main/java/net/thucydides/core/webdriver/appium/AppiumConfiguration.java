@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver.appium;
 
-import com.google.common.base.Splitter;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.PathProcessor;
 import net.thucydides.core.webdriver.MobilePlatform;
@@ -10,18 +9,18 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AppiumConfiguration {
 
     private static final String DEFAULT_URL = "http://127.0.0.1:4723/wd/hub";
     private final EnvironmentVariables environmentVariables;
 
-    public AppiumConfiguration(EnvironmentVariables environmentVariables) {
+    private AppiumConfiguration(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
     }
 
@@ -29,15 +28,26 @@ public class AppiumConfiguration {
         return new AppiumConfiguration(environmentVariables);
     }
 
+    /**
+     * Return the Appium platform defined in the system properties. Must be either ios or android.
+     */
     public MobilePlatform getTargetPlatform() {
-        String targetPlatform = environmentVariables.getProperty("appium.platformName", "UNDEFINED");
-        MobilePlatform platform = null;
+        return Stream.of(definedTargetPlatform())
+                .filter( platform -> platform.isDefined)
+                .findFirst()
+                .orElseThrow(() -> new ThucydidesConfigurationException("The appium.platformName needs to be specified (either IOS or ANDROID)"));
+    }
+
+    /**
+     * Return the Appium platform defined in the system properties, or NONE if no platform is defined.
+     */
+    public MobilePlatform definedTargetPlatform() {
+        String targetPlatform = environmentVariables.getProperty("appium.platformName","NONE");
         try {
-            platform = MobilePlatform.valueOf(targetPlatform.toUpperCase());
+            return MobilePlatform.valueOf(targetPlatform.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new ThucydidesConfigurationException("The appium.platformName needs to be specified (either IOS or ANDROID)");
+            throw new ThucydidesConfigurationException("Illegal appium.platformName value (needs to be either IOS or ANDROID):" + targetPlatform);
         }
-        return platform;
     }
 
     public URL getUrl() {
@@ -102,5 +112,9 @@ public class AppiumConfiguration {
 
     private boolean isAppProperty(String key) {
         return key.equals("appium.app");
+    }
+
+    public boolean isDefined() {
+        return getTargetPlatform() != MobilePlatform.NONE;
     }
 }

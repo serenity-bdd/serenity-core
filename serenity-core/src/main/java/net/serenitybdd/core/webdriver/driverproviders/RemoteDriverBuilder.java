@@ -1,11 +1,18 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import com.google.common.base.Splitter;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.appium.AppiumConfiguration;
+import net.thucydides.core.webdriver.stubs.AndroidWebDriverStub;
+import net.thucydides.core.webdriver.stubs.IOSWebDriverStub;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import org.mockito.Mockito;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -15,30 +22,51 @@ import java.io.IOException;
 import java.net.*;
 import java.util.List;
 
+import static org.mockito.Mockito.when;
+
 abstract class RemoteDriverBuilder {
 
     private final DriverCapabilityRecord driverProperties;
+    protected final EnvironmentVariables environmentVariables;
 
-    private final static int WITHIN_THREE_SECONDS = 3000;
-
-    RemoteDriverBuilder() {
+    RemoteDriverBuilder(EnvironmentVariables environmentVariables) {
+        this.environmentVariables = environmentVariables;
         this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     abstract WebDriver buildWithOptions(String options) throws MalformedURLException;
 
-
-    WebDriver newRemoteDriver(URL remoteUrl, Capabilities capabilities) {
+    WebDriver newRemoteDriver(URL remoteUrl, Capabilities remoteCapabilities, String options) {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
-            return new WebDriverStub();
+            return RemoteWebdriverStub.from(environmentVariables);
         }
 
         try {
             ensureHostIsAvailableAt(remoteUrl);
 
-            RemoteWebDriver driver = new RemoteWebDriver(remoteUrl, capabilities);
-            driverProperties.registerCapabilities(capabilities.getBrowserName(), driver.getCapabilities());
+            RemoteWebDriver driver;
+
+            switch (AppiumConfiguration.from(environmentVariables).definedTargetPlatform()) {
+
+                case IOS:
+                    Capabilities iosCapabilities = AppiumConfiguration.from(environmentVariables).getCapabilities(options);
+                    driver = new IOSDriver<>(remoteUrl, iosCapabilities.merge(remoteCapabilities));
+                    break;
+
+                case ANDROID:
+                    Capabilities androidCapabilities = AppiumConfiguration.from(environmentVariables).getCapabilities(options);
+                    driver = new AndroidDriver<>(remoteUrl, androidCapabilities.merge(remoteCapabilities));
+                    break;
+
+                case NONE:
+                default:
+                    driver = new RemoteWebDriver(remoteUrl, remoteCapabilities);
+                    break;
+            }
+
+            driverProperties.registerCapabilities(remoteCapabilities.getBrowserName(), driver.getCapabilities());
             return driver;
+
         } catch (UnreachableBrowserException unreachableBrowser) {
             String errorMessage = unreachableBrowserErrorMessage(unreachableBrowser);
             throw new SerenityManagedException(errorMessage, unreachableBrowser);
@@ -57,16 +85,6 @@ abstract class RemoteDriverBuilder {
         try {
             URLConnection urlConnection = remoteUrl.openConnection();
             urlConnection.connect();
-            return true;
-        } catch (IOException e) {
-            return false; // Either timeout or unreachable or failed DNS lookup.
-        }
-    }
-
-
-    public static boolean pingHost(String host, int port, int timeout) {
-        try (Socket socket = new Socket()) {
-            socket.connect(new InetSocketAddress(host, port), timeout);
             return true;
         } catch (IOException e) {
             return false; // Either timeout or unreachable or failed DNS lookup.

@@ -11,18 +11,17 @@ import java.net.URL;
 import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
 
 class DefaultRemoteDriver extends  RemoteDriverBuilder {
-    private final EnvironmentVariables environmentVariables;
     private final DriverCapabilities remoteDriverCapabilities;
 
     DefaultRemoteDriver(EnvironmentVariables environmentVariables, DriverCapabilities remoteDriverCapabilities) {
-        this.environmentVariables = environmentVariables;
+        super(environmentVariables);
         this.remoteDriverCapabilities = remoteDriverCapabilities;
     }
 
     WebDriver buildWithOptions(String options) throws MalformedURLException {
         String remoteUrl = ThucydidesSystemProperty.WEBDRIVER_REMOTE_URL.from(environmentVariables);
         Capabilities capabilities = buildRemoteCapabilities(options);
-        return newRemoteDriver(new URL(remoteUrl), capabilities);
+        return newRemoteDriver(new URL(remoteUrl), capabilities, options);
     }
 
     private Capabilities buildRemoteCapabilities(String options) {

@@ -24,6 +24,16 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     }
 
     @Unroll
+    def "should render XML tags for error messages"() {
+        expect:
+        def formatter = new Formatter(issueTracking);
+        formatter.messageBody(message) == formattedMessage
+        where:
+        message         | formattedMessage
+        "Expected XML:\n<a>value</a>"   | "Expected XML:<br>&lt;a&gt;value&lt;/a&gt;"
+    }
+
+    @Unroll
     def "should render story titles with foreign characters"() {
         expect:
         def formatter = new Formatter(issueTracking);

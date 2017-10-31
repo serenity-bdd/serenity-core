@@ -283,7 +283,10 @@
                             </div>
                             <div class="modal-body">
                                 <#if (cause.message)??>
-                                    <h5>${formatter.plainHtmlCompatible(cause.message)}</h5></#if>
+                                    <h5>
+                                        <pre>${formatter.messageBody(cause.message)}</pre>
+                                    </h5>
+                                </#if>
                                 <#list cause.stackTrace as element>
                                 ${element.className}.${element.methodName}(${(element.fileName)!""}
                                     :${element.lineNumber}) <br>
@@ -301,10 +304,13 @@
                                 </div>
                                 <div class="modal-body">
                                     <#if (cause.rootCause.get().message)??>
-                                        <h5>${formatter.plainHtmlCompatible(cause.rootCause.get().message)}</h5></#if>
+                                        <pre>${formatter.messageBody(cause.rootCause.get().message)}</pre>
+                                    </#if>
+                                    <pre>
                                     <#list cause.rootCause.get().stackTrace as element>
                                         ${element.className}.${element.methodName}(${(element.fileName)!""} :${element.lineNumber}) <br>
                                     </#list>
+                                    </pre>
                                 </div>
 
                             </#if>

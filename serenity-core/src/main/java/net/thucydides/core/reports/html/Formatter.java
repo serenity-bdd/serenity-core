@@ -246,7 +246,7 @@ public class Formatter {
     }
 
     public static String addLineBreaks(final String text) {
-        return (text != null) ? concatLines(text, "<br>") : "";
+        return (text != null) ? concatLines(text.trim(), "<br>") : "";
 //                text.replaceAll(IOUtils.LINE_SEPARATOR_WINDOWS, "<br>")
 //                    .replaceAll(IOUtils.LINE_SEPARATOR_UNIX, "<br>") : "";
     }
@@ -354,6 +354,10 @@ public class Formatter {
 
     public String htmlCompatible(Object fieldValue) {
         return plainHtmlCompatible(fieldValue);
+    }
+
+    public String messageBody(String message) {
+        return renderText(message.trim());
     }
 
     public String htmlCompatibleStoryTitle(Object fieldValue) {

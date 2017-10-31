@@ -34,6 +34,16 @@ class WhenFormattingDataForTheHTMLReports extends Specification {
     }
 
     @Unroll
+    def "should render JSON queries"() {
+        expect:
+        def formatter = new Formatter(issueTracking);
+        formatter.restQuery(message) == formattedMessage
+        where:
+        message         | formattedMessage
+        "https://jsonplaceholder.typicode.com?foo=1&ugrave=2"   | "https://jsonplaceholder.typicode.com?foo=1&amp;ugrave=2"
+    }
+
+    @Unroll
     def "should render story titles with foreign characters"() {
         expect:
         def formatter = new Formatter(issueTracking);

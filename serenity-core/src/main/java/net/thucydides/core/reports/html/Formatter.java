@@ -360,6 +360,10 @@ public class Formatter {
         return renderText(message.trim());
     }
 
+    public String restQuery(String message) {
+        return renderText(message.trim());
+    }
+
     public String htmlCompatibleStoryTitle(Object fieldValue) {
         String firstLine = fieldValue.toString().split("\\n")[0];
 

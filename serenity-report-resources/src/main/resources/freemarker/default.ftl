@@ -431,7 +431,13 @@
                             <a href="javaScript:void(0)" onClick="toggleDiv('stepSection${step_number}')"
                                style="display:block;">
                             </#if>
-                            <span class="${step_class_root}-step">${formatter.formatWithFields(step.description)}</span>
+                            <span class="${step_class_root}-step">
+                            <#if step.hasRestQuery()>
+                                ${formatter.restQuery(step.description)}
+                            <#else>
+                                ${formatter.formatWithFields(step.description)}
+                            </#if>
+                            </span>
                             <#if showAccordion>
                             </a>
                             </#if>

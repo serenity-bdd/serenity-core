@@ -589,6 +589,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
         currentGroupStack.push(getCurrentStep());
     }
 
+    private java.util.Optional<TestStep> currentStep() {
+        if (currentStepStack.isEmpty()) { return java.util.Optional.empty(); }
+        return (java.util.Optional.of(currentStepStack.peek()));
+    }
     private TestStep getCurrentStep() {
         return currentStepStack.peek();
     }
@@ -1023,12 +1027,16 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void recordRestQuery(RestQuery restQuery) {
-        stepStarted(ExecutedStepDescription.withTitle(restQuery.toString()));
-        addRestQuery(restQuery);
-        stepFinished();
+        currentStep().ifPresent(
+                step -> {
+                    stepStarted(ExecutedStepDescription.withTitle(restQuery.toString()));
+                    addRestQuery(restQuery);
+                    stepFinished();
+                }
+        );
     }
 
-    public void addRestQuery(RestQuery restQuery) {
+    private void addRestQuery(RestQuery restQuery) {
         getCurrentStep().recordRestQuery(restQuery);
     }
 }

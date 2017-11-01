@@ -390,14 +390,13 @@ Changelog of Git Changelog Maven plugin.
 ## {{name}}
  {{#issues}}
   {{#hasLink}}
-### {{name}} [{{issue}}]({{link}}) {{title}}
+### [{{issue}}]({{link}}) {{title}}
   {{/hasLink}}
   {{^hasLink}}
 ### {{name}}
   {{/hasLink}}
   {{#commits}}
-[{{hash}}](https://github.com/tomasbjerre/git-changelog-maven-plugin/commit/{{hash}}) {{authorName}} *{{commitTime}}*
-{{{message}}}
+ * [{{hash}}](https://github.com/serenity-bdd/serenity-core/commit/{{hash}}) {{{message}}}
   {{/commits}}
  {{/issues}}
 {{/tags}}

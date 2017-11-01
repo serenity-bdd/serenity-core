@@ -341,7 +341,7 @@
                                         aria-label="Close"><span aria-hidden="true">&times;</span>
                                 </button>
                                 <h4 class="modal-title" id="restModalLabel">
-                                ${restQuery.formattedQuery}
+                                ${formatter.restQuery(restQuery.formattedQuery)}
                                 </h4>
                             </div>
                             <div class="modal-body">
@@ -439,7 +439,7 @@
                             </#if>
                             </span>
                             <#if showAccordion>
-                            </a>
+                            </a>t
                             </#if>
 
                             <#if step.hasRestQuery()>

@@ -451,6 +451,17 @@ public class WhenFormattingForHTML {
     }
 
     @Test
+    public void should_keep_escaped_unicode() {
+        when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
+        Formatter formatter = new Formatter(issueTracking);
+
+        String formattedValue = formatter.renderText("\\u0008");
+
+        assertThat(formattedValue, is("&#92;0008"));
+    }
+
+
+    @Test
     public void should_escape_table_fields() {
         Formatter formatter = new Formatter(issueTracking);
 

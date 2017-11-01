@@ -73,6 +73,8 @@ public class Formatter {
     public static final String NEW_LINE_ON_ANY_OS = "\\r?\\n";
     public static final String UTF_8_NEW_LINE = "␤";
 
+    public static String[][] UNICODE_CHARS_ESCAPE = new String[][]{{"\\u", "&#92;"}};
+
     private final IssueTracking issueTracking;
     private final EnvironmentVariables environmentVariables;
     private final MarkupRenderer asciidocRenderer;
@@ -153,6 +155,7 @@ public class Formatter {
         if (isEmpty(text)) {
             return "";
         }
+
         return concatLines(BASIC_XML.translate(text),"<br>")
                 .replaceAll(TAB, FOUR_SPACES);
     }
@@ -349,7 +352,8 @@ public class Formatter {
     );
 
     private final CharSequenceTranslator BASIC_XML = new AggregateTranslator(
-            new LookupTranslator(EntityArrays.BASIC_ESCAPE())
+            new LookupTranslator(EntityArrays.BASIC_ESCAPE()),
+            new LookupTranslator(UNICODE_CHARS_ESCAPE)
     );
 
     public String htmlCompatible(Object fieldValue) {

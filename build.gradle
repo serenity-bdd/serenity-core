@@ -4,11 +4,15 @@ import org.ajoberstar.grgit.Grgit
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.5'
         classpath 'org.ajoberstar:gradle-git:1.6.0'
         classpath 'org.pegdown:pegdown:1.4.1'
+        classpath "gradle.plugin.se.bjurr.gitchangelog:git-changelog-gradle-plugin:1.51"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.15.0'
     }
 }
@@ -17,6 +21,8 @@ plugins {
     id 'org.ajoberstar.release-opinion' version '1.7.2'
     id 'project-report'
 }
+
+apply plugin: "se.bjurr.gitchangelog.git-changelog-gradle-plugin"
 
 group = 'net.serenity-bdd'
 
@@ -374,4 +380,29 @@ subprojects {
         from configurations.runtime + configurations.testCompile
         into project.projectDir.path + "/lib"
     }
+
+    task changelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
+        file = new File("CHANGELOG.md");
+        templateContent = """
+# Git Changelog Maven plugin changelog
+Changelog of Git Changelog Maven plugin.
+{{#tags}}
+## {{name}}
+ {{#issues}}
+  {{#hasLink}}
+### {{name}} [{{issue}}]({{link}}) {{title}}
+  {{/hasLink}}
+  {{^hasLink}}
+### {{name}}
+  {{/hasLink}}
+  {{#commits}}
+[{{hash}}](https://github.com/tomasbjerre/git-changelog-maven-plugin/commit/{{hash}}) {{authorName}} *{{commitTime}}*
+{{{message}}}
+  {{/commits}}
+ {{/issues}}
+{{/tags}}
+ """;
+    }
+
+
 }

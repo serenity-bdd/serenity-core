@@ -439,7 +439,7 @@
                             </#if>
                             </span>
                             <#if showAccordion>
-                            </a>t
+                            </a>
                             </#if>
 
                             <#if step.hasRestQuery()>

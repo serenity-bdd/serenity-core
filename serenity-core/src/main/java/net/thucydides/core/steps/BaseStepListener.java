@@ -1027,16 +1027,14 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public void recordRestQuery(RestQuery restQuery) {
-        currentStep().ifPresent(
-                step -> {
-                    stepStarted(ExecutedStepDescription.withTitle(restQuery.toString()));
-                    addRestQuery(restQuery);
-                    stepFinished();
-                }
-        );
+        stepStarted(ExecutedStepDescription.withTitle(restQuery.toString()));
+        addRestQuery(restQuery);
+        stepFinished();
     }
 
     private void addRestQuery(RestQuery restQuery) {
-        getCurrentStep().recordRestQuery(restQuery);
+        currentStep().ifPresent(
+                step -> step.recordRestQuery(restQuery)
+        );
     }
 }

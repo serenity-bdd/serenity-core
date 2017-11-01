@@ -1,7 +1,5 @@
 package net.thucydides.core.annotations.locators;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.annotations.locators.SmartAnnotations;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
@@ -19,15 +17,18 @@ import net.thucydides.core.webdriver.exceptions.ElementNotVisibleAfterTimeoutErr
 import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.Clock;
 import org.openqa.selenium.support.ui.Duration;
 import org.openqa.selenium.support.ui.SlowLoadableComponent;
 import org.openqa.selenium.support.ui.SystemClock;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
+
+import static net.thucydides.core.annotations.locators.SearchContextType.*;
 
 public class SmartAjaxElementLocator extends SmartElementLocator implements WithConfigurableTimeout {
     public static final Duration ZERO_SECONDS = new Duration(0, TimeUnit.SECONDS);
@@ -38,6 +39,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
     private final SearchContext searchContext;
     private final MobilePlatform platform;
     private final EnvironmentVariables environmentVariables;
+
 
     /**
      * Main constructor.
@@ -57,39 +59,59 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 
     }
 
+    private interface SearchContextProvider extends BiFunction<SearchContext, java.util.Optional<Integer>, SearchContext> {}
+
+    private final static SearchContextProvider UNMODIFIED_SEARCH_CONTEXT = (context, timeout) -> context;
+
+    private final static SearchContextProvider WEB_DRIVER_FACADE = (context, timeout) -> WebdriverProxyFactory.getFactory().proxyFor((WebDriver) context);
+
+    private final static SearchContextProvider WEB_ELEMENT_FACADE_WITH_OPTIONAL_TIMEOUT = (context, timeout) -> {
+        if (timeout.isPresent()) {
+            return ((WebElementFacade) context).withTimeoutOf(timeout.get(), TimeUnit.SECONDS);
+        } else {
+            return context;
+        }
+    };
+
+    private final static SearchContextProvider WEBELEMENT_SEARCH_CONTEXT = (context, timeout) -> context;
+
+
+    private static Map<SearchContextType, SearchContextProvider> SEARCH_CONTEXTS = new HashMap<>();
+
+    static {
+        SEARCH_CONTEXTS.put(WebDriverFacadeContext,     UNMODIFIED_SEARCH_CONTEXT);
+        SEARCH_CONTEXTS.put(WebElementFacadeContext,    WEB_ELEMENT_FACADE_WITH_OPTIONAL_TIMEOUT);
+        SEARCH_CONTEXTS.put(WebDriverContext,           WEB_DRIVER_FACADE);
+        SEARCH_CONTEXTS.put(WebElementContext,          WEBELEMENT_SEARCH_CONTEXT);
+    }
+
     public SmartAjaxElementLocator(Clock clock, SearchContext searchContext, Field field, MobilePlatform platform) {
         super(searchContext, field, platform);
         this.annotatedTimeoutInSeconds = timeoutFrom(field);
         this.clock = clock;
         this.field = field;
-        if (searchContext instanceof WebDriverFacade) {
-//            if (annotatedTimeoutInSeconds.isPresent()) {
-//                this.searchContext = ((WebDriverFacade) searchContext)
-//                        .withTimeoutOf(new Duration(annotatedTimeoutInSeconds.get(), TimeUnit.SECONDS));
-//            } else {
-                this.searchContext = searchContext;
-//            }
-        } else if (searchContext instanceof WebElementFacade) {
-            if (annotatedTimeoutInSeconds.isPresent()) {
-                this.searchContext = ((WebElementFacade) searchContext).withTimeoutOf(annotatedTimeoutInSeconds.get(), TimeUnit.SECONDS);
-            } else {
-                this.searchContext = searchContext;
-            }
-        } else if (searchContext instanceof WebDriver) {
-            this.searchContext = WebdriverProxyFactory.getFactory().proxyFor((WebDriver) searchContext);
-        } else {
-            this.searchContext = searchContext;
-        }
+
+        this.searchContext = SEARCH_CONTEXTS.get(typeOf(searchContext)).apply(searchContext, annotatedTimeoutInSeconds);
         this.platform = platform;
         this.environmentVariables = ConfiguredEnvironment.getEnvironmentVariables();
     }
 
-    private Optional<Integer> timeoutFrom(Field field) {
+
+    private SearchContextType typeOf(SearchContext searchContext) {
+        if (searchContext instanceof WebDriverFacade) return WebDriverFacadeContext;
+        if (searchContext instanceof WebDriver) return WebDriverContext;
+        if (searchContext instanceof WebElementFacade) return WebElementFacadeContext;
+        if (searchContext instanceof WebElement) return WebElementFacadeContext;
+        return OtherContext;
+    }
+
+
+    private java.util.Optional<Integer> timeoutFrom(Field field) {
         FindBy findBy = field.getAnnotation(FindBy.class);
         if ((findBy != null) && (StringUtils.isNotEmpty(findBy.timeoutInSeconds()))) {
-            return Optional.of(Integer.valueOf(findBy.timeoutInSeconds()));
+            return java.util.Optional.of(Integer.valueOf(findBy.timeoutInSeconds()));
         } else {
-            return Optional.absent();
+            return java.util.Optional.empty();
         }
     }
 
@@ -139,16 +161,16 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
      * Will poll the interface on a regular basis until the element is present.
      */
     public WebElement ajaxFindElement() {
-        SlowLoadingElement loadingElement = new SlowLoadingElement(clock, annotatedTimeoutInSeconds.or(getTimeOutInSeconds()));
+        SlowLoadingElement loadingElement = new SlowLoadingElement(clock, annotatedTimeoutInSeconds.orElse(getTimeOutInSeconds()));
         try {
             return loadingElement.get().getElement();
         } catch (ElementNotVisibleAfterTimeoutError notVisible) {
             throw new ElementNotVisibleException(
-                    String.format("Timed out after %d seconds. %s", annotatedTimeoutInSeconds.or(getTimeOutInSeconds()), notVisible.getMessage()),
+                    String.format("Timed out after %d seconds. %s", annotatedTimeoutInSeconds.orElse(getTimeOutInSeconds()), notVisible.getMessage()),
                     notVisible.getCause());
         } catch (Error e) {
             throw new NoSuchElementException(
-                    String.format("Timed out after %d seconds. %s", annotatedTimeoutInSeconds.or(getTimeOutInSeconds()), e.getMessage()));
+                    String.format("Timed out after %d seconds. %s", annotatedTimeoutInSeconds.orElse(getTimeOutInSeconds()), e.getMessage()));
         }
     }
 
@@ -171,12 +193,12 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
         if (aPreviousStepHasFailed()) {
             return EMPTY_LIST_OF_WEBELEMENTS;
         }
-        SlowLoadingElementList list = new SlowLoadingElementList(clock, annotatedTimeoutInSeconds.or(getTimeOutInSeconds()));
+        SlowLoadingElementList list = new SlowLoadingElementList(clock, annotatedTimeoutInSeconds.orElse(getTimeOutInSeconds()));
         try {
             return list.get().getElements();
         } catch (Error e) {
             throw new NoSuchElementException(
-                    String.format("Timed out after %d seconds. %s", annotatedTimeoutInSeconds.or(getTimeOutInSeconds()), e.getMessage()),
+                    String.format("Timed out after %d seconds. %s", annotatedTimeoutInSeconds.orElse(getTimeOutInSeconds()), e.getMessage()),
                     e.getCause());
         }
     }
@@ -197,7 +219,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
     }
 
     private class SlowLoadingElement extends SlowLoadableComponent<SlowLoadingElement> {
-        private Optional<WebDriverException> lastException = Optional.absent();
+        private Optional<WebDriverException> lastException = Optional.empty();
         private WebElement element;
 
         public SlowLoadingElement(Clock clock, int timeOutInSeconds) {
@@ -206,7 +228,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 
         @Override
         protected void load() {
-            lastException = Optional.absent();
+            lastException = Optional.empty();
             if (element == null) {
                 try {
                     element = SmartAjaxElementLocator.super.findElement();
@@ -252,7 +274,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
     }
 
     private class SlowLoadingElementList extends SlowLoadableComponent<SlowLoadingElementList> {
-        private Optional<WebDriverException> lastException = Optional.absent();
+        private Optional<WebDriverException> lastException = Optional.empty();
         private List<WebElement> elements;
 
         public SlowLoadingElementList(Clock clock, int timeOutInSeconds) {
@@ -261,7 +283,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 
         @Override
         protected void load() {
-            lastException = Optional.absent();
+            lastException = Optional.empty();
             if (elements == null) {
                 try {
                     elements = SmartAjaxElementLocator.super.findElements();

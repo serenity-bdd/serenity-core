@@ -1157,6 +1157,11 @@ public enum ThucydidesSystemProperty {
     STEP_CREATION_STRATEGY,
 
     /**
+     * Instruct the SafariDriver to delete all existing session data when starting a new session (true by default)
+     */
+    SAFARI_USE_CLEAN_SESSION,
+
+    /**
      * The character to be used to separate firefox preference key-value pairs when using the "firefox.preferences" property.
      * By default this is a semicolon, but sometimes semicolon appears in the preference values.
      */

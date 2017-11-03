@@ -8,11 +8,11 @@ public class RequirementsProportionCounter {
 
         private final TestType testType;
         private final TestOutcomes testOutcomes;
-        private final int estimatedTotalTests;
+        private final long estimatedTotalTests;
 
         public RequirementsProportionCounter(TestType testType,
                                              TestOutcomes testOutcomes,
-                                             int estimatedTotalTests) {
+                                             long estimatedTotalTests) {
             this.testType = testType;
             this.testOutcomes = testOutcomes;
             this.estimatedTotalTests = estimatedTotalTests;
@@ -23,15 +23,15 @@ public class RequirementsProportionCounter {
         }
 
         public Double withResult(TestResult expectedTestResult) {
-            int testCount = testOutcomes.count(testType).withResult(expectedTestResult);
+            long testCount = testOutcomes.count(testType).withResult(expectedTestResult);
             return (estimatedTotalTests == 0) ? 0.0 : ((double) testCount) / ((double) estimatedTotalTests);
         }
 
         public Double withIndeterminateResult() {
-            int passingStepCount = testOutcomes.count(testType).withResult(TestResult.SUCCESS);
-            int failingStepCount =  testOutcomes.count(testType).withResult(TestResult.FAILURE);
-            int errorStepCount =  testOutcomes.count(testType).withResult(TestResult.ERROR);
-            int total = estimatedTotalTests;
+            long passingStepCount = testOutcomes.count(testType).withResult(TestResult.SUCCESS);
+            long failingStepCount =  testOutcomes.count(testType).withResult(TestResult.FAILURE);
+            long errorStepCount =  testOutcomes.count(testType).withResult(TestResult.ERROR);
+            long total = estimatedTotalTests;
             return (total == 0) ? 0.0 : ((total - passingStepCount - failingStepCount - errorStepCount) / (double) total);
         }
 

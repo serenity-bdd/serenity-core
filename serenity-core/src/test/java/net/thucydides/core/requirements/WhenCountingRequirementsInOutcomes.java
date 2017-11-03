@@ -75,7 +75,7 @@ public class WhenCountingRequirementsInOutcomes {
         RequirementsOutcomes outcomes = fileSystemRequirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(TestOutcomeLoader.testOutcomesIn(outcomeDirectory));
 
         for(RequirementOutcome requirementsOutcome : outcomes.getRequirementOutcomes()) {
-            assertThat(requirementsOutcome.getRequirementsWithoutTestsCount(), equalTo(0));
+            assertThat(requirementsOutcome.getRequirementsWithoutTestsCount(), equalTo(0L));
         }
     }
 

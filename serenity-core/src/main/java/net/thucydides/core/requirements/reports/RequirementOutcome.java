@@ -19,17 +19,18 @@ import net.thucydides.core.util.EnvironmentVariables;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class RequirementOutcome {
     private final Requirement requirement;
     private final TestOutcomes testOutcomes;
     private IssueTracking issueTracking;
-    private final int requirementsWithoutTests;
-    private final int estimatedUnimplementedTests;
+    private final long requirementsWithoutTests;
+    private final long estimatedUnimplementedTests;
     private final EnvironmentVariables environmentVariables;
 
     public RequirementOutcome(Requirement requirement, TestOutcomes testOutcomes,
-                              int requirementsWithoutTests, int estimatedUnimplementedTests,
+                              long requirementsWithoutTests, long estimatedUnimplementedTests,
                               IssueTracking issueTracking) {
         this.requirement = requirement;
         this.testOutcomes = testOutcomes;
@@ -101,7 +102,7 @@ public class RequirementOutcome {
         return ImmutableList.copyOf(flattenedRequirements);
     }
 
-    public int getRequirementsWithoutTestsCount() {
+    public long getRequirementsWithoutTestsCount() {
         return requirementsWithoutTests;
     }
 
@@ -242,11 +243,11 @@ public class RequirementOutcome {
         return testOutcomes;
     }
 
-    public int getEstimatedUnimplementedTests() {
+    public long getEstimatedUnimplementedTests() {
         return estimatedUnimplementedTests;
     }
 
-    private int totalEstimatedAndImplementedTests() {
+    private long totalEstimatedAndImplementedTests() {
         int totalImplementedTests = testOutcomes.getTotal();
         return totalImplementedTests + estimatedUnimplementedTests;
     }
@@ -313,12 +314,10 @@ public class RequirementOutcome {
             return this;
         }
 
-        List<Requirement> childRequirementsWithTests = new ArrayList<>();
-        for(Requirement childRequirement : getRequirement().getChildren())  {
-            if (isTested(childRequirement)) {
-                childRequirementsWithTests.add(childRequirement);
-            }
-        }
+        List<Requirement> childRequirementsWithTests = getRequirement().getChildren().stream()
+                .filter(this::isTested)
+                .collect(Collectors.toList());
+
         Requirement prunedRequirement = getRequirement().withChildren(childRequirementsWithTests);
         return new RequirementOutcome(prunedRequirement, testOutcomes, requirementsWithoutTests, estimatedUnimplementedTests, issueTracking);
     }
@@ -362,5 +361,20 @@ public class RequirementOutcome {
         public int withAnyResult() {
             return testOutcomes.getTotal();
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RequirementOutcome that = (RequirementOutcome) o;
+
+        return requirement != null ? requirement.equals(that.requirement) : that.requirement == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return requirement != null ? requirement.hashCode() : 0;
     }
 }

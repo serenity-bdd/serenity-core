@@ -19,23 +19,26 @@ public class SerenityListeners {
     private List<StepListener> stepListeners;
 
     public SerenityListeners(Configuration systemConfiguration) {
+        this(StepEventBus.getEventBus(), systemConfiguration);
+    }
+
+    public SerenityListeners(StepEventBus stepEventBus, Configuration systemConfiguration) {
         this.systemConfiguration = systemConfiguration;
 
         File outputDirectory = getSystemConfiguration().getOutputDirectory();
         baseStepListener = Listeners.getBaseStepListener().withOutputDirectory(outputDirectory);
-        stepListeners = ImmutableList.of(baseStepListener,
-                                         Listeners.getLoggingListener());
-                                         //Listeners.getStatisticsListener());
+        stepListeners = ImmutableList.of(baseStepListener, Listeners.getLoggingListener());
 
-        StepEventBus.getEventBus().dropAllListeners();
-        registerListeners();
+        stepEventBus.dropAllListeners();
+
+        registerListeners(stepEventBus);
     }
 
-    private void registerListeners() {
-        StepEventBus.getEventBus().registerListener(baseStepListener);
+    private void registerListeners(StepEventBus stepEventBus) {
+        stepEventBus.registerListener(baseStepListener);
         for (StepListener listener : stepListeners) {
             if (listener != null) {
-                StepEventBus.getEventBus().registerListener(listener);
+                stepEventBus.registerListener(listener);
             }
         }
     }

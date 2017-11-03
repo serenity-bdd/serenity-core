@@ -15,6 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.function.Supplier;
 
 /**
  * An event bus for Step-related notifications.
@@ -28,7 +31,10 @@ import java.util.*;
  */
 public class StepEventBus {
 
-    private static ThreadLocal<StepEventBus> stepEventBusThreadLocal = new ThreadLocal<StepEventBus>();
+    private static final ThreadLocal<StepEventBus> stepEventBusThreadLocal = new ThreadLocal<StepEventBus>();
+
+    private static final ConcurrentMap<Object, StepEventBus> STICKY_EVENT_BUSES = new ConcurrentHashMap<>();
+
     private static final String CORE_THUCYDIDES_PACKAGE = "net.thucydides.core";
     private static final Logger LOGGER = LoggerFactory.getLogger(StepEventBus.class);
 
@@ -40,11 +46,28 @@ public class StepEventBus {
      * The event bus used to inform listening classes about when tests and test steps start and finish.
      * There is a separate event bus for each thread.
      */
-    public static synchronized StepEventBus getEventBus() {
+    public static StepEventBus getEventBus() {
         if (stepEventBusThreadLocal.get() == null) {
-            stepEventBusThreadLocal.set(new StepEventBus(ConfiguredEnvironment.getEnvironmentVariables()));
+            synchronized (stepEventBusThreadLocal) {
+                stepEventBusThreadLocal.set(new StepEventBus(ConfiguredEnvironment.getEnvironmentVariables()));
+            }
         }
         return stepEventBusThreadLocal.get();
+    }
+
+    public static StepEventBus eventBusFor(Object key) {
+        STICKY_EVENT_BUSES.putIfAbsent(key, new StepEventBus(ConfiguredEnvironment.getEnvironmentVariables()));
+        return STICKY_EVENT_BUSES.get(key);
+    }
+
+    public static void setCurrentBusToEventBusFor(Object key) {
+        synchronized (stepEventBusThreadLocal) {
+            stepEventBusThreadLocal.set(eventBusFor(key));
+        }
+    }
+
+    public static void clearEventBusFor(Object key) {
+        STICKY_EVENT_BUSES.remove(key);
     }
 
     private List<StepListener> registeredListeners = new ArrayList<>();
@@ -71,6 +94,7 @@ public class StepEventBus {
     private Optional<Boolean> isDryRun = Optional.absent();
 
     private final EnvironmentVariables environmentVariables;
+
     @Inject
     public StepEventBus(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;

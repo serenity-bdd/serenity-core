@@ -162,7 +162,7 @@
 
     <div class="clr"></div>
 
-<#if (testOutcome.isDataDriven())>
+<#if (testOutcome.isDataDriven() && testOutcome.dataDrivenSampleScenario?has_content)>
     <div class="story-title">
         <h3 class="story-header">Scenario Outline</h3>
 

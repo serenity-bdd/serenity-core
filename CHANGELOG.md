@@ -1,8 +1,15 @@
 
 # Git Changelog Maven plugin changelog
 Changelog of Git Changelog Maven plugin.
-## Unreleased
+## v1.7.0-rc.1
 ### No issue
+ * [1168366de1a43bd](https://github.com/serenity-bdd/serenity-core/commit/1168366de1a43bd) Reporting improvement: don't display the scenario outline if empty
+ * [8d3c04066801841](https://github.com/serenity-bdd/serenity-core/commit/8d3c04066801841) Upgraded to Selenium 3.7.0
+ * [487a8764926f60e](https://github.com/serenity-bdd/serenity-core/commit/487a8764926f60e) Updated the event bus logic to cater for the Cucumber 2.x lifecycle
+ * [593ad9d4eb95e2e](https://github.com/serenity-bdd/serenity-core/commit/593ad9d4eb95e2e) Added a property to clear cookies and/or clean session with Safari (see https://github.com/serenity-bdd/serenity-cucumber/issues/90)
+
+The `safari.use.clean.session` property can now be used to instruct the SafariDriver to delete all existing session data when starting a new session, by setting this value to "true". This includes browser history, cache, cookies, HTML5 local storage, and HTML5 databases. Not that since Safari uses a single profile for the current user, enabling this capability will permanently erase any existing session data.
+ * [dbe048362240de9](https://github.com/serenity-bdd/serenity-core/commit/dbe048362240de9) Updated the changelog format
  * [ec39bacf66ef97e](https://github.com/serenity-bdd/serenity-core/commit/ec39bacf66ef97e) Updated the changelog
  * [39c9885e133b0a8](https://github.com/serenity-bdd/serenity-core/commit/39c9885e133b0a8) chore: Added an experimental CHANGELOG generator
 ## v1.6.9

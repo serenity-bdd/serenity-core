@@ -10,6 +10,7 @@ import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.thucydides.core.annotations.Fields;
+import net.thucydides.core.annotations.InvalidStepsFieldException;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.construction.ConstructionStrategy;
@@ -199,6 +200,8 @@ public class StepFactory {
             return stepLibraryWithPages(scenarioStepsClass, e);
         } else if (CONSTRUCTOR_WITH_PARAMETERS.equals(strategy) && parameters.length > 0) {
             return immutableStepLibrary(scenarioStepsClass, e, parameters);
+        } else if (INNER_CLASS_CONSTRUCTOR.equals(strategy)) {
+            return immutableStepLibrary(scenarioStepsClass, e, EnclosingClass.of(scenarioStepsClass).asParameters());
         } else {
             return (T) e.create();
         }

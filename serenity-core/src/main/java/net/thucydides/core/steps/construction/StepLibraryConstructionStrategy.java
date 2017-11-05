@@ -1,24 +1,22 @@
 package net.thucydides.core.steps.construction;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.ScenarioSteps;
 
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-
-import static com.google.common.collect.ImmutableSet.copyOf;
+import java.util.Set;
+import java.util.stream.Stream;
 
 public class StepLibraryConstructionStrategy {
 
     private final Class<?> stepLibraryClass;
+    private final Constructor<?>[] declaredConstructors;
 
     private StepLibraryConstructionStrategy(Class<?> stepLibraryClass) {
         this.stepLibraryClass = stepLibraryClass;
+        this.declaredConstructors = stepLibraryClass.getDeclaredConstructors();
     }
 
     public static StepLibraryConstructionStrategy forClass(Class<?> scenarioStepsClass) {
@@ -26,110 +24,72 @@ public class StepLibraryConstructionStrategy {
     }
 
     public ConstructionStrategy getStrategy() {
-        if (isWebdriverStepClass(stepLibraryClass)) {
+        if (isWebdriverStepClass()) {
             return ConstructionStrategy.STEP_LIBRARY_WITH_WEBDRIVER;
         }
-        if (hasAConstructorWithParameters(stepLibraryClass)) {
+        if (hasAConstructorWithParameters()) {
             return ConstructionStrategy.CONSTRUCTOR_WITH_PARAMETERS;
         }
-        if (hasAPagesField(stepLibraryClass)) {
+        if (hasAPagesField()) {
             return ConstructionStrategy.STEP_LIBRARY_WITH_PAGES;
+        }
+        if (hasAnInnerClassConstructor()) {
+            return ConstructionStrategy.INNER_CLASS_CONSTRUCTOR;
         }
         return ConstructionStrategy.DEFAULT_CONSTRUCTOR;
     }
 
     public boolean hasDefaultConstructor(){
-        return hasAConstructorWithoutParameters(stepLibraryClass);
+        return hasAConstructorWithoutParameters();
     }
 
 
-    private <T> boolean isWebdriverStepClass(final Class<T> stepLibraryClass) {
+    private <T> boolean isWebdriverStepClass() {
 
-        return (isAScenarioStepClass(stepLibraryClass)
-                || hasAPagesConstructor(stepLibraryClass));
+        return (isAScenarioStepClass()  || hasAPagesConstructor());
     }
 
-    private <T> boolean hasAPagesConstructor(final Class<T> stepLibraryClass) {
-        ImmutableSet<? extends Constructor<?>> constructors = copyOf(stepLibraryClass.getDeclaredConstructors());
-        return Iterables.any(constructors, withASinglePagesParameter());
+    private <T> boolean hasAPagesConstructor() {
+        return Stream.of(declaredConstructors).anyMatch(
+                constructor -> (constructor.getParameterTypes().length == 1) && (constructor.getParameterTypes()[0] == Pages.class)
+        );
+    }
+
+    private <T> boolean hasAConstructorWithParameters() {
+        return Stream.of(declaredConstructors).anyMatch(
+                constructor -> (constructor.getParameterTypes().length > 0 && !isInnerClassConstructor(constructor))
+        );
+    }
+
+
+    private <T> boolean hasAnInnerClassConstructor() {
+        return Stream.of(declaredConstructors).anyMatch(
+                constructor -> (isInnerClassConstructor(constructor))
+        );
+    }
+
+    private boolean isInnerClassConstructor(Constructor<?> constructor) {
+        return constructor.getParameters().length == 1
+                && constructor.getParameters()[0].getType() == stepLibraryClass.getEnclosingClass();
+    }
+
+    private <T> boolean hasAConstructorWithoutParameters() {
+        return Stream.of(declaredConstructors).anyMatch(
+                constructor -> (constructor.getParameterTypes().length == 0)
+        );
+    }
+
+    private <T> boolean hasAPagesField() {
+
+        Set<Field> fields = Fields.of(stepLibraryClass).allFields();
+
+        return fields.stream().anyMatch(
+                field -> field.getType() == Pages.class
+        );
 
     }
 
-    private <T> boolean hasAConstructorWithParameters(final Class<T> stepLibraryClass) {
-        ImmutableSet<? extends Constructor<?>> constructors = copyOf(stepLibraryClass.getDeclaredConstructors());
-        return Iterables.any(constructors, withAnyParameters());
-
-    }
-
-    private <T> boolean hasAConstructorWithoutParameters(final Class<T> stepLibraryClass) {
-        ImmutableSet<? extends Constructor<?>> constructors = copyOf(stepLibraryClass.getDeclaredConstructors());
-        return Iterables.any(constructors, withoutParameters());
-
-    }
-
-    private <T> boolean hasAPagesField(final Class<T> stepLibraryClass) {
-        ImmutableSet<Field> fields = copyOf(Fields.of(stepLibraryClass).allFields());
-        return Iterables.any(fields, ofTypePages());
-
-    }
-
-    private Predicate<Constructor<?>> withAnyParameters() {
-        return new Predicate<Constructor<?>>() {
-
-            @Override
-            public boolean apply(Constructor<?> constructor) {
-                return ((constructor.getParameterTypes().length > 0));
-            }
-
-            public boolean test(Constructor<?> input) {
-                return apply(input);
-            }
-        };
-    }
-
-    private Predicate<Constructor<?>> withoutParameters() {
-        return new Predicate<Constructor<?>>() {
-
-            @Override
-            public boolean apply(Constructor<?> constructor) {
-                return ((constructor.getParameterTypes().length == 0));
-            }
-
-            public boolean test(Constructor<?> input) {
-                return apply(input);
-            }
-        };
-    }
-
-    private Predicate<Constructor<?>> withASinglePagesParameter() {
-        return new Predicate<Constructor<?>>() {
-
-            @Override
-            public boolean apply(Constructor<?> constructor) {
-                return ((constructor.getParameterTypes().length == 1)
-                        && (constructor.getParameterTypes()[0] == Pages.class));
-            }
-
-            public boolean test(Constructor<?> input) {
-                return apply(input);
-            }
-        };
-    }
-
-    private <T> boolean isAScenarioStepClass(final Class<T> stepLibraryClass) {
+    private <T> boolean isAScenarioStepClass() {
         return ScenarioSteps.class.isAssignableFrom(stepLibraryClass);
-    }
-
-    private Predicate<Field> ofTypePages() {
-        return new Predicate<Field>() {
-            @Override
-            public boolean apply(Field field) {
-                return (field.getType() == Pages.class);
-            }
-
-            public boolean test(Field input) {
-                return apply(input);
-            }
-        };
     }
 }

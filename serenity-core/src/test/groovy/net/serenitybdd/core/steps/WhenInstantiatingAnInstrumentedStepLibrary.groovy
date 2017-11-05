@@ -1,5 +1,7 @@
 package net.serenitybdd.core.steps
 
+import net.serenitybdd.core.pages.PageObject
+import net.thucydides.core.annotations.Steps
 import spock.lang.Specification
 
 class WhenInstantiatingAnInstrumentedStepLibrary extends Specification {
@@ -42,6 +44,27 @@ class WhenInstantiatingAnInstrumentedStepLibrary extends Specification {
 
 
     }
+
+
+    public static class AStepLibraryOuterClass {
+
+        public static class AnInnerPageObject extends PageObject {}
+
+        public static class AnInnerStepLibrary {
+            AnInnerPageObject innerPageObject;
+        }
+
+        @Steps
+        AnInnerStepLibrary innerStepLibrary;
+    }
+
+    def "nested step libraries can also be instrumented"() {
+        when:
+        def stepLibraryContainer = Instrumented.instanceOf(AStepLibraryOuterClass).newInstance();
+        then:
+        stepLibraryContainer.innerStepLibrary != null
+    }
+
     public static class AStepLibraryWithAttributesAndDefaultConstructor {
         private final String firstName;
         private final String lastName;

@@ -4,6 +4,7 @@ import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.PageObjects;
 import net.thucydides.core.annotations.Fields;
+import net.thucydides.core.steps.EnclosingClass;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebdriverProxyFactory;
@@ -17,6 +18,7 @@ import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
@@ -227,15 +229,33 @@ public class Pages implements Serializable {
             throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchFieldException {
         T newPage = null;
         try {
-            Class[] constructorArgs = new Class[0];
-            Constructor<? extends PageObject> constructor = pageObjectClass.getConstructor(constructorArgs);
-            newPage = (T) constructor.newInstance();
-            newPage.setDriver(driver);
+            if (hasDefaultConstructor(pageObjectClass)) {
+                Class[] constructorArgs = new Class[0];
+                Constructor<? extends PageObject> constructor = pageObjectClass.getConstructor(constructorArgs);
+                newPage = (T) constructor.newInstance();
+                newPage.setDriver(driver);
+            } else if (hasOuterClassConstructor(pageObjectClass)) {
+                Constructor<? extends PageObject> constructor = pageObjectClass.getConstructor(new Class[] {pageObjectClass.getEnclosingClass()});
+                newPage = (T) constructor.newInstance(EnclosingClass.of(pageObjectClass).newInstance());
+                newPage.setDriver(driver);
+            }
 
         } catch (NoSuchMethodException e) {
             // Try a different constructor
         }
         return newPage;
+    }
+
+    private <T extends PageObject> boolean hasDefaultConstructor(Class<T> pageObjectClass) {
+        return Arrays.stream(pageObjectClass.getConstructors())
+                .anyMatch( constructor -> constructor.getParameters().length == 0 );
+    }
+
+
+    private <T extends PageObject> boolean hasOuterClassConstructor(Class<T> pageObjectClass) {
+        return Arrays.stream(pageObjectClass.getConstructors())
+                .anyMatch( constructor -> constructor.getParameters().length == 1
+                        && constructor.getParameters()[0].getType() == pageObjectClass.getEnclosingClass() );
     }
 
     private <T extends PageObject> T createFromConstructorWithWebdriver(Class<T> pageObjectClass)

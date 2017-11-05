@@ -143,15 +143,6 @@ public class WhenKeepingTrackOfVisitedPages {
         }
     }
 
-    @Test(expected = WrongPageError.class)
-    public void the_pages_object_throws_a_wrong_page_error_when_the_page_object_is_invalid() {
-
-        when(driver.getCurrentUrl()).thenReturn("http://www.google.com");
-        final Pages pages = new Pages(driver, configuration);
-
-        pages.currentPageAt(InvalidHomePage.class);
-    }
-
     public final class ExplodingHomePage extends PageObject {
         public ExplodingHomePage(final WebDriver driver) throws InstantiationException {
             super(null);
@@ -172,14 +163,6 @@ public class WhenKeepingTrackOfVisitedPages {
         public PageObjectWithNoDriverConstructor() {
             super(null);
         }
-    }
-
-    @Test(expected = WrongPageError.class)
-    public void the_pages_object_throws_a_wrong_page_error_when_the_page_object_doesnt_have_a_webdriver_constructor() {
-
-        when(driver.getCurrentUrl()).thenReturn("http://www.google.com");
-        final Pages pages = new Pages(driver, configuration);
-        pages.currentPageAt(PageObjectWithNoDriverConstructor.class);
     }
 
     public static final class GooglePage extends PageObject {

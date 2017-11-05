@@ -384,8 +384,7 @@ subprojects {
     task changelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
         file = new File("CHANGELOG.md");
         templateContent = """
-# Git Changelog Maven plugin changelog
-Changelog of Git Changelog Maven plugin.
+# Serenity Core change log
 {{#tags}}
 ## {{name}}
  {{#issues}}

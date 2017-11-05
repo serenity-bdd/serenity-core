@@ -1,6 +1,9 @@
 
-# Git Changelog Maven plugin changelog
-Changelog of Git Changelog Maven plugin.
+# Serenity Core change log
+## Unreleased
+### No issue
+ * [d654b7d7be8af63](https://github.com/serenity-bdd/serenity-core/commit/d654b7d7be8af63) Fixed the title in the changelog
+ * [2eeb1f18d001113](https://github.com/serenity-bdd/serenity-core/commit/2eeb1f18d001113) Updated changelog for version 1.7.0-rc.1
 ## v1.7.0-rc.1
 ### No issue
  * [1168366de1a43bd](https://github.com/serenity-bdd/serenity-core/commit/1168366de1a43bd) Reporting improvement: don't display the scenario outline if empty

@@ -17,7 +17,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FirefoxDriverCapabilities  implements DriverCapabilitiesProvider {
+public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
 
     private final EnvironmentVariables environmentVariables;
     private final FirefoxProfileEnhancer firefoxProfileEnhancer;

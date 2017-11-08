@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class FirefoxProfileEnhancer {
 
@@ -29,7 +30,7 @@ public class FirefoxProfileEnhancer {
     }
 
     public void allowWindowResizeFor(final FirefoxProfile profile) {
-        profile.setPreference("dom.disable_window_move_resize",false);
+        profile.setPreference("dom.disable_window_move_resize", false);
     }
 
     public void activateProxy(final FirefoxProfile profile, String proxyUrl, String proxyPort) {
@@ -57,38 +58,38 @@ public class FirefoxProfileEnhancer {
             }
         }
     }
+
     public void addPreferences(FirefoxProfile profile) {
         String preferences = environmentVariables.getProperty(ThucydidesSystemProperty.FIREFOX_PREFERENCES);
-        List<PreferenceValue> preferenceValues = getPreferenceValuesFrom(preferences);
-        for (PreferenceValue preference : preferenceValues) {
-            preference.applyTo(profile);
-        }
+        getPreferenceValuesFrom(preferences).forEach(
+                value -> value.applyTo(profile)
+        );
     }
 
     private List<PreferenceValue> getPreferenceValuesFrom(String preferences) {
-        List<PreferenceValue> preferenceValues = new ArrayList<>();
-        String preferenceSeparator = environmentVariables.getProperty(ThucydidesSystemProperty.FIREFOX_PREFERENCE_SEPARATOR,";");
-        System.out.println("Separator = " + preferenceSeparator);
+        List<String> arguments = split(preferences, preferenceSeparator());
 
-        if (StringUtils.isNotEmpty(preferences)) {
-            List<String> arguments = split(preferences, preferenceSeparator);
-            for(String argument : arguments) {
-                System.out.println("arg = " + argument);
-                preferenceValues.addAll(convertToPreferenceValue(argument).map(Collections::singleton).orElse(Collections.emptySet()));
-            }
-        }
-        return preferenceValues;
+        return arguments.stream()
+                .map(this::asPreferenceValue)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+
     }
 
-    private Optional<PreferenceValue> convertToPreferenceValue(String argument) {
+    private String preferenceSeparator() {
+        return environmentVariables.getProperty(ThucydidesSystemProperty.FIREFOX_PREFERENCE_SEPARATOR, ";");
+    }
+
+    private java.util.Optional<PreferenceValue> asPreferenceValue(String argument) {
         List<String> arguments = split(argument, "=");
         if (arguments.size() == 1) {
             String key = arguments.get(0);
-            return Optional.of(new PreferenceValue(key,Boolean.TRUE));
+            return Optional.of(new PreferenceValue(key, Boolean.TRUE));
         } else if (arguments.size() == 2) {
             String key = arguments.get(0);
             String value = arguments.get(1);
-            return Optional.of(new PreferenceValue(key,argumentValueOf(value)));
+            return Optional.of(new PreferenceValue(key, argumentValueOf(value)));
         } else {
             return Optional.empty();
         }
@@ -105,6 +106,9 @@ public class FirefoxProfileEnhancer {
     }
 
     private List<String> split(String values, String separator) {
-        return Splitter.on(separator).trimResults().splitToList(values);
+        return Splitter.on(separator)
+                .trimResults()
+                .omitEmptyStrings()
+                .splitToList(values);
     }
 }

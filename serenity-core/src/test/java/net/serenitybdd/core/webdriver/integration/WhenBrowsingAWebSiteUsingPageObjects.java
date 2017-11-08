@@ -167,6 +167,12 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
     }
 
     @Test
+    public void should_be_able_to_move_the_cursor_to_an_element() {
+        indexPage.withAction().moveToElement(indexPage.checkbox).click().perform();
+        assertThat(indexPage.checkbox.isSelected(), is(true));
+    }
+
+    @Test
     public void should_select_values_in_select() {
         indexPage.selectFromDropdown(indexPage.color, "Red");
         assertThat(indexPage.getSelectedOptionValuesFrom(indexPage.color), hasItem("red"));

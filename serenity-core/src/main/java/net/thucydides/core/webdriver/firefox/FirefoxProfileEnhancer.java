@@ -67,7 +67,7 @@ public class FirefoxProfileEnhancer {
     }
 
     private List<PreferenceValue> getPreferenceValuesFrom(String preferences) {
-        List<String> arguments = split(preferences, preferenceSeparator());
+        List<String> arguments = split(Optional.ofNullable(preferences).orElse(""), preferenceSeparator());
 
         return arguments.stream()
                 .map(this::asPreferenceValue)

@@ -536,21 +536,6 @@ public class WhenRecordingNewTestOutcomes {
     }
 
     @Test
-    public void the_returned_test_steps_list_should_be_read_only() {
-        testOutcome.recordStep(forASuccessfulTestStepCalled("The user opens the Google search page"));
-
-        List<TestStep> testSteps = testOutcome.getTestSteps();
-        assertThat(testOutcome.toString(), is("Should do this:The user opens the Google search page"));
-
-        try {
-            testSteps.add(new TestStep("Some other step"));
-            fail("An UnsupportedOperationException exception should have been thrown");
-        } catch (UnsupportedOperationException e) {
-            assertThat(testOutcome.toString(), is("Should do this:The user opens the Google search page"));
-        }
-    }
-
-    @Test
     public void the_acceptance_test_case_is_successful_if_all_the_tests_are_successful() {
         testOutcome.recordStep(forASuccessfulTestStepCalled("Step 1"));
         testOutcome.recordStep(forASuccessfulTestStepCalled("Step 2"));

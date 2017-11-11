@@ -3,9 +3,6 @@ package net.thucydides.core.model;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.exceptions.TheErrorType;
@@ -567,7 +564,7 @@ public class TestOutcome {
                 this.id,
                 this.testCase,
                 this.testSteps,
-                (issues == null) ? issues : ImmutableList.copyOf(issues),
+                (issues == null) ? issues : new ArrayList<>(issues),
                 this.additionalIssues,
                 this.tags,
                 this.userStory,
@@ -1077,7 +1074,7 @@ public class TestOutcome {
      * @return A list of top-level test steps for this test.
      */
     public List<TestStep> getTestSteps() {
-        return ImmutableList.copyOf(testSteps);
+        return new ArrayList<>(testSteps);
     }
 
     public boolean hasScreenshots() {
@@ -1111,7 +1108,7 @@ public class TestOutcome {
             screenshots.addAll(screenshotsIn(currentStep));
         }
 
-        return ImmutableList.copyOf(screenshots);
+        return new ArrayList<>(screenshots);
     }
 
     private List<Screenshot> screenshotsIn(TestStep currentStep) {
@@ -1165,7 +1162,7 @@ public class TestOutcome {
                 leafTestSteps.add(step);
             }
         }
-        return ImmutableList.copyOf(leafTestSteps);
+        return new ArrayList<>(leafTestSteps);
     }
 
     /**
@@ -1189,7 +1186,7 @@ public class TestOutcome {
         overallResults.add(testResultFromFailureClassname);
 
         TestResult testResultFromSteps = TestResultList.overallResultFrom(overallResults);
-        return (annotatedResult != null) ? TestResultList.overallResultFrom(ImmutableList.of(testResultFromSteps, annotatedResult)) : testResultFromSteps;
+        return (annotatedResult != null) ? TestResultList.overallResultFrom(Arrays.asList(testResultFromSteps, annotatedResult)) : testResultFromSteps;
     }
 
     private TestResult testResultFromFailureClassname() {
@@ -1522,7 +1519,7 @@ public class TestOutcome {
         if (thereAre(additionalIssues)) {
             allIssues.addAll(additionalIssues);
         }
-        return ImmutableList.copyOf(allIssues);
+        return new ArrayList<>(allIssues);
     }
 
     private List<String> versions() {
@@ -1543,7 +1540,7 @@ public class TestOutcome {
             allVersions.addAll(additionalVersions);
         }
         addVersionsDefinedInTagsTo(allVersions);
-        return ImmutableList.copyOf(allVersions);
+        return new ArrayList<>(allVersions);
     }
 
     private void addVersionsDefinedInTagsTo(List<String> allVersions) {
@@ -1619,7 +1616,7 @@ public class TestOutcome {
     }
 
     public String getFormattedIssues() {
-        Set<String> issues = Sets.newHashSet(getIssues());
+        Set<String> issues = new HashSet<>(getIssues());
         if (!issues.isEmpty()) {
             List<String> orderedIssues = issues.stream().sorted().collect(Collectors.toList());
             String formattedIssues =  orderedIssues.stream().collect(Collectors.joining(", "));
@@ -1684,7 +1681,7 @@ public class TestOutcome {
     }
 
     private Set<TestTag> getTagsUsingTagProviders(List<TagProvider> tagProviders) {
-        Set<TestTag> tags = Sets.newHashSet();
+        Set<TestTag> tags = new HashSet<>();
         for (TagProvider tagProvider : tagProviders) {
             try {
                 tags.addAll(tagProvider.getTagsFor(this));
@@ -1694,11 +1691,11 @@ public class TestOutcome {
             }
         }
         tags = removeRedundantTagsFrom(tags);
-        return ImmutableSet.copyOf(tags);
+        return new HashSet<>(tags);
     }
 
     private Set<TestTag> removeRedundantTagsFrom(Set<TestTag> tags) {
-        Set<TestTag> optimizedTags = Sets.newHashSet();
+        Set<TestTag> optimizedTags = new HashSet<>();
         for (TestTag tag : tags) {
             if (!aMoreSpecificTagExistsThan(tag).in(tags)) {
                 optimizedTags.add(tag);
@@ -1712,20 +1709,20 @@ public class TestOutcome {
     }
 
     public void setTags(Set<TestTag> tags) {
-        this.tags = Sets.newHashSet(tags);
+        this.tags = new HashSet<>(tags);
     }
 
 
     public void addTags(List<TestTag> tags) {
-        Set<TestTag> updatedTags = Sets.newHashSet(getTags());
+        Set<TestTag> updatedTags = new HashSet<>(getTags());
         updatedTags.addAll(tags);
-        this.tags = ImmutableSet.copyOf(updatedTags);
+        this.tags = updatedTags;
     }
 
     public void addTag(TestTag tag) {
-        Set<TestTag> updatedTags = Sets.newHashSet(getTags());
+        Set<TestTag> updatedTags = new HashSet<>(getTags());
         updatedTags.add(tag);
-        this.tags = ImmutableSet.copyOf(updatedTags);
+        this.tags = updatedTags;
     }
 
     public List<String> getIssueKeys() {
@@ -2375,7 +2372,7 @@ public class TestOutcome {
     }
 
     private void removeSteps(List<TestStep> stepsToReplace) {
-        List<TestStep> currentTestSteps = ImmutableList.copyOf(testSteps);
+        List<TestStep> currentTestSteps = new ArrayList<>(testSteps);
         for (TestStep testStep : currentTestSteps) {
             if (stepsToReplace.contains(testStep)) {
                 testSteps.remove(testStep);

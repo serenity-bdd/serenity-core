@@ -1,6 +1,5 @@
 package net.thucydides.core.output;
 
-import com.google.common.collect.ImmutableList;
 import jxl.JXLException;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
@@ -11,6 +10,7 @@ import net.thucydides.core.matchers.SimpleValueMatcher;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -20,7 +20,7 @@ public class SpreadsheetResultsOutput implements ResultsOutput {
     boolean recordingStarted;
 
     public SpreadsheetResultsOutput(File outputFile, List<String> titles) {
-        this.titles = ImmutableList.copyOf(titles);
+        this.titles = new ArrayList<>(titles);
         this.outputFile = outputFile;
         recordingStarted = false;
 

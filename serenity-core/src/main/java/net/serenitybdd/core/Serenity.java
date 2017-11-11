@@ -1,7 +1,5 @@
 package net.serenitybdd.core;
 
-import static io.vavr.API.List;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.di.DependencyInjector;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
@@ -19,6 +17,7 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.*;
@@ -80,8 +79,9 @@ public class Serenity {
     }
 
     private static List<DependencyInjector> getDefaultDependencyInjectors() {
-        return ImmutableList.of(new PageObjectDependencyInjector(getPages()),
-                                new EnvironmentDependencyInjector());
+
+        return Arrays.asList(new PageObjectDependencyInjector(getPages()),
+                             new EnvironmentDependencyInjector());
     }
 
     /**

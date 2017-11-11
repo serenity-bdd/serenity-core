@@ -1,7 +1,6 @@
 package net.thucydides.core.model;
 
-import com.google.common.collect.ImmutableList;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,16 +20,16 @@ public class Release implements Comparable {
     public Release(TestTag releaseTag) {
         this.releaseTag = releaseTag;
         this.label = releaseTag.getName();
-        this.children = ImmutableList.of();
-        this.parents = ImmutableList.of();
+        this.children = new ArrayList<>();
+        this.parents = new ArrayList<>();
         this.reportName = null;
     }
 
     public Release(TestTag releaseTag, List<Release> children, List<Release> parents, String reportName) {
         this.releaseTag = releaseTag;
         this.label = releaseTag.getName();
-        this.children = ImmutableList.copyOf(children);
-        this.parents = ImmutableList.copyOf(parents);
+        this.children = new ArrayList<>(children);
+        this.parents = new ArrayList<>(parents);
         this.reportName = reportName;
     }
 

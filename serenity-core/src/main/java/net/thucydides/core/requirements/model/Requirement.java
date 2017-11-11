@@ -68,8 +68,8 @@ public class Requirement implements Comparable {
         this.type = type;
         this.parent = parent;
         this.narrative = narrative;
-        this.children = ImmutableList.copyOf(children);
-        this.examples = ImmutableList.copyOf(examples);
+        this.children = new ArrayList<>(children);
+        this.examples = new ArrayList<>(examples);
         this.releaseVersions = ImmutableList.copyOf(releaseVersions);
         this.customFields = ImmutableList.copyOf(customFields);
         this.featureFileName = featureFileName;

@@ -1,7 +1,5 @@
 package net.thucydides.core.model;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +11,7 @@ import static net.thucydides.core.model.TestResult.*;
 public class TestResultList {
 
     public static TestResult overallResultFrom(List<TestResult> results) {
-        List<TestResult> testResults = withoutResultsUndefined(ImmutableList.copyOf(results));
+        List<TestResult> testResults = withoutResultsUndefined(new ArrayList<>(results));
 
         if (testResults.isEmpty()) {
             return SUCCESS;

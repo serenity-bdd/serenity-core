@@ -1,7 +1,6 @@
 package net.thucydides.core.model;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.core.time.SystemClock;
@@ -227,11 +226,11 @@ public class TestStep implements Cloneable {
     }
 
     public List<TestStep> getChildren() {
-        return ImmutableList.copyOf(children);
+        return new ArrayList(children);
     }
 
     public List<ScreenshotAndHtmlSource> getScreenshots() {
-        return ImmutableList.copyOf(screenshots);
+        return new ArrayList(screenshots);
     }
 
     public boolean hasRestQuery() {

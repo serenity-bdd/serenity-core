@@ -1,7 +1,5 @@
 package net.thucydides.core.model.stacktrace;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 
@@ -19,7 +17,7 @@ public class StackTraceSanitizer {
     private final EnvironmentVariables environmentVariables;
     private final StackTraceElement[] stackTrace;
 
-    private final static List<String> MASKED_PACKAGES = ImmutableList.of(
+    private final static List<String> MASKED_PACKAGES = Arrays.asList(
             "sun.",
             "com.sun",
             "java.",

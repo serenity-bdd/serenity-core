@@ -1,6 +1,5 @@
 package net.thucydides.core.model;
 
-import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -22,11 +21,11 @@ public class DataTable {
     private final static List<DataTableRow> NO_ROWS = new ArrayList<>();
 
     protected DataTable(List<String> headers, List<DataTableRow> rows) {
-        this(null, headers, new CopyOnWriteArrayList<>(rows), null, null, ImmutableList.of(DataSetDescriptor.DEFAULT_DESCRIPTOR));
+        this(null, headers, new CopyOnWriteArrayList<>(rows), null, null, Collections.singletonList(DataSetDescriptor.DEFAULT_DESCRIPTOR));
     }
 
     protected DataTable(List<String> headers, List<DataTableRow> rows, String title, String description) {
-        this(null, headers, new CopyOnWriteArrayList<>(rows), title, description, ImmutableList.of(new DataSetDescriptor(0,0,title, description)));
+        this(null, headers, new CopyOnWriteArrayList<>(rows), title, description, Collections.singletonList(new DataSetDescriptor(0,0,title, description)));
     }
 
     protected DataTable(String scenarioOutline, List<String> headers, List<DataTableRow> rows, String title, String description, List<DataSetDescriptor> dataSetDescriptors) {
@@ -63,11 +62,11 @@ public class DataTable {
     }
 
     public List<String> getHeaders() {
-        return ImmutableList.copyOf(headers);
+        return new ArrayList<>(headers);
     }
 
     public List<DataTableRow> getRows() {
-        return ImmutableList.copyOf(rows);
+        return new ArrayList<>(rows);
     }
 
     public RowValueAccessor row(int rowNumber) {
@@ -95,7 +94,7 @@ public class DataTable {
     }
 
     public void addRow(Map<String, ?> data) {
-        addRow(new DataTableRow(ImmutableList.copyOf(data.values())));
+        addRow(new DataTableRow(new ArrayList<>(data.values())));
     }
 
     public List<DataSetDescriptor> getDataSetDescriptors() {
@@ -108,7 +107,7 @@ public class DataTable {
     }
 
     public void appendRow(Map<String, ?> data) {
-        appendRow(new DataTableRow(ImmutableList.copyOf(data.values())));
+        appendRow(new DataTableRow(new ArrayList<>(data.values())));
     }
 
     void appendRow(DataTableRow dataTableRow) {
@@ -117,7 +116,7 @@ public class DataTable {
 
     public void addRows(List<DataTableRow> rows) {
         for (DataTableRow row : rows) {
-            DataTableRow newRow = new DataTableRow(ImmutableList.copyOf(row.getValues()));
+            DataTableRow newRow = new DataTableRow(new ArrayList<>(row.getValues()));
             newRow.setResult(row.getResult());
             this.rows.add(newRow);
         }
@@ -126,7 +125,7 @@ public class DataTable {
 
     private void setLatestNameAndDescription(String name, String description) {
         if ((dataSetDescriptors == null) || (dataSetDescriptors.isEmpty())) {
-            dataSetDescriptors = ImmutableList.of(new DataSetDescriptor(0,0,name,description));
+            dataSetDescriptors = Collections.singletonList(new DataSetDescriptor(0,0,name,description));
         } else {
             dataSetDescriptors = replaceLatestDescriptor(last(dataSetDescriptors).withNameAndDescription(name, description));
         }
@@ -135,20 +134,19 @@ public class DataTable {
     private List<DataSetDescriptor> replaceLatestDescriptor(DataSetDescriptor updatedLatestDescriptor) {
         List<DataSetDescriptor> previousDescriptors = dataSetDescriptors.subList(0, dataSetDescriptors.size() - 1);
 
-        return new ImmutableList.Builder<DataSetDescriptor>()
-                .addAll(previousDescriptors)
-                .add(updatedLatestDescriptor)
-                .build();
+        List<DataSetDescriptor> descriptors = new ArrayList<>();
+        descriptors.addAll(previousDescriptors);
+        descriptors.add(updatedLatestDescriptor);
+        return descriptors;
     }
 
     public void startNewDataSet(String name, String description) {
         updateLatestRowCount();
-        dataSetDescriptors = new ImmutableList.Builder<DataSetDescriptor>()
-                            .addAll(dataSetDescriptors)
-                            .add(new DataSetDescriptor(rows.size(), 0, name, description))
-                            .build();
 
-
+        List<DataSetDescriptor> descriptors = new ArrayList<>();
+        descriptors.addAll(dataSetDescriptors);
+        descriptors.add(new DataSetDescriptor(rows.size(), 0, name, description));
+        dataSetDescriptors = descriptors;
     }
 
     private void updateLatestRowCount() {
@@ -196,7 +194,7 @@ public class DataTable {
         final List<DataSetDescriptor> descriptors;
 
         DataTableBuilder(List<String> headers) {
-            this(null, headers, NO_ROWS, null, null, ImmutableList.of(DataSetDescriptor.DEFAULT_DESCRIPTOR));
+            this(null, headers, NO_ROWS, null, null, Collections.singletonList(DataSetDescriptor.DEFAULT_DESCRIPTOR));
         }
 
         DataTableBuilder(String scenarioOutline, List<String> headers, List<DataTableRow> rows, String title,

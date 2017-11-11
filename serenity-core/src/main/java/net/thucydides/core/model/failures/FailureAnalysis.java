@@ -1,7 +1,5 @@
 package net.thucydides.core.model.failures;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import cucumber.api.PendingException;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
@@ -13,6 +11,7 @@ import net.thucydides.core.steps.StepFailureException;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static net.thucydides.core.model.TestResult.*;
@@ -56,22 +55,22 @@ public class FailureAnalysis {
     private static final List<Class<?>> DEFAULT_FAILURE_TYPES = new ArrayList<>();
 
     static {
-        DEFAULT_FAILURE_TYPES.addAll(ImmutableList.of(AssertionError.class, CausesAssertionFailure.class));
+        DEFAULT_FAILURE_TYPES.addAll(Arrays.asList(AssertionError.class, CausesAssertionFailure.class));
     }
 
     private static final List<Class<?>> DEFAULT_COMPROMISED_TYPES = new ArrayList<>();
     static {
-        DEFAULT_COMPROMISED_TYPES.addAll(ImmutableList.of(CausesCompromisedTestFailure.class));
+        DEFAULT_COMPROMISED_TYPES.addAll(Arrays.asList(CausesCompromisedTestFailure.class));
     }
 
     private static final List<Class<?>> DEFAULT_PENDING_TYPES = new ArrayList<>();
     static {
-        DEFAULT_PENDING_TYPES.addAll(ImmutableList.of(PendingStepException.class, PendingException.class));
+        DEFAULT_PENDING_TYPES.addAll(Arrays.asList(PendingStepException.class, PendingException.class));
     }
 
     private static final List<Class<?>> DEFAULT_ERROR = new ArrayList<>();
     static {
-        DEFAULT_ERROR.addAll(ImmutableList.of(Error.class));
+        DEFAULT_ERROR.addAll(Arrays.asList(Error.class));
     }
 
     public boolean reportAsFailure(Class<?> testFailureCause) {

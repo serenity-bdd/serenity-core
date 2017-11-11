@@ -1,8 +1,8 @@
 package net.serenitybdd.core.buildinfo;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -27,7 +27,7 @@ public class BuildProperties {
     }
 
     public List<String> getDrivers() {
-        return ImmutableList.copyOf(drivers);
+        return new ArrayList<>(drivers);
     }
 
     public Map<String, Properties> getDriverProperties() {

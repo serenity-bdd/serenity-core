@@ -166,7 +166,7 @@ public class StepFactory {
         }
     }
 
-    private ImmutableList<? extends DependencyInjector> getDefaultDependencyInjectors() {
+    private List<? extends DependencyInjector> getDefaultDependencyInjectors() {
         return (pages != null) ?
                 ImmutableList.of(new PageObjectDependencyInjector(pages),
                         new EnvironmentDependencyInjector()) :

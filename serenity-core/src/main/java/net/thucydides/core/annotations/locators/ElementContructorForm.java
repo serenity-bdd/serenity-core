@@ -1,13 +1,13 @@
 package net.thucydides.core.annotations.locators;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
 import net.serenitybdd.core.pages.PageObject;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.List;
 
 public enum ElementContructorForm {
@@ -34,12 +34,12 @@ public enum ElementContructorForm {
     private final List<Class> parameterTypes;
 
     ElementContructorForm(Class... parameterTypes) {
-        this.parameterTypes = ImmutableList.copyOf(parameterTypes);
+        this.parameterTypes = Arrays.asList(parameterTypes);
     }
 
     public static Optional<ElementContructorForm> matchingFormFor(Class... parameterTypes) {
         for (ElementContructorForm constructorForm : ElementContructorForm.values()) {
-            if (constructorForm.parameterTypes.equals(ImmutableList.copyOf(parameterTypes))) {
+            if (constructorForm.parameterTypes.equals(Arrays.asList(parameterTypes))) {
                 return Optional.of(constructorForm);
             }
         }
@@ -50,7 +50,7 @@ public enum ElementContructorForm {
 
     private Optional<Constructor> findMatchingConstructorFrom(Constructor<?>[] declaredConstructors) {
         for(Constructor constructor : declaredConstructors) {
-            if (parameterTypes.equals(ImmutableList.copyOf(constructor.getParameterTypes()))) {
+            if (parameterTypes.equals(Arrays.asList(constructor.getParameterTypes()))) {
                 return Optional.of(constructor);
             }
         }

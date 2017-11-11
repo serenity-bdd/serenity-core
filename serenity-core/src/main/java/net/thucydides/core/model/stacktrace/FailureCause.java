@@ -2,7 +2,6 @@ package net.thucydides.core.model.stacktrace;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.exceptions.UnrecognisedException;
 import net.thucydides.core.model.TestFailureException;
@@ -19,7 +18,7 @@ public class FailureCause {
     public static final String ERROR_MESSAGE_LABEL_1 = "{'errorMessage':";
     public static final String ERROR_MESSAGE_LABEL_2 = "{\"errorMessage\":";
 
-    private final static List<String> COLLAPSE_NEW_LINE_HINTS = ImmutableList.of(
+    private final static List<String> COLLAPSE_NEW_LINE_HINTS = Arrays.asList(
             "AssertionError",
             "Expected",
             "Expecting",

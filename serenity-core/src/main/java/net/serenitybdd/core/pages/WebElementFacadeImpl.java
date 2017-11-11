@@ -2,8 +2,6 @@ package net.serenitybdd.core.pages;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import io.appium.java_client.*;
 import net.serenitybdd.core.time.InternalSystemClock;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -21,12 +19,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.interactions.internal.Locatable;
+import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -852,7 +852,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         throw new ElementShouldBePresentException(finalMessage, timeout);
     }
 
-    private static final List<String> HTML_ELEMENTS_WITH_VALUE_ATTRIBUTE = ImmutableList.of("input", "button", "option");
+    private static final List<String> HTML_ELEMENTS_WITH_VALUE_ATTRIBUTE = Arrays.asList("input", "button", "option");
 
     private boolean hasValueAttribute(WebElement element) {
         String tag = element.getTagName().toLowerCase();
@@ -1140,7 +1140,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public boolean hasClass(String cssClassName) {
         String cssClassValue = getAttribute("class").toLowerCase();
-        List<String> cssClasses = Lists.newArrayList(Splitter.on(" ").omitEmptyStrings().trimResults().split(cssClassValue));
+        List<String> cssClasses = Splitter.on(" ").omitEmptyStrings().trimResults().splitToList(cssClassValue);
         return cssClasses.contains(cssClassName.toLowerCase());
     }
 

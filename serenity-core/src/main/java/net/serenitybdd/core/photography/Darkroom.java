@@ -1,19 +1,17 @@
 package net.serenitybdd.core.photography;
 
-import com.google.common.collect.ImmutableList;
 import net.serenitybdd.core.photography.bluring.Blurer;
 import net.serenitybdd.core.photography.resizing.Resizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Darkroom {
 
-    static int darkroomCounter = 0;
-
     private final static Logger LOGGER = LoggerFactory.getLogger(Darkroom.class);
-    private List<? extends PhotoFilter> processors = ImmutableList.of(new Resizer(), new Blurer());
+    private List<? extends PhotoFilter> processors = Arrays.asList(new Resizer(), new Blurer());
     private DarkroomProcessingLine processingLine;
     private Thread screenshotThread;
 

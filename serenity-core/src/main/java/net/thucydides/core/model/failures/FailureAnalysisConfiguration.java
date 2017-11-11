@@ -1,8 +1,6 @@
 package net.thucydides.core.model.failures;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import cucumber.api.PendingException;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.exceptions.CausesAssertionFailure;
@@ -13,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FailureAnalysisConfiguration {
@@ -23,22 +22,22 @@ public class FailureAnalysisConfiguration {
 
     private final List<Class<?>> DEFAULT_FAILURE_TYPES = new ArrayList<>();
     {
-        DEFAULT_FAILURE_TYPES.addAll(ImmutableList.of(AssertionError.class, CausesAssertionFailure.class));
+        DEFAULT_FAILURE_TYPES.addAll(Arrays.asList(AssertionError.class, CausesAssertionFailure.class));
     }
 
     private final List<Class<?>> DEFAULT_COMPROMISED_TYPES = new ArrayList<>();
     {
-        DEFAULT_COMPROMISED_TYPES.addAll(ImmutableList.of(CausesCompromisedTestFailure.class));
+        DEFAULT_COMPROMISED_TYPES.addAll(Arrays.asList(CausesCompromisedTestFailure.class));
     }
 
     private final List<Class<?>> DEFAULT_PENDING_TYPES = new ArrayList<>();
     {
-        DEFAULT_PENDING_TYPES.addAll(ImmutableList.of(PendingStepException.class, PendingException.class));
+        DEFAULT_PENDING_TYPES.addAll(Arrays.asList(PendingStepException.class, PendingException.class));
     }
 
     private final List<Class<?>> DEFAULT_ERROR_TYPES = new ArrayList<>();
     {
-        DEFAULT_ERROR_TYPES.addAll(ImmutableList.of(Error.class));
+        DEFAULT_ERROR_TYPES.addAll(Arrays.asList(Error.class));
     }
 
     public FailureAnalysisConfiguration(EnvironmentVariables environmentVariables) {
@@ -46,7 +45,7 @@ public class FailureAnalysisConfiguration {
     }
 
     public List<Class<?>> failureTypes() {
-        List<Class<?>> failureTypes = Lists.newArrayList(DEFAULT_FAILURE_TYPES);
+        List<Class<?>> failureTypes = new ArrayList<>(DEFAULT_FAILURE_TYPES);
 
         failureTypes.addAll(failureTypesDefinedIn(environmentVariables));
 
@@ -59,7 +58,7 @@ public class FailureAnalysisConfiguration {
 
 
     public List<Class<?>> compromisedTypes() {
-        List<Class<?>> compromisedTypes = Lists.newArrayList(DEFAULT_COMPROMISED_TYPES);
+        List<Class<?>> compromisedTypes = new ArrayList<>(DEFAULT_COMPROMISED_TYPES);
 
         compromisedTypes.addAll(compromisedTypesDefinedIn(environmentVariables));
 
@@ -71,7 +70,7 @@ public class FailureAnalysisConfiguration {
     }
 
     public List<Class<?>> pendingTypes() {
-        List<Class<?>> pendingTypes = Lists.newArrayList(DEFAULT_PENDING_TYPES);
+        List<Class<?>> pendingTypes = new ArrayList<>(DEFAULT_PENDING_TYPES);
         pendingTypes.addAll(pendingTypesDefinedIn(environmentVariables));
 
         pendingTypes.removeAll(errorTypesDefinedIn(environmentVariables));
@@ -82,7 +81,7 @@ public class FailureAnalysisConfiguration {
     }
 
     public List<Class<?>> errorTypes() {
-        List<Class<?>> errorTypes = Lists.newArrayList(DEFAULT_ERROR_TYPES);
+        List<Class<?>> errorTypes = new ArrayList<>(DEFAULT_ERROR_TYPES);
         errorTypes.addAll(errorTypesDefinedIn(environmentVariables));
 
         errorTypes.removeAll(pendingTypesDefinedIn(environmentVariables));

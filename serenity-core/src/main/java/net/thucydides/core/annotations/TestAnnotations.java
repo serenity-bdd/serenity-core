@@ -1,6 +1,5 @@
 package net.thucydides.core.annotations;
 
-import com.google.common.collect.ImmutableList;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.html.Formatter;
 import net.thucydides.core.tags.TagConverters;
@@ -213,7 +212,7 @@ public class TestAnnotations {
         List<TestTag> allTags = new ArrayList<>(getTags());
         allTags.addAll(getTagsFor(methodName));
 
-        return ImmutableList.copyOf(allTags);
+        return new ArrayList<>(allTags);
     }
 
     public List<TestTag> getTags() {

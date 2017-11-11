@@ -1,11 +1,10 @@
 package net.thucydides.core.csv.converters;
 
-import com.google.common.collect.ImmutableList;
-
+import java.util.Arrays;
 import java.util.List;
 
 public class TypeConverters {
-    private static final List<TypeConverter> DEFAULT_TYPE_CONVERTERS = ImmutableList.of(
+    private static final List<TypeConverter> DEFAULT_TYPE_CONVERTERS = Arrays.asList(
             new StringTypeConverter(),
             new IntegerTypeConverter(),
             new BigDecimalTypeConverter(),

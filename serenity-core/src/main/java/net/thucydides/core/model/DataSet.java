@@ -1,7 +1,6 @@
 package net.thucydides.core.model;
 
-import com.google.common.collect.ImmutableList;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +22,7 @@ public class DataSet {
 
     private List<DataTableRow> extractRows(List<DataTableRow> rows, int startRow, int rowCount) {
         int endRow = (rowCount == 0) ? rows.size() : startRow + rowCount;
-        return ImmutableList.copyOf(rows.subList(startRow, endRow));
+        return new ArrayList(rows.subList(startRow, endRow));
     }
 
     public String getDescription() {

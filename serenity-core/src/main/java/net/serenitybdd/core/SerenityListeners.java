@@ -1,6 +1,5 @@
 package net.serenitybdd.core;
 
-import com.google.common.collect.ImmutableList;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.BaseStepListener;
@@ -11,6 +10,8 @@ import net.thucydides.core.webdriver.Configuration;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SerenityListeners {
@@ -27,7 +28,7 @@ public class SerenityListeners {
 
         File outputDirectory = getSystemConfiguration().getOutputDirectory();
         baseStepListener = Listeners.getBaseStepListener().withOutputDirectory(outputDirectory);
-        stepListeners = ImmutableList.of(baseStepListener, Listeners.getLoggingListener());
+        stepListeners = Arrays.asList(baseStepListener, Listeners.getLoggingListener());
 
         stepEventBus.dropAllListeners();
 
@@ -53,7 +54,7 @@ public class SerenityListeners {
     }
 
     public List<TestOutcome> getResults() {
-        return ImmutableList.copyOf(baseStepListener.getTestOutcomes());
+        return new ArrayList<>(baseStepListener.getTestOutcomes());
     }
 
     /**

@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
@@ -170,6 +171,12 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
     public void should_be_able_to_move_the_cursor_to_an_element() {
         indexPage.withAction().moveToElement(indexPage.checkbox).click().perform();
         assertThat(indexPage.checkbox.isSelected(), is(true));
+    }
+
+    @Test
+    public void should_be_able_to_check_the_coordinates_of_an_element() {
+        Coordinates coordinates = indexPage.checkbox.getCoordinates();
+        assertThat(coordinates, is(not(nullValue())));
     }
 
     @Test

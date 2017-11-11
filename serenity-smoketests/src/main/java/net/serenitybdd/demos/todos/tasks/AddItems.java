@@ -1,6 +1,5 @@
 package net.serenitybdd.demos.todos.tasks;
 
-import com.google.common.collect.ImmutableList;
 import net.serenitybdd.demos.todos.pages.ApplicationHomePage;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
@@ -27,7 +26,7 @@ public class AddItems implements Performable {
     }
 
     public AddItems called(String... thingsToDo) {
-        return called(ImmutableList.copyOf(thingsToDo));
+        return called(new ArrayList<>(thingsToDo));
     }
 
 }

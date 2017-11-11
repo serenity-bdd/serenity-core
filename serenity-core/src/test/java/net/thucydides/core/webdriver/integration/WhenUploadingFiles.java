@@ -4,6 +4,8 @@ import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.components.FileToUpload;
 import net.thucydides.core.pages.components.FileToUploadCouldNotBeFoundException;
+import net.thucydides.core.webdriver.WebDriverFacade;
+import net.thucydides.core.webdriver.WebDriverFactory;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -67,7 +69,7 @@ public class WhenUploadingFiles {
     public static void open_local_static_site() {
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--headless");
-        driver = new ChromeDriver();
+        driver = new WebDriverFacade(ChromeDriver.class, new WebDriverFactory());
         pageFactory = new Pages(driver);
         openStaticTestSite(driver);
     }

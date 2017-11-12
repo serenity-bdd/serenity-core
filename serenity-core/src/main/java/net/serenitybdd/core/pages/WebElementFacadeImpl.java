@@ -15,6 +15,7 @@ import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.exceptions.*;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
+import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.internal.Coordinates;
@@ -201,6 +202,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     protected WebElement getElement() {
+        if (driverIsDisabled()) { return new WebElementFacadeStub();}
+
         if (resolvedELement != null) { return resolvedELement; }
 
         return (resolvedELement = getElementResolver().resolveForDriver(driver));
@@ -224,7 +227,9 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     public <T extends WebElementFacade> T findBy(String xpathOrCssSelector) {
         logIfVerbose("findBy " + xpathOrCssSelector);
         WebElement nestedElement;
-        if (isXPath(xpathOrCssSelector)) {
+        if (driverIsDisabled()) {
+            nestedElement = this;
+        } else if (isXPath(xpathOrCssSelector)) {
             nestedElement = getElement().findElement((By
                     .xpath(xpathOrCssSelector)));
         } else {
@@ -249,6 +254,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public List<WebElementFacade> thenFindAll(String xpathOrCssSelector) {
         logIfVerbose("findAll " + xpathOrCssSelector);
+        if (driverIsDisabled()) { return new ArrayList<>(); }
+
         List<WebElement> nestedElements;
         if (isXPath(xpathOrCssSelector)) {
             nestedElements = findElements((By.xpath(xpathOrCssSelector)));
@@ -270,6 +277,9 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public WebElementFacade findBy(By selector) {
         logIfVerbose("findBy " + selector);
+
+        if (driverIsDisabled()) { return this; }
+
         WebElement nestedElement = getElement().findElement(selector);
         return wrapWebElement(driver, nestedElement, timeoutInMilliseconds(), waitForTimeoutInMilliseconds,
                               "element located by " + selector.toString());
@@ -287,43 +297,59 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public String getAttribute(String name) {
+        if (driverIsDisabled()) { return ""; }
+
         return getElement().getAttribute(name);
     }
 
     @Override
     public List<WebElementFacade> thenFindAll(By selector) {
         logIfVerbose("findAll " + selector);
+        if (driverIsDisabled()) { return new ArrayList<>(); }
+
         List<WebElement> nestedElements = findElements(selector);
         return webElementFacadesFrom(nestedElements);
     }
 
     @Override
     public WebElement findElementByAccessibilityId(String id) {
+        if (driverIsDisabled()) { return this; }
+
         return ((FindsByAccessibilityId) getElement()).findElementByAccessibilityId(id);
     }
 
     @Override
     public List<WebElement> findElementsByAccessibilityId(String id) {
+        if (driverIsDisabled()) { return new ArrayList<>(); }
+
         return ((FindsByAccessibilityId) getElement()).findElementsByAccessibilityId(id);
     }
 
     @Override
     public WebElement findElementByAndroidUIAutomator(String using) {
+        if (driverIsDisabled()) { return this; }
+
         return ((FindsByAndroidUIAutomator) getElement()).findElementByAndroidUIAutomator(using);
     }
 
     @Override
     public List<WebElement> findElementsByAndroidUIAutomator(String using) {
+        if (driverIsDisabled()) { return new ArrayList<>(); }
+
         return ((FindsByAndroidUIAutomator) getElement()).findElementsByAndroidUIAutomator(using);
     }
 
     @Override
     public WebElement findElementByIosUIAutomation(String using) {
+        if (driverIsDisabled()) { return this; }
+
         return ((FindsByIosUIAutomation) getElement()).findElementByIosUIAutomation(using);
     }
 
     @Override
     public List<WebElement> findElementsByIosUIAutomation(String using) {
+        if (driverIsDisabled()) { return new ArrayList<>(); }
+
         return ((FindsByIosUIAutomation) getElement()).findElementsByIosUIAutomation(using);
     }
 
@@ -360,6 +386,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      */
     @Override
     public boolean isVisible() {
+
+        if (driverIsDisabled()) { return false; }
 
         try {
             WebElement element = getElement();
@@ -403,6 +431,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public boolean isCurrentlyEnabled() {
+        if (driverIsDisabled()) { return false; }
+
         try {
             return getElement().isEnabled();
         } catch (NoSuchElementException e) {
@@ -461,6 +491,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      */
     @Override
     public boolean hasFocus() {
+        if (driverIsDisabled()) { return false; }
+
         JavascriptExecutorFacade js = new JavascriptExecutorFacade(driver);
         WebElement activeElement = (WebElement) js.executeScript("return window.document.activeElement");
         return getElement().equals(activeElement);
@@ -471,12 +503,16 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      */
     @Override
     public boolean containsText(final String value) {
+        if (driverIsDisabled()) { return false; }
+
         WebElement element = getElement();
         return ((element != null) && (element.getText().contains(value)));
     }
 
     @Override
     public boolean containsValue(String value) {
+        if (driverIsDisabled()) { return false; }
+
         WebElement element = getElement();
         return ((element != null) && (element.getAttribute("value").contains(value)));
     }
@@ -487,6 +523,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      */
     @Override
     public boolean containsOnlyText(final String value) {
+        if (driverIsDisabled()) { return false; }
+
         WebElement element = getElement();
         return ((element != null) && (element.getText().equals(value)));
     }
@@ -496,15 +534,19 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      */
     @Override
     public boolean containsSelectOption(final String value) {
+        if (driverIsDisabled()) { return false; }
+
         return getSelectOptions().contains(value);
     }
 
     @Override
     public List<String> getSelectOptions() {
-        List<WebElement> results = Collections.emptyList();
+        if (driverIsDisabled()) { return new ArrayList<>(); }
+
         if (getElement() != null) {
-            results = findElements(By.tagName("option"));
-            return results.stream().map(WebElement::getText).collect(Collectors.toList());
+            return findElements(By.tagName("option")).stream()
+                                                     .map(WebElement::getText)
+                                                     .collect(Collectors.toList());
         }
         return Collections.emptyList();
     }
@@ -526,6 +568,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public void setImplicitTimeout(Duration implicitTimeout) {
+        if (driverIsDisabled()) { return;}
+
         if (driver instanceof ConfigurableTimeouts) {
             ((ConfigurableTimeouts) driver).setImplicitTimeout(implicitTimeout);
         }
@@ -533,6 +577,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public Duration getCurrentImplicitTimeout() {
+        if (driverIsDisabled()) { return new Duration(0, TimeUnit.SECONDS); }
+
         if (driver instanceof ConfigurableTimeouts) {
             return ((ConfigurableTimeouts) driver).getCurrentImplicitTimeout();
         }
@@ -541,6 +587,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public Duration resetTimeouts() {
+        if (driverIsDisabled()) { return new Duration(0, TimeUnit.SECONDS);}
+
         if (driver instanceof ConfigurableTimeouts) {
             return ((ConfigurableTimeouts) driver).resetTimeouts();
         }
@@ -614,6 +662,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public boolean isEnabled() {
+        if (driverIsDisabled()) { return false;}
         return (getElement() != null) && (getElement().isEnabled());
     }
 
@@ -634,6 +683,9 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public WebElementFacade type(final String value) {
         logIfVerbose("Type '" + value + "'");
+
+        if (driverIsDisabled()) { return this;}
+
         waitUntilElementAvailable();
         clear();
         getElement().sendKeys(value);
@@ -649,6 +701,9 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public WebElementFacade typeAndEnter(final String value) {
         logIfVerbose("Type and enter '" + value + "'");
+
+        if (driverIsDisabled()) { return this;}
+
         waitUntilElementAvailable();
         clear();
         getElement().sendKeys(value, Keys.ENTER);
@@ -665,6 +720,9 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public WebElementFacade typeAndTab(final String value) {
         logIfVerbose("Type and tab '" + value + "'");
+
+        if (driverIsDisabled()) { return this;}
+
         waitUntilElementAvailable();
         clear();
 
@@ -678,6 +736,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public void setWindowFocus() {
+        if (driverIsDisabled()) { return;}
+
         getJavascriptExecutorFacade().executeScript("window.focus()");
     }
 
@@ -893,6 +953,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public String getText() {
+        if (driverIsDisabled()) { return "";}
+
         checkPresenceOfWebElement();
         return getElement().getText();
     }
@@ -935,6 +997,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public String getTextValue() {
+        if (driverIsDisabled()) { return "";}
+
         waitUntilPresent();
 
         if (!isVisible()) {
@@ -976,6 +1040,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      */
     @Override
     public void click() {
+        if (driverIsDisabled()) { return;}
+
         waitUntilElementAvailable();
         logClick();
         getElement().click();
@@ -1003,6 +1069,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public void clear() {
 
+        if (driverIsDisabled()) { return;}
+
         if (!isMobileDriver()) {
             getElement().sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
         }
@@ -1028,14 +1096,20 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     public void submit() {
+        if (driverIsDisabled()) { return;}
+
         getElement().submit();
     }
 
     public void sendKeys(CharSequence... keysToSend) {
+        if (driverIsDisabled()) { return;}
+
         getElement().sendKeys(keysToSend);
     }
 
     public String getTagName() {
+        if (driverIsDisabled()) { return "";}
+
         return getElement().getTagName();
     }
 
@@ -1048,15 +1122,21 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     public List<WebElement> findElements(By by) {
+        if (driverIsDisabled()) { return new ArrayList<>();}
+
         return getElement().findElements(by);
     }
 
     public WebElement findElement(By by) {
+        if (driverIsDisabled()) { return this;}
+
         return getElement().findElement(by);
     }
 
     @Override
     public WebElement findElement(String by, String using) {
+        if (driverIsDisabled()) { return this;}
+
         if (getElement() instanceof MobileElement) {
             return ((MobileElement)getElement()).findElement(by, using);
         }
@@ -1065,6 +1145,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public List findElements(String by, String using) {
+        if (driverIsDisabled()) { return new ArrayList();}
+
         if (getElement() instanceof MobileElement) {
             return ((MobileElement)getElement()).findElements(by, using);
         }
@@ -1080,6 +1162,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      * @return Whether or not the element is displayed
      */
     public boolean isDisplayed() {
+        if (driverIsDisabled()) { return false;}
+
         return getElement().isDisplayed();
     }
 

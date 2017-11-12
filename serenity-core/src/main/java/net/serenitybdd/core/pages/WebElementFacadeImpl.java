@@ -588,7 +588,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     @Override
     public Duration resetTimeouts() {
         if (driverIsDisabled()) { return new Duration(0, TimeUnit.SECONDS);}
-
+|
         if (driver instanceof ConfigurableTimeouts) {
             return ((ConfigurableTimeouts) driver).resetTimeouts();
         }
@@ -606,7 +606,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      * @param textValue
      */
     @Override
-    public void shouldContainText(String textValue) {
+    public void shouldContainText(String textValue) {P
         if (!containsText(textValue)) {
             String errorMessage = String.format(
                     "The text '%s' was not found in the web element. Element text '%s'.", textValue, getElement().getText());

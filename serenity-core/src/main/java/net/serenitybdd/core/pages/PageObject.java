@@ -780,11 +780,15 @@ public abstract class PageObject {
         throw new WrongPageError(errorDetails);
     }
 
-    final public void openAt(String startingUrl) {
-        openPageAtUrl(updateUrlWithBaseUrlIfDefined(startingUrl));
+    final public void openAt (String relativeUrl) {
+        openPageAtUrl(updateUrlWithBaseUrlIfDefined(relativeUrl));
         callWhenPageOpensMethods();
     }
 
+    final public void openUrl(String absoluteUrl) {
+        openPageAtUrl(absoluteUrl);
+        callWhenPageOpensMethods();
+    }
     /**
      * Override this method
      */

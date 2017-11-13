@@ -40,7 +40,13 @@ public class ReportService {
     /**
      * These classes generate the reports from the test results.
      */
+    private List<AcceptanceTestFullReporter> subscribedFullReporters;
+
+    /**
+     * These classes generate the reports from the test results.
+     */
     private List<AcceptanceTestReporter> subscribedReporters;
+
 
     private JUnitXMLOutcomeReporter jUnitXMLOutcomeReporter;
 
@@ -54,22 +60,31 @@ public class ReportService {
     public ReportService(final File outputDirectory, final Collection<AcceptanceTestReporter> subscribedReporters) {
         this(outputDirectory, subscribedReporters, Injectors.getInjector().getInstance(EnvironmentVariables.class));
     }
-        /**
-         * Reports are generated using the test results in a given directory.
-         * The actual reports are generated using a set of reporter objects. The report service passes test outcomes
-         * to the reporter objects, which generate different types of reports.
-         *
-         * @param outputDirectory     Where the test data is stored, and where the generated reports will go.
-         * @param subscribedReporters A set of reporters that generate the actual reports.
-         */
+
     public ReportService(final File outputDirectory,
                          final Collection<AcceptanceTestReporter> subscribedReporters,
+                         final EnvironmentVariables environmentVariables) {
+        this(outputDirectory, subscribedReporters, getDefaultFullReporters(), environmentVariables);
+    }
+
+    /**
+     * Reports are generated using the test results in a given directory.
+     * The actual reports are generated using a set of reporter objects. The report service passes test outcomes
+     * to the reporter objects, which generate different types of reports.
+     *
+     * @param outputDirectory     Where the test data is stored, and where the generated reports will go.
+     * @param subscribedReporters A set of reporters that generate the actual reports.
+     */
+    public ReportService(final File outputDirectory,
+                         final Collection<AcceptanceTestReporter> subscribedReporters,
+                         final Collection<AcceptanceTestFullReporter> subscribedFullReporters,
                          final EnvironmentVariables environmentVariables) {
         this.outputDirectory = outputDirectory;
         if(!this.outputDirectory.exists()){
             this.outputDirectory.mkdirs();
         }
         getSubscribedReporters().addAll(subscribedReporters);
+        getSubscribedFullReporters().addAll(subscribedFullReporters);
         jUnitXMLOutcomeReporter = new JUnitXMLOutcomeReporter(outputDirectory);
         this.maximumPoolSize = ThucydidesSystemProperty.REPORT_MAX_THREADS.integerFrom(environmentVariables, Runtime.getRuntime().availableProcessors());
     }
@@ -83,6 +98,13 @@ public class ReportService {
             subscribedReporters = new ArrayList<>();
         }
         return subscribedReporters;
+    }
+
+    public List<AcceptanceTestFullReporter> getSubscribedFullReporters() {
+        if (subscribedFullReporters == null) {
+            subscribedFullReporters = new ArrayList<>();
+        }
+        return subscribedFullReporters;
     }
 
     public void subscribe(final AcceptanceTestReporter reporter) {
@@ -112,6 +134,9 @@ public class ReportService {
         for (final AcceptanceTestReporter reporter : getSubscribedReporters()) {
             generateReportsFor(reporter, allTestOutcomes);
         }
+        for (final AcceptanceTestFullReporter reporter : getSubscribedFullReporters()) {
+            generateFullReportFor(allTestOutcomes, reporter);
+        }
     }
 
     /**
@@ -123,14 +148,14 @@ public class ReportService {
         final Configuration configuration = ConfiguredEnvironment.getConfiguration();
         Config config = ConfigFactory.empty();
 
-        config = config.withValue(ThucydidesSystemProperty.THUCYDIDES_OUTPUT_DIRECTORY.preferredName(),
+        config = config.withValue(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY.preferredName(),
                 ConfigValueFactory.fromAnyRef(configuration.getOutputDirectory().getAbsolutePath()));
 
         try {
             final boolean autoFlush = true;
             final Path flow = this.outputDirectory.toPath().resolve(
-                    ThucydidesSystemProperty.THUCYDIDES_FLOW_REPORTS_DIR.preferredName());
-            final Path file = flow.resolve(ThucydidesSystemProperty.THUCYDIDES_CONFIGURATION_REPORT.preferredName());
+                    ThucydidesSystemProperty.SERENITY_FLOW_REPORTS_DIR.preferredName());
+            final Path file = flow.resolve(ThucydidesSystemProperty.SERENITY_CONFIGURATION_REPORT.preferredName());
             Files.createDirectories(flow);
             try (Writer writer = new PrintWriter(Files.newBufferedWriter(file, StandardCharsets.UTF_8), autoFlush)) {
                 LOGGER.debug("Generating report for configuration");
@@ -234,4 +259,39 @@ public class ReportService {
         }
     }
 
+    /**
+     * The default reporters applicable for standard test runs.
+     */
+    public static List<AcceptanceTestFullReporter> getDefaultFullReporters() {
+        List<AcceptanceTestFullReporter> reporters = new ArrayList<>();
+
+        FormatConfiguration formatConfiguration
+                = new FormatConfiguration(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+
+        ServiceLoader<AcceptanceTestFullReporter> reporterServiceLoader = ServiceLoader.load(AcceptanceTestFullReporter.class);
+        Iterator<AcceptanceTestFullReporter> reporterImplementations = reporterServiceLoader.iterator();
+
+        LOGGER.debug("Reporting formats: " + formatConfiguration.getFormats());
+
+        while (reporterImplementations.hasNext()) {
+            AcceptanceTestFullReporter reporter = reporterImplementations.next();
+            LOGGER.debug("Found reporter: " + reporter + "(format = " + reporter.getFormat() + ")");
+            if (!reporter.getFormat().isPresent() || formatConfiguration.getFormats().contains(reporter.getFormat().get())) {
+                LOGGER.debug("Registering reporter: " + reporter);
+                reporters.add(reporter);
+            }
+        }
+        return reporters;
+    }
+
+    private void generateFullReportFor(final TestOutcomes testOutcomes,
+                                       final AcceptanceTestFullReporter reporter) {
+        try {
+            reporter.setOutputDirectory(outputDirectory);
+            reporter.generateReportsFor(testOutcomes);
+        } catch (Exception e) {
+            throw new ReportGenerationFailedError(
+                    "Failed to generate reports using " + reporter, e);
+        }
+    }
 }

@@ -23,4 +23,8 @@ public class Open {
         return instrumented(OpenPage.class, targetPage);
     }
 
+    public Interaction the(Class<? extends PageObject> targetPageClass) {
+        return instrumented(OpenPageFromClass.class, targetPageClass);
+    }
+
 }

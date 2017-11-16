@@ -23,10 +23,14 @@ public class WaitUntil implements Interaction {
 
     @Override
     public <A extends Actor> void performAs(A actor) {
-        actor.should(eventually(seeThat(WebElementQuestion.the(target), expectedState)));
+        actor.should(eventually(seeThat(WebElementQuestion.the(target), expectedState)).withNoReporting());
     }
 
-    public static Interaction the(Target target, Matcher<WebElementState> expectedState) {
+    public static WaitUntil the(Target target, Matcher<WebElementState> expectedState) {
         return  instrumented(WaitUntil.class, target, expectedState);
+    }
+
+    public WaitUntilBuilder forNoMoreThan(int amount) {
+        return new WaitUntilBuilder(amount, target, expectedState);
     }
 }

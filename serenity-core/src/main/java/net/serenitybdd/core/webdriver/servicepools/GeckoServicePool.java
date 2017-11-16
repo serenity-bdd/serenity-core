@@ -1,9 +1,11 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
 import com.google.common.base.Optional;
+import net.serenitybdd.core.webdriver.FirefoxOptionsEnhancer;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.GeckoDriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +24,11 @@ public class GeckoServicePool extends DriverServicePool<GeckoDriverService> {
 
     @Override
     protected WebDriver newDriverInstance(Capabilities capabilities) {
-        return new FirefoxDriver(capabilities);
+        FirefoxOptions options = new FirefoxOptions(capabilities);
+
+        FirefoxOptionsEnhancer.enhanceOptions(options).using(environmentVariables);
+
+        return new FirefoxDriver(options);
     }
 
     public GeckoServicePool() {

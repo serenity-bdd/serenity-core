@@ -1,6 +1,7 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
+import net.serenitybdd.core.webdriver.FirefoxOptionsEnhancer;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.serenitybdd.core.webdriver.servicepools.GeckoServicePool;
 import net.thucydides.core.guice.Injectors;
@@ -8,16 +9,18 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import org.apache.tools.ant.types.LogLevel;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxDriverLogLevel;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-import static net.thucydides.core.ThucydidesSystemProperty.USE_GECKO_DRIVER;
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_GECKO_DRIVER;
+import static net.thucydides.core.ThucydidesSystemProperty.*;
 
 public class FirefoxDriverProvider implements DriverProvider {
 
@@ -66,7 +69,12 @@ public class FirefoxDriverProvider implements DriverProvider {
 
     private WebDriver newFirefoxDriver(DesiredCapabilities capabilities) {
         capabilities.setCapability("marionette", false);
-        return new FirefoxDriver(enhancer.enhanced(capabilities));
+
+        FirefoxOptions options = new FirefoxOptions(enhancer.enhanced(capabilities));
+
+        FirefoxOptionsEnhancer.enhanceOptions(options).using(environmentVariables);
+
+        return new FirefoxDriver(options);
     }
 
     private WebDriver newMarionetteDriver(DesiredCapabilities capabilities) {

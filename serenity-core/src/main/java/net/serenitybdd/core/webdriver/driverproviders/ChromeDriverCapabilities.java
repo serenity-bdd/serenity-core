@@ -12,6 +12,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.List;
 import java.util.Map;
 
+import static net.thucydides.core.ThucydidesSystemProperty.HEADLESS_MODE;
+
 public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
     private final EnvironmentVariables environmentVariables;
@@ -57,6 +59,10 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
             List<String> arguments = new OptionsSplitter().split(chromeSwitches);
             options.addArguments(arguments);
         }
+
+        if (HEADLESS_MODE.isDefinedIn(environmentVariables) && HEADLESS_MODE.booleanFrom(environmentVariables, false)) {
+            options.addArguments("--headless");
+        }
     }
 
     private void addRuntimeOptionsTo(ChromeOptions options) {
@@ -67,7 +73,6 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
             options.addArguments(arguments);
         }
     }
-
     private void addPreferencesTo(ChromeOptions options) {
 
         Map<String,Object> chromePreferences =  ChromePreferences.startingWith("chrome_preferences.").from(environmentVariables);

@@ -56,6 +56,7 @@ public class StepEventBus {
     }
 
     public static StepEventBus eventBusFor(Object key) {
+        if (key == null) { return new SilentEventBus(ConfiguredEnvironment.getEnvironmentVariables()); }
         STICKY_EVENT_BUSES.putIfAbsent(key, new StepEventBus(ConfiguredEnvironment.getEnvironmentVariables()));
         return STICKY_EVENT_BUSES.get(key);
     }

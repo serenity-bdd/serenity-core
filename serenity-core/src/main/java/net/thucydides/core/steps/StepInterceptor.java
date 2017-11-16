@@ -9,6 +9,7 @@ import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SkipNested;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
+import net.serenitybdd.core.steps.HasCustomFieldValues;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -195,7 +196,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     }
 
     private boolean shouldRunNestedMethodsIn(Method method) {
-        return !(TestAnnotations.shouldSkipNested(method) || shouldSkipNestedIn(method.getDeclaringClass()));
+        return !(TestAnnotations.shouldSkipNested(method)  || shouldSkipNestedIn(method.getDeclaringClass()));
     }
 
     private boolean shouldSkipNestedIn(Class testStepClass) {
@@ -506,7 +507,13 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     }
 
     private Map<String, Object> fieldValuesIn(Object object) {
-        return Fields.of(object).asMap();
+        Map<String, Object> coreFieldValues =  Fields.of(object).asMap();
+
+        if (object instanceof HasCustomFieldValues) {
+            coreFieldValues.putAll( ((HasCustomFieldValues) object).getCustomFieldValues());
+        }
+
+        return coreFieldValues;
     }
 
     private void notifySkippedStepStarted(final Object object, final Method method, final Object[] args) {

@@ -1,22 +1,14 @@
 package net.thucydides.core.steps;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.reflection.MethodFinder;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.Keys;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static net.thucydides.core.annotations.Fields.FieldValue.UNDEFINED;
 import static net.thucydides.core.util.NameConverter.humanize;
 
 /**
@@ -38,7 +30,7 @@ public final class AnnotatedStepDescription {
     }
 
     public List<String> getAnnotatedRequirements() {
-        List<String> requirements = new ArrayList<String>();
+        List<String> requirements = new ArrayList<>();
         Method testMethod = getTestMethod();
         if (testMethod != null) {
             addRequirementFrom(requirements, testMethod);
@@ -139,7 +131,7 @@ public final class AnnotatedStepDescription {
                     String annotationType = annotation.annotationType().getSimpleName();
                     String annotatedValue = (String)annotation.getClass().getMethod("value").invoke(annotation);
                     if (StringUtils.isEmpty(annotatedValue)) {
-                        return Optional.absent();
+                        return Optional.empty();
                     } else {
                         return Optional.of(annotationType + " " + StringUtils.uncapitalize(annotatedValue));
                     }
@@ -147,7 +139,7 @@ public final class AnnotatedStepDescription {
                 } catch (Exception ignoredException) {}
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private Optional<String> getNameFromStepAnnotationIn(final Method testMethod) {
@@ -156,7 +148,7 @@ public final class AnnotatedStepDescription {
         if ((step != null) && (!StringUtils.isEmpty(step.value()))) {
             return Optional.of(injectAnnotatedFieldValuesFrom(description).into(step.value()));
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private AnnotatedFieldValuesBuilder injectAnnotatedFieldValuesFrom(ExecutedStepDescription description) {
@@ -172,50 +164,36 @@ public final class AnnotatedStepDescription {
 
         public String into(String stepDescription) {
 
+            stepDescription = resolveMetaFieldIfPresentIn(stepDescription);
             Map<String, Object> fields = description.getDisplayedFields();
             for(String field : fields.keySet()) {
-                String fieldName = fieldNameFor(field);
-                Object value = fields.get(field);
-                if (stepDescription.contains(fieldName) && (value != UNDEFINED)) {
-                    stepDescription = StringUtils.replace(stepDescription, fieldNameFor(field), stringValueFor(value));
-                }
+                stepDescription = ReplaceField.in(stepDescription).theFieldCalled(field).with(fields.get(field));
             }
-            //allStepDefinitionFieldsShouldBeResolvedIn(stepDescription);
             return stepDescription;
         }
 
-        private String stringValueFor(Object value) {
+        private String resolveMetaFieldIfPresentIn(String stepDescription) {
 
-            if (value instanceof Keys[]) {
-                return keyNamesFor((Keys[]) value);
+            if (!MetaField.from(stepDescription).isDefined()) {
+                return stepDescription;
             }
-            if (value.getClass().isArray()) {
-                return Joiner.on(",").join(Arrays.asList(value));
+
+            String metafield = MetaField.from(stepDescription).template();
+
+            String metafieldName = MetaField.from(stepDescription).fieldName();
+
+            Optional<String> matchingField = description.getDisplayedFields().keySet().stream()
+                                            .filter( key -> key.equals(metafieldName))
+                                            .findFirst();
+
+            if (matchingField.isPresent()) {
+                String field = matchingField.get();
+                stepDescription = ReplaceField.in(metafield).theFieldCalled(field).with(description.getDisplayedFields().get(field));
+                description.getDisplayedFields().remove(field);
             }
-            return value.toString();
+
+            return stepDescription;
         }
-
-        private String keyNamesFor(Keys[] keyValues) {
-            List<String> keyNames = new ArrayList<>();
-            for(Keys keyValue: keyValues) {
-                keyNames.add((keyValue.name()));
-            }
-            return Joiner.on(",").join(keyNames);
-        }
-
-        private void allStepDefinitionFieldsShouldBeResolvedIn(String stepDescription) {
-            Map<String, Object> fields = description.getDisplayedFields();
-            for(String field : fields.keySet()) {
-                if (stepDescription.contains(fieldNameFor(field))) {
-                    throw new AssertionError(stepDescription +  " : " + field + " value could not be resolved");
-                }
-            }
-        }
-
-    }
-
-    private String fieldNameFor(String field) {
-        return "#" + field;
     }
 
     public String getName() {

@@ -1,5 +1,6 @@
 package net.thucydides.core.pages.components;
 
+import net.serenitybdd.core.pages.WebElementFacade;
 import net.thucydides.core.webelements.MultipleSelect;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
@@ -24,7 +25,11 @@ public class Dropdown {
     }
 
     public static Dropdown forWebElement(final WebElement webElement) {
-        return new Dropdown(webElement);
+        if (webElement instanceof WebElementFacade) {
+            return new Dropdown(((WebElementFacade) webElement).getWrappedElement());
+        } else {
+            return new Dropdown(webElement);
+        }
     }
 
     public void select(final String visibleLabel) {

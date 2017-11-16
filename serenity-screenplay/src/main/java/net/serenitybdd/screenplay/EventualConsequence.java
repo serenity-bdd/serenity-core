@@ -3,17 +3,23 @@ package net.serenitybdd.screenplay;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.time.Stopwatch;
 
-public class EventualConsequence<T> implements Consequence<T> {
+public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
     public static final int A_SHORT_PERIOD_BETWEEN_TRIES = 100;
     private final Consequence<T> consequenceThatMightTakeSomeTime;
     private final long timeout;
+    private final boolean isSilent;
 
     private AssertionError caughtAssertionError = null;
     private RuntimeException caughtRuntimeException = null;
 
     public EventualConsequence(Consequence<T> consequenceThatMightTakeSomeTime, long timeout) {
+        this(consequenceThatMightTakeSomeTime, timeout, false);
+    }
+
+    public EventualConsequence(Consequence<T> consequenceThatMightTakeSomeTime, long timeout, boolean isSilent) {
         this.consequenceThatMightTakeSomeTime = consequenceThatMightTakeSomeTime;
         this.timeout = timeout;
+        this.isSilent = isSilent;
     }
 
     public EventualConsequence(Consequence<T> consequenceThatMightTakeSomeTime) {
@@ -91,4 +97,12 @@ public class EventualConsequence<T> implements Consequence<T> {
         return new EventualConsequence<T>(consequenceThatMightTakeSomeTime.because(explanation));
     }
 
+    @Override
+    public boolean isSilent() {
+        return isSilent;
+    }
+
+    public EventualConsequence<T>  withNoReporting() {
+        return new EventualConsequence<T>(consequenceThatMightTakeSomeTime, timeout, true);
+    }
 }

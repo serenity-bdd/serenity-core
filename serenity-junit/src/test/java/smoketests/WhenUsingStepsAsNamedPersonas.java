@@ -25,6 +25,16 @@ public class WhenUsingStepsAsNamedPersonas {
         void fliesTo(String destination) {}
     }
 
+    public static class TravellerWithConfigurableTitle {
+
+        private String title = "#actor flies to {0}";
+        private String actor;
+
+        @Step("!#title")
+        void fliesTo(String destination) {}
+    }
+
+
     public static class Salesperson extends ScenarioActor {
 
 
@@ -45,12 +55,24 @@ public class WhenUsingStepsAsNamedPersonas {
     @Steps
     Salesperson anonymousSalesman;
 
+    @Steps
+    TravellerWithConfigurableTitle carrie;
+
+
     @Test
     public void shouldBeAbleToNameAPersona() {
 
         tracy.fliesTo("Tallinn");
 
         assertThat(stepDescriptionFor("shouldBeAbleToNameAPersona")).isEqualTo("Tracy flies to Tallinn");
+    }
+
+    @Test
+    public void shouldBeAbleToNameAPersonaWithAConfigurableTitle() {
+
+        carrie.fliesTo("Tallinn");
+
+        assertThat(stepDescriptionFor("shouldBeAbleToNameAPersonaWithAConfigurableTitle")).isEqualTo("Carrie flies to Tallinn");
     }
 
     public static class FirstClassTraveller extends Traveller {

@@ -190,18 +190,54 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     private <T> void check(Consequence<T> consequence, ErrorTally errorTally) {
+
+        ConsequenceCheckReporter reporter = new ConsequenceCheckReporter(eventBusInterface, consequence);
         try {
-            eventBusInterface.startQuestion(FormattedTitle.ofConsequence(consequence));
+            reporter.startQuestion();
             if (eventBusInterface.shouldIgnoreConsequences()) {
-                eventBusInterface.reportStepIgnored();
+                reporter.reportStepIgnored();
             } else {
                 consequence.evaluateFor(this);
-                eventBusInterface.reportStepFinished();
+                reporter.reportStepFinished();
             }
         } catch (IgnoreStepException e) {
-            eventBusInterface.reportStepIgnored();
+            reporter.reportStepIgnored();
         } catch (Throwable e) {
             errorTally.recordError(consequence, e);
+        }
+    }
+
+    static class ConsequenceCheckReporter {
+        private final EventBusInterface eventBusInterface;
+        private final Consequence consequence;
+
+        ConsequenceCheckReporter(EventBusInterface eventBusInterface, Consequence consequence) {
+            this.eventBusInterface = eventBusInterface;
+            this.consequence = consequence;
+        }
+
+        public void startQuestion() {
+            if (shouldReportConsequence()) {
+                eventBusInterface.startQuestion(FormattedTitle.ofConsequence(consequence));
+            }
+        }
+
+        private boolean shouldReportConsequence() {
+            return (consequence instanceof CanBeSilent) && (((CanBeSilent) consequence).isSilent());
+        }
+
+
+        public void reportStepIgnored() {
+            if (shouldReportConsequence()) {
+                eventBusInterface.reportStepIgnored();
+            }
+
+        }
+
+        public void reportStepFinished() {
+            if (shouldReportConsequence()) {
+                eventBusInterface.reportStepFinished();
+            }
         }
     }
 

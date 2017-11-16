@@ -1,17 +1,20 @@
 package net.serenitybdd.screenplay.shopping;
 
+import net.serenitybdd.screenplay.Performable;
+import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.shopping.tasks.HaveItemsDelivered;
 import net.serenitybdd.screenplay.shopping.tasks.Purchase;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
+import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static net.serenitybdd.screenplay.Tasks.instrumented;
 import static net.serenitybdd.screenplay.shopping.questions.TotalCost.theCorrectTotalCost;
 import static net.serenitybdd.screenplay.shopping.tasks.Purchase.*;
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 @RunWith(SerenityRunner.class)
@@ -25,15 +28,37 @@ public class WhenDanaGoesShopping {
     @Steps
     HaveItemsDelivered haveThemDelivered;
 
+    Task checkTheInventory  = Task.where("{0} checks for #item", LookThroughTheBags.forItem("apples"))
+                                  .with("item").of("apples");
+
     @Test
     public void shouldBeAbleToPurchaseSomeItemsWithDelivery() {
         givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
                             andPurchased().aPear().thatCosts(5).dollars());
 
-        when(dana).attemptsTo(haveThemDelivered);
+        when(dana).attemptsTo(haveThemDelivered, checkTheInventory);
 
         then(dana).should(seeThat(theCorrectTotalCost(), equalTo(15)));
     }
+
+    @Test
+    public void shouldBeAbleToCheckHerStuff() {
+        dana.attemptsTo(checkTheInventory);
+    }
+
+    public static class LookThroughTheBags implements Task {
+
+
+        @Override
+        @Step("Look through the bags")
+        public <T extends Actor> void performAs(T actor) {
+        }
+
+        static Performable forItem(String items) {
+            return instrumented(LookThroughTheBags.class);
+        }
+    }
+
 
 }
 

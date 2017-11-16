@@ -6,6 +6,7 @@ import net.thucydides.core.reflection.MethodFinder;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -147,7 +148,7 @@ public class ExecutedStepDescription implements Cloneable {
     }
 
     public Map<String, Object> getDisplayedFields() {
-        return displayedFields;
+        return new HashMap<>(displayedFields);
     }
 
     public ExecutedStepDescription asAQuestion() {

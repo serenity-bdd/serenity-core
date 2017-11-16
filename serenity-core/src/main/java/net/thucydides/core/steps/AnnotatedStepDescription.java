@@ -186,10 +186,12 @@ public final class AnnotatedStepDescription {
                                             .filter( key -> key.equals(metafieldName))
                                             .findFirst();
 
+            Map<String,Object> displayedFields = new HashMap<>(description.getDisplayedFields());
+
             if (matchingField.isPresent()) {
                 String field = matchingField.get();
-                stepDescription = ReplaceField.in(metafield).theFieldCalled(field).with(description.getDisplayedFields().get(field));
-                description.getDisplayedFields().remove(field);
+                stepDescription = ReplaceField.in(metafield).theFieldCalled(field).with(displayedFields.get(field));
+                displayedFields.remove(field);
             }
 
             return stepDescription;

@@ -188,6 +188,12 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_VERBOSE_STEPS,
 
+    /**
+     * Words that will be recognised as pronouns by Serenity Screenplay in Cucumber and used to refer to the
+     * actor in the spotlight, rather than as an actor name. Defaults to "he" and "she"
+     */
+    SCREENPLAY_PRONOUNS,
+
 
     @Deprecated
     THUCYDIDES_TAKE_SCREENSHOTS,
@@ -1160,6 +1166,13 @@ public enum ThucydidesSystemProperty {
      * Instruct the SafariDriver to delete all existing session data when starting a new session (true by default)
      */
     SAFARI_USE_CLEAN_SESSION,
+
+    /**
+     * Activate headless mode for chrome or firefox
+     */
+    HEADLESS_MODE,
+
+    FIREFOX_LOG_LEVEL,
 
     /**
      * The character to be used to separate firefox preference key-value pairs when using the "firefox.preferences" property.

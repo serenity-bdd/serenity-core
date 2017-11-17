@@ -23,13 +23,13 @@ public class SmartElementProxyCreator implements ElementProxyCreator {
     interface ElementInitialiserWithTimeout extends TriConsumer<WebDriver, PageObject, Integer> {}
 
     private ElementInitialiser appiumInitialisationStrategy
-            = (driver, pageObject) ->  PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+            = (driver, pageObject) ->  PageFactory.initElements(new AppiumFieldDecorator(driver), pageObject);
 
     private ElementInitialiser defaultInitialisationStrategy
             = (driver, pageObject) ->  PageFactory.initElements(new SmartFieldDecorator(locatorFactories().getLocatorFor(driver), driver, pageObject), pageObject);
 
     private ElementInitialiserWithTimeout appiumInitialisationStrategyWithTimeout
-            = (driver, pageObject, timeoutInSeconds) ->  PageFactory.initElements(new AppiumFieldDecorator(driver, timeoutInSeconds, TimeUnit.SECONDS), this);
+            = (driver, pageObject, timeoutInSeconds) ->  PageFactory.initElements(new AppiumFieldDecorator(driver, timeoutInSeconds, TimeUnit.SECONDS), pageObject);
 
     private ElementInitialiserWithTimeout defaultInitialisationStrategyWithTimeout
             = (driver, pageObject, timeoutInSeconds) ->  {

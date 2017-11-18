@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import integration.serenitySteps.WordPressLoginSteps;
 
+//@RunWith(SerenityRunner.class)
 @RunWith(CucumberWithSerenity.class)
 @CucumberOptions(features="src/test/java/integration/resources/features/invalid_login.feature" , plugin = {"json:target/cucumber_json/cucumber.json"} )
 public class WordPressAppTest {

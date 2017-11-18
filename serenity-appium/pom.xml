@@ -12,9 +12,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <serenity.version>1.6.3</serenity.version>
-        <serenity.cucumber.version>1.5.10</serenity.cucumber.version>
-        <serenity.maven.version>1.6.0</serenity.maven.version>
+        <serenity.version>1.7.4</serenity.version>
+        <serenity.cucumber.version>1.6.3</serenity.cucumber.version>
+        <serenity.maven.version>1.7.4</serenity.maven.version>
     </properties>
 
     <repositories>

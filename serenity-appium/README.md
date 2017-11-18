@@ -1,3 +1,6 @@
+### Running in Sauce Labs ###
+mvn surefire:test -Dtest=WordPressAppTest -Dsaucelabs.url=http://**sauceId**:**sauceKey**@ondemand.saucelabs.com:80/wd/hub -Dsaucelabs.access.key=**sauceKey** -Dsaucelabs.user.id=**sauceId**
+
 
 ### Before Run ###
 

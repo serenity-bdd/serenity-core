@@ -19,10 +19,8 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public abstract class ThucydidesFluentWait<T> implements Wait<T> {
 
-    public final static Duration FIVE_HUNDRED_MILLIS = new Duration(500, MILLISECONDS);
-
-    protected Duration timeout = FIVE_HUNDRED_MILLIS;
-    protected Duration interval = FIVE_HUNDRED_MILLIS;
+    protected Duration timeout =  new Duration(500, MILLISECONDS);;
+    protected Duration interval = new Duration(50, MILLISECONDS);;
 
     private List<Class<? extends RuntimeException>> ignoredExceptions = Lists.newLinkedList();
 

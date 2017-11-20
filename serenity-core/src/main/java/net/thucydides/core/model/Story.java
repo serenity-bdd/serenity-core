@@ -1,8 +1,12 @@
 package net.thucydides.core.model;
 
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Feature;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.features.ApplicationFeature;
 import net.thucydides.core.requirements.model.FeatureType;
+import net.thucydides.core.util.EnvironmentVariables;
+import org.apache.commons.lang3.StringUtils;
 
 import static net.thucydides.core.model.ReportType.ROOT;
 import static net.thucydides.core.util.NameConverter.humanize;
@@ -33,11 +37,26 @@ public class Story {
 
     private String pathOf(Class<?> userStoryClass) {
         String canonicalName = userStoryClass.getCanonicalName();
-        int lastDot = canonicalName.lastIndexOf(".");
+        String localPath = stripRootPathFrom(canonicalName);
+
+        int lastDot = localPath.lastIndexOf(".");
+
         if (lastDot > 0) {
-            return canonicalName.substring(0, lastDot);
+            return localPath.substring(0, lastDot);
         } else {
             return "";
+        }
+    }
+
+    private String stripRootPathFrom(String testOutcomePath) {
+        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+
+        if (testOutcomePath == null) { return ""; }
+        String rootPath = ThucydidesSystemProperty.SERENITY_TEST_ROOT.from(environmentVariables);
+        if (StringUtils.isNotEmpty(rootPath) && testOutcomePath.startsWith(rootPath) && (!testOutcomePath.equals(rootPath))) {
+            return testOutcomePath.substring(rootPath.length() + 1);
+        } else {
+            return testOutcomePath;
         }
     }
 

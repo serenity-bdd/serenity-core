@@ -496,12 +496,7 @@ public class Formatter {
 
     private List<String> sortByDecreasingSize(List<String> issues) {
         List<String> sortedIssues = Lists.newArrayList(issues);
-        Collections.sort(sortedIssues, new Comparator<String>() {
-            @Override
-            public int compare(String a, String b) {
-                return Integer.valueOf(-a.length()).compareTo(Integer.valueOf(b.length()));
-            }
-        });
+        Collections.sort(sortedIssues, (a, b) -> Integer.valueOf(-a.length()).compareTo(Integer.valueOf(b.length())));
         return sortedIssues;
     }
 

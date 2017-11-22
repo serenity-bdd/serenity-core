@@ -162,6 +162,7 @@ class WhenStoringTestOutcomesInJUnitFormat extends Specification {
         def junitXMLReport = new File(outputDirectory.getAbsolutePath(), outputDirectory.list()[0]).text
 
         then:
-        junitXMLReport.contains '''<flakyFailure message="Flaky test assertion error" type="java.lang.AssertionError">UNSTABLE TEST:FailureHistory<system-err>Flaky test assertion error\n</system-err></flakyFailure>'''
+        junitXMLReport.contains '''<flakyFailure message="Flaky test assertion error" type="java.lang.AssertionError">UNSTABLE TEST:FailureHistory<system-err>Flaky test assertion error'''
+        junitXMLReport.contains '''</system-err></flakyFailure>'''
     }
 }

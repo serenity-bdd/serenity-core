@@ -72,7 +72,6 @@ public class WhenRunningADataDrivenTestScenarioToCheckDuration {
             }
             assertThat("Duration of tests is invalid", test.getDuration() > 0, is(true));
             assertThat("Duration of tests invalid not propagated", test.getDuration(), is(duration));
-            assertThat("Duration in seconds of tests invalid", test.getDurationInSeconds() > 0, is(true));
         }
     }
     @Test

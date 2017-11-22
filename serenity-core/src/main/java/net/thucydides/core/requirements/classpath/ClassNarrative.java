@@ -35,7 +35,7 @@ public abstract class ClassNarrative {
             if (narrative.isPresent() && !isEmpty(getNarrativeTextBody(narrative.get()))) {
                 return Optional.of(getNarrativeTextBody(narrative.get()));
             }
-            return Optional.absent();
+             return Optional.absent();
         }
     }
 

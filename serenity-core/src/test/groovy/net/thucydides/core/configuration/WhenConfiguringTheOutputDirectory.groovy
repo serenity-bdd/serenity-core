@@ -2,6 +2,7 @@ package net.thucydides.core.configuration
 
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
+import org.apache.commons.lang.SystemUtils
 import spock.lang.Specification
 
 import java.nio.file.Paths
@@ -38,13 +39,15 @@ class WhenConfiguringTheOutputDirectory extends Specification {
 
     def "for a maven project an overridden absolute output directory should be absolute"() {
         given:
+            String absolutePath = (SystemUtils.IS_OS_WINDOWS)? "C:\\my\\target" : "/my/target";
+
             environmentVariables.setProperty("project.build.directory","/my/maven/project")
-            environmentVariables.setProperty("serenity.outputDirectory","/my/target")
+            environmentVariables.setProperty("serenity.outputDirectory",absolutePath)
         when:
             def config = new SystemPropertiesConfiguration(environmentVariables);
         then:
 
-            config.getOutputDirectory().toPath() == Paths.get("/my/target")
+            config.getOutputDirectory().toPath() == Paths.get(absolutePath)
     }
 
     def "for a maven project an overridden relative output directory should be relative to the maven project directory"() {

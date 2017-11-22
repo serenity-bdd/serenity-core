@@ -6,6 +6,8 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import java.nio.file.Paths
+
 class WhenFindingDriverServiceExecutables extends Specification {
 
     @Rule
@@ -24,7 +26,7 @@ class WhenFindingDriverServiceExecutables extends Specification {
     def "should look for a file using the configured environment property if defined"() {
         given:
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
-        String configuredPath = ClassLoader.getResource("/binaries/phantomjs").file
+        String configuredPath = Paths.get(ClassLoader.getResource("/binaries/phantomjs").toURI())
         environmentVariables.setProperty("my.exe.path", configuredPath)
         when:
         File gitExe = DriverServiceExecutable.called("git")

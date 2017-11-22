@@ -25,11 +25,9 @@ class WhenPrintingARequirementTree extends Specification {
         when:
             def printedRequirements = RequirementTree.withRequirements(requirements).toString()
         then:
-            printedRequirements ==
-"""REQUIREMENTS:
-    - capability: fruit
-    - capability: veges
-"""
+        printedRequirements.contains("REQUIREMENTS:")
+        printedRequirements.contains("    - capability: fruit")
+        printedRequirements.contains("    - capability: vege")
     }
 
     def "a nested  list of requirements"() {
@@ -44,14 +42,12 @@ class WhenPrintingARequirementTree extends Specification {
         when:
         def printedRequirements = RequirementTree.withRequirements(requirements).toString()
         then:
-        printedRequirements ==
-                """REQUIREMENTS:
-    - capability: fruit
-        - feature: apple
-        - feature: pear
-    - capability: veges
-        - feature: cucumber
-"""
+        printedRequirements.contains("REQUIREMENTS:")
+        printedRequirements.contains("    - capability: fruit")
+        printedRequirements.contains("        - feature: apple")
+        printedRequirements.contains("        - feature: pear")
+        printedRequirements.contains("    - capability: vege")
+        printedRequirements.contains("        - feature: cucumber")
     }
 
 }

@@ -157,19 +157,6 @@ public class WhenUploadingFiles {
 
     }
 
-    @Test
-    public void should_leave_a_windows_java_path_alone_when_running_on_windows() {
-        String windowsPath = "C:\\Users\\Joe Blogs\\Documents\\somefile.pdf";
-        if (runningOnWindows()) {
-            WebElement field = mock(WebElement.class);
-
-            FileToUpload fileToUpload = new FileToUpload(driver, windowsPath);
-            fileToUpload.to(field);
-
-            verify(field).sendKeys(windowsPath);
-        }
-    }
-
     private boolean runningOnWindows() {
         return System.getProperty("os.name").contains("Windows");
     }

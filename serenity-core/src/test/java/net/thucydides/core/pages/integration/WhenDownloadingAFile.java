@@ -19,16 +19,14 @@ public class WhenDownloadingAFile {
 
     @Test
     public void should_download_url_as_byte_array() throws IOException {
-        File siteIndex = fileInClasspathCalled("static-site/index.html");
-        URL url = new URL("file://" + siteIndex.getAbsolutePath());
+        URL url = new URL("http://example.com");
         byte[] data = FileToDownload.fromUrl(url).asByteArray();
         assertThat(data.length).isGreaterThan(0);
     }
 
     @Test
     public void should_download_url_as_string() throws IOException {
-        File siteIndex = fileInClasspathCalled("static-site/index.html");
-        URL url = new URL("file://" + siteIndex.getAbsolutePath());
+        URL url = new URL("http://example.com");
         String contents = FileToDownload.fromUrl(url).asString();
         assertThat(contents).isNotEmpty();
     }

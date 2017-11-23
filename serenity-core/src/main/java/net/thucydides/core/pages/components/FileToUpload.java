@@ -3,6 +3,7 @@ package net.thucydides.core.pages.components;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.webdriver.ConfigureFileDetector;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -49,7 +50,13 @@ public class FileToUpload {
         URL resourceOnTheClassPath = Optional.ofNullable(resourceOnClasspath(requestedFilename))
                                               .orElse(resourceOnClasspath(stripLeadingSlashFrom(requestedFilename)));
 
-        return (resourceOnTheClassPath != null) ? resourceOnTheClassPath.getPath() : getFileFromFileSystem(requestedFilename);
+        String resolvedPath = (resourceOnTheClassPath != null) ? resourceOnTheClassPath.getPath() : getFileFromFileSystem(requestedFilename);
+
+        return windowsSafe(resolvedPath);
+    }
+
+    private String windowsSafe(String resolvedPath) {
+        return (SystemUtils.IS_OS_WINDOWS && resolvedPath.startsWith("/")) ? resolvedPath.substring(1) : resolvedPath;
     }
 
     private String stripLeadingSlashFrom(String requestedFilename) {
@@ -73,7 +80,7 @@ public class FileToUpload {
 
     public void to(final WebElement uploadFileField) {
 
-        String filePath = uploadableFilePathTo(uploadFileField).forFile(resolvedFilename);
+        String filePath = windowsSafe(uploadableFilePathTo(uploadFileField).forFile(resolvedFilename));
 
         checkThatFileExistsFor(filePath);
 

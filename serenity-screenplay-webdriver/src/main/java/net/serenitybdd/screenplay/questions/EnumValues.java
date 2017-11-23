@@ -1,11 +1,14 @@
 package net.serenitybdd.screenplay.questions;
 
-import com.google.common.collect.Lists;
 import net.serenitybdd.screenplay.exceptions.UnexpectedEnumValueException;
 import net.thucydides.core.annotations.Methods;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class EnumValues {
 
@@ -19,7 +22,7 @@ public class EnumValues {
         try {
             return (T) Methods.of(enumType).called("valueOf").first().invoke(null, value);
         } catch (Exception e) {
-            throw new UnexpectedEnumValueException("Unknown enum value for "+ enumType + " of " + value);
+            throw new UnexpectedEnumValueException("Unknown enum value for " + enumType + " of " + value);
         }
     }
 
@@ -33,15 +36,23 @@ public class EnumValues {
 
     public <T> List<T> getValuesOf(List<?> values) {
         List<T> convertedValues = new ArrayList<>();
-        Object lastAttemptedValue = null;
-        try {
-            for(Object value : values) {
-                lastAttemptedValue = value;
-                convertedValues.add((T)Methods.of(enumType).called("valueOf").first().invoke(null, value.toString()));
-            }
-        } catch (Exception e) {
-            throw new UnexpectedEnumValueException("Unknown enum value for "+ enumType + ": " + lastAttemptedValue);
+        for (Object value : values) {
+            convertedValues.addAll(
+                    Methods.of(enumType).called("valueOf").asList().stream()
+                            .filter(method -> method.getParameterCount() == 1)
+                            .filter(method -> method.getParameterTypes()[0] == String.class)
+                            .map(method -> (T) stringToValue(method, value))
+                            .collect(Collectors.toList())
+            );
         }
         return convertedValues;
+    }
+
+    private static <T> T stringToValue(Method method, Object value) {
+        try {
+            return (T) method.invoke(null, value.toString());
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new UnexpectedEnumValueException("Unexpected enum value for " + method.getDeclaringClass().getSimpleName() + " of " + value);
+        }
     }
 }

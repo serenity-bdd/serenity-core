@@ -228,7 +228,7 @@ class WhenReadingUIValues extends Specification {
             element.getAttribute("checked") >> "true"
             element2.getAttribute("checked") >> "false"
         then:
-            Attribute.of(target).named("checked").viewedBy(actor).asListOf(Boolean.class) == [true, false]
+            Attribute.of(target).named("checked").viewedBy(actor).asListOf(Boolean.class) == [Boolean.TRUE, Boolean.FALSE]
     }
 
     def "should read size value"() {

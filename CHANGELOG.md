@@ -2,6 +2,58 @@
 # Serenity Core change log
 ## Unreleased
 ### No issue
+ * [0abe1cf2a796f73](https://github.com/serenity-bdd/serenity-core/commit/0abe1cf2a796f73) Fixed an issue converting enums in Screenplay on some JVMs
+ * [d60f1da87842a85](https://github.com/serenity-bdd/serenity-core/commit/d60f1da87842a85) test refactoring to ensure all of the serenity-core tests run on Windows build machines
+ * [1a01fd52a1086e2](https://github.com/serenity-bdd/serenity-core/commit/1a01fd52a1086e2) Minor fixes for the build on Windows
+## v1.8.1
+### No issue
+ * [2baf86fa0ee9104](https://github.com/serenity-bdd/serenity-core/commit/2baf86fa0ee9104) Implicit wait intervals are no 50ms rather than 500ms.
+ * [2b8aba1e9919380](https://github.com/serenity-bdd/serenity-core/commit/2b8aba1e9919380) Fixed an issue which resulted in incorrect requirements reporting for JUnit tests
+ * [42477b263c6d173](https://github.com/serenity-bdd/serenity-core/commit/42477b263c6d173) fixed script as per latest changes in framework related to appium driver handling in saucelabs
+## v1.8.0
+### No issue
+ * [5bb7e39906e9580](https://github.com/serenity-bdd/serenity-core/commit/5bb7e39906e9580) fix bug when initialising page elements using AppiumFieldDecorator
+ * [22d6212c34cf4fb](https://github.com/serenity-bdd/serenity-core/commit/22d6212c34cf4fb) Fixed a bug in the consequence reporting
+ * [42d4ef4f36f2f29](https://github.com/serenity-bdd/serenity-core/commit/42d4ef4f36f2f29) Fixed a broken unit test
+ * [8c0f25237f38509](https://github.com/serenity-bdd/serenity-core/commit/8c0f25237f38509) Waits should not be reported as consequences in the reports.
+ * [fe536f89364e801](https://github.com/serenity-bdd/serenity-core/commit/fe536f89364e801) Fixed a bug with the Select element integration, where the select element was not used correctly as it is not visible for Selenium
+ * [15ded2bff6b3d15](https://github.com/serenity-bdd/serenity-core/commit/15ded2bff6b3d15) Use FirefoxOptions instead of Capabilities, and added the headless.mode serenity property to allow headless browsing in Firefox.
+ * [5c3d911b9ceca8e](https://github.com/serenity-bdd/serenity-core/commit/5c3d911b9ceca8e) Helper methods for anonymous tasks and interactions.
+## v1.7.5
+### [#1027](https://github.com/serenity-bdd/serenity-core/pull/1027) #1027 - remove spurious characters from last commit 
+ * [e7b47c2ba3c26ff](https://github.com/serenity-bdd/serenity-core/commit/e7b47c2ba3c26ff) #1027 - remove spurious characters from last commit causing compilation error
+### No issue
+ * [1a9348a5e504a1a](https://github.com/serenity-bdd/serenity-core/commit/1a9348a5e504a1a) Added the openUrl() method to open an absolute URL
+ * [18b1d84edce9b05](https://github.com/serenity-bdd/serenity-core/commit/18b1d84edce9b05) add AcceptanceTestFullReporter listener to generate reports as in JUnitXMLOutcomeReporter
+## v1.7.4
+### No issue
+ * [c21fad2e2f69628](https://github.com/serenity-bdd/serenity-core/commit/c21fad2e2f69628) Added checks to ensure that webdriver calls are not attempted if a webelement is inadvertantly used after the test is suspended
+## v1.7.3
+### [#1006](https://github.com/serenity-bdd/serenity-core/issues/1006) Upload is not working in selenium grid environment 
+ * [9d6d7dbe56ad360](https://github.com/serenity-bdd/serenity-core/commit/9d6d7dbe56ad360) Fixed #1006
+### No issue
+ * [0da1064b4bdfca8](https://github.com/serenity-bdd/serenity-core/commit/0da1064b4bdfca8) Removed redundant test
+ * [3c45718460f6bda](https://github.com/serenity-bdd/serenity-core/commit/3c45718460f6bda) Refactoring to remove guava collection code.
+## v1.7.2
+### [#1012](https://github.com/serenity-bdd/serenity-core/issues/1012) Action moveToElement stop working in serenity after Selenium upgraded to 3.7.0
+ * [091c76ce7ce7031](https://github.com/serenity-bdd/serenity-core/commit/091c76ce7ce7031) Test to reproduce #1012
+ * [e6bd81c28b48aa1](https://github.com/serenity-bdd/serenity-core/commit/e6bd81c28b48aa1) Test to reproduce #1012
+### No issue
+ * [5f26e5b5913de51](https://github.com/serenity-bdd/serenity-core/commit/5f26e5b5913de51) Update Locatable to interactions package
+
+Update according to https://github.com/SeleniumHQ/selenium/commit/b37c27b4c62c4ba336a3a96b125f86ad0f15f04b
+ * [15ad1c23afaedba](https://github.com/serenity-bdd/serenity-core/commit/15ad1c23afaedba) Updated changelog to 1.7.1
+## v1.7.1
+### No issue
+ * [109c56703749dc3](https://github.com/serenity-bdd/serenity-core/commit/109c56703749dc3) Cater for empty firefox preferences
+ * [fbe109a8947ad81](https://github.com/serenity-bdd/serenity-core/commit/fbe109a8947ad81) Upgraded to Selenium 3.7.1, and some minor refactoring.
+ * [ef7c0888b1d2dcb](https://github.com/serenity-bdd/serenity-core/commit/ef7c0888b1d2dcb) chore: replaced deprecated setUseCleanSession() with useCleanSession() in the Safari options.
+## v1.7.0
+### No issue
+ * [7a8020159979ecd](https://github.com/serenity-bdd/serenity-core/commit/7a8020159979ecd) Updated redundant unit test
+ * [ace08918de5b710](https://github.com/serenity-bdd/serenity-core/commit/ace08918de5b710) Added support for steps and page objects in nested classes.
+Step libraries or page objects declared as nested classes, and which have a default constructor, also need the enclosing class to have a default constructor as well.
+ * [1a4e720f73002f8](https://github.com/serenity-bdd/serenity-core/commit/1a4e720f73002f8) Updated changelog title
  * [d654b7d7be8af63](https://github.com/serenity-bdd/serenity-core/commit/d654b7d7be8af63) Fixed the title in the changelog
  * [2eeb1f18d001113](https://github.com/serenity-bdd/serenity-core/commit/2eeb1f18d001113) Updated changelog for version 1.7.0-rc.1
 ## v1.7.0-rc.1

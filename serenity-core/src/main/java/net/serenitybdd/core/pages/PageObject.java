@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static net.serenitybdd.core.selectors.Selectors.xpathOrCssSelector;
@@ -793,6 +794,8 @@ public abstract class PageObject {
      * Override this method
      */
     public void callWhenPageOpensMethods() {
+        if (StepEventBus.getEventBus().currentTestIsSuspended()) { return; }
+
         for (Method annotatedMethod : methodsAnnotatedWithWhenPageOpens()) {
             try {
                 annotatedMethod.setAccessible(true);
@@ -930,14 +933,11 @@ public abstract class PageObject {
     public List<WebElementFacade> findAll(By bySelector) {
 
         List<WebElement> matchingWebElements = driver.findElements(bySelector);
+
         List<WebElementFacade> allElements = new ArrayList<>();
         for(WebElement matchingElement : matchingWebElements) {
             allElements.add($(matchingElement));
         }
-//
-//        List<WebElementFacade> allElements =matchingWebElements
-//                .stream()
-//                .map(e -> $(e)).collect(Collectors.toList());
 
         return allElements;
     }

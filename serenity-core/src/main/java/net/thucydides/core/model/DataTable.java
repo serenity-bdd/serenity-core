@@ -97,6 +97,10 @@ public class DataTable {
         addRow(new DataTableRow(new ArrayList<>(data.values())));
     }
 
+    public void addRow(List<?> data) {
+        addRow(new DataTableRow(new ArrayList<>(data)));
+    }
+
     public List<DataSetDescriptor> getDataSetDescriptors() {
         return dataSetDescriptors;
     }
@@ -108,6 +112,10 @@ public class DataTable {
 
     public void appendRow(Map<String, ?> data) {
         appendRow(new DataTableRow(new ArrayList<>(data.values())));
+    }
+
+    public void appendRow(List<?> data) {
+        appendRow(new DataTableRow(new ArrayList<>(data)));
     }
 
     void appendRow(DataTableRow dataTableRow) {

@@ -17,6 +17,11 @@ public class AuthenticationSpecificationStub implements AuthenticationSpecificat
     }
 
     @Override
+    public RequestSpecification ntlm(String userName, String password, String workstation, String domain) {
+        return new RequestSpecificationStub();
+    }
+
+    @Override
     public RequestSpecification digest(final String userName, final String password) {
         return new RequestSpecificationStub();
     }

@@ -1,5 +1,6 @@
 package net.thucydides.samples;
 
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.annotations.WithTag;
@@ -9,16 +10,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
-@RunWith(ThucydidesRunner.class)
+@RunWith(SerenityRunner.class)
 @WithTag("module:M1")
 public class SamplePassingScenario {
     
-    @Managed
+    @Managed(driver = "firefox")
     public WebDriver webdriver;
 
-//    @ManagedPages(defaultUrl = "classpath:static-site/index.html")
-//    public Pages pages;
-    
     @Steps
     public SampleScenarioSteps steps;
 

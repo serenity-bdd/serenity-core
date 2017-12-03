@@ -249,4 +249,10 @@ public class ThucydidesWebDriverSupport {
     private static void setWebdriverManager(WebdriverManager webdriverManager) {
         webdriverManagerThreadLocal.set(webdriverManager);
     }
+
+    public static void clearStepLibraries() {
+        if (stepFactoryThreadLocal.get() != null) {
+            stepFactoryThreadLocal.get().reset();
+        }
+    }
 }

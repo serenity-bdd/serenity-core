@@ -3,6 +3,8 @@ package net.thucydides.core.guice;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import net.serenitybdd.core.annotations.findby.di.ClasspathCustomFindByAnnotationProviderService;
+import net.serenitybdd.core.annotations.findby.di.CustomFindByAnnotationProviderService;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.buildinfo.PropertyBasedDriverCapabilityRecord;
 import net.serenitybdd.core.history.FileSystemTestOutcomeSummaryRecorder;
@@ -63,6 +65,7 @@ public class ThucydidesModule extends AbstractModule {
         bind(RequirementsService.class).to(MultiSourceRequirementsService.class).in(Singleton.class);
         bind(DependencyInjectorService.class).to(ClasspathDependencyInjectorService.class).in(Singleton.class);
         bind(FixtureProviderService.class).to(ClasspathFixtureProviderService.class).in(Singleton.class);
+        bind(CustomFindByAnnotationProviderService.class).to(ClasspathCustomFindByAnnotationProviderService.class).in(Singleton.class);
 
         bind(StepListener.class).annotatedWith(ThucydidesLogging.class).to(ConsoleLoggingListener.class).in(Singleton.class);
         bind(ElementProxyCreator.class).to(SmartElementProxyCreator.class).in(Singleton.class);

@@ -5,6 +5,8 @@ import io.appium.java_client.pagefactory.*;
 import net.serenitybdd.core.annotations.findby.By;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.annotations.findby.How;
+import net.serenitybdd.core.annotations.findby.di.CustomFindByAnnotationProviderService;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.webdriver.MobilePlatform;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.support.ByIdOrName;
@@ -30,6 +32,7 @@ public class SmartAnnotations extends Annotations {
 
     private Field field;
     private MobilePlatform platform;
+    private CustomFindByAnnotationProviderService customFindByAnnotationProviderService;
 
     private final static Class<?>[] DEFAULT_ANNOTATION_METHOD_ARGUMENTS = new Class<?>[]{};
 
@@ -150,11 +153,16 @@ public class SmartAnnotations extends Annotations {
         }
     }
 
-
     public SmartAnnotations(Field field, MobilePlatform platform) {
+        this(field, platform, Injectors.getInjector().getInstance(CustomFindByAnnotationProviderService.class));
+    }
+
+    public SmartAnnotations(Field field, MobilePlatform platform,
+                            CustomFindByAnnotationProviderService customFindByAnnotationProviderService) {
         super(field);
         this.field = field;
         this.platform = platform;
+        this.customFindByAnnotationProviderService = customFindByAnnotationProviderService;
     }
 
     protected void assertValidAnnotations() {
@@ -247,6 +255,10 @@ public class SmartAnnotations extends Annotations {
 //        }
 //
         if (by == null) {
+            by = buildByFromCustomAnnotationProvider(field);
+        }
+
+        if (by == null) {
             by = super.buildBy();
         }
 
@@ -261,6 +273,12 @@ public class SmartAnnotations extends Annotations {
         return by;
     }
 
+    protected org.openqa.selenium.By buildByFromCustomAnnotationProvider( Field field) {
+        return customFindByAnnotationProviderService.getCustomFindByAnnotationServices().stream()
+                .filter(annotationService ->annotationService.isAnnotatedByCustomFindByAnnotation(field))
+                .findFirst().map(annotationService ->annotationService.buildByFromCustomFindByAnnotation(field))
+                .orElse(null);
+    }
 
     protected org.openqa.selenium.By buildByFromFindBy(FindBy myFindBy) {
         assertValidFindBy(myFindBy);

@@ -5,10 +5,12 @@ import io.appium.java_client.pagefactory.AndroidFindBys;
 import io.appium.java_client.pagefactory.iOSFindBy;
 import io.appium.java_client.pagefactory.iOSFindBys;
 import net.serenitybdd.core.annotations.findby.FindBy;
+import net.serenitybdd.core.annotations.findby.di.CustomFindByAnnotationProviderService;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.core.pages.WebElementFacadeImpl;
 import net.serenitybdd.core.pages.WidgetObject;
+import net.thucydides.core.guice.Injectors;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.internal.Locatable;
@@ -31,12 +33,18 @@ public class SmartFieldDecorator implements FieldDecorator {
     protected ElementLocatorFactory factory;
     protected WebDriver driver;
     protected PageObject page;
+    private CustomFindByAnnotationProviderService customFindByAnnotationProviderService;
 
-    public SmartFieldDecorator(ElementLocatorFactory factory, WebDriver driver,
-                               PageObject pageObject) {
-        this.driver = driver;
+    public SmartFieldDecorator(ElementLocatorFactory factory, WebDriver driver, PageObject pageObject) {
+       this(factory, driver, pageObject, Injectors.getInjector().getInstance(CustomFindByAnnotationProviderService.class));
+    }
+
+    public SmartFieldDecorator(ElementLocatorFactory factory, WebDriver driver, PageObject pageObject,
+                               CustomFindByAnnotationProviderService customFindByAnnotationProviderService) {
         this.factory = factory;
+        this.driver = driver;
         this.page = pageObject;
+        this.customFindByAnnotationProviderService = customFindByAnnotationProviderService;
     }
 
     public Object decorate(ClassLoader loader, Field field) {
@@ -80,8 +88,12 @@ public class SmartFieldDecorator implements FieldDecorator {
         if (erasureClass == null || !WebElement.class.isAssignableFrom(erasureClass)) {
             return false;
         }
-        return annotatedByLegalFindByAnnotation(field);
+        return annotatedByLegalFindByAnnotation(field) ||  isAnnotatedByCustomFindByAnnotation(field);
+    }
 
+    private boolean isAnnotatedByCustomFindByAnnotation(Field field) {
+        return customFindByAnnotationProviderService.getCustomFindByAnnotationServices().stream()
+                .anyMatch(annotationService ->annotationService.isAnnotatedByCustomFindByAnnotation(field));
     }
 
     private final static List<Class<? extends Annotation>> LEGAL_ANNOTATIONS

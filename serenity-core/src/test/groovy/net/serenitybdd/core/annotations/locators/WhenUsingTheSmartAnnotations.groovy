@@ -3,8 +3,12 @@ package net.serenitybdd.core.annotations.locators
 import io.appium.java_client.MobileBy
 import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.annotations.findby.How
+import net.serenitybdd.core.annotations.findby.di.CustomFindByAnnotationProviderService
+import net.serenitybdd.core.annotations.findby.di.CustomFindByAnnotationService
 import net.thucydides.core.webdriver.MobilePlatform
 import org.openqa.selenium.By
+import org.openqa.selenium.JavascriptExecutor
+import org.openqa.selenium.SearchContext
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ByIdOrName
 import spock.lang.Specification
@@ -15,6 +19,9 @@ class WhenUsingTheSmartAnnotations extends Specification {
 
         @FindBy(id = "someId")
         public WebElement byId;
+
+        @FindByCustom
+        public WebElement byCustom1;
 
         public WebElement byIdOrName;
 
@@ -99,6 +106,44 @@ class WhenUsingTheSmartAnnotations extends Specification {
         @FindBy(how = How.ANDROID_UI_AUTOMATOR, using = "foo")
         public WebElement byAndroidUIAutomatorLong;
 
+        @FindByCustom
+        public WebElement byCustom2;
+    }
+
+    class ByReact extends By {
+
+        private static final char DOUBLE_QUOTE = '"';
+        private static final String SINGLE_QUOTE = "'";
+
+        private final String reactSelector;
+
+        public ByReact(String reactSelector){
+            this.reactSelector = reactSelector;
+        }
+
+        @Override
+        public WebElement findElement(SearchContext context) {
+            String jquery = "return __retractor(" + quoted(reactSelector) + ")[0];";
+            return (WebElement) ((JavascriptExecutor) context).executeScript(jquery);
+        }
+
+        @Override
+        public List<WebElement> findElements(SearchContext context) {
+            String jquery = "return __retractor(" + quoted(reactSelector) + ");";
+            return (List<WebElement>) ((JavascriptExecutor) context).executeScript(jquery);
+        }
+
+        private String quoted(final String reactSelector) {
+            if (reactSelector.contains("'")) {
+                return DOUBLE_QUOTE + reactSelector + '"';
+            } else {
+                return  "'" + reactSelector + SINGLE_QUOTE;
+            }
+        }
+
+        public String toString() {
+            return "By.ByReact: " + reactSelector;
+        }
     }
 
     def "should find the correct By class"() {
@@ -155,5 +200,25 @@ class WhenUsingTheSmartAnnotations extends Specification {
         AnnotatedPageSample.class.getField("byAndroidUIAutomatorLong") | MobileBy.ByAndroidUIAutomator
     }
 
+    def "should find the correct cutom By class"() {
+        CustomFindByAnnotationProviderService customFindByAnnotationProviderService = Mock()
+        CustomFindByAnnotationService customFindByAnnotationService = Mock()
+
+        given:
+        By expectedBy = new ByReact("test")
+        customFindByAnnotationService.isAnnotatedByCustomFindByAnnotation(field) >> true
+        customFindByAnnotationService.buildByFromCustomFindByAnnotation(field) >> expectedBy
+        customFindByAnnotationProviderService.customFindByAnnotationServices>>[customFindByAnnotationService]
+        def annotations = new SmartAnnotations(field, MobilePlatform.NONE, customFindByAnnotationProviderService)
+        when:
+        def by = annotations.buildBy()
+        then:
+        by.class == expectedType
+        where:
+        field                                                                            | expectedType
+        AnnotatedPageSample.class.getField("byId")               | By.ById
+        AnnotatedPageSample.class.getField("byCustom1")     | ByReact
+        AnnotatedPageSample.class.getField("byCustom2")     | ByReact
+    }
 
 }

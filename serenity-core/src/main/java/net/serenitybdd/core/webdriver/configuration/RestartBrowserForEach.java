@@ -22,7 +22,7 @@ public enum RestartBrowserForEach {
     }
 
     public static RestartBrowserForEach configuredIn(EnvironmentVariables environmentVariables) {
-        String configuredLevel = ThucydidesSystemProperty.THUCYDIDES_RESTART_BROWSER_FOR_EACH.from(environmentVariables,EXAMPLE.name()).toUpperCase();
+        String configuredLevel = ThucydidesSystemProperty.SERENITY_RESTART_BROWSER_FOR_EACH.from(environmentVariables,EXAMPLE.name()).toUpperCase();
 
         try {
             return RestartBrowserForEach.valueOf(configuredLevel);

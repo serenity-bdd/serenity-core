@@ -381,6 +381,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public void testSuiteFinished() {
         closeDarkroom();
         clearStorywideTagsAndIssues();
+        ThucydidesWebDriverSupport.clearStepLibraries();
 
         closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(STORY);
 
@@ -470,6 +471,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
             updateSessionIdIfKnown();
             closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(SCENARIO);
         }
+
         currentStepStack.clear();
     }
 

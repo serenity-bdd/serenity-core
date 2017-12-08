@@ -33,7 +33,7 @@ public class RequirementsConfiguration {
     }
 
     public List<String> getRequirementTypes() {
-        String requirementTypes = ThucydidesSystemProperty.THUCYDIDES_REQUIREMENT_TYPES.from(environmentVariables);
+        String requirementTypes = ThucydidesSystemProperty.SERENITY_REQUIREMENT_TYPES.from(environmentVariables);
         List<String> types;
         if (StringUtils.isNotEmpty(requirementTypes)) {
             Iterator<String> typeValues = Splitter.on(",").trimResults().split(requirementTypes).iterator();

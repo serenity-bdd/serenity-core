@@ -113,6 +113,6 @@ public final class TestCaseAnnotations {
     public static boolean isASerenityTestCase(Class<?> testClass) {
         return (testClass != null)
                 && (testClass.getAnnotation(RunWith.class) != null)
-                && (testClass.getAnnotation(RunWith.class).value().toString().contains("Serenity"));
+                && (testClass.getAnnotation(RunWith.class).value().toString().contains("Serenity") || testClass.getAnnotation(RunWith.class).value().toString().contains("Thucydides"));
     }
 }

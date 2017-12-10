@@ -6,11 +6,15 @@ import java.net.URL;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Load classes from a given package.
  */
 public class ClassFinder {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClassFinder.class);
 
     private final ClassLoader classLoader;
     private final Class annotation;
@@ -98,7 +102,7 @@ public class ClassFinder {
                         classList.add(Class.forName(className));
                     }
                 } catch (Throwable e) {
-                    System.out.println("Could not load class " + className);
+                    LOGGER.debug("Could not load class {}", className);
                     //throw new RuntimeException("Could not load class", e);
                 }
             }

@@ -331,17 +331,22 @@ public class ConsoleLoggingListener implements StepListener {
 
     private void logCompromised(TestOutcome result) {
         if (loggingLevelIsAtLeast(LoggingLevel.QUIET)) {
-            getLogger().error(purple(testFailureHeading() + "\nTEST COMPROMISED: {}"),
+            getLogger().error(purple(testCompormisedHeading() + "\nTEST COMPROMISED: {}"),
                     result.getTitle() + underline(TEST_COMPROMISED_HEADINGS.get(headingStyle)));
 
             logRelatedIssues(result);
             logFailureCause(result);
 
-            underline(ERROR_HEADINGS.get(headingStyle));
+            underline(TEST_COMPROMISED_HEADINGS.get(headingStyle));
         }
     }
+
     private String testFailureHeading() {
         return TEST_FAILED_HEADINGS.get(headingStyle);
+    }
+
+    private String testCompormisedHeading() {
+        return TEST_COMPROMISED_HEADINGS.get(headingStyle);
     }
 
     private void logRelatedIssues(TestOutcome result) {

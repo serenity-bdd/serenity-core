@@ -2,6 +2,29 @@
 # Serenity Core change log
 ## Unreleased
 ### No issue
+ * [0f19aaffa5ca84a](https://github.com/serenity-bdd/serenity-core/commit/0f19aaffa5ca84a) Ensure that step libraries are cleared at the end of a test run.
+ * [4d13a8e32c1c88b](https://github.com/serenity-bdd/serenity-core/commit/4d13a8e32c1c88b) Ensure that Serenity test cases are detected for both Serenity and legacy Thucydides tests.
+ * [5722fde4c8c7ef7](https://github.com/serenity-bdd/serenity-core/commit/5722fde4c8c7ef7) Update to Selenium 3.8.1
+## v1.8.5
+### No issue
+ * [a982b46e4c92723](https://github.com/serenity-bdd/serenity-core/commit/a982b46e4c92723) fix: use correct internet explorer icon for context 'ie'
+## v1.8.4
+### No issue
+ * [e6968b8d798d233](https://github.com/serenity-bdd/serenity-core/commit/e6968b8d798d233) fixed reporting bug (Examples title was not displayed)
+ * [cc293fa1cd96ec2](https://github.com/serenity-bdd/serenity-core/commit/cc293fa1cd96ec2) refactor: replace System.out.println with logger API call
+ * [a421c5108eb6c44](https://github.com/serenity-bdd/serenity-core/commit/a421c5108eb6c44) fix: ascii heading for compromised test result
+ * [805ab5cd541444a](https://github.com/serenity-bdd/serenity-core/commit/805ab5cd541444a) add custom findBy
+## v1.8.3
+### [#1026](https://github.com/serenity-bdd/serenity-core/issues/1026) Jbehave scenarios and stories marked with @ignore are still executed
+ * [2fef8e86c3ce40c](https://github.com/serenity-bdd/serenity-core/commit/2fef8e86c3ce40c) Fixed #1026 - @WhenPageOpens-annotated methods were still executed even if a test was suspended.
+## v1.8.2
+### [#1026](https://github.com/serenity-bdd/serenity-core/issues/1026) Jbehave scenarios and stories marked with @ignore are still executed
+ * [cd4a2ded98d50dc](https://github.com/serenity-bdd/serenity-core/commit/cd4a2ded98d50dc) Fixed #1026 - @WhenPageOpens-annotated methods were still executed even if a test was suspended.
+### No issue
+ * [d12e2832fa32081](https://github.com/serenity-bdd/serenity-core/commit/d12e2832fa32081) Declare Selenium dependencies to avoid them being overridden by other transitive dependencies.
+ * [b3838106e4e133f](https://github.com/serenity-bdd/serenity-core/commit/b3838106e4e133f) Upgraded to RestAssured 3.0.5
+ * [99d41bfbe25c705](https://github.com/serenity-bdd/serenity-core/commit/99d41bfbe25c705) Updated changelog
+ * [6e85dcb12b7ced4](https://github.com/serenity-bdd/serenity-core/commit/6e85dcb12b7ced4) fixed order of row elements : https://github.com/serenity-bdd/serenity-cucumber/issues/105
  * [0abe1cf2a796f73](https://github.com/serenity-bdd/serenity-core/commit/0abe1cf2a796f73) Fixed an issue converting enums in Screenplay on some JVMs
  * [d60f1da87842a85](https://github.com/serenity-bdd/serenity-core/commit/d60f1da87842a85) test refactoring to ensure all of the serenity-core tests run on Windows build machines
  * [1a01fd52a1086e2](https://github.com/serenity-bdd/serenity-core/commit/1a01fd52a1086e2) Minor fixes for the build on Windows

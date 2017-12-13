@@ -169,6 +169,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         reportingTasks.add(new TextSummaryReportTask(context, environmentVariables, getOutputDirectory(), testOutcomes));
         reportingTasks.add(new CopyResourcesTask());
+        reportingTasks.add(new CopyProjectSpecificResourcesTask());
         reportingTasks.add(new CopyTestResultsTask());
         reportingTasks.add(new AggregateReportingTask(context, environmentVariables, requirements.getRequirementsService(), getOutputDirectory(), testOutcomes));
         reportingTasks.add(new TagTypeReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider, testOutcomes));
@@ -304,5 +305,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
             copyTestResultsToOutputDirectory();
         }
     }
+
 }
 

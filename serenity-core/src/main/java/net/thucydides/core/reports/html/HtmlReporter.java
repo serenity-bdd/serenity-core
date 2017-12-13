@@ -74,6 +74,16 @@ public abstract class HtmlReporter extends ThucydidesReporter {
     protected void copyResourcesToOutputDirectory() throws IOException {
         updateResourceDirectoryFromSystemPropertyIfDefined();
         copyHtmlResourcesFrom(getResourceDirectory()).to(getOutputDirectory());
+
+        copyProjectSpecificResources();
+    }
+
+    private void copyProjectSpecificResources() throws IOException {
+        CopyProjectSpecificResourcesTask projectSpecificResourceCopier = new CopyProjectSpecificResourcesTask();
+        projectSpecificResourceCopier.setResourceDirectory(resourceDirectory);
+        projectSpecificResourceCopier.setOutputDirectory(getOutputDirectory());
+        projectSpecificResourceCopier.setSourceDirectory(getSourceDirectory());
+        projectSpecificResourceCopier.generateReports();
     }
 
     protected void copyTestResultsToOutputDirectory() throws IOException {

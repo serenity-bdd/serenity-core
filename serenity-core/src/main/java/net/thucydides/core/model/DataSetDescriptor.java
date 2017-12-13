@@ -59,6 +59,6 @@ public class DataSetDescriptor {
     }
 
     public List<TestTag> getTags() {
-        return new ArrayList<>(tags);
+        return (tags == null) ? emptyList() : new ArrayList<>(tags);
     }
 }

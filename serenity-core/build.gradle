@@ -101,6 +101,7 @@ dependencies {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
         exclude group: 'com.google.code.gson', module: 'gson'
         exclude group: 'commons-logging', module: 'commons-logging'
+        exclude group: 'commons-io', module: 'commons-io'
         exclude group: 'org.apache.commons', module: 'commons-lang3'
     }
 

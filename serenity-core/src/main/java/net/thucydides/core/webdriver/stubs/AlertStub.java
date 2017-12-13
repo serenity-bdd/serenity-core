@@ -1,7 +1,6 @@
 package net.thucydides.core.webdriver.stubs;
 
 import org.openqa.selenium.Alert;
-import org.openqa.selenium.security.Credentials;
 
 public class AlertStub implements Alert {
     @Override
@@ -19,14 +18,5 @@ public class AlertStub implements Alert {
 
     @Override
     public void sendKeys(String keysToSend) {
-    }
-
-    @Override
-    public void setCredentials(Credentials credentials) {
-
-    }
-
-    @Override
-    public void authenticateUsing(Credentials credentials) {
     }
 }

@@ -250,11 +250,12 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         return getProxiedDriver().getTitle();
     }
 
-    public <T extends WebElement> List<T> findElements(final By by) {
+    @Override
+    public List<WebElement> findElements(By by) {
         if (!isEnabled()) {
             return Collections.emptyList();
         }
-        List<T> elements;
+        List<WebElement> elements;
         try {
             webDriverFactory.setTimeouts(getProxiedDriver(), getCurrentImplicitTimeout());
             elements = getProxiedDriver().findElements(by);
@@ -264,12 +265,13 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         return elements;
     }
 
-    public <T extends WebElement> T findElement(final By by) {
+    @Override
+    public WebElement findElement(By by) {
         if (!isEnabled()) {
-            return (T) new WebElementFacadeStub();
+            return new WebElementFacadeStub();
         }
 
-        T element;
+        WebElement element;
 
         try {
             webDriverFactory.setTimeouts(getProxiedDriver(), getCurrentImplicitTimeout());
@@ -278,7 +280,38 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
             webDriverFactory.resetTimeouts(getProxiedDriver());
         }
         return element;
-    }
+   }
+
+    //    public <T extends WebElement> List<T> findElements(final By by) {
+//        if (!isEnabled()) {
+//            return Collections.emptyList();
+//        }
+//        List<T> elements;
+//        try {
+//            webDriverFactory.setTimeouts(getProxiedDriver(), getCurrentImplicitTimeout());
+//            elements = getProxiedDriver().findElements(by);
+//        } finally {
+//            webDriverFactory.resetTimeouts(getProxiedDriver());
+//        }
+//        return elements;
+//    }
+//
+//    public <T extends WebElement> T findElement(final By by) {
+//        if (!isEnabled()) {
+//            return (T) new WebElementFacadeStub();
+//        }
+//
+//        T element;
+//
+//        try {
+//            webDriverFactory.setTimeouts(getProxiedDriver(), getCurrentImplicitTimeout());
+//            element = getProxiedDriver().findElement(by);
+//        } finally {
+//            webDriverFactory.resetTimeouts(getProxiedDriver());
+//        }
+//        return element;
+//    }
+
 
     public String getPageSource() {
         if (!isEnabled()) {

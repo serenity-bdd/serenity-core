@@ -31,7 +31,7 @@ class Reporter {
         this.reportingTasks = reportingTasks;
     }
 
-    public static void generateReportsFor(Collection<ReportingTask> reportingTasks) throws IOException {
+    public static void generateReportsFor(Collection<ReportingTask> reportingTasks) {
         new Reporter(reportingTasks).generateReports();
     }
 

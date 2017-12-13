@@ -12,12 +12,14 @@ public class DataSet {
     private final String name;
     private final String description;
     private final List<DataTableRow> rows;
+    private final List<TestTag> tags;
 
-    public DataSet(int startRow, int rowCount, String name, String description, List<DataTableRow> rows) {
+    public DataSet(int startRow, int rowCount, String name, String description, List<DataTableRow> rows, List<TestTag> tags) {
         this.startRow = startRow;
         this.name = name;
         this.description = description;
         this.rows = extractRows(rows, startRow, rowCount);
+        this.tags = tags;
     }
 
     private List<DataTableRow> extractRows(List<DataTableRow> rows, int startRow, int rowCount) {
@@ -40,4 +42,6 @@ public class DataSet {
     public List<DataTableRow> getRows() {
         return rows;
     }
+
+    public List<TestTag> getTags() { return new ArrayList<>(tags); }
 }

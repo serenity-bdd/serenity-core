@@ -16,6 +16,7 @@ public class DataTable {
     private final boolean predefinedRows;
     private String scenarioOutline;
     private List<DataSetDescriptor> dataSetDescriptors;
+    private List<TestTag> tags;
     private transient AtomicInteger currentRow = new AtomicInteger(0);
 
     private final static List<DataTableRow> NO_ROWS = new ArrayList<>();
@@ -25,7 +26,7 @@ public class DataTable {
     }
 
     protected DataTable(List<String> headers, List<DataTableRow> rows, String title, String description) {
-        this(null, headers, new CopyOnWriteArrayList<>(rows), title, description, Collections.singletonList(new DataSetDescriptor(0,0,title, description)));
+        this(null, headers, new CopyOnWriteArrayList<>(rows), title, description, Collections.singletonList(new DataSetDescriptor(0,0,title, description, Collections.emptyList())));
     }
 
     protected DataTable(String scenarioOutline, List<String> headers, List<DataTableRow> rows, String title, String description, List<DataSetDescriptor> dataSetDescriptors) {
@@ -34,6 +35,7 @@ public class DataTable {
         this.rows = new CopyOnWriteArrayList<>(rows);
         this.predefinedRows = !rows.isEmpty();
         this.dataSetDescriptors = dataSetDescriptors;
+        this.tags = new ArrayList<>();
         if ((title != null) || (description != null)) {
             setLatestNameAndDescription(title, description);
         }
@@ -48,6 +50,17 @@ public class DataTable {
         this.scenarioOutline = scenarioOutline;
         this.dataSetDescriptors = dataSetDescriptors;
         this.currentRow = currentRow;
+        this.tags = new ArrayList<>();
+    }
+
+    public void addTagsToLatestDataSet(List<TestTag> tags) {
+        if (!dataSetDescriptors.isEmpty()) {
+            dataSetDescriptors.get(dataSetDescriptors.size() - 1).addTags(tags);
+        }
+    }
+
+    public List<TestTag> getTags() {
+        return new ArrayList<>(tags);
     }
 
     public void setScenarioOutline(String scenarioOutline) {
@@ -133,7 +146,7 @@ public class DataTable {
 
     private void setLatestNameAndDescription(String name, String description) {
         if ((dataSetDescriptors == null) || (dataSetDescriptors.isEmpty())) {
-            dataSetDescriptors = Collections.singletonList(new DataSetDescriptor(0,0,name,description));
+            dataSetDescriptors = Collections.singletonList(new DataSetDescriptor(0,0,name,description, Collections.emptyList()));
         } else {
             dataSetDescriptors = replaceLatestDescriptor(last(dataSetDescriptors).withNameAndDescription(name, description));
         }
@@ -153,7 +166,7 @@ public class DataTable {
 
         List<DataSetDescriptor> descriptors = new ArrayList<>();
         descriptors.addAll(dataSetDescriptors);
-        descriptors.add(new DataSetDescriptor(rows.size(), 0, name, description));
+        descriptors.add(new DataSetDescriptor(rows.size(), 0, name, description, Collections.emptyList()));
         dataSetDescriptors = descriptors;
     }
 
@@ -182,7 +195,8 @@ public class DataTable {
                     descriptor.getRowCount(),
                     descriptor.getName(),
                     descriptor.getDescription(),
-                    rows));
+                    rows,
+                    descriptor.getTags()));
         }
         return dataSets;
     }

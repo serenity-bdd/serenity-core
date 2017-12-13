@@ -69,6 +69,7 @@ public class TestOutcomeConverter implements Converter {
     private static final String HEADERS = "headers";
     private static final String HEADER = "header";
     private static final String ROWS = "rows";
+    private static final String DATASET = "dataset";
     private static final String ROW = "row";
     private static final String VALUE = "value";
     private static final String MANUAL = "manual";
@@ -598,12 +599,13 @@ public class TestOutcomeConverter implements Converter {
         while (reader.hasMoreChildren()) {
             reader.moveDown();
             String childNode = reader.getNodeName();
-            if (childNode.equals("dataset")) {
+            if (childNode.equals(DATASET)) {
                 int startRow = Integer.parseInt(reader.getAttribute("startRow"));
                 int rowCount = Integer.parseInt(reader.getAttribute("rowCount"));
                 String name = reader.getAttribute("name");
                 String description = reader.getAttribute("description");
-                descriptors.add(new DataSetDescriptor(startRow,rowCount,name, description));
+                // TODO: Not sure where this is called, it may need to read the example tags as well.
+                descriptors.add(new DataSetDescriptor(startRow,rowCount,name, description, Collections.emptyList()));
             }
             reader.moveUp();
         }

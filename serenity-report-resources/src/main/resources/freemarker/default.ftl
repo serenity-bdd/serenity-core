@@ -180,6 +180,22 @@
         <#if dataSet.description??>
             <div class="requirementNarrative">${dataSet.description}</div>
         </#if>
+
+        <#if dataSet.tags??>
+
+        <p class="example-tag">
+            <#list dataSet.tags as exampleTag>
+                <#assign exampleTagReport = absoluteReportName.forRequirementOrTag(exampleTag) />
+                <#assign exampleTagTitle = inflection.of(exampleTag.shortName).asATitle() >
+                <span class="badge tag-badge">
+                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink"
+                                                      href="${exampleTagReport}">${formatter.htmlCompatible(exampleTagTitle)}
+                    (${exampleTag.type})</a>
+                </span>
+            </#list>
+        </p>
+        </#if>
+
         <div class="example-table">
             <table>
                 <thead>
@@ -566,8 +582,10 @@
 
     <script type="text/javascript">
         $('.example-table table').DataTable({
-            "order": [[0, "asc"]],
-            "pageLength": 25,
+            // "order": [[0, "asc"]],
+            "pageLength": 50,
+            "searching": false,
+            "ordering":  false,
             "scrollX": "100%",
             "scrollXInner": "100%",
             "scrollCollapse": true

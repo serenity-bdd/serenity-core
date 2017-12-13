@@ -20,6 +20,8 @@ class CopyProjectSpecificResourcesTask extends HtmlReporter implements Reporting
     @Override
     public void generateReports() throws IOException {
 
+        if (!assetSourcePath().toFile().exists()) { return; }
+
         Files.createDirectories(assetsDestinationDirectory());
 
         Files.list(assetSourcePath())

@@ -119,7 +119,7 @@ public class FailureAnalysisConfiguration {
             try {
                 definedTypes.add(Class.forName(className));
             } catch (ClassNotFoundException e) {
-                LOGGER.warn("Could not find error class: " + className);
+                LOGGER.warn("Could not find error class: " + className + "(" + e.getMessage() + ")", e);
             }
         }
         return definedTypes;

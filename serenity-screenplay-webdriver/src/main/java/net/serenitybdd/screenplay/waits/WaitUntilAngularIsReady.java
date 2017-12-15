@@ -4,21 +4,20 @@ package net.serenitybdd.screenplay.waits;
 import net.serenitybdd.core.pages.WebElementState;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.questions.WebElementQuestion;
 import net.serenitybdd.screenplay.targets.Target;
 import org.hamcrest.Matcher;
 
 import static net.serenitybdd.screenplay.EventualConsequence.eventually;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
-import static net.serenitybdd.screenplay.Tasks.instrumented;
 
-public class WaitUntil {
+public class WaitUntilAngularIsReady implements Interaction {
 
-    public static WaitUntilTargetIsReady the(Target target, Matcher<WebElementState> expectedState) {
-        return  instrumented(WaitUntilTargetIsReady.class, target, expectedState);
-    }
+    public WaitUntilAngularIsReady() {}
 
-    public static Interaction angularRequestsHaveFinished() {
-        return instrumented(WaitUntilAngularIsReady.class);
+    @Override
+    public <A extends Actor> void performAs(A actor) {
+        BrowseTheWeb.as(actor).waitForAngularRequestsToFinish();
     }
 }

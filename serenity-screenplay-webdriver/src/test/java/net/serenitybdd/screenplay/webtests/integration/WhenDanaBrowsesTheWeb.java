@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.webtests.integration;
 
+import com.paulhammant.ngwebdriver.ByAngular;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;

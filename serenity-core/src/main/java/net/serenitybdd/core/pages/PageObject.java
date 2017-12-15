@@ -2,6 +2,7 @@ package net.serenitybdd.core.pages;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
+import com.paulhammant.ngwebdriver.NgWebDriver;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;
@@ -41,6 +42,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -151,13 +153,13 @@ public abstract class PageObject {
         new DefaultPageObjectInitialiser(driver, timeout).apply(this);
     }
 
-    public void setDriver(WebDriver driver) {
+    public <T extends PageObject> T setDriver(WebDriver driver) {
         setDriver(driver, getImplicitWaitTimeout().in(TimeUnit.MILLISECONDS));
+        return (T) this;
     }
 
-    public PageObject withDriver(WebDriver driver) {
-        setDriver(driver);
-        return this;
+    public  <T extends PageObject> T withDriver(WebDriver driver) {
+        return setDriver(driver);
     }
 
     public Duration getWaitForTimeout() {
@@ -1098,14 +1100,11 @@ public abstract class PageObject {
     }
 
     public void waitForAngularRequestsToFinish() {
-        if ((boolean) getJavascriptExecutorFacade().executeScript(
-                "return (typeof angular !== 'undefined')? true : false;")) {
-            getJavascriptExecutorFacade()
-                    .executeAsyncScript(
-                            "var callback = arguments[arguments.length - 1];"
-                                    + "angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
-        }
+        JavascriptCompatibleVersion.of(getDriver()).ifPresent(
+                driver -> new NgWebDriver(driver).waitForAngularRequestsToFinish()
+        );
     }
+
 
     Inflector inflection = Inflector.getInstance();
 

@@ -1,7 +1,26 @@
 
 # Serenity Core change log
-## Unreleased
+## v1.8.10
 ### No issue
+ * [e7aadfd845a9491](https://github.com/serenity-bdd/serenity-core/commit/e7aadfd845a9491) Added the @Shared annotation, which is a more intuitively named synonym of @Steps(shared=true).
+Fixed a defect where step libraries where not shared correctly in Screenplay tests.
+## v1.8.9
+### No issue
+ * [e687adc8bd7dac3](https://github.com/serenity-bdd/serenity-core/commit/e687adc8bd7dac3) Added the WaitUntil.angularRequestsHaveFinished() to integrate with ngWebDriver
+## v1.8.8
+### No issue
+ * [49acdb25c18caa0](https://github.com/serenity-bdd/serenity-core/commit/49acdb25c18caa0) Added integration with ngWebDriver, to allow better support for AngularJS
+ * [a633fbd5038bfcd](https://github.com/serenity-bdd/serenity-core/commit/a633fbd5038bfcd) updated appium java client version
+ * [5ddde6cef94cb5d](https://github.com/serenity-bdd/serenity-core/commit/5ddde6cef94cb5d) Added more details for errors with custom class loading
+## v1.8.7
+### No issue
+ * [d97f14a4fbac33e](https://github.com/serenity-bdd/serenity-core/commit/d97f14a4fbac33e) Fixed another unit test
+ * [0dfc6226dbe66a7](https://github.com/serenity-bdd/serenity-core/commit/0dfc6226dbe66a7) Fixed a failing unit test
+ * [8efa8836863ca74](https://github.com/serenity-bdd/serenity-core/commit/8efa8836863ca74) Serenity reporting now supports copying project assets (images etc.) that can be referenced in the markdown parts of the test reports.
+By default, files in src/test/resources/assets will be copied to target/site/serenity/assets. The directory where the assets are stored can be configered via the report.assets.directory property.
+ * [10e7f2010b657a2](https://github.com/serenity-bdd/serenity-core/commit/10e7f2010b657a2) Cucumber tags for example tables now appear with the relevant table in the reports.
+ * [75cb4469a0b336f](https://github.com/serenity-bdd/serenity-core/commit/75cb4469a0b336f) Upgrade to Cucumber 2.3.0.
+ * [b07ce9029c44a4b](https://github.com/serenity-bdd/serenity-core/commit/b07ce9029c44a4b) Updated changelog
  * [0f19aaffa5ca84a](https://github.com/serenity-bdd/serenity-core/commit/0f19aaffa5ca84a) Ensure that step libraries are cleared at the end of a test run.
  * [4d13a8e32c1c88b](https://github.com/serenity-bdd/serenity-core/commit/4d13a8e32c1c88b) Ensure that Serenity test cases are detected for both Serenity and legacy Thucydides tests.
  * [5722fde4c8c7ef7](https://github.com/serenity-bdd/serenity-core/commit/5722fde4c8c7ef7) Update to Selenium 3.8.1

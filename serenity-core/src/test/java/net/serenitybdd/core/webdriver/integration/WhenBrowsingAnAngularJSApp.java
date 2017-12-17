@@ -33,6 +33,7 @@ public class WhenBrowsingAnAngularJSApp {
                     .map(WebElement::getText)
                     .collect(Collectors.toList());
         }
+
     }
 
     TodoApp todoApp;
@@ -54,4 +55,5 @@ public class WhenBrowsingAnAngularJSApp {
 
         Assertions.assertThat(todoApp.visibleTodoItems()).contains("Walk the dog");
     }
+
 }

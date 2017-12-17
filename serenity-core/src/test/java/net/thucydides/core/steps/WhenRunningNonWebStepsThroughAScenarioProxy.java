@@ -30,7 +30,7 @@ public class WhenRunningNonWebStepsThroughAScenarioProxy {
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
 
-        factory = new StepFactory();
+        factory = StepFactory.getFactory();
 
         listener = new ConsoleStepListener();
         StepEventBus.getEventBus().reset();

@@ -1,6 +1,7 @@
 package net.serenitybdd.screenplay;
 
 import com.google.common.base.Optional;
+import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.conditions.SilentPerformable;
 import net.serenitybdd.screenplay.events.ActorAsksQuestion;
@@ -33,6 +34,8 @@ public class QuestionConsequence<T> extends BaseConsequence<T> {
         if (thisStepShouldBeIgnored() && !StepEventBus.getEventBus().softAssertsActive()) { return; }
 
         Broadcaster.getEventBus().post(new ActorAsksQuestion(question));
+
+        Serenity.injectScenarioStepsInto(question);
 
         try {
             optionalPrecondition.or(DO_NOTHING).performAs(actor);

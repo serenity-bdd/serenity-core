@@ -186,7 +186,7 @@ public class WhenRunningStepsWithTestData {
     @Before
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
-        factory = new StepFactory(new Pages(driver));
+        factory = StepFactory.getFactory().usingPages(new Pages(driver));
 
         StepEventBus.getEventBus().reset();
         StepEventBus.getEventBus().registerListener(listener);

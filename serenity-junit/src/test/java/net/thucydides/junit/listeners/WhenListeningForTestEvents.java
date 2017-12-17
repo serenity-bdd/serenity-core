@@ -84,7 +84,7 @@ public class WhenListeningForTestEvents {
                                     .and().withPageFactory(pages)
                                     .and().withTestClass(MyTestCase.class)
                                     .and().build();
-        stepFactory = new StepFactory(pages);
+        stepFactory = StepFactory.getFactory().usingPages(pages);
         listener.testRunStarted(Description.createSuiteDescription(MyTestCase.class));
         listener.testStarted(Description.createTestDescription(MyTestCase.class,"app_should_work"));
     }
@@ -94,7 +94,7 @@ public class WhenListeningForTestEvents {
                 .and().withPageFactory(pages)
                 .and().withTestClass(ScenarioWithSomeFailingTests.class)
                 .and().build();
-        stepFactory = new StepFactory(pages);
+        stepFactory = StepFactory.getFactory().usingPages(pages);
         failureTestListener.testRunStarted(Description.createSuiteDescription(ScenarioWithSomeFailingTests.class));
         failureTestListener.testStarted(Description.createTestDescription(ScenarioWithSomeFailingTests.class,"app_should_work"));
     }

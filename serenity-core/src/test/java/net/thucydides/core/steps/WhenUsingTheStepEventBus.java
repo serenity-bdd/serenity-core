@@ -199,7 +199,7 @@ public class WhenUsingTheStepEventBus {
         environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("thucydides.logging","VERBOSE");
 
-        factory = new StepFactory(new Pages(driver));
+        factory = StepFactory.getFactory().usingPages(new Pages(driver));
 
         consoleStepListener = new ConsoleStepListener();
         consoleLoggingListener = new ConsoleLoggingListener(environmentVariables);

@@ -53,6 +53,10 @@ public class Actor implements PerformsTasks, SkipNested {
         return this;
     }
 
+    public <T extends Ability> Actor whoCan(T doSomething) {
+        return can(doSomething);
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends Ability> T abilityTo(Class<? extends T> doSomething) {
         return (T) abilities.get(doSomething);

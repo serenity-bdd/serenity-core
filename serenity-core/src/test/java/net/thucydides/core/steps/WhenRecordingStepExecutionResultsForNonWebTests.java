@@ -76,7 +76,7 @@ public class WhenRecordingStepExecutionResultsForNonWebTests {
         environmentVariables = new MockEnvironmentVariables();
         configuration = new SystemPropertiesConfiguration(environmentVariables);
 
-        stepFactory = new StepFactory();
+        stepFactory = StepFactory.getFactory();
         stepListener = new BaseStepListener(null, outputDirectory, configuration);
 
         StepEventBus.getEventBus().reset();

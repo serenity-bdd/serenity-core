@@ -383,11 +383,11 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     }
 
     private void initStepFactoryUsing(final Pages pagesObject) {
-        stepFactory = new StepFactory(pagesObject);
+        stepFactory = StepFactory.getFactory().usingPages(pagesObject);
     }
 
     private void initStepFactory() {
-        stepFactory = new StepFactory();
+        stepFactory = StepFactory.getFactory();
     }
 
     private ReportService getReportService() {

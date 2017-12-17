@@ -31,7 +31,7 @@ public class WhenInstanciatingStepLibraries {
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
         Pages pages = new Pages(driver);
-        stepFactory = new StepFactory(pages);
+        stepFactory = StepFactory.getFactory().usingPages(pages);
 
     }
 

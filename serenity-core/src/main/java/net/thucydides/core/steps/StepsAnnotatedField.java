@@ -2,6 +2,7 @@ package net.thucydides.core.steps;
 
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.annotations.InvalidStepsFieldException;
+import net.thucydides.core.annotations.Shared;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.reflection.FieldSetter;
 import net.thucydides.core.util.Inflector;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -58,25 +60,12 @@ public class StepsAnnotatedField {
         return annotatedFields;
     }
 
-    private static boolean fieldIsAnnotated(final Field aField) {
-        Steps fieldAnnotation = annotationFrom(aField);
-        return (fieldAnnotation != null);
-    }
-
-    private static Steps annotationFrom(final Field aField) {
-        Steps annotationOnField = null;
-        if (isFieldAnnotated(aField)) {
-            annotationOnField = aField.getAnnotation(Steps.class);
-        }
-        return annotationOnField;
-    }
-
-    private static boolean isFieldAnnotated(final Field field) {
-        return (fieldIsAnnotatedCorrectly(field));
+    private static boolean fieldIsAnnotated(final Field field) {
+        return fieldIsAnnotatedCorrectly(field);// annotationFrom(aField) != null;
     }
 
     private static boolean fieldIsAnnotatedCorrectly(final Field field) {
-        return (field.getAnnotation(Steps.class) != null);
+        return (field.getAnnotation(Steps.class) != null) || (field.getAnnotation(Shared.class) != null);
     }
 
     protected StepsAnnotatedField(final Field field) {
@@ -110,20 +99,33 @@ public class StepsAnnotatedField {
     }
 
     public boolean isSharedInstance() {
-        return field.getAnnotation(Steps.class).shared();
+        return (field.getAnnotation(Shared.class) != null) ||  field.getAnnotation(Steps.class).shared();
     }
 
     public boolean isUniqueInstance() {
-        return field.getAnnotation(Steps.class).uniqueInstance();
+        return (field.getAnnotation(Steps.class) != null) && (field.getAnnotation(Steps.class).uniqueInstance());
     }
 
     public Optional<String> actor() {
-        String nameValue = field.getAnnotation(Steps.class).actor();
-        if (isBlank(nameValue)) {
+
+        String nameValue = getActorAttribute();
+
+        if (isEmpty(nameValue)) {
             return Optional.empty();
         }
         return Optional.of(nameValue);
     }
+
+    private String getActorAttribute() {
+        if (field.getAnnotation(Steps.class) != null) {
+            return field.getAnnotation(Steps.class).actor();
+        }
+        if (field.getAnnotation(Shared.class) != null) {
+            return field.getAnnotation(Shared.class).actor();
+        }
+        return null;
+    }
+
 
     public void assignActorNameIn(Object steps) {
 

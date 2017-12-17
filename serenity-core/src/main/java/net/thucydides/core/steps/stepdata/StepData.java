@@ -83,7 +83,7 @@ public final class StepData {
 
     public static StepFactory getDefaultStepFactory() {
         if (factoryThreadLocal.get() == null) {
-            factoryThreadLocal.set(new StepFactory());
+            factoryThreadLocal.set(StepFactory.getFactory());
         }
         return factoryThreadLocal.get();
     }

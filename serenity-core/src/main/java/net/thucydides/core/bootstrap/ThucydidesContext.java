@@ -66,9 +66,9 @@ class ThucydidesContext {
         this.defaultDriver = defaultDriver;
         if (defaultDriver != null) {
             pages =  new Pages(getDriver());
-            stepFactory = new StepFactory(pages);
+            stepFactory = StepFactory.getFactory().usingPages(pages);
         } else {
-            stepFactory = new StepFactory();
+            stepFactory = StepFactory.getFactory();
         }
         registerStepListeners(additionalListeners);
         reportService = new ReportService(outputDirectory,

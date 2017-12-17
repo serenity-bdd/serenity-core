@@ -4,7 +4,7 @@ import net.thucydides.core.steps.StepFactory;
 
 public class Instrumented {
 
-    private static StepFactory stepFactory = new StepFactory();
+    private static StepFactory stepFactory = StepFactory.getFactory();
 
     public static <T> InstrumentedBuilder<T> instanceOf(Class<T> instanceClass) {
         return new InstrumentedBuilder<T>(instanceClass);

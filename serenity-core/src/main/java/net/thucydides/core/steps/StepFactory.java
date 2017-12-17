@@ -10,7 +10,6 @@ import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.thucydides.core.annotations.Fields;
-import net.thucydides.core.annotations.InvalidStepsFieldException;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.construction.ConstructionStrategy;
@@ -43,6 +42,8 @@ public class StepFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(StepFactory.class);
     private final DependencyInjectorService dependencyInjectorService;
 
+    private static ThreadLocal<StepFactory> currentStepFactory = ThreadLocal.withInitial( () -> new StepFactory() );
+
     /**
      * Create a new step factory.
      * All web-testing step factories need a Pages object, which is passed to ScenarioSteps objects when they
@@ -59,6 +60,15 @@ public class StepFactory {
      */
     public StepFactory() {
         this(null);
+    }
+
+    public static StepFactory getFactory() {
+       return currentStepFactory.get();
+    }
+
+    public StepFactory usingPages(Pages pages) {
+        this.pages = pages;
+        return this;
     }
 
     private static final Class<?>[] CONSTRUCTOR_ARG_TYPES = {Pages.class};
@@ -223,13 +233,7 @@ public class StepFactory {
 
     private Constructor<?>[] inOrderOfIncreasingParameters(Constructor<?>[] declaredConstructors) {
         List<Constructor<?>> sortedConstructors = Lists.newArrayList(declaredConstructors);
-        Collections.sort(sortedConstructors,
-                new Comparator<Constructor<?>>() {
-                    @Override
-                    public int compare(Constructor<?> o1, Constructor<?> o2) {
-                        return Integer.compare(o1.getParameterTypes().length, o2.getParameterTypes().length);
-                    }
-                });
+        Collections.sort(sortedConstructors, Comparator.comparingInt(o -> o.getParameterTypes().length));
         return sortedConstructors.toArray(new Constructor<?>[]{});
     }
 
@@ -261,15 +265,6 @@ public class StepFactory {
     private ParameterAssignementChecker parameter(Object parameter) {
         return new ParameterAssignementChecker(parameter);
     }
-
-    private Class<?> forTheClassOfParameter(Object parameter) {
-        if (parameter == null) {
-            return Object.class;
-        }
-
-        return parameter.getClass();
-    }
-
 
     private <T> T webEnabledStepLibrary(final Class<T> scenarioStepsClass, final Enhancer e) {
         if (StepLibraryType.ofClass(scenarioStepsClass).hasAPagesConstructor()) {

@@ -348,7 +348,7 @@ public class WhenRunningStepsThroughAScenarioProxy {
     public void initMocks() throws IOException {
         MockitoAnnotations.initMocks(this);
 
-        factory = new StepFactory(new Pages(driver));
+        factory = StepFactory.getFactory().usingPages(new Pages(driver));
 
         StepEventBus.getEventBus().reset();
         baseStepListener = new BaseStepListener(temp.newFolder());

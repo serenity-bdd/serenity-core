@@ -108,7 +108,7 @@ public class WhenRecordingStepExecutionResults {
 
         screenshot1 = Files.readAllBytes(screenshot1File.toPath());
         screenshot2 = Files.readAllBytes(screenshot2File.toPath());
-        stepFactory = new StepFactory(pages);
+        stepFactory = StepFactory.getFactory().usingPages(pages);
 
         environmentVariables = new MockEnvironmentVariables();
         configuration = new SystemPropertiesConfiguration(environmentVariables);

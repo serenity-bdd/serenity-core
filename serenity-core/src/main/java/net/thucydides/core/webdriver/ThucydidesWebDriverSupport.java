@@ -162,7 +162,7 @@ public class ThucydidesWebDriverSupport {
         if (stepFactoryThreadLocal.get() != null) {
             stepFactoryThreadLocal.get().usePageFactory(pagesObject);
         } else {
-            stepFactoryThreadLocal.set(new StepFactory(pagesObject));
+            stepFactoryThreadLocal.set(StepFactory.getFactory().usingPages(pagesObject));
         }
     }
 

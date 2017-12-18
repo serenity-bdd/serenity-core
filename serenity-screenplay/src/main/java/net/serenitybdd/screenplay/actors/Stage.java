@@ -3,6 +3,8 @@ package net.serenitybdd.screenplay.actors;
 import com.google.common.base.Preconditions;
 import net.serenitybdd.screenplay.Actor;
 
+import java.util.Optional;
+
 public class Stage {
 
     private Actor actorInTheSpotlight;
@@ -13,8 +15,13 @@ public class Stage {
     }
 
     public Actor shineSpotlightOn(String actorName) {
-        Actor star = cast.actorNamed(actorName);
-        actorInTheSpotlight = star;
+
+        Optional<Actor> knownActor = cast.getActors()
+                                         .stream()
+                                         .filter(actor -> actor.getName().equalsIgnoreCase(actorName))
+                                         .findFirst();
+
+        actorInTheSpotlight = knownActor.orElse(cast.actorNamed(actorName));;
         return theActorInTheSpotlight();
     }
 

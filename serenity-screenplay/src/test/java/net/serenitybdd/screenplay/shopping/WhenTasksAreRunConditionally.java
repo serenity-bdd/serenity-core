@@ -5,6 +5,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.conditions.Check;
 import net.serenitybdd.screenplay.shopping.tasks.Purchase;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -100,5 +101,24 @@ public class WhenTasksAreRunConditionally {
         assertThat(purchaseAPear.theItemWasPurchased).isTrue();
     }
 
+    @Test
+    public void shouldBeAbleToConditionallyWithExplicitMatchers() {
+
+        Purchase purchaseAPear = purchase().aPear().thatCosts(5).dollars();
+        Purchase purchaseAnApple = purchase().anApple().thatCosts(10).dollars();
+
+        IsExpensive itIsTooExpensive = new IsExpensive(15);
+
+        Question<Integer> theCost = actor -> 30;
+
+        dana.attemptsTo(
+                Check.whether(theCost, Matchers.is(30))
+                        .andIfSo(purchaseAPear)
+                        .otherwise(purchaseAnApple)
+        );
+
+        assertThat(purchaseAnApple.theItemWasPurchased).isFalse();
+        assertThat(purchaseAPear.theItemWasPurchased).isTrue();
+    }
 }
 

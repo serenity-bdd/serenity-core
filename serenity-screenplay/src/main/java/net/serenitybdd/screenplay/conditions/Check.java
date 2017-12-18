@@ -1,6 +1,7 @@
 package net.serenitybdd.screenplay.conditions;
 
 import net.serenitybdd.screenplay.Question;
+import org.hamcrest.Matcher;
 
 public class Check {
     public static ConditionalPerformable whether(Boolean condition) {
@@ -11,4 +12,9 @@ public class Check {
         return new ConditionalPerformableOnQuestion(condition);
     }
 
+    public static <T> ConditionalPerformable whether(Question<T> question, Matcher<T> matcher) {
+        Question<Boolean> condition = actor -> matcher.matches(question.answeredBy(actor));
+
+        return new ConditionalPerformableOnQuestion(condition);
+    }
 }

@@ -16,6 +16,10 @@ public class WebElementStateMatchers {
         return new IsCurrentlyVisibleMatcher();
     }
 
+    public static <T extends WebElementState> Matcher<T> isNotCurrentlyVisible() {
+        return new IsNotCurrentlyVisibleMatcher();
+    }
+
     public static <T extends WebElementState> Matcher<T> isEnabled() {
         return new IsEnabledMatcher();
     }
@@ -25,6 +29,10 @@ public class WebElementStateMatchers {
 
     public static <T extends WebElementState> Matcher<T> isCurrentlyEnabled() {
         return new IsCurrentlyEnabledMatcher();
+    }
+
+    public static <T extends WebElementState> Matcher<T> isNotCurrentlyEnabled() {
+        return new IsNotCurrentlyEnabledMatcher();
     }
 
     public static <T extends WebElementState> Matcher<T> isPresent() {

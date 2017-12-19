@@ -13,8 +13,12 @@ public class OnlineCast extends Cast {
 
     @Override
     public Actor actorNamed(String actorName, Ability... abilities) {
+
         Actor newActor = super.actorNamed(actorName, abilities);
-        return newActor.can(BrowseTheWeb.with(theDefaulteBrowserFor(actorName)));
+        if (newActor.abilityTo(BrowseTheWeb.class) == null) {
+            newActor.can(BrowseTheWeb.with(theDefaulteBrowserFor(actorName)));
+        }
+        return newActor;
     }
 
     public BrowsingActorBuilder actorUsingBrowser(String driver) {

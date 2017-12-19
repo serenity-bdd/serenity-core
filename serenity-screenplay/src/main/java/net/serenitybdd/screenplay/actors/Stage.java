@@ -21,7 +21,7 @@ public class Stage {
                                          .filter(actor -> actor.getName().equalsIgnoreCase(actorName))
                                          .findFirst();
 
-        actorInTheSpotlight = knownActor.orElse(cast.actorNamed(actorName));;
+        actorInTheSpotlight = knownActor.orElseGet(() -> cast.actorNamed(actorName));
         return theActorInTheSpotlight();
     }
 

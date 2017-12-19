@@ -90,18 +90,16 @@ public class WebDriverFactory {
         if (driverProvidersByDriverType == null) {
             driverProvidersByDriverType = new HashMap<>();
 
-            CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-
-            driverProvidersByDriverType.put(SupportedWebDriver.APPIUM, new AppiumDriverProvider(environmentVariables, enhancer));
-            driverProvidersByDriverType.put(SupportedWebDriver.REMOTE, new RemoteDriverProvider(environmentVariables, enhancer));
-            driverProvidersByDriverType.put(SupportedWebDriver.FIREFOX, new FirefoxDriverProvider(environmentVariables, enhancer));
-            driverProvidersByDriverType.put(SupportedWebDriver.HTMLUNIT, new HtmlDriverProvider(environmentVariables, enhancer));
-            driverProvidersByDriverType.put(SupportedWebDriver.PHANTOMJS, new PhantomJSDriverProvider(environmentVariables, enhancer));
-            driverProvidersByDriverType.put(SupportedWebDriver.CHROME, new ChromeDriverProvider(environmentVariables, enhancer));
-            driverProvidersByDriverType.put(SupportedWebDriver.SAFARI, new SafariDriverProvider(environmentVariables, enhancer));
-            driverProvidersByDriverType.put(SupportedWebDriver.IEXPLORER, new InternetExplorerDriverProvider(environmentVariables, enhancer));
-            driverProvidersByDriverType.put(SupportedWebDriver.EDGE, new EdgeDriverProvider(environmentVariables, enhancer));
-            driverProvidersByDriverType.put(SupportedWebDriver.PROVIDED, new ProvidedDriverProvider(environmentVariables, enhancer));
+            driverProvidersByDriverType.put(SupportedWebDriver.APPIUM, new AppiumDriverProvider(fixtureProviderService));
+            driverProvidersByDriverType.put(SupportedWebDriver.REMOTE, new RemoteDriverProvider(fixtureProviderService));
+            driverProvidersByDriverType.put(SupportedWebDriver.FIREFOX, new FirefoxDriverProvider(fixtureProviderService));
+            driverProvidersByDriverType.put(SupportedWebDriver.HTMLUNIT, new HtmlDriverProvider(fixtureProviderService));
+            driverProvidersByDriverType.put(SupportedWebDriver.PHANTOMJS, new PhantomJSDriverProvider(fixtureProviderService));
+            driverProvidersByDriverType.put(SupportedWebDriver.CHROME, new ChromeDriverProvider(fixtureProviderService));
+            driverProvidersByDriverType.put(SupportedWebDriver.SAFARI, new SafariDriverProvider(fixtureProviderService));
+            driverProvidersByDriverType.put(SupportedWebDriver.IEXPLORER, new InternetExplorerDriverProvider(fixtureProviderService));
+            driverProvidersByDriverType.put(SupportedWebDriver.EDGE, new EdgeDriverProvider(fixtureProviderService));
+            driverProvidersByDriverType.put(SupportedWebDriver.PROVIDED, new ProvidedDriverProvider());
 
         }
         return driverProvidersByDriverType;
@@ -117,10 +115,15 @@ public class WebDriverFactory {
     }
 
     protected synchronized WebDriver newWebdriverInstance(final Class<? extends WebDriver> driverClass, String options) {
+        return newWebdriverInstance(driverClass, options, environmentVariables);
+    }
+    protected synchronized WebDriver newWebdriverInstance(final Class<? extends WebDriver> driverClass,
+                                                          String options,
+                                                          EnvironmentVariables environmentVariables) {
         RedimensionBrowser redimensionBrowser = new RedimensionBrowser(environmentVariables);
         try {
             SupportedWebDriver supportedDriverType = inEnvironment(environmentVariables).forDriverClass(driverClass);
-            WebDriver driver = driverProviders().get(supportedDriverType).newInstance(options);
+            WebDriver driver = driverProviders().get(supportedDriverType).newInstance(options,environmentVariables);
             setImplicitTimeoutsIfSpecified(driver);
             redimensionBrowser.withDriver(driver);
 

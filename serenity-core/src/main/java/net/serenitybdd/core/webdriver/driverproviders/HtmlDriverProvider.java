@@ -1,6 +1,7 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
+import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -12,23 +13,24 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class HtmlDriverProvider implements DriverProvider {
 
-    private final EnvironmentVariables environmentVariables;
-    private final CapabilityEnhancer enhancer;
     private final DriverCapabilityRecord driverProperties;
 
-    public HtmlDriverProvider(EnvironmentVariables environmentVariables, CapabilityEnhancer enhancer) {
-        this.environmentVariables = environmentVariables;
-        this.enhancer = enhancer;
+    private final FixtureProviderService fixtureProviderService;
+
+    public HtmlDriverProvider(FixtureProviderService fixtureProviderService) {
+        this.fixtureProviderService = fixtureProviderService;
         this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     @Override
-    public WebDriver newInstance(String options) {
+    public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
         DesiredCapabilities capabilities = DesiredCapabilities.htmlUnit();
         capabilities.setJavascriptEnabled(true);
+
+        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
 
         DesiredCapabilities enhancedCapabilities = enhancer.enhanced(capabilities);
 

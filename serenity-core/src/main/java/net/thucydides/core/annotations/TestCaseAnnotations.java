@@ -1,8 +1,10 @@
 package net.thucydides.core.annotations;
 
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
+import net.thucydides.core.webdriver.DriverStrategySelector;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebdriverManager;
 import org.junit.runner.RunWith;
@@ -60,10 +62,29 @@ public final class TestCaseAnnotations {
             String driverRootName = isNotEmpty(webDriverField.getDriver()) ?  webDriverField.getDriver() : configuredDriverType();
             String driverName = driverRootName + suffix;
             String driverOptions = webDriverField.getOptions();
-            WebDriver driver = (isEmpty(driverName)) ? defaultDriver : webdriverManager.withOptions(driverOptions).getWebdriver(driverName);
+            // TODO: Switch to remote, browserstack or saucelabs with target browser if specified
+            WebDriver driver = (isEmpty(driverName)) ? defaultDriver : requestedDriverFrom(webdriverManager, webDriverField.getName(), driverName, driverOptions);
             webDriverField.setValue(testCase, driver);
 
             suffix = nextSuffix(driverCount++);
+        }
+    }
+
+    private WebDriver requestedDriverFrom(WebdriverManager webdriverManager, String fieldName, String driverName, String driverOptions) {
+        if (DriverStrategySelector.inEnvironment(configuration.getEnvironmentVariables()).shouldUseARemoteDriver()) {
+            return webdriverManager.withOptions(driverOptions)
+                            .withProperty(ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.getPropertyName(), driverName)
+                            .getWebdriverByName(fieldName, "remote");
+        } else if (DriverStrategySelector.inEnvironment(configuration.getEnvironmentVariables()).saucelabsUrlIsDefined()) {
+            return webdriverManager.withOptions(driverOptions)
+                    .withProperty(ThucydidesSystemProperty.BROWSERSTACK_BROWSER.getPropertyName(), driverName)
+                    .getWebdriverByName(fieldName, "remote");
+        } else if (DriverStrategySelector.inEnvironment(configuration.getEnvironmentVariables()).saucelabsUrlIsDefined()) {
+            return webdriverManager.withOptions(driverOptions)
+                    .withProperty(ThucydidesSystemProperty.SAUCELABS_BROWSERNAME.getPropertyName(), driverName)
+                    .getWebdriverByName(fieldName, "remote");
+        } else {
+            return webdriverManager.withOptions(driverOptions).getWebdriver(driverName);
         }
     }
 

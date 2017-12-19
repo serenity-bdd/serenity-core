@@ -39,6 +39,8 @@ public interface WebdriverManager {
 
     void closeCurrentDrivers();
 
+    WebdriverManager withProperty(String property, String value);
+
     void resetDriver();
 
     int getCurrentActiveWebdriverCount();

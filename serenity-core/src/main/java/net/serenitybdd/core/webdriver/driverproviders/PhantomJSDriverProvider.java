@@ -3,6 +3,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.serenitybdd.core.webdriver.servicepools.PhantomJSServicePool;
+import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -19,8 +20,6 @@ import java.io.IOException;
 
 public class PhantomJSDriverProvider implements DriverProvider {
 
-    private final EnvironmentVariables environmentVariables;
-    private final CapabilityEnhancer enhancer;
     private final DriverCapabilityRecord driverProperties;
     private static final Logger LOGGER = LoggerFactory.getLogger(PhantomJSDriverProvider.class);
 
@@ -31,19 +30,20 @@ public class PhantomJSDriverProvider implements DriverProvider {
         return driverServicePool;
     }
 
-    public PhantomJSDriverProvider(EnvironmentVariables environmentVariables, CapabilityEnhancer enhancer) {
-        this.environmentVariables = environmentVariables;
-        this.enhancer = enhancer;
+    private final FixtureProviderService fixtureProviderService;
+
+    public PhantomJSDriverProvider(FixtureProviderService fixtureProviderService) {
+        this.fixtureProviderService = fixtureProviderService;
         this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     @Override
-    public WebDriver newInstance(String options) {
+    public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
 
-        DesiredCapabilities enhancedCapabilities = requestedPhantomJSCapabilities();
+        DesiredCapabilities enhancedCapabilities = requestedPhantomJSCapabilities(environmentVariables);
         driverProperties.registerCapabilities("phantomjs", enhancedCapabilities);
 
         try {
@@ -54,10 +54,12 @@ public class PhantomJSDriverProvider implements DriverProvider {
         }
     }
 
-    private DesiredCapabilities requestedPhantomJSCapabilities() {
+    private DesiredCapabilities requestedPhantomJSCapabilities(EnvironmentVariables environmentVariables) {
         DesiredCapabilities capabilities = DesiredCapabilities.phantomjs();
         PhantomJSCapabilityEnhancer phantomEnhancer = new PhantomJSCapabilityEnhancer(environmentVariables);
         phantomEnhancer.enhanceCapabilities(capabilities);
+
+        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         return enhancer.enhanced(capabilities);
     }
 

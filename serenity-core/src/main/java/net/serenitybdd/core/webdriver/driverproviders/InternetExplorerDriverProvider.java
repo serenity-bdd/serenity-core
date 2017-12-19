@@ -4,6 +4,7 @@ import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.time.InternalSystemClock;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.serenitybdd.core.webdriver.servicepools.InternetExplorerServicePool;
+import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -21,8 +22,6 @@ import java.io.IOException;
 
 public class InternetExplorerDriverProvider implements DriverProvider {
 
-    private final EnvironmentVariables environmentVariables;
-    private final CapabilityEnhancer enhancer;
     private final DriverCapabilityRecord driverProperties;
     private static final Logger LOGGER = LoggerFactory.getLogger(InternetExplorerDriverProvider.class);
 
@@ -33,18 +32,20 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         return driverServicePool;
     }
 
-    public InternetExplorerDriverProvider(EnvironmentVariables environmentVariables, CapabilityEnhancer enhancer) {
-        this.environmentVariables = environmentVariables;
-        this.enhancer = enhancer;
+    private final FixtureProviderService fixtureProviderService;
+
+    public InternetExplorerDriverProvider(FixtureProviderService fixtureProviderService) {
+        this.fixtureProviderService = fixtureProviderService;
         this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     @Override
-    public WebDriver newInstance(String options) {
+    public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
 
+        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         DesiredCapabilities desiredCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities());
         driverProperties.registerCapabilities("iexplorer", desiredCapabilities);
 

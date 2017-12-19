@@ -119,4 +119,6 @@ public class ManagedWebDriverAnnotatedField {
     public String getOptions() {
         return field.getAnnotation(Managed.class).options();
     }
+
+    public String getName() { return field.getName(); }
 }

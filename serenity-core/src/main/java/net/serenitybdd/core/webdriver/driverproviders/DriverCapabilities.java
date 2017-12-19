@@ -28,13 +28,13 @@ public class DriverCapabilities {
         this.enhancer = enhancer;
     }
 
-    public DesiredCapabilities forDriver(String driver, String options) {
-        if (driver == null) {
-            driver = REMOTE_DRIVER;
+    public DesiredCapabilities forDriver(String driverName, String options) {
+        if (driverName == null) {
+            driverName = REMOTE_DRIVER;
         }
-        SupportedWebDriver driverType = driverTypeFor(driver);
+        SupportedWebDriver driverType = driverTypeFor(driverComponentof(driverName));
 
-        Preconditions.checkNotNull(driverType, "Unsupported remote driver type: " + driver);
+        Preconditions.checkNotNull(driverType, "Unsupported remote driver type: " + driverName);
 
         if (shouldUseARemoteDriver()) {
             return enhancer.enhanced(remoteCapabilities(options));
@@ -43,9 +43,13 @@ public class DriverCapabilities {
         }
     }
 
+    private String driverComponentof(String driverName) {
+        return driverName.contains(":") ? driverName.split(":")[0] : driverName;
+    }
+
 
     private SupportedWebDriver driverTypeFor(String driver) {
-        String normalizedDriverName = driver.toUpperCase();
+        String normalizedDriverName = driverComponentof(driver).toUpperCase();
         if (!SupportedWebDriver.listOfSupportedDrivers().contains(normalizedDriverName)) {
             SupportedWebDriver closestDriver = SupportedWebDriver.getClosestDriverValueTo(normalizedDriverName);
             throw new AssertionError("Unsupported driver for webdriver.driver or webdriver.remote.driver: " + driver

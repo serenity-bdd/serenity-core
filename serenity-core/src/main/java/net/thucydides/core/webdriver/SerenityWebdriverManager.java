@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver;
 
+import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.SessionId;
@@ -98,6 +99,14 @@ public class SerenityWebdriverManager implements WebdriverManager {
         return new SerenityWebdriverManager(webDriverFactory, configuration, driverOptions);
     }
 
+    @Override
+    public WebdriverManager withProperty(String property, String value) {
+        EnvironmentVariables updatedEnvironmentVariables = configuration.getEnvironmentVariables().copy();
+        updatedEnvironmentVariables.setProperty(property, value);
+        return new SerenityWebdriverManager(webDriverFactory,
+                                            configuration.withEnvironmentVariables(updatedEnvironmentVariables),
+                                            options);
+    }
     public void resetDriver() {
         inThisTestThread().resetCurrentDriver();
     }

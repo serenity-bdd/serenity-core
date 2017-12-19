@@ -2,6 +2,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -14,22 +15,22 @@ import org.openqa.selenium.safari.SafariOptions;
 
 public class SafariDriverProvider implements DriverProvider {
 
-    private final EnvironmentVariables environmentVariables;
-    private final CapabilityEnhancer enhancer;
     private final DriverCapabilityRecord driverProperties;
 
-    public SafariDriverProvider(EnvironmentVariables environmentVariables, CapabilityEnhancer enhancer) {
-        this.environmentVariables = environmentVariables;
-        this.enhancer = enhancer;
+    private final FixtureProviderService fixtureProviderService;
+
+    public SafariDriverProvider(FixtureProviderService fixtureProviderService) {
+        this.fixtureProviderService = fixtureProviderService;
         this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     @Override
-    public WebDriver newInstance(String options) {
+    public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
 
+        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         SafariOptions safariOptions = SafariOptions.fromCapabilities(enhancer.enhanced(DesiredCapabilities.safari()));
 
         boolean useCleanSession = ThucydidesSystemProperty.SAFARI_USE_CLEAN_SESSION.booleanFrom(environmentVariables, false);

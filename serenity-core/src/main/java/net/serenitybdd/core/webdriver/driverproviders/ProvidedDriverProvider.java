@@ -9,14 +9,11 @@ import org.openqa.selenium.WebDriver;
 
 public class ProvidedDriverProvider implements DriverProvider {
 
-    private final EnvironmentVariables environmentVariables;
-
-    public ProvidedDriverProvider(EnvironmentVariables environmentVariables, CapabilityEnhancer enhancer) {
-        this.environmentVariables = environmentVariables;
+    public ProvidedDriverProvider() {
     }
 
     @Override
-    public WebDriver newInstance(String options) {
+    public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }

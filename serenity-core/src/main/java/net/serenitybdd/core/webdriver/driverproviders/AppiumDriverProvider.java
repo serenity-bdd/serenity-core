@@ -3,6 +3,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
+import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -18,44 +19,45 @@ import java.net.URL;
 
 public class AppiumDriverProvider implements DriverProvider {
 
-    private final EnvironmentVariables environmentVariables;
-    private final CapabilityEnhancer enhancer;
     private final DriverCapabilityRecord driverProperties;
 
-    public AppiumDriverProvider(EnvironmentVariables environmentVariables, CapabilityEnhancer enhancer) {
-        this.environmentVariables = environmentVariables;
-        this.enhancer = enhancer;
+    private final FixtureProviderService fixtureProviderService;
+
+    public AppiumDriverProvider(FixtureProviderService fixtureProviderService) {
+        this.fixtureProviderService = fixtureProviderService;
         this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     @Override
-    public WebDriver newInstance(String options) {
+    public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
+        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
+
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
-        switch (appiumTargetPlatform()) {
+        switch (appiumTargetPlatform(environmentVariables)) {
             case ANDROID:
-                AndroidDriver androidDriver = new AndroidDriver(appiumUrl(), enhancer.enhanced(appiumCapabilities(options)) );
+                AndroidDriver androidDriver = new AndroidDriver(appiumUrl(environmentVariables), enhancer.enhanced(appiumCapabilities(options,environmentVariables)) );
                 driverProperties.registerCapabilities("appium", androidDriver.getCapabilities());
                 return androidDriver;
             case IOS:
-                IOSDriver iosDriver = new IOSDriver(appiumUrl(), enhancer.enhanced(appiumCapabilities(options)));
+                IOSDriver iosDriver = new IOSDriver(appiumUrl(environmentVariables), enhancer.enhanced(appiumCapabilities(options,environmentVariables)));
                 driverProperties.registerCapabilities("appium", iosDriver.getCapabilities());
                 return iosDriver;
         }
-        throw new UnsupportedDriverException(appiumTargetPlatform().name());
+        throw new UnsupportedDriverException(appiumTargetPlatform(environmentVariables).name());
 
     }
 
-    private DesiredCapabilities appiumCapabilities(String options) {
+    private DesiredCapabilities appiumCapabilities(String options, EnvironmentVariables environmentVariables) {
         return AppiumConfiguration.from(environmentVariables).getCapabilities(options);
     }
 
-    private MobilePlatform appiumTargetPlatform() {
+    private MobilePlatform appiumTargetPlatform(EnvironmentVariables environmentVariables) {
         return AppiumConfiguration.from(environmentVariables).getTargetPlatform();
     }
 
-    private URL appiumUrl() {
+    private URL appiumUrl(EnvironmentVariables environmentVariables) {
         return AppiumConfiguration.from(environmentVariables).getUrl();
     }
 

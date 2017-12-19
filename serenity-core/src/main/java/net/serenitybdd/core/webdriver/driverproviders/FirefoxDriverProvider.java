@@ -4,15 +4,14 @@ import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.webdriver.FirefoxOptionsEnhancer;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.serenitybdd.core.webdriver.servicepools.GeckoServicePool;
+import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
-import org.apache.tools.ant.types.LogLevel;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxDriverLogLevel;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
@@ -20,12 +19,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-import static net.thucydides.core.ThucydidesSystemProperty.*;
+import static net.thucydides.core.ThucydidesSystemProperty.USE_GECKO_DRIVER;
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_GECKO_DRIVER;
 
 public class FirefoxDriverProvider implements DriverProvider {
 
-    private final EnvironmentVariables environmentVariables;
-    private final CapabilityEnhancer enhancer;
     private final DriverCapabilityRecord driverProperties;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FirefoxDriverProvider.class);
@@ -39,36 +37,42 @@ public class FirefoxDriverProvider implements DriverProvider {
 
     protected String serviceName(){ return "firefox"; }
 
-    public FirefoxDriverProvider(EnvironmentVariables environmentVariables, CapabilityEnhancer enhancer) {
-        this.environmentVariables = environmentVariables;
-        this.enhancer = enhancer;
+    private final FixtureProviderService fixtureProviderService;
+
+    public FirefoxDriverProvider(FixtureProviderService fixtureProviderService) {
+        this.fixtureProviderService = fixtureProviderService;
         this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     @Override
-    public WebDriver newInstance(String options) {
+    public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
         DesiredCapabilities capabilities = new FirefoxDriverCapabilities(environmentVariables).getCapabilities();
 
-        WebDriver driver =  (shouldUseGeckoDriver()) ? newMarionetteDriver(capabilities) : newFirefoxDriver(capabilities);
+        WebDriver driver =  (shouldUseGeckoDriver(environmentVariables)) ?
+                newMarionetteDriver(capabilities,environmentVariables) :
+                newFirefoxDriver(capabilities,environmentVariables);
 
         driverProperties.registerCapabilities("firefox", capabilities);
 
         return driver;
     }
 
-    private boolean shouldUseGeckoDriver() {
-        return (geckoDriverIsInEnvironmentVariable() || geckoDriverIsOnTheClasspath()) && geckoIsNotDisabled();
+    private boolean shouldUseGeckoDriver(EnvironmentVariables environmentVariables) {
+        return (geckoDriverIsInEnvironmentVariable(environmentVariables)
+                || geckoDriverIsOnTheClasspath()) && geckoIsNotDisabled(environmentVariables);
     }
 
-    private boolean geckoIsNotDisabled() {
+    private boolean geckoIsNotDisabled(EnvironmentVariables environmentVariables) {
         return USE_GECKO_DRIVER.booleanFrom(environmentVariables, true);
     }
 
-    private WebDriver newFirefoxDriver(DesiredCapabilities capabilities) {
+    private WebDriver newFirefoxDriver(DesiredCapabilities capabilities, EnvironmentVariables environmentVariables) {
         capabilities.setCapability("marionette", false);
+
+        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
 
         FirefoxOptions options = new FirefoxOptions(enhancer.enhanced(capabilities));
 
@@ -77,14 +81,16 @@ public class FirefoxDriverProvider implements DriverProvider {
         return new FirefoxDriver(options);
     }
 
-    private WebDriver newMarionetteDriver(DesiredCapabilities capabilities) {
+    private WebDriver newMarionetteDriver(DesiredCapabilities capabilities, EnvironmentVariables environmentVariables) {
         capabilities.setCapability("marionette", true);
+
+        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
 
         try {
             return getDriverServicePool().newDriver(enhancer.enhanced(capabilities));
         } catch (IOException couldNotStartGeckoDriverService) {
             LOGGER.warn("Failed to start the gecko driver service, using a native driver instead",  couldNotStartGeckoDriverService.getMessage());
-            return newFirefoxDriver(capabilities);
+            return newFirefoxDriver(capabilities, environmentVariables);
         }
     }
 
@@ -102,7 +108,7 @@ public class FirefoxDriverProvider implements DriverProvider {
         }
     }
 
-    private boolean geckoDriverIsInEnvironmentVariable() {
+    private boolean geckoDriverIsInEnvironmentVariable(EnvironmentVariables environmentVariables) {
         try {
             new ProcessBuilder().command(WEBDRIVER_GECKO_DRIVER.from(environmentVariables), "--help").start();
             return true;

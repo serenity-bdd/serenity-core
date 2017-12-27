@@ -91,6 +91,16 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         return properties.containsKey(property);
     }
 
+    @Override
+    public String injectSystemPropertiesInto(String value) {
+        if (value == null) { return value; }
+
+        for(String key : systemValues.keySet()) {
+            value = value.replace("${" + key.toUpperCase() + "}", systemValues.get(key));
+        }
+        return value;
+    }
+
     public Integer getPropertyAsInteger(String property, Integer defaultValue) {
         String value = properties.get(property);
         return (value != null) ? Integer.valueOf(value) : defaultValue;

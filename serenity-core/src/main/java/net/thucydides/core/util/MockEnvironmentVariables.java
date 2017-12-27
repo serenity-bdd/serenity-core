@@ -149,6 +149,11 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         return properties.contains(property);
     }
 
+    @Override
+    public String injectSystemPropertiesInto(String value) {
+        return value;
+    }
+
     public void setValue(String name, String value) {
         values.put(name, value);
     }

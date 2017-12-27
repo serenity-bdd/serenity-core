@@ -32,7 +32,7 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
 
     @Override
     public String getUrl() {
-        return ThucydidesSystemProperty.SAUCELABS_URL.from(environmentVariables);
+        return environmentVariables.injectSystemPropertiesInto(ThucydidesSystemProperty.SAUCELABS_URL.from(environmentVariables));
     }
 
     @Override

@@ -6,6 +6,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -13,7 +14,10 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 class SetAppropriateSaucelabsPlatformVersion {
     private final DesiredCapabilities capabilities;
 
+    private static String DEFAULT_PLATFORM = "Windows 10";
+
     private static Map<String, String> OS_PLATFORM_NAMES = Maps.newHashMap();
+
     static {
         OS_PLATFORM_NAMES.put("snowleopard", "OS X 10.6");
         OS_PLATFORM_NAMES.put("snow leopard", "OS X 10.6");
@@ -26,6 +30,7 @@ class SetAppropriateSaucelabsPlatformVersion {
     }
 
     private static Map<String, String> MAC_OS_VERSIONS_PER_SAFARI_VERSION = Maps.newHashMap();
+
     static {
         MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("5", "OS X 10.6");
         MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("6", "OS X 10.8");
@@ -45,14 +50,14 @@ class SetAppropriateSaucelabsPlatformVersion {
 
     public void from(EnvironmentVariables environmentVariables) {
         String platformValue = ThucydidesSystemProperty.SAUCELABS_TARGET_PLATFORM
-                                                       .from(environmentVariables)
-                                                       .toLowerCase();
+                .from(environmentVariables, DEFAULT_PLATFORM)
+                .toLowerCase();
 
         if (isEmpty(platformValue)) {
             return;
         }
         if (OS_PLATFORM_NAMES.containsKey(platformValue)) {
-            capabilities.setCapability("platform",OS_PLATFORM_NAMES.get(platformValue));
+            capabilities.setCapability("platform", OS_PLATFORM_NAMES.get(platformValue));
         } else {
             capabilities.setCapability("platform", platformFrom(platformValue));
         }
@@ -63,10 +68,8 @@ class SetAppropriateSaucelabsPlatformVersion {
 
     }
 
-    private void setAppropriateSaucelabsPlatformVersionForSafariFrom(EnvironmentVariables environmentVariables)
-    {
-        if (ThucydidesSystemProperty.SAUCELABS_TARGET_PLATFORM.from(environmentVariables).equalsIgnoreCase("mac"))
-        {
+    private void setAppropriateSaucelabsPlatformVersionForSafariFrom(EnvironmentVariables environmentVariables) {
+        if (ThucydidesSystemProperty.SAUCELABS_TARGET_PLATFORM.from(environmentVariables).equalsIgnoreCase("mac")) {
             String browserVersion = ThucydidesSystemProperty.SAUCELABS_DRIVER_VERSION.from(environmentVariables);
             if (MAC_OS_VERSIONS_PER_SAFARI_VERSION.containsKey(browserVersion)) {
                 capabilities.setCapability("platform", MAC_OS_VERSIONS_PER_SAFARI_VERSION.get(browserVersion));
@@ -75,7 +78,21 @@ class SetAppropriateSaucelabsPlatformVersion {
     }
 
     private Platform platformFrom(String platformValue) {
-        return Platform.valueOf(platformValue.toUpperCase());
+        return Arrays.stream(Platform.values()).filter(
+                platform -> platform.name().equalsIgnoreCase(platformValue) ||
+                            platformNameIn(platformValue, platform.getPartOfOsName())
+        ).findFirst()
+         .orElseThrow(() -> new UnknownPlatformException(platformValue));
     }
 
+    private boolean platformNameIn(String platformValue, String[] partOfOsName) {
+        return Arrays.stream(partOfOsName)
+                     .anyMatch( osName -> osName.equalsIgnoreCase(platformValue));
+    }
+
+    private static class UnknownPlatformException extends RuntimeException {
+        public UnknownPlatformException(String message) {
+            super(message);
+        }
+    }
 }

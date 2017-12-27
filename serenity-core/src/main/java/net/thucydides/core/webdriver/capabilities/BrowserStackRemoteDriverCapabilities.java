@@ -30,7 +30,7 @@ public class BrowserStackRemoteDriverCapabilities implements RemoteDriverCapabil
 
     @Override
     public String getUrl() {
-        return ThucydidesSystemProperty.BROWSERSTACK_URL.from(environmentVariables);
+        return environmentVariables.injectSystemPropertiesInto(ThucydidesSystemProperty.BROWSERSTACK_URL.from(environmentVariables));
     }
 
     @Override

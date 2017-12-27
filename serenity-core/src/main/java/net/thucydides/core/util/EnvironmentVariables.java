@@ -47,4 +47,6 @@ public interface EnvironmentVariables {
     boolean aValueIsDefinedFor(final Enum<?> property);
 
     boolean aValueIsDefinedFor(String property);
+
+    String injectSystemPropertiesInto(String value);
 }

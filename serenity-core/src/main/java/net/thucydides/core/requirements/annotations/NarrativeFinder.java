@@ -1,11 +1,12 @@
 package net.thucydides.core.requirements.annotations;
 
 
-import com.google.common.base.Optional;
 import net.thucydides.core.annotations.Narrative;
+
+import java.util.Optional;
 
 public class NarrativeFinder {
     public static Optional<Narrative> forClass(Class<?> annotatedClass) {
-        return Optional.fromNullable(annotatedClass.getAnnotation(Narrative.class));
+        return Optional.ofNullable(annotatedClass.getAnnotation(Narrative.class));
     }
 }

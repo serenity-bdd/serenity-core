@@ -3,10 +3,10 @@ package net.thucydides.core.requirements;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Narrative;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
@@ -14,7 +14,6 @@ import net.thucydides.core.requirements.annotations.NarrativeFinder;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.runner.RunWith;
 
@@ -194,7 +193,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
 
         Class candidateClass = null;
 
-        Optional<Narrative> narrative = Optional.absent();
+        java.util.Optional<Narrative> narrative = java.util.Optional.empty();
         try {
             candidateClass = Class.forName(rootPackage + "." + requirementPath + ".package-info");
             narrative = NarrativeFinder.forClass(candidateClass);
@@ -219,7 +218,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         String narrativeText = "";
         String cardNumber = "";
 
-        Optional<Narrative> narrative = NarrativeFinder.forClass(candidateClass);
+        java.util.Optional<Narrative> narrative = NarrativeFinder.forClass(candidateClass);
 
 
         Requirement newRequirement = getRequirement(candidateClass, packageName, level, requirementTitle, requirementType, narrativeText, cardNumber, narrative);
@@ -229,7 +228,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         return newRequirement;
     }
 
-    private Requirement getRequirement(Class candidateClass, String packageName, int level, String requirementTitle, String requirementType, String narrativeText, String cardNumber, Optional<Narrative> narrative) {
+    private Requirement getRequirement(Class candidateClass, String packageName, int level, String requirementTitle, String requirementType, String narrativeText, String cardNumber, java.util.Optional<Narrative> narrative) {
         if (narrative.isPresent()) {
             requirementTitle = isNotEmpty(narrative.get().title()) ? narrative.get().title() : requirementTitle;
             requirementType = isNotEmpty(narrative.get().type()) ? narrative.get().type() : requirementType;

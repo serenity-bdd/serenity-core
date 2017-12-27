@@ -81,13 +81,9 @@ public class LeafRequirementAdder {
             parent = humanize(secondLastOf(pathElements));
         }
 
-        String narrativeText = PackageInfoNarrative.text().definedInPath(path)
-                               .or(ClassNarrative.text().definedInPath(path))
-                               .or("");
+        String narrativeText = java.util.Optional.ofNullable(PackageInfoNarrative.text().definedInPath(path).orElseGet(ClassNarrative.text().definedInPath(path)::get)).orElse("");
 
-        String narrativeType = PackageInfoNarrative.type().definedInPath(path)
-                .or(ClassNarrative.type().definedInPath(path))
-                .or(leafRequirementTypeFrom(pathElements));
+        String narrativeType = java.util.Optional.ofNullable(PackageInfoNarrative.type().definedInPath(path).orElseGet(ClassNarrative.type().definedInPath(path)::get)).orElse(leafRequirementTypeFrom(pathElements));
 
         Requirement story = Requirement.named(storyName)
                 .withType(narrativeType)
@@ -111,7 +107,7 @@ public class LeafRequirementAdder {
         int startFromRequirementLevel = requirementsConfiguration.startLevelForADepthOf(requirementsDepth);
 
         String typeByLevel = requirementsConfiguration.getRequirementType(startFromRequirementLevel + featurePathElements.size() - 1);
-        String type = PackageInfoNarrative.type().definedInPath(path).or(typeByLevel);
+        String type = PackageInfoNarrative.type().definedInPath(path).orElse(typeByLevel);
 
         Optional<Requirement> knownMatchingRequirement = findMatchingRequirementWithName(knownRequirements, featureName, type);
 
@@ -119,7 +115,7 @@ public class LeafRequirementAdder {
             knownRequirements.remove(knownMatchingRequirement);
         }
         return knownMatchingRequirement.or(Requirement.named(featureName).withTypeOf(type))
-                                .withNarrative(PackageInfoNarrative.text().definedInPath(path).or(""))
+                                .withNarrative(PackageInfoNarrative.text().definedInPath(path).orElse(""))
                                 .withParent(parent);
     }
 

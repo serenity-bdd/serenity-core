@@ -56,6 +56,14 @@ public class TestAnnotations {
         return false;
     }
 
+    public static boolean isAnExampleStep(Method method) {
+        if (method != null) {
+            Step stepAnnotation = method.getAnnotation(Step.class);
+            return ((stepAnnotation != null) && (stepAnnotation.exampleRow()));
+        }
+        return false;
+    }
+
     private static boolean hasAnnotationCalled(Method method, String annotationName) {
         Annotation[] annotations = method.getAnnotations();
 

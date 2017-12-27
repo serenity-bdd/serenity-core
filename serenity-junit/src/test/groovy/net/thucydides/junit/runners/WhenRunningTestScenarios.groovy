@@ -284,6 +284,19 @@ class WhenRunningTestScenarios extends Specification {
         outcomes[0].testFailureMessage == "TestException without any steps."
     }
 
+    def "should be able to add rows to a table dynamically"() {
+        given:
+            def runner = new ThucydidesRunner(SampleDynamicTableScenario, webDriverFactory)
+        when:
+            runner.run(new RunNotifier())
+            def outcomes = runner.testOutcomes;
+        then:
+            outcomes.size() == 1
+            outcomes.get(0).getDataTable().getRows().size() == 3
+            outcomes.get(0).getDataTable().getHeaders() == ["Fruit","Fruit Salad"]
+    }
+
+
     def "failing tests with with failure outside a step should still record the error"() {
         given:
             def runner = new ThucydidesRunner(SampleOutsideStepFailure, webDriverFactory)

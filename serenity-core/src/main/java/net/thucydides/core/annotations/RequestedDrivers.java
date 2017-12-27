@@ -6,6 +6,7 @@ import net.thucydides.core.webdriver.DriverStrategySelector;
 import net.thucydides.core.webdriver.WebdriverManager;
 import org.openqa.selenium.WebDriver;
 
+import java.util.HashMap;
 import java.util.Map;
 
 class RequestedDrivers {
@@ -13,8 +14,8 @@ class RequestedDrivers {
     private final EnvironmentVariables environmentVariables;
     private WebdriverManager webdriverManager;
 
-    private static Map<String, String> BROWSERSTACK_BROWSER_NAMES;
-    private static Map<String, String> SAUCELABS_BROWSER_NAMES;
+    private static Map<String, String> BROWSERSTACK_BROWSER_NAMES = new HashMap<>();
+    private static Map<String, String> SAUCELABS_BROWSER_NAMES = new HashMap<>();
 
     static {
         BROWSERSTACK_BROWSER_NAMES.put("iexplorer","IE");

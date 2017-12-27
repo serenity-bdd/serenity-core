@@ -15,6 +15,8 @@ import net.sf.cglib.proxy.MethodProxy;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.model.stacktrace.StackTraceSanitizer;
+import net.thucydides.core.steps.interception.DynamicExampleStepInterceptionListener;
+import net.thucydides.core.steps.interception.StepInterceptionListener;
 import net.thucydides.core.steps.service.CleanupMethodAnnotationProvider;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
@@ -44,6 +46,8 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     private final EnvironmentVariables environmentVariables;
     private final List<String> cleanupMethodsAnnotations = new ArrayList<>();
 
+    private List<StepInterceptionListener> listeners = new ArrayList<>();
+
     StepInterceptor(final Class<?> testStepClass) {
         this.testStepClass = testStepClass;
         this.environmentVariables = ConfiguredEnvironment.getEnvironmentVariables();
@@ -51,6 +55,8 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         for (CleanupMethodAnnotationProvider cleanupMethodAnnotationProvider : cleanupMethodAnnotationProviders) {
             cleanupMethodsAnnotations.addAll(cleanupMethodAnnotationProvider.getCleanupMethodAnnotations());
         }
+
+        listeners.add(new DynamicExampleStepInterceptionListener());
     }
 
     public Object intercept(final Object obj, final Method method,
@@ -127,12 +133,30 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
             return runNormalMethod(obj, method, args, proxy);
         }
 
+        listeners.forEach( listener -> listener.start(obj, method, args, proxy));
+
+        Object result = runOrSkipMethod(obj, method, args, proxy);
+
+        listeners.forEach( listener -> listener.end(obj, method, args, proxy));
+
+        return result;
+    }
+
+    private Object runOrSkipMethod(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+        Object result;
         if (shouldSkip(method) && !stepIsCalledFromCleanupMethod()) {
-            return skipStepMethod(obj, method, args, proxy);
+            result = skipStepMethod(obj, method, args, proxy);
         } else {
             notifyStepStarted(obj, method, args);
-            return runTestStep(obj, method, args, proxy);
+            result = runTestStep(obj, method, args, proxy);
         }
+        return result;
+    }
+
+    private void endDynamicExampleIfPresent() {
+    }
+
+    private void startDynamicExampleIfPresent() {
     }
 
     private boolean stepIsCalledFromCleanupMethod() {

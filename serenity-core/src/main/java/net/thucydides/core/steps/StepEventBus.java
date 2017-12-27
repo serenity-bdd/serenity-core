@@ -10,6 +10,7 @@ import net.serenitybdd.core.eventbus.Broadcaster;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.model.*;
+import net.thucydides.core.reports.html.ExampleTable;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -250,6 +251,8 @@ public class StepEventBus {
         currentTestIsNotSuspended();
         noAssumptionsViolated();
         disableSoftAsserts();
+        ExampleTables.clear();
+
         resultTally = null;
         classUnderTest = null;
         webdriverSuspensions.clear();

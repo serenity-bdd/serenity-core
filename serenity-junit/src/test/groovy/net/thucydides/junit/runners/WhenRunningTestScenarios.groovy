@@ -321,6 +321,7 @@ class WhenRunningTestScenarios extends Specification {
     }
 
     def "should skip any ignored tests"() {
+
         given:
         def runner = new ThucydidesRunner(TestIgnoredScenario, webDriverFactory)
         when:

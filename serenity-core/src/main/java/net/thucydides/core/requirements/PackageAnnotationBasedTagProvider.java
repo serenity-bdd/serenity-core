@@ -196,7 +196,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         java.util.Optional<Narrative> narrative = java.util.Optional.empty();
         try {
             candidateClass = Class.forName(rootPackage + "." + requirementPath + ".package-info");
-            narrative = NarrativeFinder.forClass(candidateClass);
+            narrative = NarrativeFinder.forClass(candidateClass).toJavaUtil();
         } catch (ClassNotFoundException ignore) {
         }
 
@@ -218,10 +218,10 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         String narrativeText = "";
         String cardNumber = "";
 
-        java.util.Optional<Narrative> narrative = NarrativeFinder.forClass(candidateClass);
+        Optional<Narrative> narrative = NarrativeFinder.forClass(candidateClass);
 
 
-        Requirement newRequirement = getRequirement(candidateClass, packageName, level, requirementTitle, requirementType, narrativeText, cardNumber, narrative);
+        Requirement newRequirement = getRequirement(candidateClass, packageName, level, requirementTitle, requirementType, narrativeText, cardNumber, narrative.toJavaUtil());
         if (parentRequirement != null) {
             newRequirement = newRequirement.withParent(parentRequirement.getName());
         }

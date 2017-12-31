@@ -21,21 +21,21 @@ public abstract class ClassNarrative {
 
     public abstract Optional<String> definedInPath(String path);
 
-    protected java.util.Optional<Narrative> getClassLevelNarrativeFor(String path) {
+    protected Optional<Narrative> getClassLevelNarrativeFor(String path) {
         try {
             return NarrativeFinder.forClass(getClass().getClassLoader().loadClass(path));
         } catch (ClassNotFoundException e) {
-            return java.util.Optional.empty();
+            return Optional.absent();
         }
     }
 
     public static class ClassNarrativeText extends ClassNarrative {
         public Optional<String> definedInPath(String path) {
-            java.util.Optional<Narrative> narrative = getClassLevelNarrativeFor(path);
+            Optional<Narrative> narrative = getClassLevelNarrativeFor(path);
             if (narrative.isPresent() && !isEmpty(getNarrativeTextBody(narrative.get()))) {
                 return Optional.of(getNarrativeTextBody(narrative.get()));
             }
-             return Optional.absent();
+            return Optional.absent();
         }
     }
 
@@ -45,7 +45,7 @@ public abstract class ClassNarrative {
 
     public static class ClassNarrativeType extends ClassNarrative {
         public Optional<String> definedInPath(String path) {
-            java.util.Optional<Narrative> narrative = getClassLevelNarrativeFor(path);
+            Optional<Narrative> narrative = getClassLevelNarrativeFor(path);
             if (narrative.isPresent() && !isEmpty(narrative.get().type())) {
                 return Optional.of(narrative.get().type());
             }

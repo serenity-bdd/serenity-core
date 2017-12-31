@@ -140,6 +140,7 @@ public class StepEventBus {
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testStarted(testName);
         }
+        TestLifecycleEvents.postEvent(TestLifecycleEvents.testStarted());
     }
 
     public void testStarted(final String testName, final String id) {
@@ -147,6 +148,7 @@ public class StepEventBus {
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testStarted(testName, id);
         }
+        TestLifecycleEvents.postEvent(TestLifecycleEvents.testStarted());
     }
 
     public boolean isUniqueSession() {
@@ -251,7 +253,6 @@ public class StepEventBus {
         currentTestIsNotSuspended();
         noAssumptionsViolated();
         disableSoftAsserts();
-        ExampleTables.clear();
 
         resultTally = null;
         classUnderTest = null;
@@ -277,25 +278,19 @@ public class StepEventBus {
     }
 
     public void testFinished() {
-        //screenshotProcessor.waitUntilDone();
-//        Darkroom.waitUntilClose();
-
         TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testFinished(outcome);
         }
+        TestLifecycleEvents.postEvent(TestLifecycleEvents.testFinished());
         clear();
     }
 
-    private boolean thereAreNoTestOutcomes() {
-        return getBaseStepListener().getTestOutcomes() == null || (getBaseStepListener().getTestOutcomes().isEmpty());
-    }
     public void testFinished(TestOutcome result) {
-//        Darkroom.waitUntilClose();
-
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testFinished(result);
         }
+        TestLifecycleEvents.postEvent(TestLifecycleEvents.testFinished());
         clear();
     }
 

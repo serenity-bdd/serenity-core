@@ -997,6 +997,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
 
     public void exampleStarted(Map<String, String> data) {
+
         clearForcedResult();
         if (getCurrentTestOutcome().isDataDriven()) {
             if (!getCurrentTestOutcome().dataIsPredefined()) {

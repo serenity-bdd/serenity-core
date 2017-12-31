@@ -260,6 +260,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
             Map<String, List<String>> failedTests = stepListener.getFailedTests();
             failureRerunner.recordFailedTests(failedTests);
             dropListeners(notifier);
+            StepEventBus.getEventBus().dropAllListeners();
         }
     }
 

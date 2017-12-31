@@ -1,10 +1,9 @@
 package net.thucydides.core.requirements.classpath;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.requirements.annotations.NarrativeFinder;
-
-import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -21,7 +20,7 @@ public abstract class PackageInfoNarrative {
             String packageInfoPath = (path.endsWith("package-info")) ? path : path + ".package-info";
             return NarrativeFinder.forClass(getClass().getClassLoader().loadClass(packageInfoPath));
         } catch (ClassNotFoundException e) {
-            return Optional.empty();
+            return Optional.absent();
         }
     }
 
@@ -37,7 +36,7 @@ public abstract class PackageInfoNarrative {
         public Optional<String> definedInPath(String path) {
             Optional<Narrative> narrative = getClassLevelNarrativeFor(path);
             if (!narrative.isPresent()) {
-                return Optional.empty();
+                return Optional.absent();
             }
             String narrativeText = Joiner.on("\n").join(narrative.get().text());
             return Optional.of((narrative.get().title() + System.lineSeparator() + narrativeText).trim());
@@ -50,7 +49,7 @@ public abstract class PackageInfoNarrative {
             if (narrative.isPresent() && !isEmpty(narrative.get().type())) {
                 return Optional.of(narrative.get().type());
             }
-            return Optional.empty();
+            return Optional.absent();
         }
     }
 

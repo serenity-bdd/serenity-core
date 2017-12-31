@@ -1,5 +1,75 @@
 
 # Serenity Core change log
+## v1.8.13
+### No issue
+ * [852f25c89d317c8](https://github.com/serenity-bdd/serenity-core/commit/852f25c89d317c8) Added experimental support for dynamic tables in JUnit.
+
+```
+    @Test
+    public void should_create_a_data_table_dynamically() {
+
+        ExampleTables.useExampleTable().withHeaders("Fruit","Fruit Salad")
+                                       .andTitle("Fruit Salad!")
+                                       .start();
+
+        dataSteps.can_go_in_a_fruit_salad("apple", true, 0);
+        dataSteps.can_go_in_a_fruit_salad("pear", true,0);
+        dataSteps.can_go_in_a_fruit_salad("tomato", false,0);
+    }
+    .
+    .
+    .
+    @Step(exampleRow = true)
+    public void can_go_in_a_fruit_salad(String ingredient, boolean yesNo) {
+            check_recipe();
+            check_ingredients();
+    }
+
+```
+ * [bbbc7bc87cbcfb0](https://github.com/serenity-bdd/serenity-core/commit/bbbc7bc87cbcfb0) Added support for .md extension for narrative files
+ * [6f0a331b27f929c](https://github.com/serenity-bdd/serenity-core/commit/6f0a331b27f929c) Added experimental support for dynamic tables in JUnit.
+
+```
+    @Test
+    public void should_create_a_data_table_dynamically() {
+
+        ExampleTables.useExampleTable().withHeaders("Fruit","Fruit Salad")
+                                       .andTitle("Fruit Salad!")
+                                       .start();
+
+        dataSteps.can_go_in_a_fruit_salad("apple", true, 0);
+        dataSteps.can_go_in_a_fruit_salad("pear", true,0);
+        dataSteps.can_go_in_a_fruit_salad("tomato", false,0);
+    }
+    .
+    .
+    .
+    @Step(exampleRow = true)
+    public void can_go_in_a_fruit_salad(String ingredient, boolean yesNo) {
+            check_recipe();
+            check_ingredients();
+    }
+
+```
+ * [374a46f69222cb5](https://github.com/serenity-bdd/serenity-core/commit/374a46f69222cb5) Better support for @Managed drivers on remote platforms.
+When you specify a driver using the @Managed annotation, and then provide remote connection details, the driver will be passed to the remote environment.
+ * [258d9be68b20736](https://github.com/serenity-bdd/serenity-core/commit/258d9be68b20736) Updated core.css
+
+Increased the margin-left px to 30px from 15px.
+## v1.8.12
+### No issue
+ * [e787b7ef1886e83](https://github.com/serenity-bdd/serenity-core/commit/e787b7ef1886e83) The driver specified in the @Managed annotations is now honored when you run the tests using Selenium grid
+ * [6da7305b9c9c139](https://github.com/serenity-bdd/serenity-core/commit/6da7305b9c9c139) Fixed an issue where the @Managed driver assigned to an actor was overrided by the default driver.
+ * [98fb29c1e7a0d9e](https://github.com/serenity-bdd/serenity-core/commit/98fb29c1e7a0d9e) Fixed a bug which prevented an actor being reassigned a driver
+ * [4eb1d74c2de7977](https://github.com/serenity-bdd/serenity-core/commit/4eb1d74c2de7977) Adding 'Hover over' Interaction in Screenplay Webdriver
+## v1.8.11
+### No issue
+ * [48251f05ed1bc69](https://github.com/serenity-bdd/serenity-core/commit/48251f05ed1bc69) Added the ability to check against web element state in the Check interation class, e.g.
+```
+    Check.whether(the(TripPlanner.SEARCHING_MESSAGE), isCurrentlyVisible())
+         .andIfSo(WaitUntil.the(TripPlanner.SEARCHING_MESSAGE, isNotCurrentlyVisible()))
+```
+ * [37125365a27a564](https://github.com/serenity-bdd/serenity-core/commit/37125365a27a564) Updated changelog
 ## v1.8.10
 ### No issue
  * [e7aadfd845a9491](https://github.com/serenity-bdd/serenity-core/commit/e7aadfd845a9491) Added the @Shared annotation, which is a more intuitively named synonym of @Steps(shared=true).

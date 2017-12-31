@@ -1,12 +1,13 @@
 package net.thucydides.core.reports.html;
 
 import net.thucydides.core.reports.ReportGenerationFailedError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static net.thucydides.core.ThucydidesSystemProperty.REPORT_ASSETS_DIRECTORY;
 
 /**
@@ -36,7 +37,9 @@ class CopyProjectSpecificResourcesTask extends HtmlReporter implements Reporting
 
     private void copyToTarget(Path imageFile) {
         try {
-            Files.copy(imageFile, transferred(imageFile));
+            if (notCopied(imageFile)) {
+                Files.copy(imageFile, transferred(imageFile), REPLACE_EXISTING);
+            }
         } catch (IOException e) {
             throw new ReportGenerationFailedError(e.getMessage(), e);
         }

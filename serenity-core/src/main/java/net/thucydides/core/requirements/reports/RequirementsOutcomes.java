@@ -96,6 +96,11 @@ public class RequirementsOutcomes {
     }
 
 
+    public String getOverview() {
+
+        return RequirementsOverview.withEnvironmentVariables(environmentVariables).asRenderedHtml();
+    }
+
     RequirementsOutcomesOfTypeCache requirementsOfTypeCache = new RequirementsOutcomesOfTypeCache(this);
 
     public RequirementsOutcomes requirementsOfType(String type) {

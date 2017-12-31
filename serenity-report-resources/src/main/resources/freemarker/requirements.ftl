@@ -23,7 +23,6 @@
 <#include "components/test-outcomes.ftl">
 <#include "components/requirements-list.ftl">
 
-
 <#list requirements.types as requirementType>
     <#assign requirementsOfType = requirements.requirementsOfType(requirementType) />
     <#assign successfulRequirements= requirementsOfType.completedRequirementsCount >
@@ -92,19 +91,19 @@
         // Results table
         $('#test-results-table').DataTable({
             "order": [
-                [ 1, "asc" ]
+                [1, "asc"]
             ],
             "pageLength": 100,
-            "lengthMenu": [ [50, 100, 200, -1] , [50, 100, 200, "All"] ]
+            "lengthMenu": [[50, 100, 200, -1], [50, 100, 200, "All"]]
         });
 
         // Results table
         $('#req-results-table').DataTable({
             "order": [
-                [ 1, "asc" ]
+                [1, "asc"]
             ],
             "pageLength": 100,
-            "lengthMenu": [ [50, 100, 200, -1] , [50, 100, 200, "All"] ]
+            "lengthMenu": [[50, 100, 200, -1], [50, 100, 200, "All"]]
         });
 
         $('#examples-table').DataTable({
@@ -202,10 +201,11 @@
             <div class="table">
             <#if (requirements.parentRequirement.isPresent())>
                 <div>
-                    <h2><i class="fa fa-book"></i> ${parentType}: ${issueNumber} ${formatter.htmlCompatibleStoryTitle(parentTitle)}</h2>
+                    <h2><i class="fa fa-book"></i> ${parentType}
+                        : ${issueNumber} ${formatter.htmlCompatibleStoryTitle(parentTitle)}</h2>
                     <#if parentRequirement.narrative.renderedText?has_content>
                         <div class="requirementNarrativeTitle">
-                        ${formatter.addLineBreaks(formatter.renderDescription(parentRequirement.narrative.renderedText))}
+                            ${formatter.addLineBreaks(formatter.renderDescription(parentRequirement.narrative.renderedText))}
                         </div>
                     </#if>
 
@@ -258,7 +258,8 @@
                                             <#assign requirementReport = reportName.forRequirementType(requirementType) />
                                         </#if>
                                         <#assign requirementTitle = inflection.of(requirementType).inPluralForm().asATitle() />
-                                        <td class="summary-leading-column"><a href="${requirementReport}">${requirementTitle}</a></td>
+                                        <td class="summary-leading-column"><a
+                                                href="${requirementReport}">${requirementTitle}</a></td>
                                         <td>${requirements.requirementsOfType(requirementType).requirementCount}</td>
                                         <td>${requirements.requirementsOfType(requirementType).completedRequirementsCount}</td>
                                         <td>${requirements.requirementsOfType(requirementType).failingRequirementsCount}</td>
@@ -277,7 +278,8 @@
                                     <#assign requirementTestsSkippedCount = testOutcomes.totalTests.withResult("skipped") >
                                     <#assign requirementTestsFailureOrErrorCount = testOutcomes.totalTests.withFailureOrError() >
                                 <tr>
-                                    <td class="summary-leading-column"><a href="#test-results-table">Acceptance Criteria (tests)</a></td>
+                                    <td class="summary-leading-column"><a href="#test-results-table">Acceptance Criteria
+                                        (tests)</a></td>
                                     <td>${requirementTestsTotalCount}</td>
                                     <td>${requirementTestsSuccessCount}</td>
                                     <td>${requirementTestsFailureOrErrorCount}</td>
@@ -295,13 +297,20 @@
                 <div class="clr"></div>
             </#if>
 
+            <#if (requirements.overview?has_content)>
+                <div class="requirements-overview panel panel-default">
+                    <div class="panel-body">
+                        ${requirements.overview}
+                    </div>
+                </div>
+            </#if>
             <#if (requirements.requirementOutcomes?has_content || testOutcomes.total > 0)>
                 <div id="requirements-tabs">
                     <#if (requirements.requirementOutcomes?has_content || (requirements.parentRequirement.isPresent() && requirements.parentRequirement.get().hasExamples()))>
                         <ul>
                             <#if (requirements.requirementOutcomes?has_content)>
                                 <li><a href="#tabs-1">
-                                ${requirementsSectionTitle} (${requirements.requirementCount})
+                                    ${requirementsSectionTitle} (${requirements.requirementCount})
                                 </a></li>
                             </#if>
                             <#if (requirements.parentRequirement.isPresent() && requirements.parentRequirement.get().hasExamples())>
@@ -340,8 +349,8 @@
                                     <tr>
                                         <td class="cardNumber requirementRowCell">
                                             <#if example.cardNumber.isPresent() >
-                                                    ${formatter.addLinks(example.cardNumber.get())}
-                                                </#if>
+                                                ${formatter.addLinks(example.cardNumber.get())}
+                                            </#if>
                                         </td>
                                         <td class="lightgreentext requirementRowCell"> ${formatter.addLineBreaks(example.description)}</td>
                                     </tr>

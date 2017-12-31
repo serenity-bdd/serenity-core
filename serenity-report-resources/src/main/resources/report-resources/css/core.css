@@ -1722,3 +1722,7 @@ ul.second-level-requirements  {
 
 .datagrid th:first-child { display:none; }
 .datagrid td:first-child { display:none; }
+
+.requirements-overview li {
+    margin-left: 2em;
+}

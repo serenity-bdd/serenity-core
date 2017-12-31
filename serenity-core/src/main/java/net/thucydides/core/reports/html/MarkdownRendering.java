@@ -5,10 +5,10 @@ import net.thucydides.core.util.EnvironmentVariables;
 
 public class MarkdownRendering {
 
-    private final String DEFAULT_MARKDOWN_ON = "story,narrative,scenario";
+    private final String DEFAULT_MARKDOWN_ON = "overview,story,narrative,scenario";
 
     public enum RenderedElements {
-        story, narrative, scenario, step
+        overview, story, narrative, scenario, step
     }
 
     private final EnvironmentVariables environmentVariables;

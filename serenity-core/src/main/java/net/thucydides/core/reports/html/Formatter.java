@@ -126,14 +126,20 @@ public class Formatter {
     }
 
     private String stripSurroundingParagraphTagsFrom(String text) {
-        if (text.toLowerCase().trim().startsWith("<p>")) {
-            text = text.trim().substring(3);
-        }
-
-        if (text.toLowerCase().trim().endsWith("</p>")) {
-            text = text.trim().substring(0, text.length() - 4);
+        if (startsWithParagraphTag(text) && endWithParagraphTag(text)) {
+            text = text.trim()
+                       .substring(3)
+                       .substring(0, text.length() - 4);
         }
         return text;
+    }
+
+    private boolean startsWithParagraphTag(String text) {
+        return text.toLowerCase().trim().startsWith("<p>");
+    }
+
+    private boolean endWithParagraphTag(String text) {
+        return text.toLowerCase().trim().startsWith("</p>");
     }
 
     private String stripNewLines(String render) {
@@ -265,7 +271,6 @@ public class Formatter {
     private String withTablesReplaced(String text) {
         List<String> unformattedTables = getEmbeddedTablesIn(text);
         for(String unformattedTable : unformattedTables) {
-//            String unformattedTable = getFirstEmbeddedTable(text);
             ExampleTable table = new ExampleTable(unformattedTable);
 
             text = text.replace(unformattedTable, table.inHtmlFormat());

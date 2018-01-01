@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
@@ -71,6 +72,17 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     public FileSystemRequirementsTagProvider(String rootDirectory, int level) {
         this(filePathFormOf(rootDirectory), level, Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+    }
+
+    private String baseDirectory() {
+        if (level == 0) {
+            return rootDirectory;
+        }
+        Path baseDirectory = Paths.get(rootDirectory);
+        for(int step = 0; step < level; step++ ) {
+            baseDirectory = baseDirectory.getParent();
+        }
+        return baseDirectory.toString();
     }
 
     /**
@@ -502,7 +514,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                                                        storyFile.getPath(),
                                                        narrative.get()).withType(type.toString());
         } else {
-            requirement = storyNamed(storyName).withType(type.toString());
+            requirement = storyNamed(storyName, storyFile.getPath()).withType(type.toString());
         }
 
         return requirement.definedInFile(storyFile);
@@ -549,12 +561,38 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private Requirement requirementFromDirectoryName(File requirementDirectory) {
         String shortName = humanReadableVersionOf(requirementDirectory.getName());
         List<Requirement> children = readChildrenFrom(requirementDirectory);
-        return Requirement.named(shortName).withType(getDefaultType(level)).withNarrative(shortName).withChildren(children);
+        return Requirement.named(shortName)
+                          .withType(getDefaultType(level))
+                          .withNarrative("")
+                          .withPath(relativeDirectoryOf(requirementDirectory.getPath()))
+                          .withChildren(children);
     }
 
-    private Requirement storyNamed(String storyName) {
+    private String relativeDirectoryOf(String path) {
+
+        String strippedPath = stripPathOfFeatureOrStoryFile(path);
+        String baseDirectory = baseDirectory();
+        if (strippedPath.contains(baseDirectory)) {
+            int relativePathStartsAt = strippedPath.indexOf(baseDirectory) + baseDirectory.length() + 1;
+            return (relativePathStartsAt < strippedPath.length()) ?  strippedPath.substring(relativePathStartsAt) : "";
+        } else {
+            return strippedPath;
+        }
+    }
+
+    private String stripPathOfFeatureOrStoryFile(String path) {
+        if (path.endsWith(".story") || path.endsWith(".feature")) {
+            return Paths.get(path).getParent().toString();
+        }
+        return path;
+    }
+
+    private Requirement storyNamed(String storyName, String path) {
         String shortName = humanReadableVersionOf(storyName);
-        return Requirement.named(shortName).withType(STORY_EXTENSION).withNarrative(shortName);
+        return Requirement.named(shortName)
+                          .withType(STORY_EXTENSION)
+                          .withNarrative(shortName)
+                          .withPath(relativeDirectoryOf(path));
     }
 
     private Requirement leafRequirementWithNarrative(String shortName, String path, Narrative requirementNarrative) {
@@ -568,6 +606,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 .withOptionalCardNumber(cardNumber)
                 .withType(type)
                 .withNarrative(requirementNarrative.getText())
+                .withPath(relativeDirectoryOf(path))
                 .withReleaseVersions(releaseVersions);
     }
 
@@ -583,6 +622,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 .withType(type)
                 .withNarrative(requirementNarrative.getText())
                 .withReleaseVersions(releaseVersions)
+                .withPath(relativeDirectoryOf(requirementDirectory.getPath()))
                 .withChildren(children);
     }
 

@@ -296,7 +296,6 @@
                 </div>
                 <div class="clr"></div>
             </#if>
-
             <#if (requirements.overview?has_content)>
                 <div class="requirements-overview panel panel-default">
                     <div class="panel-body">

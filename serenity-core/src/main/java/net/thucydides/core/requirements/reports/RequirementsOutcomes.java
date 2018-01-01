@@ -17,6 +17,7 @@ import net.thucydides.core.requirements.ExcludedUnrelatedRequirementTypes;
 import net.thucydides.core.requirements.RequirementsTagProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -95,10 +96,24 @@ public class RequirementsOutcomes {
                                       estimatedUnimplementedTests, issueTracking);
     }
 
-
     public String getOverview() {
 
-        return RequirementsOverview.withEnvironmentVariables(environmentVariables).asRenderedHtml();
+        if (getParentRequirement().isPresent()) {
+            return getNestedOverviewFrom(getParentRequirement().get());
+        } else {
+            return RequirementsOverview.withEnvironmentVariables(environmentVariables).asRenderedHtml();
+        }
+    }
+
+    private String getNestedOverviewFrom(Requirement parentRequirement) {
+        if (isEmpty(parentRequirement.getPath())) {
+            return RequirementsOverview.withEnvironmentVariables(environmentVariables)
+                    .asRenderedHtml();
+        } else {
+            return RequirementsOverview.withEnvironmentVariables(environmentVariables)
+                    .withRelativePath(parentRequirement.getPath())
+                    .asRenderedHtml();
+        }
     }
 
     RequirementsOutcomesOfTypeCache requirementsOfTypeCache = new RequirementsOutcomesOfTypeCache(this);

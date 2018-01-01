@@ -47,7 +47,6 @@ public class ExampleTables {
     }
 
     public static void clear() {
-        System.out.println("Clear example table");
         if (currentExampleTable.get() != null) {
             currentExampleTable.get().clearTable();
         }
@@ -59,7 +58,6 @@ public class ExampleTables {
     }
 
     public void start() {
-        System.out.println("Example table test starts");
         DataTable table = DataTable.withHeaders(this.headers)
                 .andTitle(this.title).build();
         StepEventBus.getEventBus().useExamplesFrom(table);
@@ -70,7 +68,6 @@ public class ExampleTables {
 
     @Subscribe
     public void testFinishes(TestLifecycleEvents.TestFinished testFinished) {
-        System.out.println("Example table test finishes");
         TestLifecycleEvents.unregister(this);
         clear();
     }

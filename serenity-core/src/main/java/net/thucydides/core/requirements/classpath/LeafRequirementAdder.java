@@ -1,5 +1,6 @@
 package net.thucydides.core.requirements.classpath;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.requirements.model.Requirement;
@@ -92,7 +93,8 @@ public class LeafRequirementAdder {
         Requirement story = Requirement.named(storyName)
                 .withType(narrativeType)
                 .withNarrative(narrativeText)
-                .withParent(parent);
+                .withParent(parent)
+                .withPath(Joiner.on("/").join(allButLast(pathElements)));
 
         return story;
     }
@@ -120,7 +122,8 @@ public class LeafRequirementAdder {
         }
         return knownMatchingRequirement.or(Requirement.named(featureName).withTypeOf(type))
                 .withNarrative(PackageInfoNarrative.text().definedInPath(path).or(""))
-                .withParent(parent);
+                .withParent(parent)
+                .withPath(Joiner.on("/").join(featurePathElements));
     }
 
     private Optional<Requirement> findMatchingRequirementWithName(Collection<Requirement> knownRequirements, String featureName, String featureType) {

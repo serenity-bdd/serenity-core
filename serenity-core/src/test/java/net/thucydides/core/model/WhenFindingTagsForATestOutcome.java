@@ -348,6 +348,18 @@ public class WhenFindingTagsForATestOutcome {
     }
 
     @Test
+    public void should_record_the_relative_path_of_each_requirement() {
+        FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider();
+
+        when(testOutcome.getPath()).thenReturn("stories/grow_potatoes/grow_new_potatoes/PlantPotatoes.story");
+
+        Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
+
+        assertThat(requirement.isPresent(), is(true));
+        assertThat(requirement.get().getPath(), is("grow_potatoes/grow_new_potatoes"));
+    }
+
+    @Test
     public void should_get_tags_from_story_path_with_windows_file_separators() {
         FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider();
 
@@ -373,6 +385,19 @@ public class WhenFindingTagsForATestOutcome {
         assertThat(requirement.get().getNarrative().getText(), containsString("I want to plant potatoes"));
         assertThat(requirement.get().getNarrative().getText(), containsString("So that I can harvest them later on"));
     }
+
+    @Test
+    public void should_get_empty_narrative_if_none_are_defined() {
+        FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider();
+        when(testOutcome.getPath()).thenReturn("stories/grow_cucumbers");
+
+        Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
+
+        assertThat(requirement.isPresent(), is(true));
+        assertThat(requirement.get().getNarrative().getText(), isEmptyString());
+    }
+
+
 
     @Test
     public void should_get_requirement_from_feature_with_narrative_if_present() {

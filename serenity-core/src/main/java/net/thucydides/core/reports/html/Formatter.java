@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 import static net.thucydides.core.reports.html.MarkdownRendering.RenderedElements.*;
 import static org.apache.commons.lang3.StringUtils.abbreviate;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.trim;
 
 
 //////
@@ -127,19 +128,18 @@ public class Formatter {
 
     private String stripSurroundingParagraphTagsFrom(String text) {
         if (startsWithParagraphTag(text) && endWithParagraphTag(text)) {
-            text = text.trim()
-                       .substring(3)
-                       .substring(0, text.length() - 4);
+            text = trim(text).substring(3);
+            text = text.substring(0, text.length() - 4);
         }
         return text;
     }
 
     private boolean startsWithParagraphTag(String text) {
-        return text.toLowerCase().trim().startsWith("<p>");
+        return trim(text.toLowerCase()).startsWith("<p>");
     }
 
     private boolean endWithParagraphTag(String text) {
-        return text.toLowerCase().trim().startsWith("</p>");
+        return trim(text.toLowerCase()).endsWith("</p>");
     }
 
     private String stripNewLines(String render) {

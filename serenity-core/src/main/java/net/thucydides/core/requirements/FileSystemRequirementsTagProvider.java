@@ -80,7 +80,9 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
         Path baseDirectory = Paths.get(rootDirectory);
         for(int step = 0; step < level; step++ ) {
-            baseDirectory = baseDirectory.getParent();
+            if (baseDirectory.getParent() != null) {
+                baseDirectory = baseDirectory.getParent();
+            }
         }
         return baseDirectory.toString();
     }

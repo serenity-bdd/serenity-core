@@ -331,6 +331,7 @@ public class Requirement implements Comparable {
         String mergedCardNumber = isEmpty(cardNumber) ? newRequirement.cardNumber : cardNumber;
         String mergedDisplayName= (isEmpty(displayName) || name.equalsIgnoreCase(displayName))  ? newRequirement.displayName : displayName;
         String mergedNarrativeText = isEmpty(narrative.getText()) ? newRequirement.narrative.getText() : narrative.getText();
+        String mergedPath = isEmpty(path) ? newRequirement.path : path;
         String mergedFeatureFileName = isEmpty(featureFileName) ? newRequirement.featureFileName : featureFileName;
         List<String> mergedReleasVersions = ListUtils.union(releaseVersions, newRequirement.releaseVersions) ;
         List<Example> mergedExamples = ListUtils.union(examples, newRequirement.examples);
@@ -343,6 +344,7 @@ public class Requirement implements Comparable {
                 .withOptionalCardNumber(mergedCardNumber)
                 .withType(type)
                 .withNarrative(mergedNarrativeText)
+                .withPath(mergedPath)
                 .withDisplayName(mergedDisplayName)
                 .withReleaseVersions(mergedReleasVersions)
                 .withExamples(mergedExamples)

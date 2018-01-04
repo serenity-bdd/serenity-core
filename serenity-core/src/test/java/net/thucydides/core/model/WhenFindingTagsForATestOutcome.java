@@ -356,7 +356,7 @@ public class WhenFindingTagsForATestOutcome {
         Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
 
         assertThat(requirement.isPresent(), is(true));
-        assertThat(requirement.get().getPath(), is("grow_potatoes/grow_new_potatoes"));
+        assertThat(requirement.get().getPath(), is("grow_potatoes/grow_new_potatoes/PlantPotatoes.story"));
     }
 
     @Test

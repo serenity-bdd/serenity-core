@@ -229,7 +229,6 @@ public class Requirement implements Comparable {
     }
 
     public TestTag asTag() {
-//        return asUnqualifiedTag();
         return TestTag.withName(qualifiedName()).andType(getType());
     }
 

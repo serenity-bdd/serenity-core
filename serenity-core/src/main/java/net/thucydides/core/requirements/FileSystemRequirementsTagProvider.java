@@ -572,21 +572,13 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private String relativeDirectoryOf(String path) {
 
-        String strippedPath = stripPathOfFeatureOrStoryFile(path);
         String baseDirectory = baseDirectory();
-        if (strippedPath.contains(baseDirectory)) {
-            int relativePathStartsAt = strippedPath.indexOf(baseDirectory) + baseDirectory.length() + 1;
-            return (relativePathStartsAt < strippedPath.length()) ?  strippedPath.substring(relativePathStartsAt) : "";
+        if (path.contains(baseDirectory)) {
+            int relativePathStartsAt = path.indexOf(baseDirectory) + baseDirectory.length() + 1;
+            return (relativePathStartsAt < path.length()) ?  path.substring(relativePathStartsAt) : "";
         } else {
-            return strippedPath;
+            return path;
         }
-    }
-
-    private String stripPathOfFeatureOrStoryFile(String path) {
-        if (path.endsWith(".story") || path.endsWith(".feature")) {
-            return Paths.get(path).getParent().toString();
-        }
-        return path;
     }
 
     private Requirement storyNamed(String storyName, String path) {

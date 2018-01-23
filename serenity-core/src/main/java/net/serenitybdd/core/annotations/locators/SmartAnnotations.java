@@ -8,9 +8,7 @@ import net.serenitybdd.core.annotations.findby.How;
 import net.serenitybdd.core.annotations.findby.di.CustomFindByAnnotationProviderService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.webdriver.MobilePlatform;
-import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.support.ByIdOrName;
-import org.openqa.selenium.support.FindBys;
+import org.openqa.selenium.support.*;
 import org.openqa.selenium.support.pagefactory.Annotations;
 import org.openqa.selenium.support.pagefactory.ByChained;
 
@@ -20,12 +18,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.stream.Stream;
 
 import static io.appium.java_client.remote.MobilePlatform.ANDROID;
 import static io.appium.java_client.remote.MobilePlatform.IOS;
-import static org.apache.commons.lang3.StringUtils.isAlpha;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.isNumeric;
 
 
 public class SmartAnnotations extends Annotations {
@@ -437,7 +434,7 @@ public class SmartAnnotations extends Annotations {
         for (Method value : values) {
             try {
                 String strategyParameter = value.invoke(mobileBy).toString();
-                if (isNotEmpty(strategyParameter) && isAlpha(strategyParameter) ) {
+                if (isNotEmpty(strategyParameter) && !isNumeric(strategyParameter)) {
                     return value.getName();
                 }
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {

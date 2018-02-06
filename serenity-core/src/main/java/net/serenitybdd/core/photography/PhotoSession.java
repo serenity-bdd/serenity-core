@@ -5,6 +5,7 @@ import net.thucydides.core.webdriver.WebDriverFactory;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +36,12 @@ public class PhotoSession {
     public ScreenshotPhoto takeScreenshot() {
         byte[] screenshotData = null;
         if(WebDriverFactory.isAlive(driver) && driver instanceof TakesScreenshot){
-            screenshotData = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            try {
+                screenshotData = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            } catch (WebDriverException e) {
+                LOGGER.warn("Failed to take screenshot", e);
+                return ScreenshotPhoto.None;
+            }
         }
 
         if (screenshotData == null || screenshotData.length == 0) {

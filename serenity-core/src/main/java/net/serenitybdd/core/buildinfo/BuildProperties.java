@@ -1,6 +1,6 @@
 package net.serenitybdd.core.buildinfo;
 
-import com.google.common.collect.ImmutableMap;
+import net.serenitybdd.core.collect.NewMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class BuildProperties {
     }
 
     public Map<String, String> getGeneralProperties() {
-        return ImmutableMap.copyOf(generalProperties);
+        return NewMap.copyOf(generalProperties);
     }
 
     public List<String> getDrivers() {
@@ -31,6 +31,6 @@ public class BuildProperties {
     }
 
     public Map<String, Properties> getDriverProperties() {
-        return ImmutableMap.copyOf(driverProperties);
+        return NewMap.copyOf(driverProperties);
     }
 }

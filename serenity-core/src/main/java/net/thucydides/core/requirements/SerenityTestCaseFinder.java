@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import org.junit.runner.RunWith;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
  * Created by john on 22/07/2015.
  */
 public class SerenityTestCaseFinder {
-    private final List<String> LEGAL_SERENITY_RUNNER_NAMES = ImmutableList.of("SerenityRunner", "ThucydidesRunner");
+    private final List<String> LEGAL_SERENITY_RUNNER_NAMES = NewList.of("SerenityRunner", "ThucydidesRunner");
 
     public boolean isSerenityTestCase(Class<?> testClass) {
         RunWith runWithAnnotation = testClass.getAnnotation(RunWith.class);

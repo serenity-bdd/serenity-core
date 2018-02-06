@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.html;
 
-import com.google.common.collect.Sets;
 import net.serenitybdd.core.SerenitySystemProperties;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -26,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
 import static net.thucydides.core.guice.Injectors.getInjector;
@@ -160,7 +160,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         List<String> knownRequirementReportNames = requirementReportNamesFrom(requirementsOutcomes, reportNameProvider);
 
-        Set<ReportingTask> reportingTasks = Sets.newConcurrentHashSet();
+        Set<ReportingTask> reportingTasks = new CopyOnWriteArraySet<>();
 
         LOGGER.info("Generating test outcome reports: " + generateTestOutcomeReports);
         if (generateTestOutcomeReports) {

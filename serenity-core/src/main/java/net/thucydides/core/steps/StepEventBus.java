@@ -2,8 +2,8 @@ package net.thucydides.core.steps;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.NewList;
 import com.google.inject.Inject;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.eventbus.Broadcaster;
@@ -184,9 +184,9 @@ public class StepEventBus {
     }
 
     protected List<StepListener> getAllListeners() {
-        List<StepListener> allListeners = Lists.newArrayList(registeredListeners);
+        List<StepListener> allListeners = new ArrayList(registeredListeners);
         allListeners.addAll(getCustomListeners());
-        return ImmutableList.copyOf(allListeners);
+        return NewList.copyOf(allListeners);
     }
 
     private Set<StepListener> getCustomListeners() {

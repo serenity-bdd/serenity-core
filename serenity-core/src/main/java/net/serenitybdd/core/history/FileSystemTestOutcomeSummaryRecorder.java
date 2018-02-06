@@ -1,7 +1,7 @@
 package net.serenitybdd.core.history;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
+import net.serenitybdd.core.collect.NewMap;
 import com.google.inject.Inject;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.ReportNamer;
@@ -32,7 +32,7 @@ public class FileSystemTestOutcomeSummaryRecorder implements TestOutcomeSummaryR
     private static final Logger LOGGER = LoggerFactory.getLogger(FileSystemTestOutcomeSummaryRecorder.class);
 
     private static Map<Boolean, PrepareHistoryDirectory> DELETE_STRATEGY =
-            ImmutableMap.of(
+            NewMap.of(
                     false, new LeaveDirectoryContents(),
                     true, new ClearDirectoryContents()
             );

@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver.redimension;
 
-import com.google.common.collect.ImmutableMap;
+import net.serenitybdd.core.collect.NewMap;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 
@@ -20,7 +20,7 @@ public class RedimensionBrowser {
     }
 
     private Map<RedimensionStrategy, Redimensioner> getRedimensionerStrategies() {
-        return ImmutableMap.of(
+        return NewMap.of(
                 DoNotRedimension, new NoopRedimensioner(),
                 RedimensionToSpecifiedSize, new ResizeRedimensioner(environmentVariables),
                 Maximize, new MaximizeRedimensioner()

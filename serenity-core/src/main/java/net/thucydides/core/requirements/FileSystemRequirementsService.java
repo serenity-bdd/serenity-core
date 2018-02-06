@@ -1,7 +1,7 @@
 package net.thucydides.core.requirements;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -34,7 +34,7 @@ public class FileSystemRequirementsService extends BaseRequirementsService imple
 
     @Override
     public List<RequirementsTagProvider> getRequirementsTagProviders() {
-        return Lists.newArrayList(fileSystemRequirementsTagProvider);
+        return NewList.of(fileSystemRequirementsTagProvider);
     }
 
     @Override

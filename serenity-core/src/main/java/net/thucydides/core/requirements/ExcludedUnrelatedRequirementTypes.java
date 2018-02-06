@@ -1,7 +1,7 @@
 package net.thucydides.core.requirements;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
 
@@ -14,7 +14,7 @@ public class ExcludedUnrelatedRequirementTypes {
 
     private final static String DEFAULT_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE = "capability,epic,feature";
 
-    private final static List<String> EXCLUDE_NONE = ImmutableList.of("none");
+    private final static List<String> EXCLUDE_NONE = NewList.of("none");
 
     private final List<String> excludedTypes;
 

@@ -1,7 +1,5 @@
 package net.serenitybdd.junit.finder;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.reflection.ClassFinder;
 import net.thucydides.junit.annotations.UseTestDataFrom;
@@ -50,7 +48,7 @@ public abstract class TestFinder {
     }
 
     protected Set<Class<?>> getNormalTestClasses() {
-        Set<Class<?>> normalTestClasses = Sets.newHashSet();
+        Set<Class<?>> normalTestClasses = new HashSet();
         for(Class<?> testClass : getAllTestClasses()) {
             if (normalThucydidesTest(testClass)) {
                 normalTestClasses.add(testClass);

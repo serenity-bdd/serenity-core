@@ -1,6 +1,6 @@
 package net.thucydides.core.steps.di;
 
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.di.DependencyInjector;
 
 import java.util.ArrayList;

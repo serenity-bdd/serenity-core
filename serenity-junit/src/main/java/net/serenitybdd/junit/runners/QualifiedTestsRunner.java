@@ -1,6 +1,6 @@
 package net.serenitybdd.junit.runners;
 
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import net.thucydides.core.batches.BatchManager;

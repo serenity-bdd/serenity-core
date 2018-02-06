@@ -1,9 +1,8 @@
 package net.thucydides.core.steps;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.NewSet;
 import net.serenitybdd.core.di.DependencyInjector;
 import net.serenitybdd.core.exceptions.StepInitialisationException;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
@@ -24,7 +23,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.*;
 
-import static com.google.common.collect.ImmutableSet.copyOf;
 import static net.thucydides.core.steps.construction.ConstructionStrategy.*;
 import static net.thucydides.core.steps.construction.StepLibraryType.ofTypePages;
 
@@ -38,7 +36,7 @@ public class StepFactory {
     private static final boolean WITH_CACHING = true;
     private Pages pages;
 
-    private final Map<Class<?>, Object> index = new HashMap<>();
+    private final Map<Class<?>, Object> index = new HashMap();
     private static final Logger LOGGER = LoggerFactory.getLogger(StepFactory.class);
     private final DependencyInjectorService dependencyInjectorService;
 
@@ -178,9 +176,9 @@ public class StepFactory {
 
     private List<? extends DependencyInjector> getDefaultDependencyInjectors() {
         return (pages != null) ?
-                ImmutableList.of(new PageObjectDependencyInjector(pages),
+                NewList.of(new PageObjectDependencyInjector(pages),
                         new EnvironmentDependencyInjector()) :
-                ImmutableList.of(new EnvironmentDependencyInjector());
+                NewList.of(new EnvironmentDependencyInjector());
     }
 
     private <T> T instantiateUniqueStepLibraryFor(Class<T> scenarioStepsClass, Object... parameters) {
@@ -232,7 +230,7 @@ public class StepFactory {
     }
 
     private Constructor<?>[] inOrderOfIncreasingParameters(Constructor<?>[] declaredConstructors) {
-        List<Constructor<?>> sortedConstructors = Lists.newArrayList(declaredConstructors);
+        List<Constructor<?>> sortedConstructors = NewList.of(declaredConstructors);
         Collections.sort(sortedConstructors, Comparator.comparingInt(o -> o.getParameterTypes().length));
         return sortedConstructors.toArray(new Constructor<?>[]{});
     }
@@ -297,8 +295,8 @@ public class StepFactory {
             if (ScenarioSteps.class.isAssignableFrom(stepLibraryClass)) {
                 ((ScenarioSteps) newStepLibrary).setPages(pages);
             } else if (StepLibraryType.ofClass(stepLibraryClass).hasAPagesField()) {
-                ImmutableSet<Field> fields = copyOf(Fields.of(stepLibraryClass).allFields());
-                Field pagesField = Iterables.find(fields, ofTypePages());
+                Set<Field> fields = NewSet.copyOf(Fields.of(stepLibraryClass).allFields());
+                Field pagesField = fields.stream().filter(ofTypePages()).findFirst().get();
                 pagesField.setAccessible(true);
                 try {
                     pagesField.set(newStepLibrary, pages);

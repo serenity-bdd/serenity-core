@@ -1,6 +1,6 @@
 package net.thucydides.core.scheduling;
 
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.steps.StepEventBus;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.Sleeper;
 import org.openqa.selenium.support.ui.Wait;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -22,7 +23,7 @@ public abstract class ThucydidesFluentWait<T> implements Wait<T> {
     protected Duration timeout =  new Duration(500, MILLISECONDS);;
     protected Duration interval = new Duration(50, MILLISECONDS);;
 
-    private List<Class<? extends RuntimeException>> ignoredExceptions = Lists.newLinkedList();
+    private List<Class<? extends RuntimeException>> ignoredExceptions = new LinkedList<>();
 
     private final Clock clock;
     private final T input;

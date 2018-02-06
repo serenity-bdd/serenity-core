@@ -1,8 +1,7 @@
 package net.thucydides.core.requirements;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.requirements.model.Requirement;
@@ -13,10 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.google.common.collect.Lists.newArrayList;
 
 public class MultiSourceRequirementsService extends BaseRequirementsService implements RequirementsService {
 
@@ -25,7 +23,7 @@ public class MultiSourceRequirementsService extends BaseRequirementsService impl
     private static final Logger LOGGER = LoggerFactory.getLogger(RequirementsTagProvider.class);
 
     private static final List<String> LOW_PRIORITY_PROVIDERS =
-            ImmutableList.of(FileSystemRequirementsTagProvider.class.getCanonicalName(),
+            NewList.of(FileSystemRequirementsTagProvider.class.getCanonicalName(),
                              PackageAnnotationBasedTagProvider.class.getCanonicalName(),
                              AnnotationBasedTagProvider.class.getCanonicalName(),
                              FeatureStoryTagProvider.class.getCanonicalName()
@@ -40,7 +38,7 @@ public class MultiSourceRequirementsService extends BaseRequirementsService impl
         RequirementsMerger merger = new RequirementsMerger();
 
         if ((requirements == null) || (requirements.isEmpty())) {
-            requirements = newArrayList();
+            requirements = new ArrayList();
             for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
                 LOGGER.trace("Reading requirements from " + tagProvider);
                 requirements = merger.merge(requirements, RequirementsProvided.by(tagProvider));
@@ -78,7 +76,7 @@ public class MultiSourceRequirementsService extends BaseRequirementsService impl
         if (useDirectoryBasedRequirements) {
             return requirementsProviders;
         } else {
-            List<RequirementsTagProvider> activeRequirementsProviders = newArrayList();
+            List<RequirementsTagProvider> activeRequirementsProviders = new ArrayList();
             for (RequirementsTagProvider provider : requirementsProviders) {
                 if (!(provider instanceof FileSystemRequirementsTagProvider)) {
                     activeRequirementsProviders.add(provider);
@@ -89,8 +87,8 @@ public class MultiSourceRequirementsService extends BaseRequirementsService impl
     }
 
     private List<RequirementsTagProvider> reprioritizeProviders(List<RequirementsTagProvider> requirementsTagProviders) {
-        Map<String,RequirementsTagProvider> lowPriorityProviders = Maps.newHashMap();
-        List<RequirementsTagProvider> prioritizedProviders = newArrayList();
+        Map<String,RequirementsTagProvider> lowPriorityProviders = new HashMap();
+        List<RequirementsTagProvider> prioritizedProviders = new ArrayList();
 
         for (RequirementsTagProvider provider : requirementsTagProviders) {
             if (LOW_PRIORITY_PROVIDERS.contains(provider.getClass().getCanonicalName())) {

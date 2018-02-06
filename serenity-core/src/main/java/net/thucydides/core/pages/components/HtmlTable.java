@@ -208,7 +208,7 @@ public class HtmlTable {
 
 
     private Map<Object,String> rowDataFrom(List<WebElement> cells, List<String> headings) {
-        Map<Object,String> rowData = new HashMap<Object, String>();
+        Map<Object,String> rowData = new HashMap<>();
 
         int column = 0;
         for (String heading : headings) {

@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ListenerInWrongPackage;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Feature;
@@ -220,7 +220,7 @@ public class WhenRecordingStepExecutionResults {
         steps.step_one();
         steps.step_two();
 
-        StepEventBus.getEventBus().addIssuesToCurrentTest(Lists.newArrayList("issue-123","issue-456"));
+        StepEventBus.getEventBus().addIssuesToCurrentTest(NewList.of("issue-123","issue-456"));
         StepEventBus.getEventBus().testFinished();
 
         List<TestOutcome> results = stepListener.getTestOutcomes();
@@ -234,12 +234,12 @@ public class WhenRecordingStepExecutionResults {
         FlatScenarioSteps steps = stepFactory.getSharedStepLibraryFor(FlatScenarioSteps.class);
 
         StepEventBus.getEventBus().testSuiteStarted(MyTestCase.class);
-        StepEventBus.getEventBus().addIssuesToCurrentStory(Lists.newArrayList("issue-123"));
+        StepEventBus.getEventBus().addIssuesToCurrentStory(NewList.of("issue-123"));
 
         StepEventBus.getEventBus().testStarted("app_should_work", MyTestCase.class);
-        StepEventBus.getEventBus().addIssuesToCurrentTest(Lists.newArrayList("issue-456"));
-        StepEventBus.getEventBus().addTagsToCurrentStory(Lists.newArrayList(TestTag.withName("iteration-1").andType("iteration")));
-        StepEventBus.getEventBus().addTagsToCurrentTest(Lists.newArrayList(TestTag.withName("fast").andType("speed")));
+        StepEventBus.getEventBus().addIssuesToCurrentTest(NewList.of("issue-456"));
+        StepEventBus.getEventBus().addTagsToCurrentStory(NewList.of(TestTag.withName("iteration-1").andType("iteration")));
+        StepEventBus.getEventBus().addTagsToCurrentTest(NewList.of(TestTag.withName("fast").andType("speed")));
 
         steps.step_one();
         steps.step_two();
@@ -247,7 +247,7 @@ public class WhenRecordingStepExecutionResults {
         StepEventBus.getEventBus().testFinished();
 
         StepEventBus.getEventBus().testStarted("app_should_work_again", MyTestCase.class);
-        StepEventBus.getEventBus().addIssuesToCurrentTest(Lists.newArrayList("issue-789"));
+        StepEventBus.getEventBus().addIssuesToCurrentTest(NewList.of("issue-789"));
 
         steps.step_one();
         steps.step_two();

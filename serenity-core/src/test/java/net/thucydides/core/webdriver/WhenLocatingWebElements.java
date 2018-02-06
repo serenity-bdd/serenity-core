@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.annotations.locators.SmartAjaxElementLocator;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepFailure;
@@ -52,7 +52,7 @@ public class WhenLocatingWebElements {
         when(driver.withTimeoutOf(any(Duration.class))).thenReturn(driver);
         when(driver.getCurrentImplicitTimeout()).thenReturn(new Duration(0, TimeUnit.SECONDS));
         when(driver.findElement(By.id("someId"))).thenReturn(webElement);
-        when(driver.findElements(By.id("someId"))).thenReturn(ImmutableList.of(webElement));
+        when(driver.findElements(By.id("someId"))).thenReturn(NewList.of(webElement));
     }
 
     @Test(timeout = 2000)

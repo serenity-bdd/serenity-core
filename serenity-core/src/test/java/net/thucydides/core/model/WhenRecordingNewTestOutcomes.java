@@ -1,6 +1,6 @@
 package net.thucydides.core.model;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.exceptions.TestCompromisedException;
 import net.thucydides.core.annotations.Issue;
 import net.thucydides.core.annotations.Issues;
@@ -462,9 +462,9 @@ public class WhenRecordingNewTestOutcomes {
     @Test
     public void should_record_nested_test_steps() {
 
-        testOutcome.recordSteps(ImmutableList.of(forASuccessfulTestStepCalled("Step 1"),forASuccessfulTestStepCalled("Step 2")));
+        testOutcome.recordSteps(NewList.of(forASuccessfulTestStepCalled("Step 1"),forASuccessfulTestStepCalled("Step 2")));
         testOutcome.startGroup();
-        testOutcome.recordSteps(ImmutableList.of(forASuccessfulTestStepCalled("Step 2.1"), forASuccessfulTestStepCalled("Step 2.2")));
+        testOutcome.recordSteps(NewList.of(forASuccessfulTestStepCalled("Step 2.1"), forASuccessfulTestStepCalled("Step 2.2")));
         testOutcome.endGroup();
         testOutcome.recordStep(forASuccessfulTestStepCalled("Step 3"));
 
@@ -1149,8 +1149,8 @@ public class WhenRecordingNewTestOutcomes {
 //    @Test
 //    public void should_calculate_the_overall_success_rate_from_provided_statistics() {
 //        TestStatistics statistics = new TestStatistics(10L, 7L, 3L,
-//                                                       ImmutableList.of(SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,FAILURE,FAILURE,FAILURE),
-//                                                       ImmutableList.of(new TestRunTag("MYPROJECT","A story","story")));
+//                                                       NewList.of(SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,FAILURE,FAILURE,FAILURE),
+//                                                       NewList.of(new TestRunTag("MYPROJECT","A story","story")));
 //
 //        testOutcome.setStatistics(statistics);
 //        assertThat(testOutcome.getOverallStability(), is(0.7));
@@ -1159,8 +1159,8 @@ public class WhenRecordingNewTestOutcomes {
 //    @Test
 //    public void should_calculate_the_recent_success_rate_from_provided_statistics() {
 //        TestStatistics statistics = new TestStatistics(10L, 7L, 3L,
-//                ImmutableList.of(SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,FAILURE,FAILURE,FAILURE),
-//                ImmutableList.of(new TestRunTag("MYPROJECT","A story","story")));
+//                NewList.of(SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS,FAILURE,FAILURE,FAILURE),
+//                NewList.of(new TestRunTag("MYPROJECT","A story","story")));
 //
 //        testOutcome.setStatistics(statistics);
 //        assertThat(testOutcome.getRecentStability(), is(0.7));
@@ -1169,8 +1169,8 @@ public class WhenRecordingNewTestOutcomes {
 //    @Test
 //    public void should_count_the_recent_test_runs_from_provided_statistics() {
 //        TestStatistics statistics = new TestStatistics(8L, 5L, 3L,
-//                ImmutableList.of(FAILURE,FAILURE,PENDING,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS),
-//                ImmutableList.of(new TestRunTag("MYPROJECT","A story","story")));
+//                NewList.of(FAILURE,FAILURE,PENDING,SUCCESS,SUCCESS,SUCCESS,SUCCESS,SUCCESS),
+//                NewList.of(new TestRunTag("MYPROJECT","A story","story")));
 //
 //        testOutcome.setStatistics(statistics);
 //        assertThat(testOutcome.getRecentTestRunCount() , is(8L));

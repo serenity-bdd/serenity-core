@@ -1,12 +1,12 @@
 package net.thucydides.core.statistics.service;
 
-import com.google.common.collect.Sets;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.CoreTagProvider;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,6 +26,6 @@ public class AnnotationBasedTagProvider implements TagProvider, CoreTagProvider 
         }
         List<TestTag> tags = TestAnnotations.forClass(testOutcome.getTestCase()).getTagsForMethod(testOutcome.getName());
 
-        return Sets.newHashSet(tags);
+        return new HashSet(tags);
     }
 }

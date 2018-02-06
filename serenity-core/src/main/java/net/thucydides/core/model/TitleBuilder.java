@@ -17,7 +17,7 @@ public class TitleBuilder {
     private final EnvironmentVariables environmentVariables;
     private final boolean showContext;
 
-    private final static Map<String, String> FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS = new HashMap<>();
+    private final static Map<String, String> FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS = new HashMap();
     static {
         FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("chrome", "chrome");
         FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("firefox", "firefox");

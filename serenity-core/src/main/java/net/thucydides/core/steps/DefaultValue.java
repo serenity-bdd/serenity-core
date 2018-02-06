@@ -7,7 +7,7 @@ import java.util.*;
 
 public class DefaultValue {
     
-    private static final Map<Class<?>, Object> DEFAULT_VALUES = new HashMap<Class<?>, Object>();    
+    private static final Map<Class<?>, Object> DEFAULT_VALUES = new HashMap<Class<?>, Object>();
     static {
         DEFAULT_VALUES.put(String.class, "");
         DEFAULT_VALUES.put(Integer.class, 0);

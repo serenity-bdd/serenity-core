@@ -2,8 +2,7 @@ package net.thucydides.core.requirements.model;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.model.TestTag;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -71,8 +70,8 @@ public class Requirement implements Comparable {
         this.narrative = narrative;
         this.children = new ArrayList<>(children);
         this.examples = new ArrayList<>(examples);
-        this.releaseVersions = ImmutableList.copyOf(releaseVersions);
-        this.customFields = ImmutableList.copyOf(customFields);
+        this.releaseVersions = NewList.copyOf(releaseVersions);
+        this.customFields = NewList.copyOf(customFields);
         this.featureFileName = featureFileName;
     }
 
@@ -91,10 +90,10 @@ public class Requirement implements Comparable {
         this.type = type;
         this.parent = parent;
         this.narrative = narrative;
-        this.children = ImmutableList.copyOf(children);
-        this.examples = ImmutableList.copyOf(examples);
-        this.releaseVersions = ImmutableList.copyOf(releaseVersions);
-        this.customFields = ImmutableList.copyOf(customFields);
+        this.children = NewList.copyOf(children);
+        this.examples = NewList.copyOf(examples);
+        this.releaseVersions = NewList.copyOf(releaseVersions);
+        this.customFields = NewList.copyOf(customFields);
         this.path = path;
     }
 
@@ -135,11 +134,11 @@ public class Requirement implements Comparable {
     }
 
     public List<Requirement> getChildren() {
-        return ImmutableList.copyOf(children);
+        return NewList.copyOf(children);
     }
 
     public List<Example> getExamples() {
-        return ImmutableList.copyOf(examples);
+        return NewList.copyOf(examples);
     }
 
     public Boolean hasExamples() {
@@ -172,7 +171,7 @@ public class Requirement implements Comparable {
     }
 
     public void setChildren(List<Requirement> children) {
-        this.children = ImmutableList.copyOf(children);
+        this.children = NewList.copyOf(children);
     }
 
     public Requirement withParent(String parent) {
@@ -193,7 +192,7 @@ public class Requirement implements Comparable {
     }
 
     public Requirement withExample(Example example) {
-        List<Example> updatedExamples = Lists.newArrayList(examples);
+        List<Example> updatedExamples = new ArrayList<>(examples);
         updatedExamples.add(example);
         return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, updatedExamples, releaseVersions, customFields, featureFileName);
     }
@@ -225,7 +224,7 @@ public class Requirement implements Comparable {
             nestedChildren.add(child);
             nestedChildren.addAll(child.getNestedChildren());
         }
-        return ImmutableList.copyOf(nestedChildren);
+        return NewList.copyOf(nestedChildren);
     }
 
     public TestTag asTag() {
@@ -277,7 +276,7 @@ public class Requirement implements Comparable {
     }
 
     public Requirement withChild(Requirement child) {
-        List<Requirement> newChildren = Lists.newArrayList(children);
+        List<Requirement> newChildren = new ArrayList(children);
         newChildren.remove(child);
         newChildren.add(child);
         return new Requirement(name, id, displayName,cardNumber,parent, type, narrative, newChildren, examples,releaseVersions);
@@ -288,7 +287,7 @@ public class Requirement implements Comparable {
     }
 
     public List<CustomFieldValue> getCustomFieldValues() {
-        return ImmutableList.copyOf(customFields);
+        return NewList.copyOf(customFields);
     }
 
     public Optional<CustomFieldValue> getCustomField(String fieldName) {
@@ -353,7 +352,7 @@ public class Requirement implements Comparable {
     }
 
     private List<Requirement> mergeRequirementLists(List<Requirement> existingChilden, List<Requirement> newChildren) {
-        List<Requirement> mergedChildren = Lists.newArrayList(existingChilden);
+        List<Requirement> mergedChildren = new ArrayList<>(existingChilden);
         for(Requirement newChild : newChildren) {
             if (mergedChildren.contains(newChild)) {
                 Requirement existingChild = mergedChildren.remove(mergedChildren.indexOf(newChild));
@@ -362,7 +361,7 @@ public class Requirement implements Comparable {
                 mergedChildren.add(newChild);
             }
         }
-        return ImmutableList.copyOf(mergedChildren);
+        return NewList.copyOf(mergedChildren);
     }
 
     public Requirement withNarrative(String narrativeText) {
@@ -385,7 +384,7 @@ public class Requirement implements Comparable {
         }
 
         public Requirement setTo(String value, String renderedValue) {
-            List<CustomFieldValue> customFields = Lists.newArrayList(requirement.getCustomFieldValues());
+            List<CustomFieldValue> customFields = new ArrayList(requirement.getCustomFieldValues());
             customFields.add(new CustomFieldValue(fieldName, value, renderedValue));
             return new Requirement(requirement.name, requirement.id, requirement.displayName,
                     requirement.cardNumber, requirement.parent, requirement.type, requirement.path, requirement.narrative,

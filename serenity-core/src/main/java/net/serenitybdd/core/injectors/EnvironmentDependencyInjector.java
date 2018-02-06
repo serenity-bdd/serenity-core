@@ -1,6 +1,6 @@
 package net.serenitybdd.core.injectors;
 
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.di.DependencyInjector;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.annotations.Fields;

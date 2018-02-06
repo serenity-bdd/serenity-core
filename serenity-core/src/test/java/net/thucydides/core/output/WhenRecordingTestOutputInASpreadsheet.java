@@ -1,6 +1,6 @@
 package net.thucydides.core.output;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.util.ExtendedTemporaryFolder;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,15 +22,15 @@ public class WhenRecordingTestOutputInASpreadsheet {
 
         File outputDir = temporaryFolder.newFolder();
         File outputFile = new File(outputDir, "testresults.xls");
-        ResultsOutput output = new SpreadsheetResultsOutput(outputFile, ImmutableList.of("A","B","C"));
+        ResultsOutput output = new SpreadsheetResultsOutput(outputFile, NewList.of("A","B","C"));
 
         String expectedValue = "$10";
         String actualValue1 = "$10";
         String actualValue2 = "$11";
 
-        output.recordResult(ImmutableList.of("a","b","c"), checkThat(expectedValue, is(actualValue1)));
+        output.recordResult(NewList.of("a","b","c"), checkThat(expectedValue, is(actualValue1)));
 
-        output.recordResult(ImmutableList.of("d","e","f"),
+        output.recordResult(NewList.of("d","e","f"),
                 checkThat(expectedValue, is(actualValue2)));
 
         assertThat(outputFile.exists(), is(true));
@@ -41,10 +41,10 @@ public class WhenRecordingTestOutputInASpreadsheet {
 
         File outputDir = temporaryFolder.newFolder();
         File outputFile = new File(outputDir, "testresults.xls");
-        ResultsOutput output = new SpreadsheetResultsOutput(outputFile, ImmutableList.of("A","B","C"));
+        ResultsOutput output = new SpreadsheetResultsOutput(outputFile, NewList.of("A","B","C"));
 
-        output.recordResult(ImmutableList.of("a","b","c"));
-        output.recordResult(ImmutableList.of("d","e","f"));
+        output.recordResult(NewList.of("a","b","c"));
+        output.recordResult(NewList.of("d","e","f"));
 
         assertThat(outputFile.exists(), is(true));
     }
@@ -54,18 +54,18 @@ public class WhenRecordingTestOutputInASpreadsheet {
 
         File outputDir = temporaryFolder.newFolder();
         File outputFile = new File(outputDir, "testresults2.xls");
-        ResultsOutput output = new SpreadsheetResultsOutput(outputFile, ImmutableList.of("A","B","C"));
+        ResultsOutput output = new SpreadsheetResultsOutput(outputFile, NewList.of("A","B","C"));
 
         String expectedValue = "$10";
         String actualValue1 = "$10";
         String actualValue2 = "$11";
 
-        output.recordResult(ImmutableList.of("a","b","c"), checkThat(expectedValue, is(actualValue1)));
-        output.recordResult(ImmutableList.of("d","e","f"), checkThat(expectedValue, is(actualValue2)));
+        output.recordResult(NewList.of("a","b","c"), checkThat(expectedValue, is(actualValue1)));
+        output.recordResult(NewList.of("d","e","f"), checkThat(expectedValue, is(actualValue2)));
 
-        ResultsOutput newOutput = new SpreadsheetResultsOutput(outputFile, ImmutableList.of("A","B","C"));
-        newOutput.recordResult(ImmutableList.of("a","b","c"), checkThat(expectedValue, is(actualValue1)));
-        newOutput.recordResult(ImmutableList.of("d","e","f"), checkThat(expectedValue, is(actualValue2)));
+        ResultsOutput newOutput = new SpreadsheetResultsOutput(outputFile, NewList.of("A","B","C"));
+        newOutput.recordResult(NewList.of("a","b","c"), checkThat(expectedValue, is(actualValue1)));
+        newOutput.recordResult(NewList.of("d","e","f"), checkThat(expectedValue, is(actualValue2)));
 
         assertThat(outputFile.exists(), is(true));
     }

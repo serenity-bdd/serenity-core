@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.actions;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.screenplay.Actor;
 import net.thucydides.core.annotations.Step;
 import org.openqa.selenium.By;
@@ -18,7 +18,7 @@ public class EnterValueIntoBy extends EnterValue {
 
     public EnterValueIntoBy(String theText, By... locators) {
         super(theText);
-        this.locators = ImmutableList.copyOf(locators);
+        this.locators = NewList.copyOf(locators);
     }
 
     @Step("{0} enters '#theText' into #element")

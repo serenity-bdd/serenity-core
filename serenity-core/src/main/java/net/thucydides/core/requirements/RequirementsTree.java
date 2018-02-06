@@ -1,8 +1,8 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.collect.Lists;
 import net.thucydides.core.requirements.model.Requirement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RequirementsTree {
@@ -18,7 +18,8 @@ public class RequirementsTree {
     }
 
     public List<Requirement> asFlattenedList() {
-        List<Requirement> requirements = Lists.newArrayList(root);
+        List<Requirement> requirements = new ArrayList<>();
+        requirements.add(root);
         for(Requirement child : root.getChildren()) {
             requirements.addAll(RequirementsTree.forRequirement(child).asFlattenedList());
         }

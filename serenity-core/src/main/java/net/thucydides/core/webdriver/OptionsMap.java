@@ -13,7 +13,7 @@ public class OptionsMap {
 
     public static Map<String, String> from(String options) {
         List<String> optionValues = Splitter.on(";").splitToList(options);
-        Map<String, String> optionsMap = new HashMap<>();
+        Map<String, String> optionsMap = new HashMap();
         for (String optionValue : optionValues) {
             if (optionValue.contains("=")) {
                 int equalsSign = optionValue.indexOf("=");

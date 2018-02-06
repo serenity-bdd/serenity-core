@@ -1,11 +1,9 @@
 package net.thucydides.core.releases;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.Release;
@@ -22,10 +20,7 @@ import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 import static org.apache.commons.lang3.StringUtils.capitalize;
@@ -64,7 +59,7 @@ public class ReleaseManager {
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
         Gson gson = builder.create();
-        return gson.toJson(ImmutableList.of(release));
+        return gson.toJson(NewList.of(release));
 
     }
 
@@ -78,10 +73,10 @@ public class ReleaseManager {
             flattenedReleases.add(release);
             flattenedReleases.addAll(flattened(release.getChildren()));
         }
-        return ImmutableList.copyOf(flattenedReleases);
+        return NewList.copyOf(flattenedReleases);
     }
 
-    List<Release> NO_PARENTS = ImmutableList.of();
+    List<Release> NO_PARENTS = new ArrayList();
 
     public List<Release> getReleasesFrom(TestOutcomes testOutcomes) {
 
@@ -93,7 +88,7 @@ public class ReleaseManager {
         if (releases.isEmpty()) {
             releases = extractReleasesFromTestOutcomeAnnotations(testOutcomes);
         }
-        return ImmutableList.copyOf(releases);
+        return NewList.copyOf(releases);
     }
 
     private List<Release> extractReleasesFromTestOutcomeAnnotations(TestOutcomes testOutcomes) {
@@ -277,7 +272,7 @@ public class ReleaseManager {
 
 
     private Set<String> getDistinct(List<List<String>> releaseVersions) {
-        Set<String> distinctVersions = Sets.newHashSet();
+        Set<String> distinctVersions = new HashSet();
         for (List<String> releaseVersionSets : releaseVersions) {
             distinctVersions.addAll(releaseVersionSets);
         }

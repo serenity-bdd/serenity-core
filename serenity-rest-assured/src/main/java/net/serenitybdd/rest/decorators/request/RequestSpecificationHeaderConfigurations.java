@@ -48,7 +48,7 @@ abstract class RequestSpecificationHeaderConfigurations extends RequestSpecifica
     @Override
     public RequestSpecification headers(Headers headers) {
         Preconditions.checkNotNull(headers, "headers");
-        Map<String, String> converted = new HashMap<>();
+        Map<String, String> converted = new HashMap();
         if (headers.exist()) {
             for (Header header : headers.asList()) {
                 converted.put(header.getName(), header.getValue());
@@ -62,7 +62,7 @@ abstract class RequestSpecificationHeaderConfigurations extends RequestSpecifica
         Preconditions.checkNotNull(headerName, "Header name");
         Preconditions.checkNotNull(headerValue, "Header value");
 
-        Map<String, Object> prepared = new HashMap<>();
+        Map<String, Object> prepared = new HashMap();
         prepared.put(headerName, headerValue);
         for (Object value : additionalHeaderValues) {
             prepared.put(headerName, value);
@@ -72,7 +72,7 @@ abstract class RequestSpecificationHeaderConfigurations extends RequestSpecifica
 
     @Override
     public RequestSpecification header(Header header) {
-        Map<String, String> prepared = new HashMap<>();
+        Map<String, String> prepared = new HashMap();
         prepared.put(header.getName(), header.getValue());
         return headers(prepared);
     }

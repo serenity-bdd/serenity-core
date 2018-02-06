@@ -1,7 +1,6 @@
 package net.thucydides.core.statistics.service;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
+import net.serenitybdd.core.collect.NewSet;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.Story;
@@ -11,6 +10,7 @@ import net.thucydides.core.model.features.ApplicationFeature;
 import net.thucydides.core.requirements.CoreTagProvider;
 import net.thucydides.core.util.EnvironmentVariables;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -30,10 +30,10 @@ public class FeatureStoryTagProvider implements TagProvider, CoreTagProvider {
     }
 
     public Set<TestTag> getTagsFor(final TestOutcome testOutcome) {
-        Set<TestTag> tags = Sets.newHashSet();
+        Set<TestTag> tags = new HashSet();
         addStoryTagIfPresent(testOutcome, tags);
         addFeatureTagIfPresent(testOutcome, tags);
-        return ImmutableSet.copyOf(tags);
+        return NewSet.copyOf(tags);
     }
 
     private void addStoryTagIfPresent(TestOutcome testOutcome, Set<TestTag> tags) {

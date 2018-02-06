@@ -38,7 +38,7 @@ public enum DecomposedContentType {
 
     private static void register(final String representation, final DecomposedContentType decomposedContentType) {
         if (declared == null) {
-            declared = new HashMap<>();
+            declared = new HashMap();
         }
         declared.put(normalize(representation), decomposedContentType);
     }

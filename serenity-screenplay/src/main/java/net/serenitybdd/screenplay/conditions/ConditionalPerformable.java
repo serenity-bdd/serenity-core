@@ -1,9 +1,10 @@
 package net.serenitybdd.screenplay.conditions;
 
-import com.google.common.collect.Maps;
+import java.util.HashMap;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public abstract class ConditionalPerformable implements Performable {
@@ -11,7 +12,7 @@ public abstract class ConditionalPerformable implements Performable {
     protected final Map<Boolean, Performable[]> outcomeToPerform;
 
     public ConditionalPerformable() {
-        this.outcomeToPerform = Maps.newHashMap();
+        this.outcomeToPerform = new HashMap();
         outcomeToPerform.put(true, new Performable[]{ new SilentPerformable() });
         outcomeToPerform.put(false, new Performable[]{ new SilentPerformable() });
     }

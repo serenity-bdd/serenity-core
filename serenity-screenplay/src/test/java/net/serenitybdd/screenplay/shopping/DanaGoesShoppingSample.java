@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.shopping;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.PeopleAreTerriblyIncorrect;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
@@ -186,7 +186,7 @@ public class DanaGoesShoppingSample {
         dana.remember("Total Cost", 14);
         assertThat((int) dana.recall("Total Cost")).isEqualTo(14);
 
-        List<String> colorSet = ImmutableList.of("red","green","blue");
+        List<String> colorSet = NewList.of("red","green","blue");
 
         MatcherAssert.assertThat(colorSet, (Every.everyItem(isOneOf("red","green","blue","yellow"))));
     }

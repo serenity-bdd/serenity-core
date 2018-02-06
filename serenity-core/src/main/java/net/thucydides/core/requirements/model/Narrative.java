@@ -2,7 +2,7 @@ package net.thucydides.core.requirements.model;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class Narrative {
     }
 
     public Narrative(String type, String text) {
-        this(Optional.<String>absent(), Optional.<String>absent(), Optional.<String>absent(), ImmutableList.<String>of(), type, text);
+        this(Optional.<String>absent(), Optional.<String>absent(), Optional.<String>absent(), NewList.<String>of(), type, text);
     }
 
     public Optional<String> getId() {
@@ -51,7 +51,7 @@ public class Narrative {
     }
 
     public List<String> getVersionNumbers() {
-        return ImmutableList.copyOf(versionNumbers);
+        return NewList.copyOf(versionNumbers);
     }
 
     @Override

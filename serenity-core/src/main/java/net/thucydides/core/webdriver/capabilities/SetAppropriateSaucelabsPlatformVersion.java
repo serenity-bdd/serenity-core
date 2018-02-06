@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver.capabilities;
 
-import com.google.common.collect.Maps;
+import java.util.HashMap;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.Platform;
@@ -16,7 +16,7 @@ class SetAppropriateSaucelabsPlatformVersion {
 
     private static String DEFAULT_PLATFORM = "Windows 10";
 
-    private static Map<String, String> OS_PLATFORM_NAMES = Maps.newHashMap();
+    private static Map<String, String> OS_PLATFORM_NAMES = new HashMap();
 
     static {
         OS_PLATFORM_NAMES.put("snowleopard", "OS X 10.6");
@@ -29,7 +29,7 @@ class SetAppropriateSaucelabsPlatformVersion {
         OS_PLATFORM_NAMES.put("el capitan", "OS X 10.11");
     }
 
-    private static Map<String, String> MAC_OS_VERSIONS_PER_SAFARI_VERSION = Maps.newHashMap();
+    private static Map<String, String> MAC_OS_VERSIONS_PER_SAFARI_VERSION = new HashMap();
 
     static {
         MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("5", "OS X 10.6");

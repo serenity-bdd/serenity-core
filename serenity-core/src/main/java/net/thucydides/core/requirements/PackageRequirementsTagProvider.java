@@ -2,10 +2,8 @@ package net.thucydides.core.requirements;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.google.common.reflect.ClassPath;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Narrative;
@@ -114,7 +112,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
             List<String> requirementPaths = requirementPathsStartingFrom(rootPackage);
             int requirementsDepth = longestPathIn(requirementPaths);
 
-            Set<Requirement> allRequirements = Sets.newHashSet();
+            Set<Requirement> allRequirements = new HashSet();
             for (String path : requirementPaths) {
                 addRequirementsDefinedIn(path, requirementsDepth, allRequirements);
             }
@@ -122,7 +120,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
             allRequirements = removeChildrenFromTopLevelRequirementsIn(allRequirements);
 
             if (!allRequirements.isEmpty()) {
-                classpathRequirements = Lists.newArrayList(allRequirements);
+                classpathRequirements =new ArrayList<>(allRequirements);
                 Collections.sort(classpathRequirements);
 
                 requirementsStore.write(classpathRequirements);
@@ -154,7 +152,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
             readingPaths.lock();
             List<String> paths = requirementPathsFromClassesInPackage(rootPackage);
             Collections.sort(paths, byDescendingPackageLength());
-            requirementPaths = ImmutableList.copyOf(paths);
+            requirementPaths = NewList.copyOf(paths);
             readingPaths.unlock();
         }
         return requirementPaths;
@@ -186,7 +184,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
 
     private Set<Requirement> removeChildrenFromTopLevelRequirementsIn(Set<Requirement> allRequirements) {
-        Set<Requirement> prunedRequirements = Sets.newHashSet();
+        Set<Requirement> prunedRequirements = new HashSet();
         for (Requirement requirement : allRequirements) {
             if (requirement.getParent() == null) {
                 prunedRequirements.add(requirement);
@@ -255,7 +253,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     @Override
     public Set<TestTag> getTagsFor(TestOutcome testOutcome) {
         if (testOutcome.getUserStory() == null) {
-            return Sets.newHashSet();
+            return new HashSet();
         }
 
         Set<TestTag> tags = new HashSet<>();

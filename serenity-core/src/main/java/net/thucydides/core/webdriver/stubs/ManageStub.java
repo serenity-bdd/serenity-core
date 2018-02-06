@@ -1,10 +1,10 @@
 package net.thucydides.core.webdriver.stubs;
 
-import com.google.common.collect.Sets;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.Logs;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -33,7 +33,7 @@ public class ManageStub implements WebDriver.Options {
 
     @Override
     public Set<Cookie> getCookies() {
-        return Sets.newHashSet();
+        return new HashSet();
     }
 
     @Override

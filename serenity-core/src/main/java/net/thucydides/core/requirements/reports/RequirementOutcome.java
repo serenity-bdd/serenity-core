@@ -1,9 +1,7 @@
 package net.thucydides.core.requirements.reports;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import net.serenitybdd.core.collect.NewSet;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.TestOutcome;
@@ -17,6 +15,7 @@ import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -90,16 +89,18 @@ public class RequirementOutcome {
     }
 
     public List<Requirement> getFlattenedRequirements() {
-        List<Requirement> flattenedRequirements = Lists.newArrayList(requirement);
+        List<Requirement> flattenedRequirements = new ArrayList();
+        flattenedRequirements.add(requirement);
         flattenedRequirements.addAll(requirement.getNestedChildren());
-        return ImmutableList.copyOf(flattenedRequirements);
+        return NewList.copyOf(flattenedRequirements);
     }
 
     public List<Requirement> getFlattenedRequirements(Requirement... excludingRequirement) {
-        List<Requirement> flattenedRequirements = Lists.newArrayList(requirement);
+        List<Requirement> flattenedRequirements = new ArrayList();
+        flattenedRequirements.add(requirement);
         flattenedRequirements.addAll(requirement.getNestedChildren());
-        flattenedRequirements.removeAll(Lists.newArrayList(excludingRequirement));
-        return ImmutableList.copyOf(flattenedRequirements);
+        flattenedRequirements.removeAll(NewList.of(excludingRequirement));
+        return NewList.copyOf(flattenedRequirements);
     }
 
     public long getRequirementsWithoutTestsCount() {
@@ -301,11 +302,11 @@ public class RequirementOutcome {
     }
 
     public Set<String> getReleaseVersions() {
-        Set<String> releaseVersions = Sets.newHashSet();
+        Set<String> releaseVersions = new HashSet();
         for(TestOutcome outcome : getTestOutcomes().getOutcomes()) {
             releaseVersions.addAll(outcome.getVersions());
         }
-        return ImmutableSet.copyOf(releaseVersions);
+        return NewSet.copyOf(releaseVersions);
     }
 
     public RequirementOutcome withoutUnrelatedRequirements() {

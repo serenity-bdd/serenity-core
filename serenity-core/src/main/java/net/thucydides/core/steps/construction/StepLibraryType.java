@@ -1,16 +1,14 @@
 package net.thucydides.core.steps.construction;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
+import net.serenitybdd.core.collect.NewSet;
 import net.thucydides.core.annotations.Fields;
 import net.thucydides.core.pages.Pages;
 
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-
-import static com.google.common.collect.ImmutableSet.copyOf;
+import java.util.Set;
 
 public class StepLibraryType {
 
@@ -25,20 +23,23 @@ public class StepLibraryType {
     }
 
     public <T> boolean hasAPagesConstructor() {
-        ImmutableSet<? extends Constructor<?>> constructors = copyOf(stepLibraryClass.getDeclaredConstructors());
-        return Iterables.any(constructors, withASinglePagesParameter());
+        Set<? extends Constructor<?>> constructors = NewSet.copyOf(stepLibraryClass.getDeclaredConstructors());
+        return constructors.stream().anyMatch(withASinglePagesParameter());
+//                Iterables.any(constructors, withASinglePagesParameter());
 
     }
 
     public <T> boolean hasAConstructorWithParameters() {
-        ImmutableSet<? extends Constructor<?>> constructors = copyOf(stepLibraryClass.getDeclaredConstructors());
-        return Iterables.any(constructors, withAnyParameters());
+        Set<? extends Constructor<?>> constructors = NewSet.copyOf(stepLibraryClass.getDeclaredConstructors());
+        return constructors.stream().anyMatch(withAnyParameters());
+//        return Iterables.any(constructors, withAnyParameters());
 
     }
 
     public <T> boolean hasAPagesField() {
-        ImmutableSet<Field> fields = copyOf(Fields.of(stepLibraryClass).allFields());
-        return Iterables.any(fields, ofTypePages());
+        Set<Field> fields = NewSet.copyOf(Fields.of(stepLibraryClass).allFields());
+        return fields.stream().anyMatch(ofTypePages());
+//        return Iterables.any(fields, ofTypePages());
 
     }
 

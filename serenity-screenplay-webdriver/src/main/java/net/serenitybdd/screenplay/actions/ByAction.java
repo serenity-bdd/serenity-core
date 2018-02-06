@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.actions;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
@@ -16,7 +16,7 @@ public abstract class ByAction  implements Interaction {
     protected final List<By> locators;
 
     public ByAction(By... locators) {
-        this.locators = ImmutableList.copyOf(locators);
+        this.locators = NewList.copyOf(locators);
     }
 
     protected WebElement resolveFor(Actor theActor) {

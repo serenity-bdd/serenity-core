@@ -27,7 +27,7 @@ public class RestResponseRecordingHelper {
     }
 
     public Map<LogDetail, String> print(final Response response) {
-        Map<LogDetail, String> result = new HashMap<>();
+        Map<LogDetail, String> result = new HashMap();
         if (response != null) {
             try (ByteArrayOutputStream output = new ByteArrayOutputStream();
                  PrintStream recordingStream = new PrintStream(output, true, StandardCharsets.UTF_8.toString())) {

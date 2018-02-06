@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay.actors;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
+import net.serenitybdd.core.collect.NewList;
+import java.util.HashMap;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
 
@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class Cast {
 
-    Map<String, Actor> actors = Maps.newHashMap();
+    Map<String, Actor> actors = new HashMap();
 
     public Actor actorNamed(String actorName, Ability... abilities) {
 
@@ -29,7 +29,7 @@ public class Cast {
     }
 
     public List<Actor> getActors() {
-        return ImmutableList.copyOf(actors.values());
+        return NewList.copyOf(actors.values());
     }
 
     public void dismissAll() {

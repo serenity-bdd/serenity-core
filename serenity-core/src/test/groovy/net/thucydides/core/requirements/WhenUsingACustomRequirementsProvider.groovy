@@ -13,7 +13,7 @@ class WhenUsingACustomRequirementsProvider extends Specification {
         when: "We have a custom requirements provider and a corresponding services file in the META-INF/services directory"
             List<RequirementsTagProvider> requirementsProviders = requirementsProviderService.getRequirementsProviders();
         then: "We can obtain a custom requirements provider if it is present"
-            requirementsProviders.collect { it.class.simpleName } == ["PackageRequirementsTagProvider", "FileSystemRequirementsTagProvider"]
+            requirementsProviders.collect { it.class.simpleName }.containsAll(["PackageRequirementsTagProvider", "FileSystemRequirementsTagProvider"])
     }
 
     def "Should return the default file system requirements provider on the classpath if no others are present"() {
@@ -24,7 +24,7 @@ class WhenUsingACustomRequirementsProvider extends Specification {
         when: "We get the list of default requirements providers"
             List<RequirementsTagProvider> requirementsProviders = requirementsProviderService.getRequirementsProviders();
         then: "We obtain the default requirements provider"
-            requirementsProviders.collect { it.class.simpleName } == ["FileSystemRequirementsTagProvider", "PackageAnnotationBasedTagProvider"]
+            requirementsProviders.collect { it.class.simpleName }.containsAll(["FileSystemRequirementsTagProvider", "PackageAnnotationBasedTagProvider"])
     }
 
     def "Should not return the default file system requirements provider on the classpath if others are defined"() {

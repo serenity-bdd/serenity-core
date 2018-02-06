@@ -1,7 +1,7 @@
 package net.thucydides.core.model;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.guice.Injectors;
@@ -183,11 +183,11 @@ public class TestStep implements Cloneable {
         newTestStep.description = description;
         newTestStep.startTime = startTime;
         newTestStep.duration = duration;
-        newTestStep.screenshots = Lists.newArrayList(screenshots);
+        newTestStep.screenshots = NewList.copyOf(screenshots);
         newTestStep.exception = exception;
         newTestStep.result = result;
         newTestStep.number = number;
-        newTestStep.children = Lists.newArrayList(children);
+        newTestStep.children = NewList.copyOf(children);
         newTestStep.precondition = precondition;
         return newTestStep;
     }

@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.adaptors.specflow;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.model.*;
 import net.thucydides.core.reports.adaptors.common.FilebasedOutcomeAdaptor;
 
@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,7 @@ public class SpecflowAdaptor extends FilebasedOutcomeAdaptor {
     @Override
     public List<TestOutcome> loadOutcomesFrom(File source) throws IOException {
         if (source.isDirectory()) {
-            List<TestOutcome> outcomes = Lists.newArrayList();
+            List<TestOutcome> outcomes = new ArrayList<>();
             for(File outputFile : source.listFiles()) {
                 outcomes.addAll(outcomesFromFile(outputFile));
             }
@@ -80,7 +81,7 @@ public class SpecflowAdaptor extends FilebasedOutcomeAdaptor {
 
     private List<String> headersFrom(SpecflowScenarioTitleLine titleLine) {
         // TODO: This should eventually come from the .feature file
-        List<String> headers = Lists.newArrayList();
+        List<String> headers = new ArrayList();
         for(int i = 0; i < titleLine.getArguments().size(); i++) {
             headers.add(Character.toString( (char) (65 + i)));
         }
@@ -88,17 +89,17 @@ public class SpecflowAdaptor extends FilebasedOutcomeAdaptor {
     }
 
     private List<TestStep> stepsFrom(List<String> scenarioOutput) {
-        List<TestStep> discoveredSteps = Lists.newArrayList();
+        List<TestStep> discoveredSteps = new ArrayList();
         ScenarioStepReader stepReader = new ScenarioStepReader();
-        List<String> lines = Lists.newArrayList(scenarioOutput);
+        List<String> lines = NewList.copyOf(scenarioOutput);
         while (!lines.isEmpty()) {
             discoveredSteps.add(stepReader.consumeNextStepFrom(lines));
         }
-        return ImmutableList.copyOf(discoveredSteps);
+        return NewList.copyOf(discoveredSteps);
     }
 
     private List<List<String>> scenarioOutputsFrom(List<String> outputLines) {
-        List<List<String>> scenarios = Lists.newArrayList();
+        List<List<String>> scenarios = new ArrayList<>();
 
         List<String> currentScenario = null;
         SpecflowScenarioTitleLine currentTitle = null;
@@ -107,7 +108,7 @@ public class SpecflowAdaptor extends FilebasedOutcomeAdaptor {
                 SpecflowScenarioTitleLine newTitleLine = new SpecflowScenarioTitleLine(line);
                 if (currentTitle == null || !newTitleLine.getTitleName().equals(currentTitle.getTitleName())) {
                     currentTitle = new SpecflowScenarioTitleLine(line);
-                    currentScenario = Lists.newArrayList();
+                    currentScenario = new ArrayList<>();
                     scenarios.add(currentScenario);
                 }
             }
@@ -115,7 +116,7 @@ public class SpecflowAdaptor extends FilebasedOutcomeAdaptor {
                 currentScenario.add(line);
             }
         }
-        return ImmutableList.copyOf(scenarios);
+        return NewList.copyOf(scenarios);
     }
 
     private boolean isTitle(String line) {

@@ -7,15 +7,13 @@ import net.serenitybdd.core.SkipNested;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.events.*;
 import net.serenitybdd.screenplay.exceptions.IgnoreStepException;
-import net.serenitybdd.screenplay.formatting.FormattedTitle;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
-
-import static com.google.common.collect.Maps.newHashMap;
 
 public class Actor implements PerformsTasks, SkipNested {
 
@@ -25,8 +23,8 @@ public class Actor implements PerformsTasks, SkipNested {
     private EventBusInterface eventBusInterface = new EventBusInterface();
     private ConsequenceListener consequenceListener = new ConsequenceListener(eventBusInterface);
 
-    private Map<String, Object> notepad = newHashMap();
-    private Map<Class, Ability> abilities = newHashMap();
+    private Map<String, Object> notepad = new HashMap();
+    private Map<Class, Ability> abilities = new HashMap();
 
 
     public Actor(String name) {

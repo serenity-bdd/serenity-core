@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.integration;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.annotations.Story;
 import net.thucydides.core.digest.Digest;
@@ -211,15 +211,15 @@ public class WhenGeneratingAnXMLReport {
     public void should_generate_an_XML_report_for_an_acceptance_test_run_with_a_table()
             throws Exception {
 
-        List<Object> row1 = new ArrayList<Object>(); row1.addAll(Lists.newArrayList("Joe", "Smith", "20"));
-        List<Object> row2 = new ArrayList<Object>(); row2.addAll(Lists.newArrayList("Jack", "Jones", "21"));
+        List<Object> row1 = new ArrayList<Object>(); row1.addAll(NewList.of("Joe", "Smith", "20"));
+        List<Object> row2 = new ArrayList<Object>(); row2.addAll(NewList.of("Jack", "Jones", "21"));
 
         TestOutcome testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class);
         DateTime startTime = new DateTime(2013,1,1,0,0,0,0);
         testOutcome.setStartTime(startTime);
 
-        DataTable table = DataTable.withHeaders(ImmutableList.of("firstName","lastName","age")).
-                                    andRows(ImmutableList.of(row1, row2)).build();
+        DataTable table = DataTable.withHeaders(NewList.of("firstName","lastName","age")).
+                                    andRows(NewList.of(row1, row2)).build();
         testOutcome.useExamplesFrom(table);
         table.row(0).hasResult(TestResult.FAILURE);
         String expectedReport =
@@ -267,15 +267,15 @@ public class WhenGeneratingAnXMLReport {
     public void should_generate_an_XML_report_for_an_acceptance_test_run_with_a_table_with_a_title_and_description()
             throws Exception {
 
-        List<Object> row1 = new ArrayList<Object>(); row1.addAll(Lists.newArrayList("Joe", "Smith", "20"));
-        List<Object> row2 = new ArrayList<Object>(); row2.addAll(Lists.newArrayList("Jack", "Jones", "21"));
+        List<Object> row1 = new ArrayList<Object>(); row1.addAll(NewList.of("Joe", "Smith", "20"));
+        List<Object> row2 = new ArrayList<Object>(); row2.addAll(NewList.of("Jack", "Jones", "21"));
 
         TestOutcome testOutcome = TestOutcome.forTest("should_do_this", SomeTestScenario.class);
         DateTime startTime = new DateTime(2013,1,1,0,0,0,0);
         testOutcome.setStartTime(startTime);
 
-        DataTable table = DataTable.withHeaders(ImmutableList.of("firstName","lastName","age")).
-                andRows(ImmutableList.of(row1, row2)).andTitle("a title").andDescription("some description").build();
+        DataTable table = DataTable.withHeaders(NewList.of("firstName","lastName","age")).
+                andRows(NewList.of(row1, row2)).andTitle("a title").andDescription("some description").build();
         testOutcome.useExamplesFrom(table);
         table.row(0).hasResult(TestResult.FAILURE);
         String expectedReport =

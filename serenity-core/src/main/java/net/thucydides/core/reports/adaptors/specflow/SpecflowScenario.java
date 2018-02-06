@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.adaptors.specflow;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.NewList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +21,11 @@ public class SpecflowScenario {
     }
 
     public void addSteps(List<String> blockSteps) {
-        steps.addAll(ImmutableList.copyOf(blockSteps));
+        steps.addAll(NewList.copyOf(blockSteps));
     }
 
     public List<String> getSteps() {
-        return ImmutableList.copyOf(steps);
+        return NewList.copyOf(steps);
     }
 
     public void convertToTable(String firstRowTitle) {
@@ -42,10 +42,10 @@ public class SpecflowScenario {
     }
 
     public void addRow(String rowTitle, List<String> rowSteps) {
-        rows.add(new SpecflowTableRow(rowTitle, ImmutableList.copyOf(rowSteps)));
+        rows.add(new SpecflowTableRow(rowTitle, NewList.copyOf(rowSteps)));
     }
 
     public List<SpecflowTableRow> getRows() {
-        return ImmutableList.copyOf(rows);
+        return NewList.copyOf(rows);
     }
 }

@@ -1,6 +1,6 @@
 package net.thucydides.core.reports.html;
 
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.configuration.TimeoutConfiguration;
 import net.thucydides.core.configuration.TimeoutValue;
@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.*;
@@ -106,7 +107,7 @@ class Reporter {
         }
     }
     private class ErrorTally {
-        private final List<ErrorRecord> errors = Lists.newCopyOnWriteArrayList();
+        private final List<ErrorRecord> errors = new ArrayList<>();
 
         boolean hasErrors() { return !errors.isEmpty(); }
 

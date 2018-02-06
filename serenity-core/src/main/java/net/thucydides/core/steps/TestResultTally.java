@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public class TestResultTally implements Serializable {
      * What were the failures.
      */
     public List<StepFailure> getFailures() {
-        return ImmutableList.copyOf(failures);
+        return NewList.copyOf(failures);
     }
 
     /**

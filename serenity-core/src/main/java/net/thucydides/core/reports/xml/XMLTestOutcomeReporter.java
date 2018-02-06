@@ -2,7 +2,7 @@ package net.thucydides.core.reports.xml;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;

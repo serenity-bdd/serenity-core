@@ -1,10 +1,10 @@
 package net.thucydides.core.util;
 
-import com.google.common.base.Objects;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Sets;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -20,7 +20,7 @@ class Acronym {
     }
 
     public static Set<Acronym> acronymsIn(String text) {
-        Set<Acronym> acronyms = Sets.newHashSet();
+        Set<Acronym> acronyms = new HashSet();
 
         List<String> words = Splitter.on(Pattern.compile("\\W")).omitEmptyStrings().splitToList(text);
         for (String word : words) {
@@ -38,7 +38,7 @@ class Acronym {
     }
 
     private static Set<Acronym> appearencesOf(String word, String text) {
-        Set<Acronym> acronyms = Sets.newHashSet();
+        Set<Acronym> acronyms = new HashSet();
 
         int startAt = 0;
         while(startAt < text.length()) {
@@ -70,12 +70,15 @@ class Acronym {
         Acronym acronym = (Acronym) o;
         return start == acronym.start &&
                 end == acronym.end &&
-                Objects.equal(acronymText, acronym.acronymText);
+                Objects.equals(acronymText, acronym.acronymText);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(acronymText, start, end);
+        int result = acronymText != null ? acronymText.hashCode() : 0;
+        result = 31 * result + start;
+        result = 31 * result + end;
+        return result;
     }
 
     @Override

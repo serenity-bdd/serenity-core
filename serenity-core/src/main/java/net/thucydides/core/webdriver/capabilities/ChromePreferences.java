@@ -27,7 +27,7 @@ public class ChromePreferences {
                     .filter( key -> key.startsWith(prefix))
                     .collect(Collectors.toList());
 
-        Map<String, Object> preferences = new HashMap<>();
+        Map<String, Object> preferences = new HashMap();
 
         for(String propertyKey : propertiesWithPrefix) {
             String preparedPropertyKey = getPreparedPropertyKey(propertyKey);

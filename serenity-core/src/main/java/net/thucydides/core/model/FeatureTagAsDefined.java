@@ -1,7 +1,7 @@
 package net.thucydides.core.model;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Maps;
+import java.util.HashMap;
 import net.thucydides.core.model.featuretags.FeatureFileStrategy;
 import net.thucydides.core.model.featuretags.FeatureTagStrategy;
 import net.thucydides.core.model.featuretags.NoFeatureStrategy;
@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class FeatureTagAsDefined {
 
-    private final static Map<FeatureType, FeatureTagStrategy> FEATURE_STRATEGY_MAP = Maps.newHashMap();
+    private final static Map<FeatureType, FeatureTagStrategy> FEATURE_STRATEGY_MAP = new HashMap();
     static {
         FEATURE_STRATEGY_MAP.put(FeatureType.FEATURE, new FeatureFileStrategy());
         FEATURE_STRATEGY_MAP.put(FeatureType.STORY, new StoryFileStrategy());

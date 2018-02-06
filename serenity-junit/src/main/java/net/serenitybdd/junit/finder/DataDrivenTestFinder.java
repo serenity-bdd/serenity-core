@@ -1,10 +1,11 @@
 package net.serenitybdd.junit.finder;
 
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.junit.runners.DataDrivenAnnotations;
 import org.junit.runners.model.TestClass;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public class DataDrivenTestFinder extends TestFinder {
 
     @Override
     public List<Class<?>> getClasses() {
-        return sorted(Lists.newArrayList(getDataDrivenTestClasses()));
+        return sorted(new ArrayList(getDataDrivenTestClasses()));
     }
 
     @Override

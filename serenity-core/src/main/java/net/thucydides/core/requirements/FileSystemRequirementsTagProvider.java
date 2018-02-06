@@ -1,8 +1,7 @@
 package net.thucydides.core.requirements;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.files.TheDirectoryStructure;
 import net.thucydides.core.guice.Injectors;
@@ -136,7 +135,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         if (requirements == null) {
             requirementsLock.lock();
             try {
-                Set<Requirement> allRequirements = Sets.newHashSet();
+                Set<Requirement> allRequirements = new HashSet();
                 Set<String> directoryPaths = getRootDirectoryPaths();
 
                 for (String path : directoryPaths) {
@@ -147,7 +146,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                         allRequirements.addAll(loadStoriesFrom(rootDirectory.listFiles(thatAreStories())));
                     }
                 }
-                requirements = Lists.newArrayList(allRequirements);
+                requirements = new ArrayList<>(allRequirements);
                 Collections.sort(requirements);
             } catch (IOException e) {
                 requirements = NO_REQUIREMENTS;
@@ -277,7 +276,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private List<String> dropLastElement(List<String> pathElements) {
-        List<String> strippedPathElements = Lists.newArrayList(pathElements);
+        List<String> strippedPathElements = new ArrayList<>(pathElements);
         strippedPathElements.remove(pathElements.size() - 1);
         return strippedPathElements;
     }
@@ -305,7 +304,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private java.util.Optional<TestTag> storyOrFeatureDescribedIn(List<String> storyPathElements) {
         if ((!storyPathElements.isEmpty()) && isSupportedFileStoryExtension(last(storyPathElements))) {
-            String storyName = Lists.reverse(storyPathElements).get(1); // TODO: Get the story or feature name from the file only as a last resort
+            String storyName = NewList.reverse(storyPathElements).get(1); // TODO: Get the story or feature name from the file only as a last resort
             String storyParent = parentElement(storyPathElements);
             String qualifiedName = storyParent == null ?
                     humanize(storyName) : humanize(storyParent).trim() + "/" + humanize(storyName);
@@ -318,7 +317,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
 
     private String parentElement(List<String> storyPathElements) {
-        return storyPathElements.size() > 2 ? Lists.reverse(storyPathElements).get(2) : null;
+        return storyPathElements.size() > 2 ? NewList.reverse(storyPathElements).get(2) : null;
     }
 
     private String last(List<String> list) {

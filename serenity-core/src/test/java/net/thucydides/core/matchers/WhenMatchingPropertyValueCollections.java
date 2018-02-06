@@ -349,7 +349,7 @@ public class WhenMatchingPropertyValueCollections {
 
     @Test
     public void should_allow_fields_with_dots_for_maps() {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap();
         map.put("test.a", "result1");
         BeanMatcher matcher1 = the("test.a", equalTo("result1"));
         matcher1.matches(map);
@@ -357,7 +357,7 @@ public class WhenMatchingPropertyValueCollections {
 
     @Test
     public void should_allow_fields_with_brackets_for_maps() {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap();
         map.put("test[0]", "result1");
         BeanMatcher matcher1 = the("test[0]", equalTo("result1"));
         matcher1.matches(map);

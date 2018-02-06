@@ -1,8 +1,8 @@
 package net.serenitybdd.screenplay.actions.type;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.actions.KeyNames;
 import org.openqa.selenium.Keys;
@@ -22,7 +22,7 @@ public abstract class TypeValue implements Interaction {
     }
 
     public TypeValue thenHit(Keys... keys) {
-        this.followedByKeys.addAll(Lists.newArrayList(keys));
+        this.followedByKeys.addAll(NewList.of(keys));
         return this;
     }
 
@@ -43,7 +43,7 @@ public abstract class TypeValue implements Interaction {
 
         String allButLastTwo = Joiner.on(", ").join(KeyNames.allButLastTwo(keys));
         String lastTwoKeys = Joiner.on(" and ").join(KeyNames.lastTwoOf(keys));
-        String allKeys = Joiner.on(", ").join(ImmutableList.of(allButLastTwo, lastTwoKeys));
+        String allKeys = Joiner.on(", ").join(NewList.of(allButLastTwo, lastTwoKeys));
 
         return ENTER_KEYS_INTRO_TEXT + allKeys;
     }

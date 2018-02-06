@@ -1,7 +1,6 @@
 package net.thucydides.core.requirements;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Sets;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -62,7 +61,7 @@ public class RootDirectory {
                 return path;
             }
         }
-        return Sets.newHashSet();
+        return new HashSet();
     }
 
     private Set<String> getRootDirectoryFromClasspath() throws IOException {
@@ -77,7 +76,7 @@ public class RootDirectory {
     }
 
     private Set<String> restoreSpacesIn(List<URL> resourceRoots) {
-        Set<String> urlsWithRestoredSpaces = Sets.newHashSet();
+        Set<String> urlsWithRestoredSpaces = new HashSet();
         for (URL resourceRoot : resourceRoots) {
             urlsWithRestoredSpaces.add(withRestoredSpaces(resourceRoot.getPath()));
         }
@@ -92,14 +91,16 @@ public class RootDirectory {
         }
     }
 
-    private Set<String> getFileSystemDefinedDirectory() throws IOException {
+    private Set<String> getFileSystemDefinedDirectory()  {
         if (Paths.get(rootDirectoryPath).toAbsolutePath().toFile().exists()) {
-            return Sets.newHashSet(Paths.get(rootDirectoryPath).toAbsolutePath().toString());
+            Set<String> directory = new HashSet<>();
+            directory.add(Paths.get(rootDirectoryPath).toAbsolutePath().toString());
+            return directory;
         }
-        return Sets.newHashSet();
+        return new HashSet();
     }
 
-    private Set<String> getRootDirectoryFromWorkingDirectory() throws IOException {
+    private Set<String> getRootDirectoryFromWorkingDirectory()  {
         final String workingDirectory = System.getProperty("user.dir");
         final String mavenBuildDir = System.getProperty(SystemPropertiesConfiguration.PROJECT_BUILD_DIRECTORY);
         String resultDir = "";
@@ -126,7 +127,7 @@ public class RootDirectory {
         File resourceDirectory = getResourceDirectory(environmentVariables).isPresent() ? new File(parentDir, getResourceDirectory(environmentVariables).get()) : new File(parentDir);
         File requirementsDirectory = absolutePath(rootDirectoryPath) ? new File(rootDirectoryPath) : new File(resourceDirectory, rootDirectoryPath);
 
-        Set<String> directoryPaths = Sets.newHashSet();
+        Set<String> directoryPaths = new HashSet();
 
         if (requirementsDirectory.exists()) {
             directoryPaths.add(requirementsDirectory.getAbsolutePath());

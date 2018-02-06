@@ -2,7 +2,7 @@ package net.thucydides.core.steps;
 
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import com.google.inject.Inject;
 import net.serenitybdd.core.Serenity;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -55,13 +55,13 @@ public class ConsoleLoggingListener implements StepListener {
             "--------------";
 
     // STAR WARS
-    private static final List<String> BANNER_HEADINGS = ImmutableList.of(
+    private static final List<String> BANNER_HEADINGS = NewList.of(
             "SERENITY TESTS",
             SERENITY_SMALL_BANNER,
             SERENITY_BIG_BANNER);
 
     // Standard
-    private static final List<String> TEST_STARTED_HEADINGS = ImmutableList.of(
+    private static final List<String> TEST_STARTED_HEADINGS = NewList.of(
             "",
             "\n----------------\n" +
             "- TEST STARTED -\n" +
@@ -73,7 +73,7 @@ public class ConsoleLoggingListener implements StepListener {
                 "  |_| |_____|____/ |_|   |____/ |_/_/   \\_\\_| \\_\\|_| |_____|____/ \n" +
                 "                                                                  \n");
 
-    private static final List<String> TEST_PASSED_HEADINGS = ImmutableList.of(
+    private static final List<String> TEST_PASSED_HEADINGS = NewList.of(
             "",
             "\n---------------\n" +
             "- TEST PASSED -\n" +
@@ -85,7 +85,7 @@ public class ConsoleLoggingListener implements StepListener {
                     " (_)     | |   |_| |_____|____/ |_|   |_| /_/   \\_\\____/|____/|_____|____/ \n" +
                     "        /_/                                                                \n");
 
-    private static final List<String> TEST_FAILED_HEADINGS =  ImmutableList.of(
+    private static final List<String> TEST_FAILED_HEADINGS =  NewList.of(
             "",
             "\n----------------\n" +
                     "- TEST FAILED -\n" +
@@ -97,7 +97,7 @@ public class ConsoleLoggingListener implements StepListener {
                     " (_)     | |    |_| |_____|____/ |_|   |_|/_/   \\_\\___|_____|_____|____/ \n" +
                     "          \\_\\                                                            \n");
 
-    private static final List<String> TEST_ERROR_HEADINGS =  ImmutableList.of(
+    private static final List<String> TEST_ERROR_HEADINGS =  NewList.of(
             "",
             "\n--------------------------\n" +
                     "- TEST FAILED WITH ERROR-\n" +
@@ -109,7 +109,7 @@ public class ConsoleLoggingListener implements StepListener {
                     "(_)    | |    |_| |_____|____/ |_|   |_____|_| \\_\\_| \\_\\\\___/|_| \\_\\\n" +
                     "        \\_\\                                                         \n");
 
-    private static final List<String> TEST_COMPROMISED_HEADINGS =  ImmutableList.of(
+    private static final List<String> TEST_COMPROMISED_HEADINGS =  NewList.of(
             "",
             "\n--------------------------\n" +
                     "- TEST COMPROMISED -\n" +
@@ -126,7 +126,7 @@ public class ConsoleLoggingListener implements StepListener {
                     "| |__| |_| | |  | |  __/|  _ <| |_| | |  | || | ___) | |___| |_| |\n" +
                     " \\____\\___/|_|  |_|_|   |_| \\_\\\\___/|_|  |_|___|____/|_____|____/\n");
 
-    private static final List<String> TEST_SKIPPED_HEADINGS  = ImmutableList.of(
+    private static final List<String> TEST_SKIPPED_HEADINGS  = NewList.of(
             "",
             "\n----------------\n" +
             "- TEST SKIPPED -\n" +
@@ -138,7 +138,7 @@ public class ConsoleLoggingListener implements StepListener {
                     " (_)    /_/      |_| |_____|____/ |_|   |____/|_|\\_\\___|_|   |_|   |_____|____/ \n" +
                     "                                                                                \n");
 
-    private static final List<String> TEST_PENDING_HEADINGS  = ImmutableList.of(
+    private static final List<String> TEST_PENDING_HEADINGS  = NewList.of(
             "",
             "\n----------------\n" +
                     "- TEST PENDING -\n" +
@@ -150,7 +150,7 @@ public class ConsoleLoggingListener implements StepListener {
                     "(_)   /_/      |_| |_____|____/ |_|   |_|   |_____|_| \\_|____/___|_| \\_|\\____|\n" +
                     "                                                                                \n");
 
-    private static List<String>  FAILURE_HEADINGS  = ImmutableList.of(
+    private static List<String>  FAILURE_HEADINGS  = NewList.of(
             "",
             "\n-----------\n" +
             "- FAILURE -\n" +
@@ -162,7 +162,7 @@ public class ConsoleLoggingListener implements StepListener {
                     " |_|/_/   \\_\\___|_____|\\___/|_| \\_\\_____|\n" +
                     "                                         \n");
 
-    private static List<String>  ERROR_HEADINGS  = ImmutableList.of(
+    private static List<String>  ERROR_HEADINGS  = NewList.of(
             "",
             "\n-----------\n" +
                     "- FAILED WITH ERROR -\n" +

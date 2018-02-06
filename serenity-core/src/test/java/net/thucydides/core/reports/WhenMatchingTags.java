@@ -1,6 +1,6 @@
 package net.thucydides.core.reports;
 
-import com.google.common.collect.ImmutableSet;
+import net.serenitybdd.core.collect.NewSet;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;
@@ -32,7 +32,7 @@ public class WhenMatchingTags {
 
     @Test
     public void should_match_test_outcome_with_tag_name() {
-        when(testOutcome.getTags()).thenReturn(ImmutableSet.of(storyTag));
+        when(testOutcome.getTags()).thenReturn(NewSet.of(storyTag));
 
         assertThat(havingTagName("a story").matches(testOutcome), is(true));
     }
@@ -42,7 +42,7 @@ public class WhenMatchingTags {
     
     @Test
     public void should_describe_missing_tag_name_if_not_found() {
-        when(testOutcome.getTags()).thenReturn(ImmutableSet.of(storyTag));
+        when(testOutcome.getTags()).thenReturn(NewSet.of(storyTag));
 
         try {
             assertThat(testOutcome, havingTagName("unknown tag"));
@@ -55,7 +55,7 @@ public class WhenMatchingTags {
 
     @Test
     public void should_describe_missing_tag_type_if_not_found() {
-        when(testOutcome.getTags()).thenReturn(ImmutableSet.of(storyTag));
+        when(testOutcome.getTags()).thenReturn(NewSet.of(storyTag));
 
         try {
             assertThat(testOutcome, havingTagType("unknown tag type"));
@@ -68,49 +68,49 @@ public class WhenMatchingTags {
 
     @Test
     public void should_not_match_test_outcome_if_tag_name_is_not_present() {
-        when(testOutcome.getTags()).thenReturn(ImmutableSet.of(storyTag));
+        when(testOutcome.getTags()).thenReturn(NewSet.of(storyTag));
 
         assertThat(havingTagName("a feature").matches(testOutcome), is(false));
     }
 
     @Test
     public void should_match_test_outcome_with_tag_type() {
-        when(testOutcome.getTags()).thenReturn(ImmutableSet.of(storyTag));
+        when(testOutcome.getTags()).thenReturn(NewSet.of(storyTag));
 
         assertThat(havingTagType("story").matches(testOutcome), is(true));
     }
 
     @Test
     public void should_not_match_test_outcome_if_tag_type_name_is_not_present() {
-        when(testOutcome.getTags()).thenReturn(ImmutableSet.of(storyTag));
+        when(testOutcome.getTags()).thenReturn(NewSet.of(storyTag));
 
         assertThat(havingTagType("feature").matches(testOutcome), is(false));
     }
 
     @Test
     public void should_match_test_outcome_with_tag() {
-        when(testOutcome.getTags()).thenReturn(ImmutableSet.of(storyTag));
+        when(testOutcome.getTags()).thenReturn(NewSet.of(storyTag));
 
         assertThat(havingTag(TestTag.withName("a story").andType("story")).matches(testOutcome), is(true));
     }
 
     @Test
     public void should_not_match_test_outcome_with_tag_if_name_is_different() {
-        when(testOutcome.getTags()).thenReturn(ImmutableSet.of(storyTag));
+        when(testOutcome.getTags()).thenReturn(NewSet.of(storyTag));
 
         assertThat(havingTag(TestTag.withName("another story").andType("story")).matches(testOutcome), is(false));
     }
 
     @Test
     public void should_not_match_test_outcome_with_tag_if_type_is_different() {
-        when(testOutcome.getTags()).thenReturn(ImmutableSet.of(storyTag));
+        when(testOutcome.getTags()).thenReturn(NewSet.of(storyTag));
 
         assertThat(havingTag(TestTag.withName("a story").andType("feature")).matches(testOutcome), is(false));
     }
 
     @Test
     public void should_describe_expected_tag_if_not_found() {
-        when(testOutcome.getTags()).thenReturn(ImmutableSet.of(storyTag));
+        when(testOutcome.getTags()).thenReturn(NewSet.of(storyTag));
 
         try {
             assertThat(testOutcome, havingTag(TestTag.withName("a different story").andType("feature")));

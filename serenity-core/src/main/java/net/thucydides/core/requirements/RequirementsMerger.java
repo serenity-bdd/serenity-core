@@ -1,9 +1,10 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.requirements.model.Requirement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,13 +12,16 @@ import java.util.List;
  */
 public class RequirementsMerger {
     public List<Requirement> merge(Iterable<Requirement> baseRequirements, Iterable<Requirement> newRequirements) {
-        List<Requirement> mergedRequirements = Lists.newArrayList(baseRequirements);
+        List<Requirement> mergedRequirements = new ArrayList<>();
+        baseRequirements.forEach(
+                req -> mergedRequirements.add(req)
+        );
 
         for(Requirement newRequirement : newRequirements) {
             mergeNewRequirement(newRequirement, mergedRequirements);
         }
 
-        return ImmutableList.copyOf(mergedRequirements);
+        return NewList.copyOf(mergedRequirements);
     }
 
     private void mergeNewRequirement(Requirement newRequirement, List<Requirement> existingRequirements) {

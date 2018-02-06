@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements.model;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 
 /**
  * Created by john on 6/03/15.
@@ -25,7 +25,7 @@ public enum FeatureType {
     }
 
     public static FeatureType forFilename(String storyPath) {
-        for(FeatureType featureType : ImmutableList.of(FEATURE, STORY)) {
+        for(FeatureType featureType : NewList.of(FEATURE, STORY)) {
             if (storyPath.toLowerCase().endsWith(featureType.extension)) {
                 return featureType;
             }

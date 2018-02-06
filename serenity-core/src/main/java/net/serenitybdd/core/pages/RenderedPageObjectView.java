@@ -1,6 +1,7 @@
 package net.serenitybdd.core.pages;
 
 import com.google.common.base.Function;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.scheduling.NormalFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
 import net.thucydides.core.steps.StepEventBus;
@@ -9,11 +10,11 @@ import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_NO_WAIT;
 import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_WAIT;
 import static net.serenitybdd.core.selectors.Selectors.xpathOrCssSelector;
@@ -68,7 +69,7 @@ public class RenderedPageObjectView {
         return new FluentWait(driver)
                 .withTimeout(waitForTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS)
                 .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
-                .ignoreAll(newArrayList(NoSuchElementException.class,
+                .ignoreAll(NewList.of(NoSuchElementException.class,
                         NoSuchFrameException.class,
                         StaleElementReferenceException.class,
                         InvalidElementStateException.class));
@@ -497,7 +498,7 @@ public class RenderedPageObjectView {
             }
             pageObject.resetImplicitTimeout();
         } catch (TimeoutException e) {
-            return newArrayList();
+            return new ArrayList();
         }
         return results;
     }

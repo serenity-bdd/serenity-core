@@ -96,7 +96,7 @@ public class Fields {
         }
 
         public Map<String, Object> asMap() {
-            Map<String, Object> fieldValues = new HashMap<>();
+            Map<String, Object> fieldValues = new HashMap();
             for(Field field : Fields.of(object.getClass()).allFields()) {
                 try {
                     field.setAccessible(true);

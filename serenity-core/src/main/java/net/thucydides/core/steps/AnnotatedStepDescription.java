@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.reflection.MethodFinder;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +16,7 @@ import static net.thucydides.core.util.NameConverter.humanize;
  */
 public final class AnnotatedStepDescription {
 
-    private static final List<String> VALID_STEP_ANNOTATIONS = ImmutableList.of("Step", "Given", "When", "Then");
+    private static final List<String> VALID_STEP_ANNOTATIONS = NewList.of("Step", "Given", "When", "Then");
 
     private final ExecutedStepDescription description;
 

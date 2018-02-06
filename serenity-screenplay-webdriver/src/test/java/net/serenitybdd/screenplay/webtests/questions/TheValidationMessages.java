@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.webtests.questions;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 
@@ -17,6 +17,6 @@ public class TheValidationMessages implements Question< List< String > > {
 
     @Override public List< String > answeredBy( Actor actor )
     {
-        return ImmutableList.of("BSB must be 6 digits"); // should really be something like: Text.of( ErrorMessages.MESSAGES ).viewedBy( actor ).asList();
+        return NewList.of("BSB must be 6 digits"); // should really be something like: Text.of( ErrorMessages.MESSAGES ).viewedBy( actor ).asList();
     }
 }

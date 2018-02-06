@@ -1,8 +1,7 @@
 package net.thucydides.core.requirements;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.model.Release;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
@@ -17,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.EMPTY_LIST;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 
@@ -107,8 +105,8 @@ public abstract class BaseRequirementsService implements RequirementsService {
     protected void indexRequirements() {
         requirementAncestors = new ConcurrentHashMap();
         for (Requirement requirement : requirements) {
-            List<Requirement> requirementPath = ImmutableList.of(requirement);
-            requirementAncestors.put(requirement, ImmutableList.of(requirement));
+            List<Requirement> requirementPath = NewList.of(requirement);
+            requirementAncestors.put(requirement, NewList.of(requirement));
             indexChildRequirements(requirementPath, requirement.getChildren());
         }
     }
@@ -116,9 +114,9 @@ public abstract class BaseRequirementsService implements RequirementsService {
 
     private void indexChildRequirements(List<Requirement> ancestors, List<Requirement> children) {
         for (Requirement requirement : children) {
-            List<Requirement> requirementPath = newArrayList(ancestors);
+            List<Requirement> requirementPath = new ArrayList(ancestors);
             requirementPath.add(requirement);
-            requirementAncestors.put(requirement, ImmutableList.copyOf(requirementPath));
+            requirementAncestors.put(requirement, NewList.copyOf(requirementPath));
             indexChildRequirements(requirementPath, requirement.getChildren());
         }
     }
@@ -207,7 +205,7 @@ public abstract class BaseRequirementsService implements RequirementsService {
 
     @Override
     public List<String> getReleaseVersionsFor(TestOutcome testOutcome) {
-        List<String> releases = newArrayList(testOutcome.getVersions());
+        List<String> releases = new ArrayList(testOutcome.getVersions());
         for (Requirement parentRequirement : getAncestorRequirementsFor(testOutcome)) {
             releases.addAll(parentRequirement.getReleaseVersions());
         }
@@ -216,7 +214,7 @@ public abstract class BaseRequirementsService implements RequirementsService {
 
 
     private List<List<String>> getReleaseVersionsFrom(List<Requirement> requirements) {
-        List<List<String>> releaseVersions = newArrayList();
+        List<List<String>> releaseVersions = new ArrayList();
         for (Requirement requirement : requirements) {
             releaseVersions.add(requirement.getReleaseVersions());
             releaseVersions.addAll(getReleaseVersionsFrom(requirement.getChildren()));

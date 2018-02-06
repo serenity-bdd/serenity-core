@@ -2,7 +2,7 @@ package net.thucydides.core.steps.stepdata;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.csv.FailedToInitializeTestData;
 import net.thucydides.core.csv.FieldName;
 import net.thucydides.core.csv.InstanceBuilder;
@@ -24,12 +24,11 @@ public class StringTestDataSource implements TestDataSource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StringTestDataSource.class);
 
-    public StringTestDataSource(final String... rows) throws IOException {
-        Preconditions.checkState(rows.length > 1);
+    public StringTestDataSource(final String... rows) {
         this.separator = StepData.DEFAULT_SEPARATOR;
-        this.header =  rows[0];
-        this.rows = Lists.newArrayList(rows);
-        this.rows.remove(0);
+        List<String> rowData = Arrays.asList(rows);
+        this.header =  rowData.get(0);
+        this.rows = rowData.subList(1, rowData.size());
     }
 
     private Map<String, String> dataEntryFrom(final List<String> titleRow, final List<String> dataRow) {

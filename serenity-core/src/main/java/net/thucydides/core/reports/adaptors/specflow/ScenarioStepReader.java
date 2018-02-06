@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.adaptors.specflow;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewSet;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.model.TestStep;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.Set;
 public class ScenarioStepReader {
 
 
-    private static final Set<String> STEP_KEYWORDS = ImmutableSet.of("given", "when", "then", "and");
+    private static final Set<String> STEP_KEYWORDS = NewSet.of("given", "when", "then", "and");
     private static final String RESULT_LEAD = "-> ";
 
     public static boolean isResult(String line) {

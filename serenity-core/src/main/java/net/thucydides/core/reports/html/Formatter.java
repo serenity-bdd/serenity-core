@@ -3,7 +3,7 @@ package net.thucydides.core.reports.html;
 import com.github.rjeschke.txtmark.Configuration;
 import com.github.rjeschke.txtmark.Processor;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import com.google.inject.Inject;
 import com.google.inject.Key;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -448,7 +448,7 @@ public class Formatter {
     }
 
     private List<String> inOrderOfDecreasingLength(List<String> issues) {
-        List<String> sortedIssues = Lists.newArrayList(issues);
+        List<String> sortedIssues = NewList.copyOf(issues);
         Collections.sort(sortedIssues, new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
@@ -498,7 +498,7 @@ public class Formatter {
     }
 
     private List<String> sortByDecreasingSize(List<String> issues) {
-        List<String> sortedIssues = Lists.newArrayList(issues);
+        List<String> sortedIssues = new ArrayList<>(issues);
         Collections.sort(sortedIssues, (a, b) -> Integer.valueOf(-a.length()).compareTo(Integer.valueOf(b.length())));
         return sortedIssues;
     }

@@ -3,7 +3,7 @@ package net.thucydides.core.reports.csv;
 import au.com.bytecode.opencsv.CSVWriter;
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
@@ -45,7 +45,7 @@ public class CSVReporter extends ThucydidesReporter {
 
     private List<String> extraColumnsDefinedIn(EnvironmentVariables environmentVariables) {
         String columns = ThucydidesSystemProperty.SERENITY_CSV_EXTRA_COLUMNS.from(environmentVariables, "");
-        return ImmutableList.copyOf(Splitter.on(",").omitEmptyStrings().trimResults().split(columns));
+        return Splitter.on(",").omitEmptyStrings().trimResults().splitToList(columns);
     }
 
     public File generateReportFor(TestOutcomes testOutcomes, String reportName) throws IOException {
@@ -79,7 +79,7 @@ public class CSVReporter extends ThucydidesReporter {
     }
 
     private String[] withRowDataFrom(TestOutcome outcome) {
-        List<? extends Serializable> defaultValues = ImmutableList.of(
+        List<? extends Serializable> defaultValues = NewList.of(
                 blankIfNull(outcome.getStoryTitle()),
                 blankIfNull(outcome.getTitle()),
                 outcome.getResult(),

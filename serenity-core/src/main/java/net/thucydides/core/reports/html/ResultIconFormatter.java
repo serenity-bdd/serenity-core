@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class ResultIconFormatter {
 
-    private final Map<TestResult, String> resultIcons = new HashMap<>();
+    private final Map<TestResult, String> resultIcons = new HashMap();
     {
         resultIcons.put(TestResult.COMPROMISED, "<i class='fa fa-chain-broken ${iconStyle} ${qualifier}' title='${result}'></i>");
         resultIcons.put(TestResult.ERROR,  "<i class='fa fa-exclamation-triangle ${iconStyle} ${qualifier}' title='${result}'></i>");
@@ -20,7 +20,7 @@ public class ResultIconFormatter {
         resultIcons.put(TestResult.UNDEFINED, "<i class='fa-exclamation ${iconStyle} ${qualifier}' title='${result}'></i>");
     }
 
-    private final Map<TestResult, String> resultIconStyles = new HashMap<>();
+    private final Map<TestResult, String> resultIconStyles = new HashMap();
     {
         resultIconStyles.put(TestResult.COMPROMISED, "compromised-icon");
         resultIconStyles.put(TestResult.ERROR, "error-icon");

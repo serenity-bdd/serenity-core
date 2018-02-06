@@ -1,6 +1,6 @@
 package net.serenitybdd.core;
 
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.di.DependencyInjector;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
@@ -211,7 +211,7 @@ public class Serenity {
         if (getStepListener() == null) {
            return new ArrayList<>();
         }
-        return Lists.newArrayList(getStepListener());
+        return NewList.of(getStepListener());
     }
 
     public static StepListener getStepListener() {

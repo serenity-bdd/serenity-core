@@ -1,6 +1,6 @@
 package net.serenitybdd.junit.runners;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import org.junit.runners.model.RunnerScheduler;
 
 import java.util.LinkedList;
@@ -26,7 +26,7 @@ class ParameterizedRunnerScheduler implements RunnerScheduler {
     }
 
     protected Queue<Future<Void>> getTaskQueue() {
-        return new LinkedList<>(ImmutableList.copyOf(tasks));
+        return new LinkedList<>(NewList.copyOf(tasks));
     }
 
     public void schedule(final Runnable childStatement) {

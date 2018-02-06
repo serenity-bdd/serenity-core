@@ -1,7 +1,7 @@
 package net.serenitybdd.core.buildinfo;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import net.serenitybdd.core.collect.NewList;
+import java.util.HashMap;
 import com.google.inject.Inject;
 import net.thucydides.core.webdriver.Configuration;
 import org.openqa.selenium.Capabilities;
@@ -78,7 +78,7 @@ public class PropertyBasedDriverCapabilityRecord implements DriverCapabilityReco
 
     @Override
     public Map<String, Properties> getDriverCapabilities() {
-        Map<String, Properties> driverCapabilities = Maps.newHashMap();
+        Map<String, Properties> driverCapabilities = new HashMap();
         try (DirectoryStream<Path> stream = driverCapabilityRecords()) {
             for (Path file : stream) {
                 String driverName = driverNameFrom(file);

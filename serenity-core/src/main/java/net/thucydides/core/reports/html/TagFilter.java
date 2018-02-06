@@ -2,16 +2,12 @@ package net.thucydides.core.reports.html;
 
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.Sets;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class TagFilter {
 
@@ -40,7 +36,7 @@ public class TagFilter {
 
 
     public Set<TestTag> removeTagsOfType(Set<TestTag> tags, String... redundantTagTypes) {
-        Set<TestTag> filteredTags = Sets.newHashSet();
+        Set<TestTag> filteredTags = new HashSet();
         List<String> maskedTagTypes = Arrays.asList(redundantTagTypes);
         for (TestTag tag : tags) {
             if (!maskedTagTypes.contains(tag.getType())) {
@@ -52,7 +48,7 @@ public class TagFilter {
 
 
     public Set<TestTag> removeTagsWithName(Set<TestTag> tags, String name) {
-        Set<TestTag> filteredTags = Sets.newHashSet();
+        Set<TestTag> filteredTags = new HashSet();
         for (TestTag tag : tags) {
             if (!tag.getShortName().equalsIgnoreCase(name)) {
                 filteredTags.add(tag);

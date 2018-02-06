@@ -76,7 +76,7 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
     private final static SearchContextProvider WEBELEMENT_SEARCH_CONTEXT = (context, timeout) -> context;
 
 
-    private static Map<SearchContextType, SearchContextProvider> SEARCH_CONTEXTS = new HashMap<>();
+    private static Map<SearchContextType, SearchContextProvider> SEARCH_CONTEXTS = new HashMap();
 
     static {
         SEARCH_CONTEXTS.put(WebDriverFacadeContext,     UNMODIFIED_SEARCH_CONTEXT);

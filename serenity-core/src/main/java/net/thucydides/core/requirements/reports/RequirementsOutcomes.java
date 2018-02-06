@@ -1,9 +1,7 @@
 package net.thucydides.core.requirements.reports;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.OutcomeCounter;
@@ -17,14 +15,12 @@ import net.thucydides.core.requirements.ExcludedUnrelatedRequirementTypes;
 import net.thucydides.core.requirements.RequirementsTagProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.hamcrest.Matchers.hasItem;
 
 /**
  * A set of test results for a list of high-level requirements.
@@ -202,7 +198,7 @@ public class RequirementsOutcomes {
     }
 
     public List<RequirementOutcome> getRequirementOutcomes() {
-        return ImmutableList.copyOf(requirementOutcomes);
+        return NewList.copyOf(requirementOutcomes);
     }
 
     public String getType() {
@@ -378,7 +374,7 @@ public class RequirementsOutcomes {
     }
 
     public List<RequirementOutcome> getFlattenedRequirementOutcomes(List<RequirementOutcome> outcomes) {
-        Set<RequirementOutcome> flattenedOutcomes = Sets.newHashSet();
+        Set<RequirementOutcome> flattenedOutcomes = new HashSet();
 
         for (RequirementOutcome requirementOutcome : outcomes) {
             flattenedOutcomes.add(requirementOutcome);
@@ -396,7 +392,7 @@ public class RequirementsOutcomes {
             }
         }
 
-        return ImmutableList.copyOf(flattenedOutcomes);
+        return NewList.copyOf(flattenedOutcomes);
     }
 
     public OutcomeCounter getTotal() {
@@ -476,7 +472,7 @@ public class RequirementsOutcomes {
         }
 
         matchingRequirements = removeRequirementsWithoutTestsFrom(matchingRequirements);
-        return new RequirementsOutcomes(Lists.newArrayList(matchingRequirements),
+        return new RequirementsOutcomes(new ArrayList<>(matchingRequirements),
                 TestOutcomes.of(matchingTestOutcomes),
                 issueTracking,
                 environmentVariables,

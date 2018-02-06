@@ -2,7 +2,7 @@ package net.thucydides.core.reports.html;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;

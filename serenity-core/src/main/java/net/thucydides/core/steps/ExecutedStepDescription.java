@@ -1,7 +1,7 @@
 package net.thucydides.core.steps;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import net.serenitybdd.core.collect.NewList;
+import java.util.HashMap;
 import net.thucydides.core.reflection.MethodFinder;
 
 import java.lang.reflect.Method;
@@ -26,7 +26,7 @@ public class ExecutedStepDescription implements Cloneable {
     private final Map<String, Object> displayedFields;
     private boolean isAGroup;
 
-    private final static Map<String,Object> NO_FIELDS = Maps.newHashMap();
+    private final static Map<String,Object> NO_FIELDS = new HashMap();
     private final static List<String> NO_ARGUMENTS = new ArrayList<>();
     private boolean isAQuestion ;
 

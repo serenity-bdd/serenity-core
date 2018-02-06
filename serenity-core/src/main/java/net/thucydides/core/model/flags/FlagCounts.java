@@ -1,6 +1,6 @@
 package net.thucydides.core.model.flags;
 
-import com.google.common.collect.ImmutableMap;
+import net.serenitybdd.core.collect.NewMap;
 import net.thucydides.core.model.TestOutcome;
 
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class FlagCounts {
     private final List<? extends TestOutcome> testOutcomes;
-    private final  Map<Flag, Integer> flagMap = new HashMap<>();
+    private final  Map<Flag, Integer> flagMap = new HashMap();
 
     public FlagCounts(List<? extends TestOutcome> testOutcomes) {
         this.testOutcomes = testOutcomes;
@@ -24,7 +24,7 @@ public class FlagCounts {
         for(TestOutcome testOutcome : testOutcomes) {
             addToMap(testOutcome.getFlags());
         }
-        return ImmutableMap.copyOf(flagMap);
+        return NewMap.copyOf(flagMap);
     }
 
     private void addToMap(Set<? extends Flag> flags) {

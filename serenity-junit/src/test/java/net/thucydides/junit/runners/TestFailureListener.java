@@ -1,6 +1,6 @@
 package net.thucydides.junit.runners;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
@@ -18,6 +18,6 @@ public class TestFailureListener extends RunListener {
     }
     
     public List<Failure> getFailures() {
-        return ImmutableList.copyOf(failures);
+        return NewList.copyOf(failures);
     }
 }

@@ -195,7 +195,7 @@ public final class NameConverter {
         }
     }
 
-    private final static Map<Character, String> EXCLUDE_FROM_FILENAMES = new HashMap<>();
+    private final static Map<Character, String> EXCLUDE_FROM_FILENAMES = new HashMap();
     static {
         EXCLUDE_FROM_FILENAMES.put('$', "_");
         EXCLUDE_FROM_FILENAMES.put('/', "_");

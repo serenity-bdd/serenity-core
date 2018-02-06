@@ -1,7 +1,7 @@
 package net.thucydides.core.util;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import net.serenitybdd.core.collect.NewMap;
+import java.util.HashMap;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class MockEnvironmentVariables implements EnvironmentVariables {
 
     private Properties properties = new Properties();
-    private Map<String, String> values = Maps.newHashMap();
+    private Map<String, String> values = new HashMap();
 
     public MockEnvironmentVariables() {
         this.properties.setProperty("user.home", System.getProperty("user.home"));
@@ -36,7 +36,7 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
 
     protected MockEnvironmentVariables(Properties properties, Map<String, String> values) {
         this.properties = PropertiesUtil.copyOf(properties);
-        this.values = ImmutableMap.copyOf(values);
+        this.values = NewMap.copyOf(values);
     }
 
     public static EnvironmentVariables fromSystemEnvironment() {

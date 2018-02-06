@@ -3,6 +3,7 @@ package net.serenitybdd.core.webdriver.servicepools;
 import com.google.common.base.Optional;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.openqa.selenium.os.ExecutableFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

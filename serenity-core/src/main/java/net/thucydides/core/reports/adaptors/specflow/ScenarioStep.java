@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.adaptors.specflow;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.model.TestResult;
 
 import java.math.BigDecimal;
@@ -90,7 +90,7 @@ public class ScenarioStep {
     }
 
     private List<String> tail(List<String> lines) {
-        return ImmutableList.copyOf(lines.subList(1, lines.size()));
+        return NewList.copyOf(lines.subList(1, lines.size()));
     }
 
 

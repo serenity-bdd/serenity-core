@@ -1,7 +1,7 @@
 package net.serenitybdd.core.pages;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import com.paulhammant.ngwebdriver.NgWebDriver;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
@@ -929,7 +929,7 @@ public abstract class PageObject {
     }
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(By... selectors) {
-        return find(Lists.newArrayList(selectors));
+        return find(NewList.of(selectors));
     }
 
     public List<WebElementFacade> findAll(By bySelector) {

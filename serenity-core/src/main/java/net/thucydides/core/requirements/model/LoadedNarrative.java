@@ -2,8 +2,8 @@ package net.thucydides.core.requirements.model;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.NewList;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
@@ -90,7 +90,7 @@ public class LoadedNarrative {
             String normalizedLine = line.toUpperCase();
             if (normalizedLine.startsWith("@ISSUES")) {
                 String issueList = normalizedLine.replace("@ISSUES", "").trim();
-                List<String> issues = Lists.newArrayList(Splitter.on(",").trimResults().split(issueList));
+                List<String> issues = Splitter.on(",").trimResults().splitToList(issueList);
                 if (!issues.isEmpty()) {
                     cardNumber = issues.get(0);
                 }
@@ -109,10 +109,10 @@ public class LoadedNarrative {
             String normalizedLine = line.toUpperCase();
             if (normalizedLine.startsWith("@VERSIONS")) {
                 String versionList = line.substring("@VERSIONS".length()).trim();
-                return Lists.newArrayList(Splitter.on(",").trimResults().split(versionList));
+                return Splitter.on(",").trimResults().splitToList(versionList);
             }
         }
-        return ImmutableList.of();
+        return new ArrayList();
     }
 
     private String readNarrativeFrom(List<String> lines) {

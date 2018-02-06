@@ -1,6 +1,6 @@
 package net.thucydides.core.statistics.service;
 
-import com.google.common.collect.ImmutableSet;
+import net.serenitybdd.core.collect.NewSet;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
@@ -37,6 +37,6 @@ public class ContextTagProvider implements TagProvider, CoreTagProvider {
         if (!THUCYDIDES_ADD_CONTEXT_TAG.booleanFrom(environmentVariables,true)) {
             return Collections.unmodifiableSet(new HashSet<>());
         }
-        return ImmutableSet.of(TestTag.withName(testOutcome.getContext()).andType("context"));
+        return NewSet.of(TestTag.withName(testOutcome.getContext()).andType("context"));
     }
 }

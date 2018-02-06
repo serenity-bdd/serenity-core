@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import com.opera.core.systems.OperaDriver;
 import io.appium.java_client.AppiumDriver;
 import org.apache.commons.lang3.StringUtils;
@@ -60,7 +60,7 @@ public enum SupportedWebDriver {
     /**
      * Internet Explorer
      */
-    IEXPLORER(InternetExplorerDriver.class, false, ImmutableList.of("IE")),
+    IEXPLORER(InternetExplorerDriver.class, false, NewList.of("IE")),
 
     /**
      * Microsoft Edge
@@ -93,7 +93,7 @@ public enum SupportedWebDriver {
                                List<String> synonyms) {
         this.webdriverClass = webdriverClass;
         this.supportsJavascriptInjection = supportsJavascriptInjection;
-        this.synonyms = ImmutableList.copyOf(synonyms);
+        this.synonyms = NewList.copyOf(synonyms);
     }
 
     private SupportedWebDriver(Class<? extends WebDriver> webdriverClass, boolean supportsJavascriptInjection) {

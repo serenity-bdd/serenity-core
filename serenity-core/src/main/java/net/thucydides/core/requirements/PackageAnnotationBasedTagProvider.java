@@ -2,8 +2,8 @@ package net.thucydides.core.requirements;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
+import net.serenitybdd.core.collect.NewList;
+import java.util.HashMap;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import static com.google.common.collect.Sets.newHashSet;
 import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT;
 import static net.thucydides.core.reflection.ClassFinder.loadClasses;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -37,7 +36,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  */
 public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagProvider implements RequirementsTagProvider, OverridableTagProvider {
     private static final String DOT_REGEX = "\\.";
-    private final static List<String> SUPPORTED_SUFFIXES = ImmutableList.of("story", "feature");
+    private final static List<String> SUPPORTED_SUFFIXES = NewList.of("story", "feature");
 
     private final Configuration configuration;
     private final RequirementPersister persister;
@@ -61,11 +60,11 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
 
     @Override
     public List<Requirement> getRequirements() {
-        return ImmutableList.copyOf(rootRequirementsIn(getRequirementsByPath().values()));
+        return NewList.copyOf(rootRequirementsIn(getRequirementsByPath().values()));
     }
 
     Map<Requirement, String> getRequirementPaths() {
-        Map<Requirement, String> requirementPaths = Maps.newHashMap();
+        Map<Requirement, String> requirementPaths = new HashMap();
         for (String path : getRequirementsByPath().keySet()) {
             requirementPaths.put(getRequirementsByPath().get(path), path);
         }
@@ -104,7 +103,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     private SortedMap<String, Requirement> loadRequirementsFromClasses(List<Class<?>> classes) {
-        SortedMap<String, Requirement> requirementMap = Maps.newTreeMap();
+        SortedMap<String, Requirement> requirementMap = new TreeMap<>();
         int maxDepth = maximumClassDepth(classes, rootPackage);
 
         for (Class candidateClass : classes) {
@@ -294,22 +293,22 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     protected List<Class<?>> loadClassesFromPath() {
-        Set<Class<?>> classesWithNarratives = newHashSet(loadClasses().annotatedWith(Narrative.class)
+        Set<Class<?>> classesWithNarratives = new HashSet(loadClasses().annotatedWith(Narrative.class)
                 .fromPackage(rootPackage));
 
-        Set<Class<?>> testCases = newHashSet(loadClasses().annotatedWith(RunWith.class)
+        Set<Class<?>> testCases = new HashSet(loadClasses().annotatedWith(RunWith.class)
                 .fromPackage(rootPackage));
 
-        Set<Class<?>> requirementClasses = newHashSet();
+        Set<Class<?>> requirementClasses = new HashSet();
         requirementClasses.addAll(classesWithNarratives);
         requirementClasses.addAll(classesThatContainSerenityTestsIn(testCases));
 
-        return ImmutableList.copyOf(requirementClasses);
+        return NewList.copyOf(requirementClasses);
 
     }
 
     private Set<? extends Class<?>> classesThatContainSerenityTestsIn(Set<Class<?>> testCases) {
-        Set<Class<?>> matchingClasses = newHashSet();
+        Set<Class<?>> matchingClasses = new HashSet();
 
         SerenityTestCaseFinder serenityTestCaseFinder = new SerenityTestCaseFinder();
         for (Class<?> testClass : testCases) {

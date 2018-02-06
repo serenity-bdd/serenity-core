@@ -1,8 +1,8 @@
 package net.thucydides.core.tags;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
@@ -44,7 +44,7 @@ public class BreadcrumbTagFilter {
         Optional<Requirement> displayedRequirement = requirementsService.getRequirementFor(tag);
 
         return displayedRequirement.isPresent()
-                ? ImmutableList.of(displayedRequirement.get().asTag()) : ImmutableList.<TestTag>of();
+                ? NewList.of(displayedRequirement.get().asTag()) : NewList.<TestTag>of();
     }
 
     public List<TestTag> getRequirementBreadcrumbsFrom(TestOutcome testOutcome) {

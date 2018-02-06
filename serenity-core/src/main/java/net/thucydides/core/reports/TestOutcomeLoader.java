@@ -1,7 +1,7 @@
 package net.thucydides.core.reports;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import com.google.inject.Inject;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
@@ -81,7 +81,7 @@ public class TestOutcomeLoader {
 
     }
 
-    private final static List<? extends OutcomeAugmenter> AUGMENTERS = ImmutableList.of(
+    private final static List<? extends OutcomeAugmenter> AUGMENTERS = NewList.of(
             new FlagsAugmenter()
     );
 
@@ -119,7 +119,7 @@ public class TestOutcomeLoader {
         if (matchingFiles == null) {
             throw new IOException("Could not find directory " + reportsDirectory);
         }
-        return ImmutableList.copyOf(matchingFiles);
+        return NewList.copyOf(matchingFiles);
     }
 
     public static TestOutcomeLoaderBuilder loadTestOutcomes() {

@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver.javascript;
 
-import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -12,6 +11,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +23,7 @@ import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascr
 public class JavascriptExecutorFacade {
     private WebDriver driver;
 
-    private Map<Type, Object> typeAdapters = Maps.newHashMap();
+    private Map<Type, Object> typeAdapters = new HashMap();
 
     public JavascriptExecutorFacade(final WebDriver driver) {
         this();
@@ -122,7 +122,7 @@ public class JavascriptExecutorFacade {
         return (objString == null) ? null : injectParametersInto(deserializeJsonAs(classOfT, objString), injectedFields);
     }
 
-    private final static Map<String, Object> NO_INJECTABLE_FIELDS = Maps.newHashMap();
+    private final static Map<String, Object> NO_INJECTABLE_FIELDS = new HashMap();
 
     /**
      * Executes the JavaScript code and deserializes the resulting object as a classOfT.

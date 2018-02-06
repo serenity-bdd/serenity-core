@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements.reports;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.reports.TestOutcomes;
@@ -40,7 +40,7 @@ public class MultipleSourceRequirmentsOutcomeFactory implements RequirementsOutc
                                                    IssueTracking issueTracking,
                                                    EnvironmentVariables environmentVariables,
                                                    ReportNameProvider reportNameProvider) {
-        this.requirementsTagProviders = ImmutableList.copyOf(requirementsTagProviders);
+        this.requirementsTagProviders = NewList.copyOf(requirementsTagProviders);
         this.issueTracking = issueTracking;
         this.environmentVariables = environmentVariables;
         this.reportNameProvider = reportNameProvider;

@@ -17,7 +17,7 @@ public class ScreenshotPreferencesByClass {
     }
 
     private Map<String, TakeScreenshots> classNameToScreenshotPreferencesDefinedIn(EnvironmentVariables environmentVariables) {
-        Map<String, TakeScreenshots> screenshotPreference = new HashMap<>();
+        Map<String, TakeScreenshots> screenshotPreference = new HashMap();
 
         for (String key : environmentVariables.getKeys()) {
             if (key.startsWith(SERENITY_TAKE_SCREENSHOTS_FOR)) {

@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import com.google.inject.Inject;
 import net.thucydides.core.statistics.service.TagProvider;
 import net.thucydides.core.statistics.service.TagProviderFilter;
@@ -40,7 +40,7 @@ public class ClasspathRequirementsProviderService implements RequirementsProvide
             requirementsTagProviders = loadRequirementsTagProviders();
         }
 
-        return ImmutableList.copyOf(requirementsTagProviders);
+        return NewList.copyOf(requirementsTagProviders);
     }
 
     private List<RequirementsTagProvider> loadRequirementsTagProviders() {

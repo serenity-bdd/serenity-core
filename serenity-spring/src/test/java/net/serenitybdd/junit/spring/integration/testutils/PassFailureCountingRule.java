@@ -26,7 +26,7 @@ public class PassFailureCountingRule implements MethodRule {
         private int failures = 0;
     }
 
-    private static final Map<Class<?>,State> states = new HashMap<>();
+    private static final Map<Class<?>,State> states = new HashMap();
 
     @Override
     public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {

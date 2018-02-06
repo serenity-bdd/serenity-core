@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.actions;
 
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.screenplay.Interaction;
 import org.openqa.selenium.Keys;
 
@@ -18,7 +18,7 @@ public abstract class EnterValue implements Interaction {
     }
 
     public EnterValue thenHit(Keys... keys) {
-        this.followedByKeys.addAll(Lists.newArrayList(keys));
+        this.followedByKeys.addAll(NewList.of(keys));
         return this;
     }
 

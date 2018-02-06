@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.actions;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import org.openqa.selenium.By;
@@ -13,7 +13,7 @@ public class WebElementLocator {
     private final List<By> locators;
 
     public WebElementLocator(List<By> locators) {
-        this.locators = ImmutableList.copyOf(locators);
+        this.locators = NewList.copyOf(locators);
     }
 
     public static WebElementLocator forLocators(List<By> locators) {

@@ -1,7 +1,7 @@
 package net.thucydides.core.util;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import net.serenitybdd.core.collect.NewMap;
+import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -27,13 +27,13 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
     SystemEnvironmentVariables(Properties systemProperties, Map<String, String> systemValues) {
 
-        Map<String, String> propertyValues = new HashMap<>();
+        Map<String, String> propertyValues = new HashMap();
         for(String property : systemProperties.stringPropertyNames()) {
             propertyValues.put(property, systemProperties.getProperty(property));
         }
 
-        this.properties = ImmutableMap.copyOf(propertyValues);
-        this.systemValues = ImmutableMap.copyOf(systemValues);
+        this.properties = NewMap.copyOf(propertyValues);
+        this.systemValues = NewMap.copyOf(systemValues);
     }
 
     public String getValue(final String name) {
@@ -150,9 +150,9 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
         propertySetLock.lock();
 
-        HashMap<String, String> workingCopy = Maps.newHashMap(properties);
+        HashMap<String, String> workingCopy = new HashMap(properties);
         workingCopy.put(name, value);
-        properties = ImmutableMap.copyOf(workingCopy);
+        properties = NewMap.copyOf(workingCopy);
 
         propertySetLock.unlock();
     }
@@ -161,9 +161,9 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
     public void clearProperty(String name) {
         propertySetLock.lock();
 
-        HashMap<String, String> workingCopy = Maps.newHashMap(properties);
+        HashMap<String, String> workingCopy = new HashMap(properties);
         workingCopy.remove(name);
-        properties = ImmutableMap.copyOf(workingCopy);
+        properties = NewMap.copyOf(workingCopy);
 
         propertySetLock.unlock();
     }

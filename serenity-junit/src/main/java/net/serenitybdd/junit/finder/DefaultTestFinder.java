@@ -1,7 +1,8 @@
 package net.serenitybdd.junit.finder;
 
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ public class DefaultTestFinder extends TestFinder {
 
     @Override
     public List<Class<?>> getClasses() {
-        return sorted(Lists.newArrayList(getAllTestClasses()));
+        return sorted(new ArrayList(getAllTestClasses()));
     }
 
     @Override

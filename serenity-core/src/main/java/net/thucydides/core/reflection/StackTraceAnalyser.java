@@ -1,6 +1,6 @@
 package net.thucydides.core.reflection;
 
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +77,7 @@ public class StackTraceAnalyser {
         return StringUtils.isNotEmpty(stackTraceElement.getFileName()) && (stackTraceElement.getFileName().equals("<generated>"));
     }
 
-    private final static List<String> HIDDEN_PACKAGES = Lists.newArrayList("sun.","java","org.gradle");
+    private final static List<String> HIDDEN_PACKAGES = NewList.of("sun.","java","org.gradle");
     private boolean allowedClassName(String className) {
         if (className.contains("$")) { return false; }
         if (inHiddenPackage(className)) { return false; }

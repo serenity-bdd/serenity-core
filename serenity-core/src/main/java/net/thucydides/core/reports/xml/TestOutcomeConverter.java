@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.xml;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -249,7 +249,7 @@ public class TestOutcomeConverter implements Converter {
     private void addTagsTo(HierarchicalStreamWriter writer, Set<TestTag> tags) {
         if (!CollectionUtils.isEmpty(tags)) {
             writer.startNode(TAGS);
-            List<TestTag> orderedTags = Lists.newArrayList(tags);
+            List<TestTag> orderedTags = new ArrayList(tags);
             Collections.sort(orderedTags);
             for (TestTag tag : orderedTags) {
                 writer.startNode(TAG);

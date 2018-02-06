@@ -65,7 +65,7 @@ public class JUnitXMLOutcomeReporter  {
     }
 
     private Map<String, List<TestOutcome>> groupByTestCase(TestOutcomes testOutcomes) {
-        Map<String, List<TestOutcome>> groupedTestOutcomes = new HashMap<>();
+        Map<String, List<TestOutcome>> groupedTestOutcomes = new HashMap();
         for(TestOutcome outcome : testOutcomes.getOutcomes()) {
             String testCaseName = StringUtils.isNotEmpty(outcome.getTestCaseName()) ? outcome.getTestCaseName() : outcome.getStoryTitle();
             List<TestOutcome> currentOutcomes = groupedTestOutcomes.getOrDefault(testCaseName, List());

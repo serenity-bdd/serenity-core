@@ -1,6 +1,6 @@
 package net.serenitybdd.core.history;
 
-import com.google.common.collect.ImmutableSet;
+import net.serenitybdd.core.collect.NewSet;
 import com.google.inject.Inject;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
@@ -21,7 +21,7 @@ public class HistoricalFlagProvider implements FlagProvider {
     private final EnvironmentVariables environmentVariables;
     private final Map<String, PreviousTestOutcome> previousTestOutcomesById;
 
-    private final Set<? extends Flag> NO_FLAGS = ImmutableSet.of();
+    private final Set<? extends Flag> NO_FLAGS = NewSet.of();
 
     @Inject
     public HistoricalFlagProvider(EnvironmentVariables environmentVariables,
@@ -35,7 +35,7 @@ public class HistoricalFlagProvider implements FlagProvider {
     }
 
     private Map<String, PreviousTestOutcome> indexById(List<PreviousTestOutcome> previousOutcomes) {
-        Map<String, PreviousTestOutcome> previousTestOutcomesById = new HashMap<>();
+        Map<String, PreviousTestOutcome> previousTestOutcomesById = new HashMap();
         for(PreviousTestOutcome previousTestOutcome : previousOutcomes) {
             previousTestOutcomesById.put(previousTestOutcome.getId(), previousTestOutcome);
         }
@@ -44,9 +44,9 @@ public class HistoricalFlagProvider implements FlagProvider {
 
     @Override
     public Set<? extends Flag> getFlagsFor(TestOutcome testOutcome) {
-        if (!historicalFlagsAreActivated()) { return ImmutableSet.of(); }
+        if (!historicalFlagsAreActivated()) { return NewSet.of(); }
 
-        return newFailureIn(testOutcome) ? ImmutableSet.of(NewFailure.FLAG) : NO_FLAGS;
+        return newFailureIn(testOutcome) ? NewSet.of(NewFailure.FLAG) : NO_FLAGS;
     }
 
     private boolean newFailureIn(TestOutcome testOutcome) {

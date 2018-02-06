@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.newArrayList;
-
 public class ConsequenceMatchers {
 
     public static <T> Matcher<T> displays(String propertyName, Matcher<?> valueMatcher) {
@@ -49,7 +47,7 @@ public class ConsequenceMatchers {
         }
 
         private String nonStaticFieldsOf(T domainObject) {
-            ArrayList<String> fieldNames = newArrayList();
+            ArrayList<String> fieldNames = new ArrayList();
             Set<Field> fields = Fields.of(domainObject.getClass()).nonStaticFields();
             for (Field field : fields) {
                 fieldNames.add("'" + field.getName() + "'");

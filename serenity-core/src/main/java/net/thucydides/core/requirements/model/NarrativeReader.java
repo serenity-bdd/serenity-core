@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements.model;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 
 import java.io.File;
@@ -27,7 +27,7 @@ public class NarrativeReader {
 
     protected NarrativeReader(String rootDirectory, List<String> requirementTypes) {
         this.rootDirectory = rootDirectory;
-        this.requirementTypes = ImmutableList.copyOf(requirementTypes);
+        this.requirementTypes = NewList.copyOf(requirementTypes);
     }
 
     public static NarrativeReader forRootDirectory(String rootDirectory) {

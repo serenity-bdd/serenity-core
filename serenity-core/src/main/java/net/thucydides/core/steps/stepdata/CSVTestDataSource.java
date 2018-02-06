@@ -2,7 +2,7 @@ package net.thucydides.core.steps.stepdata;
 
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.csv.FailedToInitializeTestData;
 import net.thucydides.core.csv.FieldName;
 import net.thucydides.core.csv.InstanceBuilder;
@@ -67,7 +67,7 @@ public class CSVTestDataSource implements TestDataSource {
     }
 
     public CSVTestDataSource(final String path) throws IOException {
-        this(ImmutableList.<String>of(path), CSVReader.DEFAULT_SEPARATOR, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
+        this(NewList.<String>of(path), CSVReader.DEFAULT_SEPARATOR, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
     }
 
     public CSVTestDataSource(final List<String> paths, final char separatorValue) throws IOException {
@@ -75,11 +75,11 @@ public class CSVTestDataSource implements TestDataSource {
     }
 
     public CSVTestDataSource(final String path, final char separatorValue) throws IOException {
-        this(ImmutableList.<String>of(path), separatorValue, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
+        this(NewList.<String>of(path), separatorValue, CSVReader.DEFAULT_QUOTE_CHARACTER, CSVReader.DEFAULT_ESCAPE_CHARACTER, CSVReader.DEFAULT_SKIP_LINES);
     }
 
     public CSVTestDataSource(final String path, final char separatorValue, final char quotechar, final char escape) throws IOException {
-        this(ImmutableList.<String>of(path), separatorValue, quotechar, escape, CSVReader.DEFAULT_SKIP_LINES);
+        this(NewList.<String>of(path), separatorValue, quotechar, escape, CSVReader.DEFAULT_SKIP_LINES);
     }
 
     public static boolean validTestDataPath(final String path) {
@@ -134,7 +134,7 @@ public class CSVTestDataSource implements TestDataSource {
 
 
     private Map<String, String> dataEntryFrom(final String[] titleRow, final String[] dataRow) {
-        Map<String, String> dataset = new HashMap<>();
+        Map<String, String> dataset = new HashMap();
 
         for (int column = 0; column < titleRow.length; column++) {
             if (column < dataRow.length) {

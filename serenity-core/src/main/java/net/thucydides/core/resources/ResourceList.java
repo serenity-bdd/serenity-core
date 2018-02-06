@@ -1,6 +1,6 @@
 package net.thucydides.core.resources;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.util.zip.ZipFile;
  */
 public class ResourceList {
 
-    private static final List<String> UNREQUIRED_FILES = ImmutableList.of("pom.xml");
+    private static final List<String> UNREQUIRED_FILES = NewList.of("pom.xml");
     private static final String PATH_SEPARATOR = System.getProperty("path.separator");
 
     final Pattern pattern;

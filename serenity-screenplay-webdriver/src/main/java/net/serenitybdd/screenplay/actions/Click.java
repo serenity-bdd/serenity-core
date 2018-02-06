@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.actions;
 
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.targets.Target;
@@ -23,7 +23,7 @@ public class Click {
     }
 
     public static Interaction on(By... locators) {
-        return instrumented(ClickOnBy.class, Lists.newArrayList(locators));
+        return instrumented(ClickOnBy.class, NewList.of(locators));
     }
 
 }

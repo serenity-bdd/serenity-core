@@ -7,7 +7,10 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.images.ResizableImage;
 import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.model.*;
+import net.thucydides.core.model.ReportType;
+import net.thucydides.core.model.Story;
+import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestTag;
 import net.thucydides.core.model.screenshots.Screenshot;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.OutcomeFormat;
@@ -35,7 +38,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.google.common.collect.Iterables.any;
 import static net.thucydides.core.model.ReportType.HTML;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 
@@ -105,7 +107,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
         TestOutcome storedTestOutcome = testOutcome.withQualifier(qualifier);
 
-        Map<String, Object> context = new HashMap<>();
+        Map<String, Object> context = new HashMap();
         addTestOutcomeToContext(storedTestOutcome, context);
 
         if (containsScreenshots(storedTestOutcome)) {
@@ -221,7 +223,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
         String screenshotReport = testOutcome.getReportName() + "_screenshots.html";
 
-        Map<String, Object> context = new HashMap<>();
+        Map<String, Object> context = new HashMap();
         addTestOutcomeToContext(testOutcome, context);
         addFormattersToContext(context);
         context.put("screenshots", screenshots);

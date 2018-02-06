@@ -1,7 +1,7 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
+import java.util.HashMap;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
@@ -59,7 +59,7 @@ public class DriverCapabilities {
     }
 
     private Map<SupportedWebDriver, DriverCapabilitiesProvider> driverCapabilitiesSelector(String options) {
-        Map<SupportedWebDriver, DriverCapabilitiesProvider> selectors = Maps.newHashMap();
+        Map<SupportedWebDriver, DriverCapabilitiesProvider> selectors = new HashMap();
 
         selectors.put(CHROME,new ChromeDriverCapabilities(environmentVariables, options));
         selectors.put(FIREFOX,new FirefoxDriverCapabilities(environmentVariables));

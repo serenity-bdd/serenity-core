@@ -1,13 +1,10 @@
 package net.thucydides.core.statistics.service;
 
-import com.google.common.collect.Maps;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
-
-import static com.google.common.collect.Lists.newArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ClasspathTagProviderService implements TagProviderService {
 
@@ -23,7 +20,7 @@ public class ClasspathTagProviderService implements TagProviderService {
 
     private final String ALL_TAG_PROVIDERS = "ALL";
 
-    Map<String, List<TagProvider>> tagProviderCache = Maps.newConcurrentMap();
+    Map<String, List<TagProvider>> tagProviderCache = new ConcurrentHashMap<>();
 
     @Override
     public List<TagProvider> getTagProviders(String testSource) {
@@ -90,7 +87,9 @@ public class ClasspathTagProviderService implements TagProviderService {
         List<TagProvider> tagProviders = new ArrayList<>();
 
         for (TagProviderStrategy strategy : tagProviderStrategies) {
-            tagProviders.addAll(newArrayList(strategy.getTagProviders()));
+            strategy.getTagProviders().forEach(
+                    tagProviders::add
+            );
         }
         return tagProviders;
     }

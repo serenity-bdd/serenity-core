@@ -31,7 +31,7 @@ public class RemoteDriverProvider implements DriverProvider {
 
 
     private Map<RemoteDriverType,RemoteDriverBuilder> driverBuildersFor(EnvironmentVariables environmentVariables) {
-        Map<RemoteDriverType,RemoteDriverBuilder> driverBuilders = new HashMap<>();
+        Map<RemoteDriverType,RemoteDriverBuilder> driverBuilders = new HashMap();
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
 

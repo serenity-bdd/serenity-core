@@ -1,6 +1,6 @@
 package net.thucydides.core.reports.adaptors.xunit;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
@@ -26,7 +26,7 @@ public class DefaultXUnitAdaptor extends FilebasedOutcomeAdaptor {
         for(File xunitFile : XUnitFiles.in(source)) {
             loadedOutcomes.addAll(testOutcomesIn(xunitFile));
         }
-        return ImmutableList.copyOf(loadedOutcomes);
+        return NewList.copyOf(loadedOutcomes);
     }
 
     public List<TestOutcome> testOutcomesIn(File xunitFile) throws IOException {
@@ -35,7 +35,7 @@ public class DefaultXUnitAdaptor extends FilebasedOutcomeAdaptor {
         for(TestSuite testSuite : xunitTestSuites) {
             testOutcomes.addAll(testOutcomesIn(testSuite));
         }
-        return ImmutableList.copyOf(testOutcomes);
+        return NewList.copyOf(testOutcomes);
     }
 
     private Collection<? extends TestOutcome> testOutcomesIn(TestSuite testSuite) {

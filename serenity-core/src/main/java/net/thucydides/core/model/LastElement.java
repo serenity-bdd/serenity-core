@@ -1,7 +1,7 @@
 package net.thucydides.core.model;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.Maps;
+import java.util.HashMap;
 
 import java.util.List;
 import java.util.Map;
@@ -34,7 +34,7 @@ public class LastElement {
         forTestCases, forFeatureOrStoryFiles
     }
 
-    static Map<LastElementStrategy, LastElementFinder> LAST_ELEMENT_FINDER = Maps.newHashMap();
+    static Map<LastElementStrategy, LastElementFinder> LAST_ELEMENT_FINDER = new HashMap();
     static {
         LAST_ELEMENT_FINDER.put(forTestCases, new LastElementOfATestCase());
         LAST_ELEMENT_FINDER.put(forFeatureOrStoryFiles, new LastElementOfAFeatureOrStoryFile());

@@ -57,7 +57,7 @@ public class FreemarkerContext {
     public Map<String, Object> getBuildContext(TestOutcomes testOutcomesForTagType,
                                              ReportNameProvider reportName,
                                              boolean useFiltering) {
-        Map<String, Object> context = new HashMap<>();
+        Map<String, Object> context = new HashMap();
         TagFilter tagFilter = new TagFilter(environmentVariables);
         context.put("testOutcomes", testOutcomesForTagType);
         context.put("allTestOutcomes", testOutcomesForTagType.getRootOutcomes());

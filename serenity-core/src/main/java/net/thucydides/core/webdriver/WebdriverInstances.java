@@ -1,7 +1,6 @@
 package net.thucydides.core.webdriver;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import org.openqa.selenium.WebDriver;
 
@@ -20,9 +19,9 @@ public class WebdriverInstances {
     private String currentDriver;
 
     public WebdriverInstances() {
-        this.driverMap = new HashMap<>();
+        this.driverMap = new HashMap();
         this.driversUsedInCurrentThread = new ThreadLocal<>();
-        this.driversUsedInCurrentThread.set(Sets.<String>newHashSet());
+        this.driversUsedInCurrentThread.set(new HashSet());
         this.driverNamer = new DriverName(ConfiguredEnvironment.getEnvironmentVariables());
     }
 

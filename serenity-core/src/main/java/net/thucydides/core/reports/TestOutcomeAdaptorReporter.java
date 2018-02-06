@@ -1,7 +1,7 @@
 package net.thucydides.core.reports;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.adaptors.TestOutcomeAdaptor;

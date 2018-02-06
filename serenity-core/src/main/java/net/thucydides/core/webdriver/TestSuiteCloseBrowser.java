@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.thucydides.core.annotations.TestCaseAnnotations;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -10,7 +10,7 @@ import java.util.List;
 public class TestSuiteCloseBrowser extends WebdriverCloseBrowser implements CloseBrowser {
     private final Class<?> testSuite;
 
-    private final static List<RestartBrowserForEach> SCENARIO_EVENTS = ImmutableList.of(
+    private final static List<RestartBrowserForEach> SCENARIO_EVENTS = NewList.of(
             RestartBrowserForEach.SCENARIO, RestartBrowserForEach.EXAMPLE
     );
 

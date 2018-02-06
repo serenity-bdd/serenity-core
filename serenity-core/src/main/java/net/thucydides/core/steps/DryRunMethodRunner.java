@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
@@ -8,7 +8,7 @@ import java.util.List;
 
 class DryRunMethodRunner extends BaseMethodRunner implements MethodRunner {
 
-        private final List<String> slowDomains = ImmutableList.of("webdriver", "rest");
+        private final List<String> slowDomains = NewList.of("webdriver", "rest");
         @Override
         public Object invokeMethodAndNotifyFailures(Object obj, Method method, Object[] args, MethodProxy proxy, Object result) throws Throwable {
             try {

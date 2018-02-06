@@ -1,6 +1,6 @@
 package net.serenitybdd.core.selectors;
 
-import com.google.common.collect.Maps;
+import java.util.HashMap;
 import org.openqa.selenium.By;
 
 import javax.xml.xpath.XPath;
@@ -51,7 +51,7 @@ public class Selectors {
         return xpathOrCssSelector.substring(selectorStarts);
     }
 
-    private static Map<SelectorType, SelectorConverter> SELECTORS = Maps.newHashMap();
+    private static Map<SelectorType, SelectorConverter> SELECTORS = new HashMap();
     static {
         SELECTORS.put(SelectorType.css, new SelectorConverter() {
             @Override

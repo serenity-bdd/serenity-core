@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.actions.type;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.actions.WebElementLocator;
 import net.thucydides.core.annotations.Step;
@@ -19,7 +19,7 @@ public class TypeValueIntoBy extends TypeValue {
 
     public TypeValueIntoBy(String theText, By... locators) {
         super(theText);
-        this.locators = ImmutableList.copyOf(locators);
+        this.locators = NewList.copyOf(locators);
     }
 
     @Step("{0} enters '#theText' into #element")

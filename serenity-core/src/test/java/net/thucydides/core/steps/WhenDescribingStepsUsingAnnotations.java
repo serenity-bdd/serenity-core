@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import com.google.common.collect.ImmutableMap;
+import net.serenitybdd.core.collect.NewMap;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.pages.Pages;
 import org.jbehave.core.annotations.Given;
@@ -179,7 +179,7 @@ public class WhenDescribingStepsUsingAnnotations {
         ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
                 "a_customized_step_with_parameters_and_fields",
                 new Object[]{"Joe"})
-                .withDisplayedFields(ImmutableMap.of("color", (Object) "red"));
+                .withDisplayedFields(NewMap.of("color", (Object) "red"));
 
         AnnotatedStepDescription annotatedStepDescription = AnnotatedStepDescription.from(description);
 
@@ -193,7 +193,7 @@ public class WhenDescribingStepsUsingAnnotations {
         ExecutedStepDescription description = ExecutedStepDescription.of(SampleTestSteps.class,
                 "a_customized_step_with_parameters_and_empty_field_value",
                 new Object[] {"Joe"})
-                .withDisplayedFields(ImmutableMap.of("color",(Object)"red", "emptyField", Fields.FieldValue.UNDEFINED));
+                .withDisplayedFields(NewMap.of("color",(Object)"red", "emptyField", Fields.FieldValue.UNDEFINED));
 
         AnnotatedStepDescription.from(description);
     }

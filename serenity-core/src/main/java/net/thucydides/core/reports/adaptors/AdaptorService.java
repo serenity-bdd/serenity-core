@@ -1,6 +1,6 @@
 package net.thucydides.core.reports.adaptors;
 
-import com.google.common.collect.ImmutableMap;
+import net.serenitybdd.core.collect.NewMap;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.reports.adaptors.lettuce.LettuceXUnitAdaptor;
 import net.thucydides.core.reports.adaptors.specflow.SpecflowAdaptor;
@@ -13,7 +13,7 @@ import java.util.Map;
 public class AdaptorService {
 
     private final static Map<String, ? extends TestOutcomeAdaptor> BUILT_IN_ADAPTORS
-            = ImmutableMap.of("xunit", new DefaultXUnitAdaptor(),
+            = NewMap.of("xunit", new DefaultXUnitAdaptor(),
                               "specflow", new SpecflowAdaptor(),
                               "lettuce", new LettuceXUnitAdaptor());
 

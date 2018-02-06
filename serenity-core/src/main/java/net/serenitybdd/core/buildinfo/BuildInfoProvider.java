@@ -1,6 +1,6 @@
 package net.serenitybdd.core.buildinfo;
 
-import com.google.common.collect.Maps;
+import java.util.HashMap;
 import groovy.lang.Binding;
 import groovy.lang.GroovyRuntimeException;
 import groovy.lang.GroovyShell;
@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -30,7 +31,7 @@ public class BuildInfoProvider {
     }
 
     public BuildProperties getBuildProperties() {
-        Map<String, String> generalProperties = Maps.newHashMap();
+        Map<String, String> generalProperties = new HashMap();
         generalProperties.put("Default Driver", ThucydidesSystemProperty.DRIVER.from(environmentVariables,"firefox"));
         generalProperties.put("Operating System",System.getProperty("os.name") + " version " + System.getProperty("os.version"));
         addRemoteDriverPropertiesTo(generalProperties);

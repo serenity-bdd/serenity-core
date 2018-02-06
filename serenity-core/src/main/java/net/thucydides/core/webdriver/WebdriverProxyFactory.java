@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.steps.StepEventBus;
 import org.openqa.selenium.JavascriptExecutor;
@@ -43,7 +43,7 @@ public class WebdriverProxyFactory implements Serializable {
     }
 
     public static List<ThucydidesWebDriverEventListener> getEventListeners() {
-        return ImmutableList.copyOf(eventListeners);
+        return NewList.copyOf(eventListeners);
     }
     public WebDriverFacade proxyFor(final Class<? extends WebDriver> driverClass) {
        return proxyFor(driverClass,

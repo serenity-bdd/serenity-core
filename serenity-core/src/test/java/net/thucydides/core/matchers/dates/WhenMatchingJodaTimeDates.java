@@ -1,7 +1,7 @@
 package net.thucydides.core.matchers.dates;
 
 
-import com.google.common.collect.Sets;
+import net.serenitybdd.core.collect.NewSet;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -93,24 +93,24 @@ public class WhenMatchingJodaTimeDates {
 
     @Test
     public void a_collection_of_dates_can_be_matched_against_another_collection_of_dates() {
-        Set<DateTime> someDates = Sets.newHashSet(dateTime1, dateTime2, dateTime3);
-        Set<DateTime> someOtherDates = Sets.newHashSet(dateTime1, dateTime2, dateTime3);
+        Set<DateTime> someDates = NewSet.of(dateTime1, dateTime2, dateTime3);
+        Set<DateTime> someOtherDates = NewSet.of(dateTime1, dateTime2, dateTime3);
         
         assertThat(someDates, containsSameDateTimesAs(someOtherDates));
     }
 
     @Test
     public void a_collection_of_dates_fails_to_match_against_another_collection_of_dates_if_the_dates_are_different() {
-        Set<DateTime> someDates = Sets.newHashSet(dateTime1, dateTime2, dateTime3);
-        Set<DateTime> someOtherDates = Sets.newHashSet(dateTime1, dateTime2, dateTime4);
+        Set<DateTime> someDates = NewSet.of(dateTime1, dateTime2, dateTime3);
+        Set<DateTime> someOtherDates = NewSet.of(dateTime1, dateTime2, dateTime4);
 
         assertThat(someDates, not(containsSameDateTimesAs(someOtherDates)));
     }
 
     @Test
     public void a_collection_of_dates_fails_to_match_against_another_collection_of_dates_if_the_collection_sizes_are_different() {
-        Set<DateTime> someDates = Sets.newHashSet(dateTime1, dateTime2, dateTime3);
-        Set<DateTime> someOtherDates = Sets.newHashSet(dateTime1, dateTime2);
+        Set<DateTime> someDates = NewSet.of(dateTime1, dateTime2, dateTime3);
+        Set<DateTime> someOtherDates = NewSet.of(dateTime1, dateTime2);
 
         assertThat(someDates, not(containsSameDateTimesAs(someOtherDates)));
     }

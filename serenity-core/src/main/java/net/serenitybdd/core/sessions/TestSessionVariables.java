@@ -1,6 +1,6 @@
 package net.serenitybdd.core.sessions;
 
-import com.google.common.collect.ImmutableMap;
+import net.serenitybdd.core.collect.NewMap;
 import net.serenitybdd.core.SessionMap;
 
 import java.util.Map;
@@ -32,7 +32,7 @@ public class TestSessionVariables<K,V> extends ConcurrentHashMap implements Sess
 
     @Override
     public Map<String, String> getMetaData() {
-        return ImmutableMap.copyOf(metadata);
+        return NewMap.copyOf(metadata);
     }
 
     @Override

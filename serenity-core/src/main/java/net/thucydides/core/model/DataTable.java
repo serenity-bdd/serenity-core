@@ -305,7 +305,7 @@ public class DataTable {
         }
 
         public Map<String, String> toStringMap() {
-            Map<String, String> rowData = new HashMap<>();
+            Map<String, String> rowData = new HashMap();
             int i = 0;
             for (Object value : dataTable.rows.get(rowNumber).getValues()) {
                 rowData.put(dataTable.headers.get(i), value.toString());

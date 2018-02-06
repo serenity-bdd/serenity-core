@@ -1,6 +1,6 @@
 package net.thucydides.core.model;
 
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 
 import java.nio.file.Path;
 import java.util.ArrayList;

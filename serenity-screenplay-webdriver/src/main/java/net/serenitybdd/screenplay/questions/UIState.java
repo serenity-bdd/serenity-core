@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay.questions;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
+import java.util.HashMap;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.questions.converters.*;
 import org.joda.time.DateTime;
@@ -14,7 +14,7 @@ public abstract class UIState<T> {
 
     protected final Actor actor;
 
-    protected Map<Class<?>, Converter> DEFAULT_CONVERTERS = Maps.newHashMap();
+    protected Map<Class<?>, Converter> DEFAULT_CONVERTERS = new HashMap();
     {
         DEFAULT_CONVERTERS.put(Boolean.class, new BooleanConverter());
         DEFAULT_CONVERTERS.put(DateTime.class, new DateTimeConverter());

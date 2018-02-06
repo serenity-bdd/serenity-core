@@ -10,8 +10,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Singleton
 public class TestCountBasedBatchManager extends SystemVariableBasedBatchManager {
-    private Map<Integer, AtomicInteger> batchNumberTestCount = new HashMap<Integer, AtomicInteger>();
-    private Map<Integer, Integer> testCaseNumberBatchNumber = new HashMap<Integer, Integer>();
+    private Map<Integer, AtomicInteger> batchNumberTestCount = new HashMap<>();
+    private Map<Integer, Integer> testCaseNumberBatchNumber = new HashMap<>();
 
     @Inject
     public TestCountBasedBatchManager(EnvironmentVariables environmentVariables) {

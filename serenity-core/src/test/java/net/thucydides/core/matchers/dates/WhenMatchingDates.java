@@ -1,7 +1,7 @@
 package net.thucydides.core.matchers.dates;
 
 
-import com.google.common.collect.Sets;
+import net.serenitybdd.core.collect.NewSet;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -88,24 +88,24 @@ public class WhenMatchingDates {
 
     @Test
     public void a_collection_of_dates_can_be_matched_against_another_collection_of_dates() {
-        Set<Date> someDates = Sets.newHashSet(januaryFirst2000, januaryFirst2001, januaryFirst2002);
-        Set<Date> someOtherDates = Sets.newHashSet(januaryFirst2000, januaryFirst2001, januaryFirst2002);
+        Set<Date> someDates = NewSet.of(januaryFirst2000, januaryFirst2001, januaryFirst2002);
+        Set<Date> someOtherDates = NewSet.of(januaryFirst2000, januaryFirst2001, januaryFirst2002);
 
         assertThat(someDates, containsSameDatesAs(someOtherDates));
     }
 
     @Test
     public void a_collection_of_dates_fails_to_match_against_another_collection_of_dates_if_the_dates_are_different() {
-        Set<Date> someDates = Sets.newHashSet(januaryFirst2000, januaryFirst2001, januaryFirst2002);
-        Set<Date> someOtherDates = Sets.newHashSet(januaryFirst2000, januaryFirst2001, januaryFirst2003);
+        Set<Date> someDates = NewSet.of(januaryFirst2000, januaryFirst2001, januaryFirst2002);
+        Set<Date> someOtherDates = NewSet.of(januaryFirst2000, januaryFirst2001, januaryFirst2003);
 
         assertThat(someDates, not(containsSameDatesAs(someOtherDates)));
     }
 
     @Test
     public void a_collection_of_dates_fails_to_match_against_another_collection_of_dates_if_the_collection_sizes_are_different() {
-        Set<Date> someDates = Sets.newHashSet(januaryFirst2000, januaryFirst2001, januaryFirst2002);
-        Set<Date> someOtherDates = Sets.newHashSet(januaryFirst2000, januaryFirst2001);
+        Set<Date> someDates = NewSet.of(januaryFirst2000, januaryFirst2001, januaryFirst2002);
+        Set<Date> someOtherDates = NewSet.of(januaryFirst2000, januaryFirst2001);
 
         assertThat(someDates, not(containsSameDatesAs(someOtherDates)));
     }

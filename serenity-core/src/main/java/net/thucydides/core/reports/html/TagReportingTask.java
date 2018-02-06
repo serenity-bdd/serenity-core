@@ -2,7 +2,7 @@ package net.thucydides.core.reports.html;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestTag;
@@ -164,7 +164,9 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
             if (allTags.contains(tag)) {
                 return allTags;
             }
-            return Lists.asList(tag, allTags.toArray(new TestTag[]{}));
+            List<TestTag> tags = new ArrayList(allTags);
+            tags.add(tag);
+            return tags;
         }
 
         private Set<TestTag> concat(Set<TestTag> setA, Set<TestTag> setB) {
@@ -172,7 +174,5 @@ public class TagReportingTask extends BaseReportingTask implements ReportingTask
             concatenatedTags.addAll(setB);
             return concatenatedTags;
         }
-
     }
-
 }

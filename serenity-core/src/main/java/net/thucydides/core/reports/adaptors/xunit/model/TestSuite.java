@@ -1,8 +1,8 @@
 package net.thucydides.core.reports.adaptors.xunit.model;
 
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.NewList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class TestSuite {
     }
 
     public List<TestCase> getTestCases() {
-        return ImmutableList.copyOf(testCases);
+        return NewList.copyOf(testCases);
     }
 
     public TestSuite withTestCases(List<TestCase> newTestCases) {

@@ -1,9 +1,9 @@
 package net.thucydides.core.reports.adaptors.lettuce;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.NewList;
+import java.util.HashMap;
 import net.serenitybdd.core.PendingStepException;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
@@ -31,12 +31,12 @@ public class LettuceXUnitAdaptor extends FilebasedOutcomeAdaptor {
         for(File xunitFile : XUnitFiles.in(source)) {
             loadedOutcomes.addAll(testOutcomesIn(xunitFile));
         }
-        return ImmutableList.copyOf(loadedOutcomes);
+        return NewList.copyOf(loadedOutcomes);
     }
 
     private Collection<? extends TestOutcome> testOutcomesIn(File xunitFile) throws IOException {
         List<TestSuite> rawTestSuites = loader.loadFrom(xunitFile);
-        return ImmutableList.copyOf(groupTestCasesByClassname(rawTestSuites));
+        return NewList.copyOf(groupTestCasesByClassname(rawTestSuites));
     }
 
     private List<TestOutcome> groupTestCasesByClassname(List<TestSuite> testSuites) {
@@ -51,7 +51,7 @@ public class LettuceXUnitAdaptor extends FilebasedOutcomeAdaptor {
     private List<TestOutcome> testOutcomesWithGroupedTestCases(TestSuite testSuite) {
         List<TestCase> rawTestCases = testSuite.getTestCases();
         List<TestOutcome> groupedTestOutcomes = new ArrayList<>();
-        Map<String, TestOutcome> testOutcomesIndex = Maps.newHashMap();
+        Map<String, TestOutcome> testOutcomesIndex = new HashMap();
 
         for(TestCase testCase : rawTestCases) {
             TestOutcome testOutcome = testOutcomeForTestClass(testOutcomesIndex, testCase.getClassname());
@@ -63,7 +63,7 @@ public class LettuceXUnitAdaptor extends FilebasedOutcomeAdaptor {
             }
             testOutcome.recordStep(nextStep);
         }
-        return ImmutableList.copyOf(groupedTestOutcomes);
+        return NewList.copyOf(groupedTestOutcomes);
     }
 
     private void addIfNotPresent(List<TestOutcome> groupedTestOutcomes, final TestOutcome testOutcome) {

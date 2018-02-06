@@ -2,7 +2,7 @@ package net.thucydides.core.steps;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.IgnoredStepException;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.Serenity;
@@ -100,7 +100,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     }
 
     private String packageDomainName(String methodPackage) {
-        List<String> packages = Lists.newArrayList(Splitter.on(".").omitEmptyStrings().split(methodPackage));
+        List<String> packages = Splitter.on(".").omitEmptyStrings().splitToList(methodPackage);
 
         if (packages.size() == 0) {
             return "";

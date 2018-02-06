@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements.reports;
 
-import com.google.common.collect.ImmutableList;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.ReportNameProvider;
@@ -40,7 +40,7 @@ public class FileSystemRequirmentsOutcomeFactory implements RequirementsOutcomeF
                 testOutcomes,
                 issueTracking,
                 environmentVariables,
-                ImmutableList.<RequirementsTagProvider>of(tagProvider),
+                NewList.<RequirementsTagProvider>of(tagProvider),
                 reportNameProvider);
     }
 
@@ -52,7 +52,7 @@ public class FileSystemRequirmentsOutcomeFactory implements RequirementsOutcomeF
                 testOutcomes,
                 issueTracking,
                 environmentVariables,
-                ImmutableList.of(tagProvider),
+                NewList.of(tagProvider),
                 reportNameProvider);
     }
 

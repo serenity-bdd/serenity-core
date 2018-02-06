@@ -1,7 +1,6 @@
 package net.thucydides.browsermob.fixtureservices;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
@@ -103,7 +102,7 @@ public class BrowserMobFixtureService implements FixtureService {
 
     private boolean shouldActivateBrowserMobWithDriver(String filter, EnvironmentVariables environmentVariables) {
         String currentDriver = getDriverFrom(environmentVariables);
-        List allowedBrowsers = Lists.newArrayList(Splitter.on(",").trimResults().split(filter.toLowerCase()));
+        List allowedBrowsers = Splitter.on(",").trimResults().splitToList(filter.toLowerCase());
         return StringUtils.isEmpty(currentDriver) || allowedBrowsers.contains(currentDriver.toLowerCase());
     }
 

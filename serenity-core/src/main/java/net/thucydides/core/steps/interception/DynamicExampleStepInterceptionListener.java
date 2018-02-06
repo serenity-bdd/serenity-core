@@ -20,7 +20,7 @@ public class DynamicExampleStepInterceptionListener implements StepInterceptionL
 
             checkColumnCountFor(method, headers, args);
 
-            Map<String, String> row = new HashMap<>();
+            Map<String, String> row = new HashMap();
 
             int argumentIndex = 0;
             for(String header : headers) {

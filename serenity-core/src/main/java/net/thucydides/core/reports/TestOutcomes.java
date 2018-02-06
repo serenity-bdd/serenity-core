@@ -1,10 +1,8 @@
 package net.thucydides.core.reports;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.google.inject.Inject;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.NewSet;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
@@ -132,7 +130,7 @@ public class TestOutcomes {
 
     List<TestOutcome> outcomesFilteredByResult(TestResult... results) {
 
-        List<TestResult> eligableResults = Lists.newArrayList(results);
+        List<TestResult> eligableResults = NewList.of(results);
 
         return outcomes.stream()
                 .filter(outcome -> eligableResults.contains(outcome.getResult()))
@@ -158,7 +156,7 @@ public class TestOutcomes {
                 ConfiguredEnvironment.getConfiguration().getEstimatedAverageStepCount());
     }
 
-    private static List<TestOutcome> NO_OUTCOMES = ImmutableList.of();
+    private static List<TestOutcome> NO_OUTCOMES = new ArrayList();
 
     public static TestOutcomes withNoResults() {
         return new TestOutcomes(NO_OUTCOMES,
@@ -205,7 +203,7 @@ public class TestOutcomes {
                 .collect(Collectors.toList());
     }
 
-    private final Set<String> SECOND_CLASS_TAG_TYPES = ImmutableSet.of("version","feature", "story");
+    private final Set<String> SECOND_CLASS_TAG_TYPES = NewSet.of("version","feature", "story");
 
     public List<String> getFirstClassTagTypes() {
         return getTagTypes()
@@ -323,7 +321,7 @@ public class TestOutcomes {
 
     public TestOutcomes forRequirement(Requirement requirement) {
 
-        Set<TestOutcome> testOutcomesForThisRequirement = Sets.newHashSet();
+        Set<TestOutcome> testOutcomesForThisRequirement = new HashSet();
         for(Requirement childRequirement : RequirementsTree.forRequirement(requirement).asFlattenedList()) {
             testOutcomesForThisRequirement.addAll(
                     withTag(childRequirement.asTag()).getOutcomes()
@@ -376,7 +374,7 @@ public class TestOutcomes {
 
     public TestOutcomes withRequirementsTags() {
         for (TestOutcome outcome : outcomes) {
-            List<TestTag> outcomeTags = Lists.newArrayList(outcome.getTags());
+            List<TestTag> outcomeTags = new ArrayList<>(outcome.getTags());
             List<Requirement> parentRequirements = requirementsService.getAncestorRequirementsFor(outcome);
             for(Requirement requirement : parentRequirements) {
                 outcomeTags.add(requirement.asTag());
@@ -602,7 +600,7 @@ public class TestOutcomes {
     }
 
     public List<? extends TestOutcome> getOutcomes() {
-        return outcomes; //ImmutableList.copyOf(outcomes);
+        return outcomes; //NewList.copyOf(outcomes);
     }
 
     /**
@@ -842,12 +840,12 @@ public class TestOutcomes {
 
         @SuppressWarnings("unchecked")
         public TestOutcomeMatcher withName(Matcher<String> nameMatcher) {
-            this.nameMatcher = Lists.newArrayList(nameMatcher);
+            this.nameMatcher = NewList.of(nameMatcher);
             return this;
         }
 
         public TestOutcomeMatcher withNameIn(List<Matcher<String>>  nameMatchers) {
-            this.nameMatcher = Lists.newArrayList(nameMatchers);
+            this.nameMatcher = new ArrayList<>(nameMatchers);
             return this;
         }
 

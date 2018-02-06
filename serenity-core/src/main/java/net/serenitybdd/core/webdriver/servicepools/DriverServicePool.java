@@ -1,6 +1,6 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
-import com.google.common.collect.Maps;
+import java.util.HashMap;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.Capabilities;
@@ -12,11 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public abstract class DriverServicePool<T extends DriverService> {
 
-    private static final ConcurrentMap<String, DriverService> DRIVER_SERVICES = Maps.newConcurrentMap();
+    private static final ConcurrentMap<String, DriverService> DRIVER_SERVICES = new ConcurrentHashMap<>();
 
     protected final EnvironmentVariables environmentVariables;
 

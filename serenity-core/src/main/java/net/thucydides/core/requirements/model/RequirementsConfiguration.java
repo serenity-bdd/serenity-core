@@ -2,8 +2,8 @@ package net.thucydides.core.requirements.model;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.requirements.SearchForFilesOfType;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -15,11 +15,12 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class RequirementsConfiguration {
-    public final static List<String> DEFAULT_CAPABILITY_TYPES = ImmutableList.of("capability", "feature", "story");
+    public final static List<String> DEFAULT_CAPABILITY_TYPES = NewList.of("capability", "feature", "story");
     protected static final String DEFAULT_ROOT_DIRECTORY = "stories";
 
     private final EnvironmentVariables environmentVariables;
@@ -36,8 +37,7 @@ public class RequirementsConfiguration {
         String requirementTypes = ThucydidesSystemProperty.SERENITY_REQUIREMENT_TYPES.from(environmentVariables);
         List<String> types;
         if (StringUtils.isNotEmpty(requirementTypes)) {
-            Iterator<String> typeValues = Splitter.on(",").trimResults().split(requirementTypes).iterator();
-            types = Lists.newArrayList(typeValues);
+            types = Splitter.on(",").trimResults().splitToList(requirementTypes);
         } else {
             types = getDefaultCapabilityTypes();
         }
@@ -65,18 +65,18 @@ public class RequirementsConfiguration {
     private List<String> jbehaveCapabilityTypes() {
         int featureDirectoryDepth = getJBehaveFileMatcher().get().getMaxDepth();
         switch (featureDirectoryDepth) {
-            case 0: return ImmutableList.of("story");
-            case 1: return ImmutableList.of("feature", "story");
-            default: return ImmutableList.of("capability","feature", "story");
+            case 0: return NewList.of("story");
+            case 1: return NewList.of("feature", "story");
+            default: return NewList.of("capability","feature", "story");
         }
     }
 
     private List<String> cucumberCapabilityTypes() {
         int featureDirectoryDepth = getCucumberFileMatcher().get().getMaxDepth();
         switch (featureDirectoryDepth) {
-            case 0: return ImmutableList.of("feature");
-            case 1: return ImmutableList.of("capability", "feature");
-            default: return ImmutableList.of("theme","capability", "feature");
+            case 0: return NewList.of("feature");
+            case 1: return NewList.of("capability", "feature");
+            default: return NewList.of("theme","capability", "feature");
         }
     }
 

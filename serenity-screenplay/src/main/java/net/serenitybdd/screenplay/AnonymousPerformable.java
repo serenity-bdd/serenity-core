@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class AnonymousPerformable implements Performable, HasCustomFieldValues {
     private final String title;
-    private final Map<String, Object> fieldValues = new HashMap<>();
+    private final Map<String, Object> fieldValues = new HashMap();
     private final List<Performable> steps;
 
     public AnonymousPerformable(String title, List<Performable> steps) {

@@ -1,7 +1,7 @@
 package net.serenitybdd.junit.runners;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
@@ -172,6 +172,6 @@ public class FailureDetectingStepListener implements StepListener {
     }
 
     public List<String> getFailureMessages() {
-        return ImmutableList.copyOf(failureMessages);
+        return NewList.copyOf(failureMessages);
     }
 }

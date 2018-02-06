@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Maps;
+import java.util.HashMap;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Duration;
 
@@ -13,7 +13,7 @@ import java.util.Stack;
  */
 public class TimeoutStack {
 
-    Map<WebDriver, Stack<Duration>> timeouts = Maps.newHashMap();
+    Map<WebDriver, Stack<Duration>> timeouts = new HashMap();
 
     public void pushTimeoutFor(WebDriver driver, Duration implicitTimeout) {
         if (!timeouts.containsKey(driver)) {

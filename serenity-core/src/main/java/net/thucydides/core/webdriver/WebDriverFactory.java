@@ -88,7 +88,7 @@ public class WebDriverFactory {
     private Map<SupportedWebDriver, DriverProvider> driverProviders() {
 
         if (driverProvidersByDriverType == null) {
-            driverProvidersByDriverType = new HashMap<>();
+            driverProvidersByDriverType = new HashMap();
 
             driverProvidersByDriverType.put(SupportedWebDriver.APPIUM, new AppiumDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.REMOTE, new RemoteDriverProvider(fixtureProviderService));

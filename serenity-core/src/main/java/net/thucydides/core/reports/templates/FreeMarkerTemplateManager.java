@@ -1,12 +1,13 @@
 package net.thucydides.core.reports.templates;
 
-import com.google.common.collect.Maps;
+import java.util.HashMap;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Version;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Manages velocity templates.
@@ -17,7 +18,7 @@ public class FreeMarkerTemplateManager implements TemplateManager {
     public static final Version FREEMARKER_VERSION = new Version(2, 3, 23);
     Configuration cfg;
 
-    Map<String, ReportTemplate> templateCache = Maps.newConcurrentMap();
+    Map<String, ReportTemplate> templateCache = new ConcurrentHashMap();
 
     public FreeMarkerTemplateManager() throws Exception {
         cfg = new Configuration(FREEMARKER_VERSION);

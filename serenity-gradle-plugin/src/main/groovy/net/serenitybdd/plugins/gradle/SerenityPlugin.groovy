@@ -50,7 +50,7 @@ class SerenityPlugin implements Plugin<Project> {
             group = 'Serenity BDD'
             description = "Checks the Serenity reports and fails the build if there are test failures (run automatically with 'check')"
 
-            inputs.dir reportDirectory
+            inputs.files reportDirectory
 
             doLast {
                 updateProperties(project)

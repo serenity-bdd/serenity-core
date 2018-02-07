@@ -373,6 +373,8 @@ subprojects {
             shadow(MavenPublication) { publication ->
                 project.shadow.component(publication)
 
+                println "Publishing with shaded dependencies: $project.name:$project.group:$project.version"
+
                 from components.java
 
                 artifact sourcesJar {
@@ -418,8 +420,10 @@ subprojects {
                     }.each() {
                         it.scope*.value = 'compile'
                     }
-
                 }
+
+
+            }
         }
     }
 

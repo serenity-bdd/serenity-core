@@ -291,7 +291,7 @@ subprojects {
     bintray {
         user = bintrayUsername //this usually comes form gradle.properties file in ~/.gradle
         key = bintrayApiKey //this usually comes form gradle.properties file in ~/.gradle
-        publications = ['mavenJava'] // see publications closure
+        publications = ['mavenJava','shadow'] // see publications closure
         pkg {
             repo = 'maven'
             userOrg = 'serenity'

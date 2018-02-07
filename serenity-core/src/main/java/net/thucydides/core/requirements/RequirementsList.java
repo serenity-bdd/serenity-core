@@ -1,10 +1,10 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.requirements.model.Requirement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.lang.Math.max;
 
@@ -44,16 +44,16 @@ public class RequirementsList {
         return flattenedRequirements;
     }
 
-    public Optional<Requirement> findByUniqueName(String name) {
+    public java.util.Optional<Requirement> findByUniqueName(String name) {
         Requirement matchingRequirement = null;
         for(Requirement requirement : asFlattenedList()) {
             if (requirement.getName().equalsIgnoreCase(name)) {
                 if (matchingRequirement != null) {
-                    return Optional.absent();
+                    return Optional.empty();
                 }
                 matchingRequirement = requirement;
             }
         }
-        return Optional.fromNullable(matchingRequirement);
+        return Optional.ofNullable(matchingRequirement);
     }
 }

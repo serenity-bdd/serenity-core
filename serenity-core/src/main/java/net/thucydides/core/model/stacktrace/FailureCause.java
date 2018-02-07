@@ -1,6 +1,5 @@
 package net.thucydides.core.model.stacktrace;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.exceptions.UnrecognisedException;
@@ -10,6 +9,7 @@ import net.thucydides.core.util.NameConverter;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -104,8 +104,8 @@ public class FailureCause {
         return errorType;
     }
 
-    public java.util.Optional<FailureCause> getRootCause() {
-        return java.util.Optional.ofNullable(rootCause);
+    public Optional<FailureCause> getRootCause() {
+        return Optional.ofNullable(rootCause);
 
     }
 
@@ -169,11 +169,11 @@ public class FailureCause {
                 exception = new UnrecognisedException();
             }
             exception.setStackTrace(this.getStackTrace());
-            return Optional.fromNullable(exception);
+            return Optional.ofNullable(exception);
         } catch (Exception e) {
             Throwable exception = new UnrecognisedException();
             exception.setStackTrace(this.getStackTrace());
-            return Optional.fromNullable(exception);
+            return Optional.ofNullable(exception);
         }
 
     }
@@ -196,33 +196,33 @@ public class FailureCause {
 
     private Optional<Constructor> defaultConstructorFor(Class failureClass) throws NoSuchMethodException {
         try {
-            return Optional.fromNullable(failureClass.getConstructor());
+            return Optional.ofNullable(failureClass.getConstructor());
         } catch (NoSuchMethodException e) {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 
     private Optional<Constructor> stringConstructorFor(Class failureClass) throws NoSuchMethodException {
         try {
-            return Optional.fromNullable(failureClass.getConstructor(String.class));
+            return Optional.ofNullable(failureClass.getConstructor(String.class));
         } catch (NoSuchMethodException e) {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 
     private Optional<Constructor> stringThrowableConstructorFor(Class failureClass) throws NoSuchMethodException {
         try {
-            return Optional.fromNullable(failureClass.getConstructor(String.class, Throwable.class));
+            return Optional.ofNullable(failureClass.getConstructor(String.class, Throwable.class));
         } catch (NoSuchMethodException e) {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 
     private Optional<Constructor> throwableConstructorFor(Class failureClass) throws NoSuchMethodException {
         try {
-            return Optional.fromNullable(failureClass.getConstructor(Throwable.class));
+            return Optional.ofNullable(failureClass.getConstructor(Throwable.class));
         } catch (NoSuchMethodException e) {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

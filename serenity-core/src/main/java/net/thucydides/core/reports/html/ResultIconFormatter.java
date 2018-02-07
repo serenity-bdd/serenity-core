@@ -1,10 +1,10 @@
 package net.thucydides.core.reports.html;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.model.TestResult;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class ResultIconFormatter {
 
@@ -50,7 +50,7 @@ public class ResultIconFormatter {
 
     public String forResult(TestResult result) {
 
-        TestResult testResult = Optional.fromNullable(result).or(TestResult.PENDING);
+        TestResult testResult = Optional.ofNullable(result).orElse(TestResult.PENDING);
         return resultIcons.get(testResult)
                 .replace("${iconStyle}", resultIconStyles.get(testResult))
                 .replace("${qualifier}", qualifier)
@@ -58,7 +58,7 @@ public class ResultIconFormatter {
     }
 
     public String colorFor(TestResult result) {
-        return resultIconStyles.get(Optional.fromNullable(result).or(TestResult.PENDING));
+        return resultIconStyles.get(Optional.ofNullable(result).orElse(TestResult.PENDING));
     }
 
 }

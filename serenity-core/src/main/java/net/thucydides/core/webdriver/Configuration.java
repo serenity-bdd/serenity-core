@@ -1,10 +1,10 @@
 package net.thucydides.core.webdriver;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.model.TakeScreenshots;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
+import java.util.Optional;
 
 public interface Configuration {
     SupportedWebDriver getDriverType();

@@ -1,25 +1,23 @@
 package net.thucydides.core.reports;
 
-import com.google.common.base.Optional;
-import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.adaptors.TestOutcomeAdaptor;
 import net.thucydides.core.reports.html.HtmlAcceptanceTestReporter;
 import net.thucydides.core.reports.json.JSONTestOutcomeReporter;
-import net.thucydides.core.reports.xml.XMLTestOutcomeReporter;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class TestOutcomeAdaptorReporter extends ThucydidesReporter {
 
     private List<TestOutcomeAdaptor> adaptors = new ArrayList<>();
 
-    private final Optional<File> NO_SOURCE_FILE = Optional.absent();
+    private final Optional<File> NO_SOURCE_FILE = Optional.empty();
 
     public void generateReports() throws Exception {
         generateReports(NO_SOURCE_FILE);
@@ -37,7 +35,7 @@ public class TestOutcomeAdaptorReporter extends ThucydidesReporter {
      * @throws IOException
      */
     public void generateReportsFrom(File sourceDirectory) throws Exception {
-        generateReports(Optional.fromNullable(sourceDirectory));
+        generateReports(Optional.ofNullable(sourceDirectory));
     }
 
     public void generateReports(Optional<File> sourceDirectory) throws Exception {

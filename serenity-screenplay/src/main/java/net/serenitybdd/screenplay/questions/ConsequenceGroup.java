@@ -35,8 +35,8 @@ public class ConsequenceGroup<T> extends BaseConsequence<T> {
 
     @Override
     public String toString() {
-        String template = explanation.or("Then %s");
-        return addRecordedInputValuesTo(String.format(template, subjectText.or(subject)));
+        String template = explanation.orElse("Then %s");
+        return addRecordedInputValuesTo(String.format(template, subjectText.orElse(subject)));
     }
 
 }

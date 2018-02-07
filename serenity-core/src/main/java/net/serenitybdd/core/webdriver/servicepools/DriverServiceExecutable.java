@@ -1,6 +1,5 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.os.ExecutableFinder;
@@ -8,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkState;
 
@@ -46,7 +46,7 @@ public class DriverServiceExecutable {
         private final String exeName;
         private String exeProperty;
         private String documentationUrl;
-        private Optional<EnvironmentVariables> environmentVariables = Optional.absent();
+        private Optional<EnvironmentVariables> environmentVariables = Optional.empty();
         private boolean reportMissingBinary = false;
 
         public DriverServiceExecutableBuilder(String exeName) {
@@ -73,7 +73,7 @@ public class DriverServiceExecutable {
                     exeProperty,
                     documentationUrl,
                     downloadUrl,
-                    environmentVariables.or(
+                    environmentVariables.orElse(
                             ConfiguredEnvironment.getEnvironmentVariables()),
                     reportMissingBinary
             );
@@ -88,10 +88,10 @@ public class DriverServiceExecutable {
     public File asAFile() {
 
         String pathOnFilesystem = new ExecutableFinder().find(exeName);
-        Optional<String> defaultPath = Optional.fromNullable(pathOnFilesystem);
+        Optional<String> defaultPath = Optional.ofNullable(pathOnFilesystem);
 
-        Optional<String> configuredBinaryPath = Optional.fromNullable(environmentVariables.getProperty(exeProperty));
-        String exePath = configuredBinaryPath.or(defaultPath).orNull();
+        Optional<String> configuredBinaryPath = Optional.ofNullable(environmentVariables.getProperty(exeProperty));
+        String exePath = configuredBinaryPath.orElse(defaultPath.orElse(null));
 
         File executableLocation = (exePath != null) ? new File(exePath) : null;
 
@@ -102,7 +102,7 @@ public class DriverServiceExecutable {
     }
 
     private void checkForMissingBinaries(File executableLocation) {
-        String documentationSource = Optional.fromNullable(documentationUrl).or(downloadUrl);
+        String documentationSource = Optional.ofNullable(documentationUrl).orElse(downloadUrl);
 
         checkState(executableLocation != null,
                 "The path to the %s driver executable must be set by the %s system property;"

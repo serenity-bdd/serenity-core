@@ -1,9 +1,10 @@
 package net.thucydides.core.model.featuretags;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.model.cucumber.CucumberParser;
+
+import java.util.Optional;
 
 public class FeatureFileStrategy implements FeatureTagStrategy {
 

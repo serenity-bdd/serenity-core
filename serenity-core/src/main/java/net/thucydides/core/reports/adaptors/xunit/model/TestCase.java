@@ -1,7 +1,7 @@
 package net.thucydides.core.reports.adaptors.xunit.model;
 
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 public class TestCase {
     private String name;
@@ -11,9 +11,9 @@ public class TestCase {
     private Optional<TestException> error;
     private Optional<Skip> skipped;
 
-    private final static Optional<TestException> NO_FAILURE = Optional.absent();
-    private final static Optional<TestException> NO_ERROR = Optional.absent();
-    private final static Optional<Skip> NOT_SKIPPED = Optional.absent();
+    private final static Optional<TestException> NO_FAILURE = Optional.empty();
+    private final static Optional<TestException> NO_ERROR = Optional.empty();
+    private final static Optional<Skip> NOT_SKIPPED = Optional.empty();
 
     private TestCase(String name,
                      String classname,

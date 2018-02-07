@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementsConfiguration;
@@ -8,6 +7,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
 
 import java.util.List;
+import java.util.Optional;
 
 public abstract class AbstractRequirementsTagProvider {
 
@@ -85,7 +85,7 @@ public abstract class AbstractRequirementsTagProvider {
                 return requirement;
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     public Optional<Requirement> getParentRequirementOf(Requirement requirement) {
@@ -94,7 +94,7 @@ public abstract class AbstractRequirementsTagProvider {
                 return Optional.of(candidateParent);
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
 

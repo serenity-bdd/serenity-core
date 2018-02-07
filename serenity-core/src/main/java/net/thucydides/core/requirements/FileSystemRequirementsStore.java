@@ -1,7 +1,5 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.base.Optional;
-import net.serenitybdd.core.collect.NewList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -16,6 +14,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public class FileSystemRequirementsStore implements RequirementsStore {
     private final File outputDirectory;
@@ -27,6 +26,7 @@ public class FileSystemRequirementsStore implements RequirementsStore {
         this.storeName = storeName;
         this.gson = new GsonBuilder()
                 .registerTypeAdapterFactory(OptionalTypeAdapter.FACTORY)
+//                .registerTypeAdapterFactory(GuavaOptionalTypeAdapter.FACTORY)
                 .registerTypeHierarchyAdapter(Collection.class, new CollectionAdapter()).create();
 
     }
@@ -34,7 +34,7 @@ public class FileSystemRequirementsStore implements RequirementsStore {
     public Optional<List<Requirement>> read() throws IOException{
         File jsonFile = jsonRequirementsFile();
         if(!jsonFile.exists()) {
-            return Optional.absent();
+            return Optional.empty();
         }
 
         List<Requirement> requirements;

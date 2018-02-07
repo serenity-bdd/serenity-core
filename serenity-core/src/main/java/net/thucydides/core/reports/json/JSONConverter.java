@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.json;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.model.TestOutcome;
 
 import java.io.IOException;

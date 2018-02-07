@@ -1,11 +1,11 @@
 package net.thucydides.core.webdriver;
 
-import com.google.common.base.Optional;
 import java.util.HashMap;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Duration;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Stack;
 
 /**
@@ -24,10 +24,10 @@ public class TimeoutStack {
 
     public Optional<Duration> popTimeoutFor(WebDriver driver) {
         if (timeouts.containsKey(driver)) {
-            return timeouts.get(driver).isEmpty() ? Optional.<Duration>absent() :
+            return timeouts.get(driver).isEmpty() ? Optional.<Duration>empty() :
                                                            Optional.of(timeouts.get(driver).pop());
         } else {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 
@@ -39,7 +39,7 @@ public class TimeoutStack {
         if (containsTimeoutFor(driver)) {
             return Optional.of(timeouts.get(driver).peek());
         } else {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

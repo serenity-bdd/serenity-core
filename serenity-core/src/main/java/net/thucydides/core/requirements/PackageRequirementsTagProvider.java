@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import com.google.common.reflect.ClassPath;
 import net.serenitybdd.core.collect.NewList;
@@ -91,16 +90,15 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     private void fetchRequirements() {
-        requirements = reloadedRequirements()
-                            .or(requirementsReadFromClasspath()
-                                    .or(NO_REQUIREMENTS));
+        requirements = reloadedRequirements().orElse(requirementsReadFromClasspath()
+                .orElse(NO_REQUIREMENTS));
     }
 
-    private Optional<List<Requirement>> reloadedRequirements() {
+    private java.util.Optional<List<Requirement>> reloadedRequirements() {
         try {
             return requirementsStore.read();
         } catch (IOException e) {
-            return Optional.absent();
+            return java.util.Optional.empty();
         }
     }
 
@@ -127,10 +125,10 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
             }
 
         } catch (IOException e) {
-            return Optional.absent();
+            return Optional.empty();
         }
 
-        return Optional.fromNullable(classpathRequirements);
+        return Optional.ofNullable(classpathRequirements);
     }
 
     private Comparator<? super String> byDescendingPackageLength() {
@@ -223,21 +221,21 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
 
     @Override
-    public Optional<Requirement> getParentRequirementOf(TestOutcome testOutcome) {
+    public java.util.Optional<Requirement> getParentRequirementOf(TestOutcome testOutcome) {
         return getTestCaseRequirementOf(testOutcome);
     }
 
-    public Optional<Requirement> getTestCaseRequirementOf(TestOutcome testOutcome) {
+    public java.util.Optional<Requirement> getTestCaseRequirementOf(TestOutcome testOutcome) {
         for (Requirement requirement : AllRequirements.in(getRequirements())) {
             if (requirement.asTag().isAsOrMoreSpecificThan(testOutcome.getUserStory().asTag())) {
-                return Optional.of(requirement);
+                return java.util.Optional.of(requirement);
             }
         }
-        return Optional.absent();
+        return java.util.Optional.empty();
     }
 
     @Override
-    public Optional<Requirement> getRequirementFor(TestTag testTag) {
+    public java.util.Optional<Requirement> getRequirementFor(TestTag testTag) {
         for (Requirement requirement : AllRequirements.in(getRequirements())) {
             if (requirement.asTag().isAsOrMoreSpecificThan(testTag)) {
                 return Optional.of(requirement);
@@ -246,7 +244,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
         return uniqueRequirementWithName(testTag.getName());
     }
 
-    private Optional<Requirement> uniqueRequirementWithName(String name) {
+    private java.util.Optional<Requirement> uniqueRequirementWithName(String name) {
         return RequirementsList.of(getRequirements()).findByUniqueName(name);
     }
 
@@ -258,7 +256,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
 
         Set<TestTag> tags = new HashSet<>();
 
-        Optional<Requirement> matchingRequirement = getRequirementFor(testOutcome.getUserStory().asTag());
+        java.util.Optional<Requirement> matchingRequirement = getRequirementFor(testOutcome.getUserStory().asTag());
 
         if (matchingRequirement.isPresent()) {
             tags.add(matchingRequirement.get().asTag());
@@ -278,7 +276,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
                 return Optional.of(requirement);
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private static File getRequirementsDirectory(File directory) {

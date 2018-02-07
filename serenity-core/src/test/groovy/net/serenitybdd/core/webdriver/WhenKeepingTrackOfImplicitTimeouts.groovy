@@ -1,6 +1,5 @@
 package net.serenitybdd.core.webdriver
 
-import com.google.common.base.Optional
 import net.serenitybdd.core.pages.PageObject
 import net.thucydides.core.annotations.DefaultUrl
 import net.thucydides.core.webdriver.TimeoutStack

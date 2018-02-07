@@ -1,13 +1,13 @@
 package net.thucydides.core;
 
-import com.google.common.base.Optional;
-import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Properties that can be passed to a web driver test to customize its behaviour.
@@ -1192,7 +1192,7 @@ public enum ThucydidesSystemProperty {
     public static final String DEFAULT_HISTORY_DIRECTORY = "history";
 
 
-    private final org.slf4j.Logger logger = LoggerFactory.getLogger(ThucydidesSystemProperty.class);
+    private final Logger logger = LoggerFactory.getLogger(ThucydidesSystemProperty.class);
 
     ThucydidesSystemProperty(final String propertyName) {
         this.propertyName = propertyName;
@@ -1220,7 +1220,7 @@ public enum ThucydidesSystemProperty {
         if (StringUtils.isNotEmpty(legacyValue)) {
             logger.warn("Legacy property format detected for {}, please use the serenity.* format instead.",getPropertyName());
         }
-        return Optional.fromNullable(legacyValue);
+        return Optional.ofNullable(legacyValue);
     }
 
     private String withLegacyPrefix(String propertyName) {
@@ -1243,7 +1243,7 @@ public enum ThucydidesSystemProperty {
 
     public String from(EnvironmentVariables environmentVariables, String defaultValue) {
         Optional<String> newPropertyValue
-                = Optional.fromNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
+                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
 
         if (isDefined(newPropertyValue)) {
             return newPropertyValue.get();
@@ -1263,7 +1263,7 @@ public enum ThucydidesSystemProperty {
 
     public int integerFrom(EnvironmentVariables environmentVariables, int defaultValue) {
         Optional<String> newPropertyValue
-                = Optional.fromNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
+                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
 
         if (isDefined(newPropertyValue)) {
             return Integer.parseInt(newPropertyValue.get().trim());
@@ -1281,7 +1281,7 @@ public enum ThucydidesSystemProperty {
         if (environmentVariables == null) { return defaultValue; }
 
         Optional<String> newPropertyValue
-                = Optional.fromNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
+                = Optional.ofNullable(environmentVariables.getProperty(withSerenityPrefix(getPropertyName())));
 
         if (isDefined(newPropertyValue)) {
             return Boolean.valueOf(newPropertyValue.get().trim());

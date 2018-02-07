@@ -1,8 +1,6 @@
 package net.thucydides.core.reports.json;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
@@ -91,21 +89,21 @@ public class JSONTestOutcomeReporter implements AcceptanceTestReporter, Acceptan
     }
 
     @Override
-    public java.util.Optional<TestOutcome> loadReportFrom(final Path reportFile) {
+    public Optional<TestOutcome> loadReportFrom(final Path reportFile) {
         return loadReportFrom(reportFile.toFile());
     }
 
     @Override
-    public java.util.Optional<TestOutcome> loadReportFrom(final File reportFile) {
+    public Optional<TestOutcome> loadReportFrom(final File reportFile) {
         if (!reportFile.getName().toLowerCase().endsWith(".json")) {
-            return java.util.Optional.empty();
+            return Optional.empty();
         }
         try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(reportFile), encoding))) {
             return jsonConverter.fromJson(in);
         } catch (Throwable e) {
             LOGGER.warn("This file was not a valid JSON Serenity test report: " + reportFile.getName()
                     + System.lineSeparator() + e.getMessage());
-            return java.util.Optional.empty();
+            return Optional.empty();
         }
     }
 

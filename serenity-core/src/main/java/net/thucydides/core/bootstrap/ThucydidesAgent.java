@@ -1,9 +1,10 @@
 package net.thucydides.core.bootstrap;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepListener;
+
+import java.util.Optional;
 
 /**
  * A utility class that provides services to initialize web testing and reporting-related fields in arbitrary objects.

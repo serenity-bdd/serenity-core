@@ -1,6 +1,5 @@
 package net.thucydides.core.webdriver;
 
-import com.google.common.base.Optional;
 import io.appium.java_client.AppiumDriver;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.pages.DefaultTimeouts;
@@ -20,6 +19,7 @@ import org.openqa.selenium.support.ui.Duration;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static net.thucydides.core.webdriver.DriverStrategySelector.inEnvironment;
@@ -206,7 +206,7 @@ public class WebDriverFactory {
 
     public Duration currentTimeoutFor(WebDriver proxiedDriver) {
         Optional<Duration> storedTimeoutValue = timeoutStack.currentTimeoutValueFor(proxiedDriver);
-        return storedTimeoutValue.or(getDefaultImplicitTimeout());
+        return storedTimeoutValue.orElse(getDefaultImplicitTimeout());
     }
 
     public Duration resetTimeouts(WebDriver proxiedDriver) {

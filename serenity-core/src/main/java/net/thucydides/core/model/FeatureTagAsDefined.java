@@ -1,14 +1,14 @@
 package net.thucydides.core.model;
 
-import com.google.common.base.Optional;
-import java.util.HashMap;
 import net.thucydides.core.model.featuretags.FeatureFileStrategy;
 import net.thucydides.core.model.featuretags.FeatureTagStrategy;
 import net.thucydides.core.model.featuretags.NoFeatureStrategy;
 import net.thucydides.core.model.featuretags.StoryFileStrategy;
 import net.thucydides.core.requirements.model.FeatureType;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Created by john on 6/07/2016.

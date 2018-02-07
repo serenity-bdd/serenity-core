@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements
 
-import com.google.common.base.Optional
 import junittestcases.samples.fruit.RedAndGreenApples
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.model.TestOutcome

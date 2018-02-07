@@ -1,6 +1,4 @@
 package net.serenitybdd.screenplay;
-
-import com.google.common.base.Optional;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.conditions.SilentPerformable;
@@ -8,6 +6,8 @@ import net.serenitybdd.screenplay.events.ActorAsksQuestion;
 import net.serenitybdd.screenplay.formatting.StripRedundantTerms;
 import net.thucydides.core.steps.StepEventBus;
 import org.hamcrest.Matcher;
+
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -26,7 +26,7 @@ public class QuestionConsequence<T> extends BaseConsequence<T> {
         this.question = actual;
         this.expected = expected;
         this.subject = QuestionSubject.fromClass(actual.getClass()).andQuestion(actual).subject();
-        this.subjectText = Optional.fromNullable(subjectText);
+        this.subjectText = Optional.ofNullable(subjectText);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class QuestionConsequence<T> extends BaseConsequence<T> {
         Serenity.injectScenarioStepsInto(question);
 
         try {
-            optionalPrecondition.or(DO_NOTHING).performAs(actor);
+            optionalPrecondition.orElse(DO_NOTHING).performAs(actor);
             assertThat(question.answeredBy(actor), expected);
         } catch (Throwable actualError) {
 
@@ -58,8 +58,8 @@ public class QuestionConsequence<T> extends BaseConsequence<T> {
 
     @Override
     public String toString() {
-        String template = explanation.or("Then %s should be %s");
+        String template = explanation.orElse("Then %s should be %s");
         String expectedExpression = StripRedundantTerms.from(expected.toString());
-        return addRecordedInputValuesTo(String.format(template, subjectText.or(subject), expectedExpression));
+        return addRecordedInputValuesTo(String.format(template, subjectText.orElse(subject), expectedExpression));
     }
 }

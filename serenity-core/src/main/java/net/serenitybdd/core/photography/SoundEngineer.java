@@ -1,10 +1,7 @@
 package net.serenitybdd.core.photography;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.model.TestResult;
 import org.openqa.selenium.WebDriver;
-
-import java.io.File;
 
 public class SoundEngineer {
 

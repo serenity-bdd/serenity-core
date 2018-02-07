@@ -1,6 +1,5 @@
 package net.serenitybdd.core.history;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.core.collect.NewMap;
 import com.google.inject.Inject;
 import net.thucydides.core.guice.Injectors;
@@ -48,7 +47,7 @@ public class FileSystemTestOutcomeSummaryRecorder implements TestOutcomeSummaryR
      */
     public FileSystemTestOutcomeSummaryRecorder(Path historyDirectory, Boolean deletePreviousHistory) {
         this.historyDirectory = historyDirectory;
-        this.deletePreviousHistory = Optional.fromNullable(deletePreviousHistory).or(false);
+        this.deletePreviousHistory = Optional.ofNullable(deletePreviousHistory).orElse(false);
         previousOutcomeConverter = new GsonPreviousOutcomeConverter(Injectors.getInjector().getInstance(EnvironmentVariables.class));
     }
 
@@ -89,7 +88,9 @@ public class FileSystemTestOutcomeSummaryRecorder implements TestOutcomeSummaryR
         if (Files.exists(historyDirectory)) {
             try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(historyDirectory)) {
                 for (Path path : directoryStream) {
-                    previousTestOutcomes.addAll(previousTestOutcomesFrom(path).asSet());
+                    previousTestOutcomesFrom(path).ifPresent(
+                            outcome -> previousTestOutcomes.add(outcome)
+                    );
                 }
             } catch (IOException ex) {
                 LOGGER.warn("Unable to store test outcome for posterity", ex);
@@ -103,7 +104,7 @@ public class FileSystemTestOutcomeSummaryRecorder implements TestOutcomeSummaryR
         try (InputStream inputStream = new BufferedInputStream(new FileInputStream(source.toFile()))) {
             return previousOutcomeConverter.fromJson(inputStream);
         } catch (IOException e) {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

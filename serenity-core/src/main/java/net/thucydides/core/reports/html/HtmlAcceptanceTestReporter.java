@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.html;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -32,10 +31,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static net.thucydides.core.model.ReportType.HTML;
@@ -169,19 +165,19 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     }
 
     private void addParentRequirmentFieldToContext(TestOutcome testOutcome, Map<String, Object> context) {
-        Optional<Requirement> parentRequirement = requirementsService.getParentRequirementFor(testOutcome);
-        Optional<Story> featureOrStory = Optional.fromNullable(testOutcome.getUserStory());
+        java.util.Optional<Requirement> parentRequirement = requirementsService.getParentRequirementFor(testOutcome);
+        java.util.Optional<Story> featureOrStory = java.util.Optional.ofNullable(testOutcome.getUserStory());
         String parentTitle = null;
 
         if (parentRequirement.isPresent()) {
             parentTitle = parentRequirement.get().getName();
             context.put("parentRequirement", parentRequirement);
-            context.put("featureOrStory", Optional.absent());
+            context.put("featureOrStory", Optional.empty());
             context.put("parentTitle", parentTitle);
             context.put("parentLink", getReportNameProvider().forRequirement(parentRequirement.get()));
         } else if (featureOrStory.isPresent()) {
             parentTitle = featureOrStory.get().getName();
-            context.put("parentRequirement", Optional.absent());
+            context.put("parentRequirement", Optional.empty());
             context.put("featureOrStory",featureOrStory);
             context.put("parentTitle", parentTitle);
             context.put("parentLink", getReportNameProvider().forTag(featureOrStory.get().asTag()));
@@ -293,8 +289,8 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     }
 
     @Override
-    public Optional<OutcomeFormat> getFormat() {
-        return Optional.of(OutcomeFormat.HTML);
+    public java.util.Optional<OutcomeFormat> getFormat() {
+        return java.util.Optional.of(OutcomeFormat.HTML);
     }
 
 }

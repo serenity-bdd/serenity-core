@@ -1,6 +1,5 @@
 package net.thucydides.core.configuration;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TakeScreenshots;
@@ -11,6 +10,7 @@ import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.UnsupportedDriverException;
 
 import java.io.File;
+import java.util.Optional;
 
 import static net.thucydides.core.ThucydidesSystemProperty.*;
 import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
@@ -214,7 +214,7 @@ public class SystemPropertiesConfiguration implements Configuration {
         if (isNotEmpty(takeScreenshotsLevel)) {
             return Optional.of(TakeScreenshots.valueOf(takeScreenshotsLevel.toUpperCase()));
         } else {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

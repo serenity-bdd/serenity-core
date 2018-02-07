@@ -1,8 +1,6 @@
 package net.thucydides.core.requirements.model;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
-import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.requirements.SearchForFilesOfType;
@@ -15,9 +13,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 public class RequirementsConfiguration {
     public final static List<String> DEFAULT_CAPABILITY_TYPES = NewList.of("capability", "feature", "story");
@@ -95,12 +92,12 @@ public class RequirementsConfiguration {
             }
         } catch (URISyntaxException e) {
             e.printStackTrace();
-            return Optional.absent();
+            return Optional.empty();
         } catch (IOException e) {
             e.printStackTrace();
-            return Optional.absent();
+            return Optional.empty();
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
 
@@ -133,12 +130,12 @@ public class RequirementsConfiguration {
             }
         } catch (URISyntaxException e) {
             e.printStackTrace();
-            return Optional.absent();
+            return Optional.empty();
         } catch (IOException e) {
             e.printStackTrace();
-            return Optional.absent();
+            return Optional.empty();
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private boolean jbehaveFilesExist() {

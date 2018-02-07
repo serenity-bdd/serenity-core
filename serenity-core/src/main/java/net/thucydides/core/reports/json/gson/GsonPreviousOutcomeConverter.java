@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.json.gson;
 
-import com.google.common.base.Optional;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
@@ -13,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 public class GsonPreviousOutcomeConverter {
 
@@ -42,7 +42,7 @@ public class GsonPreviousOutcomeConverter {
 
     public Optional<PreviousTestOutcome> fromJson(Reader jsonReader) {
         PreviousTestOutcome testOutcome = gson.fromJson(jsonReader, PreviousTestOutcome.class);
-        return isValid(testOutcome) ? Optional.of(testOutcome) : Optional.<PreviousTestOutcome>absent();
+        return isValid(testOutcome) ? Optional.of(testOutcome) : Optional.<PreviousTestOutcome>empty();
     }
 
     private boolean isValid(PreviousTestOutcome testOutcome) {

@@ -1,9 +1,9 @@
 package net.thucydides.core.model;
 
-import com.google.common.base.Optional;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,7 +15,7 @@ public class ErrorMessageFormatter {
     Pattern LEADING_EXCEPTIONS = Pattern.compile("^<?([\\w]*\\.[\\w]*)+:");
 
     public ErrorMessageFormatter(String originalMessage) {
-        this.originalMessage = Optional.fromNullable(originalMessage);
+        this.originalMessage = Optional.ofNullable(originalMessage);
     }
 
     /**

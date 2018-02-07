@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.json.gson;
 
-import com.google.common.base.Optional;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
@@ -12,6 +11,7 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Optional;
 
 public class OptionalTypeAdapter<E> extends TypeAdapter<Optional<E>> {
 
@@ -48,9 +48,9 @@ public class OptionalTypeAdapter<E> extends TypeAdapter<Optional<E>> {
     public Optional<E> read(JsonReader in) throws IOException {
         final JsonToken peek = in.peek();
         if(peek != JsonToken.NULL){
-            return Optional.fromNullable(adapter.read(in));
+            return Optional.ofNullable(adapter.read(in));
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
 }

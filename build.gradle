@@ -167,7 +167,7 @@ subprojects {
         }
 
         shadowJar {
-            classifier = 'with-dependencies'
+            classifier = null
         }
 
         relocate 'com.google.common', 'net.serenitybdd.shadow.com.google.common'
@@ -375,7 +375,7 @@ subprojects {
 
                 println "Publishing with shaded dependencies: $project.name:$project.group:$project.version"
 
-                from components.shadow
+                from components.java
 
                 artifact sourcesJar {
                     classifier "sources"
@@ -436,6 +436,4 @@ subprojects {
 {{/tags}}
  """;
     }
-
-
 }

@@ -3,7 +3,6 @@ package net.serenitybdd.junit.runners;
 import net.thucydides.core.model.*;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.runner.Runner;
-import com.google.common.base.Optional;
 
 import java.util.*;
 import java.util.stream.Collectors;

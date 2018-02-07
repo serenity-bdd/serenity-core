@@ -1,7 +1,6 @@
 package net.thucydides.core.steps;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
 import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.exceptions.TheErrorType;
@@ -117,8 +116,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return darkroom;
     }
 
-    public Optional<TestStep> cloneCurrentStep() {
-        return (Optional<TestStep>) ((currentStepExists()) ? Optional.of(getCurrentStep().clone()) : Optional.absent());
+    public java.util.Optional<TestStep> cloneCurrentStep() {
+        return ((currentStepExists()) ? Optional.of(getCurrentStep().clone()) : Optional.empty());
     }
 
     public java.util.Optional<TestResult> getAnnotatedResult() {
@@ -309,7 +308,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     protected TestOutcome getCurrentTestOutcome() {
-        return latestTestOutcome().or(unavailableTestOutcome());
+        return latestTestOutcome().orElse(unavailableTestOutcome());
     }
 
     private TestOutcome unavailableTestOutcome() {
@@ -320,12 +319,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return true;
     }
 
-    protected Optional<TestOutcome> latestTestOutcome() {
+    protected java.util.Optional<TestOutcome> latestTestOutcome() {
         if (testOutcomes.isEmpty()) {
-            return Optional.absent();
+            return java.util.Optional.empty();
         } else {
             TestOutcome latestOutcome = testOutcomes.get(testOutcomes.size() - 1);
-            return Optional.of(latestOutcome);
+            return java.util.Optional.of(latestOutcome);
         }
     }
 
@@ -546,8 +545,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     Stack<Method> currentStepMethodStack = new Stack<>();
 
-    public Optional<Method> getCurrentStepMethod() {
-        return currentStepMethodStack.empty() ? Optional.<Method>absent() : Optional.fromNullable(currentStepMethodStack.peek());
+    public java.util.Optional<Method> getCurrentStepMethod() {
+        return currentStepMethodStack.empty() ? java.util.Optional.<Method>empty() : java.util.Optional.ofNullable(currentStepMethodStack.peek());
     }
 
     private void recordStep(ExecutedStepDescription description) {
@@ -599,12 +598,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return currentStepStack.peek();
     }
 
-    private Optional<TestStep> getPreviousStep() {
+    private java.util.Optional<TestStep> getPreviousStep() {
         if (getCurrentTestOutcome().getTestStepCount() > 1) {
             List<TestStep> currentTestSteps = getCurrentTestOutcome().getTestSteps();
-            return Optional.of(currentTestSteps.get(currentTestSteps.size() - 2));
+            return java.util.Optional.of(currentTestSteps.get(currentTestSteps.size() - 2));
         } else {
-            return Optional.absent();
+            return java.util.Optional.empty();
         }
     }
 
@@ -747,8 +746,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
-    public Optional<TestResult> getForcedResult() {
-        return Optional.fromNullable(getCurrentTestOutcome().getAnnotatedResult());
+    public java.util.Optional<TestResult> getForcedResult() {
+        return java.util.Optional.ofNullable(getCurrentTestOutcome().getAnnotatedResult());
     }
 
     public void clearForcedResult() {
@@ -762,7 +761,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private void take(final ScreenshotType screenshotType, TestResult result) {
         if (shouldTakeScreenshots()) {
             try {
-                Optional<ScreenshotAndHtmlSource> screenshotAndHtmlSource = grabScreenshot(result);
+                java.util.Optional<ScreenshotAndHtmlSource> screenshotAndHtmlSource = grabScreenshot(result);
                 if (screenshotAndHtmlSource.isPresent()) {
                     recordScreenshotIfRequired(screenshotType, screenshotAndHtmlSource.get());
                 }
@@ -829,12 +828,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
                 && (!screenshotAndHtmlSource.hasIdenticalScreenshotsAs(previousScreenshot().get())));
     }
 
-    private Optional<ScreenshotAndHtmlSource> previousScreenshot() {
+    private java.util.Optional<ScreenshotAndHtmlSource> previousScreenshot() {
         List<ScreenshotAndHtmlSource> screenshotsToDate = getCurrentTestOutcome().getScreenshotAndHtmlSources();
         if (screenshotsToDate.isEmpty()) {
-            return Optional.absent();
+            return java.util.Optional.empty();
         } else {
-            return Optional.of(screenshotsToDate.get(screenshotsToDate.size() - 1));
+            return java.util.Optional.of(screenshotsToDate.get(screenshotsToDate.size() - 1));
         }
     }
 
@@ -848,10 +847,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
-    private Optional<ScreenshotAndHtmlSource> grabScreenshot(TestResult result) {
+    private java.util.Optional<ScreenshotAndHtmlSource> grabScreenshot(TestResult result) {
 
         ScreenshotPhoto newPhoto = ScreenshotPhoto.None;
-        Optional<File> pageSource = Optional.absent();
+        java.util.Optional<File> pageSource = java.util.Optional.empty();
 
         if (pathOf(outputDirectory) != null) { // Output directory may be null for some tests
             newPhoto = getPhotographer().takesAScreenshot()
@@ -865,8 +864,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
         }
         return (newPhoto == ScreenshotPhoto.None) ?
-                Optional.<ScreenshotAndHtmlSource>absent()
-                : Optional.of(new ScreenshotAndHtmlSource(newPhoto.getPathToScreenshot().toFile(), pageSource.orNull()));
+                java.util.Optional.<ScreenshotAndHtmlSource>empty()
+                : java.util.Optional.of(new ScreenshotAndHtmlSource(newPhoto.getPathToScreenshot().toFile(), pageSource.orElse(null)));
     }
 
     private Path pathOf(File directory) {

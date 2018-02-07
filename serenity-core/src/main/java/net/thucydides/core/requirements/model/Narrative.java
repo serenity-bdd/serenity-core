@@ -1,11 +1,11 @@
 package net.thucydides.core.requirements.model;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import net.serenitybdd.core.collect.NewList;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.List;
+import java.util.Optional;
 
 public class Narrative {
     private final Optional<String> title;
@@ -27,7 +27,7 @@ public class Narrative {
     }
 
     public Narrative(String type, String text) {
-        this(Optional.<String>absent(), Optional.<String>absent(), Optional.<String>absent(), NewList.<String>of(), type, text);
+        this(Optional.<String>empty(), Optional.<String>empty(), Optional.<String>empty(), NewList.<String>of(), type, text);
     }
 
     public Optional<String> getId() {

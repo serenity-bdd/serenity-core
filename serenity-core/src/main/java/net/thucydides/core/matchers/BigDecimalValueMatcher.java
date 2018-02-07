@@ -1,12 +1,12 @@
 package net.thucydides.core.matchers;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.reflection.FieldValue;
 import org.hamcrest.Matcher;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.closeTo;
 
@@ -31,13 +31,13 @@ public class BigDecimalValueMatcher {
             if (!fieldValue.isPresent()) {
                 fieldValue = FieldValue.inObject(innerMatcher).fromFieldNamed("expected");
             }
-            return fieldValue.orNull();
+            return fieldValue.orElse(null);
         } else {
             Optional<Object> fieldValue = FieldValue.inObject(matcher).fromFieldNamed("expectedValue");
             if (!fieldValue.isPresent()) {
                 fieldValue = FieldValue.inObject(matcher).fromFieldNamed("expected");
             }
-            return fieldValue.orNull();
+            return fieldValue.orElse(null);
         }
     }
 

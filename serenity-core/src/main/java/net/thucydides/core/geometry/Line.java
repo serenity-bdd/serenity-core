@@ -1,10 +1,9 @@
 package net.thucydides.core.geometry;
 
-import com.google.common.base.Optional;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.Optional;
 
 public class Line {
     private final Point origin;
@@ -38,7 +37,7 @@ public class Line {
 
     public Optional<Point> intersectionWith(Line line) {
         if (parallelWith(line)) {
-            return Optional.absent();
+            return Optional.empty();
         } else if (isVertical()) {
             BigDecimal b2 = line.getYIntercept();
             BigDecimal m2 = line.getSlope();

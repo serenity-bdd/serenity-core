@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
@@ -11,10 +10,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MultiSourceRequirementsService extends BaseRequirementsService implements RequirementsService {
 
@@ -58,7 +54,7 @@ public class MultiSourceRequirementsService extends BaseRequirementsService impl
                 return Optional.of((ReleaseProvider) provider);
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     public List<RequirementsTagProvider> getRequirementsTagProviders() {

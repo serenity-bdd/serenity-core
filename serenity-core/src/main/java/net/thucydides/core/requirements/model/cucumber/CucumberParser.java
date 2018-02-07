@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements.model.cucumber;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import cucumber.runtime.io.MultiLoader;
 import cucumber.runtime.model.CucumberFeature;
@@ -15,6 +14,7 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 
@@ -61,9 +61,9 @@ public class CucumberParser {
             String text = gherkinDocument.getFeature().getDescription();
             String id = getIdFromName(title);
 
-            return java.util.Optional.of(new Narrative(Optional.fromNullable(title),
-                    Optional.fromNullable(id),
-                    Optional.fromNullable(cardNumber),
+            return java.util.Optional.of(new Narrative(Optional.ofNullable(title),
+                    Optional.ofNullable(id),
+                    Optional.ofNullable(cardNumber),
                     versionNumbers,
                     "feature",
                     text !=null ? text : ""));

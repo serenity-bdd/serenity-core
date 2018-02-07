@@ -1,14 +1,12 @@
 package net.thucydides.core.reports.html;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Optional;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.ReportOptions;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.requirements.RequirementsService;
-import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.tags.BreadcrumbTagFilter;
 import net.thucydides.core.util.EnvironmentVariables;

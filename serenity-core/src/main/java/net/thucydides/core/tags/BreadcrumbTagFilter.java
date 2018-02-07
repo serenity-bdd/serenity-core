@@ -1,7 +1,5 @@
 package net.thucydides.core.tags;
 
-import com.google.common.base.Optional;
-import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
@@ -13,6 +11,7 @@ import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public class BreadcrumbTagFilter {
 
@@ -33,15 +32,14 @@ public class BreadcrumbTagFilter {
     public List<TestTag> getRequirementBreadcrumbsFrom(Collection<TestTag> tags) {
         List<TestTag> requirementTypeTags = new ArrayList<>();
         for(String requirementType : requirementsService.getRequirementTypes()) {
-            requirementTypeTags.addAll(requirementTagOfType(requirementType).in(tags).asSet());
-
+            requirementTagOfType(requirementType).in(tags).ifPresent(requirementTypeTags::add);
         }
         return requirementTypeTags;
     }
 
     public List<TestTag> getRequirementBreadcrumbsFrom(TestTag tag) {
         List<TestTag> requirementTypeTags = new ArrayList<>();
-        Optional<Requirement> displayedRequirement = requirementsService.getRequirementFor(tag);
+        java.util.Optional<Requirement> displayedRequirement = requirementsService.getRequirementFor(tag);
 
         return displayedRequirement.isPresent()
                 ? NewList.of(displayedRequirement.get().asTag()) : NewList.<TestTag>of();
@@ -80,7 +78,7 @@ public class BreadcrumbTagFilter {
                     return Optional.of(tag);
                 }
             }
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 }

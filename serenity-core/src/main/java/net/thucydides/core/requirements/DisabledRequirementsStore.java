@@ -1,10 +1,10 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.requirements.model.Requirement;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class DisabledRequirementsStore implements RequirementsStore {
     @Override
@@ -13,7 +13,7 @@ public class DisabledRequirementsStore implements RequirementsStore {
 
     @Override
     public Optional<List<Requirement>> read() throws IOException {
-        return Optional.absent();
+        return Optional.empty();
     }
 
     @Override

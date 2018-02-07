@@ -1,10 +1,10 @@
 package net.thucydides.core.screenshots;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.annotations.BlurScreenshots;
 import net.thucydides.core.reflection.StackTraceAnalyser;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 public class ScreenshotBlurCheck {
 
@@ -19,6 +19,6 @@ public class ScreenshotBlurCheck {
                 return Optional.of(callingMethod.getAnnotation(BlurScreenshots.class).value());
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 }

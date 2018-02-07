@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.requirements.model.Requirement;
@@ -9,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 public class FileSystemRequirementsService extends BaseRequirementsService implements RequirementsService {
 
@@ -39,7 +39,7 @@ public class FileSystemRequirementsService extends BaseRequirementsService imple
 
     @Override
     public Optional<ReleaseProvider> getReleaseProvider() {
-        return Optional.absent();
+        return Optional.empty();
     }
 
 }

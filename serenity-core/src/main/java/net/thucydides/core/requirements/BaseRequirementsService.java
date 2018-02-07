@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.model.Release;
 import net.thucydides.core.model.ReportType;
@@ -54,11 +53,11 @@ public abstract class BaseRequirementsService implements RequirementsService {
         return augmentedRequirements;
     }
 
-    public Optional<Requirement> getParentRequirementFor(TestOutcome testOutcome) {
+    public java.util.Optional<Requirement> getParentRequirementFor(TestOutcome testOutcome) {
 
         try {
             for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
-                Optional<Requirement> requirement = getParentRequirementOf(testOutcome, tagProvider);
+                java.util.Optional<Requirement> requirement = getParentRequirementOf(testOutcome, tagProvider);
                 if (requirement.isPresent()) {
                     return requirement;
                 }
@@ -66,14 +65,14 @@ public abstract class BaseRequirementsService implements RequirementsService {
         } catch (RuntimeException handleTagProvidersElegantly) {
             LOGGER.error("Tag provider failure", handleTagProvidersElegantly);
         }
-        return Optional.absent();
+        return java.util.Optional.empty();
     }
 
-    public Optional<Requirement> getRequirementFor(TestTag tag) {
+    public java.util.Optional<Requirement> getRequirementFor(TestTag tag) {
 
         try {
             for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
-                Optional<Requirement> requirement = tagProvider.getRequirementFor(tag);
+                java.util.Optional<Requirement> requirement = tagProvider.getRequirementFor(tag);
                 if (requirement.isPresent()) {
                     return requirement;
                 }
@@ -81,14 +80,14 @@ public abstract class BaseRequirementsService implements RequirementsService {
         } catch (RuntimeException handleTagProvidersElegantly) {
             LOGGER.error("Tag provider failure", handleTagProvidersElegantly);
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     public List<Requirement> getAncestorRequirementsFor(TestOutcome testOutcome) {
         for (RequirementsTagProvider tagProvider : getRequirementsTagProviders()) {
 
 
-            Optional<Requirement> requirement = getParentRequirementOf(testOutcome, tagProvider);
+            java.util.Optional<Requirement> requirement = getParentRequirementOf(testOutcome, tagProvider);
             if (requirement.isPresent()) {
                 LOGGER.debug("Requirement found for test outcome " + testOutcome.getTitle() + "-" + testOutcome.getIssueKeys() + ": " + requirement);
                 if ((getRequirementAncestors() != null) && (getRequirementAncestors().containsKey(requirement.get()))) {
@@ -139,24 +138,24 @@ public abstract class BaseRequirementsService implements RequirementsService {
         return requirementAncestors;
     }
 
-    private Optional<Requirement> getParentRequirementOf(TestOutcome testOutcome, RequirementsTagProvider tagProvider) {
+    private java.util.Optional<Requirement> getParentRequirementOf(TestOutcome testOutcome, RequirementsTagProvider tagProvider) {
 
-        Optional<Requirement> parentDefinedInTags = ParentRequirementsProvided.by(tagProvider).forOutcome(testOutcome);
+        java.util.Optional<Requirement> parentDefinedInTags = ParentRequirementsProvided.by(tagProvider).forOutcome(testOutcome);
         if (parentDefinedInTags.isPresent()) {
-            Optional<Requirement> matchingIndexedParentRequirement = findMatchingIndexedRequirement(parentDefinedInTags.get());
+            java.util.Optional<Requirement> matchingIndexedParentRequirement = findMatchingIndexedRequirement(parentDefinedInTags.get());
             return matchingIndexedParentRequirement;
         }
 
-        return Optional.absent();
+        return java.util.Optional.empty();
     }
 
-    private Optional<Requirement> findMatchingIndexedRequirement(Requirement requirement) {
+    private java.util.Optional<Requirement> findMatchingIndexedRequirement(Requirement requirement) {
         for(Requirement indexedRequirement : AllRequirements.in(requirements)) {
             if (requirement.matches(indexedRequirement)) {
-                return Optional.of(indexedRequirement);
+                return java.util.Optional.of(indexedRequirement);
             }
         }
-        return Optional.absent();
+        return java.util.Optional.empty();
     }
 
     public List<Release> getReleasesFromRequirements() {

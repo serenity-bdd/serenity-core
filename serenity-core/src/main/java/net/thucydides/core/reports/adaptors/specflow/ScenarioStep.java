@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.adaptors.specflow;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.model.TestResult;
 
@@ -8,6 +7,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Optional;
 
 public class ScenarioStep {
 
@@ -38,7 +38,7 @@ public class ScenarioStep {
                                                                    .round(new MathContext(0, RoundingMode.HALF_UP));
             return Optional.of(durationValue);
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private boolean containsDurationValue(String resultLine) {
@@ -69,7 +69,7 @@ public class ScenarioStep {
             }
             return Optional.of(new AssertionError(errorMessage.toString()));
         } else {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

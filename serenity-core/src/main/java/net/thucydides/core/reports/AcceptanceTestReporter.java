@@ -1,10 +1,10 @@
 package net.thucydides.core.reports;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.model.TestOutcome;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Generates a report based on a set of acceptance test results.

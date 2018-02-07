@@ -1,10 +1,7 @@
 package net.thucydides.core.reports.adaptors.lettuce;
 
-import com.google.common.base.Optional;
-import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.collect.NewList;
-import java.util.HashMap;
 import net.serenitybdd.core.PendingStepException;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
@@ -17,10 +14,7 @@ import net.thucydides.core.reports.adaptors.xunit.model.TestSuite;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class LettuceXUnitAdaptor extends FilebasedOutcomeAdaptor {
 
@@ -81,7 +75,7 @@ public class LettuceXUnitAdaptor extends FilebasedOutcomeAdaptor {
         } else if (testCase.getError().isPresent()) {
             testFailure = testCase.getError().get().asException();
         }
-        return Optional.fromNullable(testFailure);
+        return Optional.ofNullable(testFailure);
     }
 
     private TestResult resultOf(TestCase testCase) {

@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.html;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.Release;
 import net.thucydides.core.model.ReportNamer;
@@ -9,6 +8,8 @@ import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.NameConverter;
+
+import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
@@ -29,14 +30,14 @@ public class ReportNameProvider {
         return new ReportNameProvider(NO_CONTEXT, reportNamer, requirementsService);
     }
 
-    public final static Optional<String> NO_CONTEXT = Optional.absent();
+    public final static Optional<String> NO_CONTEXT = Optional.empty();
 
     public ReportNameProvider() {
         this(NO_CONTEXT, ReportType.HTML);
     }
 
     public ReportNameProvider(String context) {
-       this(Optional.fromNullable(context), ReportType.HTML, Injectors.getInjector().getInstance(RequirementsService.class));
+       this(Optional.ofNullable(context), ReportType.HTML, Injectors.getInjector().getInstance(RequirementsService.class));
 
     }
 
@@ -56,7 +57,7 @@ public class ReportNameProvider {
     }
 
     public String getContext() {
-        return context.or("");
+        return context.orElse("");
      }
 
     public ReportNameProvider forCSVFiles() {

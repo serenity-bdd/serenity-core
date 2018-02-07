@@ -1,9 +1,7 @@
 package net.thucydides.core.requirements;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
 import net.serenitybdd.core.collect.NewList;
-import java.util.HashMap;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
@@ -195,7 +193,7 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         java.util.Optional<Narrative> narrative = java.util.Optional.empty();
         try {
             candidateClass = Class.forName(rootPackage + "." + requirementPath + ".package-info");
-            narrative = NarrativeFinder.forClass(candidateClass).toJavaUtil();
+            narrative = NarrativeFinder.forClass(candidateClass);
         } catch (ClassNotFoundException ignore) {
         }
 
@@ -217,10 +215,10 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
         String narrativeText = "";
         String cardNumber = "";
 
-        Optional<Narrative> narrative = NarrativeFinder.forClass(candidateClass);
+        java.util.Optional<Narrative> narrative = NarrativeFinder.forClass(candidateClass);
 
 
-        Requirement newRequirement = getRequirement(candidateClass, packageName, level, requirementTitle, requirementType, narrativeText, cardNumber, narrative.toJavaUtil());
+        Requirement newRequirement = getRequirement(candidateClass, packageName, level, requirementTitle, requirementType, narrativeText, cardNumber, narrative);
         if (parentRequirement != null) {
             newRequirement = newRequirement.withParent(parentRequirement.getName());
         }
@@ -262,17 +260,17 @@ public class PackageAnnotationBasedTagProvider extends AbstractRequirementsTagPr
     }
 
     @Override
-    public Optional<Requirement> getParentRequirementOf(TestOutcome testOutcome) {
+    public java.util.Optional<Requirement> getParentRequirementOf(TestOutcome testOutcome) {
         if (testOutcome.getUserStory() == null || testOutcome.getUserStory().getStoryClassName() == null) {
-            return Optional.absent();
+            return java.util.Optional.empty();
         }
         String name = testOutcome.getUserStory().getStoryClassName().replace(rootPackage + ".", "");
-        return Optional.fromNullable(getRequirementsByPath().get(name));
+        return java.util.Optional.ofNullable(getRequirementsByPath().get(name));
     }
 
     @Override
-    public Optional<Requirement> getRequirementFor(TestTag testTag) {
-        Optional<Requirement> result = Optional.absent();
+    public java.util.Optional<Requirement> getRequirementFor(TestTag testTag) {
+        java.util.Optional<Requirement> result = Optional.empty();
         for (Requirement requirement : getRequirements()) {
             if (requirement.matchesTag(testTag)) {
                 return Optional.of(requirement);

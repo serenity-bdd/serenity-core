@@ -1,6 +1,5 @@
 package net.thucydides.core.annotations.locators;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.core.pages.PageObject;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,6 +8,7 @@ import org.openqa.selenium.support.pagefactory.ElementLocator;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public enum ElementContructorForm {
     WEBDRIVER_ELEMENT_TWO_TIMEOUTS(WebDriver.class, ElementLocator.class, WebElement.class, long.class, long.class),
@@ -43,7 +43,7 @@ public enum ElementContructorForm {
                 return Optional.of(constructorForm);
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
 
@@ -54,7 +54,7 @@ public enum ElementContructorForm {
                 return Optional.of(constructor);
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
 
@@ -67,7 +67,7 @@ public enum ElementContructorForm {
                 return matchingConstructor;
             }
         }
-        return Optional.absent();
+        return Optional.empty();
 
     }
 
@@ -81,7 +81,7 @@ public enum ElementContructorForm {
                 return Optional.of(elementContructorForm);
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
 };

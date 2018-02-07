@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements.reports;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.issues.IssueTracking;
@@ -54,7 +53,7 @@ public class RequirementsOutcomes {
                                 List<? extends RequirementsTagProvider> requirementsTagProviders,
                                 ReportNameProvider reportNameProvider) {
         this.testOutcomes = testOutcomes;
-        this.parentRequirement = Optional.fromNullable(parentRequirement);
+        this.parentRequirement = Optional.ofNullable(parentRequirement);
         this.environmentVariables = environmentVariables;
         this.issueTracking = issueTracking;
         this.requirementsTagProviders = requirementsTagProviders;
@@ -177,20 +176,20 @@ public class RequirementsOutcomes {
         return parentRequirement;
     }
 
-    public Optional<Requirement> getGrandparentRequirement() {
-        if (!parentRequirement.isPresent()) { return Optional.absent(); }
-        if (isEmpty(parentRequirement.get().getParent())) { return Optional.absent(); }
+    public java.util.Optional<Requirement> getGrandparentRequirement() {
+        if (!parentRequirement.isPresent()) { return java.util.Optional.empty(); }
+        if (isEmpty(parentRequirement.get().getParent())) { return java.util.Optional.empty(); }
 
         return parentRequirementOf(parentRequirement.get());
     }
 
-    private Optional<Requirement> parentRequirementOf(Requirement requirement) {
+    private java.util.Optional<Requirement> parentRequirementOf(Requirement requirement) {
         for (RequirementsTagProvider tagProvider : this.requirementsTagProviders) {
             if (tagProvider.getParentRequirementOf(requirement).isPresent()) {
                 return tagProvider.getParentRequirementOf(requirement);
             }
         }
-        return Optional.absent();
+        return java.util.Optional.empty();
     }
 
     public int getRequirementCount() {

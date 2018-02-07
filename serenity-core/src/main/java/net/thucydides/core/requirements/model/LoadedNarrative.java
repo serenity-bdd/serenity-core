@@ -1,15 +1,13 @@
 package net.thucydides.core.requirements.model;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
-import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.collect.NewList;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class LoadedNarrative {
 
@@ -28,13 +26,13 @@ public class LoadedNarrative {
             Optional<String> titleLine = readOptionalTitleFrom(lines);
             if (titleLine.isPresent()) {
                 title = titleFrom(titleLine.get());
-                type = typeFrom(titleLine.get()).or(defaultType);
+                type = typeFrom(titleLine.get()).orElse(defaultType);
             }
             String text = readNarrativeFrom(lines);
             reader.close();
-            return java.util.Optional.of(new Narrative(Optional.fromNullable(title),
+            return java.util.Optional.of(new Narrative(Optional.ofNullable(title),
                     Optional.of(narrativeFile.getPath()),
-                    Optional.fromNullable(cardNumber),
+                    Optional.ofNullable(cardNumber),
                     versionNumbers,
                     type,
                     text));
@@ -142,7 +140,7 @@ public class LoadedNarrative {
                 return title;
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private boolean isMarkup(String line) {
@@ -170,7 +168,7 @@ public class LoadedNarrative {
         return (titleLine.contains(":")) ? titleLine.substring(titleLine.indexOf(":") + 1) : titleLine;
     }
 
-    Optional<String> TYPE_UNDEFINED = Optional.absent();
+    Optional<String> TYPE_UNDEFINED = Optional.empty();
 
     private Optional<String> typeFrom(String titleLine) {
         if (titleLine.contains(":")) {

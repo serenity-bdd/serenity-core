@@ -1,6 +1,5 @@
 package net.serenitybdd.core.pages;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.annotations.DefaultUrl;
 import net.thucydides.core.annotations.NamedUrl;
@@ -10,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Optional;
 
 /**
  * Manage the URLs associated with a page
@@ -50,9 +50,9 @@ public class PageUrls {
     private Optional<String> getDeclaredDefaultUrl() {
         DefaultUrl urlAnnotation = pageObject.getClass().getAnnotation(DefaultUrl.class);
         if (urlAnnotation != null) {
-            return Optional.fromNullable(urlAnnotation.value());
+            return Optional.ofNullable(urlAnnotation.value());
         } else {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

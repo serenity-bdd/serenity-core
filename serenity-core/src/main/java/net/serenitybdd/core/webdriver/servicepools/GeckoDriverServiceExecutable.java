@@ -1,9 +1,9 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
+import java.util.Optional;
 
 import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_GECKO_DRIVER;
 
@@ -27,7 +27,7 @@ public class GeckoDriverServiceExecutable {
             geckoBinary = geckoBinaryCalled("wires");
         }
 
-        return Optional.fromNullable(geckoBinary);
+        return Optional.ofNullable(geckoBinary);
     }
 
     private File geckoBinaryCalled(String driverName) {

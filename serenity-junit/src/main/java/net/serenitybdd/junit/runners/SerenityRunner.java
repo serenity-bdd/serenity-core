@@ -1,6 +1,5 @@
 package net.serenitybdd.junit.runners;
 
-import com.google.common.base.Optional;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import net.serenitybdd.core.Serenity;
@@ -38,6 +37,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static net.serenitybdd.core.Serenity.initializeTestSession;
 import static net.thucydides.core.ThucydidesSystemProperty.TEST_RETRY_COUNT;
@@ -268,7 +268,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
 
     private Optional<TestOutcome> latestOutcome() {
         if (StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes().isEmpty()) {
-            return Optional.absent();
+            return Optional.empty();
         }
         return Optional.of(StepEventBus.getEventBus().getBaseStepListener().getTestOutcomes().get(0));
     }

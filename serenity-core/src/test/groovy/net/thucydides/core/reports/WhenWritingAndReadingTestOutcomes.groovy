@@ -1,6 +1,5 @@
 package net.thucydides.core.reports
 
-import com.google.common.base.Optional
 import net.thucydides.core.model.*
 import net.thucydides.core.model.features.ApplicationFeature
 import net.thucydides.core.reports.json.JSONTestOutcomeReporter

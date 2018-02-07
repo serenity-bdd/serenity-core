@@ -1,7 +1,6 @@
 package net.serenitybdd.core.photography;
 
 
-import com.google.common.base.Optional;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -12,6 +11,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 
 public class PageSourceRecorder {
     private final WebDriver driver;
@@ -33,7 +33,7 @@ public class PageSourceRecorder {
                 LOGGER.warn("Could not save the page source HTML file", couldNotCreatePageSourcce);
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private byte[] getPageSource() {

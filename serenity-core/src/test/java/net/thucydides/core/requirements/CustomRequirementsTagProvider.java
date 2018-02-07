@@ -1,12 +1,12 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.model.Requirement;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class CustomRequirementsTagProvider implements RequirementsTagProvider {
@@ -17,17 +17,17 @@ public class CustomRequirementsTagProvider implements RequirementsTagProvider {
 
     @Override
     public Optional<Requirement> getParentRequirementOf(TestOutcome testOutcome) {
-        return Optional.absent();
+        return Optional.empty();
     }
 
     @Override
     public Optional<Requirement> getParentRequirementOf(Requirement requirement) {
-        return Optional.absent();
+        return Optional.empty();
     }
 
     @Override
     public Optional<Requirement> getRequirementFor(TestTag testTag) {
-        return Optional.absent();
+        return Optional.empty();
     }
 
     @Override

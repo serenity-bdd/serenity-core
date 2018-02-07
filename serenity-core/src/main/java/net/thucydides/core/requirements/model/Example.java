@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements.model;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 public class Example {
     private final String description;

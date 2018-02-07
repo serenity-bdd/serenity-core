@@ -1,6 +1,5 @@
 package net.thucydides.core.bootstrap;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.pages.Pages;
@@ -13,6 +12,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Container holding thread-local data related to a Thucydides test run.

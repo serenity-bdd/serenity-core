@@ -1,6 +1,5 @@
 package net.thucydides.spock;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.bootstrap.ThucydidesAgent;
 import net.thucydides.core.steps.Listeners;
 import org.apache.commons.lang3.StringUtils;

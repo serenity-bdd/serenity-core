@@ -1,6 +1,5 @@
 package net.thucydides.junit.listeners;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.steps.BaseStepListener;
@@ -78,7 +77,7 @@ public class JUnitStepListener extends RunListener {
             stepEventBus().clear();
             stepEventBus().setTestSource(StepEventBus.TEST_SOURCE_JUNIT);
             stepEventBus().testStarted(
-                    Optional.fromNullable(description.getMethodName()).or("Initialisation"),
+                    Optional.ofNullable(description.getMethodName()).orElse("Initialisation"),
                     description.getTestClass());
             startTest();
         }

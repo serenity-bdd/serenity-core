@@ -1,10 +1,10 @@
 package net.serenitybdd.screenplay;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.screenplay.annotations.AnnotatedTitle;
 import net.serenitybdd.screenplay.annotations.Subject;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 import static net.thucydides.core.util.NameConverter.humanize;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
@@ -30,21 +30,21 @@ public class QuestionSubject<T> {
 
     private Optional<String> annotatedSubject() {
         if (annotationOnMethodOf(questionClass).isPresent()) {
-            return Optional.of(annotationOnMethodOf(questionClass)).get();
+            return java.util.Optional.of(annotationOnMethodOf(questionClass)).get();
         }
         return annotatedSubjectFromClass(questionClass);
     }
 
     private Optional<String> annotatedSubjectFromClass(Class<?> questionClass) {
         if (questionClass.getAnnotation(Subject.class) != null) {
-            return Optional.of(annotationOnClass(questionClass)).get();
+            return java.util.Optional.of(annotationOnClass(questionClass)).get();
         }
 
         if (questionClass.getSuperclass() != null) {
             return annotatedSubjectFromClass(questionClass.getSuperclass());
         }
 
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private Optional<String> annotationOnMethodOf(Class<? extends Question> questionClass) {
@@ -56,9 +56,9 @@ public class QuestionSubject<T> {
                 return Optional.of(annotatedTitle);
             }
         } catch (NoSuchMethodException e) {
-            return Optional.absent();
+            return Optional.empty();
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private Optional<String> annotationOnClass(Class<?> questionClass) {
@@ -67,11 +67,11 @@ public class QuestionSubject<T> {
             annotatedTitle = AnnotatedTitle.injectFieldsInto(annotatedTitle).using(question);
             return Optional.of(annotatedTitle);
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     public String subject() {
-        return annotatedSubject().or(lowerCase(humanize(questionClass.getSimpleName())));
+        return annotatedSubject().orElse(lowerCase(humanize(questionClass.getSimpleName())));
     }
 
 }

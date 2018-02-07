@@ -1,16 +1,13 @@
 package net.thucydides.core.steps;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.collect.NewList;
 import com.google.inject.Inject;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.model.*;
-import net.thucydides.core.reports.html.ExampleTable;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.function.Supplier;
 
 /**
  * An event bus for Step-related notifications.
@@ -93,7 +89,7 @@ public class StepEventBus {
 
     private Class<?> classUnderTest;
     private Story storyUnderTest;
-    private Optional<Boolean> isDryRun = Optional.absent();
+    private Optional<Boolean> isDryRun = Optional.empty();
 
     private final EnvironmentVariables environmentVariables;
 
@@ -638,7 +634,7 @@ public class StepEventBus {
         return assumptionViolatedMessage;
     }
 
-    public Optional<TestStep> getCurrentStep() {return getBaseStepListener().cloneCurrentStep(); }
+    public java.util.Optional<TestStep> getCurrentStep() {return getBaseStepListener().cloneCurrentStep(); }
 
     /**
      * Set all steps in the current test outcome to a given result.
@@ -649,9 +645,9 @@ public class StepEventBus {
         baseStepListener.setAllStepsTo(result);
     }
 
-    private final Optional<TestResult> NO_FORCED_RESULT = Optional.absent();
+    private final Optional<TestResult> NO_FORCED_RESULT = Optional.empty();
 
-    public Optional<TestResult> getForcedResult() {
+    public java.util.Optional<TestResult> getForcedResult() {
         return (baseStepListener != null) ? baseStepListener.getForcedResult() : NO_FORCED_RESULT;
     }
 
@@ -671,11 +667,11 @@ public class StepEventBus {
         getBaseStepListener().exceptionExpected(expected);
     }
 
-    Optional<TestResult> NO_RESULT_YET = Optional.absent();
-    public Optional<TestResult> resultSoFar() {
+    java.util.Optional<TestResult> NO_RESULT_YET = java.util.Optional.empty();
+    public java.util.Optional<TestResult> resultSoFar() {
 
         return (getBaseStepListener().latestTestOutcome().isPresent()) ?
-                Optional.fromNullable(getBaseStepListener().latestTestOutcome().get().getResult()) : NO_RESULT_YET;
+                java.util.Optional.ofNullable(getBaseStepListener().latestTestOutcome().get().getResult()) : NO_RESULT_YET;
     }
 
     public void mergePreviousStep() {

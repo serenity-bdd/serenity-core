@@ -27,7 +27,7 @@ public class NarrativeTitle {
 //             if (new File(narrativeFilePath).exists()) {
                 Optional<Narrative> narrative = LoadedNarrative.load().fromFile(new File(narrativePath.get()), defaultType);
                 if (narrative.isPresent()) {
-                    return (narrative.get().getTitle().or("") + System.lineSeparator() + narrative.get().getText()).trim();
+                    return (narrative.get().getTitle().orElse("") + System.lineSeparator() + narrative.get().getText()).trim();
                 }
             }
         } catch (IllegalArgumentException noNarrativeFileFound) {

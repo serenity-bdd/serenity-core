@@ -1,9 +1,8 @@
 package net.serenitybdd.core.rest;
 
-import com.google.common.base.Optional;
-
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class RestQuery {
 
@@ -26,8 +25,8 @@ public class RestQuery {
                       String requestHeaders, String requestCookies, String responseHeaders, String responseCookies) {
         this.method = method;
         this.path = path;
-        this.parameters = Optional.fromNullable(parameters);
-        this.parameterMap = Optional.fromNullable(parameterMap);
+        this.parameters = Optional.ofNullable(parameters);
+        this.parameterMap = Optional.ofNullable(parameterMap);
         this.content = content;
         this.contentType = contentType;
         this.responseBody = responseBody;
@@ -55,41 +54,41 @@ public class RestQuery {
     }
 
     public RestQuery withResponse(String responseBody) {
-        return new RestQuery(method, path, parameters.orNull(), parameterMap.orNull(), content, contentType,
+        return new RestQuery(method, path, parameters.orElse(null), parameterMap.orElse(null), content, contentType,
                 responseBody, statusCode, requestHeaders, requestCookies, responseHeaders, responseCookies);
     }
 
     public RestQuery withStatusCode(Integer statusCode) {
-        return new RestQuery(method, path, parameters.orNull(), parameterMap.orNull(), content, contentType,
+        return new RestQuery(method, path, parameters.orElse(null), parameterMap.orElse(null), content, contentType,
                 responseBody, statusCode, requestHeaders, requestCookies, responseHeaders, responseCookies);
     }
 
     public RestQuery withContent(String content) {
-        return new RestQuery(method, path, parameters.orNull(), parameterMap.orNull(), content, contentType,
+        return new RestQuery(method, path, parameters.orElse(null), parameterMap.orElse(null), content, contentType,
                 responseBody, statusCode, requestHeaders, requestCookies, responseHeaders, responseCookies);
     }
 
     public RestQuery withContentType(String contentType) {
-        return new RestQuery(method, path, parameters.orNull(), parameterMap.orNull(), content, contentType,
+        return new RestQuery(method, path, parameters.orElse(null), parameterMap.orElse(null), content, contentType,
                 responseBody, statusCode, requestHeaders, requestCookies, responseHeaders, responseCookies);
     }
 
     public RestQuery withResponseCookies(String responseCookies) {
-        return new RestQuery(method, path, parameters.orNull(), parameterMap.orNull(), content, contentType,
+        return new RestQuery(method, path, parameters.orElse(null), parameterMap.orElse(null), content, contentType,
                 responseBody, statusCode, requestHeaders, requestCookies, responseHeaders, responseCookies);
     }
 
     public RestQuery withResponseHeaders(String responseHeaders) {
-        return new RestQuery(method, path, parameters.orNull(), parameterMap.orNull(), content, contentType,
+        return new RestQuery(method, path, parameters.orElse(null), parameterMap.orElse(null), content, contentType,
                 responseBody, statusCode, requestHeaders, requestCookies, responseHeaders, responseCookies);
     }
     public RestQuery withRequestCookies(String requestCookies) {
-        return new RestQuery(method, path, parameters.orNull(), parameterMap.orNull(), content, contentType,
+        return new RestQuery(method, path, parameters.orElse(null), parameterMap.orElse(null), content, contentType,
                 responseBody, statusCode, requestHeaders, requestCookies, responseHeaders, responseCookies);
     }
 
     public RestQuery withRequestHeaders(String requestHeaders) {
-        return new RestQuery(method, path, parameters.orNull(), parameterMap.orNull(), content, contentType,
+        return new RestQuery(method, path, parameters.orElse(null), parameterMap.orElse(null), content, contentType,
                 responseBody, statusCode, requestHeaders, requestCookies, responseHeaders, responseCookies);
     }
 

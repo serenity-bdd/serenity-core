@@ -1,12 +1,12 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.model.Release;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.model.Requirement;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Find the requirements hierarchy or the requirements associated with a given test outcome

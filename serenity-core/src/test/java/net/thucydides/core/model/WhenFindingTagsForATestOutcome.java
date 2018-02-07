@@ -1,6 +1,5 @@
 package net.thucydides.core.model;
 
-import com.google.common.base.Optional;
 import com.google.common.io.Resources;
 import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTagValuesOf;
@@ -22,6 +21,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -375,7 +375,7 @@ public class WhenFindingTagsForATestOutcome {
         Story userStory = Story.called("plant potatoes");
         when(testOutcome.getPath()).thenReturn("stories\\grow_potatoes\\grow_new_potatoes\\PlantPotatoes.story");
         when(testOutcome.getUserStory()).thenReturn(userStory);
-        when(testOutcome.getFeatureTag()).thenReturn(Optional.<TestTag>absent());
+        when(testOutcome.getFeatureTag()).thenReturn(Optional.<TestTag>empty());
 
         Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
 
@@ -405,7 +405,7 @@ public class WhenFindingTagsForATestOutcome {
         Story userStory = Story.called("Water the potatoes");
         when(testOutcome.getPath()).thenReturn("stories\\grow_potatoes\\grow_new_potatoes\\WaterPotatoes.feature");
         when(testOutcome.getUserStory()).thenReturn(userStory);
-        when(testOutcome.getFeatureTag()).thenReturn(Optional.<TestTag>absent());
+        when(testOutcome.getFeatureTag()).thenReturn(Optional.<TestTag>empty());
 
         Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
 

@@ -1,7 +1,6 @@
 package net.thucydides.core.annotations;
 
 
-import com.google.common.base.Optional;
 import org.junit.Ignore;
 import org.junit.Test;
 

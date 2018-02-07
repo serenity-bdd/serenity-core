@@ -1,7 +1,6 @@
 package net.thucydides.core.requirements
 
 import annotatedstorieswithcontents.apples.BuyApples
-import com.google.common.base.Optional
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.model.Story
 import net.thucydides.core.model.TestOutcome

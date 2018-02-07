@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.files.TheDirectoryStructure;
@@ -328,7 +327,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         }
     }
 
-    public Optional<Requirement> getParentRequirementOf(final TestOutcome testOutcome) {
+    public java.util.Optional<Requirement> getParentRequirementOf(final TestOutcome testOutcome) {
         return firstRequirementFoundIn(
                 parentRequirementFromPackagePath(testOutcome),
                 requirementWithMatchingParentId(testOutcome),
@@ -337,25 +336,25 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 mostSpecificTagRequirementFor(testOutcome));
     }
 
-    private Optional<Requirement> featureTagRequirementIn(TestOutcome testOutcome) {
+    private java.util.Optional<Requirement> featureTagRequirementIn(TestOutcome testOutcome) {
         List<String> storyPathElements = stripStorySuffixFrom(stripRootFrom(pathElements(stripRootPathFrom(testOutcome.getPath()))));
         return lastRequirementFrom(storyPathElements);
     }
 
-    private Optional<Requirement> parentRequirementFromPackagePath(TestOutcome testOutcome) {
+    private java.util.Optional<Requirement> parentRequirementFromPackagePath(TestOutcome testOutcome) {
         if (testOutcome.getPath() != null) {
             List<String> storyPathElements = stripStorySuffixFrom(stripRootFrom(pathElements(stripRootPathFrom(testOutcome.getPath()))));
             return lastRequirementFrom(storyPathElements);
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
-    private Optional<Requirement> mostSpecificTagRequirementFor(TestOutcome testOutcome) {
-        Optional<Requirement> mostSpecificRequirement = Optional.absent();
+    private java.util.Optional<Requirement> mostSpecificTagRequirementFor(TestOutcome testOutcome) {
+        java.util.Optional<Requirement> mostSpecificRequirement = Optional.empty();
         int currentSpecificity = -1;
 
         for (TestTag tag : testOutcome.getTags()) {
-            Optional<Requirement> matchingRequirement = getRequirementFor(tag);
+            java.util.Optional<Requirement> matchingRequirement = getRequirementFor(tag);
             if (matchingRequirement.isPresent()) {
                 int specificity = requirementsConfiguration.getRequirementTypes().indexOf(matchingRequirement.get().getType());
                 if (currentSpecificity < specificity) {
@@ -367,7 +366,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return mostSpecificRequirement;
     }
 
-    private Optional<Requirement> requirementWithMatchingPath(TestOutcome testOutcome) {
+    private java.util.Optional<Requirement> requirementWithMatchingPath(TestOutcome testOutcome) {
         for (Requirement requirement : AllRequirements.in(getRequirements())) {
             if (requirement.getFeatureFileName() != null
                     && testOutcome.getPath() != null
@@ -375,42 +374,42 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 return Optional.of(requirement);
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
-    private Optional<Requirement> requirementWithMatchingParentId(TestOutcome testOutcome) {
+    private java.util.Optional<Requirement> requirementWithMatchingParentId(TestOutcome testOutcome) {
         for (Requirement requirement : AllRequirements.in(getRequirements())) {
             if (requirement.getId() != null && testOutcome.getParentId() != null && (requirement.getId().equals(testOutcome.getParentId()))) {
                 return Optional.of(requirement);
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
-    public Optional<Requirement> getRequirementFor(TestTag testTag) {
+    public java.util.Optional<Requirement> getRequirementFor(TestTag testTag) {
         for (Requirement requirement : AllRequirements.in(getRequirements())) {
             if (requirement.getName().equalsIgnoreCase(testTag.getName()) && requirement.getType().equalsIgnoreCase(testTag.getType())) {
                 return Optional.of(requirement);
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
-    private Optional<Requirement> lastRequirementFrom(List<String> storyPathElements) {
+    private java.util.Optional<Requirement> lastRequirementFrom(List<String> storyPathElements) {
         if (storyPathElements.isEmpty()) {
-            return Optional.absent();
+            return Optional.empty();
         } else {
             return lastRequirementMatchingPath(getRequirements(), storyPathElements);
         }
     }
 
-    private Optional<Requirement> lastRequirementMatchingPath(List<Requirement> requirements, List<String> storyPathElements) {
+    private java.util.Optional<Requirement> lastRequirementMatchingPath(List<Requirement> requirements, List<String> storyPathElements) {
         if (storyPathElements.isEmpty()) {
-            return Optional.absent();
+            return Optional.empty();
         }
-        Optional<Requirement> matchingRequirement = findMatchingRequirementIn(next(storyPathElements), requirements);
+        java.util.Optional<Requirement> matchingRequirement = findMatchingRequirementIn(next(storyPathElements), requirements);
         if (!matchingRequirement.isPresent()) {
-            return Optional.absent();
+            return Optional.empty();
         }
         if (tail(storyPathElements).isEmpty()) {
             return matchingRequirement;
@@ -423,7 +422,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         if (storyPathElements.isEmpty()) {
             return NO_TEST_TAGS;
         } else {
-            Optional<Requirement> matchingRequirement = findMatchingRequirementIn(next(storyPathElements), requirements);
+            java.util.Optional<Requirement> matchingRequirement = findMatchingRequirementIn(next(storyPathElements), requirements);
             if (matchingRequirement.isPresent()) {
                 TestTag thisTag = matchingRequirement.get().asTag();
                 List<TestTag> remainingTags = getMatchingCapabilities(matchingRequirement.get().getChildren(), tail(storyPathElements));
@@ -463,7 +462,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return elements.subList(1, elements.size());
     }
 
-    private Optional<Requirement> findMatchingRequirementIn(String storyPathElement, List<Requirement> requirements) {
+    private java.util.Optional<Requirement> findMatchingRequirementIn(String storyPathElement, List<Requirement> requirements) {
         for (Requirement requirement : requirements) {
             String normalizedStoryPathElement = Inflector.getInstance().humanize(Inflector.getInstance().underscore(storyPathElement));
             if (requirement.getName().equals(normalizedStoryPathElement)
@@ -472,7 +471,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 return Optional.of(requirement);
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private List<Requirement> loadCapabilitiesFrom(File[] requirementDirectories) {
@@ -522,7 +521,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private String storyNameFrom(java.util.Optional<Narrative> narrative, FeatureType type, File storyFile) {
-        if (narrative.isPresent() && isNotBlank(narrative.get().getTitle().or(""))) {
+        if (narrative.isPresent() && isNotBlank(narrative.get().getTitle().orElse(""))) {
             return narrative.get().getTitle().get();
         } else {
             return storyFile.getName().replace(type.getExtension(), "");
@@ -590,11 +589,11 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private Requirement leafRequirementWithNarrative(String shortName, String path, Narrative requirementNarrative) {
         String displayName = getTitleFromNarrativeOrDirectoryName(requirementNarrative, shortName);
-        String cardNumber = requirementNarrative.getCardNumber().orNull();
+        String cardNumber = requirementNarrative.getCardNumber().orElse(null);
         String type = requirementNarrative.getType();
         List<String> releaseVersions = requirementNarrative.getVersionNumbers();
         return Requirement.named(shortName)
-                .withId(requirementNarrative.getId().or(path))
+                .withId(requirementNarrative.getId().orElse(path))
                 .withOptionalDisplayName(displayName)
                 .withOptionalCardNumber(cardNumber)
                 .withType(type)
@@ -605,7 +604,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private Requirement requirementWithNarrative(File requirementDirectory, String shortName, Narrative requirementNarrative) {
         String displayName = getTitleFromNarrativeOrDirectoryName(requirementNarrative, shortName);
-        String cardNumber = requirementNarrative.getCardNumber().orNull();
+        String cardNumber = requirementNarrative.getCardNumber().orElse(null);
         String type = requirementNarrative.getType();
         List<String> releaseVersions = requirementNarrative.getVersionNumbers();
         List<Requirement> children = readChildrenFrom(requirementDirectory);

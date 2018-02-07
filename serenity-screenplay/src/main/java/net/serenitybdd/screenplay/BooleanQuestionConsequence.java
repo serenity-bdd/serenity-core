@@ -1,10 +1,11 @@
 package net.serenitybdd.screenplay;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.conditions.SilentPerformable;
 import net.serenitybdd.screenplay.events.ActorAsksQuestion;
 import net.thucydides.core.steps.StepEventBus;
+
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -22,7 +23,7 @@ public class BooleanQuestionConsequence<T> extends BaseConsequence<T> {
     public BooleanQuestionConsequence(String subjectText, Question<Boolean> actual) {
         this.question = actual;
         this.subject = QuestionSubject.fromClass(actual.getClass()).andQuestion(actual).subject();
-        this.subjectText = Optional.fromNullable(subjectText);
+        this.subjectText = Optional.ofNullable(subjectText);
     }
 
     @Override
@@ -31,7 +32,7 @@ public class BooleanQuestionConsequence<T> extends BaseConsequence<T> {
 
         Broadcaster.getEventBus().post(new ActorAsksQuestion(question));
         try {
-            optionalPrecondition.or(DO_NOTHING).performAs(actor);
+            optionalPrecondition.orElse(DO_NOTHING).performAs(actor);
             assertThat(reason(), question.answeredBy(actor), is(true));
         } catch (Throwable actualError) {
 
@@ -55,7 +56,7 @@ public class BooleanQuestionConsequence<T> extends BaseConsequence<T> {
 
     @Override
     public String toString() {
-        String template = explanation.or("Then %s");
-        return addRecordedInputValuesTo(String.format(template, subjectText.or(subject)));
+        String template = explanation.orElse("Then %s");
+        return addRecordedInputValuesTo(String.format(template, subjectText.orElse(subject)));
     }
 }

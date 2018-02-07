@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements
 
-import com.google.common.base.Optional
 import net.thucydides.core.model.Story
 import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.model.TestTag
@@ -80,7 +79,7 @@ class WhenAssociatingATestOutcomeWithARequirementInAFeatureFile extends Specific
             def growPotatoesTag = TestTag.withName("Grow pink and purple potatoes").andType("capability")
         then:
             Optional<Requirement> requirement = capabilityProvider.getRequirementFor(growPotatoesTag)
-            requirement.absent()
+            requirement.empty()
     }
 }
 

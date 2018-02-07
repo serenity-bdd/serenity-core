@@ -2,7 +2,6 @@ package net.thucydides.core.steps;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
-import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.IgnoredStepException;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.Serenity;
@@ -195,12 +194,12 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     private Object skipTestStep(Object obj, Method method, Object[] args, MethodProxy proxy) throws Exception {
         Object skippedReturnObject = runSkippedMethod(obj, method, args, proxy);
         notifyStepSkippedFor(method, args);
-        LOGGER.debug("SKIPPED STEP: {}", StepName.fromStepAnnotationIn(method).or(method.getName()));
+        LOGGER.debug("SKIPPED STEP: {}", StepName.fromStepAnnotationIn(method).orElse(method.getName()));
         return appropriateReturnObject(skippedReturnObject, obj, method);
     }
 
     private Object runSkippedMethod(Object obj, Method method, Object[] args, MethodProxy proxy) {
-        LOGGER.trace("Running test step " + StepName.fromStepAnnotationIn(method).or(method.getName()));
+        LOGGER.trace("Running test step " + StepName.fromStepAnnotationIn(method).orElse(method.getName()));
         StepEventBus.getEventBus().temporarilySuspendWebdriverCalls();
         Object result = runIfNestedMethodsShouldBeRun(obj, method, args, proxy);
         StepEventBus.getEventBus().reenableWebdriverCalls();
@@ -404,11 +403,11 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
                                final Object[] args, final MethodProxy proxy) throws Throwable {
 
         String callingClass = testContext();
-        LOGGER.debug("STARTING STEP: {} - {}", callingClass, StepName.fromStepAnnotationIn(method).or(method.getName()));
+        LOGGER.debug("STARTING STEP: {} - {}", callingClass, StepName.fromStepAnnotationIn(method).orElse(method.getName()));
         Object result = null;
         try {
             result = executeTestStepMethod(obj, method, args, proxy, result);
-            LOGGER.debug("STEP DONE: {}", StepName.fromStepAnnotationIn(method).or(method.getName()));
+            LOGGER.debug("STEP DONE: {}", StepName.fromStepAnnotationIn(method).orElse(method.getName()));
         } catch (AssertionError failedAssertion) {
             error = failedAssertion;
             logStepFailure(obj, method, args, failedAssertion);
@@ -427,7 +426,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         notifyOfStepFailure(object, method, args, assertionError);
 
 
-        LOGGER.debug("STEP FAILED: {} - {}", StepName.fromStepAnnotationIn(method).or(method.getName()), assertionError.getMessage());
+        LOGGER.debug("STEP FAILED: {} - {}", StepName.fromStepAnnotationIn(method).orElse(method.getName()), assertionError.getMessage());
     }
 
     private Object executeTestStepMethod(Object obj, Method method, Object[] args, MethodProxy proxy, Object result) throws Throwable {

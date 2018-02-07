@@ -1,6 +1,5 @@
 package net.thucydides.core.screenshots.integration
 
-import com.google.common.base.Optional
 import net.thucydides.core.annotations.BlurScreenshots
 import net.thucydides.core.screenshots.BlurLevel
 import net.thucydides.core.screenshots.ScreenshotBlurCheck

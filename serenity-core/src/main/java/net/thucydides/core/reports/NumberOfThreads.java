@@ -1,10 +1,11 @@
 package net.thucydides.core.reports;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Optional;
 
 public class NumberOfThreads {
 
@@ -30,12 +31,12 @@ public class NumberOfThreads {
 
     public int forIO() {
         final int numberOfCores = Runtime.getRuntime().availableProcessors();
-        int reportThreads = configuredReportThreads().or((int) (numberOfCores / (1 - blockingCoefficientForIO)));
+        int reportThreads = configuredReportThreads().orElse((int) (numberOfCores / (1 - blockingCoefficientForIO)));
         LOGGER.info("Configured report threads: {}", reportThreads);
         return reportThreads;
     }
 
     private Optional<Integer> configuredReportThreads() {
-        return Optional.fromNullable(environmentVariables.getPropertyAsInteger("report.threads", null));
+        return Optional.ofNullable(environmentVariables.getPropertyAsInteger("report.threads", null));
     }
 }

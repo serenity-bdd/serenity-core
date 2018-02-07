@@ -1,6 +1,5 @@
 package net.serenitybdd.core.pages;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import io.appium.java_client.*;
 import net.serenitybdd.core.time.InternalSystemClock;
@@ -18,6 +17,7 @@ import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.interactions.internal.Locatable;
 import org.openqa.selenium.remote.RemoteWebElement;
@@ -26,10 +26,7 @@ import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -1019,7 +1016,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return copy().expectingErrorMessage(errorMessage);
     }
 
-    private Optional<String> expectedErrorMessage = Optional.absent();
+    private Optional<String> expectedErrorMessage = Optional.empty();
 
     protected WebElementState expectingErrorMessage(String errorMessage) {
         this.expectedErrorMessage = Optional.of(errorMessage);
@@ -1027,7 +1024,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     protected String getErrorMessage(String defaultErrorMessage) {
-        return expectedErrorMessage.or(defaultErrorMessage);
+        return expectedErrorMessage.orElse(defaultErrorMessage);
     }
 
     private boolean valueAttributeSupportedAndDefinedIn(final WebElement element) {
@@ -1116,7 +1113,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         if (driver instanceof WebElementFacade) {
             return Optional.of((WebDriverFacade) driver);
         } else {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

@@ -1,7 +1,8 @@
 package net.thucydides.core.model.featuretags;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.requirements.model.Narrative;
+
+import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 

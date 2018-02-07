@@ -1,9 +1,8 @@
 package net.thucydides.core.reflection;
 
 
-import com.google.common.base.Optional;
-
 import java.lang.reflect.Field;
+import java.util.Optional;
 
 public class FieldFinder {
 
@@ -32,7 +31,7 @@ public class FieldFinder {
         if (targetClass.getSuperclass() != null) {
             return findFieldCalled(fieldName, targetClass.getSuperclass());
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     public Optional<Field> findFieldOfType(Class type) {
@@ -49,7 +48,7 @@ public class FieldFinder {
         if (targetClass.getSuperclass() != null) {
             return findFieldOfType(type, targetClass.getSuperclass());
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
 }

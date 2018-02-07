@@ -1,12 +1,11 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.requirements.model.Requirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
+import java.util.Optional;
 
 public class ParentRequirementsProvided {
 
@@ -28,7 +27,7 @@ public class ParentRequirementsProvided {
         } catch (Throwable requirementProviderFailedButDontLetThatStopUs) {
             LOGGER.warn("Failed to load requirements: " + requirementProviderFailedButDontLetThatStopUs.getMessage(),
                     requirementProviderFailedButDontLetThatStopUs);
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 }

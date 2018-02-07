@@ -1,10 +1,10 @@
 package net.serenitybdd.core.pages;
 
-import com.google.common.base.Optional;
 import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
 
 public class PageObjects {
 
@@ -54,7 +54,7 @@ public class PageObjects {
         } catch (NoSuchMethodException e) {
             // Try a different constructor
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     @SuppressWarnings("unchecked")

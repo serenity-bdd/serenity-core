@@ -1,7 +1,6 @@
 package net.thucydides.core.requirements.classpath;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementTypeAt;
@@ -9,6 +8,7 @@ import net.thucydides.core.requirements.model.RequirementsConfiguration;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static net.thucydides.core.requirements.classpath.PathElements.*;
 import static net.thucydides.core.util.NameConverter.humanize;
@@ -83,12 +83,10 @@ public class LeafRequirementAdder {
         }
 
         String narrativeText = PackageInfoNarrative.text().definedInPath(path)
-                .or(ClassNarrative.text().definedInPath(path))
-                .or("");
+                .orElse(ClassNarrative.text().definedInPath(path).orElse(""));
 
         String narrativeType = PackageInfoNarrative.type().definedInPath(path)
-                .or(ClassNarrative.type().definedInPath(path))
-                .or(leafRequirementTypeFrom(pathElements));
+                .orElse(ClassNarrative.type().definedInPath(path).orElse(leafRequirementTypeFrom(pathElements)));
 
         Requirement story = Requirement.named(storyName)
                 .withType(narrativeType)
@@ -113,15 +111,15 @@ public class LeafRequirementAdder {
         int startFromRequirementLevel = requirementsConfiguration.startLevelForADepthOf(requirementsDepth);
 
         String typeByLevel = requirementsConfiguration.getRequirementType(startFromRequirementLevel + featurePathElements.size() - 1);
-        String type = PackageInfoNarrative.type().definedInPath(path).or(typeByLevel);
+        String type = PackageInfoNarrative.type().definedInPath(path).orElse(typeByLevel);
 
         Optional<Requirement> knownMatchingRequirement = findMatchingRequirementWithName(knownRequirements, featureName, type);
 
         if (knownMatchingRequirement.isPresent()) {
             knownRequirements.remove(knownMatchingRequirement);
         }
-        return knownMatchingRequirement.or(Requirement.named(featureName).withTypeOf(type))
-                .withNarrative(PackageInfoNarrative.text().definedInPath(path).or(""))
+        return knownMatchingRequirement.orElse(Requirement.named(featureName).withTypeOf(type))
+                .withNarrative(PackageInfoNarrative.text().definedInPath(path).orElse(""))
                 .withParent(parent)
                 .withPath(Joiner.on("/").join(featurePathElements));
     }
@@ -132,7 +130,7 @@ public class LeafRequirementAdder {
                 return Optional.of(requirement);
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private String leafRequirementTypeFrom(List<String> pathElements) {

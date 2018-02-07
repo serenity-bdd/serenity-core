@@ -1,10 +1,10 @@
 package net.thucydides.core.requirements.model;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 public class ExampleBuilder {
 
-    private final static Optional<String> NO_CARD_NUMBER = Optional.absent();
+    private final static Optional<String> NO_CARD_NUMBER = Optional.empty();
 
     private final String description;
 

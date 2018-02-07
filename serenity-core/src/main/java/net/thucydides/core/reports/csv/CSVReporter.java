@@ -1,7 +1,6 @@
 package net.thucydides.core.reports.csv;
 
 import au.com.bytecode.opencsv.CSVWriter;
-import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -17,10 +16,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -93,14 +89,14 @@ public class CSVReporter extends ThucydidesReporter {
     }
 
     private String blankIfNull(String value) {
-        return Optional.fromNullable(value).or("");
+        return Optional.ofNullable(value).orElse("");
     }
 
     private Collection<String> extraValuesFrom(TestOutcome outcome) {
         List<String> extraValues = new ArrayList<>();
 
         for (String extraColumn : extraColumns) {
-            extraValues.add(outcome.getTagValue(extraColumn).or(""));
+            extraValues.add(outcome.getTagValue(extraColumn).orElse(""));
         }
         return extraValues;
     }

@@ -2,7 +2,6 @@ package net.thucydides.core.requirements
 
 import annotatedstorieswithcontents.apples.BuyApples
 import annotatedstorieswithcontents.potatoes.big_potatoes.PlantBigPotatoes
-import com.google.common.base.Optional
 import net.thucydides.core.annotations.Narrative
 import net.thucydides.core.model.Story
 import net.thucydides.core.model.TestOutcome

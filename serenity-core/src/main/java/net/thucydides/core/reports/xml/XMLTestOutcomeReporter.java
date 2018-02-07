@@ -1,8 +1,6 @@
 package net.thucydides.core.reports.xml;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-import net.serenitybdd.core.collect.NewList;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
@@ -107,12 +105,12 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
     }
 
     @Override
-    public java.util.Optional<TestOutcome> loadReportFrom(final Path reportFile) {
+    public Optional<TestOutcome> loadReportFrom(final Path reportFile) {
         return loadReportFrom(reportFile.toFile());
     }
 
     @Override
-    public java.util.Optional<TestOutcome> loadReportFrom(final File reportFile) {
+    public Optional<TestOutcome> loadReportFrom(final File reportFile) {
         try(
                 InputStream input = new FileInputStream(reportFile);
                 InputStreamReader reader = new InputStreamReader(input, encoding);
@@ -120,16 +118,16 @@ public class XMLTestOutcomeReporter implements AcceptanceTestReporter, Acceptanc
             XStream xstream = new XStream();
             xstream.alias("acceptance-test-run", TestOutcome.class);
             xstream.registerConverter(usingXmlConverter());
-            return java.util.Optional.of((TestOutcome) xstream.fromXML(reader));
+            return Optional.of((TestOutcome) xstream.fromXML(reader));
         } catch (CannotResolveClassException e) {
             LOGGER.warn("Tried to load a file that is not a thucydides report: " + reportFile);
-            return java.util.Optional.empty();
+            return Optional.empty();
         } catch (FileNotFoundException e) {
             LOGGER.warn("Tried to load a file that is not a thucydides report: " + reportFile);
-            return java.util.Optional.empty();
+            return Optional.empty();
         } catch (IOException e) {
             LOGGER.warn("Could not load a report for some reason" + e.getMessage());
-            return java.util.Optional.empty();
+            return Optional.empty();
         }
     }
 

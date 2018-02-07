@@ -1,9 +1,9 @@
 package net.thucydides.core.webelements;
 
-import com.google.common.base.Optional;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.Optional;
 
 public class RadioButtonGroup {
 
@@ -19,7 +19,7 @@ public class RadioButtonGroup {
                 return Optional.of(radioButton.getAttribute("value"));
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     public void selectByValue(String value) {

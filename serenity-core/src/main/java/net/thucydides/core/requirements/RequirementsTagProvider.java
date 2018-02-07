@@ -1,12 +1,12 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.statistics.service.TagProvider;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  *  A requirements provider returns the set of application requirements in a tree structure.

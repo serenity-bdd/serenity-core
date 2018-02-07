@@ -1,10 +1,8 @@
 package net.thucydides.core.reports;
 
-import com.google.common.base.Optional;
-import net.thucydides.core.model.TestOutcome;
-
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 public interface AcceptanceTestFullReporter {
 

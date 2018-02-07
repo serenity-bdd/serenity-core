@@ -1,10 +1,10 @@
 package net.thucydides.core.steps;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.annotations.Step;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 public class StepName {
 
@@ -14,6 +14,6 @@ public class StepName {
         if ((step != null) && (!StringUtils.isEmpty(step.value()))) {
             return Optional.of(step.value());
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 }

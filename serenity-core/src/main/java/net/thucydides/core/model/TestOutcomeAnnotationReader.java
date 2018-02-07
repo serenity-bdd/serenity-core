@@ -1,7 +1,5 @@
 package net.thucydides.core.model;
 
-import com.google.common.base.Optional;
-import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.reports.html.Formatter;
 

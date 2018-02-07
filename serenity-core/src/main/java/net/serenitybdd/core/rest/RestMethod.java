@@ -1,6 +1,6 @@
 package net.serenitybdd.core.rest;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 public enum RestMethod {
     PUT,
@@ -11,10 +11,10 @@ public enum RestMethod {
     HEAD,
     DELETE;
 
-    private static final Optional<RestMethod> NOT_A_REST_METHOD = Optional.absent();
+    private static final Optional<RestMethod> NOT_A_REST_METHOD = Optional.empty();
 
     public static Optional<RestMethod> restMethodCalled(String value) {
-        return isRestMethod(value) ? Optional.fromNullable(RestMethod.valueOf(value.toUpperCase())) : NOT_A_REST_METHOD;
+        return isRestMethod(value) ? Optional.ofNullable(RestMethod.valueOf(value.toUpperCase())) : NOT_A_REST_METHOD;
     }
 
     private static boolean isRestMethod(String value) {

@@ -1,12 +1,12 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.firefox.GeckoDriverService;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 
 /**
  * Used as a wrapper around the GeckoDriverService to make it behave in a Threadsafe manner
@@ -40,7 +40,7 @@ public class ThreadsafeGeckoDriverService extends GeckoDriverService {
             GeckoDriverService newService;
 
             if (geckoExecutable.isPresent()) {
-                newService = new GeckoDriverService.Builder()
+                newService = new Builder()
                         .usingDriverExecutable(geckoExecutable.get())
                         .usingAnyFreePort()
                         .build();

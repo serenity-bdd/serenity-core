@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.adaptors.xunit;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.reports.adaptors.xunit.model.TestCase;
 import net.thucydides.core.reports.adaptors.xunit.model.TestException;
@@ -17,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class BasicXUnitLoader implements XUnitLoader {
 
@@ -29,7 +29,7 @@ public class BasicXUnitLoader implements XUnitLoader {
         shouldHaveAtLeastOneTestSuite(testSuiteElements, xUnitReport);
         for (int i = 0; i < testSuiteElements.getLength(); i++) {
             Optional<TestSuite> testSuite = testSuiteFrom(testSuiteElements.item(i));
-            testSuites.addAll(testSuite.asSet());
+            testSuite.ifPresent(testSuites::add);
         }
         return testSuites;
     }
@@ -132,7 +132,7 @@ public class BasicXUnitLoader implements XUnitLoader {
                 String errorOutput = failureElement.getTextContent();
                 return Optional.of(new TestException(message, errorOutput, exceptionType));
             }
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 }

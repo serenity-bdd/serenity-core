@@ -1,6 +1,5 @@
 package net.thucydides.core.model.screenshots;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.annotations.Screenshots;
 import net.thucydides.core.model.TakeScreenshots;
 import net.thucydides.core.reflection.StackTraceAnalyser;
@@ -8,6 +7,7 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.Configuration;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 public class ScreenshotPermission {
 
@@ -19,12 +19,12 @@ public class ScreenshotPermission {
 
 
     public boolean areAllowed(TakeScreenshots takeScreenshots) {
-        Optional<TakeScreenshots> configuredLevel = methodOverride()
-                                                    .or(classOverride())
-                                                    .or(configuration.getScreenshotLevel());
 
-        if (configuredLevel.isPresent()) {
-            return takeScreenshotLevel(takeScreenshots).isAtLeast(configuredLevel.get());
+        TakeScreenshots configuredLevel = methodOverride()
+                .orElse(classOverride().orElse(configuration.getScreenshotLevel().orElse(TakeScreenshots.UNDEFINED)));
+
+        if (configuredLevel != TakeScreenshots.UNDEFINED) {
+            return takeScreenshotLevel(takeScreenshots).isAtLeast(configuredLevel);
         } else {
             return legacyScreenshotConfiguration(takeScreenshots);
         }
@@ -41,13 +41,13 @@ public class ScreenshotPermission {
     }
 
     private Optional<TakeScreenshots> methodOverride() {
-        for(Method callingMethod : StackTraceAnalyser.inscopeMethodsIn(new Throwable().getStackTrace())) {
+        for (Method callingMethod : StackTraceAnalyser.inscopeMethodsIn(new Throwable().getStackTrace())) {
             Optional<TakeScreenshots> overriddenScreenshotPreference = overriddenScreenshotPreferenceFor(callingMethod);
             if (overriddenScreenshotPreference.isPresent()) {
                 return overriddenScreenshotPreference;
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private Optional<TakeScreenshots> classOverride() {
@@ -57,15 +57,15 @@ public class ScreenshotPermission {
                 return overriddenScreenshotPreferenceForClass(currentStepMethod.get().getDeclaringClass());
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private Optional<TakeScreenshots> overriddenScreenshotPreferenceForClass(Class<?> declaringClass) {
         java.util.Optional<TakeScreenshots> optionalScreenshotPreference
                 = ScreenshotPreferencesByClass.forClass(declaringClass)
-                                              .withEnvironmentVariables(configuration.getEnvironmentVariables()).getScreenshotPreference();
+                .withEnvironmentVariables(configuration.getEnvironmentVariables()).getScreenshotPreference();
 
-        return Optional.fromJavaUtil(optionalScreenshotPreference);
+        return optionalScreenshotPreference;
     }
 
     private Optional<TakeScreenshots> overriddenScreenshotPreferenceFor(Method callingMethod) {
@@ -73,7 +73,7 @@ public class ScreenshotPermission {
             return Optional.of(screenshotLevelFrom(callingMethod.getAnnotation(Screenshots.class)));
         }
 
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private TakeScreenshots screenshotLevelFrom(Screenshots screenshots) {

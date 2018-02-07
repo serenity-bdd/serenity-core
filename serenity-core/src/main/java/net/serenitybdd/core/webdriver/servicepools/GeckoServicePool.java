@@ -1,6 +1,5 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.core.webdriver.FirefoxOptionsEnhancer;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
@@ -11,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Optional;
 
 import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_GECKO_DRIVER;
 

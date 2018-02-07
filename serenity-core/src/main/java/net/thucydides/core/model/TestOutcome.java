@@ -1,7 +1,6 @@
 package net.thucydides.core.model;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
@@ -109,7 +108,7 @@ public class TestOutcome {
      */
     private Story userStory;
 
-    private Optional<TestTag> featureTag = Optional.absent();
+    private java.util.Optional<TestTag> featureTag = java.util.Optional.empty();
 
     private String title;
     private String description;
@@ -248,7 +247,7 @@ public class TestOutcome {
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
         this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
-        this.qualifier = Optional.absent();
+        this.qualifier = Optional.empty();
         this.context = null;
         this.groupStack = new Stack<>();
     }
@@ -298,7 +297,7 @@ public class TestOutcome {
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
         this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
-        this.qualifier = Optional.absent();
+        this.qualifier = Optional.empty();
         this.environmentVariables = environmentVariables;
         this.context = contextFrom(environmentVariables);
         if (testCase != null) {
@@ -405,7 +404,7 @@ public class TestOutcome {
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
         if ((testCase != null) || (userStory != null)) {
-            setUserStory(storyDefinedIn(testCase).or(userStory));
+            setUserStory(storyDefinedIn(testCase).orElse(userStory));
         }
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
@@ -418,7 +417,7 @@ public class TestOutcome {
 
     private Optional<Story> storyDefinedIn(Class<?> testCase) {
         if (testCase == null) {
-            return Optional.absent();
+            return Optional.empty();
         }
         return Optional.of(leafRequirementDefinedIn().testCase(testCase));
     }
@@ -545,7 +544,7 @@ public class TestOutcome {
                     this.testFailureSummary,
                     this.annotatedResult,
                     this.dataTable,
-                    Optional.fromNullable(qualifier),
+                    Optional.ofNullable(qualifier),
                     this.driver,
                     this.manual,
                     this.projectKey,
@@ -768,7 +767,7 @@ public class TestOutcome {
                 return Optional.of(step);
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     public String getId() {
@@ -966,7 +965,7 @@ public class TestOutcome {
         } else if (title != null) {
             return getDescriptionFrom(title);
         } else {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 
@@ -976,7 +975,7 @@ public class TestOutcome {
             multilineTitle.remove(0);
             return Optional.of(Joiner.on(NEW_LINE).join(multilineTitle));
         } else {
-            return Optional.absent();
+            return Optional.empty();
         }
 
     }
@@ -1415,7 +1414,7 @@ public class TestOutcome {
                 return Optional.of(step);
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private boolean noStepHasFailedSoFar() {
@@ -1888,7 +1887,7 @@ public class TestOutcome {
                 }
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     public boolean hasIssue(String issue) {
@@ -1997,7 +1996,7 @@ public class TestOutcome {
     }
 
     private Optional<TestStep> tailOf(List<TestStep> testSteps) {
-        return (testSteps.isEmpty()) ? Optional.<TestStep>absent() : Optional.of(testSteps.get(testSteps.size() - 1));
+        return (testSteps.isEmpty()) ? Optional.<TestStep>empty() : Optional.of(testSteps.get(testSteps.size() - 1));
     }
 
     public Integer getNestedStepCount() {
@@ -2204,18 +2203,18 @@ public class TestOutcome {
     }
 
     public String getStartedAt() {
-            return Optional.fromNullable(startTime).or(now())
+            return Optional.ofNullable(startTime).orElse(now())
                     .format(DateTimeFormatter.ofPattern("HH:mm:ss"));
     }
 
     public String getTimestamp() {
-        return Optional.fromNullable(startTime).or(now())
+        return Optional.ofNullable(startTime).orElse(now())
                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
 
     public String getTimestamp(DateTimeFormatter formater) {
-        return Optional.fromNullable(startTime).or(now())
+        return Optional.ofNullable(startTime).orElse(now())
                 .format(formater);
 
     }
@@ -2313,7 +2312,7 @@ public class TestOutcome {
     }
 
 
-    public Optional<TestTag> getFeatureTag() {
+    public java.util.Optional<TestTag> getFeatureTag() {
         if (!featureTag.isPresent()) {
             featureTag = FeatureTagAsDefined.in(userStory, getPath());
         }

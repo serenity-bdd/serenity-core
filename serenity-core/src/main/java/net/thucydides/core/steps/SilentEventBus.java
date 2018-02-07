@@ -1,11 +1,11 @@
 package net.thucydides.core.steps;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.model.*;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class SilentEventBus extends StepEventBus {
     public SilentEventBus(EnvironmentVariables environmentVariables) {

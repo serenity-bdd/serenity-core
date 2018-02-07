@@ -1,6 +1,5 @@
 package net.thucydides.core.reports.json.gson;
 
-import com.google.common.base.Optional;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
@@ -40,13 +39,14 @@ public class GsonJSONConverter implements JSONConverter {
         this.environmentVariables = environmentVariables;
         encoding = ThucydidesSystemProperty.THUCYDIDES_REPORT_ENCODING.from(environmentVariables, StandardCharsets.UTF_8.name());
         GsonBuilder gsonBuilder = new GsonBuilder()
-                                            .registerTypeAdapterFactory(OptionalTypeAdapter.FACTORY)
-                                            .registerTypeHierarchyAdapter(Collection.class, new CollectionAdapter())
-                                            .registerTypeAdapter(Flag.class, new InterfaceAdapter<Flag>())
-                                            .registerTypeAdapter(File.class, new FileSerializer())
-                                            .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeAdapter())
-                                            .registerTypeAdapter(File.class, new FileDeserializer())
-                                            .registerTypeAdapter(Class.class, new ClassTypeAdapter());
+                .registerTypeAdapterFactory(OptionalTypeAdapter.FACTORY)
+//                .registerTypeAdapterFactory(GuavaOptionalTypeAdapter.FACTORY)
+                .registerTypeHierarchyAdapter(Collection.class, new CollectionAdapter())
+                .registerTypeAdapter(Flag.class, new InterfaceAdapter<Flag>())
+                .registerTypeAdapter(File.class, new FileSerializer())
+                .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeAdapter())
+                .registerTypeAdapter(File.class, new FileDeserializer())
+                .registerTypeAdapter(Class.class, new ClassTypeAdapter());
         this.gson = (usePrettyPrinting()) ? gsonBuilder.setPrettyPrinting().create() : gsonBuilder.create();
     }
 
@@ -79,7 +79,7 @@ public class GsonJSONConverter implements JSONConverter {
     @Override
     public void toJson(TestOutcome testOutcome, OutputStream outputStream) throws IOException {
         testOutcome.calculateDynamicFieldValues();
-        try(Writer out = new OutputStreamWriter(outputStream, encoding)) {
+        try (Writer out = new OutputStreamWriter(outputStream, encoding)) {
             gson.toJson(testOutcome, out);
         }
     }

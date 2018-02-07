@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements.model;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.model.TestTag;
@@ -11,6 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -296,7 +296,7 @@ public class Requirement implements Comparable {
                 return Optional.of(field);
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     public List<String> getCustomFields() {

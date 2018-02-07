@@ -1,6 +1,5 @@
 package net.serenitybdd.ant;
 
-import com.google.common.base.Optional;
 import net.serenitybdd.ant.util.PathProcessor;
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter;
 import org.apache.tools.ant.BuildException;
@@ -10,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 public class SerenityReportingTask extends Task {
 
@@ -50,7 +50,7 @@ public class SerenityReportingTask extends Task {
     }
 
     private String getSourceDirectory() {
-        return Optional.fromNullable(sourceDirectory).or(DEFAULT_SOURCE);
+        return Optional.ofNullable(sourceDirectory).orElse(DEFAULT_SOURCE);
     }
 
     public void setSourceDirectory(String sourceDirectory) {
@@ -87,11 +87,11 @@ public class SerenityReportingTask extends Task {
     }
 
     public Path getOutputDirectoryFile() {
-        return Paths.get(normalizedPath(getOutputDirectory().or(getSourceDirectory())));
+        return Paths.get(normalizedPath(getOutputDirectory().orElse(getSourceDirectory())));
     }
 
-    private Optional<String> getOutputDirectory() {
-        return Optional.fromNullable(outputDirectory);
+    private java.util.Optional<String> getOutputDirectory() {
+        return java.util.Optional.ofNullable(outputDirectory);
     }
 
     public void execute() {

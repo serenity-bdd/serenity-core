@@ -1,8 +1,7 @@
 package net.thucydides.core.reflection;
 
-import com.google.common.base.Optional;
-
 import java.lang.reflect.Field;
+import java.util.Optional;
 
 /**
  * Internal class used to set field values inside an object.
@@ -25,7 +24,7 @@ public class FieldValue {
             field.setAccessible(true);
             return Optional.of(field.get(targetObject));
         } catch (Exception e) {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 }

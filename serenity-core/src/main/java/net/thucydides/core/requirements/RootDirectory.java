@@ -1,6 +1,5 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.base.Optional;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -179,7 +178,7 @@ public class RootDirectory {
 
     public static Optional<String> getResourceDirectory(EnvironmentVariables environmentVariables) {
         if (ThucydidesSystemProperty.THUCYDIDES_REQUIREMENTS_DIR.isDefinedIn(environmentVariables)) {
-            return Optional.absent();
+            return Optional.empty();
         } else {
             return Optional.of(DEFAULT_RESOURCE_DIRECTORY);
         }

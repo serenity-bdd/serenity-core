@@ -1,6 +1,5 @@
 package net.thucydides.core.model.screenshots
 
-import com.google.common.base.Optional
 import net.thucydides.core.annotations.Screenshots
 import net.thucydides.core.model.TakeScreenshots
 import net.thucydides.core.util.EnvironmentVariables
@@ -15,7 +14,7 @@ class WhenDecidingWhetherToTakeScreenshots extends Specification {
     def configuration = Mock(Configuration)
 
     def setup() {
-        configuration.screenshotLevel >> Optional.absent()
+        configuration.screenshotLevel >> Optional.empty()
     }
 
     @Unroll
@@ -24,7 +23,7 @@ class WhenDecidingWhetherToTakeScreenshots extends Specification {
         when:
             configuration.takeVerboseScreenshots() >> takeVerboseScreenshots
             configuration.onlySaveFailingScreenshots() >> onlyTakeFailingverboseScreenshots
-            configuration.screenshotLevel >> Optional.absent()
+            configuration.screenshotLevel >> Optional.empty()
             ScreenshotPermission permissions = new ScreenshotPermission(configuration)
 
         then:

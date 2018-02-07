@@ -14,6 +14,7 @@ buildscript {
         classpath 'org.pegdown:pegdown:1.4.1'
         classpath "gradle.plugin.se.bjurr.gitchangelog:git-changelog-gradle-plugin:1.51"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.15.0'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.2'
     }
 }
 
@@ -103,6 +104,7 @@ subprojects {
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.bintray'
+    apply plugin: 'com.github.johnrengelman.shadow'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -155,6 +157,21 @@ subprojects {
         if (!JavaVersion.current().isJava8Compatible()) {
             jvmArgs '-XX:MaxPermSize=256m'
         }
+    }
+
+    shadowJar {
+        zip64 = true
+        dependencies {
+            include dependency('com.google.guava:guava')
+            include dependency('org.ow2.asm:asm')
+        }
+
+        shadowJar {
+            classifier = 'with-dependencies'
+        }
+
+        relocate 'com.google.common', 'net.serenitybdd.shadow.com.google.common'
+        relocate 'org.ow2.asm', 'net.serenitybdd.shadow.org.ow2.asm'
     }
 
     test {
@@ -351,6 +368,10 @@ subprojects {
                         it.scope*.value = 'compile'
                     }
                 }
+            }
+
+            shadow(MavenPublication) { publication ->
+                project.shadow.component(publication)
             }
         }
     }

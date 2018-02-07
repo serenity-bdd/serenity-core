@@ -1,6 +1,6 @@
 package net.thucydides.core.model;
 
-import com.google.common.base.Joiner;
+import net.serenitybdd.core.strings.Joiner;
 import com.google.common.base.Preconditions;
 
 import static org.apache.commons.lang3.ObjectUtils.compare;

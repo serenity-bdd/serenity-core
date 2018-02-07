@@ -1,5 +1,8 @@
 package net.serenitybdd.core.strings;
 
+import net.thucydides.core.webdriver.SupportedWebDriver;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,4 +36,13 @@ public class Joiner {
         this.skipNuls = true;
         return this;
     }
+
+    public final String join(Iterable<?> parts) {
+        List<String> elements = new ArrayList<>();
+        parts.forEach(
+                part -> elements.add(part.toString())
+        );
+        return this.join(parts);
+    }
+
 }

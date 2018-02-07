@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import com.google.common.base.Joiner;
+import net.serenitybdd.core.strings.Joiner;
 import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.exceptions.TheErrorType;

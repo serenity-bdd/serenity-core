@@ -1,6 +1,6 @@
 package net.thucydides.core.steps;
 
-import com.google.common.base.Joiner;
+import net.serenitybdd.core.strings.Joiner;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
 
@@ -60,7 +60,12 @@ public class ReplaceField {
             return keyNamesFor((Keys[]) value);
         }
         if (value.getClass().isArray()) {
-            return Joiner.on(",").join(Collections.singletonList(value));
+            List<String> elements = new ArrayList<>();
+            Collections.singletonList(value).forEach(
+                    part -> elements.add(part.toString())
+            );
+
+            return Joiner.on(",").join(elements);
         }
         return value.toString();
     }

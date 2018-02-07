@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements.classpath;
 
-import com.google.common.base.Joiner;
+import net.serenitybdd.core.strings.Joiner;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.RequirementTypeAt;

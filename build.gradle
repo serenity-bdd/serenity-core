@@ -159,20 +159,32 @@ subprojects {
         }
     }
 
-    shadowJar {
-        zip64 = true
-        dependencies {
-            include dependency('com.google.guava:guava')
-            include dependency('org.ow2.asm:asm')
-        }
-
-        shadowJar {
-            classifier = null
-        }
-
-        relocate 'com.google.common', 'net.serenitybdd.shadow.com.google.common'
-        relocate 'org.ow2.asm', 'net.serenitybdd.shadow.org.ow2.asm'
-    }
+//    shadowJar {
+//        zip64 = true
+//        dependencies {
+//            include dependency('com.google.guava:guava')
+//            include dependency('org.ow2.asm:asm')
+//        }
+//
+//        manifest.attributes["Created-By"] =
+//                "${System.getProperty("java.version")} (${System.getProperty("java.specification.vendor")})"
+//        manifest.attributes["Implementation-Title"] = project.name
+//        manifest.attributes["Implementation-Version"] = project.version
+//
+//        from("${rootProject.projectDir}/src/dist") {
+//            include "license.txt"
+//            include "notice.txt"
+//            into "META-INF"
+//            expand(copyright: new Date().format("yyyy"), version: project.version)
+//        }
+//
+//        shadowJar {
+//            classifier = null
+//        }
+//
+//        relocate 'com.google.common', 'net.serenitybdd.shadow.com.google.common'
+//        relocate 'org.ow2.asm', 'net.serenitybdd.shadow.org.ow2.asm'
+//    }
 
     test {
         testLogging {
@@ -291,7 +303,8 @@ subprojects {
     bintray {
         user = bintrayUsername //this usually comes form gradle.properties file in ~/.gradle
         key = bintrayApiKey //this usually comes form gradle.properties file in ~/.gradle
-        publications = ['mavenJava','shadow'] // see publications closure
+//        publications = ['mavenJava','shadow'] // see publications closure
+        publications = ['mavenJava'] // see publications closure
         pkg {
             repo = 'maven'
             userOrg = 'serenity'
@@ -370,57 +383,20 @@ subprojects {
                 }
             }
 
-            shadow(MavenPublication) { publication ->
-                project.shadow.component(publication)
-
-                println "Publishing with shaded dependencies: $project.name:$project.group:$project.version"
-
-                from components.java
-
-                artifact sourcesJar {
-                    classifier "sources"
-                }
-
-                artifact javadocJar {
-                    classifier "javadoc"
-                }
-
-                pom.withXml {
-                    asNode().children().last() + {
-                        resolveStrategy = Closure.DELEGATE_FIRST
-                        name "$project.name"
-                        description "$projectDescription"
-
-                        url 'https://github.com/serenity-bdd/serenity-core'
-                        scm {
-                            url 'scm:git:git@github.com:serenity-bdd/serenity-core.git'
-                            connection 'scm:git:git@github.com:serenity-bdd/serenity-core.git'
-                            developerConnection 'scm:git:git@github.com:serenity-bdd/serenity-core.git'
-                        }
-                        licenses {
-                            license {
-                                name 'The Apache Software License, Version 2.0'
-                                url 'http://www.apache.org/license/LICENSE-2.0.txt'
-                                distribution 'repo'
-                            }
-                        }
-                        developers {
-                            developer {
-                                id 'johnsmart'
-                                name 'John Ferguson Smart'
-                                email 'john.smart@wakaleo.com'
-                            }
-                        }
-                    }
-                    // Preserve compile-scope dependencies
-                    asNode().dependencies.'*'.findAll() {
-                        it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
-                            dep.name == it.artifactId.text()
-                        }
-                    }.each() {
-                        it.scope*.value = 'compile'
-                    }
-                }
+//            shadow(MavenPublication) { publication ->
+//                project.shadow.component(publication)
+//
+//                println "Publishing with shaded dependencies: $project.name:$project.group:$project.version"
+//
+//                from components.java
+//
+//                artifact sourcesJar {
+//                    classifier "sources"
+//                }
+//
+//                artifact javadocJar {
+//                    classifier "javadoc"
+//                }
 
             }
         }

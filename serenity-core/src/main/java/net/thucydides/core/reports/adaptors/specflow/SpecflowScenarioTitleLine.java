@@ -1,6 +1,6 @@
 package net.thucydides.core.reports.adaptors.specflow;
 
-import com.google.common.base.Joiner;
+import net.serenitybdd.core.strings.Joiner;
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;

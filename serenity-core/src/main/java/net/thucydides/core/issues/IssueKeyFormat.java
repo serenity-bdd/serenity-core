@@ -1,6 +1,6 @@
 package net.thucydides.core.issues;
 
-import com.google.common.base.Joiner;
+import net.serenitybdd.core.strings.Joiner;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;

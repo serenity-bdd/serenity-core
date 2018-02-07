@@ -1,6 +1,6 @@
 package net.thucydides.core.model;
 
-import com.google.common.base.Joiner;
+import net.serenitybdd.core.strings.Joiner;
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.exceptions.SerenityManagedException;

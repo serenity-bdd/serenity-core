@@ -1,6 +1,6 @@
 package net.thucydides.core.reports;
 
-import com.google.common.base.Joiner;
+import net.serenitybdd.core.strings.Joiner;
 import com.google.common.base.Splitter;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;

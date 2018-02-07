@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.actions.type;
 
-import com.google.common.base.Joiner;
+import net.serenitybdd.core.strings.Joiner;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.screenplay.Interaction;

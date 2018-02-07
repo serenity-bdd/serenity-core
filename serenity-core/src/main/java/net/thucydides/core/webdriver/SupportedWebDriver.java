@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver;
 
-import com.google.common.base.Joiner;
+import net.serenitybdd.core.strings.Joiner;
 import net.serenitybdd.core.collect.NewList;
 import com.opera.core.systems.OperaDriver;
 import io.appium.java_client.AppiumDriver;
@@ -16,7 +16,9 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The list of supported web drivers.
@@ -122,7 +124,7 @@ public enum SupportedWebDriver {
 
     public static String listOfSupportedDrivers() {
 
-        String enumValues = Joiner.on(", ").join(SupportedWebDriver.values());
+        String enumValues = Joiner.on(", ").join(Arrays.stream(SupportedWebDriver.values()).map(Enum::toString).collect(Collectors.toList()));
 
         return Joiner.on(", ").join(getSynonymes(), enumValues);
     }

@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements.reports;
 
-import com.google.common.base.Joiner;
+import net.serenitybdd.core.strings.Joiner;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;

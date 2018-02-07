@@ -1,7 +1,7 @@
 package net.thucydides.core.steps;
 
 
-import com.google.common.base.Joiner;
+import net.serenitybdd.core.strings.Joiner;
 import net.serenitybdd.core.collect.NewList;
 import com.google.inject.Inject;
 import net.serenitybdd.core.Serenity;

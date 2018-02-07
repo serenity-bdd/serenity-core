@@ -1,6 +1,6 @@
 package net.thucydides.core.requirements.classpath;
 
-import com.google.common.base.Joiner;
+import net.serenitybdd.core.strings.Joiner;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.requirements.annotations.NarrativeFinder;
 

@@ -4,7 +4,9 @@ import io.vavr.collection.List;
 import net.thucydides.core.model.ReportNamer;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestResult;
 import net.thucydides.core.reports.TestOutcomes;
+import net.thucydides.core.steps.StepEventBus;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +53,8 @@ public class JUnitXMLOutcomeReporter {
                     }
                 }
         );
+
+        StepEventBus.getEventBus().suspendTest(TestResult.SUCCESS);
     }
 
     private String reportFilenameFor(TestOutcome testOutcome) {

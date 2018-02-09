@@ -80,7 +80,7 @@ public class ReportService {
                          final Collection<AcceptanceTestFullReporter> subscribedFullReporters,
                          final EnvironmentVariables environmentVariables) {
         this.outputDirectory = outputDirectory;
-        if(!this.outputDirectory.exists()){
+        if (!this.outputDirectory.exists()) {
             this.outputDirectory.mkdirs();
         }
         getSubscribedReporters().addAll(subscribedReporters);
@@ -140,10 +140,9 @@ public class ReportService {
     }
 
     /**
-     *
      * Store some configuration properties under output directory
      */
-    public void generateConfigurationsReport(){
+    public void generateConfigurationsReport() {
 
         final Configuration configuration = ConfiguredEnvironment.getConfiguration();
         Config config = ConfigFactory.empty();
@@ -203,11 +202,7 @@ public class ReportService {
      * JUnit test results are a special case, since they create a output file per test class (or story, or feature) rather than for each test.
      */
     private void generateJUnitTestResults(TestOutcomes outcomes) {
-        try {
-            jUnitXMLOutcomeReporter.generateReportsFor(outcomes);
-        } catch (IOException e) {
-            throw new RuntimeException("Report generation failure", e);
-        }
+        jUnitXMLOutcomeReporter.generateReportsFor(outcomes);
     }
 
     private void waitForReportGenerationToFinish(List<Future> tasks) {

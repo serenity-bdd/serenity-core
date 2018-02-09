@@ -397,8 +397,7 @@ subprojects {
 //                artifact javadocJar {
 //                    classifier "javadoc"
 //                }
-
-            }
+//            }
         }
     }
 
@@ -446,6 +445,6 @@ subprojects {
   {{/commits}}
  {{/issues}}
 {{/tags}}
- """;
+ """
     }
 }

@@ -53,5 +53,5 @@
   "annotatedResult": "FAILURE",
   "manual": false,
   "testSource": "JUnit",
-  "result": "FAILURE"
+  "result": "ERROR"
 }

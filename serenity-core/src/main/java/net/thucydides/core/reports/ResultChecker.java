@@ -39,12 +39,15 @@ public class ResultChecker {
         return tagValues.stream().map(TestTag::withValue).collect(Collectors.toList());
     }
 
-    public void checkTestResults() {
+    public TestResult checkTestResults() {
         Optional<TestOutcomes> outcomes = loadOutcomes();
+
         if (outcomes.isPresent()) {
             logOutcomesFrom(outcomes.get());
-            checkTestResultsIn(outcomes.get());
+            return outcomes.get().getResult();
         }
+
+        return TestResult.UNDEFINED;
     }
 
     private void logOutcomesFrom(TestOutcomes testOutcomes) {
@@ -59,15 +62,6 @@ public class ResultChecker {
         logger.info("  - Tests pending: " + testOutcomes.getPendingTests().getTotal());
         logger.info("  - Tests compromised: " + testOutcomes.getCompromisedTests().getTotal());
 
-    }
-
-    private void checkTestResultsIn(TestOutcomes testOutcomes) {
-
-        switch (testOutcomes.getResult()) {
-            case ERROR: throw new TestOutcomesError(testOutcomeSummary(testOutcomes));
-            case FAILURE: throw new TestOutcomesFailures(testOutcomeSummary(testOutcomes));
-            case COMPROMISED: throw new TestOutcomesCompromised(testOutcomeSummary(testOutcomes));
-        }
     }
 
     private String testOutcomeSummary(TestOutcomes testOutcomes) {

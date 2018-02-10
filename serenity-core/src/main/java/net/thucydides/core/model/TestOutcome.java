@@ -163,7 +163,6 @@ public class TestOutcome {
      */
     private TestResult annotatedResult = null;
 
-
     /**
      * The session ID for this test, is a remote web driver was used.
      * If the tests are run on SauceLabs, this is used to generate a link to the corresponding report and video.
@@ -1175,6 +1174,10 @@ public class TestOutcome {
      * @return The outcome of this test.
      */
     public TestResult getResult() {
+        if (result != null) {
+            return result;
+        }
+
         if ((IGNORED == annotatedResult) || (SKIPPED == annotatedResult) || PENDING == annotatedResult) {
             return annotatedResult;
         }

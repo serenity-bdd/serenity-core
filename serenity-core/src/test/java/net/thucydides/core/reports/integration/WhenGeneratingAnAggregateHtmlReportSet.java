@@ -2,6 +2,7 @@ package net.thucydides.core.reports.integration;
 
 import net.thucydides.core.digest.Digest;
 import net.thucydides.core.issues.IssueTracking;
+import net.thucydides.core.model.TestResult;
 import net.thucydides.core.reports.ResultChecker;
 import net.thucydides.core.reports.TestOutcomesError;
 import net.thucydides.core.reports.TestOutcomesFailures;
@@ -181,25 +182,25 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
         assertThat(reportProperties.getShouldDisplayResultLink(), is(true));
     }
 
-    @Test(expected = TestOutcomesError.class)
-    public void should_throw_an_exception_when_asked_if_errors_are_present() {
+    @Test
+    public void errors_are_present() {
         File reports = directoryInClasspathCalled("/test-outcomes/containing-errors");
         ResultChecker resultChecker = new ResultChecker(reports);
-        resultChecker.checkTestResults();
-    }
-
-    @Test(expected = TestOutcomesFailures.class)
-    public void should_throw_an_exception_when_asked_if_failures_are_present() {
-        File reports = directoryInClasspathCalled("/test-outcomes/containing-failure");
-        ResultChecker resultChecker = new ResultChecker(reports);
-        resultChecker.checkTestResults();
+        assertThat(resultChecker.checkTestResults(), is(TestResult.ERROR));
     }
 
     @Test
-    public void should_throw_no_exception_for_successful_tests() {
+    public void failures_are_present() {
+        File reports = directoryInClasspathCalled("/test-outcomes/containing-failure");
+        ResultChecker resultChecker = new ResultChecker(reports);
+        assertThat(resultChecker.checkTestResults(), is(TestResult.FAILURE));
+    }
+
+    @Test
+    public void successful_tests() {
         File reports = directoryInClasspathCalled("/test-outcomes/all-successful");
         ResultChecker resultChecker = new ResultChecker(reports);
-        resultChecker.checkTestResults();
+        assertThat(resultChecker.checkTestResults(), is(TestResult.SUCCESS));
     }
 
     @Test

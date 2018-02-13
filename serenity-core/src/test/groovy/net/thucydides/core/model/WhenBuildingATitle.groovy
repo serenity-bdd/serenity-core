@@ -61,6 +61,7 @@ class WhenBuildingATitle extends Specification {
         "safari"    | "<i class=\"fa fa-safari\" aria-hidden=\"true\"></i>"
         "opera"     | "<i class=\"fa fa-opera\" aria-hidden=\"true\"></i>"
         "ie"        | "<i class=\"fa fa-internet-explorer\" aria-hidden=\"true\"></i>"
+        "edge"      | "<i class=\"fa fa-edge\" aria-hidden=\"true\"></i>"
         "phantomjs" | "<i class=\"fa fa-snapchat-ghost\" aria-hidden=\"true\"></i>"
         "linux"     | "<i class=\"fa fa-linux\" aria-hidden=\"true\"></i>"
         "mac"       | "<i class=\"fa fa-apple\" aria-hidden=\"true\"></i>"

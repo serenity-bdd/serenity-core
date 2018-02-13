@@ -24,6 +24,7 @@ public class TitleBuilder {
         FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("safari", "safari");
         FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("opera", "opera");
         FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("ie", "internet-explorer");
+        FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("edge", "edge");
         FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("phantomjs", "snapchat-ghost");
 
         FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("linux", "linux");

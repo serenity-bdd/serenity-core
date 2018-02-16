@@ -194,7 +194,7 @@ public class JUnitXMLConverter {
         testSuiteElement.setAttribute("failures", Integer.toString(failures));
 
         testCaseOutcomes.getStartTime().ifPresent(
-                startTime -> testSuiteElement.setAttribute("timestamp", startTime.toString())
+                startTime -> testSuiteElement.setAttribute("timestamp", TIMESTAMP_FORMAT.format(startTime))
         );
 
         return testSuiteElement;

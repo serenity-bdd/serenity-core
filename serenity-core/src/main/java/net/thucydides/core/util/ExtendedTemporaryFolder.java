@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 
 public class ExtendedTemporaryFolder extends ExternalResource {
 	
@@ -81,7 +82,10 @@ public class ExtendedTemporaryFolder extends ExternalResource {
     }
 
     private File createTemporaryFolderIn(File parentFolder) throws IOException {
-        return Files.createTempDirectory(parentFolder.toPath(), "junit").toFile();
+        return (parentFolder != null) ?
+                Files.createTempDirectory(parentFolder.toPath(), "junit").toFile() :
+                Files.createTempDirectory("junit").toFile();
+
     }
 
     /**

@@ -21,6 +21,7 @@ buildscript {
 plugins {
     id 'org.ajoberstar.release-opinion' version '1.7.2'
     id 'project-report'
+    id "org.sonarqube" version "2.6"
 }
 
 apply plugin: "se.bjurr.gitchangelog.git-changelog-gradle-plugin"
@@ -305,6 +306,7 @@ subprojects {
         key = bintrayApiKey //this usually comes form gradle.properties file in ~/.gradle
 //        publications = ['mavenJava','shadow'] // see publications closure
         publications = ['mavenJava'] // see publications closure
+        publish = true
         pkg {
             repo = 'maven'
             userOrg = 'serenity'
@@ -382,22 +384,6 @@ subprojects {
                     }
                 }
             }
-
-//            shadow(MavenPublication) { publication ->
-//                project.shadow.component(publication)
-//
-//                println "Publishing with shaded dependencies: $project.name:$project.group:$project.version"
-//
-//                from components.java
-//
-//                artifact sourcesJar {
-//                    classifier "sources"
-//                }
-//
-//                artifact javadocJar {
-//                    classifier "javadoc"
-//                }
-//            }
         }
     }
 

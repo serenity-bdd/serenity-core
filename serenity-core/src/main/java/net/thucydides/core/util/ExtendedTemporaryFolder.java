@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class ExtendedTemporaryFolder extends ExternalResource {
 	
@@ -79,10 +81,7 @@ public class ExtendedTemporaryFolder extends ExternalResource {
     }
 
     private File createTemporaryFolderIn(File parentFolder) throws IOException {
-        File createdFolder = File.createTempFile("junit", "", parentFolder);
-        createdFolder.delete();
-        createdFolder.mkdir();
-        return createdFolder;
+        return Files.createTempDirectory(parentFolder.toPath(), "junit").toFile();
     }
 
     /**

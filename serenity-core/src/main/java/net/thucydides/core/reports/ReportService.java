@@ -178,13 +178,10 @@ public class ReportService {
         try {
             final ArrayList<Future> tasks = new ArrayList<>(outcomes.size());
             for (final TestOutcome outcome : outcomes) {
-                tasks.add(executorService.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        LOGGER.debug("Processing test outcome " + outcome.getCompleteName());
-                        generateReportFor(outcome, reporter);
-                        LOGGER.debug("Processing test outcome " + outcome.getCompleteName() + " done");
-                    }
+                tasks.add(executorService.submit(() -> {
+                    LOGGER.debug("Processing test outcome " + outcome.getCompleteName());
+                    generateReportFor(outcome, reporter);
+                    LOGGER.debug("Processing test outcome " + outcome.getCompleteName() + " done");
                 }));
             }
             generateJUnitTestResults(testOutcomes);

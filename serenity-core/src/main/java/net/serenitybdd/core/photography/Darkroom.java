@@ -2,18 +2,24 @@ package net.serenitybdd.core.photography;
 
 import net.serenitybdd.core.photography.bluring.Blurer;
 import net.serenitybdd.core.photography.resizing.Resizer;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_COMPRESS_SCREENSHOTS;
 
 public class Darkroom {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Darkroom.class);
-    private List<? extends PhotoFilter> processors = Arrays.asList(new Resizer(), new Blurer());
+    private final static List<PhotoFilter> DEFAULT_PROCESSERS = Arrays.asList(new Blurer());
     private DarkroomProcessingLine processingLine;
     private Thread screenshotThread;
+    private final EnvironmentVariables environmentVariables;
 
     public void isOpenForBusiness() {
         if (theDarkroomIsClosed()) {
@@ -22,10 +28,22 @@ public class Darkroom {
         }
     }
 
-    public Darkroom() { }
+    public Darkroom() {
+        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+    }
 
     private boolean theDarkroomIsClosed() {
         return !theDarkroomIsOpen();
+    }
+
+    private List<? extends PhotoFilter> getProcessors() {
+        List<PhotoFilter> processors = new ArrayList<>();
+        if (SERENITY_COMPRESS_SCREENSHOTS.booleanFrom(environmentVariables, false)) {
+            processors.add(new Resizer());
+        }
+        processors.addAll(DEFAULT_PROCESSERS);
+
+        return processors;
     }
 
     private boolean theDarkroomIsOpen() {
@@ -41,7 +59,7 @@ public class Darkroom {
 
     public void start() {
 
-        this.processingLine = new DarkroomProcessingLine(processors);
+        this.processingLine = new DarkroomProcessingLine(getProcessors());
         screenshotThread = new Thread(processingLine,"Darkroom Processing Line");
         screenshotThread.setDaemon(true);
         screenshotThread.start();

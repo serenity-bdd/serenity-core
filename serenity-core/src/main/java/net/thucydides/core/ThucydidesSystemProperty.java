@@ -968,6 +968,12 @@ public enum ThucydidesSystemProperty {
     SERENITY_COMPRESS_FILENAMES,
 
     /**
+     * If set, Serenity will scale down the screenshots taken during execution to the size of the carousel in the
+     * screenshot page. This results in a loss of quality but a gain in disk space.
+     */
+    SERENITY_COMPRESS_SCREENSHOTS,
+
+    /**
      * If set, this will define the list of tag types to be excluded from the dashboard screens
      */
     DASHBOARD_EXCLUDED_TAG_LIST,

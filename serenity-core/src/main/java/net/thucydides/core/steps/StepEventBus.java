@@ -262,6 +262,13 @@ public class StepEventBus {
         assumptionViolatedMessage = "";
     }
 
+    /**
+     * Removes a test suspension
+     */
+    public void unsuspend() {
+        suspendedTest = false;
+    }
+
     private void currentTestIsNotSuspended() {
         suspendedTest = false;
     }

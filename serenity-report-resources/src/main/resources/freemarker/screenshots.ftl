@@ -112,7 +112,8 @@
                                 <h3 class="discreet-story-header">
                                     <i class="fa fa-2x fa-comments-o"></i>
                                     <span class="story-header-title">${parentTitle} ${issueNumber}</span>
-                                    <span class="badge tag-badge">${parentType}</span>
+                                    <#assign tagStyle = styling.tagStyleFor(tag) >
+                                    <span class="badge tag-badge" style="${tagStyle}">${parentType}</span>
                                 </h3>
 
                                 <div class="discreet-requirement-narrative-title">
@@ -126,7 +127,8 @@
                                 <h3 class="discreet-story-header">
                                     <i class="fa fa-2x fa-comments-o"></i>
                                     <span class="story-header-title">${parentTitle}</span>
-                                    <span class="badge tag-badge">${parentType}</span>
+                                    <#assign tagStyle = styling.tagStyleFor(tag) >
+                                    <span class="badge tag-badge" style="${tagStyle}">${parentType}</span>
                                 </h3>
 
                                 <div class="discreet-requirement-narrative-title">
@@ -148,8 +150,9 @@
                             <#assign tagReport = absoluteReportName.forTag(tag) />
                             <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
                             <p class="tag">
-                                <span class="badge tag-badge">
-                                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" href="${tagReport}">${formatter.htmlCompatible(tagTitle)}
+                                <#assign tagStyle = styling.tagStyleFor(tag) >
+                                <span class="badge tag-badge" style="${tagStyle}"
+                                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" style="${tagStyle}" href="${tagReport}">${formatter.htmlCompatible(tagTitle)}
                                     (${tag.type})</a>
                                 </span>
                             </p>

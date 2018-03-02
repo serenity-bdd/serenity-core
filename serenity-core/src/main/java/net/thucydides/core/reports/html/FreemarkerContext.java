@@ -2,6 +2,7 @@ package net.thucydides.core.reports.html;
 
 import net.serenitybdd.core.buildinfo.BuildInfoProvider;
 import net.serenitybdd.core.buildinfo.BuildProperties;
+import net.serenitybdd.core.reports.styling.TagStylist;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.NumericalFormatter;
 import net.thucydides.core.model.ReportType;
@@ -91,6 +92,7 @@ public class FreemarkerContext {
         context.put("formatter", formatter);
         context.put("formatted", new NumericalFormatter());
         context.put("inflection", Inflector.getInstance());
+        context.put("styling", TagStylist.from(environmentVariables));
         context.put("relativeLink", relativeLink);
         context.put("reportOptions", new ReportOptions(environmentVariables));
     }

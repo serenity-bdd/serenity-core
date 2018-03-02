@@ -111,8 +111,9 @@
                             <#assign tagReport = absoluteReportName.forRequirementOrTag(tag) />
                             <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
                             <p class="tag">
-                                <span class="badge tag-badge">
-                                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink"
+                                <#assign tagStyle = styling.tagStyleFor(tag) >
+                                <span class="badge tag-badge" style="${tagStyle}">
+                                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" style="${tagStyle}"
                                                                       href="${tagReport}">${formatter.htmlCompatible(tagTitle)}
                                     (${tag.type})</a>
                                 </span>
@@ -187,8 +188,9 @@
             <#list dataSet.tags as exampleTag>
                 <#assign exampleTagReport = absoluteReportName.forRequirementOrTag(exampleTag) />
                 <#assign exampleTagTitle = inflection.of(exampleTag.shortName).asATitle() >
-                <span class="badge tag-badge">
-                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink"
+                <#assign tagStyle = styling.tagStyleFor(tag) >
+                <span class="badge tag-badge" style="${tagStyle}">
+                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" style="${tagStyle} style="${tagStyle}"
                                                       href="${exampleTagReport}">${formatter.htmlCompatible(exampleTagTitle)}
                     (${exampleTag.type})</a>
                 </span>

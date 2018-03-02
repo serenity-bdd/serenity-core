@@ -1,6 +1,7 @@
 package net.thucydides.core.reports.html;
 
 import com.google.common.base.Preconditions;
+import net.serenitybdd.core.reports.styling.TagStylist;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
@@ -157,6 +158,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
         context.put("testOutcome", testOutcome);
         context.put("currentTag", TestTag.EMPTY_TAG);
         context.put("inflection", Inflector.getInstance());
+        context.put("styling", TagStylist.from(Injectors.getInjector().getInstance(EnvironmentVariables.class)));
         context.put("requirementTypes", requirementsService.getRequirementTypes());
 
         addParentRequirmentFieldToContext(testOutcome, context);

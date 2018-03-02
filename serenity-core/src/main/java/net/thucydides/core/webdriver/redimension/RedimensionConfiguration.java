@@ -23,7 +23,7 @@ class RedimensionConfiguration {
     }
 
     public boolean isBrowserMaximised() {
-        return ThucydidesSystemProperty.THUCYDIDES_BROWSER_MAXIMIZED.booleanFrom(environmentVariables, false);
+        return ThucydidesSystemProperty.SERENITY_BROWSER_MAXIMIZED.booleanFrom(environmentVariables, false);
     }
 
     public boolean supportsResizing(Class<? extends WebDriver> driverClass) {

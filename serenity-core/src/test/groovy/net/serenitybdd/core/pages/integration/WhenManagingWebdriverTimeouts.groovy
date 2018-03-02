@@ -22,6 +22,7 @@ import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.TimeoutException
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.remote.DesiredCapabilities
 import spock.lang.*
 
@@ -44,10 +45,11 @@ class WhenManagingWebdriverTimeouts extends Specification {
 
     @Shared DriverServicePool driverService;
 
+    @Shared
     WebDriver driver
 
     def setupSpec() {
-        driverService = new PhantomJSServicePool();// ChromeServicePool()
+        driverService = new ChromeServicePool()
         driverService.start()
     }
 
@@ -56,22 +58,21 @@ class WhenManagingWebdriverTimeouts extends Specification {
     }
 
     WebDriver newDriver() {
-        driver = driverService.newDriver(DesiredCapabilities.phantomjs());
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
+        DesiredCapabilities desiredCapabilities = DesiredCapabilities.chrome()
+
+        driver = driverService.newDriver(desiredCapabilities);
         return driver
     }
 
     def setup() {
         StepEventBus.eventBus.clear()
-        driver = null
-    }
-
-    def cleanup() {
-        SerenityWebdriverManager.inThisTestThread().closeAllDrivers();
-        if (driver) {
-            driver.quit();
+        if (driver == null) {
+            driver = newDriver()
         }
+        driver.navigate().refresh();
     }
-
 
     //
     // IMPLICIT WAITS
@@ -109,14 +110,14 @@ class WhenManagingWebdriverTimeouts extends Specification {
         for(String key : variables.keySet()) {
             environmentVariables.setProperty(key, variables[key]);
         }
-        WebDriverFacade driverFacade = new WebDriverFacade(newDriver(), new WebDriverFactory(), environmentVariables);
+        WebDriverFacade driverFacade = new WebDriverFacade(driver, new WebDriverFactory(), environmentVariables);
         def page = new StaticSitePage(driverFacade, environmentVariables)
         page.open()
         return page
     }
 
     private StaticSitePage openStaticPage() {
-        def driver = new WebDriverFacade(newDriver(), new WebDriverFactory(), new SystemEnvironmentVariables()); // HtmlUnitDriver();
+        def driver = new WebDriverFacade(driver, new WebDriverFactory(), new SystemEnvironmentVariables()); // HtmlUnitDriver();
         def page = new StaticSitePage(driver)
         page.open()
         return page
@@ -230,7 +231,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         when: "We fetch a list of elements using findElements"
             def elements = page.findAll(By.cssSelector("#elements option"))
         then:
-            elements.size() == 0
+            elements.isEmpty()
     }
 
 

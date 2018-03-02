@@ -11,6 +11,8 @@
 <#include "libraries/common.ftl">
 <#include "libraries/nivo-slider.ftl">
 
+<#include "components/stacktrace.ftl">
+
     <script type="text/javascript">
 
         function getUrlVars() {
@@ -197,7 +199,18 @@
     <div id="contenttilttle">
         <#if (testOutcome.result == "FAILURE" || testOutcome.result == "ERROR")>
             <div class="screenshotFailure panel panel-danger">
-                <div class="panel-heading"><span class='error-caption ellipsis'>${testOutcome.result}: ${formatter.htmlAttributeCompatible(testOutcome.failureDetails.conciseErrorMessage, 40)}</span></div>
+                <#--<div class="panel-heading"><span class='error-caption ellipsis'>${testOutcome.result}: ${formatter.htmlAttributeCompatible(testOutcome.failureDetails.conciseErrorMessage, 40)}</span></div>-->
+
+                    <#if (testOutcome.errorMessage)??>
+                        <div class="panel-heading title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage)}">
+                            ${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 244)}
+                        </div>
+                        <#if (testOutcome.nestedTestFailureCause)??>
+                            <@stacktrace cause=testOutcome.nestedTestFailureCause id="overall" />
+                        </#if>
+                    </#if>
+
+
                 <div class="panel-body">
                     <a href="${testOutcome.failureDetails.pageSourceLink}" target="_blank" class="btn btn-info">HTML Source</a>
                 </div>

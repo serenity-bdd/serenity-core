@@ -26,13 +26,14 @@ public class Actor implements PerformsTasks, SkipNested {
     private Map<String, Object> notepad = new HashMap();
     private Map<Class, Ability> abilities = new HashMap();
 
+    private String preferredPronoun;
 
     public Actor(String name) {
         this.name = name;
     }
 
     public String toString() {
-        return name;
+        return getName();
     }
 
     public static Actor named(String name) {
@@ -40,7 +41,7 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     public String getName() {
-        return name;
+        return (preferredPronoun != null) ? preferredPronoun : name;
     }
 
     public <T extends Ability> Actor can(T doSomething) {
@@ -250,4 +251,13 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
 
+    public Actor usingPronoun(String pronoun) {
+        this.preferredPronoun = pronoun;
+        return this;
+    }
+
+    public Actor withNoPronoun() {
+        this.preferredPronoun = null;
+        return this;
+    }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class OnStage {
 
-    private final static String DEFAULT_PRONOUNS = "he,she";
+    private final static String DEFAULT_PRONOUNS = "he,she,they";
 
     private static final ThreadLocal<Stage> stage = new ThreadLocal<>();
 
@@ -24,8 +24,9 @@ public class OnStage {
     }
 
     public static Actor theActorCalled(String requiredActor) {
-
-        if (pronouns().contains(requiredActor)) { return stage().theActorInTheSpotlight(); }
+        if (pronouns().contains(requiredActor)) {
+            return stage().theActorInTheSpotlight().usingPronoun(requiredActor);
+        }
         
         return stage().shineSpotlightOn(requiredActor);
     }

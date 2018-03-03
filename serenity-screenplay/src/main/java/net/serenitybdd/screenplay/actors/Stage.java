@@ -22,7 +22,7 @@ public class Stage {
                                          .findFirst();
 
         actorInTheSpotlight = knownActor.orElseGet(() -> cast.actorNamed(actorName));
-        return theActorInTheSpotlight();
+        return theActorInTheSpotlight().withNoPronoun();
     }
 
     public Actor theActorInTheSpotlight() {

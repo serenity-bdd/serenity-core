@@ -251,13 +251,19 @@ public class StepEventBus {
         noAssumptionsViolated();
         disableSoftAsserts();
 
-        Serenity.clearCurrentSession();;
+        if (clearSessionForEachTest()) {
+            Serenity.clearCurrentSession();
+        }
 
         resultTally = null;
         classUnderTest = null;
         webdriverSuspensions.clear();
 
         Broadcaster.unregisterAllListeners();
+    }
+
+    private boolean clearSessionForEachTest() {
+        return !ThucydidesSystemProperty.SERENITY_MAINTAIN_SESSION.booleanFrom(environmentVariables, false);
     }
 
     private void noAssumptionsViolated() {

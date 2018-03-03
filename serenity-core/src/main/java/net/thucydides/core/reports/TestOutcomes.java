@@ -457,7 +457,7 @@ public class TestOutcomes {
     }
 
     public TestOutcomes withTags(List<TestTag> tags) {
-        List<TestOutcome> filteredOutcomes = new ArrayList<>();
+        Set<TestOutcome> filteredOutcomes = new HashSet<>();
         for (TestTag tag : tags) {
             filteredOutcomes.addAll(matchingOutcomes(outcomes, tag));
         }

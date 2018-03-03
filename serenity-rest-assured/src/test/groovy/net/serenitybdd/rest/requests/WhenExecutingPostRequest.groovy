@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import io.restassured.RestAssured
+import io.restassured.internal.filter.FormAuthFilter
 import io.restassured.specification.RequestSender
 import io.restassured.specification.RequestSpecification
 import io.restassured.specification.ResponseSpecification

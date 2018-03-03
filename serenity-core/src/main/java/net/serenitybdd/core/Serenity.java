@@ -287,6 +287,10 @@ public class Serenity {
         }
     }
 
+    public static void clearCurrentSession() {
+        Serenity.getCurrentSession().clear();
+    }
+
     public static Pages getPagesFactory() {
         return null;
     }

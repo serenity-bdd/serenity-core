@@ -2,6 +2,7 @@ package net.thucydides.core.steps;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
+import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.eventbus.Broadcaster;
@@ -249,6 +250,8 @@ public class StepEventBus {
         currentTestIsNotSuspended();
         noAssumptionsViolated();
         disableSoftAsserts();
+
+        Serenity.clearCurrentSession();;
 
         resultTally = null;
         classUnderTest = null;

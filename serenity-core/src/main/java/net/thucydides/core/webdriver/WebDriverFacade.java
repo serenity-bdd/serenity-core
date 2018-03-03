@@ -181,57 +181,14 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         if (!isEnabled()) {
             return;
         }
-        openIgnoringHtmlUnitScriptErrors(url);
+//        openIgnoringHtmlUnitScriptErrors(url);
+        getProxiedDriver().get(url);
+        setTimeouts();
     }
 
-    private void openIgnoringHtmlUnitScriptErrors(final String url) {
-        try {
-            ignoreUndefinedErrorsIfTheUrlIsCorrectFor(getProxiedDriver(), url);
-            setTimeouts();
-        } catch (WebDriverException e) {
-            if (!htmlunitScriptError(e)) {
-                throw e;
-            }
-        }
-    }
-
-    private void ignoreUndefinedErrorsIfTheUrlIsCorrectFor(WebDriver driver, String url) {
-        try {
-            driver.get(url);
-        } catch (WebDriverException potentiallyIgnorableError) {
-            if (!currentUrlFor(driver).equals(urlDeclaredIn(url))) {
-                throw potentiallyIgnorableError;
-            }
-        }
-    }
-
-    private URL urlDeclaredIn(String url) {
-        try {
-            return new URL(url);
-        } catch (MalformedURLException e) {
-            throw new WebDriverException(e);
-        }
-    }
-
-    private URL currentUrlFor(WebDriver driver) {
-        try {
-            return new URL(driver.getCurrentUrl());
-        } catch (MalformedURLException e) {
-            throw new WebDriverException(e);
-        }
-    }
 
     private void setTimeouts() {
         webDriverFactory.setTimeouts(getProxiedDriver(), implicitTimeout);
-    }
-
-    private boolean htmlunitScriptError(WebDriverException e) {
-        if ((e.getCause() != null) && (e.getCause() instanceof ScriptException)) {
-            LOGGER.warn("Ignoring HTMLUnit script error: " + e.getMessage());
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public String getCurrentUrl() {

@@ -32,6 +32,7 @@ public class Actor implements PerformsTasks, SkipNested {
         this.name = name;
     }
 
+
     public String toString() {
         return getName();
     }

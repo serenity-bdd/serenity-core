@@ -3,7 +3,6 @@ package net.thucydides.core.reports.html;
 import com.google.common.base.Preconditions;
 import net.serenitybdd.core.reports.styling.TagStylist;
 import net.serenitybdd.core.time.Stopwatch;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.images.ResizableImage;
 import net.thucydides.core.issues.IssueTracking;
@@ -15,7 +14,6 @@ import net.thucydides.core.model.screenshots.Screenshot;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.OutcomeFormat;
 import net.thucydides.core.reports.ReportOptions;
-import net.thucydides.core.reports.html.screenshots.ScreenshotFormatter;
 import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.tags.BreadcrumbTagFilter;
@@ -33,7 +31,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static net.thucydides.core.model.ReportType.HTML;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
@@ -104,7 +101,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
         TestOutcome storedTestOutcome = testOutcome.withQualifier(qualifier);
 
-        Map<String, Object> context = new HashMap();
+        Map<String, Object> context = new HashMap<>();
         addTestOutcomeToContext(storedTestOutcome, context);
 
         if (containsScreenshots(storedTestOutcome)) {
@@ -217,11 +214,11 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
         Preconditions.checkNotNull(getOutputDirectory());
 
-        List<Screenshot> screenshots = expandScreenshots(testOutcome.getScreenshots());
+        List<Screenshot> screenshots = testOutcome.getScreenshots();
 
         String screenshotReport = testOutcome.getReportName() + "_screenshots.html";
 
-        Map<String, Object> context = new HashMap();
+        Map<String, Object> context = new HashMap<>();
         addTestOutcomeToContext(testOutcome, context);
         addFormattersToContext(context);
         context.put("screenshots", screenshots);
@@ -229,45 +226,6 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
         generateReportPage(context, DEFAULT_ACCEPTANCE_TEST_SCREENSHOT, screenshotReport);
 
-    }
-
-    private List<Screenshot> expandScreenshots(List<Screenshot> screenshots) throws IOException {
-
-        File sourceDirectory = java.util.Optional.ofNullable(getSourceDirectory()).orElse(getOutputDirectory());
-        int maxHeight = maxScreenshotHeightIn(screenshots);
-
-        return screenshots.stream().map(
-                screenshot -> expandScreenshot(screenshot, sourceDirectory, maxHeight)
-        ).collect(Collectors.toList());
-    }
-
-    private Screenshot expandScreenshot(Screenshot screenshot, File sourceDirectory, int maxHeight) {
-        try {
-
-            return ScreenshotFormatter.forScreenshot(screenshot)
-                    .inDirectory(sourceDirectory)
-                    .keepOriginals(shouldKeepOriginalScreenshots())
-                    .expandToHeight(maxHeight);
-        } catch (IOException e) {
-            LOGGER.info("NOTE: Failed to convert scaled screenshot for {}: {}", screenshot.getFilename(), e.getMessage(), e);
-            return screenshot;
-        }
-    }
-
-    private boolean shouldKeepOriginalScreenshots() {
-        return ThucydidesSystemProperty.SERENITY_KEEP_UNSCALED_SCREENSHOTS.booleanFrom(getEnvironmentVariables());
-    }
-
-    private int maxScreenshotHeightIn(List<Screenshot> screenshots) throws IOException {
-
-        int maxHeight = 0;
-        for (Screenshot screenshot : screenshots) {
-            File screenshotFile = new File(getOutputDirectory(), screenshot.getFilename());
-            if (screenshotFile.exists() && isValidScreenshotFile(screenshotFile)) {
-                maxHeight = maxHeightOf(maxHeight, screenshotFile);
-            }
-        }
-        return maxHeight;
     }
 
     private boolean isValidScreenshotFile(File screenshotFile) {

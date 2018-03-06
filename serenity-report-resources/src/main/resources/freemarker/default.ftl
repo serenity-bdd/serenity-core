@@ -410,11 +410,11 @@
                     <#if testOutcome.hasScreenshots()>
                         <td width="100" class="${step.result}-text">
                         <#--<#if !step.isAGroup() && step.firstScreenshot??>-->
-                            <#if step.firstScreenshot??>
+                            <#if step.lastScreenshot??>
                                 <a href="${relativeLink!}${testOutcome.screenshotReportName}.html#screenshots?screenshot=${screenshotCount}">
                                     <!-- Added invalid href-attribute to img for imgpreviewer -->
-                                    <img src="${step.firstScreenshot.screenshot.name}"
-                                         href="${step.firstScreenshot.screenshot.name}"
+                                    <img src="${step.lastScreenshot.screenshot.name}"
+                                         href="${step.lastScreenshot.screenshot.name}"
                                          class="screenshot"
                                          width="48" height="48"/>
                                     <#assign screenshotCount = screenshotCount + step.screenshotCount />

@@ -16,14 +16,11 @@ public class ByTarget extends Target {
     }
 
     public WebElementFacade resolveFor(Actor theActor) {
-        TargetResolver resolver = TargetResolver.switchIFrameIfRequired(theActor, this);
-        WebElementFacade resolvedTarget = resolver.find(locator);
-        return resolvedTarget;
+        return TargetResolver.create(theActor, this).find(locator);
     }
 
     public List<WebElementFacade> resolveAllFor(Actor theActor) {
-        TargetResolver resolver = TargetResolver.switchIFrameIfRequired(theActor, this);
-        return resolver.findAll(locator);
+        return TargetResolver.create(theActor, this).findAll(locator);
     }
 
     public XPathOrCssTarget of(String... parameters) {

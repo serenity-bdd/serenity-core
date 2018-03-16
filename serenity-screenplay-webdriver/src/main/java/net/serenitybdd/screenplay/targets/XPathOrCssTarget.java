@@ -2,7 +2,6 @@ package net.serenitybdd.screenplay.targets;
 
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 
 import java.util.List;
 
@@ -15,12 +14,12 @@ public class XPathOrCssTarget extends Target {
         this.cssOrXPathSelector = cssOrXPathSelector;
     }
 
-    public WebElementFacade resolveFor(Actor theActor) {
-        return new TargetResolver(BrowseTheWeb.as(theActor).getDriver()).findBy(cssOrXPathSelector);
+    public WebElementFacade resolveFor(Actor actor) {
+        return TargetResolver.create(actor, this).findBy(cssOrXPathSelector);
     }
 
     public List<WebElementFacade> resolveAllFor(Actor actor) {
-        return new TargetResolver(BrowseTheWeb.as(actor).getDriver()).findAll(cssOrXPathSelector);
+        return TargetResolver.create(actor, this).findAll(cssOrXPathSelector);
     }
 
     public Target of(String... parameters) {

@@ -3,7 +3,6 @@ package net.serenitybdd.screenplay.targets;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,10 +15,10 @@ class IFrameSwitcher {
 
     private final static ThreadLocal<IFrameSwitcher> threadDriverManager = new ThreadLocal<>();
 
-    static synchronized IFrameSwitcher getInstance(WebDriver driver, TargetResolver resolver) {
+    static synchronized IFrameSwitcher getInstance(WebDriver driver) {
         IFrameSwitcher iFrameSwitcher = threadDriverManager.get();
         if (iFrameSwitcher == null) {
-            iFrameSwitcher = new IFrameSwitcher(driver, resolver);
+            iFrameSwitcher = new IFrameSwitcher(driver);
             threadDriverManager.set(iFrameSwitcher);
         }
         return iFrameSwitcher;
@@ -28,12 +27,10 @@ class IFrameSwitcher {
     private static final Logger LOGGER = LoggerFactory.getLogger(IFrameSwitcher.class);
 
     private WebDriver driver;
-    private TargetResolver resolver;
     private IFrame currentIFrame;
 
-    private IFrameSwitcher(WebDriver driver, TargetResolver resolver) {
+    private IFrameSwitcher(WebDriver driver) {
         this.driver = driver;
-        this.resolver = resolver;
     }
 
     void switchToIFrame(final Target target) {
@@ -62,7 +59,7 @@ class IFrameSwitcher {
 
     private void switchToChildFrame(Target target, String frame) {
         logFrameState(target, "switching to", frame);
-        resolver.waitFor(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frame));
+        driver.switchTo().frame(frame);
         logFrameState(target, "switched to", frame);
     }
 

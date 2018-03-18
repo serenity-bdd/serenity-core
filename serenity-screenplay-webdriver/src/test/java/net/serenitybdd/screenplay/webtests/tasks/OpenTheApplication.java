@@ -13,7 +13,5 @@ public class OpenTheApplication implements Performable {
     @Step("{0} opens the application")
     public <T extends Actor> void performAs(T actor) {
         actor.attemptsTo(Open.browserOn().the(homePage));
-        // or
-        actor.attemptsTo(Open.browserOn().the(HomePage.class));
     }
 }

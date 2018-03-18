@@ -169,7 +169,6 @@ subprojects {
         if (!JavaVersion.current().isJava8Compatible()) {
             jvmArgs '-XX:MaxPermSize=256m'
         }
-        systemProperties System.properties
     }
 
 //    shadowJar {

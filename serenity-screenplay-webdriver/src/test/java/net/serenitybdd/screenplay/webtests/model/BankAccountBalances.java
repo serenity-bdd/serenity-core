@@ -1,6 +1,6 @@
 package net.serenitybdd.screenplay.webtests.model;
 
-import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
 public class BankAccountBalances
 {
@@ -89,7 +89,7 @@ public class BankAccountBalances
     @Override
     public String toString()
     {
-        return MoreObjects.toStringHelper( this )
+        return Objects.toStringHelper( this )
                 .add( "accountName", name )
                 .add( "accountNumber", accountNumber )
                 .add( "bsb", bsb )

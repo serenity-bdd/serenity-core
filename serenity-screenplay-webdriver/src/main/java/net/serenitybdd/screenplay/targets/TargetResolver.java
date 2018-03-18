@@ -14,7 +14,7 @@ class TargetResolver extends PageObject {
     static TargetResolver create(Actor theActor, Target target) {
         WebDriver driver = BrowseTheWeb.as(theActor).getDriver();
         TargetResolver resolver = new TargetResolver(driver);
-        IFrameSwitcher iFrameSwitcher = IFrameSwitcher.getInstance(driver);
+        IFrameSwitcher iFrameSwitcher = IFrameSwitcher.getInstance(driver, resolver);
         iFrameSwitcher.switchToIFrame(target);
         return resolver;
     }

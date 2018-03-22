@@ -6,6 +6,11 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
+import io.restassured.filter.Filter
+import io.restassured.filter.FilterContext
+import io.restassured.response.Response
+import io.restassured.specification.FilterableRequestSpecification
+import io.restassured.specification.FilterableResponseSpecification
 import net.serenity.test.utils.rules.TestCase
 import net.serenitybdd.core.rest.RestQuery
 import net.thucydides.core.steps.BaseStepListener
@@ -139,5 +144,46 @@ class WhenRecordGetRequestsWithSerenityRest extends Specification {
             }
         and:
             result.statusCode(200)
+    }
+
+    def "Should record RestAssured get() method calls with parameter provided as a list and using a filter"() {
+        given:
+        def JsonObject json = new JsonObject()
+        json.addProperty("Weather", "rain")
+        json.addProperty("temperature", "+2")
+        def body = gson.toJson(json)
+        json.addProperty("SomeValue","value")
+        def requestBody = gson.toJson(json)
+
+        def base = "http://localhost:${wire.port()}"
+        def path = "/test/weather"
+        def url = "$base$path"
+
+        stubFor(WireMock.get(urlPathMatching("$path.*"))
+                .withRequestBody(matching(".*"))
+                .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "$APPLICATION_JSON")
+                .withBody(body)));
+        when:
+        def result = SerenityRest.given().filter(new MyFilter()).get("$url?status={status}", "available").then()
+        then: "The JSON request should be recorded in the test steps"
+        1 * test.firstListener().recordRestQuery(*_) >> { RestQuery query ->
+            assert "$query" == "GET $url?status=available"
+            assert query.method == GET
+            assert query.statusCode == 200
+            assert formatted(query.responseBody) == formatted(body)
+        }
+        and:
+        result.statusCode(200)
+    }
+
+
+    class MyFilter implements Filter {
+
+        @Override
+        public Response filter(FilterableRequestSpecification filterableRequestSpecification, FilterableResponseSpecification filterableResponseSpecification, FilterContext filterContext) {
+            return filterContext.next(filterableRequestSpecification,filterableResponseSpecification);
+        }
     }
 }

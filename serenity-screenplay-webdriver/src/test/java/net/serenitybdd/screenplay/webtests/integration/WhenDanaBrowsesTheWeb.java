@@ -1,23 +1,19 @@
 package net.serenitybdd.screenplay.webtests.integration;
 
-import com.paulhammant.ngwebdriver.ByAngular;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
-import net.serenitybdd.screenplay.actions.Click;
-import net.serenitybdd.screenplay.matchers.WebElementStateMatchers;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.waits.WaitUntil;
 import net.serenitybdd.screenplay.webtests.model.Client;
 import net.serenitybdd.screenplay.webtests.pages.ProfilePage;
+import net.serenitybdd.screenplay.webtests.questions.BankBalanceQuestion;
 import net.serenitybdd.screenplay.webtests.questions.ProfileQuestion;
 import net.serenitybdd.screenplay.webtests.questions.TheValidationMessages;
 import net.serenitybdd.screenplay.webtests.tasks.*;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
-import net.thucydides.junit.annotations.Concurrent;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
@@ -41,6 +37,8 @@ public class WhenDanaBrowsesTheWeb {
     WebDriver anotherBrowser;
 
     ProfileQuestion profile = new ProfileQuestion();
+
+    BankBalanceQuestion balances = new BankBalanceQuestion();
 
     @Test
     public void danaCanUpdateHerProfile() {
@@ -198,6 +196,18 @@ public class WhenDanaBrowsesTheWeb {
         );
     }
 
+    @Test
+    public void danaShouldBeAbleToSeeHerBankBalancesEvenIfTheyAreInANestedIFrame() {
+
+        Actor dana = new Actor("Dana");
+        dana.can(BrowseTheWeb.with(firstBrowser));
+
+        givenThat(dana).has(openedTheApplication);
+
+        when(dana).attemptsTo(viewHerProfile);
+        then(dana).should(seeThat(balances, displays("currentAccount", equalTo("£100.36"))));
+        and(dana).should(seeThat(balances, displays("savingsAccount", equalTo("£1024.12"))));
+    }
 
     @Test
     public void multipleUsersCanUpdateTheirProfilesSimultaneously() {

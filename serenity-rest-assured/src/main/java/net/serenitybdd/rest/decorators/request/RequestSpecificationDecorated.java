@@ -1,23 +1,21 @@
 package net.serenitybdd.rest.decorators.request;
 
-import io.restassured.internal.RequestSpecificationImpl;
-import io.restassured.response.Response;
-import io.restassured.specification.FilterableRequestSpecification;
-import net.serenitybdd.core.Serenity;
-import net.serenitybdd.core.rest.RestMethod;
-import net.serenitybdd.rest.stubs.ResponseStub;
-import net.serenitybdd.rest.utils.RestExecutionHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.restassured.filter.*;
+import io.restassured.internal.*;
+import io.restassured.response.*;
+import io.restassured.specification.*;
+import net.serenitybdd.core.*;
+import net.serenitybdd.core.rest.*;
+import net.serenitybdd.rest.stubs.*;
+import net.serenitybdd.rest.utils.*;
+import org.slf4j.*;
 
-import java.net.URI;
-import java.net.URL;
-import java.util.Map;
+import java.net.*;
+import java.util.*;
 
-//import static io.restassured.internal.assertion.AssertParameter.notNull;
 import static net.serenitybdd.core.rest.RestMethod.*;
-import static net.thucydides.core.steps.StepEventBus.getEventBus;
-import static org.apache.http.util.Args.notNull;
+import static net.thucydides.core.steps.StepEventBus.*;
+import static org.apache.http.util.Args.*;
 
 /**
  * User: YamStranger
@@ -275,4 +273,15 @@ public abstract class RequestSpecificationDecorated extends RequestSpecification
     private Response stubbed() {
         return new ResponseStub();
     }
+
+    /**
+     * Add a filter that will be used in the request.
+     *
+     * @param filter The filter to add
+     * @return the decorated request specification
+     */
+    @Override
+    public RequestSpecification filter(Filter filter){
+        return RestDecorationHelper.decorate(core.filter(filter));
+    };
 }

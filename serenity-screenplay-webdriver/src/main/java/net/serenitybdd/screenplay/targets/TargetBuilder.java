@@ -2,9 +2,13 @@ package net.serenitybdd.screenplay.targets;
 
 import org.openqa.selenium.By;
 
+import java.util.Optional;
+
+import static java.util.Optional.empty;
+
 public class TargetBuilder<T> {
     private String targetElementName;
-    private IFrame iFrame;
+    private Optional<IFrame> iFrame=empty();
 
 
     public TargetBuilder(String targetElementName) {
@@ -12,12 +16,7 @@ public class TargetBuilder<T> {
     }
 
     public TargetBuilder inIFrame(IFrame iFrame) {
-        this.iFrame = iFrame;
-        return this;
-    }
-
-    public TargetBuilder inIFrame(String...iframes) {
-        this.iFrame = IFrame.withPath(iframes);
+        this.iFrame = Optional.ofNullable(iFrame);
         return this;
     }
 

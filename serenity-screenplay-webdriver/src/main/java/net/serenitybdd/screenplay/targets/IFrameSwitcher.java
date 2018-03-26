@@ -1,85 +1,47 @@
 package net.serenitybdd.screenplay.targets;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.util.Optional;
 
-import static com.google.common.collect.Lists.newArrayList;
-
+import static java.util.Optional.empty;
 
 class IFrameSwitcher {
 
-    private final static ThreadLocal<IFrameSwitcher> threadDriverManager = new ThreadLocal<>();
+    private static final Logger LOGGER = LoggerFactory.getLogger(IFrameSwitcher.class);
+    private final static ThreadLocal<IFrameSwitcher> frameSwitcher = new ThreadLocal<>();
+    private Optional<IFrame> currentIFrame = empty();
 
-    static synchronized IFrameSwitcher getInstance(WebDriver driver, TargetResolver resolver) {
-        IFrameSwitcher iFrameSwitcher = threadDriverManager.get();
+    static synchronized IFrameSwitcher getInstance() {
+        IFrameSwitcher iFrameSwitcher = frameSwitcher.get();
         if (iFrameSwitcher == null) {
-            iFrameSwitcher = new IFrameSwitcher(driver, resolver);
-            threadDriverManager.set(iFrameSwitcher);
+            iFrameSwitcher = new IFrameSwitcher();
+            frameSwitcher.set(iFrameSwitcher);
         }
         return iFrameSwitcher;
     }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IFrameSwitcher.class);
 
-    private WebDriver driver;
-    private TargetResolver resolver;
-    private IFrame currentIFrame;
-
-    private IFrameSwitcher(WebDriver driver, TargetResolver resolver) {
-        this.driver = driver;
-        this.resolver = resolver;
+    private IFrameSwitcher() {
     }
 
-    void switchToIFrame(final Target target) {
-        if (target.getIFrame() == null && this.currentIFrame != null) {
-            LOGGER.debug("'" + target + "' Switching from " + this.currentIFrame + " to default content");
+    void switchToIFrame(WebDriver driver, final Target target) {
+        if (target.getIFrame().equals(this.currentIFrame)) {
+            LOGGER.debug("{} already selected for {}", printIFrame(this.currentIFrame), target);
+        } else if (!target.getIFrame().isPresent() && this.currentIFrame.isPresent()) {
+            LOGGER.debug("switching from {} to {} for {}", printIFrame(this.currentIFrame), printIFrame(target.getIFrame()), target);
             driver.switchTo().defaultContent();
-            this.currentIFrame = null;
-        } else if (target.getIFrame() == null) {
-            LOGGER.debug("'" + target + "' - already switched to default content");
-        } else if (!target.getIFrame().equals(this.currentIFrame)) {
-            String childName = target.getIFrame().childName();
-            if (getWindowFrames().contains(childName)) {
-                switchToChildFrame(target, childName);
-            } else {
-                LOGGER.debug("'" + target + "' switching to default content before switching to " + target.getIFrame());
-                driver.switchTo().defaultContent();
-                for (String frame : target.getIFrame().path) {
-                    switchToChildFrame(target, frame);
-                }
-            }
-            this.currentIFrame = target.getIFrame();
+            this.currentIFrame = empty();
         } else {
-            LOGGER.debug("'" + target + "' already switched to " + this.currentIFrame);
+            target.getIFrame().ifPresent(iFrame -> iFrame.locators.forEach(frameLocator -> driver.switchTo().frame(driver.findElement(frameLocator))));
+            this.currentIFrame = target.getIFrame();
         }
     }
 
-    private void switchToChildFrame(Target target, String frame) {
-        logFrameState(target, "switching to", frame);
-        resolver.waitFor(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frame));
-        logFrameState(target, "switched to", frame);
-    }
-
-    private void logFrameState(Target target, String state, String targetFrame) {
-        List<String> frames = getWindowFrames();
-        LOGGER.debug("'" + target + "' " + state + " iframe " + targetFrame + ". " + frames.size() + " frame(s) exist" + (frames.size() == 0 ? "" : ": " + frames));
-    }
-
-    private List<String> getWindowFrames() {
-        List<String> frames = newArrayList();
-        for (WebElement frame : driver.findElements(By.tagName("iframe"))) {
-            String name = frame.getAttribute("name");
-            if (name != null && !name.isEmpty()) {
-                frames.add(name);
-            }
-        }
-        return frames;
+    private String printIFrame(Optional<IFrame> frame) {
+        return frame.map(IFrame::toString).orElse("default content");
     }
 
 }

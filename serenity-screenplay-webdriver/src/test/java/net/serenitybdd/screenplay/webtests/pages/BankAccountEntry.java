@@ -2,9 +2,10 @@ package net.serenitybdd.screenplay.webtests.pages;
 
 import net.serenitybdd.screenplay.targets.IFrame;
 import net.serenitybdd.screenplay.targets.Target;
+import org.openqa.selenium.By;
 
 public class BankAccountEntry {
-    private static IFrame PROFILE_BANK = IFrame.withPath("profile-bank");
+    private static IFrame PROFILE_BANK = IFrame.withPath(By.id("profile-bank"));
 
     public static final Target ACCOUNT_NAME = Target.the("account name").inIFrame(PROFILE_BANK).locatedBy("#accountName");
 

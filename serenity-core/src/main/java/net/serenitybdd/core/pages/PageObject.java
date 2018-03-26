@@ -1,8 +1,8 @@
 package net.serenitybdd.core.pages;
 
 import com.google.common.base.Predicate;
-import net.serenitybdd.core.collect.NewList;
 import com.paulhammant.ngwebdriver.NgWebDriver;
+import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;
@@ -42,10 +42,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static net.serenitybdd.core.selectors.Selectors.xpathOrCssSelector;
@@ -106,6 +104,7 @@ public abstract class PageObject {
             driver.manage().timeouts().implicitlyWait(waitForElementTimeout.in(MILLISECONDS), MILLISECONDS);
         }
     }
+
     private Duration getDefaultImplicitTimeout() {
         Integer configuredTimeout = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables);
         return new Duration(configuredTimeout, TimeUnit.MILLISECONDS);
@@ -158,7 +157,7 @@ public abstract class PageObject {
         return (T) this;
     }
 
-    public  <T extends PageObject> T withDriver(WebDriver driver) {
+    public <T extends PageObject> T withDriver(WebDriver driver) {
         return setDriver(driver);
     }
 
@@ -783,7 +782,7 @@ public abstract class PageObject {
         throw new WrongPageError(errorDetails);
     }
 
-    final public void openAt (String relativeUrl) {
+    final public void openAt(String relativeUrl) {
         openPageAtUrl(updateUrlWithBaseUrlIfDefined(relativeUrl));
         callWhenPageOpensMethods();
     }
@@ -792,11 +791,14 @@ public abstract class PageObject {
         openPageAtUrl(absoluteUrl);
         callWhenPageOpensMethods();
     }
+
     /**
      * Override this method
      */
     public void callWhenPageOpensMethods() {
-        if (StepEventBus.getEventBus().currentTestIsSuspended()) { return; }
+        if (StepEventBus.getEventBus().currentTestIsSuspended()) {
+            return;
+        }
 
         for (Method annotatedMethod : methodsAnnotatedWithWhenPageOpens()) {
             try {
@@ -937,7 +939,7 @@ public abstract class PageObject {
         List<WebElement> matchingWebElements = driver.findElements(bySelector);
 
         List<WebElementFacade> allElements = new ArrayList<>();
-        for(WebElement matchingElement : matchingWebElements) {
+        for (WebElement matchingElement : matchingWebElements) {
             allElements.add($(matchingElement));
         }
 

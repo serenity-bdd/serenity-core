@@ -25,11 +25,12 @@ import net.thucydides.core.logging.ThucydidesLogging;
 import net.thucydides.core.model.flags.FlagProvider;
 import net.thucydides.core.reports.json.JSONConverter;
 import net.thucydides.core.reports.json.gson.GsonJSONConverter;
+import net.thucydides.core.reports.remoteTesting.RemoteTestingLinkManager;
 import net.thucydides.core.reports.renderer.Asciidoc;
 import net.thucydides.core.reports.renderer.AsciidocMarkupRenderer;
 import net.thucydides.core.reports.renderer.MarkupRenderer;
-import net.thucydides.core.reports.saucelabs.LinkGenerator;
-import net.thucydides.core.reports.saucelabs.SaucelabsLinkGenerator;
+import net.thucydides.core.reports.remoteTesting.LinkGenerator;
+
 import net.thucydides.core.reports.templates.FreeMarkerTemplateManager;
 import net.thucydides.core.reports.templates.TemplateManager;
 import net.thucydides.core.requirements.ClasspathRequirementsProviderService;
@@ -57,7 +58,7 @@ public class ThucydidesModule extends AbstractModule {
         bind(Configuration.class).to(SystemPropertiesConfiguration.class).in(Singleton.class);
         bind(IssueTracking.class).to(SystemPropertiesIssueTracking.class).in(Singleton.class);
         bind(BatchManager.class).toProvider(BatchManagerProvider.class).in(Singleton.class);
-        bind(LinkGenerator.class).to(SaucelabsLinkGenerator.class).in(Singleton.class);
+        bind(LinkGenerator.class).to(RemoteTestingLinkManager.class).in(Singleton.class);
         bind(JSONConverter.class).to(GsonJSONConverter.class).in(Singleton.class);
 
         bind(TagProviderService.class).to(ClasspathTagProviderService.class).in(Singleton.class);

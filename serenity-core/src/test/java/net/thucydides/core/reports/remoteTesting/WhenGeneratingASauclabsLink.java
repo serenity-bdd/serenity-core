@@ -1,4 +1,4 @@
-package net.thucydides.core.reports.saucelabs;
+package net.thucydides.core.reports.remoteTesting;
 
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -14,8 +14,8 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.when;
 
 /**
- * A description goes here.
- * User: johnsmart
+ * Browserstack tests for link generation.
+ * User: johnsmart, bebef1987
  * Date: 8/03/12
  * Time: 8:18 AM
  */
@@ -41,38 +41,38 @@ public class WhenGeneratingASauclabsLink {
 
     @Test
     public void should_generate_a_simple_link_if_no_API_key_is_provided() {
-        environmentVariables.setProperty("saucelabs.url","http://username:accesskey@ondemand.saucelabs.com:80/wd/hub");
-        SaucelabsLinkGenerator saucelabsLinkGenerator = new SaucelabsLinkGenerator(environmentVariables);
+        environmentVariables.setProperty("saucelabs.url","http://username:accesskey@ondemand.remoteTesting.com:80/wd/hub");
+        RemoteTestingLinkManager remoteTestingLinkManager = new RemoteTestingLinkManager(environmentVariables);
 
-        String saucelabsLink = saucelabsLinkGenerator.linkFor(testOutcome);
+        String saucelabsLink = remoteTestingLinkManager.linkFor(testOutcome);
         assertThat(saucelabsLink, is("http://saucelabs.com/jobs/" + A_SESSION_ID));
     }
 
     @Test
     public void should_generate_no_link_if_the_session_id_is_unavailable() {
-        SaucelabsLinkGenerator saucelabsLinkGenerator = new SaucelabsLinkGenerator(environmentVariables);
+        RemoteTestingLinkManager remoteTestingLinkManager = new RemoteTestingLinkManager(environmentVariables);
 
-        String saucelabsLink = saucelabsLinkGenerator.linkFor(testOutcomeWithNoSessionId);
+        String saucelabsLink = remoteTestingLinkManager.linkFor(testOutcomeWithNoSessionId);
         assertThat(saucelabsLink, is(nullValue()));
     }
 
     @Test
     public void should_generate_no_link_if_the_saucelabs_links_are_not_activated() {
-        SaucelabsLinkGenerator saucelabsLinkGenerator = new SaucelabsLinkGenerator(environmentVariables);
+        RemoteTestingLinkManager remoteTestingLinkManager = new RemoteTestingLinkManager(environmentVariables);
 
-        String saucelabsLink = saucelabsLinkGenerator.linkFor(testOutcome);
+        String saucelabsLink = remoteTestingLinkManager.linkFor(testOutcome);
         assertThat(saucelabsLink, is(nullValue()));
     }
 
     @Test
     public void should_generate_a_link_with_hmac_authentication_if_an_API_key_is_provided() {
-        environmentVariables.setProperty("saucelabs.url","http://username:accesskey@ondemand.saucelabs.com:80/wd/hub");
+        environmentVariables.setProperty("saucelabs.url","http://username:accesskey@ondemand.remoteTesting.com:80/wd/hub");
         environmentVariables.setProperty("saucelabs.user.id","example_user");
         environmentVariables.setProperty("saucelabs.access.key","123456-asdf-8dcf81f1fc71");
 
-        SaucelabsLinkGenerator saucelabsLinkGenerator = new SaucelabsLinkGenerator(environmentVariables);
+        RemoteTestingLinkManager remoteTestingLinkManager = new RemoteTestingLinkManager(environmentVariables);
 
-        String saucelabsLink = saucelabsLinkGenerator.linkFor(testOutcome);
+        String saucelabsLink = remoteTestingLinkManager.linkFor(testOutcome);
 
         assertThat(saucelabsLink, is("https://saucelabs.com/jobs/5f9fef27854ca50a3c132ce331cb6034?auth=3fca4184e106622adf2d33d8023271c1"));
     }

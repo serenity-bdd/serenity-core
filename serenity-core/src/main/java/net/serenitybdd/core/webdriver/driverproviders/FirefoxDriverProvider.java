@@ -4,6 +4,7 @@ import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.webdriver.FirefoxOptionsEnhancer;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.serenitybdd.core.webdriver.servicepools.GeckoServicePool;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
@@ -83,7 +84,7 @@ public class FirefoxDriverProvider implements DriverProvider {
 
     private WebDriver newMarionetteDriver(DesiredCapabilities capabilities, EnvironmentVariables environmentVariables) {
         capabilities.setCapability("marionette", true);
-
+        capabilities.setCapability("headless", ThucydidesSystemProperty.HEADLESS_MODE.booleanFrom(environmentVariables, false));
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
 
         try {

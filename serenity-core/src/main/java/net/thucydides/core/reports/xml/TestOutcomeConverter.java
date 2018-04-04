@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -27,6 +28,8 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  * @author johnsmart
  */
 public class TestOutcomeConverter implements Converter {
+
+    private final static DateTimeFormatter TIMESTAMP_FORMAT = DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss");
 
     private static final String TITLE_FIELD = "title";
     private static final String NAME_FIELD = "name";
@@ -144,7 +147,8 @@ public class TestOutcomeConverter implements Converter {
     }
 
     private String formattedTimestamp(ZonedDateTime startTime) {
-        return startTime.toString();
+        String timeStamp = TIMESTAMP_FORMAT.format(startTime);
+        return timeStamp;
     }
 
     private String escape(String attribute) {

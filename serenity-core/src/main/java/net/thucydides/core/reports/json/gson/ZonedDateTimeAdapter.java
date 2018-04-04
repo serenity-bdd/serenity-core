@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ZonedDateTimeAdapter implements JsonDeserializer<ZonedDateTime>, JsonSerializer<ZonedDateTime> {
     @Override
@@ -32,6 +33,6 @@ public class ZonedDateTimeAdapter implements JsonDeserializer<ZonedDateTime>, Js
 
     @Override
     public JsonElement serialize(ZonedDateTime src, Type typeOfSrc, JsonSerializationContext context) {
-        return new JsonPrimitive(src.toEpochSecond());
+        return new JsonPrimitive(src.toString());
     }
 }

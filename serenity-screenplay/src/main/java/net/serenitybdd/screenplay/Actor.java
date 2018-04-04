@@ -34,7 +34,7 @@ public class Actor implements PerformsTasks, SkipNested {
 
 
     public String toString() {
-        return getName();
+        return getNameOrPronoun();
     }
 
     public static Actor named(String name) {
@@ -42,6 +42,10 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     public String getName() {
+        return name;
+    }
+
+    public String getNameOrPronoun() {
         return (preferredPronoun != null) ? preferredPronoun : name;
     }
 

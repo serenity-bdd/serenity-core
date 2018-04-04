@@ -249,6 +249,14 @@ public class TestStep implements Cloneable {
         }
     }
 
+    public ScreenshotAndHtmlSource getLastScreenshot() {
+        if ((screenshots != null) && (!screenshots.isEmpty())) {
+            return screenshots.get(screenshots.size() - 1);
+        } else {
+            return null;
+        }
+    }
+
     public boolean needsScreenshots() {
         return (!isAGroup() && getScreenshots() != null);
     }

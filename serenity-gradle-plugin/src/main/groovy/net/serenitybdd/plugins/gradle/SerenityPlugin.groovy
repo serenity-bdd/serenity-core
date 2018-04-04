@@ -14,11 +14,15 @@ import org.gradle.api.Project
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class SerenityPlugin implements Plugin<Project> {
 
     Path reportDirectory
     Path historyDirectory
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Override
     void apply(Project project) {
@@ -50,11 +54,14 @@ class SerenityPlugin implements Plugin<Project> {
             group = 'Serenity BDD'
             description = "Checks the Serenity reports and fails the build if there are test failures (run automatically with 'check')"
 
+            reportDirectory = prepareReportDirectory(project)
+
+            log.info("SerenityPlugin:checkOutcomes: reportDirectory = ${reportDirectory}")
+
             inputs.files reportDirectory
 
             doLast {
                 updateProperties(project)
-                reportDirectory = prepareReportDirectory(project)
                 logger.lifecycle("Checking serenity results for ${project.serenity.projectKey} in directory $reportDirectory")
                 if (reportDirectory.toFile().exists()) {
                     def checker = new ResultChecker(reportDirectory.toFile())

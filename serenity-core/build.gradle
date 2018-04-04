@@ -148,7 +148,8 @@ dependencies {
         exclude group: 'junit', module: 'junit-dep'
     }
     compile "com.jhlabs:filters:${jhlabfiltersVersion}"
-    compile("org.asciidoctor:asciidoctor-java-integration:${asciidocVersion}") {
+
+    compile("org.asciidoctor:asciidoctorj:${asciidoctorVersion}"){
         exclude group: 'com.beust', module: 'jcommander'
     }
 

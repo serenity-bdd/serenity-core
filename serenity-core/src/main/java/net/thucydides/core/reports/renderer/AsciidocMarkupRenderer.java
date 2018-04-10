@@ -5,6 +5,8 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
 
+import java.util.Optional;
+
 import static org.asciidoctor.Asciidoctor.Factory.create;
 
 public class AsciidocMarkupRenderer implements MarkupRenderer {
@@ -22,7 +24,10 @@ public class AsciidocMarkupRenderer implements MarkupRenderer {
 
     @Override
     public String render(String text) {
-        return getAsciidoctor().render(addAsciidocLineBreaks(text), getOptions());
+        String textToRender = Optional.ofNullable(text).orElse("");
+        return Optional.ofNullable(
+                getAsciidoctor().render(addAsciidocLineBreaks(textToRender), getOptions())
+        ).orElse("");
     }
 
 

@@ -22,7 +22,7 @@ import java.util.Set;
 
 public class JUnitXMLConverter {
 
-    private final static DateTimeFormatter TIMESTAMP_FORMAT = DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss");
+    private final static DateTimeFormatter TIMESTAMP_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
 
     public void write(String testCaseName, List<TestOutcome> outcomes, OutputStream outputStream) throws ParserConfigurationException, TransformerException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();

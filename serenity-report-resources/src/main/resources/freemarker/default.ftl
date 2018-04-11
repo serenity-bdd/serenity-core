@@ -130,11 +130,6 @@
                     <tr>
                         <td colspan="2" class="test-title-bar">
                             <span class="outcome-icon">${title_outcome_icon}</span>
-                        <#if (testOutcome.videoLink)??>
-                            <a href="${relativeLink!}${testOutcome.videoLink}"><img class="story-outcome-icon"
-                                                                                    src="images/video.png" width="25"
-                                                                                    height="25" alt="Video"/></a>
-                        </#if>
                             <span class="test-case-title">
                                 <#assign testOutcomeTitle = testOutcome.unqualified.titleWithLinks >
                                     <span class="${outcome_text!ignore_color}">
@@ -157,6 +152,13 @@
                             </div>
                         </#if>
                         </td>
+                        <#if (testOutcome.videoLink)??>
+                            <td valign="top">
+                              <a href="${relativeLink!}${testOutcome.videoLink}" class="tag">
+                                <i class="fa fa-video-camera fa-2x"></i>
+                              </a>
+                            </td>
+                        </#if>
                     </tr>
                 </table>
             </div>

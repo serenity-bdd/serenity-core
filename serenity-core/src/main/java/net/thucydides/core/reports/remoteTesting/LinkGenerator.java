@@ -1,4 +1,4 @@
-package net.thucydides.core.reports.saucelabs;
+package net.thucydides.core.reports.remoteTesting;
 
 import net.thucydides.core.model.TestOutcome;
 

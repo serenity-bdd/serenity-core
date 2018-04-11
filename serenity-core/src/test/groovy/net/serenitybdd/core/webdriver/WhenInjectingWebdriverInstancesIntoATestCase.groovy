@@ -1,12 +1,14 @@
 package net.serenitybdd.core.webdriver
 
 import net.serenitybdd.core.environment.ConfiguredEnvironment
+import net.serenitybdd.core.environment.WebDriverConfiguredEnvironment
 import net.thucydides.core.annotations.Managed
 import net.thucydides.core.annotations.TestCaseAnnotations
+import net.thucydides.core.configuration.WebDriverConfiguration
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
+import net.thucydides.core.webdriver.DriverConfiguration
 import net.thucydides.core.webdriver.SerenityWebdriverManager
-import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport
 import net.thucydides.core.webdriver.WebDriverFactory
 import spock.lang.Specification
@@ -14,7 +16,7 @@ import spock.lang.Specification
 class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
 
     EnvironmentVariables environmentVariables;
-    SystemPropertiesConfiguration configuration;
+    DriverConfiguration configuration;
     WebDriverFactory webdriverFactory;
 
     static class WithADefaultDriver {
@@ -24,7 +26,7 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
 
     def setup() {
         environmentVariables = new MockEnvironmentVariables();
-        configuration = new SystemPropertiesConfiguration(environmentVariables);
+        configuration = new WebDriverConfiguration(environmentVariables);
         webdriverFactory = new WebDriverFactory(environmentVariables)
         ThucydidesWebDriverSupport.initialize()
         ThucydidesWebDriverSupport.reset()
@@ -34,7 +36,7 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
 
     def "should inject @Managed driver field with the configured browser type by default if defined"() {
         given:
-            ConfiguredEnvironment.setTestEnvironmentVariables(environmentVariables)
+            WebDriverConfiguredEnvironment.setTestEnvironmentVariables(environmentVariables)
         when:
             environmentVariables.setProperty("webdriver.driver", "chrome")
             def testCase = new WithADefaultDriver();
@@ -46,10 +48,11 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
 
     def "should inject @Managed driver field with a firefox instance by default"() {
         given:
-        def testCase = new WithADefaultDriver();
-        def webdriverManager = new SerenityWebdriverManager(webdriverFactory, configuration)
+            WebDriverConfiguredEnvironment.setTestEnvironmentVariables(environmentVariables)
+            def testCase = new WithADefaultDriver();
+            def webdriverManager = new SerenityWebdriverManager(webdriverFactory, configuration)
         when:
-        TestCaseAnnotations.forTestCase(testCase).injectDrivers(webdriverManager)
+            TestCaseAnnotations.forTestCase(testCase).injectDrivers(webdriverManager)
         then:
         testCase.driver && testCase.driver.driverClass.name.contains("Firefox")
     }

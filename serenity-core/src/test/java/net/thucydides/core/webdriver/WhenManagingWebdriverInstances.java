@@ -1,19 +1,17 @@
 package net.thucydides.core.webdriver;
 
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.MockEnvironmentVariables;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.MockitoAnnotations;
-import org.openqa.selenium.firefox.FirefoxProfile;
+import net.thucydides.core.configuration.*;
+import net.thucydides.core.steps.*;
+import net.thucydides.core.util.*;
+import org.junit.*;
+import org.mockito.*;
+import org.openqa.selenium.firefox.*;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.*;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.*;
 
 public class WhenManagingWebdriverInstances {
 
@@ -23,7 +21,7 @@ public class WhenManagingWebdriverInstances {
 
     WebDriverFactory factory;
 
-    Configuration configuration; 
+    DriverConfiguration configuration;
 
     FirefoxProfile firefoxProfile;
 
@@ -33,7 +31,7 @@ public class WhenManagingWebdriverInstances {
 
         factory = new WebDriverFactory(environmentVariables);
 
-        configuration = new SystemPropertiesConfiguration(environmentVariables);
+        configuration = new WebDriverConfiguration(environmentVariables);
         
         webdriverManager = new SerenityWebdriverManager(factory, configuration);
         webdriverManager.closeAllDrivers();

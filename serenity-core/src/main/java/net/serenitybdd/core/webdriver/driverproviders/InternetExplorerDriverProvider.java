@@ -1,24 +1,20 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
-import net.serenitybdd.core.time.InternalSystemClock;
-import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
-import net.serenitybdd.core.webdriver.servicepools.InternetExplorerServicePool;
-import net.thucydides.core.fixtureservices.FixtureProviderService;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.CapabilityEnhancer;
-import net.thucydides.core.webdriver.stubs.WebDriverStub;
-import org.openqa.selenium.NoSuchSessionException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.serenitybdd.core.buildinfo.*;
+import net.serenitybdd.core.di.*;
+import net.serenitybdd.core.time.*;
+import net.serenitybdd.core.webdriver.servicepools.*;
+import net.thucydides.core.fixtureservices.*;
+import net.thucydides.core.steps.*;
+import net.thucydides.core.util.*;
+import net.thucydides.core.webdriver.*;
+import net.thucydides.core.webdriver.stubs.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.ie.*;
+import org.openqa.selenium.remote.*;
+import org.slf4j.*;
 
-import java.io.IOException;
+import java.io.*;
 
 public class InternetExplorerDriverProvider implements DriverProvider {
 
@@ -36,7 +32,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
 
     public InternetExplorerDriverProvider(FixtureProviderService fixtureProviderService) {
         this.fixtureProviderService = fixtureProviderService;
-        this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
+        this.driverProperties = WebDriverInjectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     @Override
@@ -47,7 +43,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         DesiredCapabilities desiredCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities());
-        driverProperties.registerCapabilities("iexplorer", desiredCapabilities);
+        driverProperties.registerCapabilities("iexplorer", capabilitiesToProperties(desiredCapabilities));
 
         try {
             return retryCreateDriverOnNoSuchSession(desiredCapabilities);

@@ -1,37 +1,33 @@
 package net.serenitybdd.core.pages;
 
-import com.google.common.base.Splitter;
+import com.google.common.base.*;
 import io.appium.java_client.*;
-import net.serenitybdd.core.time.InternalSystemClock;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.annotations.locators.MethodTiming;
-import net.thucydides.core.annotations.locators.WithConfigurableTimeout;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.ConfigurableTimeouts;
-import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
-import net.thucydides.core.webdriver.WebDriverFacade;
+import net.serenitybdd.core.time.*;
+import net.thucydides.core.*;
+import net.thucydides.core.annotations.locators.*;
+import net.thucydides.core.guice.*;
+import net.thucydides.core.steps.*;
+import net.thucydides.core.util.*;
+import net.thucydides.core.webdriver.*;
 import net.thucydides.core.webdriver.exceptions.*;
-import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
-import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
-import org.apache.commons.lang3.StringUtils;
+import net.thucydides.core.webdriver.javascript.*;
+import net.thucydides.core.webdriver.stubs.*;
+import org.apache.commons.lang3.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.interactions.internal.Coordinates;
-import org.openqa.selenium.interactions.internal.Locatable;
-import org.openqa.selenium.remote.RemoteWebElement;
-import org.openqa.selenium.support.pagefactory.ElementLocator;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.interactions.internal.*;
+import org.openqa.selenium.support.pagefactory.*;
 import org.openqa.selenium.support.ui.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.concurrent.*;
+import java.util.stream.*;
 
 import static net.serenitybdd.core.pages.WebElementExpectations.*;
-import static net.serenitybdd.core.selectors.Selectors.isXPath;
+import static net.serenitybdd.core.selectors.Selectors.*;
 
 
 /**

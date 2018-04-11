@@ -1,32 +1,21 @@
 package net.thucydides.core.annotations.locators;
 
-import io.appium.java_client.pagefactory.AndroidFindBy;
-import io.appium.java_client.pagefactory.AndroidFindBys;
-import io.appium.java_client.pagefactory.iOSFindBy;
-import io.appium.java_client.pagefactory.iOSFindBys;
+import io.appium.java_client.pagefactory.*;
 import net.serenitybdd.core.annotations.findby.FindBy;
-import net.serenitybdd.core.annotations.findby.di.CustomFindByAnnotationProviderService;
-import net.serenitybdd.core.pages.PageObject;
-import net.serenitybdd.core.pages.WebElementFacade;
-import net.serenitybdd.core.pages.WebElementFacadeImpl;
-import net.serenitybdd.core.pages.WidgetObject;
-import net.thucydides.core.guice.Injectors;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import net.serenitybdd.core.annotations.findby.di.*;
+import net.serenitybdd.core.di.*;
+import net.serenitybdd.core.pages.*;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.internal.Locatable;
-import org.openqa.selenium.internal.WrapsElement;
-import org.openqa.selenium.support.FindAll;
-import org.openqa.selenium.support.FindBys;
-import org.openqa.selenium.support.pagefactory.ElementLocator;
-import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
-import org.openqa.selenium.support.pagefactory.FieldDecorator;
-import org.openqa.selenium.support.pagefactory.internal.LocatingElementHandler;
-import org.openqa.selenium.support.pagefactory.internal.LocatingElementListHandler;
+import org.openqa.selenium.internal.*;
+import org.openqa.selenium.support.*;
+import org.openqa.selenium.support.pagefactory.*;
+import org.openqa.selenium.support.pagefactory.internal.*;
 
-import java.lang.annotation.Annotation;
+import java.lang.annotation.*;
 import java.lang.reflect.*;
-import java.util.Arrays;
-import java.util.List;
+import java.lang.reflect.Proxy;
+import java.util.*;
 
 public class SmartFieldDecorator implements FieldDecorator {
 
@@ -36,7 +25,7 @@ public class SmartFieldDecorator implements FieldDecorator {
     private CustomFindByAnnotationProviderService customFindByAnnotationProviderService;
 
     public SmartFieldDecorator(ElementLocatorFactory factory, WebDriver driver, PageObject pageObject) {
-       this(factory, driver, pageObject, Injectors.getInjector().getInstance(CustomFindByAnnotationProviderService.class));
+       this(factory, driver, pageObject, WebDriverInjectors.getInjector().getInstance(CustomFindByAnnotationProviderService.class));
     }
 
     public SmartFieldDecorator(ElementLocatorFactory factory, WebDriver driver, PageObject pageObject,

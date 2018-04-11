@@ -1,17 +1,12 @@
 package net.thucydides.core.webdriver;
 
-import net.thucydides.core.util.EnvironmentVariables;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.SessionId;
+import net.thucydides.core.util.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.remote.*;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.StringJoiner;
+import java.util.*;
 
-import static org.apache.commons.lang3.StringUtils.SPACE;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.*;
 
 /**
  * Manage WebDriver instances.
@@ -29,19 +24,19 @@ public class SerenityWebdriverManager implements WebdriverManager {
 
     private final WebDriverFactory webDriverFactory;
 
-    private final Configuration configuration;
+    private final DriverConfiguration<DriverConfiguration> configuration;
 
     private final String options;
 
     private String overridenDefaultDriverType = null;
 
 
-    public SerenityWebdriverManager(final WebDriverFactory webDriverFactory, final Configuration configuration) {
+    public SerenityWebdriverManager(final WebDriverFactory webDriverFactory, final DriverConfiguration configuration) {
         this(webDriverFactory, configuration, "");
     }
 
     public SerenityWebdriverManager(final WebDriverFactory webDriverFactory,
-                                    final Configuration configuration,
+                                    final DriverConfiguration configuration,
                                     final String options) {
         this.webDriverFactory = webDriverFactory;
         this.configuration = configuration;
@@ -56,7 +51,7 @@ public class SerenityWebdriverManager implements WebdriverManager {
      * @throws UnsupportedDriverException
      *             if the driver type is not supported.
      */
-    private static WebDriver newDriver(final Configuration configuration,
+    private static WebDriver newDriver(final DriverConfiguration configuration,
                                        final WebDriverFactory webDriverFactory,
                                        final String driver,
                                        final String options) {
@@ -68,7 +63,7 @@ public class SerenityWebdriverManager implements WebdriverManager {
                                                            options);
     }
 
-    private static SupportedWebDriver getConfiguredWebDriverWithOverride(final Configuration configuration,
+    private static SupportedWebDriver getConfiguredWebDriverWithOverride(final DriverConfiguration configuration,
                                                                          final String driver) {
         if (isEmpty(driver)) {
             return configuration.getDriverType();
@@ -219,7 +214,7 @@ public class SerenityWebdriverManager implements WebdriverManager {
         return getWebdriverByName(name,configuration.getDriverType().name());
     }
 
-    private static WebDriver instantiatedThreadLocalWebDriver(final Configuration configuration,
+    private static WebDriver instantiatedThreadLocalWebDriver(final DriverConfiguration configuration,
                                                               final WebDriverFactory webDriverFactory,
                                                               final String driver,
                                                               final String options) {

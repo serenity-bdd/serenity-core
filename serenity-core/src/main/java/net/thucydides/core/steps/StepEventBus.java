@@ -36,9 +36,7 @@ public class StepEventBus {
     private static final String CORE_THUCYDIDES_PACKAGE = "net.thucydides.core";
     private static final Logger LOGGER = LoggerFactory.getLogger(StepEventBus.class);
 
-    public static final String TEST_SOURCE_JUNIT = "JUnit";
-    public static final String TEST_SOURCE_JBEHAVE = "JBehave";
-    public static final String TEST_SOURCE_CUCUMBER = "Cucumber";
+
 
     /**
      * The event bus used to inform listening classes about when tests and test steps start and finish.

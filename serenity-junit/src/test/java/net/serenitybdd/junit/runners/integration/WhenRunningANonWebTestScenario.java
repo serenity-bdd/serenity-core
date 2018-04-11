@@ -19,7 +19,6 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 import org.mockito.MockitoAnnotations;
@@ -31,7 +30,6 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.*;
 
 public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
 

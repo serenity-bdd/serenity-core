@@ -1,14 +1,12 @@
 package net.thucydides.core.webdriver;
 
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.thucydides.core.annotations.TestCaseAnnotations;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.steps.StepAnnotations;
-import net.thucydides.core.steps.StepFactory;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.SessionId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.serenitybdd.core.environment.*;
+import net.thucydides.core.annotations.*;
+import net.thucydides.core.pages.*;
+import net.thucydides.core.steps.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.remote.*;
+import org.slf4j.*;
 
 /**
  * A utility class that provides services to initialize web testing and reporting-related fields in arbitrary objects.
@@ -40,7 +38,7 @@ public class ThucydidesWebDriverSupport {
 
     private static WebdriverManager newWebdriverManager() {
         WebDriverFactory webDriverFactoryForThisThread = new WebDriverFactory();
-        Configuration globalConfiguration = ConfiguredEnvironment.getConfiguration();
+        DriverConfiguration globalConfiguration = WebDriverConfiguredEnvironment.getDriverConfiguration();
 
         return new SerenityWebdriverManager(webDriverFactoryForThisThread, globalConfiguration);
     }
@@ -166,7 +164,7 @@ public class ThucydidesWebDriverSupport {
         }
     }
 
-    public static WebdriverManager getWebdriverManager(WebDriverFactory webDriverFactory, Configuration configuration) {
+    public static WebdriverManager getWebdriverManager(WebDriverFactory webDriverFactory, DriverConfiguration configuration) {
         initialize(new SerenityWebdriverManager(webDriverFactory, configuration), "");
         return webdriverManagerThreadLocal.get();
     }

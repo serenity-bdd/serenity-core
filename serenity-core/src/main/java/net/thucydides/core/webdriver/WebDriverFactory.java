@@ -1,28 +1,25 @@
 package net.thucydides.core.webdriver;
 
-import io.appium.java_client.AppiumDriver;
-import net.serenitybdd.core.exceptions.SerenityManagedException;
-import net.serenitybdd.core.pages.DefaultTimeouts;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.fixtureservices.FixtureException;
-import net.thucydides.core.fixtureservices.FixtureProviderService;
-import net.thucydides.core.fixtureservices.FixtureService;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.capabilities.SaucelabsRemoteDriverCapabilities;
+import io.appium.java_client.*;
+import net.serenitybdd.core.di.*;
+import net.serenitybdd.core.exceptions.*;
+import net.serenitybdd.core.pages.*;
 import net.serenitybdd.core.webdriver.driverproviders.*;
-import net.thucydides.core.webdriver.redimension.RedimensionBrowser;
-import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.ui.Duration;
+import net.thucydides.core.*;
+import net.thucydides.core.fixtureservices.*;
+import net.thucydides.core.guice.*;
+import net.thucydides.core.util.*;
+import net.thucydides.core.webdriver.capabilities.*;
+import net.thucydides.core.webdriver.redimension.*;
+import org.apache.commons.lang3.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.remote.*;
+import org.openqa.selenium.support.ui.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 
-import static net.thucydides.core.webdriver.DriverStrategySelector.inEnvironment;
+import static net.thucydides.core.webdriver.DriverStrategySelector.*;
 
 /**
  * Provides an instance of a supported WebDriver.
@@ -51,7 +48,7 @@ public class WebDriverFactory {
 
     public WebDriverFactory(EnvironmentVariables environmentVariables) {
         this(environmentVariables,
-            Injectors.getInjector().getInstance(FixtureProviderService.class));
+            WebDriverInjectors.getInjector().getInstance(FixtureProviderService.class));
     }
 
     public WebDriverFactory(EnvironmentVariables environmentVariables,
@@ -60,7 +57,7 @@ public class WebDriverFactory {
         this.fixtureProviderService = fixtureProviderService;
         this.sauceRemoteDriverCapabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
         this.timeoutStack = new TimeoutStack();
-        this.closeBrowser = Injectors.getInjector().getInstance(CloseBrowser.class);
+        this.closeBrowser = WebDriverInjectors.getInjector().getInstance(CloseBrowser.class);
     }
 
     /**
@@ -155,9 +152,11 @@ public class WebDriverFactory {
 
     public static String getDriverFrom(EnvironmentVariables environmentVariables) {
         String driver = ThucydidesSystemProperty.WEBDRIVER_DRIVER.from(environmentVariables);
+        System.out.println("GetDriver from 1" + driver);
         if (driver == null) {
             driver = ThucydidesSystemProperty.DRIVER.from(environmentVariables);
         }
+        System.out.println("GetDriver from 1" + driver);
         return driver;
     }
 

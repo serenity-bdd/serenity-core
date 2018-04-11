@@ -2,7 +2,10 @@ package net.thucydides.core.reports.json
 
 import net.serenitybdd.core.rest.RestMethod
 import net.serenitybdd.core.rest.RestQuery
-import net.thucydides.core.annotations.*
+import net.thucydides.core.annotations.Feature
+import net.thucydides.core.annotations.Issue
+import net.thucydides.core.annotations.Issues
+import net.thucydides.core.annotations.WithTag
 import net.thucydides.core.digest.Digest
 import net.thucydides.core.issues.IssueTracking
 import net.thucydides.core.model.*
@@ -12,10 +15,8 @@ import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.integration.TestStepFactory
 import net.thucydides.core.reports.json.gson.GsonJSONConverter
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource
-import net.thucydides.core.steps.StepEventBus
+import net.thucydides.core.steps.TestSourceType
 import net.thucydides.core.util.MockEnvironmentVariables
-import org.joda.time.DateTime
-import org.joda.time.LocalDateTime
 import org.junit.ComparisonFailure
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
@@ -774,14 +775,14 @@ class WhenStoringTestOutcomesAsJSON extends Specification {
         given:
         def testOutcome = TestOutcome.forTest("should_do_this", ATestScenarioWithIssues.class)
         testOutcome.startTime = FIRST_OF_JANUARY
-        testOutcome.setTestSource(StepEventBus.TEST_SOURCE_JUNIT)
+        testOutcome.setTestSource(TestSourceType.TEST_SOURCE_JUNIT.getValue())
 
         when:
         def jsonReport = reporter.generateReportFor(testOutcome)
         and:
         TestOutcome reloadedOutcome = loader.loadReportFrom(jsonReport).get()
         then:
-        reloadedOutcome.getTestSource() == StepEventBus.TEST_SOURCE_JUNIT
+        reloadedOutcome.getTestSource() == TestSourceType.TEST_SOURCE_JUNIT.getValue()
     }
 
 }

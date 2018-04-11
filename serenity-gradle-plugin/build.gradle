@@ -49,5 +49,6 @@ task copySerenityJunit(dependsOn: ':serenity-junit:jar') {
 }
 
 dependencies {
+    compile project(':serenity-model')
     compile project(':serenity-core')
 }

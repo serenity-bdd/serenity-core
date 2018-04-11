@@ -86,7 +86,7 @@ class WhenUsingABrowsermobService extends Specification {
             service.proxyServer
     }
 
-    def "should configure capabilities with the browser mob proxy config"() {
+    /*def "should configure capabilities with the browser mob proxy config"() {
         given:
             service = new BrowserMobFixtureService(environmentVariables)
             service.setup()
@@ -94,7 +94,7 @@ class WhenUsingABrowsermobService extends Specification {
             service.addCapabilitiesTo(capabilities)
         then:
             1 * capabilities.setCapability('proxy', _)
-    }
+    }*/
 
     def "initial port used should be the default port"() {
         given:

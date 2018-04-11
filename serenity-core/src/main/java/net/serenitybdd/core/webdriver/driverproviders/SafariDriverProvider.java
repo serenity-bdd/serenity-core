@@ -1,17 +1,16 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.fixtureservices.FixtureProviderService;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.CapabilityEnhancer;
-import net.thucydides.core.webdriver.stubs.WebDriverStub;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.safari.SafariDriver;
-import org.openqa.selenium.safari.SafariOptions;
+import net.serenitybdd.core.buildinfo.*;
+import net.serenitybdd.core.di.*;
+import net.thucydides.core.*;
+import net.thucydides.core.fixtureservices.*;
+import net.thucydides.core.steps.*;
+import net.thucydides.core.util.*;
+import net.thucydides.core.webdriver.*;
+import net.thucydides.core.webdriver.stubs.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.remote.*;
+import org.openqa.selenium.safari.*;
 
 public class SafariDriverProvider implements DriverProvider {
 
@@ -21,7 +20,7 @@ public class SafariDriverProvider implements DriverProvider {
 
     public SafariDriverProvider(FixtureProviderService fixtureProviderService) {
         this.fixtureProviderService = fixtureProviderService;
-        this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
+        this.driverProperties = WebDriverInjectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     @Override
@@ -37,7 +36,7 @@ public class SafariDriverProvider implements DriverProvider {
         safariOptions.useCleanSession(useCleanSession);
 
         SafariDriver driver = new SafariDriver(safariOptions);
-        driverProperties.registerCapabilities("safari", driver.getCapabilities());
+        driverProperties.registerCapabilities("safari", capabilitiesToProperties(driver.getCapabilities()));
         return driver;
     }
 }

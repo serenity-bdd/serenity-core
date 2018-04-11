@@ -1,21 +1,19 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
-import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool;
-import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
-import net.thucydides.core.fixtureservices.FixtureProviderService;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.CapabilityEnhancer;
-import net.thucydides.core.webdriver.stubs.WebDriverStub;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.serenitybdd.core.buildinfo.*;
+import net.serenitybdd.core.di.*;
+import net.serenitybdd.core.webdriver.servicepools.*;
+import net.thucydides.core.fixtureservices.*;
+import net.thucydides.core.steps.*;
+import net.thucydides.core.util.*;
+import net.thucydides.core.webdriver.*;
+import net.thucydides.core.webdriver.stubs.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.*;
+import org.openqa.selenium.remote.*;
+import org.slf4j.*;
 
-import java.io.IOException;
+import java.io.*;
 
 public class ChromeDriverProvider implements DriverProvider {
 
@@ -33,7 +31,7 @@ public class ChromeDriverProvider implements DriverProvider {
 
     public ChromeDriverProvider(FixtureProviderService fixtureProviderService) {
         this.fixtureProviderService = fixtureProviderService;
-        this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
+        this.driverProperties = WebDriverInjectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     @Override
@@ -42,7 +40,7 @@ public class ChromeDriverProvider implements DriverProvider {
             return new WebDriverStub();
         }
         DesiredCapabilities capabilities = requestedChromeCapabilities(options, environmentVariables);
-        driverProperties.registerCapabilities("chrome", capabilities);
+        driverProperties.registerCapabilities("chrome", capabilitiesToProperties(capabilities));
 
         try {
             return getDriverServicePool().newDriver(capabilities);

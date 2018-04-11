@@ -1,45 +1,41 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.strings.Joiner;
-import com.google.inject.Injector;
-import net.serenitybdd.core.PendingStepException;
-import net.serenitybdd.core.exceptions.TheErrorType;
-import net.serenitybdd.core.photography.Darkroom;
-import net.serenitybdd.core.photography.Photographer;
-import net.serenitybdd.core.photography.ScreenshotPhoto;
-import net.serenitybdd.core.photography.SoundEngineer;
-import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
-import net.serenitybdd.core.rest.RestQuery;
-import net.serenitybdd.core.time.SystemClock;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.annotations.TestAnnotations;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.junit.SerenityJUnitTestCase;
+import com.google.inject.*;
+import net.serenitybdd.core.*;
+import net.serenitybdd.core.di.*;
+import net.serenitybdd.core.exceptions.*;
+import net.serenitybdd.core.photography.*;
+import net.serenitybdd.core.photography.bluring.*;
+import net.serenitybdd.core.rest.*;
+import net.serenitybdd.core.strings.*;
+import net.serenitybdd.core.time.*;
+import net.thucydides.core.*;
+import net.thucydides.core.annotations.*;
+import net.thucydides.core.junit.*;
 import net.thucydides.core.model.*;
-import net.thucydides.core.model.failures.FailureAnalysis;
-import net.thucydides.core.model.screenshots.ScreenshotPermission;
-import net.thucydides.core.model.stacktrace.FailureCause;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.core.model.Story;
+import net.thucydides.core.model.failures.*;
+import net.thucydides.core.model.screenshots.*;
+import net.thucydides.core.model.stacktrace.*;
+import net.thucydides.core.pages.*;
+import net.thucydides.core.screenshots.*;
 import net.thucydides.core.screenshots.ScreenshotException;
 import net.thucydides.core.webdriver.*;
-import org.mockito.Mockito;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.SessionId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mockito.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.remote.*;
+import org.slf4j.*;
 
-import java.io.File;
-import java.lang.reflect.Method;
-import java.nio.file.Path;
+import java.io.*;
+import java.lang.reflect.*;
+import java.nio.file.*;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.*;
-import static net.thucydides.core.model.Stories.findStoryFrom;
+import static net.thucydides.core.model.Stories.*;
 import static net.thucydides.core.model.TestResult.*;
-import static net.thucydides.core.steps.BaseStepListener.ScreenshotType.MANDATORY_SCREENSHOT;
-import static net.thucydides.core.steps.BaseStepListener.ScreenshotType.OPTIONAL_SCREENSHOT;
+import static net.thucydides.core.steps.BaseStepListener.ScreenshotType.*;
 
 /**
  * Observes the test run and stores test run details for later reporting.
@@ -225,7 +221,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     public BaseStepListener(final File outputDirectory) {
-        this(outputDirectory, Injectors.getInjector());
+        this(outputDirectory, WebDriverInjectors.getInjector());
     }
 
     public BaseStepListener(final File outputDirectory, Injector injector) {
@@ -240,7 +236,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         this.clock = injector.getInstance(SystemClock.class);
         this.configuration = injector.getInstance(Configuration.class);
         //this.screenshotProcessor = injector.getInstance(ScreenshotProcessor.class);
-        this.closeBrowsers = Injectors.getInjector().getInstance(CloseBrowser.class);
+        this.closeBrowsers = injector.getInstance(CloseBrowser.class);
 
     }
 

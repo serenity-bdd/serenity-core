@@ -1,26 +1,22 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
-import net.serenitybdd.core.webdriver.FirefoxOptionsEnhancer;
-import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
-import net.serenitybdd.core.webdriver.servicepools.GeckoServicePool;
-import net.thucydides.core.fixtureservices.FixtureProviderService;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.CapabilityEnhancer;
-import net.thucydides.core.webdriver.stubs.WebDriverStub;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.serenitybdd.core.buildinfo.*;
+import net.serenitybdd.core.di.*;
+import net.serenitybdd.core.webdriver.*;
+import net.serenitybdd.core.webdriver.servicepools.*;
+import net.thucydides.core.fixtureservices.*;
+import net.thucydides.core.steps.*;
+import net.thucydides.core.util.*;
+import net.thucydides.core.webdriver.*;
+import net.thucydides.core.webdriver.stubs.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.firefox.*;
+import org.openqa.selenium.remote.*;
+import org.slf4j.*;
 
-import java.io.IOException;
+import java.io.*;
 
-import static net.thucydides.core.ThucydidesSystemProperty.USE_GECKO_DRIVER;
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_GECKO_DRIVER;
+import static net.thucydides.core.ThucydidesSystemProperty.*;
 
 public class FirefoxDriverProvider implements DriverProvider {
 
@@ -41,7 +37,7 @@ public class FirefoxDriverProvider implements DriverProvider {
 
     public FirefoxDriverProvider(FixtureProviderService fixtureProviderService) {
         this.fixtureProviderService = fixtureProviderService;
-        this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
+        this.driverProperties = WebDriverInjectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     @Override
@@ -55,7 +51,7 @@ public class FirefoxDriverProvider implements DriverProvider {
                 newMarionetteDriver(capabilities,environmentVariables) :
                 newFirefoxDriver(capabilities,environmentVariables);
 
-        driverProperties.registerCapabilities("firefox", capabilities);
+        driverProperties.registerCapabilities("firefox", capabilitiesToProperties(capabilities));
 
         return driver;
     }

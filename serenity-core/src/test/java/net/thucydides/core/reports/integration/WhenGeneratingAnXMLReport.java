@@ -1,35 +1,27 @@
 package net.thucydides.core.reports.integration;
 
-import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.*;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.annotations.Story;
-import net.thucydides.core.digest.Digest;
+import net.thucydides.core.digest.*;
 import net.thucydides.core.model.*;
-import net.thucydides.core.reports.AcceptanceTestReporter;
-import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.reports.xml.XMLTestOutcomeReporter;
-import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.ExtendedTemporaryFolder;
-import org.apache.commons.io.FileUtils;
-import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import sample.steps.FailingStep;
+import net.thucydides.core.reports.*;
+import net.thucydides.core.reports.xml.*;
+import net.thucydides.core.screenshots.*;
+import net.thucydides.core.steps.*;
+import net.thucydides.core.util.*;
+import org.apache.commons.io.*;
+import org.joda.time.*;
+import org.junit.*;
+import org.mockito.*;
+import sample.steps.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
-import static net.thucydides.core.hamcrest.XMLMatchers.isSimilarTo;
-import static net.thucydides.core.reports.integration.TestStepFactory.successfulTestStepCalled;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static net.thucydides.core.hamcrest.XMLMatchers.*;
+import static net.thucydides.core.reports.integration.TestStepFactory.*;
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
 public class WhenGeneratingAnXMLReport {
@@ -942,7 +934,7 @@ public class WhenGeneratingAnXMLReport {
     public void should_include_test_source()
             throws Exception {
         TestOutcome testOutcome = TestOutcome.forTest("a_simple_test_case", SomeTestScenario.class);
-        testOutcome.setTestSource(StepEventBus.TEST_SOURCE_JUNIT);
+        testOutcome.setTestSource(TestSourceType.TEST_SOURCE_JUNIT.getValue());
 
         TestStep step = TestStepFactory.failingTestStepCalled("step 1");
         step.failedWith(new FailingStep().failsWithMessage("Oh nose!"));
@@ -952,7 +944,7 @@ public class WhenGeneratingAnXMLReport {
         File xmlReport = reporter.generateReportFor(testOutcome);
         String generatedReportText = getStringFrom(xmlReport);
 
-        assertThat(generatedReportText, containsString(StepEventBus.TEST_SOURCE_JUNIT));
+        assertThat(generatedReportText, containsString(TestSourceType.TEST_SOURCE_JUNIT.getValue()));
     }
 
     private String getStringFrom(File reportFile) throws IOException {

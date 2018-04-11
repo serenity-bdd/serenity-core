@@ -1,7 +1,7 @@
 package net.thucydides.junit.runners
 
 import net.serenitybdd.junit.runners.SerenityRunner
-import net.thucydides.core.configuration.SystemPropertiesConfiguration
+import net.thucydides.core.configuration.WebDriverConfiguration
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.WebDriverFactory
 import org.junit.Rule
@@ -46,7 +46,7 @@ class WhenRecordingFailingTests extends Specification {
 
     def "should record failed tests in rerun file"() {
         given:
-            def runner = new SerenityRunner(ATestWithMoreTestMethods,webDriverFactory, new SystemPropertiesConfiguration().withEnvironmentVariables(environmentVariables))
+            def runner = new SerenityRunner(ATestWithMoreTestMethods,webDriverFactory, new WebDriverConfiguration(environmentVariables))
         when:
             runner.run(new RunNotifier())
         then:

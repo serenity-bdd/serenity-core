@@ -8,6 +8,7 @@ test {
 }
 
 dependencies {
+    compile project(':serenity-model')
     compile project(':serenity-core')
     compile "junit:junit:${junitVersion}"
     compile "org.hamcrest:hamcrest-core:${hamcrestVersion}"

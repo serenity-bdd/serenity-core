@@ -1,11 +1,11 @@
 package net.thucydides.samples;
 
-import net.serenitybdd.junit.runners.SerenityRunner;
+import net.serenitybdd.junit.runners.*;
 import net.thucydides.core.annotations.*;
-import net.thucydides.core.pages.Pages;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.openqa.selenium.WebDriver;
+import net.thucydides.core.pages.*;
+import org.junit.*;
+import org.junit.runner.*;
+import org.openqa.selenium.*;
 
 @RunWith(SerenityRunner.class)
 @UserStoryCode("US01")

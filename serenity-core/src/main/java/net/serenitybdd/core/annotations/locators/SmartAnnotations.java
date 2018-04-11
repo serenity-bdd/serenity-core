@@ -1,28 +1,22 @@
 package net.serenitybdd.core.annotations.locators;
 
-import io.appium.java_client.MobileBy;
+import io.appium.java_client.*;
 import io.appium.java_client.pagefactory.*;
-import net.serenitybdd.core.annotations.findby.By;
+import net.serenitybdd.core.annotations.findby.*;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.annotations.findby.How;
-import net.serenitybdd.core.annotations.findby.di.CustomFindByAnnotationProviderService;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.webdriver.MobilePlatform;
+import net.serenitybdd.core.annotations.findby.di.*;
+import net.serenitybdd.core.di.*;
+import net.thucydides.core.webdriver.*;
 import org.openqa.selenium.support.*;
-import org.openqa.selenium.support.pagefactory.Annotations;
-import org.openqa.selenium.support.pagefactory.ByChained;
+import org.openqa.selenium.support.pagefactory.*;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.annotation.*;
+import java.lang.reflect.*;
 import java.util.*;
 
-import static io.appium.java_client.remote.MobilePlatform.ANDROID;
-import static io.appium.java_client.remote.MobilePlatform.IOS;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-import static org.apache.commons.lang3.StringUtils.isNumeric;
+import static io.appium.java_client.remote.MobilePlatform.*;
+import static org.apache.commons.lang3.StringUtils.*;
 
 
 public class SmartAnnotations extends Annotations {
@@ -151,7 +145,7 @@ public class SmartAnnotations extends Annotations {
     }
 
     public SmartAnnotations(Field field, MobilePlatform platform) {
-        this(field, platform, Injectors.getInjector().getInstance(CustomFindByAnnotationProviderService.class));
+        this(field, platform, WebDriverInjectors.getInjector().getInstance(CustomFindByAnnotationProviderService.class));
     }
 
     public SmartAnnotations(Field field, MobilePlatform platform,

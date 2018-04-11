@@ -14,6 +14,8 @@ import org.junit.runner.notification.RunListener;
 import java.io.File;
 import java.util.*;
 
+import static net.thucydides.core.steps.TestSourceType.TEST_SOURCE_JUNIT;
+
 /**
  * Intercepts JUnit events and reports them to Thucydides.
  */
@@ -75,7 +77,7 @@ public class JUnitStepListener extends RunListener {
         if (testingThisTest(description)) {
             startTestSuiteForFirstTest(description);
             stepEventBus().clear();
-            stepEventBus().setTestSource(StepEventBus.TEST_SOURCE_JUNIT);
+            stepEventBus().setTestSource(TEST_SOURCE_JUNIT.getValue());
             stepEventBus().testStarted(
                     Optional.ofNullable(description.getMethodName()).orElse("Initialisation"),
                     description.getTestClass());

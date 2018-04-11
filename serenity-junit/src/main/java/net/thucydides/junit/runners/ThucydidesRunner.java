@@ -1,13 +1,10 @@
 package net.thucydides.junit.runners;
 
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.batches.BatchManager;
-import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.WebDriverFactory;
-import net.thucydides.core.webdriver.WebdriverManager;
-import org.junit.runners.model.InitializationError;
+import com.google.inject.*;
+import net.serenitybdd.junit.runners.*;
+import net.thucydides.core.batches.*;
+import net.thucydides.core.webdriver.*;
+import org.junit.runners.model.*;
 
 /**
  * @deprecated Replaced by SerenityRunner
@@ -32,11 +29,11 @@ public class ThucydidesRunner extends SerenityRunner {
         super(klass, webDriverFactory);
     }
 
-    public ThucydidesRunner(Class<?> klass, WebDriverFactory webDriverFactory, Configuration configuration) throws InitializationError {
+    public ThucydidesRunner(Class<?> klass, WebDriverFactory webDriverFactory, DriverConfiguration configuration) throws InitializationError {
         super(klass, webDriverFactory, configuration);
     }
 
-    public ThucydidesRunner(Class<?> klass, WebDriverFactory webDriverFactory, Configuration configuration, BatchManager batchManager) throws InitializationError {
+    public ThucydidesRunner(Class<?> klass, WebDriverFactory webDriverFactory, DriverConfiguration configuration, BatchManager batchManager) throws InitializationError {
         super(klass, webDriverFactory, configuration, batchManager);
     }
 
@@ -44,7 +41,7 @@ public class ThucydidesRunner extends SerenityRunner {
         super(klass, batchManager);
     }
 
-    public ThucydidesRunner(Class<?> klass, WebdriverManager webDriverManager, Configuration configuration, BatchManager batchManager) throws InitializationError {
+    public ThucydidesRunner(Class<?> klass, WebdriverManager webDriverManager, DriverConfiguration configuration, BatchManager batchManager) throws InitializationError {
         super(klass, webDriverManager, configuration, batchManager);
     }
 }

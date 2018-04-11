@@ -16,14 +16,9 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
-import static com.github.tomakehurst.wiremock.client.WireMock.matching
-import static com.github.tomakehurst.wiremock.client.WireMock.post
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
+import static com.github.tomakehurst.wiremock.client.WireMock.*
 import static net.serenitybdd.core.rest.RestMethod.*
 import static net.serenitybdd.rest.SerenityRest.rest
-import static com.github.tomakehurst.wiremock.client.WireMock.*
 import static net.serenitybdd.rest.SerenityRest.then
 
 class WhenRunningRestTestsThroughSerenity extends Specification {

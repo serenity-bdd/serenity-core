@@ -1,9 +1,9 @@
 package net.thucydides.core.webdriver;
 
+import net.thucydides.core.configuration.*;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.FileSystemUtils;
 import net.thucydides.core.util.MockEnvironmentVariables;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
@@ -34,7 +34,7 @@ public class StaticTestSite {
     public WebDriver open(String driverType) {
         environmentVariables.setProperty("chrome.switches","--homepage=about:blank,--no-first-run");
 
-        WebDriver driver = ThucydidesWebDriverSupport.getWebdriverManager(factory, new SystemPropertiesConfiguration(environmentVariables)).getWebdriver(driverType);
+        WebDriver driver = ThucydidesWebDriverSupport.getWebdriverManager(factory, new WebDriverConfiguration(environmentVariables)).getWebdriver(driverType);
         if (factory.usesSauceLabs()) {
             driver.get("http://wakaleo.com/thucydides-tests/" + homepage);
         } else {

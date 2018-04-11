@@ -1,10 +1,10 @@
 package net.thucydides.core.webdriver;
 
-import net.serenitybdd.core.pages.PageObject;
-import net.thucydides.core.guice.Injectors;
-import org.openqa.selenium.WebDriver;
+import net.serenitybdd.core.di.*;
+import net.serenitybdd.core.pages.*;
+import org.openqa.selenium.*;
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class DefaultPageObjectInitialiser extends AbstractObjectInitialiser<PageObject> {
 
@@ -12,7 +12,7 @@ public class DefaultPageObjectInitialiser extends AbstractObjectInitialiser<Page
 	
     public DefaultPageObjectInitialiser(WebDriver driver, long ajaxTimeoutInMilliseconds) {
     	super(driver, ajaxTimeoutInMilliseconds);
-    	this.elementProxyCreator = Injectors.getInjector().getInstance(ElementProxyCreator.class);
+    	this.elementProxyCreator = WebDriverInjectors.getInjector().getInstance(ElementProxyCreator.class);
     }
 
     public boolean apply(PageObject page) {

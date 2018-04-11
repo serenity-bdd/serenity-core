@@ -1,24 +1,12 @@
 package net.serenitybdd.junit.runners;
 
-import net.serenitybdd.core.collect.NewList;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import net.thucydides.core.batches.BatchManager;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.model.DataTableRow;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.WebDriverFactory;
-import net.thucydides.core.webdriver.WebdriverManager;
-import net.thucydides.junit.listeners.JUnitStepListener;
-import org.junit.runner.notification.RunNotifier;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.InitializationError;
-import org.junit.runners.model.Statement;
+import com.google.inject.*;
+import net.thucydides.core.batches.*;
+import net.thucydides.core.model.*;
+import net.thucydides.core.webdriver.*;
+import org.junit.runners.model.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: YamStranger
@@ -53,13 +41,13 @@ abstract class QualifiedTestsRunner extends SerenityRunner {
         this.test = test;
     }
 
-    public QualifiedTestsRunner(Class<?> klass, WebDriverFactory webDriverFactory, Configuration configuration, String qualifier, Object test) throws InitializationError {
+    public QualifiedTestsRunner(Class<?> klass, WebDriverFactory webDriverFactory, DriverConfiguration configuration, String qualifier, Object test) throws InitializationError {
         super(klass, webDriverFactory, configuration);
         this.qualifier = qualifier;
         this.test = test;
     }
 
-    public QualifiedTestsRunner(Class<?> klass, WebDriverFactory webDriverFactory, Configuration configuration, BatchManager batchManager, String qualifier, Object test) throws InitializationError {
+    public QualifiedTestsRunner(Class<?> klass, WebDriverFactory webDriverFactory, DriverConfiguration configuration, BatchManager batchManager, String qualifier, Object test) throws InitializationError {
         super(klass, webDriverFactory, configuration, batchManager);
         this.qualifier = qualifier;
         this.test = test;
@@ -71,14 +59,14 @@ abstract class QualifiedTestsRunner extends SerenityRunner {
         this.test = test;
     }
 
-    public QualifiedTestsRunner(Class<?> klass, WebdriverManager webDriverManager, Configuration configuration, BatchManager batchManager, String qualifier, Object test) throws InitializationError {
+    public QualifiedTestsRunner(Class<?> klass, WebdriverManager webDriverManager, DriverConfiguration configuration, BatchManager batchManager, String qualifier, Object test) throws InitializationError {
         super(klass, webDriverManager, configuration, batchManager);
         this.qualifier = qualifier;
         this.test = test;
     }
 
     public QualifiedTestsRunner(final Class<?> type,
-                         final Configuration configuration,
+                         final DriverConfiguration configuration,
                          final WebDriverFactory webDriverFactory,
                          final BatchManager batchManager) throws InitializationError {
         super(type, webDriverFactory, configuration, batchManager);

@@ -1,21 +1,19 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
-import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
-import net.serenitybdd.core.webdriver.servicepools.EdgeServicePool;
-import net.thucydides.core.fixtureservices.FixtureProviderService;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.CapabilityEnhancer;
-import net.thucydides.core.webdriver.stubs.WebDriverStub;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.serenitybdd.core.buildinfo.*;
+import net.serenitybdd.core.di.*;
+import net.serenitybdd.core.webdriver.servicepools.*;
+import net.thucydides.core.fixtureservices.*;
+import net.thucydides.core.steps.*;
+import net.thucydides.core.util.*;
+import net.thucydides.core.webdriver.*;
+import net.thucydides.core.webdriver.stubs.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.edge.*;
+import org.openqa.selenium.remote.*;
+import org.slf4j.*;
 
-import java.io.IOException;
+import java.io.*;
 
 public class EdgeDriverProvider implements DriverProvider {
 
@@ -33,7 +31,7 @@ public class EdgeDriverProvider implements DriverProvider {
 
     public EdgeDriverProvider(FixtureProviderService fixtureProviderService) {
         this.fixtureProviderService = fixtureProviderService;
-        this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
+        this.driverProperties = WebDriverInjectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     @Override
@@ -44,7 +42,7 @@ public class EdgeDriverProvider implements DriverProvider {
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         DesiredCapabilities desiredCapabilities = enhancer.enhanced(DesiredCapabilities.edge());
-        driverProperties.registerCapabilities("edge", desiredCapabilities);
+        driverProperties.registerCapabilities("edge", capabilitiesToProperties(desiredCapabilities));
 
         try {
             return getDriverServicePool().newDriver(desiredCapabilities);

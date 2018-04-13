@@ -1186,6 +1186,11 @@ public enum ThucydidesSystemProperty {
     FIREFOX_LOG_LEVEL,
 
     /**
+     * Set to true to activate the AcceptInsecureCertificates options for Chrome and Firefox.
+     */
+    ACCEPT_INSECURE_CERTIFICATES,
+
+    /**
      * The character to be used to separate firefox preference key-value pairs when using the "firefox.preferences" property.
      * By default this is a semicolon, but sometimes semicolon appears in the preference values.
      */

@@ -20,12 +20,15 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+import static net.thucydides.core.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
+
 public class InternetExplorerDriverProvider implements DriverProvider {
 
     private final DriverCapabilityRecord driverProperties;
     private static final Logger LOGGER = LoggerFactory.getLogger(InternetExplorerDriverProvider.class);
 
     private final DriverServicePool driverServicePool = new InternetExplorerServicePool();
+    private final EnvironmentVariables environmentVariables;
 
     private DriverServicePool getDriverServicePool() throws IOException {
         driverServicePool.ensureServiceIsRunning();
@@ -37,6 +40,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
     public InternetExplorerDriverProvider(FixtureProviderService fixtureProviderService) {
         this.fixtureProviderService = fixtureProviderService;
         this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
+        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
     }
 
     @Override
@@ -88,6 +92,10 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         defaults.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, false);
         defaults.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
         defaults.setJavascriptEnabled(true);
+
+        if (ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables,false)) {
+            defaults.acceptInsecureCerts();
+        }
         return defaults;
     }
 }

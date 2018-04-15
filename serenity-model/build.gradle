@@ -18,6 +18,9 @@ dependencies {
     compile "joda-time:joda-time:${jodaTimeVersion}"
     compile "commons-collections:commons-collections:${commonsCollectionsVersion}"
     compile "commons-io:commons-io:${commonsIoVersion}"
+    compile("commons-beanutils:commons-beanutils-core:${beanUtilsVersion}") {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
     compile "javax.validation:validation-api:${javaxValidationVersion}"
     compile "net.sf.opencsv:opencsv:${openCsvVersion}"
     compile "com.google.code.gson:gson:${gsonVersion}"
@@ -47,4 +50,10 @@ dependencies {
     compile 'es.nitaur.markdown:txtmark:0.16'
 
     testCompile project(':serenity-test-utils')
+    testCompile project(':serenity-sample-alternative-resources')
+    testCompile("org.spockframework:spock-core:${spockVersion}") {
+        exclude group: "junit"
+        exclude group: "org.codehaus.groovy"
+
+    }
 }

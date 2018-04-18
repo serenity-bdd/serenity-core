@@ -37,6 +37,8 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
         AddCustomCapabilities.startingWith("chrome.capabilities.").from(environmentVariables).to(capabilities);
 
+        SetProxyConfiguration.from(environmentVariables).in(capabilities);
+
         return capabilities;
     }
 

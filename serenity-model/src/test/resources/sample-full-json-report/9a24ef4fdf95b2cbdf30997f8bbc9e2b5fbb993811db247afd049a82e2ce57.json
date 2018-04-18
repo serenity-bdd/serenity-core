@@ -1,0 +1,88 @@
+{
+  "name": "Attempting to log on with a wrong password",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Given I am an authorized staff member",
+      "duration": 14,
+      "startTime": 1425438535750,
+      "result": "SUCCESS"
+    },
+    {
+      "number": 2,
+      "description": "When I log on using an incorrect password",
+      "duration": 3,
+      "startTime": 1425438535764,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 3,
+          "description": "Enters credentials: \u003cspan class\u003d\u0027step-parameter\u0027\u003e61128, wrong\u003c/span\u003e",
+          "duration": 0,
+          "startTime": 1425438535765,
+          "result": "IGNORED"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "description": "Then I should not be logged into the application",
+      "duration": 5,
+      "startTime": 1425438535767,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 5,
+          "description": "Should not be logged on",
+          "duration": 1,
+          "startTime": 1425438535769,
+          "result": "IGNORED"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "description": "And I should see an authentication error message",
+      "duration": 5007,
+      "startTime": 1425438535772,
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 7,
+          "description": "Should see authentication error message",
+          "duration": 5005,
+          "startTime": 1425438535773,
+          "result": "IGNORED"
+        }
+      ]
+    }
+  ],
+  "userStory": {
+    "id": "login-with-username-and-password",
+    "storyName": "Login with username and password",
+    "path": "login.feature",
+    "narrative": "In order to prevent unauthorized access to non-staff members\nAs a system admin\nI want valid users to authenticate before they access customer information",
+    "type": "feature"
+  },
+  "title": "Attempting to log on with an incorrect password",
+  "description": "",
+  "tags": [
+    {
+      "name": "Login with username and password",
+      "type": "feature"
+    },
+    {
+      "name": "PROJ-36",
+      "type": "issue"
+    },
+    {
+      "name": "Login",
+      "type": "story"
+    }
+  ],
+  "startTime": 1425438535749,
+  "duration": 5030,
+  "driver": "firefox",
+  "manual": false,
+  "result": "SUCCESS"
+}

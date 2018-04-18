@@ -1,0 +1,194 @@
+{
+  "name": "",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "Given I have searched for \u0027Docking station\u0027 in my region",
+      "duration": 11255,
+      "startTime": 1437566580530,
+      "screenshots": [
+        {
+          "screenshot": "1e9265e45314496ed31766e9dc220dea_NONE.png"
+        }
+      ],
+      "result": "SUCCESS",
+      "children": [
+        {
+          "number": 2,
+          "description": "Opens home page",
+          "duration": 1387,
+          "startTime": 1437566583604,
+          "screenshots": [
+            {
+              "screenshot": "b21c9c71311ecb3fa5d19459bf78c655_NONE.png"
+            }
+          ],
+          "result": "SUCCESS"
+        },
+        {
+          "number": 3,
+          "description": "Searches by keyword: \u003cspan class\u003d\u0027step-parameter\u0027\u003eDocking station\u003c/span\u003e",
+          "duration": 5705,
+          "startTime": 1437566584992,
+          "screenshots": [
+            {
+              "screenshot": "0f7e3e0434a6e67f2e8f7878f14e0dd9_NONE.png"
+            }
+          ],
+          "result": "SUCCESS"
+        },
+        {
+          "number": 4,
+          "description": "Filters by local region",
+          "duration": 778,
+          "startTime": 1437566590698,
+          "screenshots": [
+            {
+              "screenshot": "95a773012575ef5b90c20e619480634a_NONE.png"
+            }
+          ],
+          "result": "SUCCESS"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "description": "When I select item 1",
+      "duration": 2356,
+      "startTime": 1437566591786,
+      "exception": {
+        "errorType": "org.openqa.selenium.StaleElementReferenceException",
+        "message": "stale element reference: element is not attached to the page document\n  (Session info: chrome\u003d44.0.2403.89)\n  (Driver info: chromedriver\u003d2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961),platform\u003dMac OS X 10.10.4 x86_64) (WARNING: The server did not provide any stacktrace information)\nCommand duration or timeout: 377 milliseconds\nFor documentation on this error, please visit: http://seleniumhq.org/exceptions/stale_element_reference.html\nBuild info: version: \u00272.46.0\u0027, revision: \u002761506a4624b13675f24581e453592342b7485d71\u0027, time: \u00272015-06-04 10:22:50\u0027\nSystem info: host: \u0027Johns-MBP.gateway\u0027, ip: \u002710.0.0.53\u0027, os.name: \u0027Mac OS X\u0027, os.arch: \u0027x86_64\u0027, os.version: \u002710.10.4\u0027, java.version: \u00271.8.0_45\u0027\nDriver info: org.openqa.selenium.chrome.ChromeDriver\nCapabilities [{applicationCacheEnabled\u003dfalse, rotatable\u003dfalse, mobileEmulationEnabled\u003dfalse, chrome\u003d{userDataDir\u003d/var/folders/n6/hn81c_y52yz358j4hs6kzyj80000gn/T/.org.chromium.Chromium.F5LJ4j}, takesHeapSnapshot\u003dtrue, databaseEnabled\u003dfalse, handlesAlerts\u003dtrue, hasTouchScreen\u003dfalse, version\u003d44.0.2403.89, platform\u003dMAC, browserConnectionEnabled\u003dfalse, nativeEvents\u003dtrue, acceptSslCerts\u003dtrue, locationContextEnabled\u003dtrue, webStorageEnabled\u003dtrue, browserName\u003dchrome, takesScreenshot\u003dtrue, javascriptEnabled\u003dtrue, cssSelectorsEnabled\u003dtrue}]\nSession ID: dd1511d733f99e9d4b40341e1f66dc55",
+        "stackTrace": [
+          {
+            "declaringClass": "net.thucydides.showcase.cucumber.pages.SearchResultsPage",
+            "methodName": "selectListing",
+            "fileName": "SearchResultsPage.java",
+            "lineNumber": 51
+          },
+          {
+            "declaringClass": "net.thucydides.showcase.cucumber.steps.serenity.BuyerSteps",
+            "methodName": "selects_listing",
+            "fileName": "BuyerSteps.java",
+            "lineNumber": 51
+          },
+          {
+            "declaringClass": "net.thucydides.showcase.cucumber.steps.DisplayProductDetailsScenarioSteps",
+            "methodName": "whenISelectListingItem",
+            "fileName": "DisplayProductDetailsScenarioSteps.java",
+            "lineNumber": 33
+          }
+        ]
+      },
+      "result": "ERROR",
+      "children": [
+        {
+          "number": 6,
+          "description": "Selects listing: \u003cspan class\u003d\u0027step-parameter\u0027\u003e1\u003c/span\u003e",
+          "duration": 2352,
+          "startTime": 1437566591787,
+          "screenshots": [
+            {
+              "screenshot": "c759b954ee07e31839c69498cef9f6ad_NONE.png"
+            }
+          ],
+          "exception": {
+            "errorType": "org.openqa.selenium.StaleElementReferenceException",
+            "message": "stale element reference: element is not attached to the page document\n  (Session info: chrome\u003d44.0.2403.89)\n  (Driver info: chromedriver\u003d2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961),platform\u003dMac OS X 10.10.4 x86_64) (WARNING: The server did not provide any stacktrace information)\nCommand duration or timeout: 377 milliseconds\nFor documentation on this error, please visit: http://seleniumhq.org/exceptions/stale_element_reference.html\nBuild info: version: \u00272.46.0\u0027, revision: \u002761506a4624b13675f24581e453592342b7485d71\u0027, time: \u00272015-06-04 10:22:50\u0027\nSystem info: host: \u0027Johns-MBP.gateway\u0027, ip: \u002710.0.0.53\u0027, os.name: \u0027Mac OS X\u0027, os.arch: \u0027x86_64\u0027, os.version: \u002710.10.4\u0027, java.version: \u00271.8.0_45\u0027\nDriver info: org.openqa.selenium.chrome.ChromeDriver\nCapabilities [{applicationCacheEnabled\u003dfalse, rotatable\u003dfalse, mobileEmulationEnabled\u003dfalse, chrome\u003d{userDataDir\u003d/var/folders/n6/hn81c_y52yz358j4hs6kzyj80000gn/T/.org.chromium.Chromium.F5LJ4j}, takesHeapSnapshot\u003dtrue, databaseEnabled\u003dfalse, handlesAlerts\u003dtrue, hasTouchScreen\u003dfalse, version\u003d44.0.2403.89, platform\u003dMAC, browserConnectionEnabled\u003dfalse, nativeEvents\u003dtrue, acceptSslCerts\u003dtrue, locationContextEnabled\u003dtrue, webStorageEnabled\u003dtrue, browserName\u003dchrome, takesScreenshot\u003dtrue, javascriptEnabled\u003dtrue, cssSelectorsEnabled\u003dtrue}]\nSession ID: dd1511d733f99e9d4b40341e1f66dc55",
+            "stackTrace": [
+              {
+                "declaringClass": "net.thucydides.showcase.cucumber.pages.SearchResultsPage",
+                "methodName": "selectListing",
+                "fileName": "SearchResultsPage.java",
+                "lineNumber": 51
+              },
+              {
+                "declaringClass": "net.thucydides.showcase.cucumber.steps.serenity.BuyerSteps",
+                "methodName": "selects_listing",
+                "fileName": "BuyerSteps.java",
+                "lineNumber": 51
+              },
+              {
+                "declaringClass": "net.thucydides.showcase.cucumber.steps.DisplayProductDetailsScenarioSteps",
+                "methodName": "whenISelectListingItem",
+                "fileName": "DisplayProductDetailsScenarioSteps.java",
+                "lineNumber": 33
+              }
+            ]
+          },
+          "result": "ERROR"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "description": "Then I should see product description and price on the details page",
+      "duration": 0,
+      "startTime": 1437566594142,
+      "result": "SKIPPED"
+    }
+  ],
+  "userStory": {
+    "id": "display-product-details",
+    "storyName": "Display product details",
+    "path": "search/display_product_details.feature",
+    "narrative": "In order to encourage buyers to make a purchase\nAs a seller\nI want buyers to be able to see details about a product",
+    "type": "feature"
+  },
+  "title": "Display product details from the search list",
+  "description": "",
+  "tags": [
+    {
+      "name": "Search/Display product details",
+      "type": "story"
+    },
+    {
+      "name": "ETSY-101",
+      "type": "issue"
+    },
+    {
+      "name": "Release-1",
+      "type": "version"
+    },
+    {
+      "name": "Sprint-1.2",
+      "type": "version"
+    }
+  ],
+  "startTime": 1437566580528,
+  "duration": 13615,
+  "testFailureCause": {
+    "errorType": "org.openqa.selenium.StaleElementReferenceException",
+    "message": "stale element reference: element is not attached to the page document\n  (Session info: chrome\u003d44.0.2403.89)\n  (Driver info: chromedriver\u003d2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961),platform\u003dMac OS X 10.10.4 x86_64) (WARNING: The server did not provide any stacktrace information)\nCommand duration or timeout: 377 milliseconds\nFor documentation on this error, please visit: http://seleniumhq.org/exceptions/stale_element_reference.html\nBuild info: version: \u00272.46.0\u0027, revision: \u002761506a4624b13675f24581e453592342b7485d71\u0027, time: \u00272015-06-04 10:22:50\u0027\nSystem info: host: \u0027Johns-MBP.gateway\u0027, ip: \u002710.0.0.53\u0027, os.name: \u0027Mac OS X\u0027, os.arch: \u0027x86_64\u0027, os.version: \u002710.10.4\u0027, java.version: \u00271.8.0_45\u0027\nDriver info: org.openqa.selenium.chrome.ChromeDriver\nCapabilities [{applicationCacheEnabled\u003dfalse, rotatable\u003dfalse, mobileEmulationEnabled\u003dfalse, chrome\u003d{userDataDir\u003d/var/folders/n6/hn81c_y52yz358j4hs6kzyj80000gn/T/.org.chromium.Chromium.F5LJ4j}, takesHeapSnapshot\u003dtrue, databaseEnabled\u003dfalse, handlesAlerts\u003dtrue, hasTouchScreen\u003dfalse, version\u003d44.0.2403.89, platform\u003dMAC, browserConnectionEnabled\u003dfalse, nativeEvents\u003dtrue, acceptSslCerts\u003dtrue, locationContextEnabled\u003dtrue, webStorageEnabled\u003dtrue, browserName\u003dchrome, takesScreenshot\u003dtrue, javascriptEnabled\u003dtrue, cssSelectorsEnabled\u003dtrue}]\nSession ID: dd1511d733f99e9d4b40341e1f66dc55",
+    "stackTrace": [
+      {
+        "declaringClass": "net.thucydides.showcase.cucumber.pages.SearchResultsPage",
+        "methodName": "selectListing",
+        "fileName": "SearchResultsPage.java",
+        "lineNumber": 51
+      },
+      {
+        "declaringClass": "net.thucydides.showcase.cucumber.steps.serenity.BuyerSteps",
+        "methodName": "selects_listing",
+        "fileName": "BuyerSteps.java",
+        "lineNumber": 51
+      },
+      {
+        "declaringClass": "net.thucydides.showcase.cucumber.steps.DisplayProductDetailsScenarioSteps",
+        "methodName": "whenISelectListingItem",
+        "fileName": "DisplayProductDetailsScenarioSteps.java",
+        "lineNumber": 33
+      }
+    ]
+  },
+  "testFailureClassname": "org.openqa.selenium.StaleElementReferenceException",
+  "testFailureMessage": "stale element reference: element is not attached to the page document\n  (Session info: chrome\u003d44.0.2403.89)\n  (Driver info: chromedriver\u003d2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961),platform\u003dMac OS X 10.10.4 x86_64) (WARNING: The server did not provide any stacktrace information)\nCommand duration or timeout: 377 milliseconds\nFor documentation on this error, please visit: http://seleniumhq.org/exceptions/stale_element_reference.html\nBuild info: version: \u00272.46.0\u0027, revision: \u002761506a4624b13675f24581e453592342b7485d71\u0027, time: \u00272015-06-04 10:22:50\u0027\nSystem info: host: \u0027Johns-MBP.gateway\u0027, ip: \u002710.0.0.53\u0027, os.name: \u0027Mac OS X\u0027, os.arch: \u0027x86_64\u0027, os.version: \u002710.10.4\u0027, java.version: \u00271.8.0_45\u0027\nDriver info: org.openqa.selenium.chrome.ChromeDriver\nCapabilities [{applicationCacheEnabled\u003dfalse, rotatable\u003dfalse, mobileEmulationEnabled\u003dfalse, chrome\u003d{userDataDir\u003d/var/folders/n6/hn81c_y52yz358j4hs6kzyj80000gn/T/.org.chromium.Chromium.F5LJ4j}, takesHeapSnapshot\u003dtrue, databaseEnabled\u003dfalse, handlesAlerts\u003dtrue, hasTouchScreen\u003dfalse, version\u003d44.0.2403.89, platform\u003dMAC, browserConnectionEnabled\u003dfalse, nativeEvents\u003dtrue, acceptSslCerts\u003dtrue, locationContextEnabled\u003dtrue, webStorageEnabled\u003dtrue, browserName\u003dchrome, takesScreenshot\u003dtrue, javascriptEnabled\u003dtrue, cssSelectorsEnabled\u003dtrue}]\nSession ID: dd1511d733f99e9d4b40341e1f66dc55",
+  "annotatedResult": "ERROR",
+  "driver": "chrome",
+  "manual": false,
+  "result": "ERROR",
+  "versions": [
+    "Release-1",
+    "Sprint-1.2"
+  ]
+}

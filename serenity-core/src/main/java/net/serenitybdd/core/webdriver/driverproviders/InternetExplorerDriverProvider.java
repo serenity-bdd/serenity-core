@@ -9,6 +9,8 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
+import net.thucydides.core.webdriver.SupportedWebDriver;
+import net.thucydides.core.webdriver.capabilities.AddCustomCapabilities;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
@@ -19,8 +21,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static net.thucydides.core.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
+import static net.thucydides.core.webdriver.SupportedWebDriver.IEXPLORER;
 
 public class InternetExplorerDriverProvider implements DriverProvider {
 
@@ -50,7 +54,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         }
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-        DesiredCapabilities desiredCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities());
+        DesiredCapabilities desiredCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities(), IEXPLORER);
         driverProperties.registerCapabilities("iexplorer", desiredCapabilities);
 
         try {
@@ -87,11 +91,14 @@ public class InternetExplorerDriverProvider implements DriverProvider {
 
     private DesiredCapabilities recommendedDefaultInternetExplorerCapabilities() {
         DesiredCapabilities defaults = DesiredCapabilities.internetExplorer();
+
         defaults.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING, true);
         defaults.setCapability(InternetExplorerDriver.NATIVE_EVENTS, false);
         defaults.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, false);
         defaults.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
         defaults.setJavascriptEnabled(true);
+
+        defaults = AddCustomDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(defaults);
 
         if (ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables,false)) {
             defaults.acceptInsecureCerts();

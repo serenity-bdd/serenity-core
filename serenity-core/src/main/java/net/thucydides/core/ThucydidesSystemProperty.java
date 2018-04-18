@@ -498,11 +498,6 @@ public enum ThucydidesSystemProperty {
     @Deprecated
     THUCYDIDES_PROXY_HTTP,
 
-    /**
-     * HTTP Proxy URL configuration for Firefox and PhantomJS
-     */
-    SERENITY_PROXY_HTTP,
-
     @Deprecated
     THUCYDIDES_PROXY_HTTP_PORT("thucydides.proxy.http_port"),
 
@@ -524,6 +519,11 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_PROXY_USER,
 
     /**
+     * HTTP Proxy URL configuration
+     */
+    SERENITY_PROXY_HTTP,
+
+    /**
      * HTTP Proxy username configuration for Firefox and PhantomJS
      */
     SERENITY_PROXY_USER,
@@ -535,6 +535,22 @@ public enum ThucydidesSystemProperty {
      * HTTP Proxy password configuration for Firefox and PhantomJS
      */
     SERENITY_PROXY_PASSWORD,
+
+    /**
+     * SSL Proxy port configuration for Firefox and PhantomJS - serenity.proxy.sslProxyPort
+     */
+    SERENITY_PROXY_SSL_PORT("serenity.proxy.sslProxyPort"),
+
+    /**
+     * SSL Proxy port configuration for Firefox and PhantomJS - serenity.proxy.sslProxy
+     */
+    SERENITY_PROXY_SSL("serenity.proxy.sslProxy"),
+
+//    json.addProperty("proxyType", "MANUAL");
+//json.addProperty("httpProxy", PROXY);
+//json.addProperty("httpProxyPort", PORT);
+//json.addProperty("sslProxy", PROXY);
+//json.addProperty("sslProxyPort", PORT);
 
     /**
      * How long webdriver waits for elements to appear by default, in milliseconds.

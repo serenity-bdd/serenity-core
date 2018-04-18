@@ -8,6 +8,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
+import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -43,7 +44,7 @@ public class EdgeDriverProvider implements DriverProvider {
         }
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-        DesiredCapabilities desiredCapabilities = enhancer.enhanced(DesiredCapabilities.edge());
+        DesiredCapabilities desiredCapabilities = enhancer.enhanced(DesiredCapabilities.edge(), SupportedWebDriver.EDGE);
         driverProperties.registerCapabilities("edge", desiredCapabilities);
 
         try {

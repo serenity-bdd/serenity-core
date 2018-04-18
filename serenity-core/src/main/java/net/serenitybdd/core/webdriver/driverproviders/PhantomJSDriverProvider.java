@@ -8,6 +8,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
+import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.phantomjs.PhantomJSCapabilityEnhancer;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
@@ -60,7 +61,7 @@ public class PhantomJSDriverProvider implements DriverProvider {
         phantomEnhancer.enhanceCapabilities(capabilities);
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-        return enhancer.enhanced(capabilities);
+        return enhancer.enhanced(capabilities, SupportedWebDriver.PHANTOMJS);
     }
 
 }

@@ -8,6 +8,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
+import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -49,13 +50,13 @@ public class ChromeDriverProvider implements DriverProvider {
         } catch (IOException couldNotStartChromeServer) {
             LOGGER.warn("Failed to start the chrome driver service, using a native driver instead",  couldNotStartChromeServer.getMessage());
             CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-            return new ChromeDriver(enhancer.enhanced(capabilities));
+            return new ChromeDriver(enhancer.enhanced(capabilities, SupportedWebDriver.CHROME));
         }
     }
 
     private DesiredCapabilities requestedChromeCapabilities(String options, EnvironmentVariables environmentVariables) {
         DesiredCapabilities capabilities = new ChromeDriverCapabilities(environmentVariables, options).getCapabilities();
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-        return enhancer.enhanced(capabilities);
+        return enhancer.enhanced(capabilities, SupportedWebDriver.CHROME);
     }
 }

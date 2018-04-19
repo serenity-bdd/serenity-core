@@ -546,12 +546,6 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_PROXY_SSL("serenity.proxy.sslProxy"),
 
-//    json.addProperty("proxyType", "MANUAL");
-//json.addProperty("httpProxy", PROXY);
-//json.addProperty("httpProxyPort", PORT);
-//json.addProperty("sslProxy", PROXY);
-//json.addProperty("sslProxyPort", PORT);
-
     /**
      * How long webdriver waits for elements to appear by default, in milliseconds.
      */

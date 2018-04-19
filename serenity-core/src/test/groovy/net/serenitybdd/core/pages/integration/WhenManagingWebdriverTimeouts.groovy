@@ -4,14 +4,12 @@ import net.serenitybdd.core.pages.WebElementFacade
 import net.serenitybdd.core.time.Stopwatch
 import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool
-import net.serenitybdd.core.webdriver.servicepools.PhantomJSServicePool
 import net.thucydides.core.pages.integration.StaticSitePage
 import net.thucydides.core.steps.ExecutedStepDescription
 import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.steps.StepFailure
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.util.SystemEnvironmentVariables
-import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.WebDriverFactory
 import net.thucydides.core.webdriver.exceptions.ElementShouldBeDisabledException
@@ -21,15 +19,15 @@ import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.TimeoutException
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.remote.DesiredCapabilities
 import spock.lang.*
 
+import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS
-import static java.util.concurrent.TimeUnit.SECONDS
+import static java.time.temporal.ChronoUnit.SECONDS
+
 /**
  * Timeouts are highly configurable in Serenity.
  *
@@ -152,7 +150,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         given: "We configure the WebDriver implicit wait to be 0 milliseconds"
             def page = openStaticPageWith(["webdriver.timeouts.implicitlywait":"0", "webdriver.wait.for.timeout":"0"])
         when: "We access the a list of elements"
-            def count = page.withTimeoutOf(5,SECONDS).waitFor(page.elementItems).size()
+            def count = page.withTimeoutOf(5, SECONDS).waitFor(page.elementItems).size()
         then: "Only the elements loaded after the timeout should be loaded"
             count == 4
     }
@@ -173,15 +171,11 @@ class WhenManagingWebdriverTimeouts extends Specification {
 
     def "Implicit timeout should not be affected by isCurrently* methods"() {
         given: "The #slow-loader WebElementFacade field takes 3 seconds to load"
-            def page = openStaticPage()
+        def page = openStaticPage()
         when: "We override the implicit timeout to allow the slow-loader field to load"
-            page.setImplicitTimeout(10, SECONDS)
+        page.setImplicitTimeout(10, SECONDS)
         then: "isCurrently* methods should not use the implicit timeout"
-            !page.slowLoadingField.isCurrentlyVisible()
-        then: "we can reset the driver timeouts to the default value once we are done"
-            page.driver.currentImplicitTimeout.in(SECONDS) == 10
-        then: "we can reload a slow loading WebElementFacade normally"
-            page.slowLoadingField.isDisplayed()
+        !page.slowLoadingField.isCurrentlyVisible()
     }
 
 
@@ -359,7 +353,8 @@ class WhenManagingWebdriverTimeouts extends Specification {
         given:
             def page = openStaticPage()
         when:
-            def cityIsDisplayed = page.withTimeoutOf(50, MILLISECONDS).elementIsDisplayed(By.cssSelector("#city"))
+            def cityIsDisplayed = page.withTimeoutOf(50, ChronoUnit.MILLIS).elementIsDisplayed(By.cssSelector("#city"))
+
         then:
             !cityIsDisplayed
     }
@@ -368,7 +363,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         given:
             def page = openStaticPage()
         when:
-            page.initiallyDisabled.withTimeoutOf(10, SECONDS).waitUntilClickable().click()
+            page.initiallyDisabled.withTimeoutOf(10, TimeUnit.SECONDS).waitUntilClickable().click()
         then:
             noExceptionThrown()
     }
@@ -377,7 +372,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         given:
             def page = openStaticPage()
         when:
-            page.initiallyDisabled.withTimeoutOf(50, MILLISECONDS).waitUntilClickable().click()
+            page.initiallyDisabled.withTimeoutOf(50, TimeUnit.MILLISECONDS).waitUntilClickable().click()
         then:
             thrown(TimeoutException)
     }
@@ -405,7 +400,7 @@ class WhenManagingWebdriverTimeouts extends Specification {
         given:
             def page = openStaticPage()
         when:
-           page.placetitle.withTimeoutOf(50, MILLISECONDS).waitUntilNotVisible()
+           page.placetitle.withTimeoutOf(50, TimeUnit.MILLISECONDS).waitUntilNotVisible()
         then:
             thrown(ElementShouldBeInvisibleException)
     }

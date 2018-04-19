@@ -26,6 +26,7 @@ import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.time.Duration;
@@ -363,10 +364,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public WebElementFacade withTimeoutOf(int timeout, TimeUnit unit) {
-//        return wrapWebElement(driver, getElement(),
-//                implicitTimeoutInMilliseconds,
-//                TimeUnit.MILLISECONDS.convert(timeout, unit),
-//                foundBy);
         return wrapWebElement(driver,
                 resolvedELement,
                 webElement,

@@ -3,6 +3,7 @@ package net.thucydides.core.model.failures;
 import com.google.common.base.Splitter;
 import cucumber.api.PendingException;
 import net.serenitybdd.core.PendingStepException;
+import net.serenitybdd.core.SkipStepException;
 import net.serenitybdd.core.exceptions.CausesAssertionFailure;
 import net.serenitybdd.core.exceptions.CausesCompromisedTestFailure;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -33,6 +34,11 @@ public class FailureAnalysisConfiguration {
     private final List<Class<?>> DEFAULT_PENDING_TYPES = new ArrayList<>();
     {
         DEFAULT_PENDING_TYPES.addAll(Arrays.asList(PendingStepException.class, PendingException.class));
+    }
+
+    private final List<Class<?>> DEFAULT_SKIPPED_TYPES = new ArrayList<>();
+    {
+        DEFAULT_PENDING_TYPES.addAll(Arrays.asList(SkipStepException.class));
     }
 
     private final List<Class<?>> DEFAULT_ERROR_TYPES = new ArrayList<>();
@@ -84,7 +90,7 @@ public class FailureAnalysisConfiguration {
     }
 
     public List<Class<?>> skippedTypes() {
-        List<Class<?>> pendingTypes = new ArrayList<>(DEFAULT_PENDING_TYPES);
+        List<Class<?>> pendingTypes = new ArrayList<>(DEFAULT_SKIPPED_TYPES);
         pendingTypes.addAll(skippedTypesDefinedIn(environmentVariables));
 
         pendingTypes.removeAll(errorTypesDefinedIn(environmentVariables));

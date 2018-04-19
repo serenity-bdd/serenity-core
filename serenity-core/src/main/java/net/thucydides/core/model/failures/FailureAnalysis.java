@@ -44,6 +44,9 @@ public class FailureAnalysis {
         if (reportAsPending(testFailureCause)) {
             return PENDING;
         }
+        if (reportAsSkipped(testFailureCause)) {
+            return SKIPPED;
+        }
         if (reportAsCompromised(testFailureCause)) {
             return COMPROMISED;
         }
@@ -144,7 +147,7 @@ public class FailureAnalysis {
     public TestResult resultFor(Throwable testFailureCause) {
         if (isPendingException(testFailureCause)) {
             return PENDING;
-        } else if (isPendingException(testFailureCause)) {
+        } else if (isSkippedException(testFailureCause)) {
             return SKIPPED;
         } else if (isFailure(testFailureCause)) {
             return FAILURE;

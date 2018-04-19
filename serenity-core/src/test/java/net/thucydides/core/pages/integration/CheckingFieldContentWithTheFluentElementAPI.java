@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,7 +35,7 @@ public class CheckingFieldContentWithTheFluentElementAPI extends FluentElementAP
     public void refreshPage() {
         refresh(page);
         page.setWaitForTimeout(5000);
-        page.setImplicitTimeout(2, TimeUnit.SECONDS);
+        page.setImplicitTimeout(2, ChronoUnit.SECONDS);
     }
 
     @Test

@@ -7,10 +7,10 @@ import net.serenitybdd.core.time.InternalSystemClock;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.internal.Coordinates;
-import org.openqa.selenium.support.ui.Duration;
 import org.openqa.selenium.support.ui.Wait;
 
 import java.lang.reflect.Type;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

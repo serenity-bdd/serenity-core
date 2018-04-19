@@ -26,16 +26,16 @@ public class SmartElementHandler extends AbstractSingleItemHandler<WebElementFac
             Constructor constructor = ElementContructorForm.applicableConstructorFrom(implementerClass).get();
             switch (ElementContructorForm.applicableConstructor((implementerClass)).get()) {
                 case WEBDRIVER_LOCATOR_SINGLE_TIMEOUT:
-                    instance = constructor.newInstance(page.getDriver(), locator, page.getImplicitWaitTimeout().in(TimeUnit.MILLISECONDS));
+                    instance = constructor.newInstance(page.getDriver(), locator, page.getImplicitWaitTimeout().toMillis());
                     break;
                 case WEBDRIVER_LOCATOR_TWO_TIMEOUTS:
-                    instance = constructor.newInstance(page.getDriver(), locator, page.getImplicitWaitTimeout().in(TimeUnit.MILLISECONDS), page.getWaitForTimeout().in(TimeUnit.MILLISECONDS));
+                    instance = constructor.newInstance(page.getDriver(), locator, page.getImplicitWaitTimeout().toMillis(), page.getWaitForTimeout().toMillis());
                     break;
                 case WEBDRIVER_ELEMENT_SINGLE_TIMEOUT:
-                    instance = constructor.newInstance(page.getDriver(), locator, null, page.getImplicitWaitTimeout().in(TimeUnit.MILLISECONDS));
+                    instance = constructor.newInstance(page.getDriver(), locator, null, page.getImplicitWaitTimeout().toMillis());
                     break;
                 case WEBDRIVER_ELEMENT_TWO_TIMEOUTS:
-                    instance = constructor.newInstance(page.getDriver(), locator, null, page.getImplicitWaitTimeout().in(TimeUnit.MILLISECONDS), page.getWaitForTimeout().in(TimeUnit.MILLISECONDS));
+                    instance = constructor.newInstance(page.getDriver(), locator, null, page.getImplicitWaitTimeout().toMillis(), page.getWaitForTimeout().toMillis());
                     break;
             }
         }
@@ -48,14 +48,14 @@ public class SmartElementHandler extends AbstractSingleItemHandler<WebElementFac
 //        try {
 //            constructor = implementerClass.getConstructor(WebDriver.class, ElementLocator.class, long.class, long.class);
 //            instance = constructor.newInstance(page.getDriver(), locator,
-//                    page.getImplicitWaitTimeout().in(TimeUnit.MILLISECONDS),
-//                    page.getWaitForTimeout().in(TimeUnit.MILLISECONDS));
+//                    page.getImplicitWaitTimeout().toMillis(),
+//                    page.getWaitForTimeout().toMillis());
 //        } catch (NoSuchMethodException e) {
 //            try {
 //                constructor = implementerClass.getConstructor(WebDriver.class, ElementLocator.class, WebElement.class, long.class, long.class);
 //                instance = constructor.newInstance(page.getDriver(), locator, null,
-//                        page.getImplicitWaitTimeout().in(TimeUnit.MILLISECONDS),
-//                        page.getWaitForTimeout().in(TimeUnit.MILLISECONDS));
+//                        page.getImplicitWaitTimeout().toMillis(),
+//                        page.getWaitForTimeout().toMillis());
 //            } catch (NoSuchMethodException e1) {
 //                String className = implementerClass.getSimpleName();
 //                throw new RuntimeException(String.format(NO_SUITABLE_CONSTRUCTOR_FOUND_FMT2, className, className));

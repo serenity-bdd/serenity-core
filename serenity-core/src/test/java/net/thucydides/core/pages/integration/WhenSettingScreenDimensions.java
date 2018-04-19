@@ -11,8 +11,8 @@ import org.junit.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.Duration;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -42,7 +42,7 @@ public class WhenSettingScreenDimensions {
     @Test
     public void should_remove_timeout_on_close() {
         driver = factory.newInstanceOf(SupportedWebDriver.HTMLUNIT);
-        Duration implicitTimeout = new Duration(111L, TimeUnit.MILLISECONDS);
+        Duration implicitTimeout = Duration.ofMillis(1000L);
         factory.setTimeouts(driver, implicitTimeout);
 
         assertThat(factory.currentTimeoutFor(driver),is(sameInstance(implicitTimeout)));

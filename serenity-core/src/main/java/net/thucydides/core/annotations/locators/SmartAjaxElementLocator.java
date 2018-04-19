@@ -19,11 +19,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.Clock;
-import org.openqa.selenium.support.ui.Duration;
 import org.openqa.selenium.support.ui.SlowLoadableComponent;
 import org.openqa.selenium.support.ui.SystemClock;
 
 import java.lang.reflect.Field;
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
@@ -31,7 +31,7 @@ import java.util.function.BiFunction;
 import static net.thucydides.core.annotations.locators.SearchContextType.*;
 
 public class SmartAjaxElementLocator extends SmartElementLocator implements WithConfigurableTimeout {
-    public static final Duration ZERO_SECONDS = new Duration(0, TimeUnit.SECONDS);
+    public static final Duration ZERO_SECONDS =  Duration.ofSeconds(0);
     protected Optional<Integer> annotatedTimeoutInSeconds;
     private final Clock clock;
 
@@ -176,10 +176,10 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
 
     private int getTimeOutInSeconds() {
         if (searchContext instanceof WebDriverFacade) {
-            return (int) ((WebDriverFacade) searchContext).getCurrentImplicitTimeout().in(TimeUnit.SECONDS);
+            return (int) ((WebDriverFacade) searchContext).getCurrentImplicitTimeout().getSeconds();
         }
         if (searchContext instanceof WebElementFacade) {
-            return (int) ((WebElementFacade) searchContext).getCurrentImplicitTimeout().in(TimeUnit.SECONDS);
+            return (int) ((WebElementFacade) searchContext).getCurrentImplicitTimeout().getSeconds();
         }
         return 0;
     }

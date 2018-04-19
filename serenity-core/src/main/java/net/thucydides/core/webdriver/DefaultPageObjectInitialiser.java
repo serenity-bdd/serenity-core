@@ -4,8 +4,6 @@ import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.guice.Injectors;
 import org.openqa.selenium.WebDriver;
 
-import java.util.concurrent.TimeUnit;
-
 public class DefaultPageObjectInitialiser extends AbstractObjectInitialiser<PageObject> {
 
 	private ElementProxyCreator elementProxyCreator;
@@ -17,7 +15,7 @@ public class DefaultPageObjectInitialiser extends AbstractObjectInitialiser<Page
 
     public boolean apply(PageObject page) {
         if (driver != null) {
-            page.setWaitForElementTimeout(ajaxTimeout.in(TimeUnit.MILLISECONDS));
+            page.setWaitForElementTimeout(ajaxTimeout.toMillis());
             elementProxyCreator.proxyElements(page, driver, ajaxTimeoutInSecondsWithAtLeast1Second());
         }
         return true;

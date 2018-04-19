@@ -7,9 +7,10 @@ import net.thucydides.core.webdriver.WebDriverFacade
 import net.thucydides.core.webdriver.WebDriverFactory
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
-import org.openqa.selenium.support.ui.Duration
 import spock.lang.Specification
 
+import java.time.Duration
+import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
 /**
  * Created by john on 12/03/15.
@@ -30,7 +31,7 @@ class WhenKeepingTrackOfImplicitTimeouts extends Specification{
     def "you can check whether a timeout value has been specified for a driver"() {
         given:
             def timeoutstack = new TimeoutStack();
-            def timeout = new Duration(1, TimeUnit.SECONDS)
+            def timeout = Duration.ofSeconds(1) 
         when:
             timeoutstack.pushTimeoutFor(driver,timeout)
             timeoutstack.pushTimeoutFor(anotherDriver,timeout)
@@ -47,7 +48,7 @@ class WhenKeepingTrackOfImplicitTimeouts extends Specification{
     def "you can check the current timeout value for a driver"() {
         given:
             def timeoutstack = new TimeoutStack();
-            def timeout = new Duration(1, TimeUnit.SECONDS)
+            def timeout = Duration.ofSeconds(1)
         when:
             timeoutstack.pushTimeoutFor(driver,timeout)
             def currentValue1 = timeoutstack.currentTimeoutValueFor(driver)
@@ -62,7 +63,7 @@ class WhenKeepingTrackOfImplicitTimeouts extends Specification{
     def "you can store a timeout duration for a particular driver"() {
         given:
             def timeoutstack = new TimeoutStack();
-            def timeout = new Duration(1, TimeUnit.SECONDS)
+            def timeout = Duration.ofSeconds(1)
         when:
             timeoutstack.pushTimeoutFor(driver,timeout)
         and:
@@ -78,8 +79,8 @@ class WhenKeepingTrackOfImplicitTimeouts extends Specification{
     def "you can store timeout durations for a multiple drivers"() {
         given:
             def timeoutstack = new TimeoutStack();
-            def timeout1 = new Duration(1, TimeUnit.SECONDS)
-            def timeout2 = new Duration(2, TimeUnit.SECONDS)
+            def timeout1 = Duration.ofSeconds(1)
+            def timeout2 = Duration.ofSeconds(2)
         when:
             timeoutstack.pushTimeoutFor(driver,timeout1)
             timeoutstack.pushTimeoutFor(anotherDriver,timeout2)
@@ -95,8 +96,8 @@ class WhenKeepingTrackOfImplicitTimeouts extends Specification{
     def "you can store multiple timeout durations for a driver"() {
         given:
             def timeoutstack = new TimeoutStack();
-            def timeout1 = new Duration(1, TimeUnit.SECONDS)
-            def timeout2 = new Duration(2, TimeUnit.SECONDS)
+            def timeout1 = Duration.ofSeconds(1)
+            def timeout2 = Duration.ofSeconds(2)
         when:
             timeoutstack.pushTimeoutFor(driver,timeout1)
             timeoutstack.pushTimeoutFor(driver,timeout2)
@@ -117,7 +118,7 @@ class WhenKeepingTrackOfImplicitTimeouts extends Specification{
         }
 
         public void setImplicitTimeoutTo(int timeout) {
-            setImplicitTimeout(timeout, TimeUnit.SECONDS);
+            setImplicitTimeout(timeout, ChronoUnit.SECONDS);
         }
 
         public long getImplicitTimoutMilliseconds() {

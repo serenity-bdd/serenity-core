@@ -90,7 +90,7 @@ class WhenReportingExceptions extends Specification {
         result == COMPROMISED
     }
 
-    def "should be able to override errors as skipped using serenity.skipped.on"() {
+    def "should be able to override errors as skipped using serenity.skip.on"() {
 
         given:
         def environmentVariables = new MockEnvironmentVariables()

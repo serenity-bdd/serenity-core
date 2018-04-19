@@ -1,7 +1,5 @@
 package net.thucydides.core.webdriver;
 
-import com.gargoylesoftware.htmlunit.ScriptException;
-import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.pages.DefaultTimeouts;
@@ -15,17 +13,15 @@ import org.openqa.selenium.interactions.HasInputDevices;
 import org.openqa.selenium.interactions.Keyboard;
 import org.openqa.selenium.interactions.Mouse;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.ui.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
@@ -77,9 +73,9 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     private Duration defaultImplicitWait() {
         int configuredWaitForTimeoutInMilliseconds = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT
-                        .integerFrom(environmentVariables, (int) DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT.in(MILLISECONDS));
+                        .integerFrom(environmentVariables, (int) DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT.toMillis());
 
-       return new Duration(configuredWaitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS);
+       return Duration.ofMillis(configuredWaitForTimeoutInMilliseconds);
     }
 
     public WebDriverFacade(final Class<? extends WebDriver> driverClass,

@@ -1,8 +1,12 @@
 package net.thucydides.core.webdriver;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.Duration;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -20,7 +24,7 @@ public class TimeoutsFacade implements WebDriver.Timeouts {
 
     @Override
     public WebDriver.Timeouts implicitlyWait(long timeoutValue, TimeUnit timeUnit) {
-        webDriverFacade.implicitTimeout = new Duration(timeoutValue, timeUnit);
+        webDriverFacade.implicitTimeout = Duration.of(timeoutValue, TIME_TO_TEMPORAL.get(timeUnit));
         return (timeouts != null) ? timeouts.implicitlyWait(timeoutValue,timeUnit) : timeouts;
     }
 
@@ -32,5 +36,16 @@ public class TimeoutsFacade implements WebDriver.Timeouts {
     @Override
     public WebDriver.Timeouts pageLoadTimeout(long timeoutValue, TimeUnit timeUnit) {
         return (timeouts != null) ? timeouts.pageLoadTimeout(timeoutValue,timeUnit) : timeouts;
+    }
+
+    private static final Map<TimeUnit, TemporalUnit> TIME_TO_TEMPORAL = new HashMap<>();
+    static {
+        TIME_TO_TEMPORAL.put(TimeUnit.MILLISECONDS, ChronoUnit.MILLIS);
+        TIME_TO_TEMPORAL.put(TimeUnit.SECONDS, ChronoUnit.SECONDS);
+        TIME_TO_TEMPORAL.put(TimeUnit.HOURS, ChronoUnit.HOURS);
+        TIME_TO_TEMPORAL.put(TimeUnit.MINUTES, ChronoUnit.MINUTES);
+        TIME_TO_TEMPORAL.put(TimeUnit.DAYS, ChronoUnit.DAYS);
+        TIME_TO_TEMPORAL.put(TimeUnit.MICROSECONDS, ChronoUnit.MICROS);
+        TIME_TO_TEMPORAL.put(TimeUnit.NANOSECONDS, ChronoUnit.NANOS);
     }
 }

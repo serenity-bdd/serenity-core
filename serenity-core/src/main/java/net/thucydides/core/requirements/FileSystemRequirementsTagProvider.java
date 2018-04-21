@@ -28,15 +28,13 @@ import java.util.stream.Collectors;
 import static net.thucydides.core.files.TheDirectoryStructure.startingAt;
 import static net.thucydides.core.requirements.RequirementsPath.pathElements;
 import static net.thucydides.core.requirements.RequirementsPath.stripRootFromPath;
-import static net.thucydides.core.requirements.RootDirectory.defaultRootDirectoryPathFrom;
 import static net.thucydides.core.util.NameConverter.humanize;
 import static org.apache.commons.io.FilenameUtils.removeExtension;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Load a set of requirements (epics/themes,...) from the directory structure.
- * This will typically be the directory structure containing the tests (for JUnit) or stories (e.g. for JBehave).
- * By default, the tests
+ * This will typically be the directory structure containing the tests (for JUnit), stories (JBehave) or features (Cucumber).
  */
 public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagProvider implements RequirementsTagProvider, OverridableTagProvider {
 
@@ -56,8 +54,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private List<Requirement> requirements;
 
     public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables) {
-        this(defaultRootDirectoryPathFrom(Injectors.getInjector().getProvider(EnvironmentVariables.class).get()),
-                environmentVariables);
+        this(environmentVariables,
+            RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory().orElse(Paths.get(".")).toString());
     }
 
     public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables, String rootDirectoryPath) {
@@ -65,7 +63,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     public FileSystemRequirementsTagProvider() {
-        this(defaultRootDirectoryPathFrom(Injectors.getInjector().getProvider(EnvironmentVariables.class).get()));
+        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
     }
 
     public FileSystemRequirementsTagProvider(String rootDirectory, int level) {
@@ -240,6 +238,11 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
             if ((requirement.getFeatureFileName() != null) && (requirement.getFeatureFileName().equalsIgnoreCase(candidatePath))) {
                 return java.util.Optional.of(requirement);
             }
+
+            if ((requirement.getPath() != null) && (equivalentPaths(requirement.getPath(), candidatePath))) {
+                return java.util.Optional.of(requirement);
+            }
+
         }
         return java.util.Optional.empty();
     }
@@ -367,14 +370,47 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private java.util.Optional<Requirement> requirementWithMatchingPath(TestOutcome testOutcome) {
-        for (Requirement requirement : AllRequirements.in(getRequirements())) {
+
+        List<Requirement> allRequirements = AllRequirements.in(getRequirements());
+
+        for (Requirement requirement : allRequirements) {
             if (requirement.getFeatureFileName() != null
                     && testOutcome.getPath() != null
                     && Paths.get(testOutcome.getPath()).equals(Paths.get(requirement.getFeatureFileName()))) {
                 return Optional.of(requirement);
             }
         }
-        return Optional.empty();
+
+        if (testOutcome.getPath() == null) { return Optional.empty(); }
+
+        return allRequirements.stream()
+                .filter(requirement -> requirement.getPath() != null)
+                .filter(requirement -> equivalentPaths(requirement.getPath(), testOutcome.getPath()))
+                .findFirst();
+    }
+
+    private boolean equivalentPaths(String pathA, String pathB) {
+        String normalisedPathA = removeFeatureOrStoryPrefixFrom(pathA.replaceAll("[/\\\\]","/")).replaceAll("\\.","/").replaceAll(" ","_");
+        String normalisedPathB = removeFeatureOrStoryPrefixFrom(pathB.replaceAll("[/\\\\]","/")).replaceAll("\\.","/").replaceAll(" ","_");
+        return normalisedPathA.equalsIgnoreCase(normalisedPathB);
+    }
+
+    private String removeFeatureOrStoryPrefixFrom(String path) {
+        String stories = RootDirectory.definedIn(environmentVariables).storyDirectoryName();
+        String features = RootDirectory.definedIn(environmentVariables).featureDirectoryName();
+        if (path.startsWith(stories)) {
+            path = path.substring(stories.length() + 1);
+        }
+        if (path.startsWith(features)) {
+            path = path.substring(stories.length() + 1);
+        }
+        if (path.endsWith(".story")) {
+            path = path.substring(0,path.length() - 6);
+        }
+        if (path.endsWith(".feature")) {
+            path = path.substring(0,path.length() - 8);
+        }
+        return path;
     }
 
     private java.util.Optional<Requirement> requirementWithMatchingParentId(TestOutcome testOutcome) {

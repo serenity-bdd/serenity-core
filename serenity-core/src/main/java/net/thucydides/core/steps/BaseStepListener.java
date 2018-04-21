@@ -11,6 +11,7 @@ import net.serenitybdd.core.photography.SoundEngineer;
 import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
 import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.core.time.SystemClock;
+import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
@@ -374,7 +375,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (darkroom != null) {
             darkroom.waitUntilClose();
         }
-
     }
 
     public void testSuiteFinished() {
@@ -382,7 +382,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
         clearStorywideTagsAndIssues();
         ThucydidesWebDriverSupport.clearStepLibraries();
 
-        closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(STORY);
+        if (this.currentTestIsABrowserTest()) {
+            this.closeBrowsers.forTestSuite(this.testSuite).closeIfConfiguredForANew(RestartBrowserForEach.FEATURE);
+        }
 
         suiteStarted = false;
     }

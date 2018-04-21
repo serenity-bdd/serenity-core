@@ -6,6 +6,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.reports.html.Formatter;
 import net.thucydides.core.reports.html.MarkdownRendering;
+import net.thucydides.core.requirements.RootDirectory;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +14,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -66,19 +66,27 @@ public class RequirementsOverview {
     }
 
     private List<String> relativeOverviewFilesOnClasspath(String overviewFile) {
+        RootDirectory rootDirectory = RootDirectory.definedIn(environmentVariables);
+
         return Arrays.asList(
                 testRoot() + "/" + relativePath() + overviewFile,
-                "/features/" + relativePath() + overviewFile,
-                "/stories/" + relativePath() + overviewFile
+                "/" + rootDirectory.featureDirectoryName() + "/" + relativePath() + overviewFile,
+                "/" + rootDirectory.storyDirectoryName() + "/" + relativePath() + overviewFile
                 );
     }
 
     private List<String> relativeFileSystemPaths(String overviewFile) {
-        return Arrays.asList(
-                "src/test/resources/" + relativePath() +  overviewFile,
-                "src/test/resources/features/" + relativePath() +  overviewFile,
-                "src/test/resources/stories/" + relativePath() +  overviewFile
+        RootDirectory rootDirectory = RootDirectory.definedIn(environmentVariables);
+        Optional<Path> featureOrStoriesDirectory = rootDirectory.featuresOrStoriesRootDirectory();
+
+        List<String> overviewDirectories = new ArrayList<>();
+
+        overviewDirectories.add("src/test/resources/" + relativePath() +  overviewFile);
+        featureOrStoriesDirectory.ifPresent(
+                featureDirectory -> overviewDirectories.add(featureDirectory + "/" + relativePath() + overviewFile)
         );
+
+        return overviewDirectories;
     }
 
     private String relativePath() {

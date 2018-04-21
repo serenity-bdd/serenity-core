@@ -330,7 +330,7 @@ public class WhenFindingTagsForATestOutcome {
     public void should_get_tags_from_story_path_with_file_separators() {
         FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider();
 
-        when(testOutcome.getPath()).thenReturn("stories/grow_potatoes/grow_new_potatoes/PlantNewPotatoes");
+        when(testOutcome.getPath()).thenReturn("stories/grow_potatoes/grow_new_potatoes/PlantPotatoes");
         Set<TestTag> tags = tagProvider.getTagsFor(testOutcome);
         assertThat(tags, hasItem(TestTag.withName("Grow potatoes").andType("capability")));
         assertThat(tags, hasItem(TestTag.withName("Grow potatoes/Grow new potatoes").andType("feature")));
@@ -363,7 +363,7 @@ public class WhenFindingTagsForATestOutcome {
     public void should_get_tags_from_story_path_with_windows_file_separators() {
         FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider();
 
-        when(testOutcome.getPath()).thenReturn("stories\\grow_potatoes\\grow_new_potatoes\\PlantNewPotatoes");
+        when(testOutcome.getPath()).thenReturn("stories\\grow_potatoes\\grow_new_potatoes\\PlantPotatoes");
         Set<TestTag> tags = tagProvider.getTagsFor(testOutcome);
         assertThat(tags, hasItem(TestTag.withName("Grow potatoes").andType("capability")));
         assertThat(tags, hasItem(TestTag.withName("Grow potatoes/Grow new potatoes").andType("feature")));

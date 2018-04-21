@@ -224,6 +224,14 @@
                 </div>
             </#if>
 
+            <#if (requirements.overview?has_content)>
+                <div class="requirements-overview panel panel-default">
+                    <div class="panel-body">
+                        ${requirements.overview}
+                    </div>
+                </div>
+            </#if>
+
             <#if (requirements.totalTestCount > 0 || requirements.flattenedRequirementCount > 0)>
                 <#assign untestedCount = 0>
                 <#foreach requirementType in requirements.types>
@@ -295,13 +303,6 @@
                     </div>
                 </div>
                 <div class="clr"></div>
-            </#if>
-            <#if (requirements.overview?has_content)>
-                <div class="requirements-overview panel panel-default">
-                    <div class="panel-body">
-                        ${requirements.overview}
-                    </div>
-                </div>
             </#if>
             <#if (requirements.requirementOutcomes?has_content || testOutcomes.total > 0)>
                 <div id="requirements-tabs">

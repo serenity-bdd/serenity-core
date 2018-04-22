@@ -5,9 +5,6 @@ import net.thucydides.core.model.TestTag;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.Arrays.stream;
 
 /**
  * The color of different types of tags in the Serenity reports can be configured using Serenity properties.

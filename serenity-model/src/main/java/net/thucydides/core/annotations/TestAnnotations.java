@@ -1,7 +1,7 @@
 package net.thucydides.core.annotations;
 
 import net.thucydides.core.model.TestTag;
-import net.thucydides.core.reports.html.Formatter;
+import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.tags.TagConverters;
 import org.apache.commons.lang3.StringUtils;
 
@@ -114,7 +114,7 @@ public class TestAnnotations {
      */
     List<String> getAnnotatedIssuesForMethodTitle(String methodName) {
         java.util.Optional<String> title = getAnnotatedTitleForMethod(methodName);
-        return title.map(Formatter::issuesIn).orElseGet(() -> Formatter.issuesIn(methodName));
+        return title.map(ReportFormatter::issuesIn).orElseGet(() -> ReportFormatter.issuesIn(methodName));
     }
 
 

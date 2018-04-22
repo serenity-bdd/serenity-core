@@ -91,25 +91,6 @@ public class RequirementsOutcomes {
                                       estimatedUnimplementedTests, issueTracking);
     }
 
-    public String getOverview() {
-
-        if (getParentRequirement().isPresent()) {
-            return getNestedOverviewFrom(getParentRequirement().get());
-        } else {
-            return RequirementsOverview.withEnvironmentVariables(environmentVariables).asRenderedHtml();
-        }
-    }
-
-    private String getNestedOverviewFrom(Requirement parentRequirement) {
-        if (isEmpty(parentRequirement.getPath())) {
-            return RequirementsOverview.withEnvironmentVariables(environmentVariables)
-                    .asRenderedHtml();
-        } else {
-            return RequirementsOverview.withEnvironmentVariables(environmentVariables)
-                    .withRelativePath(parentRequirement.getPath())
-                    .asRenderedHtml();
-        }
-    }
 
     RequirementsOutcomesOfTypeCache requirementsOfTypeCache = new RequirementsOutcomesOfTypeCache(this);
 

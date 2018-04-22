@@ -88,7 +88,7 @@ public class FreemarkerContext {
     }
 
     private void addFormattersToContext(final Map<String, Object> context) {
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
         context.put("formatter", formatter);
         context.put("formatted", new NumericalFormatter());
         context.put("inflection", Inflector.getInstance());

@@ -1,28 +1,35 @@
 package net.thucydides.core.reports.html;
 
-import com.github.rjeschke.txtmark.*;
-import com.google.common.base.*;
-import com.google.inject.*;
-import com.vladsch.flexmark.ast.*;
-import com.vladsch.flexmark.html.*;
-import com.vladsch.flexmark.parser.*;
-import com.vladsch.flexmark.util.options.*;
-import net.serenitybdd.core.collect.*;
-import net.thucydides.core.*;
-import net.thucydides.core.guice.*;
-import net.thucydides.core.issues.*;
-import net.thucydides.core.reports.renderer.*;
-import net.thucydides.core.util.*;
-import org.apache.commons.lang3.*;
-import org.apache.commons.lang3.text.translate.*;
-import org.slf4j.*;
+import com.github.rjeschke.txtmark.Configuration;
+import com.google.common.base.Splitter;
+import com.google.inject.Inject;
+import com.google.inject.Key;
+import com.vladsch.flexmark.ast.Node;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.options.MutableDataSet;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.reports.renderer.Asciidoc;
+import net.thucydides.core.reports.renderer.MarkupRenderer;
+import net.thucydides.core.util.EnvironmentVariables;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.translate.AggregateTranslator;
+import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
+import org.apache.commons.lang3.text.translate.EntityArrays;
+import org.apache.commons.lang3.text.translate.LookupTranslator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.util.regex.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.abbreviate;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.trim;
 
 //////
 
@@ -30,13 +37,9 @@ import static org.apache.commons.lang3.StringUtils.*;
  * Format text for HTML reports.
  * In particular, this integrates JIRA links into the generated reports.
  */
-public class Formatter {
+public class Formatter  {
 
-    private final static String ISSUE_NUMBER_REGEXP = "#([A-Z][A-Z0-9-_]*)?-?\\d+";
-    private final static Pattern shortIssueNumberPattern = Pattern.compile(ISSUE_NUMBER_REGEXP);
-    private final static String FULL_ISSUE_NUMBER_REGEXP = "([A-Z][A-Z0-9-_]*)-\\d+";
-    private final static Pattern fullIssueNumberPattern = Pattern.compile(FULL_ISSUE_NUMBER_REGEXP);
-    private final static String ISSUE_LINK_FORMAT = "<a target=\"_blank\" href=\"{0}\">{1}</a>";
+
     private static final String ELIPSE = "&hellip;";
     private static final String ASCIIDOC = "asciidoc";
     private static final String MARKDOWN = "markdown";
@@ -56,18 +59,15 @@ public class Formatter {
 
     public static String[][] UNICODE_CHARS_ESCAPE = new String[][]{{"\\u", "&#92;"}};
 
-    private final IssueTracking issueTracking;
     private final EnvironmentVariables environmentVariables;
     private final MarkupRenderer asciidocRenderer;
-//    private final Markdown4jProcessor markdown4jProcessor;
     Configuration markdownEncodingConfiguration;
 
     Parser parser;
     HtmlRenderer renderer;
 
     @Inject
-    public Formatter(IssueTracking issueTracking, EnvironmentVariables environmentVariables) {
-        this.issueTracking = issueTracking;
+    public Formatter(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
         this.asciidocRenderer = Injectors.getInjector().getInstance(Key.get(MarkupRenderer.class, Asciidoc.class));
 
@@ -89,8 +89,8 @@ public class Formatter {
 
     }
 
-    public Formatter(IssueTracking issueTracking) {
-        this(issueTracking, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
+    public Formatter() {
+        this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
     }
 
     public String renderAsciidoc(String text) {
@@ -126,16 +126,6 @@ public class Formatter {
         return render.replaceAll("\n", "");
     }
 
-    public String stripQualifications(String title) {
-        if (title == null) {
-            return "";
-        }
-        if (title.contains("[")) {
-            return title.substring(0,title.lastIndexOf("[")).trim();
-        } else {
-            return title;
-        }
-    }
 
     public String renderText(String text) {
         if (isEmpty(text)) {
@@ -152,67 +142,6 @@ public class Formatter {
         }
         return concatLines(BASIC_XML.translate(stringFormOf(text)),"<br>")
                 .replaceAll("\\t", "");
-    }
-
-    static class IssueExtractor {
-        private String workingCopy;
-
-        IssueExtractor(String initialValue) {
-            this.workingCopy = initialValue;
-        }
-
-
-        public List<String> getShortenedIssues() {
-            Matcher matcher = shortIssueNumberPattern.matcher(workingCopy);
-
-            ArrayList<String> issues = new ArrayList<>();
-            while (matcher.find()) {
-                String issue = matcher.group();
-                issues.add(issue);
-                workingCopy = workingCopy.replaceFirst(issue, "");
-            }
-
-            return issues;
-        }
-
-        public List<String> getFullIssues() {
-            Matcher unhashedMatcher = fullIssueNumberPattern.matcher(workingCopy);
-
-            ArrayList<String> issues = new ArrayList<>();
-            while (unhashedMatcher.find()) {
-                String issue = unhashedMatcher.group();
-                issues.add(issue);
-                workingCopy = workingCopy.replaceFirst(issue, "");
-            }
-
-            return issues;
-        }
-
-    }
-
-    public static List<String> issuesIn(final String value) {
-
-        IssueExtractor extractor = new IssueExtractor(value);
-
-        List<String> issuesWithHash = extractor.getShortenedIssues();
-        List<String> allIssues = extractor.getFullIssues();
-        allIssues.addAll(issuesWithHash);
-
-        return allIssues;
-    }
-
-    public String addLinks(final String value) {
-        if (issueTracking == null) {
-            return value;
-        }
-        String formattedValue = value;
-        if (issueTracking.getIssueTrackerUrl() != null) {
-            formattedValue = insertFullIssueTrackingUrls(value);
-        }
-        if (issueTracking.getShortenedIssueTrackerUrl() != null) {
-            formattedValue = insertShortenedIssueTrackingUrls(formattedValue);
-        }
-        return formattedValue;
     }
 
 
@@ -419,69 +348,8 @@ public class Formatter {
 //        return ESCAPE_SPECIAL_CHARS.translate(renderMarkdown(addLineBreaks(truncate(text, length))));
     }
 
-    private String replaceWithTokens(String value, List<String> issues) {
-        List<String> sortedIssues = inOrderOfDecreasingLength(issues);
-        for(int i = 0; i < sortedIssues.size(); i++) {
-            value = value.replaceAll(sortedIssues.get(i), "%%%" + i  + "%%%");
-        }
-        return value;
-    }
-
-    private List<String> inOrderOfDecreasingLength(List<String> issues) {
-        List<String> sortedIssues = NewList.copyOf(issues);
-        Collections.sort(sortedIssues, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o2.length() - o1.length();
-            }
-        });
-        return sortedIssues;
-    }
-
-    public static List<String> shortenedIssuesIn(String value) {
-        IssueExtractor extractor = new IssueExtractor(value);
-        return extractor.getShortenedIssues();
-    }
-
-    public static List<String> fullIssuesIn(String value) {
-        IssueExtractor extractor = new IssueExtractor(value);
-        return extractor.getFullIssues();
-    }
 
 
-    private String insertShortenedIssueTrackingUrls(String value) {
-        String issueUrlFormat = issueTracking.getShortenedIssueTrackerUrl();
-        List<String> issues = sortByDecreasingSize(shortenedIssuesIn(value));
-        String formattedValue = replaceWithTokens(value, issues);
-        int i = 0;
-        for (String issue : issues) {
-            String issueUrl = MessageFormat.format(issueUrlFormat, stripLeadingHashFrom(issue));
-            String issueLink = MessageFormat.format(ISSUE_LINK_FORMAT, issueUrl, issue);
-            String token = "%%%" + i++ + "%%%";
-            formattedValue = formattedValue.replaceAll(token, issueLink);
-        }
-        return formattedValue;
-    }
-
-    private String insertFullIssueTrackingUrls(String value) {
-        String issueUrlFormat = issueTracking.getIssueTrackerUrl();
-        List<String> issues = sortByDecreasingSize(fullIssuesIn(value));
-        String formattedValue = replaceWithTokens(value, issues);
-        int i = 0;
-        for (String issue : issues) {
-            String issueUrl = MessageFormat.format(issueUrlFormat, issue);
-            String issueLink = MessageFormat.format(ISSUE_LINK_FORMAT, issueUrl, issue);
-            String token = "%%%" + i++ + "%%%";
-            formattedValue = formattedValue.replaceAll(token, issueLink);
-        }
-        return formattedValue;
-    }
-
-    private List<String> sortByDecreasingSize(List<String> issues) {
-        List<String> sortedIssues = new ArrayList<>(issues);
-        Collections.sort(sortedIssues, (a, b) -> Integer.valueOf(-a.length()).compareTo(Integer.valueOf(b.length())));
-        return sortedIssues;
-    }
 
     public String formatWithFields(String textToFormat) {
         String textWithEscapedFields  = textToFormat.replaceAll("<", "&lt;")
@@ -499,7 +367,4 @@ public class Formatter {
         return textToFormat.replaceAll("\\{trim=false\\}\\s*\\r?\\n","");
     }
 
-    private String stripLeadingHashFrom(final String issue) {
-        return issue.substring(1);
-    }
 }

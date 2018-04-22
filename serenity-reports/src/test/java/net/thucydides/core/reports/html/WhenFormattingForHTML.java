@@ -5,6 +5,7 @@ import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.NumericalFormatter;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import org.junit.After;
@@ -45,7 +46,7 @@ public class WhenFormattingForHTML {
         when(issueTracking.getIssueTrackerUrl()).thenReturn("http://my.issue.tracker/MY-PROJECT/browse/{0}");
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn("http://my.issue.tracker/MY-PROJECT/browse/ISSUE-{0}");
 
-        Formatter formatter = new Formatter(issueTracking);
+        ReportFormatter formatter = new ReportFormatter(issueTracking);
         String formattedValue = formatter.addLinks("Fixes issue #123");
 
         assertThat(formattedValue, is("Fixes issue <a target=\"_blank\" href=\"http://my.issue.tracker/MY-PROJECT/browse/ISSUE-123\">#123</a>"));
@@ -71,7 +72,7 @@ public class WhenFormattingForHTML {
         when(issueTracking.getIssueTrackerUrl()).thenReturn("http://my.issue.tracker/MY-PROJECT/browse/{0}");
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn("http://my.issue.tracker/MY-PROJECT/browse/ISSUE-{0}");
 
-        Formatter formatter = new Formatter(issueTracking);
+        ReportFormatter formatter = new ReportFormatter(issueTracking);
         String formattedValue = formatter.addLinks("Fixes issue ISSUE-123");
 
         assertThat(formattedValue, is("Fixes issue <a target=\"_blank\" href=\"http://my.issue.tracker/MY-PROJECT/browse/ISSUE-123\">ISSUE-123</a>"));
@@ -81,7 +82,7 @@ public class WhenFormattingForHTML {
     public void should_include_issue_tracking_link_for_both_full_and_shortened_ids() {
         when(issueTracking.getIssueTrackerUrl()).thenReturn("http://my.issue.tracker/MY-PROJECT/browse/{0}");
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn("http://my.issue.tracker/MY-PROJECT/browse/MYPROJECT-{0}");
-        Formatter formatter = new Formatter(issueTracking);
+        ReportFormatter formatter = new ReportFormatter(issueTracking);
 
         String formattedValue = formatter.addLinks("Fixes issue #1 and MYPROJECT-2");
 
@@ -91,7 +92,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_include_multiple_issue_tracking_links() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn("http://my.issue.tracker/MY-PROJECT/browse/ISSUE-{0}");
-        Formatter formatter = new Formatter(issueTracking);
+        ReportFormatter formatter = new ReportFormatter(issueTracking);
 
         String formattedValue = formatter.addLinks("A scenario with about issues #123 and #456");
 
@@ -101,7 +102,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_allow_letters_and_numbers_in_issue_number() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn("http://my.issue.tracker/MYPROJECT/browse/{0}");
-        Formatter formatter = new Formatter(issueTracking);
+        ReportFormatter formatter = new ReportFormatter(issueTracking);
 
         String formattedValue = formatter.addLinks("A big story (#MYPROJECT-123,#MYPROJECT-456)");
 
@@ -112,7 +113,7 @@ public class WhenFormattingForHTML {
     public void should_allow_overlapping_issue_number() {
         IssueTracking issueTracking = mock(IssueTracking.class);
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn("http://my.issue.tracker/MYPROJECT/browse/{0}");
-        Formatter formatter = new Formatter(issueTracking);
+        ReportFormatter formatter = new ReportFormatter(issueTracking);
 
         String formattedValue = formatter.addLinks("A big story (#MYPROJECT-12,#MYPROJECT-123,#MYPROJECT-1)");
 
@@ -124,7 +125,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_allow_dashes_in_issue_number() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn("http://my.issue.tracker/MYPROJECT/browse/{0}");
-        Formatter formatter = new Formatter(issueTracking);
+        ReportFormatter formatter = new ReportFormatter(issueTracking);
 
         String formattedValue = formatter.addLinks("A big story (#MY-PROJECT-123,#MY-PROJECT-456)");
 
@@ -134,7 +135,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_allow_underscores_in_issue_number() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn("http://my.issue.tracker/MYPROJECT/browse/{0}");
-        Formatter formatter = new Formatter(issueTracking);
+        ReportFormatter formatter = new ReportFormatter(issueTracking);
 
         String formattedValue = formatter.addLinks("A big story (#MY_PROJECT_123,#MY_PROJECT_456)");
 
@@ -145,14 +146,14 @@ public class WhenFormattingForHTML {
 
     @Test
     public void formatter_should_render_asciidoc() {
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
         String formatted = formatter.renderAsciidoc("a quick *brown* fox");
         assertThat(formatted, is("a quick <strong>brown</strong> fox"));
     }
 
     @Test
     public void formatter_should_render_multiline_asciidoc() {
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
         String formatted = formatter.renderAsciidoc("a quick *brown* fox\njumped over a log");
         assertThat(formatted, is("a quick <strong>brown</strong> fox<br>jumped over a log"));
     }
@@ -161,7 +162,7 @@ public class WhenFormattingForHTML {
     public void formatter_should_render_asciidoc_if_configured() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("narrative.format","asciidoc");
-        Formatter formatter = new Formatter(issueTracking, environmentVariables);
+        Formatter formatter = new Formatter(environmentVariables);
         String formatted = formatter.renderDescription("a quick *brown* fox\njumped over a log");
         assertThat(formatted, is("a quick <strong>brown</strong> fox<br>jumped over a log"));
     }
@@ -169,7 +170,7 @@ public class WhenFormattingForHTML {
     @Test
     public void formatter_should_render_markdown_by_default() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-        Formatter formatter = new Formatter(issueTracking, environmentVariables);
+        Formatter formatter = new Formatter( environmentVariables);
         String formatted = formatter.renderDescription("a quick *brown* fox\njumped over a log");
         assertThat(formatted, containsString("a quick <em>brown</em> fox"));
     }
@@ -178,7 +179,7 @@ public class WhenFormattingForHTML {
     public void formatter_should_not_render_markdown_if_not_configured_for_narrative() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("enable.markdown","story");
-        Formatter formatter = new Formatter(issueTracking, environmentVariables);
+        Formatter formatter = new Formatter(environmentVariables);
         String formatted = formatter.renderDescription("a quick *brown* fox\njumped over a log");
         assertThat(formatted, containsString("a quick *brown* fox"));
     }
@@ -186,7 +187,7 @@ public class WhenFormattingForHTML {
     @Test
     public void formatter_should_render_markdown_headings_by_default() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-        Formatter formatter = new Formatter(issueTracking, environmentVariables);
+        Formatter formatter = new Formatter(environmentVariables);
         String formatted = formatter.renderDescription("# Heading");
         assertThat(formatted, containsString("<h1>Heading</h1>"));
         formatted = formatter.renderDescription("## Sub-heading");
@@ -199,7 +200,7 @@ public class WhenFormattingForHTML {
     public void formatter_should_not_render_markdown_headings_if_not_configured() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("enable.markdown","story");
-        Formatter formatter = new Formatter(issueTracking, environmentVariables);
+        Formatter formatter = new Formatter(environmentVariables);
         String formatted = formatter.renderDescription("# Heading");
         assertThat(formatted, containsString("# Heading"));
         formatted = formatter.renderDescription("## Sub-heading");
@@ -212,7 +213,7 @@ public class WhenFormattingForHTML {
     public void markdown_should_not_affect_escaped_html_characters() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
 
-        Formatter formatter = new Formatter(issueTracking, environmentVariables);
+        Formatter formatter = new Formatter( environmentVariables);
         String htmlFormatted = formatter.htmlCompatible(formatter.renderMarkdown("&Eacute;rintett befogad&aacute;sa"));
 
         assertThat(htmlFormatted, equalTo("&Eacute;rintett befogad&aacute;sa"));
@@ -241,21 +242,21 @@ public class WhenFormattingForHTML {
     @Test
     public void formatter_should_leave_rendered_html_as_is() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-        Formatter formatter = new Formatter(issueTracking, environmentVariables);
+        Formatter formatter = new Formatter(environmentVariables);
         String formatted = formatter.renderDescription(htmlDescription);
         assertThat(formatted, is(htmlDescription));
     }
 
     @Test
     public void should_identify_issues_in_a_text() {
-        List<String> issues = Formatter.shortenedIssuesIn("A scenario about issue #123");
+        List<String> issues = ReportFormatter.shortenedIssuesIn("A scenario about issue #123");
 
         assertThat(issues, hasItem("#123"));
     }
 
     @Test
     public void should_identify_multiple_issues_in_a_text() {
-        List<String> issues = Formatter.shortenedIssuesIn("A scenario about issue #123,#456, #789");
+        List<String> issues = ReportFormatter.shortenedIssuesIn("A scenario about issue #123,#456, #789");
 
         assertThat(issues, hasItems("#123", "#456", "#789"));
     }
@@ -263,7 +264,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_not_format_issues_if_no_issue_manage_url_is_provided() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
-        Formatter formatter = new Formatter(issueTracking);
+        ReportFormatter formatter = new ReportFormatter(issueTracking);
 
         String formattedValue = formatter.addLinks("A scenario about issues #123 and #456");
 
@@ -273,7 +274,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_not_format_issues_if_the_issue_manage_url_is_empty() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
-        Formatter formatter = new Formatter(issueTracking);
+        ReportFormatter formatter = new ReportFormatter(issueTracking);
 
         String formattedValue = formatter.addLinks("A scenario with about issues #123 and #456");
 
@@ -283,7 +284,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_insert_line_breaks_into_text_values() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
 
         String formattedValue = formatter.htmlCompatible("Line one\nLine two\nLine three");
 
@@ -293,7 +294,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_convert_text_tables_into_html_tables() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
 
         String formattedValue = formatter.convertAnyTables("| name | age |\n|Bill|20|");
 
@@ -303,7 +304,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_convert_embedded_text_tables_into_html_tables() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
 
         String formattedValue = formatter.convertAnyTables("A table:\n| name | age |\n|Bill|20|");
 
@@ -314,7 +315,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_convert_embedded_text_tables__with_square_brackets_into_html_tables() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
 
         String formattedValue = formatter.convertAnyTables("A table:\n[| name | age |\n|Bill|20|]");
 
@@ -324,7 +325,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_convert_embedded_jbehave_style_tables__with_square_brackets_into_html_tables() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
 
         String formattedValue = formatter.convertAnyTables("Given I have the following pet:\n［|name | status |\n|Fido | available |］");
 
@@ -335,7 +336,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_ignore_isolated_pipes() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
 
         String formattedValue = formatter.convertAnyTables("Not a table: | that was a pipe");
 
@@ -346,7 +347,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_return_empty_string_when_inserting_line_breaks_into_a_null_value() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
 
         String formattedValue = formatter.htmlCompatible(null);
 
@@ -356,7 +357,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_insert_line_breaks_into_text_values_with_windows_line_breaks() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
 
         String formattedValue = formatter.htmlCompatible("Line one\r\nLine two\r\nLine three");
 
@@ -366,7 +367,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_not_escape_html_tags() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
 
         String formattedValue = formatter.htmlCompatible("<ul style='margin-left:5%'><li>Line one</li><li>Line two</li><li>Line three</li></ul>");
 
@@ -376,7 +377,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_not_escape_xml_tags_unless_asked_nicely() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
 
         String formattedValue = formatter.renderText("<wsse:username>nonofyourbusiness</wsse:username>");
 
@@ -386,7 +387,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_keep_new_line_chars_in_xml() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
 
         String formattedValue = formatter.renderText("<catalog>\n" +
                 "    <cd>\n" +
@@ -413,7 +414,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_keep_new_line_chars_in_json() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
 
         String formattedValue = formatter.renderText("{\n" +
                 "    \"id\": 1409959379,\n" +
@@ -433,7 +434,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_keep_utf8_new_line_chars_in_json() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
 
         String formattedValue = formatter.renderText("{␤" +
                 "    \"id\": 1409959379,␤" +
@@ -453,7 +454,7 @@ public class WhenFormattingForHTML {
     @Test
     public void should_keep_escaped_unicode() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
 
         String formattedValue = formatter.renderText("\\u0008");
 
@@ -463,7 +464,7 @@ public class WhenFormattingForHTML {
 
     @Test
     public void should_escape_table_fields() {
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
 
         List<String> fields = NewList.of("name","age");
         String formattedValue = formatter.formatWithFields("Given a person named <name>\nand aged <age>");
@@ -475,7 +476,7 @@ public class WhenFormattingForHTML {
     public void should_disable_markdown_formatting_if_configured() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("enable.markdown", "story");
-        Formatter formatter = new Formatter(issueTracking, environmentVariables);
+        Formatter formatter = new Formatter(environmentVariables);
 
         String formattedValue = formatter.formatWithFields("Given a **person** named _Joe_");
 
@@ -486,7 +487,7 @@ public class WhenFormattingForHTML {
     public void should_allow_markdown_formatting_if_configured() {
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("enable.markdown", "step");
-        Formatter formatter = new Formatter(issueTracking, environmentVariables);
+        Formatter formatter = new Formatter(environmentVariables);
 
         String formattedValue = formatter.formatWithFields("Given a **person** named _Joe_");
 

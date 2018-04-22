@@ -1,0 +1,52 @@
+{
+  "title": "Another sample report with unicode",
+  "name": "Another sample report with unicode",
+  "testSteps": [
+    {
+      "number": 1,
+      "description": "When I run the \u0027pos_reports/import_future_pos_report_0_1\u0027 job",
+      "duration": 142,
+      "startTime": 1427726183139,
+      "result": "SUCCESS"
+    },
+    {
+      "number": 2,
+      "description": "Then I have many rows in table \u0027stg_pos.i_fut_point_of_sales\u0027 in staging schema",
+      "duration": 1830,
+      "startTime": 1427726183281,
+      "result": "SUCCESS"
+    }
+  ],
+  "userStory": {
+    "id": "import-distributor-reports",
+    "storyName": "Import distributor reports",
+    "path": "distributors/distributor_info_import.feature",
+    "narrative": " \nIn order to analyse the performance of distributors\nas a Sales Analyst\nI need to get information about their sales and inventory",
+    "type": "feature"
+  },
+  "title": "",
+  "description": "",
+  "tags": [
+    {
+      "name": "Distributors/Import distributor reports",
+      "type": "feature"
+    },
+    {
+      "name": "Distributors",
+      "type": "capability"
+    },
+    {
+      "name": "Distributors/Distributor info import",
+      "type": "story"
+    },
+    {
+      "name": "Import distributor reports",
+      "type": "feature"
+    }
+  ],
+  "startTime": 1427726182978,
+  "duration": 2133,
+  "dr iver": "firefox",
+  "manual": false,
+  "result": "SUCCESS"
+}

@@ -1,7 +1,7 @@
 package net.thucydides.core.model;
 
 import net.thucydides.core.annotations.TestAnnotations;
-import net.thucydides.core.reports.html.Formatter;
+import net.thucydides.core.model.formatters.ReportFormatter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,7 +57,7 @@ class TestOutcomeAnnotationReader {
     }
 
     private static void addTitleLevelIssuesTo(TestOutcome testOutcome, List<String> issues) {
-        List<String> titleIssues = Formatter.issuesIn(testOutcome.getTitle());
+        List<String> titleIssues = ReportFormatter.issuesIn(testOutcome.getTitle());
         if (!titleIssues.isEmpty()) {
             issues.addAll(titleIssues);
         }

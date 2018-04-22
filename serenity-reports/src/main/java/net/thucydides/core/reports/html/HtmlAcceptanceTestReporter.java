@@ -199,7 +199,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
     }
 
     private void addFormattersToContext(final Map<String, Object> context) {
-        Formatter formatter = new Formatter(issueTracking);
+        Formatter formatter = new Formatter();
         context.put("reportOptions", new ReportOptions(getEnvironmentVariables(), requirementsService));
         context.put("formatter", formatter);
         context.put("reportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService));

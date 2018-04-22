@@ -1,11 +1,14 @@
 package net.thucydides.core.model;
 
-import net.thucydides.core.*;
-import net.thucydides.core.issues.*;
-import net.thucydides.core.reports.html.Formatter;
-import net.thucydides.core.util.*;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.issues.IssueTracking;
+import net.thucydides.core.model.formatters.ReportFormatter;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.util.Inflector;
 
-import java.util.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TitleBuilder {
 
@@ -57,8 +60,8 @@ public class TitleBuilder {
         return contextFor(testOutcome) + testOutcome.getTitle(qualified);
     }
 
-    private Formatter getFormatter() {
-        return new Formatter(issueTracking);
+    private ReportFormatter getFormatter() {
+        return new ReportFormatter(issueTracking);
     }
 
     private String contextFor(TestOutcome testOutcome) {

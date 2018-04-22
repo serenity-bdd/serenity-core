@@ -1,15 +1,15 @@
 package net.thucydides.core.requirements.reports;
 
-import net.serenitybdd.core.collect.NewSet;
 import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.collect.NewSet;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestType;
+import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.reports.TestOutcomeCounter;
 import net.thucydides.core.reports.TestOutcomes;
-import net.thucydides.core.reports.html.Formatter;
 import net.thucydides.core.requirements.ExcludedUnrelatedRequirementTypes;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -27,6 +27,7 @@ public class RequirementOutcome {
     private final long requirementsWithoutTests;
     private final long estimatedUnimplementedTests;
     private final EnvironmentVariables environmentVariables;
+    private ReportFormatter reportFormatter;
 
     public RequirementOutcome(Requirement requirement, TestOutcomes testOutcomes,
                               long requirementsWithoutTests, long estimatedUnimplementedTests,
@@ -224,8 +225,9 @@ public class RequirementOutcome {
         }
     }
 
-    private Formatter getFormatter() {
-        return new Formatter(issueTracking);
+    private ReportFormatter getFormatter() {
+        return reportFormatter;
+        /*return new Formatter(issueTracking);*/
     }
 
     @Override

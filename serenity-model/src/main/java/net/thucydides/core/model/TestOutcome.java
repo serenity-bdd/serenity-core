@@ -1,51 +1,64 @@
 package net.thucydides.core.model;
 
-import com.google.common.base.*;
-import net.serenitybdd.core.environment.*;
-import net.serenitybdd.core.exceptions.*;
-import net.serenitybdd.core.model.*;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.serenitybdd.core.exceptions.SerenityManagedException;
+import net.serenitybdd.core.exceptions.TheErrorType;
+import net.serenitybdd.core.model.FailureDetails;
 import net.serenitybdd.core.strings.Joiner;
-import net.serenitybdd.core.time.*;
-import net.thucydides.core.*;
-import net.thucydides.core.annotations.*;
-import net.thucydides.core.guice.*;
-import net.thucydides.core.images.*;
-import net.thucydides.core.issues.*;
-import net.thucydides.core.model.failures.*;
-import net.thucydides.core.model.features.*;
-import net.thucydides.core.model.flags.*;
-import net.thucydides.core.model.results.*;
-import net.thucydides.core.model.screenshots.*;
-import net.thucydides.core.model.stacktrace.*;
-import net.thucydides.core.reports.html.Formatter;
-import net.thucydides.core.reports.json.*;
-import net.thucydides.core.reports.saucelabs.*;
-import net.thucydides.core.screenshots.*;
-import net.thucydides.core.statistics.service.*;
-import net.thucydides.core.steps.*;
-import net.thucydides.core.util.*;
+import net.serenitybdd.core.time.SystemClock;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.annotations.TestAnnotations;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.images.ResizableImage;
+import net.thucydides.core.issues.IssueKeyFormat;
+import net.thucydides.core.issues.IssueTracking;
+import net.thucydides.core.model.failures.FailureAnalysis;
+import net.thucydides.core.model.features.ApplicationFeature;
+import net.thucydides.core.model.flags.Flag;
+import net.thucydides.core.model.flags.FlagProvider;
+import net.thucydides.core.model.formatters.ReportFormatter;
+import net.thucydides.core.model.results.MergeStepResultStrategy;
+import net.thucydides.core.model.results.StepResultMergeStragegy;
+import net.thucydides.core.model.screenshots.Screenshot;
+import net.thucydides.core.model.stacktrace.FailureCause;
+import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
+import net.thucydides.core.reports.json.JSONConverter;
+import net.thucydides.core.reports.saucelabs.LinkGenerator;
+import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
+import net.thucydides.core.statistics.service.TagProvider;
+import net.thucydides.core.statistics.service.TagProviderService;
+import net.thucydides.core.steps.StepFailure;
+import net.thucydides.core.steps.StepFailureException;
+import net.thucydides.core.steps.TestFailureCause;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.util.NameConverter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.lang3.*;
-import org.joda.time.*;
-import org.slf4j.*;
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.validation.constraints.*;
-import java.io.*;
-import java.nio.charset.*;
-import java.time.*;
-import java.time.format.*;
-import java.time.temporal.*;
+import javax.validation.constraints.NotNull;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
-import static com.google.common.base.Preconditions.*;
-import static com.google.common.collect.Lists.*;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Lists.partition;
 import static com.google.common.collect.Lists.reverse;
-import static net.thucydides.core.model.TestType.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static net.thucydides.core.model.TestType.ANY;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Represents the results of a test (or "scenario") execution. This
@@ -62,6 +75,8 @@ public class TestOutcome {
 
     private static final String ISSUES = "issues";
     private static final String NEW_LINE = System.getProperty("line.separator");
+
+    private ReportFormatter reportFormatter;
 
 
     /**
@@ -979,8 +994,8 @@ public class TestOutcome {
         return getFormatter().addLinks(getTitle());
     }
 
-    private Formatter getFormatter() {
-        return new Formatter(issueTracking);
+    private ReportFormatter getFormatter() {
+        return new ReportFormatter(issueTracking);
     }
 
     private String obtainQualifiedTitleFromAnnotationOrMethodName() {

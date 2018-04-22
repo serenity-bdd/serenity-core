@@ -1,9 +1,7 @@
 package net.serenitybdd.screenplay.targets;
 
-import com.google.common.collect.Iterables;
 import org.openqa.selenium.By;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;

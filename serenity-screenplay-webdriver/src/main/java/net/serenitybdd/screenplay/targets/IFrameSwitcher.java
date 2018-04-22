@@ -35,6 +35,7 @@ class IFrameSwitcher {
             driver.switchTo().defaultContent();
             this.currentIFrame = empty();
         } else {
+            driver.switchTo().defaultContent();
             target.getIFrame().ifPresent(iFrame -> iFrame.locators.forEach(frameLocator -> driver.switchTo().frame(driver.findElement(frameLocator))));
             this.currentIFrame = target.getIFrame();
         }

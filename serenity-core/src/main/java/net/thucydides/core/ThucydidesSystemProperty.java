@@ -776,6 +776,11 @@ public enum ThucydidesSystemProperty {
     SERENITY_STORIES_DIRECTORY,
 
     /**
+     * Normally, REST calls are disabled when a failure occurs. Set this to false to never disable REST calls
+     */
+    SERENITY_DISABLE_REST_CALLS_AFTER_FAILURES,
+
+    /**
      * By default, Thucydides will read requirements from the directory structure that contains the stories.
      * When other tag and requirements plugins are used, such as the JIRA plugin, this can cause conflicting
      * tags. Set this property to false to deactivate this feature (it is true by default).

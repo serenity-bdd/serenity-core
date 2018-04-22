@@ -214,56 +214,68 @@ public abstract class RequestSpecificationDecorated extends RequestSpecification
     }
 
     protected Response execute(final RestMethod method, final String path, final Object... pathParams) {
-        Response response = null;
-        RuntimeException exception = null;
+        Response response;
         try {
-            switch (method) {
-                case POST:
-                    response = decorate(this.core.post(path, pathParams));
-                    break;
-                case GET:
-                    response = decorate(this.core.get(path, pathParams));
-                    break;
-                case DELETE:
-                    response = decorate(this.core.delete(path, pathParams));
-                    break;
-                case PUT:
-                    response = decorate(this.core.put(path, pathParams));
-                    break;
-                case HEAD:
-                    response = decorate(this.core.head(path, pathParams));
-                    break;
-                case OPTIONS:
-                    response = decorate(this.core.options(path, pathParams));
-                    break;
-                case PATCH:
-                    response = decorate(this.core.patch(path, pathParams));
-                    break;
-            }
-            if (RestExecutionHelper.restCallsAreEnabled()) {
+            if (RestExecutionHelper.restCallsAreDisabled()) {
                 response = stubbed();
+            } else {
+                response = executionResult(method, path, pathParams);
             }
-        } catch (RuntimeException e) {
-            exception = e;
+        } catch (RuntimeException exception) {
+            response = handleFailure(method, path, exception, pathParams);
         }
-        if (exception != null) {
-            if (Serenity.shouldThrowErrorsImmediately()) {
-                throw exception;
-            } else {
-                response = stubbed();
-            }
-            if (getEventBus().isBaseStepListenerRegistered()) {
-                reporting.registerCall(method, this, path, exception, pathParams);
-            } else {
-                log.info("No BaseStepListener, {} {} not registered.", method.toString(), path);
-            }
-        } else if (getEventBus().isBaseStepListenerRegistered()) {
+        reportMethodCall(method, response, path, pathParams);
+
+        this.lastResponse = response;
+        return response;
+    }
+
+    private Response handleFailure(RestMethod method, String path, RuntimeException exception, Object[] pathParams) {
+        reportFailedCall(method, path, exception, pathParams);
+
+        if (Serenity.shouldThrowErrorsImmediately()) {
+            throw exception;
+        } else {
+            return stubbed();
+        }
+    }
+
+    private void reportFailedCall(RestMethod method, String path, RuntimeException exception, Object[] pathParams) {
+        if (getEventBus().isBaseStepListenerRegistered()) {
+            reporting.registerCall(method, this, path, exception, pathParams);
+        } else {
+            log.info("No BaseStepListener, {} {} not registered.", method.toString(), path);
+        }
+    }
+
+    private void reportMethodCall(final RestMethod method, final Response response, final String path, final Object... pathParams) {
+        if (getEventBus().isBaseStepListenerRegistered()) {
             reporting.registerCall(method, response, this, path, pathParams);
         } else {
             log.info("No BaseStepListener, {} {} not registered.", method.toString(), path);
         }
-        this.lastResponse = response;
-        return response;
+    }
+
+
+    private Response executionResult(final RestMethod method, final String path, final Object... pathParams) {
+        switch (method) {
+            case POST:
+                return decorate(this.core.post(path, pathParams));
+            case GET:
+                return decorate(this.core.get(path, pathParams));
+            case DELETE:
+                return decorate(this.core.delete(path, pathParams));
+            case PUT:
+                return decorate(this.core.put(path, pathParams));
+            case HEAD:
+                return decorate(this.core.head(path, pathParams));
+            case OPTIONS:
+                return decorate(this.core.options(path, pathParams));
+            case PATCH:
+                return decorate(this.core.patch(path, pathParams));
+        }
+        log.warn("Unsupported rest method: " + method);
+        return this.core.post(path, pathParams);
     }
 
     public Response getLastResponse() {

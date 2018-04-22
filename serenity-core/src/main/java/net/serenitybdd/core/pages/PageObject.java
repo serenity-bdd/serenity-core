@@ -309,6 +309,14 @@ public abstract class PageObject {
         return this;
     }
 
+    /**
+     * @Deprecated TimeUnit has been replaced by TemporalUnit in Selenium. For more consistancy use a TemporalUnit parameter.
+     */
+    @Deprecated
+    public RenderedPageObjectView withTimeoutOf(int timeout, TimeUnit units) {
+        return withTimeoutOf(Duration.of(timeout, TemporalUnitConverter.fromTimeUnit(units)));
+    }
+
     public RenderedPageObjectView withTimeoutOf(int timeout, TemporalUnit units) {
         return withTimeoutOf(Duration.of(timeout, units));
     }

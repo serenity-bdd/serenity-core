@@ -214,41 +214,31 @@ public abstract class RequestSpecificationDecorated extends RequestSpecification
     }
 
     protected Response execute(final RestMethod method, final String path, final Object... pathParams) {
-        Response response;
+        Response response = null;
+        RuntimeException exception = null;
         try {
+            response = executeCall(method, path, pathParams);
             if (RestExecutionHelper.restCallsAreDisabled()) {
                 response = stubbed();
-            } else {
-                response = executionResult(method, path, pathParams);
             }
-        } catch (RuntimeException exception) {
-            response = handleFailure(method, path, exception, pathParams);
+        } catch (RuntimeException e) {
+            exception = e;
         }
-        reportMethodCall(method, response, path, pathParams);
-
+        if (exception != null) {
+            reportError(method, path, exception, pathParams);
+            if (Serenity.shouldThrowErrorsImmediately()) {
+                throw exception;
+            } else {
+                response = stubbed();
+            }
+        } else {
+            reportQuery(method, path, response, pathParams);
+        }
         this.lastResponse = response;
         return response;
     }
 
-    private Response handleFailure(RestMethod method, String path, RuntimeException exception, Object[] pathParams) {
-        reportFailedCall(method, path, exception, pathParams);
-
-        if (Serenity.shouldThrowErrorsImmediately()) {
-            throw exception;
-        } else {
-            return stubbed();
-        }
-    }
-
-    private void reportFailedCall(RestMethod method, String path, RuntimeException exception, Object[] pathParams) {
-        if (getEventBus().isBaseStepListenerRegistered()) {
-            reporting.registerCall(method, this, path, exception, pathParams);
-        } else {
-            log.info("No BaseStepListener, {} {} not registered.", method.toString(), path);
-        }
-    }
-
-    private void reportMethodCall(final RestMethod method, final Response response, final String path, final Object... pathParams) {
+    private void reportQuery(RestMethod method, String path, Response response, Object[] pathParams) {
         if (getEventBus().isBaseStepListenerRegistered()) {
             reporting.registerCall(method, response, this, path, pathParams);
         } else {
@@ -256,8 +246,15 @@ public abstract class RequestSpecificationDecorated extends RequestSpecification
         }
     }
 
+    private void reportError(RestMethod method, String path, RuntimeException exception, Object[] pathParams) {
+        if (getEventBus().isBaseStepListenerRegistered()) {
+            reporting.registerCall(method, this, path, exception, pathParams);
+        } else {
+            log.info("No BaseStepListener, {} {} not registered.", method.toString(), path);
+        }
+    }
 
-    private Response executionResult(final RestMethod method, final String path, final Object... pathParams) {
+    private Response executeCall(RestMethod method, String path, Object[] pathParams) {
         switch (method) {
             case POST:
                 return decorate(this.core.post(path, pathParams));
@@ -273,9 +270,9 @@ public abstract class RequestSpecificationDecorated extends RequestSpecification
                 return decorate(this.core.options(path, pathParams));
             case PATCH:
                 return decorate(this.core.patch(path, pathParams));
+            default:
+                throw new IllegalArgumentException("Unknown REST query type: " + method);
         }
-        log.warn("Unsupported rest method: " + method);
-        return this.core.post(path, pathParams);
     }
 
     public Response getLastResponse() {

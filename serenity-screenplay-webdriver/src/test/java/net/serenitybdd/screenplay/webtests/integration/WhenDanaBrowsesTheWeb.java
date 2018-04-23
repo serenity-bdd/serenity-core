@@ -4,9 +4,11 @@ import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.serenitybdd.screenplay.actions.Enter;
 import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.waits.WaitUntil;
 import net.serenitybdd.screenplay.webtests.model.Client;
+import net.serenitybdd.screenplay.webtests.pages.BankAccountEntry;
 import net.serenitybdd.screenplay.webtests.pages.ProfilePage;
 import net.serenitybdd.screenplay.webtests.questions.BankBalanceQuestion;
 import net.serenitybdd.screenplay.webtests.questions.ProfileQuestion;
@@ -207,6 +209,20 @@ public class WhenDanaBrowsesTheWeb {
         when(dana).attemptsTo(viewHerProfile);
         then(dana).should(seeThat(balances, displays("currentAccount", equalTo("£100.36"))));
         and(dana).should(seeThat(balances, displays("savingsAccount", equalTo("£1024.12"))));
+    }
+
+    @Test
+    public void danaShouldBeAbleToInteractWithTargetsInMultipleIFrames() {
+
+        Actor dana = new Actor("Dana");
+        dana.can(BrowseTheWeb.with(firstBrowser));
+
+        givenThat(dana).has(openedTheApplication);
+        when(dana).attemptsTo(viewHerProfile,
+                              Enter.theValue("HSBC").into(BankAccountEntry.ACCOUNT_NAME));
+        then(dana).should(seeThat(balances, displays("currentAccount", equalTo("£100.36"))));
+        and(dana).attemptsTo(Enter.theValue("Dana").into(ProfilePage.NAME));
+        then(dana).should(seeThat(balances, displays("savingsAccount", equalTo("£1024.12"))));
     }
 
     @Test

@@ -74,7 +74,7 @@ dependencies {
     compile("org.seleniumhq.selenium:selenium-opera-driver:$seleniumVersion")
     compile("org.seleniumhq.selenium:selenium-support:$seleniumVersion")
 
-    compile("com.paulhammant:ngwebdriver:1.0")
+    compile("com.paulhammant:ngwebdriver:${ngwebdriver}")
 
     compile("com.codeborne:phantomjsdriver:${phantomjsDriverVersion}") {
         exclude group: 'xml-apis', module: 'xml-apis'

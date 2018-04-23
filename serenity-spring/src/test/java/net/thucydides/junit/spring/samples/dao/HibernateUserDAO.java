@@ -2,7 +2,7 @@ package net.thucydides.junit.spring.samples.dao;
 
 import net.thucydides.junit.spring.samples.domain.User;
 import org.hibernate.SessionFactory;
-import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.orm.hibernate5.HibernateTemplate;
 
 import java.util.List;
 

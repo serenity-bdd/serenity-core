@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.transaction.TransactionConfiguration;
+//import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -30,7 +30,7 @@ import static org.hamcrest.Matchers.is;
 @Ignore("Should work but doesn't")
 @RunWith(ThucydidesRunner.class)
 @ContextConfiguration(locations = "classpath:spring/db-config.xml")
-@TransactionConfiguration
+//@TransactionConfiguration
 @Transactional
 public class WhenWorkingWithPersistentServices {
 

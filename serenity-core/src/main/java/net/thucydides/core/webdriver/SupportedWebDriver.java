@@ -2,7 +2,6 @@ package net.thucydides.core.webdriver;
 
 import net.serenitybdd.core.strings.Joiner;
 import net.serenitybdd.core.collect.NewList;
-import com.opera.core.systems.OperaDriver;
 import io.appium.java_client.AppiumDriver;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
@@ -11,6 +10,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
@@ -38,7 +38,6 @@ public enum SupportedWebDriver {
     /**
      * Opera - use it with SauceLabs
      */
-    @Deprecated
     OPERA(OperaDriver.class),
 
     /**

@@ -50,16 +50,16 @@ public class SmartWidgetHandler extends AbstractSingleItemHandler<WidgetObject> 
             Constructor constructor = ElementContructorForm.applicableConstructorFrom(implementerClass).get();
             switch (ElementContructorForm.applicableConstructor((implementerClass)).get()) {
                 case PAGE_LOCATOR_SINGLE_TIMEOUT:
-                    instance = constructor.newInstance(page, locator, page.getImplicitWaitTimeout().in(TimeUnit.MILLISECONDS));
+                    instance = constructor.newInstance(page, locator, page.getImplicitWaitTimeout().toMillis());
                     break;
                 case PAGE_LOCATOR_TWO_TIMEOUTS:
-                    instance = constructor.newInstance(page, locator, page.getImplicitWaitTimeout().in(TimeUnit.MILLISECONDS), page.getWaitForTimeout().in(TimeUnit.MILLISECONDS));
+                    instance = constructor.newInstance(page, locator, page.getImplicitWaitTimeout().toMillis(), page.getWaitForTimeout().toMillis());
                     break;
                 case PAGE_LOCATOR_ELEMENT_SINGLE_TIMEOUT:
-                    instance = constructor.newInstance(page, locator, null, page.getImplicitWaitTimeout().in(TimeUnit.MILLISECONDS));
+                    instance = constructor.newInstance(page, locator, null, page.getImplicitWaitTimeout().toMillis());
                     break;
                 case PAGE_LOCATOR_ELEMENT_TWO_TIMEOUTS:
-                    instance = constructor.newInstance(page, locator, null, page.getImplicitWaitTimeout().in(TimeUnit.MILLISECONDS), page.getWaitForTimeout().in(TimeUnit.MILLISECONDS));
+                    instance = constructor.newInstance(page, locator, null, page.getImplicitWaitTimeout().toMillis(), page.getWaitForTimeout().toMillis());
                     break;
             }
         }

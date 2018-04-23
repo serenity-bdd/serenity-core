@@ -2,9 +2,8 @@ package net.thucydides.core.webdriver;
 
 import com.google.common.base.Predicate;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.Duration;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 public abstract class AbstractObjectInitialiser<T> implements Predicate<T> {
 	
@@ -13,11 +12,11 @@ public abstract class AbstractObjectInitialiser<T> implements Predicate<T> {
 
     public AbstractObjectInitialiser(WebDriver driver, long ajaxTimeoutInMilliseconds) {
         this.driver = driver;
-        this.ajaxTimeout = new Duration(ajaxTimeoutInMilliseconds, TimeUnit.MILLISECONDS);
+        this.ajaxTimeout = Duration.ofMillis(ajaxTimeoutInMilliseconds);
     }
 
     protected int ajaxTimeoutInSecondsWithAtLeast1Second() {
-        return (int) ((ajaxTimeout.in(TimeUnit.SECONDS) > 0) ? ajaxTimeout.in(TimeUnit.SECONDS) : 1);
+        return (int) ((ajaxTimeout.getSeconds() > 0) ? ajaxTimeout.getSeconds() : 1);
     }
     
 	@Override

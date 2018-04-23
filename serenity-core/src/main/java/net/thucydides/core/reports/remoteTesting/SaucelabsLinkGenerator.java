@@ -1,6 +1,5 @@
-package net.thucydides.core.reports.saucelabs;
+package net.thucydides.core.reports.remoteTesting;
 
-import com.google.inject.Inject;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -15,40 +14,24 @@ import java.security.Key;
 /**
  * Used to generate links to Saucelabs videos when the tests are executed on the Saucelabs servers.
  */
-public class SaucelabsLinkGenerator implements LinkGenerator {
+public class SaucelabsLinkGenerator {
 
     private EnvironmentVariables environmentVariables;
 
     //no arg constructor for serialization
     public SaucelabsLinkGenerator() {
-    	
     }
-    
-    @Inject
+
     public SaucelabsLinkGenerator(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
     }
 
     public String linkFor(TestOutcome testOutcome) {
-        if (saucelabsIsNotConfigured()) {
-            return null;
-        }
-        if (noSessionIdIsFoundFor(testOutcome)) {
-            return null;
-        }
         if (accessKeyAvailable()) {
             return noLoginLinkFor(testOutcome.getSessionId());
         } else {
             return simpleLinkFor(testOutcome.getSessionId());
         }
-    }
-
-    private boolean saucelabsIsNotConfigured() {
-        return (ThucydidesSystemProperty.SAUCELABS_URL.from(environmentVariables) == null);
-    }
-
-    private boolean noSessionIdIsFoundFor(TestOutcome testOutcome) {
-        return testOutcome.getSessionId() == null;
     }
 
     private String simpleLinkFor(String jobId) {
@@ -75,7 +58,9 @@ public class SaucelabsLinkGenerator implements LinkGenerator {
         }
     }
 
+
     private boolean accessKeyAvailable() {
         return ThucydidesSystemProperty.SAUCELABS_ACCESS_KEY.from(environmentVariables) != null;
     }
+
 }

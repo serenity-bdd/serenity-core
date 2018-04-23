@@ -142,7 +142,7 @@ public class WhenRunningPolledTests {
                 .pollingEvery(100).milliseconds()
                 .until(weHaveWaitedEnough(counter));
 
-        verify(sleeper, times(3)).sleep(new Duration(100, TimeUnit.MILLISECONDS));
+        verify(sleeper, times(3)).sleep(java.time.Duration.ofMillis(100));
     }
 
 

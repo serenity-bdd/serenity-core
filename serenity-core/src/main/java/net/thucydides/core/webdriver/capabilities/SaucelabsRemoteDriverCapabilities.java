@@ -2,15 +2,10 @@ package net.thucydides.core.webdriver.capabilities;
 
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.NameConverter;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.Properties;
 

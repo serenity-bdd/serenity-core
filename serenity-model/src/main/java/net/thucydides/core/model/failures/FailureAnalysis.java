@@ -21,10 +21,10 @@ import static net.thucydides.core.model.TestResult.*;
  * By default, any exception  that extends AssertionError is a FAILURE.
  * Any exception  that extends WebdriverAssertionError and has a cause that is an AssertionError is also a FAILURE.
  * All other exceptions are an ERROR (except for StepFailureException as described below)
- *
+ * <p>
  * Any exception that extends StepFailureException and has a cause that meets the above criteria is classed as above.
  * All other exceptions are an ERROR
- *
+ * <p>
  * You can specify your own exceptions that will cause a failure by using the serenity.fail.on property.
  * You can also specify those that will cause an error using serenity.error.on.
  */
@@ -35,6 +35,7 @@ public class FailureAnalysis {
     }
 
     private final FailureAnalysisConfiguration configured;
+
     public FailureAnalysis(EnvironmentVariables environmentVariables) {
         this.configured = new FailureAnalysisConfiguration(environmentVariables);
     }
@@ -42,6 +43,9 @@ public class FailureAnalysis {
     public TestResult resultFor(Class testFailureCause) {
         if (reportAsPending(testFailureCause)) {
             return PENDING;
+        }
+        if (reportAsSkipped(testFailureCause)) {
+            return SKIPPED;
         }
         if (reportAsCompromised(testFailureCause)) {
             return COMPROMISED;
@@ -59,16 +63,19 @@ public class FailureAnalysis {
     }
 
     private static final List<Class<?>> DEFAULT_COMPROMISED_TYPES = new ArrayList<>();
+
     static {
         DEFAULT_COMPROMISED_TYPES.addAll(Arrays.asList(CausesCompromisedTestFailure.class));
     }
 
     private static final List<Class<?>> DEFAULT_PENDING_TYPES = new ArrayList<>();
+
     static {
         DEFAULT_PENDING_TYPES.addAll(Arrays.asList(PendingStepException.class, PendingException.class));
     }
 
     private static final List<Class<?>> DEFAULT_ERROR = new ArrayList<>();
+
     static {
         DEFAULT_ERROR.addAll(Arrays.asList(Error.class));
     }
@@ -77,8 +84,8 @@ public class FailureAnalysis {
         if (testFailureCause == null) {
             return false;
         }
-        for(Class<?> validFailureType: configured.failureTypes()) {
-            if (isA(validFailureType,testFailureCause)) {
+        for (Class<?> validFailureType : configured.failureTypes()) {
+            if (isA(validFailureType, testFailureCause)) {
                 return true;
             }
         }
@@ -89,8 +96,8 @@ public class FailureAnalysis {
         if (testFailureCause == null) {
             return false;
         }
-        for(Class<?> validCompromisedType: configured.compromisedTypes()) {
-            if (isA(validCompromisedType,testFailureCause)) {
+        for (Class<?> validCompromisedType : configured.compromisedTypes()) {
+            if (isA(validCompromisedType, testFailureCause)) {
                 return true;
             }
         }
@@ -101,8 +108,20 @@ public class FailureAnalysis {
         if (testFailureCause == null) {
             return false;
         }
-        for(Class<?> validPendingType: configured.pendingTypes()) {
-            if (isA(validPendingType,testFailureCause)) {
+        for (Class<?> validPendingType : configured.pendingTypes()) {
+            if (isA(validPendingType, testFailureCause)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean reportAsSkipped(Class<?> testFailureCause) {
+        if (testFailureCause == null) {
+            return false;
+        }
+        for (Class<?> validSkippedType : configured.skippedTypes()) {
+            if (isA(validSkippedType, testFailureCause)) {
                 return true;
             }
         }
@@ -113,8 +132,8 @@ public class FailureAnalysis {
         if (testFailureCause == null) {
             return false;
         }
-        for(Class<?> validErrorType: configured.errorTypes()) {
-            if (isA(validErrorType,testFailureCause)) {
+        for (Class<?> validErrorType : configured.errorTypes()) {
+            if (isA(validErrorType, testFailureCause)) {
                 return true;
             }
         }
@@ -128,6 +147,8 @@ public class FailureAnalysis {
     public TestResult resultFor(Throwable testFailureCause) {
         if (isPendingException(testFailureCause)) {
             return PENDING;
+        } else if (isSkippedException(testFailureCause)) {
+            return SKIPPED;
         } else if (isFailure(testFailureCause)) {
             return FAILURE;
         } else if (failingStepException(testFailureCause)) {
@@ -148,7 +169,9 @@ public class FailureAnalysis {
     }
 
     private boolean failingStepException(Throwable testFailureCause) {
-        if (testFailureCause == null) { return false; }
+        if (testFailureCause == null) {
+            return false;
+        }
 
         return ((StepFailureException.class.isAssignableFrom(testFailureCause.getClass()))
                 && (testFailureCause.getCause() != null)
@@ -167,4 +190,7 @@ public class FailureAnalysis {
         return reportAsPending(RootCause.ofException(testFailureCause));
     }
 
+    private boolean isSkippedException(Throwable testFailureCause) {
+        return reportAsSkipped(RootCause.ofException(testFailureCause));
+    }
 }

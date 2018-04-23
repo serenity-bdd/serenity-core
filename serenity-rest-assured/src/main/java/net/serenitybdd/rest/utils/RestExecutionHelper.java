@@ -1,10 +1,14 @@
 package net.serenitybdd.rest.utils;
 
 
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.util.EnvironmentVariables;
+
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_DISABLE_REST_CALLS_AFTER_FAILURES;
 import static net.thucydides.core.steps.StepEventBus.getEventBus;
 
 
@@ -17,19 +21,23 @@ public class RestExecutionHelper {
     private static Set<String> classWithDryCleanEnabled =
             Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
 
-    public static boolean restCallsAreEnabled() {
+    public static boolean restCallsAreDisabled() {
+
+        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+
+        if (!SERENITY_DISABLE_REST_CALLS_AFTER_FAILURES.booleanFrom(environmentVariables, true)) {
+            return false;
+        }
+
         return isEnabledDryCleanOnlyForCurrentClass()
                 || getEventBus().isDryRun()
                 || getEventBus().currentTestIsSuspended();
     }
 
-    public static boolean restCallsAreDisabled() {
-        return !restCallsAreEnabled();
-    }
 
     /**
      * Using of this method allowed to enable DryClean mode for particular class.
-     * During executing of methods restCallsAreEnabled and restCallsAreDisabled stacktrace will be
+     * During executing of methods restCallsAreDisabled and restCallsAreDisabled stacktrace will be
      * analysed to find out if this class included.
      * <p/>
      * Be careful - until even for one class enabled dry clean - performance will be decreased.

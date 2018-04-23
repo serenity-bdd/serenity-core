@@ -36,7 +36,7 @@ public class UpdatingContextFilter implements Filter {
             helper.setValueTo("filters", new SkipClassIterator((Iterator<Filter>) iterator, skipping));
             return ctx.next(requestSpec, responseSpec);
         } catch (Throwable e) {
-            if (RestExecutionHelper.restCallsAreEnabled()) {
+            if (RestExecutionHelper.restCallsAreDisabled()) {
                 return stubbed();
             }
             throw new RuntimeException("Incorrect implementation, should update field without any problem", e);

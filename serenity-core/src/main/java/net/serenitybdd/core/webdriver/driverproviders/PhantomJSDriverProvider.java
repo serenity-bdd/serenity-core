@@ -1,20 +1,23 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.core.buildinfo.*;
-import net.serenitybdd.core.di.*;
-import net.serenitybdd.core.webdriver.servicepools.*;
-import net.thucydides.core.fixtureservices.*;
-import net.thucydides.core.steps.*;
-import net.thucydides.core.util.*;
-import net.thucydides.core.webdriver.*;
-import net.thucydides.core.webdriver.phantomjs.*;
-import net.thucydides.core.webdriver.stubs.*;
-import org.openqa.selenium.*;
-import org.openqa.selenium.phantomjs.*;
-import org.openqa.selenium.remote.*;
-import org.slf4j.*;
+import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
+import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
+import net.serenitybdd.core.webdriver.servicepools.PhantomJSServicePool;
+import net.thucydides.core.fixtureservices.FixtureProviderService;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.CapabilityEnhancer;
+import net.thucydides.core.webdriver.SupportedWebDriver;
+import net.thucydides.core.webdriver.phantomjs.PhantomJSCapabilityEnhancer;
+import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.IOException;
 
 public class PhantomJSDriverProvider implements DriverProvider {
 
@@ -58,7 +61,7 @@ public class PhantomJSDriverProvider implements DriverProvider {
         phantomEnhancer.enhanceCapabilities(capabilities);
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-        return enhancer.enhanced(capabilities);
+        return enhancer.enhanced(capabilities, SupportedWebDriver.PHANTOMJS);
     }
 
 }

@@ -1,25 +1,28 @@
 package net.thucydides.core.webdriver;
 
-import io.appium.java_client.*;
-import net.serenitybdd.core.di.*;
-import net.serenitybdd.core.exceptions.*;
-import net.serenitybdd.core.pages.*;
+import io.appium.java_client.AppiumDriver;
+import net.serenitybdd.core.exceptions.SerenityManagedException;
+import net.serenitybdd.core.pages.DefaultTimeouts;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.fixtureservices.FixtureException;
+import net.thucydides.core.fixtureservices.FixtureProviderService;
+import net.thucydides.core.fixtureservices.FixtureService;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.capabilities.SaucelabsRemoteDriverCapabilities;
 import net.serenitybdd.core.webdriver.driverproviders.*;
-import net.thucydides.core.*;
-import net.thucydides.core.fixtureservices.*;
-import net.thucydides.core.guice.*;
-import net.thucydides.core.util.*;
-import net.thucydides.core.webdriver.capabilities.*;
-import net.thucydides.core.webdriver.redimension.*;
-import org.apache.commons.lang3.*;
-import org.openqa.selenium.*;
-import org.openqa.selenium.remote.*;
-import org.openqa.selenium.support.ui.*;
+import net.thucydides.core.webdriver.redimension.RedimensionBrowser;
+import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import java.time.Duration;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
-import static net.thucydides.core.webdriver.DriverStrategySelector.*;
+import static net.thucydides.core.webdriver.DriverStrategySelector.inEnvironment;
 
 /**
  * Provides an instance of a supported WebDriver.
@@ -85,7 +88,7 @@ public class WebDriverFactory {
     private Map<SupportedWebDriver, DriverProvider> driverProviders() {
 
         if (driverProvidersByDriverType == null) {
-            driverProvidersByDriverType = new HashMap();
+            driverProvidersByDriverType = new HashMap<>();
 
             driverProvidersByDriverType.put(SupportedWebDriver.APPIUM, new AppiumDriverProvider(fixtureProviderService));
             driverProvidersByDriverType.put(SupportedWebDriver.REMOTE, new RemoteDriverProvider(fixtureProviderService));
@@ -111,7 +114,7 @@ public class WebDriverFactory {
         return newWebdriverInstance(driverClass, "");
     }
 
-    protected synchronized WebDriver newWebdriverInstance(final Class<? extends WebDriver> driverClass, String options) {
+    private synchronized WebDriver newWebdriverInstance(final Class<? extends WebDriver> driverClass, String options) {
         return newWebdriverInstance(driverClass, options, environmentVariables);
     }
     protected synchronized WebDriver newWebdriverInstance(final Class<? extends WebDriver> driverClass,
@@ -152,11 +155,9 @@ public class WebDriverFactory {
 
     public static String getDriverFrom(EnvironmentVariables environmentVariables) {
         String driver = ThucydidesSystemProperty.WEBDRIVER_DRIVER.from(environmentVariables);
-        System.out.println("GetDriver from 1" + driver);
         if (driver == null) {
             driver = ThucydidesSystemProperty.DRIVER.from(environmentVariables);
         }
-        System.out.println("GetDriver from 1" + driver);
         return driver;
     }
 
@@ -199,7 +200,7 @@ public class WebDriverFactory {
         Duration currentTimeout = currentTimeoutFor(proxiedDriver);
         timeoutStack.pushTimeoutFor(proxiedDriver, implicitTimeout);
         if ((implicitTimeout != currentTimeout) && isNotAMocked(proxiedDriver)) {
-            proxiedDriver.manage().timeouts().implicitlyWait(implicitTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
+            proxiedDriver.manage().timeouts().implicitlyWait(implicitTimeout.toMillis(), TimeUnit.MILLISECONDS);
         }
     }
 
@@ -217,14 +218,14 @@ public class WebDriverFactory {
         timeoutStack.popTimeoutFor(proxiedDriver);
         Duration previousTimeout = currentTimeoutFor(proxiedDriver);//timeoutStack.popTimeoutFor(proxiedDriver).or(getDefaultImplicitTimeout());
         if ((currentTimeout != previousTimeout)  && isNotAMocked(proxiedDriver)) {
-            proxiedDriver.manage().timeouts().implicitlyWait(previousTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
+            proxiedDriver.manage().timeouts().implicitlyWait(previousTimeout.toMillis(), TimeUnit.MILLISECONDS);
         }
         return previousTimeout;
     }
 
     public Duration getDefaultImplicitTimeout() {
         String configuredTimeoutValue = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.from(environmentVariables);
-        return (configuredTimeoutValue != null) ? new Duration(Integer.parseInt(configuredTimeoutValue), TimeUnit.MILLISECONDS)
+        return (configuredTimeoutValue != null) ? Duration.ofMillis(Integer.parseInt(configuredTimeoutValue))
                 : DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT;
 
     }

@@ -1,15 +1,23 @@
 package net.thucydides.core.reports.renderer
 
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class WhenRenderingAsciidocText extends Specification {
 
+    @Unroll
     def "should render asciidoc as HTML"() {
         given:
-            def markupRenderer = new AsciidocMarkupRenderer();
+        def markupRenderer = new AsciidocMarkupRenderer();
         when:
-            def renderedText = markupRenderer.render("some *bold* text");
+        def renderedText = markupRenderer.render(text);
         then:
-            renderedText == "some <strong>bold</strong> text"
+        renderedText == expectedText
+        where:
+        text               | expectedText
+        "some *bold* text" | "some <strong>bold</strong> text"
+        "some normal text" | "some normal text"
+        ""                 | ""
+        null               | ""
     }
 }

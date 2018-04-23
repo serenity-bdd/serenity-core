@@ -1,6 +1,7 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import net.serenitybdd.core.Serenity;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -36,7 +37,40 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
             Map<String, Object> firefoxOptions = new Gson().fromJson(firefoxOptionsInJsonFormat, new TypeToken<HashMap<String, Object>>() {}.getType());
             capabilities.setCapability("moz:firefoxOptions", firefoxOptions);
         }
+
+        addProxyConfigurationTo(capabilities);
+
         return capabilities;
+    }
+
+    private void addProxyConfigurationTo(DesiredCapabilities capabilities) {
+
+        String proxyUrl = ThucydidesSystemProperty.SERENITY_PROXY_HTTP.from(environmentVariables);
+        String proxyPort = ThucydidesSystemProperty.SERENITY_PROXY_HTTP_PORT.from(environmentVariables);
+        String sslProxy = ThucydidesSystemProperty.SERENITY_PROXY_SSL.from(environmentVariables, proxyUrl);
+        String sslProxyPort = ThucydidesSystemProperty.SERENITY_PROXY_SSL_PORT.from(environmentVariables);
+        String proxyType = ThucydidesSystemProperty.SERENITY_PROXY_TYPE.from(environmentVariables, "MANUAL");
+
+        if ((proxyUrl  != null) && (!proxyUrl.isEmpty())) {
+            JsonObject json = new JsonObject();
+            if (StringUtils.isNotEmpty(proxyType)) {
+                json.addProperty("proxyType", proxyType);
+            }
+            if (StringUtils.isNotEmpty(proxyUrl)) {
+                json.addProperty("httpProxy", proxyUrl);
+            }
+            if (StringUtils.isNotEmpty(proxyPort)) {
+                json.addProperty("httpProxyPort", proxyPort);
+            }
+            if (StringUtils.isNotEmpty(sslProxy)) {
+                json.addProperty("sslProxy", sslProxy);
+            }
+            if (StringUtils.isNotEmpty(sslProxyPort)) {
+                json.addProperty("sslProxyPort", sslProxyPort);
+            }
+            capabilities.setCapability("proxy", json);
+        }
+
     }
 
     private FirefoxProfile buildFirefoxProfile() {

@@ -1,6 +1,6 @@
 package net.thucydides.core.webdriver;
 
-import org.openqa.selenium.support.ui.Duration;
+import java.time.Duration;
 
 /**
  * Created by john on 12/03/15.

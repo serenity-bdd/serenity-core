@@ -32,6 +32,8 @@ import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -40,6 +42,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -48,6 +51,8 @@ import java.util.concurrent.TimeUnit;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static net.serenitybdd.core.selectors.Selectors.xpathOrCssSelector;
 import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_JQUERY_INTEGRATION;
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_FLUENTWAIT;
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_WAIT_FOR_TIMEOUT;
 import static net.thucydides.core.webdriver.javascript.JavascriptSupport.javascriptIsSupportedIn;
 
 /**
@@ -83,8 +88,9 @@ public abstract class PageObject {
 
     private EnvironmentVariables environmentVariables;
 
-    public void setImplicitTimeout(int duration, TimeUnit unit) {
-        waitForElementTimeout = new Duration(duration, unit);
+    public void setImplicitTimeout(int duration, TemporalUnit unit) {
+
+        waitForElementTimeout = Duration.of(duration, unit);
         setDriverImplicitTimeout(waitForElementTimeout);
     }
 
@@ -92,7 +98,7 @@ public abstract class PageObject {
         if (driver instanceof ConfigurableTimeouts) {
             ((ConfigurableTimeouts) driver).setImplicitTimeout(implicitTimeout);
         } else {
-            driver.manage().timeouts().implicitlyWait(implicitTimeout.in(MILLISECONDS), MILLISECONDS);
+            driver.manage().timeouts().implicitlyWait(implicitTimeout.toMillis(), MILLISECONDS);
         }
     }
 
@@ -101,13 +107,13 @@ public abstract class PageObject {
             waitForElementTimeout = ((ConfigurableTimeouts) driver).resetTimeouts();
         } else {
             waitForElementTimeout = getDefaultImplicitTimeout();
-            driver.manage().timeouts().implicitlyWait(waitForElementTimeout.in(MILLISECONDS), MILLISECONDS);
+            driver.manage().timeouts().implicitlyWait(waitForElementTimeout.toMillis(), MILLISECONDS);
         }
     }
 
     private Duration getDefaultImplicitTimeout() {
         Integer configuredTimeout = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables);
-        return new Duration(configuredTimeout, TimeUnit.MILLISECONDS);
+        return Duration.ofMillis(configuredTimeout);
 
     }
 
@@ -153,7 +159,7 @@ public abstract class PageObject {
     }
 
     public <T extends PageObject> T setDriver(WebDriver driver) {
-        setDriver(driver, getImplicitWaitTimeout().in(TimeUnit.MILLISECONDS));
+        setDriver(driver, getImplicitWaitTimeout().toMillis());
         return (T) this;
     }
 
@@ -164,12 +170,16 @@ public abstract class PageObject {
     public Duration getWaitForTimeout() {
 
         if (waitForTimeout == null) {
-            int configuredWaitForTimeoutInMilliseconds =
-                    ThucydidesSystemProperty.WEBDRIVER_WAIT_FOR_TIMEOUT
-                            .integerFrom(environmentVariables, (int) DefaultTimeouts.DEFAULT_WAIT_FOR_TIMEOUT.in(MILLISECONDS));
-            waitForTimeout = new Duration(configuredWaitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS);
+            int configuredWaitForTimeoutInMilliseconds =fluentWaitTimeout();
+            waitForTimeout = Duration.ofMillis(configuredWaitForTimeoutInMilliseconds);
         }
         return waitForTimeout;
+    }
+
+    private int fluentWaitTimeout() {
+        return (WEBDRIVER_WAIT_FOR_TIMEOUT.integerFrom(environmentVariables,
+                WEBDRIVER_TIMEOUTS_FLUENTWAIT.integerFrom(environmentVariables,
+                        (int) DefaultTimeouts.DEFAULT_WAIT_FOR_TIMEOUT.toMillis())));
     }
 
     @Deprecated
@@ -182,8 +192,8 @@ public abstract class PageObject {
         if (waitForElementTimeout == null) {
             int configuredWaitForTimeoutInMilliseconds =
                     ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT
-                            .integerFrom(environmentVariables, (int) DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT.in(MILLISECONDS));
-            waitForElementTimeout = new Duration(configuredWaitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS);
+                            .integerFrom(environmentVariables, (int) DefaultTimeouts.DEFAULT_IMPLICIT_WAIT_TIMEOUT.toMillis());
+            waitForElementTimeout = Duration.ofMillis(configuredWaitForTimeoutInMilliseconds);
         }
         return waitForElementTimeout;
     }
@@ -239,12 +249,12 @@ public abstract class PageObject {
     }
 
     public void setWaitForTimeout(final long waitForTimeoutInMilliseconds) {
-        this.waitForTimeout = new Duration(waitForTimeoutInMilliseconds, MILLISECONDS);
+        this.waitForTimeout = Duration.ofMillis(waitForTimeoutInMilliseconds);
         getRenderedView().setWaitForTimeout(this.waitForTimeout);
     }
 
     public void setWaitForElementTimeout(final long waitForTimeoutInMilliseconds) {
-        this.waitForElementTimeout = new Duration(waitForTimeoutInMilliseconds, MILLISECONDS);
+        this.waitForElementTimeout = Duration.ofMillis(waitForTimeoutInMilliseconds);
     }
 
     protected RenderedPageObjectView getRenderedView() {
@@ -299,8 +309,16 @@ public abstract class PageObject {
         return this;
     }
 
+    /**
+     * @Deprecated TimeUnit has been replaced by TemporalUnit in Selenium. For more consistancy use a TemporalUnit parameter.
+     */
+    @Deprecated
     public RenderedPageObjectView withTimeoutOf(int timeout, TimeUnit units) {
-        return withTimeoutOf(new Duration(timeout, units));
+        return withTimeoutOf(Duration.of(timeout, TemporalUnitConverter.fromTimeUnit(units)));
+    }
+
+    public RenderedPageObjectView withTimeoutOf(int timeout, TemporalUnit units) {
+        return withTimeoutOf(Duration.of(timeout, units));
     }
 
     public RenderedPageObjectView withTimeoutOf(Duration timeout) {
@@ -350,7 +368,7 @@ public abstract class PageObject {
     }
 
     private WebDriverWait waitOnPage() {
-        return new WebDriverWait(driver, getWaitForTimeout().in(TimeUnit.SECONDS));
+        return new WebDriverWait(driver, getWaitForTimeout().getSeconds());
 //        waitForTimeoutInSecondsWithAMinimumOfOneSecond());
     }
 
@@ -393,7 +411,7 @@ public abstract class PageObject {
     }
 
     public PageObject waitForTextToDisappear(final String expectedText) {
-        return waitForTextToDisappear(expectedText, getWaitForTimeout().in(MILLISECONDS));
+        return waitForTextToDisappear(expectedText, getWaitForTimeout().toMillis());
     }
 
     /**
@@ -604,15 +622,15 @@ public abstract class PageObject {
     }
 
     private long waitForTimeoutInSecondsWithAMinimumOfOneSecond() {
-        return (getWaitForTimeout().in(TimeUnit.SECONDS) < 1) ? 1 : (getWaitForTimeout().in(TimeUnit.SECONDS));
+        return (getWaitForTimeout().getSeconds() < 1) ? 1 : (getWaitForTimeout().getSeconds());
     }
 
     public long waitForTimeoutInMilliseconds() {
-        return getWaitForTimeout().in(MILLISECONDS);
+        return getWaitForTimeout().toMillis();
     }
 
     public long implicitTimoutMilliseconds() {
-        return getImplicitWaitTimeout().in(MILLISECONDS);
+        return getImplicitWaitTimeout().toMillis();
     }
 
     public String updateUrlWithBaseUrlIfDefined(final String startingUrl) {
@@ -885,8 +903,8 @@ public abstract class PageObject {
      */
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(WebElement webElement) {
         return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver, webElement,
-                getImplicitWaitTimeout().in(MILLISECONDS),
-                getWaitForTimeout().in(MILLISECONDS),
+                getImplicitWaitTimeout().toMillis(),
+                getWaitForTimeout().toMillis(),
                 nameOf(webElement));
     }
 
@@ -913,8 +931,8 @@ public abstract class PageObject {
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(By bySelector) {
         return net.serenitybdd.core.pages.WebElementFacadeImpl.wrapWebElement(driver,
                 bySelector,
-                getImplicitWaitTimeout().in(MILLISECONDS),
-                getWaitForTimeout().in(MILLISECONDS),
+                getImplicitWaitTimeout().toMillis(),
+                getWaitForTimeout().toMillis(),
                 bySelector.toString());
     }
 
@@ -1026,14 +1044,14 @@ public abstract class PageObject {
 
     public ThucydidesFluentWait<WebDriver> waitForWithRefresh() {
         return new FluentWaitWithRefresh<>(driver, webdriverClock, sleeper)
-                .withTimeout(getWaitForTimeout().in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS)
+                .withTimeout(getWaitForTimeout().toMillis(), TimeUnit.MILLISECONDS)
                 .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
                 .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
     }
 
     public ThucydidesFluentWait<WebDriver> waitForCondition() {
         return new NormalFluentWait<>(driver, webdriverClock, sleeper)
-                .withTimeout(getWaitForTimeout().in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS)
+                .withTimeout(getWaitForTimeout().toMillis(), TimeUnit.MILLISECONDS)
                 .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
                 .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
     }

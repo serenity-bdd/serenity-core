@@ -8,6 +8,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -87,23 +88,23 @@ public class CheckingVisibilityWithTheFluentElementAPI extends FluentElementAPIT
 
     @Test
     public void should_wait_for_hidden_elements_using_shortened_form_with_custom_timeout() {
-        page.withTimeoutOf(10, TimeUnit.SECONDS).waitFor(By.cssSelector("#city"));
+        page.withTimeoutOf(10, ChronoUnit.SECONDS).waitFor(By.cssSelector("#city"));
     }
 
     @Test
     public void should_wait_for_hidden_web_elements_facades() {
-        page.withTimeoutOf(10, TimeUnit.SECONDS).waitFor(page.city);
+        page.withTimeoutOf(10, ChronoUnit.SECONDS).waitFor(page.city);
     }
 
 
     @Test
     public void should_wait_for_web_elements() {
-        page.withTimeoutOf(10, TimeUnit.SECONDS).waitFor(page.lastName);
+        page.withTimeoutOf(10, ChronoUnit.SECONDS).waitFor(page.lastName);
     }
 
     @Test
     public void should_be_able_to_set_the_timeout_for_waits() {
-        assertThat(page.withTimeoutOf(10, TimeUnit.SECONDS).getWaitForTimeout().in(TimeUnit.SECONDS), is(10L));
+        assertThat(page.withTimeoutOf(10, ChronoUnit.SECONDS).getWaitForTimeout().getSeconds(), is(10L));
     }
 
     @Test

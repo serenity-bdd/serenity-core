@@ -1,8 +1,12 @@
 package net.thucydides.core.webdriver;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.Duration;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -20,7 +24,7 @@ public class TimeoutsFacade implements WebDriver.Timeouts {
 
     @Override
     public WebDriver.Timeouts implicitlyWait(long timeoutValue, TimeUnit timeUnit) {
-        webDriverFacade.implicitTimeout = new Duration(timeoutValue, timeUnit);
+        webDriverFacade.implicitTimeout = Duration.of(timeoutValue, TemporalUnitConverter.fromTimeUnit(timeUnit));
         return (timeouts != null) ? timeouts.implicitlyWait(timeoutValue,timeUnit) : timeouts;
     }
 

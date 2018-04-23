@@ -1,33 +1,39 @@
 package net.serenitybdd.core.pages;
 
-import com.google.common.base.*;
+import com.google.common.base.Splitter;
 import io.appium.java_client.*;
-import net.serenitybdd.core.time.*;
-import net.thucydides.core.*;
-import net.thucydides.core.annotations.locators.*;
-import net.thucydides.core.guice.*;
-import net.thucydides.core.steps.*;
-import net.thucydides.core.util.*;
-import net.thucydides.core.webdriver.*;
+import net.serenitybdd.core.time.InternalSystemClock;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.annotations.locators.MethodTiming;
+import net.thucydides.core.annotations.locators.WithConfigurableTimeout;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.ConfigurableTimeouts;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
+import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.exceptions.*;
-import net.thucydides.core.webdriver.javascript.*;
-import net.thucydides.core.webdriver.stubs.*;
-import org.apache.commons.lang3.*;
+import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
+import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.interactions.internal.*;
-import org.openqa.selenium.support.pagefactory.*;
+import org.openqa.selenium.interactions.internal.Coordinates;
+import org.openqa.selenium.interactions.internal.Locatable;
+import org.openqa.selenium.remote.RemoteWebElement;
+import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.ui.*;
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.Optional;
-import java.util.concurrent.*;
-import java.util.stream.*;
+import java.util.concurrent.TimeUnit;
+import java.time.Duration;
+import java.util.stream.Collectors;
 
 import static net.serenitybdd.core.pages.WebElementExpectations.*;
-import static net.serenitybdd.core.selectors.Selectors.*;
+import static net.serenitybdd.core.selectors.Selectors.isXPath;
 
 
 /**
@@ -119,7 +125,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     private long defaultWaitForTimeout() {
         return ThucydidesSystemProperty.WEBDRIVER_WAIT_FOR_TIMEOUT.integerFrom(environmentVariables,
-                (int) DefaultTimeouts.DEFAULT_WAIT_FOR_TIMEOUT.in(TimeUnit.MILLISECONDS));
+                (int) DefaultTimeouts.DEFAULT_WAIT_FOR_TIMEOUT.toMillis());
     }
 
     private WebElementFacadeImpl copy() {
@@ -237,7 +243,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     public long timeoutInMilliseconds() {
         if (driver instanceof WebDriverFacade) {
-            return ((WebDriverFacade) driver).getCurrentImplicitTimeout().in(TimeUnit.MILLISECONDS);
+            return ((WebDriverFacade) driver).getCurrentImplicitTimeout().toMillis();
         } else {
             return implicitTimeoutInMilliseconds;
         }
@@ -358,10 +364,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public WebElementFacade withTimeoutOf(int timeout, TimeUnit unit) {
-//        return wrapWebElement(driver, getElement(),
-//                implicitTimeoutInMilliseconds,
-//                TimeUnit.MILLISECONDS.convert(timeout, unit),
-//                foundBy);
         return wrapWebElement(driver,
                 resolvedELement,
                 webElement,
@@ -570,7 +572,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public Duration getCurrentImplicitTimeout() {
-        if (driverIsDisabled()) { return new Duration(0, TimeUnit.SECONDS); }
+        if (driverIsDisabled()) { return Duration.ofSeconds(0); }
 
         if (driver instanceof ConfigurableTimeouts) {
             return ((ConfigurableTimeouts) driver).getCurrentImplicitTimeout();
@@ -580,7 +582,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public Duration resetTimeouts() {
-        if (driverIsDisabled()) { return new Duration(0, TimeUnit.SECONDS);}
+        if (driverIsDisabled()) { return Duration.ofSeconds(0);}
         if (driver instanceof ConfigurableTimeouts) {
             return ((ConfigurableTimeouts) driver).resetTimeouts();
         }

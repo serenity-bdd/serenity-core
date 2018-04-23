@@ -1,14 +1,14 @@
 package net.thucydides.core.scheduling;
 
-import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.webdriver.TemporalUnitConverter;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.support.ui.Clock;
-import org.openqa.selenium.support.ui.Duration;
 import org.openqa.selenium.support.ui.Sleeper;
 import org.openqa.selenium.support.ui.Wait;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,12 +16,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public abstract class ThucydidesFluentWait<T> implements Wait<T> {
 
-    protected Duration timeout =  new Duration(500, MILLISECONDS);;
-    protected Duration interval = new Duration(50, MILLISECONDS);;
+    protected Duration timeout =  Duration.ofMillis(500);;
+    protected Duration interval = Duration.ofMillis(50);
 
     private List<Class<? extends RuntimeException>> ignoredExceptions = new LinkedList<>();
 
@@ -49,7 +48,7 @@ public abstract class ThucydidesFluentWait<T> implements Wait<T> {
 
     @Override
     public <V> V until(Function<? super T, V> isTrue) {
-        long end = getClock().laterBy(timeout.in(MILLISECONDS));
+        long end = getClock().laterBy(timeout.toMillis());
         RuntimeException lastException = null;
         String waitForConditionMessage = isTrue.toString();
         while (true) {
@@ -71,7 +70,7 @@ public abstract class ThucydidesFluentWait<T> implements Wait<T> {
             }
 
             if (!getClock().isNowBefore(end)) {
-                String message = String.format("Timed out after %d milliseconds: ",timeout.in(MILLISECONDS)) + waitForConditionMessage;
+                String message = String.format("Timed out after %d milliseconds: ",timeout.toMillis()) + waitForConditionMessage;
                 throw timeoutException(message, lastException);
             }
 
@@ -105,7 +104,7 @@ public abstract class ThucydidesFluentWait<T> implements Wait<T> {
     }
 
     public ThucydidesFluentWait<T> withTimeout(long duration, TimeUnit unit) {
-        this.timeout = new Duration(duration, unit);
+        this.timeout = Duration.of(duration, TemporalUnitConverter.fromTimeUnit(unit));
         return this;
     }
 
@@ -115,7 +114,7 @@ public abstract class ThucydidesFluentWait<T> implements Wait<T> {
     }
 
     public ThucydidesFluentWait<T> pollingEvery(long duration, TimeUnit unit) {
-        this.interval = new Duration(duration, unit);
+        this.interval = Duration.of(duration, TemporalUnitConverter.fromTimeUnit(unit));
         return this;
     }
 

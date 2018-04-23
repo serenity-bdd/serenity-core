@@ -12,6 +12,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.List;
 import java.util.Map;
 
+import static net.thucydides.core.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
 import static net.thucydides.core.ThucydidesSystemProperty.HEADLESS_MODE;
 
 public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
@@ -35,6 +36,8 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
         capabilities.setCapability("chrome.switches", chromeSwitches);
 
         AddCustomCapabilities.startingWith("chrome.capabilities.").from(environmentVariables).to(capabilities);
+
+        SetProxyConfiguration.from(environmentVariables).in(capabilities);
 
         return capabilities;
     }
@@ -72,6 +75,8 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
             List<String> arguments = new OptionsSplitter().split(driverOptions);
             options.addArguments(arguments);
         }
+
+        options.setAcceptInsecureCerts(ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables,false));
     }
     private void addPreferencesTo(ChromeOptions options) {
 

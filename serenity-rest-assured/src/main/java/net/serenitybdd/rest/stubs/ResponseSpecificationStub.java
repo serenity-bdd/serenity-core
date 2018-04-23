@@ -6,11 +6,8 @@ import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
 import io.restassured.specification.*;
 import org.apache.commons.lang3.NotImplementedException;
-import org.apache.http.MethodNotSupportedException;
 import org.hamcrest.Matcher;
 
-import java.net.URI;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;

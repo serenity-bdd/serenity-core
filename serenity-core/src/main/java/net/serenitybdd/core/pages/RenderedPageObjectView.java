@@ -1,6 +1,5 @@
 package net.serenitybdd.core.pages;
 
-import com.google.common.base.Function;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.scheduling.NormalFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
@@ -10,10 +9,13 @@ import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_NO_WAIT;
 import static net.serenitybdd.core.pages.FindAllWaitOptions.WITH_WAIT;
@@ -38,7 +40,7 @@ public class RenderedPageObjectView {
             .getLogger(RenderedPageObjectView.class);
 
     public RenderedPageObjectView(final WebDriver driver, final PageObject pageObject, long waitForTimeoutInMilliseconds) {
-        this(driver, pageObject, new Duration(waitForTimeoutInMilliseconds, TimeUnit.MILLISECONDS), true);
+        this(driver, pageObject, Duration.ofMillis(waitForTimeoutInMilliseconds), true);
     }
 
     public RenderedPageObjectView(final WebDriver driver, final PageObject pageObject, Duration waitForTimeout, boolean timeoutCanBeOverriden) {
@@ -57,7 +59,7 @@ public class RenderedPageObjectView {
 
     public ThucydidesFluentWait<WebDriver> waitForCondition() {
         return new NormalFluentWait<>(driver, webdriverClock, sleeper)
-                .withTimeout(waitForTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS)
+                .withTimeout(waitForTimeout)
                 .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
                 .ignoring(NoSuchElementException.class,
                         NoSuchFrameException.class,
@@ -67,8 +69,8 @@ public class RenderedPageObjectView {
 
     public FluentWait<WebDriver> doWait() {
         return new FluentWait(driver)
-                .withTimeout(waitForTimeout.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS)
-                .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
+                .withTimeout(waitForTimeout)
+                .pollingEvery(Duration.ofMillis(WAIT_FOR_ELEMENT_PAUSE_LENGTH))
                 .ignoreAll(NewList.of(NoSuchElementException.class,
                         NoSuchFrameException.class,
                         StaleElementReferenceException.class,
@@ -135,17 +137,15 @@ public class RenderedPageObjectView {
     }
 
     private Function<? super WebDriver, Boolean> elementIsDisplayed(final WebElementFacade webElement) {
-        return new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver driver) {
-                try {
-                    if (webElement.isCurrentlyVisible()) {
-                        return true;
-                    }
-                } catch (NoSuchElementException noSuchElement) {
-                    // Ignore exception
+        return (ExpectedCondition<Boolean>) driver -> {
+            try {
+                if (webElement.isCurrentlyVisible()) {
+                    return true;
                 }
-                return false;
+            } catch (NoSuchElementException noSuchElement) {
+                // Ignore exception
             }
+            return false;
         };
     }
 
@@ -160,15 +160,13 @@ public class RenderedPageObjectView {
     }
 
     private Function<? super WebDriver, Boolean> elementsAreDisplayed(final List<WebElementFacade> webElements) {
-        return new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver driver) {
-                try {
-                    return (webElements.size() > 0) && allElementsVisibleIn(webElements);
-                } catch (NoSuchElementException noSuchElement) {
-                    // Ignore exception
-                }
-                return false;
+        return (ExpectedCondition<Boolean>) driver -> {
+            try {
+                return (webElements.size() > 0) && allElementsVisibleIn(webElements);
+            } catch (NoSuchElementException noSuchElement) {
+                // Ignore exception
             }
+            return false;
         };
     }
 
@@ -185,7 +183,7 @@ public class RenderedPageObjectView {
      * This method will wait until an element is present on the screen, though not necessarily visible.
      */
     public void waitForPresenceOf(final By byElementCriteria) {
-        WebDriverWait wait = new WebDriverWait(driver, waitForTimeout.in(TimeUnit.SECONDS));
+        WebDriverWait wait = new WebDriverWait(driver, waitForTimeout.getSeconds());
         wait.until(ExpectedConditions.presenceOfElementLocated(byElementCriteria));
     }
 
@@ -206,11 +204,7 @@ public class RenderedPageObjectView {
         try {
             waitFor(ExpectedConditions.visibilityOfAllElementsLocatedBy(byElementCriteria));
             return true;
-        } catch (NoSuchElementException noSuchElement) {
-            return false;
-        } catch (StaleElementReferenceException se) {
-            return false;
-        } catch (TimeoutException iGuessItsNotThere) {
+        } catch (NoSuchElementException | TimeoutException | StaleElementReferenceException noSuchElement) {
             return false;
         }
     }
@@ -219,11 +213,7 @@ public class RenderedPageObjectView {
         try {
             List<WebElement> matchingElements = driver.findElements(byElementCriteria);
             return (!matchingElements.isEmpty() && matchingElements.get(0).isDisplayed());
-        } catch (NoSuchElementException noSuchElement) {
-            return false;
-        } catch (StaleElementReferenceException se) {
-            return false;
-        } catch (TimeoutException iGuessItsNotThere) {
+        } catch (NoSuchElementException | StaleElementReferenceException | TimeoutException noSuchElement) {
             return false;
         }
     }
@@ -482,12 +472,12 @@ public class RenderedPageObjectView {
         return waitForTimeout;
     }
 
-    protected List<net.serenitybdd.core.pages.WebElementFacade> findAllWithOptionalWait(By bySelector, FindAllWaitOptions waitForOptions) {
-        List<net.serenitybdd.core.pages.WebElementFacade> results;
+    protected List<WebElementFacade> findAllWithOptionalWait(By bySelector, FindAllWaitOptions waitForOptions) {
+        List<WebElementFacade> results;
         try {
-            pageObject.setImplicitTimeout(0, TimeUnit.SECONDS);
+            pageObject.setImplicitTimeout(0, ChronoUnit.SECONDS);
             if (timeoutCanBeOverriden) {
-                overrideWaitForTimeoutTo(new Duration(0, TimeUnit.SECONDS));
+                overrideWaitForTimeoutTo( Duration.ofSeconds(0));
             }
             if (waitForOptions == WITH_WAIT) {
                 waitFor(bySelector);
@@ -503,11 +493,11 @@ public class RenderedPageObjectView {
         return results;
     }
 
-    public List<net.serenitybdd.core.pages.WebElementFacade> findAll(By bySelector) {
+    public List<WebElementFacade> findAll(By bySelector) {
         return findAllWithOptionalWait(bySelector, WITH_WAIT);
     }
 
-    public List<net.serenitybdd.core.pages.WebElementFacade> findAllWithNoWait(By bySelector) {
+    public List<WebElementFacade> findAllWithNoWait(By bySelector) {
         return findAllWithOptionalWait(bySelector, WITH_NO_WAIT);
     }
 
@@ -522,19 +512,19 @@ public class RenderedPageObjectView {
         setWaitForTimeout(oldWaitFor);
     }
 
-    public List<net.serenitybdd.core.pages.WebElementFacade> findAll(String xpathOrCssSelector) {
+    public List<WebElementFacade> findAll(String xpathOrCssSelector) {
         return findAll(xpathOrCssSelector(xpathOrCssSelector));
     }
 
-    public net.serenitybdd.core.pages.WebElementFacade find(By bySelector) {
+    public WebElementFacade find(By bySelector) {
         waitFor(bySelector);
-        pageObject.setImplicitTimeout(0, TimeUnit.SECONDS);
-        net.serenitybdd.core.pages.WebElementFacade result = pageObject.find(bySelector);
+        pageObject.setImplicitTimeout(0, ChronoUnit.SECONDS);
+        WebElementFacade result = pageObject.find(bySelector);
         pageObject.resetImplicitTimeout();
         return result;
     }
 
-    public net.serenitybdd.core.pages.WebElementFacade find(String xpathOrCssSelector) {
+    public WebElementFacade find(String xpathOrCssSelector) {
         return find(xpathOrCssSelector(xpathOrCssSelector));
     }
 

@@ -1,15 +1,13 @@
 package net.thucydides.core.webdriver;
 
-import net.thucydides.core.webdriver.TimeoutStack;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.openqa.selenium.WebDriver;
 
-import org.openqa.selenium.support.ui.Duration;
+import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -20,8 +18,7 @@ public class WhenUsingTimeoutStack {
     @Mock
     private WebDriver webDriver;
 
-    @Mock
-    private Duration duration;
+    private Duration duration = Duration.ZERO;
 
     @InjectMocks
     private TimeoutStack timeoutStack;

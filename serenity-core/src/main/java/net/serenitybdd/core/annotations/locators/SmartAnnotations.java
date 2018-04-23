@@ -1,22 +1,28 @@
 package net.serenitybdd.core.annotations.locators;
 
-import io.appium.java_client.*;
+import io.appium.java_client.MobileBy;
 import io.appium.java_client.pagefactory.*;
-import net.serenitybdd.core.annotations.findby.*;
+import net.serenitybdd.core.annotations.findby.By;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.annotations.findby.How;
-import net.serenitybdd.core.annotations.findby.di.*;
-import net.serenitybdd.core.di.*;
-import net.thucydides.core.webdriver.*;
-import org.openqa.selenium.support.*;
-import org.openqa.selenium.support.pagefactory.*;
+import net.serenitybdd.core.annotations.findby.di.CustomFindByAnnotationProviderService;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.webdriver.MobilePlatform;
+import org.openqa.selenium.support.ByIdOrName;
+import org.openqa.selenium.support.FindBys;
+import org.openqa.selenium.support.pagefactory.Annotations;
+import org.openqa.selenium.support.pagefactory.ByChained;
 
-import java.lang.annotation.*;
-import java.lang.reflect.*;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
-import static io.appium.java_client.remote.MobilePlatform.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static io.appium.java_client.remote.MobilePlatform.ANDROID;
+import static io.appium.java_client.remote.MobilePlatform.IOS;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 
 public class SmartAnnotations extends Annotations {
@@ -424,11 +430,10 @@ public class SmartAnnotations extends Annotations {
 
     private static String getFieldValue(Annotation mobileBy) {
         Method[] values = prepareAnnotationMethods(mobileBy.getClass());
-
         for (Method value : values) {
             try {
                 String strategyParameter = value.invoke(mobileBy).toString();
-                if (isNotEmpty(strategyParameter) && !isNumeric(strategyParameter)) {
+                if (isNotEmpty(strategyParameter) && isStrategyName(value.getName())) {
                     return value.getName();
                 }
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -438,6 +443,10 @@ public class SmartAnnotations extends Annotations {
         throw new IllegalArgumentException("@"
                 + mobileBy.getClass().getSimpleName() + ": one of "
                 + Arrays.toString(Strategies.strategyNames()) + " should be filled");
+    }
+
+    private static boolean isStrategyName(String potentialStrategyName) {
+        return Arrays.asList(Strategies.strategyNames()).contains(potentialStrategyName);
     }
 
     private static Method[] prepareAnnotationMethods(

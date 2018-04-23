@@ -1,19 +1,25 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import io.appium.java_client.android.*;
-import io.appium.java_client.ios.*;
-import net.serenitybdd.core.buildinfo.*;
-import net.serenitybdd.core.di.*;
-import net.thucydides.core.fixtureservices.*;
-import net.thucydides.core.steps.*;
-import net.thucydides.core.util.*;
-import net.thucydides.core.webdriver.*;
-import net.thucydides.core.webdriver.appium.*;
-import net.thucydides.core.webdriver.stubs.*;
-import org.openqa.selenium.*;
-import org.openqa.selenium.remote.*;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
+import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
+import net.thucydides.core.fixtureservices.FixtureProviderService;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.CapabilityEnhancer;
+import net.thucydides.core.webdriver.MobilePlatform;
+import net.thucydides.core.webdriver.SupportedWebDriver;
+import net.thucydides.core.webdriver.UnsupportedDriverException;
+import net.thucydides.core.webdriver.appium.AppiumConfiguration;
+import net.thucydides.core.webdriver.stubs.WebDriverStub;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.net.*;
+import java.net.URL;
+
+import static net.thucydides.core.webdriver.SupportedWebDriver.ANDROID;
+import static net.thucydides.core.webdriver.SupportedWebDriver.IPHONE;
 
 public class AppiumDriverProvider implements DriverProvider {
 
@@ -35,11 +41,11 @@ public class AppiumDriverProvider implements DriverProvider {
         }
         switch (appiumTargetPlatform(environmentVariables)) {
             case ANDROID:
-                AndroidDriver androidDriver = new AndroidDriver(appiumUrl(environmentVariables), enhancer.enhanced(appiumCapabilities(options,environmentVariables)) );
+                AndroidDriver androidDriver = new AndroidDriver(appiumUrl(environmentVariables), enhancer.enhanced(appiumCapabilities(options,environmentVariables), ANDROID) );
                 driverProperties.registerCapabilities("appium", capabilitiesToProperties(androidDriver.getCapabilities()));
                 return androidDriver;
             case IOS:
-                IOSDriver iosDriver = new IOSDriver(appiumUrl(environmentVariables), enhancer.enhanced(appiumCapabilities(options,environmentVariables)));
+                IOSDriver iosDriver = new IOSDriver(appiumUrl(environmentVariables), enhancer.enhanced(appiumCapabilities(options,environmentVariables), IPHONE));
                 driverProperties.registerCapabilities("appium", capabilitiesToProperties(iosDriver.getCapabilities()));
                 return iosDriver;
         }

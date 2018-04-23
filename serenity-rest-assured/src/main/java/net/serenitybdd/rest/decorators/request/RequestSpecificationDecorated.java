@@ -217,53 +217,62 @@ public abstract class RequestSpecificationDecorated extends RequestSpecification
         Response response = null;
         RuntimeException exception = null;
         try {
-            switch (method) {
-                case POST:
-                    response = decorate(this.core.post(path, pathParams));
-                    break;
-                case GET:
-                    response = decorate(this.core.get(path, pathParams));
-                    break;
-                case DELETE:
-                    response = decorate(this.core.delete(path, pathParams));
-                    break;
-                case PUT:
-                    response = decorate(this.core.put(path, pathParams));
-                    break;
-                case HEAD:
-                    response = decorate(this.core.head(path, pathParams));
-                    break;
-                case OPTIONS:
-                    response = decorate(this.core.options(path, pathParams));
-                    break;
-                case PATCH:
-                    response = decorate(this.core.patch(path, pathParams));
-                    break;
-            }
-            if (RestExecutionHelper.restCallsAreEnabled()) {
+            response = executeCall(method, path, pathParams);
+            if (RestExecutionHelper.restCallsAreDisabled()) {
                 response = stubbed();
             }
         } catch (RuntimeException e) {
             exception = e;
         }
         if (exception != null) {
+            reportError(method, path, exception, pathParams);
             if (Serenity.shouldThrowErrorsImmediately()) {
                 throw exception;
             } else {
                 response = stubbed();
             }
-            if (getEventBus().isBaseStepListenerRegistered()) {
-                reporting.registerCall(method, this, path, exception, pathParams);
-            } else {
-                log.info("No BaseStepListener, {} {} not registered.", method.toString(), path);
-            }
-        } else if (getEventBus().isBaseStepListenerRegistered()) {
+        } else {
+            reportQuery(method, path, response, pathParams);
+        }
+        this.lastResponse = response;
+        return response;
+    }
+
+    private void reportQuery(RestMethod method, String path, Response response, Object[] pathParams) {
+        if (getEventBus().isBaseStepListenerRegistered()) {
             reporting.registerCall(method, response, this, path, pathParams);
         } else {
             log.info("No BaseStepListener, {} {} not registered.", method.toString(), path);
         }
-        this.lastResponse = response;
-        return response;
+    }
+
+    private void reportError(RestMethod method, String path, RuntimeException exception, Object[] pathParams) {
+        if (getEventBus().isBaseStepListenerRegistered()) {
+            reporting.registerCall(method, this, path, exception, pathParams);
+        } else {
+            log.info("No BaseStepListener, {} {} not registered.", method.toString(), path);
+        }
+    }
+
+    private Response executeCall(RestMethod method, String path, Object[] pathParams) {
+        switch (method) {
+            case POST:
+                return decorate(this.core.post(path, pathParams));
+            case GET:
+                return decorate(this.core.get(path, pathParams));
+            case DELETE:
+                return decorate(this.core.delete(path, pathParams));
+            case PUT:
+                return decorate(this.core.put(path, pathParams));
+            case HEAD:
+                return decorate(this.core.head(path, pathParams));
+            case OPTIONS:
+                return decorate(this.core.options(path, pathParams));
+            case PATCH:
+                return decorate(this.core.patch(path, pathParams));
+            default:
+                throw new IllegalArgumentException("Unknown REST query type: " + method);
+        }
     }
 
     public Response getLastResponse() {

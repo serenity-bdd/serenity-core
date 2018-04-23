@@ -123,7 +123,7 @@ public class Formatter  {
     }
 
     private String stripNewLines(String render) {
-        return render.replaceAll("\n", "");
+        return (render != null) ? render.replaceAll("\n", "") : "";
     }
 
 

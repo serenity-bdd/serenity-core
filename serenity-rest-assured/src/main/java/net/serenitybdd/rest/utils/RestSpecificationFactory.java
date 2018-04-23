@@ -101,7 +101,7 @@ public class RestSpecificationFactory {
         for (final LogDetail logDetail : Arrays.asList(HEADERS, COOKIES, BODY, PARAMS, METHOD, URI)) {
             filters.add(new FieldsRecordingFilter(true, logDetail));
         }
-        if (RestExecutionHelper.restCallsAreEnabled()) {
+        if (RestExecutionHelper.restCallsAreDisabled()) {
             filters.add(new UpdatingContextFilter(SendRequestFilter.class));
         }
         instrumentedResponse.filters(filters);

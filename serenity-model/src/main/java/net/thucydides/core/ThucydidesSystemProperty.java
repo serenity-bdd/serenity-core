@@ -498,11 +498,6 @@ public enum ThucydidesSystemProperty {
     @Deprecated
     THUCYDIDES_PROXY_HTTP,
 
-    /**
-     * HTTP Proxy URL configuration for Firefox and PhantomJS
-     */
-    SERENITY_PROXY_HTTP,
-
     @Deprecated
     THUCYDIDES_PROXY_HTTP_PORT("thucydides.proxy.http_port"),
 
@@ -524,6 +519,11 @@ public enum ThucydidesSystemProperty {
     THUCYDIDES_PROXY_USER,
 
     /**
+     * HTTP Proxy URL configuration
+     */
+    SERENITY_PROXY_HTTP,
+
+    /**
      * HTTP Proxy username configuration for Firefox and PhantomJS
      */
     SERENITY_PROXY_USER,
@@ -537,9 +537,24 @@ public enum ThucydidesSystemProperty {
     SERENITY_PROXY_PASSWORD,
 
     /**
+     * SSL Proxy port configuration for Firefox and PhantomJS - serenity.proxy.sslProxyPort
+     */
+    SERENITY_PROXY_SSL_PORT("serenity.proxy.sslProxyPort"),
+
+    /**
+     * SSL Proxy port configuration for Firefox and PhantomJS - serenity.proxy.sslProxy
+     */
+    SERENITY_PROXY_SSL("serenity.proxy.sslProxy"),
+
+    /**
      * How long webdriver waits for elements to appear by default, in milliseconds.
      */
     WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT,
+
+    /**
+     * Synonym for webdriver.wait.for.timeout
+     */
+    WEBDRIVER_TIMEOUTS_FLUENTWAIT,
 
     /**
      * How long webdriver waits by default when you use a fluent waiting method, in milliseconds.
@@ -747,6 +762,23 @@ public enum ThucydidesSystemProperty {
 
     @Deprecated
     THUCYDIDES_USE_REQUIREMENTS_DIRECTORIES,
+
+    /**
+     * Override the directory name for the directory containing feature files. This is designed to work for both
+     * simple and multi-module projects. Give the name of the directory inside src/test/resources (e.g. you
+     * would put serenity.features.directory = myFeatures for src/test/resources/myFeatures
+     */
+    SERENITY_FEATURES_DIRECTORY,
+
+    /**
+     * Same as serenity.features.directory but for src/test/stories
+     */
+    SERENITY_STORIES_DIRECTORY,
+
+    /**
+     * Normally, REST calls are disabled when a failure occurs. Set this to false to never disable REST calls
+     */
+    SERENITY_DISABLE_REST_CALLS_AFTER_FAILURES,
 
     /**
      * By default, Thucydides will read requirements from the directory structure that contains the stories.
@@ -1077,6 +1109,11 @@ public enum ThucydidesSystemProperty {
     SERENITY_COMPROMISED_ON,
 
     /**
+     * Comma-separated list of exception classes that should produce a skipped test in the reports.
+     */
+    SERENITY_SKIPPED_ON,
+
+    /**
      * Comma-separated list of exception classes that should produce an error in the reports.
      */
     SERENITY_ERROR_ON,
@@ -1186,10 +1223,21 @@ public enum ThucydidesSystemProperty {
     FIREFOX_LOG_LEVEL,
 
     /**
+     * Set to true to activate the AcceptInsecureCertificates options for Chrome and Firefox.
+     */
+    ACCEPT_INSECURE_CERTIFICATES,
+
+    /**
      * The character to be used to separate firefox preference key-value pairs when using the "firefox.preferences" property.
      * By default this is a semicolon, but sometimes semicolon appears in the preference values.
      */
-    FIREFOX_PREFERENCE_SEPARATOR;
+    FIREFOX_PREFERENCE_SEPARATOR,
+
+    /**
+     * Disable Webdriver integration. Turn this off to avoid Serenity loading WebDriver classes unnecessarily.
+     */
+    SERENITY_WEBDRIVER_INTEGRATION,
+    ;
 
     private String propertyName;
     public static final int DEFAULT_HEIGHT = 700;

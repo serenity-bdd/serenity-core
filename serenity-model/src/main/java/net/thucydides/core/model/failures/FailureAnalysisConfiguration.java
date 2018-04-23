@@ -3,6 +3,7 @@ package net.thucydides.core.model.failures;
 import com.google.common.base.Splitter;
 import cucumber.api.PendingException;
 import net.serenitybdd.core.PendingStepException;
+import net.serenitybdd.core.SkipStepException;
 import net.serenitybdd.core.exceptions.CausesAssertionFailure;
 import net.serenitybdd.core.exceptions.CausesCompromisedTestFailure;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -35,6 +36,11 @@ public class FailureAnalysisConfiguration {
         DEFAULT_PENDING_TYPES.addAll(Arrays.asList(PendingStepException.class, PendingException.class));
     }
 
+    private final List<Class<?>> DEFAULT_SKIPPED_TYPES = new ArrayList<>();
+    {
+        DEFAULT_PENDING_TYPES.addAll(Arrays.asList(SkipStepException.class));
+    }
+
     private final List<Class<?>> DEFAULT_ERROR_TYPES = new ArrayList<>();
     {
         DEFAULT_ERROR_TYPES.addAll(Arrays.asList(Error.class));
@@ -51,6 +57,7 @@ public class FailureAnalysisConfiguration {
 
         failureTypes.removeAll(errorTypesDefinedIn(environmentVariables));
         failureTypes.removeAll(pendingTypesDefinedIn(environmentVariables));
+        failureTypes.removeAll(skippedTypesDefinedIn(environmentVariables));
         failureTypes.removeAll(compromisedTypesDefinedIn(environmentVariables));
 
         return failureTypes;
@@ -64,6 +71,7 @@ public class FailureAnalysisConfiguration {
 
         compromisedTypes.removeAll(errorTypesDefinedIn(environmentVariables));
         compromisedTypes.removeAll(pendingTypesDefinedIn(environmentVariables));
+        compromisedTypes.removeAll(skippedTypesDefinedIn(environmentVariables));
         compromisedTypes.removeAll(failureTypesDefinedIn(environmentVariables));
 
         return compromisedTypes;
@@ -75,6 +83,19 @@ public class FailureAnalysisConfiguration {
 
         pendingTypes.removeAll(errorTypesDefinedIn(environmentVariables));
         pendingTypes.removeAll(compromisedTypesDefinedIn(environmentVariables));
+        pendingTypes.removeAll(skippedTypesDefinedIn(environmentVariables));
+        pendingTypes.removeAll(failureTypesDefinedIn(environmentVariables));
+
+        return pendingTypes;
+    }
+
+    public List<Class<?>> skippedTypes() {
+        List<Class<?>> pendingTypes = new ArrayList<>(DEFAULT_SKIPPED_TYPES);
+        pendingTypes.addAll(skippedTypesDefinedIn(environmentVariables));
+
+        pendingTypes.removeAll(errorTypesDefinedIn(environmentVariables));
+        pendingTypes.removeAll(compromisedTypesDefinedIn(environmentVariables));
+        pendingTypes.removeAll(pendingTypesDefinedIn(environmentVariables));
         pendingTypes.removeAll(failureTypesDefinedIn(environmentVariables));
 
         return pendingTypes;
@@ -85,6 +106,7 @@ public class FailureAnalysisConfiguration {
         errorTypes.addAll(errorTypesDefinedIn(environmentVariables));
 
         errorTypes.removeAll(pendingTypesDefinedIn(environmentVariables));
+        errorTypes.removeAll(skippedTypesDefinedIn(environmentVariables));
         errorTypes.removeAll(compromisedTypesDefinedIn(environmentVariables));
         errorTypes.removeAll(failureTypesDefinedIn(environmentVariables));
 
@@ -105,6 +127,10 @@ public class FailureAnalysisConfiguration {
 
     private List<Class<?>> compromisedTypesDefinedIn(EnvironmentVariables environmentVariables) {
         return typesDefinedIn(ThucydidesSystemProperty.SERENITY_COMPROMISED_ON, environmentVariables);
+    }
+
+    private List<Class<?>> skippedTypesDefinedIn(EnvironmentVariables environmentVariables) {
+        return typesDefinedIn(ThucydidesSystemProperty.SERENITY_SKIPPED_ON, environmentVariables);
     }
 
     private List<Class<?>> typesDefinedIn(ThucydidesSystemProperty typeListProperty, EnvironmentVariables environmentVariables) {

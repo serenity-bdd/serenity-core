@@ -1,8 +1,8 @@
 package net.thucydides.core.webdriver;
 
+import java.time.Duration;
 import java.util.HashMap;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.Duration;
 
 import java.util.Map;
 import java.util.Optional;
@@ -17,7 +17,7 @@ public class TimeoutStack {
 
     public void pushTimeoutFor(WebDriver driver, Duration implicitTimeout) {
         if (!timeouts.containsKey(driver)) {
-            timeouts.put(driver, new Stack<Duration>());
+            timeouts.put(driver, new Stack<>());
         }
         timeouts.get(driver).push(implicitTimeout);
     }

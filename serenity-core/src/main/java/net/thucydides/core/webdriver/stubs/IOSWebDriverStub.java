@@ -1,7 +1,6 @@
 package net.thucydides.core.webdriver.stubs;
 
 import io.appium.java_client.*;
-import io.appium.java_client.ios.LocksIOSDevice;
 import io.appium.java_client.ios.PerformsTouchID;
 import io.appium.java_client.ios.PushesFiles;
 import io.appium.java_client.ios.ShakesDevice;
@@ -14,7 +13,7 @@ import org.openqa.selenium.remote.Response;
 import java.util.*;
 
 public class IOSWebDriverStub extends WebDriverStub implements HidesKeyboardWithKeyName, ShakesDevice,
-        FindsByIosUIAutomation, LocksIOSDevice, PerformsTouchID, FindsByIosNSPredicate, FindsByIosClassChain, PushesFiles {
+        FindsByIosUIAutomation, PerformsTouchID, FindsByIosNSPredicate, FindsByIosClassChain, PushesFiles, LocksDevice {
 
     @Override
     public void get(String s) {

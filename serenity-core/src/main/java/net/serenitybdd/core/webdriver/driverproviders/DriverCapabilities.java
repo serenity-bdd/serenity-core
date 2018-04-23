@@ -37,9 +37,9 @@ public class DriverCapabilities {
         Preconditions.checkNotNull(driverType, "Unsupported remote driver type: " + driverName);
 
         if (shouldUseARemoteDriver()) {
-            return enhancer.enhanced(remoteCapabilities(options));
+            return enhancer.enhanced(remoteCapabilities(options), driverType);
         } else {
-            return enhancer.enhanced(realBrowserCapabilities(driverType, options));
+            return enhancer.enhanced(realBrowserCapabilities(driverType, options), driverType);
         }
     }
 
@@ -81,7 +81,8 @@ public class DriverCapabilities {
         return enhancer.enhanced(
                 driverCapabilitiesSelector(options)
                         .getOrDefault(driverType, DEFAULT_CAPABILITIES)
-                        .getCapabilities()
+                        .getCapabilities(),
+                driverType
         );
     }
 

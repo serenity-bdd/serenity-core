@@ -151,8 +151,8 @@ public class WhenBrowsingAWebSiteUsingListfulPageObjects {
     }
     
     private Table tableFromElement(TablesPage page, WebElement elm) {
-    	return new TableImpl(page.getDriver(), null, elm, page.getImplicitWaitTimeout().in(TimeUnit.MILLISECONDS),
-														  page.getWaitForTimeout().in(TimeUnit.MILLISECONDS));
+    	return new TableImpl(page.getDriver(), null, elm, page.getImplicitWaitTimeout().toMillis(),
+														  page.getWaitForTimeout().toMillis());
     }
 
     @Test

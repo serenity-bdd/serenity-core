@@ -2,6 +2,7 @@ package net.thucydides.core.webdriver.stubs;
 
 import io.appium.java_client.*;
 import io.appium.java_client.android.*;
+import io.appium.java_client.android.connection.HasNetworkConnection;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.Response;
@@ -10,8 +11,8 @@ import java.time.Duration;
 import java.util.*;
 
 public class AndroidWebDriverStub extends WebDriverStub implements PressesKeyCode, HasNetworkConnection,
-        PushesFiles, StartsActivity, FindsByAndroidUIAutomator, LocksAndroidDevice,
-        HasDeviceDetails, HasSupportedPerformanceDataType {
+        PushesFiles, StartsActivity, FindsByAndroidUIAutomator,
+        HasDeviceDetails, HasSupportedPerformanceDataType, LocksDevice {
 
     @Override
     public void get(String s) {

@@ -8,6 +8,7 @@ dependencies {
     compile project(':serenity-report-resources')
 
     compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
+    compile group: 'commons-net', name: 'commons-net', version: '3.6'
 
     compile "com.typesafe:config:${typesafeConfigVersion}"
 
@@ -40,7 +41,7 @@ dependencies {
         exclude group: 'org.apache.httpcomponents', module:'httpclient'
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
-    compile("org.asciidoctor:asciidoctor-java-integration:${asciidocVersion}") {
+    compile("org.asciidoctor:asciidoctorj:${asciidoctorVersion}"){
         exclude group: 'com.beust', module: 'jcommander'
     }
     compile "org.freemarker:freemarker:${freemarkerVersion}"

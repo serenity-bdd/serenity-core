@@ -126,6 +126,9 @@ dependencies {
     compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
     compile "commons-collections:commons-collections:${commonsCollectionsVersion}"
     compile "org.freemarker:freemarker:${freemarkerVersion}"
+    compile("net.sourceforge.jexcelapi:jxl:${jexcelapiVersion}") {
+        exclude group: 'log4j', module: 'log4j'
+    }
     compile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
     compile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
 //    compile("net.sourceforge.htmlunit:htmlunit:${htmlunitVersion}") {

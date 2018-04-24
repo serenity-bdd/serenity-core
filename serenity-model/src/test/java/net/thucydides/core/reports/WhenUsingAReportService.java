@@ -18,7 +18,9 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class WhenUsingAReportService {
 
@@ -64,7 +66,7 @@ public class WhenUsingAReportService {
     public void a_report_service_should_generate_reports_for_each_test_outcome() throws Exception {
 
         List<TestOutcome> testOutcomeResults = new ArrayList<>();
-        for(int i = 0; i < 1000; i++) {
+        for(int i = 0; i < 100; i++) {
             TestOutcome outcome = TestOutcome.forTest("test" + i, ATestCase.class);
             //TestOutcome outcome = TestOutcome.forTestInStory("test" + i, Story.withId("s1", "Story 1"));
             testOutcomeResults.add(outcome);
@@ -76,7 +78,7 @@ public class WhenUsingAReportService {
 
         reportService.generateReportsFor(testOutcomeResults);
 
-        verify(reporter, times(1000)).generateReportFor(Matchers.any(TestOutcome.class));
+        verify(reporter, times(100)).generateReportFor(Matchers.any(TestOutcome.class));
     }
 
 

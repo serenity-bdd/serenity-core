@@ -1,8 +1,8 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.strings.Joiner;
 import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
+import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.exceptions.TheErrorType;
 import net.serenitybdd.core.photography.Darkroom;
 import net.serenitybdd.core.photography.Photographer;
@@ -10,6 +10,7 @@ import net.serenitybdd.core.photography.ScreenshotPhoto;
 import net.serenitybdd.core.photography.SoundEngineer;
 import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
 import net.serenitybdd.core.rest.RestQuery;
+import net.serenitybdd.core.strings.Joiner;
 import net.serenitybdd.core.time.SystemClock;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -36,7 +37,8 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.*;
+import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.EXAMPLE;
+import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.SCENARIO;
 import static net.thucydides.core.model.Stories.findStoryFrom;
 import static net.thucydides.core.model.TestResult.*;
 import static net.thucydides.core.steps.BaseStepListener.ScreenshotType.MANDATORY_SCREENSHOT;
@@ -241,7 +243,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         this.clock = injector.getInstance(SystemClock.class);
         this.configuration = injector.getInstance(Configuration.class);
         //this.screenshotProcessor = injector.getInstance(ScreenshotProcessor.class);
-        this.closeBrowsers = Injectors.getInjector().getInstance(CloseBrowser.class);
+        this.closeBrowsers = WebDriverInjectors.getInjector().getInstance(CloseBrowser.class);
 
     }
 

@@ -6,7 +6,7 @@ import net.serenitybdd.core.annotations.findby.By;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.annotations.findby.How;
 import net.serenitybdd.core.annotations.findby.di.CustomFindByAnnotationProviderService;
-import net.thucydides.core.guice.Injectors;
+import net.serenitybdd.core.di.WebDriverInjectors;
 import net.thucydides.core.webdriver.MobilePlatform;
 import org.openqa.selenium.support.ByIdOrName;
 import org.openqa.selenium.support.FindBys;

@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkState;
@@ -87,29 +89,42 @@ public class DriverServiceExecutable {
 
     public File asAFile() {
 
+        Path binaryPath = asAPath();
+
+        if (reportMissingBinary) {
+            checkForMissingBinaries(binaryPath);
+        }
+        return binaryPath != null ? binaryPath.toFile() : null;
+    }
+
+    public Path asAPath() {
+
         String pathOnFilesystem = new ExecutableFinder().find(exeName);
         Optional<String> defaultPath = Optional.ofNullable(pathOnFilesystem);
 
+        Optional<String> osSpecificPath = Optional.ofNullable(environmentVariables.getProperty(osSpecific(exeProperty)));
+
         Optional<String> configuredBinaryPath = Optional.ofNullable(environmentVariables.getProperty(exeProperty));
-        String exePath = configuredBinaryPath.orElse(defaultPath.orElse(null));
 
-        File executableLocation = (exePath != null) ? new File(exePath) : null;
+        String exePath = configuredBinaryPath.orElse(osSpecificPath.orElse(defaultPath.orElse(null)));
 
-        if (reportMissingBinary) {
-            checkForMissingBinaries(executableLocation);
-        }
-        return executableLocation;
+        return (exePath == null) ? null : Paths.get(exePath);
     }
 
-    private void checkForMissingBinaries(File executableLocation) {
+    private String osSpecific(String exeProperty) {
+        return "drivers." + CurrentOS.getType() + "." + exeProperty;
+    }
+
+    private void checkForMissingBinaries(Path binaryPath) {
         String documentationSource = Optional.ofNullable(documentationUrl).orElse(downloadUrl);
 
-        checkState(executableLocation != null,
+        checkState(binaryPath != null,
                 "The path to the %s driver executable must be set by the %s system property;"
                         + " for more information, see %s. "
                         + "The latest version can be downloaded from %s",
                 exeName, exeProperty, documentationSource, downloadUrl);
-        checkExecutable(executableLocation);
+
+        checkExecutable(binaryPath.toFile());
     }
 
     protected static void checkExecutable(File exe) {

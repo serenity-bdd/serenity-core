@@ -6,6 +6,7 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import java.nio.file.Path
 import java.nio.file.Paths
 
 class WhenFindingDriverServiceExecutables extends Specification {
@@ -65,4 +66,21 @@ class WhenFindingDriverServiceExecutables extends Specification {
         e.message == "The path to the myexe driver executable must be set by the my.exe.path system property; for more information, see the website. The latest version can be downloaded from the internet"
     }
 
+    def "should be able to configure OS-specific drivers"() {
+        given:
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
+        String os = CurrentOS.type
+        environmentVariables.setProperty("drivers.${os}.my.exe.path","/my/path")
+
+        when:
+            Path driverPath = DriverServiceExecutable.called("myexe")
+                    .usingEnvironmentVariables(environmentVariables)
+                    .withSystemProperty("my.exe.path")
+                    .documentedAt("the website")
+                    .downloadableFrom("the internet")
+                    .asAPath()
+        then:
+            driverPath.toString() == "/my/path"
+
+    }
 }

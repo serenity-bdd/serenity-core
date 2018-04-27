@@ -58,6 +58,25 @@ class WhenAskingQuestionsAboutUIElements extends Specification {
             question.answeredBy(actor) == "some text value"
     }
 
+    def "should read string text content from targets"() {
+        when:
+        element.getAttribute("textContent") >> "some text value"
+        and:
+        Question<String> question = TheTarget.textOf(target).ignoringVisibility();
+        then:
+        question.answeredBy(actor) == "some text value"
+    }
+
+    def "should read string text content from multiple targets"() {
+        when:
+        element.getAttribute("textContent") >> "alpha"
+        element2.getAttribute("textContent") >> "beta"
+        and:
+        Question<String> question = TheTarget.textValuesOf(target)
+        then:
+        question.answeredBy(actor) == ["alpha","beta"]
+    }
+
     def "should read selected values from targets"() {
         when:
             element.getSelectedValue() >> "some text value"
@@ -94,6 +113,16 @@ class WhenAskingQuestionsAboutUIElements extends Specification {
             question.answeredBy(actor) == "some text value"
     }
 
+    def "should read selected attribute value lists from targets"() {
+        when:
+        element.getAttribute("attr") >> "alpha"
+        element2.getAttribute("attr") >> "beta"
+        and:
+            Question<String> question = TheTarget.attributeNamed("attr").forTargetsMatching(target)
+        then:
+            question.answeredBy(actor) == ["alpha","beta"]
+    }
+
     def "should read selected CSS values from targets"() {
         when:
             element.getCssValue("color") >> "red"
@@ -101,6 +130,16 @@ class WhenAskingQuestionsAboutUIElements extends Specification {
             Question<String> question = TheTarget.cssValueNamed("color").forTarget(target);
         then:
             question.answeredBy(actor) == "red"
+    }
+
+    def "should read selected CSS value sets from targets"() {
+        when:
+        element.getCssValue("color") >> "red"
+        element2.getCssValue("color") >> "blue"
+        and:
+        Question<String> question = TheTarget.cssValueNamed("color").forTargetsMatching(target);
+        then:
+        question.answeredBy(actor) == ["red","blue"]
     }
 
     def aTestHasStarted() {

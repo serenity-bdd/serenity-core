@@ -7,27 +7,17 @@ import net.serenitybdd.screenplay.questions.Attribute;
 import net.serenitybdd.screenplay.questions.Text;
 import net.serenitybdd.screenplay.targets.Target;
 
-import java.util.List;
-
 @Subject("#target")
-public class TargetText implements Question<String> {
+public class TargetTextContent implements Question<String> {
 
     private final Target target;
 
-    TargetText(Target target) {
+    TargetTextContent(Target target) {
         this.target = target;
-    }
-
-    /**
-     * Return text values even if they are off screen
-     * By default, Selenium will throw an exception for off-screen elements.
-     */
-    public TargetTextContent ignoringVisibility() {
-        return new TargetTextContent(target);
     }
 
     @Override
     public String answeredBy(Actor actor) {
-        return Text.of(target).viewedBy(actor).asString();
+        return Attribute.of(target).named("textContent").viewedBy(actor).asString();
     }
 }

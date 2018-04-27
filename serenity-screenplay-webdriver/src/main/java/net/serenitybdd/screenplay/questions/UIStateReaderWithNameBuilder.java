@@ -29,7 +29,7 @@ public class UIStateReaderWithNameBuilder<T> {
             this.name = name;
         }
 
-        public <T extends UIState> T viewedBy(Actor actor) {
+        public <T extends TargetedUIState> T viewedBy(Actor actor) {
             try {
                 return (T) type.getConstructor(Target.class, Actor.class, String.class).newInstance(target, actor, name);
             } catch (Exception e) {

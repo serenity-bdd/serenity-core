@@ -1,10 +1,10 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
+import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.serenitybdd.core.webdriver.servicepools.PhantomJSServicePool;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
@@ -35,7 +35,7 @@ public class PhantomJSDriverProvider implements DriverProvider {
 
     public PhantomJSDriverProvider(FixtureProviderService fixtureProviderService) {
         this.fixtureProviderService = fixtureProviderService;
-        this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
+        this.driverProperties = WebDriverInjectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class PhantomJSDriverProvider implements DriverProvider {
         }
 
         DesiredCapabilities enhancedCapabilities = requestedPhantomJSCapabilities(environmentVariables);
-        driverProperties.registerCapabilities("phantomjs", enhancedCapabilities);
+        driverProperties.registerCapabilities("phantomjs", capabilitiesToProperties(enhancedCapabilities));
 
         try {
             return getDriverServicePool().newDriver(enhancedCapabilities);

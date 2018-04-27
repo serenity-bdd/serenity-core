@@ -2,6 +2,8 @@ include 'serenity-test-utils',
         'serenity-report-resources',
         'serenity-sample-alternative-resources',
         'serenity-core',
+        'serenity-model',
+        'serenity-reports',
         'serenity-junit',
         'serenity-ant-task',
         'serenity-gradle-plugin',
@@ -10,3 +12,5 @@ include 'serenity-test-utils',
         'serenity-browsermob-plugin',
         'serenity-screenplay',
         'serenity-screenplay-webdriver'
+
+

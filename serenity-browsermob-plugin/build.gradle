@@ -4,6 +4,7 @@ ext {
 }
 
 dependencies {
+    compile project(':serenity-model')
     compile project(':serenity-core')
     compile("net.lightbody.bmp:browsermob-core:${browsermobVersion}") {
      	exclude group: 'org.seleniumhq.selenium', module:'selenium-java'

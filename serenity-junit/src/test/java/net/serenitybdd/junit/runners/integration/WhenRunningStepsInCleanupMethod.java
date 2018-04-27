@@ -4,8 +4,8 @@ package net.serenitybdd.junit.runners.integration;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
+import net.thucydides.core.configuration.WebDriverConfiguration;
 import net.thucydides.core.util.MockEnvironmentVariables;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -36,7 +36,7 @@ public class WhenRunningStepsInCleanupMethod {
     public void step_contained_in_after_method_is_not_skipped() throws Exception {
         SerenityRunner runner = new SerenityRunner(SampleTest.class,
                 new WebDriverFactory(environmentVariables),
-                new SystemPropertiesConfiguration(environmentVariables));
+                new WebDriverConfiguration(environmentVariables));
 
         CapturingNotifier notifier =  new CapturingNotifier();
         runner.run(notifier);

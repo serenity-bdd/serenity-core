@@ -1,10 +1,10 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
+import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.webdriver.servicepools.ChromeServicePool;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
@@ -34,7 +34,7 @@ public class ChromeDriverProvider implements DriverProvider {
 
     public ChromeDriverProvider(FixtureProviderService fixtureProviderService) {
         this.fixtureProviderService = fixtureProviderService;
-        this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
+        this.driverProperties = WebDriverInjectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ChromeDriverProvider implements DriverProvider {
             return new WebDriverStub();
         }
         DesiredCapabilities capabilities = requestedChromeCapabilities(options, environmentVariables);
-        driverProperties.registerCapabilities("chrome", capabilities);
+        driverProperties.registerCapabilities("chrome", capabilitiesToProperties(capabilities));
 
         try {
             return getDriverServicePool().newDriver(capabilities);

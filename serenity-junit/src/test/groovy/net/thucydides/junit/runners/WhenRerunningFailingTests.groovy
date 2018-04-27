@@ -1,7 +1,7 @@
 package net.thucydides.junit.runners
 
 import net.serenitybdd.junit.runners.SerenityRunner
-import net.thucydides.core.configuration.SystemPropertiesConfiguration
+import net.thucydides.core.configuration.WebDriverConfiguration
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.WebDriverFactory
 import org.junit.Rule
@@ -45,7 +45,7 @@ class WhenRerunningFailingTests extends Specification {
 
     def "should rerun only tests specified in rerun file"() {
         given:
-            def runner = new SerenityRunner(ATestWithMoreTestMethods,webDriverFactory, new SystemPropertiesConfiguration().withEnvironmentVariables(environmentVariables))
+            def runner = new SerenityRunner(ATestWithMoreTestMethods,webDriverFactory, new WebDriverConfiguration(environmentVariables))
         when:
             runner.run(new RunNotifier())
         then:

@@ -1,24 +1,22 @@
 package net.serenitybdd.core;
 
-import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.di.DependencyInjector;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
-import net.serenitybdd.core.sessions.TestSessionVariables;
-import net.thucydides.core.annotations.TestCaseAnnotations;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.pages.Pages;
+import net.serenitybdd.core.collect.*;
+import net.serenitybdd.core.di.*;
+import net.serenitybdd.core.environment.*;
+import net.serenitybdd.core.injectors.*;
+import net.serenitybdd.core.sessions.*;
+import net.thucydides.core.annotations.*;
+import net.thucydides.core.guice.*;
+import net.thucydides.core.pages.*;
 import net.thucydides.core.steps.*;
-import net.thucydides.core.steps.di.DependencyInjectorService;
-import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.steps.di.*;
+import net.thucydides.core.util.*;
 import net.thucydides.core.webdriver.*;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.*;
+import org.openqa.selenium.firefox.*;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.*;
 
@@ -114,7 +112,7 @@ public class Serenity {
     }
 
     private static void setupWebDriverFactory() {
-        factoryThreadLocal.set(Injectors.getInjector().getInstance(WebDriverFactory.class));
+        factoryThreadLocal.set(WebDriverInjectors.getInjector().getInstance(WebDriverFactory.class));
     }
 
     /**

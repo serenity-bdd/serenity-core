@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class ScreenshotPermission {
 
-    private final Configuration configuration;
+    private final Configuration<Configuration> configuration;
 
     public ScreenshotPermission(Configuration configuration) {
         this.configuration = configuration;
@@ -20,8 +20,9 @@ public class ScreenshotPermission {
 
     public boolean areAllowed(TakeScreenshots takeScreenshots) {
 
-        TakeScreenshots configuredLevel = methodOverride()
-                .orElse(classOverride().orElse(configuration.getScreenshotLevel().orElse(TakeScreenshots.UNDEFINED)));
+        TakeScreenshots configuredLevel = methodOverride().
+                orElse(classOverride().orElse(configuration.getScreenshotLevel().orElse(TakeScreenshots.UNDEFINED)));
+
 
         if (configuredLevel != TakeScreenshots.UNDEFINED) {
             return takeScreenshotLevel(takeScreenshots).isAtLeast(configuredLevel);

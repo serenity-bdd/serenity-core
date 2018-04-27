@@ -1,30 +1,23 @@
 package net.thucydides.core.steps;
 
-import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.collect.NewSet;
-import net.serenitybdd.core.di.DependencyInjector;
-import net.serenitybdd.core.exceptions.StepInitialisationException;
-import net.serenitybdd.core.injectors.EnvironmentDependencyInjector;
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.thucydides.core.annotations.Fields;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.steps.construction.ConstructionStrategy;
-import net.thucydides.core.steps.construction.StepLibraryConstructionStrategy;
-import net.thucydides.core.steps.construction.StepLibraryType;
-import net.thucydides.core.steps.di.DependencyInjectorService;
-import org.apache.commons.lang3.ClassUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.serenitybdd.core.collect.*;
+import net.serenitybdd.core.di.*;
+import net.serenitybdd.core.exceptions.*;
+import net.serenitybdd.core.injectors.*;
+import net.sf.cglib.proxy.*;
+import net.thucydides.core.annotations.*;
+import net.thucydides.core.guice.*;
+import net.thucydides.core.pages.*;
+import net.thucydides.core.steps.construction.*;
+import net.thucydides.core.steps.di.*;
+import org.apache.commons.lang3.*;
+import org.slf4j.*;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
+import java.lang.reflect.*;
 import java.util.*;
 
 import static net.thucydides.core.steps.construction.ConstructionStrategy.*;
-import static net.thucydides.core.steps.construction.StepLibraryType.ofTypePages;
+import static net.thucydides.core.steps.construction.StepLibraryType.*;
 
 /**
  * Produces an instance of a set of requirement steps for use in the acceptance tests.

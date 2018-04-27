@@ -1,8 +1,10 @@
 package net.thucydides.core.webdriver;
 
 import io.appium.java_client.AppiumDriver;
+import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.pages.DefaultTimeouts;
+import net.serenitybdd.core.webdriver.driverproviders.*;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureException;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
@@ -10,13 +12,12 @@ import net.thucydides.core.fixtureservices.FixtureService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.SaucelabsRemoteDriverCapabilities;
-import net.serenitybdd.core.webdriver.driverproviders.*;
 import net.thucydides.core.webdriver.redimension.RedimensionBrowser;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import java.time.Duration;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -51,7 +52,7 @@ public class WebDriverFactory {
 
     public WebDriverFactory(EnvironmentVariables environmentVariables) {
         this(environmentVariables,
-            Injectors.getInjector().getInstance(FixtureProviderService.class));
+            WebDriverInjectors.getInjector().getInstance(FixtureProviderService.class));
     }
 
     public WebDriverFactory(EnvironmentVariables environmentVariables,
@@ -60,7 +61,7 @@ public class WebDriverFactory {
         this.fixtureProviderService = fixtureProviderService;
         this.sauceRemoteDriverCapabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
         this.timeoutStack = new TimeoutStack();
-        this.closeBrowser = Injectors.getInjector().getInstance(CloseBrowser.class);
+        this.closeBrowser = WebDriverInjectors.getInjector().getInstance(CloseBrowser.class);
     }
 
     /**

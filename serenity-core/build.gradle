@@ -32,6 +32,8 @@ test {
 dependencies {
 
     compile project(':serenity-report-resources')
+    compile project(':serenity-model')
+    compile project(':serenity-reports')
 
     compile "com.google.code.gson:gson:${gsonVersion}"
 
@@ -199,6 +201,8 @@ dependencies {
 
     testCompile project(':serenity-sample-alternative-resources')
     testCompile project(':serenity-test-utils')
+    testCompile project(':serenity-model')
+    testCompile project(':serenity-reports')
     testCompile "org.skyscreamer:jsonassert:${jsonassertVersion}"
     testCompile("org.jbehave:jbehave:${jbehaveVersion}") {
         exclude module: 'freemarker'

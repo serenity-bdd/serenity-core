@@ -1,9 +1,8 @@
 package net.thucydides.junit.runners;
 
-import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
-import net.thucydides.core.batches.BatchManager;
-import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.WebDriverFactory;
+import net.serenitybdd.junit.runners.*;
+import net.thucydides.core.batches.*;
+import net.thucydides.core.webdriver.*;
 
 /**
  * @deprecated Replaced by SerenityParameterizedRunner
@@ -12,7 +11,7 @@ import net.thucydides.core.webdriver.WebDriverFactory;
  */
 @Deprecated
 public class ThucydidesParameterizedRunner extends SerenityParameterizedRunner {
-    public ThucydidesParameterizedRunner(Class<?> klass, Configuration configuration, WebDriverFactory webDriverFactory, BatchManager batchManager) throws Throwable {
+    public ThucydidesParameterizedRunner(Class<?> klass, DriverConfiguration configuration, WebDriverFactory webDriverFactory, BatchManager batchManager) throws Throwable {
         super(klass, configuration, webDriverFactory, batchManager);
     }
 

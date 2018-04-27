@@ -1,9 +1,9 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
+import net.serenitybdd.core.di.WebDriverInjectors;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
@@ -22,7 +22,7 @@ public class SafariDriverProvider implements DriverProvider {
 
     public SafariDriverProvider(FixtureProviderService fixtureProviderService) {
         this.fixtureProviderService = fixtureProviderService;
-        this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
+        this.driverProperties = WebDriverInjectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SafariDriverProvider implements DriverProvider {
         safariOptions.useCleanSession(useCleanSession);
 
         SafariDriver driver = new SafariDriver(safariOptions);
-        driverProperties.registerCapabilities("safari", driver.getCapabilities());
+        driverProperties.registerCapabilities("safari", capabilitiesToProperties(driver.getCapabilities()));
         return driver;
     }
 }

@@ -1,21 +1,15 @@
 package net.thucydides.core.annotations;
 
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
-import net.thucydides.core.webdriver.DriverStrategySelector;
-import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
-import net.thucydides.core.webdriver.WebdriverManager;
-import org.junit.runner.RunWith;
-import org.openqa.selenium.WebDriver;
+import net.serenitybdd.core.environment.*;
+import net.thucydides.core.configuration.*;
+import net.thucydides.core.webdriver.*;
+import org.junit.runner.*;
+import org.openqa.selenium.*;
 
-import java.util.List;
+import java.util.*;
 
 import static net.thucydides.core.annotations.ManagedWebDriverAnnotatedField.*;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.*;
 
 /**
  * Utility class used to inject fields into a test case.
@@ -25,16 +19,16 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 public final class TestCaseAnnotations {
 
     private final Object testCase;
-    private final Configuration configuration;
+    private final DriverConfiguration configuration;
 
-    public TestCaseAnnotations(final Object testCase, SystemPropertiesConfiguration configuration) {
+    public TestCaseAnnotations(final Object testCase, WebDriverConfiguration configuration) {
         this.testCase = testCase;
         this.configuration = configuration;
     }
 
     public TestCaseAnnotations(final Object testCase) {
         this.testCase = testCase;
-        this.configuration = ConfiguredEnvironment.getConfiguration();
+        this.configuration = WebDriverConfiguredEnvironment.getDriverConfiguration();
     }
 
     public static TestCaseAnnotations forTestCase(final Object testCase) {

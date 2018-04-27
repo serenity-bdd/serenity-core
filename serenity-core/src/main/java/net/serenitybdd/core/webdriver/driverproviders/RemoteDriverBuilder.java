@@ -1,28 +1,20 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import com.google.common.base.Splitter;
-import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.ios.IOSDriver;
-import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
-import net.serenitybdd.core.exceptions.SerenityManagedException;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.appium.AppiumConfiguration;
-import net.thucydides.core.webdriver.stubs.AndroidWebDriverStub;
-import net.thucydides.core.webdriver.stubs.IOSWebDriverStub;
-import net.thucydides.core.webdriver.stubs.WebDriverStub;
-import org.mockito.Mockito;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.UnreachableBrowserException;
+import com.google.common.base.*;
+import io.appium.java_client.android.*;
+import io.appium.java_client.ios.*;
+import net.serenitybdd.core.buildinfo.*;
+import net.serenitybdd.core.di.*;
+import net.serenitybdd.core.exceptions.*;
+import net.thucydides.core.steps.*;
+import net.thucydides.core.util.*;
+import net.thucydides.core.webdriver.appium.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.remote.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
-import java.util.List;
-
-import static org.mockito.Mockito.when;
+import java.util.*;
 
 abstract class RemoteDriverBuilder {
 
@@ -31,7 +23,7 @@ abstract class RemoteDriverBuilder {
 
     RemoteDriverBuilder(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
-        this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
+        this.driverProperties = WebDriverInjectors.getInjector().getInstance(DriverCapabilityRecord.class);
     }
 
     abstract WebDriver buildWithOptions(String options) throws MalformedURLException;
@@ -64,7 +56,7 @@ abstract class RemoteDriverBuilder {
                     break;
             }
 
-            driverProperties.registerCapabilities(remoteCapabilities.getBrowserName(), driver.getCapabilities());
+            driverProperties.registerCapabilities(remoteCapabilities.getBrowserName(),  CapabilitiesToPropertiesConverter.capabilitiesToProperties(driver.getCapabilities()));
             return driver;
 
         } catch (UnreachableBrowserException unreachableBrowser) {

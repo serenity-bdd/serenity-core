@@ -1,7 +1,6 @@
 package net.serenitybdd.junit.runners;
 
 import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;

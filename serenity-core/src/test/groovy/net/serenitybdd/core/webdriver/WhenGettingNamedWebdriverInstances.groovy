@@ -1,16 +1,17 @@
 package net.serenitybdd.core.webdriver
 
+import net.thucydides.core.configuration.SystemPropertiesConfiguration
+import net.thucydides.core.configuration.WebDriverConfiguration
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SerenityWebdriverManager
-import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import net.thucydides.core.webdriver.WebDriverFactory
 import spock.lang.Specification
 
 class WhenGettingNamedWebdriverInstances extends Specification {
 
     EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-    SystemPropertiesConfiguration configuration = new SystemPropertiesConfiguration(environmentVariables);
+    SystemPropertiesConfiguration configuration = new WebDriverConfiguration(environmentVariables);
 
     def "should be able to request explicitly several named driver instances"() {
         given:

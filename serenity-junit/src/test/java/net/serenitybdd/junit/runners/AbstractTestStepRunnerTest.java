@@ -1,10 +1,10 @@
 package net.serenitybdd.junit.runners;
 
+import net.thucydides.core.configuration.WebDriverConfiguration;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.util.MockEnvironmentVariables;
-import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
+import net.thucydides.core.webdriver.DriverConfiguration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.junit.Before;
 import org.junit.runners.model.InitializationError;
@@ -25,7 +25,7 @@ public abstract class AbstractTestStepRunnerTest {
     }
 
     protected SerenityRunner getTestRunnerUsing(Class<?> testClass) throws InitializationError {
-        Configuration configuration = new SystemPropertiesConfiguration(environmentVariables);
+        DriverConfiguration configuration = new WebDriverConfiguration(environmentVariables);
         WebDriverFactory factory = new WebDriverFactory(environmentVariables);
         return new SerenityRunner(testClass, factory, configuration);
     }

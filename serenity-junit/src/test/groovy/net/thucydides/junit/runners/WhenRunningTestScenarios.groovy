@@ -2,10 +2,10 @@ package net.thucydides.junit.runners
 
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner
 import net.serenitybdd.junit.runners.SerenityRunner
+import net.thucydides.core.configuration.WebDriverConfiguration
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SerenityWebdriverManager
-import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import net.thucydides.core.webdriver.WebDriverFactory
 import net.thucydides.samples.*
 import org.junit.Rule
@@ -24,7 +24,7 @@ import static net.thucydides.junit.runners.TestOutcomeChecks.resultsFrom
 class WhenRunningTestScenarios extends Specification {
 
     def environmentVariables = new MockEnvironmentVariables()
-    def configuration = new SystemPropertiesConfiguration(environmentVariables)
+    def configuration = new WebDriverConfiguration(environmentVariables)
     def webDriverFactory = new WebDriverFactory(environmentVariables)
     File temporaryDirectory
 
@@ -482,7 +482,7 @@ class WhenRunningTestScenarios extends Specification {
 
     def "should ignore close if the webdriver is not defined"() {
         when:
-        def manager = new SerenityWebdriverManager(webDriverFactory, new SystemPropertiesConfiguration(environmentVariables));
+        def manager = new SerenityWebdriverManager(webDriverFactory, new WebDriverConfiguration(environmentVariables));
         then:
         manager.closeDriver()
     }

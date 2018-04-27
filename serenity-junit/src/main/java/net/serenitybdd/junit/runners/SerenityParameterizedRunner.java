@@ -1,30 +1,23 @@
 package net.serenitybdd.junit.runners;
 
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.thucydides.core.batches.BatchManager;
-import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.reports.AcceptanceTestReporter;
-import net.thucydides.core.reports.ReportService;
-import net.thucydides.core.steps.StepEventBus;
-import net.thucydides.core.tags.TagScanner;
-import net.thucydides.core.tags.Taggable;
-import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.WebDriverFactory;
-import net.thucydides.junit.ThucydidesJUnitSystemProperties;
-import net.thucydides.junit.annotations.Concurrent;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.runner.Runner;
-import org.junit.runner.notification.RunNotifier;
-import org.junit.runners.Suite;
-import org.junit.runners.model.FrameworkMethod;
+import net.serenitybdd.core.environment.*;
+import net.thucydides.core.batches.*;
+import net.thucydides.core.guice.*;
+import net.thucydides.core.model.*;
+import net.thucydides.core.reports.*;
+import net.thucydides.core.steps.*;
+import net.thucydides.core.tags.*;
+import net.thucydides.core.webdriver.*;
+import net.thucydides.junit.*;
+import net.thucydides.junit.annotations.*;
+import org.apache.commons.lang3.*;
+import org.junit.runner.*;
+import org.junit.runner.notification.*;
+import org.junit.runners.*;
+import org.junit.runners.model.*;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 /**
  * Run a Serenity test suite using a set of data.
@@ -36,7 +29,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
 
     private List<Runner> runners = new ArrayList<>();
 
-    private final Configuration configuration;
+    private final DriverConfiguration configuration;
     private ReportService reportService;
     private final ParameterizedTestsOutcomeAggregator parameterizedTestsOutcomeAggregator = ParameterizedTestsOutcomeAggregator.from(this);
     private TagScanner tagScanner;
@@ -51,7 +44,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
      * @throws Throwable - cause anything can happen!
      */
     public SerenityParameterizedRunner(final Class<?> klass,
-                                       Configuration configuration,
+                                       DriverConfiguration configuration,
                                        final WebDriverFactory webDriverFactory,
                                        final BatchManager batchManager
     ) throws Throwable {
@@ -191,7 +184,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
      * @throws Throwable Cause shit happens
      */
     public SerenityParameterizedRunner(final Class<?> klass) throws Throwable {
-        this(klass, ConfiguredEnvironment.getConfiguration(), new WebDriverFactory(),
+        this(klass, WebDriverConfiguredEnvironment.getDriverConfiguration(), new WebDriverFactory(),
                 Injectors.getInjector().getInstance(BatchManager.class));
     }
 

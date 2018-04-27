@@ -3,7 +3,6 @@ package net.serenitybdd.screenplay.shopping.questions;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.shopping.tasks.CommonData;
-import net.serenitybdd.screenplay.shopping.tasks.TestData;
 import net.thucydides.core.annotations.Shared;
 import net.thucydides.core.annotations.Steps;
 

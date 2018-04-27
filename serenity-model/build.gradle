@@ -1,0 +1,60 @@
+ext {
+    bintrayPackage = 'serenity-model'
+    projectDescription = 'Serenity Model'
+}
+
+dependencies {
+
+    compile project(':serenity-report-resources')
+
+    compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
+    compile group: 'commons-net', name: 'commons-net', version: '3.6'
+
+    compile "com.typesafe:config:${typesafeConfigVersion}"
+
+    compile("org.jsoup:jsoup:${jsoupVersion}") {
+        exclude group: 'junit', module: 'junit'
+    }
+
+    compile "joda-time:joda-time:${jodaTimeVersion}"
+    compile "commons-collections:commons-collections:${commonsCollectionsVersion}"
+    compile "commons-io:commons-io:${commonsIoVersion}"
+    compile("commons-beanutils:commons-beanutils-core:${beanUtilsVersion}") {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
+    compile "javax.validation:validation-api:${javaxValidationVersion}"
+    compile "net.sf.opencsv:opencsv:${openCsvVersion}"
+    compile "com.google.code.gson:gson:${gsonVersion}"
+    compile "org.imgscalr:imgscalr-lib:${imgscalrVersion}"
+    compile "com.thoughtworks.xstream:xstream:${xstreamVersion}"
+    compile "org.codehaus.groovy:groovy:${groovyVersion}"
+    compile("net.sourceforge.jexcelapi:jxl:${jexcelapiVersion}") {
+        exclude group: 'log4j', module: 'log4j'
+    }
+
+    compile("org.awaitility:awaitility:${awaitilityVersion}") {
+        exclude group: 'cglib', module: 'cglib-nodep'
+        exclude group: 'org.objenesis', module: 'objenesis'
+    }
+    testCompile ("com.github.tomakehurst:wiremock:$wiremockCoreVersion") {
+        exclude group: 'com.google.guava', module:'guava'
+        exclude group: 'org.apache.httpcomponents', module:'httpclient'
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
+    compile("org.asciidoctor:asciidoctorj:${asciidoctorVersion}"){
+        exclude group: 'com.beust', module: 'jcommander'
+    }
+    compile "org.freemarker:freemarker:${freemarkerVersion}"
+    compile ("com.vladsch.flexmark:flexmark-all:0.26.4") {
+        exclude group:"org.jsoup", module:"jsoup"
+    }
+    compile 'es.nitaur.markdown:txtmark:0.16'
+
+    testCompile project(':serenity-test-utils')
+    testCompile project(':serenity-sample-alternative-resources')
+    testCompile("org.spockframework:spock-core:${spockVersion}") {
+        exclude group: "junit"
+        exclude group: "org.codehaus.groovy"
+
+    }
+}

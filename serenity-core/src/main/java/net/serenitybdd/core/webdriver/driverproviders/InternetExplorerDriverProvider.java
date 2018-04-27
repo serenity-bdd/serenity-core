@@ -1,22 +1,17 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import com.google.gson.JsonObject;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
+import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.time.InternalSystemClock;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.serenitybdd.core.webdriver.servicepools.InternetExplorerServicePool;
-import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
-import net.thucydides.core.webdriver.SupportedWebDriver;
-import net.thucydides.core.webdriver.capabilities.AddCustomCapabilities;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.NoSuchSessionException;
-import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
@@ -25,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Map;
 
 import static net.thucydides.core.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
 import static net.thucydides.core.webdriver.SupportedWebDriver.IEXPLORER;
@@ -47,7 +41,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
 
     public InternetExplorerDriverProvider(FixtureProviderService fixtureProviderService) {
         this.fixtureProviderService = fixtureProviderService;
-        this.driverProperties = Injectors.getInjector().getInstance(DriverCapabilityRecord.class);
+        this.driverProperties = WebDriverInjectors.getInjector().getInstance(DriverCapabilityRecord.class);
         this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
     }
 
@@ -62,7 +56,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
 
         SetProxyConfiguration.from(environmentVariables).in(desiredCapabilities);
 
-        driverProperties.registerCapabilities("iexplorer", desiredCapabilities);
+        driverProperties.registerCapabilities("iexplorer", capabilitiesToProperties(desiredCapabilities));
 
         try {
             return retryCreateDriverOnNoSuchSession(desiredCapabilities);

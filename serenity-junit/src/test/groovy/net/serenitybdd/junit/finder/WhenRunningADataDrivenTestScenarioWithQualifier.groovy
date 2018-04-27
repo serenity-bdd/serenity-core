@@ -4,9 +4,10 @@ import net.serenitybdd.junit.runners.ParameterizedTestsOutcomeAggregator
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.batches.BatchManagerProvider
+import net.thucydides.core.configuration.SystemPropertiesConfiguration
+import net.thucydides.core.configuration.WebDriverConfiguration
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.Configuration
-import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import net.thucydides.core.webdriver.WebDriverFactory
 import net.thucydides.junit.rules.QuietThucydidesLoggingRule
 import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule
@@ -59,7 +60,7 @@ class WhenRunningADataDrivenTestScenarioWithQualifier extends Specification {
     }
 
     def private SerenityParameterizedRunner getStubbedTestRunnerUsing(Class<?> testClass) throws Throwable {
-        def configuration = new SystemPropertiesConfiguration(environmentVariables)
+        def configuration = new WebDriverConfiguration(environmentVariables)
         def factory = new WebDriverFactory(environmentVariables)
         def batchManager = new BatchManagerProvider(configuration).get()
         return new SerenityParameterizedRunner(testClass, configuration, factory, batchManager) {

@@ -1,25 +1,21 @@
 package net.serenitybdd.junit.runners;
 
-import net.thucydides.core.batches.BatchManager;
-import net.thucydides.core.model.DataTable;
-import net.thucydides.core.model.DataTableRow;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.webdriver.WebDriverFactory;
-import net.thucydides.junit.listeners.JUnitStepListener;
-import org.junit.runner.notification.RunNotifier;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.InitializationError;
-import org.junit.runners.model.Statement;
+import net.thucydides.core.batches.*;
+import net.thucydides.core.model.*;
+import net.thucydides.core.pages.*;
+import net.thucydides.core.webdriver.*;
+import net.thucydides.junit.listeners.*;
+import org.junit.runner.notification.*;
+import org.junit.runners.model.*;
 
-import java.util.List;
+import java.util.*;
 
 class TestClassRunnerForParameters extends QualifiedTestsRunner {
     private final int parameterSetNumber;
     private final DataTable parametersTable;
 
     TestClassRunnerForParameters(final Class<?> type,
-                                 final Configuration configuration,
+                                 final DriverConfiguration configuration,
                                  final WebDriverFactory webDriverFactory,
                                  final BatchManager batchManager,
                                  final DataTable parametersTable,

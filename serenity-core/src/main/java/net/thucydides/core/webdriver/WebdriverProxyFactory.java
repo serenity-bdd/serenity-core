@@ -1,17 +1,14 @@
 package net.thucydides.core.webdriver;
 
-import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
-import net.thucydides.core.steps.StepEventBus;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
+import net.serenitybdd.core.collect.*;
+import net.serenitybdd.core.environment.*;
+import net.thucydides.core.steps.*;
+import org.openqa.selenium.*;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
-import static java.util.Collections.synchronizedList;
+import static java.util.Collections.*;
 
 /**
  * Provides a proxy for a WebDriver instance.
@@ -28,11 +25,11 @@ public class WebdriverProxyFactory implements Serializable {
 
     private WebDriverFactory webDriverFactory;
     private WebDriverFacade mockDriver;
-    private final Configuration configuration;
+    private final DriverConfiguration configuration;
 
     private WebdriverProxyFactory() {
         webDriverFactory = new WebDriverFactory();
-        this.configuration = ConfiguredEnvironment.getConfiguration();
+        this.configuration = WebDriverConfiguredEnvironment.getDriverConfiguration();
     }
 
     public static WebdriverProxyFactory getFactory() {

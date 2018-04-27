@@ -1,10 +1,10 @@
 package net.serenitybdd.core.webdriver
 
+import net.thucydides.core.configuration.WebDriverConfiguration
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.SupportedWebDriver
-import net.thucydides.core.configuration.SystemPropertiesConfiguration
 import net.thucydides.core.webdriver.WebDriverFactory
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
@@ -14,6 +14,7 @@ import spock.lang.Specification
 
 import static org.mockito.Matchers.any
 import static org.mockito.Mockito.*
+
 /**
  * User: YamStranger
  * Date: 2/8/16
@@ -37,7 +38,7 @@ class WhenUsingWebDriverFacade extends Specification {
     def setup() {
         MockitoAnnotations.initMocks(this);
         environmentVariables = new MockEnvironmentVariables()
-        configuration = new SystemPropertiesConfiguration(environmentVariables)
+        configuration = new WebDriverConfiguration(environmentVariables)
     }
 
     def "should be possible get session id using webdriverManager"() {

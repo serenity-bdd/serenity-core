@@ -3,12 +3,13 @@ package net.serenitybdd.junit.runners.integration;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.configuration.WebDriverConfiguration;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
-import net.thucydides.core.configuration.SystemPropertiesConfiguration;
+import net.thucydides.core.webdriver.DriverConfiguration;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import net.thucydides.samples.SampleNonWebScenarioWithError;
 import net.thucydides.samples.SampleNonWebScenarioWithErrorThatEventuallyWorks;
@@ -20,7 +21,9 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
 
 public class WhenRerunningFailedTests {
 
@@ -32,7 +35,7 @@ public class WhenRerunningFailedTests {
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
         environmentVariables = new MockEnvironmentVariables();
-        configuration = new SystemPropertiesConfiguration(environmentVariables);
+        configuration = new WebDriverConfiguration(environmentVariables);
     }
 
     @Test
@@ -69,7 +72,7 @@ public class WhenRerunningFailedTests {
     }
 
     protected SerenityRunner getNormalTestRunnerUsing(Class<?> testClass) throws Throwable {
-        Configuration configuration = new SystemPropertiesConfiguration(environmentVariables);
+        DriverConfiguration configuration = new WebDriverConfiguration(environmentVariables);
         WebDriverFactory factory = new WebDriverFactory(environmentVariables);
         return new SerenityRunner(testClass, factory, configuration);
     }

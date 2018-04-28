@@ -1,0 +1,7 @@
+"Story","Title","Result","Date","Stability","Duration (s)"
+"Complete a todo","Should be able to complete a todo in screenplay","SUCCESS","2016-11-24T12:23:27.309Z","0.0","8.1"
+"Toggle all todos","Should be able to quickly complete all todos in screenplay","SUCCESS","2016-11-24T12:23:58.161Z","0.0","7.54"
+"Toggle all todos","Should be able to toggle status of all todos in screenplay","SUCCESS","2016-11-24T12:23:43.518Z","0.0","8.17"
+"Toggle all todos","Should see how many items todo when all are toggled to incomplete in screenplay","SUCCESS","2016-11-24T12:23:35.537Z","0.0","7.93"
+"Toggle all todos","Should see that there are zero items todo when all are toggled complete in screenplay","SUCCESS","2016-11-24T12:23:51.736Z","0.0","6.37"
+"Complete a todo","Should see the number of todos decrease when an item is completed","SUCCESS","2016-11-24T12:23:19.863Z","0.0","7.39"

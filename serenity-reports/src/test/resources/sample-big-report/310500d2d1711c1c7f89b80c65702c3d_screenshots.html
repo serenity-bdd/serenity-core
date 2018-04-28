@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Screenshots</title>
+
+    <link rel="shortcut icon" href="favicon.ico">
+
+<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+<!--[if IE 7]>
+<link rel="stylesheet" href="font-awesome/css/font-awesome-ie7.min.css">
+<![endif]--><!-- JQuery -->
+<script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script><!-- Bootstrap -->
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="bootstrap/js/bootstrap.min.js"></script><link rel="stylesheet" href="css/core.css"/>
+<link rel="stylesheet" href="css/link.css"/>
+<link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet"/><!-- Nivo Slider -->
+<link rel="stylesheet" href="nivo-slider/3.2/nivo-slider.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="nivo-slider/3.2/themes/default/default.css" type="text/css" media="screen" />
+<script src="nivo-slider/3.2/jquery.nivo.slider.pack.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        function getUrlVars() {
+            var vars = {};
+            var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+                vars[key] = value;
+            });
+            return vars;
+        }
+
+        var screenshotIndex = getUrlVars()["screenshot"];
+
+        $(window).load(function () {
+            $('#slider').nivoSlider({
+                startSlide: screenshotIndex,
+                effect: 'fade',
+                animSpeed: 200,
+                manualAdvance: true
+            });
+        });
+
+        $(window).keydown(function(e) {
+            switch(e.which) {
+                case 37:
+                    $('a.nivo-prevNav').click();
+                    break;
+                case 39:
+                    $('a.nivo-nextNav').click();
+                    break;
+            }
+        });
+    </script>
+
+</head>
+
+<body>
+<div id="topheader">
+    <div id="topbanner">
+        <div id="logo"><a href="index.html"><img src="images/serenity-bdd-logo.png" border="0"/></a></div>
+        <div id="projectname-banner" style="float:right">
+            <span class="projectname">Demo Project using Serenity and Cucumber</span>
+        </div>
+    </div>
+</div>
+
+<div class="middlecontent">
+    <div id="contenttop">
+        <div class="middlebg">
+            <span class="breadcrumbs">
+                <a href="index.html">Home</a>
+                > <a
+                    href="d28aa45a09618d4486f72e9755b0d93e.html">Add New Todos</a>
+                > <a
+                    href="310500d2d1711c1c7f89b80c65702c3d.html">Should be able to add many many todo items </a>
+                > Screenshots
+            </span>
+        </div>
+        <div class="rightbg"></div>
+    </div>
+
+    <div class="clr"></div>
+
+    <!--/* starts second table*/-->
+<div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#"><i class="fa fa-check-square-o"></i> Overall Test Results</a>
+        </li>
+        <li >
+            <a href="capabilities.html"><i class="fa fa-book"></i> Requirements</a>
+        </li>
+        <li >
+            <a href="e3a5a59a6d792683cf33d050ee0f6f92.html"><i class="fa fa-comments-o"></i> Capabilities</a>
+        </li>
+        <li >
+            <a href="d782c44557441225cc92a5e35bf4b23b.html"><i class="fa fa-comments-o"></i> Features</a>
+        </li>
+    </ul>
+    <span class="date-and-time"><a href="build-info.html"><i class="fa fa-info-circle"></i></a> Report generated 24-11-2016 12:30</span>
+    <br style="clear:left"/>
+</div>
+
+    <div class="clr"></div>
+
+
+    <div id="contentbody">
+        <div class="titlebar">
+            <div class="story-title">
+                <table class="outcome-header">
+                    <tr>
+                        <td>
+                            <div>
+                                <h3 class="discreet-story-header">
+                                    <i class="fa fa-2x fa-comments-o"></i>
+                                    <span class="story-header-title">Add New Todos </span>
+                                    <span class="badge tag-badge">Feature</span>
+                                </h3>
+
+                                <div class="discreet-requirement-narrative-title">
+                                
+                                </div>
+                            </div>
+
+                        </td>
+                        <td valign="top" align="right">
+                            <p class="tag">
+                                <span class="badge tag-badge">
+                                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" href="f182430807c1cbb494fad9896dc3d484.html">Screenplay Pattern
+                                    (tag)</a>
+                                </span>
+                            </p>
+                            <p class="tag">
+                                <span class="badge tag-badge">
+                                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" href="81df5ca96d6f2e53310cee7defa7d10f.html">Release-1
+                                    (version)</a>
+                                </span>
+                            </p>
+                            <p class="tag">
+                                <span class="badge tag-badge">
+                                    <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" href="2c989a8647e192562ebe1c1dd723c33b.html">Record Todos
+                                    (capability)</a>
+                                </span>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="story-title">
+                <table class="outcome-header">
+                    <tr>
+                        <td colspan="2" class="test-title-bar">
+                            <span class="outcome-icon"><i class='fa fa-check-square-o success-icon fa-3x' title='SUCCESS'></i></span>
+                            <span class="test-case-title">
+                                <span class="success-color">Should Be Able To Add Many Many Todo Items
+                                    <span class="related-issue-title"></span>
+                                </span>
+                            </span>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="clr"></div>
+
+
+    <div id="beforetable"></div>
+    <div id="contenttilttle">
+        <div class="slider-wrapper theme-default">
+            <div id="slider">
+                <img src="e5ef9c264a64559807977f7f8b4d2466.png" title="James starts with **a todo list containing Walk the dog, Put out the garbage**" width="960"/>
+                <img src="665c645d1484d0e0a89a0bc7a6a04af8.png" title="James opens the Application home page" width="960"/>
+                <img src="4fabc37b68470020361ff08cf5098fe3.png" title="James adds the todo items called: [Walk the dog, Put out the garbage]" width="960"/>
+                <img src="3ea59cfc65a6233857b32364ba53d59c.png" title="James adds the todo items called: [Walk the dog, Put out the garbage]" width="960"/>
+                <img src="4fabc37b68470020361ff08cf5098fe3.png" title="James adds a todo item called: Walk the dog" width="960"/>
+                <img src="4641b4ebcac94f8901baf401a9cf8a02.png" title="James adds a todo item called: Walk the dog" width="960"/>
+                <img src="665c645d1484d0e0a89a0bc7a6a04af8.png" title="James enters 'Walk the dog' into 'What needs to be done?' field" width="960"/>
+                <img src="46ecf4c88ed404c404723ce4ee4b776c.png" title="James enters 'Walk the dog' into 'What needs to be done?' field" width="960"/>
+                <img src="4641b4ebcac94f8901baf401a9cf8a02.png" title="James adds a todo item called: Put out the garbage" width="960"/>
+                <img src="3ea59cfc65a6233857b32364ba53d59c.png" title="James adds a todo item called: Put out the garbage" width="960"/>
+                <img src="e08c270aed6a45aee88133303f779bd1.png" title="James enters 'Put out the garbage' into 'What needs to be done?' field" width="960"/>
+                <img src="3ea59cfc65a6233857b32364ba53d59c.png" title="James enters 'Put out the garbage' into 'What needs to be done?' field" width="960"/>
+                <img src="8b8fb3c7f14616e3e50e33c96f428011.png" title="James adds a todo item called: Buy some milk" width="960"/>
+                <img src="3ea59cfc65a6233857b32364ba53d59c.png" title="James enters 'Buy some milk' into 'What needs to be done?' field" width="960"/>
+                <img src="8b8fb3c7f14616e3e50e33c96f428011.png" title="James enters 'Buy some milk' into 'What needs to be done?' field" width="960"/>
+                <img src="3d24b8551a9cdef2e8035eee14eaa1b1.png" title="Then the displayed todo items should be (a collection containing 'Walk the dog' and a collection containing 'Put out the garbage' and a collection containing 'Buy some milk'): <span class='success-color'>SUCCESS</span>" width="960"/>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<div id="beforefooter"></div>
+<div id="bottomfooter">
+    <span class="version">Serenity BDD version 1.2.1-SNAPSHOT</span>
+</div>
+</body>
+</html>

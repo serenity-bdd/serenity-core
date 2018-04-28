@@ -6,6 +6,7 @@ import net.serenitybdd.junit.runners.AbstractTestStepRunnerTest;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.guice.ThucydidesModule;
+import net.thucydides.core.guice.webdriver.WebDriverModule;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestStep;
@@ -44,7 +45,7 @@ public class WhenRunningANonWebTestScenario extends AbstractTestStepRunnerTest {
     @Before
     public void createATestableDriverFactory() throws Exception {
         MockitoAnnotations.initMocks(this);
-        injector = Guice.createInjector(new ThucydidesModule());
+        injector = Guice.createInjector(new WebDriverModule());
         StepEventBus.getEventBus().clear();
     }
 

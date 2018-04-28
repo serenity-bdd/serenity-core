@@ -77,6 +77,16 @@ class WhenAskingQuestionsAboutUIElements extends Specification {
         question.answeredBy(actor) == ["alpha","beta"]
     }
 
+    def "should read trimmed string text content from multiple targets"() {
+        when:
+        element.getAttribute("textContent") >> "\nalpha "
+        element2.getAttribute("textContent") >> "\nbeta "
+        and:
+        Question<String> question = TheTarget.textValuesOf(target).withNoSurroundingWhiteSpace();
+        then:
+        question.answeredBy(actor) == ["alpha","beta"]
+    }
+
     def "should read selected values from targets"() {
         when:
             element.getSelectedValue() >> "some text value"

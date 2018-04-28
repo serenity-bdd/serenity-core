@@ -18,7 +18,7 @@ public class TheTarget {
         return new TargetText(target);
     }
 
-    public static Question<List<String>> textValuesOf(Target target) {
+    public static TargetTextValues textValuesOf(Target target) {
         return new TargetTextValues(target);
     }
 

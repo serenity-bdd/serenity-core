@@ -173,33 +173,6 @@ subprojects {
         }
     }
 
-//    shadowJar {
-//        zip64 = true
-//        dependencies {
-//            include dependency('com.google.guava:guava')
-//            include dependency('org.ow2.asm:asm')
-//        }
-//
-//        manifest.attributes["Created-By"] =
-//                "${System.getProperty("java.version")} (${System.getProperty("java.specification.vendor")})"
-//        manifest.attributes["Implementation-Title"] = project.name
-//        manifest.attributes["Implementation-Version"] = project.version
-//
-//        from("${rootProject.projectDir}/src/dist") {
-//            include "license.txt"
-//            include "notice.txt"
-//            into "META-INF"
-//            expand(copyright: new Date().format("yyyy"), version: project.version)
-//        }
-//
-//        shadowJar {
-//            classifier = null
-//        }
-//
-//        relocate 'com.google.common', 'net.serenitybdd.shadow.com.google.common'
-//        relocate 'org.ow2.asm', 'net.serenitybdd.shadow.org.ow2.asm'
-//    }
-
     test {
         testLogging {
             events "failed"//, "passed", "skipped"

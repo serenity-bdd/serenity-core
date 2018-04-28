@@ -1,0 +1,6 @@
+"Story","Title","Result","Date","Stability","Duration (s)"
+"Filtering todos","Should be able to view both complete and incomplete todos","SUCCESS","2016-11-24T12:25:48.036Z","0.0","8.99"
+"Filtering todos","Should be able to view only completed todos","SUCCESS","2016-11-24T12:25:39.374Z","0.0","8.61"
+"Filtering todos","Should be able to view only incomplete todos","SUCCESS","2016-11-24T12:25:30.656Z","0.0","8.67"
+"Filtering todos","Should be able to view only not done todos","SUCCESS","2016-11-24T12:25:22.020Z","0.0","8.58"
+"Filtering todos","Should be able to view only unfinished todos","SUCCESS","2016-11-24T12:25:57.076Z","0.0","8.92"

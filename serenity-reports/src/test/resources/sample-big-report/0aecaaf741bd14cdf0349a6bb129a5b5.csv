@@ -1,0 +1,5 @@
+"Story","Title","Result","Date","Stability","Duration (s)"
+"Complete a todo","Should be able to complete a todo","SUCCESS","2016-11-24T12:24:41.102Z","0.0","6.93"
+"Complete a todo","Should see how many items are left","SUCCESS","2016-11-24T12:24:34.097Z","0.0","6.95"
+"Complete a todo","Should see how many items remain","SUCCESS","2016-11-24T12:24:27.229Z","0.0","6.8"
+"Complete a todo","Should see the number of todos decrease when an item is completed","SUCCESS","2016-11-24T12:24:48.085Z","0.0","6.35"

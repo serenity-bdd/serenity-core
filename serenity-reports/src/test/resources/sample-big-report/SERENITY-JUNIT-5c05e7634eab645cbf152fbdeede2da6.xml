@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="0" name="Filtering my todo list" skipped="0" tests="9" time="130.33" timestamp="2016-11-329 12:40:50"><testcase name="View only **completed** items #123"/><testcase name="Viewing items by status"/></testsuite>

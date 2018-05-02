@@ -1,0 +1,5 @@
+"Story","Title","Result","Date","Stability","Duration (s)"
+"Delete todos","Should be able to delete todos","SUCCESS","2016-11-24T12:25:01.383Z","0.0","7.34"
+"Delete todos","Should see deleting a todo decreases the remaining items count","SUCCESS","2016-11-24T12:25:08.772Z","0.0","6.9"
+"Delete todos","Should see deleting a todo make the remaining items count go down","SUCCESS","2016-11-24T12:25:15.726Z","0.0","6.19"
+"Delete todos","Should see deleting a todo reduces the remaining items count","SUCCESS","2016-11-24T12:24:54.541Z","0.0","6.79"

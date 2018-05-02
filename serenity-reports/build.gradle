@@ -11,4 +11,5 @@ dependencies {
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
     testCompile project(':serenity-test-utils')
+    testCompile project(':serenity-sample-alternative-resources')
 }

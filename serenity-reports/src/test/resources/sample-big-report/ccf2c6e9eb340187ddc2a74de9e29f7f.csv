@@ -1,0 +1,3 @@
+"Story","Title","Result","Date","Stability","Duration (s)"
+"Filtering my todo list","View only **completed** items #123","SUCCESS","2016-11-24T12:40:50.902Z","0.0","17.41"
+"Filtering my todo list","Viewing items by status","SUCCESS","2016-11-24T12:41:09.923Z","0.0","112.92"

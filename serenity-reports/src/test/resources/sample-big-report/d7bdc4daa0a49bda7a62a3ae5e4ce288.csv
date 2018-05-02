@@ -1,0 +1,5 @@
+"Story","Title","Result","Date","Stability","Duration (s)"
+"Todos belong to a user","Should certainly not affect todos belonging to another user","SUCCESS","2016-11-24T12:26:06.113Z","0.0","12.3"
+"Todos belong to a user","Should not affect todos belonging to another user","SUCCESS","2016-11-24T12:26:45.332Z","0.0","13.0"
+"Todos belong to a user","Should not affect todos belonging to another user at all","SUCCESS","2016-11-24T12:26:31.792Z","0.0","13.44"
+"Todos belong to a user","Should not affect todos belonging to another user even a little bit","SUCCESS","2016-11-24T12:26:18.521Z","0.0","13.17"

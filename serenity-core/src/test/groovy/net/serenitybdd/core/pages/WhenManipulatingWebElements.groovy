@@ -179,14 +179,6 @@ class WhenManipulatingWebElements extends Specification {
         !webElementFacade.containsSelectOption("value")
     }
 
-
-    def "when webelement is null get selected value should fail"() {
-        when:
-        !webElementFacade.getSelectedValue()
-        then:
-        thrown(NoSuchElementException.class)
-    }
-
     def "when webelement is null get text value should fail"() {
         when:
         !webElementFacade.getTextValue()

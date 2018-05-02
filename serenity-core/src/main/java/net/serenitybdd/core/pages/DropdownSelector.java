@@ -23,7 +23,7 @@ class DropdownSelector {
 
     public String visibleTextValue() {
         if (webElementFacade.driverIsDisabled()) { return ""; }
-        webElementFacade.waitUntilVisible();
+        webElementFacade.waitUntilElementAvailable();
         Select select = new Select(webElementFacade.getElement());
         return select.getFirstSelectedOption().getText();
 
@@ -40,7 +40,7 @@ class DropdownSelector {
 
     public String value() {
         if (webElementFacade.driverIsDisabled()) { return ""; }
-        webElementFacade.waitUntilVisible();
+        webElementFacade.waitUntilElementAvailable();
         Select select = new Select(webElementFacade.getElement());
         return select.getFirstSelectedOption().getAttribute("value");
     }

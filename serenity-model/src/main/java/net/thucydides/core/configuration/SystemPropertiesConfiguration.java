@@ -54,11 +54,11 @@ public class SystemPropertiesConfiguration implements Configuration {
     /**
      * HTML and XML reports will be generated in this directory.
      */
-    private File outputDirectory;
+    protected File outputDirectory;
 
     private File historyDirectory;
 
-    private String defaultBaseUrl;
+    protected String defaultBaseUrl;
 
     private final EnvironmentVariables environmentVariables;
 

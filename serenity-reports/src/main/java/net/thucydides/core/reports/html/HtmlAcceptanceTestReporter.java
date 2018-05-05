@@ -10,6 +10,7 @@ import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
+import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.model.screenshots.Screenshot;
 import net.thucydides.core.reports.AcceptanceTestReporter;
 import net.thucydides.core.reports.OutcomeFormat;
@@ -200,8 +201,10 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
     private void addFormattersToContext(final Map<String, Object> context) {
         Formatter formatter = new Formatter();
+        ReportFormatter reportFormatter = new ReportFormatter();
         context.put("reportOptions", new ReportOptions(getEnvironmentVariables(), requirementsService));
         context.put("formatter", formatter);
+        context.put("reportFormatter", reportFormatter);
         context.put("reportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService));
         context.put("absoluteReportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService));
 

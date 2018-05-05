@@ -72,7 +72,7 @@
                                 <#assign parentTitle = formatter.renderDescription(inflection.of(parentRequirement.get().name).asATitle()) >
                                 <#assign parentType = inflection.of(parentRequirement.get().type).asATitle() >
                                 <#if (parentRequirement.get().cardNumber?has_content) >
-                                    <#assign issueNumber = "[" + formatter.addLinks(parentRequirement.get().cardNumber) + "]" >
+                                    <#assign issueNumber = "[" + reportFormatter.addLinks(parentRequirement.get().cardNumber) + "]" >
                                 <#else>
                                     <#assign issueNumber = "">
                                 </#if>

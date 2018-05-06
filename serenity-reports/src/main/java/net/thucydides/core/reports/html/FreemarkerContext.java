@@ -7,6 +7,7 @@ import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.NumericalFormatter;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestTag;
+import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.reports.ReportOptions;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.requirements.RequirementsService;
@@ -89,7 +90,9 @@ public class FreemarkerContext {
 
     private void addFormattersToContext(final Map<String, Object> context) {
         Formatter formatter = new Formatter();
+        ReportFormatter reportFormatter = new ReportFormatter();
         context.put("formatter", formatter);
+        context.put("reportFormatter", reportFormatter);
         context.put("formatted", new NumericalFormatter());
         context.put("inflection", Inflector.getInstance());
         context.put("styling", TagStylist.from(environmentVariables));

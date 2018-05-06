@@ -18,11 +18,17 @@ public class ReportFormatter {
     private final IssueTracking issueTracking;
     private final EnvironmentVariables environmentVariables;
 
+    public ReportFormatter() {
+        this(Injectors.getInjector().getInstance(IssueTracking.class),
+                Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
+    }
+
     public ReportFormatter(IssueTracking issueTracking, EnvironmentVariables environmentVariables) {
 
         this.issueTracking = issueTracking;
         this.environmentVariables = environmentVariables;
     }
+
 
     public ReportFormatter(IssueTracking issueTracking) {
         this(issueTracking, Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );

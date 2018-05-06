@@ -152,7 +152,7 @@
     <#assign parentTitle = inflection.of(parentRequirement.displayName).asATitle() >
     <#assign parentType = inflection.of(parentRequirement.type).asATitle() >
     <#if (parentRequirement.cardNumber?has_content) >
-        <#assign issueNumber = "[" + formatter.addLinks(parentRequirement.cardNumber) + "]" >
+        <#assign issueNumber = "[" + reportFormatter.addLinks(parentRequirement.cardNumber) + "]" >
     <#else>
         <#assign issueNumber = "">
     </#if>
@@ -349,7 +349,7 @@
                                     <tr>
                                         <td class="cardNumber requirementRowCell">
                                             <#if example.cardNumber.isPresent() >
-                                                ${formatter.addLinks(example.cardNumber.get())}
+                                                ${reportFormatter.addLinks(example.cardNumber.get())}
                                             </#if>
                                         </td>
                                         <td class="lightgreentext requirementRowCell"> ${formatter.addLineBreaks(example.description)}</td>

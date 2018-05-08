@@ -283,6 +283,38 @@
                 </#if>
             </#macro>
 
+            <#macro reportData(reportData, number) >
+                <span>
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#reportData-${number}">
+                        ${reportData.title}
+                    </button>
+                </span>
+                <!-- Modal -->
+                <div class="modal fade" id="reportData-${number}" tabindex="-1" role="dialog" aria-labelledby="restModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                        aria-label="Close"><span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="restModalLabel">
+                                    ${reportData.title}
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                ${(formatter.renderText(reportData.contents))!}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </#macro>
+
+
             <#macro restQueryData(restQuery, number) >
                 <span>
                     <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
@@ -405,7 +437,11 @@
                                 <span class="rest-query">
                                     <@restQueryData restQuery=step.restQuery number=step.number />
                                 </span>
-
+                            </#if>
+                            <#if step.hasData()>
+                                <span class="rest-query">
+                                    <@reportData reportData=step.reportData number=step.number />
+                                </span>
                             </#if>
                         </div>
                     </td>

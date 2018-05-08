@@ -322,7 +322,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return true;
     }
 
-    protected java.util.Optional<TestOutcome> latestTestOutcome() {
+    public java.util.Optional<TestOutcome> latestTestOutcome() {
         if (testOutcomes.isEmpty()) {
             return java.util.Optional.empty();
         } else {

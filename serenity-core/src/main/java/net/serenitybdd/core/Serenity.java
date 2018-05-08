@@ -4,6 +4,8 @@ import net.serenitybdd.core.collect.*;
 import net.serenitybdd.core.di.*;
 import net.serenitybdd.core.environment.*;
 import net.serenitybdd.core.injectors.*;
+import net.serenitybdd.core.reports.ReportDataSaver;
+import net.serenitybdd.core.reports.WithTitle;
 import net.serenitybdd.core.sessions.*;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.guice.*;
@@ -238,6 +240,10 @@ public class Serenity {
 
     public static void takeScreenshot() {
         StepEventBus.getEventBus().takeScreenshot();
+    }
+
+    public static WithTitle recordReportData() {
+        return new ReportDataSaver(StepEventBus.getEventBus());
     }
 
     /**

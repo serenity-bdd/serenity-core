@@ -44,6 +44,7 @@ public class TestStep implements Cloneable {
     private FailureCause exception;
     private TestResult result;
     private RestQuery restQuery;
+    private ReportData reportData;
     private boolean precondition;
 
 
@@ -237,8 +238,16 @@ public class TestStep implements Cloneable {
         return restQuery != null;
     }
 
+    public boolean hasData() {
+        return reportData != null;
+    }
+
     public RestQuery getRestQuery() {
         return restQuery;
+    }
+
+    public ReportData getReportData() {
+        return reportData;
     }
 
     public ScreenshotAndHtmlSource getFirstScreenshot() {
@@ -478,6 +487,11 @@ public class TestStep implements Cloneable {
 
     public void removeScreenshot(int index) {
         screenshots.remove(index);
+    }
+
+    public TestStep withReportData(ReportData reportData) {
+        this.reportData = reportData;
+        return this;
     }
 
     @Override

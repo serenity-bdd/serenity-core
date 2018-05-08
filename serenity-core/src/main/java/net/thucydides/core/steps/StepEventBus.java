@@ -99,6 +99,10 @@ public class StepEventBus {
 //        Darkroom.isOpenForBusiness();
     }
 
+    public EnvironmentVariables getEnvironmentVariables() {
+        return environmentVariables;
+    }
+
     /**
      * Indicates the test source e.g : junit/jbehave/cucumber
      */
@@ -736,4 +740,5 @@ public class StepEventBus {
     public static void overrideEventBusWith(StepEventBus stepEventBus) {
         stepEventBusThreadLocal.set(stepEventBus);
     }
+
 }

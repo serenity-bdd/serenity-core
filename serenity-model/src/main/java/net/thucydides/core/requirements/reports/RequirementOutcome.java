@@ -219,16 +219,12 @@ public class RequirementOutcome {
 
     public String getCardNumberWithLinks() {
         if (requirement.getCardNumber() != null) {
-            return getFormatter().addLinks(requirement.getCardNumber());
+            return new ReportFormatter(issueTracking).addLinks(requirement.getCardNumber());
         } else {
             return "";
         }
     }
 
-    private ReportFormatter getFormatter() {
-        return reportFormatter;
-        /*return new Formatter(issueTracking);*/
-    }
 
     @Override
     public String toString() {

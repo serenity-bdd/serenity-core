@@ -3,6 +3,7 @@ package net.serenitybdd.core.photography;
 
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +38,13 @@ public class PageSourceRecorder {
     }
 
     private byte[] getPageSource() {
-        if (driver.getPageSource() == null) {  return new byte[]{}; }
-        return driver.getPageSource().getBytes(StandardCharsets.UTF_8);
+        try {
+            String ps = driver.getPageSource();
+            if (ps == null) { return new byte[]{}; }
+            return ps.getBytes(StandardCharsets.UTF_8);
+        } catch(WebDriverException e) {
+            LOGGER.warn("Failed to get page source", e);
+            return new byte[]{};
+        }
     }
 }

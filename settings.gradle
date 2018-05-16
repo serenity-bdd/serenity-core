@@ -11,6 +11,7 @@ include 'serenity-test-utils',
         'serenity-rest-assured',
         'serenity-browsermob-plugin',
         'serenity-screenplay',
-        'serenity-screenplay-webdriver'
+        'serenity-screenplay-webdriver',
+        'serenity-screenplay-rest'
 
 

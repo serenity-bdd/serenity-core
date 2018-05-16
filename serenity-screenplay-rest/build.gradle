@@ -1,0 +1,11 @@
+ext {
+    bintrayPackage = 'serenity-screenplay-rest'
+    projectDescription = 'Serenity Screenplay Rest integration'
+}
+
+dependencies {
+    compile project(':serenity-core')
+    compile project(':serenity-rest-assured')
+    compile project(':serenity-screenplay')
+    testCompile project(':serenity-junit')
+}

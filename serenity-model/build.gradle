@@ -22,7 +22,7 @@ dependencies {
     compile("commons-beanutils:commons-beanutils-core:${beanUtilsVersion}") {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
-    compile "javax.validation:validation-api:${javaxValidationVersion}"
+//    compile "javax.validation:validation-api:${javaxValidationVersion}"
     compile "net.sf.opencsv:opencsv:${openCsvVersion}"
     compile "com.google.code.gson:gson:${gsonVersion}"
     compile "org.imgscalr:imgscalr-lib:${imgscalrVersion}"

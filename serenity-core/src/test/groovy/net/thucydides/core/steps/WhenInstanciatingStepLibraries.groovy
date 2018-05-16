@@ -4,6 +4,7 @@ import net.thucydides.core.annotations.Step
 import net.thucydides.core.pages.Pages
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.webdriver.Configuration
+import net.thucydides.core.webdriver.DriverConfiguration
 import org.openqa.selenium.WebDriver
 import spock.lang.Specification
 
@@ -39,6 +40,7 @@ class WhenInstanciatingStepLibraries extends Specification {
         MyOtherPageObject myInstantiatedPageObject;
         EnvironmentVariables environmentVariables;
         Configuration configuration;
+        DriverConfiguration driverConfiguration;
 
         MyStepLibrary(Pages pages) {
             super(pages)
@@ -121,6 +123,13 @@ class WhenInstanciatingStepLibraries extends Specification {
         def myStepLibrary = stepFactory.getSharedStepLibraryFor(MyStepLibrary)
         then:
         myStepLibrary.configuration != null
+    }
+
+    def "should instantiate driver configuration variable fields"() {
+        when:
+        def myStepLibrary = stepFactory.getSharedStepLibraryFor(MyStepLibrary)
+        then:
+        myStepLibrary.driverConfiguration != null
     }
 
     def "should instantiate unique step libraries if requested"() {

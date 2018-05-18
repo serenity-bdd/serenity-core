@@ -10,9 +10,17 @@ import java.util.function.Consumer;
 public class ResponseConsequence extends BaseConsequence<Response> {
 
     private final Consumer<ValidatableResponse> expression;
+    private final String message;
 
-    ResponseConsequence(Consumer<ValidatableResponse> expression) {
+    ResponseConsequence(String message,
+                        Consumer<ValidatableResponse> expression) {
+        this.message = message;
         this.expression = expression;
+    }
+
+    @Override
+    public String toString() {
+        return message;
     }
 
     @Override
@@ -20,7 +28,11 @@ public class ResponseConsequence extends BaseConsequence<Response> {
         expression.accept(LastResponse.received().answeredBy(actor).then());
     }
 
+    public static ResponseConsequence seeThatResponse(String message, Consumer<ValidatableResponse> expression) {
+        return new ResponseConsequence(message, expression);
+    }
+
     public static ResponseConsequence seeThatResponse(Consumer<ValidatableResponse> expression) {
-        return new ResponseConsequence(expression);
+        return new ResponseConsequence("the response", expression);
     }
 }

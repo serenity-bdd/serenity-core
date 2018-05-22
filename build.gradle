@@ -247,6 +247,7 @@ subprojects {
         testCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
+
         testCompile("org.codehaus.groovy:groovy-all:${groovyVersion}")
         testCompile("org.spockframework:spock-core:${spockVersion}") {
             exclude group: "junit"

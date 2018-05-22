@@ -538,7 +538,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     public Requirement readRequirementsFromStoryOrFeatureFile(File storyFile) {
         FeatureType type = featureTypeOf(storyFile);
-        String defaultStoryName = storyFile.getName().replace(type.getExtension(), "");
 
         java.util.Optional<Narrative> narrative = (type == FeatureType.STORY) ? loadFromStoryFile(storyFile) : loadFromFeatureFile(storyFile);
 

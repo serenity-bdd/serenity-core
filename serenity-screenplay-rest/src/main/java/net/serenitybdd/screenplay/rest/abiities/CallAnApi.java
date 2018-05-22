@@ -19,8 +19,6 @@ public class CallAnApi implements Ability {
 
     private final String baseURL;
 
-    private Response lastResponse;
-
     private CallAnApi(String baseURL) {
         this.baseURL = baseURL;
     }
@@ -39,34 +37,11 @@ public class CallAnApi implements Ability {
         return actor.abilityTo(CallAnApi.class);
     }
 
-    /**
-     * Send a GET request to a specified url.
-     * Response will be resolved and made available as lastResponse.
-     *
-     */
-    public void get(String resource) {
-        lastResponse = SerenityRest.given().get(baseURL + resource);
-    }
-
     public String resolve(String resource) {
         return baseURL + resource;
     }
 
-    Function<RequestSpecification, RequestSpecification> config = request -> request.header("Content-Type", "application/json")
-            .body("{\"name\": \"joe\",\"job\": \"leader\"}");
-
-    public void post(String resource) {
-        RequestSpecification s = config.apply(SerenityRest.given());
-
-        s.post(baseURL + resource);
-//        lastResponse = SerenityRest.given().post(baseURL + resource);
-    }
-
     public Response getLastResponse() {
         return SerenityRest.lastResponse();
-    }
-
-    public RequestSpecification withRestAssured() {
-        return SerenityRest.rest();
     }
 }

@@ -9,6 +9,7 @@ import net.serenitybdd.screenplay.rest.interactions.Delete;
 import net.serenitybdd.screenplay.rest.interactions.Get;
 import net.serenitybdd.screenplay.rest.interactions.Post;
 import net.serenitybdd.screenplay.rest.interactions.Put;
+import net.serenitybdd.screenplay.rest.questions.ResponseConsequence;
 import net.thucydides.core.annotations.Step;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +37,7 @@ public class WhenRetrievingUserDetails {
         );
 
         sam.should(
-                seeThatResponse("all the expected users should be returned",
+                ResponseConsequence.seeThatResponse("all the expected users should be returned",
                                 response -> response.statusCode(200)
                                                     .body("data.first_name",
                                                             hasItems("George", "Janet", "Emma")))

@@ -11,6 +11,7 @@ import net.thucydides.core.steps.StepEventBus
 import org.openqa.selenium.WebDriver
 import spock.lang.Specification
 
+import static net.serenitybdd.screenplay.GivenWhenThen.seeIf
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat
 import static org.hamcrest.Matchers.equalTo
 
@@ -37,6 +38,8 @@ class WhenAskingQuestionsAboutUIElements extends Specification {
             aTestHasStarted()
         then:
             actor.should(seeThat("a value", TheTarget.valueOf(target), equalTo("some value")))
+
+            actor.attemptsTo(seeIf(TheTarget.valueOf(target), equalTo("some value")))
 
     }
 

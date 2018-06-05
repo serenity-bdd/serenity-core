@@ -73,4 +73,11 @@ public class GivenWhenThen {
         return consequences.toArray(new Consequence[]{});
     }
 
+    public static <T> Task seeIf(Question<T> question, Matcher<T> matcher) {
+        Consequence<T> consequence = seeThat(question, matcher);
+        return Task.where("See that " + question.toString() + " " + matcher.toString(),
+                (Performable) consequence::evaluateFor
+        );
+    }
+
 }

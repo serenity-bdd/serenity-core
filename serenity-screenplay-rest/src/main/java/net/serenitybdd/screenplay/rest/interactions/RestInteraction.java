@@ -4,7 +4,10 @@ import io.restassured.specification.RequestSpecification;
 import net.serenitybdd.rest.SerenityRest;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
+import net.serenitybdd.screenplay.rest.questions.RestQueryFunction;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -13,14 +16,23 @@ import java.util.function.Function;
  */
 public abstract class RestInteraction implements Interaction {
 
-    Function<RequestSpecification, RequestSpecification> restConfiguration = requestSpecification -> requestSpecification;
+    List<Function<RequestSpecification, RequestSpecification>> restConfigurations = new ArrayList<>();
 
-    public RestInteraction with(Function<RequestSpecification, RequestSpecification> restConfiguration) {
-        this.restConfiguration = restConfiguration;
+    public RestInteraction with(RestQueryFunction restConfiguration) {
+        this.restConfigurations.add(restConfiguration);
+        return this;
+    }
+
+    public RestInteraction with(List<RestQueryFunction> restConfigurations) {
+        this.restConfigurations.addAll(restConfigurations);
         return this;
     }
 
     protected RequestSpecification rest() {
-        return restConfiguration.apply(SerenityRest.given());
+        RequestSpecification requestSpecification = SerenityRest.given();
+        for(Function<RequestSpecification, RequestSpecification> restConfiguration : restConfigurations) {
+            requestSpecification = restConfiguration.apply(requestSpecification);
+        }
+        return requestSpecification;
     }
 }

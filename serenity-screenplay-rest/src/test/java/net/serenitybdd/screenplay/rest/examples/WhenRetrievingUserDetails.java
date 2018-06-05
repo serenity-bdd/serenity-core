@@ -3,6 +3,7 @@ package net.serenitybdd.screenplay.rest.examples;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.rest.SerenityRest;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.rest.abiities.CallAnApi;
 import net.serenitybdd.screenplay.rest.interactions.Delete;
@@ -10,10 +11,14 @@ import net.serenitybdd.screenplay.rest.interactions.Get;
 import net.serenitybdd.screenplay.rest.interactions.Post;
 import net.serenitybdd.screenplay.rest.interactions.Put;
 import net.serenitybdd.screenplay.rest.questions.ResponseConsequence;
+import net.serenitybdd.screenplay.rest.questions.RestQuestionBuilder;
+import net.serenitybdd.screenplay.rest.questions.TheResponse;
+import net.serenitybdd.screenplay.rest.questions.TheResponseStatusCode;
 import net.thucydides.core.annotations.Step;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -86,6 +91,79 @@ public class WhenRetrievingUserDetails {
 
         sam.should(
                 seeThatResponse(response -> response.body("data.first_name", equalTo("George")))
+        );
+    }
+
+    static class TheUser {
+        public static Question<String> nameForUserWithId(Long userId) {
+            return new RestQuestionBuilder<String>().about("user name")
+                    .to("/api/users/{userId}")
+                    .with(request -> request.pathParam("userId", userId))
+                    .returning(response -> response.path("data.first_name"));
+        }
+
+        public static Question<String> nameForUserWithIdViaPathParams(Long userId) {
+            return new RestQuestionBuilder<String>().about("user name")
+                    .to("/api/users/{userId}")
+                    .withPathParameters("userId", userId)
+                    .returning(response -> response.path("data.first_name"));
+        }
+
+        public static Question<Integer> totalPagesForPage(Integer page) {
+            return new RestQuestionBuilder<Integer>().about("user name")
+                    .to("/api/users")
+                    .withQueryParameters("page", 2)
+                    .returning(response -> response.path("total_pages"));
+        }
+
+        public static Question<Integer> totalPagesForPages(Integer page) {
+            return new RestQuestionBuilder<Integer>().about("user name")
+                    .to("/api/users")
+                    .withQueryParameters("page", page, "count", 1)
+                    .returning(response -> response.path("total_pages"));
+        }
+    }
+
+    @Test
+    public void question_an_individual_user() {
+
+        sam.should(
+                seeThat(TheUser.nameForUserWithId(1L), equalTo("George"))
+        );
+    }
+
+
+    @Test
+    public void question_an_individual_user_via_path_params() {
+
+        sam.should(
+                seeThat(TheUser.nameForUserWithIdViaPathParams(1L), equalTo("George"))
+        );
+    }
+
+    @Test
+    public void question_via_query_param() {
+
+        sam.should(
+                seeThat(TheUser.totalPagesForPage(2), equalTo(4))
+        );
+    }
+
+    @Test
+    public void question_about_status() {
+        sam.attemptsTo(
+                Get.resource("/api/users/1")
+        );
+
+        sam.should(
+                seeThat(TheResponse.statusCode(), equalTo(200))
+        );
+    }
+    @Test
+    public void question_via_query_params() {
+
+        sam.should(
+                seeThat(TheUser.totalPagesForPages(2), equalTo(4))
         );
     }
 

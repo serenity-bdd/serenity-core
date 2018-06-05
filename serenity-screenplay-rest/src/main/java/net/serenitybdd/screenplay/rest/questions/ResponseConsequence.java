@@ -33,6 +33,6 @@ public class ResponseConsequence extends BaseConsequence<Response> {
     }
 
     public static ResponseConsequence seeThatResponse(Consumer<ValidatableResponse> expression) {
-        return new ResponseConsequence("the response", expression);
+        return new ResponseConsequence("A valid response is returned", expression);
     }
 }

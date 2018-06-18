@@ -54,12 +54,4 @@ public class RestQuestion<T> implements Question<T> {
 
         return result.apply(SerenityRest.lastResponse());
     }
-
-    private void ensureValidResponsFor(int statusCode) {
-        if (statusCode < 200 || statusCode >= 300) {
-            throw new UnexpectedRestResponseException("Unexpected response received from endpoint " + endpoint + ":"
-                                                      + System.lineSeparator()
-                                                      + SerenityRest.lastResponse().getBody().prettyPrint());
-        }
-    }
 }

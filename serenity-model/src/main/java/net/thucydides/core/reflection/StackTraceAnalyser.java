@@ -27,10 +27,7 @@ public class StackTraceAnalyser {
         try {
             if (allowedClassName(stackTraceElement.getClassName()) && !lambda(stackTraceElement.getClassName())) {
                 Class callingClass = Class.forName(stackTraceElement.getClassName());
-                Method matchingMethod = extractMethod(stackTraceElement, callingClass);
-                if (matchingMethod != null) {
-                    return matchingMethod;
-                }
+                return extractMethod(stackTraceElement, callingClass);
             }
         } catch (ClassNotFoundException classNotFoundIgnored) {
             logger.debug("Couldn't find class during Stack analysis: " + classNotFoundIgnored.getLocalizedMessage());
@@ -67,7 +64,11 @@ public class StackTraceAnalyser {
             targetClass = callingClass;
         }
         try {
-            return targetClass.getMethod(stackTraceElement.getMethodName());
+            Method methodFound = targetClass.getMethod(stackTraceElement.getMethodName());
+            if (methodFound == null ){
+                methodFound = targetClass.getDeclaredMethod(stackTraceElement.getMethodName());
+            }
+            return methodFound;
         } catch (NoSuchMethodException e) {
             return null;
         }

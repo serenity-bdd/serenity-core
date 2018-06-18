@@ -75,7 +75,7 @@ public class GivenWhenThen {
 
     public static <T> Task seeIf(Question<T> question, Matcher<T> matcher) {
         Consequence<T> consequence = seeThat(question, matcher);
-        return Task.where("See that " + question.toString() + " " + matcher.toString(),
+        return Task.where("See if " + question.toString() + " " + matcher.toString(),
                 (Performable) consequence::evaluateFor
         );
     }

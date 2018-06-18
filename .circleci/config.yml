@@ -36,13 +36,12 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       # run tests!
-      - run:
-        - gradle test
+      - run: gradle test
 
-      test:
-        post:
-          - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-          - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+#      test:
+#        post:
+#          - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+#          - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
 
   integration_tests:
     docker:
@@ -80,20 +79,16 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       # run tests!
-      - run:
-        - gradle integrationTests
-        - gradle browserTests
+      - run: gradle integrationTests
+      - run: gradle browserTests
 
-      test:
-        post:
-          - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-          - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+#      test:
+#        post: mkdir -p $CIRCLE_TEST_REPORTS/junit/
+#        post: find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
 
 workflows:
   version: 2
   build_pipeline:
     jobs:
       - unit_tests
-      - integration_tests:
-          requires:
-            - unit_tests
+      - integration_tests

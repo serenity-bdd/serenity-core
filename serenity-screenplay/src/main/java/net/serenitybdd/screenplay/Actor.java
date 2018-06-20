@@ -15,6 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * An actor represents the person or system using the application under test.
+ * Actors can have Abilities, which allows them to perform Tasks and Interactions.
+ */
 public class Actor implements PerformsTasks, SkipNested {
 
     private final String name;

@@ -110,6 +110,6 @@ public class RestSpecificationFactory {
     }
 
     public static ResponseSpecificationDecorated getInstrumentedResponseSpecification(ResponseSpecificationImpl delegate) {
-        return  (ResponseSpecificationDecorated) responseSpecificationDecoratedFactory.create(delegate);
+        return responseSpecificationDecoratedFactory.create(delegate);
     }
 }

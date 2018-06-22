@@ -96,7 +96,7 @@ public class RestSpecificationFactory {
     }
 
     public static RequestSpecificationDecorated getInstrumentedRequestSpecification(RequestSpecificationImpl delegate) {
-        RequestSpecificationDecorated instrumentedResponse  = (RequestSpecificationDecorated) requestSpecificationDecoratedFactory.create((delegate));
+        RequestSpecificationDecorated instrumentedResponse  = requestSpecificationDecoratedFactory.create((delegate));
         final List<Filter> filters = new LinkedList<>();
         for (final LogDetail logDetail : Arrays.asList(HEADERS, COOKIES, BODY, PARAMS, METHOD, URI)) {
             filters.add(new FieldsRecordingFilter(true, logDetail));

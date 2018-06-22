@@ -99,7 +99,8 @@ allprojects {
                     "org.apache.httpcomponents:httpmime:${httpclientVersion}",
                     "org.apache.httpcomponents:httpcore:${httpCoreVersion}",
                     "org.apache.httpcomponents:httpclient:${httpclientVersion}",
-                    "javax.websocket:javax.websocket-api:${websocketVersion}"
+                    "javax.websocket:javax.websocket-api:${websocketVersion}",
+                    "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
         }
     }
 }

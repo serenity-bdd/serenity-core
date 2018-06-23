@@ -7,6 +7,7 @@ import io.restassured.internal.ResponseSpecificationImpl;
 import io.restassured.internal.filter.SendRequestFilter;
 import io.restassured.specification.*;
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.serenitybdd.rest.SerenityRest;
@@ -44,14 +45,14 @@ public class RestSpecificationFactory {
                 .method(isDeclaredBy(RequestSpecification.class).or(isDeclaredBy(RequestSenderOptions.class)).or(isDeclaredBy(FilterableRequestSpecification.class)))
                 .intercept(MethodDelegation.toField("core"))
                 .make()
-                .load(SerenityRest.class.getClassLoader())
+                .load(SerenityRest.class.getClassLoader(),ClassLoadingStrategy.Default.INJECTION)
                 .getLoaded();
         final Class<?> responseSpecificationDecoratedClass = new ByteBuddy()
                 .subclass(ResponseSpecificationDecorated.class)
                 .method(isDeclaredBy(ResponseSpecification.class).or(isDeclaredBy(RequestSenderOptions.class)).or(isDeclaredBy(FilterableResponseSpecification.class)))
                 .intercept(MethodDelegation.toField("core"))
                 .make()
-                .load(SerenityRest.class.getClassLoader())
+                .load(SerenityRest.class.getClassLoader(),ClassLoadingStrategy.Default.INJECTION)
                 .getLoaded();
         try {
             requestSpecificationDecoratedConstructor = requestSpecificationDecoratedClass.getConstructor(RequestSpecificationImpl.class);
@@ -73,7 +74,7 @@ public class RestSpecificationFactory {
                             .construct(requestSpecificationDecoratedConstructor)
                             .withArgument(0))
                     .make()
-                    .load(requestSpecificationDecoratedClass.getClassLoader())
+                    .load(requestSpecificationDecoratedClass.getClassLoader(),ClassLoadingStrategy.Default.INJECTION)
                     .getLoaded().newInstance();
         } catch (InstantiationException | IllegalAccessException  e) {
             log.error("Cannot create requestSpecificationDecoratedFactory ",e);
@@ -87,7 +88,7 @@ public class RestSpecificationFactory {
                             .construct(responseSpecificationDecoratedConstructor)
                             .withArgument(0))
                     .make()
-                    .load(responseSpecificationDecoratedClass.getClassLoader())
+                    .load(responseSpecificationDecoratedClass.getClassLoader(),ClassLoadingStrategy.Default.INJECTION)
                     .getLoaded().newInstance();
         } catch (InstantiationException | IllegalAccessException  e) {
             log.error("Cannot create responseSpecificationDecoratedFactory ",e);

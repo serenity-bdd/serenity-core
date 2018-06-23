@@ -89,7 +89,7 @@ class WhenManipulatingWebElements extends Specification {
         WebElementFacade webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, webElement, 100, 100);
         WebElementFacade webElementFacadeWithDifferentTimeout = webElementFacade.withTimeoutOf(2, TimeUnit.SECONDS);
         then:
-        webElementFacadeWithDifferentTimeout.implicitTimeoutInMilliseconds == 100L
+        webElementFacadeWithDifferentTimeout.implicitTimeoutInMilliseconds == 2000L
         webElementFacadeWithDifferentTimeout.waitForTimeoutInMilliseconds == 2000L
     }
 

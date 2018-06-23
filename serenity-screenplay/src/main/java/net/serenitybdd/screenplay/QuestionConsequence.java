@@ -9,6 +9,8 @@ import org.hamcrest.Matcher;
 
 import java.util.Optional;
 
+import static net.serenitybdd.screenplay.questions.QuestionHints.addHints;
+import static net.serenitybdd.screenplay.questions.QuestionHints.fromAssertion;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class QuestionConsequence<T> extends BaseConsequence<T> {
@@ -39,6 +41,9 @@ public class QuestionConsequence<T> extends BaseConsequence<T> {
 
         try {
             optionalPrecondition.orElse(DO_NOTHING).performAs(actor);
+
+            addHints(fromAssertion(expected)).to(question);
+
             assertThat(question.answeredBy(actor), expected);
         } catch (Throwable actualError) {
 

@@ -369,7 +369,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                 webElement,
                 bySelector,
                 locator,
-                implicitTimeoutInMilliseconds,
+                TimeUnit.MILLISECONDS.convert(timeout, unit),
                 TimeUnit.MILLISECONDS.convert(timeout, unit),
                 foundBy);
     }

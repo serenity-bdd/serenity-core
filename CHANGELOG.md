@@ -1,13 +1,18 @@
 
 # Serenity Core change log
-## Unreleased
+## v1.9.24
 ### No issue
+ * [37dc6287ded94dc](https://github.com/serenity-bdd/serenity-core/commit/37dc6287ded94dc) chore: fixing unit tests
  * [b4afb54ef081b48](https://github.com/serenity-bdd/serenity-core/commit/b4afb54ef081b48) fix: Performance improvements for Screenplay matchers. Previously, matchers such as isNotVisible() and isNotPresent() would timeout before passing the test. Now they will succeed immediately if the element is missing.
  * [316e980fa719878](https://github.com/serenity-bdd/serenity-core/commit/316e980fa719878) chore: Code cleanup
  * [2d808b7732c1db2](https://github.com/serenity-bdd/serenity-core/commit/2d808b7732c1db2) fix: updated groovy dependencies to avoid a class dependency issue that happens sometimes with serenity-rest-assured
  * [b0aa33ed9f31ea3](https://github.com/serenity-bdd/serenity-core/commit/b0aa33ed9f31ea3) chore: tidying up and documentation
+## v1.9.23
+### No issue
  * [cb36459bd7e3917](https://github.com/serenity-bdd/serenity-core/commit/cb36459bd7e3917) Updated CircleCI files
  * [06ef2be87813c21](https://github.com/serenity-bdd/serenity-core/commit/06ef2be87813c21) Updated CircleCI files
+## v1.9.22
+### No issue
  * [d5f537eb219293a](https://github.com/serenity-bdd/serenity-core/commit/d5f537eb219293a) chore: refactoring
  * [3294d57bc204efd](https://github.com/serenity-bdd/serenity-core/commit/3294d57bc204efd) fix: corrected wording for the seeIf task.
  * [717c4e3a0a2d6b9](https://github.com/serenity-bdd/serenity-core/commit/717c4e3a0a2d6b9) fix: Questions with the @Subject annotation where not always reported correctly in the reports

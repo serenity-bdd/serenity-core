@@ -9,12 +9,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_MAXIMUM_STEP_NESTING_DEPTH;
+
 /**
  * Utility class used to inject fields into a test case.
  */
 public final class StepAnnotations {
 
-    public static final int MAX_ALLOWED_STEP_LIBRARY_NESTING = 16;
     private final EnvironmentVariables environmentVariables;
 
     private StepAnnotations() {
@@ -85,7 +86,8 @@ public final class StepAnnotations {
         long levelsOfNesting = Stream.of(stackTrace).filter( element -> element.getMethodName().equals("instantiateAnyUnitiaializedSteps"))
                                      .count();
 
-        if (levelsOfNesting > MAX_ALLOWED_STEP_LIBRARY_NESTING) {
+        int maxAllowedNesting = SERENITY_MAXIMUM_STEP_NESTING_DEPTH.integerFrom(environmentVariables, 32);
+        if (levelsOfNesting > maxAllowedNesting) {
             String message = String.format(
                     "A recursive or cyclic reference was detected for the @Steps-annotated field %s in class %s. " +
                     "You may need to use @Steps(shared=true) to ensure that the same step library instance is used everywhere.",

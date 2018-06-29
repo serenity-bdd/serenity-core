@@ -1237,6 +1237,14 @@ public enum ThucydidesSystemProperty {
      * Disable Webdriver integration. Turn this off to avoid Serenity loading WebDriver classes unnecessarily.
      */
     SERENITY_WEBDRIVER_INTEGRATION,
+
+    /**
+     * When creating steps that contain references to other steps serenity does a recursion check to prevent cyclic references.
+     * This property determines how many levels deep the step classes can be nested before it triggers a recursion exception.
+     * By default it is set to 32, but can be increased if you start getting RecursiveOrCyclicStepLibraryReferenceException
+     * due to step nesting rather than actual infinite recursion.
+     */
+    SERENITY_MAXIMUM_STEP_NESTING_DEPTH,
     ;
 
     private String propertyName;

@@ -5,6 +5,7 @@ import org.hamcrest.Matcher;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -25,6 +26,14 @@ public class GivenWhenThen {
 
     public static <T> Consequence<T> seeThat(Question<? extends T> actual, Matcher<T> expected) {
         return new QuestionConsequence(actual, expected);
+    }
+
+    public static <T> Consequence<T> seeThat(Question<? extends T> actual, Predicate<T> expected) {
+        return new PredicateConsequence(actual, expected);
+    }
+
+    public static <T> Consequence<T> seeThat(String subject, Question<? extends T> actual, Predicate<T> expected) {
+        return new PredicateConsequence(subject, actual, expected);
     }
 
     public static <T> Consequence<T> seeThat(String subject, Question<? extends T> actual, Matcher<T> expected) {

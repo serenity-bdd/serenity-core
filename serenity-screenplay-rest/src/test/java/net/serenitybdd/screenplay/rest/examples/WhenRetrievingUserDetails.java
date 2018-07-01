@@ -132,6 +132,13 @@ public class WhenRetrievingUserDetails {
         );
     }
 
+    @Test
+    public void question_an_individual_user_using_a_predicate() {
+
+        sam.should(
+                seeThat("names should match", TheUser.nameForUserWithId(1L), name -> name.equalsIgnoreCase("George"))
+        );
+    }
 
     @Test
     public void question_an_individual_user_via_path_params() {

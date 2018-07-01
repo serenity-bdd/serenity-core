@@ -53,60 +53,20 @@ public class Selectors {
 
     private static Map<SelectorType, SelectorConverter> SELECTORS = new HashMap();
     static {
-        SELECTORS.put(SelectorType.css, new SelectorConverter() {
-            @Override
-            public By apply(String path) {
-                return By.cssSelector(withoutPrefix(path));
-            }
-        });
+        SELECTORS.put(SelectorType.css, path -> By.cssSelector(withoutPrefix(path)));
 
-        SELECTORS.put(SelectorType.xpath, new SelectorConverter() {
-            @Override
-            public By apply(String path) {
-                return By.xpath(withoutPrefix(path));
-            }
-        });
+        SELECTORS.put(SelectorType.xpath, path -> By.xpath(withoutPrefix(path)));
 
-        SELECTORS.put(SelectorType.linkText, new SelectorConverter() {
-            @Override
-            public By apply(String path) {
-                return By.linkText(withoutPrefix(path));
-            }
-        });
+        SELECTORS.put(SelectorType.linkText, path -> By.linkText(withoutPrefix(path)));
 
-        SELECTORS.put(SelectorType.className, new SelectorConverter() {
-            @Override
-            public By apply(String path) {
-                return By.className(withoutPrefix(path));
-            }
-        });
+        SELECTORS.put(SelectorType.className, path -> By.className(withoutPrefix(path)));
 
-        SELECTORS.put(SelectorType.id, new SelectorConverter() {
-            @Override
-            public By apply(String path) {
-                return By.id(withoutPrefix(path));
-            }
-        });
+        SELECTORS.put(SelectorType.id, path -> By.id(withoutPrefix(path)));
 
-        SELECTORS.put(SelectorType.partialLinkText, new SelectorConverter() {
-            @Override
-            public By apply(String path) {
-                return By.partialLinkText(withoutPrefix(path));
-            }
-        });
+        SELECTORS.put(SelectorType.partialLinkText, path -> By.partialLinkText(withoutPrefix(path)));
 
-        SELECTORS.put(SelectorType.name, new SelectorConverter() {
-            @Override
-            public By apply(String path) {
-                return By.name(withoutPrefix(path));
-            }
-        });
+        SELECTORS.put(SelectorType.name, path -> By.name(withoutPrefix(path)));
 
-        SELECTORS.put(SelectorType.tagName, new SelectorConverter() {
-            @Override
-            public By apply(String path) {
-                return By.tagName(withoutPrefix(path));
-            }
-        });
+        SELECTORS.put(SelectorType.tagName, path -> By.tagName(withoutPrefix(path)));
     }
 }

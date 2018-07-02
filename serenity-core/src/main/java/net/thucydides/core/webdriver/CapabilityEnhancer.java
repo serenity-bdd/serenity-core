@@ -39,7 +39,33 @@ public class CapabilityEnhancer {
     private void addExtraCapabiities(DesiredCapabilities capabilities, CapabilitySet capabilitySet) {
         Map<String, Object> extraCapabilities = capabilitySet.getCapabilities();
         for(String capabilityName : extraCapabilities.keySet()) {
-            capabilities.setCapability(capabilityName, extraCapabilities.get(capabilityName));
+            capabilities.setCapability(capabilityName, convertFromString(extraCapabilities.get(capabilityName)));
+        }
+    }
+
+    private Object convertFromString(Object value) {
+        if (!(value instanceof String)) {
+            return value;
+        }
+        if (isaBoolean(value)) {
+            return Boolean.getBoolean(value.toString());
+        }
+        if (isAnInteger(value)) {
+            return Integer.parseInt(value.toString());
+        }
+        return false;
+    }
+
+    private boolean isaBoolean(Object value) {
+        return value.toString().equalsIgnoreCase("true") || value.toString().equalsIgnoreCase("false");
+    }
+
+    private boolean isAnInteger(Object value) {
+        try {
+            Integer.parseInt(value.toString());
+            return true;
+        } catch(NumberFormatException notAnInteger) {
+            return false;
         }
     }
 

@@ -45,7 +45,8 @@ public class CustomCapabilities {
                 .stream()
                 .collect(toMap(
                         entry -> stripPrefixFrom(entry.getKey().toString()),
-                        entry -> CapabilityValue.fromString(entry.getValue())
+                        entry -> stringOrBooleanFrom(entry.getValue())
+//                        entry -> CapabilityValue.fromString(entry.getValue())
                         )
                 );
     }
@@ -57,6 +58,12 @@ public class CustomCapabilities {
 
     private String driverPrefix() {
         return "driver_capabilities." + driver.toString().toLowerCase();
+    }
+    private static Object stringOrBooleanFrom(Object value) {
+        if (value.toString().equalsIgnoreCase("true") || value.toString().equalsIgnoreCase("false")) {
+            return Boolean.valueOf(value.toString());
+        }
+        return value.toString();
     }
 
     public static CustomCapabilities forDriver(SupportedWebDriver driver) {

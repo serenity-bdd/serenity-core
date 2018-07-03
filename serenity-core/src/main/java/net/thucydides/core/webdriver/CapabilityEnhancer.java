@@ -41,7 +41,7 @@ public class CapabilityEnhancer {
     private void addExtraCapabiities(DesiredCapabilities capabilities, CapabilitySet capabilitySet) {
         Map<String, Object> extraCapabilities = capabilitySet.getCapabilities();
         for(String capabilityName : extraCapabilities.keySet()) {
-            capabilities.setCapability(capabilityName, fromString(extraCapabilities.get(capabilityName)));
+            capabilities.setCapability(capabilityName, extraCapabilities.get(capabilityName));
         }
     }
 

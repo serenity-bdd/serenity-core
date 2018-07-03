@@ -24,6 +24,7 @@ import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeT
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.not;
 
 @RunWith(SerenityRunner.class)
 public class WhenRetrievingUserDetails {
@@ -194,7 +195,7 @@ public class WhenRetrievingUserDetails {
         );
 
         sam.should(
-                seeThatResponse(response -> response.statusCode(404))
+                seeThatResponse(response -> response.statusCode(not(equalTo(200))))
         );
     }
 

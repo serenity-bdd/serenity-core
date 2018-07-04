@@ -1,11 +1,5 @@
 package net.serenitybdd.screenplay.shopping;
 
-import net.serenitybdd.screenplay.Ability;
-import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.actors.Cast;
-
-import java.util.function.Consumer;
-
 /**
  * Created by john on 11/11/2015.
  */

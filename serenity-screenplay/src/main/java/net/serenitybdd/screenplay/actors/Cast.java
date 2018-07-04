@@ -14,6 +14,9 @@ import java.util.function.Consumer;
  */
 public class Cast {
 
+    public static Cast ofStandardUsers() {
+        return new SimpleCast();
+    }
 
     /**
      * Create a Cast object with a list of predefined abilities

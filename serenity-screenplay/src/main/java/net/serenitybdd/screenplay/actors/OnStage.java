@@ -10,7 +10,7 @@ import java.util.List;
 
 public class OnStage {
 
-    private final static String DEFAULT_PRONOUNS = "he,she,they";
+    private final static String DEFAULT_PRONOUNS = "he,she,they,it";
 
     private static final ThreadLocal<Stage> stage = new ThreadLocal<>();
 

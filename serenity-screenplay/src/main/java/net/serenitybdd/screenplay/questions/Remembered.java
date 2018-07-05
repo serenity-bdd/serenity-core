@@ -2,11 +2,13 @@ package net.serenitybdd.screenplay.questions;
 
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
+import net.serenitybdd.screenplay.annotations.Subject;
 
 /**
  * A question that returns a value previously remembered by the actor.
  * @param <T>
  */
+@Subject("#key")
 public class Remembered<T> implements Question<T> {
 
     private final String key;

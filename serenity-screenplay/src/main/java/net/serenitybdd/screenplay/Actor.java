@@ -109,10 +109,13 @@ public class Actor implements PerformsTasks, SkipNested {
         if (isPending(todo)) {
             StepEventBus.getEventBus().stepPending();
         }
+
+
         try {
             notifyPerformanceOf(todo);
             taskTally.newTask();
-            todo.performAs(this);
+
+            performTask(todo);
 
             if (anOutOfStepErrorOccurred()) {
                 eventBusInterface.mergePreviousStep();
@@ -126,6 +129,12 @@ public class Actor implements PerformsTasks, SkipNested {
             }
         } finally {
             eventBusInterface.updateOverallResult();
+        }
+    }
+
+    private <T extends Performable> void performTask(T todo) {
+        if (!StepEventBus.getEventBus().currentTestIsSuspended()) {
+            todo.performAs(this);
         }
     }
 

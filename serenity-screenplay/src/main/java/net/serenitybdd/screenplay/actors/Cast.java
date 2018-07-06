@@ -1,6 +1,8 @@
 package net.serenitybdd.screenplay.actors;
 
 import net.serenitybdd.core.collect.NewList;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
@@ -9,20 +11,35 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import static java.util.Arrays.asList;
+
 /**
  * Provide simple support for managing Screenplay actors in Cucumber-JVM or JBehave
  */
 public class Cast {
 
-    public static Cast ofStandardUsers() {
-        return new SimpleCast();
+    private final List<Ability> standardAbilities;
+    private final List<Consumer<Actor>> abilityProviders;
+
+    public Cast(Ability[] abilities) {
+        this.standardAbilities = asList(abilities);
+        this.abilityProviders = new ArrayList<>();
+    }
+
+    public Cast(Consumer<Actor>... providers) {
+        this.standardAbilities = new ArrayList<>();
+        this.abilityProviders = asList(providers);
+    }
+
+    public static Cast ofStandardActors() {
+        return new Cast();
     }
 
     /**
      * Create a Cast object with a list of predefined abilities
      */
     public static Cast whereEveryoneCan(Ability... abilities) {
-        return new SimpleCast(abilities);
+        return new Cast(abilities);
     }
 
     /**
@@ -31,7 +48,7 @@ public class Cast {
      *     Cast globeTheatreCast = Cast.whereEveryoneCan(actor -> actor.whoCan(Fetch.some("Coffee")));
      */
     public static Cast whereEveryoneCan(Consumer<Actor>... abilities) {
-        return new SimpleCast(abilities);
+        return new Cast(abilities);
     }
 
     Map<String, Actor> actors = new HashMap();
@@ -44,6 +61,9 @@ public class Cast {
             for(Ability doSomething : abilities) {
                 newActor.can(doSomething);
             }
+
+            assignGeneralAbilitiesTo(newActor);
+
             actors.put(actorName, newActor);
         }
         return actors.get(actorName);
@@ -55,6 +75,13 @@ public class Cast {
 
     public void dismissAll() {
         actors.clear();
+    }
+
+    protected void assignGeneralAbilitiesTo(Actor newActor) {
+        standardAbilities.forEach(newActor::whoCan);
+        abilityProviders.forEach(
+                ability -> ability.accept(newActor)
+        );
     }
 
 }

@@ -10,7 +10,7 @@ class WhenRecruitingACast extends Specification {
 
     def "a cast can provide actors by name"() {
         given:
-            Cast cast = new SimpleCast()
+            Cast cast = new Cast()
         when:
             Actor actor = cast.actorNamed("Joe")
         then:

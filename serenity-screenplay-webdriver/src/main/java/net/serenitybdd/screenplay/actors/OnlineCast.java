@@ -6,10 +6,36 @@ import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.openqa.selenium.WebDriver;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
+import static java.util.Arrays.asList;
+
 /**
  * Provide simple support for managing Screenplay actors in Cucumber-JVM or JBehave
  */
 public class OnlineCast extends Cast {
+
+    public OnlineCast() {
+        this(new Ability[]{});
+    }
+
+    public OnlineCast(Ability[] abilities) {
+        super(abilities);
+    }
+
+    public OnlineCast(Consumer<Actor>... providers) {
+        super(providers);
+    }
+
+    public static Cast whereEveryoneCan(Ability... abilities) {
+        return new OnlineCast(abilities);
+    }
+
+    public static Cast whereEveryoneCan(Consumer<Actor>... abilityProviders) {
+        return new OnlineCast(abilityProviders);
+    }
 
     @Override
     public Actor actorNamed(String actorName, Ability... abilities) {

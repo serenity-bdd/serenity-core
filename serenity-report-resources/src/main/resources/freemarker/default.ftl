@@ -187,7 +187,7 @@
                                                 <#list testOutcome.actors as castMember>
                                                 <td width="${cellWidth}%">
                                                     <h4><i class="fa fa-2x fa-user-o"></i>&nbsp;<span>${castMember.name}</span><h4>
-                                                    <p>${castMember.description!""}</p>
+                                                    <p>${formatter.renderDescription(castMember.description!"")}</p>
                                                     <ul>
                                                     <#if (castMember.hasFacts())>
                                                         <li><strong>${castMember.name} has:</strong>

@@ -1726,3 +1726,16 @@ ul.second-level-requirements  {
 .requirements-overview li {
     margin-left: 2em;
 }
+
+.cast {
+    margin-left: 20px;
+}
+
+.cast td {
+    vertical-align: top;
+}
+.cast li {
+    color: grey;
+    margin-left: 20px;
+    padding-top: 4px;
+}

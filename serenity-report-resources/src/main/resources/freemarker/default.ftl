@@ -162,6 +162,66 @@
                     </tr>
                 </table>
             </div>
+
+            <#if (testOutcome.actors?has_content)>
+                <#assign castSize = testOutcome.actors?size>
+                <#assign cellWidth = 100 / castSize>
+
+                <!-- CAST MEMBERS -->
+                <div>&nbsp;</div>
+                <div class="story-title" >
+                    <table class="outcome-header">
+                        <tr>
+                            <td>
+                                <div>
+                                    <h3 class="discreet-story-header">
+                                        <i class="fa fa-2x fa-users"></i>
+                                        <span class="story-header-title">
+                                            <a class="btn btn-primary" data-toggle="collapse" href="#castDetails" role="button" aria-expanded="true" aria-controls="castDetails">Cast</a>
+                                        </span>
+                                    </h3>
+
+                                    <div class="cast-member collapse" id="castDetails">
+                                        <table class="cast">
+                                            <tr>
+                                                <#list testOutcome.actors as castMember>
+                                                <td width="${cellWidth}%">
+                                                    <h4><i class="fa fa-2x fa-user-o"></i>&nbsp;<span>${castMember.name}</span><h4>
+                                                    <p>${castMember.description!""}</p>
+                                                    <ul>
+                                                    <#if (castMember.hasFacts())>
+                                                        <li><strong>${castMember.name} has:</strong>
+                                                            <ul>
+                                                                <#list castMember.getHas() as fact>
+                                                                <li>${fact}</li>
+                                                                </#list>
+                                                            </ul>
+                                                        </li>
+                                                    </#if>
+                                                    <#if (castMember.hasAbilities())>
+                                                        <li><strong>${castMember.name} can:</strong>
+                                                            <ul>
+                                                                <#list castMember.can as ability>
+                                                                    <li>${ability}</li>
+                                                                </#list>
+                                                            </ul>
+                                                        </li>
+                                                    </#if>
+                                                    </ul>
+                                                </td>
+                                                </#list>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- END CAST MEMBERS -->
+            </#if>
+
+
         </div>
     </div>
 

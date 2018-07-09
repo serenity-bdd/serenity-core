@@ -741,4 +741,11 @@ public class StepEventBus {
         stepEventBusThreadLocal.set(stepEventBus);
     }
 
+    public void castActor(String name) {
+        if ((baseStepListener != null) && (baseStepListener.latestTestOutcome() != null)) {
+            baseStepListener.latestTestOutcome().ifPresent(
+                    testOutcome -> testOutcome.castActor(name)
+            );
+        }
+    }
 }

@@ -44,4 +44,9 @@ public class CallAnApi implements Ability {
     public Response getLastResponse() {
         return SerenityRest.lastResponse();
     }
+
+    @Override
+    public String toString() {
+        return "call an API at " + baseURL;
+    }
 }

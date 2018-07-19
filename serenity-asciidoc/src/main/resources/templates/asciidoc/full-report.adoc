@@ -1,0 +1,11 @@
+= ${report.title}
+:revdate: ${report.date?date}
+:revnumber: ${report.version}
+:version-label!:
+
+== Colophon
+<#noparse>
+Version: ${revnumber}
+
+Version Date: ${revdate}
+</#noparse>

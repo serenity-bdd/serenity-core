@@ -1,9 +1,14 @@
 package net.serenitybdd.rest.decorators;
 
+import io.restassured.config.DecoderConfig;
+import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.Cookie;
 import io.restassured.http.Cookies;
 import io.restassured.http.Headers;
+import io.restassured.internal.ResponseParserRegistrar;
+import io.restassured.internal.RestAssuredResponseOptionsGroovyImpl;
 import io.restassured.internal.RestAssuredResponseOptionsImpl;
+import io.restassured.internal.log.LogRepository;
 import io.restassured.mapper.ObjectMapperType;
 import io.restassured.mapper.ObjectMapper;
 import io.restassured.path.json.JsonPath;
@@ -14,6 +19,7 @@ import io.restassured.response.*;
 
 import java.io.InputStream;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * User: YamStranger
@@ -235,5 +241,25 @@ public class ResponseDecorated extends RestAssuredResponseOptionsImpl<Response> 
     @Override
     public int getStatusCode() {
         return core.getStatusCode();
+    }
+
+    @Override
+    public long time() {
+        return core.time();
+    }
+
+    @Override
+    public long timeIn(TimeUnit timeUnit) {
+        return core.timeIn(timeUnit);
+    }
+
+    @Override
+    public long getTime() {
+        return core.getTime();
+    }
+
+    @Override
+    public long getTimeIn(TimeUnit timeUnit) {
+        return core.getTimeIn(timeUnit);
     }
 }

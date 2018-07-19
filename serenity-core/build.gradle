@@ -160,8 +160,6 @@ dependencies {
 
     compile "org.imgscalr:imgscalr-lib:${imgscalrVersion}"
 
-//    compile "javax.validation:validation-api:${javaxValidationVersion}"
-//    compile "org.hibernate:hibernate-validator:${hibernateValidatorVersion}"
     compile "javax.el:javax.el-api:${elApiVersion}"
     compile "org.glassfish.web:javax.el:${elApiVersion}"
 

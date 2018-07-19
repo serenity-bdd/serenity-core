@@ -1,0 +1,56 @@
+buildscript {
+    ext.kotlin_version = '1.2.51'
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+apply plugin: 'kotlin'
+
+test {
+    useJUnitPlatform {
+        includeEngines 'junit-jupiter'
+    }
+}
+
+dependencies {
+    compile project(':serenity-model')
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    compile "org.freemarker:freemarker:${freemarkerVersion}"
+
+    // TEST DEPENDENCIES
+
+    // JUnit 5
+    testImplementation(
+            "org.junit.jupiter:junit-jupiter-api:${junit5_version}"
+    )
+    testRuntimeOnly(
+            "org.junit.jupiter:junit-jupiter-engine:${junit5_version}"
+    )
+//
+//    testCompile('io.kotlintest:kotlintest-runner-junit5:3.1.8') {
+//        exclude group: "com.google.guava", module: "guava"
+//        exclude group: "org.reflections:reflections", module: "reflections"
+//    }
+//    testCompile('org.reflections:reflections:0.9.11') {
+//        exclude group: "com.google.guava", module: "guava"
+//    }
+}
+repositories {
+    mavenCentral()
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}

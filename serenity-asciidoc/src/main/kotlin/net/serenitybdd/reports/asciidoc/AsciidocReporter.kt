@@ -27,25 +27,28 @@ public class AsciidocReporter(val environmentVariables: EnvironmentVariables) {
 
         // Prepare the parameters
         val outputDirectory = SerenityReport.outputDirectory().configuredIn(environmentVariables)
+        val fields = templateFields(environmentVariables, testOutcomes)
+
+        // Merge the template
+        val outputFile = newOutputFileIn(outputDirectory)
+        val writer = outputFile.bufferedWriter()
+        val template = SerenityReport.template().configuredIn(environmentVariables)
+
+        TemplateEngine(environmentVariables).merge(template, fields, writer)
+
+        return outputFile
+    }
+
+    private fun templateFields(environmentVariables: EnvironmentVariables, testOutcomes: TestOutcomes): Map<String, Any> {
         val reportTitle = SerenityReport.reportTitle().configuredIn(environmentVariables)
 
         val fields = hashMapOf(
                 "testOutcomes" to testOutcomes,
                 "report" to ReportInfo(title = reportTitle,
-                                       version = environmentVariables.getProperty("project.version",""),
-                                       date = Date())
+                        version = environmentVariables.getProperty("project.version",""),
+                        date = Date())
         )
-
-        // Merge the template
-        outputDirectory.toFile().mkdirs()
-        val outputFile = outputFileIn(outputDirectory)
-        outputFile.createNewFile()
-
-        val writer = outputFileIn(outputDirectory).bufferedWriter()
-
-        TemplateEngine.merge("full-report.adoc", fields, writer)
-
-        return outputFile
+        return fields
     }
 
     fun testOutcomesIn(outputDirectory: Path): TestOutcomes {
@@ -54,5 +57,14 @@ public class AsciidocReporter(val environmentVariables: EnvironmentVariables) {
 
     fun outputFileIn(outputDirectory: Path): File {
         return outputDirectory.resolve("serenity.asc").toFile()
+    }
+
+    fun newOutputFileIn(outputDirectory: Path) : File {
+        outputDirectory.toFile().mkdirs()
+
+        val outputFile = outputFileIn(outputDirectory)
+        outputFile.createNewFile()
+
+        return outputFile;
     }
 }

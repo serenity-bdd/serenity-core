@@ -17,7 +17,7 @@ class WhenGeneratingAnAsciidocReport {
     val TEST_OUTCOMES_WITH_A_SINGLE_TEST = ClassLoader.getSystemResource("test_outcomes/with_a_single_test").path
 
     @Nested
-    inner class ASimpleCucumberReport {
+    inner class AllReports {
 
         private val generatedReport : File
         private val reportContents : String;
@@ -50,22 +50,26 @@ class WhenGeneratingAnAsciidocReport {
     }
 
     @Nested
-    inner class YouShouldBeAbleTo {
-        private val reportContents : String;
+    inner class YouCanUseYourOwnTemplateBy {
         private val environmentVariables : EnvironmentVariables = MockEnvironmentVariables()
+        private val customTemplatePath = File(ClassLoader.getSystemResource("custom_template/my_template.adoc").path)
 
-        init {
-            environmentVariables.setProperty("asciidoc.template","custom_template/my_template.adoc")
-
+        @Test
+        fun `providing a custom asciidoc template using the asciidoc-dot-template system property and a full path`() {
+            environmentVariables.setProperty("asciidoc.template", customTemplatePath.path)
             val generatedReport = AsciidocReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_A_SINGLE_TEST))
+            val reportContents = generatedReport.readText()
 
-            reportContents = generatedReport.readText()
+            assertThat(reportContents).contains("My Custom Asciidoc Template")
         }
 
         @Test
-        fun `provide a custom asciidoc template using the asciidoc-dot-template system property and a file on the project classpath`() {
+        fun `providing a custom asciidoc template using a relative path`() {
+            environmentVariables.setProperty("asciidoc.template", "src/test/resources/custom_template/my_template.adoc")
+            val generatedReport = AsciidocReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_A_SINGLE_TEST))
+            val reportContents = generatedReport.readText()
+
             assertThat(reportContents).contains("My Custom Asciidoc Template")
         }
     }
-
 }

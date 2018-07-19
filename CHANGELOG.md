@@ -1,5 +1,98 @@
 
 # Serenity Core change log
+## Unreleased
+### [#1309](https://github.com/serenity-bdd/serenity-core/issues/1309) Serenity Rest Assured Always Getting -1 when Measuring Response Time
+ * [26cf362d901f5ca](https://github.com/serenity-bdd/serenity-core/commit/26cf362d901f5ca) Fixed #1309
+### No issue
+ * [482985c5a660776](https://github.com/serenity-bdd/serenity-core/commit/482985c5a660776) Minor refactoring
+ * [0ee932d0a77c1bb](https://github.com/serenity-bdd/serenity-core/commit/0ee932d0a77c1bb) Added an interaction class to upload files.
+Usage:
+    actor.attemptsTo(Upload.theFile(pathToFile).to(SOME_TARGET);
+ * [f25324de75cdf30](https://github.com/serenity-bdd/serenity-core/commit/f25324de75cdf30) fix: report Favicon
+## v1.9.30
+### No issue
+ * [034a42906cb46bb](https://github.com/serenity-bdd/serenity-core/commit/034a42906cb46bb) Added support for markdown formatting in actor descriptions
+ * [add76d98de591fe](https://github.com/serenity-bdd/serenity-core/commit/add76d98de591fe) Added support for Facts, to setup and teardown test data.
+ * [bef67bd73adcde7](https://github.com/serenity-bdd/serenity-core/commit/bef67bd73adcde7) Harmonised the Screenplay Cast API
+## v1.9.29
+### No issue
+ * [6a470595bada55d](https://github.com/serenity-bdd/serenity-core/commit/6a470595bada55d) Added a Subject to the Remembered Question class so that the key will appear in the reports.
+ * [c099b3d76c78d5f](https://github.com/serenity-bdd/serenity-core/commit/c099b3d76c78d5f) Ensure that tasks are not executed for @Manual or @Pending tests.
+ * [bc1f74ee6ee39e9](https://github.com/serenity-bdd/serenity-core/commit/bc1f74ee6ee39e9) Added `it` as a recognised screenplay pronoun.
+ * [3e2a85f0d8bb0c4](https://github.com/serenity-bdd/serenity-core/commit/3e2a85f0d8bb0c4) Ensure that the tests do not fail when copying the same report asset from different threads
+ * [36f4a20ca924d28](https://github.com/serenity-bdd/serenity-core/commit/36f4a20ca924d28) feat: A Question to easily make assertions about remembered values
+
+Sample usage:
+
+```
+Actor tracy = Actor.named("Tracy");
+tracy.remember("age",30);
+tracy.should(seeThat(Remembered.valueOf("age"), equalTo(30)));
+```
+ * [3554fa44bc464be](https://github.com/serenity-bdd/serenity-core/commit/3554fa44bc464be) feat: Added the ability to create a cast of actors with no special abilities.
+ * [28613000b7a9263](https://github.com/serenity-bdd/serenity-core/commit/28613000b7a9263) feat: You can now create arbitrary Casts of actors more easily with predefined abilities for each actor.
+
+Imagine you have the following Ability class:
+
+```
+public class Fetch implements Ability {
+    private final String item;
+
+    private Fetch(String item) {
+        this.item = item;
+    }
+    public static Fetch some(String item) { return new Fetch(item)}
+};
+```
+
+You can define a cast of actors who have this ability like this:
+```
+        Cast globeTheatreCast = Cast.whereEveryoneCan(Fetch.some("Coffee")));
+```
+
+Or you can use a lambda expression for more flexibility:
+```
+        Cast globeTheatreCast = Cast.whereEveryoneCan(actor -> actor.whoCan(Fetch.some("Coffee"))));
+```
+ * [125dcbce74a7252](https://github.com/serenity-bdd/serenity-core/commit/125dcbce74a7252) Add double-checked locking for requirements
+
+Also make sure that the returned list is not modified by anyone
+https://github.com/serenity-bdd/serenity-core/issues/1291
+## v1.9.28
+### No issue
+ * [689978d6df03218](https://github.com/serenity-bdd/serenity-core/commit/689978d6df03218) Updated REST tests
+ * [012f9fa5201742a](https://github.com/serenity-bdd/serenity-core/commit/012f9fa5201742a) chore: fixed some unit tests
+ * [badc7517a9afdee](https://github.com/serenity-bdd/serenity-core/commit/badc7517a9afdee) Updated to Cucumber 3.0.2
+ * [21408f5c3f62f79](https://github.com/serenity-bdd/serenity-core/commit/21408f5c3f62f79) fix: Ensure custom capabilities are always converted to boolean or numbers as appropriate
+## v1.9.27
+### No issue
+ * [dd14c54207555f0](https://github.com/serenity-bdd/serenity-core/commit/dd14c54207555f0) Improved handling of boolean and integer values in the serenity.conf file for Capabilities
+ * [1ebba53e33a6450](https://github.com/serenity-bdd/serenity-core/commit/1ebba53e33a6450) feat: added support for Predicates in the seeThat screenplay expressions,
+
+e.g.
+```
+        sam.should(
+                seeThat("names should match", TheUser.name(), name -> name.equalsIgnoreCase("George"))
+        );
+```
+## v1.9.26
+### No issue
+ * [26935c65aaacb9c](https://github.com/serenity-bdd/serenity-core/commit/26935c65aaacb9c) chore: Update to Selenium 3.13.0
+ * [911d817d144e9b8](https://github.com/serenity-bdd/serenity-core/commit/911d817d144e9b8) feat: Added the Switch interaction class to handle switching between frames in Screenplay.
+
+Sample usage:
+```
+actor.attemptsTo(
+    Switch.toFrame(1)),
+    Click.on(SOME_BUTTON),
+    Switch.toParentFrame()
+);
+ * [578f060615e6ce6](https://github.com/serenity-bdd/serenity-core/commit/578f060615e6ce6) fix: added SERENITY_MAXIMUM_STEP_NESTING_DEPTH property to allow configuration of maximum step nesting
+## v1.9.25
+### Jira
+ * [ef485368c5e7358](https://github.com/serenity-bdd/serenity-core/commit/ef485368c5e7358) upgrade to byte-buddy-1.8.12
+### No issue
+ * [409eb096a3b6680](https://github.com/serenity-bdd/serenity-core/commit/409eb096a3b6680) chore: Updated changelog
 ## v1.9.24
 ### No issue
  * [37dc6287ded94dc](https://github.com/serenity-bdd/serenity-core/commit/37dc6287ded94dc) chore: fixing unit tests

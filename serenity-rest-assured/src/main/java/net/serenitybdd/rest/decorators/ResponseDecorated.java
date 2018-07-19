@@ -263,4 +263,3 @@ public class ResponseDecorated extends RestAssuredResponseOptionsImpl<Response> 
         return core.getTimeIn(timeUnit);
     }
 }
-gi

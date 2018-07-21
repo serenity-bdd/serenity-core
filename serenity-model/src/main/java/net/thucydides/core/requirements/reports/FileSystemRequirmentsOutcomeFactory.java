@@ -41,7 +41,8 @@ public class FileSystemRequirmentsOutcomeFactory implements RequirementsOutcomeF
                 issueTracking,
                 environmentVariables,
                 NewList.<RequirementsTagProvider>of(tagProvider),
-                reportNameProvider);
+                reportNameProvider,
+                tagProvider.getOverview().orElse(""));
     }
 
     public RequirementsOutcomes buildRequirementsOutcomesFrom(Requirement parentRequirement,
@@ -53,7 +54,7 @@ public class FileSystemRequirmentsOutcomeFactory implements RequirementsOutcomeF
                 issueTracking,
                 environmentVariables,
                 NewList.of(tagProvider),
-                reportNameProvider);
+                reportNameProvider,
+                "");
     }
-
 }

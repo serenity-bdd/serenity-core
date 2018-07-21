@@ -42,10 +42,12 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private static final List<Requirement> NO_REQUIREMENTS = new ArrayList<>();
     private static final List<TestTag> NO_TEST_TAGS = new ArrayList<>();
-    public static final String STORY_EXTENSION = "story";
-    public static final String FEATURE_EXTENSION = "feature";
+    private static final String STORY_EXTENSION = "story";
+    private static final String FEATURE_EXTENSION = "feature";
 
     private final NarrativeReader narrativeReader;
+    private final OverviewReader overviewReader;
+    private final Set<String> directoryPaths;
     private final int level;
 
     private final RequirementsConfiguration requirementsConfiguration;
@@ -98,9 +100,10 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         super(environmentVariables, rootDirectory);
         this.narrativeReader = NarrativeReader.forRootDirectory(rootDirectory)
                 .withRequirementTypes(getRequirementTypes());
+        this.overviewReader = new OverviewReader();
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
 
-        Set<String> directoryPaths = rootDirectories(rootDirectory, environmentVariables);
+        directoryPaths = rootDirectories(rootDirectory, environmentVariables);
         this.level = requirementsConfiguration.startLevelForADepthOf(maxDirectoryDepthIn(directoryPaths) + 1);
     }
 
@@ -108,6 +111,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         super(environmentVariables, rootDirectory);
         this.narrativeReader = NarrativeReader.forRootDirectory(rootDirectory)
                 .withRequirementTypes(getRequirementTypes());
+        this.overviewReader = new OverviewReader();
+        directoryPaths = rootDirectories(rootDirectory, environmentVariables);
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
         this.level = level;
     }
@@ -161,16 +166,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return directoryPaths.stream()
                 .mapToInt(directoryPath -> TheDirectoryStructure.startingAt(new File(directoryPath)).maxDepth())
                 .max().orElse(0);
-
-//        int maxDepth = 0;
-//
-//        for (String directoryPath : directoryPaths) {
-//            int localMax = TheDirectoryStructure.startingAt(new File(directoryPath)).maxDepth();
-//            if (localMax > maxDepth) {
-//                maxDepth = localMax;
-//            }
-//        }
-//        return maxDepth;
     }
 
     private List<Requirement> addParentsTo(List<Requirement> requirements) {
@@ -292,13 +287,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                         requirement -> requirement.asTag().isAsOrMoreSpecificThan(storyOrFeatureTag)
                 )
                 .findFirst();
-
-//        for (Requirement requirement : AllRequirements.in(getRequirements())) {
-//            if (requirement.asTag().isAsOrMoreSpecificThan(storyOrFeatureTag)) {
-//                return java.util.Optional.of(requirement);
-//            }
-//        }
-//        return java.util.Optional.empty();
     }
 
     private java.util.Optional<TestTag> getMatchingRequirementTagsFor(TestTag storyOrFeatureTag) {
@@ -751,4 +739,9 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private boolean isSupportedFileStoryExtension(String storyFileExtension) {
         return (storyFileExtension.toLowerCase().equals(FEATURE_EXTENSION) || storyFileExtension.toLowerCase().equals(STORY_EXTENSION));
     }
+
+    public Optional<String> getOverview() {
+        return overviewReader.readOverviewFrom(directoryPaths.toArray(new String[]{}));
+    }
+
 }

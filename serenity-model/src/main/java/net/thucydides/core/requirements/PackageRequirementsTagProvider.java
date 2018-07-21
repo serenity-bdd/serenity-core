@@ -1,23 +1,28 @@
 package net.thucydides.core.requirements;
 
-import com.google.common.base.*;
-import com.google.common.reflect.*;
-import net.serenitybdd.core.collect.*;
-import net.serenitybdd.core.environment.*;
-import net.thucydides.core.*;
-import net.thucydides.core.model.*;
-import net.thucydides.core.requirements.annotations.*;
-import net.thucydides.core.requirements.classpath.*;
-import net.thucydides.core.requirements.model.*;
-import net.thucydides.core.util.*;
-import org.junit.runner.*;
+import com.google.common.base.Splitter;
+import com.google.common.reflect.ClassPath;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestTag;
+import net.thucydides.core.requirements.annotations.ClassInfoAnnotations;
+import net.thucydides.core.requirements.classpath.LeafRequirementAdder;
+import net.thucydides.core.requirements.classpath.NonLeafRequirementsAdder;
+import net.thucydides.core.requirements.model.OverviewReader;
+import net.thucydides.core.requirements.model.Requirement;
+import net.thucydides.core.util.EnvironmentVariables;
+import org.junit.runner.RunWith;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
-import java.util.Optional;
-import java.util.concurrent.locks.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-import static java.lang.Math.*;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 /**
  * Load a set of requirements (epics/themes,...) from the directory structure.
@@ -53,7 +58,7 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables) {
-        this(environmentVariables, ThucydidesSystemProperty.THUCYDIDES_TEST_ROOT.from(environmentVariables));
+        this(environmentVariables, ThucydidesSystemProperty.SERENITY_TEST_ROOT.from(environmentVariables));
     }
 
     public PackageRequirementsTagProvider() {

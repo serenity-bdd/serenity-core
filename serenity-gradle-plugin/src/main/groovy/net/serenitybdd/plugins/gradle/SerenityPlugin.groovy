@@ -39,6 +39,7 @@ class SerenityPlugin implements Plugin<Project> {
                 }
                 logger.lifecycle("Generating Serenity Reports for ${project.serenity.projectKey} to directory $reportDirectory")
                 System.properties['serenity.project.key'] = project.serenity.projectKey
+                System.properties['serenity.test.requirements.basedir'] = project.serenity.requirementsBaseDir
                 def reporter = new HtmlAggregateStoryReporter(project.serenity.projectKey)
 
                 reporter.outputDirectory = reportDirectory.toFile()
@@ -46,6 +47,10 @@ class SerenityPlugin implements Plugin<Project> {
                 reporter.issueTrackerUrl = project.serenity.issueTrackerUrl
                 reporter.jiraUrl = project.serenity.jiraUrl
                 reporter.jiraProject = project.serenity.jiraProject
+
+                if (project.serenity.generateOutcomes) {
+                    reporter.setGenerateTestOutcomeReports();
+                }
                 reporter.generateReportsForTestResultsFrom(reportDirectory.toFile())
             }
         }

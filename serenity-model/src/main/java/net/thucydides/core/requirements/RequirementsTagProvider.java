@@ -21,4 +21,5 @@ public interface RequirementsTagProvider extends TagProvider {
     Optional<Requirement> getParentRequirementOf(final TestOutcome testOutcome);
     Optional<Requirement> getParentRequirementOf(final Requirement requirement);
     Optional<Requirement> getRequirementFor(TestTag testTag);
+    default Optional<String> getOverview() { return Optional.empty(); }
 }

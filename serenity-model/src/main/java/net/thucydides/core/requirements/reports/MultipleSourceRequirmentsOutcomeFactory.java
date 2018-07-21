@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Merges and consolidates requirements hierarchies coming from several sources.
@@ -52,20 +53,29 @@ public class MultipleSourceRequirmentsOutcomeFactory implements RequirementsOutc
         for (RequirementsTagProvider tagProvider : requirementsTagProviders) {
             allRequirements = new RequirementsMerger().merge(allRequirements, RequirementsProvided.by(tagProvider));
         }
+
+        Optional<String> overview = requirementsTagProviders.stream()
+                                                            .map(RequirementsTagProvider::getOverview)
+                                                            .filter(Optional::isPresent)
+                                                            .map(overviewText -> overviewText.get())
+                                                            .findFirst();
+
         LOGGER.debug("Merged requirements set:{}{}", System.lineSeparator(), RequirementTree.withRequirements(allRequirements));
         return new RequirementsOutcomes(allRequirements,
                 testOutcomes,
                 issueTracking,
                 environmentVariables,
                 requirementsTagProviders,
-                reportNameProvider);
+                reportNameProvider,
+                overview.orElse(""));
     }
 
 
     public RequirementsOutcomes buildRequirementsOutcomesFrom(Requirement parentRequirement, TestOutcomes testOutcomes) {
         List<Requirement> childRequirements = parentRequirement.getChildren();
+
         return new RequirementsOutcomes(parentRequirement, childRequirements, testOutcomes, issueTracking,
-                environmentVariables, requirementsTagProviders, reportNameProvider);
+                environmentVariables, requirementsTagProviders, reportNameProvider, "");
     }
 
 }

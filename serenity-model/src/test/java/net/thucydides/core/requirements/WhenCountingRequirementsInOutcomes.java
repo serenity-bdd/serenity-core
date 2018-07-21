@@ -26,13 +26,22 @@ public class WhenCountingRequirementsInOutcomes {
 
     @Before
     public void findSourceDirectories() throws URISyntaxException {
-        featuresDirectory = new File("build/resources/test/serenity-cucumber/features");
-        outcomeDirectory =  new File("build/resources/test/serenity-cucumber/json");
-        		//Paths.get(Resources.getResource("serenity-cucumber/json").toURI().getPath()).toFile();
+        featuresDirectory = new File(ClassLoader.getSystemClassLoader().getResource("serenity-cucumber/features").getFile());
+        outcomeDirectory =  new File(ClassLoader.getSystemClassLoader().getResource("serenity-cucumber/json").getFile());
     }
 
     @Test
     public void should_find_correct_total_requirement_outcome_count_for_cucumber_jvm_outcomes() throws URISyntaxException, IOException {
+
+        FileSystemRequirements fileSystemRequirements = new FileSystemRequirements(featuresDirectory.getPath());
+
+        RequirementsOutcomes outcomes = fileSystemRequirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(TestOutcomeLoader.testOutcomesIn(outcomeDirectory));
+
+        assertThat(outcomes.getOverview(), is("## Requirements Overview"));
+    }
+
+    @Test
+    public void should_find_overview_text_for_cucumber_jvm_outcomes() throws URISyntaxException, IOException {
 
         FileSystemRequirements fileSystemRequirements = new FileSystemRequirements(featuresDirectory.getPath());
 

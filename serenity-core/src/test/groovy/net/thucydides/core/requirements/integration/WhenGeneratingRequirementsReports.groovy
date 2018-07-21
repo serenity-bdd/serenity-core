@@ -56,6 +56,16 @@ class WhenGeneratingRequirementsReports extends Specification {
             firstRequirement.childType() == 'feature'
     }
 
+
+    def "Should read the requirements overview"() {
+        when: "we read the requirements from the directory structure"
+            def noTestOutcomes = TestOutcomes.of(Collections.EMPTY_LIST)
+            RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory([requirementsProvider], issueTracking, new ReportNameProvider())
+            RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
+        then:
+            outcomes.overview == "## My overview"
+    }
+
     def someTestResults() {
 
         TestOutcome testOutcome1 = TestOutcome.forTestInStory("planting potatoes in the sun", Story.called("planting potatoes"))

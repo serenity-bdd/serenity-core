@@ -54,12 +54,33 @@ public class RootDirectory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RootDirectory.class);
 
+    private final List<String> requirementsDirectoryNames;
+
     RootDirectory(EnvironmentVariables environmentVariables, String rootDirectoryPath) {
         this.environmentVariables = environmentVariables;
         this.rootDirectoryPath = rootDirectoryPath;
 
+        List<String> customRequirementsDirectoryNames = new ArrayList<>();
+        List<String> defaultRequirementsDirectoryNames = new ArrayList<>();
+
+
         this.featureDirectoryName = SERENITY_FEATURES_DIRECTORY.from(environmentVariables, DEFAULT_FEATURES_ROOT_DIRECTORY);
         this.storyDirectoryName = SERENITY_STORIES_DIRECTORY.from(environmentVariables, DEFAULT_STORIES_ROOT_DIRECTORY);
+
+        if (SERENITY_FEATURES_DIRECTORY.isDefinedIn(environmentVariables)) {
+            customRequirementsDirectoryNames.add(featureDirectoryName);
+        } else {
+            defaultRequirementsDirectoryNames.add(featureDirectoryName);
+        }
+        if (SERENITY_STORIES_DIRECTORY.isDefinedIn(environmentVariables)) {
+            customRequirementsDirectoryNames.add(storyDirectoryName);
+        } else {
+            defaultRequirementsDirectoryNames.add(storyDirectoryName);
+        }
+
+        requirementsDirectoryNames = new ArrayList<>(customRequirementsDirectoryNames);
+        requirementsDirectoryNames.addAll(defaultRequirementsDirectoryNames);
+
     }
 
     public static RootDirectory definedIn(EnvironmentVariables environmentVariables) {
@@ -198,10 +219,10 @@ public class RootDirectory {
         }
         List<File> resourceDirectories = getResourceDirectories(Paths.get(relativeRoot), environmentVariables);
         for (File resourceDir : resourceDirectories) {
-            if (new File(resourceDir, storyDirectoryName).exists()) {
-                return Optional.of(resourceDir.toPath().resolve(storyDirectoryName));
-            } else if (new File(resourceDir, featureDirectoryName).exists()) {
-                return Optional.of(resourceDir.toPath().resolve(featureDirectoryName));
+            for(String candidateDirectoryName : requirementsDirectoryNames) {
+                if (new File(resourceDir, candidateDirectoryName).exists()) {
+                    return Optional.of(resourceDir.toPath().resolve(candidateDirectoryName));
+                }
             }
         }
         return Optional.empty();

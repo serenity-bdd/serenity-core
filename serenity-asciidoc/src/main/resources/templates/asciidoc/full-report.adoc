@@ -3,6 +3,11 @@
 :revnumber: ${report.version}
 :version-label!:
 
+<#if (requirementsOutcomes.overview?has_content)>
+= Introduction
+${formatted.asAsciidoc(requirementsOutcomes.overview)}
+</#if>
+
 == Colophon
 <#noparse>
 Version: ${revnumber}

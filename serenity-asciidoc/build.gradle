@@ -22,6 +22,10 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     compile "org.freemarker:freemarker:${freemarkerVersion}"
+    compile("ca.szc.thirdparty.nl.jworks.markdown_to_asciidoc:markdown_to_asciidoc:1.0") {
+        exclude group: "org.ow2.asm", module: "asm"
+        exclude group: "org.jsoup", module: "jsoup"
+    }
 
     // TEST DEPENDENCIES
 
@@ -32,14 +36,6 @@ dependencies {
     testRuntimeOnly(
             "org.junit.jupiter:junit-jupiter-engine:${junit5_version}"
     )
-//
-//    testCompile('io.kotlintest:kotlintest-runner-junit5:3.1.8') {
-//        exclude group: "com.google.guava", module: "guava"
-//        exclude group: "org.reflections:reflections", module: "reflections"
-//    }
-//    testCompile('org.reflections:reflections:0.9.11') {
-//        exclude group: "com.google.guava", module: "guava"
-//    }
 }
 repositories {
     mavenCentral()

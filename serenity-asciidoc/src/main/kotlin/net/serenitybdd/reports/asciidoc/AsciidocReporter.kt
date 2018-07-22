@@ -6,6 +6,10 @@ import net.serenitybdd.reports.asciidoc.templates.TemplateEngine
 import net.thucydides.core.reports.OutcomeFormat
 import net.thucydides.core.reports.TestOutcomeLoader
 import net.thucydides.core.reports.TestOutcomes
+import net.thucydides.core.requirements.DefaultRequirements
+import net.thucydides.core.requirements.FileSystemRequirements
+import net.thucydides.core.requirements.reports.FileSystemRequirmentsOutcomeFactory
+import net.thucydides.core.requirements.reports.RequirementsOutcomes
 import net.thucydides.core.util.EnvironmentVariables
 import java.io.File
 import java.nio.file.Path
@@ -15,7 +19,8 @@ import java.util.*
 /**
  * Generate an Asciidoc report from a set of Serenity test outcomes in a given directory.
  */
-public class AsciidocReporter(val environmentVariables: EnvironmentVariables) {
+class AsciidocReporter(val environmentVariables: EnvironmentVariables) {
+
 
     /**
      * Generate an Asciidoc report using the json files in the specified directory
@@ -25,9 +30,12 @@ public class AsciidocReporter(val environmentVariables: EnvironmentVariables) {
         // Fetch the test outcomes
         val testOutcomes = testOutcomesIn(sourceDirectory)
 
+        // Overall requirements hierarchy
+        val requirementsOutcomes = requirementsOutcomesFrom(testOutcomes).using(environmentVariables)
+
         // Prepare the parameters
         val outputDirectory = SerenityReport.outputDirectory().configuredIn(environmentVariables)
-        val fields = templateFields(environmentVariables, testOutcomes)
+        val fields = templateFields(environmentVariables, testOutcomes, requirementsOutcomes)
 
         // Merge the template
         val outputFile = newOutputFileIn(outputDirectory)
@@ -39,14 +47,18 @@ public class AsciidocReporter(val environmentVariables: EnvironmentVariables) {
         return outputFile
     }
 
-    private fun templateFields(environmentVariables: EnvironmentVariables, testOutcomes: TestOutcomes): Map<String, Any> {
+    private fun templateFields(environmentVariables: EnvironmentVariables,
+                               testOutcomes: TestOutcomes,
+                               requirementsOutcomes : RequirementsOutcomes): Map<String, Any> {
         val reportTitle = SerenityReport.reportTitle().configuredIn(environmentVariables)
 
         val fields = hashMapOf(
                 "testOutcomes" to testOutcomes,
+                "requirementsOutcomes" to requirementsOutcomes,
                 "report" to ReportInfo(title = reportTitle,
-                        version = environmentVariables.getProperty("project.version",""),
-                        date = Date())
+                        version = environmentVariables.getProperty("project.version", ""),
+                        date = Date()),
+                "formatted" to Formatted()
         )
         return fields
     }
@@ -55,16 +67,24 @@ public class AsciidocReporter(val environmentVariables: EnvironmentVariables) {
         return TestOutcomeLoader.loadTestOutcomes().inFormat(OutcomeFormat.JSON).from(outputDirectory.toFile())
     }
 
+
     fun outputFileIn(outputDirectory: Path): File {
         return outputDirectory.resolve("serenity.asc").toFile()
     }
 
-    fun newOutputFileIn(outputDirectory: Path) : File {
+    fun newOutputFileIn(outputDirectory: Path): File {
         outputDirectory.toFile().mkdirs()
 
         val outputFile = outputFileIn(outputDirectory)
         outputFile.createNewFile()
 
         return outputFile;
+    }
+
+    fun requirementsOutcomesFrom(testOutcomes: TestOutcomes) = RequirementsOutcomesProvider(testOutcomes)
+
+    class RequirementsOutcomesProvider(val testOutcomes: TestOutcomes) {
+        fun using(environmentVariables: EnvironmentVariables): RequirementsOutcomes =
+                FileSystemRequirmentsOutcomeFactory(environmentVariables).buildRequirementsOutcomesFrom(testOutcomes)
     }
 }

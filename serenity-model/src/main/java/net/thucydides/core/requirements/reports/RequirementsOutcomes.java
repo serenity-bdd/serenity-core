@@ -86,7 +86,7 @@ public class RequirementsOutcomes {
         List<Requirement> distinctRequirements = requirements.stream().distinct().collect(Collectors.toList());
 
         return distinctRequirements.parallelStream()
-                .map( requirement -> requirementOutcomeFor(requirement))
+                .map(this::requirementOutcomeFor)
                 .collect(Collectors.toList());
     }
 

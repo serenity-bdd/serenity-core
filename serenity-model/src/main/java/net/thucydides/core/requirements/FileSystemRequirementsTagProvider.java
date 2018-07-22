@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements;
 
 import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.files.TheDirectoryStructure;
 import net.thucydides.core.guice.Injectors;
@@ -134,6 +135,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
      * at the working directory.
      */
     public List<Requirement> getRequirements() {
+
         if (requirements == null) {
             synchronized (requirementsLock) {
                 if (requirements == null) {
@@ -743,5 +745,4 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     public Optional<String> getOverview() {
         return overviewReader.readOverviewFrom(directoryPaths.toArray(new String[]{}));
     }
-
 }

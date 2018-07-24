@@ -16,7 +16,7 @@ public class Upload {
 
     public static UploadBuilder theFile(Path fileToUpload) { return new UploadBuilder(fileToUpload); }
 
-    private static class UploadBuilder {
+    public static class UploadBuilder {
         private final Path fileToUpload;
 
         public UploadBuilder(Path fileToUpload) {

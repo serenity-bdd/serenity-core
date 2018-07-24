@@ -75,14 +75,37 @@ class WhenGeneratingAnAsciidocReport {
         fun `should convert markdown narratives to asciidoc`() {
             assertThat(reportContents).contains("== Some details")
         }
-
-//        @Test
-//        fun `should include feature-level narratives`() {
-//            assertThat(reportContents).contains(":revnumber: 1.2.3")
-//        }
-//
     }
 
+    @Nested
+    inner class ReportsWithCapabilitiesAndFeatures {
+
+        private val generatedReport : File
+        private val reportContents : String
+        private val environmentVariables : EnvironmentVariables = MockEnvironmentVariables()
+
+        init {
+            environmentVariables.setProperty("serenity.project.name","A Simple Cucumber Report")
+            environmentVariables.setProperty("project.version","1.2.3")
+            environmentVariables.setProperty("serenity.requirements.dir","src/test/resources/test_outcomes/with_a_single_test/features")
+
+            generatedReport = AsciidocReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_A_SINGLE_TEST))
+            reportContents = generatedReport.readText()
+        }
+
+        @Test
+        fun `should include level 2 headings for each capability`() {
+            assertThat(reportContents).contains("== Capability: Application")
+                                      .contains("== Capability: Compliance")
+                                      .contains("== Capability: Monitoring")
+        }
+
+        @Test
+        fun `should include narrative texts for each capability`() {
+            assertThat(reportContents).contains("Client onboarding and vetting")
+            println(reportContents)
+        }
+    }
 
     @Nested
     inner class YouCanUseYourOwnTemplateBy {

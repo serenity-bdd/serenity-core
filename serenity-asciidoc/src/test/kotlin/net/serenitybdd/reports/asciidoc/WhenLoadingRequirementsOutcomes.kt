@@ -41,6 +41,11 @@ class WhenLoadingRequirementsOutcomes {
 
         val outcomesFactory = FileSystemRequirmentsOutcomeFactory(environmentVariables)
         val requirementsOutcomes = outcomesFactory.buildRequirementsOutcomesFrom(testOutcomes)
+        requirementsOutcomes.requirementOutcomes[0].requirement.children
+        val requirementOutcome = requirementsOutcomes.requirementOutcomes[0]
+        val requirement = requirementOutcome.requirement
+        val kids = requirementsOutcomes.requirementOutcomeFor(requirement)
+//        requirementsOutcomes.requirementOutcomes[0].requirement.narrative.text
 
         assertThat(requirementsOutcomes.requirementCount).isEqualTo(2)
     }

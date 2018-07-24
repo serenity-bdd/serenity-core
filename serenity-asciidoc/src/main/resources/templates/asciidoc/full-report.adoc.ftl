@@ -1,3 +1,5 @@
+<#include "requirement-section.ftl">
+
 = ${report.title}
 :revdate: ${report.date?date}
 :revnumber: ${report.version}
@@ -7,6 +9,14 @@
 = Introduction
 ${formatted.asAsciidoc(requirementsOutcomes.overview)}
 </#if>
+
+= Features
+<#list requirementsOutcomes.requirementOutcomes as requirementOutcome>
+<@requirement_section requirementsOutcomes=requirementsOutcomes requirementOutcome=requirementOutcome level=2/>
+</#list>
+
+= Acceptance Tests
+
 
 == Colophon
 <#noparse>

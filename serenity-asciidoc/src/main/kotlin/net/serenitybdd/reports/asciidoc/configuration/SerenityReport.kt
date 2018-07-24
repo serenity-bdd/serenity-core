@@ -15,7 +15,7 @@ sealed class SerenityReport {
 
         private const val DEFAULT_OUTPUT_DIRECTORY = "target/site/serenity"
         private const val DEFAULT_TITLE = "Serenity Living Documentation Report"
-        private const val DEFAULT_TEMPLATE = "full-report.adoc"
+        private const val DEFAULT_TEMPLATE = "full-report.adoc.ftl"
 
         fun outputDirectory() : ReportProperty<Path> {
             return PathReportProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY, DEFAULT_OUTPUT_DIRECTORY)

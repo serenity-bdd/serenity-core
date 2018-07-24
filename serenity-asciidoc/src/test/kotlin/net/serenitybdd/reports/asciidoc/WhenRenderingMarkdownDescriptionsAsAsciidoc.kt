@@ -21,4 +21,13 @@ class WhenRenderingMarkdownDescriptionsAsAsciidoc {
         assertThat(Formatted().asAsciidoc("== A Title")).isEqualTo("== A Title")
     }
 
+    @Test
+    fun `should capitalise titles`() {
+        assertThat(Formatted().asATitle("capability")).isEqualTo("Capability")
+    }
+
+    @Test
+    fun `should capitalise scenario titles`() {
+        assertThat(Formatted().asATitle("some scenario name")).isEqualTo("Some scenario name")
+    }
 }

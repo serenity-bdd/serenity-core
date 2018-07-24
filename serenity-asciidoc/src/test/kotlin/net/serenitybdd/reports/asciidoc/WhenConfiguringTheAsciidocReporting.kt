@@ -18,7 +18,7 @@ class WhenConfiguringTheAsciidocReporting {
 
         @Test
         fun `should be target-site-serenity by default`() {
-            assertThat(SerenityReport.outputDirectory().configuredIn(environmentVariables)).isEqualTo("target/site/serenity")
+            assertThat(SerenityReport.outputDirectory().configuredIn(environmentVariables).toString()).isEqualTo("target/site/serenity")
         }
 
         @Test
@@ -26,7 +26,7 @@ class WhenConfiguringTheAsciidocReporting {
 
             environmentVariables.setProperty("serenity.outputDirectory","/my/output/dir")
 
-            assertThat(SerenityReport.outputDirectory().configuredIn(environmentVariables)).isEqualTo("/my/output/dir")
+            assertThat(SerenityReport.outputDirectory().configuredIn(environmentVariables).toString()).isEqualTo("/my/output/dir")
         }
 
     }

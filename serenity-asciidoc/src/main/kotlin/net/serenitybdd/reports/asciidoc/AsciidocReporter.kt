@@ -6,14 +6,11 @@ import net.serenitybdd.reports.asciidoc.templates.TemplateEngine
 import net.thucydides.core.reports.OutcomeFormat
 import net.thucydides.core.reports.TestOutcomeLoader
 import net.thucydides.core.reports.TestOutcomes
-import net.thucydides.core.requirements.DefaultRequirements
-import net.thucydides.core.requirements.FileSystemRequirements
 import net.thucydides.core.requirements.reports.FileSystemRequirmentsOutcomeFactory
 import net.thucydides.core.requirements.reports.RequirementsOutcomes
 import net.thucydides.core.util.EnvironmentVariables
 import java.io.File
 import java.nio.file.Path
-import java.time.LocalDateTime
 import java.util.*
 
 /**

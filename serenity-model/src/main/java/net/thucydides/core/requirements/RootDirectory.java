@@ -67,15 +67,15 @@ public class RootDirectory {
         this.featureDirectoryName = SERENITY_FEATURES_DIRECTORY.from(environmentVariables, DEFAULT_FEATURES_ROOT_DIRECTORY);
         this.storyDirectoryName = SERENITY_STORIES_DIRECTORY.from(environmentVariables, DEFAULT_STORIES_ROOT_DIRECTORY);
 
-        if (SERENITY_FEATURES_DIRECTORY.isDefinedIn(environmentVariables)) {
-            customRequirementsDirectoryNames.add(featureDirectoryName);
-        } else {
-            defaultRequirementsDirectoryNames.add(featureDirectoryName);
-        }
         if (SERENITY_STORIES_DIRECTORY.isDefinedIn(environmentVariables)) {
             customRequirementsDirectoryNames.add(storyDirectoryName);
         } else {
             defaultRequirementsDirectoryNames.add(storyDirectoryName);
+        }
+        if (SERENITY_FEATURES_DIRECTORY.isDefinedIn(environmentVariables)) {
+            customRequirementsDirectoryNames.add(featureDirectoryName);
+        } else {
+            defaultRequirementsDirectoryNames.add(featureDirectoryName);
         }
 
         requirementsDirectoryNames = new ArrayList<>(customRequirementsDirectoryNames);

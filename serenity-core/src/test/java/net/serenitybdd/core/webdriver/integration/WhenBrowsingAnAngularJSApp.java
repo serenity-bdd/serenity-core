@@ -6,12 +6,16 @@ import net.thucydides.core.annotations.DefaultUrl;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.assertj.core.api.Assertions;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +28,7 @@ public class WhenBrowsingAnAngularJSApp {
     static class TodoApp extends PageObject {
 
         public void addTodoItem(String todo) {
-            find(ByAngular.model("newTodo")).sendKeys(todo, Keys.ENTER);
+            find(ByAngular.model("newTodo")).waitUntilVisible().sendKeys(todo, Keys.ENTER);
         }
 
         public List<String> visibleTodoItems() {
@@ -40,12 +44,17 @@ public class WhenBrowsingAnAngularJSApp {
 
     @Before
     public void openDriver() {
-        driver = new WebDriverFacade(ChromeDriver.class, new WebDriverFactory());
+        driver = new WebDriverFacade(FirefoxDriver.class, new WebDriverFactory());
         todoApp = new TodoApp().withDriver(driver);
     }
 
+    @After
+    public void closeDriver() {
+        driver.quit();
+    }
+
     @Test
-    public void shouldWaitForAngularToFinish() {
+    public void shouldProvideAccessToAngularLocatorsAndWaitForAngularToFinish() {
 
         todoApp.open();
 
@@ -55,5 +64,4 @@ public class WhenBrowsingAnAngularJSApp {
 
         Assertions.assertThat(todoApp.visibleTodoItems()).contains("Walk the dog");
     }
-
 }

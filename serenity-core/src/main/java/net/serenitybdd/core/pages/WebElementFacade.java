@@ -17,56 +17,55 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @ImplementedBy(WebElementFacadeImpl.class)
-
 public interface WebElementFacade extends WebElement, WrapsElement, Locatable, WebElementState, FindsByAccessibilityId, FindsByAndroidUIAutomator,
         FindsByIosUIAutomation, ConfigurableTimeouts {
 
-    public <T extends WebElementFacade> T then(String xpathOrCssSelector);
+    <T extends WebElementFacade> T then(String xpathOrCssSelector);
 
-    public <T extends WebElementFacade> T findBy(String xpathOrCssSelector);
+    <T extends WebElementFacade> T findBy(String xpathOrCssSelector);
 
-    public List<WebElementFacade> thenFindAll(
+    List<WebElementFacade> thenFindAll(
             String xpathOrCssSelector);
 
-    public <T extends WebElementFacade> T findBy(By selector);
+    <T extends WebElementFacade> T findBy(By selector);
 
-    public <T extends WebElementFacade> T find(By bySelector);
+    <T extends WebElementFacade> T find(By bySelector);
 
-    public <T extends WebElementFacade> T then(By bySelector);
+    <T extends WebElementFacade> T then(By bySelector);
 
-    public String getAttribute(String name);
+    String getAttribute(String name);
 
-    public List<WebElementFacade> thenFindAll(By selector);
+    List<WebElementFacade> thenFindAll(By selector);
 
-    public long getImplicitTimeoutInMilliseconds();
+    long getImplicitTimeoutInMilliseconds();
 
-    public <T extends WebElementFacade> T withTimeoutOf(int timeout, TimeUnit unit);
-
-    /**
-     * Convenience method to chain method calls more fluently.
-     */
-    public <T extends WebElementFacade> T and();
+    <T extends WebElementFacade> T withTimeoutOf(int timeout, TimeUnit unit);
 
     /**
      * Convenience method to chain method calls more fluently.
      */
-    public <T extends WebElementFacade> T then();
+    <T extends WebElementFacade> T and();
 
-    public List<String> getSelectOptions();
+    /**
+     * Convenience method to chain method calls more fluently.
+     */
+    <T extends WebElementFacade> T then();
+
+    List<String> getSelectOptions();
 
     /**
      * Type a value into a field, making sure that the field is empty first.
      *
      * @param value
      */
-    public <T extends WebElementFacade> T type(String value);
+    <T extends WebElementFacade> T type(String value);
 
     /**
      * Type a value into a field and then press Enter, making sure that the field is empty first.
      *
      * @param value
      */
-    public <T extends WebElementFacade> T typeAndEnter(String value);
+    <T extends WebElementFacade> T typeAndEnter(String value);
 
     /**
      * Type a value into a field and then press TAB, making sure that the field is empty first.
@@ -74,59 +73,59 @@ public interface WebElementFacade extends WebElement, WrapsElement, Locatable, W
      *
      * @param value
      */
-    public <T extends WebElementFacade> T typeAndTab(String value);
+    <T extends WebElementFacade> T typeAndTab(String value);
 
-    public void setWindowFocus();
+    void setWindowFocus();
 
-    public <T extends WebElementFacade> T deselectAll();
+    <T extends WebElementFacade> T deselectAll();
 
-    public <T extends WebElementFacade> T deselectByVisibleText(String label);
+    <T extends WebElementFacade> T deselectByVisibleText(String label);
 
-    public <T extends WebElementFacade> T deselectByValue(String value);
+    <T extends WebElementFacade> T deselectByValue(String value);
 
-    public <T extends WebElementFacade> T deselectByIndex(int indexValue);
+    <T extends WebElementFacade> T deselectByIndex(int indexValue);
 
-    public <T extends WebElementFacade> T selectByVisibleText(String label);
+    <T extends WebElementFacade> T selectByVisibleText(String label);
 
-    public <T extends WebElementFacade> T selectByValue(String value);
+    <T extends WebElementFacade> T selectByValue(String value);
 
-    public <T extends WebElementFacade> T selectByIndex(int indexValue);
+    <T extends WebElementFacade> T selectByIndex(int indexValue);
 
-    public <T extends WebElementFacade> T waitUntilVisible();
+    <T extends WebElementFacade> T waitUntilVisible();
 
-    public <T extends WebElementFacade> T waitUntilPresent();
+    <T extends WebElementFacade> T waitUntilPresent();
 
-    public Wait<WebDriver> waitForCondition();
+    Wait<WebDriver> waitForCondition();
 
-    public <T extends WebElementFacade> T waitUntilNotVisible();
+    <T extends WebElementFacade> T waitUntilNotVisible();
 
-    public String getValue();
+    String getValue();
 
-    public String getText();
+    String getText();
 
-    public <T extends WebElementFacade> T waitUntilEnabled();
+    <T extends WebElementFacade> T waitUntilEnabled();
 
-    public <T extends WebElementFacade> T waitUntilClickable();
+    <T extends WebElementFacade> T waitUntilClickable();
 
-    public <T extends WebElementFacade> T waitUntilDisabled();
+    <T extends WebElementFacade> T waitUntilDisabled();
 
     /**
      * Wait for an element to be visible and enabled, and then click on it.
      */
-    public void click();
+    void click();
 
-    public void clear();
+    void clear();
 
-    public String toString();
+    String toString();
 
-    public boolean containsElements(By selector);
+    boolean containsElements(By selector);
 
-    public boolean containsElements(String xpathOrCssSelector);
+    boolean containsElements(String xpathOrCssSelector);
 
-    public void shouldContainElements(By selector);
+    void shouldContainElements(By selector);
 
-    public void shouldContainElements(String xpathOrCssSelector);
+    void shouldContainElements(String xpathOrCssSelector);
 
-    public boolean hasClass(String cssClassName);
+    boolean hasClass(String cssClassName);
 
 }

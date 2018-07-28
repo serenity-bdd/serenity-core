@@ -25,19 +25,6 @@ public class WhenReadingRequirementsFromThePackageStructure {
         assertThat(requirements.get(0).getType(), equalTo("feature"));
     }
 
-
-    @Test
-    public void should_read_requirements_overview_from_a_package_hierarchy() {
-
-        // GIVEN
-        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
-        environmentVariables.setProperty("serenity.test.root", "packagerequirements");
-        PackageRequirementsTagProvider tagProvider = new PackageRequirementsTagProvider(environmentVariables).withCacheDisabled();
-
-        assertThat(tagProvider.getOverview(), equalTo("## Package Overview"));
-    }
-
-
     @Test
     public void should_read_requirements_from_a_two_level_package_hierarchy() {
 

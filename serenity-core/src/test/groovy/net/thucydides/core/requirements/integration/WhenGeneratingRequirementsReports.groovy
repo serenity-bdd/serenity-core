@@ -63,7 +63,7 @@ class WhenGeneratingRequirementsReports extends Specification {
             RequirementsOutcomeFactory requirmentsOutcomeFactory = new MultipleSourceRequirmentsOutcomeFactory([requirementsProvider], issueTracking, new ReportNameProvider())
             RequirementsOutcomes outcomes = requirmentsOutcomeFactory.buildRequirementsOutcomesFrom(noTestOutcomes)
         then:
-            outcomes.overview == "## My overview"
+            outcomes.overview == "Farming stories"
     }
 
     def someTestResults() {

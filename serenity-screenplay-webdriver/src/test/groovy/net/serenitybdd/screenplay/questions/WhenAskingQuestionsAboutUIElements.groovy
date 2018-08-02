@@ -72,8 +72,8 @@ class WhenAskingQuestionsAboutUIElements extends Specification {
 
     def "should read string text content from multiple targets"() {
         when:
-        element.getAttribute("textContent") >> "alpha"
-        element2.getAttribute("textContent") >> "beta"
+        element.getAttribute("innerText") >> "alpha"
+        element2.getAttribute("innerText") >> "beta"
         and:
         Question<String> question = TheTarget.textValuesOf(target)
         then:
@@ -82,8 +82,8 @@ class WhenAskingQuestionsAboutUIElements extends Specification {
 
     def "should read trimmed string text content from multiple targets"() {
         when:
-        element.getAttribute("textContent") >> "\nalpha "
-        element2.getAttribute("textContent") >> "\nbeta "
+        element.getAttribute("innerText") >> "\nalpha "
+        element2.getAttribute("innerText") >> "\nbeta "
         and:
         Question<String> question = TheTarget.textValuesOf(target).withNoSurroundingWhiteSpace();
         then:

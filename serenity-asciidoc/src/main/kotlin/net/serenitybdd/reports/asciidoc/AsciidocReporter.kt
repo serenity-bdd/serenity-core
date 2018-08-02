@@ -2,7 +2,7 @@ package net.serenitybdd.reports.asciidoc
 
 import net.serenitybdd.reports.asciidoc.configuration.SerenityReport
 import net.serenitybdd.reports.asciidoc.model.ReportInfo
-import net.serenitybdd.reports.asciidoc.templates.TemplateEngine
+import net.serenitybdd.reports.asciidoc.templates.FreemarkerTemplateEngine
 import net.thucydides.core.reports.OutcomeFormat
 import net.thucydides.core.reports.TestOutcomeLoader
 import net.thucydides.core.reports.TestOutcomes
@@ -39,7 +39,7 @@ class AsciidocReporter(val environmentVariables: EnvironmentVariables) {
         val writer = outputFile.bufferedWriter()
         val template = SerenityReport.template().configuredIn(environmentVariables)
 
-        TemplateEngine(environmentVariables).merge(template, fields, writer)
+        FreemarkerTemplateEngine(environmentVariables).merge(template, fields, writer)
 
         return outputFile
     }

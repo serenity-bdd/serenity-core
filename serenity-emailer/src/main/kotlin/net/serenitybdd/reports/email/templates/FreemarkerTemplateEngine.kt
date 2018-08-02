@@ -1,19 +1,18 @@
-package net.serenitybdd.reports.asciidoc.templates
+package net.serenitybdd.reports.email.templates
 
 import freemarker.template.Configuration
 import freemarker.template.TemplateExceptionHandler
-import net.serenitybdd.reports.asciidoc.configuration.SerenityReport
-import net.serenitybdd.reports.asciidoc.configuration.TemplateDirectoryProperty
+import net.serenitybdd.reports.email.SerenityEmailReport
 import net.thucydides.core.util.EnvironmentVariables
 import java.io.Writer
 
 
-class TemplateEngine(environmentVariables: EnvironmentVariables) {
+class FreemarkerTemplateEngine(environmentVariables: EnvironmentVariables) {
 
     val configuration : Configuration = Configuration(Configuration.VERSION_2_3_28)
 
     init {
-        val templateDirectory = SerenityReport.templateDirectory().configuredIn(environmentVariables)
+        val templateDirectory = SerenityEmailReport.templateDirectory().configuredIn(environmentVariables)
         configuration.setDirectoryForTemplateLoading(templateDirectory)
         configuration.defaultEncoding = "UTF-8"
         configuration.templateExceptionHandler = TemplateExceptionHandler.RETHROW_HANDLER

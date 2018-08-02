@@ -735,6 +735,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private FileFilter thatAreNarratives() {
         return file -> file.getName().toLowerCase().equals("narrative.txt")
                 || file.getName().toLowerCase().equals("narrative.md")
+                || file.getName().toLowerCase().equals("readme.md")
                 || file.getName().toLowerCase().equals("placeholder.txt");
     }
 

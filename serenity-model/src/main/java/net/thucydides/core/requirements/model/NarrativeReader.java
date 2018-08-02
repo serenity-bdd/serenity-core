@@ -121,6 +121,7 @@ public class NarrativeReader {
     private FilenameFilter calledNarrativeOrOverview() {
         return (file, name) -> (name.toLowerCase().equals("narrative.txt")
                                 || name.toLowerCase().equals("narrative.md")
+                                || name.toLowerCase().equals("readme.md")
                                 || name.toLowerCase().equals("overview.txt")
                                 || name.toLowerCase().equals("overview.md"));
     }

@@ -101,13 +101,13 @@ class WhenGeneratingAnEmailableReport {
         @Test
         fun `should list all configured summary tag types as headings`() {
             val tagTitles = parsedReport.getElementsByClass("tag-title").map { element -> element.text() }
-            assertThat(tagTitles).containsExactly("group","feature")
+            assertThat(tagTitles).containsExactly("Group","Feature")
         }
 
         @Test
         fun `should list the tags of each specified tag type as sub-headings`() {
             val tagSubTitles = parsedReport.getElementsByClass("tag-subtitle").map { element -> element.text() }
-            assertThat(tagSubTitles).contains("alpha","beta","gamma")
+            assertThat(tagSubTitles).contains("Alpha","Beta","Gamma")
         }
 
         @Test
@@ -115,6 +115,73 @@ class WhenGeneratingAnEmailableReport {
             val tagSubTitles = parsedReport.getElementsByClass("tag-subtitle").map { element -> element.text() }
             assertThat(tagSubTitles).contains("Broken scenarios","Compromised scenarios","Failed scenarios","Ignored scenarios",
                                               "Mixed scenarios","Passing scenarios","Pending scenarios")
+        }
+
+        @Test
+        fun `should list top most frequent failures features`() {
+            val unstableFeatures = parsedReport.getElementsByClass("frequent-failure").map { element -> element.text() }
+            assertThat(unstableFeatures).containsExactly("Assertion error","Illegal argument exception")
+        }
+
+        @Test
+        fun `should list top most unstable features`() {
+            val unstableFeatures = parsedReport.getElementsByClass("unstable-feature").map { element -> element.text() }
+            assertThat(unstableFeatures).containsExactly("Failed scenarios","Broken scenarios","Mixed scenarios")
+        }
+    }
+
+    @Nested
+    inner class ReportsWithFailureScoreboards {
+        private val generatedReport: File
+        private val reportContents: String
+        private val parsedReport: Document
+
+        init {
+            generatedReport = EmailReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_A_SINGLE_TEST))
+            reportContents = generatedReport.readText()
+            parsedReport = parse(reportContents)
+        }
+
+
+        @Test
+        fun `should list feature tags in their shortened form`() {
+            val tagSubTitles = parsedReport.getElementsByClass("tag-subtitle").map { element -> element.text() }
+            assertThat(tagSubTitles).contains("Broken scenarios","Compromised scenarios","Failed scenarios","Ignored scenarios",
+                    "Mixed scenarios","Passing scenarios","Pending scenarios")
+        }
+
+        @Test
+        fun `should list top most frequent failures features`() {
+            val unstableFeatures = parsedReport.getElementsByClass("frequent-failure").map { element -> element.text() }
+            assertThat(unstableFeatures).containsExactly("Assertion error","Illegal argument exception")
+        }
+
+        @Test
+        fun `should list top most unstable features`() {
+            val unstableFeatures = parsedReport.getElementsByClass("unstable-feature").map { element -> element.text() }
+            assertThat(unstableFeatures).containsExactly("Failed scenarios","Broken scenarios","Mixed scenarios")
+        }
+
+        @Nested
+        inner class AndAConfiguredScoreboardSize {
+            private val generatedReport: File
+            private val reportContents: String
+            private val parsedReport: Document
+
+            init {
+                environmentVariables.setProperty("report.scoreboard.size", "2")
+
+                generatedReport = EmailReporter(environmentVariables).generateReportFrom(Paths.get(TEST_OUTCOMES_WITH_A_SINGLE_TEST))
+                reportContents = generatedReport.readText()
+                parsedReport = parse(reportContents)
+            }
+
+
+            @Test
+            fun `should list no more than the configured number of errors or  unstable features`() {
+                val unstableFeatures = parsedReport.getElementsByClass("unstable-feature").map { element -> element.text() }
+                assertThat(unstableFeatures).containsExactly("Failed scenarios", "Broken scenarios")
+            }
         }
     }
 }

@@ -30,7 +30,7 @@ dependencies {
 
     // TEST DEPENDENCIES
     testCompile project(':serenity-core')
-    testCompile "org.jsoup:jsoup:1.11.3"
+    testCompile "org.jsoup:jsoup:1.10.3"
 
     // JUnit 5
     testImplementation(

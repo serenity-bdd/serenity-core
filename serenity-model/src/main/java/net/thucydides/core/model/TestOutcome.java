@@ -861,6 +861,12 @@ public class TestOutcome {
                 .anyMatch( tag -> tag.getType().equalsIgnoreCase(tagType) );
     }
 
+    public boolean hasTagWithTypes(List<String> tagTypes) {
+        return java.util.Optional.ofNullable(tags).orElse(Collections.emptySet())
+                .stream()
+                .anyMatch( tag -> tagTypes.contains(tag.getType()));
+    }
+
     public int getDataTableRowCount() {
         if (dataTable == null) { return 0; }
         return dataTable.getSize();

@@ -9,20 +9,16 @@ import net.thucydides.core.util.EnvironmentVariables
 class TagCoverage(val environmentVariables: EnvironmentVariables, val testOutcomes: TestOutcomes) {
 
     companion object {
-        const val REPORTED_TAG_TYPES = "report.tagtypes"
+        fun from(testOutcomes: TestOutcomes) = TagCoverageBuilder(testOutcomes)
     }
+}
 
-    val tagCoverageByType = displayedTagsConfiguredIn(environmentVariables, testOutcomes)
-
-    private fun displayedTagsConfiguredIn(environmentVariables: EnvironmentVariables, testOutcomes: TestOutcomes): List<CoverageByTagType> {
-        val displayedTagTypes = environmentVariables.getProperty(REPORTED_TAG_TYPES, "")
-                .split(",")
-                .map { value -> value.trim() }
-                .filter { value -> value.isNotEmpty() }
-
-        return displayedTagTypes.map { displayedTagType -> CoverageByTagType(displayedTagType, testOutcomes.withTagType(displayedTagType)) }
+class TagCoverageBuilder(val testOutcomes: TestOutcomes) {
+    fun forTagTypes(displayedTagTypes : List<String>) :  List<CoverageByTagType> {
+        return displayedTagTypes.map {
+            displayedTagType -> CoverageByTagType(displayedTagType.capitalize(), testOutcomes.withTagType(displayedTagType))
+        }
     }
-
 }
 
 class CoverageByTagType(val tagType: String, val testOutcomes: TestOutcomes) {
@@ -34,8 +30,8 @@ class CoverageByTagType(val tagType: String, val testOutcomes: TestOutcomes) {
 
     private fun coverageFor(testTag : TestTag) : CoverageByTag {
         val testOutcomesForTag = testOutcomes.withTag(testTag)
-        val successRate = testOutcomesForTag.formattedPercentage.withResult(TestResult.SUCCESS)
-        return CoverageByTag(shortened(testTag.name),
+        val successRate = testOutcomesForTag.formattedPercentage.withResult(TestResult.SUCCESS,0)
+        return CoverageByTag(shortened(testTag.name).capitalize(),
                              testOutcomesForTag.testCount,
                              successRate,
                              countByResultLabelFrom(testOutcomesForTag),

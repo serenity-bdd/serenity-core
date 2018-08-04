@@ -6,7 +6,6 @@ import net.serenitybdd.reports.io.testOutcomesIn
 import net.serenitybdd.reports.outcomes.averageDurationOf
 import net.serenitybdd.reports.outcomes.formattedDuration
 import net.serenitybdd.reports.outcomes.maxDurationOf
-import net.thucydides.core.model.TestResult
 import net.thucydides.core.model.TestResult.*
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.util.EnvironmentVariables
@@ -47,7 +46,6 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) {
         writer.use {
             val template = SerenityEmailReport.template().configuredIn(environmentVariables)
             ThymeleafTemplateEngine(environmentVariables).merge(template, fields, writer)
-//          FreemarkerTemplateEngine(environmentVariables).merge(template, fields, writer)
         }
 
         return outputFile
@@ -56,8 +54,9 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) {
     private fun templateFields(environmentVariables: EnvironmentVariables,
                                testOutcomes: TestOutcomes): Map<String, Any> {
         val reportTitle = SerenityEmailReport.reportTitle().configuredIn(environmentVariables)
-
+        val scoreboardSize = SerenityEmailReport.scoreboardSize().configuredIn(environmentVariables)
         val customReportFields = CustomReportFields(environmentVariables)
+        val tagTypes = SerenityEmailReport.tagTypes().configuredIn(environmentVariables)
 
         val fields = hashMapOf(
                 "testOutcomes" to testOutcomes,
@@ -74,7 +73,9 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) {
                         averageTestDuration = formattedDuration(averageDurationOf(testOutcomes.outcomes)),
                         maxTestDuration = formattedDuration(maxDurationOf(testOutcomes.outcomes))
                 ),
-                "coverage" to TagCoverage(environmentVariables,testOutcomes),
+                "frequentFailures" to FrequentFailures.from(testOutcomes).withMaxOf(scoreboardSize),
+                "unstableFeatures" to UnstableFeatures.from(testOutcomes).withMaxOf(scoreboardSize),
+                "coverage" to TagCoverage.from(testOutcomes).forTagTypes(tagTypes),
                 "customFields" to customReportFields.fieldNames,
                 "customFieldValues" to customReportFields.values,
                 "formatted" to Formatted(),

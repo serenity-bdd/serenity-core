@@ -23,7 +23,7 @@ import java.time.ZonedDateTime
 class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedReport {
     override fun getName(): String = "email"
 
-    private val LOGGER = LoggerFactory.getLogger(SerenityEmailReport::class.java!!)
+    private val LOGGER = LoggerFactory.getLogger(SerenityEmailReport::class.java)
 
     constructor() : this(Injectors.getInjector().getProvider<EnvironmentVariables>(EnvironmentVariables::class.java).get())
 
@@ -55,7 +55,7 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedRe
 
         writer.use {
             val template = SerenityEmailReport.template().configuredIn(environmentVariables)
-            ThymeleafTemplateEngine(environmentVariables).merge(template, fields, writer)
+            ThymeleafTemplateEngine().merge(template, fields, writer)
         }
 
         return outputFile

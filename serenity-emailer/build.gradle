@@ -10,6 +10,12 @@ buildscript {
 }
 apply plugin: 'kotlin'
 
+
+ext {
+    bintrayPackage = 'serenity-emailer'
+    projectDescription = 'Serenity Email Report'
+}
+
 test {
     useJUnitPlatform {
         includeEngines 'junit-jupiter'

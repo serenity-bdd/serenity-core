@@ -8,7 +8,7 @@ fun maxDurationOf(outcomes: List<TestOutcome>): Duration = Duration.ofMillis(
 )
 
 fun averageDurationOf(outcomes: List<TestOutcome>): Duration = Duration.ofMillis(
-        if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> outcome.duration }.average()!!.toLong()
+        if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> outcome.duration }.average().toLong()
 )
 
 fun formattedDuration(duration: Duration): String {

@@ -8,7 +8,7 @@ import org.thymeleaf.templateresolver.DefaultTemplateResolver
 import java.io.Writer
 
 
-class ThymeleafTemplateEngine(environmentVariables: EnvironmentVariables) {
+class ThymeleafTemplateEngine() {
 
     val templateEngine : TemplateEngine;
 

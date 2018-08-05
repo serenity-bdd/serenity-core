@@ -5,7 +5,7 @@ package net.thucydides.core.issues;
  */
 public interface IssueTracking {
 
-    public String getIssueTrackerUrl();
-    public String getShortenedIssueTrackerUrl();
+    String getIssueTrackerUrl();
+    String getShortenedIssueTrackerUrl();
 
 }

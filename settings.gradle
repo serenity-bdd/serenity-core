@@ -12,6 +12,8 @@ include 'serenity-test-utils',
         'serenity-browsermob-plugin',
         'serenity-screenplay',
         'serenity-screenplay-webdriver',
-        'serenity-screenplay-rest'
+        'serenity-screenplay-rest',
+        'serenity-asciidoc',
+        'serenity-emailer'
 
 

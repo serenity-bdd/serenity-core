@@ -90,7 +90,7 @@ public class RequirementsOutcomes {
                 .collect(Collectors.toList());
     }
 
-    private RequirementOutcome requirementOutcomeFor(Requirement requirement) {
+    public RequirementOutcome requirementOutcomeFor(Requirement requirement) {
         TestOutcomes outcomesForRequirement = testOutcomes.forRequirement(requirement);
 
         long requirementsWithoutTests = countRequirementsWithoutTestsIn(requirement);

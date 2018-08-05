@@ -1245,6 +1245,16 @@ public enum ThucydidesSystemProperty {
      * due to step nesting rather than actual infinite recursion.
      */
     SERENITY_MAXIMUM_STEP_NESTING_DEPTH,
+
+    /**
+     * The maximum number of entries to appear on report scoreboards (default 5)
+     */
+    REPORT_SCOREBOARD_SIZE,
+
+    /**
+     * What tag types should be listed in the report summary
+     */
+    REPORT_TAGTYPES
     ;
 
     private String propertyName;

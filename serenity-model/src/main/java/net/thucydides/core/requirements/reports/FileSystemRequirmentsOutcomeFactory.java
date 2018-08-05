@@ -2,6 +2,7 @@ package net.thucydides.core.requirements.reports;
 
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.issues.IssueTracking;
+import net.thucydides.core.issues.SystemPropertiesIssueTracking;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.FileSystemRequirementsTagProvider;
@@ -22,6 +23,21 @@ public class FileSystemRequirmentsOutcomeFactory implements RequirementsOutcomeF
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FileSystemRequirmentsOutcomeFactory.class);
 
+    public FileSystemRequirmentsOutcomeFactory(EnvironmentVariables environmentVariables) {
+        this(environmentVariables,
+             new SystemPropertiesIssueTracking(),
+             new ReportNameProvider());
+    }
+
+    public FileSystemRequirmentsOutcomeFactory(EnvironmentVariables environmentVariables,
+                                               IssueTracking issueTracking,
+                                               ReportNameProvider reportNameProvider) {
+        this.issueTracking = issueTracking;
+        this.environmentVariables = environmentVariables;
+        this.tagProvider = new FileSystemRequirementsTagProvider(environmentVariables);
+        this.reportNameProvider = reportNameProvider;
+    }
+
     public FileSystemRequirmentsOutcomeFactory(EnvironmentVariables environmentVariables,
                                                IssueTracking issueTracking,
                                                ReportNameProvider reportNameProvider,
@@ -30,7 +46,6 @@ public class FileSystemRequirmentsOutcomeFactory implements RequirementsOutcomeF
         this.environmentVariables = environmentVariables;
         this.tagProvider = new FileSystemRequirementsTagProvider(environmentVariables, rootDirectoryPath);
         this.reportNameProvider = reportNameProvider;
-
     }
 
     public RequirementsOutcomes buildRequirementsOutcomesFrom(TestOutcomes testOutcomes) {

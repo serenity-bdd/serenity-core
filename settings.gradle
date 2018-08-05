@@ -13,7 +13,6 @@ include 'serenity-test-utils',
         'serenity-screenplay',
         'serenity-screenplay-webdriver',
         'serenity-screenplay-rest',
-        'serenity-asciidoc',
         'serenity-emailer'
 
 

@@ -40,7 +40,7 @@ sealed class SerenityEmailReport {
         }
 
         fun tagTypes() : ReportProperty<List<String>> {
-            return StringListReportProperty(ThucydidesSystemProperty.REPORT_TAGTYPES)
+            return StringListReportProperty(ThucydidesSystemProperty.REPORT_TAGTYPES, listOf("feature"))
         }
 
     }

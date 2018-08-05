@@ -6,9 +6,12 @@ import net.serenitybdd.reports.io.testOutcomesIn
 import net.serenitybdd.reports.outcomes.averageDurationOf
 import net.serenitybdd.reports.outcomes.formattedDuration
 import net.serenitybdd.reports.outcomes.maxDurationOf
+import net.thucydides.core.guice.Injectors
 import net.thucydides.core.model.TestResult.*
+import net.thucydides.core.reports.ExtendedReport
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.util.EnvironmentVariables
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.file.Path
 import java.time.Duration
@@ -17,7 +20,12 @@ import java.time.ZonedDateTime
 /**
  * Generate an HTML summary report from a set of Serenity test outcomes in a given directory.
  */
-class EmailReporter(val environmentVariables: EnvironmentVariables) {
+class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedReport {
+    override fun getName(): String = "email"
+
+    private val LOGGER = LoggerFactory.getLogger(SerenityEmailReport::class.java!!)
+
+    constructor() : this(Injectors.getInjector().getProvider<EnvironmentVariables>(EnvironmentVariables::class.java).get())
 
     companion object {
         val DISPLAYED_TEST_RESULTS = listOf(SUCCESS, PENDING, IGNORED, FAILURE, ERROR, COMPROMISED)
@@ -26,7 +34,9 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) {
     /**
      * Generate an HTMLsummary report using the json files in the specified directory
      */
-    fun generateReportFrom(sourceDirectory: Path): File {
+    override fun generateReportFrom(sourceDirectory: Path): File {
+
+        LOGGER.info("GENERATING EMAIL REPORT")
 
         // Fetch the test outcomes
         val testOutcomes = testOutcomesIn(sourceDirectory)

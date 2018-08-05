@@ -3,6 +3,7 @@ package net.serenitybdd.plugins.gradle
 import net.serenitybdd.core.history.FileSystemTestOutcomeSummaryRecorder
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.guice.Injectors
+import net.thucydides.core.reports.ExtendedReports
 import net.thucydides.core.reports.ResultChecker
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter
 import net.thucydides.core.webdriver.Configuration
@@ -52,6 +53,11 @@ class SerenityPlugin implements Plugin<Project> {
                     reporter.setGenerateTestOutcomeReports();
                 }
                 reporter.generateReportsForTestResultsFrom(reportDirectory.toFile())
+
+                List<String> extendedReportTypes =  System.properties.getProperty('serenity.reports').tokenize(", ")
+                ExtendedReports.named(extendedReportTypes).forEach {
+                    report -> report.generateReportFrom(reportDirectory)
+                }
             }
         }
 

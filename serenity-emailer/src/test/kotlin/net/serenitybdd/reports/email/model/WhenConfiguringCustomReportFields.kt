@@ -64,16 +64,17 @@ class WhenConfiguringCustomReportFields {
 
     @Test
     fun `field values can be defined from system properties using the dollar notation`() {
+        System.setProperty("COLOR","blue")
         val environmentVariables = SystemEnvironmentVariables()
 
         // GIVEN
-        environmentVariables.setProperty("report.customfields.java_home","\${JAVA_HOME}")
+        environmentVariables.setProperty("report.customfields.color","\${HOME}")
 
         // WHEN
         val customReportFields = CustomReportFields(environmentVariables)
 
         // THEN
-        assertThat(customReportFields.fieldNames).containsExactly("Java home")
+        assertThat(customReportFields.fieldNames).containsExactly("Color")
         assertThat(File(customReportFields.values[0])).exists()
     }
 

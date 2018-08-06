@@ -47,6 +47,7 @@ public class FirefoxDriverProvider implements DriverProvider {
     }
 
     @Override
+    // TODO: Add support for runtime options
     public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();

@@ -61,6 +61,13 @@ public class FirefoxProfileEnhancer {
 
     public void addPreferences(FirefoxProfile profile) {
         String preferences = environmentVariables.getProperty(ThucydidesSystemProperty.FIREFOX_PREFERENCES);
+        String driverOptions = environmentVariables.getProperty(ThucydidesSystemProperty.DRIVER_OPTIONS);
+
+        applyPreferences(profile, preferences);
+        applyPreferences(profile, driverOptions);
+    }
+
+    private void applyPreferences(FirefoxProfile profile, String preferences) {
         getPreferenceValuesFrom(preferences).forEach(
                 value -> value.applyTo(profile)
         );

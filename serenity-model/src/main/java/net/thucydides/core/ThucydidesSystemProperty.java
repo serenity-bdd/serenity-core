@@ -588,6 +588,11 @@ public enum ThucydidesSystemProperty {
     FIREFOX_PREFERENCES,
 
     /**
+     * Used to specify either chrome options or firefox preferences, depending on which driver is being used.
+     */
+    DRIVER_OPTIONS,
+
+    /**
      * Full path to the Firefox profile to be used with Firefox.
      * You can include Java system properties ${user.dir}, ${user.home} and the Windows environment variables %APPDIR%
      * and %USERPROFILE (assuming these are correctly set in the environment)
@@ -1216,7 +1221,7 @@ public enum ThucydidesSystemProperty {
     HEADLESS_MODE,
 
     /**
-     * Where to find images used in the reports (defaults to src/test/resources/assets)
+     * Where to find images used in the reports (defaults to src/test/resourcesFC/assets)
      */
     REPORT_ASSETS_DIRECTORY,
 

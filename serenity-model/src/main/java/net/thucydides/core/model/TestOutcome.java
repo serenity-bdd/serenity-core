@@ -239,6 +239,11 @@ public class TestOutcome {
     List<String> issues;
     List<String> versions;
 
+    /**
+     * Scenario outline text.
+     */
+    private String scenarioOutline;
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestOutcome.class);
 
@@ -2306,7 +2311,18 @@ public class TestOutcome {
         return new ArrayList<>();
     }
 
+    public void useScenarioOutline(String scenarioOutline) {
+        this.scenarioOutline = scenarioOutline;
+    }
+
     public String getDataDrivenSampleScenario() {
+        if (scenarioOutline == null) {
+            scenarioOutline = buildScenarioOutline();
+        }
+        return scenarioOutline;
+    }
+
+    private String buildScenarioOutline() {
         if (!isDataDriven() || getTestSteps().isEmpty() || !atLeastOneStepHasChildren()) {
             return "";
         }

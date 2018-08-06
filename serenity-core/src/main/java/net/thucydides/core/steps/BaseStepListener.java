@@ -1014,7 +1014,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private String exampleTitle(int exampleNumber, Map<String, String> data) {
-        return String.format("%s #%s: %s", getCurrentTestOutcome().getTitle(), exampleNumber, data);
+        return String.format("Example #%s: %s", exampleNumber, data);
     }
 
     public void exampleFinished() {

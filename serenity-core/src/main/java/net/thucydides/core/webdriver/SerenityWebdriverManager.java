@@ -192,14 +192,15 @@ public class SerenityWebdriverManager implements WebdriverManager {
         return null;
     }
 
-    public WebDriver getWebdriver(final String driverName) {
+    public WebDriver getWebdriver(final String driverName, String options) {
 
         String name = (isEmpty(driverName)) ?  inThisTestThread().getCurrentDriverName() : driverName;
 
         return instantiatedThreadLocalWebDriver(configuration, webDriverFactory, name, options);
+    }
 
-       // registerDriverInGlobalDrivers(activeDriver);
-       // return activeDriver;
+    public WebDriver getWebdriver(final String driverName) {
+        return getWebdriver(driverName, options);
     }
 
     public WebDriver getCurrentDriver() {

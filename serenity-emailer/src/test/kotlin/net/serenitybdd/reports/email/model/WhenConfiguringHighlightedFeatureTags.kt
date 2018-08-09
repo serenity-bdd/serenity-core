@@ -40,4 +40,5 @@ class WhenConfiguringHighlightedFeatureTags {
         // THEN
         assertThat(displayedTagGroups).containsExactly("epic","story")
     }
+
 }

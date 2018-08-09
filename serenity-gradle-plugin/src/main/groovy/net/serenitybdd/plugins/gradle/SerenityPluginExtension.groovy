@@ -13,5 +13,6 @@ class SerenityPluginExtension {
     String jiraProject
     String sourceDirectory = outputDirectory
     String requirementsBaseDir
-    boolean generateOutcomes;
+    boolean generateOutcomes
+    List<String> reports
 }

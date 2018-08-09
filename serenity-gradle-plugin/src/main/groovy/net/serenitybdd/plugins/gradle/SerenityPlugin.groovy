@@ -40,7 +40,9 @@ class SerenityPlugin implements Plugin<Project> {
                 }
                 logger.lifecycle("Generating Serenity Reports for ${project.serenity.projectKey} to directory $reportDirectory")
                 System.properties['serenity.project.key'] = project.serenity.projectKey
-                System.properties['serenity.test.requirements.basedir'] = project.serenity.requirementsBaseDir
+                if (project.serenity.requirementsBaseDir) {
+                    System.properties['serenity.test.requirements.basedir'] = project.serenity.requirementsBaseDir
+                }
                 def reporter = new HtmlAggregateStoryReporter(project.serenity.projectKey)
 
                 reporter.outputDirectory = reportDirectory.toFile()
@@ -53,10 +55,30 @@ class SerenityPlugin implements Plugin<Project> {
                     reporter.setGenerateTestOutcomeReports();
                 }
                 reporter.generateReportsForTestResultsFrom(reportDirectory.toFile())
+            }
+        }
 
-                List<String> extendedReportTypes =  System.properties.getProperty('serenity.reports').tokenize(", ")
-                ExtendedReports.named(extendedReportTypes).forEach {
-                    report -> report.generateReportFrom(reportDirectory)
+        project.task('reports') {
+            group = 'Serenity BDD'
+            description = 'Generates extended Serenity reports'
+            doLast {
+                updateProperties(project)
+                reportDirectory = prepareReportDirectory(project)
+                if (!project.serenity.projectKey) {
+                    project.serenity.projectKey = project.name
+                }
+                logger.lifecycle("Generating Serenity Reports for ${project.serenity.projectKey} to directory $reportDirectory")
+                System.properties['serenity.project.key'] = project.serenity.projectKey
+                if (project.serenity.requirementsBaseDir) {
+                    System.properties['serenity.test.requirements.basedir'] = project.serenity.requirementsBaseDir
+                }
+
+                List<String> extendedReportTypes = project.serenity.reports
+                if (extendedReportTypes) {
+                    logger.lifecycle("PROCESSING EXTENDED REPORTS: " + extendedReportTypes)
+                    ExtendedReports.named(extendedReportTypes).forEach {
+                        report -> report.generateReportFrom(reportDirectory)
+                    }
                 }
             }
         }
@@ -111,7 +133,7 @@ class SerenityPlugin implements Plugin<Project> {
                 historyDirectory = prepareHistoryDirectory(project)
 
                 new FileSystemTestOutcomeSummaryRecorder(historyDirectory,
-                                                         deletePreviousHistory())
+                        deletePreviousHistory())
                         .recordOutcomeSummariesFrom(project.serenity.sourceDirectory);
 
             }

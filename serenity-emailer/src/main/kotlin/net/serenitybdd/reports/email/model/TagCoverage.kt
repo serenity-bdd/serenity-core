@@ -4,6 +4,7 @@ import net.thucydides.core.model.TestResult
 import net.thucydides.core.model.TestTag
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.util.EnvironmentVariables
+import net.thucydides.core.util.NameConverter.humanize
 
 
 class TagCoverage(val environmentVariables: EnvironmentVariables, val testOutcomes: TestOutcomes) {
@@ -31,7 +32,7 @@ class CoverageByTagType(val tagType: String, val testOutcomes: TestOutcomes) {
     private fun coverageFor(testTag : TestTag) : CoverageByTag {
         val testOutcomesForTag = testOutcomes.withTag(testTag)
         val successRate = testOutcomesForTag.formattedPercentage.withResult(TestResult.SUCCESS,0)
-        return CoverageByTag(shortened(testTag.name).capitalize(),
+        return CoverageByTag(humanize(shortened(testTag.name)),
                              testOutcomesForTag.testCount,
                              successRate,
                              countByResultLabelFrom(testOutcomesForTag),

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class BreadcrumbTagFilter {
 
@@ -46,12 +47,12 @@ public class BreadcrumbTagFilter {
     }
 
     public List<TestTag> getRequirementBreadcrumbsFrom(TestOutcome testOutcome) {
-        List<TestTag> requirementTypeTags = new ArrayList<>();
-        for(Requirement ancestor : requirementsService.getAncestorRequirementsFor(testOutcome)) {
-            requirementTypeTags.add(ancestor.asTag());
 
-        }
-        return requirementTypeTags;
+        List<Requirement> ancestors = requirementsService.getAncestorRequirementsFor(testOutcome);
+
+        if (ancestors == null) { return new ArrayList<>(); }
+
+        return ancestors.stream().map(Requirement::asTag).collect(Collectors.toList());
     }
 
     private RequirementTagFilter requirementTagOfType(String requirementType) {

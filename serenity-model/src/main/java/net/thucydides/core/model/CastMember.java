@@ -59,8 +59,8 @@ public class CastMember {
         return can;
     }
 
-    public Boolean hasFacts() { return !has.isEmpty();}
-    public Boolean hasAbilities() { return !can.isEmpty();}
+    public Boolean hasFacts() { return (has != null && !has.isEmpty()); }
+    public Boolean hasAbilities() { return (can != null && !can.isEmpty()); }
 
     public List<String> getHas() {
         return has;

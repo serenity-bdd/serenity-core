@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static net.serenitybdd.screenplay.shopping.questions.DisplayedPrices.thePriceIsCorrectlyDisplayed;
@@ -47,6 +48,16 @@ public class DanaGoesShoppingSample {
         then(dana).should(seeThat(theTotalCost(), equalTo(15)),
                           seeThat(theTotalCostIncludingDelivery(), greaterThanOrEqualTo(20)),
                           seeThat(theThankYouMessage(), equalTo("Thank you")));
+    }
+
+    @Test
+    public void shouldBeAbleToPurchaseSomeItemsWithDeliveryUsingPredicates() {
+        givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
+                andPurchased().aPear().thatCosts(5).dollars());
+
+        when(dana).attemptsTo(haveThemDelivered);
+
+        then(dana).should(seeThat("Total cost", theTotalCost(), Predicate.isEqual(15)));
     }
 
     @Test

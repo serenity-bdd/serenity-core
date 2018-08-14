@@ -4,6 +4,7 @@ import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.PeopleAreTerriblyIncorrect;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.GivenWhenThen;
 import net.serenitybdd.screenplay.shopping.questions.NestedThankYouMessage;
 import net.serenitybdd.screenplay.shopping.tasks.HaveItemsDelivered;
 import net.serenitybdd.screenplay.shopping.tasks.Purchase;
@@ -16,6 +17,7 @@ import org.junit.runner.RunWith;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static java.util.function.Predicate.isEqual;
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static net.serenitybdd.screenplay.shopping.questions.DisplayedPrices.thePriceIsCorrectlyDisplayed;
 import static net.serenitybdd.screenplay.shopping.questions.DisplayedPrices.thePriceIsIncorrectlyDisplayed;
@@ -57,7 +59,8 @@ public class DanaGoesShoppingSample {
 
         when(dana).attemptsTo(haveThemDelivered);
 
-        then(dana).should(seeThat("Total cost", theTotalCost(), Predicate.isEqual(15)));
+        then(dana).should(seeThat("Total cost", theTotalCost(),
+                                   GivenWhenThen.returnsAValueThat("is equal to 15", isEqual(15))));
     }
 
     @Test

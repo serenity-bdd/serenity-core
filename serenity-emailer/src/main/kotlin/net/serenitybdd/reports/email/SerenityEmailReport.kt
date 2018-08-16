@@ -18,6 +18,7 @@ sealed class SerenityEmailReport {
         private const val DEFAULT_TITLE = "Serenity Summary Report"
         private const val DEFAULT_TEMPLATE = "templates/email/serenity-summary-report-inlined.html"
         private const val DEFAULT_SCOREBOARD_SIZE= 5
+        private const val DEFAULT_TEMPLATE_DIRECTORY = "templates/email"
 
         fun outputDirectory() : ReportProperty<Path> {
             return PathReportProperty(ThucydidesSystemProperty.SERENITY_OUTPUT_DIRECTORY, DEFAULT_OUTPUT_DIRECTORY)

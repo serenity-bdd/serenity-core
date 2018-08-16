@@ -9,18 +9,24 @@ import java.io.File
  * This is either the templates/asciidoc directory on the classpath,
  * or the parent directory of the specified custom template.
  */
-class TemplateDirectoryProperty : ReportProperty<File> {
+class TemplateDirectoryProperty(val defaultTemplateDirectory : String,
+                                val templateProperty: String) : ReportProperty<File> {
 
     companion object {
-        private const val DEFAULT_TEMPLATE_DIRECTORY = "templates/email"
+        fun definedByProperty(propertyName : String) : TemplateDirectoryPropertyBuilder = TemplateDirectoryPropertyBuilder(propertyName)
     }
 
     override fun configuredIn(environmentVariables: EnvironmentVariables) : File {
         val customTemplate = CustomReportTemplateProperty(templateProperty).configuredIn(environmentVariables)
         return if (customTemplate == null) {
-            File(ClassLoader.getSystemResource(DEFAULT_TEMPLATE_DIRECTORY).path)
+            File(ClassLoader.getSystemResource(defaultTemplateDirectory).path)
         } else {
             File(customTemplate).parentFile
         }
     }
+
+    class TemplateDirectoryPropertyBuilder(val propertyName: String) {
+        fun withDefaultValueOf(defaultValue: String) : TemplateDirectoryProperty = TemplateDirectoryProperty(defaultValue, propertyName)
+    }
 }
+

@@ -6,11 +6,12 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import  org.junit.jupiter.api.BeforeEach
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WhenConfiguringReportProperties {
 
-    private val environmentVariables: EnvironmentVariables = MockEnvironmentVariables()
+    private var environmentVariables: EnvironmentVariables = MockEnvironmentVariables()
 
 
     @Nested
@@ -26,7 +27,7 @@ class WhenConfiguringReportProperties {
 
         @Test
         fun `providing a default value`() {
-            assertThat(StringReportProperty("favorite.city","Rome").configuredIn(environmentVariables)).isEqualTo("Rome")
+            assertThat(StringReportProperty("favorite.city", "Rome").configuredIn(environmentVariables)).isEqualTo("Rome")
         }
 
         @Test
@@ -48,7 +49,7 @@ class WhenConfiguringReportProperties {
 
         @Test
         fun `providing a default value`() {
-            assertThat(IntReportProperty("favorite.integer",7).configuredIn(environmentVariables)).isEqualTo(7)
+            assertThat(IntReportProperty("favorite.integer", 7).configuredIn(environmentVariables)).isEqualTo(7)
         }
 
         @Test
@@ -66,23 +67,61 @@ class WhenConfiguringReportProperties {
 
         @Test
         fun `using a comma-separated list of values`() {
-            assertThat(StringListReportProperty("favorite.colors").configuredIn(environmentVariables)).isEqualTo(listOf("red","blue"))
+            assertThat(StringListReportProperty("favorite.colors").configuredIn(environmentVariables)).isEqualTo(listOf("red", "blue"))
         }
 
         @Test
         fun `should ignore spaces`() {
-            assertThat(StringListReportProperty("favorite.colors.with.spaces").configuredIn(environmentVariables)).isEqualTo(listOf("red","blue"))
+            assertThat(StringListReportProperty("favorite.colors.with.spaces").configuredIn(environmentVariables)).isEqualTo(listOf("red", "blue"))
         }
 
         @Test
         fun `providing a default value`() {
-            assertThat(StringListReportProperty("favorite.numbers",listOf("1","2")).configuredIn(environmentVariables)).isEqualTo(listOf("1","2"))
+            assertThat(StringListReportProperty("favorite.numbers", listOf("1", "2")).configuredIn(environmentVariables)).isEqualTo(listOf("1", "2"))
         }
 
         @Test
         fun `the default is an empty list`() {
             assertThat(StringListReportProperty("favorite.things").configuredIn(environmentVariables)).isEqualTo(listOf<String>())
         }
+    }
+
+    @Nested
+    inner class ForTemplateFiles {
+
+        val absoluteTemplateFile = createTempFile("templates",".ftl")
+        val relativeTemplateFile = "src/test/resources/sample-template.ftl"
+
+        @BeforeEach
+        fun reset() {
+            environmentVariables = MockEnvironmentVariables()
+        }
+
+        @Test
+        fun `we can define template files using an absolute path`() {
+
+            environmentVariables.setProperty("reports.templates.email", absoluteTemplateFile.absolutePath)
+
+            assertThat(TemplateFileProperty("default-template.ftl","reports.templates.email")
+                       .configuredIn(environmentVariables)).isEqualTo(absoluteTemplateFile.absolutePath)
+        }
+
+        @Test
+        fun `we can define template files using a relative path`() {
+
+            environmentVariables.setProperty("reports.templates.email", relativeTemplateFile)
+
+            assertThat(TemplateFileProperty("default-template.ftl","reports.templates.email")
+                    .configuredIn(environmentVariables)).isEqualTo(relativeTemplateFile)
+        }
+
+        @Test
+        fun `we can define template files using a default value path`() {
+
+            assertThat(TemplateFileProperty("default-template.ftl","reports.templates.email")
+                    .configuredIn(environmentVariables)).isEqualTo("default-template.ftl")
+        }
+
     }
 
 

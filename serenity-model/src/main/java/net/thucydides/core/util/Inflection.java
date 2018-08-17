@@ -46,6 +46,11 @@ public class Inflection {
         return this;
     }
 
+    public Inflection withKebabCase() {
+        this.word = inflector.kebabCase(word);
+        return this;
+    }
+
     public Inflection asATitle() {
         this.word = inflector.titleCase(word);
         return this;

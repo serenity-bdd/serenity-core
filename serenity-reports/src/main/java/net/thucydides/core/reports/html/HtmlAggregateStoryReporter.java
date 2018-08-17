@@ -119,18 +119,18 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         Stopwatch stopwatch = Stopwatch.started();
         copyScreenshotsFrom(sourceDirectory);
 
-        LOGGER.debug("Copied screenshots after {} ms", stopwatch.lapTime());
+        LOGGER.debug("Copied screenshots after {}", stopwatch.lapTimeFormatted());
 
         TestOutcomes allTestOutcomes = loadTestOutcomesFrom(sourceDirectory);
 
         if (!isEmpty(tags)) {
             allTestOutcomes = allTestOutcomes.withTags(getTags());
         }
-        LOGGER.debug("Loaded test outcomes after {} ms", stopwatch.lapTime());
+        LOGGER.debug("Loaded test outcomes after {}", stopwatch.lapTimeFormatted());
 
         generateReportsForTestResultsIn(allTestOutcomes);
 
-        LOGGER.debug("Generated reports after {} ms", stopwatch.lapTime());
+        LOGGER.debug("Generated reports after {}", stopwatch.lapTimeFormatted());
 
         return allTestOutcomes;
     }
@@ -148,11 +148,11 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
         RequirementsOutcomes requirementsOutcomes = requirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(testOutcomes);
 
-        LOGGER.info("{} requirements loaded after {} ms",requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTime());
+        LOGGER.info("{} requirements loaded after {}", requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTimeFormatted());
 
         requirementsOutcomes = requirementsOutcomes.withoutUnrelatedRequirements();
 
-        LOGGER.info("{} related requirements found after {} ms",requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTime());
+        LOGGER.info("{} related requirements found after {}", requirementsOutcomes.getFlattenedRequirementCount(), stopwatch.lapTimeFormatted());
 
 
         List<String> knownRequirementReportNames = requirementReportNamesFrom(requirementsOutcomes, reportNameProvider);
@@ -190,9 +190,9 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                 requirementsOutcomes
         ));
 
-        LOGGER.info("Starting generating reports: {} ms", stopwatch.lapTime());
+        LOGGER.info("Starting generating reports: {}", stopwatch.lapTimeFormatted());
         Reporter.generateReportsFor(reportingTasks);
-        LOGGER.info("Test results for {} tests generated in {} ms",testOutcomes.getTestCount(), stopwatch.stop());
+        LOGGER.info("Test results for {} tests generated in {}", testOutcomes.getTestCount(), stopwatch.executionTimeFormatted());
     }
 
     private Set<ReportingTask> nestedTagReports(TestOutcomes testOutcomes, FreemarkerContext context, List<String> knownRequirementReportNames) {

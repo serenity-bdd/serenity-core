@@ -32,7 +32,6 @@ public class WhenManagingTheInternalClock {
                 throw new InterruptedException("For testing purposes");
             }
         };
-
         clock.pauseFor(50);
     }
 

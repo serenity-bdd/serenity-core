@@ -257,6 +257,17 @@ public class Inflector {
         return result.toLowerCase();
     }
 
+    /**
+     * Makes an kebab-cased expression of a string method.
+     *
+     * @param camelCaseWord the camel-cased word that is to be converted;
+     * @param delimiterChars optional characters that are used to delimit word boundaries (beyond capitalization)
+     * @return a kebab-cased version of the input, with separate words delimited by the hyphen character.
+     */
+    public String kebabCase( String camelCaseWord,
+                              char... delimiterChars ) {
+        return underscore(camelCaseWord, delimiterChars).replaceAll("_","-");
+    }
 
     /**
      * Capitalizes all the words and replaces some characters in the string to create a nicer looking title. Underscores are

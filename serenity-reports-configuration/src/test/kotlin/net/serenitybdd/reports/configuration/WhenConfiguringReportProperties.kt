@@ -121,8 +121,5 @@ class WhenConfiguringReportProperties {
             assertThat(TemplateFileProperty("default-template.ftl","reports.templates.email")
                     .configuredIn(environmentVariables)).isEqualTo("default-template.ftl")
         }
-
     }
-
-
 }

@@ -765,6 +765,11 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_REQUIREMENTS_DIR,
 
+    /**
+     * if specified, should point to a folder that contains one or more Serenity CSV output files
+     */
+    SERENITY_TEST_STATISTICS_DIR,
+
     @Deprecated
     THUCYDIDES_USE_REQUIREMENTS_DIRECTORIES,
 
@@ -1127,6 +1132,16 @@ public enum ThucydidesSystemProperty {
      * Comma-separated list of exception classes that should produce a failure in the reports.
      */
     SERENITY_FAIL_ON,
+
+    /**
+     *  If batch testing is being used in a multithreaded environment, this is the number of forks that will be created.
+     */
+    SERENITY_FORK_COUNT,
+
+    /**
+     *  If batch testing is being used in a multithreaded environment, this is the executing fork number.
+     */
+    SERENITY_FORK_NUMBER,
 
     /**
      * Comma-separated list of exception classes that should produce a pending test in the reports.

@@ -20,28 +20,38 @@ public class Stopwatch {
     }
 
     public void start() {
-        startTime = System.currentTimeMillis();
+        startTime = currentTimeMillis();
     }
 
     public long stop() {
-        long result = System.currentTimeMillis() - startTime;
+        validateStarted();
+        long result = currentTimeMillis() - startTime;
         startTime = 0;
         return result;
     }
 
-    public String lapTimeFormatted() {
-        return lapTimeFormatted(startTime = currentTimeMillis());
+    private void validateStarted() {
+        if (startTime == 0) {
+            throw new IllegalStateException("stopwatch is already stopped");
+        }
     }
+
+    public String lapTimeFormatted() {
+        validateStarted();
+        return lapTimeFormatted(currentTimeMillis() - startTime);
+    }
+
     public String executionTimeFormatted() {
         return lapTimeFormatted(stop());
     }
 
     public String lapTimeFormatted(Long executionTimeInMilliseconds) {
-        return executionTimeInMilliseconds < 1000 ? executionTimeInMilliseconds + " ms" : new DecimalFormat("#,###.#").format(executionTimeInMilliseconds / 1000.0) + " secs";
+        return (executionTimeInMilliseconds < 1000) ? (executionTimeInMilliseconds + " ms") : (new DecimalFormat("#,###.#").format(executionTimeInMilliseconds / 1000.0) + " secs");
     }
 
     public long lapTime() {
-        return System.currentTimeMillis() - startTime;
+        validateStarted();
+        return currentTimeMillis() - startTime;
     }
 
     public long stop(String message) {

@@ -190,7 +190,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                 requirementsOutcomes
         ));
 
-        LOGGER.info("Starting generating reports: {}", stopwatch.lapTimeFormatted());
+        LOGGER.info("Starting generating reports after {}", stopwatch.lapTimeFormatted());
         Reporter.generateReportsFor(reportingTasks);
         LOGGER.info("Test results for {} tests generated in {}", testOutcomes.getTestCount(), stopwatch.executionTimeFormatted());
     }

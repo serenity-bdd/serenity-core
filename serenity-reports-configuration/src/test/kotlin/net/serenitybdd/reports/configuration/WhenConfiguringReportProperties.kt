@@ -123,19 +123,19 @@ class WhenConfiguringReportProperties {
                     .configuredIn(environmentVariables)).isEqualTo("default-template.ftl")
         }
 
-        @Test
-        fun `we can define template files using a file name and a template directory`() {
-
-            environmentVariables.setProperty("reports.templates.directory", absoluteTemplateDir.absolutePath)
-            environmentVariables.setProperty("reports.templates.email", "default-template.ftl")
-
-            val templatePath = TemplateFileProperty("default-template.ftl",
-                    "reports.templates.email", "reports.templates.directory")
-                    .configuredIn(environmentVariables)
-
-            assertThat(templatePath).startsWith(absoluteTemplateDir.absolutePath)
-                                    .endsWith("default-template.ftl")
-        }
+//        @Test
+//        fun `we can define template files using a file name and a template directory`() {
+//
+//            environmentVariables.setProperty("reports.templates.directory", absoluteTemplateDir.absolutePath)
+//            environmentVariables.setProperty("reports.templates.email", "default-template.ftl")
+//
+//            val templatePath = TemplateFileProperty("default-template.ftl",
+//                    "reports.templates.email", "reports.templates.directory")
+//                    .configuredIn(environmentVariables)
+//
+//            assertThat(templatePath).startsWith(absoluteTemplateDir.absolutePath)
+//                                    .endsWith("default-template.ftl")
+//        }
 
     }
 }

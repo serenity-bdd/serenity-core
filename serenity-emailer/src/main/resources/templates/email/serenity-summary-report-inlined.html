@@ -63,6 +63,7 @@
     .compact-wrapper {
         box-sizing: border-box;
         padding-left: 24px;
+        padding-right: 24px;
         padding-top: 4px;
         padding-bottom: 4px;
     }
@@ -205,7 +206,8 @@
     }
 
     h3 {
-        font-size: 22px;
+        font-size: 20px;
+        text-align: center;
     }
 
     h4 {
@@ -656,7 +658,6 @@
         color: white;
     }
 
-
     .success-badge {
         background-color: #52B255; /* #61bd76; */
         color: white;
@@ -799,6 +800,24 @@
         white-space: nowrap;
     }
 
+    .test-results-table {
+        border: 1px solid grey;
+        margin-bottom: 26px;
+    }
+
+    .failure-list {
+        border: 1px solid grey;
+    }
+
+    .feature {
+        font-style: italic;
+        font-weight: bold;
+    }
+
+    .scenarioName {
+        padding-left: 8px;
+    }
+
     h4 {
         font-size: 18px;
         margin-top: 20px;
@@ -935,7 +954,9 @@
                                         </table>
                                     </td>
                                 </tr>
-                                <tr><td style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;">&nbsp;</td></tr>
+                                <tr>
+                                    <td style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;">&nbsp;</td>
+                                </tr>
                                 <tr th:block th:if="${#lists.size(customFields) &gt; 0}">
                                     <td style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;">
                                         <table class="environment" style="border-collapse: separate;mso-table-lspace: 0pt;mso-table-rspace: 0pt;width: 100%;border-style: solid;border-width: 1px;border-color: #acb1b9;background-color: #EBEBEB;">
@@ -954,12 +975,12 @@
                         </td>
                     </tr>
                     <tr th:block th:if="${#lists.size(coverage) &gt; 0}">
-                        <td class="compact-wrapper" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;box-sizing: border-box;padding-left: 24px;padding-top: 4px;padding-bottom: 4px;"><h3 style="color: #222222;font-family: Helvetica, sans-serif;font-weight: 400;line-height: 1.4;margin: 0;font-size: 22px !important;margin-bottom: 8px !important;">Functional Coverage</h3></td>
+                        <td class="compact-wrapper" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;box-sizing: border-box;padding-left: 24px;padding-right: 24px;padding-top: 4px;padding-bottom: 4px;"><h3 style="color: #222222;font-family: Helvetica, sans-serif;font-weight: 400;line-height: 1.4;margin: 0;text-align: center;font-size: 22px !important;margin-bottom: 8px !important;">Functional Coverage</h3></td>
                     </tr>
                     <tr th:each="tagCoverageByType : ${coverage}">
-                        <td class="compact-wrapper" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;box-sizing: border-box;padding-left: 24px;padding-top: 4px;padding-bottom: 4px;">
+                        <td class="compact-wrapper" th:if="${#lists.size(tagCoverageByType.tagCoverage) &gt; 0}" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;box-sizing: border-box;padding-left: 24px;padding-right: 24px;padding-top: 4px;padding-bottom: 4px;">
                             <h4 class="tag-title" th:text="${tagCoverageByType.tagType}" style="color: #222222;font-family: Helvetica, sans-serif;font-weight: 500;line-height: 1.4;margin: 0;font-size: 18px;margin-top: 20px;text-transform: capitalize;">Control Creation</h4>
-                            <table style="border-collapse: separate;mso-table-lspace: 0pt;mso-table-rspace: 0pt;width: 100%;">
+                            <table class="test-results-table" style="border-collapse: separate;mso-table-lspace: 0pt;mso-table-rspace: 0pt;width: 100%;border: 1px solid grey;margin-bottom: 26px;">
                                 <tr>
                                     <th></th>
                                     <th class="tag-coverage" style="text-align: left;white-space: nowrap;">Tests</th>
@@ -1000,10 +1021,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="compact-wrapper" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;box-sizing: border-box;padding-left: 24px;padding-top: 4px;padding-bottom: 4px;"><h3 style="color: #222222;font-family: Helvetica, sans-serif;font-weight: 400;line-height: 1.4;margin: 0;font-size: 22px !important;margin-bottom: 8px !important;">Test Failures</h3></td>
+                        <td class="compact-wrapper" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;box-sizing: border-box;padding-left: 24px;padding-right: 24px;padding-top: 4px;padding-bottom: 4px;"><h3 style="color: #222222;font-family: Helvetica, sans-serif;font-weight: 400;line-height: 1.4;margin: 0;text-align: center;font-size: 22px !important;margin-bottom: 8px !important;">Test Failure Overview</h3></td>
                     </tr>
                     <tr>
-                        <td class="compact-wrapper" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;box-sizing: border-box;padding-left: 24px;padding-top: 4px;padding-bottom: 4px;">
+                        <td class="compact-wrapper" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;box-sizing: border-box;padding-left: 24px;padding-right: 24px;padding-top: 4px;padding-bottom: 4px;">
                             <table style="border-collapse: separate;mso-table-lspace: 0pt;mso-table-rspace: 0pt;width: 100%;">
                                 <tr>
                                     <td style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;">
@@ -1038,6 +1059,24 @@
                                         </table>
                                     </td>
                                 </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="compact-wrapper" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;box-sizing: border-box;padding-left: 24px;padding-right: 24px;padding-top: 4px;padding-bottom: 4px;">
+                            <h3 style="color: #222222;font-family: Helvetica, sans-serif;font-weight: 400;line-height: 1.4;margin: 0;text-align: center;font-size: 22px !important;margin-bottom: 8px !important;">Full Failure List</h3>
+                            <table class="failure-list" style="border-collapse: separate;mso-table-lspace: 0pt;mso-table-rspace: 0pt;width: 100%;border: 1px solid grey;">
+                                <span th:each="failingFeature : ${failuresByFeature}" style="font-size: 16px !important;">
+                                    </span><tr>
+                                <td colspan="2" th:text="${failingFeature.featureName}" class="feature" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;font-style: italic;font-weight: bold;">A
+                                    Failing Feature
+                                </td>
+                            </tr>
+                                <tr th:each="failingScenario: ${failingFeature.failures}">
+                                    <td class="scenarioName" th:text="${failingScenario.title}" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;padding-left: 8px;">Failing scenario</td>
+                                    <td th:text="${failingScenario.conciseErrorMessage}" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;">Error message</td>
+                                </tr>
+
                             </table>
                         </td>
                     </tr>

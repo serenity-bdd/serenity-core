@@ -83,6 +83,7 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedRe
                         averageTestDuration = formattedDuration(averageDurationOf(testOutcomes.outcomes)),
                         maxTestDuration = formattedDuration(maxDurationOf(testOutcomes.outcomes))
                 ),
+                "failuresByFeature" to FailuresByFeature.from(testOutcomes),
                 "frequentFailures" to FrequentFailures.from(testOutcomes).withMaxOf(scoreboardSize),
                 "unstableFeatures" to UnstableFeatures.from(testOutcomes).withMaxOf(scoreboardSize),
                 "coverage" to TagCoverage.from(testOutcomes).forTagTypes(tagTypes),

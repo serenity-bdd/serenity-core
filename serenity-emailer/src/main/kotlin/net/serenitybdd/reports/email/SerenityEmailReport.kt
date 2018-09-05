@@ -16,7 +16,8 @@ sealed class SerenityEmailReport {
 
         private const val DEFAULT_OUTPUT_DIRECTORY = "target/site/serenity"
         private const val DEFAULT_TITLE = "Serenity Summary Report"
-        private const val DEFAULT_TEMPLATE = "templates/email/serenity-summary-report-inlined.html"
+//        private const val DEFAULT_TEMPLATE = "templates/email/serenity-summary-report-inlined.html"
+        private const val DEFAULT_TEMPLATE = "templates/email/serenity-summary-report-inlindc.html"
         private const val DEFAULT_SCOREBOARD_SIZE= 5
         private const val DEFAULT_TEMPLATE_DIRECTORY = "templates/email"
 

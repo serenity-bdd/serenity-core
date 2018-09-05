@@ -1066,17 +1066,17 @@
                         <td class="compact-wrapper" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;box-sizing: border-box;padding-left: 24px;padding-right: 24px;padding-top: 4px;padding-bottom: 4px;">
                             <h3 style="color: #222222;font-family: Helvetica, sans-serif;font-weight: 400;line-height: 1.4;margin: 0;text-align: center;font-size: 22px !important;margin-bottom: 8px !important;">Full Failure List</h3>
                             <table class="failure-list" style="border-collapse: separate;mso-table-lspace: 0pt;mso-table-rspace: 0pt;width: 100%;border: 1px solid grey;">
-                                <span th:each="failingFeature : ${failuresByFeature}" style="font-size: 16px !important;">
-                                    </span><tr>
-                                <td colspan="2" th:text="${failingFeature.featureName}" class="feature" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;font-style: italic;font-weight: bold;">A
-                                    Failing Feature
-                                </td>
-                            </tr>
-                                <tr th:each="failingScenario: ${failingFeature.failures}">
-                                    <td class="scenarioName" th:text="${failingScenario.title}" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;padding-left: 8px;">Failing scenario</td>
-                                    <td th:text="${failingScenario.conciseErrorMessage}" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;">Error message</td>
-                                </tr>
-
+                                <span th:each="failingFeature : ${failuresByFeature}">
+                                    <tr>
+                                        <td th:text="${failingFeature.featureName}" colspan="2" class="feature" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;font-style: italic;font-weight: bold;">A
+                                            Failing Feature
+                                        </td>
+                                    </tr>
+                                    <tr th:each="failingScenario: ${failingFeature.failures}">
+                                        <td class="scenarioName" th:text="${failingScenario.title}" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;padding-left: 8px;">Failing scenario</td>
+                                        <td th:text="${failingScenario.conciseErrorMessage}" style="font-family: Helvetica, sans-serif;font-size: 16px !important;vertical-align: top;">Error message</td>
+                                    </tr>
+                                </span>
                             </table>
                         </td>
                     </tr>

@@ -48,6 +48,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
         addEnvironmentSwitchesTo(options);
         addRuntimeOptionsTo(options);
         addPreferencesTo(options);
+        addExperimentalOptionsTo(options);
         updateChromeBinaryIfSpecified(options);
 
         return options;
@@ -76,15 +77,25 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
             options.addArguments(arguments);
         }
 
-        options.setAcceptInsecureCerts(ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables,false));
+        options.setAcceptInsecureCerts(ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables, false));
     }
+
     private void addPreferencesTo(ChromeOptions options) {
 
-        Map<String,Object> chromePreferences =  ChromePreferences.startingWith("chrome_preferences.").from(environmentVariables);
+        Map<String, Object> chromePreferences = ChromePreferences.startingWith("chrome_preferences.").from(environmentVariables);
         if (!chromePreferences.isEmpty()) {
             options.setExperimentalOption("prefs", chromePreferences);
         }
 
+    }
+
+    private void addExperimentalOptionsTo(ChromeOptions options) {
+        Map<String, Object> chrome_experimental_options = ChromePreferences.startingWith("chrome_experimental_options.").from(environmentVariables);
+        if (!chrome_experimental_options.isEmpty()) {
+            for (String key : chrome_experimental_options.keySet()) {
+                options.setExperimentalOption(key, chrome_experimental_options.get(key));
+            }
+        }
     }
 
     private void updateChromeBinaryIfSpecified(ChromeOptions options) {

@@ -91,11 +91,9 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
     private void addExperimentalOptionsTo(ChromeOptions options) {
         Map<String, Object> chrome_experimental_options = ChromePreferences.startingWith("chrome_experimental_options.").from(environmentVariables);
-        if (!chrome_experimental_options.isEmpty()) {
-            for (String key : chrome_experimental_options.keySet()) {
-                options.setExperimentalOption(key, chrome_experimental_options.get(key));
-            }
-        }
+        chrome_experimental_options.keySet().forEach(
+                key -> options.setExperimentalOption(key, chrome_experimental_options.get(key))
+        );
     }
 
     private void updateChromeBinaryIfSpecified(ChromeOptions options) {

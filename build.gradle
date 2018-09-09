@@ -402,6 +402,44 @@ subprojects {
         into project.projectDir.path + "/lib"
     }
 
+    task gitChangelogTask(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
+        file = new File("CHANGELOG.md");
+        templateContent = """
+# Git Changelog Gradle plugin
+
+Changelog of Git Changelog Gradle plugin.
+
+{{#tags}}
+## {{name}}
+ {{#issues}}
+  {{#hasIssue}}
+   {{#hasLink}}
+### {{name}} [{{issue}}]({{link}}) {{title}}
+   {{/hasLink}}
+   {{^hasLink}}
+### {{name}} {{issue}} {{title}}
+   {{/hasLink}}
+  {{/hasIssue}}
+  {{^hasIssue}}
+### {{name}}
+  {{/hasIssue}}
+
+  {{#commits}}
+**{{{messageTitle}}}**
+
+{{#messageBodyItems}}
+ * {{.}} 
+{{/messageBodyItems}}
+
+[{{hash}}](https://github.com/tomasbjerre/git-changelog-gradle-plugin/commit/{{hash}}) {{authorName}} *{{commitTime}}*
+
+  {{/commits}}
+
+ {{/issues}}
+{{/tags}}
+"""
+    }
+
     task changelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
         file = new File("CHANGELOG.md");
         templateContent = """

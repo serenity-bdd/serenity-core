@@ -71,7 +71,8 @@ public class RestReportingHelper {
         if (shouldRecordResponseBodyFor(response)) {
             String renderedBody = new Prettifier().getPrettifiedBodyIfPossible(
                     (ResponseOptions) response.getBody(), response.getBody());
-            restQuery = restQuery.withResponse(renderedBody);
+
+            restQuery = restQuery.withResponse(renderedBody.isEmpty() ? response.asString() : renderedBody);
         }
         restQuery = restQuery.withStatusCode(response.getStatusCode())
                 .withResponseHeaders(firstNonNull(values.get(LogDetail.HEADERS), ""))

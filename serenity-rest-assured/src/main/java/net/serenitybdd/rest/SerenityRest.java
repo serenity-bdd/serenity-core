@@ -579,24 +579,5 @@ public class SerenityRest {
     }
 
 
-    /**
-     * A helper method to make a RestAssured assertion appear as a separate step.
-     * e.g
-     *   checkThat("Commany name should be returned",
-     *             response -> response.body("companyName", equalTo("Apple Inc.s")));
-     *
-     * @param description
-     * @param check
-     */
-    public static void checkThat(String description, Consumer<ValidatableResponse> check) {
-        StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(description));
-        try {
-            check.accept(SerenityRest.then());
-        } catch(Throwable e) {
-            StepEventBus.getEventBus().stepFailed(new StepFailure(ExecutedStepDescription.withTitle(description), e));
-        } finally {
-            StepEventBus.getEventBus().stepFinished();
-        }
-    }
 
 }

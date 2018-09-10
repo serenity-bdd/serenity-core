@@ -67,11 +67,13 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedRe
         val scoreboardSize = SerenityEmailReport.scoreboardSize().configuredIn(environmentVariables)
         val customReportFields = CustomReportFields(environmentVariables)
         val tagTypes = SerenityEmailReport.tagTypes().configuredIn(environmentVariables)
+        val tagCategoryTitle = SerenityEmailReport.tagCategoryTitle().configuredIn(environmentVariables)
 
         val fields = hashMapOf(
                 "testOutcomes" to testOutcomes,
                 "report" to ReportInfo(
                         title = reportTitle,
+                        tagCategoryTitle = tagCategoryTitle,
                         version = environmentVariables.getProperty("project.version", ""),
                         date = testOutcomes.startTime.orElse(ZonedDateTime.now()).toLocalDateTime()
                 ),

@@ -1274,7 +1274,12 @@ public enum ThucydidesSystemProperty {
     /**
      * What tag types should be listed in the report summary
      */
-    REPORT_TAGTYPES
+    REPORT_TAGTYPES,
+
+    /**
+     * The title to appear in the tag type table in the email reports
+     */
+    REPORT_TAGTYPE_TITLE
     ;
 
     private String propertyName;

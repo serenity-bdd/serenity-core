@@ -38,14 +38,14 @@
         max-width: 600px;
         padding: 0;
         padding-top: 24px;
-        width: 600px;
+        width: 90%;
     }
 
     .content {
         box-sizing: border-box;
         display: block;
         margin: 0 auto;
-        max-width: 600px;
+	        max-width: 100%;
         padding: 0;
     }
 
@@ -606,6 +606,19 @@
         white-space: nowrap;
     }
 
+    td.legend-key {
+	    border-top: solid 0.5px #DDDDDD;
+	    border-bottom: solid 0.5px #DDDDDD;
+	    border-left: solid 0.5px #DDDDDD;
+    }
+
+    td.legend-result {
+	    border-top: solid 0.5px #DDDDDD;
+	    border-bottom: solid 0.5px #DDDDDD;
+	    border-right: solid 0.5px #DDDDDD;
+	    text-align: right;
+    }
+	
     .environment {
         border-style: solid;
         border-width: 1px;
@@ -618,11 +631,7 @@
         font-size: 0.9em;
         text-align: center;
     }
-
-    .result-bar {
-        width: 150px;
-    }
-
+    
     .result-bar td {
         text-align: center;
         font-size: 0.9em;
@@ -803,6 +812,19 @@
     .test-results-table {
         border: 1px solid grey;
         margin-bottom: 26px;
+        border-collapse: collapse;
+    }
+
+	td.test-results-table {
+		border: 1px solid red;
+	}
+
+    .categories tr td {
+		border: 0.5px solid #dddddd;
+    }
+	
+    tr.categories, th.categories, td.categories {
+		border: 0.5px solid grey;
     }
 
     .failure-list {
@@ -816,8 +838,10 @@
 
     .scenarioName {
         padding-left: 8px;
+        min-width: 4em;
+        width: 55%;
     }
-
+    
     h4 {
         font-size: 18px;
         margin-top: 20px;
@@ -928,38 +952,38 @@
                                                 <td>
                                                     <table cellspacing="0" cellpadding="2">
                                                         <tr>
-                                                            <td class="for-passing legend-key">Passing</td>
+                                                            <td class="for-passing legend-key legend-label" width="30%">Passing</td>
                                                             <td class="for-passing legend-result">
                                                                 <span data-th-text="'&nbsp;' + ${results.countByResult.SUCCESS} + '&nbsp;'"
                                                                       class="success-badge">100</span>
                                                             </td>
 
-                                                            <td class="for-pending legend-key">Pending</td>
-                                                            <td class="for-pending legend-result">
+                                                            <td class="for-pending legend-key legend-label" width="30%">Pending</td>
+                                                            <td class="for-pending legend-result legend-result">
                                                                 <span data-th-text="'&nbsp;' + ${results.countByResult.PENDING} + '&nbsp;'"
                                                                       class="pending-badge">100</span>
                                                             </td>
 
-                                                            <td class="for-ignored legend-key">Ignored</td>
+                                                            <td class="for-ignored legend-key legend-label" width="30%">Ignored</td>
                                                             <td class="for-ignored legend-result">
                                                                 <span data-th-text="'&nbsp;' + ${results.countByResult.IGNORED} + '&nbsp;'"
                                                                       class="ignored-badge">100</span>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="for-failure legend-key">Failing</td>
+                                                            <td class="for-failure legend-key legend-label" width="30%">Failing</td>
                                                             <td class="for-failure legend-result">
                                                                 <span data-th-text="'&nbsp;' + ${results.countByResult.FAILURE} + '&nbsp;'"
                                                                       class="failure-badge">100</span>
                                                             </td>
 
-                                                            <td class="for-error legend-key">Broken</td>
+                                                            <td class="for-error legend-key legend-label" width="30%">Broken</td>
                                                             <td class="for-error legend-result">
                                                                 <span data-th-text="'&nbsp;' + ${results.countByResult.ERROR} + '&nbsp;'"
                                                                       class="error-badge">100</span>
                                                             </td>
 
-                                                            <td class="for-compromised legend-key">Compromised</td>
+                                                            <td class="for-compromised legend-key legend-label" width="30%">Compromised</td>
                                                             <td class="for-compromised legend-result">
                                                                 <span data-th-text="'&nbsp;' + ${results.countByResult.COMPROMISED} + '&nbsp;'"
                                                                       class="compromised-badge">100</span>
@@ -1016,21 +1040,19 @@
                     <tr th:each="tagCoverageByType : ${coverage}">
                         <td class="compact-wrapper" th:if="${#lists.size(tagCoverageByType.tagCoverage) > 0}">
                             <h4 class="tag-title" th:text="${tagCoverageByType.tagType}">Control Creation</h4>
-                            <table class="test-results-table">
+                            <table class="test-results-table categories">
                                 <tr>
-                                    <th></th>
-                                    <th class="tag-coverage">Tests</th>
-                                    <th class="tag-coverage">Pass</th>
+                                    <th width="60%" th:text="${report.tagCategoryTitle}">Category</th>
+                                    <th class="tag-coverage" width="5%">Tests</th>
+                                    <th class="tag-coverage" width="5%">Pass</th>
                                     <th class="tag-coverage">Results</th>
                                 </tr>
                                 <tr th:each="tagCoverage : ${tagCoverageByType.tagCoverage}">
-                                    <td class="tag-subtitle" th:text="${tagCoverage.tagName}">ACO Acknowledgement - ICG
-                                        Debt
-                                    </td>
+                                    <td class="tag-subtitle categories" th:text="${tagCoverage.tagName}" width="90%">ACO Acknowledgement - ICG Debt ACO Acknowledgement - ICG Debt ACO Acknowledgement - ICG Debt ACO Acknowledgement - ICG Debt ACO Acknowledgement - ICG Debt</td>
                                     <td th:text="${tagCoverage.testCount}">100</td>
                                     <td th:text="${tagCoverage.successRate}">10%</td>
                                     <td>
-                                        <table cellspacing="0" cellpadding="0" class="result-bar">
+                                        <table cellspacing="0" cellpadding="0" class="result-bar" width="100%">
                                             <tr>
                                                 <td class="success-background"
                                                     th:unless="${tagCoverage.countByResult.SUCCESS == 0}"
@@ -1152,7 +1174,7 @@
                                     </tr>
                                     <tr th:each="failingScenario: ${failingFeature.failures}">
                                         <td class="scenarioName" th:text="${failingScenario.title}">Failing scenario</td>
-                                        <td th:text="${failingScenario.conciseErrorMessage}">Error message</td>
+                                        <td th:text="${failingScenario.errorMessage}" th:attr="class='frequent-failure for-' + ${failingScenario.result}">Error message</td>
                                     </tr>
                                 </span>
                             </table>

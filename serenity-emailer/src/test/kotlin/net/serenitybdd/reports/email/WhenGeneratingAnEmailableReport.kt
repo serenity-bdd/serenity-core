@@ -119,9 +119,11 @@ class WhenGeneratingAnEmailableReport {
 
         @Test
         fun `should list top most frequent failures features`() {
-            val unstableFeatures = parsedReport.getElementsByClass("frequent-failure").map { element -> element.text() }
-            assertThat(unstableFeatures).containsExactly("Assertion error","Illegal argument exception")
-        }
+            val unstableFeatures = parsedReport.getElementsByClass("failure-scoreboard")[0]
+                    .getElementsByClass("frequent-failure")
+                    .map { it.text() }
+
+            assertThat(unstableFeatures).containsExactly("Assertion error","Illegal argument exception") }
 
         @Test
         fun `should list top most unstable features`() {
@@ -152,7 +154,9 @@ class WhenGeneratingAnEmailableReport {
 
         @Test
         fun `should list top most frequent failures features`() {
-            val unstableFeatures = parsedReport.getElementsByClass("frequent-failure").map { element -> element.text() }
+            val unstableFeatures = parsedReport.getElementsByClass("failure-scoreboard")[0]
+                                               .getElementsByClass("frequent-failure")
+                                               .map { it.text() }
             assertThat(unstableFeatures).containsExactly("Assertion error","Illegal argument exception")
         }
 

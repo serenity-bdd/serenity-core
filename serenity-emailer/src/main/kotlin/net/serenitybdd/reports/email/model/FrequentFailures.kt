@@ -13,9 +13,9 @@ class FrequentFailures {
 class FrequentFailuresBuilder(val testOutcomes: TestOutcomes) {
     fun withMaxOf(maxEntries : Int) : List<FrequentFailure> =
             testOutcomes.failingOrErrorTests.outcomes
-                    .groupBy { outcome -> outcome.testFailureErrorType }
+                    .groupBy { it.testFailureErrorType }
                     .map { (error, outcomes) -> FrequentFailure(error, outcomes.size, outcomes.first().result) }
-                    .sortedByDescending { frequentFailure -> frequentFailure.count }
+                    .sortedByDescending { it.count }
                     .take(maxEntries)
 }
 

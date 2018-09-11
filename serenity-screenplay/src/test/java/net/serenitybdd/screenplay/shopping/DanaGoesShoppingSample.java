@@ -43,13 +43,13 @@ public class DanaGoesShoppingSample {
     @Test
     public void shouldBeAbleToPurchaseSomeItemsWithDelivery() {
         givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
-                            andPurchased().aPear().thatCosts(5).dollars());
+                andPurchased().aPear().thatCosts(5).dollars());
 
         when(dana).attemptsTo(haveThemDelivered);
 
         then(dana).should(seeThat(theTotalCost(), equalTo(15)),
-                          seeThat(theTotalCostIncludingDelivery(), greaterThanOrEqualTo(20)),
-                          seeThat(theThankYouMessage(), equalTo("Thank you")));
+                seeThat(theTotalCostIncludingDelivery(), greaterThanOrEqualTo(20)),
+                seeThat(theThankYouMessage(), equalTo("Thank you")));
     }
 
     @Test
@@ -60,7 +60,7 @@ public class DanaGoesShoppingSample {
         when(dana).attemptsTo(haveThemDelivered);
 
         then(dana).should(seeThat("Total cost", theTotalCost(),
-                                   GivenWhenThen.returnsAValueThat("is equal to 15", isEqual(15))));
+                GivenWhenThen.returnsAValueThat("is equal to 15", isEqual(15))));
     }
 
     @Test
@@ -95,7 +95,7 @@ public class DanaGoesShoppingSample {
 
         then(dana).should(seeThat(theTotalCostIncludingDelivery(), greaterThanOrEqualTo(20)),
                 seeThat(theThankYouMessage(), equalTo("You're welcome"))
-                        .orComplainWith(PeopleAreSoImpolite.class,"You should say something nice"));
+                        .orComplainWith(PeopleAreSoImpolite.class, "You should say something nice"));
     }
 
 
@@ -118,7 +118,7 @@ public class DanaGoesShoppingSample {
         givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
                 andPurchased().aPear().thatCosts(5).dollars());
 
-        when(dana).attemptsTo(haveThemDelivered);
+        when(dana).attemptsTo(new HaveItemsDelivered());
 
         then(dana).should(seeThat(thePriceIsCorrectlyDisplayed()));
     }
@@ -135,8 +135,11 @@ public class DanaGoesShoppingSample {
 
     @Test
     public void shouldBeAbleToEvaluateErrorConsequenceGroups() {
-        givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
-                andPurchased().aPear().thatCosts(5).dollars());
+//        givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
+//                andPurchased().aPear().thatCosts(5).dollars());
+
+        givenThat(dana).has(new Purchase("Apple", 10, "Dollars"),
+                new Purchase("Pear", 5, "Dollars"));
 
         when(dana).attemptsTo(haveThemDelivered);
 
@@ -200,9 +203,9 @@ public class DanaGoesShoppingSample {
         dana.remember("Total Cost", 14);
         assertThat((int) dana.recall("Total Cost")).isEqualTo(14);
 
-        List<String> colorSet = NewList.of("red","green","blue");
+        List<String> colorSet = NewList.of("red", "green", "blue");
 
-        MatcherAssert.assertThat(colorSet, (Every.everyItem(isOneOf("red","green","blue","yellow"))));
+        MatcherAssert.assertThat(colorSet, (Every.everyItem(isOneOf("red", "green", "blue", "yellow"))));
     }
 
     @Test
@@ -232,10 +235,10 @@ public class DanaGoesShoppingSample {
     @Test
     public void shouldBeAbleToPurchaseAnItemWithAllTheRightDetails() {
         givenThat(dana).attemptsTo(purchase().anApple().thatCosts(10).dollars(),
-                                   purchase().aPear().thatCosts(5).dollars());
+                purchase().aPear().thatCosts(5).dollars());
 
         then(dana).should(seeThat(theTotalCost(), equalTo(20)),
-                                  seeThat(theThankYouMessage(), equalTo("De nada")));
+                seeThat(theThankYouMessage(), equalTo("De nada")));
     }
 
     // Expected to fail with two failures and a compromised test

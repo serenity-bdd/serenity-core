@@ -122,7 +122,7 @@ public class Actor implements PerformsTasks, SkipNested {
     public final void attemptsTo(Performable... tasks) {
         beginPerformance();
         for (Performable task : tasks) {
-            perform(task);
+            perform(InstrumentedTask.of(task));
         }
         endPerformance();
     }

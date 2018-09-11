@@ -135,16 +135,13 @@ public class DanaGoesShoppingSample {
 
     @Test
     public void shouldBeAbleToEvaluateErrorConsequenceGroups() {
-//        givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
-//                andPurchased().aPear().thatCosts(5).dollars());
-
-        givenThat(dana).has(new Purchase("Apple", 10, "Dollars"),
-                new Purchase("Pear", 5, "Dollars"));
-
+        givenThat(dana).has(purchased().anApple().thatCosts(10).dollars(),
+                andPurchased().aPear().thatCosts(5).dollars());
         when(dana).attemptsTo(haveThemDelivered);
 
         then(dana).should(seeThat(thePriceIsIncorrectlyDisplayedWithAnError()));
     }
+
 
     @Test
     public void shouldBeAbleToEvaluateNestedGroup() {

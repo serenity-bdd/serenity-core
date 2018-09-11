@@ -42,6 +42,16 @@ public class WhenDanaGoesShopping {
     }
 
     @Test
+    public void shouldBeAbleToPurchaseSomeItemsWithDeliveryUsingUninstrumentedClasses() {
+        givenThat(dana).has(new Purchase("Apple", 10, "Dollars"),
+                new Purchase("Pear", 5, "Dollars"));
+
+        when(dana).attemptsTo(haveThemDelivered, checkTheInventory);
+
+        then(dana).should(seeThat(theCorrectTotalCost(), equalTo(15)));
+    }
+
+    @Test
     public void shouldBeAbleToCheckHerStuff() {
         dana.attemptsTo(checkTheInventory);
     }

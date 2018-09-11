@@ -32,7 +32,13 @@ public class InstrumentedTask {
     }
 
     private static Performable instrumentedCopyOf(Performable task, Class taskClass) {
-        Performable instrumentedTask = (Performable) Instrumented.instanceOf(taskClass).newInstance();
+
+        Performable instrumentedTask = null;
+        try {
+            instrumentedTask = (Performable) Instrumented.instanceOf(taskClass).newInstance();
+        } catch(IllegalArgumentException missingDefaultConstructor) {
+            throw new TaskInstantiationException("Could not instantiate the class " + taskClass + " - does it have a default constructor?");
+        }
         Cloner cloner = new Cloner();
         cloner.copyPropertiesOfInheritedClass(task, instrumentedTask);
         return instrumentedTask;

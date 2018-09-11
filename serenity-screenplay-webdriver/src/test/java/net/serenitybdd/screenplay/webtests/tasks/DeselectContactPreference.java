@@ -9,7 +9,11 @@ import static net.serenitybdd.screenplay.webtests.pages.ProfilePage.*;
 
 public class DeselectContactPreference implements Performable {
 
-    private final String existingValue;
+    private String existingValue;
+
+
+    public DeselectContactPreference() {
+    }
 
     private DeselectContactPreference(String existingValue) {
         this.existingValue = existingValue;

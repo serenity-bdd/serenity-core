@@ -9,8 +9,11 @@ import static net.serenitybdd.screenplay.webtests.pages.ProfilePage.*;
 
 public class SelectCountry implements Task {
   
-    final String code;
-  
+    String code;
+
+    public SelectCountry() {
+    }
+
     private SelectCountry(String code) {
         this.code = code.toUpperCase();
     }

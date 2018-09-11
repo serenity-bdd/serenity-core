@@ -9,6 +9,9 @@ import static net.serenitybdd.screenplay.webtests.pages.ProfilePage.CONTACT_PREF
 
 public class DeselectAll implements Performable {
 
+
+    public DeselectAll() {}
+
     public static DeselectAll contactPreferences() {
         return new DeselectAll();
     }

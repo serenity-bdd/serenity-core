@@ -8,7 +8,10 @@ import static net.serenitybdd.screenplay.webtests.pages.ProfilePage.*;
 
 public class SelectContactPreference implements Performable {
 
-    final String value;
+    String value;
+
+    public SelectContactPreference() {
+    }
 
     private SelectContactPreference(String value) {
         this.value = value;

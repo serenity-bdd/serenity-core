@@ -37,7 +37,7 @@ public class InstrumentedTask {
         try {
             instrumentedTask = (Performable) Instrumented.instanceOf(taskClass).newInstance();
         } catch(IllegalArgumentException missingDefaultConstructor) {
-            throw new TaskInstantiationException("Could not instantiate the class " + taskClass + " - does it have a default constructor?");
+            throw new TaskInstantiationException("Could not instantiate " + taskClass + ". If you are not instrumenting a Task class explicitly you need to give the class a default constructor.");
         }
         Cloner cloner = new Cloner();
         cloner.copyPropertiesOfInheritedClass(task, instrumentedTask);

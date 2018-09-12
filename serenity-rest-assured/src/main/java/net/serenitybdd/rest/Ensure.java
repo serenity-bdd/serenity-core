@@ -18,14 +18,26 @@ public class Ensure {
      * @param description
      * @param check
      */
-    public static void that(String description, Consumer<ValidatableResponse> check) {
-        StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle("Ensure that " + description));
+    public static Ensure that(String description, Consumer<ValidatableResponse> check) {
+        Ensure ensure = new Ensure();
+        ensure.performCheck(description, check, "Ensure that ");
+        return ensure;
+    }
+
+    public Ensure andThat(String description, Consumer<ValidatableResponse> check) {
+        performCheck(description, check, "And that ");
+        return this;
+    }
+
+    private void performCheck(String description, Consumer<ValidatableResponse> check, String prefix) {
+        StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle(prefix + description));
         try {
             check.accept(SerenityRest.then());
-        } catch(Throwable e) {
+        } catch (Throwable e) {
             StepEventBus.getEventBus().stepFailed(new StepFailure(ExecutedStepDescription.withTitle(description), e));
         } finally {
             StepEventBus.getEventBus().stepFinished();
         }
     }
+
 }

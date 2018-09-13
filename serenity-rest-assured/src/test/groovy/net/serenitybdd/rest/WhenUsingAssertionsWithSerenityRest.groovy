@@ -6,6 +6,7 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
+import io.restassured.response.ValidatableResponse
 import net.serenity.test.utils.rules.TestCase
 import net.thucydides.core.annotations.Step
 import net.thucydides.core.model.TestResult
@@ -15,6 +16,8 @@ import org.hamcrest.Matchers
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
+
+import java.util.function.Consumer
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*
 import static net.serenitybdd.rest.JsonConverter.formatted
@@ -53,6 +56,55 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
             given().get("$url/{id}", 1000).then().body("Food", Matchers.equalTo(1001));
         }
 
+        def Consumer<ValidatableResponse> foodIsHealthy = new Consumer<ValidatableResponse>() {
+            @Override
+            void accept(ValidatableResponse response) {
+                response.body("Food", Matchers.equalTo(1000))
+            }
+        }
+
+        def Consumer<ValidatableResponse> foodIsTasty = new Consumer<ValidatableResponse>() {
+            @Override
+            void accept(ValidatableResponse response) {
+                response.body("Food", Matchers.equalTo(1001))
+            }
+        }
+
+        def Consumer<ValidatableResponse> foodIsSushi = new Consumer<ValidatableResponse>() {
+            @Override
+            void accept(ValidatableResponse response) {
+                response.body("Food", Matchers.equalTo("sushi"))
+            }
+        }
+
+        @Step
+        def getWithEnsure(final String url) {
+            given().get("$url/{id}", 1000);
+
+            Ensure.that("food is 1001", foodIsTasty)
+        }
+
+        @Step
+        def getWithMultipleEnsures(final String url) {
+            given().get("$url/{id}", 1000);
+
+            Ensure.that("food is healthy", foodIsHealthy).andThat("food is sushi", foodIsSushi)
+        }
+
+        @Step
+        def getWithMultipleFailingEnsures(final String url) {
+            given().get("$url/{id}", 1000);
+
+            Ensure.that("food is healthy", foodIsHealthy).andThat("food is tasty", foodIsTasty)
+        }
+
+
+        @Step
+        def getWithMultiplePassingEnsures(final String url) {
+            given().get("$url/{id}", 1000);
+
+            Ensure.that("food is sushi", foodIsSushi).andThat("food is sushi", foodIsSushi)
+        }
 
         @Step
         def getById(final String url) {
@@ -97,6 +149,100 @@ class WhenUsingAssertionsWithSerenityRest extends Specification {
         then:
             def testSteps = listener.testOutcomes[0].testSteps
             testSteps[0].result == TestResult.FAILURE
+    }
+
+
+    def "should support failing assertions with Ensure.that() on response results"() {
+        given:
+        def listener = new BaseStepListener(temporaryFolder.newFolder())
+        test.register(listener)
+        StepFactory factory = new StepFactory();
+        def restSteps = factory.getSharedStepLibraryFor(RestSteps)
+
+        def JsonObject json = new JsonObject()
+        json.addProperty("Food", "sushi")
+        json.addProperty("size", "7")
+        def body = gson.toJson(json)
+
+        def base = "http://localhost:${wire.port()}"
+        def path = "/test/food/sushi"
+        def url = "$base$path"
+
+        stubFor(WireMock.get(urlPathMatching("$path.*"))
+                .withRequestBody(matching(".*"))
+                .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(body)));
+        when:
+        restSteps.getWithEnsure(url)
+        then:
+        def testSteps = listener.testOutcomes[0].testSteps
+        testSteps[0].children.size() == 2
+        testSteps[0].result == TestResult.FAILURE
+    }
+
+    def "should support passing assertions with chained Ensure.that() on response results"() {
+        given:
+        def listener = new BaseStepListener(temporaryFolder.newFolder())
+        test.register(listener)
+        StepFactory factory = new StepFactory();
+        def restSteps = factory.getSharedStepLibraryFor(RestSteps)
+
+        def JsonObject json = new JsonObject()
+        json.addProperty("Food", "sushi")
+        json.addProperty("size", "7")
+        def body = gson.toJson(json)
+
+        def base = "http://localhost:${wire.port()}"
+        def path = "/test/food/sushi"
+        def url = "$base$path"
+
+        stubFor(WireMock.get(urlPathMatching("$path.*"))
+                .withRequestBody(matching(".*"))
+                .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(body)));
+        when:
+        restSteps.getWithMultiplePassingEnsures(url)
+        then:
+        def testSteps = listener.testOutcomes[0].testSteps
+        listener.testOutcomes[0].testSteps[0].children.size() == 3
+        testSteps[0].children[1].result == TestResult.SUCCESS
+        testSteps[0].children[2].result == TestResult.SUCCESS
+    }
+
+    def "should support failing assertions with chained Ensure.that() on response results"() {
+        given:
+        def listener = new BaseStepListener(temporaryFolder.newFolder())
+        test.register(listener)
+        StepFactory factory = new StepFactory();
+        def restSteps = factory.getSharedStepLibraryFor(RestSteps)
+
+        def JsonObject json = new JsonObject()
+        json.addProperty("Food", "sushi")
+        json.addProperty("size", "7")
+        def body = gson.toJson(json)
+
+        def base = "http://localhost:${wire.port()}"
+        def path = "/test/food/sushi"
+        def url = "$base$path"
+
+        stubFor(WireMock.get(urlPathMatching("$path.*"))
+                .withRequestBody(matching(".*"))
+                .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(body)));
+        when:
+        restSteps.getWithMultipleEnsures(url)
+        then:
+        def testSteps = listener.testOutcomes[0].testSteps
+        listener.testOutcomes[0].testSteps[0].children.size() == 3
+        testSteps[0].children[1].result == TestResult.FAILURE
+        testSteps[0].children[2].result == TestResult.SUCCESS
+
     }
 
     def "should support assertions on response results"() {

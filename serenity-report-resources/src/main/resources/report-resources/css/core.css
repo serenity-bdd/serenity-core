@@ -831,15 +831,11 @@ font-family:euphemia, verdana, sans-serif; font-size:16px; color: #88a717; font-
     display: block;
     margin: 1px;
     cursor: pointer;
-    padding: 5 5 5 7px;
+    padding: 5px;
     list-style: circle;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px;
-}
-
-.requirementNarrativeTitle ul,ol,dl {
-    margin-left: 40px;
 }
 
 #accordion ul {
@@ -1221,13 +1217,46 @@ h4 {
 }
 
 
+.requirementNarrativeTitle ul,ol,dl {
+    margin-left: 40px;
+}
 
 .requirementNarrativeTitle {
-    color: #0d78ae;
-    font-family:euphemia, verdana, sans-serif;font-size: 15px; font-weight:normal; font-style: italic;
-    /*border: #6495ed solid thin;*/
+    padding-left: 1.6em;
+    padding-bottom: 1em;
+}
+
+.requirementNarrativeTitle > blockquote{
+    font-size: 1em;
+    font-style: italic;
+}
+
+
+.requirementNarrativeTitle > h3 {
+    font-size: 1.1em;
+}
+
+.requirementNarrativeTitle > table {
+    border: solid 1px grey;
+    padding: 4px;
+}
+
+.requirementNarrativeTitle > table th {
+    font-weight: bold;
+    color: gray;
+}
+
+
+.requirementNarrativeTitle > table tr td {
+    border: solid 0.5px grey;
     padding: 8px;
 }
+
+.requirementNarrativeTitle > table th {
+    border: solid 0.5px grey;
+    padding: 8px;
+}
+
 .requirementNarrativeField {
     color: #0d78ae;
     font-family:euphemia, verdana, sans-serif;font-size: 14px; font-weight:normal;
@@ -1235,7 +1264,7 @@ h4 {
     padding: 8px;
 }
 
-.requirementNarrativeField ul,ol {
+.requirementNarrativeField > ul,ol {
     margin-left: 30px;
 }
 
@@ -1634,7 +1663,7 @@ ul.second-level-requirements  {
 
 /* Icon colors */
 .pending-icon {
-    color: #0d78ae;
+    color: #A2C4EC;
 }
 
 .success-icon {
@@ -1654,11 +1683,11 @@ ul.second-level-requirements  {
 }
 
 .ignored-icon {
-    color: grey;
+    color: darkgrey;
 }
 
 .skip-icon {
-    color: darkgoldenrod;
+    color: #EEE098;
 }
 
 .error-caption {
@@ -1743,4 +1772,225 @@ ul.second-level-requirements  {
     color: grey;
     margin-left: 20px;
     padding-top: 4px;
+}
+
+.small-graph {
+    height: 250px;
+}
+
+/* Chartist styling */
+
+.ct-chart-donut .ct-label {
+    font-size: 1em;
+}
+
+/* Automated only results */
+.aggregated-results .ct-series-a .ct-slice-donut-solid {
+    fill: #30cb23;
+}
+.aggregated-results .ct-series-b .ct-slice-donut-solid {
+    fill: #A2C4EC;
+}
+.aggregated-results .ct-series-c .ct-slice-donut-solid {
+    fill: darkgrey;
+}
+.aggregated-results .ct-series-d .ct-slice-donut-solid {
+    fill: #EEE098;
+}
+.aggregated-results .ct-series-e .ct-slice-donut-solid {
+    fill: #f8001f;
+}
+.aggregated-results .ct-series-f .ct-slice-donut-solid {
+    fill: darkorange;
+}
+.aggregated-results .ct-series-g .ct-slice-donut-solid {
+    fill: fuchsia;
+}
+
+/* Automated and manual results */
+.automated-and-manual-results .ct-series-a .ct-slice-donut-solid {
+    fill: rgba(48, 204, 34, 1);
+}
+.automated-and-manual-results .ct-series-b .ct-slice-donut-solid {
+    fill: rgba(48, 204, 34, 0.5);;
+}
+
+.automated-and-manual-results .ct-series-c .ct-slice-donut-solid {
+    fill: rgba(165, 199, 238, 1) ;
+}
+.automated-and-manual-results .ct-series-d .ct-slice-donut-solid {
+    fill: rgba(165, 199, 238, 0.5) ;
+}
+
+.automated-and-manual-results .ct-series-e .ct-slice-donut-solid {
+    fill: rgba(168, 168, 168, 1);
+}
+.automated-and-manual-results .ct-series-f .ct-slice-donut-solid {
+    fill: rgba(168, 168, 168, 0.5);
+}
+
+.automated-and-manual-results .ct-series-g .ct-slice-donut-solid {
+    fill: rgba(238, 224, 152, 1) ;
+}
+.automated-and-manual-results .ct-series-h .ct-slice-donut-solid {
+    fill: rgba(238, 224, 152, 5) ;
+}
+
+.automated-and-manual-results .ct-series-i .ct-slice-donut-solid {
+    fill: rgba(248, 0, 31, 1);
+}
+.automated-and-manual-results .ct-series-j .ct-slice-donut-solid {
+    fill: rgba(248, 0, 31, 0.5);
+}
+
+.automated-and-manual-results .ct-series-k .ct-slice-donut-solid {
+    fill: rgba(255, 141, 0, 1);
+}
+.automated-and-manual-results .ct-series-l .ct-slice-donut-solid {
+    fill: rgba(255, 141, 0, 0.5);
+}
+
+.automated-and-manual-results .ct-series-m .ct-slice-donut-solid {
+    fill: rgba(255, 0, 255, 1);
+}
+.automated-and-manual-results .ct-series-n .ct-slice-donut-solid {
+    fill: rgba(255, 0, 255, 0.5);
+}
+
+.scenario-heading {padding-left: 1em;}
+.scenario-details p { line-height: 0.8;}
+
+.scenario-heading {padding-left: 1em;}
+
+.gwt-button {padding-left: 2.5em;}
+.scenario-details p { line-height: 0.8;}
+
+.scenario-docs p {
+    padding-left: 2.5em;
+    margin: 0px;
+}
+
+
+.more-details { background-color: #0d78ae; }
+.more-details:hover { background-color: #428bca; }
+
+.scenario-text {
+    padding-left: 1.5em;
+    margin-bottom: 1em;
+}
+
+div.scenario-text:empty {
+    display:none;
+}
+
+.table-parameter {
+    font-style: italic;
+    color: #0d78ae;
+}
+
+.examples {
+    margin-top: 1em;
+}
+
+.scenario-docs.card {
+    background-color: white;
+    border: 0.5px grey solid;
+    border-radius: 0.5em;
+    margin-bottom: 1em;
+}
+
+.card-header {
+    border-bottom: solid gray 0.5px;
+    padding: 0.5em;
+    font-weight: bold;
+}
+
+/* Card header colours */
+
+.card-header.failure {
+    background-color: rgba(255, 0, 0, 0.05);
+}
+.card-header.pending {
+    background-color: rgba(0, 167, 255, 0.05);
+}
+.card-header.error {
+    background-color: rgba(255, 141, 0, 0.05);
+}
+.card-header.compromised {
+    background-color: rgba(255, 0, 255, 0.05);
+}
+.card-header.ignored {
+    background-color: rgba(168, 168, 168, 0.1);
+}
+.card-header.skipped {
+    background-color: rgba(238, 224, 152, 0.2);
+}
+
+.scenario-result .pending {
+    background-color: rgba(0, 167, 255, 0.05);
+}
+.scenario-result .failure {
+    background-color: rgba(255, 0, 0, 0.05);
+}
+.scenario-result .pending {
+    background-color: rgba(0, 167, 255, 0.05);
+}
+.scenario-result .error {
+    background-color: rgba(255, 141, 0, 0.05);
+}
+.scenario-result .compromised {
+    background-color: rgba(255, 0, 255, 0.05);
+}
+.scenario-result .ignored {
+    background-color: rgba(168, 168, 168, 0.1);
+}
+.scenario-result .skipped {
+    background-color: rgba(238, 224, 152, 0.2);
+}
+
+.card-body {
+    padding: 0.5em;
+}
+
+.scenario-result {
+    float: right;
+}
+
+.scenario-docs table {
+    margin-left: 3em;
+    margin-top: 0.5em;
+    border: 0.5px solid grey;
+}
+.scenario-docs th {
+    font-weight: bold;
+    color: grey;
+    font-size: 12px;
+    padding: 4px;
+    border: 0.5px solid grey;
+}
+.scenario-docs td {
+    padding: 4px;
+    border: 0.5px solid grey;
+}
+.examples {
+    padding-top: 0.5em;
+}
+
+.automated-stats {
+    background-color: rgba(38, 38, 38, 0.06);
+    width: 8%;
+}
+
+.manual-stats {
+    background-color: rgba(38, 38, 38, 0.03);
+    width: 8%;
+}
+
+.total-stats {
+    font-weight: bold;
+    width: 8%;
+}
+
+.treeview .badge {
+    background-color: white;
 }

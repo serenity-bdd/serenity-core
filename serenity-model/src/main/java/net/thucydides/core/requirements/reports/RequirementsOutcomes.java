@@ -3,10 +3,7 @@ package net.thucydides.core.requirements.reports;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.model.OutcomeCounter;
-import net.thucydides.core.model.Release;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestType;
+import net.thucydides.core.model.*;
 import net.thucydides.core.releases.ReleaseManager;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.ReportNameProvider;
@@ -223,6 +220,12 @@ public class RequirementsOutcomes {
         return testOutcomes;
     }
 
+    public Optional<TestResult> getTestResultForTestNamed(String name) {
+        Optional<? extends TestOutcome> testOutcome = testOutcomes.testOutcomeWithName(name);
+        return testOutcome.map(TestOutcome::getResult);
+
+    }
+
     @Override
     public String toString() {
         return "RequirementsOutcomes{" +
@@ -296,6 +299,17 @@ public class RequirementsOutcomes {
 
 
         return cachedTotal("IgnoredRequirementsCount", matchingRequirements);
+    }
+
+    public int getSkippedRequirementsCount() {
+        if (totalIsCachedFor("SkippedRequirementsCount")) { return cachedTotalOf("SkippedRequirementsCount"); }
+
+        int matchingRequirements = (int) requirementOutcomes.stream()
+                .filter(RequirementOutcome::isSkipped)
+                .count();
+
+
+        return cachedTotal("SkippedRequirementsCount", matchingRequirements);
     }
 
     public int getRequirementsWithoutTestsCount() {

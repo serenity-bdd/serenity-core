@@ -384,6 +384,12 @@ public class TestOutcomes {
         return this;
     }
 
+    public Optional<? extends TestOutcome> testOutcomeWithName(String name) {
+        return outcomes.stream().filter(
+                outcome -> outcome.getName().equalsIgnoreCase(name)
+        ).findFirst();
+    }
+
     private static class TagFinder {
         private final String tagType;
 
@@ -743,6 +749,8 @@ public class TestOutcomes {
             int skippedCount =  countStepsWithResult(TestResult.SKIPPED, testType);
             return ((pendingCount + skippedCount + ignoredCount) / (double) getEstimatedTotalStepCount());
         }
+
+
     }
 
     public TestCoverageFormatter.FormattedPercentageStepCoverage getFormattedPercentageSteps() {
@@ -903,4 +911,5 @@ public class TestOutcomes {
             return false;
         }
     }
+
 }

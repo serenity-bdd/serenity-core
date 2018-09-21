@@ -450,13 +450,10 @@ public class WhenFindingTagsForATestOutcome {
         FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider(environmentVariables);
 
         File norwegenfeatureFile = new File(this.getClass().getResource("/features/PlantScandanavianPotatoes.feature").toURI());
-        File germanfeatureFile = new File(this.getClass().getResource("/features/PlantGermanPotatoes.feature").toURI());
 
         Requirement norwegenRequirement = tagProvider.readRequirementsFromStoryOrFeatureFile(norwegenfeatureFile);
-        Requirement germanRequirement = tagProvider.readRequirementsFromStoryOrFeatureFile(germanfeatureFile);
 
         assertThat(norwegenRequirement.getName(), is("Summering"));
-        assertThat(germanRequirement.getName(), is("Ich möchte testen, wie serenity und cucumber mit deutscher sprache umgehen."));
     }
 
     @Test

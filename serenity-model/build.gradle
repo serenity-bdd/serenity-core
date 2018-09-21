@@ -45,7 +45,9 @@ dependencies {
         exclude group: 'com.beust', module: 'jcommander'
     }
     compile "org.freemarker:freemarker:${freemarkerVersion}"
-    compile ("com.vladsch.flexmark:flexmark-all:0.26.4") {
+
+
+    compile ("com.vladsch.flexmark:flexmark-all:0.34.30") {
         exclude group:"org.jsoup", module:"jsoup"
     }
     compile 'es.nitaur.markdown:txtmark:0.16'

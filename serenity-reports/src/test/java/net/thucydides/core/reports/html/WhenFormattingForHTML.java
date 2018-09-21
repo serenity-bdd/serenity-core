@@ -219,6 +219,20 @@ public class WhenFormattingForHTML {
         assertThat(htmlFormatted, equalTo("&Eacute;rintett befogad&aacute;sa"));
     }
 
+    @Test
+    public void markdown_should_render_tables() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+
+        Formatter formatter = new Formatter( environmentVariables);
+        String htmlFormatted = formatter.htmlCompatible(formatter.renderMarkdown(
+                "| Tasks |" + System.lineSeparator() +
+                "|-------|" + System.lineSeparator() +
+                "| Bread |"));
+
+        assertThat(htmlFormatted, containsString("<table>"));
+    }
+
+
     private final String htmlDescription = "<h2><a name=\"ScenarioDosometests\"></a>Scenario Do some tests</h2>\n"+
             "<p><b>Given</b> we want to test some stuff<br/>\n"+
             "<b>When</b> we do some tests<br/>\n"+

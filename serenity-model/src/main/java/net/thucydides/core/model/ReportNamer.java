@@ -17,7 +17,7 @@ public class ReportNamer {
     }
 
     private ReportType type;
-    private boolean compressedFilename = true;
+    private boolean compressedFilename;
     private String prefix = "";
 
     private ReportNamer(final ReportType type) {

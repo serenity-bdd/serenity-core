@@ -30,8 +30,8 @@ class WhenLoadingRequirementsFromAPackageStructure extends Specification {
             def capabilitiyTexts = capabilities.collect {it.narrative.renderedText.replace("\r\n","\n").replace("\r","\n")}
         then:
             capabilityNames == ["Apples", "Nice zucchinis", "Potatoes"]
-            capabilitiyTexts == ["apples\nThis is a narrative\nFor apples", "This is a narrative\nFor Nice Zuchinnis",
-                    "This is a narrative\nFor a potato"]
+            capabilitiyTexts == ["apples  \nThis is a narrative  \nFor apples  ", "This is a narrative  \nFor Nice Zuchinnis  ",
+                    "This is a narrative  \nFor a potato  "]
     }
 
     def "Should be able to load capabilities from junit test cases in a specified package"() {

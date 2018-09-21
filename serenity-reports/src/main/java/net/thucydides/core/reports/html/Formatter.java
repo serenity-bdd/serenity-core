@@ -5,13 +5,17 @@ import com.google.common.base.Splitter;
 import com.google.inject.Inject;
 import com.google.inject.Key;
 import com.vladsch.flexmark.ast.Node;
+import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension;
+import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.options.MutableDataSet;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.renderer.Asciidoc;
 import net.thucydides.core.reports.renderer.MarkupRenderer;
+import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.translate.AggregateTranslator;
@@ -25,7 +29,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.abbreviate;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -79,7 +87,7 @@ public class Formatter  {
         MutableDataSet options = new MutableDataSet();
 
         // uncomment to set optional extensions
-        //options.set(Parser.EXTENSIONS, Arrays.asList(TablesExtension.create(), StrikethroughExtension.create()));
+        options.set(Parser.EXTENSIONS, Arrays.asList(TablesExtension.create(), StrikethroughExtension.create()));
 
         // uncomment to convert soft-breaks to hard breaks
         //options.set(HtmlRenderer.SOFT_BREAK, "<br />\n");
@@ -127,6 +135,9 @@ public class Formatter  {
     }
 
 
+    public String escapedXML(String text) {
+        return BASIC_XML.translate(text);
+    }
     public String renderText(String text) {
         if (isEmpty(text)) {
             return "";
@@ -157,6 +168,64 @@ public class Formatter  {
         } else {
             return addLineBreaks(text);
         }
+    }
+
+
+
+    public String renderDescriptionWithEmbeddedResults(final String text, RequirementsOutcomes requirementsOutcomes) {
+
+        String textWithResults = textWithEmbeddedExampleResults(textWithEmbeddedResults(text, requirementsOutcomes), requirementsOutcomes);
+        System.out.println(textWithResults);
+        return renderDescription(textWithResults);
+    }
+
+    private final Pattern RESULT_TOKEN = Pattern.compile("\\{result:(.*)!(.*)\\}'?");
+    private final Pattern EXAMPLE_RESULT_TOKEN = Pattern.compile("\\{example-result:(.*)!(.*)\\[(.*)\\]\\}'?");
+
+    private String textWithEmbeddedResults(String text, RequirementsOutcomes requirementsOutcomes) {
+
+        ResultIconFormatter resultIconFormatter = new ResultIconFormatter();
+
+        StringBuffer newText = new StringBuffer();
+        Matcher matcher = RESULT_TOKEN.matcher(text);
+        while (matcher.find()) {
+            String feature= matcher.group(1);
+            String scenario= matcher.group(2);
+
+            Optional<? extends TestOutcome> matchingOutcome = requirementsOutcomes.getTestOutcomes().getOutcomes().stream().filter(
+                                                     outcome -> outcome.getName().equalsIgnoreCase(scenario) && outcome.getUserStory().getName().equalsIgnoreCase(feature)
+            ).findFirst();
+
+            matchingOutcome.ifPresent(testOutcome -> matcher.appendReplacement(newText, resultIconFormatter.forResult(testOutcome.getResult())));
+        }
+        matcher.appendTail(newText);
+        return newText.toString();
+    }
+
+    private String textWithEmbeddedExampleResults(String text, RequirementsOutcomes requirementsOutcomes) {
+
+        ResultIconFormatter resultIconFormatter = new ResultIconFormatter();
+
+        StringBuffer newText = new StringBuffer();
+        Matcher matcher = EXAMPLE_RESULT_TOKEN.matcher(text);
+        while (matcher.find()) {
+            String feature= matcher.group(1);
+            String scenario= matcher.group(2);
+            Integer exampleRow = Integer.parseInt(matcher.group(3));
+
+            Optional<? extends TestOutcome> matchingOutcome = requirementsOutcomes.getTestOutcomes().getOutcomes().stream().filter(
+                    outcome -> outcome.getName().equalsIgnoreCase(scenario) && outcome.getUserStory().getName().equalsIgnoreCase(feature)
+            ).findFirst();
+
+            matchingOutcome.ifPresent(
+                    testOutcome -> {
+                        if (exampleRow < testOutcome.getTestSteps().size()) {
+                            matcher.appendReplacement(newText, resultIconFormatter.forResult(testOutcome.getTestSteps().get(exampleRow).getResult()));
+                        }
+                    });
+        }
+        matcher.appendTail(newText);
+        return newText.toString();
     }
 
     private boolean isRenderedHtml(String text) {

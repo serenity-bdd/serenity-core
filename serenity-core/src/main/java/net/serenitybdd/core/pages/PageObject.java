@@ -49,6 +49,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.MINUTES;
 import static net.serenitybdd.core.selectors.Selectors.xpathOrCssSelector;
 import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_JQUERY_INTEGRATION;
 import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_FLUENTWAIT;
@@ -114,7 +115,6 @@ public abstract class PageObject {
     private Duration getDefaultImplicitTimeout() {
         Integer configuredTimeout = ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT.integerFrom(environmentVariables);
         return Duration.ofMillis(configuredTimeout);
-
     }
 
     private enum OpenMode {

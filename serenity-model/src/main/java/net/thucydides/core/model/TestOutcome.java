@@ -40,7 +40,6 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -82,7 +81,6 @@ public class TestOutcome {
     /**
      * The name of the method implementing this test.
      */
-    @NotNull
     private String name;
 
     /**

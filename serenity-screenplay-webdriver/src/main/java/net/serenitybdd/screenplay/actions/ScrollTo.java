@@ -21,6 +21,5 @@ public abstract class ScrollTo implements Interaction {
 
     protected void performScrollTo(Actor actor, WebElement element) {
         BrowseTheWeb.as(actor).evaluateJavascript("arguments[0].scrollIntoView(arguments[1]);", element, alignToTop);
-
     }
 }

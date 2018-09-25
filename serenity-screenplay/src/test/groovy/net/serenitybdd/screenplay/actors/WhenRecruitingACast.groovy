@@ -1,0 +1,55 @@
+package net.serenitybdd.screenplay.actors
+
+import net.serenitybdd.screenplay.Ability
+import net.serenitybdd.screenplay.Actor
+import spock.lang.Specification
+
+import java.util.function.Consumer
+
+class WhenRecruitingACast extends Specification {
+
+    def "a cast can provide actors by name"() {
+        given:
+            Cast cast = new SimpleCast()
+        when:
+            Actor actor = cast.actorNamed("Joe")
+        then:
+            actor.name == "Joe"
+    }
+
+    static class PerformShakespeare implements Ability {}
+
+    def "cast members can be trained"() {
+        given:
+            Ability performShakespeare = new PerformShakespeare();
+        and:
+            Cast globeTheatreCast = Cast.whereEveryoneCan(performShakespeare)
+        when:
+            Actor laurance = globeTheatreCast.actorNamed("Laurence")
+        then:
+            laurance.abilityTo(PerformShakespeare.class) == performShakespeare
+    }
+
+    static class Fetch implements Ability {
+        String item
+
+        Fetch(String item) {
+            this.item = item
+        }
+
+        static some(String item) {
+            return new Fetch(item)
+        }
+    }
+
+    def "cast members can be trained to do arbitrary things"() {
+        given:
+            Consumer<Actor> fetchTheCoffee = {actor -> actor.whoCan(Fetch.some("Coffee"))}
+            Cast globeTheatreCast = Cast.whereEveryoneCan(fetchTheCoffee)
+        when:
+            Actor kenneth = globeTheatreCast.actorNamed("Kenneth")
+        then:
+            kenneth.abilityTo(Fetch.class).item == "Coffee"
+    }
+
+}

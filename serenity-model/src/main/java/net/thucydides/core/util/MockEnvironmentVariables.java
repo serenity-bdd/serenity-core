@@ -92,6 +92,11 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         return properties.getProperty(name);
     }
 
+    @Override
+    public Optional<String> optionalProperty(String name) {
+        return Optional.ofNullable(getProperty(name));
+    }
+
 
     public String getProperty(Enum<?> property) {
         return getProperty(property.toString());

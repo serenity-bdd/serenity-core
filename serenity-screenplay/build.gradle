@@ -1,5 +1,5 @@
 ext {
-    bintrayPackage = 'serenity-journey'
+    bintrayPackage = 'serenity-screenplay'
     projectDescription = 'Support for the User Journey pattern in Serenity'
 }
 

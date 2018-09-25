@@ -4,7 +4,7 @@ import net.serenitybdd.core.pages.WebElementState;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
-public class IsNotSelectedMatcher<T extends WebElementState> extends TypeSafeMatcher<T> {
+public class IsNotSelectedMatcher<T extends WebElementState> extends TypeSafeMatcher<T>{
 
     @Override
     protected boolean matchesSafely(T element) {

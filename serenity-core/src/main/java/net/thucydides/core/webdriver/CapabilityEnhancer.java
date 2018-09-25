@@ -1,6 +1,7 @@
 package net.thucydides.core.webdriver;
 
 import net.serenitybdd.core.webdriver.driverproviders.AddCustomDriverCapabilities;
+import net.serenitybdd.core.webdriver.driverproviders.CapabilityValue;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.fixtureservices.FixtureService;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -8,6 +9,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Map;
 
+import static net.serenitybdd.core.webdriver.driverproviders.CapabilityValue.fromString;
 import static net.thucydides.core.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
 import static net.thucydides.core.webdriver.SupportedWebDriver.IEXPLORER;
 

@@ -50,10 +50,14 @@ public class SerenityRest {
     }
 
     public static ValidatableResponse then() {
+        return lastResponse().then();
+    }
+
+    public static Response lastResponse() {
         Preconditions.checkNotNull(currentRequestSpecification, "request specification should be initialized");
-        final Response response = currentRequestSpecification.get().getLastResponse();
+        Response lastResponse = currentRequestSpecification.get().getLastResponse();
         Preconditions.checkNotNull(currentRequestSpecification, "response should be created");
-        return response.then();
+        return lastResponse;
     }
 
     public static String setDefaultBasePath(final String basePath) {

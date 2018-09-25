@@ -1,6 +1,7 @@
 package net.thucydides.core.util;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 /**
@@ -25,6 +26,21 @@ public interface EnvironmentVariables {
     Boolean getPropertyAsBoolean(final Enum<?> property, boolean defaultValue);
 
     String getProperty(final String name);
+
+    /**
+     * Returns an optional system property.
+     * The property may be defined in the project's serenity.properties or serenity.conf file, or be provided as a
+     * a system property. This is designed particularly for user-provided properties, to make it easier to store
+     * test confiuration properties in a single file.
+     *
+     * Sample usage:
+     * ```
+     * EnvironmentVariables environmentVariables;
+     *
+     * String environment = environmentVariables.optionalProperty("env").orElse("DEV")
+     * ```
+     */
+    Optional<String> optionalProperty(String name);
 
     String getProperty(final Enum<?> property);
 

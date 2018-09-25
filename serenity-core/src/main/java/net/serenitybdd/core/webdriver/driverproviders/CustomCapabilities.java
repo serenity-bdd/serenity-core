@@ -46,6 +46,7 @@ public class CustomCapabilities {
                 .collect(toMap(
                         entry -> stripPrefixFrom(entry.getKey().toString()),
                         entry -> stringOrBooleanFrom(entry.getValue())
+//                        entry -> CapabilityValue.fromString(entry.getValue())
                         )
                 );
     }

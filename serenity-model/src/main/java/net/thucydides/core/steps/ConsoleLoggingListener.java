@@ -511,7 +511,7 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
     private boolean showColoredOutput() {
-        return ThucydidesSystemProperty.THUCYDIDES_CONSOLE_COLORS.booleanFrom(environmentVariables,false);
+        return ThucydidesSystemProperty.SERENITY_CONSOLE_COLORS.booleanFrom(environmentVariables,false);
     }
 
     private String red(String text) {

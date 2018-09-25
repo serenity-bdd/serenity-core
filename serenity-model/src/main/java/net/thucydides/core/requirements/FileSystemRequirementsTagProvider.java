@@ -51,7 +51,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private final RequirementsConfiguration requirementsConfiguration;
 
     //    @Transient
-    private List<Requirement> requirements;
+    private volatile List<Requirement> requirements;
 
     public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables) {
         this(environmentVariables,
@@ -120,7 +120,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         this(filePathFormOf(rootDirectory), Injectors.getInjector().getProvider(EnvironmentVariables.class).get());
     }
 
-    private final ReentrantLock requirementsLock = new ReentrantLock();
+    private final Object requirementsLock = new Object();
 
     /**
      * We look for file system requirements in the root directory path (by default, 'stories').
@@ -130,29 +130,31 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
      */
     public List<Requirement> getRequirements() {
         if (requirements == null) {
-            requirementsLock.lock();
-            try {
-                Set<Requirement> allRequirements = new HashSet();
-                Set<String> directoryPaths = getRootDirectoryPaths();
+            synchronized (requirementsLock) {
+                if (requirements == null) {
+                    try {
+                        Set<Requirement> allRequirements = new HashSet<>();
+                        Set<String> directoryPaths = getRootDirectoryPaths();
 
-                for (String path : directoryPaths) {
-                    File rootDirectory = new File(path);
-                    logger.trace("Loading requirements from {}", rootDirectory);
-                    if (rootDirectory.exists()) {
-                        allRequirements.addAll(loadCapabilitiesFrom(rootDirectory.listFiles(thatAreFeatureDirectories())));
-                        allRequirements.addAll(loadStoriesFrom(rootDirectory.listFiles(thatAreStories())));
+                        for (String path : directoryPaths) {
+                            File rootDirectory = new File(path);
+                            logger.trace("Loading requirements from {}", rootDirectory);
+                            if (rootDirectory.exists()) {
+                                allRequirements.addAll(loadCapabilitiesFrom(rootDirectory.listFiles(thatAreFeatureDirectories())));
+                                allRequirements.addAll(loadStoriesFrom(rootDirectory.listFiles(thatAreStories())));
+                            }
+                        }
+                        requirements = new ArrayList<>(allRequirements);
+                        Collections.sort(requirements);
+                    } catch (IOException e) {
+                        requirements = NO_REQUIREMENTS;
+                        throw new IllegalArgumentException("Could not load requirements from '" + rootDirectory + "'", e);
                     }
+                    requirements = addParentsTo(requirements);
                 }
-                requirements = new ArrayList<>(allRequirements);
-                Collections.sort(requirements);
-            } catch (IOException e) {
-                requirements = NO_REQUIREMENTS;
-                throw new IllegalArgumentException("Could not load requirements from '" + rootDirectory + "'", e);
             }
-            requirements = addParentsTo(requirements);
-            requirementsLock.unlock();
         }
-        return requirements;
+        return Collections.unmodifiableList(requirements);
     }
 
     private int maxDirectoryDepthIn(Set<String> directoryPaths) {
@@ -538,7 +540,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     public Requirement readRequirementsFromStoryOrFeatureFile(File storyFile) {
         FeatureType type = featureTypeOf(storyFile);
-        String defaultStoryName = storyFile.getName().replace(type.getExtension(), "");
 
         java.util.Optional<Narrative> narrative = (type == FeatureType.STORY) ? loadFromStoryFile(storyFile) : loadFromFeatureFile(storyFile);
 

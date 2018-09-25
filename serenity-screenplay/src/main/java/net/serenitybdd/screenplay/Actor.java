@@ -15,6 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * An actor represents the person or system using the application under test.
+ * Actors can have Abilities, which allows them to perform Tasks and Interactions.
+ */
 public class Actor implements PerformsTasks, SkipNested {
 
     private final String name;
@@ -23,8 +27,8 @@ public class Actor implements PerformsTasks, SkipNested {
     private EventBusInterface eventBusInterface = new EventBusInterface();
     private ConsequenceListener consequenceListener = new ConsequenceListener(eventBusInterface);
 
-    private Map<String, Object> notepad = new HashMap();
-    private Map<Class, Ability> abilities = new HashMap();
+    private Map<String, Object> notepad = new HashMap<>();
+    private Map<Class, Ability> abilities = new HashMap<>();
 
     private String preferredPronoun;
 
@@ -72,6 +76,11 @@ public class Actor implements PerformsTasks, SkipNested {
     public <T extends Ability> T usingAbilityTo(Class<? extends T> doSomething) {
         return abilityTo(doSomething);
     }
+
+    /**
+     * A method used to declare that an actor is now the actor in the spotlight, without having them perform any tasks.
+     */
+    public final void entersTheScene() {}
 
     public final void has(Performable... todos) {
         attemptsTo(todos);

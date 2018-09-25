@@ -1,8 +1,11 @@
 package net.thucydides.core.requirements;
 
+import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,9 +20,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.nio.file.Files.isDirectory;
+import static java.nio.file.Files.isHidden;
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_FEATURES_DIRECTORY;
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_STORIES_DIRECTORY;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -45,6 +51,8 @@ public class RootDirectory {
 
     private final String featureDirectoryName;
     private final String storyDirectoryName;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RootDirectory.class);
 
     RootDirectory(EnvironmentVariables environmentVariables, String rootDirectoryPath) {
         this.environmentVariables = environmentVariables;
@@ -199,30 +207,77 @@ public class RootDirectory {
         return Optional.empty();
     }
 
+    private static Map<Path, List<File>> RESOURCE_DIRECTORY_CACHE = new HashMap<>();
+
     private static List<File> getResourceDirectories(Path root, EnvironmentVariables environmentVariables) {
+
+        if (RESOURCE_DIRECTORY_CACHE.containsKey(root)) {
+            return RESOURCE_DIRECTORY_CACHE.get(root);
+        }
+
+        Stopwatch stopwatch = Stopwatch.started();
+        List<File> results;
         if (ThucydidesSystemProperty.SERENITY_REQUIREMENTS_DIR.isDefinedIn(environmentVariables)) {
-            return new ArrayList<>();
+            results = new ArrayList<>();
         } else {
-            return listDirectories(root).stream()
+            results = listDirectories(root).parallelStream()
                     .filter(path -> path.endsWith("src/test/resources"))
                     .map(Path::toFile)
                     .collect(Collectors.toList());
         }
+        RESOURCE_DIRECTORY_CACHE.put(root,results);
+        LOGGER.debug("Resource directories found in {} in {} ms: {}", root, stopwatch.stop(), results);
+
+        return results;
     }
 
     private static List<Path> listDirectories(Path path) {
         List<Path> files = new ArrayList<>();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
-            for (Path entry : stream) {
-                if (Files.isDirectory(entry)) {
-                    files.add(entry);
-                    files.addAll(listDirectories(entry));
+        if (isResourceDirectoryCandidate(path)) {
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
+                for (Path entry : stream) {
+                    if (isResourceDirectoryCandidate(entry)) {
+                        files.add(entry);
+                        files.addAll(listDirectories(entry));
+                    }
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return files;
+    }
+
+    /**
+     * Don't bother looking for src/test/resources folders in directories with names like these
+     */
+    private final static List<Predicate<Path>> IGNORED_DIRECTORIES = new ArrayList<>();
+    static {
+        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().startsWith("."));
+        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("target"));
+        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("build"));
+        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("out"));
+        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("java"));
+        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("scala"));
+        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("groovy"));
+        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("kotlin"));
+        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("features"));
+        IGNORED_DIRECTORIES.add( path -> path.getFileName().toString().equals("stories"));
+    }
+    private static boolean isResourceDirectoryCandidate(Path entry) {
+
+        try {
+            if (entry.toString().isEmpty()) { return true; }
+            if (!isDirectory(entry)) { return false; }
+            if (isHidden(entry)) { return false; }
+
+            return IGNORED_DIRECTORIES.stream().noneMatch(
+                    shouldIgnore -> shouldIgnore.test(entry)
+            );
+
+        } catch (IOException e) {
+            return false;
+        }
     }
 
 

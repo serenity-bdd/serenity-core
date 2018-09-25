@@ -45,7 +45,7 @@ public class BooleanQuestionConsequence<T> extends BaseConsequence<T> {
     }
 
     private String reason() {
-        return "Expected " + QuestionSubject.fromClass(question.getClass());
+        return "Expected " + QuestionSubject.fromClass(question.getClass()).andQuestion(question).subject();
     }
 
     private void throwDiagosticErrorIfProvided(Error actualError) {

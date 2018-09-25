@@ -125,6 +125,11 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
         return properties.get(name);
     }
 
+    @Override
+    public Optional<String> optionalProperty(String name) {
+        return Optional.ofNullable(getProperty(name));
+    }
+
 
     public String getProperty(Enum<?> property) {
         return getProperty(property.toString());

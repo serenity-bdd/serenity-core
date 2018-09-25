@@ -147,6 +147,19 @@ public class WhenLoadingPreferencesFromALocalPropertiesFile {
         assertThat(environmentVariables.getProperty("environment.uat"), is("uat-server"));
     }
 
+    @Test
+    public void users_can_define_optional_custom_properties() {
+
+        // WHEN
+        environmentVariables.setProperty("env","QA");
+
+        // THEN
+        assertThat(environmentVariables.optionalProperty("env").isPresent(), is(true));
+
+        // BUT
+        assertThat(environmentVariables.optionalProperty("undefined").isPresent(), is(false));
+
+    }
 
     @SuppressWarnings("static-access")
     private String writeToPropertiesFileCalled(String filename, String... lines) throws IOException, InterruptedException {

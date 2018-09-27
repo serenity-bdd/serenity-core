@@ -21,6 +21,14 @@ public class Purchase implements Performable {
     String currency;
 
 
+    public Purchase() {}
+
+    public Purchase(String purchasedItem, int cost, String currency) {
+        this.purchasedItem = purchasedItem;
+        this.cost = cost;
+        this.currency = currency;
+    }
+
     public Boolean theItemWasPurchased = false;
 
     public static Purchase purchased() {return instrumented(Purchase.class);}

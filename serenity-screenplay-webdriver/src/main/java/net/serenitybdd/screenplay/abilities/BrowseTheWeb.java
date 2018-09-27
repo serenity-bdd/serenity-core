@@ -79,4 +79,9 @@ public class BrowseTheWeb extends PageObject implements Ability, RefersToActor {
         this.actor = actor;
         return (T) this;
     }
+
+    @Override
+    public String toString() {
+        return "browse the web with " + webdriverManager.getDefaultDriverType();
+    }
 }

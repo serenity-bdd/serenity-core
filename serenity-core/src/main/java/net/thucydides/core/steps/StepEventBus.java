@@ -528,6 +528,12 @@ public class StepEventBus {
 
     }
 
+    public void useScenarioOutline(String scenarioOutline) {
+        getBaseStepListener().latestTestOutcome().ifPresent(
+                testOutcome -> testOutcome.useScenarioOutline(scenarioOutline)
+        );
+    }
+
     public boolean currentTestIsSuspended() {
         return suspendedTest;
     }
@@ -741,4 +747,11 @@ public class StepEventBus {
         stepEventBusThreadLocal.set(stepEventBus);
     }
 
+    public void castActor(String name) {
+        if ((baseStepListener != null) && (baseStepListener.latestTestOutcome() != null)) {
+            baseStepListener.latestTestOutcome().ifPresent(
+                    testOutcome -> testOutcome.castActor(name)
+            );
+        }
+    }
 }

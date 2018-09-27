@@ -3,7 +3,7 @@ package net.serenitybdd.core.buildinfo;
 import groovy.lang.Binding;
 import groovy.lang.GroovyRuntimeException;
 import groovy.lang.GroovyShell;
-import io.vavr.collection.List;
+//import io.vavr.collection.List;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -12,8 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * Created by john on 12/02/15.
@@ -30,17 +32,15 @@ public class BuildInfoProvider {
     }
 
     public BuildProperties getBuildProperties() {
-        Map<String, String> generalProperties = new HashMap();
+        Map<String, String> generalProperties = new HashMap<>();
         generalProperties.put("Default Driver", ThucydidesSystemProperty.DRIVER.from(environmentVariables,"firefox"));
         generalProperties.put("Operating System",System.getProperty("os.name") + " version " + System.getProperty("os.version"));
         addRemoteDriverPropertiesTo(generalProperties);
         addSaucelabsPropertiesTo(generalProperties);
         addCustomPropertiesTo(generalProperties);
 
-        List<String> drivers = List.ofAll(driverCapabilityRecord.getDrivers());
         Map<String, Properties> driverPropertiesMap = driverCapabilityRecord.getDriverCapabilities();
-
-        return new BuildProperties(generalProperties, drivers.toJavaList(), driverPropertiesMap);
+        return new BuildProperties(generalProperties, driverCapabilityRecord.getDrivers(), driverPropertiesMap);
     }
 
     private void addRemoteDriverPropertiesTo(Map<String, String> buildProperties) {
@@ -81,7 +81,9 @@ public class BuildInfoProvider {
 
     private void addCustomPropertiesTo(Map<String, String> buildProperties) {
 
-        List<String> sysInfoKeys = sysInfoKeysIn(List.ofAll(environmentVariables.getKeys()));
+        List<String> sysInfoKeys = environmentVariables.getKeys().stream()
+                                                        .filter( key -> key.startsWith("sysinfo."))
+                                                        .collect(Collectors.toList());
         for(String key : sysInfoKeys) {
             String simplifiedKey = key.replace("sysinfo.", "");
             String expression = environmentVariables.getProperty(key);
@@ -90,10 +92,6 @@ public class BuildInfoProvider {
 
             buildProperties.put(humanizedFormOf(simplifiedKey), value);
         }
-    }
-
-    private List<String> sysInfoKeysIn(List<String> keys) {
-        return keys.filter( key -> key.startsWith("sysinfo.") );
     }
 
     private boolean isGroovyExpression(String expression) {

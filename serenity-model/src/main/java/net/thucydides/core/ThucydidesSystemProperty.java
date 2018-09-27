@@ -588,6 +588,11 @@ public enum ThucydidesSystemProperty {
     FIREFOX_PREFERENCES,
 
     /**
+     * Used to specify either chrome options or firefox preferences, depending on which driver is being used.
+     */
+    DRIVER_OPTIONS,
+
+    /**
      * Full path to the Firefox profile to be used with Firefox.
      * You can include Java system properties ${user.dir}, ${user.home} and the Windows environment variables %APPDIR%
      * and %USERPROFILE (assuming these are correctly set in the environment)
@@ -759,6 +764,11 @@ public enum ThucydidesSystemProperty {
      * Use this property if you need to completely override the location of requirements for the File System Provider.
      */
     SERENITY_REQUIREMENTS_DIR,
+
+    /**
+     * if specified, should point to a folder that contains one or more Serenity CSV output files
+     */
+    SERENITY_TEST_STATISTICS_DIR,
 
     @Deprecated
     THUCYDIDES_USE_REQUIREMENTS_DIRECTORIES,
@@ -1124,6 +1134,16 @@ public enum ThucydidesSystemProperty {
     SERENITY_FAIL_ON,
 
     /**
+     *  If batch testing is being used in a multithreaded environment, this is the number of forks that will be created.
+     */
+    SERENITY_FORK_COUNT,
+
+    /**
+     *  If batch testing is being used in a multithreaded environment, this is the executing fork number.
+     */
+    SERENITY_FORK_NUMBER,
+
+    /**
      * Comma-separated list of exception classes that should produce a pending test in the reports.
      */
     SERENITY_PENDING_ON,
@@ -1216,7 +1236,7 @@ public enum ThucydidesSystemProperty {
     HEADLESS_MODE,
 
     /**
-     * Where to find images used in the reports (defaults to src/test/resources/assets)
+     * Where to find images used in the reports (defaults to src/test/resourcesFC/assets)
      */
     REPORT_ASSETS_DIRECTORY,
 
@@ -1245,6 +1265,21 @@ public enum ThucydidesSystemProperty {
      * due to step nesting rather than actual infinite recursion.
      */
     SERENITY_MAXIMUM_STEP_NESTING_DEPTH,
+
+    /**
+     * The maximum number of entries to appear on report scoreboards (default 5)
+     */
+    REPORT_SCOREBOARD_SIZE,
+
+    /**
+     * What tag types should be listed in the report summary
+     */
+    REPORT_TAGTYPES,
+
+    /**
+     * The title to appear in the tag type table in the email reports
+     */
+    REPORT_TAGTYPE_TITLE
     ;
 
     private String propertyName;

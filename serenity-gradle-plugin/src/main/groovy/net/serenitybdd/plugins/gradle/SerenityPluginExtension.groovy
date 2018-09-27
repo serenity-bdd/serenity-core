@@ -5,11 +5,14 @@ import net.thucydides.core.webdriver.Configuration;
 
 class SerenityPluginExtension {
     private final def configuration = Injectors.getInjector().getProvider(Configuration.class).get()
-    def String outputDirectory = configuration.getOutputDirectory()
-    def String historyDirectory = configuration.getHistoryDirectory()
-    def String projectKey
-    def String issueTrackerUrl
-    def String jiraUrl
-    def String jiraProject
-    def String sourceDirectory = outputDirectory
+    String outputDirectory = configuration.getOutputDirectory()
+    String historyDirectory = configuration.getHistoryDirectory()
+    String projectKey
+    String issueTrackerUrl
+    String jiraUrl
+    String jiraProject
+    String sourceDirectory = outputDirectory
+    String requirementsBaseDir
+    boolean generateOutcomes
+    List<String> reports
 }

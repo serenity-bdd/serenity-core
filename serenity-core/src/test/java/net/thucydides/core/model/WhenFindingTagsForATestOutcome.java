@@ -327,6 +327,34 @@ public class WhenFindingTagsForATestOutcome {
     }
 
     @Test
+    public void should_get_overview_from_default_story_path() {
+        FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider();
+
+        assertThat(tagProvider.getOverview().isPresent(), is(true));
+        assertThat(tagProvider.getOverview().get(), is("Farming stories"));
+    }
+
+    @Test
+    public void should_get_overview_from_custom_feature_path() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+        environmentVariables.setProperty("serenity.features.directory", "feature-requirements");
+        FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider(environmentVariables);
+
+        assertThat(tagProvider.getOverview().isPresent(), is(true));
+        assertThat(tagProvider.getOverview().get(), is("## My custom overview"));
+    }
+
+    @Test
+    public void should_get_overview_from_custom_story_path() {
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+        environmentVariables.setProperty("serenity.features.directory", "one-level-story-files/stories");
+        FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider(environmentVariables);
+
+        assertThat(tagProvider.getOverview().isPresent(), is(true));
+        assertThat(tagProvider.getOverview().get(), is("## My custom story overview"));
+    }
+
+    @Test
     public void should_get_tags_from_story_path_with_file_separators() {
         FileSystemRequirementsTagProvider tagProvider = new FileSystemRequirementsTagProvider();
 

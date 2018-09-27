@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements;
 
 import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.files.TheDirectoryStructure;
 import net.thucydides.core.guice.Injectors;
@@ -42,10 +43,12 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private static final List<Requirement> NO_REQUIREMENTS = new ArrayList<>();
     private static final List<TestTag> NO_TEST_TAGS = new ArrayList<>();
-    public static final String STORY_EXTENSION = "story";
-    public static final String FEATURE_EXTENSION = "feature";
+    private static final String STORY_EXTENSION = "story";
+    private static final String FEATURE_EXTENSION = "feature";
 
     private final NarrativeReader narrativeReader;
+    private final OverviewReader overviewReader;
+    private final Set<String> directoryPaths;
     private final int level;
 
     private final RequirementsConfiguration requirementsConfiguration;
@@ -98,9 +101,10 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         super(environmentVariables, rootDirectory);
         this.narrativeReader = NarrativeReader.forRootDirectory(rootDirectory)
                 .withRequirementTypes(getRequirementTypes());
+        this.overviewReader = new OverviewReader();
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
 
-        Set<String> directoryPaths = rootDirectories(rootDirectory, environmentVariables);
+        directoryPaths = rootDirectories(rootDirectory, environmentVariables);
         this.level = requirementsConfiguration.startLevelForADepthOf(maxDirectoryDepthIn(directoryPaths) + 1);
     }
 
@@ -108,6 +112,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         super(environmentVariables, rootDirectory);
         this.narrativeReader = NarrativeReader.forRootDirectory(rootDirectory)
                 .withRequirementTypes(getRequirementTypes());
+        this.overviewReader = new OverviewReader();
+        directoryPaths = rootDirectories(rootDirectory, environmentVariables);
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
         this.level = level;
     }
@@ -129,6 +135,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
      * at the working directory.
      */
     public List<Requirement> getRequirements() {
+
         if (requirements == null) {
             synchronized (requirementsLock) {
                 if (requirements == null) {
@@ -161,16 +168,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         return directoryPaths.stream()
                 .mapToInt(directoryPath -> TheDirectoryStructure.startingAt(new File(directoryPath)).maxDepth())
                 .max().orElse(0);
-
-//        int maxDepth = 0;
-//
-//        for (String directoryPath : directoryPaths) {
-//            int localMax = TheDirectoryStructure.startingAt(new File(directoryPath)).maxDepth();
-//            if (localMax > maxDepth) {
-//                maxDepth = localMax;
-//            }
-//        }
-//        return maxDepth;
     }
 
     private List<Requirement> addParentsTo(List<Requirement> requirements) {
@@ -292,13 +289,6 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                         requirement -> requirement.asTag().isAsOrMoreSpecificThan(storyOrFeatureTag)
                 )
                 .findFirst();
-
-//        for (Requirement requirement : AllRequirements.in(getRequirements())) {
-//            if (requirement.asTag().isAsOrMoreSpecificThan(storyOrFeatureTag)) {
-//                return java.util.Optional.of(requirement);
-//            }
-//        }
-//        return java.util.Optional.empty();
     }
 
     private java.util.Optional<TestTag> getMatchingRequirementTagsFor(TestTag storyOrFeatureTag) {
@@ -745,10 +735,15 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private FileFilter thatAreNarratives() {
         return file -> file.getName().toLowerCase().equals("narrative.txt")
                 || file.getName().toLowerCase().equals("narrative.md")
+                || file.getName().toLowerCase().equals("readme.md")
                 || file.getName().toLowerCase().equals("placeholder.txt");
     }
 
     private boolean isSupportedFileStoryExtension(String storyFileExtension) {
         return (storyFileExtension.toLowerCase().equals(FEATURE_EXTENSION) || storyFileExtension.toLowerCase().equals(STORY_EXTENSION));
+    }
+
+    public Optional<String> getOverview() {
+        return overviewReader.readOverviewFrom(directoryPaths.toArray(new String[]{}));
     }
 }

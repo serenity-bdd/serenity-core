@@ -6,11 +6,14 @@ import net.serenitybdd.core.SkipNested;
 import net.serenitybdd.core.eventbus.Broadcaster;
 import net.serenitybdd.screenplay.events.*;
 import net.serenitybdd.screenplay.exceptions.IgnoreStepException;
+import net.serenitybdd.screenplay.facts.Fact;
+import net.serenitybdd.screenplay.facts.FactLifecycleListener;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -27,6 +30,7 @@ public class Actor implements PerformsTasks, SkipNested {
     private EventBusInterface eventBusInterface = new EventBusInterface();
     private ConsequenceListener consequenceListener = new ConsequenceListener(eventBusInterface);
 
+    private String description;
     private Map<String, Object> notepad = new HashMap<>();
     private Map<Class, Ability> abilities = new HashMap<>();
 
@@ -42,11 +46,22 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     public static Actor named(String name) {
+        EventBusInterface.castActor(name);
         return new Actor(name);
+    }
+
+    public Actor describedAs(String description) {
+        this.description = description;
+        assignDescriptionToActor(description);
+        return this;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getNameOrPronoun() {
@@ -58,6 +73,7 @@ public class Actor implements PerformsTasks, SkipNested {
             ((RefersToActor)doSomething).asActor(this);
         }
         abilities.put(doSomething.getClass(), doSomething);
+        eventBusInterface.assignAbilityToActor(this, doSomething.toString());
         return this;
     }
 
@@ -86,8 +102,18 @@ public class Actor implements PerformsTasks, SkipNested {
         attemptsTo(todos);
     }
 
+    public final void has(Fact... facts) {
+        Arrays.stream(facts).forEach(
+                fact -> {
+                    fact.setup(this);
+                    eventBusInterface.assignFactToActor(this, fact.toString());
+                    StepEventBus.getEventBus().registerListener(new FactLifecycleListener(this, fact));
+                }
+        );
+    }
+
     /**
-     * A tense-neutral synonyme for has() for use with given() clauses
+     * A tense-neutral synonyme for addFact() for use with given() clauses
      */
     public final void wasAbleTo(Performable... todos) {
         attemptsTo(todos);
@@ -96,7 +122,7 @@ public class Actor implements PerformsTasks, SkipNested {
     public final void attemptsTo(Performable... tasks) {
         beginPerformance();
         for (Performable task : tasks) {
-            perform(task);
+            perform(InstrumentedTask.of(task));
         }
         endPerformance();
     }
@@ -109,10 +135,13 @@ public class Actor implements PerformsTasks, SkipNested {
         if (isPending(todo)) {
             StepEventBus.getEventBus().stepPending();
         }
+
+
         try {
             notifyPerformanceOf(todo);
             taskTally.newTask();
-            todo.performAs(this);
+
+            performTask(todo);
 
             if (anOutOfStepErrorOccurred()) {
                 eventBusInterface.mergePreviousStep();
@@ -126,6 +155,12 @@ public class Actor implements PerformsTasks, SkipNested {
             }
         } finally {
             eventBusInterface.updateOverallResult();
+        }
+    }
+
+    private <T extends Performable> void performTask(T todo) {
+        if (!StepEventBus.getEventBus().currentTestIsSuspended()) {
+            todo.performAs(this);
         }
     }
 
@@ -273,5 +308,11 @@ public class Actor implements PerformsTasks, SkipNested {
     public Actor withNoPronoun() {
         this.preferredPronoun = null;
         return this;
+    }
+
+    public void assignDescriptionToActor(String description) {
+        StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
+                testOutcome -> testOutcome.assignDescriptionToActor(getName(), description)
+        );
     }
 }

@@ -64,7 +64,9 @@ dependencies {
         exclude group: "commons-codec", module:"commons-codec"
         exclude group: "org.seleniumhq.selenium", module:"htmlunit-driver"
         exclude group: "net.sourceforge.htmlunit", module:"neko-htmlunit"
-
+        exclude group: "net.sourceforge.htmlunit", module:"htmlunit-core"
+        exclude group: "net.sourceforge.htmlunit", module:"htmlunit-core-js"
+        exclude group: "net.sourceforge.htmlunit", module:"htmlunit-cssparser"
     }
 
     compile("org.seleniumhq.selenium:selenium-java:$seleniumVersion")
@@ -112,7 +114,9 @@ dependencies {
         exclude group: 'commons-logging', module: 'commons-logging'
         exclude group: 'commons-io', module: 'commons-io'
         exclude group: 'org.apache.commons', module: 'commons-lang3'
+        exclude group: 'org.glassfish.tyrus', module: 'tyrus-core'
     }
+    compile "org.glassfish.tyrus:tyrus-core:1.13.1"
 
     compile "org.codehaus.groovy:groovy:${groovyVersion}"
 
@@ -131,16 +135,16 @@ dependencies {
     }
     compile "org.hamcrest:hamcrest-core:${hamcrestVersion}"
     compile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
-//    compile("net.sourceforge.htmlunit:htmlunit:${htmlunitVersion}") {
-//        exclude group: 'org.apache.commons', module: 'commons-lang3'
-//        exclude group: 'commons-logging', module: 'commons-logging'
-//        exclude group: 'commons-io', module: 'commons-io'
-//        exclude group: 'xml-apis', module: 'xml-apis'
-//        exclude group: 'xalan', module: 'xalan'
-//        exclude group: 'commons-codec', module: 'commons-codec'
-//        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
-//        exclude group: 'org.apache.httpcomponents', module: 'httpmime'
-//    }
+    compile("net.sourceforge.htmlunit:htmlunit:${htmlunitVersion}") {
+        exclude group: 'org.apache.commons', module: 'commons-lang3'
+        exclude group: 'commons-logging', module: 'commons-logging'
+        exclude group: 'commons-io', module: 'commons-io'
+        exclude group: 'xml-apis', module: 'xml-apis'
+        exclude group: 'xalan', module: 'xalan'
+        exclude group: 'commons-codec', module: 'commons-codec'
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+        exclude group: 'org.apache.httpcomponents', module: 'httpmime'
+    }
     compile("org.apache.httpcomponents:httpclient:${httpclientVersion}") {
         exclude group: 'commons-codec', module: 'commons-codec'
     }
@@ -160,8 +164,6 @@ dependencies {
 
     compile "org.imgscalr:imgscalr-lib:${imgscalrVersion}"
 
-//    compile "javax.validation:validation-api:${javaxValidationVersion}"
-//    compile "org.hibernate:hibernate-validator:${hibernateValidatorVersion}"
     compile "javax.el:javax.el-api:${elApiVersion}"
     compile "org.glassfish.web:javax.el:${elApiVersion}"
 

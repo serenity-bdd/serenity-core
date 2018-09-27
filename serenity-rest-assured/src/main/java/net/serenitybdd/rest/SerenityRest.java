@@ -21,6 +21,9 @@ import net.serenitybdd.rest.decorators.ResponseSpecificationDecorated;
 import net.serenitybdd.rest.decorators.request.RequestSpecificationDecorated;
 import net.serenitybdd.rest.utils.RestDecorationHelper;
 import net.serenitybdd.rest.utils.RestSpecificationFactory;
+import net.thucydides.core.steps.ExecutedStepDescription;
+import net.thucydides.core.steps.StepEventBus;
+import net.thucydides.core.steps.StepFailure;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -30,6 +33,7 @@ import java.net.URL;
 import java.security.KeyStore;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import static io.restassured.specification.ProxySpecification.host;
 
@@ -573,4 +577,7 @@ public class SerenityRest {
     public static Response get() {
         return given().get();
     }
+
+
+
 }

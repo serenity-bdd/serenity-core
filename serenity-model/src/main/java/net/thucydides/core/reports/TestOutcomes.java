@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.collect.NewSet;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
+import net.serenitybdd.core.strings.Joiner;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.*;
 import net.thucydides.core.model.flags.Flag;
@@ -415,6 +416,16 @@ public class TestOutcomes {
                 .collect(Collectors.toList());
 
         return TestOutcomes.of(testOutcomesWithTags).withLabel(tagType).withRootOutcomes(getRootOutcomes());
+    }
+
+    public TestOutcomes withTagTypes(List<String> tagTypes) {
+
+        List<TestOutcome> testOutcomesWithTags = outcomes.stream()
+                .filter(outcome -> outcome.hasTagWithTypes(tagTypes))
+                .collect(Collectors.toList());
+
+        return TestOutcomes.of(testOutcomesWithTags).withLabel(Joiner.on(",").join(tagTypes))
+                           .withRootOutcomes(getRootOutcomes());
     }
 
     private TestOutcomes withRootOutcomes(TestOutcomes rootOutcomes) {

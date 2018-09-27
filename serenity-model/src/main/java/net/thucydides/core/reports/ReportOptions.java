@@ -33,7 +33,7 @@ public class ReportOptions {
     public ReportOptions(EnvironmentVariables environmentVariables, RequirementsService requirementsService) {
         showStepDetails = Boolean.valueOf(THUCYDIDES_REPORTS_SHOW_STEP_DETAILS.from(environmentVariables, "false"));
         showManualTests = Boolean.valueOf(THUCYDIDES_REPORT_SHOW_MANUAL_TESTS.from(environmentVariables, "true"));
-        showReleases = Boolean.valueOf(THUCYDIDES_REPORT_SHOW_RELEASES.from(environmentVariables, "true"));
+        showReleases = Boolean.valueOf(THUCYDIDES_REPORT_SHOW_RELEASES.from(environmentVariables, "false"));
         showProgress = Boolean.valueOf(THUCYDIDES_REPORT_SHOW_PROGRESS.from(environmentVariables, "false"));
         showHistory = Boolean.valueOf(THUCYDIDES_REPORT_SHOW_HISTORY.from(environmentVariables, "false"));
         showTagMenus = Boolean.valueOf(THUCYDIDES_REPORT_SHOW_TAG_MENUS.from(environmentVariables, "false"));

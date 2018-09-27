@@ -1,20 +1,22 @@
 package net.serenitybdd.screenplay.actions.deselectactions;
 
+import net.serenitybdd.core.steps.Instrumented;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.actions.ByAction;
 import net.serenitybdd.screenplay.targets.Target;
 import net.thucydides.core.annotations.Step;
+import org.openqa.selenium.By;
 
 public class DeselectAllOptions extends ByAction {
 
     private final Target target;
 
-    private DeselectAllOptions(Target target) {
+    public DeselectAllOptions(Target target) {
         this.target = target;
     }
 
     public static DeselectAllOptions from(Target target) {
-        return new DeselectAllOptions(target);
+        return Instrumented.instanceOf(DeselectAllOptions.class).withProperties(target);
     }
 
     @Step("{0} deselects all options in #value")

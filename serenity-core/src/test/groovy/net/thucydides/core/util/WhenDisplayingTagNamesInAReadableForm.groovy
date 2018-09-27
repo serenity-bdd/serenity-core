@@ -65,6 +65,17 @@ class WhenDisplayingTagNamesInAReadableForm extends Specification {
                     'AnotherWord'  | 'another_word'
     }
 
+    def "should transform kebab-case to underscore"() {
+        when:
+        def kebabCaseForm = inflection.of(word).withKebabCase().toString()
+        then:
+        kebabCaseForm == expectedKebabCaseForm
+        where:
+        word          | expectedKebabCaseForm
+        'aWord'       | 'a-word'
+        'AnotherWord' | 'another-word'
+    }
+
     def "should captialize first word"() {
         when:
             def capitalized = inflection.of(word).startingWithACapital().toString()

@@ -228,11 +228,21 @@ public class TestOutcome {
     private String testSource;
 
     /**
+     * The actors used in a Screenplay test
+     */
+    private List<CastMember> actors;
+
+    /**
      * Fields used for serialization
      */
     TestResult result;
     List<String> issues;
     List<String> versions;
+
+    /**
+     * Scenario outline text.
+     */
+    private String scenarioOutline;
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestOutcome.class);
@@ -241,6 +251,7 @@ public class TestOutcome {
         groupStack = new Stack<>();
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
+        this.actors = new ArrayList<>();
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
         this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
@@ -291,6 +302,7 @@ public class TestOutcome {
         this.testCaseName = nameOf(testCase);
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
+        this.actors = new ArrayList<>();
         this.issueTracking = Injectors.getInjector().getInstance(IssueTracking.class);
         this.linkGenerator = Injectors.getInjector().getInstance(LinkGenerator.class);
         this.flagProvider = Injectors.getInjector().getInstance(FlagProvider.class);
@@ -400,6 +412,7 @@ public class TestOutcome {
         this.testCaseName = nameOf(testCase);
         this.additionalIssues = new ArrayList<>();
         this.additionalVersions = new ArrayList<>();
+        this.actors = new ArrayList<>();
         if ((testCase != null) || (userStory != null)) {
             setUserStory(storyDefinedIn(testCase).orElse(userStory));
         }
@@ -430,6 +443,7 @@ public class TestOutcome {
                 this.testSteps,
                 this.coreIssues,
                 this.additionalIssues,
+                this.actors,
                 this.tags,
                 this.userStory,
                 this.testFailureCause,
@@ -455,6 +469,7 @@ public class TestOutcome {
                           final List<TestStep> testSteps,
                           final List<String> issues,
                           final List<String> additionalIssues,
+                          final List<CastMember> actors,
                           final Set<TestTag> tags,
                           final Story userStory,
                           final FailureCause testFailureCause,
@@ -480,6 +495,7 @@ public class TestOutcome {
         this.coreIssues = removeDuplicates(issues);
         this.additionalVersions = removeDuplicates(additionalVersions);
         this.additionalIssues = additionalIssues;
+        this.actors = actors;
         this.tags = tags;
         setUserStory(userStory);
         this.testFailureCause = testFailureCause;
@@ -533,6 +549,7 @@ public class TestOutcome {
                     this.testSteps,
                     this.coreIssues,
                     this.additionalIssues,
+                    this.actors,
                     this.tags,
                     this.userStory,
                     this.testFailureCause,
@@ -562,6 +579,7 @@ public class TestOutcome {
                 this.testSteps,
                 (issues == null) ? issues : new ArrayList<>(issues),
                 this.additionalIssues,
+                this.actors,
                 this.tags,
                 this.userStory,
                 this.testFailureCause,
@@ -588,6 +606,7 @@ public class TestOutcome {
                 this.testSteps,
                 this.coreIssues,
                 this.additionalIssues,
+                this.actors,
                 tags,
                 this.userStory,
                 this.testFailureCause,
@@ -615,6 +634,7 @@ public class TestOutcome {
                     this.getTestSteps(),
                     this.coreIssues,
                     this.additionalIssues,
+                    this.actors,
                     this.tags,
                     this.userStory,
                     this.testFailureCause,
@@ -797,6 +817,7 @@ public class TestOutcome {
                 this.testSteps,
                 this.coreIssues,
                 this.additionalIssues,
+                this.actors,
                 tags,
                 this.userStory,
                 this.testFailureCause,
@@ -845,6 +866,12 @@ public class TestOutcome {
                 .anyMatch( tag -> tag.getType().equalsIgnoreCase(tagType) );
     }
 
+    public boolean hasTagWithTypes(List<String> tagTypes) {
+        return java.util.Optional.ofNullable(tags).orElse(Collections.emptySet())
+                .stream()
+                .anyMatch( tag -> tagTypes.contains(tag.getType()));
+    }
+
     public int getDataTableRowCount() {
         if (dataTable == null) { return 0; }
         return dataTable.getSize();
@@ -852,6 +879,42 @@ public class TestOutcome {
 
     public int getTestStepCount() {
         return getTestSteps().size();
+    }
+
+    public void castActor(String name) {
+        if (actors.stream().noneMatch( actor -> actor.getName().equalsIgnoreCase(name))) {
+            actors.add(new CastMember(name));
+        }
+    }
+
+    public void assignFact(String name, String fact) {
+        if (actors.stream().noneMatch( actor -> actor.getName().equalsIgnoreCase(name))) {
+            actors.add(new CastMember(name));
+        }
+
+        actors.stream().filter(actor -> actor.getName().equalsIgnoreCase(name)).forEach(
+                crewMember -> crewMember.addFact(fact)
+        );
+    }
+
+    public void assignAbility(String name, String ability) {
+        if (actors.stream().noneMatch( actor -> actor.getName().equalsIgnoreCase(name))) {
+            actors.add(new CastMember(name));
+        }
+
+        actors.stream().filter(actor -> actor.getName().equalsIgnoreCase(name)).forEach(
+                crewMember -> crewMember.addAbility(ability)
+        );
+    }
+
+    public void assignDescriptionToActor(String name, String description) {
+        if (actors.stream().noneMatch( actor -> actor.getName().equalsIgnoreCase(name))) {
+            actors.add(new CastMember(name));
+        }
+
+        actors.stream().filter(actor -> actor.getName().equalsIgnoreCase(name)).forEach(
+                crewMember -> crewMember.withDescription(description)
+        );
     }
 
     private static class TestOutcomeWithEnvironmentBuilder {
@@ -2248,7 +2311,18 @@ public class TestOutcome {
         return new ArrayList<>();
     }
 
+    public void useScenarioOutline(String scenarioOutline) {
+        this.scenarioOutline = scenarioOutline;
+    }
+
     public String getDataDrivenSampleScenario() {
+        if (scenarioOutline == null) {
+            scenarioOutline = buildScenarioOutline();
+        }
+        return scenarioOutline;
+    }
+
+    private String buildScenarioOutline() {
         if (!isDataDriven() || getTestSteps().isEmpty() || !atLeastOneStepHasChildren()) {
             return "";
         }
@@ -2391,5 +2465,7 @@ public class TestOutcome {
     public void setTestSource(String testSource) {
         this.testSource = testSource;
     }
+
+    public List<CastMember> getActors() { return new ArrayList<>(actors); }
 
 }

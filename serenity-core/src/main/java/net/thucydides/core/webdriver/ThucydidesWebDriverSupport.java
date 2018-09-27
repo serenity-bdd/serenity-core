@@ -8,6 +8,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.remote.*;
 import org.slf4j.*;
 
+import java.util.Optional;
+
 /**
  * A utility class that provides services to initialize web testing and reporting-related fields in arbitrary objects.
  * It is designed to help integrate Thucydides into other testing tools such as Cucumber.
@@ -18,9 +20,7 @@ public class ThucydidesWebDriverSupport {
     private static final ThreadLocal<Pages> pagesThreadLocal = new ThreadLocal<Pages>();
     private static final ThreadLocal<StepFactory> stepFactoryThreadLocal = new ThreadLocal<StepFactory>();
     private static final ThreadLocal<String> defaultDriverType = new ThreadLocal<>();
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ThucydidesWebDriverSupport.class);
-
+    private static final ThreadLocal<String> defaultDriverOptions = new ThreadLocal<>();
 
     public static void initialize() {
         if (!webdriversInitialized()) {
@@ -90,8 +90,13 @@ public class ThucydidesWebDriverSupport {
         defaultDriverType.set(driverName);
     }
 
+    public static void useDriverOptions(String driverOptions) {
+        defaultDriverOptions.set(driverOptions);
+    }
+
     public static void clearDefaultDriver() {
         defaultDriverType.remove();
+        defaultDriverOptions.remove();
         if (webdriverManagerThreadLocal.get() != null) {
             webdriverManagerThreadLocal.get().overrideDefaultDriverType("");
         }
@@ -120,7 +125,8 @@ public class ThucydidesWebDriverSupport {
         WebDriver driver;
 
         if (defaultDriverType.get() != null) {
-            driver = getWebdriverManager().getWebdriver(defaultDriverType.get());
+            driver = getWebdriverManager().withOptions(Optional.ofNullable(defaultDriverOptions.get()).orElse(""))
+                                          .getWebdriver(defaultDriverType.get());
         } else {
             driver = (getWebdriverManager().getCurrentDriver() != null) ?
                     getWebdriverManager().getCurrentDriver() : getWebdriverManager().getWebdriver();

@@ -30,6 +30,11 @@ public class TargetTextValues implements Question<List<String>> {
         this.renderElement = renderElement;
     }
 
+    /**
+     * @deprecated The Target Text Value now returns the innerText attribute of the targeted element,
+     * which should not contain unnecessary surrounding spaces.
+     */
+    @Deprecated
     public TargetTextValues withNoSurroundingWhiteSpace() {
         return new TargetTextValues(target, TRIM_WHITESPACE);
     }
@@ -37,7 +42,7 @@ public class TargetTextValues implements Question<List<String>> {
     @Override
     public List<String> answeredBy(Actor actor) {
         List<String> textValues = Attribute.of(target)
-                                            .named("textContent")
+                                            .named("innerText")
                                             .viewedBy(actor)
                                             .asList();
 

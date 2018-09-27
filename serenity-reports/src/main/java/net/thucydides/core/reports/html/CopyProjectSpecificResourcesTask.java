@@ -40,7 +40,7 @@ class CopyProjectSpecificResourcesTask extends HtmlReporter implements Reporting
             if (notCopied(imageFile)) {
                 Files.copy(imageFile, transferred(imageFile), REPLACE_EXISTING);
             }
-        } catch (FileAlreadyExistsException nothingToSeeHereMoveAlong) {
+        } catch (FileSystemException anotherThreadIsAlreadyCopyingTheFileWeAreProbablyCool) {
         } catch (IOException e) {
             throw new ReportGenerationFailedError(e.getMessage(), e);
         }

@@ -1,6 +1,7 @@
 package net.serenitybdd.screenplay;
 
 import net.serenitybdd.screenplay.questions.ConsequenceGroup;
+import net.serenitybdd.screenplay.questions.NamedPredicate;
 import org.hamcrest.Matcher;
 
 import java.util.ArrayList;
@@ -89,4 +90,7 @@ public class GivenWhenThen {
         );
     }
 
+    public static <T> NamedPredicate<T> returnsAValueThat(String name, Predicate<T> predicate) {
+        return new NamedPredicate(name, predicate);
+    }
 }

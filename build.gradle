@@ -9,7 +9,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.5'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath 'org.ajoberstar:gradle-git:1.6.0'
         classpath 'org.pegdown:pegdown:1.4.1'
         classpath "gradle.plugin.se.bjurr.gitchangelog:git-changelog-gradle-plugin:1.51"
@@ -69,7 +69,7 @@ allprojects {
         resolutionStrategy {
             // fail fast on dependency convergence problems
 
-            failOnVersionConflict()
+           failOnVersionConflict()
 
             // force versions to fix dependency convergence problems
             // whe//n updating this list, update Serenity's declared deps if exists
@@ -400,6 +400,44 @@ subprojects {
     task copyDeps(type: Copy) {
         from configurations.runtime + configurations.testCompile
         into project.projectDir.path + "/lib"
+    }
+
+    task gitChangelogTask(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
+        file = new File("CHANGELOG.md");
+        templateContent = """
+# Git Changelog Gradle plugin
+
+Changelog of Git Changelog Gradle plugin.
+
+{{#tags}}
+## {{name}}
+ {{#issues}}
+  {{#hasIssue}}
+   {{#hasLink}}
+### {{name}} [{{issue}}]({{link}}) {{title}}
+   {{/hasLink}}
+   {{^hasLink}}
+### {{name}} {{issue}} {{title}}
+   {{/hasLink}}
+  {{/hasIssue}}
+  {{^hasIssue}}
+### {{name}}
+  {{/hasIssue}}
+
+  {{#commits}}
+**{{{messageTitle}}}**
+
+{{#messageBodyItems}}
+ * {{.}} 
+{{/messageBodyItems}}
+
+[{{hash}}](https://github.com/tomasbjerre/git-changelog-gradle-plugin/commit/{{hash}}) {{authorName}} *{{commitTime}}*
+
+  {{/commits}}
+
+ {{/issues}}
+{{/tags}}
+"""
     }
 
     task changelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {

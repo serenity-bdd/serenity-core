@@ -227,7 +227,7 @@
             <#if (requirements.overview?has_content)>
                 <div class="requirements-overview panel panel-default">
                     <div class="panel-body">
-                        ${requirements.overview}
+                        ${formatter.addLineBreaks(formatter.renderDescription(requirements.overview))}
                     </div>
                 </div>
             </#if>

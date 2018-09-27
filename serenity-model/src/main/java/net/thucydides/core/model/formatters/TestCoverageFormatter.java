@@ -62,7 +62,11 @@ public class TestCoverageFormatter {
         protected abstract double percentageWithResult(TestResult expectedResult);
 
         public String withResult(TestResult expectedResult) {
-            return formatter.percentage(percentageWithResult(expectedResult), 1);
+            return withResult(expectedResult, 1);
+        }
+
+        public String withResult(TestResult expectedResult, int precision) {
+            return formatter.percentage(percentageWithResult(expectedResult), precision);
         }
 
         public String withIndeterminateResult() {

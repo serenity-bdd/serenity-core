@@ -18,6 +18,10 @@ public class Enter {
         return new Enter(text);
     }
 
+    public static SendKeys keyValues(String text) {
+        return new SendKeys(text);
+    }
+
     public EnterValue into(String cssOrXpathForElement) {
         return instrumented(EnterValueIntoTarget.class, theText, Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement));
     }

@@ -12,9 +12,12 @@ import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.ExcludedUnrelatedRequirementTypes;
 import net.thucydides.core.requirements.RequirementsTagProvider;
+import net.thucydides.core.requirements.model.NarrativeReader;
+import net.thucydides.core.requirements.model.OverviewReader;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -34,6 +37,7 @@ public class RequirementsOutcomes {
     private final ReleaseManager releaseManager;
     private final ReportNameProvider reportNameProvider;
     List<RequirementOutcome> flattenedRequirementOutcomes = null;
+    private final String overview;
 
     public final static Integer DEFAULT_TESTS_PER_REQUIREMENT = 4;
 
@@ -44,14 +48,16 @@ public class RequirementsOutcomes {
                                 IssueTracking issueTracking,
                                 EnvironmentVariables environmentVariables,
                                 List<? extends RequirementsTagProvider> requirementsTagProviders,
-                                ReportNameProvider reportNameProvider) {
-        this(null, requirements, testOutcomes, issueTracking, environmentVariables, requirementsTagProviders, reportNameProvider);
+                                ReportNameProvider reportNameProvider,
+                                String overview) {
+        this(null, requirements, testOutcomes, issueTracking, environmentVariables, requirementsTagProviders, reportNameProvider, overview);
     }
 
     public RequirementsOutcomes(Requirement parentRequirement, List<Requirement> requirements, TestOutcomes testOutcomes,
                                 IssueTracking issueTracking, EnvironmentVariables environmentVariables,
                                 List<? extends RequirementsTagProvider> requirementsTagProviders,
-                                ReportNameProvider reportNameProvider) {
+                                ReportNameProvider reportNameProvider,
+                                String overview) {
         this.testOutcomes = testOutcomes;
         this.parentRequirement = Optional.ofNullable(parentRequirement);
         this.environmentVariables = environmentVariables;
@@ -60,9 +66,10 @@ public class RequirementsOutcomes {
         this.requirementOutcomes = buildRequirementOutcomes(requirements);
         this.reportNameProvider = reportNameProvider;
         this.releaseManager = new ReleaseManager(environmentVariables, reportNameProvider);
+        this.overview = overview;
     }
 
-    RequirementsOutcomes(ReportNameProvider reportNameProvider, List<RequirementOutcome> requirementOutcomes, TestOutcomes testOutcomes, Optional<Requirement> parentRequirement, EnvironmentVariables environmentVariables, IssueTracking issueTracking, List<? extends RequirementsTagProvider> requirementsTagProviders, ReleaseManager releaseManager) {
+    RequirementsOutcomes(ReportNameProvider reportNameProvider, List<RequirementOutcome> requirementOutcomes, TestOutcomes testOutcomes, Optional<Requirement> parentRequirement, EnvironmentVariables environmentVariables, IssueTracking issueTracking, List<? extends RequirementsTagProvider> requirementsTagProviders, ReleaseManager releaseManager, String overview) {
         this.reportNameProvider = reportNameProvider;
         this.requirementOutcomes = requirementOutcomes;
         this.testOutcomes = testOutcomes;
@@ -71,6 +78,7 @@ public class RequirementsOutcomes {
         this.issueTracking = issueTracking;
         this.requirementsTagProviders = requirementsTagProviders;
         this.releaseManager = releaseManager;
+        this.overview = overview;
     }
 
     private List<RequirementOutcome> buildRequirementOutcomes(List<Requirement> requirements) {
@@ -78,11 +86,11 @@ public class RequirementsOutcomes {
         List<Requirement> distinctRequirements = requirements.stream().distinct().collect(Collectors.toList());
 
         return distinctRequirements.parallelStream()
-                .map( requirement -> requirementOutcomeFor(requirement))
+                .map(this::requirementOutcomeFor)
                 .collect(Collectors.toList());
     }
 
-    private RequirementOutcome requirementOutcomeFor(Requirement requirement) {
+    public RequirementOutcome requirementOutcomeFor(Requirement requirement) {
         TestOutcomes outcomesForRequirement = testOutcomes.forRequirement(requirement);
 
         long requirementsWithoutTests = countRequirementsWithoutTestsIn(requirement);
@@ -116,7 +124,8 @@ public class RequirementsOutcomes {
                 issueTracking,
                 environmentVariables,
                 requirementsTagProviders,
-                reportNameProvider).withoutUnrelatedRequirements();
+                reportNameProvider,
+                overview).withoutUnrelatedRequirements();
     }
 
     private long countRequirementsWithoutTestsIn(Requirement rootRequirement) {
@@ -367,7 +376,7 @@ public class RequirementsOutcomes {
                 List<Requirement> childRequirements = requirement.getChildren();
                 RequirementsOutcomes childOutcomes =
                         new RequirementsOutcomes(childRequirements, testOutcomesForRequirement, issueTracking,
-                                environmentVariables, requirementsTagProviders, reportNameProvider).withoutUnrelatedRequirements();
+                                environmentVariables, requirementsTagProviders, reportNameProvider, overview).withoutUnrelatedRequirements();
                 flattenedOutcomes.addAll(getFlattenedRequirementOutcomes(childOutcomes.getRequirementOutcomes()));
             }
         }
@@ -457,7 +466,8 @@ public class RequirementsOutcomes {
                 issueTracking,
                 environmentVariables,
                 requirementsTagProviders,
-                reportNameProvider).withoutUnrelatedRequirements();
+                reportNameProvider,
+                overview).withoutUnrelatedRequirements();
     }
 
     private Set<Requirement> removeRequirementsWithoutTestsFrom(Collection<Requirement> requirements) {
@@ -496,7 +506,8 @@ public class RequirementsOutcomes {
                 environmentVariables,
                 issueTracking,
                 requirementsTagProviders,
-                releaseManager);
+                releaseManager,
+                overview);
     }
 
     private List<RequirementOutcome> pruned(List<RequirementOutcome> requirementOutcomes) {
@@ -512,5 +523,9 @@ public class RequirementsOutcomes {
         return ((requirementOutcome.getTestCount() == 0)
                  && ExcludedUnrelatedRequirementTypes.definedIn(environmentVariables)
                 .excludeUntestedRequirementOfType(requirementOutcome.getRequirement().getType()));
+    }
+
+    public String getOverview() {
+        return overview;
     }
 }

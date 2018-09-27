@@ -7,6 +7,11 @@ import net.thucydides.core.steps.StepFailure;
 
 public class EventBusInterface {
 
+    public static void castActor(String name) {
+        if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) { return; }
+        StepEventBus.getEventBus().castActor(name);
+    }
+
     public void reportStepFailureFor(Performable todo, Throwable e) {
         ExecutedStepDescription taskDescription =  ExecutedStepDescription.of(todo.getClass(),"attemptsTo");
         StepEventBus.getEventBus().stepFailed(new StepFailure(taskDescription, e));
@@ -75,4 +80,21 @@ public class EventBusInterface {
     public boolean stepsAreRunning() {
         return StepEventBus.getEventBus().areStepsRunning();
     }
+
+    public void assignFactToActor(Actor actor, String fact) {
+        if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) { return; }
+        StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
+                testOutcome -> testOutcome.assignFact(actor.getName(), fact)
+        );
+    }
+
+    public void assignAbilityToActor(Actor actor, String ability) {
+        if (!StepEventBus.getEventBus().isBaseStepListenerRegistered()) { return; }
+        if (StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome() == null) { return; }
+
+        StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
+                testOutcome -> testOutcome.assignAbility(actor.getName(), ability)
+        );
+    }
+
 }

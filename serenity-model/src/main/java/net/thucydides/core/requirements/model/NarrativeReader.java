@@ -15,7 +15,6 @@ import java.util.*;
  * "narrative.txt" file provides a description.
  */
 public class NarrativeReader {
-    private static final String NEW_LINE = System.getProperty("line.separator");
     private static final String BACKSLASH = "\\\\";
     private static final String FORWARDSLASH = "/";
 
@@ -40,14 +39,13 @@ public class NarrativeReader {
     }
 
     public Optional<Narrative> loadFrom(File directory, int requirementsLevel) {
-        File[] narrativeFiles = directory.listFiles(calledNarrativeDotTxt());
+        File[] narrativeFiles = directory.listFiles(calledNarrativeOrOverview());
         if (narrativeFiles == null || narrativeFiles.length == 0) {
             return Optional.empty();
         } else {
             return narrativeLoadedFrom(narrativeFiles[0], requirementsLevel);
         }
     }
-
 
     public Optional<Narrative> loadFromStoryFile(File storyFile) {
         if (storyFile.getName().endsWith(".story")) {
@@ -120,12 +118,11 @@ public class NarrativeReader {
         }
     }
 
-    private FilenameFilter calledNarrativeDotTxt() {
-        return new FilenameFilter() {
-
-            public boolean accept(File file, String name) {
-                return name.toLowerCase().equals("narrative.txt");
-            }
-        };
+    private FilenameFilter calledNarrativeOrOverview() {
+        return (file, name) -> (name.toLowerCase().equals("narrative.txt")
+                                || name.toLowerCase().equals("narrative.md")
+                                || name.toLowerCase().equals("readme.md")
+                                || name.toLowerCase().equals("overview.txt")
+                                || name.toLowerCase().equals("overview.md"));
     }
 }

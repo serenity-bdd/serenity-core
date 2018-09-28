@@ -355,10 +355,9 @@
                         ${reportData.title}
                     </button>
                 </span>
-                <!-- Modal -->
-                <div class="modal fade" id="reportData-${number}" tabindex="-1" role="dialog"
-                     aria-labelledby="restModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
+                <div class="rest-query-details">
+                    <div class="collapse multi-collapse" id="reportData-${number}" tabindex="-1" role="dialog"
+                         aria-labelledby="restModalLabel" aria-hidden="true">
                             <div class="card">
                                 <h4 class="card-header" id="restModalLabel">
                                     ${reportData.title}
@@ -367,7 +366,6 @@
                             <div class="card-body">
                                 ${(formatter.renderText(reportData.contents))!}
                             </div>
-                        </div>
                     </div>
                 </div>
             </#macro>

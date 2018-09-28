@@ -49,20 +49,20 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
         examples.isPresent()
         and:
         examples.get() == """### Do some things
-| tasks                       | filter    | expected      |  |
-|-----------------------------|-----------|---------------|--|
-| Buy some milk, Walk the dog | Completed | Walk the dog  |  |
-| Buy some milk, Walk the dog | Active    | Buy some milk |  |
+| tasks                       | filter    | expected      |**{result:Filtering things I need to do!Do many things}**|
+|-----------------------------|-----------|---------------|---|
+| Buy some milk, Walk the dog | Completed | Walk the dog  |{example-result:Filtering things I need to do!Do many things[0]}|
+| Buy some milk, Walk the dog | Active    | Buy some milk |{example-result:Filtering things I need to do!Do many things[1]}|
 
-[<i class="fa fa-info-circle"></i> More details](filtering-things-i-need-to-do_do-many-things.html)
+[<i class="fa fa-info-circle"></i> More details](f5d0b08e3d3c0d0bf91e75595c812557a5edec10041ba70977bbead78fbdacf6.html)
 
 ### Do some other things
-| tasks                       | filter    | expected      |  |
-|-----------------------------|-----------|---------------|--|
-| Buy some milk, Walk the dog | Completed | Walk the dog  |  |
-| Buy some milk, Walk the dog | Active    | Buy some milk |  |
+| tasks                       | filter    | expected      |**{result:Filtering things I need to do!Do many things}**|
+|-----------------------------|-----------|---------------|---|
+| Buy some milk, Walk the dog | Completed | Walk the dog  |{example-result:Filtering things I need to do!Do many things[0]}|
+| Buy some milk, Walk the dog | Active    | Buy some milk |{example-result:Filtering things I need to do!Do many things[1]}|
 
-[<i class="fa fa-info-circle"></i> More details](filtering-things-i-need-to-do_do-many-things.html)
+[<i class="fa fa-info-circle"></i> More details](f5d0b08e3d3c0d0bf91e75595c812557a5edec10041ba70977bbead78fbdacf6.html)
 """
     }
 
@@ -80,7 +80,7 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
  > And she has completed the task called 'Walk the dog'  
  > When she filters her list to show only Completed tasks  
  > Then her todo list should contain Walk the dog  
-[<i class="fa fa-info-circle"></i> More details](filtering-things-i-need-to-do_view-only-completed-items.html)
+[<i class="fa fa-info-circle"></i> More details](18e784fa28e919b434aa2fece7557e45321020135af83ca39d340c4f4830c003.html)
 """
 
     }
@@ -93,7 +93,7 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
  > And she has completed the task called 'Walk the dog'  
  > When she filters her list to show only Completed tasks  
  > Then her todo list should contain Walk the dog  
-[<i class="fa fa-info-circle"></i> More details](filtering-things-i-need-to-do_view-only-completed-items.html)
+[<i class="fa fa-info-circle"></i> More details](18e784fa28e919b434aa2fece7557e45321020135af83ca39d340c4f4830c003.html)
 """
 
     }
@@ -102,20 +102,20 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
         expect:
         DescriptionWithScenarioReferences.from(filteringTodoFeature).
                 forText("{Examples} Do many things") ==  """### Do some things
-| tasks                       | filter    | expected      |  |
-|-----------------------------|-----------|---------------|--|
-| Buy some milk, Walk the dog | Completed | Walk the dog  |  |
-| Buy some milk, Walk the dog | Active    | Buy some milk |  |
+| tasks                       | filter    | expected      |**{result:Filtering things I need to do!Do many things}**|
+|-----------------------------|-----------|---------------|---|
+| Buy some milk, Walk the dog | Completed | Walk the dog  |{example-result:Filtering things I need to do!Do many things[0]}|
+| Buy some milk, Walk the dog | Active    | Buy some milk |{example-result:Filtering things I need to do!Do many things[1]}|
 
-[<i class="fa fa-info-circle"></i> More details](filtering-things-i-need-to-do_do-many-things.html)
+[<i class="fa fa-info-circle"></i> More details](f5d0b08e3d3c0d0bf91e75595c812557a5edec10041ba70977bbead78fbdacf6.html)
 
 ### Do some other things
-| tasks                       | filter    | expected      |  |
-|-----------------------------|-----------|---------------|--|
-| Buy some milk, Walk the dog | Completed | Walk the dog  |  |
-| Buy some milk, Walk the dog | Active    | Buy some milk |  |
+| tasks                       | filter    | expected      |**{result:Filtering things I need to do!Do many things}**|
+|-----------------------------|-----------|---------------|---|
+| Buy some milk, Walk the dog | Completed | Walk the dog  |{example-result:Filtering things I need to do!Do many things[0]}|
+| Buy some milk, Walk the dog | Active    | Buy some milk |{example-result:Filtering things I need to do!Do many things[1]}|
 
-[<i class="fa fa-info-circle"></i> More details](filtering-things-i-need-to-do_do-many-things.html)
+[<i class="fa fa-info-circle"></i> More details](f5d0b08e3d3c0d0bf91e75595c812557a5edec10041ba70977bbead78fbdacf6.html)
 """
 
     }

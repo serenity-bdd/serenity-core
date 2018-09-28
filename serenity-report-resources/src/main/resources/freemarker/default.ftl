@@ -350,7 +350,7 @@
 
             <#macro reportData(reportData, number) >
                 <span>
-                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="collapse"
                             data-target="#reportData-${number}">
                         ${reportData.title}
                     </button>
@@ -359,22 +359,13 @@
                 <div class="modal fade" id="reportData-${number}" tabindex="-1" role="dialog"
                      aria-labelledby="restModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"
-                                        aria-label="Close"><span aria-hidden="true">&times;</span>
-                                </button>
-                                <h4 class="modal-title" id="restModalLabel">
+                            <div class="card">
+                                <h4 class="card-header" id="restModalLabel">
                                     ${reportData.title}
                                 </h4>
                             </div>
-                            <div class="modal-body">
+                            <div class="card-body">
                                 ${(formatter.renderText(reportData.contents))!}
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">
-                                    Close
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -574,14 +565,11 @@
                     <td width="%" colspan="3">
                     </#if>
                     <#if (testOutcome.errorMessage)??>
-                        <span class="error-message"
-                              title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage)}">
-                            ${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 244)}
-                        </span>
                         <#if (testOutcome.nestedTestFailureCause)??>
-                            <@stacktrace cause=testOutcome.nestedTestFailureCause id="overall" />
+                            <@stacktrace title=testOutcome.conciseErrorMessage cause=testOutcome.nestedTestFailureCause id="overall" />
                         </#if>
                     </#if>
+
                 </td>
                 </tr>
             <#--</#if>-->

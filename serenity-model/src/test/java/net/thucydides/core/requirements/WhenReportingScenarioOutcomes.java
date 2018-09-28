@@ -40,7 +40,7 @@ public class WhenReportingScenarioOutcomes {
 
         RequirementsOutcomes outcomes = fileSystemRequirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(TestOutcomeLoader.testOutcomesIn(outcomeDirectory));
 
-        assertThat(ScenarioOutcomes.from(outcomes).size(), equalTo(2));
+        assertThat(ScenarioOutcomes.from(outcomes).size(), equalTo(5));
     }
 
 
@@ -52,8 +52,7 @@ public class WhenReportingScenarioOutcomes {
         RequirementsOutcomes outcomes = fileSystemRequirements.getRequirementsOutcomeFactory().buildRequirementsOutcomesFrom(TestOutcomeLoader.testOutcomesIn(outcomeDirectory));
 
         Requirement requirement = outcomes.getRequirementOutcomes().get(0).getRequirement().getChildren().get(0);
-
-        assertThat(FeatureFileScenarioOutcomes.from(requirement).forOutcomesIn(outcomes).size(), equalTo(3));
+        assertThat(FeatureFileScenarioOutcomes.from(requirement).forOutcomesIn(outcomes).size(), equalTo(4));
 
     }
 

@@ -23,7 +23,7 @@ class WhenModellingRequirements extends Specification {
             requirement = requirement.withCustomField("Acceptance Criteria").setTo("It should work","<p>It should work</p>")
         then: "I should be able to retrieve this value"
             requirement.getCustomField("Acceptance Criteria").isPresent() &&
-            requirement.getCustomField("Acceptance Criteria").get().renderedText == "<p>It should work</p>"
+            requirement.getCustomField("Acceptance Criteria").get().renderedText == "<p>It should work</p>  "
     }
 
     def "should be able to list the custom requirement fields"() {
@@ -42,13 +42,13 @@ class WhenModellingRequirements extends Specification {
         then:
             customField.text == "*red*"
         and:
-            customField.renderedText == "<b>red</b>"
+            customField.renderedText == "<b>red</b>  "
     }
 
     def "custom fields without a rendered value should default to the normal value"() {
         when: "A custom field with a rendered value"
             def customField = new CustomFieldValue("Color", "*red*")
         then:
-            customField.renderedText == "*red*"
+            customField.renderedText == "*red*  "
     }
 }

@@ -27,6 +27,10 @@ public class JSONRequirementsTree {
         return new JSONRequirementsTree(requirements, requirementsOutcomes);
     }
 
+    public static JSONRequirementsTree forRequirements(List<Requirement> requirements) {
+        return new JSONRequirementsTree(requirements, null);
+    }
+
     private Node toNode(Requirement requirement,RequirementsOutcomes requirementsOutcomes) {
         List<Node> children = requirement.getChildren().stream()
                                          .map(child -> toNode(child, requirementsOutcomes))
@@ -42,6 +46,8 @@ public class JSONRequirementsTree {
 
     private TestResult matchingOutcome(Requirement requirement,
                                        RequirementsOutcomes requirementsOutcomes) {
+
+        if (requirementsOutcomes == null) { return TestResult.UNDEFINED; }
 
         Optional<RequirementOutcome> matchingOutcome = requirementsOutcomes.getFlattenedRequirementOutcomes().stream()
                                                             .filter(outcome -> outcome.getRequirement().equals(requirement))

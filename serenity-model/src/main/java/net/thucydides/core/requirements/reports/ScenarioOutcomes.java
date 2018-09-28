@@ -65,6 +65,8 @@ public class ScenarioOutcomes {
         List<String> exampleTables = (testOutcome.isDataDriven()) ?
                 Collections.singletonList(testOutcome.getDataTable().toMarkdown()) : Collections.EMPTY_LIST;
 
+        String userStoryName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getName() : null;
+        String userStoryReportName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getReportName() : null;
         return new ScenarioOutcome(testOutcome.getTitleWithLinks(),
                 "Acceptance Test",
                 testOutcome.getResult(),
@@ -76,8 +78,8 @@ public class ScenarioOutcomes {
                 testOutcome.getTestSteps().stream().map(TestStep::getDescription).collect(Collectors.toList()),
                 exampleTables,
                 testOutcome.getDataTableRowCount(),
-                testOutcome.getUserStory().getName(),
-                testOutcome.getUserStory().getReportName());
+                userStoryName,
+                userStoryReportName);
     }
 
 }

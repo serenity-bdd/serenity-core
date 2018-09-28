@@ -22,7 +22,7 @@ public class WhenReadingRequirementsFromThePackageStructure {
 
         List<Requirement> requirements = tagProvider.getRequirements();
 
-        assertThat(requirements.get(0).getType(), equalTo("feature"));
+        assertThat(requirements.get(0).getType(), equalTo("capability"));
     }
 
     @Test
@@ -52,7 +52,7 @@ public class WhenReadingRequirementsFromThePackageStructure {
 
         assertThat(requirements.get(0).getType(), equalTo("capability"));
         assertThat(requirements.get(0).getChildren().get(0).getType(), equalTo("feature"));
-        assertThat(requirements.get(0).getChildren().get(0).getChildren().get(0).getType(), equalTo("story"));
+        assertThat(requirements.get(0).getChildren().get(0).getChildren().get(0).getType(), equalTo("feature"));
     }
 
 }

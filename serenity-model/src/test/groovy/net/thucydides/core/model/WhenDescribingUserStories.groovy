@@ -24,15 +24,6 @@ class WhenDescribingUserStories extends Specification {
             htmlReportName == Digest.ofTextValue("some_test_case_sample") + ".html"
     }
 
-    def "should be able obtain a story report name from a test class"() {
-        when:
-            def story = Stories.findStoryFrom(SomeTestCaseSample.class)
-            def htmlReportName = story.reportName
-        then:
-            htmlReportName == Digest.ofTextValue("some_test_case_sample")
-    }
-
-
     def "should be able obtain an XML story report name from a test class"() {
         when:
         def story = Stories.findStoryFrom(SomeTestCaseSample.class)

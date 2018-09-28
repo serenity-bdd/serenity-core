@@ -557,8 +557,8 @@ public class TestOutcomes {
      */
     public TestOutcomes getPendingTests() {
 
-        List<TestOutcome> pendingOrSkippedOutcomes = outcomesWithResults(outcomes, TestResult.PENDING, TestResult.SKIPPED);
-        return TestOutcomes.of(pendingOrSkippedOutcomes)
+        List<TestOutcome> pendingOutcomes = outcomesWithResults(outcomes, TestResult.PENDING);
+        return TestOutcomes.of(pendingOutcomes)
                 .withLabel(labelForTestsWithStatus("pending tests"))
                 .withRootOutcomes(getRootOutcomes());
 

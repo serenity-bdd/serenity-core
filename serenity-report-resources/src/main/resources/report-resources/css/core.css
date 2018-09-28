@@ -85,9 +85,31 @@ td.tag-title {
     border-left: 1px solid #88a717; padding-left: 10px
 }
 
+.requireent-type-heading {
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
 #bottomfooter
 {
     background-image:url(../images/bg_04.jpg); height:26px; background-repeat:repeat-x; margin:0 auto;
+}
+
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #333;
+    color:grey;
+}
+
+.requirement-name-column {
+    min-width: 30em !important;
+}
+
+.test-name-column {
+    min-width: 40em !important;
 }
 
 #topbanner
@@ -436,7 +458,7 @@ i.tag {
 }
 
 .error-color  {
-    color: #CC0033;
+    color: darkorange;
 }
 
 .flag-color {
@@ -497,9 +519,13 @@ i.tag {
     max-width: 755px;
 }
 .error-message {
-    font-family:euphemia, verdana, sans-serif; font-size:12px; color:#CC0033; text-align:right;
+    font-family:euphemia, verdana, sans-serif; font-size:12px; color:#CC0033; text-align:left; width:100%;
 }
 
+.error-message-title {
+    margin-left: 1em;
+    font-size: 1em;
+}
 .parameters {
     display: block;
     font-size:14px; font-style: italic; color:grey;
@@ -1113,6 +1139,7 @@ h2 {
     font-size: 18px;
     color:#0d78ae;
     margin-bottom: 10px;
+    padding-bottom: 0.5em;
 }
 
 h3 {
@@ -1452,7 +1479,7 @@ table.coverage_data td {
     display:block
 }
 
-.example-table{
+.example-table {
     padding-bottom: 20px;
 }
 
@@ -1584,9 +1611,9 @@ ul.second-level-requirements  {
 }
 
 .version {
-    float: right;
-    color: white;
+    color: grey;
     padding-top: 4px;
+    alignment: center;
     font-size: smaller;
     font-family:euphemia, verdana, sans-serif;
 }
@@ -1784,6 +1811,14 @@ ul.second-level-requirements  {
     font-size: 1em;
 }
 
+.chart-container {
+    margin:10px;
+}
+
+h3 {
+    padding-bottom: 0.5em;
+}
+
 /* Automated only results */
 .aggregated-results .ct-series-a .ct-slice-donut-solid {
     fill: #30cb23;
@@ -1833,7 +1868,7 @@ ul.second-level-requirements  {
     fill: rgba(238, 224, 152, 1) ;
 }
 .automated-and-manual-results .ct-series-h .ct-slice-donut-solid {
-    fill: rgba(238, 224, 152, 5) ;
+    fill: rgba(238, 224, 152, 0.5) ;
 }
 
 .automated-and-manual-results .ct-series-i .ct-slice-donut-solid {
@@ -1870,6 +1905,9 @@ ul.second-level-requirements  {
     margin: 0px;
 }
 
+.summary-stats td {
+    font-weight: bold;
+}
 
 .more-details { background-color: #0d78ae; }
 .more-details:hover { background-color: #428bca; }
@@ -1926,33 +1964,30 @@ div.scenario-text:empty {
     background-color: rgba(238, 224, 152, 0.2);
 }
 
-.scenario-result .pending {
-    background-color: rgba(0, 167, 255, 0.05);
-}
-.scenario-result .failure {
-    background-color: rgba(255, 0, 0, 0.05);
-}
-.scenario-result .pending {
-    background-color: rgba(0, 167, 255, 0.05);
-}
-.scenario-result .error {
-    background-color: rgba(255, 141, 0, 0.05);
-}
-.scenario-result .compromised {
-    background-color: rgba(255, 0, 255, 0.05);
-}
-.scenario-result .ignored {
-    background-color: rgba(168, 168, 168, 0.1);
-}
-.scenario-result .skipped {
-    background-color: rgba(238, 224, 152, 0.2);
-}
+/*.scenario-result.PENDING {*/
+    /*background-color: rgba(0, 167, 255, 0.05);*/
+/*}*/
+/*.scenario-result.FAILURE {*/
+    /*background-color: rgba(255, 0, 0, 0.05);*/
+/*}*/
+/*.scenario-result.ERROR {*/
+    /*background-color: rgba(255, 141, 0, 0.05);*/
+/*}*/
+/*.scenario-result.COMPROMISED {*/
+    /*background-color: rgba(255, 0, 255, 0.05);*/
+/*}*/
+/*.scenario-result.IGNORED {*/
+    /*background-color: rgba(168, 168, 168, 0.1);*/
+/*}*/
+/*.scenario-result.SKIPPED {*/
+    /*background-color: rgba(238, 224, 152, 0.2);*/
+/*}*/
 
 .card-body {
     padding: 0.5em;
 }
 
-.scenario-result {
+.scenario-result-icon {
     float: right;
 }
 
@@ -1991,6 +2026,51 @@ div.scenario-text:empty {
     width: 8%;
 }
 
+.scenario-result-table th {
+    text-transform: capitalize;
+}
+
 .treeview .badge {
     background-color: white;
+}
+
+.toc-title {
+    min-width: 60em;
+}
+
+.top-list-title {
+    min-width: 30em;
+}
+
+.failure-badge {
+    background-color: red !important;
+}
+
+.feature-tags {
+    float:right;
+    padding:4px;
+}
+
+.progress {
+    margin-bottom:0px;
+}
+
+.stacktrace-details {
+    width: 100%;
+    margin-left: 0px !important;
+    background-color: bisque;
+    font-family: monospace;
+}
+
+.rest-query-details {
+    width: 100%;
+    margin-left: 0px !important;
+    background-color: #EEEEE0;
+    font-family: monospace;
+}
+
+.details-button  {
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
+    font-size: 1em;
 }

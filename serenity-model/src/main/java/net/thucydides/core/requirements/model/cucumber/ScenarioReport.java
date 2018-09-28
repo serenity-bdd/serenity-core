@@ -1,12 +1,13 @@
 package net.thucydides.core.requirements.model.cucumber;
 
 import gherkin.ast.Feature;
+import net.thucydides.core.model.ReportNamer;
+import net.thucydides.core.model.ReportType;
 
 public class ScenarioReport {
     private final String scenarioName;
 
     private ScenarioReport(String scenarioName) {
-
         this.scenarioName = scenarioName;
     }
 
@@ -15,11 +16,11 @@ public class ScenarioReport {
     }
 
     public String inFeature(Feature feature) {
-        return convertToId(feature.getName()) + "_" + convertToId(scenarioName) + ".html";
+        return ReportNamer.forReportType(ReportType.HTML)
+                          .getNormalizedTestReportNameFor(convertToId(feature.getName()) + "_" + convertToId(scenarioName));
     }
 
-
     static String convertToId(String name) {
-        return name.replaceAll("[\\s'_,!]", "-").toLowerCase();
+        return name.replaceAll("[\\s'!,]", "-").toLowerCase();
     }
 }

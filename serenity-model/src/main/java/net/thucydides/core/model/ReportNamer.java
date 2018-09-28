@@ -41,7 +41,12 @@ public class ReportNamer {
         return normalizedVersionOf(NameConverter.filesystemSafe(testNameWithoutIndex));
     }
 
-    private String optionallyCompressed(String text) {
+    public String getNormalizedTestReportNameFor(String testName) {
+        String testNameWithoutIndex = NameConverter.stripIndexesFrom(testName);
+        return normalizedVersionOf(NameConverter.filesystemSafe(testNameWithoutIndex));
+    }
+
+    public String optionallyCompressed(String text) {
         return compressedFilename ? Digest.ofTextValue(text) : text;
     }
 

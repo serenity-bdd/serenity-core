@@ -34,6 +34,7 @@ public class RequirementsOutcomes {
     private final ReleaseManager releaseManager;
     private final ReportNameProvider reportNameProvider;
     List<RequirementOutcome> flattenedRequirementOutcomes = null;
+    List<RequirementOutcome> leafRequirementOutcomes = null;
     private final String overview;
 
     public final static Integer DEFAULT_TESTS_PER_REQUIREMENT = 4;
@@ -374,6 +375,17 @@ public class RequirementsOutcomes {
             flattenedRequirementOutcomes = getFlattenedRequirementOutcomes(requirementOutcomes);
         }
         return flattenedRequirementOutcomes;
+    }
+
+    public List<RequirementOutcome> getLeafRequirementOutcomes() {
+        if (leafRequirementOutcomes == null) {
+            leafRequirementOutcomes = geLeafRequirementOutcomes(getFlattenedRequirementOutcomes(requirementOutcomes));
+        }
+        return leafRequirementOutcomes;
+    }
+
+    public List<RequirementOutcome> geLeafRequirementOutcomes(List<RequirementOutcome> outcomes) {
+        return outcomes.stream().filter(outcome -> !outcome.getRequirement().hasChildren()).collect(Collectors.toList());
     }
 
     public List<RequirementOutcome> getFlattenedRequirementOutcomes(List<RequirementOutcome> outcomes) {

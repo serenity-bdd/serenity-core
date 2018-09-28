@@ -82,7 +82,7 @@
                                 </h3>
 
                                 <div class="discreet-requirement-narrative-title">
-                                ${formatter.renderDescription(parentRequirement.get().narrative.renderedSummary)}
+                                    ${formatter.renderDescription(parentRequirement.get().narrative.renderedSummary)}
                                 </div>
                             </div>
                         <#elseif (featureOrStory?? && featureOrStory.isPresent())>
@@ -95,7 +95,7 @@
                                 </h3>
 
                                 <div class="discreet-requirement-narrative-title">
-                                ${formatter.renderDescription(featureOrStory.get().narrative)}
+                                    ${formatter.renderDescription(featureOrStory.get().narrative)}
                                 </div>
                             </div>
                         </#if>
@@ -132,7 +132,7 @@
                             <span class="outcome-icon">${title_outcome_icon}</span>
                             <span class="test-case-title">
                                 <#assign testOutcomeTitle = testOutcome.unqualified.titleWithLinks >
-                                    <span class="${outcome_text!ignore_color}">
+                                <span class="${outcome_text!ignore_color}">
                                     ${formatter.htmlCompatibleTestTitle(testOutcomeTitle)}
                                     <#if (!testOutcome.titleWithIssues)>
                                         <span class="related-issue-title">${testOutcome.formattedIssues}</span>
@@ -143,20 +143,21 @@
                             <i class="fa fa-user manual" alt="Manual test" title="Manual test"></i>
                         </#if>
                         <#list testOutcome.flags as flag>
-                            <i class="fa fa-2x fa-${flag.symbol} flag-color" alt="${flag.message}" title="${flag.message}"></i>
+                            <i class="fa fa-2x fa-${flag.symbol} flag-color" alt="${flag.message}"
+                               title="${flag.message}"></i>
                         </#list>
                         <#if (testOutcome.descriptionText.isPresent() && testOutcome.descriptionText.get()?has_content)>
                             <div class="discreet-requirement-narrative-title">
                                 <br/>
-                            ${formatter.renderDescription(testOutcome.descriptionText.get())}
+                                ${formatter.renderDescription(testOutcome.descriptionText.get())}
                             </div>
                         </#if>
                         </td>
                         <#if (testOutcome.videoLink)??>
                             <td valign="top">
-                              <a href="${relativeLink!}${testOutcome.videoLink}" class="tag">
-                                <i class="fa fa-video-camera fa-2x"></i>
-                              </a>
+                                <a href="${relativeLink!}${testOutcome.videoLink}" class="tag">
+                                    <i class="fa fa-video-camera fa-2x"></i>
+                                </a>
                             </td>
                         </#if>
                     </tr>
@@ -169,7 +170,7 @@
 
                 <!-- CAST MEMBERS -->
                 <div>&nbsp;</div>
-                <div class="story-title" >
+                <div class="story-title">
                     <table class="outcome-header">
                         <tr>
                             <td>
@@ -177,7 +178,8 @@
                                     <h3 class="discreet-story-header">
                                         <i class="fa fa-2x fa-users"></i>
                                         <span class="story-header-title">
-                                            <a class="btn btn-primary" data-toggle="collapse" href="#castDetails" role="button" aria-expanded="true" aria-controls="castDetails">Cast</a>
+                                            <a class="btn btn-primary" data-toggle="collapse" href="#castDetails"
+                                               role="button" aria-expanded="true" aria-controls="castDetails">Cast</a>
                                         </span>
                                     </h3>
 
@@ -185,15 +187,17 @@
                                         <table class="cast">
                                             <tr>
                                                 <#list testOutcome.actors as castMember>
-                                                <td width="${cellWidth}%">
-                                                    <h4><i class="fa fa-2x fa-user-o"></i>&nbsp;<span>${castMember.name}</span><h4>
-                                                    <p>${formatter.renderDescription(castMember.description!"")}</p>
-                                                    <ul>
+                                                    <td width="${cellWidth}%">
+                                                        <h4>
+                                                            <i class="fa fa-2x fa-user-o"></i>&nbsp;<span>${castMember.name}</span>
+                                                            <h4>
+                                                                <p>${formatter.renderDescription(castMember.description!"")}</p>
+                                                                <ul>
                                                     <#if (castMember.hasFacts())>
                                                         <li><strong>${castMember.name} has:</strong>
                                                             <ul>
                                                                 <#list castMember.getHas() as fact>
-                                                                <li>${fact}</li>
+                                                                    <li>${fact}</li>
                                                                 </#list>
                                                             </ul>
                                                         </li>
@@ -207,8 +211,8 @@
                                                             </ul>
                                                         </li>
                                                     </#if>
-                                                    </ul>
-                                                </td>
+                                                                </ul>
+                                                    </td>
                                                 </#list>
                                             </tr>
                                         </table>
@@ -263,7 +267,7 @@
         </#if>
 
         <div class="example-table">
-            <table>
+            <table class="table">
                 <thead>
                 <tr>
                     <th>#</th>
@@ -278,7 +282,8 @@
                     <tr>
                         <td class="test-${row.result}"><a href="#${rowIndex}">${rowIndex + 1}</a></td>
                         <#list row.values as value>
-                            <td class="test-${row.result}"><a href="#${rowIndex}">${formatter.plainHtmlCompatible(value)}</a>
+                            <td class="test-${row.result}"><a
+                                    href="#${rowIndex}">${formatter.plainHtmlCompatible(value)}</a>
                             </td>
                         </#list>
                     </tr>
@@ -345,12 +350,14 @@
 
             <#macro reportData(reportData, number) >
                 <span>
-                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#reportData-${number}">
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                            data-target="#reportData-${number}">
                         ${reportData.title}
                     </button>
                 </span>
                 <!-- Modal -->
-                <div class="modal fade" id="reportData-${number}" tabindex="-1" role="dialog" aria-labelledby="restModalLabel" aria-hidden="true">
+                <div class="modal fade" id="reportData-${number}" tabindex="-1" role="dialog"
+                     aria-labelledby="restModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -377,60 +384,47 @@
 
             <#macro restQueryData(restQuery, number) >
                 <span>
-                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="collapse"
                             data-target="#restModal-${number}">
                         REST Query
                     </button>
                 </span>
                 <!-- Modal -->
-                <div class="modal fade" id="restModal-${number}" tabindex="-1" role="dialog"
-                     aria-labelledby="restModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"
-                                        aria-label="Close"><span aria-hidden="true">&times;</span>
-                                </button>
-                                <h4 class="modal-title" id="restModalLabel">
-                                ${formatter.restQuery(restQuery.formattedQuery)}
-                                </h4>
-                            </div>
-                            <div class="modal-body">
-                                <#if restQuery.statusCode?has_content>
-                                    <p>Status code: ${restQuery.statusCode}</p>
-                                </#if>
-                                <#if restQuery.contentType?has_content>
-                                    <p>Content Type: ${restQuery.contentType}</p>
-                                </#if>
-                                <#if restQuery.requestHeaders?has_content>
-                                    <h5>Request Headers</h5>
-                                    <pre>${(formatter.renderHeaders(restQuery.requestHeaders))!}</pre>
-                                </#if>
-                                <#if restQuery.content?has_content>
-                                    <h5>Content Body</h5>
-                                    <pre>${(formatter.renderText(restQuery.content))!}</pre>
-                                </#if>
-                                <#if restQuery.requestCookies?has_content>
-                                    <h5>Request Cookies</h5>
-                                    <pre>${(formatter.renderText(restQuery.requestCookies))!}</pre>
-                                </#if>
-                                <#if restQuery.responseHeaders?has_content>
-                                    <h5>Response Headers</h5>
-                                    <pre>${(formatter.renderHeaders(restQuery.responseHeaders))!}</pre>
-                                </#if>
-                                <h5>Response Body</h5>
-                                <#if restQuery.responseHeaders?has_content>
-                                    <pre>${formatter.renderText(restQuery.responseBody)}</pre>
-                                </#if>
-                                <#if restQuery.responseCookies?has_content && (!(restQuery.requestCookies?has_content) || restQuery.responseCookies!=restQuery.requestCookies)>
-                                    <h5>Response Cookies</h5>
-                                    <pre>${(formatter.renderText(restQuery.responseCookies))!}</pre>
-                                </#if>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">
-                                    Close
-                                </button>
+                <div class="rest-query-details">
+                    <div class="collapse multi-collapse" id="restModal-${number}">
+                        <div class="card">
+                            <div class="card-body">
+                                        <h4>Response</h4>
+                                        <#if restQuery.statusCode?has_content>
+                                            <p>Status code: ${restQuery.statusCode}</p>
+                                        </#if>
+                                        <#if restQuery.contentType?has_content>
+                                            <p>Content Type: ${restQuery.contentType}</p>
+                                        </#if>
+                                        <#if restQuery.requestHeaders?has_content>
+                                            <h4>Request Headers</h4>
+                                            <pre>${(formatter.renderHeaders(restQuery.requestHeaders))!}</pre>
+                                        </#if>
+                                        <#if restQuery.content?has_content>
+                                            <h4>Content Body</h4>
+                                            <pre>${(formatter.renderText(restQuery.content))!}</pre>
+                                        </#if>
+                                        <#if restQuery.requestCookies?has_content>
+                                            <h4>Request Cookies</h4>
+                                            <pre>${(formatter.renderText(restQuery.requestCookies))!}</pre>
+                                        </#if>
+                                        <#if restQuery.responseHeaders?has_content>
+                                            <h4>Response Headers</h4>
+                                            <pre>${(formatter.renderHeaders(restQuery.responseHeaders))!}</pre>
+                                        </#if>
+                                        <h4>Response Body</h4>
+                                        <#if restQuery.responseHeaders?has_content>
+                                            <pre>${formatter.renderText(restQuery.responseBody)}</pre>
+                                        </#if>
+                                        <#if restQuery.responseCookies?has_content && (!(restQuery.requestCookies?has_content) || restQuery.responseCookies!=restQuery.requestCookies)>
+                                            <h4>Response Cookies</h4>
+                                            <pre>${(formatter.renderText(restQuery.responseCookies))!}</pre>
+                                        </#if>
                             </div>
                         </div>
                     </div>
@@ -531,15 +525,23 @@
                         <#else>
                             <#assign errorMessageTitle = "">
                         </#if>
+                        <#if testOutcome.hasScreenshots()>
                         <td width="%" colspan="4" class="error-message-cell">
-                            <div class="error-message ellipsis"
-                                 title='${formatter.htmlAttributeCompatible(errorMessageTitle)}'>
-                                <pre>${formatter.htmlAttributeCompatible(errorMessageTitle,244)!''}</pre>
-                            </div>
+                        <#else>
+                        <td width="%" colspan="3" class="error-message-cell">
+                        </#if>
+
+                        <#assign formattedErrorMessageTitle = formatter.htmlAttributeCompatible(errorMessageTitle) />
+
                             <#if step.nestedException?has_content>
-                                <@stacktrace cause=step.nestedException id=step.number />
+                                <@stacktrace title=formattedErrorMessageTitle cause=step.nestedException id=step.number />
+                            <#else>
+                                <div class="error-message ellipsis"
+                                     title='${formatter.htmlAttributeCompatible(errorMessageTitle)}'>
+                                    <pre>${formatter.htmlAttributeCompatible(errorMessageTitle,244)!''}</pre>
+                                </div>
                             </#if>
-                        </td>
+                    </td>
                     </tr>
                 </#if>
             </#macro>
@@ -559,7 +561,9 @@
                     </#if>
                     <span class="top-level-step">An error occurred outside of step execution.</span>
                 </td>
-                    <td width="100"><span class="top-level-step">${formatter.htmlCompatibleStepDescription(testOutcome.result)}</span></td>
+                    <td width="100"><span
+                            class="top-level-step">${formatter.htmlCompatibleStepDescription(testOutcome.result)}</span>
+                    </td>
                     <td width="100"><span class="top-level-step">${testOutcome.durationInSeconds}s</span></td>
                 </tr>
                 <tr class="test-${testOutcome.result}">
@@ -572,8 +576,8 @@
                     <#if (testOutcome.errorMessage)??>
                         <span class="error-message"
                               title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage)}">
-                        ${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 244)}
-                            </span>
+                            ${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 244)}
+                        </span>
                         <#if (testOutcome.nestedTestFailureCause)??>
                             <@stacktrace cause=testOutcome.nestedTestFailureCause id="overall" />
                         </#if>
@@ -596,10 +600,15 @@
         </div>
     </div>
     <div id="beforefooter"></div>
-    <div id="bottomfooter">
-        <span class="version">Serenity BDD version ${serenityVersionNumber}</span>
-    </div>
 
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <span class="version">Serenity BDD version ${serenityVersionNumber}</span>
+            </div>
+        </div>
+    </div>
 
     <script type="text/javascript">
         function toggleDiv(divId) {
@@ -619,17 +628,17 @@
         }
     </script>
 
-    <script type="text/javascript">
-        $('.example-table table').DataTable({
-            // "order": [[0, "asc"]],
-            "pageLength": 50,
-            "searching": false,
-            "ordering":  false,
-            "scrollX": "100%",
-            "scrollXInner": "100%",
-            "scrollCollapse": true
-        });
-    </script>
+<#--<script type="text/javascript">-->
+<#--$('.example-table table').DataTable({-->
+<#--// "order": [[0, "asc"]],-->
+<#--"pageLength": 50,-->
+<#--"searching": false,-->
+<#--"ordering":  false,-->
+<#--"scrollX": "100%",-->
+<#--"scrollXInner": "100%",-->
+<#--"scrollCollapse": true-->
+<#--});-->
+<#--</script>-->
 
     <script type="text/javascript">
         //<![CDATA[

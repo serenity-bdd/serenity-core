@@ -52,7 +52,7 @@ public class RequirementCounts {
     }
 
     private String ifNotEmpty(String result) {
-        return (result.equals("0.0%") ? " " : result);
+        return (result.equals("0.0%") ? " " : "'" + result + "'");
     }
 
 

@@ -18,6 +18,8 @@ public class ResultCounts {
     private final Map<TestResult, Integer> automatedTests = new HashMap<>();
     private final Map<TestResult, Integer> manualTests = new HashMap<>();
     private final Map<TestResult, Integer> totalTests = new HashMap<>();
+    private final int totalAutomatedTests;
+    private final int totalManualTests;
     private final int totalTestCount;
 
     public ResultCounts(TestOutcomes testOutcomes) {
@@ -27,7 +29,9 @@ public class ResultCounts {
             manualTests.put(result, testOutcomes.ofType(TestType.MANUAL).withResult(result).getTotal());
             totalTests.put(result, automatedTests.get(result) + manualTests.get(result));
         }
-        this.totalTestCount = testOutcomes.getTestCount();
+        this.totalAutomatedTests = testOutcomes.ofType(TestType.AUTOMATED).getTotal();
+        this.totalManualTests = testOutcomes.ofType(TestType.MANUAL).getTotal();
+        this.totalTestCount = testOutcomes.getTotal();
     }
 
     public boolean hasManualTests() {
@@ -44,6 +48,18 @@ public class ResultCounts {
 
     public Integer getOverallTestCount(String result) {
         return totalTests.getOrDefault(TestResult.valueOf(result.toUpperCase()),0);
+    }
+
+    public Integer getTotalAutomatedTestCount() {
+        return totalAutomatedTests;
+    }
+
+    public Integer getTotalManualTestCount() {
+        return totalManualTests;
+    }
+
+    public Integer getTotalOverallTestCount() {
+        return totalTestCount;
     }
 
     public String getAutomatedTestPercentage(String result) {
@@ -66,12 +82,18 @@ public class ResultCounts {
      * Returns automated and manual result counts of each of the specified result types
      */
     public String byTypeFor(String... testResultTypes) {
-        List<Integer> resultCounts = new ArrayList<>();
+        List<String> resultCounts = new ArrayList<>();
         for(String resultType : testResultTypes) {
-            resultCounts.add(testOutcomes.ofType(TestType.AUTOMATED).withResult(TestResult.valueOf(resultType.toUpperCase())).getTotal());
-            resultCounts.add(testOutcomes.ofType(TestType.MANUAL).withResult(TestResult.valueOf(resultType.toUpperCase())).getTotal());
+            resultCounts.add(labeledValue(resultType, TestType.AUTOMATED));
+            resultCounts.add(labeledValue(resultType, TestType.MANUAL));
         }
         return Arrays.toString(resultCounts.toArray());
+    }
+
+    private String labeledValue(String resultType, TestType testType) {
+        int resultCount = testOutcomes.ofType(testType).withResult(TestResult.valueOf(resultType.toUpperCase())).getTotal();
+        String label = TestResult.valueOf(resultType.toUpperCase()).getLabel() + " (" + testType.toString().toLowerCase() + ")";
+        return "{meta: '" + label + "', value: " + resultCount + "}";
     }
 
     public String percentageLabelsByTypeFor(String... testResultTypes) {

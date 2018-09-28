@@ -11,7 +11,7 @@ import java.util.Optional;
 /**
  * Find the requirements hierarchy or the requirements associated with a given test outcome
  */
-public interface RequirementsService {
+public interface RequirementsService extends ParentRequirementProvider {
     List<Requirement> getRequirements();
 
     Optional<Requirement> getParentRequirementFor(TestOutcome testOutcome);

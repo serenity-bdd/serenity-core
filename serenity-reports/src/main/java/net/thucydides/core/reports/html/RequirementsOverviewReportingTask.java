@@ -3,6 +3,7 @@ package net.thucydides.core.reports.html;
 import com.google.common.base.Objects;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.model.ReportType;
+import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.ReportOptions;
 import net.thucydides.core.reports.TestOutcomes;
@@ -11,6 +12,7 @@ import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.RequirementOutcome;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
+import net.thucydides.core.requirements.reports.ScenarioOutcome;
 import net.thucydides.core.requirements.reports.ScenarioOutcomes;
 import net.thucydides.core.tags.BreadcrumbTagFilter;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -22,6 +24,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static net.serenitybdd.core.environment.ConfiguredEnvironment.getEnvironmentVariables;
@@ -112,13 +115,42 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         context.put("reportOptions", new ReportOptions(getEnvironmentVariables()));
         context.put("relativeLink", relativeLink);
 
+        requirementsOutcomes.getParentRequirement().map(
+                parentRequirement -> context.put("currentTag", parentRequirement.asTag())
+        );
+
         context.put("scenarios", ScenarioOutcomes.from(requirementsOutcomes));
+        context.put("testCases", executedScenariosIn(requirementsOutcomes));
+        context.put("automatedTestCases", automated(executedScenariosIn(requirementsOutcomes)));
+        context.put("manualTestCases", manual(executedScenariosIn(requirementsOutcomes)));
 
         addBreadcrumbs(requirementsOutcomes, context, requirementsOutcomes.getTestOutcomes().getTags());
 
         generateReportPage(context, DEFAULT_REQUIREMENTS_REPORT, reportName);
         LOGGER.trace("Requirements report generated: {} in {} ms", reportName, stopwatch.stop());
 
+    }
+
+    private void addTags(TestOutcome testOutcome, Map<String, Object> context, String parentTitle) {
+        TagFilter tagFilter = new TagFilter(getEnvironmentVariables());
+        Set<TestTag> filteredTags = (parentTitle != null) ? tagFilter.removeTagsWithName(testOutcome.getTags(), parentTitle) : testOutcome.getTags();
+        context.put("filteredTags", filteredTags);
+    }
+
+
+    private List<ScenarioOutcome> automated(List<ScenarioOutcome> executedScenariosIn) {
+        return executedScenariosIn.stream().filter(scenarioOutcome -> !scenarioOutcome.isManual()).collect(Collectors.toList());
+    }
+
+    private List<ScenarioOutcome> manual(List<ScenarioOutcome> executedScenariosIn) {
+        return executedScenariosIn.stream().filter(scenarioOutcome -> scenarioOutcome.isManual()).collect(Collectors.toList());
+    }
+
+    private List<ScenarioOutcome> executedScenariosIn(RequirementsOutcomes requirementsOutcomes) {
+        return ScenarioOutcomes.from(requirementsOutcomes)
+                                                  .stream()
+                                                  .filter(scenarioOutcome -> !scenarioOutcome.getType().equalsIgnoreCase("background"))
+                                                  .collect(Collectors.toList());
     }
 
     private void addBreadcrumbs(RequirementsOutcomes requirementsOutcomes, Map<String, Object> context, List<TestTag> allTags) {

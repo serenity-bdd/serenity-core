@@ -43,14 +43,6 @@ public class JSONRequirementsTree {
     private TestResult matchingOutcome(Requirement requirement,
                                        RequirementsOutcomes requirementsOutcomes) {
 
-        if (requirementsOutcomes.getParentRequirement().isPresent() && requirementsOutcomes.getParentRequirement().get() == requirement) {
-            return requirementsOutcomes.getTestOutcomes().getResult();
-        }
-
-//        if (!requirement.hasChildren()) {
-//            return requirementsOutcomes.getTestOutcomes().getResult();
-//        }
-//
         Optional<RequirementOutcome> matchingOutcome = requirementsOutcomes.getFlattenedRequirementOutcomes().stream()
                                                             .filter(outcome -> outcome.getRequirement().equals(requirement))
                                                             .findFirst();

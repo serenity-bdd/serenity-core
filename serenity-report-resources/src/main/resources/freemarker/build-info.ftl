@@ -235,8 +235,12 @@
 </div>
 </div>
 <div id="beforefooter"></div>
-<div id="bottomfooter">
-    <span class="version">Serenity version ${serenityVersionNumber}</span>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <span class="version">Serenity BDD version ${serenityVersionNumber}</span>
+        </div>
+    </div>
 </div>
 
 </body>

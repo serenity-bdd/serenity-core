@@ -6,8 +6,9 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.List;
+
+import static java.util.Collections.EMPTY_LIST;
 
 public class ScenarioOutcome {
     private final String name;
@@ -18,9 +19,12 @@ public class ScenarioOutcome {
     private final String description;
     private final List<String> steps;
     private final List<String> examples;
+    private final int exampleCount;
     private final ZonedDateTime startTime;
     private final Long duration;
     private final boolean manual;
+    private final String parentName;
+    private final String parentReport;
 
     public ScenarioOutcome(String name, String type, TestResult result,
                            String scenarioReport, ZonedDateTime startTime, Long duration) {
@@ -32,9 +36,12 @@ public class ScenarioOutcome {
         this.startTime = startTime;
         this.duration = duration;
         this.description = "";
-        this.steps = Collections.EMPTY_LIST;
-        this.examples = Collections.EMPTY_LIST;
+        this.steps = EMPTY_LIST;
+        this.examples = EMPTY_LIST;
+        this.exampleCount = 0;
         this.manual = false;
+        this.parentReport = "";
+        this.parentName = "";
     }
 
     public ScenarioOutcome(String name,
@@ -46,7 +53,10 @@ public class ScenarioOutcome {
                            Boolean manual,
                            String description,
                            List<String> steps,
-                           List<String> examples) {
+                           List<String> examples,
+                           int exampleCount,
+                           String parentName,
+                           String parentReport) {
         this.name = name;
         this.type = type;
         this.id = Digest.ofTextValue(name);
@@ -58,6 +68,9 @@ public class ScenarioOutcome {
         this.description = description;
         this.steps = steps;
         this.examples = examples;
+        this.exampleCount = exampleCount;
+        this.parentName = parentName;
+        this.parentReport = parentReport;
     }
 
     public String getName() {
@@ -81,6 +94,10 @@ public class ScenarioOutcome {
         return id;
     }
 
+    public String getType() {
+        return type;
+    }
+
     public TestResult getResult() {
         return result;
     }
@@ -100,6 +117,11 @@ public class ScenarioOutcome {
     public List<String> getExamples() {
         return examples;
     }
+
+    public boolean hasExamples() { return exampleCount > 0; }
+
+    public String getNumberOfExamples() { return (exampleCount == 1) ? "1 example" : exampleCount + " examples"; }
+
 
     public String getScenarioReport() {
         return scenarioReport;
@@ -127,5 +149,13 @@ public class ScenarioOutcome {
 
     public String getFormattedDuration() {
         return (duration != 0L) ? DurationFormatUtils.formatDuration(duration,"mm:ss") : " ";
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public String getParentReport() {
+        return parentReport;
     }
 }

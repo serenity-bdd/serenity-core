@@ -164,18 +164,20 @@ public class Formatter  {
         } else if (format.equalsIgnoreCase(ASCIIDOC)) {  // Use ASCIIDOC if configured
             return renderAsciidoc(text);
         } else if (format.equalsIgnoreCase(MARKDOWN) ||  (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(MarkdownRendering.RenderedElements.narrative)) ) {
-            return renderMarkdown(text);
+            return renderMarkdown(convertTablesToMarkdown(text));
         } else {
             return addLineBreaks(text);
         }
     }
 
+    private String convertTablesToMarkdown(String text) {
+        return MarkdownTables.convertTablesIn(text);
+    }
 
 
     public String renderDescriptionWithEmbeddedResults(final String text, RequirementsOutcomes requirementsOutcomes) {
 
         String textWithResults = textWithEmbeddedExampleResults(textWithEmbeddedResults(text, requirementsOutcomes), requirementsOutcomes);
-        System.out.println(textWithResults);
         return renderDescription(textWithResults);
     }
 

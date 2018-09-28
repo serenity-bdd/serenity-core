@@ -9,6 +9,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.reports.TestOutcomes;
+import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 import net.thucydides.core.requirements.model.cucumber.ScenarioReport;
@@ -59,10 +60,11 @@ public class FeatureFileScenarioOutcomes {
     private ScenarioOutcome scenarioOutcomeFrom(Feature feature, ScenarioDefinition scenarioDefinition, TestOutcomes testOutcomes) {
         Optional<? extends TestOutcome> outcome = testOutcomes.testOutcomeWithName(scenarioDefinition.getName());
         TestResult testResult = (outcome.isPresent() ? outcome.get().getResult() : TestResult.UNDEFINED);
-        ZonedDateTime startTime = (outcome.isPresent()) ? outcome.get().getStartTime() : null;
+        ZonedDateTime startTime = outcome.map(TestOutcome::getStartTime).orElse(null);
         Long duration = (outcome.isPresent()) ? outcome.get().getDuration() : 0;
-        boolean isManual = (outcome.isPresent()) ? outcome.get().isManual() : false;
+        boolean isManual = outcome.map(TestOutcome::isManual).orElse(false);
         String scenarioReport = ScenarioReport.forScenario(scenarioDefinition.getName()).inFeature(feature);
+        String featureReport = new ReportNameProvider().forRequirement(feature.getName(),"feature");
 
         List<String> renderedSteps = scenarioDefinition.getSteps().stream()
                                                        .map(RenderCucumber::step)
@@ -71,6 +73,9 @@ public class FeatureFileScenarioOutcomes {
         List<String> renderedExamples = (scenarioDefinition instanceof ScenarioOutline) ?
                 RenderCucumber.examples(((ScenarioOutline) scenarioDefinition).getExamples()) : Collections.EMPTY_LIST;
 
+        int exampleCount = (scenarioDefinition instanceof ScenarioOutline) ?
+                ((ScenarioOutline) scenarioDefinition).getExamples().stream().mapToInt(examples -> examples.getTableBody().size()).sum()
+                : 0;
         return new ScenarioOutcome(scenarioDefinition.getName(),
                                     scenarioDefinition.getKeyword(),
                                     testResult,
@@ -80,7 +85,10 @@ public class FeatureFileScenarioOutcomes {
                                     isManual,
                                     scenarioDefinition.getDescription(),
                                     renderedSteps,
-                                    renderedExamples
+                                    renderedExamples,
+                                    exampleCount,
+                                    feature.getName(),
+                                    featureReport
         );
 
     }

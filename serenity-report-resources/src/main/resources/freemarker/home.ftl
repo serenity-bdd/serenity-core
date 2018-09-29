@@ -172,7 +172,7 @@
                 </#if>
                 <#if (brokenCount > 0)>
                     <span class="test-count"> |
-                        ${brokenCount}x
+                        ${brokenCount}
                         <#if (report.shouldDisplayResultLink)>
                             <a href="${relativeLink}${brokenReport}">unsuccessful</a>
                         <#else>unsuccessful</#if>
@@ -526,12 +526,13 @@
                                                 <div class="row">
                                                     <div class="col-sm-6">
                                                         <h4>Most Frequent Failures</h4>
-
                                                         <table class="table">
                                                             <tbody>
                                                             <#list frequentFailures as frequentFailure>
                                                             <tr>
-                                                                <td class="${frequentFailure.resultClass}-color top-list-title">${frequentFailure.resultIcon} ${frequentFailure.name}</td>
+                                                                <td class="${frequentFailure.resultClass}-color top-list-title">
+                                                                    <a href="${frequentFailure.report}">${frequentFailure.resultIcon} ${frequentFailure.name}</a>
+                                                                </td>
                                                                 <td><span class="badge failure-badge">${frequentFailure.count}</span></td>
                                                             </tr>
                                                             </#list>

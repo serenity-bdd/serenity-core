@@ -1490,6 +1490,7 @@ public class TestOutcome {
     }
 
     public String getTestFailureErrorType() {
+        if (getTestFailureCause() == null) { return ""; }
         return getTestFailureCause().getErrorType();
     }
 

@@ -96,6 +96,9 @@ public enum TestResult {
         return true;
     }
 
+    public boolean isAtLeast(TestResult minimumTestResult) {
+        return this.priority >= minimumTestResult.priority;
+    }
     public boolean executedResultsCount() {
         return executedResultsCount;
     }

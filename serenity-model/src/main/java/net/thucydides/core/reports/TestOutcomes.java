@@ -362,6 +362,19 @@ public class TestOutcomes {
         return TestOutcomes.of(filteredOutcomes);
     }
 
+    public TestOutcomes withErrorType(String testFailureErrorType) {
+        List<TestOutcome> filteredOutcomes = outcomes
+                .stream()
+                .filter(outcome -> failedWith(outcome, testFailureErrorType))
+                .collect(Collectors.toList());
+
+        return TestOutcomes.of(filteredOutcomes).withLabel("");
+    }
+
+    private boolean failedWith(TestOutcome outcome, String testFailureErrorType) {
+        return (outcome.getTestFailureErrorType().equals(testFailureErrorType) && (outcome.getResult().isAtLeast(TestResult.FAILURE)));
+    }
+
     public TestOutcomes withResult(TestResult result) {
 
         List<TestOutcome> filteredOutcomes = outcomes

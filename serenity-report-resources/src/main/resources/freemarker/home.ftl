@@ -20,6 +20,7 @@
 
 <#assign manualTests = testOutcomes.count("manual")>
 <#assign automatedTests = testOutcomes.count("automated")>
+<#assign totalTests = testOutcomes.count("automated")>
 
 <#assign testResultData = resultCounts.byTypeFor("success","pending","ignored","skipped","failure","error","compromised") >
 <#assign testLabels = resultCounts.percentageLabelsByTypeFor("success","pending","ignored","skipped","failure","error","compromised") >
@@ -171,7 +172,7 @@
                 </#if>
                 <#if (brokenCount > 0)>
                     <span class="test-count"> |
-                        ${brokenCount}
+                        ${brokenCount}x
                         <#if (report.shouldDisplayResultLink)>
                             <a href="${relativeLink}${brokenReport}">unsuccessful</a>
                         <#else>unsuccessful</#if>
@@ -254,6 +255,7 @@
                                             <div class="container-fluid">
                                                 <div class="row">
                                                     <div class="col-sm-4">
+                                                        <#if testOutcomes.total != 0>
                                                         <div style="width:300px;" class="chart-container ${graphType}">
                                                             <div class="ct-chart ct-square"></div>
                                                         </div>
@@ -301,6 +303,7 @@
 
 
                                                         </script>
+                                                        </#if>
                                                     </div>
                                                     <div class="col-sm-8">
 

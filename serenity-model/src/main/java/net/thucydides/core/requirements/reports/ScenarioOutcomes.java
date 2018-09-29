@@ -9,6 +9,7 @@ import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.cucumber.FeatureFileScenarioOutcomes;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,6 +68,12 @@ public class ScenarioOutcomes {
 
         String userStoryName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getName() : null;
         String userStoryReportName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getReportName() : null;
+
+        List<String> steps = (testOutcome.getDataDrivenSampleScenario() != null && !testOutcome.getDataDrivenSampleScenario().isEmpty()) ?
+                Collections.singletonList(testOutcome.getDataDrivenSampleScenario()) :
+                testOutcome.getTestSteps().stream().map(TestStep::getDescription).collect(Collectors.toList());
+
+
         return new ScenarioOutcome(testOutcome.getTitleWithLinks(),
                 "Acceptance Test",
                 testOutcome.getResult(),
@@ -75,7 +82,7 @@ public class ScenarioOutcomes {
                 testOutcome.getDuration(),
                 testOutcome.isManual(),
                 testOutcome.getDescription(),
-                testOutcome.getTestSteps().stream().map(TestStep::getDescription).collect(Collectors.toList()),
+                steps,
                 exampleTables,
                 testOutcome.getDataTableRowCount(),
                 userStoryName,

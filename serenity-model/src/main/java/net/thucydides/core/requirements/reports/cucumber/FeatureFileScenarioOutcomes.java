@@ -20,10 +20,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import java.io.File;
 import java.net.URL;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FeatureFileScenarioOutcomes {
@@ -67,8 +64,8 @@ public class FeatureFileScenarioOutcomes {
         String featureReport = new ReportNameProvider().forRequirement(feature.getName(),"feature");
 
         List<String> renderedSteps = scenarioDefinition.getSteps().stream()
-                                                       .map(RenderCucumber::step)
-                                                       .collect(Collectors.toList());
+                    .map(RenderCucumber::step)
+                    .collect(Collectors.toList());
 
         List<String> renderedExamples = (scenarioDefinition instanceof ScenarioOutline) ?
                 RenderCucumber.examples(((ScenarioOutline) scenarioDefinition).getExamples()) : Collections.EMPTY_LIST;

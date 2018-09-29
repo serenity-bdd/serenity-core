@@ -289,6 +289,7 @@
                                     <div class="row">
                                         <div class="col-sm-4">
 
+                                            <#if resultCounts.getTotalOverallTestCount() != 0>
                                             <div style="width:300px;" class="chart-container ${graphType}">
                                                 <div class="ct-chart ct-square"></div>
                                             </div>
@@ -320,6 +321,7 @@
                                                 });
 
                                             </script>
+                                            </#if>
                                         </div>
                                         <div class="col-sm-8">
                                                 <#assign successReport = reportName.withPrefix(currentTag).forTestResult("success") >

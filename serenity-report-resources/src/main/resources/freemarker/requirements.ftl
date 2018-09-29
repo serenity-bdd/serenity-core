@@ -251,17 +251,27 @@
                                             <h3>Scenario details</h3>
                                             <#list scenarios as scenario>
 
+                                                <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
+
                                                 <div class="scenario-docs card" id="${scenario.id}">
                                                     <div class="scenario-docs card-header ${scenario.resultStyle}">
                                                         <span class="scenario-heading">
+                                                            <#if outcome_icon?has_content>
                                                             <a href="${scenario.scenarioReport}"
                                                                title="More details...">${scenario.title}</a>
+                                                            <#else>
+                                                                ${scenario.title}
+                                                            </#if>
                                                         </span>
                                                         <span class="scenario-result-icon">
                                                             <#if (scenario.manual)> <i class="fa fa-user manual"
                                                                                        title="Manual test"></i></#if>
-                                                            <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
-                                                            ${outcome_icon}
+
+                                                            <#if outcome_icon?has_content>
+                                                                ${outcome_icon}
+                                                            <#else>
+                                                                <i class="fas fa-pause" title="No test has been implemented yet"></i>
+                                                            </#if>
                                                         </span>
                                                     </div>
                                                     <div class="scenario-docs card-body">
@@ -526,19 +536,28 @@
                                                 </thead>
                                                 <tbody>
                                                 <#list automatedTestCases as scenario>
-                                                    <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
+                                                <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
                                                 <tr class="scenario-result ${scenario.result}">
                                                     <td>
-                                                        <a href="${scenario.scenarioReport}">${scenario.title}</a>
-                                                               <#if scenario.hasExamples() >
-                                                                   (${scenario.numberOfExamples})
-                                                               </#if>
+                                                        <#if outcome_icon?has_content>
+                                                            <a href="${scenario.scenarioReport}">${scenario.title}</a>
+                                                        <#else>
+                                                            ${scenario.title}
+                                                        </#if>
+                                                        <#if scenario.hasExamples() >
+                                                               (${scenario.numberOfExamples})
+                                                        </#if>
                                                     </td>
                                                     <td>${scenario.stepCount}</td>
                                                     <td>${scenario.formattedStartTime}</td>
                                                     <td>${scenario.formattedDuration}</td>
-                                                    <td>${outcome_icon} <span
-                                                            style="display:none">${scenario.result}</span></td>
+                                                    <td>
+                                                        <#if outcome_icon?has_content >
+                                                            ${outcome_icon} <span style="display:none">${scenario.result}</span>
+                                                        <#else>
+                                                            <i class="fas fa-pause" title="No test has been implemented yet"></i>
+                                                        </#if>
+                                                        </td>
                                                 </tr>
                                                 </#list>
                                                 </tbody>

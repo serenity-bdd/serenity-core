@@ -27,6 +27,8 @@ class SetAppropriateSaucelabsPlatformVersion {
         OS_PLATFORM_NAMES.put("yosemite", "OS X 10.10");
         OS_PLATFORM_NAMES.put("elcapitan", "OS X 10.11");
         OS_PLATFORM_NAMES.put("el capitan", "OS X 10.11");
+        OS_PLATFORM_NAMES.put("sierra", "macOS 10.12");
+        OS_PLATFORM_NAMES.put("high sierra", "macOS 10.13");
     }
 
     private static Map<String, String> MAC_OS_VERSIONS_PER_SAFARI_VERSION = new HashMap();
@@ -37,6 +39,7 @@ class SetAppropriateSaucelabsPlatformVersion {
         MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("7", "OS X 10.9");
         MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("8", "OS X 10.10");
         MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("10", "OS X 10.11");
+        MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("11", "macOS 10.13");
     }
 
     public SetAppropriateSaucelabsPlatformVersion(DesiredCapabilities capabilities) {

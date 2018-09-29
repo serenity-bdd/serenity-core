@@ -34,6 +34,7 @@ public class JSONRequirementsTree {
     private Node toNode(Requirement requirement,RequirementsOutcomes requirementsOutcomes) {
         List<Node> children = requirement.getChildren().stream()
                                          .map(child -> toNode(child, requirementsOutcomes))
+                                         .distinct()
                                          .collect(Collectors.toList());
 
         TestResult result = matchingOutcome(requirement, requirementsOutcomes);

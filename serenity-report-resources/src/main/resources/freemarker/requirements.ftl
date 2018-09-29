@@ -287,9 +287,9 @@
                             <div id="results" class="tab-pane fade">
                                 <div class="container-fluid">
                                     <div class="row">
+                                    <#if resultCounts.getTotalOverallTestCount() != 0>
                                         <div class="col-sm-4">
 
-                                            <#if resultCounts.getTotalOverallTestCount() != 0>
                                             <div style="width:300px;" class="chart-container ${graphType}">
                                                 <div class="ct-chart ct-square"></div>
                                             </div>
@@ -321,9 +321,11 @@
                                                 });
 
                                             </script>
-                                            </#if>
                                         </div>
                                         <div class="col-sm-8">
+                                        <#else>
+                                        <div class="col-sm-12">
+                                        </#if>
                                                 <#assign successReport = reportName.withPrefix(currentTag).forTestResult("success") >
                                                 <#assign brokenReport = reportName.withPrefix(currentTag).forTestResult("broken") >
                                                 <#assign failureReport = reportName.withPrefix(currentTag).forTestResult("failure") >

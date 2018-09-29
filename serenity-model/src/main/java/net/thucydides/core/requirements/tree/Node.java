@@ -1,5 +1,7 @@
 package net.thucydides.core.requirements.tree;
 
+import com.google.common.base.Objects;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,4 +33,17 @@ public class Node {
         return nodes;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Node node = (Node) o;
+        return Objects.equal(text, node.text) &&
+                Objects.equal(href, node.href);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(text, href);
+    }
 }

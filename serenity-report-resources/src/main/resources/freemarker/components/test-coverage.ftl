@@ -34,7 +34,7 @@
 
 <table>
     <tr>
-        <td width="40px">
+        <td width="40px" style="padding-top:4px;">
             <div class="small" style="text-align:right;">${passing}</div>
         </td>
         <td style="min-width:12.5em;">

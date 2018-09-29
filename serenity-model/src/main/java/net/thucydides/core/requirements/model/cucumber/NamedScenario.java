@@ -24,4 +24,11 @@ public abstract class NamedScenario {
      * @return
      */
     public abstract Optional<String> asExampleTable();
+
+    /**
+     * Return the example table part of the scenario outline
+     * @return
+     */
+    public abstract Optional<String> asExampleTable(ScenarioDisplayOption displayOption);
+
 }

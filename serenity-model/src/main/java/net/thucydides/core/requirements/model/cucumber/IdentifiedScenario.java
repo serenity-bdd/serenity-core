@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.lang.System.lineSeparator;
+import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOption.WithNoTitle;
+import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOption.WithTitle;
 
 public class IdentifiedScenario extends NamedScenario {
     private Feature feature;
@@ -48,6 +50,11 @@ public class IdentifiedScenario extends NamedScenario {
 
     @Override
     public Optional<String> asExampleTable() {
+        return asExampleTable(WithNoTitle);
+    }
+
+    @Override
+    public Optional<String> asExampleTable(ScenarioDisplayOption withDisplayOption) {
         if (!(scenarioDefinition instanceof ScenarioOutline)) {
             return Optional.empty();
         }
@@ -56,11 +63,11 @@ public class IdentifiedScenario extends NamedScenario {
 
         return Optional.of(scenarioOutline.getExamples()
                 .stream()
-                .map(this::renderedFormOf)
+                .map(example -> renderedFormOf(example, withDisplayOption))
                 .collect(Collectors.joining(lineSeparator())));
     }
 
-    private String renderedFormOf(Examples exampleTable) {
+    private String renderedFormOf(Examples exampleTable, ScenarioDisplayOption displayOption) {
 
         ExampleRowResultIcon exampleRowCounter = new ExampleRowResultIcon(feature.getName()
                                                                             + "!"
@@ -72,8 +79,11 @@ public class IdentifiedScenario extends NamedScenario {
         if (tableName.isEmpty()) {
             tableName = scenarioDefinition.getName();
         }
-        String exampleTitle =  "### " + tableName;
-        renderedExampleTable.append(exampleTitle);
+        if (displayOption == WithTitle) {
+            String exampleTitle = "### " + tableName;
+            renderedExampleTable.append(exampleTitle);
+            renderedExampleTable.append(System.lineSeparator());
+        }
         renderedExampleTable.append(RenderedExampleTable.descriptionFor(exampleTable));
         renderedExampleTable.append(RenderedExampleTable.renderedTable(exampleTable, exampleRowCounter));
         renderedExampleTable.append(System.lineSeparator()).append("[<i class=\"fa fa-info-circle\"></i> More details](" + scenarioReport + ")").append(System.lineSeparator());

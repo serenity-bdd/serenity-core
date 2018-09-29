@@ -12,4 +12,9 @@ public class UnknownScenario extends NamedScenario {
     public Optional<String> asExampleTable() {
         return Optional.empty();
     }
+
+    @Override
+    public Optional<String> asExampleTable(ScenarioDisplayOption displayOption) {
+        return Optional.empty();
+    }
 }

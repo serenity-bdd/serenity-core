@@ -4,6 +4,10 @@
     margin:0;
     padding:0;
 }
+
+body {
+    font-size:16px !important;
+}
 a:link {
     text-decoration: none;
 }
@@ -105,11 +109,11 @@ footer {
 }
 
 .requirement-name-column {
-    min-width: 30em !important;
+    min-width: 20em !important;
 }
 
 .test-name-column {
-    min-width: 40em !important;
+    min-width: 35em !important;
 }
 
 #topbanner
@@ -1723,65 +1727,65 @@ ul.second-level-requirements  {
 }
 
 
-.datagrid table {
-    border-collapse: collapse;
-    text-align: left;
-    width: 100%;
-}
+/*.datagrid table {*/
+/*border-collapse: collapse;*/
+/*text-align: left;*/
+/*width: 100%;*/
+/*}*/
 
-.datagrid {
-    font: normal 12px/150% Arial, Helvetica, sans-serif;
-    background: #fff;
-    overflow: hidden;
-    border: 1px solid #006699;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-}
+/*.datagrid {*/
+/*font: normal 12px/150% Arial, Helvetica, sans-serif;*/
+/*background: #fff;*/
+/*overflow: hidden;*/
+/*border: 1px solid #006699;*/
+/*-webkit-border-radius: 3px;*/
+/*-moz-border-radius: 3px;*/
+/*border-radius: 3px;*/
+/*}*/
 
-.datagrid table td, .datagrid table th {
-    padding: 3px 10px;
-}
+/*.datagrid table td, .datagrid table th {*/
+/*padding: 3px 10px;*/
+/*}*/
 
-.datagrid table thead th {
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #0d78ae), color-stop(1, #00557F));
-    background: -moz-linear-gradient(center top, #006699 5%, #00557F 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');
-    background-color: #006699;
-    color: #FFFFFF;
-    font-size: 15px;
-    font-weight: bold;
-    border-left: 1px solid #0070A8;
-}
+/*.datagrid table thead th {*/
+/*background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #0d78ae), color-stop(1, #00557F));*/
+/*background: -moz-linear-gradient(center top, #006699 5%, #00557F 100%);*/
+/*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');*/
+/*background-color: #006699;*/
+/*color: #FFFFFF;*/
+/*font-size: 15px;*/
+/*font-weight: bold;*/
+/*border-left: 1px solid #0070A8;*/
+/*}*/
 
-.datagrid table thead th:first-child {
-    border: none;
-}
+/*.datagrid table thead th:first-child {*/
+/*border: none;*/
+/*}*/
 
-.datagrid table tbody td {
-    color: #0d78ae;
-    border-left: 1px solid #E1EEF4;
-    font-size: 14px;
-    font-weight: normal;
-    font-family: euphemia, verdana, sans-serif;
+/*.datagrid table tbody td {*/
+/*color: #0d78ae;*/
+/*border-left: 1px solid #E1EEF4;*/
+/*font-size: 14px;*/
+/*font-weight: normal;*/
+/*font-family: euphemia, verdana, sans-serif;*/
 
-}
+/*}*/
 
-.datagrid table tbody .alt td {
-    background: #E1EEf4;
-    color: #00557F;
-}
+/*.datagrid table tbody .alt td {*/
+/*background: #E1EEf4;*/
+/*color: #00557F;*/
+/*}*/
 
-.datagrid table tbody td:first-child {
-    border-left: none;
-}
+/*.datagrid table tbody td:first-child {*/
+/*border-left: none;*/
+/*}*/
 
-.datagrid table tbody tr:last-child td {
-    border-bottom: none;
-}
+/*.datagrid table tbody tr:last-child td {*/
+/*border-bottom: none;*/
+/*}*/
 
-.datagrid th:first-child { display:none; }
-.datagrid td:first-child { display:none; }
+/*.datagrid th:first-child { display:none; }*/
+/*.datagrid td:first-child { display:none; }*/
 
 .requirements-overview li {
     margin-left: 2em;
@@ -1965,22 +1969,22 @@ div.scenario-text:empty {
 }
 
 /*.scenario-result.PENDING {*/
-    /*background-color: rgba(0, 167, 255, 0.05);*/
+/*background-color: rgba(0, 167, 255, 0.05);*/
 /*}*/
 /*.scenario-result.FAILURE {*/
-    /*background-color: rgba(255, 0, 0, 0.05);*/
+/*background-color: rgba(255, 0, 0, 0.05);*/
 /*}*/
 /*.scenario-result.ERROR {*/
-    /*background-color: rgba(255, 141, 0, 0.05);*/
+/*background-color: rgba(255, 141, 0, 0.05);*/
 /*}*/
 /*.scenario-result.COMPROMISED {*/
-    /*background-color: rgba(255, 0, 255, 0.05);*/
+/*background-color: rgba(255, 0, 255, 0.05);*/
 /*}*/
 /*.scenario-result.IGNORED {*/
-    /*background-color: rgba(168, 168, 168, 0.1);*/
+/*background-color: rgba(168, 168, 168, 0.1);*/
 /*}*/
 /*.scenario-result.SKIPPED {*/
-    /*background-color: rgba(238, 224, 152, 0.2);*/
+/*background-color: rgba(238, 224, 152, 0.2);*/
 /*}*/
 
 .card-body {
@@ -2039,7 +2043,7 @@ div.scenario-text:empty {
 }
 
 .top-list-title {
-    min-width: 30em;
+    min-width: 25em;
 }
 
 .failure-badge {
@@ -2049,10 +2053,6 @@ div.scenario-text:empty {
 .feature-tags {
     float:right;
     padding:4px;
-}
-
-.progress {
-    margin-bottom:0px;
 }
 
 .stacktrace-details {
@@ -2073,4 +2073,13 @@ div.scenario-text:empty {
     margin-top: 4px !important;
     margin-bottom: 4px !important;
     font-size: 1em;
+}
+
+.missing-scenario-warning {
+    color: red;
+}
+
+div.progress {
+    height:20px;
+    margin:0px !important;
 }

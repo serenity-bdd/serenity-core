@@ -171,7 +171,6 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         reportingTasks.add(new CopyResourcesTask());
         reportingTasks.add(new CopyTestResultsTask());
         reportingTasks.add(new AggregateReportingTask(context, environmentVariables, requirements.getRequirementsService(), getOutputDirectory(), testOutcomes));
-        reportingTasks.add(new TagTypeReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider, testOutcomes));
         reportingTasks.addAll(TagReportingTask.tagReportsFor(testOutcomes).using(context,
                 environmentVariables,
                 getOutputDirectory(),

@@ -82,7 +82,7 @@ public class IdentifiedScenario extends NamedScenario {
         if (displayOption == WithTitle) {
             String exampleTitle = "### " + tableName;
             renderedExampleTable.append(exampleTitle);
-            renderedExampleTable.append(System.lineSeparator());
+//            renderedExampleTable.append(System.lineSeparator());
         }
         renderedExampleTable.append(System.lineSeparator());
         renderedExampleTable.append(RenderedExampleTable.descriptionFor(exampleTable));

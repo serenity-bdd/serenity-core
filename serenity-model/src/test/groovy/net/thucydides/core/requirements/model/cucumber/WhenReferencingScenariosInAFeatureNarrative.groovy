@@ -4,6 +4,8 @@ import cucumber.runtime.io.MultiLoader
 import cucumber.runtime.model.CucumberFeature
 import spock.lang.Specification
 
+import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOption.WithTitle
+
 class WhenReferencingScenariosInAFeatureNarrative extends Specification {
 
     def featureFile = "src/test/resources/serenity-cucumber/features/maintain_my_todo_list/filtering_todos.feature"
@@ -44,11 +46,12 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
 
     def "Should return the examples table alone for scenario outline if requested"() {
         when:
-        def examples = ReferencedScenario.in(filteringTodoFeature).withName("Do many things").asExampleTable()
+        def examples = ReferencedScenario.in(filteringTodoFeature).withName("Do many things").asExampleTable(WithTitle)
         then:
         examples.isPresent()
         and:
         examples.get() == """### Do some things
+
 | tasks                       | filter    | expected      |**{result:Filtering things I need to do!Do many things}**|
 |-----------------------------|-----------|---------------|---|
 | Buy some milk, Walk the dog | Completed | Walk the dog  |{example-result:Filtering things I need to do!Do many things[0]}|
@@ -57,6 +60,7 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
 [<i class="fa fa-info-circle"></i> More details](f5d0b08e3d3c0d0bf91e75595c812557a5edec10041ba70977bbead78fbdacf6.html)
 
 ### Do some other things
+
 | tasks                       | filter    | expected      |**{result:Filtering things I need to do!Do many things}**|
 |-----------------------------|-----------|---------------|---|
 | Buy some milk, Walk the dog | Completed | Walk the dog  |{example-result:Filtering things I need to do!Do many things[0]}|
@@ -101,7 +105,7 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
     def "Should replace example references with the example table"() {
         expect:
         DescriptionWithScenarioReferences.from(filteringTodoFeature).
-                forText("{Examples} Do many things") ==  """### Do some things
+                forText("{Examples} Do many things") ==  """
 | tasks                       | filter    | expected      |**{result:Filtering things I need to do!Do many things}**|
 |-----------------------------|-----------|---------------|---|
 | Buy some milk, Walk the dog | Completed | Walk the dog  |{example-result:Filtering things I need to do!Do many things[0]}|
@@ -109,7 +113,7 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
 
 [<i class="fa fa-info-circle"></i> More details](f5d0b08e3d3c0d0bf91e75595c812557a5edec10041ba70977bbead78fbdacf6.html)
 
-### Do some other things
+
 | tasks                       | filter    | expected      |**{result:Filtering things I need to do!Do many things}**|
 |-----------------------------|-----------|---------------|---|
 | Buy some milk, Walk the dog | Completed | Walk the dog  |{example-result:Filtering things I need to do!Do many things[0]}|

@@ -130,9 +130,9 @@
                     <tr>
                         <td width="375px" valign="top">
                             <div class="test-count-summary">
-                <span class="test-count-title">${testOutcomes.totalTestScenarios}
-                    test scenarios <#if (testOutcomes.hasDataDrivenTests())>(${testOutcomes.total} tests in all, including ${testOutcomes.totalDataRows}
-                    rows of test data)</#if></span>
+                                <div class="test-count-title">${testOutcomes.totalTestScenarios}
+                                    test scenarios <#if (testOutcomes.hasDataDrivenTests())>(${testOutcomes.total} tests in all, including ${testOutcomes.totalDataRows}
+                                    rows of test data)</#if></div>
                                 <div>
             <#assign successReport = reportName.withPrefix(currentTag).forTestResult("success") >
             <#assign brokenReport = reportName.withPrefix(currentTag).forTestResult("broken") >

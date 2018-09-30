@@ -84,6 +84,7 @@ public class IdentifiedScenario extends NamedScenario {
             renderedExampleTable.append(exampleTitle);
             renderedExampleTable.append(System.lineSeparator());
         }
+        renderedExampleTable.append(System.lineSeparator());
         renderedExampleTable.append(RenderedExampleTable.descriptionFor(exampleTable));
         renderedExampleTable.append(RenderedExampleTable.renderedTable(exampleTable, exampleRowCounter));
         renderedExampleTable.append(System.lineSeparator()).append("[<i class=\"fa fa-info-circle\"></i> More details](" + scenarioReport + ")").append(System.lineSeparator());

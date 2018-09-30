@@ -1220,6 +1220,7 @@ h4 {
 
 .test-count-title {
     font-weight: bold;
+    padding-bottom: 0.25em;
 }
 
 .result-test-count {

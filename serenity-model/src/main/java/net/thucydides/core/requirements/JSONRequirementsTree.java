@@ -55,7 +55,11 @@ public class JSONRequirementsTree {
                                                             .findFirst();
 
         if (matchingOutcome.isPresent()) {
-            return (matchingOutcome.get().getTestOutcomes().getResult());
+            if (matchingOutcome.get().getTestOutcomes().getTotal() == 0) {
+                return TestResult.PENDING;
+            } else {
+                return (matchingOutcome.get().getTestOutcomes().getResult());
+            }
         }
 
         return TestResult.UNDEFINED;

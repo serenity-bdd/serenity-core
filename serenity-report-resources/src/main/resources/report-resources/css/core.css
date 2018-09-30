@@ -527,8 +527,7 @@ i.tag {
 }
 
 .error-message-title {
-    margin-left: 1em;
-    font-size: 1em;
+    font-size: 16px;
 }
 .parameters {
     display: block;

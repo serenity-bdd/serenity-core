@@ -2,8 +2,8 @@
     <div style="display:block">
         <div class="table">
             <div class="row">
-                <div class="col-sm-10" style="padding:0.75em;">
-                    <span class="error-message error-message-title ellipsis">${title}</span>
+                <div class="col-sm-10" style="padding-left:1.5em; padding-top:0.5em; padding-bottom:0.5em;">
+                    <span class="error-message error-message-title">${title}</span>
                 </div>
                 <div class="col-sm-2">
                     <a class="btn btn-warning details-button" data-toggle="collapse" href="#stacktraceModal-${id}""
@@ -23,10 +23,7 @@
                 </div>
                 <div class="card-body">
                     <div>
-                    <#list cause.stackTrace as element>
-                        ${element.className}.${element.methodName}(${(element.fileName)!""}
-                        :${element.lineNumber}) <br>
-                    </#list>
+                        <pre><#list cause.stackTrace as element>${element.className?trim}.${element.methodName}(${(element.fileName)!""}:${element.lineNumber})<br /></#list></pre>
                     </div>
 
                     <#if (cause.rootCause.isPresent())>
@@ -37,11 +34,7 @@
                         <#if (cause.rootCause.get().message)??>
                             <pre>${formatter.messageBody(cause.rootCause.get().message)}</pre>
                         </#if>
-                        <pre>
-                        <#list cause.rootCause.get().stackTrace as element>
-                            ${element.className}.${element.methodName}(${(element.fileName)!""} :${element.lineNumber}) <br>
-                        </#list>
-                        </pre>
+                        <pre><#list cause.rootCause.get().stackTrace as element>${element.className?trim}.${element.methodName}(${(element.fileName)!""} :${element.lineNumber})<br /></#list></pre>
                     </div>
                     </#if>
                 </div>

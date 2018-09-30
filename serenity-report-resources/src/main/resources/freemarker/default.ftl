@@ -525,8 +525,7 @@
                             <#if step.nestedException?has_content>
                                 <@stacktrace title=formattedErrorMessageTitle cause=step.nestedException id=step.number />
                             <#else>
-                                <div class="error-message ellipsis"
-                                     title='${formatter.htmlAttributeCompatible(errorMessageTitle)}'>
+                                <div class="error-message" title='${formatter.htmlAttributeCompatible(errorMessageTitle)}'>
                                     <pre>${formatter.htmlAttributeCompatible(errorMessageTitle,244)!''}</pre>
                                 </div>
                             </#if>

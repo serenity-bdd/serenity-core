@@ -96,6 +96,8 @@ public class CucumberParser {
     }
 
     private String descriptionWithScenarioReferencesFrom(Feature feature) {
+        if (feature.getDescription() == null) { return ""; }
+
         return stream(feature.getDescription().split("\\r?\\n"))
                 .map(line -> DescriptionWithScenarioReferences.from(feature).forText(line))
                 .collect(Collectors.joining(lineSeparator()));

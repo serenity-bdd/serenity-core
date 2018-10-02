@@ -2082,3 +2082,8 @@ div.progress {
     height:20px;
     margin:0px !important;
 }
+
+.feature-count {
+    font-weight: normal;
+    color: dimgrey;
+}

@@ -8,6 +8,7 @@ import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.RequirementOutcome;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.requirements.tree.Node;
+import net.thucydides.core.util.Inflector;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,8 +42,39 @@ public class JSONRequirementsTree {
 
         String label = new ResultIconFormatter().forResult(result);
 
+        String childCount = (children.isEmpty()) ? countScenariosIn(requirement, requirementsOutcomes) : countChildRequirementsIn(requirement);
+
         String report = new ReportNameProvider().forRequirement(requirement);
-        return new Node(requirement.getName(), report, label, children);
+        return new Node(requirement.getName(), requirement.getType(), report, label, childCount, children);
+    }
+
+    private String countChildRequirementsIn(Requirement requirement) {
+        Inflector inflection = new Inflector();
+        return "<span class='feature-count'>"
+                + requirement.getChildren().size() + " "
+                + inflection.of(requirement.getChildren().size()).times(requirement.getChildren().get(0).getType()).inPluralForm().toString()
+                + "</span>";
+    }
+
+    private String countScenariosIn(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
+        Inflector inflection = new Inflector();
+        int scenarioCount = scenariosUnder(requirement, requirementsOutcomes);
+
+        if (scenarioCount == 0) return "";
+
+        return "<span class='feature-count'>"
+                + scenarioCount + " "
+                + inflection.of(scenarioCount).times("scenario").inPluralForm().toString()
+                + "</span>";
+    }
+
+    private int scenariosUnder(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
+        int scenarioCount = 0;
+        if ((requirementsOutcomes != null) && (requirementsOutcomes.requirementOutcomeFor(requirement) != null)
+            && ((requirementsOutcomes.requirementOutcomeFor(requirement).getTestOutcomes() != null))) {
+            scenarioCount = requirementsOutcomes.requirementOutcomeFor(requirement).getTestOutcomes().getOutcomes().size();
+        }
+        return scenarioCount;
     }
 
     private TestResult matchingOutcome(Requirement requirement,

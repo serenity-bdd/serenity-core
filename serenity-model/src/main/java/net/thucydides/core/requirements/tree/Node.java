@@ -8,17 +8,19 @@ import java.util.List;
 public class Node {
 
     private final String text;
+    private String type;
     private final String href;
     private final List<Node> nodes;
     private final boolean selectable = false;
     private final List<String> tags;
 
 
-    public Node(String text, String href, String result, List<Node> nodes) {
+    public Node(String text, String type, String href, String result, String childCount, List<Node> nodes) {
         this.text = text;
+        this.type = type;
         this.href = href;
         this.nodes = nodes;
-        this.tags = Arrays.asList(result);
+        this.tags = Arrays.asList(result, childCount);
     }
 
     public String getText() {

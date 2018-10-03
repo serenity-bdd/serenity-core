@@ -7,6 +7,7 @@ import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOpt
 public class DescriptionWithScenarioReferences {
 
     private static String SCENARIO_PREFIX = "{Scenario}";
+    private static String SCENARIO_WITH_TITLE_PREFIX = "{Scenario!WithTitle}";
     private static String EXAMPLES_PREFIX = "{Examples}";
     private static String EXAMPLES_WITH_TITLE_PREFIX = "{Examples!WithTitle}";
 
@@ -19,6 +20,10 @@ public class DescriptionWithScenarioReferences {
     public String forText(String line) {
         if (line.trim().startsWith(SCENARIO_PREFIX)) {
             return ReferencedScenario.in(feature).withName(scenarioNameFrom(line,SCENARIO_PREFIX)).asGivenWhenThen()
+                    .orElse(highlighted(line));
+        }
+        if (line.trim().startsWith(SCENARIO_WITH_TITLE_PREFIX)) {
+            return ReferencedScenario.in(feature).withName(scenarioNameFrom(line,SCENARIO_PREFIX)).asGivenWhenThen(WithTitle)
                     .orElse(highlighted(line));
         }
 

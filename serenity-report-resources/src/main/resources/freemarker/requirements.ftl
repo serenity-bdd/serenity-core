@@ -110,7 +110,6 @@
         </div>
         <div class="rightbg"></div>
     </div>
-
     <div class="clr"></div>
 
     <!--/* starts second table*/-->
@@ -274,7 +273,10 @@
                                                         </span>
                                                     </div>
                                                     <div class="scenario-docs card-body">
-                                                        <div class="scenario-text">${formatter.renderDescription(scenario.description)}</div>
+                                                        <#if scenario.description?has_content>
+                                                            <div class="scenario-text">
+                                                                <i class="fa fa-info-circle"></i> ${formatter.renderDescription(scenario.description)}</div>
+                                                        </#if>
                                                         <#list scenario.steps as step>
                                                             <p>${formatter.renderDescription(step)}</p>
                                                         </#list>

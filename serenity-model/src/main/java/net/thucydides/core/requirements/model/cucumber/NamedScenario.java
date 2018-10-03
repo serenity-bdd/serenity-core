@@ -17,6 +17,7 @@ public abstract class NamedScenario {
      * Return the Given..When..Then part of the scenario
      * @return
      */
+    public abstract Optional<String> asGivenWhenThen(ScenarioDisplayOption displayOption);
     public abstract Optional<String> asGivenWhenThen();
 
     /**

@@ -1919,6 +1919,7 @@ h3 {
 .scenario-text {
     padding-left: 1.5em;
     margin-bottom: 1em;
+    font-style: italic;
 }
 
 div.scenario-text:empty {

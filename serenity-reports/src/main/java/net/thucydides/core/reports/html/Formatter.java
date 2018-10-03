@@ -162,9 +162,9 @@ public class Formatter  {
         if (isRenderedHtml(text)) {
             return text;
         } else if (format.equalsIgnoreCase(ASCIIDOC)) {  // Use ASCIIDOC if configured
-            return renderAsciidoc(text);
+            return renderAsciidoc(text.trim());
         } else if (format.equalsIgnoreCase(MARKDOWN) ||  (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(MarkdownRendering.RenderedElements.narrative)) ) {
-            return renderMarkdown(convertTablesToMarkdown(text));
+            return renderMarkdown(convertTablesToMarkdown(text.trim()));
         } else {
             return addLineBreaks(text);
         }

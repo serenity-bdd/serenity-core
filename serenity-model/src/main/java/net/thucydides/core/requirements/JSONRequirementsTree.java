@@ -2,6 +2,7 @@ package net.thucydides.core.requirements;
 
 import com.google.gson.Gson;
 import net.thucydides.core.model.TestResult;
+import net.thucydides.core.model.TestResultList;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.reports.html.ResultIconFormatter;
 import net.thucydides.core.requirements.model.Requirement;
@@ -10,6 +11,7 @@ import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.requirements.tree.Node;
 import net.thucydides.core.util.Inflector;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -82,19 +84,37 @@ public class JSONRequirementsTree {
 
         if (requirementsOutcomes == null) { return TestResult.UNDEFINED; }
 
-        Optional<RequirementOutcome> matchingOutcome = requirementsOutcomes.getFlattenedRequirementOutcomes().stream()
-                                                            .filter(outcome -> outcome.getRequirement().equals(requirement))
-                                                            .findFirst();
+        Optional<RequirementOutcome> matchingOutcome = testOutcomeForRequirement(requirement, requirementsOutcomes);
 
         if (matchingOutcome.isPresent()) {
             if (matchingOutcome.get().getTestOutcomes().getTotal() == 0) {
                 return TestResult.PENDING;
+            } else if (unimplementedFeaturesExistFor(matchingOutcome.get(), requirementsOutcomes)) {
+                return TestResultList.overallResultFrom(Arrays.asList(TestResult.PENDING, matchingOutcome.get().getTestOutcomes().getResult()));
             } else {
+
                 return (matchingOutcome.get().getTestOutcomes().getResult());
             }
         }
 
         return TestResult.UNDEFINED;
+    }
+
+    private Optional<RequirementOutcome> testOutcomeForRequirement(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
+        return requirementsOutcomes.getFlattenedRequirementOutcomes().stream()
+                                                            .filter(outcome -> outcome.getRequirement().equals(requirement))
+                                                            .findFirst();
+    }
+
+    private boolean unimplementedFeaturesExistFor(RequirementOutcome matchingOutcome, RequirementsOutcomes requirementsOutcomes) {
+        return matchingOutcome.getFlattenedRequirements(matchingOutcome.getRequirement())
+                       .stream()
+                       .anyMatch( requirement -> noTestsExistFor(requirement, requirementsOutcomes));
+    }
+
+    private boolean noTestsExistFor(Requirement requirement, RequirementsOutcomes requirementsOutcomes) {
+        Optional<RequirementOutcome> requirementOutcome = testOutcomeForRequirement(requirement, requirementsOutcomes);
+        return !requirementOutcome.isPresent() || (requirementOutcome.get().getTestOutcomes().getTotal() == 0);
     }
 
     public String asString() {

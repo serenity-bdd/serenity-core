@@ -4,6 +4,11 @@ import java.util.Optional;
 
 public class UnknownScenario extends NamedScenario {
     @Override
+    public Optional<String> asGivenWhenThen(ScenarioDisplayOption displayOption) {
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<String> asGivenWhenThen() {
         return Optional.empty();
     }

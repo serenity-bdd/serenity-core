@@ -157,6 +157,8 @@ public class Formatter  {
 
 
     public String renderDescription(final String text) {
+        if (text == null) { return ""; }
+
         String format = environmentVariables.getProperty(ThucydidesSystemProperty.NARRATIVE_FORMAT, TEXT);
 
         if (isRenderedHtml(text)) {

@@ -83,7 +83,20 @@ public class Actor implements PerformsTasks, SkipNested {
 
     @SuppressWarnings("unchecked")
     public <T extends Ability> T abilityTo(Class<? extends T> doSomething) {
-        return (T) abilities.get(doSomething);
+        T ability = (T) abilities.get(doSomething);
+
+        if (ability == null) {
+            // See if any ability is a subclass of doSomething
+            for (Map.Entry<Class, Ability> entry: abilities.entrySet()) {
+                // Return the first subclass we find
+                if (doSomething.isAssignableFrom(entry.getKey())) {
+                    ability = (T) entry.getValue();
+                    break;
+                }
+            }
+        }
+
+        return ability;
     }
 
     /**

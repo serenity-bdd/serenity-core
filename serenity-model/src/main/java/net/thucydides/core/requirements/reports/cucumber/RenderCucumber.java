@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class RenderCucumber {
     public static String step(Step step) {
-        return step.getKeyword() + " " + withEscapedParameterFields(step.getText()) + "  " + renderedArgument(step.getArgument());
+        return step.getKeyword() + withEscapedParameterFields(step.getText()) + "  " + renderedArgument(step.getArgument());
     }
 
     private static String renderedArgument(Node argument) {

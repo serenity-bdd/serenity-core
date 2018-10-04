@@ -16,17 +16,17 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
         when:
         def scenarioDescription = ReferencedScenario.in(filteringTodoFeature).withName("View only completed items").asGivenWhenThen()
         then:
-        scenarioDescription.get().contains("> Given that Jane has a todo list containing Buy some milk, Walk the dog  ")
-        scenarioDescription.get().contains("> And she has completed the task called 'Walk the dog'  ")
-        scenarioDescription.get().contains("> When she filters her list to show only Completed tasks  ")
-        scenarioDescription.get().contains("> Then her todo list should contain Walk the dog  ")
+        scenarioDescription.get().contains("Given that Jane has a todo list containing Buy some milk, Walk the dog  ")
+        scenarioDescription.get().contains("And she has completed the task called 'Walk the dog'  ")
+        scenarioDescription.get().contains("When she filters her list to show only Completed tasks  ")
+        scenarioDescription.get().contains("Then her todo list should contain Walk the dog  ")
     }
 
     def "Should report scenario outline given-when-then statements with variables"() {
         when:
         def scenarioDescription = ReferencedScenario.in(filteringTodoFeature).withName("Do many things").asGivenWhenThen()
         then:
-        scenarioDescription.get().contains("> Given that Jane has a todo list containing &lt;tasks&gt;  ")
+        scenarioDescription.get().contains("Given that Jane has a todo list containing {tasks}  ")
     }
 
     def "Should indicate if a scenario is not known"() {
@@ -79,11 +79,10 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
     def "Should replace scenario references with the Given-When-Then text"() {
         expect:
         DescriptionWithScenarioReferences.from(filteringTodoFeature).
-                forText("{Scenario} View only completed items") == """ > **View only completed items**  {result:Filtering things I need to do!View only completed items}
- > Given that Jane has a todo list containing Buy some milk, Walk the dog  
- > And she has completed the task called 'Walk the dog'  
- > When she filters her list to show only Completed tasks  
- > Then her todo list should contain Walk the dog  
+                forText("{Scenario} View only completed items") == """Given that Jane has a todo list containing Buy some milk, Walk the dog    
+And she has completed the task called 'Walk the dog'    
+When she filters her list to show only Completed tasks    
+Then her todo list should contain Walk the dog    {result:Filtering things I need to do!View only completed items}
 [<i class="fa fa-info-circle"></i> More details](18e784fa28e919b434aa2fece7557e45321020135af83ca39d340c4f4830c003.html)
 """
 
@@ -92,11 +91,10 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
     def "Should ignore leading spaces"() {
         expect:
         DescriptionWithScenarioReferences.from(filteringTodoFeature).
-                forText("  {Scenario}   View only completed items") == """ > **View only completed items**  {result:Filtering things I need to do!View only completed items}
- > Given that Jane has a todo list containing Buy some milk, Walk the dog  
- > And she has completed the task called 'Walk the dog'  
- > When she filters her list to show only Completed tasks  
- > Then her todo list should contain Walk the dog  
+                forText("  {Scenario}   View only completed items") == """Given that Jane has a todo list containing Buy some milk, Walk the dog    
+And she has completed the task called 'Walk the dog'    
+When she filters her list to show only Completed tasks    
+Then her todo list should contain Walk the dog    {result:Filtering things I need to do!View only completed items}
 [<i class="fa fa-info-circle"></i> More details](18e784fa28e919b434aa2fece7557e45321020135af83ca39d340c4f4830c003.html)
 """
 

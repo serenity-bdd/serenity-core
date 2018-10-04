@@ -53,15 +53,12 @@ public class CustomFieldValue {
      */
     public String getRenderedSummary() {
         String rawText =  (renderedText != null) ? renderedText : text;
-        String summaryText = "";
         List<String> lines = asList(rawText.split(("\\r?\\n")));
-        for (String line : lines) {
-            if (line.isEmpty()) {
-                break;
-            }
-            summaryText += line + "  " + System.lineSeparator();
+        if (lines.isEmpty()) {
+            return "";
+        } else {
+            return lines.get(0) + "  " + System.lineSeparator();
         }
-        return summaryText;
     }
 
     @Override

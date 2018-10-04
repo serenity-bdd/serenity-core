@@ -3,6 +3,21 @@
 <#include "feature-coverage.ftl">
 <#include "test-coverage.ftl">
 
+<#if requirements.requirementOutcomes?size gt 10>
+<script>
+    $(document).ready(function () {
+
+        var scenarioTable = $('#req-results-table').DataTable({
+
+            "order": [],
+            "language": {
+                searchPlaceholder: "Filter",
+                search: ""
+            }
+        });
+    });
+</script>
+</#if>
 <h4 class="requireent-type-heading">${requirementType}</h4>
 
 <table class="scenario-result table" id="req-results-table">

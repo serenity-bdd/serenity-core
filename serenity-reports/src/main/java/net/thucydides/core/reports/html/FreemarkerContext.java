@@ -131,6 +131,7 @@ public class FreemarkerContext {
     private void addTags(TestOutcome testOutcome, Map<String, Object> context, String parentTitle) {
         TagFilter tagFilter = new TagFilter(environmentVariables);
         Set<TestTag> filteredTags = (parentTitle != null) ? tagFilter.removeTagsWithName(testOutcome.getTags(), parentTitle) : testOutcome.getTags();
+        filteredTags = tagFilter.removeRequirementsTagsFrom(filteredTags);
         context.put("filteredTags", filteredTags);
     }
 

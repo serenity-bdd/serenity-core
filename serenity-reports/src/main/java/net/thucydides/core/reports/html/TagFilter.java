@@ -3,17 +3,22 @@ package net.thucydides.core.reports.html;
 
 import com.google.common.base.Splitter;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestTag;
+import net.thucydides.core.requirements.RequirementsService;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TagFilter {
 
     private final EnvironmentVariables environmentVariables;
+    private final RequirementsService requirementsService;
 
     public TagFilter(EnvironmentVariables environmentVariables) {
+        this.requirementsService = Injectors.getInjector().getInstance(RequirementsService.class);
         this.environmentVariables = environmentVariables;
     }
 
@@ -96,5 +101,13 @@ public class TagFilter {
         } else {
             return new ArrayList<>();
         }
+    }
+
+    public Set<TestTag> removeRequirementsTagsFrom(Set<TestTag> filteredTags) {
+        List<String> requirementTypes = requirementsService.getRequirementTypes();
+        return filteredTags.stream()
+                .filter(
+                        tag -> !requirementTypes.contains(tag.getType())
+                ).collect(Collectors.toSet());
     }
 }

@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements.model;
 
-import java.util.Arrays;
+import net.serenitybdd.core.strings.FirstLine;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,12 +54,7 @@ public class CustomFieldValue {
      */
     public String getRenderedSummary() {
         String rawText =  (renderedText != null) ? renderedText : text;
-        List<String> lines = asList(rawText.split(("\\r?\\n")));
-        if (lines.isEmpty()) {
-            return "";
-        } else {
-            return lines.get(0) + "  " + System.lineSeparator();
-        }
+        return FirstLine.of(rawText);
     }
 
     @Override

@@ -181,7 +181,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         List<Requirement> augmentedRequirements = new ArrayList<>();
         for (Requirement requirement : requirements) {
             List<Requirement> children = requirement.hasChildren()
-                    ? addParentsTo(requirement.getChildren(), requirement.qualifiedName()) : NO_REQUIREMENTS;
+                    ? addParentsTo(requirement.getChildren(), requirement.getName()) : NO_REQUIREMENTS;
             augmentedRequirements.add(requirement.withParent(parent).withChildren(children));
         }
         return augmentedRequirements;

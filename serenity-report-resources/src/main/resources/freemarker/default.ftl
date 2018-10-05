@@ -95,7 +95,7 @@
                                 </h3>
 
                                 <div class="discreet-requirement-narrative-title">
-                                    ${formatter.renderDescription(featureOrStory.get().narrative)}
+                                    ${formatter.renderDescription(featureOrStory.get().narrativeSummary)}
                                 </div>
                             </div>
                         </#if>

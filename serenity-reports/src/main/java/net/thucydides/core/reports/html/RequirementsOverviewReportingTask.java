@@ -131,13 +131,6 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
 
     }
 
-    private void addTags(TestOutcome testOutcome, Map<String, Object> context, String parentTitle) {
-        TagFilter tagFilter = new TagFilter(getEnvironmentVariables());
-        Set<TestTag> filteredTags = (parentTitle != null) ? tagFilter.removeTagsWithName(testOutcome.getTags(), parentTitle) : testOutcome.getTags();
-        context.put("filteredTags", filteredTags);
-    }
-
-
     private List<ScenarioOutcome> automated(List<ScenarioOutcome> executedScenariosIn) {
         return executedScenariosIn.stream().filter(scenarioOutcome -> !scenarioOutcome.isManual()).collect(Collectors.toList());
     }

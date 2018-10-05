@@ -1,5 +1,6 @@
 package net.thucydides.core.model;
 
+import net.serenitybdd.core.strings.FirstLine;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Feature;
 import net.thucydides.core.guice.Injectors;
@@ -262,6 +263,10 @@ public class Story {
 
     public String getNarrative() {
         return narrative;
+    }
+
+    public String getNarrativeSummary() {
+        return FirstLine.of(narrative);
     }
 
     public String getType() {

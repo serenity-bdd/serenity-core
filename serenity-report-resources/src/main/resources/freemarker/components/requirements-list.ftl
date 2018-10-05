@@ -7,7 +7,7 @@
 <script>
     $(document).ready(function () {
 
-        var scenarioTable = $('#req-results-table').DataTable({
+        $('#${id}').DataTable({
 
             "order": [],
             "language": {
@@ -20,7 +20,7 @@
 </#if>
 <h4 class="requireent-type-heading">${requirementType}</h4>
 
-<table class="scenario-result table" id="req-results-table">
+<table class="scenario-result table" id="${id}">
     <thead>
         <tr>
             <th class="requirement-name-column" width="60%">${title}</th>

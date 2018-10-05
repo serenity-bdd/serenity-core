@@ -16,23 +16,7 @@
 <#assign successfulManualTests = (requirements.count("manual").withResult("SUCCESS") > 0)>
 <#assign pendingManualTests = (requirements.count("manual").withIndeterminateResult() > 0)>
 <#assign failingManualTests = (requirements.count("manual").withResult("FAILURE") > 0)>
-
-    <script class="code" type="text/javascript">$(document).ready(function () {
-
-        // Results table
-        $('#req-results-table').DataTable({
-
-            "order": [],
-            "language": {
-                searchPlaceholder: "Filter",
-                search: ""
-            },
-            pageLength: 25
-        });
-    })
-    ;
-    </script>
-
+    
 </head>
 
 <body class="results-page">
@@ -72,7 +56,7 @@
             <#if (requirements.requirementOutcomes?has_content || testOutcomes.total > 0)>
                 <#assign workingRequirementsTitle = inflection.of(requirements.type).inPluralForm().asATitle() >
 
-                <@requirements_results requirements=requirements title=requirementTypeTitle requirementType=workingRequirementsTitle id="req-results-table"/>
+                <@requirements_results requirements=requirements title=requirementTypeTitle requirementType=workingRequirementsTitle id="requirements-table"/>
 
             </#if>
             </div>

@@ -16,7 +16,7 @@
 <#assign successfulManualTests = (requirements.count("manual").withResult("SUCCESS") > 0)>
 <#assign pendingManualTests = (requirements.count("manual").withIndeterminateResult() > 0)>
 <#assign failingManualTests = (requirements.count("manual").withResult("FAILURE") > 0)>
-    
+
 </head>
 
 <body class="results-page">

@@ -132,13 +132,17 @@
                         <div>
                             <div clas="table">
                                 <div class="row">
+                                    <#if isLeafRequirement && filteredTags?has_content >
                                     <div class="col-sm-8">
-                          <span>
-                                <h2><i class="fa fa-book"></i> ${parentType}: ${issueNumber} ${formatter.htmlCompatibleStoryTitle(parentTitle)}</h2>
-                            </span>
+                                    <#else>
+                                    <div class="col-sm-12">
+                                    </#if>
+                                        <span>
+                                            <h2><i class="fa fa-book"></i> ${parentType}: ${issueNumber} ${formatter.htmlCompatibleStoryTitle(parentTitle)}</h2>
+                                        </span>
                                     </div>
+                                    <#if isLeafRequirement && filteredTags?has_content >
                                     <div class="col-sm-4">
-                                        <#if isLeafRequirement && filteredTags?has_content >
                                         <span class="feature-tags">
                                             <#list filteredTags as tag>
                                                 <#assign tagReport = absoluteReportName.forRequirementOrTag(tag) />
@@ -153,8 +157,8 @@
                                                 </p>
                                             </#list>
                                         </span>
-                                        </#if>
                                     </div>
+                                    </#if>
                                 </div>
                             </div>
                         </div>

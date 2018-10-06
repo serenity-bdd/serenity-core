@@ -53,6 +53,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private final Set<String> directoryPaths;
     private final int level;
 
+    private final static String DEFAULT_FEATURE_DIRECTORY="src/test.features";
+
     private final RequirementsConfiguration requirementsConfiguration;
 
     //    @Transient
@@ -60,7 +62,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables) {
         this(environmentVariables,
-            RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory().orElse(Paths.get(".")).toString());
+            RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory().orElse(Paths.get(DEFAULT_FEATURE_DIRECTORY)).toString());
     }
 
     public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables, String rootDirectoryPath) {

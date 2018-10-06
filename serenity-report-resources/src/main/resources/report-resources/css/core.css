@@ -2040,6 +2040,7 @@ div.scenario-text:empty {
 }
 
 .toc-title {
+    width: 90%;
 }
 
 .top-list-title {

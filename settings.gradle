@@ -3,6 +3,7 @@ include 'serenity-test-utils',
         'serenity-sample-alternative-resources',
         'serenity-core',
         'serenity-model',
+        'serenity-stats',
         'serenity-reports',
         'serenity-junit',
         'serenity-ant-task',
@@ -15,4 +16,3 @@ include 'serenity-test-utils',
         'serenity-screenplay-rest',
         'serenity-emailer'
 include 'serenity-reports-configuration'
-

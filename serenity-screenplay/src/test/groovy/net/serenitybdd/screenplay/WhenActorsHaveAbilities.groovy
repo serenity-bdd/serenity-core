@@ -16,6 +16,8 @@ class WhenActorsHaveAbilities extends Specification{
         }
     }
 
+    class ReachEnlightenment extends Meditate {}
+
     def "actors can be associated with Abilities"() {
         given:
         def actor = Actor.named("Bruce")
@@ -35,6 +37,17 @@ class WhenActorsHaveAbilities extends Specification{
         actor.abilityTo(Meditate) != null
         and:
         meditate.actor == actor;
+
+    }
+
+    def "actors associate extensions of Abilities with the superclass too"() {
+        given:
+        def actor = Actor.named("Bruce")
+        def reachEnlightenment = new ReachEnlightenment()
+        when:
+        actor.can(reachEnlightenment)
+        then:
+        actor.abilityTo(Meditate) instanceof ReachEnlightenment
 
     }
 

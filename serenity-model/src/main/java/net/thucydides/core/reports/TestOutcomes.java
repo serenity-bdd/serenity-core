@@ -362,6 +362,19 @@ public class TestOutcomes {
         return TestOutcomes.of(filteredOutcomes);
     }
 
+    public TestOutcomes withErrorType(String testFailureErrorType) {
+        List<TestOutcome> filteredOutcomes = outcomes
+                .stream()
+                .filter(outcome -> failedWith(outcome, testFailureErrorType))
+                .collect(Collectors.toList());
+
+        return TestOutcomes.of(filteredOutcomes).withLabel("");
+    }
+
+    private boolean failedWith(TestOutcome outcome, String testFailureErrorType) {
+        return (outcome.getTestFailureErrorType().equals(testFailureErrorType) && (outcome.getResult().isAtLeast(TestResult.FAILURE)));
+    }
+
     public TestOutcomes withResult(TestResult result) {
 
         List<TestOutcome> filteredOutcomes = outcomes
@@ -382,6 +395,12 @@ public class TestOutcomes {
             outcome.addTags(outcomeTags);
         }
         return this;
+    }
+
+    public Optional<? extends TestOutcome> testOutcomeWithName(String name) {
+        return outcomes.stream().filter(
+                outcome -> outcome.getName().equalsIgnoreCase(name)
+        ).findFirst();
     }
 
     private static class TagFinder {
@@ -551,8 +570,8 @@ public class TestOutcomes {
      */
     public TestOutcomes getPendingTests() {
 
-        List<TestOutcome> pendingOrSkippedOutcomes = outcomesWithResults(outcomes, TestResult.PENDING, TestResult.SKIPPED);
-        return TestOutcomes.of(pendingOrSkippedOutcomes)
+        List<TestOutcome> pendingOutcomes = outcomesWithResults(outcomes, TestResult.PENDING);
+        return TestOutcomes.of(pendingOutcomes)
                 .withLabel(labelForTestsWithStatus("pending tests"))
                 .withRootOutcomes(getRootOutcomes());
 
@@ -743,6 +762,8 @@ public class TestOutcomes {
             int skippedCount =  countStepsWithResult(TestResult.SKIPPED, testType);
             return ((pendingCount + skippedCount + ignoredCount) / (double) getEstimatedTotalStepCount());
         }
+
+
     }
 
     public TestCoverageFormatter.FormattedPercentageStepCoverage getFormattedPercentageSteps() {
@@ -903,4 +924,5 @@ public class TestOutcomes {
             return false;
         }
     }
+
 }

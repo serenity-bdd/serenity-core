@@ -3,11 +3,17 @@ package net.thucydides.core.reports.html;
 import com.google.common.base.Objects;
 import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.model.ReportType;
+import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.reports.ReportOptions;
 import net.thucydides.core.reports.TestOutcomes;
+import net.thucydides.core.requirements.JSONRequirementsTree;
 import net.thucydides.core.requirements.RequirementsService;
+import net.thucydides.core.requirements.model.Requirement;
+import net.thucydides.core.requirements.reports.RequirementOutcome;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
+import net.thucydides.core.requirements.reports.ScenarioOutcome;
+import net.thucydides.core.requirements.reports.ScenarioOutcomes;
 import net.thucydides.core.tags.BreadcrumbTagFilter;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
@@ -15,8 +21,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static net.serenitybdd.core.environment.ConfiguredEnvironment.getEnvironmentVariables;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
@@ -77,9 +86,28 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
 
         Map<String, Object> context = freemarker.getBuildContext(requirementsOutcomes.getTestOutcomes(), reportNameProvider, true);
 
+        String requirementsOverview = requirementsOutcomes.getOverview();
+
+        List<Requirement> requirements;
+        if (requirementsOutcomes.getParentRequirement().isPresent()) {
+            requirements = Arrays.asList(requirementsOutcomes.getParentRequirement().get());
+        } else {
+            requirements = requirementsOutcomes.getRequirementOutcomes().stream().map(RequirementOutcome::getRequirement).collect(Collectors.toList());
+
+        }
+
+        JSONRequirementsTree requirementsTree = JSONRequirementsTree.forRequirements(requirements, requirementsOutcomes);
+
         context.put("requirements", requirementsOutcomes.withoutUnrelatedRequirements());
+        context.put("requirementsTree", requirementsTree.asString());
+        context.put("requirementsOverview", requirementsOverview);
+
+        context.put("isLeafRequirement", requirementsTree.isALeafNode());
+
         context.put("requirementTypes", requirementsService.getRequirementTypes());
         context.put("testOutcomes", requirementsOutcomes.getTestOutcomes());
+        context.put("resultCounts", ResultCounts.forOutcomesIn(requirementsOutcomes.getTestOutcomes()));
+        context.put("requirementCounts", RequirementCounts.forOutcomesIn(requirementsOutcomes));
         context.put("allTestOutcomes", testOutcomes);
         context.put("timestamp", TestOutcomeTimestamp.from(testOutcomes));
         context.put("reportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService));
@@ -87,11 +115,35 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         context.put("reportOptions", new ReportOptions(getEnvironmentVariables()));
         context.put("relativeLink", relativeLink);
 
+        requirementsOutcomes.getParentRequirement().map(
+                parentRequirement -> context.put("currentTag", parentRequirement.asTag())
+        );
+
+        context.put("scenarios", ScenarioOutcomes.from(requirementsOutcomes));
+        context.put("testCases", executedScenariosIn(requirementsOutcomes));
+        context.put("automatedTestCases", automated(executedScenariosIn(requirementsOutcomes)));
+        context.put("manualTestCases", manual(executedScenariosIn(requirementsOutcomes)));
+
         addBreadcrumbs(requirementsOutcomes, context, requirementsOutcomes.getTestOutcomes().getTags());
 
         generateReportPage(context, DEFAULT_REQUIREMENTS_REPORT, reportName);
         LOGGER.trace("Requirements report generated: {} in {} ms", reportName, stopwatch.stop());
 
+    }
+
+    private List<ScenarioOutcome> automated(List<ScenarioOutcome> executedScenariosIn) {
+        return executedScenariosIn.stream().filter(scenarioOutcome -> !scenarioOutcome.isManual()).collect(Collectors.toList());
+    }
+
+    private List<ScenarioOutcome> manual(List<ScenarioOutcome> executedScenariosIn) {
+        return executedScenariosIn.stream().filter(scenarioOutcome -> scenarioOutcome.isManual()).collect(Collectors.toList());
+    }
+
+    private List<ScenarioOutcome> executedScenariosIn(RequirementsOutcomes requirementsOutcomes) {
+        return ScenarioOutcomes.from(requirementsOutcomes)
+                                                  .stream()
+                                                  .filter(scenarioOutcome -> !scenarioOutcome.getType().equalsIgnoreCase("background"))
+                                                  .collect(Collectors.toList());
     }
 
     private void addBreadcrumbs(RequirementsOutcomes requirementsOutcomes, Map<String, Object> context, List<TestTag> allTags) {

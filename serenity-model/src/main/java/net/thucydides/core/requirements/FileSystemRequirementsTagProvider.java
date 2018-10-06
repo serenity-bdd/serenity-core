@@ -20,12 +20,14 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.sort;
 import static net.thucydides.core.files.TheDirectoryStructure.startingAt;
 import static net.thucydides.core.requirements.RequirementsPath.pathElements;
 import static net.thucydides.core.requirements.RequirementsPath.stripRootFromPath;
@@ -51,6 +53,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private final Set<String> directoryPaths;
     private final int level;
 
+    private final static String DEFAULT_FEATURE_DIRECTORY="src/test.features";
+
     private final RequirementsConfiguration requirementsConfiguration;
 
     //    @Transient
@@ -58,7 +62,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables) {
         this(environmentVariables,
-            RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory().orElse(Paths.get(".")).toString());
+            RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory().orElse(Paths.get(DEFAULT_FEATURE_DIRECTORY)).toString());
     }
 
     public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables, String rootDirectoryPath) {
@@ -152,7 +156,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                             }
                         }
                         requirements = new ArrayList<>(allRequirements);
-                        Collections.sort(requirements);
+                        sort(requirements);
                     } catch (IOException e) {
                         requirements = NO_REQUIREMENTS;
                         throw new IllegalArgumentException("Could not load requirements from '" + rootDirectory + "'", e);
@@ -179,7 +183,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         List<Requirement> augmentedRequirements = new ArrayList<>();
         for (Requirement requirement : requirements) {
             List<Requirement> children = requirement.hasChildren()
-                    ? addParentsTo(requirement.getChildren(), requirement.qualifiedName()) : NO_REQUIREMENTS;
+                    ? addParentsTo(requirement.getChildren(), requirement.getName()) : NO_REQUIREMENTS;
             augmentedRequirements.add(requirement.withParent(parent).withChildren(children));
         }
         return augmentedRequirements;
@@ -569,7 +573,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     private String readLocaleFromFeatureFile(File storyFile) {
         try {
-            List<String> featureFileLines = FileUtils.readLines(storyFile);
+            List<String> featureFileLines = FileUtils.readLines(storyFile, Charset.defaultCharset());
             for (String line : featureFileLines) {
                 if (line.startsWith("#") && line.contains("language:")) {
                     return line.substring(line.indexOf("language:") + 10).trim();

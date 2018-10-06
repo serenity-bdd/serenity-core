@@ -207,6 +207,31 @@ public class DataTable {
         }
     }
 
+    public String toMarkdown() {
+        StringBuilder renderedTable = new StringBuilder();
+
+        renderedTable.append("| ");
+        getHeaders().forEach(
+                header -> renderedTable.append(header).append(" |")
+        );
+        renderedTable.append(System.lineSeparator());
+
+        renderedTable.append("| ");
+        for(int column = 0; column < getHeaders().size(); column++) {
+            renderedTable.append("------- | ");
+        }
+        renderedTable.append(" ").append(System.lineSeparator());
+
+        getRows().forEach(
+                row -> {
+                    renderedTable.append("| ");
+                    row.getValues().forEach( value -> renderedTable.append(value).append(" |") );
+                    renderedTable.append(System.lineSeparator());
+                }
+        );
+        return renderedTable.toString();
+    }
+
     public static class DataTableBuilder {
         final String scenarioOutline;
         final List<String> headers;

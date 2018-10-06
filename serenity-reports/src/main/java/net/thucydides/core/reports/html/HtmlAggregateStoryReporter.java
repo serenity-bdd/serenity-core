@@ -2,6 +2,8 @@ package net.thucydides.core.reports.html;
 
 import net.serenitybdd.core.SerenitySystemProperties;
 import net.serenitybdd.core.time.Stopwatch;
+import net.serenitybdd.reports.model.FrequentFailure;
+import net.serenitybdd.reports.model.FrequentFailures;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.ReportType;
@@ -27,6 +29,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
+import static net.thucydides.core.ThucydidesSystemProperty.REPORT_SCOREBOARD_SIZE;
 import static net.thucydides.core.guice.Injectors.getInjector;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -88,7 +91,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                                       final String relativeLink,
                                       final IssueTracking issueTracking,
                                       final EnvironmentVariables environmentVariables) {
-        this(projectName,relativeLink, issueTracking, environmentVariables, new DefaultRequirements());
+        this(projectName, relativeLink, issueTracking, environmentVariables, new DefaultRequirements());
     }
 
     public HtmlAggregateStoryReporter(final String projectName,
@@ -142,7 +145,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     public void generateReportsForTestResultsIn(TestOutcomes testOutcomes) throws IOException {
 
         Stopwatch stopwatch = Stopwatch.started();
-        LOGGER.info("Generating test results for {} tests",testOutcomes.getTestCount());
+        LOGGER.info("Generating test results for {} tests", testOutcomes.getTestCount());
 
         FreemarkerContext context = new FreemarkerContext(environmentVariables, requirements.getRequirementsService(), issueTracking, relativeLink);
 
@@ -168,17 +171,16 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
         reportingTasks.add(new CopyResourcesTask());
         reportingTasks.add(new CopyTestResultsTask());
         reportingTasks.add(new AggregateReportingTask(context, environmentVariables, requirements.getRequirementsService(), getOutputDirectory(), testOutcomes));
-        reportingTasks.add(new TagTypeReportingTask(context, environmentVariables, getOutputDirectory(), reportNameProvider, testOutcomes));
         reportingTasks.addAll(TagReportingTask.tagReportsFor(testOutcomes).using(context,
-                                                                environmentVariables,
-                                                                getOutputDirectory(),
-                                                                reportNameProvider,
-                                                                testOutcomes.getTags(),
-                                                                knownRequirementReportNames));
+                environmentVariables,
+                getOutputDirectory(),
+                reportNameProvider,
+                testOutcomes.getTags(),
+                knownRequirementReportNames));
 
         reportingTasks.addAll(nestedTagReports(testOutcomes, context, knownRequirementReportNames));
 
-        reportingTasks.addAll(ResultReports.resultReportsFor(testOutcomes,context, environmentVariables, getOutputDirectory(),reportNameProvider));
+        reportingTasks.addAll(ResultReports.resultReportsFor(testOutcomes, context, environmentVariables, getOutputDirectory(), reportNameProvider));
 
         reportingTasks.addAll(RequirementsReports.requirementsReportsFor(
                 context, environmentVariables, getOutputDirectory(),
@@ -190,6 +192,21 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                 requirementsOutcomes
         ));
 
+        List<FrequentFailure> failures = FrequentFailures.from(testOutcomes)
+                .withMaxOf(REPORT_SCOREBOARD_SIZE.integerFrom(environmentVariables, 5));
+
+        failures.forEach(
+                failure -> reportingTasks.add(
+                        new ErrorTypeReportingTask(context,
+                                environmentVariables,
+                                requirements.getRequirementsService(),
+                                getOutputDirectory(),
+                                reportNameProvider,
+                                testOutcomes.withErrorType(failure.getType()).withLabel("Tests with error: " + failure.getName()),
+                                failure.getType())
+                )
+        );
+
         LOGGER.info("Starting generating reports after {}", stopwatch.lapTimeFormatted());
         Reporter.generateReportsFor(reportingTasks);
         LOGGER.info("Test results for {} tests generated in {}", testOutcomes.getTestCount(), stopwatch.executionTimeFormatted());
@@ -198,7 +215,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     private Set<ReportingTask> nestedTagReports(TestOutcomes testOutcomes, FreemarkerContext context, List<String> knownRequirementReportNames) {
         Set<ReportingTask> reportingTasks = new HashSet<>();
 
-        for(TestTag knownTag : testOutcomes.getTags()) {
+        for (TestTag knownTag : testOutcomes.getTags()) {
             reportingTasks.addAll(TagReportingTask.tagReportsFor(testOutcomes.withTag(knownTag)).using(
                     context.withParentTag(knownTag),
                     environmentVariables,
@@ -214,7 +231,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
                                                     ReportNameProvider reportNameProvider) {
 
         return requirementsOutcomes.getFlattenedRequirementOutcomes().stream()
-                .map( req -> reportNameProvider.forRequirement(req.getRequirement()) )
+                .map(req -> reportNameProvider.forRequirement(req.getRequirement()))
                 .collect(Collectors.toList());
     }
 
@@ -278,7 +295,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
             return tagList;
         }
 
-        for(String tagValue : StringUtils.split(tags,",")) {
+        for (String tagValue : StringUtils.split(tags, ",")) {
             tagList.add(TestTag.withValue(tagValue.trim()));
         }
         return tagList;

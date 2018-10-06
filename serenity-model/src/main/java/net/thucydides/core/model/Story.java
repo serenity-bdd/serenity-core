@@ -1,9 +1,11 @@
 package net.thucydides.core.model;
 
+import net.serenitybdd.core.strings.FirstLine;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Feature;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.features.ApplicationFeature;
+import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.FeatureType;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
@@ -244,7 +246,7 @@ public class Story {
     }
 
     public String getReportName() {
-        return getReportName(ROOT);
+        return new ReportNameProvider().forRequirement(this.asTag());
     }
 
     public ApplicationFeature getFeature() {
@@ -261,6 +263,10 @@ public class Story {
 
     public String getNarrative() {
         return narrative;
+    }
+
+    public String getNarrativeSummary() {
+        return FirstLine.of(narrative);
     }
 
     public String getType() {

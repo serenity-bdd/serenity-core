@@ -32,6 +32,9 @@ public class OverviewReader {
         if (new File(featureDirectory + "/overview.md").exists()) {
             return Optional.of(new File(featureDirectory + "/overview.md"));
         }
+        if (new File(featureDirectory + "/readme.md").exists()) {
+            return Optional.of(new File(featureDirectory + "/readme.md"));
+        }
         return Optional.empty();
     }
 }

@@ -16,12 +16,23 @@ public class OutcomeCounter extends TestOutcomeCounter {
         return withResult(TestResult.valueOf(expectedResult.toUpperCase()));
     }
 
+    public int percentageWithResult(String expectedResult) {
+        return percentageWithResult(TestResult.valueOf(expectedResult.toUpperCase()));
+    }
+
     public int withResult(TestResult expectedResult) {
         int totalResults = 0;
         for(TestOutcome outcome : outcomes.getOutcomes()) {
             totalResults += outcome.countResults(expectedResult);
         }
         return totalResults;
+    }
+
+    public int percentageWithResult(TestResult expectedResult) {
+        int totalResults = withResult(expectedResult);
+        int totalAllResults = getTotal();
+
+        return (totalAllResults == 0) ? 0 : (totalResults * 100) / totalAllResults;
     }
 
     public int getTotal() {

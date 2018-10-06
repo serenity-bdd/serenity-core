@@ -72,6 +72,10 @@ public class ReportNameProvider {
         return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + tag.toLowerCase());
     }
 
+    public String forErrorType(String errorType) {
+        return reportNamer.getNormalizedTestNameFor("errortype_" + errorType.toLowerCase());
+    }
+
     public String forTag(TestTag tag) {
         return reportNamer.getNormalizedTestNameFor(prefixUsing(context) + tag.getType().toLowerCase() + "_" + tag.getName().toLowerCase());
     }

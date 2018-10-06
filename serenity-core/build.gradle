@@ -190,7 +190,7 @@ dependencies {
     compile 'es.nitaur.markdown:txtmark:0.16'
     //compile 'org.commonjava.googlecode.markdown4j:markdown4j:2.2-cj-1.1'
 
-    compile ("com.vladsch.flexmark:flexmark-all:0.26.4") {
+    compile ("com.vladsch.flexmark:flexmark-all:0.34.30") {
         exclude group:"org.jsoup", module:"jsoup"
     }
 

@@ -202,11 +202,12 @@
                 <#--<div class="panel-heading"><span class='error-caption ellipsis'>${testOutcome.result}: ${formatter.htmlAttributeCompatible(testOutcome.failureDetails.conciseErrorMessage, 40)}</span></div>-->
 
                     <#if (testOutcome.errorMessage)??>
-                        <div class="panel-heading title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage)}">
-                            ${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 244)}
-                        </div>
                         <#if (testOutcome.nestedTestFailureCause)??>
-                            <@stacktrace cause=testOutcome.nestedTestFailureCause id="overall" />
+                            <@stacktrace title=formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage) cause=testOutcome.nestedTestFailureCause id="overall" />
+                        <#else>
+                            <div class="panel-heading title="${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage)}">
+                                ${formatter.htmlAttributeCompatible(testOutcome.conciseErrorMessage, 244)}
+                            </div>
                         </#if>
                     </#if>
 

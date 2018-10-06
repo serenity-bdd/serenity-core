@@ -1,11 +1,11 @@
 package net.serenitybdd.reports.email
 
-import net.serenitybdd.reports.email.model.*
+import net.serenitybdd.reports.model.*
 import net.serenitybdd.reports.email.templates.ThymeleafTemplateEngine
 import net.serenitybdd.reports.io.testOutcomesIn
-import net.serenitybdd.reports.outcomes.averageDurationOf
-import net.serenitybdd.reports.outcomes.formattedDuration
-import net.serenitybdd.reports.outcomes.maxDurationOf
+import net.serenitybdd.reports.model.averageDurationOf
+import net.serenitybdd.reports.model.formattedDuration
+import net.serenitybdd.reports.model.maxDurationOf
 import net.thucydides.core.guice.Injectors
 import net.thucydides.core.model.TestResult.*
 import net.thucydides.core.reports.ExtendedReport

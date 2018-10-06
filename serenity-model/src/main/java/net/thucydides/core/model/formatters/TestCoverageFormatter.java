@@ -103,6 +103,9 @@ public class TestCoverageFormatter {
             return outcomes.proportionOf(testType).withResult(expectedResult);
         }
 
+        protected double percentageWithResult(String expectedResult) {
+            return percentageWithResult(TestResult.valueOf(expectedResult.toUpperCase()));
+        }
 
     }
 

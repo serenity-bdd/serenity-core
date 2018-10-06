@@ -2,6 +2,7 @@ package net.thucydides.core.reports.html;
 
 import com.google.common.base.Objects;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
+import net.thucydides.core.requirements.reports.ScenarioOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
@@ -57,6 +58,7 @@ class RequirementsTypeReportingTask extends BaseReportingTask implements Reporti
         context.put("report", ReportProperties.forAggregateResultsReport());
         context.put("requirementType", requirementType);
         context.put("requirements", requirementsOutcomes.requirementsOfType(requirementType).withoutUnrelatedRequirements());
+        context.put("scenarios", ScenarioOutcomes.from(requirementsOutcomes));
 
         generateReportPage(context, REQUIREMENT_TYPE_TEMPLATE_PATH, reportName);
 

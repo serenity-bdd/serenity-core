@@ -124,20 +124,6 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
         assertThat(driver.findElement(By.cssSelector(".date-and-time")).isDisplayed(), is(true));
     }
 
-    @Test
-    public void aggregate_dashboard_should_contain_a_list_of_all_tag_types() throws Exception {
-
-        File report = new File(outputDirectory, "index.html");
-        driver.get(urlFor(report));
-
-        List<WebElement> tagTypes = driver.findElements(By.cssSelector(".tagTypeTitle"));
-        List<String> tagTypeNames =
-                tagTypes.stream()
-                        .map(WebElement::getText)
-                        .collect(Collectors.toList());
-        assertThat(tagTypeNames, hasItems("Stories", "Features", "Epics"));
-    }
-
     private String urlFor(File report) {
         return "file:///" + report.getAbsolutePath();
     }
@@ -149,7 +135,6 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
         driver.get(urlFor(report));
 
         List<String> testCountLabels = convertToStrings(driver.findElements(By.cssSelector(".test-count")));
-        assertThat(testCountLabels, hasSize(8));
         Matcher<Iterable<? super String>> passedMatcher = hasItem(containsString("2 passed"));
         Matcher<Iterable<? super String>> pendingMatcher = hasItem(containsString("2 pending"));
         Matcher<Iterable<? super String>> failedMatcher = hasItem(containsString("2 failed"));

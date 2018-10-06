@@ -12,8 +12,8 @@ public class Ensure {
     /**
      * A helper method to make a RestAssured assertion appear as a separate step.
      * e.g
-     *   Ensure.that("Commany name should be returned",
-     *               response -> response.body("companyName", equalTo("Apple Inc.s")));
+     * Ensure.that("Commany name should be returned",
+     * response -> response.body("companyName", equalTo("Apple Inc.s")));
      *
      * @param description
      * @param check
@@ -35,9 +35,9 @@ public class Ensure {
             check.accept(SerenityRest.then());
         } catch (Throwable e) {
             StepEventBus.getEventBus().stepFailed(new StepFailure(ExecutedStepDescription.withTitle(description), e));
-        } finally {
-            StepEventBus.getEventBus().stepFinished();
+            return;
         }
+        StepEventBus.getEventBus().stepFinished();
     }
 
 }

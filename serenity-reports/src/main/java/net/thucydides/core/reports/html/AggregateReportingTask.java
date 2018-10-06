@@ -48,5 +48,4 @@ public class AggregateReportingTask extends BaseReportingTask implements Reporti
 
          LOGGER.debug("Aggregate reports generated in {} ms ", stopwatch.stop());
     }
-
 }

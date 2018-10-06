@@ -3,10 +3,7 @@ package net.thucydides.core.requirements.reports;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.issues.IssueTracking;
-import net.thucydides.core.model.OutcomeCounter;
-import net.thucydides.core.model.Release;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestType;
+import net.thucydides.core.model.*;
 import net.thucydides.core.releases.ReleaseManager;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.ReportNameProvider;
@@ -37,6 +34,7 @@ public class RequirementsOutcomes {
     private final ReleaseManager releaseManager;
     private final ReportNameProvider reportNameProvider;
     List<RequirementOutcome> flattenedRequirementOutcomes = null;
+    List<RequirementOutcome> leafRequirementOutcomes = null;
     private final String overview;
 
     public final static Integer DEFAULT_TESTS_PER_REQUIREMENT = 4;
@@ -223,6 +221,12 @@ public class RequirementsOutcomes {
         return testOutcomes;
     }
 
+    public Optional<TestResult> getTestResultForTestNamed(String name) {
+        Optional<? extends TestOutcome> testOutcome = testOutcomes.testOutcomeWithName(name);
+        return testOutcome.map(TestOutcome::getResult);
+
+    }
+
     @Override
     public String toString() {
         return "RequirementsOutcomes{" +
@@ -298,6 +302,17 @@ public class RequirementsOutcomes {
         return cachedTotal("IgnoredRequirementsCount", matchingRequirements);
     }
 
+    public int getSkippedRequirementsCount() {
+        if (totalIsCachedFor("SkippedRequirementsCount")) { return cachedTotalOf("SkippedRequirementsCount"); }
+
+        int matchingRequirements = (int) requirementOutcomes.stream()
+                .filter(RequirementOutcome::isSkipped)
+                .count();
+
+
+        return cachedTotal("SkippedRequirementsCount", matchingRequirements);
+    }
+
     public int getRequirementsWithoutTestsCount() {
         if (totalIsCachedFor("RequirementsWithoutTestsCount")) { return cachedTotalOf("RequirementsWithoutTestsCount"); }
 
@@ -360,6 +375,17 @@ public class RequirementsOutcomes {
             flattenedRequirementOutcomes = getFlattenedRequirementOutcomes(requirementOutcomes);
         }
         return flattenedRequirementOutcomes;
+    }
+
+    public List<RequirementOutcome> getLeafRequirementOutcomes() {
+        if (leafRequirementOutcomes == null) {
+            leafRequirementOutcomes = geLeafRequirementOutcomes(getFlattenedRequirementOutcomes(requirementOutcomes));
+        }
+        return leafRequirementOutcomes;
+    }
+
+    public List<RequirementOutcome> geLeafRequirementOutcomes(List<RequirementOutcome> outcomes) {
+        return outcomes.stream().filter(outcome -> !outcome.getRequirement().hasChildren()).collect(Collectors.toList());
     }
 
     public List<RequirementOutcome> getFlattenedRequirementOutcomes(List<RequirementOutcome> outcomes) {

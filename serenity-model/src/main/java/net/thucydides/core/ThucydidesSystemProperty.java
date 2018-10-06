@@ -1276,6 +1276,8 @@ public enum ThucydidesSystemProperty {
      */
     REPORT_TAGTYPES,
 
+    MAX_FREQUENT_FAILURES,
+
     /**
      * The title to appear in the tag type table in the email reports
      */

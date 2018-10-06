@@ -90,14 +90,25 @@ public abstract class BaseRequirementsService implements RequirementsService {
             java.util.Optional<Requirement> requirement = getParentRequirementOf(testOutcome, tagProvider);
             if (requirement.isPresent()) {
                 LOGGER.debug("Requirement found for test outcome " + testOutcome.getTitle() + "-" + testOutcome.getIssueKeys() + ": " + requirement);
-                if ((getRequirementAncestors() != null) && (getRequirementAncestors().containsKey(requirement.get()))) {
-                    return getRequirementAncestors().get(requirement.get());
+                if (matchingAncestorFor(requirement.get()).isPresent()) {
+                    Requirement matchingAncestor = matchingAncestorFor(requirement.get()).get();
+                    return getRequirementAncestors().get(matchingAncestor);
+//                }
+//
+//                if ((getRequirementAncestors() != null) && (getRequirementAncestors().containsKey(requirement.get()))) {
+//                    return getRequirementAncestors().get(requirement.get());
                 } else {
                     LOGGER.warn("Requirement without identified ancestors found test outcome " + testOutcome.getTitle() + "-" + testOutcome.getIssueKeys() + ": " + requirement);
                 }
             }
         }
         return EMPTY_LIST;
+    }
+
+    Optional<Requirement> matchingAncestorFor(Requirement requirement) {
+        return getRequirementAncestors().keySet().stream().filter(
+               requirementKey -> requirementKey.matches(requirement)
+        ).findFirst();
     }
 
 
@@ -152,10 +163,17 @@ public abstract class BaseRequirementsService implements RequirementsService {
     private java.util.Optional<Requirement> findMatchingIndexedRequirement(Requirement requirement) {
         for(Requirement indexedRequirement : AllRequirements.in(requirements)) {
             if (requirement.matches(indexedRequirement)) {
-                return java.util.Optional.of(indexedRequirement);
+                return java.util.Optional.of(mostPreciseOf(requirement,indexedRequirement));
             }
         }
         return java.util.Optional.empty();
+    }
+
+    private Requirement mostPreciseOf(Requirement thisRequirement, Requirement thatRequirement) {
+        String thisParent = thisRequirement.getParent() != null ? thisRequirement.getParent() : "";
+        String thatParent = thatRequirement.getParent() != null ? thatRequirement.getParent() : "";
+
+        return (thatParent.length() >= thisParent.length()) ? thatRequirement : thisRequirement;
     }
 
     public List<Release> getReleasesFromRequirements() {

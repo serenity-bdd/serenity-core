@@ -6,7 +6,6 @@
 <#include "libraries/favicon.ftl">
 
     <#include "libraries/common.ftl">
-    <#include "libraries/jqplot.ftl">
     <#include "libraries/jquery-ui.ftl">
 
     <script class="code" type="text/javascript">$(document).ready(function () {

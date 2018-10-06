@@ -2,6 +2,7 @@ package net.thucydides.core.requirements.model;
 
 import com.google.common.base.Preconditions;
 import net.serenitybdd.core.collect.NewList;
+import net.thucydides.core.model.LastElement;
 import net.thucydides.core.model.TestTag;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -251,12 +252,12 @@ public class Requirement implements Comparable {
     }
 
     public boolean matches(Requirement that) {
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (parent != null ? !parent.equals(that.parent) : that.parent != null) return false;
-        if (StringUtils.isNotEmpty(cardNumber) ? !cardNumber.equals(that.cardNumber) : that.cardNumber != null) return false;
+        boolean namesMatch = (name != null ? name.equals(that.name) : that.name == null);
+        boolean typesMatch = (type != null ? type.equals(that.type) : that.type == null);
+        boolean cardNumberMatches =  (StringUtils.isNotEmpty(cardNumber) ? cardNumber.equals(that.cardNumber) : that.cardNumber == null);
+        boolean parentsMatch = (parent != null) ? this.parent.equals(that.parent) : that.parent == null;
 
-        return true;
+        return namesMatch && typesMatch && cardNumberMatches && parentsMatch;
     }
 
     @Override
@@ -317,6 +318,7 @@ public class Requirement implements Comparable {
 
     public String qualifier() {
         return (getParent() != null) ? getParent() : null;
+//        return (getParent() != null) ? LastElement.of(getParent()) : null;
     }
 
     public boolean matchesTag(TestTag testTag) {

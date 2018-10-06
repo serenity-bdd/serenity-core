@@ -85,6 +85,10 @@ public class RequirementOutcome {
         return getTestOutcomes().getResult() == TestResult.IGNORED || anyChildRequirementsAreIgnored();
     }
 
+    public boolean isSkipped() {
+        return getTestOutcomes().getResult() == TestResult.SKIPPED || anyChildRequirementsAreSkipped();
+    }
+
     public int getFlattenedRequirementCount() {
         return getFlattenedRequirements().size();
     }
@@ -135,6 +139,10 @@ public class RequirementOutcome {
 
     private boolean anyChildRequirementsAreIgnored() {
         return anyChildRequirementsAreIgnoredFor(requirement.getChildren());
+    }
+
+    private boolean anyChildRequirementsAreSkipped() {
+        return anyChildRequirementsAreSkippedFor(requirement.getChildren());
     }
 
     private boolean allChildRequirementsAreSuccessfulFor(List<Requirement> requirements) {
@@ -216,6 +224,18 @@ public class RequirementOutcome {
         return false;
     }
 
+    private boolean anyChildRequirementsAreSkippedFor(List<Requirement> requirements) {
+        for(Requirement childRequirement : requirements) {
+            RequirementOutcome childOutcomes = new RequirementOutcome(childRequirement,
+                    testOutcomes.forRequirement(requirement), issueTracking);
+            if (childOutcomes.isSkipped()) {
+                return true;
+            } else if (anyChildRequirementsAreIgnoredFor(childRequirement.getChildren())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public String getCardNumberWithLinks() {
         if (requirement.getCardNumber() != null) {

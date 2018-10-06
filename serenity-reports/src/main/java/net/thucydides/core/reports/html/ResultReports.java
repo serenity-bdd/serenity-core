@@ -11,8 +11,6 @@ import java.util.List;
 
 public class ResultReports {
 
-    private static final String TEST_OUTCOME_TEMPLATE_PATH = "freemarker/home.ftl";
-
     public static List<ReportingTask> resultReportsFor(TestOutcomes testOutcomes,
                                                        FreemarkerContext freemarker,
                                                        EnvironmentVariables environmentVariables,
@@ -36,8 +34,7 @@ public class ResultReports {
                             environmentVariables,
                             outputDirectory,
                             testOutcomes.withTag(tag),
-                            new ReportNameProvider(tag.getName()),
-                            tag));
+                            new ReportNameProvider(tag.getName()), tag));
         }
         return reportingTasks;
     }

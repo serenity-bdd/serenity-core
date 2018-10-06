@@ -3,6 +3,7 @@ package net.thucydides.core.requirements.model.cucumber;
 import com.google.common.base.Splitter;
 import cucumber.runtime.io.MultiLoader;
 import cucumber.runtime.model.CucumberFeature;
+import cucumber.runtime.model.FeatureLoader;
 import gherkin.ast.Feature;
 import gherkin.ast.GherkinDocument;
 import gherkin.ast.Tag;
@@ -52,7 +53,8 @@ public class CucumberParser {
 
         List<String> listOfFiles = new ArrayList<>();
         listOfFiles.add(narrativeFile.getAbsolutePath());
-        List<CucumberFeature> cucumberFeatures = CucumberFeature.load(new MultiLoader(CucumberParser.class.getClassLoader()), listOfFiles);
+        MultiLoader multiLoader = new MultiLoader(CucumberParser.class.getClassLoader());
+        List<CucumberFeature> cucumberFeatures = new FeatureLoader(multiLoader).load(listOfFiles);
         try {
             if (cucumberFeatures.size() == 0) {
                 return Optional.empty();

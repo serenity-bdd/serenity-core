@@ -190,7 +190,7 @@
                     <div class="col-sm-12">
                         <div class="requirements-overview panel panel-default">
                             <div class="panel-body">
-                                ${formatter.addLineBreaks(formatter.renderDescription(requirements.overview))}
+                                ${formatter.renderDescription(requirements.overview)}
                             </div>
                         </div>
                     </div>

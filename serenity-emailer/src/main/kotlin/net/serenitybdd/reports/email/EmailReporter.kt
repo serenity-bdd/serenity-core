@@ -80,7 +80,7 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedRe
                 "results" to TestResultSummary(
                         totalCount = testOutcomes.total,
                         countByResult = countByResultLabelFrom(testOutcomes),
-                        percentageByResult = percentageByResultFrom(testOutcomes),
+                        percentageByResult = percentageByResultLabelFrom(testOutcomes),
                         totalTestDuration = formattedDuration(Duration.ofMillis(testOutcomes.duration)),
                         averageTestDuration = formattedDuration(averageDurationOf(testOutcomes.outcomes)),
                         maxTestDuration = formattedDuration(maxDurationOf(testOutcomes.outcomes))

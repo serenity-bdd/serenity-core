@@ -363,9 +363,7 @@
                                     ${reportData.title}
                                 </h4>
                             </div>
-                            <div class="card-body">
-                                ${(formatter.renderText(reportData.contents))!}
-                            </div>
+                            <div class="card-body"><pre>${(formatter.renderText(reportData.contents))!}</pre></div>
                     </div>
                 </div>
             </#macro>

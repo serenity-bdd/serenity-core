@@ -546,7 +546,7 @@
                                                                 <#list unstableFeatures as unstableFeature>
                                                                 <tr>
                                                                     <td class="failure-color top-list-title"><a href="${unstableFeature.report}">${unstableFeature.name}</a></td>
-                                                                    <td><span class="badge failure-badge">${unstableFeature.failureCount}</span></td>
+                                                                    <td><span class="badge failure-badge">${unstableFeature.failurePercentage}%</span></td>
                                                                 </tr>
                                                                 </#list>
                                                             </tbody>

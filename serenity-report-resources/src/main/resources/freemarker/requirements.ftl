@@ -231,7 +231,9 @@
                                                     <#list scenarios as scenario>
                                                         <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
                                                         <tr>
-                                                            <td class="toc-title"><a href="#${scenario.id}">${scenario.title}</a></li>
+                                                            <td class="toc-title"><a href="#${scenario.id}">${scenario.title}</a>
+                                                                 <#if scenario.hasExamples() >(${scenario.numberOfExamples})</#if>
+
                                                             </td>
                                                             <td>${outcome_icon}
                                                                <#if (scenario.manual)> <i class="fa fa-user manual"

@@ -2,8 +2,8 @@ package net.thucydides.core.requirements.model.cucumber;
 
 import com.google.common.base.Splitter;
 import cucumber.runtime.io.MultiLoader;
+import cucumber.runtime.io.ResourceLoader;
 import cucumber.runtime.model.CucumberFeature;
-import cucumber.runtime.model.FeatureLoader;
 import gherkin.ast.Feature;
 import gherkin.ast.GherkinDocument;
 import gherkin.ast.Tag;
@@ -11,10 +11,16 @@ import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.requirements.model.Narrative;
 import net.thucydides.core.util.EnvironmentVariables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.lang.System.lineSeparator;
@@ -28,6 +34,12 @@ public class CucumberParser {
 
     private final String locale;
     private final String encoding;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CucumberParser.class);
+
+    private final static String CUCUMBER_4_FEATURE_LOADER = "cucumber.runtime.model.FeatureLoader";
+    private final static String CUCUMBER_2_FEATURE_LOADER = "cucumber.runtime.model.CucumberFeature";
+
 
     public CucumberParser() {
         this(ConfiguredEnvironment.getEnvironmentVariables());
@@ -54,7 +66,7 @@ public class CucumberParser {
         List<String> listOfFiles = new ArrayList<>();
         listOfFiles.add(narrativeFile.getAbsolutePath());
         MultiLoader multiLoader = new MultiLoader(CucumberParser.class.getClassLoader());
-        List<CucumberFeature> cucumberFeatures = new FeatureLoader(multiLoader).load(listOfFiles);
+        List<CucumberFeature> cucumberFeatures = loadCucumberFeatures(multiLoader,listOfFiles);
         try {
             if (cucumberFeatures.size() == 0) {
                 return Optional.empty();
@@ -69,6 +81,25 @@ public class CucumberParser {
             ex.printStackTrace();
             return Optional.empty();
         }
+    }
+
+    private List<CucumberFeature> loadCucumberFeatures(MultiLoader multiLoader, List<String> listOfFiles) {
+        try {
+            Class<?> featureLoaderClass = CucumberParser.class.getClassLoader().loadClass(CUCUMBER_4_FEATURE_LOADER);
+            Method load = featureLoaderClass.getMethod("load", List.class);
+            Object featureLoader = featureLoaderClass.getConstructor(ResourceLoader.class).newInstance(multiLoader);
+            return  (List<CucumberFeature>)load.invoke(featureLoader, listOfFiles);
+        } catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException cucumber4Exception) {
+            LOGGER.info("Found no Cucumber 4.x.x class " + CUCUMBER_4_FEATURE_LOADER + " try Cucumber 2.x.x ");
+            try {
+                Class<?> featureLoaderClass = CucumberParser.class.getClassLoader().loadClass(CUCUMBER_2_FEATURE_LOADER);
+                Method load = featureLoaderClass.getMethod("load", ResourceLoader.class,List.class);
+                return  (List<CucumberFeature>)load.invoke(null, multiLoader, listOfFiles);
+            } catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException cucumber2Exception)  {
+                LOGGER.error("Found no Cucumber 2.x.x class " + CUCUMBER_2_FEATURE_LOADER + " failed loading CucumberFeatures ", cucumber2Exception);
+            }
+        }
+        return null;
     }
 
     public java.util.Optional<Narrative> loadFeatureNarrative(File narrativeFile) {

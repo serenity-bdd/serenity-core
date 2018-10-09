@@ -133,9 +133,19 @@ public class TestOutcomes {
         List<TestResult> eligableResults = NewList.of(results);
 
         return outcomes.stream()
-                .filter(outcome -> eligableResults.contains(outcome.getResult()))
+                .filter(outcome -> outcomeHasResultFrom(outcome, eligableResults))
                 .collect(Collectors.toList());
 
+    }
+
+    private boolean outcomeHasResultFrom(TestOutcome outcome, List<TestResult> eligableResults) {
+
+        if (!outcome.isDataDriven()) {
+            return eligableResults.contains(outcome.getResult());
+        }
+        return outcome.getDataTable().getRows().stream().anyMatch(
+                row -> eligableResults.contains(row.getResult())
+        );
     }
 
     List<TestOutcome> outcomesFilteredByTag(TestTag tag) {
@@ -362,6 +372,35 @@ public class TestOutcomes {
         return TestOutcomes.of(filteredOutcomes);
     }
 
+    private boolean failedWith(TestOutcome outcome, String testFailureErrorType) {
+        if (!outcome.isDataDriven()) {
+            return (outcome.getTestFailureErrorType().equals(testFailureErrorType) && (outcome.getResult().isAtLeast(TestResult.FAILURE)));
+        }
+        return outcome.getTestSteps().stream()
+                .anyMatch(
+                        step -> step.getResult().isAtLeast(TestResult.FAILURE)
+                                && step.getException() != null
+                                && step.getException().getErrorType().equals(testFailureErrorType)
+                );
+    }
+
+    public Integer scenarioCountWithResult(TestResult result) {
+        return outcomes
+                .stream()
+                .mapToInt(outcome -> countScenariosWithResult(result, outcome))
+                .sum();
+    }
+
+    private int countScenariosWithResult(TestResult result, TestOutcome outcome) {
+        if (!outcome.isDataDriven()) {
+            return (outcome.getResult() == result) ? 1 : 0;
+        }
+
+        return (int) outcome.getDataTable().getRows().stream()
+                                           .filter(row -> row.getResult() == result)
+                                           .count();
+    }
+
     public TestOutcomes withErrorType(String testFailureErrorType) {
         List<TestOutcome> filteredOutcomes = outcomes
                 .stream()
@@ -371,15 +410,11 @@ public class TestOutcomes {
         return TestOutcomes.of(filteredOutcomes).withLabel("");
     }
 
-    private boolean failedWith(TestOutcome outcome, String testFailureErrorType) {
-        return (outcome.getTestFailureErrorType().equals(testFailureErrorType) && (outcome.getResult().isAtLeast(TestResult.FAILURE)));
-    }
-
     public TestOutcomes withResult(TestResult result) {
 
         List<TestOutcome> filteredOutcomes = outcomes
                 .stream()
-                .filter(outcome -> outcome.getResult() == result)
+                .filter(outcome -> countScenariosWithResult(result, outcome) > 0)
                 .collect(Collectors.toList());
 
         return TestOutcomes.of(filteredOutcomes);

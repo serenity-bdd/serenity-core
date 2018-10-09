@@ -408,55 +408,7 @@
                                                         </table>
                                                     </div>
                                                 </div>
-
-
-                                                <#if coverage?has_content>
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <h3>Functional Coverage Overview</h3>
-
-                                                        <#list coverage as tagCoverageByType>
-                                                            <#if tagCoverageByType.tagCoverage?has_content>
-                                                            <table class="table" id="${tagCoverageByType.tagType}">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>${tagCoverageByType.tagType}</th>
-                                                                        <th style=""width:7.5em;">Scenarios</th>
-                                                                        <th style=""width:7.5em;">% Pass</th>
-                                                                        <th style=""width:7.5em;">Result</th>
-                                                                        <th>Coverage</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <#assign tageCoverageEntries = tagCoverageByType.tagCoverage />
-                                                                <tbody>
-                                                                    <#list tageCoverageEntries as tagCoverage>
-                                                                    <tr>
-                                                                        <td><a href="${tagCoverage.report}">${tagCoverage.tagName}</a></td>
-                                                                        <td>${tagCoverage.testCount}</td>
-                                                                        <td>${tagCoverage.successRate}</td>
-                                                                        <td>${tagCoverage.resultIcon}</td>
-                                                                        <td>
-                                                                            <div class="progress">
-                                                                                <#list tagCoverage.coverageSegments as coverageSegment>
-                                                                                    <div class="progress-bar" role="progressbar"
-                                                                                         style="width: ${coverageSegment.percentage}%; background-color: ${coverageSegment.color}"
-                                                                                         aria-valuenow="${coverageSegment.count}"
-                                                                                         title="${coverageSegment.title}"
-                                                                                         aria-valuemin="0"
-                                                                                         aria-valuemax="100">
-                                                                                    </div>
-                                                                                </#list>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
-                                                                    </#list>
-                                                                </tbody>
-                                                            </table>
-                                                            </#if>
-                                                        </#list>
-                                                    </div>
-                                                </div>
-                                                </#if>
+hom
 
                                                 <#if badTestCount != 0>
                                                 <div class="row">

@@ -35,8 +35,8 @@ class UnstableFeaturesBuilder(val testOutcomes: TestOutcomes) {
                     .take(maxEntries)
 
     private fun percentageFailures(failingScenarios: Int, userStory: Story, testOutcomes: TestOutcomes): Int {
-        val totalScenarios = testOutcomes.withTag(userStory.asTag()).total
-        return failingScenarios * 100 / totalScenarios
+        val totalScenarios = TestOutcomes.of(testOutcomes.outcomes.filter { outcome -> userStory.equals(outcome.userStory)}).total
+        return if (totalScenarios == 0) 0 else failingScenarios * 100 / totalScenarios
     }
 
     fun featureReport(outcome : TestOutcome) : String {

@@ -2091,3 +2091,7 @@ div.progress {
 }
 
 .requirements-overview img {width: 100%;}
+
+td.indented-error-category i {
+    margin-left: 20px;
+}

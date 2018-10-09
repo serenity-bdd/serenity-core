@@ -190,7 +190,7 @@ class WhenProcessingTestOutcomes extends Specification {
         when:
             def tests = testOutcomes.passingTests.getTests()
         then:
-            tests.size() == 11
+            tests.size() == 12
     }
 
     def "should list all failing tests"() {

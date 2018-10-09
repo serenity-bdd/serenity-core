@@ -134,7 +134,6 @@ public class TestOutcomes {
 
         return outcomes.stream()
                 .filter(outcome -> outcomeHasResultFrom(outcome, eligableResults))
-                .distinct()
                 .collect(Collectors.toList());
 
     }

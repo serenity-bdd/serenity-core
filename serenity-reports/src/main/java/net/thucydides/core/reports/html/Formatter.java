@@ -180,7 +180,11 @@ public class Formatter  {
     public String renderDescriptionWithEmbeddedResults(final String text, RequirementsOutcomes requirementsOutcomes) {
 
         String textWithResults = textWithEmbeddedExampleResults(textWithEmbeddedResults(text, requirementsOutcomes), requirementsOutcomes);
-        return renderDescription(textWithResults);
+        return wrapTablesInDivs(renderDescription(textWithResults),"example-table");
+    }
+
+    public String renderTableDescription(final String text) {
+        return wrapTablesInDivs(renderDescription(text), "example-table-in-scenario");
     }
 
     private final Pattern RESULT_TOKEN = Pattern.compile("\\{result:(.*)!(.*)\\}'?");
@@ -197,13 +201,20 @@ public class Formatter  {
             String scenario= matcher.group(2);
 
             Optional<? extends TestOutcome> matchingOutcome = requirementsOutcomes.getTestOutcomes().getOutcomes().stream().filter(
-                                                     outcome -> outcome.getName().equalsIgnoreCase(scenario) && outcome.getUserStory().getName().equalsIgnoreCase(feature)
+                                                     outcome -> outcome.getName().equalsIgnoreCase(scenario)
+                                                                && outcome.getUserStory().getName().equalsIgnoreCase(feature)
             ).findFirst();
 
             matchingOutcome.ifPresent(testOutcome -> matcher.appendReplacement(newText, resultIconFormatter.forResult(testOutcome.getResult())));
         }
         matcher.appendTail(newText);
+
         return newText.toString();
+    }
+
+    private String wrapTablesInDivs(String markdownText, String cssClass) {
+        return markdownText.replace("<table>","<div class='" + cssClass + "'><table>")
+                           .replace("</table>", "</table></div>");
     }
 
     private String textWithEmbeddedExampleResults(String text, RequirementsOutcomes requirementsOutcomes) {
@@ -215,7 +226,7 @@ public class Formatter  {
         while (matcher.find()) {
             String feature= matcher.group(1);
             String scenario= matcher.group(2);
-            Integer exampleRow = Integer.parseInt(matcher.group(3));
+            int exampleRow = Integer.parseInt(matcher.group(3));
 
             Optional<? extends TestOutcome> matchingOutcome = requirementsOutcomes.getTestOutcomes().getOutcomes().stream().filter(
                     outcome -> outcome.getName().equalsIgnoreCase(scenario) && outcome.getUserStory().getName().equalsIgnoreCase(feature)

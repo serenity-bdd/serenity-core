@@ -2095,3 +2095,66 @@ div.progress {
 td.indented-error-category i {
     margin-left: 20px;
 }
+
+.report-info {
+    font-style: italic;
+    font-size: 0.9em;
+    padding-top: 0.5em;
+    padding-left: 1em;
+}
+
+.example-table {
+     overflow-x:auto;
+ }
+
+.example-table table {
+    min-width: 80%;
+    max-width: 80%;
+}
+.example-table table th {
+    padding: 4px;
+}
+
+.example-table table td {
+    padding: 4px;
+}
+
+.example-table th {
+    border: 0.5px solid darkgrey;
+    color: grey;
+    background-color: beige;
+}
+
+.example-table td {
+    border: 0.5px solid darkgrey;
+    color: grey;
+}
+
+
+
+
+.example-table-in-scenario {
+    overflow-x:auto;
+}
+
+.example-table-in-scenario table {
+    min-width: 80%;
+    max-width: 80%;
+}
+.example-table-in-scenario table th {
+    padding: 4px;
+}
+
+.example-table-in-scenario table td {
+    padding: 4px;
+}
+
+.example-table-in-scenario th {
+    border: 0.5px solid darkgrey;
+    color: grey;
+}
+
+.example-table-in-scenario td {
+    border: 0.5px solid darkgrey;
+    color: grey;
+}

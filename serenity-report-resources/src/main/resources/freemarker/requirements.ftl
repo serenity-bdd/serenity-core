@@ -39,6 +39,13 @@
                 }
             });
 
+            $('.example-table table').DataTable({
+                searching: false,
+                ordering:  false,
+                paging: false,
+                info: false
+            });
+
             $("#requirements-tabs").tabs();
             $("#test-tabs").tabs();
 
@@ -288,7 +295,7 @@
                                                         </#list>
                                                         <div class="examples">
                                                         <#list scenario.examples as example>
-                                                            <p>${formatter.renderDescription(example)}</p>
+                                                            <p>${formatter.renderTableDescription(example)}</p>
                                                         </#list>
                                                         </div>
 

@@ -130,11 +130,20 @@
                     <tr>
                         <td width="375px" valign="top">
                             <div class="test-count-summary">
-                                <div class="test-count-title">
-                                ${testOutcomes.total} test scenarios <#if (testOutcomes.hasDataDrivenTests())>(including ${testOutcomes.totalDataRows} rows of test data)</#if>
-                                <#if (csvReport! != '')> |
-                                    <a href="${csvReport}" title="Download CSV"> <i class="fa fa-download" title="Download CSV"></i></a>
-                                </#if>
+                                <div>
+                                    <#assign scenarioLabel = inflection.of(testOutcomes.totalTestScenarios).times("scenario").inPluralForm().toString() >
+
+                                    ${testOutcomes.totalMatchingScenarios} ${testOutcomes.resultTypeLabel} across ${testOutcomes.totalTestScenarios} ${scenarioLabel}
+
+                                    <#if (csvReport! != '')> |
+                                        <a href="${csvReport}" title="Download CSV"> <i class="fa fa-download" title="Download CSV"></i></a>
+                                    </#if>
+
+                                    <#if testOutcomes.resultFilterName != 'SUCCESS'>
+                                    <p class="report-info"><i class="fas fa-info-circle"></i> Note that results include data-driven scenarios containing ${testOutcomes.resultTypeLabel} ,
+                                        which may also contain results other than ${testOutcomes.resultTypeLabel} .</p>
+                                    </#if>
+
             <#assign successReport = reportName.withPrefix(currentTag).forTestResult("success") >
             <#assign brokenReport = reportName.withPrefix(currentTag).forTestResult("broken") >
             <#assign failureReport = reportName.withPrefix(currentTag).forTestResult("failure") >
@@ -408,7 +417,6 @@
                                                         </table>
                                                     </div>
                                                 </div>
-hom
 
                                                 <#if badTestCount != 0>
                                                 <div class="row">

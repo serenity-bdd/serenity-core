@@ -317,8 +317,8 @@
                 <#if testOutcome.hasScreenshots()>
                     <th width="120" class="greentext">Screenshot</th>
                 </#if>
-                    <th width="100" class="greentext">Outcome</th>
-                    <th width="75" class="greentext">Duration</th>
+                    <th width="110" class="greentext">Outcome</th>
+                    <th width="80" class="greentext">Duration</th>
                 </tr>
                 <tr class="step-table-separator">
                     <td colspan="5"></td>

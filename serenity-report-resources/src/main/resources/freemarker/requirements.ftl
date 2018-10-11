@@ -549,6 +549,9 @@
                                             <table class="scenario-result-table table" id="scenario-results">
                                                 <thead>
                                                 <tr>
+                                                    <#if !isLeafRequirement>
+                                                    <th>${leafRequirementType}</th>
+                                                    </#if>
                                                     <th class="test-name-column">Scenario</th>
                                                     <th>Steps</th>
                                                     <th>Start Time</th>
@@ -560,6 +563,13 @@
                                                 <#list automatedTestCases as scenario>
                                                 <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
                                                 <tr class="scenario-result ${scenario.result}">
+                                                    <#if !isLeafRequirement>
+                                                    <td>
+                                                        <#if scenario.parentName?has_content>
+                                                            <a href="${scenario.parentReport}">${scenario.parentName}</a>
+                                                        </#if>
+                                                    </td>
+                                                    </#if>
                                                     <td>
                                                         <#if outcome_icon?has_content>
                                                             <a href="${scenario.scenarioReport}">${scenario.title}</a>
@@ -599,6 +609,9 @@
                                             <table class="scenario-result-table table" id="manual-scenario-results">
                                                 <thead>
                                                 <tr>
+                                                    <#if !isLeafRequirement>
+                                                    <th>${leafRequirementType}</th>
+                                                    </#if>
                                                     <th class="test-name-column" style="width:60em;">Scenario</th>
                                                     <th>Steps</th>
                                                     <th>Result</th>
@@ -608,6 +621,13 @@
                                                 <#list manualTestCases as scenario>
                                                     <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
                                                 <tr class="scenario-result ${scenario.result}">
+                                                     <#if !isLeafRequirement>
+                                                    <td>
+                                                        <#if scenario.parentName?has_content>
+                                                            <a href="${scenario.parentReport}">${scenario.parentName}</a>
+                                                        </#if>
+                                                    </td>
+                                                     </#if>
                                                     <td>
                                                         <a href="${scenario.scenarioReport}">${scenario.title}</a>
                                                         <#if scenario.hasExamples() >

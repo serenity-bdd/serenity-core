@@ -6,10 +6,10 @@ import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOpt
 
 public class DescriptionWithScenarioReferences {
 
-    private static String SCENARIO_PREFIX = "{Scenario}";
-    private static String SCENARIO_WITH_TITLE_PREFIX = "{Scenario!WithTitle}";
-    private static String EXAMPLES_PREFIX = "{Examples}";
-    private static String EXAMPLES_WITH_TITLE_PREFIX = "{Examples!WithTitle}";
+    private static final String SCENARIO_PREFIX = "{Scenario}";
+    private static final String SCENARIO_WITH_TITLE_PREFIX = "{Scenario!WithTitle}";
+    private static final String EXAMPLES_PREFIX = "{Examples}";
+    private static final String EXAMPLES_WITH_TITLE_PREFIX = "{Examples!WithTitle}";
 
     private final Feature feature;
 
@@ -23,18 +23,22 @@ public class DescriptionWithScenarioReferences {
                     .orElse(highlighted(line));
         }
         if (line.trim().startsWith(SCENARIO_WITH_TITLE_PREFIX)) {
-            return ReferencedScenario.in(feature).withName(scenarioNameFrom(line,SCENARIO_PREFIX)).asGivenWhenThen(WithTitle)
+            return ReferencedScenario.in(feature).withName(scenarioNameFrom(line,SCENARIO_WITH_TITLE_PREFIX)).asGivenWhenThen(WithTitle)
                     .orElse(highlighted(line));
         }
 
         if (line.trim().startsWith(EXAMPLES_PREFIX)) {
             return ReferencedScenario.in(feature).withName(scenarioNameFrom(line,EXAMPLES_PREFIX)).asExampleTable()
-                    .orElse(highlighted(line));
+                    .orElse(ReferencedExampleTable.in(feature).withName(scenarioNameFrom(line,EXAMPLES_PREFIX)).asExampleTable()
+                            .orElse(highlighted(line)))
+                    ;
         }
 
         if (line.trim().startsWith(EXAMPLES_WITH_TITLE_PREFIX)) {
-            return ReferencedScenario.in(feature).withName(scenarioNameFrom(line,EXAMPLES_PREFIX)).asExampleTable(WithTitle)
-                    .orElse(highlighted(line));
+            return ReferencedScenario.in(feature).withName(scenarioNameFrom(line,EXAMPLES_WITH_TITLE_PREFIX)).asExampleTable(WithTitle)
+                    .orElse(ReferencedExampleTable.in(feature).withName(scenarioNameFrom(line,EXAMPLES_WITH_TITLE_PREFIX)).asExampleTable(WithTitle)
+                            .orElse(highlighted(line)))
+                    ;
         }
 
         return line;

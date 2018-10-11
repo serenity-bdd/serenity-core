@@ -2,6 +2,7 @@ package net.thucydides.core.requirements.model.cucumber;
 
 import gherkin.ast.*;
 import net.thucydides.core.requirements.reports.cucumber.RenderCucumber;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,11 +15,13 @@ public class IdentifiedScenario extends NamedScenario {
     private Feature feature;
     private String scenarioReport;
     private ScenarioDefinition scenarioDefinition;
+    private ExampleTableInMarkdown exampleTableInMarkdown;
 
     protected IdentifiedScenario(Feature feature, ScenarioDefinition scenarioDefinition) {
         this.feature = feature;
         this.scenarioReport = ScenarioReport.forScenario(scenarioDefinition.getName()).inFeature(feature);
         this.scenarioDefinition = scenarioDefinition;
+        this.exampleTableInMarkdown = new ExampleTableInMarkdown(feature, scenarioReport, scenarioDefinition);
     }
 
     @Override
@@ -44,7 +47,7 @@ public class IdentifiedScenario extends NamedScenario {
                                + "[<i class=\"fa fa-info-circle\"></i> More details](" + scenarioReport + ")"
                                + System.lineSeparator();
 
-        return Optional.of(renderedDescription);
+        return Optional.of("" + renderedDescription + "");
 
     }
 
@@ -65,34 +68,15 @@ public class IdentifiedScenario extends NamedScenario {
 
         ScenarioOutline scenarioOutline = (ScenarioOutline) scenarioDefinition;
 
-        return Optional.of(scenarioOutline.getExamples()
-                .stream()
-                .map(example -> renderedFormOf(example, withDisplayOption))
-                .collect(Collectors.joining(lineSeparator())));
-    }
+        StringBuilder renderedExamples = new StringBuilder();
 
-    private String renderedFormOf(Examples exampleTable, ScenarioDisplayOption displayOption) {
-
-        ExampleRowResultIcon exampleRowCounter = new ExampleRowResultIcon(feature.getName()
-                                                                            + "!"
-                                                                            +scenarioDefinition.getName());
-
-        StringBuilder renderedExampleTable = new StringBuilder();
-
-        String tableName = RenderedExampleTable.nameFor(exampleTable);
-        if (tableName.isEmpty()) {
-            tableName = scenarioDefinition.getName();
+        int exampleRow = 0;
+        for(Examples example : scenarioOutline.getExamples()) {
+            renderedExamples.append(exampleTableInMarkdown.renderedFormOf(example, exampleRow++, withDisplayOption));
+            if (exampleRow < scenarioOutline.getExamples().size() - 1) {
+                renderedExamples.append(lineSeparator());
+            }
         }
-        if (displayOption == WithTitle) {
-            String exampleTitle = "### " + tableName;
-            renderedExampleTable.append(exampleTitle);
-        }
-        renderedExampleTable.append(System.lineSeparator());
-        renderedExampleTable.append(RenderedExampleTable.descriptionFor(exampleTable));
-        renderedExampleTable.append(RenderedExampleTable.renderedTable(exampleTable, exampleRowCounter));
-        renderedExampleTable.append(System.lineSeparator()).append("[<i class=\"fa fa-info-circle\"></i> More details](" + scenarioReport + ")").append(System.lineSeparator());
-
-        return renderedExampleTable.toString();
+        return Optional.of(renderedExamples.toString());
     }
-
 }

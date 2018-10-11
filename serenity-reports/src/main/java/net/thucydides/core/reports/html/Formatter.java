@@ -188,7 +188,7 @@ public class Formatter  {
     }
 
     private final Pattern RESULT_TOKEN = Pattern.compile("\\{result:(.*)!(.*)\\}'?");
-    private final Pattern EXAMPLE_RESULT_TOKEN = Pattern.compile("\\{example-result:(.*)!(.*)\\[(.*)\\]\\}'?");
+    private final Pattern EXAMPLE_RESULT_TOKEN = Pattern.compile("\\{example-result:(.*)!(.*)\\[(.*)\\]\\[(.*)\\]\\}'?");
 
     private String textWithEmbeddedResults(String text, RequirementsOutcomes requirementsOutcomes) {
 
@@ -204,6 +204,7 @@ public class Formatter  {
                                                      outcome -> outcome.getName().equalsIgnoreCase(scenario)
                                                                 && outcome.getUserStory().getName().equalsIgnoreCase(feature)
             ).findFirst();
+
 
             matchingOutcome.ifPresent(testOutcome -> matcher.appendReplacement(newText, resultIconFormatter.forResult(testOutcome.getResult())));
         }
@@ -226,7 +227,8 @@ public class Formatter  {
         while (matcher.find()) {
             String feature= matcher.group(1);
             String scenario= matcher.group(2);
-            int exampleRow = Integer.parseInt(matcher.group(3));
+            int exampleTable = Integer.parseInt(matcher.group(3));
+            int exampleRow = Integer.parseInt(matcher.group(4));
 
             Optional<? extends TestOutcome> matchingOutcome = requirementsOutcomes.getTestOutcomes().getOutcomes().stream().filter(
                     outcome -> outcome.getName().equalsIgnoreCase(scenario) && outcome.getUserStory().getName().equalsIgnoreCase(feature)
@@ -234,8 +236,17 @@ public class Formatter  {
 
             matchingOutcome.ifPresent(
                     testOutcome -> {
-                        if (exampleRow < testOutcome.getTestSteps().size()) {
-                            matcher.appendReplacement(newText, resultIconFormatter.forResult(testOutcome.getTestSteps().get(exampleRow).getResult()));
+
+                        int dataRow = exampleRow;
+                        if (exampleTable > 0) {
+                            dataRow = testOutcome.getDataTable().getDataSetDescriptors().get(exampleTable - 1).getStartRow()
+                                      + testOutcome.getDataTable().getDataSetDescriptors().get(exampleTable - 1).getRowCount()
+                                      + exampleRow;
+                        }
+
+                        if (dataRow < testOutcome.getTestSteps().size()) {
+                            matcher.appendReplacement(newText,
+                                                      resultIconFormatter.forResult(testOutcome.getTestSteps().get(dataRow).getResult()));
                         }
                     });
         }

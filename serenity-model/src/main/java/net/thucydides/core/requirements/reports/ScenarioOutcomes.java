@@ -50,18 +50,6 @@ public class ScenarioOutcomes {
 
     }
 
-    private static ScenarioOutcome outcomeFrom(RequirementOutcome requirementOutcome) {
-
-        ReportNameProvider report = new ReportNameProvider();
-
-        return new ScenarioOutcome(requirementOutcome.getRequirement().getDisplayName(),
-                requirementOutcome.getRequirement().getType(),
-                requirementOutcome.getTestOutcomes().getResult(),
-                report.forRequirement(requirementOutcome.getRequirement()),
-                null,
-                0L);
-    }
-
     private static ScenarioOutcome outcomeFrom(TestOutcome testOutcome) {
 
         List<String> exampleTables = (testOutcome.isDataDriven()) ?

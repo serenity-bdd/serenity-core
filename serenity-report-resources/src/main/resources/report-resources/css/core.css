@@ -1008,7 +1008,7 @@ a.tagLink:visited, a.tagLink:link {
 
 .step-table
 {
-    width:1025px;
+    width:95%;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
@@ -2135,6 +2135,7 @@ td.indented-error-category i {
 
 .example-table-in-scenario {
     overflow-x:auto;
+    padding-bottom: 1.5em;
 }
 
 .example-table-in-scenario table {
@@ -2157,4 +2158,8 @@ td.indented-error-category i {
 .example-table-in-scenario td {
     border: 0.5px solid darkgrey;
     color: grey;
+}
+
+.scenario-description {
+    padding-left: 1em;
 }

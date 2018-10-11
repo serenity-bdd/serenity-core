@@ -5,8 +5,8 @@ public class ExampleRowResultIcon implements RowResultIcon {
     private int exampleRow = 0;
     private final String fullScenarioName;
 
-    public ExampleRowResultIcon(String fullScenarioName, int exampleTableNumber) {
-        this.fullScenarioName = fullScenarioName;
+    public ExampleRowResultIcon(String featureName, String scenarioName, int exampleTableNumber) {
+        this.fullScenarioName = featureName + "!" + scenarioName;
         this.exampleTableNumber = exampleTableNumber;
     }
 
@@ -22,5 +22,9 @@ public class ExampleRowResultIcon implements RowResultIcon {
 
     public SummaryRowResultIcon summaryIcon() {
         return new SummaryRowResultIcon(fullScenarioName);
+    }
+
+    public RowResultIcon noIcon() {
+        return new BlankRowResultIcon();
     }
 }

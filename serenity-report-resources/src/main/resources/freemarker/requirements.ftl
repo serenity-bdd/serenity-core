@@ -295,7 +295,7 @@
                                                         </#list>
                                                         <div class="examples">
                                                         <#list scenario.examples as example>
-                                                            <p>${formatter.renderTableDescription(example)}</p>
+                                                            <p>${formatter.renderTableDescription(example, requirements)}</p>
                                                         </#list>
                                                         </div>
 

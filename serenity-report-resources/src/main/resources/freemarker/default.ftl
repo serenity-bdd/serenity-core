@@ -266,7 +266,7 @@
         </p>
         </#if>
 
-        <div class="example-table">
+        <div class="example-table test-report">
             <table class="table">
                 <thead>
                 <tr>

@@ -20,9 +20,7 @@ public class ExampleTableInMarkdown {
 
     public String renderedFormOf(Examples exampleTable, int exampleRow, ScenarioDisplayOption displayOption) {
 
-        ExampleRowResultIcon exampleRowCounter = new ExampleRowResultIcon(feature.getName()
-                + "!"
-                + scenarioDefinition.getName(), exampleRow);
+        ExampleRowResultIcon exampleRowCounter = new ExampleRowResultIcon(feature.getName(),scenarioDefinition.getName(), exampleRow);
 
         StringBuilder renderedExampleTable = new StringBuilder();
 

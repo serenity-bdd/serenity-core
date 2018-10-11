@@ -176,15 +176,15 @@ public class Formatter  {
         return MarkdownTables.convertTablesIn(text);
     }
 
-
     public String renderDescriptionWithEmbeddedResults(final String text, RequirementsOutcomes requirementsOutcomes) {
 
         String textWithResults = textWithEmbeddedExampleResults(textWithEmbeddedResults(text, requirementsOutcomes), requirementsOutcomes);
-        return wrapTablesInDivs(renderDescription(textWithResults),"example-table");
+        return wrapTablesInDivs(renderDescription(textWithResults),"example-table example-table-in-summary");
     }
 
-    public String renderTableDescription(final String text) {
-        return wrapTablesInDivs(renderDescription(text), "example-table-in-scenario");
+    public String renderTableDescription(final String text, RequirementsOutcomes requirementsOutcomes) {
+        String textWithResults = textWithEmbeddedExampleResults(textWithEmbeddedResults(text, requirementsOutcomes), requirementsOutcomes);
+        return wrapTablesInDivs(renderDescription(textWithResults),"example-table-in-scenario");
     }
 
     private final Pattern RESULT_TOKEN = Pattern.compile("\\{result:(.*)!(.*)\\}'?");

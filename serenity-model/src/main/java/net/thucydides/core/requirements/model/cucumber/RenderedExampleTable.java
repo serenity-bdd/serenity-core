@@ -34,7 +34,7 @@ public class RenderedExampleTable {
 
         final Map<Integer,Integer> maxColumnWidths = maxColumnWidthForColumnsIn(exampleTable);
 
-        String headings = cellRow(exampleTable.getTableHeader().getCells(), maxColumnWidths, exampleRowIcon.summaryIcon())
+        String headings = cellRow(exampleTable.getTableHeader().getCells(), maxColumnWidths, exampleRowIcon.noIcon())
                           + headerSeparator(maxColumnWidths);
 
         String body = exampleTable.getTableBody().stream()

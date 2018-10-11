@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class ResultReportingTask extends BaseReportingTask implements ReportingTask {
 
-    private static final String TEST_OUTCOME_TEMPLATE_PATH = "freemarker/home.ftl";
+    private static final String TEST_OUTCOME_TEMPLATE_PATH = "freemarker/outcomes-with-result.ftl";
 
     final FreemarkerContext freemarker;
     final EnvironmentVariables environmentVariables;

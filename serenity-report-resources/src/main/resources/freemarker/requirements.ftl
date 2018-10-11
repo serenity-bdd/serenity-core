@@ -39,6 +39,13 @@
                 }
             });
 
+            $('.example-table table').DataTable({
+                searching: false,
+                ordering:  false,
+                paging: false,
+                info: false
+            });
+
             $("#requirements-tabs").tabs();
             $("#test-tabs").tabs();
 
@@ -190,7 +197,7 @@
                     <div class="col-sm-12">
                         <div class="requirements-overview panel panel-default">
                             <div class="panel-body">
-                                ${formatter.addLineBreaks(formatter.renderDescription(requirements.overview))}
+                                ${formatter.renderDescription(requirements.overview)}
                             </div>
                         </div>
                     </div>
@@ -231,7 +238,9 @@
                                                     <#list scenarios as scenario>
                                                         <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
                                                         <tr>
-                                                            <td class="toc-title"><a href="#${scenario.id}">${scenario.title}</a></li>
+                                                            <td class="toc-title"><a href="#${scenario.id}">${scenario.title}</a>
+                                                                 <#if scenario.hasExamples() >(${scenario.numberOfExamples})</#if>
+
                                                             </td>
                                                             <td>${outcome_icon}
                                                                <#if (scenario.manual)> <i class="fa fa-user manual"
@@ -279,14 +288,14 @@
                                                     <div class="scenario-docs card-body">
                                                         <#if scenario.description?has_content>
                                                             <div class="scenario-text">
-                                                                <i class="fa fa-info-circle"></i> ${formatter.renderDescription(scenario.description)}</div>
+                                                                <i class="fa fa-info-circle"></i> ${formatter.renderHtmlEscapedDescription(scenario.description)}</div>
                                                         </#if>
                                                         <#list scenario.steps as step>
-                                                            <p>${formatter.renderDescription(step)}</p>
+                                                            <p>${formatter.renderHtmlEscapedDescription(step)}</p>
                                                         </#list>
                                                         <div class="examples">
                                                         <#list scenario.examples as example>
-                                                            <p>${formatter.renderDescription(example)}</p>
+                                                            <p>${formatter.renderTableDescription(example, requirements)}</p>
                                                         </#list>
                                                         </div>
 
@@ -353,7 +362,7 @@
                                             <table class="table">
                                                 <thead>
                                                 <tr>
-                                                    <th scope="col">Scenarios</th>
+                                                    <th scope="col">Scenario Results (including rows of test data)</th>
                                                     <th scope="col" colspan="2" class="automated-stats">
                                                         Automated
                                                     </th>
@@ -375,12 +384,12 @@
                                                                     </td>
                                                                 </#if>
                                                     <td class="automated-stats">${resultCounts.getAutomatedTestCount("success")}</td>
-                                                    <td class="automated-stats">${resultCounts.getAutomatedTestPercentage("success")}</td>
+                                                    <td class="automated-stats">${resultCounts.getAutomatedTestPercentageLabel("success")}</td>
                                                                 <#if resultCounts.hasManualTests() >
                                                                 <td class="manual-stats">${resultCounts.getManualTestCount("success")}</td>
-                                                                <td class="manual-stats">${resultCounts.getManualTestPercentage("success")}</td>
+                                                                <td class="manual-stats">${resultCounts.getManualTestPercentageLabel("success")}</td>
                                                                 <td class="total-stats">${resultCounts.getOverallTestCount("success")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestPercentage("success")}</td>
+                                                                <td class="total-stats">${resultCounts.getOverallTestPercentageLabel("success")}</td>
                                                                 </#if>
                                                 </tr>
                                                 <tr>
@@ -394,12 +403,12 @@
                                                                     </td>
                                                                 </#if>
                                                     <td class="automated-stats">${resultCounts.getAutomatedTestCount("pending")}</td>
-                                                    <td class="automated-stats">${resultCounts.getAutomatedTestPercentage("pending")}</td>
+                                                    <td class="automated-stats">${resultCounts.getAutomatedTestPercentageLabel("pending")}</td>
                                                                 <#if resultCounts.hasManualTests() >
                                                                 <td class="manual-stats">${resultCounts.getManualTestCount("pending")}</td>
-                                                                <td class="manual-stats">${resultCounts.getManualTestPercentage("pending")}</td>
+                                                                <td class="manual-stats">${resultCounts.getManualTestPercentageLabel("pending")}</td>
                                                                 <td class="total-stats">${resultCounts.getOverallTestCount("pending")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestPercentage("pending")}</td>
+                                                                <td class="total-stats">${resultCounts.getOverallTestPercentageLabel("pending")}</td>
                                                                 </#if>
                                                 </tr>
                                                 <tr>
@@ -413,12 +422,12 @@
                                                                 </td>
                                                                 </#if>
                                                     <td class="automated-stats">${resultCounts.getAutomatedTestCount("ignored")}</td>
-                                                    <td class="automated-stats">${resultCounts.getAutomatedTestPercentage("ignored")}</td>
+                                                    <td class="automated-stats">${resultCounts.getAutomatedTestPercentageLabel("ignored")}</td>
                                                                 <#if resultCounts.hasManualTests() >
                                                                 <td class="manual-stats">${resultCounts.getManualTestCount("ignored")}</td>
-                                                                <td class="manual-stats">${resultCounts.getManualTestPercentage("ignored")}</td>
+                                                                <td class="manual-stats">${resultCounts.getManualTestPercentageLabel("ignored")}</td>
                                                                 <td class="total-stats">${resultCounts.getOverallTestCount("ignored")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestPercentage("ignored")}</td>
+                                                                <td class="total-stats">${resultCounts.getOverallTestPercentageLabel("ignored")}</td>
                                                                 </#if>
                                                 </tr>
                                                 <tr>
@@ -432,67 +441,75 @@
                                                                 </td>
                                                                 </#if>
                                                     <td class="automated-stats">${resultCounts.getAutomatedTestCount("skipped")}</td>
-                                                    <td class="automated-stats">${resultCounts.getAutomatedTestPercentage("skipped")}</td>
+                                                    <td class="automated-stats">${resultCounts.getAutomatedTestPercentageLabel("skipped")}</td>
                                                                 <#if resultCounts.hasManualTests() >
                                                                 <td class="manual-stats">${resultCounts.getManualTestCount("skipped")}</td>
-                                                                <td class="manual-stats">${resultCounts.getManualTestPercentage("skipped")}</td>
+                                                                <td class="manual-stats">${resultCounts.getManualTestPercentageLabel("skipped")}</td>
                                                                 <td class="total-stats">${resultCounts.getOverallTestCount("skipped")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestPercentage("skipped")}</td>
+                                                                <td class="total-stats">${resultCounts.getOverallTestPercentageLabel("skipped")}</td>
                                                                 </#if>
                                                 </tr>
                                                 <tr>
+                                                                <#if resultCounts.hasManualTests() >
+                                                                    <td colspan="7"><a href="${brokenReport}"><i class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a></td>
+                                                                <#else>
+                                                                    <td colspan="3"><a href="${brokenReport}"><i class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a></td>
+                                                                </#if>
+                                                </tr>
+
+                                                <tr>
                                                                 <#if (resultCounts.getOverallTestCount("failure") != 0)>
-                                                                    <td class="aggregate-result-count">
+                                                                    <td class="aggregate-result-count indented-error-category">
                                                                         <a href="${failureReport}"><i class='fa fa-times-circle failure-icon'></i>&nbsp;Failed</a>
                                                                     </td>
                                                                 <#else>
-                                                                <td class="aggregate-result-count"><i
+                                                                <td class="aggregate-result-count indented-error-category"><i
                                                                         class='fa fa-times-circle failure-icon'></i>&nbsp;Failed
                                                                 </td>
                                                                 </#if>
                                                     <td class="automated-stats">${resultCounts.getAutomatedTestCount("failure")}</td>
-                                                    <td class="automated-stats">${resultCounts.getAutomatedTestPercentage("failure")}</td>
+                                                    <td class="automated-stats">${resultCounts.getAutomatedTestPercentageLabel("failure")}</td>
                                                                 <#if resultCounts.hasManualTests() >
                                                                 <td class="manual-stats">${resultCounts.getManualTestCount("failure")}</td>
-                                                                <td class="manual-stats">${resultCounts.getManualTestPercentage("failure")}</td>
+                                                                <td class="manual-stats">${resultCounts.getManualTestPercentageLabel("failure")}</td>
                                                                 <td class="total-stats">${resultCounts.getOverallTestCount("failure")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestPercentage("failure")}</td>
+                                                                <td class="total-stats">${resultCounts.getOverallTestPercentageLabel("failure")}</td>
                                                                 </#if>
                                                 <tr>
                                                                 <#if (resultCounts.getOverallTestCount("error") != 0)>
-                                                                    <td class="aggregate-result-count">
+                                                                    <td class="aggregate-result-count indented-error-category">
                                                                         <a href="${errorReport}"><i class='fa fa-exclamation-triangle error-icon'></i>&nbsp;Broken</a>
                                                                     </td>
                                                                 <#else>
-                                                                <td class="aggregate-result-count"><i
+                                                                <td class="aggregate-result-count indented-error-category"><i
                                                                         class='fa fa-exclamation-triangle error-icon'></i>&nbsp;Broken
                                                                 </td>
                                                                 </#if>
                                                     <td class="automated-stats">${resultCounts.getAutomatedTestCount("error")}</td>
-                                                    <td class="automated-stats">${resultCounts.getAutomatedTestPercentage("error")}</td>
+                                                    <td class="automated-stats">${resultCounts.getAutomatedTestPercentageLabel("error")}</td>
                                                                 <#if resultCounts.hasManualTests() >
                                                                 <td class="manual-stats">${resultCounts.getManualTestCount("error")}</td>
-                                                                <td class="manual-stats">${resultCounts.getManualTestPercentage("error")}</td>
+                                                                <td class="manual-stats">${resultCounts.getManualTestPercentageLabel("error")}</td>
                                                                 <td class="total-stats">${resultCounts.getOverallTestCount("error")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestPercentage("error")}</td>
+                                                                <td class="total-stats">${resultCounts.getOverallTestPercentageLabel("error")}</td>
                                                                 </#if>
                                                 <tr>
                                                                 <#if (resultCounts.getOverallTestCount("compromised") != 0)>
-                                                                    <td class="aggregate-result-count">
+                                                                    <td class="aggregate-result-count indented-error-category">
                                                                         <a href="${compromisedReport}"><i class='fa fa-chain-broken compromised-icon'></i>&nbsp;Compromised</a>
                                                                     </td>
                                                                 <#else>
-                                                                <td class="aggregate-result-count"><i
+                                                                <td class="aggregate-result-count indented-error-category"><i
                                                                         class='fa fa-chain-broken compromised-icon'></i>&nbsp;Compromised
                                                                 </td>
                                                                 </#if>
                                                     <td class="automated-stats">${resultCounts.getAutomatedTestCount("compromised")}</td>
-                                                    <td class="automated-stats">${resultCounts.getAutomatedTestPercentage("compromised")}</td>
+                                                    <td class="automated-stats">${resultCounts.getAutomatedTestPercentageLabel("compromised")}</td>
                                                                 <#if resultCounts.hasManualTests() >
                                                                 <td class="manual-stats">${resultCounts.getManualTestCount("compromised")}</td>
-                                                                <td class="manual-stats">${resultCounts.getManualTestPercentage("compromised")}</td>
+                                                                <td class="manual-stats">${resultCounts.getManualTestPercentageLabel("compromised")}</td>
                                                                 <td class="total-stats">${resultCounts.getOverallTestCount("compromised")}</td>
-                                                                <td class="total-stats">${resultCounts.getOverallTestPercentage("compromised")}</td>
+                                                                <td class="total-stats">${resultCounts.getOverallTestPercentageLabel("compromised")}</td>
                                                                 </#if>
                                                 </tr>
                                                 <tr class="summary-stats">
@@ -532,6 +549,9 @@
                                             <table class="scenario-result-table table" id="scenario-results">
                                                 <thead>
                                                 <tr>
+                                                    <#if !isLeafRequirement>
+                                                    <th>${leafRequirementType}</th>
+                                                    </#if>
                                                     <th class="test-name-column">Scenario</th>
                                                     <th>Steps</th>
                                                     <th>Start Time</th>
@@ -543,6 +563,13 @@
                                                 <#list automatedTestCases as scenario>
                                                 <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
                                                 <tr class="scenario-result ${scenario.result}">
+                                                    <#if !isLeafRequirement>
+                                                    <td>
+                                                        <#if scenario.parentName?has_content>
+                                                            <a href="${scenario.parentReport}">${scenario.parentName}</a>
+                                                        </#if>
+                                                    </td>
+                                                    </#if>
                                                     <td>
                                                         <#if outcome_icon?has_content>
                                                             <a href="${scenario.scenarioReport}">${scenario.title}</a>
@@ -582,6 +609,9 @@
                                             <table class="scenario-result-table table" id="manual-scenario-results">
                                                 <thead>
                                                 <tr>
+                                                    <#if !isLeafRequirement>
+                                                    <th>${leafRequirementType}</th>
+                                                    </#if>
                                                     <th class="test-name-column" style="width:60em;">Scenario</th>
                                                     <th>Steps</th>
                                                     <th>Result</th>
@@ -591,6 +621,13 @@
                                                 <#list manualTestCases as scenario>
                                                     <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
                                                 <tr class="scenario-result ${scenario.result}">
+                                                     <#if !isLeafRequirement>
+                                                    <td>
+                                                        <#if scenario.parentName?has_content>
+                                                            <a href="${scenario.parentReport}">${scenario.parentName}</a>
+                                                        </#if>
+                                                    </td>
+                                                     </#if>
                                                     <td>
                                                         <a href="${scenario.scenarioReport}">${scenario.title}</a>
                                                         <#if scenario.hasExamples() >

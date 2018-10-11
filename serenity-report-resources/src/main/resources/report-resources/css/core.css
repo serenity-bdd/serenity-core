@@ -1008,7 +1008,7 @@ a.tagLink:visited, a.tagLink:link {
 
 .step-table
 {
-    width:1025px;
+    width:95%;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
@@ -2088,4 +2088,126 @@ div.progress {
 .feature-count {
     font-weight: normal;
     color: dimgrey;
+}
+
+.requirements-overview img {width: 100%;}
+
+td.indented-error-category i {
+    margin-left: 20px;
+}
+
+.report-info {
+    font-style: italic;
+    font-size: 0.9em;
+    padding-top: 0.5em;
+    padding-left: 1em;
+}
+
+.example-table {
+     overflow-x:auto;
+ }
+
+.example-table table {
+    min-width: 80%;
+    max-width: 80%;
+}
+.example-table table th {
+    padding: 4px;
+}
+
+.example-table table td {
+    padding: 4px;
+}
+
+.example-table th {
+    border: 0.5px solid darkgrey;
+    color: grey;
+    background-color: beige;
+}
+
+.example-table td {
+    border: 0.5px solid darkgrey;
+    color: grey;
+}
+
+
+.test-report table {
+    border: 0.75px solid dimgrey;
+    min-width: 98%;
+}
+.test-report th {
+    font-weight: bold;
+    background-color: white;
+}
+
+.test-report th:first-child {
+    width: 1em;
+}
+
+.test-report td.test-SUCCESS {
+    background-color: white;
+}
+
+
+
+
+.example-table-in-scenario {
+    overflow-x:auto;
+    padding-bottom: 1.5em;
+}
+
+.example-table-in-scenario table {
+    min-width: 80%;
+    max-width: 80%;
+}
+.example-table-in-scenario table th {
+    padding: 4px;
+}
+
+.example-table-in-scenario table td {
+    padding: 4px;
+}
+
+.example-table-in-scenario th {
+    border: 0.5px solid darkgrey;
+    color: grey;
+}
+
+.example-table-in-scenario td {
+    border: 0.5px solid darkgrey;
+    color: grey;
+}
+
+
+
+.example-table-in-summary th:last-child {
+    width: 0.5em;
+}
+
+.example-table-in-summary th:last-child {
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    padding-left: 1em;
+
+}
+
+.example-table-in-scenario th:last-child {
+    width: 0.5em;
+    /*border-right: solid white 1px;*/
+    /*border-top: solid white 1px;*/
+    /*border-bottom: solid white 1px;*/
+}
+
+.example-table-in-scenario td:last-child {
+    padding-left: 0.5em;
+    width: 1em;
+    /*border-right: solid white 1px;*/
+    /*border-top: solid white 1px;*/
+    /*border-bottom: solid white 1px;*/
+}
+
+
+.scenario-description {
+    padding-left: 1em;
 }

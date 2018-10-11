@@ -1,5 +1,6 @@
 package net.serenitybdd.reports.model
 
+import net.thucydides.core.model.Story
 import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.html.ReportNameProvider
@@ -28,9 +29,15 @@ class UnstableFeaturesBuilder(val testOutcomes: TestOutcomes) {
                     .groupBy { outcome -> outcome.userStory }
                     .map { (userStory, outcomes) -> UnstableFeature(userStory.displayName,
                                                                     outcomes.size,
+                                                                    percentageFailures(outcomes.size, userStory, testOutcomes),
                                                                     featureReport(outcomes[0])) }
-                    .sortedByDescending { unstableFeature -> unstableFeature.failureCount }
+                    .sortedByDescending { unstableFeature -> unstableFeature.failurePercentage }
                     .take(maxEntries)
+
+    private fun percentageFailures(failingScenarios: Int, userStory: Story, testOutcomes: TestOutcomes): Int {
+        val totalScenarios = TestOutcomes.of(testOutcomes.outcomes.filter { outcome -> userStory.equals(outcome.userStory)}).total
+        return if (totalScenarios == 0) 0 else failingScenarios * 100 / totalScenarios
+    }
 
     fun featureReport(outcome : TestOutcome) : String {
 
@@ -47,4 +54,4 @@ class DummyParentRequirementProvider : ParentRequirementProvider {
     override fun getParentRequirementFor(testOutcome: TestOutcome?): Optional<Requirement> = Optional.empty()
 }
 
-class UnstableFeature(val name: String, val failureCount: Int, val report: String)
+class UnstableFeature(val name: String, val failureCount: Int, val failurePercentage: Int, val report: String)

@@ -24,6 +24,7 @@ public class Inflector {
         return INSTANCE;
     }
 
+    public static Inflector inflection() { return getInstance(); }
     public Inflection of(String word) {
         return new Inflection(word, this);
     }

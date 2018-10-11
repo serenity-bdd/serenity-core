@@ -130,11 +130,20 @@
                     <tr>
                         <td width="375px" valign="top">
                             <div class="test-count-summary">
-                                <div class="test-count-title">
-                                ${testOutcomes.total} test scenarios <#if (testOutcomes.hasDataDrivenTests())>(including ${testOutcomes.totalDataRows} rows of test data)</#if>
-                                <#if (csvReport! != '')> |
-                                    <a href="${csvReport}" title="Download CSV"> <i class="fa fa-download" title="Download CSV"></i></a>
-                                </#if>
+                                <div>
+                                    <#assign scenarioLabel = inflection.of(testOutcomes.totalTestScenarios).times("scenario").inPluralForm().toString() >
+
+                                    ${testOutcomes.totalMatchingScenarios} ${testOutcomes.resultTypeLabel} across ${testOutcomes.totalTestScenarios} ${scenarioLabel}
+
+                                    <#if (csvReport! != '')> |
+                                        <a href="${csvReport}" title="Download CSV"> <i class="fa fa-download" title="Download CSV"></i></a>
+                                    </#if>
+
+                                    <#if testOutcomes.resultFilterName != 'SUCCESS'>
+                                    <p class="report-info"><i class="fas fa-info-circle"></i> Note that results include data-driven scenarios containing ${testOutcomes.resultTypeLabel} ,
+                                        which may also contain results other than ${testOutcomes.resultTypeLabel} .</p>
+                                    </#if>
+
             <#assign successReport = reportName.withPrefix(currentTag).forTestResult("success") >
             <#assign brokenReport = reportName.withPrefix(currentTag).forTestResult("broken") >
             <#assign failureReport = reportName.withPrefix(currentTag).forTestResult("failure") >
@@ -408,55 +417,6 @@
                                                         </table>
                                                     </div>
                                                 </div>
-
-
-                                                <#if coverage?has_content>
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <h3>Functional Coverage Overview</h3>
-
-                                                        <#list coverage as tagCoverageByType>
-                                                            <#if tagCoverageByType.tagCoverage?has_content>
-                                                            <table class="table" id="${tagCoverageByType.tagType}">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>${tagCoverageByType.tagType}</th>
-                                                                        <th style=""width:7.5em;">Scenarios</th>
-                                                                        <th style=""width:7.5em;">% Pass</th>
-                                                                        <th style=""width:7.5em;">Result</th>
-                                                                        <th>Coverage</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <#assign tageCoverageEntries = tagCoverageByType.tagCoverage />
-                                                                <tbody>
-                                                                    <#list tageCoverageEntries as tagCoverage>
-                                                                    <tr>
-                                                                        <td><a href="${tagCoverage.report}">${tagCoverage.tagName}</a></td>
-                                                                        <td>${tagCoverage.testCount}</td>
-                                                                        <td>${tagCoverage.successRate}</td>
-                                                                        <td>${tagCoverage.resultIcon}</td>
-                                                                        <td>
-                                                                            <div class="progress">
-                                                                                <#list tagCoverage.coverageSegments as coverageSegment>
-                                                                                    <div class="progress-bar" role="progressbar"
-                                                                                         style="width: ${coverageSegment.percentage}%; background-color: ${coverageSegment.color}"
-                                                                                         aria-valuenow="${coverageSegment.count}"
-                                                                                         title="${coverageSegment.title}"
-                                                                                         aria-valuemin="0"
-                                                                                         aria-valuemax="100">
-                                                                                    </div>
-                                                                                </#list>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
-                                                                    </#list>
-                                                                </tbody>
-                                                            </table>
-                                                            </#if>
-                                                        </#list>
-                                                    </div>
-                                                </div>
-                                                </#if>
 
                                                 <#if badTestCount != 0>
                                                 <div class="row">

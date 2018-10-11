@@ -266,7 +266,7 @@
         </p>
         </#if>
 
-        <div class="example-table">
+        <div class="example-table test-report">
             <table class="table">
                 <thead>
                 <tr>
@@ -317,8 +317,8 @@
                 <#if testOutcome.hasScreenshots()>
                     <th width="120" class="greentext">Screenshot</th>
                 </#if>
-                    <th width="100" class="greentext">Outcome</th>
-                    <th width="75" class="greentext">Duration</th>
+                    <th width="110" class="greentext">Outcome</th>
+                    <th width="80" class="greentext">Duration</th>
                 </tr>
                 <tr class="step-table-separator">
                     <td colspan="5"></td>
@@ -363,9 +363,7 @@
                                     ${reportData.title}
                                 </h4>
                             </div>
-                            <div class="card-body">
-                                ${(formatter.renderText(reportData.contents))!}
-                            </div>
+                            <div class="card-body"><pre>${(formatter.renderText(reportData.contents))!}</pre></div>
                     </div>
                 </div>
             </#macro>

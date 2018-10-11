@@ -127,22 +127,7 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
     private String urlFor(File report) {
         return "file:///" + report.getAbsolutePath();
     }
-
-    @Test
-    public void aggregate_dashboard_should_contain_correct_test_counts() throws Exception {
-
-        File report = new File(outputDirectory, "index.html");
-        driver.get(urlFor(report));
-
-        List<String> testCountLabels = convertToStrings(driver.findElements(By.cssSelector(".test-count")));
-        Matcher<Iterable<? super String>> passedMatcher = hasItem(containsString("2 passed"));
-        Matcher<Iterable<? super String>> pendingMatcher = hasItem(containsString("2 pending"));
-        Matcher<Iterable<? super String>> failedMatcher = hasItem(containsString("2 failed"));
-        Matcher<Iterable<? super String>> errorMatcher = hasItem(containsString("1 with errors"));
-        Matcher<Iterable<? super String>> ignoredMatcher = hasItem(containsString("1 ignored"));
-        assertThat(testCountLabels, allOf(passedMatcher, pendingMatcher, failedMatcher, errorMatcher, ignoredMatcher));
-    }
-
+    
     private List<String> convertToStrings(List<WebElement> elements) {
         return elements.stream()
                 .map(WebElement::getText)

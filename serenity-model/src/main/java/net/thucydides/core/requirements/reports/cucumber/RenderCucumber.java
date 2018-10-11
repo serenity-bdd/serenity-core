@@ -121,6 +121,6 @@ public class RenderCucumber {
     }
 
     private static String withEscapedParameterFields(String text) {
-        return text.replaceAll("<","{").replaceAll(">","}");
+        return text.replace("<","{").replace(">","}");
     }
 }

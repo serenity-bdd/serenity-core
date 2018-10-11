@@ -156,6 +156,10 @@ public class Formatter  {
     }
 
 
+    public String renderHtmlEscapedDescription(final String text) {
+        return renderDescription(addMarkdownLineBreaks(withEscapedParameterFields(text)));
+    }
+
     public String renderDescription(final String text) {
         if (text == null) { return ""; }
 
@@ -170,6 +174,10 @@ public class Formatter  {
         } else {
             return addLineBreaks(text);
         }
+    }
+
+    private static String withEscapedParameterFields(String text) {
+        return text.replace("<","{").replace(">","}");
     }
 
     private String convertTablesToMarkdown(String text) {
@@ -260,6 +268,10 @@ public class Formatter  {
 
     public static String addLineBreaks(final String text) {
         return (text != null) ? concatLines(text.trim(), "<br>") : "";
+    }
+
+    public static String addMarkdownLineBreaks(final String text) {
+        return (text != null) ? concatLines(text.trim(), "  ") : "";
     }
 
     public String convertAnyTables(String text) {

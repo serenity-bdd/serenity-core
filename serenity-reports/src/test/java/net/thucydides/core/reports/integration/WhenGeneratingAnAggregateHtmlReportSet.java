@@ -127,7 +127,7 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
     private String urlFor(File report) {
         return "file:///" + report.getAbsolutePath();
     }
-    
+
     private List<String> convertToStrings(List<WebElement> elements) {
         return elements.stream()
                 .map(WebElement::getText)

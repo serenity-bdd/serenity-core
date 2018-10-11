@@ -288,10 +288,10 @@
                                                     <div class="scenario-docs card-body">
                                                         <#if scenario.description?has_content>
                                                             <div class="scenario-text">
-                                                                <i class="fa fa-info-circle"></i> ${formatter.renderDescription(scenario.description)}</div>
+                                                                <i class="fa fa-info-circle"></i> ${formatter.renderHtmlEscapedDescription(scenario.description)}</div>
                                                         </#if>
                                                         <#list scenario.steps as step>
-                                                            <p>${formatter.renderDescription(step)}</p>
+                                                            <p>${formatter.renderHtmlEscapedDescription(step)}</p>
                                                         </#list>
                                                         <div class="examples">
                                                         <#list scenario.examples as example>

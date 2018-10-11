@@ -2194,17 +2194,17 @@ td.indented-error-category i {
 
 .example-table-in-scenario th:last-child {
     width: 0.5em;
-    border-right: solid white 1px;
-    border-top: solid white 1px;
-    border-bottom: solid white 1px;
+    /*border-right: solid white 1px;*/
+    /*border-top: solid white 1px;*/
+    /*border-bottom: solid white 1px;*/
 }
 
 .example-table-in-scenario td:last-child {
     padding-left: 0.5em;
-    /* text-align: center; */
-    border-right: solid white 1px;
-    border-top: solid white 1px;
-    border-bottom: solid white 1px;
+    width: 1em;
+    /*border-right: solid white 1px;*/
+    /*border-top: solid white 1px;*/
+    /*border-bottom: solid white 1px;*/
 }
 
 

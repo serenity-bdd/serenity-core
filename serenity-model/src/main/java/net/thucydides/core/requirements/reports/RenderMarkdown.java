@@ -1,0 +1,193 @@
+package net.thucydides.core.requirements.reports;
+
+import com.google.common.base.Splitter;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import static java.util.Collections.reverseOrder;
+
+public class RenderMarkdown {
+
+    private final String originalText;
+    private final List<String> lines;
+
+    private final static Pattern DATA_TABLE_LINE = Pattern.compile("\\|.*\\|");
+    private final static Pattern SEPARATOR_LINE = Pattern.compile("\\|(-|\\s|\\|)+\\|");
+
+    private final static Pattern INLINED_TABLE = Pattern.compile("[^\\r\\n\\t\\f\\v\\|](\\r?\\n)\\|");
+
+
+    private RenderMarkdown(String text) {
+        this.originalText = text;
+        lines = Arrays.asList(text.split("\\r?\\n"));
+    }
+
+    public static String convertEmbeddedTablesIn(String text) {
+        return new RenderMarkdown(text).convertTables();
+    }
+
+    public static String preprocessMarkdownTables(String text) {
+        if (!INLINED_TABLE.matcher(text).find()) {
+            return text;
+        }
+
+        return INLINED_TABLE.matcher(text).replaceFirst(System.lineSeparator() + System.lineSeparator() + "|");
+    }
+
+    private String convertTables() {
+        if (noTablularLinesIn(lines)) {
+            return originalText;
+        }
+        if (isRenderedMarkdownTableIn(tabularLinesIn(lines))) {
+            return originalText;
+        }
+        return renderMarkdownTable();
+    }
+
+    private String renderMarkdownTable() {
+
+        List<NarrativeBlock> blocks = convertToBlocks(lines);
+
+        List<String> markdownTable = new ArrayList<>();
+        blocks.forEach(
+                block -> markdownTable.addAll(block.asMarkdown())
+        );
+
+        return markdownTable.stream().collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator();
+    }
+
+    private List<NarrativeBlock> convertToBlocks(List<String> lines) {
+        List<NarrativeBlock> blocks = new ArrayList<>();
+
+        boolean inTable = false;
+
+        NarrativeBlock currentBlock = NarrativeBlock.forNormalText();
+
+        for (String line : lines) {
+            if (switchingToATableSection(inTable, line)) {
+                inTable = true;
+                blocks.add(currentBlock);
+                currentBlock = NarrativeBlock.forATable();
+            } else if (switchingToATextSection(inTable, line)) {
+                inTable = false;
+                blocks.add(currentBlock);
+                currentBlock = NarrativeBlock.forNormalText();
+            }
+            currentBlock.add(line);
+        }
+        blocks.add(currentBlock);
+
+        return blocks;
+    }
+
+    private boolean switchingToATableSection(boolean inTable, String line) {
+        return !inTable && isDataTableLine(line);
+    }
+
+    private boolean switchingToATextSection(boolean inTable, String line) {
+        return inTable && !isDataTableLine(line);
+    }
+
+    private String headingFrom(List<String> tableLines) {
+        return System.lineSeparator() + System.lineSeparator() + tableLines.get(0);
+    }
+
+    private List<String> bodyFrom(List<String> tableLines) {
+        return tableLines.subList(1, tableLines.size());
+    }
+
+    static int numberOfColumnsIn(List<String> tableLines) {
+        return Splitter.on("|").omitEmptyStrings().splitToList(tableLines.get(0)).size();
+    }
+
+    private List<String> tabularLinesIn(List<String> lines) {
+        List<String> tableLines = new ArrayList<>();
+
+        int row = lines.size() - 1;
+        String line = lines.get(row);
+        while (isDataTableLine(line) && row >= 0) {
+            tableLines.add(line);
+            line = lines.get(--row);
+            ;
+        }
+
+        Collections.reverse(tableLines);
+        return tableLines;
+    }
+
+    private boolean isRenderedMarkdownTableIn(List<String> lines) {
+        return lines.stream().anyMatch(this::isSeparatorLine);
+    }
+
+    private boolean noTablularLinesIn(List<String> lines) {
+        return lines.stream().noneMatch(this::isDataTableLine);
+    }
+
+    private boolean isDataTableLine(String line) {
+        return DATA_TABLE_LINE.matcher(line).matches();
+    }
+
+    private boolean isSeparatorLine(String line) {
+        return SEPARATOR_LINE.matcher(line).matches();
+    }
+
+
+    private static class NarrativeBlock {
+
+        public static NarrativeBlock forNormalText() {
+            return new NarrativeBlock(false);
+        }
+
+        public static NarrativeBlock forATable() {
+            return new NarrativeBlock(true);
+        }
+
+        private final boolean isTable;
+
+        private List<String> lines = new ArrayList<>();
+
+        private NarrativeBlock(boolean isTable) {
+            this.isTable = isTable;
+        }
+
+        public void add(String line) {
+            lines.add(line);
+        }
+
+        public List<String> getLines() {
+            return lines;
+        }
+
+        public boolean isTable() {
+            return isTable;
+        }
+
+        public List<String>  asMarkdown() {
+            if (!isTable) {
+                return lines;
+            } else {
+                return markdownTable();
+            }
+        }
+
+        private List<String> markdownTable() {
+            int columnCount = numberOfColumnsIn(lines);
+            String separatorLine = "|" + StringUtils.repeat("---|", columnCount);
+
+            List<String> markdownTable = new ArrayList<>();
+
+            markdownTable.add(System.lineSeparator());
+            markdownTable.add(lines.get(0));
+            markdownTable.add(separatorLine);
+            for(int row = 1; row < lines.size(); row++) {
+                markdownTable.add(lines.get(row));
+            }
+
+            return markdownTable;
+        }
+    }
+
+}

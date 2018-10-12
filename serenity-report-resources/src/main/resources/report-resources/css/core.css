@@ -2192,6 +2192,10 @@ td.indented-error-category i {
 
 }
 
+.example-table-in-summary {
+    padding-bottom: 0px;
+}
+
 .example-table-in-scenario th:last-child {
     width: 0.5em;
     /*border-right: solid white 1px;*/
@@ -2206,7 +2210,6 @@ td.indented-error-category i {
     /*border-top: solid white 1px;*/
     /*border-bottom: solid white 1px;*/
 }
-
 
 .scenario-description {
     padding-left: 1em;

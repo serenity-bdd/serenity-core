@@ -2,6 +2,7 @@ package net.thucydides.core.reports.html;
 
 import com.google.common.base.Objects;
 import net.serenitybdd.core.time.Stopwatch;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
@@ -28,6 +29,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static net.serenitybdd.core.environment.ConfiguredEnvironment.getEnvironmentVariables;
+import static net.thucydides.core.ThucydidesSystemProperty.CUCUMBER_PRETTY_FORMAT_TABLES;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
 
 class RequirementsOverviewReportingTask extends BaseReportingTask implements ReportingTask {
@@ -101,6 +103,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         context.put("requirements", requirementsOutcomes.withoutUnrelatedRequirements());
         context.put("requirementsTree", requirementsTree.asString());
         context.put("requirementsOverview", requirementsOverview);
+        context.put("prettyTables", CUCUMBER_PRETTY_FORMAT_TABLES.booleanFrom(environmentVariables, false));
 
         context.put("isLeafRequirement", requirementsTree.isALeafNode());
 

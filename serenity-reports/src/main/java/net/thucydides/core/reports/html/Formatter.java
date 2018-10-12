@@ -15,6 +15,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.renderer.Asciidoc;
 import net.thucydides.core.reports.renderer.MarkupRenderer;
+import net.thucydides.core.requirements.reports.RenderMarkdown;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
@@ -35,9 +36,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.apache.commons.lang3.StringUtils.abbreviate;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.apache.commons.lang3.StringUtils.trim;
+import static org.apache.commons.lang3.StringUtils.*;
 
 //////
 
@@ -157,7 +156,7 @@ public class Formatter  {
 
 
     public String renderHtmlEscapedDescription(final String text) {
-        return renderDescription(addMarkdownLineBreaks(withEscapedParameterFields(text)));
+        return renderDescription(RenderMarkdown.preprocessMarkdownTables(withEscapedParameterFields(text)));
     }
 
     public String renderDescription(final String text) {
@@ -170,7 +169,7 @@ public class Formatter  {
         } else if (format.equalsIgnoreCase(ASCIIDOC)) {  // Use ASCIIDOC if configured
             return renderAsciidoc(text.trim());
         } else if (format.equalsIgnoreCase(MARKDOWN) ||  (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(MarkdownRendering.RenderedElements.narrative)) ) {
-            return renderMarkdown(convertTablesToMarkdown(text.trim()));
+            return renderMarkdown(text.trim());
         } else {
             return addLineBreaks(text);
         }

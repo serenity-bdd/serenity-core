@@ -568,4 +568,28 @@ public class WhenFormattingForHTML {
         assertThat(formatter.percentage(0.5, 1), is("50%"));
     }
 
+    @Test
+    public void formatter_should_expand_embedded_tables_to_markdown_compatible_form() {
+        Formatter formatter = new Formatter();
+        String description = "Given a business with the following details:\n" +
+                             "\n" +
+                             "\n" +
+                             "| Name | Category |\n" +
+                             "|---|---|\n" +
+                             "| ACME | Casino |\n";
+
+
+        assertThat(formatter.renderHtmlEscapedDescription(description), containsString("<table"));
+    }
+
+    @Test
+    public void formatter_should_prepare_tables_for_markdown() {
+        Formatter formatter = new Formatter();
+        String description = "Given a business with the following details:\n" +
+                "| Name | Category |\n" +
+                "|---|---|\n" +
+                "| ACME | Casino |\n";
+
+        assertThat(formatter.renderHtmlEscapedDescription(description), containsString("<table"));
+    }
 }

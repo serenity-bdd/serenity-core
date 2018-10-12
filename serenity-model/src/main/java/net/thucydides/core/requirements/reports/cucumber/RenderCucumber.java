@@ -87,7 +87,7 @@ public class RenderCucumber {
 
     private static String renderedDataTable(DataTable dataTable) {
         StringBuffer renderedTable = new StringBuffer();
-        renderedTable.append(System.lineSeparator()).append(System.lineSeparator());
+        renderedTable.append("  ").append(System.lineSeparator());
         TableRow header = dataTable.getRows().get(0);
         addRow(renderedTable, header.getCells());
         addSeparatorCells(renderedTable, header.getCells().size());
@@ -103,7 +103,7 @@ public class RenderCucumber {
         for(int col = 0; col < columnCount; col ++) {
             renderedTable.append("-----------").append("|");
         }
-        renderedTable.append(System.lineSeparator());
+        renderedTable.append("  ").append(System.lineSeparator());
     }
     private static void addRow(StringBuffer renderedTable, List<TableCell> cells) {
         addRow(renderedTable, cells, null);
@@ -112,12 +112,12 @@ public class RenderCucumber {
     private static void addRow(StringBuffer renderedTable, List<TableCell> cells, String statusToken) {
         renderedTable.append("|");
         for(TableCell cell : cells) {
-            renderedTable.append(cell.getValue()).append(" |");
+            renderedTable.append(withEscapedParameterFields(cell.getValue())).append(" |");
         }
         if (statusToken != null) {
             renderedTable.append(statusToken + " |");
         }
-        renderedTable.append(System.lineSeparator());
+        renderedTable.append("  ").append(System.lineSeparator());
     }
 
     private static String withEscapedParameterFields(String text) {

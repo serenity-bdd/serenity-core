@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ScenarioOutcomes {
+
     public static List<ScenarioOutcome> from(RequirementsOutcomes requirementsOutcomes) {
         if (requirementsOutcomes.getParentRequirement().isPresent() && isAFeature(requirementsOutcomes.getParentRequirement().get())) {
             return scenariosFrom(requirementsOutcomes.getParentRequirement().get(), requirementsOutcomes);
@@ -61,7 +62,7 @@ public class ScenarioOutcomes {
         List<String> steps = (testOutcome.getDataDrivenSampleScenario() != null && !testOutcome.getDataDrivenSampleScenario().isEmpty()) ?
                 testStepsFromSampleScenario(testOutcome.getDataDrivenSampleScenario()) :
                 testOutcome.getTestSteps()
-                        .stream().map(TestStep::getDescription).collect(Collectors.toList());
+                        .stream().map(step -> RenderMarkdown.convertEmbeddedTablesIn(step.getDescription())).collect(Collectors.toList());
 
 
         return new ScenarioOutcome(testOutcome.getTitleWithLinks(),

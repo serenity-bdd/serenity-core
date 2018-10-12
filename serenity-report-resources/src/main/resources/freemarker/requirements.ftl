@@ -71,6 +71,21 @@
             });
         });
     </script>
+    <#if (prettyTables) >
+        <style>
+            .example-table-in-scenario th:last-child {
+                border-right: solid white 1px;
+                border-top: solid white 1px;
+                border-bottom: solid white 1px;
+            }
+
+            .example-table-in-scenario td:last-child {
+                border-right: solid white 1px;
+                border-top: solid white 1px;
+                border-bottom: solid white 1px;
+            }
+        </style>
+    </#if>
 </head>
 
 <body class="results-page">

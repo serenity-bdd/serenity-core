@@ -78,10 +78,10 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
     def "Should replace scenario references with the Given-When-Then text"() {
         expect:
         DescriptionWithScenarioReferences.from(filteringTodoFeature).
-                forText("{Scenario} View only completed items") == """  > Given that Jane has a todo list containing Buy some milk, Walk the dog    
-  > And she has completed the task called 'Walk the dog'    
-  > When she filters her list to show only Completed tasks    
-  > Then her todo list should contain Walk the dog    {result:Filtering things I need to do!View only completed items}
+                forText("{Scenario} View only completed items") == """Given that Jane has a todo list containing Buy some milk, Walk the dog    
+And she has completed the task called 'Walk the dog'    
+When she filters her list to show only Completed tasks    
+Then her todo list should contain Walk the dog    {result:Filtering things I need to do!View only completed items}
 [<i class="fa fa-info-circle"></i> More details](8cfac59ce2d4d3ff1b3eb71419572b98d191f73e8f2dfae13af2491bb0bfcb91.html)
 """
 
@@ -90,10 +90,10 @@ class WhenReferencingScenariosInAFeatureNarrative extends Specification {
     def "Should ignore leading spaces"() {
         expect:
         DescriptionWithScenarioReferences.from(filteringTodoFeature).
-                forText("  {Scenario}   View only completed items") == """  > Given that Jane has a todo list containing Buy some milk, Walk the dog    
-  > And she has completed the task called 'Walk the dog'    
-  > When she filters her list to show only Completed tasks    
-  > Then her todo list should contain Walk the dog    {result:Filtering things I need to do!View only completed items}
+                forText("  {Scenario}   View only completed items") == """Given that Jane has a todo list containing Buy some milk, Walk the dog    
+And she has completed the task called 'Walk the dog'    
+When she filters her list to show only Completed tasks    
+Then her todo list should contain Walk the dog    {result:Filtering things I need to do!View only completed items}
 [<i class="fa fa-info-circle"></i> More details](8cfac59ce2d4d3ff1b3eb71419572b98d191f73e8f2dfae13af2491bb0bfcb91.html)
 """
 

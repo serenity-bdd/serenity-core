@@ -53,6 +53,18 @@
                 info: false
             });
 
+            $('#evidence-table').DataTable(
+                <#if evidence?size <= 10 >
+                    {
+                        searching: false,
+                        ordering: false,
+                        paging: false,
+                        info: false
+                    }
+                </#if>
+            );
+
+
             $(".scenario-docs .card-body table").wrap("<div class='table-responsive'></div>");
 
             $("#requirements-tabs").tabs();
@@ -703,7 +715,7 @@
                                         <div class="row">
                                             <div class="col-sm-12">
                                                 <h3><i class="far fa-file"></i> Evidence</h3>
-                                                <table class="table table-bordered">
+                                                <table id="evidence-table" class="table table-bordered">
                                                     <thead>
                                                     <tr>
                                                         <th>Scenario</th>

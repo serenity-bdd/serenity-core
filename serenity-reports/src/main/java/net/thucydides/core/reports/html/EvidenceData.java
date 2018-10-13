@@ -56,9 +56,9 @@ public class EvidenceData {
                     + "'><i class='fas fa-download'></i>&nbsp;Download Evidence</a>";
         } else {
             String report = ReportNamer.forReportType(ReportType.HTML).getNormalizedTestNameFor(testOutcome);
-            return "<a role='button' target='_blank' class='btn btn-success btn-sm' href='"
+            return "<a role='button' class='btn btn-success btn-sm' href='"
                     + report
-                    + "'><i class='fas fa-download'></i>&nbsp;Details</a>";
+                    + "'><i class=\"fas fa-external-link-alt\"></i>&nbsp;Details</a>";
         }
     }
 

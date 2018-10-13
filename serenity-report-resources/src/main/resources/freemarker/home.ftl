@@ -37,7 +37,7 @@
         $('.scenario-result-table').DataTable({
 
             "order": [[0, "asc",], [3, "asc",]],
-            "pageLength": 25,
+            "pageLength": 10,
             "language": {
                 searchPlaceholder: "Filter",
                 search: ""
@@ -47,10 +47,19 @@
         // Results table
         $('#test-results-table').DataTable({
             "order": [[0, "asc",], [3, "asc",]],
-            "pageLength": 100,
-            "lengthMenu": [[25, 50, 100, 200, -1], [25, 50, 100, 200, "All"]]
+            "pageLength": 10,
+            "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]]
         });
 
+        $('#evidence-table').DataTable(
+                <#if evidence?size <= 10 >
+                    {
+                        searching: false,
+                        paging: false,
+                        info: false
+                    }
+                </#if>
+        );
     })
     ;
     </script>
@@ -603,6 +612,34 @@
 
                                                     </div>
                                                 </div>
+
+
+
+                                                <#if evidence?has_content>
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <h3><i class="far fa-file"></i> Evidence</h3>
+                                                            <table id="evidence-table" class="table table-bordered">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>Scenario</th>
+                                                                    <th>Title</th>
+                                                                    <th>Details</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                 <#list evidence as evidenceRecord>
+                                                                 <tr>
+                                                                     <td>${evidenceRecord.scenario}</td>
+                                                                     <td>${evidenceRecord.title}</td>
+                                                                     <td>${evidenceRecord.detailsLink}</td>
+                                                                 </tr>
+                                                                 </#list>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </#if>
                                             </div>
                                         </div>
                         </td>

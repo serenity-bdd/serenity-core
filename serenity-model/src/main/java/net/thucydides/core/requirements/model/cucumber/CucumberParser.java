@@ -90,7 +90,7 @@ public class CucumberParser {
             Object featureLoader = featureLoaderClass.getConstructor(ResourceLoader.class).newInstance(multiLoader);
             return  (List<CucumberFeature>)load.invoke(featureLoader, listOfFiles);
         } catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException cucumber4Exception) {
-            LOGGER.info("Found no Cucumber 4.x.x class " + CUCUMBER_4_FEATURE_LOADER + " try Cucumber 2.x.x ");
+            LOGGER.debug("Found no Cucumber 4.x.x class " + CUCUMBER_4_FEATURE_LOADER + " try Cucumber 2.x.x ");
             try {
                 Class<?> featureLoaderClass = CucumberParser.class.getClassLoader().loadClass(CUCUMBER_2_FEATURE_LOADER);
                 Method load = featureLoaderClass.getMethod("load", ResourceLoader.class,List.class);

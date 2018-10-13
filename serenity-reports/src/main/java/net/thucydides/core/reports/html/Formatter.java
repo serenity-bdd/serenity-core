@@ -185,7 +185,8 @@ public class Formatter  {
 
     public String renderDescriptionWithEmbeddedResults(final String text, RequirementsOutcomes requirementsOutcomes) {
 
-        String textWithResults = textWithEmbeddedExampleResults(textWithEmbeddedResults(text, requirementsOutcomes), requirementsOutcomes);
+        String textWithResults = RenderMarkdown.preprocessMarkdownTables(
+                                                textWithEmbeddedExampleResults(textWithEmbeddedResults(text, requirementsOutcomes), requirementsOutcomes));
         return wrapTablesInDivs(renderDescription(textWithResults),"example-table example-table-in-summary");
     }
 

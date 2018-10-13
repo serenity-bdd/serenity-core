@@ -40,7 +40,7 @@ public class IdentifiedScenario extends NamedScenario {
             suffix = resultToken();
         }
         renderedDescription += scenarioDefinition.getSteps().stream()
-                        .map(step -> "  > " + RenderCucumber.step(step) + "  ")
+                        .map(step -> RenderCucumber.step(step) + "  ")
                         .collect(Collectors.joining(lineSeparator())) + suffix;
 
         renderedDescription += System.lineSeparator()

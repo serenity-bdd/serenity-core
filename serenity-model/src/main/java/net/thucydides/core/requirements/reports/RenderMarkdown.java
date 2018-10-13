@@ -15,7 +15,7 @@ public class RenderMarkdown {
     private final String originalText;
     private final List<String> lines;
 
-    private final static Pattern DATA_TABLE_LINE = Pattern.compile("\\|.*\\|");
+    private final static Pattern DATA_TABLE_LINE = Pattern.compile("\\s*\\|.*\\|\\s*");
     private final static Pattern SEPARATOR_LINE = Pattern.compile("\\|(-|\\s|\\|)+\\|");
 
     private final static Pattern INLINED_TABLE = Pattern.compile("[^\\r\\n\\t\\f\\v\\|](\\r?\\n)\\|");
@@ -31,11 +31,31 @@ public class RenderMarkdown {
     }
 
     public static String preprocessMarkdownTables(String text) {
-        if (!INLINED_TABLE.matcher(text).find()) {
-            return text;
+
+        return new RenderMarkdown(text).injectNewLineBeforeTables();
+
+
+//        if (!INLINED_TABLE.matcher(text).find()) {
+//            return text;
+//        }
+//
+//        return INLINED_TABLE.matcher(text).replaceFirst(System.lineSeparator() + System.lineSeparator() + "|");
+    }
+
+    private String injectNewLineBeforeTables() {
+        List<NarrativeBlock> blocks = convertToBlocks(lines);
+        List<String> spacedLines = new ArrayList<>();
+
+        for(NarrativeBlock block: blocks) {
+            if (block.isTable()) {
+                spacedLines.add(System.lineSeparator());
+                spacedLines.addAll(block.lines);
+            } else {
+                spacedLines.addAll(block.lines);
+            }
         }
 
-        return INLINED_TABLE.matcher(text).replaceFirst(System.lineSeparator() + System.lineSeparator() + "|");
+        return spacedLines.stream().collect(Collectors.joining(System.lineSeparator()));
     }
 
     private String convertTables() {

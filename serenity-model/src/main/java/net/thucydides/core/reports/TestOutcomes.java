@@ -436,9 +436,20 @@ public class TestOutcomes {
             return (expectedResults.contains(outcome.getResult())) ? 1 : 0;
         }
 
+        if (dataTableRowResultsAreUndefinedIn(outcome.getDataTable())
+                && outcome.getTestSteps().size() == outcome.getDataTable().getSize()) {
+            return (int) outcome.getTestSteps().stream()
+                    .filter(step -> expectedResults.contains(step.getResult()))
+                    .count();
+        }
+
         return (int) outcome.getDataTable().getRows().stream()
                 .filter(row -> expectedResults.contains(row.getResult()))
                 .count();
+    }
+
+    private boolean dataTableRowResultsAreUndefinedIn(DataTable dataTable) {
+        return dataTable.getRows().stream().allMatch(row -> row.getResult() == TestResult.UNDEFINED);
     }
 
     public TestOutcomes withErrorType(String testFailureErrorType) {

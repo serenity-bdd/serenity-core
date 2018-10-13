@@ -43,7 +43,6 @@ public class ParameterizedTestsOutcomeAggregator {
             }
 
             if (testOutcome.isDataDriven()) {
-                updateResultsForAnyExternalFailures(testOutcome, scenarioOutcomes.get(normalizedMethodName));
                 scenarioOutcome.addDataFrom(testOutcome.getDataTable());
 
             }

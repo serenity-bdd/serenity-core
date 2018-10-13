@@ -46,6 +46,15 @@
                 info: false
             });
 
+            $('.example-table-in-scenario table').DataTable({
+                searching: false,
+                ordering:  false,
+                paging: false,
+                info: false
+            });
+
+            $( ".scenario-docs .card-body table" ).wrap( "<div class='table-responsive'></div>" );
+
             $("#requirements-tabs").tabs();
             $("#test-tabs").tabs();
 
@@ -59,6 +68,7 @@
                 collapseIcon: "glyphicon glyphicon-folder-open",
                 emptyIcon: "glyphicon glyphicon-book"
             });
+
         });
     </script>
 
@@ -84,6 +94,11 @@
                 border-top: solid white 1px;
                 border-bottom: solid white 1px;
             }
+
+            .scenario-docs table.dataTable {
+                border: 0px !important;
+            }
+
         </style>
     </#if>
 </head>

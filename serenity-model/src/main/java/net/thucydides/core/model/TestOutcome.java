@@ -1696,11 +1696,6 @@ public class TestOutcome {
         }
     }
 
-    public void addFailingExternalStep(Throwable testFailureCause) {
-        // Add as a sibling of the last deepest group
-        addFailingStepAsSibling(testSteps, testFailureCause);
-    }
-
     public void addFailingStepAsSibling(List<TestStep> testStepList, Throwable testFailureCause) {
         if (testStepList.isEmpty()) {
             addStep(failingStep(testFailureCause));

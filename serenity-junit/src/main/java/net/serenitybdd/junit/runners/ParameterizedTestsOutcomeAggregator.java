@@ -44,7 +44,6 @@ public class ParameterizedTestsOutcomeAggregator {
 
             if (testOutcome.isDataDriven()) {
                 scenarioOutcome.addDataFrom(testOutcome.getDataTable());
-
             }
         }
 
@@ -84,13 +83,6 @@ public class ParameterizedTestsOutcomeAggregator {
             scenarioOutcomes.put(normalizedMethodName, scenarioOutcome);
         }
         return scenarioOutcomes.get(normalizedMethodName);
-    }
-
-    private void updateResultsForAnyExternalFailures(TestOutcome testOutcome, TestOutcome scenarioOutcome) {
-        if (rowResultsAreInconsistantWithOverallResult(testOutcome)) {
-            testOutcome.getDataTable().getRows().get(0).updateResult(testOutcome.getResult());
-            scenarioOutcome.addFailingExternalStep(new AssertionError(testOutcome.getTestFailureMessage()));
-        }
     }
 
     private boolean rowResultsAreInconsistantWithOverallResult(TestOutcome testOutcome) {

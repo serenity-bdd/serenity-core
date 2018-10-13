@@ -1999,8 +1999,8 @@ div.scenario-text:empty {
 .scenario-docs table {
     margin-left: 3em;
     margin-top: 0.5em;
-    border: 0.5px solid grey;
 }
+
 .scenario-docs th {
     font-weight: bold;
     color: grey;
@@ -2012,6 +2012,11 @@ div.scenario-text:empty {
     padding: 4px;
     border: 0.5px solid grey;
 }
+
+.scenario-docs .dataTable {
+    border-bottom-color: white;
+}
+
 .examples {
     padding-top: 0.5em;
 }
@@ -2213,4 +2218,10 @@ td.indented-error-category i {
 
 .scenario-description {
     padding-left: 1em;
+}
+
+.scenario-docs .card-body table {
+    margin-left: 3em;
+    width: 95%;
+    max-width: 95%;
 }

@@ -34,19 +34,4 @@ public class WhenRenderingJBehaveTables {
                         "| 101      | MIFID-2      | Reportable |  \n");
     }
 
-    @Test
-    public void shouldRenderCucumberTables() {
-
-        String textWithATable = "Given the following transaction is reportable\n" +
-                "| Trade ID | Jurisdiction | State      |\n" +
-                "| 100      | MIFID-2      | Reportable |\n" +
-                "| 101      | MIFID-2      | Reportable |";
-
-        assertThat(MarkdownTables.convertTablesIn(textWithATable))
-                .isEqualTo("Given the following transaction is reportable\n\n" +
-                        "| Trade ID | Jurisdiction | State      |  \n" +
-                        "| --- | --- | --- |  \n" +
-                        "| 100      | MIFID-2      | Reportable |  \n" +
-                        "| 101      | MIFID-2      | Reportable |  \n");
-    }
 }

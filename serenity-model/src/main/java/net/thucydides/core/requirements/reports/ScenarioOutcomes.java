@@ -5,6 +5,7 @@ import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestStep;
 import net.thucydides.core.reports.TestOutcomes;
+import net.thucydides.core.reports.html.DescriptionSplitter;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.cucumber.FeatureFileScenarioOutcomes;
@@ -81,7 +82,9 @@ public class ScenarioOutcomes {
     }
 
     private static List<String> testStepsFromSampleScenario(String sampleDataDrivenScenario) {
-        return Arrays.asList(sampleDataDrivenScenario.split("\\R"));
+        return DescriptionSplitter.splitIntoSteps(sampleDataDrivenScenario).stream().map(
+                RenderMarkdown::convertEmbeddedTablesIn
+        ).collect(Collectors.toList());
     }
 
 }

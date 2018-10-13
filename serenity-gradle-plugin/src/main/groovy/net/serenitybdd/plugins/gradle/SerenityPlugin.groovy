@@ -20,6 +20,9 @@ import org.slf4j.LoggerFactory;
 
 class SerenityPlugin implements Plugin<Project> {
 
+    Path reportDirectory
+    Path historyDirectory
+
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Override

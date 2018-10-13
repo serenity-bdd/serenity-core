@@ -117,6 +117,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         context.put("absoluteReportName", new ReportNameProvider(NO_CONTEXT, ReportType.HTML, requirementsService));
         context.put("reportOptions", new ReportOptions(getEnvironmentVariables()));
         context.put("relativeLink", relativeLink);
+        context.put("evidence", EvidenceData.from(requirementsOutcomes.getTestOutcomes()));
 
         requirementsOutcomes.getParentRequirement().map(
                 parentRequirement -> context.put("currentTag", parentRequirement.asTag())

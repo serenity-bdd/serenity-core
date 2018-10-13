@@ -10,12 +10,14 @@ public class ReportData {
     private final String title;
     private final String contents;
     private final String path;
+    private Boolean isEvidence;
 
     public ReportData(String title, String contents, String path) {
 
         this.title = title;
         this.contents = contents;
         this.path = path;
+        this.isEvidence = false;
     }
 
     public static ReportDataBuilder withTitle(String title) {
@@ -53,7 +55,15 @@ public class ReportData {
             return new ReportData(title, null, storedRelativePath);
         }
 
+    }
 
+    public ReportData asEvidence(Boolean isEvidence) {
+        this.isEvidence = isEvidence;
+        return this;
+    }
+
+    public boolean isEvidence() {
+        return isEvidence;
     }
 
     @Override

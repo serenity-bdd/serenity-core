@@ -83,6 +83,24 @@ class WhenIncludingReportDataWithAStep extends Specification {
         testOutcome.lastStep().reportData.path.endsWith("report-data.xml")
     }
 
+    def "Arbitrary report data can be recorded as evidence to appear at the feature level"() {
+        given:
+        File outputDir = Files.createTempDirectory("out").toFile()
+
+        StepEventBus.getEventBus().registerListener(new BaseStepListener(outputDir));
+        StepEventBus.getEventBus().testStarted("some test")
+        StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle("some test"))
+
+        when:
+        def testDataSource = Paths.get(this.class.getResource("/testdata/report-data.xml").toURI())
+        Serenity.recordReportData().withTitle("Some data").downloadable().asEvidence().fromFile(testDataSource)
+
+        then:
+        TestOutcome testOutcome = StepEventBus.getEventBus().baseStepListener.testOutcomes.get(0)
+        testOutcome.lastStep().hasData()
+        testOutcome.lastStep().reportData.isEvidence
+    }
+
 
     def "Arbitrary report data can be added to a step from a file using the Serenity class using the encoding"() {
         given:

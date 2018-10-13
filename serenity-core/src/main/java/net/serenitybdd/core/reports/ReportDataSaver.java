@@ -18,6 +18,7 @@ public class ReportDataSaver implements WithTitle, AndContent, FromFile {
     private final StepEventBus eventBus;
     private String title;
     private boolean fileIsDownloadable = false;
+    private boolean isEvidence = false;
 
     public ReportDataSaver(StepEventBus eventBus) {
         this.eventBus = eventBus;
@@ -31,7 +32,7 @@ public class ReportDataSaver implements WithTitle, AndContent, FromFile {
     @Override
     public void andContents(String contents) {
         eventBus.getBaseStepListener().latestTestOutcome().ifPresent(
-                outcome -> outcome.currentStep().withReportData(ReportData.withTitle(title).andContents(contents))
+                outcome -> outcome.currentStep().withReportData(ReportData.withTitle(title).andContents(contents).asEvidence(isEvidence))
         );
     }
 
@@ -48,8 +49,8 @@ public class ReportDataSaver implements WithTitle, AndContent, FromFile {
 
         if (outcome.isPresent()) {
             ReportData reportData = (fileIsDownloadable) ?
-                    ReportData.withTitle(title).fromPath(source) :
-                    ReportData.withTitle(title).fromFile(source, encoding);
+                    ReportData.withTitle(title).fromPath(source).asEvidence(isEvidence) :
+                    ReportData.withTitle(title).fromFile(source, encoding).asEvidence(isEvidence);
 
             outcome.get().currentStep().withReportData(reportData);
         }
@@ -58,6 +59,12 @@ public class ReportDataSaver implements WithTitle, AndContent, FromFile {
     @Override
     public FromFile downloadable() {
         this.fileIsDownloadable = true;
+        return this;
+    }
+
+    @Override
+    public FromFile asEvidence() {
+        this.isEvidence = true;
         return this;
     }
 }

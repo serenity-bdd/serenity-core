@@ -349,6 +349,7 @@
             </#macro>
 
             <#macro reportData(reportData, number) >
+                <#if reportData.contents?has_content>
                 <span>
                     <button type="button" class="btn btn-success btn-sm" data-toggle="collapse"
                             data-target="#reportData-${number}">
@@ -366,6 +367,13 @@
                             <div class="card-body"><pre>${(formatter.renderText(reportData.contents))!}</pre></div>
                     </div>
                 </div>
+                <#else>
+                <span>
+                    <a role="button" class="btn btn-success btn-sm" href="${reportData.path}">
+                        <i class="fas fa-download"></i>&nbsp;${reportData.title}
+                    </a>
+                </span>
+                </#if>
             </#macro>
 
 

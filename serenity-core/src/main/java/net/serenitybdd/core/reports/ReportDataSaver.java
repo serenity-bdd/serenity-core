@@ -12,11 +12,12 @@ import java.util.Optional;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_ENCODING;
 
-public class ReportDataSaver implements WithTitle, AndContent {
+public class ReportDataSaver implements WithTitle, AndContent, FromFile {
 
 
     private final StepEventBus eventBus;
     private String title;
+    private boolean fileIsDownloadable = false;
 
     public ReportDataSaver(StepEventBus eventBus) {
         this.eventBus = eventBus;
@@ -46,7 +47,17 @@ public class ReportDataSaver implements WithTitle, AndContent {
         Optional<TestOutcome> outcome = eventBus.getBaseStepListener().latestTestOutcome();
 
         if (outcome.isPresent()) {
-            outcome.get().currentStep().withReportData(ReportData.withTitle(title).fromFile(source, encoding));
+            ReportData reportData = (fileIsDownloadable) ?
+                    ReportData.withTitle(title).fromPath(source) :
+                    ReportData.withTitle(title).fromFile(source, encoding);
+
+            outcome.get().currentStep().withReportData(reportData);
         }
+    }
+
+    @Override
+    public FromFile downloadable() {
+        this.fileIsDownloadable = true;
+        return this;
     }
 }

@@ -50,6 +50,8 @@ public class MultipleSourceRequirmentsOutcomeFactory implements RequirementsOutc
     public RequirementsOutcomes buildRequirementsOutcomesFrom(TestOutcomes testOutcomes) {
         List<Requirement> allRequirements = new ArrayList<>();
 
+        LOGGER.info("Loading requirements from tag providers :" + requirementsTagProviders);
+
         for (RequirementsTagProvider tagProvider : requirementsTagProviders) {
             allRequirements = new RequirementsMerger().merge(allRequirements, RequirementsProvided.by(tagProvider));
         }

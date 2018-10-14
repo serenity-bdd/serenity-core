@@ -20,9 +20,6 @@ import org.slf4j.LoggerFactory;
 
 class SerenityPlugin implements Plugin<Project> {
 
-    Path reportDirectory
-    Path historyDirectory
-
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Override
@@ -34,7 +31,7 @@ class SerenityPlugin implements Plugin<Project> {
             description = 'Generates aggregated Serenity reports'
             doLast {
                 updateProperties(project)
-                reportDirectory = prepareReportDirectory(project)
+                def reportDirectory = prepareReportDirectory(project)
                 if (!project.serenity.projectKey) {
                     project.serenity.projectKey = project.name
                 }
@@ -63,7 +60,7 @@ class SerenityPlugin implements Plugin<Project> {
             description = 'Generates extended Serenity reports'
             doLast {
                 updateProperties(project)
-                reportDirectory = prepareReportDirectory(project)
+                def reportDirectory = prepareReportDirectory(project)
                 if (!project.serenity.projectKey) {
                     project.serenity.projectKey = project.name
                 }
@@ -87,7 +84,7 @@ class SerenityPlugin implements Plugin<Project> {
             group = 'Serenity BDD'
             description = "Checks the Serenity reports and fails the build if there are test failures (run automatically with 'check')"
 
-            reportDirectory = prepareReportDirectory(project)
+            def reportDirectory = prepareReportDirectory(project)
 
             log.info("SerenityPlugin:checkOutcomes: reportDirectory = ${reportDirectory}")
 
@@ -108,7 +105,7 @@ class SerenityPlugin implements Plugin<Project> {
 
             doLast {
                 updateProperties(project)
-                reportDirectory = prepareReportDirectory(project)
+                def reportDirectory = prepareReportDirectory(project)
                 FileUtils.deleteDirectory(reportDirectory.toFile())
             }
         }
@@ -119,7 +116,7 @@ class SerenityPlugin implements Plugin<Project> {
 
             doLast {
                 updateProperties(project)
-                historyDirectory = prepareHistoryDirectory(project)
+                def historyDirectory = prepareHistoryDirectory(project)
                 Files.delete(historyDirectory)
             }
         }
@@ -130,7 +127,7 @@ class SerenityPlugin implements Plugin<Project> {
 
             doLast {
                 updateProperties(project)
-                historyDirectory = prepareHistoryDirectory(project)
+                def historyDirectory = prepareHistoryDirectory(project)
 
                 new FileSystemTestOutcomeSummaryRecorder(historyDirectory,
                         deletePreviousHistory())

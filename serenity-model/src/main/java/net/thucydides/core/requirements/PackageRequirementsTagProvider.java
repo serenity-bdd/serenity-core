@@ -14,6 +14,8 @@ import net.thucydides.core.requirements.model.OverviewReader;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,6 +43,9 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     private final RequirementsStore requirementsStore;
 
     List<String> requirementPaths;
+
+    private final static Logger logger = LoggerFactory.getLogger(PackageRequirementsTagProvider.class);
+
 
     public PackageRequirementsTagProvider(EnvironmentVariables environmentVariables,
                                           String rootPackage,
@@ -90,6 +95,8 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     private void fetchRequirements() {
+        logger.info("Loading requirements from package requirements at: " + rootPackage);
+
         requirements = reloadedRequirements().orElse(requirementsReadFromClasspath()
                 .orElse(NO_REQUIREMENTS));
     }

@@ -15,10 +15,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -150,9 +147,12 @@ public class RootDirectory {
     }
 
     private Set<String> getFileSystemDefinedDirectory() {
-        if (Paths.get(rootDirectoryPath).toAbsolutePath().toFile().exists()) {
+
+        File rootDirectoryPathFile = FileSystems.getDefault().getPath(rootDirectoryPath).toFile();
+
+        if (rootDirectoryPathFile.exists()) {
             Set<String> directory = new HashSet<>();
-            directory.add(Paths.get(rootDirectoryPath).toAbsolutePath().toString());
+            directory.add(rootDirectoryPathFile.getPath());
             return directory;
         }
         return new HashSet<>();
@@ -168,6 +168,7 @@ public class RootDirectory {
     private Set<String> configuredRelativeRootDirectories;
 
     private Set<String> getRootDirectoryFromRequirementsBaseDir() {
+
         if (configuredRelativeRootDirectories == null) {
             configuredRelativeRootDirectories
                     = getRootDirectoryFromParentDir(ThucydidesSystemProperty.SERENITY_TEST_REQUIREMENTS_BASEDIR

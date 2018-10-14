@@ -103,6 +103,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     public FileSystemRequirementsTagProvider(String rootDirectory, EnvironmentVariables environmentVariables) {
         super(environmentVariables, rootDirectory);
+
         this.narrativeReader = NarrativeReader.forRootDirectory(rootDirectory)
                 .withRequirementTypes(getRequirementTypes());
         this.overviewReader = new OverviewReader();
@@ -114,6 +115,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     public FileSystemRequirementsTagProvider(String rootDirectory, int level, EnvironmentVariables environmentVariables) {
         super(environmentVariables, rootDirectory);
+
         this.narrativeReader = NarrativeReader.forRootDirectory(rootDirectory)
                 .withRequirementTypes(getRequirementTypes());
         this.overviewReader = new OverviewReader();
@@ -143,24 +145,24 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         if (requirements == null) {
             synchronized (requirementsLock) {
                 if (requirements == null) {
-                    try {
                         Set<Requirement> allRequirements = new HashSet<>();
-                        Set<String> directoryPaths = getRootDirectoryPaths();
+                    Set<String> directoryPaths = getRootDirectoryPaths();
 
-                        for (String path : directoryPaths) {
-                            File rootDirectory = new File(path);
-                            logger.trace("Loading requirements from {}", rootDirectory);
-                            if (rootDirectory.exists()) {
-                                allRequirements.addAll(loadCapabilitiesFrom(rootDirectory.listFiles(thatAreFeatureDirectories())));
-                                allRequirements.addAll(loadStoriesFrom(rootDirectory.listFiles(thatAreStories())));
-                            }
+                    for (String path : directoryPaths) {
+                        File rootDirectory = new File(path);
+
+                        if (rootDirectory.exists()) {
+
+                            List<Requirement> capabilities = loadCapabilitiesFrom(rootDirectory.listFiles(thatAreFeatureDirectories()));
+
+                            List<Requirement> leafRequirements = loadStoriesFrom(rootDirectory.listFiles(thatAreStories()));
+
+                            allRequirements.addAll(capabilities);
+                            allRequirements.addAll(leafRequirements);
                         }
-                        requirements = new ArrayList<>(allRequirements);
-                        sort(requirements);
-                    } catch (IOException e) {
-                        requirements = NO_REQUIREMENTS;
-                        throw new IllegalArgumentException("Could not load requirements from '" + rootDirectory + "'", e);
                     }
+                    requirements = new ArrayList<>(allRequirements);
+                    sort(requirements);
                     requirements = addParentsTo(requirements);
                 }
             }
@@ -193,7 +195,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     /**
      * Find the root directory in the classpath or on the file system from which the requirements will be read.
      */
-    public Set<String> getRootDirectoryPaths() throws IOException {
+    public Set<String> getRootDirectoryPaths() {
         return new RootDirectory(environmentVariables, rootDirectory).getRootDirectoryPaths();
     }
 
@@ -751,4 +753,5 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     public Optional<String> getOverview() {
         return overviewReader.readOverviewFrom(directoryPaths.toArray(new String[]{}));
     }
+
 }

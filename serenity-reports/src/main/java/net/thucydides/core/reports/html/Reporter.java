@@ -13,7 +13,7 @@ import java.util.stream.*;
 
 class Reporter {
 
-    private static final TimeoutValue DEFAULT_TIMEOUT = new TimeoutValue(30, TimeUnit.SECONDS);
+    private static final TimeoutValue DEFAULT_TIMEOUT = new TimeoutValue(60, TimeUnit.SECONDS);
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlAggregateStoryReporter.class);
 

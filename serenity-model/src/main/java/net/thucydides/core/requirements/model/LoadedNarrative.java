@@ -6,10 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class LoadedNarrative {
 
@@ -33,7 +30,7 @@ public class LoadedNarrative {
             String text = readNarrativeFrom(lines);
             reader.close();
 
-            List<TestTag> tags = Arrays.asList(TestTag.withName(title).andType("story"));
+            List<TestTag> tags = (StringUtils.isEmpty(title)) ? new ArrayList<>() : Collections.singletonList(TestTag.withName(title).andType("story"));
 
             return java.util.Optional.of(new Narrative(Optional.ofNullable(title),
                     Optional.of(narrativeFile.getPath()),

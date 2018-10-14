@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.EMPTY_LIST;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
@@ -206,7 +207,7 @@ public abstract class BaseRequirementsService implements RequirementsService {
         return requirementTypes;
     }
 
-    private Collection<? extends String> requirementTypesDefinedIn(List<Requirement> requirements) {
+    private Collection<String> requirementTypesDefinedIn(List<Requirement> requirements) {
         List<String> requirementTypes = new ArrayList<>();
         for(Requirement requirement : requirements) {
             if (!requirementTypes.contains(requirement.getType())) {
@@ -219,6 +220,17 @@ public abstract class BaseRequirementsService implements RequirementsService {
         return requirementTypes;
     }
 
+    private Collection<TestTag> requirementTagsOfType(List<Requirement> requirements, List<String> tagTypes) {
+        Set<TestTag> requirementTypes = new HashSet<>();
+        for(Requirement requirement : AllRequirements.in(requirements)) {
+            List<TestTag> matchingTags = requirement.getTags().stream()
+                                                    .filter( tag -> tagTypes.contains(tag.getType()))
+                                                    .collect(Collectors.toList());
+
+            requirementTypes.addAll(matchingTags);
+        }
+        return requirementTypes;
+    }
 
     @Override
     public List<String> getReleaseVersionsFor(TestOutcome testOutcome) {
@@ -244,4 +256,8 @@ public abstract class BaseRequirementsService implements RequirementsService {
         return getRequirementTypes().contains(tag.getType());
     }
 
+    @Override
+    public Collection<TestTag> getTagsOfType(List<String> tagTypes) {
+        return requirementTagsOfType(getRequirements(), tagTypes);
+    }
 }

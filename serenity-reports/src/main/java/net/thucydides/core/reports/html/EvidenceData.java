@@ -57,7 +57,7 @@ public class EvidenceData {
         } else {
             String report = ReportNamer.forReportType(ReportType.HTML).getNormalizedTestNameFor(testOutcome);
             return "<a role='button' class='btn btn-success btn-sm' href='"
-                    + report
+                    + report + "#" + reportData.getId()
                     + "'><i class=\"fas fa-external-link-alt\"></i>&nbsp;Details</a>";
         }
     }

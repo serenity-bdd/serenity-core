@@ -630,7 +630,8 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                 .withType(type)
                 .withNarrative(requirementNarrative.getText())
                 .withPath(relativeDirectoryOf(path))
-                .withReleaseVersions(releaseVersions);
+                .withReleaseVersions(releaseVersions)
+                .withTags(requirementNarrative.getTags());
     }
 
     private Requirement requirementWithNarrative(File requirementDirectory, String shortName, Narrative requirementNarrative) {

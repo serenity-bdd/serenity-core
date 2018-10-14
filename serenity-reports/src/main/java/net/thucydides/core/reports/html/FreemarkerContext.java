@@ -116,7 +116,9 @@ public class FreemarkerContext {
                                         .trimResults()
                                         .splitToList(REPORT_TAGTYPES.from(environmentVariables,"feature"));
 
-        context.put("coverage", TagCoverage.from(testOutcomes).forTagTypes(tagTypes));
+        context.put("coverage", TagCoverage.from(testOutcomes)
+                                           .showingTags(requirements.getTagsOfType(tagTypes))
+                                           .forTagTypes(tagTypes));
         context.put("backgroundColor", new BackgroundColor());
 
         testOutcomes.getOutcomes().forEach(

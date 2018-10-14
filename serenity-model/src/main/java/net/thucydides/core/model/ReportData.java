@@ -5,12 +5,14 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 public class ReportData {
     private final String title;
     private final String contents;
     private final String path;
     private Boolean isEvidence;
+    private String id;
 
     public ReportData(String title, String contents, String path) {
 
@@ -18,6 +20,7 @@ public class ReportData {
         this.contents = contents;
         this.path = path;
         this.isEvidence = false;
+        this.id = "report-data-" + UUID.randomUUID().toString();
     }
 
     public static ReportDataBuilder withTitle(String title) {
@@ -33,6 +36,8 @@ public class ReportData {
     }
 
     public String getPath() { return path; }
+
+    public String getId() { return id; }
 
     public static class ReportDataBuilder {
         private final String title;

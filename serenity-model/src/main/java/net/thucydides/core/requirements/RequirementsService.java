@@ -5,6 +5,7 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.model.Requirement;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,4 +28,6 @@ public interface RequirementsService extends ParentRequirementProvider {
     List<Release> getReleasesFromRequirements();
 
     List<String> getRequirementTypes();
+
+    Collection<TestTag> getTagsOfType(List<String> tagTypes);
 }

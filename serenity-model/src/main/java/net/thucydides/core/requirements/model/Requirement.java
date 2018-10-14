@@ -35,6 +35,7 @@ public class Requirement implements Comparable {
     private List<Example> examples;
     private List<String> releaseVersions;
     private List<CustomFieldValue> customFields;
+    private List<TestTag> tags = new ArrayList<>();
 
     public Requirement() {
         // Used by Jackson
@@ -74,6 +75,31 @@ public class Requirement implements Comparable {
         this.releaseVersions = NewList.copyOf(releaseVersions);
         this.customFields = NewList.copyOf(customFields);
         this.featureFileName = featureFileName;
+        this.tags = new ArrayList<>();
+    }
+
+    protected Requirement(String name, String id, String displayName, String cardNumber, String parent, String type, String path, CustomFieldValue narrative,
+                          List<Requirement> children, List<Example> examples,
+                          List<String> releaseVersions,
+                          List<CustomFieldValue> customFields,
+                          String featureFileName,
+                          List<TestTag> tags) {
+        Preconditions.checkNotNull(name);
+        Preconditions.checkNotNull(type);
+        this.name = name;
+        this.id = id;
+        this.displayName = (displayName != null) ? displayName : name;
+        this.cardNumber = cardNumber;
+        this.type = type;
+        this.path = path;
+        this.parent = parent;
+        this.narrative = narrative;
+        this.children = new ArrayList<>(children);
+        this.examples = new ArrayList<>(examples);
+        this.releaseVersions = NewList.copyOf(releaseVersions);
+        this.customFields = NewList.copyOf(customFields);
+        this.featureFileName = featureFileName;
+        this.tags = tags;
     }
 
     protected Requirement(String name, String id, String displayName, String cardNumber, String parent, String type, String path,
@@ -96,6 +122,7 @@ public class Requirement implements Comparable {
         this.releaseVersions = NewList.copyOf(releaseVersions);
         this.customFields = NewList.copyOf(customFields);
         this.path = path;
+        this.tags = new ArrayList<>();
     }
 
     public String getName() {
@@ -164,11 +191,11 @@ public class Requirement implements Comparable {
 
     public Requirement definedInFile(File featureFile) {
         return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type,  this.path, this.narrative,
-                                this.children, this.examples, this.releaseVersions,  this.customFields, featureFile.getName());
+                                this.children, this.examples, this.releaseVersions,  this.customFields, featureFile.getName(), this.tags);
     }
 
     public Requirement withChildren(List<Requirement> children) {
-        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type,  this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName);
+        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type,  this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags);
     }
 
     public void setChildren(List<Requirement> children) {
@@ -176,43 +203,43 @@ public class Requirement implements Comparable {
     }
 
     public Requirement withParent(String parent) {
-        return new Requirement(this.name,  this.id, this.displayName, this.cardNumber, parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName);
+        return new Requirement(this.name,  this.id, this.displayName, this.cardNumber, parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags);
     }
 
 
     public Requirement withType(String type) {
-        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName);
+        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags);
     }
 
     public Requirement withDisplayName(String displayName) {
-        return new Requirement(this.name, this.id, displayName, this.cardNumber, this.parent, type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName);
+        return new Requirement(this.name, this.id, displayName, this.cardNumber, this.parent, type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags);
     }
 
     public Requirement withFeatureFileyName(String featureFileName) {
-        return new Requirement(this.name, this.id, displayName, this.cardNumber, this.parent, type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName);
+        return new Requirement(this.name, this.id, displayName, this.cardNumber, this.parent, type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags);
     }
 
     public Requirement withExample(Example example) {
         List<Example> updatedExamples = new ArrayList<>(examples);
         updatedExamples.add(example);
-        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, updatedExamples, releaseVersions, customFields, featureFileName);
+        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, updatedExamples, releaseVersions, customFields, featureFileName, this.tags);
     }
 
     public Requirement withExamples(List<Example> examples) {
-        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName);
+        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags);
     }
 
     public Requirement withReleaseVersions(List<String> releaseVersions) {
-        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName);
+        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags);
     }
 
     public Requirement withCustomFields(List<CustomFieldValue> customFields) {
-        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName);
+        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, this.path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags);
     }
 
 
     public Requirement withPath(String path) {
-        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, path, this.narrative, children, examples, releaseVersions, customFields, featureFileName);
+        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, this.parent, this.type, path, this.narrative, children, examples, releaseVersions, customFields, featureFileName, this.tags);
     }
 
     public boolean hasChildren() {
@@ -226,6 +253,10 @@ public class Requirement implements Comparable {
             nestedChildren.addAll(child.getNestedChildren());
         }
         return NewList.copyOf(nestedChildren);
+    }
+
+    public List<TestTag> getTags() {
+        return new ArrayList<>(tags);
     }
 
     public TestTag asTag() {
@@ -280,7 +311,7 @@ public class Requirement implements Comparable {
         List<Requirement> newChildren = new ArrayList(children);
         newChildren.remove(child);
         newChildren.add(child);
-        return new Requirement(name, id, displayName,cardNumber,parent, type, narrative, newChildren, examples,releaseVersions);
+        return new Requirement(name, id, displayName,cardNumber,parent, type, narrative, newChildren, examples,releaseVersions).withTags(this.tags);
     }
 
     public CustomFieldSetter withCustomField(String fieldName) {
@@ -350,7 +381,8 @@ public class Requirement implements Comparable {
                 .withExamples(mergedExamples)
                 .withCustomFields(mergedCustomFields)
                 .withFeatureFileyName(mergedFeatureFileName)
-                .withChildren(mergedChildren);
+                .withChildren(mergedChildren)
+                .withTags(tags);
     }
 
     private List<Requirement> mergeRequirementLists(List<Requirement> existingChilden, List<Requirement> newChildren) {
@@ -368,11 +400,16 @@ public class Requirement implements Comparable {
 
     public Requirement withNarrative(String narrativeText) {
         return new Requirement(this.name, this.id, this.displayName, this.cardNumber, parent, this.type, this.path, new CustomFieldValue("Narrative", narrativeText),
-                               children, examples, releaseVersions, customFields, featureFileName);
+                               children, examples, releaseVersions, customFields, featureFileName, tags);
     }
 
     public String getPath() {
         return path;
+    }
+
+    public Requirement withTags(List<TestTag> tags) {
+        return new Requirement(this.name, this.id, this.displayName, this.cardNumber, parent, this.type, this.path, this.narrative,
+                children, examples, releaseVersions, customFields, featureFileName, tags);
     }
 
     public static class CustomFieldSetter {
@@ -391,7 +428,7 @@ public class Requirement implements Comparable {
             return new Requirement(requirement.name, requirement.id, requirement.displayName,
                     requirement.cardNumber, requirement.parent, requirement.type, requirement.path, requirement.narrative,
                     requirement.children, requirement.examples, requirement.releaseVersions,
-                    customFields);
+                    customFields).withTags(requirement.tags);
         }
 
         public Requirement setTo(String value) {

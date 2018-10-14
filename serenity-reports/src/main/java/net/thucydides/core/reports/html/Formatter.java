@@ -18,6 +18,8 @@ import net.thucydides.core.reports.renderer.MarkupRenderer;
 import net.thucydides.core.requirements.reports.RenderMarkdown;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.util.Inflection;
+import net.thucydides.core.util.Inflector;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.translate.AggregateTranslator;
 import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
@@ -451,12 +453,11 @@ public class Formatter  {
 
     public String truncatedHtmlCompatible(String text, int length) {
         return htmlCompatible(text);
-//        return renderMarkdown(addLineBreaks(ESCAPE_SPECIAL_CHARS.translate(truncate(text, length))));
-//        return ESCAPE_SPECIAL_CHARS.translate(renderMarkdown(addLineBreaks(truncate(text, length))));
     }
 
-
-
+    public String humanReadableFormOf(String text) {
+        return Inflector.inflection().humanize(text);
+    }
 
     public String formatWithFields(String textToFormat) {
         String textWithEscapedFields  = textToFormat.replaceAll("<", "&lt;")

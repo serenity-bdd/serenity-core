@@ -9,6 +9,7 @@ import gherkin.ast.GherkinDocument;
 import gherkin.ast.Tag;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.model.TestTag;
 import net.thucydides.core.requirements.model.Narrative;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -119,12 +121,17 @@ public class CucumberParser {
 
         String id = getIdFromName(title);
 
+        List<TestTag> tags = feature.getTags().stream().map(tag -> TestTag.withValue(tag.getName())).collect(Collectors.toList());
+
+        tags.add(TestTag.withName(title).andType("feature"));
+        
         return Optional.of(new Narrative(Optional.ofNullable(title),
                 Optional.ofNullable(id),
                 Optional.ofNullable(cardNumber),
                 versionNumbers,
                 "feature",
-                text != null ? text : ""));
+                text != null ? text : "",
+                tags));
 
     }
 

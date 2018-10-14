@@ -1,11 +1,13 @@
 package net.thucydides.core.requirements.model;
 
 import com.google.common.base.Splitter;
+import net.thucydides.core.model.TestTag;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,12 +32,16 @@ public class LoadedNarrative {
             }
             String text = readNarrativeFrom(lines);
             reader.close();
+
+            List<TestTag> tags = Arrays.asList(TestTag.withName(title).andType("story"));
+
             return java.util.Optional.of(new Narrative(Optional.ofNullable(title),
                     Optional.of(narrativeFile.getPath()),
                     Optional.ofNullable(cardNumber),
                     versionNumbers,
                     type,
-                    text));
+                    text,
+                    tags));
         } catch (IOException ex) {
             ex.printStackTrace();
         }

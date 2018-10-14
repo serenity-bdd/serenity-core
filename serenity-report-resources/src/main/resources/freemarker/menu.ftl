@@ -28,7 +28,7 @@
     <#if reportOptions.showTagMenus>
         <#foreach tagType in allTestOutcomes.firstClassTagTypes>
             <#assign tagReport = absoluteReportName.forTagType(tagType) >
-            <#assign tagTypeTitle = inflection.of(tagType).inPluralForm().asATitle() >
+            <#assign tagTypeTitle = inflection.of(inflection.humanize(tagType)).inPluralForm().asATitle() >
             <li <#if selected=="${tagType}">class="active"</#if>>
                 <#if selected=="${tagType}"><a href="#"><#else><a href="${tagReport}"></#if><i class="fa fa-tags"></i> ${tagTypeTitle}</a>
             </li>

@@ -672,8 +672,8 @@ public class TestOutcome {
     public String toString() {
 
         return getTitle() + ":" + testSteps.stream()
-                                           .map(TestStep::toString)
-                                           .collect(Collectors.joining(", "));
+                .map(TestStep::toString)
+                .collect(Collectors.joining(", "));
     }
 
     /**
@@ -857,23 +857,25 @@ public class TestOutcome {
     public boolean hasTagWithName(String tagName) {
         return java.util.Optional.ofNullable(tags).orElse(Collections.emptySet())
                 .stream()
-                .anyMatch( tag -> tag.getName().equalsIgnoreCase(tagName) );
+                .anyMatch(tag -> tag.getName().equalsIgnoreCase(tagName));
     }
 
     public boolean hasTagWithType(String tagType) {
         return java.util.Optional.ofNullable(tags).orElse(Collections.emptySet())
                 .stream()
-                .anyMatch( tag -> tag.getType().equalsIgnoreCase(tagType) );
+                .anyMatch(tag -> tag.getType().equalsIgnoreCase(tagType));
     }
 
     public boolean hasTagWithTypes(List<String> tagTypes) {
         return java.util.Optional.ofNullable(tags).orElse(Collections.emptySet())
                 .stream()
-                .anyMatch( tag -> tagTypes.contains(tag.getType()));
+                .anyMatch(tag -> tagTypes.contains(tag.getType()));
     }
 
     public int getDataTableRowCount() {
-        if (dataTable == null) { return 0; }
+        if (dataTable == null) {
+            return 0;
+        }
         return dataTable.getSize();
     }
 
@@ -882,13 +884,13 @@ public class TestOutcome {
     }
 
     public void castActor(String name) {
-        if (actors.stream().noneMatch( actor -> actor.getName().equalsIgnoreCase(name))) {
+        if (actors.stream().noneMatch(actor -> actor.getName().equalsIgnoreCase(name))) {
             actors.add(new CastMember(name));
         }
     }
 
     public void assignFact(String name, String fact) {
-        if (actors.stream().noneMatch( actor -> actor.getName().equalsIgnoreCase(name))) {
+        if (actors.stream().noneMatch(actor -> actor.getName().equalsIgnoreCase(name))) {
             actors.add(new CastMember(name));
         }
 
@@ -898,7 +900,7 @@ public class TestOutcome {
     }
 
     public void assignAbility(String name, String ability) {
-        if (actors.stream().noneMatch( actor -> actor.getName().equalsIgnoreCase(name))) {
+        if (actors.stream().noneMatch(actor -> actor.getName().equalsIgnoreCase(name))) {
             actors.add(new CastMember(name));
         }
 
@@ -908,7 +910,7 @@ public class TestOutcome {
     }
 
     public void assignDescriptionToActor(String name, String description) {
-        if (actors.stream().noneMatch( actor -> actor.getName().equalsIgnoreCase(name))) {
+        if (actors.stream().noneMatch(actor -> actor.getName().equalsIgnoreCase(name))) {
             actors.add(new CastMember(name));
         }
 
@@ -1490,7 +1492,9 @@ public class TestOutcome {
     }
 
     public String getTestFailureErrorType() {
-        if (getTestFailureCause() == null) { return ""; }
+        if (getTestFailureCause() == null) {
+            return "";
+        }
         return getTestFailureCause().getErrorType();
     }
 
@@ -1683,7 +1687,7 @@ public class TestOutcome {
         Set<String> issues = new HashSet<>(getIssues());
         if (!issues.isEmpty()) {
             List<String> orderedIssues = issues.stream().sorted().collect(Collectors.toList());
-            String formattedIssues =  orderedIssues.stream().collect(Collectors.joining(", "));
+            String formattedIssues = orderedIssues.stream().collect(Collectors.joining(", "));
             return "(" + getFormatter().addLinks(formattedIssues) + ")";
         } else {
             return "";
@@ -1694,11 +1698,6 @@ public class TestOutcome {
         if (!issues().contains(issue)) {
             issues().add(issue);
         }
-    }
-
-    public void addFailingExternalStep(Throwable testFailureCause) {
-        // Add as a sibling of the last deepest group
-        addFailingStepAsSibling(testSteps, testFailureCause);
     }
 
     public void addFailingStepAsSibling(List<TestStep> testStepList, Throwable testFailureCause) {
@@ -2084,13 +2083,17 @@ public class TestOutcome {
         return count(TestStep.COMPROMISED_TESTSTEPS).in(getLeafTestSteps());
     }
 
-    public Long getIgnoredCount() { return count(TestStep.IGNORED_TESTSTEPS).in(getLeafTestSteps()); }
+    public Long getIgnoredCount() {
+        return count(TestStep.IGNORED_TESTSTEPS).in(getLeafTestSteps());
+    }
 
     public Long getSkippedOrIgnoredCount() {
         return getIgnoredCount() + getSkippedCount();
     }
 
-    public Long getSkippedCount() { return count(TestStep.SKIPPED_TESTSTEPS).in(getLeafTestSteps()); }
+    public Long getSkippedCount() {
+        return count(TestStep.SKIPPED_TESTSTEPS).in(getLeafTestSteps());
+    }
 
     public Long getPendingCount() {
         return getLeafTestSteps()
@@ -2138,7 +2141,9 @@ public class TestOutcome {
     }
 
     public Long getDuration() {
-        if (duration > 0) { return duration; }
+        if (duration > 0) {
+            return duration;
+        }
 
         return testSteps
                 .stream()
@@ -2173,6 +2178,7 @@ public class TestOutcome {
     private StepCountBuilder count(Predicate<TestStep> filter) {
         return new StepCountBuilder(filter);
     }
+
     public static class StepCountBuilder {
         private final Predicate<TestStep> stepFilter;
 
@@ -2182,7 +2188,7 @@ public class TestOutcome {
 
         long in(List<TestStep> steps) {
             return steps.stream()
-                    .filter( stepFilter )
+                    .filter(stepFilter)
                     .count();
         }
     }
@@ -2268,13 +2274,13 @@ public class TestOutcome {
     }
 
     public String getStartedAt() {
-            return Optional.ofNullable(startTime).orElse(now())
-                    .format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        return Optional.ofNullable(startTime).orElse(now())
+                .format(DateTimeFormatter.ofPattern("HH:mm:ss"));
     }
 
     public String getTimestamp() {
         return Optional.ofNullable(startTime).orElse(now())
-               .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
 
@@ -2283,6 +2289,7 @@ public class TestOutcome {
                 .format(formater);
 
     }
+
     public boolean isDataDriven() {
         return dataTable != null;
     }
@@ -2467,6 +2474,20 @@ public class TestOutcome {
         this.testSource = testSource;
     }
 
-    public List<CastMember> getActors() { return new ArrayList<>(actors); }
+    public List<CastMember> getActors() {
+        return new ArrayList<>(actors);
+    }
 
+    public boolean hasEvidence() {
+        return testSteps.stream().anyMatch(
+                step -> step.getReportData().isEvidence()
+        );
+    }
+
+    public List<ReportData> getEvidence() {
+        return testSteps.stream().filter(
+                step -> step.getReportData() != null && step.getReportData().isEvidence())
+                .map(TestStep::getReportData)
+                .collect(Collectors.toList());
+    }
 }

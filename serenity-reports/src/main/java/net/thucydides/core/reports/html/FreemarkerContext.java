@@ -105,6 +105,7 @@ public class FreemarkerContext {
         context.put("testCases", executedScenariosIn(testOutcomes));
         context.put("automatedTestCases", automated(executedScenariosIn(testOutcomes)));
         context.put("manualTestCases", manual(executedScenariosIn(testOutcomes)));
+        context.put("evidence", EvidenceData.from(testOutcomes));
 
         context.put("frequentFailures", FrequentFailures.from(testOutcomes).withMaxOf(5));
         context.put("unstableFeatures", UnstableFeatures.from(testOutcomes)

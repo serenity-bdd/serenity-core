@@ -6,6 +6,8 @@ import net.thucydides.core.model.NumericalFormatter;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.formatters.ReportFormatter;
+import net.thucydides.core.requirements.model.cucumber.CucumberParser;
+import net.thucydides.core.requirements.reports.RenderMarkdown;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import org.junit.After;
@@ -566,6 +568,74 @@ public class WhenFormattingForHTML {
     public void formatter_should_drop_training_zeros_for_percentages() {
         NumericalFormatter formatter = new NumericalFormatter();
         assertThat(formatter.percentage(0.5, 1), is("50%"));
+    }
+
+    @Test
+    public void formatter_should_expand_embedded_tables_to_markdown_compatible_form() {
+        Formatter formatter = new Formatter();
+        String description = "Given a business with the following details:\n" +
+                             "\n" +
+                             "\n" +
+                             "| Name | Category |\n" +
+                             "|---|---|\n" +
+                             "| ACME | Casino |\n";
+
+
+        assertThat(formatter.renderHtmlEscapedDescription(description), containsString("<table"));
+    }
+
+    @Test
+    public void formatter_should_prepare_tables_for_markdown() {
+        Formatter formatter = new Formatter();
+        String description = "Given a business with the following details:\n" +
+                "| Name | Category |\n" +
+                "|---|---|\n" +
+                "| ACME | Casino |\n";
+
+        assertThat(formatter.renderHtmlEscapedDescription(description), containsString("<table"));
+    }
+
+    @Test
+    public void formatter_should_inject_lines_before() {
+        String description = "Given a business with the following details:\n" +
+                "| Name | Category |\n" +
+                "|---|---|\n" +
+                "| ACME | Casino |\n";
+
+        assertThat(RenderMarkdown.preprocessMarkdownTables(description), equalTo(
+                "Given a business with the following details:\n\n\n" +
+                "| Name | Category |\n" +
+                "|---|---|\n" +
+                "| ACME | Casino |"));
+    }
+
+    @Test
+    public void should_split_up_given_when_then_statements() {
+        String statement = "Given a calculator\n" +
+                "When I give the following instructions:\n" +
+                "Then system should display 6\n";
+
+        assertThat(DescriptionSplitter.splitIntoSteps(statement), hasItems("Given a calculator",
+                                                                        "When I give the following instructions:",
+                                                                        "Then system should display 6"));
+    }
+
+    @Test
+    public void should_inlcude_tables_when_spliting_up_given_when_then_statements() {
+        String statement = "Given a calculator\n" +
+                "When I give the following instructions:\n" +
+                "| Operation | Amount |\n" +
+                "| + | 10 |\n" +
+                "| - | 5|\n" +
+                "Then system should display 6\n";
+
+        assertThat(DescriptionSplitter.splitIntoSteps(statement), hasItems("Given a calculator",
+                "When I give the following instructions:" + System.lineSeparator() +
+                "| Operation | Amount |" + System.lineSeparator() +
+                        "| + | 10 |" + System.lineSeparator() +
+                        "| - | 5|",
+                "Then system should display 6"));
+
     }
 
 }

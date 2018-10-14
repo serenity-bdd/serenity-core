@@ -9,11 +9,15 @@ import java.nio.file.Paths;
 public class ReportData {
     private final String title;
     private final String contents;
+    private final String path;
+    private Boolean isEvidence;
 
-    public ReportData(String title, String contents) {
+    public ReportData(String title, String contents, String path) {
 
         this.title = title;
         this.contents = contents;
+        this.path = path;
+        this.isEvidence = false;
     }
 
     public static ReportDataBuilder withTitle(String title) {
@@ -28,6 +32,8 @@ public class ReportData {
         return contents;
     }
 
+    public String getPath() { return path; }
+
     public static class ReportDataBuilder {
         private final String title;
 
@@ -36,13 +42,28 @@ public class ReportData {
         }
 
         public ReportData andContents(String contents) {
-            return new ReportData(title, contents);
+            return new ReportData(title, contents, null);
         }
 
         public ReportData fromFile(Path source, Charset encoding) throws IOException {
             byte[] encoded = Files.readAllBytes(source);
-            return new ReportData(title, new String(encoded, encoding));
+            return new ReportData(title, new String(encoded, encoding), null);
         }
+
+        public ReportData fromPath(Path path) throws IOException {
+            String storedRelativePath = Downloadables.copyDownloadableFileFrom(path);
+            return new ReportData(title, null, storedRelativePath);
+        }
+
+    }
+
+    public ReportData asEvidence(Boolean isEvidence) {
+        this.isEvidence = isEvidence;
+        return this;
+    }
+
+    public boolean isEvidence() {
+        return isEvidence;
     }
 
     @Override

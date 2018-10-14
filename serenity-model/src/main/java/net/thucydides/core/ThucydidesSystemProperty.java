@@ -1278,6 +1278,8 @@ public enum ThucydidesSystemProperty {
 
     MAX_FREQUENT_FAILURES,
 
+    CUCUMBER_PRETTY_FORMAT_TABLES,
+
     /**
      * The title to appear in the tag type table in the email reports
      */

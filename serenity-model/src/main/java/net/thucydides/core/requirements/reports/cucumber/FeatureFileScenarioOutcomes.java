@@ -54,7 +54,10 @@ public class FeatureFileScenarioOutcomes {
         }
     }
 
-    private ScenarioOutcome scenarioOutcomeFrom(Feature feature, ScenarioDefinition scenarioDefinition, TestOutcomes testOutcomes) {
+    private ScenarioOutcome scenarioOutcomeFrom(Feature feature,
+                                                ScenarioDefinition scenarioDefinition,
+                                                TestOutcomes testOutcomes) {
+
         Optional<? extends TestOutcome> outcome = testOutcomes.testOutcomeWithName(scenarioDefinition.getName());
         TestResult testResult = (outcome.isPresent() ? outcome.get().getResult() : TestResult.UNDEFINED);
         ZonedDateTime startTime = outcome.map(TestOutcome::getStartTime).orElse(null);
@@ -68,7 +71,9 @@ public class FeatureFileScenarioOutcomes {
                     .collect(Collectors.toList());
 
         List<String> renderedExamples = (scenarioDefinition instanceof ScenarioOutline) ?
-                RenderCucumber.examples(((ScenarioOutline) scenarioDefinition).getExamples()) : Collections.EMPTY_LIST;
+                RenderCucumber.examples(((ScenarioOutline) scenarioDefinition).getExamples(),
+                                        feature.getName(),
+                                        scenarioDefinition.getName()) : Collections.EMPTY_LIST;
 
         int exampleCount = (scenarioDefinition instanceof ScenarioOutline) ?
                 ((ScenarioOutline) scenarioDefinition).getExamples().stream().mapToInt(examples -> examples.getTableBody().size()).sum()

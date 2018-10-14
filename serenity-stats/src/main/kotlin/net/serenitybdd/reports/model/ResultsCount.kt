@@ -2,23 +2,16 @@ package net.serenitybdd.reports.model
 
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.reports.TestOutcomes
-
-fun countByResultFrom(testOutcomes: TestOutcomes): Map<TestResult, Int> {
-    return TestResult.values().associate { result -> Pair(result, testOutcomes.withResult(result).total) }
-}
+import net.thucydides.core.reports.html.ResultCounts
 
 fun countByResultLabelFrom(testOutcomes: TestOutcomes): Map<String, Int> {
-    return TestResult.values().associate { result -> Pair(result.toString(), testOutcomes.withResult(result).total) }
-}
-
-fun percentageByResultFrom(testOutcomes: TestOutcomes): Map<TestResult, Int> {
-    return TestResult.values().associate { result ->
-        Pair(result, ((testOutcomes.withResult(result).total * 1.0 / testOutcomes.total) * 100).toInt())
+    return TestResult.values().associate { result -> Pair(result.toString(),
+                                                          ResultCounts.forOutcomesIn(testOutcomes).getOverallTestCount(result.toString()))
     }
 }
 
 fun percentageByResultLabelFrom(testOutcomes: TestOutcomes): Map<String, Int> {
     return TestResult.values().associate { result ->
-        Pair(result.toString(), ((testOutcomes.withResult(result).total * 1.0 / testOutcomes.total) * 100).toInt())
+        Pair(result.toString(), ResultCounts.forOutcomesIn(testOutcomes).getOverallTestPercentage(result.toString()))
     }
 }

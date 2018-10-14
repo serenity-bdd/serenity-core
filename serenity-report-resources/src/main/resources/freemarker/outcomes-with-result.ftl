@@ -37,7 +37,7 @@
         $('.scenario-result-table').DataTable({
 
             "order": [[0, "asc",], [3, "asc",]],
-            "pageLength": 10,
+            "pageLength": 25,
             "language": {
                 searchPlaceholder: "Filter",
                 search: ""
@@ -47,19 +47,10 @@
         // Results table
         $('#test-results-table').DataTable({
             "order": [[0, "asc",], [3, "asc",]],
-            "pageLength": 10,
-            "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]]
+            "pageLength": 100,
+            "lengthMenu": [[25, 50, 100, 200, -1], [25, 50, 100, 200, "All"]]
         });
 
-        $('#evidence-table').DataTable(
-                <#if evidence?size <= 10 >
-                    {
-                        searching: false,
-                        paging: false,
-                        info: false
-                    }
-                </#if>
-        );
     })
     ;
     </script>
@@ -139,11 +130,20 @@
                     <tr>
                         <td width="375px" valign="top">
                             <div class="test-count-summary">
-                                <div class="test-count-title">
-                                ${testOutcomes.total} test scenarios <#if (testOutcomes.hasDataDrivenTests())>(including ${testOutcomes.totalDataRows} rows of test data)</#if>
-                                <#if (csvReport! != '')> |
-                                    <a href="${csvReport}" title="Download CSV"> <i class="fa fa-download" title="Download CSV"></i></a>
-                                </#if>
+                                <div>
+                                    <#assign scenarioLabel = inflection.of(testOutcomes.totalTestScenarios).times("scenario").inPluralForm().toString() >
+
+                                    ${testOutcomes.totalMatchingScenarios} ${testOutcomes.resultTypeLabel} across ${testOutcomes.totalTestScenarios} ${scenarioLabel}
+
+                                    <#if (csvReport! != '')> |
+                                        <a href="${csvReport}" title="Download CSV"> <i class="fa fa-download" title="Download CSV"></i></a>
+                                    </#if>
+
+                                    <#if testOutcomes.resultFilterName != 'SUCCESS'>
+                                    <p class="report-info"><i class="fas fa-info-circle"></i> Note that results include data-driven scenarios containing ${testOutcomes.resultTypeLabel} ,
+                                        which may also contain results other than ${testOutcomes.resultTypeLabel} .</p>
+                                    </#if>
+
             <#assign successReport = reportName.withPrefix(currentTag).forTestResult("success") >
             <#assign brokenReport = reportName.withPrefix(currentTag).forTestResult("broken") >
             <#assign failureReport = reportName.withPrefix(currentTag).forTestResult("failure") >
@@ -418,55 +418,6 @@
                                                     </div>
                                                 </div>
 
-
-                                                <#if coverage?has_content>
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <h3>Functional Coverage Overview</h3>
-
-                                                        <#list coverage as tagCoverageByType>
-                                                            <#if tagCoverageByType.tagCoverage?has_content>
-                                                            <table class="table" id="${tagCoverageByType.tagType}">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>${tagCoverageByType.tagType}</th>
-                                                                        <th style=""width:7.5em;">Scenarios</th>
-                                                                        <th style=""width:7.5em;">% Pass</th>
-                                                                        <th style=""width:7.5em;">Result</th>
-                                                                        <th>Coverage</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <#assign tageCoverageEntries = tagCoverageByType.tagCoverage />
-                                                                <tbody>
-                                                                    <#list tageCoverageEntries as tagCoverage>
-                                                                    <tr>
-                                                                        <td><a href="${tagCoverage.report}">${tagCoverage.tagName}</a></td>
-                                                                        <td>${tagCoverage.testCount}</td>
-                                                                        <td>${tagCoverage.successRate}</td>
-                                                                        <td>${tagCoverage.resultIcon}</td>
-                                                                        <td>
-                                                                            <div class="progress">
-                                                                                <#list tagCoverage.coverageSegments as coverageSegment>
-                                                                                    <div class="progress-bar" role="progressbar"
-                                                                                         style="width: ${coverageSegment.percentage}%; background-color: ${coverageSegment.color}"
-                                                                                         aria-valuenow="${coverageSegment.count}"
-                                                                                         title="${coverageSegment.title}"
-                                                                                         aria-valuemin="0"
-                                                                                         aria-valuemax="100">
-                                                                                    </div>
-                                                                                </#list>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
-                                                                    </#list>
-                                                                </tbody>
-                                                            </table>
-                                                            </#if>
-                                                        </#list>
-                                                    </div>
-                                                </div>
-                                                </#if>
-
                                                 <#if badTestCount != 0>
                                                 <div class="row">
                                                     <div class="col-sm-6">
@@ -612,34 +563,6 @@
 
                                                     </div>
                                                 </div>
-
-
-
-                                                <#if evidence?has_content>
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <h3><i class="far fa-file"></i> Evidence</h3>
-                                                            <table id="evidence-table" class="table table-bordered">
-                                                                <thead>
-                                                                <tr>
-                                                                    <th>Scenario</th>
-                                                                    <th>Title</th>
-                                                                    <th>Details</th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                 <#list evidence as evidenceRecord>
-                                                                 <tr>
-                                                                     <td>${evidenceRecord.scenario}</td>
-                                                                     <td>${evidenceRecord.title}</td>
-                                                                     <td>${evidenceRecord.detailsLink}</td>
-                                                                 </tr>
-                                                                 </#list>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </#if>
                                             </div>
                                         </div>
                         </td>

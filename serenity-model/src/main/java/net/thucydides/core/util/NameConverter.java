@@ -223,6 +223,7 @@ public final class NameConverter {
         EXCLUDE_FROM_FILENAMES.put('#', "_hash_");
         EXCLUDE_FROM_FILENAMES.put('+', "_plus_");
         EXCLUDE_FROM_FILENAMES.put(' ', "_");
+        EXCLUDE_FROM_FILENAMES.put('-', "_");
     }
 
     public static String filesystemSafe(final String name) {

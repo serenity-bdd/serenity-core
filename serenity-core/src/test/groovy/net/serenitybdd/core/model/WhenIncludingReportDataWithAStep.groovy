@@ -62,7 +62,9 @@ class WhenIncludingReportDataWithAStep extends Specification {
                 testOutcome.lastStep().reportData == ReportData.withTitle("Some data").andContents("<some><data/></some>")
     }
 
-    def "Arbitrary report data can be added to a step from a file using the Serenity class"() {
+
+
+    def "Arbitrary report data can be added to a step from a downloadable file using the Serenity class"() {
         given:
         File outputDir = Files.createTempDirectory("out").toFile()
 
@@ -72,13 +74,33 @@ class WhenIncludingReportDataWithAStep extends Specification {
 
         when:
         def testDataSource = Paths.get(this.class.getResource("/testdata/report-data.xml").toURI())
-        Serenity.recordReportData().withTitle("Some data").fromFile(testDataSource)
+        Serenity.recordReportData().withTitle("Some data").downloadable().fromFile(testDataSource)
 
         then:
         TestOutcome testOutcome = StepEventBus.getEventBus().baseStepListener.testOutcomes.get(0)
-        testOutcome.lastStep().hasData() &&
-                testOutcome.lastStep().reportData == ReportData.withTitle("Some data").andContents("<some><more><data/></more></some>")
+        testOutcome.lastStep().hasData()
+        testOutcome.lastStep().reportData.path.startsWith("downloadable")
+        testOutcome.lastStep().reportData.path.endsWith("report-data.xml")
     }
+
+    def "Arbitrary report data can be recorded as evidence to appear at the feature level"() {
+        given:
+        File outputDir = Files.createTempDirectory("out").toFile()
+
+        StepEventBus.getEventBus().registerListener(new BaseStepListener(outputDir));
+        StepEventBus.getEventBus().testStarted("some test")
+        StepEventBus.getEventBus().stepStarted(ExecutedStepDescription.withTitle("some test"))
+
+        when:
+        def testDataSource = Paths.get(this.class.getResource("/testdata/report-data.xml").toURI())
+        Serenity.recordReportData().withTitle("Some data").downloadable().asEvidence().fromFile(testDataSource)
+
+        then:
+        TestOutcome testOutcome = StepEventBus.getEventBus().baseStepListener.testOutcomes.get(0)
+        testOutcome.lastStep().hasData()
+        testOutcome.lastStep().reportData.isEvidence
+    }
+
 
     def "Arbitrary report data can be added to a step from a file using the Serenity class using the encoding"() {
         given:

@@ -1,14 +1,13 @@
 package net.thucydides.core.reports;
 
 import net.thucydides.core.annotations.Feature;
-import net.thucydides.core.model.Story;
-import net.thucydides.core.model.TestOutcome;
-import net.thucydides.core.model.TestStepFactory;
+import net.thucydides.core.model.*;
 import org.joda.time.DateTime;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TestOutcomesBuilder {
@@ -43,6 +42,15 @@ public class TestOutcomesBuilder {
         return TestOutcomes.of(testOutcomeList);
     }
 
+    public TestOutcomes getDataDrivenResults() {
+        List<TestOutcome> testOutcomeList = new ArrayList<TestOutcome>();
+
+        Story story = Story.from(WidgetFeature.PurchaseNewWidget.class);
+        testOutcomeList.add(thatIsADataDrivenStory(story));
+        testOutcomeList.add(thatIsADataDrivenStory(story));
+
+        return TestOutcomes.of(testOutcomeList);
+    }
 
     public TestOutcome thatSucceedsFor(Story story, int stepCount) {
         TestOutcome testOutcome = TestOutcome.forTestInStory("a test", story);
@@ -59,6 +67,7 @@ public class TestOutcomesBuilder {
             testOutcome.recordStep(TestStepFactory.forAPendingTestStepCalled("Step " + i));
         }
         testOutcome.setStartTime(LATE_DATE);
+        testOutcome.setResult(TestResult.PENDING);
         return testOutcome;
     }
 
@@ -78,4 +87,25 @@ public class TestOutcomesBuilder {
         testOutcome.setStartTime(LATE_DATE);
         return testOutcome;
     }
+
+    public TestOutcome thatIsADataDrivenStory(Story story) {
+        TestOutcome testOutcome = TestOutcome.forTestInStory("a test", story);
+        testOutcome.addDataFrom(DataTable.withHeaders(Arrays.asList("A","B"))
+                .andRows(Arrays.asList(
+                        Arrays.asList("1","2"),
+                        Arrays.asList("3","4"),
+                        Arrays.asList("5","6"),
+                        Arrays.asList("7","8")
+                )).build());
+
+        testOutcome.getDataTable().getRows().get(0).setResult(TestResult.SUCCESS);
+        testOutcome.getDataTable().getRows().get(1).setResult(TestResult.SUCCESS);
+        testOutcome.getDataTable().getRows().get(2).setResult(TestResult.SUCCESS);
+        testOutcome.getDataTable().getRows().get(3).setResult(TestResult.FAILURE);
+
+        testOutcome.setStartTime(LATE_DATE);
+        testOutcome.setResult(TestResult.FAILURE);
+        return testOutcome;
+    }
+
 }

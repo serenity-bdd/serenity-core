@@ -15,6 +15,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reports.renderer.Asciidoc;
 import net.thucydides.core.reports.renderer.MarkupRenderer;
+import net.thucydides.core.requirements.reports.RenderMarkdown;
 import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
@@ -35,9 +36,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.apache.commons.lang3.StringUtils.abbreviate;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.apache.commons.lang3.StringUtils.trim;
+import static org.apache.commons.lang3.StringUtils.*;
 
 //////
 
@@ -156,6 +155,10 @@ public class Formatter  {
     }
 
 
+    public String renderHtmlEscapedDescription(final String text) {
+        return renderDescription(RenderMarkdown.preprocessMarkdownTables(withEscapedParameterFields(text)));
+    }
+
     public String renderDescription(final String text) {
         if (text == null) { return ""; }
 
@@ -166,25 +169,34 @@ public class Formatter  {
         } else if (format.equalsIgnoreCase(ASCIIDOC)) {  // Use ASCIIDOC if configured
             return renderAsciidoc(text.trim());
         } else if (format.equalsIgnoreCase(MARKDOWN) ||  (MarkdownRendering.configuredIn(environmentVariables).renderMarkdownFor(MarkdownRendering.RenderedElements.narrative)) ) {
-            return renderMarkdown(convertTablesToMarkdown(text.trim()));
+            return renderMarkdown(text.trim());
         } else {
             return addLineBreaks(text);
         }
+    }
+
+    private static String withEscapedParameterFields(String text) {
+        return text.replace("<","{").replace(">","}");
     }
 
     private String convertTablesToMarkdown(String text) {
         return MarkdownTables.convertTablesIn(text);
     }
 
-
     public String renderDescriptionWithEmbeddedResults(final String text, RequirementsOutcomes requirementsOutcomes) {
 
+        String textWithResults = RenderMarkdown.preprocessMarkdownTables(
+                                                textWithEmbeddedExampleResults(textWithEmbeddedResults(text, requirementsOutcomes), requirementsOutcomes));
+        return wrapTablesInDivs(renderDescription(textWithResults),"example-table example-table-in-summary");
+    }
+
+    public String renderTableDescription(final String text, RequirementsOutcomes requirementsOutcomes) {
         String textWithResults = textWithEmbeddedExampleResults(textWithEmbeddedResults(text, requirementsOutcomes), requirementsOutcomes);
-        return renderDescription(textWithResults);
+        return wrapTablesInDivs(renderDescription(textWithResults),"example-table-in-scenario");
     }
 
     private final Pattern RESULT_TOKEN = Pattern.compile("\\{result:(.*)!(.*)\\}'?");
-    private final Pattern EXAMPLE_RESULT_TOKEN = Pattern.compile("\\{example-result:(.*)!(.*)\\[(.*)\\]\\}'?");
+    private final Pattern EXAMPLE_RESULT_TOKEN = Pattern.compile("\\{example-result:(.*)!(.*)\\[(.*)\\]\\[(.*)\\]\\}'?");
 
     private String textWithEmbeddedResults(String text, RequirementsOutcomes requirementsOutcomes) {
 
@@ -197,13 +209,21 @@ public class Formatter  {
             String scenario= matcher.group(2);
 
             Optional<? extends TestOutcome> matchingOutcome = requirementsOutcomes.getTestOutcomes().getOutcomes().stream().filter(
-                                                     outcome -> outcome.getName().equalsIgnoreCase(scenario) && outcome.getUserStory().getName().equalsIgnoreCase(feature)
+                                                     outcome -> outcome.getName().equalsIgnoreCase(scenario)
+                                                                && outcome.getUserStory().getName().equalsIgnoreCase(feature)
             ).findFirst();
+
 
             matchingOutcome.ifPresent(testOutcome -> matcher.appendReplacement(newText, resultIconFormatter.forResult(testOutcome.getResult())));
         }
         matcher.appendTail(newText);
+
         return newText.toString();
+    }
+
+    private String wrapTablesInDivs(String markdownText, String cssClass) {
+        return markdownText.replace("<table>","<div class='" + cssClass + "'><table>")
+                           .replace("</table>", "</table></div>");
     }
 
     private String textWithEmbeddedExampleResults(String text, RequirementsOutcomes requirementsOutcomes) {
@@ -215,7 +235,8 @@ public class Formatter  {
         while (matcher.find()) {
             String feature= matcher.group(1);
             String scenario= matcher.group(2);
-            Integer exampleRow = Integer.parseInt(matcher.group(3));
+            int exampleTable = Integer.parseInt(matcher.group(3));
+            int exampleRow = Integer.parseInt(matcher.group(4));
 
             Optional<? extends TestOutcome> matchingOutcome = requirementsOutcomes.getTestOutcomes().getOutcomes().stream().filter(
                     outcome -> outcome.getName().equalsIgnoreCase(scenario) && outcome.getUserStory().getName().equalsIgnoreCase(feature)
@@ -223,8 +244,17 @@ public class Formatter  {
 
             matchingOutcome.ifPresent(
                     testOutcome -> {
-                        if (exampleRow < testOutcome.getTestSteps().size()) {
-                            matcher.appendReplacement(newText, resultIconFormatter.forResult(testOutcome.getTestSteps().get(exampleRow).getResult()));
+
+                        int dataRow = exampleRow;
+                        if (exampleTable > 0) {
+                            dataRow = testOutcome.getDataTable().getDataSetDescriptors().get(exampleTable - 1).getStartRow()
+                                      + testOutcome.getDataTable().getDataSetDescriptors().get(exampleTable - 1).getRowCount()
+                                      + exampleRow;
+                        }
+
+                        if (dataRow < testOutcome.getTestSteps().size()) {
+                            matcher.appendReplacement(newText,
+                                                      resultIconFormatter.forResult(testOutcome.getTestSteps().get(dataRow).getResult()));
                         }
                     });
         }
@@ -238,6 +268,10 @@ public class Formatter  {
 
     public static String addLineBreaks(final String text) {
         return (text != null) ? concatLines(text.trim(), "<br>") : "";
+    }
+
+    public static String addMarkdownLineBreaks(final String text) {
+        return (text != null) ? concatLines(text.trim(), "  ") : "";
     }
 
     public String convertAnyTables(String text) {

@@ -5,16 +5,19 @@ import net.thucydides.core.model.ReportType;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestStep;
 import net.thucydides.core.reports.TestOutcomes;
+import net.thucydides.core.reports.html.DescriptionSplitter;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.cucumber.FeatureFileScenarioOutcomes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ScenarioOutcomes {
+
     public static List<ScenarioOutcome> from(RequirementsOutcomes requirementsOutcomes) {
         if (requirementsOutcomes.getParentRequirement().isPresent() && isAFeature(requirementsOutcomes.getParentRequirement().get())) {
             return scenariosFrom(requirementsOutcomes.getParentRequirement().get(), requirementsOutcomes);
@@ -49,18 +52,6 @@ public class ScenarioOutcomes {
 
     }
 
-    private static ScenarioOutcome outcomeFrom(RequirementOutcome requirementOutcome) {
-
-        ReportNameProvider report = new ReportNameProvider();
-
-        return new ScenarioOutcome(requirementOutcome.getRequirement().getDisplayName(),
-                requirementOutcome.getRequirement().getType(),
-                requirementOutcome.getTestOutcomes().getResult(),
-                report.forRequirement(requirementOutcome.getRequirement()),
-                null,
-                0L);
-    }
-
     private static ScenarioOutcome outcomeFrom(TestOutcome testOutcome) {
 
         List<String> exampleTables = (testOutcome.isDataDriven()) ?
@@ -70,8 +61,9 @@ public class ScenarioOutcomes {
         String userStoryReportName = (testOutcome.getUserStory() != null) ? testOutcome.getUserStory().getReportName() : null;
 
         List<String> steps = (testOutcome.getDataDrivenSampleScenario() != null && !testOutcome.getDataDrivenSampleScenario().isEmpty()) ?
-                Collections.singletonList(testOutcome.getDataDrivenSampleScenario()) :
-                testOutcome.getTestSteps().stream().map(TestStep::getDescription).collect(Collectors.toList());
+                testStepsFromSampleScenario(testOutcome.getDataDrivenSampleScenario()) :
+                testOutcome.getTestSteps()
+                        .stream().map(step -> RenderMarkdown.convertEmbeddedTablesIn(step.getDescription())).collect(Collectors.toList());
 
 
         return new ScenarioOutcome(testOutcome.getTitleWithLinks(),
@@ -87,6 +79,12 @@ public class ScenarioOutcomes {
                 testOutcome.getDataTableRowCount(),
                 userStoryName,
                 userStoryReportName);
+    }
+
+    private static List<String> testStepsFromSampleScenario(String sampleDataDrivenScenario) {
+        return DescriptionSplitter.splitIntoSteps(sampleDataDrivenScenario).stream().map(
+                RenderMarkdown::convertEmbeddedTablesIn
+        ).collect(Collectors.toList());
     }
 
 }

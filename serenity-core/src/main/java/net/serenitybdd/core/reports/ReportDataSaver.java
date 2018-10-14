@@ -12,11 +12,13 @@ import java.util.Optional;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_ENCODING;
 
-public class ReportDataSaver implements WithTitle, AndContent {
+public class ReportDataSaver implements WithTitle, AndContent, FromFile {
 
 
     private final StepEventBus eventBus;
     private String title;
+    private boolean fileIsDownloadable = false;
+    private boolean isEvidence = false;
 
     public ReportDataSaver(StepEventBus eventBus) {
         this.eventBus = eventBus;
@@ -30,7 +32,7 @@ public class ReportDataSaver implements WithTitle, AndContent {
     @Override
     public void andContents(String contents) {
         eventBus.getBaseStepListener().latestTestOutcome().ifPresent(
-                outcome -> outcome.currentStep().withReportData(ReportData.withTitle(title).andContents(contents))
+                outcome -> outcome.currentStep().withReportData(ReportData.withTitle(title).andContents(contents).asEvidence(isEvidence))
         );
     }
 
@@ -46,7 +48,23 @@ public class ReportDataSaver implements WithTitle, AndContent {
         Optional<TestOutcome> outcome = eventBus.getBaseStepListener().latestTestOutcome();
 
         if (outcome.isPresent()) {
-            outcome.get().currentStep().withReportData(ReportData.withTitle(title).fromFile(source, encoding));
+            ReportData reportData = (fileIsDownloadable) ?
+                    ReportData.withTitle(title).fromPath(source).asEvidence(isEvidence) :
+                    ReportData.withTitle(title).fromFile(source, encoding).asEvidence(isEvidence);
+
+            outcome.get().currentStep().withReportData(reportData);
         }
+    }
+
+    @Override
+    public FromFile downloadable() {
+        this.fileIsDownloadable = true;
+        return this;
+    }
+
+    @Override
+    public FromFile asEvidence() {
+        this.isEvidence = true;
+        return this;
     }
 }

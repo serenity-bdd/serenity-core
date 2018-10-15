@@ -1281,6 +1281,11 @@ public enum ThucydidesSystemProperty {
     CUCUMBER_PRETTY_FORMAT_TABLES,
 
     /**
+     * How many days before a manually configured test result expires and goes back to pending.
+     */
+    MANUAL_RESULT_EXPIRY_LIMIT,
+
+    /**
      * The title to appear in the tag type table in the email reports
      */
     REPORT_TAGTYPE_TITLE

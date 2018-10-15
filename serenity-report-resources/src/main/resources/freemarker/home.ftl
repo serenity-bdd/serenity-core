@@ -529,7 +529,13 @@
                                                                         </td>
                                                                         <td>${tagCoverage.testCount}</td>
                                                                         <td>${tagCoverage.successRate}</td>
-                                                                        <td>${tagCoverage.resultIcon}</td>
+                                                                        <td>
+                                                                            <#if tagCoverage.testCount = 0>
+                                                                                <i class="fa fa-stop-circle-o pending-icon"></i>
+                                                                            <#else>
+                                                                                ${tagCoverage.resultIcon}
+                                                                            </#if>
+                                                                        </td>
                                                                         <td>
                                                                             <div class="progress">
                                                                                 <#list tagCoverage.coverageSegments as coverageSegment>

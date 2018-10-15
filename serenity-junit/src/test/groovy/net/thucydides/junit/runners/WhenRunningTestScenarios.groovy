@@ -140,8 +140,49 @@ class WhenRunningTestScenarios extends Specification {
         when:
             runner.run(new RunNotifier())
             def outcomes = runner.testOutcomes;
+            def manualOutcome = outcomes.find { outcome -> outcome.name == 'a_manual_test' }
         then:
-            outcomes[0].isManual()
+            manualOutcome.isManual()
+            manualOutcome.getResult() == TestResult.PENDING
+    }
+
+    def "should mark passing @manual tests as manual passing"() {
+            given:
+        def runner = new ThucydidesRunner(SampleManualScenario, webDriverFactory)
+        when:
+            runner.run(new RunNotifier())
+            def outcomes = runner.testOutcomes;
+            def manualOutcome = outcomes.find { outcome -> outcome.name == 'a_successful_manual_test' }
+        then:
+            omanualOutcome.isManual()
+            manualOutcome.getResult() == TestResult.SUCCESS
+    }
+
+    def "should mark failing @manual tests as manual failing"() {
+        given:
+        def runner = new ThucydidesRunner(SampleManualScenario, webDriverFactory)
+        when:
+        runner.run(new RunNotifier())
+        def outcomes = runner.testOutcomes;
+        def manualOutcome = outcomes.find { outcome -> outcome.name == 'a_failing_manual_test' }
+        then:
+        manualOutcome.isManual()
+        manualOutcome.getResult() == TestResult.FAILURE
+    }
+
+
+
+    def "failing @manual tests can have a reason"() {
+        given:
+        def runner = new ThucydidesRunner(SampleManualScenario, webDriverFactory)
+        when:
+        runner.run(new RunNotifier())
+        def outcomes = runner.testOutcomes;
+        def manualOutcome = outcomes.find { outcome -> outcome.name == 'a_failing_manual_test_with_a_message' }
+        then:
+        manualOutcome.isManual()
+        manualOutcome.getResult() == TestResult.FAILURE
+        manualOutcome.getTestFailureMessage() == "It doesn't work"
     }
 
     def "should mark @manual data-driven tests as manual"() {

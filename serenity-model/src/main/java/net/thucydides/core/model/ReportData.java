@@ -16,10 +16,15 @@ public class ReportData {
 
     public ReportData(String title, String contents, String path) {
 
+        this(title, contents, path, false);
+    }
+
+    public ReportData(String title, String contents, String path, Boolean isEvidence) {
+
         this.title = title;
         this.contents = contents;
         this.path = path;
-        this.isEvidence = false;
+        this.isEvidence = isEvidence;
         this.id = "report-data-" + UUID.randomUUID().toString();
     }
 
@@ -63,11 +68,10 @@ public class ReportData {
     }
 
     public ReportData asEvidence(Boolean isEvidence) {
-        this.isEvidence = isEvidence;
-        return this;
+        return new ReportData(title, contents, path, isEvidence);
     }
 
-    public boolean isEvidence() {
+    public Boolean isEvidence() {
         return isEvidence;
     }
 

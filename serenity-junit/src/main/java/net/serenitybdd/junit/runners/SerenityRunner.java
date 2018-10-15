@@ -25,9 +25,11 @@ import org.slf4j.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Consumer;
 
 import static net.serenitybdd.core.Serenity.*;
 import static net.thucydides.core.ThucydidesSystemProperty.*;
+import static net.thucydides.core.model.TestResult.SUCCESS;
 import static org.apache.commons.lang3.StringUtils.*;
 
 /**
@@ -417,8 +419,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
         }
 
         if (theMethod.isManual()) {
-            markAsManual(method);
-            notifier.fireTestIgnored(describeChild(method));
+            markAsManual(method).accept(notifier);
             return;
         } else if (theMethod.isPending()) {
             markAsPending(method);
@@ -510,11 +511,40 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
         StepEventBus.getEventBus().testFinished();
     }
 
-    private void markAsManual(FrameworkMethod method) {
+    private Consumer<RunNotifier> markAsManual(FrameworkMethod method) {
+        TestMethodConfiguration theMethod = TestMethodConfiguration.forMethod(method);
+
         testStarted(method);
         StepEventBus.getEventBus().testIsManual();
-        StepEventBus.getEventBus().testPending();
-        StepEventBus.getEventBus().testFinished();
+        StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
+                outcome -> outcome.setResult(theMethod.getManualResult())
+        );
+        switch(theMethod.getManualResult()) {
+            case SUCCESS:
+                StepEventBus.getEventBus().testFinished();
+                return (notifier -> notifier.fireTestFinished(Description.EMPTY));
+            case FAILURE:
+                Throwable failure = new ManualTestMarkedAsFailure(theMethod.getManualResultReason());
+                StepEventBus.getEventBus().testFailed(failure);
+                return (notifier -> notifier.fireTestFailure(
+                        new Failure(Description.createTestDescription(method.getDeclaringClass(), method.getName()),failure)));
+            case ERROR:
+            case COMPROMISED:
+            case UNSUCCESSFUL:
+                Throwable error = new ManualTestMarkedAsError(theMethod.getManualResultReason());
+                StepEventBus.getEventBus().testFailed(error);
+                return (notifier -> notifier.fireTestFailure(
+                        new Failure(Description.createTestDescription(method.getDeclaringClass(), method.getName()),error)));
+            case IGNORED:
+                StepEventBus.getEventBus().testIgnored();
+                return (notifier -> notifier.fireTestIgnored(Description.createTestDescription(method.getDeclaringClass(), method.getName())));
+            case SKIPPED:
+                StepEventBus.getEventBus().testSkipped();
+                return (notifier -> notifier.fireTestIgnored(Description.createTestDescription(method.getDeclaringClass(), method.getName())));
+            default:
+                StepEventBus.getEventBus().testPending();
+                return (notifier -> notifier.fireTestIgnored(Description.createTestDescription(method.getDeclaringClass(), method.getName())));
+        }
     }
 
     private void testStarted(FrameworkMethod method) {

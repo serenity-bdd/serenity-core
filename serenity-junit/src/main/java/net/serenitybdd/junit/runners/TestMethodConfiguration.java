@@ -2,6 +2,7 @@ package net.serenitybdd.junit.runners;
 
 import net.thucydides.core.annotations.Manual;
 import net.thucydides.core.annotations.Pending;
+import net.thucydides.core.model.TestResult;
 import org.junit.Ignore;
 import org.junit.runners.model.FrameworkMethod;
 
@@ -21,6 +22,14 @@ public class TestMethodConfiguration {
         return method.getAnnotation(Manual.class) != null;
     }
 
+    public TestResult getManualResult() {
+        return method.getAnnotation(Manual.class).result();
+    }
+
+    public String getManualResultLastTested() {
+        return method.getAnnotation(Manual.class).lastTested();
+    }
+
     public boolean isIgnored() {
         return method.getAnnotation(Ignore.class) != null;
     }
@@ -30,4 +39,7 @@ public class TestMethodConfiguration {
     }
 
 
+    public String getManualResultReason() {
+        return method.getAnnotation(Manual.class).reason();
+    }
 }

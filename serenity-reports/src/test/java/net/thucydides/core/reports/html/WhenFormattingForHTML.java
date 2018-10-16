@@ -610,6 +610,20 @@ public class WhenFormattingForHTML {
     }
 
     @Test
+    public void formatter_should_handle_jbehave_style_tables() {
+        String description = "Given a business with the following details:\n" +
+                "［| Name | Category |\n" +
+                "|---|---|\n" +
+                "| ACME | Casino |］\n";
+
+        assertThat(RenderMarkdown.preprocessMarkdownTables(description), equalTo(
+                "Given a business with the following details:\n\n\n" +
+                        "| Name | Category |\n" +
+                        "|---|---|\n" +
+                        "| ACME | Casino |"));
+    }
+
+    @Test
     public void should_split_up_given_when_then_statements() {
         String statement = "Given a calculator\n" +
                 "When I give the following instructions:\n" +

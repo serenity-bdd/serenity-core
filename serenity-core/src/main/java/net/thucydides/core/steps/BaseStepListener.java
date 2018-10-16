@@ -766,9 +766,9 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (shouldTakeScreenshots()) {
             try {
                 java.util.Optional<ScreenshotAndHtmlSource> screenshotAndHtmlSource = grabScreenshot(result);
-                if (screenshotAndHtmlSource.isPresent()) {
-                    recordScreenshotIfRequired(screenshotType, screenshotAndHtmlSource.get());
-                }
+                screenshotAndHtmlSource.ifPresent(
+                        screenshot -> recordScreenshotIfRequired(screenshotType, screenshot)
+                );
                 removeDuplicatedInitalScreenshotsIfPresent();
             } catch (ScreenshotException e) {
                 LOGGER.warn("Failed to take screenshot", e);

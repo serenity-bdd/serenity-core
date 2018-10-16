@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -15,10 +16,9 @@ public class RenderMarkdown {
     private final String originalText;
     private final List<String> lines;
 
-    private final static Pattern DATA_TABLE_LINE = Pattern.compile("\\s*\\|.*\\|\\s*");
-    private final static Pattern SEPARATOR_LINE = Pattern.compile("\\|(-|\\s|\\|)+\\|");
 
-    private final static Pattern INLINED_TABLE = Pattern.compile("[^\\r\\n\\t\\f\\v\\|](\\r?\\n)\\|");
+    private final static Pattern DATA_TABLE_LINE = Pattern.compile("\\s*(\\[|［)?(\\|.*\\|)(\\]|］?)\\s*");//"\\s*\\|.*\\|\\s*");
+    private final static Pattern SEPARATOR_LINE = Pattern.compile("\\|(-|\\s|\\|)+\\|");
 
 
     private RenderMarkdown(String text) {
@@ -31,15 +31,7 @@ public class RenderMarkdown {
     }
 
     public static String preprocessMarkdownTables(String text) {
-
         return new RenderMarkdown(text).injectNewLineBeforeTables();
-
-
-//        if (!INLINED_TABLE.matcher(text).find()) {
-//            return text;
-//        }
-//
-//        return INLINED_TABLE.matcher(text).replaceFirst(System.lineSeparator() + System.lineSeparator() + "|");
     }
 
     private String injectNewLineBeforeTables() {
@@ -97,7 +89,7 @@ public class RenderMarkdown {
                 blocks.add(currentBlock);
                 currentBlock = NarrativeBlock.forNormalText();
             }
-            currentBlock.add(line);
+            currentBlock.add(trimSquareBracketsFrom(line));
         }
         blocks.add(currentBlock);
 
@@ -130,13 +122,21 @@ public class RenderMarkdown {
         int row = lines.size() - 1;
         String line = lines.get(row);
         while (isDataTableLine(line) && row >= 0) {
-            tableLines.add(line);
+            tableLines.add(trimSquareBracketsFrom(line));
             line = lines.get(--row);
-            ;
         }
 
         Collections.reverse(tableLines);
         return tableLines;
+    }
+
+    private String trimSquareBracketsFrom(String line) {
+        Matcher tableLine = DATA_TABLE_LINE.matcher(line);
+        if (tableLine.matches()) {
+            return tableLine.group(2);
+        } else {
+            return line;
+        }
     }
 
     private boolean isRenderedMarkdownTableIn(List<String> lines) {

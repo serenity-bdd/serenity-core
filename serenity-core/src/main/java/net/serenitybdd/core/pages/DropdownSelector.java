@@ -22,12 +22,10 @@ class DropdownSelector {
     }
 
     public String visibleTextValue() {
-        if (webElementFacade.driverIsDisabled()) { return ""; }
-        webElementFacade.waitUntilElementAvailable();
         Select select = new Select(webElementFacade.getElement());
         return select.getFirstSelectedOption().getText();
-
     }
+
 
     public WebElementFacade byValue(String value) {
         if (webElementFacade.driverIsDisabled()) { return webElementFacade; }
@@ -39,8 +37,6 @@ class DropdownSelector {
     }
 
     public String value() {
-        if (webElementFacade.driverIsDisabled()) { return ""; }
-        webElementFacade.waitUntilElementAvailable();
         Select select = new Select(webElementFacade.getElement());
         return select.getFirstSelectedOption().getAttribute("value");
     }

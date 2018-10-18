@@ -10,9 +10,10 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.firefox.FirefoxProfileEnhancer;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.MutableCapabilities;
 
 import java.io.File;
 import java.util.HashMap;
@@ -29,8 +30,8 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
         this.firefoxProfileEnhancer = new FirefoxProfileEnhancer(environmentVariables);
     }
 
-    public DesiredCapabilities getCapabilities() {
-        DesiredCapabilities capabilities = DesiredCapabilities.firefox();
+    public MutableCapabilities getCapabilities() {
+        MutableCapabilities capabilities = new FirefoxOptions();
         capabilities.setCapability("firefox_profile",buildFirefoxProfile());
         if (ThucydidesSystemProperty.GECKO_FIREFOX_OPTIONS.isDefinedIn(environmentVariables)) {
             String firefoxOptionsInJsonFormat = ThucydidesSystemProperty.GECKO_FIREFOX_OPTIONS.from(environmentVariables);
@@ -43,7 +44,7 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
         return capabilities;
     }
 
-    private void addProxyConfigurationTo(DesiredCapabilities capabilities) {
+    private void addProxyConfigurationTo(MutableCapabilities capabilities) {
 
         String proxyUrl = ThucydidesSystemProperty.SERENITY_PROXY_HTTP.from(environmentVariables);
         String proxyPort = ThucydidesSystemProperty.SERENITY_PROXY_HTTP_PORT.from(environmentVariables);
@@ -76,7 +77,7 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
     private FirefoxProfile buildFirefoxProfile() {
         String profileName = ThucydidesSystemProperty.WEBDRIVER_FIREFOX_PROFILE.from(environmentVariables);
         FilePathParser parser = new FilePathParser(environmentVariables);
-        DesiredCapabilities firefoxCapabilities = DesiredCapabilities.firefox();
+        MutableCapabilities firefoxCapabilities = new FirefoxOptions();
         if (StringUtils.isNotEmpty(profileName)) {
             firefoxCapabilities.setCapability(FirefoxDriver.PROFILE, parser.getInstanciatedPath(profileName));
         }

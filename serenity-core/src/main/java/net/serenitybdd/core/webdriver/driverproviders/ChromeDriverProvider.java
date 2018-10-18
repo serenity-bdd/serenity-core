@@ -12,7 +12,7 @@ import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.MutableCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +42,7 @@ public class ChromeDriverProvider implements DriverProvider {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
-        DesiredCapabilities capabilities = requestedChromeCapabilities(options, environmentVariables);
+        MutableCapabilities capabilities = requestedChromeCapabilities(options, environmentVariables);
         driverProperties.registerCapabilities("chrome", capabilitiesToProperties(capabilities));
 
         try {
@@ -54,8 +54,8 @@ public class ChromeDriverProvider implements DriverProvider {
         }
     }
 
-    private DesiredCapabilities requestedChromeCapabilities(String options, EnvironmentVariables environmentVariables) {
-        DesiredCapabilities capabilities = new ChromeDriverCapabilities(environmentVariables, options).getCapabilities();
+    private MutableCapabilities requestedChromeCapabilities(String options, EnvironmentVariables environmentVariables) {
+        MutableCapabilities capabilities = new ChromeDriverCapabilities(environmentVariables, options).getCapabilities();
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         return enhancer.enhanced(capabilities, SupportedWebDriver.CHROME);
     }

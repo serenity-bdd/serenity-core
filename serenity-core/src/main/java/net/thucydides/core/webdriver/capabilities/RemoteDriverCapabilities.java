@@ -1,11 +1,11 @@
 package net.thucydides.core.webdriver.capabilities;
 
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.MutableCapabilities;
 
 public interface RemoteDriverCapabilities {
 
     String getUrl();
 
-    DesiredCapabilities getCapabilities(DesiredCapabilities capabilities);
+    MutableCapabilities getCapabilities(MutableCapabilities capabilities);
 
 }

@@ -1,6 +1,7 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.thucydides.core.util.EnvironmentVariables;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class ProvidedDriverCapabilities implements DriverCapabilitiesProvider {
@@ -12,8 +13,8 @@ public class ProvidedDriverCapabilities implements DriverCapabilitiesProvider {
     }
 
     @Override
-    public DesiredCapabilities getCapabilities() {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
+    public MutableCapabilities getCapabilities() {
+    	DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setJavascriptEnabled(true);
         return capabilities;
     }

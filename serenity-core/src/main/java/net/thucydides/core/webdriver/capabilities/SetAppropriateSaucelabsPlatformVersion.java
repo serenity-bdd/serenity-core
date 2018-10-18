@@ -4,7 +4,7 @@ import java.util.HashMap;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.MutableCapabilities;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -12,7 +12,7 @@ import java.util.Map;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 class SetAppropriateSaucelabsPlatformVersion {
-    private final DesiredCapabilities capabilities;
+    private final MutableCapabilities capabilities;
 
     private static String DEFAULT_PLATFORM = "Windows 10";
 
@@ -42,12 +42,12 @@ class SetAppropriateSaucelabsPlatformVersion {
         MAC_OS_VERSIONS_PER_SAFARI_VERSION.put("11", "macOS 10.13");
     }
 
-    public SetAppropriateSaucelabsPlatformVersion(DesiredCapabilities capabilities) {
+    public SetAppropriateSaucelabsPlatformVersion(MutableCapabilities capabilities) {
 
         this.capabilities = capabilities;
     }
 
-    public static SetAppropriateSaucelabsPlatformVersion inCapabilities(DesiredCapabilities capabilities) {
+    public static SetAppropriateSaucelabsPlatformVersion inCapabilities(MutableCapabilities capabilities) {
         return new SetAppropriateSaucelabsPlatformVersion(capabilities);
     }
 

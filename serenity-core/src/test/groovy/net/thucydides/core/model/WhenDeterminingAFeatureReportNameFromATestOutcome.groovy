@@ -42,4 +42,15 @@ class WhenDeterminingAFeatureReportNameFromATestOutcome extends Specification {
         reportName == Digest.ofTextValue("feature_reports_examples_sl_test_reports") + ".html"
     }
 
+    def "Should use parent directory with junit test results for class-based directory structures"() {
+        given:
+        Story story = new Story("net.serenitybdd.demos.todos.screenplay.features.accessing_the_application.LearnAboutTheApplication",
+                "Learn about the application",
+                null,
+                "accessing_the_application").asFeature()
+        when:
+        def reportName = story.getReportName()
+        then:
+        reportName == Digest.ofTextValue("feature_accessing_the_application_sl_learn_about_the_application") + ".html"
+    }
 }

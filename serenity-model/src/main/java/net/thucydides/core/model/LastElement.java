@@ -51,7 +51,6 @@ public class LastElement {
 
             pathElements.remove(pathElements.size() - 1);
             return (pathElements.isEmpty()) ? "" : pathElements.get(pathElements.size() - 1);
-//            return (pathElements.size() > 2) ? pathElements.get(pathElements.size() - 2) : "";
         }
     }
 
@@ -60,7 +59,8 @@ public class LastElement {
         @Override
         public String lastElementIn(String path) {
             List<String> pathElements = elementsOf(path);
-            return (pathElements.size() > 1) ? pathElements.get(pathElements.size() - 1) : "";
+            return (pathElements.isEmpty()) ? "" :  pathElements.get(pathElements.size() - 1);
+//            return (pathElements.size() > 1) ? pathElements.get(pathElements.size() - 1) : "";
         }
     }
 

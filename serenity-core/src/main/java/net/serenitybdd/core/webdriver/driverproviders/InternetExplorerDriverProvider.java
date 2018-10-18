@@ -52,22 +52,22 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         }
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-        MutableCapabilities MutableCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities(), IEXPLORER);
+        MutableCapabilities mutableCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities(), IEXPLORER);
 
-        SetProxyConfiguration.from(environmentVariables).in(MutableCapabilities);
+        SetProxyConfiguration.from(environmentVariables).in(mutableCapabilities);
 
-        driverProperties.registerCapabilities("iexplorer", capabilitiesToProperties(MutableCapabilities));
+        driverProperties.registerCapabilities("iexplorer", capabilitiesToProperties(mutableCapabilities));
 
         try {
-            return retryCreateDriverOnNoSuchSession(MutableCapabilities);
+            return retryCreateDriverOnNoSuchSession(mutableCapabilities);
         } catch (Exception couldNotStartServer) {
             LOGGER.warn("Failed to start the Internet driver service, using a native driver instead - " + couldNotStartServer.getMessage());
-            return new InternetExplorerDriver(MutableCapabilities);
+            return new InternetExplorerDriver(mutableCapabilities);
         }
     }
 
-    private WebDriver retryCreateDriverOnNoSuchSession(MutableCapabilities MutableCapabilities) throws IOException {
-        return new TryAtMost(3).toStartNewDriverWith(MutableCapabilities);
+    private WebDriver retryCreateDriverOnNoSuchSession(MutableCapabilities mutableCapabilities) throws IOException {
+        return new TryAtMost(3).toStartNewDriverWith(mutableCapabilities);
     }
 
     private class TryAtMost {

@@ -205,7 +205,6 @@ public class WhenRetrievingUserDetails {
                                                 .body("{\"firstName\": \"joe\",\"lastName\": \"smith\"}")
                         )
         );
-
         sam.should(
                 seeThatResponse(response -> response.statusCode(201))
         );

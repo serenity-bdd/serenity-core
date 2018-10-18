@@ -1,6 +1,5 @@
 package net.serenitybdd.core.webdriver.servicepools;
 
-import java.util.HashMap;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.Capabilities;

@@ -154,7 +154,7 @@ class WhenRunningTestScenarios extends Specification {
             def outcomes = runner.testOutcomes;
             def manualOutcome = outcomes.find { outcome -> outcome.name == 'a_successful_manual_test' }
         then:
-            omanualOutcome.isManual()
+            manualOutcome.isManual()
             manualOutcome.getResult() == TestResult.SUCCESS
     }
 
@@ -182,7 +182,7 @@ class WhenRunningTestScenarios extends Specification {
         then:
         manualOutcome.isManual()
         manualOutcome.getResult() == TestResult.FAILURE
-        manualOutcome.getTestFailureMessage() == "It doesn't work"
+        manualOutcome.getTestFailureMessage() == "Doesn't work"
     }
 
     def "should mark @manual data-driven tests as manual"() {

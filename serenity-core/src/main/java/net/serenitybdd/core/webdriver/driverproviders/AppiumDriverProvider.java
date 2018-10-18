@@ -13,7 +13,7 @@ import net.thucydides.core.webdriver.UnsupportedDriverException;
 import net.thucydides.core.webdriver.appium.AppiumConfiguration;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.MutableCapabilities;
 
 import java.net.URL;
 
@@ -52,7 +52,7 @@ public class AppiumDriverProvider implements DriverProvider {
 
     }
 
-    private DesiredCapabilities appiumCapabilities(String options, EnvironmentVariables environmentVariables) {
+    private MutableCapabilities appiumCapabilities(String options, EnvironmentVariables environmentVariables) {
         return AppiumConfiguration.from(environmentVariables).getCapabilities(options);
     }
 

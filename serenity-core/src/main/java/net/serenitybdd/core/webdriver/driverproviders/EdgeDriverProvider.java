@@ -12,7 +12,8 @@ import net.thucydides.core.webdriver.SupportedWebDriver;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.MutableCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,14 +45,14 @@ public class EdgeDriverProvider implements DriverProvider {
         }
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-        DesiredCapabilities desiredCapabilities = enhancer.enhanced(DesiredCapabilities.edge(), SupportedWebDriver.EDGE);
-        driverProperties.registerCapabilities("edge", capabilitiesToProperties(desiredCapabilities));
+        MutableCapabilities mutableCapabilities = enhancer.enhanced(new EdgeOptions(), SupportedWebDriver.EDGE);
+        driverProperties.registerCapabilities("edge", capabilitiesToProperties(mutableCapabilities));
 
         try {
-            return getDriverServicePool().newDriver(desiredCapabilities);
+            return getDriverServicePool().newDriver(mutableCapabilities);
         } catch (IOException couldNotStartServer) {
             LOGGER.warn("Failed to start the edge driver service, using a native driver instead",  couldNotStartServer.getMessage());
-            return new EdgeDriver(desiredCapabilities);
+            return new EdgeDriver(mutableCapabilities);
         }
     }
 }

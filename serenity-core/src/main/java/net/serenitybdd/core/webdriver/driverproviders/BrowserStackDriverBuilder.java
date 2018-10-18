@@ -4,7 +4,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.BrowserStackRemoteDriverCapabilities;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.MutableCapabilities;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -30,7 +30,7 @@ class BrowserStackDriverBuilder extends RemoteDriverBuilder {
     private Capabilities findbrowserStackCapabilities(String options) {
 
         String driver = getBrowserStackDriverFrom(environmentVariables);
-        DesiredCapabilities capabilities = remoteDriverCapabilities.forDriver(driver, options);
+        MutableCapabilities capabilities = remoteDriverCapabilities.forDriver(driver, options);
 
         return browserStackRemoteDriverCapabilities.getCapabilities(capabilities);
 

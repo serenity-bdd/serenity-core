@@ -5,7 +5,7 @@ import net.serenitybdd.core.webdriver.driverproviders.CapabilityValue;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.fixtureservices.FixtureService;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.MutableCapabilities;
 
 import java.util.Map;
 
@@ -25,12 +25,9 @@ public class CapabilityEnhancer {
         this.fixtureProviderService = fixtureProviderService;
     }
 
-    public DesiredCapabilities enhanced(DesiredCapabilities capabilities, SupportedWebDriver driver) {
+    public MutableCapabilities enhanced(MutableCapabilities capabilities, SupportedWebDriver driver) {
         CapabilitySet capabilitySet = new CapabilitySet(environmentVariables);
         addExtraCapabiities(capabilities, capabilitySet);
-        if (ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables,false)) {
-            capabilities.acceptInsecureCerts();
-        }
         addCapabilitiesFromFixtureServicesTo(capabilities);
 
         AddCustomDriverCapabilities.from(environmentVariables).forDriver(driver).to(capabilities);
@@ -38,14 +35,14 @@ public class CapabilityEnhancer {
         return capabilities;
     }
 
-    private void addExtraCapabiities(DesiredCapabilities capabilities, CapabilitySet capabilitySet) {
+    private void addExtraCapabiities(MutableCapabilities capabilities, CapabilitySet capabilitySet) {
         Map<String, Object> extraCapabilities = capabilitySet.getCapabilities();
         for(String capabilityName : extraCapabilities.keySet()) {
             capabilities.setCapability(capabilityName, extraCapabilities.get(capabilityName));
         }
     }
 
-    private void addCapabilitiesFromFixtureServicesTo(DesiredCapabilities capabilities) {
+    private void addCapabilitiesFromFixtureServicesTo(MutableCapabilities capabilities) {
         for(FixtureService fixtureService : fixtureProviderService.getFixtureServices()) {
             fixtureService.addCapabilitiesTo(capabilities);
         }

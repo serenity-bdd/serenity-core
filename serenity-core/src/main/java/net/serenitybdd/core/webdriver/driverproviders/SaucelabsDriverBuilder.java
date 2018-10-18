@@ -5,7 +5,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.SaucelabsRemoteDriverCapabilities;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.MutableCapabilities;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -48,7 +48,7 @@ class SaucelabsDriverBuilder extends RemoteDriverBuilder {
     private Capabilities findSaucelabsCapabilities(String options) {
 
         String driver = getSaucelabsDriverFrom(environmentVariables);
-        DesiredCapabilities capabilities = remoteDriverCapabilities.forDriver(driver, options);
+        MutableCapabilities capabilities = remoteDriverCapabilities.forDriver(driver, options);
 
         return saucelabsRemoteDriverCapabilities.getCapabilities(capabilities);
     }

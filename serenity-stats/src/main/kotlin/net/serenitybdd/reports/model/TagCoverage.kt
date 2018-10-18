@@ -8,6 +8,7 @@ import net.thucydides.core.reports.html.ReportNameProvider
 import net.thucydides.core.reports.html.ResultIconFormatter
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.NameConverter.humanize
+import org.apache.commons.lang3.StringUtils
 
 
 class TagCoverage(val environmentVariables: EnvironmentVariables, val testOutcomes: TestOutcomes) {
@@ -66,7 +67,7 @@ class CoverageByTagType(val tagType: String, val testOutcomes: TestOutcomes, tag
     }
 
     private fun noCoverageFor(tag: TestTag, coverageFromTestOutcomes: List<CoverageByTag>): Boolean =
-            coverageFromTestOutcomes.count { coverage -> coverage.tagName == tag.name } == 0
+            coverageFromTestOutcomes.count { coverage -> StringUtils.equalsIgnoreCase(coverage.tagName, tag.name) } == 0
 
     private fun coverageFor(testTag: TestTag): CoverageByTag {
         val testOutcomesForTag = testOutcomes.withTag(testTag)

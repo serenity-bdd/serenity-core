@@ -1,6 +1,8 @@
 package net.thucydides.core.model;
 
 import com.google.common.base.Splitter;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.util.List;
@@ -44,8 +46,12 @@ public class LastElement {
 
         @Override
         public String lastElementIn(String path) {
-            List<String> pathElements = elementsOf(withoutFeatureFileSuffixes(path));
-            return (pathElements.size() > 2) ? pathElements.get(pathElements.size() - 2) : "";
+            List<String> pathElements = new ArrayList<>(elementsOf(withoutFeatureFileSuffixes(path)));
+            if (pathElements.isEmpty()) { return ""; }
+
+            pathElements.remove(pathElements.size() - 1);
+            return (pathElements.isEmpty()) ? "" : pathElements.get(pathElements.size() - 1);
+//            return (pathElements.size() > 2) ? pathElements.get(pathElements.size() - 2) : "";
         }
     }
 

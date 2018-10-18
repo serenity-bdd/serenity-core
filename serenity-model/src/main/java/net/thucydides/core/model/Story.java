@@ -289,8 +289,8 @@ public class Story {
         String parentName = (getPath() != null) ? humanize(LastElement.of(getPath())) : null;
 
         return (isNotEmpty(parentName)) ?
-                TestTag.withName(parentName + "/" + storyName).andType(type.toString()) :
-                TestTag.withName(storyName).andType(type.toString());
+                TestTag.withName(parentName + "/" + storyName).andType(type) :
+                TestTag.withName(storyName).andType(type);
     }
 
 }

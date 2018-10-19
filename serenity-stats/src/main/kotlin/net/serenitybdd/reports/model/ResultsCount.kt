@@ -15,3 +15,9 @@ fun percentageByResultLabelFrom(testOutcomes: TestOutcomes): Map<String, Int> {
         Pair(result.toString(), ResultCounts.forOutcomesIn(testOutcomes).getOverallTestPercentage(result.toString()))
     }
 }
+
+fun percentageByResultFrom(testOutcomes: TestOutcomes): Map<String, Double> {
+    return TestResult.values().associate { result ->
+        Pair(result.toString(), ResultCounts.forOutcomesIn(testOutcomes).getPreciseTestPercentage(result.toString()))
+    }
+}

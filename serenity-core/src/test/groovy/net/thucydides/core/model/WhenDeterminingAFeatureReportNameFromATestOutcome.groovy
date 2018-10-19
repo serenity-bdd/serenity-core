@@ -1,6 +1,7 @@
 package net.thucydides.core.model
 
 import net.thucydides.core.digest.Digest
+import net.thucydides.core.webdriver.SerenityWebdriverManager
 import spock.lang.Specification
 
 class WhenDeterminingAFeatureReportNameFromATestOutcome extends Specification {
@@ -50,6 +51,7 @@ class WhenDeterminingAFeatureReportNameFromATestOutcome extends Specification {
                 "accessing_the_application").asFeature()
         when:
         def reportName = story.getReportName()
+
         then:
         reportName == Digest.ofTextValue("feature_accessing_the_application_sl_learn_about_the_application") + ".html"
     }

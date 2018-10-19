@@ -381,7 +381,7 @@
 </div>
 <div id="beforefooter"></div>
     <div id="bottomfooter">
-        <span class="version">Serenity BDD version ${serenityVersionNumber}</span>
+        <span class="version">Serenity BDD version ${serenityVersionNumber!"SNAPSHOT-BUILD"}</span>
     </div>
 
 

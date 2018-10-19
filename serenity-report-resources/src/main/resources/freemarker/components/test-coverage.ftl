@@ -11,31 +11,40 @@
     <#assign compromisedCount = requirementOutcome.testOutcomes.totalTests.withResult("compromised") >
     <#assign requirementsWithoutTestsCount = requirementOutcome.testOutcomes.totalTests.withResult("compromised") >
 
-    <#assign passing = requirementOutcome.testOutcomes.formatted.percentTests().withResult("SUCCESS")>
-    <#assign failure = requirementOutcome.testOutcomes.formatted.percentTests().withResult("FAILURE")>
-    <#assign error = requirementOutcome.testOutcomes.formatted.percentTests().withResult("ERROR")>
-    <#assign compromised = requirementOutcome.testOutcomes.formatted.percentTests().withResult("COMPROMISED")>
-    <#assign pending = requirementOutcome.testOutcomes.formatted.percentTests().withResult("PENDING")>
-    <#assign ignored = requirementOutcome.testOutcomes.formatted.percentTests().withResult("IGNORED")>
-    <#assign skipped = requirementOutcome.testOutcomes.formatted.percentTests().withResult("SKIPPED")>
-    <#assign indeterminate = requirementOutcome.testOutcomes.formatted.percentTests().withIndeterminateResult()>
+    <#assign passing = requirementOutcome.testOutcomes.formatted.percentTests().withPrecision(6).withResult("SUCCESS")>
+    <#assign failure = requirementOutcome.testOutcomes.formatted.percentTests().withPrecision(6).withResult("FAILURE")>
+    <#assign error = requirementOutcome.testOutcomes.formatted.percentTests().withPrecision(6).withResult("ERROR")>
+    <#assign compromised = requirementOutcome.testOutcomes.formatted.percentTests().withPrecision(6).withResult("COMPROMISED")>
+    <#assign pending = requirementOutcome.testOutcomes.formatted.percentTests().withPrecision(6).withResult("PENDING")>
+    <#assign ignored = requirementOutcome.testOutcomes.formatted.percentTests().withPrecision(6).withResult("IGNORED")>
+    <#assign skipped = requirementOutcome.testOutcomes.formatted.percentTests().withPrecision(6).withResult("SKIPPED")>
+    <#assign indeterminate = requirementOutcome.testOutcomes.formatted.percentTests().withPrecision(6).withIndeterminateResult()>
+
+    <#assign passingLabel = requirementOutcome.testOutcomes.formatted.percentTests().withPrecision(1).withResult("SUCCESS")>
+    <#assign failureLabel = requirementOutcome.testOutcomes.formatted.percentTests().withPrecision(1).withResult("FAILURE")>
+    <#assign errorLabel = requirementOutcome.testOutcomes.formatted.percentTests().withPrecision(1).withResult("ERROR")>
+    <#assign compromisedLabel = requirementOutcome.testOutcomes.formatted.percentTests().withPrecision(1).withResult("COMPROMISED")>
+    <#assign pendingLabel = requirementOutcome.testOutcomes.formatted.percentTests().withPrecision(1).withResult("PENDING")>
+    <#assign ignoredLabel = requirementOutcome.testOutcomes.formatted.percentTests().withPrecision(1).withResult("IGNORED")>
+    <#assign skippedLabel = requirementOutcome.testOutcomes.formatted.percentTests().withPrecision(1).withResult("SKIPPED")>
+    <#assign indeterminateLabel= requirementOutcome.testOutcomes.formatted.percentTests().withPrecision(1).withIndeterminateResult()>
 
     <#assign tests = inflection.of(requirementOutcome.testOutcomes.total).times("test") >
 
     <#assign overviewCaption =
 "  - Total tests: ${totalCount}
-  - Passing tests: ${successCount} (${passing})
-  - Failing tests: ${failureCount} (${failure})
-  - Tests with errors: ${errorCount} (${error})
-  - Compromised tests ${compromisedCount} (${compromised})
-  - Pending tests: ${pendingCount} (${pending})
-  - Ignored or skipped tests: ${ignoredCount} (${ignored})"
+  - Passing tests: ${successCount} (${passingLabel})
+  - Failing tests: ${failureCount} (${failureLabel})
+  - Tests with errors: ${errorCount} (${errorLabel})
+  - Compromised tests ${compromisedCount} (${compromisedLabel})
+  - Pending tests: ${pendingCount} (${pendingLabel})
+  - Ignored or skipped tests: ${ignoredCount} (${ignoredLabel})"
     >
 
 <table>
     <tr>
         <td width="40px" style="padding-top:4px;">
-            <div class="small" style="text-align:right;">${passing}</div>
+            <div class="small" style="text-align:right;">${passingLabel}</div>
         </td>
         <td style="min-width:12.5em;">
             <div class="progress">

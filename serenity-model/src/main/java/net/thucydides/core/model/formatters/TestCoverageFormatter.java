@@ -50,8 +50,15 @@ public class TestCoverageFormatter {
 
     public abstract class FormattedCoverage extends TestOutcomeCounter {
 
+        int precision = 1;
+
         public FormattedCoverage(TestType testType) {
             super(testType);
+        }
+
+        public FormattedCoverage withPrecision(int precision) {
+            this.precision = precision;
+            return this;
         }
 
         public String withResult(String expectedResult) {
@@ -62,7 +69,7 @@ public class TestCoverageFormatter {
         protected abstract double percentageWithResult(TestResult expectedResult);
 
         public String withResult(TestResult expectedResult) {
-            return withResult(expectedResult, 1);
+            return withResult(expectedResult, precision);
         }
 
         public String withResult(TestResult expectedResult, int precision) {
@@ -70,17 +77,17 @@ public class TestCoverageFormatter {
         }
 
         public String withIndeterminateResult() {
-            return formatter.percentage(1 - percentageDeterminedResult(), 1);
+            return formatter.percentage(1 - percentageDeterminedResult(), precision);
         }
 
         public String withFailureOrError() {
             return formatter.percentage(percentageWithResult(TestResult.FAILURE)
                     + percentageWithResult(TestResult.ERROR)
-                    + percentageWithResult(TestResult.COMPROMISED), 1);
+                    + percentageWithResult(TestResult.COMPROMISED), precision);
         }
 
         public String withSkippedOrIgnored() {
-            return formatter.percentage(percentageWithResult(TestResult.SKIPPED) + percentageWithResult(TestResult.IGNORED),1);
+            return formatter.percentage(percentageWithResult(TestResult.SKIPPED) + percentageWithResult(TestResult.IGNORED),precision);
         }
     }
 

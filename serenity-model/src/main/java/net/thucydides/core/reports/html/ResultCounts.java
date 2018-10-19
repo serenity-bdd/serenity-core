@@ -80,6 +80,10 @@ public class ResultCounts {
         return  (int) Math.round(getOverallTestCount(result) * 100.0 / totalTestCount);
     }
 
+    public Double getPreciseTestPercentage(String result) {
+        return  getOverallTestCount(result) * 100.0 / totalTestCount;
+    }
+
     public static ResultCounts forOutcomesIn(TestOutcomes testOutcomes) {
         return new ResultCounts(testOutcomes);
     }

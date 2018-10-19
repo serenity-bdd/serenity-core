@@ -568,7 +568,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
-                <span class="version">Serenity BDD version ${serenityVersionNumber}</span>
+                <span class="version">Serenity BDD version ${serenityVersionNumber!"SNAPSHOT-BUILD"}</span>
             </div>
         </div>
     </div>

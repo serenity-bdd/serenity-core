@@ -33,9 +33,7 @@
 
     <script class="code" type="text/javascript">$(document).ready(function () {
 
-
         $('.scenario-result-table').DataTable({
-
             "order": [[0, "asc",], [3, "asc",]],
             "pageLength": 10,
             "language": {
@@ -52,11 +50,11 @@
         });
 
         $('#evidence-table').DataTable({
-                <#if evidence?size <= 10 >
-                        searching: false,
-                        paging:false,
-                        info: false
-                </#if>
+            <#if evidence?size <= 10 >
+                    searching: false,
+                    paging:false,
+                    info: false
+            </#if>
         });
 
         $(".feature-coverage-table").DataTable({
@@ -71,49 +69,9 @@
             language: {
                 searchPlaceholder: "Filter",
                 search: ""
-            },<script class="code" type="text/javascript">$(document).ready(function () {
-
-
-            $('.scenario-result-table').DataTable({
-
-                "order": [[0, "asc",], [3, "asc",]],
-                "pageLength": 10,
-                "language": {
-                    searchPlaceholder: "Filter",
-                    search: ""
-                }
-            });
-
-            // Results table
-            $('#test-results-table').DataTable({
-                "order": [[0, "asc",], [3, "asc",]],
-                "pageLength": 10,
-                "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]]
-            });
-
-            $('#evidence-table').DataTable({
-                <#if evidence?size <= 10 >
-                        searching: false,
-                        paging:false,
-                        info: false
-                </#if>
-            });
-
-            $(".feature-coverage-table").DataTable({
-                searching: false,
-                paging: false,
-                info: false
-            });
-
-            $(".feature-coverage-table-with-pagination").DataTable({
-                order: [[0, "asc",]],
-                pageLength: 10,
-                language: {
-                    searchPlaceholder: "Filter",
-                    search: ""
-                },
-            });
+            }
         });
+    });
     </script>
 </head>
 

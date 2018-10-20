@@ -64,7 +64,7 @@ class WhenDefiningCustomDriverPropertiesInTheSystemProperties extends Specificat
         and:
         ChromeOptions options = new ChromeOptions()
         when:
-        capabilities = AddCustomDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(options)
+        def capabilities = AddCustomDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(options)
         then:
         capabilities.getCapability("takesScreenshot") == true &&
         capabilities.getCapability("ie.ensureCleanSession") == true

@@ -34,7 +34,7 @@ public class GeckoDriverServiceExecutable {
         return DriverServiceExecutable.called(driverName)
                 .withSystemProperty(WEBDRIVER_GECKO_DRIVER.getPropertyName())
                 .usingEnvironmentVariables(environmentVariables)
-                .downloadableFrom("https://github.com/jgraham/wires")
+                .downloadableFrom("https://github.com/mozilla/geckodriver/releases")
                 .asAFile();
     }
 

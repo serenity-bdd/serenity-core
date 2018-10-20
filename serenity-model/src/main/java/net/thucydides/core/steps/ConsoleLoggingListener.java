@@ -4,7 +4,6 @@ package net.thucydides.core.steps;
 import net.serenitybdd.core.strings.Joiner;
 import net.serenitybdd.core.collect.NewList;
 import com.google.inject.Inject;
-//import net.serenitybdd.core.Serenity;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.logging.LoggingLevel;
 import net.thucydides.core.model.DataTable;

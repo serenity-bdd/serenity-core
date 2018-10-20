@@ -2485,7 +2485,7 @@ public class TestOutcome {
     }
 
     public List<ReportData> getEvidence() {
-        return testSteps.stream().filter(
+        return getFlattenedTestSteps().stream().filter(
                 step -> step.getReportData() != null && step.getReportData().isEvidence())
                 .map(TestStep::getReportData)
                 .collect(Collectors.toList());

@@ -149,7 +149,6 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
                 return webDriverFactory.newWebdriverInstance(driverClass, options, environmentVariables);
             }
         } catch (UnsupportedDriverException e) {
-            LOGGER.error("FAILED TO CREATE NEW WEBDRIVER_DRIVER INSTANCE " + driverClass + ": " + e.getMessage(), e);
             throw new UnsupportedDriverException("Could not instantiate " + driverClass, e);
         }
     }

@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver;
 
+import com.google.common.eventbus.EventBus;
 import io.appium.java_client.android.AndroidDriver;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.pages.DefaultTimeouts;
@@ -302,8 +303,8 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         	if (areWindowHandlesAllowed(getDriverInstance()) &&
                     getDriverInstance().getWindowHandles() != null && getDriverInstance().getWindowHandles().size() == 1){
                 this.quit();
-                webDriverFactory.shutdownFixtureServices();
             } else{
+        	    WebDriverInstanceEvents.bus().notifyOf(WebDriverLifecycleEvent.CLOSE).forDriver(getDriverInstance());
                 getDriverInstance().close();
             }
         }
@@ -317,7 +318,9 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
         if (proxyInstanciated()) {
             try {
                 getDriverInstance().quit();
+                webDriverFactory.shutdownFixtureServices();
                 webDriverFactory.releaseTimoutFor(getDriverInstance());
+
             } catch (WebDriverException e) {
                 LOGGER.warn("Error while quitting the driver (" + e.getMessage() + ")");
             }

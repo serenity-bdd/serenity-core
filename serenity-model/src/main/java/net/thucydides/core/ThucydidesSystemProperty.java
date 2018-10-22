@@ -1242,6 +1242,8 @@ public enum ThucydidesSystemProperty {
 
     FIREFOX_LOG_LEVEL,
 
+    APPIUM_DEVICE_NAME("appium.deviceName"),
+    APPIUM_DEVICE_NAMES("appium.deviceNames"),
     /**
      * Set to true to activate the AcceptInsecureCertificates options for Chrome and Firefox.
      */

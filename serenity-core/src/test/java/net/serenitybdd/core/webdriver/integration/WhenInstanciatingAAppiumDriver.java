@@ -40,22 +40,22 @@ public class WhenInstanciatingAAppiumDriver {
         }
     }
 
-    @Test(expected = UnsupportedDriverException.class)
-    public void should_start_mobile_browser_on_appium() {
-        environmentVariables.setProperty("appium.browserName", "Browser");
-        environmentVariables.setProperty("appium.platformName", "Android");
-        environmentVariables.setProperty("appium.deviceName", "emulator-5554");
-        new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
-    }
-
-    @Test(expected = UnsupportedDriverException.class)
-    public void should_ignoreWhenInstanciatingAAppiumDriver_browser_dimensions_on_appium() {
-        environmentVariables.setProperty("appium.browserName", "Browser");
-        environmentVariables.setProperty("appium.platformName", "Android");
-        environmentVariables.setProperty("appium.deviceName", "emulator-5554");
-        environmentVariables.setProperty("serenity.browser.width", "1280");
-        environmentVariables.setProperty("serenity.browser.height", "1024");
-        new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
-    }
+//    @Test(expected = UnsupportedDriverException.class)
+//    public void should_start_mobile_browser_on_appium() {
+//        environmentVariables.setProperty("appium.browserName", "Browser");
+//        environmentVariables.setProperty("appium.platformName", "Android");
+//        environmentVariables.setProperty("appium.deviceName", "emulator-5554");
+//        new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
+//    }
+//
+//    @Test(expected = UnsupportedDriverException.class)
+//    public void should_ignoreWhenInstanciatingAAppiumDriver_browser_dimensions_on_appium() {
+//        environmentVariables.setProperty("appium.browserName", "Browser");
+//        environmentVariables.setProperty("appium.platformName", "Android");
+//        environmentVariables.setProperty("appium.deviceName", "emulator-5554");
+//        environmentVariables.setProperty("serenity.browser.width", "1280");
+//        environmentVariables.setProperty("serenity.browser.height", "1024");
+//        new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
+//    }
 
 }

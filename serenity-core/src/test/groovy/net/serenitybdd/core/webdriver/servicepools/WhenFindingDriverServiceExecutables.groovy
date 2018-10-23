@@ -39,33 +39,6 @@ class WhenFindingDriverServiceExecutables extends Specification {
         gitExe.getAbsolutePath() == configuredPath
     }
 
-    def "should report a sensible error if no binary is found"() {
-        when:
-        DriverServiceExecutable.called("myexe")
-                .withSystemProperty("my.exe.path")
-                .reportMissingBinary()
-                .downloadableFrom("the internet")
-                .asAFile()
-
-        then:
-        IllegalStateException e = thrown();
-        e.message == "The path to the myexe driver executable must be set by the my.exe.path system property; for more information, see the internet. The latest version can be downloaded from the internet"
-    }
-
-    def "should be able to document the driver web site"() {
-        when:
-        DriverServiceExecutable.called("myexe")
-                .withSystemProperty("my.exe.path")
-                .documentedAt("the website")
-                .reportMissingBinary()
-                .downloadableFrom("the internet")
-                .asAFile()
-
-        then:
-        IllegalStateException e = thrown();
-        e.message == "The path to the myexe driver executable must be set by the my.exe.path system property; for more information, see the website. The latest version can be downloaded from the internet"
-    }
-
     def "should be able to configure OS-specific drivers"() {
         given:
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables()

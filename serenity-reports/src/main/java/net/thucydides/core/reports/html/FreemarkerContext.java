@@ -125,8 +125,7 @@ public class FreemarkerContext {
             testOutcome ->  addTags(testOutcome, context, null)
         );
 
-        context.put("tagResults",TagResults.from(testOutcomes).forAllTags());
-
+        context.put("tagResults",TagResults.from(testOutcomes).groupedByType());
 
         return context;
     }

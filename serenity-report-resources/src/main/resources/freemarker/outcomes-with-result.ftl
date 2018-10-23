@@ -133,14 +133,17 @@
                                 <div>
                                     <#assign scenarioLabel = inflection.of(testOutcomes.totalTestScenarios).times("scenario").inPluralForm().toString() >
 
-                                    ${testOutcomes.totalMatchingScenarios} ${testOutcomes.resultTypeLabel} across ${testOutcomes.totalTestScenarios} ${scenarioLabel}
+                                ${testOutcomes.totalMatchingScenarios} ${testOutcomes.resultTypeLabel}
+                                    across ${testOutcomes.totalTestScenarios} ${scenarioLabel}
 
                                     <#if (csvReport! != '')> |
-                                        <a href="${csvReport}" title="Download CSV"> <i class="fa fa-download" title="Download CSV"></i></a>
+                                        <a href="${csvReport}" title="Download CSV"> <i class="fa fa-download"
+                                                                                        title="Download CSV"></i></a>
                                     </#if>
 
                                     <#if testOutcomes.resultFilterName != 'SUCCESS'>
-                                    <p class="report-info"><i class="fas fa-info-circle"></i> Note that results include data-driven scenarios containing ${testOutcomes.resultTypeLabel} ,
+                                    <p class="report-info"><i class="fas fa-info-circle"></i> Note that results include
+                                        data-driven scenarios containing ${testOutcomes.resultTypeLabel} ,
                                         which may also contain results other than ${testOutcomes.resultTypeLabel} .</p>
                                     </#if>
 
@@ -199,53 +202,54 @@
                                                 <div class="row">
                                                     <div class="col-sm-4">
                                                         <#if testOutcomes.total != 0>
-                                                        <div style="width:300px;" class="chart-container ${graphType}">
-                                                            <div class="ct-chart ct-square"></div>
-                                                        </div>
-                                                        <script>
+                                                            <div style="width:300px;"
+                                                                 class="chart-container ${graphType}">
+                                                                <div class="ct-chart ct-square"></div>
+                                                            </div>
+                                                            <script>
 
-                                                            var labels = ${testLabels};
-                                                            // Our series array that contains series objects or in this case series data arrays
+                                                                var labels = ${testLabels};
+                                                                // Our series array that contains series objects or in this case series data arrays
 
-                                                            var series = ${testResultData};
+                                                                var series = ${testResultData};
 
-                                                            // As options we currently only set a static size of 300x200 px. We can also omit this and use aspect ratio containers
-                                                            // as you saw in the previous example
-                                                            var options = {
-                                                                width: 350,
-                                                                height: 300
-                                                            };
-
-
-                                                            new Chartist.Pie('.ct-chart', {
-                                                                series: series,
-                                                                labels: labels
-                                                            }, {
-                                                                plugins: [ Chartist.plugins.tooltip() ],
-                                                                donut: true,
-                                                                donutWidth: 60,
-                                                                donutSolid: true,
-                                                                startAngle: 270,
-                                                                showLabel: true
-                                                            }, options);
+                                                                // As options we currently only set a static size of 300x200 px. We can also omit this and use aspect ratio containers
+                                                                // as you saw in the previous example
+                                                                var options = {
+                                                                    width: 350,
+                                                                    height: 300
+                                                                };
 
 
-                                                            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                                                                 new Chartist.Pie('.ct-chart', {
                                                                     series: series,
                                                                     labels: labels
                                                                 }, {
-                                                                    plugins: [ Chartist.plugins.tooltip() ],
+                                                                    plugins: [Chartist.plugins.tooltip()],
                                                                     donut: true,
                                                                     donutWidth: 60,
                                                                     donutSolid: true,
                                                                     startAngle: 270,
                                                                     showLabel: true
                                                                 }, options);
-                                                            });
 
 
-                                                        </script>
+                                                                $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                                                                    new Chartist.Pie('.ct-chart', {
+                                                                        series: series,
+                                                                        labels: labels
+                                                                    }, {
+                                                                        plugins: [Chartist.plugins.tooltip()],
+                                                                        donut: true,
+                                                                        donutWidth: 60,
+                                                                        donutSolid: true,
+                                                                        startAngle: 270,
+                                                                        showLabel: true
+                                                                    }, options);
+                                                                });
+
+
+                                                            </script>
                                                         </#if>
                                                     </div>
                                                     <div class="col-sm-8">
@@ -267,7 +271,8 @@
                                                             <tr>
                                                                 <#if (resultCounts.getOverallTestCount("success") != 0)>
                                                                     <td class="aggregate-result-count">
-                                                                        <a href="${successReport}"><i class='fa fa-check-circle-o success-icon'></i>&nbsp;Passing</a>
+                                                                        <a href="${successReport}"><i
+                                                                                class='fa fa-check-circle-o success-icon'></i>&nbsp;Passing</a>
                                                                     </td>
                                                                 <#else>
                                                                     <td class="aggregate-result-count"><i
@@ -286,7 +291,8 @@
                                                             <tr>
                                                                 <#if (resultCounts.getOverallTestCount("pending") != 0)>
                                                                     <td class="aggregate-result-count">
-                                                                        <a href="${pendingReport}"><i class='fa fa-stop-circle-o pending-icon'></i>&nbsp;Pending</a>
+                                                                        <a href="${pendingReport}"><i
+                                                                                class='fa fa-stop-circle-o pending-icon'></i>&nbsp;Pending</a>
                                                                     </td>
                                                                 <#else>
                                                                     <td class="aggregate-result-count"><i
@@ -305,7 +311,8 @@
                                                             <tr>
                                                                 <#if (resultCounts.getOverallTestCount("ignored") != 0)>
                                                                     <td class="aggregate-result-count">
-                                                                        <a href="${ignoredReport}"><i class='fa fa-ban ignored-icon'></i>&nbsp;Ignored</a>
+                                                                        <a href="${ignoredReport}"><i
+                                                                                class='fa fa-ban ignored-icon'></i>&nbsp;Ignored</a>
                                                                     </td>
                                                                 <#else>
                                                                 <td class="aggregate-result-count"><i
@@ -324,7 +331,8 @@
                                                             <tr>
                                                                 <#if (resultCounts.getOverallTestCount("skipped") != 0)>
                                                                     <td class="aggregate-result-count">
-                                                                        <a href="${skippedReport}"><i class='fa fa-fast-forward skip-icon'></i>&nbsp;Skipped</a>
+                                                                        <a href="${skippedReport}"><i
+                                                                                class='fa fa-fast-forward skip-icon'></i>&nbsp;Skipped</a>
                                                                     </td>
                                                                 <#else>
                                                                 <td class="aggregate-result-count"><i
@@ -342,19 +350,27 @@
                                                             </tr>
                                                             <tr>
                                                                 <#if resultCounts.hasManualTests() >
-                                                                    <td colspan="7"><a href="${relativeLink}${brokenReport}"><i class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a></td>
+                                                                    <td colspan="7"><a
+                                                                            href="${relativeLink}${brokenReport}"><i
+                                                                            class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                    </td>
                                                                 <#else>
-                                                                    <td colspan="3"><a href="${relativeLink}${brokenReport}"><i class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a></td>
+                                                                    <td colspan="3"><a
+                                                                            href="${relativeLink}${brokenReport}"><i
+                                                                            class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                    </td>
                                                                 </#if>
                                                             </tr>
                                                             <tr>
                                                                 <#if (resultCounts.getOverallTestCount("failure") != 0)>
                                                                     <td class="aggregate-result-count indented-error-category">
-                                                                        <a href="${failureReport}"><i class='fa fa-times-circle failure-icon'></i>&nbsp;Failed</a>
+                                                                        <a href="${failureReport}"><i
+                                                                                class='fa fa-times-circle failure-icon'></i>&nbsp;Failed</a>
                                                                     </td>
                                                                 <#else>
-                                                                <td class="aggregate-result-count indented-error-category"><i
-                                                                        class='fa fa-times-circle failure-icon'></i>&nbsp;Failed
+                                                                <td class="aggregate-result-count indented-error-category">
+                                                                    <i
+                                                                            class='fa fa-times-circle failure-icon'></i>&nbsp;Failed
                                                                 </td>
                                                                 </#if>
                                                                 <td class="automated-stats">${resultCounts.getAutomatedTestCount("failure")}</td>
@@ -368,11 +384,13 @@
                                                             <tr>
                                                                 <#if (resultCounts.getOverallTestCount("error") != 0)>
                                                                     <td class="aggregate-result-count indented-error-category">
-                                                                        <a href="${errorReport}"><i class='fa fa-exclamation-triangle error-icon'></i>&nbsp;Broken</a>
+                                                                        <a href="${errorReport}"><i
+                                                                                class='fa fa-exclamation-triangle error-icon'></i>&nbsp;Broken</a>
                                                                     </td>
                                                                 <#else>
-                                                                <td class="aggregate-result-count indented-error-category"><i
-                                                                        class='fa fa-exclamation-triangle error-icon'></i>&nbsp;Broken
+                                                                <td class="aggregate-result-count indented-error-category">
+                                                                    <i
+                                                                            class='fa fa-exclamation-triangle error-icon'></i>&nbsp;Broken
                                                                 </td>
                                                                 </#if>
                                                                 <td class="automated-stats">${resultCounts.getAutomatedTestCount("error")}</td>
@@ -386,11 +404,13 @@
                                                             <tr>
                                                                 <#if (resultCounts.getOverallTestCount("compromised") != 0)>
                                                                     <td class="aggregate-result-count indented-error-category">
-                                                                        <a href="${compromisedReport}"><i class='fa fa-chain-broken compromised-icon'></i>&nbsp;Compromised</a>
+                                                                        <a href="${compromisedReport}"><i
+                                                                                class='fa fa-chain-broken compromised-icon'></i>&nbsp;Compromised</a>
                                                                     </td>
                                                                 <#else>
-                                                                <td class="aggregate-result-count indented-error-category"><i
-                                                                        class='fa fa-chain-broken compromised-icon'></i>&nbsp;Compromised
+                                                                <td class="aggregate-result-count indented-error-category">
+                                                                    <i
+                                                                            class='fa fa-chain-broken compromised-icon'></i>&nbsp;Compromised
                                                                 </td>
                                                                 </#if>
                                                                 <td class="automated-stats">${resultCounts.getAutomatedTestCount("compromised")}</td>
@@ -434,7 +454,9 @@
                                                                 <td class="${frequentFailure.resultClass}-color top-list-title">
                                                                     <a href="${frequentFailure.report}">${frequentFailure.resultIcon} ${frequentFailure.name}</a>
                                                                 </td>
-                                                                <td><span class="badge failure-badge">${frequentFailure.count}</span></td>
+                                                                <td><span
+                                                                        class="badge failure-badge">${frequentFailure.count}</span>
+                                                                </td>
                                                             </tr>
                                                             </#list>
                                                             </tbody>
@@ -446,8 +468,12 @@
                                                             <tbody>
                                                                 <#list unstableFeatures as unstableFeature>
                                                                 <tr>
-                                                                    <td class="failure-color top-list-title"><a href="${unstableFeature.report}">${unstableFeature.name}</a></td>
-                                                                    <td><span class="badge failure-badge">${unstableFeature.failurePercentage}%</span></td>
+                                                                    <td class="failure-color top-list-title"><a
+                                                                            href="${unstableFeature.report}">${unstableFeature.name}</a>
+                                                                    </td>
+                                                                    <td><span
+                                                                            class="badge failure-badge">${unstableFeature.failurePercentage}%</span>
+                                                                    </td>
                                                                 </tr>
                                                                 </#list>
                                                             </tbody>
@@ -461,12 +487,23 @@
                                                     <div class="col-sm-12">
                                                         <h3>Tags</h3>
 
-                                                        <#list tagResults as tagResult >
-                                                        <span>
-                                                            <a href="${tagResult.report}">
-                                                                <span class="badge" style="background-color:${tagResult.color}; margin:1em;padding:4px;"><i class="fa fa-tag"></i> ${tagResult.label}&nbsp;&nbsp;&nbsp;${tagResult.count}</span>
-                                                            </a>
-                                                        </span>
+                                                        <#list tagResults as tagResultGroup >
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                              <#if tagResultGroup.tagType?has_content>
+                                                                <h5 class="card-title">${inflection.of(tagResultGroup.tagType).asATitle()}</h5>
+                                                              </#if>
+                                                                <div>
+                                                                <#list tagResultGroup.tagResults as tagResult >
+                                                                    <a href="${tagResult.report}">
+                                                                        <span class="badge"
+                                                                              style="background-color:${tagResult.color}; margin:1em;padding:4px;"><i
+                                                                                class="fa fa-tag"></i> ${inflection.of(tagResult.tag.name).asATitle()}&nbsp;&nbsp;&nbsp;${tagResult.count}</span>
+                                                                    </a>
+                                                                </#list>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         </#list>
                                                     </div>
                                                 </div>
@@ -509,7 +546,8 @@
                                                     <td>${scenario.stepCount}</td>
                                                     <td>${scenario.formattedStartTime}</td>
                                                     <td>${scenario.formattedDuration}</td>
-                                                    <td>${outcome_icon} <span style="display:none">${scenario.result}</span></td>
+                                                    <td>${outcome_icon} <span
+                                                            style="display:none">${scenario.result}</span></td>
                                                 </tr>
                                                 </#list>
                                                 </tbody>

@@ -567,14 +567,23 @@
                                                     <div class="col-sm-12">
                                                         <h3>Tags</h3>
 
-                                                        <#list tagResults as tagResult >
-                                                        <span>
-                                                            <a href="${tagResult.report}">
-                                                                <span class="badge"
-                                                                      style="background-color:${tagResult.color}; margin:1em;padding:4px;"><i
-                                                                        class="fa fa-tag"></i> ${tagResult.label}&nbsp;&nbsp;&nbsp;${tagResult.count}</span>
-                                                            </a>
-                                                        </span>
+                                                        <#list tagResults as tagResultGroup >
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                              <#if tagResultGroup.tagType?has_content>
+                                                                <h5 class="card-title">${inflection.of(tagResultGroup.tagType).asATitle()}</h5>
+                                                              </#if>
+                                                                <div>
+                                                                <#list tagResultGroup.tagResults as tagResult >
+                                                                    <a href="${tagResult.report}">
+                                                                        <span class="badge"
+                                                                              style="background-color:${tagResult.color}; margin:1em;padding:4px;"><i
+                                                                                class="fa fa-tag"></i> ${inflection.of(tagResult.tag.name).asATitle()}&nbsp;&nbsp;&nbsp;${tagResult.count}</span>
+                                                                    </a>
+                                                                </#list>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         </#list>
                                                     </div>
                                                 </div>

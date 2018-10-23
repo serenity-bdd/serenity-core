@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver.integration;
 
+import net.serenitybdd.core.webdriver.appium.AppiumDevicePool;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
@@ -18,21 +19,34 @@ public class WhenInstanciatingAAppiumDriver {
     public void createATestableDriverFactory() throws Exception {
         environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("serenity.timeout", "1000");
+        AppiumDevicePool.clear();
     }
 
     @Test
-    public void should_verify_appium_config_params() {
+    public void should_verify_appium_device_name() {
         try {
             new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
         } catch (UnsupportedDriverException couldNotFindDriver) {
-            assertThat(couldNotFindDriver.getCause().getMessage()).contains("The appium.platformName needs to be specified (either IOS or ANDROID)");
+            assertThat(couldNotFindDriver.getCause().getMessage()).contains("No available Appium device found - have you specified a device in appium.deviceName or a list of available devices in appium.deviceNames?");
+        }
+    }
+
+    @Test
+    public void should_verify_appium_platform_name() {
+        try {
+            environmentVariables.setProperty("appium.deviceName", "abc");
+            new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
+        } catch (UnsupportedDriverException couldNotFindDriver) {
+            assertThat(couldNotFindDriver.getCause().getMessage())
+                    .contains("The appium.platformName needs to be specified (either IOS or ANDROID)");
         }
     }
 
     @Test
     public void should_verify_appium_platform() {
         try {
-            environmentVariables.setProperty("appium.browserName", "abc");
+            environmentVariables.setProperty("appium.deviceName", "abc");
+            environmentVariables.setProperty("appium.browserName", "chrome");
             new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
         } catch (UnsupportedDriverException couldNotFindDriver) {
             assertThat(couldNotFindDriver.getCause().getMessage())

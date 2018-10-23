@@ -23,11 +23,22 @@ public class AppiumDevicePool {
 
     private static AppiumDevicePool pool;
 
+    public static AppiumDevicePool instance(EnvironmentVariables environmentVariables) {
+        if (pool == null) {
+            pool = new AppiumDevicePool(environmentVariables);
+        }
+        return pool;
+    }
+
     public static AppiumDevicePool instance() {
         if (pool == null) {
             pool = new AppiumDevicePool(Injectors.getInjector().getInstance(EnvironmentVariables.class));
         }
         return pool;
+    }
+
+    public static void clear() {
+        pool = null;
     }
 
     public AppiumDevicePool(EnvironmentVariables environmentVariables) {
@@ -64,7 +75,7 @@ public class AppiumDevicePool {
 
     public synchronized String requestDevice() {
         if (availableDevices.isEmpty()) {
-            throw new NoAvailableDeviceException();
+            throw new NoAvailableDeviceException("No available Appium device found - have you specified a device in appium.deviceName or a list of available devices in appium.deviceNames?");
         }
         String providedDevice = availableDevices.remove(0);
         LOGGER.info("Device provided: " + providedDevice);

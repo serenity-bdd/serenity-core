@@ -37,7 +37,7 @@ public class AppiumDriverProvider implements DriverProvider {
     public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
 
         EnvironmentVariables testEnvironmentVariables = environmentVariables.copy();
-        String deviceName = AppiumDevicePool.instance().requestDevice();
+        String deviceName = AppiumDevicePool.instance(testEnvironmentVariables).requestDevice();
         testEnvironmentVariables.setProperty(ThucydidesSystemProperty.APPIUM_DEVICE_NAME.getPropertyName(), deviceName);
         testEnvironmentVariables.clearProperty(ThucydidesSystemProperty.APPIUM_DEVICE_NAMES.getPropertyName());
 

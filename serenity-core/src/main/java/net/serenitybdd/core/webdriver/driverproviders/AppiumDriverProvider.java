@@ -1,10 +1,13 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
+import com.google.common.eventbus.Subscribe;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.webdriver.appium.AppiumDevicePool;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -35,14 +38,15 @@ public class AppiumDriverProvider implements DriverProvider {
 
         EnvironmentVariables testEnvironmentVariables = environmentVariables.copy();
         String deviceName = AppiumDevicePool.instance().requestDevice();
-        testEnvironmentVariables.setProperty("deviceName", deviceName);
+        testEnvironmentVariables.setProperty(ThucydidesSystemProperty.APPIUM_DEVICE_NAME.getPropertyName(), deviceName);
+        testEnvironmentVariables.clearProperty(ThucydidesSystemProperty.APPIUM_DEVICE_NAMES.getPropertyName());
 
-        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
+        CapabilityEnhancer enhancer = new CapabilityEnhancer(testEnvironmentVariables, fixtureProviderService);
 
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
-        switch (appiumTargetPlatform(environmentVariables)) {
+        switch (appiumTargetPlatform(testEnvironmentVariables)) {
             case ANDROID:
                 AndroidDriver androidDriver = new AndroidDriver(appiumUrl(testEnvironmentVariables), enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), ANDROID) );
                 driverProperties.registerCapabilities("appium", capabilitiesToProperties(androidDriver.getCapabilities()));
@@ -54,7 +58,7 @@ public class AppiumDriverProvider implements DriverProvider {
                 WebDriverInstanceEvents.bus().register(listenerFor(iosDriver, deviceName));
                 return iosDriver;
         }
-        throw new UnsupportedDriverException(appiumTargetPlatform(environmentVariables).name());
+        throw new UnsupportedDriverException(appiumTargetPlatform(testEnvironmentVariables).name());
 
     }
 
@@ -78,11 +82,20 @@ public class AppiumDriverProvider implements DriverProvider {
         private final String deviceName;
         private WebDriver appiumDriver;
         private AppiumDevicePool devicePool;
+        private Thread currentThread;
 
         private AppiumEventListener(WebDriver appiumDriver, String deviceName, AppiumDevicePool devicePool) {
             this.appiumDriver = appiumDriver;
             this.deviceName = deviceName;
             this.devicePool = devicePool;
+            this.currentThread = Thread.currentThread();
+
+            TestLifecycleEvents.register(this);
+        }
+
+        @Subscribe
+        public void testFinishes(TestLifecycleEvents.TestFinished testFinished) {
+            releaseAllDevicesUsedInThread(Thread.currentThread());
         }
 
         private AppiumEventListener(WebDriver appiumDriver, String deviceName) {
@@ -102,5 +115,11 @@ public class AppiumDriverProvider implements DriverProvider {
             }
         }
 
+        void releaseAllDevicesUsedInThread(Thread thread) {
+            if (appiumDriver != null && currentThread == thread) {
+                devicePool.freeDevice(deviceName);
+                appiumDriver = null;
+            }
+        }
     }
 }

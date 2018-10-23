@@ -2,13 +2,12 @@ package net.serenitybdd.core.webdriver.appium
 
 import net.serenitybdd.core.webdriver.driverproviders.AppiumDriverProvider
 import net.thucydides.core.annotations.Shared
+import net.thucydides.core.events.TestLifecycleEvents
 import net.thucydides.core.util.MockEnvironmentVariables
-import net.thucydides.core.webdriver.WebDriverInstanceEventListener
 import net.thucydides.core.webdriver.WebDriverInstanceEvents
 import net.thucydides.core.webdriver.WebDriverLifecycleEvent
 import org.openqa.selenium.WebDriver
 import spock.lang.Specification
-
 
 class WhenUsingAnAppiumDevicePool extends Specification {
 
@@ -112,18 +111,17 @@ class WhenUsingAnAppiumDevicePool extends Specification {
         !devicePool.availableDevices.contains(claimedDevice)
     }
 
-    def "should not get upset if both close and quit are called"() {
+    def "should free all devices in the current thread at the end of the test"() {
         given:
-        environmentVariables.setProperty("appium.deviceNames","device1, device2, device3")
-        AppiumDevicePool devicePool = new AppiumDevicePool(environmentVariables)
+            environmentVariables.setProperty("appium.deviceNames","device1, device2, device3")
+            AppiumDevicePool devicePool = new AppiumDevicePool(environmentVariables)
         and:
-        WebDriverInstanceEvents bus = new WebDriverInstanceEvents()
-        bus.register(new AppiumDriverProvider.AppiumEventListener(driver, "device1", devicePool))
+            WebDriverInstanceEvents bus = new WebDriverInstanceEvents()
+            bus.register(new AppiumDriverProvider.AppiumEventListener(driver, devicePool.requestDevice(), devicePool))
+            bus.register(new AppiumDriverProvider.AppiumEventListener(driver, devicePool.requestDevice(), devicePool))
         when:
-        bus.notifyOf(WebDriverLifecycleEvent.CLOSE).forDriver(driver)
-        bus.notifyOf(WebDriverLifecycleEvent.QUIT).forDriver(driver)
+            TestLifecycleEvents.postEvent(TestLifecycleEvents.testFinished());
         then:
-        devicePool.availableDevices.contains("device1")
+            devicePool.availableDevices.containsAll(["device1","device2","device3"])
     }
-
 }

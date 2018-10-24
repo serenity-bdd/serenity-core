@@ -124,4 +124,15 @@ class WhenUsingAnAppiumDevicePool extends Specification {
         then:
             devicePool.availableDevices.containsAll(["device1","device2","device3"])
     }
+
+
+    def "should provide the default port if a device pool is not set up"() {
+        given:
+        environmentVariables.setProperty("appium.deviceName","device1")
+        when:
+        AppiumDevicePool devicePool = new AppiumDevicePool(environmentVariables)
+        then:
+        devicePool.portFor("device1") == 4273
+    }
+
 }

@@ -16,7 +16,7 @@ public class WhenInstanciatingAAppiumDriver {
     private EnvironmentVariables environmentVariables;
 
     @Before
-    public void createATestableDriverFactory() throws Exception {
+    public void createATestableDriverFactory(){
         environmentVariables = new MockEnvironmentVariables();
         environmentVariables.setProperty("serenity.timeout", "1000");
         AppiumDevicePool.clear();

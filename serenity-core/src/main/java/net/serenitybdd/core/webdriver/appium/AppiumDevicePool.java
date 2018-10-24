@@ -1,40 +1,50 @@
 package net.serenitybdd.core.webdriver.appium;
 
 import com.google.common.base.Splitter;
-import net.serenitybdd.core.buildinfo.PropertyBasedDriverCapabilityRecord;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static net.thucydides.core.ThucydidesSystemProperty.APPIUM_DEVICE_NAME;
 import static net.thucydides.core.ThucydidesSystemProperty.APPIUM_DEVICE_NAMES;
 
+/**
+ * Manage Appium servers for multiple devices.
+ * Used for parallel testing of Appium.
+ *
+ */
 public class AppiumDevicePool {
 
-    Logger LOGGER = LoggerFactory.getLogger(PropertyBasedDriverCapabilityRecord.class);
+    private final int DEFAULT_APPIUM_PORT = 4273;
+
+    Logger LOGGER = LoggerFactory.getLogger(AppiumDevicePool.class);
 
     private final List<String> deviceList;
     private final List<String> availableDevices;
+    private final Map<String, Integer> ports = new HashMap<>();
 
     private static AppiumDevicePool pool;
 
-    public static AppiumDevicePool instance(EnvironmentVariables environmentVariables) {
+    public synchronized static AppiumDevicePool instance(EnvironmentVariables environmentVariables) {
         if (pool == null) {
             pool = new AppiumDevicePool(environmentVariables);
         }
         return pool;
     }
 
-    public static AppiumDevicePool instance() {
-        if (pool == null) {
-            pool = new AppiumDevicePool(Injectors.getInjector().getInstance(EnvironmentVariables.class));
-        }
-        return pool;
+    public synchronized static AppiumDevicePool instance() {
+        return instance(Injectors.getInjector().getInstance(EnvironmentVariables.class));
+    }
+
+    public boolean hasMultipleDevices() {
+        return deviceList.size() > 1;
+    }
+
+    public boolean hasOnlyOneDevice() {
+        return deviceList.size() == 1;
     }
 
     public static void clear() {
@@ -47,9 +57,12 @@ public class AppiumDevicePool {
 
         String definedDevice = APPIUM_DEVICE_NAME.from(environmentVariables);
 
-        deviceList = (specifiedDevices.isEmpty()) ?
-                deviceListFromSingleDevice(definedDevice) :
-                elementsIn(APPIUM_DEVICE_NAMES.from(environmentVariables, ""));
+        if (specifiedDevices.isEmpty()) {
+            deviceList = deviceListFromSingleDevice(definedDevice);
+            ports.put(definedDevice,DEFAULT_APPIUM_PORT);
+        } else {
+            deviceList = elementsIn(APPIUM_DEVICE_NAMES.from(environmentVariables, ""));
+        }
 
         availableDevices = Collections.synchronizedList(new ArrayList<>(deviceList));
 
@@ -81,5 +94,9 @@ public class AppiumDevicePool {
         LOGGER.info("Device provided: " + providedDevice);
 
         return providedDevice;
+    }
+
+    public int portFor(String deviceName) {
+        return ports.getOrDefault(deviceName, DEFAULT_APPIUM_PORT);
     }
 }

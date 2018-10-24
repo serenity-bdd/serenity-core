@@ -6,6 +6,7 @@ import io.appium.java_client.ios.IOSDriver;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.webdriver.appium.AppiumDevicePool;
+import net.serenitybdd.core.webdriver.appium.AppiumServerPool;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.events.TestLifecycleEvents;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
@@ -38,6 +39,8 @@ public class AppiumDriverProvider implements DriverProvider {
 
         EnvironmentVariables testEnvironmentVariables = environmentVariables.copy();
         String deviceName = AppiumDevicePool.instance(testEnvironmentVariables).requestDevice();
+        URL appiumUrl = appiumUrl(testEnvironmentVariables, deviceName);
+
         testEnvironmentVariables.setProperty(ThucydidesSystemProperty.APPIUM_DEVICE_NAME.getPropertyName(), deviceName);
         testEnvironmentVariables.clearProperty(ThucydidesSystemProperty.APPIUM_DEVICE_NAMES.getPropertyName());
 
@@ -48,12 +51,12 @@ public class AppiumDriverProvider implements DriverProvider {
         }
         switch (appiumTargetPlatform(testEnvironmentVariables)) {
             case ANDROID:
-                AndroidDriver androidDriver = new AndroidDriver(appiumUrl(testEnvironmentVariables), enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), ANDROID) );
+                AndroidDriver androidDriver = new AndroidDriver(appiumUrl, enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), ANDROID) );
                 driverProperties.registerCapabilities("appium", capabilitiesToProperties(androidDriver.getCapabilities()));
                 WebDriverInstanceEvents.bus().register(listenerFor(androidDriver, deviceName));
                 return androidDriver;
             case IOS:
-                IOSDriver iosDriver = new IOSDriver(appiumUrl(testEnvironmentVariables), enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), IPHONE));
+                IOSDriver iosDriver = new IOSDriver(appiumUrl, enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), IPHONE));
                 driverProperties.registerCapabilities("appium", capabilitiesToProperties(iosDriver.getCapabilities()));
                 WebDriverInstanceEvents.bus().register(listenerFor(iosDriver, deviceName));
                 return iosDriver;
@@ -70,8 +73,8 @@ public class AppiumDriverProvider implements DriverProvider {
         return AppiumConfiguration.from(environmentVariables).getTargetPlatform();
     }
 
-    private URL appiumUrl(EnvironmentVariables environmentVariables) {
-        return AppiumConfiguration.from(environmentVariables).getUrl();
+    private URL appiumUrl(EnvironmentVariables environmentVariables, String deviceName) {
+        return AppiumServerPool.instance(environmentVariables).urlFor(deviceName);
     }
 
     private WebDriverInstanceEventListener listenerFor(WebDriver driver, String deviceName) {
@@ -98,6 +101,11 @@ public class AppiumDriverProvider implements DriverProvider {
             releaseAllDevicesUsedInThread(Thread.currentThread());
         }
 
+        @Subscribe
+        public void testSuiteFinishes(TestLifecycleEvents.TestSuiteFinished testSuiteFinished) {
+            shutdownAllAppiumServersUsedInThread(Thread.currentThread());
+        }
+
         private AppiumEventListener(WebDriver appiumDriver, String deviceName) {
             this(appiumDriver, deviceName, AppiumDevicePool.instance());
         }
@@ -120,6 +128,10 @@ public class AppiumDriverProvider implements DriverProvider {
                 devicePool.freeDevice(deviceName);
                 appiumDriver = null;
             }
+        }
+
+        void shutdownAllAppiumServersUsedInThread(Thread thread) {
+            AppiumServerPool.instance().shutdownAllServersRunningOnThread(thread);
         }
     }
 }

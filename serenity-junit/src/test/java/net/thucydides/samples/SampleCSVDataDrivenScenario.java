@@ -1,5 +1,6 @@
 package net.thucydides.samples;
 
+import net.serenitybdd.junit.runners.SerenityParameterizedRunner;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
@@ -13,9 +14,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
-@RunWith(ThucydidesParameterizedRunner.class)
+@RunWith(SerenityParameterizedRunner.class)
 @UseTestDataFrom(value="test-data/simple-data.csv")
-//@BatchSize(10)
 public class SampleCSVDataDrivenScenario {
 
     private String name;

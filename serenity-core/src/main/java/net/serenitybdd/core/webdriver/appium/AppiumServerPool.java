@@ -43,9 +43,11 @@ public class AppiumServerPool {
         Optional<String> configuredAppiumHub = Optional.ofNullable(environmentVariables.getProperty("appium.hub"));
 
         if (configuredAppiumHub.isPresent() && AppiumDevicePool.instance(environmentVariables).hasOnlyOneDevice()) {
+            System.out.println("Using configured default hub url " + configuredAppiumHub.get());
             defaultHubUrl = Optional.of(configuredAppiumHub.get());
         } else if (AppiumDevicePool.instance(environmentVariables).hasOnlyOneDevice()) {
             String defaultUrl = startDefaultAppiumServer().toString();
+            System.out.println("Using default hub url " + defaultUrl);
             defaultHubUrl = Optional.of(defaultUrl);
         }
     }
@@ -62,21 +64,35 @@ public class AppiumServerPool {
     }
 
     public URL urlFor(String deviceName) {
-        return defaultHubUrl.map(this::configuredAppiumUrl).orElseGet(() -> localServerUrlFor(deviceName));
+        System.out.println("Finding URL for device " + deviceName);
+        if (defaultHubUrl.isPresent()) {
+            System.out.println("  -> Using default URL " + defaultHubUrl.get());
+            return configuredAppiumUrl(defaultHubUrl.get());
+        } else {
+            URL localServerUrl = localServerUrlFor(deviceName);
+            System.out.println("  -> Using local server URL " + localServerUrl);
+            return localServerUrl;
+        }
     }
 
     private URL localServerUrlFor(String deviceName) {
+        System.out.println("Finding local appium server for " + deviceName);
         if (appiumServers.get(deviceName) != null) {
             return appiumServers.get(deviceName).getUrl();
         }
 
+        System.out.println("No local appium server found for " + deviceName + " - starting a new one");
         DriverService appiumDriverService = AppiumDriverLocalService.buildService(new AppiumServiceBuilder().usingAnyFreePort());
         try {
             appiumDriverService.start();
             appiumServers.put(deviceName, appiumDriverService);
             index(appiumDriverService);
+            System.out.println("Local appium server for " + deviceName + " started on " + appiumDriverService.getUrl());
             return appiumDriverService.getUrl();
         } catch (IOException e) {
+            System.out.println("Failed to start appium service on " + appiumDriverService.getUrl());
+            e.printStackTrace();
+
             LOGGER.error("Failed to start appium service on " + appiumDriverService.getUrl());
             throw new WebDriverException("Failed to start appium service on " + appiumDriverService.getUrl(), e);
         }
@@ -84,6 +100,7 @@ public class AppiumServerPool {
 
 
     private URL startDefaultAppiumServer() {
+        System.out.println("Starting the default appium server");
         DriverService appiumDriverService = AppiumDriverLocalService.buildDefaultService();
         index(appiumDriverService);
         return appiumDriverService.getUrl();
@@ -107,8 +124,12 @@ public class AppiumServerPool {
         serversByThread.getOrDefault(thread, new HashSet<>()).forEach(
                 service -> {
                     LOGGER.info("Shutting down Appium server on " + service.getUrl());
+                    System.out.println("Shutting down Appium server on " + service.getUrl());
                     if (service.isRunning()) {
                         service.stop();
+                        System.out.println("Service stopped");
+                    } else {
+                        System.out.println("Service was already stopped");
                     }
                 }
         );

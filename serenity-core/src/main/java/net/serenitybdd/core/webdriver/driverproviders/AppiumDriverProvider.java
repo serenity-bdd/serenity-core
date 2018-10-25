@@ -37,9 +37,14 @@ public class AppiumDriverProvider implements DriverProvider {
     @Override
     public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
 
+        System.out.println("Creating a new appium driver instance with options " + options);
+
         EnvironmentVariables testEnvironmentVariables = environmentVariables.copy();
         String deviceName = AppiumDevicePool.instance(testEnvironmentVariables).requestDevice();
+        System.out.println("  - Using deviceName " + deviceName);
+
         URL appiumUrl = appiumUrl(testEnvironmentVariables, deviceName);
+        System.out.println("  - Using appium server at " + appiumUrl);
 
         testEnvironmentVariables.setProperty(ThucydidesSystemProperty.APPIUM_DEVICE_NAME.getPropertyName(), deviceName);
         testEnvironmentVariables.clearProperty(ThucydidesSystemProperty.APPIUM_DEVICE_NAMES.getPropertyName());
@@ -51,14 +56,22 @@ public class AppiumDriverProvider implements DriverProvider {
         }
         switch (appiumTargetPlatform(testEnvironmentVariables)) {
             case ANDROID:
+                System.out.println("  - Using appium server at " + appiumUrl);
+                System.out.println("  - Using appium capabilities " +  enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), ANDROID));
                 AndroidDriver androidDriver = new AndroidDriver(appiumUrl, enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), ANDROID) );
+
                 driverProperties.registerCapabilities("appium", capabilitiesToProperties(androidDriver.getCapabilities()));
                 WebDriverInstanceEvents.bus().register(listenerFor(androidDriver, deviceName));
+                System.out.println("  -> driver created" + androidDriver);
                 return androidDriver;
             case IOS:
+                System.out.println("  - Using appium server at " + appiumUrl);
+                System.out.println("  - Using appium capabilities " +  enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), IPHONE));
                 IOSDriver iosDriver = new IOSDriver(appiumUrl, enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), IPHONE));
+
                 driverProperties.registerCapabilities("appium", capabilitiesToProperties(iosDriver.getCapabilities()));
                 WebDriverInstanceEvents.bus().register(listenerFor(iosDriver, deviceName));
+                System.out.println("  -> driver created" + iosDriver);
                 return iosDriver;
         }
         throw new UnsupportedDriverException(appiumTargetPlatform(testEnvironmentVariables).name());
@@ -98,11 +111,13 @@ public class AppiumDriverProvider implements DriverProvider {
 
         @Subscribe
         public void testFinishes(TestLifecycleEvents.TestFinished testFinished) {
+            System.out.println("Appium test finished - releasing all devices");
             releaseAllDevicesUsedInThread(Thread.currentThread());
         }
 
         @Subscribe
         public void testSuiteFinishes(TestLifecycleEvents.TestSuiteFinished testSuiteFinished) {
+            System.out.println("Appium test suite finished - shutting down servers");
             shutdownAllAppiumServersUsedInThread(Thread.currentThread());
         }
 

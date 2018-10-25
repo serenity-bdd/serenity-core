@@ -84,12 +84,14 @@ public class AppiumServerPool {
         System.out.println("No local appium server found for " + deviceName + " - starting a new one");
         DriverService appiumDriverService = AppiumDriverLocalService.buildService(new AppiumServiceBuilder().usingAnyFreePort());
         try {
+            System.out.print("Starting service...");
             appiumDriverService.start();
+            System.out.println("Service started");
             appiumServers.put(deviceName, appiumDriverService);
             index(appiumDriverService);
             System.out.println("Local appium server for " + deviceName + " started on " + appiumDriverService.getUrl());
             return appiumDriverService.getUrl();
-        } catch (IOException e) {
+        } catch (Throwable e) {
             System.out.println("Failed to start appium service on " + appiumDriverService.getUrl());
             e.printStackTrace();
 

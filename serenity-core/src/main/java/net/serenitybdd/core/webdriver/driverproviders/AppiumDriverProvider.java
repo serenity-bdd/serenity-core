@@ -56,7 +56,7 @@ public class AppiumDriverProvider implements DriverProvider {
         }
         switch (appiumTargetPlatform(testEnvironmentVariables)) {
             case ANDROID:
-                System.out.println("  - Using appium server at " + appiumUrl);
+                System.out.println("  - Using android appium server at " + appiumUrl);
                 System.out.println("  - Using appium capabilities " +  enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), ANDROID));
                 AndroidDriver androidDriver = new AndroidDriver(appiumUrl, enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), ANDROID) );
 
@@ -65,7 +65,7 @@ public class AppiumDriverProvider implements DriverProvider {
                 System.out.println("  -> driver created" + androidDriver);
                 return androidDriver;
             case IOS:
-                System.out.println("  - Using appium server at " + appiumUrl);
+                System.out.println("  - Using ios appium server at " + appiumUrl);
                 System.out.println("  - Using appium capabilities " +  enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), IPHONE));
                 IOSDriver iosDriver = new IOSDriver(appiumUrl, enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), IPHONE));
 

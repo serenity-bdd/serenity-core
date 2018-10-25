@@ -82,7 +82,7 @@ public class AppiumDevicePool {
     }
 
     public synchronized void freeDevice(String deviceName) {
-        LOGGER.info("Device freed: " + deviceList);
+        LOGGER.info("Device freed: " + deviceName);
         availableDevices.add(deviceName);
     }
 
@@ -92,6 +92,7 @@ public class AppiumDevicePool {
         }
         String providedDevice = availableDevices.remove(0);
         LOGGER.info("Device provided: " + providedDevice);
+        LOGGER.info("Remaining devices: " + availableDevices);
 
         return providedDevice;
     }

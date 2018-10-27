@@ -10,11 +10,10 @@ import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.reports.cucumber.FeatureFileScenarioOutcomes;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 public class ScenarioOutcomes {
 
@@ -43,16 +42,16 @@ public class ScenarioOutcomes {
         List<ScenarioOutcome> scenarioOutcomes = FeatureFileScenarioOutcomes.from(requirement).forOutcomesIn(requirementsOutcomes);
 
         if (scenarioOutcomes.isEmpty()) {
-            scenarioOutcomes  = requirementsOutcomes.getTestOutcomes().getTests().stream()
-                                                    .map(ScenarioOutcomes::outcomeFrom)
-                                                    .collect(Collectors.toList());
+            scenarioOutcomes = requirementsOutcomes.getTestOutcomes().getTests().stream()
+                    .map(ScenarioOutcomes::outcomeFrom)
+                    .collect(Collectors.toList());
         }
 
         return scenarioOutcomes;
 
     }
 
-    private static ScenarioOutcome outcomeFrom(TestOutcome testOutcome) {
+    public static ScenarioOutcome outcomeFrom(TestOutcome testOutcome) {
 
         List<String> exampleTables = (testOutcome.isDataDriven()) ?
                 Collections.singletonList(testOutcome.getDataTable().toMarkdown()) : Collections.EMPTY_LIST;
@@ -65,8 +64,9 @@ public class ScenarioOutcomes {
                 testOutcome.getTestSteps()
                         .stream().map(step -> RenderMarkdown.convertEmbeddedTablesIn(step.getDescription())).collect(Collectors.toList());
 
-
-        return new ScenarioOutcome(testOutcome.getTitleWithLinks(),
+        return new SingleScenarioOutcome(
+                testOutcome.getQualified().withContext().getTitleWithLinks(),
+                testOutcome.getName(),
                 "Acceptance Test",
                 testOutcome.getResult(),
                 ReportNamer.forReportType(ReportType.HTML).getNormalizedTestNameFor(testOutcome),

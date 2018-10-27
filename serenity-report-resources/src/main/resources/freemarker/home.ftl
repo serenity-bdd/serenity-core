@@ -52,7 +52,7 @@
         $('#evidence-table').DataTable({
             <#if evidence?size <= 10 >
                     searching: false,
-                    paging:false,
+                    paging: false,
                     info: false
             </#if>
         });
@@ -201,6 +201,11 @@
                                         <a data-toggle="tab" href="#tests"><i class="fas fa-tachometer-alt"></i> Test
                                             Results</a>
                                     </li>
+                                    <#if evidence?has_content>
+                                    <li>
+                                        <a data-toggle="tab" href="#evidence"><i class="far fa-file"></i> Evidence</a>
+                                    </li>
+                                    </#if>
                                 </ul>
 
 
@@ -266,7 +271,9 @@
                                                         <table class="table">
                                                             <thead>
                                                             <tr>
-                                                                <th scope="col">Scenarios</th>
+                                                                <th scope="col">Scenario Results (including rows of test
+                                                                    data)
+                                                                </th>
                                                                 <th scope="col" colspan="2" class="automated-stats">
                                                                     Automated
                                                                 </th>
@@ -447,7 +454,30 @@
                                                     </div>
                                                 </div>
 
-
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <table class="table">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>Execution Time</th>
+                                                                <th>Clock Time</th>
+                                                                <th>Fastest Test</th>
+                                                                <th>Slowest Test</th>
+                                                                <th>Average Execution Time</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>${totalTestDuration}</td>
+                                                                <td>${totalClockDuration}</td>
+                                                                <td>${minTestDuration}</td>
+                                                                <td>${maxTestDuration}</td>
+                                                                <td>${averageTestDuration}</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                                 <#if coverage?has_content>
                                                 <div class="row">
                                                     <div class="col-sm-12">
@@ -681,36 +711,38 @@
 
                                                     </div>
                                                 </div>
-
-
-
-                                                <#if evidence?has_content>
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <h3><i class="far fa-file"></i> Evidence</h3>
-                                                            <table id="evidence-table" class="table table-bordered">
-                                                                <thead>
-                                                                <tr>
-                                                                    <th>Scenario</th>
-                                                                    <th>Title</th>
-                                                                    <th>Details</th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                 <#list evidence as evidenceRecord>
-                                                                 <tr>
-                                                                     <td>${evidenceRecord.scenario}</td>
-                                                                     <td>${evidenceRecord.title}</td>
-                                                                     <td>${evidenceRecord.detailsLink}</td>
-                                                                 </tr>
-                                                                 </#list>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </#if>
                                             </div>
                                         </div>
+
+                                     <#if evidence?has_content>
+                                        <div id="evidence" class="tab-pane fade">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <h3><i class="far fa-file"></i> Evidence</h3>
+                                                        <table id="evidence-table" class="table table-bordered">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>Scenario</th>
+                                                                <th>Title</th>
+                                                                <th>Details</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                     <#list evidence as evidenceRecord>
+                                                     <tr>
+                                                         <td>${evidenceRecord.scenario}</td>
+                                                         <td>${evidenceRecord.title}</td>
+                                                         <td>${evidenceRecord.detailsLink}</td>
+                                                     </tr>
+                                                     </#list>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                     </#if>
                         </td>
 
                     </tr>

@@ -41,7 +41,7 @@ public class EvidenceData {
 
         for(TestOutcome testOutcome : testOutcomes.getOutcomes()) {
             for(ReportData reportData : testOutcome.getEvidence()) {
-                evidence.add(new EvidenceData(testOutcome.getName(),
+                evidence.add(new EvidenceData(testOutcome.getQualified().withContext().getTitle(),
                                               reportData.getTitle(),
                                               detailsLinkFor(testOutcome, reportData)));
             }

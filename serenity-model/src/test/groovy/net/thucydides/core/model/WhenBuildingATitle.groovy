@@ -32,7 +32,7 @@ class WhenBuildingATitle extends Specification {
     }
 
     def "it should return only the outcome title if there is no context"() {
-        given:
+        given:T
         titleBuilder = titleBuilder.withContext()
 
         when:

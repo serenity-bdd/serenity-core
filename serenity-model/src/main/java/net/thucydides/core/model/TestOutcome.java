@@ -43,10 +43,12 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalField;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -1814,6 +1816,10 @@ public class TestOutcome {
         return null;
     }
 
+    public String getNonNullContext() {
+        return (getContext() == null) ? "" : getContext();
+    }
+
     public String getContext() {
         if (context == null) {
             context = contextFrom(environmentVariables);
@@ -2151,6 +2157,11 @@ public class TestOutcome {
                 .sum();
     }
 
+    public ZonedDateTime getEndTime() {
+        if (startTime == null) { return null; }
+        return startTime.plusNanos( duration * 1000);
+    }
+
     /**
      * @return The total duration of all of the tests in this set in milliseconds.
      */
@@ -2376,6 +2387,7 @@ public class TestOutcome {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (qualifier != null ? !qualifier.equals(that.qualifier) : that.qualifier != null) return false;
+        if (context != null ? !context.equals(that.context) : that.context != null) return false;
         if (testCaseName != null ? !testCaseName.equals(that.testCaseName) : that.testCaseName != null) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
         if (userStory != null ? !userStory.equals(that.userStory) : that.userStory != null) return false;

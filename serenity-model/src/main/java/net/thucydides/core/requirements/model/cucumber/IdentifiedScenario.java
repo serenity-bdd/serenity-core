@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements.model.cucumber;
 
 import gherkin.ast.*;
+import net.thucydides.core.digest.Digest;
 import net.thucydides.core.requirements.reports.cucumber.RenderCucumber;
 import org.apache.commons.lang3.StringUtils;
 
@@ -14,12 +15,14 @@ import static net.thucydides.core.requirements.model.cucumber.ScenarioDisplayOpt
 public class IdentifiedScenario extends NamedScenario {
     private Feature feature;
     private String scenarioReport;
+    private String scenarioId;
     private ScenarioDefinition scenarioDefinition;
     private ExampleTableInMarkdown exampleTableInMarkdown;
 
     protected IdentifiedScenario(Feature feature, ScenarioDefinition scenarioDefinition) {
         this.feature = feature;
         this.scenarioReport = ScenarioReport.forScenario(scenarioDefinition.getName()).inFeature(feature);
+        this.scenarioId = Digest.ofTextValue(scenarioDefinition.getName());
         this.scenarioDefinition = scenarioDefinition;
         this.exampleTableInMarkdown = new ExampleTableInMarkdown(feature, scenarioReport, scenarioDefinition);
     }
@@ -44,7 +47,7 @@ public class IdentifiedScenario extends NamedScenario {
                         .collect(Collectors.joining(lineSeparator())) + suffix;
 
         renderedDescription += System.lineSeparator()
-                               + "[<i class=\"fa fa-info-circle\"></i> More details](" + scenarioReport + ")"
+                               + "[<i class=\"fa fa-info-circle\"></i> More details](#" + scenarioId + ")"
                                + System.lineSeparator();
 
         return Optional.of("" + renderedDescription + "");

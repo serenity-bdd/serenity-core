@@ -24,12 +24,14 @@ import net.thucydides.core.util.Inflector;
 import net.thucydides.core.util.VersionProvider;
 import org.joda.time.DateTime;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static net.serenitybdd.reports.model.DurationsKt.*;
 import static net.thucydides.core.ThucydidesSystemProperty.REPORT_TAGTYPES;
 import static net.thucydides.core.reports.html.HtmlReporter.TIMESTAMP_FORMAT;
 import static net.thucydides.core.reports.html.ReportNameProvider.NO_CONTEXT;
@@ -67,12 +69,12 @@ public class FreemarkerContext {
                              RequirementsService requirements,
                              IssueTracking issueTracking,
                              String relativeLink) {
-        this(environmentVariables, requirements, issueTracking,relativeLink, TestTag.EMPTY_TAG);
+        this(environmentVariables, requirements, issueTracking, relativeLink, TestTag.EMPTY_TAG);
     }
 
     public Map<String, Object> getBuildContext(TestOutcomes testOutcomes,
-                                             ReportNameProvider reportName,
-                                             boolean useFiltering) {
+                                               ReportNameProvider reportName,
+                                               boolean useFiltering) {
         Map<String, Object> context = new HashMap();
         TagFilter tagFilter = new TagFilter(environmentVariables);
         context.put("testOutcomes", testOutcomes);
@@ -94,6 +96,11 @@ public class FreemarkerContext {
         context.put("leafRequirementType", last(requirements.getRequirementTypes()));
         addFormattersToContext(context);
 
+        context.put("totalTestDuration", formattedDuration(Duration.ofMillis(testOutcomes.getDuration())));
+        context.put("totalClockDuration", formattedDuration(clockDurationOf(testOutcomes.getOutcomes())));
+        context.put("averageTestDuration", formattedDuration(averageDurationOf(testOutcomes.getOutcomes())));
+        context.put("maxTestDuration", formattedDuration(maxDurationOf(testOutcomes.getOutcomes())));
+        context.put("minTestDuration", formattedDuration(minDurationOf(testOutcomes.getOutcomes())));
 
         VersionProvider versionProvider = new VersionProvider(environmentVariables);
         context.put("serenityVersionNumber", versionProvider.getVersion());
@@ -113,19 +120,19 @@ public class FreemarkerContext {
                 .withMaxOf(5));
 
         List<String> tagTypes = Splitter.on(",")
-                                        .trimResults()
-                                        .splitToList(REPORT_TAGTYPES.from(environmentVariables,"feature"));
+                .trimResults()
+                .splitToList(REPORT_TAGTYPES.from(environmentVariables, "feature"));
 
         context.put("coverage", TagCoverage.from(testOutcomes)
-                                           .showingTags(requirements.getTagsOfType(tagTypes))
-                                           .forTagTypes(tagTypes));
+                .showingTags(requirements.getTagsOfType(tagTypes))
+                .forTagTypes(tagTypes));
         context.put("backgroundColor", new BackgroundColor());
 
         testOutcomes.getOutcomes().forEach(
-            testOutcome ->  addTags(testOutcome, context, null)
+                testOutcome -> addTags(testOutcome, context, null)
         );
 
-        context.put("tagResults",TagResults.from(testOutcomes).groupedByType());
+        context.put("tagResults", TagResults.from(testOutcomes).groupedByType());
 
         return context;
     }

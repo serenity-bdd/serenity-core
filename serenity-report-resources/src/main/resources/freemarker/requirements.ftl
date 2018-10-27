@@ -281,25 +281,17 @@
                                                     <#list scenarios as scenario>
                                                         <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
                                                         <tr>
-                                                            <td class="toc-title"><a
-                                                                    href="#${scenario.id}">${scenario.title}</a>
+                                                            <td style="width:99%;" class="toc-title"><a href="#${scenario.id}">${scenario.simplifiedName}</a>
                                                                  <#if scenario.hasExamples() >
                                                                      (${scenario.numberOfExamples})</#if>
 
                                                             </td>
-                                                            <td>${outcome_icon}
+                                                            <td style="width:1%;">${outcome_icon}
                                                                <#if (scenario.manual)> <i class="fa fa-user manual"
                                                                                           title="Manual test"></i></#if>
                                                             </td>
-                                                            <td>
-                                                               <#if outcome_icon?has_content>
-                                                                   <a href="${scenario.scenarioReport}"
-                                                                      class="badge more-details ${scenario.resultStyle}">Details</a>
-                                                               </#if>
-                                                            </td>
                                                         </tr>
                                                     </#list>
-
                                                 </table>
 
                                             </div>
@@ -310,26 +302,30 @@
                                                 <#assign outcome_icon = formatter.resultIcon().forResult(scenario.result) />
 
                                                 <div class="scenario-docs card" id="${scenario.id}">
-                                                    <div class="scenario-docs card-header ${scenario.resultStyle}">
-                                                        <span class="scenario-heading">
-                                                            <#if outcome_icon?has_content>
-                                                            <a href="${scenario.scenarioReport}"
-                                                               title="More details...">${scenario.title}</a>
-                                                            <#else>
+                                                    <div class="scenario-docs card-header ${scenario.resultStyle}" style="min-height:1.5em;">
+                                                        <div>
+                                                            <span class="scenario-heading">
                                                                 ${scenario.title}
-                                                            </#if>
-                                                        </span>
-                                                        <span class="scenario-result-icon">
-                                                            <#if (scenario.manual)> <i class="fa fa-user manual"
-                                                                                       title="Manual test"></i></#if>
+                                                            </span>
+                                                            <span class="scenario-result-icon">
+                                                                <#if (scenario.manual)> <i class="fa fa-user manual"
+                                                                                           title="Manual test"></i></#if>
 
-                                                            <#if outcome_icon?has_content>
-                                                                ${outcome_icon}
-                                                            <#else>
-                                                                <i class="fas fa-pause"
-                                                                   title="No test has been implemented yet"></i>
-                                                            </#if>
-                                                        </span>
+                                                                <#if outcome_icon?has_content>
+                                                                    ${outcome_icon}
+                                                                <#else>
+                                                                    <i class="fas fa-pause"
+                                                                       title="No test has been implemented yet"></i>
+                                                                </#if>
+                                                            </span>
+                                                        </div>
+                                                        <#if outcome_icon?has_content>
+                                                        <div class="scenario-report-badges">
+                                                            <#list scenario.scenarioReports as scenarioReport>
+                                                                <span class="scenario-report-badge" style="float:right;">${scenarioReport}</span>
+                                                            </#list>
+                                                        </div>
+                                                        </#if>
                                                     </div>
                                                     <div class="scenario-docs card-body">
                                                         <#if scenario.description?has_content>
@@ -588,6 +584,31 @@
                                         </table>
                                     </div>
                                     </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <table class="table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Execution Time</th>
+                                                        <th>Clock Time</th>
+                                                        <th>Fastest Test</th>
+                                                        <th>Slowest Test</th>
+                                                        <th>Average Execution Time</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>${totalTestDuration}</td>
+                                                        <td>${totalClockDuration}</td>
+                                                        <td>${minTestDuration}</td>
+                                                        <td>${maxTestDuration}</td>
+                                                        <td>${averageTestDuration}</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
 
                                     <#if (requirements.requirementOutcomes?has_content)>
                                         <#assign workingRequirementsTitle = inflection.of(requirements.type).inPluralForm().asATitle() >

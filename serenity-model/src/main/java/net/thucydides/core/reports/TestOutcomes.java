@@ -489,6 +489,12 @@ public class TestOutcomes {
         ).findFirst();
     }
 
+    public List<TestOutcome> testOutcomesWithName(String name) {
+        return outcomes.stream().filter(
+                outcome -> outcome.getName().equalsIgnoreCase(name)
+        ).collect(Collectors.toList());
+    }
+
     private static class TagFinder {
         private final String tagType;
 
@@ -582,12 +588,15 @@ public class TestOutcomes {
     private List<? extends TestOutcome> matchingOutcomes(List<? extends TestOutcome> outcomes, TestTag tag) {
 
         return outcomes.stream().filter(
-
-                outcome -> (isAnIssue(tag) && (outcome.hasIssue(tag.getName())))
-                            || (outcome.hasTag(tag))
-                            || (outcome.hasAMoreGeneralFormOfTag(tag))
-
+                outcome -> hasMatchingTag(outcome, tag)
         ).collect(Collectors.toList());
+    }
+
+    private boolean hasMatchingTag(TestOutcome outcome, TestTag tag) {
+        if (isAnIssue(tag)) {
+            return outcome.hasIssue(tag.getName());
+        }
+        return outcome.hasTag(tag) || outcome.hasAMoreGeneralFormOfTag(tag);
     }
 
 

@@ -5,6 +5,7 @@ import net.thucydides.core.issues.IssueTracking;
 import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.Inflector;
+import org.omg.CORBA.Context;
 
 
 import java.util.HashMap;
@@ -17,23 +18,6 @@ public class TitleBuilder {
     private final IssueTracking issueTracking;
     private final EnvironmentVariables environmentVariables;
     private final boolean showContext;
-
-    private final static Map<String, String> FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS = new HashMap();
-    static {
-        FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("chrome", "chrome");
-        FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("firefox", "firefox");
-        FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("safari", "safari");
-        FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("opera", "opera");
-        FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("ie", "internet-explorer");
-        FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("edge", "edge");
-        FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("phantomjs", "snapchat-ghost");
-
-        FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("linux", "linux");
-        FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("mac", "apple");
-        FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("windows", "windows");
-        FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("android", "android");
-        FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.put("iphone", "apple");
-    }
 
     public TitleBuilder(TestOutcome testOutcome, IssueTracking issueTracking, EnvironmentVariables environmentVariables, boolean qualified, boolean showContext) {
         this.testOutcome = testOutcome;
@@ -71,16 +55,7 @@ public class TitleBuilder {
             return "";
         }
 
-        String context = testOutcome.getContext();
-        if (context == null) {
-            return "";
-        }
-
-        if (FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.containsKey(context.toLowerCase())) {
-            return String.format("<i class=\"fa fa-%s\" aria-hidden=\"true\"></i> | ",
-                    FONTAWESOME_CLASSES_FOR_COMMON_CONTEXTS.get(context.toLowerCase()));
-        }
-        return context.toUpperCase() + " | ";
+        return ContextIcon.forOutcome(testOutcome);
     }
 
 }

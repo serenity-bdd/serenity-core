@@ -2225,3 +2225,22 @@ td.indented-error-category i {
     width: 95%;
     max-width: 95%;
 }
+
+.context-icon {
+   padding-right: 1em;
+}
+
+.more-details-result-compromised { background-color: fuchsia; !important; }
+.more-details-result-error { background-color: darkorange; !important;  }
+.more-details-result-failure { background-color: #f8001f; !important; }
+.more-details-result-skipped { background-color: #B2A671;  !important; }
+.more-details-result-ignored { background-color: #777777;  !important; }
+.more-details-result-pending { background-color: #6884A6; !important;  }
+.more-details-result-success { background-color: #1D9918; !important;  }
+
+.scenario-report-badges {
+    min-height:1.5em;
+}
+.scenario-report-badge {
+    float:right;
+}

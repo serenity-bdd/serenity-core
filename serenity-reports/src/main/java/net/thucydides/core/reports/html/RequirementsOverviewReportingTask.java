@@ -144,7 +144,7 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
     }
 
     private List<ScenarioOutcome> executedScenariosIn(RequirementsOutcomes requirementsOutcomes) {
-        return ScenarioOutcomes.from(requirementsOutcomes)
+        return ScenarioOutcomes.from(requirementsOutcomes.getTestOutcomes())
                                                   .stream()
                                                   .filter(scenarioOutcome -> !scenarioOutcome.getType().equalsIgnoreCase("background"))
                                                   .collect(Collectors.toList());

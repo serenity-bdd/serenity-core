@@ -57,9 +57,6 @@ public class FeatureFileScenarioOutcomes {
         }
     }
 
-    private final String DETAILS_BADGE = "<a href='%s' class='badge more-details'>%s</a>";
-    private final String DETAILS_WITH_CONTEXT_BADGE = "<a href='%s'class='badge more-details' style='background-color:%s;'>%s %s</a>";
-
     private ScenarioOutcome scenarioOutcomeFrom(Feature feature,
                                                 ScenarioDefinition scenarioDefinition,
                                                 TestOutcomes testOutcomes) {
@@ -71,7 +68,7 @@ public class FeatureFileScenarioOutcomes {
         TestResult result = (outcomes.isEmpty()) ? TestResult.UNDEFINED :
                         TestResultList.overallResultFrom(outcomes.stream().map(TestOutcome::getResult).collect(Collectors.toList()));
 
-        List<String> reportBadges = reportBadgesFrom(outcomes, scenarioDefinition.getName());
+        List<String> reportBadges = ReportBadges.from(outcomes, scenarioDefinition.getName());
 
         String featureReport = new ReportNameProvider().forRequirement(feature.getName(),"feature");
 
@@ -101,29 +98,6 @@ public class FeatureFileScenarioOutcomes {
                                          featureReport);
 
 
-    }
-
-    private List<String> reportBadgesFrom(List<TestOutcome> outcomes, String scenarioName) {
-
-
-        if (outcomes.size() == 1) {
-            return Collections.singletonList(String.format(DETAILS_BADGE, outcomes.get(0).getHtmlReport(), "Details"));
-        }
-
-        return outcomes.stream()
-                    .filter( outcome -> outcome.getName().equalsIgnoreCase(scenarioName))
-                    .map(this::outcomeBadgeFor)
-                    .collect(Collectors.toList());
-    }
-
-    private String outcomeBadgeFor(TestOutcome outcome) {
-        String contextIcon = ContextIcon.forOutcome(outcome);
-
-        return String.format(DETAILS_WITH_CONTEXT_BADGE,
-                outcome.getHtmlReport(),
-                BadgeBackground.forOutcome(outcome),
-                contextIcon,
-                "Details");
     }
 
     private File pathFromResourceOnClasspath(String path) {

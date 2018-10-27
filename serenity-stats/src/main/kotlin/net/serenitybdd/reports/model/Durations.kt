@@ -22,17 +22,23 @@ fun clockDurationOf(outcomes: List<TestOutcome>): Duration = ofMillis(
         if (outcomes.isEmpty())
             0
         else {
-            val minStartTime = outcomes.filter { outcome -> outcome.startTime != null }
-                                       .map { outcome -> outcome.startTime }
-                                       .min()
-
-            val maxEndTime = outcomes.filter { outcome -> outcome.startTime != null }
-                    .map { outcome -> outcome.endTime }
-                    .max();
-
-            ChronoUnit.MILLIS.between(minStartTime, maxEndTime)
+            startToFinishTimeIn(outcomes)
         }
 )
+
+private fun startToFinishTimeIn(outcomes: List<TestOutcome>): Long {
+    val minStartTime = outcomes.filter { outcome -> outcome.startTime != null }
+            .map { outcome -> outcome.startTime }
+            .min()
+
+    val maxEndTime = outcomes.filter { outcome -> outcome.startTime != null }
+            .map { outcome -> outcome.endTime }
+            .max();
+
+    return if ((minStartTime != null) && (maxEndTime != null))
+        ChronoUnit.MILLIS.between(minStartTime, maxEndTime)
+    else 0
+}
 
 fun averageDurationOf(outcomes: List<TestOutcome>): Duration = ofMillis(
         if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> outcome.duration }.average().toLong()

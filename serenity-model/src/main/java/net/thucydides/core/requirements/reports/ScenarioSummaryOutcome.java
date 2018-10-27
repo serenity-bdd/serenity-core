@@ -98,7 +98,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         return "";
     }
 
-    public List<String> getScenarioReports() {
+    public List<String> getScenarioReportBadges() {
         return scenarioReports;
     }
 

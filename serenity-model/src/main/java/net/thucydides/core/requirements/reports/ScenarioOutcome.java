@@ -33,6 +33,8 @@ public interface ScenarioOutcome {
 
     String getScenarioReport();
 
+    List<String> getScenarioReportBadges();
+
     Integer getStepCount();
 
     ZonedDateTime getStartTime();

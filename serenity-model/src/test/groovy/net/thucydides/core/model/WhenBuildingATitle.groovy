@@ -32,7 +32,7 @@ class WhenBuildingATitle extends Specification {
     }
 
     def "it should return only the outcome title if there is no context"() {
-        given:T
+        given:
         titleBuilder = titleBuilder.withContext()
 
         when:
@@ -52,22 +52,22 @@ class WhenBuildingATitle extends Specification {
         String title = titleBuilder.getTitle()
 
         then:
-        title == icon + " | " + testOutcome.getTitle()
+        title == icon + testOutcome.getTitle()
 
         where:
         context     | icon
-        "chrome"    | "<i class=\"fa fa-chrome\" aria-hidden=\"true\"></i>"
-        "firefox"   | "<i class=\"fa fa-firefox\" aria-hidden=\"true\"></i>"
-        "safari"    | "<i class=\"fa fa-safari\" aria-hidden=\"true\"></i>"
-        "opera"     | "<i class=\"fa fa-opera\" aria-hidden=\"true\"></i>"
-        "ie"        | "<i class=\"fa fa-internet-explorer\" aria-hidden=\"true\"></i>"
-        "edge"      | "<i class=\"fa fa-edge\" aria-hidden=\"true\"></i>"
-        "phantomjs" | "<i class=\"fa fa-snapchat-ghost\" aria-hidden=\"true\"></i>"
-        "linux"     | "<i class=\"fa fa-linux\" aria-hidden=\"true\"></i>"
-        "mac"       | "<i class=\"fa fa-apple\" aria-hidden=\"true\"></i>"
-        "windows"   | "<i class=\"fa fa-windows\" aria-hidden=\"true\"></i>"
-        "android"   | "<i class=\"fa fa-android\" aria-hidden=\"true\"></i>"
-        "iphone"    | "<i class=\"fa fa-apple\" aria-hidden=\"true\"></i>"
+        "chrome"    | "<span class='context-icon'><i class='fa fa-chrome' aria-hidden='true'></i></span>"
+        "firefox"   | "<span class='context-icon'><i class='fa fa-firefox' aria-hidden='true'></i></span>"
+        "safari"    | "<span class='context-icon'><i class='fa fa-safari' aria-hidden='true'></i></span>"
+        "opera"     | "<span class='context-icon'><i class='fa fa-opera' aria-hidden='true'></i></span>"
+        "ie"        | "<span class='context-icon'><i class='fa fa-internet-explorer' aria-hidden='true'></i></span>"
+        "edge"      | "<span class='context-icon'><i class='fa fa-edge' aria-hidden='true'></i></span>"
+        "phantomjs" | "<span class='context-icon'><i class='fa fa-snapchat-ghost' aria-hidden='true'></i></span>"
+        "linux"     | "<span class='context-icon'><i class='fa fa-linux' aria-hidden='true'></i></span>"
+        "mac"       | "<span class='context-icon'><i class='fa fa-apple' aria-hidden='true'></i></span>"
+        "windows"   | "<span class='context-icon'><i class='fa fa-windows' aria-hidden='true'></i></span>"
+        "android"   | "<span class='context-icon'><i class='fa fa-android' aria-hidden='true'></i></span>"
+        "iphone"    | "<span class='context-icon'><i class='fa fa-apple' aria-hidden='true'></i></span>"
     }
 
     def "it should return the uppercase context name with outcome title for unknown contexts"() {
@@ -79,7 +79,7 @@ class WhenBuildingATitle extends Specification {
         String title = titleBuilder.getTitle()
 
         then:
-        title == "BLACKBERRY | " + testOutcome.getTitle()
+        title.contains("BLACKBERRY")
     }
 
     def "it should return only the outcome title if the display context environment property is set to false"() {

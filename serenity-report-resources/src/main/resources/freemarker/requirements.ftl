@@ -321,7 +321,7 @@
                                                         </div>
                                                         <#if outcome_icon?has_content>
                                                         <div class="scenario-report-badges">
-                                                            <#list scenario.scenarioReports as scenarioReport>
+                                                            <#list scenario.scenarioReportBadges as scenarioReport>
                                                                 <span class="scenario-report-badge" style="float:right;">${scenarioReport}</span>
                                                             </#list>
                                                         </div>

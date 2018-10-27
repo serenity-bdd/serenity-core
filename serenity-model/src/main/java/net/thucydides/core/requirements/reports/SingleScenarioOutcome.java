@@ -6,6 +6,7 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.Collections.EMPTY_LIST;
@@ -131,6 +132,11 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
 
     public String getScenarioReport() {
         return scenarioReport;
+    }
+
+    @Override
+    public List<String> getScenarioReportBadges() {
+        return ReportBadges.forReport(scenarioReport);
     }
 
     public Integer getStepCount() { return steps.size(); }

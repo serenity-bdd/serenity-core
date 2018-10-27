@@ -15,7 +15,7 @@ import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +52,7 @@ public class FirefoxDriverProvider implements DriverProvider {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
-        MutableCapabilities capabilities = new FirefoxDriverCapabilities(environmentVariables).getCapabilities();
+        DesiredCapabilities capabilities = new FirefoxDriverCapabilities(environmentVariables).getCapabilities();
 
         WebDriver driver =  (shouldUseGeckoDriver(environmentVariables)) ?
                 newMarionetteDriver(capabilities,environmentVariables) :
@@ -72,7 +72,7 @@ public class FirefoxDriverProvider implements DriverProvider {
         return USE_GECKO_DRIVER.booleanFrom(environmentVariables, true);
     }
 
-    private WebDriver newFirefoxDriver(MutableCapabilities capabilities, EnvironmentVariables environmentVariables) {
+    private WebDriver newFirefoxDriver(DesiredCapabilities capabilities, EnvironmentVariables environmentVariables) {
         capabilities.setCapability("marionette", false);
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
@@ -84,7 +84,7 @@ public class FirefoxDriverProvider implements DriverProvider {
         return new FirefoxDriver(options);
     }
 
-    private WebDriver newMarionetteDriver(MutableCapabilities capabilities, EnvironmentVariables environmentVariables) {
+    private WebDriver newMarionetteDriver(DesiredCapabilities capabilities, EnvironmentVariables environmentVariables) {
         capabilities.setCapability("marionette", true);
         capabilities.setCapability("headless", ThucydidesSystemProperty.HEADLESS_MODE.booleanFrom(environmentVariables, false));
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);

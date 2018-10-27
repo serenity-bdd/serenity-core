@@ -7,12 +7,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.edge.EdgeOptions;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.opera.OperaOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.safari.SafariOptions;
-import org.openqa.selenium.MutableCapabilities;
 
 import java.util.Map;
 
@@ -22,7 +17,7 @@ import static net.thucydides.core.webdriver.WebDriverFactory.getDriverFrom;
 
 public class DriverCapabilities {
 
-    public static final DriverCapabilitiesProvider DEFAULT_CAPABILITIES = FirefoxOptions::new;
+    public static final DriverCapabilitiesProvider DEFAULT_CAPABILITIES = DesiredCapabilities::firefox;
     private final EnvironmentVariables environmentVariables;
     private final CapabilityEnhancer enhancer;
 
@@ -33,7 +28,7 @@ public class DriverCapabilities {
         this.enhancer = enhancer;
     }
 
-    public MutableCapabilities forDriver(String driverName, String options) {
+    public DesiredCapabilities forDriver(String driverName, String options) {
         if (driverName == null) {
             driverName = REMOTE_DRIVER;
         }
@@ -63,26 +58,25 @@ public class DriverCapabilities {
         return SupportedWebDriver.valueOrSynonymOf(normalizedDriverName);
     }
 
-    @SuppressWarnings("deprecation")
-	private Map<SupportedWebDriver, DriverCapabilitiesProvider> driverCapabilitiesSelector(String options) {
-        Map<SupportedWebDriver, DriverCapabilitiesProvider> selectors = new HashMap<>();
+    private Map<SupportedWebDriver, DriverCapabilitiesProvider> driverCapabilitiesSelector(String options) {
+        Map<SupportedWebDriver, DriverCapabilitiesProvider> selectors = new HashMap();
 
         selectors.put(CHROME,new ChromeDriverCapabilities(environmentVariables, options));
         selectors.put(FIREFOX,new FirefoxDriverCapabilities(environmentVariables));
         selectors.put(APPIUM,new AppiumDriverCapabilities(environmentVariables, options));
         selectors.put(PROVIDED,new ProvidedDriverCapabilities(environmentVariables));
-        selectors.put(SAFARI, SafariOptions::new);
+        selectors.put(SAFARI, DesiredCapabilities::safari);
         selectors.put(HTMLUNIT, DesiredCapabilities::htmlUnit);
-        selectors.put(OPERA, OperaOptions::new);
+        selectors.put(OPERA, DesiredCapabilities::operaBlink);
         selectors.put(IEXPLORER, DesiredCapabilities::internetExplorer);
-        selectors.put(EDGE, EdgeOptions::new);
+        selectors.put(EDGE, DesiredCapabilities::edge);
         selectors.put(PHANTOMJS, DesiredCapabilities::phantomjs);
         selectors.put(IPHONE, DesiredCapabilities::iphone);
         selectors.put(ANDROID, DesiredCapabilities::android);
         return selectors;
     }
 
-    public MutableCapabilities realBrowserCapabilities(SupportedWebDriver driverType, String options) {
+    public DesiredCapabilities realBrowserCapabilities(SupportedWebDriver driverType, String options) {
 
         return enhancer.enhanced(
                 driverCapabilitiesSelector(options)
@@ -92,13 +86,13 @@ public class DriverCapabilities {
         );
     }
 
-    private MutableCapabilities remoteCapabilities(String options) {
+    private DesiredCapabilities remoteCapabilities(String options) {
         String remoteBrowser = ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables, getDriverFrom(environmentVariables));
         if (remoteBrowser == null) {
             remoteBrowser = "firefox";
         }
 
-        MutableCapabilities capabilities = realBrowserCapabilities(driverTypeFor(remoteBrowser), options);
+        DesiredCapabilities capabilities = realBrowserCapabilities(driverTypeFor(remoteBrowser), options);
         capabilities.setCapability("idle-timeout",EXTRA_TIME_TO_TAKE_SCREENSHOTS);
 
         Boolean recordScreenshotsInSaucelabs = ThucydidesSystemProperty.SAUCELABS_RECORD_SCREENSHOTS.booleanFrom(environmentVariables);

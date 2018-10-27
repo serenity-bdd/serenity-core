@@ -11,7 +11,6 @@ import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.MutableCapabilities;
 
 public class HtmlDriverProvider implements DriverProvider {
 
@@ -34,7 +33,7 @@ public class HtmlDriverProvider implements DriverProvider {
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
 
-        MutableCapabilities enhancedCapabilities = enhancer.enhanced(capabilities, SupportedWebDriver.HTMLUNIT);
+        DesiredCapabilities enhancedCapabilities = enhancer.enhanced(capabilities, SupportedWebDriver.HTMLUNIT);
 
         HtmlUnitDriver driver = new HtmlUnitDriver(enhancedCapabilities);
         driverProperties.registerCapabilities("htmlunit", capabilitiesToProperties(enhancedCapabilities));

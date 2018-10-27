@@ -2,7 +2,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.appium.AppiumConfiguration;
-import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class AppiumDriverCapabilities implements DriverCapabilitiesProvider {
 
@@ -15,7 +15,7 @@ public class AppiumDriverCapabilities implements DriverCapabilitiesProvider {
     }
 
     @Override
-    public MutableCapabilities getCapabilities() {
+    public DesiredCapabilities getCapabilities() {
         return AppiumConfiguration.from(environmentVariables).getCapabilities(options);
     }
 

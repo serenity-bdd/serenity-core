@@ -12,7 +12,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.List;
 
@@ -83,7 +83,7 @@ public class BrowserMobFixtureService implements FixtureService {
     }
 
     @Override
-    public void addCapabilitiesTo(MutableCapabilities capabilities) {
+    public void addCapabilitiesTo(DesiredCapabilities capabilities) {
         if (!proxyServerRunning()) {
             setup();
         }

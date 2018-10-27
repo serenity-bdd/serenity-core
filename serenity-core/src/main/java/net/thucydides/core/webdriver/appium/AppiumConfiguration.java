@@ -5,7 +5,7 @@ import net.thucydides.core.util.PathProcessor;
 import net.thucydides.core.webdriver.MobilePlatform;
 import net.thucydides.core.webdriver.OptionsMap;
 import net.thucydides.core.webdriver.ThucydidesConfigurationException;
-import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -59,12 +59,12 @@ public class AppiumConfiguration {
         }
     }
 
-    public MutableCapabilities getCapabilities() {
+    public DesiredCapabilities getCapabilities() {
         return getCapabilities("");
     }
 
-    public MutableCapabilities getCapabilities(String options) {
-        MutableCapabilities capabilities = new MutableCapabilities();
+    public DesiredCapabilities getCapabilities(String options) {
+        DesiredCapabilities capabilities = new DesiredCapabilities();
         Properties appiumProperties = getProperties(options);
         for (Object key : appiumProperties.keySet()) {
             capabilities.setCapability(key.toString(), appiumProperties.getProperty(key.toString()));

@@ -20,6 +20,7 @@ import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.TimeoutException
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.remote.DesiredCapabilities
 import spock.lang.*
 
 import java.time.temporal.ChronoUnit
@@ -57,8 +58,9 @@ class WhenManagingWebdriverTimeouts extends Specification {
     WebDriver newDriver() {
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--headless");
+        DesiredCapabilities desiredCapabilities = DesiredCapabilities.chrome()
 
-        driver = driverService.newDriver(chromeOptions);
+        driver = driverService.newDriver(desiredCapabilities);
         return driver
     }
 

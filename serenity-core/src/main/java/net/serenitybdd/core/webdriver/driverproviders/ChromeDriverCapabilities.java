@@ -7,7 +7,7 @@ import net.thucydides.core.webdriver.capabilities.ChromePreferences;
 import net.thucydides.core.webdriver.chrome.OptionsSplitter;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.List;
 import java.util.Map;
@@ -25,8 +25,8 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
         this.driverOptions = driverOptions;
     }
 
-    public MutableCapabilities getCapabilities() {
-        MutableCapabilities capabilities = new ChromeOptions();
+    public DesiredCapabilities getCapabilities() {
+        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
 
         ChromeOptions chromeOptions = configuredOptions();
 

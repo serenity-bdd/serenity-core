@@ -5,7 +5,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.AddCustomCapabilities;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
-import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public class PhantomJSCapabilityEnhancer {
         this.environmentVariables = environmentVariables;
     }
 
-    public void enhanceCapabilities(MutableCapabilities capabilities) {
+    public void enhanceCapabilities(DesiredCapabilities capabilities) {
         if (environmentVariables.getProperty(ThucydidesSystemProperty.PHANTOMJS_BINARY_PATH) != null) {
             capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,
                     environmentVariables.getProperty(ThucydidesSystemProperty.PHANTOMJS_BINARY_PATH));

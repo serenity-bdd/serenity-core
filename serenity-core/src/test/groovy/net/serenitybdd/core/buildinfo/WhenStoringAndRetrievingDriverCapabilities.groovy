@@ -4,7 +4,6 @@ import net.serenitybdd.core.webdriver.driverproviders.CapabilitiesToPropertiesCo
 import net.thucydides.core.webdriver.DriverConfiguration
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
-import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.remote.DesiredCapabilities
 import spock.lang.Specification
 /**
@@ -29,7 +28,7 @@ class WhenStoringAndRetrievingDriverCapabilities extends Specification {
             def driverCapabilityRecord = new PropertyBasedDriverCapabilityRecord(configuration)
         when:
             driverCapabilityRecord.registerCapabilities("htmlUnit",  CapabilitiesToPropertiesConverter.capabilitiesToProperties(DesiredCapabilities.htmlUnit()));
-            driverCapabilityRecord.registerCapabilities("firefox",  CapabilitiesToPropertiesConverter.capabilitiesToProperties(new FirefoxOptions()));
+            driverCapabilityRecord.registerCapabilities("firefox",  CapabilitiesToPropertiesConverter.capabilitiesToProperties(DesiredCapabilities.firefox()));
         then:
             outputDirectory.list().sort() == ["browser-firefox.properties","browser-htmlunit.properties"]
     }
@@ -39,7 +38,7 @@ class WhenStoringAndRetrievingDriverCapabilities extends Specification {
             def driverCapabilityRecord = new PropertyBasedDriverCapabilityRecord(configuration)
         and:
             driverCapabilityRecord.registerCapabilities("htmlUnit",  CapabilitiesToPropertiesConverter.capabilitiesToProperties(DesiredCapabilities.htmlUnit()));
-            driverCapabilityRecord.registerCapabilities("firefox",  CapabilitiesToPropertiesConverter.capabilitiesToProperties(new FirefoxOptions()));
+            driverCapabilityRecord.registerCapabilities("firefox",  CapabilitiesToPropertiesConverter.capabilitiesToProperties(DesiredCapabilities.firefox()));
         when:
             def drivers = driverCapabilityRecord.drivers
             def capabilities = driverCapabilityRecord.driverCapabilities

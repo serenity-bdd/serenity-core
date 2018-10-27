@@ -8,7 +8,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.IOException;
 
@@ -28,7 +28,7 @@ public class FluentElementAPITestsBaseClass {
         chromeService.start();
         StepEventBus.getEventBus().clear();
 
-        driver = chromeService.newDriver(new ChromeOptions());
+        driver = chromeService.newDriver(DesiredCapabilities.chrome());
         staticSitePage = new StaticSitePage(driver, 1000);
         staticSitePage.open();
     }

@@ -2,10 +2,14 @@ package net.thucydides.core.webdriver.capabilities;
 
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.util.NameConverter;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.lang.reflect.Method;
 import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -30,12 +34,12 @@ public class BrowserStackRemoteDriverCapabilities implements RemoteDriverCapabil
     }
 
     @Override
-    public MutableCapabilities getCapabilities(MutableCapabilities capabilities) {
+    public DesiredCapabilities getCapabilities(DesiredCapabilities capabilities) {
         configureBrowserStackCapabilities(capabilities);
         return capabilities;
     }
 
-    private void configureBrowserStackCapabilities(MutableCapabilities capabilities) {
+    private void configureBrowserStackCapabilities(DesiredCapabilities capabilities) {
         Optional<String> guessedTestName = RemoteTestName.fromCurrentTest();
         guessedTestName.ifPresent(
                 name -> capabilities.setCapability("name", name)
@@ -45,7 +49,7 @@ public class BrowserStackRemoteDriverCapabilities implements RemoteDriverCapabil
 
         String remotePlatform = environmentVariables.getProperty("remote.platform");
         if (isNotEmpty(remotePlatform)) {
-            capabilities.setCapability(CapabilityType.PLATFORM, Platform.valueOf(remotePlatform));
+            capabilities.setPlatform(Platform.valueOf(remotePlatform));
         }
     }
 

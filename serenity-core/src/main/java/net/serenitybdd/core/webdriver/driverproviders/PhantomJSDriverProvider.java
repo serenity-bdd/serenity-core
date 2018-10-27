@@ -14,7 +14,6 @@ import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.MutableCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +44,7 @@ public class PhantomJSDriverProvider implements DriverProvider {
             return new WebDriverStub();
         }
 
-        MutableCapabilities enhancedCapabilities = requestedPhantomJSCapabilities(environmentVariables);
+        DesiredCapabilities enhancedCapabilities = requestedPhantomJSCapabilities(environmentVariables);
         driverProperties.registerCapabilities("phantomjs", capabilitiesToProperties(enhancedCapabilities));
 
         try {
@@ -56,8 +55,8 @@ public class PhantomJSDriverProvider implements DriverProvider {
         }
     }
 
-    private MutableCapabilities requestedPhantomJSCapabilities(EnvironmentVariables environmentVariables) {
-        MutableCapabilities capabilities = DesiredCapabilities.phantomjs();
+    private DesiredCapabilities requestedPhantomJSCapabilities(EnvironmentVariables environmentVariables) {
+        DesiredCapabilities capabilities = DesiredCapabilities.phantomjs();
         PhantomJSCapabilityEnhancer phantomEnhancer = new PhantomJSCapabilityEnhancer(environmentVariables);
         phantomEnhancer.enhanceCapabilities(capabilities);
 

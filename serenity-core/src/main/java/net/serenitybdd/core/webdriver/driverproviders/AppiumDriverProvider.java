@@ -16,7 +16,7 @@ import net.thucydides.core.webdriver.*;
 import net.thucydides.core.webdriver.appium.AppiumConfiguration;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,7 +82,7 @@ public class AppiumDriverProvider implements DriverProvider {
 
     }
 
-    private MutableCapabilities appiumCapabilities(String options, EnvironmentVariables environmentVariables) {
+    private DesiredCapabilities appiumCapabilities(String options, EnvironmentVariables environmentVariables) {
         return AppiumConfiguration.from(environmentVariables).getCapabilities(options);
     }
 

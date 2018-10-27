@@ -16,12 +16,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.MutableCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+import static net.thucydides.core.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
 import static net.thucydides.core.webdriver.SupportedWebDriver.IEXPLORER;
 
 public class InternetExplorerDriverProvider implements DriverProvider {
@@ -52,22 +52,22 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         }
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-        MutableCapabilities mutableCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities(), IEXPLORER);
+        DesiredCapabilities desiredCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities(), IEXPLORER);
 
-        SetProxyConfiguration.from(environmentVariables).in(mutableCapabilities);
+        SetProxyConfiguration.from(environmentVariables).in(desiredCapabilities);
 
-        driverProperties.registerCapabilities("iexplorer", capabilitiesToProperties(mutableCapabilities));
+        driverProperties.registerCapabilities("iexplorer", capabilitiesToProperties(desiredCapabilities));
 
         try {
-            return retryCreateDriverOnNoSuchSession(mutableCapabilities);
+            return retryCreateDriverOnNoSuchSession(desiredCapabilities);
         } catch (Exception couldNotStartServer) {
             LOGGER.warn("Failed to start the Internet driver service, using a native driver instead - " + couldNotStartServer.getMessage());
-            return new InternetExplorerDriver(mutableCapabilities);
+            return new InternetExplorerDriver(desiredCapabilities);
         }
     }
 
-    private WebDriver retryCreateDriverOnNoSuchSession(MutableCapabilities mutableCapabilities) throws IOException {
-        return new TryAtMost(3).toStartNewDriverWith(mutableCapabilities);
+    private WebDriver retryCreateDriverOnNoSuchSession(DesiredCapabilities desiredCapabilities) throws IOException {
+        return new TryAtMost(3).toStartNewDriverWith(desiredCapabilities);
     }
 
     private class TryAtMost {
@@ -77,29 +77,33 @@ public class InternetExplorerDriverProvider implements DriverProvider {
             this.maxTries = maxTries;
         }
 
-        public WebDriver toStartNewDriverWith(MutableCapabilities MutableCapabilities) throws IOException {
+        public WebDriver toStartNewDriverWith(DesiredCapabilities desiredCapabilities) throws IOException {
             try {
-                return getDriverServicePool().newDriver(MutableCapabilities);
+                return getDriverServicePool().newDriver(desiredCapabilities);
             } catch (NoSuchSessionException e) {
                 if (maxTries == 0) { throw e; }
 
                 LOGGER.error(e.getClass().getCanonicalName() + " happened - retrying in 2 seconds");
                 new InternalSystemClock().pauseFor(2000);
-                return new TryAtMost(maxTries - 1).toStartNewDriverWith(MutableCapabilities);
+                return new TryAtMost(maxTries - 1).toStartNewDriverWith(desiredCapabilities);
             }
         }
     }
 
-    private MutableCapabilities recommendedDefaultInternetExplorerCapabilities() {
-        MutableCapabilities defaults = DesiredCapabilities.internetExplorer();
+    private DesiredCapabilities recommendedDefaultInternetExplorerCapabilities() {
+        DesiredCapabilities defaults = DesiredCapabilities.internetExplorer();
 
         defaults.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING, true);
         defaults.setCapability(InternetExplorerDriver.NATIVE_EVENTS, false);
         defaults.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, false);
         defaults.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
-        defaults.setCapability(CapabilityType.SUPPORTS_JAVASCRIPT, true);
+        defaults.setJavascriptEnabled(true);
 
         defaults = AddCustomDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(defaults);
+
+        if (ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables,false)) {
+            defaults.acceptInsecureCerts();
+        }
         return defaults;
     }
 }

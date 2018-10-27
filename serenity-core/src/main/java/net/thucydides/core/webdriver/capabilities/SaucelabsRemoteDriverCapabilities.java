@@ -4,8 +4,7 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Optional;
 import java.util.Properties;
@@ -32,7 +31,7 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
     }
 
     @Override
-    public MutableCapabilities getCapabilities(MutableCapabilities capabilities) {
+    public DesiredCapabilities getCapabilities(DesiredCapabilities capabilities) {
 
 
         configureBrowserVersion(capabilities);
@@ -50,31 +49,31 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
 
         configureTestName(capabilities);
 
-        capabilities.setCapability(CapabilityType.SUPPORTS_JAVASCRIPT, true);
+        capabilities.setJavascriptEnabled(true);
 
         return capabilities;
     }
 
-    private void addBuildNumberTo(MutableCapabilities capabilities) {
+    private void addBuildNumberTo(DesiredCapabilities capabilities) {
         if (environmentVariables.getProperty("BUILD_NUMBER") != null) {
             capabilities.setCapability("build", environmentVariables.getProperty("BUILD_NUMBER"));
         }
     }
 
 
-    private void configureBrowserVersion(MutableCapabilities capabilities) {
+    private void configureBrowserVersion(DesiredCapabilities capabilities) {
         String driverVersion = ThucydidesSystemProperty.SAUCELABS_DRIVER_VERSION.from(environmentVariables);
         if (isNotEmpty(driverVersion)) {
             capabilities.setCapability("version", driverVersion);
         }
     }
 
-    private void configureTargetPlatform(MutableCapabilities capabilities) {
+    private void configureTargetPlatform(DesiredCapabilities capabilities) {
         SetAppropriateSaucelabsPlatformVersion.inCapabilities(capabilities).from(environmentVariables);
 
         String remotePlatform = environmentVariables.getProperty("remote.platform");
         if (isNotEmpty(remotePlatform)) {
-            capabilities.setCapability(CapabilityType.PLATFORM, Platform.valueOf(remotePlatform));
+            capabilities.setPlatform(Platform.valueOf(remotePlatform));
         }
 
     }
@@ -101,7 +100,7 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
         return propertyName.replace("saucelabs.","");
     }
 
-    private void configureTestName(MutableCapabilities capabilities) {
+    private void configureTestName(DesiredCapabilities capabilities) {
         String testName = SAUCELABS_TEST_NAME.from(environmentVariables);
         if (isNotEmpty(testName)) {
             capabilities.setCapability("name", testName);

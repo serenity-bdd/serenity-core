@@ -2,7 +2,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
-import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Map;
 
@@ -24,7 +24,7 @@ public class AddCustomDriverCapabilities {
         return new AddCustomDriverCapabilities(environmentVariables);
     }
 
-    public MutableCapabilities to(MutableCapabilities capabilities) {
+    public DesiredCapabilities to(DesiredCapabilities capabilities) {
         Map<String, ?> customCapabilities = CustomCapabilities.forDriver(driver).from(environmentVariables);
         customCapabilities.forEach(
                 capabilities::setCapability

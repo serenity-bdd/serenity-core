@@ -6,7 +6,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class SetProxyConfiguration {
     private final EnvironmentVariables environmentVariables;
@@ -20,7 +20,7 @@ public class SetProxyConfiguration {
         return new SetProxyConfiguration(environmentVariables);
     }
 
-    public void in(MutableCapabilities capabilities) {
+    public void in(DesiredCapabilities capabilities) {
         String proxyUrl = ThucydidesSystemProperty.SERENITY_PROXY_HTTP.from(environmentVariables);
         String proxyPort = ThucydidesSystemProperty.SERENITY_PROXY_HTTP_PORT.from(environmentVariables);
         String sslProxy = ThucydidesSystemProperty.SERENITY_PROXY_SSL.from(environmentVariables, proxyUrl);

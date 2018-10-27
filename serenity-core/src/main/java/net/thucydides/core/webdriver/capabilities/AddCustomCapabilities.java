@@ -2,7 +2,7 @@ package net.thucydides.core.webdriver.capabilities;
 
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +28,7 @@ public class AddCustomCapabilities {
         return this;
     }
 
-    public void to(MutableCapabilities capabilities) {
+    public void to(DesiredCapabilities capabilities) {
         List<String> propertiesWithPrefix = environmentVariables.getKeys()
                 .stream()
                 .filter(key -> key.startsWith(prefix))

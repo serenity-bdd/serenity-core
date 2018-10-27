@@ -6,7 +6,7 @@ import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.core.util.MockEnvironmentVariables
 import org.openqa.selenium.ie.InternetExplorerDriver
 import org.openqa.selenium.remote.CapabilityType
-import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.remote.DesiredCapabilities
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -62,9 +62,9 @@ class WhenDefiningCustomDriverPropertiesInTheSystemProperties extends Specificat
         environmentVariables.setProperty("driver_capabilities.common.takesScreenshot", "true")
         environmentVariables.setProperty("driver_capabilities.iexplorer.ie.ensureCleanSession", "true")
         and:
-        ChromeOptions options = new ChromeOptions()
+        DesiredCapabilities capabilities = DesiredCapabilities.chrome()
         when:
-        def capabilities = AddCustomDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(options)
+        capabilities = AddCustomDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(capabilities)
         then:
         capabilities.getCapability("takesScreenshot") == true &&
         capabilities.getCapability("ie.ensureCleanSession") == true

@@ -39,6 +39,10 @@ public class TagFilter {
         return filteredTags;
     }
 
+    public boolean shouldDisplayTagWithType(String tagType) {
+        return !filteredTagTypes(Collections.singletonList(tagType)).isEmpty();
+    }
+
 
     public Set<TestTag> removeTagsOfType(Set<TestTag> tags, String... redundantTagTypes) {
         Set<TestTag> filteredTags = new HashSet();

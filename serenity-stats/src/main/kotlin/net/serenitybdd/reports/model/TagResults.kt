@@ -5,13 +5,18 @@ import net.thucydides.core.model.TestResult
 import net.thucydides.core.model.TestTag
 import net.thucydides.core.reports.TestOutcomes
 import net.thucydides.core.reports.html.ReportNameProvider
+import net.thucydides.core.reports.html.TagFilter
 import net.thucydides.core.requirements.RequirementsService
+import net.thucydides.core.util.EnvironmentVariables
 import org.apache.commons.lang3.StringUtils
 
 
 class TagResults(val testOutcomes: TestOutcomes) {
 
     val requirementsService = getInjector().getInstance<RequirementsService>(RequirementsService::class.java)
+    val environmentVariables = getInjector().getInstance<EnvironmentVariables>(EnvironmentVariables::class.java)
+
+    val tagFilter = TagFilter(environmentVariables)
 
     companion object {
         @JvmStatic
@@ -21,10 +26,13 @@ class TagResults(val testOutcomes: TestOutcomes) {
     fun groupedByType(): List<TagResultSet> {
         return forAllTags()
                 .filter { tagResult -> StringUtils.isNotEmpty(tagResult.tag.type) }
+                .filter { tagResult -> tagFilter.shouldDisplayTagWithType(tagResult.tag.type) }
                 .groupBy { tagResult -> tagResult.type }
                 .map { (tagType, tagResults) -> TagResultSet(tagType, tagResults) }
                 .sortedBy { tagResultSet -> tagResultSet.tagType }
     }
+
+
 
     fun forAllTags(): List<TagResult> =
             testOutcomes.tags

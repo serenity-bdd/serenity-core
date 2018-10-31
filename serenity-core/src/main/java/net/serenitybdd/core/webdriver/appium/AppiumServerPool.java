@@ -9,7 +9,6 @@ import org.openqa.selenium.remote.service.DriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -32,8 +31,8 @@ public class AppiumServerPool {
 
     private static AppiumServerPool pool;
 
-    private Map<String, DriverService> appiumServers = new HashMap<>();
-    private Map<Thread, Set<DriverService>> serversByThread = new HashMap<>();
+    private Map<String, DriverService> appiumServers = Collections.synchronizedMap(new HashMap<>());
+    private Map<Thread, Set<DriverService>> serversByThread = Collections.synchronizedMap(new HashMap<>());
 
     private Optional<String> defaultHubUrl = Optional.empty();
 
@@ -51,9 +50,11 @@ public class AppiumServerPool {
     }
 
     private void logStatus() {
-        appiumServers.values().forEach(
-                server -> LOGGER.info("Server status for " + server.getUrl() + " : is running = " + server.isRunning())
-        );
+        synchronized(appiumServers) {
+            appiumServers.values().forEach(
+                    server -> LOGGER.info("Server status for " + server.getUrl() + " : is running = " + server.isRunning())
+            );
+        }
     }
 
     public synchronized static AppiumServerPool instance(EnvironmentVariables environmentVariables) {
@@ -116,8 +117,12 @@ public class AppiumServerPool {
 
 
     private void index(DriverService appiumDriverService) {
-        serversByThread.putIfAbsent(Thread.currentThread(), new HashSet<>());
-        serversByThread.get(Thread.currentThread()).add(appiumDriverService);
+        synchronized(serversByThread) {
+            if (serversByThread.get(Thread.currentThread()) == null) {
+                serversByThread.put(Thread.currentThread(), new HashSet<>());
+            }
+            serversByThread.get(Thread.currentThread()).add(appiumDriverService);
+        }
     }
 
     private URL configuredAppiumUrl(String url) {
@@ -129,25 +134,29 @@ public class AppiumServerPool {
     }
 
     public void shutdownAllServersRunningOnThread(Thread thread) {
-        serversByThread.getOrDefault(thread, new HashSet<>()).forEach(
-                service -> {
-                    LOGGER.info("Shutting down Appium server on " + service.getUrl());
-                    LOGGER.info("Shutting down Appium server on " + service.getUrl());
-                    if (service.isRunning()) {
-                        service.stop();
-                        LOGGER.info("Service stopped");
-                    } else {
-                        LOGGER.info("Service was already stopped");
+        synchronized(serversByThread) {
+            serversByThread.getOrDefault(thread, new HashSet<>()).forEach(
+                    service -> {
+                        LOGGER.info("Shutting down Appium server on " + service.getUrl());
+                        LOGGER.info("Shutting down Appium server on " + service.getUrl());
+                        if (service.isRunning()) {
+                            service.stop();
+                            LOGGER.info("Service stopped");
+                        } else {
+                            LOGGER.info("Service was already stopped");
+                        }
                     }
-                }
-        );
-        serversByThread.remove(thread);
+            );
+            serversByThread.remove(thread);
+        }
     }
 
     public Set<URL> getActiveServersInCurrentThread() {
-        return serversByThread.getOrDefault(Thread.currentThread(), new HashSet<>())
-                              .stream()
-                               .map(DriverService::getUrl)
-                               .collect(Collectors.toSet());
+        synchronized(serversByThread) {
+            return serversByThread.getOrDefault(Thread.currentThread(), new HashSet<>())
+                    .stream()
+                    .map(DriverService::getUrl)
+                    .collect(Collectors.toSet());
+        }
     }
 }

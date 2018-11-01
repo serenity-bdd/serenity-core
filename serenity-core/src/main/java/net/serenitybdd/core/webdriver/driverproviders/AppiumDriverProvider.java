@@ -62,8 +62,13 @@ public class AppiumDriverProvider implements DriverProvider {
             case ANDROID:
                 LOGGER.info("  - Using android appium server at " + appiumUrl);
                 LOGGER.info("  - Using appium capabilities " +  enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), ANDROID));
-                AndroidDriver androidDriver = new AndroidDriver(appiumUrl, enhancer.enhanced(appiumCapabilities(options,testEnvironmentVariables), ANDROID) );
-
+                AndroidDriver androidDriver = null;
+                try {
+                    androidDriver = new AndroidDriver(appiumUrl, enhancer.enhanced(appiumCapabilities(options, testEnvironmentVariables), ANDROID));
+                } catch(Exception e) {
+                    LOGGER.error("Creating ANDROID Driver failed " + androidDriver, e);
+                    throw e;
+                }
                 driverProperties.registerCapabilities("appium", capabilitiesToProperties(androidDriver.getCapabilities()));
                 WebDriverInstanceEvents.bus().register(listenerFor(androidDriver, deviceName));
                 LOGGER.info("  -> driver created" + androidDriver);

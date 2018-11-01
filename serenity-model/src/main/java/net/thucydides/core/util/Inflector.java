@@ -249,7 +249,7 @@ public class Inflector {
         if (result.length() == 0) return "";
         result = result.replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2");
         result = result.replaceAll("([a-z\\d])([A-Z])", "$1_$2");
-        result = result.replace('-', '_');
+//        result = result.replace('-', '_');
         if (delimiterChars != null) {
             for (char delimiterChar : delimiterChars) {
                 result = result.replace(delimiterChar, '_');

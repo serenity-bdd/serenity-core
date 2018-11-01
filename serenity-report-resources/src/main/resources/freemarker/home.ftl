@@ -490,8 +490,7 @@
                                                                 <#else>
                                                                     <#assign coverageTableClass="feature-coverage-table-with-pagination">
                                                                 </#if>
-                                                            <table class="table ${coverageTableClass}"
-                                                                   id="${tagCoverageByType.tagType}">
+                                                            <table class="table ${coverageTableClass}" id="${tagCoverageByType.tagType}">
                                                                 <thead>
                                                                 <tr>
                                                                     <th>${formatter.humanReadableFormOf(tagCoverageByType.tagType)}</th>

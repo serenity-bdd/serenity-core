@@ -58,6 +58,10 @@ public class WhenMakingTestNamesMoreReadable {
         assertThat(NameConverter.humanize("aTESTMethod"), is("A TEST method"));
     }
 
+    @Test
+    public void should_recognize_word_acronyms() {
+        assertThat(NameConverter.humanize("A TEST method"), is("A TEST method"));
+    }
 
     @Test
     public void camelCase_method_names_should_be_converted_to_human_readable_sentences() {

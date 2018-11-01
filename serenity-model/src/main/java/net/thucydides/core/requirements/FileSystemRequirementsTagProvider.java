@@ -543,9 +543,9 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
         Requirement requirement;
         if (narrative.isPresent()) {
-            requirement = leafRequirementWithNarrative(humanReadableVersionOf(storyName),
-                                                       storyFile.getPath(),
-                                                       narrative.get()).withType(type.toString());
+              requirement = leafRequirementWithNarrative(storyName,
+                                                         storyFile.getPath(),
+                                                         narrative.get()).withType(type.toString());
         } else {
             requirement = storyNamed(storyName, storyFile.getPath()).withType(type.toString());
         }
@@ -557,7 +557,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         if (narrative.isPresent() && isNotBlank(narrative.get().getTitle().orElse(""))) {
             return narrative.get().getTitle().get();
         } else {
-            return storyFile.getName().replace(type.getExtension(), "");
+            return storyFile.getName().replace(type.getExtension(), "").replace("_"," ");
         }
 
     }

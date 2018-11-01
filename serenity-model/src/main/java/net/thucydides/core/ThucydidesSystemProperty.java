@@ -1242,8 +1242,22 @@ public enum ThucydidesSystemProperty {
 
     FIREFOX_LOG_LEVEL,
 
+    /**
+     * The device name used for Appium tests
+     */
     APPIUM_DEVICE_NAME("appium.deviceName"),
+
+    /**
+     * (Experimental) Specifies a list of devices to be used for parallel testing.
+     * Will only be used if manage.appium.servers is set to true
+     */
     APPIUM_DEVICE_NAMES("appium.deviceNames"),
+
+    /**
+     * Should Serenity Manage your appium servers for you
+     */
+    MANAGE_APPIUM_SERVERS,
+
     /**
      * Set to true to activate the AcceptInsecureCertificates options for Chrome and Firefox.
      */

@@ -132,7 +132,6 @@ public class AppiumServerPool {
         serversByThread.getOrDefault(thread, new HashSet<>()).forEach(
                 service -> {
                     LOGGER.info("Shutting down Appium server on " + service.getUrl());
-                    LOGGER.info("Shutting down Appium server on " + service.getUrl());
                     if (service.isRunning()) {
                         service.stop();
                         LOGGER.info("Service stopped");

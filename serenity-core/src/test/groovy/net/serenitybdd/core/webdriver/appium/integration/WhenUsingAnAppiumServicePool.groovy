@@ -1,6 +1,7 @@
-package net.serenitybdd.core.webdriver.appium
+package net.serenitybdd.core.webdriver.appium.integration
 
-
+import net.serenitybdd.core.webdriver.appium.AppiumDevicePool
+import net.serenitybdd.core.webdriver.appium.AppiumServerPool
 import net.thucydides.core.annotations.Shared
 import net.thucydides.core.util.MockEnvironmentVariables
 import spock.lang.Specification

@@ -8,5 +8,4 @@ public interface FromFile {
     void fromFile(Path source) throws IOException;
     void fromFile(Path source, Charset encoding) throws IOException;
     FromFile downloadable();
-    FromFile asEvidence();
 }

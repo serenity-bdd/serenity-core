@@ -83,13 +83,18 @@ public class AppiumServerPool {
 
     private URL localServerUrlFor(String deviceName) {
         LOGGER.info("Finding local appium server for " + deviceName);
-        if (appiumServers.get(deviceName) != null) {
-            return appiumServers.get(deviceName).getUrl();
-        }
-
-        LOGGER.info("No local appium server found for " + deviceName + " - starting a new one");
-        DriverService appiumDriverService = AppiumDriverLocalService.buildService(new AppiumServiceBuilder().usingAnyFreePort());
+        DriverService appiumDriverService = null;
         try {
+            if (appiumServers.get(deviceName) != null) {
+                appiumDriverService = appiumServers.get(deviceName);
+                if(!appiumDriverService.isRunning()) {
+                    LOGGER.info("  -> Restarting local appium server " + appiumDriverService.getUrl());
+                    appiumDriverService.start();
+                }
+                return appiumDriverService.getUrl();
+            }
+            LOGGER.info("No local appium server found for " + deviceName + " - starting a new one");
+            appiumDriverService = AppiumDriverLocalService.buildService(new AppiumServiceBuilder().usingAnyFreePort());
             LOGGER.info("Starting service...");
             appiumDriverService.start();
             LOGGER.info("Service started: " + appiumDriverService.getUrl());
@@ -137,7 +142,6 @@ public class AppiumServerPool {
         synchronized(serversByThread) {
             serversByThread.getOrDefault(thread, new HashSet<>()).forEach(
                     service -> {
-                        LOGGER.info("Shutting down Appium server on " + service.getUrl());
                         LOGGER.info("Shutting down Appium server on " + service.getUrl());
                         if (service.isRunning()) {
                             service.stop();

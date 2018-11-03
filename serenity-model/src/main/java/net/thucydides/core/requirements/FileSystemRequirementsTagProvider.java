@@ -31,6 +31,7 @@ import static java.util.Collections.sort;
 import static net.thucydides.core.files.TheDirectoryStructure.startingAt;
 import static net.thucydides.core.requirements.RequirementsPath.pathElements;
 import static net.thucydides.core.requirements.RequirementsPath.stripRootFromPath;
+import static net.thucydides.core.util.Inflector.inflection;
 import static net.thucydides.core.util.NameConverter.humanize;
 import static org.apache.commons.io.FilenameUtils.removeExtension;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -557,9 +558,19 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         if (narrative.isPresent() && isNotBlank(narrative.get().getTitle().orElse(""))) {
             return narrative.get().getTitle().get();
         } else {
-            return storyFile.getName().replace(type.getExtension(), "").replace("_"," ");
+            if (isSnakeCase(storyFile.getName())) {
+                return storyFile.getName().replace(type.getExtension(), "").replace("_"," ");
+            } else {
+                String storyNameWithoutExtension = storyFile.getName().replace(type.getExtension(), "");
+                String snakeCaseStoryName = inflection().underscore(storyNameWithoutExtension);
+                return inflection().of(snakeCaseStoryName).asATitle().toString();
+            }
         }
 
+    }
+
+    private boolean isSnakeCase(String name) {
+        return name.contains("_");
     }
 
     private java.util.Optional<Narrative> loadFromStoryFile(File storyFile) {

@@ -1,4 +1,4 @@
-package net.serenitybdd.screenplay;
+package net.serenitybdd.markers;
 
 public interface CanBeSilent {
     boolean isSilent();

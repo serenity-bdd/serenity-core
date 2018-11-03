@@ -9,6 +9,8 @@ import net.serenitybdd.core.SkipNested;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.steps.HasCustomFieldValues;
+import net.serenitybdd.markers.CanBeSilent;
+import net.serenitybdd.markers.IsSilent;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import net.thucydides.core.ThucydidesSystemProperty;
@@ -62,7 +64,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
                             final Object[] args, final MethodProxy proxy) throws Throwable {
 
         Object result;
-        if (baseClassMethod(method, obj.getClass())) {
+        if (baseClassMethod(method, obj)) {
             result = runBaseObjectMethod(obj, method, args, proxy);
         } else {
             result = testStepResult(obj, method, args, proxy);
@@ -82,10 +84,23 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
             "finalize",
             "getMetaClass");
 
-    private boolean baseClassMethod(final Method method, final Class callingClass) {
+    private boolean baseClassMethod(final Method method, Object obj) {
+        Class callingClass = obj.getClass();
         boolean isACoreLanguageMethod = (OBJECT_METHODS.contains(method.getName()));
         boolean methodDoesNotComeFromThisClassOrARelatedParentClass = !declaredInSameDomain(method, callingClass);
-        return (isACoreLanguageMethod || methodDoesNotComeFromThisClassOrARelatedParentClass);
+        boolean isSilentMethod = isSilent(callingClass, method,  obj);
+        return (isACoreLanguageMethod || methodDoesNotComeFromThisClassOrARelatedParentClass || isSilentMethod);
+    }
+
+    private boolean isSilent(Class callingClass, Method method, Object obj) {
+        if (IsSilent.class.isAssignableFrom(callingClass)) { return true; }
+
+        if ((CanBeSilent.class.isAssignableFrom(callingClass) && method.getName().equals("isSilent"))) {
+            return true;
+        }
+
+        if (CanBeSilent.class.isAssignableFrom(callingClass)  && ((CanBeSilent) obj).isSilent()) { return true; }
+        return false;
     }
 
     private boolean declaredInSameDomain(Method method, final Class callingClass) {
@@ -392,7 +407,7 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     }
 
     private boolean isATestStep(final Method method) {
-        return isAnnotatedWithAValidStepAnnotation(method);
+        return isAnnotatedWithAValidStepAnnotation(method) || ScreenplayInspector.isAScreenplayPerformAsMethod(method);
     }
 
     private boolean isIgnored(final Method method) {
@@ -474,31 +489,10 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
     }
 
     private String getTestNameFrom(final Method method, final Object[] args) {
-        if ((args == null) || (args.length == 0)) {
-            return method.getName();
-        } else {
-            return testNameWithArguments(method, args);
-        }
+        return StepNamer.forMethod(method).withArguments(args);
     }
 
-    private String testNameWithArguments(final Method method,
-                                         final Object[] args) {
-        StringBuilder testName = new StringBuilder(method.getName());
-        testName.append(": ");
-
-        boolean isFirst = true;
-        for (Object arg : args) {
-            if (!isFirst) {
-                testName.append(", ");
-            }
-            testName.append(StepArgumentWriter.readableFormOf(arg));
-            isFirst = false;
-        }
-        return testName.toString();
-    }
-
-    private void notifyStepSkippedFor(final Method method, final Object[] args)
-            throws Exception {
+    private void notifyStepSkippedFor(final Method method, final Object[] args) {
 
         if (isPending(method)) {
             StepEventBus.getEventBus().stepPending();

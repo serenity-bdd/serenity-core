@@ -219,7 +219,7 @@ public class StepFactory {
                 return parameterTypes;
             }
         }
-        throw new IllegalArgumentException("Could not find a matching constructor for class " + scenarioStepsClass + "with parameters " + Arrays.toString(parameters));
+        throw new IllegalArgumentException("Could not find a matching constructor for class " + scenarioStepsClass + " with parameters " + Arrays.toString(parameters));
     }
 
     private Constructor<?>[] inOrderOfIncreasingParameters(Constructor<?>[] declaredConstructors) {

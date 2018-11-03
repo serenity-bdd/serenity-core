@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static net.serenitybdd.screenplay.SilentTasks.isSilent;
+
 /**
  * An actor represents the person or system using the application under test.
  * Actors can have Abilities, which allows them to perform Tasks and Interactions.
@@ -135,7 +137,11 @@ public class Actor implements PerformsTasks, SkipNested {
     public final void attemptsTo(Performable... tasks) {
         beginPerformance();
         for (Performable task : tasks) {
-            perform(InstrumentedTask.of(task));
+            if (isSilent(task)) {
+                perform(task);
+            } else {
+                perform(InstrumentedTask.of(task));
+            }
         }
         endPerformance();
     }
@@ -148,7 +154,6 @@ public class Actor implements PerformsTasks, SkipNested {
         if (isPending(todo)) {
             StepEventBus.getEventBus().stepPending();
         }
-
 
         try {
             notifyPerformanceOf(todo);

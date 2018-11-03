@@ -25,6 +25,7 @@ public class WhenInstanciatingAAppiumDriver {
     @Test
     public void should_verify_appium_device_name() {
         try {
+            environmentVariables.setProperty("manage.appium.servers","true");
             new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
         } catch (UnsupportedDriverException couldNotFindDriver) {
             assertThat(couldNotFindDriver.getCause().getMessage()).contains("No available Appium device found - have you specified a device in appium.deviceName or a list of available devices in appium.deviceNames?");

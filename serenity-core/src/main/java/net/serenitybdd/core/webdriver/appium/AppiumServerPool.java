@@ -2,6 +2,7 @@ package net.serenitybdd.core.webdriver.appium;
 
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
+import io.appium.java_client.service.local.flags.GeneralServerFlag;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriverException;
@@ -94,7 +95,9 @@ public class AppiumServerPool {
                 return appiumDriverService.getUrl();
             }
             LOGGER.info("No local appium server found for " + deviceName + " - starting a new one");
-            appiumDriverService = AppiumDriverLocalService.buildService(new AppiumServiceBuilder().usingAnyFreePort());
+            appiumDriverService = AppiumDriverLocalService.buildService(new AppiumServiceBuilder().withIPAddress("127.0.0.1").
+                                    withArgument(GeneralServerFlag.SESSION_OVERRIDE).usingAnyFreePort());
+
             LOGGER.info("Starting service...");
             appiumDriverService.start();
             LOGGER.info("Service started: " + appiumDriverService.getUrl());

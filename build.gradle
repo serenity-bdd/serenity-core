@@ -164,7 +164,8 @@ subprojects {
         exclude '**/*$*'
         exclude '**/samples/**'
         exclude '**/*Sample*'
-        exclude '**/integration/browsers**'
+        exclude '**/integration/browsers/**'
+        exclude '**/integration/appium/**'
         include '**/integration/**'
         reports.junitXml.destination = file("${buildDir}/reports/integration-tests")
         reports.html.destination = file("${buildDir}/reports/integration-tests")
@@ -195,6 +196,7 @@ subprojects {
         exclude '**/*Sample*'
         exclude '**/*Base'
         include '**/integration/browsers/**'
+        include '**/integration/appium/**'
     }
 
     task javadoc(type: Javadoc, overwrite: true) {

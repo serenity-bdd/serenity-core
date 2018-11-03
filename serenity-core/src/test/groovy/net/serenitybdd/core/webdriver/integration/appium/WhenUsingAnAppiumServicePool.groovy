@@ -1,4 +1,4 @@
-package net.serenitybdd.core.webdriver.appium.integration
+package net.serenitybdd.core.webdriver.integration.appium
 
 import net.serenitybdd.core.webdriver.appium.AppiumDevicePool
 import net.serenitybdd.core.webdriver.appium.AppiumServerPool

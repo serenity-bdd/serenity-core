@@ -18,15 +18,14 @@ import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.interactions.internal.Coordinates;
-import org.openqa.selenium.interactions.internal.Locatable;
-import org.openqa.selenium.remote.RemoteWebElement;
+import org.openqa.selenium.interactions.Coordinates;
+import org.openqa.selenium.interactions.Locatable;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.temporal.ChronoUnit;
+import java.time.Clock;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.time.Duration;
@@ -69,7 +68,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         this.driver = driver;
         this.locator = locator;
         this.bySelector = bySelector;
-        this.webdriverClock = new org.openqa.selenium.support.ui.SystemClock();
+        this.webdriverClock = Clock.systemDefaultZone();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
         this.javascriptExecutorFacade = new JavascriptExecutorFacade(driver);
         this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
@@ -86,7 +85,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         this.driver = driver;
         this.locator = locator;
         this.bySelector = null;
-        this.webdriverClock = new org.openqa.selenium.support.ui.SystemClock();
+        this.webdriverClock = Clock.systemDefaultZone();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
         this.javascriptExecutorFacade = new JavascriptExecutorFacade(driver);
         this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
@@ -113,7 +112,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         this.driver = driver;
         this.locator = locator;
         this.bySelector = bySelector;
-        this.webdriverClock = new org.openqa.selenium.support.ui.SystemClock();
+        this.webdriverClock = Clock.systemDefaultZone();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
         this.javascriptExecutorFacade = new JavascriptExecutorFacade(driver);
         this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
@@ -1182,10 +1181,10 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return getElement();
     }
 
-    @Override
-    public Coordinates getCoordinates() {
-        return ((Locatable) getElement()).getCoordinates();
-    }
+//    @Override
+//    public Coordinates getCoordinates() {
+//        return ((Locatable) getElement()).getCoordinates();
+//    }
 
     @Override
     public boolean containsElements(By bySelector) {
@@ -1227,4 +1226,8 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         return this;
     }
 
+    @Override
+    public Coordinates getCoordinates() {
+        return ((Locatable) getElement()).getCoordinates();
+    }
 }

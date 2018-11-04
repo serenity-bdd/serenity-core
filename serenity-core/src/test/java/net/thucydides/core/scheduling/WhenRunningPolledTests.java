@@ -13,11 +13,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.Clock;
-import org.openqa.selenium.support.ui.Duration;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Sleeper;
 
+import java.time.Clock;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -134,7 +133,7 @@ public class WhenRunningPolledTests {
     @Test
     public void page_should_pause_during_wait() throws InterruptedException {
 
-        Clock clock = new org.openqa.selenium.support.ui.SystemClock();
+        Clock clock = Clock.systemDefaultZone();
         NormalFluentWait<WebDriver> waitFor = new NormalFluentWait(driver, clock, sleeper);
         Counter counter = new Counter();
 

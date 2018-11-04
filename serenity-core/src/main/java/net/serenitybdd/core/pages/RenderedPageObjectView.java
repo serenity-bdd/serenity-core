@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Clock;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class RenderedPageObjectView {
         this.driver = driver;
         this.pageObject = pageObject;
         setWaitForTimeout(waitForTimeout);
-        this.webdriverClock = new SystemClock();
+        this.webdriverClock = Clock.systemDefaultZone();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;
         this.timeoutCanBeOverriden = timeoutCanBeOverriden;
     }
@@ -58,7 +59,7 @@ public class RenderedPageObjectView {
     }
 
     public ThucydidesFluentWait<WebDriver> waitForCondition() {
-        return new NormalFluentWait<>(driver, webdriverClock, sleeper)
+        return new NormalFluentWait(driver, webdriverClock, sleeper)
                 .withTimeout(waitForTimeout)
                 .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
                 .ignoring(NoSuchElementException.class,

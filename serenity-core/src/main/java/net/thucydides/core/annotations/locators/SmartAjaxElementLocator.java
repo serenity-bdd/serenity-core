@@ -18,11 +18,10 @@ import net.thucydides.core.webdriver.stubs.WebElementFacadeStub;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.support.ui.Clock;
 import org.openqa.selenium.support.ui.SlowLoadableComponent;
-import org.openqa.selenium.support.ui.SystemClock;
 
 import java.lang.reflect.Field;
+import java.time.Clock;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -50,12 +49,12 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
      * @deprecated The timeOutInSeconds parameter is no longer used - implicit timeouts should now be used
      */
     public SmartAjaxElementLocator(SearchContext searchContext, Field field, MobilePlatform platform, int timeOutInSeconds) {
-        this(new SystemClock(), searchContext, field, platform);
+        this(Clock.systemDefaultZone(), searchContext, field, platform);
 
     }
 
     public SmartAjaxElementLocator(SearchContext searchContext, Field field, MobilePlatform platform) {
-        this(new SystemClock(), searchContext, field, platform);
+        this(Clock.systemDefaultZone(), searchContext, field, platform);
 
     }
 
@@ -256,17 +255,6 @@ public class SmartAjaxElementLocator extends SmartElementLocator implements With
                 }
             }
         }
-
-//        @Override
-//        protected void isError() throws Error {
-//            if (lastException.isPresent()) {
-//                throw new AssertionError("Element could not be loaded", lastException.get());
-//            }
-//        }
-
-//		public NoSuchElementException getLastException() {
-//			return lastException.get();
-//		}
 
         public WebElement getElement() {
             return element;

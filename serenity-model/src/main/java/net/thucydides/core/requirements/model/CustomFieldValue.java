@@ -50,7 +50,6 @@ public class CustomFieldValue {
     }
     /**
      * Return the first paragraph of the rendered text.
-     * @return
      */
     public String getRenderedSummary() {
         String rawText =  (renderedText != null) ? renderedText : text;

@@ -195,7 +195,17 @@ subprojects {
         exclude '**/samples/**'
         exclude '**/*Sample*'
         exclude '**/*Base'
+        exclude '**/integration/appium/**'
         include '**/integration/browsers/**'
+    }
+
+
+    task appiumTests(type: Test) {
+        exclude '**/*$*'
+        exclude '**/samples/**'
+        exclude '**/*Sample*'
+        exclude '**/*Base'
+        exclude '**/integration/browsers/**'
         include '**/integration/appium/**'
     }
 

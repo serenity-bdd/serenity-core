@@ -245,7 +245,6 @@ public class StepFactory {
                 
                 if ((parameters[parameterNumber] != null)
                         && (!isAssignableFrom(parameters[parameterNumber], parameterType))) {
-//                        && (!ClassUtils.isAssignable(parameters[parameterNumber].getClass(), parameterType))) {
                     return false;
                 }
                 parameterNumber++;
@@ -330,7 +329,6 @@ public class StepFactory {
                 return PARAMETER_CAN_BE_ASSIGNED;
             }
             return (!isAssignableFrom(parameter, parameterType));
-//            return (!ClassUtils.isAssignable(parameter.getClass(), parameterType));
         }
     }
 
@@ -359,7 +357,7 @@ public class StepFactory {
         } else if (fieldType.equals(Byte.class) || fieldType.equals(byte.class)) {
             return parameterType.equals(Byte.class) || parameterType.equals(byte.class);
         }
-        return fieldType.isAssignableFrom(parameterType);
+        return parameterType.isAssignableFrom(fieldType);
     }
 
 

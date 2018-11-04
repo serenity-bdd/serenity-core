@@ -244,7 +244,8 @@ public class StepFactory {
                 }
                 
                 if ((parameters[parameterNumber] != null)
-                        && (!ClassUtils.isAssignable(parameters[parameterNumber].getClass(), parameterType))) {
+                        && (!isAssignableFrom(parameters[parameterNumber].getClass(), parameterType))) {
+//                        && (!ClassUtils.isAssignable(parameters[parameterNumber].getClass(), parameterType))) {
                     return false;
                 }
                 parameterNumber++;
@@ -328,8 +329,31 @@ public class StepFactory {
             if (parameter == null) {
                 return PARAMETER_CAN_BE_ASSIGNED;
             }
-
-            return (!ClassUtils.isAssignable(parameter.getClass(), parameterType));
+            return (!isAssignableFrom(parameter.getClass(), parameterType));
+//            return (!ClassUtils.isAssignable(parameter.getClass(), parameterType));
         }
     }
+
+    public static boolean isAssignableFrom(final Class<?> fieldType, final Class<?> parameterType) {
+        if (fieldType.equals(Integer.class) || fieldType.equals(int.class)) {
+            return parameterType.equals(Integer.class) || parameterType.equals(int.class);
+        } else if (fieldType.equals(Float.class) || fieldType.equals(float.class)) {
+            return parameterType.equals(Float.class) || parameterType.equals(float.class);
+        } else if (fieldType.equals(Double.class) || fieldType.equals(double.class)) {
+            return parameterType.equals(Double.class) || parameterType.equals(double.class);
+        } else if (fieldType.equals(Character.class) || fieldType.equals(char.class)) {
+            return parameterType.equals(Character.class) || parameterType.equals(char.class);
+        } else if (fieldType.equals(Long.class) || fieldType.equals(long.class)) {
+            return parameterType.equals(Long.class) || parameterType.equals(long.class);
+        } else if (fieldType.equals(Short.class) || fieldType.equals(short.class)) {
+            return parameterType.equals(Short.class) || parameterType.equals(short.class);
+        } else if (fieldType.equals(Boolean.class) || fieldType.equals(boolean.class)) {
+            return parameterType.equals(Boolean.class) || parameterType.equals(boolean.class);
+        } else if (fieldType.equals(Byte.class) || fieldType.equals(byte.class)) {
+            return parameterType.equals(Byte.class) || parameterType.equals(byte.class);
+        }
+        return fieldType.isAssignableFrom(parameterType);
+    }
+
+
 }

@@ -15,20 +15,17 @@ public abstract class NamedScenario {
 
     /**
      * Return the Given..When..Then part of the scenario
-     * @return
      */
     public abstract Optional<String> asGivenWhenThen(ScenarioDisplayOption displayOption);
     public abstract Optional<String> asGivenWhenThen();
 
     /**
      * Return the example table part of the scenario outline
-     * @return
      */
     public abstract Optional<String> asExampleTable();
 
     /**
      * Return the example table part of the scenario outline
-     * @return
      */
     public abstract Optional<String> asExampleTable(ScenarioDisplayOption displayOption);
 

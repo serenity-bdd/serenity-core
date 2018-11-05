@@ -1242,6 +1242,7 @@ public enum ThucydidesSystemProperty {
 
     FIREFOX_LOG_LEVEL,
 
+    APPIUM_UDID("appium.udid"),
     APPIUM_DEVICE_NAME("appium.deviceName"),
     APPIUM_DEVICE_NAMES("appium.deviceNames"),
     /**

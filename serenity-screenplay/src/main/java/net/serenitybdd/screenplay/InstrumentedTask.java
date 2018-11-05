@@ -3,6 +3,8 @@ package net.serenitybdd.screenplay;
 import com.rits.cloning.Cloner;
 import net.serenitybdd.core.steps.Instrumented;
 import net.thucydides.core.annotations.Step;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.util.EnvironmentVariables;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.util.Arrays.stream;
+import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMENTION;
 
 public class InstrumentedTask {
 
@@ -24,6 +27,12 @@ public class InstrumentedTask {
 
     private static <T extends Performable> boolean shouldInstrument(T task) {
 
+        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+
+        if (MANUAL_TASK_INSTRUMENTION.booleanFrom(environmentVariables, false)) {
+            return false;
+        }
+        
         Optional<Method> performAs = stream(task.getClass().getMethods())
                 .filter(method -> method.getName().equals("performAs"))
                 .findFirst();

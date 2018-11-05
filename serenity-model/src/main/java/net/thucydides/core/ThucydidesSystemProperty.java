@@ -1302,6 +1302,11 @@ public enum ThucydidesSystemProperty {
     MANUAL_RESULT_EXPIRY_LIMIT,
 
     /**
+     * Set this property to true if you don't want Serenity to try to instrument tasks for you.
+     */
+    MANUAL_TASK_INSTRUMENTION,
+
+    /**
      * The title to appear in the tag type table in the email reports
      */
     REPORT_TAGTYPE_TITLE

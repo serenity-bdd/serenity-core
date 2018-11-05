@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay;
 
+import net.serenitybdd.markers.CanBeSilent;
 import net.serenitybdd.screenplay.formatting.FormattedTitle;
 
 class ConsequenceCheckReporter {

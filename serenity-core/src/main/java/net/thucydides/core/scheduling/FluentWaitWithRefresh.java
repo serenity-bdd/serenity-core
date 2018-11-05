@@ -1,8 +1,9 @@
 package net.thucydides.core.scheduling;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.Clock;
 import org.openqa.selenium.support.ui.Sleeper;
+
+import java.time.Clock;
 
 public class FluentWaitWithRefresh<T> extends ThucydidesFluentWait<T> {
 

@@ -408,7 +408,7 @@ public class WhenFindingTagsForATestOutcome {
         Optional<Requirement> requirement = tagProvider.getParentRequirementOf(testOutcome);
 
         assertThat(requirement.isPresent(), is(true));
-        assertThat(requirement.get().getName(), is("Plant potatoes"));
+        assertThat(requirement.get().getName(), is("Plant Potatoes"));
         assertThat(requirement.get().getNarrative().getText(), containsString("As a farmer"));
         assertThat(requirement.get().getNarrative().getText(), containsString("I want to plant potatoes"));
         assertThat(requirement.get().getNarrative().getText(), containsString("So that I can harvest them later on"));

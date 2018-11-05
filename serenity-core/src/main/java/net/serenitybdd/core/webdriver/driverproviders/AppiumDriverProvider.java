@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 
+import static net.thucydides.core.ThucydidesSystemProperty.MANAGE_APPIUM_SERVERS;
 import static net.thucydides.core.webdriver.SupportedWebDriver.ANDROID;
 import static net.thucydides.core.webdriver.SupportedWebDriver.IPHONE;
 
@@ -40,6 +41,33 @@ public class AppiumDriverProvider implements DriverProvider {
 
     @Override
     public WebDriver newInstance(String options, EnvironmentVariables environmentVariables) {
+        if (MANAGE_APPIUM_SERVERS.booleanFrom(environmentVariables, false)) {
+            return newDriverUsingManagedAppiumServers(options, environmentVariables);
+        } else {
+            return newDriverUsingExternalServer(options, environmentVariables);
+        }
+    }
+
+    private WebDriver newDriverUsingExternalServer(String options, EnvironmentVariables environmentVariables) {
+        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
+
+        if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
+            return new WebDriverStub();
+        }
+        switch (appiumTargetPlatform(environmentVariables)) {
+            case ANDROID:
+                AndroidDriver androidDriver = new AndroidDriver(appiumUrl(environmentVariables), enhancer.enhanced(appiumCapabilities(options,environmentVariables), ANDROID) );
+                driverProperties.registerCapabilities("appium", capabilitiesToProperties(androidDriver.getCapabilities()));
+                return androidDriver;
+            case IOS:
+                IOSDriver iosDriver = new IOSDriver(appiumUrl(environmentVariables), enhancer.enhanced(appiumCapabilities(options,environmentVariables), IPHONE));
+                driverProperties.registerCapabilities("appium", capabilitiesToProperties(iosDriver.getCapabilities()));
+                return iosDriver;
+        }
+        throw new UnsupportedDriverException(appiumTargetPlatform(environmentVariables).name());
+    }
+
+    public WebDriver newDriverUsingManagedAppiumServers(String options, EnvironmentVariables environmentVariables) {
 
         LOGGER.info("Creating a new appium driver instance with options " + options);
 
@@ -98,6 +126,11 @@ public class AppiumDriverProvider implements DriverProvider {
 
     private URL appiumUrl(EnvironmentVariables environmentVariables, String deviceName) {
         return AppiumServerPool.instance(environmentVariables).urlFor(deviceName);
+    }
+
+
+    private URL appiumUrl(EnvironmentVariables environmentVariables) {
+        return AppiumConfiguration.from(environmentVariables).getUrl();
     }
 
     private WebDriverInstanceEventListener listenerFor(WebDriver driver, String deviceName) {

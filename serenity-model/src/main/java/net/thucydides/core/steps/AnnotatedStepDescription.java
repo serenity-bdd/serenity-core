@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 import static net.thucydides.core.util.NameConverter.humanize;
+import static net.thucydides.core.util.NameConverter.withNoArguments;
 
 /**
  * Test steps and step groups can be described by various annotations.
@@ -54,9 +55,20 @@ public final class AnnotatedStepDescription {
         }
     }
 
+//    public Method getTestMethod() {
+//        if (getTestClass() != null) {
+//            return methodCalled(description, getTestClass());
+//        } else {
+//            return null;
+//        }
+//    }
     public Method getTestMethod() {
         if (getTestClass() != null) {
-            return methodCalled(description, getTestClass());
+            if (ScreenplayInspector.isAScreenplayClass(getTestClass())) {
+                return ScreenplayInspector.performAsMethodIn(getTestClass());
+            } else {
+                return methodCalled(description, getTestClass());
+            }
         } else {
             return null;
         }

@@ -115,7 +115,11 @@ public class ExecutedStepDescription implements Cloneable {
 
     public Method getStepMethod() {
         if (getStepClass() != null) {
-            return methodCalled(withNoArguments(getName()), getStepClass());
+            if (ScreenplayInspector.isAScreenplayClass(getStepClass())) {
+                return ScreenplayInspector.performAsMethodIn(getStepClass());
+            } else {
+                return methodCalled(withNoArguments(getName()), getStepClass());
+            }
         } else {
             return null;
         }

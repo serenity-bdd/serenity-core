@@ -164,7 +164,8 @@ subprojects {
         exclude '**/*$*'
         exclude '**/samples/**'
         exclude '**/*Sample*'
-        exclude '**/integration/browsers**'
+        exclude '**/integration/browsers/**'
+        exclude '**/integration/appium/**'
         include '**/integration/**'
         reports.junitXml.destination = file("${buildDir}/reports/integration-tests")
         reports.html.destination = file("${buildDir}/reports/integration-tests")
@@ -194,7 +195,18 @@ subprojects {
         exclude '**/samples/**'
         exclude '**/*Sample*'
         exclude '**/*Base'
+        exclude '**/integration/appium/**'
         include '**/integration/browsers/**'
+    }
+
+
+    task appiumTests(type: Test) {
+        exclude '**/*$*'
+        exclude '**/samples/**'
+        exclude '**/*Sample*'
+        exclude '**/*Base'
+        exclude '**/integration/browsers/**'
+        include '**/integration/appium/**'
     }
 
     task javadoc(type: Javadoc, overwrite: true) {
@@ -243,6 +255,12 @@ subprojects {
 
         compile "io.vavr:vavr:${vavrVersion}"
 
+        /* Required for Java 9 and higher */
+        compile "javax.xml.bind:jaxb-api:${jaxbVersion}"
+        compile "com.sun.xml.bind:jaxb-core:${jaxbVersion}"
+        compile "com.sun.xml.bind:jaxb-impl:${jaxbVersion}"
+        compile "javax.activation:activation:${activationVersion}"
+        
         testCompile("ch.qos.logback:logback-classic:${logbackVersion}") {
             exclude group: "org.slf4j", module: 'slf4j-api'
         }

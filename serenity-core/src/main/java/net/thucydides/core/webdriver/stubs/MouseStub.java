@@ -1,7 +1,7 @@
 package net.thucydides.core.webdriver.stubs;
 
+import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.interactions.Mouse;
-import org.openqa.selenium.interactions.internal.Coordinates;
 
 /**
  * Created by john on 14/06/2016.

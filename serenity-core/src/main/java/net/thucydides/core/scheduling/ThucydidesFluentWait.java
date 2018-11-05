@@ -4,10 +4,10 @@ import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.webdriver.TemporalUnitConverter;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.support.ui.Clock;
 import org.openqa.selenium.support.ui.Sleeper;
 import org.openqa.selenium.support.ui.Wait;
 
+import java.time.Clock;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -48,7 +48,7 @@ public abstract class ThucydidesFluentWait<T> implements Wait<T> {
 
     @Override
     public <V> V until(Function<? super T, V> isTrue) {
-        long end = getClock().laterBy(timeout.toMillis());
+        long end = getClock().millis() +  timeout.toMillis();
         RuntimeException lastException = null;
         String waitForConditionMessage = isTrue.toString();
         while (true) {
@@ -69,7 +69,7 @@ public abstract class ThucydidesFluentWait<T> implements Wait<T> {
                 lastException = propagateIfNotIngored(e);
             }
 
-            if (!getClock().isNowBefore(end)) {
+            if (!(getClock().millis() < end)){
                 String message = String.format("Timed out after %d milliseconds: ",timeout.toMillis()) + waitForConditionMessage;
                 throw timeoutException(message, lastException);
             }

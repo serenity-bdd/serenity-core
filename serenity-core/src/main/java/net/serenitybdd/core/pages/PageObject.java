@@ -32,6 +32,7 @@ import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Clock;
 import java.time.Duration;
 
 import java.io.IOException;
@@ -123,7 +124,7 @@ public abstract class PageObject {
     }
 
     protected PageObject() {
-        this.webdriverClock = new SystemClock();
+        this.webdriverClock = Clock.systemDefaultZone();
         this.clock = Injectors.getInjector().getInstance(net.serenitybdd.core.time.SystemClock.class);
         this.environmentVariables = Injectors.getInjector().getProvider(EnvironmentVariables.class).get();
         this.sleeper = Sleeper.SYSTEM_SLEEPER;

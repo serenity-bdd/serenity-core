@@ -33,7 +33,7 @@ public class StepFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(StepFactory.class);
     private final DependencyInjectorService dependencyInjectorService;
 
-    private static ThreadLocal<StepFactory> currentStepFactory = ThreadLocal.withInitial( () -> new StepFactory() );
+    private static ThreadLocal<StepFactory> currentStepFactory = ThreadLocal.withInitial(() -> new StepFactory());
 
     /**
      * Create a new step factory.
@@ -54,7 +54,7 @@ public class StepFactory {
     }
 
     public static StepFactory getFactory() {
-       return currentStepFactory.get();
+        return currentStepFactory.get();
     }
 
     public StepFactory usingPages(Pages pages) {
@@ -88,9 +88,9 @@ public class StepFactory {
             throw recurciveCallException;
         } catch (RuntimeException stepCreationFailed) {
             throw new StepInitialisationException("Failed to create step library for "
-                                                    + scenarioStepsClass.getSimpleName()
-                                                    + ":" + stepCreationFailed.getMessage(),
-                                                  stepCreationFailed);
+                    + scenarioStepsClass.getSimpleName()
+                    + ":" + stepCreationFailed.getMessage(),
+                    stepCreationFailed);
         }
     }
 
@@ -219,7 +219,7 @@ public class StepFactory {
                 return parameterTypes;
             }
         }
-        throw new IllegalArgumentException("Could not find a matching constructor for class " + scenarioStepsClass + "with parameters " + Arrays.toString(parameters));
+        throw new IllegalArgumentException("Could not find a matching constructor for class " + scenarioStepsClass + " with parameters " + Arrays.toString(parameters));
     }
 
     private Constructor<?>[] inOrderOfIncreasingParameters(Constructor<?>[] declaredConstructors) {
@@ -242,9 +242,9 @@ public class StepFactory {
                 if (parameter(parameters[parameterNumber]).cannotBeAssignedTo(parameterType)) {
                     return false;
                 }
-                
+
                 if ((parameters[parameterNumber] != null)
-                        && (!ClassUtils.isAssignable(parameters[parameterNumber].getClass(), parameterType))) {
+                        && (!isAssignableFrom(parameters[parameterNumber], parameterType))) {
                     return false;
                 }
                 parameterNumber++;
@@ -328,8 +328,69 @@ public class StepFactory {
             if (parameter == null) {
                 return PARAMETER_CAN_BE_ASSIGNED;
             }
-
-            return (!ClassUtils.isAssignable(parameter.getClass(), parameterType));
+            return (!isAssignableFrom(parameter, parameterType));
         }
     }
+
+    public static boolean isAssignableFrom(final Object argument, final Class<?> parameterType) {
+
+        if (parameterType.isInterface()) {
+            return parameterType.isInstance(argument);
+        }
+
+        Class<?> argumentType = argument.getClass();
+
+        if (isByte(parameterType)) {
+            return isByte(argumentType);
+        } else if (isShort(parameterType)) {
+            return isShort(argumentType) || isByte(argumentType);
+        } else if (isInteger(parameterType)) {
+            return isInteger(argumentType) || isShort(argumentType) || isByte(argumentType);
+        } else if (isLong(parameterType)) {
+            return isLong(argumentType) || isInteger(argumentType) || isShort(argumentType) || isByte(argumentType);
+        } else if (isFloat(parameterType)) {
+            return isFloat(argumentType);
+        } else if (isDouble(parameterType)) {
+            return isDouble(argumentType) || isFloat(argumentType);
+        } else if (isBoolean(parameterType)) {
+            return isBoolean(argumentType);
+        } else if (isCharacter(parameterType)) {
+            return isCharacter(argumentType);
+        }
+        return parameterType.isAssignableFrom(argumentType);
+    }
+
+    private static boolean isInteger(Class<?> fieldType) {
+        return (fieldType.equals(Integer.class) || fieldType.equals(int.class));
+    }
+
+    private static boolean isFloat(Class<?> fieldType) {
+        return (fieldType.equals(Float.class) || fieldType.equals(float.class));
+    }
+
+    private static boolean isDouble(Class<?> fieldType) {
+        return (fieldType.equals(Double.class) || fieldType.equals(double.class));
+    }
+
+    private static boolean isCharacter(Class<?> fieldType) {
+        return (fieldType.equals(Character.class) || fieldType.equals(char.class));
+    }
+
+    private static boolean isLong(Class<?> fieldType) {
+        return (fieldType.equals(Long.class) || fieldType.equals(long.class));
+    }
+
+    private static boolean isShort(Class<?> fieldType) {
+        return (fieldType.equals(Short.class) || fieldType.equals(short.class));
+    }
+
+    private static boolean isBoolean(Class<?> fieldType) {
+        return (fieldType.equals(Boolean.class) || fieldType.equals(boolean.class));
+    }
+
+    private static boolean isByte(Class<?> fieldType) {
+        return (fieldType.equals(Byte.class) || fieldType.equals(byte.class));
+    }
+
+
 }

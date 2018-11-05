@@ -21,7 +21,7 @@ class WhenAssociatingATestOutcomeWithARequirementInAFeatureFile extends Specific
             def testOutcome = TestOutcome.forTestInStory("someTest", Story.withIdAndPath("PlantPotatoes","Plant potatoes","grow_potatoes/grow_new_potatoes/PlantPotatoes.story"))
         then:
             capabilityProvider.getParentRequirementOf(testOutcome).isPresent()
-            capabilityProvider.getParentRequirementOf(testOutcome).get().name == "Plant potatoes"
+            capabilityProvider.getParentRequirementOf(testOutcome).get().name == "Plant Potatoes"
     }
 
     def "Should find the direct parent requirement of a test outcome related to a feature file without a path"() {
@@ -34,7 +34,7 @@ class WhenAssociatingATestOutcomeWithARequirementInAFeatureFile extends Specific
         def testOutcome = TestOutcome.forTestInStory("someTest", Story.withIdAndPath("PlantPotatoes","Plant potatoes","PlantPotatoes.story"))
         then:
             capabilityProvider.getParentRequirementOf(testOutcome).isPresent()
-            capabilityProvider.getParentRequirementOf(testOutcome).get().name == "Plant potatoes"
+            capabilityProvider.getParentRequirementOf(testOutcome).get().name == "Plant Potatoes"
     }
 
     def "Should find the requirement for a given tag"() {

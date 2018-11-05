@@ -30,7 +30,7 @@ public class FeatureStoryTagProvider implements TagProvider, CoreTagProvider {
     }
 
     public Set<TestTag> getTagsFor(final TestOutcome testOutcome) {
-        Set<TestTag> tags = new HashSet();
+        Set<TestTag> tags = new HashSet<>();
         addStoryTagIfPresent(testOutcome, tags);
         addFeatureTagIfPresent(testOutcome, tags);
         return NewSet.copyOf(tags);

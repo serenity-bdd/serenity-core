@@ -46,9 +46,15 @@ public class ReportData {
 
     public static class ReportDataBuilder {
         private final String title;
+        private boolean asEvidence = false;
 
         public ReportDataBuilder(String title) {
             this.title = title;
+        }
+
+        public ReportDataBuilder asEvidence() {
+            this.asEvidence = true;
+            return this;
         }
 
         public ReportData andContents(String contents) {
@@ -57,7 +63,7 @@ public class ReportData {
 
         public ReportData fromFile(Path source, Charset encoding) throws IOException {
             byte[] encoded = Files.readAllBytes(source);
-            return new ReportData(title, new String(encoded, encoding), null);
+            return new ReportData(title, new String(encoded, encoding), null, asEvidence);
         }
 
         public ReportData fromPath(Path path) throws IOException {

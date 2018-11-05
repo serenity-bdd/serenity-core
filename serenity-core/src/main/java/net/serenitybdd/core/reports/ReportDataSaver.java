@@ -11,9 +11,9 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import static net.thucydides.core.ThucydidesSystemProperty.SERENITY_REPORT_ENCODING;
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_BASE_URL;
 
 public class ReportDataSaver implements WithTitle, AndContent, FromFile {
-
 
     private final StepEventBus eventBus;
     private String title;
@@ -63,8 +63,9 @@ public class ReportDataSaver implements WithTitle, AndContent, FromFile {
     }
 
     @Override
-    public FromFile asEvidence() {
+    public WithTitle asEvidence() {
         this.isEvidence = true;
         return this;
     }
+
 }

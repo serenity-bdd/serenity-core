@@ -1,15 +1,14 @@
 package net.thucydides.core.scheduling;
 
-import org.openqa.selenium.support.ui.Clock;
 import org.openqa.selenium.support.ui.Sleeper;
-import org.openqa.selenium.support.ui.SystemClock;
 
+import java.time.Clock;
 import java.util.function.Function;
 
 public class NormalFluentWait<T> extends ThucydidesFluentWait<T> {
 
     public NormalFluentWait(T input) {
-        super(input, new SystemClock(), Sleeper.SYSTEM_SLEEPER);
+        super(input, Clock.systemDefaultZone(), Sleeper.SYSTEM_SLEEPER);
     }
 
     public NormalFluentWait(T input, Clock clock, Sleeper sleeper) {

@@ -3,11 +3,18 @@ package net.serenitybdd.screenplay;
 import com.rits.cloning.Cloner;
 import net.serenitybdd.core.steps.Instrumented;
 import net.thucydides.core.annotations.Step;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.util.EnvironmentVariables;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Arrays.stream;
+import static net.thucydides.core.ThucydidesSystemProperty.MANUAL_TASK_INSTRUMENTION;
 
 public class InstrumentedTask {
 
@@ -20,15 +27,32 @@ public class InstrumentedTask {
 
     private static <T extends Performable> boolean shouldInstrument(T task) {
 
+        EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+
+        if (MANUAL_TASK_INSTRUMENTION.booleanFrom(environmentVariables, false)) {
+            return false;
+        }
+        
         Optional<Method> performAs = stream(task.getClass().getMethods())
                 .filter(method -> method.getName().equals("performAs"))
                 .findFirst();
 
-        if (performAs.isPresent() && (performAs.get().getAnnotation(Step.class) != null)) {
-            return true;
-        }
+        return performAs.isPresent() && defaultConstructorPresentFor(task.getClass());
+    }
 
-        return false;
+    private static boolean defaultConstructorPresentFor(Class<? extends Performable> taskClass) {
+
+        return findAllConstructorsIn(taskClass).stream()
+                         .anyMatch( constructor -> constructor.getParameterCount() == 0 );
+    }
+
+    private static List<Constructor<?>> findAllConstructorsIn(Class<? extends Performable> taskClass) {
+        List<Constructor<?>> allConstructors = new ArrayList<>();
+
+        allConstructors.addAll(Arrays.asList(taskClass.getConstructors()));
+        allConstructors.addAll(Arrays.asList(taskClass.getDeclaredConstructors()));
+
+        return allConstructors;
     }
 
     private static Performable instrumentedCopyOf(Performable task, Class taskClass) {
@@ -44,7 +68,7 @@ public class InstrumentedTask {
         return instrumentedTask;
     }
 
-    private static boolean isInstrumented(Performable task) {
+    public static boolean isInstrumented(Performable task) {
         return task.getClass().getSimpleName().contains("EnhancerByCGLIB");
     }
 }

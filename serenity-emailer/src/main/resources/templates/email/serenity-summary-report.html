@@ -667,35 +667,35 @@
         color: white;
     }
 
-    .success-badge {
-        background-color: #52B255; /* #61bd76; */
-        color: white;
-    }
+    /*.success-badge {*/
+        /*background-color: #52B255; !* #61bd76; *!*/
+        /*color: white;*/
+    /*}*/
 
-    .pending-badge {
-        background-color: #5FB0E0; /* #52B255; */
-        color: white;
-    }
+    /*.pending-badge {*/
+        /*background-color: #5FB0E0; !* #52B255; *!*/
+        /*color: white;*/
+    /*}*/
 
-    .ignored-badge {
-        background-color: #C9C9C9; /* #52B255; */
-        color: black;
-    }
+    /*.ignored-badge {*/
+        /*background-color: #C9C9C9; !* #52B255; *!*/
+        /*color: black;*/
+    /*}*/
 
-    .failure-badge {
-        background-color: #f44336; /* #52B255;DA2C38;f44336*/
-        color: white;
-    }
+    /*.failure-badge {*/
+        /*background-color: #f44336; !* #52B255;DA2C38;f44336*!*/
+        /*color: white;*/
+    /*}*/
 
-    .error-badge {
-        background-color: #ECA43A; /*F6AE2D; #52B255; */
-        color: white;
-    }
+    /*.error-badge {*/
+        /*background-color: #ECA43A; !*F6AE2D; #52B255; *!*/
+        /*color: white;*/
+    /*}*/
 
-    .compromised-badge {
-        background-color: #9C77AD; /* #52B255; */
-        color: white;
-    }
+    /*.compromised-badge {*/
+        /*background-color: #9C77AD; !* #52B255; *!*/
+        /*color: white;*/
+    /*}*/
 
     .for-passing {
         color: #52B255;
@@ -731,21 +731,21 @@
         text-align: left;
     }
 
-    .count-badge {
-        border-radius: 6px;
-        /*padding: 2px;*/
-        /*padding-left: 4px;*/
-        /*padding-right: 4px;*/
-        color: white;
-        font-size: 0.9em;
-        font-weight: bold;
-    }
+    /*.count-badge {*/
+        /*border-radius: 6px;*/
+        /*!*padding: 2px;*!*/
+        /*!*padding-left: 4px;*!*/
+        /*!*padding-right: 4px;*!*/
+        /*color: white;*/
+        /*font-size: 0.9em;*/
+        /*font-weight: bold;*/
+    /*}*/
 
-    .count-badge td {
-        color: white;
-        font-size: 0.8em;
-        font-weight: bold;
-    }
+    /*.count-badge td {*/
+        /*color: white;*/
+        /*font-size: 0.8em;*/
+        /*font-weight: bold;*/
+    /*}*/
 
     table.count-badge {
         padding: 0px;
@@ -833,7 +833,7 @@
 
     .feature {
         font-style: italic;
-        font-weight: bold;
+        /*font-weight: bold;*/
     }
 
     .scenarioName {
@@ -847,6 +847,10 @@
         margin-top: 20px;
     }
 
+    .summary-bar-cell {
+        height:2em;
+        vertical-align:middle;
+    }
 
     </style>
     <!--[if gte mso 9]>
@@ -890,43 +894,46 @@
                                                 <td>
                                                     <table cellspacing="0" cellpadding="0" class="summary-bar">
                                                         <tr>
-                                                            <td class="success-background summary" width="30%"
-                                                                th:attr="width=${results.percentageByResult.SUCCESS} + '%'">
+                                                            <td class="success-background summary summary-bar-cell" width="30%"
+                                                                valign="middle"
+                                                                align="center"
+                                                                style="padding:8px;"
+                                                                th:attr="width=${results.percentageByResult.SUCCESS} + '%', style=${results.countByResult.SUCCESS == 0  ? 'padding:0px;' : 'padding:8px;'}">
                                                                 <span class="summary" title="Passing tests"
                                                                       th:attr="title=${results.countByResult.SUCCESS} + ' passing tests'"
                                                                       data-th-text="${results.percentageByResult.SUCCESS} + '%'"
                                                                       th:unless="${results.countByResult.SUCCESS == 0}">30%</span>
                                                             </td>
-                                                            <td class="pending-background summary" width=20%
-                                                                th:attr="width=${results.percentageByResult.PENDING} + '%'">
+                                                            <td class="pending-background summary summary-bar-cell" width=20% valign="middle" align="center" style="padding:8px;"
+                                                                th:attr="width=${results.percentageByResult.PENDING} + '%', style=${results.countByResult.PENDING == 0  ? 'padding:0px;' : 'padding:8px;'}">
                                                                 <span class="summary" title="Pending tests"
                                                                       th:attr="title=${results.countByResult.PENDING} + ' pending tests'"
                                                                       data-th-text="${results.percentageByResult.PENDING} + '%'"
                                                                       th:unless="${results.countByResult.PENDING == 0}">20%</span>
                                                             </td>
-                                                            <td class="ignored-background summary" width=5%
-                                                                th:attr="width=${results.percentageByResult.IGNORED} + '%'">
+                                                            <td class="ignored-background summary summary-bar-cell" width=5% valign="middle" align="center" style="padding:8px;"
+                                                                th:attr="width=${results.percentageByResult.IGNORED} + '%', style=${results.countByResult.IGNORED == 0  ? 'padding:0px;' : 'padding:8px;'}">
                                                                 <span class="summary" title="Ignored tests"
                                                                       th:attr="title=${results.countByResult.IGNORED} + ' ignored tests'"
                                                                       data-th-text="${results.percentageByResult.IGNORED} + '%'"
                                                                       th:unless="${results.countByResult.IGNORED == 0}">5%</span>
                                                             </td>
-                                                            <td class="failure-background summary" width=10%
-                                                                th:attr="width=${results.percentageByResult.FAILURE} + '%'">
+                                                            <td class="failure-background summary summary-bar-cell" width=10% valign="middle" align="center" style="padding:8px;"
+                                                                th:attr="width=${results.percentageByResult.FAILURE} + '%', style=${results.countByResult.FAILURE == 0  ? 'padding:0px;' : 'padding:8px;'}">
                                                                 <span class="summary" title="Failing tests"
                                                                       th:attr="title=${results.countByResult.FAILURE} + ' failing tests'"
                                                                       data-th-text="${results.percentageByResult.FAILURE} + '%'"
                                                                       th:unless="${results.countByResult.FAILURE == 0}">10%</span>
                                                             </td>
-                                                            <td class="error-background summary" width=15%
-                                                                th:attr="width=${results.percentageByResult.ERROR} + '%'"><span
-                                                                    class="summary" title="Broken tests"
-                                                                    th:attr="title=${results.countByResult.ERROR} + ' brokem tests'"
+                                                            <td class="error-background summary summary-bar-cell" width=15% valign="middle" align="center" style="padding:8px;"
+                                                                th:attr="width=${results.percentageByResult.ERROR} + '%', style=${results.countByResult.ERROR == 0  ? 'padding:0px;' : 'padding:8px;'}">
+                                                                <span class="summary" title="Broken tests"
+                                                                     th:attr="title=${results.countByResult.ERROR} + ' brokem tests'"
                                                                     data-th-text="${results.percentageByResult.ERROR} + '%'"
                                                                     th:unless="${results.countByResult.ERROR == 0}">15%</span>
                                                             </td>
-                                                            <td class="compromised-background summary" width=20%
-                                                                th:attr="width=${results.percentageByResult.COMPROMISED} + '%'">
+                                                            <td class="compromised-background summary summary-bar-cell" width=20% valign="middle" align="center" style="padding:8px;"
+                                                                th:attr="width=${results.percentageByResult.COMPROMISED} + '%', style=${results.countByResult.COMPROMISED == 0  ? 'padding:0px;' : 'padding:8px;'}">
                                                                 <span class="summary" title="Compromised tests"
                                                                       th:attr="title=${results.countByResult.COMPROMISED} + ' compromised tests'"
                                                                       data-th-text="${results.percentageByResult.COMPROMISED} + '%'"
@@ -954,38 +961,37 @@
                                                         <tr>
                                                             <td class="for-passing legend-key legend-label" width="30%">Passing</td>
                                                             <td class="for-passing legend-result">
-                                                                <span data-th-text="'&nbsp;' + ${results.countByResult.SUCCESS} + '&nbsp;'"
-                                                                      class="success-badge">100</span>
+                                                                <span data-th-text="${results.countByResult.SUCCESS}" class="success-badge">100</span>
                                                             </td>
 
                                                             <td class="for-pending legend-key legend-label" width="30%">Pending</td>
                                                             <td class="for-pending legend-result legend-result">
-                                                                <span data-th-text="'&nbsp;' + ${results.countByResult.PENDING} + '&nbsp;'"
+                                                                <span data-th-text="${results.countByResult.PENDING}"
                                                                       class="pending-badge">100</span>
                                                             </td>
 
                                                             <td class="for-ignored legend-key legend-label" width="30%">Ignored</td>
                                                             <td class="for-ignored legend-result">
-                                                                <span data-th-text="'&nbsp;' + ${results.countByResult.IGNORED} + '&nbsp;'"
+                                                                <span data-th-text="${results.countByResult.IGNORED}"
                                                                       class="ignored-badge">100</span>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="for-failure legend-key legend-label" width="30%">Failing</td>
                                                             <td class="for-failure legend-result">
-                                                                <span data-th-text="'&nbsp;' + ${results.countByResult.FAILURE} + '&nbsp;'"
+                                                                <span data-th-text="${results.countByResult.FAILURE}"
                                                                       class="failure-badge">100</span>
                                                             </td>
 
                                                             <td class="for-error legend-key legend-label" width="30%">Broken</td>
                                                             <td class="for-error legend-result">
-                                                                <span data-th-text="'&nbsp;' + ${results.countByResult.ERROR} + '&nbsp;'"
+                                                                <span data-th-text="${results.countByResult.ERROR}"
                                                                       class="error-badge">100</span>
                                                             </td>
 
                                                             <td class="for-compromised legend-key legend-label" width="30%">Compromised</td>
                                                             <td class="for-compromised legend-result">
-                                                                <span data-th-text="'&nbsp;' + ${results.countByResult.COMPROMISED} + '&nbsp;'"
+                                                                <span data-th-text="${results.countByResult.COMPROMISED}"
                                                                       class="compromised-badge">100</span>
                                                             </td>
                                                         </tr>
@@ -1000,13 +1006,17 @@
                                         <table class="timings" cellpadding="0" cellspacing="0" border="0">
                                             <tr>
                                                 <th>Total test execution time</th>
+                                                <th>Total clock time</th>
                                                 <th>Average test execution time</th>
                                                 <th>Max test execution time</th>
+                                                <th>Min test execution time</th>
                                             </tr>
                                             <tr>
                                                 <td data-th-text="${results.totalTestDuration}">3h 23m 14s</td>
+                                                <td data-th-text="${results.clockTestDuration}">3h 23m 14s</td>
                                                 <td data-th-text="${results.averageTestDuration}">2m 34s</td>
                                                 <td data-th-text="${results.maxTestDuration}">8m 15s</td>
+                                                <td data-th-text="${results.minTestDuration}">8m 15s</td>
                                             </tr>
                                         </table>
                                     </td>
@@ -1134,8 +1144,8 @@
                                                     Web Element Not Found
                                                 </td>
                                                 <td>
-                                                    <span data-th-text="'&nbsp;' + ${frequentFailure.count} + '&nbsp;'"
-                                                          class='count-badge failure-background'>100</span>
+                                                    <span data-th-text=" ${frequentFailure.count} "
+                                                          class='count-badge for-failure'>100</span>
                                                 </td>
                                             </tr>
                                         </table>
@@ -1152,8 +1162,8 @@
                                                     ACO Acknowledgement
                                                 </td>
                                                 <td>
-                                                    <span data-th-text="'&nbsp;' + ${unstableFeature.failurePercentage} + '%&nbsp;'"
-                                                          class='count-badge failure-background'>100</span>
+                                                    <span data-th-text=" ${unstableFeature.failurePercentage} + '%&nbsp;'"
+                                                          class='count-badge for-failure'>100</span>
                                                 </td>
                                             </tr>
                                         </table>
@@ -1165,7 +1175,11 @@
                     <tr>
                         <td class="compact-wrapper">
                             <h3>Full Failure List</h3>
-                            <table class="failure-list">
+                            <table class="failure-list failure-scoreboard" style="border:1px solid black;">
+                                <tr>
+                                    <th>Requirement</th>
+                                    <th>Failure</th>
+                                </tr>
                                 <span th:each="failingFeature : ${failuresByFeature}">
                                     <tr>
                                         <td colspan="2" th:text=${failingFeature.featureName} class="feature">A
@@ -1174,7 +1188,8 @@
                                     </tr>
                                     <tr th:each="failingScenario: ${failingFeature.failures}">
                                         <td class="scenarioName" th:text="${failingScenario.title}">Failing scenario</td>
-                                        <td th:text="${failingScenario.errorMessage}" th:attr="class='frequent-failure for-' + ${failingScenario.result}">Error message</td>
+                                        <td th:text="${failingScenario.errorMessage}"
+                                            th:attr="class='frequent-failure for-' + ${failingScenario.result}">Error message</td>
                                     </tr>
                                 </span>
                             </table>

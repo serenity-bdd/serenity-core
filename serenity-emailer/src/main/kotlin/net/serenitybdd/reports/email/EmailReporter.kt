@@ -82,8 +82,10 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedRe
                         countByResult = countByResultLabelFrom(testOutcomes),
                         percentageByResult = percentageByResultLabelFrom(testOutcomes),
                         totalTestDuration = formattedDuration(Duration.ofMillis(testOutcomes.duration)),
+                        clockTestDuration = formattedDuration(clockDurationOf(testOutcomes.outcomes)),
                         averageTestDuration = formattedDuration(averageDurationOf(testOutcomes.outcomes)),
-                        maxTestDuration = formattedDuration(maxDurationOf(testOutcomes.outcomes))
+                        maxTestDuration = formattedDuration(maxDurationOf(testOutcomes.outcomes)),
+                        minTestDuration = formattedDuration(minDurationOf(testOutcomes.outcomes))
                 ),
                 "failuresByFeature" to FailuresByFeature.from(testOutcomes),
                 "frequentFailures" to FrequentFailures.from(testOutcomes).withMaxOf(scoreboardSize),

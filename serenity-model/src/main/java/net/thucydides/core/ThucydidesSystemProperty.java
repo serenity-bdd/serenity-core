@@ -1243,6 +1243,11 @@ public enum ThucydidesSystemProperty {
     FIREFOX_LOG_LEVEL,
 
     /**
+     * Unique device identifier of the connected physical device used for appium tests
+     */
+    APPIUM_UDID("appium.udid"),
+
+    /**
      * The device name used for Appium tests
      */
     APPIUM_DEVICE_NAME("appium.deviceName"),

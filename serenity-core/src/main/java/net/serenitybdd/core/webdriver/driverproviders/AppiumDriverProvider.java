@@ -79,6 +79,7 @@ public class AppiumDriverProvider implements DriverProvider {
         LOGGER.info("  - Using appium server at " + appiumUrl);
 
         testEnvironmentVariables.setProperty(ThucydidesSystemProperty.APPIUM_DEVICE_NAME.getPropertyName(), deviceName);
+        testEnvironmentVariables.setProperty(ThucydidesSystemProperty.APPIUM_UDID.getPropertyName(), deviceName);
         testEnvironmentVariables.clearProperty(ThucydidesSystemProperty.APPIUM_DEVICE_NAMES.getPropertyName());
 
         CapabilityEnhancer enhancer = new CapabilityEnhancer(testEnvironmentVariables, fixtureProviderService);
@@ -93,7 +94,7 @@ public class AppiumDriverProvider implements DriverProvider {
                 AndroidDriver androidDriver = null;
                 try {
                     androidDriver = new AndroidDriver(appiumUrl, enhancer.enhanced(appiumCapabilities(options, testEnvironmentVariables), ANDROID));
-                } catch(Exception e) {
+                } catch(Throwable e) {
                     LOGGER.error("Creating ANDROID Driver failed " + androidDriver, e);
                     throw e;
                 }

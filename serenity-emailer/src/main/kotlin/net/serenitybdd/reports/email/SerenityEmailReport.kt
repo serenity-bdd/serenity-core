@@ -18,8 +18,8 @@ sealed class SerenityEmailReport {
         private const val DEFAULT_OUTPUT_DIRECTORY = "target/site/serenity"
         private const val DEFAULT_TITLE = "Serenity Summary Report"
         private const val DEFAULT_TAGTYPE_TITLE = "Category"
-        private const val DEFAULT_TEMPLATE = "templates/email/serenity-summary-report.html"
-//        private const val DEFAULT_TEMPLATE = "templates/email/serenity-summary-report-inlined.html"
+//        private const val DEFAULT_TEMPLATE = "templates/email/serenity-summary-report.html"
+        private const val DEFAULT_TEMPLATE = "templates/email/serenity-summary-report-inlined.html"
         private const val DEFAULT_SCOREBOARD_SIZE= 5
 
         fun outputDirectory() : ReportProperty<Path> = PathReportProperty(SERENITY_OUTPUT_DIRECTORY, DEFAULT_OUTPUT_DIRECTORY)

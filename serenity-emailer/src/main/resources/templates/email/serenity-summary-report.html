@@ -1103,8 +1103,7 @@
                                                 <td class="error-background"
                                                     th:unless="${tagCoverage.countByResult.ERROR == 0}"
                                                     title="Broken tests"
-                                                    th:attr="width=${tagCoverage.percentageByResult.ERROR} + '%'"
-                                                    width="15%"><span class="summary"
+                                                    th:attr="width=${tagCoverage.percentageByResult.ERROR} + '%'" width="15%"><span class="summary"
                                                                       th:attr="title=${tagCoverage.percentageByResult.ERROR} + '% broken tests'"
                                                                       data-th-text="${tagCoverage.countByResult.ERROR}"
                                                                       th:unless="${tagCoverage.countByResult.ERROR == 0}">15</span>
@@ -1162,7 +1161,7 @@
                                                     ACO Acknowledgement
                                                 </td>
                                                 <td>
-                                                    <span data-th-text=" ${unstableFeature.failurePercentage} + '%&nbsp;'"
+                                                    <span data-th-text="${unstableFeature.failurePercentage}"
                                                           class='count-badge for-failure'>100</span>
                                                 </td>
                                             </tr>

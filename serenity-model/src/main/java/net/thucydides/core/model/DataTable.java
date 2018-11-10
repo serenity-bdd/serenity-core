@@ -16,7 +16,6 @@ public class DataTable {
     private final boolean predefinedRows;
     private String scenarioOutline;
     private List<DataSetDescriptor> dataSetDescriptors;
-    private List<TestTag> tags;
     private transient AtomicInteger currentRow = new AtomicInteger(0);
 
     private final static List<DataTableRow> NO_ROWS = new ArrayList<>();
@@ -35,7 +34,6 @@ public class DataTable {
         this.rows = new CopyOnWriteArrayList<>(rows);
         this.predefinedRows = !rows.isEmpty();
         this.dataSetDescriptors = dataSetDescriptors;
-        this.tags = new ArrayList<>();
         if ((title != null) || (description != null)) {
             setLatestNameAndDescription(title, description);
         }
@@ -44,13 +42,18 @@ public class DataTable {
     protected DataTable(List<String> headers, List<DataTableRow> rows, boolean predefinedRows,
                         String scenarioOutline, List<DataSetDescriptor> dataSetDescriptors,
                         AtomicInteger currentRow) {
+        this(headers,rows,predefinedRows,scenarioOutline,dataSetDescriptors,currentRow,new ArrayList<>());
+    }
+
+    protected DataTable(List<String> headers, List<DataTableRow> rows, boolean predefinedRows,
+                        String scenarioOutline, List<DataSetDescriptor> dataSetDescriptors,
+                        AtomicInteger currentRow, Collection<TestTag> tags) {
         this.headers = headers;
         this.rows = rows;
         this.predefinedRows = predefinedRows;
         this.scenarioOutline = scenarioOutline;
         this.dataSetDescriptors = dataSetDescriptors;
         this.currentRow = currentRow;
-        this.tags = new ArrayList<>();
     }
 
     public void addTagsToLatestDataSet(List<TestTag> tags) {
@@ -59,8 +62,8 @@ public class DataTable {
         }
     }
 
-    public List<TestTag> getTags() {
-        return new ArrayList<>(tags);
+    public Collection<TestTag> getTags() {
+        return getExampleTags();
     }
 
     public void setScenarioOutline(String scenarioOutline) {
@@ -230,6 +233,69 @@ public class DataTable {
                 }
         );
         return renderedTable.toString();
+    }
+
+    public List<TestStep> filterStepsWithTagsFrom(List<TestStep> testSteps, Collection<TestTag> tags) {
+        List<DataSetDescriptor> exampleTablesContainingTag = descriptorsWithTagsFrom(tags);
+
+        List<TestStep> filteredSteps = new ArrayList<>();
+
+        exampleTablesContainingTag.forEach(
+                table -> {
+                    filteredSteps.addAll(
+                            testSteps.subList(table.getStartRow(), table.getStartRow() + table.getRowCount())
+                    );
+                }
+        );
+        return filteredSteps;
+    }
+
+
+    public DataTable containingOnlyRowsWithTagsFrom(Collection<TestTag> filterTags) {
+
+        if ((getExampleTags() == null) || (getExampleTags().isEmpty())) return this;
+
+
+
+        List<DataSetDescriptor> exampleTablesContainingTag = descriptorsWithTagsFrom(filterTags);
+
+        List<DataTableRow> filteredRows = new ArrayList<>();
+        List<DataSetDescriptor> reindexedDescriptors = new ArrayList<>();
+
+        int row = 0;
+        for (DataSetDescriptor tableDescriptor : exampleTablesContainingTag) {
+            filteredRows.addAll(rowsReferencedIn(tableDescriptor));
+            reindexedDescriptors.add(tableDescriptor.forRange(row,tableDescriptor.getRowCount()));
+            row += tableDescriptor.getRowCount();
+        }
+
+
+        return new DataTable(headers,
+                             filteredRows,
+                             predefinedRows,
+                             scenarioOutline,
+                             reindexedDescriptors,
+                             new AtomicInteger(filteredRows.size() - 1));
+    }
+
+    private Collection<TestTag> getExampleTags() {
+        return dataSetDescriptors.stream().flatMap(
+                descriptor -> descriptor.getTags().stream()
+        ).collect(Collectors.toList());
+    }
+
+    private List<DataSetDescriptor> descriptorsWithTagsFrom(Collection<TestTag> tags) {
+        return dataSetDescriptors.stream()
+                    .filter( dataset -> TestTags.of(dataset.getTags()).containsTagMatchingOneOf(tags))
+                    .collect(Collectors.toList());
+    }
+
+    private Collection<DataTableRow> rowsReferencedIn(DataSetDescriptor tableDescriptor) {
+        List<DataTableRow> referencedRows = new ArrayList<>();
+        for(int row = tableDescriptor.getStartRow(); row <= tableDescriptor.getLastRow(); row++) {
+            referencedRows.add(rows.get(row));
+        }
+        return referencedRows;
     }
 
     public static class DataTableBuilder {

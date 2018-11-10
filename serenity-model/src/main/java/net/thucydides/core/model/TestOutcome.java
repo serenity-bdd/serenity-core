@@ -1968,16 +1968,9 @@ public class TestOutcome {
         return getTags().contains(tag);
     }
 
-
     public boolean hasAMoreGeneralFormOfTag(TestTag specificTag) {
-        for (TestTag tag : getTags()) {
-            if (specificTag.isAsOrMoreSpecificThan(tag)) {
-                return true;
-            }
-        }
-        return false;
+        return TestTags.of(getTags()).containsTagMatching(specificTag);
     }
-
 
     public void setStartTime(ZonedDateTime startTime) {
         this.startTime = startTime;
@@ -2501,5 +2494,56 @@ public class TestOutcome {
                 step -> step.getReportData() != null && step.getReportData().isEvidence())
                 .map(TestStep::getReportData)
                 .collect(Collectors.toList());
+    }
+
+    public TestOutcome withDataRowsfilteredbyTag(TestTag tag) {
+        return withDataRowsfilteredbyTagsFrom(Collections.singleton(tag));
+    }
+
+    public TestOutcome withDataRowsfilteredbyTagsFrom(Collection<TestTag> filterTags) {
+        if (!isDataDriven()) {
+            return this;
+        }
+
+        if (!TestTags.of(dataTable.getTags()).containsTagMatchingOneOf(filterTags)) {
+            return this;
+        }
+
+        DataTable filteredDataTable = dataTable.containingOnlyRowsWithTagsFrom(filterTags);
+        List<TestStep> filteredSteps = dataTable.filterStepsWithTagsFrom(testSteps, tags);
+
+        Collection<TestTag> originalDataTableTags = dataTable.getTags();
+        Collection<TestTag> filteredDataTableTags = filteredDataTable.getTags();
+
+        Collection<TestTag> redundantTags = new HashSet(originalDataTableTags);
+        redundantTags.removeAll(filteredDataTableTags);
+
+        Set<TestTag> outcomeTagsWithoutRedundentTags = new HashSet<>(tags);
+        outcomeTagsWithoutRedundentTags.removeAll(redundantTags);
+
+        return new TestOutcome(startTime,
+                                duration,
+                                title,
+                                description,
+                                name,
+                                id,
+                                testCase,
+                                filteredSteps,
+                                issues,
+                                additionalIssues,
+                                actors,
+                                outcomeTagsWithoutRedundentTags,
+                                userStory,
+                                testFailureCause,
+                                testFailureClassname,
+                                testFailureMessage,
+                                testFailureSummary,
+                                annotatedResult,
+                                filteredDataTable,
+                                qualifier,
+                                driver,
+                                manual,
+                                projectKey,
+                                environmentVariables);
     }
 }

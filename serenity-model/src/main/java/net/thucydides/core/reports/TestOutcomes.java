@@ -587,9 +587,22 @@ public class TestOutcomes {
 
     private List<? extends TestOutcome> matchingOutcomes(List<? extends TestOutcome> outcomes, TestTag tag) {
 
-        return outcomes.stream().filter(
-                outcome -> hasMatchingTag(outcome, tag)
-        ).collect(Collectors.toList());
+        return outcomes.stream()
+                .filter(outcome -> hasMatchingTag(outcome, tag))
+                .map(outcome -> outcome.withDataRowsfilteredbyTag(tag))
+                .collect(Collectors.toList());
+    }
+
+    private List<? extends TestOutcome> matchingOutcomesWithTagsFrom(List<? extends TestOutcome> outcomes, Collection<TestTag> tags) {
+
+        return outcomes.stream()
+                .filter(outcome -> hasMatchingTagsFrom(outcome, tags))
+                .map(outcome -> outcome.withDataRowsfilteredbyTagsFrom(tags))
+                .collect(Collectors.toList());
+    }
+
+    private boolean hasMatchingTagsFrom(TestOutcome outcome, Collection<TestTag> tags) {
+        return tags.stream().anyMatch( tag -> hasMatchingTag(outcome, tag));
     }
 
     private boolean hasMatchingTag(TestOutcome outcome, TestTag tag) {

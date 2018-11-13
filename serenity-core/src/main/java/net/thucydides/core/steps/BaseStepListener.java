@@ -765,8 +765,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     private void take(final ScreenshotType screenshotType, TestResult result) {
         if (shouldTakeScreenshots()) {
             try {
-                java.util.Optional<ScreenshotAndHtmlSource> screenshotAndHtmlSource = grabScreenshot(result);
-                screenshotAndHtmlSource.ifPresent(
+                grabScreenshots(result).forEach(
                         screenshot -> recordScreenshotIfRequired(screenshotType, screenshot)
                 );
                 removeDuplicatedInitalScreenshotsIfPresent();
@@ -849,6 +848,42 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if ((currentStepExists()) && (screenshots().areAllowed(TakeScreenshots.BEFORE_AND_AFTER_EACH_STEP))) {
             take(OPTIONAL_SCREENSHOT);
         }
+    }
+
+    public Map<String, WebDriver> getActiveDrivers() {
+        return SerenityWebdriverManager.inThisTestThread().getActiveDriverMap();
+    }
+
+    private List<ScreenshotAndHtmlSource> grabScreenshots(TestResult result) {
+
+        if (pathOf(outputDirectory) == null) { // Output directory may be null for some tests
+            return new ArrayList<>();
+        }
+
+        return getActiveDrivers().entrySet().stream()
+                .map(
+                        entry -> new ScreenshotAndHtmlSource(
+                                screenshotFrom(entry.getValue()),
+                                sourceFrom(result, entry.getValue())
+                        )
+                )
+                .collect(Collectors.toList());
+    }
+
+    private File screenshotFrom( WebDriver driver) {
+        Path screenshotPath = getPhotographer().takesAScreenshot()
+                .with(driver)
+                .andWithBlurring(AnnotatedBluring.blurLevel())
+                .andSaveToDirectory(pathOf(outputDirectory))
+                .getPathToScreenshot();
+
+        return (screenshotPath == null) ? null : screenshotPath.toFile();
+    }
+
+    private File sourceFrom(TestResult result, WebDriver driver) {
+        return soundEngineer.ifRequiredForResult(result)
+                .recordPageSourceUsing(driver)
+                .intoDirectory(pathOf(outputDirectory)).orElse(null) ;
     }
 
     private java.util.Optional<ScreenshotAndHtmlSource> grabScreenshot(TestResult result) {

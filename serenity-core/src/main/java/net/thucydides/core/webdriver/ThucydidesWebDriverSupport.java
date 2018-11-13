@@ -113,6 +113,13 @@ public class ThucydidesWebDriverSupport {
         getWebdriverManager().registerDriver(driver);
     }
 
+    public static Optional<String> getDefaultDriverType() {
+        return Optional.ofNullable(defaultDriverType.get());
+    }
+
+    public static Optional<String> getDefaultDriverOptions() {
+        return Optional.ofNullable(defaultDriverOptions.get());
+    }
 
     public static WebDriver getDriver() {
 

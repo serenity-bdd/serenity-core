@@ -114,7 +114,7 @@ public class WebdriverInstances {
 
     public void closeCurrentDrivers() {
         closeCurrentDriver();
-        for(String driverName : driversUsedInCurrentThread.get()) {
+        for (String driverName : driversUsedInCurrentThread.get()) {
             WebDriver openDriver = driverMap.get(driverName);
             if (isInstantiated(openDriver)) {
                 closeAndQuit(openDriver);
@@ -207,6 +207,28 @@ public class WebdriverInstances {
             }
         }
         return activeDrivers;
+    }
+
+    public Map<String, WebDriver> getActiveDriverMap() {
+        Map<String, WebDriver> activeDrivers = new HashMap<>();
+
+        driverMap.entrySet().stream()
+                .filter(entry -> isActive(entry.getValue()))
+                .forEach(
+                        entry -> activeDrivers.put(labelFrom(entry.getKey()), entry.getValue())
+                );
+        return activeDrivers;
+    }
+
+    private String labelFrom(String key) {
+        return key.contains(":") ? key.substring(key.lastIndexOf(":")) : key;
+    }
+
+    private boolean isActive(WebDriver driver) {
+        if (driver instanceof WebDriverFacade) {
+            return ((WebDriverFacade) driver).getProxiedDriver() != null;
+        }
+        return true;
     }
 
     public final class InstanceRegistration {

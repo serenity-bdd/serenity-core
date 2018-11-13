@@ -65,7 +65,9 @@ public class FirefoxDriverProvider implements DriverProvider {
 
     private boolean shouldUseGeckoDriver(EnvironmentVariables environmentVariables) {
         return (geckoDriverIsInEnvironmentVariable(environmentVariables)
-                || geckoDriverIsOnTheClasspath()) && geckoIsNotDisabled(environmentVariables);
+                || geckoDriverIsOnTheClasspath()
+                || geckoDriverPathIsDefined())
+                && geckoIsNotDisabled(environmentVariables);
     }
 
     private boolean geckoIsNotDisabled(EnvironmentVariables environmentVariables) {
@@ -109,6 +111,10 @@ public class FirefoxDriverProvider implements DriverProvider {
                 return false;
             }
         }
+    }
+
+    private boolean geckoDriverPathIsDefined() {
+        return System.getProperty("webdriver.gecko.driver") != null;
     }
 
     private boolean geckoDriverIsInEnvironmentVariable(EnvironmentVariables environmentVariables) {

@@ -4,6 +4,8 @@ import com.google.inject.*;
 import net.thucydides.core.util.*;
 import net.thucydides.core.webdriver.*;
 
+import java.util.Optional;
+
 public class WebDriverConfiguration<T extends DriverConfiguration> extends SystemPropertiesConfiguration implements DriverConfiguration  {
 
     /**
@@ -22,7 +24,12 @@ public class WebDriverConfiguration<T extends DriverConfiguration> extends Syste
      * Get the currently-configured browser type.
      */
     public SupportedWebDriver getDriverType() {
-        String driverType = WebDriverFactory.getDriverFrom(getEnvironmentVariables(), DEFAULT_WEBDRIVER_DRIVER);
+
+        Optional<String> driverDefinedInEnvironment = Optional.ofNullable(WebDriverFactory.getDriverFrom(getEnvironmentVariables()));
+        Optional<String> driverDefinedInTest = ThucydidesWebDriverSupport.getDefaultDriverType();
+
+        String driverType =  driverDefinedInTest.orElse(driverDefinedInEnvironment.orElse(DEFAULT_WEBDRIVER_DRIVER));
+
         return lookupSupportedDriverTypeFor(driverType);
     }
 

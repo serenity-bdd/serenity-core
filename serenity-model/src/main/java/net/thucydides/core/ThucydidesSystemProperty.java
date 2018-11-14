@@ -210,6 +210,8 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_TAKE_SCREENSHOTS,
 
+    SERENITY_USE_AWT_ROBOT_FOR_SCREENSHOTS,
+
     @Deprecated
     THUCYDIDES_REPORTS_SHOW_STEP_DETAILS,
 

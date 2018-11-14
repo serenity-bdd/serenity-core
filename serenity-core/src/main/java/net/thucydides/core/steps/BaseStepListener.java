@@ -4,10 +4,7 @@ import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.exceptions.TheErrorType;
-import net.serenitybdd.core.photography.Darkroom;
-import net.serenitybdd.core.photography.Photographer;
-import net.serenitybdd.core.photography.ScreenshotPhoto;
-import net.serenitybdd.core.photography.SoundEngineer;
+import net.serenitybdd.core.photography.*;
 import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
 import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.core.strings.Joiner;
@@ -31,10 +28,16 @@ import org.openqa.selenium.remote.SessionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach.EXAMPLE;
@@ -857,15 +860,25 @@ public class BaseStepListener implements StepListener, StepPublisher {
         java.util.Optional<File> pageSource = java.util.Optional.empty();
 
         if (pathOf(outputDirectory) != null) { // Output directory may be null for some tests
-            newPhoto = getPhotographer().takesAScreenshot()
-                    .with(getDriver())
-                    .andWithBlurring(AnnotatedBluring.blurLevel())
-                    .andSaveToDirectory(pathOf(outputDirectory));
+                            newPhoto = getPhotographer().takesAScreenshot()
+                        .with(getDriver())
+                        .andWithBlurring(AnnotatedBluring.blurLevel())
+                        .andSaveToDirectory(pathOf(outputDirectory));
 
-            pageSource = soundEngineer.ifRequiredForResult(result)
-                    .recordPageSourceUsing(getDriver())
-                    .intoDirectory(pathOf(outputDirectory));
-
+                pageSource = soundEngineer.ifRequiredForResult(result)
+                        .recordPageSourceUsing(getDriver())
+                        .intoDirectory(pathOf(outputDirectory));
+            if (ThucydidesSystemProperty.SERENITY_USE_AWT_ROBOT_FOR_SCREENSHOTS.booleanFrom(configuration.getEnvironmentVariables())){
+                try {
+                    String screenshotPath = newPhoto.getPathToScreenshot().toString();
+                    Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+                    BufferedImage capture = new Robot().createScreenCapture(screenRect);
+                    ImageIO.write(capture, "png", new File(screenshotPath));
+                    LOGGER.debug("Screenshot being replaced by Robot at {}", screenshotPath);
+                } catch (IOException|AWTException e) {
+                    LOGGER.warn("Failed to save screenshot", e);
+                }
+            }
         }
         return (newPhoto == ScreenshotPhoto.None) ?
                 java.util.Optional.<ScreenshotAndHtmlSource>empty()

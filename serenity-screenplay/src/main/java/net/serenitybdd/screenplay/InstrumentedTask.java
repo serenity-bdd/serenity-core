@@ -60,7 +60,10 @@ public class InstrumentedTask {
         try {
             instrumentedTask = (Performable) Instrumented.instanceOf(taskClass).newInstance();
         } catch(IllegalArgumentException missingDefaultConstructor) {
-            throw new TaskInstantiationException("Could not instantiate " + taskClass + ". If you are not instrumenting a Task class explicitly you need to give the class a default constructor.");
+            throw new TaskInstantiationException("Could not instantiate "
+                                                 + taskClass
+                                                + ". If you are not instrumenting a Task class explicitly you need to give the class a default constructor."
+                                                + "A task class cannot be instrumented if it is final (so if you are writing in Kotlin, make sure the task class is 'open'.");
         }
         Cloner cloner = new Cloner();
         cloner.copyPropertiesOfInheritedClass(task, instrumentedTask);

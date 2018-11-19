@@ -20,7 +20,7 @@
                 </div>
     <#else>
                 <span>
-                    <a role="button" class="btn btn-success btn-sm" href="${reportData.path}">
+                    <a role="button" class="btn btn-success btn-sm" href="${(reportData.path)!}">
                         <i class="fas fa-download"></i>&nbsp;${reportData.title}
                     </a>
                 </span>

@@ -25,7 +25,7 @@ test {
 dependencies {
     compile project(':serenity-model')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+//    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // JUnit 5
     testImplementation(

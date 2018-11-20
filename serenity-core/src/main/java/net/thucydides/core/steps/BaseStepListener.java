@@ -860,7 +860,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         java.util.Optional<File> pageSource = java.util.Optional.empty();
 
         if (pathOf(outputDirectory) != null) { // Output directory may be null for some tests
-                            newPhoto = getPhotographer().takesAScreenshot()
+                newPhoto = getPhotographer().takesAScreenshot()
                         .with(getDriver())
                         .andWithBlurring(AnnotatedBluring.blurLevel())
                         .andSaveToDirectory(pathOf(outputDirectory));
@@ -868,6 +868,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
                 pageSource = soundEngineer.ifRequiredForResult(result)
                         .recordPageSourceUsing(getDriver())
                         .intoDirectory(pathOf(outputDirectory));
+
             if (ThucydidesSystemProperty.SERENITY_USE_AWT_ROBOT_FOR_SCREENSHOTS.booleanFrom(configuration.getEnvironmentVariables())){
                 try {
                     String screenshotPath = newPhoto.getPathToScreenshot().toString();

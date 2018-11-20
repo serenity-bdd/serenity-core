@@ -3,6 +3,7 @@ package net.thucydides.core.webdriver.capabilities;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -39,29 +40,31 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
 
         Properties saucelabsProperties = environmentVariables.getPropertiesWithPrefix("saucelabs.");
 
+        MutableCapabilities sauceCaps = new MutableCapabilities();
+
         for(String propertyName : saucelabsProperties.stringPropertyNames()) {
             String unprefixedPropertyName = unprefixed(propertyName);
-            capabilities.setCapability(propertyName, typed(saucelabsProperties.getProperty(propertyName)));
-            capabilities.setCapability(unprefixedPropertyName, typed(saucelabsProperties.getProperty(propertyName)));
+            sauceCaps.setCapability(propertyName, typed(saucelabsProperties.getProperty(propertyName)));
+            sauceCaps.setCapability(unprefixedPropertyName, typed(saucelabsProperties.getProperty(propertyName)));
         }
 
-        addBuildNumberTo(capabilities);
+        addBuildNumberTo(sauceCaps);
+        configureTestName(sauceCaps);
 
-        configureTestName(capabilities);
-
+        capabilities.setCapability("sauce:options", sauceCaps);
         capabilities.setJavascriptEnabled(true);
 
         return capabilities;
     }
 
-    private void addBuildNumberTo(DesiredCapabilities capabilities) {
+    private void addBuildNumberTo(MutableCapabilities capabilities) {
         if (environmentVariables.getProperty("BUILD_NUMBER") != null) {
             capabilities.setCapability("build", environmentVariables.getProperty("BUILD_NUMBER"));
         }
     }
 
 
-    private void configureBrowserVersion(DesiredCapabilities capabilities) {
+    private void configureBrowserVersion(MutableCapabilities capabilities) {
         String driverVersion = ThucydidesSystemProperty.SAUCELABS_DRIVER_VERSION.from(environmentVariables);
         if (isNotEmpty(driverVersion)) {
             capabilities.setCapability("version", driverVersion);
@@ -100,7 +103,7 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
         return propertyName.replace("saucelabs.","");
     }
 
-    private void configureTestName(DesiredCapabilities capabilities) {
+    private void configureTestName(MutableCapabilities capabilities) {
         String testName = SAUCELABS_TEST_NAME.from(environmentVariables);
         if (isNotEmpty(testName)) {
             capabilities.setCapability("name", testName);

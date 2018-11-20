@@ -1,12 +1,9 @@
-package net.serenitybdd.screenplay.rest.abiities;
+package net.serenitybdd.screenplay.rest.abilities;
 
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import net.serenitybdd.rest.SerenityRest;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
-
-import java.util.function.Function;
 
 /**
  * A Screenplay ability that allows an actor to perform REST queries against a specified API.

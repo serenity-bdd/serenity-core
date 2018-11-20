@@ -1,16 +1,10 @@
 package net.serenitybdd.screenplay.rest.interactions;
 
-import net.serenitybdd.rest.SerenityRest;
 import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.Interaction;
-import net.serenitybdd.screenplay.rest.abiities.CallAnApi;
 import net.thucydides.core.annotations.Step;
 
-import java.util.Optional;
-import java.util.function.Consumer;
-
 import static net.serenitybdd.screenplay.Tasks.instrumented;
-import static net.serenitybdd.screenplay.rest.abiities.CallAnApi.as;
+import static net.serenitybdd.screenplay.rest.abilities.CallAnApi.as;
 
 /**
  * Post something to a REST resource.

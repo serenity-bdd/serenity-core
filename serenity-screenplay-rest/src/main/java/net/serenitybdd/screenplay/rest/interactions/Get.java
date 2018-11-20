@@ -4,7 +4,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.thucydides.core.annotations.Step;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
-import static net.serenitybdd.screenplay.rest.abiities.CallAnApi.as;
+import static net.serenitybdd.screenplay.rest.abilities.CallAnApi.as;
 
 /**
  * Perform a GET query on a given REST resource

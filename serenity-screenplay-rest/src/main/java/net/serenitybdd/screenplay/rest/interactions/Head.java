@@ -21,7 +21,7 @@ public class Head extends RestInteraction {
     @Step("{0} executes a PUT on the resource #resource")
     @Override
     public <T extends Actor> void performAs(T actor) {
-        rest().patch(as(actor).resolve(resource));
+        rest().head(as(actor).resolve(resource));
     }
 
     public static Head to(String resource) {

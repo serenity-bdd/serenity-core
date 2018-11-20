@@ -21,7 +21,7 @@ public class Options extends RestInteraction {
     @Step("{0} executes a PUT on the resource #resource")
     @Override
     public <T extends Actor> void performAs(T actor) {
-        rest().patch(as(actor).resolve(resource));
+        rest().options(as(actor).resolve(resource));
     }
 
     public static Options to(String resource) {

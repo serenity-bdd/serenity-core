@@ -4,7 +4,10 @@ import com.google.inject.Injector;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.exceptions.TheErrorType;
-import net.serenitybdd.core.photography.*;
+import net.serenitybdd.core.photography.Darkroom;
+import net.serenitybdd.core.photography.Photographer;
+import net.serenitybdd.core.photography.ScreenshotPhoto;
+import net.serenitybdd.core.photography.SoundEngineer;
 import net.serenitybdd.core.photography.bluring.AnnotatedBluring;
 import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.core.strings.Joiner;
@@ -860,14 +863,15 @@ public class BaseStepListener implements StepListener, StepPublisher {
         java.util.Optional<File> pageSource = java.util.Optional.empty();
 
         if (pathOf(outputDirectory) != null) { // Output directory may be null for some tests
-                            newPhoto = getPhotographer().takesAScreenshot()
-                        .with(getDriver())
-                        .andWithBlurring(AnnotatedBluring.blurLevel())
-                        .andSaveToDirectory(pathOf(outputDirectory));
+            newPhoto = getPhotographer().takesAScreenshot()
+                    .with(getDriver())
+                    .andWithBlurring(AnnotatedBluring.blurLevel())
+                    .andSaveToDirectory(pathOf(outputDirectory));
 
-                pageSource = soundEngineer.ifRequiredForResult(result)
-                        .recordPageSourceUsing(getDriver())
-                        .intoDirectory(pathOf(outputDirectory));
+            pageSource = soundEngineer.ifRequiredForResult(result)
+                    .recordPageSourceUsing(getDriver())
+                    .intoDirectory(pathOf(outputDirectory));
+
             if (ThucydidesSystemProperty.SERENITY_USE_AWT_ROBOT_FOR_SCREENSHOTS.booleanFrom(configuration.getEnvironmentVariables())){
                 try {
                     String screenshotPath = newPhoto.getPathToScreenshot().toString();

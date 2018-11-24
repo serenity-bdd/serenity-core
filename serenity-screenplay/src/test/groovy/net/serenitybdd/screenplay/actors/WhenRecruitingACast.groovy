@@ -23,7 +23,7 @@ class WhenRecruitingACast extends Specification {
         given:
             Ability performShakespeare = new PerformShakespeare();
         and:
-            Cast globeTheatreCast = Cast.whereEveryoneCan(performShakespeare)
+        Cast globeTheatreCast = Cast.whereEveryoneCan(performShakespeare)
         when:
             Actor laurance = globeTheatreCast.actorNamed("Laurence")
         then:

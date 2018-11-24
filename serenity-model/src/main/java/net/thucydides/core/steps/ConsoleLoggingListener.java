@@ -31,7 +31,6 @@ public class ConsoleLoggingListener implements StepListener {
     public static final String ANSI_SERENITY_GREEN = "\u001B[36m";
 
     public static final String SERENITY_BIG_BANNER =
-            ANSI_SERENITY_GREEN +
             "\n\n-------------------------------------------------------------------------------------\n" +
             "     _______. _______ .______       _______ .__   __.  __  .___________.____    ____ \n" +
             "    /       ||   ____||   _  \\     |   ____||  \\ |  | |  | |           |\\   \\  /   / \n" +
@@ -45,8 +44,7 @@ public class ConsoleLoggingListener implements StepListener {
             " Join the Serenity Community on Rocket Chat at https://serenity-bdd.rocket.chat      \n" +
             " Serenity BDD Support and Training at http://serenity-bdd.info/#/trainingandsupport  \n" +
             " Learn Serenity BDD online at http://serenity-dojo.com                               \n" +
-            "-------------------------------------------------------------------------------------\n"
-            + ANSI_RESET;
+            "-------------------------------------------------------------------------------------\n";
 
     public static final String SERENITY_SMALL_BANNER =
             "\n--------------\n" +
@@ -509,7 +507,7 @@ public class ConsoleLoggingListener implements StepListener {
         }
     }
 
-    private boolean showColoredOutput() {
+    private static boolean showColoredOutput() {
         return ThucydidesSystemProperty.SERENITY_CONSOLE_COLORS.booleanFrom(environmentVariables,false);
     }
 

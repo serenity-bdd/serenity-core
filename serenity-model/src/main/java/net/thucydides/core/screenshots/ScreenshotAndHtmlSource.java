@@ -14,7 +14,7 @@ public class ScreenshotAndHtmlSource {
 
     private final File screenshot;
     private final File htmlSource;
-    private final Long timeStamp;
+    private Long timeStamp = 0L;
 
     public ScreenshotAndHtmlSource(String screenshotName, String sourcecodeName) {
         this.screenshot = new File(screenshotName);
@@ -65,7 +65,7 @@ public class ScreenshotAndHtmlSource {
     }
 
     public Long getTimeStamp() {
-        return timeStamp;
+        return timeStamp == null ? 0 : timeStamp;
     }
 
     @Override

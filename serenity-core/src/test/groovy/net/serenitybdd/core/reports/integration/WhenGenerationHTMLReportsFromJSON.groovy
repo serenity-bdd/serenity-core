@@ -48,7 +48,7 @@ class WhenGenerationHTMLReportsFromJSON extends Specification {
                 outcomeReports.add(reporter.generateReportFor(outcome).text)
             }
         then:
-            outcomeReports.findAll { !it.contains(">Screenshot<") }.isEmpty()
+            outcomeReports.findAll { !it.contains(">Screenshots<") }.isEmpty()
     }
 
     def "failures in example tables show be reflected individually in the overall report"() {

@@ -5,6 +5,7 @@ import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import org.openqa.selenium.WebDriver;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -180,18 +181,7 @@ public class WebdriverInstances {
 
 
     public List<WebDriver> getActiveDrivers() {
-        List<WebDriver> activeDrivers = new ArrayList<>();
-        for (WebDriver webDriver : driverMap.values()) {
-            if (!(webDriver instanceof WebDriverFacade)) {
-                activeDrivers.add(webDriver);
-                continue;
-            }
-
-            if (((WebDriverFacade) webDriver).isInstantiated()) {
-                activeDrivers.add(webDriver);
-            }
-        }
-        return activeDrivers;
+        return driverMap.values().stream().filter(this::isActive).collect(Collectors.toList());
     }
 
     public List<String> getActiveDriverTypes() {
@@ -226,9 +216,10 @@ public class WebdriverInstances {
 
     private boolean isActive(WebDriver driver) {
         if (driver instanceof WebDriverFacade) {
-            return ((WebDriverFacade) driver).getProxiedDriver() != null;
+            return ((WebDriverFacade) driver).isInstantiated();
+        } else {
+            return true;
         }
-        return true;
     }
 
     public final class InstanceRegistration {

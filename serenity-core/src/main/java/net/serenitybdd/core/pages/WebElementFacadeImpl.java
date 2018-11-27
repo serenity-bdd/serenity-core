@@ -1076,6 +1076,10 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public String toString() {
+
+        if (webElement != null && !driverIsDisabled()) {
+            return webElement.toString();
+        }
         if (foundBy != null) {
             return foundBy;
         }

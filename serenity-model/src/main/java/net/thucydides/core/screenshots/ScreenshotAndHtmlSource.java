@@ -3,6 +3,8 @@ package net.thucydides.core.screenshots;
 import com.google.common.base.Objects;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalField;
 import java.util.Optional;
 
 /**
@@ -12,15 +14,18 @@ public class ScreenshotAndHtmlSource {
 
     private final File screenshot;
     private final File htmlSource;
+    private final Long timeStamp;
 
     public ScreenshotAndHtmlSource(String screenshotName, String sourcecodeName) {
         this.screenshot = new File(screenshotName);
         this.htmlSource = (sourcecodeName != null) ? new File(sourcecodeName) : null;
+        this.timeStamp = System.currentTimeMillis();
     }
 
     public ScreenshotAndHtmlSource(File screenshot, File sourcecode) {
         this.screenshot = screenshot;
         this.htmlSource = sourcecode;
+        this.timeStamp = System.currentTimeMillis();
     }
 
     public String getScreenshotName() {
@@ -57,6 +62,10 @@ public class ScreenshotAndHtmlSource {
         ScreenshotAndHtmlSource that = (ScreenshotAndHtmlSource) o;
         return Objects.equal(screenshot, that.screenshot) &&
                 Objects.equal(htmlSource, that.htmlSource);
+    }
+
+    public Long getTimeStamp() {
+        return timeStamp;
     }
 
     @Override

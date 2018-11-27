@@ -6,6 +6,7 @@ import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.core.time.SystemClock;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.failures.FailureAnalysis;
+import net.thucydides.core.model.screenshots.Screenshot;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import net.thucydides.core.model.stacktrace.RootCauseAnalyzer;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static net.thucydides.core.model.TestOutcome.extractScreenshot;
 import static net.thucydides.core.model.TestResult.*;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -253,6 +255,30 @@ public class TestStep implements Cloneable {
     public ScreenshotAndHtmlSource getFirstScreenshot() {
         if ((screenshots != null) && (!screenshots.isEmpty())) {
             return screenshots.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public ScreenshotAndHtmlSource getEarliestScreenshot() {
+        if (hasChildren()) {
+            return getChildren().get(0).getEarliestScreenshot();
+        }
+
+        if ((screenshots != null) && (!screenshots.isEmpty())) {
+            return screenshots.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public ScreenshotAndHtmlSource getLatestScreenshot() {
+        if (hasChildren()) {
+            return getChildren().get(getChildren().size() - 1).getLatestScreenshot();
+        }
+
+        if ((screenshots != null) && (!screenshots.isEmpty())) {
+            return screenshots.get(screenshots.size() - 1);
         } else {
             return null;
         }
@@ -492,6 +518,12 @@ public class TestStep implements Cloneable {
     public TestStep withReportData(ReportData reportData) {
         this.reportData = reportData;
         return this;
+    }
+
+    public List<Screenshot> getRenderedScreenshots() {
+        return getScreenshots().stream().map(
+                screenshotAndHtmlSource -> extractScreenshot(this, screenshotAndHtmlSource)
+        ).collect(Collectors.toList());
     }
 
     @Override

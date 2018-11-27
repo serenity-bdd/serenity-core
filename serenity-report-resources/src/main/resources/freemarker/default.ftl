@@ -316,10 +316,10 @@
                     </th>
                 </#if>
                 <#if testOutcome.hasScreenshots()>
-                    <th width="120" class="greentext">Screenshot</th>
+                    <th width="150" class="greentext">Screenshots</th>
                 </#if>
                     <th width="110" class="greentext">Outcome</th>
-                    <th width="80" class="greentext">Duration</th>
+                    <th width="80" class="greentext"><i title="Duration" class="far fa-clock"></i></th>
                 </tr>
                 <tr class="step-table-separator">
                     <td colspan="5"></td>
@@ -419,7 +419,7 @@
                     <#assign showAccordion = false/>
                 </#if>
                 <tr class="test-${step.result}">
-                    <td width="60" class="step-icon">
+                    <td width="50" class="step-icon">
                         <#if step_number?has_content><a name="${step_number}"/></#if>
                         <#if showAccordion>
                             <a href="javaScript:void(0)" onClick="toggleDiv('stepSection${step_number}')"
@@ -467,13 +467,23 @@
                         </div>
                     </td>
                     <#if testOutcome.hasScreenshots()>
-                        <td width="100" class="${step.result}-text">
-                        <#--<#if !step.isAGroup() && step.firstScreenshot??>-->
-                            <#if step.lastScreenshot??>
+                        <td width="160" class="${step.result}-text">
+                            <#if step.hasChildren()>
+                              <#if step.earliestScreenshot?has_content>
                                 <a href="${relativeLink!}${testOutcome.screenshotReportName}.html#screenshots?screenshot=${screenshotCount}">
-                                    <!-- Added invalid href-attribute to img for imgpreviewer -->
-                                    <img src="${step.lastScreenshot.screenshot.name}"
-                                         href="${step.lastScreenshot.screenshot.name}"
+                                    <img src="${step.earliestScreenshot.screenshot.name}"
+                                         href="${step.earliestScreenshot.screenshot.name}"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                                <i class="fas fa-arrow-right"></i>
+                              </#if>
+                            </#if>
+
+                            <#if step.latestScreenshot?has_content>
+                                <a href="${relativeLink!}${testOutcome.screenshotReportName}.html#screenshots?screenshot=${screenshotCount}">
+                                    <img src="${step.latestScreenshot.screenshot.name}"
+                                         href="${step.latestScreenshot.screenshot.name}"
                                          class="screenshot"
                                          width="48" height="48"/>
                                     <#assign screenshotCount = screenshotCount + step.screenshotCount />

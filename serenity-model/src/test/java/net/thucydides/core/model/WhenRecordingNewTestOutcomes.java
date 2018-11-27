@@ -593,19 +593,19 @@ public class WhenRecordingNewTestOutcomes {
 
     @Test
     public void a_screenshot_without_an_error_message__returns_an_empty_string() {
-        Screenshot screenshot = new Screenshot("step_1.png", "Step 1", 800);
+        Screenshot screenshot = new Screenshot("step_1.png", "Step 1", 0, 800);
         assertThat(screenshot.getErrorMessage(), is(""));
     }
 
     @Test
     public void a_failing_screenshot_records_the_error_message() {
-        Screenshot screenshot = new Screenshot("step_1.png", "Step 1", 800, new FailureCause(new AssertionError("Element not found")));
+        Screenshot screenshot = new Screenshot("step_1.png", "Step 1", 0, 800, new FailureCause(new AssertionError("Element not found")));
         assertThat(screenshot.getErrorMessage(), is("Element not found"));
     }
 
     @Test
     public void a_failing_step_should_the_error_message_for_errors_with_complex_constructors() {
-        Screenshot screenshot = new Screenshot("step_1.png", "Step 1", 800, new FailureCause(new ComparisonFailure("oh crap", "a","b")));
+        Screenshot screenshot = new Screenshot("step_1.png", "Step 1", 0, 800, new FailureCause(new ComparisonFailure("oh crap", "a","b")));
         assertThat(screenshot.getError().getMessage(), is("oh crap expected:<[a]> but was:<[b]>"));
         assertThat(screenshot.getError().getStackTrace().length, is(greaterThan(0)));
     }
@@ -683,7 +683,7 @@ public class WhenRecordingNewTestOutcomes {
     public void the_acceptance_test_case_is_in_error_if_a_test_step_has_an_error() {
 
         testOutcome.recordStep(forASuccessfulTestStepCalled("Step 1"));
-        testOutcome.recordStep(forABrokenTestStepCalled("Step 2", new StepFailureException("Oh bother",new NoSuchElementException("Can't find element"))));
+        testOutcome.recordStep(forABrokenTestStepCalled("Step 2", new StepFailureException("Oh bshould_not_resize_image_if_target_height_is_larger_than_the_maximum_heightother",new NoSuchElementException("Can't find element"))));
         testOutcome.recordStep(forASuccessfulTestStepCalled("Step 4"));
 
         assertThat(testOutcome.getResult(), is(ERROR));

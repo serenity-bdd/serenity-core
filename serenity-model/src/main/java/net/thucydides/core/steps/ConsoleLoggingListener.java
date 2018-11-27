@@ -1,9 +1,9 @@
 package net.thucydides.core.steps;
 
 
-import net.serenitybdd.core.strings.Joiner;
-import net.serenitybdd.core.collect.NewList;
 import com.google.inject.Inject;
+import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.strings.Joiner;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.logging.LoggingLevel;
 import net.thucydides.core.model.DataTable;
@@ -21,14 +21,14 @@ import java.util.Map;
 
 public class ConsoleLoggingListener implements StepListener {
 
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[91m";
-    public static final String ANSI_GREEN = "\u001B[92m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[95m";
-    public static final String ANSI_CYAN = "\u001B[96m";
-    public static final String ANSI_SERENITY_GREEN = "\u001B[36m";
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_RED = "\u001B[91m";
+    private static final String ANSI_GREEN = "\u001B[92m";
+    private static final String ANSI_YELLOW = "\u001B[33m";
+    private static final String ANSI_BLUE = "\u001B[34m";
+    private static final String ANSI_PURPLE = "\u001B[95m";
+    private static final String ANSI_CYAN = "\u001B[96m";
+    private static final String ANSI_SERENITY_GREEN = "\u001B[36m";
 
     public static final String SERENITY_BIG_BANNER =
             "\n\n-------------------------------------------------------------------------------------\n" +
@@ -46,7 +46,7 @@ public class ConsoleLoggingListener implements StepListener {
             " Learn Serenity BDD online at http://serenity-dojo.com                               \n" +
             "-------------------------------------------------------------------------------------\n";
 
-    public static final String SERENITY_SMALL_BANNER =
+    private static final String SERENITY_SMALL_BANNER =
             "\n--------------\n" +
             "- SERENITY   -\n" +
             "--------------";
@@ -185,7 +185,7 @@ public class ConsoleLoggingListener implements StepListener {
         this.analysis = new FailureAnalysis(environmentVariables);
 
 
-        String headerStyleValue = ThucydidesSystemProperty.THUCYDIDES_CONSOLE_HEADINGS.from(environmentVariables, HeadingStyle.ASCII.toString())
+        String headerStyleValue = ThucydidesSystemProperty.SERENITY_CONSOLE_HEADINGS.from(environmentVariables, HeadingStyle.ASCII.toString())
                                   .toUpperCase();
 
         headingStyle = headingStyleFrom(headerStyleValue);
@@ -227,7 +227,7 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
     private LoggingLevel getLoggingLevel() {
-        String logLevel = ThucydidesSystemProperty.THUCYDIDES_LOGGING.from(environmentVariables,
+        String logLevel = ThucydidesSystemProperty.SERENITY_LOGGING.from(environmentVariables,
                                                                 LoggingLevel.NORMAL.name());
 
         return LoggingLevel.valueOf(logLevel);
@@ -507,7 +507,7 @@ public class ConsoleLoggingListener implements StepListener {
         }
     }
 
-    private static boolean showColoredOutput() {
+    private boolean showColoredOutput() {
         return ThucydidesSystemProperty.SERENITY_CONSOLE_COLORS.booleanFrom(environmentVariables,false);
     }
 

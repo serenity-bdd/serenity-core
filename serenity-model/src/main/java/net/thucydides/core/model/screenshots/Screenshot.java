@@ -12,21 +12,25 @@ public class Screenshot {
     private final String description;
     private final int width;
     private final FailureCause error;
+    private final Long timestamp;
 
     public Screenshot(final String filename,
                       final String description,
                       final int width,
+                      final long timestamp,
                       final FailureCause error) {
         this.filename = filename;
         this.description = description;
+        this.timestamp = timestamp;
         this.width = width;
         this.error = error;
     }
 
     public Screenshot(final String filename,
                       final String description,
-                      final int width) {
-        this(filename, description, width, null);
+                      final int width,
+                      final long timestamp) {
+        this(filename, description, width, timestamp, null);
     }
 
     public FailureCause getError() {
@@ -55,6 +59,10 @@ public class Screenshot {
 
     public int getWidth() {
         return width;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
     }
 
     public HtmlFormattedInfo getHtml() {

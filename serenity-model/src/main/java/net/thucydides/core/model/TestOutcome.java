@@ -1161,17 +1161,43 @@ public class TestOutcome {
                 .collect(Collectors.toList());
     }
 
+
     public List<Screenshot> getScreenshots() {
+
         List<Screenshot> screenshots = new ArrayList<>();
 
-        List<TestStep> testStepsWithScreenshots = getFlattenedTestSteps();// select(getFlattenedTestSteps(),
-//                having(on(TestStep.class).needsScreenshots()));
+        List<TestStep> testStepsWithScreenshots = getFlattenedTestSteps();
 
         for (TestStep currentStep : testStepsWithScreenshots) {
             screenshots.addAll(screenshotsIn(currentStep));
         }
 
-        return new ArrayList<>(screenshots);
+        screenshots.sort(Comparator.comparing(Screenshot::getTimestamp));
+
+        return screenshots;
+    }
+
+
+    public List<Screenshot> getLeafScreenshots() {
+
+        List<Screenshot> screenshots = new ArrayList<>();
+
+        List<TestStep> testStepsWithScreenshots = getFlattenedTestSteps();
+
+        for (TestStep currentStep : testStepsWithScreenshots) {
+            if (currentStep.hasChildren()) {
+                first(screenshotsIn(currentStep)).ifPresent(screenshots::add);
+            } else {
+                screenshots.addAll(screenshotsIn(currentStep));
+            }
+        }
+
+        return screenshots;
+    }
+
+    private Optional<Screenshot> first(List<Screenshot> screenshots) {
+        if (screenshots.isEmpty()) { return Optional.empty(); }
+        return Optional.of(screenshots.get(0));
     }
 
     private List<Screenshot> screenshotsIn(TestStep currentStep) {
@@ -1184,6 +1210,7 @@ public class TestOutcome {
         return new Screenshot(from.getScreenshot().getName(),
                 currentStep.getDescription(),
                 widthOf(from.getScreenshot()),
+                from.getTimeStamp(),
                 currentStep.getException());
     }
 

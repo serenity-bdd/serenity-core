@@ -48,6 +48,7 @@ public class ScreenshotFormatter {
             return new Screenshot(resizedFile.getName(),
                     screenshot.getDescription(),
                     screenshot.getWidth(),
+                    screenshot.getTimestamp(),
                     screenshot.getError());
         }
         return screenshot;

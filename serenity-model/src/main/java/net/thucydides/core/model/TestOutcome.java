@@ -1178,30 +1178,29 @@ public class TestOutcome {
     }
 
 
-    public List<Screenshot> getLeafScreenshots() {
+    /**
+     * Find the first and last screenshots for each aggregate step, and every screenshots for leaf steps.
+     * @return
+     */
+    public List<Screenshot> getStepScreenshots() {
 
         List<Screenshot> screenshots = new ArrayList<>();
 
-        List<TestStep> testStepsWithScreenshots = getFlattenedTestSteps();
-
-        for (TestStep currentStep : testStepsWithScreenshots) {
-            if (currentStep.hasChildren()) {
-                first(screenshotsIn(currentStep)).ifPresent(screenshots::add);
-            } else {
-                screenshots.addAll(screenshotsIn(currentStep));
-            }
-        }
+        testSteps.forEach(
+                step -> screenshots.addAll(step.getRenderedScreenshots())
+        );
 
         return screenshots;
     }
 
-    private Optional<Screenshot> first(List<Screenshot> screenshots) {
-        if (screenshots.isEmpty()) { return Optional.empty(); }
-        return Optional.of(screenshots.get(0));
-    }
 
+    /**
+     * The screenshots in the current step include the screenshots
+     * @param currentStep
+     * @return
+     */
     private List<Screenshot> screenshotsIn(TestStep currentStep) {
-        return currentStep.getScreenshots().stream().map(
+        return currentStep.getAllScreenshots().stream().map(
                 screenshotAndHtmlSource -> extractScreenshot(currentStep, screenshotAndHtmlSource)
         ).collect(Collectors.toList());
     }

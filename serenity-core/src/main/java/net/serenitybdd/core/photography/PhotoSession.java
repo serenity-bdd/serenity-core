@@ -23,6 +23,9 @@ public class PhotoSession {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
+    private static ThreadLocal<ScreenshotPhoto> previousScreenshot = new ThreadLocal<>();
+    private static ThreadLocal<Long> previousScreenshotTimestamp = ThreadLocal.withInitial(() -> 0L);
+
     public PhotoSession(WebDriver driver,  Darkroom darkroom, Path outputDirectory, BlurLevel blurLevel) {
         this.driver = driver;
         this.outputDirectory = outputDirectory;
@@ -33,6 +36,13 @@ public class PhotoSession {
     }
 
     public ScreenshotPhoto takeScreenshot() {
+
+        if (tooSoonForNewPhoto() && previousScreenshot.get() != null) {
+            return previousScreenshot.get();
+        }
+
+        ScreenshotPhoto photo;
+
         byte[] screenshotData = null;
         if(WebDriverFactory.isAlive(driver) && driver instanceof TakesScreenshot){
             try {
@@ -47,7 +57,16 @@ public class PhotoSession {
             return ScreenshotPhoto.None;
         }
 
-        return storedScreenshot(screenshotData);
+        photo = storedScreenshot(screenshotData);
+        previousScreenshot.set(photo);
+        previousScreenshotTimestamp.set(System.currentTimeMillis());
+
+        return photo;
+    }
+
+    private boolean tooSoonForNewPhoto() {
+        long previousPhotoTaken = previousScreenshotTimestamp.get();
+        return (System.currentTimeMillis() - previousPhotoTaken < 50);
     }
 
     private ScreenshotPhoto storedScreenshot(byte[] screenshotData) {

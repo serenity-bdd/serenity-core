@@ -856,11 +856,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private List<ScreenshotAndHtmlSource> grabScreenshots(TestResult result) {
 
+        System.out.println();
         if (pathOf(outputDirectory) == null) { // Output directory may be null for some tests
             return new ArrayList<>();
         }
 
-        return getActiveDrivers().entrySet().stream()
+        List<ScreenshotAndHtmlSource> screenshots = getActiveDrivers().entrySet().stream()
                 .map(
                         entry -> new ScreenshotAndHtmlSource(
                                 screenshotFrom(entry.getValue()),
@@ -868,6 +869,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
                         )
                 )
                 .collect(Collectors.toList());
+
+        LOGGER.info("Screenshots for " + this.currentStep().get().getDescription() + ":" + screenshots);
+
+        return screenshots;
     }
 
     private File screenshotFrom( WebDriver driver) {
@@ -903,7 +908,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
         }
         return (newPhoto == ScreenshotPhoto.None) ?
-                java.util.Optional.<ScreenshotAndHtmlSource>empty()
+                java.util.Optional.empty()
                 : java.util.Optional.of(new ScreenshotAndHtmlSource(newPhoto.getPathToScreenshot().toFile(), pageSource.orElse(null)));
     }
 

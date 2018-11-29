@@ -1,20 +1,22 @@
 package net.thucydides.core.screenshots;
 
-import com.google.common.base.Objects;
-
 import java.io.File;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.TemporalField;
+import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
  * A screenshot image and the corresponding HTML source code.
  */
-public class ScreenshotAndHtmlSource {
+public class ScreenshotAndHtmlSource implements Comparable<ScreenshotAndHtmlSource> {
 
     private final File screenshot;
     private final File htmlSource;
-    private Long timeStamp = 0L;
+    private Long timeStamp;
 
     public ScreenshotAndHtmlSource(String screenshotName, String sourcecodeName) {
         this.screenshot = new File(screenshotName);
@@ -60,17 +62,23 @@ public class ScreenshotAndHtmlSource {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ScreenshotAndHtmlSource that = (ScreenshotAndHtmlSource) o;
-        return Objects.equal(screenshot, that.screenshot) &&
-                Objects.equal(htmlSource, that.htmlSource);
-    }
-
-    public Long getTimeStamp() {
-        return timeStamp == null ? 0 : timeStamp;
+        return Objects.equals(screenshot, that.screenshot) &&
+                Objects.equals(htmlSource, that.htmlSource) &&
+                Objects.equals(timeStamp, that.timeStamp);
     }
 
     @Override
     public int hashCode() {
-        return screenshot != null ? screenshot.hashCode() : 0;
+        return Objects.hash(screenshot, htmlSource, timeStamp);
+    }
+
+    public Long getTimeStamp() {
+        return timeStamp == null ? 0L : timeStamp;
+    }
+
+    public String toString() {
+
+        return "Screenshot created at " + Instant.ofEpochMilli(timeStamp) + ": " + screenshot;
     }
 
     public boolean hasIdenticalScreenshotsAs(ScreenshotAndHtmlSource anotherScreenshotAndHtmlSource) {
@@ -83,7 +91,13 @@ public class ScreenshotAndHtmlSource {
     public File getScreenshotFile(File screenshotTargetDirectory) {
         return new File(screenshotTargetDirectory, getScreenshot().getName());
     }
+
     public boolean hasNoScreenshot() {
         return getScreenshot() == null;
+    }
+
+    @Override
+    public int compareTo(ScreenshotAndHtmlSource otherScreenshot) {
+        return this.getTimeStamp().compareTo(otherScreenshot.getTimeStamp());
     }
 }

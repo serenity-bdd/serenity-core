@@ -1,6 +1,9 @@
 package net.serenitybdd.screenplay.questions;
 
 import com.google.common.base.Preconditions;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.questions.converters.*;
@@ -55,6 +58,14 @@ public abstract class UIState<T> {
 
     public DateTime asDate() {
         return as(DateTime.class);
+    }
+
+    public LocalDate asLocalDate() {
+        return as(LocalDate.class);
+    }
+
+    public LocalDate asLocalDate(String format) {
+        return LocalDate.parse(format, DateTimeFormatter.ofPattern(format));
     }
 
     public DateTime asDate(String format) {

@@ -4,7 +4,9 @@ import com.google.common.base.Objects;
 import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.core.time.SystemClock;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.images.ResizableImage;
 import net.thucydides.core.model.failures.FailureAnalysis;
 import net.thucydides.core.model.screenshots.Screenshot;
 import net.thucydides.core.model.stacktrace.FailureCause;
@@ -13,18 +15,19 @@ import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import org.joda.time.DateTime;
 import org.jsoup.Jsoup;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static net.thucydides.core.model.TestOutcome.extractScreenshot;
 import static net.thucydides.core.model.TestResult.*;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.codehaus.groovy.runtime.DefaultGroovyMethods.first;
 
 /**
  * An acceptance test run is made up of test steps.
@@ -236,6 +239,98 @@ public class TestStep implements Cloneable {
         return new ArrayList(screenshots);
     }
 
+    public List<ScreenshotAndHtmlSource> getAllScreenshots() {
+
+        Set<ScreenshotAndHtmlSource> allScreenshots
+                                                = children.stream()
+                                                          .flatMap( child -> child.getAllScreenshots().stream() )
+                                                          .collect(Collectors.toSet());
+
+        allScreenshots.addAll(screenshots);
+
+
+        List<ScreenshotAndHtmlSource> screenshotInOrderOfAppearance = new ArrayList<>(screenshots);
+        screenshotInOrderOfAppearance.sort(Comparator.comparingLong(ScreenshotAndHtmlSource::getTimeStamp));
+
+        return screenshotInOrderOfAppearance;
+    }
+
+    /**
+     * Returns rendered screenshots of this step and of child steps, in order of appearance,
+     * and starting with the earliet screenshot overall with the name of this step.
+     */
+    public List<Screenshot> getRenderedScreenshots() {
+
+        List<Screenshot> stepScreenshots = (screenshots == null) ? new ArrayList<>() : screenshots.stream().map(this::renderedScreenshotOf).collect(Collectors.toList());
+
+        getFlattenedSteps().forEach(
+                step -> stepScreenshots.addAll(step.getTopLevelScreenshots())
+        );
+
+        stepScreenshots.sort(Comparator.comparingLong(Screenshot::getTimestamp));
+
+        Screenshot earliestScreenshot = stepScreenshots.get(0);
+        Screenshot lastScreenshot = stepScreenshots.get(stepScreenshots.size() - 1);
+
+        if (isScreenshotInThisStep(lastScreenshot) && lastScreenshot.getTimestamp() > earliestScreenshot.getTimestamp()) {
+            stepScreenshots.remove(stepScreenshots.size() - 1);
+            stepScreenshots.add(withClosingDescriptionForThisStep(lastScreenshot));
+        }
+
+        if (thereAreNoScreenshotsInThisStep() || !isScreenshotInThisStep(earliestScreenshot) ) {
+            stepScreenshots.add(0, withDescriptionForThisStep(earliestScreenshot));
+        }
+
+        return stepScreenshots;
+    }
+
+    private Screenshot withClosingDescriptionForThisStep(Screenshot screenshot) {
+        return screenshot.withDescription(screenshot.getDescription() + " (completed)");
+    }
+
+    private Screenshot withDescriptionForThisStep(Screenshot screenshot) {
+        return screenshot.before().withDescription(getDescription());
+    }
+
+    private boolean isScreenshotInThisStep(Screenshot screenshot) {
+        return screenshot.getDescription().equals(getDescription());
+    }
+
+    private boolean thereAreNoScreenshotsInThisStep() {
+        return  (screenshots == null) || screenshots.isEmpty();
+    }
+
+    public List<Screenshot> getTopLevelScreenshots() {
+        if (screenshots == null) { return new ArrayList<>(); }
+
+        return screenshots.stream().map(this::renderedScreenshotOf).collect(Collectors.toList());
+    }
+
+    public  Screenshot renderedScreenshotOf(ScreenshotAndHtmlSource from) {
+        return new Screenshot(from.getScreenshot().getName(),
+                getDescription(),
+                widthOf(from.getScreenshot()),
+                from.getTimeStamp(),
+                getException());
+    }
+
+    private static int widthOf(final File screenshot) {
+        try {
+            return new ResizableImage(screenshot).getWidth();
+        } catch (IOException e) {
+            return ThucydidesSystemProperty.DEFAULT_WIDTH;
+        }
+    }
+
+    private <T> T firstOf(List<T> elements) {
+        return elements.get(0);
+    }
+
+    private <T> T  lastOf(List<T> elements) {
+        return elements.get(elements.size() - 1);
+    }
+
+
     public boolean hasRestQuery() {
         return restQuery != null;
     }
@@ -261,27 +356,15 @@ public class TestStep implements Cloneable {
     }
 
     public ScreenshotAndHtmlSource getEarliestScreenshot() {
-        if (hasChildren()) {
-            return getChildren().get(0).getEarliestScreenshot();
-        }
-
-        if ((screenshots != null) && (!screenshots.isEmpty())) {
-            return screenshots.get(0);
-        } else {
-            return null;
-        }
+        if (getAllScreenshots().isEmpty()) { return null; }
+        return getAllScreenshots().get(0);
     }
 
-    public ScreenshotAndHtmlSource getLatestScreenshot() {
-        if (hasChildren()) {
-            return getChildren().get(getChildren().size() - 1).getLatestScreenshot();
-        }
 
-        if ((screenshots != null) && (!screenshots.isEmpty())) {
-            return screenshots.get(screenshots.size() - 1);
-        } else {
-            return null;
-        }
+
+    public ScreenshotAndHtmlSource getLatestScreenshot() {
+        if (getAllScreenshots().isEmpty()) { return null; }
+        return getAllScreenshots().get(getAllScreenshots().size() - 1);
     }
 
     public ScreenshotAndHtmlSource getLastScreenshot() {
@@ -450,6 +533,9 @@ public class TestStep implements Cloneable {
                 flattenedSteps.addAll(child.getFlattenedSteps());
             }
         }
+
+        flattenedSteps.sort(Comparator.comparingLong(TestStep::getNumber));
+
         return flattenedSteps;
     }
 
@@ -473,6 +559,10 @@ public class TestStep implements Cloneable {
 
     public boolean hasChildren() {
         return !children.isEmpty();
+    }
+
+    public int getTotalScreenshotCount() {
+        return getAllScreenshots().size();
     }
 
     public Collection<? extends TestStep> getLeafTestSteps() {
@@ -518,12 +608,6 @@ public class TestStep implements Cloneable {
     public TestStep withReportData(ReportData reportData) {
         this.reportData = reportData;
         return this;
-    }
-
-    public List<Screenshot> getRenderedScreenshots() {
-        return getScreenshots().stream().map(
-                screenshotAndHtmlSource -> extractScreenshot(this, screenshotAndHtmlSource)
-        ).collect(Collectors.toList());
     }
 
     @Override

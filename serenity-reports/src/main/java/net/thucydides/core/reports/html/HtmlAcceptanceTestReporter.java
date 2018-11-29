@@ -218,7 +218,7 @@ public class HtmlAcceptanceTestReporter extends HtmlReporter implements Acceptan
 
         Preconditions.checkNotNull(getOutputDirectory());
 
-        List<Screenshot> screenshots = testOutcome.getLeafScreenshots();
+        List<Screenshot> screenshots = testOutcome.getStepScreenshots();
 
         String screenshotReport = testOutcome.getReportName() + "_screenshots.html";
 

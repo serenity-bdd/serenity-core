@@ -37,4 +37,5 @@ public class ScreenshotPhoto {
     public int hashCode() {
         return Objects.hashCode(pathToScreenshot);
     }
+
 }

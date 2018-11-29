@@ -468,7 +468,7 @@
                     </td>
                     <#if testOutcome.hasScreenshots()>
                         <td width="160" class="${step.result}-text">
-                            <#if step.hasChildren()>
+                            <#if step.totalScreenshotCount gt 1 >
                               <#if step.earliestScreenshot?has_content>
                                 <a href="${relativeLink!}${testOutcome.screenshotReportName}.html#screenshots?screenshot=${screenshotCount}">
                                     <img src="${step.earliestScreenshot.screenshot.name}"

@@ -4,6 +4,8 @@ import net.thucydides.core.model.ErrorMessageFormatter;
 import net.thucydides.core.model.stacktrace.FailureCause;
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import java.util.Objects;
+
 /**
  * Represents a screenshot stored during a test execution.
  */
@@ -69,6 +71,14 @@ public class Screenshot {
         return new HtmlFormattedInfo(description);
     }
 
+    public Screenshot withDescription(String description) {
+        return new Screenshot(filename, description, width, timestamp);
+    }
+
+    public Screenshot before() {
+        return new Screenshot(filename, description, width, timestamp  - 1);
+    }
+
     public static class HtmlFormattedInfo {
         private final String description;
 
@@ -79,5 +89,20 @@ public class Screenshot {
         public String getDescription() {
             return StringEscapeUtils.escapeHtml4(description);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Screenshot that = (Screenshot) o;
+        return Objects.equals(filename, that.filename) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(timestamp, that.timestamp);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(filename, description, timestamp);
     }
 }

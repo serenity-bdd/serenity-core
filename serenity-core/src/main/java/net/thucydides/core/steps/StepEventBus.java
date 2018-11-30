@@ -130,6 +130,9 @@ public class StepEventBus {
     }
 
     public BaseStepListener getBaseStepListener() {
+        if (baseStepListener == null) {
+            LOGGER.error("No base step listener registered - this is generally a bad sign.");
+        }
         Preconditions.checkNotNull(baseStepListener, "No BaseStepListener has been registered");
         return baseStepListener;
     }

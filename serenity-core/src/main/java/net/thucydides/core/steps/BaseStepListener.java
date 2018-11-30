@@ -649,10 +649,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private void markCurrentStepAs(final TestResult result) {
-        if (getCurrentTestOutcome().currentStep() != null) {
-            getCurrentTestOutcome().currentStep().setResult(result);
-            updateExampleTableIfNecessary(result);
-        }
+        getCurrentTestOutcome().currentStep().ifPresent(
+            step -> {
+                step.setResult(result);
+                updateExampleTableIfNecessary(result);
+            }
+        );
     }
 
     FailureAnalysis failureAnalysis = new FailureAnalysis();
@@ -869,8 +871,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
                         )
                 )
                 .collect(Collectors.toList());
-
-        LOGGER.info("Screenshots for " + this.currentStep().get().getDescription() + ":" + screenshots);
 
         return screenshots;
     }

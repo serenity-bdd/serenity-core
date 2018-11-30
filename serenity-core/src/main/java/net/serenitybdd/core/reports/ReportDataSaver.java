@@ -32,7 +32,7 @@ public class ReportDataSaver implements WithTitle, AndContent, FromFile {
     @Override
     public void andContents(String contents) {
         eventBus.getBaseStepListener().latestTestOutcome().ifPresent(
-                outcome -> outcome.currentStep().withReportData(ReportData.withTitle(title).andContents(contents).asEvidence(isEvidence))
+                outcome -> outcome.currentStep().get().withReportData(ReportData.withTitle(title).andContents(contents).asEvidence(isEvidence))
         );
     }
 
@@ -52,7 +52,7 @@ public class ReportDataSaver implements WithTitle, AndContent, FromFile {
                     ReportData.withTitle(title).fromPath(source).asEvidence(isEvidence) :
                     ReportData.withTitle(title).fromFile(source, encoding).asEvidence(isEvidence);
 
-            outcome.get().currentStep().withReportData(reportData);
+            outcome.get().currentStep().get().withReportData(reportData);
         }
     }
 

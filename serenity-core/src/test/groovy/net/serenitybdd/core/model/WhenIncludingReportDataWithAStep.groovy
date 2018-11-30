@@ -27,7 +27,7 @@ class WhenIncludingReportDataWithAStep extends Specification {
             def testOutcome = TestOutcome.forTestInStory("some test", Story.called("some story"))
             testOutcome.recordStep(TestStep.forStepCalled("Sample step").withResult(TestResult.SUCCESS))
         when:
-            testOutcome.currentStep().withReportData(ReportData.withTitle("Some data").andContents("<some><data/></some>"))
+            testOutcome.currentStep().get().withReportData(ReportData.withTitle("Some data").andContents("<some><data/></some>"))
         then:
             testOutcome.lastStep().hasData() &&
                     testOutcome.lastStep().reportData == ReportData.withTitle("Some data").andContents("<some><data/></some>")
@@ -39,7 +39,7 @@ class WhenIncludingReportDataWithAStep extends Specification {
             testOutcome.recordStep(TestStep.forStepCalled("Sample step").withResult(TestResult.SUCCESS))
         when:
             def testDataSource = Paths.get(this.class.getResource("/testdata/report-data.xml").toURI())
-            testOutcome.currentStep().withReportData(ReportData.withTitle("Some data").fromFile( testDataSource, StandardCharsets.UTF_8))
+            testOutcome.currentStep().get().withReportData(ReportData.withTitle("Some data").fromFile( testDataSource, StandardCharsets.UTF_8))
         then:
             testOutcome.lastStep().hasData() &&
                 testOutcome.lastStep().reportData == ReportData.withTitle("Some data").andContents("<some><more><data/></more></some>")

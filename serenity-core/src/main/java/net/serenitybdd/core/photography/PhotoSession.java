@@ -1,5 +1,6 @@
 package net.serenitybdd.core.photography;
 
+import net.serenitybdd.core.time.Stopwatch;
 import net.thucydides.core.screenshots.BlurLevel;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.openqa.selenium.OutputType;
@@ -8,6 +9,9 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,7 +30,9 @@ public class PhotoSession {
     private static ThreadLocal<ScreenshotPhoto> previousScreenshot = new ThreadLocal<>();
     private static ThreadLocal<Long> previousScreenshotTimestamp = ThreadLocal.withInitial(() -> 0L);
 
-    public PhotoSession(WebDriver driver,  Darkroom darkroom, Path outputDirectory, BlurLevel blurLevel) {
+    private static final String BLANK_SCREEN = "c118a2e3019c996cb56584ec6f8cd0b2be4c056ce4ae6b83de3c32c2e364cc61.png";
+
+    public PhotoSession(WebDriver driver, Darkroom darkroom, Path outputDirectory, BlurLevel blurLevel) {
         this.driver = driver;
         this.outputDirectory = outputDirectory;
         this.blurLevel = blurLevel;
@@ -44,7 +50,7 @@ public class PhotoSession {
         ScreenshotPhoto photo;
 
         byte[] screenshotData = null;
-        if(WebDriverFactory.isAlive(driver) && driver instanceof TakesScreenshot){
+        if (WebDriverFactory.isAlive(driver) && driver instanceof TakesScreenshot) {
             try {
                 screenshotData = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
             } catch (Exception e) {
@@ -53,7 +59,7 @@ public class PhotoSession {
             }
         }
 
-        if (screenshotData == null || screenshotData.length == 0) {
+        if (shouldIgnore(screenshotData)) {
             return ScreenshotPhoto.None;
         }
 
@@ -63,6 +69,17 @@ public class PhotoSession {
 
         return photo;
     }
+
+    private boolean shouldIgnore(byte[] screenshotData) {
+        if ((screenshotData == null) || (screenshotData.length == 0)) {
+            return true;
+        }
+        if (filenameFor(screenshotData).equals(BLANK_SCREEN)) {
+            return true;
+        }
+        return false;
+    }
+
 
     private boolean tooSoonForNewPhoto() {
         long previousPhotoTaken = previousScreenshotTimestamp.get();
@@ -94,8 +111,11 @@ public class PhotoSession {
         return darkroom.sendNegative(screenshotNegative);
     }
 
+    private String filenameFor(byte[] screenshotData) {
+        return ScreenshotDigest.forScreenshotData(screenshotData);
+    }
+
     private Path screenshotPathFor(byte[] screenshotData) {
-        String screenshotFilename = ScreenshotDigest.forScreenshotData(screenshotData);
-        return outputDirectory.resolve(screenshotFilename);
+        return outputDirectory.resolve(filenameFor(screenshotData));
     }
 }

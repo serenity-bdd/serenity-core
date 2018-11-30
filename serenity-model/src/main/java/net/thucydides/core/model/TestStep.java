@@ -39,6 +39,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 public class TestStep implements Cloneable {
 
+    public static final TestStep NO_STEP = new TestStep("NO STEP");
     private int number;
     private String description;
     private long duration;

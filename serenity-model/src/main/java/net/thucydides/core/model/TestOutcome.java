@@ -1357,9 +1357,9 @@ public class TestOutcome {
      * Turns the current step into a group. Subsequent steps will be added as children of the current step.
      */
     public void startGroup() {
-        if (!testSteps.isEmpty()) {
-            groupStack.push(currentStep());
-        }
+        currentStep().ifPresent(
+                step -> groupStack.push(step)
+        );
     }
 
     /**
@@ -1374,14 +1374,14 @@ public class TestOutcome {
     /**
      * @return The current step is the last step in the step list, or the last step in the children of the current step group.
      */
-    public TestStep currentStep() {
-        checkState(!testSteps.isEmpty());
+    public Optional<TestStep> currentStep() {
+        if (testSteps.isEmpty()) { return Optional.empty(); }
 
         if (!inGroup()) {
-            return lastStepIn(testSteps);
+            return Optional.ofNullable(lastStepIn(testSteps));
         } else {
             TestStep currentStepGroup = groupStack.peek();
-            return lastStepIn(currentStepGroup.getChildren());
+            return Optional.ofNullable(lastStepIn(currentStepGroup.getChildren()));
         }
     }
 
@@ -1398,6 +1398,7 @@ public class TestOutcome {
     }
 
     private TestStep lastStepIn(final List<TestStep> testSteps) {
+        if (testSteps.isEmpty()) { return null; }
         return testSteps.get(testSteps.size() - 1);
     }
 

@@ -69,19 +69,6 @@ class WhenTakingScreenshots extends Specification {
         1 * baseStepListener.takeScreenshot()
     }
 
-    def "should add screenshots to the current test outcome"() {
-        given:
-        ThucydidesWebDriverSupport.getDriver().get(staticSite)
-        and:
-        BaseStepListener stepListener = new BaseStepListener(temporaryDirectory)
-        stepListener.testStarted("someTest")
-        stepListener.stepStarted(ExecutedStepDescription.withTitle("some step"))
-        when:
-        stepListener.takeScreenshot()
-        then:
-        stepListener.getTestOutcomes().get(0).getScreenshots().size() == 2
-    }
-
     def "should not store HTML source by default"() {
         given:
         ThucydidesWebDriverSupport.getDriver().get(staticSite)

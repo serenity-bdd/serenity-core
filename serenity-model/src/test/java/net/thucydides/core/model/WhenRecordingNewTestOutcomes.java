@@ -599,13 +599,13 @@ public class WhenRecordingNewTestOutcomes {
 
     @Test
     public void a_failing_screenshot_records_the_error_message() {
-        Screenshot screenshot = new Screenshot("step_1.png", "Step 1", 0, 800, new FailureCause(new AssertionError("Element not found")));
+        Screenshot screenshot = new Screenshot("step_1.png", "Step 1", 0, 800, new FailureCause(new AssertionError("Element not found")),0);
         assertThat(screenshot.getErrorMessage(), is("Element not found"));
     }
 
     @Test
     public void a_failing_step_should_the_error_message_for_errors_with_complex_constructors() {
-        Screenshot screenshot = new Screenshot("step_1.png", "Step 1", 0, 800, new FailureCause(new ComparisonFailure("oh crap", "a","b")));
+        Screenshot screenshot = new Screenshot("step_1.png", "Step 1", 0, 800, new FailureCause(new ComparisonFailure("oh crap", "a","b")),0);
         assertThat(screenshot.getError().getMessage(), is("oh crap expected:<[a]> but was:<[b]>"));
         assertThat(screenshot.getError().getStackTrace().length, is(greaterThan(0)));
     }

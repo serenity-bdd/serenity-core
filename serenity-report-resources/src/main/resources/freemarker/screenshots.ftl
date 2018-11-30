@@ -229,7 +229,8 @@
                         <#assign caption = "${screenshot.html.description}">
                     </#if>
                 </#if>
-                <img src="${screenshot.filename}" title="${caption}" width="${screenshot.width?string.computer}"/>
+                <#list 0..<screenshot.depth as i></#list>
+                <img src="${screenshot.filename}" title="${formatter.depthIndicatorForLevel(screenshot.depth)} ${caption}" width="${screenshot.width?string.computer}"/>
             </#foreach>
             </div>
         </div>
@@ -237,6 +238,9 @@
 
     </div>
 </div>
+<#macro repeat input times>
+    <#list 0..<times as i>${input}</#list>
+</#macro>
 <div id="beforefooter"></div>
 <div id="bottomfooter">
     <span class="version">Serenity BDD version ${serenityVersionNumber!"SNAPSHOT-BUILD"}</span>

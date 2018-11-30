@@ -1169,7 +1169,7 @@ public class TestOutcome {
         List<TestStep> testStepsWithScreenshots = getFlattenedTestSteps();
 
         for (TestStep currentStep : testStepsWithScreenshots) {
-            screenshots.addAll(screenshotsIn(currentStep));
+            screenshots.addAll(currentStep.getRenderedScreenshots());
         }
 
         screenshots.sort(Comparator.comparing(Screenshot::getTimestamp));
@@ -1180,7 +1180,6 @@ public class TestOutcome {
 
     /**
      * Find the first and last screenshots for each aggregate step, and every screenshots for leaf steps.
-     * @return
      */
     public List<Screenshot> getStepScreenshots() {
 
@@ -1193,33 +1192,6 @@ public class TestOutcome {
         return screenshots;
     }
 
-
-    /**
-     * The screenshots in the current step include the screenshots
-     * @param currentStep
-     * @return
-     */
-    private List<Screenshot> screenshotsIn(TestStep currentStep) {
-        return currentStep.getAllScreenshots().stream().map(
-                screenshotAndHtmlSource -> extractScreenshot(currentStep, screenshotAndHtmlSource)
-        ).collect(Collectors.toList());
-    }
-
-    public static Screenshot extractScreenshot(TestStep currentStep, ScreenshotAndHtmlSource from) {
-        return new Screenshot(from.getScreenshot().getName(),
-                currentStep.getDescription(),
-                widthOf(from.getScreenshot()),
-                from.getTimeStamp(),
-                currentStep.getException());
-    }
-
-    private static int widthOf(final File screenshot) {
-        try {
-            return new ResizableImage(screenshot).getWidth();
-        } catch (IOException e) {
-            return ThucydidesSystemProperty.DEFAULT_WIDTH;
-        }
-    }
 
     public boolean hasNonStepFailure() {
         boolean stepsContainFailure = false;

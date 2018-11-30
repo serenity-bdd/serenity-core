@@ -2,7 +2,7 @@ package net.thucydides.core.model.screenshots;
 
 import net.thucydides.core.model.ErrorMessageFormatter;
 import net.thucydides.core.model.stacktrace.FailureCause;
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.Objects;
 
@@ -15,24 +15,36 @@ public class Screenshot {
     private final int width;
     private final FailureCause error;
     private final Long timestamp;
+    private final int depth;
 
-    public Screenshot(final String filename,
-                      final String description,
-                      final int width,
-                      final long timestamp,
-                      final FailureCause error) {
+    public Screenshot(String filename,
+                      String description,
+                      int width,
+                      long timestamp,
+                      FailureCause error) {
+        this(filename,description, width, timestamp, error, 0);
+    }
+
+
+    public Screenshot(String filename,
+                      String description,
+                      int width,
+                      long timestamp,
+                      FailureCause error,
+                      int depth) {
         this.filename = filename;
         this.description = description;
         this.timestamp = timestamp;
         this.width = width;
         this.error = error;
+        this.depth = depth;
     }
 
     public Screenshot(final String filename,
                       final String description,
                       final int width,
                       final long timestamp) {
-        this(filename, description, width, timestamp, null);
+        this(filename, description, width, timestamp, null, 0);
     }
 
     public FailureCause getError() {
@@ -67,22 +79,30 @@ public class Screenshot {
         return timestamp;
     }
 
+    public int getDepth() {
+        return depth;
+    }
+
     public HtmlFormattedInfo getHtml() {
         return new HtmlFormattedInfo(description);
     }
 
     public Screenshot withDescription(String description) {
-        return new Screenshot(filename, description, width, timestamp);
+        return new Screenshot(filename, description, width, timestamp, error, depth);
+    }
+
+    public Screenshot withDepth(int depth) {
+        return new Screenshot(filename, description, width, timestamp, error, depth);
     }
 
     public Screenshot before() {
-        return new Screenshot(filename, description, width, timestamp  - 1);
+        return new Screenshot(filename, description, width, timestamp  - 1, error, depth);
     }
 
     public static class HtmlFormattedInfo {
         private final String description;
 
-        public HtmlFormattedInfo(String description) {
+        HtmlFormattedInfo(String description) {
             this.description = description;
         }
 

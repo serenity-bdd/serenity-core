@@ -468,22 +468,20 @@
                     </td>
                     <#if testOutcome.hasScreenshots()>
                         <td width="160" class="${step.result}-text">
-                            <#if step.totalScreenshotCount gt 1 >
-                              <#if step.earliestScreenshot?has_content>
+                            <#if step.hasMultipleScreenshots() >
                                 <a href="${relativeLink!}${testOutcome.screenshotReportName}.html#screenshots?screenshot=${screenshotCount}">
-                                    <img src="${step.earliestScreenshot.screenshot.name}"
-                                         href="${step.earliestScreenshot.screenshot.name}"
+                                    <img src="${step.earliestScreenshot.filename}"
+                                         href="${step.earliestScreenshot.filename}"
                                          class="screenshot"
                                          width="48" height="48"/>
                                 </a>
                                 <i class="fas fa-arrow-right"></i>
-                              </#if>
                             </#if>
 
                             <#if step.latestScreenshot?has_content>
                                 <a href="${relativeLink!}${testOutcome.screenshotReportName}.html#screenshots?screenshot=${screenshotCount}">
-                                    <img src="${step.latestScreenshot.screenshot.name}"
-                                         href="${step.latestScreenshot.screenshot.name}"
+                                    <img src="${step.latestScreenshot.filename}"
+                                         href="${step.latestScreenshot.filename}"
                                          class="screenshot"
                                          width="48" height="48"/>
                                     <#assign screenshotCount = screenshotCount + step.screenshotCount />

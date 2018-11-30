@@ -19,6 +19,9 @@ dependencies {
     compile "joda-time:joda-time:${jodaTimeVersion}"
     compile "commons-collections:commons-collections:${commonsCollectionsVersion}"
     compile "commons-io:commons-io:${commonsIoVersion}"
+    compile("org.apache.commons:commons-text:${commonsTextVersion}") {
+        exclude group: 'org.apache.commons', module: 'commons-lang3'
+    }
     compile("commons-beanutils:commons-beanutils-core:${beanUtilsVersion}") {
         exclude group: 'commons-logging', module: 'commons-logging'
     }

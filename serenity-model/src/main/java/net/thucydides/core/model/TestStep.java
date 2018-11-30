@@ -24,10 +24,8 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static net.thucydides.core.model.TestOutcome.extractScreenshot;
 import static net.thucydides.core.model.TestResult.*;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.codehaus.groovy.runtime.DefaultGroovyMethods.first;
 
 /**
  * An acceptance test run is made up of test steps.
@@ -51,6 +49,7 @@ public class TestStep implements Cloneable {
     private RestQuery restQuery;
     private ReportData reportData;
     private boolean precondition;
+    private int level;
 
 
     public final static Predicate<TestStep> IGNORED_TESTSTEPS = testStep -> testStep.getResult() == IGNORED;
@@ -149,12 +148,14 @@ public class TestStep implements Cloneable {
     public TestStep(final String description) {
         this();
         this.description = description;
+        this.level = 0;
     }
 
     public TestStep(final ZonedDateTime startTime, final String description) {
         this();
         this.startTime = startTime;
         this.description = description;
+        this.level = 0;
     }
 
     @Deprecated
@@ -173,6 +174,7 @@ public class TestStep implements Cloneable {
 
         this.startTime = time;
         this.description = description;
+        this.level = 0;
     }
 
 
@@ -195,6 +197,7 @@ public class TestStep implements Cloneable {
         newTestStep.number = number;
         newTestStep.children = NewList.copyOf(children);
         newTestStep.precondition = precondition;
+        newTestStep.level = level;
         return newTestStep;
     }
 
@@ -260,25 +263,28 @@ public class TestStep implements Cloneable {
      * and starting with the earliet screenshot overall with the name of this step.
      */
     public List<Screenshot> getRenderedScreenshots() {
+        List<Screenshot> stepScreenshots = (screenshots == null) ? new ArrayList<>()
+                : screenshots.stream()
+                             .map(screenshot -> renderedScreenshotOf(screenshot, this.getLevel())).collect(Collectors.toList());
 
-        List<Screenshot> stepScreenshots = (screenshots == null) ? new ArrayList<>() : screenshots.stream().map(this::renderedScreenshotOf).collect(Collectors.toList());
-
-        getFlattenedSteps().forEach(
-                step -> stepScreenshots.addAll(step.getTopLevelScreenshots())
+        children.forEach(
+                child -> stepScreenshots.addAll(child.getRenderedScreenshots())
         );
 
         stepScreenshots.sort(Comparator.comparingLong(Screenshot::getTimestamp));
 
-        Screenshot earliestScreenshot = stepScreenshots.get(0);
-        Screenshot lastScreenshot = stepScreenshots.get(stepScreenshots.size() - 1);
+        if (!stepScreenshots.isEmpty()) {
+            Screenshot earliestScreenshot = stepScreenshots.get(0);
+            Screenshot lastScreenshot = stepScreenshots.get(stepScreenshots.size() - 1);
 
-        if (isScreenshotInThisStep(lastScreenshot) && lastScreenshot.getTimestamp() > earliestScreenshot.getTimestamp()) {
-            stepScreenshots.remove(stepScreenshots.size() - 1);
-            stepScreenshots.add(withClosingDescriptionForThisStep(lastScreenshot));
-        }
+            if (isScreenshotInThisStep(lastScreenshot) && lastScreenshot.getTimestamp() > earliestScreenshot.getTimestamp()) {
+                stepScreenshots.remove(stepScreenshots.size() - 1);
+                stepScreenshots.add(withClosingDescriptionForThisStep(lastScreenshot.withDepth(level)));
+            }
 
-        if (thereAreNoScreenshotsInThisStep() || !isScreenshotInThisStep(earliestScreenshot) ) {
-            stepScreenshots.add(0, withDescriptionForThisStep(earliestScreenshot));
+            if (thereAreNoScreenshotsInThisStep() || !isScreenshotInThisStep(earliestScreenshot)) {
+                stepScreenshots.add(0, withDescriptionForThisStep(earliestScreenshot.withDepth(level)));
+            }
         }
 
         return stepScreenshots;
@@ -303,15 +309,16 @@ public class TestStep implements Cloneable {
     public List<Screenshot> getTopLevelScreenshots() {
         if (screenshots == null) { return new ArrayList<>(); }
 
-        return screenshots.stream().map(this::renderedScreenshotOf).collect(Collectors.toList());
+        return screenshots.stream().map(screenshot -> renderedScreenshotOf(screenshot, level)).collect(Collectors.toList());
     }
 
-    public  Screenshot renderedScreenshotOf(ScreenshotAndHtmlSource from) {
+    public  Screenshot renderedScreenshotOf(ScreenshotAndHtmlSource from, int level) {
         return new Screenshot(from.getScreenshot().getName(),
                 getDescription(),
                 widthOf(from.getScreenshot()),
                 from.getTimeStamp(),
-                getException());
+                getException(),
+                level);
     }
 
     private static int widthOf(final File screenshot) {
@@ -343,6 +350,10 @@ public class TestStep implements Cloneable {
         return restQuery;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
     public ReportData getReportData() {
         return reportData;
     }
@@ -355,16 +366,20 @@ public class TestStep implements Cloneable {
         }
     }
 
-    public ScreenshotAndHtmlSource getEarliestScreenshot() {
-        if (getAllScreenshots().isEmpty()) { return null; }
-        return getAllScreenshots().get(0);
+    public Screenshot getEarliestScreenshot() {
+
+        List<Screenshot> screenshots = getRenderedScreenshots();
+
+        if (screenshots.isEmpty()) { return null; }
+        return screenshots.get(0);
     }
 
 
 
-    public ScreenshotAndHtmlSource getLatestScreenshot() {
-        if (getAllScreenshots().isEmpty()) { return null; }
-        return getAllScreenshots().get(getAllScreenshots().size() - 1);
+    public Screenshot getLatestScreenshot() {
+        List<Screenshot> screenshots = getRenderedScreenshots();
+        if (screenshots.isEmpty()) { return null; }
+        return screenshots.get(screenshots.size() - 1);
     }
 
     public ScreenshotAndHtmlSource getLastScreenshot() {
@@ -539,6 +554,11 @@ public class TestStep implements Cloneable {
         return flattenedSteps;
     }
 
+    private TestStep withLevel(int level) {
+        this.level = level;
+        return this;
+    }
+
     public boolean isAGroup() {
         return hasChildren();
     }
@@ -553,7 +573,7 @@ public class TestStep implements Cloneable {
     }
 
     public TestStep addChildStep(final TestStep step) {
-        children.add(step);
+        children.add(step.withLevel(level + 1));
         return this;
     }
 
@@ -561,8 +581,12 @@ public class TestStep implements Cloneable {
         return !children.isEmpty();
     }
 
-    public int getTotalScreenshotCount() {
-        return getAllScreenshots().size();
+    public boolean hasMultipleScreenshots() {
+        Set<String> uniqueScreenshots = getRenderedScreenshots().stream()
+                .map(Screenshot::getFilename)
+                .collect(Collectors.toSet());
+
+        return uniqueScreenshots.size() > 1;
     }
 
     public Collection<? extends TestStep> getLeafTestSteps() {

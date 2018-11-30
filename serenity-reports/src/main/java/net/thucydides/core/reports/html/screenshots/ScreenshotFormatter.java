@@ -49,7 +49,8 @@ public class ScreenshotFormatter {
                     screenshot.getDescription(),
                     screenshot.getWidth(),
                     screenshot.getTimestamp(),
-                    screenshot.getError());
+                    screenshot.getError(),
+                    screenshot.getDepth());
         }
         return screenshot;
     }

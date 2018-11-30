@@ -79,7 +79,7 @@ class WhenTakingScreenshots extends Specification {
         when:
         stepListener.takeScreenshot()
         then:
-        stepListener.getTestOutcomes().get(0).getScreenshots().size() == 1
+        stepListener.getTestOutcomes().get(0).getScreenshots().size() == 2
     }
 
     def "should not store HTML source by default"() {
@@ -97,22 +97,6 @@ class WhenTakingScreenshots extends Specification {
         !screenshot.getHtmlSource().isPresent()
     }
 
-    def "identical screenshots should not be duplicated within steps"() {
-        given:
-        ThucydidesWebDriverSupport.getDriver().get(staticSite)
-        and:
-        BaseStepListener stepListener = new BaseStepListener(temporaryDirectory)
-        stepListener.testStarted("someTest")
-        when:
-
-        stepListener.stepStarted(ExecutedStepDescription.withTitle("step 1"))
-        stepListener.takeScreenshot();
-        stepListener.stepFinished()
-
-        then:
-        TestStep firstStep = stepListener.getTestOutcomes().get(0).getTestSteps().get(0);
-        firstStep.getScreenshots().size() == 1
-    }
 
 
 }

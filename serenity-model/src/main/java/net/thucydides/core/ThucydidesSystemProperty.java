@@ -59,6 +59,12 @@ public enum ThucydidesSystemProperty {
     WEBDRIVER_REMOTE_OS,
 
     /**
+     * The minimum time to wait between screenshots.
+     * Trying to take screenshots too often can slow down the tests.
+     */
+    WEBDRIVER_MIN_SCREENSHOT_INTERVAL,
+
+    /**
      * Path to the Internet Explorer driver, if it is not on the system path.
      */
     WEBDRIVER_IE_DRIVER,

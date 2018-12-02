@@ -12,9 +12,6 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -98,7 +95,6 @@ public class PhotoSession {
         try {
             Path screenshotPath = screenshotPathFor(screenshotData);
             ScreenshotReceipt screenshotReceipt = storeScreenshot(screenshotData, screenshotPath);
-            LOGGER.debug("Screenshot scheduled to be saved to {}", screenshotPath);
             return ScreenshotPhoto.forScreenshotAt(screenshotReceipt.getDestinationPath());
         } catch (IOException e) {
             LOGGER.warn("Failed to save screenshot", e);

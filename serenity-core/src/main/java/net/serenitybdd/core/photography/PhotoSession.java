@@ -1,7 +1,10 @@
 package net.serenitybdd.core.photography;
 
 import net.serenitybdd.core.time.Stopwatch;
+import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.screenshots.BlurLevel;
+import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -24,6 +27,7 @@ public class PhotoSession {
     private final Path outputDirectory;
     private final Darkroom darkroom;
     private BlurLevel blurLevel;
+    private EnvironmentVariables environmentVariables;
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -37,6 +41,7 @@ public class PhotoSession {
         this.outputDirectory = outputDirectory;
         this.blurLevel = blurLevel;
         this.darkroom = darkroom;
+        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
 
         darkroom.isOpenForBusiness();
     }
@@ -52,7 +57,9 @@ public class PhotoSession {
         byte[] screenshotData = null;
         if (WebDriverFactory.isAlive(driver) && driver instanceof TakesScreenshot) {
             try {
+                Stopwatch stopwatch = Stopwatch.started();
                 screenshotData = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+                LOGGER.info("Screenshot read in " + stopwatch.stop() + " ms");
             } catch (Exception e) {
                 LOGGER.warn("Failed to take screenshot", e);
                 return ScreenshotPhoto.None;
@@ -83,7 +90,8 @@ public class PhotoSession {
 
     private boolean tooSoonForNewPhoto() {
         long previousPhotoTaken = previousScreenshotTimestamp.get();
-        return (System.currentTimeMillis() - previousPhotoTaken < 50);
+        long minimumInterval = ThucydidesSystemProperty.WEBDRIVER_MIN_SCREENSHOT_INTERVAL.integerFrom(environmentVariables,250);
+        return (System.currentTimeMillis() - previousPhotoTaken < minimumInterval);
     }
 
     private ScreenshotPhoto storedScreenshot(byte[] screenshotData) {

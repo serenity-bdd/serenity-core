@@ -2,18 +2,18 @@ package net.serenitybdd.screenplay;
 
 import net.thucydides.core.annotations.Step;
 
-class EatsAPeach implements Performable {
+class EatsFruit implements Performable {
 
     private String fruit;
 
-    public EatsAPeach() {}
+    public EatsFruit() {}
 
-    EatsAPeach(String fruit) {
+    EatsFruit(String fruit) {
         this.fruit = fruit;
     }
 
-    public static EatsAPeach loudly() {
-        return new EatsAPeach("peach");
+    public static EatsFruit loudly() {
+        return new EatsFruit("peach");
     }
 
     @Override

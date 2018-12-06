@@ -163,9 +163,9 @@ public class WhenGeneratingAnHtmlReport extends AbstractReportGenerationTest {
         File screenshotReport = withSuffix(report,"_screenshots");
 
         String reportContents = FileUtils.readFileToString(screenshotReport);
-        assertThat(reportContents, allOf(containsString("title=\"Search cats on Google\""),
-                containsString("title=\"View the results\""),
-                containsString("title=\"Display a resulting page")));
+        assertThat(reportContents, allOf(containsString("title=\" Search cats on Google\""),
+                containsString("title=\" View the results\""),
+                containsString("title=\" Display a resulting page")));
     }
 
     @Test

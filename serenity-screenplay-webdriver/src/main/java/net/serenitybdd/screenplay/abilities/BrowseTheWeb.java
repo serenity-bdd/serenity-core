@@ -83,6 +83,8 @@ public class BrowseTheWeb extends PageObject implements Ability, RefersToActor {
 
     @Override
     public String toString() {
+        if (getDriver().toString().contains("Mock")) {return "browse the web with a mock browser";}
+
         String driverName = ((WebDriverFacade) getDriver()).getDriverName();
         return "browse the web with " + driverName;
     }

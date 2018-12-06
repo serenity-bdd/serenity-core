@@ -13,6 +13,7 @@ import net.serenitybdd.screenplay.exceptions.ActorCannotBrowseTheWebException;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.PageObjectDependencyInjector;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
+import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebdriverManager;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -82,6 +83,7 @@ public class BrowseTheWeb extends PageObject implements Ability, RefersToActor {
 
     @Override
     public String toString() {
-        return "browse the web with " + webdriverManager.getDefaultDriverType();
+        String driverName = ((WebDriverFacade) getDriver()).getDriverName();
+        return "browse the web with " + driverName;
     }
 }

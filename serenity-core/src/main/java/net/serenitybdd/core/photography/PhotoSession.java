@@ -54,9 +54,7 @@ public class PhotoSession {
         byte[] screenshotData = null;
         if (WebDriverFactory.isAlive(driver) && driver instanceof TakesScreenshot) {
             try {
-                Stopwatch stopwatch = Stopwatch.started();
                 screenshotData = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-                LOGGER.info("Screenshot read in " + stopwatch.stop() + " ms");
             } catch (Exception e) {
                 LOGGER.warn("Failed to take screenshot", e);
                 return ScreenshotPhoto.None;
@@ -87,7 +85,7 @@ public class PhotoSession {
 
     private boolean tooSoonForNewPhoto() {
         long previousPhotoTaken = previousScreenshotTimestamp.get();
-        long minimumInterval = ThucydidesSystemProperty.WEBDRIVER_MIN_SCREENSHOT_INTERVAL.integerFrom(environmentVariables,250);
+        long minimumInterval = ThucydidesSystemProperty.WEBDRIVER_MIN_SCREENSHOT_INTERVAL.integerFrom(environmentVariables,50);
         return (System.currentTimeMillis() - previousPhotoTaken < minimumInterval);
     }
 

@@ -2,6 +2,7 @@ package net.serenitybdd.screenplay.waits;
 
 
 import net.serenitybdd.core.pages.WebElementState;
+import net.serenitybdd.markers.IsSilent;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.questions.WebElementQuestion;
@@ -12,7 +13,7 @@ import static net.serenitybdd.screenplay.EventualConsequence.eventually;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
-public class WaitUntilTargetIsReady implements Interaction {
+public class WaitUntilTargetIsReady implements Interaction, IsSilent {
     private final Target target;
     private final Matcher<WebElementState> expectedState;
 

@@ -4,6 +4,8 @@ import net.serenitybdd.demos.todos.model.TodoStatusFilter;
 import net.serenitybdd.demos.todos.pages.ApplicationHomePage;
 import net.serenitybdd.demos.todos.pages.TodoPage;
 import net.thucydides.core.annotations.Step;
+import static java.util.Arrays.asList;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,7 +26,7 @@ public class ATodoUser {
 
     @Step("Joe completed **many** tasks")
     public void has_added_actions_called(String... actionNames) {
-        newArrayList(actionNames).forEach(
+        asList(actionNames).forEach(
                 action -> adds_an_action_called(action)
         );
     }

@@ -5,6 +5,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.actions.Open;
 import net.thucydides.core.annotations.Step;
+import static java.util.Arrays.asList;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class AddItems implements Performable {
     }
 
     public AddItems called(String... thingsToDo) {
-        return called(new ArrayList<>(thingsToDo));
+        return called(asList(thingsToDo));
     }
 
 }

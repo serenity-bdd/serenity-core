@@ -19,7 +19,7 @@ public class TodoPage extends PageObject {
     public static final String COMPLETE_TICKBOX = ".//input[@ng-model='todo.completed']";
 
     public void addAnActionCalled(String actionName) {
-        $("#new-todo").type(actionName)
+        $(".new-todo").type(actionName)
                       .then().sendKeys(Keys.ENTER);
     }
 
@@ -68,6 +68,6 @@ public class TodoPage extends PageObject {
     }
 
     public void clearCompletedActions() {
-        $("#clear-completed").click();
+        $(".clear-completed").click();
     }
 }

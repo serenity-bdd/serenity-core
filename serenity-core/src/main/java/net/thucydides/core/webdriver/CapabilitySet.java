@@ -2,11 +2,10 @@ package net.thucydides.core.webdriver;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
-import net.serenitybdd.core.collect.NewList;
-import java.util.HashMap;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -78,14 +77,40 @@ class CapabilitySet {
         private final String value;
 
         private CapabilityToken(String capability) {
-            int colonIndex = capability.indexOf(":");
+
+            int colonIndex = capability.lastIndexOf(":");
             if (colonIndex >= 0)  {
+                boolean colonIndexFound = false;
+                int lastIndex = capability.length();
+                while(!colonIndexFound) {
+                    int lastColonIndex = capability.lastIndexOf(":", lastIndex);
+                    if (lastColonIndex > 0) {
+                        colonIndex = lastColonIndex;
+                        if ((capability.length() >= colonIndex + 1) && isFollowedByPathSeparator(capability, colonIndex)) {
+                            if (lastIndex == colonIndex - 1) {
+                                colonIndexFound = true;
+                                //been here before, only single colon followed by a path separator found
+                                break;
+                            }
+                            lastIndex = colonIndex - 1;
+                        } else {
+                            colonIndexFound = true;
+                        }
+                    }
+                    else {
+                       colonIndexFound = true;
+                    }
+                }
                 name = capability.substring(0, colonIndex);
                 value = capability.substring(colonIndex + 1);
             } else {
                 name = capability;
                 value = null;
             }
+        }
+
+        private boolean isFollowedByPathSeparator(String capability, int colonIndex) {
+            return (capability.charAt(colonIndex+1) =='\\') || (capability.charAt(colonIndex+1) =='/');
         }
 
         public String getName() {

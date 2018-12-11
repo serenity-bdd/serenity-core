@@ -669,6 +669,22 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     /**
+     * Check to see if the element is clickable
+     *
+     */
+    public boolean isClickable() {
+        try {
+            if (!driverIsDisabled()) {
+                waitForCondition().until(elementIsClickable(this));
+                return true;
+            }
+        } catch (TimeoutException timeout) {
+            throw new ElementShouldBeEnabledException("Expected enabled element was not clickable", timeout);
+        }
+        return false;
+    }
+
+    /**
      * Type a value into a field, making sure that the field is empty first.
      *
      * @param value

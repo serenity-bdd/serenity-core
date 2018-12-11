@@ -451,6 +451,11 @@ public class WebElementFacadeStub implements WebElementFacade {
         return this;
     }
 
+    @Override
+    public boolean isClickable() {
+        return false;
+    }
+
     protected WebElementState expectingErrorMessage(String errorMessage) {
         return this;
     }

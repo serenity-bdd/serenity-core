@@ -120,4 +120,6 @@ public interface WebElementState {
     String getTextValue();
 
     WebElementState expect(String errorMessage);
+
+    boolean isClickable();
 }

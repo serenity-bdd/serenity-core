@@ -10,17 +10,36 @@ class WhenConfiguringExtraWebdriverCapabilities extends Specification {
     def "should add capabilities defined in a system property"() {
 
         given:
-        environmentVariables.setProperty("thucydides.driver.capabilities","build:build-1234")
+        environmentVariables.setProperty("serenity.driver.capabilities","build:build-1234")
         when:
         def capabilitySet = new CapabilitySet(environmentVariables)
         then:
         capabilitySet.capabilities == ["build":"build-1234"]
     }
 
+
+    def "should allow capabilities containing two colons"() {
+        given:
+        environmentVariables.setProperty("serenity.driver.capabilities","e34:token:ccccccccc")
+        when:
+        def capabilitySet = new CapabilitySet(environmentVariables)
+        then:
+        capabilitySet.capabilities == ["e34:token":"ccccccccc"]
+    }
+
+    def "should allow capabilities containing multiple colons"() {
+        given:
+        environmentVariables.setProperty("serenity.driver.capabilities","e34:token1:token2:ccccccccc")
+        when:
+        def capabilitySet = new CapabilitySet(environmentVariables)
+        then:
+        capabilitySet.capabilities == ["e34:token1:token2":"ccccccccc"]
+    }
+
     def "should add no capabilities if the system property is not defined"() {
 
         given:
-        environmentVariables.clearProperty("thucydides.driver.capabilities")
+        environmentVariables.clearProperty("serenity.driver.capabilities")
         when:
         def capabilitySet = new CapabilitySet(environmentVariables)
         then:
@@ -31,7 +50,7 @@ class WhenConfiguringExtraWebdriverCapabilities extends Specification {
     def "should add multiple capabilities defined in a system property"() {
 
         given:
-        environmentVariables.setProperty("thucydides.driver.capabilities","build:build-1234;version:2.8.0")
+        environmentVariables.setProperty("serenity.driver.capabilities","build:build-1234;version:2.8.0")
         when:
         def capabilitySet = new CapabilitySet(environmentVariables)
         then:
@@ -41,7 +60,7 @@ class WhenConfiguringExtraWebdriverCapabilities extends Specification {
     def "should add integer capabilities defined in a system property"() {
 
         given:
-        environmentVariables.setProperty("thucydides.driver.capabilities","timeout:300")
+        environmentVariables.setProperty("serenity.driver.capabilities","timeout:300")
         when:
         def capabilitySet = new CapabilitySet(environmentVariables)
         then:
@@ -51,7 +70,7 @@ class WhenConfiguringExtraWebdriverCapabilities extends Specification {
     def "should add boolean capabilities defined in a system property"() {
 
         given:
-        environmentVariables.setProperty("thucydides.driver.capabilities","disable-popup-handler:true")
+        environmentVariables.setProperty("serenity.driver.capabilities","disable-popup-handler:true")
         when:
         def capabilitySet = new CapabilitySet(environmentVariables)
         then:
@@ -61,7 +80,7 @@ class WhenConfiguringExtraWebdriverCapabilities extends Specification {
     def "should add value-list capabilities defined in a system property"() {
 
         given:
-        environmentVariables.setProperty("thucydides.driver.capabilities","tags:[tag1,tag2,tag3]")
+        environmentVariables.setProperty("serenity.driver.capabilities","tags:[tag1,tag2,tag3]")
         when:
         def capabilitySet = new CapabilitySet(environmentVariables)
         then:
@@ -71,17 +90,37 @@ class WhenConfiguringExtraWebdriverCapabilities extends Specification {
     def "should support windows paths in capability values"() {
 
         given:
-        environmentVariables.setProperty("thucydides.driver.capabilities","app:D:/GoogleEx/GoogleEx.apk")
+        environmentVariables.setProperty("serenity.driver.capabilities","app:D:/GoogleEx/GoogleEx.apk")
         when:
         def capabilitySet = new CapabilitySet(environmentVariables)
         then:
         capabilitySet.capabilities == ["app":"D:/GoogleEx/GoogleEx.apk"]
     }
 
+    def "should not crash if drive only windows path is specified as capability"() {
+
+        given:
+        environmentVariables.setProperty("serenity.driver.capabilities","app:D:/")
+        when:
+        def capabilitySet = new CapabilitySet(environmentVariables)
+        then:
+        capabilitySet.capabilities == ["app":"D:/"]
+    }
+
+    def "should not crash if only windows path is specified as capability"() {
+
+        given:
+        environmentVariables.setProperty("serenity.driver.capabilities","D:/GoogleEx/GoogleEx.apk")
+        when:
+        def capabilitySet = new CapabilitySet(environmentVariables)
+        then:
+        capabilitySet.capabilities == ["D":"/GoogleEx/GoogleEx.apk"]
+    }
+
     def "should add value-list capabilities with non-string types defined in a system property"() {
 
         given:
-        environmentVariables.setProperty("thucydides.driver.capabilities","numbers:[1,2,3]")
+        environmentVariables.setProperty("serenity.driver.capabilities","numbers:[1,2,3]")
         when:
         def capabilitySet = new CapabilitySet(environmentVariables)
         then:
@@ -91,7 +130,7 @@ class WhenConfiguringExtraWebdriverCapabilities extends Specification {
     def "should add capabilities with white spaces"() {
 
         given:
-        environmentVariables.setProperty("thucydides.driver.capabilities","device:iPhone 5S")
+        environmentVariables.setProperty("serenity.driver.capabilities","device:iPhone 5S")
         when:
         def capabilitySet = new CapabilitySet(environmentVariables)
         then:

@@ -7,10 +7,7 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.join;
@@ -130,7 +127,7 @@ public class BeanMatcherAsserts {
             for(PropertyDescriptor descriptor : propertiesOf(bean)) {
                 Method getter = descriptor.getReadMethod();
                 if (getter != null) {
-                    propertyTerms.add(propertyValueOf(descriptor.getDisplayName(), getter.invoke(bean).toString()));
+                    propertyTerms.add(propertyValueOf(descriptor.getDisplayName(), Optional.ofNullable(getter.invoke(bean)).map(Object::toString).orElse("null")));
                 }
             }
             return join(propertyTerms);

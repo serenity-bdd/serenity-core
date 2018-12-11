@@ -20,6 +20,7 @@ public class SelectFromOptions {
     }
 
     public static SelectFromOptions byValue(String value) {
+
         SelectFromOptions selectFromOptions = new SelectFromOptions(SelectStrategy.ByValue);
         selectFromOptions.theValue = value;
         return selectFromOptions;

@@ -14,7 +14,7 @@ public class ReportBadges {
     private final static String DETAILS_WITH_CONTEXT_BADGE = "<a href='%s'class='badge more-details' style='background-color:%s;'>%s %s</a>";
 
     public static List<String> forReport(String report) {
-        return Collections.singletonList(String.format(DETAILS_BADGE, report, "Details"));
+        return Collections.singletonList(String.format(DETAILS_BADGE, report, "Test Results"));
     }
 
     public static List<String> from(TestOutcome outcome) {
@@ -25,7 +25,7 @@ public class ReportBadges {
 
 
         if (outcomes.size() == 1) {
-            return Collections.singletonList(String.format(DETAILS_BADGE, outcomes.get(0).getHtmlReport(), "Details"));
+            return Collections.singletonList(String.format(DETAILS_BADGE, outcomes.get(0).getHtmlReport(), "Test Results"));
         }
 
         return outcomes.stream()
@@ -41,7 +41,7 @@ public class ReportBadges {
                 outcome.getHtmlReport(),
                 BadgeBackground.forOutcome(outcome),
                 contextIcon,
-                "Details");
+                "Test Results");
     }
 
 }

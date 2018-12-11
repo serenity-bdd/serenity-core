@@ -17,17 +17,14 @@ import java.util.function.Consumer;
 public class ViewMyProfile implements Performable {
 
     Target theProfileButton = Target.the("View profile button").locatedBy(HomePage.VIEW_PROFILE);
-    Target profileName = Target.the("View profile button").locatedBy(HomePage.VIEW_PROFILE);
-
     HomePage homePage;
-    ProfilePage profilePage;
 
     @Step("{0} views her profile")
     public <T extends Actor> void performAs(T actor) {
 
         actor.attemptsTo(
                 Open.browserOn(homePage),
-                MoveMouse.to(theProfileButton).andThen( Actions::click )
+                MoveMouse.to(theProfileButton).andThen( actions -> actions.sendKeys("") )
         );
     }
 }

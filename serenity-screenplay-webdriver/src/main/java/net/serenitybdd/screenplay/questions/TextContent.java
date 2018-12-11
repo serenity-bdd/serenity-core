@@ -1,14 +1,14 @@
 package net.serenitybdd.screenplay.questions;
 
-import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.targets.Target;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
-public class Text extends TargetedUIState<String> {
+public class TextContent extends TargetedUIState<String> {
 
-    public Text(Target target, Actor actor) {
+    public TextContent(Target target, Actor actor) {
         super(target, actor);
     }
 
@@ -17,12 +17,12 @@ public class Text extends TargetedUIState<String> {
     }
 
     public String resolve() {
-        return target.resolveFor(actor).getText();
+        return target.resolveFor(actor).getAttribute("textContent");
     }
 
-    public java.util.List<String> resolveAll() {
+    public List<String> resolveAll() {
         return target.resolveAllFor(actor).stream()
-                .map(WebElementFacade::getText)
+                .map(element -> element.getAttribute("textContent"))
                 .collect(Collectors.toList());
     }
 }

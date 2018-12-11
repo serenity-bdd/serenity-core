@@ -475,7 +475,4 @@ public class Formatter  {
         return textToFormat.replaceAll("\\{trim=false\\}\\s*\\r?\\n","");
     }
 
-    public String depthIndicatorForLevel(int level) {
-        return StringUtils.repeat("> ", level);
-    }
 }

@@ -52,6 +52,7 @@ class WhenReadingUIValues extends Specification {
             Value.of(target).viewedBy(actor).as(Long) == 1L
             Value.of(target).viewedBy(actor).as(Double) == 1.0D
             Value.of(target).viewedBy(actor).as(Float) == 1.0F
+            Value.of(target).viewedBy(actor).as(BigDecimal) == new BigDecimal("1.0")
     }
 
     def "should convert string values to numerical types using shortcut methods"() {
@@ -198,6 +199,7 @@ class WhenReadingUIValues extends Specification {
         when:
             element.getCssValue("font") >> "Italics"
         then:
+
             ValueOf.the(CSSValue.of(target).named("font").viewedBy(actor)) == "Italics"
     }
 

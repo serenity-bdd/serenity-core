@@ -2,11 +2,10 @@ package net.thucydides.core.webdriver;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
-import net.serenitybdd.core.collect.NewList;
-import java.util.HashMap;
 import net.thucydides.core.util.EnvironmentVariables;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;

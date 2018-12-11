@@ -9,6 +9,7 @@ import net.serenitybdd.screenplay.annotations.Subject;
 import net.serenitybdd.screenplay.matchers.statematchers.CheckForAbsenceHint;
 import net.serenitybdd.screenplay.matchers.statematchers.MissingWebElement;
 import net.serenitybdd.screenplay.targets.Target;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
@@ -29,12 +30,34 @@ public class WebElementQuestion implements Question<WebElementState>, AcceptsHin
         return new WebElementQuestion(target);
     }
 
+    public static Question<WebElementState> stateOf(String xpathOrCssSelector) {
+        return new WebElementQuestion(Target.the(xpathOrCssSelector).locatedBy(xpathOrCssSelector));
+    }
+
+    public static Question<WebElementState> stateOf(By byLocator) {
+        return new WebElementQuestion(Target.the(byLocator.toString()).located(byLocator));
+    }
+
     public static Question<WebElementState> valueOf(Target target) {
         return stateOf(target);
+    }
+    public static Question<WebElementState> valueOf(String xpathOrCssSelector) {
+        return stateOf(xpathOrCssSelector);
+    }
+    public static Question<WebElementState> valueOf(By byLocator) {
+        return stateOf(byLocator);
     }
 
     public static Question<WebElementState> the(Target target) {
         return stateOf(target);
+    }
+
+    public static Question<WebElementState> the(String xpathOrCssSelector) {
+        return stateOf(xpathOrCssSelector);
+    }
+
+    public static Question<WebElementState> the(By byLocator) {
+        return stateOf(byLocator);
     }
 
     @Override

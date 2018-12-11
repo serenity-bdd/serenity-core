@@ -48,7 +48,9 @@ public class WebElementStateMatchers {
     public static <T extends WebElementState> Matcher<T> isNotSelected() {
         return new IsNotSelectedMatcher();
     }
-
+    public static <T extends WebElementState> Matcher<T> isClickable() {
+        return new isClickableMatcher();
+    }
     public static <T extends WebElementState> Matcher<T> containsText(String expectedText) {
         return new ContainsTextMatcher(expectedText);
     }

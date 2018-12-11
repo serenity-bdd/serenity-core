@@ -230,7 +230,7 @@
                     </#if>
                 </#if>
                 <#list 0..<screenshot.depth as i></#list>
-                <img src="${screenshot.filename}" title="${formatter.depthIndicatorForLevel(screenshot.depth)} ${caption}" width="${screenshot.width?string.computer}"/>
+                <img src="${screenshot.filename}" title="${(formatter.depthIndicatorForLevel(screenshot.depth))!} ${caption}" width="${screenshot.width?string.computer}"/>
             </#foreach>
             </div>
         </div>

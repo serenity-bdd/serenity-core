@@ -24,7 +24,7 @@ public class ViewMyProfile implements Performable {
 
         actor.attemptsTo(
                 Open.browserOn(homePage),
-                MoveMouse.to(theProfileButton).andThen( actions -> actions.sendKeys("") )
+                Click.on(theProfileButton)
         );
     }
 }

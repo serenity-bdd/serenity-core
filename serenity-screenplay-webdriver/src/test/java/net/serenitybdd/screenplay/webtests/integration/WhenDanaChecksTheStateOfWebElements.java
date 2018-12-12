@@ -39,6 +39,7 @@ public class WhenDanaChecksTheStateOfWebElements {
                 seeThat(the(fieldLocatedBy("#visibleTextField")), isCurrentlyVisible()),
                 seeThat(the(fieldLocatedBy("#visibleTextField")), isVisible()),
                 seeThat(the(fieldLocatedBy("#visibleTextField")), isPresent()),
+                seeThat(the(fieldLocatedBy("#visibleTextField")), isClickable()),
 
                 seeThat(the(fieldLocatedBy("#invisibleTextField")), isNotCurrentlyVisible()),
                 seeThat(the(fieldLocatedBy("#invisibleTextField")), isNotVisible()),

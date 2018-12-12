@@ -148,6 +148,11 @@ public class MissingWebElement implements WebElementState {
         return this;
     }
 
+    @Override
+    public boolean isClickable() {
+        return false;
+    }
+
     private void failWithMessage(String errorMessage) {
         throw new AssertionError(getErrorMessage(errorMessage));
     }

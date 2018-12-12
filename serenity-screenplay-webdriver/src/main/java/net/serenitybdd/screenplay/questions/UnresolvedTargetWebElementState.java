@@ -154,4 +154,9 @@ public class UnresolvedTargetWebElementState implements WebElementState {
     public WebElementState expect(String errorMessage) {
         return null;
     }
+
+    @Override
+    public boolean isClickable() {
+        return false;
+    }
 }

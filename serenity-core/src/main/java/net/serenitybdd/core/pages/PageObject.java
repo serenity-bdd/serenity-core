@@ -51,6 +51,7 @@ import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
+import static net.serenitybdd.core.pages.ParameterisedLocator.withArguments;
 import static net.serenitybdd.core.selectors.Selectors.xpathOrCssSelector;
 import static net.thucydides.core.ThucydidesSystemProperty.THUCYDIDES_JQUERY_INTEGRATION;
 import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_FLUENTWAIT;
@@ -326,8 +327,8 @@ public abstract class PageObject {
         return new RenderedPageObjectView(driver, this, timeout, false);
     }
 
-    public PageObject waitFor(String xpathOrCssSelector) {
-        return waitForRenderedElements(xpathOrCssSelector(xpathOrCssSelector));
+    public PageObject waitFor(String xpathOrCssSelector, Object... arguments) {
+        return waitForRenderedElements(xpathOrCssSelector(withArguments(xpathOrCssSelector, arguments)));
     }
 
     public PageObject waitFor(ExpectedCondition expectedCondition) {
@@ -341,8 +342,8 @@ public abstract class PageObject {
         return this;
     }
 
-    public PageObject waitForPresenceOf(String xpathOrCssSelector) {
-        return waitForRenderedElementsToBePresent(xpathOrCssSelector(xpathOrCssSelector));
+    public PageObject waitForPresenceOf(String xpathOrCssSelector, Object... arguments) {
+        return waitForRenderedElementsToBePresent(xpathOrCssSelector(withArguments(xpathOrCssSelector, arguments)));
     }
 
 
@@ -351,8 +352,8 @@ public abstract class PageObject {
         return this;
     }
 
-    public PageObject waitForAbsenceOf(String xpathOrCssSelector) {
-        return waitForRenderedElementsToDisappear(xpathOrCssSelector(xpathOrCssSelector));
+    public PageObject waitForAbsenceOf(String xpathOrCssSelector, Object... arguments) {
+        return waitForRenderedElementsToDisappear(xpathOrCssSelector(withArguments(xpathOrCssSelector, arguments)));
     }
 
     /**
@@ -922,8 +923,8 @@ public abstract class PageObject {
         return element(webElement);
     }
 
-    public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(String xpathOrCssSelector) {
-        return element(xpathOrCssSelector);
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(String xpathOrCssSelector, Object... arguments) {
+        return element(xpathOrCssSelector, arguments);
     }
 
     /**
@@ -968,24 +969,24 @@ public abstract class PageObject {
     /**
      * Provides a fluent API for querying web elements.
      */
-    public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(String xpathOrCssSelector) {
-        return element(xpathOrCssSelector(xpathOrCssSelector));
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(String xpathOrCssSelector, Object... arguments) {
+        return element(xpathOrCssSelector(withArguments(xpathOrCssSelector,arguments)));
     }
 
-    public <T extends net.serenitybdd.core.pages.WebElementFacade> T findBy(String xpathOrCssSelector) {
-        return element(xpathOrCssSelector);
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T findBy(String xpathOrCssSelector, Object... arguments) {
+        return element(withArguments(xpathOrCssSelector,arguments));
     }
 
-    public List<net.serenitybdd.core.pages.WebElementFacade> findAll(String xpathOrCssSelector) {
-        return findAll(xpathOrCssSelector(xpathOrCssSelector));
+    public List<net.serenitybdd.core.pages.WebElementFacade> findAll(String xpathOrCssSelector, Object... arguments) {
+        return findAll(xpathOrCssSelector(withArguments(xpathOrCssSelector,arguments)));
     }
 
     public boolean containsElements(By bySelector) {
         return !findAll(bySelector).isEmpty();
     }
 
-    public boolean containsElements(String xpathOrCssSelector) {
-        return !findAll(xpathOrCssSelector).isEmpty();
+    public boolean containsElements(String xpathOrCssSelector, Object... arguments) {
+        return !findAll(xpathOrCssSelector, arguments).isEmpty();
     }
 
 
@@ -1106,11 +1107,11 @@ public abstract class PageObject {
         return new ThucydidesFluentAdapter(getDriver());
     }
 
-    public <T extends WebElementFacade> T moveTo(String xpathOrCssSelector) {
+    public <T extends WebElementFacade> T moveTo(String xpathOrCssSelector, Object... arguments) {
         if (!driverIsDisabled()) {
-            withAction().moveToElement(findBy(xpathOrCssSelector)).perform();
+            withAction().moveToElement(findBy(xpathOrCssSelector, arguments)).perform();
         }
-        return findBy(xpathOrCssSelector);
+        return findBy(xpathOrCssSelector, arguments);
     }
 
     public <T extends WebElementFacade> T moveTo(By locator) {

@@ -25,11 +25,10 @@ public class SystemPropertiesIssueTracking implements IssueTracking {
 
     public String getIssueTrackerUrl() {
         if (jiraUrlDefined()) {
-
             return ThucydidesSystemProperty.JIRA_URL.from(environmentVariables)
                                          + "/browse/" + "{0}";
         } else {
-            return ThucydidesSystemProperty.THUCYDIDES_ISSUE_TRACKER_URL.from(environmentVariables);
+            return ThucydidesSystemProperty.SERENITY_ISSUE_TRACKER_URL.from(environmentVariables);
         }
     }
 
@@ -38,7 +37,7 @@ public class SystemPropertiesIssueTracking implements IssueTracking {
             return ThucydidesSystemProperty.JIRA_URL.from(environmentVariables)
                     + "/browse/" + getJiraProjectSuffix() + "{0}";
         } else {
-            return ThucydidesSystemProperty.THUCYDIDES_ISSUE_TRACKER_URL.from(environmentVariables);
+            return ThucydidesSystemProperty.SERENITY_ISSUE_TRACKER_URL.from(environmentVariables);
         }
     }
 

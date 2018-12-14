@@ -245,7 +245,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     public void setIssueTrackerUrl(String issueTrackerUrl) {
         if (issueTrackerUrl != null) {
-            getSystemProperties().setValue(ThucydidesSystemProperty.THUCYDIDES_ISSUE_TRACKER_URL, issueTrackerUrl);
+            getSystemProperties().setValue(ThucydidesSystemProperty.SERENITY_ISSUE_TRACKER_URL, issueTrackerUrl);
         }
     }
 

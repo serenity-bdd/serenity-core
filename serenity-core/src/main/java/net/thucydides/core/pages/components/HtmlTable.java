@@ -21,6 +21,7 @@ public class HtmlTable {
     public HtmlTable(final WebElement tableElement) {
         this.tableElement = tableElement;
         this.headings = null;
+        this.cellReaderStrategy = CellReaderStrategy.TEXT_CONTENT_ATTRIBUTE;
     }
 
     public HtmlTable(final WebElement tableElement, List<String> headings) {

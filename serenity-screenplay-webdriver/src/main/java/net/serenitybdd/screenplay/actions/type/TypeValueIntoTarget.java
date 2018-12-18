@@ -16,7 +16,8 @@ public class TypeValueIntoTarget extends TypeValue {
     @Step("{0} enters '#theText' into #target")
     public <T extends Actor> void performAs(T theUser) {
         target.resolveFor(theUser).sendKeys(theText);
-        target.resolveFor(theUser).sendKeys(getFollowedByKeys());
-
+        if(getFollowedByKeys().length!=0) {        
+            target.resolveFor(theUser).sendKeys(getFollowedByKeys());
+        }
     }
 }

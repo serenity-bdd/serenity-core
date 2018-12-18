@@ -24,7 +24,7 @@ public class InstrumentedTask {
         return (T) instrumentedCopyOf(task, task.getClass());
     }
 
-    private static <T extends Performable> boolean shouldInstrument(T task) {
+    public static <T extends Performable> boolean shouldInstrument(T task) {
 
         EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
 

@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static java.util.Arrays.asList;
+import static net.serenitybdd.screenplay.InstrumentedTask.isInstrumented;
 import static net.serenitybdd.screenplay.SilentTasks.isSilent;
 
 /**
@@ -137,8 +139,12 @@ public class Actor implements PerformsTasks, SkipNested {
     public final void attemptsTo(Performable... tasks) {
         beginPerformance();
         for (Performable task : tasks) {
-            if (isSilent(task)) {
-                perform(task);
+            if (isNestedInSilentTask()) {
+                performSilently(task);
+            } else if (isSilent(task)) {
+                performSilently(task);
+            } else if (shouldPerformSilently(task)) {
+                performSilently(task);
             } else {
                 perform(InstrumentedTask.of(task));
             }
@@ -146,8 +152,16 @@ public class Actor implements PerformsTasks, SkipNested {
         endPerformance();
     }
 
+    private boolean shouldPerformSilently(Performable task) {
+        return !InstrumentedTask.isInstrumented(task) && !InstrumentedTask.shouldInstrument(task);
+    }
+
     public <ANSWER> ANSWER asksFor(Question<ANSWER> question) {
         return question.answeredBy(this);
+    }
+
+    private <T extends Performable> void performSilently(T todo) {
+        perform(todo);
     }
 
     private <T extends Performable> void perform(T todo) {
@@ -326,6 +340,12 @@ public class Actor implements PerformsTasks, SkipNested {
     public Actor withNoPronoun() {
         this.preferredPronoun = null;
         return this;
+    }
+
+    private boolean isNestedInSilentTask() {
+        return asList(new Exception().getStackTrace())
+                .stream()
+                .anyMatch(element -> element.getMethodName().equals("performSilently"));
     }
 
     public void assignDescriptionToActor(String description) {

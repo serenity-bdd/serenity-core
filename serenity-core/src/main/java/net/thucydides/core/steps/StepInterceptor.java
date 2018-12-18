@@ -30,6 +30,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
 
+import static java.util.Arrays.asList;
 import static net.thucydides.core.steps.ErrorConvertor.forError;
 
 /**
@@ -100,8 +101,20 @@ public class StepInterceptor implements MethodInterceptor, MethodErrorReporter {
         }
 
         if (CanBeSilent.class.isAssignableFrom(callingClass)  && ((CanBeSilent) obj).isSilent()) { return true; }
+
+        if (isNestedInSilentTask()) {
+            return true;
+        }
+
         return false;
     }
+
+    private boolean isNestedInSilentTask() {
+        return asList(new Exception().getStackTrace())
+                .stream()
+                .anyMatch(element -> element.getMethodName().equals("performSilently"));
+    }
+
 
     private boolean declaredInSameDomain(Method method, final Class callingClass) {
         return domainPackageOf(getRoot(method)).equals(domainPackageOf(callingClass));

@@ -490,57 +490,58 @@
                                                                 <#else>
                                                                     <#assign coverageTableClass="feature-coverage-table-with-pagination">
                                                                 </#if>
-                                                            <table class="table ${coverageTableClass}" id="${tagCoverageByType.tagType}">
-                                                                <thead>
-                                                                <tr>
-                                                                    <th>${formatter.humanReadableFormOf(tagCoverageByType.tagType)}</th>
-                                                                    <th style="" width:7.5em;
-                                                                    ">Scenarios</th>
-                                                                    <th style="" width:7.5em;
-                                                                    ">% Pass</th>
-                                                                    <th style="" width:7.5em;
-                                                                    ">Result</th>
-                                                                    <th>Coverage</th>
-                                                                </tr>
-                                                                </thead>
-                                                                <#assign tageCoverageEntries = tagCoverageByType.tagCoverage />
-                                                                <tbody>
-                                                                    <#list tageCoverageEntries as tagCoverage>
+
+                                                                <#assign sectionTitle = inflection.of(tagCoverageByType.tagType).inPluralForm().asATitle() >
+                                                                <h4>${sectionTitle}</h4>
+
+                                                                <table class="table ${coverageTableClass}" id="${tagCoverageByType.tagType}">
+                                                                    <thead>
                                                                     <tr>
-                                                                        <td>
-                                                                            <#if tagCoverage.testCount = 0>
-                                                                                ${tagCoverage.tagName}
-                                                                            <#else>
-                                                                                <a href="${tagCoverage.report}">${tagCoverage.tagName}</a>
-                                                                            </#if>
-                                                                        </td>
-                                                                        <td>${tagCoverage.testCount}</td>
-                                                                        <td>${tagCoverage.successRate}</td>
-                                                                        <td>
-                                                                            <#if tagCoverage.testCount = 0>
-                                                                                <i class="fa fa-stop-circle-o pending-icon"></i>
-                                                                            <#else>
-                                                                                ${tagCoverage.resultIcon}
-                                                                            </#if>
-                                                                        </td>
-                                                                        <td>
-                                                                            <div class="progress">
-                                                                                <#list tagCoverage.coverageSegments as coverageSegment>
-                                                                                    <div class="progress-bar"
-                                                                                         role="progressbar"
-                                                                                         style="width: ${coverageSegment.percentage}%; background-color: ${coverageSegment.color}"
-                                                                                         aria-valuenow="${coverageSegment.count}"
-                                                                                         title="${coverageSegment.title}"
-                                                                                         aria-valuemin="0"
-                                                                                         aria-valuemax="100">
-                                                                                    </div>
-                                                                                </#list>
-                                                                            </div>
-                                                                        </td>
+                                                                        <th>${formatter.humanReadableFormOf(tagCoverageByType.tagType)}</th>
+                                                                        <th style="width:7.5em;">Scenarios</th>
+                                                                        <th style="width:7.5em;">% Pass</th>
+                                                                        <th style="width:7.5em;">Result</th>
+                                                                        <th>Coverage</th>
                                                                     </tr>
-                                                                    </#list>
-                                                                </tbody>
-                                                            </table>
+                                                                    </thead>
+                                                                    <#assign tagCoverageEntries = tagCoverageByType.tagCoverage />
+                                                                    <tbody>
+                                                                        <#list tagCoverageEntries as tagCoverage>
+                                                                        <tr>
+                                                                            <td>
+                                                                                <#if tagCoverage.testCount = 0>
+                                                                                    ${tagCoverage.tagName}
+                                                                                <#else>
+                                                                                    <a href="${tagCoverage.report}">${tagCoverage.tagName}</a>
+                                                                                </#if>
+                                                                            </td>
+                                                                            <td>${tagCoverage.testCount}</td>
+                                                                            <td>${tagCoverage.successRate}</td>
+                                                                            <td>
+                                                                                <#if tagCoverage.testCount = 0>
+                                                                                    <i class="fa fa-stop-circle-o pending-icon"></i>
+                                                                                <#else>
+                                                                                    ${tagCoverage.resultIcon}
+                                                                                </#if>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="progress">
+                                                                                    <#list tagCoverage.coverageSegments as coverageSegment>
+                                                                                        <div class="progress-bar"
+                                                                                             role="progressbar"
+                                                                                             style="width: ${coverageSegment.percentage}%; background-color: ${coverageSegment.color}"
+                                                                                             aria-valuenow="${coverageSegment.count}"
+                                                                                             title="${coverageSegment.title}"
+                                                                                             aria-valuemin="0"
+                                                                                             aria-valuemax="100">
+                                                                                        </div>
+                                                                                    </#list>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </#list>
+                                                                    </tbody>
+                                                                </table>
                                                             </#if>
                                                         </#list>
                                                     </div>

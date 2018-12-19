@@ -90,17 +90,33 @@ public class Actor implements PerformsTasks, SkipNested {
         T ability = (T) abilities.get(doSomething);
 
         if (ability == null) {
-            // See if any ability is a subclass of doSomething
-            for (Map.Entry<Class, Ability> entry: abilities.entrySet()) {
-                // Return the first subclass we find
-                if (doSomething.isAssignableFrom(entry.getKey())) {
-                    ability = (T) entry.getValue();
-                    break;
-                }
-            }
+            ability = this.getAbilityThatExtends(doSomething);
         }
 
         return ability;
+    }
+
+    /**
+     * Return an ability that extends the given class. Can be a Superclass or an Interface. If there are multiple
+     * candidate Abilities, the first one found will be returned.
+     * @param extendedClass the Interface class that we expect to find
+     * @param <C> the matching Ability cast to extendedClass
+     * @throws NoMatchingAbilityException when we don't find an appropriate Ability
+     */
+    @SuppressWarnings("unchecked")
+    public <C> C getAbilityThatExtends(Class<C> extendedClass) {
+        // See if any ability extends doSomething
+        for (Map.Entry<Class, Ability> entry: abilities.entrySet()) {
+            // Return the first matching Ability we find
+            if (extendedClass.isAssignableFrom(entry.getKey())) {
+                return  (C) entry.getValue();
+            }
+        }
+        throw new NoMatchingAbilityException(
+                String.format("%s does not have an Ability that extends %s",
+                        this.getName(), extendedClass)
+        );
+
     }
 
     /**
@@ -130,7 +146,7 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     /**
-     * A tense-neutral synonyme for addFact() for use with given() clauses
+     * A tense-neutral synonym for addFact() for use with given() clauses
      */
     public final void wasAbleTo(Performable... todos) {
         attemptsTo(todos);

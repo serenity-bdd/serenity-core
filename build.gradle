@@ -256,9 +256,9 @@ subprojects {
         compile "io.vavr:vavr:${vavrVersion}"
 
         /* Required for Java 9 and higher */
-        compile "javax.xml.bind:jaxb-api:${jaxbVersion}"
-        compile "com.sun.xml.bind:jaxb-core:${jaxbVersion}"
-        compile "com.sun.xml.bind:jaxb-impl:${jaxbVersion}"
+        compile "javax.xml.bind:jaxb-api:${jaxbApiVersion}"
+        compile "com.sun.xml.bind:jaxb-core:${jaxbCoreVersion}"
+        compile "com.sun.xml.bind:jaxb-impl:${jaxbCoreVersion}"
         compile "javax.activation:activation:${activationVersion}"
         
         testCompile("ch.qos.logback:logback-classic:${logbackVersion}") {

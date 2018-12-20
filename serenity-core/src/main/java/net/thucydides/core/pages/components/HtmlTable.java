@@ -21,13 +21,13 @@ public class HtmlTable {
     public HtmlTable(final WebElement tableElement) {
         this.tableElement = tableElement;
         this.headings = null;
-        this.cellReaderStrategy = CellReaderStrategy.TEXT_CONTENT_ATTRIBUTE;
+        this.cellReaderStrategy = CellReaderStrategy.GET_TEXT;
     }
 
     public HtmlTable(final WebElement tableElement, List<String> headings) {
         this.tableElement = tableElement;
         this.headings = headings;
-        this.cellReaderStrategy = CellReaderStrategy.TEXT_CONTENT_ATTRIBUTE;
+        this.cellReaderStrategy = CellReaderStrategy.GET_TEXT;
     }
 
 
@@ -171,7 +171,7 @@ public class HtmlTable {
     private boolean hasMatchingCellValuesIn(WebElement firstRow, List<String> headings) {
         List<WebElement> cells = firstRow.findElements(By.xpath("./td"));
         for(int cellIndex = 0; cellIndex < headings.size(); cellIndex++) {
-            if ((cells.size() < cellIndex) || (!cells.get(cellIndex).getAttribute("textContent").equals(headings.get(cellIndex)))) {
+            if ((cells.size() < cellIndex) || !cellToText(cells.get(cellIndex)).equals(headings.get(cellIndex))) {
                 return false;
             }
         }
@@ -242,8 +242,8 @@ public class HtmlTable {
 
     private String cellToText(WebElement cell) {
         switch (cellReaderStrategy) {
-            case GET_TEXT: return cell.getAttribute("textContent");
-            case TEXT_CONTENT_ATTRIBUTE: return cell.getText();
+            case GET_TEXT: return cell.getText();
+            case TEXT_CONTENT_ATTRIBUTE: return cell.getAttribute("textContent");
             case INNER_TEXT_ATTRIBUTE: return cell.getAttribute("innerText").trim().replaceAll("\\t"," ");
             case OUTER_TEXT_ATTRIBUTE: return cell.getAttribute("outerText").trim().replaceAll("\\t"," ");
         }

@@ -70,8 +70,15 @@ public class QuestionSubject<T> {
         return Optional.empty();
     }
 
+    private Optional<String> subjectFromQuestionInterface() {
+        if (question.getSubject() == null || question.getSubject().isEmpty()) { return Optional.empty(); }
+        return Optional.of(question.getSubject());
+    }
+
     public String subject() {
-        return annotatedSubject().orElse(lowerCase(humanize(questionClass.getSimpleName())));
+        return subjectFromQuestionInterface().orElse(
+                annotatedSubject().orElse(
+                        lowerCase(humanize(questionClass.getSimpleName()))));
     }
 
 }

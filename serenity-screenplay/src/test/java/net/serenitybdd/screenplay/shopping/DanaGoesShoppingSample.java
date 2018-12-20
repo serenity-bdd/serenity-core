@@ -1,7 +1,7 @@
 package net.serenitybdd.screenplay.shopping;
 
-import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.PeopleAreTerriblyIncorrect;
+import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.GivenWhenThen;
@@ -15,13 +15,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 import static java.util.function.Predicate.isEqual;
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
-import static net.serenitybdd.screenplay.shopping.questions.DisplayedPrices.thePriceIsCorrectlyDisplayed;
-import static net.serenitybdd.screenplay.shopping.questions.DisplayedPrices.thePriceIsIncorrectlyDisplayed;
-import static net.serenitybdd.screenplay.shopping.questions.DisplayedPrices.thePriceIsIncorrectlyDisplayedWithAnError;
+import static net.serenitybdd.screenplay.shopping.questions.DisplayedPrices.*;
 import static net.serenitybdd.screenplay.shopping.questions.ThankYouMessage.theThankYouMessage;
 import static net.serenitybdd.screenplay.shopping.questions.TotalCost.theTotalCost;
 import static net.serenitybdd.screenplay.shopping.questions.TotalCostIncludingDelivery.theTotalCostIncludingDelivery;

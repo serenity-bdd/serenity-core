@@ -21,11 +21,19 @@ public class UseAnAbility {
     /**
      * If the {@link #actor} has an {@link Ability} that implements the Interface, return that. If
      * there are multiple candidate Abilities, the first one found will be returned.
+     *
      * @param implementedInterface the Interface class that we expect to find
-     * @param <C> the implementation of the Interface
+     * @param <C>                  the implementation of the Interface
      * @return the Ability that implements the interface
      */
     public <C> C that(Class<C> implementedInterface) {
-        return this.actor.getAbilityThatExtends(implementedInterface);
+        C ability = this.actor.getAbilityThatExtends(implementedInterface);
+
+        if (ability == null) {
+            throw new NoMatchingAbilityException(
+                    String.format("%s does not have an Ability that extends %s", actor, implementedInterface.getName())
+            );
+        }
+        return ability;
     }
 }

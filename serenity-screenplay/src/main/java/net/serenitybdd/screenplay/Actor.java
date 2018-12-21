@@ -112,10 +112,11 @@ public class Actor implements PerformsTasks, SkipNested {
                 return  (C) entry.getValue();
             }
         }
-        throw new NoMatchingAbilityException(
-                String.format("%s does not have an Ability that extends %s",
-                        this.getName(), extendedClass)
-        );
+        return null;
+//        throw new NoMatchingAbilityException(
+//                String.format("%s does not have an Ability that extends %s",
+//                        this.getName(), extendedClass)
+//        );
 
     }
 

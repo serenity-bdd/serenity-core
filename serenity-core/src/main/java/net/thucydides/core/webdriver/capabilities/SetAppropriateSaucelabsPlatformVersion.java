@@ -73,7 +73,7 @@ class SetAppropriateSaucelabsPlatformVersion {
 
     private void setAppropriateSaucelabsPlatformVersionForSafariFrom(EnvironmentVariables environmentVariables) {
         if (ThucydidesSystemProperty.SAUCELABS_TARGET_PLATFORM.from(environmentVariables).equalsIgnoreCase("mac")) {
-            String browserVersion = ThucydidesSystemProperty.SAUCELABS_DRIVER_VERSION.from(environmentVariables);
+            String browserVersion = ThucydidesSystemProperty.SAUCELABS_BROWSER_VERSION.from(environmentVariables);
             if (MAC_OS_VERSIONS_PER_SAFARI_VERSION.containsKey(browserVersion)) {
                 capabilities.setCapability("platform", MAC_OS_VERSIONS_PER_SAFARI_VERSION.get(browserVersion));
             }

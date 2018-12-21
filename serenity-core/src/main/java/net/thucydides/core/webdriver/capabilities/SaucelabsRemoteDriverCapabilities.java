@@ -44,7 +44,6 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
 
         for(String propertyName : saucelabsProperties.stringPropertyNames()) {
             String unprefixedPropertyName = unprefixed(propertyName);
-            sauceCaps.setCapability(propertyName, typed(saucelabsProperties.getProperty(propertyName)));
             sauceCaps.setCapability(unprefixedPropertyName, typed(saucelabsProperties.getProperty(propertyName)));
         }
 
@@ -65,9 +64,9 @@ public class SaucelabsRemoteDriverCapabilities implements RemoteDriverCapabiliti
 
 
     private void configureBrowserVersion(MutableCapabilities capabilities) {
-        String driverVersion = ThucydidesSystemProperty.SAUCELABS_DRIVER_VERSION.from(environmentVariables);
-        if (isNotEmpty(driverVersion)) {
-            capabilities.setCapability("version", driverVersion);
+        String browserVersion = ThucydidesSystemProperty.SAUCELABS_BROWSER_VERSION.from(environmentVariables);
+        if (isNotEmpty(browserVersion)) {
+            capabilities.setCapability("browserVersion", browserVersion);
         }
     }
 

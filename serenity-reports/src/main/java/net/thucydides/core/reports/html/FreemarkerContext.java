@@ -123,7 +123,7 @@ public class FreemarkerContext {
 
         context.put("inflection", Inflector.getInstance());
         context.put("coverage", TagCoverage.from(testOutcomes)
-//                .showingTags(requirements.getTagsOfType(tagTypes))
+                .showingTags(requirements.getTagsOfType(tagTypes))
                 .forTagTypes(tagTypes));
         context.put("backgroundColor", new BackgroundColor());
 

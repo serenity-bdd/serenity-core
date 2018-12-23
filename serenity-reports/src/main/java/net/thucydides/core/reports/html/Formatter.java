@@ -413,12 +413,16 @@ public class Formatter  {
     }
 
     public String htmlAttributeCompatible(Object fieldValue) {
+        return htmlAttributeCompatible(fieldValue, false);
+    }
+
+    public String htmlAttributeCompatible(Object fieldValue, boolean renderNewLines) {
         if (fieldValue == null) { return ""; }
 
         return concatLines(ESCAPE_SPECIAL_CHARS.translate(stringFormOf(fieldValue)
                 .replaceAll("<", "(")
                 .replaceAll(">", ")")
-                .replaceAll("\"", "'")));
+                .replaceAll("\"", "'")), "<br>");
     }
 
     public String htmlAttributeCompatible(Object fieldValue, int maxLength) {

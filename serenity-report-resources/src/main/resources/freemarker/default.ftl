@@ -496,7 +496,7 @@
                     <tr class="test-${step.result}">
                         <td width="40">&nbsp</td>
                         <#if step.errorMessage?has_content>
-                            <#assign errorMessageTitle = step.conciseErrorMessage?html>
+                            <#assign errorMessageTitle = step.errorMessage?html>
                         <#else>
                             <#assign errorMessageTitle = "">
                         </#if>
@@ -506,7 +506,7 @@
                         <td width="%" colspan="3" class="error-message-cell">
                         </#if>
 
-                        <#assign formattedErrorMessageTitle = formatter.htmlAttributeCompatible(errorMessageTitle) />
+                        <#assign formattedErrorMessageTitle = formatter.htmlAttributeCompatible(errorMessageTitle, true) />
 
                             <#if step.nestedException?has_content>
                                 <@stacktrace title=formattedErrorMessageTitle cause=step.nestedException id=step.number />
@@ -549,7 +549,9 @@
                     </#if>
                     <#if (testOutcome.errorMessage)??>
                         <#if (testOutcome.nestedTestFailureCause)??>
-                            <@stacktrace title=testOutcome.conciseErrorMessage cause=testOutcome.nestedTestFailureCause id="overall" />
+                            <#assign formattedErrorMessageTitle = formatter.htmlAttributeCompatible(testOutcome.errorMessage, true) />
+
+                            <@stacktrace title=formattedErrorMessageTitle cause=testOutcome.nestedTestFailureCause id="overall" />
                         </#if>
                     </#if>
 

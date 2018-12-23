@@ -2079,6 +2079,7 @@ div.scenario-text:empty {
     margin-top: 4px !important;
     margin-bottom: 4px !important;
     font-size: 1em;
+    background-color: rgba(238,0,0,0.3);
 }
 
 .missing-scenario-warning {

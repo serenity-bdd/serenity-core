@@ -18,8 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static java.util.Arrays.asList;
-import static net.serenitybdd.screenplay.InstrumentedTask.isInstrumented;
+import static net.serenitybdd.screenplay.SilentTasks.isNestedInSilentTask;
 import static net.serenitybdd.screenplay.SilentTasks.isSilent;
 
 /**
@@ -113,11 +112,6 @@ public class Actor implements PerformsTasks, SkipNested {
             }
         }
         return null;
-//        throw new NoMatchingAbilityException(
-//                String.format("%s does not have an Ability that extends %s",
-//                        this.getName(), extendedClass)
-//        );
-
     }
 
     /**
@@ -359,11 +353,6 @@ public class Actor implements PerformsTasks, SkipNested {
         return this;
     }
 
-    private boolean isNestedInSilentTask() {
-        return asList(new Exception().getStackTrace())
-                .stream()
-                .anyMatch(element -> element.getMethodName().equals("performSilently"));
-    }
 
     public void assignDescriptionToActor(String description) {
         StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().ifPresent(

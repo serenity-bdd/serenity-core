@@ -19,7 +19,9 @@ class ConsequenceCheckReporter {
         }
 
         private boolean shouldReportConsequence() {
-            return !((consequence instanceof CanBeSilent) && (((CanBeSilent) consequence).isSilent()));
+            if ((consequence instanceof CanBeSilent) && (((CanBeSilent) consequence).isSilent())) return false;
+            if (SilentTasks.isNestedInSilentTask()) return false;
+            return true;
         }
 
 

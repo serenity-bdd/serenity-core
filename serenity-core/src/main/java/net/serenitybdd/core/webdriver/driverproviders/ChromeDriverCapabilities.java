@@ -83,15 +83,21 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     private void addPreferencesTo(ChromeOptions options) {
 
         Map<String, Object> chromePreferences = ChromePreferences.startingWith("chrome_preferences.").from(environmentVariables);
+
+        chromePreferences.putAll(ChromePreferences.startingWith("chrome.preferences.").from(environmentVariables));
+
         if (!chromePreferences.isEmpty()) {
             options.setExperimentalOption("prefs", chromePreferences);
         }
-
     }
 
     private void addExperimentalOptionsTo(ChromeOptions options) {
         options.setExperimentalOption("w3c", true);
         Map<String, Object> chrome_experimental_options = ChromePreferences.startingWith("chrome_experimental_options.").from(environmentVariables);
+
+        Map<String, Object> nestedExperimentalOptions = ChromePreferences.startingWith("chrome.experimental_options.").from(environmentVariables);
+        chrome_experimental_options.putAll(nestedExperimentalOptions);
+
         chrome_experimental_options.keySet().forEach(
                 key -> options.setExperimentalOption(key, chrome_experimental_options.get(key))
         );

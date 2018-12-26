@@ -1,6 +1,7 @@
 package net.thucydides.core.util;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -49,6 +50,8 @@ public interface EnvironmentVariables {
     String getProperty(final Enum<?> property, final String defaultValue);
 
     void setProperty(final String name, final String value);
+
+    void setProperties(Map<String, String> properties);
 
     void clearProperty(final String name);
 

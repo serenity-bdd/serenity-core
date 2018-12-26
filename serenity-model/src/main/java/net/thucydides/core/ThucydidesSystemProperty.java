@@ -1317,6 +1317,7 @@ public enum ThucydidesSystemProperty {
      */
     MANUAL_TASK_INSTRUMENTATION,
 
+    ENVIRONMENT,
     /**
      * The title to appear in the tag type table in the email reports
      */

@@ -150,10 +150,17 @@ public class SystemEnvironmentVariables implements EnvironmentVariables {
 
         propertySetLock.lock();
 
-        HashMap<String, String> workingCopy = new HashMap(properties);
+        HashMap<String, String> workingCopy = new HashMap<>(properties);
         workingCopy.put(name, value);
         properties = NewMap.copyOf(workingCopy);
 
+        propertySetLock.unlock();
+    }
+
+    public void setProperties(Map<String, String> properties) {
+
+        propertySetLock.lock();
+        properties.putAll(properties);
         propertySetLock.unlock();
     }
 

@@ -1,6 +1,7 @@
 package net.thucydides.core.configuration;
 
 import com.google.inject.*;
+import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.*;
 import net.thucydides.core.model.*;
 import net.thucydides.core.steps.*;
@@ -222,7 +223,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     public int getRestartFrequency() {
-        return THUCYDIDES_RESTART_BROWSER_FREQUENCY.integerFrom(environmentVariables);
+        return SERENITY_RESTART_BROWSER_FREQUENCY.integerFrom(environmentVariables);
     }
 
     @Override
@@ -236,7 +237,13 @@ public class SystemPropertiesConfiguration implements Configuration {
      * It is also the base URL used to build relative paths.
      */
     public String getBaseUrl() {
-        return environmentVariables.getProperty(WEBDRIVER_BASE_URL.getPropertyName(), defaultBaseUrl);
+        if (EnvironmentSpecificConfiguration.areDefinedIn(environmentVariables)) {
+            return Optional.ofNullable(EnvironmentSpecificConfiguration.from(environmentVariables)
+                    .getProperty(WEBDRIVER_BASE_URL.getPropertyName()))
+                    .orElse(defaultBaseUrl);
+        } else {
+            return environmentVariables.getProperty(WEBDRIVER_BASE_URL.getPropertyName(), defaultBaseUrl);
+        }
     }
 
 

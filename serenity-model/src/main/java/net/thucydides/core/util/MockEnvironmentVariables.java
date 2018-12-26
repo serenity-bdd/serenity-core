@@ -115,6 +115,10 @@ public class MockEnvironmentVariables implements EnvironmentVariables {
         properties.setProperty(name, value);
     }
 
+    public void setProperties(Map<String, String> newProperties) {
+        properties.putAll(newProperties);
+    }
+
 
     public void clearProperty(String name) {
         properties.remove(name);

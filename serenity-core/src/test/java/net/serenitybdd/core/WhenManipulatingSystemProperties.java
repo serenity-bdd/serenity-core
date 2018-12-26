@@ -25,7 +25,7 @@ public class WhenManipulatingSystemProperties {
     public void should_be_able_to_read_a_thucydides_system_property_when_default_is_provided() {
         System.setProperty("jira.url","http://my.jira.server");
         String storedValue = SerenitySystemProperties.getProperties().getValue(ThucydidesSystemProperty.JIRA_URL,
-                                                                                 "DEFAULT");
+                                                                                 "NO_ENVIRONMENT_DEFINED");
 
         assertThat(storedValue, is("http://my.jira.server"));
     }
@@ -74,9 +74,9 @@ public class WhenManipulatingSystemProperties {
     public void should_return_the_default_value_if_a_thucydides_system_property_has_not_been_defined() {
         System.clearProperty("jira.url");
         String storedValue = SerenitySystemProperties.getProperties().getValue(ThucydidesSystemProperty.JIRA_URL,
-                                                                                 "DEFAULT");
+                                                                                 "NO_ENVIRONMENT_DEFINED");
 
-        assertThat(storedValue, is("DEFAULT"));
+        assertThat(storedValue, is("NO_ENVIRONMENT_DEFINED"));
     }
 
     @Test

@@ -23,6 +23,10 @@ public class Open {
         return instrumented(OpenPage.class, targetPage);
     }
 
+    public Interaction thePageNamed(String pageName) {
+        return instrumented(OpenPage.class, pageName);
+    }
+
     public Interaction the(Class<? extends PageObject> targetPageClass) {
         return instrumented(OpenPageFromClass.class, targetPageClass);
     }

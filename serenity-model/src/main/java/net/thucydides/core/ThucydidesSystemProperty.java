@@ -619,7 +619,7 @@ public enum ThucydidesSystemProperty {
 
     SAUCELABS_TARGET_PLATFORM,
 
-    SAUCELABS_DRIVER_VERSION,
+    SAUCELABS_BROWSER_VERSION,
 
     SAUCELABS_TEST_NAME,
     /**

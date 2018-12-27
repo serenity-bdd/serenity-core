@@ -5,17 +5,17 @@ import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.thucydides.core.annotations.Step;
 
-public class OpenUrl implements Interaction {
+public class OpenAt implements Interaction {
 
     private final String url;
 
-    public OpenUrl(String url) {
+    public OpenAt(String url) {
         this.url = url;
     }
 
     @Step("{0} opens the #url")
     public <T extends Actor> void performAs(T theUser) {
-        BrowseTheWeb.as(theUser).openUrl(url);
+        BrowseTheWeb.as(theUser).openAt(url);
     }
 
 

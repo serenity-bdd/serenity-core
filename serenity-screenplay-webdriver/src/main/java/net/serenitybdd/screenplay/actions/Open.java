@@ -19,6 +19,10 @@ public class Open {
         return instrumented(OpenUrl.class, targetUrl);
     }
 
+    public static OpenAt relativeUrl(String targetUrl) {
+        return instrumented(OpenAt.class, targetUrl);
+    }
+
     public Interaction the(PageObject targetPage) {
         return instrumented(OpenPage.class, targetPage);
     }

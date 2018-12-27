@@ -24,7 +24,7 @@ public class OpenPageWithName implements Interaction {
     public <T extends Actor> void performAs(T theUser) {
         String pageUrl = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(pageName);
         if (pageUrl == null) {
-            throw new UnknownPageException("No page defiined with the name '" + pageUrl + "'");
+            throw new UnknownPageException("No page defined with the name '" + pageUrl + "'");
         }
         BrowseTheWeb.as(theUser).getDriver().get(pageUrl);
     }

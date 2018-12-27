@@ -24,7 +24,7 @@ public class Open {
     }
 
     public Interaction thePageNamed(String pageName) {
-        return instrumented(OpenPage.class, pageName);
+        return instrumented(OpenPageWithName.class, pageName);
     }
 
     public Interaction the(Class<? extends PageObject> targetPageClass) {

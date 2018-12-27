@@ -221,7 +221,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     public void setDefaultBaseUrl(final String defaultBaseUrl) {
         this.defaultBaseUrl = defaultBaseUrl;
     }
-
+O
     public int getRestartFrequency() {
         return SERENITY_RESTART_BROWSER_FREQUENCY.integerFrom(environmentVariables);
     }

@@ -36,15 +36,6 @@ public class WhenUsingRecordedScreenshots {
     }
 
     @Test
-    public void screenshots_with_the_same_image_are_considered_identical() {
-        ScreenshotAndHtmlSource screenshotAndHtmlSource = new ScreenshotAndHtmlSource(screenshotFileFrom("/screenshots/amazon.png"), new File("screen.html"));
-        ScreenshotAndHtmlSource identicalScreenshotAndHtmlSource = new ScreenshotAndHtmlSource(screenshotFileFrom("/screenshots/amazon.png"), new File("screen.html"));
-        
-        assertThat(screenshotAndHtmlSource, is(identicalScreenshotAndHtmlSource));
-        assertThat(screenshotAndHtmlSource.hashCode(), is(identicalScreenshotAndHtmlSource.hashCode()));
-    }
-
-    @Test
     public void screenshots_with_different_images_are_considered_unidentical() {
         ScreenshotAndHtmlSource screenshotAndHtmlSource = new ScreenshotAndHtmlSource(screenshotFileFrom("/screenshots/google_page_1.png"), new File("screen.html"));
         ScreenshotAndHtmlSource differentScreenshotAndHtmlSource = new ScreenshotAndHtmlSource(screenshotFileFrom("/screenshots/google_page_2.png"), new File("screen.html"));

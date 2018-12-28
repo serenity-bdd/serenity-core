@@ -296,11 +296,27 @@ public class StepEventBus {
 
     public void testFinished() {
         TestOutcome outcome = getBaseStepListener().getCurrentTestOutcome();
+        outcome = checkForEmptyScenarioIn(outcome);
+
         for (StepListener stepListener : getAllListeners()) {
             stepListener.testFinished(outcome);
         }
         TestLifecycleEvents.postEvent(TestLifecycleEvents.testFinished());
         clear();
+    }
+
+    private TestOutcome checkForEmptyScenarioIn(TestOutcome outcome) {
+        if (isAGherkinScenario(outcome)) {
+            if (outcome.getTestSteps().isEmpty()) {
+                return outcome.withResult(TestResult.PENDING);
+            }
+        }
+        return outcome;
+    }
+
+    private boolean isAGherkinScenario(TestOutcome outcome) {
+        if ((outcome == null) || (outcome.getTestSource() == null)) return false;
+        return outcome.getTestSource().equalsIgnoreCase("cucumber") || outcome.getTestSource().equalsIgnoreCase("jbehave");
     }
 
     public void testFinished(TestOutcome result) {

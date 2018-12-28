@@ -3,6 +3,7 @@ package smoketests;
 import net.serenitybdd.core.steps.Instrumented;
 import net.serenitybdd.core.steps.ScenarioActor;
 import net.serenitybdd.junit.runners.SerenityRunner;
+import net.thucydides.core.annotations.Manual;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.model.TestOutcome;

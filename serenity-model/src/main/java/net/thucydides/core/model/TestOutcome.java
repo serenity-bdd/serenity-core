@@ -1926,9 +1926,6 @@ public class TestOutcome {
             }
         }
         return matchingRowCount;
-//        List<DataTableRow> matchingRows
-//                = filter(having(on(DataTableRow.class).getResult(), is(expectedResult)), getDataTable().getRows());
-//        return matchingRows.size();
     }
 
     public int countNestedStepsWithResult(TestResult expectedResult, TestType testType) {

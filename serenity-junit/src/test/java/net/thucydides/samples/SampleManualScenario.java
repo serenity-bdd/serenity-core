@@ -24,8 +24,8 @@ public class SampleManualScenario {
     @Test
     public void a_failing_manual_test_with_a_message() {}
 
-    @Manual(result = TestResult.SUCCESS, lastTested = "2000-01-01")
-    @Test
-    public void a_successful_manual_test_with_an_expiry_date() {}
+//    @Manual(result = TestResult.SUCCESS, lastTested = "2000-01-01")
+//    @Test
+//    public void a_successful_manual_test_with_an_expiry_date() {}
 
 }

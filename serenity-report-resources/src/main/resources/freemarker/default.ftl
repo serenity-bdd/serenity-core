@@ -533,7 +533,11 @@
                     <#else>
                     <td width="%" colspan="1">
                     </#if>
-                    <span class="top-level-step">An error occurred outside of step execution.</span>
+                    <#if testOutcome.errorMessage?has_content>
+                        <span class="top-level-step">${testOutcome.errorMessage}</span>
+                    <#else>
+                        <span class="top-level-step">An error occurred outside of step execution</span>
+                    </#if>
                 </td>
                     <td width="100"><span
                             class="top-level-step">${formatter.htmlCompatibleStepDescription(testOutcome.result)}</span>

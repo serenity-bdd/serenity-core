@@ -16,15 +16,10 @@ import java.time.LocalDate;
 public @interface Manual {
     /**
      * Specify the most recent result of manual testing.
-=     * This will expire after a certain number of days, configurable with the "manual.result.expiry.limit" property
+     * This will expire after a certain number of days, configurable with the "manual.result.expiry.limit" property
      * (by default 15).
      */
     TestResult result() default TestResult.PENDING;
-
-    /**
-     * The date the test was last tested, in the format YYYY-MM-DD
-      */
-    String lastTested() default "";
 
     /**
      * An optional reason explaining the manual result

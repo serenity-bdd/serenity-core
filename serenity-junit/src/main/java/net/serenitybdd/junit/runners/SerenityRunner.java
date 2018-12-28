@@ -29,7 +29,7 @@ import java.util.function.Consumer;
 
 import static net.serenitybdd.core.Serenity.*;
 import static net.thucydides.core.ThucydidesSystemProperty.*;
-import static net.thucydides.core.model.TestResult.SUCCESS;
+import static net.thucydides.core.model.TestResult.FAILURE;
 import static org.apache.commons.lang3.StringUtils.*;
 
 /**
@@ -517,21 +517,27 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
         testStarted(method);
         StepEventBus.getEventBus().testIsManual();
         StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().ifPresent(
-                outcome -> outcome.setResult(theMethod.getManualResult())
+                outcome -> {
+                    outcome.setResult(theMethod.getManualResult());
+                    if (theMethod.getManualResult() == FAILURE) {
+                        outcome.setTestFailureMessage(manualReasonDeclaredIn(theMethod));
+                    }
+
+                }
         );
         switch(theMethod.getManualResult()) {
             case SUCCESS:
                 StepEventBus.getEventBus().testFinished();
                 return (notifier -> notifier.fireTestFinished(Description.EMPTY));
             case FAILURE:
-                Throwable failure = new ManualTestMarkedAsFailure(theMethod.getManualResultReason());
+                Throwable failure = new ManualTestMarkedAsFailure(manualReasonDeclaredIn(theMethod));
                 StepEventBus.getEventBus().testFailed(failure);
                 return (notifier -> notifier.fireTestFailure(
                         new Failure(Description.createTestDescription(method.getDeclaringClass(), method.getName()),failure)));
             case ERROR:
             case COMPROMISED:
             case UNSUCCESSFUL:
-                Throwable error = new ManualTestMarkedAsError(theMethod.getManualResultReason());
+                Throwable error = new ManualTestMarkedAsError(manualReasonDeclaredIn(theMethod));
                 StepEventBus.getEventBus().testFailed(error);
                 return (notifier -> notifier.fireTestFailure(
                         new Failure(Description.createTestDescription(method.getDeclaringClass(), method.getName()),error)));
@@ -545,6 +551,10 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
                 StepEventBus.getEventBus().testPending();
                 return (notifier -> notifier.fireTestIgnored(Description.createTestDescription(method.getDeclaringClass(), method.getName())));
         }
+    }
+
+    private String manualReasonDeclaredIn(TestMethodConfiguration theMethod) {
+        return theMethod.getManualResultReason().isEmpty() ? "Manual test failure" : "Manual test failure: " + theMethod.getManualResultReason();
     }
 
     private void testStarted(FrameworkMethod method) {

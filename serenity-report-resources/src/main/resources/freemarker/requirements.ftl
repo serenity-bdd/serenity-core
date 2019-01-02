@@ -308,8 +308,7 @@
                                                                 ${scenario.title}
                                                             </span>
                                                             <span class="scenario-result-icon">
-                                                                <#if (scenario.manual)> <i class="fa fa-user manual"
-                                                                                           title="Manual test"></i></#if>
+                                                                <#if (scenario.manual)> MANUAL <i class="fa fa-user manual" title="Manual test"></i></#if>
 
                                                                 <#if outcome_icon?has_content>
                                                                     ${outcome_icon}

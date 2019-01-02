@@ -92,7 +92,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     }
 
     private void addExperimentalOptionsTo(ChromeOptions options) {
-        options.setExperimentalOption("w3c", true);
+
         Map<String, Object> chrome_experimental_options = ChromePreferences.startingWith("chrome_experimental_options.").from(environmentVariables);
 
         Map<String, Object> nestedExperimentalOptions = ChromePreferences.startingWith("chrome.experimental_options.").from(environmentVariables);

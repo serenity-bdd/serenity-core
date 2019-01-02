@@ -588,6 +588,11 @@ public enum ThucydidesSystemProperty {
     CHROME_EXTENSION,
 
     /**
+     * Set this to true to activate the "w3c" experimental option for chrome. This needs to be set to true for Saucelabs and false for Browserstack
+     */
+    CHROME_DEFAULT_OPTIONS_W3C,
+
+    /**
      * Preferences to be passed to the Firefox driver, separated by semi-colons (commas often appear in the preference
      * values.
      */

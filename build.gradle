@@ -28,10 +28,6 @@ apply plugin: "se.bjurr.gitchangelog.git-changelog-gradle-plugin"
 
 group = 'net.serenity-bdd'
 
-task wrapper(type: Wrapper) {
-    gradleVersion = "${gradleVersion}"
-}
-
 subprojects {
     task allDeps(type: DependencyReportTask) {}
 }

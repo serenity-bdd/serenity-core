@@ -1,6 +1,6 @@
 package net.serenitybdd.reports.email
 
-import com.sun.xml.internal.ws.util.StringUtils
+import org.apache.commons.lang3.StringUtils
 
 class Formatted {
     fun asATitle(text:String) = StringUtils.capitalize(text)

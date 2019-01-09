@@ -1,6 +1,7 @@
 package net.serenitybdd.junit.runners;
 
 import com.google.inject.*;
+import com.google.inject.Module;
 import net.thucydides.core.batches.*;
 import net.thucydides.core.model.*;
 import net.thucydides.core.webdriver.*;
@@ -23,7 +24,7 @@ abstract class QualifiedTestsRunner extends SerenityRunner {
         this.test = test;
     }
 
-    public QualifiedTestsRunner(Class<?> klass, Module module, String qualifier, Object test) throws InitializationError {
+    public QualifiedTestsRunner(Class<?> klass, com.google.inject.Module module, String qualifier, Object test) throws InitializationError {
         super(klass, module);
         this.qualifier = qualifier;
         this.test = test;

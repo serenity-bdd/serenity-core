@@ -10,7 +10,7 @@ public class WebDriverInjectors {
         return Injectors.getInjector(new WebDriverModule());
     }
 
-    public static synchronized Injector getInjector(Module module) {
+    public static synchronized Injector getInjector(com.google.inject.Module module) {
         return Injectors.getInjector(module);
     }
 }

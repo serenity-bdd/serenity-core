@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
 import java.util.*;
 
 import static net.thucydides.core.util.NameConverter.humanize;

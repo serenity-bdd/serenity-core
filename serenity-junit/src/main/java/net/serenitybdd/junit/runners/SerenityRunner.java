@@ -96,7 +96,7 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
      * @param module used to inject a custom Guice module
      * @throws InitializationError if some JUnit-related initialization problem occurred
      */
-    public SerenityRunner(Class<?> klass, Module module) throws InitializationError {
+    public SerenityRunner(Class<?> klass, com.google.inject.Module module) throws InitializationError {
         this(klass, Injectors.getInjector(module));
     }
 

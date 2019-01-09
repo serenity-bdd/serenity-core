@@ -103,7 +103,7 @@ allprojects {
 }
 
 release {
-    grgit = Grgit.open()
+    grgit = Grgit.open(file('.'))
     defaultVersionStrategy Strategies.SNAPSHOT
     versionStrategy Strategies.SNAPSHOT
 }
@@ -232,6 +232,7 @@ subprojects {
 
         compile("cglib:cglib:${cglibVersion}") {
             exclude group: "org.ow2.asm", module: "asm"
+            exclude group: "org.apache.ant", module: "ant"
         }
         compile("org.ow2.asm:asm:${asmVersion}")
 

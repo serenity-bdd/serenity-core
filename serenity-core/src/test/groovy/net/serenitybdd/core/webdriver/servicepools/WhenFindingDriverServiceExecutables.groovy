@@ -24,21 +24,6 @@ class WhenFindingDriverServiceExecutables extends Specification {
         gitExe.exists()
     }
 
-    def "should look for a file using the configured environment property if defined"() {
-        given:
-        EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
-        String configuredPath = Paths.get(ClassLoader.getResource("/binaries/phantomjs").toURI())
-        environmentVariables.setProperty("my.exe.path", configuredPath)
-        when:
-        File gitExe = DriverServiceExecutable.called("git")
-                .withSystemProperty("my.exe.path")
-                .usingEnvironmentVariables(environmentVariables)
-                .downloadableFrom("the internet")
-                .asAFile()
-        then:
-        gitExe.getAbsolutePath() == configuredPath
-    }
-
     def "should be able to configure OS-specific drivers"() {
         given:
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables()

@@ -1031,6 +1031,11 @@
                             </table>
                         </td>
                     </tr>
+                    <tr th:block th:if="${!#strings.isEmpty(report.link)}">
+                        <td class="compact-wrapper" style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;" >
+                            <a th:href="${report.link}">View full report</a>
+                        </td>
+                    </tr>
                     <tr th:block th:if="${#lists.size(coverage) > 0}">
                         <td class="compact-wrapper" style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;" ><h3 style="color:#222222;font-family:Helvetica, sans-serif;font-weight:400;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;font-size:20px;text-align:center;" >Functional Coverage</h3></td>
                     </tr>

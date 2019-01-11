@@ -21,6 +21,7 @@ class WhenGeneratingAnEmailableReport {
 
     init {
         environmentVariables.setProperty("serenity.summary.report.title", "A Simple Cucumber Report")
+        environmentVariables.setProperty("serenity.report.url", "http://my.serenity.report")
         environmentVariables.setProperty("project.version", "1.2.3")
     }
 
@@ -44,6 +45,12 @@ class WhenGeneratingAnEmailableReport {
         @Test
         fun `should have a configurable title`() {
             assertThat(reportContents).contains("A Simple Cucumber Report")
+        }
+
+        @Test
+        fun `should have a report link`() {
+            assertThat(reportContents).contains("View full report")
+            assertThat(reportContents).contains("http://my.serenity.report")
         }
 
         @Test

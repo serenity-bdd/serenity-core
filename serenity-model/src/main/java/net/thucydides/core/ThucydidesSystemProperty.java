@@ -111,6 +111,11 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_SUMMARY_REPORT_TITLE,
 
+    /**
+     * Link to the generated Serenity report to embed in the emailable summary report.
+     */
+    SERENITY_REPORT_URL,
+
     @Deprecated
     THUCYDIDES_HOME,
 

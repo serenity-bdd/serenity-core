@@ -2,6 +2,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.capabilities.AddCustomCapabilities;
 import net.thucydides.core.webdriver.capabilities.ChromePreferences;
 import net.thucydides.core.webdriver.chrome.OptionsSplitter;
@@ -9,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +19,7 @@ import static net.thucydides.core.ThucydidesSystemProperty.HEADLESS_MODE;
 
 public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
+    private final static List<String> AUTOMATION_OPTIONS = Arrays.asList("--enable-automation","--test-type");
     private final EnvironmentVariables environmentVariables;
     private final String driverOptions;
 
@@ -58,7 +61,6 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
         String chromeSwitches = environmentVariables.getProperty(ThucydidesSystemProperty.CHROME_SWITCHES);
 
-        options.addArguments("test-type");
         if (StringUtils.isNotEmpty(chromeSwitches)) {
             List<String> arguments = new OptionsSplitter().split(chromeSwitches);
             options.addArguments(arguments);
@@ -71,11 +73,17 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
     private void addRuntimeOptionsTo(ChromeOptions options) {
 
-        options.addArguments("test-type");
+
+        if (ThucydidesSystemProperty.USE_CHROME_AUTOMATION_OPTIONS.booleanFrom(environmentVariables,true)) {
+            options.addArguments(AUTOMATION_OPTIONS);
+        }
+
         if (StringUtils.isNotEmpty(driverOptions)) {
             List<String> arguments = new OptionsSplitter().split(driverOptions);
             options.addArguments(arguments);
         }
+
+
 
         options.setAcceptInsecureCerts(ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables, false));
     }

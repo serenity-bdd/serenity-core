@@ -1,4 +1,4 @@
-package net.thucydides.core.pages
+package net.thucydides.core.pages.integration
 
 import net.serenitybdd.core.pages.PageUrls
 import net.thucydides.core.annotations.DefaultUrl

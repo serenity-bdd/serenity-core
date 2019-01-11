@@ -1,5 +1,6 @@
-package net.thucydides.core.webdriver
+package net.thucydides.core.webdriver.integration
 
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport
 import spock.lang.Specification
 
 /**

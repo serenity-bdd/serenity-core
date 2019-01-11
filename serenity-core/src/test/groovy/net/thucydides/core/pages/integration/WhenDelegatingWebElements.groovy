@@ -1,5 +1,6 @@
-package net.thucydides.core.pages
+package net.thucydides.core.pages.integration
 
+import net.thucydides.core.pages.WebElementFacadeImpl
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement

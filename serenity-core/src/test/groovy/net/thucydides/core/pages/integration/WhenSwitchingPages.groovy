@@ -1,6 +1,7 @@
-package net.thucydides.core.pages
+package net.thucydides.core.pages.integration
 
 import net.serenitybdd.core.pages.PageObject
+import net.thucydides.core.pages.Pages
 import org.openqa.selenium.WebDriver
 import spock.lang.Specification
 
@@ -28,7 +29,7 @@ class WhenSwitchingPages extends Specification {
 
     def "should be able to switch between pages from withing a page"() {
         given:
-            Pages pageFactory = new Pages(driver);
+        Pages pageFactory = new Pages(driver);
             def pageA = pageFactory[PageObjectA]
         when:
             def pageB = pageA.switchToPageB()

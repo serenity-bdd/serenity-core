@@ -50,6 +50,12 @@ public enum ThucydidesSystemProperty {
     PHANTOMJS_WEBDRIVER_PORT,
 
     /**
+     * Sets a number of common chrome options useful for automated testing.
+     * In particular, this includes: --enable-automation --test-type
+     */
+    USE_CHROME_AUTOMATION_OPTIONS,
+
+    /**
      * The driver to be used for remote drivers
      */
     WEBDRIVER_REMOTE_DRIVER,

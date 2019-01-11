@@ -26,6 +26,8 @@ sealed class SerenityEmailReport {
 
         fun reportTitle() : ReportProperty<String> = StringReportProperty(SERENITY_SUMMARY_REPORT_TITLE, DEFAULT_TITLE)
 
+        fun reportLink() : ReportProperty<String> = StringReportProperty(SERENITY_REPORT_URL, "")
+
         fun tagCategoryTitle() : ReportProperty<String> = StringReportProperty(REPORT_TAGTYPE_TITLE, DEFAULT_TAGTYPE_TITLE)
 
         fun scoreboardSize() : ReportProperty<Int> = IntReportProperty(REPORT_SCOREBOARD_SIZE, DEFAULT_SCOREBOARD_SIZE)

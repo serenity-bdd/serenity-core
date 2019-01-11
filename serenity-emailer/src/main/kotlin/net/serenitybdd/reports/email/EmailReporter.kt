@@ -64,6 +64,7 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedRe
     private fun templateFields(environmentVariables: EnvironmentVariables,
                                testOutcomes: TestOutcomes): Map<String, Any> {
         val reportTitle = SerenityEmailReport.reportTitle().configuredIn(environmentVariables)
+        val reportLink = SerenityEmailReport.reportLink().configuredIn(environmentVariables)
         val scoreboardSize = SerenityEmailReport.scoreboardSize().configuredIn(environmentVariables)
         val customReportFields = CustomReportFields(environmentVariables)
         val tagTypes = SerenityEmailReport.tagTypes().configuredIn(environmentVariables)
@@ -73,6 +74,7 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedRe
                 "testOutcomes" to testOutcomes,
                 "report" to ReportInfo(
                         title = reportTitle,
+                        link = reportLink,
                         tagCategoryTitle = tagCategoryTitle,
                         version = environmentVariables.getProperty("project.version", ""),
                         date = testOutcomes.startTime.orElse(ZonedDateTime.now()).toLocalDateTime()

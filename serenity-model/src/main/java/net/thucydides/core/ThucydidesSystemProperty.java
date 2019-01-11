@@ -106,6 +106,10 @@ public enum ThucydidesSystemProperty {
      */
     SERENITY_PROJECT_NAME,
 
+    /**
+     * What name should appear on the email summary report
+     */
+    SERENITY_SUMMARY_REPORT_TITLE,
 
     @Deprecated
     THUCYDIDES_HOME,

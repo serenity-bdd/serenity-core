@@ -20,7 +20,7 @@ class WhenGeneratingAnEmailableReport {
 
 
     init {
-        environmentVariables.setProperty("serenity.project.name", "A Simple Cucumber Report")
+        environmentVariables.setProperty("serenity.summary.report.title", "A Simple Cucumber Report")
         environmentVariables.setProperty("project.version", "1.2.3")
     }
 
@@ -43,7 +43,7 @@ class WhenGeneratingAnEmailableReport {
 
         @Test
         fun `should have a configurable title`() {
-            assertThat(reportContents).contains("Test Report - A Simple Cucumber Report")
+            assertThat(reportContents).contains("A Simple Cucumber Report")
         }
 
         @Test

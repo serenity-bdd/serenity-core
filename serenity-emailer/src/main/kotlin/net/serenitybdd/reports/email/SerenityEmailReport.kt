@@ -24,7 +24,7 @@ sealed class SerenityEmailReport {
 
         fun outputDirectory() : ReportProperty<Path> = PathReportProperty(SERENITY_OUTPUT_DIRECTORY, DEFAULT_OUTPUT_DIRECTORY)
 
-        fun reportTitle() : ReportProperty<String> = StringReportProperty(SERENITY_PROJECT_NAME, DEFAULT_TITLE)
+        fun reportTitle() : ReportProperty<String> = StringReportProperty(SERENITY_SUMMARY_REPORT_TITLE, DEFAULT_TITLE)
 
         fun tagCategoryTitle() : ReportProperty<String> = StringReportProperty(REPORT_TAGTYPE_TITLE, DEFAULT_TAGTYPE_TITLE)
 

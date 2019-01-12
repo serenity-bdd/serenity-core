@@ -2,6 +2,7 @@ package net.thucydides.core.steps;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
+import net.bytebuddy.ByteBuddy;
 import net.serenitybdd.core.IgnoredStepException;
 import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.Serenity;

@@ -222,7 +222,9 @@ subprojects {
 
 
     dependencies {
+        compile "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
         compile "com.google.guava:guava:${guavaVersion}"
+        
         compile("com.google.inject:guice:${guiceVersion}") {
             exclude group: "org.ow2.asm", module: "asm"
             exclude group: "asm", module: "asm"
@@ -244,11 +246,6 @@ subprojects {
 
         compile("commons-logging:commons-logging:${commonsLoggingVersion}")
         compile "junit:junit:${junitVersion}"
-        compile("org.mockito:mockito-core:${mockitoCoreVersion}") {
-            exclude group: "org.hamcrest", module: "hamcrest-core"
-            exclude group: "org.objenesis", module: "objenesis"
-        }
-        compile "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
 
         compile "io.vavr:vavr:${vavrVersion}"
 
@@ -257,9 +254,15 @@ subprojects {
         compile "com.sun.xml.bind:jaxb-core:${jaxbCoreVersion}"
         compile "com.sun.xml.bind:jaxb-impl:${jaxbCoreVersion}"
         compile "javax.activation:activation:${activationVersion}"
-        
+
         testCompile("ch.qos.logback:logback-classic:${logbackVersion}") {
             exclude group: "org.slf4j", module: 'slf4j-api'
+        }
+        compile("org.mockito:mockito-core:${mockitoCoreVersion}") {
+            exclude group: "org.hamcrest", module: "hamcrest-core"
+            exclude group: "org.objenesis", module: "objenesis"
+            exclude group: "net.bytebuddy", module: "byte-buddy"
+            exclude group: "net.bytebuddy", module: "byte-buddy-agent"
         }
         testCompile "org.hamcrest:hamcrest-integration:${hamcrestVersion}"
         testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"

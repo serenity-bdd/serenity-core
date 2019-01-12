@@ -25,7 +25,6 @@ import net.thucydides.core.pages.Pages;
 import net.thucydides.core.screenshots.ScreenshotAndHtmlSource;
 import net.thucydides.core.screenshots.ScreenshotException;
 import net.thucydides.core.webdriver.*;
-import org.mockito.Mockito;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionId;
 import org.slf4j.Logger;
@@ -315,7 +314,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     private TestOutcome unavailableTestOutcome() {
-        return Mockito.mock(TestOutcome.class);
+        return new UnavailableTestOutcome("Test outcome unavailable");
     }
 
     public boolean isAvailable() {

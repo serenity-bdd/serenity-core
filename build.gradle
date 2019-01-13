@@ -25,6 +25,7 @@ plugins {
 }
 
 apply plugin: "se.bjurr.gitchangelog.git-changelog-gradle-plugin"
+apply plugin: 'project-report'
 
 group = 'net.serenity-bdd'
 
@@ -70,34 +71,13 @@ allprojects {
             // force versions to fix dependency convergence problems
             // whe//n updating this list, update Serenity's declared deps if exists
             // TODO make work for generated Maven POM...
-            // it's working for gradle build, but also had to exclude old transitives for geio.appiumnerated POM
-            force "com.thoughtworks.xstream:xstream:${xstreamVersion}",
-                    "commons-collections:commons-collections:${commonsCollectionsVersion}",
-                    "commons-logging:commons-logging:${commonsLoggingVersion}",
-                    "xml-apis:xml-apis:${xmlApisVersion}",
-                    "org.springframework:spring-context:${springVersion}",
-                    "org.seleniumhq.selenium:selenium-java:${seleniumVersion}",
-                    "org.seleniumhq.selenium:selenium-server:${seleniumVersion}",
-                    "org.seleniumhq.selenium:selenium-remote-driver:${seleniumVersion}",
-                    "org.seleniumhq.selenium:selenium-api:${seleniumVersion}",
-                    "org.seleniumhq.selenium:selenium-support:${seleniumVersion}",
-                    "org.seleniumhq.selenium:htmlunit-driver:${htmlunitDriverVersion}",
-                    "com.squareup.okio:okio:${okioVersion}",
-                    "org.codehaus.groovy:groovy-all:${groovyVersion}",
-                    "org.eclipse.jetty:jetty-http:${jettyVersion}",
-                    "org.eclipse.jetty:jetty-util:${jettyVersion}",
-                    "org.eclipse.jetty:jetty-client:${jettyVersion}",
-                    "org.eclipse.jetty:jetty-xml:${jettyVersion}",
-                    "org.eclipse.jetty.websocket:websocket-client:${jettyVersion}",
-                    "org.eclipse.jetty.websocket:websocket-common:${jettyVersion}",
-                    "org.eclipse.jetty.websocket:websocket-api:${jettyVersion}",
-                    "commons-codec:commons-codec:${commonsCodecVersion}",
+            // it's working for gradle build, but also had to exclude old transitives for generated POM
+            force   "commons-collections:commons-collections:${commonsCollectionsVersion}",
                     "org.apache.commons:commons-text:${commonsText}",
                     "org.apache.httpcomponents:httpmime:${httpclientVersion}",
-                    "org.apache.httpcomponents:httpcore:${httpCoreVersion}",
-                    "org.apache.httpcomponents:httpclient:${httpclientVersion}",
-                    "javax.websocket:javax.websocket-api:${websocketVersion}",
-                    "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
+                    "org.eclipse.jetty:jetty-http:${jettyVersion}",
+                    "org.eclipse.jetty:jetty-util:${jettyVersion}",
+                    "org.eclipse.jetty:jetty-io:${jettyVersion}"
         }
     }
 }
@@ -223,6 +203,7 @@ subprojects {
 
     dependencies {
         compile "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
+        compile "net.bytebuddy:byte-buddy-agent:${byteBuddyVersion}"
         compile "com.google.guava:guava:${guavaVersion}"
         
         compile("com.google.inject:guice:${guiceVersion}") {

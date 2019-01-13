@@ -24,6 +24,7 @@ dependencies {
     }
     compile("commons-beanutils:commons-beanutils-core:${beanUtilsVersion}") {
         exclude group: 'commons-logging', module: 'commons-logging'
+        exclude group: 'commons-collections', module: 'commons-collections'
     }
 //    compile "javax.validation:validation-api:${javaxValidationVersion}"
     compile "net.sf.opencsv:opencsv:${openCsvVersion}"

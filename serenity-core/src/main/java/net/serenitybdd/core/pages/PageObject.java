@@ -28,6 +28,7 @@ import net.thucydides.core.webelements.RadioButtonGroup;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -717,8 +718,7 @@ public abstract class PageObject {
 
     private void open(final OpenMode openMode, final String urlTemplateName,
                       final String[] parameterValues) {
-        String startingUrl = pageUrls.getNamedUrl(urlTemplateName,
-                parameterValues);
+        String startingUrl = pageUrls.getNamedUrl(urlTemplateName, parameterValues);
         LOGGER.debug("Opening page at url {}", startingUrl);
         openPageAtUrl(startingUrl);
         checkUrlPatterns(openMode);
@@ -925,6 +925,10 @@ public abstract class PageObject {
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(String xpathOrCssSelector, Object... arguments) {
         return element(xpathOrCssSelector, arguments);
+    }
+
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(By bySelector) {
+        return element(bySelector);
     }
 
     /**

@@ -154,8 +154,8 @@ public class Actor implements PerformsTasks, SkipNested {
                 performSilently(task);
             } else if (isSilent(task)) {
                 performSilently(task);
-            } else if (shouldPerformSilently(task)) {
-                performSilently(task);
+            } else if (shouldNotReport(task)) {
+                performWithoutReporting(task);
             } else {
                 perform(InstrumentedTask.of(task));
             }
@@ -163,7 +163,7 @@ public class Actor implements PerformsTasks, SkipNested {
         endPerformance();
     }
 
-    private boolean shouldPerformSilently(Performable task) {
+    private boolean shouldNotReport(Performable task) {
         return !InstrumentedTask.isInstrumented(task) && !InstrumentedTask.shouldInstrument(task);
     }
 
@@ -172,6 +172,14 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     private <T extends Performable> void performSilently(T todo) {
+        perform(todo);
+    }
+
+    private <T extends Performable> void performWithoutReporting(T todo) {
+        perform(todo);
+    }
+
+    private <T extends Performable> void performConditionally(T todo) {
         perform(todo);
     }
 

@@ -4,6 +4,7 @@ import net.serenitybdd.core.PendingStepException;
 import net.serenitybdd.core.Serenity;
 import net.serenitybdd.core.SkipNested;
 import net.serenitybdd.core.eventbus.Broadcaster;
+import net.serenitybdd.markers.IsHidden;
 import net.serenitybdd.screenplay.events.*;
 import net.serenitybdd.screenplay.exceptions.IgnoreStepException;
 import net.serenitybdd.screenplay.facts.Fact;
@@ -154,13 +155,17 @@ public class Actor implements PerformsTasks, SkipNested {
                 performSilently(task);
             } else if (isSilent(task)) {
                 performSilently(task);
-            } else if (shouldNotReport(task)) {
+            } else if (isHidden(task) || shouldNotReport(task)) {
                 performWithoutReporting(task);
             } else {
                 perform(InstrumentedTask.of(task));
             }
         }
         endPerformance();
+    }
+
+    private boolean isHidden(Performable task) {
+        return task instanceof IsHidden;
     }
 
     private boolean shouldNotReport(Performable task) {

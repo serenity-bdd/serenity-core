@@ -24,6 +24,8 @@ public class SendKeysIntoBy extends EnterValue {
     @Step("{0} enters '#theText' into #element")
     public <T extends Actor> void performAs(T theUser) {
         resolveFor(theUser).sendKeys(theText);
-        resolveFor(theUser).sendKeys(getFollowedByKeys());
+        if (getFollowedByKeys().length > 0) {
+            resolveFor(theUser).sendKeys(getFollowedByKeys());
+        } 
     }
 }

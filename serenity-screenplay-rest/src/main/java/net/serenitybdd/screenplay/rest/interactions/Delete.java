@@ -18,7 +18,7 @@ public class Delete extends RestInteraction {
         this.resource = resource;
     }
 
-    @Step("{0} executes a PUT on the resource #resource")
+    @Step("{0} executes a DELETE on the resource #resource")
     @Override
     public <T extends Actor> void performAs(T actor) {
         rest().delete(as(actor).resolve(resource));

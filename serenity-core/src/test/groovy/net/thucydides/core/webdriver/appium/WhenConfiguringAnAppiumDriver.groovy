@@ -1,12 +1,20 @@
 package net.thucydides.core.webdriver.appium
 
+import io.appium.java_client.android.AndroidDriver
+import net.serenitybdd.core.webdriver.driverproviders.RemoteWebdriverStub
 import net.thucydides.core.util.FileSeparatorUtil
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.util.PathProcessor
 import net.thucydides.core.webdriver.MobilePlatform
 import net.thucydides.core.webdriver.ThucydidesConfigurationException
+import net.thucydides.core.webdriver.stubs.AndroidWebDriverStub
+import org.openqa.selenium.By
+import org.openqa.selenium.Platform
+import org.openqa.selenium.WebDriver
+import org.openqa.selenium.WebElement
+import org.openqa.selenium.remote.DesiredCapabilities
+import org.openqa.selenium.remote.RemoteWebDriver
 import spock.lang.Specification
-import spock.lang.Unroll
 
 /**
  * Created by Ben on 10/11/14.
@@ -26,6 +34,64 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         value     | expectedPlatform
         "IOS"     | MobilePlatform.IOS
         "android" | MobilePlatform.ANDROID
+    }
+
+    def "can alternatively derive the target platform from the context variable"() {
+        given:
+        environmentVariables.setProperty("context", value)
+        when:
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        then:
+        appiumConfiguration.targetPlatform == expectedPlatform
+        where:
+        value     | expectedPlatform
+        "IOS"     | MobilePlatform.IOS
+        "android" | MobilePlatform.ANDROID
+    }
+
+    def "the context overrides the environment property for the target platform"() {
+        given:
+        environmentVariables.setProperty("appium.platformName", env)
+        environmentVariables.setProperty("context", context)
+        when:
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        then:
+        appiumConfiguration.targetPlatform == expectedPlatform
+        where:
+        context   | env       | expectedPlatform
+        "IOS"     | "android" | MobilePlatform.IOS
+        "android" | "IOS"     | MobilePlatform.ANDROID
+    }
+
+    def "invalid contexts fall back to the environment property"() {
+        given:
+        environmentVariables.setProperty("appium.platformName", env)
+        environmentVariables.setProperty("context", context)
+        when:
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        then:
+        appiumConfiguration.targetPlatform == expectedPlatform
+        where:
+        env       | context      | expectedPlatform
+        "IOS"     | "Oreo"       | MobilePlatform.IOS
+        "android" | "IOS6.0"     | MobilePlatform.ANDROID
+    }
+
+    def "the platform may be defined by the driver capabilities"() {
+        given:
+        def driver = Stub(RemoteWebDriver)
+        def caps = new DesiredCapabilities()
+        caps.setPlatform(Platform.valueOf(value.toUpperCase()))
+        driver.getCapabilities() >> caps
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        when:
+        def definedPlatform = appiumConfiguration.getTargetPlatform(driver)
+        then:
+        definedPlatform == expectedPlatform
+        where:
+        value     | expectedPlatform
+        "IOS"     | MobilePlatform.IOS
+        "ANDROID" | MobilePlatform.ANDROID
     }
 
     def "should provide meaningful message if the platform is not specified"() {

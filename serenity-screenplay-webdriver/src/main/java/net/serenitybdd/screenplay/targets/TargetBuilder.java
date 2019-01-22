@@ -27,5 +27,14 @@ public class TargetBuilder<T> {
     public Target located(By locator) {
         return new ByTarget(targetElementName, locator, iFrame);
     }
+    
+    // Target support multi located element on Android and iOS both (#1531)
+    public Target locatedForAndroid(MobileBy locator) {
+        // TO DO
+    }
+    
+    public Target locatedForIOS(MobileBy locator) {
+        // TO DO
+    }
 
 }

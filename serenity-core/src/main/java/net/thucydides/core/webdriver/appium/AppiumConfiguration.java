@@ -2,21 +2,25 @@ package net.thucydides.core.webdriver.appium;
 
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.PathProcessor;
-import net.thucydides.core.webdriver.MobilePlatform;
-import net.thucydides.core.webdriver.OptionsMap;
-import net.thucydides.core.webdriver.ThucydidesConfigurationException;
+import net.thucydides.core.webdriver.*;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class AppiumConfiguration {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AppiumConfiguration.class);
     private static final String DEFAULT_URL = "http://127.0.0.1:4723/wd/hub";
     private final EnvironmentVariables environmentVariables;
 
@@ -29,11 +33,33 @@ public class AppiumConfiguration {
     }
 
     /**
-     * Return the Appium platform defined in the system properties. Must be either ios or android.
+     * Define the platform based on the {@link DesiredCapabilities} of the {@link WebDriver} first. If that doesn't
+     * work, fall back to the Appium platform defined in the system properties or the context.
+     * Must be either ios or android.
+     */
+    public MobilePlatform getTargetPlatform(WebDriver driver) {
+        try {
+            return MobilePlatform.valueOf(((RemoteWebDriver) driver).getCapabilities().getPlatform().name());
+        } catch (IllegalArgumentException e) {
+            LOGGER.debug("Platform was not a MobilePlatform:", e);
+        }
+
+        return getTargetPlatform();
+    }
+
+    /**
+     * Return the Appium platform defined in the system properties or the context. Must be either ios or android.
      */
     public MobilePlatform getTargetPlatform() {
+        Optional contextPlatform = Stream.of(definedContext())
+                                         .filter(platform -> platform.isDefined)
+                                         .findFirst();
+        if (contextPlatform.isPresent()) {
+            return (MobilePlatform) contextPlatform.get();
+        }
+
         return Stream.of(definedTargetPlatform())
-                .filter( platform -> platform.isDefined)
+                .filter(platform -> platform.isDefined)
                 .findFirst()
                 .orElseThrow(() -> new ThucydidesConfigurationException("The appium.platformName needs to be specified (either IOS or ANDROID)"));
     }
@@ -48,6 +74,16 @@ public class AppiumConfiguration {
         } catch (IllegalArgumentException e) {
             throw new ThucydidesConfigurationException("Illegal appium.platformName value (needs to be either IOS or ANDROID):" + targetPlatform);
         }
+    }
+
+    public MobilePlatform definedContext() {
+        String targetPlatform = environmentVariables.getProperty("context","NONE");
+        try {
+            return MobilePlatform.valueOf(targetPlatform.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            LOGGER.debug("The provided context ({}) could not be used as the MobilePlatform", targetPlatform);
+        }
+        return MobilePlatform.NONE;
     }
 
     public URL getUrl() {

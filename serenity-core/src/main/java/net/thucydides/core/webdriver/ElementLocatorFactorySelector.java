@@ -48,7 +48,7 @@ public class ElementLocatorFactorySelector {
         if (!WebDriverType.isMobile(driver)) {
             return MobilePlatform.NONE;
         }
-        return appiumConfiguration.getTargetPlatform();
+        return appiumConfiguration.getTargetPlatform(driver);
     }
 
     public ElementLocatorFactorySelector withTimeout(int timeoutInSeconds) {

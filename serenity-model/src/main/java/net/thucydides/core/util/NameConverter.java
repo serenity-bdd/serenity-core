@@ -6,6 +6,7 @@ import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Utility class to convert test case and method names into human-readable form.
@@ -78,7 +79,7 @@ public final class NameConverter {
     public static String splitCamelCase(final String name) {
         List<String> splitWords = new ArrayList<>();
 
-        List<String> phrases = Splitter.on(" ").omitEmptyStrings().splitToList(name);
+        List<String> phrases = Splitter.on(" ").trimResults().omitEmptyStrings().splitToList(name);
 
         for(String phrase : phrases) {
             splitWords.addAll(splitWordsIn(phrase));
@@ -103,7 +104,7 @@ public final class NameConverter {
         }
         splitWords.add(lowercaseOrAcronym(currentWord));
 
-        return splitWords;
+        return splitWords.stream().filter(word -> !word.trim().isEmpty()).collect(Collectors.toList());
     }
 
     private static String lowercaseOrAcronym(String word) {

@@ -173,7 +173,11 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     public <ANSWER> ANSWER asksFor(Question<ANSWER> question) {
-        return question.answeredBy(this);
+        beginPerformance();
+        ANSWER answer = question.answeredBy(this);
+        endPerformance();
+
+        return answer;
     }
 
     private <T extends Performable> void performSilently(T todo) {
@@ -221,7 +225,7 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     private <T extends Performable> void notifyPerformanceOf(T todo) {
-        Broadcaster.getEventBus().post(new ActorPerforms(todo));
+        Broadcaster.getEventBus().post(new ActorPerforms(todo, getName()));
     }
 
     private <T extends Performable> boolean isPending(T todo) {
@@ -315,8 +319,10 @@ public class Actor implements PerformsTasks, SkipNested {
     }
 
     public <ANSWER> void remember(String key, Question<ANSWER> question) {
+        beginPerformance();
         ANSWER answer = this.asksFor(question);
         notepad.put(key, answer);
+        endPerformance();
     }
 
     public void remember(String key, Object value) {
@@ -346,6 +352,7 @@ public class Actor implements PerformsTasks, SkipNested {
 
 
     private void startConsequenceCheck() {
+        beginPerformance();
         consequenceListener.beginConsequenceCheck();
         Broadcaster.getEventBus().post(new ActorBeginsConsequenceCheckEvent(name));
     }
@@ -353,6 +360,7 @@ public class Actor implements PerformsTasks, SkipNested {
     private void endConsequenceCheck() {
         consequenceListener.endConsequenceCheck();
         Broadcaster.getEventBus().post(new ActorEndsConsequenceCheckEvent(name));
+        endPerformance();
     }
 
 

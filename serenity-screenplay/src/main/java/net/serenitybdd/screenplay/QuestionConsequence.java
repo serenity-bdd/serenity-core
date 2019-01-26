@@ -35,7 +35,7 @@ public class QuestionConsequence<T> extends BaseConsequence<T> {
     public void evaluateFor(Actor actor) {
         if (thisStepShouldBeIgnored() && !StepEventBus.getEventBus().softAssertsActive()) { return; }
 
-        Broadcaster.getEventBus().post(new ActorAsksQuestion(question));
+        Broadcaster.getEventBus().post(new ActorAsksQuestion(question, actor.getName()));
 
         Serenity.injectScenarioStepsInto(question);
 

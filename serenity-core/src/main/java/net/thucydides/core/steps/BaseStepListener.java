@@ -862,16 +862,11 @@ public class BaseStepListener implements StepListener, StepPublisher {
             return new ArrayList<>();
         }
 
-        List<ScreenshotAndHtmlSource> screenshots = getActiveDrivers().entrySet().stream()
-                .map(
-                        entry -> new ScreenshotAndHtmlSource(
-                                screenshotFrom(entry.getValue()),
-                                sourceFrom(result, entry.getValue())
-                        )
-                )
-                .collect(Collectors.toList());
-
-        return screenshots;
+        return SerenityWebdriverManager.inThisTestThread().getCurrentDrivers().stream().map(
+                        driver -> new ScreenshotAndHtmlSource(
+                                screenshotFrom(driver),
+                                sourceFrom(result, driver))
+                ).collect(Collectors.toList());
     }
 
     private File screenshotFrom( WebDriver driver) {

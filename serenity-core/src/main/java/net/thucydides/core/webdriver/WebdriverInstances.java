@@ -199,6 +199,26 @@ public class WebdriverInstances {
         return activeDrivers;
     }
 
+    private WebDriver currentActiveDriver;
+
+    public void setCurrentActiveDriver(WebDriver driver) {
+        this.currentActiveDriver = driver;
+    }
+
+    public void clearCurrentActiveDriver() {
+        this.currentActiveDriver = null;
+    }
+
+    public List<WebDriver> getCurrentDrivers() {
+        if (currentActiveDriver == null) {
+            return getActiveDriverMap().entrySet().stream()
+                    .map(entry -> entry.getValue())
+                    .collect(Collectors.toList());
+        } else {
+            return Arrays.asList(currentActiveDriver);
+        }
+    }
+
     public Map<String, WebDriver> getActiveDriverMap() {
         Map<String, WebDriver> activeDrivers = new HashMap<>();
 

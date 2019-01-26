@@ -7,14 +7,13 @@ import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.RefersToActor;
 import net.serenitybdd.screenplay.events.ActorAsksQuestion;
+import net.serenitybdd.screenplay.events.ActorBeginsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorEndsPerformanceEvent;
 import net.serenitybdd.screenplay.events.ActorPerforms;
 import net.serenitybdd.screenplay.exceptions.ActorCannotBrowseTheWebException;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.steps.PageObjectDependencyInjector;
-import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
-import net.thucydides.core.webdriver.WebDriverFacade;
-import net.thucydides.core.webdriver.WebdriverManager;
+import net.thucydides.core.webdriver.*;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +72,13 @@ public class BrowseTheWeb extends PageObject implements Ability, RefersToActor {
         injector.injectDependenciesInto(questionEvent.getQuestion());
     }
 
-    @Subscribe public void endPerformance(ActorEndsPerformanceEvent performanceEvent) {}
+    @Subscribe public void beginPerformance(ActorBeginsPerformanceEvent performanceEvent) {
+        SerenityWebdriverManager.inThisTestThread().setCurrentActiveDriver(getDriver());
+    }
+
+    @Subscribe public void endPerformance(ActorEndsPerformanceEvent performanceEvent) {
+        SerenityWebdriverManager.inThisTestThread().clearCurrentActiveDriver();
+    }
 
     @Override
     public <T extends Ability> T asActor(Actor actor) {

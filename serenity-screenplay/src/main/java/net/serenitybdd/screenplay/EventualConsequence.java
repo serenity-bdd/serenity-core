@@ -4,6 +4,10 @@ import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.time.Stopwatch;
 import net.serenitybdd.markers.CanBeSilent;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
     public static final int A_SHORT_PERIOD_BETWEEN_TRIES = 100;
     private final Consequence<T> consequenceThatMightTakeSomeTime;
@@ -12,6 +16,7 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
 
     private AssertionError caughtAssertionError = null;
     private RuntimeException caughtRuntimeException = null;
+    private List<Class<? extends Throwable>> exceptionsToIgnore = new ArrayList<>();
 
     public EventualConsequence(Consequence<T> consequenceThatMightTakeSomeTime, long timeout) {
         this(consequenceThatMightTakeSomeTime, timeout, false);
@@ -33,7 +38,7 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
     }
 
     public EventualConsequenceBuilder<T> waitingForNoLongerThan(long amount) {
-        return new EventualConsequenceBuilder(consequenceThatMightTakeSomeTime, amount);
+        return new EventualConsequenceBuilder<>(consequenceThatMightTakeSomeTime, amount);
     }
 
     @Override
@@ -46,14 +51,35 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
                 consequenceThatMightTakeSomeTime.evaluateFor(actor);
                 return;
             } catch (AssertionError assertionError) {
-                caughtAssertionError = assertionError;
+                if (!shouldIgnoreException(assertionError)) {
+                    caughtAssertionError = assertionError;
+                }
             } catch (RuntimeException runtimeException) {
-                caughtRuntimeException = runtimeException;
+                if (!shouldIgnoreException(runtimeException)) {
+                    caughtRuntimeException = runtimeException;
+                }
+            } catch (Throwable exception) {
+                if (!shouldIgnoreException(exception)) {
+                    throw exception;
+                }
             }
+//            } catch(Throwable exception) {
+//                if (!shouldIgnoreException(exception)) {
+//                    if (exception instanceof AssertionError) {
+//                        caughtAssertionError =(AssertionError) exception;
+//                    } else if (exception instanceof RuntimeException) {
+//                        caughtRuntimeException = (RuntimeException) exception;
+//                    }
+//                }
+//            }
             pauseBeforeNextAttempt();
         } while (stopwatch.lapTime() < timeout);
 
         throwAnyCaughtErrors();
+    }
+
+    private boolean shouldIgnoreException(Throwable exception) {
+        return exceptionsToIgnore.contains(exception.getClass());
     }
 
     private void pauseBeforeNextAttempt() {
@@ -81,6 +107,11 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
     @Override
     public Consequence<T> orComplainWith(Class<? extends Error> complaintType) {
         return new EventualConsequence(consequenceThatMightTakeSomeTime.orComplainWith(complaintType));
+    }
+
+    public Consequence<T> ignoringExceptions(Class<? extends Throwable>... exceptionsToIgnore) {
+        this.exceptionsToIgnore = Arrays.asList(exceptionsToIgnore);
+        return this;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package net.thucydides.core.requirements;
 
 import net.serenitybdd.core.collect.NewList;
-import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.files.TheDirectoryStructure;
 import net.thucydides.core.guice.Injectors;
@@ -24,7 +23,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.sort;
@@ -150,7 +148,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
                     Set<String> directoryPaths = getRootDirectoryPaths();
 
                     for (String path : directoryPaths) {
-                        File rootDirectory = new File(path);
+                        File rootDirectory = new File(System.getProperty("user.dir") + File.pathSeparator + path);
 
                         if (rootDirectory.exists()) {
 

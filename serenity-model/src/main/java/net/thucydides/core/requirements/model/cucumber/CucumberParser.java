@@ -20,7 +20,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -99,9 +98,10 @@ public class CucumberParser {
                 return  (List<CucumberFeature>)load.invoke(null, multiLoader, listOfFiles);
             } catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException cucumber2Exception)  {
                 LOGGER.error("Found no Cucumber 2.x.x class " + CUCUMBER_2_FEATURE_LOADER + " failed loading CucumberFeatures ", cucumber2Exception);
+                LOGGER.error("Found neither Cucumber 2.x.x nor Cucumber 4.x runtime in classpath");
+                throw new RuntimeException("Found neither Cucumber 2.x.x nor Cucumber 4.x runtime in classpath",cucumber2Exception);
             }
         }
-        return null;
     }
 
     public Optional<Narrative> loadFeatureNarrative(File narrativeFile) {

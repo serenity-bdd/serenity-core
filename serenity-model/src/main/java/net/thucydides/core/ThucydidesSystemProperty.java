@@ -1195,12 +1195,6 @@ public enum ThucydidesSystemProperty {
     SERENITY_WEBDRIVER_COLLECTION_LOADING_STRATEGY("serenity.webdriver.collection_loading_strategy"),
 
     /**
-     * Serenity will try to download drivers not present on the system.
-     * If you don't want this behaviour, set this property to false
-     */
-    AUTOMATIC_DRIVER_DOWNLOAD,
-
-    /**
      * If the Gecko Driver is on the system path, it will be used (with Marionnette) by default.
      * If you want to use the old-style Firefox driver, but have gecko on the system path,
      * then set this property to false.

@@ -16,6 +16,8 @@ public class TypeValueIntoElement extends TypeValue {
     @Step("{0} enters '#theText' into #element")
     public <T extends Actor> void performAs(T theUser) {
         element.sendKeys(theText);
-        element.sendKeys(getFollowedByKeys());
+        if (getFollowedByKeys().length > 0) {
+            element.sendKeys(getFollowedByKeys());
+        }
     }
 }

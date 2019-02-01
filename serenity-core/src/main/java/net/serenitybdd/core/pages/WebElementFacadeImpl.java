@@ -31,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 import java.time.Duration;
 import java.util.stream.Collectors;
 
+import static net.serenitybdd.core.pages.ParameterisedLocator.withArguments;
 import static net.serenitybdd.core.pages.WebElementExpectations.*;
 import static net.serenitybdd.core.selectors.Selectors.isXPath;
 
@@ -217,6 +218,11 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
 
     @Override
+    public WebElementFacade then(String xpathOrCssSelector, Object... arguments) {
+        return findBy(xpathOrCssSelector, arguments);
+    }
+
+    @Override
     public WebElementFacade then(String xpathOrCssSelector) {
         return findBy(xpathOrCssSelector);
     }
@@ -237,6 +243,10 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
         return wrapWebElement(driver, nestedElement, timeoutInMilliseconds(), waitForTimeoutInMilliseconds,
                               "element located by " + xpathOrCssSelector);
+    }
+
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T findBy(String xpathOrCssSelector, Object... arguments) {
+        return findBy(withArguments(xpathOrCssSelector,arguments));
     }
 
 
@@ -262,6 +272,10 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         }
 
         return webElementFacadesFrom(nestedElements);
+    }
+
+    public List<WebElementFacade> thenFindAll(String xpathOrCssSelector, Object... arguments) {
+        return thenFindAll(withArguments(xpathOrCssSelector,arguments));
     }
 
     private List<WebElementFacade> webElementFacadesFrom(List<WebElement> nestedElements) {

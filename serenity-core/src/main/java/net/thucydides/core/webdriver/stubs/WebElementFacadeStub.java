@@ -73,6 +73,11 @@ public class WebElementFacadeStub implements WebElementFacade {
     }
 
     @Override
+    public WebElementFacade then(String xpathOrCssSelector, Object... arguments) {
+        return this;
+    }
+
+    @Override
     public WebElementFacade findBy(String xpathOrCssSelector) {
         return this;
 
@@ -80,7 +85,17 @@ public class WebElementFacadeStub implements WebElementFacade {
 
 
     @Override
+    public WebElementFacade findBy(String xpathOrCssSelector, Object... arguments) {
+        return this;
+    }
+
+    @Override
     public List<WebElementFacade> thenFindAll(String xpathOrCssSelector) {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<WebElementFacade> thenFindAll(String xpathOrCssSelector, Object... arguments) {
         return new ArrayList<>();
     }
 

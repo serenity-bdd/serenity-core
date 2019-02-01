@@ -12,7 +12,6 @@ import org.openqa.selenium.interactions.internal.Locatable;
 import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.ui.Wait;
 
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -21,11 +20,13 @@ public interface WebElementFacade extends WebElement, WrapsElement, Locatable, W
         FindsByIosUIAutomation, ConfigurableTimeouts {
 
     <T extends WebElementFacade> T then(String xpathOrCssSelector);
+    <T extends WebElementFacade> T then(String xpathOrCssSelector, Object... arguments);
 
     <T extends WebElementFacade> T findBy(String xpathOrCssSelector);
+    <T extends WebElementFacade> T findBy(String xpathOrCssSelector, Object... arguments);
 
-    List<WebElementFacade> thenFindAll(
-            String xpathOrCssSelector);
+    List<WebElementFacade> thenFindAll(String xpathOrCssSelector);
+    List<WebElementFacade> thenFindAll(String xpathOrCssSelector, Object... arguments);
 
     <T extends WebElementFacade> T findBy(By selector);
 

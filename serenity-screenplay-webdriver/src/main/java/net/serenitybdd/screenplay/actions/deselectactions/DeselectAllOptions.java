@@ -19,7 +19,7 @@ public class DeselectAllOptions extends ByAction {
         return Instrumented.instanceOf(DeselectAllOptions.class).withProperties(target);
     }
 
-    @Step("{0} deselects all options in #value")
+    @Step("{0} deselects all options in #target")
     public <T extends Actor> void performAs(T theUser) {
         target.resolveFor(theUser).deselectAll();
     }

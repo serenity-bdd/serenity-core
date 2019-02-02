@@ -22,7 +22,7 @@ public class TypeValueIntoBy extends TypeValue {
         this.locators = NewList.copyOf(locators);
     }
 
-    @Step("{0} enters '#theText' into #element")
+    @Step("{0} enters '#theText' into #locators")
     public <T extends Actor> void performAs(T theUser) {
         resolveFor(theUser).sendKeys(theText);
         if (getFollowedByKeys().length > 0) {

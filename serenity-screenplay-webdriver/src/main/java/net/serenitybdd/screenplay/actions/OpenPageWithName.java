@@ -20,7 +20,7 @@ public class OpenPageWithName implements Interaction {
         this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
     }
 
-    @Step("{0} opens the #targetPage")
+    @Step("{0} opens the #pageName")
     public <T extends Actor> void performAs(T theUser) {
         String pageUrl = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty(pageName);
         if (pageUrl == null) {

@@ -17,6 +17,11 @@ public class HoverOverBy extends Hover {
         return resolveFor(actor);
     }
 
+    @Override
+    protected String getTarget() {
+        return locators.toString();
+    }
+
     public HoverOverBy(List<By> locators) {
         this.locators = locators;
     }

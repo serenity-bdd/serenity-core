@@ -14,7 +14,7 @@ public class SelectByValueFromElement implements Interaction {
         this.value = value;
     }
 
-    @Step("{0} selects #value in #target")
+    @Step("{0} selects #value in #element")
     public <T extends Actor> void performAs(T theUser) {
         element.selectByValue(value);
     }

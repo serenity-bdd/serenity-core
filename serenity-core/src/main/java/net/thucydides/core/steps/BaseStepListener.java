@@ -56,8 +56,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
      */
     private final List<TestOutcome> testOutcomes;
 
-    private ThreadLocal<TestOutcome> currentTestOutcome;
-
     /**
      * Keeps track of what steps have been started but not finished, in order to structure nested steps.
      */
@@ -235,7 +233,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
     public BaseStepListener(final File outputDirectory, Injector injector) {
         this.proxyFactory = WebdriverProxyFactory.getFactory();
         this.testOutcomes = new ArrayList<>();
-        this.currentTestOutcome = new ThreadLocal<>();
         this.currentStepStack = new Stack<>();
         this.currentGroupStack = new Stack<>();
         this.outputDirectory = outputDirectory;
@@ -313,7 +310,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
     }
 
     protected TestOutcome getCurrentTestOutcome() {
-        return currentTestOutcome.get();
+        return latestTestOutcome().orElse(unavailableTestOutcome());
     }
 
     private TestOutcome unavailableTestOutcome() {
@@ -328,7 +325,8 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (testOutcomes.isEmpty()) {
             return java.util.Optional.empty();
         } else {
-            return java.util.Optional.of(currentTestOutcome.get());
+            TestOutcome latestOutcome = testOutcomes.get(testOutcomes.size() - 1);
+            return java.util.Optional.of(latestOutcome);
         }
     }
 
@@ -400,14 +398,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
      */
     public void testStarted(final String testMethod) {
         TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory);
-        this.currentTestOutcome.set(newTestOutcome);
-        recordNewTestOutcome(testMethod, currentTestOutcome.get());
+        recordNewTestOutcome(testMethod, newTestOutcome);
     }
 
     public void testStarted(final String testMethod, final String id) {
         TestOutcome newTestOutcome = TestOutcome.forTestInStory(testMethod, testSuite, testedStory).withId(id);
-        this.currentTestOutcome.set(newTestOutcome);
-        recordNewTestOutcome(testMethod, currentTestOutcome.get());
+        recordNewTestOutcome(testMethod, newTestOutcome);
     }
 
     private void recordNewTestOutcome(String testMethod, TestOutcome newTestOutcome) {
@@ -653,10 +649,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private void markCurrentStepAs(final TestResult result) {
         getCurrentTestOutcome().currentStep().ifPresent(
-                step -> {
-                    step.setResult(result);
-                    updateExampleTableIfNecessary(result);
-                }
+            step -> {
+                step.setResult(result);
+                updateExampleTableIfNecessary(result);
+            }
         );
     }
 

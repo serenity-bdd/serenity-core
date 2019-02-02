@@ -983,6 +983,13 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     @Override
+    public String getTextContent() {
+        if (driverIsDisabled()) { return "";}
+
+        return getElement().getAttribute("textContent");
+    }
+
+    @Override
     public WebElementFacade waitUntilEnabled() {
         try {
             if (!driverIsDisabled()) {

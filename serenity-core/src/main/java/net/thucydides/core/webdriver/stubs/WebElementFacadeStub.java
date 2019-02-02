@@ -442,6 +442,11 @@ public class WebElementFacadeStub implements WebElementFacade {
     }
 
     @Override
+    public String getTextContent() {
+        return "";
+    }
+
+    @Override
     public WebElementFacade waitUntilClickable() {
         return null;
     }

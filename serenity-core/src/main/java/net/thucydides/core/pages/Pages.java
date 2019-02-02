@@ -226,16 +226,18 @@ public class Pages implements Serializable {
     }
 
     private <T extends PageObject> T createFromSimpleConstructor(Class<T> pageObjectClass)
-            throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchFieldException {
+            throws IllegalAccessException, InvocationTargetException, InstantiationException {
         T newPage = null;
         try {
             if (hasDefaultConstructor(pageObjectClass)) {
                 Class[] constructorArgs = new Class[0];
-                Constructor<? extends PageObject> constructor = pageObjectClass.getConstructor(constructorArgs);
+                Constructor<? extends PageObject> constructor = pageObjectClass.getDeclaredConstructor(constructorArgs);
+                constructor.setAccessible(true);
                 newPage = (T) constructor.newInstance();
                 newPage.setDriver(driver);
             } else if (hasOuterClassConstructor(pageObjectClass)) {
-                Constructor<? extends PageObject> constructor = pageObjectClass.getConstructor(new Class[] {pageObjectClass.getEnclosingClass()});
+                Constructor<? extends PageObject> constructor = pageObjectClass.getDeclaredConstructor(new Class[] {pageObjectClass.getEnclosingClass()});
+                constructor.setAccessible(true);
                 newPage = (T) constructor.newInstance(EnclosingClass.of(pageObjectClass).newInstance());
                 newPage.setDriver(driver);
             }
@@ -247,7 +249,7 @@ public class Pages implements Serializable {
     }
 
     private <T extends PageObject> boolean hasDefaultConstructor(Class<T> pageObjectClass) {
-        return Arrays.stream(pageObjectClass.getConstructors())
+        return Arrays.stream(pageObjectClass.getDeclaredConstructors())
                 .anyMatch( constructor -> constructor.getParameters().length == 0 );
     }
 

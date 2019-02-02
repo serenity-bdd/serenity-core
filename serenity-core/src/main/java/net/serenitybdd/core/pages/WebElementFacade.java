@@ -104,6 +104,8 @@ public interface WebElementFacade extends WebElement, WrapsElement, Locatable, W
 
     String getText();
 
+    String getTextContent();
+
     <T extends WebElementFacade> T waitUntilEnabled();
 
     <T extends WebElementFacade> T waitUntilClickable();

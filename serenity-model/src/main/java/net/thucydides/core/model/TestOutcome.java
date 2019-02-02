@@ -1827,6 +1827,10 @@ public class TestOutcome {
         return context;
     }
 
+    public void setContext(String context) {
+        this.context = context;
+    }
+
     /**
      * Returns the name of the test prefixed by the name of the story.
      */
@@ -2518,28 +2522,28 @@ public class TestOutcome {
         outcomeTagsWithoutRedundentTags.removeAll(redundantTags);
 
         return new TestOutcome(startTime,
-                                duration,
-                                title,
-                                description,
-                                name,
-                                id,
-                                testCase,
-                                filteredSteps,
-                                issues,
-                                additionalIssues,
-                                actors,
-                                outcomeTagsWithoutRedundentTags,
-                                userStory,
-                                testFailureCause,
-                                testFailureClassname,
-                                testFailureMessage,
-                                testFailureSummary,
-                                annotatedResult,
-                                filteredDataTable,
-                                qualifier,
-                                driver,
-                                manual,
-                                projectKey,
-                                environmentVariables);
+                duration,
+                title,
+                description,
+                name,
+                id,
+                testCase,
+                filteredSteps,
+                issues,
+                additionalIssues,
+                actors,
+                outcomeTagsWithoutRedundentTags,
+                userStory,
+                testFailureCause,
+                testFailureClassname,
+                testFailureMessage,
+                testFailureSummary,
+                annotatedResult,
+                filteredDataTable,
+                qualifier,
+                driver,
+                manual,
+                projectKey,
+                environmentVariables);
     }
 }

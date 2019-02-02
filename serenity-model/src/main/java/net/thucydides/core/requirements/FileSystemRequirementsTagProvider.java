@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements;
 
 import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.files.TheDirectoryStructure;
 import net.thucydides.core.guice.Injectors;
@@ -23,6 +24,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.sort;
@@ -61,7 +63,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
     public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables) {
         this(environmentVariables,
-            RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory().orElse(Paths.get(DEFAULT_FEATURE_DIRECTORY)).toString());
+                RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory().orElse(Paths.get(DEFAULT_FEATURE_DIRECTORY)).toString());
     }
 
     public FileSystemRequirementsTagProvider(EnvironmentVariables environmentVariables, String rootDirectoryPath) {
@@ -144,11 +146,11 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         if (requirements == null) {
             synchronized (requirementsLock) {
                 if (requirements == null) {
-                        Set<Requirement> allRequirements = new HashSet<>();
+                    Set<Requirement> allRequirements = new HashSet<>();
                     Set<String> directoryPaths = getRootDirectoryPaths();
 
                     for (String path : directoryPaths) {
-                        File rootDirectory = new File(System.getProperty("user.dir") + File.pathSeparator + path);
+                        File rootDirectory = new File(path);
 
                         if (rootDirectory.exists()) {
 
@@ -542,9 +544,9 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
 
         Requirement requirement;
         if (narrative.isPresent()) {
-              requirement = leafRequirementWithNarrative(storyName,
-                                                         storyFile.getPath(),
-                                                         narrative.get()).withType(type.toString());
+            requirement = leafRequirementWithNarrative(storyName,
+                    storyFile.getPath(),
+                    narrative.get()).withType(type.toString());
         } else {
             requirement = storyNamed(storyName, storyFile.getPath()).withType(type.toString());
         }
@@ -604,10 +606,10 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         String shortName = humanReadableVersionOf(requirementDirectory.getName());
         List<Requirement> children = readChildrenFrom(requirementDirectory);
         return Requirement.named(shortName)
-                          .withType(getDefaultType(level))
-                          .withNarrative("")
-                          .withPath(relativeDirectoryOf(requirementDirectory.getPath()))
-                          .withChildren(children);
+                .withType(getDefaultType(level))
+                .withNarrative("")
+                .withPath(relativeDirectoryOf(requirementDirectory.getPath()))
+                .withChildren(children);
     }
 
     private String relativeDirectoryOf(String path) {
@@ -624,9 +626,9 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     private Requirement storyNamed(String storyName, String path) {
         String shortName = humanReadableVersionOf(storyName);
         return Requirement.named(shortName)
-                          .withType(STORY_EXTENSION)
-                          .withNarrative(shortName)
-                          .withPath(relativeDirectoryOf(path));
+                .withType(STORY_EXTENSION)
+                .withNarrative(shortName)
+                .withPath(relativeDirectoryOf(path));
     }
 
     private Requirement leafRequirementWithNarrative(String shortName, String path, Narrative requirementNarrative) {

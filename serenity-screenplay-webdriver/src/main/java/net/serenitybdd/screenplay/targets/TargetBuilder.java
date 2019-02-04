@@ -28,4 +28,25 @@ public class TargetBuilder<T> {
         return new ByTarget(targetElementName, locator, iFrame);
     }
 
+    public LocatesCrossPlatform locatedForAndroid(By androidLocator) {
+        return new CrossPlatformTargetBuilder(targetElementName, androidLocator, iFrame);
+    }
+
+    static class CrossPlatformTargetBuilder implements LocatesCrossPlatform {
+
+        private String targetElementName;
+        private By androidLocator;
+        private Optional<IFrame> iFrame;
+
+        CrossPlatformTargetBuilder(String targetElementName, By androidLocator, Optional<IFrame> iFrame) {
+            this.targetElementName = targetElementName;
+            this.androidLocator = androidLocator;
+            this.iFrame = iFrame;
+        }
+
+        public Target locatedForIOS(By iosLocator) {
+            return new ByTarget(this.targetElementName, this.androidLocator, iosLocator, this.iFrame);
+        }
+
+    }
 }

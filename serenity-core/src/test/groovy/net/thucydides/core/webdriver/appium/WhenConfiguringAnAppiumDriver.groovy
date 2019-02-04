@@ -1,17 +1,11 @@
 package net.thucydides.core.webdriver.appium
 
-import io.appium.java_client.android.AndroidDriver
-import net.serenitybdd.core.webdriver.driverproviders.RemoteWebdriverStub
 import net.thucydides.core.util.FileSeparatorUtil
 import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.util.PathProcessor
 import net.thucydides.core.webdriver.MobilePlatform
 import net.thucydides.core.webdriver.ThucydidesConfigurationException
-import net.thucydides.core.webdriver.stubs.AndroidWebDriverStub
-import org.openqa.selenium.By
 import org.openqa.selenium.Platform
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebElement
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
 import spock.lang.Specification

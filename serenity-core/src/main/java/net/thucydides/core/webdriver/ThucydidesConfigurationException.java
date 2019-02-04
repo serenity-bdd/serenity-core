@@ -7,4 +7,8 @@ public class ThucydidesConfigurationException extends RuntimeException {
     public ThucydidesConfigurationException(String s) {
         super(s);
     }
+
+    public ThucydidesConfigurationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

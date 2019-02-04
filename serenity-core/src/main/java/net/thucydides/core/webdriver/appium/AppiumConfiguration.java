@@ -41,9 +41,9 @@ public class AppiumConfiguration {
         try {
             return MobilePlatform.valueOf(((RemoteWebDriver) driver).getCapabilities().getPlatform().name());
         } catch (IllegalArgumentException e) {
-            LOGGER.debug("Platform was not a MobilePlatform:", e);
+            LOGGER.debug("Platform was not a MobilePlatform. Falling back to other platform definitions.");
         } catch (ClassCastException e) {
-            LOGGER.debug("The driver {} could not be cast to RemoteWebDriver:", driver.getClass().getCanonicalName(), e);
+            LOGGER.debug("The driver could not be cast to RemoteWebDriver. Falling back to other platform definitions.");
         }
 
         return getTargetPlatform();

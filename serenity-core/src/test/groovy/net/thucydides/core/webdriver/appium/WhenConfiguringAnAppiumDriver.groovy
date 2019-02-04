@@ -5,6 +5,7 @@ import net.thucydides.core.util.MockEnvironmentVariables
 import net.thucydides.core.util.PathProcessor
 import net.thucydides.core.webdriver.MobilePlatform
 import net.thucydides.core.webdriver.ThucydidesConfigurationException
+import net.thucydides.core.webdriver.WebDriverFacade
 import org.openqa.selenium.Platform
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
@@ -69,6 +70,21 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         env       | context      | expectedPlatform
         "IOS"     | "Oreo"       | MobilePlatform.IOS
         "android" | "IOS6.0"     | MobilePlatform.ANDROID
+    }
+
+    def "drivers other than RemoteWebDriver should work"() {
+        given:
+        def driver = Stub(WebDriverFacade)
+        environmentVariables.setProperty("appium.platformName", env)
+        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
+        when:
+        def definedPlatform = appiumConfiguration.getTargetPlatform(driver)
+        then:
+        definedPlatform == expectedPlatform
+        where:
+        env       | expectedPlatform
+        "IOS"     | MobilePlatform.IOS
+        "android" | MobilePlatform.ANDROID
     }
 
     def "the platform may be defined by the driver capabilities"() {

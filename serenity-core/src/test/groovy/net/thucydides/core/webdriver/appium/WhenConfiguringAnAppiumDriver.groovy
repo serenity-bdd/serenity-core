@@ -6,7 +6,6 @@ import net.thucydides.core.util.PathProcessor
 import net.thucydides.core.webdriver.MobilePlatform
 import net.thucydides.core.webdriver.ThucydidesConfigurationException
 import net.thucydides.core.webdriver.WebDriverFacade
-import org.openqa.selenium.Platform
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
 import spock.lang.Specification
@@ -91,7 +90,7 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         given:
         def driver = Stub(RemoteWebDriver)
         def caps = new DesiredCapabilities()
-        caps.setPlatform(Platform.valueOf(value.toUpperCase()))
+        caps.setCapability("platformName", value)
         driver.getCapabilities() >> caps
         def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
         when:

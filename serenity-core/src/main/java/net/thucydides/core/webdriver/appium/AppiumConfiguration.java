@@ -3,6 +3,7 @@ package net.thucydides.core.webdriver.appium;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.PathProcessor;
 import net.thucydides.core.webdriver.*;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -38,8 +39,13 @@ public class AppiumConfiguration {
      * Must be either ios or android.
      */
     public MobilePlatform getTargetPlatform(WebDriver driver) {
+        String PLATFORM_NAME = "platformName";
         try {
-            return MobilePlatform.valueOf(((RemoteWebDriver) driver).getCapabilities().getPlatform().name());
+            Capabilities caps = ((RemoteWebDriver) driver).getCapabilities();
+            if (caps.getCapabilityNames().contains(PLATFORM_NAME)) {
+                return MobilePlatform.valueOf(
+                        caps.getCapability(PLATFORM_NAME).toString().toUpperCase());
+            }
         } catch (IllegalArgumentException e) {
             LOGGER.debug("Platform was not a MobilePlatform. Falling back to other platform definitions.");
         } catch (ClassCastException e) {

@@ -43,8 +43,9 @@ public class ByTarget extends Target {
         if (null != this.androidLocator && null != this.iosLocator) {
             String platform;
             try {
-                platform = ((RemoteWebDriver) BrowseTheWeb.as(actor).getDriver()).getCapabilities()
-                                                                                 .getPlatform().name().toUpperCase();
+                platform = ((RemoteWebDriver) BrowseTheWeb.as(actor).getDriver())
+                                                    .getCapabilities().getCapability("platformName")
+                                                                      .toString().toUpperCase();
             } catch (ClassCastException e) {
                 throw new ThucydidesConfigurationException(String.format(
                         "The configured driver '%s' does not support Cross Platform Mobile targets",

@@ -138,6 +138,11 @@ public class WebElementFacadeStub implements WebElementFacade {
         return this;
     }
 
+    @Override
+    public WebElementFacade withTimeoutOf(Duration duration) {
+        return this;
+    }
+
     /**
      * Is this web element present and visible on the screen
      * This method will not throw an exception if the element is not on the screen at all.

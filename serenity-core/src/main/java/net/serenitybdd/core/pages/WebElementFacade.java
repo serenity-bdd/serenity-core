@@ -13,6 +13,7 @@ import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.ui.Wait;
 
 import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -43,6 +44,8 @@ public interface WebElementFacade extends WebElement, WrapsElement, Locatable, W
 
     @Deprecated
     <T extends WebElementFacade> T withTimeoutOf(int timeout, TimeUnit unit);
+
+    <T extends WebElementFacade> T withTimeoutOf(int timeout, TemporalUnit unit);
 
     <T extends WebElementFacade> T withTimeoutOf(Duration duration);
 

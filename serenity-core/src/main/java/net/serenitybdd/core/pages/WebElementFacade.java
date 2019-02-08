@@ -12,6 +12,7 @@ import org.openqa.selenium.interactions.internal.Locatable;
 import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.ui.Wait;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -40,7 +41,10 @@ public interface WebElementFacade extends WebElement, WrapsElement, Locatable, W
 
     long getImplicitTimeoutInMilliseconds();
 
+    @Deprecated
     <T extends WebElementFacade> T withTimeoutOf(int timeout, TimeUnit unit);
+
+    <T extends WebElementFacade> T withTimeoutOf(Duration duration);
 
     /**
      * Convenience method to chain method calls more fluently.

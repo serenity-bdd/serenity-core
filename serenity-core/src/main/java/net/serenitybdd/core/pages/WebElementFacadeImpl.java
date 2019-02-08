@@ -387,6 +387,17 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
                 foundBy);
     }
 
+    public WebElementFacade withTimeoutOf(Duration duration) {
+        return wrapWebElement(driver,
+                resolvedELement,
+                webElement,
+                bySelector,
+                locator,
+                duration.toMillis(),
+                duration.toMillis(),
+                foundBy);
+    }
+
     /**
      * Is this web element present and visible on the screen
      * This method will not throw an exception if the element is not on the screen at all.

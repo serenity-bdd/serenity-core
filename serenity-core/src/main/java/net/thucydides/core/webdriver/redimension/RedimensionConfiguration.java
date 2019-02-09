@@ -36,11 +36,11 @@ class RedimensionConfiguration {
     }
 
     public int getWidth() {
-        return ThucydidesSystemProperty.THUCYDIDES_BROWSER_WIDTH.integerFrom(environmentVariables,0);
+        return ThucydidesSystemProperty.SERENITY_BROWSER_WIDTH.integerFrom(environmentVariables,0);
     }
 
     public int getHeight() {
-        return ThucydidesSystemProperty.THUCYDIDES_BROWSER_HEIGHT.integerFrom(environmentVariables, 0);
+        return ThucydidesSystemProperty.SERENITY_BROWSER_HEIGHT.integerFrom(environmentVariables, 0);
     }
 
     public boolean isDisabled() {

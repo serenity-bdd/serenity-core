@@ -5,6 +5,7 @@ import io.restassured.http.Cookies;
 import io.restassured.http.Headers;
 import io.restassured.mapper.ObjectMapperType;
 import io.restassured.mapper.ObjectMapper;
+import io.restassured.mapper.TypeRef;
 import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.config.JsonPathConfig;
 import io.restassured.path.xml.XmlPath;
@@ -58,6 +59,26 @@ public class ResponseStub implements Response {
 
     @Override
     public <T> T as(Class<T> cls, ObjectMapper mapper) {
+        return null;
+    }
+
+    @Override
+    public <T> T as(TypeRef<T> typeRef) {
+        return null;
+    }
+
+    @Override
+    public <T> T as(Type cls) {
+        return null;
+    }
+
+    @Override
+    public <T> T as(Type cls, ObjectMapperType mapperType) {
+        return null;
+    }
+
+    @Override
+    public <T> T as(Type cls, ObjectMapper mapper) {
         return null;
     }
 

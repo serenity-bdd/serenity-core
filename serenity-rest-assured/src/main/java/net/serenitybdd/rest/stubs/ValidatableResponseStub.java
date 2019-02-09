@@ -4,6 +4,7 @@ import io.restassured.function.RestAssuredFunction;
 import io.restassured.http.ContentType;
 import io.restassured.internal.RestAssuredResponseOptionsImpl;
 import io.restassured.internal.ValidatableResponseImpl;
+import io.restassured.matcher.DetailedCookieMatcher;
 import io.restassured.matcher.ResponseAwareMatcher;
 import io.restassured.parsing.Parser;
 import io.restassured.response.ExtractableResponse;
@@ -124,6 +125,11 @@ public class ValidatableResponseStub implements ValidatableResponse {
 
     @Override
     public ValidatableResponse cookie(String cookieName, Matcher<?> expectedValueMatcher) {
+        return this;
+    }
+
+    @Override
+    public ValidatableResponse cookie(String cookieName, DetailedCookieMatcher detailedCookieMatcher) {
         return this;
     }
 

@@ -1,7 +1,9 @@
 package net.serenitybdd.rest.stubs;
 
+import io.restassured.filter.log.LogDetail;
 import io.restassured.function.RestAssuredFunction;
 import io.restassured.http.ContentType;
+import io.restassured.matcher.DetailedCookieMatcher;
 import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
 import io.restassured.specification.*;
@@ -118,6 +120,11 @@ public class ResponseSpecificationStub implements ResponseSpecification {
 
     @Override
     public ResponseSpecification cookie(final String cookieName, final Matcher<?> expectedValueMatcher) {
+        return this;
+    }
+
+    @Override
+    public ResponseSpecification cookie(String cookieName, DetailedCookieMatcher detailedCookieMatcher) {
         return this;
     }
 
@@ -268,6 +275,11 @@ public class ResponseSpecificationStub implements ResponseSpecification {
 
     @Override
     public ResponseSpecification defaultParser(final Parser parser) {
+        return this;
+    }
+
+    @Override
+    public ResponseSpecification logDetail(LogDetail logDetail) {
         return this;
     }
 

@@ -125,9 +125,7 @@ class WhenExecutingPutRequestsFromSerenityRest extends Specification {
                 .withBody(body)))
         when: "creating new request and making get request"
             def response = put("$url?status={status}", ["status": "available"])
-        then: "created response should be decorated"
-            response instanceof ResponseDecorated
-        and: "returned status should be correct"
+        then: "returned status should be correct"
             response.then().statusCode(256)
     }
 }

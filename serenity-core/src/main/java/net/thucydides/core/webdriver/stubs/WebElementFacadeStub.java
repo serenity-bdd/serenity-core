@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.Wait;
 
 import java.lang.reflect.Type;
 import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -135,6 +136,16 @@ public class WebElementFacadeStub implements WebElementFacade {
 
     @Override
     public WebElementFacade withTimeoutOf(int timeout, TimeUnit unit) {
+        return this;
+    }
+
+    @Override
+    public WebElementFacade withTimeoutOf(int timeout, TemporalUnit unit) {
+        return this;
+    }
+
+    @Override
+    public WebElementFacade withTimeoutOf(Duration duration) {
         return this;
     }
 

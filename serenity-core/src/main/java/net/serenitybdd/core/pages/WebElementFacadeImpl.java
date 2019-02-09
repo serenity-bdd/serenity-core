@@ -10,6 +10,7 @@ import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.ConfigurableTimeouts;
+import net.thucydides.core.webdriver.TemporalUnitConverter;
 import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.exceptions.*;
@@ -26,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Clock;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.time.Duration;
@@ -377,13 +379,21 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public WebElementFacade withTimeoutOf(int timeout, TimeUnit unit) {
+        return withTimeoutOf(timeout, TemporalUnitConverter.fromTimeUnit(unit));
+    }
+
+    public WebElementFacade withTimeoutOf(int timeout, TemporalUnit unit) {
+        return withTimeoutOf(Duration.of(timeout, unit));
+    }
+
+    public WebElementFacade withTimeoutOf(Duration duration) {
         return wrapWebElement(driver,
                 resolvedELement,
                 webElement,
                 bySelector,
                 locator,
-                TimeUnit.MILLISECONDS.convert(timeout, unit),
-                TimeUnit.MILLISECONDS.convert(timeout, unit),
+                duration.toMillis(),
+                duration.toMillis(),
                 foundBy);
     }
 

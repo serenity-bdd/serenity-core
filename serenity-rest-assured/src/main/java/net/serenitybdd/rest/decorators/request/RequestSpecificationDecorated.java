@@ -1,5 +1,6 @@
 package net.serenitybdd.rest.decorators.request;
 
+import io.restassured.authentication.AuthenticationScheme;
 import io.restassured.filter.*;
 import io.restassured.internal.*;
 import io.restassured.response.*;
@@ -8,6 +9,7 @@ import net.serenitybdd.core.*;
 import net.serenitybdd.core.rest.*;
 import net.serenitybdd.rest.stubs.*;
 import net.serenitybdd.rest.utils.*;
+import org.apache.http.client.HttpClient;
 import org.slf4j.*;
 
 import java.net.*;
@@ -22,7 +24,8 @@ import static org.apache.http.util.Args.*;
  * Date: 3/16/16
  * Time: 2:08 PM
  */
-public abstract class RequestSpecificationDecorated extends RequestSpecificationAdvancedConfiguration
+public abstract class RequestSpecificationDecorated
+        extends RequestSpecificationAdvancedConfiguration
         implements FilterableRequestSpecification {
     private static final Logger log = LoggerFactory.getLogger(RequestSpecificationDecorated.class);
     private Response lastResponse;
@@ -293,4 +296,114 @@ public abstract class RequestSpecificationDecorated extends RequestSpecification
     public RequestSpecification filter(Filter filter){
         return RestDecorationHelper.decorate(core.filter(filter));
     };
+
+    @Override
+    public List<Filter> getDefinedFilters() {
+        return core.getDefinedFilters();
+    }
+
+    @Override
+    public String getContentType() {
+        return core.getContentType();
+    }
+
+    @Override
+    public ProxySpecification getProxySpecification() {
+        return core.getProxySpecification();
+    }
+
+    @Override
+    public AuthenticationScheme getAuthenticationScheme() {
+        return core.getAuthenticationScheme();
+    }
+
+    @Override
+    public String getBasePath() {
+        return core.getBasePath();
+    }
+
+    @Override
+    public String getBaseUri() {
+        return core.getBaseUri();
+    }
+
+    @Override
+    public String getDerivedPath() {
+        return core.getDerivedPath();
+    }
+
+    @Override
+    public String getUserDefinedPath() {
+        return core.getUserDefinedPath();
+    }
+
+    @Override
+    public String getMethod() {
+        return core.getMethod();
+    }
+
+    @Override
+    public String getURI() {
+        return core.getURI();
+    }
+
+    @Override
+    public int getPort() {
+        return core.getPort();
+    }
+
+    @Override
+    public Map<String, String> getRequestParams() {
+        return core.getRequestParams();
+    }
+
+    @Override
+    public Map<String, String> getFormParams() {
+        return core.getFormParams();
+    }
+
+    @Override
+    public Map<String, String> getPathParams() {
+        return core.getPathParams();
+    }
+
+    @Override
+    public Map<String, String> getNamedPathParams() {
+        return core.getNamedPathParams();
+    }
+
+    @Override
+    public Map<String, String> getUnnamedPathParams() {
+        return core.getUnnamedPathParams();
+    }
+
+    @Override
+    public List<String> getUnnamedPathParamValues() {
+        return core.getUnnamedPathParamValues();
+    }
+
+    @Override
+    public Map<String, String> getQueryParams() {
+        return core.getQueryParams();
+    }
+
+    @Override
+    public <T> T getBody() {
+        return core.getBody();
+    }
+
+    @Override
+    public HttpClient getHttpClient() {
+        return core.getHttpClient();
+    }
+
+    @Override
+    public List<String> getUndefinedPathParamPlaceholders() {
+        return core.getUndefinedPathParamPlaceholders();
+    }
+
+    @Override
+    public List<String> getPathParamPlaceholders() {
+        return core.getPathParamPlaceholders();
+    }
 }

@@ -17,8 +17,7 @@ public class RestDecorationHelper {
         if (specification instanceof RequestSpecificationDecorated) {
             return specification;
         } else if (specification instanceof RequestSpecificationImpl) {
-            RequestSpecificationDecorated decorated = RestSpecificationFactory.getInstrumentedRequestSpecification((RequestSpecificationImpl) specification);
-            return decorated;
+            return RestSpecificationFactory.getInstrumentedRequestSpecification((RequestSpecificationImpl) specification);
         } else {
             throw new IllegalArgumentException("Can not be used custom Request Specification Implementation");
         }

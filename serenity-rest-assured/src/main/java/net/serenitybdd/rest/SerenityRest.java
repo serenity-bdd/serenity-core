@@ -34,6 +34,7 @@ import java.security.KeyStore;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static io.restassured.specification.ProxySpecification.host;
 
@@ -205,16 +206,10 @@ public class SerenityRest {
         return withNoArguments();
     }
 
-    private static TestSpecificationImpl createTestSpecification() {
-        try {
-            Method method = RestAssured.class.getDeclaredMethod("createTestSpecification");
-            method.setAccessible(true);
-            return (TestSpecificationImpl) method.invoke(null);
-        } catch (Exception e) {
-            throw new IllegalStateException("Can not initialize rest assurance");
-        }
-    }
-
+    /**
+     * Create a new RestAssured query sequence
+     * @return
+     */
     public static RequestSpecification given() {
         final RequestSpecificationImpl generated = (RequestSpecificationImpl) RestAssured.given();
         final RequestSpecification request = RestDecorationHelper.decorate(generated);
@@ -222,7 +217,32 @@ public class SerenityRest {
         return ((TestSpecificationImpl) given(request, response)).getRequestSpecification();
     }
 
+    /**
+     * Add an additional clause to a RestAssured query
+     * @return
+     */
+    public static RequestSender andGiven() {
+        if(currentRequestSpecification.get() != null) {
+            return currentRequestSpecification.get();
+        }
+        return given();
+    }
+
+    /**
+     * Clear the current RestAssured test context, so that the next when() call will create a new RestAssured query
+     */
+    public static void clear() {
+        currentRequestSpecification.remove();
+    }
+
+    /**
+     * Add an action to a RestAssured query, building on previous given() statements if they were called.
+     * @return
+     */
     public static RequestSender when() {
+        if(currentRequestSpecification.get() != null) {
+            return currentRequestSpecification.get();
+        }
         return given();
     }
 
@@ -452,7 +472,7 @@ public class SerenityRest {
 
     public static Response options(final String path, final Object... pathParams) {
         if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
-            return given().options(path, (Map<String, ?>) pathParams[0]);
+            return given().options(path, pathParams[0]);
         } else {
             return given().options(path, pathParams);
         }
@@ -480,7 +500,7 @@ public class SerenityRest {
 
     public static Response patch(final String path, final Object... pathParams) {
         if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
-            return given().patch(path, (Map<String, ?>) pathParams[0]);
+            return given().patch(path, pathParams[0]);
         } else {
             return given().patch(path, pathParams);
         }
@@ -488,7 +508,7 @@ public class SerenityRest {
 
     public static Response post(final String path, final Object... pathParams) {
         if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
-            return given().post(path, (Map<String, ?>) pathParams[0]);
+            return given().post(path, pathParams[0]);
         } else {
             return given().post(path, pathParams);
         }
@@ -516,7 +536,7 @@ public class SerenityRest {
 
     public static Response put(final String path, final Object... pathParams) {
         if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
-            return given().put(path, (Map<String, ?>) pathParams[0]);
+            return given().put(path, pathParams[0]);
         } else {
             return given().put(path, pathParams);
         }
@@ -548,7 +568,7 @@ public class SerenityRest {
 
     public static Response delete(final String path, final Object... pathParams) {
         if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
-            return given().delete(path, (Map<String, ?>) pathParams[0]);
+            return given().delete(path, pathParams[0]);
         } else {
             return given().delete(path, pathParams);
         }
@@ -564,7 +584,7 @@ public class SerenityRest {
 
     public static Response get(final String path, final Object... pathParams) {
         if (pathParams != null && pathParams.length == 1 && pathParams[0] instanceof Map) {
-            return given().get(path, (Map<String, ?>) pathParams[0]);
+            return given().get(path, pathParams[0]);
         } else {
             return given().get(path, pathParams);
         }
@@ -578,6 +598,11 @@ public class SerenityRest {
         return given().get();
     }
 
-
-
+    /**
+     * A convenience method that allows you to check the last response received using a lambda expression,
+     * e.g. restAssuredThat(lastResponse -> lastResponse.body(equalTo(expectedMessage)));
+     */
+    static public void restAssuredThat(Consumer<ValidatableResponse> expectedCondition) {
+        expectedCondition.accept(SerenityRest.lastResponse().then());
+    }
 }

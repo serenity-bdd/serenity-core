@@ -37,7 +37,7 @@ class WhenExecutingPutRequest extends Specification {
         void apply() {
             reset()
         }
-    },)git
+    },)
     def setup() {
         SerenityRest.clear()
     }

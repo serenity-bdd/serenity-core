@@ -1,6 +1,7 @@
 package net.serenitybdd.screenplay.targets;
 
 import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.thucydides.core.webdriver.ThucydidesConfigurationException;
@@ -43,7 +44,7 @@ public class ByTarget extends Target {
         if (null != this.androidLocator && null != this.iosLocator) {
             String platform;
             try {
-                platform = ((RemoteWebDriver) BrowseTheWeb.as(actor).getDriver())
+                platform = RemoteDriver.of(BrowseTheWeb.as(actor).getDriver())
                                                     .getCapabilities().getCapability("platformName")
                                                                       .toString().toUpperCase();
             } catch (ClassCastException e) {

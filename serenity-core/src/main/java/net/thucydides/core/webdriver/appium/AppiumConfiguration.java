@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver.appium;
 
+import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.PathProcessor;
 import net.thucydides.core.webdriver.*;
@@ -41,7 +42,7 @@ public class AppiumConfiguration {
     public MobilePlatform getTargetPlatform(WebDriver driver) {
         String PLATFORM_NAME = "platformName";
         try {
-            Capabilities caps = ((RemoteWebDriver) driver).getCapabilities();
+            Capabilities caps = RemoteDriver.of(driver).getCapabilities();
             if (caps.getCapabilityNames().contains(PLATFORM_NAME)) {
                 return MobilePlatform.valueOf(
                         caps.getCapability(PLATFORM_NAME).toString().toUpperCase());

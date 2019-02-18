@@ -410,11 +410,7 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
         try {
             WebElement element = getElement();
             return (element != null) && (element.isDisplayed());
-        } catch (ElementNotVisibleException e) {
-            return false;
-        } catch (NoSuchElementException e) {
-            return false;
-        } catch (StaleElementReferenceException se) {
+        } catch (ElementNotVisibleException | NoSuchElementException | StaleElementReferenceException e) {
             return false;
         }
     }

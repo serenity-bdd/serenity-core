@@ -1076,7 +1076,7 @@ public abstract class PageObject {
     }
 
     public Actions withAction() {
-        WebDriver proxiedDriver = (getDriver() instanceof WebElementFacade) ?
+        WebDriver proxiedDriver = (getDriver() instanceof WebDriverFacade) ?
                 ((WebDriverFacade) getDriver()).getProxiedDriver() : getDriver();
         return new Actions(proxiedDriver);
     }

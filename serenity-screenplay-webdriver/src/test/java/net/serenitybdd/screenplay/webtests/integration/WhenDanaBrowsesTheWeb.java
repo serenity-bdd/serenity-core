@@ -47,7 +47,6 @@ public class WhenDanaBrowsesTheWeb {
 
         Actor dana = new Actor("Dana");
         dana.can(BrowseTheWeb.with(firstBrowser));
-
         givenThat(dana).has(openedTheApplication);
 
         when(dana).attemptsTo(viewHerProfile);

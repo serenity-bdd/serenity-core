@@ -8,6 +8,10 @@ import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.steps.StepEventBus;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
+import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -148,6 +152,11 @@ public class WhenUsingStepsAsNamedPersonas {
         anonymousSalesman.makesASale();
 
         assertThat(stepDescriptionFor("shouldBeAbleToNameActorsAfterCreation")).isEqualTo("Sam makes a sale");
+    }
+
+    @Test
+    public void shouldStopTestIfAnAssumptionFails() {
+        Assume.assumeTrue(false);
     }
 
     private String stepDescriptionFor(String testName) {

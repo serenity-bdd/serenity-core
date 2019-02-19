@@ -1313,6 +1313,11 @@ public enum ThucydidesSystemProperty {
     REPORT_SCOREBOARD_SIZE,
 
     /**
+     * Show the full test results in the emailable reports
+     */
+    SHOW_FULL_TEST_RESULTS,
+
+    /**
      * What tag types should be listed in the report summary
      */
     REPORT_TAGTYPES,

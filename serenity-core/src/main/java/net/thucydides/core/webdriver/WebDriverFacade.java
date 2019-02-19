@@ -1,26 +1,36 @@
 package net.thucydides.core.webdriver;
 
+import com.google.common.eventbus.EventBus;
 import io.appium.java_client.android.AndroidDriver;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.pages.DefaultTimeouts;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.stubs.*;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.*;
+import org.openqa.selenium.interactions.HasInputDevices;
+import org.openqa.selenium.interactions.Keyboard;
+import org.openqa.selenium.interactions.Mouse;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.time.Duration;
-import java.util.*;
+
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 /**
  * A proxy class for webdriver instances, designed to prevent the browser being opened unnecessarily.
  */
-public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevices, JavascriptExecutor, HasCapabilities, ConfigurableTimeouts, Interactive {
+public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevices, JavascriptExecutor, HasCapabilities, ConfigurableTimeouts {
 
     private final Class<? extends WebDriver> driverClass;
 
@@ -439,25 +449,5 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     public boolean isDisabled() {
         return (proxyInstanciated() && proxiedWebDriver.getClass().getName().endsWith("Stub"));
-    }
-
-    @Override
-    public void perform(Collection<Sequence> actions) {
-        if (proxiedWebDriver instanceof Interactive) {
-            ((Interactive) proxiedWebDriver).perform(actions);
-            return;
-        }
-        throw new UnsupportedOperationException("Underlying driver does not implement advanced"
-                + " user interactions yet.");
-    }
-
-    @Override
-    public void resetInputState() {
-        if (proxiedWebDriver instanceof Interactive) {
-            ((Interactive) proxiedWebDriver).resetInputState();
-            return;
-        }
-        throw new UnsupportedOperationException("Underlying driver does not implement advanced"
-                + " user interactions yet.");
     }
 }

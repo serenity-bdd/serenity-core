@@ -71,21 +71,6 @@ class WhenConfiguringAnAppiumDriver extends Specification {
         "android" | "IOS6.0"     | MobilePlatform.ANDROID
     }
 
-    def "drivers other than RemoteWebDriver should work"() {
-        given:
-        def driver = Stub(WebDriverFacade)
-        environmentVariables.setProperty("appium.platformName", env)
-        def appiumConfiguration = AppiumConfiguration.from(environmentVariables)
-        when:
-        def definedPlatform = appiumConfiguration.getTargetPlatform(driver)
-        then:
-        definedPlatform == expectedPlatform
-        where:
-        env       | expectedPlatform
-        "IOS"     | MobilePlatform.IOS
-        "android" | MobilePlatform.ANDROID
-    }
-
     def "the platform may be defined by the driver capabilities"() {
         given:
         def driver = Stub(RemoteWebDriver)

@@ -14,4 +14,5 @@ public class RemoteDriver {
         }
         throw new UnexpectedDriverExpected("Expected a remote web driver instance but found " + driver.getClass());
     }
+
 }

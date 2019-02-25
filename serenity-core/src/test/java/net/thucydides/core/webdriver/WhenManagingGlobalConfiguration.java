@@ -81,8 +81,4 @@ public class WhenManagingGlobalConfiguration {
         assertThat(configuration.shouldUseAUniqueBrowser(), is(false));
     }
 
-    @Test
-    public void the_default_unique_browser_value_should_be_false() {
-        assertThat(configuration.shouldUseAUniqueBrowser(), is(false));
-    }
 }

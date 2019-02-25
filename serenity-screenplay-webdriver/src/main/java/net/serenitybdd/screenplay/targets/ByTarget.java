@@ -47,7 +47,7 @@ public class ByTarget extends Target {
                 platform = RemoteDriver.of(BrowseTheWeb.as(actor).getDriver())
                                                     .getCapabilities().getCapability("platformName")
                                                                       .toString().toUpperCase();
-            } catch (ClassCastException e) {
+            } catch (Exception e) {
                 throw new ThucydidesConfigurationException(String.format(
                         "The configured driver '%s' does not support Cross Platform Mobile targets",
                         BrowseTheWeb.as(actor).getDriver()

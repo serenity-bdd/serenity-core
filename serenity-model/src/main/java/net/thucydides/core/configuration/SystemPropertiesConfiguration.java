@@ -130,7 +130,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     public int getStepDelay() {
         int stepDelay = 0;
 
-        String stepDelayValue = THUCYDIDES_STEP_DELAY.from(environmentVariables);
+        String stepDelayValue = SERENITY_STEP_DELAY.from(environmentVariables);
         if ((stepDelayValue != null) && (!stepDelayValue.isEmpty())) {
             stepDelay = Integer.parseInt(stepDelayValue);
         }
@@ -151,10 +151,12 @@ public class SystemPropertiesConfiguration implements Configuration {
     }
 
     @Override
+    @Deprecated
     public boolean getUseUniqueBrowser() {
         return shouldUseAUniqueBrowser();
     }
 
+    @Deprecated
     public boolean shouldUseAUniqueBrowser() {
         return THUCYDIDES_USE_UNIQUE_BROWSER.booleanFrom(getEnvironmentVariables());
     }

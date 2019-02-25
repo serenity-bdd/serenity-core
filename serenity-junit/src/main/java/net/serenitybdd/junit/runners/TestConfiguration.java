@@ -26,6 +26,7 @@ public class TestConfiguration {
         return new TestConfigurationBuilder(testClass);
     }
 
+    @Deprecated
     protected boolean isUniqueSession() {
         return (theTestIsAnnotated.toUseAUniqueSession() || configuration.shouldUseAUniqueBrowser());
     }

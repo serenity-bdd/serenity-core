@@ -8,16 +8,17 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 public class UsingWebdriverActionsWithTheFluentElementAPI extends FluentElementAPITestsBaseClass {
 
-    static WebDriver htmlUnitDriver;
+    static WebDriver driver;
     static StaticSitePage page;
 
     @BeforeClass
     public static void openStaticPage() {
-        htmlUnitDriver = new WebDriverFacade(HtmlUnitDriver.class, new WebDriverFactory());
-        page = new StaticSitePage(htmlUnitDriver);
+        driver = new WebDriverFacade(PhantomJSDriver.class, new WebDriverFactory());
+        page = new StaticSitePage(driver);
         page.setWaitForTimeout(750);
         page.open();
     }

@@ -35,8 +35,10 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
         if (ThucydidesSystemProperty.GECKO_FIREFOX_OPTIONS.isDefinedIn(environmentVariables)) {
             String firefoxOptionsInJsonFormat = ThucydidesSystemProperty.GECKO_FIREFOX_OPTIONS.from(environmentVariables)
                     .replace("\\\"","\"")
-                    .replace("\\n",System.lineSeparator())
-                    .strip();
+                    .replace("\\n",System.lineSeparator());
+
+            firefoxOptionsInJsonFormat = StringUtils.strip(firefoxOptionsInJsonFormat);
+
             Map<String, Object> firefoxOptions = new Gson().fromJson(firefoxOptionsInJsonFormat, new TypeToken<HashMap<String, Object>>() {}.getType());
             capabilities.setCapability("moz:firefoxOptions", firefoxOptions);
         }

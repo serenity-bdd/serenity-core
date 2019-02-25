@@ -4,7 +4,7 @@ import net.serenitybdd.core.webdriver.appium.AppiumDevicePool;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
-import net.thucydides.core.webdriver.UnsupportedDriverException;
+import net.thucydides.core.webdriver.DriverConfigurationError;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class WhenInstanciatingAAppiumDriver {
         try {
             environmentVariables.setProperty("manage.appium.servers","true");
             new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
-        } catch (UnsupportedDriverException couldNotFindDriver) {
+        } catch (DriverConfigurationError couldNotFindDriver) {
             assertThat(couldNotFindDriver.getCause().getMessage()).contains("No available Appium device found - have you specified a device in appium.deviceName or a list of available devices in appium.deviceNames?");
         }
     }
@@ -37,7 +37,7 @@ public class WhenInstanciatingAAppiumDriver {
         try {
             environmentVariables.setProperty("appium.deviceName", "abc");
             new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
-        } catch (UnsupportedDriverException couldNotFindDriver) {
+        } catch (DriverConfigurationError couldNotFindDriver) {
             assertThat(couldNotFindDriver.getCause().getMessage())
                     .contains("The appium.platformName needs to be specified (either IOS or ANDROID)");
         }
@@ -49,13 +49,13 @@ public class WhenInstanciatingAAppiumDriver {
             environmentVariables.setProperty("appium.deviceName", "abc");
             environmentVariables.setProperty("appium.browserName", "chrome");
             new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
-        } catch (UnsupportedDriverException couldNotFindDriver) {
+        } catch (DriverConfigurationError couldNotFindDriver) {
             assertThat(couldNotFindDriver.getCause().getMessage())
                     .contains("The appium.platformName needs to be specified (either IOS or ANDROID)");
         }
     }
 
-//    @Test(expected = UnsupportedDriverException.class)
+//    @Test(expected = DriverConfigurationError.class)
 //    public void should_start_mobile_browser_on_appium() {
 //        environmentVariables.setProperty("appium.browserName", "Browser");
 //        environmentVariables.setProperty("appium.platformName", "Android");
@@ -63,7 +63,7 @@ public class WhenInstanciatingAAppiumDriver {
 //        new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.APPIUM);
 //    }
 //
-//    @Test(expected = UnsupportedDriverException.class)
+//    @Test(expected = DriverConfigurationError.class)
 //    public void should_ignoreWhenInstanciatingAAppiumDriver_browser_dimensions_on_appium() {
 //        environmentVariables.setProperty("appium.browserName", "Browser");
 //        environmentVariables.setProperty("appium.platformName", "Android");

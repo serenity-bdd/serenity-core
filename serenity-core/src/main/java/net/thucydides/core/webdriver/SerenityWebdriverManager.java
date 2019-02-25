@@ -48,7 +48,7 @@ public class SerenityWebdriverManager implements WebdriverManager {
      * override this method to use a custom driver if you really know what you
      * are doing.
      *
-     * @throws UnsupportedDriverException
+     * @throws DriverConfigurationError
      *             if the driver type is not supported.
      */
     private static WebDriver newDriver(final DriverConfiguration configuration,

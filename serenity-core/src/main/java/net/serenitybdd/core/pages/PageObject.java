@@ -3,6 +3,7 @@ package net.serenitybdd.core.pages;
 import com.google.common.base.Predicate;
 import com.paulhammant.ngwebdriver.NgWebDriver;
 import net.serenitybdd.core.collect.NewList;
+import net.serenitybdd.core.webdriver.RemoteDriver;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.WhenPageOpens;
 import net.thucydides.core.fluent.ThucydidesFluentAdapter;
@@ -47,6 +48,7 @@ import java.nio.file.Path;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -958,6 +960,10 @@ public abstract class PageObject {
         return find(NewList.of(selectors));
     }
 
+    public Optional<WebElementFacade> findFirst(By bySelector) {
+        return findAll(bySelector).stream().findFirst();
+    }
+
     public List<WebElementFacade> findAll(By bySelector) {
 
         List<WebElement> matchingWebElements = driver.findElements(bySelector);
@@ -979,6 +985,10 @@ public abstract class PageObject {
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T findBy(String xpathOrCssSelector, Object... arguments) {
         return element(withArguments(xpathOrCssSelector,arguments));
+    }
+
+    public Optional<WebElementFacade> findFirst(String xpathOrCssSelector, Object... arguments) {
+        return findAll(xpathOrCssSelector, arguments).stream().findFirst();
     }
 
     public List<net.serenitybdd.core.pages.WebElementFacade> findAll(String xpathOrCssSelector, Object... arguments) {

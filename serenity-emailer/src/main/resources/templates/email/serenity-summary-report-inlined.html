@@ -1187,6 +1187,20 @@
                             </table>
                         </td>
                     </tr>
+                    <tr th:if="${showFullTestResults}">
+                        <td class="compact-wrapper" style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;box-sizing:border-box;padding-left:24px;padding-right:24px;padding-top:4px;padding-bottom:4px;" >
+                            <h3 style="color:#222222;font-family:Helvetica, sans-serif;font-weight:400;line-height:1.4;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;font-size:20px;text-align:center;" >Test Results</h3>
+                        </td>
+                    </tr>
+                    <tr style="color:#f44336;" >
+                        <td width="100%" th:text="${frequentFailure.name}" style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;" >
+                            Web Element Not Found
+                        </td>
+                        <td style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;" >
+                                                    <span data-th-text=" ${frequentFailure.count} "
+                                                          class='count-badge for-failure' style="color:#f44336;" >100</span>
+                        </td>
+                    </tr>
                     <tr class="footer" style="clear:both;padding-top:24px;text-align:center;width:100%;" >
                         <td style="font-family:Helvetica, sans-serif;vertical-align:top;color:#999999;font-size:12px;text-align:center;" >Report produced by Serenity BDD</td>
                     </tr>

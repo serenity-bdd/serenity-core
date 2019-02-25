@@ -2,7 +2,7 @@ package net.serenitybdd.junit.runners;
 
 import net.thucydides.core.batches.SystemVariableBasedBatchManager;
 import net.thucydides.core.batches.TestCountBasedBatchManager;
-import net.thucydides.core.webdriver.UnsupportedDriverException;
+import net.thucydides.core.webdriver.DriverConfigurationError;
 import net.thucydides.junit.rules.SaveWebdriverSystemPropertiesRule;
 import net.thucydides.samples.SuccessfulSingleTestScenario;
 import net.thucydides.samples.SuccessfulSingleTestScenarioWithABrowser;
@@ -54,8 +54,8 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
 
             runner.run(new RunNotifier());
 
-            fail("Should have thrown UnsupportedDriverException");
-        } catch (UnsupportedDriverException e) {
+            fail("Should have thrown DriverConfigurationError");
+        } catch (DriverConfigurationError e) {
             assertThat(e.getMessage(), containsString("Unsupported browser type: netscape"));
         }
     }
@@ -71,8 +71,8 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
 
             runner.run(new RunNotifier());
 
-            fail("Should have thrown UnsupportedDriverException");
-        } catch (UnsupportedDriverException e) {
+            fail("Should have thrown DriverConfigurationError");
+        } catch (DriverConfigurationError e) {
             assertThat(e.getMessage(), containsString("Unsupported browser type: lynx"));
         }
     }
@@ -96,8 +96,8 @@ public class WhenInstanciatingANewTestRunner extends AbstractTestStepRunnerTest 
 
             runner.run(new RunNotifier());
 
-            fail("Should have thrown UnsupportedDriverException");
-        } catch (UnsupportedDriverException e) {
+            fail("Should have thrown DriverConfigurationError");
+        } catch (DriverConfigurationError e) {
             assertThat(e.getMessage(), containsString("Unsupported browser type: doesnotexist"));
         }
     }

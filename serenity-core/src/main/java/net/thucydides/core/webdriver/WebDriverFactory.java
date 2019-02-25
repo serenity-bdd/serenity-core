@@ -134,7 +134,7 @@ public class WebDriverFactory {
         } catch (SerenityManagedException toPassThrough) {
             throw toPassThrough;
         } catch (Exception cause) {
-            throw new UnsupportedDriverException("Could not instantiate new WebDriver instance of type " + driverClass + " (" + cause.getMessage(), cause);
+            throw new DriverConfigurationError("Could not instantiate new WebDriver instance of type " + driverClass + " (" + cause.getMessage() + "). See below for more details.", cause);
         }
     }
 

@@ -37,7 +37,7 @@ public class WebDriverConfiguration<T extends DriverConfiguration> extends Syste
      * Transform a driver type into the SupportedWebDriver enum. Driver type can
      * be any case.
      *
-     * @throws UnsupportedDriverException
+     * @throws DriverConfigurationError
      */
     private SupportedWebDriver lookupSupportedDriverTypeFor(final String driverType) {
         SupportedWebDriver driver = null;
@@ -50,7 +50,7 @@ public class WebDriverConfiguration<T extends DriverConfiguration> extends Syste
     }
 
     private void throwUnsupportedDriverExceptionFor(final String driverType) {
-        throw new UnsupportedDriverException(driverType
+        throw new DriverConfigurationError(driverType
                 + " is not a supported browser. Supported driver values are: "
                 + SupportedWebDriver.listOfSupportedDrivers());
     }

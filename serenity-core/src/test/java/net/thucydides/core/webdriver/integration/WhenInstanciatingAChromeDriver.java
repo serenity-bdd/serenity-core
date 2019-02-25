@@ -2,8 +2,8 @@ package net.thucydides.core.webdriver.integration;
 
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
+import net.thucydides.core.webdriver.DriverConfigurationError;
 import net.thucydides.core.webdriver.SupportedWebDriver;
-import net.thucydides.core.webdriver.UnsupportedDriverException;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
@@ -41,7 +41,7 @@ public class WhenInstanciatingAChromeDriver {
         try {
             WebDriver webdriver = new WebDriverFactory(environmentVariables).newInstanceOf(SupportedWebDriver.CHROME);
             webdriver.get("http://www.google.com");
-        } catch (UnsupportedDriverException couldNotFindDriver) {
+        } catch (DriverConfigurationError couldNotFindDriver) {
             assertThat(couldNotFindDriver.getCause().getMessage()).contains("The driver executable does not exist: /path/to/chromedriver/bin");
         }
     }

@@ -69,9 +69,11 @@ class EmailReporter(val environmentVariables: EnvironmentVariables) : ExtendedRe
         val customReportFields = CustomReportFields(environmentVariables)
         val tagTypes = SerenityEmailReport.tagTypes().configuredIn(environmentVariables)
         val tagCategoryTitle = SerenityEmailReport.tagCategoryTitle().configuredIn(environmentVariables)
+        val showFullTestResults = SerenityEmailReport.showFullTestResults().configuredIn(environmentVariables)
 
         val fields = hashMapOf(
                 "testOutcomes" to testOutcomes,
+                "showFullTestResults" to showFullTestResults,
                 "report" to ReportInfo(
                         title = reportTitle,
                         link = reportLink,

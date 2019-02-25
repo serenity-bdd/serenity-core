@@ -64,7 +64,7 @@ public class AppiumDriverProvider implements DriverProvider {
                 driverProperties.registerCapabilities("appium", capabilitiesToProperties(iosDriver.getCapabilities()));
                 return iosDriver;
         }
-        throw new UnsupportedDriverException(appiumTargetPlatform(environmentVariables).name());
+        throw new DriverConfigurationError(appiumTargetPlatform(environmentVariables).name());
     }
 
     public WebDriver newDriverUsingManagedAppiumServers(String options, EnvironmentVariables environmentVariables) {
@@ -112,7 +112,7 @@ public class AppiumDriverProvider implements DriverProvider {
                 LOGGER.info("  -> driver created" + iosDriver);
                 return iosDriver;
         }
-        throw new UnsupportedDriverException(appiumTargetPlatform(testEnvironmentVariables).name());
+        throw new DriverConfigurationError(appiumTargetPlatform(testEnvironmentVariables).name());
 
     }
 

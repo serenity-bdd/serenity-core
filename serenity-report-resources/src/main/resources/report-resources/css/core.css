@@ -1582,12 +1582,13 @@ ul.second-level-requirements  {
 }
 
 #projectname-banner {
-    float:right
+    float:right;
+    width:70%
 }
 
 .projectname {
     font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
-    font-weight:normal; font-size:2em; color:#428bca; position:relative; top:30px; right:20px;
+    font-weight:normal; font-size:2em; color:#428bca; position:relative;
 }
 
 .togglePieChart {

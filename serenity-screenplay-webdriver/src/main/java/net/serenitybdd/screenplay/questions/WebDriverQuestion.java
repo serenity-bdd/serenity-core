@@ -14,7 +14,7 @@ public class WebDriverQuestion {
     public static class UIInteractionQuestionBuilder {
         private final String subject;
 
-        public UIInteractionQuestionBuilder(String subject) {
+        UIInteractionQuestionBuilder(String subject) {
             this.subject = subject;
         }
 
@@ -22,9 +22,5 @@ public class WebDriverQuestion {
             Question<T> uiInteractionQuestion = actor -> questionToAsk.apply(BrowseTheWeb.as(actor));
             return new QuestionWithDefinedSubject(uiInteractionQuestion, subject);
         }
-
-//        public <T> Question<T> answeredBy(Question<T> questionToAsk) {
-//            return new QuestionWithDefinedSubject(questionToAsk, subject);
-//        }
     }
 }

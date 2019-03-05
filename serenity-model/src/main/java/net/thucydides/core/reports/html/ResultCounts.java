@@ -44,6 +44,14 @@ public class ResultCounts {
         return totalTests.getOrDefault(TestResult.valueOf(result.toUpperCase()),0);
     }
 
+    public Integer getOverallTestsCount(String... results) {
+        int allTestsCount = 0;
+        for(String result : results) {
+            allTestsCount += getOverallTestCount(result);
+        }
+        return allTestsCount;
+    }
+
     public Integer getTotalAutomatedTestCount() {
         return totalAutomatedTests;
     }

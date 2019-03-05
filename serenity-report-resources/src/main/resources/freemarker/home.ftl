@@ -366,15 +366,27 @@
                                                             </tr>
                                                             <tr>
                                                                 <#if resultCounts.hasManualTests() >
-                                                                    <td colspan="7"><a
-                                                                            href="${relativeLink}${brokenReport}"><i
-                                                                            class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
-                                                                    </td>
+                                                                        <#if (resultCounts.getOverallTestsCount("failure","error","compromised") != 0)>
+                                                                            <td colspan="7"><a
+                                                                                    href="${relativeLink}${brokenReport}"><i
+                                                                                    class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                            </td>
+                                                                        <#else>
+                                                                            <td colspan="7"><i
+                                                                                class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                            </td>
+                                                                        </#if>
                                                                 <#else>
-                                                                    <td colspan="3"><a
-                                                                            href="${relativeLink}${brokenReport}"><i
-                                                                            class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
-                                                                    </td>
+                                                                        <#if (resultCounts.getOverallTestsCount("failure","error","compromised") != 0)>
+                                                                            <td colspan="3"><a
+                                                                                    href="${relativeLink}${brokenReport}"><i
+                                                                                    class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                            </td>
+                                                                        <#else>
+                                                                            <td colspan="3"><i
+                                                                                class='fa fa-times failure-icon'></i>&nbsp;<em>Unsuccessful</em></a>
+                                                                            </td>
+                                                                        </#if>
                                                                 </#if>
                                                             </tr>
                                                             <tr>

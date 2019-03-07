@@ -7,16 +7,18 @@ import static org.junit.Assert.assertEquals;
 public class VersionProviderTest {
 
     @Test
-    public void getVersionNameFromArchiveName()
+    public void getVersionNameFromArchiveName() throws Exception
     {
         VersionProvider versionProvider = new VersionProvider();
-        assertEquals("2.0.41", versionProvider.getVersionNameFromArchiveName("/test/home/serenity-core-2.0.41.jar"));
+        ClassLoader classLoader = getClass().getClassLoader();
+        assertEquals("2.0.19", versionProvider.getVersionNameFromArchiveName(classLoader.getResource("util/serenity-model-2.0.19.jar")));
     }
 
     @Test
     public void getVersionNameFromSnapshotArchiveName()
     {
         VersionProvider versionProvider = new VersionProvider();
-        assertEquals("2.0.41-SNAPSHOT", versionProvider.getVersionNameFromArchiveName("/test/home/serenity-model-2.0.41-SNAPSHOT.jar"));
+        ClassLoader classLoader = getClass().getClassLoader();
+        assertEquals("2.0.19-SNAPSHOT", versionProvider.getVersionNameFromArchiveName(classLoader.getResource("util/serenity-model-2.0.19-SNAPSHOT.jar")));
     }
 }

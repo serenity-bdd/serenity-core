@@ -36,7 +36,7 @@ public class VersionProvider {
         try {
             ProtectionDomain protectionDomain = this.getClass().getProtectionDomain();
             CodeSource codeSource = protectionDomain.getCodeSource();
-            buildNumber = getVersionNameFromArchiveName(codeSource.getLocation());
+            buildNumber = getVersionNameFromCodeSourceURL(codeSource.getLocation());
         } catch(Throwable t){
             logger.error("Cannot get version number ", t);
             return getVersionLegacyWay();
@@ -44,8 +44,7 @@ public class VersionProvider {
         return buildNumber;
     }
 
-
-    public String getVersionNameFromArchiveName(URL locationUrl) {
+    String getVersionNameFromCodeSourceURL(URL locationUrl) {
         String locationString = locationUrl.toString();
         String buildNumber;
         String archiveName = locationString.substring(locationString.lastIndexOf(File.separator) + 1,locationString.length()-4);

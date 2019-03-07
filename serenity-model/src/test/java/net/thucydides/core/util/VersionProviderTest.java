@@ -11,7 +11,7 @@ public class VersionProviderTest {
     {
         VersionProvider versionProvider = new VersionProvider();
         ClassLoader classLoader = getClass().getClassLoader();
-        assertEquals("2.0.19", versionProvider.getVersionNameFromArchiveName(classLoader.getResource("util/serenity-model-2.0.19.jar")));
+        assertEquals("2.0.19", versionProvider.getVersionNameFromCodeSourceURL(classLoader.getResource("util/serenity-model-2.0.19.jar")));
     }
 
     @Test
@@ -19,6 +19,6 @@ public class VersionProviderTest {
     {
         VersionProvider versionProvider = new VersionProvider();
         ClassLoader classLoader = getClass().getClassLoader();
-        assertEquals("2.0.19-SNAPSHOT", versionProvider.getVersionNameFromArchiveName(classLoader.getResource("util/serenity-model-2.0.19-SNAPSHOT.jar")));
+        assertEquals("2.0.19-SNAPSHOT", versionProvider.getVersionNameFromCodeSourceURL(classLoader.getResource("util/serenity-model-2.0.19-SNAPSHOT.jar")));
     }
 }

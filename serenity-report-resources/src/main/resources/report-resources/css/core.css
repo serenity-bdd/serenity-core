@@ -527,7 +527,8 @@ i.tag {
 }
 
 .error-message-title {
-    font-size: 16px;
+    font-family:monospace; font-size: 14px; color: black;
+    white-space: pre-wrap;
 }
 .parameters {
     display: block;

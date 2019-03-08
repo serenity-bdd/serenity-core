@@ -3,6 +3,8 @@
 Serenity (previously known as 'Thucydides') is a library designed to make writing automated acceptance tests easier, 
 and more fun. 
 
+[![Javadocs](https://www.javadoc.io/badge/net.serenity-bdd/serenity-core.svg)](https://www.javadoc.io/doc/net.serenity-bdd/serenity-core)
+
 ## What does it do?
 
 Serenity helps structure your automated acceptance tests in order to make them easier to understand and maintain, 

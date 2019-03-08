@@ -1,3 +1,8 @@
 ext {
     projectDescription = 'Serenity Assertions'
 }
+
+dependencies {
+    testCompile project(':serenity-screenplay')
+    testCompile project(':serenity-junit')
+}

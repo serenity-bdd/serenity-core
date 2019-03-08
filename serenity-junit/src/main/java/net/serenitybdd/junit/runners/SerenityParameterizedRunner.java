@@ -106,8 +106,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
 
     private List<Runner> buildTestRunnersForEachDataSetUsing(final WebDriverFactory webDriverFactory,
                                                      final BatchManager batchManager) throws Throwable {
-
-        if (shouldSkipTest(getTestAnnotations().getTestMethod())) {
+        if (shouldSkipAllTests()) {
             return new ArrayList<>();
         }
 
@@ -129,8 +128,7 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
 
     private List<Runner> buildTestRunnersFromADataSourceUsing(final WebDriverFactory webDriverFactory,
                                                       final BatchManager batchManager) throws Throwable {
-
-        if (shouldSkipTest(getTestAnnotations().getTestMethod())) {
+        if (shouldSkipAllTests()) {
             return new ArrayList<>();
         }
 
@@ -153,6 +151,13 @@ public class SerenityParameterizedRunner extends Suite implements Taggable {
 
     private boolean shouldSkipTest(FrameworkMethod method) {
         return !tagScanner.shouldRunMethod(getTestClass().getJavaClass(), method.getName());
+    }
+
+    private boolean shouldSkipAllTests() {
+        return getTestAnnotations()
+                .getTestMethods()
+                .stream()
+                .allMatch(this::shouldSkipTest);
     }
 
     private String getQualifierFor(final Object testCase) {

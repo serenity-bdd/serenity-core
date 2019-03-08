@@ -7,6 +7,7 @@ import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
+import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.batches.BatchManager;
 import net.thucydides.core.batches.BatchManagerProvider;
 import net.thucydides.core.configuration.SystemPropertiesConfiguration;
@@ -15,6 +16,7 @@ import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
 import net.thucydides.core.model.TestStep;
 import net.thucydides.core.pages.Pages;
+import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
 import net.thucydides.core.webdriver.DriverConfiguration;
@@ -826,6 +828,10 @@ public class WhenRunningADataDrivenTestScenario {
     }
 
     protected SerenityParameterizedRunner getTestRunnerUsing(Class<?> testClass) throws Throwable {
+        return getTestRunnerUsing(testClass, environmentVariables);
+    }
+
+    protected SerenityParameterizedRunner getTestRunnerUsing(Class<?> testClass, EnvironmentVariables environmentVariables) throws Throwable {
         DriverConfiguration configuration = new WebDriverConfiguration(environmentVariables);
         WebDriverFactory factory = new WebDriverFactory(environmentVariables);
         BatchManager batchManager = new BatchManagerProvider(configuration).get();
@@ -842,6 +848,64 @@ public class WhenRunningADataDrivenTestScenario {
                 //do nothing
             }
         };
+    }
+
+    @Test
+    public void parameterized_test_class_correct_number_of_test_methods_are_run_using_one_tag() throws Throwable {
+        EnvironmentVariables environmentVariablesWithTags = environmentVariables;
+        environmentVariables.setProperty("tags", "b");
+        SerenityParameterizedRunner runner = getTestRunnerUsing(
+                ExampleDataDrivenWithTestMethodTags.class,
+                environmentVariablesWithTags
+        );
+        runner.run(new RunNotifier());
+        List<TestOutcome> executedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).getTestOutcomesForAllParameterSets();
+
+        assertThat(executedScenarios.size(), is(1));
+    }
+
+    @Test
+    public void parameterized_test_class_correct_number_of_test_methods_are_run_using_multiple_tags() throws Throwable {
+        EnvironmentVariables environmentVariablesWithTags = environmentVariables;
+        environmentVariables.setProperty("tags", "a,c");
+        SerenityParameterizedRunner runner = getTestRunnerUsing(
+                ExampleDataDrivenWithTestMethodTags.class,
+                environmentVariablesWithTags
+        );
+        runner.run(new RunNotifier());
+        List<TestOutcome> executedScenarios = ParameterizedTestsOutcomeAggregator.from(runner).getTestOutcomesForAllParameterSets();
+
+        assertThat(executedScenarios.size(), is(2));
+    }
+
+    @RunWith(SerenityParameterizedRunner.class)
+    public static class ExampleDataDrivenWithTestMethodTags {
+
+        @TestData
+        public static Collection<Object[]> testData() {
+            List<Object[]> list = new ArrayList<>();
+            list.add(new String[]{""});
+            return list;
+        }
+
+        public ExampleDataDrivenWithTestMethodTags(String string) {
+        }
+
+        @Test
+        @WithTag("a")
+        public void a() {
+        }
+
+        @Test
+        @WithTag("b")
+        public void b() {
+        }
+
+        @Test
+        @WithTag("c")
+        public void c() {
+        }
+
     }
 
 }

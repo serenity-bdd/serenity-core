@@ -28,25 +28,6 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     private final String parentName;
     private final String parentReport;
 
-    public SingleScenarioOutcome(String name, String simplifiedName, String type, TestResult result,
-                                 String scenarioReport, ZonedDateTime startTime, Long duration) {
-        this.name = name;
-        this.simplifiedName = simplifiedName;
-        this.type = type;
-        this.id = Digest.ofTextValue(name);
-        this.result = result;
-        this.scenarioReport = scenarioReport;
-        this.startTime = startTime;
-        this.duration = duration;
-        this.description = "";
-        this.steps = EMPTY_LIST;
-        this.examples = EMPTY_LIST;
-        this.exampleCount = 0;
-        this.manual = false;
-        this.parentReport = "";
-        this.parentName = "";
-    }
-
     public SingleScenarioOutcome(String name,
                                  String simplifiedName,
                                  String type,
@@ -76,6 +57,10 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
         this.exampleCount = exampleCount;
         this.parentName = parentName;
         this.parentReport = parentReport;
+    }
+
+    public String toString() {
+        return "SingleScenarioOutcome[" + name + "]";
     }
 
     public String getName() {
@@ -130,6 +115,7 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     public String getNumberOfExamples() { return (exampleCount == 1) ? "1 example" : exampleCount + " examples"; }
 
 
+    @Override
     public String getScenarioReport() {
         return scenarioReport;
     }

@@ -1,24 +1,26 @@
 package net.thucydides.core.requirements.reports.cucumber;
 
-import gherkin.ast.Examples;
 import gherkin.ast.Feature;
 import gherkin.ast.ScenarioDefinition;
 import gherkin.ast.ScenarioOutline;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
-import net.thucydides.core.model.*;
+import net.thucydides.core.model.TestOutcome;
+import net.thucydides.core.model.TestResult;
+import net.thucydides.core.model.TestResultList;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.Requirement;
 import net.thucydides.core.requirements.model.cucumber.CucumberParser;
-import net.thucydides.core.requirements.model.cucumber.ScenarioReport;
 import net.thucydides.core.requirements.reports.*;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.File;
 import java.net.URL;
-import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class FeatureFileScenarioOutcomes {
@@ -71,6 +73,7 @@ public class FeatureFileScenarioOutcomes {
         List<String> reportBadges = ReportBadges.from(outcomes, scenarioDefinition.getName());
 
         String featureReport = new ReportNameProvider().forRequirement(feature.getName(),"feature");
+        Optional<String> scenarioReport = (outcomes.isEmpty()) ? Optional.empty() : Optional.of(outcomes.get(0).getHtmlReport());
 
         List<String> renderedSteps = scenarioDefinition.getSteps().stream()
                     .map(RenderCucumber::step)
@@ -85,19 +88,17 @@ public class FeatureFileScenarioOutcomes {
                 ((ScenarioOutline) scenarioDefinition).getExamples().stream().mapToInt(examples -> examples.getTableBody().size()).sum()
                 : 0;
 
-
         return new ScenarioSummaryOutcome(scenarioTitle,
-                                         scenarioDefinition.getKeyword(),
-                                         result,
-                                         reportBadges,
-                                         scenarioDefinition.getDescription(),
-                                         renderedSteps,
-                                         renderedExamples,
-                                         exampleCount,
-                                         feature.getName(),
-                                         featureReport);
-
-
+                scenarioDefinition.getKeyword(),
+                result,
+                reportBadges,
+                scenarioReport.orElse(""),
+                scenarioDefinition.getDescription(),
+                renderedSteps,
+                renderedExamples,
+                exampleCount,
+                feature.getName(),
+                featureReport);
     }
 
     private File pathFromResourceOnClasspath(String path) {

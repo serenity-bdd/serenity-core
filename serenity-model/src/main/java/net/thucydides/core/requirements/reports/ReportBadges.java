@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class ReportBadges {
 
-    private final static String DETAILS_BADGE = "<a href='%s' class='badge more-details'>%s</a>";
+    private final static String DETAILS_BADGE = "<a href='%s' class='badge more-details badge-%s'>%s</a>";
     private final static String DETAILS_WITH_CONTEXT_BADGE = "<a href='%s'class='badge more-details' style='background-color:%s;'>%s %s</a>";
 
     public static List<String> forReport(String report) {
@@ -25,7 +25,10 @@ public class ReportBadges {
 
 
         if (outcomes.size() == 1) {
-            return Collections.singletonList(String.format(DETAILS_BADGE, outcomes.get(0).getHtmlReport(), "Test Results"));
+            return Collections.singletonList(String.format(DETAILS_BADGE,
+                                                           outcomes.get(0).getHtmlReport(),
+                                                           outcomes.get(0).getResult().name().toLowerCase(),
+                                                           "Test Results"));
         }
 
         return outcomes.stream()

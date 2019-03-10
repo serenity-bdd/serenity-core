@@ -11,7 +11,8 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     private final String type;
     private final String id;
     private final TestResult result;
-    private final List<String> scenarioReports;
+    private final List<String> reportBadges;
+    private final String scenarioReport;
     private final String description;
     private final List<String> steps;
     private final List<String> examples;
@@ -22,7 +23,8 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     public ScenarioSummaryOutcome(String name,
                                   String type,
                                   TestResult result,
-                                  List<String> scenarioReports,
+                                  List<String> reportBadges,
+                                  String scenarioReport,
                                   String description,
                                   List<String> steps,
                                   List<String> examples,
@@ -33,7 +35,8 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         this.type = type;
         this.id = Digest.ofTextValue(name);
         this.result = result;
-        this.scenarioReports = scenarioReports;
+        this.reportBadges = reportBadges;
+        this.scenarioReport = scenarioReport;
         this.description = description;
         this.steps = steps;
         this.examples = examples;
@@ -41,6 +44,11 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         this.parentName = parentName;
         this.parentReport = parentReport;
     }
+
+    public String toString() {
+        return "ScenarioSummaryOutcome for " + name;
+    }
+
 
     public String getName() {
         return name;
@@ -95,11 +103,11 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
 
 
     public String getScenarioReport() {
-        return "";
+        return scenarioReport;
     }
 
     public List<String> getScenarioReportBadges() {
-        return scenarioReports;
+        return reportBadges;
     }
 
     public Integer getStepCount() { return steps.size(); }

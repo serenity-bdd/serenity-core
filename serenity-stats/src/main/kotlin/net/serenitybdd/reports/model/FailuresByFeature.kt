@@ -4,7 +4,7 @@ import net.thucydides.core.model.TestOutcome
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.reports.TestOutcomes
 
-class FailuresByFeature(val featureName: String, val failures: List<FailingScenario>) {
+class FailuresByFeature(val featureName: String, val failures: List<ScenarioSummary>) {
     companion object {
         fun from(testOutcomes: TestOutcomes): List<FailuresByFeature> {
             val failingOutcomesGroupedByFeature = testOutcomes.failingOrErrorTests.tests.groupBy { it.userStory }
@@ -14,24 +14,12 @@ class FailuresByFeature(val featureName: String, val failures: List<FailingScena
             }.sortedBy { it.featureName }
         }
 
-        private fun failingScenariosIn(testOutcomes: List<TestOutcome>): List<FailingScenario> =
+        private fun failingScenariosIn(testOutcomes: List<TestOutcome>): List<ScenarioSummary> =
                 testOutcomes.map { outcome ->
-                    FailingScenario(outcome.title,
+                    ScenarioSummary(outcome.title,
                             outcome.result,
+                            outcome.htmlReport,
                             outcome.conciseErrorMessage)
                 }
     }
-}
-
-/**
- * A summary of a failing scenario to appear in the eamil reports
- */
-class FailingScenario(val title: String, testResult: TestResult, conciseErrorMessage: String) {
-    val result = testResult.toString().toLowerCase()
-    val errorMessage = removeNoiseFrom(conciseErrorMessage)
-
-    private fun removeNoiseFrom(conciseErrorMessage: String): String =
-            conciseErrorMessage.substringBefore("net.serenitybdd")  // Noisy exceptions
-                                .substringBefore("(Session info:")  // WebDriver noise
-                                .trim()
 }

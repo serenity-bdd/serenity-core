@@ -291,9 +291,16 @@
                                                                 <table>
                                                                     <tr>
                                                                         <td>
+                                                                            <#if outcome_icon?has_content>
+                                                                            <a style="margin-left:0.5em;padding-right: 1.5em;"
+                                                                               href="${scenario.scenarioReport}"
+                                                                               title="View test results">
+                                                                            </#if>
                                                                             ${outcome_icon}
-                                                                            <#if (scenario.manual)> <i class="fa fa-user manual"
-                                                                                                       title="Manual test"></i></#if>
+                                                                            <#if outcome_icon?has_content></a></#if>
+
+                                                                        <#if (scenario.manual)> <i class="fa fa-user manual"
+                                                                                           title="Manual test"></i></#if>
                                                                         </td>
                                                                         <#if outcome_icon?has_content>
                                                                         <td>

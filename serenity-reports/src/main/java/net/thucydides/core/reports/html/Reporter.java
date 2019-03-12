@@ -39,11 +39,13 @@ class Reporter {
             final List<ReportExecutor> partitions
                     = reportingTasks.stream()
                     .map(ReportExecutor::new)
+                    .filter(data-> data != null)
                     .collect(Collectors.toList());
 
             final List<ReportExecutorFuture> futures
                     = partitions.stream()
                     .map( partition -> new ReportExecutorFuture(executorPool.submit(partition), partition.getReportingTask()) )
+                    .filter(data-> data != null)
                     .collect(Collectors.toList());
 
             final TimeoutValue timeout = TimeoutConfiguration.from(environmentVariables).forProperty("report.timeout", DEFAULT_TIMEOUT);

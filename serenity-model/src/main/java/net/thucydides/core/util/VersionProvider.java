@@ -47,11 +47,15 @@ public class VersionProvider {
     String getVersionNameFromCodeSourceURL(URL locationUrl) {
         String locationString = locationUrl.toString();
         String buildNumber;
-        String archiveName = locationString.substring(locationString.lastIndexOf(File.separator) + 1,locationString.length()-4);
+        String archiveName = locationString.substring(locationString.lastIndexOf(File.separator) + 1,locationString.length() - ".jar".length());
         if(archiveName.endsWith("-SNAPSHOT")) {
-            String archiveNameNoSnapshot = archiveName.substring(0,archiveName.length()-9);
-            buildNumber = archiveName.substring(archiveNameNoSnapshot.lastIndexOf("-")+1);
-        } else {
+            String archiveNameWithoutSnapshotEnding = archiveName.substring(0,archiveName.length()- "-SNAPSHOT".length());
+            buildNumber = archiveName.substring(archiveNameWithoutSnapshotEnding.lastIndexOf("-")+1);
+        }else if(archiveName.endsWith("-all")) {
+            //there is no jar file having the serenity-bdd version inside of it
+            return getVersionLegacyWay();
+        }
+        else {
             buildNumber = archiveName.substring(archiveName.lastIndexOf("-")+1);
         }
         return buildNumber;

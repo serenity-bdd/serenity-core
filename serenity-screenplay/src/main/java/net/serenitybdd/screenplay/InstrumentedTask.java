@@ -28,6 +28,10 @@ public class InstrumentedTask {
 
         EnvironmentVariables environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
 
+        if (task.getClass().isAnonymousClass()) {
+            return false;
+        }
+
         if (MANUAL_TASK_INSTRUMENTATION.booleanFrom(environmentVariables, false)) {
             return false;
         }

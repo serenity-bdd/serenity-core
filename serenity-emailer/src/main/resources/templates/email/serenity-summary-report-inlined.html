@@ -1170,7 +1170,9 @@
                                     </tr>
                                     <tr th:each="failingScenario: ${failingFeature.failures}">
                                         <td class="scenarioName" style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;padding-left:32px;min-width:4em;width:55%;" >
-	                                        <a th:if="${!#strings.isEmpty(report.link)}" th:text="${failingScenario.title}" th:href="${#strings.concat(report.link,'/', failingScenario.reportName)}">
+	                                        <a th:if="${!#strings.isEmpty(report.link)}"
+                                               th:text="${failingScenario.title}"
+                                               th:href="${#strings.concat(report.link,'/', failingScenario.reportName)}">
 		                                        Failing scenario
 		                                    </a>
 		                                    <a th:unless="${!#strings.isEmpty(report.link)}" th:text="${failingScenario.title}"></a>
@@ -1178,10 +1180,11 @@
                                         <td th:attr="class='frequent-failure for-' + ${failingScenario.result}" style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;" >   
 	                                        <div th:text="${failingScenario.result}"
 		                                         th:attr="class='frequent-failure for-' + ${failingScenario.result}"
-		                                         class="scenario-summary-tag for-passing" style="font-weight: bold; text-transform: uppercase; ">ERROR</div>
+		                                         class="scenario-summary-tag for-passing"
+                                                 style="font-weight: bold; text-transform: uppercase; ">ERROR</div>
 	                                        <div th:text="${failingScenario.errorMessage}" 
 		                                         th:attr="class='frequent-failure for-' + ${failingScenario.result}"
-			                                     class="frequent-failure for-error">Error message</div>	                                            
+			                                     class="frequent-failure for-error">Error message</div>
                                             </td>
                                     </tr>
                                 </span>
@@ -1200,7 +1203,8 @@
                                 </tr>
                                 <span th:each="feature : ${resultsByFeature}">
                                     <tr>
-                                        <td colspan="2" th:text=${feature.featureName} class="feature feature-title" style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;font-style:italic;padding-left:16px;" >A Feature
+                                        <td colspan="2" th:text=${feature.featureName} class="feature feature-title"
+                                            style="font-family:Helvetica, sans-serif;font-size:14px;vertical-align:top;font-style:italic;padding-left:16px;" >A Feature
                                         </td>
                                     </tr>
                                     <tr th:each="scenario: ${feature.scenarios}">
@@ -1210,12 +1214,18 @@
 
 	                                        </td>
                                         <td>
-	                                        <div th:text="${scenario.result}"
-		                                         th:attr="class='frequent-failure for-' + ${scenario.result}"
-		                                         class="scenario-summary-tag for-passing" style="font-weight: bold; text-transform: uppercase; ">PASSING</div>
-	                                        <div th:text="${scenario.errorMessage}" 
-		                                         th:attr="class='frequent-failure for-' + ${scenario.result}"
-			                                     class="frequent-failure for-error">Error message</div>
+	                                        <div th:attr="class='frequent-failure for-' + ${scenario.result}"
+		                                         class="scenario-summary-tag for-passing"
+                                                 style="font-weight: bold; text-transform: uppercase; ">
+                                                <span th:text="${scenario.result}" th:attr="color=${scenario.color}">PASSING</span>
+
+                                            </div>
+	                                        <div th:attr="class='frequent-failure for-' + ${scenario.result}"
+			                                     class="frequent-failure for-error">
+                                                <span th:text="${scenario.errorMessage}" th:attr="color=${scenario.color}">
+                                                    Error message
+                                                </span>
+                                            </div>
 	                                    <td>
                                         
 <!--                                        

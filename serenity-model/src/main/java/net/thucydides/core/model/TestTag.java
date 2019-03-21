@@ -24,12 +24,16 @@ public class TestTag implements Comparable<TestTag> {
     }
 
     public String normalisedName() {
-        if (normalisedName == null) { normalisedName = name.toLowerCase(); }
+        if (normalisedName == null) { normalisedName = normalised(name); }
         return normalisedName;
     }
 
+    private String normalised(String name) {
+        return name.replaceAll("[\\s_-]"," ").toLowerCase();
+    }
+
     public String normalisedType() {
-        if (normalisedType == null) { normalisedType = type.toLowerCase(); }
+        if (normalisedType == null) { normalisedType = normalised(type); }
         return normalisedType;
     }
 

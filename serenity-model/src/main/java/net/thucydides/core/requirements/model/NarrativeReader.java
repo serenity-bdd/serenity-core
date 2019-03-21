@@ -1,6 +1,7 @@
 package net.thucydides.core.requirements.model;
 
 import net.serenitybdd.core.collect.*;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.requirements.*;
 import net.thucydides.core.requirements.model.cucumber.*;
 
@@ -27,7 +28,8 @@ public class NarrativeReader {
     }
 
     public static NarrativeReader forRootDirectory(String rootDirectory) {
-        return new NarrativeReader(rootDirectory, RequirementsConfiguration.DEFAULT_CAPABILITY_TYPES);
+        List<String> requirementTypes = new RequirementsConfiguration(rootDirectory).getRequirementTypes();
+        return new NarrativeReader(rootDirectory, requirementTypes);
     }
 
     public NarrativeReader withRequirementTypes(List<String> requirementTypes) {
@@ -79,9 +81,27 @@ public class NarrativeReader {
         int rootDirectoryEnd = findRootDirectoryEnd(rootDirectoryStart, normalizedNarrativePath, normalizedRootPath);
         String relativeNarrativePath = normalizedNarrativePath.substring(rootDirectoryEnd);
         int directoryCount = RequirementsPath.fileSystemPathElements(relativeNarrativePath).size() - 1;
-        int level = requirementsLevel + directoryCount - 1;
+        int level = isNarrative(narrativeFile) ?
+                calculateNarrativeLevel(requirementsLevel, directoryCount) :
+                calculateRequirementsLevel(requirementsLevel, directoryCount);
 
         return getRequirementTypeForLevel(level);
+    }
+
+    private boolean isNarrative(File narrativeFile) {
+        return narrativeFile.getName().equalsIgnoreCase("readme.md")
+                || narrativeFile.getName().equalsIgnoreCase("readme.txt")
+                || narrativeFile.getName().toLowerCase().endsWith("narrative.txt")
+                || narrativeFile.getName().toLowerCase().endsWith("narrative.md");
+    }
+
+    private int calculateRequirementsLevel(int requirementsLevel, int directoryCount) {
+        return requirementsLevel + directoryCount - 1;
+    }
+
+    private int calculateNarrativeLevel(int requirementsLevel, int directoryCount) {
+        int featureLevel = requirementsLevel + directoryCount - 1;
+        return (featureLevel > 0) ? featureLevel - 1 : featureLevel;
     }
 
     private int findRootDirectoryEnd(int rootDirectoryStart, String normalizedNarrativePath, String normalizedRootPath) {

@@ -106,7 +106,7 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
         super(environmentVariables, rootDirectory);
 
         this.narrativeReader = NarrativeReader.forRootDirectory(rootDirectory)
-                .withRequirementTypes(getRequirementTypes());
+                .withRequirementTypes(getRequirementTypes(rootDirectory));
         this.overviewReader = new OverviewReader();
         this.requirementsConfiguration = new RequirementsConfiguration(environmentVariables);
 

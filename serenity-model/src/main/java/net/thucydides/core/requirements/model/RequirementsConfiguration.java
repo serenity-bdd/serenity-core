@@ -3,6 +3,7 @@ package net.thucydides.core.requirements.model;
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
+import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.requirements.RootDirectory;
 import net.thucydides.core.requirements.SearchForFilesOfType;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -22,9 +23,16 @@ public class RequirementsConfiguration {
     private static final String DEFAULT_ROOT_DIRECTORY = "stories";
 
     private final EnvironmentVariables environmentVariables;
+    private Optional<Path> root;
 
     public RequirementsConfiguration(EnvironmentVariables environmentVariables) {
         this.environmentVariables = environmentVariables;
+        root = RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory();
+    }
+
+    public RequirementsConfiguration(String rootDirectory) {
+        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
+        root = Optional.of(Paths.get(rootDirectory));
     }
 
     public List<String> getRequirementTypes() {
@@ -81,7 +89,7 @@ public class RequirementsConfiguration {
             return Optional.of(jbehaveFileMatcher);
         }
         try {
-            Optional<Path> root = RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory();// findResourcePath(rootRequirementsDirectory + "/stories");
+//            Optional<Path> root = RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory();// findResourcePath(rootRequirementsDirectory + "/stories");
             if (root.isPresent()) {
                 jbehaveFileMatcher = new SearchForFilesOfType(root.get(),".story");
                 Files.walkFileTree(root.get(), jbehaveFileMatcher);
@@ -97,17 +105,6 @@ public class RequirementsConfiguration {
     public String getRequirementType(int level) {
         return RequirementTypeAt.level(level).in(getRequirementTypes());
     }
-//
-//    private Path findResourcePath(String path) throws URISyntaxException {
-//        Path root;
-//        URL storyDirectory = getClass().getResource(path);
-//        if (storyDirectory != null) {
-//            root =  Paths.get(storyDirectory.toURI());
-//        } else {
-//            root = Paths.get("src/test/resources/" + path);
-//        }
-//        return root;
-//    }
 
     private SearchForFilesOfType cucumberFileMatcher;
 
@@ -116,7 +113,7 @@ public class RequirementsConfiguration {
             return Optional.of(cucumberFileMatcher);
         }
         try {
-            Optional<Path> root = RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory();// findResourcePath(rootRequirementsDirectory + "/stories");
+//            Optional<Path> root = RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory();// findResourcePath(rootRequirementsDirectory + "/stories");
             if (root.isPresent()) {
                 cucumberFileMatcher = new SearchForFilesOfType(root.get(),".feature");
                 Files.walkFileTree(root.get(), cucumberFileMatcher);

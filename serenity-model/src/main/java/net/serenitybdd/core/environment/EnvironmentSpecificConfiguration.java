@@ -75,7 +75,7 @@ public class EnvironmentSpecificConfiguration {
         return substituteProperties(propertyValue);
     }
 
-    private final Pattern VARIABLE_EXPRRESSION_PATTERN = Pattern.compile("#\\{(.*)\\}");
+    private final Pattern VARIABLE_EXPRRESSION_PATTERN = Pattern.compile("#\\{([^}]*)\\}");
 
     private String substituteProperties(String propertyValue) {
         if (propertyValue == null) { return propertyValue; }

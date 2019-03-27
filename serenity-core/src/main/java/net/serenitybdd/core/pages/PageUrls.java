@@ -166,12 +166,12 @@ public class PageUrls {
     private String urlWithParametersSubstituted(final String template,
                                                 final String[] parameterValues) {
 
-        String url = template;
+        String url = addBaseUrlTo(template);
         for (int i = 0; i < parameterValues.length; i++) {
             String variable = String.format("{%d}", i + 1);
             url = url.replace(variable, parameterValues[i]);
         }
-        return addBaseUrlTo(url);
+        return url;
     }
 
     private String addBaseUrlTo(final String url) {

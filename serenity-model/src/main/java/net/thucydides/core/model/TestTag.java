@@ -3,6 +3,8 @@ package net.thucydides.core.model;
 import net.serenitybdd.core.strings.Joiner;
 import com.google.common.base.Preconditions;
 
+import java.util.Optional;
+
 import static org.apache.commons.lang3.ObjectUtils.compare;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -12,15 +14,22 @@ public class TestTag implements Comparable<TestTag> {
 
     private final String name;
     private final String type;
+    private final String displayName;
 
     private transient String normalisedName;
     private transient String normalisedType;
 
     private TestTag(String name, String type) {
+        this(name,type, name);
+    }
+
+    private TestTag(String name, String type, String displayName) {
         Preconditions.checkNotNull(name);
         Preconditions.checkNotNull(type);
+        Preconditions.checkNotNull(displayName);
         this.name = name;
         this.type = type;
+        this.displayName = displayName;
     }
 
     public String normalisedName() {
@@ -48,6 +57,10 @@ public class TestTag implements Comparable<TestTag> {
         return name;
     }
 
+    public String getDisplayName() {
+        return Optional.ofNullable(displayName).orElse(name);
+    }
+
     public String getType() {
         return type;
     }
@@ -67,6 +80,10 @@ public class TestTag implements Comparable<TestTag> {
         } else {
             return TestTag.withName(value.trim()).andType("tag");
         }
+    }
+
+    public TestTag withDisplayName(String displayName) {
+        return new TestTag(name, type, displayName);
     }
 
     private static TestTag getTestTag(String value, int separatorPosition) {

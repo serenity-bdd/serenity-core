@@ -260,11 +260,11 @@ public class Requirement implements Comparable {
     }
 
     public TestTag asTag() {
-        return TestTag.withName(qualifiedName()).andType(getType());
+        return TestTag.withName(qualifiedName()).andType(getType()).withDisplayName(displayName);
     }
 
     public TestTag asUnqualifiedTag() {
-        return TestTag.withName(getName()).andType(getType());
+        return TestTag.withName(getName()).andType(getType()).withDisplayName(displayName);
     }
 
     @Override

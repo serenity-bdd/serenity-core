@@ -313,8 +313,10 @@ public class BaseStepListener implements StepListener, StepPublisher {
         return latestTestOutcome().orElse(unavailableTestOutcome());
     }
 
+    private final static TestOutcome UNAVAILABLE_TEST_OUTCOME = new UnavailableTestOutcome("Test outcome unavailable");
+
     private TestOutcome unavailableTestOutcome() {
-        return new UnavailableTestOutcome("Test outcome unavailable");
+        return UNAVAILABLE_TEST_OUTCOME;
     }
 
     public boolean isAvailable() {

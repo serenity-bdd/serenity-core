@@ -144,7 +144,7 @@
 
             <#list breadcrumbs as breadcrumb>
                 <#assign breadcrumbReport = absoluteReportName.forRequirement(breadcrumb) />
-                <#assign breadcrumbTitle = inflection.of(breadcrumb.shortName).asATitle() >
+                <#assign breadcrumbTitle = inflection.of(breadcrumb.displayName).asATitle() >
                 > <a href="${breadcrumbReport}">${formatter.htmlCompatibleStoryTitle(breadcrumbTitle)}</a>
             </#list>
 

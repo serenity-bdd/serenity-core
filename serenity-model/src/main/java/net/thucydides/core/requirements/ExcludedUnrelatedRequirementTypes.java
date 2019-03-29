@@ -27,7 +27,7 @@ public class ExcludedUnrelatedRequirementTypes {
 
     public static ExcludedUnrelatedRequirementTypes definedIn(EnvironmentVariables environmentVariables) {
         String unrleatedRequirementTypes =
-                ThucydidesSystemProperty.THUCYDIDES_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE.from(environmentVariables,
+                ThucydidesSystemProperty.SERENITY_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE.from(environmentVariables,
                         DEFAULT_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE);
 
         return new ExcludedUnrelatedRequirementTypes(

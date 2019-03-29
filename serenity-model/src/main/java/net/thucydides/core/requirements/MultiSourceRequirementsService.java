@@ -41,7 +41,7 @@ public class MultiSourceRequirementsService extends BaseRequirementsService impl
             }
             requirements = addParentsTo(requirements);
             indexRequirements();
-            LOGGER.debug("Requirements found:" + requirements);
+            LOGGER.debug(" found:" + requirements);
         }
         return requirements;
     }

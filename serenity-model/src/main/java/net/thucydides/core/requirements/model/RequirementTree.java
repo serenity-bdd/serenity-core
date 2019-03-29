@@ -61,13 +61,22 @@ public class RequirementTree {
             ByteArrayOutputStream printedRequirement = new ByteArrayOutputStream();
             PrintStream printStream = new PrintStream(printedRequirement);
 
-            printStream.println(indent + "- " + requirement.getType() + ": " + requirement.getDisplayName());
+            printStream.println(indent + "- " + requirement.getName() + ": " + detailsOf(requirement));
 
             for(Requirement child : requirement.getChildren()) {
                 printStream.print(stringFormOf(child).withIndentationLevel(level + 1));
             }
 
             return printedRequirement.toString();
+        }
+
+        private String detailsOf(Requirement requirement) {
+            return " {" +
+                    "id: " + requirement.getId() + ", " +
+                    "type: '" + requirement.getType() + "', " +
+                    "displayName: '" + requirement.getDisplayName() + "', " +
+                    "path: " + requirement.getPath() + ", " +
+                    "parent: '" + requirement.getParent() + "'}";
         }
     }
 }

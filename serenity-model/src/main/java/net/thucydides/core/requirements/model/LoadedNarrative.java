@@ -30,7 +30,7 @@ public class LoadedNarrative {
             String text = readNarrativeFrom(lines);
             reader.close();
 
-            List<TestTag> tags = (StringUtils.isEmpty(title)) ? new ArrayList<>() : Collections.singletonList(TestTag.withName(title).andType("story"));
+            List<TestTag> tags = (StringUtils.isEmpty(title)) ? new ArrayList<>() : Collections.singletonList(TestTag.withName(title).andType(defaultType));
 
             return java.util.Optional.of(new Narrative(Optional.ofNullable(title),
                     Optional.of(narrativeFile.getPath()),

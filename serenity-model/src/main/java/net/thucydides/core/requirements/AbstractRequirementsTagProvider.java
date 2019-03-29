@@ -71,12 +71,16 @@ public abstract class AbstractRequirementsTagProvider {
     }
 
     public List<String> getRequirementTypes(String rootDirectory) {
-        return new RequirementsConfiguration(rootDirectory).getRequirementTypes();
+        return new RequirementsConfiguration(environmentVariables, rootDirectory).getRequirementTypes();
     }
 
+    private List<String> requirementsTypes = null;
+
     public List<String> getRequirementTypes() {
-        return new RequirementsConfiguration(rootDirectory).getRequirementTypes();
-//        return requirementsConfiguration.getRequirementTypes();
+        if (requirementsTypes == null) {
+            requirementsTypes = new RequirementsConfiguration(environmentVariables, rootDirectory).getRequirementTypes();
+        }
+        return requirementsTypes;
     }
 
     protected String getDefaultRootDirectory() {

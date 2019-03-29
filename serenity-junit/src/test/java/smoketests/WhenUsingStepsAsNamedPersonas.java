@@ -125,7 +125,6 @@ public class WhenUsingStepsAsNamedPersonas {
     public void shouldNotBreakNormalUsesOfANameField() {
 
         NamedTraveller traveller = Instrumented.instanceOf(NamedTraveller.class).withProperties("Natalie");
-
         assertThat(traveller.actor).isEqualTo("Natalie");
     }
 

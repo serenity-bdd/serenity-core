@@ -722,7 +722,9 @@ public class StepEventBus {
     }
 
     public void updateOverallResults() {
-        baseStepListener.updateOverallResults();
+        if (baseStepListener != null) {
+            baseStepListener.updateOverallResults();
+        }
     }
 
     public void reset() {

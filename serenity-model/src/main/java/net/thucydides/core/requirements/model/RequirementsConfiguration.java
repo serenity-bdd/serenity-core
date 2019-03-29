@@ -3,14 +3,11 @@ package net.thucydides.core.requirements.model;
 import com.google.common.base.Splitter;
 import net.serenitybdd.core.collect.NewList;
 import net.thucydides.core.ThucydidesSystemProperty;
-import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.requirements.RootDirectory;
 import net.thucydides.core.requirements.SearchForFilesOfType;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,20 +27,34 @@ public class RequirementsConfiguration {
         root = RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory();
     }
 
-    public RequirementsConfiguration(String rootDirectory) {
-        this.environmentVariables = Injectors.getInjector().getInstance(EnvironmentVariables.class);
-        root = Optional.of(Paths.get(rootDirectory));
+    public RequirementsConfiguration(EnvironmentVariables environmentVariables, String rootDirectory) {
+        this.environmentVariables = environmentVariables;
+//        root = RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory();
+//        if (!root.isPresent()) {
+            root = Optional.of(Paths.get(absolutePathOfDirectoryOnClasspath(rootDirectory)));
+///        }
+    }
+
+    private String absolutePathOfDirectoryOnClasspath(String rootDirectory) {
+        URL rootDirOnClasspath = getClass().getClassLoader().getResource(rootDirectory);
+        if (rootDirOnClasspath != null) {
+            return rootDirOnClasspath.getFile();
+        } else {
+            return rootDirectory;
+        }
     }
 
     public List<String> getRequirementTypes() {
-        String requirementTypes = ThucydidesSystemProperty.SERENITY_REQUIREMENT_TYPES.from(environmentVariables);
-        List<String> types;
-        if (StringUtils.isNotEmpty(requirementTypes)) {
-            types = Splitter.on(",").trimResults().splitToList(requirementTypes);
-        } else {
-            types = getDefaultCapabilityTypes();
+        return configuredRequirementTypes().orElse(getDefaultCapabilityTypes());
+    }
+
+    private Optional<List<String>> configuredRequirementTypes() {
+
+        if (ThucydidesSystemProperty.SERENITY_REQUIREMENT_TYPES.isDefinedIn(environmentVariables)) {
+            String configuredRequirementTypes = ThucydidesSystemProperty.SERENITY_REQUIREMENT_TYPES.from(environmentVariables);
+            return Optional.of(Splitter.on(",").trimResults().splitToList(configuredRequirementTypes));
         }
-        return types;
+        return Optional.empty();
     }
 
     public String getDefaultRootDirectory() {

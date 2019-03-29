@@ -4,9 +4,13 @@ import net.serenitybdd.core.collect.*;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.requirements.*;
 import net.thucydides.core.requirements.model.cucumber.*;
+import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.util.*;
+
+import static java.lang.Math.max;
 
 /**
  * Load a narrative text from a directory.
@@ -28,7 +32,12 @@ public class NarrativeReader {
     }
 
     public static NarrativeReader forRootDirectory(String rootDirectory) {
-        List<String> requirementTypes = new RequirementsConfiguration(rootDirectory).getRequirementTypes();
+        return forRootDirectory(Injectors.getInjector().getInstance(EnvironmentVariables.class), rootDirectory);
+    }
+
+
+    public static NarrativeReader forRootDirectory(EnvironmentVariables environmentVariables, String rootDirectory) {
+        List<String> requirementTypes = new RequirementsConfiguration(environmentVariables, rootDirectory).getRequirementTypes();
         return new NarrativeReader(rootDirectory, requirementTypes);
     }
 
@@ -37,15 +46,33 @@ public class NarrativeReader {
     }
 
     public Optional<Narrative> loadFrom(File directory) {
-        return loadFrom(directory, 0);
+        return loadFrom(directory, 0);// levelOf(directory));
     }
 
+    private int levelOf(File directory) {
+        if (getClass().getClassLoader().getResource(rootDirectory) == null) {
+            return 0;
+        }
+        try {
+            String rootPath = getClass().getClassLoader().getResource(rootDirectory).toURI().getPath();
+            if (directory.getPath().startsWith(rootPath)) {
+                return directory.getPath()
+                                .substring(rootPath.length() + 1)
+                                .split(File.separator)
+                                .length;
+            }
+        } catch (URISyntaxException e) {
+            return 0;
+        }
+        return 0;
+
+    }
     public Optional<Narrative> loadFrom(File directory, int requirementsLevel) {
         File[] narrativeFiles = directory.listFiles(calledNarrativeOrOverview());
         if (narrativeFiles == null || narrativeFiles.length == 0) {
             return Optional.empty();
         } else {
-            return narrativeLoadedFrom(narrativeFiles[0], requirementsLevel);
+            return narrativeLoadedFrom(narrativeFiles[0], requirementsLevel);//max(0, requirementsLevel - 1));
         }
     }
 
@@ -81,9 +108,7 @@ public class NarrativeReader {
         int rootDirectoryEnd = findRootDirectoryEnd(rootDirectoryStart, normalizedNarrativePath, normalizedRootPath);
         String relativeNarrativePath = normalizedNarrativePath.substring(rootDirectoryEnd);
         int directoryCount = RequirementsPath.fileSystemPathElements(relativeNarrativePath).size() - 1;
-        int level = isNarrative(narrativeFile) ?
-                calculateNarrativeLevel(requirementsLevel, directoryCount) :
-                calculateRequirementsLevel(requirementsLevel, directoryCount);
+        int level = calculateRequirementsLevel(requirementsLevel, directoryCount);
 
         return getRequirementTypeForLevel(level);
     }
@@ -97,11 +122,6 @@ public class NarrativeReader {
 
     private int calculateRequirementsLevel(int requirementsLevel, int directoryCount) {
         return requirementsLevel + directoryCount - 1;
-    }
-
-    private int calculateNarrativeLevel(int requirementsLevel, int directoryCount) {
-        int featureLevel = requirementsLevel + directoryCount - 1;
-        return (featureLevel > 0) ? featureLevel - 1 : featureLevel;
     }
 
     private int findRootDirectoryEnd(int rootDirectoryStart, String normalizedNarrativePath, String normalizedRootPath) {

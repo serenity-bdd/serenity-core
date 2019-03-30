@@ -6,7 +6,6 @@ import net.thucydides.core.model.NumericalFormatter;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.formatters.ReportFormatter;
-import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 import net.thucydides.core.requirements.reports.RenderMarkdown;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.MockEnvironmentVariables;

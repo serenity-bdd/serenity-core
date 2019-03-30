@@ -625,19 +625,17 @@ public class FileSystemRequirementsTagProvider extends AbstractRequirementsTagPr
     }
 
     private Requirement requirementFromDirectoryName(File requirementDirectory) {
-        String requirementType = getRequirementTypeOf(rootDirectory, requirementDirectory);
+        String requirementType = getRequirementTypeOf(requirementDirectory);
         String shortName = humanReadableVersionOf(requirementDirectory.getName());
         List<Requirement> children = readChildrenFrom(requirementDirectory);
         return Requirement.named(shortName)
                 .withType(requirementType)
-//                .withType(getDefaultType(level))
-//                .withType(getDefaultType(Math.max(0,level - 1)))
                 .withNarrative("")
                 .withPath(relativeDirectoryOf(requirementDirectory.getPath()))
                 .withChildren(children);
     }
 
-    private String getRequirementTypeOf(String rootDirectory, File requirementDirectory) {
+    private String getRequirementTypeOf(File requirementDirectory) {
         int depth = requirementDepthOf(topLevelDirectory, requirementDirectory);
         int maxDepth = TheDirectoryStructure.startingAt(directoryAt(topLevelDirectory)).maxDepth();
         return getDefaultType(depth, maxDepth);

@@ -32,16 +32,21 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
     public DesiredCapabilities getCapabilities() {
         DesiredCapabilities capabilities = DesiredCapabilities.firefox();
         capabilities.setCapability("firefox_profile",buildFirefoxProfile());
+        Map<String, Object> firefoxOptions = new HashMap<>();
         if (ThucydidesSystemProperty.GECKO_FIREFOX_OPTIONS.isDefinedIn(environmentVariables)) {
             String firefoxOptionsInJsonFormat = ThucydidesSystemProperty.GECKO_FIREFOX_OPTIONS.from(environmentVariables)
-                    .replace("\\\"","\"")
-                    .replace("\\n",System.lineSeparator());
+                    .replace("\\\"", "\"")
+                    .replace("\\n", System.lineSeparator());
 
             firefoxOptionsInJsonFormat = StringUtils.strip(firefoxOptionsInJsonFormat);
 
-            Map<String, Object> firefoxOptions = new Gson().fromJson(firefoxOptionsInJsonFormat, new TypeToken<HashMap<String, Object>>() {}.getType());
-            capabilities.setCapability("moz:firefoxOptions", firefoxOptions);
+            firefoxOptions = new Gson().fromJson(firefoxOptionsInJsonFormat, new TypeToken<HashMap<String, Object>>() {}.getType());
         }
+        if (ThucydidesSystemProperty.WEBDRIVER_GECKO_DRIVER.isDefinedIn(environmentVariables)) {
+            firefoxOptions.put("binary", ThucydidesSystemProperty.WEBDRIVER_GECKO_DRIVER.from(environmentVariables));
+        }
+
+        capabilities.setCapability("moz:firefoxOptions", firefoxOptions);
 
         addProxyConfigurationTo(capabilities);
 

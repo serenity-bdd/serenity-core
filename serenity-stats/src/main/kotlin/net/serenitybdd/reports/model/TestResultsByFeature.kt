@@ -15,11 +15,6 @@ class TestResultsByFeature(val featureName: String, val scenarios: List<Scenario
         }
 
         private fun scenariosIn(testOutcomes: List<TestOutcome>): List<ScenarioSummary> =
-                testOutcomes.map { outcome ->
-                    ScenarioSummary(outcome.title,
-                            outcome.result,
-                            outcome.htmlReport,
-                            outcome.conciseErrorMessage)
-                }
+                testOutcomes.map { outcome -> ScenarioSummary.ofFailingScenariosIn(outcome) }
     }
 }

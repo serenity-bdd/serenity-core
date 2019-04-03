@@ -56,7 +56,7 @@ public class ResultReports {
         }
         if ((testOutcomesForThisTag.getTotalTests().withResult(TestResult.FAILURE) > 0)
                 || (testOutcomesForThisTag.getTotalTests().withResult(TestResult.ERROR) > 0)) {
-            tasks.add(resultReport(freemarker, environmentVariables, outputDirectory, testOutcomesForThisTag.getFailingOrErrorTests(), reportName, tag, "broken"));
+            tasks.add(resultReport(freemarker, environmentVariables, outputDirectory, testOutcomesForThisTag.getUnsuccessfulTests(), reportName, tag, "broken"));
         }
         if (testOutcomesForThisTag.getTotalTests().withResult(TestResult.FAILURE) > 0) {
             tasks.add(resultReport(freemarker, environmentVariables, outputDirectory, testOutcomesForThisTag.getFailingTests(), reportName, tag, "failure"));

@@ -100,8 +100,8 @@ public class TestOutcomes {
         return outcomes.stream()
                 .sorted(Comparator.comparing(TestOutcome::getPath,
                         Comparator.nullsFirst(naturalOrder()))
-                .thenComparing(Comparator.comparing(TestOutcome::getStartTime,
-                               Comparator.nullsFirst(naturalOrder()))))
+                .thenComparing(TestOutcome::getStartTime,
+                               Comparator.nullsFirst(naturalOrder())))
                 .collect(Collectors.toList());
     }
 
@@ -161,7 +161,7 @@ public class TestOutcomes {
         List<TestResult> eligableResults = NewList.of(results);
 
         return outcomes.stream()
-                .filter(outcome -> eligableResults.contains(((TestOutcome) outcome).getResult()))
+                .filter(outcome -> eligableResults.contains(outcome.getResult()))
                 .collect(Collectors.toList());
     }
 
@@ -195,7 +195,7 @@ public class TestOutcomes {
         return new TestOutcomes(outcomes,ConfiguredEnvironment.getConfiguration().getEstimatedAverageStepCount());
     }
 
-    private static List<TestOutcome> NO_OUTCOMES = new ArrayList();
+    private static List<TestOutcome> NO_OUTCOMES = new ArrayList<>();
 
 
     public static TestOutcomes withNoResults() {
@@ -621,8 +621,8 @@ public class TestOutcomes {
         return resultFilter.name();
     }
 
-    public TestOutcomes getFailingOrErrorTests() {
-        return TestOutcomes.of(outcomesFilteredByResult(TestResult.ERROR, TestResult.FAILURE))
+    public TestOutcomes getUnsuccessfulTests() {
+        return TestOutcomes.of(outcomesFilteredByResult(TestResult.ERROR, TestResult.FAILURE,  TestResult.COMPROMISED))
                 .withLabel(labelForTestsWithStatus("unsuccessful tests"))
                 .withResultFilter(TestResult.UNSUCCESSFUL)
                 .withRootOutcomes(getRootOutcomes());

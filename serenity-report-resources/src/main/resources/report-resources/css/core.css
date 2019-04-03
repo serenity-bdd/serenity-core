@@ -1035,7 +1035,7 @@ a.tagLink:visited, a.tagLink:link {
     float: left;
 }
 .step-description-wide-column {
-    width: 750px;
+    width: 730px;
 }
 
 .step-description-column {
@@ -1911,6 +1911,11 @@ h3 {
     margin: 0px;
 }
 
+.scenario-docs ul {
+    padding-left: 3.5em;
+    margin: 0px;
+}
+
 .summary-stats td {
     font-weight: bold;
 }
@@ -2257,3 +2262,4 @@ td.indented-error-category i {
 .scenario-report-badge {
     float:right;
 }
+

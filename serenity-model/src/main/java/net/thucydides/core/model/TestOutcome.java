@@ -2481,14 +2481,15 @@ public class TestOutcome {
 
     public boolean hasEvidence() {
         return testSteps.stream().anyMatch(
-                step -> step.getReportData().isEvidence()
+                step -> step.getReportData().stream().anyMatch(ReportData::isEvidence)
         );
     }
 
     public List<ReportData> getEvidence() {
-        return getFlattenedTestSteps().stream().filter(
-                step -> step.getReportData() != null && step.getReportData().isEvidence())
-                .map(TestStep::getReportData)
+        return getFlattenedTestSteps().stream()
+                .filter(step -> !step.getReportEvidence().isEmpty())
+                .map(TestStep::getReportEvidence)
+                .flatMap(List::stream)
                 .collect(Collectors.toList());
     }
 

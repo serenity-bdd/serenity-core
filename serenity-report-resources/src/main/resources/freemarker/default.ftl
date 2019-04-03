@@ -453,17 +453,22 @@
                             <#if showAccordion>
                             </a>
                             </#if>
-
-                            <#if step.hasRestQuery()>
-                                <span class="rest-query">
-                                    <@restQueryData restQuery=step.restQuery number=step.number />
-                                </span>
-                            </#if>
-                            <#if step.hasData()>
-                                <span class="rest-query">
-                                    <@reportData reportData=step.reportData number=step.number />
-                                </span>
-                            </#if>
+                            <span class="evidence">
+                                <#if step.hasRestQuery()>
+                                    <span class="piece-of-evidence">
+                                        <#assign restDataNumber = "REST-${step.number}">
+                                        <@restQueryData restQuery=step.restQuery number=restDataNumber />
+                                    </span>
+                                </#if>
+                                <#if step.hasData()>
+                                    <#list step.reportData as recordedData>
+                                        <#assign restDataNumber = "EVIDENCE-${step.number}-${recordedData?index}">
+                                        <span class="piece-of-evidence">
+                                            <@reportData reportData=recordedData number=restDataNumber />
+                                        </span>
+                                    </#list>
+                                </#if>
+                            </span>
                         </div>
                     </td>
                     <#if testOutcome.hasScreenshots()>

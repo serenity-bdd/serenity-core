@@ -1684,8 +1684,10 @@ ul.second-level-requirements  {
     color: grey;
 }
 
-.rest-query {
-    padding-left : 10px;
+.piece-of-evidence {
+    padding-left : 1em;
+    padding-top:0.5em;
+    display: block;
 }
 
 .parent-requirement-label {
@@ -2263,3 +2265,6 @@ td.indented-error-category i {
     float:right;
 }
 
+span.evidence {
+    display: block;
+}

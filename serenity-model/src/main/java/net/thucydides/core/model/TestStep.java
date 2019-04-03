@@ -48,7 +48,7 @@ public class TestStep implements Cloneable {
     private FailureCause exception;
     private TestResult result;
     private RestQuery restQuery;
-    private ReportData reportData;
+    private List<ReportData> reportData;
     private boolean precondition;
     private int level;
 
@@ -344,7 +344,7 @@ public class TestStep implements Cloneable {
     }
 
     public boolean hasData() {
-        return reportData != null;
+        return reportData != null && ! reportData.isEmpty();
     }
 
     public RestQuery getRestQuery() {
@@ -355,8 +355,12 @@ public class TestStep implements Cloneable {
         return level;
     }
 
-    public ReportData getReportData() {
-        return reportData;
+    public List<ReportData> getReportEvidence() {
+        return getReportData().stream().filter(ReportData::isEvidence).collect(Collectors.toList());
+    }
+
+    public List<ReportData> getReportData() {
+        return (reportData == null) ? new ArrayList<>() : reportData;
     }
 
     public ScreenshotAndHtmlSource getFirstScreenshot() {
@@ -631,8 +635,15 @@ public class TestStep implements Cloneable {
     }
 
     public TestStep withReportData(ReportData reportData) {
-        this.reportData = reportData;
+        if (this.reportData == null) {
+            this.reportData = new ArrayList<>();
+        }
+        this.reportData.add(reportData);
         return this;
+    }
+
+    public TestStep recordReportData(ReportData reportData) {
+        return this.withReportData(reportData);
     }
 
     @Override

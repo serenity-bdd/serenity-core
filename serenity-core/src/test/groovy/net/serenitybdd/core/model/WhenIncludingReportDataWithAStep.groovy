@@ -30,7 +30,7 @@ class WhenIncludingReportDataWithAStep extends Specification {
             testOutcome.currentStep().get().withReportData(ReportData.withTitle("Some data").andContents("<some><data/></some>"))
         then:
             testOutcome.lastStep().hasData() &&
-                    testOutcome.lastStep().reportData == ReportData.withTitle("Some data").andContents("<some><data/></some>")
+                    testOutcome.lastStep().reportData[0] == ReportData.withTitle("Some data").andContents("<some><data/></some>")
     }
 
     def "Arbitrary report data can be added to a step from a file"() {
@@ -42,7 +42,7 @@ class WhenIncludingReportDataWithAStep extends Specification {
             testOutcome.currentStep().get().withReportData(ReportData.withTitle("Some data").fromFile( testDataSource, StandardCharsets.UTF_8))
         then:
             testOutcome.lastStep().hasData() &&
-                testOutcome.lastStep().reportData == ReportData.withTitle("Some data").andContents("<some><more><data/></more></some>")
+                testOutcome.lastStep().reportData[0] == ReportData.withTitle("Some data").andContents("<some><more><data/></more></some>")
     }
 
     def "Arbitrary report data can be added to a step from a string using the Serenity class"() {
@@ -59,7 +59,7 @@ class WhenIncludingReportDataWithAStep extends Specification {
         then:
             TestOutcome testOutcome = StepEventBus.getEventBus().baseStepListener.testOutcomes.get(0)
             testOutcome.lastStep().hasData() &&
-                testOutcome.lastStep().reportData == ReportData.withTitle("Some data").andContents("<some><data/></some>")
+                testOutcome.lastStep().reportData[0] == ReportData.withTitle("Some data").andContents("<some><data/></some>")
     }
 
 
@@ -79,8 +79,8 @@ class WhenIncludingReportDataWithAStep extends Specification {
         then:
         TestOutcome testOutcome = StepEventBus.getEventBus().baseStepListener.testOutcomes.get(0)
         testOutcome.lastStep().hasData()
-        testOutcome.lastStep().reportData.path.startsWith("downloadable")
-        testOutcome.lastStep().reportData.path.endsWith("report-data.xml")
+        testOutcome.lastStep().reportData[0].path.startsWith("downloadable")
+        testOutcome.lastStep().reportData[0].path.endsWith("report-data.xml")
     }
 
     def "Arbitrary report data can be recorded as evidence to appear at the feature level"() {
@@ -98,7 +98,7 @@ class WhenIncludingReportDataWithAStep extends Specification {
         then:
         TestOutcome testOutcome = StepEventBus.getEventBus().baseStepListener.testOutcomes.get(0)
         testOutcome.lastStep().hasData()
-        testOutcome.lastStep().reportData.isEvidence
+        testOutcome.lastStep().reportData[0].isEvidence
     }
 
 
@@ -117,6 +117,6 @@ class WhenIncludingReportDataWithAStep extends Specification {
         then:
         TestOutcome testOutcome = StepEventBus.getEventBus().baseStepListener.testOutcomes.get(0)
         testOutcome.lastStep().hasData() &&
-                testOutcome.lastStep().reportData == ReportData.withTitle("Some data").andContents("<some><more><data/></more></some>")
+                testOutcome.lastStep().reportData[0] == ReportData.withTitle("Some data").andContents("<some><more><data/></more></some>")
     }
 }

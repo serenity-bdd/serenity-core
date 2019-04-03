@@ -15,7 +15,6 @@
 
 <#include "components/stacktrace.ftl">
 
-<body class="results-page">
 <div id="topheader">
     <div id="topbanner">
         <div id="logo"><a href="index.html"><img src="images/serenity-logo.png" border="0"/></a></div>
@@ -83,7 +82,7 @@
                                 </h3>
 
                                 <div class="discreet-requirement-narrative-title">
-                                    ${formatter.renderDescription(parentRequirement.get().narrative.renderedSummary)}
+                                    ${formatter.renderDescription(parentRequirement.get().narrative.renderedText)}
                                 </div>
                             </div>
                         <#elseif (featureOrStory?? && featureOrStory.isPresent())>

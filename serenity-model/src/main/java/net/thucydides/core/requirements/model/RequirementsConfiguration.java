@@ -8,6 +8,7 @@ import net.thucydides.core.requirements.SearchForFilesOfType;
 import net.thucydides.core.util.EnvironmentVariables;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,17 +32,21 @@ public class RequirementsConfiguration {
         this.environmentVariables = environmentVariables;
 //        root = RootDirectory.definedIn(environmentVariables).featuresOrStoriesRootDirectory();
 //        if (!root.isPresent()) {
-            root = Optional.of(Paths.get(absolutePathOfDirectoryOnClasspath(rootDirectory)));
+            root = Optional.of(absolutePathOfDirectoryOnClasspath(rootDirectory));
 ///        }
     }
 
-    private String absolutePathOfDirectoryOnClasspath(String rootDirectory) {
+    private Path absolutePathOfDirectoryOnClasspath(String rootDirectory) {
         URL rootDirOnClasspath = getClass().getClassLoader().getResource(rootDirectory);
+        Path absolutePath = Paths.get(rootDirectory);
         if (rootDirOnClasspath != null) {
-            return rootDirOnClasspath.getFile();
-        } else {
-            return rootDirectory;
+            try {
+                absolutePath = Paths.get(rootDirOnClasspath.toURI());
+            } catch (URISyntaxException e) {
+                throw new IllegalArgumentException("Fail to build absolute path of directory on classpath", e);
+            }
         }
+        return absolutePath;
     }
 
     public List<String> getRequirementTypes() {

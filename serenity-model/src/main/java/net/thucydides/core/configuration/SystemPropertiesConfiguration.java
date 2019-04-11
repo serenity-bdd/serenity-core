@@ -25,7 +25,7 @@ public class SystemPropertiesConfiguration implements Configuration {
     /**
      * Default timeout when waiting for AJAX elements in pages, in milliseconds.
      */
-    public static final int DEFAULT_ELEMENT_TIMEOUT_SECONDS = 5000;
+    public static final int DEFAULT_ELEMENT_TIMEOUT_MILLISECONDS = 5000;
 
     public static final Integer DEFAULT_ESTIMATED_AVERAGE_STEP_COUNT = 5;
 
@@ -140,7 +140,7 @@ public class SystemPropertiesConfiguration implements Configuration {
 
     @Override
     public int getElementTimeout() {
-        int elementTimeout = DEFAULT_ELEMENT_TIMEOUT_SECONDS;
+        int elementTimeout = DEFAULT_ELEMENT_TIMEOUT_MILLISECONDS;
 
         String stepDelayValue = THUCYDIDES_TIMEOUT.from(environmentVariables);
         if ((stepDelayValue != null) && (!stepDelayValue.isEmpty())) {

@@ -30,7 +30,7 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
 
     public EventualConsequence(Consequence<T> consequenceThatMightTakeSomeTime) {
         this(consequenceThatMightTakeSomeTime,
-             ConfiguredEnvironment.getConfiguration().getElementTimeout() * 1000);
+             ConfiguredEnvironment.getConfiguration().getElementTimeout());
     }
 
     public static <T> EventualConsequence<T> eventually(Consequence<T> consequenceThatMightTakeSomeTime) {

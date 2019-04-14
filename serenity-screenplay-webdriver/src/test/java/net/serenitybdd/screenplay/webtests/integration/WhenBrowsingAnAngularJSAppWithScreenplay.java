@@ -27,7 +27,7 @@ public class WhenBrowsingAnAngularJSAppWithScreenplay {
     private static Target ITEMS = Target.the("The visible todo items")
                                                      .located(ByAngular.repeater("todo in todos"));
 
-    @Managed(driver = "firefox")
+    @Managed(driver = "chrome")
     private WebDriver driver;
 
     @Test

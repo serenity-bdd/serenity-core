@@ -86,7 +86,7 @@
 
     <script>
         $(document).ready(function () {
-            $(".scenario-docs p").html(function () {
+            $(".scenario-docs > div > p").html(function () {
                 var text = $(this).text().trim().split(" ");
                 var first = text.shift();
                 return (text.length > 0 ? "<strong>" + first + "</strong> " : first) + text.join(" ");

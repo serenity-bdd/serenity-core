@@ -88,7 +88,8 @@ public class DriverServiceExecutable {
         }
 
         public DriverServiceExecutableBuilder reportMissingBinary() {
-            this.reportMissingBinary = true;
+            //this.reportMissingBinary = true;
+            // Todo: Report Missing Binaries does not work in multi-module Gradle projects, and is disabled until this is resolved.
             return this;
         }
 

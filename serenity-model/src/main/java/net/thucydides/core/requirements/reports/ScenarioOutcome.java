@@ -41,7 +41,7 @@ public interface ScenarioOutcome {
 
     Long getDuration();
 
-    boolean isManual();
+    Boolean isManual();
 
     String getFormattedStartTime();
 

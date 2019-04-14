@@ -175,7 +175,7 @@ public abstract class PageObject {
     public Duration getWaitForTimeout() {
 
         if (waitForTimeout == null) {
-            int configuredWaitForTimeoutInMilliseconds =fluentWaitTimeout();
+            int configuredWaitForTimeoutInMilliseconds = fluentWaitTimeout();
             waitForTimeout = Duration.ofMillis(configuredWaitForTimeoutInMilliseconds);
         }
         return waitForTimeout;

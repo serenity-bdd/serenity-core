@@ -19,6 +19,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
     private final int exampleCount;
     private final String parentName;
     private final String parentReport;
+    private final Boolean manual;
 
     public ScenarioSummaryOutcome(String name,
                                   String type,
@@ -29,6 +30,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
                                   List<String> steps,
                                   List<String> examples,
                                   int exampleCount,
+                                  Boolean isManual,
                                   String parentName,
                                   String parentReport) {
         this.name = name;
@@ -43,6 +45,7 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         this.exampleCount = exampleCount;
         this.parentName = parentName;
         this.parentReport = parentReport;
+        this.manual = isManual;
     }
 
     public String toString() {
@@ -121,10 +124,9 @@ public class ScenarioSummaryOutcome implements ScenarioOutcome {
         return 0L;
     }
 
-    public boolean isManual() {
-        return false;
+    public Boolean isManual() {
+        return manual;
     }
-
 
     public String getFormattedStartTime() {
         return " ";

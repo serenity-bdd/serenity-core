@@ -123,10 +123,13 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
                 parentRequirement -> context.put("currentTag", parentRequirement.asTag())
         );
 
-        context.put("scenarios", ScenarioOutcomes.from(requirementsOutcomes));
-        context.put("testCases", executedScenariosIn(requirementsOutcomes));
-        context.put("automatedTestCases", automated(executedScenariosIn(requirementsOutcomes)));
-        context.put("manualTestCases", manual(executedScenariosIn(requirementsOutcomes)));
+        List<ScenarioOutcome> scenarios = ScenarioOutcomes.from(requirementsOutcomes);
+        List<ScenarioOutcome> executedScenarios = executedScenariosIn(scenarios);
+
+        context.put("scenarios", scenarios);
+        context.put("testCases", executedScenarios);
+        context.put("automatedTestCases", automated(executedScenarios));
+        context.put("manualTestCases", manual(executedScenarios));
 
         addBreadcrumbs(requirementsOutcomes, context, requirementsOutcomes.getTestOutcomes().getTags());
 
@@ -143,17 +146,16 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
         return executedScenariosIn.stream().filter(scenarioOutcome -> scenarioOutcome.isManual()).collect(Collectors.toList());
     }
 
-    private List<ScenarioOutcome> executedScenariosIn(RequirementsOutcomes requirementsOutcomes) {
-        return ScenarioOutcomes.from(requirementsOutcomes.getTestOutcomes())
-                                                  .stream()
-                                                  .filter(scenarioOutcome -> !scenarioOutcome.getType().equalsIgnoreCase("background"))
-                                                  .collect(Collectors.toList());
+    private List<ScenarioOutcome> executedScenariosIn(List<ScenarioOutcome> scenarios) {
+        return scenarios.stream()
+                .filter(scenarioOutcome -> !scenarioOutcome.getType().equalsIgnoreCase("background"))
+                .collect(Collectors.toList());
     }
 
     private void addBreadcrumbs(RequirementsOutcomes requirementsOutcomes, Map<String, Object> context, List<TestTag> allTags) {
         if (this.requirementsOutcomes.getParentRequirement().isPresent()) {
             context.put("breadcrumbs", Breadcrumbs.forRequirementsTag(this.requirementsOutcomes.getParentRequirement().get().asTag())
-                                                  .fromTagsIn(allTags));
+                    .fromTagsIn(allTags));
         } else {
             context.put("breadcrumbs", new BreadcrumbTagFilter().getRequirementBreadcrumbsFrom(requirementsOutcomes));
         }

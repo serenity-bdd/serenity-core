@@ -619,6 +619,11 @@ public enum ThucydidesSystemProperty {
     DRIVER_OPTIONS,
 
     /**
+     * Try to create a Chrome driver using a driver service pool
+     */
+    WEBDRIVER_USE_DRIVER_SERVICE_POOL,
+
+    /**
      * Full path to the Firefox profile to be used with Firefox.
      * You can include Java system properties ${user.dir}, ${user.home} and the Windows environment variables %APPDIR%
      * and %USERPROFILE (assuming these are correctly set in the environment)

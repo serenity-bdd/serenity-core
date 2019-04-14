@@ -122,6 +122,18 @@ class WhenLoadingNarrativeDescriptionFromADirectory extends Specification {
         narrative.get().text.replace("\r\n", "\n").replace("\r","\n") == "  As a farmer\n  I want to plant an apple tree\n  So that I can grow apples\n\n  This is really important"
     }
 
+
+    def "Should read narrative in a comment in a feature file"() {
+        given: "there is a narrative.txt file in a directory"
+        File reqDirectory = directoryInClasspathAt("sample-story-directories/capabilities_and_features/grow_apples/grow_red_apples/grow_special_red_apples")
+        when: "We try to load a feature file"
+        def reader = NarrativeReader.forRootDirectory("sample-story-directories/capabilities_and_features")
+        def narrative = reader.loadFromStoryFile(new File(reqDirectory, "PlantingAnAppleTreeWithAComment.feature"))
+        then: "the narrativeText should be found"
+        narrative.present
+        narrative.get().title.get() == 'Planting a new apple tree'
+        narrative.get().text.replace("\r\n", "\n").replace("\r","\n") == "  As a farmer\n  I want to plant an apple tree\n  So that I can grow apples\n\n  This is really important"
+    }
     def "Should use the lowest requirement type for deeply nested requirements"() {
         given: "there is a narrative.txt file in a directory"
             File directoryContainingANarrative = directoryInClasspathAt("sample-story-directories/capabilities_and_features/grow_apples/grow_red_apples/grow_special_red_apples")

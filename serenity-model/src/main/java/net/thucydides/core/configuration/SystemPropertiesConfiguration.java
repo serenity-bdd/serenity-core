@@ -23,7 +23,7 @@ import static org.apache.commons.lang3.StringUtils.*;
 public class SystemPropertiesConfiguration implements Configuration {
 
     /**
-     * Default timeout when waiting for AJAX elements in pages, in milliseconds.
+     * Default timeout when waiting for AJAX elements in pages, in seconds.
      */
     public static final int DEFAULT_ELEMENT_TIMEOUT_SECONDS = 5;
 
@@ -142,9 +142,9 @@ public class SystemPropertiesConfiguration implements Configuration {
     public int getElementTimeout() {
         int elementTimeout = DEFAULT_ELEMENT_TIMEOUT_SECONDS;
 
-        String stepDelayValue = THUCYDIDES_TIMEOUT.from(environmentVariables);
-        if ((stepDelayValue != null) && (!stepDelayValue.isEmpty())) {
-            elementTimeout = Integer.parseInt(stepDelayValue);
+        String serenityDefinedTimeoutInSeconds = SERENITY_TIMEOUT.from(environmentVariables);
+        if ((serenityDefinedTimeoutInSeconds != null) && (!serenityDefinedTimeoutInSeconds.isEmpty())) {
+            elementTimeout = Integer.parseInt(serenityDefinedTimeoutInSeconds);
         }
         return elementTimeout;
 

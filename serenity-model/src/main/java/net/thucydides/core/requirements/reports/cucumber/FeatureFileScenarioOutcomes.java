@@ -3,6 +3,7 @@ package net.thucydides.core.requirements.reports.cucumber;
 import gherkin.ast.Feature;
 import gherkin.ast.ScenarioDefinition;
 import gherkin.ast.ScenarioOutline;
+import gherkin.ast.Tag;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.model.TestOutcome;
@@ -11,6 +12,7 @@ import net.thucydides.core.model.TestResultList;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.reports.html.ReportNameProvider;
 import net.thucydides.core.requirements.model.Requirement;
+import net.thucydides.core.requirements.model.cucumber.AnnotatedFeature;
 import net.thucydides.core.requirements.model.cucumber.CucumberParser;
 import net.thucydides.core.requirements.reports.*;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -43,15 +45,15 @@ public class FeatureFileScenarioOutcomes {
 
     public List<ScenarioOutcome> forOutcomesIn(RequirementsOutcomes requirementsOutcomes) {
         CucumberParser parser = new CucumberParser();
-        Optional<Feature> feature = parser.loadFeature(pathFromResourceOnClasspath(requirement.getPath()));
+        Optional<AnnotatedFeature> feature = parser.loadFeature(pathFromResourceOnClasspath(requirement.getPath()));
 
         if (!feature.isPresent()) {
             return Collections.emptyList();
         } else {
             List<ScenarioOutcome> scenarioOutcomes = new ArrayList<>();
-            feature.get().getChildren().forEach(
+            feature.get().getFeature().getChildren().forEach(
                     scenarioDefinition -> scenarioOutcomes.add(
-                                                scenarioOutcomeFrom(feature.get(),
+                                                scenarioOutcomeFrom(feature.get().getFeature(),
                                                                      scenarioDefinition,
                                                                      requirementsOutcomes.getTestOutcomes()))
             );
@@ -88,6 +90,7 @@ public class FeatureFileScenarioOutcomes {
                 ((ScenarioOutline) scenarioDefinition).getExamples().stream().mapToInt(examples -> examples.getTableBody().size()).sum()
                 : 0;
 
+        Boolean isManual = (outcomes.size() == 1) ? outcomes.get(0).isManual() : hasManualTag(feature.getTags());
         return new ScenarioSummaryOutcome(scenarioTitle,
                 scenarioDefinition.getKeyword(),
                 result,
@@ -97,8 +100,13 @@ public class FeatureFileScenarioOutcomes {
                 renderedSteps,
                 renderedExamples,
                 exampleCount,
+                isManual,
                 feature.getName(),
                 featureReport);
+    }
+
+    private Boolean hasManualTag(List<Tag> tags) {
+        return tags.stream().anyMatch(tag -> tag.getName().toLowerCase().startsWith("@manual"));
     }
 
     private File pathFromResourceOnClasspath(String path) {

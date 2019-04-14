@@ -73,7 +73,7 @@ public class FreemarkerContext {
     public Map<String, Object> getBuildContext(TestOutcomes testOutcomes,
                                                ReportNameProvider reportName,
                                                boolean useFiltering) {
-        Map<String, Object> context = new HashMap();
+        Map<String, Object> context = new HashMap<>();
         TagFilter tagFilter = new TagFilter(environmentVariables);
         context.put("testOutcomes", testOutcomes);
         context.put("allTestOutcomes", testOutcomes.getRootOutcomes());
@@ -106,10 +106,13 @@ public class FreemarkerContext {
         context.put("build", buildProperties);
 
         context.put("resultCounts", ResultCounts.forOutcomesIn(testOutcomes));
-        context.put("scenarios", ScenarioOutcomes.from(testOutcomes));
-        context.put("testCases", executedScenariosIn(testOutcomes));
-        context.put("automatedTestCases", automated(executedScenariosIn(testOutcomes)));
-        context.put("manualTestCases", manual(executedScenariosIn(testOutcomes)));
+
+        List<ScenarioOutcome> scenarios = ScenarioOutcomes.from(testOutcomes);
+
+        context.put("scenarios", scenarios);
+        context.put("testCases", executedScenariosIn(scenarios));
+        context.put("automatedTestCases", automated(executedScenariosIn(scenarios)));
+        context.put("manualTestCases", manual(executedScenariosIn(scenarios)));
         context.put("evidence", EvidenceData.from(testOutcomes));
 
         context.put("frequentFailures", FrequentFailures.from(testOutcomes).withMaxOf(5));
@@ -155,9 +158,8 @@ public class FreemarkerContext {
         return executedScenariosIn.stream().filter(scenarioOutcome -> scenarioOutcome.isManual()).collect(Collectors.toList());
     }
 
-    private List<ScenarioOutcome> executedScenariosIn(TestOutcomes testOutcomes) {
-        return ScenarioOutcomes.from(testOutcomes)
-                .stream()
+    private List<ScenarioOutcome> executedScenariosIn(List<ScenarioOutcome> scenarioOutcomes) {
+        return scenarioOutcomes.stream()
                 .filter(scenarioOutcome -> !scenarioOutcome.getType().equalsIgnoreCase("background"))
                 .collect(Collectors.toList());
     }

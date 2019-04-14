@@ -30,16 +30,18 @@ class UnstableFeaturesBuilder(val testOutcomes: TestOutcomes) {
     fun withMaxOf(maxEntries: Int): List<UnstableFeature> {
         val failingTestCount = unsuccessfulOutcomesIn(testOutcomes.unsuccessfulTests)
         return testOutcomes.unsuccessfulTests.outcomes
-                .groupBy { outcome -> outcome.userStory }
-                .map { (userStory, outcomes) ->
-                    UnstableFeature(userStory.displayName,
+                .groupBy { outcome -> defaultStoryNameOr(outcome.userStory?.displayName) }
+                .map { (userStoryName, outcomes) ->
+                    UnstableFeature(userStoryName,
                             failingTestCount,
-                            percentageFailures(failingTestCount, userStory, testOutcomes),
+                            percentageFailures(failingTestCount, userStoryName, testOutcomes),
                             featureReport(outcomes[0]))
                 }
                 .sortedByDescending { unstableFeature -> unstableFeature.failurePercentage }
                 .take(maxEntries)
     }
+
+    private fun defaultStoryNameOr(displayName: String?): String = if (displayName != null) displayName else "Undefined Story"
 
     private fun unsuccessfulOutcomesIn(testOutcomes: TestOutcomes) : Int {
         return testOutcomes.outcomes.map { unsuccessfulOutcomesIn(it) }.sum()
@@ -54,8 +56,10 @@ class UnstableFeaturesBuilder(val testOutcomes: TestOutcomes) {
 
     private fun isUnsuccessful(row: DataTableRow) = row.result == FAILURE || row.result == ERROR || row.result == COMPROMISED
 
-    private fun percentageFailures(failingScenarios: Int, userStory: Story, testOutcomes: TestOutcomes): Int {
-        val totalScenarios = TestOutcomes.of(testOutcomes.outcomes.filter { outcome -> userStory.equals(outcome.userStory)}).total
+    private fun percentageFailures(failingScenarios: Int, userStoryName: String, testOutcomes: TestOutcomes): Int {
+        val totalScenarios = TestOutcomes.of(testOutcomes.outcomes.filter {
+                                                outcome -> userStoryName == outcome.userStory?.displayName }
+                                            ).total
         return if (totalScenarios == 0) 0 else failingScenarios * 100 / totalScenarios
     }
 

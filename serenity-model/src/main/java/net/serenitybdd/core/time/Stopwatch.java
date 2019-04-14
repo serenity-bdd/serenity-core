@@ -11,7 +11,7 @@ public class Stopwatch {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Stopwatch.class);
 
-    long startTime = 0;
+    long startTimeInMillis = 0;
 
     public static Stopwatch started() {
         Stopwatch stopwatch = new Stopwatch();
@@ -20,25 +20,25 @@ public class Stopwatch {
     }
 
     public void start() {
-        startTime = currentTimeMillis();
+        startTimeInMillis = currentTimeMillis();
     }
 
     public long stop() {
         validateStarted();
-        long result = currentTimeMillis() - startTime;
-        startTime = 0;
+        long result = currentTimeMillis() - startTimeInMillis;
+        startTimeInMillis = 0;
         return result;
     }
 
     private void validateStarted() {
-        if (startTime == 0) {
+        if (startTimeInMillis == 0) {
             throw new IllegalStateException("stopwatch is already stopped");
         }
     }
 
     public String lapTimeFormatted() {
         validateStarted();
-        return lapTimeFormatted(currentTimeMillis() - startTime);
+        return lapTimeFormatted(currentTimeMillis() - startTimeInMillis);
     }
 
     public String executionTimeFormatted() {
@@ -51,7 +51,7 @@ public class Stopwatch {
 
     public long lapTime() {
         validateStarted();
-        return currentTimeMillis() - startTime;
+        return currentTimeMillis() - startTimeInMillis;
     }
 
     public long stop(String message) {

@@ -24,7 +24,7 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
     private final int exampleCount;
     private final ZonedDateTime startTime;
     private final Long duration;
-    private final boolean manual;
+    private final Boolean manual;
     private final String parentName;
     private final String parentReport;
 
@@ -136,10 +136,13 @@ public class SingleScenarioOutcome implements ScenarioOutcome {
         return duration;
     }
 
-    public boolean isManual() {
+    public Boolean isManual() {
         return manual;
     }
 
+    public Boolean isManualScenario() {
+        return manual;
+    }
 
     public String getFormattedStartTime() {
         return (startTime != null) ? startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")) : " ";

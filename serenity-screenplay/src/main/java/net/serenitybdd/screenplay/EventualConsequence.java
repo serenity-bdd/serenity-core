@@ -11,20 +11,20 @@ import java.util.List;
 public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
     public static final int A_SHORT_PERIOD_BETWEEN_TRIES = 100;
     private final Consequence<T> consequenceThatMightTakeSomeTime;
-    private final long timeout;
+    private final long timeoutInMilliseconds;
     private final boolean isSilent;
 
     private AssertionError caughtAssertionError = null;
     private RuntimeException caughtRuntimeException = null;
     private List<Class<? extends Throwable>> exceptionsToIgnore = new ArrayList<>();
 
-    public EventualConsequence(Consequence<T> consequenceThatMightTakeSomeTime, long timeout) {
-        this(consequenceThatMightTakeSomeTime, timeout, false);
+    public EventualConsequence(Consequence<T> consequenceThatMightTakeSomeTime, long timeoutInMilliseconds) {
+        this(consequenceThatMightTakeSomeTime, timeoutInMilliseconds, false);
     }
 
-    public EventualConsequence(Consequence<T> consequenceThatMightTakeSomeTime, long timeout, boolean isSilent) {
+    public EventualConsequence(Consequence<T> consequenceThatMightTakeSomeTime, long timeoutInMilliseconds, boolean isSilent) {
         this.consequenceThatMightTakeSomeTime = consequenceThatMightTakeSomeTime;
-        this.timeout = timeout;
+        this.timeoutInMilliseconds = timeoutInMilliseconds;
         this.isSilent = isSilent;
     }
 
@@ -63,17 +63,8 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
                     throw exception;
                 }
             }
-//            } catch(Throwable exception) {
-//                if (!shouldIgnoreException(exception)) {
-//                    if (exception instanceof AssertionError) {
-//                        caughtAssertionError =(AssertionError) exception;
-//                    } else if (exception instanceof RuntimeException) {
-//                        caughtRuntimeException = (RuntimeException) exception;
-//                    }
-//                }
-//            }
             pauseBeforeNextAttempt();
-        } while (stopwatch.lapTime() < timeout);
+        } while (stopwatch.lapTime() < timeoutInMilliseconds);
 
         throwAnyCaughtErrors();
     }
@@ -135,6 +126,6 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
     }
 
     public EventualConsequence<T>  withNoReporting() {
-        return new EventualConsequence<T>(consequenceThatMightTakeSomeTime, timeout, true);
+        return new EventualConsequence<T>(consequenceThatMightTakeSomeTime, timeoutInMilliseconds, true);
     }
 }

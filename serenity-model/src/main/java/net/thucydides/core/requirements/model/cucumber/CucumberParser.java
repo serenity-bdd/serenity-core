@@ -1,7 +1,6 @@
 package net.thucydides.core.requirements.model.cucumber;
 
 import com.google.common.base.Splitter;
-import cucumber.runtime.CucumberException;
 import cucumber.runtime.io.MultiLoader;
 import cucumber.runtime.io.ResourceLoader;
 import cucumber.runtime.model.CucumberFeature;
@@ -58,7 +57,7 @@ public class CucumberParser {
         this.encoding = ThucydidesSystemProperty.FEATURE_FILE_ENCODING.from(environmentVariables, Charset.defaultCharset().name());
     }
 
-    public Optional<Feature> loadFeature(File narrativeFile) {
+    public Optional<AnnotatedFeature> loadFeature(File narrativeFile) {
         if (narrativeFile == null) {
             return Optional.empty();
         }
@@ -76,10 +75,13 @@ public class CucumberParser {
             }
             CucumberFeature cucumberFeature = cucumberFeatures.get(0);
             GherkinDocument gherkinDocument = cucumberFeature.getGherkinFeature();
+
+            String descriptionInComments = NarrativeFromCucumberComments.in(gherkinDocument.getComments());
+
             if (featureFileCouldNotBeReadFor(gherkinDocument.getFeature())) {
                 return Optional.empty();
             }
-            return Optional.of(gherkinDocument.getFeature());
+            return Optional.of(new AnnotatedFeature(gherkinDocument.getFeature(),descriptionInComments));
         } catch (Exception ex) {
             ex.printStackTrace();
             return Optional.empty();
@@ -110,13 +112,13 @@ public class CucumberParser {
 
     public Optional<Narrative> loadFeatureNarrative(File narrativeFile) {
 
-        Optional<Feature> loadedFeature = loadFeature(narrativeFile);
+        Optional<AnnotatedFeature> loadedFeature = loadFeature(narrativeFile);
 
         if (!loadedFeature.isPresent()) {
             return Optional.empty();
         }
 
-        Feature feature = loadedFeature.get();
+        Feature feature = loadedFeature.get().getFeature();
 
         String cardNumber = findCardNumberInTags(tagsDefinedIn(feature));
         List<String> versionNumbers = findVersionNumberInTags(tagsDefinedIn(feature));

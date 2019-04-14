@@ -299,7 +299,7 @@
                                                                             ${outcome_icon}
                                                                             <#if outcome_icon?has_content></a></#if>
 
-                                                                        <#if (scenario.manual)> <i class="fa fa-user manual"
+                                                                        <#if (scenario.isManual())> <i class="fa fa-user manual"
                                                                                            title="Manual test"></i></#if>
                                                                         </td>
                                                                         <#if outcome_icon?has_content>
@@ -332,7 +332,7 @@
                                                                 <a href="${scenario.scenarioReport}" title="View test results">${scenario.title}</a>
                                                             </span>
                                                             <span class="scenario-result-icon">
-                                                                <#if (scenario.manual)> MANUAL <i class="fa fa-user manual" title="Manual test"></i></#if>
+                                                                <#if (scenario.isManual())> <i class="fa fa-user manual" title="Manual test"></i></#if>
 
                                                                 <#if outcome_icon?has_content>
                                                                     ${outcome_icon}

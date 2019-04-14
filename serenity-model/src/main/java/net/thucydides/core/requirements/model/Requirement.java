@@ -182,7 +182,7 @@ public class Requirement implements Comparable {
     }
 
     public int compareTo(Object otherRequirement) {
-        return name.compareTo(((Requirement) otherRequirement).getName());
+        return getOrder().compareTo(((Requirement) otherRequirement).getOrder());
     }
 
     public static RequirementBuilderNameStep named(String name) {
@@ -434,5 +434,9 @@ public class Requirement implements Comparable {
         public Requirement setTo(String value) {
             return setTo(value, null);
         }
+    }
+
+    public String getOrder() {
+        return ((path != null) ? path : "") + (featureFileName != null ? featureFileName : "") + getDisplayName();
     }
 }

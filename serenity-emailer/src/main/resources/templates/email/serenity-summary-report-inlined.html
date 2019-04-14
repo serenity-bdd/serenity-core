@@ -1352,6 +1352,14 @@
                                                th:text="${scenario.title}">Scenario</a>
                                         </td>
                                         <td>
+                                          <span th:if="${scenario.results.empty}"
+                                                th:text="${scenario.result}"
+                                                th:attr="class='frequent-failure for-' + ${scenario.result}"
+                                                class="scenario-summary-tag for-passing"
+                                                style="font-weight: bold; text-transform: uppercase;"><span
+                                                  th:attr="color=${scenario.color}">ERROR</span>
+                                            </span>
+
 	                                        <div th:each="scenarioOutcome: ${scenario.results}">
                                                 <div>
                                                     <span th:text="${scenarioOutcome.result}"
@@ -1360,13 +1368,15 @@
                                                           style="font-weight: bold; text-transform: uppercase;"><span
                                                             th:attr="color=${scenarioOutcome.color}">ERROR</span>
                                                     </span>
-                                                    <span th:if="${!#strings.isEmpty(scenarioOutcome.description)}">
-                                                        -
-                                                    </span>
-                                                    <span th:text="${scenarioOutcome.description}"
-                                                          th:attr="class='for-' + ${scenarioOutcome.result}"
-                                                          class="frequent-failure for-passing"><span
-                                                            th:attr="color=${scenarioOutcome.color}">Example #1</span>
+                                                    <span th:if="${scenario.hasExamples}">
+                                                        <span th:if="!#strings.isEmpty(scenarioOutcome.description)}">
+                                                            -
+                                                        </span>
+                                                        <span th:text="${scenarioOutcome.description}"
+                                                              th:attr="class='for-' + ${scenarioOutcome.result}"
+                                                              class="frequent-failure for-passing"><span
+                                                                th:attr="color=${scenarioOutcome.color}">Example #1</span>
+                                                        </span>
                                                     </span>
                                                 </div>
                                                 <div th:text="${scenarioOutcome.errorMessage}"

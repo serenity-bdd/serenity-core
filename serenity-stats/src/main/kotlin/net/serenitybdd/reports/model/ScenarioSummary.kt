@@ -15,6 +15,7 @@ class ScenarioSummary(val title: String,
     val result = testResult.toString().toLowerCase()
     val color = CSSColor().forResult(testResult)
     val errorMessage = if (results.isEmpty()) "" else results[0].errorMessage
+    val hasExamples = results.size > 1
 
     companion object {
         fun ofFailingScenariosIn(outcome: TestOutcome): ScenarioSummary =

@@ -17,18 +17,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_USE_DRIVER_SERVICE_POOL;
 
 public class ChromeDriverProvider implements DriverProvider {
 
     private final DriverCapabilityRecord driverProperties;
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChromeDriverProvider.class);
 
     private final DriverServicePool driverServicePool = new ChromeServicePool();
-
-    private DriverServicePool getDriverServicePool() throws IOException {
-        driverServicePool.ensureServiceIsRunning();
-        return driverServicePool;
-    }
 
     private final FixtureProviderService fixtureProviderService;
 
@@ -42,16 +42,22 @@ public class ChromeDriverProvider implements DriverProvider {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
-        DesiredCapabilities capabilities = requestedChromeCapabilities(options, environmentVariables);
-        driverProperties.registerCapabilities("chrome", capabilitiesToProperties(capabilities));
 
-        try {
-            return getDriverServicePool().newDriver(capabilities);
-        } catch (IOException couldNotStartChromeServer) {
-            LOGGER.warn("Failed to start the chrome driver service, using a native driver instead",  couldNotStartChromeServer.getMessage());
-            CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-            return new ChromeDriver(enhancer.enhanced(capabilities, SupportedWebDriver.CHROME));
-        }
+        DesiredCapabilities enhancedCapabilities = enhancedCapabilitiesConfiguredIn(environmentVariables, options);
+        driverProperties.registerCapabilities("chrome", capabilitiesToProperties(enhancedCapabilities));
+
+        return ProvideNewDriver.withConfiguration(environmentVariables,
+                enhancedCapabilities,
+                driverServicePool,
+                DriverServicePool::newDriver,
+                (pool, capabilities) -> new ChromeDriver(capabilities)
+        );
+    }
+
+    private DesiredCapabilities enhancedCapabilitiesConfiguredIn(EnvironmentVariables environmentVariables, String options) {
+        DesiredCapabilities capabilities = requestedChromeCapabilities(options, environmentVariables);
+        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
+        return enhancer.enhanced(capabilities, SupportedWebDriver.CHROME);
     }
 
     private DesiredCapabilities requestedChromeCapabilities(String options, EnvironmentVariables environmentVariables) {

@@ -2268,3 +2268,8 @@ td.indented-error-category i {
 span.evidence {
     display: block;
 }
+
+.scenario-docs blockquote {
+    font-style: italic;
+    font-size: 1em;
+}

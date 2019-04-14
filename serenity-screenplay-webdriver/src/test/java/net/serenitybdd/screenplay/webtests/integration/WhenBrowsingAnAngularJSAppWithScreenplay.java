@@ -47,6 +47,6 @@ public class WhenBrowsingAnAngularJSAppWithScreenplay {
                 WaitUntil.angularRequestsHaveFinished()
         );
 
-        tim.should(seeThat(TheTarget.textValuesOf(ITEMS), hasItems("Walk the dog","Feed the cat")));
+        tim.should(seeThat(TheTarget.textValuesOf(ITEMS).withNoSurroundingWhiteSpace(), hasItems("Walk the dog","Feed the cat")));
     }
 }

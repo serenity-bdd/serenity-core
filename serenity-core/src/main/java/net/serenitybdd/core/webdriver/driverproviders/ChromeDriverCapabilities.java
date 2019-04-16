@@ -1,8 +1,9 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
+import com.google.common.base.Optional;
+import net.serenitybdd.core.webdriver.servicepools.DriverServiceExecutable;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.capabilities.AddCustomCapabilities;
 import net.thucydides.core.webdriver.capabilities.ChromePreferences;
 import net.thucydides.core.webdriver.chrome.OptionsSplitter;
@@ -10,12 +11,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static net.thucydides.core.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
-import static net.thucydides.core.ThucydidesSystemProperty.HEADLESS_MODE;
+import static net.thucydides.core.ThucydidesSystemProperty.*;
 
 public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
 
@@ -112,10 +113,16 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
     }
 
     private void updateChromeBinaryIfSpecified(ChromeOptions options) {
-        String chromeBinary = environmentVariables.getProperty(ThucydidesSystemProperty.WEBDRIVER_CHROME_BINARY);
 
-        if (StringUtils.isNotEmpty(chromeBinary)) {
-            options.setBinary(chromeBinary);
+        File executable = DriverServiceExecutable.called("chromedriver")
+                .withSystemProperty(WEBDRIVER_CHROME_DRIVER.getPropertyName())
+                .usingEnvironmentVariables(environmentVariables)
+                .reportMissingBinary()
+                .downloadableFrom("https://sites.google.com/a/chromium.org/chromedriver/downloads")
+                .asAFile();
+
+        if (executable.exists()) {
+            System.setProperty("webdriver.chrome.driver", executable.getAbsolutePath());
         }
     }
 

@@ -55,12 +55,6 @@ public class ChromeDriverProvider implements DriverProvider {
     }
 
     private DesiredCapabilities enhancedCapabilitiesConfiguredIn(EnvironmentVariables environmentVariables, String options) {
-        DesiredCapabilities capabilities = requestedChromeCapabilities(options, environmentVariables);
-        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-        return enhancer.enhanced(capabilities, SupportedWebDriver.CHROME);
-    }
-
-    private DesiredCapabilities requestedChromeCapabilities(String options, EnvironmentVariables environmentVariables) {
         DesiredCapabilities capabilities = new ChromeDriverCapabilities(environmentVariables, options).getCapabilities();
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         return enhancer.enhanced(capabilities, SupportedWebDriver.CHROME);

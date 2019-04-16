@@ -47,62 +47,25 @@ public class FirefoxDriverProvider implements DriverProvider {
         }
         DesiredCapabilities capabilities = new FirefoxDriverCapabilities(environmentVariables).getCapabilities();
 
-        WebDriver driver =  (shouldUseGeckoDriver(environmentVariables)) ?
-                newMarionetteDriver(capabilities,environmentVariables) :
-                newFirefoxDriver(capabilities,environmentVariables);
+        WebDriver driver = newMarionetteDriver(capabilities,environmentVariables);
 
         driverProperties.registerCapabilities("firefox", capabilitiesToProperties(capabilities));
 
         return driver;
     }
 
-    private boolean shouldUseGeckoDriver(EnvironmentVariables environmentVariables) {
-        return (geckoDriverIsInEnvironmentVariable(environmentVariables)
-                || geckoDriverPathIsDefined())
-                && geckoIsNotDisabled(environmentVariables);
-    }
-
-    private boolean geckoIsNotDisabled(EnvironmentVariables environmentVariables) {
-        return USE_GECKO_DRIVER.booleanFrom(environmentVariables, true);
-    }
-
-    private WebDriver newFirefoxDriver(DesiredCapabilities capabilities, EnvironmentVariables environmentVariables) {
-        capabilities.setCapability("marionette", false);
-
-        CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
-
-        FirefoxOptions options = new FirefoxOptions(enhancer.enhanced(capabilities, SupportedWebDriver.FIREFOX));
-
-        FirefoxOptionsEnhancer.enhanceOptions(options).using(environmentVariables);
-
-        return new FirefoxDriver(options);
-    }
-
     private WebDriver newMarionetteDriver(DesiredCapabilities capabilities, EnvironmentVariables environmentVariables) {
         capabilities.setCapability("marionette", true);
         capabilities.setCapability("headless", ThucydidesSystemProperty.HEADLESS_MODE.booleanFrom(environmentVariables, false));
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
+        FirefoxOptions options = new FirefoxOptions(enhancer.enhanced(capabilities, SupportedWebDriver.FIREFOX));
         DesiredCapabilities enhancedCapabilities = enhancer.enhanced(capabilities, SupportedWebDriver.FIREFOX);
 
         return ProvideNewDriver.withConfiguration(environmentVariables,
                 enhancedCapabilities,
                 driverServicePool,
                 DriverServicePool::newDriver,
-                (pool, caps) -> newFirefoxDriver(caps, environmentVariables)
+                (pool, caps) -> new FirefoxDriver(options)
         );
     }
-
-    private boolean geckoDriverPathIsDefined() {
-        return System.getProperty("webdriver.gecko.driver") != null;
-    }
-
-    private boolean geckoDriverIsInEnvironmentVariable(EnvironmentVariables environmentVariables) {
-        try {
-            new ProcessBuilder().command(WEBDRIVER_GECKO_DRIVER.from(environmentVariables), "--help").start();
-            return true;
-        } catch (Exception geckodriverBinaryNotFound) {
-            return false;
-        }
-    }
-
 }

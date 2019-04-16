@@ -4,11 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.webdriver.servicepools.DriverServiceExecutable;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.steps.FilePathParser;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.firefox.FirefoxProfileEnhancer;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
@@ -17,6 +19,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_CHROME_DRIVER;
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_GECKO_DRIVER;
 
 public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
 
@@ -42,16 +47,33 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
 
             firefoxOptions = new Gson().fromJson(firefoxOptionsInJsonFormat, new TypeToken<HashMap<String, Object>>() {}.getType());
         }
-        if (ThucydidesSystemProperty.WEBDRIVER_GECKO_DRIVER.isDefinedIn(environmentVariables)) {
-            firefoxOptions.put("binary", ThucydidesSystemProperty.WEBDRIVER_GECKO_DRIVER.from(environmentVariables));
-        }
+        updateBinaryIfSpecified();
+//        if (WEBDRIVER_GECKO_DRIVER.isDefinedIn(environmentVariables)) {
+//            firefoxOptions.put("binary", WEBDRIVER_GECKO_DRIVER.from(environmentVariables));
+//        }
 
         capabilities.setCapability("moz:firefoxOptions", firefoxOptions);
 
         addProxyConfigurationTo(capabilities);
 
+
         return capabilities;
     }
+
+    private void updateBinaryIfSpecified() {
+
+        File executable = DriverServiceExecutable.called("geckodriver")
+                .withSystemProperty(WEBDRIVER_GECKO_DRIVER.getPropertyName())
+                .usingEnvironmentVariables(environmentVariables)
+                .reportMissingBinary()
+                .downloadableFrom("https://github.com/mozilla/geckodriver/releases")
+                .asAFile();
+
+        if (executable.exists()) {
+            System.setProperty("webdriver.gecko.driver", executable.getAbsolutePath());
+        }
+    }
+
 
     private void addProxyConfigurationTo(DesiredCapabilities capabilities) {
 

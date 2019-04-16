@@ -21,17 +21,17 @@ public class WhenRenderingJBehaveTables {
     @Test
     public void shouldRenderJBehaveTables() {
 
-        String textWithAJBehaveTable = "Given the following transaction is reportable\n" +
-                "［| Trade ID | Jurisdiction | State      |\n" +
-                "| 100      | MIFID-2      | Reportable |\n" +
+        String textWithAJBehaveTable = "Given the following transaction is reportable" + System.lineSeparator() +
+                "［| Trade ID | Jurisdiction | State      |" + System.lineSeparator() +
+                "| 100      | MIFID-2      | Reportable |" + System.lineSeparator() +
                 "| 101      | MIFID-2      | Reportable |］";
 
         assertThat(MarkdownTables.convertTablesIn(textWithAJBehaveTable))
-                .isEqualTo("Given the following transaction is reportable\n\n" +
-                        "| Trade ID | Jurisdiction | State      |  \n" +
-                        "| --- | --- | --- |  \n" +
-                        "| 100      | MIFID-2      | Reportable |  \n" +
-                        "| 101      | MIFID-2      | Reportable |  \n");
+                .isEqualTo("Given the following transaction is reportable" + System.lineSeparator() + System.lineSeparator() +
+                        "| Trade ID | Jurisdiction | State      |  " + System.lineSeparator() +
+                        "| --- | --- | --- |  " + System.lineSeparator() +
+                        "| 100      | MIFID-2      | Reportable |  " + System.lineSeparator() +
+                        "| 101      | MIFID-2      | Reportable |  " + System.lineSeparator());
     }
 
 }

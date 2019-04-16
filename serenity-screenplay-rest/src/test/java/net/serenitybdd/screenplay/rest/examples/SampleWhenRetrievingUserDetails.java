@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.not;
 
 @RunWith(SerenityRunner.class)
-public class WhenRetrievingUserDetails {
+public class SampleWhenRetrievingUserDetails {
 
     Actor sam = Actor.named("Sam the supervisor").whoCan(CallAnApi.at("https://reqres.in"));
 

@@ -24,11 +24,13 @@ class WhenFindingDriverServiceExecutables extends Specification {
         gitExe.exists()
     }
 
+    def MY_PATH = File.separator + "my" + File.separator + "path";
+
     def "should be able to configure OS-specific drivers"() {
         given:
         EnvironmentVariables environmentVariables = new MockEnvironmentVariables()
         String os = CurrentOS.type
-        environmentVariables.setProperty("drivers.${os}.my.exe.path","/my/path")
+        environmentVariables.setProperty("drivers.${os}.my.exe.path",MY_PATH)
 
         when:
             Path driverPath = DriverServiceExecutable.called("myexe")
@@ -38,7 +40,7 @@ class WhenFindingDriverServiceExecutables extends Specification {
                     .downloadableFrom("the internet")
                     .asAPath()
         then:
-            driverPath.toString() == "/my/path"
+            driverPath.toString() == MY_PATH
 
     }
 }

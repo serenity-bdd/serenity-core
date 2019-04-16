@@ -1369,9 +1369,7 @@
                                                             th:attr="color=${scenarioOutcome.color}">ERROR</span>
                                                     </span>
                                                     <span th:if="${scenario.hasExamples}">
-                                                        <span th:if="!#strings.isEmpty(scenarioOutcome.description)}">
-                                                            -
-                                                        </span>
+                                                        -
                                                         <span th:text="${scenarioOutcome.description}"
                                                               th:attr="class='for-' + ${scenarioOutcome.result}"
                                                               class="frequent-failure for-passing"><span

@@ -121,7 +121,7 @@ public class ChromeDriverCapabilities implements DriverCapabilitiesProvider {
                 .downloadableFrom("https://sites.google.com/a/chromium.org/chromedriver/downloads")
                 .asAFile();
 
-        if (executable.exists()) {
+        if (executable != null && executable.exists()) {
             System.setProperty("webdriver.chrome.driver", executable.getAbsolutePath());
         }
     }

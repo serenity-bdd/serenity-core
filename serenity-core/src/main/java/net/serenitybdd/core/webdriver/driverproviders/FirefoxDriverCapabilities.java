@@ -48,9 +48,6 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
             firefoxOptions = new Gson().fromJson(firefoxOptionsInJsonFormat, new TypeToken<HashMap<String, Object>>() {}.getType());
         }
         updateBinaryIfSpecified();
-//        if (WEBDRIVER_GECKO_DRIVER.isDefinedIn(environmentVariables)) {
-//            firefoxOptions.put("binary", WEBDRIVER_GECKO_DRIVER.from(environmentVariables));
-//        }
 
         capabilities.setCapability("moz:firefoxOptions", firefoxOptions);
 
@@ -69,7 +66,7 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
                 .downloadableFrom("https://github.com/mozilla/geckodriver/releases")
                 .asAFile();
 
-        if (executable.exists()) {
+        if (executable != null && executable.exists()) {
             System.setProperty("webdriver.gecko.driver", executable.getAbsolutePath());
         }
     }

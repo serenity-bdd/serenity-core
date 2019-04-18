@@ -1341,6 +1341,11 @@ public enum ThucydidesSystemProperty {
      */
     MANUAL_TASK_INSTRUMENTATION,
 
+    /**
+     * The root package used to look for Serenity extension classes
+     */
+    SERENITY_EXTENSION_PACKAGE,
+
     ENVIRONMENT,
     /**
      * The title to appear in the tag type table in the email reports

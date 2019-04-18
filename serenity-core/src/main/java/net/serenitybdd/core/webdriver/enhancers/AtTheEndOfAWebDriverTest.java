@@ -1,5 +1,6 @@
 package net.serenitybdd.core.webdriver.enhancers;
 
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reflection.ClassFinder;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -11,8 +12,15 @@ public class AtTheEndOfAWebDriverTest {
     public static void invokeCustomTeardownLogicWithDriver(EnvironmentVariables environmentVariables,
                                                            TestOutcome testOutcome,
                                                            WebDriver driver) {
+
         List<Class<?>> webdriverTeardown = ClassFinder.loadClasses().thatImplement(AfterAWebdriverScenario.class)
                                                       .fromPackage("net.serenitybdd");
+
+        String extensionPackage = ThucydidesSystemProperty.SERENITY_EXTENSION_PACKAGE.from(environmentVariables);
+        if (extensionPackage != null) {
+            webdriverTeardown.addAll(ClassFinder.loadClasses().thatImplement(AfterAWebdriverScenario.class)
+                    .fromPackage(extensionPackage));
+        }
 
         webdriverTeardown.forEach(
                 teardown -> {

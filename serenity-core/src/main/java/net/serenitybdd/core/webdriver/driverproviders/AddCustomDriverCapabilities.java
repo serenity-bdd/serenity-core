@@ -1,6 +1,8 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
+import net.serenitybdd.core.webdriver.enhancers.AfterAWebdriverScenario;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.reflection.ClassFinder;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -35,6 +37,12 @@ public class AddCustomDriverCapabilities {
                 = ClassFinder.loadClasses()
                              .thatImplement(BeforeAWebdriverScenario.class)
                              .fromPackage("net.serenitybdd");
+
+        String extensionPackage = ThucydidesSystemProperty.SERENITY_EXTENSION_PACKAGE.from(environmentVariables);
+        if (extensionPackage != null) {
+            customCapabilityEnhancers.addAll(ClassFinder.loadClasses().thatImplement(BeforeAWebdriverScenario.class)
+                    .fromPackage(extensionPackage));
+        }
 
         customCapabilityEnhancers.forEach(
                 enhancerType -> {

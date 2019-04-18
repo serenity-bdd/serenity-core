@@ -15,5 +15,6 @@ include 'serenity-test-utils',
         'serenity-screenplay-webdriver',
         'serenity-screenplay-rest',
         'serenity-emailer',
+        'serenity-zalenium',
         'serenity-assertions'
 include 'serenity-reports-configuration'

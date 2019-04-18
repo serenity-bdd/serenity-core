@@ -19,10 +19,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-
 import static net.thucydides.core.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_USE_DRIVER_SERVICE_POOL;
 import static net.thucydides.core.webdriver.SupportedWebDriver.IEXPLORER;
 
 public class InternetExplorerDriverProvider implements DriverProvider {
@@ -97,7 +94,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         defaults.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
         defaults.setJavascriptEnabled(true);
 
-        defaults = AddCustomDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(defaults);
+        defaults = AddEnvironmentSpecifiedDriverCapabilities.from(environmentVariables).forDriver(IEXPLORER).to(defaults);
 
         if (ACCEPT_INSECURE_CERTIFICATES.booleanFrom(environmentVariables, false)) {
             defaults.acceptInsecureCerts();

@@ -394,7 +394,7 @@ public class WebDriverFacade implements WebDriver, TakesScreenshot, HasInputDevi
 
     @Override
     public String toString() {
-        return "WebDriverFacade for " + getDriverName();
+        return (proxiedWebDriver == null) ? "Uninitialised WebDriverFacade" : proxiedWebDriver.toString();
     }
 
     public WebDriverFacade withOptions(String options) {

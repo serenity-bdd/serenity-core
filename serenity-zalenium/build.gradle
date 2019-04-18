@@ -1,0 +1,7 @@
+ext {
+    projectDescription = 'Serenity Zalenium Integration'
+}
+
+dependencies {
+    compile project(':serenity-core')
+}

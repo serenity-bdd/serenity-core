@@ -13,6 +13,7 @@ import net.serenitybdd.core.rest.RestQuery;
 import net.serenitybdd.core.strings.Joiner;
 import net.serenitybdd.core.time.SystemClock;
 import net.serenitybdd.core.webdriver.configuration.RestartBrowserForEach;
+import net.serenitybdd.core.webdriver.enhancers.AtTheEndOfAWebDriverTest;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.annotations.TestAnnotations;
 import net.thucydides.core.guice.Injectors;
@@ -473,6 +474,12 @@ public class BaseStepListener implements StepListener, StepPublisher {
         if (currentTestIsABrowserTest()) {
             getCurrentTestOutcome().setDriver(getDriverUsedInThisTest());
             updateSessionIdIfKnown();
+
+            AtTheEndOfAWebDriverTest.invokeCustomTeardownLogicWithDriver(
+                    getEventBus().getEnvironmentVariables(),
+                    outcome,
+                    getDriver());
+
             closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(SCENARIO);
         }
 

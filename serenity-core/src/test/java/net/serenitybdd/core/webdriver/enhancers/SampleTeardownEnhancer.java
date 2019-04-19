@@ -9,7 +9,9 @@ public class SampleTeardownEnhancer implements BeforeAWebdriverScenario {
 
     @Override
     public DesiredCapabilities apply(EnvironmentVariables environmentVariables, SupportedWebDriver driver, TestOutcome testOutcome, DesiredCapabilities capabilities) {
-        capabilities.setCapability("name", testOutcome.getStoryTitle() + " - " + testOutcome.getTitle());
+        if (testOutcome != null) {
+            capabilities.setCapability("name", testOutcome.getStoryTitle() + " - " + testOutcome.getTitle());
+        }
         return capabilities;
     }
 }

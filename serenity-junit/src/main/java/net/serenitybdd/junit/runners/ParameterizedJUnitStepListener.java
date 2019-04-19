@@ -60,6 +60,8 @@ public class ParameterizedJUnitStepListener extends JUnitStepListener {
     }
 
     private boolean testingThisDataSet(Description description) {
+        if (description == null || description.getTestClass() == null) { return false; }
+
         return ((description.getTestClass().equals(getTestClass())) &&
                 (description.getMethodName().endsWith("[" + parameterSetNumber + "]")));
     }

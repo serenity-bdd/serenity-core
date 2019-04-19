@@ -37,7 +37,10 @@ public class CapabilityEnhancer {
         AddEnvironmentSpecifiedDriverCapabilities.from(environmentVariables).forDriver(driver).to(capabilities);
 
         if (StepEventBus.getEventBus() != null && StepEventBus.getEventBus().isBaseStepListenerRegistered()) {
-            TestOutcome currentTestOutcome = StepEventBus.getEventBus().getBaseStepListener().latestTestOutcome().orElse(null);
+            TestOutcome currentTestOutcome = StepEventBus.getEventBus()
+                                                         .getBaseStepListener()
+                                                         .latestTestOutcome()
+                                                         .orElse(null);
             AddCustomDriverCapabilities.from(environmentVariables).withTestDetails(driver, currentTestOutcome).to(capabilities);
         }
 

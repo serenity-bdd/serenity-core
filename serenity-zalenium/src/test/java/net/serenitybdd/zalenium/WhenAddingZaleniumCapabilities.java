@@ -22,7 +22,9 @@ public class WhenAddingZaleniumCapabilities {
         DesiredCapabilities capabilities = DesiredCapabilities.chrome();
         TestOutcome testOutcome = TestOutcome.forTestInStory("sample_test", Story.called("Sample story"));
 
-        AddCustomDriverCapabilities.from(environmentVariables).withTestDetails(SupportedWebDriver.CHROME, testOutcome).to(capabilities);
+        AddCustomDriverCapabilities.from(environmentVariables)
+                                   .withTestDetails(SupportedWebDriver.REMOTE, testOutcome)
+                                   .to(capabilities);
 
         assertThat(capabilities.getCapability("name")).isEqualTo( "Sample story - Sample test");
     }
@@ -35,7 +37,7 @@ public class WhenAddingZaleniumCapabilities {
         TestOutcome testOutcome = TestOutcome.forTestInStory("sample_test", Story.called("Sample story"));
         environmentVariables.setProperty("zalenium.screenResolution","1280x720");
 
-        AddCustomDriverCapabilities.from(environmentVariables).withTestDetails(SupportedWebDriver.CHROME, testOutcome).to(capabilities);
+        AddCustomDriverCapabilities.from(environmentVariables).withTestDetails(SupportedWebDriver.REMOTE, testOutcome).to(capabilities);
 
         assertThat(capabilities.getCapability("screenResolution")).isEqualTo("1280x720");
     }
@@ -48,7 +50,7 @@ public class WhenAddingZaleniumCapabilities {
         TestOutcome testOutcome = TestOutcome.forTestInStory("sample_test", Story.called("Sample story"));
         environmentVariables.setProperty("zalenium.idleTimeout","150");
 
-        AddCustomDriverCapabilities.from(environmentVariables).withTestDetails(SupportedWebDriver.CHROME, testOutcome).to(capabilities);
+        AddCustomDriverCapabilities.from(environmentVariables).withTestDetails(SupportedWebDriver.REMOTE, testOutcome).to(capabilities);
 
         assertThat(capabilities.getCapability("idleTimeout")).isEqualTo( 150);
     }

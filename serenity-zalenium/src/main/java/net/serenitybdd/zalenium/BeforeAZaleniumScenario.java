@@ -19,6 +19,9 @@ public class BeforeAZaleniumScenario implements BeforeAWebdriverScenario {
             return capabilities;
         }
 
+        capabilities.setCapability("network.cookie.cookieBehavior","1");
+        capabilities.setCapability("profile.default_content_settings.cookies","1");
+
         capabilities.setCapability("name", testOutcome.getStoryTitle() + " - " + testOutcome.getTitle());
 
         Properties zaleniumProperties = environmentVariables.getPropertiesWithPrefix(ZALENIUM);

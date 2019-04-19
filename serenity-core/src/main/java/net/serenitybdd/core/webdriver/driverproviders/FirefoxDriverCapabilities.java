@@ -10,7 +10,6 @@ import net.thucydides.core.steps.FilePathParser;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.firefox.FirefoxProfileEnhancer;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
@@ -20,7 +19,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_CHROME_DRIVER;
 import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_GECKO_DRIVER;
 
 public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {

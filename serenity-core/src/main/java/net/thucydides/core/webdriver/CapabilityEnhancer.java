@@ -41,7 +41,7 @@ public class CapabilityEnhancer {
                                                          .getBaseStepListener()
                                                          .latestTestOutcome();
 
-            TestOutcome outcome = currentTestOutcome.orElse(null);
+            TestOutcome outcome = (currentTestOutcome == null) ? null : currentTestOutcome.orElse(null);
             AddCustomDriverCapabilities.from(environmentVariables).withTestDetails(driver, outcome).to(capabilities);
         }
 

@@ -1,59 +1,50 @@
-package net.serenitybdd.zalenium;
+package net.serenitybdd.browserstack;
 
+import net.serenitybdd.core.webdriver.driverproviders.CapabilityValue;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
-import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Properties;
 
-public class BeforeAZaleniumScenario implements BeforeAWebdriverScenario {
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
-    public static final String ZALENIUM = "zalenium.";
+public class BeforeABrowserStackScenario implements BeforeAWebdriverScenario {
+
+    public static final String BROWSERSTACK = "browserstack.";
 
     @Override
-    public DesiredCapabilities apply(EnvironmentVariables environmentVariables, SupportedWebDriver driver, TestOutcome testOutcome, DesiredCapabilities capabilities) {
+    public DesiredCapabilities apply(EnvironmentVariables environmentVariables,
+                                     SupportedWebDriver driver,
+                                     TestOutcome testOutcome,
+                                     DesiredCapabilities capabilities) {
+
         if (driver != SupportedWebDriver.REMOTE) {
             return capabilities;
         }
 
-        capabilities.setCapability("network.cookie.cookieBehavior","1");
-        capabilities.setCapability("profile.default_content_settings.cookies","1");
+        String remotePlatform = environmentVariables.getProperty("remote.platform");
+        if (isNotEmpty(remotePlatform)) {
+            capabilities.setPlatform(Platform.valueOf(remotePlatform));
+        }
 
         capabilities.setCapability("name", testOutcome.getStoryTitle() + " - " + testOutcome.getTitle());
 
-        Properties zaleniumProperties = environmentVariables.getPropertiesWithPrefix(ZALENIUM);
+        Properties browserStackProperties = environmentVariables.getPropertiesWithPrefix(BROWSERSTACK);
 
-        for(String propertyName : zaleniumProperties.stringPropertyNames()) {
+        for(String propertyName : browserStackProperties.stringPropertyNames()) {
             String unprefixedPropertyName = unprefixed(propertyName);
-            capabilities.setCapability(unprefixedPropertyName, typed(zaleniumProperties.getProperty(propertyName)));
+            capabilities.setCapability(unprefixedPropertyName, CapabilityValue.fromString(browserStackProperties.getProperty(propertyName)));
         }
 
         return capabilities;
     }
 
-    private Object typed(String value) {
-        if (isABoolean(value)) {
-            return Boolean.parseBoolean(value);
-        }
-        if (isAnInteger(value)) {
-            return Integer.parseInt(value);
-        }
-        return value;
-    }
-
-    private boolean isAnInteger(String value) {
-        return StringUtils.isNumeric(value);
-    }
-
-    private boolean isABoolean(String value) {
-        return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false") ;
-    }
-
     private String unprefixed(String propertyName) {
-        return propertyName.replace("zalenium.","");
+        return propertyName.replace(BROWSERSTACK,"");
     }
 
 }

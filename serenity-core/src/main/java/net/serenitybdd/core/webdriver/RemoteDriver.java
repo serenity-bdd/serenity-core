@@ -15,4 +15,7 @@ public class RemoteDriver {
         throw new UnexpectedDriverExpected("Expected a remote web driver instance but found " + driver.getClass());
     }
 
+    public static boolean isARemoteDriver(WebDriver driver) {
+        return RemoteWebDriver.class.isAssignableFrom(((WebDriverFacade) driver).getDriverClass());
+    }
 }

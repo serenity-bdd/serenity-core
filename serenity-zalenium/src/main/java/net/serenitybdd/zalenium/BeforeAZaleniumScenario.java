@@ -1,10 +1,10 @@
 package net.serenitybdd.zalenium;
 
+import net.serenitybdd.core.webdriver.driverproviders.CapabilityValue;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Properties;
@@ -28,28 +28,10 @@ public class BeforeAZaleniumScenario implements BeforeAWebdriverScenario {
 
         for(String propertyName : zaleniumProperties.stringPropertyNames()) {
             String unprefixedPropertyName = unprefixed(propertyName);
-            capabilities.setCapability(unprefixedPropertyName, typed(zaleniumProperties.getProperty(propertyName)));
+            capabilities.setCapability(unprefixedPropertyName, CapabilityValue.fromString(zaleniumProperties.getProperty(propertyName)));
         }
 
         return capabilities;
-    }
-
-    private Object typed(String value) {
-        if (isABoolean(value)) {
-            return Boolean.parseBoolean(value);
-        }
-        if (isAnInteger(value)) {
-            return Integer.parseInt(value);
-        }
-        return value;
-    }
-
-    private boolean isAnInteger(String value) {
-        return StringUtils.isNumeric(value);
-    }
-
-    private boolean isABoolean(String value) {
-        return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false") ;
     }
 
     private String unprefixed(String propertyName) {

@@ -35,23 +35,22 @@ public class BrowserStackRemoteDriverCapabilities implements RemoteDriverCapabil
 
     @Override
     public DesiredCapabilities getCapabilities(DesiredCapabilities capabilities) {
-        configureBrowserStackCapabilities(capabilities);
         return capabilities;
+//        configureBrowserStackCapabilities(capabilities);
+//        return capabilities;
     }
 
-    private void configureBrowserStackCapabilities(DesiredCapabilities capabilities) {
-        Optional<String> guessedTestName = RemoteTestName.fromCurrentTest();
-        guessedTestName.ifPresent(
-                name -> capabilities.setCapability("name", name)
-        );
-
-        AddCustomCapabilities.startingWith("browserstack.").from(environmentVariables).withAndWithoutPrefixes().to(capabilities);
-
-        String remotePlatform = environmentVariables.getProperty("remote.platform");
-        if (isNotEmpty(remotePlatform)) {
-            capabilities.setPlatform(Platform.valueOf(remotePlatform));
-        }
-    }
-
-
+//    private void configureBrowserStackCapabilities(DesiredCapabilities capabilities) {
+//        Optional<String> guessedTestName = RemoteTestName.fromCurrentTest();
+//        guessedTestName.ifPresent(
+//                name -> capabilities.setCapability("name", name)
+//        );
+//
+//        AddCustomCapabilities.startingWith("browserstack.").from(environmentVariables).withAndWithoutPrefixes().to(capabilities);
+//
+//        String remotePlatform = environmentVariables.getProperty("remote.platform");
+//        if (isNotEmpty(remotePlatform)) {
+//            capabilities.setPlatform(Platform.valueOf(remotePlatform));
+//        }
+//    }
 }

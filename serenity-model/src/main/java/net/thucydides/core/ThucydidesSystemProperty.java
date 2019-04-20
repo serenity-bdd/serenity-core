@@ -1342,9 +1342,19 @@ public enum ThucydidesSystemProperty {
     MANUAL_TASK_INSTRUMENTATION,
 
     /**
-     * The root package used to look for Serenity extension classes
+     * The root package or packages used to look for Serenity extension classes, as a comma-separated list.
      */
-    SERENITY_EXTENSION_PACKAGE,
+    SERENITY_EXTENSION_PACKAGES,
+
+    /**
+     * A semi-colon list of (partial) error messages.
+     * If WebDriver creation fails for a reason mentioned in this list, Serenity will retry driver creation
+     * every thirty seconds for at most WEBDRIVER_CREATION_RETRY_MAX_TIME times (the default is 30)
+     * The default recognises BrowserStack timeouts ("All parallel tests are currently in use")
+     */
+    WEBDRIVER_CREATION_RETRY_CAUSES,
+
+    WEBDRIVER_CREATION_RETRY_MAX_TIME,
 
     ENVIRONMENT,
     /**

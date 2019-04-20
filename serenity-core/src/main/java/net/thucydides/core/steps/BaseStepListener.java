@@ -478,7 +478,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
             AtTheEndOfAWebDriverTest.invokeCustomTeardownLogicWithDriver(
                     getEventBus().getEnvironmentVariables(),
                     outcome,
-                    getDriver());
+                    SerenityWebdriverManager.inThisTestThread().getCurrentDriver());
 
             closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(SCENARIO);
         }

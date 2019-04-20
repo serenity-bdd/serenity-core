@@ -59,8 +59,8 @@ public class RemoteDriverProvider implements DriverProvider {
 
         if (saucelabsUrlIsDefined(environmentVariables)) {
             return RemoteDriverType.SAUCELABS;
-        } else if (browserStackUrlIsDefined(environmentVariables)){
-            return RemoteDriverType.BROWSERSTACK;
+//        } else if (browserStackUrlIsDefined(environmentVariables)){
+//            return RemoteDriverType.BROWSERSTACK;
         } else {
             return RemoteDriverType.DEFAULT;
         }

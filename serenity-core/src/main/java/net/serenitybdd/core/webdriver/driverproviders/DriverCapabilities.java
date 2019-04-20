@@ -29,7 +29,7 @@ public class DriverCapabilities {
     }
 
     public DesiredCapabilities forDriver(String driverName, String options) {
-        if (driverName == null) {
+        if (driverName == null || driverName.startsWith(":")) {
             driverName = REMOTE_DRIVER;
         }
         SupportedWebDriver driverType = driverTypeFor(driverComponentof(driverName));
@@ -86,9 +86,13 @@ public class DriverCapabilities {
         );
     }
 
+    private boolean isUndefined(String browser) {
+       return (browser == null || browser.startsWith(":"));
+    }
+
     private DesiredCapabilities remoteCapabilities(String options) {
         String remoteBrowser = ThucydidesSystemProperty.WEBDRIVER_REMOTE_DRIVER.from(environmentVariables, getDriverFrom(environmentVariables));
-        if (remoteBrowser == null) {
+        if (isUndefined(remoteBrowser)) {
             remoteBrowser = "firefox";
         }
 

@@ -4,25 +4,30 @@ import io.appium.java_client.AppiumDriver;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
 import net.serenitybdd.core.pages.DefaultTimeouts;
+import net.serenitybdd.core.time.Stopwatch;
 import net.serenitybdd.core.webdriver.driverproviders.*;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.fixtureservices.FixtureException;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
 import net.thucydides.core.fixtureservices.FixtureService;
 import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.requirements.RequirementsTagProvider;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.capabilities.SaucelabsRemoteDriverCapabilities;
 import net.thucydides.core.webdriver.redimension.RedimensionBrowser;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.net.MalformedURLException;
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_CREATION_RETRY_CAUSES;
+import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_CREATION_RETRY_MAX_TIME;
 import static net.thucydides.core.webdriver.DriverStrategySelector.inEnvironment;
 
 /**
@@ -44,6 +49,8 @@ public class WebDriverFactory {
     private Map<SupportedWebDriver, DriverProvider> driverProvidersByDriverType;
 
     private final TimeoutStack timeoutStack;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebDriverFactory.class);
 
     public WebDriverFactory() {
         this(Injectors.getInjector().getProvider(EnvironmentVariables.class).get() );
@@ -118,24 +125,70 @@ public class WebDriverFactory {
     private synchronized WebDriver newWebdriverInstance(final Class<? extends WebDriver> driverClass, String options) {
         return newWebdriverInstance(driverClass, options, environmentVariables);
     }
+
     protected synchronized WebDriver newWebdriverInstance(final Class<? extends WebDriver> driverClass,
                                                           String options,
                                                           EnvironmentVariables environmentVariables) {
-        RedimensionBrowser redimensionBrowser = new RedimensionBrowser(environmentVariables);
         try {
-            SupportedWebDriver supportedDriverType = inEnvironment(environmentVariables).forDriverClass(driverClass);
-            WebDriver driver = driverProviders().get(supportedDriverType).newInstance(options,environmentVariables);
-            setImplicitTimeoutsIfSpecified(driver);
-            redimensionBrowser.withDriver(driver);
-
-            closeBrowser.closeWhenTheTestsAreFinished(driver);
-
-            return driver;
+            return createWebDriver(driverClass, options, environmentVariables);
         } catch (SerenityManagedException toPassThrough) {
             throw toPassThrough;
         } catch (Exception cause) {
-            throw new DriverConfigurationError("Could not instantiate new WebDriver instance of type " + driverClass + " (" + cause.getMessage() + "). See below for more details.", cause);
+            if (shouldRetry(cause)) {
+                LOGGER.info("Waiting to retry: " + cause.getMessage() + ")");
+                return waitThenRetry(driverClass, options, environmentVariables);
+            } else {
+                throw new DriverConfigurationError("Could not instantiate new WebDriver instance of type " + driverClass + " (" + cause.getMessage() + "). See below for more details.", cause);
+            }
         }
+    }
+
+    private WebDriver createWebDriver(Class<? extends WebDriver> driverClass, String options, EnvironmentVariables environmentVariables) throws MalformedURLException {
+        RedimensionBrowser redimensionBrowser = new RedimensionBrowser(environmentVariables);
+        SupportedWebDriver supportedDriverType = inEnvironment(environmentVariables).forDriverClass(driverClass);
+        WebDriver driver = driverProviders().get(supportedDriverType).newInstance(options,environmentVariables);
+        setImplicitTimeoutsIfSpecified(driver);
+        redimensionBrowser.withDriver(driver);
+        closeBrowser.closeWhenTheTestsAreFinished(driver);
+        return driver;
+    }
+
+    private WebDriver waitThenRetry(Class<? extends WebDriver> driverClass,
+                                    String options,
+                                    EnvironmentVariables environmentVariables) {
+        int maxRetryCount = WEBDRIVER_CREATION_RETRY_MAX_TIME.integerFrom(environmentVariables,30);
+        return waitThenRetry(maxRetryCount, driverClass, options, environmentVariables, null);
+    }
+
+    private WebDriver waitThenRetry(int remainingTries,
+                                    Class<? extends WebDriver> driverClass,
+                                    String options,
+                                    EnvironmentVariables environmentVariables,
+                                    Exception cause) {
+        LOGGER.info("Remaining tries: " + remainingTries);
+
+        if (remainingTries == 0) {
+            throw new DriverConfigurationError("After several attempts, could not instantiate new WebDriver instance of type " + driverClass + " (" + cause.getMessage() + "). See below for more details.", cause);
+        }
+
+        PauseTestExecution.forADelayOf(30).seconds();
+
+        try {
+            return createWebDriver(driverClass, options, environmentVariables);
+        } catch (SerenityManagedException toPassThrough) {
+            throw toPassThrough;
+        } catch (Exception latestCause) {
+            return waitThenRetry(remainingTries - 1, driverClass, options, environmentVariables, latestCause);
+        }
+    }
+
+    private boolean shouldRetry(Exception cause) {
+        List<String> RETRY_CAUSES = Arrays.asList(WEBDRIVER_CREATION_RETRY_CAUSES
+                                          .from(environmentVariables,"All parallel tests are currently in use")
+                                          .split(";"));
+        return RETRY_CAUSES.stream().anyMatch(
+                partialErrorMessage -> cause.getMessage().contains(partialErrorMessage)
+        );
     }
 
 

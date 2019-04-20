@@ -16,7 +16,7 @@ public class AtTheEndOfAWebDriverTest {
         List<Class<?>> webdriverTeardown = ClassFinder.loadClasses().thatImplement(AfterAWebdriverScenario.class)
                                                       .fromPackage("net.serenitybdd");
 
-        String extensionPackage = ThucydidesSystemProperty.SERENITY_EXTENSION_PACKAGE.from(environmentVariables);
+        String extensionPackage = ThucydidesSystemProperty.SERENITY_EXTENSION_PACKAGES.from(environmentVariables);
         if (extensionPackage != null) {
             webdriverTeardown.addAll(ClassFinder.loadClasses().thatImplement(AfterAWebdriverScenario.class)
                     .fromPackage(extensionPackage));

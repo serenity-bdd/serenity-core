@@ -1,6 +1,5 @@
 package net.serenitybdd.core.webdriver.driverproviders;
 
-import net.serenitybdd.core.webdriver.enhancers.AfterAWebdriverScenario;
 import net.serenitybdd.core.webdriver.enhancers.BeforeAWebdriverScenario;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.model.TestOutcome;
@@ -9,6 +8,7 @@ import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.SupportedWebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class AddCustomDriverCapabilities {
@@ -38,10 +38,14 @@ public class AddCustomDriverCapabilities {
                              .thatImplement(BeforeAWebdriverScenario.class)
                              .fromPackage("net.serenitybdd");
 
-        String extensionPackage = ThucydidesSystemProperty.SERENITY_EXTENSION_PACKAGE.from(environmentVariables);
-        if (extensionPackage != null) {
-            customCapabilityEnhancers.addAll(ClassFinder.loadClasses().thatImplement(BeforeAWebdriverScenario.class)
-                    .fromPackage(extensionPackage));
+        String extensionPackageList = ThucydidesSystemProperty.SERENITY_EXTENSION_PACKAGES.from(environmentVariables);
+        if (extensionPackageList != null) {
+            List<String> extensionPackages = Arrays.asList(extensionPackageList.split(","));
+            extensionPackages.forEach(
+                    extensionPackage ->
+                            customCapabilityEnhancers.addAll(ClassFinder.loadClasses().thatImplement(BeforeAWebdriverScenario.class)
+                                    .fromPackage(extensionPackage))
+            );
         }
 
         customCapabilityEnhancers.forEach(

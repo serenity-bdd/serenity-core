@@ -1,4 +1,4 @@
-package net.serenitybdd.zalenium;
+package net.serenitybdd.browserstack;
 
 import net.serenitybdd.core.webdriver.driverproviders.AddCustomDriverCapabilities;
 import net.thucydides.core.model.Story;
@@ -11,7 +11,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WhenAddingZaleniumCapabilities {
+public class WhenAddingBrowserStackCapabilities {
 
     EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
 
@@ -30,29 +30,16 @@ public class WhenAddingZaleniumCapabilities {
     }
 
     @Test
-    public void shouldAddZaleniumPropertiesFromTheEnvironmentConfiguration() {
+    public void shouldAddBrowserStackPropertiesFromTheEnvironmentConfiguration() {
 
         // Given
         DesiredCapabilities capabilities = DesiredCapabilities.chrome();
         TestOutcome testOutcome = TestOutcome.forTestInStory("sample_test", Story.called("Sample story"));
-        environmentVariables.setProperty("zalenium.screenResolution","1280x720");
+        environmentVariables.setProperty("browserstack.browser","edge");
 
         AddCustomDriverCapabilities.from(environmentVariables).withTestDetails(SupportedWebDriver.REMOTE, testOutcome).to(capabilities);
 
-        assertThat(capabilities.getCapability("screenResolution")).isEqualTo("1280x720");
-    }
-
-    @Test
-    public void shouldAddZaleniumNumericalPropertiesFromTheEnvironmentConfiguration() {
-
-        // Given
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-        TestOutcome testOutcome = TestOutcome.forTestInStory("sample_test", Story.called("Sample story"));
-        environmentVariables.setProperty("zalenium.idleTimeout","150");
-
-        AddCustomDriverCapabilities.from(environmentVariables).withTestDetails(SupportedWebDriver.REMOTE, testOutcome).to(capabilities);
-
-        assertThat(capabilities.getCapability("idleTimeout")).isEqualTo( 150);
+        assertThat(capabilities.getCapability("browser")).isEqualTo("edge");
     }
 
 }

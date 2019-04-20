@@ -1,5 +1,6 @@
 package net.thucydides.core.webdriver;
 
+import com.google.common.base.Splitter;
 import io.appium.java_client.AppiumDriver;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.exceptions.SerenityManagedException;
@@ -183,11 +184,14 @@ public class WebDriverFactory {
     }
 
     private boolean shouldRetry(Exception cause) {
-        List<String> RETRY_CAUSES = Arrays.asList(WEBDRIVER_CREATION_RETRY_CAUSES
-                                          .from(environmentVariables,"All parallel tests are currently in use")
-                                          .split(";"));
+        List<String> RETRY_CAUSES = Splitter.on(";")
+                                            .trimResults()
+                                            .omitEmptyStrings()
+                                            .splitToList(WEBDRIVER_CREATION_RETRY_CAUSES
+                                            .from(environmentVariables,"All parallel tests are currently in use"));
         return RETRY_CAUSES.stream().anyMatch(
-                partialErrorMessage -> cause.getMessage().contains(partialErrorMessage)
+                partialErrorMessage -> (cause != null) && (cause.getMessage() != null)
+                                        && (cause.getMessage().contains(partialErrorMessage))
         );
     }
 

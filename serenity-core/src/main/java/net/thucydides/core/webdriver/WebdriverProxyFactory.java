@@ -105,10 +105,14 @@ public class WebdriverProxyFactory implements Serializable {
 
         if (StepEventBus.getEventBus().isDryRun()) { return; }
 
-        if (((WebDriverFacade) driver).isInstantiated()) {
-            driver.manage().deleteAllCookies();
+        if (((WebDriverFacade) driver).isInstantiated()
+                && !((WebDriverFacade) driver).getProxiedDriver().getCurrentUrl().isEmpty()) {
+
+            WebDriver proxiedDriver = ((WebDriverFacade) driver).getProxiedDriver();
+            proxiedDriver.manage().deleteAllCookies();
             try {
-                ((JavascriptExecutor) driver).executeScript(String.format("window.localStorage.clear();"));
+                ((JavascriptExecutor) proxiedDriver).executeScript("window.sessionStorage.clear();");
+                ((JavascriptExecutor) proxiedDriver).executeScript("window.localStorage.clear();");
             } catch (WebDriverException driverDoesntSupportJavascriptTooBad) {}
         }
     }

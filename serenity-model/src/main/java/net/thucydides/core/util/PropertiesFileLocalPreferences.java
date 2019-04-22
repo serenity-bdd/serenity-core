@@ -52,17 +52,17 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
     public void loadPreferences() throws IOException {
 
         updatePreferencesFrom(
+                preferencesIn(preferencesFileWithAbsolutePath()),
+                preferencesIn(legacyPreferencesFileWithAbsolutePath()),
+                typesafeConfigPreferencesInCustomDefinedConfigFile(),
                 typesafeConfigPreferences(),
-                preferencesIn(preferencesFileInHomeDirectory()),
-                preferencesIn(legacyPreferencesFileInHomeDirectory()),
                 preferencesIn(preferencesFileInMavenModuleDirectory()),
                 preferencesIn(preferencesFileInMavenParentModuleDirectory()),
                 preferencesIn(preferencesFileInWorkingDirectory()),
                 preferencesIn(legacyPreferencesFileInWorkingDirectory()),
-                preferencesIn(preferencesFileWithAbsolutePath()),
-                preferencesIn(legacyPreferencesFileWithAbsolutePath()),
+                preferencesIn(preferencesFileInHomeDirectory()),
+                preferencesIn(legacyPreferencesFileInHomeDirectory()),
                 preferencesInClasspath());
-
     }
 
     private Properties preferencesInClasspath() throws IOException {
@@ -84,15 +84,34 @@ public class PropertiesFileLocalPreferences implements LocalPreferences {
         return input;
     }
 
+    private Properties typesafeConfigPreferencesInCustomDefinedConfigFile() {
+        String providedConfigPath = defaultPropertiesFileName();
+        if (!providedConfigPath.endsWith(".conf")) {
+            return new Properties();
+        }
+
+        File providedConfigFile = new File(providedConfigPath);
+        if (!providedConfigFile.exists()) {
+            return new Properties();
+        }
+
+        Set<Map.Entry<String, ConfigValue>> preferences = ConfigFactory.parseFile(providedConfigFile).entrySet();
+        return getPropertiesFromConfig(preferences);
+    }
+
     private Properties typesafeConfigPreferences() {
         Set<Map.Entry<String, ConfigValue>> preferences = ConfigFactory.load(TYPESAFE_CONFIG_FILE).entrySet();
+        return getPropertiesFromConfig(preferences);
+    }
+
+    private Properties getPropertiesFromConfig(Set<Map.Entry<String, ConfigValue>> preferences) {
         Properties properties = new Properties();
         for (Map.Entry<String, ConfigValue> preference : preferences) {
             properties.put(preference.getKey(), strip(preference.getValue().render(), "\""));
         }
         return properties;
     }
-    
+
     private void updatePreferencesFrom(Properties... propertySets) throws IOException {
         for (Properties localPreferences : propertySets) {
             PropertiesUtil.expandPropertyAndEnvironmentReferences(System.getenv(), localPreferences);

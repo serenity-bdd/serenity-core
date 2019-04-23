@@ -45,7 +45,7 @@ public class FirefoxDriverProvider implements DriverProvider {
         if (StepEventBus.getEventBus().webdriverCallsAreSuspended()) {
             return new WebDriverStub();
         }
-        DesiredCapabilities capabilities = new FirefoxDriverCapabilities(environmentVariables).getCapabilities();
+        DesiredCapabilities capabilities = new FirefoxDriverCapabilities(environmentVariables, options).getCapabilities();
 
         WebDriver driver = newMarionetteDriver(capabilities,environmentVariables);
 

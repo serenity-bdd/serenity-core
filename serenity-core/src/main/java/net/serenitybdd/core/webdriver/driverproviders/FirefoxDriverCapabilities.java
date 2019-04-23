@@ -25,19 +25,28 @@ public class FirefoxDriverCapabilities implements DriverCapabilitiesProvider {
 
     private final EnvironmentVariables environmentVariables;
     private final FirefoxProfileEnhancer firefoxProfileEnhancer;
+    private final String options;
     private ProfilesIni allProfiles;
 
     public FirefoxDriverCapabilities(EnvironmentVariables environmentVariables){
         this.environmentVariables = environmentVariables;
         this.firefoxProfileEnhancer = new FirefoxProfileEnhancer(environmentVariables);
+        this.options = "";
+    }
+
+    public FirefoxDriverCapabilities(EnvironmentVariables environmentVariables, String options){
+        this.environmentVariables = environmentVariables;
+        this.firefoxProfileEnhancer = new FirefoxProfileEnhancer(environmentVariables);
+        this.options = options;
     }
 
     public DesiredCapabilities getCapabilities() {
         DesiredCapabilities capabilities = DesiredCapabilities.firefox();
         capabilities.setCapability("firefox_profile",buildFirefoxProfile());
         Map<String, Object> firefoxOptions = new HashMap<>();
-        if (ThucydidesSystemProperty.GECKO_FIREFOX_OPTIONS.isDefinedIn(environmentVariables)) {
-            String firefoxOptionsInJsonFormat = ThucydidesSystemProperty.GECKO_FIREFOX_OPTIONS.from(environmentVariables)
+        String geckoOptions = (!options.isEmpty()) ? options : ThucydidesSystemProperty.GECKO_FIREFOX_OPTIONS.from(environmentVariables,"");
+        if (!geckoOptions.isEmpty()) {
+            String firefoxOptionsInJsonFormat = geckoOptions
                     .replace("\\\"", "\"")
                     .replace("\\n", System.lineSeparator());
 

@@ -57,6 +57,10 @@ public final class TestCaseAnnotations {
             String driverRootName = isNotEmpty(webDriverField.getDriver()) ?  webDriverField.getDriver() : configuredDriverType();
             String driverName = driverRootName + suffix;
             String driverOptions = webDriverField.getOptions();
+
+            ThucydidesWebDriverSupport.useDefaultDriver(driverName);
+            ThucydidesWebDriverSupport.useDriverOptions(driverOptions);
+
             WebDriver driver = (isEmpty(driverName)) ? defaultDriver : requestedDriverFrom(webdriverManager, webDriverField.getName(), driverName, driverOptions);
             webDriverField.setValue(testCase, driver);
 

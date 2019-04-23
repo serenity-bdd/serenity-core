@@ -147,7 +147,10 @@ public class WebDriverFactory {
     private WebDriver createWebDriver(Class<? extends WebDriver> driverClass, String options, EnvironmentVariables environmentVariables) throws MalformedURLException {
         RedimensionBrowser redimensionBrowser = new RedimensionBrowser(environmentVariables);
         SupportedWebDriver supportedDriverType = inEnvironment(environmentVariables).forDriverClass(driverClass);
-        WebDriver driver = driverProviders().get(supportedDriverType).newInstance(options,environmentVariables);
+
+        String resolvedOptions = (options.isEmpty()) ? ThucydidesWebDriverSupport.getDefaultDriverOptions().orElse(options) : options;
+
+        WebDriver driver = driverProviders().get(supportedDriverType).newInstance(resolvedOptions,environmentVariables);
         setImplicitTimeoutsIfSpecified(driver);
         redimensionBrowser.withDriver(driver);
         closeBrowser.closeWhenTheTestsAreFinished(driver);

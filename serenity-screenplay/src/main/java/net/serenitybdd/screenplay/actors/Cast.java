@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import net.serenitybdd.screenplay.Ability;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.HasTeardown;
 
 import java.util.List;
 import java.util.Map;
@@ -74,7 +75,19 @@ public class Cast {
     }
 
     public void dismissAll() {
+        runTeardowns();
         actors.clear();
+    }
+
+    /**
+     * Run the teardown for any {@link Ability} that implements one.
+     */
+    private void runTeardowns() {
+        for (Actor a : actors.values()) {
+            for (HasTeardown ability : a.getTeardowns()) {
+                ability.tearDown();
+            }
+        }
     }
 
     protected void assignGeneralAbilitiesTo(Actor newActor) {

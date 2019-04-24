@@ -64,10 +64,10 @@ public class WhenIncludingJIRALinksInReports extends AbstractReportGenerationTes
 
 
     @Test
-    public void a_jira_issue_number_can_also_appear_in_the_issue_annotation()  throws Exception {
+    public void an_issue_number_can_also_appear_in_the_issue_annotation()  throws Exception {
         TestOutcome testOutcome = TestOutcome.forTest("a_simple_test_case", JIRAAnnotatedTestScenario.class)
                                               .usingIssueTracking(issueTracking);
-        environmentVariables.setProperty("thucydides.issue.tracker.url", "http://my.issue.tracker/{0}");
+        environmentVariables.setProperty("serenity.issue.tracker.url", "http://my.issue.tracker/{0}");
 
         recordSimpleTest(testOutcome);
 

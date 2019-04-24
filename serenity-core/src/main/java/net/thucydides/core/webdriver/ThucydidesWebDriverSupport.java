@@ -4,6 +4,7 @@ import net.serenitybdd.core.environment.*;
 import net.thucydides.core.annotations.*;
 import net.thucydides.core.pages.*;
 import net.thucydides.core.steps.*;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.*;
 import org.slf4j.*;
@@ -87,7 +88,9 @@ public class ThucydidesWebDriverSupport {
     }
 
     public static void useDefaultDriver(String driverName) {
-        defaultDriverType.set(driverName);
+        if (StringUtils.isNotEmpty(driverName)) {
+            defaultDriverType.set(driverName);
+        }
     }
 
     public static void useDriverOptions(String driverOptions) {

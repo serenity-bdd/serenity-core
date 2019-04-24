@@ -1261,7 +1261,7 @@ public enum ThucydidesSystemProperty {
     HEADLESS_MODE,
 
     /**
-     * Where to find images used in the reports (defaults to src/test/resourcesFC/assets)
+     * Where to find images used in the reports (defaults to src/test/resources/assets)
      */
     REPORT_ASSETS_DIRECTORY,
 

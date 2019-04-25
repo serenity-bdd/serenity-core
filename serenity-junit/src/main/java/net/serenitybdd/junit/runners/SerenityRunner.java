@@ -619,7 +619,8 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
     protected WebDriver driverFor(final FrameworkMethod method) {
         if (TestMethodAnnotations.forTest(method).isDriverSpecified()) {
             String testSpecificDriver = TestMethodAnnotations.forTest(method).specifiedDriver();
-            return getDriver(testSpecificDriver);
+            String driverOptions = TestMethodAnnotations.forTest(method).driverOptions();
+            return getDriver(testSpecificDriver, driverOptions);
         } else {
             return getDriver();
         }
@@ -651,9 +652,9 @@ public class SerenityRunner extends BlockJUnit4ClassRunner implements Taggable {
                 : ThucydidesWebDriverSupport.getWebdriverManager().getWebdriver(requestedDriver);
     }
 
-    protected WebDriver getDriver(final String driver) {
-        return (isEmpty(driver)) ? ThucydidesWebDriverSupport.getWebdriverManager().getWebdriver()
-                                 : ThucydidesWebDriverSupport.getWebdriverManager().getWebdriver(driver);
+    protected WebDriver getDriver(final String driver, String driverOptions) {
+        return (isEmpty(driver)) ? ThucydidesWebDriverSupport.getWebdriverManager().withOptions(driverOptions).getWebdriver()
+                                 : ThucydidesWebDriverSupport.getWebdriverManager().withOptions(driverOptions).getWebdriver(driver);
     }
 
     /**

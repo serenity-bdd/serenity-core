@@ -4,6 +4,8 @@ import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.pages.Pages;
 import net.thucydides.core.pages.components.FileToUpload;
 import net.thucydides.core.pages.components.FileToUploadCouldNotBeFoundException;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFacade;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.junit.AfterClass;
@@ -67,9 +69,9 @@ public class WhenUploadingFiles {
 
     @BeforeClass
     public static void open_local_static_site() {
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--headless");
-        driver = new WebDriverFacade(ChromeDriver.class, new WebDriverFactory());
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+        environmentVariables.setProperty("headless.mode","true");
+        driver = new WebDriverFacade(ChromeDriver.class, new WebDriverFactory(), environmentVariables);
         pageFactory = new Pages(driver);
         openStaticTestSite(driver);
     }

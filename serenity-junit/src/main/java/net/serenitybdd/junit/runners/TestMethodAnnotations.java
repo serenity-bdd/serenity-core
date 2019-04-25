@@ -1,6 +1,7 @@
 package net.serenitybdd.junit.runners;
 
 import com.google.common.base.Preconditions;
+import net.thucydides.core.annotations.DriverOptions;
 import net.thucydides.core.annotations.WithDriver;
 import org.junit.runners.model.FrameworkMethod;
 
@@ -31,5 +32,9 @@ public final class TestMethodAnnotations {
         return (method.getMethod().getAnnotation(WithDriver.class).value());
     }
 
+    public String driverOptions() {
+        Preconditions.checkArgument(isDriverSpecified() == true);
+        return (method.getMethod().getAnnotation(DriverOptions.class).value());
+    }
 
 }

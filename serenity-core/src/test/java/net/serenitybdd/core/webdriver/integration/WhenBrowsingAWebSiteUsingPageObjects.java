@@ -93,7 +93,7 @@ public class WhenBrowsingAWebSiteUsingPageObjects {
     public static void openDriver() {
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--headless");
-        driver = new ChromeDriver();
+        driver = new ChromeDriver(chromeOptions);
     }
 
     @Before

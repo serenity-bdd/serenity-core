@@ -156,6 +156,7 @@ public abstract class PageObject {
         this();
         this.environmentVariables = environmentVariables;
         setDriver(driver);
+        setupPageUrls();
     }
 
     protected void setDriver(WebDriver driver, long timeout) {
@@ -243,7 +244,7 @@ public abstract class PageObject {
     }
 
     private void setupPageUrls() {
-        setPageUrls(new PageUrls(this));
+        setPageUrls(new PageUrls(this, environmentVariables));
     }
 
     /**
@@ -638,13 +639,29 @@ public abstract class PageObject {
         return getImplicitWaitTimeout().toMillis();
     }
 
-    public String updateUrlWithBaseUrlIfDefined(final String startingUrl) {
+    public String updateUrlWithBaseUrlIfDefined(String startingUrl) {
+
+        if (pageUrls.getDeclaredDefaultUrl().isPresent()) {
+            startingUrl = pageUrls.addDefaultUrlTo(startingUrl);
+        }
 
         String baseUrl = pageUrls.getSystemBaseUrl();
-        if ((baseUrl != null) && (!StringUtils.isEmpty(baseUrl))) {
-            return replaceHost(startingUrl, baseUrl);
-        } else {
-            return startingUrl;
+        if ((baseUrl != null) && (!StringUtils.isEmpty(baseUrl)) && isFullUrl(startingUrl)) {
+            return replaceHost(startingUrl, baseUrl);//pageUrls.addBaseUrlTo(startingUrl);// replaceHost(startingUrl, baseUrl);
+        }
+//        else if (pageUrls.getDeclaredDefaultUrl().isPresent()) {
+//            return pageUrls.addDefaultUrlTo(startingUrl);
+//        }
+
+        return startingUrl;
+    }
+
+    private boolean isFullUrl(String startingUrl) {
+        try {
+            new URL(startingUrl);
+            return true;
+        } catch (MalformedURLException e) {
+            return false;
         }
     }
 
@@ -703,6 +720,25 @@ public abstract class PageObject {
         checkUrlPatterns(openMode);
         initializePage();
         LOGGER.debug("Page opened");
+    }
+
+    public final OpenWithParams open(final String urlTemplateName) {
+        return new OpenWithParams(this, urlTemplateName);
+    }
+
+    public static class OpenWithParams {
+
+        private PageObject pageObject;
+        private String urlTemplateName;
+
+        public OpenWithParams(PageObject pageObject, String urlTemplateName) {
+            this.pageObject = pageObject;
+            this.urlTemplateName = urlTemplateName;
+        }
+
+        public void withParameters(String... parameters) {
+            pageObject.open(urlTemplateName, parameters);
+        }
     }
 
     public final void open(final String urlTemplateName,

@@ -113,12 +113,22 @@ subprojects {
         bintrayRepository = 'maven'
         bintrayPackage = 'serenity-core'
         projectDescription = 'Serenity core libraries'
+        os = "windows"
+        if (org.gradle.internal.os.OperatingSystem.current().isMacOsX()) {
+            os = "macos"
+        }
+        if (org.gradle.internal.os.OperatingSystem.current().isLinux()) {
+            os = "linxu"
+        }
         if (!project.hasProperty("bintrayUsername")) {
             bintrayUsername = 'wakaleo'
         }
         if (!project.hasProperty("bintrayApiKey")) {
             bintrayApiKey = ''
         }
+
+        chromeDriverBinary = project.file("../src/test/resources/drivers/${os}/chromedriver").absolutePath
+        geckoDriverBinary = project.file("../src/test/resources/drivers/${os}/geckodriver").absolutePath
     }
     group = 'net.serenity-bdd'
     version = rootProject.version
@@ -143,6 +153,8 @@ subprojects {
     }
 
     task integrationTests(type: Test) {
+        systemProperty "webdriver.chrome.driver", chromeDriverBinary
+        systemProperty "webdriver.gecko.driver", geckoDriverBinary
         exclude '**/*$*'
         exclude '**/samples/**'
         exclude '**/*Sample*'
@@ -465,4 +477,9 @@ Changelog of Git Changelog Gradle plugin.
 {{/tags}}
  """
     }
+}
+
+gradle.taskGraph.whenReady { graph ->
+    println "SETTING CHROME DRIVER TO src/test/resources/drivers/macos/chromedriver"
+    System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/macos/chromedriver")
 }

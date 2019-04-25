@@ -27,8 +27,7 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_CREATION_RETRY_CAUSES;
-import static net.thucydides.core.ThucydidesSystemProperty.WEBDRIVER_CREATION_RETRY_MAX_TIME;
+import static net.thucydides.core.ThucydidesSystemProperty.*;
 import static net.thucydides.core.webdriver.DriverStrategySelector.inEnvironment;
 
 /**
@@ -70,6 +69,22 @@ public class WebDriverFactory {
         this.sauceRemoteDriverCapabilities = new SaucelabsRemoteDriverCapabilities(environmentVariables);
         this.timeoutStack = new TimeoutStack();
         this.closeBrowser = WebDriverInjectors.getInjector().getInstance(CloseBrowser.class);
+    }
+
+    public WebDriverFactory(EnvironmentVariables environmentVariables,
+                            FixtureProviderService fixtureProviderService,
+                            SaucelabsRemoteDriverCapabilities saucelabsRemoteDriverCapabilities,
+                            TimeoutStack timeoutStack,
+                            CloseBrowser closeBrowser) {
+        this.environmentVariables = environmentVariables;
+        this.fixtureProviderService = fixtureProviderService;
+        this.sauceRemoteDriverCapabilities = saucelabsRemoteDriverCapabilities;
+        this.timeoutStack = timeoutStack;
+        this.closeBrowser = closeBrowser;
+    }
+
+    public WebDriverFactory withEnvironmentVariables(EnvironmentVariables environmentVariables) {
+        return new WebDriverFactory(environmentVariables, fixtureProviderService, sauceRemoteDriverCapabilities, timeoutStack, closeBrowser);
     }
 
     /**
@@ -120,7 +135,8 @@ public class WebDriverFactory {
      * with each other.
      */
     protected synchronized WebDriver newWebdriverInstance(final Class<? extends WebDriver> driverClass) {
-        return newWebdriverInstance(driverClass, "");
+        String driverOptions = DRIVER_OPTIONS.from(environmentVariables,"");
+        return newWebdriverInstance(driverClass, driverOptions);
     }
 
     private synchronized WebDriver newWebdriverInstance(final Class<? extends WebDriver> driverClass, String options) {

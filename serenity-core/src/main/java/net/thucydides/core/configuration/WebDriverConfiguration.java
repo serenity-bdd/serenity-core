@@ -28,9 +28,13 @@ public class WebDriverConfiguration<T extends DriverConfiguration> extends Syste
         Optional<String> driverDefinedInEnvironment = Optional.ofNullable(WebDriverFactory.getDriverFrom(getEnvironmentVariables()));
         Optional<String> driverDefinedInTest = ThucydidesWebDriverSupport.getDefaultDriverType();
 
-        String driverType =  driverDefinedInTest.orElse(driverDefinedInEnvironment.orElse(DEFAULT_WEBDRIVER_DRIVER));
+        String driverType = driverTypeOf(driverDefinedInTest.orElse(driverDefinedInEnvironment.orElse(DEFAULT_WEBDRIVER_DRIVER)));
 
         return lookupSupportedDriverTypeFor(driverType);
+    }
+
+    private String driverTypeOf(String driverName) {
+        return (driverName.contains(":") ? driverName.substring(0, driverName.indexOf(":")) : driverName);
     }
 
     /**

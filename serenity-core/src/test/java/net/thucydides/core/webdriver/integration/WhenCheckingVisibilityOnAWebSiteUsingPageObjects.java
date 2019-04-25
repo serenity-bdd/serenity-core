@@ -40,7 +40,7 @@ public class WhenCheckingVisibilityOnAWebSiteUsingPageObjects {
         String url = "file://" + fileInClasspathCalled("static-site/index.html").getAbsolutePath();
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--headless");
-        driver = new ChromeDriver();
+        driver = new ChromeDriver(chromeOptions);
         driver.get(url);
     }
 

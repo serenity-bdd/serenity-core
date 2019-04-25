@@ -127,9 +127,10 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
 
 
     static class WithMultipleDriversOfDifferentTypeWithADefaultValueLast {
-        @Managed(driver = "chrome") driver1;
-        @Managed driver2;
-        @Managed driver3;
+        @Managed driver1;
+        @Managed(driver = "chrome") driver2;
+        @Managed(driver = "firefox") driver3;
+        @Managed driver4;
     }
 
     def "should inject a different driver for each @Managed field with a mixture of types and defaults with the default last"() {
@@ -139,11 +140,13 @@ class WhenInjectingWebdriverInstancesIntoATestCase extends Specification {
         when:
             TestCaseAnnotations.forTestCase(testCase).injectDrivers(webdriverManager)
         then:
-            testCase.driver1 && testCase.driver1.driverClass.name.contains("Chrome")
+            testCase.driver1 && testCase.driver1.driverClass.name.contains("Firefox")
         and:
-            testCase.driver2 && testCase.driver2.driverClass.name.contains("Firefox")
+            testCase.driver2 && testCase.driver2.driverClass.name.contains("Chrome")
         and:
             testCase.driver3 && testCase.driver3.driverClass.name.contains("Firefox")
+        and:
+            testCase.driver4 && testCase.driver4.driverClass.name.contains("Firefox")
         and:
            testCase.driver3 != testCase.driver2
     }

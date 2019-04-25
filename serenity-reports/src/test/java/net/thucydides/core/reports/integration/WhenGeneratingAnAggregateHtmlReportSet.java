@@ -55,7 +55,7 @@ public class WhenGeneratingAnAggregateHtmlReportSet {
 
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--headless");
-        driver = new ChromeDriver();
+        driver = new ChromeDriver(chromeOptions);
     }
 
     @AfterClass

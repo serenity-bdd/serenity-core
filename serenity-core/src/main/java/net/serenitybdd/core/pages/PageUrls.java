@@ -1,10 +1,12 @@
 package net.serenitybdd.core.pages;
 
+import cucumber.runtime.Env;
 import net.serenitybdd.core.environment.ConfiguredEnvironment;
 import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.thucydides.core.annotations.DefaultUrl;
 import net.thucydides.core.annotations.NamedUrl;
 import net.thucydides.core.annotations.NamedUrls;
+import net.thucydides.core.configuration.SystemPropertiesConfiguration;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.webdriver.Configuration;
@@ -37,7 +39,12 @@ public class PageUrls {
     }
 
     public PageUrls(final Object pageObject) {
-        this(pageObject, ConfiguredEnvironment.getConfiguration());
+        this(pageObject, Injectors.getInjector().getInstance(EnvironmentVariables.class));
+    }
+
+    public PageUrls(final Object pageObject, EnvironmentVariables environmentVariables) {
+        this(pageObject,
+             ConfiguredEnvironment.getConfiguration().withEnvironmentVariables(environmentVariables));
     }
 
     public String getStartingUrl() {
@@ -51,7 +58,7 @@ public class PageUrls {
         return verified(url, pageObject);
     }
 
-    private Optional<String> getDeclaredDefaultUrl() {
+    public Optional<String> getDeclaredDefaultUrl() {
         DefaultUrl urlAnnotation = pageObject.getClass().getAnnotation(DefaultUrl.class);
         if (urlAnnotation != null) {
             return Optional.ofNullable(urlAnnotation.value());
@@ -174,7 +181,13 @@ public class PageUrls {
         return addBaseUrlTo(url);
     }
 
-    private String addBaseUrlTo(final String url) {
+
+
+    public String addDefaultUrlTo(final String url) {
+        return prefixedWithDefaultUrl(url);
+    }
+
+    public String addBaseUrlTo(final String url) {
         if (isANamedUrl(url)) {
             return namedUrlFrom(url);
         }

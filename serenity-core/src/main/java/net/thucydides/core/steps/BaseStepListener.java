@@ -385,6 +385,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         closeDarkroom();
         clearStorywideTagsAndIssues();
         ThucydidesWebDriverSupport.clearStepLibraries();
+        ThucydidesWebDriverSupport.clearDefaultDriver();
 
         if (this.currentTestIsABrowserTest()) {
             this.closeBrowsers.forTestSuite(this.testSuite).closeIfConfiguredForANew(RestartBrowserForEach.FEATURE);
@@ -484,6 +485,7 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
 
         currentStepStack.clear();
+        ThucydidesWebDriverSupport.clearDefaultDriver();
     }
 
     private void testAndTopLevelStepsShouldBeIgnored() {

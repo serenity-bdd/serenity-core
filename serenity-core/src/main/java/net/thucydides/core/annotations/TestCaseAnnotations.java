@@ -3,6 +3,7 @@ package net.thucydides.core.annotations;
 import net.serenitybdd.core.environment.*;
 import net.thucydides.core.configuration.*;
 import net.thucydides.core.webdriver.*;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.runner.*;
 import org.openqa.selenium.*;
 
@@ -58,8 +59,10 @@ public final class TestCaseAnnotations {
             String driverName = driverRootName + suffix;
             String driverOptions = webDriverField.getOptions();
 
-            ThucydidesWebDriverSupport.useDefaultDriver(driverName);
-            ThucydidesWebDriverSupport.useDriverOptions(driverOptions);
+            if (!ThucydidesWebDriverSupport.getDefaultDriverType().isPresent()) {
+                ThucydidesWebDriverSupport.useDefaultDriver(driverName);
+                ThucydidesWebDriverSupport.useDriverOptions(driverOptions);
+            }
 
             WebDriver driver = (isEmpty(driverName)) ? defaultDriver : requestedDriverFrom(webdriverManager, webDriverField.getName(), driverName, driverOptions);
             webDriverField.setValue(testCase, driver);
@@ -76,7 +79,7 @@ public final class TestCaseAnnotations {
     }
 
     private String configuredDriverType() {
-        if (ThucydidesWebDriverSupport.isInitialised()) {
+        if (ThucydidesWebDriverSupport.isInitialised() && (StringUtils.isNotEmpty(ThucydidesWebDriverSupport.getCurrentDriverName()))) {
             return ThucydidesWebDriverSupport.getCurrentDriverName();
         }
         return configuration.getDriverType().name();

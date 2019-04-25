@@ -9,11 +9,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -64,26 +62,23 @@ public class WhenSettingScreenDimensions {
         environmentVariables.setProperty("thucydides.browser.height", "200");
         environmentVariables.setProperty("thucydides.browser.width", "400");
 
-        driver = factory.newInstanceOf(SupportedWebDriver.HTMLUNIT);
+        driver = factory.withEnvironmentVariables(environmentVariables).newInstanceOf(SupportedWebDriver.HTMLUNIT);
         page = new StaticSitePage(driver, 1024);
         page.open();
 
     }
 
     @Test
-    public void should_resize_phantomjs_automatically() {
-        Platform current = Platform.getCurrent();
-        if (Platform.MAC.is(current)) {
+    public void should_resize_browser_automatically() {
+        environmentVariables.setProperty("thucydides.browser.height", "500");
+        environmentVariables.setProperty("thucydides.browser.width", "500");
+        environmentVariables.setProperty("headless.mode", "true");
 
-            environmentVariables.setProperty("thucydides.browser.height", "200");
-            environmentVariables.setProperty("thucydides.browser.width", "400");
+        driver = factory.withEnvironmentVariables(environmentVariables).newInstanceOf(SupportedWebDriver.CHROME);
+        page = new StaticSitePage(driver, 1024);
 
-            driver = factory.newInstanceOf(SupportedWebDriver.PHANTOMJS);
-            page = new StaticSitePage(driver, 1024);
-
-            int width = ((Long)(((JavascriptExecutor)driver).executeScript("return window.innerWidth"))).intValue();
-            assertThat(width, allOf(lessThanOrEqualTo(400), greaterThan(380)));
-        }
+        int width = ((Long)(((JavascriptExecutor)driver).executeScript("return window.innerWidth"))).intValue();
+        assertThat(width, equalTo(500));
     }
 
     @After

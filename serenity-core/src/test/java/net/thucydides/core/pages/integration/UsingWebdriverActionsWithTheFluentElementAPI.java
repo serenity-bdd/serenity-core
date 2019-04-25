@@ -1,14 +1,15 @@
 package net.thucydides.core.pages.integration;
 
 
-import net.thucydides.core.webdriver.WebDriverFacade;
+import net.thucydides.core.util.EnvironmentVariables;
+import net.thucydides.core.util.MockEnvironmentVariables;
 import net.thucydides.core.webdriver.WebDriverFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
+
+import static net.thucydides.core.webdriver.SupportedWebDriver.CHROME;
 
 public class UsingWebdriverActionsWithTheFluentElementAPI extends FluentElementAPITestsBaseClass {
 
@@ -17,7 +18,9 @@ public class UsingWebdriverActionsWithTheFluentElementAPI extends FluentElementA
 
     @BeforeClass
     public static void openStaticPage() {
-        driver = new WebDriverFacade(PhantomJSDriver.class, new WebDriverFactory());
+        EnvironmentVariables environmentVariables = new MockEnvironmentVariables();
+        environmentVariables.setProperty("driver.options","--headless");
+        driver = new WebDriverFactory().withEnvironmentVariables(environmentVariables).newInstanceOf(CHROME);
         page = new StaticSitePage(driver);
         page.setWaitForTimeout(750);
         page.open();

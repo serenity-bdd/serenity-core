@@ -118,7 +118,7 @@ subprojects {
             os = "macos"
         }
         if (org.gradle.internal.os.OperatingSystem.current().isLinux()) {
-            os = "linxu"
+            os = "linux"
         }
         if (!project.hasProperty("bintrayUsername")) {
             bintrayUsername = 'wakaleo'
@@ -129,6 +129,10 @@ subprojects {
 
         chromeDriverBinary = project.file("../src/test/resources/drivers/${os}/chromedriver").absolutePath
         geckoDriverBinary = project.file("../src/test/resources/drivers/${os}/geckodriver").absolutePath
+
+        println "USING CHROME DRIVER: ${chromeDriverBinary}"
+        println "USING GECKO DRIVER: ${geckoDriverBinary}"
+
     }
     group = 'net.serenity-bdd'
     version = rootProject.version
@@ -477,9 +481,4 @@ Changelog of Git Changelog Gradle plugin.
 {{/tags}}
  """
     }
-}
-
-gradle.taskGraph.whenReady { graph ->
-    println "SETTING CHROME DRIVER TO src/test/resources/drivers/macos/chromedriver"
-    System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/macos/chromedriver")
 }

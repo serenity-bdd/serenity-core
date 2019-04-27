@@ -99,6 +99,7 @@ dependencies {
     }
 
     compile("com.paulhammant:ngwebdriver:${ngwebdriver}") {
+        exclude group: 'org.seleniumhq.selenium'
         exclude group: "net.bytebuddy", module:"byte-buddy"
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
     }

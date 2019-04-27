@@ -1,6 +1,7 @@
 package net.serenitybdd.screenplay.targets;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,7 @@ class IFrameSwitcher {
             this.currentIFrame = empty();
         } else {
             driver.switchTo().defaultContent();
-            target.getIFrame().ifPresent(iFrame -> iFrame.locators.forEach(frameLocator -> driver.switchTo().frame(driver.findElement(frameLocator))));
+            target.getIFrame().ifPresent(iFrame -> iFrame.locators.forEach(frameLocator -> driver.switchTo().frame((WebElement)driver.findElement(frameLocator))));
             this.currentIFrame = target.getIFrame();
         }
     }

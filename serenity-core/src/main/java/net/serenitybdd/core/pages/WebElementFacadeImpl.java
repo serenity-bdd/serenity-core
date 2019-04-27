@@ -311,8 +311,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
 
     @Override
     public String getAttribute(String name) {
-        if (driverIsDisabled()) { return ""; }
-
         return getElement().getAttribute(name);
     }
 
@@ -1136,40 +1134,22 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     }
 
     public void submit() {
-        if (driverIsDisabled()) { return;}
-
         getElement().submit();
     }
 
     public void sendKeys(CharSequence... keysToSend) {
-        if (driverIsDisabled()) { return;}
-
         getElement().sendKeys(keysToSend);
     }
 
     public String getTagName() {
-        if (driverIsDisabled()) { return "";}
-
         return getElement().getTagName();
     }
 
-    private Optional<WebDriverFacade> webDriverFacade() {
-        if (driver instanceof WebElementFacade) {
-            return Optional.of((WebDriverFacade) driver);
-        } else {
-            return Optional.empty();
-        }
-    }
-
     public List<WebElement> findElements(By by) {
-        if (driverIsDisabled()) { return new ArrayList<>();}
-
         return getElement().findElements(by);
     }
 
     public WebElement findElement(By by) {
-        if (driverIsDisabled()) { return this;}
-
         return getElement().findElement(by);
     }
 
@@ -1202,8 +1182,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
      * @return Whether or not the element is displayed
      */
     public boolean isDisplayed() {
-        if (driverIsDisabled()) { return false;}
-
         return getElement().isDisplayed();
     }
 
@@ -1227,11 +1205,6 @@ public class WebElementFacadeImpl implements WebElementFacade, net.thucydides.co
     public WebElement getWrappedElement() {
         return getElement();
     }
-
-//    @Override
-//    public Coordinates getCoordinates() {
-//        return ((Locatable) getElement()).getCoordinates();
-//    }
 
     @Override
     public boolean containsElements(By bySelector) {

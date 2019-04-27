@@ -145,7 +145,9 @@ dependencies {
         exclude group: 'org.glassfish.tyrus', module: 'tyrus-core'
         exclude group: "net.bytebuddy", module:"byte-buddy"
         exclude group: "net.bytebuddy", module:"byte-buddy-agent"
+        exclude group: "org.springframework", module:"spring-context"
     }
+    compile "org.springframework:spring-context-support:${springVersion}"
     compile "org.glassfish.tyrus:tyrus-core:1.13.1"
 
     compile "org.codehaus.groovy:groovy:${groovyVersion}"

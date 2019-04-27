@@ -129,10 +129,6 @@ subprojects {
 
         chromeDriverBinary = project.file("../src/test/resources/drivers/${os}/chromedriver").absolutePath
         geckoDriverBinary = project.file("../src/test/resources/drivers/${os}/geckodriver").absolutePath
-
-        println "USING CHROME DRIVER: ${chromeDriverBinary}"
-        println "USING GECKO DRIVER: ${geckoDriverBinary}"
-
     }
     group = 'net.serenity-bdd'
     version = rootProject.version

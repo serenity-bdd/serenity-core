@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
@@ -980,6 +981,10 @@ public abstract class PageObject {
                 bySelector.toString());
     }
 
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(By selector) {
+        return element(selector);
+    }
+
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(List<By> selectors) {
         T element = null;
         for (By selector : selectors) {
@@ -992,12 +997,83 @@ public abstract class PageObject {
         return element;
     }
 
-    public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(By... selectors) {
-        return find(NewList.of(selectors));
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T findBy(List<String> selectors) {
+        T element = null;
+        for (String selector : selectors) {
+            if (element == null) {
+                element = element(selector);
+            } else {
+                element = element.findBy(selector);
+            }
+        }
+        return element;
+    }
+
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(String selector) {
+        return findBy(NewList.of(selector));
+    }
+
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T findElementMatching(String... selectors) {
+        return findBy(NewList.of(selectors));
+    }
+
+
+    public Optional<WebElementFacade> findFirst(String xpathOrCSSSelector) {
+        return findEach(xpathOrCSSSelector).findFirst();
     }
 
     public Optional<WebElementFacade> findFirst(By bySelector) {
-        return findAll(bySelector).stream().findFirst();
+        return findEach(bySelector).findFirst();
+    }
+
+    public Stream<WebElementFacade> findEach(By bySelector) {
+        return findAll(bySelector).stream();
+    }
+
+    /**
+     * FindEach will return a stream of WebElementFacades matching the described nested structure.
+     * Only the last selector will return a list; the initial selectors will be used to locate the list of elements.
+     * @param bySelectors
+     * @return
+     */
+    public Stream<WebElementFacade> findEach(By... bySelectors) {
+        if (bySelectors.length == 1) {
+            return findEach(bySelectors[0]);
+        }
+        return find(allButLastIn(bySelectors))
+               .thenFindAll(lastIn(bySelectors)).stream();
+    }
+
+    public Stream<WebElementFacade> findEach(String... xpathOrCssSelectors) {
+        if (xpathOrCssSelectors.length == 1) {
+            return findEach(xpathOrCssSelectors[0]);
+        }
+        return findBy(allButLastIn(xpathOrCssSelectors))
+                .thenFindAll(lastIn(xpathOrCssSelectors)).stream();
+    }
+
+    public List<WebElementFacade> findElementsMatching(String... xpathOrCssSelectors) {
+        if (xpathOrCssSelectors.length == 1) {
+            return findAll(xpathOrCssSelectors[0]);
+        }
+        return findBy(allButLastIn(xpathOrCssSelectors))
+                .thenFindAll(lastIn(xpathOrCssSelectors));
+    }
+
+
+    private <T> List<T> allButLastIn(T[] selectors) {
+        List<T> subList = new ArrayList<>();
+        for(int i = 0; i < selectors.length - 1; i++) {
+            subList.add(selectors[i]);
+        }
+        return subList;
+    }
+    private <T> T lastIn(T[] selectors) {
+        return selectors[selectors.length - 1];
+    }
+
+    public Stream<WebElementFacade> findEach(String xpathOrCSSSelector) {
+        return findAll(xpathOrCSSSelector).stream();
     }
 
     public List<WebElementFacade> findAll(By bySelector) {

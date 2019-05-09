@@ -16,6 +16,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import java.time.Duration;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -92,9 +93,12 @@ public class RootDirectory {
             if (ThucydidesSystemProperty.SERENITY_TEST_REQUIREMENTS_BASEDIR.isDefinedIn(environmentVariables)) {
                 return getRootDirectoryFromRequirementsBaseDir();
             } else {
-                return firstDefinedOf(getRootDirectoryFromClasspath(),
+                return firstDefinedOf(
+                        getRootDirectoryFromClasspath(),
+                        getGradleProjectDirectoryAsSet(),
                         getFileSystemDefinedDirectory(),
-                        getRootDirectoryFromWorkingDirectory());
+                        getRootDirectoryFromWorkingDirectory()
+                );
             }
         } catch (IOException e) {
             return new HashSet<>();
@@ -147,7 +151,6 @@ public class RootDirectory {
     }
 
     private Set<String> getFileSystemDefinedDirectory() {
-
         File rootDirectoryPathFile = FileSystems.getDefault().getPath(rootDirectoryPath).toFile();
 
         if (rootDirectoryPathFile.exists()) {
@@ -158,10 +161,29 @@ public class RootDirectory {
         return new HashSet<>();
     }
 
+    private Set<String> getGradleProjectDirectoryAsSet() {
+
+        String gradleProjectDir = getGradleProjectDirectory();
+        String gradleResourcetDir = new File(gradleProjectDir, rootDirectoryPath).getAbsolutePath();
+
+        if (gradleProjectDir != null) {
+            Set<String> directory = new HashSet<>();
+            directory.add(gradleResourcetDir);
+            return directory;
+        }
+        return new HashSet<>();
+    }
+
+    private String getGradleProjectDirectory() {
+        return environmentVariables.getProperty("serenity.project.directory");
+    }
+
     private Set<String> getRootDirectoryFromWorkingDirectory() {
         final String workingDirectory = System.getProperty("user.dir");
         final String mavenBuildDir = System.getProperty(SystemPropertiesConfiguration.PROJECT_BUILD_DIRECTORY);
-        String resultDir = (!isEmpty(mavenBuildDir)) ? mavenBuildDir :  workingDirectory;
+        final String gradleBuildDir = getGradleProjectDirectory();
+        String resultDir = (!isEmpty(mavenBuildDir)) ? mavenBuildDir : (!isEmpty(gradleBuildDir)) ? gradleBuildDir : workingDirectory;
+
         return getRootDirectoryFromParentDir(resultDir);
     }
 
@@ -194,7 +216,6 @@ public class RootDirectory {
                 directoryPaths.add(new File(resourceDirectory, storyDirectoryName).getAbsolutePath()); //stories
             }
         }
-
         return directoryPaths;
     }
 

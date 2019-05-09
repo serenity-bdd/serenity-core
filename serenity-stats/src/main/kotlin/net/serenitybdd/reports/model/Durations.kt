@@ -5,18 +5,23 @@ import java.time.Duration
 import java.time.Duration.ofMillis
 import java.time.temporal.ChronoUnit
 
-fun maxDurationOf(outcomes: List<TestOutcome>): Duration = ofMillis(
-        if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> outcome.duration }.max()!!
-)
+fun maxDurationOf(outcomes: List<TestOutcome>) : Duration = ofMillis(
+        if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> maxDurationOf(outcome) }.max()!!
+);
 
-fun minDurationOf(outcomes: List<TestOutcome>): Duration = ofMillis(
-        if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> outcome.duration }.min()!!
-)
-
+fun minDurationOf(outcomes: List<TestOutcome>) : Duration = ofMillis(
+        if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> minDurationOf(outcome) }.min()!!
+);
 
 fun totalDurationOf(outcomes: List<TestOutcome>): Duration = ofMillis(
         if (outcomes.isEmpty()) 0 else outcomes.map { outcome -> outcome.duration }.sum()
 )
+
+fun maxDurationOf(outcome: TestOutcome) =
+        if (outcome.isDataDriven) { outcome.testSteps.map { step -> step.duration }.max()!! } else outcome.duration
+
+fun minDurationOf(outcome: TestOutcome) =
+        if (outcome.isDataDriven) { outcome.testSteps.map { step -> step.duration }.min()!! } else outcome.duration
 
 fun clockDurationOf(outcomes: List<TestOutcome>): Duration = ofMillis(
         if (outcomes.isEmpty())

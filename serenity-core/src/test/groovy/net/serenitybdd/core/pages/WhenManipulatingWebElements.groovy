@@ -131,11 +131,13 @@ class WhenManipulatingWebElements extends Specification {
 
     }
 
-    def "Null WebElements should not be acessible"() {
+    def "Null WebElements should not be accessible"() {
         when:
         WebElementFacade webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, (WebElement) null, 100, 100);
         then:
-        !webElementFacade.isVisible() && !webElementFacade.isPresent() && !webElementFacade.isEnabled()
+        !webElementFacade.isVisible() &&
+                !webElementFacade.isPresent() &&
+                !webElementFacade.isEnabled()
     }
 
     WebElementFacade webElementFacade = WebElementFacadeImpl.wrapWebElement(driver, (WebElement) null, 100, 100);
@@ -145,13 +147,6 @@ class WhenManipulatingWebElements extends Specification {
             webElementFacade.click()
         then:
             thrown(ElementShouldBeEnabledException.class)
-    }
-
-    def "when webelement is null it should fail wait until disabled"() {
-        when:
-        webElementFacade.waitUntilDisabled()
-        then:
-        thrown(ElementShouldBeDisabledException.class)
     }
 
 
@@ -193,11 +188,4 @@ class WhenManipulatingWebElements extends Specification {
         thrown(NoSuchElementException.class)
     }
 
-
-    def "when webelement is null get text should fail"() {
-        when:
-        !webElementFacade.getText()
-        then:
-        thrown(NoSuchElementException.class)
-    }
 }

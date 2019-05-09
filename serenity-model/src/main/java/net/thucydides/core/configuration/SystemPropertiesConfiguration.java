@@ -32,8 +32,8 @@ public class SystemPropertiesConfiguration implements Configuration {
     /**
      * If in system properties will be defined project.build.directory or project.reporting.OutputDirectory then it will
      * be used for output for serenity test reports.
-     * By default maven NEVER push this properties to system environment, but they are available in maven pm.
-     * This property is used when maven/gradle build conta subprojects by serenity  plugins
+     * By default maven NEVER push this properties to system environment, but they are available in maven.
+     * This property is used when maven/gradle build contains sub-projects
      */
     public static final String PROJECT_BUILD_DIRECTORY = "project.build.directory";
 

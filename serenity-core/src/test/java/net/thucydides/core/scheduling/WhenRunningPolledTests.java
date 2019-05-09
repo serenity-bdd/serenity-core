@@ -78,11 +78,9 @@ public class WhenRunningPolledTests {
 
 
     private ExpectedCondition<Boolean> weHaveWaitedEnough(final Counter counter) {
-        return new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver driver) {
-                counter.incrementCounter();
-                return counter.getCounter() > 3;
-            }
+        return driver -> {
+            counter.incrementCounter();
+            return counter.getCounter() > 3;
         };
     }
 
@@ -221,9 +219,9 @@ public class WhenRunningPolledTests {
         Counter counter = new Counter();
 
         page.waitForCondition()
-                .ignoring(NullPointerException.class)
                 .withTimeoutOf(5000).milliseconds()
                 .pollingEvery(100).milliseconds()
+                .ignoring(NullPointerException.class)
                 .until(weSpitTheDummyWithARuntimeException(counter));
 
     }

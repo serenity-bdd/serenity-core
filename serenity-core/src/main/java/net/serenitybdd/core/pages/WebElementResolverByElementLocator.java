@@ -9,6 +9,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class WebElementResolverByElementLocator extends WebElementResolver {
@@ -27,6 +30,13 @@ public class WebElementResolverByElementLocator extends WebElementResolver {
         WebElement resolvedELement = getLocatorWithDriver(driver).findElement();
         ensureVisibilityOf(resolvedELement);
         return resolvedELement;
+    }
+
+    @Override
+    public List<WebElement> resolveAllForDriver(WebDriver driver) {
+        if (locator == null) { return Collections.emptyList(); }
+
+        return getLocatorWithDriver(driver).findElements();
     }
 
     private void ensureVisibilityOf(WebElement resolvedELement) {

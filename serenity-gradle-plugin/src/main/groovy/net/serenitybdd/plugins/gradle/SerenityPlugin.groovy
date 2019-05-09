@@ -37,6 +37,7 @@ class SerenityPlugin implements Plugin<Project> {
                 }
                 logger.lifecycle("Generating Serenity Reports for ${project.serenity.projectKey} to directory $reportDirectory")
                 System.properties['serenity.project.key'] = project.serenity.projectKey
+
                 if (project.serenity.requirementsBaseDir) {
                     System.properties['serenity.test.requirements.basedir'] = project.serenity.requirementsBaseDir
                 }
@@ -44,6 +45,7 @@ class SerenityPlugin implements Plugin<Project> {
 
                 reporter.outputDirectory = reportDirectory.toFile()
 
+                reporter.projectDirectory =  project.projectDir.absolutePath
                 reporter.issueTrackerUrl = project.serenity.issueTrackerUrl
                 reporter.jiraUrl = project.serenity.jiraUrl
                 reporter.jiraProject = project.serenity.jiraProject

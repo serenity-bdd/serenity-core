@@ -343,14 +343,6 @@ public class TestOutcomes {
                 .collect(Collectors.toList());
     }
 
-    private List<TestTag> removeExcluded(List<TestTag> allTagsOfType, String excludedTag) {
-        Predicate<TestTag> withExcludedTags = tag -> !tag.getName().equalsIgnoreCase(excludedTag);
-
-        return allTagsOfType.stream()
-                .filter(withExcludedTags)
-                .collect(Collectors.toList());
-    }
-
     private TagFinder tagsOfType(String tagType) {
         return new TagFinder(tagType);
     }
@@ -359,19 +351,42 @@ public class TestOutcomes {
         return rootOutcomes.orElse(this);
     }
 
+
+    private List<? extends TestOutcome> outcomesWithMatchingTagFor(Requirement childRequirement) {
+        return withTag(childRequirement.asTag()).getOutcomes();
+    }
+
+    private List<? extends TestOutcome> outcomesWithMatchingCardNumberFor(Requirement childRequirement) {
+        if (childRequirement.getCardNumber() != null) {
+            return withCardNumber(childRequirement.getCardNumber()).getOutcomes();
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+
+    private Stream<? extends TestOutcome> outcomesMatching(Requirement requirement) {
+        return Stream.concat(
+                outcomesWithMatchingTagFor(requirement).stream(),
+                outcomesWithMatchingCardNumberFor(requirement).stream()
+        );
+    }
+
     public TestOutcomes forRequirement(Requirement requirement) {
 
-        Set<TestOutcome> testOutcomesForThisRequirement = new HashSet();
-        for(Requirement childRequirement : RequirementsTree.forRequirement(requirement).asFlattenedList()) {
-            testOutcomesForThisRequirement.addAll(
-                    withTag(childRequirement.asTag()).getOutcomes()
-            );
-            if (childRequirement.getCardNumber() != null) {
-                testOutcomesForThisRequirement.addAll(
-                        withCardNumber(childRequirement.getCardNumber()).getOutcomes()
-                );
-            }
-        }
+        Set<TestOutcome> testOutcomesForThisRequirement
+                = requirement.stream().flatMap(this::outcomesMatching).collect(Collectors.toSet());
+//
+//        for(Requirement childRequirement : RequirementsTree.forRequirement(requirement).asFlattenedList()) {
+//            testOutcomesForThisRequirement.addAll(
+//                    withTag(childRequirement.asTag()).getOutcomes()
+//            );
+//            if (childRequirement.getCardNumber() != null) {
+//                testOutcomesForThisRequirement.addAll(
+//                        withCardNumber(childRequirement.getCardNumber()).getOutcomes()
+//                );
+//            }
+//        }
 
         return TestOutcomes.of(testOutcomesForThisRequirement)
                 .withLabel(requirement.getDisplayName())
@@ -1039,12 +1054,7 @@ public class TestOutcomes {
         }
 
         private boolean matches(String name, List<Matcher<String>> matchers) {
-            for(Matcher<String> match : matchers) {
-                if (match.matches(name)) {
-                    return true;
-                }
-            }
-            return false;
+            return matchers.stream().anyMatch( match -> match.matches(name));
         }
     }
 

@@ -1,8 +1,7 @@
 package net.thucydides.core.webdriver.stubs;
 
 import com.google.gson.Gson;
-import net.serenitybdd.core.pages.WebElementFacade;
-import net.serenitybdd.core.pages.WebElementState;
+import net.serenitybdd.core.pages.*;
 import net.serenitybdd.core.time.InternalSystemClock;
 import net.thucydides.core.webdriver.javascript.JavascriptExecutorFacade;
 import org.openqa.selenium.*;
@@ -70,6 +69,16 @@ public class WebElementFacadeStub implements WebElementFacade {
 
     @Override
     public WebElementFacade then(String xpathOrCssSelector) {
+        return this;
+    }
+
+    @Override
+    public WebElementFacade thenFind(String xpathOrCssSelector) {
+        return this;
+    }
+
+    @Override
+    public WebElementFacade thenFind(String xpathOrCssSelector, Object... arguments) {
         return this;
     }
 
@@ -314,10 +323,10 @@ public class WebElementFacadeStub implements WebElementFacade {
     /**
      * Type a value into a field, making sure that the field is empty first.
      *
-     * @param value
+     * @param keysToSend
      */
     @Override
-    public WebElementFacade type(final String value) {
+    public WebElementFacade type(CharSequence... keysToSend) {
         return this;
     }
 
@@ -344,6 +353,16 @@ public class WebElementFacadeStub implements WebElementFacade {
 
     @Override
     public void setWindowFocus() {
+    }
+
+    @Override
+    public FluentDropdownSelect select() {
+        return new FluentDropdownSelect(new WebElementFacadeStub());
+    }
+
+    @Override
+    public FluentDropdownDeselect deselect() {
+        return new FluentDropdownDeselect(new WebElementFacadeStub());
     }
 
     @Override
@@ -455,6 +474,11 @@ public class WebElementFacadeStub implements WebElementFacade {
     @Override
     public String getTextContent() {
         return "";
+    }
+
+    @Override
+    public boolean isDisabled() {
+        return false;
     }
 
     @Override

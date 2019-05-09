@@ -233,21 +233,32 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     public java.util.Optional<Requirement> getTestCaseRequirementOf(TestOutcome testOutcome) {
-        for (Requirement requirement : AllRequirements.in(getRequirements())) {
-            if (requirement.asTag().isAsOrMoreSpecificThan(testOutcome.getUserStory().asTag())) {
-                return java.util.Optional.of(requirement);
-            }
-        }
-        return java.util.Optional.empty();
+//        for (Requirement requirement : AllRequirements.in(getRequirements())) {
+//            if (requirement.asTag().isAsOrMoreSpecificThan(testOutcome.getUserStory().asTag())) {
+//                return java.util.Optional.of(requirement);
+//            }
+//        }
+//        return java.util.Optional.empty();
+//
+        return AllRequirements.asStreamFrom(getRequirements())
+                .filter(
+                        requirement -> (requirement.asTag().isAsOrMoreSpecificThan(testOutcome.getUserStory().asTag()))
+                ).findFirst();
     }
 
     @Override
     public java.util.Optional<Requirement> getRequirementFor(TestTag testTag) {
-        for (Requirement requirement : AllRequirements.in(getRequirements())) {
-            if (requirement.asTag().isAsOrMoreSpecificThan(testTag)) {
-                return Optional.of(requirement);
-            }
-        }
+        Optional<Requirement> matching = AllRequirements.asStreamFrom(getRequirements())
+                .filter(requirement -> requirement.asTag().isAsOrMoreSpecificThan(testTag))
+                .findFirst();
+
+        if (matching.isPresent()) { return matching; }
+//
+//        for (Requirement requirement : AllRequirements.in(getRequirements())) {
+//            if (requirement.asTag().isAsOrMoreSpecificThan(testTag)) {
+//                return Optional.of(requirement);
+//            }
+//        }
         return uniqueRequirementWithName(testTag.getName());
     }
 
@@ -278,12 +289,17 @@ public class PackageRequirementsTagProvider extends AbstractRequirementsTagProvi
     }
 
     private Optional<Requirement> parentOf(Requirement child) {
-        for (Requirement requirement : AllRequirements.in(requirements)) {
-            if (requirement.getChildren().contains(child)) {
-                return Optional.of(requirement);
-            }
-        }
-        return Optional.empty();
+        return AllRequirements.asStreamFrom(getRequirements())
+                .filter(requirement -> requirement.getChildren().contains(child))
+                .findFirst();
+//
+//
+//        for (Requirement requirement : AllRequirements.in(requirements)) {
+//            if (requirement.getChildren().contains(child)) {
+//                return Optional.of(requirement);
+//            }
+//        }
+//        return Optional.empty();
     }
 
     private static File getRequirementsDirectory(File directory) {

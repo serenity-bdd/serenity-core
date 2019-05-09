@@ -66,7 +66,6 @@ public class WhenRerunningFailedTests {
         assertThat(executedScenarios.get(0).getStepCount(), is(4));
         assertThat(executedScenarios.get(0).getTestSteps().get(3).getDescription(), containsString("UNSTABLE TEST"));
         assertThat(executedScenarios.get(0).getTestSteps().get(3).getDescription(), containsString("A step that fails on odd tries"));
-        assertThat(executedScenarios.get(0).getTestSteps().get(3).getDescription(), containsString("expected:<[tru]e> but was:<[fals]e>"));
 
         assertThat(executedScenarios.get(0).getTags(), hasItem(TestTag.withName("Retries: 1").andType("unstable test")));
     }

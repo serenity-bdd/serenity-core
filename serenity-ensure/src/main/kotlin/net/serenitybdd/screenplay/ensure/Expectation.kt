@@ -1,10 +1,10 @@
 package net.serenitybdd.screenplay.ensure
 
-import net.thucydides.junit.annotations.Qualifier
+import net.serenitybdd.screenplay.Actor
 
-typealias BooleanPredicate<A> = (actual: A) -> Boolean
-typealias SingleValuePredicate<A, E> = (actual: A, expected: E) -> Boolean
-typealias DoubleValuePredicate<A, E> = (actual: A, startRange: E, endRange: E) -> Boolean
+typealias BooleanPredicate<A> = (actor: Actor?, actual: A) -> Boolean
+typealias SingleValuePredicate<A, E> = (actor: Actor?, actual: A, expected: E) -> Boolean
+typealias DoubleValuePredicate<A, E> = (actor: Actor?, actual: A, startRange: E, endRange: E) -> Boolean
 
 fun <A, E> expectThatActualIs(message: String, predicate: SingleValuePredicate<A, E>) = Expectation(message, predicate)
 fun <A, E> expectThatActualIs(message: String, predicate: DoubleValuePredicate<A, E>) = DoubleValueExpectation(message, predicate)
@@ -28,15 +28,15 @@ class Expectation<A, E>(private val expectation: String,
                         val predicate: SingleValuePredicate<A, E>,
                         val readableExpectedValue: String? = null) {
     fun describe(actual: A?, expected: E, isNegated: Boolean = false) = comparisonDescription(expectation, actual as Any?, expected as Any?, isNegated, readableExpectedValue)
-    fun apply(actual: A, expected: E) = predicate(actual, expected)
+    fun apply(actual: A, expected: E, actor: Actor?) = predicate(actor, actual, expected)
 }
 
 /**
  * Models a value predicate with a description that takes no parameters
  */
-open class PredicateExpectation<A>(val expectation: String, val predicate: BooleanPredicate<A>) {
+open class PredicateExpectation<A>(val expectation: String, val predicate: BooleanPredicate<A>, val isNegated: Boolean = false) {
     open fun describe(actual: A?, isNegated: Boolean = false) = predicateDescription(expectation, actual as Any?, isNegated)
-    fun apply(actual: A) = predicate(actual)
+    fun apply(actual: A, actor: Actor?) = if (isNegated) !predicate(actor, actual) else predicate(actor, actual)
 }
 
 class CollectionPredicateExpectation<A>(expectation: String,
@@ -63,7 +63,7 @@ class DoubleValueExpectation<A, E>(val expectation: String, val predicate: Doubl
             endRange as Any,
             isNegated)
 
-    fun apply(actual: A, startRange: E, endRange: E) = predicate(actual, startRange, endRange)
+    fun apply(actual: A, startRange: E, endRange: E, actor: Actor?) = predicate(actor, actual, startRange, endRange)
 }
 
 
@@ -116,18 +116,5 @@ But got: ${actualValue(actual)}"""
 fun expectedType(expected: Any?) = if (expected is Collection<*>) "a collection" else "a value"
 fun thatIsOrIsnt(isNegated: Boolean) = if (isNegated) "that is not " else "that is "
 fun matchesOrDoesNotMatch(isNegated: Boolean) = if (isNegated) "does not match" else "matches"
-fun isOrIsnt(isNegated: Boolean, number: GrammaticalNumber) =
-        when (number) {
-            GrammaticalNumber.SINGULAR -> if (isNegated) "is not " else "is "
-            GrammaticalNumber.PLURAL -> if (isNegated) "are not " else "are "
-        }
-
-fun qualifier(singularQualifier: String, pluralQualifier: String, number: GrammaticalNumber) =
-        when (number) {
-            GrammaticalNumber.SINGULAR -> singularQualifier
-            GrammaticalNumber.PLURAL -> pluralQualifier
-        }
-
-
 fun expectedValue(expected: Any?) = if (expected is String) "<\"$expected\">" else "<$expected>"
 fun actualValue(actual: Any?) = if (actual is String) "<\"$actual\">" else "<$actual>"

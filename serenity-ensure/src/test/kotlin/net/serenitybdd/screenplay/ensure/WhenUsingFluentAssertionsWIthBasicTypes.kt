@@ -6,7 +6,7 @@ import org.junit.jupiter.api.TestInstance
 import java.time.LocalDate
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class WhenUsingSimpleFluentAssertionsWIthBasicTypes {
+class WhenUsingFluentAssertionsWIthBasicTypes {
 
     @Nested
     inner class WeCanCheckFor {

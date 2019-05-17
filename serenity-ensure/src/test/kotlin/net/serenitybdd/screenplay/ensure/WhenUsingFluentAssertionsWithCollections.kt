@@ -7,7 +7,7 @@ import org.junit.jupiter.api.TestInstance
 import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class WhenUsingSimpleFluentAssertionsWithCollections {
+class WhenUsingFluentAssertionsWithCollections {
 
 
     @Nested
@@ -43,8 +43,8 @@ class WhenUsingSimpleFluentAssertionsWithCollections {
 
             @Test
             fun `when two lists contain different elements but should contain the same`() {
-                shouldFailWithMessage("""|Expecting a collection that is equal to: <[yellow, cyan, magenta]>
-                                         |But got................................: <[red, green, blue]>"""
+                shouldFailWithMessage("""|Expecting a value that is equal to: <[yellow, cyan, magenta]>
+                                         |But got...........................: <[red, green, blue]>"""
                         .trimMargin())
                         .whenChecking(that(someColors).isEqualTo(someDifferentColors))
             }
@@ -62,6 +62,16 @@ class WhenUsingSimpleFluentAssertionsWithCollections {
             }
 
             @Test
+            fun `when a list is null or empty`() {
+                val nullList : List<String>? = null
+                val emptyList : List<String> = emptyList()
+
+                shouldPassWhenChecking(that(nullList).isNullOrEmpty())
+                shouldPassWhenChecking(that(emptyList).isNullOrEmpty())
+                shouldFailWhenChecking(that(colors).isNullOrEmpty())
+            }
+
+            @Test
             fun `when a list is not empty`() {
                 shouldPassWhenChecking(that(colors).not().isEmpty())
                 shouldPassWhenChecking(that(colors).isNotEmpty())
@@ -69,7 +79,7 @@ class WhenUsingSimpleFluentAssertionsWithCollections {
 
             @Test
             fun `when a list is not empty but should be`() {
-                shouldFailWithMessage("""|Expecting a collection that is empty
+                shouldFailWithMessage("""|Expecting a value that is empty
                                          |But got: <[red, green, blue]>"""
                         .trimMargin())
                         .whenChecking(that(colors).isEmpty())
@@ -132,8 +142,8 @@ class WhenUsingSimpleFluentAssertionsWithCollections {
 
             @Test
             fun `when the size is not what it should be`() {
-                shouldFailWithMessage("""|Expecting a collection that is of size: <10>
-                                         |But got...............................: <[red, green, blue]>"""
+                shouldFailWithMessage("""|Expecting a value that is of size: <10>
+                                         |But got..........................: <[red, green, blue]>"""
                         .trimMargin())
                         .whenChecking(that(colors).hasSize(10))
             }
@@ -160,6 +170,12 @@ class WhenUsingSimpleFluentAssertionsWithCollections {
             @Test
             fun `values in a list`() {
                 shouldPassWhenChecking(that(colors).containsElementsFrom(listOf("red", "blue")))
+            }
+
+            @Test
+            fun `any values in a list`() {
+                shouldPassWhenChecking(that(colors).containsAnyElementsOf(listOf("red", "pink")))
+                shouldFailWhenChecking(that(colors).containsAnyElementsOf(listOf("purple", "pink")))
             }
 
             @Test

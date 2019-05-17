@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -18,7 +19,7 @@ import java.util.List;
 /**
  * Some high level smoke tests
  */
-public class WhenUsingSimpleFluentAssertionsInJava {
+public class WhenUsingFluentAssertionsInJava {
 
     @Test
     public void weCanMakeAssertionsAboutNumbers() {
@@ -125,7 +126,44 @@ public class WhenUsingSimpleFluentAssertionsInJava {
     }
 
     @Test
-    public void weCanCompareElemetnsInAListAgainstAPredicate() {
+    public void weCanCompareBooleans() {
+        Actor aster = Actor.named("Aster");
+
+        aster.attemptsTo(
+                Ensure.that(true).isTrue(),
+                Ensure.that(false).isFalse()
+        );
+    }
+
+    @Test
+    public void weCanCompareDoubles() {
+        Actor aster = Actor.named("Aster");
+
+        aster.attemptsTo(
+                Ensure.that(3.14159d).isGreaterThan(3.0d)
+        );
+    }
+
+    @Test
+    public void weCanCompareFloats() {
+        Actor aster = Actor.named("Aster");
+
+        aster.attemptsTo(
+                Ensure.that(3.14159f).isGreaterThan(3.0f)
+        );
+    }
+
+
+    @Test
+    public void weCanCompareBigDecimals() {
+        Actor aster = Actor.named("Aster");
+
+        aster.attemptsTo(
+                Ensure.that(new BigDecimal("3.14159")).isGreaterThan(BigDecimal.ONE)
+        );
+    }
+    @Test
+    public void weCanCompareElementsInAListAgainstAPredicate() {
         Actor aster = Actor.named("Aster");
         List<String> colors = ImmutableList.of("blue", "cyan", "pink");
 

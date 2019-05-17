@@ -1,5 +1,8 @@
 package net.serenitybdd.screenplay.ensure.collections
 
+/*
+
+ */
 class CollectionsComparison<A>(val comparator: Comparator<A>? = null) {
     fun areEqual(actual: Collection<A>?, expected: Collection<A>?): Boolean {
         if (actual == null && expected == null) return true

@@ -1,5 +1,7 @@
 package net.serenitybdd.screenplay.ensure
 
+import net.serenitybdd.screenplay.Actor
+
 object CommonPreconditions {
 
     fun ensureActualNotNull(actual: Any?) {
@@ -9,6 +11,11 @@ object CommonPreconditions {
     fun ensureActualAndExpectedNotNull(actual: Any?, expected: Any?) {
         ensureNotNull("actual should not be null", actual)
         ensureNotNull("expected should not be null", expected)
+    }
+
+    fun ensureActualAndActorNotNull(actual: Any?, actor: Actor?) {
+        ensureNotNull("actual should not be null", actual)
+        ensureNotNull("actor should not be null", actor)
     }
 
     fun ensureActualAndRangeValues(actual: Any?, startRange: Any?, endRange: Any?) {

@@ -6,13 +6,32 @@ import org.junit.jupiter.api.TestInstance
 import java.util.Comparator
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class WhenUsingSimpleFluentAssertionsWIthComparableTypes {
+class WhenUsingFluentAssertionsWIthComparableTypes {
 
     internal enum class Color {
         RED, GREEN, BLUE
     }
 
     @Nested
+    inner class WeCanUseDifferentTypesSuchAs {
+        @Test
+        fun integers() {
+            shouldPassWhenChecking(that(2).isGreaterThan(1))
+        }
+
+        @Test
+        fun longs() {
+            shouldPassWhenChecking(that(20000000000L).isGreaterThan(10000000000L))
+        }
+
+        @Test
+        fun floats() {
+            shouldPassWhenChecking(that(3.14159).isGreaterThan(3.0))
+        }
+
+    }
+
+        @Nested
     inner class WeCanCheckFor {
 
         @Nested

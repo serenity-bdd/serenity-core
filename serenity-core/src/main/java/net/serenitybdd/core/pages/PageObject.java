@@ -486,10 +486,6 @@ public abstract class PageObject {
         return driver.findElements(byListCriteria);
     }
 
-    public <T extends PageObject> T foo() {
-        return (T) this;
-    }
-
     /**
      * Check that the specified text appears somewhere in the page.
      */

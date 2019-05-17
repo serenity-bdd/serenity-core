@@ -6,7 +6,7 @@ import org.junit.jupiter.api.TestInstance
 import java.util.regex.Pattern
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class WhenUsingSimpleFluentAssertionsWithStrings {
+class WhenUsingFluentAssertionsWithStrings {
 
 
     @Nested
@@ -69,6 +69,12 @@ class WhenUsingSimpleFluentAssertionsWithStrings {
             }
 
             @Test
+            fun `when the value is null for obscure edge cases`() {
+                val nullValue : String? = null;
+                shouldFailWhenChecking(that(nullValue).contains("null"))
+            }
+
+            @Test
             fun `when the expected list is empty`() {
                 shouldFailWhenChecking(that("red green blue").contains())
             }
@@ -98,7 +104,7 @@ class WhenUsingSimpleFluentAssertionsWithStrings {
             @Test
             fun `when the value is null`() {
                 val nullValue : String? = null;
-                shouldFailWhenChecking(that(nullValue).doesNotContain("blue"))
+                shouldPassWhenChecking(that(nullValue).doesNotContain("blue"))
             }
 
             @Test
@@ -224,13 +230,23 @@ class WhenUsingSimpleFluentAssertionsWithStrings {
         inner class BlankStrings {
 
             @Test
-            fun `when the string is empty`() {
+            fun `when the string is blank`() {
                 shouldPassWhenChecking(that("").isBlank())
             }
 
             @Test
             fun `when the string has only white spaces`() {
                 shouldPassWhenChecking(that("    ").isBlank())
+            }
+
+            @Test
+            fun `when the string should not be blank`() {
+                shouldPassWhenChecking(that("NOT BLANK").isNotBlank())
+            }
+
+            @Test
+            fun `when the string should be blank but is not`() {
+                shouldFailWhenChecking(that("").isNotBlank())
             }
 
             @Test
@@ -258,6 +274,17 @@ class WhenUsingSimpleFluentAssertionsWithStrings {
                         .trimMargin())
                         .whenChecking(that("   ").isEmpty())
             }
+
+            @Test
+            fun `when the string should not be empty`() {
+                shouldPassWhenChecking(that("NOT EMPTY").isNotEmpty())
+            }
+
+            @Test
+            fun `when the string is empty but should not be empty`() {
+                shouldFailWhenChecking(that("").isNotEmpty())
+            }
+
 
             @Test
             fun `when the string is not empty`() {

@@ -8,7 +8,7 @@ import java.time.LocalDate
 import java.time.Month
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class WhenUsingSimpleFluentAssertionsWithDates {
+class WhenUsingFluentAssertionsWithDates {
 
 
     @Nested

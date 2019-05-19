@@ -6,8 +6,8 @@ class BooleanEnsure(override val value: KnowableValue<Boolean?>) : UICommonEnsur
 
     constructor(value: Boolean?) : this(KnownValue(value, value.toString()))
 
-    fun isTrue() = PerformablePredicate<KnowableValue<Boolean?>?>(value, IS_TRUE, isNegated())
-    fun isFalse() = PerformablePredicate<KnowableValue<Boolean?>?>(value, IS_FALSE, isNegated())
+    fun isTrue() = PerformablePredicate<KnowableValue<Boolean?>?>(value, IS_TRUE, isNegated(),"a value")
+    fun isFalse() = PerformablePredicate<KnowableValue<Boolean?>?>(value, IS_FALSE, isNegated(),"a value")
 
     override fun not(): BooleanEnsure = negate() as BooleanEnsure
 
@@ -16,7 +16,7 @@ class BooleanEnsure(override val value: KnowableValue<Boolean?>) : UICommonEnsur
                 if (actual == null || actor == null) return false;
 
                 val resolvedValue = actual(actor)
-                return if (resolvedValue == null) false else resolvedValue
+                return actual(actor) ?: false
             })
 
     val IS_FALSE = expectThatActualIs("false",

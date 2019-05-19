@@ -26,38 +26,44 @@ private fun isAFailure(result: Boolean, isNegated: Boolean) = (!isNegated && !re
 class PerformableExpectation<A, E>(val actual: A?,
                                    private val expectation: Expectation<A?, E>,
                                    val expected: E,
-                                   private val isNegated: Boolean = false) : Performable {
+                                   private val isNegated: Boolean = false,
+                                   private val expectedDescription: String = "a value") : Performable {
     override fun <T : Actor?> performAs(actor: T) {
+        BlackBox.reset()
         val result = expectation.apply(actual, expected, actor)
 
         if (isAFailure(result, isNegated)) {
-            throw AssertionError(expectation.describe(actual, expected, isNegated))
+            throw AssertionError(expectation.describe(actual, expected, isNegated, expectedDescription))
         }
     }
 }
 
 class BiPerformableExpectation<A, E>(val actual: A?,
-                                     val expectation: DoubleValueExpectation<A?, E>,
-                                     val startRange: E,
-                                     val endRange: E,
-                                     val isNegated: Boolean = false) : Performable {
+                                     private val expectation: DoubleValueExpectation<A?, E>,
+                                     private val startRange: E,
+                                     private val endRange: E,
+                                     private val isNegated: Boolean = false,
+                                     private val expectedDescription: String) : Performable {
     override fun <T : Actor?> performAs(actor: T) {
+        BlackBox.reset()
         val result = expectation.apply(actual, startRange, endRange, actor)
 
         if (isAFailure(result, isNegated)) {
-            throw AssertionError(expectation.describe(actual, startRange, endRange))
+            throw AssertionError(expectation.describe(actual, startRange, endRange, isNegated, expectedDescription))
         }
     }
 }
 
 class PerformablePredicate<A>(val actual: A?,
-                              val expectation: PredicateExpectation<A?>,
-                              val isNegated: Boolean = false) : Performable {
+                              private val expectation: PredicateExpectation<A?>,
+                              private val isNegated: Boolean = false,
+                              private val expectedDescription: String) : Performable {
     override fun <T : Actor?> performAs(actor: T) {
+        BlackBox.reset()
         val result = expectation.apply(actual, actor)
 
         if (isAFailure(result, isNegated)) {
-            throw AssertionError(expectation.describe(actual, isNegated))
+            throw AssertionError(expectation.describe(actual, isNegated, expectedDescription))
         }
     }
 }

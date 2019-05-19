@@ -88,7 +88,7 @@ class WhenUsingFluentAssertionsWIthBasicTypes {
             @Test
             fun `for negative cases`() {
                 shouldFailWithMessage("""|Expecting a value that is null
-                                     |But got: <"bar">"""
+                                     |But got: "bar""""
                         .trimMargin())
                         .whenChecking(that("bar").isNull())
             }

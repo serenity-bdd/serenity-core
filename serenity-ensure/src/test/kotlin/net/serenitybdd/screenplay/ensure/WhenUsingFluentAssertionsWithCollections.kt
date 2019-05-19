@@ -43,8 +43,8 @@ class WhenUsingFluentAssertionsWithCollections {
 
             @Test
             fun `when two lists contain different elements but should contain the same`() {
-                shouldFailWithMessage("""|Expecting a value that is equal to: <[yellow, cyan, magenta]>
-                                         |But got...........................: <[red, green, blue]>"""
+                shouldFailWithMessage("""|Expecting a collection that is equal to: <[yellow, cyan, magenta]>
+                                         |But got................................: <[red, green, blue]>"""
                         .trimMargin())
                         .whenChecking(that(someColors).isEqualTo(someDifferentColors))
             }
@@ -79,8 +79,8 @@ class WhenUsingFluentAssertionsWithCollections {
 
             @Test
             fun `when a list is not empty but should be`() {
-                shouldFailWithMessage("""|Expecting a value that is empty
-                                         |But got: <[red, green, blue]>"""
+                shouldFailWithMessage("""|Expecting a collection that is empty
+                                         |But got: [red, green, blue]"""
                         .trimMargin())
                         .whenChecking(that(colors).isEmpty())
             }
@@ -142,8 +142,8 @@ class WhenUsingFluentAssertionsWithCollections {
 
             @Test
             fun `when the size is not what it should be`() {
-                shouldFailWithMessage("""|Expecting a value that is of size: <10>
-                                         |But got..........................: <[red, green, blue]>"""
+                shouldFailWithMessage("""|Expecting a collection that is of size: <10>
+                                         |But got...............................: <[red, green, blue]>"""
                         .trimMargin())
                         .whenChecking(that(colors).hasSize(10))
             }
@@ -436,7 +436,7 @@ class WhenUsingFluentAssertionsWithCollections {
             @Test
             fun `when not all the values match`() {
                 shouldFailWithMessage("""|Expecting a collection that matches: each element is 4 characters long
-                                         |But got: <[red, green, blue]>"""
+                                         |But got: [red, green, blue]"""
                         .trimMargin())
                         .whenChecking(that(listOf("red","green","blue")).allMatch("4 characters long", hasALengthOfFour))
             }
@@ -463,7 +463,7 @@ class WhenUsingFluentAssertionsWithCollections {
             @Test
             fun `when there are no matching elements`() {
                 shouldFailWithMessage("""|Expecting a collection that matches: at least one element is pink
-                                         |But got: <[red, green, blue]>"""
+                                         |But got: [red, green, blue]"""
                         .trimMargin())
                         .whenChecking(that(listOf("red","green","blue")).anyMatch("pink") { it : String -> it == "pink"})
             }
@@ -492,7 +492,7 @@ class WhenUsingFluentAssertionsWithCollections {
             @Test
             fun `when there are no matching elements`() {
                 shouldFailWithMessage("""|Expecting a collection that matches: no elements are red
-                                         |But got: <[red, green, blue]>"""
+                                         |But got: [red, green, blue]"""
                         .trimMargin())
                         .whenChecking(that(listOf("red","green","blue")).noneMatch("red", isRed))
             }

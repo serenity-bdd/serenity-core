@@ -22,7 +22,7 @@ open class UICommonEnsure<A, E>(open val value: KnowableValue<A>) {
      * actor.attemptsTo(Ensure.that(&quot;abc&quot;).isEqualTo(&quot;abc&quot;));
      * </code></pre>
      */
-    fun isEqualTo(expected: E) = PerformableExpectation(value, IS_EQUAL_TO, expected, isNegated())
+    open fun isEqualTo(expected: E) = PerformableExpectation(value, IS_EQUAL_TO, expected, isNegated())
 
     // TODO
     // fun isEqualToIgnoringFields(expected: E, vararg fieldsToIgnore: String) = PerformableExpectation(value, IS_EQUAL_TO, expected, isNegated())
@@ -35,7 +35,7 @@ open class UICommonEnsure<A, E>(open val value: KnowableValue<A>) {
      * actor.attemptsTo(Ensure.that(&quot;abc&quot;).isEqualTo(&quot;123&quot;));
      * </code></pre>
      */
-    fun isNotEqualTo(expected: E) = PerformableExpectation(value, IS_NOT_EQUAL_TO, expected, isNegated())
+    open fun isNotEqualTo(expected: E) = PerformableExpectation(value, IS_NOT_EQUAL_TO, expected, isNegated())
 
     /**
      * Verifies that the actual value is {@code null}.
@@ -49,7 +49,7 @@ open class UICommonEnsure<A, E>(open val value: KnowableValue<A>) {
      * actor.attemptsTo(Ensure.that(&quot;abc&quot;).isNull();
      * </code></pre>
      */
-    open fun isNull() = PerformablePredicate(value, IS_NULL, isNegated())
+    open fun isNull() = PerformablePredicate(value, IS_NULL, isNegated(), "a value")
 
 
     /**
@@ -65,7 +65,7 @@ open class UICommonEnsure<A, E>(open val value: KnowableValue<A>) {
      * actor.attemptsTo(Ensure.that(name).isNotNull();
      * </code></pre>
      */
-    fun isNotNull() = PerformablePredicate(value, IS_NOT_NULL, isNegated())
+    fun isNotNull() = PerformablePredicate(value, IS_NOT_NULL, isNegated(), "a value")
 
 
     /**
@@ -154,12 +154,12 @@ open class UICommonEnsure<A, E>(open val value: KnowableValue<A>) {
 
     private val IS_NOT_IN = expectThatActualIs("not in", fun(actor: Actor?, actual: KnowableValue<A>?, expected: List<A>): Boolean = (actor != null && actual != null) && !expected.contains(actual(actor)))
 
-    private fun matchesPredicate(description: String) = expectThatActualIs("a match for", fun(actor: Actor?, actual: KnowableValue<A>?, expected: (A?) -> Boolean): Boolean =
-            (actor != null && actual != null) && expected.invoke(actual(actor)), description)
+    private fun matchesPredicate(description: String) = expectThatActualIs("a match for",
+            fun(actor: Actor?, actual: KnowableValue<A>?, expected: (A?) -> Boolean): Boolean =
+                    (actor != null && actual != null) && expected.invoke(actual(actor)), description)
 
 
     companion object {
         val NULL_VALUE_AS_STRING = "\u2205" // UNICODE EMPTY SET SYMBOL
     }
-
 }

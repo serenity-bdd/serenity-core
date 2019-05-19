@@ -118,6 +118,45 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
                 fun `when the element is not on the page`() {
                     shouldFailWhenChecking(that(ElementLocated.by(By.id("#unknown"))).isDisplayed(), wendy)
                 }
+
+            }
+
+            @Nested
+            inner class IsDisabled {
+
+                @Test
+                fun `when the element is disabled`() {
+                    shouldPassWhenChecking(that(ElementLocated.by("#disabled-field")).isDisabled(), wendy)
+                }
+
+                @Test
+                fun `when the element is enabled`() {
+                    shouldFailWhenChecking(that(ElementLocated.by("#firstName")).isDisabled(), wendy)
+                }
+
+                @Test
+                fun `when the element is not on the page`() {
+                    shouldFailWhenChecking(that(ElementLocated.by(By.id("#unknown"))).isDisabled(), wendy)
+                }
+            }
+
+            @Nested
+            inner class IsEnabled {
+
+                @Test
+                fun `when the element is not disabled`() {
+                    shouldPassWhenChecking(that(ElementLocated.by("#firstName")).isEnabled(), wendy)
+                }
+
+                @Test
+                fun `when the element is disabled`() {
+                    shouldFailWhenChecking(that(ElementLocated.by("#disabled-field")).isEnabled(), wendy)
+                }
+
+                @Test
+                fun `when the element is not on the page`() {
+                    shouldFailWhenChecking(that(ElementLocated.by(By.id("#unknown"))).isEnabled(), wendy)
+                }
             }
 
             @Nested
@@ -134,7 +173,45 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
                 fun `when the element is not on the page`() {
                     shouldFailWhenChecking(that(ElementLocated.by(By.id("#unknown"))).isDisplayed(), wendy)
                 }
+
+                @Test
+                fun `when the value does not match`() {
+                    shouldFailWithMessage("""|Expecting web element located by #block-of-text with text value that contains: <[Some other text content]>
+                                             |But got......................................................................: <"Some text content">"""
+                            .trimMargin())
+                            .whenChecking(that(ElementLocated.by("#block-of-text")).text().contains("Some other text content"), wendy)
+                }
+
             }
+
+            @Nested
+            inner class HasATextContent {
+
+                @Test
+                fun `when the text is present`() {
+                    shouldPassWhenChecking(that(ElementLocated.by("#block-of-text")).textContent().contains("Some text content"), wendy)
+                }
+
+                @Test
+                fun `when the text is not present`() {
+                    shouldFailWhenChecking(that(ElementLocated.by("#block-of-text")).textContent().doesNotContain("Some text content"), wendy)
+                }
+            }
+
+            @Nested
+            inner class HasAValue {
+
+                @Test
+                fun `for an input field`() {
+                    shouldPassWhenChecking(that(ElementLocated.by("#firstName")).value().isEqualToIgnoringCase("joe"), wendy)
+                }
+
+                @Test
+                fun `when the field is not present`() {
+                    shouldFailWhenChecking(that(ElementLocated.by("#does-not-exist")).value().isEqualTo("Some value"), wendy)
+                }
+            }
+
         }
     }
 }

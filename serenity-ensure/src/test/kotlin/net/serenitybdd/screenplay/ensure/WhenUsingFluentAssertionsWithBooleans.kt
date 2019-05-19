@@ -26,6 +26,14 @@ class WhenUsingFluentAssertionsWithBooleans {
             }
 
             @Test
+            fun `for negative cases`() {
+                shouldFailWithMessage("""|Expecting a value that is true
+                                     |But got: false"""
+                        .trimMargin())
+                        .whenChecking(that(false).isTrue())
+            }
+
+            @Test
             fun `when the value is a double negative`() {
                 shouldPassWhenChecking(that(false).not().isTrue())
             }

@@ -152,8 +152,8 @@ class WhenUsingFluentAssertionsWIthComparableTypes {
 
             @Test
             fun `for negative cases`() {
-                shouldFailWithMessage("""|Expecting a value that is between <1> and <3>
-                                         |But got: <5>"""
+                shouldFailWithMessage("""|Expecting a value that is between 1 and 3
+                                         |But got: 5"""
                         .trimMargin())
                         .whenChecking(that(5).isBetween(1, 3))
             }
@@ -169,8 +169,8 @@ class WhenUsingFluentAssertionsWIthComparableTypes {
 
             @Test
             fun `for negative cases`() {
-                shouldFailWithMessage("""|Expecting a value that is strictly between <1> and <3>
-                                         |But got: <5>"""
+                shouldFailWithMessage("""|Expecting a value that is strictly between 1 and 3
+                                         |But got: 5"""
                         .trimMargin())
                         .whenChecking(that(5).isStrictlyBetween(1, 3))
             }
@@ -198,8 +198,8 @@ class WhenUsingFluentAssertionsWIthComparableTypes {
 
             @Test
             fun `for negative cases`() {
-                shouldFailWithMessage("""|Expecting a value that is strictly between <1> and <3>
-                                         |But got: <5>"""
+                shouldFailWithMessage("""|Expecting a value that is strictly between 1 and 3
+                                         |But got: 5"""
                         .trimMargin())
                         .whenChecking(that(5).isStrictlyBetween(1, 3))
             }

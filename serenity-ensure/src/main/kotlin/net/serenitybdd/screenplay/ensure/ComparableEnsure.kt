@@ -15,6 +15,20 @@ open class ComparableEnsure<A>(override val value: KnowableValue<Comparable<A>>,
     constructor(value: Comparable<A>, comparator: Comparator<A>? = null):this(KnownValue(value, value.toString()), comparator)
 
     /**
+     * Verifies that the actual value is equal to the given one.
+     * <p>
+     * Example:
+     * <pre><code class='java'>
+     * actor.attemptsTo(Ensure.that(&quot;abc&quot;).isEqualTo(&quot;abc&quot;));
+     * </code></pre>
+     */
+    override fun isEqualTo(expected: A): PerformableExpectation<KnowableValue<Comparable<A>>, A> =
+            PerformableExpectation(value, IS_EQUAL_TO_USING_COMPARATORS, expected, isNegated())
+
+    override fun isNotEqualTo(expected: A): PerformableExpectation<KnowableValue<Comparable<A>>, A> =
+    PerformableExpectation(value, IS_NOT_EQUAL_TO_USING_COMPARATORS, expected, isNegated())
+
+    /**
      * Verifies that the actual value is greater than the given one.
      * <p>
      * Example:
@@ -65,7 +79,7 @@ open class ComparableEnsure<A>(override val value: KnowableValue<Comparable<A>>,
      * </code></pre>
      */
 
-    fun isBetween(lowerBound: Comparable<A>, upperBound: Comparable<A>) = BiPerformableExpectation(value, IS_BETWEEN, lowerBound, upperBound, isNegated())
+    fun isBetween(lowerBound: Comparable<A>, upperBound: Comparable<A>) = BiPerformableExpectation(value, IS_BETWEEN, lowerBound, upperBound, isNegated(), "a value")
 
 
     /**
@@ -78,13 +92,30 @@ open class ComparableEnsure<A>(override val value: KnowableValue<Comparable<A>>,
      * actor.attemptsTo(Ensure.that(1).isStrictlyBetween(1,3));
      * </code></pre>
      */
-    fun isStrictlyBetween(lowerBound: Comparable<A>, upperBound: Comparable<A>) = BiPerformableExpectation(value, IS_STRICTLY_BETWEEN, lowerBound, upperBound, isNegated())
+    fun isStrictlyBetween(lowerBound: Comparable<A>, upperBound: Comparable<A>) = BiPerformableExpectation(value, IS_STRICTLY_BETWEEN, lowerBound, upperBound, isNegated(), "a value")
 
     open fun hasValue(): ComparableEnsure<A> = this
     override fun not(): ComparableEnsure<A> = negate() as ComparableEnsure<A>
     open fun usingComparator(comparator: Comparator<A>): ComparableEnsure<A> {
         return ComparableEnsure(value, comparator)
     }
+
+    private val IS_EQUAL_TO_USING_COMPARATORS =
+            expectThatActualIs("equal to",
+                    fun(actor: Actor?, actual: KnowableValue<Comparable<A>>?, expected: A): Boolean {
+                        ensureActualAndExpectedNotNull(actual, expected)
+                        val resolvedValue = actual!!(actor!!)
+                        return if (comparator != null) comparator.compare(resolvedValue as A, expected) == 0 else resolvedValue == expected
+                    })
+
+    private val IS_NOT_EQUAL_TO_USING_COMPARATORS =
+            expectThatActualIs("not equal to",
+                    fun(actor: Actor?, actual: KnowableValue<Comparable<A>>?, expected: A): Boolean {
+                        ensureActualAndExpectedNotNull(actual, expected)
+                        val resolvedValue = actual!!(actor!!)
+                        ensureActualNotNull(resolvedValue)
+                        return if (comparator != null) comparator.compare(resolvedValue as A, expected) != 0 else resolvedValue != expected
+                    })
 
     private val IS_GREATER_THAN =
             expectThatActualIs("greater than",
@@ -95,7 +126,7 @@ open class ComparableEnsure<A>(override val value: KnowableValue<Comparable<A>>,
                         return if (comparator != null) comparator.compare(resolvedValue as A, expected as A) > 0 else resolvedValue!! > expected as A
                     })
 
-    val IS_GREATER_THAN_OR_EQUAL_TO = expectThatActualIs("greater than or equal to",
+    private val IS_GREATER_THAN_OR_EQUAL_TO = expectThatActualIs("greater than or equal to",
             fun(actor: Actor?, actual: KnowableValue<Comparable<A>>?, expected: Comparable<A>): Boolean {
                 ensureActualAndExpectedNotNull(actual, expected)
                 val resolvedValue = actual!!(actor!!)
@@ -103,7 +134,7 @@ open class ComparableEnsure<A>(override val value: KnowableValue<Comparable<A>>,
                 return if (comparator != null) comparator.compare(resolvedValue as A, expected as A) >= 0 else resolvedValue!! >= expected as A
             })
 
-    val IS_LESS_THAN = expectThatActualIs("less than",
+    private val IS_LESS_THAN = expectThatActualIs("less than",
             fun(actor: Actor?, actual: KnowableValue<Comparable<A>>?, expected: Comparable<A>): Boolean {
                 ensureActualAndExpectedNotNull(actual, expected)
                 val resolvedValue = actual!!(actor!!)
@@ -111,7 +142,7 @@ open class ComparableEnsure<A>(override val value: KnowableValue<Comparable<A>>,
                 return if (comparator != null) comparator.compare(resolvedValue as A, expected as A) < 0 else resolvedValue!! < expected as A
             })
 
-    val IS_LESS_THAN_OR_EQUAL_TO =
+    private val IS_LESS_THAN_OR_EQUAL_TO =
             expectThatActualIs("less than or equal to",
                     fun(actor: Actor?, actual: KnowableValue<Comparable<A>>?, expected: Comparable<A>): Boolean {
                         ensureActualAndExpectedNotNull(actual, expected)
@@ -120,7 +151,7 @@ open class ComparableEnsure<A>(override val value: KnowableValue<Comparable<A>>,
                         return if (comparator != null) comparator.compare(resolvedValue as A, expected as A) <= 0 else resolvedValue!! <= expected as A
                     })
 
-    val IS_BETWEEN =
+    private val IS_BETWEEN =
             expectThatActualIs("between",
                     fun(actor: Actor?, actual: KnowableValue<Comparable<A>>?, startRange: Comparable<A>, endRange: Comparable<A>): Boolean {
                         ensureActualAndRangeValues(actual, startRange, endRange)
@@ -132,7 +163,7 @@ open class ComparableEnsure<A>(override val value: KnowableValue<Comparable<A>>,
                             (resolvedValue!! >= startRange as A && resolvedValue!! <= endRange as A)
                     })
 
-    val IS_STRICTLY_BETWEEN =
+    private val IS_STRICTLY_BETWEEN =
             expectThatActualIs("strictly between",
                     fun(actor: Actor?, actual: KnowableValue<Comparable<A>>?, startRange: Comparable<A>, endRange: Comparable<A>): Boolean {
                         ensureActualAndRangeValues(actual, startRange, endRange)

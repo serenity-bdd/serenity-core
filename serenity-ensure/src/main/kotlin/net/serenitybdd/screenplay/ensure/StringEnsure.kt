@@ -12,29 +12,33 @@ import java.io.StringReader
 import java.util.Comparator.naturalOrder
 import java.util.regex.Pattern
 
-class StringEnsure(override val value: KnowableValue<String?>, comparator: Comparator<String>) : ComparableEnsure<String>(value, comparator) {
+class StringEnsure(override val value: KnowableValue<String?>,
+                   comparator: Comparator<String>,
+                   val expectedDescription: String = "a string") : ComparableEnsure<String>(value, comparator) {
 
     constructor(value: KnowableValue<String?>) : this(value, Comparator.naturalOrder<String>())
 
+    constructor(value: KnowableValue<String?>, valueDescription: String) : this(value, Comparator.naturalOrder<String>(), valueDescription)
+
     constructor(value: String?) : this(
-            KnownValue<String?>(value, if (value == null) "null" else "\"$value\""),
+            KnownValue<String?>(value, if (value == null) "<null>" else "\"$value\""),
             naturalOrder<String>()
     )
 
     /**
      * Verifies that the actual {@code String} is either an empty string or <code>null</code>
      */
-    fun isNullOrEmpty() = PerformablePredicate(value, NULL_OR_EMPTY, isNegated())
+    fun isNullOrEmpty() = PerformablePredicate(value, NULL_OR_EMPTY, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code String} is an empty string (contains no characters)
      */
-    fun isEmpty() = PerformablePredicate(value, IS_EMPTY, isNegated())
+    fun isEmpty() = PerformablePredicate(value, IS_EMPTY, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code String} is an empty string (contains no characters)
      */
-    fun isNotEmpty() = PerformablePredicate(value, IS_NOT_EMPTY, isNegated())
+    fun isNotEmpty() = PerformablePredicate(value, IS_NOT_EMPTY, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code String} contains all the given values.
@@ -43,147 +47,148 @@ class StringEnsure(override val value: KnowableValue<String?>, comparator: Compa
      * <pre><code class='java'>actor.attemptsTo(Ensure.that("red green blue").contains("green"));</code></pre>
      * <pre><code class='java'>actor.attemptsTo(Ensure.that("red green blue").contains("green","red));</code></pre>
      */
-    fun contains(vararg expected: String) = PerformableExpectation(value, CONTAINS, expected.toList(), isNegated())
+    fun contains(vararg expected: String) = PerformableExpectation(value, CONTAINS, expected.toList(), isNegated(), expectedDescription)
+//    fun contains(vararg expected: String) = PerformableExpectation(value, CONTAINS, expected.toList(), isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code String} do not contain any the given values.
      */
-    fun doesNotContain(vararg expected: String) = PerformableExpectation(value, DOES_NOT_CONTAINS, expected.toList(), isNegated())
+    fun doesNotContain(vararg expected: String) = PerformableExpectation(value, DOES_NOT_CONTAINS, expected.toList(), isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code CharSequence} contains the given sequence, ignoring case considerations.
      */
-    fun containsIgnoringCase(vararg expected: String) = PerformableExpectation(value, CONTAINS_IGNORING_CASE, expected.toList(), isNegated())
+    fun containsIgnoringCase(vararg expected: String) = PerformableExpectation(value, CONTAINS_IGNORING_CASE, expected.toList(), isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code String} is equal to the expected value, ignoring case.
      */
-    fun isEqualToIgnoringCase(expected: CharSequence) = PerformableExpectation(value, EQUALS_IGNORING_CASE, expected, isNegated())
+    fun isEqualToIgnoringCase(expected: CharSequence) = PerformableExpectation(value, EQUALS_IGNORING_CASE, expected, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code String} is in upper case.
      * Empty or null strings will fail
      */
-    fun isInUppercase() = PerformablePredicate(value, IS_UPPER_CASE, isNegated())
+    fun isInUppercase() = PerformablePredicate(value, IS_UPPER_CASE, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code String} is in lower case.
      * Empty or null strings will fail
      */
-    fun isInLowercase() = PerformablePredicate(value, IS_LOWER_CASE, isNegated())
+    fun isInLowercase() = PerformablePredicate(value, IS_LOWER_CASE, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code String} is empty or contains only whitespace
      * Empty or null strings will fail
      */
-    fun isBlank() = PerformablePredicate(value, BLANK, isNegated())
+    fun isBlank() = PerformablePredicate(value, BLANK, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code String} is not empty or contains only whitespace
      * Empty or null strings will fail
      */
-    fun isNotBlank() = PerformablePredicate(value, NOT_BLANK, isNegated())
+    fun isNotBlank() = PerformablePredicate(value, NOT_BLANK, isNegated(), expectedDescription)
 
 
     /**
      * Verifies that the actual {@code String} is a substring of the specified value.
      */
-    fun isSubstringOf(expected: CharSequence) = PerformableExpectation(value, SUBSTRING_OF, expected, isNegated())
+    fun isSubstringOf(expected: CharSequence) = PerformableExpectation(value, SUBSTRING_OF, expected, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code String} starts with the specified value.
      */
-    fun startsWith(expected: CharSequence) = PerformableExpectation(value, STARTS_WITH, expected, isNegated())
+    fun startsWith(expected: CharSequence) = PerformableExpectation(value, STARTS_WITH, expected, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code String} ends with the specified value.
      */
-    fun endsWith(expected: CharSequence) = PerformableExpectation(value, ENDS_WITH, expected, isNegated())
+    fun endsWith(expected: CharSequence) = PerformableExpectation(value, ENDS_WITH, expected, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code String} matches a given regular expression
      */
-    fun matches(expected: CharSequence) = PerformableExpectation(value, MATCHES, expected, isNegated())
+    fun matches(expected: CharSequence) = PerformableExpectation(value, MATCHES, expected, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code String} matches a given regular expression
      */
-    fun matches(expected: Pattern) = PerformableExpectation(value, MATCHES_PATTERN, expected, isNegated())
+    fun matches(expected: Pattern) = PerformableExpectation(value, MATCHES_PATTERN, expected, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code CharSequence} consists of one or more whitespace characters (according to
      * {@link Character#isWhitespace(char)}).
      */
-    fun containsWhitespaces() = PerformablePredicate(value, CONTAINS_WHITESPACES, isNegated())
+    fun containsWhitespaces() = PerformablePredicate(value, CONTAINS_WHITESPACES, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code CharSequence} consists of one or more whitespace characters (according to
      * {@link Character#isWhitespace(char)}).
      */
-    fun containsOnlyWhitespaces() = PerformablePredicate(value, CONTAINS_ONLY_WHITESPACES, isNegated())
+    fun containsOnlyWhitespaces() = PerformablePredicate(value, CONTAINS_ONLY_WHITESPACES, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code CharSequence} is either {@code null}, empty or does not contain any whitespace characters (according to {@link Character#isWhitespace(char)}).
      */
-    fun doesNotContainAnyWhitespaces() = PerformablePredicate(value, CONTAINS_NO_WHITESPACES, isNegated())
+    fun doesNotContainAnyWhitespaces() = PerformablePredicate(value, CONTAINS_NO_WHITESPACES, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code CharSequence} contains only digits. It fails if it contains non-digit
      * characters or is empty.
      */
-    fun containsOnlyDigits() = PerformablePredicate(value, CONTAINS_ONLY_DIGITS, isNegated())
+    fun containsOnlyDigits() = PerformablePredicate(value, CONTAINS_ONLY_DIGITS, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code CharSequence} contains only letters.
      */
-    fun containsOnlyLetters() = PerformablePredicate(value, CONTAINS_ONLY_LETTERS, isNegated())
+    fun containsOnlyLetters() = PerformablePredicate(value, CONTAINS_ONLY_LETTERS, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code CharSequence} contains only letters or digits
      */
-    fun containsOnlyLettersOrDigits() = PerformablePredicate(value, CONTAINS_ONLY_LETTERS_OR_DIGITS, isNegated())
+    fun containsOnlyLettersOrDigits() = PerformablePredicate(value, CONTAINS_ONLY_LETTERS_OR_DIGITS, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code CharSequence} has the expected length using the {@code length()} method.
      */
-    fun hasSize(expected: Int) = PerformableExpectation(value, HAS_SIZE, expected, isNegated())
+    fun hasSize(expected: Int) = PerformableExpectation(value, HAS_SIZE, expected, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code CharSequence} has has a length less than the given value using the {@code length()} method.
      */
-    fun hasSizeLessThan(expected: Int) = PerformableExpectation(value, HAS_SIZE_LESS_THAN, expected, isNegated())
+    fun hasSizeLessThan(expected: Int) = PerformableExpectation(value, HAS_SIZE_LESS_THAN, expected, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code CharSequence} has has a length less than or equal to the given value using the {@code length()} method.
      */
-    fun hasSizeLessThanOrEqualTo(expected: Int) = PerformableExpectation(value, HAS_SIZE_LESS_THAN_OR_EQUAL_TO, expected, isNegated())
+    fun hasSizeLessThanOrEqualTo(expected: Int) = PerformableExpectation(value, HAS_SIZE_LESS_THAN_OR_EQUAL_TO, expected, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code CharSequence} has has a length greater than the given value using the {@code length()} method.
      */
-    fun hasSizeGreaterThan(expected: Int) = PerformableExpectation(value, HAS_SIZE_GREATER_THAN, expected, isNegated())
+    fun hasSizeGreaterThan(expected: Int) = PerformableExpectation(value, HAS_SIZE_GREATER_THAN, expected, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code CharSequence} has has a length greater than the given value using the {@code length()} method.
      */
-    fun hasSizeGreaterThanOrEqualTo(expected: Int) = PerformableExpectation(value, HAS_SIZE_GREATER_THAN_OR_EQUAL_TO, expected, isNegated())
+    fun hasSizeGreaterThanOrEqualTo(expected: Int) = PerformableExpectation(value, HAS_SIZE_GREATER_THAN_OR_EQUAL_TO, expected, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code CharSequence} has length between the given boundaries (inclusive)
      * using the {@code length()} method.
      * */
-    fun hasSizeBetween(startRange: Int, endRange: Int) = BiPerformableExpectation(value, HAS_SIZE_BETWEEN, startRange, endRange, isNegated())
+    fun hasSizeBetween(startRange: Int, endRange: Int) = BiPerformableExpectation(value, HAS_SIZE_BETWEEN, startRange, endRange, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code CharSequence} has the expected line count.
      */
-    fun hasLineCount(expected: Int) = PerformableExpectation(value, HAS_LINE_COUNT, expected, isNegated())
+    fun hasLineCount(expected: Int) = PerformableExpectation(value, HAS_LINE_COUNT, expected, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual {@code CharSequence} has a length that's the same as the length of the given
      * {@code CharSequence}.
      */
-    fun hasSameSizeAs(expected: CharSequence) = PerformableExpectation(value, HAS_SAME_SIZE, expected, isNegated())
+    fun hasSameSizeAs(expected: CharSequence) = PerformableExpectation(value, HAS_SAME_SIZE, expected, isNegated(), expectedDescription)
 
     override fun hasValue(): StringEnsure = this
     override fun not(): StringEnsure = negate() as StringEnsure
@@ -197,6 +202,7 @@ class StringEnsure(override val value: KnowableValue<String?>, comparator: Compa
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
                     if (actor == null || actual == null) return true
                     val actualValue = actual(actor)
+                    BlackBox.logAssertion(actualValue,"a null or empty value")
                     return actualValue == null || actualValue.isEmpty() //|| actualValue == NULL_VALUE_AS_STRING
                 }
         )
@@ -205,6 +211,7 @@ class StringEnsure(override val value: KnowableValue<String?>, comparator: Compa
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
                     if (actor == null || actual == null) return true
                     val actualValue = actual(actor)
+                    BlackBox.logAssertion(actualValue,"an empty value")
                     return actualValue != null && actualValue.isEmpty()
 
                 }
@@ -215,17 +222,18 @@ class StringEnsure(override val value: KnowableValue<String?>, comparator: Compa
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
                     if (actor == null || actual == null) return true
                     val actualValue = actual(actor) ?: return false
+                    BlackBox.logAssertion(actualValue,"a non-empty value")
                     return actualValue.isNotEmpty()
                 }
         )
 
-        private val CONTAINS = expectThatActualIs("containing",
+        private val CONTAINS = expectThatActualIs("contains", "does not contain",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expectedList: List<CharSequence>): Boolean {
                     ensureActualAndExpectedNotNull(actual, expectedList)
                     ensureNotEmpty("expected should not be null", expectedList)
                     ensureNoNullElementsIn("actual should not contain null elements", expectedList)
 
-                    val actualValue = actual!!(actor!!) ?: return false
+                    val actualValue = resolveActual(actual, actor, expectedList) ?: return false
 
                     return expectedList.all { expectedItem ->
                         actualValue.contains(expectedItem)
@@ -234,34 +242,40 @@ class StringEnsure(override val value: KnowableValue<String?>, comparator: Compa
         )
 
 
-        private val DOES_NOT_CONTAINS = expectThatActualIs("not containing",
+        private val DOES_NOT_CONTAINS = expectThatActualIs("does not contain", "contains",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expectedList: List<CharSequence>): Boolean {
                     ensureActualAndExpectedNotNull(actual, expectedList)
                     ensureNotEmpty("expected should not be null", expectedList)
                     ensureNoNullElementsIn("actual should not contain null elements", expectedList)
 
-                    val actualValue = actual!!(actor!!) ?: return true
+                    val actualValue = resolveActual(actual, actor, expectedList) ?: return true
 
                     return expectedList.none { expectedItem -> actualValue.contains(expectedItem) }
                 }
         )
 
-        private val CONTAINS_IGNORING_CASE = expectThatActualIs("containing (ignoring case)",
+        private val CONTAINS_IGNORING_CASE = expectThatActualIs("contains (ignoring case)", "does not contain (ignoring case)",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expectedList: List<CharSequence>): Boolean {
                     ensureActualAndExpectedNotNull(actual, expectedList)
                     ensureNotEmpty("expected should not be null", expectedList)
                     ensureNoNullElementsIn("actual should not contain null elements", expectedList)
 
-                    val actualValue = actual!!(actor!!) ?: return false
+                    val actualValue = resolveActual(actual, actor, expectedList) ?: return false
 
                     return expectedList.all { expectedItem -> actualValue.toLowerCase().contains(expectedItem.toString().toLowerCase()) }
                 }
         )
 
+        private fun resolveActual(actual: KnowableValue<String>?, actor: Actor?, expectedList: Any): String? {
+            val actualValue = actual!!(actor!!)
+            BlackBox.logAssertion(actualValue, expectedList)
+            return actualValue
+        }
+
         private val EQUALS_IGNORING_CASE = expectThatActualIs("equal to (ignoring case)",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expected: CharSequence): Boolean {
 
-                    val actualValue = actual!!(actor!!) ?: return expected.isEmpty()
+                    val actualValue = resolveActual(actual, actor, expected) ?: return expected.isEmpty()
 
                     return actualValue.toLowerCase() == expected.toString().toLowerCase()
                 }
@@ -271,7 +285,9 @@ class StringEnsure(override val value: KnowableValue<String?>, comparator: Compa
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
                     if (actor == null || actual == null) return false
 
-                    val actualValue = actual(actor) ?: return false
+                    val actualValue = actual(actor)
+                    BlackBox.logAssertion(actualValue,"an uppercase value")
+                    if (actualValue == null) { return false }
 
                     return actualValue.isNotEmpty() && actualValue.toUpperCase() == actualValue
                 }
@@ -280,7 +296,11 @@ class StringEnsure(override val value: KnowableValue<String?>, comparator: Compa
         private val IS_LOWER_CASE = expectThatActualIs("in lowercase",
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
                     if (actor == null || actual == null) return true
-                    val actualValue = actual(actor) ?: return false
+
+                    val actualValue = actual(actor)
+                    BlackBox.logAssertion(actualValue,"a lowercase value")
+                    if (actualValue == null) { return false }
+
                     return actualValue.isNotEmpty() && actualValue.toLowerCase() == actualValue
                 }
         )
@@ -288,15 +308,20 @@ class StringEnsure(override val value: KnowableValue<String?>, comparator: Compa
         private val BLANK = expectThatActualIs("blank",
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
                     if (actor == null || actual == null) return true
-                    val actualValue = actual(actor) ?: return false
+                    val actualValue = actual(actor)
+                    BlackBox.logAssertion(actualValue,"a blank value")
+                    if (actualValue == null) { return false }
                     return actualValue.isBlank()
                 }
         )
 
-        private val NOT_BLANK = expectThatActualIs("not blank",
+        private val NOT_BLANK = expectThatActualIs(
+                "is not blank", "is blank",
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
                     if (actor == null || actual == null) return true
-                    val actualValue = actual(actor) ?: return false
+                    val actualValue = actual(actor)
+                    BlackBox.logAssertion(actualValue,"a non-blank value")
+                    if (actualValue == null) { return false }
                     return actualValue.isNotBlank()
                 }
         )
@@ -304,22 +329,32 @@ class StringEnsure(override val value: KnowableValue<String?>, comparator: Compa
         private val SUBSTRING_OF = expectThatActualIs("a substring of",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expected: CharSequence): Boolean {
                     ensureActualNotNull(actual)
-                    val actualValue = actual!!(actor!!) ?: return false
-                    return expected.contains(actualValue)
-                })
 
-        private val STARTS_WITH = expectThatActualIs("starting with",
+                    val actualValue = resolveActual(actual, actor, expected) ?: return false
+
+                    return expected.contains(actualValue)
+                }
+        )
+
+        private val STARTS_WITH = expectThatActualIs(
+                "starts with","does not start with",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expected: CharSequence): Boolean {
                     ensureActualAndExpectedNotNull(actual, expected)
-                    val actualValue = actual!!(actor!!) ?: return false
+
+                    val actualValue = resolveActual(actual, actor, expected)
+                    BlackBox.logAssertion(actualValue, expected)
+                    if (actualValue == null) { return false }
+
                     return actualValue.startsWith(expected)
                 }
         )
 
-        private val ENDS_WITH = expectThatActualIs("ending with",
+        private val ENDS_WITH = expectThatActualIs("ends with", "does not end with",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expected: CharSequence): Boolean {
                     ensureActualAndExpectedNotNull(actual, expected)
-                    val actualValue = actual!!(actor!!) ?: return false
+
+                    val actualValue = resolveActual(actual, actor, expected) ?: return false
+
                     return actualValue.endsWith(expected)
                 }
         )
@@ -327,96 +362,136 @@ class StringEnsure(override val value: KnowableValue<String?>, comparator: Compa
         private val MATCHES = expectThatActualIs("a match for",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expected: CharSequence): Boolean {
                     ensureActualAndExpectedNotNull(actual, expected)
-                    val actualValue = actual!!(actor!!) ?: return false
+
+                    val actualValue = resolveActual(actual, actor, expected) ?: return false
+
                     return actualValue.matches(Regex(expected.toString()))
                 }
         )
 
         private val MATCHES_PATTERN = expectThatActualIs("a match for",
-                fun(actor: Actor?, actual: KnowableValue<String>?, expected: Pattern): Boolean = expected.matcher(actual!!(actor!!)).matches())
+                fun(actor: Actor?, actual: KnowableValue<String>?, expected: Pattern): Boolean {
+
+                    val actualValue = resolveActual(actual, actor, expected) ?: return false
+
+                    return expected.matcher(actualValue).matches()
+                })
 
 
         private val CONTAINS_WHITESPACES = expectThatActualIs("containing whitespaces",
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
-                    val actualValue = actual!!(actor!!) ?: return false
+
+                    if (actor == null || actual == null) return true
+
+                    val actualValue = actual(actor)
+                    BlackBox.logAssertion(actualValue,"containing whitespaces")
+                    if (actualValue == null) { return false }
+
                     return actualValue.isNotEmpty() && actualValue.chars().anyMatch(Character::isWhitespace)
                 })
 
         private val CONTAINS_ONLY_WHITESPACES = expectThatActualIs("containing only whitespaces",
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
-                    val actualValue = actual!!(actor!!) ?: return false
+                    if (actor == null || actual == null) return true
+
+                    val actualValue = actual(actor)
+                    BlackBox.logAssertion(actualValue,"containing only whitespaces")
+                    if (actualValue == null) { return false }
+
                     return actualValue.isNotEmpty() && actualValue.chars().allMatch(Character::isWhitespace)
                 })
 
         private val CONTAINS_NO_WHITESPACES = expectThatActualIs("without any whitespaces",
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
-                    val actualValue = actual!!(actor!!) ?: return true
+                    if (actor == null || actual == null) return true
+
+                    val actualValue = actual(actor)
+                    BlackBox.logAssertion(actualValue,"without any whitespaces")
+                    if (actualValue == null) { return false }
+
                     return actualValue.chars().noneMatch(Character::isWhitespace)
                 })
 
         private val CONTAINS_ONLY_DIGITS = expectThatActualIs("containing only digits",
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
-                    val actualValue = actual!!(actor!!) ?: return false
+                    if (actor == null || actual == null) return true
+
+                    val actualValue = actual(actor)
+                    BlackBox.logAssertion(actualValue,"containing only digits")
+                    if (actualValue == null) { return false }
+
                     return actualValue.isNotEmpty() && actualValue.chars().allMatch(Character::isDigit)
                 })
 
         private val CONTAINS_ONLY_LETTERS = expectThatActualIs("containing only letters",
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
-                    val actualValue = actual!!(actor!!) ?: return false
+                    if (actor == null || actual == null) return true
+
+                    val actualValue = actual(actor)
+                    BlackBox.logAssertion(actualValue,"containing only letters")
+                    if (actualValue == null) { return false }
+
                     return actualValue.isNotEmpty() && actualValue.chars().allMatch(Character::isLetter)
                 })
 
         private val CONTAINS_ONLY_LETTERS_OR_DIGITS = expectThatActualIs("containing only letters or digits",
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
-                    val actualValue = actual!!(actor!!) ?: return false
+                    if (actor == null || actual == null) return true
+
+                    val actualValue = actual(actor)
+                    BlackBox.logAssertion(actualValue,"containing only letters or digits")
+                    if (actualValue == null) { return false }
+
                     return actualValue.isNotEmpty() && actualValue.chars().allMatch(Character::isLetterOrDigit)
                 })
 
         private val HAS_SIZE = expectThatActualIs("of size",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expected: Int): Boolean {
                     if (actual == null) return false
-                    val actualValue = actual(actor!!) ?: return false
+                    val actualValue = resolveActual(actual, actor, expected) ?: return false
+
                     return actualValue.length == expected
                 })
 
         private val HAS_SIZE_LESS_THAN = expectThatActualIs("of size less than",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expected: Int): Boolean {
                     if (actual == null) return false
-                    val actualValue = actual(actor!!) ?: return false
+                    val actualValue = resolveActual(actual, actor, expected) ?: return false
                     return actualValue.length < expected
                 })
 
         private val HAS_SIZE_LESS_THAN_OR_EQUAL_TO = expectThatActualIs("of size less than or equal to",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expected: Int): Boolean {
                     if (actual == null) return false
-                    val actualValue = actual(actor!!) ?: return false
+                    val actualValue = resolveActual(actual, actor, expected) ?: return false
                     return actualValue.length <= expected
                 })
 
         private val HAS_SIZE_GREATER_THAN = expectThatActualIs("of size greater than",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expected: Int): Boolean {
                     if (actual == null) return false
-                    val actualValue = actual(actor!!) ?: return false
+                    val actualValue = resolveActual(actual, actor, expected) ?: return false
                     return actualValue.length > expected
                 })
 
         private val HAS_SIZE_GREATER_THAN_OR_EQUAL_TO = expectThatActualIs("of size greater than or equal to",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expected: Int): Boolean {
                     if (actual == null) return false
-                    val actualValue = actual(actor!!) ?: return false
+                    val actualValue = resolveActual(actual, actor, expected) ?: return false
                     return actualValue.length >= expected
                 })
 
         private val HAS_SIZE_BETWEEN = expectThatActualIs("of size of between",
                 fun(actor: Actor?, actual: KnowableValue<String>?, startRange: Int, endRange: Int): Boolean {
                     if (actual == null) return false
-                    val actualValue = actual(actor!!) ?: return false
+                    val actualValue = resolveActual(actual, actor, "of size between $startRange and $endRange") ?: return false
                     return actualValue.length in startRange..endRange
                 })
 
-        private val HAS_LINE_COUNT = expectThatActualIs("with a line count of",
+        private val HAS_LINE_COUNT = expectThatActualIs("has a line count of","does not have a line count of",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expected: Int): Boolean {
-                    val reader = LineNumberReader(StringReader(actual!!(actor!!)))
+                    val actualValue = resolveActual(actual, actor, expected) ?: return false
+                    val reader = LineNumberReader(StringReader(actualValue))
                     try {
                         while (reader.readLine() != null);
                     } catch (e: IOException) {
@@ -425,10 +500,10 @@ class StringEnsure(override val value: KnowableValue<String?>, comparator: Compa
                     return reader.lineNumber == expected
                 }
         )
-        private val HAS_SAME_SIZE = expectThatActualIs("the same size as",
+        private val HAS_SAME_SIZE = expectThatActualIs("has the same size as","does not have the same size as",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expected: CharSequence): Boolean {
                     if (actual == null) return false
-                    val actualValue = actual(actor!!) ?: return false
+                    val actualValue = resolveActual(actual, actor, expected) ?: return false
                     return actualValue.length == expected.length
                 }
         )

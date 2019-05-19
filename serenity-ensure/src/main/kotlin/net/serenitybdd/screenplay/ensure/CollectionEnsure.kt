@@ -13,17 +13,17 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
     /**
      * Verifies that the actual {@code Collection} is either an empty list or <code>null</code>
      */
-    fun isNullOrEmpty() = PerformablePredicate(value, nullOrEmptyList, isNegated())
+    fun isNullOrEmpty() = PerformablePredicate(value, nullOrEmptyList, isNegated(),"a collection")
 
     /**
      * Verifies that the actual {@code Collection} is an empty list
      */
-    fun isEmpty() = PerformablePredicate(value, emptyList, isNegated())
+    fun isEmpty() = PerformablePredicate(value, emptyList, isNegated(),"a collection")
 
     /**
      * Verifies that the actual {@code Collection} contains at least one element
      */
-    fun isNotEmpty() = PerformablePredicate(value, notAnEmptyList, isNegated())
+    fun isNotEmpty() = PerformablePredicate(value, notAnEmptyList, isNegated(),"a collection")
 
     /**
      * Verifies that the actual value is equal to the given one.
@@ -33,7 +33,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
      * actor.attemptsTo(Ensure.that(&quot;abc&quot;).isEqualTo(&quot;abc&quot;));
      * </code></pre>
      */
-    fun isEqualTo(expected: Collection<A>) = PerformableExpectation(value, isEqualTo, expected, isNegated())
+    fun isEqualTo(expected: Collection<A>) = PerformableExpectation(value, isEqualTo, expected, isNegated(),"a collection")
 
     /**
      * Verifies that the actual value is _not_ equal to the given one.
@@ -43,105 +43,105 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
      * actor.attemptsTo(Ensure.that(&quot;abc&quot;).isEqualTo(&quot;123&quot;));
      * </code></pre>
      */
-    fun isNotEqualTo(expected: Collection<A>) = PerformableExpectation(value, isNotEqualTo, expected, isNegated())
+    fun isNotEqualTo(expected: Collection<A>) = PerformableExpectation(value, isNotEqualTo, expected, isNegated(),"a collection")
 
     /**
      * Verifies that the actual value is {@code null}.
      * </code></pre>
      */
-    fun isNull() = PerformablePredicate(value, isNullList, isNegated())
+    fun isNull() = PerformablePredicate(value, isNullList, isNegated(),"a collection")
 
     /**
      * Verifies that the actual value is not {@code null}.
      */
-    fun isNotNull() = PerformablePredicate(value, isNotNullList, isNegated())
+    fun isNotNull() = PerformablePredicate(value, isNotNullList, isNegated(),"a collection")
 
     /**
      * Verifies that the actual {@code Collection} has the expected number of elements
      */
-    fun hasSize(expected: Int) = PerformableExpectation(value, hasSize, expected, isNegated())
+    fun hasSize(expected: Int) = PerformableExpectation(value, hasSize, expected, isNegated(),"a collection")
 
     /**
      * Verifies that the actual {@code Collection} has a size less than the given value.
      */
-    fun hasSizeLessThan(expected: Int) = PerformableExpectation(value, hasSizeLessThan, expected, isNegated())
+    fun hasSizeLessThan(expected: Int) = PerformableExpectation(value, hasSizeLessThan, expected, isNegated(),"a collection")
 
     /**
      * Verifies that the actual {@code Collection} has a size less than or equal to the given value.
      */
-    fun hasSizeLessThanOrEqualTo(expected: Int) = PerformableExpectation(value, hasSizeLessThanOrEqualTo, expected, isNegated())
+    fun hasSizeLessThanOrEqualTo(expected: Int) = PerformableExpectation(value, hasSizeLessThanOrEqualTo, expected, isNegated(),"a collection")
 
     /**
      * Verifies that the actual {@code Collection} has a size greater than the given value.
      */
-    fun hasSizeGreaterThan(expected: Int) = PerformableExpectation(value, hasSizeGreaterThan, expected, isNegated())
+    fun hasSizeGreaterThan(expected: Int) = PerformableExpectation(value, hasSizeGreaterThan, expected, isNegated(),"a collection")
 
     /**
      * Verifies that the actual {@code Collection} has has a size greater than the given value.
      */
-    fun hasSizeGreaterThanOrEqualTo(expected: Int) = PerformableExpectation(value, hasSizeGreaterThanOrEqualTo, expected, isNegated())
+    fun hasSizeGreaterThanOrEqualTo(expected: Int) = PerformableExpectation(value, hasSizeGreaterThanOrEqualTo, expected, isNegated(),"a collection")
 
     /**
      * Verifies that the actual {@code Collection} has a size between the given boundaries (inclusive)
      * using the {@code length()} method.
      * */
-    fun hasSizeBetween(startRange: Int, endRange: Int) = BiPerformableExpectation(value, hasSizeBetween, startRange, endRange, isNegated())
+    fun hasSizeBetween(startRange: Int, endRange: Int) = BiPerformableExpectation(value, hasSizeBetween, startRange, endRange, isNegated(),"a collection")
 
     /**
      * Verifies that the actual {@code Collection} has a size that is the same as a specified collection
      * using the {@code length()} method.
      * */
-    fun hasSameSizeAs(expected: Collection<A>) = PerformableExpectation(value, hasSameSizeAs, expected, isNegated())
+    fun hasSameSizeAs(expected: Collection<A>) = PerformableExpectation(value, hasSameSizeAs, expected, isNegated(),"a collection")
 
     /**
      * Verifies that the actual {@code Collection} contains the given elements
      */
-    fun contains(vararg expected: A) = PerformableExpectation(value, listContains, expected.toList(), isNegated())
+    fun contains(vararg expected: A) = PerformableExpectation(value, listContains, expected.toList(), isNegated(),"a collection")
 
     /**
      * Verifies that the actual {@code Collection} contains the given elements
      */
-    fun containsAnyOf(vararg expected: A) = PerformableExpectation(value, listContainsAnyOf, expected.toList(), isNegated())
+    fun containsAnyOf(vararg expected: A) = PerformableExpectation(value, listContainsAnyOf, expected.toList(), isNegated(),"a collection")
 
     /**
      * Verifies that the actual {@code Collection} contains the given elements
      */
-    fun containsAnyElementsOf(expected: Collection<A>) = PerformableExpectation(value, listContainsAnyOf, expected.toList(), isNegated())
+    fun containsAnyElementsOf(expected: Collection<A>) = PerformableExpectation(value, listContainsAnyOf, expected.toList(), isNegated(),"a collection")
 
     /**
      * Verifies that the actual {@code Collection} contains the given elements
      */
-    fun containsElementsFrom(expected: Collection<A>) = PerformableExpectation(value, listContains, expected, isNegated())
+    fun containsElementsFrom(expected: Collection<A>) = PerformableExpectation(value, listContains, expected, isNegated(),"a collection")
 
     /**
      * Verifies that the actual group contains only the given values and nothing else, in any order and ignoring duplicates (i.e. once a value is found, its duplicates are also considered found).
      */
-    fun containsOnly(vararg expected: A) = PerformableExpectation(value, listContainsOnly, expected.toList(), isNegated())
+    fun containsOnly(vararg expected: A) = PerformableExpectation(value, listContainsOnly, expected.toList(), isNegated(),"a collection")
 
     /**
      * Verifies that the actual group contains only the given values and nothing else, in any order and ignoring duplicates (i.e. once a value is found, its duplicates are also considered found).
      */
-    fun containsOnlyElementsFrom(expected: Collection<A>) = PerformableExpectation(value, listContainsOnly, expected, isNegated())
+    fun containsOnlyElementsFrom(expected: Collection<A>) = PerformableExpectation(value, listContainsOnly, expected, isNegated(),"a collection")
 
     /**
      * Verifies that the actual {@code Collection} does not contain the given elements
      */
-    fun doesNotContain(vararg expected: A) = PerformableExpectation(value, listDoesNotContains, expected.toList(), isNegated())
+    fun doesNotContain(vararg expected: A) = PerformableExpectation(value, listDoesNotContains, expected.toList(), isNegated(),"a collection")
 
     /**
      * Verifies that the actual {@code Collection} does not contain the given elements
      */
-    fun doesNotContainElementsFrom(expected: Collection<A>) = PerformableExpectation(value, listDoesNotContains, expected, isNegated())
+    fun doesNotContainElementsFrom(expected: Collection<A>) = PerformableExpectation(value, listDoesNotContains, expected, isNegated(),"a collection")
 
     /**
      * Verifies that the actual {@code Collection} does not contain the given elements
      */
-    fun doesNotHaveDuplicates() = PerformablePredicate(value, listDoesNotContainDuplicates, isNegated())
+    fun doesNotHaveDuplicates() = PerformablePredicate(value, listDoesNotContainDuplicates, isNegated(),"a collection")
 
     /**
      * Verifies that the actual group contains exactly the given values and nothing else, <b>in order</b>.<br>
      */
-    fun containsExactly(vararg expected: A) = PerformableExpectation(value, listContainsExactly, expected.toList(), isNegated())
+    fun containsExactly(vararg expected: A) = PerformableExpectation(value, listContainsExactly, expected.toList(), isNegated(),"a collection")
 
     /**
      * Verifies that the actual group contains exactly the given values and nothing else, <b>in order</b>.<br>
@@ -206,7 +206,8 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             // Each element is 4 characters long
             PerformablePredicate(value,
                     containsElementsThatAllMatch(predicateDescription, predicate),
-                    isNegated())
+                    isNegated(),
+                    "a collection")
 
 
     /**
@@ -218,7 +219,8 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             // Each element is 4 characters long
             PerformablePredicate(value,
                     containsAtLeastOneElementThatMatches(predicateDescription, predicate),
-                    isNegated())
+                    isNegated(),
+                    "a collection")
 
     /**
      * Verifies that at least _n_ elements in a collection that match a given predicate
@@ -234,7 +236,8 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
                         IS_ARE,
                         predicateDescription,
                         predicate),
-                isNegated())
+                isNegated(),
+                "a collection")
     }
 
     /**
@@ -251,7 +254,8 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
                         IS_ARE,
                         predicateDescription,
                         predicate),
-                isNegated())
+                isNegated(),
+                "a collection")
     }
 
     /**
@@ -262,7 +266,8 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
     fun noneMatch(predicateDescription: String, predicate: (A) -> Boolean) =
             PerformablePredicate(value,
                     containsNoElementsThatMatch(predicateDescription, predicate),
-                    isNegated())
+                    isNegated(),
+                    "a collection")
 
 
     private var negated: Boolean = false

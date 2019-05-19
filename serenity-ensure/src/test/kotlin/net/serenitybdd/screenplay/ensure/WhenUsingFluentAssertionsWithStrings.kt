@@ -8,7 +8,6 @@ import java.util.regex.Pattern
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WhenUsingFluentAssertionsWithStrings {
 
-
     @Nested
     inner class WeCanCheckFor {
 
@@ -22,8 +21,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string is not empty`() {
-                shouldFailWithMessage("""|Expecting a value that is empty
-                                         |But got: <"Foo">"""
+                shouldFailWithMessage("""|Expecting a string that is empty
+                                         |But got: "Foo""""
                         .trimMargin())
                         .whenChecking(that("Foo").isEmpty())
             }
@@ -46,12 +45,19 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string is neither empty nor null`() {
-                shouldFailWithMessage("""|Expecting a value that is null or empty
-                                         |But got: <"Foo">"""
+                shouldFailWithMessage("""|Expecting a string that is null or empty
+                                         |But got: "Foo""""
                         .trimMargin())
                         .whenChecking(that("Foo").isNullOrEmpty())
             }
 
+            @Test
+            fun `when the string is unexpectedly neither empty nor null`() {
+                shouldFailWithMessage("""|Expecting a string that is not null or empty
+                                         |But got: """""
+                        .trimMargin())
+                        .whenChecking(that("").not().isNullOrEmpty())
+            }
         }
 
         @Nested
@@ -86,10 +92,17 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string does not contain the text`() {
-                shouldFailWithMessage("""|Expecting a value that is containing: <[yellow]>
-                                         |But got.............................: <"red green blue">"""
+                shouldFailWithMessage("""|Expecting a string that contains: <[yellow]>
+                                         |But got.........................: <"red green blue">"""
                         .trimMargin())
                         .whenChecking(that("red green blue").contains("yellow"))
+            }
+            @Test
+            fun `when the string is expected not to contain the text`() {
+                shouldFailWithMessage("""|Expecting a string that does not contain: <[red]>
+                                         |But got.................................: <"red green blue">"""
+                        .trimMargin())
+                        .whenChecking(that("red green blue").not().contains("red"))
             }
         }
 
@@ -119,7 +132,7 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the text contains the string`() {
-                shouldFailWithMessage("""|Expecting a value that is not containing: <[red]>
+                shouldFailWithMessage("""|Expecting a string that does not contain: <[red]>
                                          |But got.................................: <"red green blue">"""
                         .trimMargin())
                         .whenChecking(that("red green blue").doesNotContain("red"))
@@ -153,8 +166,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string does not contain the text`() {
-                shouldFailWithMessage("""|Expecting a value that is containing (ignoring case): <[yellow]>
-                                         |But got.............................................: <"red green blue">"""
+                shouldFailWithMessage("""|Expecting a string that contains (ignoring case): <[yellow]>
+                                         |But got.........................................: <"red green blue">"""
                         .trimMargin())
                         .whenChecking(that("red green blue").containsIgnoringCase("yellow"))
             }
@@ -169,8 +182,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the strings don't match`() {
-                shouldFailWithMessage("""|Expecting a value that is equal to (ignoring case): <"Bar">
-                                         |But got...........................................: <"foo">"""
+                shouldFailWithMessage("""|Expecting a string that is equal to (ignoring case): <"Bar">
+                                         |But got............................................: <"foo">"""
                         .trimMargin())
                         .whenChecking(that("foo").isEqualToIgnoringCase("Bar"))
             }
@@ -186,16 +199,16 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string is not in upper case`() {
-                shouldFailWithMessage("""|Expecting a value that is in uppercase
-                                         |But got: <"foo">"""
+                shouldFailWithMessage("""|Expecting a string that is in uppercase
+                                         |But got: "foo""""
                         .trimMargin())
                         .whenChecking(that("foo").isInUppercase())
             }
 
             @Test
             fun `when the string is empty`() {
-                shouldFailWithMessage("""|Expecting a value that is in uppercase
-                                         |But got: <"">"""
+                shouldFailWithMessage("""|Expecting a string that is in uppercase
+                                         |But got: """""
                         .trimMargin())
                         .whenChecking(that("").isInUppercase())
             }
@@ -211,16 +224,16 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string is not in lower case`() {
-                shouldFailWithMessage("""|Expecting a value that is in lowercase
-                                         |But got: <"FOO">"""
+                shouldFailWithMessage("""|Expecting a string that is in lowercase
+                                         |But got: "FOO""""
                         .trimMargin())
                         .whenChecking(that("FOO").isInLowercase())
             }
 
             @Test
             fun `when the string is empty`() {
-                shouldFailWithMessage("""|Expecting a value that is in lowercase
-                                         |But got: <"">"""
+                shouldFailWithMessage("""|Expecting a string that is in lowercase
+                                         |But got: """""
                         .trimMargin())
                         .whenChecking(that("").isInLowercase())
             }
@@ -251,8 +264,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string is not blank`() {
-                shouldFailWithMessage("""|Expecting a value that is blank
-                                         |But got: <"FOO">"""
+                shouldFailWithMessage("""|Expecting a string that is blank
+                                         |But got: "FOO""""
                         .trimMargin())
                         .whenChecking(that("FOO").isBlank())
             }
@@ -269,8 +282,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string has only white spaces`() {
-                shouldFailWithMessage("""|Expecting a value that is empty
-                                         |But got: <"   ">"""
+                shouldFailWithMessage("""|Expecting a string that is empty
+                                         |But got: "   """"
                         .trimMargin())
                         .whenChecking(that("   ").isEmpty())
             }
@@ -288,8 +301,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string is not empty`() {
-                shouldFailWithMessage("""|Expecting a value that is empty
-                                         |But got: <"FOO">"""
+                shouldFailWithMessage("""|Expecting a string that is empty
+                                         |But got: "FOO""""
                         .trimMargin())
                         .whenChecking(that("FOO").isEmpty())
             }
@@ -311,8 +324,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string is not a substring of the text`() {
-                shouldFailWithMessage("""|Expecting a value that is a substring of: <"red green blue">
-                                         |But got.................................: <"yellow">"""
+                shouldFailWithMessage("""|Expecting a string that is a substring of: <"red green blue">
+                                         |But got..................................: <"yellow">"""
                         .trimMargin())
                         .whenChecking(that("yellow").isSubstringOf("red green blue"))
             }
@@ -328,8 +341,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string does not start with text`() {
-                shouldFailWithMessage("""|Expecting a value that is starting with: <"yellow">
-                                         |But got................................: <"red green blue">"""
+                shouldFailWithMessage("""|Expecting a string that starts with: <"yellow">
+                                         |But got............................: <"red green blue">"""
                         .trimMargin())
                         .whenChecking(that("red green blue").startsWith("yellow"))
             }
@@ -345,8 +358,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string does not ends with text`() {
-                shouldFailWithMessage("""|Expecting a value that is ending with: <"yellow">
-                                         |But got..............................: <"red green blue">"""
+                shouldFailWithMessage("""|Expecting a string that ends with: <"yellow">
+                                         |But got..........................: <"red green blue">"""
                         .trimMargin())
                         .whenChecking(that("red green blue").endsWith("yellow"))
             }
@@ -362,8 +375,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string does not match`() {
-                shouldFailWithMessage("""|Expecting a value that is a match for: <"yellow.*">
-                                         |But got..............................: <"red green blue">"""
+                shouldFailWithMessage("""|Expecting a string that is a match for: <"yellow.*">
+                                         |But got...............................: <"red green blue">"""
                         .trimMargin())
                         .whenChecking(that("red green blue").matches("yellow.*"))
             }
@@ -379,8 +392,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string does not match`() {
-                shouldFailWithMessage("""|Expecting a value that is a match for: <yellow.*>
-                                         |But got..............................: <"red green blue">"""
+                shouldFailWithMessage("""|Expecting a string that is a match for: <yellow.*>
+                                         |But got...............................: <"red green blue">"""
                         .trimMargin())
                         .whenChecking(that("red green blue").matches(Pattern.compile("yellow.*")))
             }
@@ -406,8 +419,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string has no whitespaces`() {
-                shouldFailWithMessage("""|Expecting a value that is containing whitespaces
-                                         |But got: <"FOO">"""
+                shouldFailWithMessage("""|Expecting a string that is containing whitespaces
+                                         |But got: "FOO""""
                         .trimMargin())
                         .whenChecking(that("FOO").containsWhitespaces())
             }
@@ -434,8 +447,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string has no whitespaces`() {
-                shouldFailWithMessage("""|Expecting a value that is containing only whitespaces
-                                         |But got: <"FOO">"""
+                shouldFailWithMessage("""|Expecting a string that is containing only whitespaces
+                                         |But got: "FOO""""
                         .trimMargin())
                         .whenChecking(that("FOO").containsOnlyWhitespaces())
             }
@@ -466,8 +479,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string has no whitespaces`() {
-                shouldFailWithMessage("""|Expecting a value that is without any whitespaces
-                                         |But got: <"foo bar">"""
+                shouldFailWithMessage("""|Expecting a string that is without any whitespaces
+                                         |But got: "foo bar""""
                         .trimMargin())
                         .whenChecking(that("foo bar").doesNotContainAnyWhitespaces())
             }
@@ -493,8 +506,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string has no digits`() {
-                shouldFailWithMessage("""|Expecting a value that is containing only digits
-                                         |But got: <"FOO">"""
+                shouldFailWithMessage("""|Expecting a string that is containing only digits
+                                         |But got: "FOO""""
                         .trimMargin())
                         .whenChecking(that("FOO").containsOnlyDigits())
             }
@@ -526,8 +539,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string has no letters`() {
-                shouldFailWithMessage("""|Expecting a value that is containing only letters
-                                         |But got: <"123">"""
+                shouldFailWithMessage("""|Expecting a string that is containing only letters
+                                         |But got: "123""""
                         .trimMargin())
                         .whenChecking(that("123").containsOnlyLetters())
             }
@@ -568,8 +581,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string has no letters`() {
-                shouldFailWithMessage("""|Expecting a value that is containing only letters or digits
-                                         |But got: <"$$$">"""
+                shouldFailWithMessage("""|Expecting a string that is containing only letters or digits
+                                         |But got: "$$$""""
                         .trimMargin())
                         .whenChecking(that("$$$").containsOnlyLettersOrDigits())
             }
@@ -585,10 +598,18 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string does not have the expected size`() {
-                shouldFailWithMessage("""|Expecting a value that is of size: <3>
-                                         |But got..........................: <"green">"""
+                shouldFailWithMessage("""|Expecting a string that is of size: <3>
+                                         |But got...........................: <"green">"""
                         .trimMargin())
                         .whenChecking(that("green").hasSize(3))
+            }
+
+            @Test
+            fun `when the string does not have the expected size (negated)`() {
+                shouldFailWithMessage("""|Expecting a string that is not of size: <5>
+                                         |But got...............................: <"green">"""
+                        .trimMargin())
+                        .whenChecking(that("green").not().hasSize(5))
             }
         }
 
@@ -607,8 +628,8 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string does not have the expected size`() {
-                shouldFailWithMessage("""|Expecting a value that is of size greater than: <10>
-                                         |But got.......................................: <"green">"""
+                shouldFailWithMessage("""|Expecting a string that is of size greater than: <10>
+                                         |But got........................................: <"green">"""
                         .trimMargin())
                         .whenChecking(that("green").hasSizeGreaterThan(10))
             }
@@ -626,11 +647,20 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string does not have the expected size`() {
-                shouldFailWithMessage("""|Expecting a value that is of size greater than or equal to: <10>
-                                         |But got...................................................: <"green">"""
+                shouldFailWithMessage("""|Expecting a string that is of size greater than or equal to: <10>
+                                         |But got....................................................: <"green">"""
                         .trimMargin())
                         .whenChecking(that("green").hasSizeGreaterThanOrEqualTo(10))
             }
+
+            @Test
+            fun `when the string does not have the expected size (negated)`() {
+                shouldFailWithMessage("""|Expecting a string that is not of size greater than or equal to: <3>
+                                         |But got........................................................: <"green">"""
+                        .trimMargin())
+                        .whenChecking(that("green").not().hasSizeGreaterThanOrEqualTo(3))
+            }
+
         }
 
 
@@ -650,10 +680,18 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string does not have the expected size`() {
-                shouldFailWithMessage("""|Expecting a value that is of size less than: <3>
-                                         |But got....................................: <"green">"""
+                shouldFailWithMessage("""|Expecting a string that is of size less than: <3>
+                                         |But got.....................................: <"green">"""
                         .trimMargin())
                         .whenChecking(that("green").hasSizeLessThan(3))
+            }
+
+            @Test
+            fun `when the string does not have the expected size (negated)`() {
+                shouldFailWithMessage("""|Expecting a string that is not of size less than: <4>
+                                         |But got.........................................: <"red">"""
+                        .trimMargin())
+                        .whenChecking(that("red").not().hasSizeLessThan(4))
             }
         }
 
@@ -667,13 +705,20 @@ class WhenUsingFluentAssertionsWithStrings {
                 shouldPassWhenChecking(that("red").hasSizeLessThanOrEqualTo(3))
             }
 
-
             @Test
             fun `when the string does not have the expected size`() {
-                shouldFailWithMessage("""|Expecting a value that is of size less than or equal to: <3>
-                                         |But got................................................: <"green">"""
+                shouldFailWithMessage("""|Expecting a string that is of size less than or equal to: <3>
+                                         |But got.................................................: <"green">"""
                         .trimMargin())
                         .whenChecking(that("green").hasSizeLessThanOrEqualTo(3))
+            }
+
+            @Test
+            fun `when the string does not have the expected size (negated)`() {
+                shouldFailWithMessage("""|Expecting a string that is not of size less than or equal to: <3>
+                                         |But got.....................................................: <"red">"""
+                        .trimMargin())
+                        .whenChecking(that("red").not().hasSizeLessThanOrEqualTo(3))
             }
         }
 
@@ -695,11 +740,20 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string does not have the expected size`() {
-                shouldFailWithMessage("""|Expecting a value that is of size of between <1> and <4>
-                                         |But got: <"green">"""
+                shouldFailWithMessage("""|Expecting a string that is of size of between 1 and 4
+                                         |But got: "green""""
                         .trimMargin())
                         .whenChecking(that("green").hasSizeBetween(1,4))
             }
+
+            @Test
+            fun `when the string does not have the expected size (negated form)`() {
+                shouldFailWithMessage("""|Expecting a string that is not of size of between 1 and 4
+                                         |But got: "red""""
+                        .trimMargin())
+                        .whenChecking(that("red").not().hasSizeBetween(1,4))
+            }
+
         }
 
 
@@ -720,10 +774,18 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string does not have the expected size`() {
-                shouldFailWithMessage("""|Expecting a value that is the same size as: <"red">
-                                         |But got...................................: <"green">"""
+                shouldFailWithMessage("""|Expecting a string that has the same size as: <"red">
+                                         |But got.....................................: <"green">"""
                         .trimMargin())
                         .whenChecking(that("green").hasSameSizeAs("red"))
+            }
+
+            @Test
+            fun `when the string does not have the expected size (negated)`() {
+                shouldFailWithMessage("""|Expecting a string that does not have the same size as: <"red">
+                                         |But got...............................................: <"RED">"""
+                        .trimMargin())
+                        .whenChecking(that("RED").not().hasSameSizeAs("red"))
             }
         }
 
@@ -745,11 +807,20 @@ class WhenUsingFluentAssertionsWithStrings {
 
             @Test
             fun `when the string does not have the expected line count`() {
-                shouldFailWithMessage("""|Expecting a value that is with a line count of: <3>
-                                         |But got.......................................: <"green">"""
+                shouldFailWithMessage("""|Expecting a string that has a line count of: <3>
+                                         |But got....................................: <"green">"""
                         .trimMargin())
                         .whenChecking(that("green").hasLineCount(3))
             }
+
+            @Test
+            fun `when the string does not have the expected line count (negated)`() {
+                shouldFailWithMessage("""|Expecting a string that does not have a line count of: <1>
+                                         |But got..............................................: <"green">"""
+                        .trimMargin())
+                        .whenChecking(that("green").not().hasLineCount(1))
+            }
+
         }
     }
 }

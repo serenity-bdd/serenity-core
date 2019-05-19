@@ -6,6 +6,7 @@ import org.junit.jupiter.api.TestInstance
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Month
+import java.util.Comparator
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WhenUsingFluentAssertionsWithDates {
@@ -28,6 +29,11 @@ class WhenUsingFluentAssertionsWithDates {
             }
 
             @Test
+            fun `non-equality`() {
+                shouldPassWhenChecking(that(firstDayOfTheYear).not().isEqualTo(wednesday))
+            }
+
+            @Test
             fun `before`() {
                 shouldPassWhenChecking(that(tuesday).isBefore(wednesday))
             }
@@ -35,6 +41,28 @@ class WhenUsingFluentAssertionsWithDates {
             @Test
             fun `after`() {
                 shouldPassWhenChecking(that(thursday).isAfter(wednesday))
+            }
+
+            @Test
+            fun `using a custom comparator`() {
+
+                val byMonth = Comparator.comparingInt<LocalDate> { it.monthValue }
+
+                shouldPassWhenChecking(that(thursday).usingComparator(byMonth).isEqualTo(wednesday))
+                shouldFailWhenChecking(that(thursday).usingComparator(byMonth).isNotEqualTo(wednesday))
+            }
+
+
+            @Test
+            fun `Custom comparators work with the normal comparison methods, not the specific date ones`() {
+
+                val byMonthNumber = Comparator.comparingInt<LocalDate> { it.month.value }
+
+                val firstOfJanuary = LocalDate.of(2019,1,1)
+                val secondOfFebruary = LocalDate.of(2018,2,1)
+
+                shouldPassWhenChecking(that(firstOfJanuary).usingComparator(byMonthNumber).isLessThan(secondOfFebruary))
+                shouldFailWhenChecking(that(firstOfJanuary).usingComparator(byMonthNumber).isBefore(secondOfFebruary))
             }
 
             @Test

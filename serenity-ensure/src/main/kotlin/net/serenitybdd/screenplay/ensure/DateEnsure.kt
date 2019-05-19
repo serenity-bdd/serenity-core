@@ -41,7 +41,6 @@ class DateEnsure(override val value: KnowableValue<LocalDate?>, comparator: Comp
      */
     fun isTheYear(expected: Int) = PerformableExpectation(value, YEAR, expected, isNegated())
 
-    override fun hasValue(): DateEnsure = this
     override fun not(): DateEnsure = negate() as DateEnsure
     override fun usingComparator(comparator: Comparator<LocalDate>): DateEnsure {
         return DateEnsure(value, comparator)

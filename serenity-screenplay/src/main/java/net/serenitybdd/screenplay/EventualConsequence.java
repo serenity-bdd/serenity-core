@@ -97,7 +97,8 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
 
     @Override
     public Consequence<T> orComplainWith(Class<? extends Error> complaintType) {
-        return new EventualConsequence(consequenceThatMightTakeSomeTime.orComplainWith(complaintType));
+        return new EventualConsequence(consequenceThatMightTakeSomeTime.orComplainWith(complaintType),
+            timeoutInMilliseconds, isSilent);
     }
 
     public Consequence<T> ignoringExceptions(Class<? extends Throwable>... exceptionsToIgnore) {
@@ -107,17 +108,20 @@ public class EventualConsequence<T> implements Consequence<T>, CanBeSilent {
 
     @Override
     public Consequence<T> orComplainWith(Class<? extends Error> complaintType, String complaintDetails) {
-        return new EventualConsequence(consequenceThatMightTakeSomeTime.orComplainWith(complaintType, complaintDetails));
+        return new EventualConsequence(consequenceThatMightTakeSomeTime.orComplainWith(complaintType,
+            complaintDetails), timeoutInMilliseconds, isSilent);
     }
 
     @Override
     public Consequence<T> whenAttemptingTo(Performable performable) {
-        return new EventualConsequence<T>(consequenceThatMightTakeSomeTime.whenAttemptingTo(performable));
+        return new EventualConsequence<T>(consequenceThatMightTakeSomeTime.whenAttemptingTo(performable),
+            timeoutInMilliseconds, isSilent);
     }
 
     @Override
     public Consequence<T> because(String explanation) {
-        return new EventualConsequence<T>(consequenceThatMightTakeSomeTime.because(explanation));
+        return new EventualConsequence<T>(consequenceThatMightTakeSomeTime.because(explanation),
+            timeoutInMilliseconds, isSilent);
     }
 
     @Override

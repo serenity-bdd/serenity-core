@@ -5,7 +5,9 @@ import net.serenitybdd.core.collect.NewList;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.GivenWhenThen;
+import net.serenitybdd.screenplay.ThisTakesTooLong;
 import net.serenitybdd.screenplay.shopping.questions.NestedThankYouMessage;
+import net.serenitybdd.screenplay.shopping.tasks.Checkout;
 import net.serenitybdd.screenplay.shopping.tasks.HaveItemsDelivered;
 import net.serenitybdd.screenplay.shopping.tasks.Purchase;
 import net.thucydides.core.annotations.Steps;
@@ -17,11 +19,15 @@ import org.junit.runner.RunWith;
 import java.util.List;
 
 import static java.util.function.Predicate.isEqual;
+import static net.serenitybdd.screenplay.EventualConsequence.eventually;
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static net.serenitybdd.screenplay.shopping.questions.DisplayedPrices.*;
+import static net.serenitybdd.screenplay.shopping.questions.NextPersonToBeServed.*;
 import static net.serenitybdd.screenplay.shopping.questions.ThankYouMessage.theThankYouMessage;
 import static net.serenitybdd.screenplay.shopping.questions.TotalCost.theTotalCost;
 import static net.serenitybdd.screenplay.shopping.questions.TotalCostIncludingDelivery.theTotalCostIncludingDelivery;
+import static net.serenitybdd.screenplay.shopping.tasks.Checkout.*;
+import static net.serenitybdd.screenplay.shopping.tasks.JoinTheCheckoutQueue.*;
 import static net.serenitybdd.screenplay.shopping.tasks.Purchase.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -255,6 +261,42 @@ public class DanaGoesShoppingSample {
 
         then(dana).should(seeThat(theTotalCost(), equalTo(20)));
         and(dana).should(seeThat(theThankYouMessage(), equalTo("De nada")));
+    }
+
+    @Test
+    public void shouldBeAbleToWaitInCheckoutLine() {
+        Checkout fastCheckout = fastCheckout();
+
+        givenThat(dana).attemptsTo(joinTheCheckoutQueue().of(fastCheckout));
+
+        then(dana).should(eventually(seeThat(
+            nextPersonToBeServed().by(fastCheckout), is("Dana")
+        )).waitingForNoLongerThan(3).seconds()
+            .orComplainWith(ThisTakesTooLong.class));
+    }
+
+    @Test
+    public void shouldPatientlyWaitInCheckoutLine() {
+        Checkout slowCheckout = slowCheckout();
+
+        givenThat(dana).attemptsTo(joinTheCheckoutQueue().of(slowCheckout));
+
+        then(dana).should(eventually(seeThat(
+            nextPersonToBeServed().by(slowCheckout), is("Dana")
+        )).waitingForNoLongerThan(10).seconds()
+            .orComplainWith(ThisTakesTooLong.class));
+    }
+
+    @Test(expected = ThisTakesTooLong.class)
+    public void shouldImpatientlyWaitInCheckoutLine() {
+        Checkout fastCheckout = fastCheckout();
+
+        givenThat(dana).attemptsTo(joinTheCheckoutQueue().of(fastCheckout));
+
+        then(dana).should(eventually(seeThat(
+            nextPersonToBeServed().by(fastCheckout), is("Dana")
+        )).waitingForNoLongerThan(1).seconds()
+            .orComplainWith(ThisTakesTooLong.class));
     }
 }
 

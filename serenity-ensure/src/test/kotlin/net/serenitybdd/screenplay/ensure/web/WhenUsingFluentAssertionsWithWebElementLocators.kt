@@ -166,22 +166,37 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
                 fun `when the element is on the page`() {
                     shouldPassWhenChecking(that(ElementLocated.by("#heading")).text().isEqualTo("Heading"), wendy)
                     shouldPassWhenChecking(that(ElementLocated.by("#heading")).text().isGreaterThan("Aardvark"), wendy)
-                    shouldFailWhenChecking(that(ElementLocated.by("#heading")).text().isEqualTo("Wrong Heading"), wendy)
+                }
+
+                @Test
+                fun `when the element is on the page with the wrong value (using a string comparator)`() {
+                    shouldFailWithMessage("""|Expecting web element located by #heading with text value that contains: <[Wrong]>
+                                             |But got................................................................: <"Heading">"""
+                            .trimMargin())
+                            .whenChecking(that(ElementLocated.by("#heading")).text().contains("Wrong"), wendy)
+                }
+
+
+                @Test
+                fun `when the element is on the page with the wrong value (using a comparable)`() {
+                    shouldFailWithMessage("""|Expecting web element located by #heading with text value that is equal to: <"Wrong Heading">
+                                             |But got...................................................................: <"Heading">"""
+                            .trimMargin())
+                            .whenChecking(that(ElementLocated.by("#heading")).text().isEqualTo("Wrong Heading"), wendy)
+                }
+
+                @Test
+                fun `when the element is on the page with the wrong value (using a basic comparison)`() {
+                    shouldFailWithMessage("""|Expecting web element located by #heading with text value that is in: <[Wrong Heading, Another Wrong One]>
+                                             |But got.............................................................: <"Heading">"""
+                            .trimMargin())
+                            .whenChecking(that(ElementLocated.by("#heading")).text().isIn("Wrong Heading","Another Wrong One"), wendy)
                 }
 
                 @Test
                 fun `when the element is not on the page`() {
                     shouldFailWhenChecking(that(ElementLocated.by(By.id("#unknown"))).isDisplayed(), wendy)
                 }
-
-                @Test
-                fun `when the value does not match`() {
-                    shouldFailWithMessage("""|Expecting web element located by #block-of-text with text value that contains: <[Some other text content]>
-                                             |But got......................................................................: <"Some text content">"""
-                            .trimMargin())
-                            .whenChecking(that(ElementLocated.by("#block-of-text")).text().contains("Some other text content"), wendy)
-                }
-
             }
 
             @Nested
@@ -196,6 +211,15 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
                 fun `when the text is not present`() {
                     shouldFailWhenChecking(that(ElementLocated.by("#block-of-text")).textContent().doesNotContain("Some text content"), wendy)
                 }
+
+                @Test
+                fun `when the text content does not match`() {
+                    shouldFailWithMessage("""|Expecting web element located by #block-of-text with text value that contains: <[Some other text content]>
+                                             |But got......................................................................: <"Some text content">"""
+                            .trimMargin())
+                            .whenChecking(that(ElementLocated.by("#block-of-text")).text().contains("Some other text content"), wendy)
+                }
+
             }
 
             @Nested
@@ -203,7 +227,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
                 @Test
                 fun `for an input field`() {
-                    shouldPassWhenChecking(that(ElementLocated.by("#firstName")).value().isEqualToIgnoringCase("joe"), wendy)
+                    shouldPassWhenChecking(that(ElementLocated.by("#firstName")).value().isEqualTo("Joe"), wendy)
                 }
 
                 @Test

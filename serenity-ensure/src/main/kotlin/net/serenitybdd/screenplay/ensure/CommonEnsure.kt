@@ -10,7 +10,8 @@ class KnownValue<A>(val value: A?, val description: String) : KnowableValue<A> {
     override fun toString() = description
 }
 
-open class UICommonEnsure<A, E>(open val value: KnowableValue<A>) {
+open class CommonEnsure<A, E>(open val value: KnowableValue<A>,
+                              val expectedDescription: String = "a value") {
 
     constructor(value: A) : this(KnownValue(value, value.toString()))
 
@@ -22,7 +23,7 @@ open class UICommonEnsure<A, E>(open val value: KnowableValue<A>) {
      * actor.attemptsTo(Ensure.that(&quot;abc&quot;).isEqualTo(&quot;abc&quot;));
      * </code></pre>
      */
-    open fun isEqualTo(expected: E) = PerformableExpectation(value, IS_EQUAL_TO, expected, isNegated())
+    open fun isEqualTo(expected: E) = PerformableExpectation(value, IS_EQUAL_TO, expected, isNegated(), expectedDescription)
 
     // TODO
     // fun isEqualToIgnoringFields(expected: E, vararg fieldsToIgnore: String) = PerformableExpectation(value, IS_EQUAL_TO, expected, isNegated())
@@ -35,7 +36,7 @@ open class UICommonEnsure<A, E>(open val value: KnowableValue<A>) {
      * actor.attemptsTo(Ensure.that(&quot;abc&quot;).isEqualTo(&quot;123&quot;));
      * </code></pre>
      */
-    open fun isNotEqualTo(expected: E) = PerformableExpectation(value, IS_NOT_EQUAL_TO, expected, isNegated())
+    open fun isNotEqualTo(expected: E) = PerformableExpectation(value, IS_NOT_EQUAL_TO, expected, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual value is {@code null}.
@@ -49,7 +50,7 @@ open class UICommonEnsure<A, E>(open val value: KnowableValue<A>) {
      * actor.attemptsTo(Ensure.that(&quot;abc&quot;).isNull();
      * </code></pre>
      */
-    open fun isNull() = PerformablePredicate(value, IS_NULL, isNegated(), "a value")
+    open fun isNull() = PerformablePredicate(value, IS_NULL, isNegated(), expectedDescription)
 
 
     /**
@@ -65,7 +66,7 @@ open class UICommonEnsure<A, E>(open val value: KnowableValue<A>) {
      * actor.attemptsTo(Ensure.that(name).isNotNull();
      * </code></pre>
      */
-    fun isNotNull() = PerformablePredicate(value, IS_NOT_NULL, isNegated(), "a value")
+    fun isNotNull() = PerformablePredicate(value, IS_NOT_NULL, isNegated(), expectedDescription)
 
 
     /**
@@ -75,7 +76,7 @@ open class UICommonEnsure<A, E>(open val value: KnowableValue<A>) {
      * actor.attemptsTo(Ensure.that("red").isIn("red","green","blue));
      * </code></pre>
      */
-    fun isIn(vararg expected: A) = PerformableExpectation(value, IS_IN, expected.toList(), isNegated())
+    fun isIn(vararg expected: A) = PerformableExpectation(value, IS_IN, expected.toList(), isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual value is present in the given collection of values
@@ -85,7 +86,7 @@ open class UICommonEnsure<A, E>(open val value: KnowableValue<A>) {
      * </code></pre>
      *
      */
-    fun isIn(expected: Collection<A>) = PerformableExpectation(value, IS_IN, expected.toList(), isNegated())
+    fun isIn(expected: Collection<A>) = PerformableExpectation(value, IS_IN, expected.toList(), isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual value is not present in the given array of values.
@@ -95,7 +96,7 @@ open class UICommonEnsure<A, E>(open val value: KnowableValue<A>) {
      * </code></pre>
      *
      */
-    fun isNotIn(vararg expected: A) = PerformableExpectation(value, IS_NOT_IN, expected.toList(), isNegated())
+    fun isNotIn(vararg expected: A) = PerformableExpectation(value, IS_NOT_IN, expected.toList(), isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual value is not present in the given collection of values
@@ -105,7 +106,7 @@ open class UICommonEnsure<A, E>(open val value: KnowableValue<A>) {
      * </code></pre>
      *
      */
-    fun isNotIn(expected: Collection<A>) = PerformableExpectation(value, IS_NOT_IN, expected.toList(), isNegated())
+    fun isNotIn(expected: Collection<A>) = PerformableExpectation(value, IS_NOT_IN, expected.toList(), isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual value matches a specified lambda expression
@@ -118,48 +119,80 @@ open class UICommonEnsure<A, E>(open val value: KnowableValue<A>) {
      * @param expected the lambda expression to check values against
      *
      */
-    fun matches(description: String, expected: (A?) -> Boolean): Performable = PerformableExpectation(value, matchesPredicate(description), expected, isNegated())
+    fun matches(description: String, expected: (A?) -> Boolean): Performable = PerformableExpectation(value, matchesPredicate(description), expected, isNegated(), expectedDescription)
 
     private var negated = false
 
-    fun negate(): UICommonEnsure<A, E> {
+    fun negate(): CommonEnsure<A, E> {
         negated = !negated
         return this
     }
 
-    open fun not(): UICommonEnsure<A, E> = negate()
+    open fun not(): CommonEnsure<A, E> = negate()
 
     fun isNegated() = negated
 
     private val IS_EQUAL_TO = expectThatActualIs("equal to",
-            fun(actor: Actor?, actual: KnowableValue<A>?, expected: E): Boolean =
-                    (actor != null && actual != null) && actual(actor) == expected)
+            fun(actor: Actor?, actual: KnowableValue<A>?, expected: E): Boolean {
+                if (actor == null || actual == null) return false;
+                val actualValue = actual(actor)
+                BlackBox.logAssertion(actualValue, expected)
 
-    private val IS_NOT_EQUAL_TO = expectThatActualIs("not equal to", fun(actor: Actor?, actual: KnowableValue<A>?, expected: E): Boolean =
-            (actor != null && actual != null) && actual(actor) != expected)
+                return actual(actor) == expected
 
-    private val IS_NULL = expectThatActualIs("null", fun(actor: Actor?, actual: KnowableValue<A?>?): Boolean {
+            })
+
+    private val IS_NOT_EQUAL_TO = expectThatActualIs("not equal to",
+            fun(actor: Actor?, actual: KnowableValue<A>?, expected: E): Boolean {
+                if (actor == null || actual == null) return false;
+                val actualValue = actual(actor)
+                BlackBox.logAssertion(actualValue, expected)
+
+                return actual(actor) != expected
+            })
+
+    private
+    val IS_NULL = expectThatActualIs("null", fun(actor: Actor?, actual: KnowableValue<A?>?): Boolean {
         if (actor == null || actual == null) return true
         val actualValue = actual(actor)
-        return actualValue == null || actualValue == NULL_VALUE_AS_STRING
+        BlackBox.logAssertion(actualValue, null)
+
+        return actualValue == null
     })
 
-    private val IS_NOT_NULL = expectThatActualIs("not null", fun(actor: Actor?, actual: KnowableValue<A?>?): Boolean {
+    private
+    val IS_NOT_NULL = expectThatActualIs("not null", fun(actor: Actor?, actual: KnowableValue<A?>?): Boolean {
         if (actor == null || actual == null) return false
         val actualValue = actual(actor)
-        return actualValue != null && actualValue != NULL_VALUE_AS_STRING
+        BlackBox.logAssertion(actualValue, "not null")
+        return actualValue != null
     })
 
-    private val IS_IN = expectThatActualIs("in", fun(actor: Actor?, actual: KnowableValue<A>?, expected: List<A>): Boolean = (actor != null && actual != null) && expected.contains(actual(actor)))
+    private
+    val IS_IN = expectThatActualIs("in",
+            fun(actor: Actor?, actual: KnowableValue<A>?, expected: List<A>): Boolean {
+                if (actor == null || actual == null) return false
+                val actualValue = actual(actor)
+                BlackBox.logAssertion(actualValue, expected)
 
-    private val IS_NOT_IN = expectThatActualIs("not in", fun(actor: Actor?, actual: KnowableValue<A>?, expected: List<A>): Boolean = (actor != null && actual != null) && !expected.contains(actual(actor)))
+                return expected.contains(actualValue)
+            })
+
+    private val IS_NOT_IN = expectThatActualIs("not in",
+            fun(actor: Actor?, actual: KnowableValue<A>?, expected: List<A>): Boolean {
+                if (actor == null || actual == null) return false
+                val actualValue = actual(actor)
+                BlackBox.logAssertion(actualValue, expected)
+
+                return  !expected.contains(actualValue)
+            })
 
     private fun matchesPredicate(description: String) = expectThatActualIs("a match for",
-            fun(actor: Actor?, actual: KnowableValue<A>?, expected: (A?) -> Boolean): Boolean =
-                    (actor != null && actual != null) && expected.invoke(actual(actor)), description)
+            fun(actor: Actor?, actual: KnowableValue<A>?, expected: (A?) -> Boolean): Boolean {
+                if (actor == null || actual == null) return false
+                val actualValue = actual(actor)
+                BlackBox.logAssertion(actualValue, null)
 
-
-    companion object {
-        val NULL_VALUE_AS_STRING = "\u2205" // UNICODE EMPTY SET SYMBOL
-    }
+                return expected.invoke(actualValue)
+            }, description)
 }

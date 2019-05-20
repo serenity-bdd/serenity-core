@@ -2,7 +2,7 @@ package net.serenitybdd.screenplay.ensure
 
 import net.serenitybdd.screenplay.Actor
 
-class BooleanEnsure(override val value: KnowableValue<Boolean?>) : UICommonEnsure<Boolean?, Boolean>(value) {
+class BooleanEnsure(override val value: KnowableValue<Boolean?>) : CommonEnsure<Boolean?, Boolean>(value) {
 
     constructor(value: Boolean?) : this(KnownValue(value, value.toString()))
 

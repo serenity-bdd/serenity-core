@@ -2,6 +2,7 @@ package net.serenitybdd.screenplay.actors
 
 import net.serenitybdd.screenplay.Ability
 import net.serenitybdd.screenplay.Actor
+import net.serenitybdd.screenplay.HasTeardown
 import spock.lang.Specification
 
 import java.util.function.Consumer
@@ -50,6 +51,23 @@ class WhenRecruitingACast extends Specification {
             Actor kenneth = globeTheatreCast.actorNamed("Kenneth")
         then:
             kenneth.abilityTo(Fetch.class).item == "Coffee"
+    }
+
+    static class PerformHamlet implements Ability, HasTeardown {
+
+        @Override
+        void tearDown() {}
+    }
+
+    def "cast members can tidy up after themselves"() {
+        given:
+            PerformHamlet performHamlet = Mock(PerformHamlet.class)
+            OnStage.setTheStage(Cast.whereEveryoneCan(performHamlet))
+            OnStage.theActorCalled("Laurence")
+        when:
+            OnStage.drawTheCurtain()
+        then:
+            1 * performHamlet.tearDown()
     }
 
 }

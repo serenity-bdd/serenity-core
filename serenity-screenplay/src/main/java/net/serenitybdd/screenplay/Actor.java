@@ -14,10 +14,7 @@ import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepEventBus;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static net.serenitybdd.screenplay.SilentTasks.isNestedInSilentTask;
 import static net.serenitybdd.screenplay.SilentTasks.isSilent;
@@ -100,8 +97,7 @@ public class Actor implements PerformsTasks, SkipNested {
      * Return an ability that extends the given class. Can be a Superclass or an Interface. If there are multiple
      * candidate Abilities, the first one found will be returned.
      * @param extendedClass the Interface class that we expect to find
-     * @param <C> the matching Ability cast to extendedClass
-     * @throws NoMatchingAbilityException when we don't find an appropriate Ability
+     * @param <C> the matching Ability cast to extendedClass or null if none match
      */
     @SuppressWarnings("unchecked")
     public <C> C getAbilityThatExtends(Class<C> extendedClass) {
@@ -113,6 +109,19 @@ public class Actor implements PerformsTasks, SkipNested {
             }
         }
         return null;
+    }
+
+    /**
+     * Return a list of all {@link Ability}s which implement {@link HasTeardown}
+     */
+    public List<HasTeardown> getTeardowns() {
+        List<HasTeardown> teardowns = new ArrayList<>();
+        for (Ability a : abilities.values()) {
+            if (a instanceof HasTeardown) {
+                teardowns.add((HasTeardown) a);
+            }
+        }
+        return teardowns;
     }
 
     /**

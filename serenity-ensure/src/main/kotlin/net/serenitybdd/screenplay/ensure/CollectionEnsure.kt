@@ -6,7 +6,6 @@ import net.serenitybdd.screenplay.ensure.GrammaticalNumber.PLURAL
 import net.serenitybdd.screenplay.ensure.GrammaticalNumber.SINGULAR
 import net.serenitybdd.screenplay.ensure.collections.CollectionsComparison
 import net.serenitybdd.screenplay.ensure.web.NamedExpectation
-import net.serenitybdd.screenplay.questions.NamedPredicate
 
 class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, 
                           private val targetDescription: String = "a collection",

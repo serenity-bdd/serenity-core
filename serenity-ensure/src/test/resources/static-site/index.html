@@ -3,8 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Test Page</title>
+
+    <script type="text/javascript">
+        <!--
+
+        function initFields() {
+            hide('city')
+            displayFieldsAfterDelay();
+        }
+
+        function hide(id) {
+            var e = document.getElementById(id);
+            e.style.display = 'none';
+        }
+
+        function show(id) {
+            var e = document.getElementById(id);
+            e.style.display = 'block';
+        }
+
+        function displayCityField() {
+            show('city')
+        }
+
+        function displayFieldsAfterDelay() {
+            setTimeout("displayCityField()", 1000);
+        }
+
+        //-->
+    </script>
 </head>
-<body>
+<body onLoad="initFields()">
 
 <h3>Text and text content</h3>
 <p id="block-of-text">
@@ -25,6 +54,7 @@
         <option value="yellow">Yellow</option>
         <option value="purple">Purple</option>
     </select>
+    <input id="city">
 </form>
 <div id="stations">
     <div class="station">Canary Wharf</div>

@@ -11,6 +11,7 @@ import net.thucydides.core.annotations.DefaultUrl
 import net.thucydides.core.steps.BaseStepListener
 import net.thucydides.core.steps.StepEventBus
 import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.Assertions.assertTimeout
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -20,6 +21,10 @@ import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import java.nio.file.Files
 import java.nio.file.Path
+import java.time.Duration
+import java.time.Duration.ofMinutes
+import java.time.Duration.ofSeconds
+
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WhenUsingFluentAssertionsWithWebElementLocators {
@@ -208,7 +213,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
                     shouldFailWithMessage("""|Expecting web element located by #heading with text value that is in: <[Wrong Heading, Another Wrong One]>
                                              |But got.............................................................: <"Heading">"""
                             .trimMargin())
-                            .whenChecking(that(ElementLocated.by("#heading")).text().isIn("Wrong Heading","Another Wrong One"), wendy)
+                            .whenChecking(that(ElementLocated.by("#heading")).text().isIn("Wrong Heading", "Another Wrong One"), wendy)
                 }
 
                 @Test
@@ -346,6 +351,29 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
                     shouldPassWhenChecking(that(ElementLocated.by("#stations")).containsElements(By.cssSelector(".station")), wendy)
                 }
             }
+
+            @Nested
+            inner class IsDisplayedAfterADelay {
+
+                @Test
+                fun `when the element is on the page`() {
+                    val aSlowDisplayingField: Target = ElementLocated.by(By.id("city"))
+                            .waitingForNoMoreThan(Duration.ofSeconds(2))
+
+                    shouldPassWhenChecking(that(aSlowDisplayingField).isDisplayed(), wendy)
+                }
+
+                @Test()
+                fun `when the element is not on the page`() {
+                    val aMissingField: Target = ElementLocated.by(By.id("missing-field"))
+                            .waitingForNoMoreThan(Duration.ofSeconds(1))
+
+                    assertTimeout(ofSeconds(3)) {
+                        shouldFailWhenChecking(that(aMissingField).isDisplayed(), wendy)
+                    }
+                }
+
+            }
         }
 
         @Nested
@@ -366,26 +394,26 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
             @Test
             fun `that have a certain number of elements`() {
-                shouldPassWhenChecking(thatTheSetOf(ElementsLocated.by(".station")).hasSize(3), wendy)
+                shouldPassWhenChecking(thatTheSetOf(ElementsLocated.by(By.cssSelector(".station"))).hasSize(3), wendy)
             }
 
             @Test
             fun `that all match a predicate`() {
-                val isDisplayed = {it : WebElementFacade -> it.isDisplayed}
+                val isDisplayed = { it: WebElementFacade -> it.isDisplayed }
 
-                shouldPassWhenChecking(thatAmongst(ElementsLocated.by(".station")).allMatch("is displayed", isDisplayed), wendy)
+                shouldPassWhenChecking(thatAmongst(ElementsLocated.by(Target.the("list of stations").locatedBy(".station"))).allMatch("is displayed", isDisplayed), wendy)
             }
 
             @Test
             fun `where some match a predicate`() {
-                val isDisplayed = {it : WebElementFacade -> it.isDisplayed}
+                val isDisplayed = { it: WebElementFacade -> it.isDisplayed }
 
                 shouldPassWhenChecking(thatAmongst(ElementsLocated.by(".station")).atLeast(2, "is displayed", isDisplayed), wendy)
             }
 
             @Test
             fun `that fails to match a predicate`() {
-                val isDisplayed = {it : WebElementFacade -> it.isDisplayed}
+                val isDisplayed = { it: WebElementFacade -> it.isDisplayed }
 
                 shouldFailWhenChecking(thatAmongst(ElementsLocated.by(".station")).noMoreThan(1, "is displayed", isDisplayed), wendy)
             }
@@ -397,7 +425,7 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
 
             @Test
             fun `that no elements are displayed`() {
-                shouldPassWhenChecking(thatTheSetOf(ElementsLocated.by(".hidden-station")).noneMatch(TheMatchingElement.isDisplayed()), wendy)
+                shouldPassWhenChecking(thatAmongst(ElementsLocated.by(".hidden-station")).noneMatch(TheMatchingElement.isDisplayed()), wendy)
             }
 
             @Test

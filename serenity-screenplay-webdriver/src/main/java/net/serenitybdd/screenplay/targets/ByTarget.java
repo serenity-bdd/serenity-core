@@ -8,6 +8,7 @@ import net.thucydides.core.webdriver.ThucydidesConfigurationException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,12 +29,38 @@ public class ByTarget extends Target {
         this.iosLocator = iosLocator;
     }
 
+    public ByTarget(String targetElementName, By androidLocator, By iosLocator, Optional<IFrame> iFrame, Optional<Duration> timeout) {
+        super(targetElementName, iFrame, timeout);
+        this.androidLocator = androidLocator;
+        this.iosLocator = iosLocator;
+    }
+
+
+    protected ByTarget(String targetElementName, By locator, By androidLocator, By iosLocator, Optional<IFrame> iFrame, Optional<Duration> timeout) {
+        super(targetElementName, iFrame, timeout);
+        this.locator = locator;
+        this.androidLocator = androidLocator;
+        this.iosLocator = iosLocator;
+    }
+
     public WebElementFacade resolveFor(Actor actor) {
-        return TargetResolver.create(BrowseTheWeb.as(actor).getDriver(), this).find(getLocatorForPlatform(actor));
+        TargetResolver resolver = TargetResolver.create(BrowseTheWeb.as(actor).getDriver(), this);
+        if (timeout.isPresent()) {
+            return resolver.withTimeoutOf(timeout.get()).find(getLocatorForPlatform(actor));
+        } else {
+            return resolver.find(getLocatorForPlatform(actor));
+        }
+//        return TargetResolver.create(BrowseTheWeb.as(actor).getDriver(), this).find(getLocatorForPlatform(actor));
     }
 
     public List<WebElementFacade> resolveAllFor(Actor actor) {
-        return TargetResolver.create(BrowseTheWeb.as(actor).getDriver(), this).findAll(getLocatorForPlatform(actor));
+        TargetResolver resolver = TargetResolver.create(BrowseTheWeb.as(actor).getDriver(), this);
+        if (timeout.isPresent()) {
+            return resolver.withTimeoutOf(timeout.get()).findAll(getLocatorForPlatform(actor));
+        } else {
+            return resolver.findAll(getLocatorForPlatform(actor));
+        }
+//        return TargetResolver.create(BrowseTheWeb.as(actor).getDriver(), this).findAll(getLocatorForPlatform(actor));
     }
 
     public XPathOrCssTarget of(String... parameters) {
@@ -71,7 +98,12 @@ public class ByTarget extends Target {
         throw new UnsupportedOperationException("The getCssOrXPathSelector() method is not supported for By-type Targets");
     }
 
+    @Override
+    public Target waitingForNoMoreThan(Duration timeout) {
+        return new ByTarget(targetElementName, locator, androidLocator, iosLocator, iFrame, Optional.ofNullable(timeout));
+    }
+
     public ByTarget called(String name) {
-        return new ByTarget(name, locator, iFrame);
+        return new ByTarget(targetElementName, locator, androidLocator, iosLocator, iFrame, timeout);
     }
 }

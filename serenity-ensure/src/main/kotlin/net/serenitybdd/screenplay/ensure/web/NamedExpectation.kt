@@ -1,24 +1,11 @@
 package net.serenitybdd.screenplay.ensure.web
 
 import net.serenitybdd.core.pages.WebElementFacade
-import net.serenitybdd.screenplay.Actor
-import net.serenitybdd.screenplay.ensure.KnowableValue
 import org.openqa.selenium.By
 
 class NamedExpectation<A>(val description: String, val predicate: (A) -> Boolean)
 
-class KnownWebElementValue<A>(val value: A?, val description: String) : KnowableValue<A> {
-    override fun invoke(actor: Actor): A? = value
-    override fun toString() = description
-}
-
 class TheMatchingElement {
-
-    fun textValueOf(element: WebElementFacade): KnowableValue<String?> {
-        return object : KnowableValue<String?> {
-            override fun invoke(actor: Actor): String? = element.text
-        }
-    }
 
     companion object {
         @JvmStatic

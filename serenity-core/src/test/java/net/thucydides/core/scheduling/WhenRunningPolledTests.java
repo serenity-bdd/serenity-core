@@ -238,7 +238,7 @@ public class WhenRunningPolledTests {
     }
 
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = TimeoutException.class)
     public void should_check_that_condition_is_a_boolean_function() {
         SlowPage page = new SlowPage(driver);
 

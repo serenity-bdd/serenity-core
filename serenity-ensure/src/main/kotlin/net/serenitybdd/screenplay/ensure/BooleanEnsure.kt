@@ -16,7 +16,8 @@ class BooleanEnsure(override val value: KnowableValue<Boolean?>) : CommonEnsure<
                 if (actual == null || actor == null) return false;
 
                 val resolvedValue = actual(actor)
-                return actual(actor) ?: false
+                BlackBox.logAssertion(resolvedValue,"true")
+                return resolvedValue ?: false
             })
 
     val IS_FALSE = expectThatActualIs("false",
@@ -24,6 +25,7 @@ class BooleanEnsure(override val value: KnowableValue<Boolean?>) : CommonEnsure<
                 if (actual == null || actor == null) return true;
 
                 val resolvedValue = actual(actor)
+                BlackBox.logAssertion(resolvedValue,"false")
                 return if (resolvedValue == null) true else !resolvedValue
             })
 }

@@ -143,9 +143,17 @@ class WhenUsingFluentAssertionsWithCollections {
             @Test
             fun `when the size is not what it should be`() {
                 shouldFailWithMessage("""|Expecting a collection that is of size: <10>
-                                         |But got...............................: <[red, green, blue]>"""
+                                         |But got...............................: <"a list with 3 elements containing [red, green, blue]">"""
                         .trimMargin())
                         .whenChecking(that(colors).hasSize(10))
+            }
+
+            @Test
+            fun `when the size is not what it should be and there is only one element`() {
+                shouldFailWithMessage("""|Expecting a collection that is of size greater than: <10>
+                                         |But got............................................: <"a list with 1 element containing [red]">"""
+                        .trimMargin())
+                        .whenChecking(that(listOf("red")).hasSizeGreaterThan(10))
             }
 
         }

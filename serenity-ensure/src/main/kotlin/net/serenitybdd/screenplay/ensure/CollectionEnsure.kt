@@ -5,25 +5,29 @@ import net.serenitybdd.screenplay.ensure.ElementQualifier.Companion.IS_ARE
 import net.serenitybdd.screenplay.ensure.GrammaticalNumber.PLURAL
 import net.serenitybdd.screenplay.ensure.GrammaticalNumber.SINGULAR
 import net.serenitybdd.screenplay.ensure.collections.CollectionsComparison
+import net.serenitybdd.screenplay.ensure.web.NamedExpectation
+import net.serenitybdd.screenplay.questions.NamedPredicate
 
-class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparator: Comparator<A>? = null) {
+class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, 
+                          private val targetDescription: String = "a collection",
+                          val comparator: Comparator<A>? = null) {
 
     constructor(value: Collection<A>?) : this(KnownValue<Collection<A>?>(value, value.toString()))
 
     /**
      * Verifies that the actual {@code Collection} is either an empty list or <code>null</code>
      */
-    fun isNullOrEmpty() = PerformablePredicate(value, nullOrEmptyList, isNegated(),"a collection")
+    fun isNullOrEmpty() = PerformablePredicate(value, nullOrEmptyList, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual {@code Collection} is an empty list
      */
-    fun isEmpty() = PerformablePredicate(value, emptyList, isNegated(),"a collection")
+    fun isEmpty() = PerformablePredicate(value, emptyList, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual {@code Collection} contains at least one element
      */
-    fun isNotEmpty() = PerformablePredicate(value, notAnEmptyList, isNegated(),"a collection")
+    fun isNotEmpty() = PerformablePredicate(value, notAnEmptyList, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual value is equal to the given one.
@@ -33,7 +37,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
      * actor.attemptsTo(Ensure.that(&quot;abc&quot;).isEqualTo(&quot;abc&quot;));
      * </code></pre>
      */
-    fun isEqualTo(expected: Collection<A>) = PerformableExpectation(value, isEqualTo, expected, isNegated(),"a collection")
+    fun isEqualTo(expected: Collection<A>) = PerformableExpectation(value, isEqualTo, expected, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual value is _not_ equal to the given one.
@@ -43,105 +47,105 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
      * actor.attemptsTo(Ensure.that(&quot;abc&quot;).isEqualTo(&quot;123&quot;));
      * </code></pre>
      */
-    fun isNotEqualTo(expected: Collection<A>) = PerformableExpectation(value, isNotEqualTo, expected, isNegated(),"a collection")
+    fun isNotEqualTo(expected: Collection<A>) = PerformableExpectation(value, isNotEqualTo, expected, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual value is {@code null}.
      * </code></pre>
      */
-    fun isNull() = PerformablePredicate(value, isNullList, isNegated(),"a collection")
+    fun isNull() = PerformablePredicate(value, isNullList, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual value is not {@code null}.
      */
-    fun isNotNull() = PerformablePredicate(value, isNotNullList, isNegated(),"a collection")
+    fun isNotNull() = PerformablePredicate(value, isNotNullList, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual {@code Collection} has the expected number of elements
      */
-    fun hasSize(expected: Int) = PerformableExpectation(value, hasSize, expected, isNegated(),"a collection")
+    fun hasSize(expected: Int) = PerformableExpectation(value, hasSize, expected, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual {@code Collection} has a size less than the given value.
      */
-    fun hasSizeLessThan(expected: Int) = PerformableExpectation(value, hasSizeLessThan, expected, isNegated(),"a collection")
+    fun hasSizeLessThan(expected: Int) = PerformableExpectation(value, hasSizeLessThan, expected, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual {@code Collection} has a size less than or equal to the given value.
      */
-    fun hasSizeLessThanOrEqualTo(expected: Int) = PerformableExpectation(value, hasSizeLessThanOrEqualTo, expected, isNegated(),"a collection")
+    fun hasSizeLessThanOrEqualTo(expected: Int) = PerformableExpectation(value, hasSizeLessThanOrEqualTo, expected, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual {@code Collection} has a size greater than the given value.
      */
-    fun hasSizeGreaterThan(expected: Int) = PerformableExpectation(value, hasSizeGreaterThan, expected, isNegated(),"a collection")
+    fun hasSizeGreaterThan(expected: Int) = PerformableExpectation(value, hasSizeGreaterThan, expected, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual {@code Collection} has has a size greater than the given value.
      */
-    fun hasSizeGreaterThanOrEqualTo(expected: Int) = PerformableExpectation(value, hasSizeGreaterThanOrEqualTo, expected, isNegated(),"a collection")
+    fun hasSizeGreaterThanOrEqualTo(expected: Int) = PerformableExpectation(value, hasSizeGreaterThanOrEqualTo, expected, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual {@code Collection} has a size between the given boundaries (inclusive)
      * using the {@code length()} method.
      * */
-    fun hasSizeBetween(startRange: Int, endRange: Int) = BiPerformableExpectation(value, hasSizeBetween, startRange, endRange, isNegated(),"a collection")
+    fun hasSizeBetween(startRange: Int, endRange: Int) = BiPerformableExpectation(value, hasSizeBetween, startRange, endRange, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual {@code Collection} has a size that is the same as a specified collection
      * using the {@code length()} method.
      * */
-    fun hasSameSizeAs(expected: Collection<A>) = PerformableExpectation(value, hasSameSizeAs, expected, isNegated(),"a collection")
+    fun hasSameSizeAs(expected: Collection<A>) = PerformableExpectation(value, hasSameSizeAs, expected, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual {@code Collection} contains the given elements
      */
-    fun contains(vararg expected: A) = PerformableExpectation(value, listContains, expected.toList(), isNegated(),"a collection")
+    fun contains(vararg expected: A) = PerformableExpectation(value, listContains, expected.toList(), isNegated(),targetDescription)
 
     /**
      * Verifies that the actual {@code Collection} contains the given elements
      */
-    fun containsAnyOf(vararg expected: A) = PerformableExpectation(value, listContainsAnyOf, expected.toList(), isNegated(),"a collection")
+    fun containsAnyOf(vararg expected: A) = PerformableExpectation(value, listContainsAnyOf, expected.toList(), isNegated(),targetDescription)
 
     /**
      * Verifies that the actual {@code Collection} contains the given elements
      */
-    fun containsAnyElementsOf(expected: Collection<A>) = PerformableExpectation(value, listContainsAnyOf, expected.toList(), isNegated(),"a collection")
+    fun containsAnyElementsOf(expected: Collection<A>) = PerformableExpectation(value, listContainsAnyOf, expected.toList(), isNegated(),targetDescription)
 
     /**
      * Verifies that the actual {@code Collection} contains the given elements
      */
-    fun containsElementsFrom(expected: Collection<A>) = PerformableExpectation(value, listContains, expected, isNegated(),"a collection")
+    fun containsElementsFrom(expected: Collection<A>) = PerformableExpectation(value, listContains, expected, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual group contains only the given values and nothing else, in any order and ignoring duplicates (i.e. once a value is found, its duplicates are also considered found).
      */
-    fun containsOnly(vararg expected: A) = PerformableExpectation(value, listContainsOnly, expected.toList(), isNegated(),"a collection")
+    fun containsOnly(vararg expected: A) = PerformableExpectation(value, listContainsOnly, expected.toList(), isNegated(),targetDescription)
 
     /**
      * Verifies that the actual group contains only the given values and nothing else, in any order and ignoring duplicates (i.e. once a value is found, its duplicates are also considered found).
      */
-    fun containsOnlyElementsFrom(expected: Collection<A>) = PerformableExpectation(value, listContainsOnly, expected, isNegated(),"a collection")
+    fun containsOnlyElementsFrom(expected: Collection<A>) = PerformableExpectation(value, listContainsOnly, expected, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual {@code Collection} does not contain the given elements
      */
-    fun doesNotContain(vararg expected: A) = PerformableExpectation(value, listDoesNotContains, expected.toList(), isNegated(),"a collection")
+    fun doesNotContain(vararg expected: A) = PerformableExpectation(value, listDoesNotContains, expected.toList(), isNegated(),targetDescription)
 
     /**
      * Verifies that the actual {@code Collection} does not contain the given elements
      */
-    fun doesNotContainElementsFrom(expected: Collection<A>) = PerformableExpectation(value, listDoesNotContains, expected, isNegated(),"a collection")
+    fun doesNotContainElementsFrom(expected: Collection<A>) = PerformableExpectation(value, listDoesNotContains, expected, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual {@code Collection} does not contain the given elements
      */
-    fun doesNotHaveDuplicates() = PerformablePredicate(value, listDoesNotContainDuplicates, isNegated(),"a collection")
+    fun doesNotHaveDuplicates() = PerformablePredicate(value, listDoesNotContainDuplicates, isNegated(),targetDescription)
 
     /**
      * Verifies that the actual group contains exactly the given values and nothing else, <b>in order</b>.<br>
      */
-    fun containsExactly(vararg expected: A) = PerformableExpectation(value, listContainsExactly, expected.toList(), isNegated(),"a collection")
+    fun containsExactly(vararg expected: A) = PerformableExpectation(value, listContainsExactly, expected.toList(), isNegated(),targetDescription)
 
     /**
      * Verifies that the actual group contains exactly the given values and nothing else, <b>in order</b>.<br>
@@ -207,8 +211,10 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             PerformablePredicate(value,
                     containsElementsThatAllMatch(predicateDescription, predicate),
                     isNegated(),
-                    "a collection")
+                    targetDescription)
 
+
+    fun allMatch(expectation: NamedExpectation<A>) = allMatch(expectation.description, expectation.predicate)
 
     /**
      * Verifies that at least one element in a collection matches a given predicate
@@ -220,7 +226,9 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             PerformablePredicate(value,
                     containsAtLeastOneElementThatMatches(predicateDescription, predicate),
                     isNegated(),
-                    "a collection")
+                    targetDescription)
+
+    fun anyMatch(expectation: NamedExpectation<A>) = anyMatch(expectation.description, expectation.predicate)
 
     /**
      * Verifies that at least _n_ elements in a collection that match a given predicate
@@ -237,8 +245,10 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
                         predicateDescription,
                         predicate),
                 isNegated(),
-                "a collection")
+                targetDescription)
     }
+
+    fun atLeast(n: Int, expectation: NamedExpectation<A>) = atLeast(n, expectation.description, expectation.predicate)
 
     /**
      * Verifies that no more than _n_ elements in a collection that match a given predicate
@@ -255,8 +265,10 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
                         predicateDescription,
                         predicate),
                 isNegated(),
-                "a collection")
+                targetDescription)
     }
+
+    fun noMoreThan(n: Int, expectation: NamedExpectation<A>) = noMoreThan(n, expectation.description, expectation.predicate)
 
     /**
      * Verifies that at no elements in a collection matches a given predicate
@@ -267,7 +279,9 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             PerformablePredicate(value,
                     containsNoElementsThatMatch(predicateDescription, predicate),
                     isNegated(),
-                    "a collection")
+                    targetDescription)
+
+    fun noneMatch(expectation: NamedExpectation<A>) = noneMatch(expectation.description, expectation.predicate)
 
 
     private var negated: Boolean = false
@@ -280,13 +294,14 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
     }
 
     fun usingComparator(comparator: Comparator<A>): CollectionEnsure<A> {
-        return CollectionEnsure(value, comparator)
+        return CollectionEnsure(value, targetDescription, comparator)
     }
 
     private val emptyList = expectThatActualIs("empty",
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?): Boolean {
                 if (actual == null) return true
                 val actualValue = actual(actor!!) ?: return true
+                BlackBox.logAssertion(actualValue, null)
                 return actualValue.isEmpty()
             }
     )
@@ -296,6 +311,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?): Boolean {
                 if (actual == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion(actualValue, null)
                 return actualValue.isNotEmpty()
             }
     )
@@ -309,7 +325,9 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
     private val isNotNullList = expectThatActualIs("not null",
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?): Boolean {
                 if (actual == null) return false
-                return actual(actor!!) != null
+                val actualValue = actual(actor!!)
+                BlackBox.logAssertion(actualValue, null)
+                return actualValue != null
             })
     private val isNullList = expectThatActualIs("null",
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?): Boolean { return (actual == null) || (actual(actor!!) == null) }
@@ -318,21 +336,27 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
     private val isEqualTo = expectThatActualIs("equal to",
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>): Boolean {
                 if (actual == null) return false
-                val actualValue = actual(actor!!) ?: return false
+                val actualValue = actual(actor!!)
+//                BlackBox.logAssertion(actualValue, expected)
                 return CollectionsComparison(comparator).areEqual(actualValue, expected)
             }
     )
     private val isNotEqualTo = expectThatActualIs("not equal to",
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>): Boolean {
                 if (actual == null) return false
-                return !CollectionsComparison(comparator).areEqual(actual(actor!!), expected)
+                val actualValue = actual(actor!!)
+                BlackBox.logAssertion(actualValue, expected)
+                return !CollectionsComparison(comparator).areEqual(actualValue, expected)
             }
     )
+
+    private fun plural(n : Int) = if (n == 1) "" else "s"
 
     private val hasSize = expectThatActualIs("of size",
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Int): Boolean {
                 if (actual == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion("a list with ${actualValue.size} element${plural(actualValue.size)} containing $actualValue", expected)
                 return actualValue.size == expected
             }
     )
@@ -341,6 +365,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Int): Boolean {
                 if (actual == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion("a list with ${actualValue.size} element${plural(actualValue.size)} containing $actualValue", expected)
                 return actualValue.size < expected
             }
     )
@@ -349,6 +374,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Int): Boolean {
                 if (actual == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion("a list with ${actualValue.size} element${plural(actualValue.size)} containing $actualValue", expected)
                 return actualValue.size <= expected
             }
     )
@@ -358,6 +384,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Int): Boolean {
                 if (actual == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion("a list with ${actualValue.size} element${plural(actualValue.size)} containing $actualValue", expected)
                 return actualValue.size > expected
             }
     )
@@ -366,6 +393,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Int): Boolean {
                 if (actual == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion("a list with ${actualValue.size} element${plural(actualValue.size)} containing $actualValue", expected)
                 return actualValue.size >= expected
             }
     )
@@ -374,6 +402,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, startRange: Int, endRange: Int): Boolean {
                 if (actual == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion("a list with ${actualValue.size} element${plural(actualValue.size)} containing $actualValue", null)
                 return actualValue.size in startRange..endRange
             })
 
@@ -381,6 +410,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
                 if (actual == null || expected == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion("a list with ${actualValue.size} element${plural(actualValue.size)} containing $actualValue", expected)
                 return actualValue.size == expected.size
             })
 
@@ -388,6 +418,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
                 if (actual == null || expected == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion(actualValue, expected)
                 return actualValue.containsAll(expected)
             })
 
@@ -395,6 +426,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
                 if (actual == null || expected == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion(actualValue, expected)
                 return !actualValue.containsAll(expected)
             })
 
@@ -402,6 +434,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
                 if (actual == null || expected == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion(actualValue, expected)
                 return actualValue.all { expected.contains(it) }
             })
 
@@ -409,6 +442,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
                 if (actual == null || expected == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion(actualValue, expected)
                 return (expected.find { actualValue.contains(it) } != null)
             })
 
@@ -416,6 +450,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
     private val listContainsExactly = expectThatActualIs("a list containing exactly", fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
         if (actual == null || expected == null) return false
         val actualValue = actual(actor!!) ?: return false
+        BlackBox.logAssertion(actualValue, expected)
         return (actualValue == expected)
     })
 
@@ -423,18 +458,21 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
                 if (actual == null || expected == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion(actualValue, expected)
                 return (actualValue.toSet() == expected.toSet())
             })
 
     private val listIsASubsetOf = expectThatActualIs("a list containing exactly", fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
         if (actual == null || expected == null) return false
         val actualValue = actual(actor!!) ?: return false
+        BlackBox.logAssertion(actualValue, expected)
         return (actualValue.all { element -> expected.contains(element) })
     })
 
     private val listDoesNotContainDuplicates = expectThatActualIs("a list containing duplicates", fun(actor: Actor?, actual: KnowableValue<Collection<A>>?): Boolean {
         if (actual == null) return false
         val actualValue = actual(actor!!) ?: return false
+        BlackBox.logAssertion(actualValue, null)
         return actualValue.toSet().size == actualValue.size
     })
 
@@ -442,6 +480,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
         if (actual == null || expected == null) return false
         val actualValue = actual(actor!!) ?: return false
         if (actualValue.size <= expected.size || expected.isEmpty()) return false
+        BlackBox.logAssertion(actualValue, expected)
         return sequencesAreIdenticalIn(actualValue, expected, 0, expected.size - 1)
     })
 
@@ -449,6 +488,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
         if (actual == null || expected == null) return false
         val actualValue = actual(actor!!) ?: return false
         if (actualValue.size <= expected.size || expected.isEmpty()) return false
+        BlackBox.logAssertion(actualValue, expected)
         val sequenceEnd = actualValue.size - 1
         val sequenceStart = sequenceEnd - expected.size + 1
         return sequencesAreIdenticalIn(actualValue, expected, sequenceStart, sequenceEnd)
@@ -472,6 +512,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?): Boolean {
                 if (actual == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion(actualValue, null)
                 return actualValue.all(predicate)
             },
             predicateDescription,
@@ -485,6 +526,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?): Boolean {
                 if (actual == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion(actualValue, null)
                 return actualValue.any(predicate)
             },
             predicateDescription,
@@ -498,6 +540,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?): Boolean {
                 if (actual == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion(actualValue, null)
                 return actualValue.none(predicate)
             },
             predicateDescription,
@@ -515,6 +558,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?): Boolean {
                 if (actual == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion(actualValue, null)
                 return actualValue.filter(predicate).size >= n
             },
             predicateDescription,
@@ -532,6 +576,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, val comparat
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?): Boolean {
                 if (actual == null) return false
                 val actualValue = actual(actor!!) ?: return false
+                BlackBox.logAssertion(actualValue, null)
                 return actualValue.filter(predicate).size <= n
             },
             predicateDescription,

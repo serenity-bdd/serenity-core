@@ -10,6 +10,13 @@ object BlackBox {
         flightLog.get().add(ResolvedAssertion(actualAsString, expectedAsString))
     }
 
+    fun logAssertionValues(actual: Any?, expected: Any?) {
+        val actualAsString = if (actual == null) "<null>" else actual.toString()
+        val expectedAsString = if (expected == null) "<null>" else expected.toString()
+
+        flightLog.get().add(ResolvedAssertion(actualAsString, expectedAsString))
+    }
+
     fun hasLastEntry() = flightLog.get().isNotEmpty()
     fun lastEntry() = flightLog.get().last()
     fun reset() { flightLog.get().clear() }

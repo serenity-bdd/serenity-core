@@ -21,6 +21,13 @@ fun that(value: PageObject) = PageObjectEnsure(value)
 fun that(value: Target) = TargetEnsure(value)
 fun that(value: By) = TargetEnsure(value)
 
+// Collection matchers
+fun thatTheSetOf(value: Target) = CollectionEnsure(KnowableCollectionTarget(value), "a collection of ${KnowableCollectionTarget(value)}")
+fun thatTheSetOf(value: By) = CollectionEnsure(KnowableCollectionTarget(value), "a collection of ${KnowableCollectionTarget(value)}")
+fun thatAmongst(value: Target) = CollectionEnsure(KnowableCollectionTarget(value), "a collection of ${KnowableCollectionTarget(value)}")
+fun thatAmongst(value: By) = CollectionEnsure(KnowableCollectionTarget(value), "a collection of ${KnowableCollectionTarget(value)}")
+
+
 private fun isAFailure(result: Boolean, isNegated: Boolean) = (!isNegated && !result || isNegated && result)
 
 class PerformableExpectation<A, E>(val actual: A?,

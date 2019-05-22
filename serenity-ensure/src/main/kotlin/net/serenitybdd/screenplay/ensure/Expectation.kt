@@ -118,10 +118,11 @@ private fun rangeDescription(expectation: String,
                              expectedDescription: String?): String {
     val expecedType = if (expectedDescription == null) expectedType(actual) else expectedDescription
     val expectedDescription = "Expecting $expecedType ${thatIsOrIsnt(isNegated)}$expectation ${expectedValue(startRange)} and ${expectedValue(endRange)}"
+    val actualAsText = if (BlackBox.hasLastEntry()) BlackBox.lastEntry().actual else actualValue(actual)
 
     return """
 $expectedDescription
-But got: ${actualValue(actual)}"""
+But got: $actualAsText"""
 }
 
 
@@ -129,10 +130,11 @@ private fun predicateDescription(expectation: String, negatedExpectation: String
     val expectedExpression = if (!isNegated) expectation else negatedExpectation
     val expectedType = if (expectedDescription == null) expectedType(actual) else expectedDescription
     val expectedAsString = "Expecting $expectedType that $expectedExpression"
+    val actualAsText = if (BlackBox.hasLastEntry()) BlackBox.lastEntry().actual else actualValue(actual)// else specifiedDesciptionOrDescriptionFromType(actualValue(actual), readableActualDescription)
 
     return """
 $expectedAsString
-But got: ${actualValue(actual)}"""
+But got: $actualAsText"""
 }
 
 private fun collectionPredicateDescription(expectation: String,
@@ -145,10 +147,11 @@ private fun collectionPredicateDescription(expectation: String,
     val qualifier = qualifier.resolve(number)
     val matchesOrDoesNotMatch = matchesOrDoesNotMatch(isNegated)
     val expected = "Expecting a collection that $matchesOrDoesNotMatch: $expectation $qualifier $predicateDescription"
+    val actualAsText = if (BlackBox.hasLastEntry()) BlackBox.lastEntry().actual else actualValue(actual)
 
     return """
 $expected
-But got: ${actualValue(actual)}"""
+But got: ${actualAsText}"""
 }
 
 fun expectedType(expected: Any?) = if (expected is Collection<*>) "a collection" else "a value"

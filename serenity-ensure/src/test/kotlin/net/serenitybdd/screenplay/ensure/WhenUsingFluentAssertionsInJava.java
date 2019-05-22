@@ -3,13 +3,13 @@ package net.serenitybdd.screenplay.ensure;
 import com.google.common.collect.ImmutableList;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
-import org.assertj.core.api.Assertions;
+import net.serenitybdd.screenplay.ensure.web.ElementsLocated;
+import net.serenitybdd.screenplay.ensure.web.TheMatchingElement;
 import org.junit.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;

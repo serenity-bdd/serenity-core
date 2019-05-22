@@ -1,7 +1,10 @@
 package net.serenitybdd.screenplay.ensure
 
+import net.serenitybdd.core.pages.WebElementFacade
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.Performable
+import net.serenitybdd.screenplay.targets.Target
+import org.openqa.selenium.By
 
 typealias KnowableValue<A> = (Actor) -> A?
 
@@ -9,6 +12,16 @@ class KnownValue<A>(val value: A?, val description: String) : KnowableValue<A> {
     override fun invoke(actor: Actor): A? = value
     override fun toString() = description
 }
+
+class KnowableCollectionTarget(val target: Target, val description: String = pluralFormOf(target.name)) : KnowableValue<List<WebElementFacade>?> {
+
+    constructor(locator: By) : this(Target.the(locator.toString()).located(locator))
+
+    override fun invoke(actor: Actor): List<WebElementFacade> = target.resolveAllFor(actor)
+    override fun toString() = description
+}
+
+fun pluralFormOf(targetName: String) = targetName.replace("web element ","web elements ")
 
 open class CommonEnsure<A, E>(open val value: KnowableValue<A>,
                               val expectedDescription: String = "a value") {

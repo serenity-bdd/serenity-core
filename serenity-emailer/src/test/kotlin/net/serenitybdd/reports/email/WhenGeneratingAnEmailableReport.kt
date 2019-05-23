@@ -59,6 +59,7 @@ class WhenGeneratingAnEmailableReport {
         }
     }
 
+
     @Nested
     inner class ReportWithCustomFields {
 
@@ -136,7 +137,7 @@ class WhenGeneratingAnEmailableReport {
         @Test
         fun `should list top most unstable features`() {
             val unstableFeatures = parsedReport.getElementsByClass("unstable-feature").map { element -> element.text() }
-            assertThat(unstableFeatures).containsExactly("Compromised scenarios", "Broken scenarios", "Failed scenarios", "Mixed scenarios")
+            assertThat(unstableFeatures).containsExactly("Failed scenarios", "Broken scenarios", "Compromised scenarios", "Mixed scenarios")
         }
     }
 
@@ -171,7 +172,7 @@ class WhenGeneratingAnEmailableReport {
         @Test
         fun `should list top most unstable features`() {
             val unstableFeatures = parsedReport.getElementsByClass("unstable-feature").map { element -> element.text() }
-            assertThat(unstableFeatures).containsExactly("Compromised scenarios", "Broken scenarios", "Failed scenarios", "Mixed scenarios")
+            assertThat(unstableFeatures).containsExactly("Failed scenarios", "Broken scenarios", "Compromised scenarios", "Mixed scenarios")
         }
 
         @Nested
@@ -192,7 +193,7 @@ class WhenGeneratingAnEmailableReport {
             @Test
             fun `should list no more than the configured number of errors or  unstable features`() {
                 val unstableFeatures = parsedReport.getElementsByClass("unstable-feature").map { element -> element.text() }
-                assertThat(unstableFeatures).containsExactly("Compromised scenarios", "Broken scenarios")
+                assertThat(unstableFeatures).containsExactly("Failed scenarios", "Broken scenarios")
             }
         }
     }

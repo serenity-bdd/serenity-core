@@ -28,7 +28,6 @@ class UnstableFeaturesBuilder(val testOutcomes: TestOutcomes) {
     }
 
     fun withMaxOf(maxEntries: Int): List<UnstableFeature> {
-        val failingTestCount = unsuccessfulOutcomesIn(testOutcomes.unsuccessfulTests)
         return testOutcomes.unsuccessfulTests.outcomes
                 .groupBy { outcome -> defaultStoryNameOr(outcome.userStory?.displayName) }
                 .map { (userStoryName, outcomes) ->

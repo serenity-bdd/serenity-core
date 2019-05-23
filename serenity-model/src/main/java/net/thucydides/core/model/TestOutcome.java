@@ -77,9 +77,6 @@ public class TestOutcome {
     private static final String ISSUES = "issues";
     private static final String NEW_LINE = System.getProperty("line.separator");
 
-    private ReportFormatter reportFormatter;
-
-
     /**
      * The name of the method implementing this test.
      */

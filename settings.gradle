@@ -18,5 +18,6 @@ include 'serenity-test-utils',
         'serenity-zalenium',
         'serenity-browserstack',
         'serenity-assertions',
-        'serenity-ensure'
-include 'serenity-reports-configuration'
+        'serenity-ensure',
+        'serenity-assertions',
+        'serenity-reports-configuration'

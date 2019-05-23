@@ -2,6 +2,7 @@ package net.serenitybdd.screenplay.actors;
 
 import com.google.common.base.Splitter;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Performable;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -31,8 +32,22 @@ public class OnStage {
         return stage().shineSpotlightOn(requiredActor);
     }
 
+    /**
+     * A shorter version of "theActorCalled()"
+     */
+    public static Actor theActor(String actorName) {
+        return theActorCalled(actorName);
+    }
+
     public static Actor theActorInTheSpotlight() {
         return stage().theActorInTheSpotlight();
+    }
+
+    /**
+     * A shorter version of "theActorInTheSpotlight().attemptsTo(...)"
+     */
+    public static void withCurrentActor(Performable... performTasks) {
+        theActorInTheSpotlight().attemptsTo(performTasks);
     }
 
     private static Stage stage() {

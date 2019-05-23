@@ -1364,6 +1364,7 @@ public enum ThucydidesSystemProperty {
     LEGACY_WAIT_FOR_TEXT,
 
     ENVIRONMENT,
+
     /**
      * The title to appear in the tag type table in the email reports
      */

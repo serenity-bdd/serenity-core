@@ -12,8 +12,8 @@ apply plugin: 'kotlin'
 
 
 ext {
-    bintrayPackage = 'serenity-emailer'
-    projectDescription = 'Serenity Email Report'
+    bintrayPackage = 'serenity-ensure'
+    projectDescription = 'Serenity Ensure'
 }
 
 test {
@@ -24,21 +24,13 @@ test {
 
 dependencies {
     compile project(':serenity-model')
-    compile project(':serenity-stats')
-    compile project(':serenity-reports')
+    compile project(':serenity-junit')
+    compile project(':serenity-screenplay')
+    compile project(':serenity-screenplay-webdriver')
+//    compile project(':serenity-screenplay-rest')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-
-    compile "org.thymeleaf:thymeleaf:${thymeleafVersion}"
-    compile "org.knowm.xchart:xchart:${xchartVersion}"
-    compile ('org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.1.RELEASE') {
-        exclude group: "org.thymeleaf", module:"thymeleaf"
-        exclude group: 'org.slf4j', module: 'slf4j-api'
-    }
-
-    // TEST DEPENDENCIES
-    testCompile project(':serenity-core')
-    testCompile "org.jsoup:jsoup:1.10.3"
+    compile "org.assertj:assertj-core:${assertjVersion}"
+//    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // JUnit 5
     testImplementation(

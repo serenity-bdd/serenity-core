@@ -1,6 +1,7 @@
 package net.serenitybdd.core.pages;
 
 import net.thucydides.core.pages.Pages;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.springframework.util.ReflectionUtils;
 
@@ -16,8 +17,8 @@ public class PagesAnnotedFieldTest {
 	private static final class TestDefault {
 
 		public Pages pages;
-
 	}
+
 
 	private static final class ExtendedPages extends Pages {
 		// nothing specific

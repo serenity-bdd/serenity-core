@@ -626,6 +626,19 @@ public class TestStep implements Cloneable {
         return startTime;
     }
 
+    public int getActualScreenshotCount() {
+        int screenshotCount = 0;
+        if(hasChildren()){
+            for(TestStep step:children){
+                screenshotCount +=  step.getActualScreenshotCount()+1;
+            }
+            if(hasScreenshots()) screenshotCount += 1;
+            return screenshotCount;
+        }else{
+            return getScreenshotCount() - 1;
+        }
+    }
+
     public int getScreenshotCount() {
         return screenshots.size();
     }

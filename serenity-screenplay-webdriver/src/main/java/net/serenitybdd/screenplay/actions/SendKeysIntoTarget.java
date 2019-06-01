@@ -8,7 +8,7 @@ public class SendKeysIntoTarget extends EnterValue {
 
     private Target target;
 
-    public SendKeysIntoTarget(String theText, Target target) {
+    public SendKeysIntoTarget(Target target, CharSequence... theText) {
         super(theText);
         this.target = target;
     }

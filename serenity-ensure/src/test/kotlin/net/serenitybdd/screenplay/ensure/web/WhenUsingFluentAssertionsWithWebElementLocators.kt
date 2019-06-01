@@ -269,6 +269,28 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
             }
 
             @Nested
+            inner class HasAnAttributeValue {
+
+                @Test
+                fun `for an input field`() {
+                    shouldPassWhenChecking(that(ElementLocated.by("#firstName")).attribute("title").isEqualTo("First Name"), wendy)
+                }
+
+                @Test
+                fun `when the field is not present`() {
+                    shouldFailWhenChecking(that(ElementLocated.by("#does-not-exist")).attribute("title").isEqualTo("Some value"), wendy)
+                }
+
+
+                @Test
+                fun `when the value does not match`() {
+                    shouldFailWithMessage("""|Expecting web element located by #firstName with Title attribute that is equal to: <"Wrong Value">
+                                             |But got..........................................................................: <"First Name">"""
+                            .trimMargin())
+                            .whenChecking(that(ElementLocated.by("#firstName")).attribute("Title").isEqualTo("Wrong Value"), wendy)
+                }
+            }
+            @Nested
             inner class HasASelectedValue {
 
                 @Test

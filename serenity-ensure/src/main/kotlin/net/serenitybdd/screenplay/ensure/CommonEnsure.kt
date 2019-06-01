@@ -1,30 +1,14 @@
 package net.serenitybdd.screenplay.ensure
 
-import net.serenitybdd.core.pages.WebElementFacade
+import net.serenitybdd.markers.CanBeSilent
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.Performable
-import net.serenitybdd.screenplay.targets.Target
-import org.openqa.selenium.By
+import java.time.LocalDate
 
-typealias KnowableValue<A> = (Actor) -> A?
-
-class KnownValue<A>(val value: A?, val description: String) : KnowableValue<A> {
-    override fun invoke(actor: Actor): A? = value
-    override fun toString() = description
-}
-
-class KnowableCollectionTarget(val target: Target, val description: String = pluralFormOf(target.name)) : KnowableValue<List<WebElementFacade>?> {
-
-    constructor(locator: By) : this(Target.the(locator.toString()).located(locator))
-
-    override fun invoke(actor: Actor): List<WebElementFacade> = target.resolveAllFor(actor)
-    override fun toString() = description
-}
-
-fun pluralFormOf(targetName: String) = targetName.replace("web element ","web elements ")
+fun pluralFormOf(targetName: String) = targetName.replace("web element ", "web elements ")
 
 open class CommonEnsure<A, E>(open val value: KnowableValue<A>,
-                              val expectedDescription: String = "a value") {
+                              val expectedDescription: String = "a value") : CanBeSilent {
 
     constructor(value: A) : this(KnownValue(value, value.toString()))
 
@@ -145,6 +129,23 @@ open class CommonEnsure<A, E>(open val value: KnowableValue<A>,
 
     fun isNegated() = negated
 
+    var silent = false
+
+    override fun isSilent() = silent
+
+    open fun silently(): CommonEnsure<A, E> {
+        silent = true
+        return this
+    }
+
+    fun asAString() = StringEnsure(KnowableStringValue(value, expectedDescription), expectedDescription)
+    fun asAnInteger() = ComparableEnsure(KnowableIntValue(value, expectedDescription), null, expectedDescription)
+    fun asADouble() = ComparableEnsure(KnowableDoubleValue(value, expectedDescription), null, expectedDescription)
+    fun asAFloat() = ComparableEnsure(KnowableFloatValue(value, expectedDescription), null, expectedDescription)
+    fun asABigDecimal() = ComparableEnsure(KnowableBigDecimalValue(value, expectedDescription), null, expectedDescription)
+    fun asADate() = DateEnsure(KnowableLocalDateValue(value, expectedDescription), naturalOrder<LocalDate>())
+    fun asABoolean() = BooleanEnsure(KnowableBooleanValue(value, expectedDescription))
+
     private val IS_EQUAL_TO = expectThatActualIs("equal to",
             fun(actor: Actor?, actual: KnowableValue<A>?, expected: E): Boolean {
                 if (actor == null || actual == null) return false;
@@ -164,8 +165,7 @@ open class CommonEnsure<A, E>(open val value: KnowableValue<A>,
                 return actual(actor) != expected
             })
 
-    private
-    val IS_NULL = expectThatActualIs("null", fun(actor: Actor?, actual: KnowableValue<A?>?): Boolean {
+    private val IS_NULL = expectThatActualIs("null", fun(actor: Actor?, actual: KnowableValue<A?>?): Boolean {
         if (actor == null || actual == null) return true
         val actualValue = actual(actor)
         BlackBox.logAssertion(actualValue, null)
@@ -173,16 +173,14 @@ open class CommonEnsure<A, E>(open val value: KnowableValue<A>,
         return actualValue == null
     })
 
-    private
-    val IS_NOT_NULL = expectThatActualIs("not null", fun(actor: Actor?, actual: KnowableValue<A?>?): Boolean {
+    private val IS_NOT_NULL = expectThatActualIs("not null", fun(actor: Actor?, actual: KnowableValue<A?>?): Boolean {
         if (actor == null || actual == null) return false
         val actualValue = actual(actor)
         BlackBox.logAssertion(actualValue, "not null")
         return actualValue != null
     })
 
-    private
-    val IS_IN = expectThatActualIs("in",
+    private val IS_IN = expectThatActualIs("in",
             fun(actor: Actor?, actual: KnowableValue<A>?, expected: List<A>): Boolean {
                 if (actor == null || actual == null) return false
                 val actualValue = actual(actor)
@@ -197,7 +195,7 @@ open class CommonEnsure<A, E>(open val value: KnowableValue<A>,
                 val actualValue = actual(actor)
                 BlackBox.logAssertion(actualValue, expected)
 
-                return  !expected.contains(actualValue)
+                return !expected.contains(actualValue)
             })
 
     private fun matchesPredicate(description: String) = expectThatActualIs("a match for",

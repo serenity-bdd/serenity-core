@@ -10,7 +10,6 @@ public class StepName {
 
     public static Optional<String> fromStepAnnotationIn(final Method testMethod) {
         Step step = testMethod.getAnnotation(Step.class);
-
         if ((step != null) && (!StringUtils.isEmpty(step.value()))) {
             return Optional.of(step.value());
         }

@@ -24,11 +24,11 @@ open class ComparableEnsure<A>(override val value: KnowableValue<Comparable<A>>,
      * actor.attemptsTo(Ensure.that(&quot;abc&quot;).isEqualTo(&quot;abc&quot;));
      * </code></pre>
      */
-    override fun isEqualTo(expected: A): PerformableExpectation<KnowableValue<Comparable<A>>, A> =
+    override fun isEqualTo(expected: A) =
             PerformableExpectation(value, IS_EQUAL_TO_USING_COMPARATORS, expected, isNegated(), expectedDescription)
 
-    override fun isNotEqualTo(expected: A): PerformableExpectation<KnowableValue<Comparable<A>>, A> =
-    PerformableExpectation(value, IS_NOT_EQUAL_TO_USING_COMPARATORS, expected, isNegated(), expectedDescription)
+    override fun isNotEqualTo(expected: A) =
+            PerformableExpectation(value, IS_NOT_EQUAL_TO_USING_COMPARATORS, expected, isNegated(), expectedDescription)
 
     /**
      * Verifies that the actual value is greater than the given one.
@@ -98,6 +98,8 @@ open class ComparableEnsure<A>(override val value: KnowableValue<Comparable<A>>,
 
     open fun hasValue(): ComparableEnsure<A> = this
     override fun not(): ComparableEnsure<A> = negate() as ComparableEnsure<A>
+    override fun silently(): ComparableEnsure<A> = silently() as ComparableEnsure<A>
+
     open fun usingComparator(comparator: Comparator<A>): ComparableEnsure<A> {
         return ComparableEnsure(value, comparator)
     }

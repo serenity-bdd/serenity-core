@@ -5,6 +5,7 @@ import net.serenitybdd.screenplay.ensure.CommonPreconditions.ensureActualAndExpe
 import net.serenitybdd.screenplay.ensure.CommonPreconditions.ensureActualNotNull
 import net.serenitybdd.screenplay.ensure.CommonPreconditions.ensureNoNullElementsIn
 import net.serenitybdd.screenplay.ensure.CommonPreconditions.ensureNotEmpty
+import net.serenitybdd.screenplay.targets.Target
 import org.assertj.core.internal.InputStreamsException
 import java.io.IOException
 import java.io.LineNumberReader
@@ -190,8 +191,11 @@ class StringEnsure(override val value: KnowableValue<String?>,
      */
     fun hasSameSizeAs(expected: CharSequence) = PerformableExpectation(value, HAS_SAME_SIZE, expected, isNegated(), expectedDescription)
 
+//    fun asInteger() = ComparableEnsure<Comparable<Int>>(intValue(value), expectedDescription)
+
     override fun hasValue(): StringEnsure = this
     override fun not(): StringEnsure = negate() as StringEnsure
+    override fun silently(): StringEnsure = silently() as StringEnsure
     override fun usingComparator(comparator: Comparator<String>): StringEnsure {
         return StringEnsure(value, comparator)
     }

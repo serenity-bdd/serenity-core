@@ -9,10 +9,10 @@ import java.util.List;
 
 public abstract class EnterValue implements Interaction {
 
-    protected final String theText;
+    protected final CharSequence[] theText;
     protected final List<Keys> followedByKeys;
 
-    public EnterValue(String theText) {
+    public EnterValue(CharSequence... theText) {
         this.theText = theText;
         this.followedByKeys = new ArrayList<>();
     }

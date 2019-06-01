@@ -19,7 +19,7 @@ object BlackBox {
 
     fun hasLastEntry() = flightLog.get().isNotEmpty()
     fun lastEntry() = flightLog.get().last()
-    fun reset() { flightLog.get().clear() }
+    @JvmStatic fun reset() { flightLog.get().clear() }
 
     private fun asString(value: Any) = if (value is String) "\"$value\"" else value.toString()
 }

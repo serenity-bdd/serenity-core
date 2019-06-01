@@ -16,9 +16,9 @@ public class SendKeysIntoBy extends EnterValue {
         return WebElementLocator.forLocators(locators).andActor(theUser);
     }
 
-    public SendKeysIntoBy(String theText, By... locators) {
+    public SendKeysIntoBy(List<By> locators, CharSequence... theText) {
         super(theText);
-        this.locators = NewList.copyOf(locators);
+        this.locators = locators;
     }
 
     @Step("{0} enters '#theText' into #locators")

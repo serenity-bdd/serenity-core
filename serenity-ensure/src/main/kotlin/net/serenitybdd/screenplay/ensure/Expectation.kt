@@ -1,6 +1,9 @@
 package net.serenitybdd.screenplay.ensure
 
 import net.serenitybdd.screenplay.Actor
+import net.thucydides.core.steps.ExecutedStepDescription
+import net.thucydides.core.steps.StepEventBus
+import java.time.LocalDate
 
 typealias BooleanPredicate<A> = (actor: Actor?, actual: A) -> Boolean
 typealias SingleValuePredicate<A, E> = (actor: Actor?, actual: A, expected: E) -> Boolean
@@ -31,13 +34,22 @@ class Expectation<A, E>(private val expectation: String,
                         private val negatedExpectation: String,
                         val predicate: SingleValuePredicate<A, E>,
                         private val readableExpectedValue: String? = null) {
-    fun describe(actual: A?, expected: E, isNegated: Boolean = false, expectedDescription: String?) =
-            comparisonDescription(expectation,
+
+    fun describe(expected: E?, isNegated: Boolean = false, expectedDescription: String?) =
+            expectationDescription(expectation,
+                    negatedExpectation,
+                    expected,
+                    isNegated,
+                    if (expectedDescription != null) expectedDescription else readableExpectedValue)
+
+    fun compareActualWithExpected(actual: A?, expected: E, isNegated: Boolean = false, expectedDescription: String?) =
+            compareExpectedWithActual(expectation,
                     negatedExpectation,
                     actual as Any?,
                     expected as Any?,
                     isNegated,
                     if (expectedDescription != null) expectedDescription else readableExpectedValue)
+
     fun apply(actual: A, expected: E, actor: Actor?) = predicate(actor, actual, expected)
 }
 
@@ -45,10 +57,19 @@ class Expectation<A, E>(private val expectation: String,
  * Models a value predicate with a description that takes no parameters
  */
 open class PredicateExpectation<A>(val expectation: String,
-                                   private val negatedExpression : String,
+                                   private val negatedExpression: String,
                                    val predicate: BooleanPredicate<A>,
                                    private val isNegated: Boolean = false) {
-    open fun describe(actual: A?, isNegated: Boolean = false, expectedDescription: String? = "a value") = predicateDescription(expectation, negatedExpression, actual as Any?, isNegated, expectedDescription)
+    open fun compareActualWithExpected(actual: A?, isNegated: Boolean = false, expectedDescription: String? = "a value") =
+            compareExpectedWithActual(expectation, negatedExpression, actual as Any?, isNegated, expectedDescription)
+
+    fun describe(isNegated: Boolean = false, expectedDescription: String?) =
+            predicateDescription(expectation,
+                    negatedExpression,
+                    isNegated,
+                    expectedDescription
+            )
+
     fun apply(actual: A, actor: Actor?) = if (isNegated) !predicate(actor, actual) else predicate(actor, actual)
 }
 
@@ -56,8 +77,8 @@ class CollectionPredicateExpectation<A>(expectation: String,
                                         private val predicateDescription: String,
                                         private val qualifier: ElementQualifier,
                                         predicate: BooleanPredicate<A>,
-                                        private val number: GrammaticalNumber) : PredicateExpectation<A>(expectation, "not $expectation",predicate) {
-    override fun describe(actual: A?, isNegated: Boolean, expectedDescription: String?) = collectionPredicateDescription(
+                                        private val number: GrammaticalNumber) : PredicateExpectation<A>(expectation, "not $expectation", predicate) {
+    override fun compareActualWithExpected(actual: A?, isNegated: Boolean, expectedDescription: String?) = collectionPredicateDescription(
             expectation,
             qualifier,
             predicateDescription,
@@ -70,22 +91,31 @@ class CollectionPredicateExpectation<A>(expectation: String,
  * Models a value predicate with a description that takes two parameters
  */
 class DoubleValueExpectation<A, E>(val expectation: String, val predicate: DoubleValuePredicate<A, E>) {
-    fun describe(actual: A,
-                 startRange: E,
-                 endRange: E,
-                 isNegated: Boolean,
-                 expectedDescription: String?) = rangeDescription(expectation,
+    fun compareActualWithExpected(actual: A,
+                                  startRange: E?,
+                                  endRange: E?,
+                                  isNegated: Boolean,
+                                  expectedDescription: String?) = rangeDescription(expectation,
             actual,
-            startRange as Any,
-            endRange as Any,
+            startRange as Any?,
+            endRange as Any?,
             isNegated,
             expectedDescription)
 
-    fun apply(actual: A, startRange: E, endRange: E, actor: Actor?) = predicate(actor, actual, startRange, endRange)
+    fun describeRange(startRange: E?,
+                 endRange: E?,
+                 isNegated: Boolean,
+                 expectedDescription: String?) = rangeDescription(expectation,
+            startRange as Any?,
+            endRange as Any?,
+            isNegated,
+            expectedDescription)
+
+    fun apply(actual: A, startRange: E?, endRange: E?, actor: Actor?) = predicate(actor, actual, startRange!!, endRange!!)
 }
 
 
-private fun comparisonDescription(expectation: String,
+private fun compareExpectedWithActual(expectation: String,
                                   negatedExpectation: String,
                                   actual: Any?,
                                   expected: Any?,
@@ -103,14 +133,27 @@ $expectedDescription: <$expectedValue>
 $butGot: <$actualAsText>"""
 }
 
-private fun specifiedDesciptionOrDescriptionFromType(actual: Any?, readableActualDescription: String?) : String {
+private fun expectationDescription(expectation: String,
+                                  negatedExpectation: String,
+                                  expected: Any?,
+                                  isNegated: Boolean,
+                                  readableExpectedValue: String?): String {
+    val expectedAsText = specifiedDesciptionOrDescriptionFromType(expected, readableExpectedValue)
+    val expressionAsText = if (isNegated) negatedExpectation else expectation
+    val expectedDescription = "$expectedAsText that $expressionAsText"
+    val expectedValue = expectedValue(expected)
+
+    return """$expectedDescription: <$expectedValue>"""
+}
+
+private fun specifiedDesciptionOrDescriptionFromType(actual: Any?, readableActualDescription: String?): String {
     if (readableActualDescription != null) return readableActualDescription else return expectedType(actual)
 }
 
 private fun rangeDescription(expectation: String,
                              actual: Any?,
-                             startRange: Any,
-                             endRange: Any,
+                             startRange: Any?,
+                             endRange: Any?,
                              isNegated: Boolean,
                              expectedDescription: String?): String {
     val expecedType = if (expectedDescription == null) expectedType(actual) else expectedDescription
@@ -122,8 +165,16 @@ $expectedAsText
 But got: $actualAsText"""
 }
 
+private fun rangeDescription(expectation: String,
+                             startRange: Any?,
+                             endRange: Any?,
+                             isNegated: Boolean,
+                             expectedDescription: String?): String {
+    val expecedType = if (expectedDescription == null) "a value" else expectedDescription
+    return "$expecedType ${thatIsOrIsnt(isNegated)}$expectation ${expectedValue(startRange)} and ${expectedValue(endRange)}"
+}
 
-private fun predicateDescription(expectation: String, negatedExpectation: String, actual: Any?, isNegated: Boolean, expectedDescription: String? = "value"): String {
+private fun compareExpectedWithActual(expectation: String, negatedExpectation: String, actual: Any?, isNegated: Boolean, expectedDescription: String? = "value"): String {
     val expectedExpression = if (!isNegated) expectation else negatedExpectation
     val expectedType = if (expectedDescription == null) expectedType(actual) else expectedDescription
     val expectedAsString = "Expecting $expectedType that $expectedExpression"
@@ -132,6 +183,12 @@ private fun predicateDescription(expectation: String, negatedExpectation: String
     return """
 $expectedAsString
 But got: $actualAsText"""
+}
+
+private fun predicateDescription(expectation: String, negatedExpectation: String, isNegated: Boolean, expectedDescription: String? = "value"): String {
+    val expectedExpression = if (!isNegated) expectation else negatedExpectation
+    val expectedType = if (expectedDescription == null) "a value" else expectedDescription
+    return "$expectedType that $expectedExpression"
 }
 
 private fun collectionPredicateDescription(expectation: String,

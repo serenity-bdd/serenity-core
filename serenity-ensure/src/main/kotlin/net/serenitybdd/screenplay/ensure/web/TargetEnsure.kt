@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.ensure.web
 
+import net.serenitybdd.core.pages.WebElementFacade
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.ensure.*
 import net.serenitybdd.screenplay.targets.Target
@@ -8,7 +9,6 @@ import org.openqa.selenium.By
 class TargetEnsure(val value: Target, val targetDescription: String = value.toString()) {
 
     constructor(byLocator: By) : this(Target.the(byLocator.toString()).located(byLocator))
-    constructor(xPathOrCssExpression: String) : this(Target.the(xPathOrCssExpression).locatedBy(xPathOrCssExpression))
 
     private var negated = false
 
@@ -37,27 +37,48 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
     /**
      * Verifies the text value of the specified element
      */
-    fun text(): StringEnsure = StringEnsure(textValueOf(value), targetDescription + " with text value")
+    fun text(): StringEnsure = StringEnsure(textValueOf(value), "$targetDescription with text value")
+
+    /**
+     * Verifies the text value of the specified element
+     */
+    fun textValues(): CollectionEnsure<String> = CollectionEnsure(textValuesOf(value), "$targetDescription with text values")
 
     /**
      * Verifies the text content of the specified element
      */
-    fun textContent(): StringEnsure = StringEnsure(textValueOf(value), targetDescription + " with text content")
+    fun textContent(): StringEnsure = StringEnsure(textValueOf(value), "$targetDescription with text content")
 
     /**
      * Verifies the value attribute of an element
      */
-    fun value(): StringEnsure = StringEnsure(valueOf(value), targetDescription + " with value")
+    fun value(): StringEnsure = StringEnsure(valueOf(value), "$targetDescription with value")
+
+    /**
+     * Verifies the value attributes of all matching elements
+     */
+    fun values(): CollectionEnsure<String> = CollectionEnsure(valuesOf(value), "$targetDescription with values")
+
+    /**
+     * Verifies the value attribute of an element
+     */
+    fun attribute(attributeName: String): StringEnsure = StringEnsure(attributeValueOf(attributeName, value), "$targetDescription with $attributeName attribute")
+
+    /**
+     * Verifies the value attribute of an element
+     */
+    fun attributeValues(attributeName: String): CollectionEnsure<String> =
+            CollectionEnsure(attributeValuesOf(attributeName, value), "$targetDescription with $attributeName attribute values")
 
     /**
      * Verifies the selected value attribute of a dropdown list
      */
-    fun selectedValue(): StringEnsure = StringEnsure(selectedValueOf(value), targetDescription + " with selected value")
+    fun selectedValue(): StringEnsure = StringEnsure(selectedValueOf(value), "$targetDescription with selected value")
 
     /**
      * Verifies the selected value attribute of a dropdown list
      */
-    fun selectedVisibleText(): StringEnsure = StringEnsure(selectedVisibleTextOf(value), targetDescription + " with selected visible text")
+    fun selectedVisibleText(): StringEnsure = StringEnsure(selectedVisibleTextOf(value), "$targetDescription with selected visible text")
 
     /**
      * Verifies that the element has a given CSS class
@@ -82,10 +103,34 @@ class TargetEnsure(val value: Target, val targetDescription: String = value.toSt
                 return target.resolveFor(actor).text
             }
 
+    private fun textValuesOf(target: Target): KnowableValue<List<String>?> =
+            fun(actor: Actor?): List<String> {
+                if (actor == null) return emptyList()
+                return target.resolveAllFor(actor).map { it.text }
+            }
+
     private fun valueOf(target: Target): KnowableValue<String> =
             fun(actor: Actor?): String {
                 if (actor == null) return ""
                 return target.resolveFor(actor).value
+            }
+
+    private fun valuesOf(target: Target): KnowableValue<List<String>?> =
+            fun(actor: Actor?): List<String> {
+                if (actor == null) return emptyList()
+                return target.resolveAllFor(actor).map { it.value }
+            }
+
+    private fun attributeValueOf(attributeName: String, target: Target): KnowableValue<String> =
+            fun(actor: Actor?): String {
+                if (actor == null) return ""
+                return target.resolveFor(actor).getAttribute(attributeName)
+            }
+
+    private fun attributeValuesOf(attributeName: String, target: Target): KnowableValue<List<String>?> =
+            fun(actor: Actor?): List<String> {
+                if (actor == null) return emptyList()
+                return target.resolveAllFor(actor).map { it.getAttribute(attributeName) }
             }
 
     private fun selectedValueOf(target: Target): KnowableValue<String> =

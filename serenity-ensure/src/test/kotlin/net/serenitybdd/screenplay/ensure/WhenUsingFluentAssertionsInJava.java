@@ -3,6 +3,8 @@ package net.serenitybdd.screenplay.ensure;
 import com.google.common.collect.ImmutableList;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Question;
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.ensure.web.ElementsLocated;
 import net.serenitybdd.screenplay.ensure.web.TheMatchingElement;
 import org.junit.Test;
@@ -10,7 +12,9 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -126,6 +130,15 @@ public class WhenUsingFluentAssertionsInJava {
     }
 
     @Test
+    public void weCanCompareBooleansAsStrings() {
+        Actor aster = Actor.named("Aster");
+
+        aster.attemptsTo(
+                Ensure.that("true").asABoolean().isTrue(),
+                Ensure.that("false").asABoolean().isFalse()
+        );
+    }
+
     public void weCanCompareBooleans() {
         Actor aster = Actor.named("Aster");
 
@@ -134,6 +147,7 @@ public class WhenUsingFluentAssertionsInJava {
                 Ensure.that(false).isFalse()
         );
     }
+
 
     @Test
     public void weCanCompareDoubles() {
@@ -170,6 +184,118 @@ public class WhenUsingFluentAssertionsInJava {
 
         aster.attemptsTo(
                 Ensure.that(colors).allMatch("4 characters long", it -> it.length() == 4)
+        );
+    }
+
+
+    @Test
+    public void weCanMakeAssertionsAboutQuestionsAboutTextValues() {
+        Actor aster = Actor.named("Aster");
+
+        aster.attemptsTo(
+                Ensure.thatTheAnswerTo("the color red", colorRed()).asAString().isEqualTo("RED")
+        );
+    }
+
+    @Test
+    public void weCanMakeAssertionsAboutQuestionsAboutEnums() {
+        Actor aster = Actor.named("Aster");
+
+        aster.attemptsTo(
+                Ensure.thatTheAnswerTo(statusOf("some-todo-item")).isEqualTo(TodoStatus.COMPLETED)
+        );
+    }
+
+    @Test
+    public void weCanMakeAssertionsAboutQuestionsAboutNumbers() {
+        Actor aster = Actor.named("Aster");
+
+        aster.attemptsTo(
+                Ensure.thatTheAnswerTo("the count", countOf("some-todo-item")).isEqualTo(1)
+        );
+    }
+
+    @Test
+    public void weCanMakeAssertionsAboutQuestionsAboutCollections() {
+        Actor aster = Actor.named("Aster");
+
+        aster.attemptsTo(
+                Ensure.thatTheAnswersTo(colors()).contains("red")
+        );
+    }
+
+    @Test
+    public void weCanMakeAssertionsAboutQuestionsAboutBooleans() {
+        Actor aster = Actor.named("Aster");
+
+        aster.attemptsTo(
+                Ensure.thatTheAnswerTo("the boolean", booleanEquivalentOf("true")).asABoolean().isTrue()
+        );
+    }
+
+    @Test
+    public void weCanMakeAssertionsAboutQuestionsAboutBooleanStrings() {
+        Actor aster = Actor.named("Aster");
+
+        aster.attemptsTo(
+                Ensure.thatTheAnswerTo("the boolean", stringBooleanEquivalentOf("true")).asABoolean().isTrue()
+        );
+    }
+
+    @Test
+    public void weCanMakeAssertionsAboutQuestionsAboutDate() {
+        Actor aster = Actor.named("Aster");
+
+        LocalDate firstOfJanuary = LocalDate.of(2000,1,1);
+        LocalDate secondOfJanuary = LocalDate.of(2000,1,2);
+
+        aster.attemptsTo(
+                Ensure.thatTheAnswerTo("January 1st 2000", firstOfJanuary2000()).asADate().isBefore(secondOfJanuary),
+                Ensure.thatTheAnswerTo("January 1st 2000", firstOfJanuary2000()).asADate().not().isBefore(firstOfJanuary)
+        );
+    }
+
+    enum TodoStatus {COMPLETED, TODO}
+
+    Question<TodoStatus> statusOf(String todoItem) {
+        return Question.about("todo status").answeredBy(
+                actor -> TodoStatus.COMPLETED
+        );
+    }
+
+    public Question<Integer> countOf(String todoItem) {
+        return Question.about("todo status").answeredBy(
+                actor -> 1
+        );
+    }
+
+    public Question<Boolean> booleanEquivalentOf(String todoItem) {
+        return Question.about("a boolean value").answeredBy(
+                actor -> Boolean.valueOf(todoItem)
+        );
+    }
+
+    public Question<String> stringBooleanEquivalentOf(String todoItem) {
+        return Question.about("a boolean value").answeredBy(
+                actor -> todoItem
+        );
+    }
+
+    Question<String> colorRed() {
+        return Question.about("color red").answeredBy(
+                actor -> "RED"
+        );
+    }
+
+    Question<Collection<String>> colors() {
+        return Question.about("colors").answeredBy(
+                actor -> Arrays.asList("red","green","blue")
+        );
+    }
+
+    Question<LocalDate> firstOfJanuary2000() {
+        return Question.about("first of January").answeredBy(
+                actor -> LocalDate.of(2000,1,1)
         );
     }
 

@@ -1,5 +1,6 @@
 package net.serenitybdd.screenplay.ensure
 
+import net.serenitybdd.markers.CanBeSilent
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.ensure.ElementQualifier.Companion.IS_ARE
 import net.serenitybdd.screenplay.ensure.GrammaticalNumber.PLURAL
@@ -7,9 +8,9 @@ import net.serenitybdd.screenplay.ensure.GrammaticalNumber.SINGULAR
 import net.serenitybdd.screenplay.ensure.collections.CollectionsComparison
 import net.serenitybdd.screenplay.ensure.web.NamedExpectation
 
-class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>, 
+class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>,
                           private val targetDescription: String = "a collection",
-                          val comparator: Comparator<A>? = null) {
+                          val comparator: Comparator<A>? = null) : CanBeSilent {
 
     constructor(value: Collection<A>?) : this(KnownValue<Collection<A>?>(value, value.toString()))
 
@@ -289,6 +290,15 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>,
 
     fun not(): CollectionEnsure<A> {
         negated = !negated
+        return this
+    }
+
+    var silent = false
+
+    override fun isSilent() = silent
+
+    open fun silently(): CollectionEnsure<A> {
+        silent = true
         return this
     }
 

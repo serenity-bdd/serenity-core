@@ -339,6 +339,7 @@
                         <@write_step step=nestedStep step_number=""/>
                     </#list>
                     <#assign level = level-1>
+                    <#assign screenshotCount = screenshotCount +1>
 
                     <#if level == 1>
                     </table>
@@ -483,13 +484,18 @@
                             </#if>
 
                             <#if step.latestScreenshot?has_content>
-                                <a href="${relativeLink!}${testOutcome.screenshotReportName}.html#screenshots?screenshot=${screenshotCount}">
+                                <#assign actualScreenshotCount = screenshotCount + step.actualScreenshotCount />
+                                <a href="${relativeLink!}${testOutcome.screenshotReportName}.html#screenshots?screenshot=${actualScreenshotCount}">
                                     <img src="${step.latestScreenshot.filename}"
                                          href="${step.latestScreenshot.filename}"
                                          class="screenshot"
                                          width="48" height="48"/>
-                                    <#assign screenshotCount = screenshotCount + step.screenshotCount />
                                 </a>
+                                <#if step.hasChildren()>
+                                    <#assign screenshotCount = screenshotCount + 1 />
+                                <#else>
+                                    <#assign screenshotCount = screenshotCount + step.screenshotCount />
+                                </#if>
                             </#if>
                         </td>
                     </#if>

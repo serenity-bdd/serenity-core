@@ -102,14 +102,27 @@ public class RenderCucumber {
     private static String renderedDataTable(DataTable dataTable) {
         StringBuffer renderedTable = new StringBuffer();
         renderedTable.append("  ").append(System.lineSeparator());
-        TableRow header = dataTable.getRows().get(0);
-        addRow(renderedTable, header.getCells());
-        addSeparatorCells(renderedTable, header.getCells().size());
 
-        for (int row = 1; row < dataTable.getRows().size(); row++) {
+        int firstRow = 0;
+
+        TableRow header = dataTable.getRows().get(0);
+
+        if (thereAreMultipleColumnsIn(dataTable)) {
+            addRow(renderedTable, header.getCells());
+            addSeparatorCells(renderedTable, header.getCells().size());
+            firstRow++;
+      } else {
+            addSeparatorCells(renderedTable, header.getCells().size());
+        }
+
+        for (int row = firstRow; row < dataTable.getRows().size(); row++) {
             addRow(renderedTable, dataTable.getRows().get(row).getCells());
         }
         return renderedTable.toString();
+    }
+
+    private static boolean thereAreMultipleColumnsIn(DataTable dataTable) {
+        return dataTable.getRows().get(0).getCells().size() > 1;
     }
 
     private static void addSeparatorCells(StringBuffer renderedTable, int columnCount) {

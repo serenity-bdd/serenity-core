@@ -1357,6 +1357,11 @@ public enum ThucydidesSystemProperty {
     WEBDRIVER_CREATION_RETRY_MAX_TIME,
 
     /**
+     * If set to true, the name of the actor will appear in "should" statements for Screenplay tests.
+     */
+    SERENITY_INCLUDE_ACTOR_NAME_IN_CONSEQUENCES,
+
+    /**
      * Wait for an element to be visible and fail if the element is not visible.
      * By default, this behaviour is deactivated as of version 2.0.49, and the behaviour of getText()
      * replicates the standard Selenium behavior of returning an empty string if an element is not visible.

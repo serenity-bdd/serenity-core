@@ -313,7 +313,7 @@ public class Actor implements PerformsTasks, SkipNested {
 
         ConsequenceCheckReporter reporter = new ConsequenceCheckReporter(eventBusInterface, consequence);
         try {
-            reporter.startQuestion();
+            reporter.startQuestion(this);
             if (eventBusInterface.shouldIgnoreConsequences()) {
                 reporter.reportStepIgnored();
             } else {

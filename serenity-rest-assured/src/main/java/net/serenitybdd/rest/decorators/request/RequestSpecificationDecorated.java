@@ -2,6 +2,7 @@ package net.serenitybdd.rest.decorators.request;
 
 import io.restassured.authentication.AuthenticationScheme;
 import io.restassured.filter.*;
+import io.restassured.http.Method;
 import io.restassured.internal.*;
 import io.restassured.response.*;
 import io.restassured.specification.*;
@@ -39,6 +40,8 @@ public abstract class RequestSpecificationDecorated
         return get("");
     }
 
+
+
     @Override
     public Response get(URL url) {
         return get(notNull(url, "URL").toString());
@@ -47,6 +50,33 @@ public abstract class RequestSpecificationDecorated
     @Override
     public Response get(String path, Object... pathParams) {
         return execute(GET, path, pathParams);
+    }
+
+    @Override
+    public Response request(String method, URI uri) {
+        return execute(RestMethod.valueOf(method), uri.getPath());
+    }
+
+    @Override
+    public Response request(String method, URL url) {
+        return execute(RestMethod.valueOf(method), url.getPath());
+    }
+
+    public Response request(RestMethod method, String path, Object... pathParams) {
+        return execute(method, path, pathParams);
+    }
+
+    @Override
+    public Response request(String method, String path, Object... pathParams) {
+        return execute(RestMethod.valueOf(method), path, pathParams);
+    }
+
+    public Response request(RestMethod method, URI uri) {
+        return execute(method, uri.getPath());
+    }
+
+    public Response request(RestMethod method, URL url) {
+        return execute(method, url.getPath());
     }
 
     @Override

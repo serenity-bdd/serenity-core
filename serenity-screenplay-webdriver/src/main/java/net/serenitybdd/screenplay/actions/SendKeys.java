@@ -21,7 +21,7 @@ public class SendKeys {
     }
 
     public EnterValue into(String cssOrXpathForElement) {
-        return instrumented(SendKeysIntoTarget.class, theText, Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement));
+        return instrumented(SendKeysIntoTarget.class, Target.the(cssOrXpathForElement).locatedBy(cssOrXpathForElement), theText);
     }
 
     public EnterValue into(Target target) {

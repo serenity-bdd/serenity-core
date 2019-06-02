@@ -13,7 +13,7 @@ public class SendKeystoElement extends EnterValue {
         this.element = element;
     }
 
-    @Step("{0} enters '#theText' into #element")
+    @Step("{0} enters #theTextAsAString into #element")
     public <T extends Actor> void performAs(T theUser) {
         element.sendKeys(theText);
         if (getFollowedByKeys().length > 0) {

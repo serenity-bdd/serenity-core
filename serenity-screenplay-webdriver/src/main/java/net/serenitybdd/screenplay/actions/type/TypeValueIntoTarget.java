@@ -8,12 +8,12 @@ public class TypeValueIntoTarget extends TypeValue {
 
     private Target target;
 
-    public TypeValueIntoTarget(String theText, Target target) {
+    public TypeValueIntoTarget(Target target, CharSequence... theText) {
         super(theText);
         this.target = target;
     }
 
-    @Step("{0} enters '#theText' into #target")
+    @Step("{0} enters #theTextAsAString into #target")
     public <T extends Actor> void performAs(T theUser) {
         target.resolveFor(theUser).sendKeys(theText);
         if(getFollowedByKeys().length!=0) {        

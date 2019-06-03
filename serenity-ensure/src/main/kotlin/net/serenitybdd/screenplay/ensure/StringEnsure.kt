@@ -285,7 +285,7 @@ class StringEnsure(override val value: KnowableValue<String?>,
                 }
         )
 
-        private val IS_UPPER_CASE = expectThatActualIs("in uppercase",
+        private val IS_UPPER_CASE = expectThatActualIs("uppercase",
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
                     if (actor == null || actual == null) return false
 
@@ -297,7 +297,7 @@ class StringEnsure(override val value: KnowableValue<String?>,
                 }
         )
 
-        private val IS_LOWER_CASE = expectThatActualIs("in lowercase",
+        private val IS_LOWER_CASE = expectThatActualIs("lowercase",
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
                     if (actor == null || actual == null) return true
 
@@ -382,7 +382,8 @@ class StringEnsure(override val value: KnowableValue<String?>,
                 })
 
 
-        private val CONTAINS_WHITESPACES = expectThatActualIs("containing whitespaces",
+        private val CONTAINS_WHITESPACES =
+                expectThatActualIs("contains whitespaces","contains no whitespaces",
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
 
                     if (actor == null || actual == null) return true
@@ -394,62 +395,62 @@ class StringEnsure(override val value: KnowableValue<String?>,
                     return actualValue.isNotEmpty() && actualValue.chars().anyMatch(Character::isWhitespace)
                 })
 
-        private val CONTAINS_ONLY_WHITESPACES = expectThatActualIs("containing only whitespaces",
+        private val CONTAINS_ONLY_WHITESPACES = expectThatActualIs("contains only whitespaces","does not contain only whitespaces",
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
                     if (actor == null || actual == null) return true
 
                     val actualValue = actual(actor)
-                    BlackBox.logAssertion(actualValue,"containing only whitespaces")
+                    BlackBox.logAssertion(actualValue,"contains only whitespaces")
                     if (actualValue == null) { return false }
 
                     return actualValue.isNotEmpty() && actualValue.chars().allMatch(Character::isWhitespace)
                 })
 
-        private val CONTAINS_NO_WHITESPACES = expectThatActualIs("without any whitespaces",
+        private val CONTAINS_NO_WHITESPACES = expectThatActualIs("contains no whitespace"," contains whitespace",
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
                     if (actor == null || actual == null) return true
 
                     val actualValue = actual(actor)
-                    BlackBox.logAssertion(actualValue,"without any whitespaces")
+                    BlackBox.logAssertion(actualValue,"contains no whitespace")
                     if (actualValue == null) { return false }
 
                     return actualValue.chars().noneMatch(Character::isWhitespace)
                 })
 
-        private val CONTAINS_ONLY_DIGITS = expectThatActualIs("containing only digits",
+        private val CONTAINS_ONLY_DIGITS = expectThatActualIs("contains only digits", "does not contain only digits",
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
                     if (actor == null || actual == null) return true
 
                     val actualValue = actual(actor)
-                    BlackBox.logAssertion(actualValue,"containing only digits")
+                    BlackBox.logAssertion(actualValue,"contains only digits")
                     if (actualValue == null) { return false }
 
                     return actualValue.isNotEmpty() && actualValue.chars().allMatch(Character::isDigit)
                 })
 
-        private val CONTAINS_ONLY_LETTERS = expectThatActualIs("containing only letters",
+        private val CONTAINS_ONLY_LETTERS = expectThatActualIs("contains only letters","does not contain only letters",
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
                     if (actor == null || actual == null) return true
 
                     val actualValue = actual(actor)
-                    BlackBox.logAssertion(actualValue,"containing only letters")
+                    BlackBox.logAssertion(actualValue,"contains only letters")
                     if (actualValue == null) { return false }
 
                     return actualValue.isNotEmpty() && actualValue.chars().allMatch(Character::isLetter)
                 })
 
-        private val CONTAINS_ONLY_LETTERS_OR_DIGITS = expectThatActualIs("containing only letters or digits",
+        private val CONTAINS_ONLY_LETTERS_OR_DIGITS = expectThatActualIs("contains only letters or digits","contains characters other than letters and digits",
                 fun(actor: Actor?, actual: KnowableValue<String>?): Boolean {
                     if (actor == null || actual == null) return true
 
                     val actualValue = actual(actor)
-                    BlackBox.logAssertion(actualValue,"containing only letters or digits")
+                    BlackBox.logAssertion(actualValue,"contains only letters or digits")
                     if (actualValue == null) { return false }
 
                     return actualValue.isNotEmpty() && actualValue.chars().allMatch(Character::isLetterOrDigit)
                 })
 
-        private val HAS_SIZE = expectThatActualIs("of size",
+        private val HAS_SIZE = expectThatActualIs("has size", "does not have size",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expected: Int): Boolean {
                     if (actual == null) return false
                     val actualValue = resolveActual(actual, actor, expected) ?: return false
@@ -457,35 +458,35 @@ class StringEnsure(override val value: KnowableValue<String?>,
                     return actualValue.length == expected
                 })
 
-        private val HAS_SIZE_LESS_THAN = expectThatActualIs("of size less than",
+        private val HAS_SIZE_LESS_THAN = expectThatActualIs("has size less than", "has size greater than or equal to",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expected: Int): Boolean {
                     if (actual == null) return false
                     val actualValue = resolveActual(actual, actor, expected) ?: return false
                     return actualValue.length < expected
                 })
 
-        private val HAS_SIZE_LESS_THAN_OR_EQUAL_TO = expectThatActualIs("of size less than or equal to",
+        private val HAS_SIZE_LESS_THAN_OR_EQUAL_TO = expectThatActualIs("has size less than or equal to","has size greater than",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expected: Int): Boolean {
                     if (actual == null) return false
                     val actualValue = resolveActual(actual, actor, expected) ?: return false
                     return actualValue.length <= expected
                 })
 
-        private val HAS_SIZE_GREATER_THAN = expectThatActualIs("of size greater than",
+        private val HAS_SIZE_GREATER_THAN = expectThatActualIs("has size greater than", "has size less than or equal to",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expected: Int): Boolean {
                     if (actual == null) return false
                     val actualValue = resolveActual(actual, actor, expected) ?: return false
                     return actualValue.length > expected
                 })
 
-        private val HAS_SIZE_GREATER_THAN_OR_EQUAL_TO = expectThatActualIs("of size greater than or equal to",
+        private val HAS_SIZE_GREATER_THAN_OR_EQUAL_TO = expectThatActualIs("has size greater than or equal to","has size less than",
                 fun(actor: Actor?, actual: KnowableValue<String>?, expected: Int): Boolean {
                     if (actual == null) return false
                     val actualValue = resolveActual(actual, actor, expected) ?: return false
                     return actualValue.length >= expected
                 })
 
-        private val HAS_SIZE_BETWEEN = expectThatActualIs("of size of between",
+        private val HAS_SIZE_BETWEEN = expectThatActualIs("of size between",
                 fun(actor: Actor?, actual: KnowableValue<String>?, startRange: Int, endRange: Int): Boolean {
                     if (actual == null) return false
                     val actualValue = resolveActual(actual, actor, "of size between $startRange and $endRange") ?: return false

@@ -4,7 +4,7 @@ import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.Performable
 import net.thucydides.core.annotations.Step
 
-open class PerformableExpectation<A, E>(val actual: A?,
+open class PerformableExpectation<A, E>(private val actual: A?,
                                    private val expectation: Expectation<A?, E>,
                                    private val expected: E?,
                                    private val isNegated: Boolean = false,
@@ -35,7 +35,7 @@ open class PerformableExpectation<A, E>(val actual: A?,
     }
 }
 
-open class BiPerformableExpectation<A, E>(val actual: A?,
+open class BiPerformableExpectation<A, E>(private val actual: A?,
                                      private val expectation: DoubleValueExpectation<A?, E>,
                                      private val startRange: E?,
                                      private val endRange: E?,
@@ -69,7 +69,7 @@ open class BiPerformableExpectation<A, E>(val actual: A?,
     }
 }
 
-open class PerformablePredicate<A>(val actual: A?,
+open class PerformablePredicate<A>(private val actual: A?,
                               private val expectation: PredicateExpectation<A?>,
                               private val isNegated: Boolean = false,
                               private val expectedDescription: String) : Performable {

@@ -423,7 +423,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>,
                 return actualValue.size == expected.size
             })
 
-    private val listContains = expectThatActualIs("a list containing",
+    private val listContains = expectThatActualIs("contains", "does not contain",
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
                 if (actual == null || expected == null) return false
                 val actualValue = actual(actor!!) ?: return false
@@ -431,7 +431,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>,
                 return actualValue.containsAll(expected)
             })
 
-    private val listDoesNotContains = expectThatActualIs("a list not containing",
+    private val listDoesNotContains = expectThatActualIs("does not contain","contains",
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
                 if (actual == null || expected == null) return false
                 val actualValue = actual(actor!!) ?: return false
@@ -439,7 +439,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>,
                 return !actualValue.containsAll(expected)
             })
 
-    private val listContainsOnly = expectThatActualIs("a list containing only",
+    private val listContainsOnly = expectThatActualIs("contains only","does not contain only",
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
                 if (actual == null || expected == null) return false
                 val actualValue = actual(actor!!) ?: return false
@@ -447,7 +447,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>,
                 return actualValue.all { expected.contains(it) }
             })
 
-    private val listContainsAnyOf = expectThatActualIs("a list containing any of",
+    private val listContainsAnyOf = expectThatActualIs("contains any of","does not contain any of",
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
                 if (actual == null || expected == null) return false
                 val actualValue = actual(actor!!) ?: return false
@@ -456,14 +456,15 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>,
             })
 
 
-    private val listContainsExactly = expectThatActualIs("a list containing exactly", fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
+    private val listContainsExactly = expectThatActualIs("contains exactly", "does not contain exactly",
+            fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
         if (actual == null || expected == null) return false
         val actualValue = actual(actor!!) ?: return false
         BlackBox.logAssertion(actualValue, expected)
         return (actualValue == expected)
     })
 
-    private val listContainsExactlyInAnyOrder = expectThatActualIs("a list containing exactly",
+    private val listContainsExactlyInAnyOrder = expectThatActualIs("contains exactly in any order", "does not contain exactly in any order",
             fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
                 if (actual == null || expected == null) return false
                 val actualValue = actual(actor!!) ?: return false
@@ -471,21 +472,21 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>,
                 return (actualValue.toSet() == expected.toSet())
             })
 
-    private val listIsASubsetOf = expectThatActualIs("a list containing exactly", fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
+    private val listIsASubsetOf = expectThatActualIs("a subset of", fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
         if (actual == null || expected == null) return false
         val actualValue = actual(actor!!) ?: return false
         BlackBox.logAssertion(actualValue, expected)
         return (actualValue.all { element -> expected.contains(element) })
     })
 
-    private val listDoesNotContainDuplicates = expectThatActualIs("a list containing duplicates", fun(actor: Actor?, actual: KnowableValue<Collection<A>>?): Boolean {
+    private val listDoesNotContainDuplicates = expectThatActualIs("contains no duplicates","contains duplicates", fun(actor: Actor?, actual: KnowableValue<Collection<A>>?): Boolean {
         if (actual == null) return false
         val actualValue = actual(actor!!) ?: return false
         BlackBox.logAssertion(actualValue, null)
         return actualValue.toSet().size == actualValue.size
     })
 
-    private val listStartsWith = expectThatActualIs("a list starting with", fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
+    private val listStartsWith = expectThatActualIs("starts with","does not start with", fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
         if (actual == null || expected == null) return false
         val actualValue = actual(actor!!) ?: return false
         if (actualValue.size <= expected.size || expected.isEmpty()) return false
@@ -493,7 +494,7 @@ class CollectionEnsure<A>(val value: KnowableValue<Collection<A>?>,
         return sequencesAreIdenticalIn(actualValue, expected, 0, expected.size - 1)
     })
 
-    private val listEndsWith = expectThatActualIs("a list ending with", fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
+    private val listEndsWith = expectThatActualIs("ends with", "does not end with", fun(actor: Actor?, actual: KnowableValue<Collection<A>>?, expected: Collection<A>?): Boolean {
         if (actual == null || expected == null) return false
         val actualValue = actual(actor!!) ?: return false
         if (actualValue.size <= expected.size || expected.isEmpty()) return false

@@ -93,6 +93,7 @@ class WhenUsingFluentAssertionsWithCollections {
             val colors = listOf("red", "green", "blue");
             val otherColors = listOf("red", "cyan", "pink");
             val fewerColors = listOf("red", "cyan");
+            val moreColors = listOf("red", "green", "blue","pink");
 
             @Test
             fun `equal to a given value`() {
@@ -103,14 +104,44 @@ class WhenUsingFluentAssertionsWithCollections {
             @Test
             fun `greater than a given value`() {
                 shouldPassWhenChecking(that(colors).hasSizeGreaterThan(2))
-                shouldFailWhenChecking(that(colors).hasSizeGreaterThan(3))
+            }
+
+            @Test
+            fun `greater than a given value (negative case)`() {
+                shouldFailWithMessage("""|Expecting a collection that is of size greater than: <3>
+                                         |But got............................................: <"a list with 3 elements containing [red, green, blue]">"""
+                        .trimMargin())
+                        .whenChecking(that(colors).hasSizeGreaterThan(3))
+            }
+
+            @Test
+            fun `not greater than a given value (negative case)`() {
+                shouldFailWithMessage("""|Expecting a collection that is not of size greater than: <3>
+                                         |But got................................................: <"a list with 4 elements containing [red, green, blue, pink]">"""
+                        .trimMargin())
+                        .whenChecking(that(moreColors).not().hasSizeGreaterThan(3))
             }
 
             @Test
             fun `greater than or equal to a given value`() {
                 shouldPassWhenChecking(that(colors).hasSizeGreaterThanOrEqualTo(2))
                 shouldPassWhenChecking(that(colors).hasSizeGreaterThanOrEqualTo(3))
-                shouldFailWhenChecking(that(colors).hasSizeGreaterThanOrEqualTo(4))
+            }
+
+            @Test
+            fun `greater than or equal to a given value (negative case)`() {
+                shouldFailWithMessage("""|Expecting a collection that is of size greater than or equal to: <4>
+                                         |But got........................................................: <"a list with 3 elements containing [red, green, blue]">"""
+                        .trimMargin())
+                        .whenChecking(that(colors).hasSizeGreaterThanOrEqualTo(4))
+            }
+
+            @Test
+            fun `not greater than or equal to a given value (negative case)`() {
+                shouldFailWithMessage("""|Expecting a collection that is not of size greater than or equal to: <4>
+                                         |But got............................................................: <"a list with 4 elements containing [red, green, blue, pink]">"""
+                        .trimMargin())
+                        .whenChecking(that(moreColors).not().hasSizeGreaterThanOrEqualTo(4))
             }
 
             @Test
@@ -170,6 +201,14 @@ class WhenUsingFluentAssertionsWithCollections {
             }
 
             @Test
+            fun `a given value (negative case)`() {
+                shouldFailWithMessage("""|Expecting a collection that contains: <[purple]>
+                                         |But got.............................: <[red, green, blue]>"""
+                        .trimMargin())
+                        .whenChecking(that(colors).contains("purple"))
+            }
+
+            @Test
             fun `several values`() {
                 shouldPassWhenChecking(that(colors).contains("red", "blue"))
                 shouldFailWhenChecking(that(colors).contains("red", "purple"))
@@ -189,6 +228,14 @@ class WhenUsingFluentAssertionsWithCollections {
             @Test
             fun `does not contain a given value`() {
                 shouldPassWhenChecking(that(colors).doesNotContain("purple"))
+            }
+
+            @Test
+            fun `does not contain a given value (negative case)`() {
+                shouldFailWithMessage("""|Expecting a collection that does not contain: <[red]>
+                                         |But got.....................................: <[red, green, blue]>"""
+                        .trimMargin())
+                        .whenChecking(that(colors).not().contains("red"))
             }
 
             @Test
@@ -215,6 +262,13 @@ class WhenUsingFluentAssertionsWithCollections {
             fun `a given value`() {
                 shouldPassWhenChecking(that(reds).containsOnly("red"))
                 shouldFailWhenChecking(that(colors).containsOnly("red"))
+            }
+
+            @Test
+            fun `a given value (negative case)`() {
+                shouldFailWithMessage("""|Expecting a collection that contains only: <[red]>
+                                         |But got..................................: <[red, green, blue, red, blue]>"""
+                .trimMargin()).whenChecking(that(colors).containsOnly("red"))
             }
 
             @Test
@@ -248,7 +302,9 @@ class WhenUsingFluentAssertionsWithCollections {
 
             @Test
             fun `the same elements in a different order`() {
-                shouldFailWhenChecking(that(colors).containsExactly("green", "blue", "red"))
+                shouldFailWithMessage("""|Expecting a collection that contains exactly: <[green, blue, red]>
+                                         |But got.....................................: <[red, green, blue]>"""
+                        .trimMargin()).whenChecking(that(colors).containsExactly("green", "blue", "red"))
             }
 
             @Test
@@ -272,9 +328,13 @@ class WhenUsingFluentAssertionsWithCollections {
             fun `where the list contains some of the elements`() {
                 shouldPassWhenChecking(that(colors).containsAnyOf("red", "blue","pink"))
             }
+
             @Test
             fun `where the list contains none of the elements`() {
-                shouldFailWhenChecking(that(colors).containsAnyOf("pink", "orange","cyan"))
+                shouldFailWithMessage("""|Expecting a collection that contains any of: <[pink, orange, cyan]>
+                                         |But got....................................: <[red, green, blue]>"""
+                        .trimMargin())
+                        .whenChecking(that(colors).containsAnyOf("pink", "orange","cyan"))
             }
 
         }
@@ -299,7 +359,10 @@ class WhenUsingFluentAssertionsWithCollections {
 
             @Test
             fun `different elements`() {
-                shouldFailWhenChecking(that(colors).containsExactlyInAnyOrder("red", "green", "yellow"))
+                shouldFailWithMessage("""|Expecting a value that contains exactly in any order: <[red, green, yellow]>
+                                         |But got.............................................: <[red, green, blue]>"""
+                        .trimMargin())
+                        .whenChecking(that(colors).containsExactlyInAnyOrder("red", "green", "yellow"))
             }
 
             @Test
@@ -344,7 +407,10 @@ class WhenUsingFluentAssertionsWithCollections {
 
             @Test
             fun `a different list`() {
-                shouldFailWhenChecking(that(listOf("red","green","blue")).isASubsetOf(notColors))
+                shouldFailWithMessage("""|Expecting a value that is a subset of: <[cat, dog]>
+                                         |But got..............................: <[red, green, blue]>"""
+                        .trimMargin())
+                        .whenChecking(that(listOf("red","green","blue")).isASubsetOf(notColors))
             }
         }
 
@@ -357,7 +423,10 @@ class WhenUsingFluentAssertionsWithCollections {
 
             @Test
             fun `when duplicates are present`() {
-                shouldFailWhenChecking(that(listOf("red", "green", "blue", "blue")).doesNotHaveDuplicates())
+                shouldFailWithMessage("""|Expecting a collection that contains no duplicates
+                                         |But got: [red, green, blue, blue]"""
+                        .trimMargin())
+                        .whenChecking(that(listOf("red", "green", "blue", "blue")).doesNotHaveDuplicates())
             }
         }
 
@@ -372,7 +441,14 @@ class WhenUsingFluentAssertionsWithCollections {
 
             @Test
             fun `when the values don't match`() {
-                shouldFailWhenChecking(that(listOf("red","green","blue")).startsWith("red","pink"))
+                shouldFailWithMessage("""|Expecting a value that starts with: <[red, pink]>
+                                         |But got...........................: <[red, green, blue]>"""
+                        .trimMargin())
+                        .whenChecking(that(listOf("red","green","blue")).startsWith("red","pink"))
+            }
+
+            @Test
+            fun `when the values in a collection don't match`() {
                 shouldFailWhenChecking(that(listOf("red","green","blue")).startsWithElementsFrom(listOf("red","pink")))
             }
 
@@ -404,8 +480,10 @@ class WhenUsingFluentAssertionsWithCollections {
 
             @Test
             fun `when the values don't match`() {
-                shouldFailWhenChecking(that(listOf("red","green","blue")).endsWith("red","pink"))
-                shouldFailWhenChecking(that(listOf("red","green","blue")).endsWithElementsFrom(listOf("red","pink")))
+                shouldFailWithMessage("""|Expecting a value that ends with: <[red, pink]>
+                                         |But got.........................: <[red, green, blue]>"""
+                        .trimMargin())
+                        .whenChecking(that(listOf("red","green","blue")).endsWithElementsFrom(listOf("red","pink")))
             }
 
             @Test

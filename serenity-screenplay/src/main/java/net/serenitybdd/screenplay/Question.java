@@ -20,5 +20,6 @@ public interface Question<ANSWER> {
         public <T> Question<T> answeredBy(Question<T> questionToAsk) {
             return new QuestionWithDefinedSubject(questionToAsk, subject);
         }
+
     }
 }

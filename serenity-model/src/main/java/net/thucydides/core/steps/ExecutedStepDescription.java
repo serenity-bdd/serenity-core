@@ -26,7 +26,7 @@ public class ExecutedStepDescription implements Cloneable {
 
     private final static Map<String,Object> NO_FIELDS = new HashMap();
     private final static List<String> NO_ARGUMENTS = new ArrayList<>();
-    private boolean isAQuestion ;
+    private boolean isAQuestion;
 
     protected ExecutedStepDescription(final Class<? extends Object> stepsClass,
                                       final String name,

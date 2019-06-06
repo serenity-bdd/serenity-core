@@ -3,6 +3,7 @@ package net.serenitybdd.core.webdriver.driverproviders;
 import net.serenitybdd.core.buildinfo.DriverCapabilityRecord;
 import net.serenitybdd.core.di.WebDriverInjectors;
 import net.serenitybdd.core.time.InternalSystemClock;
+import net.serenitybdd.core.webdriver.servicepools.DriverServiceExecutable;
 import net.serenitybdd.core.webdriver.servicepools.DriverServicePool;
 import net.serenitybdd.core.webdriver.servicepools.InternetExplorerServicePool;
 import net.thucydides.core.fixtureservices.FixtureProviderService;
@@ -13,13 +14,17 @@ import net.thucydides.core.webdriver.CapabilityEnhancer;
 import net.thucydides.core.webdriver.stubs.WebDriverStub;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static net.thucydides.core.ThucydidesSystemProperty.ACCEPT_INSECURE_CERTIFICATES;
+import java.io.File;
+
+import static net.thucydides.core.ThucydidesSystemProperty.*;
 import static net.thucydides.core.webdriver.SupportedWebDriver.IEXPLORER;
 
 public class InternetExplorerDriverProvider implements DriverProvider {
@@ -44,6 +49,8 @@ public class InternetExplorerDriverProvider implements DriverProvider {
             return new WebDriverStub();
         }
 
+        updateIEDriverBinaryIfSpecified();
+
         CapabilityEnhancer enhancer = new CapabilityEnhancer(environmentVariables, fixtureProviderService);
         DesiredCapabilities desiredCapabilities = enhancer.enhanced(recommendedDefaultInternetExplorerCapabilities(), IEXPLORER);
 
@@ -55,7 +62,7 @@ public class InternetExplorerDriverProvider implements DriverProvider {
                 desiredCapabilities,
                 driverServicePool,
                 this::retryCreateDriverOnNoSuchSession,
-                (pool, caps) -> new InternetExplorerDriver(caps)
+                (pool, caps) -> new InternetExplorerDriver(new InternetExplorerOptions(caps))
         );
     }
 
@@ -101,4 +108,20 @@ public class InternetExplorerDriverProvider implements DriverProvider {
         }
         return defaults;
     }
+
+    private void updateIEDriverBinaryIfSpecified() {
+
+        File executable = DriverServiceExecutable.called("InternetExplorerDriver.exe")
+                .withSystemProperty(WEBDRIVER_IE_DRIVER.getPropertyName())
+                .usingEnvironmentVariables(environmentVariables)
+                .reportMissingBinary()
+                .downloadableFrom("https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver")
+                .asAFile();
+
+        if (executable != null && executable.exists()) {
+            System.setProperty("webdriver.ie.driver", executable.getAbsolutePath());
+        }
+    }
+
+
 }

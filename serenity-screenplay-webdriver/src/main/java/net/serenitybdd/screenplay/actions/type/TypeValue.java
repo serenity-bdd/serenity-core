@@ -7,45 +7,34 @@ import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.actions.KeyNames;
 import org.openqa.selenium.Keys;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static net.serenitybdd.screenplay.actions.type.RenderEnteredText.getFollowedByKeysDescriptionFor;
+import static net.serenitybdd.screenplay.actions.type.RenderEnteredText.getTextAsStringFor;
 
 public abstract class TypeValue implements Interaction {
 
-    protected final String theText;
+    protected final CharSequence[] theText;
     protected final List<Keys> followedByKeys;
-    private static final String ENTER_KEYS_INTRO_TEXT = " then hits ";
+    protected String theTextAsAString;
 
-    public TypeValue(String theText) {
+    public TypeValue(CharSequence... theText) {
         this.theText = theText;
         this.followedByKeys = new ArrayList<>();
+        this.theTextAsAString = getTextAsStringFor(theText);
     }
 
     public TypeValue thenHit(Keys... keys) {
         this.followedByKeys.addAll(NewList.of(keys));
+        theTextAsAString = getTextAsStringFor(theText) + getFollowedByKeysDescriptionFor(followedByKeys);
         return this;
     }
 
     public Keys[] getFollowedByKeys() {
         return followedByKeys.toArray(new Keys[]{});
-    }
-
-    private String getFollowedByKeysDescriptionFor(List<Keys> keys) {
-        if (keys.isEmpty()) {
-            return "";
-        }
-        if (keys.size() == 1) {
-            return ENTER_KEYS_INTRO_TEXT + KeyNames.of(keys);
-        }
-        if (keys.size() == 2) {
-            return ENTER_KEYS_INTRO_TEXT + Joiner.on(" and ").join(KeyNames.of(keys));
-        }
-
-        String allButLastTwo = Joiner.on(", ").join(KeyNames.allButLastTwo(keys));
-        String lastTwoKeys = Joiner.on(" and ").join(KeyNames.lastTwoOf(keys));
-        String allKeys = Joiner.on(", ").join(NewList.of(allButLastTwo, lastTwoKeys));
-
-        return ENTER_KEYS_INTRO_TEXT + allKeys;
     }
 
 }

@@ -77,9 +77,6 @@ public class TestOutcome {
     private static final String ISSUES = "issues";
     private static final String NEW_LINE = System.getProperty("line.separator");
 
-    private ReportFormatter reportFormatter;
-
-
     /**
      * The name of the method implementing this test.
      */
@@ -1966,6 +1963,12 @@ public class TestOutcome {
 
     public boolean hasAMoreGeneralFormOfTag(TestTag specificTag) {
         return TestTags.of(getTags()).containsTagMatching(specificTag);
+    }
+
+    public boolean hasAMoreSpecificFormOfTag(TestTag generalTag) {
+        return getTags().stream().anyMatch(
+                tag -> tag.isAsOrMoreSpecificThan(generalTag)
+        );// TestTags.of(getTags()).containsTagMatching(specificTag);
     }
 
     public void setStartTime(ZonedDateTime startTime) {

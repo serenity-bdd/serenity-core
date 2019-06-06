@@ -328,6 +328,15 @@ public class WhenFormattingForHTML {
 
 
     @Test
+    public void should_convert_single_column_embedded_text_tables_into_html_tables_without_a_header_row() {
+        when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
+        Formatter formatter = new Formatter();
+
+        String formattedValue = formatter.convertAnyTables("A table:\n| Rob |\n|Bill|");
+
+        assertThat(formattedValue, is("A table:<br><table class='embedded'><tbody><tr><td>Rob</td></tr><tr><td>Bill</td></tr></tbody></table>"));
+    }
+    @Test
     public void should_convert_embedded_text_tables__with_square_brackets_into_html_tables() {
         when(issueTracking.getShortenedIssueTrackerUrl()).thenReturn(null);
         Formatter formatter = new Formatter();

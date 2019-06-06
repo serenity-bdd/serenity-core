@@ -209,6 +209,8 @@ public final class NameConverter {
         EXCLUDE_FROM_FILENAMES.put(']', "_cbr_");
         EXCLUDE_FROM_FILENAMES.put('{', "_obrc_");
         EXCLUDE_FROM_FILENAMES.put('}', "_cbrc_");
+        EXCLUDE_FROM_FILENAMES.put('(', "_opr");
+        EXCLUDE_FROM_FILENAMES.put(')', "_cpr_");
         EXCLUDE_FROM_FILENAMES.put('*', "_star_");
         EXCLUDE_FROM_FILENAMES.put('^', "_caret_");
         EXCLUDE_FROM_FILENAMES.put('%', "_per_");

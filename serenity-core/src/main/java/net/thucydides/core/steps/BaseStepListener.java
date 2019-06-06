@@ -868,7 +868,6 @@ public class BaseStepListener implements StepListener, StepPublisher {
 
     private List<ScreenshotAndHtmlSource> grabScreenshots(TestResult result) {
 
-        System.out.println();
         if (pathOf(outputDirectory) == null) { // Output directory may be null for some tests
             return new ArrayList<>();
         }

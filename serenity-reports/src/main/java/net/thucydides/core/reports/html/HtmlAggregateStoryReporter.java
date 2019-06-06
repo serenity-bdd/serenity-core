@@ -44,6 +44,7 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlAggregateStoryReporter.class);
 
     private String projectName;
+    private String projectDirectory;
     private String relativeLink;
     private String tags;
     private final IssueTracking issueTracking;
@@ -303,6 +304,12 @@ public class HtmlAggregateStoryReporter extends HtmlReporter implements UserStor
 
     public void setGenerateTestOutcomeReports() {
         this.generateTestOutcomeReports = true;
+    }
+
+    public void setProjectDirectory(String projectDirectory) {
+        this.projectDirectory = projectDirectory;
+        environmentVariables.setProperty("serenity.project.directory", projectDirectory);
+        System.setProperty("serenity.project.directory", projectDirectory);
     }
 
     private class CopyResourcesTask implements ReportingTask {

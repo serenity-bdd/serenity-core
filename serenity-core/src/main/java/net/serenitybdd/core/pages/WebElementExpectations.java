@@ -72,17 +72,17 @@ public class WebElementExpectations {
         }.forElement(element);
     }
 
+
     public static ExpectedCondition<Boolean> elementIsNotEnabled(final WebElementFacadeImpl element) {
         return new ExpectedCondition<Boolean>() {
-            private WebElementFacadeImpl element;
-            public ExpectedCondition<Boolean> forElement(WebElementFacadeImpl element) {
+            private WebElementFacade element;
+            public ExpectedCondition<Boolean> forElement(WebElementFacade element) {
                 this.element = element;
                 return this;
             }
 
             public Boolean apply(WebDriver driver) {
-                WebElement resolvedElement = element.getElement();
-                return ((resolvedElement != null) && (!resolvedElement.isEnabled()));
+                return element.isDisabled();
             }
 
             @Override
@@ -92,6 +92,7 @@ public class WebElementExpectations {
 
         }.forElement(element);
     }
+
 
     public static ExpectedCondition<Boolean> elementIsClickable(final WebElementFacadeImpl element) {
         return new ExpectedCondition<Boolean>() {

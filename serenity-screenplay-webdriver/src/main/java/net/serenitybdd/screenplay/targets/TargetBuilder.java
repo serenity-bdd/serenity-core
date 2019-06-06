@@ -21,7 +21,7 @@ public class TargetBuilder<T> {
     }
 
     public Target locatedBy(String cssOrXPathSelector) {
-        return new XPathOrCssTarget(targetElementName, cssOrXPathSelector, iFrame);
+        return new XPathOrCssTarget(targetElementName, cssOrXPathSelector, iFrame, Optional.empty());
     }
 
     public Target located(By locator) {

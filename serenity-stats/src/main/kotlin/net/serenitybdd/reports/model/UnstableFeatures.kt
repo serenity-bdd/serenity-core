@@ -28,16 +28,16 @@ class UnstableFeaturesBuilder(val testOutcomes: TestOutcomes) {
     }
 
     fun withMaxOf(maxEntries: Int): List<UnstableFeature> {
-        val failingTestCount = unsuccessfulOutcomesIn(testOutcomes.unsuccessfulTests)
         return testOutcomes.unsuccessfulTests.outcomes
                 .groupBy { outcome -> defaultStoryNameOr(outcome.userStory?.displayName) }
                 .map { (userStoryName, outcomes) ->
                     UnstableFeature(userStoryName,
-                            failingTestCount,
-                            percentageFailures(failingTestCount, userStoryName, testOutcomes),
+                            outcomes.size,
+                            percentageFailures(outcomes.size, userStoryName, testOutcomes),
                             featureReport(outcomes[0]))
                 }
-                .sortedByDescending { unstableFeature -> unstableFeature.failurePercentage }
+                .sortedWith(compareByDescending<UnstableFeature> { it.failurePercentage }
+                            .thenByDescending { it.failureCount })
                 .take(maxEntries)
     }
 

@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8"/>
     <title>${testOutcome.unqualified.title}</title>
-<#include "libraries/favicon.ftl">
+    <#include "libraries/favicon.ftl">
 
-<#include "libraries/common.ftl">
-<#include "libraries/jquery-ui.ftl">
-<#include "libraries/datatables.ftl">
-<#include "libraries/imgpreview.ftl">
-<#include "components/report-data.ftl">
+    <#include "libraries/common.ftl">
+    <#include "libraries/jquery-ui.ftl">
+    <#include "libraries/datatables.ftl">
+    <#include "libraries/imgpreview.ftl">
+    <#include "components/report-data.ftl">
 
 </head>
 
@@ -19,7 +19,10 @@
     <div id="topbanner">
         <div id="logo"><a href="index.html"><img src="images/serenity-logo.png" border="0"/></a></div>
         <div id="projectname-banner" style="float:right">
-            <span class="projectname">${reportOptions.projectName}</span>
+            <span class="projectname">
+                <span class="projecttitle">${reportOptions.projectName}</span>
+                <span class="projectsubtitle">${reportOptions.projectSubTitle}</span>
+            </span>
         </div>
     </div>
 </div>
@@ -46,81 +49,81 @@
     <div class="clr"></div>
 
     <!--/* starts second table*/-->
-<#include "menu.ftl">
-<@main_menu selected="home" />
+    <#include "menu.ftl">
+    <@main_menu selected="home" />
     <div class="clr"></div>
 
-<#if testOutcome.result == "FAILURE"><#assign outcome_text = "failing-color">
-<#elseif testOutcome.result == "ERROR"><#assign outcome_text = "error-color">
-<#elseif testOutcome.result == "SUCCESS"><#assign outcome_text = "success-color">
-<#elseif testOutcome.result == "PENDING"><#assign outcome_text = "pending-color">
-<#elseif testOutcome.result == "COMPROMISED"><#assign outcome_text = "compromised-color">
-<#else><#assign outcome_text = "ignore-color">
-</#if>
+    <#if testOutcome.result == "FAILURE"><#assign outcome_text = "failing-color">
+    <#elseif testOutcome.result == "ERROR"><#assign outcome_text = "error-color">
+    <#elseif testOutcome.result == "SUCCESS"><#assign outcome_text = "success-color">
+    <#elseif testOutcome.result == "PENDING"><#assign outcome_text = "pending-color">
+    <#elseif testOutcome.result == "COMPROMISED"><#assign outcome_text = "compromised-color">
+    <#else><#assign outcome_text = "ignore-color">
+    </#if>
 
-<#assign title_outcome_icon =  formatter.resultIcon().inLarge().forResult(testOutcome.result) />
+    <#assign title_outcome_icon =  formatter.resultIcon().inLarge().forResult(testOutcome.result) />
 
-<#-- TEST TITLE-->
+    <#-- TEST TITLE-->
     <div id="contentbody">
         <div class="titlebar">
             <div class="story-title">
                 <table class="outcome-header">
                     <tr>
                         <td>
-                        <#if (parentRequirement?? && parentRequirement.isPresent())>
-                            <div>
-                                <#assign parentTitle = formatter.renderDescription(inflection.of(parentRequirement.get().name).asATitle()) >
-                                <#assign parentType = inflection.of(parentRequirement.get().type).asATitle() >
-                                <#if (parentRequirement.get().cardNumber?has_content) >
-                                    <#assign issueNumber = "[" + reportFormatter.addLinks(parentRequirement.get().cardNumber) + "]" >
-                                <#else>
-                                    <#assign issueNumber = "">
-                                </#if>
-                                <h3 class="discreet-story-header">
-                                    <i class="fa fa-2x fa-comments-o"></i>
-                                    <span class="story-header-title">${parentTitle} ${issueNumber}</span>
-                                </h3>
+                            <#if (parentRequirement?? && parentRequirement.isPresent())>
+                                <div>
+                                    <#assign parentTitle = formatter.renderDescription(inflection.of(parentRequirement.get().name).asATitle()) >
+                                    <#assign parentType = inflection.of(parentRequirement.get().type).asATitle() >
+                                    <#if (parentRequirement.get().cardNumber?has_content) >
+                                        <#assign issueNumber = "[" + reportFormatter.addLinks(parentRequirement.get().cardNumber) + "]" >
+                                    <#else>
+                                        <#assign issueNumber = "">
+                                    </#if>
+                                    <h3 class="discreet-story-header">
+                                        <i class="fa fa-2x fa-comments-o"></i>
+                                        <span class="story-header-title">${parentTitle} ${issueNumber}</span>
+                                    </h3>
 
-                                <div class="discreet-requirement-narrative-title">
-                                    ${formatter.renderDescription(parentRequirement.get().narrative.renderedText)}
+                                    <div class="discreet-requirement-narrative-title">
+                                        ${formatter.renderDescription(parentRequirement.get().narrative.renderedText)}
+                                    </div>
                                 </div>
-                            </div>
-                        <#elseif (featureOrStory?? && featureOrStory.isPresent())>
-                            <div>
-                                <#assign parentTitle = inflection.of(featureOrStory.get().name).asATitle() >
-                                <#assign parentType = inflection.of(featureOrStory.get().type).asATitle() >
-                                <h3 class="discreet-story-header">
-                                    <i class="fa fa-2x fa-comments-o"></i>
-                                    <span class="story-header-title">${parentTitle}</span>
-                                </h3>
+                            <#elseif (featureOrStory?? && featureOrStory.isPresent())>
+                                <div>
+                                    <#assign parentTitle = inflection.of(featureOrStory.get().name).asATitle() >
+                                    <#assign parentType = inflection.of(featureOrStory.get().type).asATitle() >
+                                    <h3 class="discreet-story-header">
+                                        <i class="fa fa-2x fa-comments-o"></i>
+                                        <span class="story-header-title">${parentTitle}</span>
+                                    </h3>
 
-                                <div class="discreet-requirement-narrative-title">
-                                    ${formatter.renderDescription(featureOrStory.get().narrativeSummary)}
+                                    <div class="discreet-requirement-narrative-title">
+                                        ${formatter.renderDescription(featureOrStory.get().narrativeSummary)}
+                                    </div>
                                 </div>
-                            </div>
-                        </#if>
+                            </#if>
 
-                        <#if (testOutcome.backgroundTitle?has_content)>
-                            <div class="requirementNarrative">Background: ${testOutcome.backgroundTitle}
-                                <#if (testOutcome.backgroundTitle?has_content)>
-                                    <p>${testOutcome.backgroundDescription}</p>
-                                </#if>
-                            </div>
-                        </#if>
+                            <#if (testOutcome.backgroundTitle?has_content)>
+                                <div class="requirementNarrative">Background: ${testOutcome.backgroundTitle}
+                                    <#if (testOutcome.backgroundTitle?has_content)>
+                                        <p>${testOutcome.backgroundDescription}</p>
+                                    </#if>
+                                </div>
+                            </#if>
                         </td>
                         <td valign="top">
-                        <#list filteredTags as tag>
-                            <#assign tagReport = absoluteReportName.forRequirementOrTag(tag) />
-                            <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
-                            <p class="tag">
-                                <#assign tagStyle = styling.tagStyleFor(tag) >
-                                <span class="badge tag-badge" style="${tagStyle}">
+                            <#list filteredTags as tag>
+                                <#assign tagReport = absoluteReportName.forRequirementOrTag(tag) />
+                                <#assign tagTitle = inflection.of(tag.shortName).asATitle() >
+                                <p class="tag">
+                                    <#assign tagStyle = styling.tagStyleFor(tag) >
+                                    <span class="badge tag-badge" style="${tagStyle}">
                                     <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" style="${tagStyle}"
                                                                       href="${tagReport}">${formatter.htmlCompatible(tagTitle)}
                                     (${tag.type})</a>
                                 </span>
-                            </p>
-                        </#list>
+                                </p>
+                            </#list>
                         </td>
                     </tr>
                 </table>
@@ -139,19 +142,19 @@
                                     </#if>
                                 </span>
                             </span>
-                        <#if (testOutcome.manual)>
-                            <i class="fa fa-user manual" alt="Manual test" title="Manual test"></i>
-                        </#if>
-                        <#list testOutcome.flags as flag>
-                            <i class="fa fa-2x fa-${flag.symbol} flag-color" alt="${flag.message}"
-                               title="${flag.message}"></i>
-                        </#list>
-                        <#if (testOutcome.descriptionText.isPresent() && testOutcome.descriptionText.get()?has_content)>
-                            <div class="discreet-requirement-narrative-title">
-                                <br/>
-                                ${formatter.renderDescription(testOutcome.descriptionText.get())}
-                            </div>
-                        </#if>
+                            <#if (testOutcome.manual)>
+                                <i class="fa fa-user manual" alt="Manual test" title="Manual test"></i>
+                            </#if>
+                            <#list testOutcome.flags as flag>
+                                <i class="fa fa-2x fa-${flag.symbol} flag-color" alt="${flag.message}"
+                                   title="${flag.message}"></i>
+                            </#list>
+                            <#if (testOutcome.descriptionText.isPresent() && testOutcome.descriptionText.get()?has_content)>
+                                <div class="discreet-requirement-narrative-title">
+                                    <br/>
+                                    ${formatter.renderDescription(testOutcome.descriptionText.get())}
+                                </div>
+                            </#if>
                         </td>
                         <#if (testOutcome.videoLink)??>
                             <td valign="top">
@@ -193,24 +196,24 @@
                                                             <h4>
                                                                 <p>${formatter.renderDescription(castMember.description!"")}</p>
                                                                 <ul>
-                                                    <#if (castMember.hasFacts())>
-                                                        <li><strong>${castMember.name} has:</strong>
-                                                            <ul>
-                                                                <#list castMember.getHas() as fact>
-                                                                    <li>${fact}</li>
-                                                                </#list>
-                                                            </ul>
-                                                        </li>
-                                                    </#if>
-                                                    <#if (castMember.hasAbilities())>
-                                                        <li><strong>${castMember.name} can:</strong>
-                                                            <ul>
-                                                                <#list castMember.can as ability>
-                                                                    <li>${ability}</li>
-                                                                </#list>
-                                                            </ul>
-                                                        </li>
-                                                    </#if>
+                                                                    <#if (castMember.hasFacts())>
+                                                                        <li><strong>${castMember.name} has:</strong>
+                                                                            <ul>
+                                                                                <#list castMember.getHas() as fact>
+                                                                                    <li>${fact}</li>
+                                                                                </#list>
+                                                                            </ul>
+                                                                        </li>
+                                                                    </#if>
+                                                                    <#if (castMember.hasAbilities())>
+                                                                        <li><strong>${castMember.name} can:</strong>
+                                                                            <ul>
+                                                                                <#list castMember.can as ability>
+                                                                                    <li>${ability}</li>
+                                                                                </#list>
+                                                                            </ul>
+                                                                        </li>
+                                                                    </#if>
                                                                 </ul>
                                                     </td>
                                                 </#list>
@@ -231,135 +234,137 @@
 
     <div class="clr"></div>
 
-<#if (testOutcome.isDataDriven() && testOutcome.dataDrivenSampleScenario?has_content)>
-    <div class="story-title">
-        <h3 class="story-header">Scenario Outline</h3>
+    <#if (testOutcome.isDataDriven() && testOutcome.dataDrivenSampleScenario?has_content)>
+        <div class="story-title">
+            <h3 class="story-header">Scenario Outline</h3>
 
-        <div class="scenario">${formatter.formatWithFields(testOutcome.dataDrivenSampleScenario)}</div>
+            <div class="scenario">${formatter.formatWithFields(testOutcome.dataDrivenSampleScenario)}</div>
 
-    </div>
-</#if>
+        </div>
+    </#if>
 
     <div id="beforetable"></div>
 
-<#if (testOutcome.isDataDriven())>
+    <#if (testOutcome.isDataDriven())>
 
-    <#list testOutcome.dataTable.dataSets as dataSet >
-        <h3 class="story-header">Examples:<#if dataSet.name??>&nbsp;${dataSet.name}</#if></h3>
-        <#if dataSet.description??>
-            <div class="requirementNarrative">${dataSet.description}</div>
-        </#if>
+        <#list testOutcome.dataTable.dataSets as dataSet >
+            <h3 class="story-header">Examples:<#if dataSet.name??>&nbsp;${dataSet.name}</#if></h3>
+            <#if dataSet.description??>
+                <div class="requirementNarrative">${dataSet.description}</div>
+            </#if>
 
-        <#if dataSet.tags??>
+            <#if dataSet.tags??>
 
-        <p class="example-tag">
-            <#list dataSet.tags as exampleTag>
-                <#assign exampleTagReport = absoluteReportName.forRequirementOrTag(exampleTag) />
-                <#assign exampleTagTitle = inflection.of(exampleTag.shortName).asATitle() >
-                <#assign tagStyle = styling.tagStyleFor(tag) >
-                <span class="badge tag-badge" style="${tagStyle}">
+                <p class="example-tag">
+                    <#list dataSet.tags as exampleTag>
+                        <#assign exampleTagReport = absoluteReportName.forRequirementOrTag(exampleTag) />
+                        <#assign exampleTagTitle = inflection.of(exampleTag.shortName).asATitle() >
+                        <#assign tagStyle = styling.tagStyleFor(tag) >
+                        <span class="badge tag-badge" style="${tagStyle}">
                     <i class="fa fa-tag"></i>&nbsp;<a class="tagLink" style="${tagStyle} style="${tagStyle}"
                                                       href="${exampleTagReport}">${formatter.htmlCompatible(exampleTagTitle)}
                     (${exampleTag.type})</a>
                 </span>
-            </#list>
-        </p>
-        </#if>
-
-        <div class="example-table test-report">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <#list testOutcome.dataTable.headers as header>
-                        <th>${inflection.of(header).asATitle()}</th>
                     </#list>
-                </tr>
-                </thead>
-                <tbody>
-                    <#assign rowIndex = dataSet.startRow >
-                    <#list dataSet.rows as row>
+                </p>
+            </#if>
+
+            <div class="example-table test-report">
+                <table class="table">
+                    <thead>
                     <tr>
-                        <td class="test-${row.result}"><a href="#${rowIndex}">${rowIndex + 1}</a></td>
-                        <#list row.values as value>
-                            <td class="test-${row.result}"><a
-                                    href="#${rowIndex}">${formatter.plainHtmlCompatible(value)}</a>
-                            </td>
+                        <th>#</th>
+                        <#list testOutcome.dataTable.headers as header>
+                            <th>${inflection.of(header).asATitle()}</th>
                         </#list>
                     </tr>
+                    </thead>
+                    <tbody>
+                    <#assign rowIndex = dataSet.startRow >
+                    <#list dataSet.rows as row>
+                        <tr>
+                            <td class="test-${row.result}"><a href="#${rowIndex}">${rowIndex + 1}</a></td>
+                            <#list row.values as value>
+                                <td class="test-${row.result}"><a
+                                            href="#${rowIndex}">${formatter.plainHtmlCompatible(value)}</a>
+                                </td>
+                            </#list>
+                        </tr>
                         <#assign rowIndex = rowIndex + 1 >
                     </#list>
-                </tbody>
-            </table>
-        </div>
-    </#list>
-</#if>
+                    </tbody>
+                </table>
+            </div>
+        </#list>
+    </#if>
 
     <div id="tablecontents">
         <div>
             <table class="step-table">
                 <tr class="step-titles">
                     <th width="65"><#if (testOutcome.manual)>
-                        <i class="fa fa-user fa-2x" title="Manual test"></i>
-                    </#if>
+                            <i class="fa fa-user fa-2x" title="Manual test"></i>
+                        </#if>
                         &nbsp;
                     </th>
 
-                <#if testOutcome.hasScreenshots()>
-                    <th width="%" class="step-description-column greentext"><#if (testOutcome.manual)>Manual </#if>
-                        Steps
-                    </th>
-                <#else>
-                    <th width="%" class="step-description-wide-column greentext"><#if (testOutcome.manual)>Manual </#if>
-                        Steps
-                    </th>
-                </#if>
-                <#if testOutcome.hasScreenshots()>
-                    <th width="150" class="greentext">Screenshots</th>
-                </#if>
+                    <#if testOutcome.hasScreenshots()>
+                        <th width="%" class="step-description-column greentext"><#if (testOutcome.manual)>Manual </#if>
+                            Steps
+                        </th>
+                    <#else>
+                        <th width="%"
+                            class="step-description-wide-column greentext"><#if (testOutcome.manual)>Manual </#if>
+                            Steps
+                        </th>
+                    </#if>
+                    <#if testOutcome.hasScreenshots()>
+                        <th width="150" class="greentext">Screenshots</th>
+                    </#if>
                     <th width="130" class="greentext">Outcome</th>
                     <th width="80" class="greentext"><i title="Duration" class="far fa-clock"></i></th>
                 </tr>
                 <tr class="step-table-separator">
                     <td colspan="5"></td>
                 </tr>
-            <#assign level = 1>
-            <#assign screenshotCount = 0>
-            <#macro write_step(step, step_number)>
+                <#assign level = 1>
+                <#assign screenshotCount = 0>
+                <#macro write_step(step, step_number)>
                 <@step_details step=step step_number=step_number level=level/>
                 <#if step.isAGroup()>
-                    <#if level == 1>
-                    <tr>
-                    <td colspan="5">
-                    <table id="stepSection${step_number}" style="display:none; width:100%">
+                <#if level == 1>
+                <tr>
+                <td colspan="5">
+                <table id="stepSection${step_number}" style="display:none; width:100%">
 
-                    </#if>
-                    <#assign level = level + 1>
-                    <#list step.children as nestedStep>
-                        <@write_step step=nestedStep step_number=""/>
-                    </#list>
-                    <#assign level = level-1>
-
-                    <#if level == 1>
-                    </table>
-                    </td>
-                    <tr>
-                    </#if>
                 </#if>
-            </#macro>
+                <#assign level = level + 1>
+                <#list step.children as nestedStep>
+                    <@write_step step=nestedStep step_number=""/>
+                </#list>
+                <#assign level = level-1>
+                <#assign screenshotCount = screenshotCount +1>
 
-            <#macro restQueryData(restQuery, number) >
-                <span>
+                <#if level == 1>
+                </table>
+                </td>
+                <tr>
+                    </#if>
+                    </#if>
+                    </#macro>
+
+                    <#macro restQueryData(restQuery, number) >
+                        <span>
                     <button type="button" class="btn btn-success btn-sm" data-toggle="collapse"
                             data-target="#restModal-${number}">
                         REST Query
                     </button>
                 </span>
-                <!-- Modal -->
-                <div class="rest-query-details">
-                    <div class="collapse multi-collapse" id="restModal-${number}">
-                        <div class="card">
-                            <div class="card-body">
+                        <!-- Modal -->
+                        <div class="rest-query-details">
+                            <div class="collapse multi-collapse" id="restModal-${number}">
+                                <div class="card">
+                                    <div class="card-body">
                                         <h4>Response</h4>
                                         <#if restQuery.statusCode?has_content>
                                             <p>Status code: ${restQuery.statusCode}</p>
@@ -391,43 +396,43 @@
                                             <h4>Response Cookies</h4>
                                             <pre>${(formatter.renderText(restQuery.responseCookies))!}</pre>
                                         </#if>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </#macro>
+                    </#macro>
 
 
-            <#macro step_details(step, step_number, level)>
-                <#assign step_outcome_icon = formatter.resultIcon().forResult(step.result) />
-                <#assign step_outcome_style = formatter.resultIcon().colorFor(step.result) />
-                <#assign step_icon_size = 20>
-                <#if (level>1)>
-                    <#if step.isAGroup()>
-                        <#assign step_class_root = "nested">
+                    <#macro step_details(step, step_number, level)>
+                    <#assign step_outcome_icon = formatter.resultIcon().forResult(step.result) />
+                    <#assign step_outcome_style = formatter.resultIcon().colorFor(step.result) />
+                    <#assign step_icon_size = 20>
+                    <#if (level>1)>
+                        <#if step.isAGroup()>
+                            <#assign step_class_root = "nested">
+                        <#else>
+                            <#assign step_class_root = "nested-group">
+                        </#if>
                     <#else>
-                        <#assign step_class_root = "nested-group">
+                        <#assign step_class_root = "top-level">
                     </#if>
-                <#else>
-                    <#assign step_class_root = "top-level">
-                </#if>
-                <#assign step_indent = level*20>
-                <#if level == 1 && step.isAGroup()>
-                    <#assign showAccordion = true/>
-                <#else>
-                    <#assign showAccordion = false/>
-                </#if>
+                    <#assign step_indent = level*20>
+                    <#if level == 1 && step.isAGroup()>
+                        <#assign showAccordion = true/>
+                    <#else>
+                        <#assign showAccordion = false/>
+                    </#if>
                 <tr class="test-${step.result}">
                     <td width="50" class="step-icon">
                         <#if step_number?has_content><a name="${step_number}"/></#if>
                         <#if showAccordion>
                             <a href="javaScript:void(0)" onClick="toggleDiv('stepSection${step_number}')"
                                style="display:block">
-                            <#--${step_outcome_icon}-->
+                                <#--${step_outcome_icon}-->
                                 <i class="fa fa-plus-square-o imgstepSection${step_number} ${step_outcome_style}"
                                    style="margin-left: 20px; float:left;  padding-right:5px"></i>
-                            <#--<img src="images/plus.png" width="24" class="imgstepSection${step_number}"-->
-                            <#--style="margin-left: 20px; float:left;  padding-right:5px"/>-->
+                                <#--<img src="images/plus.png" width="24" class="imgstepSection${step_number}"-->
+                                <#--style="margin-left: 20px; float:left;  padding-right:5px"/>-->
                             </a>
                         <#else>
                             <span style="margin-left: ${step_indent}px; margin-right: 5px;"
@@ -441,15 +446,15 @@
                             <#if showAccordion>
                             <a href="javaScript:void(0)" onClick="toggleDiv('stepSection${step_number}')"
                                style="display:block;">
-                            </#if>
-                            <span class="${step_class_root}-step">
+                                </#if>
+                                <span class="${step_class_root}-step">
                             <#if step.hasRestQuery()>
                                 ${formatter.restQuery(step.description)}
                             <#else>
                                 ${formatter.formatWithFields(step.description)}
                             </#if>
                             </span>
-                            <#if showAccordion>
+                                <#if showAccordion>
                             </a>
                             </#if>
                             <span class="evidence">
@@ -483,13 +488,18 @@
                             </#if>
 
                             <#if step.latestScreenshot?has_content>
-                                <a href="${relativeLink!}${testOutcome.screenshotReportName}.html#screenshots?screenshot=${screenshotCount}">
+                                <#assign actualScreenshotCount = screenshotCount + step.actualScreenshotCount />
+                                <a href="${relativeLink!}${testOutcome.screenshotReportName}.html#screenshots?screenshot=${actualScreenshotCount}">
                                     <img src="${step.latestScreenshot.filename}"
                                          href="${step.latestScreenshot.filename}"
                                          class="screenshot"
                                          width="48" height="48"/>
-                                    <#assign screenshotCount = screenshotCount + step.screenshotCount />
                                 </a>
+                                <#if step.hasChildren()>
+                                    <#assign screenshotCount = screenshotCount + 1 />
+                                <#else>
+                                    <#assign screenshotCount = screenshotCount + step.screenshotCount />
+                                </#if>
                             </#if>
                         </td>
                     </#if>
@@ -506,73 +516,74 @@
                         </#if>
                         <#if testOutcome.hasScreenshots()>
                         <td width="%" colspan="4" class="error-message-cell">
-                        <#else>
+                            <#else>
                         <td width="%" colspan="3" class="error-message-cell">
-                        </#if>
+                            </#if>
 
-                        <#assign formattedErrorMessageTitle = formatter.htmlAttributeCompatible(errorMessageTitle, true) />
+                            <#assign formattedErrorMessageTitle = formatter.htmlAttributeCompatible(errorMessageTitle, true) />
 
                             <#if step.nestedException?has_content>
                                 <@stacktrace title=formattedErrorMessageTitle cause=step.nestedException id=step.number />
                             <#else>
-                                <div class="error-message" title='${formatter.htmlAttributeCompatible(errorMessageTitle)}'>
+                                <div class="error-message"
+                                     title='${formatter.htmlAttributeCompatible(errorMessageTitle)}'>
                                     <pre>${formatter.htmlAttributeCompatible(errorMessageTitle,244)!''}</pre>
                                 </div>
                             </#if>
-                    </td>
+                        </td>
                     </tr>
                 </#if>
-            </#macro>
-            <#-- Test step results -->
-            <#list testOutcome.testSteps as step>
-                <@write_step step=step step_number=step_index />
-            </#list>
-            <#if testOutcome.hasNonStepFailure()>
-                <#assign step_outcome_icon = formatter.resultIcon().forResult(testOutcome.result) />
-                <tr class="test-${testOutcome.result}">
-                    <td width="40">${step_outcome_icon}
-                    </td>
-                    <#if testOutcome.hasScreenshots()>
-                    <td width="%" colspan="2">
-                    <#else>
-                    <td width="%" colspan="1">
-                    </#if>
-                    <#if testOutcome.errorMessage?has_content>
-                        <span class="top-level-step">${testOutcome.errorMessage}</span>
-                    <#else>
-                        <span class="top-level-step">An error occurred outside of step execution</span>
-                    </#if>
-                </td>
-                    <td width="100"><span
-                            class="top-level-step">${formatter.htmlCompatibleStepDescription(testOutcome.result)}</span>
-                    </td>
-                    <td width="100"><span class="top-level-step">${testOutcome.durationInSeconds}s</span></td>
-                </tr>
-                <tr class="test-${testOutcome.result}">
-                    <td width="40">&nbsp</td>
-                    <#if testOutcome.hasScreenshots()>
-                    <td width="%" colspan="4">
-                    <#else>
-                    <td width="%" colspan="3">
-                    </#if>
-                    <#if (testOutcome.errorMessage)??>
-                        <#if (testOutcome.nestedTestFailureCause)??>
-                            <#assign formattedErrorMessageTitle = formatter.htmlAttributeCompatible(testOutcome.errorMessage, true) />
+                </#macro>
+                <#-- Test step results -->
+                <#list testOutcome.testSteps as step>
+                    <@write_step step=step step_number=step_index />
+                </#list>
+                <#if testOutcome.hasNonStepFailure()>
+                    <#assign step_outcome_icon = formatter.resultIcon().forResult(testOutcome.result) />
+                    <tr class="test-${testOutcome.result}">
+                        <td width="40">${step_outcome_icon}
+                        </td>
+                        <#if testOutcome.hasScreenshots()>
+                        <td width="%" colspan="2">
+                            <#else>
+                        <td width="%" colspan="1">
+                            </#if>
+                            <#if testOutcome.errorMessage?has_content>
+                                <span class="top-level-step">${testOutcome.errorMessage}</span>
+                            <#else>
+                                <span class="top-level-step">An error occurred outside of step execution</span>
+                            </#if>
+                        </td>
+                        <td width="100"><span
+                                    class="top-level-step">${formatter.htmlCompatibleStepDescription(testOutcome.result)}</span>
+                        </td>
+                        <td width="100"><span class="top-level-step">${testOutcome.durationInSeconds}s</span></td>
+                    </tr>
+                    <tr class="test-${testOutcome.result}">
+                        <td width="40">&nbsp</td>
+                        <#if testOutcome.hasScreenshots()>
+                        <td width="%" colspan="4">
+                            <#else>
+                        <td width="%" colspan="3">
+                            </#if>
+                            <#if (testOutcome.errorMessage)??>
+                                <#if (testOutcome.nestedTestFailureCause)??>
+                                    <#assign formattedErrorMessageTitle = formatter.htmlAttributeCompatible(testOutcome.errorMessage, true) />
 
-                            <@stacktrace title=formattedErrorMessageTitle cause=testOutcome.nestedTestFailureCause id="overall" />
-                        </#if>
-                    </#if>
+                                    <@stacktrace title=formattedErrorMessageTitle cause=testOutcome.nestedTestFailureCause id="overall" />
+                                </#if>
+                            </#if>
 
-                </td>
-                </tr>
-            <#--</#if>-->
-            </#if>
-                <tr class="test-${testOutcome.result}">
-                <#if testOutcome.hasScreenshots()>
-                    <td colspan="3"></td>
-                <#else>
-                    <td colspan="2"></td>
+                        </td>
+                    </tr>
+                <#--</#if>-->
                 </#if>
+                <tr class="test-${testOutcome.result}">
+                    <#if testOutcome.hasScreenshots()>
+                        <td colspan="3"></td>
+                    <#else>
+                        <td colspan="2"></td>
+                    </#if>
                     <td width="100"><span class="top-level-step"><em>${testOutcome.result}</em></span></td>
                     <td width="100"><span class="top-level-step"><em>${testOutcome.durationInSeconds}s</em></span></td>
                 </tr>
@@ -600,8 +611,7 @@
                     return "images/minus.png";
                 });
 
-            }
-            else {
+            } else {
                 $(".img" + divId).attr("src", function () {
                     return "images/plus.png";
                 });
@@ -609,17 +619,17 @@
         }
     </script>
 
-<#--<script type="text/javascript">-->
-<#--$('.example-table table').DataTable({-->
-<#--// "order": [[0, "asc"]],-->
-<#--"pageLength": 50,-->
-<#--"searching": false,-->
-<#--"ordering":  false,-->
-<#--"scrollX": "100%",-->
-<#--"scrollXInner": "100%",-->
-<#--"scrollCollapse": true-->
-<#--});-->
-<#--</script>-->
+    <#--<script type="text/javascript">-->
+    <#--$('.example-table table').DataTable({-->
+    <#--// "order": [[0, "asc"]],-->
+    <#--"pageLength": 50,-->
+    <#--"searching": false,-->
+    <#--"ordering":  false,-->
+    <#--"scrollX": "100%",-->
+    <#--"scrollXInner": "100%",-->
+    <#--"scrollCollapse": true-->
+    <#--});-->
+    <#--</script>-->
 
     <script type="text/javascript">
         //<![CDATA[
@@ -636,7 +646,7 @@
         //]]>
     </script>
     <div id="imgPreviewContainer" style="position: absolute; top: 612px; left: 355px; display: none; " class=""><img
-            src="" style="display: none; "></div>
+                src="" style="display: none; "></div>
     <div id="imgPreviewContainer2" style="position: absolute; top: 925px; left: 320px; display: none; " class="">
         <img style="width: 200px; display: none; " src=""></div>
     <div id="imgPreviewWithStyles" style="position: absolute; top: 1272px; left: 321px; display: none; " class="">
@@ -644,5 +654,5 @@
     <div id="imgPreviewWithStyles2" style="display: none; position: absolute; "><img style="height: 200px; "></div>
     <div id="imgPreviewWithStyles3" style="display: none; position: absolute; "><img style="height: 200px; "></div>
 
-</body>
+    </body>
 </html>

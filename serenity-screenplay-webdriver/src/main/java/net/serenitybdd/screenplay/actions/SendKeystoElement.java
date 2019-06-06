@@ -8,12 +8,12 @@ public class SendKeystoElement extends EnterValue {
 
     private WebElementFacade element;
 
-    public SendKeystoElement(String theText, WebElementFacade element) {
+    public SendKeystoElement(WebElementFacade element, CharSequence... theText) {
         super(theText);
         this.element = element;
     }
 
-    @Step("{0} enters '#theText' into #element")
+    @Step("{0} enters #theTextAsAString into #element")
     public <T extends Actor> void performAs(T theUser) {
         element.sendKeys(theText);
         if (getFollowedByKeys().length > 0) {

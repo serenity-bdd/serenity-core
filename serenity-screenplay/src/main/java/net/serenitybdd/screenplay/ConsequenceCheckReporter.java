@@ -12,9 +12,9 @@ class ConsequenceCheckReporter {
             this.consequence = consequence;
         }
 
-        public void startQuestion() {
+        public void startQuestion(Actor actor) {
             if (shouldReportConsequence()) {
-                eventBusInterface.startQuestion(FormattedTitle.ofConsequence(consequence));
+                eventBusInterface.startQuestion(FormattedTitle.ofConsequence(consequence, actor));
             }
         }
 

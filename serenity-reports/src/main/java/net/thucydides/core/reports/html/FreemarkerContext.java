@@ -15,6 +15,7 @@ import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.reports.ReportOptions;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.requirements.RequirementsService;
+import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.requirements.reports.ScenarioOutcome;
 import net.thucydides.core.requirements.reports.ScenarioOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -23,10 +24,7 @@ import net.thucydides.core.util.VersionProvider;
 import org.joda.time.DateTime;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static net.serenitybdd.reports.model.DurationsKt.*;
@@ -125,8 +123,15 @@ public class FreemarkerContext {
                 .splitToList(REPORT_TAGTYPES.from(environmentVariables, "feature"));
 
         context.put("inflection", Inflector.getInstance());
+
+        Collection<TestTag> coveredTags = requirements.getTagsOfType(tagTypes).stream()
+                .filter(tag -> testOutcomes.containsTagMatching(tag))
+                .collect(Collectors.toSet());
+
+
         context.put("coverage", TagCoverage.from(testOutcomes)
-                .showingTags(requirements.getTagsOfType(tagTypes))
+//                .showingTags(requirements.getTagsOfType(tagTypes))
+                .showingTags(coveredTags)
                 .forTagTypes(tagTypes));
         context.put("backgroundColor", new BackgroundColor());
 

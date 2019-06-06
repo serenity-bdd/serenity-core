@@ -151,6 +151,16 @@ public class UnresolvedTargetWebElementState implements WebElementState {
     }
 
     @Override
+    public String getValue() {
+        return null;
+    }
+
+    @Override
+    public String getText() {
+        return null;
+    }
+
+    @Override
     public WebElementState expect(String errorMessage) {
         return null;
     }

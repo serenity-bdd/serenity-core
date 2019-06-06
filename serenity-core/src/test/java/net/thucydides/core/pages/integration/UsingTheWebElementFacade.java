@@ -81,7 +81,7 @@ public class UsingTheWebElementFacade extends FluentElementAPITestsBaseClass {
      */
     @Test
     public void page_level_queries_should_return_elements_using_successive_filters() {
-        List<net.serenitybdd.core.pages.WebElementFacade> elements = page.findElementsMatching("#demo", "#firstname");
+        List<net.serenitybdd.core.pages.WebElementFacade> elements = page.findNestedElements("#demo", "#firstname");
         assertThat(elements).isNotEmpty();
     }
 
@@ -99,7 +99,7 @@ public class UsingTheWebElementFacade extends FluentElementAPITestsBaseClass {
 
     @Test
     public void page_level_queries_should_return_individual_elements_using_successive_filters() {
-        WebElementFacade element = page.findElementMatching("#demo", "#firstname");
+        WebElementFacade element = page.findNested("#demo", "#firstname");
         element.shouldBePresent();
     }
 

@@ -112,6 +112,12 @@ public enum ThucydidesSystemProperty {
     SERENITY_SUMMARY_REPORT_TITLE,
 
     /**
+     * A subtitle to appear in the Serenity HTML reports.
+     * This can be useful to describe a qualified or filtered report.
+     */
+    REPORT_SUBTITLE,
+
+    /**
      * Link to the generated Serenity report to embed in the emailable summary report.
      */
     SERENITY_REPORT_URL,
@@ -1356,7 +1362,20 @@ public enum ThucydidesSystemProperty {
 
     WEBDRIVER_CREATION_RETRY_MAX_TIME,
 
+    /**
+     * If set to true, the name of the actor will appear in "should" statements for Screenplay tests.
+     */
+    SERENITY_INCLUDE_ACTOR_NAME_IN_CONSEQUENCES,
+
+    /**
+     * Wait for an element to be visible and fail if the element is not visible.
+     * By default, this behaviour is deactivated as of version 2.0.49, and the behaviour of getText()
+     * replicates the standard Selenium behavior of returning an empty string if an element is not visible.
+     */
+    LEGACY_WAIT_FOR_TEXT,
+
     ENVIRONMENT,
+
     /**
      * The title to appear in the tag type table in the email reports
      */

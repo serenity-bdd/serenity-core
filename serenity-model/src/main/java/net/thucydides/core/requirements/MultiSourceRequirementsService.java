@@ -39,7 +39,7 @@ public class MultiSourceRequirementsService extends BaseRequirementsService impl
                 LOGGER.trace("Reading requirements from " + tagProvider);
                 requirements = merger.merge(requirements, RequirementsProvided.by(tagProvider));
             }
-            requirements = addParentsTo(requirements);
+            requirements = RequirementAncestry.addParentsTo(requirements);
             indexRequirements();
             LOGGER.debug(" found:" + requirements);
         }

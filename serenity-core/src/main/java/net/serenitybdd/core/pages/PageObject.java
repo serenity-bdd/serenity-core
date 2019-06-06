@@ -16,6 +16,7 @@ import net.thucydides.core.pages.jquery.JQueryEnabledPage;
 import net.thucydides.core.reflection.MethodFinder;
 import net.thucydides.core.scheduling.FluentWaitWithRefresh;
 import net.thucydides.core.scheduling.NormalFluentWait;
+import net.thucydides.core.scheduling.SerenityFluentWait;
 import net.thucydides.core.scheduling.ThucydidesFluentWait;
 import net.thucydides.core.steps.PageObjectStepDelayer;
 import net.thucydides.core.steps.StepEventBus;
@@ -341,6 +342,11 @@ public abstract class PageObject {
         return this;
     }
 
+    public PageObject waitFor(String message, ExpectedCondition expectedCondition) {
+        getRenderedView().waitFor(message, expectedCondition);
+        return this;
+    }
+
     public PageObject waitForRenderedElementsToBePresent(final By byElementCriteria) {
         getRenderedView().waitForPresenceOf(byElementCriteria);
 
@@ -374,9 +380,8 @@ public abstract class PageObject {
         return this;
     }
 
-    private WebDriverWait waitOnPage() {
+    public WebDriverWait waitOnPage() {
         return new WebDriverWait(driver, getWaitForTimeout().getSeconds());
-//        waitForTimeoutInSecondsWithAMinimumOfOneSecond());
     }
 
     public PageObject waitForTitleToDisappear(final String expectedTitle) {
@@ -481,10 +486,6 @@ public abstract class PageObject {
         return driver.findElements(byListCriteria);
     }
 
-    public <T extends PageObject> T foo() {
-        return (T) this;
-    }
-
     /**
      * Check that the specified text appears somewhere in the page.
      */
@@ -546,8 +547,8 @@ public abstract class PageObject {
      * Clear a field and enter a value into it.
      * This is a more fluent alternative to using the typeInto method.
      */
-    public FieldEntry enter(final String value) {
-        return new FieldEntry(value);
+    public FieldEntry enter(CharSequence... keysToSend) {
+        return new FieldEntry(keysToSend);
     }
 
     public void selectFromDropdown(final WebElement dropdown,
@@ -957,6 +958,13 @@ public abstract class PageObject {
         }
     }
 
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(WithLocator locator) {
+        return element(locator.getLocator());
+    }
+
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(WithByLocator locator) {
+        return element(locator.getLocator());
+    }
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(WebElement webElement) {
         return element(webElement);
@@ -969,6 +977,15 @@ public abstract class PageObject {
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T $(By bySelector) {
         return element(bySelector);
     }
+
+    public List<WebElementFacade> $$(String xpathOrCssSelector, Object... arguments) {
+        return findAll(xpathOrCssSelector, arguments);
+    }
+
+    public List<WebElementFacade> $$(By bySelector) {
+        return findAll(bySelector);
+    }
+
 
     /**
      * Provides a fluent API for querying web elements.
@@ -983,6 +1000,12 @@ public abstract class PageObject {
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(By selector) {
         return element(selector);
+    }
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(WithByLocator selector) {
+        return element(selector.getLocator());
+    }
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(WithLocator selector) {
+        return element(selector.getLocator());
     }
 
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(List<By> selectors) {
@@ -1009,14 +1032,25 @@ public abstract class PageObject {
         return element;
     }
 
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T findNested(By... selectors) {
+        T element = null;
+        for (By selector : selectors) {
+            if (element == null) {
+                element = element(selector);
+            } else {
+                element = element.findBy(selector);
+            }
+        }
+        return element;
+    }
+
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T find(String selector) {
         return findBy(NewList.of(selector));
     }
 
-    public <T extends net.serenitybdd.core.pages.WebElementFacade> T findElementMatching(String... selectors) {
+    public <T extends net.serenitybdd.core.pages.WebElementFacade> T findNested(String... selectors) {
         return findBy(NewList.of(selectors));
     }
-
 
     public Optional<WebElementFacade> findFirst(String xpathOrCSSSelector) {
         return findEach(xpathOrCSSSelector).findFirst();
@@ -1028,6 +1062,14 @@ public abstract class PageObject {
 
     public Stream<WebElementFacade> findEach(By bySelector) {
         return findAll(bySelector).stream();
+    }
+
+    public Stream<WebElementFacade> findEach(WithByLocator bySelector) {
+        return findAll(bySelector.getLocator()).stream();
+    }
+
+    public Stream<WebElementFacade> findEach(WithLocator bySelector) {
+        return findAll(bySelector.getLocator()).stream();
     }
 
     /**
@@ -1052,7 +1094,7 @@ public abstract class PageObject {
                 .thenFindAll(lastIn(xpathOrCssSelectors)).stream();
     }
 
-    public List<WebElementFacade> findElementsMatching(String... xpathOrCssSelectors) {
+    public List<WebElementFacade> findNestedElements(String... xpathOrCssSelectors) {
         if (xpathOrCssSelectors.length == 1) {
             return findAll(xpathOrCssSelectors[0]);
         }
@@ -1088,9 +1130,16 @@ public abstract class PageObject {
         return allElements;
     }
 
-    /**
-     * Provides a fluent API for querying web elements.
-     */
+    public List<WebElementFacade> findAll(WithLocator bySelector) {
+        return findAll(bySelector.getLocator());
+    }
+
+    public List<WebElementFacade> findAll(WithByLocator bySelector) {
+        return findAll(bySelector.getLocator());
+    }
+        /**
+         * Provides a fluent API for querying web elements.
+         */
     public <T extends net.serenitybdd.core.pages.WebElementFacade> T element(String xpathOrCssSelector, Object... arguments) {
         return element(xpathOrCssSelector(withArguments(xpathOrCssSelector,arguments)));
     }
@@ -1177,10 +1226,10 @@ public abstract class PageObject {
                 .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
     }
 
-    public ThucydidesFluentWait<WebDriver> waitForCondition() {
-        return new NormalFluentWait<>(driver, webdriverClock, sleeper)
-                .withTimeout(getWaitForTimeout().toMillis(), TimeUnit.MILLISECONDS)
-                .pollingEvery(WAIT_FOR_ELEMENT_PAUSE_LENGTH, TimeUnit.MILLISECONDS)
+    public SerenityFluentWait waitForCondition() {
+        return (SerenityFluentWait) new SerenityFluentWait(driver, webdriverClock, sleeper)
+                .withTimeout(getWaitForTimeout())
+                .pollingEvery(Duration.ofMillis(WAIT_FOR_ELEMENT_PAUSE_LENGTH))
                 .ignoring(NoSuchElementException.class, NoSuchFrameException.class);
     }
 
@@ -1192,6 +1241,9 @@ public abstract class PageObject {
         return getRenderedView().waitFor(webElement);
     }
 
+    public WebElementFacadeWait waitForElement() {
+        return getRenderedView().waitForElement();
+    }
 
     public Alert getAlert() {
         return driver.switchTo().alert();
@@ -1205,23 +1257,26 @@ public abstract class PageObject {
 
     public class FieldEntry {
 
-        private final String value;
+        private final CharSequence[] keysToSend;
 
-        public FieldEntry(final String value) {
-            this.value = value;
+        public FieldEntry(final CharSequence... keysToSend) {
+            this.keysToSend = keysToSend;
         }
 
         public void into(final WebElement field) {
-            element(field).type(value);
+            element(field).type(keysToSend);
         }
 
         public void into(final net.serenitybdd.core.pages.WebElementFacade field) {
-            field.type(value);
+            field.type(keysToSend);
         }
 
-        public void intoField(final By bySelector) {
+        public void into(final By bySelector) {
             WebElement field = getDriver().findElement(bySelector);
             into(field);
+        }
+        public void into(String selector) {
+            $(selector).type(keysToSend);
         }
     }
 

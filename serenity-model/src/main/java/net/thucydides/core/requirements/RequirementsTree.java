@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class RequirementsTree {
     private final List<Requirement> rootRequirements;
@@ -28,18 +29,22 @@ public class RequirementsTree {
         return new RequirementsTree(requirements);
     }
 
-    public List<Requirement> asFlattenedList() {
-        List<Requirement> requirements = new ArrayList<>();
-        rootRequirements.forEach(
-                requirement -> {
-                    requirements.add(requirement);
-                    for(Requirement child : requirement.getChildren()) {
-                        requirements.addAll(RequirementsTree.forRequirement(child).asFlattenedList());
-                    }
-                }
-        );
-        return requirements;
+    public Stream<Requirement> stream() {
+        return rootRequirements.stream().flatMap(Requirement::stream);
     }
+
+//    public List<Requirement> asFlattenedList() {
+//        List<Requirement> requirements = new ArrayList<>();
+//        rootRequirements.forEach(
+//                requirement -> {
+//                    requirements.add(requirement);
+//                    for(Requirement child : requirement.getChildren()) {
+//                        requirements.addAll(RequirementsTree.forRequirement(child).asFlattenedList());
+//                    }
+//                }
+//        );
+//        return requirements;
+//    }
 
     public String toString() {
         return net.thucydides.core.requirements.model.RequirementTree.withRequirements(rootRequirements).toString();

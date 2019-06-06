@@ -182,7 +182,7 @@ public class CheckingVisibilityWithTheFluentElementAPI extends FluentElementAPIT
         page.element(page.initiallyDisabled).waitUntilEnabled().and().then().click();
     }
 
-    @Test
+    @Test///
     public void should_know_if_disabled_element_is_not_enabled() {
         assertThat(page.element(page.readonlyField).isEnabled(), is(false));
     }

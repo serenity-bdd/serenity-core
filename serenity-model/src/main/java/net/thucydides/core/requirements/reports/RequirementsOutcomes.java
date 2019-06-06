@@ -389,7 +389,7 @@ public class RequirementsOutcomes {
     }
 
     public List<RequirementOutcome> getFlattenedRequirementOutcomes(List<RequirementOutcome> outcomes) {
-        Set<RequirementOutcome> flattenedOutcomes = new HashSet();
+        Set<RequirementOutcome> flattenedOutcomes = new HashSet<>();
 
         for (RequirementOutcome requirementOutcome : outcomes) {
             flattenedOutcomes.add(requirementOutcome);
@@ -521,7 +521,7 @@ public class RequirementsOutcomes {
     }
 
     public RequirementsOutcomes withoutUnrelatedRequirements() {
-        if (isEmpty(ThucydidesSystemProperty.THUCYDIDES_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE.from(environmentVariables))) {
+        if (isEmpty(ThucydidesSystemProperty.SERENITY_EXCLUDE_UNRELATED_REQUIREMENTS_OF_TYPE.from(environmentVariables))) {
             return this;
         }
         return new RequirementsOutcomes(

@@ -11,6 +11,14 @@ public class NamedPredicate<T> implements Predicate<T>{
         this.predicate = predicate;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public Predicate<T> getPredicate() {
+        return predicate;
+    }
+
     @Override
     public String toString() {
         return name;

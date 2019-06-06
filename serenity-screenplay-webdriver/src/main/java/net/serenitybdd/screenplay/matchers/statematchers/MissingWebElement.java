@@ -143,6 +143,16 @@ public class MissingWebElement implements WebElementState {
     }
 
     @Override
+    public String getValue() {
+        return "";
+    }
+
+    @Override
+    public String getText() {
+        return "";
+    }
+
+    @Override
     public WebElementState expect(String errorMessage) {
         this.expectedErrorMessage = errorMessage;
         return this;

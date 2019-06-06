@@ -18,7 +18,7 @@ public class Head extends RestInteraction {
         this.resource = resource;
     }
 
-    @Step("{0} executes a PUT on the resource #resource")
+    @Step("{0} executes a HEAD on the resource #resource")
     @Override
     public <T extends Actor> void performAs(T actor) {
         rest().head(as(actor).resolve(resource));

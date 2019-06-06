@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -70,10 +71,10 @@ public class Requirement implements Comparable {
         this.path = path;
         this.parent = parent;
         this.narrative = narrative;
-        this.children = new ArrayList<>(children);
-        this.examples = new ArrayList<>(examples);
-        this.releaseVersions = NewList.copyOf(releaseVersions);
-        this.customFields = NewList.copyOf(customFields);
+        this.children = Collections.unmodifiableList(children);
+        this.examples = Collections.unmodifiableList(examples);
+        this.releaseVersions = Collections.unmodifiableList(releaseVersions);
+        this.customFields = Collections.unmodifiableList(customFields);
         this.featureFileName = featureFileName;
         this.tags = new ArrayList<>();
     }
@@ -94,10 +95,10 @@ public class Requirement implements Comparable {
         this.path = path;
         this.parent = parent;
         this.narrative = narrative;
-        this.children = new ArrayList<>(children);
-        this.examples = new ArrayList<>(examples);
-        this.releaseVersions = NewList.copyOf(releaseVersions);
-        this.customFields = NewList.copyOf(customFields);
+        this.children = Collections.unmodifiableList(children);
+        this.examples = Collections.unmodifiableList(examples);
+        this.releaseVersions = Collections.unmodifiableList(releaseVersions);
+        this.customFields = Collections.unmodifiableList(customFields);
         this.featureFileName = featureFileName;
         this.tags = tags;
     }
@@ -117,10 +118,10 @@ public class Requirement implements Comparable {
         this.type = type;
         this.parent = parent;
         this.narrative = narrative;
-        this.children = NewList.copyOf(children);
-        this.examples = NewList.copyOf(examples);
-        this.releaseVersions = NewList.copyOf(releaseVersions);
-        this.customFields = NewList.copyOf(customFields);
+        this.children = Collections.unmodifiableList(children);
+        this.examples = Collections.unmodifiableList(examples);
+        this.releaseVersions = Collections.unmodifiableList(releaseVersions);
+        this.customFields = Collections.unmodifiableList(customFields);
         this.path = path;
         this.tags = new ArrayList<>();
     }
@@ -162,7 +163,15 @@ public class Requirement implements Comparable {
     }
 
     public List<Requirement> getChildren() {
-        return NewList.copyOf(children);
+        return children; //NewList.copyOf(children);
+    }
+
+    public Stream<Requirement> getChildrenAsStream() {
+        return children.stream();
+    }
+
+    public boolean hasChild(Requirement child) {
+        return children.contains(child);
     }
 
     public List<Example> getExamples() {
@@ -199,7 +208,7 @@ public class Requirement implements Comparable {
     }
 
     public void setChildren(List<Requirement> children) {
-        this.children = NewList.copyOf(children);
+        this.children = Collections.unmodifiableList(children);
     }
 
     public Requirement withParent(String parent) {
@@ -439,4 +448,9 @@ public class Requirement implements Comparable {
     public String getOrder() {
         return ((path != null) ? path : "") + (featureFileName != null ? featureFileName : "") + getDisplayName();
     }
+
+    public Stream<Requirement> stream() {
+        return Stream.concat(Stream.of(this), getChildren().stream().flatMap(Requirement::stream));
+    }
+
 }

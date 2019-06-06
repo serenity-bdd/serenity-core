@@ -15,6 +15,7 @@ import net.serenitybdd.core.SkipNested;
  * --
  *
  */
+@FunctionalInterface
 public interface Performable extends SkipNested {
     <T extends Actor> void performAs(T actor);
 }

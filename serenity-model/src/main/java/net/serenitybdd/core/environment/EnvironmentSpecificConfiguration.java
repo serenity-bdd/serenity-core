@@ -75,12 +75,13 @@ public class EnvironmentSpecificConfiguration {
         return substituteProperties(propertyValue);
     }
 
-    private final Pattern VARIABLE_EXPRRESSION_PATTERN = Pattern.compile("#\\{(.*)\\}");
+    //private final Pattern VARIABLE_EXPRRESSION_PATTERN = Pattern.compile("#\\{(.*)\\}");
+    private final Pattern VARIABLE_EXPRESSION_PATTERN = Pattern.compile("#\\{([^}]*)\\}");
 
     private String substituteProperties(String propertyValue) {
         if (propertyValue == null) { return propertyValue; }
 
-        Matcher matcher = VARIABLE_EXPRRESSION_PATTERN.matcher(propertyValue);
+        Matcher matcher = VARIABLE_EXPRESSION_PATTERN.matcher(propertyValue);
         while (matcher.find()) {
             String nestedProperty = matcher.group().substring(2,matcher.group().length() - 1);
             String value = getPropertyValue(nestedProperty);

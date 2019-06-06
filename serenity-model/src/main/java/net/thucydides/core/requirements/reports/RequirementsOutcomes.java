@@ -389,7 +389,7 @@ public class RequirementsOutcomes {
     }
 
     public List<RequirementOutcome> getFlattenedRequirementOutcomes(List<RequirementOutcome> outcomes) {
-        Set<RequirementOutcome> flattenedOutcomes = new HashSet();
+        Set<RequirementOutcome> flattenedOutcomes = new HashSet<>();
 
         for (RequirementOutcome requirementOutcome : outcomes) {
             flattenedOutcomes.add(requirementOutcome);

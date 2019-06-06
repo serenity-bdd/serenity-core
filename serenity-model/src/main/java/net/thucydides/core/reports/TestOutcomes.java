@@ -400,6 +400,12 @@ public class TestOutcomes {
         return getTags().contains(testTag);
     }
 
+    public boolean containsTagMatching(TestTag containedTag) {
+        return getTags().stream().anyMatch(
+                tag -> tag.isAsOrMoreSpecificThan(containedTag) || containedTag.isAsOrMoreSpecificThan(tag)
+        );
+    }
+
     public Optional<ZonedDateTime> getStartTime() {
         return outcomes.stream()
                 .filter(outcome -> outcome.getStartTime() != null)

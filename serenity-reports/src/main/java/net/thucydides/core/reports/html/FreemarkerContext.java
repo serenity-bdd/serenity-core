@@ -15,6 +15,7 @@ import net.thucydides.core.model.formatters.ReportFormatter;
 import net.thucydides.core.reports.ReportOptions;
 import net.thucydides.core.reports.TestOutcomes;
 import net.thucydides.core.requirements.RequirementsService;
+import net.thucydides.core.requirements.reports.RequirementsOutcomes;
 import net.thucydides.core.requirements.reports.ScenarioOutcome;
 import net.thucydides.core.requirements.reports.ScenarioOutcomes;
 import net.thucydides.core.util.EnvironmentVariables;
@@ -123,10 +124,14 @@ public class FreemarkerContext {
 
         context.put("inflection", Inflector.getInstance());
 
-        Collection<TestTag> coveredTags = requirements.getTagsOfType(tagTypes);
+        Collection<TestTag> coveredTags = requirements.getTagsOfType(tagTypes).stream()
+                .filter(tag -> testOutcomes.containsTagMatching(tag))
+                .collect(Collectors.toSet());
 
-        context.put("coverage", TagCoverage.from(testOutcomes)//.withTags(coveredTags))
-                .showingTags(requirements.getTagsOfType(tagTypes))
+
+        context.put("coverage", TagCoverage.from(testOutcomes)
+//                .showingTags(requirements.getTagsOfType(tagTypes))
+                .showingTags(coveredTags)
                 .forTagTypes(tagTypes));
         context.put("backgroundColor", new BackgroundColor());
 

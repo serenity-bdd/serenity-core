@@ -98,7 +98,8 @@ class RequirementsOverviewReportingTask extends BaseReportingTask implements Rep
 
         }
 
-        JSONRequirementsTree requirementsTree = JSONRequirementsTree.forRequirements(requirements, requirementsOutcomes);
+//        JSONRequirementsTree requirementsTree = JSONRequirementsTree.forRequirements(requirements, requirementsOutcomes);
+        JSONRequirementsTree requirementsTree = JSONRequirementsTree.forRequirements(requirements, requirementsOutcomes.withoutUnrelatedRequirements());
 
         context.put("requirements", requirementsOutcomes.withoutUnrelatedRequirements());
         context.put("requirementsTree", requirementsTree.asString());

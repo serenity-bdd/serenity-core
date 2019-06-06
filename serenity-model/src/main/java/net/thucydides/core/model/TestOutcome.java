@@ -1965,6 +1965,12 @@ public class TestOutcome {
         return TestTags.of(getTags()).containsTagMatching(specificTag);
     }
 
+    public boolean hasAMoreSpecificFormOfTag(TestTag generalTag) {
+        return getTags().stream().anyMatch(
+                tag -> tag.isAsOrMoreSpecificThan(generalTag)
+        );// TestTags.of(getTags()).containsTagMatching(specificTag);
+    }
+
     public void setStartTime(ZonedDateTime startTime) {
         this.startTime = startTime;
     }

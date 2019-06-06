@@ -22,6 +22,7 @@ public class ReportOptions {
     final private boolean showTagMenus;
     final private boolean showRelatedTags;
     final private String projectName;
+    final private String projectSubTitle;
     final private RequirementsService requirementsService;
     final private boolean displayPiechart;
     final private List<String> firstClassTagTypes;
@@ -40,6 +41,7 @@ public class ReportOptions {
         showRelatedTags = Boolean.valueOf(SHOW_RELATED_TAGS.from(environmentVariables, "true"));
         displayPiechart = Boolean.valueOf(SHOW_PIE_CHARTS.from(environmentVariables, "true"));
         projectName = SERENITY_PROJECT_NAME.from(environmentVariables,"");
+        projectSubTitle = REPORT_SUBTITLE.from(environmentVariables,"");
         this.requirementsService = requirementsService;
         firstClassTagTypes = Splitter.on(",").omitEmptyStrings().splitToList(THUCYDIDES_REPORT_TAG_MENUS.from(environmentVariables,""));
     }
@@ -78,6 +80,10 @@ public class ReportOptions {
 
     public String getProjectName() {
         return projectName;
+    }
+
+    public String getProjectSubTitle() {
+        return projectSubTitle;
     }
 
     public boolean isDisplayPiechart() {

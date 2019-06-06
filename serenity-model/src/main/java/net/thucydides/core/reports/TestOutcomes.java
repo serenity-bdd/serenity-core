@@ -592,7 +592,7 @@ public class TestOutcomes {
         return new TestOutcomes(this.outcomes, this.estimatedAverageStepCount, label, tag);
     }
 
-    public TestOutcomes withTags(List<TestTag> tags) {
+    public TestOutcomes withTags(Collection<TestTag> tags) {
         Set<TestOutcome> filteredOutcomes = new HashSet<>();
         for (TestTag tag : tags) {
             filteredOutcomes.addAll(matchingOutcomes(outcomes, tag));
@@ -624,7 +624,7 @@ public class TestOutcomes {
         if (isAnIssue(tag)) {
             return outcome.hasIssue(tag.getName());
         }
-        return outcome.hasTag(tag) || outcome.hasAMoreGeneralFormOfTag(tag);
+        return outcome.hasTag(tag) || outcome.hasAMoreGeneralFormOfTag(tag);// || outcome.hasAMoreSpecificFormOfTag(tag);
     }
 
 

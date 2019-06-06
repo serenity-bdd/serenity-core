@@ -112,6 +112,12 @@ public enum ThucydidesSystemProperty {
     SERENITY_SUMMARY_REPORT_TITLE,
 
     /**
+     * A subtitle to appear in the Serenity HTML reports.
+     * This can be useful to describe a qualified or filtered report.
+     */
+    REPORT_SUBTITLE,
+
+    /**
      * Link to the generated Serenity report to embed in the emailable summary report.
      */
     SERENITY_REPORT_URL,

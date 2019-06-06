@@ -23,10 +23,7 @@ import net.thucydides.core.util.VersionProvider;
 import org.joda.time.DateTime;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static net.serenitybdd.reports.model.DurationsKt.*;
@@ -125,7 +122,10 @@ public class FreemarkerContext {
                 .splitToList(REPORT_TAGTYPES.from(environmentVariables, "feature"));
 
         context.put("inflection", Inflector.getInstance());
-        context.put("coverage", TagCoverage.from(testOutcomes)
+
+        Collection<TestTag> coveredTags = requirements.getTagsOfType(tagTypes);
+
+        context.put("coverage", TagCoverage.from(testOutcomes)//.withTags(coveredTags))
                 .showingTags(requirements.getTagsOfType(tagTypes))
                 .forTagTypes(tagTypes));
         context.put("backgroundColor", new BackgroundColor());

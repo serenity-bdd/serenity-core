@@ -301,6 +301,11 @@ public class ConsoleLoggingListener implements StepListener {
     }
 
     @Override
+    public void testFinished(TestOutcome result, boolean isInDataDrivenTest) {
+        testFinished(result);
+    }
+
+    @Override
     public void testRetried() {
     }
 

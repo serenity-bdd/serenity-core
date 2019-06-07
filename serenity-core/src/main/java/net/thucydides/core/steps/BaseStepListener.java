@@ -454,12 +454,15 @@ public class BaseStepListener implements StepListener, StepPublisher {
         }
     }
 
+    public void testFinished(final TestOutcome outcome) {
+        testFinished(outcome, false);
+    }
     /**
      * A test has finished.
      *
      * @param outcome the result of the test that just finished.
      */
-    public void testFinished(final TestOutcome outcome) {
+    public void testFinished(final TestOutcome outcome, boolean inDataDrivenTest) {
 
         if (getTestOutcomes().isEmpty()) { return; }
 
@@ -481,11 +484,17 @@ public class BaseStepListener implements StepListener, StepPublisher {
                     outcome,
                     SerenityWebdriverManager.inThisTestThread().getCurrentDriver());
 
-            closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(SCENARIO);
+
+            if (inDataDrivenTest) {
+                closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(EXAMPLE);
+            } else {
+                closeBrowsers.forTestSuite(testSuite).closeIfConfiguredForANew(SCENARIO);
+                ThucydidesWebDriverSupport.clearDefaultDriver();
+            }
+
         }
 
         currentStepStack.clear();
-        ThucydidesWebDriverSupport.clearDefaultDriver();
     }
 
     private void testAndTopLevelStepsShouldBeIgnored() {

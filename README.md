@@ -1,15 +1,12 @@
-## Serenity - that feeling you get when you know you can trust your tests
+# Serenity - that feeling you get when you know you can trust your tests
 
-Serenity (previously known as 'Thucydides') is a library designed to make writing automated acceptance tests easier, 
-and more fun. 
-
-[![Javadocs](https://www.javadoc.io/badge/net.serenity-bdd/serenity-core.svg)](https://www.javadoc.io/doc/net.serenity-bdd/serenity-core)
+Serenity BDD is a library designed to make writing automated acceptance tests easier, and more fun. 
 
 ## What does it do?
 
 Serenity helps structure your automated acceptance tests in order to make them easier to understand and maintain, 
-and provides great reporting capabilties on top of tools like JBehave, Cucumber or JUnit. It also provides tight integration 
-with WebDriver, to make automated web testing easier and more efficient.
+and provides great reporting capabilties on top of tools like Cucumber and JUnit. It also provides tight integration 
+with WebDriver and RestAssured, to make both web testing and API testing easier and more efficient.
 
 Serenity works in two ways:
   - It instruments your test code and reports on the steps that your tests execute to achieve their goals, and stores the test
@@ -18,6 +15,51 @@ Serenity works in two ways:
   but also the status of your project. For example, you can get Serenity to report on what requirements, features or stories
   you have implemented, and how well (or not) they were tested.
   
+## Where can I learn more?
+
+Check out Serenity BDD in more detail here:
+* [Full User Guide](https://serenity-bdd.github.io/theserenitybook/latest/index.html)
+* [![Javadocs](https://www.javadoc.io/badge/net.serenity-bdd/serenity-core.svg)](https://www.javadoc.io/doc/net.serenity-bdd/serenity-core)
+  
+## What is the latest stable version I should use?
+
+The tables below list the latest stable versions of Serenity BDD and other related libraries.
+
+### Serenity with JUnit
+
+| serenity-core | Selenium version  |  RestAssured version |
+|---------------|-------------------|----------------------|
+| 2.0.52        | 3.141.59          | 3.3.0                |
+
+Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd/serenity-junit-starter).
+
+### Serenity with Cucumber
+Serenity works with both Cucumber 2 and Cucumber 4
+
+#### Cucumber 2
+
+| serenity-core | serenity-cucumber | Cucumber            |
+|---------------|-------------------|---------------------|
+| 2.0.52        | 1.9.39            | 2.4.0               |
+
+Sample project: [Serenity Cucumber Starter Project](https://github.com/serenity-bdd/serenity-cucumber-starter).
+
+#### Cucumber 4
+
+| serenity-core | serenity-cucumber4 | Cucumber           |
+|---------------|-------------------|---------------------|
+| 2.0.52        | 1.0.14            | 4.2.0               |
+
+Sample project: [Serenity Cucumber 4 Starter Project](https://github.com/serenity-bdd/serenity-cucumber4-starter).
+
+### Serenity with JBehave
+
+| serenity-core | serenity-jbehave  | JBehave             |
+|---------------|-------------------|---------------------|
+| 2.0.52        | 1.0.44            | 4.5                 |
+
+Sample project: [Serenity JBehave Starter Project](https://github.com/serenity-bdd/serenity-jbehave-starter).
+
 ## History - Serenity and Thucydides
 
 Serenity was originally called [Thucydides](https://github.com/thucydides-webtests), and the package structure still reflects this history. 
@@ -102,7 +144,11 @@ It is easier for us to fix something we can see breaking. If someone has to volu
 
 The fastest way to fix a defect is often to dig into the code and to submit a pull request. 
 
-### Ask for commercial support
+## Online Training
+
+The **[Serenity Dojo](http://serenitydojo.teachable.com)** provides a range of online courses to help you learn BDD and test automation with Serenity BDD.
+
+## Need Commercial Support?
 
 If you are using Serenity for your company projects, and need faster or more in-depth support, why not ask your company to get some [commercial support](https://johnfergusonsmart.com/serenity-bdd/)? We provide a range of support options including prioritied tickets, custom Serenity work, and remote mentoring/pair programming sessions, depending on your needs.
 

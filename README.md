@@ -1,4 +1,4 @@
-# ![Serenity BDD](docs/serenity-logo.png "Logo Title Text 1")
+# ![Serenity BDD](docs/serenity-bdd-logo.png "Logo Title Text 1")
 
 **_That feeling you get when you know you can trust your tests_**
 

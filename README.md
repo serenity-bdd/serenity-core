@@ -1,4 +1,5 @@
-# Serenity BDD
+# ![Serenity BDD](docs/serenity-logo.png "Logo Title Text 1")
+
 **_That feeling you get when you know you can trust your tests_**
 
 Serenity BDD is a library designed to make writing automated acceptance tests easier, and more fun. 

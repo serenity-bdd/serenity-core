@@ -15,10 +15,34 @@ Serenity works in two ways:
   but also the status of your project. For example, you can get Serenity to report on what requirements, features or stories
   you have implemented, and how well (or not) they were tested.
   
+### Serenity makes your test cleaner
+
+Serenity provides libraries and patterns that make it easier to write cleaner, more reusable code. It provides tight integration with Selenium WebDriver, and modern testing patterns such as Lean Page Objects, Action Classes, and the [Screenplay Pattern](https://serenity-bdd.github.io/theserenitybook/latest/serenity-screenplay.html). You can learn more about these patterns [in this article](https://johnfergusonsmart.com/page-objects-that-suck-less-tips-for-writing-more-maintainable-page-objects/).
+
+### Serenity makes your reports richer
+
+Serenity reports aim to be more than simple test reports - they are designed to provide _living documentation_ of your product. 
+The reports give an overview of the test results:
+
+![Serenity Test Summary](docs/serenity-dashboard.png "Logo Title Text 1")
+
+But they also let you document your requirements hierarchy, and the state of the acceptance criteria associated with your requirements:
+
+![Serenity Requirements Summary](docs/serenity-requirements.png "Logo Title Text 1")
+
+When you use BDD tools like Cucumber or JBehave, Serenity will include the feature details in a format that both team members and business folk can read:
+
+![Serenity Feature Details](docs/serenity-feature-overview.png "Logo Title Text 1")
+
+And if you drill into the details, Serenity will give you a detailed account of how the test played out, including interactions and screenshots:
+
+![Serenity Test Details](docs/serenity-details.png "Logo Title Text 1")
+
+  
 ## Where can I learn more?
 
 Check out Serenity BDD in more detail here:
-* [Full User Guide](https://serenity-bdd.github.io/theserenitybook/latest/index.html)
+* [User Guide](https://serenity-bdd.github.io/theserenitybook/latest/index.html)
 * [![Javadocs](https://www.javadoc.io/badge/net.serenity-bdd/serenity-core.svg)](https://www.javadoc.io/doc/net.serenity-bdd/serenity-core)
   
 ## What is the latest stable version I should use?
@@ -59,20 +83,6 @@ Sample project: [Serenity Cucumber 4 Starter Project](https://github.com/serenit
 | 2.0.52        | 1.0.44            | 4.5                 |
 
 Sample project: [Serenity JBehave Starter Project](https://github.com/serenity-bdd/serenity-jbehave-starter).
-
-## History - Serenity and Thucydides
-
-Serenity was originally called [Thucydides](https://github.com/thucydides-webtests), and the package structure still reflects this history. 
-Thucydides is discussed at length in the [BDD in Action](http://www.amazon.com/BDD-Action-Behavior-driven-development-lifecycle/dp/161729165X) 
-under the name *Thucydides* - everything discussed in "BDD in Action" is directly applicable for Serenity except for the artifact names.
-
-*Thucydides* was renamed *Serenity* in November 2014, and moving forward, all new work will be done on Serenity. The artifact names reflect this change, e.g.
-  - *net.thucydides:thucydides-code* becomes *net.serenity:core*
-  - *net.thucydides:thucydides-junit* becomes *net.serenity:serenity-junit*
-  - *net.thucydides:thucydides-jbehave* becomes *net.serenity:serenity-jbehave*
-  - *net.thucydides:thucydides-cucumber* becomes *net.serenity:serenity-cucumber*
- 
-and so on.
 
 ## Version number format
 
@@ -116,11 +126,23 @@ Please take a look at release notes to find some more examples of mutiline commi
 
 Starting from version 1.1.26, any commits without one of these prefixes will not appear in the release notes.
 
-
 ## Licensing
 
 This distribution, as a whole, is licensed under the terms of the Apache License, Version 2.0
 
+## History - Serenity and Thucydides
+
+Serenity was originally called [Thucydides](https://github.com/thucydides-webtests), and the package structure still reflects this history. 
+Thucydides is discussed at length in the [BDD in Action](http://www.amazon.com/BDD-Action-Behavior-driven-development-lifecycle/dp/161729165X) 
+under the name *Thucydides* - everything discussed in "BDD in Action" is directly applicable for Serenity except for the artifact names.
+
+*Thucydides* was renamed *Serenity* in November 2014, and moving forward, all new work will be done on Serenity. The artifact names reflect this change, e.g.
+  - *net.thucydides:thucydides-code* becomes *net.serenity:core*
+  - *net.thucydides:thucydides-junit* becomes *net.serenity:serenity-junit*
+  - *net.thucydides:thucydides-jbehave* becomes *net.serenity:serenity-jbehave*
+  - *net.thucydides:thucydides-cucumber* becomes *net.serenity:serenity-cucumber*
+ 
+and so on.
 
 ## Found a bug? Please read this before you raise an issue.
 

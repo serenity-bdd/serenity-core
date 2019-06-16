@@ -55,10 +55,10 @@ The tables below list the latest stable versions of Serenity BDD and other relat
 
 ### Serenity with JUnit
 
-| serenity-core | Selenium version  |  RestAssured version |
-|---------------|-------------------|----------------------|
-| 2.0.52        | 3.141.59          | 3.3.0                |
-| 2.0.48        | 3.141.59          | 3.3.0                |
+| serenity-core | serenity-maven-plugin | Selenium version  |  RestAssured version |
+|---------------|-----------------------|-------------------|----------------------|
+| 2.0.52        | 2.0.52                | 3.141.59          | 3.3.0                |
+| 2.0.48        | 2.0.48                | 3.141.59          | 3.3.0                |
 
 Sample project: [Serenity JUnit Starter Project](https://github.com/serenity-bdd/serenity-junit-starter).
 
@@ -67,17 +67,17 @@ Serenity works with both Cucumber 2 and Cucumber 4
 
 #### Cucumber 2
 
-| serenity-core | serenity-cucumber | Cucumber            |
-|---------------|-------------------|---------------------|
-| 2.0.52        | 1.9.39            | 2.4.0               |
-| 2.0.48        | 1.9.37            | 2.4.0               |
+| serenity-core | serenity-maven-plugin | serenity-cucumber | Cucumber            |
+|---------------|-----------------------|-------------------|---------------------|
+| 2.0.52        | 2.0.52                | 1.9.39            | 2.4.0               |
+| 2.0.48        | 2.0.48                | 1.9.37            | 2.4.0               |
 
 Sample project: [Serenity Cucumber Starter Project](https://github.com/serenity-bdd/serenity-cucumber-starter).
 
 #### Cucumber 4
 
-| serenity-core | serenity-cucumber4 | Cucumber            |
-|---------------|--------------------|---------------------|
+| serenity-core | serenity-maven-plugin | serenity-cucumber4 | Cucumber            |
+|---------------|-----------------------|--------------------|---------------------|
 | 2.0.52        | 1.0.14             | 4.2.0               |
 | 2.0.48        | 1.0.12             | 4.2.0               |
 
@@ -85,10 +85,10 @@ Sample project: [Serenity Cucumber 4 Starter Project](https://github.com/serenit
 
 ### Serenity with JBehave
 
-| serenity-core | serenity-jbehave  | JBehave             |
-|---------------|-------------------|---------------------|
-| 2.0.52        | 1.0.46            | 4.5                 |
-| 2.0.42        | 1.0.45            | 4.5                 |
+| serenity-core | serenity-maven-plugin | serenity-jbehave  | JBehave             |
+|---------------|-----------------------|-------------------|---------------------|
+| 2.0.52        | 2.0.52                | 1.0.46            | 4.5                 |
+| 2.0.42        | 2.0.48                | 1.0.45            | 4.5                 |
 
 Sample project: [Serenity JBehave Starter Project](https://github.com/serenity-bdd/serenity-jbehave-starter).
 

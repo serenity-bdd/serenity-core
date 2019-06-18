@@ -85,23 +85,23 @@ class WhenUsingFluentAssertionsWithWebElementLocators {
         inner class ThePage {
             @Test
             fun `has a given title`() {
-                shouldPassWhenChecking(that(demoPage).title().isEqualTo("Test Page"))
-                shouldFailWhenChecking(that(demoPage).title().isEqualTo("Wrong Page"))
+                shouldPassWhenChecking(thatTheCurrentPage().title().isEqualTo("Test Page"), wendy)
+                shouldFailWhenChecking(thatTheCurrentPage().title().isEqualTo("Wrong Page"), wendy)
             }
 
             @Test
             fun `has a given url`() {
-                shouldPassWhenChecking(that(demoPage).currentUrl().endsWith("static-site/index.html"))
+                shouldPassWhenChecking(thatTheCurrentPage().currentUrl().endsWith("static-site/index.html"), wendy)
             }
 
             @Test
             fun `has a given page HTML content`() {
-                shouldPassWhenChecking(that(demoPage).pageSource().contains("<title>Test Page</title>"))
+                shouldPassWhenChecking(thatTheCurrentPage().pageSource().contains("<title>Test Page</title>"), wendy)
             }
 
             @Test
             fun `has a given window handle`() {
-                shouldPassWhenChecking(that(demoPage).windowHandle().not().isEmpty())
+                shouldPassWhenChecking(thatTheCurrentPage().windowHandle().not().isEmpty(), wendy)
             }
         }
 

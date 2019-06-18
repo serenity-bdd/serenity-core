@@ -39,7 +39,7 @@ public class PageUrls {
     }
 
     public PageUrls(final Object pageObject) {
-        this(pageObject, Injectors.getInjector().getInstance(EnvironmentVariables.class));
+        this(pageObject, ConfiguredEnvironment.getConfiguration());
     }
 
     public PageUrls(final Object pageObject, EnvironmentVariables environmentVariables) {

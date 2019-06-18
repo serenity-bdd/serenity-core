@@ -28,7 +28,7 @@ fun <A> thatTheAnswersTo(description: String, question: Question<Collection<A>>)
 
 fun <A> thatTheAnswersTo(question: Question<Collection<A>>) = thatTheAnswersTo(question.getSubject(), question)
 
-fun that(value: PageObject) = PageObjectEnsure(value)
+fun thatTheCurrentPage() = PageObjectEnsure()
 fun that(value: Target) = TargetEnsure(value)
 fun that(value: By) = TargetEnsure(value)
 

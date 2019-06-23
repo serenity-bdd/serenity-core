@@ -343,7 +343,7 @@
                     <@write_step step=nestedStep step_number=""/>
                 </#list>
                 <#assign level = level-1>
-                <#assign screenshotCount = screenshotCount +1>
+                <#assign screenshotCount = screenshotCount + step.screenshotCount>
 
                 <#if level == 1>
                 </table>
